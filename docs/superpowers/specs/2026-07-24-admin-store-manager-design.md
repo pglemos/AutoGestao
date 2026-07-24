@@ -44,3 +44,7 @@ A atualização automática permanece como comportamento interno. A interface mo
 ## Segurança
 
 A RPC mantém autorização por perfil no banco, execução restrita a usuários autenticados e filtragem dos vendedores por vínculos ativos nas estruturas oficiais da loja.
+
+## Validação exigida
+
+O head completo só pode ser integrado após typecheck, testes, lint de tokens, build Vite, preview acessível e verificação da rota da LIAL. Falhas de provisionamento da plataforma de deploy não são tratadas como falhas do código, mas exigem uma nova execução completa antes da integração.
