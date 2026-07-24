@@ -7,6 +7,7 @@ const PASSWORD = process.env.E2E_ROLE_PASSWORD || getVisualAuthPassword()
 const adminRoutes = [
   { key: 'painel', path: '/painel' },
   { key: 'lojas', path: '/lojas' },
+  { key: 'loja-lial', path: '/lojas/lial' },
   { key: 'agenda', path: '/agenda' },
   { key: 'consultoria', path: '/consultoria/clientes' },
   { key: 'produtos', path: '/produtos' },
