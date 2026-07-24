@@ -2,6 +2,7 @@ import { useMemo, useState } from 'react'
 import { Eye, Search } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Typography } from '@/components/atoms/Typography'
+import { useMxSurfaceVisualMode } from '@/components/module/MxSurfaceVisualContext'
 import { cn } from '@/lib/utils'
 import { SECTION_LABELS } from '@/features/configuracoes/tabRegistry'
 import type { ConfigTabDefinition, ConfigTabKey } from '@/features/configuracoes/types'
@@ -15,6 +16,7 @@ interface ConfigTabsNavProps {
 }
 
 export function ConfigTabsNav({ tabs, activeTab, role, onSelect }: ConfigTabsNavProps) {
+    const manager = useMxSurfaceVisualMode() === 'manager'
     const [searchTerm, setSearchTerm] = useState('')
     const filteredTabs = useMemo(() => {
         const term = searchTerm.trim().toLowerCase()
@@ -26,6 +28,64 @@ export function ConfigTabsNav({ tabs, activeTab, role, onSelect }: ConfigTabsNav
         acc[tab.section].push(tab)
         return acc
     }, { pessoal: [], gestao: [], mx: [], sistema: [] })
+
+    if (manager) {
+        return (
+            <nav
+                data-mx-config-tabs="manager"
+                className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"
+                aria-label="Abas de configurações"
+            >
+                <div className="flex flex-col gap-3 lg:flex-row lg:items-center">
+                    <label className="relative block w-full lg:max-w-xs">
+                        <span className="sr-only">Buscar configuração</span>
+                        <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" aria-hidden="true" />
+                        <input
+                            type="search"
+                            value={searchTerm}
+                            onChange={(event) => setSearchTerm(event.target.value)}
+                            placeholder="Buscar configuração"
+                            className="h-10 w-full rounded-xl border border-gray-200 bg-white pl-9 pr-3 text-sm font-normal text-gray-700 outline-none placeholder:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
+                        />
+                    </label>
+
+                    <div className="flex min-w-0 flex-1 gap-1 overflow-x-auto rounded-xl bg-gray-100 p-1 no-scrollbar">
+                        {filteredTabs.map(tab => {
+                            const Icon = tab.icon
+                            const selected = tab.key === activeTab
+                            const readOnly = Boolean(role && tab.readOnlyRoles?.includes(role))
+
+                            return (
+                                <button
+                                    key={tab.key}
+                                    type="button"
+                                    onClick={() => onSelect(tab.key)}
+                                    className={cn(
+                                        'inline-flex h-9 shrink-0 items-center gap-2 rounded-lg px-3 text-xs font-semibold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+                                        selected
+                                            ? 'bg-white text-emerald-700 shadow-sm'
+                                            : 'text-gray-500 hover:bg-white/70 hover:text-gray-700',
+                                    )}
+                                    aria-current={selected ? 'page' : undefined}
+                                    title={tab.description}
+                                >
+                                    <Icon size={14} className="shrink-0" />
+                                    <span>{tab.label}</span>
+                                    {readOnly ? <Eye size={12} className="text-gray-400" aria-label="Somente consulta" /> : null}
+                                </button>
+                            )
+                        })}
+                    </div>
+                </div>
+
+                {filteredTabs.length === 0 ? (
+                    <div className="mt-3 rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-6 text-center">
+                        <Typography variant="p" className="text-sm text-gray-500">Nenhuma configuração encontrada para a busca.</Typography>
+                    </div>
+                ) : null}
+            </nav>
+        )
+    }
 
     return (
         <nav className="space-y-mx-md" aria-label="Abas de configurações">
@@ -88,7 +148,7 @@ export function ConfigTabsNav({ tabs, activeTab, role, onSelect }: ConfigTabsNav
                                             </span>
                                         </span>
                                         {readOnly && (
-                                            <Badge variant={selected ? 'outline' : 'outline'} className={cn('shrink-0 text-mx-micro font-black uppercase', selected && 'border-white/30 text-white')}>
+                                            <Badge variant="outline" className={cn('shrink-0 text-mx-micro font-black uppercase', selected && 'border-white/30 text-white')}>
                                                 <Eye size={11} className="mr-1" />
                                                 Consulta
                                             </Badge>

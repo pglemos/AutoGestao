@@ -3,6 +3,7 @@ export type InternalMxPageMeta = {
   title: string
   description: string
   group: string
+  managerLayout?: boolean
   match: (pathname: string) => boolean
 }
 
@@ -16,20 +17,20 @@ export const INTERNAL_MX_PAGE_REGISTRY: readonly InternalMxPageMeta[] = [
   { key: 'consultoria', title: 'Consultoria', description: 'Operação consultiva da MX, programas, indicadores e entregas.', group: 'Rede e Gestão', match: prefix('/consultoria') },
   { key: 'agenda', title: 'Agenda Central MX', description: 'Compromissos, visitas, reuniões e sincronizações da consultoria.', group: 'Rede e Gestão', match: exact('/agenda') },
   { key: 'simulacao', title: 'Simulação de Perfis', description: 'Validação segura da experiência de Vendedor, Gerente e Dono.', group: 'Simulação', match: prefix('/simulacao') },
-  { key: 'ranking', title: 'Ranking', description: 'Classificação, evolução e leitura comparativa de performance.', group: 'Rotina e Conteúdo', match: exact('/classificacao') },
-  { key: 'devolutivas', title: 'Devolutivas e PDI', description: 'Feedbacks, planos de desenvolvimento e acompanhamento de ações.', group: 'Rotina e Conteúdo', match: exact('/devolutivas') },
-  { key: 'treinamentos', title: 'Treinamentos', description: 'Conteúdos, trilhas, aulas e evolução da Universidade MX.', group: 'Rotina e Conteúdo', match: exact('/treinamentos') },
-  { key: 'produtos', title: 'Produtos Digitais', description: 'Catálogo e governança dos produtos digitais da MX.', group: 'Rotina e Conteúdo', match: exact('/produtos') },
-  { key: 'notificacoes', title: 'Notificações', description: 'Comunicações operacionais, alertas e registros de leitura.', group: 'Rotina e Conteúdo', match: exact('/notificacoes') },
-  { key: 'relatorio-matinal', title: 'Relatório Matinal', description: 'Consolidação diária dos indicadores e pendências da rede.', group: 'Relatórios e Diagnóstico', match: exact('/relatorio-matinal') },
-  { key: 'performance-vendas', title: 'Performance de Vendas', description: 'Indicadores comerciais, conversões, projeções e comparativos.', group: 'Relatórios e Diagnóstico', match: exact('/relatorios/performance-vendas') },
+  { key: 'ranking', title: 'Ranking', description: 'Classificação, evolução e leitura comparativa de performance.', group: 'Rotina e Conteúdo', managerLayout: true, match: exact('/classificacao') },
+  { key: 'devolutivas', title: 'Devolutivas e PDI', description: 'Feedbacks, planos de desenvolvimento e acompanhamento de ações.', group: 'Rotina e Conteúdo', managerLayout: true, match: exact('/devolutivas') },
+  { key: 'treinamentos', title: 'Treinamentos', description: 'Conteúdos, trilhas, aulas e evolução da Universidade MX.', group: 'Rotina e Conteúdo', managerLayout: true, match: exact('/treinamentos') },
+  { key: 'produtos', title: 'Produtos Digitais', description: 'Catálogo e governança dos produtos digitais da MX.', group: 'Rotina e Conteúdo', managerLayout: true, match: exact('/produtos') },
+  { key: 'notificacoes', title: 'Notificações', description: 'Comunicações operacionais, alertas e registros de leitura.', group: 'Rotina e Conteúdo', managerLayout: true, match: exact('/notificacoes') },
+  { key: 'relatorio-matinal', title: 'Relatório Matinal', description: 'Consolidação diária dos indicadores e pendências da rede.', group: 'Relatórios e Diagnóstico', managerLayout: true, match: exact('/relatorio-matinal') },
+  { key: 'performance-vendas', title: 'Performance de Vendas', description: 'Indicadores comerciais, conversões, projeções e comparativos.', group: 'Relatórios e Diagnóstico', managerLayout: true, match: exact('/relatorios/performance-vendas') },
   { key: 'performance-vendedor', title: 'Performance por Vendedor', description: 'Leitura individual e comparativa de execução comercial.', group: 'Relatórios e Diagnóstico', match: exact('/relatorios/performance-vendedor') },
   { key: 'auditoria', title: 'Diagnóstico Operacional', description: 'Saúde operacional, inconsistências, evidências e ações corretivas.', group: 'Relatórios e Diagnóstico', match: exact('/auditoria') },
   { key: 'config-remuneracao', title: 'Remuneração', description: 'Planos, regras e parâmetros de remuneração por perfil e unidade.', group: 'Configurações', match: exact('/configuracoes/remuneracao') },
-  { key: 'config-operacional', title: 'Configuração Operacional', description: 'Parâmetros de operação, metas, regras e comportamentos do sistema.', group: 'Configurações', match: exact('/configuracoes/operacional') },
-  { key: 'config-pmr', title: 'Parâmetros PMR', description: 'Modelos, perguntas, pesos e parâmetros da metodologia consultiva.', group: 'Configurações', match: exact('/configuracoes/consultoria-pmr') },
+  { key: 'config-operacional', title: 'Configuração Operacional', description: 'Parâmetros de operação, metas, regras e comportamentos do sistema.', group: 'Configurações', managerLayout: true, match: exact('/configuracoes/operacional') },
+  { key: 'config-pmr', title: 'Parâmetros PMR', description: 'Modelos, perguntas, pesos e parâmetros da metodologia consultiva.', group: 'Configurações', managerLayout: true, match: exact('/configuracoes/consultoria-pmr') },
   { key: 'reprocessamento', title: 'Reprocessamento', description: 'Execuções controladas, histórico, auditoria e recuperação operacional.', group: 'Configurações', match: exact('/configuracoes/reprocessamento') },
-  { key: 'configuracoes', title: 'Configurações', description: 'Preferências, usuários, permissões e parâmetros gerais.', group: 'Configurações', match: prefix('/configuracoes') },
+  { key: 'configuracoes', title: 'Configurações', description: 'Preferências, usuários, permissões e parâmetros gerais.', group: 'Configurações', managerLayout: true, match: prefix('/configuracoes') },
   { key: 'perfil', title: 'Meu Perfil', description: 'Dados pessoais, preferências e segurança da conta.', group: 'Conta', match: exact('/perfil') },
 ] as const
 
@@ -39,6 +40,7 @@ export function getInternalMxPageMeta(pathname: string): InternalMxPageMeta {
     title: 'MX Performance',
     description: 'Módulo interno de gestão e consultoria MX.',
     group: 'Módulo Interno',
+    managerLayout: false,
     match: () => true,
   }
 }
