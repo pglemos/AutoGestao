@@ -1,4 +1,12 @@
-import { ChevronDown, Globe, RefreshCw, Target, Users } from 'lucide-react'
+import {
+  Building2,
+  CalendarDays,
+  ChevronDown,
+  Globe,
+  RefreshCw,
+  Target,
+  Users,
+} from 'lucide-react'
 import { cn, slugify } from '@/lib/utils'
 import { useNavigate } from 'react-router-dom'
 import { Typography } from '@/components/atoms/Typography'
@@ -27,7 +35,6 @@ type DashboardHeaderProps = {
   lastSyncAt: Date | null
   lastSyncLabel: string
   onRefresh: () => void
-  // period selector
   viewMode: ViewMode
   setViewMode: (m: ViewMode) => void
   referenceDate: string
@@ -48,11 +55,6 @@ const PERIODO_TABS = [
   { key: 'day' as const, label: 'D-1' },
 ]
 
-/**
- * Header do DashboardLoja — store selector, tabs, refresh, owner store switch,
- * sync warning e seletor de período (quando aba performance).
- * Extraído de DashboardLoja.tsx (Story 2.5).
- */
 export function DashboardHeader({
   role,
   isOwner,
@@ -80,12 +82,172 @@ export function DashboardHeader({
   const periodContext = viewMode === 'day'
     ? {
         title: 'Leitura D-1',
-        description: `Dados do dia de referência ${format(parseISO(referenceDate), 'dd/MM/yyyy')}. Intervalo manual fica desativado nesta leitura.`,
+        description: `Dados do dia de referência ${format(parseISO(referenceDate), 'dd/MM/yyyy')}.`,
       }
     : {
         title: 'Intervalo manual',
         description: `Dados consolidados de ${format(parseISO(startDate), 'dd/MM/yyyy')} até ${format(parseISO(endDate), 'dd/MM/yyyy')}.`,
       }
+
+  const navigateToStore = (newStoreId: string) => {
+    const newStore = selectableStores.find(store => store.id === newStoreId)
+    if (!newStore) return
+    setActiveStoreId(newStoreId)
+    navigate(`/lojas/${slugify(newStore.name)}?id=${newStoreId}${activeTab === 'performance' ? '' : `&tab=${activeTab}`}`)
+  }
+
+  if (isPerfilInternoMx(role)) {
+    return (
+      <div className="mx-auto w-full max-w-7xl space-y-4">
+        <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+            <div className="flex min-w-0 items-start gap-3">
+              <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+                <Building2 size={20} />
+              </span>
+              <div className="min-w-0">
+                <h1 className="text-xl font-bold text-gray-800">Visão da unidade</h1>
+                <p className="mt-1 text-sm text-gray-500">
+                  Acompanhe resultado, execução da equipe e qualidade dos fechamentos.
+                </p>
+              </div>
+            </div>
+
+            <div className="flex flex-wrap items-center gap-2">
+              <label className="relative min-w-48">
+                <Building2 size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <select
+                  id="store-dashboard-select"
+                  name="store-dashboard-select"
+                  aria-label="Selecionar unidade"
+                  value={selectedStoreId || ''}
+                  onChange={event => navigateToStore(event.target.value)}
+                  className="h-10 w-full appearance-none rounded-xl border border-gray-200 bg-white pl-9 pr-8 text-sm font-semibold text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500"
+                >
+                  {selectableStores.map(store => (
+                    <option key={store.id} value={store.id}>{store.name}</option>
+                  ))}
+                </select>
+                <ChevronDown size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+              </label>
+
+              <nav className="flex rounded-xl bg-gray-100 p-1" aria-label="Abas da loja">
+                {LOJA_TABS.map(tab => {
+                  const Icon = tab.icon
+                  const active = activeTab === tab.key
+                  return (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      onClick={() => onTabChange(tab.key)}
+                      className={`inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition ${active ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                    >
+                      <Icon size={14} />
+                      <span className="hidden sm:inline">{tab.label}</span>
+                      <span className="sm:hidden">{tab.mobileLabel}</span>
+                    </button>
+                  )
+                })}
+              </nav>
+
+              {activeTab === 'performance' && (
+                <button
+                  type="button"
+                  onClick={onRefresh}
+                  disabled={isRefetching}
+                  aria-label={`Atualizar performance. ${lastSyncLabel}`}
+                  title={lastSyncLabel}
+                  className="inline-flex h-10 items-center gap-2 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-50"
+                >
+                  <RefreshCw size={15} className={cn(isRefetching && 'animate-spin')} />
+                  Atualizar
+                </button>
+              )}
+            </div>
+          </div>
+        </header>
+
+        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
+          <LastUpdated value={lastSyncAt} />
+          {syncWarning && (
+            <div role="alert" className="rounded-xl border border-amber-100 bg-amber-50 px-3 py-2 text-xs font-medium text-amber-700">
+              {syncWarning}
+            </div>
+          )}
+        </div>
+
+        {activeTab === 'performance' && (
+          <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <div className="grid gap-4 xl:grid-cols-[1fr_auto_auto] xl:items-end">
+              <div className="flex items-start gap-3">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-600">
+                  <CalendarDays size={18} />
+                </span>
+                <div>
+                  <h2 className="font-semibold text-gray-800">{periodContext.title}</h2>
+                  <p className="mt-1 text-sm text-gray-500">{periodContext.description}</p>
+                </div>
+              </div>
+
+              <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
+                <div className="flex h-10 rounded-xl bg-gray-100 p-1">
+                  {PERIODO_TABS.map(tab => (
+                    <button
+                      key={tab.key}
+                      type="button"
+                      onClick={() => setViewMode(tab.key)}
+                      className={`rounded-lg px-4 text-xs font-semibold transition ${viewMode === tab.key ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500'}`}
+                    >
+                      {tab.label}
+                    </button>
+                  ))}
+                </div>
+
+                <label className="text-xs text-gray-500">
+                  Início
+                  <input
+                    type="date"
+                    aria-label="Data inicial do período"
+                    disabled={viewMode === 'day'}
+                    value={startDate}
+                    onChange={event => {
+                      setStartDate(event.target.value)
+                      setViewMode('month')
+                    }}
+                    className="mt-1 block h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-gray-400"
+                  />
+                </label>
+
+                <label className="text-xs text-gray-500">
+                  Fim
+                  <input
+                    type="date"
+                    aria-label="Data final do período"
+                    disabled={viewMode === 'day'}
+                    value={endDate}
+                    onChange={event => {
+                      setEndDate(event.target.value)
+                      setViewMode('month')
+                    }}
+                    className="mt-1 block h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-gray-400"
+                  />
+                </label>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => onTabChange('metas')}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-xl border border-emerald-200 px-3 text-sm font-semibold text-emerald-700 hover:bg-emerald-50"
+              >
+                <Target size={15} />
+                Ver metas
+              </button>
+            </div>
+          </section>
+        )}
+      </div>
+    )
+  }
 
   return (
     <>
@@ -96,36 +258,9 @@ export function DashboardHeader({
           </Typography>
           <div className="flex items-center justify-center lg:justify-start gap-mx-sm">
             <div className="h-mx-10 w-mx-xs shrink-0 rounded-mx-full bg-brand-primary shadow-mx-md" aria-hidden="true" />
-            {isPerfilInternoMx(role) ? (
-              <div className="relative group w-full mx-store-title-select-width max-w-mx-sidebar-expanded sm:max-w-mx-2xl">
-                <select
-                  id="store-dashboard-select"
-                  name="store-dashboard-select"
-                  aria-label="Selecionar unidade"
-                  value={selectedStoreId || ''}
-                  onChange={e => {
-                    const newStoreId = e.target.value
-                    const newStore = selectableStores.find(store => store.id === newStoreId)
-                    if (newStore) {
-                      if (!isPerfilInternoMx(role)) setActiveStoreId(newStoreId)
-                      navigate(`/lojas/${slugify(newStore.name)}?id=${newStoreId}${activeTab === 'performance' ? '' : `&tab=${activeTab}`}`)
-                    }
-                  }}
-                  className="w-full appearance-none bg-transparent text-2xl sm:text-4xl xl:text-5xl font-black text-text-primary tracking-tighter uppercase outline-none pr-10 cursor-pointer hover:text-brand-primary transition-colors truncate"
-                >
-                  {selectableStores.map(store => (
-                    <option key={store.id} value={store.id} className="text-lg bg-white">
-                      {store.name.toUpperCase()}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown size={24} className="absolute right-mx-0 top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none" />
-              </div>
-            ) : (
-              <Typography variant="h1" className="max-w-full text-3xl sm:text-5xl font-black uppercase tracking-tighter break-words">
-                {storeName}
-              </Typography>
-            )}
+            <Typography variant="h1" className="max-w-full text-3xl sm:text-5xl font-black uppercase tracking-tighter break-words">
+              {storeName}
+            </Typography>
           </div>
         </div>
 
@@ -133,17 +268,12 @@ export function DashboardHeader({
           {isOwner && selectableStores.length > 1 && (
             <label htmlFor="owner-store-select" className="flex w-full flex-col gap-mx-tiny rounded-mx-lg border border-border-subtle bg-white px-mx-md py-mx-xs shadow-mx-sm sm:w-mx-sidebar-expanded">
               <span className="text-mx-micro font-black uppercase tracking-widest text-text-secondary">Trocar unidade</span>
-              <select aria-label="Trocar unidade"
+              <select
+                aria-label="Trocar unidade"
                 id="owner-store-select"
                 name="owner-store-select"
                 value={selectedStoreId || ''}
-                onChange={event => {
-                  const newStoreId = event.target.value
-                  const newStore = selectableStores.find(store => store.id === newStoreId)
-                  if (!newStore) return
-                  setActiveStoreId(newStoreId)
-                  navigate(`/lojas/${slugify(newStore.name)}?id=${newStoreId}${activeTab === 'performance' ? '' : `&tab=${activeTab}`}`)
-                }}
+                onChange={event => navigateToStore(event.target.value)}
                 className="min-w-0 bg-transparent text-sm font-black uppercase text-text-primary outline-none"
               >
                 {selectableStores.map(store => (
@@ -180,18 +310,18 @@ export function DashboardHeader({
               <Typography variant="p" tone="muted" className="mt-mx-tiny text-sm">{periodContext.description}</Typography>
             </div>
             <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center">
-              <TabNavPill tabs={PERIODO_TABS} activeTab={viewMode} onTabChange={(m) => setViewMode(m as ViewMode)} buttonClassName="h-mx-11 px-5" aria-label="Período do dashboard" />
+              <TabNavPill tabs={PERIODO_TABS} activeTab={viewMode} onTabChange={(mode) => setViewMode(mode as ViewMode)} buttonClassName="h-mx-11 px-5" aria-label="Período do dashboard" />
               <div className={cn(
                 'grid grid-cols-1 gap-mx-sm rounded-mx-lg border border-border-subtle bg-surface-alt p-mx-sm sm:grid-cols-2',
-                viewMode === 'day' && 'opacity-50'
+                viewMode === 'day' && 'opacity-50',
               )}>
                 <label className="space-y-mx-tiny">
                   <span className="block text-mx-micro font-black uppercase tracking-widest text-text-secondary">Início</span>
-                  <input type="date" aria-label="Data inicial do período" disabled={viewMode === 'day'} value={startDate} onChange={e => { setStartDate(e.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-mx-lg border border-border-subtle bg-white px-mx-sm text-sm font-black text-text-primary outline-none focus:border-brand-primary" />
+                  <input type="date" aria-label="Data inicial do período" disabled={viewMode === 'day'} value={startDate} onChange={event => { setStartDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-mx-lg border border-border-subtle bg-white px-mx-sm text-sm font-black text-text-primary outline-none focus:border-brand-primary" />
                 </label>
                 <label className="space-y-mx-tiny">
                   <span className="block text-mx-micro font-black uppercase tracking-widest text-text-secondary">Fim</span>
-                  <input type="date" aria-label="Data final do período" disabled={viewMode === 'day'} value={endDate} onChange={e => { setEndDate(e.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-mx-lg border border-border-subtle bg-white px-mx-sm text-sm font-black text-text-primary outline-none focus:border-brand-primary" />
+                  <input type="date" aria-label="Data final do período" disabled={viewMode === 'day'} value={endDate} onChange={event => { setEndDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-mx-lg border border-border-subtle bg-white px-mx-sm text-sm font-black text-text-primary outline-none focus:border-brand-primary" />
                 </label>
               </div>
             </div>

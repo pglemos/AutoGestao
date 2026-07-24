@@ -1,17 +1,19 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertTriangle,
-  CalendarCheck2,
+  Calendar,
   CheckCircle2,
   Clock3,
-  Radio,
   RefreshCw,
+  ShoppingCart,
   UsersRound,
 } from 'lucide-react'
 import { supabase } from '@/lib/supabase'
 import {
   getClosingPresentation,
+  loadAdminStoreLiveOverview,
   summarizeLiveOverview,
+  type AdminLiveOverviewRpcClient,
   type StoreClosingStatus,
   type StoreLiveOverviewRow,
 } from '../lib/admin-live-overview'
@@ -20,13 +22,6 @@ type Props = {
   storeId: string
   referenceDate: string
 }
-
-type RpcResponse = {
-  data: unknown
-  error: { message: string } | null
-}
-
-type RpcInvoker = (name: string, args: Record<string, unknown>) => Promise<RpcResponse>
 
 const numberFields: Array<keyof StoreLiveOverviewRow> = [
   'discipline_score',
@@ -48,8 +43,13 @@ function normalizeRow(raw: Record<string, unknown>): StoreLiveOverviewRow {
   return normalized as unknown as StoreLiveOverviewRow
 }
 
-function formatDateTime(value: string | null) {
-  if (!value) return 'Sem atividade registrada'
+function formatReferenceDate(value: string) {
+  const [year, month, day] = value.split('-')
+  return year && month && day ? `${day}/${month}/${year}` : value
+}
+
+function formatDateTime(value: string | null, emptyLabel: string) {
+  if (!value) return emptyLabel
   const date = new Date(value)
   if (Number.isNaN(date.getTime())) return 'Horário indisponível'
   return date.toLocaleString('pt-BR', {
@@ -62,26 +62,30 @@ function formatDateTime(value: string | null) {
 }
 
 function statusClass(status: StoreClosingStatus) {
-  if (status === 'submitted_on_time') return 'bg-status-success-surface text-status-success'
-  if (status === 'submitted_late' || status === 'draft') return 'bg-status-warning-surface text-status-warning'
-  return 'bg-status-error-surface text-status-error'
+  if (status === 'submitted_on_time') return 'bg-emerald-100 text-emerald-700'
+  if (status === 'submitted_late' || status === 'draft') return 'bg-amber-100 text-amber-700'
+  return 'bg-red-100 text-red-700'
 }
 
-function MetricSet({ row, declared = false }: { row: StoreLiveOverviewRow; declared?: boolean }) {
-  const values = declared
-    ? [row.declared_leads, row.declared_appointments, row.declared_attendances, row.declared_sales]
-    : [row.live_leads, row.live_appointments, row.live_attendances, row.live_sales]
-  const labels = ['Leads', 'Agd.', 'Atend.', 'Vendas']
-
+function MetricCell({
+  label,
+  real,
+  declared,
+  declaredAvailable,
+}: {
+  label: string
+  real: number
+  declared: number
+  declaredAvailable: boolean
+}) {
+  const differs = declaredAvailable && real !== declared
   return (
-    <div className="grid min-w-[230px] grid-cols-4 gap-mx-xs">
-      {values.map((value, index) => (
-        <div key={labels[index]} className="rounded-mx-md bg-surface-alt px-mx-sm py-mx-xs text-center">
-          <div className="text-mx-lg font-black text-content-primary">{value}</div>
-          <div className="text-[10px] font-bold uppercase tracking-wide text-content-tertiary">{labels[index]}</div>
-        </div>
-      ))}
-    </div>
+    <td className={`px-4 py-3 ${differs ? 'bg-amber-50/60' : ''}`}>
+      <p className="text-base font-bold text-gray-800">{real}</p>
+      <p className={`mt-0.5 text-[11px] ${differs ? 'font-semibold text-amber-700' : 'text-gray-400'}`}>
+        {declaredAvailable ? `Declarado: ${declared}` : `${label}: aguardando fechamento`}
+      </p>
+    </td>
   )
 }
 
@@ -90,34 +94,36 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
   const [loading, setLoading] = useState(true)
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [syncWarning, setSyncWarning] = useState<string | null>(null)
   const [lastSyncAt, setLastSyncAt] = useState<Date | null>(null)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
   const fetchRows = useCallback(async (manual = false) => {
     if (manual) setRefreshing(true)
-    else setLoading(true)
+    else if (rows.length === 0) setLoading(true)
     setError(null)
 
     try {
-      const invokeRpc = supabase.rpc as unknown as RpcInvoker
-      const { data, error: rpcError } = await invokeRpc('admin_store_live_overview', {
-        p_store_id: storeId,
-        p_reference_date: referenceDate,
-      })
+      const { data, error: rpcError } = await loadAdminStoreLiveOverview(
+        supabase as unknown as AdminLiveOverviewRpcClient,
+        storeId,
+        referenceDate,
+      )
       if (rpcError) throw new Error(rpcError.message)
       const normalized = Array.isArray(data)
         ? data.map(item => normalizeRow(item as Record<string, unknown>))
         : []
       setRows(normalized)
       setLastSyncAt(new Date())
+      setSyncWarning(null)
     } catch (fetchError) {
       console.error('Audit Error [AdminLiveOperationsPanel]: fetch fail ->', fetchError)
-      setError('Não foi possível carregar o monitor operacional em tempo real.')
+      setError(fetchError instanceof Error ? fetchError.message : 'Falha inesperada ao carregar a equipe.')
     } finally {
       setLoading(false)
       setRefreshing(false)
     }
-  }, [referenceDate, storeId])
+  }, [referenceDate, rows.length, storeId])
 
   useEffect(() => {
     void fetchRows()
@@ -139,127 +145,267 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
       .on('postgres_changes', { event: '*', schema: 'public', table: 'oportunidades', filter: `loja_id=eq.${storeId}` }, scheduleRefresh)
       .subscribe(status => {
         if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
-          setError('Realtime indisponível. Use o botão Atualizar antes de tomar uma decisão.')
+          setSyncWarning('A atualização automática foi interrompida. Use Atualizar para consultar os dados mais recentes.')
         }
       })
 
     return () => {
       if (timerRef.current) clearTimeout(timerRef.current)
-      supabase.removeChannel(channel)
+      void supabase.removeChannel(channel)
     }
   }, [fetchRows, storeId])
 
   const summary = useMemo(() => summarizeLiveOverview(rows), [rows])
   const cards = [
-    { label: 'Fechamentos feitos', value: summary.completed, icon: CheckCircle2 },
-    { label: 'Fechamentos pendentes', value: summary.pending, icon: Clock3 },
-    { label: 'Divergências', value: summary.divergences, icon: AlertTriangle },
-    { label: 'Vendas reais', value: summary.sales, icon: CalendarCheck2 },
+    {
+      label: 'Fechamentos feitos',
+      value: summary.completed,
+      helper: `${rows.length} vendedor${rows.length === 1 ? '' : 'es'} ativo${rows.length === 1 ? '' : 's'}`,
+      icon: CheckCircle2,
+      tone: 'green' as const,
+    },
+    {
+      label: 'Fechamentos pendentes',
+      value: summary.pending,
+      helper: `${summary.notStarted} não iniciado${summary.notStarted === 1 ? '' : 's'} · ${summary.drafts} rascunho${summary.drafts === 1 ? '' : 's'}`,
+      icon: Clock3,
+      tone: 'amber' as const,
+    },
+    {
+      label: 'Vendas registradas',
+      value: summary.sales,
+      helper: `${summary.attendances} atendimento${summary.attendances === 1 ? '' : 's'} no período`,
+      icon: ShoppingCart,
+      tone: 'blue' as const,
+    },
+    {
+      label: 'Divergências',
+      value: summary.divergences,
+      helper: summary.divergences ? 'Exigem conferência' : 'Nenhuma diferença encontrada',
+      icon: AlertTriangle,
+      tone: 'red' as const,
+    },
   ]
 
+  if (loading && rows.length === 0) return <OperationsSkeleton />
+
+  const hasUnavailableData = Boolean(error && rows.length === 0)
+
   return (
-    <section className="mb-mx-lg overflow-hidden rounded-mx-xl border border-border-subtle bg-surface-card shadow-mx-sm">
-      <header className="flex flex-col gap-mx-md border-b border-border-subtle px-mx-lg py-mx-lg lg:flex-row lg:items-center lg:justify-between">
-        <div>
-          <div className="mb-mx-xs flex flex-wrap items-center gap-mx-sm">
-            <h2 className="text-mx-xl font-black text-content-primary">Operação da equipe em tempo real</h2>
-            <span className="inline-flex items-center gap-mx-xs rounded-full bg-status-success-surface px-mx-sm py-mx-xs text-mx-xs font-black uppercase text-status-success">
-              <Radio className="h-3.5 w-3.5" /> Supabase Realtime
+    <section className="space-y-4">
+      <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex items-start gap-3">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+              <UsersRound size={20} />
             </span>
+            <div>
+              <h2 className="text-xl font-bold text-gray-800">Acompanhamento diário da equipe</h2>
+              <p className="mt-1 text-sm text-gray-500">
+                Fechamento, atividade comercial e comparação entre o registrado no sistema e o informado pelo vendedor.
+              </p>
+            </div>
           </div>
-          <p className="text-mx-sm text-content-secondary">
-            Números reais do CRM comparados ao que cada vendedor declarou no fechamento diário.
-          </p>
-        </div>
-        <div className="flex items-center gap-mx-md">
-          <span className="text-mx-xs font-semibold text-content-tertiary">
-            {lastSyncAt ? `Atualizado às ${lastSyncAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}` : 'Sincronizando'}
-          </span>
-          <button
-            type="button"
-            onClick={() => { void fetchRows(true) }}
-            disabled={refreshing}
-            className="inline-flex min-h-10 items-center gap-mx-sm rounded-mx-md border border-border-subtle bg-surface-card px-mx-md text-mx-sm font-black text-content-primary transition hover:bg-surface-alt disabled:opacity-50"
-          >
-            <RefreshCw className={`h-4 w-4 ${refreshing ? 'animate-spin' : ''}`} /> Atualizar
-          </button>
+
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-3 text-sm text-gray-600">
+              <Calendar size={14} />
+              {formatReferenceDate(referenceDate)}
+            </span>
+            <span className="hidden text-xs text-gray-400 sm:inline">
+              {lastSyncAt
+                ? `Atualizado às ${lastSyncAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
+                : 'Aguardando atualização'}
+            </span>
+            <button
+              type="button"
+              onClick={() => { void fetchRows(true) }}
+              disabled={refreshing}
+              className="inline-flex h-10 items-center gap-2 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white transition hover:bg-emerald-700 disabled:opacity-50"
+            >
+              <RefreshCw size={15} className={refreshing ? 'animate-spin' : ''} />
+              Atualizar
+            </button>
+          </div>
         </div>
       </header>
 
       {error && (
-        <div className="mx-mx-lg mt-mx-md rounded-mx-md bg-status-error-surface px-mx-md py-mx-sm text-mx-sm font-bold text-status-error">
-          {error}
-        </div>
+        <article className="flex flex-col gap-3 rounded-2xl border border-red-100 bg-red-50 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex items-start gap-3">
+            <AlertTriangle className="mt-0.5 shrink-0 text-red-600" size={19} />
+            <div>
+              <p className="font-semibold text-red-800">Não foi possível atualizar os dados da equipe.</p>
+              <p className="mt-1 text-sm text-red-700">{error}</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            onClick={() => { void fetchRows(true) }}
+            className="h-9 shrink-0 rounded-xl border border-red-200 bg-white px-3 text-sm font-semibold text-red-700 hover:bg-red-100"
+          >
+            Tentar novamente
+          </button>
+        </article>
       )}
 
-      <div className="grid gap-mx-sm p-mx-lg sm:grid-cols-2 xl:grid-cols-4">
-        {cards.map(({ label, value, icon: Icon }) => (
-          <div key={label} className="rounded-mx-lg border border-border-subtle bg-surface-alt p-mx-md">
-            <div className="mb-mx-sm flex items-center justify-between">
-              <span className="text-mx-xs font-black uppercase tracking-wide text-content-tertiary">{label}</span>
-              <Icon className="h-4 w-4 text-brand-primary" />
-            </div>
-            <div className="text-mx-2xl font-black text-content-primary">{loading ? '—' : value}</div>
-          </div>
-        ))}
-      </div>
+      {syncWarning && !error && (
+        <article className="flex items-start gap-3 rounded-2xl border border-amber-100 bg-amber-50 p-4 text-sm text-amber-800">
+          <AlertTriangle className="mt-0.5 shrink-0" size={18} />
+          <p>{syncWarning}</p>
+        </article>
+      )}
 
-      <div className="overflow-x-auto border-t border-border-subtle">
-        <table className="w-full min-w-[1120px] border-collapse">
-          <thead className="bg-surface-alt text-left text-mx-xs font-black uppercase tracking-wide text-content-tertiary">
-            <tr>
-              <th className="px-mx-lg py-mx-md">Vendedor</th>
-              <th className="px-mx-lg py-mx-md">Fechamento</th>
-              <th className="px-mx-lg py-mx-md">Real no sistema</th>
-              <th className="px-mx-lg py-mx-md">Declarado</th>
-              <th className="px-mx-lg py-mx-md">Conferência</th>
-              <th className="px-mx-lg py-mx-md">Última atividade</th>
-            </tr>
-          </thead>
-          <tbody>
-            {!loading && rows.map(row => {
-              const presentation = getClosingPresentation(row.closing_status)
-              return (
-                <tr key={row.seller_user_id} className="border-t border-border-subtle align-middle">
-                  <td className="px-mx-lg py-mx-md">
-                    <div className="flex items-center gap-mx-sm">
-                      <span className="flex h-9 w-9 items-center justify-center rounded-full bg-brand-primary/10 text-brand-primary">
-                        <UsersRound className="h-4 w-4" />
-                      </span>
-                      <div>
-                        <div className="font-black text-content-primary">{row.seller_name}</div>
-                        <div className="text-mx-xs text-content-tertiary">Disciplina: {row.discipline_score ?? '—'}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-mx-lg py-mx-md">
-                    <span className={`inline-flex rounded-full px-mx-sm py-mx-xs text-mx-xs font-black uppercase ${statusClass(row.closing_status)}`}>
-                      {presentation.label}
-                    </span>
-                    <div className="mt-mx-xs text-mx-xs text-content-tertiary">{formatDateTime(row.submitted_at)}</div>
-                  </td>
-                  <td className="px-mx-lg py-mx-md"><MetricSet row={row} /></td>
-                  <td className="px-mx-lg py-mx-md"><MetricSet row={row} declared /></td>
-                  <td className="px-mx-lg py-mx-md">
-                    <span className={`inline-flex rounded-full px-mx-sm py-mx-xs text-mx-xs font-black uppercase ${row.has_divergence ? 'bg-status-error-surface text-status-error' : 'bg-status-success-surface text-status-success'}`}>
-                      {row.has_divergence ? 'Revisar divergência' : 'Sem divergência'}
-                    </span>
-                  </td>
-                  <td className="px-mx-lg py-mx-md text-mx-sm font-semibold text-content-secondary">
-                    {formatDateTime(row.last_activity_at)}
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Resumo do acompanhamento diário">
+        {cards.map(card => (
+          <SummaryCard
+            key={card.label}
+            label={card.label}
+            value={hasUnavailableData ? '—' : card.value}
+            helper={hasUnavailableData ? 'Dados indisponíveis' : card.helper}
+            icon={card.icon}
+            tone={card.tone}
+          />
+        ))}
+      </section>
+
+      <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+        <div className="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div>
+            <h3 className="font-semibold text-gray-800">Vendedores da unidade</h3>
+            <p className="mt-1 text-xs text-gray-400">
+              Valores principais são os registros do sistema. O declarado aparece abaixo para conferência.
+            </p>
+          </div>
+          {!hasUnavailableData && (
+            <div className="flex flex-wrap gap-2 text-xs text-gray-500">
+              <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.leads} leads</span>
+              <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.appointments} agendamentos</span>
+              <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.attendances} atendimentos</span>
+              <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.sales} vendas</span>
+            </div>
+          )}
+        </div>
+
+        <div className="overflow-x-auto">
+          <table className="w-full min-w-[1120px] text-sm">
+            <thead className="border-b border-gray-100 bg-gray-50">
+              <tr>
+                {['Vendedor', 'Fechamento', 'Leads', 'Agendamentos', 'Atendimentos', 'Vendas', 'Conferência', 'Última atividade'].map(label => (
+                  <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                    {label}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-gray-50">
+              {hasUnavailableData ? (
+                <tr>
+                  <td colSpan={8} className="px-4 py-12 text-center text-sm text-gray-500">
+                    Atualize novamente para carregar os vendedores e os números da unidade.
                   </td>
                 </tr>
-              )
-            })}
-            {!loading && rows.length === 0 && (
-              <tr><td colSpan={6} className="px-mx-lg py-mx-2xl text-center text-content-secondary">Nenhum vendedor ativo encontrado para esta loja.</td></tr>
-            )}
-            {loading && (
-              <tr><td colSpan={6} className="px-mx-lg py-mx-2xl text-center text-content-secondary">Carregando operação da equipe...</td></tr>
-            )}
-          </tbody>
-        </table>
+              ) : rows.length === 0 ? (
+                <tr>
+                  <td colSpan={8} className="px-4 py-12 text-center text-sm text-gray-500">
+                    Nenhum vendedor ativo está vinculado a esta unidade.
+                  </td>
+                </tr>
+              ) : rows.map(row => {
+                const presentation = getClosingPresentation(row.closing_status)
+                const declaredAvailable = Boolean(
+                  row.submitted_at
+                  && row.closing_status !== 'draft'
+                  && row.closing_status !== 'not_started',
+                )
+                return (
+                  <tr key={row.seller_user_id} className="transition-colors hover:bg-gray-50">
+                    <td className="px-4 py-3">
+                      <p className="font-medium text-gray-800">{row.seller_name}</p>
+                      <p className="mt-0.5 text-[11px] text-gray-400">
+                        Disciplina: {row.discipline_score ?? 'sem pontuação'}
+                      </p>
+                    </td>
+                    <td className="px-4 py-3">
+                      <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-medium ${statusClass(row.closing_status)}`}>
+                        {presentation.label}
+                      </span>
+                      <p className="mt-1.5 text-[11px] text-gray-400">
+                        {formatDateTime(row.submitted_at, 'Ainda não enviado')}
+                      </p>
+                    </td>
+                    <MetricCell label="Leads" real={row.live_leads} declared={row.declared_leads} declaredAvailable={declaredAvailable} />
+                    <MetricCell label="Agendamentos" real={row.live_appointments} declared={row.declared_appointments} declaredAvailable={declaredAvailable} />
+                    <MetricCell label="Atendimentos" real={row.live_attendances} declared={row.declared_attendances} declaredAvailable={declaredAvailable} />
+                    <MetricCell label="Vendas" real={row.live_sales} declared={row.declared_sales} declaredAvailable={declaredAvailable} />
+                    <td className="px-4 py-3">
+                      {declaredAvailable ? (
+                        <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-medium ${row.has_divergence ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}>
+                          {row.has_divergence ? 'Revisar diferenças' : 'Dados conferem'}
+                        </span>
+                      ) : (
+                        <span className="inline-flex rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-500">
+                          Aguardando fechamento
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-4 py-3 text-sm text-gray-600">
+                      {formatDateTime(row.last_activity_at, 'Sem atividade registrada')}
+                    </td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  )
+}
+
+function SummaryCard({
+  label,
+  value,
+  helper,
+  icon: Icon,
+  tone,
+}: {
+  label: string
+  value: string | number
+  helper: string
+  icon: typeof CheckCircle2
+  tone: 'green' | 'amber' | 'blue' | 'red'
+}) {
+  const styles = {
+    green: 'bg-emerald-50 text-emerald-600',
+    amber: 'bg-amber-50 text-amber-600',
+    blue: 'bg-blue-50 text-blue-600',
+    red: 'bg-red-50 text-red-600',
+  }
+  return (
+    <article className="flex min-h-28 items-start gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+      <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${styles[tone]}`}>
+        <Icon size={20} />
+      </span>
+      <div className="min-w-0">
+        <p className="text-2xl font-bold text-gray-800">{value}</p>
+        <p className="text-xs font-medium text-gray-600">{label}</p>
+        <p className="mt-1 text-[11px] leading-4 text-gray-400">{helper}</p>
       </div>
+    </article>
+  )
+}
+
+function OperationsSkeleton() {
+  return (
+    <section className="space-y-4" aria-busy="true" aria-label="Carregando acompanhamento da equipe">
+      <div className="h-28 animate-pulse rounded-2xl border border-gray-100 bg-white shadow-sm" />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        {Array.from({ length: 4 }).map((_, index) => (
+          <div key={index} className="h-28 animate-pulse rounded-2xl border border-gray-100 bg-white shadow-sm" />
+        ))}
+      </div>
+      <div className="h-80 animate-pulse rounded-2xl border border-gray-100 bg-white shadow-sm" />
     </section>
   )
 }

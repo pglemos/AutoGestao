@@ -1,9 +1,6 @@
 import { useEffect, useState, type FormEvent } from 'react'
-import { Settings2, Building2 } from 'lucide-react'
+import { Building2, Settings2, SlidersHorizontal } from 'lucide-react'
 import { toast } from '@/lib/toast'
-import { Typography } from '@/components/atoms/Typography'
-import { Button } from '@/components/atoms/Button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/molecules/Card'
 import { type useOperationalSettings, type StoreSettingsPayload } from '@/hooks/useOperationalSettings'
 import type { ProjectionMode, Store } from '@/types/database'
 import {
@@ -33,10 +30,6 @@ type AdminSettingsCardProps = {
   onRefetchAll: () => Promise<void>
 }
 
-/**
- * Card de Administração da Loja — header com toggles + AdminSettingsForm interno.
- * Visível apenas para Admin MX. Extraído de DashboardLoja.tsx (Story 2.5).
- */
 export function AdminSettingsCard({
   selectedStoreId,
   selectedStore,
@@ -111,10 +104,10 @@ export function AdminSettingsCard({
     const benchAgdVisita = toBoundedNumber(settingsForm.bench_agd_visita, 60, 0, 100)
     const benchVisitaVnd = toBoundedNumber(settingsForm.bench_visita_vnd, 33, 0, 100)
     if (
-      String(monthlyGoal) !== String(toNumber(settingsForm.monthly_goal, 0)) ||
-      String(benchLeadAgd) !== String(toNumber(settingsForm.bench_lead_agd, 20)) ||
-      String(benchAgdVisita) !== String(toNumber(settingsForm.bench_agd_visita, 60)) ||
-      String(benchVisitaVnd) !== String(toNumber(settingsForm.bench_visita_vnd, 33))
+      String(monthlyGoal) !== String(toNumber(settingsForm.monthly_goal, 0))
+      || String(benchLeadAgd) !== String(toNumber(settingsForm.bench_lead_agd, 20))
+      || String(benchAgdVisita) !== String(toNumber(settingsForm.bench_agd_visita, 60))
+      || String(benchVisitaVnd) !== String(toNumber(settingsForm.bench_visita_vnd, 33))
     ) {
       toast.error('Revise metas e benchmarks. Use valores entre 0 e 100 para conversões.')
       return
@@ -158,7 +151,10 @@ export function AdminSettingsCard({
     setSavingSettings(true)
     try {
       const { error } = await saveSettings(payload)
-      if (error) { toast.error(error); return }
+      if (error) {
+        toast.error(error)
+        return
+      }
       await onRefetchAll()
       toast.success('Dados operacionais da loja atualizados.')
     } finally {
@@ -169,43 +165,56 @@ export function AdminSettingsCard({
   if (!selectedStore) return null
 
   return (
-    <Card className="w-full rounded-mx-lg border border-border-subtle bg-white overflow-hidden shadow-mx-sm">
-      <CardHeader className="bg-surface-alt/30 border-b border-border-default p-mx-md">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-mx-md">
-          <div className="flex items-center gap-mx-sm min-w-0">
-            <div className="w-mx-12 h-mx-12 rounded-mx-xl bg-brand-primary text-white flex items-center justify-center shadow-mx-inner shrink-0">
-              <Settings2 size={22} />
-            </div>
-            <div className="min-w-0">
-              <CardTitle className="text-lg md:text-xl tracking-tight">Administração da Loja</CardTitle>
-              <CardDescription className="uppercase tracking-mx-wide font-black mt-1 text-mx-tiny">
+    <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+      <header className="p-5">
+        <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
+          <div className="flex items-start gap-3">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+              <Settings2 size={20} />
+            </span>
+            <div>
+              <h2 className="text-xl font-bold text-gray-800">Administração da loja</h2>
+              <p className="mt-1 text-sm text-gray-500">
                 {operationalLoading
-                  ? 'CARREGANDO DADOS...'
-                  : `${selectedStore.name.toUpperCase()} · Cadastro e parâmetros separados da leitura de performance`}
-              </CardDescription>
+                  ? 'Carregando cadastro e parâmetros da unidade.'
+                  : `${selectedStore.name} · cadastro, metas, benchmarks e entregas.`}
+              </p>
             </div>
           </div>
-          <div className="flex flex-wrap items-center gap-mx-sm">
-            <Button type="button" variant="outline" onClick={onOpenEdit} className="h-mx-10 rounded-mx-xl">
-              <Building2 size={16} className="mr-2" /> Editar cadastro
-            </Button>
-            <Button type="button" variant="outline" onClick={onNavigateLojas} className="h-mx-10 rounded-mx-xl">
-              <Building2 size={16} className="mr-2" /> Gerenciar lojas
-            </Button>
-            <Button type="button" variant={showAdminSettings ? 'secondary' : 'outline'} onClick={onToggleAdminSettings} className="h-mx-10 rounded-mx-xl">
-              <Settings2 size={16} className="mr-2" />
+
+          <div className="flex flex-wrap items-center gap-2">
+            <button
+              type="button"
+              onClick={onOpenEdit}
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+            >
+              <Building2 size={15} />
+              Editar cadastro
+            </button>
+            <button
+              type="button"
+              onClick={onNavigateLojas}
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+            >
+              <Building2 size={15} />
+              Gerenciar lojas
+            </button>
+            <button
+              type="button"
+              onClick={onToggleAdminSettings}
+              className={`inline-flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition ${showAdminSettings ? 'bg-gray-100 text-gray-700' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}
+            >
+              <SlidersHorizontal size={15} />
               {showAdminSettings ? 'Ocultar parâmetros' : 'Configurar parâmetros'}
-            </Button>
+            </button>
           </div>
         </div>
-      </CardHeader>
+      </header>
+
       {showAdminSettings && (
-        <CardContent className="p-mx-md">
-          <div className="mb-mx-lg rounded-mx-xl border border-border-default bg-surface-alt px-mx-md py-mx-sm">
-            <Typography variant="p" tone="muted" className="text-sm">
-              Estes parâmetros alteram metas, fonte de dados, benchmarks e entregas de relatório. A leitura de
-              performance abaixo continua baseada nos lançamentos do período selecionado.
-            </Typography>
+        <div className="border-t border-gray-100 p-5">
+          <div className="mb-5 rounded-xl bg-gray-50 p-4 text-sm leading-6 text-gray-600">
+            Estes parâmetros controlam metas, fonte de dados, benchmarks e entregas de relatório. A leitura da equipe permanece separada para evitar que configuração e resultado sejam confundidos.
           </div>
           <AdminSettingsForm
             form={settingsForm}
@@ -217,9 +226,9 @@ export function AdminSettingsCard({
             onReload={fetchSettings}
             onDelete={onDelete}
           />
-        </CardContent>
+        </div>
       )}
-    </Card>
+    </section>
   )
 }
 
