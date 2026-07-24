@@ -2,7 +2,9 @@ import { describe, expect, test } from 'bun:test'
 import {
   getClosingPresentation,
   isClosingCompleted,
+  loadAdminStoreLiveOverview,
   summarizeLiveOverview,
+  type AdminLiveOverviewRpcClient,
   type StoreLiveOverviewRow,
 } from './admin-live-overview'
 
@@ -29,6 +31,26 @@ const row = (overrides: Partial<StoreLiveOverviewRow>): StoreLiveOverviewRow => 
 })
 
 describe('admin live store overview', () => {
+  test('keeps the rpc call bound to the Supabase client', async () => {
+    const client: AdminLiveOverviewRpcClient & { marker: string } = {
+      marker: 'bound-client',
+      async rpc(this: { marker: string }, name, args) {
+        expect(this.marker).toBe('bound-client')
+        expect(name).toBe('admin_store_live_overview')
+        expect(args).toEqual({
+          p_store_id: 'store-1',
+          p_reference_date: '2026-07-24',
+        })
+        return { data: [], error: null }
+      },
+    }
+
+    await expect(loadAdminStoreLiveOverview(client, 'store-1', '2026-07-24')).resolves.toEqual({
+      data: [],
+      error: null,
+    })
+  })
+
   test('only submitted statuses count as completed', () => {
     expect(isClosingCompleted('submitted_on_time')).toBe(true)
     expect(isClosingCompleted('submitted_late')).toBe(true)
@@ -60,6 +82,8 @@ describe('admin live store overview', () => {
     expect(summary).toEqual({
       completed: 1,
       pending: 1,
+      drafts: 1,
+      notStarted: 0,
       divergences: 1,
       leads: 3,
       appointments: 1,
