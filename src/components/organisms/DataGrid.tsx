@@ -1,10 +1,11 @@
 import { ReactNode, memo } from 'react'
 import { AnimatePresence } from 'motion/react'
+import { SearchX } from 'lucide-react'
+import { useMxSurfaceVisualMode } from '@/components/module/MxSurfaceVisualContext'
 import { cn } from '@/lib/utils'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { Skeleton } from '@/components/atoms/Skeleton'
-import { SearchX } from 'lucide-react'
 import { MotionList, MotionRow, rowVariants } from '@/design/motion'
 
 export interface Column<T> {
@@ -38,19 +39,25 @@ function DataGridInner<T extends { id: string | number }>({
   columns,
   data,
   loading,
-  emptyMessage = "Nenhum registro localizado na malha.",
+  emptyMessage = 'Nenhum registro localizado.',
   emptyDescription,
   rowClassName,
   onRowClick,
-  minWidth = "min-w-mx-table",
-  stickyHeader = true
+  minWidth = 'min-w-mx-table',
+  stickyHeader = true,
 }: DataGridProps<T>) {
-  
+  const manager = useMxSurfaceVisualMode() === 'manager'
+  const effectiveMinWidth = manager && minWidth === 'min-w-mx-table' ? 'min-w-[760px]' : minWidth
+
   if (loading) {
     return (
-      <div className="space-y-mx-sm animate-in fade-in duration-500">
+      <div
+        className={manager ? 'space-y-3' : 'space-y-mx-sm animate-in fade-in duration-500'}
+        aria-busy="true"
+        aria-live="polite"
+      >
         {[1, 2, 3, 4, 5].map((i) => (
-          <Skeleton key={i} className="h-mx-20 w-full rounded-mx-xl" />
+          <Skeleton key={i} variant="table-row" className="w-full" />
         ))}
       </div>
     )
@@ -58,13 +65,21 @@ function DataGridInner<T extends { id: string | number }>({
 
   if (!data || data.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center py-20 text-center space-y-mx-md text-text-label">
-        <SearchX size={48} className="text-text-tertiary" />
-        <Typography variant="caption" className="uppercase font-black tracking-widest max-w-xs mx-auto">
+      <div className={cn(
+        'flex flex-col items-center justify-center text-center',
+        manager ? 'gap-3 px-5 py-16 text-gray-500' : 'space-y-mx-md py-20 text-text-label',
+      )}>
+        <span className={manager ? 'grid h-14 w-14 place-items-center rounded-2xl bg-gray-50 text-gray-400' : ''}>
+          <SearchX size={manager ? 24 : 48} className={manager ? '' : 'text-text-tertiary'} aria-hidden="true" />
+        </span>
+        <Typography
+          variant={manager ? 'h3' : 'caption'}
+          className={manager ? 'text-base font-semibold text-gray-800' : 'max-w-xs font-black uppercase tracking-widest'}
+        >
           {emptyMessage}
         </Typography>
         {emptyDescription && (
-          <Typography variant="p" tone="muted" className="max-w-md mx-auto">
+          <Typography variant="p" tone="muted" className="max-w-md text-sm">
             {emptyDescription}
           </Typography>
         )}
@@ -74,22 +89,23 @@ function DataGridInner<T extends { id: string | number }>({
 
   return (
     <div className="w-full">
-      {/* Desktop Table View */}
-      <div className="hidden md:block overflow-x-auto">
+      <div className="hidden overflow-x-auto md:block">
         <Typography variant="tiny" tone="muted" className="sr-only">
           Se houver colunas fora da área visível, role a tabela horizontalmente.
         </Typography>
-        <table className={cn("w-full text-left border-collapse", minWidth)}>
-          <thead className={cn(stickyHeader && "sticky top-0 z-20")}>
-            <tr className="bg-surface-alt/50 border-b border-border-default">
-              {columns.filter(col => !col.mobileOnly).map((col) => (
-                <th 
-                  key={col.key} 
-                  scope="col" 
+        <table className={cn('w-full border-collapse text-left', effectiveMinWidth)}>
+          <thead className={cn(stickyHeader && 'sticky top-0 z-20')}>
+            <tr className={manager ? 'border-b border-gray-100 bg-gray-50' : 'border-b border-border-default bg-surface-alt/50'}>
+              {columns.filter((col) => !col.mobileOnly).map((col) => (
+                <th
+                  key={col.key}
+                  scope="col"
                   className={cn(
-                    "py-6 px-4 font-black uppercase tracking-mx-wider text-mx-micro text-text-tertiary",
+                    manager
+                      ? 'px-4 py-3 text-xs font-semibold tracking-normal text-gray-500'
+                      : 'px-4 py-6 text-mx-micro font-black uppercase tracking-mx-wider text-text-tertiary',
                     col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left',
-                    col.width
+                    col.width,
                   )}
                 >
                   {col.header}
@@ -97,7 +113,7 @@ function DataGridInner<T extends { id: string | number }>({
               ))}
             </tr>
           </thead>
-          <MotionList as="tbody" className="divide-y divide-border-default bg-white">
+          <MotionList as="tbody" className={manager ? 'divide-y divide-gray-100 bg-white' : 'divide-y divide-border-default bg-white'}>
             <AnimatePresence mode="popLayout">
               {data.map((item, idx) => (
                 <MotionRow
@@ -108,17 +124,21 @@ function DataGridInner<T extends { id: string | number }>({
                   exit={{ opacity: 0, transition: { duration: 0.12 } }}
                   onClick={() => onRowClick?.(item)}
                   className={cn(
-                    "group transition-colors hover:bg-surface-alt/30 h-mx-20",
-                    onRowClick && "cursor-pointer",
-                    rowClassName
+                    manager
+                      ? 'group h-16 transition-colors hover:bg-gray-50'
+                      : 'group h-mx-20 transition-colors hover:bg-surface-alt/30',
+                    onRowClick && 'cursor-pointer',
+                    rowClassName,
                   )}
                 >
-                  {columns.filter(col => !col.mobileOnly).map((col) => (
-                    <td 
-                      key={`${item.id}-${col.key}`} 
+                  {columns.filter((col) => !col.mobileOnly).map((col) => (
+                    <td
+                      key={`${item.id}-${col.key}`}
                       className={cn(
-                        "px-4 py-2 text-sm font-bold text-text-primary transition-all",
-                        col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left'
+                        manager
+                          ? 'px-4 py-3 text-sm font-medium text-gray-700'
+                          : 'px-4 py-2 text-sm font-bold text-text-primary transition-all',
+                        col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left',
                       )}
                     >
                       {col.render ? col.render(item, idx) : getCellValue(item, col.key)}
@@ -131,8 +151,7 @@ function DataGridInner<T extends { id: string | number }>({
         </table>
       </div>
 
-      {/* Mobile Card View */}
-      <MotionList className="md:hidden space-y-mx-md pb-mx-24">
+      <MotionList className={manager ? 'space-y-4 pb-24 md:hidden' : 'space-y-mx-md pb-mx-24 md:hidden'}>
         <AnimatePresence mode="popLayout">
           {data.map((item, idx) => (
             <MotionRow
@@ -143,22 +162,30 @@ function DataGridInner<T extends { id: string | number }>({
               onClick={() => onRowClick?.(item)}
             >
               <Card className={cn(
-                "p-mx-lg border-none shadow-mx-lg",
-                onRowClick && "active:scale-[0.98] transition-all"
+                manager ? 'border border-gray-100 p-4 shadow-sm' : 'border-none p-mx-lg shadow-mx-lg',
+                onRowClick && 'active:scale-[0.98] transition-all',
               )}>
-                <div className="space-y-mx-md">
-                  {columns.filter(col => !col.desktopOnly).map((col, cIdx) => (
-                    <div 
+                <div className={manager ? 'space-y-3' : 'space-y-mx-md'}>
+                  {columns.filter((col) => !col.desktopOnly).map((col, cIdx) => (
+                    <div
                       key={`${item.id}-mob-${col.key}`}
                       className={cn(
-                        "flex flex-col gap-1",
-                        cIdx === 0 && "border-b border-border-default pb-4 mb-4"
+                        'flex flex-col gap-1',
+                        cIdx === 0 && (manager ? 'mb-3 border-b border-gray-100 pb-3' : 'mb-4 border-b border-border-default pb-4'),
                       )}
                     >
-                      {cIdx > 0 && <Typography variant="tiny" tone="muted" className="uppercase font-black">{col.header}</Typography>}
+                      {cIdx > 0 && (
+                        <Typography
+                          variant="tiny"
+                          tone="muted"
+                          className={manager ? 'text-xs font-medium text-gray-500' : 'font-black uppercase'}
+                        >
+                          {col.header}
+                        </Typography>
+                      )}
                       <div className={cn(
-                        "text-sm font-bold",
-                        cIdx === 0 && "text-lg font-black uppercase tracking-tight"
+                        manager ? 'text-sm font-medium text-gray-700' : 'text-sm font-bold',
+                        cIdx === 0 && (manager ? 'text-base font-semibold text-gray-800' : 'text-lg font-black uppercase tracking-tight'),
                       )}>
                         {col.render ? col.render(item, idx) : getCellValue(item, col.key)}
                       </div>

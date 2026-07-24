@@ -1,6 +1,8 @@
 import type { ReactNode } from 'react'
 import { ButtonVisualProvider } from '@/components/atoms/Button'
+import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { cn } from '@/lib/utils'
+import { InternalMxVisualScope } from './InternalMxVisualScope'
 
 export function MxRoleVisualScope({
   children,
@@ -11,6 +13,16 @@ export function MxRoleVisualScope({
   manager?: boolean
   className?: string
 }) {
+  const { role } = useAuth()
+
+  if (isPerfilInternoMx(role)) {
+    return (
+      <InternalMxVisualScope role={role}>
+        <div className={cn('h-full min-h-0 w-full', className)}>{children}</div>
+      </InternalMxVisualScope>
+    )
+  }
+
   if (!manager) return <>{children}</>
 
   return (
