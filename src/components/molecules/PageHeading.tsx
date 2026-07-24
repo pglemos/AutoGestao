@@ -38,7 +38,7 @@ export function PageHeading({
                 {title}
               </Typography>
               {subtitle ? (
-                <Typography variant="p" className="mt-1 max-w-3xl text-sm font-normal leading-6 text-gray-500">
+                <Typography as="div" variant="p" className="mt-1 max-w-3xl text-sm font-normal leading-6 text-gray-500">
                   {subtitle}
                 </Typography>
               ) : null}
