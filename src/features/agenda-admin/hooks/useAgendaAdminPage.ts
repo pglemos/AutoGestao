@@ -15,12 +15,20 @@ export function useAgendaAdminPage(viewMode?: 'day' | 'week' | 'month' | 'list')
     return { year: now.getFullYear(), month: now.getMonth() }
   })
 
+  // Shared with both filters (what gets fetched) and view (what gets drawn) —
+  // prev/next navigation on Dia/Semana must move both in lockstep, or the
+  // grid shows dates with no data (Story fix: navegar semana ficava vazio).
+  const [dayAnchor, setDayAnchor] = useState<Date>(() => new Date())
+  const [weekAnchor, setWeekAnchor] = useState<Date>(() => new Date())
+
   const filters = useAgendaFilters({
     visits: events.visits,
     scheduleEvents: events.scheduleEvents,
     calendarMonth,
     setCalendarMonth,
     canViewAllAgendas: events.canViewAllAgendas,
+    dayAnchor,
+    weekAnchor,
   })
 
   const view = useAgendaView({
@@ -30,6 +38,10 @@ export function useAgendaAdminPage(viewMode?: 'day' | 'week' | 'month' | 'list')
     calendarMonth,
     setCalendarMonth,
     viewMode,
+    dayAnchor,
+    setDayAnchor,
+    weekAnchor,
+    setWeekAnchor,
   })
 
   const crud = useAgendaCRUD({

@@ -45,6 +45,8 @@ export function useAgendaAdmin() {
     const now = new Date()
     return { year: now.getFullYear(), month: now.getMonth() }
   })
+  const [dayAnchor, setDayAnchor] = useState<Date>(() => new Date())
+  const [weekAnchor, setWeekAnchor] = useState<Date>(() => new Date())
 
   const filters = useAgendaFilters({
     visits: events.visits,
@@ -52,6 +54,8 @@ export function useAgendaAdmin() {
     calendarMonth,
     setCalendarMonth,
     canViewAllAgendas: events.canViewAllAgendas,
+    dayAnchor,
+    weekAnchor,
   })
 
   const view = useAgendaView({
@@ -60,6 +64,10 @@ export function useAgendaAdmin() {
     dateFilter: filters.dateFilter,
     calendarMonth,
     setCalendarMonth,
+    dayAnchor,
+    setDayAnchor,
+    weekAnchor,
+    setWeekAnchor,
   })
 
   const crud = useAgendaCRUD({

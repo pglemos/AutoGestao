@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo } from 'react'
 import { addDays, addWeeks, format, startOfWeek } from 'date-fns'
 import type {
   AgendaScheduleEvent,
@@ -15,6 +15,10 @@ export type UseAgendaViewInput = {
   calendarMonth: CalendarMonth
   setCalendarMonth: (next: CalendarMonth | ((prev: CalendarMonth) => CalendarMonth)) => void
   viewMode?: 'day' | 'week' | 'month' | 'list'
+  dayAnchor: Date
+  setDayAnchor: (next: Date | ((prev: Date) => Date)) => void
+  weekAnchor: Date
+  setWeekAnchor: (next: Date | ((prev: Date) => Date)) => void
 }
 
 export type UseAgendaViewReturn = {
@@ -45,13 +49,16 @@ export function useAgendaView({
   calendarMonth,
   setCalendarMonth,
   viewMode,
+  dayAnchor,
+  setDayAnchor,
+  weekAnchor,
+  setWeekAnchor,
 }: UseAgendaViewInput): UseAgendaViewReturn {
 
   // Anchors let the prev/next arrows step through arbitrary days/weeks —
   // dateFilter only seeds the starting point (today / next week / etc).
-  const [dayAnchor, setDayAnchor] = useState<Date>(() => new Date())
-  const [weekAnchor, setWeekAnchor] = useState<Date>(() => new Date())
-
+  // Owned by the caller (shared with useAgendaFilters) so navigation also
+  // moves which dates are fetched, not just which dates are drawn.
   useEffect(() => {
     if (dateFilter === 'hoje') setDayAnchor(new Date())
     else if (dateFilter === 'semana') setWeekAnchor(new Date())

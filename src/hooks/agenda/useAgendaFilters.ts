@@ -12,24 +12,21 @@ import {
 export function getDateFilterInterval(
   dateFilter: DateFilter,
   calendarMonth: CalendarMonth,
+  dayAnchor: Date,
+  weekAnchor: Date,
 ) {
-  const now = new Date()
-
   switch (dateFilter) {
     case 'hoje':
-      return { start: startOfDay(now), end: endOfDay(now) }
+      return { start: startOfDay(dayAnchor), end: endOfDay(dayAnchor) }
     case 'semana':
+    case 'proxima_semana':
+      // Both filters just seed weekAnchor's starting point (this week /
+      // next week) — prev/next navigation moves weekAnchor from there, so
+      // the fetched interval must follow the anchor, not a fixed "now".
       return {
-        start: startOfWeek(now, { weekStartsOn: 1 }),
-        end: endOfWeek(now, { weekStartsOn: 1 }),
+        start: startOfWeek(weekAnchor, { weekStartsOn: 1 }),
+        end: endOfWeek(weekAnchor, { weekStartsOn: 1 }),
       }
-    case 'proxima_semana': {
-      const nextWeekBase = addWeeks(now, 1)
-      return {
-        start: startOfWeek(nextWeekBase, { weekStartsOn: 1 }),
-        end: endOfWeek(nextWeekBase, { weekStartsOn: 1 }),
-      }
-    }
     case 'mes': {
       const visibleMonth = new Date(calendarMonth.year, calendarMonth.month, 1)
       return {
@@ -54,6 +51,8 @@ export type UseAgendaFiltersInput = {
   calendarMonth: CalendarMonth
   setCalendarMonth: (next: CalendarMonth | ((prev: CalendarMonth) => CalendarMonth)) => void
   canViewAllAgendas: boolean
+  dayAnchor: Date
+  weekAnchor: Date
 }
 
 export type UseAgendaFiltersReturn = {
@@ -79,6 +78,8 @@ export function useAgendaFilters({
   calendarMonth,
   setCalendarMonth,
   canViewAllAgendas,
+  dayAnchor,
+  weekAnchor,
 }: UseAgendaFiltersInput): UseAgendaFiltersReturn {
   const [dateFilter, setDateFilterState] = useState<DateFilter>(() => getInitialSearchParam('range', 'semana', DATE_FILTERS) as DateFilter)
   const [statusFilter, setStatusFilterState] = useState<string>(() => getInitialSearchParam('status', 'todos'))
@@ -140,7 +141,7 @@ export function useAgendaFilters({
       ))
     }
 
-    const dateInterval = getDateFilterInterval(dateFilter, calendarMonth)
+    const dateInterval = getDateFilterInterval(dateFilter, calendarMonth, dayAnchor, weekAnchor)
     if (dateInterval) {
       filtered = filtered.filter((v) => {
         const d = new Date(v.scheduled_at)
@@ -153,7 +154,7 @@ export function useAgendaFilters({
     }
 
     return filtered
-  }, [visits, consultantFilter, dateFilter, statusFilter, calendarMonth])
+  }, [visits, consultantFilter, dateFilter, statusFilter, calendarMonth, dayAnchor, weekAnchor])
 
   const filteredScheduleEvents = useMemo(() => {
     let filtered = scheduleEvents
@@ -162,7 +163,7 @@ export function useAgendaFilters({
       filtered = filtered.filter((event) => event.responsible_user_id === consultantFilter)
     }
 
-    const dateInterval = getDateFilterInterval(dateFilter, calendarMonth)
+    const dateInterval = getDateFilterInterval(dateFilter, calendarMonth, dayAnchor, weekAnchor)
     if (dateInterval) {
       filtered = filtered.filter((event) => {
         const d = new Date(event.starts_at)
@@ -181,7 +182,7 @@ export function useAgendaFilters({
     }
 
     return filtered
-  }, [scheduleEvents, consultantFilter, dateFilter, statusFilter, calendarMonth])
+  }, [scheduleEvents, consultantFilter, dateFilter, statusFilter, calendarMonth, dayAnchor, weekAnchor])
 
   const activeFilters = useMemo(() => {
     return [
