@@ -13,16 +13,20 @@ import { PasswordRecoveryRequestError, requestPasswordRecovery } from '@/lib/aut
 import { AUTH_SIGNOUT_REASON_STORAGE_KEY } from '@/hooks/auth/authHelpers'
 
 const RECOVERY_EXPIRED_MESSAGE = 'Link de redefinição inválido ou expirado. Solicite um novo acesso.'
-const RECOVERY_INACTIVE_MESSAGE = 'Sua conta está desativada. Fale com o administrador da sua loja para reativar o acesso.'
 
-function consumeInactiveSignoutReason(): boolean {
-    if (typeof window === 'undefined') return false
+const SIGNOUT_REASON_MESSAGES: Record<string, string> = {
+    inactive: 'Sua conta está desativada. Fale com o administrador da sua loja para reativar o acesso.',
+    'no-profile': 'Não encontramos um perfil operacional para esta conta. Fale com o administrador da sua loja ou com o suporte MX.',
+    'no-store': 'Sua conta não está vinculada a nenhuma loja ativa no momento. Fale com o administrador da sua loja.',
+}
+
+/** Lê e consome a razão do último signout forçado (guard de perfil/loja). */
+function consumeSignoutReasonMessage(): string | null {
+    if (typeof window === 'undefined') return null
     const reason = window.sessionStorage.getItem(AUTH_SIGNOUT_REASON_STORAGE_KEY)
-    if (reason === 'inactive') {
-        window.sessionStorage.removeItem(AUTH_SIGNOUT_REASON_STORAGE_KEY)
-        return true
-    }
-    return false
+    if (!reason) return null
+    window.sessionStorage.removeItem(AUTH_SIGNOUT_REASON_STORAGE_KEY)
+    return SIGNOUT_REASON_MESSAGES[reason] || null
 }
 
 type LoginMode = 'login' | 'forgot' | 'recovery'
@@ -99,6 +103,15 @@ export default function Login() {
         setIsHydrated(true)
     }, [])
 
+    // Sessão derrubada em segundo plano (guard de perfil/loja rodando fora do
+    // submit — ex.: restauração de sessão ao recarregar a página). Sem isso o
+    // usuário só via a tela de login de novo, sem nenhuma explicação.
+    useEffect(() => {
+        if (mode !== 'login') return
+        const message = consumeSignoutReasonMessage()
+        if (message) setError(message)
+    }, [mode])
+
     useEffect(() => {
         if (mode !== 'recovery') return
 
@@ -131,7 +144,7 @@ export default function Login() {
 
             const { data } = await supabase.auth.getSession()
             if (mounted && !data.session) {
-                setError(consumeInactiveSignoutReason() ? RECOVERY_INACTIVE_MESSAGE : RECOVERY_EXPIRED_MESSAGE)
+                setError(consumeSignoutReasonMessage() || RECOVERY_EXPIRED_MESSAGE)
             }
         }
 
@@ -253,7 +266,7 @@ export default function Login() {
         const { data: sessionData } = await supabase.auth.getSession()
         if (!sessionData.session?.user.id) {
             setLoading(false)
-            setError(consumeInactiveSignoutReason() ? RECOVERY_INACTIVE_MESSAGE : RECOVERY_EXPIRED_MESSAGE)
+            setError(consumeSignoutReasonMessage() || RECOVERY_EXPIRED_MESSAGE)
             return
         }
 

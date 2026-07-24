@@ -15,6 +15,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { corsHeaders } from "../_shared/cors.ts";
+import { requireAuthenticatedRole } from "../_shared/auth.ts";
 import { requireEnv } from "../_shared/crypto.ts";
 import {
   CENTRAL_CALENDAR_ID,
@@ -82,6 +83,19 @@ Deno.serve(async (req) => {
     return new Response(null, { headers: corsHeaders });
   }
   try {
+    // Achado na auditoria de 2026-07-24: endpoint sem nenhuma checagem de
+    // autenticação (comentário do topo do arquivo já assumia "UI ou cron"
+    // sem nunca validar nenhum). Chamado por OwnerExecutiveCockpit.tsx (dono),
+    // por isso o gate cobre os papéis internos MX + dono/gerente, não só admin.
+    const auth = await requireAuthenticatedRole(req, [
+      "administrador_geral",
+      "administrador_mx",
+      "consultor_mx",
+      "dono",
+      "gerente",
+    ]);
+    if (auth.response) return auth.response;
+
     const body = (await req.json()) as { action?: string; eventId?: string };
     const action: "upsert" | "delete" = body.action === "delete" ? "delete" : "upsert";
     const eventId = body.eventId;

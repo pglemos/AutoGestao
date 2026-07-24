@@ -243,6 +243,18 @@ serve(async (req) => {
   if (typeof updates.is_venda_loja !== 'undefined') userPayload.is_venda_loja = Boolean(updates.is_venda_loja)
   userPayload.role = nextRole
 
+  // usuarios.email e auth.users.email precisam ficar em sincronia: sem isto,
+  // trocar o e-mail aqui derruba silenciosamente login e recuperação de senha
+  // pro e-mail antigo (auth.users nunca muda) enquanto o resto do app já
+  // mostra o e-mail novo.
+  if (typeof userPayload.email === 'string') {
+    const { error: authEmailError } = await adminClient.auth.admin.updateUserById(userId, {
+      email: userPayload.email,
+      email_confirm: true,
+    })
+    if (authEmailError) return jsonResponse({ success: false, error: authEmailError.message }, 500)
+  }
+
   if (Object.keys(userPayload).length) {
     const { error: userError } = await adminClient.from('usuarios').update(userPayload).eq('id', userId)
     if (userError) return jsonResponse({ success: false, error: userError.message }, 500)

@@ -4,8 +4,7 @@ import { createResendClient, createServiceClient } from '../_shared/supabase-cli
 
 const adminClient = createServiceClient()
 const resend = createResendClient()
-const attempts = new Map<string, { count: number; resetAt: number }>()
-const windowMs = 15 * 60 * 1000
+const windowSeconds = 15 * 60
 const maxAttempts = 3
 
 function jsonResponse(body: Record<string, unknown>, status = 200) {
@@ -45,9 +44,26 @@ function normalizeRedirectTo(value: unknown) {
   }
 }
 
-function isUnknownUserError(error: { code?: string; message?: string }) {
+// Anti-enumeração: só expomos erro real ao cliente para falhas claramente
+// transitórias/de infra. Qualquer outra rejeição do GoTrue (usuário
+// inexistente, e-mail inválido pra ele, etc.) cai no genericSuccess() —
+// o smoke test da auditoria de 2026-07-24 mostrou que a lista antiga de
+// mensagens ("not found"/"does not exist") não cobria todas as variantes
+// que o GoTrue retorna pra e-mail sem conta, o que fazia esses casos
+// vazarem como erro 502 em vez da mensagem genérica.
+function isTransientInfraError(error: { status?: number; message?: string }) {
   const message = String(error.message || '').toLowerCase()
-  return error.code === 'user_not_found' || message.includes('not found') || message.includes('does not exist')
+  return (
+    error.status === 500 ||
+    error.status === 503 ||
+    message.includes('timeout') ||
+    message.includes('network') ||
+    message.includes('unavailable') ||
+    message.includes('internal server error') ||
+    message.includes('fetch failed') ||
+    message.includes('rate limit') ||
+    message.includes('too many requests')
+  )
 }
 
 function genericSuccess() {
@@ -74,14 +90,17 @@ Deno.serve(async req => {
   }
 
   const key = `${clientIp(req)}:${email}`
-  const now = Date.now()
-  const current = attempts.get(key)
-  if (current && current.resetAt > now && current.count >= maxAttempts) {
+  const { data: allowed, error: rateLimitError } = await adminClient.rpc(
+    'check_and_increment_recovery_rate_limit',
+    { p_key: key, p_window_seconds: windowSeconds, p_max_attempts: maxAttempts },
+  )
+  if (rateLimitError) {
+    console.error('[PasswordRecovery] rate limit check failed:', rateLimitError.message)
+    return jsonResponse({ success: false, error: 'Não foi possível processar agora. Tente novamente em alguns minutos.' }, 502)
+  }
+  if (!allowed) {
     return jsonResponse({ success: false, code: 'rate_limited', error: 'Aguarde alguns minutos antes de solicitar novamente.' }, 429)
   }
-  attempts.set(key, current && current.resetAt > now
-    ? { count: current.count + 1, resetAt: current.resetAt }
-    : { count: 1, resetAt: now + windowMs })
 
   const { data, error } = await adminClient.auth.admin.generateLink({
     type: 'recovery',
@@ -90,7 +109,7 @@ Deno.serve(async req => {
   })
 
   if (error) {
-    if (isUnknownUserError(error)) return genericSuccess()
+    if (!isTransientInfraError(error)) return genericSuccess()
     console.error('[PasswordRecovery] generateLink failed:', error.message)
     return jsonResponse({ success: false, error: 'Não foi possível enviar o link agora. Tente novamente em alguns minutos.' }, 502)
   }
