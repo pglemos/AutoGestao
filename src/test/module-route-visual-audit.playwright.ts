@@ -9,8 +9,8 @@ const EVIDENCE_DIR = join(process.cwd(), 'visual-evidence', 'internal-mx')
 const adminRoutes = [
   { key: 'painel', path: '/painel' },
   { key: 'lojas', path: '/lojas' },
-  { key: 'loja-lial', path: '/lojas/lial' },
-  { key: 'consultoria', path: '/consultoria/clientes' },
+  { key: 'loja-detalhe', path: '/lojas/lial' },
+  { key: 'consultoria-clientes', path: '/consultoria/clientes' },
   { key: 'agenda', path: '/agenda' },
   { key: 'ranking', path: '/classificacao' },
   { key: 'devolutivas', path: '/devolutivas' },
@@ -27,19 +27,6 @@ const adminRoutes = [
   { key: 'configuracoes', path: '/configuracoes?aba=perfil' },
   { key: 'simulacao', path: '/simulacao' },
 ] as const
-
-const strictManagerRoutes = new Set([
-  'ranking',
-  'devolutivas',
-  'treinamentos',
-  'produtos',
-  'notificacoes',
-  'relatorio-matinal',
-  'performance-vendas',
-  'config-operacional',
-  'config-pmr',
-  'configuracoes',
-])
 
 const viewports = [
   { key: 'desktop', width: 1440, height: 900 },
@@ -59,9 +46,10 @@ type RouteMetric = {
   legacyNodes: number
   aggressiveHeadings: number
   oversizedHeadings: number
-  uppercaseSamples: string[]
   consoleErrors: string[]
   managerPage: string
+  managerTemplate: string
+  canonicalTemplate: string
   managerHeader: boolean
   managerHeaderRadius: number
   managerHeaderBackground: string
@@ -103,22 +91,16 @@ async function auditRoute(
     if (!main) throw new Error('main-content não encontrado')
     const headings = Array.from(main.querySelectorAll<HTMLElement>('h1, h2, h3'))
       .filter((node) => node.getBoundingClientRect().width > 0)
-    const texts = Array.from(main.querySelectorAll<HTMLElement>('h1, h2, h3, p, span, th, button'))
-      .map((node) => node.textContent?.trim() || '')
-      .filter((text) => text.length >= 5 && /[A-ZÁÉÍÓÚÂÊÔÃÕÇ]/.test(text))
-    const uppercaseSamples = texts
-      .filter((text) => text === text.toLocaleUpperCase('pt-BR'))
-      .filter((text, index, collection) => collection.indexOf(text) === index)
-      .slice(0, 12)
-
     const managerFrame = document.querySelector<HTMLElement>('[data-mx-manager-page]')
-    const nestedMain = managerFrame?.querySelector<HTMLElement>('main')
-    const managerHeader = managerFrame?.querySelector<HTMLElement>('[data-mx-page-heading="manager"]')
-      ?? nestedMain?.querySelector<HTMLElement>(':scope > header:first-child')
+    const canonicalTemplate = managerFrame?.querySelector<HTMLElement>('[data-mx-canonical-template]') ?? null
+    const nestedMain = canonicalTemplate?.querySelector<HTMLElement>('main')
+    const managerHeader = canonicalTemplate?.querySelector<HTMLElement>('[data-mx-module-header], [data-mx-page-heading="manager"]')
+      ?? nestedMain?.querySelector<HTMLElement>(':scope > header:first-child, :scope > div > header:first-child')
       ?? null
     const headerStyle = managerHeader ? getComputedStyle(managerHeader) : null
-    const cards = managerFrame
-      ? Array.from(managerFrame.querySelectorAll<HTMLElement>('[data-mx-card]')).filter((node) => node.getBoundingClientRect().width > 0)
+    const cards = canonicalTemplate
+      ? Array.from(canonicalTemplate.querySelectorAll<HTMLElement>('[data-mx-card], [data-mx-section-card]'))
+          .filter((node) => node.getBoundingClientRect().width > 0)
       : []
     const isDark = (background: string) => {
       const values = background.match(/[\d.]+/g)?.slice(0, 3).map(Number) ?? []
@@ -126,8 +108,8 @@ async function auditRoute(
       const [red, green, blue] = values
       return (red * 299 + green * 587 + blue * 114) / 1000 < 100
     }
-    const legacyAccentBars = managerFrame
-      ? Array.from(managerFrame.querySelectorAll<HTMLElement>("[class*='w-mx-xs'][class*='bg-brand-primary']"))
+    const legacyAccentBars = canonicalTemplate
+      ? Array.from(canonicalTemplate.querySelectorAll<HTMLElement>("[class*='w-mx-xs'][class*='bg-brand-primary']"))
           .filter((node) => {
             const rect = node.getBoundingClientRect()
             return getComputedStyle(node).display !== 'none' && rect.width > 0 && rect.height > 0
@@ -143,17 +125,16 @@ async function auditRoute(
       h1: main.querySelector('h1')?.textContent?.trim() || '',
       runtime: document.documentElement.dataset.mxRuntime || '',
       horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
-      legacyNodes: main.querySelectorAll(
-        '.mxds-page-frame, .mx-internal-workspace, [class*="mxds-"], [class*="bg-mx-black"]',
-      ).length,
+      legacyNodes: main.querySelectorAll('.mxds-page-frame, .mx-internal-workspace, [class*="mxds-"]').length,
       aggressiveHeadings: headings.filter((node) => {
         const style = getComputedStyle(node)
         return Number(style.fontWeight) > 700 || style.textTransform === 'uppercase'
       }).length,
       oversizedHeadings: headings.filter((node) => Number.parseFloat(getComputedStyle(node).fontSize) > 40).length,
-      uppercaseSamples,
       consoleErrors,
       managerPage: managerFrame?.dataset.mxManagerPage || '',
+      managerTemplate: managerFrame?.dataset.mxManagerTemplate || '',
+      canonicalTemplate: canonicalTemplate?.dataset.mxCanonicalTemplate || '',
       managerHeader: Boolean(managerHeader),
       managerHeaderRadius: headerStyle ? Number.parseFloat(headerStyle.borderRadius) : 0,
       managerHeaderBackground: headerStyle?.backgroundColor || '',
@@ -181,26 +162,25 @@ async function auditRoute(
   expect.soft(metric.oversizedHeadings, `${role}/${viewport}/${key}: títulos superdimensionados`).toBe(0)
   expect.soft(metric.h1, `${role}/${viewport}/${key}: heading principal`).not.toBe('')
   expect.soft(metric.consoleErrors, `${role}/${viewport}/${key}: erros de console`).toEqual([])
-
-  if (strictManagerRoutes.has(key)) {
-    expect.soft(metric.managerPage, `${role}/${viewport}/${key}: frame Gerente 1:1`).toBe(key)
-    expect.soft(metric.managerHeader, `${role}/${viewport}/${key}: cabeçalho Gerente`).toBe(true)
-    expect.soft(metric.managerHeaderRadius, `${role}/${viewport}/${key}: raio do cabeçalho`).toBeGreaterThanOrEqual(14)
-    expect.soft(metric.managerHeaderBackground, `${role}/${viewport}/${key}: superfície do cabeçalho`).toBe('rgb(255, 255, 255)')
-    expect.soft(metric.darkCards, `${role}/${viewport}/${key}: cards escuros`).toBe(0)
-    expect.soft(metric.cardRadiusViolations, `${role}/${viewport}/${key}: raio dos cards`).toBe(0)
-    expect.soft(metric.legacyAccentBars, `${role}/${viewport}/${key}: barra de título antiga`).toBe(0)
-  }
+  expect.soft(metric.managerPage, `${role}/${viewport}/${key}: área registrada`).toBe(key)
+  expect.soft(metric.managerTemplate, `${role}/${viewport}/${key}: template registrado`).not.toBe('')
+  expect.soft(metric.canonicalTemplate, `${role}/${viewport}/${key}: template canônico`).toBe(metric.managerTemplate)
+  expect.soft(metric.managerHeader, `${role}/${viewport}/${key}: cabeçalho Gerente`).toBe(true)
+  expect.soft(metric.managerHeaderRadius, `${role}/${viewport}/${key}: raio do cabeçalho`).toBeGreaterThanOrEqual(14)
+  expect.soft(metric.managerHeaderBackground, `${role}/${viewport}/${key}: superfície do cabeçalho`).toBe('rgb(255, 255, 255)')
+  expect.soft(metric.darkCards, `${role}/${viewport}/${key}: cards escuros`).toBe(0)
+  expect.soft(metric.cardRadiusViolations, `${role}/${viewport}/${key}: raio dos cards`).toBe(0)
+  expect.soft(metric.legacyAccentBars, `${role}/${viewport}/${key}: barra de título antiga`).toBe(0)
 
   page.off('console', onConsole)
   page.off('pageerror', onPageError)
   return metric
 }
 
-test.describe('auditoria visual completa das rotas internas MX', () => {
+test.describe('auditoria visual canônica das rotas internas MX', () => {
   test.describe.configure({ timeout: 900_000 })
 
-  test('Administrador Geral percorre todas as rotas em desktop, tablet e mobile', async ({ page }, testInfo) => {
+  test('Administrador Geral percorre as dezenove áreas em desktop, tablet e mobile', async ({ page }, testInfo) => {
     mkdirSync(EVIDENCE_DIR, { recursive: true })
     await page.setViewportSize({ width: viewports[0].width, height: viewports[0].height })
     await login(page, process.env.E2E_ADMIN_EMAIL || 'synvollt@gmail.com')
@@ -209,11 +189,25 @@ test.describe('auditoria visual completa das rotas internas MX', () => {
     for (const viewport of viewports) {
       await page.setViewportSize({ width: viewport.width, height: viewport.height })
       for (const route of adminRoutes) {
-        metrics.push(await auditRoute(page, testInfo, 'admin', viewport.key, route.key, route.path))
+        metrics.push(await auditRoute(page, testInfo, 'administrador-geral', viewport.key, route.key, route.path))
       }
     }
 
     writeFileSync(join(EVIDENCE_DIR, 'admin-route-matrix.json'), JSON.stringify(metrics, null, 2))
     writeFileSync(testInfo.outputPath('admin-route-matrix.json'), JSON.stringify(metrics, null, 2))
   })
+
+  for (const profile of [
+    { role: 'administrador-mx', email: process.env.E2E_ADMIN_MX_EMAIL },
+    { role: 'consultor-mx', email: process.env.E2E_CONSULTANT_EMAIL },
+  ]) {
+    test(`${profile.role} recebe o mesmo shell canônico nas áreas permitidas`, async ({ page }, testInfo) => {
+      test.skip(!profile.email, `Configure o e-mail E2E de ${profile.role}`)
+      await page.setViewportSize({ width: 1440, height: 900 })
+      await login(page, profile.email!)
+      for (const route of adminRoutes) {
+        await auditRoute(page, testInfo, profile.role, 'desktop', route.key, route.path)
+      }
+    })
+  }
 })

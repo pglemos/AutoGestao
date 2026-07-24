@@ -5,7 +5,12 @@ import { join } from 'node:path'
 const root = process.cwd()
 const read = (path: string) => readFileSync(join(root, path), 'utf8')
 
-const managerRoutes = [
+const canonicalPages = [
+  'painel',
+  'lojas',
+  'loja-detalhe',
+  'consultoria',
+  'agenda',
   'ranking',
   'devolutivas',
   'treinamentos',
@@ -13,42 +18,61 @@ const managerRoutes = [
   'notificacoes',
   'relatorio-matinal',
   'performance-vendas',
+  'performance-vendedor',
+  'auditoria',
   'config-operacional',
   'config-pmr',
+  'reprocessamento',
   'configuracoes',
+  'simulacao',
 ] as const
 
-describe('contrato visual Gerente 1:1 para o módulo interno MX', () => {
-  test('registra todas as dez rotas na composição gerencial', () => {
+const templateKinds = ['dashboard', 'list', 'detail', 'workspace', 'settings'] as const
+
+describe('contrato canônico do módulo interno MX', () => {
+  test('registra as dezenove áreas no sistema visual compartilhado', () => {
     const registry = read('src/design-system/internal-mx/internalMxPageRegistry.ts')
-    for (const key of managerRoutes) {
+    for (const key of canonicalPages) {
       expect(registry).toContain(`key: '${key}'`)
       const entry = registry.split(`key: '${key}'`)[1]?.split('},')[0] ?? ''
       expect(entry).toContain('managerLayout: true')
+      expect(templateKinds.some((kind) => entry.includes(`template: '${kind}'`))).toBe(true)
     }
   })
 
-  test('o frame interno aplica uma única composição por rota', () => {
+  test('o frame escolhe um template real em vez do retrofit de rota', () => {
     const frame = read('src/components/module/InternalManagerRouteFrame.tsx')
-    expect(frame).toContain('data-mx-manager-page')
-    expect(frame).toContain('mx-manager-page-1to1')
-    expect(frame).toContain('pageMeta.managerLayout')
+    const template = read('src/components/module/InternalMxCanonicalTemplate.tsx')
+    expect(frame).toContain('InternalMxCanonicalTemplate')
+    expect(frame).toContain('data-mx-manager-template')
+    expect(frame).toContain('pageMeta.template')
+    expect(template).toContain('data-mx-canonical-template')
+    expect(template).toContain('manager-v3')
+    expect(frame).not.toContain('mx-manager-page-1to1')
   })
 
-  test('PageHeading renderiza o cabeçalho compacto do Gerente no contexto manager', () => {
+  test('a composição não depende de seletores específicos por página', () => {
+    const css = read('src/styles/internal-mx-manager-scope.css')
+    expect(css).toContain('.mx-canonical-template')
+    expect(css).toContain("[data-mx-canonical-template")
+    expect(css).not.toContain('.mx-manager-page-1to1')
+    expect(css).not.toContain("data-mx-manager-page='")
+    expect(css).not.toContain('data-mx-manager-page="')
+  })
+
+  test('as primitivas expõem contratos semânticos para header, cards e conteúdo', () => {
+    const primitives = read('src/components/module/MxModuleVisualPrimitives.tsx')
+    expect(primitives).toContain('data-mx-module-page')
+    expect(primitives).toContain('data-mx-module-header')
+    expect(primitives).toContain('data-mx-section-card')
+    expect(primitives).toContain('data-mx-toolbar')
+    expect(primitives).toContain('data-mx-table-surface')
+  })
+
+  test('PageHeading continua usando a anatomia compacta do Gerente', () => {
     const heading = read('src/components/molecules/PageHeading.tsx')
     expect(heading).toContain('data-mx-page-heading="manager"')
     expect(heading).toContain('rounded-2xl border border-gray-100 bg-white p-5 shadow-sm')
     expect(heading).toContain('text-xl font-bold text-gray-800')
-    expect(heading).not.toContain('padrão da tela /classificacao')
-  })
-
-  test('a composição elimina superfícies e tipografia promocionais antigas', () => {
-    const css = read('src/styles/internal-mx-manager-scope.css')
-    expect(css).toContain('.mx-manager-page-1to1')
-    expect(css).toContain('[data-mx-card]')
-    expect(css).toContain('[data-mx-config-tabs=')
-    expect(css).toContain('text-transform: none')
-    expect(css).toContain('max-width: 80rem')
   })
 })

@@ -3,6 +3,7 @@ import { getInternalMxPageMeta } from '@/design-system/internal-mx/internalMxPag
 import type { UserRole } from '@/types/database'
 import { isPerfilInternoMx } from '@/hooks/useAuth'
 import { cn } from '@/lib/utils'
+import { InternalMxCanonicalTemplate } from './InternalMxCanonicalTemplate'
 
 export function InternalManagerRouteFrame({
   role,
@@ -14,15 +15,20 @@ export function InternalManagerRouteFrame({
   children: ReactNode
 }) {
   const pageMeta = getInternalMxPageMeta(pathname)
-  const enabled = isPerfilInternoMx(role) && pageMeta.managerLayout === true
+  const enabled = isPerfilInternoMx(role) && pageMeta.managerLayout
 
   return (
     <div
       data-mx-manager-page={enabled ? pageMeta.key : undefined}
       data-mx-manager-page-title={enabled ? pageMeta.title : undefined}
-      className={cn('h-full min-h-0 w-full', enabled && 'mx-manager-page-1to1')}
+      data-mx-manager-template={enabled ? pageMeta.template : undefined}
+      className={cn('h-full min-h-0 w-full', enabled && 'mx-manager-canonical-page')}
     >
-      {children}
+      {enabled ? (
+        <InternalMxCanonicalTemplate kind={pageMeta.template}>
+          {children}
+        </InternalMxCanonicalTemplate>
+      ) : children}
     </div>
   )
 }
