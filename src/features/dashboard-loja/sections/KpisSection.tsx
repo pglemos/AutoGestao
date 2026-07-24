@@ -9,6 +9,7 @@ import {
   TrendingUp,
   UsersRound,
   Zap,
+  type LucideIcon,
 } from 'lucide-react'
 import { isPerfilInternoMx } from '@/hooks/useAuth'
 import { calcularProjecao, getDiasInfo } from '@/lib/calculations'
@@ -17,6 +18,13 @@ import type { UserRole } from '@/types/database'
 type Seller = { name: string; checkin_today?: boolean }
 type LatestDRE = { net_profit: number } | null
 type MetricTone = 'green' | 'amber' | 'red' | 'blue' | 'violet' | 'slate'
+type MetricDefinition = {
+  title: string
+  value: string | number
+  detail: string
+  icon: LucideIcon
+  tone: MetricTone
+}
 
 type KpisSectionProps = {
   role: UserRole | null
@@ -66,34 +74,34 @@ export function KpisSection({
     : 0
   const mxScore = Math.round((Math.min(metrics.attainment, 100) * 0.45) + (conversionScore * 0.35) + (disciplinePct * 0.2))
 
-  const cards = [
+  const cards: MetricDefinition[] = [
     {
       title: 'Meta da unidade',
       value: metrics.goalValue || '—',
       detail: `${metrics.attainment}% atingido`,
       icon: Target,
-      tone: 'green' as const,
+      tone: 'green',
     },
     {
       title: 'Vendas no período',
       value: metrics.totalSales,
       detail: `${projection || 0} projetadas no ritmo atual`,
       icon: BarChart3,
-      tone: metrics.attainment >= 80 ? 'green' as const : 'amber' as const,
+      tone: metrics.attainment >= 80 ? 'green' : 'amber',
     },
     {
       title: 'Leads registrados',
       value: metrics.totalLeads,
       detail: `${metrics.totalAgd} agendamentos`,
       icon: UsersRound,
-      tone: 'blue' as const,
+      tone: 'blue',
     },
     {
       title: 'Visitas realizadas',
       value: metrics.totalVis,
       detail: `${funilData.tx_visita_vnd}% converteram em venda`,
       icon: CalendarDays,
-      tone: 'violet' as const,
+      tone: 'violet',
     },
     {
       title: 'Disciplina da equipe',
@@ -102,14 +110,14 @@ export function KpisSection({
         ? `${pendingDisciplineSellers.length} fechamento${pendingDisciplineSellers.length === 1 ? '' : 's'} pendente${pendingDisciplineSellers.length === 1 ? '' : 's'}`
         : 'Equipe em dia',
       icon: Gauge,
-      tone: pendingDisciplineSellers.length ? 'amber' as const : 'green' as const,
+      tone: pendingDisciplineSellers.length ? 'amber' : 'green',
     },
     {
       title: 'MX Score',
       value: mxScore,
       detail: `${disciplinePct}% de disciplina`,
       icon: TrendingUp,
-      tone: mxScore >= 75 ? 'green' as const : mxScore >= 60 ? 'amber' as const : 'red' as const,
+      tone: mxScore >= 75 ? 'green' : mxScore >= 60 ? 'amber' : 'red',
     },
   ]
 
@@ -143,16 +151,19 @@ export function KpisSection({
       </div>
 
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
-        {cards.map(card => (
-          <MetricCard
-            key={card.title}
-            title={card.title}
-            value={card.value}
-            detail={card.detail}
-            icon={<card.icon size={20} />}
-            tone={card.tone}
-          />
-        ))}
+        {cards.map(card => {
+          const Icon = card.icon
+          return (
+            <MetricCard
+              key={card.title}
+              title={card.title}
+              value={card.value}
+              detail={card.detail}
+              icon={<Icon size={20} />}
+              tone={card.tone}
+            />
+          )
+        })}
       </div>
     </section>
   )
