@@ -138,6 +138,9 @@ export function useAuthProfile(options: UseAuthProfileOptions): UseAuthProfileRe
         const currentRole = loadedProfile ? normalizeRole(loadedProfile.role) : null
 
         if (!currentRole) {
+          if (typeof window !== 'undefined') {
+            window.sessionStorage.setItem(AUTH_SIGNOUT_REASON_STORAGE_KEY, 'no-profile')
+          }
           await supabase.auth.signOut()
           setProfile(null)
           setMemberships([])
@@ -162,6 +165,9 @@ export function useAuthProfile(options: UseAuthProfileOptions): UseAuthProfileRe
           !isPerfilInternoMx(currentRole) &&
           loadedMemberships.length === 0
         ) {
+          if (typeof window !== 'undefined') {
+            window.sessionStorage.setItem(AUTH_SIGNOUT_REASON_STORAGE_KEY, 'no-store')
+          }
           await supabase.auth.signOut()
           setProfile(null)
           setMemberships([])
