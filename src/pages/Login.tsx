@@ -72,16 +72,24 @@ function clearRecoveryTokensFromUrl() {
 }
 
 export default function Login() {
-    const { signIn, profile, role, loading: authLoading } = useAuth()
+    const { signIn, profile, role, supabaseUser, loading: authLoading } = useAuth()
     const navigate = useNavigate()
     const location = useLocation()
     const [mode, setMode] = useState<LoginMode>(() => getInitialMode())
 
+    // supabaseUser entra na condição pra evitar uma race real (achada na
+    // auditoria de 2026-07-24): handleRecoverySubmit chama signOut() e, no
+    // mesmo tick, muda mode pra 'login'. `profile` some via uma cadeia de
+    // efeitos mais longa que `supabaseUser` (que zera direto no listener de
+    // onAuthStateChange), então por um instante `profile` ainda podia estar
+    // com o valor antigo quando `mode` virava 'login' — navegando pra uma
+    // rota protegida e voltando, destruindo a mensagem de sucesso antes do
+    // usuário ver. Exigir os dois fecha a janela da race.
     useEffect(() => {
-        if (profile && mode !== 'recovery') {
+        if (profile && supabaseUser && mode !== 'recovery') {
             navigate(resolvePostLoginRedirect(location.state, role), { replace: true })
         }
-    }, [profile, role, mode, navigate, location.state])
+    }, [profile, supabaseUser, role, mode, navigate, location.state])
 
     const [email, setEmail] = useState(getInitialEmail)
     const [password, setPassword] = useState('')
