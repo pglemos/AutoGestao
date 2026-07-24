@@ -205,6 +205,23 @@ serve(async (req) => {
 
   if (req.method !== 'POST') return jsonResponse({ success: false, error: 'Method not allowed' }, 405)
 
+  // Endpoint público e sem autenticação: qualquer chamador cria auth.users +
+  // usuarios + notifica todos os admins. Sem limite, um bot conseguiria
+  // floodar contas fantasma e a fila de aprovação dos admins. Reaproveita o
+  // mesmo contador atômico em Postgres da recuperação de senha (mesma tabela,
+  // chave com prefixo próprio).
+  const rateLimitKey = `store-pre-registration:${clientIp(req) || 'unknown'}`
+  const { data: rateLimitAllowed, error: rateLimitError } = await adminClient.rpc(
+    'check_and_increment_recovery_rate_limit',
+    { p_key: rateLimitKey, p_window_seconds: 60 * 60, p_max_attempts: 5 },
+  )
+  if (rateLimitError) {
+    return jsonResponse({ success: false, error: 'Não foi possível processar agora. Tente novamente em alguns minutos.' }, 502)
+  }
+  if (!rateLimitAllowed) {
+    return jsonResponse({ success: false, error: 'Muitas tentativas de cadastro. Aguarde antes de tentar novamente.' }, 429)
+  }
+
   let payload: any
   try {
     payload = await req.json()
@@ -286,14 +303,16 @@ serve(async (req) => {
   if (storeError) return jsonResponse({ success: false, error: storeError.message }, 500)
   if (!store) return jsonResponse({ success: false, error: 'Loja não localizada ou inativa.' }, 404)
 
-  const { data: existingUsers, error: existingUserError } = await adminClient
+  // Query direta por e-mail: buscar todos os usuarios com .limit(1000) e filtrar
+  // em memória (versão anterior) fica cego pra qualquer conta além da página
+  // 1000 assim que a base crescer — falso negativo silencioso de duplicidade.
+  const { data: existingUser, error: existingUserError } = await adminClient
     .from('usuarios')
     .select('id, email, active, role')
-    .limit(1000)
+    .ilike('email', email)
+    .maybeSingle()
 
   if (existingUserError) return jsonResponse({ success: false, error: existingUserError.message }, 500)
-
-  const existingUser = (existingUsers || []).find((item: any) => normalizeEmail(item.email) === email) || null
 
   if (existingUser && protectedExistingRoles.includes(existingUser.role)) {
     return jsonResponse({
