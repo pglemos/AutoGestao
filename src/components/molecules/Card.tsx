@@ -8,6 +8,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
     return (
       <div
         ref={ref}
+        data-mx-card=""
         className={cn(
           manager
             ? 'relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-colors'
@@ -28,6 +29,7 @@ const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
     return (
       <div
         ref={ref}
+        data-mx-card-header=""
         className={cn(
           manager
             ? 'flex flex-col gap-1 border-b border-gray-100 bg-white p-5'
@@ -48,6 +50,7 @@ const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTML
     return (
       <h3
         ref={ref}
+        data-mx-card-title=""
         className={cn(
           manager
             ? 'text-lg font-semibold leading-tight tracking-normal text-gray-800 md:text-xl'
@@ -70,6 +73,7 @@ const CardDescription = React.forwardRef<HTMLParagraphElement, React.HTMLAttribu
     return (
       <p
         ref={ref}
+        data-mx-card-description=""
         className={cn(
           manager
             ? 'mt-1 text-sm font-normal leading-6 tracking-normal text-gray-500'
@@ -87,7 +91,7 @@ CardDescription.displayName = 'CardDescription'
 const CardContent = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElement>>(
   ({ className, ...props }, ref) => {
     const manager = useMxSurfaceVisualMode() === 'manager'
-    return <div ref={ref} className={cn(manager ? 'p-5' : 'p-mx-lg', className)} {...props} />
+    return <div ref={ref} data-mx-card-content="" className={cn(manager ? 'p-5' : 'p-mx-lg', className)} {...props} />
   },
 )
 CardContent.displayName = 'CardContent'
@@ -98,6 +102,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
     return (
       <div
         ref={ref}
+        data-mx-card-footer=""
         className={cn(
           manager
             ? 'mt-auto flex items-center border-t border-gray-100 bg-white p-5'

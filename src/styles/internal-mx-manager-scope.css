@@ -57,3 +57,292 @@
 .mx-internal-scope :is(.bg-mx-black, .bg-brand-secondary):not([role='log']):not([class*='font-mono']) .text-white {
   color: var(--color-mx-text);
 }
+
+/* Manager 1:1 composition for the explicitly migrated internal MX routes. */
+.mx-manager-page-1to1 {
+  height: 100%;
+  min-height: 0;
+  width: 100%;
+  overflow: hidden;
+  background: #f9fafb;
+  color: #1f2937;
+}
+
+.mx-manager-page-1to1 > * {
+  min-width: 0;
+}
+
+.mx-manager-page-1to1 main {
+  display: flex !important;
+  width: 100% !important;
+  max-width: 80rem !important;
+  min-height: 100% !important;
+  margin-inline: auto !important;
+  padding: 1.5rem 1rem 6rem !important;
+  flex-direction: column !important;
+  gap: 1.25rem !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  background: #f9fafb !important;
+}
+
+@media (min-width: 768px) {
+  .mx-manager-page-1to1 main {
+    padding-inline: 1.5rem !important;
+  }
+}
+
+.mx-manager-page-1to1 [data-mx-page-heading='manager'],
+.mx-manager-page-1to1 main > header:first-child:not([data-mx-page-heading='manager']) {
+  width: 100%;
+  border: 1px solid #f3f4f6 !important;
+  border-radius: 1rem !important;
+  background: #ffffff !important;
+  padding: 1.25rem !important;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.05) !important;
+}
+
+.mx-manager-page-1to1 main > header:first-child:not([data-mx-page-heading='manager']) {
+  align-items: center !important;
+  border-bottom-width: 1px !important;
+  gap: 1rem !important;
+}
+
+.mx-manager-page-1to1 main > header:first-child:not([data-mx-page-heading='manager']) [class*='w-mx-xs'][class*='bg-brand-primary'],
+.mx-manager-page-1to1 main > header:first-child:not([data-mx-page-heading='manager']) [class*='blur-3xl'] {
+  display: none !important;
+}
+
+.mx-manager-page-1to1 h1 {
+  max-width: 100%;
+  font-size: 1.5rem !important;
+  line-height: 1.25 !important;
+  font-weight: 700 !important;
+  letter-spacing: -0.025em !important;
+  text-transform: none !important;
+  color: #1f2937 !important;
+}
+
+.mx-manager-page-1to1 h2 {
+  font-size: 1.125rem !important;
+  line-height: 1.4 !important;
+  font-weight: 600 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+  color: #1f2937 !important;
+}
+
+.mx-manager-page-1to1 h3,
+.mx-manager-page-1to1 h4 {
+  font-size: 1rem !important;
+  line-height: 1.45 !important;
+  font-weight: 600 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+.mx-manager-page-1to1 :is(p, label, button, th, td, span) {
+  letter-spacing: normal;
+}
+
+.mx-manager-page-1to1 :is(p, label, button, span).uppercase {
+  text-transform: none !important;
+}
+
+.mx-manager-page-1to1 [data-mx-card] {
+  border: 1px solid #f3f4f6 !important;
+  border-radius: 1rem !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.05) !important;
+}
+
+.mx-manager-page-1to1 [data-mx-card]:not(:has(> [data-mx-card-header])) {
+  padding: 1rem !important;
+}
+
+.mx-manager-page-1to1 [data-mx-card]:has(> [data-mx-card-header]) {
+  padding: 0 !important;
+}
+
+.mx-manager-page-1to1 [data-mx-card-header],
+.mx-manager-page-1to1 [data-mx-card-content],
+.mx-manager-page-1to1 [data-mx-card-footer] {
+  padding: 1.25rem !important;
+  border-color: #f3f4f6 !important;
+  background: #ffffff !important;
+}
+
+.mx-manager-page-1to1 [data-mx-card] > .absolute[class*='blur'],
+.mx-manager-page-1to1 [data-mx-card] > .absolute[class*='opacity-10'],
+.mx-manager-page-1to1 [data-mx-card] > .absolute[class*='opacity-20'] {
+  display: none !important;
+}
+
+.mx-manager-page-1to1 [data-mx-card][class*='bg-brand-primary'],
+.mx-manager-page-1to1 [data-mx-card][class*='bg-brand-secondary'],
+.mx-manager-page-1to1 [data-mx-card][class*='bg-mx-black'],
+.mx-manager-page-1to1 [data-mx-card][class*='from-'],
+.mx-manager-page-1to1 [data-mx-card][class*='to-'] {
+  border-color: #f3f4f6 !important;
+  background: #ffffff !important;
+  color: #1f2937 !important;
+}
+
+.mx-manager-page-1to1 [data-mx-card][class*='bg-brand-primary'] .text-white,
+.mx-manager-page-1to1 [data-mx-card][class*='bg-brand-secondary'] .text-white,
+.mx-manager-page-1to1 [data-mx-card][class*='bg-mx-black'] .text-white {
+  color: #374151 !important;
+}
+
+.mx-manager-page-1to1 [data-mx-card] h1 {
+  font-size: 1.875rem !important;
+}
+
+.mx-manager-page-1to1 main > .grid,
+.mx-manager-page-1to1 main > section,
+.mx-manager-page-1to1 [data-mx-card] .grid {
+  gap: 1rem !important;
+}
+
+.mx-manager-page-1to1 button {
+  border-radius: 0.75rem;
+  font-weight: 600 !important;
+  letter-spacing: normal !important;
+  text-transform: none !important;
+}
+
+.mx-manager-page-1to1 :is(input, select):not([type='checkbox']):not([type='radio']):not([type='file']) {
+  height: 2.5rem !important;
+  min-height: 2.5rem !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.75rem !important;
+  background: #ffffff !important;
+  padding-inline: 0.75rem;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  color: #374151 !important;
+}
+
+.mx-manager-page-1to1 textarea {
+  min-height: 7rem !important;
+  border: 1px solid #e5e7eb !important;
+  border-radius: 0.75rem !important;
+  background: #ffffff !important;
+  padding: 0.75rem !important;
+  font-size: 0.875rem !important;
+  font-weight: 400 !important;
+  color: #374151 !important;
+}
+
+.mx-manager-page-1to1 table {
+  width: 100%;
+  border-collapse: collapse;
+  background: #ffffff;
+}
+
+.mx-manager-page-1to1 thead tr {
+  border-bottom: 1px solid #f3f4f6 !important;
+  background: #f9fafb !important;
+}
+
+.mx-manager-page-1to1 th {
+  padding: 0.75rem 1rem !important;
+  font-size: 0.75rem !important;
+  line-height: 1.25 !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.02em !important;
+  text-transform: uppercase !important;
+  color: #6b7280 !important;
+}
+
+.mx-manager-page-1to1 td {
+  padding: 0.875rem 1rem !important;
+  border-bottom: 1px solid #f3f4f6 !important;
+  font-size: 0.875rem !important;
+  color: #374151 !important;
+}
+
+.mx-manager-page-1to1 tbody tr {
+  background: #ffffff !important;
+}
+
+.mx-manager-page-1to1 tbody tr:hover {
+  background: #f9fafb !important;
+}
+
+.mx-manager-page-1to1 [class*='rounded-mx-full'][class*='px-4'],
+.mx-manager-page-1to1 [class*='rounded-mx-full'][class*='px-6'],
+.mx-manager-page-1to1 [class*='rounded-mx-full'][class*='px-8'] {
+  border-radius: 0.75rem !important;
+}
+
+.mx-manager-page-1to1 [class*='shadow-mx-xl'],
+.mx-manager-page-1to1 [class*='shadow-mx-lg'],
+.mx-manager-page-1to1 [class*='shadow-mx-md'] {
+  box-shadow: 0 1px 2px rgb(15 23 42 / 0.05) !important;
+}
+
+.mx-manager-page-1to1 [class*='bg-surface-alt/30'],
+.mx-manager-page-1to1 [class*='bg-surface-alt/50'] {
+  background: #f9fafb !important;
+}
+
+.mx-manager-page-1to1 [role='alert'] {
+  border-radius: 0.75rem;
+}
+
+/* Configurações becomes a horizontal manager workspace instead of a legacy left rail. */
+.mx-manager-page-1to1[data-mx-manager-page='configuracoes'] main > .grid {
+  display: flex !important;
+  min-height: 0 !important;
+  flex-direction: column !important;
+}
+
+.mx-manager-page-1to1[data-mx-manager-page='configuracoes'] main > .grid > aside,
+.mx-manager-page-1to1[data-mx-manager-page='configuracoes'] main > .grid > section {
+  position: static !important;
+  width: 100% !important;
+  max-width: none !important;
+  align-self: stretch !important;
+}
+
+.mx-manager-page-1to1 [data-mx-config-tabs='manager'] {
+  position: static !important;
+  width: 100% !important;
+}
+
+/* Dense report and ranking pages use the same compact rhythm as the manager store view. */
+.mx-manager-page-1to1[data-mx-manager-page='relatorio-matinal'] [data-mx-card],
+.mx-manager-page-1to1[data-mx-manager-page='performance-vendas'] [data-mx-card],
+.mx-manager-page-1to1[data-mx-manager-page='ranking'] [data-mx-card] {
+  min-height: 0 !important;
+}
+
+.mx-manager-page-1to1[data-mx-manager-page='relatorio-matinal'] [data-mx-card] [class*='mb-8'],
+.mx-manager-page-1to1[data-mx-manager-page='performance-vendas'] [data-mx-card] [class*='mb-8'] {
+  margin-bottom: 0.75rem !important;
+}
+
+.mx-manager-page-1to1[data-mx-manager-page='relatorio-matinal'] [data-mx-card] [class*='w-mx-14'],
+.mx-manager-page-1to1[data-mx-manager-page='performance-vendas'] [data-mx-card] [class*='w-mx-14'] {
+  width: 2.5rem !important;
+  height: 2.5rem !important;
+  border-radius: 0.75rem !important;
+}
+
+@media (max-width: 767px) {
+  .mx-manager-page-1to1 main {
+    padding: 1rem 0.75rem 5rem !important;
+  }
+
+  .mx-manager-page-1to1 [data-mx-page-heading='manager'],
+  .mx-manager-page-1to1 main > header:first-child:not([data-mx-page-heading='manager']),
+  .mx-manager-page-1to1 [data-mx-card] {
+    border-radius: 0.875rem !important;
+  }
+
+  .mx-manager-page-1to1 table {
+    min-width: 44rem;
+  }
+}

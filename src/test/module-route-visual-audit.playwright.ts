@@ -13,20 +13,33 @@ const adminRoutes = [
   { key: 'consultoria', path: '/consultoria/clientes' },
   { key: 'agenda', path: '/agenda' },
   { key: 'ranking', path: '/classificacao' },
-  { key: 'devolutivas-pdi', path: '/devolutivas' },
-  { key: 'desenvolvimento', path: '/treinamentos' },
+  { key: 'devolutivas', path: '/devolutivas' },
+  { key: 'treinamentos', path: '/treinamentos' },
   { key: 'produtos', path: '/produtos' },
   { key: 'notificacoes', path: '/notificacoes' },
   { key: 'relatorio-matinal', path: '/relatorio-matinal' },
   { key: 'performance-vendas', path: '/relatorios/performance-vendas' },
   { key: 'performance-vendedor', path: '/relatorios/performance-vendedor' },
   { key: 'auditoria', path: '/auditoria' },
-  { key: 'operacional', path: '/configuracoes/operacional' },
-  { key: 'parametros-pmr', path: '/configuracoes/consultoria-pmr' },
+  { key: 'config-operacional', path: '/configuracoes/operacional' },
+  { key: 'config-pmr', path: '/configuracoes/consultoria-pmr' },
   { key: 'reprocessamento', path: '/configuracoes/reprocessamento' },
-  { key: 'configuracoes', path: '/configuracoes' },
+  { key: 'configuracoes', path: '/configuracoes?aba=perfil' },
   { key: 'simulacao', path: '/simulacao' },
 ] as const
+
+const strictManagerRoutes = new Set([
+  'ranking',
+  'devolutivas',
+  'treinamentos',
+  'produtos',
+  'notificacoes',
+  'relatorio-matinal',
+  'performance-vendas',
+  'config-operacional',
+  'config-pmr',
+  'configuracoes',
+])
 
 const viewports = [
   { key: 'desktop', width: 1440, height: 900 },
@@ -48,6 +61,13 @@ type RouteMetric = {
   oversizedHeadings: number
   uppercaseSamples: string[]
   consoleErrors: string[]
+  managerPage: string
+  managerHeader: boolean
+  managerHeaderRadius: number
+  managerHeaderBackground: string
+  darkCards: number
+  cardRadiusViolations: number
+  legacyAccentBars: number
 }
 
 async function login(page: Page, email: string) {
@@ -91,6 +111,29 @@ async function auditRoute(
       .filter((text, index, collection) => collection.indexOf(text) === index)
       .slice(0, 12)
 
+    const managerFrame = document.querySelector<HTMLElement>('[data-mx-manager-page]')
+    const nestedMain = managerFrame?.querySelector<HTMLElement>('main')
+    const managerHeader = managerFrame?.querySelector<HTMLElement>('[data-mx-page-heading="manager"]')
+      ?? nestedMain?.querySelector<HTMLElement>(':scope > header:first-child')
+      ?? null
+    const headerStyle = managerHeader ? getComputedStyle(managerHeader) : null
+    const cards = managerFrame
+      ? Array.from(managerFrame.querySelectorAll<HTMLElement>('[data-mx-card]')).filter((node) => node.getBoundingClientRect().width > 0)
+      : []
+    const isDark = (background: string) => {
+      const values = background.match(/[\d.]+/g)?.slice(0, 3).map(Number) ?? []
+      if (values.length !== 3) return false
+      const [red, green, blue] = values
+      return (red * 299 + green * 587 + blue * 114) / 1000 < 100
+    }
+    const legacyAccentBars = managerFrame
+      ? Array.from(managerFrame.querySelectorAll<HTMLElement>("[class*='w-mx-xs'][class*='bg-brand-primary']"))
+          .filter((node) => {
+            const rect = node.getBoundingClientRect()
+            return getComputedStyle(node).display !== 'none' && rect.width > 0 && rect.height > 0
+          }).length
+      : 0
+
     return {
       role,
       viewport,
@@ -110,6 +153,13 @@ async function auditRoute(
       oversizedHeadings: headings.filter((node) => Number.parseFloat(getComputedStyle(node).fontSize) > 40).length,
       uppercaseSamples,
       consoleErrors,
+      managerPage: managerFrame?.dataset.mxManagerPage || '',
+      managerHeader: Boolean(managerHeader),
+      managerHeaderRadius: headerStyle ? Number.parseFloat(headerStyle.borderRadius) : 0,
+      managerHeaderBackground: headerStyle?.backgroundColor || '',
+      darkCards: cards.filter((node) => isDark(getComputedStyle(node).backgroundColor)).length,
+      cardRadiusViolations: cards.filter((node) => Number.parseFloat(getComputedStyle(node).borderRadius) < 14).length,
+      legacyAccentBars,
     }
   }, { role, viewport, route: key, consoleErrors })
 
@@ -131,6 +181,16 @@ async function auditRoute(
   expect.soft(metric.oversizedHeadings, `${role}/${viewport}/${key}: títulos superdimensionados`).toBe(0)
   expect.soft(metric.h1, `${role}/${viewport}/${key}: heading principal`).not.toBe('')
   expect.soft(metric.consoleErrors, `${role}/${viewport}/${key}: erros de console`).toEqual([])
+
+  if (strictManagerRoutes.has(key)) {
+    expect.soft(metric.managerPage, `${role}/${viewport}/${key}: frame Gerente 1:1`).toBe(key)
+    expect.soft(metric.managerHeader, `${role}/${viewport}/${key}: cabeçalho Gerente`).toBe(true)
+    expect.soft(metric.managerHeaderRadius, `${role}/${viewport}/${key}: raio do cabeçalho`).toBeGreaterThanOrEqual(14)
+    expect.soft(metric.managerHeaderBackground, `${role}/${viewport}/${key}: superfície do cabeçalho`).toBe('rgb(255, 255, 255)')
+    expect.soft(metric.darkCards, `${role}/${viewport}/${key}: cards escuros`).toBe(0)
+    expect.soft(metric.cardRadiusViolations, `${role}/${viewport}/${key}: raio dos cards`).toBe(0)
+    expect.soft(metric.legacyAccentBars, `${role}/${viewport}/${key}: barra de título antiga`).toBe(0)
+  }
 
   page.off('console', onConsole)
   page.off('pageerror', onPageError)

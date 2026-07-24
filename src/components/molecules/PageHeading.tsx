@@ -1,21 +1,59 @@
 import type { ReactNode } from 'react'
+import type { LucideIcon } from 'lucide-react'
+import { LayoutDashboard } from 'lucide-react'
 import { Typography } from '../atoms/Typography'
+import { useMxSurfaceVisualMode } from '@/components/module/MxSurfaceVisualContext'
 
-type PageHeadingProps = {
+export type PageHeadingProps = {
   title: ReactNode
-  /** Subtítulo curto em caps (padrão da tela de Ranking). */
   subtitle?: ReactNode
-  /** Slot de ações/filtros à direita. */
   actions?: ReactNode
-  /** Breadcrumb opcional renderizado acima do título. */
   breadcrumb?: ReactNode
+  icon?: LucideIcon
 }
 
-/**
- * Cabeçalho de página canônico do sistema — espelha o padrão da tela /classificacao:
- * barra de acento + título h1 + subtítulo em caps. Usar em todas as telas de conteúdo.
- */
-export function PageHeading({ title, subtitle, actions, breadcrumb }: PageHeadingProps) {
+export function PageHeading({
+  title,
+  subtitle,
+  actions,
+  breadcrumb,
+  icon: Icon = LayoutDashboard,
+}: PageHeadingProps) {
+  const manager = useMxSurfaceVisualMode() === 'manager'
+
+  if (manager) {
+    return (
+      <header
+        data-mx-page-heading="manager"
+        className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
+      >
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex min-w-0 items-start gap-3">
+            <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
+              <Icon size={20} strokeWidth={1.8} aria-hidden="true" />
+            </span>
+            <div className="min-w-0">
+              {breadcrumb ? <div className="mb-1 text-xs text-gray-500">{breadcrumb}</div> : null}
+              <Typography as="h1" variant="h2" className="text-xl font-bold text-gray-800 md:text-2xl">
+                {title}
+              </Typography>
+              {subtitle ? (
+                <Typography variant="p" className="mt-1 max-w-3xl text-sm font-normal leading-6 text-gray-500">
+                  {subtitle}
+                </Typography>
+              ) : null}
+            </div>
+          </div>
+          {actions ? (
+            <div className="flex min-w-0 flex-wrap items-center gap-2 lg:justify-end">
+              {actions}
+            </div>
+          ) : null}
+        </div>
+      </header>
+    )
+  }
+
   return (
     <header className="flex min-w-0 shrink-0 flex-col justify-between gap-mx-sm border-b border-border-default pb-mx-md sm:gap-mx-md sm:pb-mx-lg lg:flex-row lg:items-start">
       <div className="flex min-w-0 flex-col gap-mx-tiny text-center lg:text-left">
