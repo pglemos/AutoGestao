@@ -1,6 +1,7 @@
 import { Building2, Eye, EyeOff, RefreshCw, Swords, Trophy } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
+import { useMxSurfaceVisualMode } from '@/components/module/MxSurfaceVisualContext'
 import { LastUpdated } from '@/components/molecules/LastUpdated'
 import { cn } from '@/lib/utils'
 
@@ -30,8 +31,13 @@ export function GlobalRankingHeader({
   hideStoreNames, onToggleHideStoreNames,
   onRefresh, isRefetching, lastUpdatedAt,
 }: Props) {
+  const manager = useMxSurfaceVisualMode() === 'manager'
+  const activeTabClass = manager
+    ? 'bg-emerald-600 text-white shadow-sm'
+    : 'bg-mx-black text-brand-primary shadow-lg'
+
   return (
-<header className="flex min-w-0 flex-col 2xl:flex-row 2xl:items-center justify-between gap-mx-lg border-b border-border-default pb-10 shrink-0">
+    <header className="flex min-w-0 flex-col 2xl:flex-row 2xl:items-center justify-between gap-mx-lg border-b border-border-default pb-10 shrink-0">
       <div className="flex flex-col gap-mx-tiny text-center lg:text-left">
         <div className="flex items-center justify-center lg:justify-start gap-mx-sm">
           <div className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-mx-md" aria-hidden="true" />
@@ -42,21 +48,21 @@ export function GlobalRankingHeader({
         </Typography>
       </div>
 
-<div className="flex min-w-0 flex-col items-center gap-mx-sm shrink-0 w-full sm:flex-row sm:flex-wrap sm:justify-center 2xl:w-auto 2xl:justify-end">
+      <div className="flex min-w-0 flex-col items-center gap-mx-sm shrink-0 w-full sm:flex-row sm:flex-wrap sm:justify-center 2xl:w-auto 2xl:justify-end">
         <div className="grid grid-cols-1 sm:flex w-full sm:w-auto bg-white p-1.5 rounded-2xl border border-border-default shadow-mx-sm mr-0 sm:mr-4 gap-mx-xs" role="tablist" aria-label="Modo da classificação">
-          <button type="button" role="tab" aria-selected={viewMode === 'leaderboard'} onClick={() => onChangeViewMode('leaderboard')} className={cn("px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs", viewMode === 'leaderboard' ? 'bg-mx-black text-brand-primary shadow-lg' : 'text-text-tertiary hover:bg-white/60')}>
+          <button type="button" role="tab" aria-selected={viewMode === 'leaderboard'} onClick={() => onChangeViewMode('leaderboard')} className={cn('px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs', viewMode === 'leaderboard' ? activeTabClass : 'text-text-tertiary hover:bg-white/60')}>
             <Trophy size={14} /> Ranking
           </button>
-          <button type="button" role="tab" aria-selected={viewMode === 'battle'} onClick={() => onChangeViewMode('battle')} className={cn("px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs", viewMode === 'battle' ? 'bg-mx-black text-brand-primary shadow-lg' : 'text-text-tertiary hover:bg-white/60')}>
+          <button type="button" role="tab" aria-selected={viewMode === 'battle'} onClick={() => onChangeViewMode('battle')} className={cn('px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs', viewMode === 'battle' ? activeTabClass : 'text-text-tertiary hover:bg-white/60')}>
             <Swords size={14} /> Comparativo
           </button>
-          <button type="button" role="tab" aria-selected={viewMode === 'store-arena'} onClick={() => onChangeViewMode('store-arena')} className={cn("px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs", viewMode === 'store-arena' ? 'bg-mx-black text-brand-primary shadow-lg' : 'text-text-tertiary hover:bg-white/60')}>
+          <button type="button" role="tab" aria-selected={viewMode === 'store-arena'} onClick={() => onChangeViewMode('store-arena')} className={cn('px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs', viewMode === 'store-arena' ? activeTabClass : 'text-text-tertiary hover:bg-white/60')}>
             <Building2 size={14} /> Comparativo Lojas
           </button>
         </div>
 
-<div className="order-1 flex w-full min-w-0 flex-wrap items-center justify-center gap-mx-sm sm:order-none 2xl:w-auto 2xl:justify-end">
-<LastUpdated value={lastUpdatedAt} className="hidden 2xl:inline-flex" />
+        <div className="order-1 flex w-full min-w-0 flex-wrap items-center justify-center gap-mx-sm sm:order-none 2xl:w-auto 2xl:justify-end">
+          <LastUpdated value={lastUpdatedAt} className="hidden 2xl:inline-flex" />
           <Button
             variant="outline"
             onClick={onToggleHideStoreNames}
@@ -68,7 +74,7 @@ export function GlobalRankingHeader({
             {hideStoreNames ? 'Mostrar lojas' : 'Ocultar lojas'}
           </Button>
           <Button variant="outline" onClick={onRefresh} aria-label="Atualizar ranking global" className="rounded-mx-xl shadow-mx-sm h-mx-xl bg-white px-mx-md">
-            <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
+            <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
             Atualizar
           </Button>
           <div className="flex-1 sm:flex-none flex items-center justify-center gap-mx-sm bg-white border border-border-default px-6 h-mx-xl rounded-mx-full shadow-mx-sm">

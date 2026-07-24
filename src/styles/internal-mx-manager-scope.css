@@ -1,0 +1,59 @@
+.mx-internal-scope {
+  color-scheme: light;
+}
+
+.mx-internal-scope :is(h1, h2, h3, h4, h5, h6, p, button, label).font-black {
+  font-weight: 600;
+}
+
+.mx-internal-scope :is(h1, h2, h3, h4, h5, h6, p, button, label).uppercase {
+  text-transform: none;
+}
+
+.mx-internal-scope :is(h1, h2, h3, h4, h5, h6, p, button, label)[class*='tracking-widest'],
+.mx-internal-scope :is(h1, h2, h3, h4, h5, h6, p, button, label)[class*='tracking-mx-'] {
+  letter-spacing: normal;
+}
+
+.mx-internal-scope :is(.shadow-mx-md, .shadow-mx-lg, .shadow-mx-xl) {
+  box-shadow: var(--shadow-mx-sm);
+}
+
+.mx-internal-scope :is(.rounded-mx-2xl, .rounded-mx-3xl, .rounded-mx-4xl) {
+  border-radius: 1rem;
+}
+
+.mx-internal-scope :is(input, select, textarea):not([type='checkbox']):not([type='radio']):not([type='file']) {
+  border-color: var(--color-mx-border);
+  border-radius: 0.75rem;
+  background-color: var(--color-mx-surface);
+  color: var(--color-mx-text);
+  font-size: 0.875rem;
+  font-weight: 400;
+  letter-spacing: normal;
+  text-transform: none;
+}
+
+.mx-internal-scope :is(input, select):not([type='checkbox']):not([type='radio']):not([type='file']) {
+  min-height: 2.5rem;
+}
+
+.mx-internal-scope textarea {
+  min-height: 7.5rem;
+}
+
+.mx-internal-scope :is(input, select, textarea):focus-visible {
+  border-color: var(--color-brand-primary);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--color-brand-primary) 20%, transparent);
+}
+
+.mx-internal-scope :is(.bg-mx-black, .bg-brand-secondary):not([role='log']):not([class*='font-mono']) {
+  border-color: var(--color-mx-divider);
+  background-color: var(--color-mx-surface);
+  color: var(--color-mx-text);
+}
+
+.mx-internal-scope :is(.bg-mx-black, .bg-brand-secondary):not([role='log']):not([class*='font-mono']) .text-white {
+  color: var(--color-mx-text);
+}

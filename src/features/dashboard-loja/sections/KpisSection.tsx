@@ -1,20 +1,30 @@
 import { useNavigate } from 'react-router-dom'
 import type { ReactNode } from 'react'
-import { BarChart3, CalendarDays, Gauge, Target, TrendingUp, Zap } from 'lucide-react'
-import { Typography } from '@/components/atoms/Typography'
-import { Badge } from '@/components/atoms/Badge'
-import { Button } from '@/components/atoms/Button'
-import { Card } from '@/components/molecules/Card'
-import { GlossaryHint } from '@/components/molecules/GlossaryHint'
+import {
+  BarChart3,
+  CalendarDays,
+  CircleDollarSign,
+  Gauge,
+  Target,
+  TrendingUp,
+  UsersRound,
+  Zap,
+  type LucideIcon,
+} from 'lucide-react'
 import { isPerfilInternoMx } from '@/hooks/useAuth'
 import { calcularProjecao, getDiasInfo } from '@/lib/calculations'
-import { cn } from '@/lib/utils'
 import type { UserRole } from '@/types/database'
 
 type Seller = { name: string; checkin_today?: boolean }
-
 type LatestDRE = { net_profit: number } | null
-type ManagerTone = 'brand' | 'success' | 'warning' | 'danger' | 'info'
+type MetricTone = 'green' | 'amber' | 'red' | 'blue' | 'violet' | 'slate'
+type MetricDefinition = {
+  title: string
+  value: string | number
+  detail: string
+  icon: LucideIcon
+  tone: MetricTone
+}
 
 type KpisSectionProps = {
   role: UserRole | null
@@ -44,13 +54,8 @@ type KpisSectionProps = {
   latestDRE: LatestDRE
 }
 
-/**
- * 5 cards de KPI da loja (meta, vendido, leads, visitas, disciplina) + DRE
- * para perfis internos/dono. Extraído de DashboardLoja.tsx (Story 2.5).
- */
 export function KpisSection({
   role,
-  isOwner,
   metrics,
   funilData,
   funnelBenchmarks,
@@ -69,152 +74,102 @@ export function KpisSection({
     : 0
   const mxScore = Math.round((Math.min(metrics.attainment, 100) * 0.45) + (conversionScore * 0.35) + (disciplinePct * 0.2))
 
-  if (role === 'gerente' && !isOwner) {
-    return (
-      <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-6 gap-mx-md md:gap-mx-lg shrink-0">
-        <ManagerMetricCard
-          title="Meta"
-          value={metrics.goalValue || '--'}
-          detail={`${metrics.attainment}% atingido`}
-          icon={<Target size={22} />}
-          tone="brand"
-        />
-        <ManagerMetricCard
-          title="Realizado"
-          value={metrics.totalSales}
-          detail="vendas no período"
-          icon={<BarChart3 size={22} />}
-          tone={metrics.attainment >= 80 ? 'success' : 'warning'}
-        />
-        <ManagerMetricCard
-          title="Projeção"
-          value={projection || '--'}
-          detail="ritmo de fechamento"
-          icon={<Zap size={22} />}
-          tone={projection >= metrics.goalValue && metrics.goalValue > 0 ? 'success' : 'warning'}
-        />
-        <ManagerMetricCard
-          title="Agendamentos Hoje"
-          value={metrics.totalAgd}
-          detail="agenda comercial"
-          icon={<CalendarDays size={22} />}
-          tone="info"
-        />
-        <ManagerMetricCard
-          title="Conversão"
-          value={`${funilData.tx_visita_vnd}%`}
-          detail={`visita > venda · meta ${funnelBenchmarks.visitaVnd}%`}
-          icon={<TrendingUp size={22} />}
-          tone={funilData.tx_visita_vnd >= funnelBenchmarks.visitaVnd ? 'success' : 'danger'}
-        />
-        <ManagerMetricCard
-          title="MX Score"
-          value={mxScore}
-          detail={`${disciplinePct}% disciplina`}
-          icon={<Gauge size={22} />}
-          tone={mxScore >= 75 ? 'success' : mxScore >= 60 ? 'warning' : 'danger'}
-        />
-      </div>
-    )
+  const cards: MetricDefinition[] = [
+    {
+      title: 'Meta da unidade',
+      value: metrics.goalValue || '—',
+      detail: `${metrics.attainment}% atingido`,
+      icon: Target,
+      tone: 'green',
+    },
+    {
+      title: 'Vendas no período',
+      value: metrics.totalSales,
+      detail: `${projection || 0} projetadas no ritmo atual`,
+      icon: BarChart3,
+      tone: metrics.attainment >= 80 ? 'green' : 'amber',
+    },
+    {
+      title: 'Leads registrados',
+      value: metrics.totalLeads,
+      detail: `${metrics.totalAgd} agendamentos`,
+      icon: UsersRound,
+      tone: 'blue',
+    },
+    {
+      title: 'Visitas realizadas',
+      value: metrics.totalVis,
+      detail: `${funilData.tx_visita_vnd}% converteram em venda`,
+      icon: CalendarDays,
+      tone: 'violet',
+    },
+    {
+      title: 'Disciplina da equipe',
+      value: sellersTotal ? `${metrics.checkedInCount}/${sellersTotal}` : '—',
+      detail: pendingDisciplineSellers.length
+        ? `${pendingDisciplineSellers.length} fechamento${pendingDisciplineSellers.length === 1 ? '' : 's'} pendente${pendingDisciplineSellers.length === 1 ? '' : 's'}`
+        : 'Equipe em dia',
+      icon: Gauge,
+      tone: pendingDisciplineSellers.length ? 'amber' : 'green',
+    },
+    {
+      title: 'MX Score',
+      value: mxScore,
+      detail: `${disciplinePct}% de disciplina`,
+      icon: TrendingUp,
+      tone: mxScore >= 75 ? 'green' : mxScore >= 60 ? 'amber' : 'red',
+    },
+  ]
+
+  if ((isPerfilInternoMx(role) || role === 'gerente') && latestDRE) {
+    cards.push({
+      title: 'Resultado líquido',
+      value: `R$ ${Math.round(latestDRE.net_profit).toLocaleString('pt-BR')}`,
+      detail: 'DRE do mês',
+      icon: CircleDollarSign,
+      tone: latestDRE.net_profit >= 0 ? 'green' : 'red',
+    })
   }
 
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-5 gap-mx-md md:gap-mx-lg shrink-0">
-      <Card className="rounded-mx-lg border border-white/10 bg-brand-secondary text-white p-mx-md shadow-mx-sm">
-        <Typography variant="tiny" tone="white" className="opacity-50 mb-2 block font-black uppercase tracking-widest text-mx-tiny">Meta de Vendas</Typography>
-        <Typography variant="h1" tone="white" className="text-4xl sm:text-5xl tabular-nums leading-none mb-2 tracking-tighter font-mono-numbers">{metrics.goalValue}</Typography>
-        <Badge variant="outline" className="bg-white text-brand-secondary border-white font-black h-mx-md uppercase text-mx-tiny shadow-mx-sm">{metrics.attainment}% ATINGIDO</Badge>
-      </Card>
-
-      <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
-        <Typography variant="tiny" tone="muted" className="mb-2 block font-black uppercase tracking-widest text-mx-tiny">Vendido Período</Typography>
-        <Typography variant="h1" className="text-4xl sm:text-5xl tabular-nums leading-none mb-2 tracking-tighter font-mono-numbers">{metrics.totalSales}</Typography>
-        <Typography variant="tiny" tone="brand" className="font-black uppercase tracking-widest text-mx-tiny">REFERÊNCIA REAL-TIME</Typography>
-      </Card>
-
-      <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
-        <Typography variant="tiny" tone="muted" className="mb-2 block font-black uppercase tracking-widest text-mx-tiny">Leads Gerados</Typography>
-        <div className="flex items-baseline gap-mx-xs mb-2">
-          <Typography variant="h1" className="text-4xl sm:text-5xl tabular-nums leading-none tracking-tighter font-mono-numbers">{metrics.totalLeads}</Typography>
-          <Typography variant="h3" tone="muted" className="text-xl font-black uppercase opacity-20">LEADS</Typography>
+    <section className="space-y-4" aria-labelledby="store-kpis-title">
+      <div className="flex flex-col gap-2 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h2 id="store-kpis-title" className="text-lg font-bold text-gray-800">Indicadores da unidade</h2>
+          <p className="mt-1 text-sm text-gray-500">Leitura comercial, ritmo de meta e disciplina da equipe no período selecionado.</p>
         </div>
-        <Typography variant="tiny" tone="info" className="font-black uppercase tracking-widest text-mx-tiny">ENTRADA DO FUNIL</Typography>
-      </Card>
-
-      <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
-        <Typography variant="tiny" tone="muted" className="mb-2 block font-black uppercase tracking-widest text-mx-tiny">Visitas Realizadas</Typography>
-        <div className="flex items-baseline gap-mx-xs mb-2">
-          <Typography variant="h1" className="text-4xl sm:text-5xl tabular-nums leading-none tracking-tighter font-mono-numbers">{metrics.totalVis}</Typography>
-          <Typography variant="h3" tone="muted" className="text-xl font-black uppercase opacity-20">VIS</Typography>
-        </div>
-        <Typography variant="tiny" tone="warning" className="font-black uppercase tracking-widest text-mx-tiny">MEIO DO FUNIL</Typography>
-      </Card>
-
-      <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
-        <Typography variant="tiny" tone="muted" className="mb-2 block font-black uppercase tracking-widest text-mx-tiny">
-          <GlossaryHint term="Saúde Disciplinar" definition="Percentual da equipe que realizou o Fechamento Diário obrigatório." />
-        </Typography>
-        <Typography
-          variant="h1"
-          tone={metrics.checkedInCount < sellersTotal ? 'error' : 'success'}
-          className="text-4xl sm:text-5xl tabular-nums leading-none mb-2 tracking-tighter font-mono-numbers"
-        >
-          {metrics.checkedInCount}
-          <span className="text-text-tertiary text-2xl font-black">/{sellersTotal}</span>
-        </Typography>
-        <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest text-mx-tiny">REGISTROS SINCRONIZADOS</Typography>
-        {pendingDisciplineSellers.length > 0 && (
-          <div className="mt-mx-sm rounded-mx-lg border border-status-warning/20 bg-status-warning-surface p-mx-sm">
-            <Typography variant="tiny" className="block font-black uppercase tracking-widest text-status-warning">Pendentes</Typography>
-            <Typography variant="p" className="mt-mx-tiny text-sm text-status-warning line-clamp-2">
-              {pendingDisciplineSellers.slice(0, 3).map(seller => seller.name).join(', ')}
-              {pendingDisciplineSellers.length > 3 ? ` +${pendingDisciplineSellers.length - 3}` : ''}
-            </Typography>
-            {role === 'gerente' && (
-              <Button type="button" variant="outline" size="sm" onClick={() => navigate('/rotina')} className="mt-mx-sm h-mx-9 rounded-mx-lg bg-white text-status-warning">
-                Resolver na rotina
-              </Button>
-            )}
-          </div>
+        {role === 'gerente' && pendingDisciplineSellers.length > 0 && (
+          <button
+            type="button"
+            onClick={() => navigate('/gerente/rotina-equipe')}
+            className="inline-flex h-9 items-center gap-2 rounded-xl border border-amber-200 bg-white px-3 text-sm font-semibold text-amber-700 hover:bg-amber-50"
+          >
+            <Zap size={15} />
+            Resolver pendências
+          </button>
         )}
-      </Card>
+      </div>
 
-      {(isPerfilInternoMx(role) || role === 'dono') && latestDRE && (
-        <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm animate-in slide-in-from-right duration-500 delay-300">
-          <Typography variant="tiny" tone="muted" className="mb-2 block font-black uppercase tracking-widest text-mx-tiny text-brand-primary">Lucratividade Preditiva (DRE)</Typography>
-          <div className="flex items-baseline gap-mx-xs mb-mx-xs">
-            <Typography variant="tiny" tone="muted" className="font-black text-mx-nano">R$</Typography>
-            <Typography variant="h1" tone={latestDRE.net_profit >= 0 ? 'success' : 'error'} className="text-4xl sm:text-5xl tabular-nums leading-none tracking-tighter font-mono-numbers">
-              {Math.round(latestDRE.net_profit).toLocaleString('pt-BR')}
-            </Typography>
-          </div>
-          <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest text-mx-tiny">RESULTADO LÍQUIDO MÊS</Typography>
-        </Card>
-      )}
-      {(isPerfilInternoMx(role) || role === 'dono') && !latestDRE && (
-        <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
-          <Typography variant="tiny" tone="muted" className="mb-2 block font-black uppercase tracking-widest text-mx-tiny text-brand-primary">Lucratividade Preditiva (DRE)</Typography>
-          <Typography variant="h3" className="mb-mx-xs uppercase">DRE pendente</Typography>
-          <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest text-mx-tiny">
-            {isOwner ? 'SOLICITE CADASTRO AO ADMIN MX' : 'RESULTADO INDISPONÍVEL'}
-          </Typography>
-        </Card>
-      )}
-    </div>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+        {cards.map(card => {
+          const Icon = card.icon
+          return (
+            <MetricCard
+              key={card.title}
+              title={card.title}
+              value={card.value}
+              detail={card.detail}
+              icon={<Icon size={20} />}
+              tone={card.tone}
+            />
+          )
+        })}
+      </div>
+    </section>
   )
 }
 
-function managerToneClasses(tone: ManagerTone) {
-  return {
-    brand: 'bg-mx-indigo-50 text-brand-primary border-mx-indigo-100',
-    success: 'bg-status-success-surface text-status-success border-status-success/20',
-    warning: 'bg-status-warning-surface text-status-warning border-status-warning/20',
-    danger: 'bg-status-error-surface text-status-error border-status-error/20',
-    info: 'bg-status-info-surface text-status-info border-status-info/20',
-  }[tone]
-}
-
-function ManagerMetricCard({
+function MetricCard({
   title,
   value,
   detail,
@@ -225,27 +180,30 @@ function ManagerMetricCard({
   value: string | number
   detail: string
   icon: ReactNode
-  tone: ManagerTone
+  tone: MetricTone
 }) {
+  const toneClass: Record<MetricTone, string> = {
+    green: 'bg-emerald-50 text-emerald-600',
+    amber: 'bg-amber-50 text-amber-600',
+    red: 'bg-red-50 text-red-600',
+    blue: 'bg-blue-50 text-blue-600',
+    violet: 'bg-violet-50 text-violet-600',
+    slate: 'bg-slate-100 text-slate-600',
+  }
+
   return (
-    <Card className="min-h-[144px] rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
-      <div className="flex items-start justify-between gap-mx-sm">
+    <article className="min-h-32 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+      <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <Typography variant="tiny" tone="muted" className="mb-2 block font-black uppercase tracking-widest text-mx-tiny">
-            {title}
-          </Typography>
-          <Typography variant="h1" className="text-3xl sm:text-4xl tabular-nums leading-none tracking-tighter font-mono-numbers">
-            {value}
-          </Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-black uppercase tracking-tight">
-            {detail}
-          </Typography>
+          <p className="text-xs font-medium text-gray-500">{title}</p>
+          <p className="mt-2 break-words text-2xl font-bold leading-tight text-gray-800 tabular-nums">{value}</p>
+          <p className="mt-2 text-xs leading-4 text-gray-400">{detail}</p>
         </div>
-        <div className={cn('h-mx-12 w-mx-12 rounded-mx-xl border flex shrink-0 items-center justify-center shadow-mx-inner', managerToneClasses(tone))}>
+        <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${toneClass[tone]}`}>
           {icon}
-        </div>
+        </span>
       </div>
-    </Card>
+    </article>
   )
 }
 

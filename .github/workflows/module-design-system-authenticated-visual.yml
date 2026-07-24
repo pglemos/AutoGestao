@@ -28,6 +28,7 @@ jobs:
       VITE_SUPABASE_ANON_KEY: sb_publishable_etxw6xyht7S_g8epHpqsJw_wB6x9d9k
       E2E_ROLE_PASSWORD: ${{ secrets.E2E_ROLE_PASSWORD }}
       E2E_AUTH_PASSWORD: ${{ secrets.E2E_AUTH_PASSWORD }}
+      E2E_OWNER_EMAIL: ${{ secrets.E2E_OWNER_EMAIL }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -60,17 +61,21 @@ jobs:
           src/test/module-route-visual-audit.playwright.ts
           --project=chromium --workers=1
       - name: Run authenticated Owner Base44 route matrix
-        if: steps.auth.outputs.available == 'true'
+        if: steps.auth.outputs.available == 'true' && env.E2E_OWNER_EMAIL != ''
         run: >
           npx playwright test
           src/test/owner-base44-authenticated-visual.playwright.ts
           --project=chromium --workers=1
+      - name: Owner visual matrix skipped
+        if: steps.auth.outputs.available == 'true' && env.E2E_OWNER_EMAIL == ''
+        run: echo "::notice::Owner visual matrix skipped because E2E_OWNER_EMAIL is not configured."
       - name: Upload visual evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: module-design-system-authenticated-visual
           path: |
+            visual-evidence/
             test-results/
             playwright-report/
           retention-days: 14

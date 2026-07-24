@@ -1,5 +1,6 @@
 import { Crown } from 'lucide-react'
 import { Avatar } from '@/components/atoms/Avatar'
+import { useMxSurfaceVisualMode } from '@/components/module/MxSurfaceVisualContext'
 import { cn } from '@/lib/utils'
 
 type PodiumEntry = {
@@ -20,6 +21,8 @@ type Props = {
  * Preserva visual: 2º à esquerda, 1º centro elevado, 3º à direita.
  */
 export function RankingPodium({ entries, onSelect }: Props) {
+  const manager = useMxSurfaceVisualMode() === 'manager'
+
   return (
     <div className="flex justify-center items-end gap-mx-sm sm:gap-mx-xl relative pt-4 min-h-48 sm:min-h-56 md:min-h-mx-64">
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 h-48 w-full max-w-xs rounded-full bg-brand-primary/10 blur-mx-huge pointer-events-none sm:h-56 sm:max-w-lg md:h-mx-64"></div>
@@ -50,10 +53,25 @@ export function RankingPodium({ entries, onSelect }: Props) {
                   src={seller.avatar_url || undefined}
                   alt={`Avatar de ${seller.user_name}`}
                   fallback={seller.user_name}
-                  className={`rounded-full border-4 border-mx-black ${isFirst ? 'w-mx-20 h-mx-20 sm:w-mx-32 sm:h-mx-32' : isSecond ? 'w-mx-20 h-mx-20 sm:w-mx-20 sm:h-mx-20' : 'w-mx-14 h-mx-14 sm:w-mx-20 sm:h-mx-20'}`}
+                  className={cn(
+                    'rounded-full border-4',
+                    manager ? 'border-white' : 'border-mx-black',
+                    isFirst
+                      ? 'w-mx-20 h-mx-20 sm:w-mx-32 sm:h-mx-32'
+                      : isSecond
+                        ? 'w-mx-20 h-mx-20 sm:w-mx-20 sm:h-mx-20'
+                        : 'w-mx-14 h-mx-14 sm:w-mx-20 sm:h-mx-20',
+                  )}
                 />
               </div>
-              <div className={`absolute -bottom-3 px-3 py-1 rounded-full text-mx-micro font-black uppercase tracking-wider shadow-lg border border-white/20 whitespace-nowrap z-20 ${isFirst ? 'bg-mx-black text-brand-primary' : 'bg-surface-alt text-text-primary'}`}>
+              <div className={cn(
+                'absolute -bottom-3 px-3 py-1 rounded-full text-mx-micro font-black uppercase tracking-wider shadow-lg border border-white/20 whitespace-nowrap z-20',
+                isFirst
+                  ? manager
+                    ? 'bg-emerald-600 text-white'
+                    : 'bg-mx-black text-brand-primary'
+                  : 'bg-surface-alt text-text-primary',
+              )}>
                 {isFirst ? '1º lugar' : `#${seller.position} lugar`}
               </div>
             </div>
@@ -61,8 +79,8 @@ export function RankingPodium({ entries, onSelect }: Props) {
               ${isFirst ? 'h-mx-64 bg-gradient-to-b from-brand-primary/80 to-brand-primary/5' : isSecond ? 'h-mx-48 bg-gradient-to-b from-border-strong/80 to-surface-alt/10' : 'h-mx-32 bg-gradient-to-b from-status-warning/60 to-status-warning/10'}`}>
               <div className={`font-display font-black text-2xl sm:text-3xl mb-1 drop-shadow-sm ${isFirst ? 'text-mx-black' : 'text-text-primary'}`}>{seller.atingimento}%</div>
               <div className={cn(
-                "text-mx-nano sm:text-mx-micro uppercase font-bold tracking-wide sm:tracking-widest max-w-full text-center",
-                isFirst ? 'text-brand-secondary' : 'text-text-tertiary'
+                'text-mx-nano sm:text-mx-micro uppercase font-bold tracking-wide sm:tracking-widest max-w-full text-center',
+                isFirst ? 'text-brand-secondary' : 'text-text-tertiary',
               )}>
                 <span className="sm:hidden">ATG</span>
                 <span className="hidden sm:inline">ATINGIMENTO</span>
