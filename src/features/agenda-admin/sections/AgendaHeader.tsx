@@ -2,12 +2,13 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu'
 import * as Popover from '@radix-ui/react-popover'
 import {
   Ban, CalendarDays, ChevronDown, ChevronLeft, ChevronRight,
-  Filter, List, Plus, RefreshCw, Users
+  Filter, List, Plus, RefreshCw, Users,
 } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Select } from '@/components/atoms/Select'
 import { Typography } from '@/components/atoms/Typography'
+import { useMxSurfaceVisualMode } from '@/components/module/MxSurfaceVisualContext'
 import { cn } from '@/lib/utils'
 import type { AgendaConsultant, DateFilter } from '@/hooks/agenda'
 import { statusFilters } from '../data/agendaFilters'
@@ -70,6 +71,8 @@ export function AgendaHeader({
   consultants = [],
   canViewAllAgendas = false,
 }: AgendaHeaderProps) {
+  const manager = useMxSurfaceVisualMode() === 'manager'
+
   const handleViewModeChange = (mode: AdminCalendarViewMode) => {
     setCalendarViewMode(mode)
     if (mode === 'day') setDateFilter('hoje')
@@ -80,11 +83,8 @@ export function AgendaHeader({
 
   return (
     <header className="flex shrink-0 flex-col gap-3 border-b border-border-strong pb-3 bg-white">
-      {/* Main Row: Navigation + Month Label + Controls */}
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        {/* Left: Navigation Controls */}
         <div className="flex flex-wrap items-center gap-3">
-          {/* Date Navigation: < Hoje > */}
           <div className="flex items-center gap-1">
             <button
               type="button"
@@ -111,18 +111,14 @@ export function AgendaHeader({
             </button>
           </div>
 
-          {/* Month/Period Label */}
-          <h1 className="text-lg font-extrabold text-text-primary capitalize">
+          <h1 className={cn('text-lg text-text-primary capitalize', manager ? 'font-semibold' : 'font-extrabold')}>
             {monthLabel}
           </h1>
         </div>
 
-        {/* Right: Search, View Toggle, Filters, Create */}
         <div className="flex flex-wrap items-center gap-2">
-          {/* Search */}
           <AgendaSearchBar searchQuery={searchQuery} onSearchChange={onSearchChange} />
 
-          {/* View Mode Toggle */}
           <div className="flex rounded-mx-lg border border-border-strong bg-surface-alt/60 p-0.5 shrink-0">
             {VIEW_OPTIONS.map((option) => (
               <button
@@ -143,7 +139,6 @@ export function AgendaHeader({
             ))}
           </div>
 
-          {/* Filters Popover */}
           <Popover.Root>
             <Popover.Trigger asChild>
               <button
@@ -192,12 +187,12 @@ export function AgendaHeader({
                       <Select
                         id="agenda-consultant-select"
                         value={consultantFilter}
-                        onChange={(e) => setConsultantFilter(e.target.value)}
+                        onChange={(event) => setConsultantFilter(event.target.value)}
                         className="!h-8 !rounded-mx-lg text-xs"
                       >
                         <option value="todos">Todos os consultores</option>
-                        {consultants.map((c) => (
-                          <option key={c.id} value={c.id}>{c.name}</option>
+                        {consultants.map((consultant) => (
+                          <option key={consultant.id} value={consultant.id}>{consultant.name}</option>
                         ))}
                       </Select>
                     </div>
@@ -208,19 +203,19 @@ export function AgendaHeader({
                       Status
                     </span>
                     <div className="flex flex-wrap gap-1">
-                      {statusFilters.map((f) => (
+                      {statusFilters.map((filter) => (
                         <button
-                          key={f.key}
+                          key={filter.key}
                           type="button"
-                          onClick={() => setStatusFilter(f.key)}
+                          onClick={() => setStatusFilter(filter.key)}
                           className={cn(
                             'rounded-mx-md px-2.5 py-1 text-xs font-medium transition-colors',
-                            statusFilter === f.key
+                            statusFilter === filter.key
                               ? 'bg-brand-primary text-white font-bold'
                               : 'border border-border-strong bg-white text-text-secondary hover:bg-surface-alt',
                           )}
                         >
-                          {f.label}
+                          {filter.label}
                         </button>
                       ))}
                     </div>
@@ -230,7 +225,6 @@ export function AgendaHeader({
             </Popover.Portal>
           </Popover.Root>
 
-          {/* Refresh */}
           <Button
             variant="outline"
             size="icon"
@@ -241,7 +235,6 @@ export function AgendaHeader({
             <RefreshCw size={14} />
           </Button>
 
-          {/* Create Button */}
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
               <Button className="h-8 rounded-mx-lg bg-brand-primary px-3 font-bold text-xs text-white shadow-xs hover:bg-brand-primary/90">
