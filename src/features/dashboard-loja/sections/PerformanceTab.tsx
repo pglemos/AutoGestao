@@ -31,10 +31,6 @@ type PerformanceTabProps = {
   onRefetchAll: () => Promise<void>
 }
 
-/**
- * Aba "Performance" do DashboardLoja — orquestra todas as sections quando ativeTab='performance'.
- * Extraído de DashboardLoja.tsx (Story 2.5).
- */
 export function PerformanceTab({
   role,
   isOwner,
@@ -84,7 +80,7 @@ export function PerformanceTab({
     )
   }
 
-  return (
+  const performanceContent = (
     <>
       {isAdminMx && selectedStore && (
         <DashboardErrorBoundary sectionName="AdminSettings">
@@ -155,6 +151,18 @@ export function PerformanceTab({
       </DashboardErrorBoundary>
     </>
   )
+
+  if (isPerfilInternoMx(role)) {
+    return (
+      <main className="min-h-screen bg-gray-50 text-gray-800">
+        <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-6 pb-24">
+          {performanceContent}
+        </div>
+      </main>
+    )
+  }
+
+  return performanceContent
 }
 
 export default PerformanceTab
