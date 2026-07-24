@@ -69,7 +69,7 @@ export function ConfigTabsNav({ tabs, activeTab, role, onSelect }: ConfigTabsNav
                                     aria-current={selected ? 'page' : undefined}
                                     title={tab.description}
                                 >
-                                    <Icon size={14} strokeWidth={1.8} aria-hidden="true" />
+                                    <Icon size={14} className="shrink-0" />
                                     <span>{tab.label}</span>
                                     {readOnly ? <Eye size={12} className="text-gray-400" aria-label="Somente consulta" /> : null}
                                 </button>

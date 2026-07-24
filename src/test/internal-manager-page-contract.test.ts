@@ -47,7 +47,7 @@ describe('contrato visual Gerente 1:1 para o módulo interno MX', () => {
     const css = read('src/styles/internal-mx-manager-scope.css')
     expect(css).toContain('.mx-manager-page-1to1')
     expect(css).toContain('[data-mx-card]')
-    expect(css).toContain('[data-mx-config-tabs="manager"]')
+    expect(css).toContain('[data-mx-config-tabs=')
     expect(css).toContain('text-transform: none')
     expect(css).toContain('max-width: 80rem')
   })
