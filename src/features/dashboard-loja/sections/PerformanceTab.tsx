@@ -6,6 +6,7 @@ import { PerformanceAlerts, usePerformanceAlerts } from './PerformanceAlerts'
 import { FunnelSection } from './FunnelSection'
 import { RankingSection } from './RankingSection'
 import { AdminSettingsCard } from './AdminSettingsCard'
+import { AdminLiveOperationsPanel } from './AdminLiveOperationsPanel'
 import { OwnerExecutiveCockpit } from './OwnerExecutiveCockpit'
 import { ManagerSellerParityHomeCanonical } from './ManagerSellerParityHomeCanonical'
 import type { useDashboardLojaData } from '../hooks/useDashboardLojaData'
@@ -107,6 +108,15 @@ export function PerformanceTab({
             onDelete={onDeleteStore}
             deletingStore={deletingStore}
             onRefetchAll={onRefetchAll}
+          />
+        </DashboardErrorBoundary>
+      )}
+
+      {isPerfilInternoMx(role) && (
+        <DashboardErrorBoundary sectionName="AdminLiveOperations">
+          <AdminLiveOperationsPanel
+            storeId={selectedStoreId}
+            referenceDate={data.referenceDate}
           />
         </DashboardErrorBoundary>
       )}
