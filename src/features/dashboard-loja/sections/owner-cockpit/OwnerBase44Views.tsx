@@ -10,6 +10,7 @@ import {
   MessageSquareText,
   ShieldAlert,
   UserRoundCheck,
+  Users,
 } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
@@ -86,6 +87,36 @@ export function OwnerRoutineView({
       0,
     )
 
+  const activeSellers = (data.sellers || []).filter(s => s.active && !s.is_venda_loja)
+  const sellerStatus = useMemo(() => {
+    const checkinsBySeller = (data.checkins || []).reduce((acc, c) => {
+      if (!acc[c.seller_user_id]) acc[c.seller_user_id] = []
+      acc[c.seller_user_id].push(c)
+      return acc
+    }, {} as Record<string, typeof data.checkins>)
+
+    return activeSellers.map(seller => {
+      const sellerCheckins = checkinsBySeller[seller.id] || []
+      const todayCheckin = sellerCheckins.find(c => c.reference_date === data.referenceDate)
+      const totalSales = sellerCheckins.reduce((sum, c) => sum + (c.vnd_porta_prev_day || 0) + (c.vnd_cart_prev_day || 0) + (c.vnd_net_prev_day || 0), 0)
+      const totalLeads = sellerCheckins.reduce((sum, c) => sum + (c.leads_prev_day || 0), 0)
+      const totalAgd = sellerCheckins.reduce((sum, c) => sum + (c.agd_cart_today || 0) + (c.agd_net_today || 0), 0)
+
+      return {
+        id: seller.id,
+        name: seller.name,
+        checkedIn: seller.checkin_today,
+        hasTodayCheckin: Boolean(todayCheckin),
+        sales: totalSales,
+        leads: totalLeads,
+        appointments: totalAgd,
+      }
+    })
+  }, [activeSellers, data.checkins, data.referenceDate])
+
+  const checkedInCount = sellerStatus.filter(s => s.checkedIn).length
+  const pendingSellers = sellerStatus.filter(s => !s.checkedIn)
+
   return (
     <div className="space-y-mx-md">
       <SectionTitle
@@ -116,6 +147,79 @@ export function OwnerRoutineView({
           tone="danger"
         />
       </div>
+
+      {/* Fechamento Diário da Equipe */}
+      <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
+        <div className="flex items-center justify-between gap-mx-sm">
+          <div className="flex items-center gap-mx-sm">
+            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-xl bg-brand-primary/10">
+              <Users size={20} className="text-brand-primary" />
+            </span>
+            <div>
+              <Typography variant="h3" className="text-xl font-black">Fechamento Diário da Equipe</Typography>
+              <Typography variant="p" tone="muted" className="mt-1 text-sm font-bold">
+                {checkedInCount}/{activeSellers.length} vendedores realizaram o fechamento
+              </Typography>
+            </div>
+          </div>
+          {pendingSellers.length > 0 && (
+            <span className="rounded-mx-md border border-status-error/20 bg-status-error-surface px-mx-sm py-mx-xs text-mx-tiny font-black text-status-error">
+              {pendingSellers.length} pendente{pendingSellers.length > 1 ? 's' : ''}
+            </span>
+          )}
+        </div>
+
+        <div className="mt-mx-md overflow-x-auto">
+          <table className="w-full min-w-[700px] text-sm">
+            <thead className="bg-surface-alt">
+              <tr>
+                <th className="px-mx-md py-mx-sm text-left text-mx-tiny font-black uppercase tracking-mx-wide text-text-tertiary">Vendedor</th>
+                <th className="px-mx-md py-mx-sm text-left text-mx-tiny font-black uppercase tracking-mx-wide text-text-tertiary">Status</th>
+                <th className="px-mx-md py-mx-sm text-center text-mx-tiny font-black uppercase tracking-mx-wide text-text-tertiary">Vendas</th>
+                <th className="px-mx-md py-mx-sm text-center text-mx-tiny font-black uppercase tracking-mx-wide text-text-tertiary">Leads</th>
+                <th className="px-mx-md py-mx-sm text-center text-mx-tiny font-black uppercase tracking-mx-wide text-text-tertiary">Agendamentos</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-border-subtle">
+              {sellerStatus.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-mx-md py-mx-lg text-center text-sm font-bold text-text-tertiary">
+                    Nenhum vendedor vinculado a esta loja.
+                  </td>
+                </tr>
+              ) : sellerStatus.map(seller => (
+                <tr key={seller.id} className="transition-colors hover:bg-surface-alt">
+                  <td className="px-mx-md py-mx-sm font-black text-text-primary">{seller.name}</td>
+                  <td className="px-mx-md py-mx-sm">
+                    <span className={cn(
+                      'rounded-mx-md px-mx-sm py-mx-xs text-mx-tiny font-black uppercase',
+                      seller.checkedIn
+                        ? 'bg-status-success-surface text-status-success'
+                        : 'bg-status-error-surface text-status-error'
+                    )}>
+                      {seller.checkedIn ? 'Fechamento feito' : 'Fechamento pendente'}
+                    </span>
+                  </td>
+                  <td className="px-mx-md py-mx-sm text-center tabular-nums font-black">{seller.sales}</td>
+                  <td className="px-mx-md py-mx-sm text-center tabular-nums font-black">{seller.leads}</td>
+                  <td className="px-mx-md py-mx-sm text-center tabular-nums font-black">{seller.appointments}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {pendingSellers.length > 0 && (
+          <div className="mt-mx-md rounded-mx-xl border border-status-warning/20 bg-status-warning-surface p-mx-md">
+            <Typography variant="tiny" className="block font-black uppercase tracking-mx-wide text-status-warning">
+              Vendedores pendentes
+            </Typography>
+            <Typography variant="p" className="mt-mx-xs text-sm font-bold text-status-warning">
+              {pendingSellers.map(s => s.name).join(', ')}
+            </Typography>
+          </div>
+        )}
+      </Card>
 
       <div className="grid grid-cols-1 gap-mx-md xl:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
         <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
