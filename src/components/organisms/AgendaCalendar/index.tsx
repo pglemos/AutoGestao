@@ -97,7 +97,7 @@ export function AgendaCalendar({
         </div>
       )}
 
-      <div className="flex-1 min-h-0 overflow-y-auto">
+      <div className="overflow-y-auto lg:flex-1 lg:min-h-0">
         {isTimeGrid ? (
           <TimeGrid
             days={calendarDays}
