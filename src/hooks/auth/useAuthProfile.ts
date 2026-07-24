@@ -12,7 +12,7 @@ import { supabase } from '@/lib/supabase'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 import type { User as AppUser } from '@/types/database'
 import { normalizeRole, isPerfilInternoMx } from '@/lib/auth/roles'
-import { isTransientFetchError, PROFILE_SELECT, MEMBERSHIP_SELECT, AUTH_SIGNOUT_REASON_STORAGE_KEY } from './authHelpers'
+import { isTransientFetchError, PROFILE_SELECT, MEMBERSHIP_SELECT, writeSignoutReason } from './authHelpers'
 import type { StoreMembership, StoreMembershipRow } from './authTypes'
 
 export interface UseAuthProfileResult {
@@ -138,9 +138,7 @@ export function useAuthProfile(options: UseAuthProfileOptions): UseAuthProfileRe
         const currentRole = loadedProfile ? normalizeRole(loadedProfile.role) : null
 
         if (!currentRole) {
-          if (typeof window !== 'undefined') {
-            window.sessionStorage.setItem(AUTH_SIGNOUT_REASON_STORAGE_KEY, 'no-profile')
-          }
+          writeSignoutReason('no-profile')
           await supabase.auth.signOut()
           setProfile(null)
           setMemberships([])
@@ -149,9 +147,7 @@ export function useAuthProfile(options: UseAuthProfileOptions): UseAuthProfileRe
         }
 
         if (loadedProfile?.active === false) {
-          if (typeof window !== 'undefined') {
-            window.sessionStorage.setItem(AUTH_SIGNOUT_REASON_STORAGE_KEY, 'inactive')
-          }
+          writeSignoutReason('inactive')
           await supabase.auth.signOut()
           setProfile(null)
           setMemberships([])
@@ -165,9 +161,7 @@ export function useAuthProfile(options: UseAuthProfileOptions): UseAuthProfileRe
           !isPerfilInternoMx(currentRole) &&
           loadedMemberships.length === 0
         ) {
-          if (typeof window !== 'undefined') {
-            window.sessionStorage.setItem(AUTH_SIGNOUT_REASON_STORAGE_KEY, 'no-store')
-          }
+          writeSignoutReason('no-store')
           await supabase.auth.signOut()
           setProfile(null)
           setMemberships([])

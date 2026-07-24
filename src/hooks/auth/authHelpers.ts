@@ -12,6 +12,36 @@ export const ROLE_SIMULATION_STORAGE_KEY = 'mx_role_simulation'
 export const SIMULATION_CONTEXT_STORAGE_KEY = 'mx_simulation_context'
 export const DEV_BYPASS_ALLOWED_HOSTS = new Set(['localhost', '127.0.0.1', '::1'])
 export const AUTH_SIGNOUT_REASON_STORAGE_KEY = 'mx_auth_signout_reason'
+// Reasons expiram: sem isto, um reason gravado num signout antigo (ex.: conta
+// esteve inativa por um instante, foi reativada, sessionStorage sobrevive na
+// aba) podia ser lido e mostrado como causa de uma falha totalmente diferente
+// e posterior (ex.: link de recovery expirado) — usuário vendo "conta
+// desativada" pra uma conta que já está ativa há muito tempo. Achado real:
+// matheus.silva_ma@yahoo.com em 2026-07-24 (conta/loja confirmadas ativas no
+// banco no momento do relato).
+const AUTH_SIGNOUT_REASON_MAX_AGE_MS = 60_000
+
+/** Grava a razão do signout forçado com timestamp, pra poder expirar depois. */
+export function writeSignoutReason(reason: string): void {
+  if (typeof window === 'undefined') return
+  window.sessionStorage.setItem(AUTH_SIGNOUT_REASON_STORAGE_KEY, JSON.stringify({ reason, ts: Date.now() }))
+}
+
+/** Lê e consome a razão do signout — descarta se tiver mais de 60s (obsoleta). */
+export function readSignoutReason(): string | null {
+  if (typeof window === 'undefined') return null
+  const raw = window.sessionStorage.getItem(AUTH_SIGNOUT_REASON_STORAGE_KEY)
+  if (!raw) return null
+  window.sessionStorage.removeItem(AUTH_SIGNOUT_REASON_STORAGE_KEY)
+  try {
+    const parsed = JSON.parse(raw) as { reason?: string; ts?: number }
+    if (!parsed.reason || typeof parsed.ts !== 'number') return null
+    if (Date.now() - parsed.ts > AUTH_SIGNOUT_REASON_MAX_AGE_MS) return null
+    return parsed.reason
+  } catch {
+    return null
+  }
+}
 
 export const PROFILE_SELECT =
   'id, name, email, role, avatar_url, is_venda_loja, active, created_at, phone, must_change_password, notification_preferences'

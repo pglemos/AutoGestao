@@ -10,7 +10,7 @@ import { supabase } from '@/lib/supabase'
 import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from '@/lib/auth/passwordPolicy'
 import { resolvePostLoginRedirect } from '@/lib/auth/postLoginRedirect'
 import { PasswordRecoveryRequestError, requestPasswordRecovery } from '@/lib/auth/passwordRecovery'
-import { AUTH_SIGNOUT_REASON_STORAGE_KEY } from '@/hooks/auth/authHelpers'
+import { readSignoutReason } from '@/hooks/auth/authHelpers'
 
 const RECOVERY_EXPIRED_MESSAGE = 'Link de redefinição inválido ou expirado. Solicite um novo acesso.'
 
@@ -20,12 +20,16 @@ const SIGNOUT_REASON_MESSAGES: Record<string, string> = {
     'no-store': 'Sua conta não está vinculada a nenhuma loja ativa no momento. Fale com o administrador da sua loja.',
 }
 
-/** Lê e consome a razão do último signout forçado (guard de perfil/loja). */
+/**
+ * Lê e consome a razão do último signout forçado (guard de perfil/loja).
+ * readSignoutReason() já descarta razões com mais de 60s — achado real
+ * (matheus.silva_ma@yahoo.com, 2026-07-24): sem esse limite, uma razão
+ * gravada em um signout antigo podia ser exibida como causa de uma falha
+ * totalmente diferente e posterior, mesmo com a conta já ativa há tempo.
+ */
 function consumeSignoutReasonMessage(): string | null {
-    if (typeof window === 'undefined') return null
-    const reason = window.sessionStorage.getItem(AUTH_SIGNOUT_REASON_STORAGE_KEY)
+    const reason = readSignoutReason()
     if (!reason) return null
-    window.sessionStorage.removeItem(AUTH_SIGNOUT_REASON_STORAGE_KEY)
     return SIGNOUT_REASON_MESSAGES[reason] || null
 }
 
