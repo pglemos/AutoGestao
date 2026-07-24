@@ -18,6 +18,7 @@ import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import webPush from "https://esm.sh/web-push@3.6.7";
 import { corsHeaders } from "../_shared/cors.ts";
+import { canManageStore, isAdminRole, requireAuthenticatedRole } from "../_shared/auth.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
 const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
@@ -57,6 +58,20 @@ Deno.serve(async (req) => {
     );
   }
   try {
+    // Achado crítico na auditoria de 2026-07-24: este endpoint não tinha
+    // NENHUMA checagem de autenticação — qualquer chamador (repo é público
+    // no GitHub, nome da function é descobrível) podia mandar push
+    // notification arbitrário (título/corpo/URL) pra qualquer usuário ou
+    // loja via userIds/lojaId, usando service_role por baixo. Vetor de
+    // phishing direto pros usuários reais do app.
+    const auth = await requireAuthenticatedRole(req, [
+      "administrador_geral",
+      "administrador_mx",
+      "dono",
+      "gerente",
+    ]);
+    if (auth.response) return auth.response;
+
     const body = (await req.json()) as RequestBody;
     if (!body.title || body.title.trim().length === 0) {
       return new Response(JSON.stringify({ error: "title obrigatorio" }), {
@@ -64,6 +79,24 @@ Deno.serve(async (req) => {
         headers: { ...corsHeaders, "Content-Type": "application/json" },
       });
     }
+
+    // Dono/gerente só podem transmitir pra loja(s) que gerenciam, nunca por
+    // userIds arbitrário (que poderia mirar qualquer usuário do sistema).
+    if (!isAdminRole(auth.context!.role)) {
+      if (body.userIds?.length || !body.lojaId) {
+        return new Response(
+          JSON.stringify({ error: "Informe lojaId (dono/gerente só podem notificar a própria loja)." }),
+          { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+      if (!(await canManageStore(auth.context!, body.lojaId))) {
+        return new Response(
+          JSON.stringify({ error: "Você não gerencia esta loja." }),
+          { status: 403, headers: { ...corsHeaders, "Content-Type": "application/json" } },
+        );
+      }
+    }
+
     const admin = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
 
     // Carrega subscriptions ativas conforme filtro
