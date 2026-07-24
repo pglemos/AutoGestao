@@ -181,7 +181,8 @@ BEGIN
 END;
 $$;
 
-REVOKE ALL ON FUNCTION public.admin_store_live_overview(uuid, date) FROM PUBLIC;
+REVOKE EXECUTE ON FUNCTION public.admin_store_live_overview(uuid, date) FROM anon;
+REVOKE EXECUTE ON FUNCTION public.admin_store_live_overview(uuid, date) FROM PUBLIC;
 GRANT EXECUTE ON FUNCTION public.admin_store_live_overview(uuid, date) TO authenticated;
 
 DO $$
