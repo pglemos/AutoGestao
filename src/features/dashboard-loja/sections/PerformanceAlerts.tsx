@@ -1,9 +1,6 @@
 import { useMemo } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { Typography } from '@/components/atoms/Typography'
-import { Badge } from '@/components/atoms/Badge'
-import { Button } from '@/components/atoms/Button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/molecules/Card'
+import { AlertTriangle, ArrowRight, CheckCircle2, CircleAlert, Lightbulb } from 'lucide-react'
 import type { UserRole } from '@/types/database'
 
 export type OwnerPerformanceAlert = {
@@ -15,7 +12,6 @@ export type OwnerPerformanceAlert = {
   impact: 'Alto' | 'Médio' | 'Baixo'
   ctaLabel: string
   ctaTo: string
-  /** Área/departamento de origem do alerta, para exibir como tag no card do Dono */
   department?: string
 }
 
@@ -48,10 +44,6 @@ type Metrics = {
 
 type Seller = { id?: string; name?: string; checkin_today?: boolean }
 
-/**
- * Calcula alertas de performance + mix de canais a partir das métricas da loja.
- * Hook puro para evitar duplicação entre o card de alertas e o owner-card.
- */
 export function usePerformanceAlerts({
   role,
   isOwner,
@@ -142,7 +134,7 @@ export function usePerformanceAlerts({
           : 'Checar proposta, avaliação de troca, financiamento e fechamento.',
         variant: 'danger',
         impact: 'Alto',
-        ctaLabel: role === 'gerente' ? 'Ver ranking' : 'Ver ranking',
+        ctaLabel: 'Ver ranking',
         ctaTo: role === 'gerente' ? '/gerente/ranking' : '/classificacao',
         department: 'Comercial',
       })
@@ -193,9 +185,9 @@ export function usePerformanceAlerts({
     const total = metrics.totalSales
 
     return [
-      { label: 'Porta (Showroom)', color: 'bg-brand-primary', pct: total > 0 ? Math.round((porta / total) * 100) : 0, tone: 'success' as ChannelTone },
-      { label: 'Carteira (Ativo)', color: 'bg-brand-primary', pct: total > 0 ? Math.round((carteira / total) * 100) : 0, tone: 'info' as ChannelTone },
-      { label: 'Digital (Leads)', color: 'bg-brand-primary', pct: total > 0 ? Math.round((digital / total) * 100) : 0, tone: 'brand' as ChannelTone },
+      { label: 'Porta (Showroom)', color: 'bg-emerald-500', pct: total > 0 ? Math.round((porta / total) * 100) : 0, tone: 'success' as ChannelTone },
+      { label: 'Carteira (Ativo)', color: 'bg-blue-500', pct: total > 0 ? Math.round((carteira / total) * 100) : 0, tone: 'info' as ChannelTone },
+      { label: 'Digital (Leads)', color: 'bg-violet-500', pct: total > 0 ? Math.round((digital / total) * 100) : 0, tone: 'brand' as ChannelTone },
     ]
   }, [checkins, metrics.totalSales])
 
@@ -208,70 +200,104 @@ type PerformanceAlertsProps = {
   alerts: OwnerPerformanceAlert[]
 }
 
-/**
- * Card de alertas de performance — visão gerente/dono/admin com 4 alertas
- * principais ordenados por severidade. Extraído de DashboardLoja.tsx (Story 2.5).
- */
 export function PerformanceAlerts({ role, isOwner, alerts }: PerformanceAlertsProps) {
   const navigate = useNavigate()
+  const hasDanger = alerts.some(alert => alert.variant === 'danger')
+  const hasWarning = alerts.some(alert => alert.variant === 'warning')
+  const summaryLabel = hasDanger ? 'Ação necessária' : hasWarning ? 'Ponto de atenção' : 'Dentro do ritmo'
+  const SummaryIcon = hasDanger ? AlertTriangle : hasWarning ? CircleAlert : CheckCircle2
+
   return (
-    <Card className="w-full border-none shadow-mx-lg bg-white overflow-hidden">
-      <CardHeader className="bg-surface-alt/30 border-b border-border-default p-mx-lg">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-mx-md">
+    <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm" aria-labelledby="performance-alerts-title">
+      <header className="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex items-start gap-3">
+          <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${hasDanger ? 'bg-red-50 text-red-600' : hasWarning ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
+            <SummaryIcon size={19} />
+          </span>
           <div>
-            <CardTitle className="text-lg md:text-xl uppercase tracking-tighter">
-              {role === 'gerente' ? 'Visão Gerencial' : isOwner ? 'Decisões do Dono' : 'Visão do Dono'}
-            </CardTitle>
-            <CardDescription className="uppercase tracking-widest font-black mt-1 text-mx-tiny">
-              {isOwner
-                ? 'IMPACTO FINANCEIRO, COMERCIAL E DISCIPLINAR PRIORIZADO'
-                : 'ALERTAS DE PERFORMANCE, ROTINA E FUNIL'}
-            </CardDescription>
+            <h2 id="performance-alerts-title" className="text-lg font-bold text-gray-800">
+              {role === 'gerente' ? 'Prioridades gerenciais' : isOwner ? 'Decisões prioritárias' : 'Pontos de atenção'}
+            </h2>
+            <p className="mt-1 text-sm text-gray-500">Alertas de performance, rotina e funil organizados por impacto.</p>
           </div>
-          <Badge
-            variant={
-              alerts.some(alert => alert.variant === 'danger')
-                ? 'danger'
-                : alerts.some(alert => alert.variant === 'warning')
-                ? 'warning'
-                : 'success'
-            }
-            className="rounded-mx-full px-3 py-1 w-fit"
-          >
-            {alerts.some(alert => alert.variant === 'danger')
-              ? 'AÇÃO NECESSÁRIA'
-              : alerts.some(alert => alert.variant === 'warning')
-              ? 'PONTO DE ATENÇÃO'
-              : 'DENTRO DO RITMO'}
-          </Badge>
         </div>
-      </CardHeader>
-      <CardContent className="p-mx-lg">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-mx-md">
-          {alerts.map((alert) => (
-            <div key={alert.title} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-              <div className="flex items-start justify-between gap-mx-sm mb-mx-sm">
-                <Typography variant="p" className="font-black uppercase text-sm leading-tight">{alert.title}</Typography>
-                <Badge variant={alert.variant} className="rounded-mx-full px-2 py-0.5 shrink-0">
-                  {alert.variant === 'success' ? 'OK' : alert.variant === 'warning' ? 'ATENÇÃO' : alert.variant === 'outline' ? 'VALIDAR' : 'CRÍTICO'}
-                </Badge>
-              </div>
-              {isOwner && (
-                <Typography variant="tiny" tone="muted" className="mb-mx-xs block font-black uppercase tracking-widest">
-                  Impacto {alert.impact}
-                </Typography>
-              )}
-              <Typography variant="tiny" tone="muted" className="block mb-mx-sm">{alert.description}</Typography>
-              <Typography variant="tiny" tone="brand" className="mb-mx-xs block font-black uppercase tracking-tight">{alert.recommendation}</Typography>
-              <Typography variant="tiny" className="font-black uppercase tracking-tight">{alert.action}</Typography>
-              <Button type="button" variant="outline" size="sm" onClick={() => navigate(alert.ctaTo)} className="mt-mx-sm h-mx-9 rounded-mx-lg bg-white">
-                {alert.ctaLabel}
-              </Button>
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
+        <span className={`inline-flex w-fit rounded-lg px-2.5 py-1 text-xs font-semibold ${hasDanger ? 'bg-red-100 text-red-700' : hasWarning ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}>
+          {summaryLabel}
+        </span>
+      </header>
+
+      <div className="grid gap-4 p-5 md:grid-cols-2 xl:grid-cols-4">
+        {alerts.map(alert => (
+          <AlertCard key={alert.title} alert={alert} isOwner={isOwner} onOpen={() => navigate(alert.ctaTo)} />
+        ))}
+      </div>
+    </section>
+  )
+}
+
+function AlertCard({
+  alert,
+  isOwner,
+  onOpen,
+}: {
+  alert: OwnerPerformanceAlert
+  isOwner: boolean
+  onOpen: () => void
+}) {
+  const styles = {
+    success: {
+      surface: 'border-emerald-100 bg-emerald-50/60',
+      badge: 'bg-emerald-100 text-emerald-700',
+      icon: 'text-emerald-600',
+      label: 'Dentro do esperado',
+      Icon: CheckCircle2,
+    },
+    warning: {
+      surface: 'border-amber-100 bg-amber-50/60',
+      badge: 'bg-amber-100 text-amber-700',
+      icon: 'text-amber-600',
+      label: 'Atenção',
+      Icon: CircleAlert,
+    },
+    danger: {
+      surface: 'border-red-100 bg-red-50/60',
+      badge: 'bg-red-100 text-red-700',
+      icon: 'text-red-600',
+      label: 'Crítico',
+      Icon: AlertTriangle,
+    },
+    outline: {
+      surface: 'border-gray-200 bg-gray-50',
+      badge: 'bg-gray-200 text-gray-600',
+      icon: 'text-gray-500',
+      label: 'Validar',
+      Icon: Lightbulb,
+    },
+  }[alert.variant]
+  const Icon = styles.Icon
+
+  return (
+    <article className={`flex min-h-64 flex-col rounded-2xl border p-4 ${styles.surface}`}>
+      <div className="flex items-start justify-between gap-3">
+        <Icon size={19} className={styles.icon} />
+        <span className={`rounded-lg px-2 py-1 text-[11px] font-semibold ${styles.badge}`}>{styles.label}</span>
+      </div>
+      <h3 className="mt-4 text-base font-bold text-gray-800">{alert.title}</h3>
+      <p className="mt-2 text-sm leading-5 text-gray-600">{alert.description}</p>
+      <div className="mt-4 rounded-xl bg-white/80 p-3">
+        <p className="text-xs font-semibold text-gray-700">Recomendação</p>
+        <p className="mt-1 text-xs leading-5 text-gray-500">{alert.recommendation}</p>
+      </div>
+      {isOwner && <p className="mt-3 text-xs text-gray-500">Impacto {alert.impact}</p>}
+      <button
+        type="button"
+        onClick={onOpen}
+        className="mt-auto inline-flex h-9 items-center justify-between rounded-xl bg-white px-3 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+      >
+        {alert.ctaLabel}
+        <ArrowRight size={15} />
+      </button>
+    </article>
   )
 }
 
