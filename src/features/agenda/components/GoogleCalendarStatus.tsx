@@ -32,6 +32,29 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
 
   const upcoming = events.slice(0, compact ? 3 : 6)
 
+  if (compact) {
+    return (
+      <div className="flex min-w-0 items-center gap-mx-sm text-mx-tiny">
+        <Calendar size={14} className="shrink-0 text-brand-primary" />
+        <span className="flex items-center gap-1 font-bold text-text-secondary">
+          {personalConnected
+            ? <CheckCircle2 size={12} className="text-status-success" />
+            : <AlertCircle size={12} className="text-text-tertiary" />}
+          Sua agenda
+        </span>
+        {canViewCentralAgenda && (
+          <span className="flex items-center gap-1 font-bold text-text-secondary">
+            {centralConnected && centralMeetCohostsAuthorized
+              ? <CheckCircle2 size={12} className="text-status-success" />
+              : <AlertCircle size={12} className="text-status-warning" />}
+            Central MX
+          </span>
+        )}
+        {error && <span className="font-bold text-status-error">{error}</span>}
+      </div>
+    )
+  }
+
   return (
     <Card className="space-y-mx-md rounded-mx-lg border border-border-strong bg-white p-mx-lg shadow-none">
       <header className="flex min-w-0 items-center justify-between gap-mx-sm">

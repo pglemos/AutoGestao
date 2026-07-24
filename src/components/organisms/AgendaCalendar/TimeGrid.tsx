@@ -96,9 +96,9 @@ export function TimeGrid({
   })
 
   return (
-    <div className="flex flex-col overflow-hidden rounded-mx-lg border border-border-strong bg-white">
+    <div className="flex flex-col rounded-mx-lg border border-border-strong bg-white">
       <div
-        className="grid overflow-x-auto border-b border-border-strong bg-white"
+        className="sticky top-0 z-30 grid overflow-x-auto border-b border-border-strong bg-white"
         style={{ gridTemplateColumns: days.length === 1 ? '4rem minmax(0, 1fr)' : `4rem repeat(${days.length}, minmax(7.5rem, 1fr))` }}
       >
         <div className="border-r border-border-default" aria-hidden="true" />

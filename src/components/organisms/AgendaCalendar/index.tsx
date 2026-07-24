@@ -59,7 +59,7 @@ export function AgendaCalendar({
   const isTimeGrid = viewMode === 'day' || viewMode === 'week'
 
   return (
-    <Card className={cn('border border-border-strong shadow-none bg-white overflow-hidden rounded-mx-lg', className)}>
+    <Card className={cn('border border-border-strong shadow-none bg-white overflow-hidden rounded-mx-lg flex flex-col', className)}>
       {showNavigation && (
         <div className="flex items-center justify-between gap-mx-xs p-mx-sm sm:p-mx-md border-b border-border-strong bg-white">
           <button
@@ -97,32 +97,34 @@ export function AgendaCalendar({
         </div>
       )}
 
-      {isTimeGrid ? (
-        <TimeGrid
-          days={calendarDays}
-          visitsByDate={visitsByDate}
-          getVisitDotColor={getVisitDotColor}
-          selectedDate={selectedDate}
-          onDateSelect={(date) => {
-            onDateSelect(date)
-            onDateClick?.(date)
-          }}
-          onSlotClick={onSlotClick}
-          onReschedule={onReschedule}
-          onResize={onResize}
-          quickActions={quickActions}
-        />
-      ) : (
-        <MonthGrid
-          days={calendarDays}
-          visitsByDate={visitsByDate}
-          getVisitDotColor={getVisitDotColor}
-          selectedDate={selectedDate}
-          onDateSelect={onDateSelect}
-          onDateClick={onDateClick}
-          onEventClick={onEventClick}
-        />
-      )}
+      <div className="flex-1 min-h-0 overflow-y-auto">
+        {isTimeGrid ? (
+          <TimeGrid
+            days={calendarDays}
+            visitsByDate={visitsByDate}
+            getVisitDotColor={getVisitDotColor}
+            selectedDate={selectedDate}
+            onDateSelect={(date) => {
+              onDateSelect(date)
+              onDateClick?.(date)
+            }}
+            onSlotClick={onSlotClick}
+            onReschedule={onReschedule}
+            onResize={onResize}
+            quickActions={quickActions}
+          />
+        ) : (
+          <MonthGrid
+            days={calendarDays}
+            visitsByDate={visitsByDate}
+            getVisitDotColor={getVisitDotColor}
+            selectedDate={selectedDate}
+            onDateSelect={onDateSelect}
+            onDateClick={onDateClick}
+            onEventClick={onEventClick}
+          />
+        )}
+      </div>
     </Card>
   )
 }

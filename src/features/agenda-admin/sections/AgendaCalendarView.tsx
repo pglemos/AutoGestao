@@ -45,6 +45,7 @@ export function AgendaCalendarView({
       onResize={onResize}
       onEventClick={onEventClick}
       quickActions={quickActions}
+      className="flex-1 min-h-0 flex flex-col"
     />
   )
 }

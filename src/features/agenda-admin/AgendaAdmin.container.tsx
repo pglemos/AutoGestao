@@ -386,39 +386,41 @@ export function AgendaAdmin() {
         />
 
         {/* Center Main Calendar View */}
-        <div className="flex-1 flex flex-col min-w-0">
-          {calendarViewMode === 'list' ? (
-            <AgendaErrorBoundary sectionName="list">
-              <AgendaListView
-                loading={loading} groupedVisits={groupedVisits}
-                onStartVisit={forms.handleStartVisit}
-                onCancelVisit={forms.handleCancelVisit}
-                onDeleteVisit={forms.handleDeleteVisit}
-                onEditVisit={forms.handleOpenEditVisit}
-                onEditEvent={forms.handleOpenEditEvent}
-                onDeleteEvent={forms.handleDeleteEvent}
-              />
-            </AgendaErrorBoundary>
-          ) : (
-            <AgendaErrorBoundary sectionName="calendar">
-              <AgendaCalendarView
-                calendarDays={calendarDays} visitsByDate={visitsByDate}
-                selectedDate={selectedDate} onDateSelect={setSelectedDate}
-                monthLabel={monthLabel}
-                onPrevMonth={goToPrevMonth} onNextMonth={goToNextMonth}
-                onTodayClick={() => { goToToday(); setDateFilter('hoje'); setCalendarViewMode('day') }}
-                calendarViewMode={calendarViewMode} dateFilter={dateFilter}
-                onSlotClick={handleSlotClick}
-                onReschedule={handleReschedule}
-                onResize={handleResizeItem}
-                onEventClick={handleQuickEdit}
-                quickActions={quickActions}
-              />
-            </AgendaErrorBoundary>
-          )}
+        <div className="flex-1 flex flex-col min-w-0 min-h-0">
+          <div className="flex-1 min-h-0 flex flex-col">
+            {calendarViewMode === 'list' ? (
+              <AgendaErrorBoundary sectionName="list">
+                <AgendaListView
+                  loading={loading} groupedVisits={groupedVisits}
+                  onStartVisit={forms.handleStartVisit}
+                  onCancelVisit={forms.handleCancelVisit}
+                  onDeleteVisit={forms.handleDeleteVisit}
+                  onEditVisit={forms.handleOpenEditVisit}
+                  onEditEvent={forms.handleOpenEditEvent}
+                  onDeleteEvent={forms.handleDeleteEvent}
+                />
+              </AgendaErrorBoundary>
+            ) : (
+              <AgendaErrorBoundary sectionName="calendar">
+                <AgendaCalendarView
+                  calendarDays={calendarDays} visitsByDate={visitsByDate}
+                  selectedDate={selectedDate} onDateSelect={setSelectedDate}
+                  monthLabel={monthLabel}
+                  onPrevMonth={goToPrevMonth} onNextMonth={goToNextMonth}
+                  onTodayClick={() => { goToToday(); setDateFilter('hoje'); setCalendarViewMode('day') }}
+                  calendarViewMode={calendarViewMode} dateFilter={dateFilter}
+                  onSlotClick={handleSlotClick}
+                  onReschedule={handleReschedule}
+                  onResize={handleResizeItem}
+                  onEventClick={handleQuickEdit}
+                  quickActions={quickActions}
+                />
+              </AgendaErrorBoundary>
+            )}
+          </div>
 
           {/* Sync Footer Badge */}
-          <div className="mt-4 flex items-center justify-between border-t border-border-default pt-3">
+          <div className="mt-4 flex items-center justify-between border-t border-border-default pt-3 shrink-0">
             <GoogleCalendarStatus compact />
             <span className="text-[10px] text-text-tertiary font-mono hidden md:inline">
               Atalhos: [T] Hoje • [D] Dia • [W] Semana • [M] Mês • [L] Lista • [/] Buscar
