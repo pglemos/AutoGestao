@@ -78,11 +78,25 @@ export function useAuthActions(options: UseAuthActionsOptions): UseAuthActionsRe
       }
 
       if (data?.user) {
-        // Trava Zero Trust: validar acesso operacional antes de liberar a UI
-        const [loadedProfile, loadedMemberships] = await Promise.all([
-          fetchProfile(data.user.id),
-          fetchMemberships(data.user.id),
-        ])
+        // Trava Zero Trust: validar acesso operacional antes de liberar a UI.
+        // fetchProfile/fetchMemberships agora lançam em erro de query (rede, timing
+        // de RLS logo após o signIn) — precisa capturar aqui e devolver um erro de
+        // conectividade em vez de deixar a rejeição estourar ou (pior) confundir
+        // "não consegui carregar" com "perfil inválido" e bloquear o acesso à toa.
+        let loadedProfile: AppUser | null
+        let loadedMemberships: StoreMembership[]
+        try {
+          ;[loadedProfile, loadedMemberships] = await Promise.all([
+            fetchProfile(data.user.id),
+            fetchMemberships(data.user.id),
+          ])
+        } catch (err) {
+          return {
+            error: isTransientFetchError(err)
+              ? AUTH_NETWORK_ERROR_MESSAGE
+              : 'Não foi possível carregar seu perfil. Tente novamente.',
+          }
+        }
 
         const currentRole = loadedProfile ? normalizeRole(loadedProfile.role) : null
 

@@ -59,17 +59,23 @@ export function useAuthProfile(options: UseAuthProfileOptions): UseAuthProfileRe
     }
   }, [devProfile])
 
+  // IMPORTANTE: em erro de query (rede, timing de RLS/JWT logo após reload, timeout),
+  // isto DEVE lançar em vez de devolver null/[] — devolver um valor "vazio" fazia o
+  // chamador (loadUserData) confundir "erro transitório" com "perfil inválido / sem
+  // loja", derrubando (signOut) uma sessão que continuava válida.
   const fetchProfile = useCallback(async (userId: string): Promise<AppUser | null> => {
     const { data, error } = await supabase
       .from('usuarios')
       .select(PROFILE_SELECT)
       .eq('id', userId)
       .maybeSingle()
-    if (error && !isTransientFetchError(error)) {
-      console.error('Audit Error [useAuth]: fetchProfile fail ->', error.message)
+    if (error) {
+      if (!isTransientFetchError(error)) {
+        console.error('Audit Error [useAuth]: fetchProfile fail ->', error.message)
+      }
+      throw error
     }
-    if (data) setProfile(data as AppUser)
-    else setProfile(null)
+    setProfile((data as AppUser) || null)
     return (data as AppUser) || null
   }, [])
 
@@ -81,8 +87,11 @@ export function useAuthProfile(options: UseAuthProfileOptions): UseAuthProfileRe
       .eq('is_active', true)
       .order('created_at', { ascending: true })
 
-    if (error && !isTransientFetchError(error)) {
-      console.error('Audit Error [useAuth]: fetchMemberships fail ->', error.message)
+    if (error) {
+      if (!isTransientFetchError(error)) {
+        console.error('Audit Error [useAuth]: fetchMemberships fail ->', error.message)
+      }
+      throw error
     }
 
     // Isolamento de Estado (Soft Delete): Lojas inativas não são exibidas na rede

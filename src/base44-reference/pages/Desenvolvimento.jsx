@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { BookOpen } from "lucide-react";
 import { SellerPageHeader } from "@/components/seller/SellerPageHeader";
 import FeedbackPage from "./FeedbackPage";
@@ -10,7 +11,16 @@ const TABS = [
 ];
 
 export default function Desenvolvimento() {
-  const [tab, setTab] = useState("feedback");
+  const [searchParams] = useSearchParams();
+  const [tab, setTab] = useState(() => (searchParams.get("tab") === "pdi" ? "pdi" : "feedback"));
+
+  // Rotas como /pdi (vendedor) e /feedbacks redirecionam pra cá com ?tab=pdi
+  // ou ?tab=feedback — sem isso, a página sempre abria em "feedback" e
+  // ignorava silenciosamente o destino pedido.
+  useEffect(() => {
+    const paramTab = searchParams.get("tab");
+    if (paramTab === "pdi" || paramTab === "feedback") setTab(paramTab);
+  }, [searchParams]);
 
   return (
 <div className="min-h-screen bg-[#F8FAFC] p-4 sm:p-6">

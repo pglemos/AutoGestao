@@ -15,6 +15,7 @@ export interface OportunidadeForClienteRow {
   cliente_id: string
   seller_user_id: string
   veiculo_interesse: string | null
+  tipo_veiculo?: string | null
   valor_negociado: number
   etapa: string
   canal: string | null
@@ -131,6 +132,7 @@ export function deriveClientesListFromCrm(
         nomeCliente: op.cliente?.nome ?? '',
         telefone: op.cliente?.telefone ?? '',
         veiculoInteresse: op.veiculo_interesse ?? '',
+        tipoVeiculo: op.tipo_veiculo ?? null,
         valorNegociado: op.valor_negociado || null,
         dataAgendamento,
         canal: CANAL_LABEL[op.canal ?? ''] ?? 'Showroom',

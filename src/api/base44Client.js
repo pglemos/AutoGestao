@@ -1046,7 +1046,12 @@ export const base44 = {
 
         const mapped = (rows || []).map(r => ({
           id: r.id,
-          type: r.caso_motivo || 'Desenvolvimento',
+          // `devolutivas` não tem categoria Positivo/Desenvolvimento — cada registro
+          // pode ter pontos positivos e de atenção ao mesmo tempo. `caso_motivo` é
+          // texto livre do caso, nunca um desses dois rótulos; usar como "type"
+          // fazia "Positivos" ficar sempre ~0 no card de estatística.
+          hasPositives: Boolean((r.positives || '').trim()),
+          hasAttentionPoints: Boolean((r.attention_points || '').trim()),
           competency: r.action || 'Atendimento',
           message: r.notes || r.attention_points || r.positives || '',
           responsible: 'Gestor Comercial',
@@ -1071,13 +1076,14 @@ export const base44 = {
         }
         if (data.acknowledged_date !== undefined) payload.acknowledged_at = data.acknowledged_date;
 
-        const { data: updated } = await supabase
+        const { data: updated, error } = await supabase
           .from('devolutivas')
           .update(payload)
           .eq('id', id)
           .select()
           .single();
 
+        if (error) throw error;
         return updated;
       }
     },

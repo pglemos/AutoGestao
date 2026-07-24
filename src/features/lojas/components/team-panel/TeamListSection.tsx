@@ -109,8 +109,8 @@ export function TeamListSection({
 
                   <div className="flex flex-wrap items-center gap-mx-xs">
                     <Badge variant={vigencia.variant} className="font-black uppercase">{vigencia.label}</Badge>
-                    <Badge variant={member.checkin_today ? 'success' : 'outline'} className="font-black uppercase">
-                      {member.checkin_today ? 'Check-in hoje' : 'Sem check-in'}
+                    <Badge variant={member.checkin_today ? 'success' : 'danger'} className="font-black uppercase">
+                      {member.checkin_today ? 'Fechamento feito' : 'Fechamento pendente'}
                     </Badge>
                   </div>
 

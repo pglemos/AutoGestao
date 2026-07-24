@@ -12,11 +12,16 @@ type Props = {
   setFilterType: (v: string | null) => void
 }
 
+// Precisa bater com os tipos reais gravados em `notificacoes.type`
+// ('system', 'discipline', 'routine', 'checkin') mais o filtro derivado
+// 'approval' (ver isApprovalNotification em useNotificacoesPage). Os rótulos
+// antigos "Feedbacks"/"PDI" (types 'performance'/'alert') nunca correspondiam
+// a nenhuma notificação real gravada — o filtro sempre voltava vazio.
 const FILTERS = [
-  { label: 'Cadastros', type: 'approval', icon: ShieldCheck, tone: 'brand' },
+  { label: 'Aprovações', type: 'approval', icon: ShieldCheck, tone: 'brand' },
   { label: 'Lançamentos', type: 'discipline', icon: Smartphone, tone: 'error' },
-  { label: 'Feedbacks', type: 'performance', icon: TrendingUp, tone: 'success' },
-  { label: 'PDI', type: 'alert', icon: History, tone: 'warning' },
+  { label: 'Rotina', type: 'routine', icon: TrendingUp, tone: 'success' },
+  { label: 'Check-in', type: 'checkin', icon: History, tone: 'warning' },
   { label: 'Geral', type: 'system', icon: Megaphone, tone: 'brand' },
 ] as const
 

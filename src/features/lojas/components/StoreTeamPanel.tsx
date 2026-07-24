@@ -2,7 +2,7 @@ import { useTeam, useStores, type TeamMember } from '@/hooks/useTeam'
 import { UserCreationModal } from '@/features/equipe/components/UserCreationModal'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { useState, useMemo, useCallback, useEffect, useRef } from 'react'
-import { Users, UserPlus, Search, Shield, RefreshCw, Zap, Clock } from 'lucide-react'
+import { Users, UserPlus, Search, Shield, RefreshCw, Zap, Clock, CheckCircle2 } from 'lucide-react'
 import { AnimatePresence } from 'motion/react'
 import { cn, getPreRegistrationLink } from '@/lib/utils'
 import { toast } from '@/lib/toast'
@@ -179,11 +179,12 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
     const total = (team || []).length;
     const leaders = (team || []).filter(m => isPerfilInternoMx(m.role) || m.role === 'dono' || m.role === 'gerente');
     const activeMembers = (team || []).filter(m => m.active !== false && m.is_active !== false);
+    const completedCheckin = (team || []).filter(m => m.checkin_today).length;
 
     return [
         { label: 'Integrantes', shortLabel: 'Int.', value: total, icon: Users, tone: 'brand', color: 'from-brand-primary/20 to-brand-primary/5' },
+        { label: 'Fechamentos', shortLabel: 'Fech.', value: completedCheckin, icon: CheckCircle2, tone: 'success', color: 'from-status-success-surface to-transparent' },
         { label: 'Ativos', shortLabel: 'Atv.', value: activeMembers.length, icon: Zap, tone: 'success', color: 'from-status-success-surface to-transparent' },
-        { label: 'Inativos', shortLabel: 'Inat.', value: total - activeMembers.length, icon: Clock, tone: 'error', color: 'from-status-error-surface to-transparent' },
         { label: 'Líderes', shortLabel: 'Líd.', value: leaders.length, icon: Shield, tone: 'warning', color: 'from-status-warning-surface to-transparent' },
     ];
   }, [team])

@@ -133,10 +133,15 @@ export function useNotificacoesPage() {
       const matchesSearch =
         n.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
         n.message.toLowerCase().includes(searchTerm.toLowerCase())
-      const matchesType = filterType ? n.type === filterType : true
+      // 'approval' não é um valor real de `type` gravado no banco — é derivado
+      // (type literal ou título "login pendente"), então precisa do mesmo
+      // helper usado pra decidir a ação de aprovar, não uma igualdade direta.
+      const matchesType = filterType
+        ? (filterType === 'approval' ? isApprovalNotification(n) : n.type === filterType)
+        : true
       return matchesSearch && matchesType
     })
-  }, [notificacoes, searchTerm, filterType])
+  }, [notificacoes, searchTerm, filterType, isApprovalNotification])
 
   const grouped = useMemo(() => {
     const today = new Date().toISOString().split('T')[0]

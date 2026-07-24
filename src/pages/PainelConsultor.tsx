@@ -678,37 +678,37 @@ export default function PainelConsultor() {
             description="Ajuste a busca ou os filtros para voltar a exibir as unidades da rede."
           />
         ) : (
-          <MxTableSurface className="rounded-none border-0">
-            <table className="w-full min-w-mx-table-wide text-left">
+          <MxTableSurface className="overflow-x-visible rounded-none border-0">
+            <table className="w-full table-fixed text-left text-xs sm:text-sm [&_td]:overflow-hidden [&_th]:overflow-hidden">
               <thead className="bg-surface-alt">
                 <tr className="border-b border-border-subtle">
                   {(
                     [
-                      ['name', 'Unidade', 'text-left'],
-                      ['leads', 'Leads', 'text-right'],
-                      ['agd', 'Agendamentos', 'text-right'],
-                      ['vis', 'Visitas', 'text-right'],
-                      ['sales', 'Vendas', 'text-right'],
-                      ['goal', 'Meta', 'text-right'],
-                      ['gap', 'Gap', 'text-right'],
-                      ['proj', 'Projeção', 'text-right'],
-                      ['ritmo', 'Ritmo diário', 'text-right'],
+                      ['name', 'Unidade', 'text-left', 'w-[20%]'],
+                      ['leads', 'Leads', 'text-right', 'w-[6%]'],
+                      ['agd', 'Agend.', 'text-right', 'w-[7%]'],
+                      ['vis', 'Visitas', 'text-right', 'w-[6%]'],
+                      ['sales', 'Vendas', 'text-right', 'w-[6%]'],
+                      ['goal', 'Meta', 'text-right', 'w-[6%]'],
+                      ['gap', 'Gap', 'text-right', 'w-[5%]'],
+                      ['proj', 'Projeção', 'text-right', 'w-[7%]'],
+                      ['ritmo', 'Ritmo', 'text-right', 'w-[6%]'],
                     ] as const
-                  ).map(([key, label, alignment]) => (
-                    <th key={key} className={cn('px-mx-md py-mx-sm', alignment)}>
+                  ).map(([key, label, alignment, width]) => (
+                    <th key={key} className={cn('px-mx-xs py-mx-xs', alignment, width)}>
                       <button
                         type="button"
                         onClick={() => handleSort(key)}
-                        className="font-semibold text-text-secondary transition-colors hover:text-brand-primary"
+                        className="truncate font-semibold text-text-secondary transition-colors hover:text-brand-primary"
                       >
                         {label}
                       </button>
                     </th>
                   ))}
-                  <th className="px-mx-md py-mx-sm text-center font-semibold text-text-secondary">
+                  <th className="w-[13%] px-mx-xs py-mx-xs text-center font-semibold text-text-secondary">
                     Situação
                   </th>
-                  <th className="px-mx-md py-mx-sm text-right font-semibold text-text-secondary">
+                  <th className="w-[13%] px-mx-xs py-mx-xs text-right font-semibold text-text-secondary">
                     Disciplina
                   </th>
                 </tr>
@@ -724,51 +724,53 @@ export default function PainelConsultor() {
                       transition={{ delay: Math.min(index * 0.015, 0.2) }}
                       className="transition-colors hover:bg-surface-alt"
                     >
-                      <td className="px-mx-md py-mx-sm">
+                      <td className="px-mx-xs py-mx-xs">
                         <button
                           type="button"
                           onClick={() => handleStoreClick(store.id, store.name)}
-                          className="flex min-w-mx-48 items-center gap-mx-sm rounded-mx-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
+                          className="flex w-full min-w-0 items-center gap-mx-xs rounded-mx-md text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary focus-visible:ring-offset-2"
                           aria-label={`Abrir unidade ${store.name}`}
                         >
-                          <span className="grid h-mx-9 w-mx-9 shrink-0 place-items-center rounded-mx-lg bg-status-success-surface text-brand-primary">
-                            <Building2 size={17} aria-hidden="true" />
+                          <span className="grid h-7 w-7 shrink-0 place-items-center rounded-mx-lg bg-status-success-surface text-brand-primary">
+                            <Building2 size={14} aria-hidden="true" />
                           </span>
                           <span className="min-w-0">
                             <Typography variant="p" className="block truncate font-semibold text-text-primary">
                               {store.name}
                             </Typography>
-                            <Typography variant="tiny" tone="muted" className="block">
-                              {store.checkedInToday}/{store.sellers} vendedores com registro
+                            <Typography variant="tiny" tone="muted" className="block truncate">
+                              {store.checkedInToday}/{store.sellers} vendedores
                             </Typography>
                           </span>
                         </button>
                       </td>
-                      <td className="px-mx-md py-mx-sm text-right tabular-nums">{store.leads}</td>
-                      <td className="px-mx-md py-mx-sm text-right tabular-nums">{store.agd}</td>
-                      <td className="px-mx-md py-mx-sm text-right tabular-nums">{store.vis}</td>
-                      <td className="px-mx-md py-mx-sm text-right font-semibold tabular-nums text-brand-primary">
+                      <td className="px-mx-xs py-mx-xs text-right tabular-nums">{store.leads}</td>
+                      <td className="px-mx-xs py-mx-xs text-right tabular-nums">{store.agd}</td>
+                      <td className="px-mx-xs py-mx-xs text-right tabular-nums">{store.vis}</td>
+                      <td className="px-mx-xs py-mx-xs text-right font-semibold tabular-nums text-brand-primary">
                         {store.sales}
                       </td>
-                      <td className="px-mx-md py-mx-sm text-right tabular-nums text-text-secondary">
+                      <td className="px-mx-xs py-mx-xs text-right tabular-nums text-text-secondary">
                         {store.goal}
                       </td>
-                      <td className="px-mx-md py-mx-sm text-right font-semibold tabular-nums text-status-error">
+                      <td className="px-mx-xs py-mx-xs text-right font-semibold tabular-nums text-status-error">
                         {store.gap}
                       </td>
-                      <td className="px-mx-md py-mx-sm text-right font-semibold tabular-nums">
+                      <td className="px-mx-xs py-mx-xs text-right font-semibold tabular-nums">
                         {store.proj}
                       </td>
-                      <td className="px-mx-md py-mx-sm text-right tabular-nums">
+                      <td className="px-mx-xs py-mx-xs text-right tabular-nums">
                         {store.ritmo}
                       </td>
-                      <td className="px-mx-md py-mx-sm text-center">
-                        <Badge variant={statusVariant(status.label)}>{status.label}</Badge>
+                      <td className="px-mx-xs py-mx-xs text-center">
+                        <Badge variant={statusVariant(status.label)} className="whitespace-nowrap">
+                          {status.label}
+                        </Badge>
                       </td>
-                      <td className="px-mx-md py-mx-sm text-right">
+                      <td className="px-mx-xs py-mx-xs text-right">
                         <div className="flex items-center justify-end gap-mx-xs">
                           <span
-                            className="h-mx-2 w-mx-20 overflow-hidden rounded-mx-full bg-border-subtle"
+                            className="h-1.5 w-8 shrink-0 overflow-hidden rounded-mx-full bg-border-subtle"
                             aria-hidden="true"
                           >
                             <span
@@ -781,7 +783,7 @@ export default function PainelConsultor() {
                               style={{ width: `${Math.min(store.disciplinePct, 100)}%` }}
                             />
                           </span>
-                          <span className="min-w-mx-10 text-right font-semibold tabular-nums">
+                          <span className="min-w-[2.5rem] text-right font-semibold tabular-nums">
                             {Math.round(store.disciplinePct)}%
                           </span>
                         </div>

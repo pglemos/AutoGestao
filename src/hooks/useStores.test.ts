@@ -23,6 +23,7 @@ function createQuery(table: string) {
   const builder = {
     select: () => builder,
     eq: () => builder,
+    neq: () => builder,
     then: (
       resolve: (value: QueryResult) => unknown,
       reject: (reason: unknown) => unknown,

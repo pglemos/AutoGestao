@@ -327,7 +327,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
     setTelefone(row.telefone)
     setCanal(row.canal.toLowerCase() as CrmCanal)
     setVeiculo(row.veiculoInteresse)
-    setTipoVeiculo('carro') // default or mapped from DB
+    setTipoVeiculo((row.tipoVeiculo as CrmTipoVeiculo) || 'carro')
     setValor(row.valorNegociado ? formatMoney(row.valorNegociado) : '')
     setSinal(row.sinal ? formatMoney(row.sinal) : '')
     setFinanciamento(row.financiamento === 'Aprovado' ? 'aprovado' : row.financiamento === 'Recusado' ? 'reprovado' : 'nao_aplica')

@@ -20,22 +20,31 @@ export default function FeedbackPage({ hideHeader = false }) {
 
   const acknowledge = async (id) => {
     const comment = comments[id] || "";
-    await base44.entities.Feedback.update(id, { 
-      acknowledged: true, 
-      user_comment: comment,
-      acknowledged_date: new Date().toISOString()
-    });
+    try {
+      await base44.entities.Feedback.update(id, {
+        acknowledged: true,
+        user_comment: comment,
+        acknowledged_date: new Date().toISOString()
+      });
+    } catch (error) {
+      toast({ title: "Não foi possível confirmar o feedback.", description: "Tente novamente.", variant: "destructive" });
+      return;
+    }
     setFeedbacks(prev => prev.map(f => f.id === id ? { ...f, acknowledged: true, user_comment: comment, acknowledged_date: new Date().toISOString() } : f));
     toast({ title: "Feedback confirmado!", description: "Seu líder foi notificado." });
   };
+
+  const feedbackBadge = (f) => (f.hasAttentionPoints
+    ? { label: "Desenvolvimento", className: "bg-mx-amber-light text-mx-amber" }
+    : { label: "Positivo", className: "bg-mx-green-light text-mx-green" });
 
   if (loading) {
     return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-slate-200 border-t-mx-blue rounded-full animate-spin" /></div>;
   }
 
   const pending = feedbacks.filter(f => !f.acknowledged);
-  const positive = feedbacks.filter(f => f.type === "Positivo").length;
-  const development = feedbacks.filter(f => f.type === "Desenvolvimento").length;
+  const positive = feedbacks.filter(f => !f.hasAttentionPoints).length;
+  const development = feedbacks.filter(f => f.hasAttentionPoints).length;
 
   return (
     <div className="space-y-8">
@@ -59,7 +68,7 @@ export default function FeedbackPage({ hideHeader = false }) {
                 <div className="flex items-start justify-between gap-4">
                   <div className="flex-1">
                     <div className="flex items-center gap-2 mb-2">
-                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${f.type === "Positivo" ? "bg-mx-green-light text-mx-green" : "bg-mx-amber-light text-mx-amber"}`}>{f.type}</span>
+                      <span className={`text-xs font-semibold px-2.5 py-1 rounded-full ${feedbackBadge(f).className}`}>{feedbackBadge(f).label}</span>
                       <span className="text-xs text-slate-400">{f.competency}</span>
                       <span className="text-xs text-slate-400">· {moment(f.created_date).format("DD/MM/YYYY")}</span>
                     </div>
@@ -111,7 +120,7 @@ export default function FeedbackPage({ hideHeader = false }) {
                   <tr key={f.id} className="hover:bg-slate-50/50">
                     <td className="px-5 py-3.5 text-sm text-slate-600">{moment(f.created_date).format("DD/MM/YYYY")}</td>
                     <td className="px-5 py-3.5">
-                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${f.type === "Positivo" ? "bg-mx-green-light text-mx-green" : "bg-mx-amber-light text-mx-amber"}`}>{f.type}</span>
+                      <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${feedbackBadge(f).className}`}>{feedbackBadge(f).label}</span>
                     </td>
                     <td className="px-5 py-3.5 text-sm text-slate-600">{f.competency}</td>
                     <td className="px-5 py-3.5 text-sm text-slate-600">{f.responsible}</td>

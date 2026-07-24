@@ -556,7 +556,7 @@ export function useSellersByStore(storeId: string | null) {
       return
     }
 
-    let checkins: { seller_user_id: string }[] | null = null
+    let checkins: { seller_user_id: string; submission_status?: string | null }[] | null = null
     let checkinsError: { message: string } | null = null
     if (isLancamentosViaRpcEnabled()) {
       const { data: rpcData, error: rpcErr } = await supabase.rpc('get_lancamentos_por_loja_periodo', {
@@ -565,15 +565,16 @@ export function useSellersByStore(storeId: string | null) {
         p_end_date: referenceDate,
         p_scope: 'daily',
       })
-      checkins = (rpcData as { seller_user_id: string }[] | null) || []
+      checkins = (rpcData as { seller_user_id: string; submission_status?: string | null }[] | null) || []
       checkinsError = rpcErr
     } else {
       const res = await supabase
         .from('lancamentos_diarios')
-        .select('seller_user_id')
+        .select('seller_user_id, submission_status')
         .eq('store_id', storeId)
         .eq('reference_date', referenceDate)
         .eq('metric_scope', 'daily')
+        .neq('submission_status', 'draft')
       checkins = res.data
       checkinsError = res.error
     }
@@ -583,7 +584,7 @@ export function useSellersByStore(storeId: string | null) {
     if (checkinsError)
       console.error('Audit Error [useSellersByStore]: checkins fail ->', checkinsError.message)
 
-    const checkedIn = new Set(checkins?.map((c) => c.seller_user_id) || [])
+    const checkedIn = new Set((checkins || []).filter(c => c.submission_status !== 'draft').map((c) => c.seller_user_id))
     const activeSellerMemberships = new Set(
       ((membershipsData || []) as unknown as Array<{
         user_id: string

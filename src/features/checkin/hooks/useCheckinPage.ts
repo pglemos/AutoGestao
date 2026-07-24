@@ -70,6 +70,7 @@ export interface ClienteRow {
     nomeCliente: string
     telefone: string
     veiculoInteresse: string
+    tipoVeiculo?: string | null
     valorNegociado: number | null
     dataAgendamento: string
     canal: 'Carteira' | 'Internet' | 'Showroom'

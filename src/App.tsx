@@ -375,7 +375,7 @@ export default function App() {
                   <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<OwnerLegacyRedirect />} admin={<StoreConsultorIa />} />
                 </Suspense>} />
                 <Route path="lojas/:storeSlug/*" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<OwnerLegacyRedirect />} admin={<DashboardLoja />} />
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} />
                 </Suspense>} />
                 <Route path="consultor-ia" element={<ConsultorIaAliasRedirect />} />
                 <Route path="pdi" element={<Suspense fallback={<Spinner />}>
