@@ -31,7 +31,15 @@ test.describe('Password recovery login flow', () => {
       await route.fulfill({
         status: 200,
         contentType: 'application/json',
-        body: '{}',
+        // Mock desatualizado (de 2026-05-14): a função sempre respondeu
+        // {success:true, message:...} — o client lança erro quando
+        // payload.success está ausente (ver requestPasswordRecovery em
+        // src/lib/auth/passwordRecovery.ts), então o body vazio nunca
+        // bateu com o contrato real da função.
+        body: JSON.stringify({
+          success: true,
+          message: 'Se o e-mail estiver autorizado, enviaremos um link para redefinir a senha.',
+        }),
       })
     })
 
