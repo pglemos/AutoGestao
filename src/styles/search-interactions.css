@@ -1,0 +1,17 @@
+/*
+ * Ícones de busca são decorativos. Eles nunca devem bloquear clique, toque
+ * ou foco no input/botão que está logo abaixo ou ao redor.
+ */
+svg.lucide-search {
+  pointer-events: none;
+  user-select: none;
+}
+
+input[type='search'] {
+  -webkit-appearance: none;
+  appearance: none;
+}
+
+input[type='search']::-webkit-search-cancel-button {
+  cursor: pointer;
+}
