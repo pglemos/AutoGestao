@@ -2,13 +2,15 @@ import { CalendarDays, Plus, RefreshCw } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/atoms/Button'
 import { MxErrorState, MxLoadingState, MxModuleHeader, MxModulePage, MxSectionCard, MxSectionHeader } from '@/components/module/MxModuleVisualPrimitives'
+import { useAuth } from '@/hooks/useAuth'
 import { ConsultingClientTable } from './components/ConsultingClientTable'
 import { ConsultingClientFormModal } from './components/ConsultingClientFormModal'
 import { ConsultingClientMetrics } from './sections/ConsultingClientMetrics'
 import { ConsultingClientToolbar } from './sections/ConsultingClientToolbar'
 import { useConsultingClientsController } from './hooks/useConsultingClientsController'
+import { ConsultantAssignedClientsPage } from './ConsultantAssignedClientsPage'
 
-export function ConsultingClientsPage() {
+function AdministrativeConsultingClientsPage() {
   const controller = useConsultingClientsController()
   return (
     <MxModulePage id="internal-consulting-clients">
@@ -17,6 +19,11 @@ export function ConsultingClientsPage() {
       <ConsultingClientFormModal open={controller.open} draft={controller.draft} submitting={controller.submitting} modules={controller.modules} onDraft={controller.setDraft} onSubmit={() => void controller.submit()} onClose={() => { if (!controller.submitting) controller.setOpen(false) }} />
     </MxModulePage>
   )
+}
+
+export function ConsultingClientsPage() {
+  const { role } = useAuth()
+  return role === 'consultor_mx' ? <ConsultantAssignedClientsPage /> : <AdministrativeConsultingClientsPage />
 }
 
 export default ConsultingClientsPage
