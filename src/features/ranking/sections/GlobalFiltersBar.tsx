@@ -22,18 +22,25 @@ export function GlobalFiltersBar({
 }: Props) {
   return (
     <div className="flex flex-col sm:flex-row gap-mx-sm shrink-0 mb-6">
-      <div className="relative group flex-1">
-        <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" />
+      <label className="relative group flex-1" htmlFor="ranking-global-search">
+        <Search
+          size={16}
+          aria-hidden="true"
+          className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors"
+        />
         <Input
           id="ranking-global-search"
           name="ranking-global-search"
+          type="search"
+          inputMode="search"
+          autoComplete="off"
           aria-label="Localizar vendedor ou loja"
           placeholder="LOCALIZAR VENDEDOR OU LOJA..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
           className="!pl-11 !h-mx-14 !text-mx-tiny uppercase tracking-widest font-black"
         />
-      </div>
+      </label>
       <div className="flex items-center gap-mx-xs bg-white border border-border-default px-4 h-mx-14 sm:h-mx-14 rounded-mx-md shadow-inner overflow-x-auto no-scrollbar">
         <button
           type="button"
