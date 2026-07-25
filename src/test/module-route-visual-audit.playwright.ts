@@ -34,6 +34,12 @@ const viewports = [
   { key: 'mobile', width: 390, height: 844 },
 ] as const
 
+const profiles = [
+  { role: 'administrador_geral', email: process.env.E2E_ADMIN_EMAIL || 'synvollt@gmail.com' },
+  { role: 'administrador_mx', email: process.env.E2E_ADMIN_MX_EMAIL },
+  { role: 'consultor_mx', email: process.env.E2E_CONSULTANT_EMAIL },
+] as const
+
 type RouteMetric = {
   role: string
   viewport: string
@@ -50,6 +56,12 @@ type RouteMetric = {
   managerPage: string
   managerTemplate: string
   canonicalTemplate: string
+  templateShell: boolean
+  templateBody: boolean
+  templateSlots: number
+  nativePage: boolean
+  accessMode: string
+  enabledManageActions: number
   managerHeader: boolean
   managerHeaderRadius: number
   managerHeaderBackground: string
@@ -94,7 +106,7 @@ async function auditRoute(
     const managerFrame = document.querySelector<HTMLElement>('[data-mx-manager-page]')
     const canonicalTemplate = managerFrame?.querySelector<HTMLElement>('[data-mx-canonical-template]') ?? null
     const nestedMain = canonicalTemplate?.querySelector<HTMLElement>('main')
-    const managerHeader = canonicalTemplate?.querySelector<HTMLElement>('[data-mx-module-header], [data-mx-page-heading="manager"]')
+    const managerHeader = canonicalTemplate?.querySelector<HTMLElement>('[data-mx-template-header], [data-mx-module-header], [data-mx-page-heading="manager"]')
       ?? nestedMain?.querySelector<HTMLElement>(':scope > header:first-child, :scope > div > header:first-child')
       ?? null
     const headerStyle = managerHeader ? getComputedStyle(managerHeader) : null
@@ -113,6 +125,15 @@ async function auditRoute(
           .filter((node) => {
             const rect = node.getBoundingClientRect()
             return getComputedStyle(node).display !== 'none' && rect.width > 0 && rect.height > 0
+          }).length
+      : 0
+    const accessNode = canonicalTemplate?.querySelector<HTMLElement>('[data-mx-access-mode]') ?? null
+    const enabledManageActions = canonicalTemplate
+      ? Array.from(canonicalTemplate.querySelectorAll<HTMLElement>('[data-mx-requires-manage]'))
+          .filter((node) => {
+            const rect = node.getBoundingClientRect()
+            const disabled = node.matches(':disabled') || node.getAttribute('aria-disabled') === 'true'
+            return !disabled && getComputedStyle(node).display !== 'none' && rect.width > 0 && rect.height > 0
           }).length
       : 0
 
@@ -135,6 +156,12 @@ async function auditRoute(
       managerPage: managerFrame?.dataset.mxManagerPage || '',
       managerTemplate: managerFrame?.dataset.mxManagerTemplate || '',
       canonicalTemplate: canonicalTemplate?.dataset.mxCanonicalTemplate || '',
+      templateShell: Boolean(canonicalTemplate?.querySelector('[data-mx-template-shell]')),
+      templateBody: Boolean(canonicalTemplate?.querySelector('[data-mx-template-body]')),
+      templateSlots: canonicalTemplate?.querySelectorAll('[data-mx-template-slot]').length || 0,
+      nativePage: Boolean(canonicalTemplate?.querySelector('[data-mx-template-page]')),
+      accessMode: accessNode?.dataset.mxAccessMode || '',
+      enabledManageActions,
       managerHeader: Boolean(managerHeader),
       managerHeaderRadius: headerStyle ? Number.parseFloat(headerStyle.borderRadius) : 0,
       managerHeaderBackground: headerStyle?.backgroundColor || '',
@@ -165,12 +192,23 @@ async function auditRoute(
   expect.soft(metric.managerPage, `${role}/${viewport}/${key}: área registrada`).toBe(key)
   expect.soft(metric.managerTemplate, `${role}/${viewport}/${key}: template registrado`).not.toBe('')
   expect.soft(metric.canonicalTemplate, `${role}/${viewport}/${key}: template canônico`).toBe(metric.managerTemplate)
+  expect.soft(metric.templateShell, `${role}/${viewport}/${key}: shell explícito`).toBe(true)
+  expect.soft(metric.templateBody, `${role}/${viewport}/${key}: body explícito`).toBe(true)
+  expect.soft(metric.templateSlots, `${role}/${viewport}/${key}: slots estruturais`).toBeGreaterThanOrEqual(2)
   expect.soft(metric.managerHeader, `${role}/${viewport}/${key}: cabeçalho Gerente`).toBe(true)
   expect.soft(metric.managerHeaderRadius, `${role}/${viewport}/${key}: raio do cabeçalho`).toBeGreaterThanOrEqual(14)
   expect.soft(metric.managerHeaderBackground, `${role}/${viewport}/${key}: superfície do cabeçalho`).toBe('rgb(255, 255, 255)')
   expect.soft(metric.darkCards, `${role}/${viewport}/${key}: cards escuros`).toBe(0)
   expect.soft(metric.cardRadiusViolations, `${role}/${viewport}/${key}: raio dos cards`).toBe(0)
   expect.soft(metric.legacyAccentBars, `${role}/${viewport}/${key}: barra de título antiga`).toBe(0)
+
+  if (key === 'config-operacional' || key === 'config-pmr') {
+    const expectedMode = role === 'consultor_mx' ? 'read-only' : 'manage'
+    expect.soft(metric.accessMode, `${role}/${viewport}/${key}: modo de acesso`).toBe(expectedMode)
+    if (role === 'consultor_mx') {
+      expect.soft(metric.enabledManageActions, `${role}/${viewport}/${key}: mutações habilitadas`).toBe(0)
+    }
+  }
 
   page.off('console', onConsole)
   page.off('pageerror', onPageError)
@@ -180,34 +218,23 @@ async function auditRoute(
 test.describe('auditoria visual canônica das rotas internas MX', () => {
   test.describe.configure({ timeout: 900_000 })
 
-  test('Administrador Geral percorre as dezenove áreas em desktop, tablet e mobile', async ({ page }, testInfo) => {
-    mkdirSync(EVIDENCE_DIR, { recursive: true })
-    await page.setViewportSize({ width: viewports[0].width, height: viewports[0].height })
-    await login(page, process.env.E2E_ADMIN_EMAIL || 'synvollt@gmail.com')
-
-    const metrics: RouteMetric[] = []
+  for (const profile of profiles) {
     for (const viewport of viewports) {
-      await page.setViewportSize({ width: viewport.width, height: viewport.height })
-      for (const route of adminRoutes) {
-        metrics.push(await auditRoute(page, testInfo, 'administrador-geral', viewport.key, route.key, route.path))
-      }
+      test(`${profile.role} percorre as dezenove áreas em ${viewport.key}`, async ({ page }, testInfo) => {
+        test.skip(!profile.email, `Configure o e-mail E2E de ${profile.role}`)
+        mkdirSync(EVIDENCE_DIR, { recursive: true })
+        await page.setViewportSize({ width: viewport.width, height: viewport.height })
+        await login(page, profile.email!)
+
+        const metrics: RouteMetric[] = []
+        for (const route of adminRoutes) {
+          metrics.push(await auditRoute(page, testInfo, profile.role, viewport.key, route.key, route.path))
+        }
+
+        const matrixName = `${profile.role}-${viewport.key}-route-matrix.json`
+        writeFileSync(join(EVIDENCE_DIR, matrixName), JSON.stringify(metrics, null, 2))
+        writeFileSync(testInfo.outputPath(matrixName), JSON.stringify(metrics, null, 2))
+      })
     }
-
-    writeFileSync(join(EVIDENCE_DIR, 'admin-route-matrix.json'), JSON.stringify(metrics, null, 2))
-    writeFileSync(testInfo.outputPath('admin-route-matrix.json'), JSON.stringify(metrics, null, 2))
-  })
-
-  for (const profile of [
-    { role: 'administrador-mx', email: process.env.E2E_ADMIN_MX_EMAIL },
-    { role: 'consultor-mx', email: process.env.E2E_CONSULTANT_EMAIL },
-  ]) {
-    test(`${profile.role} recebe o mesmo shell canônico nas áreas permitidas`, async ({ page }, testInfo) => {
-      test.skip(!profile.email, `Configure o e-mail E2E de ${profile.role}`)
-      await page.setViewportSize({ width: 1440, height: 900 })
-      await login(page, profile.email!)
-      for (const route of adminRoutes) {
-        await auditRoute(page, testInfo, profile.role, 'desktop', route.key, route.path)
-      }
-    })
   }
 })

@@ -25,7 +25,12 @@ export function InternalManagerRouteFrame({
       className={cn('h-full min-h-0 w-full', enabled && 'mx-manager-canonical-page')}
     >
       {enabled ? (
-        <InternalMxCanonicalTemplate kind={pageMeta.template}>
+        <InternalMxCanonicalTemplate
+          kind={pageMeta.template}
+          pageKey={pageMeta.key}
+          pageTitle={pageMeta.title}
+          role={role}
+        >
           {children}
         </InternalMxCanonicalTemplate>
       ) : children}

@@ -4,6 +4,7 @@ import { ButtonVisualProvider } from '@/components/atoms/Button'
 import { isPerfilInternoMx } from '@/hooks/useAuth'
 import type { UserRole } from '@/types/database'
 import '@/styles/internal-mx-manager-scope.css'
+import '@/styles/internal-mx-template-slots.css'
 import { MxSurfaceVisualProvider } from './MxSurfaceVisualContext'
 import { InternalManagerRouteFrame } from './InternalManagerRouteFrame'
 

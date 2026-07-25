@@ -1,6 +1,11 @@
-import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
-import { isAdministradorMx, useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/hooks/useAuth'
+import {
+  canManageInternalMxArea,
+  getInternalMxAccessMode,
+  getInternalMxReadOnlyMessage,
+} from '@/design-system/internal-mx/internalMxAccessPolicy'
 import type { StoreDeliveryRules } from '@/types/database'
 
 const DELIVERY_RULES_SELECT = 'store_id, matinal_recipients, weekly_recipients, monthly_recipients, whatsapp_group_ref, timezone, active, updated_by, updated_at'
@@ -9,6 +14,9 @@ export function useStoreDeliveryRules(storeIdOverride?: string) {
   const { storeId: authStoreId, role } = useAuth()
   const queryClient = useQueryClient()
   const storeId = storeIdOverride || authStoreId
+  const accessMode = getInternalMxAccessMode('operational-settings', role)
+  const canManage = canManageInternalMxArea('operational-settings', role)
+  const readOnlyMessage = getInternalMxReadOnlyMessage('operational-settings')
 
   const { data: deliveryRules, isLoading: loading, refetch } = useQuery({
     queryKey: ['delivery-rules', storeId],
@@ -17,13 +25,13 @@ export function useStoreDeliveryRules(storeIdOverride?: string) {
       const { data } = await supabase.from('regras_entrega_loja').select(DELIVERY_RULES_SELECT).eq('store_id', storeId).maybeSingle()
       return data as StoreDeliveryRules | null
     },
-    enabled: !!storeId,
+    enabled: Boolean(storeId),
   })
 
   const updateDeliveryRulesMut = useMutation({
     mutationFn: async (data: Partial<StoreDeliveryRules>) => {
       if (!storeId) return { error: 'Loja não identificada' }
-      if (!isAdministradorMx(role)) return { error: 'Apenas Admin MX pode alterar regras de entrega.' }
+      if (!canManage) return { error: readOnlyMessage }
       const { error } = await supabase.from('regras_entrega_loja').upsert({
         store_id: storeId,
         ...data,
@@ -41,6 +49,9 @@ export function useStoreDeliveryRules(storeIdOverride?: string) {
     deliveryRules: deliveryRules ?? null,
     loading,
     refetch,
+    accessMode,
+    canManage,
+    readOnlyMessage,
     updateDeliveryRules: (data: Partial<StoreDeliveryRules>) => updateDeliveryRulesMut.mutateAsync(data),
   }
 }

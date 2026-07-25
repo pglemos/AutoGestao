@@ -10,8 +10,16 @@ import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { cn } from '@/lib/utils'
 import { MxSurfaceVisualProvider } from './MxSurfaceVisualContext'
+import {
+  InternalMxTemplateHeader,
+  InternalMxTemplatePage,
+  InternalMxTemplateSection,
+  InternalMxTemplateTable,
+  InternalMxTemplateToolbar,
+} from './InternalMxTemplateSlots'
 
 export type MxTone = 'brand' | 'success' | 'warning' | 'danger' | 'info' | 'violet' | 'neutral'
+export type MxAccessMode = 'manage' | 'read-only'
 
 type ToneStyle = { icon: string; surface: string; value: string; banner: string; progress: string }
 const toneStyles: Record<MxTone, ToneStyle> = {
@@ -24,13 +32,19 @@ const toneStyles: Record<MxTone, ToneStyle> = {
   neutral: { icon: 'bg-gray-50 text-gray-500', surface: 'border-gray-100', value: 'text-gray-800', banner: 'border-gray-200 bg-gray-50 text-gray-700', progress: 'bg-gray-400' },
 }
 
-export function MxModulePage({ children, className, contentClassName, maxWidth = '7xl', id }: { children: ReactNode; className?: string; contentClassName?: string; maxWidth?: 'full' | '7xl'; id?: string }) {
+export function MxModulePage({ children, className, contentClassName, maxWidth = '7xl', id, accessMode }: { children: ReactNode; className?: string; contentClassName?: string; maxWidth?: 'full' | '7xl'; id?: string; accessMode?: MxAccessMode }) {
   return (
     <ButtonVisualProvider mode="manager">
       <MxSurfaceVisualProvider mode="manager">
-        <main id={id} data-mx-module-page="" data-mx-visual-system="manager" className={cn('min-h-full w-full overflow-y-auto bg-gray-50 text-gray-800', className)}>
+        <InternalMxTemplatePage
+          id={id}
+          data-mx-module-page=""
+          data-mx-visual-system="manager"
+          data-mx-access-mode={accessMode}
+          className={cn('min-h-full w-full overflow-y-auto bg-gray-50 text-gray-800', className)}
+        >
           <div className={cn('mx-auto w-full space-y-5 px-4 py-6 pb-24', maxWidth === '7xl' ? 'max-w-7xl' : 'max-w-none', contentClassName)}>{children}</div>
-        </main>
+        </InternalMxTemplatePage>
       </MxSurfaceVisualProvider>
     </ButtonVisualProvider>
   )
@@ -38,7 +52,7 @@ export function MxModulePage({ children, className, contentClassName, maxWidth =
 
 export function MxModuleHeader({ title, description, eyebrow, actions, className }: { title: ReactNode; description?: ReactNode; eyebrow?: ReactNode; actions?: ReactNode; className?: string }) {
   return (
-    <header data-mx-module-header="" className={cn('rounded-2xl border border-gray-100 bg-white p-5 shadow-sm', className)}>
+    <InternalMxTemplateHeader data-mx-module-header="" className={cn('rounded-2xl border border-gray-100 bg-white p-5 shadow-sm', className)}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0 max-w-3xl">
           {eyebrow ? <Typography variant="caption" className="mb-1 block font-semibold text-emerald-700">{eyebrow}</Typography> : null}
@@ -47,7 +61,7 @@ export function MxModuleHeader({ title, description, eyebrow, actions, className
         </div>
         {actions ? <div className="flex min-w-0 flex-wrap items-center gap-2">{actions}</div> : null}
       </div>
-    </header>
+    </InternalMxTemplateHeader>
   )
 }
 
@@ -88,12 +102,12 @@ export function MxStatusGauge({ value, label, ariaLabel, showLabel = true }: { v
 }
 
 export function MxSectionCard({ as: Component = 'section', children, className, ...props }: { as?: ElementType; children: ReactNode; className?: string } & HTMLAttributes<HTMLElement>) {
-  return <Component data-mx-section-card="" className={cn('overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm', className)} {...props}>{children}</Component>
+  return <InternalMxTemplateSection as={Component} data-mx-section-card="" className={cn('overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm', className)} {...props}>{children}</InternalMxTemplateSection>
 }
 
 export function MxSectionHeader({ title, description, actions, className }: { title: ReactNode; description?: ReactNode; actions?: ReactNode; className?: string }) {
   return (
-    <header data-mx-section-header="" className={cn('flex flex-col gap-3 border-b border-gray-100 p-5 sm:flex-row sm:items-center sm:justify-between', className)}>
+    <header data-mx-section-header="" data-mx-template-slot="section-header" className={cn('flex flex-col gap-3 border-b border-gray-100 p-5 sm:flex-row sm:items-center sm:justify-between', className)}>
       <div className="min-w-0">
         <Typography as="h2" variant="h3" className="text-lg font-semibold text-gray-800">{title}</Typography>
         {description ? <Typography variant="p" className="mt-1 text-sm text-gray-500">{description}</Typography> : null}
@@ -104,7 +118,7 @@ export function MxSectionHeader({ title, description, actions, className }: { ti
 }
 
 export function MxToolbar({ children, className, ...props }: HTMLAttributes<HTMLElement>) {
-  return <section data-mx-toolbar="" className={cn('flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-center', className)} {...props}>{children}</section>
+  return <InternalMxTemplateToolbar data-mx-toolbar="" className={cn('flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-center', className)} {...props}>{children}</InternalMxTemplateToolbar>
 }
 
 export function MxField({ label, hint, error, children, className, ...props }: { label: ReactNode; hint?: ReactNode; error?: ReactNode; children: ReactNode; className?: string } & LabelHTMLAttributes<HTMLLabelElement>) {
@@ -120,7 +134,7 @@ export function MxField({ label, hint, error, children, className, ...props }: {
 export function MxInput(props: InputProps) { return <Input {...props} /> }
 export function MxSelect(props: SelectProps) { return <Select {...props} /> }
 export function MxTextarea(props: TextareaProps) { return <Textarea {...props} /> }
-export function MxTableSurface({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) { return <div data-mx-table-surface="" className={cn('w-full overflow-x-auto rounded-2xl border border-gray-100 bg-white', className)} {...props}>{children}</div> }
+export function MxTableSurface({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) { return <InternalMxTemplateTable data-mx-table-surface="" className={cn('w-full overflow-x-auto rounded-2xl border border-gray-100 bg-white', className)} {...props}>{children}</InternalMxTemplateTable> }
 
 export function MxEmptyState({ title, description, icon: Icon = Inbox, action, className }: { title: string; description?: string; icon?: LucideIcon; action?: ReactNode; className?: string }) {
   return (

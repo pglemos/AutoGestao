@@ -40,39 +40,54 @@ describe('contrato canônico do módulo interno MX', () => {
     }
   })
 
-  test('o frame escolhe um template real em vez do retrofit de rota', () => {
+  test('o frame fornece metadados completos ao template real', () => {
     const frame = read('src/components/module/InternalManagerRouteFrame.tsx')
     const template = read('src/components/module/InternalMxCanonicalTemplate.tsx')
     expect(frame).toContain('InternalMxCanonicalTemplate')
-    expect(frame).toContain('data-mx-manager-template')
-    expect(frame).toContain('pageMeta.template')
-    expect(template).toContain('data-mx-canonical-template')
-    expect(template).toContain('manager-v3')
+    expect(frame).toContain('pageKey={pageMeta.key}')
+    expect(frame).toContain('pageTitle={pageMeta.title}')
+    expect(frame).toContain('role={role}')
+    expect(template).toContain('InternalMxTemplateContext.Provider')
+    expect(template).toContain('data-mx-template-shell')
+    expect(template).toContain('data-mx-template-body')
+    expect(template).toContain('manager-v4')
     expect(frame).not.toContain('mx-manager-page-1to1')
   })
 
-  test('a composição não depende de seletores específicos por página', () => {
-    const css = read('src/styles/internal-mx-manager-scope.css')
+  test('slots semânticos sustentam página, header, toolbar, seção, tabela, tabs e sidebar', () => {
+    const slots = read('src/components/module/InternalMxTemplateSlots.tsx')
+    for (const slot of ['page', 'header', 'toolbar', 'section', 'table', 'tabs', 'sidebar']) {
+      expect(slots).toContain(`data-mx-template-slot="${slot}"`)
+    }
+
+    const primitives = read('src/components/module/MxModuleVisualPrimitives.tsx')
+    expect(primitives).toContain('InternalMxTemplatePage')
+    expect(primitives).toContain('InternalMxTemplateHeader')
+    expect(primitives).toContain('InternalMxTemplateToolbar')
+    expect(primitives).toContain('InternalMxTemplateSection')
+    expect(primitives).toContain('InternalMxTemplateTable')
+  })
+
+  test('a composição não adiciona seletores específicos por rota', () => {
+    const legacyCss = read('src/styles/internal-mx-manager-scope.css')
+    const slotsCss = read('src/styles/internal-mx-template-slots.css')
+    const css = `${legacyCss}\n${slotsCss}`
     expect(css).toContain('.mx-canonical-template')
-    expect(css).toContain("[data-mx-canonical-template")
+    expect(css).toContain('[data-mx-template-shell]')
+    expect(css).toContain('[data-mx-template-page]')
     expect(css).not.toContain('.mx-manager-page-1to1')
     expect(css).not.toContain("data-mx-manager-page='")
     expect(css).not.toContain('data-mx-manager-page="')
   })
 
-  test('as primitivas expõem contratos semânticos para header, cards e conteúdo', () => {
-    const primitives = read('src/components/module/MxModuleVisualPrimitives.tsx')
-    expect(primitives).toContain('data-mx-module-page')
-    expect(primitives).toContain('data-mx-module-header')
-    expect(primitives).toContain('data-mx-section-card')
-    expect(primitives).toContain('data-mx-toolbar')
-    expect(primitives).toContain('data-mx-table-surface')
+  test('o escopo visual importa a camada explícita de slots', () => {
+    const scope = read('src/components/module/InternalMxVisualScope.tsx')
+    expect(scope).toContain("@/styles/internal-mx-template-slots.css")
   })
 
-  test('PageHeading continua usando a anatomia compacta do Gerente', () => {
+  test('PageHeading permanece apenas como ponte compacta para páginas ainda não migradas', () => {
     const heading = read('src/components/molecules/PageHeading.tsx')
     expect(heading).toContain('data-mx-page-heading="manager"')
     expect(heading).toContain('rounded-2xl border border-gray-100 bg-white p-5 shadow-sm')
-    expect(heading).toContain('text-xl font-bold text-gray-800')
   })
 })

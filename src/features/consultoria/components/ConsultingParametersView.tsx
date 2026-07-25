@@ -1,15 +1,24 @@
-import type React from 'react'
-import { useEffect, useMemo, useState } from 'react'
-import { toast } from '@/lib/toast'
+import { useEffect, useMemo, useState, type FormEvent } from 'react'
+import { BarChart3, RefreshCw, Save } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Select } from '@/components/atoms/Select'
 import { Textarea } from '@/components/atoms/Textarea'
 import { Typography } from '@/components/atoms/Typography'
-import { Card } from '@/components/molecules/Card'
-import { PageHeading } from '@/components/molecules/PageHeading'
+import {
+  MxErrorState,
+  MxField,
+  MxLoadingState,
+  MxModuleHeader,
+  MxModulePage,
+  MxSectionCard,
+  MxSectionHeader,
+  MxStatusBanner,
+  MxTableSurface,
+} from '@/components/module/MxModuleVisualPrimitives'
 import { useConsultingParameters } from '@/hooks/useConsultingParameters'
+import { toast } from '@/lib/toast'
 
 function toInputValue(value?: number | null) {
   return value == null ? '' : String(value)
@@ -22,8 +31,21 @@ function parseOptionalNumber(value: string) {
 }
 
 export function ConsultingParametersView() {
-  const { catalog, values, valueByMetric, activeSet, loading, error, canManage, updateParameterValue } = useConsultingParameters()
+  const {
+    catalog,
+    valueByMetric,
+    activeSet,
+    loading,
+    error,
+    accessMode,
+    canManage,
+    readOnlyMessage,
+    updateParameterValue,
+    refetch,
+  } = useConsultingParameters()
   const [metricKey, setMetricKey] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+  const [refreshing, setRefreshing] = useState(false)
   const [form, setForm] = useState({
     market_average: '',
     best_practice: '',
@@ -33,11 +55,11 @@ export function ConsultingParametersView() {
     green_threshold: '',
     notes: '',
   })
-  const [submitting, setSubmitting] = useState(false)
 
-  const selectedMetric = useMemo(() => {
-    return catalog.find((metric) => metric.metric_key === (metricKey || catalog[0]?.metric_key))
-  }, [catalog, metricKey])
+  const selectedMetric = useMemo(
+    () => catalog.find((metric) => metric.metric_key === (metricKey || catalog[0]?.metric_key)),
+    [catalog, metricKey],
+  )
 
   useEffect(() => {
     if (!selectedMetric) return
@@ -53,9 +75,21 @@ export function ConsultingParametersView() {
     })
   }, [selectedMetric, valueByMetric])
 
-  const handleSubmit = async (event: React.FormEvent) => {
+  const handleRefresh = async () => {
+    setRefreshing(true)
+    await refetch()
+    setRefreshing(false)
+    toast.success('Parâmetros PMR atualizados.')
+  }
+
+  const handleSubmit = async (event: FormEvent) => {
     event.preventDefault()
     if (!selectedMetric) return
+    if (!canManage) {
+      toast.error(readOnlyMessage)
+      return
+    }
+
     const parsed = {
       market_average: parseOptionalNumber(form.market_average),
       best_practice: parseOptionalNumber(form.best_practice),
@@ -64,8 +98,9 @@ export function ConsultingParametersView() {
       yellow_threshold: parseOptionalNumber(form.yellow_threshold),
       green_threshold: parseOptionalNumber(form.green_threshold),
     }
+
     if (Object.values(parsed).some((value) => typeof value === 'undefined')) {
-      toast.error('Revise os campos numericos antes de salvar o parametro PMR.')
+      toast.error('Revise os campos numéricos antes de salvar o parâmetro PMR.')
       return
     }
 
@@ -82,135 +117,159 @@ export function ConsultingParametersView() {
     })
     setSubmitting(false)
 
-    if (updateError) {
-      toast.error(updateError)
-      return
-    }
-
-    toast.success('Parametro PMR atualizado.')
+    if (updateError) toast.error(updateError)
+    else toast.success('Parâmetro PMR atualizado.')
   }
 
   if (loading) {
     return (
-      <main className="h-full w-full overflow-y-auto bg-surface-alt p-mx-lg no-scrollbar">
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
-          <Typography variant="p">Carregando parametros PMR...</Typography>
-        </Card>
-      </main>
+      <MxModulePage accessMode={accessMode === 'manage' ? 'manage' : 'read-only'}>
+        <MxModuleHeader title="Parâmetros PMR" description="Carregando catálogo, benchmarks e limites da consultoria." />
+        <MxSectionCard><MxLoadingState label="Carregando parâmetros PMR" /></MxSectionCard>
+      </MxModulePage>
     )
   }
 
   if (error) {
     return (
-      <main className="h-full w-full overflow-y-auto bg-surface-alt p-mx-lg no-scrollbar">
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
-          <Typography variant="h3" tone="error">Parametros indisponiveis</Typography>
-          <Typography variant="p" tone="muted">{error}</Typography>
-        </Card>
-      </main>
+      <MxModulePage accessMode={accessMode === 'manage' ? 'manage' : 'read-only'}>
+        <MxModuleHeader title="Parâmetros PMR" description="Catálogo de indicadores e benchmarks da consultoria." />
+        <MxSectionCard><MxErrorState description={error} retry={() => void refetch()} /></MxSectionCard>
+      </MxModulePage>
     )
   }
 
   return (
-    <main className="h-full w-full overflow-y-auto bg-surface-alt p-mx-lg no-scrollbar flex flex-col gap-mx-lg">
-      <PageHeading
+    <MxModulePage accessMode={accessMode === 'manage' ? 'manage' : 'read-only'}>
+      <MxModuleHeader
+        eyebrow="Metodologia consultiva"
         title="Parâmetros PMR"
-        subtitle="INDICADORES, BENCHMARKS, LIMITES DE COR E FÓRMULAS EDITÁVEIS DA CONSULTORIA"
-        actions={
-          <Badge variant="outline" className="rounded-mx-full px-4 py-1">
-            {activeSet ? `${activeSet.name} ${activeSet.version}` : 'SEM CONJUNTO ATIVO'}
-          </Badge>
-        }
+        description="Consulte indicadores, benchmarks, metas padrão e limites de diagnóstico em uma única composição."
+        actions={(
+          <>
+            <Button
+              variant="managerSecondary"
+              size="icon"
+              onClick={() => void handleRefresh()}
+              disabled={refreshing}
+              aria-label="Atualizar parâmetros PMR"
+            >
+              <RefreshCw size={17} className={refreshing ? 'animate-spin' : undefined} aria-hidden="true" />
+            </Button>
+            <Badge variant="outline">{activeSet ? `${activeSet.name} ${activeSet.version}` : 'Sem conjunto ativo'}</Badge>
+            {!canManage ? <Badge variant="outline">Somente leitura</Badge> : null}
+          </>
+        )}
       />
 
-      <div className="grid grid-cols-1 xl:grid-cols-3 gap-mx-lg">
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white xl:col-span-2">
-          <Typography variant="h3" className="mb-mx-md">CATALOGO DE INDICADORES</Typography>
-          <div className="overflow-x-auto">
+      {!canManage ? <MxStatusBanner tone="info">{readOnlyMessage}</MxStatusBanner> : null}
+
+      <div className="grid gap-5 xl:grid-cols-[minmax(0,2fr)_minmax(320px,1fr)]">
+        <MxSectionCard>
+          <MxSectionHeader
+            title="Catálogo de indicadores"
+            description="Selecione uma métrica para consultar seus valores e editar quando seu perfil permitir."
+            actions={<BarChart3 size={18} className="text-emerald-600" aria-hidden="true" />}
+          />
+          <MxTableSurface className="rounded-none border-0 shadow-none">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-border-default">
-                  <th className="py-mx-sm pr-mx-md"><Typography variant="tiny" tone="muted">INDICADOR</Typography></th>
-                  <th className="py-mx-sm pr-mx-md"><Typography variant="tiny" tone="muted">AREA</Typography></th>
-                  <th className="py-mx-sm pr-mx-md"><Typography variant="tiny" tone="muted">MERCADO</Typography></th>
-                  <th className="py-mx-sm pr-mx-md"><Typography variant="tiny" tone="muted">BOA PRATICA</Typography></th>
-                  <th className="py-mx-sm"><Typography variant="tiny" tone="muted">FONTE</Typography></th>
+                <tr>
+                  <th>Indicador</th>
+                  <th>Área</th>
+                  <th>Mercado</th>
+                  <th>Boa prática</th>
+                  <th>Fonte</th>
                 </tr>
               </thead>
               <tbody>
                 {catalog.map((metric) => {
                   const value = valueByMetric.get(metric.metric_key)
+                  const selected = selectedMetric?.metric_key === metric.metric_key
                   return (
-                    <tr key={metric.metric_key} className="border-b border-border-subtle">
-                      <td className="py-mx-sm pr-mx-md">
+                    <tr key={metric.metric_key} className={selected ? 'bg-emerald-50/60' : undefined}>
+                      <td>
                         <button type="button" className="text-left" onClick={() => setMetricKey(metric.metric_key)}>
-                          <Typography variant="p" className="font-black">{metric.label}</Typography>
+                          <Typography variant="h4" className="text-sm">{metric.label}</Typography>
                           <Typography variant="tiny" tone="muted">{metric.metric_key}</Typography>
                         </button>
                       </td>
-                      <td className="py-mx-sm pr-mx-md"><Typography variant="p">{metric.area}</Typography></td>
-                      <td className="py-mx-sm pr-mx-md"><Typography variant="p">{value?.market_average ?? '-'}</Typography></td>
-                      <td className="py-mx-sm pr-mx-md"><Typography variant="p">{value?.best_practice ?? '-'}</Typography></td>
-                      <td className="py-mx-sm"><Typography variant="p">{metric.source_scope}</Typography></td>
+                      <td>{metric.area}</td>
+                      <td>{value?.market_average ?? '—'}</td>
+                      <td>{value?.best_practice ?? '—'}</td>
+                      <td>{metric.source_scope}</td>
                     </tr>
                   )
                 })}
               </tbody>
             </table>
-          </div>
-        </Card>
+          </MxTableSurface>
+        </MxSectionCard>
 
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
-          <Typography variant="h3" className="mb-mx-md">EDITAR PARAMETRO</Typography>
-          <form onSubmit={handleSubmit} className="space-y-mx-md">
-            <Select
-              label="Indicador"
-              value={selectedMetric?.metric_key || ''}
-              onChange={(event) => setMetricKey(event.target.value)}
-            >
-              {catalog.map((metric) => (
-                <option key={metric.metric_key} value={metric.metric_key}>{metric.label}</option>
+        <MxSectionCard>
+          <MxSectionHeader
+            title={selectedMetric ? `Parâmetro: ${selectedMetric.label}` : 'Editar parâmetro'}
+            description={canManage ? 'Alterações ficam vinculadas ao conjunto PMR ativo.' : 'Consulta segura, sem permissão de gravação.'}
+          />
+          <form onSubmit={handleSubmit} className="space-y-4 p-5">
+            <MxField label="Indicador" htmlFor="pmr-metric">
+              <Select
+                id="pmr-metric"
+                value={selectedMetric?.metric_key || ''}
+                onChange={(event) => setMetricKey(event.target.value)}
+                aria-label="Indicador PMR"
+              >
+                {catalog.map((metric) => <option key={metric.metric_key} value={metric.metric_key}>{metric.label}</option>)}
+              </Select>
+            </MxField>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              {[
+                ['Média de mercado', 'market_average'],
+                ['Boa prática', 'best_practice'],
+                ['Meta padrão', 'target_default'],
+                ['Limite vermelho', 'red_threshold'],
+                ['Limite amarelo', 'yellow_threshold'],
+                ['Limite verde', 'green_threshold'],
+              ].map(([label, key]) => (
+                <MxField key={key} label={label} htmlFor={`pmr-${key}`}>
+                  <Input
+                    id={`pmr-${key}`}
+                    type="number"
+                    step="0.01"
+                    value={form[key as keyof typeof form]}
+                    onChange={(event) => setForm((current) => ({ ...current, [key]: event.target.value }))}
+                    disabled={!canManage}
+                    aria-label={label}
+                  />
+                </MxField>
               ))}
-            </Select>
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-md">
-              <div className="space-y-mx-xs">
-                <Typography as="label" htmlFor="pmr-param-market" variant="caption">Media mercado</Typography>
-                <Input aria-label="Media mercado" id="pmr-param-market" type="number" step="0.01" value={form.market_average} onChange={(event) => setForm((current) => ({ ...current, market_average: event.target.value }))} disabled={!canManage} />
-              </div>
-              <div className="space-y-mx-xs">
-                <Typography as="label" htmlFor="pmr-param-best" variant="caption">Boa pratica</Typography>
-                <Input aria-label="Boa pratica" id="pmr-param-best" type="number" step="0.01" value={form.best_practice} onChange={(event) => setForm((current) => ({ ...current, best_practice: event.target.value }))} disabled={!canManage} />
-              </div>
-              <div className="space-y-mx-xs">
-                <Typography as="label" htmlFor="pmr-param-target" variant="caption">Meta padrao</Typography>
-                <Input aria-label="Meta padrao" id="pmr-param-target" type="number" step="0.01" value={form.target_default} onChange={(event) => setForm((current) => ({ ...current, target_default: event.target.value }))} disabled={!canManage} />
-              </div>
-              <div className="space-y-mx-xs">
-                <Typography as="label" htmlFor="pmr-param-red" variant="caption">Limite vermelho</Typography>
-                <Input aria-label="Limite vermelho" id="pmr-param-red" type="number" step="0.01" value={form.red_threshold} onChange={(event) => setForm((current) => ({ ...current, red_threshold: event.target.value }))} disabled={!canManage} />
-              </div>
-              <div className="space-y-mx-xs">
-                <Typography as="label" htmlFor="pmr-param-yellow" variant="caption">Limite amarelo</Typography>
-                <Input aria-label="Limite amarelo" id="pmr-param-yellow" type="number" step="0.01" value={form.yellow_threshold} onChange={(event) => setForm((current) => ({ ...current, yellow_threshold: event.target.value }))} disabled={!canManage} />
-              </div>
-              <div className="space-y-mx-xs">
-                <Typography as="label" htmlFor="pmr-param-green" variant="caption">Limite verde</Typography>
-                <Input aria-label="Limite verde" id="pmr-param-green" type="number" step="0.01" value={form.green_threshold} onChange={(event) => setForm((current) => ({ ...current, green_threshold: event.target.value }))} disabled={!canManage} />
-              </div>
             </div>
-            <div className="space-y-mx-xs">
-              <Typography as="label" htmlFor="pmr-param-notes" variant="caption">Observacoes</Typography>
-              <Textarea aria-label="Observacoes" id="pmr-param-notes" value={form.notes} onChange={(event) => setForm((current) => ({ ...current, notes: event.target.value }))} disabled={!canManage} />
-            </div>
-            <Button type="submit" className="w-full" disabled={!canManage || submitting || !selectedMetric}>
-              {submitting ? 'SALVANDO...' : 'SALVAR PARAMETRO'}
+
+            <MxField label="Observações" htmlFor="pmr-notes">
+              <Textarea
+                id="pmr-notes"
+                value={form.notes}
+                onChange={(event) => setForm((current) => ({ ...current, notes: event.target.value }))}
+                disabled={!canManage}
+                aria-label="Observações do parâmetro PMR"
+              />
+            </MxField>
+
+            <Button
+              data-mx-requires-manage=""
+              type="submit"
+              variant="managerPrimary"
+              className="w-full"
+              disabled={!canManage || submitting || !selectedMetric}
+              loading={submitting}
+            >
+              {!submitting && <Save size={17} aria-hidden="true" />}
+              Salvar parâmetro
             </Button>
-            {!canManage && (
-              <Typography variant="tiny" tone="muted">Somente administradores podem editar parametros.</Typography>
-            )}
           </form>
-        </Card>
+        </MxSectionCard>
       </div>
-    </main>
+    </MxModulePage>
   )
 }

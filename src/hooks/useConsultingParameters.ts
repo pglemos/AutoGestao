@@ -1,6 +1,11 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/hooks/useAuth'
+import {
+  canManageInternalMxArea,
+  getInternalMxAccessMode,
+  getInternalMxReadOnlyMessage,
+} from '@/design-system/internal-mx/internalMxAccessPolicy'
 import {
   parseConsultingMetricCatalogArray,
   parseConsultingParameterValueArray,
@@ -23,7 +28,9 @@ export function useConsultingParameters() {
   const [activeSet, setActiveSet] = useState<ActiveSet | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const canManage = isPerfilInternoMx(role)
+  const accessMode = getInternalMxAccessMode('pmr-parameters', role)
+  const canManage = canManageInternalMxArea('pmr-parameters', role)
+  const readOnlyMessage = getInternalMxReadOnlyMessage('pmr-parameters')
 
   const fetchParameters = useCallback(async () => {
     setLoading(true)
@@ -34,7 +41,7 @@ export function useConsultingParameters() {
     ])
 
     if (catalogRes.error || setRes.error) {
-      setError(catalogRes.error?.message || setRes.error?.message || 'Erro ao carregar parametros.')
+      setError(catalogRes.error?.message || setRes.error?.message || 'Erro ao carregar parâmetros.')
       setLoading(false)
       return
     }
@@ -61,7 +68,9 @@ export function useConsultingParameters() {
   }, [])
 
   const updateParameterValue = useCallback(async (input: Partial<ConsultingParameterValue> & { metric_key: string }) => {
-    if (!canManage || !activeSet?.id) return { error: 'Apenas perfis MX podem alterar parâmetros PMR.' }
+    if (!canManage) return { error: readOnlyMessage }
+    if (!activeSet?.id) return { error: 'Nenhum conjunto de parâmetros PMR está ativo.' }
+
     const { error: upsertError } = await supabase
       .from('valores_parametros_consultoria')
       .upsert({
@@ -80,13 +89,25 @@ export function useConsultingParameters() {
     if (upsertError) return { error: upsertError.message }
     await fetchParameters()
     return { error: null }
-  }, [activeSet?.id, canManage, fetchParameters])
+  }, [activeSet?.id, canManage, fetchParameters, readOnlyMessage])
 
   useEffect(() => {
-    fetchParameters()
+    void fetchParameters()
   }, [fetchParameters])
 
   const valueByMetric = useMemo(() => new Map(values.map((value) => [value.metric_key, value])), [values])
 
-  return { catalog, values, valueByMetric, activeSet, loading, error, canManage, updateParameterValue, refetch: fetchParameters }
+  return {
+    catalog,
+    values,
+    valueByMetric,
+    activeSet,
+    loading,
+    error,
+    accessMode,
+    canManage,
+    readOnlyMessage,
+    updateParameterValue,
+    refetch: fetchParameters,
+  }
 }
