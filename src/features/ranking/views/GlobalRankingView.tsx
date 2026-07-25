@@ -25,7 +25,7 @@ export function GlobalRankingView() {
 
   return (
     <RankingErrorBoundary sectionName="Ranking Global">
-      <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-surface-alt relative">
+      <div className="relative flex min-h-full w-full min-w-0 flex-col gap-mx-lg bg-surface-alt p-mx-lg pb-32">
         <GlobalRankingHeader
           totalLojas={data.lojas.length}
           totalVendedores={data.totalVendedores}
@@ -64,7 +64,7 @@ export function GlobalRankingView() {
           getHiddenStoreName={data.getHiddenStoreName}
         />
 
-        <div className="flex-1 min-h-0 pb-32" aria-live="polite">
+        <div className="min-w-0" aria-live="polite">
           {data.viewMode === 'battle' && (
             <BattleSelector
               opponents={data.battleOpponents}
@@ -107,7 +107,7 @@ export function GlobalRankingView() {
             onClose={() => data.setSelectedSeller(null)}
           />
         )}
-      </main>
+      </div>
     </RankingErrorBoundary>
   )
 }
