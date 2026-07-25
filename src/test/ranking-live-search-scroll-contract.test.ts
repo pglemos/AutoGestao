@@ -56,4 +56,20 @@ describe('contrato da classificação global', () => {
     expect(filters).toContain('type="search"')
     expect(filters).toContain('pointer-events-none')
   })
+
+  test('o estilo canônico não apaga o recuo horizontal reservado para ícones', () => {
+    const css = read('src/styles/internal-mx-manager-scope.css')
+    const lojasHeader = read('src/features/lojas/sections/LojasHeader.tsx')
+    const networkFilters = read('src/features/network-dashboard/sections/NetworkFiltersSection.tsx')
+    const canonicalInputBlock = css.match(
+      /\.mx-canonical-template :is\(input, select\)[\s\S]*?\n\}/,
+    )?.[0]
+
+    expect(canonicalInputBlock).toBeDefined()
+    expect(canonicalInputBlock).not.toContain('padding-inline')
+    expect(css).toContain('.mx-canonical-template :where(')
+    expect(css).toContain('padding-inline: 0.75rem')
+    expect(lojasHeader).toContain('className="pl-mx-10"')
+    expect(networkFilters).toContain('className="pl-9"')
+  })
 })
