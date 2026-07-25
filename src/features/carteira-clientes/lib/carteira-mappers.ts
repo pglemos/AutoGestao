@@ -167,6 +167,8 @@ export function mapMxClientToCarteiraVisual(client: ClientRow, now = new Date())
     oportunidade_id: opportunity?.id || null,
     agendamento_id: appointment?.id || null,
     vendedor_id: client.seller_user_id || null,
+    etapa: opportunity?.etapa || null,
+    closed_at: opportunity?.closed_at || null,
     loja_id: client.loja_id || null,
     nome: client.nome || 'Cliente sem nome',
     telefone: phone,

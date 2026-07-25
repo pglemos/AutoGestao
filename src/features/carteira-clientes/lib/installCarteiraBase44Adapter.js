@@ -7,6 +7,7 @@ import {
 } from './carteira-mappers'
 import { carteiraMutationCoordinator } from './carteira-mutation-coordinator'
 import { readSimulationContext } from '@/hooks/auth/authHelpers'
+import { cancelarVendaRpc } from '@/features/crm/lib/cancelarVenda'
 
 const INSTALLED_KEY = '__mxCarteiraBase44AdapterInstalled'
 const missionCache = new Map()
@@ -441,6 +442,17 @@ async function createCampaign(data) {
   })
 }
 
+async function cancelarVenda(oportunidadeId, motivo) {
+  await yieldSupabaseClient()
+  const { error } = await cancelarVendaRpc(oportunidadeId, motivo)
+  if (error) throw new Error(error)
+  const clientId = await (async () => {
+    const { data } = await supabase.from('oportunidades').select('cliente_id').eq('id', oportunidadeId).maybeSingle()
+    return data?.cliente_id || null
+  })()
+  return clientId ? getVisualClient(clientId) : null
+}
+
 async function loadMission(id) {
   await yieldSupabaseClient()
   const { data: mission, error } = await supabase
@@ -463,6 +475,7 @@ export function installCarteiraBase44Adapter(base44) {
     get: getVisualClient,
     create: data => saveClient(data),
     update: (id, data) => saveClient(data, id),
+    cancelarVenda,
   }
 
   base44.entities.Client = base44.entities.CarteiraCliente

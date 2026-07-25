@@ -7,9 +7,10 @@ import { StoreGoalsPanel } from '@/features/lojas/components/StoreGoalsPanel'
 import { StoreTeamPanel } from '@/features/lojas/components/StoreTeamPanel'
 import { ManagerTeamPerformance } from '@/features/manager/team/ManagerTeamPerformance'
 import { ManagerStoreGoalReference } from '@/features/manager/meta/ManagerStoreGoalReference'
-import { ManagerSellerParityHome } from './sections/ManagerSellerParityHome'
+import { ManagerSellerParityHomeCanonical } from './sections/ManagerSellerParityHomeCanonical'
 import { DashboardHeader, type DashboardTab } from './sections/DashboardHeader'
 import { PerformanceTab } from './sections/PerformanceTab'
+import { VendasFechadasLoja } from '@/features/vendas-loja/VendasFechadasLoja'
 import { CreateStoreModal } from './sections/CreateStoreModal'
 import {
   OwnerStoreUnavailable,
@@ -46,8 +47,9 @@ export function DashboardLoja() {
   const activeTab = useMemo<DashboardTab>(() => {
     if (location.pathname === '/gerente/minha-equipe') return 'equipe'
     if (location.pathname === '/gerente/meta-loja') return 'metas'
+    if (location.pathname === '/gerente/vendas') return 'vendas'
     const tab = new URLSearchParams(location.search).get('tab')
-    return tab === 'metas' || tab === 'equipe' ? tab : 'performance'
+    return tab === 'metas' || tab === 'equipe' || tab === 'vendas' ? tab : 'performance'
   }, [location.pathname, location.search])
   const isFocusedRolePerformance = (isOwner || role === 'gerente') && activeTab === 'performance'
   const isManagerSection = role === 'gerente' && activeTab !== 'performance'
@@ -91,7 +93,7 @@ export function DashboardLoja() {
   if (!resolving && !storesLoading && role === 'gerente' && activeTab === 'performance' && !selectedStoreId) {
     return (
       <main className="h-full w-full overflow-y-auto bg-surface-alt no-scrollbar">
-        <ManagerSellerParityHome data={data} alerts={[]} />
+        <ManagerSellerParityHomeCanonical data={data} alerts={[]} />
       </main>
     )
   }
@@ -142,6 +144,13 @@ export function DashboardLoja() {
         role === 'gerente'
           ? <ManagerTeamPerformance data={data} storeName={data.metrics.storeName} selectableStores={selectableStores} onStoreChange={setActiveStoreId} />
           : <StoreTeamPanel storeId={selectedStoreId} storeName={data.metrics.storeName} />
+      ) : activeTab === 'vendas' ? (
+        <VendasFechadasLoja
+          storeId={selectedStoreId}
+          showManagerHeader={role === 'gerente'}
+          selectableStores={selectableStores}
+          onStoreChange={setActiveStoreId}
+        />
       ) : selectedStoreId ? (
         <PerformanceTab
           role={role}

@@ -11,7 +11,7 @@ const performanceTabSource = readFileSync(
   'utf8',
 )
 const dashboardContainerSource = readFileSync(
-  new URL('../../dashboard-loja/DashboardLoja.tsx', import.meta.url),
+  new URL('../../dashboard-loja/DashboardLoja.container.tsx', import.meta.url),
   'utf8',
 )
 

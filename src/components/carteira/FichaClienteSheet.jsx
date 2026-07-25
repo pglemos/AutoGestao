@@ -7,12 +7,27 @@ import { Zap, X, Edit2, ChevronDown, ChevronUp, AlertCircle, Clock, CheckCircle2
 import AlterarProximoPasso from "./AlterarProximoPasso";
 import moment from "moment/min/moment-with-locales";
 import { toast } from "@/components/ui/use-toast";
+import { useAuth } from "@/hooks/useAuth";
+import { CancelarVendaModal } from "@/features/crm/components/CancelarVendaModal";
 
 moment.locale("pt-br");
 import {
   SITUACOES_ATUAIS, TEMPERATURAS, CANAIS_COMERCIAIS, STATUS_COMERCIAIS,
   calcularObjetivoEProximoPasso, calcularScore, explicacaoCliente, tempColor,
 } from "./carteiraUtils";
+
+const JANELA_CANCELAMENTO_DIAS = 7;
+
+/**
+ * Espelha a janela de 7 dias validada no backend (RPC cancelar_venda) — só
+ * controla a exibição do botão aqui; a regra de verdade é a checagem no
+ * servidor, então divergência entre front/back nunca vira brecha.
+ */
+function dentroJanelaCancelamento(closedAt) {
+  if (!closedAt) return false;
+  const diffMs = Date.now() - new Date(closedAt).getTime();
+  return diffMs >= 0 && diffMs <= JANELA_CANCELAMENTO_DIAS * 86400000;
+}
 
 // ─── QUALIDADE DA OPORTUNIDADE ───────────────────────────────────────────────
 function calcularQualidade(cliente) {
@@ -235,6 +250,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
 
 // ─── MAIN COMPONENT ───────────────────────────────────────────────────────────
 export default function FichaClienteSheet({ clienteId, open, onClose, onAtualizado, onExecutar }) {
+  const { role, supabaseUser } = useAuth();
   const [cliente, setCliente] = useState(null);
   const [loading, setLoading] = useState(true);
   const [historico, setHistorico] = useState([]);
@@ -243,6 +259,8 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
   const [salvando, setSalvando] = useState(false);
   const [alterarPassoOpen, setAlterarPassoOpen] = useState(false);
   const [passoPrefill, setPassoPrefill] = useState(null);
+  const [cancelarVendaOpen, setCancelarVendaOpen] = useState(false);
+  const [cancelandoVenda, setCancelandoVenda] = useState(false);
 
   useEffect(() => {
     if (!open || !clienteId) return;
@@ -296,6 +314,29 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
     if (onAtualizado) onAtualizado(persistido);
   }
 
+  async function confirmarCancelarVenda(motivo) {
+    if (!cliente?.oportunidade_id) return;
+    setCancelandoVenda(true);
+    try {
+      const atualizado = await base44.entities.CarteiraCliente.cancelarVenda(cliente.oportunidade_id, motivo);
+      toast({ title: "Venda cancelada." });
+      setCancelarVendaOpen(false);
+      if (atualizado) {
+        setCliente(atualizado);
+        setForm(atualizado);
+        if (onAtualizado) onAtualizado(atualizado);
+      }
+    } catch (error) {
+      toast({
+        title: "Não foi possível cancelar a venda.",
+        description: error?.message || "Tente novamente.",
+        variant: "destructive",
+      });
+    } finally {
+      setCancelandoVenda(false);
+    }
+  }
+
   function handlePassoSalvo(atualizado) {
     setCliente(atualizado);
     setForm(atualizado);
@@ -318,6 +359,10 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
   const { objetivo, proximoPasso } = useMemo(() => cliente ? calcularObjetivoEProximoPasso(cliente) : { objetivo: "—", proximoPasso: "—" }, [cliente]);
   const motivo = useMemo(() => cliente ? motivoRecomendacao(cliente) : "", [cliente]);
   const { score } = useMemo(() => cliente ? calcularScore(cliente) : { score: 0 }, [cliente]);
+  const isPrivileged = role === "gerente" || role === "dono" || role === "administrador_mx" || role === "administrador_geral";
+  const isVendaAtiva = cliente?.etapa === "ganho";
+  const isOwnClient = cliente?.vendedor_id === supabaseUser?.id;
+  const podeCancelarVenda = isVendaAtiva && (isPrivileged || (isOwnClient && dentroJanelaCancelamento(cliente?.closed_at)));
 
   const situacao = cliente?.situacao_atual || cliente?.momento || "—";
   const canal = cliente?.canal_comercial || cliente?.canal_origem || "—";
@@ -592,6 +637,15 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
               >
                 <Edit2 className="w-3.5 h-3.5" /> {editando ? "Cancelar edição" : "Editar"}
               </Button>
+              {podeCancelarVenda && !editando && (
+                <Button
+                  variant="outline"
+                  onClick={() => setCancelarVendaOpen(true)}
+                  className="rounded-xl text-sm border-red-200 text-red-600 hover:bg-red-50"
+                >
+                  Cancelar venda
+                </Button>
+              )}
               {onExecutar && !editando && (
                 <Button
                   onClick={() => { onClose(); onExecutar(cliente); }}
@@ -618,6 +672,18 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
           onSalvo={handlePassoSalvo}
         />
       )}
+
+      <CancelarVendaModal
+        open={cancelarVendaOpen}
+        saving={cancelandoVenda}
+        resumo={cliente ? {
+          cliente: cliente.nome,
+          veiculo: cliente.veiculo_interesse || null,
+          valor: Number(cliente.valor_negociado || 0),
+        } : null}
+        onConfirm={confirmarCancelarVenda}
+        onClose={() => setCancelarVendaOpen(false)}
+      />
     </Dialog>
   );
 }

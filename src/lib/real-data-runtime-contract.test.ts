@@ -98,7 +98,7 @@ describe('contrato de dados reais do runtime ativo', () => {
   test('falhas e ausência de configuração não ativam catálogos locais de negócio', () => {
     const agenda = readFileSync(resolve(root, 'src/hooks/useAgendaOptions.ts'), 'utf8')
     const consulting = readFileSync(resolve(root, 'src/hooks/useConsultingModules.ts'), 'utf8')
-    const carteira = readFileSync(resolve(root, 'src/features/crm/CarteiraClientes.container.tsx'), 'utf8')
+    const carteira = readFileSync(resolve(root, 'src/base44-reference/pages/CarteiraClientes.jsx'), 'utf8')
     const carteiraAdapter = readFileSync(resolve(root, 'src/features/carteira-clientes/lib/installCarteiraBase44Adapter.js'), 'utf8')
     const base44 = readFileSync(resolve(root, 'src/api/base44Client.js'), 'utf8')
 

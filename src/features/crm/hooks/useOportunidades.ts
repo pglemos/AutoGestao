@@ -13,6 +13,7 @@ import {
 } from '@/lib/schemas/crm.schema'
 import { z } from 'zod'
 import { eventoJaExiste, registrarEventoComercial } from '@/features/crm/lib/eventosComerciais'
+import { cancelarVendaRpc } from '@/features/crm/lib/cancelarVenda'
 
 const OportunidadeComClienteSchema = OportunidadeSchema.extend({
   cliente: z.object({ nome: z.string(), telefone: z.string().nullable() }).nullable().optional(),
@@ -260,6 +261,14 @@ export function useOportunidades() {
     return { error: null }
   }, [supabaseUser, effectiveStoreId, fetchOportunidades, oportunidades])
 
+  const cancelarVenda = useCallback(async (id: string, motivo: string): Promise<{ error: string | null }> => {
+    if (!supabaseUser) return { error: 'Sessão inválida.' }
+    const { error: cancelError } = await cancelarVendaRpc(id, motivo)
+    if (cancelError) return { error: cancelError }
+    await fetchOportunidades()
+    return { error: null }
+  }, [supabaseUser, fetchOportunidades])
+
   const deleteOportunidade = useCallback(async (id: string): Promise<{ error: string | null }> => {
     if (!supabaseUser) return { error: 'Sessão inválida.' }
     const { error: delError } = await supabase.from('oportunidades').delete().eq('id', id)
@@ -301,5 +310,5 @@ export function useOportunidades() {
     }
   }, [oportunidades])
 
-  return { oportunidades, funil, loading, error, refetch: fetchOportunidades, createOportunidade, registrarVendaDireta, updateOportunidade, updateMotivoPerda, updateEtapa, deleteOportunidade }
+  return { oportunidades, funil, loading, error, refetch: fetchOportunidades, createOportunidade, registrarVendaDireta, updateOportunidade, updateMotivoPerda, updateEtapa, cancelarVenda, deleteOportunidade }
 }

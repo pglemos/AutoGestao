@@ -6923,6 +6923,8 @@ export type Database = {
       oportunidades: {
         Row: {
           canal: Database["public"]["Enums"]["crm_canal"] | null
+          cancelada_em: string | null
+          cancelada_por: string | null
           carro_avaliado: boolean
           categoria_veiculo:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
@@ -6939,6 +6941,7 @@ export type Database = {
           id: string
           idempotency_key: string | null
           loja_id: string
+          motivo_cancelamento: string | null
           motivo_perda: string | null
           origem_modulo: string
           placa_veiculo: string | null
@@ -6954,6 +6957,8 @@ export type Database = {
         }
         Insert: {
           canal?: Database["public"]["Enums"]["crm_canal"] | null
+          cancelada_em?: string | null
+          cancelada_por?: string | null
           carro_avaliado?: boolean
           categoria_veiculo?:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
@@ -6970,6 +6975,7 @@ export type Database = {
           id?: string
           idempotency_key?: string | null
           loja_id: string
+          motivo_cancelamento?: string | null
           motivo_perda?: string | null
           origem_modulo?: string
           placa_veiculo?: string | null
@@ -6985,6 +6991,8 @@ export type Database = {
         }
         Update: {
           canal?: Database["public"]["Enums"]["crm_canal"] | null
+          cancelada_em?: string | null
+          cancelada_por?: string | null
           carro_avaliado?: boolean
           categoria_veiculo?:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
@@ -7001,6 +7009,7 @@ export type Database = {
           id?: string
           idempotency_key?: string | null
           loja_id?: string
+          motivo_cancelamento?: string | null
           motivo_perda?: string | null
           origem_modulo?: string
           placa_veiculo?: string | null
@@ -7015,6 +7024,13 @@ export type Database = {
           veiculo_troca?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "oportunidades_cancelada_por_fkey"
+            columns: ["cancelada_por"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "oportunidades_cliente_id_fkey"
             columns: ["cliente_id"]
@@ -12372,6 +12388,7 @@ export type Database = {
         Args: { p_request_id: string }
         Returns: Json
       }
+      cancelar_venda: { Args: { p_payload: Json }; Returns: Json }
       carteira_atualizar_missao: {
         Args: { p_missao_id: string; p_payload: Json }
         Returns: Json
@@ -13877,6 +13894,7 @@ export type Database = {
         | "fechamento"
         | "ganho"
         | "perdido"
+        | "cancelada"
       crm_evento_modalidade:
         | "visita_loja"
         | "atendimento_externo"
@@ -13892,6 +13910,7 @@ export type Database = {
         | "entrega_realizada"
         | "garantia_registrada"
         | "pos_venda_realizado"
+        | "venda_cancelada"
       crm_financiamento: "aprovado" | "reprovado" | "nao_aplica" | "pendente"
       crm_relacionamento: "excelente" | "bom" | "neutro" | "ruim" | "critico"
       crm_tipo_veiculo: "carro" | "moto" | "caminhao"
@@ -14119,6 +14138,7 @@ export const Constants = {
         "fechamento",
         "ganho",
         "perdido",
+        "cancelada",
       ],
       crm_evento_modalidade: [
         "visita_loja",
@@ -14136,6 +14156,7 @@ export const Constants = {
         "entrega_realizada",
         "garantia_registrada",
         "pos_venda_realizado",
+        "venda_cancelada",
       ],
       crm_financiamento: ["aprovado", "reprovado", "nao_aplica", "pendente"],
       crm_relacionamento: ["excelente", "bom", "neutro", "ruim", "critico"],
