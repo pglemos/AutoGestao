@@ -94,7 +94,7 @@ export function VendasFechadasLoja({
           onChange={event => setSearch(event.target.value)}
           placeholder="Buscar por cliente, vendedor ou veículo..."
           aria-label="Buscar venda"
-          className="h-9 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+          className="h-9 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm focus:outline-none focus:ring-1 focus:ring-mx-action"
         />
       </div>
 
