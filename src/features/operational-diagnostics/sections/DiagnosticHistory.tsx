@@ -1,0 +1,2 @@
+import { MxEmptyState, MxSectionCard, MxSectionHeader } from '@/components/module/MxModuleVisualPrimitives'
+export function DiagnosticHistory() { return <MxSectionCard><MxSectionHeader title="Histórico" description="Execuções registradas para auditoria." /><MxEmptyState title="Histórico não disponível nesta leitura" description="A análise atual não cria registros adicionais no banco." /></MxSectionCard> }

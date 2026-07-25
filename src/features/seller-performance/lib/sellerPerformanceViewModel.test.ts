@@ -1,0 +1,3 @@
+import { describe, expect, test } from 'bun:test'
+import { buildSellerPerformanceViewModel, createLatestRequestGuard } from './sellerPerformanceViewModel'
+describe('seller performance view model', () => { test('handles zero leads and request invalidation', () => { const model = buildSellerPerformanceViewModel({ user_id: '1', user_name: 'A', avatar_url: null, vnd_total: 2, leads: 0, visitas: 1, atingimento: 50, ritmo: 2 } as never); expect(model.conversion).toBe(0); const guard = createLatestRequestGuard(); const a = guard.next(); const b = guard.next(); expect(guard.isCurrent(a)).toBe(false); expect(guard.isCurrent(b)).toBe(true) }) })

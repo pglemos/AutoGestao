@@ -1,0 +1,3 @@
+import { MxSectionCard, MxSectionHeader, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
+import type { DiagnosticFinding } from '../types'
+export function CorrectiveActionPanel({ finding }: { finding: DiagnosticFinding | null }) { return <MxSectionCard><MxSectionHeader title="Ação corretiva" description="A conclusão só deve ser registrada depois de persistência confirmada." /><div className="p-5">{finding ? <MxStatusBanner tone={finding.severity === 'critical' ? 'danger' : finding.severity === 'warning' ? 'warning' : 'info'}>{finding.suggestedAction}</MxStatusBanner> : <p className="text-sm text-gray-500">Selecione um achado para consultar a orientação.</p>}</div></MxSectionCard> }

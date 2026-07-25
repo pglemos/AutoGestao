@@ -1,0 +1,4 @@
+import { PolarAngleAxis, PolarGrid, Radar, RadarChart, ResponsiveContainer, Tooltip } from 'recharts'
+import { ReportChartSection } from '@/features/internal-reports/ReportChartSection'
+import type { SellerPerformanceViewModel } from '../lib/sellerPerformanceViewModel'
+export function SellerPerformanceCharts({ seller }: { seller: SellerPerformanceViewModel }) { return <ReportChartSection title="Perfil de execução" description="Atributos normalizados de 0 a 100."><div className="h-80 w-full"><ResponsiveContainer width="100%" height="100%"><RadarChart data={seller.attributes}><PolarGrid /><PolarAngleAxis dataKey="subject" /><Radar dataKey="value" fill="var(--color-brand-primary)" fillOpacity={0.25} stroke="var(--color-brand-primary)" /><Tooltip /></RadarChart></ResponsiveContainer></div></ReportChartSection> }

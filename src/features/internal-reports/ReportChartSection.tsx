@@ -1,0 +1,3 @@
+import type { ReactNode } from 'react'
+import { MxErrorState, MxLoadingState, MxSectionCard, MxSectionHeader } from '@/components/module/MxModuleVisualPrimitives'
+export function ReportChartSection(props: { title: ReactNode; description?: ReactNode; actions?: ReactNode; loading?: boolean; error?: string | null; retry?: () => void; children: ReactNode }) { return <MxSectionCard><MxSectionHeader title={props.title} description={props.description} actions={props.actions} /><div className="p-5">{props.loading ? <MxLoadingState label="Carregando gráfico" /> : props.error ? <MxErrorState description={props.error} retry={props.retry} /> : props.children}</div></MxSectionCard> }

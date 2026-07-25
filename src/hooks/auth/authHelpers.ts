@@ -1,9 +1,3 @@
-/**
- * Auth Helpers — pure utilities extracted from useAuth.tsx
- *
- * Story 2.9 / ADR-0052 — Auth Provider split.
- * These helpers are framework-agnostic and unit-testable in isolation.
- */
 import type { User as AppUser, UserRole, Store } from '@/types/database'
 import { normalizeRole } from '@/lib/auth/roles'
 
@@ -12,22 +6,13 @@ export const ROLE_SIMULATION_STORAGE_KEY = 'mx_role_simulation'
 export const SIMULATION_CONTEXT_STORAGE_KEY = 'mx_simulation_context'
 export const DEV_BYPASS_ALLOWED_HOSTS = new Set(['localhost', '127.0.0.1', '::1'])
 export const AUTH_SIGNOUT_REASON_STORAGE_KEY = 'mx_auth_signout_reason'
-// Reasons expiram: sem isto, um reason gravado num signout antigo (ex.: conta
-// esteve inativa por um instante, foi reativada, sessionStorage sobrevive na
-// aba) podia ser lido e mostrado como causa de uma falha totalmente diferente
-// e posterior (ex.: link de recovery expirado) — usuário vendo "conta
-// desativada" pra uma conta que já está ativa há muito tempo. Achado real:
-// matheus.silva_ma@yahoo.com em 2026-07-24 (conta/loja confirmadas ativas no
-// banco no momento do relato).
 const AUTH_SIGNOUT_REASON_MAX_AGE_MS = 60_000
 
-/** Grava a razão do signout forçado com timestamp, pra poder expirar depois. */
 export function writeSignoutReason(reason: string): void {
   if (typeof window === 'undefined') return
   window.sessionStorage.setItem(AUTH_SIGNOUT_REASON_STORAGE_KEY, JSON.stringify({ reason, ts: Date.now() }))
 }
 
-/** Lê e consome a razão do signout — descarta se tiver mais de 60s (obsoleta). */
 export function readSignoutReason(): string | null {
   if (typeof window === 'undefined') return null
   const raw = window.sessionStorage.getItem(AUTH_SIGNOUT_REASON_STORAGE_KEY)
@@ -52,59 +37,39 @@ export const AUTH_NETWORK_ERROR_MESSAGE =
   'Não foi possível conectar ao servidor de autenticação. Verifique sua conexão ou tente novamente em alguns minutos.'
 
 export type SimulationRole = Extract<UserRole, 'dono' | 'gerente' | 'vendedor'>
-
 export type SimulationContext = {
   role: SimulationRole
   sellerUserId: string
   storeId: string
+  realRole?: string
+  startedAt?: string
 }
 
-/**
- * Detects transient network errors that should be reported as connectivity
- * issues instead of authentication failures.
- */
 export function isTransientFetchError(error: unknown): boolean {
   if (!error || typeof error !== 'object' || !('message' in error)) return false
   const message = String((error as { message?: unknown }).message || '').toLowerCase()
-  return (
-    message.includes('failed to fetch') ||
-    message.includes('networkerror') ||
-    message.includes('load failed') ||
-    message.includes('name_not_resolved') ||
-    message.includes('err_name_not_resolved')
-  )
+  return ['failed to fetch', 'networkerror', 'load failed', 'name_not_resolved', 'err_name_not_resolved']
+    .some(fragment => message.includes(fragment))
 }
 
-/**
- * Dev-only auth bypass is allowed only in DEV builds, with the env flag enabled,
- * and on a known local hostname.
- */
 export function isDevBypassAllowed(): boolean {
   if (!import.meta.env.DEV || typeof window === 'undefined') return false
   if (import.meta.env.VITE_ENABLE_DEV_AUTH_BYPASS !== 'true') return false
   return DEV_BYPASS_ALLOWED_HOSTS.has(window.location.hostname)
 }
 
-/**
- * Reads a persisted dev-bypass profile from localStorage.
- * Returns null if dev-bypass is not allowed or the payload is invalid.
- */
 export function readDevBypassProfile(): AppUser | null {
   if (!isDevBypassAllowed()) {
     if (typeof window !== 'undefined') window.localStorage.removeItem(DEV_BYPASS_STORAGE_KEY)
     return null
   }
-
   try {
     const raw = window.localStorage.getItem(DEV_BYPASS_STORAGE_KEY)
     if (!raw) return null
-
     const parsed = JSON.parse(raw) as Partial<AppUser>
     if (!parsed.id || !parsed.email) return null
-
     const role = normalizeRole(parsed.role)
     if (!role) return null
-
     return {
       id: parsed.id,
       name: parsed.name || 'Admin MX',
@@ -123,9 +88,6 @@ export function readDevBypassProfile(): AppUser | null {
   }
 }
 
-/**
- * Reads the persisted simulation role from sessionStorage.
- */
 export function readSimulationRole(): SimulationRole | null {
   if (typeof window === 'undefined') return null
   const stored = window.sessionStorage.getItem(ROLE_SIMULATION_STORAGE_KEY)
@@ -138,15 +100,13 @@ export function readSimulationContext(): SimulationContext | null {
     const raw = window.sessionStorage.getItem(SIMULATION_CONTEXT_STORAGE_KEY)
     if (!raw) return null
     const parsed = JSON.parse(raw) as Partial<SimulationContext>
-    if (
-      (parsed.role !== 'vendedor' && parsed.role !== 'gerente' && parsed.role !== 'dono')
-      || !parsed.sellerUserId
-      || !parsed.storeId
-    ) return null
+    if ((parsed.role !== 'vendedor' && parsed.role !== 'gerente' && parsed.role !== 'dono') || !parsed.sellerUserId || !parsed.storeId) return null
     return {
       role: parsed.role,
       sellerUserId: parsed.sellerUserId,
       storeId: parsed.storeId,
+      realRole: typeof parsed.realRole === 'string' ? parsed.realRole : undefined,
+      startedAt: typeof parsed.startedAt === 'string' ? parsed.startedAt : undefined,
     }
   } catch {
     window.sessionStorage.removeItem(SIMULATION_CONTEXT_STORAGE_KEY)
@@ -163,19 +123,16 @@ export function writeSimulationContext(context: SimulationContext | null): void 
   window.sessionStorage.setItem(SIMULATION_CONTEXT_STORAGE_KEY, JSON.stringify(context))
 }
 
-/**
- * Selects the appropriate store for a simulation session.
- * Priority: MX CONSULTORIA sandbox > preferred store > first active store.
- */
+export function clearSimulationStorage(): void {
+  if (typeof window === 'undefined') return
+  window.sessionStorage.removeItem(ROLE_SIMULATION_STORAGE_KEY)
+  window.sessionStorage.removeItem(SIMULATION_CONTEXT_STORAGE_KEY)
+}
+
 export function pickSimulationStore(stores: Store[], preferredStoreId?: string | null): Store | null {
   const activeStores = stores.filter(store => store.active)
-  const sandboxStore = activeStores.find(
-    store => store.name?.trim().toLowerCase() === 'mx consultoria',
-  )
+  const sandboxStore = activeStores.find(store => store.name?.trim().toLowerCase() === 'mx consultoria')
   if (sandboxStore) return sandboxStore
-
-  const preferredStore = preferredStoreId
-    ? activeStores.find(store => store.id === preferredStoreId)
-    : null
+  const preferredStore = preferredStoreId ? activeStores.find(store => store.id === preferredStoreId) : null
   return preferredStore || activeStores[0] || null
 }

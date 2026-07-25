@@ -1,0 +1,3 @@
+import { Download, RefreshCw } from 'lucide-react'
+import { Button } from '@/components/atoms/Button'
+export function ReportExportActions({ exporting, refreshing, canExport, onExport, onRefresh }: { exporting: boolean; refreshing: boolean; canExport: boolean; onExport: () => void; onRefresh: () => void }) { return <><Button variant="managerSecondary" onClick={onRefresh} disabled={refreshing}><RefreshCw size={18} className={refreshing ? 'animate-spin motion-reduce:animate-none' : ''} />Atualizar</Button>{canExport ? <Button variant="managerOutline" onClick={onExport} disabled={exporting}><Download size={18} />{exporting ? 'Exportando...' : 'Exportar'}</Button> : null}</> }
