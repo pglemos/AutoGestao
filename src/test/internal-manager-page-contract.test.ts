@@ -6,28 +6,18 @@ const root = process.cwd()
 const read = (path: string) => readFileSync(join(root, path), 'utf8')
 
 const canonicalPages = [
-  'painel',
-  'lojas',
-  'loja-detalhe',
-  'consultoria',
-  'agenda',
-  'ranking',
-  'devolutivas',
-  'treinamentos',
-  'produtos',
-  'notificacoes',
-  'relatorio-matinal',
-  'performance-vendas',
-  'performance-vendedor',
-  'auditoria',
-  'config-operacional',
-  'config-pmr',
-  'reprocessamento',
-  'configuracoes',
-  'simulacao',
+  'painel', 'lojas', 'loja-detalhe', 'consultoria', 'agenda', 'ranking',
+  'devolutivas', 'treinamentos', 'produtos', 'notificacoes', 'relatorio-matinal',
+  'performance-vendas', 'performance-vendedor', 'auditoria', 'config-operacional',
+  'config-pmr', 'reprocessamento', 'configuracoes', 'simulacao',
 ] as const
-
 const templateKinds = ['dashboard', 'list', 'detail', 'workspace', 'settings'] as const
+
+const wave2CanonicalContainers = [
+  'src/pages/ManagerDevelopment.tsx',
+  'src/features/configuracoes/components/ConfiguracoesShell.tsx',
+  'src/features/digital-products/DigitalProductsPage.tsx',
+] as const
 
 describe('contrato canônico do módulo interno MX', () => {
   test('registra as dezenove áreas no sistema visual compartilhado', () => {
@@ -59,13 +49,10 @@ describe('contrato canônico do módulo interno MX', () => {
     for (const slot of ['page', 'header', 'toolbar', 'section', 'table', 'tabs', 'sidebar']) {
       expect(slots).toContain(`data-mx-template-slot="${slot}"`)
     }
-
     const primitives = read('src/components/module/MxModuleVisualPrimitives.tsx')
-    expect(primitives).toContain('InternalMxTemplatePage')
-    expect(primitives).toContain('InternalMxTemplateHeader')
-    expect(primitives).toContain('InternalMxTemplateToolbar')
-    expect(primitives).toContain('InternalMxTemplateSection')
-    expect(primitives).toContain('InternalMxTemplateTable')
+    for (const primitive of ['InternalMxTemplatePage', 'InternalMxTemplateHeader', 'InternalMxTemplateToolbar', 'InternalMxTemplateSection', 'InternalMxTemplateTable']) {
+      expect(primitives).toContain(primitive)
+    }
   })
 
   test('a composição não adiciona seletores específicos por rota', () => {
@@ -89,5 +76,23 @@ describe('contrato canônico do módulo interno MX', () => {
     const heading = read('src/components/molecules/PageHeading.tsx')
     expect(heading).toContain('data-mx-page-heading="manager"')
     expect(heading).toContain('rounded-2xl border border-gray-100 bg-white p-5 shadow-sm')
+  })
+
+  for (const file of wave2CanonicalContainers) {
+    test(`${file} não cria shell paralelo`, () => {
+      const source = read(file)
+      expect(source).toContain('MxModulePage')
+      expect(source).toContain('MxModuleHeader')
+      expect(source).not.toContain('PageHeading')
+      expect(source).not.toMatch(/<main[\s>]/)
+    })
+  }
+
+  test('a Onda 2 usa o slot canônico de tabs', () => {
+    const tabs = read('src/components/module/MxPageTabs.tsx')
+    expect(tabs).toContain('InternalMxTemplateTabs')
+    expect(tabs).toContain('data-mx-page-tabs')
+    expect(tabs).toContain('role="tab"')
+    expect(tabs).toContain('aria-selected')
   })
 })
