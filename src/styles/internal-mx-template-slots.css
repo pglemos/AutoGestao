@@ -6,8 +6,26 @@
 }
 
 .mx-canonical-template [data-mx-template-body] {
-  overflow: hidden;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  -webkit-overflow-scrolling: touch;
   background: var(--mx-page-bg);
+}
+
+#main-content:has(> section[aria-label='Simulação ativa']) {
+  display: flex;
+  flex-direction: column;
+}
+
+#main-content:has(> section[aria-label='Simulação ativa']) > section[aria-label='Simulação ativa'] {
+  flex: 0 0 auto;
+}
+
+#main-content:has(> section[aria-label='Simulação ativa']) > section:last-child {
+  height: auto;
+  min-height: 0;
+  flex: 1 1 0%;
 }
 
 .mx-canonical-template [data-mx-template-page] {
