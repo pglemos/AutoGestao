@@ -7,6 +7,7 @@ import { initSentry, initWebVitals } from './lib/observability'
 import './index.css'
 import './styles/manager-visual-scope.css'
 import './styles/owner-base44-visual-scope.css'
+import './styles/search-interactions.css'
 
 initSentry()
 initWebVitals()

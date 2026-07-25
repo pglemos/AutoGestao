@@ -18,7 +18,7 @@
     "lint:tokens": "node scripts/lint-tokens-ast.mjs",
     "lint:tokens:legacy": "node scripts/lint-tokens.legacy.js",
     "lint:a11y": "eslint 'src/**/*.{ts,tsx}'",
-    "typecheck": "tsc --noEmit",
+    "typecheck": "bun test src/test/ranking-live-search-scroll-contract.test.ts && tsc --noEmit",
     "test": "bun test --isolate --max-concurrency=1 src/lib src/benchmarks src/hooks src/components src/features src/pages src/test src/api",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
