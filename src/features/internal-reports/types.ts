@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import type { LucideIcon } from 'lucide-react'
 
 export type ReportDateRange = { start: string; end: string }
 export type ReportPageState<T> = {
@@ -16,7 +17,7 @@ export type ReportMetric = {
   value: string | number
   detail: string
   tone?: 'brand' | 'success' | 'warning' | 'danger' | 'info' | 'violet' | 'neutral'
-  icon: React.ComponentType<{ size?: number; className?: string; 'aria-hidden'?: boolean | 'true' | 'false' }>
+  icon: LucideIcon
 }
 
 export type ReportTableColumn<Row> = {
