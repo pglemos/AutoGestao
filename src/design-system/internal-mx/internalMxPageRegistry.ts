@@ -10,9 +10,18 @@ export type InternalMxPageMeta = {
   match: (pathname: string) => boolean
 }
 
-const exact = (path: string) => (pathname: string) => pathname === path
-const prefix = (path: string) => (pathname: string) => pathname === path || pathname.startsWith(`${path}/`)
-const child = (path: string) => (pathname: string) => pathname.startsWith(`${path}/`)
+const normalizePath = (pathname: string) => {
+  if (pathname.length > 1 && pathname.endsWith('/')) return pathname.slice(0, -1)
+  return pathname
+}
+
+const exact = (path: string) => (pathname: string) => normalizePath(pathname) === path
+const oneOf = (...paths: string[]) => (pathname: string) => paths.includes(normalizePath(pathname))
+const prefix = (path: string) => (pathname: string) => {
+  const normalizedPath = normalizePath(pathname)
+  return normalizedPath === path || normalizedPath.startsWith(`${path}/`)
+}
+const child = (path: string) => (pathname: string) => normalizePath(pathname).startsWith(`${path}/`)
 
 export const INTERNAL_MX_PAGE_REGISTRY: readonly InternalMxPageMeta[] = [
   { key: 'painel', title: 'Painel Geral', description: 'Visão consolidada da rede, metas, disciplina operacional e prioridades.', group: 'Rede e Gestão', managerLayout: true, template: 'dashboard', match: exact('/painel') },
@@ -23,8 +32,8 @@ export const INTERNAL_MX_PAGE_REGISTRY: readonly InternalMxPageMeta[] = [
   { key: 'consultoria', title: 'Consultoria', description: 'Operação consultiva da MX, programas, indicadores e entregas.', group: 'Rede e Gestão', managerLayout: true, template: 'list', match: prefix('/consultoria') },
   { key: 'agenda', title: 'Agenda Central MX', description: 'Compromissos, visitas, reuniões e sincronizações da consultoria.', group: 'Rede e Gestão', managerLayout: true, template: 'workspace', match: exact('/agenda') },
   { key: 'simulacao', title: 'Simulação de Perfis', description: 'Validação segura da experiência de Vendedor, Gerente e Dono.', group: 'Simulação', managerLayout: true, template: 'dashboard', match: prefix('/simulacao') },
-  { key: 'ranking', title: 'Ranking', description: 'Classificação, evolução e leitura comparativa de performance.', group: 'Rotina e Conteúdo', managerLayout: true, template: 'dashboard', match: exact('/classificacao') },
-  { key: 'devolutivas', title: 'Devolutivas e PDI', description: 'Feedbacks, planos de desenvolvimento e acompanhamento de ações.', group: 'Rotina e Conteúdo', managerLayout: true, template: 'list', match: exact('/devolutivas') },
+  { key: 'ranking', title: 'Ranking', description: 'Classificação, evolução e leitura comparativa de performance.', group: 'Rotina e Conteúdo', managerLayout: true, template: 'dashboard', match: oneOf('/ranking', '/classificacao', '/gerente/ranking') },
+  { key: 'devolutivas', title: 'Devolutivas e PDI', description: 'Feedbacks, planos de desenvolvimento e acompanhamento de ações.', group: 'Rotina e Conteúdo', managerLayout: true, template: 'list', match: oneOf('/devolutivas', '/pdi') },
   { key: 'treinamentos', title: 'Desenvolvimento', description: 'Conteúdos, trilhas, aulas e evolução da Universidade MX.', group: 'Rotina e Conteúdo', managerLayout: true, template: 'list', match: exact('/treinamentos') },
   { key: 'produtos', title: 'Produtos Digitais', description: 'Catálogo e governança dos produtos digitais da MX.', group: 'Rotina e Conteúdo', managerLayout: true, template: 'list', match: exact('/produtos') },
   { key: 'notificacoes', title: 'Notificações', description: 'Comunicações operacionais, alertas e registros de leitura.', group: 'Rotina e Conteúdo', managerLayout: true, template: 'list', match: exact('/notificacoes') },
