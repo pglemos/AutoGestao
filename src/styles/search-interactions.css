@@ -7,6 +7,15 @@ svg.lucide-search {
   user-select: none;
 }
 
+/*
+ * O escopo canônico define padding-inline com especificidade maior que as
+ * utilities pl-*. Esta regra é carregada por último e preserva uma área fixa
+ * para a lupa em qualquer campo de busca relativo, sem alterar inputs comuns.
+ */
+:where(.relative, [data-search-field]):has(svg.lucide-search) > input {
+  padding-left: 2.75rem !important;
+}
+
 input[type='search'] {
   -webkit-appearance: none;
   appearance: none;
