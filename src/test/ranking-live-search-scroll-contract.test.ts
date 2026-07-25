@@ -5,6 +5,7 @@ import { join } from 'node:path'
 const root = process.cwd()
 const read = (path: string) => readFileSync(join(root, path), 'utf8')
 
+// Executado no typecheck para impedir regressões silenciosas em scroll, Realtime e busca.
 describe('contrato da classificação global', () => {
   test('usa somente o scroll vertical do shell da aplicação', () => {
     const view = read('src/features/ranking/views/GlobalRankingView.tsx')
