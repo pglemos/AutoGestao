@@ -454,6 +454,11 @@ async function updateLiveAction(action, updates) {
     if (!responsibleId) throw new Error("Responsável não encontrado na unidade da ação.");
     resolvedUpdates = { ...updates, responsibleId };
   }
+  if (updates.blockResponsible && !updates.blockResponsibleId) {
+    const blockResponsibleId = await resolveResponsibleId(updates.blockResponsible, action.scopeId);
+    if (!blockResponsibleId) throw new Error("Responsável pelo bloqueio não encontrado na unidade da ação.");
+    resolvedUpdates = { ...resolvedUpdates, blockResponsibleId };
+  }
   const { data, error } = await supabase.rpc("atualizar_plano_acao_patch", updatePayload(action, resolvedUpdates));
   if (error) throw error;
   return data;
@@ -621,11 +626,14 @@ export const actionPlanLiveRepository = {
   },
 
   async blockAction(id, payload = {}) {
-    return this.updateActionById(id, {
+    const action = await this.getActionById(id);
+    if (!action) throw new Error("Ação não encontrada.");
+    return updateLiveAction(action, {
       status: "blocked",
       blockedReason: payload.reason || null,
       blockCategory: payload.category || null,
       blockResponsible: payload.responsible || null,
+      blockResponsibleId: payload.responsibleId || null,
       expectedUnblockDate: payload.expectedUnblockDate || null,
       blockNote: payload.note || null,
       transitionMetadata: { eventType: "blocked", category: payload.category || null },

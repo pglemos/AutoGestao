@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Check, Trash2, Lock, Unlock, MessageSquare, ListChecks } from "lucide-react";
 import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
+import { getExecutionQuickActions, shouldShowProgressEditor } from "../actionPlanUiUtils";
 
 export default function ExecutionTab({ action, onReload, onQuickAction, user }) {
   const { toast } = useToast();
@@ -16,6 +17,8 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
   const [editText, setEditText] = useState("");
 
   const checklistProgress = actionPlanLiveRepository.getChecklistProgress(action);
+  const showProgressEditor = shouldShowProgressEditor(action.status);
+  const sharedActions = getExecutionQuickActions(action.status);
 
   const handleAddChecklist = async () => {
     if (!newChecklistText.trim()) return;
@@ -78,21 +81,43 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
   return (
     <div className="space-y-4">
       {/* Progresso */}
-      <section className="rounded-lg border border-border p-3">
-        <div className="flex items-center justify-between">
-          <p className="text-sm font-medium text-foreground">Progresso atual</p>
-          <span className="text-lg font-bold text-foreground">{action.progress}%</span>
-        </div>
-        <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
-          <div className={`h-full rounded-full ${action.status === "completed" ? "bg-emerald-500" : action.status === "blocked" ? "bg-red-400" : "bg-blue-500"}`} style={{ width: `${action.progress}%` }} />
-        </div>
-        {checklistProgress != null && (
-          <p className="mt-1.5 text-xs text-muted-foreground">Checklist sugere: {checklistProgress}%</p>
-        )}
-        <Button size="sm" variant="outline" className="mt-2" onClick={() => onQuickAction(action, "progress")}>
-          Atualizar progresso
-        </Button>
-      </section>
+      {showProgressEditor && (
+        <section className="rounded-lg border border-border p-3">
+          <div className="flex items-center justify-between">
+            <p className="text-sm font-medium text-foreground">Progresso atual</p>
+            <span className="text-lg font-bold text-foreground">{action.progress}%</span>
+          </div>
+          <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
+            <div className="h-full rounded-full bg-blue-500" style={{ width: `${action.progress}%` }} />
+          </div>
+          {checklistProgress != null && (
+            <p className="mt-1.5 text-xs text-muted-foreground">Checklist sugere: {checklistProgress}%</p>
+          )}
+          <Button size="sm" variant="outline" className="mt-2" onClick={() => onQuickAction(action, "progress")}>
+            Atualizar progresso
+          </Button>
+        </section>
+      )}
+
+      {sharedActions.length > 0 && (
+        <section className="flex flex-wrap gap-2 rounded-lg border border-border p-3">
+          {sharedActions.map((quickAction) => {
+            const isPrimary = ["approve", "validate", "start", "submitValidation"].includes(quickAction.value);
+            const isDanger = ["cancel", "return"].includes(quickAction.value);
+            return (
+              <Button
+                key={quickAction.value}
+                size="sm"
+                variant={isPrimary ? "default" : "outline"}
+                onClick={() => onQuickAction(action, quickAction.value)}
+                className={isPrimary ? "bg-primary hover:bg-primary/90" : isDanger ? "text-red-600 hover:text-red-700" : ""}
+              >
+                {quickAction.label}
+              </Button>
+            );
+          })}
+        </section>
+      )}
 
       {/* Checklist */}
       <section className="rounded-lg border border-border p-3">

@@ -85,6 +85,15 @@ Nenhuma credencial foi inserida em arquivo, log, commit ou workflow público. A 
 
 ## Limitações conhecidas
 
+## Correção incremental — fluxos do Plano de Ação
+
+- [x] Corrigir menus de seleção dentro dos modais: `SelectContent` passou a ficar acima do overlay do `Dialog` (`z-[110]`), permitindo selecionar progresso, responsável, categoria, impacto e tipo de evidência.
+- [x] Remover o rodapé global duplicado do detalhe da ação e concentrar as ações de estado na aba Execução.
+- [x] Restringir a edição de progresso a ações em andamento e manter comandos únicos para bloqueada e aguardando validação.
+- [x] Persistir `block_responsible_id` junto do nome exibido e reler a ação com o escopo da unidade.
+- [x] Completar evidências do tipo link com URL e sincronizar o formulário de impacto após releitura.
+- [x] Validação local: 7 testes focados, `npm test` com 1463 testes aprovados, `npm run lint` sem erros, `npm run typecheck`, `npm run build` e `git diff --check` aprovados. O browser local confirmou seleção de Daniel Santos, Decisão do Dono, Link e progresso 20%, com restauração do registro real para 1%.
+
 1. O card de estoque permanece como `Pendente` porque ainda não existe uma fonte canônica validada de estoque por loja no MX. O Base44 usa fixture local, que não foi promovida a dado real.
 2. A Central de Decisões organiza e contextualiza alertas e ações existentes, mas os comandos diretos `Aprovar` e `Delegar` ainda não possuem uma transição persistente própria. O usuário é direcionado ao Plano de Ação canônico, evitando estados falsos.
 3. A tela de Consultoria reúne o ciclo, a pauta e a agenda existente. A agenda completa continua no módulo canônico já existente.
@@ -133,6 +142,18 @@ Nenhuma credencial foi inserida em arquivo, log, commit ou workflow público. A 
 - `supabase/migrations/20260718225000_owner_consultant_bridge_status.sql`
 - `supabase/migrations/20260718225500_owner_consultant_requests_rls_perf.sql`
 - Rollbacks correspondentes em `supabase/rollbacks/`.
+
+### Plano de Ação — correção de fluxos
+
+- `src/components/owner/actionplan/actionPlanLiveRepository.js`
+- `src/components/owner/actionplan/actionPlanUiUtils.js`
+- `src/components/owner/actionplan/board/ActionDrawerTabs.jsx`
+- `src/components/owner/actionplan/board/ExecutionTab.jsx`
+- `src/components/owner/actionplan/board/EvidenceTab.jsx`
+- `src/components/owner/actionplan/board/HistoryTab.jsx`
+- `src/components/ui/select.jsx`
+- `src/lib/action-plan-drawer-parity.test.ts`
+- `src/lib/action-plan-live-repository.test.ts`
 
 ### Documentação
 

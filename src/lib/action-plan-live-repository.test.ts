@@ -111,4 +111,14 @@ describe('mapLiveAction', () => {
       eficacia_score: 0,
     })
   })
+
+  it('sends the blocker identity separately from the display name', () => {
+    expect(buildActionUpdatePatch({
+      blockResponsible: 'Daniel Santos',
+      blockResponsibleId: 'user-1',
+    })).toEqual({
+      block_responsible: 'Daniel Santos',
+      block_responsible_id: 'user-1',
+    })
+  })
 })

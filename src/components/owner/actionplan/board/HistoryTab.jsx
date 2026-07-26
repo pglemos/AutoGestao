@@ -1,5 +1,5 @@
 // Aba Histórico e Impacto do drawer — timeline + medição de impacto.
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -36,6 +36,16 @@ export default function HistoryTab({ action, onReload, user }) {
     measurementDate: "",
     note: "",
   });
+  useEffect(() => {
+    setImpactForm({
+      impactStatus: action.impactStatus || "unmeasured",
+      valueBefore: action.impactValueBefore == null ? "" : String(action.impactValueBefore),
+      valueAfter: action.impactValueAfter == null ? "" : String(action.impactValueAfter),
+      realizedImpact: action.realizedImpact || "",
+      measurementDate: action.impactMeasurementDate || "",
+      note: action.expectedImpact || "",
+    });
+  }, [action.id, action.impactStatus, action.impactValueBefore, action.impactValueAfter, action.realizedImpact, action.impactMeasurementDate, action.expectedImpact]);
   const set = (k, v) => setImpactForm((p) => ({ ...p, [k]: v }));
 
   const history = [...(action.history || [])].reverse();

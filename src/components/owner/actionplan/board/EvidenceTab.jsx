@@ -18,20 +18,21 @@ const EVIDENCE_TYPES = [
 
 export default function EvidenceTab({ action, onReload, user }) {
   const { toast } = useToast();
-  const [form, setForm] = useState({ type: "file", name: "", note: "", valueBefore: "", valueAfter: "" });
+  const [form, setForm] = useState({ type: "file", name: "", url: "", note: "", valueBefore: "", valueAfter: "" });
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
   const handleAdd = async () => {
-    if (!form.name.trim()) return;
+    if (!form.name.trim() || (form.type === "link" && !form.url.trim())) return;
     try {
       await actionPlanLiveRepository.addEvidence(action.id, {
         type: form.type,
         name: form.name.trim(),
+        url: form.url.trim() || null,
         note: form.note.trim(),
         valueBefore: form.valueBefore || null,
         valueAfter: form.valueAfter || null,
       });
-      setForm({ type: "file", name: "", note: "", valueBefore: "", valueAfter: "" });
+      setForm({ type: "file", name: "", url: "", note: "", valueBefore: "", valueAfter: "" });
       await onReload();
     } catch (error) {
       toast({ title: "Não foi possível adicionar a evidência.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
@@ -68,6 +69,12 @@ export default function EvidenceTab({ action, onReload, user }) {
             <Label className="mb-1 block text-xs">Nome *</Label>
             <Input value={form.name} onChange={(e) => set("name", e.target.value)} placeholder="Nome da evidência" className="h-8 text-xs" />
           </div>
+          {form.type === "link" && (
+            <div>
+              <Label className="mb-1 block text-xs">URL *</Label>
+              <Input value={form.url} onChange={(e) => set("url", e.target.value)} placeholder="https://..." className="h-8 text-xs" />
+            </div>
+          )}
           <div>
             <Label className="mb-1 block text-xs">Observação</Label>
             <Textarea value={form.note} onChange={(e) => set("note", e.target.value)} rows={2} className="text-xs" />
@@ -82,7 +89,7 @@ export default function EvidenceTab({ action, onReload, user }) {
               <Input value={form.valueAfter} onChange={(e) => set("valueAfter", e.target.value)} className="h-8 text-xs" />
             </div>
           </div>
-          <Button size="sm" onClick={handleAdd} disabled={!form.name.trim()} className="bg-primary hover:bg-primary/90">
+          <Button size="sm" onClick={handleAdd} disabled={!form.name.trim() || (form.type === "link" && !form.url.trim())} className="bg-primary hover:bg-primary/90">
             <Plus className="h-3.5 w-3.5" /> Adicionar
           </Button>
         </div>
