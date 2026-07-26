@@ -6,7 +6,7 @@ import { DEPT_STYLES, PRIORITY_STYLES, QUICK_ACTIONS } from "../actionPlanConsta
 import { formatDueDate, isLate, daysLate } from "../actionPlanUtils";
 import MoveToMenu from "./MoveToMenu";
 
-export default function KanbanCard({ action, onQuickAction, onMoveTo }) {
+export default function KanbanCard({ action, onQuickAction, onDelete, onMoveTo }) {
   const dept = DEPT_STYLES[action.department] || DEPT_STYLES.general;
   const priority = PRIORITY_STYLES[action.priority] || PRIORITY_STYLES.medium;
   const late = isLate(action);
@@ -85,6 +85,7 @@ export default function KanbanCard({ action, onQuickAction, onMoveTo }) {
                 </DropdownMenuItem>
               ))}
               <DropdownMenuSeparator />
+              {onDelete && <DropdownMenuItem className="text-destructive" onClick={() => onDelete(action)}>Excluir definitivamente</DropdownMenuItem>}
               <MoveToMenu action={action} onMoveTo={onMoveTo} />
             </DropdownMenuContent>
           </DropdownMenu>

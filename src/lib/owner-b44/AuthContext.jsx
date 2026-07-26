@@ -4,7 +4,7 @@ import { useMemo } from 'react'
 import { useAuth as useMxAuth } from '@/hooks/useAuth'
 
 export function useAuth() {
-  const { profile, role, signOut } = useMxAuth()
+  const { profile, role, signOut, activeStoreId, setActiveStoreId } = useMxAuth()
 
   const user = useMemo(() => {
     if (!profile) return null
@@ -16,5 +16,5 @@ export function useAuth() {
     }
   }, [profile, role])
 
-  return { user, logout: signOut }
+  return { user, logout: signOut, activeStoreId, setActiveStoreId }
 }

@@ -722,6 +722,11 @@ export const actionPlanLiveRepository = {
     });
   },
 
+  async deleteAction(id) {
+    const { error } = await supabase.from("planos_acao").delete().eq("id", id);
+    if (error) throw error;
+  },
+
   async updateDueDate(id, payload = {}) {
     return this.updateActionById(id, {
       dueDate: payload.newDueDate,

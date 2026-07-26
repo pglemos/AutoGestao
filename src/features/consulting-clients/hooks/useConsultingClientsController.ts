@@ -5,6 +5,7 @@ import { DEFAULT_CONSULTING_MODULES } from '@/hooks/useConsultingModules'
 import { toast } from '@/lib/toast'
 import { filterConsultingClients } from '../lib/consultingClientFilters'
 import { canCreateConsultingClient } from '../lib/consultingClientPolicy'
+import type { ConsultingClient } from '@/lib/schemas/consulting-client.schema'
 import type { ConsultingClientDraft } from '../types'
 
 function initialDraft(): ConsultingClientDraft {
@@ -24,6 +25,7 @@ export function useConsultingClientsController() {
   const { metrics } = useConsultingClientMetrics()
   const [search, setSearch] = useState('')
   const [draft, setDraft] = useState<ConsultingClientDraft>(initialDraft)
+  const [editingClientId, setEditingClientId] = useState<string | null>(null)
   const [open, setOpen] = useState(false)
   const [submitting, setSubmitting] = useState(false)
 
@@ -42,19 +44,42 @@ export function useConsultingClientsController() {
     }
     setSubmitting(true)
     try {
-      const { error } = await source.createClient(draft)
+      const { error } = editingClientId
+        ? await source.updateClient({ ...draft, id: editingClientId })
+        : await source.createClient(draft)
       if (error) {
         toast.error(error)
         return
       }
-      toast.success('Cliente da consultoria criado.')
+      toast.success(editingClientId ? 'Cliente da consultoria atualizado.' : 'Cliente da consultoria criado.')
       setDraft(initialDraft())
+      setEditingClientId(null)
       setOpen(false)
     } catch (cause) {
       toast.error(cause instanceof Error ? cause.message : 'Falha ao criar cliente.')
     } finally {
       setSubmitting(false)
     }
+  }
+
+  const editClient = (client: ConsultingClient) => {
+    setEditingClientId(client.id)
+    setDraft({
+      name: client.name || '',
+      legal_name: client.legal_name || '',
+      cnpj: client.cnpj || '',
+      product_name: client.product_name || '',
+      notes: client.notes || '',
+      enabled_modules: [],
+    })
+    setOpen(true)
+  }
+
+  const closeForm = () => {
+    if (submitting) return
+    setOpen(false)
+    setEditingClientId(null)
+    setDraft(initialDraft())
   }
 
   return {
@@ -69,6 +94,9 @@ export function useConsultingClientsController() {
     setOpen,
     submitting,
     submit,
+    editClient,
+    editingClientId,
+    closeForm,
     canCreate,
     modules: DEFAULT_CONSULTING_MODULES,
   }

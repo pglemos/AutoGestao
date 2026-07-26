@@ -38,6 +38,7 @@ export default function PlanoEstrategico() {
   const [refreshKey, setRefreshKey] = useState(0);
   const [displayMode, setDisplayMode] = useState("table");
   const [isMobile, setIsMobile] = useState(false);
+  const [planningReloadKey, setPlanningReloadKey] = useState(0);
 
   // Detectar mobile e carregar preferências
   useEffect(() => {
@@ -91,6 +92,23 @@ export default function PlanoEstrategico() {
       });
     return () => { mounted = false; };
   }, [currentUnits, setLastUpdated, unitId]);
+
+  useEffect(() => {
+    const handlePlanningReload = () => setPlanningReloadKey((key) => key + 1);
+    window.addEventListener("mx:planning-reload", handlePlanningReload);
+    return () => window.removeEventListener("mx:planning-reload", handlePlanningReload);
+  }, []);
+
+  useEffect(() => {
+    if (!planningReloadKey) return;
+    const storeId = unitId || currentUnits?.[0]?.id || null;
+    let mounted = true;
+    setLoading(true);
+    strategicPlanRepository.load({ storeId, year: REFERENCE_YEAR })
+      .then(() => { if (mounted) setLoading(false); })
+      .catch((error) => { if (mounted) { setDataError(error instanceof Error ? error.message : "Não foi possível carregar o Plano Estratégico."); setLoading(false); } });
+    return () => { mounted = false; };
+  }, [currentUnits, planningReloadKey, unitId]);
 
   const indicator = strategicPlanRepository.getIndicatorById(selectedIndicatorId);
   const series = strategicPlanRepository.getIndicatorSeries(selectedIndicatorId, REFERENCE_YEAR);

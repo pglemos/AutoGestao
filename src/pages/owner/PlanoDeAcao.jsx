@@ -99,6 +99,12 @@ export default function PlanoDeAcao() {
   }, [loadActions]);
 
   useEffect(() => {
+    const handlePlanningReload = () => { void loadActions(); };
+    window.addEventListener("mx:planning-reload", handlePlanningReload);
+    return () => window.removeEventListener("mx:planning-reload", handlePlanningReload);
+  }, [loadActions]);
+
+  useEffect(() => {
     let mounted = true;
     const storeId = unitId || currentUnits?.[0]?.id || null;
     actionPlanLiveRepository.getResponsiblePeople({ storeId })
@@ -231,6 +237,17 @@ export default function PlanoDeAcao() {
       toast({ title: "Prazo atualizado com sucesso." });
     } catch (err) {
       toast({ title: "Não foi possível atualizar o prazo.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+    }
+  };
+
+  const handleDelete = async (action) => {
+    if (!window.confirm(`Excluir definitivamente a ação ${action.code}? Esta operação não pode ser desfeita.`)) return;
+    try {
+      await actionPlanLiveRepository.deleteAction(action.id);
+      await loadActions();
+      toast({ title: "Ação excluída definitivamente." });
+    } catch (err) {
+      toast({ title: "Não foi possível excluir a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
     }
   };
 
@@ -456,6 +473,7 @@ export default function PlanoDeAcao() {
               onDelegate={handleDelegate}
               onTalkToConsultant={handleTalkToConsultant}
               onQuickAction={handleQuickAction}
+              onDelete={handleDelete}
               onClearFilters={handleClearFilters}
               onNewAction={() => handleNewAction()}
             />
@@ -467,6 +485,7 @@ export default function PlanoDeAcao() {
               sortBy={sortBy}
               onSortChange={setSortBy}
               onQuickAction={handleQuickAction}
+              onDelete={handleDelete}
               onMoveTo={handleMoveTo}
               onDragEnd={handleDragEnd}
               onNewAction={() => handleNewAction()}

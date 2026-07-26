@@ -7,7 +7,7 @@ import { DEPT_STYLES, PRIORITY_STYLES, STATUS_STYLES, QUICK_ACTIONS } from "../a
 import { sortActions, formatDueDate, isLate, daysLate } from "../actionPlanUtils";
 import MoveToMenu from "./MoveToMenu";
 
-export default function ListView({ actions, sortBy, onSortChange, onQuickAction, onMoveTo, selectedIds, onToggleSelect, onToggleSelectAll }) {
+export default function ListView({ actions, sortBy, onSortChange, onQuickAction, onDelete, onMoveTo, selectedIds, onToggleSelect, onToggleSelectAll }) {
   const sorted = sortActions(actions, sortBy);
   const allSelected = sorted.length > 0 && sorted.every((a) => selectedIds.includes(a.id));
 
@@ -95,6 +95,7 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
                         <DropdownMenuItem key={qa.value} onClick={() => onQuickAction(action, qa.value)}>{qa.label}</DropdownMenuItem>
                       ))}
                       <DropdownMenuSeparator />
+                      {onDelete && <DropdownMenuItem className="text-destructive" onClick={() => onDelete(action)}>Excluir definitivamente</DropdownMenuItem>}
                       <MoveToMenu action={action} onMoveTo={onMoveTo} />
                     </DropdownMenuContent>
                   </DropdownMenu>

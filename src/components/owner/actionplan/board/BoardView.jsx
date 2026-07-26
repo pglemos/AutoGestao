@@ -15,6 +15,7 @@ export default function BoardView({
   sortBy,
   onSortChange,
   onQuickAction,
+  onDelete,
   onMoveTo,
   onDragEnd,
   onNewAction,
@@ -132,6 +133,7 @@ export default function BoardView({
           actions={actions}
           sortBy={sortBy}
           onQuickAction={onQuickAction}
+          onDelete={onDelete}
           onMoveTo={onMoveTo}
           onDragEnd={onDragEnd}
         />
@@ -141,6 +143,7 @@ export default function BoardView({
           sortBy={sortBy}
           onSortChange={onSortChange}
           onQuickAction={onQuickAction}
+          onDelete={onDelete}
           onMoveTo={onMoveTo}
           selectedIds={selectedIds}
           onToggleSelect={toggleSelect}

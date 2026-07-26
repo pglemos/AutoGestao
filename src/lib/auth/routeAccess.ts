@@ -31,6 +31,7 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/dono', roles: ['dono'] },
   { pattern: '/dono/*', roles: ['dono'] },
   { pattern: '/plano-acao', roles: USER_ROLES },
+  { pattern: '/plano-estrategico', roles: INTERNAL_ROLES },
   { pattern: '/settings', roles: CONFIGURATION_ROLES, capability: 'view_configurations' },
   { pattern: '/team', capability: 'manage_team' },
   { pattern: '/equipe', capability: 'manage_team' },

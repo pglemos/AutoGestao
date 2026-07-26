@@ -11,20 +11,15 @@ describe('internal MX consulting scope contract', () => {
     expect(source('pages/ConsultoriaVisitaExecucao.tsx')).toContain('ConsultingClientScopeGuard')
   })
 
-  test('client list uses the scoped controller', () => {
+  test('client list uses the global controller', () => {
     const list = source('features/consulting-clients/ConsultingClientsPage.tsx')
-    const scopedList = source('features/consulting-clients/ConsultantAssignedClientsPage.tsx')
-    expect(list).toContain('role === \'consultor_mx\'')
-    expect(list).toContain('ConsultantAssignedClientsPage')
-    expect(scopedList).toContain(".from('atribuicoes_consultoria')")
-    expect(scopedList).toContain(".eq('user_id', profile.id)")
-    expect(scopedList).toContain(".eq('active', true)")
+    expect(list).toContain('AdministrativeConsultingClientsPage')
+    expect(list).not.toContain('ConsultantAssignedClientsPage')
   })
 
-  test('consultant scope queries active assignments by current user', () => {
+  test('internal scope no longer gates detail by assignment', () => {
     const guard = source('features/consulting-clients/ConsultingClientScopeGuard.tsx')
-    expect(guard).toContain(".from('atribuicoes_consultoria')")
-    expect(guard).toContain(".eq('user_id', profile.id)")
-    expect(guard).toContain(".eq('active', true)")
+    expect(guard).toContain('isPerfilInternoMx')
+    expect(guard).not.toContain(".from('atribuicoes_consultoria')")
   })
 })

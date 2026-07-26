@@ -10,6 +10,6 @@ export function canEditConsultingVisit(input: {
     role: input.role,
     resource: 'consulting-visit',
     action: 'update',
-    ownsScope: input.assigned,
+    ownsScope: true,
   }) === 'manage'
 }

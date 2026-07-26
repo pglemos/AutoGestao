@@ -40,6 +40,7 @@ export function buildInternalMxNavigation(
       items: [
         { key: 'dashboard', label: 'Painel Geral', path: '/painel', icon: LayoutDashboard },
         { key: 'stores', label: 'Lojas', path: '/lojas', icon: Building2 },
+        { key: 'strategic-plan', label: 'Plano Estratégico', path: '/plano-estrategico', icon: TrendingUp },
         { key: 'action-plan', label: 'Plano de Ação', path: '/plano-acao', icon: ClipboardList },
         { key: 'consulting', label: 'Consultoria', path: '/consultoria/clientes', icon: BriefcaseBusiness, activePaths: ['/consultoria', '/consultoria/clientes'] },
         { key: 'agenda', label: 'Agenda', path: '/agenda', icon: CalendarDays },

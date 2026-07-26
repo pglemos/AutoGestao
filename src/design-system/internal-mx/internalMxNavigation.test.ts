@@ -16,6 +16,8 @@ describe('navegação interna MX', () => {
         'Configurações',
       ])
       expect(items.some((item) => item.path === '/painel')).toBe(true)
+      expect(items.some((item) => item.path === '/plano-estrategico')).toBe(true)
+      expect(items.some((item) => item.path === '/plano-acao')).toBe(true)
       expect(items.some((item) => item.path === '/consultoria/clientes')).toBe(true)
       expect(items.find((item) => item.path === '/notificacoes')?.badge).toBe('7')
     })

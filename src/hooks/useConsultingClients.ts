@@ -32,6 +32,7 @@ type ConsultingAssignableUser = {
 }
 
 type CreateConsultingClientInput = {
+  id?: string
   name: string
   legal_name?: string
   cnpj?: string
@@ -161,20 +162,34 @@ export function useConsultingClients() {
     return { error: null }
   }, [canCreate, fetchClients, supabaseUser])
 
-  const deleteClient = useCallback(async (clientId: string): Promise<{ error: string | null }> => {
+  const updateClient = useCallback(async (input: CreateConsultingClientInput): Promise<{ error: string | null }> => {
+    if (!isPerfilInternoMx(role) || !supabaseUser || !input.id) {
+      return { error: 'Apenas perfis MX podem editar clientes da consultoria.' }
+    }
+    if (!input.name.trim()) return { error: 'Nome do cliente é obrigatório.' }
+    const { error: updateError } = await supabase
+      .from('clientes_consultoria')
+      .update({
+        name: input.name.trim(),
+        legal_name: input.legal_name?.trim() || null,
+        cnpj: input.cnpj?.trim() || null,
+        product_name: input.product_name?.trim() || null,
+        notes: input.notes?.trim() || null,
+      })
+      .eq('id', input.id)
+    if (updateError) return { error: updateError.message }
+    await fetchClients()
+    return { error: null }
+  }, [fetchClients, role, supabaseUser])
+
+  const archiveClient = useCallback(async (clientId: string): Promise<{ error: string | null }> => {
     if (!isPerfilInternoMx(role)) return { error: 'Sem permissão para excluir clientes.' }
     try {
-      // 1. Remove pasta do Drive (fire-and-forget — não bloqueia exclusão)
-      supabase.functions.invoke('google-drive-files', {
-        body: { action: 'delete_client_folder', clientId },
-      }).catch(() => {})
-
-      // 2. Exclui o registro do banco (cascata remove subpastas e arquivos)
-      const { error: deleteError } = await supabase
+      const { error: archiveError } = await supabase
         .from('clientes_consultoria')
-        .delete()
+        .update({ status: 'arquivado' })
         .eq('id', clientId)
-      if (deleteError) return { error: deleteError.message }
+      if (archiveError) return { error: archiveError.message }
 
       await fetchClients()
       return { error: null }
@@ -183,8 +198,25 @@ export function useConsultingClients() {
     }
   }, [role, fetchClients])
 
+  const restoreClient = useCallback(async (clientId: string): Promise<{ error: string | null }> => {
+    if (!isPerfilInternoMx(role)) return { error: 'Sem permissão para restaurar clientes.' }
+    const { error: restoreError } = await supabase
+      .from('clientes_consultoria')
+      .update({ status: 'ativo' })
+      .eq('id', clientId)
+    if (restoreError) return { error: restoreError.message }
+    await fetchClients()
+    return { error: null }
+  }, [fetchClients, role])
+
   useEffect(() => {
     fetchClients()
+  }, [fetchClients])
+
+  useEffect(() => {
+    const handlePlanningReload = () => { void fetchClients() }
+    window.addEventListener('mx:planning-reload', handlePlanningReload)
+    return () => window.removeEventListener('mx:planning-reload', handlePlanningReload)
   }, [fetchClients])
 
   return {
@@ -194,7 +226,10 @@ export function useConsultingClients() {
     canCreate,
     refetch: fetchClients,
     createClient,
-    deleteClient,
+    updateClient,
+    archiveClient,
+    restoreClient,
+    deleteClient: archiveClient,
   }
 }
 

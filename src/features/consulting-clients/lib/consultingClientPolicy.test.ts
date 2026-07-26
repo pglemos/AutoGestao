@@ -12,18 +12,18 @@ const assignments = [
 ]
 
 describe('consulting client policy', () => {
-  test('admin manages all and consultant only assigned scope', () => {
+  test('all internal profiles manage the global consulting scope', () => {
     expect(canCreateConsultingClient('administrador_mx')).toBe(true)
-    expect(canCreateConsultingClient('consultor_mx')).toBe(false)
+    expect(canCreateConsultingClient('consultor_mx')).toBe(true)
     expect(canManageConsultingClient({ role: 'consultor_mx', assigned: true })).toBe(true)
-    expect(canManageConsultingClient({ role: 'consultor_mx', assigned: false })).toBe(false)
+    expect(canManageConsultingClient({ role: 'consultor_mx', assigned: false })).toBe(true)
   })
 
-  test('consultant can only view an active assigned client', () => {
+  test('assignment remains useful metadata but does not gate global access', () => {
     expect(isConsultantAssignedToClient({ userId: 'consultor-a', clientId: 'cliente-a', assignments })).toBe(true)
     expect(isConsultantAssignedToClient({ userId: 'consultor-a', clientId: 'cliente-b', assignments })).toBe(false)
     expect(canViewConsultingClient({ role: 'consultor_mx', assigned: true })).toBe(true)
-    expect(canViewConsultingClient({ role: 'consultor_mx', assigned: false })).toBe(false)
+    expect(canViewConsultingClient({ role: 'consultor_mx', assigned: false })).toBe(true)
     expect(canViewConsultingClient({ role: 'administrador_geral', assigned: false })).toBe(true)
   })
 })

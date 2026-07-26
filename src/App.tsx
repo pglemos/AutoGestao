@@ -42,6 +42,9 @@ const Perfil = lazy(() => import('@/pages/Perfil'))
 // Gerente e Dono
 const DashboardLoja = lazy(() => import('@/pages/DashboardLoja'))
 const ActionPlanWorkspace = lazy(() => import('@/features/action-plan/ActionPlanWorkspace'))
+const InternalActionPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalActionPlanPage'))
+const InternalStrategicPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalStrategicPlanPage'))
+const InternalConsultingPage = lazy(() => import('@/features/internal-mx-planning/InternalConsultingPage'))
 const OwnerModule = lazy(() => import('@/features/owner-base44/OwnerModule'))
 const StoreConsultorIa = lazy(() => import('@/pages/StoreConsultorIa'))
 const GerenteFeedback = lazy(() => import('@/pages/GerenteFeedback'))
@@ -257,7 +260,8 @@ export default function App() {
               <Route path="/dono/*" element={<ProtectedRoute><Suspense fallback={<Spinner />}><OwnerModule /></Suspense></ProtectedRoute>} />
               <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                 <Route path="settings" element={<Navigate to="/configuracoes" replace />} />
-                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ActionPlanWorkspace />} gerente={<ActionPlanWorkspace />} dono={<ActionPlanWorkspace />} admin={<ActionPlanWorkspace />} /></Suspense>} />
+                <Route path="plano-estrategico" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /></Suspense>} />
+                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ActionPlanWorkspace />} gerente={<ActionPlanWorkspace />} dono={<ActionPlanWorkspace />} admin={<InternalActionPlanPage />} /></Suspense>} />
                 <Route path="team" element={<TeamAliasRedirect />} />
                 <Route path="equipe" element={<TeamAliasRedirect />} />
 
@@ -392,7 +396,7 @@ export default function App() {
                 <Route path="simulacao/:simulationRole" element={<Suspense fallback={<Spinner />}><Simulacao /></Suspense>} />
                 <Route path="agenda" element={<Suspense fallback={<Spinner />}><AgendaAdmin /></Suspense>} />
                 <Route path="consultoria">
-                  <Route index element={<Suspense fallback={<Spinner />}><Consultoria /></Suspense>} />
+                  <Route index element={<Suspense fallback={<Spinner />}><InternalConsultingPage /></Suspense>} />
                   <Route path="clientes" element={<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>} />
                   <Route path="clientes/:clientSlug" element={<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>} />
                   <Route path="clientes/:clientSlug/visitas/:visitNumber" element={<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>} />

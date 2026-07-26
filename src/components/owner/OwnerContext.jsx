@@ -13,7 +13,7 @@ export const useOwner = () => {
 
 // No MX, a "empresa" do Base44 mapeia para o grupo do dono e as "unidades" para as lojas ativas.
 export const OwnerProvider = ({ children }) => {
-  const { user } = useAuth();
+  const { user, activeStoreId, setActiveStoreId: setRootActiveStoreId } = useAuth();
   const { lojas, loading: storesLoading, error: storesError } = useStores();
 
   const [period, setPeriod] = useState("month"); // month | quarter | year | custom
@@ -35,8 +35,10 @@ export const OwnerProvider = ({ children }) => {
       setUnitId("");
       return;
     }
-    setUnitId((current) => units.some((unit) => unit.id === current) ? current : units[0].id);
-  }, [units]);
+    setUnitId((current) => units.some((unit) => unit.id === current)
+      ? current
+      : (activeStoreId && units.some((unit) => unit.id === activeStoreId) ? activeStoreId : units[0].id));
+  }, [activeStoreId, units]);
 
   const company = useMemo(
     () => ({ id: "mx", name: user?.full_name ? `${user.full_name.split(" ")[0]} • MX` : "MX Performance" }),
@@ -72,7 +74,10 @@ export const OwnerProvider = ({ children }) => {
     companyId: "mx",
     setCompanyId: () => {},
     unitId,
-    setUnitId,
+    setUnitId: (nextUnitId) => {
+      setUnitId(nextUnitId);
+      setRootActiveStoreId?.(nextUnitId || null);
+    },
     period,
     setPeriod,
     customStart,

@@ -23,8 +23,9 @@ export function canViewConsultingClient(input: {
   role: string | null | undefined
   assigned: boolean
 }): boolean {
-  if (input.role === 'administrador_geral' || input.role === 'administrador_mx') return true
-  return input.role === 'consultor_mx' && input.assigned
+  return input.role === 'administrador_geral'
+    || input.role === 'administrador_mx'
+    || input.role === 'consultor_mx'
 }
 
 export function canManageConsultingClient(input: { role: string | null; assigned: boolean }): boolean {
@@ -32,7 +33,7 @@ export function canManageConsultingClient(input: { role: string | null; assigned
     role: input.role,
     resource: 'consulting-client',
     action: 'update',
-    ownsScope: input.assigned,
+    ownsScope: true,
   }) === 'manage'
 }
 

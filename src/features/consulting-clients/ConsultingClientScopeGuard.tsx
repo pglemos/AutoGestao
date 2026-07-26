@@ -1,8 +1,7 @@
 import { useCallback, useEffect, useState, type ReactNode } from 'react'
 import { ShieldAlert } from 'lucide-react'
 import { useParams } from 'react-router-dom'
-import { isAdministradorMx, useAuth } from '@/hooks/useAuth'
-import { supabase } from '@/lib/supabase'
+import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import {
   MxEmptyState,
   MxErrorState,
@@ -15,20 +14,20 @@ type Props = { children: ReactNode }
 
 export function ConsultingClientScopeGuard({ children }: Props) {
   const { clientSlug } = useParams<{ clientSlug: string }>()
-  const { role, profile } = useAuth()
-  const admin = isAdministradorMx(role)
-  const [allowed, setAllowed] = useState(admin)
-  const [loading, setLoading] = useState(!admin)
+  const { role } = useAuth()
+  const internal = isPerfilInternoMx(role)
+  const [allowed, setAllowed] = useState(internal)
+  const [loading, setLoading] = useState(!internal)
   const [error, setError] = useState<string | null>(null)
 
   const validateScope = useCallback(async () => {
-    if (admin) {
+    if (internal) {
       setAllowed(true)
       setLoading(false)
       setError(null)
       return
     }
-    if (role !== 'consultor_mx' || !profile?.id || !clientSlug) {
+    if (!clientSlug) {
       setAllowed(false)
       setLoading(false)
       setError(null)
@@ -37,38 +36,9 @@ export function ConsultingClientScopeGuard({ children }: Props) {
 
     setLoading(true)
     setError(null)
-    try {
-      const isUuid = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(clientSlug)
-      let clientQuery = supabase.from('clientes_consultoria').select('id')
-      clientQuery = isUuid
-        ? clientQuery.or(`slug.eq.${clientSlug},id.eq.${clientSlug}`)
-        : clientQuery.eq('slug', clientSlug)
-
-      const { data: client, error: clientError } = await clientQuery.maybeSingle()
-      if (clientError) throw clientError
-      if (!client?.id) {
-        setAllowed(false)
-        return
-      }
-
-      const { data: assignment, error: assignmentError } = await supabase
-        .from('atribuicoes_consultoria')
-        .select('id')
-        .eq('client_id', client.id)
-        .eq('user_id', profile.id)
-        .eq('active', true)
-        .limit(1)
-        .maybeSingle()
-
-      if (assignmentError) throw assignmentError
-      setAllowed(Boolean(assignment?.id))
-    } catch (cause) {
-      setAllowed(false)
-      setError(cause instanceof Error ? cause.message : 'Falha ao validar o vínculo da consultoria.')
-    } finally {
-      setLoading(false)
-    }
-  }, [admin, clientSlug, profile?.id, role])
+    setAllowed(false)
+    setLoading(false)
+  }, [clientSlug, internal])
 
   useEffect(() => {
     void validateScope()

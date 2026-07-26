@@ -4,7 +4,7 @@ import { KANBAN_COLUMNS, STATUS_STYLES } from "../actionPlanConstants";
 import { sortActions, isLate } from "../actionPlanUtils";
 import KanbanCard from "./KanbanCard";
 
-export default function KanbanBoard({ actions, sortBy, onQuickAction, onMoveTo, onDragEnd }) {
+export default function KanbanBoard({ actions, sortBy, onQuickAction, onDelete, onMoveTo, onDragEnd }) {
   const sorted = sortActions(actions, sortBy);
   const lateIds = new Set(sorted.filter(isLate).map((a) => a.id));
 
@@ -38,7 +38,7 @@ export default function KanbanBoard({ actions, sortBy, onQuickAction, onMoveTo, 
                       <Draggable key={action.id} draggableId={action.id} index={index}>
                         {(prov) => (
                           <div ref={prov.innerRef} {...prov.draggableProps} {...prov.dragHandleProps}>
-                            <KanbanCard action={action} onQuickAction={onQuickAction} onMoveTo={onMoveTo} />
+                            <KanbanCard action={action} onQuickAction={onQuickAction} onDelete={onDelete} onMoveTo={onMoveTo} />
                           </div>
                         )}
                       </Draggable>

@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react'
-import { isAdministradorMx, useAuth } from '@/hooks/useAuth'
+import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useConsultingClientDetailBySlug } from '@/hooks/useConsultingClientBySlug'
 import { getCentralSyncError, syncVisitToGoogle } from '@/hooks/useAgendaAdmin'
 import { supabase } from '@/lib/supabase'
@@ -44,7 +44,7 @@ export function useScopedConsultingClientDetailBySlug(slug?: string) {
     if (!canManage || !base.client?.id || !supabaseUser) {
       return { error: 'Seu perfil não pode alterar visitas deste cliente.' }
     }
-    if (isAdministradorMx(role)) return base.upsertVisit(input)
+    if (isPerfilInternoMx(role)) return base.upsertVisit(input)
     if (!isPmrSchedulableVisitNumber(input.visit_number)) {
       return { error: 'O PMR trabalha com visitas de 1 a 7 e acompanhamento mensal.' }
     }
@@ -93,7 +93,7 @@ export function useScopedConsultingClientDetailBySlug(slug?: string) {
     if (!canManage || !base.client?.id || !supabaseUser) {
       return { error: 'Seu perfil não pode concluir visitas deste cliente.' }
     }
-    if (isAdministradorMx(role)) return base.completeLegacyVisits(input)
+    if (isPerfilInternoMx(role)) return base.completeLegacyVisits(input)
 
     const validationError = validateLegacyVisitCompletionInput(input)
     if (validationError) return { error: validationError }

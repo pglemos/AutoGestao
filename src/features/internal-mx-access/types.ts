@@ -3,6 +3,8 @@ export type InternalMxAccessMode = 'hidden' | 'read' | 'manage'
 export type InternalMxResource =
   | 'network'
   | 'store'
+  | 'strategic-plan'
+  | 'action-plan'
   | 'consulting-client'
   | 'consulting-visit'
   | 'agenda'

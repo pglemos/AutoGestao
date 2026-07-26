@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { isAdministradorMx, useAuth } from '@/hooks/useAuth'
+import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { getCentralSyncError, syncVisitToGoogle } from '@/hooks/useAgendaAdmin'
 import type {
   ConsultingAssignableUser,
@@ -50,7 +50,7 @@ export function useConsultingClientDetailBySlug(slug?: string) {
   const [assignableUsers, setAssignableUsers] = useState<ConsultingAssignableUser[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  const canManage = isAdministradorMx(role)
+  const canManage = isPerfilInternoMx(role)
 
   const fetchClient = useCallback(async () => {
     if (!supabaseUser || !slug || slug === 'undefined') {
@@ -377,6 +377,12 @@ export function useConsultingClientDetailBySlug(slug?: string) {
 
   useEffect(() => {
     fetchClient()
+  }, [fetchClient])
+
+  useEffect(() => {
+    const handlePlanningReload = () => { void fetchClient() }
+    window.addEventListener('mx:planning-reload', handlePlanningReload)
+    return () => window.removeEventListener('mx:planning-reload', handlePlanningReload)
   }, [fetchClient])
 
   return { 

@@ -7,6 +7,14 @@ import type {
 const ADMIN_ROLES = new Set(['administrador_geral', 'administrador_mx'])
 const INTERNAL_ROLES = new Set([...ADMIN_ROLES, 'consultor_mx'])
 
+const GLOBAL_PLANNING_RESOURCES = new Set<InternalMxResource>([
+  'strategic-plan',
+  'action-plan',
+  'consulting-client',
+  'consulting-visit',
+  'agenda',
+])
+
 const CONSULTANT_OWNED_RESOURCES = new Set<InternalMxResource>([
   'consulting-client',
   'consulting-visit',
@@ -20,6 +28,8 @@ export function getInternalMxAccessMode(input: InternalMxActionInput): InternalM
   if (ADMIN_ROLES.has(role)) return 'manage'
 
   if (resource === 'reprocessing' || resource === 'simulation') return 'hidden'
+
+  if (GLOBAL_PLANNING_RESOURCES.has(resource)) return 'manage'
 
   if (action === 'view') return 'read'
 
