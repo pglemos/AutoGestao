@@ -122,3 +122,15 @@ describe('mapLiveAction', () => {
     })
   })
 })
+
+describe('buildActionUpdatePatch', () => {
+  it('inclui o problema ou oportunidade no patch de edição global', () => {
+    const patch = buildActionUpdatePatch({ problemOrOpportunity: 'Problema editado' })
+    expect(patch).toEqual({ problema: 'Problema editado' })
+  })
+
+  it('inclui como executar no patch de edição global', () => {
+    const patch = buildActionUpdatePatch({ description: 'Execução editada' })
+    expect(patch).toEqual({ problema: 'Execução editada', como: 'Execução editada' })
+  })
+})

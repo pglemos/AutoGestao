@@ -50,6 +50,13 @@ describe('Plano de Ação canônico e tabela Base44', () => {
     expect(migration).toContain('event_note')
   })
 
+  test('permite editar o problema ou oportunidade no patch global', () => {
+    const fix = read('supabase/migrations/20260726123752_action_plan_patch_problema.sql')
+    expect(fix).toContain("'problema'")
+    expect(fix).toContain('SET problema = v_after.problema')
+    expect(fix).toContain('jsonb_populate_record(v_before, v_patch)')
+  })
+
   test('does not route the owner table through fixture/localStorage data', () => {
     const page = read('src/pages/owner/PlanoDeAcao.jsx')
     const repository = read('src/components/owner/actionplan/actionPlanLiveRepository.js')

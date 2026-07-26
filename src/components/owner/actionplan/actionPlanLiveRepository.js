@@ -363,6 +363,7 @@ export function buildActionUpdatePatch(updates = {}) {
   set("objetivo", updates.strategicObjectiveLabel ?? updates.strategicObjective);
   set("indicador", updates.indicator);
   set("departamento", updates.department);
+  set("como", updates.description);
   set("responsavel_id", updates.responsibleId);
   set("prazo", updates.dueDate === undefined ? undefined : parseDateInput(updates.dueDate));
   set("prioridade", updates.priority === undefined ? undefined : UI_TO_DB_PRIORITY[updates.priority] || updates.priority);
