@@ -28,7 +28,7 @@ export function AgendaView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
       <Card className="rounded-mx-2xl p-mx-lg">
         <div className="space-y-mx-sm">
           {priorities.length === 0 ? (
-            <div className="owner-base44-exact__empty-state" role="status">
+            <div className="rounded-mx-xl border border-dashed border-border-default bg-white p-mx-lg text-center" role="status">
               <strong className="text-base font-black text-text-primary">Nenhuma prioridade calculada</strong>
               <p className="text-sm text-text-secondary">Não há alertas derivados dos dados atuais da loja.</p>
             </div>

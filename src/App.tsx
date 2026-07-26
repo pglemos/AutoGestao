@@ -254,8 +254,8 @@ export default function App() {
               <Route path="/pre-cadastro/:storeSlug" element={<Suspense fallback={<Spinner />}><StorePreRegistration /></Suspense>} />
               <Route path="/privacy" element={<Suspense fallback={<Spinner />}><Privacy /></Suspense>} />
               <Route path="/terms" element={<Suspense fallback={<Spinner />}><Terms /></Suspense>} />
-              <Route path="/dono/*" element={<ProtectedRoute><Suspense fallback={<Spinner />}><OwnerModule /></Suspense></ProtectedRoute>} />
               <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+                <Route path="/dono/*" element={<Suspense fallback={<Spinner />}><OwnerModule /></Suspense>} />
                 <Route path="settings" element={<Navigate to="/configuracoes" replace />} />
                 <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ActionPlanWorkspace />} gerente={<ActionPlanWorkspace />} dono={<ActionPlanWorkspace />} admin={<ActionPlanWorkspace />} /></Suspense>} />
                 <Route path="team" element={<TeamAliasRedirect />} />

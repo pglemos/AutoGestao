@@ -1,13 +1,12 @@
 import { Navigate, Route, Routes } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { DashboardErrorBoundary } from '@/features/dashboard-loja/components/DashboardErrorBoundary'
-import { Toaster as OwnerToaster } from '@/components/ui/toaster'
-import OwnerLayout from '@/components/owner/OwnerLayout'
+import { OwnerProvider } from '@/components/owner/OwnerContext'
+import ConsultantRequestModal from '@/components/owner/ConsultantRequestModal'
 import PlanoDeAcao from '@/pages/owner/PlanoDeAcao'
 import OwnerLiveDataPage from '@/features/owner-base44/OwnerLiveDataPage'
-import '@/styles/owner-base44-exact.css'
 
-// Espelha o módulo do Dono do Base44 (paths /dono/*) montado dentro do MX.
+// Conteúdo executivo real montado dentro do shell universal do MX.
 export default function OwnerModule() {
   const { role } = useAuth()
   if (role !== 'dono') {
@@ -16,15 +15,15 @@ export default function OwnerModule() {
 
   return (
     <DashboardErrorBoundary sectionName="OwnerModule">
-      <div className="owner-b44 owner-base44-exact h-full min-h-0">
-        <Routes>
-          <Route element={<OwnerLayout />}>
+      <OwnerProvider>
+        <div data-mx-owner-workspace="true" className="h-full min-h-0 w-full">
+          <Routes>
             <Route path="plano-acao" element={<PlanoDeAcao />} />
             <Route path="*" element={<OwnerLiveDataPage />} />
-          </Route>
-        </Routes>
-        <OwnerToaster />
-      </div>
+          </Routes>
+          <ConsultantRequestModal />
+        </div>
+      </OwnerProvider>
     </DashboardErrorBoundary>
   )
 }

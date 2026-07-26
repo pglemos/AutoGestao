@@ -1,15 +1,11 @@
 import { useEffect } from 'react'
-import { useLocation, useOutletContext } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 import { useOwner } from '@/components/owner/OwnerContext'
 import { DashboardErrorBoundary } from '@/features/dashboard-loja/components/DashboardErrorBoundary'
 import { useDashboardLojaData } from '@/features/dashboard-loja/hooks/useDashboardLojaData'
 import { PerformanceLoadingSkeleton } from '@/features/dashboard-loja/sections/DashboardEmptyStates'
 import { OwnerExecutiveCockpit } from '@/features/dashboard-loja/sections/OwnerExecutiveCockpit'
 import { usePerformanceAlerts } from '@/features/dashboard-loja/sections/PerformanceAlerts'
-
-type OwnerOutletContext = {
-  setLastUpdated?: (value: Date) => void
-}
 
 type OwnerContextValue = {
   currentUnits: Array<{ id: string; name: string }>
@@ -28,7 +24,6 @@ type OwnerContextValue = {
 
 export default function OwnerLiveDataPage() {
   const location = useLocation()
-  const { setLastUpdated } = useOutletContext<OwnerOutletContext>()
   const {
     currentUnits,
     unitId,
@@ -57,10 +52,6 @@ export default function OwnerLiveDataPage() {
     funnelBenchmarks: data.funnelBenchmarks,
     selectedStoreId: selectedStore?.id ?? null,
   })
-
-  useEffect(() => {
-    setLastUpdated?.(new Date())
-  }, [data.lastSyncAt, setLastUpdated])
 
   useEffect(() => {
     if (new URLSearchParams(location.search).get('openConsultant') !== '1') return

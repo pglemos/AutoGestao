@@ -41,7 +41,7 @@ type RouteMetric = {
   universalSidebar: boolean
   universalSidebarWidth: number
   universalSidebarBackground: string
-  ownerTopbarHeight: number
+  shellMainHeight: number
   activeNavigationItems: number
   horizontalOverflow: boolean
   pageErrors: string[]
@@ -51,8 +51,7 @@ type RouteMetric = {
 async function openOwnerRoute(page: Page, path: string, expectedPath: string) {
   await page.goto(path, { waitUntil: 'networkidle' })
   await expect(page).toHaveURL(new RegExp(`${expectedPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:[?#]|$)`))
-  await expect(page.locator('.owner-base44-exact')).toBeVisible({ timeout: 30_000 })
-  await expect(page.locator('[role="region"]#owner-main-content')).toBeVisible({ timeout: 30_000 })
+  await expect(page.locator('[data-mx-owner-workspace="true"]')).toBeVisible({ timeout: 30_000 })
   await expect(page.locator('main#main-content')).toBeVisible({ timeout: 30_000 })
 }
 
@@ -105,15 +104,15 @@ async function auditRoute(
 
   const metric = await page.evaluate(
     ({ routeKey, viewportKey, collectedPageErrors, collectedConsoleErrors }) => {
-      const ownerRoot = document.querySelector<HTMLElement>('.owner-base44-exact')
-      const ownerRegion = document.querySelector<HTMLElement>('[role="region"]#owner-main-content')
+      const ownerRoot = document.querySelector<HTMLElement>('[data-mx-owner-workspace="true"]')
+      const ownerRegion = ownerRoot?.querySelector<HTMLElement>('section') || ownerRoot
       const universalMain = document.querySelector<HTMLElement>('main#main-content')
       const universalSidebar = Array.from(
         document.querySelectorAll<HTMLElement>(
           'aside[aria-label="Menu principal do Dono"], [role="dialog"][aria-label="Menu principal do Dono"]',
         ),
       ).find((node) => node.getBoundingClientRect().width > 0) || null
-      const ownerTopbar = document.querySelector<HTMLElement>('.owner-base44-exact__topbar')
+      const shellMain = document.querySelector<HTMLElement>('main#main-content')
 
       return {
         route: routeKey,
@@ -125,7 +124,7 @@ async function auditRoute(
         universalSidebar: Boolean(universalSidebar),
         universalSidebarWidth: universalSidebar ? Math.round(universalSidebar.getBoundingClientRect().width) : 0,
         universalSidebarBackground: universalSidebar ? getComputedStyle(universalSidebar).backgroundColor : '',
-        ownerTopbarHeight: ownerTopbar ? Math.round(ownerTopbar.getBoundingClientRect().height) : 0,
+        shellMainHeight: shellMain ? Math.round(shellMain.getBoundingClientRect().height) : 0,
         activeNavigationItems: universalSidebar?.querySelectorAll('a[aria-current="page"]').length || 0,
         horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
         pageErrors: collectedPageErrors,
@@ -146,7 +145,7 @@ async function auditRoute(
   expect.soft(metric.universalSidebar, `${route.key}/${viewport.key}: sidebar universal`).toBe(true)
   expect.soft(metric.horizontalOverflow, `${route.key}/${viewport.key}: overflow horizontal`).toBe(false)
   expect.soft(metric.activeNavigationItems, `${route.key}/${viewport.key}: item ativo`).toBe(1)
-  expect.soft(metric.ownerTopbarHeight, `${route.key}/${viewport.key}: topbar`).toBeGreaterThanOrEqual(60)
+  expect.soft(metric.shellMainHeight, `${route.key}/${viewport.key}: shell universal`).toBeGreaterThan(0)
   expect.soft(metric.universalSidebarWidth, `${route.key}/${viewport.key}: sidebar`).toBe(viewport.mobile ? 304 : 224)
   expect.soft(metric.universalSidebarBackground, `${route.key}/${viewport.key}: fundo da sidebar`).toBe('rgb(255, 255, 255)')
   expect.soft(metric.pageErrors, `${route.key}/${viewport.key}: erros de página`).toEqual([])

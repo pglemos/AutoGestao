@@ -268,14 +268,11 @@ export default function Layout() {
       <Outlet />
     </MotionPage>
   )
-  const isOwnerRoute = location.pathname === '/dono' || location.pathname.startsWith('/dono/')
-  const pageContent = role === 'dono' && isOwnerRoute
-    ? pageOutlet
-    : (
-      <MxRoleVisualScope manager={role !== 'vendedor'}>
-        {pageOutlet}
-      </MxRoleVisualScope>
-      )
+  const pageContent = (
+    <MxRoleVisualScope manager={role !== 'vendedor'}>
+      {pageOutlet}
+    </MxRoleVisualScope>
+  )
   const stopCurrentSimulation = () => {
     stopSimulation()
     navigate('/painel', { replace: true })

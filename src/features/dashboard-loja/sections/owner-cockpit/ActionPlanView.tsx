@@ -133,7 +133,7 @@ export function ActionPlanView({
       </div>
 
       {filteredActions.length === 0 ? (
-        <div className="owner-base44-exact__empty-state" role="status">
+        <div className="rounded-mx-xl border border-dashed border-border-default bg-white p-mx-lg text-center" role="status">
           <strong className="text-base font-black text-text-primary">Nenhuma ação encontrada</strong>
           <p className="text-sm text-text-secondary">Ajuste os filtros ou cadastre uma nova ação para esta unidade.</p>
         </div>

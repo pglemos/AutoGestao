@@ -92,7 +92,9 @@ describe('contrato de dados reais do runtime ativo', () => {
   test('garante o carregamento do Módulo do Dono Base44 no bundle ativo', () => {
     const active = new Set(sources.map(file => relative(root, file)))
     expect(active.has('src/features/owner-base44/OwnerModule.tsx')).toBe(true)
-    expect(active.has('src/components/owner/OwnerSidebar.jsx')).toBe(true)
+    expect(active.has('src/components/owner/OwnerContext.jsx')).toBe(true)
+    expect(active.has('src/components/owner/ConsultantRequestModal.jsx')).toBe(true)
+    expect(active.has('src/components/owner/OwnerSidebar.jsx')).toBe(false)
   })
 
   test('falhas e ausência de configuração não ativam catálogos locais de negócio', () => {

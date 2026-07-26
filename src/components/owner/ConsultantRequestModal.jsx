@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { base44 } from "@/features/owner-base44/b44adapter";
 import { useOwner } from "@/components/owner/OwnerContext";
-import { useAuth } from "@/lib/owner-b44/AuthContext";
+import { useAuth } from "@/hooks/useAuth";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -23,7 +23,7 @@ const priorityOptions = Object.entries(PRIORITY_LABELS).map(([value, label]) => 
 
 export default function ConsultantRequestModal() {
   const { consultantModal, closeConsultantModal, currentCompany, unitId, period, currentUnits } = useOwner();
-  const { user } = useAuth();
+  const { profile } = useAuth();
   const ctx = consultantModal.context;
 
   const [subject, setSubject] = useState("");
@@ -71,8 +71,8 @@ export default function ConsultantRequestModal() {
       await base44.entities.ConsultantRequest.create({
         company_id: currentCompany.id,
         unit_id: targetUnitId,
-        created_by: user?.id,
-        created_by_name: user?.full_name || user?.email,
+        created_by: profile?.id,
+        created_by_name: profile?.name || profile?.email,
         request_type: requestType,
         subject,
         message,
