@@ -74,3 +74,14 @@ para acompanhar execucao do PMR em tempo real.
 - `src/features/dashboard-loja/sections/CentralMxPlanoSegmentadoPanel.tsx`
 - `src/lib/action-plan-table-parity.test.ts`
 - `src/types/database.generated.ts`
+
+## QA Results
+
+- **Gate: CONCERNS — funcionalidade do Plano de Ação aprovada em produção; gates globais preexistentes permanecem fora do escopo.**
+- Produção: deploy `https://mxperformance-k2zoya5wf-synvolt.vercel.app` em `Ready`, aliases `https://www.mxperformance.com.br`, `https://mxperformance.com.br` e `https://mxperformance.vercel.app`, código publicado no `main` em `19d5dd18e0412dec85dc73459aa7fd8e1183fef2`.
+- Smoke autenticado multi-role final: `1 passed (10.9m)`, contra `https://www.mxperformance.com.br`, cobrindo vendedor, gerente, dono, administrador geral, administrador MX e consultor MX, leitura Supabase real por rota, ausência de mocks/dados fictícios, isolamento de consultoria e limpeza das identidades temporárias.
+- Controle de autorização validado no smoke: gerente e vendedor não exibem `Novo plano` nem `Concluir`; Dono usa `Nova Ação`; Admin Geral, Admin MX e Consultor MX exibem `Novo plano`.
+- Navegador: `/dono/plano-acao` exibiu tabela detalhada persistida com código, ação, objetivo, indicador, departamento, responsável, prioridade, status, progresso, datas, atraso e atualização; console sem erros.
+- Rota legada `/lojas/mx-consultoria/plano-acao` não abriu conteúdo legado nem redirecionou para `/dono/plano-acao`; terminou em autenticação, enquanto as rotas canônicas permanecem em `/dono/*` e `/plano-acao`.
+- Contratos focados: `26 pass, 0 fail`; typecheck e build passaram; ESLint direcionado dos arquivos alterados passou.
+- **CONCERNS não relacionados:** `npm run lint` global ainda reporta 3 erros em controllers preexistentes (`useAdminMorningReportController.ts`, `useNetworkDashboardController.ts`, `useOperationalDiagnosticsController.ts`) e `npm test` global reporta `1440 pass / 9 fail / 1 error` em contratos internos preexistentes.
