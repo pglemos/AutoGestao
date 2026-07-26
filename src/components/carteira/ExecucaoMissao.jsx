@@ -39,7 +39,6 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
       setErro("");
       return true;
     } catch (error) {
-      console.error("Falha ao persistir missão:", error);
       setErro("Não foi possível salvar o progresso da missão. Tente novamente.");
       return false;
     } finally {

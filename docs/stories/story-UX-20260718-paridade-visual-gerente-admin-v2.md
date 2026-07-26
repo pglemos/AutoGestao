@@ -47,6 +47,8 @@ Fazer Admin MX, Administrador Geral, Consultor MX e Dono utilizarem a mesma matr
 - [x] Corrigir seleção única de navegação por rota e query string.
 - [x] Reconstruir a landing de Consultoria com a fundação compartilhada.
 - [x] Rodar testes focados e suíte completa.
+- [x] Corrigir os contratos residuais de adapters, escopo consultivo, storage e diálogos de desenvolvimento.
+- [x] Eliminar o erro de console no fluxo de persistência resiliente da Carteira.
 - [x] Validar build de produção e bundle budget.
 - [x] Validar matriz Playwright desktop/mobile dos cinco perfis.
 - [x] Validar Supabase sem mutação.
@@ -86,4 +88,11 @@ Fazer Admin MX, Administrador Geral, Consultor MX e Dono utilizarem a mesma matr
 - `src/features/lojas/sections/LojasHeader.tsx`
 - `src/features/checkin/CheckinStickyHeader.test.ts`
 - `src/test/module-design-system-parity.test.ts`
+- `src/test/internal-mx-surface-provider.test.ts`
+- `src/test/internal-mx-waves34-contract.test.ts`
+- `src/test/internal-mx-consulting-scope-contract.test.ts`
+- `src/hooks/auth/authHelpers.simulation.test.ts`
+- `src/features/manager/development/ManagerDevelopmentDialogs.test.tsx`
+- `src/features/manager/development/ManagerFeedbackReference.tsx`
+- `src/components/carteira/ExecucaoMissao.jsx`
 - `src/test/module-design-system-authenticated-visual.playwright.ts`

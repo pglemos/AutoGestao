@@ -43,17 +43,18 @@ describe('internal MX manager visual provider', () => {
 describe('internal MX legacy route remediation', () => {
   test('removes dark promotional shells from the three failing admin routes', () => {
     const routes = [
-      'src/pages/Reprocessamento.tsx',
-      'src/pages/SellerPerformance.tsx',
-      'src/pages/AiDiagnostics.tsx',
+      ['src/pages/Reprocessamento.tsx', 'src/features/reprocessing/ReprocessingGuardedPage.tsx'],
+      ['src/pages/SellerPerformance.tsx', 'src/features/seller-performance/SellerPerformancePage.tsx'],
+      ['src/pages/AiDiagnostics.tsx', 'src/features/operational-diagnostics/OperationalDiagnosticsPage.tsx'],
     ]
 
-    for (const route of routes) {
-      expect(read(route)).toContain('MxModulePage')
+    for (const [route, implementation] of routes) {
+      expect(read(route)).toContain(implementation.split('/').pop()!.replace('.tsx', ''))
+      expect(read(implementation)).toContain('MxModulePage')
     }
 
     expect(read('src/pages/Reprocessamento.tsx')).not.toContain('DATA INJECTION ENGINE')
     expect(read('src/pages/SellerPerformance.tsx')).not.toContain('Terminal de Auditoria de Vendedores')
-    expect(read('src/pages/AiDiagnostics.tsx')).toContain('if (!internalProfile)')
+    expect(read('src/pages/AiDiagnostics.tsx')).toContain('isPerfilInternoMx(role)')
   })
 })

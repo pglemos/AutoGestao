@@ -1,8 +1,8 @@
 import { afterEach, beforeEach, describe, expect, mock, test } from 'bun:test'
 import { cleanup, fireEvent, render, screen, waitFor } from '@testing-library/react'
 import type { FeedbackListItem } from '@/features/gerente-feedback/lib/helpers'
-import { FeedbackDetail } from './ManagerFeedbackReference'
-import { TeamCompetencyMap } from './ManagerPDIReference'
+import { Modal } from '@/components/organisms/Modal'
+import { DevelopmentTeamCompetencyMap } from './DevelopmentTeamCompetencyMap'
 
 beforeEach(() => {
   cleanup()
@@ -52,8 +52,14 @@ describe('Desenvolvimento manager dialogs', () => {
     document.body.appendChild(trigger)
     trigger.focus()
 
-    const { rerender } = render(<FeedbackDetail feedback={feedback} onClose={onClose} />)
-    const close = screen.getByRole('button', { name: 'Fechar' })
+    const { rerender } = render(
+      <Modal open onClose={onClose} title="Detalhes do feedback" description={feedback.seller_name} referenceStyle>
+        <p>{feedback.positives}</p>
+        <p>{feedback.attention_points}</p>
+        <p>{feedback.action}</p>
+      </Modal>,
+    )
+    const close = screen.getByRole('button', { name: 'Fechar modal' })
     await waitFor(() => expect(document.activeElement).toBe(close))
 
     fireEvent.keyDown(close, { key: 'Escape' })
@@ -70,8 +76,8 @@ describe('Desenvolvimento manager dialogs', () => {
     document.body.appendChild(trigger)
     trigger.focus()
 
-    const { rerender } = render(<TeamCompetencyMap pdis={[]} onClose={onClose} />)
-    const close = screen.getByRole('button', { name: 'Fechar' })
+    const { rerender } = render(<DevelopmentTeamCompetencyMap open pdis={[]} onClose={onClose} />)
+    const close = screen.getByRole('button', { name: 'Fechar modal' })
     await waitFor(() => expect(document.activeElement).toBe(close))
 
     fireEvent.keyDown(close, { key: 'Escape' })

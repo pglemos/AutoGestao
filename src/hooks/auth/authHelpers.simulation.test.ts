@@ -11,8 +11,8 @@ describe('simulation storage lifecycle', () => {
     expect(readSimulationContext()?.realRole).toBe('administrador_mx')
   })
   test('clears corrupt data', () => {
-    sessionStorage.setItem('mx_simulation_context', '{')
+    window.sessionStorage.setItem('mx_simulation_context', '{')
     expect(readSimulationContext()).toBeNull()
-    expect(sessionStorage.getItem('mx_simulation_context')).toBeNull()
+    expect(window.sessionStorage.getItem('mx_simulation_context')).toBeNull()
   })
 })

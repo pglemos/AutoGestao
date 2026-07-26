@@ -33,10 +33,11 @@ describe('internal MX waves 3 and 4 architecture', () => {
   test('new internal pages use the canonical page primitive', () => {
     for (const path of canonicalPages) {
       const source = read(path)
-      expect(source).toContain('MxModulePage')
+      expect(source.includes('MxModulePage') || source.includes('ReportPageShell')).toBe(true)
       expect(source).not.toMatch(/<main[\s>]/)
       expect(source).not.toContain('PageHeading')
     }
+    expect(read('src/features/internal-reports/ReportPageShell.tsx')).toContain('MxModulePage')
   })
 
   test('authorization exists before sensitive domains', () => {

@@ -15,10 +15,21 @@ const universalPrimitives = read('../components/module/MxModuleVisualPrimitives.
 const button = read('../components/atoms/Button.tsx')
 const roleVisualScope = read('../components/module/MxRoleVisualScope.tsx')
 const managerScopeCss = read('../styles/manager-visual-scope.css')
-const painelConsultor = read('../pages/PainelConsultor.tsx')
+const painelConsultor = [
+  read('../pages/PainelConsultor.tsx'),
+  read('../features/network-dashboard/NetworkDashboardPage.tsx'),
+  read('../features/network-dashboard/components/NetworkDashboardHeader.tsx'),
+  read('../features/network-dashboard/sections/NetworkMetricsSection.tsx'),
+].join('\n')
 const lojasContainer = read('../features/lojas/Lojas.container.tsx')
 const lojasHeader = read('../features/lojas/sections/LojasHeader.tsx')
-const consultoriaClientes = read('../pages/ConsultoriaClientes.tsx')
+const consultoriaClientes = [
+  read('../pages/ConsultoriaClientes.tsx'),
+  read('../features/consulting-clients/ConsultingClientsPage.tsx'),
+  read('../features/consulting-clients/ConsultantAssignedClientsPage.tsx'),
+  read('../features/consulting-clients/sections/ConsultingClientMetrics.tsx'),
+  read('../features/consulting-clients/sections/ConsultingClientToolbar.tsx'),
+].join('\n')
 
 const legacyFiles = [
   '../design-system/internal-mx/InternalMxPageFrame.tsx',

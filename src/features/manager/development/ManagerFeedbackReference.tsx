@@ -4,7 +4,7 @@ import { Plus } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
 import { Modal } from '@/components/organisms/Modal'
-import { MxErrorState, MxLoadingState, MxSectionCard, MxSectionHeader } from '@/components/module/MxModuleVisualPrimitives'
+import { MxLoadingState, MxSectionCard, MxSectionHeader } from '@/components/module/MxModuleVisualPrimitives'
 import { useStoreFeedback } from '@/features/gerente-feedback/hooks/useStoreFeedback'
 import type { TeamMember } from '@/hooks/useTeam'
 import { getFeedbackSellerName, type FeedbackListItem } from '@/features/gerente-feedback/lib/helpers'
@@ -14,6 +14,7 @@ import { DevelopmentFeedbackMetrics } from './DevelopmentFeedbackMetrics'
 import { DevelopmentFeedbackFilters } from './DevelopmentFeedbackFilters'
 import { DevelopmentFeedbackTable } from './DevelopmentFeedbackTable'
 import { filterDevelopmentFeedbacks, getFeedbackCompetency, type DevelopmentFeedbackStatusFilter, type DevelopmentKindFilter, type DevelopmentPeriodFilter } from './development-filters'
+import { ManagerDataErrorState } from './ManagerDataErrorState'
 
 function localDateKey(date: Date) {
   const offset = date.getTimezoneOffset() * 60_000
@@ -43,7 +44,7 @@ export default function ManagerFeedbackReference() {
   const pending = feedbacks.filter((item: FeedbackListItem) => !item.acknowledged).length
 
   if (vm.isLoading) return <MxSectionCard><MxLoadingState label="Carregando feedbacks" /></MxSectionCard>
-  if (vm.error) return <MxSectionCard><MxErrorState description="Não foi possível carregar os feedbacks." retry={vm.handleRefresh} /></MxSectionCard>
+  if (vm.error) return <MxSectionCard><ManagerDataErrorState title="Não foi possível carregar os feedbacks." /></MxSectionCard>
 
   return (
     <div className="space-y-5">
