@@ -2,7 +2,7 @@
 
 ## Status
 
-In progress — shell Base44 aprovado restaurado e validado localmente; publicação pendente.
+Done — shell Base44 aprovado restaurado, validado e publicado em produção no commit `037b770c`.
 
 ## Contexto
 
@@ -44,20 +44,21 @@ Reproduzir a arquitetura de informação, hierarquia visual e fluxos executivos 
 - [x] Estados de loading, vazio e erro são explícitos no fluxo de consultoria.
 - [x] Build, typecheck, lint e testes passam no head final.
 - [x] Supabase permanece sem duplicação dos domínios existentes.
-- [ ] Produção Vercel publica a revisão final do `main`.
-- [ ] Domínios e aliases oficiais apontam para o deployment publicado.
-- [ ] Rotas públicas do SPA e chunks específicos do módulo Dono respondem com HTTP 200.
-- [ ] Nenhum erro, warning ou fatal é registrado no runtime após a publicação e os acessos de smoke.
+- [x] Produção Vercel publica a revisão final do `main`.
+- [x] Domínios e aliases oficiais apontam para o deployment publicado.
+- [x] Rotas públicas do SPA e chunks específicos do módulo Dono respondem com HTTP 200.
+- [x] Nenhum erro ou fatal é registrado no runtime após a publicação e os acessos de smoke; permanece apenas o warning operacional de Sentry DSN ausente.
 
 ## Evidência de integração
 
 - PR: `#125`
 - Merge commit: `3a9d1a3c2f710ed857f544ecab54915487e9a301`
 - Commit de reacionamento documental: `294e0c441d94b99cb08f71fbd26c87333f524afd`
+- Commit desta correção: `037b770cd34b136c1f870ea0ec6ca4f01a7bfc89`
 - CI: 13 gates aprovados no merge commit real da PR.
 - Supabase: tipos gerados pelo projeto `fbhcmzzgwjdgkctlfvbo` e validados pelo gate `db-types-diff`.
 - Vercel project: `mxperformance`
-- Deployment publicado: `dpl_Hd3Wej8Bqxg71agjNjopxy53uNiL`
+- Deployment publicado: `dpl_2dZBpVHZYTvZq9LraJzAiW8S2LkZ`
 - Estado do deployment: `READY`
 - Target: `production`
 - Build Vite concluído em aproximadamente 33 segundos após os contratos, typecheck, testes de resiliência e lint de tokens.
@@ -67,7 +68,7 @@ Reproduzir a arquitetura de informação, hierarquia visual e fluxos executivos 
 
 ## Auditoria autenticada de produção
 
-A matriz planejada de 17 rotas em 1440, 1024, 768 e 390 px não foi executada contra a produção autenticada porque os secrets `E2E_ROLE_PASSWORD` e `E2E_AUTH_PASSWORD` não estão configurados no GitHub Actions. A ausência foi confirmada antes de qualquer navegação protegida.
+A matriz planejada de 17 rotas em 1440, 1024, 768 e 390 px não foi executada integralmente contra a produção autenticada porque os secrets `E2E_ROLE_PASSWORD` e `E2E_AUTH_PASSWORD` não estão configurados no GitHub Actions. A validação autenticada desta correção foi executada diretamente nas quatro rotas solicitadas, no viewport `1280×720`.
 
 Nenhuma credencial foi inserida em arquivo, log, commit ou workflow público. A validação visual autenticada do código final já passou no CI da PR em desktop e mobile; a matriz completa contra o domínio publicado permanece uma tarefa de configuração operacional, não uma falha conhecida do runtime.
 
@@ -79,6 +80,7 @@ Nenhuma credencial foi inserida em arquivo, log, commit ou workflow público. A 
 - `npm run typecheck`, `npm run build` e `git diff --check`: aprovados.
 - Navegador integrado: 4 rotas locais (`/dono`, `/dono/plano-estrategico?tab=resumo`, `/dono/plano-acao` e `/dono/consultoria`) carregaram com conteúdo, shell Base44, sem overlay, overflow horizontal ou erro de console.
 - Plano de Ação: drawer central (`768×648` em viewport `1280×720`), quatro abas funcionais e modais de Atualizar progresso, Delegar, Bloquear e Enviar para validação abertos com validações e sem duplicação de ações.
+- Produção autenticada: as quatro rotas retornaram conteúdo do shell Base44, sem overlay, overflow horizontal ou erro de console; HTTP `200` confirmado para as quatro rotas e para os aliases Vercel `mxperformance-synvolt.vercel.app` e `mxperformance-git-main-synvolt.vercel.app`.
 - Design legado removido do grafo ativo: `owner-base44-fixes.css` e `owner-base44-visual-scope.css`; o CSS canônico `owner-base44-exact.css` permanece ativo.
 
 ## Limitações conhecidas
