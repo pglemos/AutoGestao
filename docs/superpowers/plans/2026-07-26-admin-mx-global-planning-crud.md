@@ -2,9 +2,9 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:executing-plans to implement this plan task-by-task.
 
-**Goal:** Dar a `administrador_geral`, `administrador_mx` e `consultor_mx` o mesmo CRUD global, por loja ativa, para Plano Estratégico, Plano de Ação e Consultoria, reutilizando os fluxos completos já aprovados do módulo Dono.
+**Goal:** Dar a `administrador_geral`, `administrador_mx` e `consultor_mx` o mesmo CRUD global, por loja ativa, para Plano Estratégico, Plano de Ação e Consultoria, mantendo as telas e abas próprias do módulo interno MX.
 
-**Architecture:** O shell interno permanece o responsável pela navegação e pelo design system. As telas completas do Dono serão montadas em uma ponte de contexto que usa a autenticação MX atual e o seletor de loja ativa. As permissões de escrita serão centralizadas em `eh_area_interna_mx(auth.uid())`, com uma migration final idempotente e invalidação Realtime para que as telas reflitam alterações cruzadas.
+**Architecture:** O shell interno permanece o responsável pela navegação e pelo design system. As telas do módulo Admin MX são superfícies próprias, com seletor global de loja ativa e os contratos persistidos compartilhados; elas não montam `OwnerProvider` nem importam páginas do Dono. As permissões de escrita são centralizadas em `eh_area_interna_mx(auth.uid())`, com invalidação Realtime para refletir alterações cruzadas.
 
 **Tech Stack:** React, TypeScript/JSX, React Router, Supabase Postgres/RLS/Realtime, Bun tests, Vite.
 
@@ -32,19 +32,20 @@
 - [x] Transformar exclusão de cliente de consultoria em arquivamento, mantendo o registro e dependências.
 - [x] Cobrir o contrato em testes unitários e de texto SQL.
 
-### Task 2: Navegação e ponte das telas completas
+### Task 2: Navegação e telas próprias completas
 
 **Files:**
-- Create: `src/features/internal-mx-planning/InternalMxOwnerBridge.tsx`
+- Delete: `src/features/internal-mx-planning/InternalMxOwnerBridge.tsx`
 - Create: `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx`
 - Create: `src/features/internal-mx-planning/InternalActionPlanPage.tsx`
+- Create: `src/features/internal-mx-planning/InternalMxPlanningShell.tsx`
 - Modify: `src/design-system/internal-mx/internalMxNavigation.tsx`
 - Modify: `src/design-system/internal-mx/internalMxPageRegistry.ts`
 - Modify: `src/lib/auth/routeAccess.ts`
 - Modify: `src/App.tsx`
 - Test: `src/design-system/internal-mx/internalMxNavigation.test.ts`
 
-- [x] Montar `OwnerProvider` sob o shell interno para reutilizar os componentes completos sem duplicar o módulo Dono.
+- [x] Montar superfícies próprias do módulo interno sob `MxModulePage`, sem reutilizar rota, contexto ou tela do Dono.
 - [x] Adicionar rota e item de navegação para `/plano-estrategico`.
 - [x] Trocar `/plano-acao` interno pela tela completa, mantendo a tela reduzida para gerente/vendedor.
 - [x] Adicionar seletor de loja ativa compartilhado e manter a seleção no contexto existente.
@@ -72,9 +73,10 @@
 
 ## File list
 
-- `src/features/internal-mx-planning/` — ponte e páginas globais internas.
+- `src/features/internal-mx-planning/` — shell e páginas globais próprias do módulo interno.
 - `src/features/internal-mx-access/` — contrato de recursos e permissões.
 - `src/design-system/internal-mx/`, `src/lib/auth/routeAccess.ts`, `src/App.tsx` — rotas e navegação.
 - `src/features/consulting-clients/`, `src/hooks/`, `src/pages/owner/`, `src/components/owner/` — CRUD, escopo e sincronização.
+- `src/test/internal-mx-planning-pages.test.ts` — contrato de isolamento das telas internas em relação ao Dono.
 - `supabase/migrations/20260726150000_internal_mx_global_planning_crud.sql` — RLS/RPC global aplicada no remoto.
 - `supabase/rollbacks/20260726150000_internal_mx_global_planning_crud.sql` — rollback preservando dados.

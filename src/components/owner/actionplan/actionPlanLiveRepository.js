@@ -359,6 +359,7 @@ export function buildActionUpdatePatch(updates = {}) {
   };
 
   set("acao", updates.title);
+  set("problema", updates.problemOrOpportunity ?? updates.description);
   set("objetivo", updates.strategicObjectiveLabel ?? updates.strategicObjective);
   set("indicador", updates.indicator);
   set("departamento", updates.department);
