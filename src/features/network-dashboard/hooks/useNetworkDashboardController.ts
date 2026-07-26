@@ -42,7 +42,8 @@ export function useNetworkDashboardController() {
 
   const fetchSnapshot = useCallback(async (manual = false) => {
     const requestId = ++requestSequence.current
-    manual ? setRefreshing(true) : setLoading(true)
+    if (manual) setRefreshing(true)
+    else setLoading(true)
     const range = resolveNetworkDateRange(timeframe, customRange)
     const validation = validateNetworkDateRange(range)
     if (validation) {

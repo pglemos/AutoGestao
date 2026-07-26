@@ -23,7 +23,8 @@ export function useOperationalDiagnosticsController() {
 
   const fetchAdmin = useCallback(async (manual = false) => {
     if (!internal) return
-    manual ? setRefreshing(true) : setLoading(true)
+    if (manual) setRefreshing(true)
+    else setLoading(true)
     try {
       if (isLancamentosViaRpcEnabled()) {
         const { data, error: rpcError } = await supabase.rpc('get_lancamentos_rede_periodo', { p_start_date: daysAgoISO(ADMIN_AUDIT_DAYS), p_end_date: new Date().toISOString().slice(0, 10), p_scope: 'daily' })

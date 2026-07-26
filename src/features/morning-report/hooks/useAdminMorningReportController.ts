@@ -15,7 +15,8 @@ export function useAdminMorningReportController() {
 
   const fetchReport = useCallback(async (manual = false) => {
     const currentRequest = ++requestId.current
-    manual ? setRefreshing(true) : setLoading(true)
+    if (manual) setRefreshing(true)
+    else setLoading(true)
     try {
       const referenceDate = format(subDays(new Date(), 1), 'yyyy-MM-dd')
       const [storesResult, goalsResult, sellersResult, checkinsResult] = await Promise.all([
