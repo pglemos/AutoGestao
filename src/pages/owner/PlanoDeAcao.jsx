@@ -17,6 +17,7 @@ import FocusView from "@/components/owner/actionplan/focus/FocusView";
 import ActionDrawer from "@/components/owner/actionplan/ActionDrawer";
 import ApproveModal from "@/components/owner/actionplan/ApproveModal";
 import DelegateModal from "@/components/owner/actionplan/DelegateModal";
+import EditActionModal from "@/components/owner/actionplan/EditActionModal";
 import NewActionModal from "@/components/owner/actionplan/NewActionModal";
 import BoardView from "@/components/owner/actionplan/board/BoardView";
 import BoardModals from "@/components/owner/actionplan/board/BoardModals";
@@ -71,6 +72,7 @@ export default function PlanoDeAcao() {
   const [drawerInitialTab, setDrawerInitialTab] = useState("resumo");
   const [approveAction, setApproveAction] = useState(null);
   const [delegateAction, setDelegateAction] = useState(null);
+  const [editAction, setEditAction] = useState(null);
   const [newActionOpen, setNewActionOpen] = useState(false);
   const [newActionInitialDate, setNewActionInitialDate] = useState("");
   const [activeModal, setActiveModal] = useState({ type: null, action: null });
@@ -179,6 +181,22 @@ export default function PlanoDeAcao() {
     }
   };
 
+  const handleEdit = (action) => {
+    setDrawerOpen(false);
+    setEditAction(action);
+  };
+
+  const handleEditConfirm = async (id, payload) => {
+    try {
+      await actionPlanLiveRepository.updateActionById(id, payload);
+      setEditAction(null);
+      await loadActions();
+      toast({ title: "Ação atualizada com sucesso." });
+    } catch (err) {
+      toast({ title: "Não foi possível atualizar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+    }
+  };
+
   const handleNewAction = (date) => {
     setNewActionInitialDate(date || "");
     setNewActionOpen(true);
@@ -268,8 +286,10 @@ export default function PlanoDeAcao() {
   const handleQuickAction = async (action, actionType) => {
     switch (actionType) {
       case "open":
-      case "edit":
         openDrawer(action, "resumo");
+        break;
+      case "edit":
+        handleEdit(action);
         break;
       case "approve":
         handleApprove(action);
@@ -515,6 +535,14 @@ export default function PlanoDeAcao() {
         open={!!delegateAction}
         onOpenChange={(o) => !o && setDelegateAction(null)}
         onConfirm={handleDelegateConfirm}
+        responsiblePeople={responsiblePeople}
+      />
+
+      <EditActionModal
+        action={editAction}
+        open={!!editAction}
+        onOpenChange={(o) => !o && setEditAction(null)}
+        onConfirm={handleEditConfirm}
         responsiblePeople={responsiblePeople}
       />
 

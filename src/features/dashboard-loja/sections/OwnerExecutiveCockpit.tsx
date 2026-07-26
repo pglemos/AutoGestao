@@ -20,7 +20,6 @@ import {
 import { CentralMxBenchmarkInteractive } from './CentralMxBenchmarkInteractive'
 import { CentralMxPlanoSegmentadoPanel } from './CentralMxPlanoSegmentadoPanel'
 import { ConsultorIaStoreSection } from '@/features/central-mx/sections/ConsultorIaStoreSection'
-import { PlanejamentoEstrategico } from '@/features/central-mx/sections/PlanejamentoEstrategico'
 import { DepartamentoDashboard } from '@/features/departamentos/sections/DepartamentoDashboard'
 import type { DepartamentoCode } from '@/features/departamentos/hooks/useDepartamentoDashboard'
 import { MarketingModulo } from '@/features/marketing/sections/MarketingModulo'
@@ -153,10 +152,7 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
       )}
 
       {section === 'planejamento' && (
-        <>
-          <StrategicPlanningView data={data} planningIndicators={centralMx.planningIndicators} />
-          <PlanejamentoEstrategico planningIndicators={centralMx.planningIndicators} periodLabel={periodLabel} />
-        </>
+        <StrategicPlanningView data={data} planningIndicators={centralMx.planningIndicators} />
       )}
 
       {section === 'plano-acao' && (

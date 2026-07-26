@@ -6,6 +6,30 @@ const root = process.cwd()
 const read = (file: string) => readFileSync(resolve(root, file), 'utf8')
 
 describe('Dono — contratos dos fluxos corrigidos', () => {
+  test('rotas executivas usam o cockpit real e não páginas demonstrativas legadas', () => {
+    const module = read('src/features/owner-base44/OwnerModule.tsx')
+    expect(module).toContain("import OwnerLiveDataPage from '@/features/owner-base44/OwnerLiveDataPage'")
+    expect(module).toContain('<Route path="*" element={<OwnerLiveDataPage />} />')
+    expect(module).toContain('<Route path="plano-acao" element={<PlanoDeAcao />} />')
+    expect(module).not.toContain("import OwnerHome from '@/pages/owner/OwnerHome'")
+    expect(module).not.toContain("import PlanoEstrategico from '@/pages/owner/PlanoEstrategico'")
+    expect(module).not.toContain("import Consultoria from '@/pages/owner/Consultoria'")
+  })
+
+  test('plano estratégico monta uma única matriz real', () => {
+    const cockpit = read('src/features/dashboard-loja/sections/OwnerExecutiveCockpit.tsx')
+    expect(cockpit).toContain('<StrategicPlanningView data={data} planningIndicators={centralMx.planningIndicators} />')
+    expect(cockpit).not.toContain('PlanejamentoEstrategico')
+  })
+
+  test('editar ação abre o formulário real e persiste no repositório live', () => {
+    const page = read('src/pages/owner/PlanoDeAcao.jsx')
+    expect(page).toContain('import EditActionModal from "@/components/owner/actionplan/EditActionModal"')
+    expect(page).toContain('case "edit":')
+    expect(page).toContain('await actionPlanLiveRepository.updateActionById(id, payload)')
+    expect(page).toContain('<EditActionModal')
+  })
+
   test('topbar publica refresh e dashboard escuta o mesmo evento', () => {
     const context = read('src/components/owner/OwnerContext.jsx')
     const topbar = read('src/components/owner/OwnerTopbar.jsx')
