@@ -61,7 +61,7 @@ export default function PlanoDeAcao() {
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [mode, setMode] = useState(() => {
     const saved = localStorage.getItem(MODE_KEY);
-    return saved === "list" ? "table" : saved || "table";
+    return saved === "list" ? "table" : saved || "foco";
   });
   const [sortBy, setSortBy] = useState(() => localStorage.getItem(SORT_KEY) || "due_soon");
   const [activeCard, setActiveCard] = useState(null);
