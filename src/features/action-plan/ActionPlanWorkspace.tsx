@@ -35,6 +35,7 @@ export function ActionPlanWorkspace() {
       ? [membership.store]
       : []
   const sellerView = role === 'vendedor'
+  const readOnly = role === 'vendedor' || role === 'gerente'
 
   const handleStoreChange = (storeId: string) => {
     setSelectedStoreId(storeId || null)
@@ -77,7 +78,7 @@ export function ActionPlanWorkspace() {
         storeId={selectedStoreId}
         defaultScope={sellerView ? 'vendedor' : 'loja'}
         availableScopes={sellerView ? ['vendedor'] : ['loja', 'departamento', 'vendedor']}
-        readOnly={sellerView}
+        readOnly={readOnly}
       />
     </main>
   )
