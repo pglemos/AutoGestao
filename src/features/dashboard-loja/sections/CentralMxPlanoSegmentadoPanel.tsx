@@ -15,6 +15,7 @@ import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { cn } from '@/lib/utils'
 import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/hooks/useAuth'
 import {
   useCentralMxPlanosAcaoSegmentado,
   type CentralMxPlanoScope,
@@ -50,11 +51,21 @@ const STATUS_TONE: Record<CentralMxPlanoStatus, string> = {
 type Props = {
   storeId: string | null | undefined
   createRequest?: number
+  defaultScope?: CentralMxPlanoScope
+  availableScopes?: CentralMxPlanoScope[]
+  readOnly?: boolean
 }
 
-export function CentralMxPlanoSegmentadoPanel({ storeId, createRequest = 0 }: Props) {
+export function CentralMxPlanoSegmentadoPanel({
+  storeId,
+  createRequest = 0,
+  defaultScope = 'loja',
+  availableScopes = ['loja', 'departamento', 'vendedor'],
+  readOnly = false,
+}: Props) {
+  const { profile, role } = useAuth()
   const segmentado = useCentralMxPlanosAcaoSegmentado(storeId)
-  const [activeScope, setActiveScope] = useState<CentralMxPlanoScope>('loja')
+  const [activeScope, setActiveScope] = useState<CentralMxPlanoScope>(defaultScope)
   const activeList = segmentado.planos[activeScope]
   const [openCreate, setOpenCreate] = useState(false)
   const [pendingCreateRequest, setPendingCreateRequest] = useState(false)
@@ -66,6 +77,10 @@ export function CentralMxPlanoSegmentadoPanel({ storeId, createRequest = 0 }: Pr
     let cancelled = false
     if (!storeId) {
       setScopeChoices([])
+      return
+    }
+    if (role === 'vendedor' && profile?.id) {
+      setScopeChoices([{ scope: 'vendedor', scopeId: profile.id, label: 'Meu plano de ação' }])
       return
     }
     setScopeChoices([{ scope: 'loja', scopeId: storeId, label: 'Loja' }])
@@ -111,7 +126,7 @@ export function CentralMxPlanoSegmentadoPanel({ storeId, createRequest = 0 }: Pr
     return () => {
       cancelled = true
     }
-  }, [storeId])
+  }, [profile?.id, role, storeId])
 
   const orderedChoices = useMemo(
     () =>
@@ -164,16 +179,18 @@ export function CentralMxPlanoSegmentadoPanel({ storeId, createRequest = 0 }: Pr
             )}
             <span className="ml-1">Atualizar</span>
           </Button>
-          <Button
-            type="button"
-            variant="primary"
-            size="sm"
-            onClick={() => setOpenCreate(true)}
-            disabled={!storeId || orderedChoices.length === 0}
-          >
-            <Plus size={14} className="mr-1" />
-            Novo plano
-          </Button>
+          {!readOnly && (
+            <Button
+              type="button"
+              variant="primary"
+              size="sm"
+              onClick={() => setOpenCreate(true)}
+              disabled={!storeId || orderedChoices.length === 0}
+            >
+              <Plus size={14} className="mr-1" />
+              Novo plano
+            </Button>
+          )}
         </div>
       </header>
 
@@ -186,7 +203,7 @@ export function CentralMxPlanoSegmentadoPanel({ storeId, createRequest = 0 }: Pr
       )}
 
       <div role="tablist" aria-label="Escopo do plano de ação" className="mt-mx-md flex flex-wrap gap-mx-xs">
-        {(Object.keys(SCOPE_LABEL) as CentralMxPlanoScope[]).map((scope) => {
+        {availableScopes.map((scope) => {
           const def = SCOPE_LABEL[scope]
           const isActive = activeScope === scope
           return (
@@ -238,7 +255,12 @@ export function CentralMxPlanoSegmentadoPanel({ storeId, createRequest = 0 }: Pr
 
       <ul className="mt-mx-md space-y-mx-sm">
         {activeList.map((plano) => (
-          <PlanoRow key={plano.id} plano={plano} onConcluir={segmentado.marcarConcluido} />
+          <PlanoRow
+            key={plano.id}
+            plano={plano}
+            onConcluir={segmentado.marcarConcluido}
+            readOnly={readOnly}
+          />
         ))}
         {!activeList.length && !segmentado.loading && (
           <li className="rounded-mx-xl border border-dashed border-border-default p-mx-md text-center">
@@ -290,9 +312,11 @@ function CountTile({
 function PlanoRow({
   plano,
   onConcluir,
+  readOnly,
 }: {
   plano: CentralMxPlanoAcaoRow
   onConcluir: (id: string, eficaciaNota?: string) => Promise<void>
+  readOnly: boolean
 }) {
   return (
     <li className={cn('rounded-mx-xl border p-mx-md', STATUS_TONE[plano.status])}>
@@ -329,7 +353,7 @@ function PlanoRow({
           )}
         </div>
         <div className="flex items-center gap-mx-xs">
-          {plano.status !== 'concluido' && (
+          {!readOnly && plano.status !== 'concluido' && (
             <Button
               type="button"
               size="sm"

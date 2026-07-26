@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from '@/lib/toast'
 import { supabase } from '@/lib/supabase'
+import { useAuth } from '@/hooks/useAuth'
 import type {
   CentralMxPlanoAcaoRow,
   CentralMxPlanoStatus,
@@ -47,6 +48,7 @@ export function useCentralMxPlanosAcaoSegmentado(
   storeId: string | null | undefined,
   options: Options = {},
 ): UseCentralMxPlanosAcaoSegmentadoResult {
+  const { profile, role } = useAuth()
   const [planos, setPlanos] = useState<SegmentedPlanos>(EMPTY_SEGMENTED)
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -59,6 +61,27 @@ export function useCentralMxPlanosAcaoSegmentado(
     setLoading(true)
     setError(null)
     try {
+      // Vendedor só pode enxergar o próprio escopo individual. Além de
+      // respeitar a RLS, isso evita consultas de departamentos/equipe que não
+      // fazem parte do contrato de leitura do vendedor.
+      if (role === 'vendedor' && profile?.id) {
+        const { data, error: sellerError } = await supabase
+          .from('planos_acao')
+          .select(
+            'id, codigo, scope_type, scope_id, objetivo, departamento, indicador, problema, acao, como, responsavel_id, prazo, status, prioridade, origem, origem_ref_id, origem_ref_table, eficacia_score, eficacia_nota, progresso, iniciado_at, created_at, updated_at, concluido_at',
+          )
+          .eq('scope_type', scopeToDb('vendedor'))
+          .eq('scope_id', profile.id)
+          .in('status', options.includeConcluidos
+            ? ['pendente', 'em_andamento', 'atrasado', 'concluido', 'validando_eficacia']
+            : ['pendente', 'em_andamento', 'atrasado', 'validando_eficacia'])
+          .order('prazo', { ascending: true, nullsFirst: false })
+          .order('created_at', { ascending: false })
+        if (sellerError) throw sellerError
+        setPlanos({ loja: [], departamento: [], vendedor: (data ?? []) as CentralMxPlanoAcaoRow[] })
+        return
+      }
+
       // 1. Coletar ids de escopos derivados da loja
       const [deptRes, sellerRes] = await Promise.all([
         supabase
@@ -136,7 +159,7 @@ export function useCentralMxPlanosAcaoSegmentado(
     } finally {
       setLoading(false)
     }
-  }, [storeId, options.includeConcluidos])
+  }, [profile?.id, role, storeId, options.includeConcluidos])
 
   useEffect(() => {
     fetchAll()

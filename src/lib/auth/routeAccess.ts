@@ -13,10 +13,24 @@ const MANAGEMENT_ROLES = ['administrador_geral', 'administrador_mx', 'consultor_
 const MANAGER_AND_INTERNAL_ROLES = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente'] as const satisfies readonly UserRole[]
 const INTERNAL_AND_OWNER = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono'] as const satisfies readonly UserRole[]
 const INTERNAL_AND_LEADERS = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente'] as const satisfies readonly UserRole[]
+const INTERNAL_AND_MANAGER = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente'] as const satisfies readonly UserRole[]
+const STORE_CONSULTOR_ROLES = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente', 'vendedor'] as const satisfies readonly UserRole[]
+const LEGACY_OWNER_WORKSPACE_SEGMENTS = new Set([
+  'rotina',
+  'decisoes',
+  'plano-estrategico',
+  'plano-acao',
+  'consultoria',
+  'departamentos',
+  'mercado',
+  'universidade',
+  'consultor',
+])
 
 export const ROUTE_ACCESS_RULES = [
   { pattern: '/dono', roles: ['dono'] },
   { pattern: '/dono/*', roles: ['dono'] },
+  { pattern: '/plano-acao', roles: USER_ROLES },
   { pattern: '/settings', roles: CONFIGURATION_ROLES, capability: 'view_configurations' },
   { pattern: '/team', capability: 'manage_team' },
   { pattern: '/equipe', capability: 'manage_team' },
@@ -27,19 +41,9 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/consultoria/*', roles: INTERNAL_ROLES },
   { pattern: '/configuracoes/consultoria-pmr', roles: INTERNAL_ROLES },
   { pattern: '/configuracoes/reprocessamento', roles: INTERNAL_ROLES },
-  { pattern: '/lojas/:storeSlug/consultor-ia', roles: USER_ROLES },
-  { pattern: '/lojas/:storeSlug/rotina', roles: ['dono'] },
-  { pattern: '/lojas/:storeSlug/decisoes', roles: ['dono'] },
-  { pattern: '/lojas/:storeSlug/plano-estrategico', roles: ['dono'] },
-  { pattern: '/lojas/:storeSlug/plano-acao', roles: ['dono'] },
-  { pattern: '/lojas/:storeSlug/consultoria', roles: ['dono'] },
-  { pattern: '/lojas/:storeSlug/departamentos', roles: ['dono'] },
-  { pattern: '/lojas/:storeSlug/departamentos/*', roles: ['dono'] },
-  { pattern: '/lojas/:storeSlug/mercado', roles: ['dono'] },
-  { pattern: '/lojas/:storeSlug/universidade', roles: ['dono'] },
-  { pattern: '/lojas/:storeSlug/consultor', roles: ['dono'] },
-  { pattern: '/lojas/:storeSlug', roles: INTERNAL_AND_LEADERS },
-  { pattern: '/lojas/:storeSlug/*', roles: INTERNAL_AND_LEADERS },
+  { pattern: '/lojas/:storeSlug/consultor-ia', roles: STORE_CONSULTOR_ROLES },
+  { pattern: '/lojas/:storeSlug', roles: INTERNAL_AND_MANAGER },
+  { pattern: '/lojas/:storeSlug/*', roles: INTERNAL_AND_MANAGER },
   { pattern: '/lojas', roles: INTERNAL_AND_OWNER },
   { pattern: '/rotina', roles: ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente'] },
   { pattern: '/gerente/rotina-equipe', roles: MANAGER_AND_INTERNAL_ROLES },
@@ -137,6 +141,15 @@ export function getRouteAccessRule(pathname: string): RouteRule | null {
 
 export function canAccessPath(pathname: string, role: UserRole | null | undefined): boolean {
   if (!role) return false
+  const normalizedPath = normalizePath(pathname)
+  const storePathParts = normalizedPath.split('/').filter(Boolean)
+  if (
+    storePathParts[0] === 'lojas' &&
+    storePathParts.length >= 3 &&
+    LEGACY_OWNER_WORKSPACE_SEGMENTS.has(storePathParts[2])
+  ) {
+    return false
+  }
   const rule = getRouteAccessRule(pathname)
   if (!rule) return false
   if (rule.capability) return hasCapability(role, rule.capability)

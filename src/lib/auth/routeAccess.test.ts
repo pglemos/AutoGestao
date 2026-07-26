@@ -42,22 +42,23 @@ describe('route access matrix', () => {
     expect(canAccessPath('/lojas', 'gerente')).toBe(false)
   })
 
-  it('allows scoped store subroutes only to leaders and internal MX profiles', () => {
-    for (const role of ['gerente', 'dono', 'administrador_geral', 'administrador_mx', 'consultor_mx'] as const) {
+  it('allows scoped store subroutes only to managers and internal MX profiles', () => {
+    for (const role of ['gerente', 'administrador_geral', 'administrador_mx', 'consultor_mx'] as const) {
       expect(canAccessPath('/lojas/mx-consultoria/equipe', role)).toBe(true)
     }
+    expect(canAccessPath('/lojas/mx-consultoria/equipe', 'dono')).toBe(false)
     expect(canAccessPath('/lojas/mx-consultoria/equipe', 'vendedor')).toBe(false)
     expect(canAccessPath('/lojas/mx-consultoria/consultor-ia', 'vendedor')).toBe(true)
   })
 
-  it('keeps legacy owner workspace subroutes exclusive while allowing regular store tabs', () => {
+  it('removes legacy owner workspace routes instead of redirecting them', () => {
     for (const route of [
       '/lojas/mx-consultoria/plano-acao',
       '/lojas/mx-consultoria/departamentos/comercial',
       '/lojas/mx-consultoria/mercado',
       '/lojas/mx-consultoria/universidade',
     ]) {
-      expect(canAccessPath(route, 'dono')).toBe(true)
+      expect(canAccessPath(route, 'dono')).toBe(false)
       expect(canAccessPath(route, 'gerente')).toBe(false)
       expect(canAccessPath(route, 'administrador_mx')).toBe(false)
     }
@@ -106,7 +107,7 @@ describe('route access matrix', () => {
     expect(canAccessPath('/home', 'gerente')).toBe(true)
     expect(canAccessPath('/home', 'dono')).toBe(true)
     expect(canAccessPath('/lojas/acertt/consultor-ia', 'vendedor')).toBe(true)
-    expect(canAccessPath('/lojas/acertt/consultor-ia', 'dono')).toBe(true)
+    expect(canAccessPath('/lojas/acertt/consultor-ia', 'dono')).toBe(false)
     expect(canAccessPath('/lojas/acertt/consultor-ia', 'administrador_mx')).toBe(true)
     expect(canAccessPath('/lancamento-diario', 'vendedor')).toBe(true)
     expect(canAccessPath('/lancamento-diario', 'gerente')).toBe(false)

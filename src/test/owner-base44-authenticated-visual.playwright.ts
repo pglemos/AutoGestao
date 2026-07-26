@@ -2,7 +2,7 @@ import { test, expect, type Page, type TestInfo } from '@playwright/test'
 import { writeFileSync } from 'node:fs'
 import { loginAsOwner } from './e2e-helpers/owner-auth'
 
-const OWNER_BASE_PATH = '/lojas/mx-consultoria'
+const OWNER_BASE_PATH = '/dono'
 
 const routes = [
   { key: 'inicio', path: OWNER_BASE_PATH, expectedPath: '/dono' },

@@ -3,6 +3,7 @@ import type { UserRole } from '@/types/database'
 export const MX_STORE_SLUG = 'mx-consultoria'
 
 const SELLER_ROUTES = [
+  '/plano-acao',
   '/home', '/meu-dia', '/minha-remuneracao', '/lancamento-diario', '/fechamento-diario',
   '/terminal-mx', '/carteira-clientes', '/carteira', '/vendedor/carteira', '/mentor-comercial',
   '/vendedor/mentor-comercial', '/meu-funil', '/minha-meta', '/vendedor/minha-meta',
@@ -18,16 +19,21 @@ const SELLER_ROUTES = [
 ] as const
 
 const SHARED_LEADERSHIP_ROUTES = [
-  '/settings', `/lojas/${MX_STORE_SLUG}`, `/lojas/${MX_STORE_SLUG}/equipe`,
-  `/lojas/${MX_STORE_SLUG}/consultor-ia`, '/fechamento-diario', '/relatorio-matinal',
+  '/settings', '/plano-acao', '/fechamento-diario', '/relatorio-matinal',
   '/relatorios/performance-vendas', '/relatorios/performance-vendedor', '/ranking', '/classificacao',
   '/feedback', '/vendedor/treinamentos', '/vendedor/universidade-mx', '/treinamentos',
   '/universidade-mx', '/devolutivas', '/notificacoes', '/perfil', '/meu-perfil', '/pdi',
   '/produtos', '/configuracoes', '/configuracoes/remuneracao', '/liberacao-fechamento',
 ] as const
 
+const STORE_LEADERSHIP_ROUTES = [
+  `/lojas/${MX_STORE_SLUG}`,
+  `/lojas/${MX_STORE_SLUG}/equipe`,
+  `/lojas/${MX_STORE_SLUG}/consultor-ia`,
+] as const
+
 const MANAGER_ROUTES = [
-  ...SHARED_LEADERSHIP_ROUTES, '/team', '/equipe', '/home', '/rotina',
+  ...SHARED_LEADERSHIP_ROUTES, ...STORE_LEADERSHIP_ROUTES, '/team', '/equipe', '/home', '/rotina',
   '/gerente/fechamento-diario', '/gerente/rotina-equipe', '/gerente/minha-equipe',
   '/gerente/meta-loja', '/gerente/mentor', '/gerente/feedbacks-pdis', '/gerente/ranking',
   '/gerente/universidade-mx', '/funil-vendas', '/metas', '/falar-consultor', '/auditoria',
@@ -46,7 +52,7 @@ const OWNER_ROUTES = [
 ] as const
 
 const INTERNAL_SHARED_ROUTES = [
-  ...SHARED_LEADERSHIP_ROUTES, '/painel', '/simulacao', '/simulacao/vendedor',
+  ...SHARED_LEADERSHIP_ROUTES, ...STORE_LEADERSHIP_ROUTES, '/painel', '/simulacao', '/simulacao/vendedor',
   '/simulacao/gerente', '/simulacao/dono', '/lojas', '/agenda', '/consultoria',
   '/consultoria/clientes', '/configuracoes/operacional', '/configuracoes/consultoria-pmr',
   '/configuracoes/reprocessamento', '/rotina', '/gerente/fechamento-diario',

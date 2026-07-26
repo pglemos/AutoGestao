@@ -6,7 +6,6 @@ import { MotionConfig } from 'motion/react'
 import Layout from '@/components/Layout'
 import { slugify } from '@/lib/utils'
 import { canAccessPath } from '@/lib/auth/routeAccess'
-import { mapLegacyOwnerPathToCanonical } from '@/lib/owner-b44/routes'
 
 // Pages — Lazy loaded
 const OAuthHome = lazy(() => import('@/pages/OAuthHome'))
@@ -42,6 +41,7 @@ const Perfil = lazy(() => import('@/pages/Perfil'))
 
 // Gerente e Dono
 const DashboardLoja = lazy(() => import('@/pages/DashboardLoja'))
+const ActionPlanWorkspace = lazy(() => import('@/features/action-plan/ActionPlanWorkspace'))
 const OwnerModule = lazy(() => import('@/features/owner-base44/OwnerModule'))
 const StoreConsultorIa = lazy(() => import('@/pages/StoreConsultorIa'))
 const GerenteFeedback = lazy(() => import('@/pages/GerenteFeedback'))
@@ -224,11 +224,6 @@ function ConsultorIaAliasRedirect() {
   return <ForbiddenRoute />
 }
 
-function OwnerLegacyRedirect() {
-  const location = useLocation()
-  return <RedirectWithSearch to={mapLegacyOwnerPathToCanonical(location.pathname)} />
-}
-
 function PublicHome() {
   const { profile, loading, initialized } = useAuth()
 
@@ -262,6 +257,7 @@ export default function App() {
               <Route path="/dono/*" element={<ProtectedRoute><Suspense fallback={<Spinner />}><OwnerModule /></Suspense></ProtectedRoute>} />
               <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                 <Route path="settings" element={<Navigate to="/configuracoes" replace />} />
+                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ActionPlanWorkspace />} gerente={<ActionPlanWorkspace />} dono={<ActionPlanWorkspace />} admin={<ActionPlanWorkspace />} /></Suspense>} />
                 <Route path="team" element={<TeamAliasRedirect />} />
                 <Route path="equipe" element={<TeamAliasRedirect />} />
 
@@ -373,10 +369,13 @@ export default function App() {
                 <Route path="gerente/ranking" element={<Suspense fallback={<Spinner />}><Ranking /></Suspense>} />
                 <Route path="gerente/universidade-mx" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<ConsultorTreinamentos />} /></Suspense>} />
                 <Route path="lojas/:storeSlug/consultor-ia" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<OwnerLegacyRedirect />} admin={<StoreConsultorIa />} />
+                  <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<ForbiddenRoute />} admin={<StoreConsultorIa />} />
                 </Suspense>} />
-                <Route path="lojas/:storeSlug/*" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} />
+                <Route path="lojas/:storeSlug" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<ForbiddenRoute />} admin={<DashboardLoja />} />
+                </Suspense>} />
+                <Route path="lojas/:storeSlug/equipe" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<ForbiddenRoute />} admin={<DashboardLoja />} />
                 </Suspense>} />
                 <Route path="consultor-ia" element={<ConsultorIaAliasRedirect />} />
                 <Route path="pdi" element={<Suspense fallback={<Spinner />}>

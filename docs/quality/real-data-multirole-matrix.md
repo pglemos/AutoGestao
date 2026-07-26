@@ -1,7 +1,7 @@
 # Matriz de runtime com dados reais — multi-role
 
-Versão: 1.0.0  
-Atualizada em: 2026-07-21  
+Versão: 1.1.0
+Atualizada em: 2026-07-26
 Story: `OPS-20260721`
 
 Esta matriz inventaria as rotas protegidas ativas de `src/App.tsx` e `src/lib/auth/routeAccess.ts`. “Vazio” significa estado vazio verdadeiro: nenhuma fixture, número substituto, identidade sintética ou gravação apenas em memória/localStorage pode ocupar o lugar da fonte oficial.
@@ -26,6 +26,7 @@ Esta matriz inventaria as rotas protegidas ativas de `src/App.tsx` e `src/lib/au
 | `/carteira-clientes`, `/carteira`, `/vendedor/carteira`, `/mentor-comercial`, `/vendedor/mentor-comercial` | Carteira e plano de ataque | `clientes`, `oportunidades`, `agendamentos`, `eventos_comerciais`, `carteira_missoes`, `veiculos_estoque` | RPC `carteira_salvar_cliente_v2`, RPCs `carteira_*`, eventos/estoque com idempotência | `carteira-adapter-contract`, `real-data-runtime-contract` |
 | `/meu-funil`, `/funil`, `/funil-comercial`, `/minha-meta`, aliases `/vendedor/*` | Funil e meta | `clientes`, `oportunidades`, `eventos_comerciais`, metas e performance oficial | alterações de etapa/cliente por contratos CRM | testes de CRM/funil e gates globais |
 | `/central-execucao`, `/central-de-execucao`, `/rotina-do-dia`, `/vendedor/rotina-do-dia` | Execução diária | `execution_actions`, `routine_activity_templates`, `prospecting_schedule`, `story_ideas`, CRM | mutations/RPCs de `execution_actions`, agendamentos e CRM | testes `src/features/central-execucao/**` |
+| `/plano-acao` | Plano de Ação compartilhado | `public.planos_acao` nos escopos autorizados; vendedor consulta apenas `scope_type=individual` e `auth.uid()` | vendedor atualiza apenas a própria ação; demais perfis usam RPCs por escopo | smoke multi-role, `useCentralMxPlanosAcaoSegmentado` |
 | `/relatorios-vendedor`, `/relatorios` | Relatórios | performance oficial, lançamentos, CRM e metas do vendedor | sem escrita de negócio | gates globais |
 | `/universidade-mx`, aliases `/vendedor/treinamentos` | Treinamentos | `treinamentos`, `progresso_treinamentos`, perfil/competências reais | progresso oficial de treinamento | `useVendedorTreinamentos.test.ts` |
 | `/desenvolvimento`, `/devolutivas`, `/feedback*`, `/pdi` | Desenvolvimento, feedback e PDI | `pdis`, `devolutivas`, catálogos oficiais | RPCs/tabelas de PDI, devolutivas e comentários autorizados | testes de PDI/devolutivas e matriz RLS |
@@ -43,6 +44,7 @@ Esta matriz inventaria as rotas protegidas ativas de `src/App.tsx` e `src/lib/au
 | `/funil-vendas`, `/metas`, `/ranking`, `/classificacao`, `/gerente/ranking` | Funil, metas e ranking | CRM, metas e lançamentos oficiais | metas somente por contratos autorizados | testes de funil/ranking |
 | `/treinamentos`, `/gerente/universidade-mx` | Universidade da equipe | treinamentos, trilhas, progresso da equipe | gestão/progresso conforme capability | testes de treinamento |
 | `/falar-consultor`, `/lojas/:storeSlug/consultor-ia` | Consultoria/Central MX | loja selecionada, solicitações e contexto oficial | solicitação persistida e ações autorizadas | contratos Central MX |
+| `/plano-acao` | Plano de Ação compartilhado | `public.planos_acao` filtrado por unidade/escopo pela RLS | RPC `criar_plano_acao_v2` e `atualizar_plano_acao` conforme papel | smoke multi-role, migration de escopo de departamento |
 | `/configuracoes`, `/configuracoes/remuneracao` | Configuração da loja | configurações operacionais e remuneração da loja | RPCs/tabelas canônicas, sem adapter local | testes de remuneração/configuração |
 
 ## Dono
@@ -61,6 +63,7 @@ Esta matriz inventaria as rotas protegidas ativas de `src/App.tsx` e `src/lib/au
 | --- | --- | --- | --- | --- |
 | `/painel`, `/simulacao/**` | Painel interno e simulação | `usuarios`, `lojas`, vínculos, clientes e métricas oficiais | simulação é somente contexto de visualização; não cria identidade sintética | `routeAccess`, capabilities e smokes por perfil |
 | `/lojas`, `/lojas/:storeSlug/*`, `/lojas/:storeSlug/consultor-ia` | Lojas/Loja MX | loja selecionada, equipe, metas, lançamentos, CRM, agenda, rankings e dashboards | RPCs administrativas específicas; Consultor MX não recebe permissão genérica | matriz RLS e browser por perfil |
+| `/plano-acao` | Plano de Ação compartilhado | `public.planos_acao` com seleção explícita de loja e escopos internos | RPCs canônicas com auditoria e RLS | smoke multi-role, `ActionPlanWorkspace` |
 | `/agenda` | Agenda interna | `agenda_eventos`, visitas e `opcoes_agenda_consultoria` | CRUD do catálogo oficial somente Admin MX/Master; agenda conforme políticas | `useAgendaOptions`, contrato anti-ficção |
 | `/consultoria`, `/consultoria/clientes`, `/consultoria/clientes/:clientSlug`, `/consultoria/clientes/:clientSlug/visitas/:visitNumber` | Consultoria | `clientes_consultoria`, `modulos_cliente_consultoria`, visitas, formulários, métricas PMR, planos, ações, fechamento e DRE | contratos Supabase/Edge Functions com `client_id` explícito | testes de consultoria, schemas e RLS |
 | `/produtos` | Produtos digitais | catálogo oficial de produtos/capabilities | somente perfis com capability | `routeAccess`/capabilities |

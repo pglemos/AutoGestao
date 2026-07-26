@@ -104,10 +104,18 @@ async function auditAuthenticatedRole(browser: Browser, roleCase: RoleCase) {
       activeRoute = route
       successfulBusinessRequestsByRoute.set(route, 0)
       await navigateWithinApp(page, route)
-      await expect(page.locator('main#main-content').first(), `${roleCase.role}: ${route}`).toBeVisible({ timeout: 30_000 })
+      // Legacy store workspace routes render their own main landmark, while the
+      // owner module exposes its content as a named region instead of a main.
+      await expect(
+        page.locator('main, [role="region"][aria-label*="Conteúdo"]').first(),
+        `${roleCase.role}: ${route}`,
+      ).toBeVisible({ timeout: 30_000 })
       await expect(page, `${roleCase.role}: ${route}`).not.toHaveURL(/\/login(?:[?#]|$)/)
       await expect(page.getByText(/Acesso não autorizado|Página não encontrada/i), `${roleCase.role}: ${route}`).toHaveCount(0)
       await expect(page.locator('body'), `${roleCase.role}: ${route}`).not.toContainText(/dados\s+fict[ií]cios|dados\s+demonstrativos|dados\s+de\s+demonstra[cç][aã]o|modelo\s+em\s+valida[cç][aã]o|valida[cç][aã]o\s+visual/i)
+      if (route === '/plano-acao') {
+        await expect(page.getByRole('heading', { name: 'Plano de Ação', exact: true }).first(), `${roleCase.role}: Plano de Ação não renderizado`).toBeVisible()
+      }
       await expect.poll(
         () => successfulBusinessRequestsByRoute.get(route) || 0,
         { message: `${roleCase.role}: ${route} não realizou leitura/escrita real no Supabase`, timeout: 15_000 },
