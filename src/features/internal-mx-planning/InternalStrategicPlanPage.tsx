@@ -141,7 +141,7 @@ export default function InternalStrategicPlanPage() {
           {tab === 'acoes' ? <ActionTab actions={(planRepository.getActionItems(selected?.id) || []) as Array<Record<string, unknown>>} onCreate={() => setOpenAction(true)} /> : null}
         </>
       )}
-      {openAction && selected ? <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true" aria-labelledby="internal-strategic-action-title">
+      {openAction && selected ? <div className="fixed inset-0 z-[120] flex items-center justify-center bg-black/40 p-4" role="dialog" aria-modal="true" aria-labelledby="internal-strategic-action-title">
         <section className="w-full max-w-xl rounded-2xl bg-white p-5 shadow-xl">
           <h2 id="internal-strategic-action-title" className="text-lg font-semibold text-gray-800">Criar ação estratégica</h2>
           <p className="mt-1 text-sm text-gray-500">A ação será criada na loja selecionada e ficará disponível no Plano de Ação interno.</p>

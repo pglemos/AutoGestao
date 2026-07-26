@@ -28,6 +28,15 @@ describe('páginas de planejamento do módulo interno MX', () => {
     expect(read('src/features/internal-mx-planning/InternalActionPlanPage.tsx')).toContain('Impacto')
   })
 
+  test('mantém os modais acima da sidebar interna', () => {
+    const actionPage = read('src/features/internal-mx-planning/InternalActionPlanPage.tsx')
+    const strategicPage = read('src/features/internal-mx-planning/InternalStrategicPlanPage.tsx')
+    expect(actionPage.match(/fixed inset-0 z-50/g)).toBeNull()
+    expect(strategicPage.match(/fixed inset-0 z-50/g)).toBeNull()
+    expect(actionPage.match(/fixed inset-0 z-\[120\]/g)?.length).toBe(2)
+    expect(strategicPage).toContain('fixed inset-0 z-[120]')
+  })
+
   test('mantém a seleção global de loja e o realtime no módulo interno', () => {
     const source = read('src/features/internal-mx-planning/InternalMxPlanningShell.tsx')
     expect(source).toContain('useStores')
