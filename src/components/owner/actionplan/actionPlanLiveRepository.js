@@ -232,7 +232,7 @@ export function mapLiveAction(row, context = {}) {
     id: row.id,
     code: row.codigo || fallbackCode(row.id),
     title: safeText(row.acao, "Ação sem título"),
-    description: safeText(row.problema),
+    description: safeText(row.como || row.problema),
     problemOrOpportunity: safeText(row.problema),
     department,
     departmentLabel: DEPARTMENT_LABELS[department] || department,

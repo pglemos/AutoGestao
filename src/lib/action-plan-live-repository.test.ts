@@ -93,6 +93,21 @@ describe('mapLiveAction', () => {
     })
   })
 
+  it('prefere o campo persistido como ao montar a descrição da ação', () => {
+    const action = mapLiveAction({
+      id: 'action-3',
+      acao: 'Ação com execução',
+      problema: 'Problema original',
+      como: 'Como executar persistido',
+      departamento: 'commercial',
+      status: 'pendente',
+      prioridade: 'media',
+      progresso: 0,
+    })
+    expect(action.description).toBe('Como executar persistido')
+    expect(action.problemOrOpportunity).toBe('Problema original')
+  })
+
   it('keeps explicit nulls in an update patch so values can be cleared', () => {
     expect(buildActionUpdatePatch({
       responsibleId: null,
