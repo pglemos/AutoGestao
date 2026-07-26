@@ -33,7 +33,7 @@ type FormState = {
   como: string
   prazo: string
   prioridade: 'critica' | 'alta' | 'media' | 'baixa'
-  origem: 'manual' | 'alerta' | 'score' | 'consultor'
+  origem: 'manual' | 'alertas' | 'score' | 'consultor'
 }
 
 const INITIAL: FormState = {
@@ -86,9 +86,10 @@ export function CentralMxCriarPlanoModal({
     }
     setSaving(true)
     try {
-      const { error } = await supabase.rpc('criar_plano_acao', {
+      const { error } = await supabase.rpc('criar_plano_acao_v2', {
         p_scope_type: scopeToDb(target.scope),
         p_scope_id: target.scopeId,
+        p_objetivo: '',
         p_departamento: form.departamento.trim(),
         p_indicador: form.indicador.trim(),
         p_problema: form.problema.trim(),
@@ -300,7 +301,7 @@ export function CentralMxCriarPlanoModal({
                 className="w-full h-mx-14 rounded-mx-md border border-border-default bg-white px-5 text-sm font-black uppercase shadow-inner outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
               >
                 <option value="manual">Manual</option>
-                <option value="alerta">Alerta</option>
+                <option value="alertas">Alerta</option>
                 <option value="score">Score</option>
                 <option value="consultor">Consultor</option>
               </select>

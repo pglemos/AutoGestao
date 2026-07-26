@@ -78,7 +78,7 @@ export function useCentralMxPlanosAcaoSegmentado(
       const sellerIds = (sellerRes.data ?? []).map((row) => row.seller_user_id as string)
 
       const baseSelect =
-        'id, scope_type, scope_id, departamento, indicador, problema, acao, como, responsavel_id, prazo, status, prioridade, origem, origem_ref_id, origem_ref_table, eficacia_score, eficacia_nota, created_at, concluido_at'
+        'id, codigo, scope_type, scope_id, objetivo, departamento, indicador, problema, acao, como, responsavel_id, prazo, status, prioridade, origem, origem_ref_id, origem_ref_table, eficacia_score, eficacia_nota, progresso, iniciado_at, created_at, updated_at, concluido_at'
       const statusFilter: CentralMxPlanoStatus[] = options.includeConcluidos
         ? ['pendente', 'em_andamento', 'atrasado', 'concluido', 'validando_eficacia']
         : ['pendente', 'em_andamento', 'atrasado', 'validando_eficacia']
@@ -145,14 +145,12 @@ export function useCentralMxPlanosAcaoSegmentado(
   const marcarConcluido = useCallback(
     async (planoId: string, eficaciaNota?: string) => {
       try {
-        const payload: { status: CentralMxPlanoStatus; eficacia_nota?: string } = {
-          status: 'concluido',
-        }
-        if (eficaciaNota?.trim()) payload.eficacia_nota = eficaciaNota.trim()
-        const { error: updateError } = await supabase
-          .from('planos_acao')
-          .update(payload)
-          .eq('id', planoId)
+        const { error: updateError } = await supabase.rpc('atualizar_plano_acao', {
+          p_plano_id: planoId,
+          p_status: 'concluido',
+          p_progresso: 100,
+          p_eficacia_nota: eficaciaNota?.trim() || null,
+        })
         if (updateError) throw updateError
         toast.success('Plano marcado como concluído.')
         await fetchAll()

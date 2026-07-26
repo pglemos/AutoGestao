@@ -24,8 +24,10 @@ export type CentralMxPlanoPriority = 'critica' | 'alta' | 'media' | 'baixa'
 
 export type CentralMxPlanoAcaoRow = {
   id: string
+  codigo: string | null
   scope_type: 'loja' | 'departamento' | 'vendedor' | 'consultor'
   scope_id: string
+  objetivo: string | null
   departamento: string
   indicador: string
   problema: string
@@ -40,7 +42,10 @@ export type CentralMxPlanoAcaoRow = {
   origem_ref_table: string | null
   eficacia_score: number | null
   eficacia_nota: string | null
+  progresso: number
+  iniciado_at: string | null
   created_at: string
+  updated_at: string
   concluido_at: string | null
 }
 
@@ -87,7 +92,7 @@ export function useCentralMxPlanosAcao(
       let query = supabase
         .from('planos_acao')
         .select(
-          'id, scope_type, scope_id, departamento, indicador, problema, acao, como, responsavel_id, prazo, status, prioridade, origem, origem_ref_id, origem_ref_table, eficacia_score, eficacia_nota, created_at, concluido_at',
+          'id, codigo, scope_type, scope_id, objetivo, departamento, indicador, problema, acao, como, responsavel_id, prazo, status, prioridade, origem, origem_ref_id, origem_ref_table, eficacia_score, eficacia_nota, progresso, iniciado_at, created_at, updated_at, concluido_at',
         )
         .eq('scope_type', scopeToDb('loja'))
         .eq('scope_id', storeId)
@@ -123,14 +128,12 @@ export function useCentralMxPlanosAcao(
   const marcarConcluido = useCallback(
     async (planoId: string, eficaciaNota?: string) => {
       try {
-        const payload: { status: CentralMxPlanoStatus; eficacia_nota?: string } = {
-          status: 'concluido',
-        }
-        if (eficaciaNota?.trim()) payload.eficacia_nota = eficaciaNota.trim()
-        const { error: updateError } = await supabase
-          .from('planos_acao')
-          .update(payload)
-          .eq('id', planoId)
+        const { error: updateError } = await supabase.rpc('atualizar_plano_acao', {
+          p_plano_id: planoId,
+          p_status: 'concluido',
+          p_progresso: 100,
+          p_eficacia_nota: eficaciaNota?.trim() || null,
+        })
         if (updateError) throw updateError
         toast.success('Plano marcado como concluído.')
         await fetchPlanos()

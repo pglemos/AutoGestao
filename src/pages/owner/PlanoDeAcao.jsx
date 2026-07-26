@@ -1,11 +1,11 @@
-// Página Plano de Ação — abas Ações e Calendário.
+// Página Plano de Ação — dados canônicos do Supabase, tabela, quadro e calendário.
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/lib/owner-b44/AuthContext";
 import { useOwner } from "@/components/owner/OwnerContext";
 import { useIsMobile } from "@/lib/owner-b44/use-mobile";
-import { actionPlanRepository } from "@/components/owner/actionplan/actionPlanRepository";
+import { actionPlanLiveRepository } from "@/components/owner/actionplan/actionPlanLiveRepository";
 import { filterActions } from "@/components/owner/actionplan/actionPlanUtils";
 import { exportActionsCSV } from "@/components/owner/actionplan/exportActions";
 import { DEPARTMENTS, OBJECTIVES, TRANSITION_RULES } from "@/components/owner/actionplan/actionPlanConstants";
@@ -48,15 +48,20 @@ const SORT_KEY = "mx_action_plan_board_sort";
 export default function PlanoDeAcao() {
   const { toast } = useToast();
   const { user } = useAuth();
-  const { openConsultantModal } = useOwner();
+  const { openConsultantModal, currentUnits, unitId } = useOwner();
   const isMobile = useIsMobile();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const [actions, setActions] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [responsiblePeople, setResponsiblePeople] = useState(() => user?.full_name ? [user.full_name] : []);
   const [tab, setTab] = useState(TAB_MAP[searchParams.get("tab")] || "acoes");
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
-  const [mode, setMode] = useState(() => localStorage.getItem(MODE_KEY) || "foco");
+  const [mode, setMode] = useState(() => {
+    const saved = localStorage.getItem(MODE_KEY);
+    return saved === "list" ? "table" : saved || "table";
+  });
   const [sortBy, setSortBy] = useState(() => localStorage.getItem(SORT_KEY) || "due_soon");
   const [activeCard, setActiveCard] = useState(null);
   const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
@@ -70,16 +75,33 @@ export default function PlanoDeAcao() {
   const [newActionInitialDate, setNewActionInitialDate] = useState("");
   const [activeModal, setActiveModal] = useState({ type: null, action: null });
 
-  const loadActions = useCallback(() => {
+  const loadActions = useCallback(async () => {
     setLoading(true);
-    const data = actionPlanRepository.getActions();
-    setActions(data);
-    setLoading(false);
-  }, []);
+    setError(null);
+    try {
+      const storeId = unitId || currentUnits?.[0]?.id || null;
+      const data = await actionPlanLiveRepository.getActions({ storeId });
+      setActions(data);
+    } catch (err) {
+      const message = err instanceof Error ? err.message : "Não foi possível carregar o Plano de Ação.";
+      setError(message);
+      setActions([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [currentUnits, unitId]);
 
   useEffect(() => {
-    loadActions();
+    void loadActions();
   }, [loadActions]);
+
+  useEffect(() => {
+    let mounted = true;
+    actionPlanLiveRepository.getResponsiblePeople()
+      .then((people) => { if (mounted) setResponsiblePeople(people); })
+      .catch(() => { if (mounted) setResponsiblePeople([]); });
+    return () => { mounted = false; };
+  }, []);
 
   useEffect(() => { localStorage.setItem(MODE_KEY, mode); }, [mode]);
   useEffect(() => { localStorage.setItem(SORT_KEY, sortBy); }, [sortBy]);
@@ -130,11 +152,15 @@ export default function PlanoDeAcao() {
     setApproveAction(action);
   };
 
-  const handleApproveConfirm = (id, payload) => {
-    actionPlanRepository.approveAction(id, { ...payload, approvedBy: user?.full_name || user?.email || "Dono" });
-    setApproveAction(null);
-    loadActions();
-    toast({ title: "Ação aprovada com sucesso." });
+  const handleApproveConfirm = async (id, payload) => {
+    try {
+      await actionPlanLiveRepository.approveAction(id, { ...payload, approvedBy: user?.full_name || user?.email || "Dono" });
+      setApproveAction(null);
+      await loadActions();
+      toast({ title: "Ação aprovada com sucesso." });
+    } catch (err) {
+      toast({ title: "Não foi possível aprovar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   const handleDelegate = (action) => {
@@ -142,11 +168,15 @@ export default function PlanoDeAcao() {
     setDelegateAction(action);
   };
 
-  const handleDelegateConfirm = (id, payload) => {
-    actionPlanRepository.delegateAction(id, { ...payload, delegatedBy: user?.full_name || "Dono" });
-    setDelegateAction(null);
-    loadActions();
-    toast({ title: "Ação delegada com sucesso." });
+  const handleDelegateConfirm = async (id, payload) => {
+    try {
+      await actionPlanLiveRepository.delegateAction(id, { ...payload, delegatedBy: user?.full_name || "Dono" });
+      setDelegateAction(null);
+      await loadActions();
+      toast({ title: "Ação delegada com sucesso." });
+    } catch (err) {
+      toast({ title: "Não foi possível delegar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   const handleNewAction = (date) => {
@@ -154,27 +184,35 @@ export default function PlanoDeAcao() {
     setNewActionOpen(true);
   };
 
-  const handleNewActionConfirm = (payload) => {
+  const handleNewActionConfirm = async (payload) => {
     const dept = DEPARTMENTS.find((d) => d.value === payload.department);
     const obj = OBJECTIVES.find((o) => o.value === payload.strategicObjective);
-    const created = actionPlanRepository.createAction({
-      ...payload,
-      departmentLabel: dept?.label || payload.department,
-      strategicObjectiveLabel: obj?.label || payload.strategicObjective,
-      executor: payload.responsible,
-      createdBy: user?.full_name || "Dono",
-    });
-    setNewActionOpen(false);
-    setNewActionInitialDate("");
-    loadActions();
-    toast({ title: "Ação criada com sucesso." });
-    if (created) openDrawer(created, "resumo");
+    try {
+      const created = await actionPlanLiveRepository.createAction({
+        ...payload,
+        departmentLabel: dept?.label || payload.department,
+        strategicObjectiveLabel: obj?.label || payload.strategicObjective,
+        executor: payload.responsible,
+        createdBy: user?.full_name || "Dono",
+      }, { storeId: unitId || currentUnits?.[0]?.id });
+      setNewActionOpen(false);
+      setNewActionInitialDate("");
+      await loadActions();
+      toast({ title: "Ação criada com sucesso." });
+      if (created) openDrawer(created, "resumo");
+    } catch (err) {
+      toast({ title: "Não foi possível criar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
-  const handleUpdateDeadline = (id, payload) => {
-    actionPlanRepository.updateDueDate(id, payload);
-    loadActions();
-    toast({ title: "Prazo atualizado com sucesso." });
+  const handleUpdateDeadline = async (id, payload) => {
+    try {
+      await actionPlanLiveRepository.updateDueDate(id, payload);
+      await loadActions();
+      toast({ title: "Prazo atualizado com sucesso." });
+    } catch (err) {
+      toast({ title: "Não foi possível atualizar o prazo.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   const handleTalkToConsultantDay = (date, dayActions) => {
@@ -227,7 +265,7 @@ export default function PlanoDeAcao() {
     toast({ title: "Exportação concluída." });
   };
 
-  const handleQuickAction = (action, actionType) => {
+  const handleQuickAction = async (action, actionType) => {
     switch (actionType) {
       case "open":
       case "edit":
@@ -243,9 +281,13 @@ export default function PlanoDeAcao() {
         handleTalkToConsultant(action);
         break;
       case "start":
-        actionPlanRepository.startAction(action.id, { startedBy: user?.full_name || "Dono" });
-        loadActions();
-        toast({ title: "Ação iniciada." });
+        try {
+          await actionPlanLiveRepository.startAction(action.id, { startedBy: user?.full_name || "Dono" });
+          await loadActions();
+          toast({ title: "Ação iniciada." });
+        } catch (err) {
+          toast({ title: "Não foi possível iniciar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
+        }
         break;
       case "viewImpact":
         openDrawer(action, "historico");
@@ -257,7 +299,7 @@ export default function PlanoDeAcao() {
     }
   };
 
-  const handleMoveTo = (action, destStatus) => {
+  const handleMoveTo = async (action, destStatus) => {
     const rule = TRANSITION_RULES[action.status]?.[destStatus];
     if (!rule) {
       toast({ title: "Transição não permitida.", variant: "destructive" });
@@ -265,16 +307,14 @@ export default function PlanoDeAcao() {
     }
     if (rule.direct) {
       if (action.status === "not_started" && destStatus === "in_progress") {
-        actionPlanRepository.startAction(action.id, { startedBy: user?.full_name || "Dono" });
-        loadActions();
-        toast({ title: "Ação iniciada." });
+        await handleQuickAction(action, "start");
       }
     } else if (rule.modal) {
       handleQuickAction(action, rule.modal);
     }
   };
 
-  const handleDragEnd = (result) => {
+  const handleDragEnd = async (result) => {
     const { source, destination, draggableId } = result;
     if (!destination) return;
     if (source.droppableId === destination.droppableId) return;
@@ -283,61 +323,68 @@ export default function PlanoDeAcao() {
     handleMoveTo(action, destination.droppableId);
   };
 
-  const handleModalConfirm = (modalType, id, payload) => {
+  const handleModalConfirm = async (modalType, id, payload) => {
     const userName = user?.full_name || "Dono";
     let successMessage = "";
-    switch (modalType) {
-      case "block":
-        actionPlanRepository.blockAction(id, { ...payload, blockedBy: userName });
-        successMessage = "Ação bloqueada.";
-        break;
-      case "unblock":
-        actionPlanRepository.unblockAction(id, { ...payload, unblockedBy: userName });
-        successMessage = "Bloqueio removido.";
-        break;
-      case "progress":
-        actionPlanRepository.updateProgress(id, { ...payload, updatedBy: userName });
-        successMessage = "Progresso atualizado.";
-        break;
-      case "submitValidation": {
-        const result = actionPlanRepository.submitForValidation(id, { ...payload, submittedBy: userName });
-        if (result?.error) {
-          toast({ title: "Não foi possível enviar.", description: result.errors.join("; "), variant: "destructive" });
+    try {
+      switch (modalType) {
+        case "block":
+          await actionPlanLiveRepository.blockAction(id, { ...payload, blockedBy: userName });
+          successMessage = "Ação marcada como atrasada/bloqueada.";
+          break;
+        case "unblock":
+          await actionPlanLiveRepository.unblockAction(id, { ...payload, unblockedBy: userName });
+          successMessage = "Bloqueio removido.";
+          break;
+        case "progress":
+          await actionPlanLiveRepository.updateProgress(id, { ...payload, updatedBy: userName });
+          successMessage = "Progresso atualizado.";
+          break;
+        case "submitValidation": {
+          const result = await actionPlanLiveRepository.submitForValidation(id, { ...payload, submittedBy: userName });
+          if (result?.error) {
+            const details = Array.isArray(result.errors)
+              ? result.errors.join("; ")
+              : result.message || "Revise os requisitos da ação e tente novamente.";
+            toast({ title: "Não foi possível enviar.", description: details, variant: "destructive" });
+            return;
+          }
+          successMessage = "Ação enviada para validação.";
+          break;
+        }
+        case "validate":
+          await actionPlanLiveRepository.validateAction(id, { ...payload, validatedBy: userName });
+          successMessage = "Conclusão aprovada.";
+          break;
+        case "return":
+          await actionPlanLiveRepository.returnToExecution(id, { ...payload, returnedBy: userName });
+          successMessage = "Ação devolvida para execução.";
+          break;
+        case "reopen":
+          await actionPlanLiveRepository.reopenAction(id, { ...payload, reopenedBy: userName });
+          successMessage = "Ação reaberta.";
+          break;
+        case "cancel":
+          await actionPlanLiveRepository.cancelAction(id, { ...payload, cancelledBy: userName });
+          successMessage = "Ação encerrada.";
+          break;
+        case "duplicate": {
+          const newAction = await actionPlanLiveRepository.duplicateAction(id, { ...payload, createdBy: userName });
+          setActiveModal({ type: null, action: null });
+          await loadActions();
+          toast({ title: "Ação duplicada com sucesso." });
+          if (newAction) openDrawer(newAction, "resumo");
           return;
         }
-        successMessage = "Ação enviada para validação.";
-        break;
+        default:
+          break;
       }
-      case "validate":
-        actionPlanRepository.validateAction(id, { ...payload, validatedBy: userName });
-        successMessage = "Conclusão aprovada.";
-        break;
-      case "return":
-        actionPlanRepository.returnToExecution(id, { ...payload, returnedBy: userName });
-        successMessage = "Ação devolvida para execução.";
-        break;
-      case "reopen":
-        actionPlanRepository.reopenAction(id, { ...payload, reopenedBy: userName });
-        successMessage = "Ação reaberta.";
-        break;
-      case "cancel":
-        actionPlanRepository.cancelAction(id, { ...payload, cancelledBy: userName });
-        successMessage = "Ação cancelada.";
-        break;
-      case "duplicate": {
-        const newAction = actionPlanRepository.duplicateAction(id, { ...payload, createdBy: userName });
-        setActiveModal({ type: null, action: null });
-        loadActions();
-        toast({ title: "Ação duplicada com sucesso." });
-        if (newAction) openDrawer(newAction, "resumo");
-        return;
-      }
-      default:
-        break;
+      setActiveModal({ type: null, action: null });
+      await loadActions();
+      if (successMessage) toast({ title: successMessage });
+    } catch (err) {
+      toast({ title: "Não foi possível atualizar a ação.", description: err instanceof Error ? err.message : "Erro desconhecido", variant: "destructive" });
     }
-    setActiveModal({ type: null, action: null });
-    loadActions();
-    if (successMessage) toast({ title: successMessage });
   };
 
   const filteredActions = filterActions(actions, filters);
@@ -350,6 +397,12 @@ export default function PlanoDeAcao() {
       />
 
       <ActionPlanTabs tab={tab} onTabChange={handleTabChange} />
+
+      {error && (
+        <div className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-700" role="alert">
+          Não foi possível carregar os dados reais do Plano de Ação: {error}
+        </div>
+      )}
 
       {tab === "acoes" && (
         <>
@@ -370,6 +423,7 @@ export default function PlanoDeAcao() {
             onNewAction={() => handleNewAction()}
             isMobile={isMobile}
             onOpenMobileFilters={() => setMobileFiltersOpen(true)}
+            responsiblePeople={responsiblePeople}
           />
 
           {mode === "foco" ? (
@@ -453,6 +507,7 @@ export default function PlanoDeAcao() {
         open={!!approveAction}
         onOpenChange={(o) => !o && setApproveAction(null)}
         onConfirm={handleApproveConfirm}
+        responsiblePeople={responsiblePeople}
       />
 
       <DelegateModal
@@ -460,6 +515,7 @@ export default function PlanoDeAcao() {
         open={!!delegateAction}
         onOpenChange={(o) => !o && setDelegateAction(null)}
         onConfirm={handleDelegateConfirm}
+        responsiblePeople={responsiblePeople}
       />
 
       <NewActionModal
@@ -467,6 +523,7 @@ export default function PlanoDeAcao() {
         onOpenChange={(o) => { setNewActionOpen(o); if (!o) setNewActionInitialDate(""); }}
         onConfirm={handleNewActionConfirm}
         initialDueDate={newActionInitialDate}
+        responsiblePeople={responsiblePeople}
       />
 
       <BoardModals

@@ -8,7 +8,7 @@ import {
 } from "@/components/ui/sheet";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
-import { actionPlanRepository } from "../actionPlanRepository";
+import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
 import { QUICK_ACTIONS } from "../actionPlanConstants";
 import SummaryTab from "./SummaryTab";
 import ExecutionTab from "./ExecutionTab";
@@ -28,10 +28,10 @@ export default function ActionDrawerTabs({ action, open, onOpenChange, onQuickAc
 
   if (!currentAction) return null;
 
-  const reload = () => {
-    const updated = actionPlanRepository.getActionById(currentAction.id);
+  const reload = async () => {
+    const updated = await actionPlanLiveRepository.getActionById(currentAction.id);
     if (updated) setCurrentAction(updated);
-    if (onReload) onReload();
+    if (onReload) await onReload();
   };
 
   const quickActions = QUICK_ACTIONS[currentAction.status] || [];

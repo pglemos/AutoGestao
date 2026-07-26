@@ -313,10 +313,14 @@ function PlanoRow({
             </Badge>
           </div>
           <Typography variant="p" className="mt-mx-xs font-black">
-            {plano.problema}
+            <span className="mr-mx-xs text-brand-primary">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
+            {plano.acao}
           </Typography>
           <Typography variant="tiny" tone="muted" className="block">
-            Ação: {plano.acao}
+            Objetivo: {plano.objetivo || 'Não informado'} • Indicador: {plano.indicador}
+          </Typography>
+          <Typography variant="tiny" tone="muted" className="block">
+            Progresso: {plano.progresso ?? 0}% • Problema: {plano.problema}
           </Typography>
           {plano.prazo && (
             <Typography variant="tiny" tone="muted" className="block">

@@ -1,10 +1,9 @@
 // Barra de ferramentas compacta da aba Ações — filtros, modos e ordenação.
-import { SlidersHorizontal, Plus, Target, KanbanSquare, List, X } from "lucide-react";
+import { SlidersHorizontal, Plus, Target, KanbanSquare, Table2, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import {
   DEPARTMENTS,
-  RESPONSIBLE_PEOPLE,
   SORT_OPTIONS,
 } from "./actionPlanConstants";
 
@@ -13,7 +12,7 @@ const selectClass = "h-9 text-sm";
 const MODES = [
   { value: "foco", label: "Foco", icon: Target },
   { value: "kanban", label: "Kanban", icon: KanbanSquare },
-  { value: "list", label: "Lista", icon: List },
+  { value: "table", label: "Tabela", icon: Table2 },
 ];
 
 export default function ActionsToolbar({
@@ -27,6 +26,7 @@ export default function ActionsToolbar({
   onNewAction,
   isMobile,
   onOpenMobileFilters,
+  responsiblePeople = [],
 }) {
   const set = (key, value) => onFilterChange({ ...filters, [key]: value || undefined });
 
@@ -59,7 +59,7 @@ export default function ActionsToolbar({
                 <SelectTrigger className={`${selectClass} w-[160px]`}><SelectValue placeholder="Responsável" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos os responsáveis</SelectItem>
-                  {RESPONSIBLE_PEOPLE.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                  {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
                 </SelectContent>
               </Select>
             </>

@@ -2,7 +2,7 @@
 // Fonte única de dados para programas, encontros, aulas, preparação, evidências e antecipações.
 
 import { PROGRAMS, MEETINGS, LESSONS, PREPARATION_TEMPLATES, EVIDENCE_TEMPLATES, CLIENT_PROGRAM } from "./consultingFixtures";
-import { actionPlanRepository } from "@/components/owner/actionplan/actionPlanRepository";
+import { actionPlanLiveRepository } from "@/components/owner/actionplan/actionPlanLiveRepository";
 
 const KEYS = {
   lessons: "mx_consulting_lessons_v1",
@@ -467,19 +467,19 @@ export const consultingRepository = {
   },
 
   // ---------- Actions ----------
-  getMeetingActions(meetingId) {
+  async getMeetingActions(meetingId) {
     const meeting = this.getMeeting(meetingId);
     if (!meeting) return [];
-    const allActions = actionPlanRepository.getActions();
+    const allActions = await actionPlanLiveRepository.getActions();
     return allActions.filter((a) => a.origin === "consulting" && a.meetingId === meetingId);
   },
 
-  createActionFromMeeting(meetingId, payload) {
+  async createActionFromMeeting(meetingId, payload) {
     const meeting = this.getMeeting(meetingId);
     if (!meeting) return null;
     const program = this.getProgram(meeting.programId);
 
-    const action = actionPlanRepository.createAction({
+    const action = await actionPlanLiveRepository.createAction({
       title: payload.title,
       description: payload.description || payload.orientacao || "",
       department: payload.department || "general",
@@ -495,7 +495,7 @@ export const consultingRepository = {
     });
 
     // Adicionar campos específicos da consultoria via updateAction
-    return actionPlanRepository.updateAction(action.id, {
+    return actionPlanLiveRepository.updateActionById(action.id, {
       meetingId,
       programId: meeting.programId,
       meetingTitle: meeting.title,

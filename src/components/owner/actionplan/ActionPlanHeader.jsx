@@ -1,7 +1,6 @@
 // Cabeçalho compacto do Plano de Ação.
 import { Plus, Download } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { CYCLE_INFO } from "./actionPlanConstants";
 
 export default function ActionPlanHeader({ onNewAction, onExport }) {
   return (
@@ -32,18 +31,12 @@ export default function ActionPlanHeader({ onNewAction, onExport }) {
 
       <div className="mt-4 flex flex-wrap items-center gap-x-6 gap-y-2 border-t border-border pt-3 text-sm">
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground">Ciclo:</span>
-          <span className="font-medium text-foreground">{CYCLE_INFO.name}</span>
+          <span className="text-muted-foreground">Fonte:</span>
+          <span className="font-medium text-foreground">Plano de Ação centralizado</span>
         </div>
         <div className="flex items-center gap-2">
-          <span className="text-muted-foreground">Período:</span>
-          <span className="font-medium text-foreground">
-            {CYCLE_INFO.startDate} a {CYCLE_INFO.endDate}
-          </span>
-        </div>
-        <div className="flex items-center gap-2">
-          <span className="text-muted-foreground">Dias restantes:</span>
-          <span className="font-medium text-foreground">{CYCLE_INFO.daysRemaining} dias</span>
+          <span className="text-muted-foreground">Atualização:</span>
+          <span className="font-medium text-foreground">dados reais do Supabase</span>
         </div>
       </div>
     </section>

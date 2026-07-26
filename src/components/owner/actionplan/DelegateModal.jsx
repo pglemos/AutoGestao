@@ -13,9 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RESPONSIBLE_PEOPLE, PRIORITIES } from "./actionPlanConstants";
+import { PRIORITIES } from "./actionPlanConstants";
 
-export default function DelegateModal({ action, open, onOpenChange, onConfirm }) {
+export default function DelegateModal({ action, open, onOpenChange, onConfirm, responsiblePeople = [] }) {
   const [responsible, setResponsible] = useState("");
   const [dueDate, setDueDate] = useState("");
   const [note, setNote] = useState("");
@@ -52,7 +52,7 @@ export default function DelegateModal({ action, open, onOpenChange, onConfirm })
             <Select value={responsible} onValueChange={setResponsible}>
               <SelectTrigger><SelectValue placeholder="Selecionar..." /></SelectTrigger>
               <SelectContent>
-                {RESPONSIBLE_PEOPLE.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
               </SelectContent>
             </Select>
           </div>

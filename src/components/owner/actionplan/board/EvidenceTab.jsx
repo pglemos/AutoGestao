@@ -6,8 +6,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Plus, Trash2, Eye, FileText, Link as LinkIcon, Image, Type } from "lucide-react";
-import { actionPlanRepository } from "../actionPlanRepository";
-import { RESPONSIBLE_PEOPLE } from "../actionPlanConstants";
+import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
 
 const EVIDENCE_TYPES = [
   { value: "image", label: "Imagem", icon: Image },
@@ -17,26 +16,25 @@ const EVIDENCE_TYPES = [
 ];
 
 export default function EvidenceTab({ action, onReload, user }) {
-  const [form, setForm] = useState({ type: "file", name: "", responsible: "", note: "", valueBefore: "", valueAfter: "" });
+  const [form, setForm] = useState({ type: "file", name: "", note: "", valueBefore: "", valueAfter: "" });
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
-  const handleAdd = () => {
+  const handleAdd = async () => {
     if (!form.name.trim()) return;
-    actionPlanRepository.addEvidence(action.id, {
+    await actionPlanLiveRepository.addEvidence(action.id, {
       type: form.type,
       name: form.name.trim(),
-      responsible: form.responsible || user?.full_name || "Dono",
       note: form.note.trim(),
       valueBefore: form.valueBefore || null,
       valueAfter: form.valueAfter || null,
     });
-    setForm({ type: "file", name: "", responsible: "", note: "", valueBefore: "", valueAfter: "" });
-    onReload();
+    setForm({ type: "file", name: "", note: "", valueBefore: "", valueAfter: "" });
+    await onReload();
   };
 
-  const handleRemove = (evidenceId) => {
-    actionPlanRepository.removeEvidence(action.id, evidenceId);
-    onReload();
+  const handleRemove = async (evidenceId) => {
+    await actionPlanLiveRepository.removeEvidence(action.id, evidenceId);
+    await onReload();
   };
 
   return (
@@ -54,15 +52,7 @@ export default function EvidenceTab({ action, onReload, user }) {
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label className="mb-1 block text-xs">Responsável</Label>
-              <Select value={form.responsible} onValueChange={(v) => set("responsible", v)}>
-                <SelectTrigger className="h-8 text-xs"><SelectValue placeholder="Você" /></SelectTrigger>
-                <SelectContent>
-                  {RESPONSIBLE_PEOPLE.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
-                </SelectContent>
-              </Select>
-            </div>
+            <div />
           </div>
           <div>
             <Label className="mb-1 block text-xs">Nome *</Label>

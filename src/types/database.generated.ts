@@ -7966,6 +7966,9 @@ export type Database = {
       planos_acao: {
         Row: {
           acao: string
+          checklist: Json
+          codigo: string | null
+          comentarios: Json
           como: string | null
           concluido_at: string | null
           created_at: string
@@ -7975,12 +7978,15 @@ export type Database = {
           eficacia_score: number | null
           id: string
           indicador: string
+          iniciado_at: string | null
+          objetivo: string | null
           origem: Database["public"]["Enums"]["action_origin"]
           origem_ref_id: string | null
           origem_ref_table: string | null
           prazo: string | null
           prioridade: Database["public"]["Enums"]["action_priority"]
           problema: string
+          progresso: number
           responsavel_id: string | null
           scope_id: string
           scope_type: Database["public"]["Enums"]["score_scope_type"]
@@ -7989,6 +7995,9 @@ export type Database = {
         }
         Insert: {
           acao: string
+          checklist?: Json
+          codigo?: string | null
+          comentarios?: Json
           como?: string | null
           concluido_at?: string | null
           created_at?: string
@@ -7998,12 +8007,15 @@ export type Database = {
           eficacia_score?: number | null
           id?: string
           indicador: string
+          iniciado_at?: string | null
+          objetivo?: string | null
           origem: Database["public"]["Enums"]["action_origin"]
           origem_ref_id?: string | null
           origem_ref_table?: string | null
           prazo?: string | null
           prioridade?: Database["public"]["Enums"]["action_priority"]
           problema: string
+          progresso?: number
           responsavel_id?: string | null
           scope_id: string
           scope_type: Database["public"]["Enums"]["score_scope_type"]
@@ -8012,6 +8024,9 @@ export type Database = {
         }
         Update: {
           acao?: string
+          checklist?: Json
+          codigo?: string | null
+          comentarios?: Json
           como?: string | null
           concluido_at?: string | null
           created_at?: string
@@ -8021,12 +8036,15 @@ export type Database = {
           eficacia_score?: number | null
           id?: string
           indicador?: string
+          iniciado_at?: string | null
+          objetivo?: string | null
           origem?: Database["public"]["Enums"]["action_origin"]
           origem_ref_id?: string | null
           origem_ref_table?: string | null
           prazo?: string | null
           prioridade?: Database["public"]["Enums"]["action_priority"]
           problema?: string
+          progresso?: number
           responsavel_id?: string | null
           scope_id?: string
           scope_type?: Database["public"]["Enums"]["score_scope_type"]
@@ -12357,6 +12375,60 @@ export type Database = {
         Args: { p_seller_id?: string }
         Returns: string
       }
+      atualizar_plano_acao: {
+        Args: {
+          p_acao?: string
+          p_checklist?: Json
+          p_comentarios?: Json
+          p_como?: string
+          p_departamento?: string
+          p_eficacia_nota?: string
+          p_eficacia_score?: number
+          p_indicador?: string
+          p_objetivo?: string
+          p_plano_id: string
+          p_prazo?: string
+          p_prioridade?: Database["public"]["Enums"]["action_priority"]
+          p_progresso?: number
+          p_responsavel_id?: string
+          p_status?: Database["public"]["Enums"]["action_status"]
+        }
+        Returns: {
+          acao: string
+          checklist: Json
+          codigo: string | null
+          comentarios: Json
+          como: string | null
+          concluido_at: string | null
+          created_at: string
+          created_by: string | null
+          departamento: string
+          eficacia_nota: string | null
+          eficacia_score: number | null
+          id: string
+          indicador: string
+          iniciado_at: string | null
+          objetivo: string | null
+          origem: Database["public"]["Enums"]["action_origin"]
+          origem_ref_id: string | null
+          origem_ref_table: string | null
+          prazo: string | null
+          prioridade: Database["public"]["Enums"]["action_priority"]
+          problema: string
+          progresso: number
+          responsavel_id: string | null
+          scope_id: string
+          scope_type: Database["public"]["Enums"]["score_scope_type"]
+          status: Database["public"]["Enums"]["action_status"]
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "planos_acao"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       begin_password_change: { Args: never; Returns: Json }
       buscar_cliente_loja_por_telefone: {
         Args: { p_telefone: string }
@@ -12377,6 +12449,14 @@ export type Database = {
         Returns: boolean
       }
       can_access_mx_scope: {
+        Args: {
+          p_scope_id: string
+          p_scope_type: Database["public"]["Enums"]["score_scope_type"]
+          uid?: string
+        }
+        Returns: boolean
+      }
+      can_manage_mx_action_scope: {
         Args: {
           p_scope_id: string
           p_scope_type: Database["public"]["Enums"]["score_scope_type"]
@@ -12837,6 +12917,9 @@ export type Database = {
         }
         Returns: {
           acao: string
+          checklist: Json
+          codigo: string | null
+          comentarios: Json
           como: string | null
           concluido_at: string | null
           created_at: string
@@ -12846,12 +12929,66 @@ export type Database = {
           eficacia_score: number | null
           id: string
           indicador: string
+          iniciado_at: string | null
+          objetivo: string | null
           origem: Database["public"]["Enums"]["action_origin"]
           origem_ref_id: string | null
           origem_ref_table: string | null
           prazo: string | null
           prioridade: Database["public"]["Enums"]["action_priority"]
           problema: string
+          progresso: number
+          responsavel_id: string | null
+          scope_id: string
+          scope_type: Database["public"]["Enums"]["score_scope_type"]
+          status: Database["public"]["Enums"]["action_status"]
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "planos_acao"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      criar_plano_acao_v2: {
+        Args: {
+          p_acao: string
+          p_como?: string
+          p_departamento: string
+          p_indicador: string
+          p_objetivo: string
+          p_origem?: Database["public"]["Enums"]["action_origin"]
+          p_prazo?: string
+          p_prioridade?: Database["public"]["Enums"]["action_priority"]
+          p_problema: string
+          p_responsavel_id?: string
+          p_scope_id: string
+          p_scope_type: Database["public"]["Enums"]["score_scope_type"]
+        }
+        Returns: {
+          acao: string
+          checklist: Json
+          codigo: string | null
+          comentarios: Json
+          como: string | null
+          concluido_at: string | null
+          created_at: string
+          created_by: string | null
+          departamento: string
+          eficacia_nota: string | null
+          eficacia_score: number | null
+          id: string
+          indicador: string
+          iniciado_at: string | null
+          objetivo: string | null
+          origem: Database["public"]["Enums"]["action_origin"]
+          origem_ref_id: string | null
+          origem_ref_table: string | null
+          prazo: string | null
+          prioridade: Database["public"]["Enums"]["action_priority"]
+          problema: string
+          progresso: number
           responsavel_id: string | null
           scope_id: string
           scope_type: Database["public"]["Enums"]["score_scope_type"]
@@ -13844,6 +13981,7 @@ export type Database = {
         | "atrasado"
         | "concluido"
         | "validando_eficacia"
+        | "cancelada"
       alert_channel: "system" | "push" | "whatsapp"
       alert_status: "open" | "acknowledged" | "resolved" | "dismissed"
       alert_type: "critical" | "warning" | "positive" | "consultive"
@@ -14082,6 +14220,7 @@ export const Constants = {
         "atrasado",
         "concluido",
         "validando_eficacia",
+        "cancelada",
       ],
       alert_channel: ["system", "push", "whatsapp"],
       alert_status: ["open", "acknowledged", "resolved", "dismissed"],

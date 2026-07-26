@@ -5,7 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { actionPlanRepository } from "../actionPlanRepository";
+import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
 import { IMPACT_STATUSES, IMPACT_STYLES } from "../actionPlanConstants";
 
 const HISTORY_ICONS = {
@@ -39,14 +39,14 @@ export default function HistoryTab({ action, onReload, user }) {
   const history = [...(action.history || [])].reverse();
   const impact = IMPACT_STYLES[action.impactStatus] || IMPACT_STYLES.unmeasured;
 
-  const handleMeasure = () => {
-    actionPlanRepository.measureImpact(action.id, {
+  const handleMeasure = async () => {
+    await actionPlanLiveRepository.measureImpact(action.id, {
       ...impactForm,
       valueBefore: impactForm.valueBefore || null,
       valueAfter: impactForm.valueAfter || null,
       measuredBy: user?.full_name || "Dono",
     });
-    onReload();
+    await onReload();
   };
 
   return (

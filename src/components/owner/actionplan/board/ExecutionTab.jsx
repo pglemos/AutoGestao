@@ -4,7 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Plus, Check, Trash2, Lock, Unlock, MessageSquare, ListChecks } from "lucide-react";
-import { actionPlanRepository } from "../actionPlanRepository";
+import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
 
 export default function ExecutionTab({ action, onReload, onQuickAction, user }) {
   const [newChecklistText, setNewChecklistText] = useState("");
@@ -13,24 +13,24 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
   const [editingId, setEditingId] = useState(null);
   const [editText, setEditText] = useState("");
 
-  const checklistProgress = actionPlanRepository.getChecklistProgress(action);
+  const checklistProgress = actionPlanLiveRepository.getChecklistProgress(action);
 
-  const handleAddChecklist = () => {
+  const handleAddChecklist = async () => {
     if (!newChecklistText.trim()) return;
-    actionPlanRepository.addChecklistItem(action.id, { text: newChecklistText.trim(), required: newChecklistRequired });
+    await actionPlanLiveRepository.addChecklistItem(action.id, { text: newChecklistText.trim(), required: newChecklistRequired });
     setNewChecklistText("");
     setNewChecklistRequired(false);
-    onReload();
+    await onReload();
   };
 
-  const handleToggleChecklist = (itemId, done) => {
-    actionPlanRepository.updateChecklistItem(action.id, itemId, { done: !done });
-    onReload();
+  const handleToggleChecklist = async (itemId, done) => {
+    await actionPlanLiveRepository.updateChecklistItem(action.id, itemId, { done: !done });
+    await onReload();
   };
 
-  const handleRemoveChecklist = (itemId) => {
-    actionPlanRepository.removeChecklistItem(action.id, itemId);
-    onReload();
+  const handleRemoveChecklist = async (itemId) => {
+    await actionPlanLiveRepository.removeChecklistItem(action.id, itemId);
+    await onReload();
   };
 
   const handleStartEdit = (item) => {
@@ -38,19 +38,19 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
     setEditText(item.text);
   };
 
-  const handleSaveEdit = (itemId) => {
+  const handleSaveEdit = async (itemId) => {
     if (editText.trim()) {
-      actionPlanRepository.updateChecklistItem(action.id, itemId, { text: editText.trim() });
+      await actionPlanLiveRepository.updateChecklistItem(action.id, itemId, { text: editText.trim() });
     }
     setEditingId(null);
-    onReload();
+    await onReload();
   };
 
-  const handleAddComment = () => {
+  const handleAddComment = async () => {
     if (!newComment.trim()) return;
-    actionPlanRepository.addComment(action.id, { author: user?.full_name || "Dono", content: newComment.trim() });
+    await actionPlanLiveRepository.addComment(action.id, { author: user?.full_name || "Dono", content: newComment.trim() });
     setNewComment("");
-    onReload();
+    await onReload();
   };
 
   return (

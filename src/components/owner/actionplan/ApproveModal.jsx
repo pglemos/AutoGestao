@@ -13,9 +13,8 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RESPONSIBLE_PEOPLE } from "./actionPlanConstants";
 
-export default function ApproveModal({ action, open, onOpenChange, onConfirm }) {
+export default function ApproveModal({ action, open, onOpenChange, onConfirm, responsiblePeople = [] }) {
   const [note, setNote] = useState("");
   const [responsible, setResponsible] = useState("");
   const [dueDate, setDueDate] = useState("");
@@ -75,7 +74,7 @@ export default function ApproveModal({ action, open, onOpenChange, onConfirm }) 
               <Select value={responsible} onValueChange={setResponsible}>
                 <SelectTrigger><SelectValue placeholder="Selecionar..." /></SelectTrigger>
                 <SelectContent>
-                  {RESPONSIBLE_PEOPLE.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                  {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>

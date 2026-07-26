@@ -1,24 +1,34 @@
 // Utilitários do Plano de Ação: datas, atraso, filtros, cálculos.
-import { REFERENCE_DATE } from "./actionPlanConstants";
-
 export function parseBRDate(str) {
   if (!str) return null;
-  const [dd, mm, yyyy] = str.split("/");
-  return new Date(parseInt(yyyy), parseInt(mm) - 1, parseInt(dd));
+  const match = String(str).match(/^(\d{2})\/(\d{2})\/(\d{4})$/);
+  if (!match) return null;
+  const [, dd, mm, yyyy] = match;
+  return new Date(Number(yyyy), Number(mm) - 1, Number(dd));
 }
 
 export function parseISODate(iso) {
   if (!iso) return null;
-  return new Date(iso);
+  const raw = String(iso);
+  return new Date(/^\d{4}-\d{2}-\d{2}$/.test(raw) ? `${raw}T00:00:00` : raw);
 }
 
 export function getRefDate() {
-  return parseBRDate(REFERENCE_DATE);
+  // Atraso é uma propriedade do dado persistido em relação ao dia atual.
+  // A constante histórica continua disponível para fixtures, mas não pode
+  // congelar o estado da produção em uma data de demonstração.
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return today;
 }
 
 export function daysBetween(dateA, dateB) {
   if (!dateA || !dateB) return 0;
-  const ms = dateA.getTime() - dateB.getTime();
+  const normalizedA = new Date(dateA);
+  const normalizedB = new Date(dateB);
+  normalizedA.setHours(0, 0, 0, 0);
+  normalizedB.setHours(0, 0, 0, 0);
+  const ms = normalizedA.getTime() - normalizedB.getTime();
   return Math.round(ms / (1000 * 60 * 60 * 24));
 }
 

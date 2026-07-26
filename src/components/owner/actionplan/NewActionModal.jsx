@@ -13,9 +13,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { OBJECTIVES, DEPARTMENTS, RESPONSIBLE_PEOPLE, PRIORITIES, ORIGINS } from "./actionPlanConstants";
+import { OBJECTIVES, DEPARTMENTS, PRIORITIES, ORIGINS } from "./actionPlanConstants";
 
-export default function NewActionModal({ open, onOpenChange, onConfirm, initialDueDate }) {
+export default function NewActionModal({ open, onOpenChange, onConfirm, initialDueDate, responsiblePeople = [] }) {
   const [form, setForm] = useState({
     title: "",
     description: "",
@@ -149,7 +149,7 @@ export default function NewActionModal({ open, onOpenChange, onConfirm, initialD
               <Select value={form.responsible} onValueChange={(v) => set("responsible", v)}>
                 <SelectTrigger><SelectValue placeholder="Selecionar..." /></SelectTrigger>
                 <SelectContent>
-                  {RESPONSIBLE_PEOPLE.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                  {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>

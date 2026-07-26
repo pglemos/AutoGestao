@@ -1,7 +1,7 @@
-// Container principal da aba Ações — Kanban e Lista (modo Foco é renderizado pelo PlanoDeAcao).
+// Container principal da aba Ações — Kanban e tabela detalhada.
 import { useState } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { actionPlanRepository } from "../actionPlanRepository";
+import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
 import { exportActionsCSV } from "../exportActions";
 import { Button } from "@/components/ui/button";
 import KanbanBoard from "./KanbanBoard";
@@ -37,27 +37,39 @@ export default function BoardView({
     });
   };
 
-  const handleBatchResponsible = (responsible) => {
-    actionPlanRepository.batchUpdate(selectedIds, { responsible, executor: responsible });
-    toast({ title: `${selectedIds.length} ação(ões) atualizada(s).` });
-    setSelectedIds([]);
-    onReload();
+  const handleBatchResponsible = async (responsible) => {
+    try {
+      await actionPlanLiveRepository.batchUpdate(selectedIds, { responsible });
+      toast({ title: `${selectedIds.length} ação(ões) atualizada(s).` });
+      setSelectedIds([]);
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível atualizar as ações.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
-  const handleBatchPriority = (priority) => {
-    actionPlanRepository.batchUpdate(selectedIds, { priority });
-    toast({ title: `${selectedIds.length} ação(ões) atualizada(s).` });
-    setSelectedIds([]);
-    onReload();
+  const handleBatchPriority = async (priority) => {
+    try {
+      await actionPlanLiveRepository.batchUpdate(selectedIds, { priority });
+      toast({ title: `${selectedIds.length} ação(ões) atualizada(s).` });
+      setSelectedIds([]);
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível atualizar as ações.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
-  const handleBatchDueDate = () => {
+  const handleBatchDueDate = async () => {
     const dueDate = window.prompt("Novo prazo para as ações selecionadas (DD/MM/AAAA):");
     if (!dueDate) return;
-    actionPlanRepository.batchUpdate(selectedIds, { dueDate });
-    toast({ title: `${selectedIds.length} ação(ões) atualizada(s).` });
-    setSelectedIds([]);
-    onReload();
+    try {
+      await actionPlanLiveRepository.batchUpdate(selectedIds, { dueDate });
+      toast({ title: `${selectedIds.length} ação(ões) atualizada(s).` });
+      setSelectedIds([]);
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível atualizar as ações.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   const handleExportSelected = () => {
@@ -66,16 +78,18 @@ export default function BoardView({
     toast({ title: "Exportação concluída." });
   };
 
-  const handleRequestUpdate = () => {
-    selectedIds.forEach((id) => {
-      actionPlanRepository.addComment(id, {
+  const handleRequestUpdate = async () => {
+    try {
+      await Promise.all(selectedIds.map((id) => actionPlanLiveRepository.addComment(id, {
         author: user?.full_name || "Dono",
         content: "Solicito atualização do status e progresso desta ação.",
-      });
-    });
-    toast({ title: `${selectedIds.length} solicitação(ões) enviada(s).` });
-    setSelectedIds([]);
-    onReload();
+      })));
+      toast({ title: `${selectedIds.length} solicitação(ões) enviada(s).` });
+      setSelectedIds([]);
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível solicitar atualização.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   if (loading) {
@@ -100,7 +114,7 @@ export default function BoardView({
 
   return (
     <div className="space-y-3">
-      {mode === "list" && (
+      {mode === "table" && (
         <BatchActionsBar
           selectedCount={selectedIds.length}
           onClear={() => setSelectedIds([])}
