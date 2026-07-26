@@ -99,11 +99,12 @@ export default function PlanoDeAcao() {
 
   useEffect(() => {
     let mounted = true;
-    actionPlanLiveRepository.getResponsiblePeople()
+    const storeId = unitId || currentUnits?.[0]?.id || null;
+    actionPlanLiveRepository.getResponsiblePeople({ storeId })
       .then((people) => { if (mounted) setResponsiblePeople(people); })
       .catch(() => { if (mounted) setResponsiblePeople([]); });
     return () => { mounted = false; };
-  }, []);
+  }, [currentUnits, unitId]);
 
   useEffect(() => { localStorage.setItem(MODE_KEY, mode); }, [mode]);
   useEffect(() => { localStorage.setItem(SORT_KEY, sortBy); }, [sortBy]);

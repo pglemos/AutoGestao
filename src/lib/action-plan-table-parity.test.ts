@@ -30,6 +30,26 @@ describe('Plano de Ação canônico e tabela Base44', () => {
     expect(hardening).toContain('REVOKE ALL ON FUNCTION public.criar_plano_acao_v2')
   })
 
+  test('preserves the complete Base44 action lifecycle and null-clearing RPC', () => {
+    const migration = read('supabase/migrations/20260726010000_action_plan_lifecycle_parity.sql')
+    expect(migration).toContain("ADD VALUE IF NOT EXISTS 'bloqueada'")
+    expect(migration).toContain("ADD VALUE IF NOT EXISTS 'aguardando_decisao'")
+    for (const field of [
+      'requires_owner', 'financial_impact', 'budget', 'evidence_required',
+      'blocked_reason', 'block_category', 'expected_unblock_date', 'block_note',
+      'return_reason', 'return_guidance', 'reopen_reason', 'cancel_reason',
+      'impact_status', 'impact_value_before', 'impact_value_after',
+      'realized_impact', 'impact_measurement_date', 'progress_note', 'next_step',
+      'projected_date',
+    ]) {
+      expect(migration).toContain(`ADD COLUMN IF NOT EXISTS ${field}`)
+    }
+    expect(migration).toContain('CREATE OR REPLACE FUNCTION public.atualizar_plano_acao_patch')
+    expect(migration).toContain('jsonb_populate_record')
+    expect(migration).toContain('event_type')
+    expect(migration).toContain('event_note')
+  })
+
   test('does not route the owner table through fixture/localStorage data', () => {
     const page = read('src/pages/owner/PlanoDeAcao.jsx')
     const repository = read('src/components/owner/actionplan/actionPlanLiveRepository.js')

@@ -97,7 +97,16 @@ export default function EvidenceTab({ action, onReload, user }) {
                 )}
               </div>
               <div className="flex gap-1">
-                <Button size="sm" variant="ghost" className="h-7 w-7 p-0"><Eye className="h-3.5 w-3.5" /></Button>
+                <Button
+                  size="sm"
+                  variant="ghost"
+                  className="h-7 w-7 p-0"
+                  aria-label={`Visualizar evidência ${e.name}`}
+                  disabled={!e.url}
+                  onClick={() => e.url && window.open(e.url, "_blank", "noopener,noreferrer")}
+                >
+                  <Eye className="h-3.5 w-3.5" />
+                </Button>
                 <Button size="sm" variant="ghost" onClick={() => handleRemove(e.id)} className="h-7 w-7 p-0 text-red-500 hover:text-red-700">
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
