@@ -360,7 +360,6 @@ export default function MxSidebarShell({
       <div key={key} data-sidebar-group={item.label} className="space-y-1">
         <button
           type="button"
-          aria-label={item.label}
           aria-expanded={expanded}
           onClick={toggleGroup}
           className={cn(

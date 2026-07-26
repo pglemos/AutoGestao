@@ -16,7 +16,7 @@ export default function ActionPlanTabs({ tab, onTabChange }) {
           <button
             key={t.value}
             onClick={() => onTabChange(t.value)}
-            className={`inline-flex items-center gap-2 rounded-md px-4 py-2 text-sm font-medium transition-colors ${
+            className={`inline-flex items-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors ${
               active
                 ? "bg-emerald-50 text-emerald-700 shadow-sm"
                 : "text-muted-foreground hover:text-foreground"

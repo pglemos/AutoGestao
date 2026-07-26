@@ -14,6 +14,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { PRIORITIES } from "./actionPlanConstants";
+import { normalizeResponsibleValue } from "./actionPlanFormUtils";
 
 export default function DelegateModal({ action, open, onOpenChange, onConfirm, responsiblePeople = [] }) {
   const [responsible, setResponsible] = useState("");
@@ -23,7 +24,7 @@ export default function DelegateModal({ action, open, onOpenChange, onConfirm, r
 
   useEffect(() => {
     if (action) {
-      setResponsible(action.executor || action.responsible || "");
+      setResponsible(normalizeResponsibleValue(action.executor || action.responsible));
       setDueDate(action.dueDate || "");
       setNote("");
       setPriority(action.priority || "medium");
@@ -33,7 +34,8 @@ export default function DelegateModal({ action, open, onOpenChange, onConfirm, r
   if (!action) return null;
 
   const handleConfirm = () => {
-    onConfirm(action.id, { responsible, dueDate, note, priority });
+    if (!responsible) return;
+    onConfirm(action.id, { responsible, dueDate, note: note.trim(), priority });
   };
 
   return (
@@ -86,7 +88,7 @@ export default function DelegateModal({ action, open, onOpenChange, onConfirm, r
 
         <DialogFooter>
           <Button variant="outline" onClick={() => onOpenChange(false)}>Cancelar</Button>
-          <Button onClick={handleConfirm} className="bg-primary hover:bg-primary/90">
+          <Button onClick={handleConfirm} disabled={!responsible} className="bg-primary hover:bg-primary/90">
             Confirmar delegação
           </Button>
         </DialogFooter>

@@ -2,7 +2,7 @@
 
 ## Status
 
-Done — merged to `main` and published in production.
+In progress — shell Base44 aprovado restaurado e validado localmente; publicação pendente.
 
 ## Contexto
 
@@ -24,7 +24,7 @@ Reproduzir a arquitetura de informação, hierarquia visual e fluxos executivos 
 - [x] Consultoria consumindo visitas e agenda de consultoria existentes.
 - [x] Departamentos, Mercado e Universidade reutilizando módulos existentes.
 - [x] Falar com Consultor recebe contexto da tela, consulta o consultor vinculado e persiste solicitações auditáveis.
-- [x] Design System Base44 isolado dentro do cockpit do Dono, preservando o sidebar compartilhado.
+- [x] Dono usa o shell Base44 aprovado (`OwnerLayout`, `OwnerSidebar`, `OwnerTopbar` e `owner-base44-exact.css`).
 
 ## Restrições atendidas
 
@@ -44,10 +44,10 @@ Reproduzir a arquitetura de informação, hierarquia visual e fluxos executivos 
 - [x] Estados de loading, vazio e erro são explícitos no fluxo de consultoria.
 - [x] Build, typecheck, lint e testes passam no head final.
 - [x] Supabase permanece sem duplicação dos domínios existentes.
-- [x] Produção Vercel publica a revisão do `main`.
-- [x] Domínios e aliases oficiais apontam para o deployment publicado.
-- [x] Rotas públicas do SPA e chunks específicos do módulo Dono respondem com HTTP 200.
-- [x] Nenhum erro, warning ou fatal foi registrado no runtime após a publicação e os acessos de smoke.
+- [ ] Produção Vercel publica a revisão final do `main`.
+- [ ] Domínios e aliases oficiais apontam para o deployment publicado.
+- [ ] Rotas públicas do SPA e chunks específicos do módulo Dono respondem com HTTP 200.
+- [ ] Nenhum erro, warning ou fatal é registrado no runtime após a publicação e os acessos de smoke.
 
 ## Evidência de integração
 
@@ -71,6 +71,16 @@ A matriz planejada de 17 rotas em 1440, 1024, 768 e 390 px não foi executada co
 
 Nenhuma credencial foi inserida em arquivo, log, commit ou workflow público. A validação visual autenticada do código final já passou no CI da PR em desktop e mobile; a matriz completa contra o domínio publicado permanece uma tarefa de configuração operacional, não uma falha conhecida do runtime.
 
+## Validação desta correção
+
+- Contratos focados: 28 pass, 0 fail.
+- `npm test`: 1459 pass, 0 fail.
+- `npm run lint`: 0 erros e 7 warnings preexistentes.
+- `npm run typecheck`, `npm run build` e `git diff --check`: aprovados.
+- Navegador integrado: 4 rotas locais (`/dono`, `/dono/plano-estrategico?tab=resumo`, `/dono/plano-acao` e `/dono/consultoria`) carregaram com conteúdo, shell Base44, sem overlay, overflow horizontal ou erro de console.
+- Plano de Ação: drawer central (`768×648` em viewport `1280×720`), quatro abas funcionais e modais de Atualizar progresso, Delegar, Bloquear e Enviar para validação abertos com validações e sem duplicação de ações.
+- Design legado removido do grafo ativo: `owner-base44-fixes.css` e `owner-base44-visual-scope.css`; o CSS canônico `owner-base44-exact.css` permanece ativo.
+
 ## Limitações conhecidas
 
 1. O card de estoque permanece como `Pendente` porque ainda não existe uma fonte canônica validada de estoque por loja no MX. O Base44 usa fixture local, que não foi promovida a dado real.
@@ -79,6 +89,19 @@ Nenhuma credencial foi inserida em arquivo, log, commit ou workflow público. A 
 4. A matriz autenticada de produção depende da configuração segura de um secret E2E no GitHub Actions.
 
 ## File list
+
+### Shell Base44 aprovado e remoção do design legado
+
+- `src/App.tsx`
+- `src/components/Layout.tsx`
+- `src/components/MxSidebarShell.tsx`
+- `src/features/owner-base44/OwnerModule.tsx`
+- `src/features/owner-base44/OwnerLiveDataPage.tsx`
+- `src/lib/owner-base44-exact-parity-contract.test.ts`
+- `src/test/owner-base44-authenticated-visual.playwright.ts`
+- `src/test/owner-base44-design-scope.test.ts`
+- `src/lib/real-data-runtime-contract.test.ts`
+- `src/lib/owner-flow-contract.test.ts`
 
 ### Navegação e cockpit
 
@@ -91,7 +114,6 @@ Nenhuma credencial foi inserida em arquivo, log, commit ou workflow público. A 
 - `src/features/dashboard-loja/sections/owner-cockpit/ownerBase44Config.test.ts`
 - `src/features/dashboard-loja/sections/owner-cockpit/format.tsx`
 - `src/features/dashboard-loja/sections/owner-cockpit/types.ts`
-- `src/styles/owner-base44-visual-scope.css`
 
 ### Consultoria contextual
 

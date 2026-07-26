@@ -1,5 +1,6 @@
 // Aba Execução do drawer — progresso, checklist, comentários, bloqueios.
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -7,6 +8,7 @@ import { Plus, Check, Trash2, Lock, Unlock, MessageSquare, ListChecks } from "lu
 import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
 
 export default function ExecutionTab({ action, onReload, onQuickAction, user }) {
+  const { toast } = useToast();
   const [newChecklistText, setNewChecklistText] = useState("");
   const [newChecklistRequired, setNewChecklistRequired] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -17,20 +19,32 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
 
   const handleAddChecklist = async () => {
     if (!newChecklistText.trim()) return;
-    await actionPlanLiveRepository.addChecklistItem(action.id, { text: newChecklistText.trim(), required: newChecklistRequired });
-    setNewChecklistText("");
-    setNewChecklistRequired(false);
-    await onReload();
+    try {
+      await actionPlanLiveRepository.addChecklistItem(action.id, { text: newChecklistText.trim(), required: newChecklistRequired });
+      setNewChecklistText("");
+      setNewChecklistRequired(false);
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível adicionar o item.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   const handleToggleChecklist = async (itemId, done) => {
-    await actionPlanLiveRepository.updateChecklistItem(action.id, itemId, { done: !done });
-    await onReload();
+    try {
+      await actionPlanLiveRepository.updateChecklistItem(action.id, itemId, { done: !done });
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível atualizar o checklist.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   const handleRemoveChecklist = async (itemId) => {
-    await actionPlanLiveRepository.removeChecklistItem(action.id, itemId);
-    await onReload();
+    try {
+      await actionPlanLiveRepository.removeChecklistItem(action.id, itemId);
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível remover o item.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   const handleStartEdit = (item) => {
@@ -39,18 +53,26 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
   };
 
   const handleSaveEdit = async (itemId) => {
-    if (editText.trim()) {
-      await actionPlanLiveRepository.updateChecklistItem(action.id, itemId, { text: editText.trim() });
+    try {
+      if (editText.trim()) {
+        await actionPlanLiveRepository.updateChecklistItem(action.id, itemId, { text: editText.trim() });
+      }
+      setEditingId(null);
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível editar o item.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
     }
-    setEditingId(null);
-    await onReload();
   };
 
   const handleAddComment = async () => {
     if (!newComment.trim()) return;
-    await actionPlanLiveRepository.addComment(action.id, { author: user?.full_name || "Dono", content: newComment.trim() });
-    setNewComment("");
-    await onReload();
+    try {
+      await actionPlanLiveRepository.addComment(action.id, { author: user?.full_name || "Nome não informado", content: newComment.trim() });
+      setNewComment("");
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível adicionar o comentário.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   return (

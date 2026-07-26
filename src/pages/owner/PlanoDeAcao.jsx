@@ -8,6 +8,7 @@ import { useIsMobile } from "@/lib/owner-b44/use-mobile";
 import { actionPlanLiveRepository } from "@/components/owner/actionplan/actionPlanLiveRepository";
 import { filterActions } from "@/components/owner/actionplan/actionPlanUtils";
 import { exportActionsCSV } from "@/components/owner/actionplan/exportActions";
+import { normalizeActionPlanMode } from "@/components/owner/actionplan/actionPlanFormUtils";
 import { DEPARTMENTS, OBJECTIVES, TRANSITION_RULES } from "@/components/owner/actionplan/actionPlanConstants";
 import ActionPlanHeader from "@/components/owner/actionplan/ActionPlanHeader";
 import ActionPlanTabs from "@/components/owner/actionplan/ActionPlanTabs";
@@ -61,7 +62,7 @@ export default function PlanoDeAcao() {
   const [filters, setFilters] = useState(DEFAULT_FILTERS);
   const [mode, setMode] = useState(() => {
     const saved = localStorage.getItem(MODE_KEY);
-    return saved === "list" ? "table" : saved || "foco";
+    return normalizeActionPlanMode(saved);
   });
   const [sortBy, setSortBy] = useState(() => localStorage.getItem(SORT_KEY) || "due_soon");
   const [activeCard, setActiveCard] = useState(null);
@@ -140,7 +141,6 @@ export default function PlanoDeAcao() {
         }
         return next;
       });
-      if (cardKey === "total") setMode("foco");
     }
   };
 
@@ -157,7 +157,7 @@ export default function PlanoDeAcao() {
 
   const handleApproveConfirm = async (id, payload) => {
     try {
-      await actionPlanLiveRepository.approveAction(id, { ...payload, approvedBy: user?.full_name || user?.email || "Dono" });
+      await actionPlanLiveRepository.approveAction(id, { ...payload, approvedBy: user?.full_name || user?.email || "Nome não informado" });
       setApproveAction(null);
       await loadActions();
       toast({ title: "Ação aprovada com sucesso." });
@@ -173,7 +173,7 @@ export default function PlanoDeAcao() {
 
   const handleDelegateConfirm = async (id, payload) => {
     try {
-      await actionPlanLiveRepository.delegateAction(id, { ...payload, delegatedBy: user?.full_name || "Dono" });
+      await actionPlanLiveRepository.delegateAction(id, { ...payload, delegatedBy: user?.full_name || "Nome não informado" });
       setDelegateAction(null);
       await loadActions();
       toast({ title: "Ação delegada com sucesso." });
@@ -212,7 +212,7 @@ export default function PlanoDeAcao() {
         departmentLabel: dept?.label || payload.department,
         strategicObjectiveLabel: obj?.label || payload.strategicObjective,
         executor: payload.responsible,
-        createdBy: user?.full_name || "Dono",
+        createdBy: user?.full_name || "Nome não informado",
       }, { storeId: unitId || currentUnits?.[0]?.id });
       setNewActionOpen(false);
       setNewActionInitialDate("");
@@ -303,7 +303,7 @@ export default function PlanoDeAcao() {
         break;
       case "start":
         try {
-          await actionPlanLiveRepository.startAction(action.id, { startedBy: user?.full_name || "Dono" });
+          await actionPlanLiveRepository.startAction(action.id, { startedBy: user?.full_name || "Nome não informado" });
           await loadActions();
           toast({ title: "Ação iniciada." });
         } catch (err) {
@@ -345,7 +345,7 @@ export default function PlanoDeAcao() {
   };
 
   const handleModalConfirm = async (modalType, id, payload) => {
-    const userName = user?.full_name || "Dono";
+    const userName = user?.full_name || "Nome não informado";
     let successMessage = "";
     try {
       switch (modalType) {
@@ -474,6 +474,7 @@ export default function PlanoDeAcao() {
               onClearFilters={handleClearFilters}
               user={user}
               onReload={loadActions}
+              responsiblePeople={responsiblePeople}
             />
           )}
         </>
@@ -492,6 +493,7 @@ export default function PlanoDeAcao() {
           onTalkToConsultantDay={handleTalkToConsultantDay}
           onUpdateDeadline={handleUpdateDeadline}
           user={user}
+          responsiblePeople={responsiblePeople}
         />
       )}
 
@@ -508,6 +510,7 @@ export default function PlanoDeAcao() {
               onClear={handleClearFilters}
               collapsed={false}
               onToggleCollapse={() => {}}
+              responsiblePeople={responsiblePeople}
             />
           </div>
         </SheetContent>
@@ -559,6 +562,7 @@ export default function PlanoDeAcao() {
         activeModal={activeModal}
         onClose={() => setActiveModal({ type: null, action: null })}
         onConfirm={handleModalConfirm}
+        responsiblePeople={responsiblePeople}
       />
     </div>
   );

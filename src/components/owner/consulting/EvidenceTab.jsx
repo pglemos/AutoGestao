@@ -46,8 +46,8 @@ export default function EvidenceTab({ meeting, user }) {
       consultingRepository.addEvidence(meeting.id, {
         type: "file",
         name: template.title,
-        responsible: user?.full_name || user?.email || "Dono",
-        responsibleName: user?.full_name || "Dono",
+        responsible: user?.full_name || user?.email || "Nome não informado",
+        responsibleName: user?.full_name || "Nome não informado",
         evidenceTemplateId: template.id,
         fileName: file.name,
         fileType: file.type,
@@ -78,8 +78,8 @@ export default function EvidenceTab({ meeting, user }) {
     consultingRepository.addEvidence(meeting.id, {
       type: "file",
       name: customName,
-      responsible: user?.full_name || user?.email || "Dono",
-      responsibleName: user?.full_name || "Dono",
+      responsible: user?.full_name || user?.email || "Nome não informado",
+      responsibleName: user?.full_name || "Nome não informado",
       note: customNote,
     });
     refresh();

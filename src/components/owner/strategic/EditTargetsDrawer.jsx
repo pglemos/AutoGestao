@@ -1,4 +1,4 @@
-// Drawer de edição de metas com persistência em localStorage.
+// Drawer de edição de metas persistidas no escopo real da unidade.
 import { useState, useEffect } from "react";
 import DetailDrawer from "@/components/owner/DetailDrawer";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { MONTHS, MONTHS_FULL, SELECTED_MONTH_INDEX, formatCellValue, consolidateValues, getConsolidatedLabel, AREA_STYLES } from "./strategicUtils";
 import { DIRECTION_LABELS, AGGREGATION_LABELS, FORMAT_LABELS } from "./strategicIndicatorCatalog";
-import { strategicPlanRepository } from "./MockStrategicPlanRepository";
+import { strategicPlanRepository } from "./strategicPlanLiveRepository";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/lib/owner-b44/AuthContext";
 import { ShoppingCart, Megaphone, Package, Wallet, Settings } from "lucide-react";
@@ -24,7 +24,7 @@ export default function EditTargetsDrawer({ open, onOpenChange, indicator, year,
 
   useEffect(() => {
     if (open && indicator) {
-      const series = strategicPlanRepository.getIndicatorSeries(indicator.id, "demo", "all", year);
+      const series = strategicPlanRepository.getIndicatorSeries(indicator.id, year);
       const orig = series.targetValues.map((v) => String(v));
       setValues(orig);
       setOriginalValues(orig);
@@ -74,14 +74,10 @@ export default function EditTargetsDrawer({ open, onOpenChange, indicator, year,
   };
 
   const restore = () => {
-    strategicPlanRepository.resetDemoTargets(indicator.id, year, user);
-    const series = strategicPlanRepository.getIndicatorSeries(indicator.id, "demo", "all", year);
-    setValues(series.targetValues.map((v) => String(v)));
-    setErrors({});
-    toast({ title: "Metas restauradas", description: "Valores originais reaplicados." });
+    toast({ title: "Restaurar indisponível", description: "Não existe histórico persistido para restaurar.", variant: "destructive" });
   };
 
-  const save = () => {
+  const save = async () => {
     const newErrors = {};
     values.forEach((raw, idx) => {
       const err = validate(raw);
@@ -93,10 +89,14 @@ export default function EditTargetsDrawer({ open, onOpenChange, indicator, year,
       return;
     }
     const numValues = values.map((v) => parseValue(v));
-    strategicPlanRepository.updateTargets(indicator.id, year, numValues, user, note);
-    toast({ title: "Metas atualizadas com sucesso." });
-    onSaved?.();
-    onOpenChange(false);
+    try {
+      await strategicPlanRepository.updateTargets(indicator.id, year, numValues, user, note);
+      toast({ title: "Metas atualizadas com sucesso." });
+      onSaved?.();
+      onOpenChange(false);
+    } catch (error) {
+      toast({ title: "Não foi possível atualizar as metas.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   const consValue = consolidateValues(values.map((v) => parseValue(v) || 0), indicator.aggregationMode, SELECTED_MONTH_INDEX);

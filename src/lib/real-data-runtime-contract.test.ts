@@ -79,8 +79,6 @@ describe('contrato de dados reais do runtime ativo', () => {
   test('não carrega textos, identificadores ou valores fictícios conhecidos', () => {
     const violations: string[] = []
     for (const file of sources) {
-      // Ignorar verificações em componentes legados do Dono restaurados
-      if (file.includes('src/pages/owner/') || file.includes('src/components/owner/')) continue
       const source = readFileSync(file, 'utf8')
       for (const [label, pattern] of prohibitedRuntimePatterns) {
         if (pattern.test(source)) violations.push(`${relative(root, file)}: ${label}`)
@@ -92,7 +90,7 @@ describe('contrato de dados reais do runtime ativo', () => {
   test('garante o carregamento do Módulo do Dono Base44 no bundle ativo', () => {
     const active = new Set(sources.map(file => relative(root, file)))
     expect(active.has('src/features/owner-base44/OwnerModule.tsx')).toBe(true)
-    expect(active.has('src/components/owner/OwnerSidebar.jsx')).toBe(true)
+    expect(active.has('src/components/MxSidebarShell.tsx')).toBe(true)
   })
 
   test('falhas e ausência de configuração não ativam catálogos locais de negócio', () => {

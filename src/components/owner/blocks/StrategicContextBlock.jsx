@@ -6,7 +6,7 @@ import { Sparkles, UserCircle, CalendarClock, RefreshCcw } from "lucide-react";
 
 export default function StrategicContextBlock({ cycle }) {
   const { user } = useOwner();
-  const firstName = (user?.full_name || "Dono").split(" ")[0];
+  const firstName = (user?.full_name || "Nome não informado").split(" ")[0];
   const isDemo = cycle?.is_demo;
 
   return (

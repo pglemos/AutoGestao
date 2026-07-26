@@ -8,7 +8,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { strategicPlanRepository } from "./MockStrategicPlanRepository";
+import { strategicPlanRepository } from "./strategicPlanLiveRepository";
 import { MONTHS, SELECTED_MONTH_INDEX, MONTHS_FULL, REFERENCE_YEAR, formatCellValue, consolidateValues, getConsolidatedLabel } from "./strategicUtils";
 
 function downloadFile(filename, content, mime = "text/csv;charset=utf-8") {
@@ -36,7 +36,7 @@ export default function StrategicExportMenu({ indicatorId, year }) {
   };
 
   const printPDF = () => {
-    const series = strategicPlanRepository.getIndicatorSeries(indicatorId, "demo", "all", year);
+    const series = strategicPlanRepository.getIndicatorSeries(indicatorId, year);
     if (!series) return;
     const idx = SELECTED_MONTH_INDEX;
     const consLabel = getConsolidatedLabel(series.aggregationMode, idx);
@@ -59,7 +59,7 @@ export default function StrategicExportMenu({ indicatorId, year }) {
       </style></head><body>
       <h1>Plano Estratégico — ${series.name}</h1>
       <div class="info">
-        Empresa: Auto Prime Veículos · Unidade: Todas as unidades · Período: ${MONTHS_FULL[idx]}/${year}<br/>
+        Empresa e unidade: contexto selecionado no módulo Dono · Período: ${MONTHS_FULL[idx]}/${year}<br/>
         Código: ${series.code} · Área: ${series.area} · Direção: ${series.direction === "increase" ? "Aumentar" : "Diminuir"} · Formato: ${series.displayFormat}
       </div>
       <h2>Resumo do mês</h2>

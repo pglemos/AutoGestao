@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useOutletContext } from "react-router-dom";
+import { useOwner } from "@/components/owner/OwnerContext";
 import { Button } from "@/components/ui/button";
 import { Edit3, PlusCircle, SlidersHorizontal } from "lucide-react";
 
@@ -19,16 +20,18 @@ import TargetHistoryPanel from "@/components/owner/strategic/TargetHistoryPanel"
 import FiltersDrawer from "@/components/owner/strategic/FiltersDrawer";
 import DisplayModeSelector from "@/components/owner/strategic/DisplayModeSelector";
 
-import { strategicPlanRepository } from "@/components/owner/strategic/MockStrategicPlanRepository";
+import { strategicPlanRepository } from "@/components/owner/strategic/strategicPlanLiveRepository";
 import { SELECTED_MONTH_INDEX, REFERENCE_YEAR, calculatePercentageOfTarget, getStatusFromPercentage } from "@/components/owner/strategic/strategicUtils";
 
 export default function PlanoEstrategico() {
-  const { setLastUpdated } = useOutletContext();
+  const { setLastUpdated } = useOutletContext() || {};
+  const { currentUnits, unitId } = useOwner();
 
   const [tab, setTab] = useState("resumo");
   const [selectedIndicatorId, setSelectedIndicatorId] = useState("SP-001");
   const [areaFilter, setAreaFilter] = useState("all");
   const [loading, setLoading] = useState(true);
+  const [dataError, setDataError] = useState(null);
   const [editOpen, setEditOpen] = useState(false);
   const [actionOpen, setActionOpen] = useState(false);
   const [filtersOpen, setFiltersOpen] = useState(false);
@@ -71,13 +74,26 @@ export default function PlanoEstrategico() {
   }, [tab]);
 
   useEffect(() => {
-    setLastUpdated?.(new Date());
-    const t = setTimeout(() => setLoading(false), 400);
-    return () => clearTimeout(t);
-  }, [setLastUpdated]);
+    let mounted = true;
+    const storeId = unitId || currentUnits?.[0]?.id || null;
+    setLoading(true);
+    setDataError(null);
+    strategicPlanRepository.load({ storeId, year: REFERENCE_YEAR })
+      .then(() => {
+        if (!mounted) return;
+        setLoading(false);
+        setLastUpdated?.(new Date());
+      })
+      .catch((error) => {
+        if (!mounted) return;
+        setDataError(error instanceof Error ? error.message : "Não foi possível carregar o Plano Estratégico.");
+        setLoading(false);
+      });
+    return () => { mounted = false; };
+  }, [currentUnits, setLastUpdated, unitId]);
 
   const indicator = strategicPlanRepository.getIndicatorById(selectedIndicatorId);
-  const series = strategicPlanRepository.getIndicatorSeries(selectedIndicatorId, "demo", "all", REFERENCE_YEAR);
+  const series = strategicPlanRepository.getIndicatorSeries(selectedIndicatorId, REFERENCE_YEAR);
   const existingAction = strategicPlanRepository.getActionItems(selectedIndicatorId).length > 0;
 
   // Status do indicador para hierarquia de botões
@@ -114,6 +130,18 @@ export default function PlanoEstrategico() {
             <div className="h-[360px] rounded-xl bg-white/60 animate-pulse" />
             <div className="h-[360px] rounded-xl bg-white/60 animate-pulse" />
           </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (dataError) {
+    return (
+      <div className="-mx-4 -my-6 min-h-[calc(100vh-3.5rem)] bg-[#F5F7FA] px-4 py-6 lg:-mx-8 lg:-my-8 lg:px-8 lg:py-8">
+        <div className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
+          <h1 className="text-lg font-semibold text-foreground">Não foi possível carregar o Plano Estratégico</h1>
+          <p className="mt-2 text-sm text-muted-foreground">{dataError}</p>
+          <Button className="mt-4" onClick={() => window.location.reload()}>Tentar novamente</Button>
         </div>
       </div>
     );

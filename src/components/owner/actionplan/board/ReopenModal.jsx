@@ -6,11 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { RESPONSIBLE_PEOPLE } from "../actionPlanConstants";
+import { normalizeResponsibleValue, getProgressOptions } from "../actionPlanFormUtils";
 
-const PROGRESS_OPTIONS = [0, 20, 40, 45, 50, 60, 65, 75, 80];
-
-export default function ReopenModal({ action, open, onOpenChange, onConfirm }) {
+export default function ReopenModal({ action, open, onOpenChange, onConfirm, responsiblePeople = [] }) {
   const [reason, setReason] = useState("");
   const [newResponsible, setNewResponsible] = useState("");
   const [newDueDate, setNewDueDate] = useState("");
@@ -20,7 +18,7 @@ export default function ReopenModal({ action, open, onOpenChange, onConfirm }) {
   useEffect(() => {
     if (action) {
       setReason("");
-      setNewResponsible(action.responsible || "");
+      setNewResponsible(normalizeResponsibleValue(action.responsible));
       setNewDueDate("");
       setInitialProgress(0);
       setNote("");
@@ -53,7 +51,7 @@ export default function ReopenModal({ action, open, onOpenChange, onConfirm }) {
               <Select value={newResponsible} onValueChange={setNewResponsible}>
                 <SelectTrigger><SelectValue placeholder="Selecionar..." /></SelectTrigger>
                 <SelectContent>
-                  {RESPONSIBLE_PEOPLE.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                  {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>
@@ -67,7 +65,7 @@ export default function ReopenModal({ action, open, onOpenChange, onConfirm }) {
             <Select value={String(initialProgress)} onValueChange={(v) => setInitialProgress(parseInt(v, 10))}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                {PROGRESS_OPTIONS.map((p) => <SelectItem key={p} value={String(p)}>{p}%</SelectItem>)}
+                {getProgressOptions(action.progress).filter((p) => p < 100).map((p) => <SelectItem key={p} value={String(p)}>{p}%</SelectItem>)}
               </SelectContent>
             </Select>
           </div>

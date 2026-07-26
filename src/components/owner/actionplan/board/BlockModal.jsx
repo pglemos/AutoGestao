@@ -6,9 +6,10 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { BLOCK_CATEGORIES, RESPONSIBLE_PEOPLE } from "../actionPlanConstants";
+import { BLOCK_CATEGORIES } from "../actionPlanConstants";
+import { normalizeResponsibleValue } from "../actionPlanFormUtils";
 
-export default function BlockModal({ action, open, onOpenChange, onConfirm }) {
+export default function BlockModal({ action, open, onOpenChange, onConfirm, responsiblePeople = [] }) {
   const [reason, setReason] = useState("");
   const [category, setCategory] = useState("");
   const [responsible, setResponsible] = useState("");
@@ -19,7 +20,7 @@ export default function BlockModal({ action, open, onOpenChange, onConfirm }) {
     if (action) {
       setReason("");
       setCategory("");
-      setResponsible(action.responsible || "");
+      setResponsible(normalizeResponsibleValue(action.responsible));
       setExpectedUnblockDate("");
       setNote("");
     }
@@ -60,7 +61,7 @@ export default function BlockModal({ action, open, onOpenChange, onConfirm }) {
               <Select value={responsible} onValueChange={setResponsible}>
                 <SelectTrigger><SelectValue placeholder="Selecionar..." /></SelectTrigger>
                 <SelectContent>
-                  {RESPONSIBLE_PEOPLE.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                  {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>

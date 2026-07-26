@@ -2,11 +2,11 @@
 import { X, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DEPARTMENTS, RESPONSIBLE_PEOPLE } from "./actionPlanConstants";
+import { DEPARTMENTS } from "./actionPlanConstants";
 
 const selectClass = "h-9 text-sm";
 
-export default function ExecutiveFilters({ filters, onChange, onClear, collapsed, onToggleCollapse }) {
+export default function ExecutiveFilters({ filters, onChange, onClear, collapsed, onToggleCollapse, responsiblePeople = [] }) {
   const set = (key, value) => onChange({ ...filters, [key]: value || undefined });
 
   const activeChips = [];
@@ -51,7 +51,7 @@ export default function ExecutiveFilters({ filters, onChange, onClear, collapsed
                 <SelectTrigger className={selectClass}><SelectValue placeholder="Equipe" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Toda a equipe</SelectItem>
-                  {RESPONSIBLE_PEOPLE.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                  {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>

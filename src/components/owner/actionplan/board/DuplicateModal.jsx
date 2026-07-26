@@ -6,9 +6,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { OBJECTIVES, DEPARTMENTS, RESPONSIBLE_PEOPLE, PRIORITIES, ORIGINS, getObjectiveLabel, getDeptLabel } from "../actionPlanConstants";
+import { OBJECTIVES, DEPARTMENTS, PRIORITIES, ORIGINS, getObjectiveLabel, getDeptLabel } from "../actionPlanConstants";
 
-export default function DuplicateModal({ action, open, onOpenChange, onConfirm }) {
+export default function DuplicateModal({ action, open, onOpenChange, onConfirm, responsiblePeople = [] }) {
   const [form, setForm] = useState({});
 
   useEffect(() => {
@@ -106,7 +106,7 @@ export default function DuplicateModal({ action, open, onOpenChange, onConfirm }
               <Select value={form.responsible || ""} onValueChange={(v) => set("responsible", v)}>
                 <SelectTrigger><SelectValue placeholder="Selecionar..." /></SelectTrigger>
                 <SelectContent>
-                  {RESPONSIBLE_PEOPLE.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+                  {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
                 </SelectContent>
               </Select>
             </div>

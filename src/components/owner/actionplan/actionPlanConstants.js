@@ -224,16 +224,6 @@ export const DISPLAY_FILTERS = [
   { value: "unmeasured", label: "Impacto ainda não medido" },
 ];
 
-export const RESPONSIBLE_PEOPLE = [
-  "Rafael Souza",
-  "Bruno Alves",
-  "Ana Costa",
-  "Marcos Oliveira",
-  "Juliana Lima",
-  "Carla Mendes",
-  "Daniel",
-];
-
 export const KANBAN_COLUMNS = [
   { value: "not_started", label: "Não iniciada", iconName: "Circle" },
   { value: "in_progress", label: "Em andamento", iconName: "Play" },

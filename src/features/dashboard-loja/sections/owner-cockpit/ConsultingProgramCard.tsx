@@ -34,7 +34,7 @@ export function ConsultingProgramCard({
 
   if (error || !program) {
     return (
-      <div className="owner-base44-exact__empty-state" role="status">
+      <div className="rounded-mx-xl border border-border-subtle bg-white p-mx-lg" role="status">
         <strong className="text-base font-black text-text-primary">Nenhum programa de consultoria ativo</strong>
         <p className="text-sm text-text-secondary">{error || 'Esta loja ainda não possui um programa de consultoria vinculado.'}</p>
       </div>

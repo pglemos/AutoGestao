@@ -4,8 +4,7 @@ import { ShoppingCart, Megaphone, Package, Wallet, Settings, ChevronDown, Chevro
 import { Button } from "@/components/ui/button";
 import { AREA_LIST } from "./strategicIndicatorCatalog";
 import { MONTHS, SELECTED_MONTH_INDEX, VIEW_OPTIONS, AREA_STYLES, CARD_ICON_STYLES, SPARK_COLORS, formatCellValue, consolidateValues, getConsolidatedLabel, normalizeText, calculatePercentageOfTarget } from "./strategicUtils";
-import { executiveCardConfigs } from "./strategicPlanFixtures";
-import { strategicPlanRepository } from "./MockStrategicPlanRepository";
+import { strategicPlanRepository } from "./strategicPlanLiveRepository";
 import MiniChart from "./MiniChart";
 import StrategicPlanOverviewFilters from "./StrategicPlanOverviewFilters";
 import ViewSelector from "./ViewSelector";
@@ -21,6 +20,14 @@ const AREA_ICONS = {
   Financeiro: Wallet,
   Operacional: Settings,
 };
+
+const executiveCardConfigs = [
+  { id: "sales", indicatorId: "SP-001", title: "Vendas Total", icon: "barChart", iconColor: "purple", sparkType: "bar", sparkColor: "purple" },
+  { id: "leads", indicatorId: "SP-023", title: "Leads Recebidos", icon: "shoppingCart", iconColor: "orange", sparkType: "line", sparkColor: "orange" },
+  { id: "inventory", indicatorId: "SP-031", title: "Estoque Total", icon: "package", iconColor: "blue", sparkType: "line", sparkColor: "blue" },
+  { id: "appointments", indicatorId: "SP-017", title: "Agendamentos", icon: "users", iconColor: "teal", sparkType: "line", sparkColor: "teal" },
+  { id: "visits", indicatorId: "SP-018", title: "Visitas", icon: "dollar", iconColor: "green", sparkType: "line", sparkColor: "green" },
+];
 
 function ExecutiveCard({ card, series, onClick }) {
   const Icon = CARD_ICONS[card.icon] || DollarSign;
@@ -59,7 +66,7 @@ export default function StrategicPlanOverview({ onCardClick, onRowClick, year, r
   const [resultFilter, setResultFilter] = useState("all");
   const [expanded, setExpanded] = useState({});
 
-  const allSeries = useMemo(() => strategicPlanRepository.getOverviewData("demo", "all", year), [year, refreshKey]);
+  const allSeries = useMemo(() => strategicPlanRepository.getOverviewData(year), [year, refreshKey]);
 
   const filtered = useMemo(() => {
     const norm = normalizeText(search);

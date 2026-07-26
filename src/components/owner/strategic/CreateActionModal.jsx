@@ -1,4 +1,4 @@
-// Modal de criação de Plano de Ação com persistência em localStorage.
+// Modal de criação de Plano de Ação com persistência no Supabase.
 import { useState, useEffect } from "react";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { strategicPlanRepository } from "./MockStrategicPlanRepository";
+import { strategicPlanRepository } from "./strategicPlanLiveRepository";
 import { formatCellValue, calculatePercentageOfTarget, getStatusFromPercentage, STATUS_STYLES, AREA_STYLES, SELECTED_MONTH_INDEX } from "./strategicUtils";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/lib/owner-b44/AuthContext";
@@ -19,7 +19,7 @@ export default function CreateActionModal({ open, onOpenChange, indicator, year,
 
   useEffect(() => {
     if (open && indicator) {
-      const series = strategicPlanRepository.getIndicatorSeries(indicator.id, "demo", "all", year);
+      const series = strategicPlanRepository.getIndicatorSeries(indicator.id, year);
       const idx = SELECTED_MONTH_INDEX;
       const resultado = series.currentValues[idx];
       const meta = series.targetValues[idx];
@@ -52,19 +52,23 @@ export default function CreateActionModal({ open, onOpenChange, indicator, year,
 
   const set = (key, val) => setForm((p) => ({ ...p, [key]: val }));
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!form.title || !form.action) {
       toast({ title: "Erro", description: "Preencha o título e a ação proposta.", variant: "destructive" });
       return;
     }
-    strategicPlanRepository.createActionItem({
-      ...form,
-      year,
-      createdBy: user?.full_name || user?.email || "Usuário",
-    });
-    toast({ title: "Plano de ação criado com sucesso." });
-    onCreated?.();
-    onOpenChange(false);
+    try {
+      await strategicPlanRepository.createActionItem({
+        ...form,
+        year,
+        createdBy: user?.full_name || user?.email || "Usuário",
+      });
+      toast({ title: "Plano de ação criado com sucesso." });
+      onCreated?.();
+      onOpenChange(false);
+    } catch (error) {
+      toast({ title: "Não foi possível criar o plano de ação.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   return (

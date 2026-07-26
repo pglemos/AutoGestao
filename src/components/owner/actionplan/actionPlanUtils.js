@@ -16,7 +16,7 @@ export function parseISODate(iso) {
 export function getRefDate() {
   // Atraso é uma propriedade do dado persistido em relação ao dia atual.
   // A constante histórica continua disponível para fixtures, mas não pode
-  // congelar o estado da produção em uma data de demonstração.
+  // congelar o estado da produção em uma data de referência.
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   return today;

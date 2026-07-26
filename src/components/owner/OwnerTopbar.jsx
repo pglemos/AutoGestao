@@ -47,7 +47,7 @@ export default function OwnerTopbar({ lastUpdated, onOpenSidebar }) {
     ...currentUnits.map((u) => ({ value: u.id, label: u.name })),
   ];
 
-  const firstName = (user?.full_name || user?.email || "Dono").split(" ")[0];
+  const firstName = (user?.full_name || user?.email || "Nome não informado").split(" ")[0];
 
   return (
     <header className="owner-base44-exact__topbar sticky top-0 z-30 flex min-h-16 flex-col gap-2 border-b border-border bg-card/90 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-card/75 xl:h-16 xl:flex-row xl:items-center xl:py-0 2xl:px-6">
@@ -130,7 +130,7 @@ export default function OwnerTopbar({ lastUpdated, onOpenSidebar }) {
               <div className="fixed inset-0 z-10" onClick={() => setProfileOpen(false)} />
               <div className="absolute right-0 top-11 z-20 w-56 rounded-xl border border-border bg-card p-2 shadow-lg">
                 <div className="px-2 py-1.5">
-                  <p className="text-sm font-medium text-foreground">{user?.full_name || "Dono"}</p>
+                  <p className="text-sm font-medium text-foreground">{user?.full_name || "Nome não informado"}</p>
                   <p className="truncate text-xs text-muted-foreground">{user?.email}</p>
                 </div>
                 <div className="my-1 h-px bg-border" />

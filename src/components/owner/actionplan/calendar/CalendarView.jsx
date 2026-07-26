@@ -46,6 +46,7 @@ export default function CalendarView({
   user,
   companyName,
   unitName,
+  responsiblePeople = [],
 }) {
   const { toast } = useToast();
   const isMobile = useIsMobile();
@@ -122,7 +123,7 @@ export default function CalendarView({
   };
 
   const handleRescheduleConfirm = (id, payload) => {
-    onUpdateDeadline(id, { ...payload, rescheduledBy: user?.full_name || "Dono" });
+    onUpdateDeadline(id, { ...payload, rescheduledBy: user?.full_name || "Nome não informado" });
     setRescheduleAction(null);
     setRescheduleNewDate("");
   };
@@ -183,6 +184,7 @@ export default function CalendarView({
           onClear={onClearFilters}
           collapsed={false}
           onToggleCollapse={() => {}}
+          responsiblePeople={responsiblePeople}
         />
       )}
 
@@ -258,6 +260,7 @@ export default function CalendarView({
               onClear={onClearFilters}
               collapsed={false}
               onToggleCollapse={() => {}}
+              responsiblePeople={responsiblePeople}
             />
           </div>
         </SheetContent>

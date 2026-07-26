@@ -6,8 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-
-const PROGRESS_OPTIONS = [0, 20, 40, 45, 50, 60, 65, 75, 80, 100];
+import { getProgressOptions } from "../actionPlanFormUtils";
 
 export default function ProgressModal({ action, open, onOpenChange, onConfirm }) {
   const [progress, setProgress] = useState(0);
@@ -27,7 +26,7 @@ export default function ProgressModal({ action, open, onOpenChange, onConfirm })
   if (!action) return null;
 
   const handleConfirm = () => {
-    onConfirm(action.id, { progress, comment: comment.trim(), nextStep: nextStep.trim(), projectedDate });
+    onConfirm(action.id, { progress: Number(progress), comment: comment.trim(), nextStep: nextStep.trim(), projectedDate });
   };
 
   return (
@@ -49,7 +48,7 @@ export default function ProgressModal({ action, open, onOpenChange, onConfirm })
             <Select value={String(progress)} onValueChange={(v) => setProgress(parseInt(v, 10))}>
               <SelectTrigger><SelectValue /></SelectTrigger>
               <SelectContent>
-                {PROGRESS_OPTIONS.map((p) => <SelectItem key={p} value={String(p)}>{p}%</SelectItem>)}
+                {getProgressOptions(action.progress).map((p) => <SelectItem key={p} value={String(p)}>{p}%</SelectItem>)}
               </SelectContent>
             </Select>
           </div>

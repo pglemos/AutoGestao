@@ -2,9 +2,9 @@
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Download, X, UserCog, CalendarClock, Flag, MessageSquare } from "lucide-react";
-import { RESPONSIBLE_PEOPLE, PRIORITIES } from "../actionPlanConstants";
+import { PRIORITIES } from "../actionPlanConstants";
 
-export default function BatchActionsBar({ selectedCount, onClear, onBatchResponsible, onBatchDueDate, onBatchPriority, onExportSelected, onRequestUpdate }) {
+export default function BatchActionsBar({ selectedCount, onClear, onBatchResponsible, onBatchDueDate, onBatchPriority, onExportSelected, onRequestUpdate, responsiblePeople = [] }) {
   if (selectedCount === 0) return null;
 
   return (
@@ -14,7 +14,7 @@ export default function BatchActionsBar({ selectedCount, onClear, onBatchRespons
         <Select onValueChange={onBatchResponsible}>
           <SelectTrigger className="h-8 w-[140px] text-xs"><span className="flex items-center gap-1"><UserCog className="h-3 w-3" /> Responsável</span></SelectTrigger>
           <SelectContent>
-            {RESPONSIBLE_PEOPLE.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
+            {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
           </SelectContent>
         </Select>
         <Select onValueChange={onBatchPriority}>

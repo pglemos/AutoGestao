@@ -1,5 +1,6 @@
 // Aba Evidências do drawer — adicionar e remover evidências.
 import { useState } from "react";
+import { useToast } from "@/components/ui/use-toast";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -16,25 +17,34 @@ const EVIDENCE_TYPES = [
 ];
 
 export default function EvidenceTab({ action, onReload, user }) {
+  const { toast } = useToast();
   const [form, setForm] = useState({ type: "file", name: "", note: "", valueBefore: "", valueAfter: "" });
   const set = (k, v) => setForm((p) => ({ ...p, [k]: v }));
 
   const handleAdd = async () => {
     if (!form.name.trim()) return;
-    await actionPlanLiveRepository.addEvidence(action.id, {
-      type: form.type,
-      name: form.name.trim(),
-      note: form.note.trim(),
-      valueBefore: form.valueBefore || null,
-      valueAfter: form.valueAfter || null,
-    });
-    setForm({ type: "file", name: "", note: "", valueBefore: "", valueAfter: "" });
-    await onReload();
+    try {
+      await actionPlanLiveRepository.addEvidence(action.id, {
+        type: form.type,
+        name: form.name.trim(),
+        note: form.note.trim(),
+        valueBefore: form.valueBefore || null,
+        valueAfter: form.valueAfter || null,
+      });
+      setForm({ type: "file", name: "", note: "", valueBefore: "", valueAfter: "" });
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível adicionar a evidência.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   const handleRemove = async (evidenceId) => {
-    await actionPlanLiveRepository.removeEvidence(action.id, evidenceId);
-    await onReload();
+    try {
+      await actionPlanLiveRepository.removeEvidence(action.id, evidenceId);
+      await onReload();
+    } catch (error) {
+      toast({ title: "Não foi possível remover a evidência.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+    }
   };
 
   return (

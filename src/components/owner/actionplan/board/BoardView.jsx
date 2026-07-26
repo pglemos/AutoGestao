@@ -22,6 +22,7 @@ export default function BoardView({
   onClearFilters,
   user,
   onReload,
+  responsiblePeople = [],
 }) {
   const { toast } = useToast();
   const [selectedIds, setSelectedIds] = useState([]);
@@ -81,7 +82,7 @@ export default function BoardView({
   const handleRequestUpdate = async () => {
     try {
       await Promise.all(selectedIds.map((id) => actionPlanLiveRepository.addComment(id, {
-        author: user?.full_name || "Dono",
+        author: user?.full_name || "Nome não informado",
         content: "Solicito atualização do status e progresso desta ação.",
       })));
       toast({ title: `${selectedIds.length} solicitação(ões) enviada(s).` });
@@ -123,6 +124,7 @@ export default function BoardView({
           onBatchPriority={handleBatchPriority}
           onExportSelected={handleExportSelected}
           onRequestUpdate={handleRequestUpdate}
+          responsiblePeople={responsiblePeople}
         />
       )}
       {mode === "kanban" ? (

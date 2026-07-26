@@ -48,7 +48,7 @@ export default function ActionsToolbar({
           ) : (
             <>
               <Select value={filters.department || "all"} onValueChange={(v) => set("department", v === "all" ? undefined : v)}>
-                <SelectTrigger className={`${selectClass} w-[160px]`}><SelectValue placeholder="Departamento" /></SelectTrigger>
+              <SelectTrigger className={`${selectClass} w-[210px]`}><SelectValue placeholder="Departamento" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos os departamentos</SelectItem>
                   {DEPARTMENTS.map((d) => <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>)}
@@ -56,7 +56,7 @@ export default function ActionsToolbar({
               </Select>
 
               <Select value={filters.responsible || "all"} onValueChange={(v) => set("responsible", v === "all" ? undefined : v)}>
-                <SelectTrigger className={`${selectClass} w-[160px]`}><SelectValue placeholder="Responsável" /></SelectTrigger>
+              <SelectTrigger className={`${selectClass} w-[210px]`}><SelectValue placeholder="Responsável" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos os responsáveis</SelectItem>
                   {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
@@ -76,7 +76,7 @@ export default function ActionsToolbar({
                 <button
                   key={m.value}
                   onClick={() => onModeChange(m.value)}
-                  className={`inline-flex items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
+                    className={`inline-flex items-center gap-1.5 whitespace-nowrap rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                     active ? "bg-emerald-50 text-emerald-700 shadow-sm" : "text-muted-foreground hover:text-foreground"
                   }`}
                 >

@@ -2,7 +2,7 @@
 import { useState, useEffect, Fragment } from "react";
 import { ChevronDown, ChevronRight, History, RotateCcw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { strategicPlanRepository } from "./MockStrategicPlanRepository";
+import { strategicPlanRepository } from "./strategicPlanLiveRepository";
 import { MONTHS, formatCellValue } from "./strategicUtils";
 import { formatDateTime } from "@/lib/owner-b44/format";
 import { useToast } from "@/components/ui/use-toast";
@@ -33,12 +33,17 @@ export default function TargetHistoryPanel({ indicatorId, year, onRestored }) {
     if (open) load();
   }, [open, indicatorId, year]);
 
-  const restore = (id) => {
-    strategicPlanRepository.restoreHistoryVersion(id, user);
-    toast({ title: "Versão restaurada com sucesso." });
-    setConfirmId(null);
-    load();
-    onRestored?.();
+  const restore = async (id) => {
+    try {
+      await strategicPlanRepository.restoreHistoryVersion(id, user);
+      toast({ title: "Versão restaurada com sucesso." });
+      setConfirmId(null);
+      load();
+      onRestored?.();
+    } catch (error) {
+      toast({ title: "Não foi possível restaurar a versão.", description: error instanceof Error ? error.message : "Erro desconhecido", variant: "destructive" });
+      setConfirmId(null);
+    }
   };
 
   return (

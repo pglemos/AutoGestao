@@ -35,13 +35,12 @@ type RouteMetric = {
   route: string
   viewport: string
   finalPath: string
-  ownerRoot: boolean
+  ownerShell: boolean
   ownerRegion: boolean
-  universalMain: boolean
-  universalSidebar: boolean
-  universalSidebarWidth: number
-  universalSidebarBackground: string
-  ownerTopbarHeight: number
+  ownerSidebar: boolean
+  ownerSidebarWidth: number
+  ownerSidebarBackground: string
+  ownerContentHeight: number
   activeNavigationItems: number
   horizontalOverflow: boolean
   pageErrors: string[]
@@ -51,9 +50,7 @@ type RouteMetric = {
 async function openOwnerRoute(page: Page, path: string, expectedPath: string) {
   await page.goto(path, { waitUntil: 'networkidle' })
   await expect(page).toHaveURL(new RegExp(`${expectedPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:[?#]|$)`))
-  await expect(page.locator('.owner-base44-exact')).toBeVisible({ timeout: 30_000 })
-  await expect(page.locator('[role="region"]#owner-main-content')).toBeVisible({ timeout: 30_000 })
-  await expect(page.locator('main#main-content')).toBeVisible({ timeout: 30_000 })
+  await expect(page.locator('#owner-main-content')).toBeVisible({ timeout: 30_000 })
 }
 
 async function auditRoute(
@@ -75,7 +72,7 @@ async function auditRoute(
   await openOwnerRoute(page, route.path, route.expectedPath)
 
   const desktopSidebar = page.locator('aside[aria-label="Menu principal do Dono"]')
-  const mobileDrawer = page.getByRole('dialog', { name: 'Menu principal do Dono' })
+  const mobileDrawer = page.locator('div.fixed.inset-0.z-40 > div.relative').first()
   if (viewport.mobile) {
     await expect(desktopSidebar).toBeHidden()
     await expect(mobileDrawer).toHaveCount(0)
@@ -105,28 +102,23 @@ async function auditRoute(
 
   const metric = await page.evaluate(
     ({ routeKey, viewportKey, collectedPageErrors, collectedConsoleErrors }) => {
-      const ownerRoot = document.querySelector<HTMLElement>('.owner-base44-exact')
-      const ownerRegion = document.querySelector<HTMLElement>('[role="region"]#owner-main-content')
-      const universalMain = document.querySelector<HTMLElement>('main#main-content')
-      const universalSidebar = Array.from(
-        document.querySelectorAll<HTMLElement>(
-          'aside[aria-label="Menu principal do Dono"], [role="dialog"][aria-label="Menu principal do Dono"]',
-        ),
+      const ownerShell = document.querySelector<HTMLElement>('.owner-base44-exact')
+      const ownerRegion = document.querySelector<HTMLElement>('#owner-main-content')
+      const ownerSidebar = Array.from(
+        document.querySelectorAll<HTMLElement>('aside[aria-label="Menu principal do Dono"], div.fixed.inset-0.z-40 > div.relative'),
       ).find((node) => node.getBoundingClientRect().width > 0) || null
-      const ownerTopbar = document.querySelector<HTMLElement>('.owner-base44-exact__topbar')
 
       return {
         route: routeKey,
         viewport: viewportKey,
         finalPath: window.location.pathname + window.location.search,
-        ownerRoot: Boolean(ownerRoot),
+        ownerShell: Boolean(ownerShell),
         ownerRegion: Boolean(ownerRegion),
-        universalMain: Boolean(universalMain),
-        universalSidebar: Boolean(universalSidebar),
-        universalSidebarWidth: universalSidebar ? Math.round(universalSidebar.getBoundingClientRect().width) : 0,
-        universalSidebarBackground: universalSidebar ? getComputedStyle(universalSidebar).backgroundColor : '',
-        ownerTopbarHeight: ownerTopbar ? Math.round(ownerTopbar.getBoundingClientRect().height) : 0,
-        activeNavigationItems: universalSidebar?.querySelectorAll('a[aria-current="page"]').length || 0,
+        ownerSidebar: Boolean(ownerSidebar),
+        ownerSidebarWidth: ownerSidebar ? Math.round(ownerSidebar.getBoundingClientRect().width) : 0,
+        ownerSidebarBackground: ownerSidebar ? getComputedStyle(ownerSidebar.firstElementChild || ownerSidebar).backgroundColor : '',
+        ownerContentHeight: ownerRegion ? Math.round(ownerRegion.getBoundingClientRect().height) : 0,
+        activeNavigationItems: ownerSidebar?.querySelectorAll('a[aria-current="page"]').length || 0,
         horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
         pageErrors: collectedPageErrors,
         consoleErrors: collectedConsoleErrors,
@@ -140,15 +132,14 @@ async function auditRoute(
     },
   )
 
-  expect.soft(metric.ownerRoot, `${route.key}/${viewport.key}: escopo do conteúdo`).toBe(true)
+  expect.soft(metric.ownerShell, `${route.key}/${viewport.key}: shell Base44`).toBe(true)
   expect.soft(metric.ownerRegion, `${route.key}/${viewport.key}: região do Dono`).toBe(true)
-  expect.soft(metric.universalMain, `${route.key}/${viewport.key}: main universal`).toBe(true)
-  expect.soft(metric.universalSidebar, `${route.key}/${viewport.key}: sidebar universal`).toBe(true)
+  expect.soft(metric.ownerSidebar, `${route.key}/${viewport.key}: sidebar Base44`).toBe(true)
   expect.soft(metric.horizontalOverflow, `${route.key}/${viewport.key}: overflow horizontal`).toBe(false)
   expect.soft(metric.activeNavigationItems, `${route.key}/${viewport.key}: item ativo`).toBe(1)
-  expect.soft(metric.ownerTopbarHeight, `${route.key}/${viewport.key}: topbar`).toBeGreaterThanOrEqual(60)
-  expect.soft(metric.universalSidebarWidth, `${route.key}/${viewport.key}: sidebar`).toBe(viewport.mobile ? 304 : 224)
-  expect.soft(metric.universalSidebarBackground, `${route.key}/${viewport.key}: fundo da sidebar`).toBe('rgb(255, 255, 255)')
+  expect.soft(metric.ownerContentHeight, `${route.key}/${viewport.key}: conteúdo`).toBeGreaterThan(0)
+  expect.soft(metric.ownerSidebarWidth, `${route.key}/${viewport.key}: sidebar`).toBe(256)
+  expect.soft(metric.ownerSidebarBackground, `${route.key}/${viewport.key}: fundo da sidebar`).toBe('rgb(250, 250, 250)')
   expect.soft(metric.pageErrors, `${route.key}/${viewport.key}: erros de página`).toEqual([])
   expect.soft(metric.consoleErrors, `${route.key}/${viewport.key}: erros de console`).toEqual([])
 
@@ -179,7 +170,7 @@ async function auditRoute(
   return metric
 }
 
-test.describe('módulo Dono Base44 com sidebar universal MX', () => {
+test.describe('módulo Dono Base44 aprovado', () => {
   test.describe.configure({ timeout: 900_000 })
 
   test('percorre todas as superfícies e viewports no mesmo shell de Vendedor e Gerente', async ({ browser }, testInfo) => {

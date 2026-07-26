@@ -93,9 +93,11 @@ export default function OwnerSidebar({ onNavigate }) {
                   const isOpen = openGroups[item.group];
                   const Icon = item.icon;
                   return (
-                    <div key={item.label}>
+                    <div key={item.label} data-sidebar-group="Departamentos">
                       <button
                         onClick={() => toggleGroup(item.group)}
+                        aria-expanded={isOpen}
+                        aria-controls={`sidebar-subnav-${item.group}`}
                         className="flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
                       >
                         <Icon className="h-4 w-4 shrink-0 text-muted-foreground/80" />
@@ -103,7 +105,7 @@ export default function OwnerSidebar({ onNavigate }) {
                         {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
                       </button>
                       {isOpen && (
-                        <div className="ml-3 mt-0.5 space-y-0.5 border-l border-sidebar-border pl-3">
+                        <div id={`sidebar-subnav-${item.group}`} data-sidebar-subnav="Departamentos" className="ml-3 mt-0.5 space-y-0.5 border-l border-sidebar-border pl-3">
                           {item.children.map((child) => (
                             <NavLink
                               key={child.to}

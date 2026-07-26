@@ -71,9 +71,9 @@ describe('Plano de Ação canônico e tabela Base44', () => {
     }
   })
 
-  test('opens the action plan in the approved Base44 focus view by default', () => {
+  test('opens the action plan in the approved Base44 table view by default', () => {
     const page = read('src/pages/owner/PlanoDeAcao.jsx')
-    expect(page).toContain('return saved === "list" ? "table" : saved || "foco"')
-    expect(page).not.toContain('return saved === "list" ? "table" : saved || "table"')
+    expect(page).toContain('normalizeActionPlanMode(saved)')
+    expect(page).toContain('import { normalizeActionPlanMode }')
   })
 })

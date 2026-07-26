@@ -491,7 +491,7 @@ export const consultingRepository = {
       expectedImpact: payload.expectedImpact || payload.impactoEsperado || "",
       evidenceRequired: payload.evidenceRequired || false,
       requiresOwner: false,
-      createdBy: payload.createdBy || "Dono",
+      createdBy: payload.createdBy || "Nome não informado",
     });
 
     // Adicionar campos específicos da consultoria via updateAction

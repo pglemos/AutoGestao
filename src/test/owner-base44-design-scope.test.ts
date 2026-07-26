@@ -1,31 +1,30 @@
 import { describe, expect, test } from 'bun:test'
-import { existsSync, readFileSync } from 'node:fs'
+import { readFileSync } from 'node:fs'
 
 const read = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf8')
-const ownerScopeUrl = new URL('../styles/owner-base44-visual-scope.css', import.meta.url)
-const ownerScopeCss = existsSync(ownerScopeUrl) ? readFileSync(ownerScopeUrl, 'utf8') : ''
 const ownerCockpit = read('../features/dashboard-loja/sections/OwnerExecutiveCockpit.tsx')
 const main = read('../main.tsx')
+const app = read('../App.tsx')
+const layout = read('../components/Layout.tsx')
+const ownerModule = read('../features/owner-base44/OwnerModule.tsx')
+const ownerLayout = read('../components/owner/OwnerLayout.jsx')
+const ownerStyles = read('../styles/owner-base44-exact.css')
 
-const requiredPalette = ['#ecfdf5', '#d1fae5', '#34d399', '#059669', '#064e3b']
-
-describe('escopo visual Base44 da Visão do Dono', () => {
-  test('aplica o escopo somente no cockpit do Dono e mantém o sidebar fora dele', () => {
-    expect(ownerCockpit).toContain('owner-base44-scope')
-    expect(main).toContain("./styles/owner-base44-visual-scope.css")
-    expect(ownerScopeCss).toContain('.owner-base44-scope')
-    expect(ownerScopeCss).not.toContain('aside[')
-    expect(ownerScopeCss).not.toContain("[role='dialog']")
+describe('escopo visual Base44 aprovado do módulo Dono', () => {
+  test('monta o Dono fora do shell universal e mantém o shell Base44 dedicado', () => {
+    expect(app).toContain("const OwnerModule = lazy(() => import('@/features/owner-base44/OwnerModule'))")
+    expect(app).toContain('path="/dono/*"')
+    expect(main).not.toContain('owner-base44-visual-scope')
+    expect(layout).toContain('const isOwnerRoute')
+    expect(ownerModule).toContain('OwnerLayout')
+    expect(ownerModule).toContain('owner-base44-exact')
+    expect(ownerLayout).toContain('aria-label="Menu principal do Dono"')
+    expect(ownerCockpit).not.toContain('owner-base44-scope')
   })
 
-  test('preserva a paleta aprovada do Base44 dentro do escopo do Dono', () => {
-    const normalized = ownerScopeCss.toLowerCase()
-    for (const color of requiredPalette) expect(normalized).toContain(color)
-  })
-
-  test('usa Lexend no corpo e Outfit na hierarquia de títulos do Dono', () => {
-    expect(ownerScopeCss).toContain("font-family: 'Lexend'")
-    expect(ownerScopeCss).toContain("font-family: 'Outfit'")
-    expect(ownerScopeCss).toContain('.owner-base44-scope :is(h1, h2, h3, h4, h5, h6)')
+  test('tokens do design aprovado ficam escopados ao módulo', () => {
+    expect(ownerStyles).toContain('.owner-b44')
+    expect(ownerStyles).toContain('--primary: 152 69% 31%')
+    expect(ownerStyles).toContain('--color-primary: hsl(var(--primary))')
   })
 })

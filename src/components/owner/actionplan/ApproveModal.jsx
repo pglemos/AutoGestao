@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { normalizeResponsibleValue } from "./actionPlanFormUtils";
 
 export default function ApproveModal({ action, open, onOpenChange, onConfirm, responsiblePeople = [] }) {
   const [note, setNote] = useState("");
@@ -23,7 +24,7 @@ export default function ApproveModal({ action, open, onOpenChange, onConfirm, re
   useEffect(() => {
     if (action) {
       setNote("");
-      setResponsible(action.executor || action.responsible || "");
+      setResponsible(normalizeResponsibleValue(action.executor || action.responsible));
       setDueDate(action.dueDate || "");
       setBudget(action.budget != null ? String(action.budget) : "");
     }
@@ -33,7 +34,7 @@ export default function ApproveModal({ action, open, onOpenChange, onConfirm, re
 
   const handleConfirm = () => {
     onConfirm(action.id, {
-      note,
+      note: note.trim(),
       responsible,
       dueDate,
       budget: budget ? parseFloat(budget) : null,

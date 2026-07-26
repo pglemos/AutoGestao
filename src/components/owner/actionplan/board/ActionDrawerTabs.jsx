@@ -1,11 +1,6 @@
 // Drawer de ação com 4 abas internas: Resumo, Execução, Evidências, Histórico e Impacto.
 import { useState, useEffect } from "react";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-} from "@/components/ui/sheet";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { actionPlanLiveRepository } from "../actionPlanLiveRepository";
@@ -37,21 +32,21 @@ export default function ActionDrawerTabs({ action, open, onOpenChange, onQuickAc
   const quickActions = QUICK_ACTIONS[currentAction.status] || [];
 
   return (
-    <Sheet open={open} onOpenChange={onOpenChange}>
-      <SheetContent className="w-full overflow-y-auto sm:max-w-2xl">
-        <SheetHeader>
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-3xl">
+        <DialogHeader>
           <div className="flex items-center gap-2">
             <span className="text-xs font-bold text-muted-foreground">{currentAction.code}</span>
           </div>
-          <SheetTitle className="text-left">{currentAction.title}</SheetTitle>
-        </SheetHeader>
+          <DialogTitle className="text-left">{currentAction.title}</DialogTitle>
+        </DialogHeader>
 
         <Tabs value={tab} onValueChange={setTab} className="mt-4">
           <TabsList className="grid w-full grid-cols-2 sm:grid-cols-4">
-            <TabsTrigger value="resumo" className="text-xs">Resumo</TabsTrigger>
-            <TabsTrigger value="execucao" className="text-xs">Execução</TabsTrigger>
-            <TabsTrigger value="evidencias" className="text-xs">Evidências</TabsTrigger>
-            <TabsTrigger value="historico" className="text-xs">Histórico e Impacto</TabsTrigger>
+            <TabsTrigger value="resumo" className="whitespace-nowrap text-xs">Resumo</TabsTrigger>
+            <TabsTrigger value="execucao" className="whitespace-nowrap text-xs">Execução</TabsTrigger>
+            <TabsTrigger value="evidencias" className="whitespace-nowrap text-xs">Evidências</TabsTrigger>
+            <TabsTrigger value="historico" className="whitespace-nowrap text-xs">Histórico e Impacto</TabsTrigger>
           </TabsList>
           <TabsContent value="resumo" className="mt-3"><SummaryTab action={currentAction} /></TabsContent>
           <TabsContent value="execucao" className="mt-3"><ExecutionTab action={currentAction} onReload={reload} onQuickAction={onQuickAction} user={user} /></TabsContent>
@@ -59,8 +54,12 @@ export default function ActionDrawerTabs({ action, open, onOpenChange, onQuickAc
           <TabsContent value="historico" className="mt-3"><HistoryTab action={currentAction} onReload={reload} user={user} /></TabsContent>
         </Tabs>
 
-        <div className="mt-4 flex flex-wrap gap-2 border-t border-border pt-4">
-          {quickActions.map((qa) => {
+        <div className="mt-4 flex min-w-0 flex-wrap gap-2 border-t border-border pt-4">
+          {quickActions.filter((qa) => {
+            if (qa.value === "open") return false;
+            if (tab === "execucao" && ["progress", "block", "unblock"].includes(qa.value)) return false;
+            return true;
+          }).map((qa) => {
             const isPrimary = qa.value === "approve" || qa.value === "validate" || qa.value === "start" || qa.value === "submitValidation";
             const isDanger = qa.value === "cancel" || qa.value === "block";
             return (
@@ -76,7 +75,7 @@ export default function ActionDrawerTabs({ action, open, onOpenChange, onQuickAc
             );
           })}
         </div>
-      </SheetContent>
-    </Sheet>
+      </DialogContent>
+    </Dialog>
   );
 }

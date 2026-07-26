@@ -13,28 +13,34 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
 
   return (
     <div className="overflow-x-auto rounded-xl border border-border">
-      <table className="w-full min-w-[1100px] text-sm">
+      <table className="w-full min-w-[1980px] table-fixed text-sm">
+        <colgroup>
+          <col className="w-10" /><col className="w-28" /><col className="w-64" /><col className="w-48" />
+          <col className="w-40" /><col className="w-44" /><col className="w-40" /><col className="w-24" />
+          <col className="w-40" /><col className="w-36" /><col className="w-28" /><col className="w-28" />
+          <col className="w-36" /><col className="w-32" /><col className="w-16" />
+        </colgroup>
         <thead className="sticky top-0 bg-muted/50">
           <tr className="border-b border-border">
             <th className="w-10 px-2 py-2 text-left">
               <Checkbox checked={allSelected} onCheckedChange={() => onToggleSelectAll(sorted.map((a) => a.id))} />
             </th>
-            <th className="sticky left-10 z-10 bg-muted/50 px-3 py-2 text-left text-xs font-medium text-muted-foreground">
+            <th className="sticky left-10 z-10 whitespace-nowrap bg-muted/50 px-3 py-2 text-left text-xs font-medium text-muted-foreground">
               <SortButton label="Código" onClick={() => onSortChange("updated_recent")} />
             </th>
-            <th className="sticky left-[88px] z-10 bg-muted/50 px-3 py-2 text-left text-xs font-medium text-muted-foreground">Ação</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Objetivo</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Indicador</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Depto</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Resp.</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Prio</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Status</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Progresso</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Início</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Prazo</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Atraso</th>
-            <th className="px-3 py-2 text-left text-xs font-medium text-muted-foreground">Atualização</th>
-            <th className="w-12 px-2 py-2 text-center text-xs font-medium text-muted-foreground">Ações</th>
+            <th className="sticky left-[88px] z-10 whitespace-nowrap bg-muted/50 px-3 py-2 text-left text-xs font-medium text-muted-foreground">Ação</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Objetivo</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Indicador</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Depto</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Resp.</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Prio</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Status</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Progresso</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Início</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Prazo</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Atraso</th>
+            <th className="whitespace-nowrap px-3 py-2 text-left text-xs font-medium text-muted-foreground">Atualização</th>
+            <th className="w-12 whitespace-nowrap px-2 py-2 text-center text-xs font-medium text-muted-foreground">Ações</th>
           </tr>
         </thead>
         <tbody>
@@ -53,17 +59,17 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
                   <Checkbox checked={selected} onCheckedChange={() => onToggleSelect(action.id)} />
                 </td>
                 <td className="sticky left-10 z-10 bg-card px-3 py-2 text-xs font-bold text-muted-foreground">{action.code}</td>
-                <td className="sticky left-[88px] z-10 max-w-[200px] bg-card px-3 py-2">
-                  <button onClick={() => onQuickAction(action, "open")} className="line-clamp-1 text-left text-sm font-medium text-foreground hover:text-primary">
+                <td className="sticky left-[88px] z-10 max-w-[256px] bg-card px-3 py-2">
+                  <button title={action.title} onClick={() => onQuickAction(action, "open")} className="block w-full truncate text-left text-sm font-medium text-foreground hover:text-primary">
                     {action.title}
                   </button>
                 </td>
-                <td className="max-w-[140px] px-3 py-2 text-xs text-muted-foreground"><span className="line-clamp-1">{action.strategicObjectiveLabel}</span></td>
-                <td className="max-w-[120px] px-3 py-2 text-xs text-muted-foreground"><span className="line-clamp-1">{action.indicator || "—"}</span></td>
-                <td className="px-3 py-2"><span className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${dept.badge}`}>{dept.label}</span></td>
-                <td className="px-3 py-2 text-xs text-foreground">{action.responsible}</td>
-                <td className="px-3 py-2"><span className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${priority.badge}`}>{priority.label}</span></td>
-                <td className="px-3 py-2"><span className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${status.badge}`}>{status.label}</span></td>
+                <td title={action.strategicObjectiveLabel} className="max-w-[192px] truncate px-3 py-2 text-xs text-muted-foreground">{action.strategicObjectiveLabel}</td>
+                <td title={action.indicator || "—"} className="max-w-[160px] truncate px-3 py-2 text-xs text-muted-foreground">{action.indicator || "—"}</td>
+                <td className="whitespace-nowrap px-3 py-2"><span className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${dept.badge}`}>{dept.label}</span></td>
+                <td className="truncate px-3 py-2 text-xs text-foreground" title={action.responsible}>{action.responsible}</td>
+                <td className="whitespace-nowrap px-3 py-2"><span className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${priority.badge}`}>{priority.label}</span></td>
+                <td className="whitespace-nowrap px-3 py-2"><span className={`rounded-full px-1.5 py-0.5 text-xs font-medium ${status.badge}`}>{status.label}</span></td>
                 <td className="px-3 py-2">
                   <div className="flex items-center gap-1.5">
                     <div className="h-1.5 w-16 overflow-hidden rounded-full bg-muted">

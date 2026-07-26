@@ -1,4 +1,5 @@
 import { supabase } from "@/lib/supabase";
+import { normalizeResponsibleValue } from "./actionPlanFormUtils";
 
 const ACTION_SELECT = [
   "id",
@@ -425,7 +426,8 @@ function parseDateInput(value) {
 }
 
 async function resolveResponsibleId(name, storeId) {
-  if (!name || !storeId) return null;
+  const normalizedName = normalizeResponsibleValue(name);
+  if (!normalizedName || !storeId) return null;
   const { data: links, error: linksError } = await supabase
     .from("vinculos_loja")
     .select("user_id")
@@ -437,7 +439,7 @@ async function resolveResponsibleId(name, storeId) {
   const { data: user, error: userError } = await supabase
     .from("usuarios")
     .select("id")
-    .eq("name", name)
+    .eq("name", normalizedName)
     .in("id", ids)
     .limit(1)
     .maybeSingle();
