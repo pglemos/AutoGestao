@@ -7,10 +7,8 @@ import {
   CheckCircle2,
   ClipboardCheck,
   Clock3,
-  Lock,
   MessageSquareText,
   ShieldAlert,
-  TrendingUp,
   UserRoundCheck,
   Users,
 } from 'lucide-react'
@@ -22,6 +20,7 @@ import type { OwnerPerformanceAlert } from '../PerformanceAlerts'
 import { ownerPath } from './format'
 import { SectionTitle } from './primitives'
 import { toneClasses, type ActionRow, type DashboardData } from './types'
+import { ConsultingProgramCard } from './ConsultingProgramCard'
 
 type ExecutiveItem = {
   id: string
@@ -414,119 +413,45 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
   const navigate = useNavigate()
   const program = data.consultingProgram
   const contextQuery = `storeId=${encodeURIComponent(data.operationalStore?.id || '')}&origem=consultoria`
-  const completedVisits = program?.visitsCompleted ?? 0
-  const totalVisits = program?.totalVisits ?? 0
-  const completion = totalVisits > 0 ? Math.round((completedVisits / totalVisits) * 100) : null
-  const nextVisit = program?.nextVisitNumber || (totalVisits > completedVisits ? completedVisits + 1 : null)
-  const monthLabel = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(new Date(`${data.referenceDate}T12:00:00`))
-  const activeProgram = program?.programKey || 'pmr'
-  const programCards = [
-    { key: 'pmr', name: activeProgram === 'pmr' ? program?.programName || 'PMR' : 'PMR', detail: 'Programa de implementação e acompanhamento.', total: activeProgram === 'pmr' ? totalVisits : null },
-    { key: 'pmr_plus', name: 'PMR Plus', detail: 'Processos, acompanhamento e organização financeira.', total: null },
-    { key: 'ppa', name: 'PPA', detail: 'Modelo de negócio, planejamento e eficiência em custo.', total: null },
-  ]
-  const journeyTotal = Math.max(totalVisits, 1)
-  const departmentFocus = data.metrics.storeName
-    ? [
-        { label: 'Unidade', value: data.metrics.storeName, score: data.metrics.attainment },
-        { label: 'Vendas no período', value: `${data.metrics.totalSales}`, score: data.metrics.attainment },
-        { label: 'Estoque acima de 90 dias', value: `${data.inventory?.agingOver90 ?? 0}`, score: null },
-        { label: 'Disciplina operacional', value: `${data.pendingDisciplineSellers.length} pendências`, score: null },
-      ]
-    : []
 
   return (
     <div className="space-y-mx-md">
-      <div className="flex flex-col gap-mx-xs sm:flex-row sm:items-start sm:justify-between">
-        <SectionTitle title="Consultoria" subtitle="Acompanhe o plano contratado, encontros e implicações" />
-        <span className="inline-flex w-fit items-center gap-mx-xs rounded-mx-full bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-success">
-          <TrendingUp size={14} /> Estágio atual: {program?.clientStatus || 'Não informado'}
-        </span>
-      </div>
+      <SectionTitle
+        title="Consultoria"
+        subtitle="Jornada executiva, preparação dos encontros e decisões que precisam ser levadas ao Consultor MX."
+      />
 
-      {data.consultingLoading ? (
-        <Card className="rounded-mx-xl border border-border-subtle bg-white p-mx-lg"><Typography variant="p" tone="muted">Carregando programa de consultoria…</Typography></Card>
-      ) : data.consultingError || !program ? (
-        <Card className="rounded-mx-xl border border-dashed border-border-default bg-white p-mx-lg text-center">
-          <Typography variant="h3">Nenhum programa de consultoria ativo</Typography>
-          <Typography variant="p" tone="muted" className="mt-mx-xs">{data.consultingError || 'Esta unidade ainda não possui um programa vinculado.'}</Typography>
-        </Card>
-      ) : (
-        <>
-          <Card className="rounded-mx-xl border border-border-subtle bg-white p-mx-md shadow-mx-sm">
-            <div className="grid gap-mx-md xl:grid-cols-[minmax(0,1fr)_280px]">
-              <div>
-                <span className="inline-flex rounded-mx-full bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-success">Programa contratado</span>
-                <div className="mt-mx-xs flex flex-wrap items-center gap-mx-xs">
-                  <Typography variant="h2" className="text-xl font-bold">{program.programName}</Typography>
-                  <span className="inline-flex items-center gap-1 rounded-mx-full bg-status-success-surface px-mx-xs py-0.5 text-mx-tiny font-bold text-status-success"><span className="h-1.5 w-1.5 rounded-full bg-status-success" />Ativo</span>
-                </div>
-                <Typography variant="p" tone="muted" className="mt-mx-xs text-sm">Acompanhamento do programa no recorte de {monthLabel}.</Typography>
-                <div className="mt-mx-sm flex flex-wrap gap-x-mx-md gap-y-mx-xs text-mx-tiny text-text-secondary">
-                  <span>Modalidade: <strong className="text-text-primary">{program.clientModality || 'Não informado'}</strong></span>
-                  <span>Encontros: <strong className="text-text-primary">{completedVisits} de {totalVisits || '—'}</strong></span>
-                  <span>Status: <strong className="text-text-primary">{program.clientStatus || 'Não informado'}</strong></span>
-                </div>
-                <div className="mt-mx-md grid gap-mx-sm sm:grid-cols-3">
-                  <ConsultingMetric label="Encontros realizados" completed={completedVisits} total={totalVisits} percent={completion} />
-                  <ConsultingMetric label="Próximo encontro" completed={nextVisit ? `#${nextVisit}` : '—'} total="" percent={null} />
-                  <ConsultingMetric label="Dados do programa" completed={program.clientId ? 'Disponível' : '—'} total="" percent={null} />
-                </div>
-              </div>
-              <div className="rounded-mx-lg border border-brand-primary/20 bg-brand-primary/5 p-mx-md">
-                <Typography variant="tiny" tone="muted" className="font-bold">Próximo encontro</Typography>
-                <Typography variant="p" className="mt-mx-xs font-bold">{nextVisit ? `Encontro ${nextVisit}` : 'A agendar'}</Typography>
-                <Typography variant="p" className="text-sm">{program.nextVisitObjective || 'Objetivo ainda não informado.'}</Typography>
-                <Typography variant="tiny" tone="muted" className="mt-mx-xs block">{program.nextVisitScheduledAt ? new Date(program.nextVisitScheduledAt).toLocaleString('pt-BR') : 'Sem data registrada'}</Typography>
-                <div className="mt-mx-sm space-y-mx-xs">
-                  {program.nextVisitMeetLink && <a href={program.nextVisitMeetLink} target="_blank" rel="noreferrer" className="flex h-mx-10 items-center justify-center rounded-mx-lg bg-brand-primary px-mx-sm text-mx-tiny font-bold text-white">Entrar na Reunião</a>}
-                  <button type="button" onClick={() => navigate(`/falar-consultor?${contextQuery}`)} className="flex h-mx-10 w-full items-center justify-center gap-mx-xs rounded-mx-lg border border-border-subtle bg-white text-mx-tiny font-bold text-text-primary">Falar com Consultor <ArrowRight size={14} /></button>
-                </div>
-              </div>
-            </div>
-          </Card>
+      <ConsultingProgramCard program={program} loading={data.consultingLoading} error={data.consultingError} />
 
-          <div className="grid gap-mx-sm md:grid-cols-3">
-            {programCards.map(card => {
-              const isActive = card.key === activeProgram
-              return (
-                <div key={card.key} className={cn('rounded-mx-xl border bg-white p-mx-md', isActive ? 'border-brand-primary bg-brand-primary/5' : 'border-border-subtle opacity-60')}>
-                  <div className="flex items-center justify-between"><span className={cn('rounded-mx-full px-mx-xs py-0.5 text-mx-tiny font-bold', isActive ? 'bg-brand-primary text-white' : 'bg-surface-alt text-text-secondary')}>{isActive ? 'Ativo' : 'Bloqueado'}</span>{!isActive && <Lock size={15} className="text-text-tertiary" />}</div>
-                  <Typography variant="p" className="mt-mx-sm font-bold">{card.name}</Typography>
-                  <Typography variant="tiny" tone="muted" className="mt-mx-xs block line-clamp-2">{card.detail}</Typography>
-                  <Typography variant="tiny" tone="muted" className="mt-mx-sm block">{card.total ? `${card.total} encontros` : 'Detalhes não disponíveis'}</Typography>
-                </div>
-              )
-            })}
+      <div className="grid grid-cols-1 gap-mx-md xl:grid-cols-[minmax(0,1fr)_340px]">
+        <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
+          <Typography variant="h3" className="text-xl font-black">Pauta executiva recomendada</Typography>
+          <div className="mt-mx-md space-y-mx-sm">
+            {[
+              program?.nextVisitObjective || 'Definir pauta do próximo encontro a partir dos dados da unidade.',
+              `${data.metrics.totalSales} vendas registradas no período selecionado.`,
+              `${data.inventory?.agingOver90 ?? 0} veículos com aging acima de 90 dias.`,
+              `${data.pendingDisciplineSellers.length} vendedores sem registro no recorte selecionado.`,
+            ].map((item, index) => (
+              <div key={item} className="flex items-start gap-mx-sm rounded-mx-xl bg-surface-alt p-mx-md">
+                <span className="flex h-mx-7 w-mx-7 shrink-0 items-center justify-center rounded-mx-lg bg-brand-primary text-xs font-black text-white">{index + 1}</span>
+                <p className="text-sm font-black leading-relaxed text-text-primary">{item}</p>
+              </div>
+            ))}
           </div>
+        </Card>
 
-          <Card className="rounded-mx-xl border border-border-subtle bg-white p-mx-md shadow-mx-sm">
-            <Typography variant="h3" className="text-base font-bold">Jornada do Programa</Typography>
-            <div className="mt-mx-sm flex gap-mx-xs"><span className="flex-1 rounded-mx-lg border border-border-subtle px-mx-sm py-mx-xs text-mx-tiny"><strong>Implementação</strong> 1–{journeyTotal}</span><span className="flex-1 rounded-mx-lg border border-border-subtle px-mx-sm py-mx-xs text-mx-tiny"><strong>Acompanhamento</strong> —</span></div>
-            <div className="mt-mx-md flex flex-wrap gap-x-1 gap-y-mx-sm">
-              {Array.from({ length: journeyTotal }, (_, index) => {
-                const number = index + 1
-                const completed = number <= completedVisits
-                const current = number === nextVisit
-                return <div key={number} className="flex min-w-[76px] flex-1 flex-col items-center text-center"><div className={cn('flex h-8 w-8 items-center justify-center rounded-full border-2 text-mx-tiny font-bold', completed ? 'border-brand-primary bg-brand-primary text-white' : current ? 'border-brand-primary bg-brand-primary/10 text-brand-primary' : 'border-border-default bg-surface-alt text-text-tertiary')}>{completed ? '✓' : number}</div><span className={cn('mt-mx-xs text-mx-tiny', current ? 'font-bold text-text-primary' : 'text-text-tertiary')}>{current ? program.nextVisitObjective || 'Próximo encontro' : `Encontro ${number}`}</span><span className="mt-0.5 text-[10px] text-text-tertiary">{completed ? 'Concluído' : current ? 'Agendado' : 'Pendente'}</span></div>
-              })}
-            </div>
-          </Card>
-
-          <Card className="rounded-mx-xl border border-border-subtle bg-white p-mx-md shadow-mx-sm">
-            <Typography variant="h3" className="text-base font-bold">Focos atuais do ciclo</Typography>
-            <div className="mt-mx-sm grid gap-mx-sm sm:grid-cols-2 xl:grid-cols-4">
-              {departmentFocus.map(focus => <div key={focus.label} className="rounded-mx-lg border border-border-subtle bg-surface-alt/50 p-mx-sm"><Typography variant="tiny" className="font-bold">{focus.label}</Typography><Typography variant="p" className="mt-mx-xs font-bold">{focus.value}</Typography><Typography variant="tiny" tone="muted" className="mt-mx-xs block">{focus.score == null ? 'Sem score registrado' : `${Math.max(0, Math.min(100, Math.round(focus.score)))}% no recorte atual`}</Typography></div>)}
-            </div>
-          </Card>
-
-          <Card className="rounded-mx-xl border border-border-subtle bg-white p-mx-md shadow-mx-sm"><Typography variant="h3" className="text-base font-bold">Detalhes</Typography><div className="mt-mx-sm grid gap-x-mx-md gap-y-mx-xs text-mx-tiny text-text-secondary sm:grid-cols-3"><span>Consultor: <strong className="text-text-primary">Não informado</strong></span><span>Cliente: <strong className="text-text-primary">{program.clientId}</strong></span><span>Início: <strong className="text-text-primary">Não informado</strong></span></div></Card>
-        </>
-      )}
+        <Card className="rounded-mx-2xl border border-brand-primary/20 bg-mx-indigo-50 p-mx-lg shadow-mx-sm">
+          <MessageSquareText size={28} className="text-brand-primary" />
+          <Typography variant="h3" className="mt-mx-sm text-xl font-black">Falar com Consultor</Typography>
+          <Typography variant="p" tone="muted" className="mt-mx-xs text-sm font-bold leading-relaxed">
+            Abra o atendimento com o contexto da loja e use os indicadores desta tela como base da solicitação.
+          </Typography>
+          <Button type="button" className="mt-mx-md w-full rounded-mx-xl" onClick={() => navigate(`/falar-consultor?${contextQuery}`)}>
+            Falar com Consultor <ArrowRight size={16} />
+          </Button>
+        </Card>
+      </div>
     </div>
   )
-}
-
-function ConsultingMetric({ label, completed, total, percent }: { label: string; completed: string | number; total: string | number; percent: number | null }) {
-  return <div className="rounded-lg border border-border-subtle bg-surface-alt/60 p-mx-sm"><Typography variant="tiny" className="font-bold">{label}</Typography><div className="mt-mx-xs flex items-baseline gap-1"><span className="text-base font-bold text-text-primary">{completed}</span>{total !== '' && <span className="text-mx-tiny text-text-tertiary">de {total}</span>}{percent != null && <span className="ml-auto text-mx-tiny text-text-tertiary">{percent}%</span>}</div>{percent != null && <div className="mt-mx-xs h-1.5 overflow-hidden rounded-full bg-border-subtle"><div className="h-full rounded-full bg-brand-primary" style={{ width: `${percent}%` }} /></div>}</div>
 }

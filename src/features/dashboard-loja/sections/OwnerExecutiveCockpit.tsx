@@ -118,7 +118,7 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
   )
 
   return (
-    <section className="min-h-full space-y-mx-md bg-surface-alt p-mx-sm md:p-mx-lg">
+    <section className="owner-base44-scope min-h-full space-y-mx-md bg-surface-alt p-mx-sm md:p-mx-lg">
       <OwnerCockpitHeader
         name={profile?.name || 'Nome não informado'}
         periodLabel={periodLabel}
@@ -164,7 +164,19 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
       )}
 
       {section === 'consultoria' && (
-        <OwnerConsultingView data={data} />
+        <>
+          <OwnerConsultingView data={data} />
+          <OwnerModuleGrid
+            title="Visitas e acompanhamento"
+            subtitle="Acompanhamento PMR, PMR Plus, PPA e evidências da consultoria."
+            items={[
+              { title: 'Checklist da visita', detail: 'Roteiro, observações e execução.', icon: <CalendarDays size={20} />, tone: 'brand' },
+              { title: 'Relatório e ata', detail: 'Resumo da visita e próximos passos.', icon: <LineChartIcon size={20} />, tone: 'info' },
+              { title: 'Evidências', detail: 'Fotos, anexos e validações.', icon: <Package size={20} />, tone: 'warning' },
+            ]}
+          />
+          <CentralMxPersistedAgendaPanel storeId={data.operationalStore?.id || null} />
+        </>
       )}
 
       {section === 'departamentos' && (

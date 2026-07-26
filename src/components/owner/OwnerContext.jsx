@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
-import { useAuth } from "@/hooks/useAuth";
+import { useAuth } from "@/lib/owner-b44/AuthContext";
 import { useStores } from "@/hooks/useStores";
 import { resolveOwnerPeriodRange } from "@/lib/owner-period";
 
@@ -13,7 +13,7 @@ export const useOwner = () => {
 
 // No MX, a "empresa" do Base44 mapeia para o grupo do dono e as "unidades" para as lojas ativas.
 export const OwnerProvider = ({ children }) => {
-  const { profile, role } = useAuth();
+  const { user } = useAuth();
   const { lojas, loading: storesLoading, error: storesError } = useStores();
 
   const [period, setPeriod] = useState("month"); // month | quarter | year | custom
@@ -39,8 +39,8 @@ export const OwnerProvider = ({ children }) => {
   }, [units]);
 
   const company = useMemo(
-    () => ({ id: "mx", name: profile?.name ? `${profile.name.split(" ")[0]} • MX` : "MX Performance" }),
-    [profile],
+    () => ({ id: "mx", name: user?.full_name ? `${user.full_name.split(" ")[0]} • MX` : "MX Performance" }),
+    [user],
   );
 
   const companies = useMemo(() => [company], [company]);
@@ -63,12 +63,7 @@ export const OwnerProvider = ({ children }) => {
   }, [customEnd, customStart, period]);
 
   const value = {
-    user: profile ? {
-      id: profile.id,
-      email: profile.email || "",
-      full_name: profile.name || "Nome não informado",
-      role,
-    } : null,
+    user,
     companies,
     memberships: [],
     unitsByCompany,

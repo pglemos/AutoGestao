@@ -1,0 +1,38 @@
+@import url('https://fonts.googleapis.com/css2?family=Lexend:wght@400;500;600;700;800&family=Outfit:wght@500;600;700;800&display=swap');
+
+/* Paridade visual do conteúdo da Visão do Dono com o projeto Base44.
+   O escopo começa dentro do cockpit. O sidebar universal permanece fora dele. */
+.owner-base44-scope {
+  --color-brand-primary: #059669;
+  --color-brand-primary-hover: #047857;
+  --color-brand-secondary: #064e3b;
+  --color-mx-teal: #059669;
+  --color-mx-teal-light: #d1fae5;
+  --color-mx-teal-soft: #ecfdf5;
+  --color-mx-action: #059669;
+  --color-mx-action-hover: #047857;
+  --color-mx-action-light: #ecfdf5;
+  --color-mx-green-50: #ecfdf5;
+  --color-mx-green-100: #d1fae5;
+  --color-mx-green-400: #34d399;
+  --color-mx-green-500: #059669;
+  --color-mx-green-600: #059669;
+  --color-mx-green-700: #047857;
+  --color-mx-green-900: #064e3b;
+  --color-status-success: #059669;
+  --color-status-success-surface: #ecfdf5;
+  --color-chart-1: #059669;
+  --color-kpi-footer-success-bg: #ecfdf5;
+  --color-kpi-footer-success-text: #059669;
+  font-family: 'Lexend', 'Inter', system-ui, sans-serif;
+  font-synthesis: none;
+}
+
+.owner-base44-scope :is(h1, h2, h3, h4, h5, h6) {
+  font-family: 'Outfit', 'Lexend', 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.02em;
+}
+
+.owner-base44-scope :is(button, input, select, textarea) {
+  font-family: inherit;
+}

@@ -18,7 +18,7 @@ export function DepartmentsView({
     return (
       <div className="space-y-mx-md">
         <SectionTitle title="Departamentos" subtitle="Marketing, produto, financeiro, RH, operações e comercial com indicators, rotina e playbook." />
-        <div className="rounded-mx-xl border border-dashed border-border-default bg-white p-mx-lg text-center" role="status">
+        <div className="owner-base44-exact__empty-state" role="status">
           <strong className="text-base font-black text-text-primary">Nenhum departamento disponível</strong>
           <p className="text-sm text-text-secondary">Os dados de departamentos para esta unidade não estão configurados.</p>
         </div>
