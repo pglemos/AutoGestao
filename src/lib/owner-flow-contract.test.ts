@@ -6,14 +6,17 @@ const root = process.cwd()
 const read = (file: string) => readFileSync(resolve(root, file), 'utf8')
 
 describe('Dono — contratos dos fluxos corrigidos', () => {
-  test('rotas executivas usam o cockpit real e não páginas demonstrativas legadas', () => {
+  test('rotas aprovadas usam as páginas visuais do módulo Base44', () => {
     const module = read('src/features/owner-base44/OwnerModule.tsx')
     expect(module).toContain("import OwnerLiveDataPage from '@/features/owner-base44/OwnerLiveDataPage'")
     expect(module).toContain('<Route path="*" element={<OwnerLiveDataPage />} />')
+    expect(module).toContain("import OwnerHome from '@/pages/owner/OwnerHome'")
+    expect(module).toContain("import PlanoEstrategico from '@/pages/owner/PlanoEstrategico'")
     expect(module).toContain('<Route path="plano-acao" element={<PlanoDeAcao />} />')
-    expect(module).not.toContain("import OwnerHome from '@/pages/owner/OwnerHome'")
-    expect(module).not.toContain("import PlanoEstrategico from '@/pages/owner/PlanoEstrategico'")
-    expect(module).not.toContain("import Consultoria from '@/pages/owner/Consultoria'")
+    expect(module).toContain("import Consultoria from '@/pages/owner/Consultoria'")
+    expect(module).toContain('<Route index element={<OwnerHome />} />')
+    expect(module).toContain('<Route path="plano-estrategico" element={<PlanoEstrategico />} />')
+    expect(module).toContain('<Route path="consultoria" element={<Consultoria />} />')
   })
 
   test('plano estratégico monta uma única matriz real', () => {

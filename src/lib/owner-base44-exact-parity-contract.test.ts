@@ -76,9 +76,15 @@ describe('owner Base44 exact parity contract', () => {
     const route = read('src/features/owner-base44/OwnerModule.tsx')
     expect(route).toContain('OwnerLayout')
     expect(route).toContain('OwnerLiveDataPage')
+    expect(route).toContain('OwnerHome')
+    expect(route).toContain('PlanoEstrategico')
     expect(route).toContain('PlanoDeAcao')
-    expect(route).toContain('<Route path="*" element={<OwnerLiveDataPage />} />')
+    expect(route).toContain('Consultoria')
+    expect(route).toContain('<Route index element={<OwnerHome />} />')
+    expect(route).toContain('<Route path="plano-estrategico" element={<PlanoEstrategico />} />')
     expect(route).toContain('<Route path="plano-acao" element={<PlanoDeAcao />} />')
+    expect(route).toContain('<Route path="consultoria" element={<Consultoria />} />')
+    expect(route).toContain('<Route path="*" element={<OwnerLiveDataPage />} />')
   })
 
   it('preserves the Base44 executive navigation in OwnerSidebar', () => {
