@@ -1,8 +1,8 @@
 {
   "_comment": "Congelamento forward-only das migrations aplicadas. NÃO editar à mão. Regenerar apenas ao adicionar migrations novas: node scripts/gen_migration_checksums.mjs",
-  "generated_at": "2026-07-21",
+  "generated_at": "2026-07-27",
   "algorithm": "sha256",
-  "count": 270,
+  "count": 269,
   "checksums": {
     "00000000000000_baseline_legacy_schema.sql": "3a519e3804095af5e9f7d8a7cb70dcc388b04530b6a7911ee1e3cb76af10b0fc",
     "00000000000001_mark_existing_migrations_applied.sql": "a8183b5cc5bd56b549ce8d8d302eb0c5d4f7b20381438586e02dd7353d6f2a45",
@@ -99,7 +99,6 @@
     "20260518120000_checkin_validation_kit.sql": "48a2eab6408076ce98253c996303444cabd0fb2be5809c4014253805648fd2df",
     "20260518130000_correlation_id_observability.sql": "2afef10a830980c8a844e90fa0510e1edf530bc7620b5229536b29e97dc1546b",
     "20260520120000_ai_model_daily_usage_limits.sql": "c581bba9577bd3935818220467420b45bb8c32f1a5efd3f58be80dd5bc347cd3",
-    "20260520120000_gemini_daily_usage_limits.sql": "15c7069749983a0967706afc9f06dc3b91e2e03208c8aed18f7b581724f5c481",
     "20260520143000_google_meet_atas.sql": "a819d1069c47670041ef48bae57accf2ea14bcffd9e658fbbc49fb5583f5e3d4",
     "20260522100000_admin_master_scope_alignment.sql": "9143ef10855e6f0f13191ce1d7e82ecbf24e0155f260e31d827c1ac3213713b5",
     "20260527100000_canonical_roles_schema.sql": "a3b894ca311aacd852385181f14ce1d8bca5f6df6b2209881e3e31fb878af783",
