@@ -1,0 +1,35 @@
+name: Diagnose Supabase start
+
+on:
+  push:
+    branches:
+      - feat/internal-mx-option-b-global-admin
+
+permissions:
+  contents: read
+
+jobs:
+  diagnose:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: supabase/setup-cli@v1
+        with:
+          version: latest
+      - name: Capture Supabase startup
+        shell: bash
+        run: |
+          set +e
+          supabase start --debug > /tmp/supabase-start.log 2>&1
+          echo $? > /tmp/supabase-start.status
+          tail -300 /tmp/supabase-start.log
+          exit 0
+      - name: Upload startup diagnostics
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-start-diagnostics
+          path: |
+            /tmp/supabase-start.log
+            /tmp/supabase-start.status
+          retention-days: 1
