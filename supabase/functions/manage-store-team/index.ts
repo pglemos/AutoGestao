@@ -4,9 +4,9 @@ import { corsHeaders } from '../_shared/cors.ts'
 
 const internalRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']
 const storeRoles = ['dono', 'gerente', 'vendedor']
-const adminRoles = ['administrador_geral', 'administrador_mx']
+const adminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']
 type StoreRole = 'dono' | 'gerente' | 'vendedor'
-type CallerRole = 'administrador_geral' | 'administrador_mx' | 'dono' | 'gerente'
+type CallerRole = 'administrador_geral' | 'administrador_mx' | 'consultor_mx' | 'dono' | 'gerente'
 type TeamAction = 'update' | 'delete'
 
 type TeamUpdates = {
@@ -87,7 +87,7 @@ serve(async (req) => {
     return jsonResponse({ success: false, error: 'Inactive user' }, 403)
   }
 
-  if (!['administrador_geral', 'administrador_mx', 'dono', 'gerente'].includes(callerRole)) {
+  if (![...adminRoles, 'dono', 'gerente'].includes(callerRole)) {
     return jsonResponse({ success: false, error: 'Insufficient privileges' }, 403)
   }
 
@@ -151,6 +151,7 @@ serve(async (req) => {
   if (targetProfileError) return jsonResponse({ success: false, error: targetProfileError.message }, 500)
   if (!targetProfile) return jsonResponse({ success: false, error: 'Target user not found' }, 404)
 
+  const targetProfileRow = targetProfile as UserProfileRow
   const { data: targetMembership } = await adminClient
     .from('vinculos_loja')
     .select('role')
@@ -180,10 +181,10 @@ serve(async (req) => {
     previousMembership = data as StoreMembershipRow | null
   }
 
-  const targetCurrentRole = (previousMembership?.role || targetMembershipRow?.role || targetProfile.role || '').toLowerCase()
+  const targetCurrentRole = (previousMembership?.role || targetMembershipRow?.role || targetProfileRow.role || '').toLowerCase()
   if (!isAdmin) {
     if (internalRoles.includes(targetCurrentRole)) {
-      return jsonResponse({ success: false, error: 'Internal MX users can only be managed by admin' }, 403)
+      return jsonResponse({ success: false, error: 'Internal MX users can only be managed by the internal MX area' }, 403)
     }
     if (typedCallerRole === 'gerente' && targetCurrentRole !== 'vendedor') {
       return jsonResponse({ success: false, error: 'Gerente can manage only vendedores' }, 403)
@@ -222,13 +223,26 @@ serve(async (req) => {
       if (userError) return jsonResponse({ success: false, error: userError.message }, 500)
     }
 
+    const { error: auditError } = await adminClient.from('internal_mx_admin_audit').insert({
+      actor_id: caller.user.id,
+      actor_role: callerRole,
+      action: 'unlink_store_user',
+      entity_type: 'usuario',
+      entity_id: userId,
+      store_id: targetStoreId,
+      before_data: { role: targetCurrentRole, active: targetProfileRow.active },
+      after_data: { membership_active: false },
+      metadata: {},
+    })
+    if (auditError) return jsonResponse({ success: false, error: auditError.message }, 500)
+
     return jsonResponse({ success: true })
   }
 
   const updates = payload.updates || {}
   const nextRole = updates.role || 'vendedor'
   if (internalRoles.includes(nextRole)) {
-    return jsonResponse({ success: false, error: 'Internal MX roles are not valid store team roles' }, 400)
+    return jsonResponse({ success: false, error: 'Internal MX roles are managed by the global user administration flow' }, 400)
   }
 
   if (!storeRoles.includes(nextRole) || (!isAdmin && typedCallerRole === 'gerente' && nextRole !== 'vendedor') || (!isAdmin && typedCallerRole === 'dono' && nextRole === 'dono')) {
@@ -243,10 +257,6 @@ serve(async (req) => {
   if (typeof updates.is_venda_loja !== 'undefined') userPayload.is_venda_loja = Boolean(updates.is_venda_loja)
   userPayload.role = nextRole
 
-  // usuarios.email e auth.users.email precisam ficar em sincronia: sem isto,
-  // trocar o e-mail aqui derruba silenciosamente login e recuperação de senha
-  // pro e-mail antigo (auth.users nunca muda) enquanto o resto do app já
-  // mostra o e-mail novo.
   if (typeof userPayload.email === 'string') {
     const { error: authEmailError } = await adminClient.auth.admin.updateUserById(userId, {
       email: userPayload.email,
@@ -293,12 +303,26 @@ serve(async (req) => {
       }, { onConflict: 'store_id,seller_user_id' })
     if (tenureError) return jsonResponse({ success: false, error: tenureError.message }, 500)
   } else {
-    await adminClient
+    const { error: tenureError } = await adminClient
       .from('vendedores_loja')
       .update({ is_active: false, ended_at: updates.ended_at || todayISO() })
       .eq('store_id', targetStoreId)
       .eq('seller_user_id', userId)
+    if (tenureError) return jsonResponse({ success: false, error: tenureError.message }, 500)
   }
+
+  const { error: auditError } = await adminClient.from('internal_mx_admin_audit').insert({
+    actor_id: caller.user.id,
+    actor_role: callerRole,
+    action: 'update_store_user',
+    entity_type: 'usuario',
+    entity_id: userId,
+    store_id: targetStoreId,
+    before_data: { role: targetCurrentRole, store_id: previousStoreId },
+    after_data: { ...userPayload, role: nextRole, store_id: targetStoreId },
+    metadata: {},
+  })
+  if (auditError) return jsonResponse({ success: false, error: auditError.message }, 500)
 
   return jsonResponse({ success: true })
 })
