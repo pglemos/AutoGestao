@@ -1,0 +1,51 @@
+import { describe, expect, test } from 'bun:test'
+import { readFileSync } from 'node:fs'
+
+const read = (path: string) => readFileSync(new URL(`../../${path}`, import.meta.url), 'utf8')
+const compact = (value: string) => value.replace(/\s+/g, ' ').trim()
+
+const migrationPath = 'supabase/migrations/20260727040000_internal_mx_option_b_global_admin.sql'
+const migration = compact(read(migrationPath))
+const registerUser = compact(read('supabase/functions/register-user/index.ts'))
+const manageStoreTeam = compact(read('supabase/functions/manage-store-team/index.ts'))
+const manageGlobalUser = compact(read('supabase/functions/manage-global-user/index.ts'))
+
+describe('Opção B: administração global equivalente da área interna MX', () => {
+  test('treats the three internal roles as the same database administrator contract', () => {
+    expect(migration).toContain("SELECT public.eh_area_interna_mx(uid)")
+    expect(migration).toContain('CREATE OR REPLACE FUNCTION public.eh_administrador_mx')
+    expect(migration).toContain('CREATE OR REPLACE FUNCTION public.eh_admin_master_mx')
+    expect(migration).not.toContain("lower(u.email) = ANY")
+  })
+
+  test('keeps privileged user mutations behind authenticated service-role functions', () => {
+    expect(registerUser).toContain("const internalAdminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']")
+    expect(registerUser).toContain("const globallyCreatableRoles")
+    expect(manageStoreTeam).toContain("const adminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']")
+    expect(manageGlobalUser).toContain("const internalAdminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']")
+    expect(manageGlobalUser).toContain("type GlobalUserAction = 'update' | 'delete' | 'force_password_change'")
+    expect(migration).not.toMatch(/GRANT UPDATE ON public\.usuarios TO authenticated/i)
+  })
+
+  test('publishes operational progress sources used by the global real-time cockpit', () => {
+    for (const table of [
+      'planos_acao',
+      'clientes_consultoria',
+      'visitas_consultoria',
+      'seller_routine_snapshots',
+      'manager_routine_snapshots',
+      'valores_indicadores_planejamento',
+      'score_calculations',
+      'score_history',
+    ]) {
+      expect(migration).toContain(`'${table}'`)
+    }
+    expect(migration).toContain('ALTER PUBLICATION supabase_realtime ADD TABLE')
+  })
+
+  test('records privileged mutations in an immutable audit surface', () => {
+    expect(migration).toContain('CREATE TABLE IF NOT EXISTS public.internal_mx_admin_audit')
+    expect(migration).toContain('internal_mx_admin_audit_no_direct_write')
+    expect(manageGlobalUser).toContain(".from('internal_mx_admin_audit')")
+  })
+})
