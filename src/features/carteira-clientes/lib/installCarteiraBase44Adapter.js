@@ -219,16 +219,8 @@ async function listVisualClients(query, order, limit) {
       return []
     }
 
-    const mapped = (data || []).map(row => {
-      const mappedRow = mapMxClientToCarteiraVisual(row)
-      console.log('[CarteiraAdapter] mapped client', mappedRow.id, 'vendedor_id:', mappedRow.vendedor_id, 'etapa:', mappedRow.etapa, 'closed_at:', mappedRow.closed_at)
-      return mappedRow
-    })
+    const mapped = (data || []).map(row => mapMxClientToCarteiraVisual(row))
     const filtered = mapped.filter(row => matchesQuery(row, query))
-    if (query && query.id) {
-      const match = filtered[0]
-      if (match) console.log('[CarteiraAdapter] target client', match.id, 'podeCancelar checks:', { etapa: match.etapa, vendedor_id: match.vendedor_id, closed_at: match.closed_at })
-    }
     const sorted = sortRows(filtered, order)
     return typeof limit === 'number' ? sorted.slice(0, limit) : sorted
   } catch (err) {

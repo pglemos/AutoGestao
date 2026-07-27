@@ -16,17 +16,15 @@ import {
   calcularObjetivoEProximoPasso, calcularScore, explicacaoCliente, tempColor,
 } from "./carteiraUtils";
 
-const JANELA_CANCELAMENTO_DIAS = 7;
-
 /**
- * Espelha a janela de 7 dias validada no backend (RPC cancelar_venda) — só
- * controla a exibição do botão aqui; a regra de verdade é a checagem no
- * servidor, então divergência entre front/back nunca vira brecha.
+ * Controla a exibição do botão de cancelar no frontend.
+ * A regra de verdade está no backend (RPC cancelar_venda).
  */
-function dentroJanelaCancelamento(closedAt) {
+function dentroMesCancelamento(closedAt) {
   if (!closedAt) return false;
-  const diffMs = Date.now() - new Date(closedAt).getTime();
-  return diffMs >= 0 && diffMs <= JANELA_CANCELAMENTO_DIAS * 86400000;
+  const closed = new Date(closedAt);
+  const now = new Date();
+  return closed.getFullYear() === now.getFullYear() && closed.getMonth() === now.getMonth();
 }
 
 // ─── QUALIDADE DA OPORTUNIDADE ───────────────────────────────────────────────
@@ -273,7 +271,6 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
       setCliente(c);
       setForm(c);
       setHistorico(h || []);
-      console.log('[FichaClienteSheet] loaded client', c?.id, 'data:', { etapa: c?.etapa, vendedor_id: c?.vendedor_id, closed_at: c?.closed_at })
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [open, clienteId]);
@@ -360,16 +357,18 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
   const { objetivo, proximoPasso } = useMemo(() => cliente ? calcularObjetivoEProximoPasso(cliente) : { objetivo: "—", proximoPasso: "—" }, [cliente]);
   const motivo = useMemo(() => cliente ? motivoRecomendacao(cliente) : "", [cliente]);
   const { score } = useMemo(() => cliente ? calcularScore(cliente) : { score: 0 }, [cliente]);
-  const isPrivileged = role === "gerente" || role === "dono" || role === "administrador_mx" || role === "administrador_geral";
+  const isGlobalAdmin = role === "administrador_mx" || role === "administrador_geral" || role === "consultor_mx";
   const isVendaAtiva = cliente?.etapa === "ganho";
   const isOwnClient = cliente?.vendedor_id === supabaseUser?.id;
-  const podeCancelarVenda = isVendaAtiva && (isPrivileged || (isOwnClient && dentroJanelaCancelamento(cliente?.closed_at)));
 
-  useEffect(() => {
-    if (cliente && supabaseUser) {
-      console.log('[FichaClienteSheet] podeCancelarVenda', podeCancelarVenda, { role, supabaseUserId: supabaseUser.id, etapa: cliente.etapa, vendedor_id: cliente.vendedor_id, closed_at: cliente.closed_at, isPrivileged, isVendaAtiva, isOwnClient, dentroJanela: dentroJanelaCancelamento(cliente?.closed_at) })
+  let podeCancelarVenda = false;
+  if (isVendaAtiva) {
+    if (isGlobalAdmin || role === "gerente" || role === "dono") {
+      podeCancelarVenda = true;
+    } else if (role === "vendedor" && isOwnClient && dentroMesCancelamento(cliente?.closed_at)) {
+      podeCancelarVenda = true;
     }
-  }, [podeCancelarVenda, cliente?.etapa, cliente?.vendedor_id, cliente?.closed_at, supabaseUser?.id, role])
+  }
 
   const situacao = cliente?.situacao_atual || cliente?.momento || "—";
   const canal = cliente?.canal_comercial || cliente?.canal_origem || "—";
