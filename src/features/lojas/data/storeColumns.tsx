@@ -1,6 +1,6 @@
-import { Building2, Copy, Link2, X } from 'lucide-react'
+import { Building2, Copy, Link2, Trash2, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
-import { isAdministradorMx } from '@/hooks/useAuth'
+import { canManageStore } from '@/lib/auth/capabilities'
 import { cn, slugify } from '@/lib/utils'
 import { Badge } from '@/components/atoms/Badge'
 import { Typography } from '@/components/atoms/Typography'
@@ -23,6 +23,7 @@ interface BuildColumnsParams {
   copyRegistrationLink: (storeName: string) => void
   getRegistrationLink: (storeName: string) => string
   handleArchiveStore: (store: Store) => void
+  handleHardDeleteStore: (store: Store) => void | Promise<void>
   toggleStoreStatus: (storeId: string, active: boolean) => Promise<{ error?: string | null }>
 }
 
@@ -33,8 +34,11 @@ export function buildStoreColumns({
   copyRegistrationLink,
   getRegistrationLink,
   handleArchiveStore,
+  handleHardDeleteStore,
   toggleStoreStatus,
 }: BuildColumnsParams): Column<Store>[] {
+  const canManageNetwork = canManageStore(role)
+
   return [
     {
       key: 'name',
@@ -130,19 +134,19 @@ export function buildStoreColumns({
               size={14}
               className={cn(
                 'shrink-0',
-                isAdministradorMx(role) ? 'text-brand-primary' : 'text-text-tertiary',
+                canManageNetwork ? 'text-brand-primary' : 'text-text-tertiary',
               )}
               aria-hidden="true"
             />
             <Typography variant="tiny" tone="muted" className="truncate">
-              {isAdministradorMx(role)
-                ? 'Disponível para cópia segura'
+              {canManageNetwork
+                ? 'Disponível para a área interna MX'
                 : isOwner
-                  ? 'Operado pelo Admin MX'
-                  : 'Restrito ao Admin MX'}
+                  ? 'Operado pela área interna MX'
+                  : 'Restrito à área interna MX'}
             </Typography>
           </div>
-          {isAdministradorMx(role) ? (
+          {canManageNetwork ? (
             <Typography
               variant="tiny"
               className="block max-w-mx-64 truncate rounded-mx-md bg-surface-alt px-mx-xs py-mx-tiny font-mono text-text-secondary"
@@ -179,7 +183,7 @@ export function buildStoreColumns({
                   </Link>
                 </Button>
               ) : null}
-              {isAdministradorMx(role) ? (
+              {canManageNetwork ? (
                 <>
                   <Button
                     variant="outline"
@@ -201,14 +205,26 @@ export function buildStoreColumns({
                 </>
               ) : null}
             </>
-          ) : isAdministradorMx(role) ? (
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => toggleStoreStatus(store.id, true)}
-            >
-              Restaurar
-            </Button>
+          ) : canManageNetwork ? (
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => toggleStoreStatus(store.id, true)}
+              >
+                Restaurar
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => { void handleHardDeleteStore(store) }}
+                className="text-status-error hover:bg-status-error-surface"
+                aria-label={`Excluir definitivamente ${store.name}`}
+                title="Excluir definitivamente"
+              >
+                <Trash2 size={16} aria-hidden="true" />
+              </Button>
+            </>
           ) : null}
         </div>
       ),

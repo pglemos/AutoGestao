@@ -37,10 +37,9 @@ export function GlobalRankingHeader({
     : 'bg-mx-black text-brand-primary shadow-lg'
 
   return (
-    <header className="flex min-w-0 flex-col 2xl:flex-row 2xl:items-center justify-between gap-mx-lg border-b border-border-default pb-10 shrink-0">
+    <header data-mx-module-header="" className="flex min-w-0 shrink-0 flex-col justify-between gap-mx-lg rounded-2xl border border-gray-100 bg-white p-5 shadow-sm 2xl:flex-row 2xl:items-center">
       <div className="flex flex-col gap-mx-tiny text-center lg:text-left">
         <div className="flex items-center justify-center lg:justify-start gap-mx-sm">
-          <div className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-mx-md" aria-hidden="true" />
           <Typography variant="h1">Ranking <span className="text-mx-green-700">Global</span></Typography>
         </div>
         <Typography variant="caption" className="pl-mx-md uppercase tracking-widest font-black text-text-label">

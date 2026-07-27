@@ -29,7 +29,23 @@ jobs:
           version: latest
 
       - name: Start Supabase local stack
-        run: supabase start
+        id: supabase-start
+        shell: bash
+        run: |
+          set +e
+          supabase start --debug > /tmp/supabase-start.log 2>&1
+          status=$?
+          tail -300 /tmp/supabase-start.log
+          exit "$status"
+
+      - name: Upload Supabase startup diagnostics
+        if: failure() && steps.supabase-start.conclusion == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: supabase-start-diagnostics
+          path: /tmp/supabase-start.log
+          if-no-files-found: error
+          retention-days: 2
 
       - name: Apply migrations
         run: supabase db reset --no-seed

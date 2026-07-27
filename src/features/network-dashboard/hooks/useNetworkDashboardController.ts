@@ -20,8 +20,17 @@ const reportLabels: Record<NetworkReportType, string> = {
   mensal: 'Relatório mensal',
 }
 
+const REALTIME_DEBOUNCE_MS = 450
+const REALTIME_MAX_WAIT_MS = 2_000
+
+type RealtimeStatus = 'connecting' | 'connected' | 'degraded'
+
 export function useNetworkDashboardController() {
   const requestSequence = useRef(0)
+  const realtimeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const realtimeBurstStartedAt = useRef<number | null>(null)
+  const snapshotInFlight = useRef<Promise<void> | null>(null)
+  const reloadQueued = useRef(false)
   const { metas, loading: goalsLoading } = useAllStoreGoals()
   const initialRange = useMemo<NetworkDateRange>(() => ({
     start: format(new Date(new Date().getFullYear(), new Date().getMonth(), 1), 'yyyy-MM-dd'),
@@ -33,6 +42,7 @@ export function useNetworkDashboardController() {
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null)
+  const [realtimeStatus, setRealtimeStatus] = useState<RealtimeStatus>('connecting')
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<NetworkStatusFilter>('all')
   const [timeframe, setTimeframe] = useState<NetworkTimeframe>('mensal')
@@ -40,84 +50,157 @@ export function useNetworkDashboardController() {
   const [sort, setSort] = useState<NetworkSort>({ key: 'sales', direction: 'desc' })
   const [reportLoading, setReportLoading] = useState<NetworkReportType | null>(null)
 
-  const fetchSnapshot = useCallback(async (manual = false) => {
-    const requestId = ++requestSequence.current
-    if (manual) setRefreshing(true)
-    else setLoading(true)
-    const range = resolveNetworkDateRange(timeframe, customRange)
-    const validation = validateNetworkDateRange(range)
-    if (validation) {
-      setError(validation)
-      setLoading(false)
-      setRefreshing(false)
-      return
+  const fetchSnapshot = useCallback((manual = false): Promise<void> => {
+    if (snapshotInFlight.current) {
+      reloadQueued.current = true
+      if (manual) setRefreshing(true)
+      return snapshotInFlight.current
     }
 
-    try {
-      const [summary, stores, sellers, checkins] = await Promise.all([
-        supabase.rpc('get_resumo_rede_periodo', { p_start_date: range.start, p_end_date: range.end, p_scope: 'daily' }),
-        supabase.from('lojas').select('id,name').eq('active', true),
-        supabase.from('vendedores_loja').select('store_id').eq('is_active', true),
-        supabase.rpc('get_lancamentos_referencia_dia', { p_reference_date: format(new Date(), 'yyyy-MM-dd'), p_scope: 'daily' }),
-      ])
-      const firstError = summary.error || stores.error || sellers.error || checkins.error
-      if (firstError) throw firstError
-      if (requestId !== requestSequence.current) return
+    const operation = (async () => {
+      const requestId = ++requestSequence.current
+      if (manual) setRefreshing(true)
+      else setLoading(true)
 
-      const aggregate = new Map<string, { sales: number; leads: number; agd: number; vis: number }>()
-      for (const item of (summary.data || []) as Array<Record<string, unknown>>) {
-        aggregate.set(String(item.store_id), {
-          sales: Number(item.sales || 0),
-          leads: Number(item.leads || 0),
-          agd: Number(item.agd || 0),
-          vis: Number(item.vis || 0),
-        })
-      }
-      const sellerCounts = new Map<string, number>()
-      for (const item of (sellers.data || []) as Array<{ store_id: string }>) {
-        sellerCounts.set(item.store_id, (sellerCounts.get(item.store_id) || 0) + 1)
-      }
-      const checkinCounts = new Map<string, number>()
-      for (const item of (checkins.data || []) as Array<{ store_id: string; seller_user_id: string }>) {
-        checkinCounts.set(item.store_id, (checkinCounts.get(item.store_id) || 0) + 1)
-      }
-      const goalMap = new Map<string, number>()
-      for (const goal of (metas || []) as Array<Record<string, unknown>>) {
-        goalMap.set(String(goal.store_id || goal.loja_id || ''), Number(goal.monthly_goal || goal.meta_mensal || goal.goal || 0))
-      }
-      const now = new Date()
-      const totalDays = endOfMonth(now).getDate()
-      const nextRows = ((stores.data || []) as Array<{ id: string; name: string }>).map(store => {
-        const data = aggregate.get(store.id) || { sales: 0, leads: 0, agd: 0, vis: 0 }
-        return buildStoreDiagnostic({
-          id: store.id,
-          name: store.name,
-          ...data,
-          goal: goalMap.get(store.id) || 0,
-          sellers: sellerCounts.get(store.id) || 0,
-          checkedInToday: checkinCounts.get(store.id) || 0,
-          elapsedDays: getDate(now),
-          totalDays,
-        })
-      })
-      setRows(nextRows)
-      setError(null)
-      setLastUpdatedAt(new Date())
-    } catch (cause) {
-      if (requestId === requestSequence.current) {
-        setError(cause instanceof Error ? cause.message : 'Não foi possível atualizar a rede.')
-      }
-    } finally {
-      if (requestId === requestSequence.current) {
+      const range = resolveNetworkDateRange(timeframe, customRange)
+      const validation = validateNetworkDateRange(range)
+      if (validation) {
+        setError(validation)
         setLoading(false)
         setRefreshing(false)
+        return
       }
-    }
+
+      try {
+        const [summary, stores, sellers, checkins] = await Promise.all([
+          supabase.rpc('get_resumo_rede_periodo', { p_start_date: range.start, p_end_date: range.end, p_scope: 'daily' }),
+          supabase.from('lojas').select('id,name').eq('active', true),
+          supabase.from('vendedores_loja').select('store_id').eq('is_active', true),
+          supabase.rpc('get_lancamentos_referencia_dia', { p_reference_date: format(new Date(), 'yyyy-MM-dd'), p_scope: 'daily' }),
+        ])
+        const firstError = summary.error || stores.error || sellers.error || checkins.error
+        if (firstError) throw firstError
+        if (requestId !== requestSequence.current) return
+
+        const aggregate = new Map<string, { sales: number; leads: number; agd: number; vis: number }>()
+        for (const item of (summary.data || []) as Array<Record<string, unknown>>) {
+          aggregate.set(String(item.store_id), {
+            sales: Number(item.sales || 0),
+            leads: Number(item.leads || 0),
+            agd: Number(item.agd || 0),
+            vis: Number(item.vis || 0),
+          })
+        }
+
+        const sellerCounts = new Map<string, number>()
+        for (const item of (sellers.data || []) as Array<{ store_id: string }>) {
+          sellerCounts.set(item.store_id, (sellerCounts.get(item.store_id) || 0) + 1)
+        }
+
+        const checkinCounts = new Map<string, number>()
+        for (const item of (checkins.data || []) as Array<{ store_id: string; seller_user_id: string }>) {
+          checkinCounts.set(item.store_id, (checkinCounts.get(item.store_id) || 0) + 1)
+        }
+
+        const goalMap = new Map<string, number>()
+        for (const goal of (metas || []) as Array<Record<string, unknown>>) {
+          goalMap.set(String(goal.store_id || goal.loja_id || ''), Number(goal.monthly_goal || goal.meta_mensal || goal.goal || 0))
+        }
+
+        const now = new Date()
+        const totalDays = endOfMonth(now).getDate()
+        const nextRows = ((stores.data || []) as Array<{ id: string; name: string }>).map(store => {
+          const data = aggregate.get(store.id) || { sales: 0, leads: 0, agd: 0, vis: 0 }
+          return buildStoreDiagnostic({
+            id: store.id,
+            name: store.name,
+            ...data,
+            goal: goalMap.get(store.id) || 0,
+            sellers: sellerCounts.get(store.id) || 0,
+            checkedInToday: checkinCounts.get(store.id) || 0,
+            elapsedDays: getDate(now),
+            totalDays,
+          })
+        })
+
+        setRows(nextRows)
+        setError(null)
+        setLastUpdatedAt(new Date())
+      } catch (cause) {
+        if (requestId === requestSequence.current) {
+          setError(cause instanceof Error ? cause.message : 'Não foi possível atualizar a rede.')
+        }
+      } finally {
+        if (requestId === requestSequence.current) {
+          setLoading(false)
+          setRefreshing(false)
+        }
+      }
+    })()
+
+    snapshotInFlight.current = operation
+    void operation.finally(() => {
+      snapshotInFlight.current = null
+      if (reloadQueued.current) {
+        reloadQueued.current = false
+        void fetchSnapshot(false)
+      }
+    })
+
+    return operation
   }, [customRange, metas, timeframe])
 
   useEffect(() => {
     if (!goalsLoading) void fetchSnapshot(false)
   }, [fetchSnapshot, goalsLoading])
+
+  useEffect(() => {
+    const scheduleReload = () => {
+      const now = Date.now()
+      if (realtimeBurstStartedAt.current === null) realtimeBurstStartedAt.current = now
+      if (realtimeTimer.current) clearTimeout(realtimeTimer.current)
+
+      const elapsed = now - realtimeBurstStartedAt.current
+      const delay = Math.max(0, Math.min(REALTIME_DEBOUNCE_MS, REALTIME_MAX_WAIT_MS - elapsed))
+      realtimeTimer.current = setTimeout(() => {
+        realtimeBurstStartedAt.current = null
+        if (snapshotInFlight.current) reloadQueued.current = true
+        else void fetchSnapshot(false)
+      }, delay)
+    }
+
+    const channel = supabase.channel('internal-network-dashboard-live')
+    for (const table of [
+      'lancamentos_diarios',
+      'clientes',
+      'agendamentos',
+      'atendimentos',
+      'oportunidades',
+      'vendedores_loja',
+      'vinculos_loja',
+      'lojas',
+      'regras_metas_loja',
+      'seller_routine_snapshots',
+      'manager_routine_snapshots',
+      'planos_acao',
+    ]) {
+      channel.on('postgres_changes', { event: '*', schema: 'public', table }, scheduleReload)
+    }
+
+    channel.subscribe((nextStatus) => {
+      if (nextStatus === 'SUBSCRIBED') setRealtimeStatus('connected')
+      if (nextStatus === 'CHANNEL_ERROR' || nextStatus === 'TIMED_OUT' || nextStatus === 'CLOSED') {
+        setRealtimeStatus('degraded')
+      }
+    })
+
+    return () => {
+      if (realtimeTimer.current) clearTimeout(realtimeTimer.current)
+      realtimeBurstStartedAt.current = null
+      reloadQueued.current = false
+      void supabase.removeChannel(channel)
+    }
+  }, [fetchSnapshot])
 
   const triggerReport = useCallback(async (type: NetworkReportType) => {
     if (reportLoading) return
@@ -149,6 +232,7 @@ export function useNetworkDashboardController() {
     refreshing,
     error,
     lastUpdatedAt,
+    realtimeStatus,
     search,
     setSearch,
     status,

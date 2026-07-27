@@ -18,7 +18,7 @@ import type { UserRole } from '@/types/database'
 import { PerfilTab } from './components/tabs/PerfilTab'
 import { SegurancaTab } from './components/tabs/SegurancaTab'
 import { NotificacoesTab } from './components/tabs/NotificacoesTab'
-import { EquipeUsuariosTab } from './components/tabs/EquipeUsuariosTab'
+import { EquipeUsuariosTabRouter } from './components/tabs/EquipeUsuariosTabRouter'
 import { LojasRedeTab } from './components/tabs/LojasRedeTab'
 import { OperacionalLojaTab } from './components/tabs/OperacionalLojaTab'
 import { ConsultoriaPmrTab } from './components/tabs/ConsultoriaPmrTab'
@@ -62,9 +62,9 @@ export const TAB_REGISTRY: ConfigTabDefinition[] = [
         label: 'Equipe & Usuários',
         description: 'Gerenciar integrantes',
         icon: Users,
-        component: EquipeUsuariosTab,
+        component: EquipeUsuariosTabRouter,
         roles: ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente'],
-        readOnlyRoles: ['consultor_mx', 'dono'],
+        readOnlyRoles: ['dono'],
         section: 'gestao',
     },
     {
@@ -74,7 +74,7 @@ export const TAB_REGISTRY: ConfigTabDefinition[] = [
         icon: Building2,
         component: LojasRedeTab,
         roles: ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono'],
-        readOnlyRoles: ['consultor_mx', 'dono'],
+        readOnlyRoles: ['dono'],
         section: 'gestao',
     },
     {
@@ -84,7 +84,7 @@ export const TAB_REGISTRY: ConfigTabDefinition[] = [
         icon: SlidersHorizontal,
         component: OperacionalLojaTab,
         roles: ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono'],
-        readOnlyRoles: ['consultor_mx', 'dono'],
+        readOnlyRoles: ['dono'],
         section: 'gestao',
     },
     {
@@ -139,7 +139,6 @@ export const TAB_REGISTRY: ConfigTabDefinition[] = [
         icon: Server,
         component: SistemaMxTab,
         roles: ['administrador_geral', 'administrador_mx', 'consultor_mx'],
-        readOnlyRoles: ['consultor_mx'],
         section: 'sistema',
     },
     {

@@ -8,6 +8,7 @@ import { OwnerExecutiveSection } from './sections/OwnerExecutiveSection'
 import { CorporateMetricsSection } from './sections/CorporateMetricsSection'
 import { StoresGridSection } from './sections/StoresGridSection'
 import { CreateStoreModal } from './modals/CreateStoreModal'
+import { HardDeleteStoreModal } from './modals/HardDeleteStoreModal'
 import {
   MxModulePage,
   MxStatusBanner,
@@ -25,6 +26,7 @@ export function Lojas() {
         copyRegistrationLink: page.copyRegistrationLink,
         getRegistrationLink: page.getRegistrationLink,
         handleArchiveStore: page.handleArchiveStore,
+        handleHardDeleteStore: page.handleHardDeleteStore,
         toggleStoreStatus: page.toggleStoreStatus,
       }),
     [
@@ -34,6 +36,7 @@ export function Lojas() {
       page.copyRegistrationLink,
       page.getRegistrationLink,
       page.handleArchiveStore,
+      page.handleHardDeleteStore,
       page.toggleStoreStatus,
     ],
   )
@@ -48,7 +51,7 @@ export function Lojas() {
         <LojasErrorBoundary sectionName="LojasHeader">
           <LojasHeader
             isOwner={page.isOwner}
-            isAdminMx={page.isAdminMx}
+            canManageNetwork={page.canManageNetwork}
             searchTerm={page.searchTerm}
             onSearchChange={page.setSearchTerm}
             filterActive={page.filterActive}
@@ -100,6 +103,15 @@ export function Lojas() {
           creating={page.creating}
           onSubmit={page.handleCreateStore}
           onClose={() => page.setIsCreateModalOpen(false)}
+        />
+
+        <HardDeleteStoreModal
+          store={page.hardDeleteStore}
+          confirmation={page.hardDeleteConfirmation}
+          deleting={page.hardDeleting}
+          onConfirmationChange={page.setHardDeleteConfirmation}
+          onClose={page.closeHardDeleteStore}
+          onConfirm={() => void page.confirmHardDeleteStore()}
         />
       </MxModulePage>
     </LojasErrorBoundary>

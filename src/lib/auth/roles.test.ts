@@ -18,11 +18,13 @@ describe('role normalization', () => {
     expect(normalizeRole(undefined)).toBeNull()
   })
 
-  it('classifies internal and admin roles from canonical or legacy values', () => {
+  it('classifies all internal MX roles as global administrators', () => {
     expect(isPerfilInternoMx('consultor')).toBe(true)
     expect(isPerfilInternoMx('vendedor')).toBe(false)
     expect(isAdministradorMx('admin_master')).toBe(true)
-    expect(isAdministradorMx('consultor_mx')).toBe(false)
+    expect(isAdministradorMx('administrador_mx')).toBe(true)
+    expect(isAdministradorMx('consultor_mx')).toBe(true)
+    expect(isAdministradorMx('dono')).toBe(false)
   })
 
   it('maps legacy roles to the canonical roles table codes without changing legacy normalization', () => {

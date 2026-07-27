@@ -1,5 +1,5 @@
 import type { UserRole } from '@/types/database'
-import { isAdministradorMx, isPerfilInternoMx } from './roles'
+import { isPerfilInternoMx } from './roles'
 
 export type Capability =
   | 'simulate_role'
@@ -33,11 +33,11 @@ export function canSimulateRole(role: UserRole | string | null | undefined): boo
 }
 
 export function canManageStore(role: UserRole | string | null | undefined): boolean {
-  return isAdministradorMx(role)
+  return isPerfilInternoMx(role)
 }
 
 export function canManageTeam(role: UserRole | string | null | undefined): boolean {
-  return isAdministradorMx(role) || role === 'gerente'
+  return isPerfilInternoMx(role) || role === 'gerente'
 }
 
 export function canManageFeedback(role: UserRole | string | null | undefined): boolean {

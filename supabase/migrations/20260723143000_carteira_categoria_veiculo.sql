@@ -6,7 +6,7 @@
 -- de preco quando o texto do veiculo de interesse nao bate literal.
 -- Reuniao de 2026-07-23.
 
-BEGIN
+BEGIN;
 
 DO $$
 BEGIN
@@ -15,19 +15,19 @@ BEGIN
   );
 EXCEPTION
   WHEN duplicate_object THEN NULL;
-END $$
+END $$;
 
 ALTER TABLE public.oportunidades
-  ADD COLUMN IF NOT EXISTS categoria_veiculo public.crm_categoria_veiculo
+  ADD COLUMN IF NOT EXISTS categoria_veiculo public.crm_categoria_veiculo;
 
 ALTER TABLE public.veiculos_estoque
-  ADD COLUMN IF NOT EXISTS categoria public.crm_categoria_veiculo
+  ADD COLUMN IF NOT EXISTS categoria public.crm_categoria_veiculo;
 
 COMMENT ON COLUMN public.oportunidades.categoria_veiculo IS
-  'Categoria do veiculo de interesse do cliente, para sugestao de veiculos chegados por categoria.'
+  'Categoria do veiculo de interesse do cliente, para sugestao de veiculos chegados por categoria.';
 
 COMMENT ON COLUMN public.veiculos_estoque.categoria IS
-  'Categoria do veiculo recem-chegado, para sugestao aos clientes da carteira.'
+  'Categoria do veiculo recem-chegado, para sugestao aos clientes da carteira.';
 
 CREATE OR REPLACE FUNCTION public.carteira_salvar_cliente(p_payload jsonb, p_idempotency_key text DEFAULT NULL::text)
  RETURNS jsonb
@@ -382,11 +382,11 @@ BEGIN
     'evento_id', v_evento_id
   );
 END;
-$function$
+$function$;
 
-NOTIFY pgrst, 'reload schema'
+NOTIFY pgrst, 'reload schema';
 
-COMMIT
+COMMIT;
 
 -- DOWN (manual):
 -- ALTER TABLE public.oportunidades DROP COLUMN IF EXISTS categoria_veiculo;

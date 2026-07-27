@@ -22,12 +22,14 @@ describe('internal mx wave 2 architecture', () => {
     expect(read('src/features/configuracoes/components/ConfiguracoesShell.tsx')).toContain('MxModuleHeader')
   })
 
-  test('configurations keep a single 13-tab registry', () => {
+  test('configurations keep a single 13-tab registry and Option B internal parity', () => {
     const registry = read('src/features/configuracoes/tabRegistry.ts')
     const keys = registry.match(/key:\s*'[^']+'/g) ?? []
     expect(keys).toHaveLength(13)
-    expect(registry).toContain("readOnlyRoles: ['consultor_mx', 'dono']")
-    expect(registry).toContain("readOnlyRoles: ['consultor_mx']")
+    expect(registry).toContain('EquipeUsuariosTabRouter')
+    expect(registry).not.toContain("readOnlyRoles: ['consultor_mx', 'dono']")
+    expect(registry).not.toContain("readOnlyRoles: ['consultor_mx']")
+    expect(registry.match(/readOnlyRoles: \['dono'\]/g) ?? []).toHaveLength(3)
   })
 
   test('development is decomposed into canonical metrics, filters and tables', () => {
