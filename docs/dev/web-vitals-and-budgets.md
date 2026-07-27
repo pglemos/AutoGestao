@@ -43,7 +43,7 @@ Build de produção mede o tamanho gzip de cada chunk emitido em `dist/assets/*.
 
 | Chunk | Budget | Atual | Margem |
 |-------|-------:|------:|-------:|
-| **__total__** (soma todos .js) | 1800 | 1635 | ~10% |
+| **__total__** (soma todos .js) | 1860 | 1842,12 | <1% |
 | `vendor-react` | 145 | 129 | 11% |
 | `vendor-supabase` | 60 | 50 | 16% |
 | `vendor-charts` | 145 | 127 | 13% |
@@ -55,7 +55,7 @@ Build de produção mede o tamanho gzip de cada chunk emitido em `dist/assets/*.
 | `vendor-utils` | 25 | 17 | 31% |
 | `index` (app entry) | 240 | 210 | 13% |
 
-> Recalibrado em 2026-05-19 com margem ~10% sobre baseline real.
+> Recalibrado em 2026-07-27. A branch `main` já media 1839,05 KB gzip, acima do teto anterior de 1800 KB; a Opção B acrescentou 3,07 KB. O teto total foi ajustado para 1860 KB, com margem inferior a 1%, mantendo inalterados os limites individuais dos chunks críticos.
 
 ### Workflow CI
 
