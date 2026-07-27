@@ -194,6 +194,8 @@ export default function Login() {
         e.preventDefault()
         if (loading) return
 
+        clearSignoutReason()
+
         if (lockoutUntil && Date.now() < lockoutUntil) {
             const secs = Math.ceil((lockoutUntil - Date.now()) / 1000)
             setError(`Aguarde ${secs}s antes de tentar novamente.`)

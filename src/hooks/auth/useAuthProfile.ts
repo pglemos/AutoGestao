@@ -130,7 +130,7 @@ export function useAuthProfile(options: UseAuthProfileOptions): UseAuthProfileRe
       }, 30000)
 
       try {
-        const [loadedProfile, loadedMemberships] = await Promise.all([
+        let [loadedProfile, loadedMemberships] = await Promise.all([
           fetchProfile(userId),
           fetchMemberships(userId),
         ])
@@ -147,12 +147,29 @@ export function useAuthProfile(options: UseAuthProfileOptions): UseAuthProfileRe
         }
 
         if (loadedProfile?.active === false) {
-          writeSignoutReason('inactive')
-          await supabase.auth.signOut()
-          setProfile(null)
-          setMemberships([])
-          setActiveStoreId(null)
-          return
+          console.warn('[useAuth] inactive detected for', userId, loadedProfile?.email)
+          const { data: reVerify } = await supabase
+            .from('usuarios')
+            .select('active, must_change_password')
+            .eq('id', userId)
+            .maybeSingle()
+          if (reVerify?.active !== false) {
+            console.error(
+              '[useAuth] FALSE POSITIVE: active=false for',
+              userId,
+              loadedProfile?.email,
+              're-verify shows',
+              reVerify,
+            )
+            loadedProfile = { ...loadedProfile, active: true }
+          } else {
+            writeSignoutReason('inactive')
+            await supabase.auth.signOut()
+            setProfile(null)
+            setMemberships([])
+            setActiveStoreId(null)
+            return
+          }
         }
 
         // Ejeção Ativa (Sessões Existentes): perdeu a loja ativada enquanto logado
