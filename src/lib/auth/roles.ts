@@ -98,7 +98,13 @@ export function isPerfilInternoMx(role: UserRole | string | null | undefined): b
   return normalized === 'administrador_geral' || normalized === 'administrador_mx' || normalized === 'consultor_mx'
 }
 
+/**
+ * Contrato administrativo global da área interna MX.
+ *
+ * A Opção B deliberadamente iguala Administrador Geral, Administrador MX e
+ * Consultor MX para todas as superfícies que historicamente consumiam este
+ * helper como gate de administração.
+ */
 export function isAdministradorMx(role: UserRole | string | null | undefined): boolean {
-  const normalized = normalizeRole(role)
-  return normalized === 'administrador_geral' || normalized === 'administrador_mx'
+  return isPerfilInternoMx(role)
 }
