@@ -12,7 +12,7 @@ import { OPERATIONAL_ACTION_LABELS } from '@/lib/ui/actionLabels'
 
 interface LojasHeaderProps {
   isOwner: boolean
-  isAdminMx: boolean
+  canManageNetwork: boolean
   searchTerm: string
   onSearchChange: (value: string) => void
   filterActive: boolean
@@ -26,7 +26,7 @@ interface LojasHeaderProps {
 
 export function LojasHeader({
   isOwner,
-  isAdminMx,
+  canManageNetwork,
   searchTerm,
   onSearchChange,
   filterActive,
@@ -63,7 +63,7 @@ export function LojasHeader({
               />
               {OPERATIONAL_ACTION_LABELS.refresh}
             </Button>
-            {isAdminMx ? (
+            {canManageNetwork ? (
               <Button onClick={onOpenCreate}>
                 <Plus size={18} aria-hidden="true" />
                 Nova loja
@@ -92,7 +92,7 @@ export function LojasHeader({
           />
         </div>
 
-        {isAdminMx ? (
+        {canManageNetwork ? (
           <TabNavPill
             tabs={[
               { key: 'ativas', label: `Ativas (${storeStatusCounts.active})` },
