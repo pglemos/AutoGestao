@@ -4,22 +4,23 @@
 
 **Goal:** Extrair o Plano Estratégico completo para um workspace compartilhado entre Dono e perfis internos, preservando os 45 indicadores, metas, histórico, tabela, gráfico, exportação e criação de Plano de Ação.
 
-**Architecture:** A página atual do Dono será decomposta em controller tipado e workspace neutro. As páginas do Dono e do módulo interno viram wrappers que fornecem contexto e shell. O repositório JavaScript existente será acessado por um adapter TypeScript único, evitando `as any` nas páginas.
+**Architecture:** A página atual do Dono será decomposta em controller tipado e workspace neutro. Dono e módulo interno viram wrappers que fornecem contexto e shell. O repositório JavaScript existente será acessado por um adapter TypeScript único que tipa leitura, edição de metas, exportação e vínculo com ações.
 
 **Tech Stack:** React 19, TypeScript 5.8, React Router 7, Recharts 3, Supabase, Bun Test, Testing Library, Playwright.
 
 ## Global Constraints
 
 - Reutilizar `strategicPlanRepository`; não criar segundo repositório.
-- Preservar os 45 indicadores, códigos, áreas, direções, fórmulas e agregações.
+- Preservar 45 indicadores, códigos, áreas, direções, fórmulas e agregações.
 - Abas finais: `Resumo` e `Visão Geral`.
-- Desktop inicia no modo `Ambos`; mobile não oferece `Ambos`.
+- Desktop inicia em `Ambos`; mobile não oferece `Ambos`.
 - No modo Ambos: tabela aproximadamente 58%, gráfico aproximadamente 42%, mesma altura entre 340 e 380 px.
-- Substituir quatro cards grandes por uma faixa horizontal única de resumo.
-- Ausência de valor permanece `null`/`—`; nunca converter mês futuro em zero.
+- Substituir quatro cards grandes por uma faixa horizontal única.
+- Ausência permanece `null`/`—`; mês futuro nunca vira zero.
 - A página interna não importa `src/pages/owner`.
-- `Dono` usa a própria loja; perfis internos usam a loja global selecionada.
-- Tema global `#198653` permanece fora deste plano.
+- Dono usa a própria loja; perfis internos usam a loja global selecionada.
+- O adapter deve tipar também `updateTargets`, `createActionItem` e `exportIndicatorData`.
+- Nenhuma alteração de tema global neste plano.
 
 ---
 
@@ -41,11 +42,15 @@
 - Create: `src/features/strategic-plan/StrategicPlanWorkspace.test.tsx`
 - Create: `src/features/strategic-plan/components/StrategicAnalysisGrid.tsx`
 - Create: `src/features/strategic-plan/components/StrategicIndicatorStrip.tsx`
+- Create: `src/features/strategic-plan/components/StrategicIndicatorStrip.test.tsx`
+- Create: `src/features/strategic-plan/components/StrategicAnalysisGrid.test.tsx`
 - Modify: `src/pages/owner/PlanoEstrategico.jsx`
 - Modify: `src/features/internal-mx-planning/InternalStrategicPlanPage.tsx`
 - Modify: `src/test/internal-mx-planning-pages.test.ts`
+- Create: `src/test/strategic-plan-shared.playwright.ts`
+- Create: `docs/qa/evidence/internal-mx-functional/strategic-plan.md`
 
-### Componentes existentes reutilizados
+### Componentes canônicos reutilizados
 
 - Reuse: `src/components/owner/strategic/StrategicHeader.jsx`
 - Reuse: `src/components/owner/strategic/StrategicPlanTabs.jsx`
@@ -64,7 +69,7 @@
 
 ---
 
-### Task 1: Tipar o contrato do repositório estratégico
+### Task 1: Tipar integralmente o repositório canônico
 
 **Files:**
 - Create: `src/features/strategic-plan/strategicPlan.types.ts`
@@ -72,39 +77,50 @@
 - Create: `src/features/strategic-plan/strategicPlanRepositoryAdapter.test.ts`
 
 **Interfaces:**
-- Produces: `StrategicIndicator`, `StrategicSeries`, `StrategicDisplayMode`, `StrategicPlanRepository`, `strategicPlanDataSource`.
+- Produces: `StrategicSeries`, `StrategicDisplayMode`, `StrategicActionPayload`, `StrategicPlanRepository`, `strategicPlanDataSource`.
 
-- [ ] **Step 1: escrever teste RED do adapter**
+- [ ] **Step 1: escrever o teste RED do adapter**
 
 ```ts
 import { describe, expect, test } from 'bun:test'
 import { createStrategicPlanRepositoryAdapter } from './strategicPlanRepositoryAdapter'
 
+const series = {
+  id: 'SP-001', code: 'SP-001', name: 'Vendas', area: 'Comercial', direction: 'increase',
+  targetValues: Array(12).fill(10), currentValues: Array(12).fill(8), previousYearValues: Array(12).fill(7),
+}
+
 const legacy = {
   load: async () => undefined,
-  getOverviewData: () => [{ id: 'SP-001', code: 'SP-001', name: 'Vendas', area: 'Comercial', direction: 'increase', targetValues: Array(12).fill(10), currentValues: Array(12).fill(8), previousYearValues: Array(12).fill(7) }],
-  getIndicatorById: (id: string) => ({ id, code: id, name: 'Vendas', area: 'Comercial', direction: 'increase' }),
-  getIndicatorSeries: () => ({ id: 'SP-001', targetValues: Array(12).fill(10), currentValues: Array(12).fill(8), previousYearValues: Array(12).fill(7) }),
+  getOverviewData: () => [series],
+  getIndicatorById: () => series,
+  getIndicatorSeries: () => series,
   getActionItems: () => [],
   getPreferences: () => ({}),
   setPreferences: () => undefined,
+  updateTargets: async () => undefined,
+  createActionItem: async () => ({ id: 'action-1' }),
+  exportIndicatorData: () => 'month,target,current\nJan,10,8',
 }
 
 describe('strategicPlanRepositoryAdapter', () => {
-  test('normaliza séries em 12 meses e preserva null', () => {
+  test('expõe leitura e mutações no mesmo contrato', async () => {
     const adapter = createStrategicPlanRepositoryAdapter(legacy)
-    const rows = adapter.getOverviewData()
-    expect(rows[0].currentValues).toHaveLength(12)
-    expect(adapter.getActionItems('SP-001')).toEqual([])
+    expect(adapter.getOverviewData()[0].currentValues).toHaveLength(12)
+    await expect(adapter.updateTargets('SP-001', 2026, Array(12).fill(12))).resolves.toBeUndefined()
+    await expect(adapter.createActionItem({ indicatorId: 'SP-001', action: 'Recuperar vendas' })).resolves.toEqual({ id: 'action-1' })
+    expect(adapter.exportIndicatorData('SP-001', 2026)).toContain('month,target,current')
   })
 })
 ```
 
-- [ ] **Step 2: executar e confirmar RED**
+- [ ] **Step 2: executar RED**
 
 Run: `bun test src/features/strategic-plan/strategicPlanRepositoryAdapter.test.ts`
 
-- [ ] **Step 3: criar os tipos**
+Expected: FAIL porque os módulos ainda não existem.
+
+- [ ] **Step 3: criar tipos completos**
 
 ```ts
 export type StrategicDisplayMode = 'both' | 'table' | 'chart'
@@ -122,6 +138,18 @@ export type StrategicSeries = {
   previousYearValues: Array<number | null>
 }
 
+export type StrategicActionPayload = {
+  indicatorId: string
+  action: string
+  problem?: string
+  note?: string
+  area?: string
+  deadline?: string | null
+  priority?: string
+  createdBy?: string
+  [key: string]: unknown
+}
+
 export type StrategicPlanRepository = {
   load(input: { storeId: string | null; year: number }): Promise<void>
   getOverviewData(): StrategicSeries[]
@@ -130,10 +158,13 @@ export type StrategicPlanRepository = {
   getActionItems(id: string): Array<Record<string, unknown>>
   getPreferences(): { displayMode?: StrategicDisplayMode }
   setPreferences(input: { displayMode: StrategicDisplayMode }): void
+  updateTargets(id: string, year: number, values: Array<number | null>): Promise<void>
+  createActionItem(payload: StrategicActionPayload): Promise<Record<string, unknown> | null>
+  exportIndicatorData(id: string, year: number): string
 }
 ```
 
-- [ ] **Step 4: implementar um único cast legado**
+- [ ] **Step 4: implementar o único cast legado**
 
 ```ts
 import { strategicPlanRepository } from '@/components/owner/strategic/strategicPlanLiveRepository'
@@ -146,9 +177,9 @@ export function createStrategicPlanRepositoryAdapter(source: unknown): Strategic
 export const strategicPlanDataSource = createStrategicPlanRepositoryAdapter(strategicPlanRepository)
 ```
 
-The cast must exist only in this file.
+The cast must remain only in this adapter.
 
-- [ ] **Step 5: GREEN e commit**
+- [ ] **Step 5: executar GREEN e commit**
 
 ```bash
 bun test src/features/strategic-plan/strategicPlanRepositoryAdapter.test.ts
@@ -158,7 +189,7 @@ git commit -m "refactor(strategy): type the canonical repository"
 
 ---
 
-### Task 2: Isolar preferências e URL
+### Task 2: Isolar preferências e query string
 
 **Files:**
 - Create: `src/features/strategic-plan/strategicPlanPreferences.ts`
@@ -171,17 +202,21 @@ git commit -m "refactor(strategy): type the canonical repository"
 
 ```ts
 import { describe, expect, test } from 'bun:test'
-import { resolveInitialStrategicDisplayMode, readStrategicRouteState } from './strategicPlanPreferences'
+import { readStrategicRouteState, resolveInitialStrategicDisplayMode, writeStrategicRouteState } from './strategicPlanPreferences'
 
 describe('preferências estratégicas', () => {
   test('desktop sem preferência inicia em both', () => {
     expect(resolveInitialStrategicDisplayMode({ width: 1440 })).toBe('both')
   })
+
   test('mobile nunca inicia em both', () => {
     expect(resolveInitialStrategicDisplayMode({ width: 390, saved: 'both' })).toBe('table')
   })
-  test('lê aba e indicador da URL', () => {
-    expect(readStrategicRouteState('?tab=visao-geral&indicator=SP-004')).toEqual({ tab: 'visao-geral', indicatorId: 'SP-004' })
+
+  test('preserva storeId ao escrever aba e indicador', () => {
+    const next = writeStrategicRouteState('?storeId=store-1', { tab: 'visao-geral', indicatorId: 'SP-004' })
+    expect(readStrategicRouteState(next)).toEqual({ tab: 'visao-geral', indicatorId: 'SP-004' })
+    expect(next).toContain('storeId=store-1')
   })
 })
 ```
@@ -193,15 +228,18 @@ Run: `bun test src/features/strategic-plan/strategicPlanPreferences.test.ts`
 - [ ] **Step 3: implementar regras puras**
 
 ```ts
-export function resolveInitialStrategicDisplayMode({ width, saved }: { width: number; saved?: StrategicDisplayMode }): StrategicDisplayMode {
+export function resolveInitialStrategicDisplayMode({ width, saved }: {
+  width: number
+  saved?: StrategicDisplayMode
+}): StrategicDisplayMode {
   if (width < 768) return saved === 'chart' ? 'chart' : 'table'
   return saved || 'both'
 }
 ```
 
-`writeStrategicRouteState` must preserve unrelated query params, including `storeId`.
+`writeStrategicRouteState` must preserve every unrelated parameter.
 
-- [ ] **Step 4: executar GREEN e commit**
+- [ ] **Step 4: GREEN e commit**
 
 ```bash
 bun test src/features/strategic-plan/strategicPlanPreferences.test.ts
@@ -211,7 +249,7 @@ git commit -m "feat(strategy): define display and route preferences"
 
 ---
 
-### Task 3: Criar o controller compartilhado
+### Task 3: Criar controller compartilhado
 
 **Files:**
 - Create: `src/features/strategic-plan/useStrategicPlanController.ts`
@@ -219,44 +257,37 @@ git commit -m "feat(strategy): define display and route preferences"
 
 **Interfaces:**
 - Consumes: `usePlanningWorkspace`, `strategicPlanDataSource`, `usePlanningRealtime`.
-- Produces: `StrategicPlanController` with load state, selected indicator, tab, filters, drawers and actions.
+- Produces: `StrategicPlanController`.
 
-- [ ] **Step 1: escrever teste RED de carregamento por loja**
+- [ ] **Step 1: escrever RED de carregamento por loja**
 
 ```tsx
-import { renderHook, waitFor } from '@testing-library/react'
-import { expect, test } from 'bun:test'
-
-// Inject a fake repository through the hook options.
-test('carrega o repositório usando a loja do workspace', async () => {
-  const loadCalls: unknown[] = []
-  const repository = fakeStrategicRepository({ load: async input => { loadCalls.push(input) } })
+test('carrega usando a loja do workspace', async () => {
+  const repository = fakeStrategicRepository()
   const { result } = renderStrategicController({ storeId: 'store-1', repository })
   await waitFor(() => expect(result.current.loading).toBe(false))
-  expect(loadCalls).toEqual([{ storeId: 'store-1', year: 2026 }])
+  expect(repository.load).toHaveBeenCalledWith({ storeId: 'store-1', year: 2026 })
 })
 ```
 
-- [ ] **Step 2: adicionar testes para estados**
+- [ ] **Step 2: cobrir estados e ações**
 
-Cover:
+Tests:
 
 ```text
-sem loja → não consulta;
-load rejeita → error preenchido;
-indicator da URL inexistente → usa primeiro indicador;
-trocar indicador preserva displayMode;
-Realtime chama reload agrupado;
-mobile converte both para table.
+sem loja não consulta;
+erro de load preenche error;
+indicator inválido usa primeiro indicador;
+45 indicadores são preservados;
+trocar indicador preserva display mode;
+mobile converte both para table;
+edit target calls updateTargets and reloads;
+create action calls createActionItem once;
+export returns non-empty CSV;
+Realtime burst triggers one reload.
 ```
 
-- [ ] **Step 3: executar RED**
-
-Run: `bun test src/features/strategic-plan/useStrategicPlanController.test.tsx`
-
-- [ ] **Step 4: implementar controller com injeção opcional**
-
-Signature:
+- [ ] **Step 3: implementar assinatura**
 
 ```ts
 export function useStrategicPlanController(options?: {
@@ -265,26 +296,23 @@ export function useStrategicPlanController(options?: {
 }): StrategicPlanController
 ```
 
-The controller must use `REFERENCE_YEAR` as default, keep `refreshKey`, and expose:
+Expose:
 
-```ts
-{
-  tab, setTab,
-  selectedIndicatorId, setSelectedIndicatorId,
-  areaFilter, setAreaFilter,
-  displayMode, setDisplayMode,
-  effectiveDisplayMode,
-  loading, error, reload,
-  indicator, series, overview,
-  existingAction,
-  editOpen, setEditOpen,
-  actionOpen, setActionOpen,
-  filtersOpen, setFiltersOpen,
-  isActionPrimary,
-}
+```text
+tab, setTab;
+selectedIndicatorId, setSelectedIndicatorId;
+areaFilter, setAreaFilter;
+displayMode, setDisplayMode, effectiveDisplayMode;
+loading, error, reload;
+indicator, series, overview, existingAction;
+editOpen, actionOpen, filtersOpen and setters;
+updateTargets, createAction, exportIndicator;
+isActionPrimary.
 ```
 
-- [ ] **Step 5: executar GREEN e commit**
+- [ ] **Step 4: usar `usePlanningRealtime({ scope: 'strategic' })`**
+
+- [ ] **Step 5: GREEN e commit**
 
 ```bash
 bun test src/features/strategic-plan/useStrategicPlanController.test.tsx
@@ -295,7 +323,7 @@ git commit -m "feat(strategy): add shared strategic controller"
 
 ---
 
-### Task 4: Criar faixa de resumo e grid 58/42
+### Task 4: Criar faixa horizontal e grid 58/42
 
 **Files:**
 - Create: `src/features/strategic-plan/components/StrategicIndicatorStrip.tsx`
@@ -304,9 +332,9 @@ git commit -m "feat(strategy): add shared strategic controller"
 - Create: `src/features/strategic-plan/components/StrategicAnalysisGrid.test.tsx`
 
 **Interfaces:**
-- Produces: faixa única com quatro métricas e container responsivo da análise.
+- Produces: faixa única de resumo e composição responsiva da análise.
 
-- [ ] **Step 1: escrever teste RED da faixa**
+- [ ] **Step 1: escrever RED da faixa**
 
 ```tsx
 render(<StrategicIndicatorStrip series={series} selectedMonthIndex={6} />)
@@ -316,7 +344,7 @@ expect(screen.getByText('Atingimento da meta')).toBeInTheDocument()
 expect(screen.getByText('Variação contra o ano anterior')).toBeInTheDocument()
 ```
 
-- [ ] **Step 2: escrever teste RED do grid**
+- [ ] **Step 2: escrever RED do grid**
 
 ```tsx
 render(<StrategicAnalysisGrid mode="both" table={<div>Tabela</div>} chart={<div>Gráfico</div>} />)
@@ -325,9 +353,9 @@ expect(screen.getByTestId('strategic-table-slot')).toHaveClass('h-[360px]')
 expect(screen.getByTestId('strategic-chart-slot')).toHaveClass('h-[360px]')
 ```
 
-- [ ] **Step 3: implementar sem duplicar cálculos**
+- [ ] **Step 3: implementar usando utilitários canônicos**
 
-Use `calculatePercentageOfTarget` and `getStatusFromPercentage` from `strategicUtils`. Preserve `null` as `—`.
+Use `calculatePercentageOfTarget` and `getStatusFromPercentage`. Preserve `null` as `—`.
 
 - [ ] **Step 4: GREEN e commit**
 
@@ -339,17 +367,17 @@ git commit -m "feat(strategy): add compact analysis composition"
 
 ---
 
-### Task 5: Montar o workspace compartilhado
+### Task 5: Montar workspace compartilhado
 
 **Files:**
 - Create: `src/features/strategic-plan/StrategicPlanWorkspace.tsx`
 - Create: `src/features/strategic-plan/StrategicPlanWorkspace.test.tsx`
 
 **Interfaces:**
-- Consumes: controller, componentes existentes e novos componentes neutros.
+- Consumes: controller e componentes canônicos.
 - Produces: `StrategicPlanWorkspace`.
 
-- [ ] **Step 1: escrever teste RED da composição final**
+- [ ] **Step 1: escrever RED da composição**
 
 ```tsx
 renderStrategicWorkspace()
@@ -360,49 +388,36 @@ expect(screen.getByText('Leitura do indicador')).toBeInTheDocument()
 expect(screen.getByText('Direcionamento MX')).toBeInTheDocument()
 ```
 
-- [ ] **Step 2: implementar loading, error e empty**
-
-Required states:
+- [ ] **Step 2: implementar estados**
 
 ```text
 loading skeleton com dimensões finais;
-error com mensagem e Tentar novamente;
-sem loja selecionada;
+erro com Tentar novamente;
+sem loja;
 indicador sem dados;
 indicador derivado não editável;
 meta ausente;
 ação vinculada ausente/presente.
 ```
 
-- [ ] **Step 3: implementar composição**
-
-Structure:
+- [ ] **Step 3: implementar estrutura**
 
 ```text
-StrategicHeader compacto
-StrategicPlanTabs
-barra compacta de controles
-StrategicIndicatorStrip
-StrategicAnalysisGrid
-Leitura + Direcionamento
-TargetHistoryPanel
-EditTargetsDrawer
-CreateActionModal
-FiltersDrawer
+cabeçalho compacto, sem saudação;
+Resumo e Visão Geral;
+barra compacta: Indicador, Área, Exibição, Editar Metas, Criar/Abrir Plano de Ação, Exportar;
+StrategicIndicatorStrip;
+StrategicAnalysisGrid;
+Leitura e Direcionamento;
+TargetHistoryPanel;
+drawers/modals canônicos.
 ```
 
-No greeting is rendered inside this workspace.
-
-- [ ] **Step 4: executar GREEN**
+- [ ] **Step 4: GREEN e commit**
 
 ```bash
 bun test src/features/strategic-plan/StrategicPlanWorkspace.test.tsx
 npm run typecheck
-```
-
-- [ ] **Step 5: commit**
-
-```bash
 git add src/features/strategic-plan/StrategicPlanWorkspace.tsx src/features/strategic-plan/StrategicPlanWorkspace.test.tsx
 git commit -m "feat(strategy): add shared strategic workspace"
 ```
@@ -417,10 +432,9 @@ git commit -m "feat(strategy): add shared strategic workspace"
 - Modify: `src/test/internal-mx-planning-pages.test.ts`
 
 **Interfaces:**
-- Consumes: `PlanningWorkspaceProvider`, adapters e `StrategicPlanWorkspace`.
-- Produces: duas montagens sobre a mesma implementação.
+- Produces: duas montagens da mesma implementação.
 
-- [ ] **Step 1: escrever contrato RED dos wrappers**
+- [ ] **Step 1: escrever contrato RED**
 
 ```ts
 const owner = read('src/pages/owner/PlanoEstrategico.jsx')
@@ -433,13 +447,7 @@ expect(internal).not.toContain('TargetTab')
 expect(internal).not.toContain('ActionTab')
 ```
 
-- [ ] **Step 2: executar RED**
-
-Run: `bun test src/test/internal-mx-planning-pages.test.ts`
-
-- [ ] **Step 3: reduzir a página do Dono**
-
-The owner wrapper must:
+- [ ] **Step 2: reduzir página do Dono**
 
 ```tsx
 const storeId = resolveOwnerPlanningStoreId(unitId, currentUnits)
@@ -451,7 +459,7 @@ return (
 )
 ```
 
-- [ ] **Step 4: reduzir a página interna**
+- [ ] **Step 3: reduzir página interna**
 
 ```tsx
 export default function InternalStrategicPlanPage() {
@@ -464,7 +472,7 @@ export default function InternalStrategicPlanPage() {
 }
 ```
 
-- [ ] **Step 5: executar GREEN e commit**
+- [ ] **Step 4: executar GREEN e commit**
 
 ```bash
 bun test src/features/strategic-plan src/test/internal-mx-planning-pages.test.ts
@@ -475,31 +483,32 @@ git commit -m "refactor(strategy): share owner and internal workspace"
 
 ---
 
-### Task 7: Validar ação vinculada, exportação e responsividade
+### Task 7: Validar persistência, deduplicação e responsividade
 
 **Files:**
 - Create: `src/test/strategic-plan-shared.playwright.ts`
 - Create: `docs/qa/evidence/internal-mx-functional/strategic-plan.md`
 
 **Interfaces:**
-- Produces: evidência funcional e visual das duas montagens.
+- Produces: evidência das duas montagens.
 
 - [ ] **Step 1: criar E2E autenticado**
 
 Scenarios:
 
 ```text
-internal selects store and opens SP-001;
-owner opens the same store;
-both show same target/current values;
-internal edits target and owner sees it after Realtime;
-create action from indicator once;
-second click opens existing action instead of duplicating;
-export generates non-empty CSV;
-mobile offers only Tabela and Gráfico.
+perfil interno seleciona loja e abre SP-001;
+Dono abre a mesma loja;
+ambos mostram mesmas metas/resultados;
+interno edita meta e Dono recebe atualização;
+criar ação a partir do indicador apenas uma vez;
+segundo CTA abre ação existente;
+exportação gera CSV não vazio;
+mobile mostra apenas Tabela e Gráfico;
+Visão Geral contém exatamente 45 indicadores.
 ```
 
-- [ ] **Step 2: executar testes e gates**
+- [ ] **Step 2: executar gates**
 
 ```bash
 bun test src/features/strategic-plan src/test/internal-mx-planning-pages.test.ts
@@ -511,7 +520,7 @@ npm run build
 
 - [ ] **Step 3: registrar evidência**
 
-`strategic-plan.md` must contain SHA, store used, indicator used, screenshots at 1440/1024/768/390, test commands and result.
+Include SHA, loja/indicador usados, screenshots 1440/1024/768/390, comandos e resultados.
 
 - [ ] **Step 4: commit**
 
