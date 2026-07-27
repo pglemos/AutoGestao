@@ -4,7 +4,7 @@
 
 **Goal:** Extrair o Plano de Ação completo para um workspace compartilhado entre Dono e perfis internos, com Ações/Calendário, cinco cards executivos, Foco, Kanban, Lista e ciclo integral de mutações.
 
-**Architecture:** Regras puras de contagem, classificação de foco e política por papel serão isoladas em TypeScript. Um controller único administrará estado, filtros, mutações e reconciliação. Os componentes existentes do Dono serão reutilizados, e as páginas do Dono e do módulo interno serão reduzidas a wrappers.
+**Architecture:** Regras puras de contagem, classificação de foco e política por papel serão isoladas em TypeScript. Um controller único administrará estado, filtros, mutações e reconciliação. Os componentes existentes do Dono, incluindo `ListView`, serão reutilizados. Uma migration aditiva publicará no Realtime as tabelas filhas necessárias para checklist, evidências e histórico.
 
 **Tech Stack:** React 19, TypeScript 5.8, React Router 7, @hello-pangea/dnd 17, Radix UI, Supabase, Bun Test, Testing Library, Playwright.
 
@@ -18,15 +18,21 @@
 - O Calendário não repete os cinco cards.
 - Drag and drop e `Mover para` usam a mesma função de domínio.
 - Não criar cópia da página do Dono ou segundo repositório.
-- Reutilizar `actionPlanLiveRepository` e tabelas canônicas.
-- Perfis internos têm administração global; demais papéis preservam o próprio escopo.
+- Reutilizar `actionPlanLiveRepository`, `BoardView` e `ListView`.
+- Perfis internos têm administração global; Dono não recebe exclusão definitiva; Gerente/Vendedor preservam o próprio escopo.
 - Todas as transições registram histórico.
 - Nenhum `window.confirm` para exclusão irreversível; usar diálogo controlado com confirmação textual.
-- Tema global permanece fora deste plano.
+- Tabelas filhas devem entrar no `supabase_realtime` de forma idempotente antes de serem usadas pelo hook compartilhado.
+- Nenhuma alteração de tema global neste plano.
 
 ---
 
 ## Mapa de arquivos
+
+### Banco e contrato Realtime
+
+- Create: `supabase/migrations/20260727163000_action_plan_realtime_sources.sql`
+- Create: `src/lib/action-plan-realtime-migration.test.ts`
 
 ### Regras e contratos
 
@@ -40,6 +46,8 @@
 
 ### Controller e workspace
 
+- Create: `src/features/action-plan/actionPlanRepositoryAdapter.ts`
+- Create: `src/features/action-plan/actionPlanRepositoryAdapter.test.ts`
 - Create: `src/features/action-plan/useActionPlanController.ts`
 - Create: `src/features/action-plan/useActionPlanController.test.tsx`
 - Create: `src/features/action-plan/ActionPlanWorkspace.tsx`
@@ -47,15 +55,17 @@
 - Create: `src/features/action-plan/components/DeleteActionDialog.tsx`
 - Create: `src/features/action-plan/components/DeleteActionDialog.test.tsx`
 
-### Wrappers e testes
+### Wrappers e evidência
 
 - Modify: `src/pages/owner/PlanoDeAcao.jsx`
 - Modify: `src/features/internal-mx-planning/InternalActionPlanPage.tsx`
+- Modify: `src/features/planning-workspace/usePlanningRealtime.ts`
+- Modify: `src/features/planning-workspace/usePlanningRealtime.test.tsx`
 - Modify: `src/test/internal-mx-planning-pages.test.ts`
 - Create: `src/test/action-plan-shared.playwright.ts`
 - Create: `docs/qa/evidence/internal-mx-functional/action-plan.md`
 
-### Componentes existentes reutilizados
+### Componentes canônicos reutilizados
 
 - Reuse: `src/components/owner/actionplan/ActionPlanHeader.jsx`
 - Reuse: `src/components/owner/actionplan/ActionPlanTabs.jsx`
@@ -64,6 +74,7 @@
 - Reuse: `src/components/owner/actionplan/ExecutiveFilters.jsx`
 - Reuse: `src/components/owner/actionplan/focus/FocusView.jsx`
 - Reuse: `src/components/owner/actionplan/board/BoardView.jsx`
+- Reuse: `src/components/owner/actionplan/board/ListView.jsx`
 - Reuse: `src/components/owner/actionplan/board/BoardModals.jsx`
 - Reuse: `src/components/owner/actionplan/calendar/CalendarView.jsx`
 - Reuse: `src/components/owner/actionplan/ActionDrawer.jsx`
@@ -77,7 +88,84 @@
 
 ---
 
-### Task 1: Definir contrato e contagens executivas
+### Task 1: Publicar fontes filhas no Realtime
+
+**Files:**
+- Create: `supabase/migrations/20260727163000_action_plan_realtime_sources.sql`
+- Create: `src/lib/action-plan-realtime-migration.test.ts`
+- Modify: `src/features/planning-workspace/usePlanningRealtime.ts`
+- Modify: `src/features/planning-workspace/usePlanningRealtime.test.tsx`
+
+**Interfaces:**
+- Produces: publicação idempotente de `historico_planos_acao`, `evidencias_planos_acao` e `itens_plano_acao`.
+
+- [ ] **Step 1: escrever teste RED da migration**
+
+```ts
+import { expect, test } from 'bun:test'
+import { readFileSync } from 'node:fs'
+
+const sql = readFileSync('supabase/migrations/20260727163000_action_plan_realtime_sources.sql', 'utf8')
+
+test('publica somente tabelas canônicas do Plano de Ação', () => {
+  for (const table of ['historico_planos_acao', 'evidencias_planos_acao', 'itens_plano_acao']) {
+    expect(sql).toContain(table)
+  }
+  expect(sql).not.toContain('CREATE TABLE')
+  expect(sql).not.toContain('action_plan_history')
+})
+```
+
+- [ ] **Step 2: executar RED**
+
+Run: `bun test src/lib/action-plan-realtime-migration.test.ts`
+
+- [ ] **Step 3: criar migration idempotente**
+
+```sql
+DO $$
+DECLARE
+  v_table text;
+BEGIN
+  FOREACH v_table IN ARRAY ARRAY[
+    'historico_planos_acao',
+    'evidencias_planos_acao',
+    'itens_plano_acao'
+  ]
+  LOOP
+    IF to_regclass(format('public.%I', v_table)) IS NOT NULL
+       AND NOT EXISTS (
+         SELECT 1
+         FROM pg_publication_tables
+         WHERE pubname = 'supabase_realtime'
+           AND schemaname = 'public'
+           AND tablename = v_table
+       ) THEN
+      EXECUTE format('ALTER PUBLICATION supabase_realtime ADD TABLE public.%I', v_table);
+    END IF;
+  END LOOP;
+END;
+$$;
+```
+
+- [ ] **Step 4: atualizar o registro do hook**
+
+```ts
+action: ['planos_acao', 'historico_planos_acao', 'evidencias_planos_acao', 'itens_plano_acao']
+```
+
+- [ ] **Step 5: validar localmente e commit**
+
+```bash
+supabase db reset
+bun test src/lib/action-plan-realtime-migration.test.ts src/features/planning-workspace/usePlanningRealtime.test.tsx
+git add supabase/migrations/20260727163000_action_plan_realtime_sources.sql src/lib/action-plan-realtime-migration.test.ts src/features/planning-workspace/usePlanningRealtime.ts src/features/planning-workspace/usePlanningRealtime.test.tsx
+git commit -m "feat(actions): publish canonical realtime sources"
+```
+
+---
+
+### Task 2: Definir contrato e contagens executivas
 
 **Files:**
 - Create: `src/features/action-plan/actionPlan.types.ts`
@@ -93,8 +181,8 @@
 import { describe, expect, test } from 'bun:test'
 import { calculateActionPlanMetrics } from './actionPlanMetrics'
 
-const action = (id: string, status: string, dueDate: string, cancelled = false) => ({
-  id, code: id, title: id, status, dueDate, cancelled, progress: 0, priority: 'medium', updatedAt: '2026-07-27T12:00:00-03:00',
+const action = (id: string, status: string, dueDate: string) => ({
+  id, code: id, title: id, status, dueDate, progress: 0, priority: 'medium', updatedAt: '2026-07-27T12:00:00-03:00',
 })
 
 describe('calculateActionPlanMetrics', () => {
@@ -103,25 +191,21 @@ describe('calculateActionPlanMetrics', () => {
       action('a', 'not_started', '2026-07-28'),
       action('b', 'in_progress', '2026-07-26'),
       action('c', 'completed', '2026-07-20'),
-      action('d', 'cancelled', '2026-07-20', true),
+      action('d', 'cancelled', '2026-07-20'),
     ], new Date('2026-07-27T12:00:00-03:00'))
     expect(metrics).toEqual({ total: 3, notStarted: 1, late: 1, inProgress: 1, completed: 1 })
   })
 })
 ```
 
-- [ ] **Step 2: escrever teste RED do toggle de card**
+- [ ] **Step 2: escrever RED do toggle**
 
 ```ts
 expect(applyExecutiveCardFilter('late', null)).toEqual({ activeCard: 'late', patch: { display: 'late', status: undefined } })
 expect(applyExecutiveCardFilter('late', 'late')).toEqual({ activeCard: null, patch: { display: undefined, status: undefined } })
 ```
 
-- [ ] **Step 3: executar RED**
-
-Run: `bun test src/features/action-plan/actionPlanMetrics.test.ts`
-
-- [ ] **Step 4: implementar tipos mínimos**
+- [ ] **Step 3: criar tipos**
 
 ```ts
 export type ActionPlanStatus = 'awaiting_decision' | 'not_started' | 'in_progress' | 'blocked' | 'awaiting_validation' | 'completed' | 'cancelled'
@@ -138,16 +222,17 @@ export type ActionPlanItem = {
   updatedAt: string | null
   blockedReason?: string | null
   requiresOwnerDecision?: boolean
-  impactStatus?: string | null
+  completedAt?: string | null
+  submittedForValidationAt?: string | null
   [key: string]: unknown
 }
 ```
 
-- [ ] **Step 5: implementar cálculos puros**
+- [ ] **Step 4: implementar cálculos**
 
-`late` must be true when `dueDate < startOfToday(now)` and status is neither `completed` nor `cancelled`.
+`late` is true when due date is before the start of current day and status is not `completed` or `cancelled`.
 
-- [ ] **Step 6: GREEN e commit**
+- [ ] **Step 5: GREEN e commit**
 
 ```bash
 bun test src/features/action-plan/actionPlanMetrics.test.ts
@@ -157,7 +242,7 @@ git commit -m "feat(actions): add executive metrics contract"
 
 ---
 
-### Task 2: Classificar as cinco seções do Foco
+### Task 3: Classificar as cinco seções do Foco
 
 **Files:**
 - Create: `src/features/action-plan/actionPlanFocus.ts`
@@ -166,41 +251,30 @@ git commit -m "feat(actions): add executive metrics contract"
 **Interfaces:**
 - Produces: `buildFocusSections(actions, now)`.
 
-- [ ] **Step 1: escrever testes RED**
+- [ ] **Step 1: escrever RED da classificação**
 
 ```ts
-import { expect, test } from 'bun:test'
-import { buildFocusSections } from './actionPlanFocus'
-
-test('separa ações sem duplicar a mesma ação em seções incompatíveis', () => {
-  const sections = buildFocusSections(fixtures, new Date('2026-07-27T12:00:00-03:00'))
-  expect(sections.needsYou.map(item => item.id)).toContain('decision')
-  expect(sections.atRisk.map(item => item.id)).toContain('late')
-  expect(sections.inExecution.map(item => item.id)).toContain('running')
-  expect(sections.awaitingValidation.map(item => item.id)).toContain('validation')
-  expect(sections.recentlyCompleted).toHaveLength(4)
-})
+const sections = buildFocusSections(fixtures, new Date('2026-07-27T12:00:00-03:00'))
+expect(sections.needsYou.map(item => item.id)).toContain('decision')
+expect(sections.atRisk.map(item => item.id)).toContain('late')
+expect(sections.inExecution.map(item => item.id)).toContain('running')
+expect(sections.awaitingValidation.map(item => item.id)).toContain('validation')
+expect(sections.recentlyCompleted).toHaveLength(4)
 ```
 
 - [ ] **Step 2: cobrir critérios de risco**
 
-Tests must cover:
-
 ```text
 prazo vencido;
 bloqueada;
-prazo em até dois dias e progresso < 50%;
+prazo em até dois dias com progresso < 50%;
 sem atualização há mais de sete dias;
 prioridade crítica sem execução.
 ```
 
-- [ ] **Step 3: executar RED**
+- [ ] **Step 3: implementar e ordenar**
 
-Run: `bun test src/features/action-plan/actionPlanFocus.test.ts`
-
-- [ ] **Step 4: implementar classificação e ordenação**
-
-Return shape:
+Return:
 
 ```ts
 {
@@ -212,17 +286,7 @@ Return shape:
 }
 ```
 
-Ordering:
-
-```text
-needsYou: prioridade, prazo;
-atRisk: vencida, bloqueada, prioridade, prazo;
-inExecution: prioridade, prazo, menor progresso;
-awaitingValidation: data de envio mais antiga;
-recentlyCompleted: conclusão mais recente, máximo 4.
-```
-
-- [ ] **Step 5: GREEN e commit**
+- [ ] **Step 4: GREEN e commit**
 
 ```bash
 bun test src/features/action-plan/actionPlanFocus.test.ts
@@ -232,17 +296,17 @@ git commit -m "feat(actions): classify executive focus sections"
 
 ---
 
-### Task 3: Definir política de ações por papel
+### Task 4: Definir política por papel e estado
 
 **Files:**
 - Create: `src/features/action-plan/actionPlanPolicy.ts`
 - Create: `src/features/action-plan/actionPlanPolicy.test.ts`
 
 **Interfaces:**
-- Consumes: `PlanningCapabilities`, estado da ação.
-- Produces: `resolveActionPlanPolicy(capabilities, action)`.
+- Consumes: `PlanningCapabilities` and action state.
+- Produces: `resolveActionPlanPolicy`.
 
-- [ ] **Step 1: escrever testes RED**
+- [ ] **Step 1: escrever RED por papel**
 
 ```ts
 expect(resolveActionPlanPolicy(internalCapabilities, action)).toMatchObject({ canEdit: true, canDelete: true, canValidate: true })
@@ -250,43 +314,80 @@ expect(resolveActionPlanPolicy(ownerCapabilities, action)).toMatchObject({ canDe
 expect(resolveActionPlanPolicy(sellerCapabilities, action)).toMatchObject({ canDelete: false, canDelegate: false, canValidate: false })
 ```
 
-- [ ] **Step 2: cobrir restrições de estado**
+- [ ] **Step 2: cobrir estados**
 
 ```text
-completed → apenas reabrir quando permitido;
-cancelled → não iniciar nem atualizar progresso;
+completed → apenas reabrir quando autorizado;
+cancelled → não iniciar nem atualizar;
 awaiting_validation → não editar execução;
 not_started → iniciar;
 blocked → desbloquear;
-owner decision → aprovar/delegar somente para papel autorizado.
+owner decision → aprovar/delegar somente quando autorizado.
 ```
 
-- [ ] **Step 3: executar RED, implementar e executar GREEN**
+- [ ] **Step 3: GREEN e commit**
 
 ```bash
 bun test src/features/action-plan/actionPlanPolicy.test.ts
-```
-
-- [ ] **Step 4: commit**
-
-```bash
 git add src/features/action-plan/actionPlanPolicy.ts src/features/action-plan/actionPlanPolicy.test.ts
 git commit -m "feat(actions): enforce role and state policy"
 ```
 
 ---
 
-### Task 4: Criar o controller compartilhado
+### Task 5: Tipar o repositório canônico
+
+**Files:**
+- Create: `src/features/action-plan/actionPlanRepositoryAdapter.ts`
+- Create: `src/features/action-plan/actionPlanRepositoryAdapter.test.ts`
+
+**Interfaces:**
+- Produces: `ActionPlanRepository`, `actionPlanDataSource`.
+
+- [ ] **Step 1: escrever RED das operações obrigatórias**
+
+The fake source must expose and the adapter must type:
+
+```text
+getActions, getResponsiblePeople, createAction, updateActionById, deleteAction,
+approveAction, delegateAction, startAction, updateProgress, blockAction, unblockAction,
+submitForValidation, validateAction, returnToExecution, reopenAction, cancelAction,
+duplicateAction, updateDueDate.
+```
+
+- [ ] **Step 2: implementar um único cast legado**
+
+```ts
+import { actionPlanLiveRepository } from '@/components/owner/actionplan/actionPlanLiveRepository'
+
+export function createActionPlanRepositoryAdapter(source: unknown): ActionPlanRepository {
+  return source as ActionPlanRepository
+}
+
+export const actionPlanDataSource = createActionPlanRepositoryAdapter(actionPlanLiveRepository)
+```
+
+- [ ] **Step 3: GREEN e commit**
+
+```bash
+bun test src/features/action-plan/actionPlanRepositoryAdapter.test.ts
+git add src/features/action-plan/actionPlanRepositoryAdapter.ts src/features/action-plan/actionPlanRepositoryAdapter.test.ts
+git commit -m "refactor(actions): type canonical repository"
+```
+
+---
+
+### Task 6: Criar controller compartilhado
 
 **Files:**
 - Create: `src/features/action-plan/useActionPlanController.ts`
 - Create: `src/features/action-plan/useActionPlanController.test.tsx`
 
 **Interfaces:**
-- Consumes: `usePlanningWorkspace`, `actionPlanLiveRepository`, metrics, focus, policy, `usePlanningRealtime`.
+- Consumes: planning workspace, repository, metrics, focus, policy and Realtime.
 - Produces: `ActionPlanController`.
 
-- [ ] **Step 1: escrever teste RED do carregamento**
+- [ ] **Step 1: escrever RED do carregamento**
 
 ```tsx
 test('carrega ações e responsáveis da loja do workspace', async () => {
@@ -298,9 +399,7 @@ test('carrega ações e responsáveis da loja do workspace', async () => {
 })
 ```
 
-- [ ] **Step 2: testar estado inicial e URL**
-
-Cover:
+- [ ] **Step 2: testar estado inicial**
 
 ```text
 ?tab=calendario abre Calendário;
@@ -312,14 +411,14 @@ storeId permanece na URL ao trocar tab.
 
 - [ ] **Step 3: testar mutações e reconciliação**
 
-For each method, fake repository resolves and expect exactly one `reload()`:
+Each method resolves and triggers exactly one reconciliation:
 
 ```text
 create, update, delete, approve, delegate, start, progress, block, unblock,
 submitValidation, validate, return, reopen, cancel, duplicate, updateDueDate.
 ```
 
-- [ ] **Step 4: implementar signature**
+- [ ] **Step 4: implementar assinatura**
 
 ```ts
 export function useActionPlanController(options?: {
@@ -328,42 +427,35 @@ export function useActionPlanController(options?: {
 }): ActionPlanController
 ```
 
-Expose:
+Expose actions, filteredActions, metrics, focusSections, responsiblePeople, loading/error/reload, tab/mode/filters/sort/card, drawer/modal state and all mutation handlers.
 
-```text
-actions, filteredActions, metrics, focusSections, responsiblePeople;
-loading, refreshing, error, reload;
-tab, mode, filters, sortBy, activeCard;
-drawer/modal state;
-all mutation handlers;
-handleMoveTo and handleDragEnd using one transition function.
-```
+- [ ] **Step 5: unificar transições**
 
-- [ ] **Step 5: usar `usePlanningRealtime({ scope: 'action' })`**
+`handleDragEnd` and `Mover para` call the same `transitionAction(action, destination)` function.
 
-Realtime must schedule one reconciliation, not call every mutation handler.
+- [ ] **Step 6: usar `usePlanningRealtime({ scope: 'action' })`**
 
-- [ ] **Step 6: GREEN e commit**
+- [ ] **Step 7: GREEN e commit**
 
 ```bash
 bun test src/features/action-plan/useActionPlanController.test.tsx
 npm run typecheck
 git add src/features/action-plan/useActionPlanController.ts src/features/action-plan/useActionPlanController.test.tsx
-git commit -m "feat(actions): add shared action plan controller"
+git commit -m "feat(actions): add shared action controller"
 ```
 
 ---
 
-### Task 5: Criar diálogo de exclusão controlado
+### Task 7: Criar exclusão controlada
 
 **Files:**
 - Create: `src/features/action-plan/components/DeleteActionDialog.tsx`
 - Create: `src/features/action-plan/components/DeleteActionDialog.test.tsx`
 
 **Interfaces:**
-- Produces: `DeleteActionDialog` requiring the exact action code.
+- Produces: diálogo que exige o código exato da ação.
 
-- [ ] **Step 1: escrever teste RED**
+- [ ] **Step 1: escrever RED**
 
 ```tsx
 render(<DeleteActionDialog open action={{ id: '1', code: 'PA-001', title: 'Ação' }} onOpenChange={() => {}} onConfirm={confirm} />)
@@ -372,9 +464,9 @@ await user.type(screen.getByLabelText('Digite o código da ação'), 'PA-001')
 expect(screen.getByRole('button', { name: 'Excluir definitivamente' })).toBeEnabled()
 ```
 
-- [ ] **Step 2: implementar com `AlertDialog`**
+- [ ] **Step 2: implementar com AlertDialog**
 
-The dialog must show impact, title, code, irreversible warning, loading state and generic error.
+Show impact, title, code, irreversible warning, loading and generic error.
 
 - [ ] **Step 3: GREEN e commit**
 
@@ -386,17 +478,17 @@ git commit -m "feat(actions): add controlled permanent deletion"
 
 ---
 
-### Task 6: Montar o workspace final
+### Task 8: Montar workspace final
 
 **Files:**
 - Create: `src/features/action-plan/ActionPlanWorkspace.tsx`
 - Create: `src/features/action-plan/ActionPlanWorkspace.test.tsx`
 
 **Interfaces:**
-- Consumes: controller e componentes existentes.
+- Consumes: controller and canonical components.
 - Produces: `ActionPlanWorkspace`.
 
-- [ ] **Step 1: escrever teste RED da hierarquia**
+- [ ] **Step 1: escrever RED da hierarquia**
 
 ```tsx
 renderActionPlanWorkspace()
@@ -406,15 +498,19 @@ expect(screen.getAllByTestId('executive-card')).toHaveLength(5)
 expect(screen.getByRole('button', { name: 'Foco' })).toHaveAttribute('aria-pressed', 'true')
 ```
 
-- [ ] **Step 2: testar os cards como filtros**
+- [ ] **Step 2: testar cards como filtros**
 
-Click `Atrasadas`, expect only late actions in Foco/Kanban/List. Click again, expect filter removed.
+Click `Atrasadas`, verify Foco, Kanban and Lista show only late actions; click again and remove filter.
 
-- [ ] **Step 3: testar Calendário sem cards**
+- [ ] **Step 3: testar Lista real**
+
+When mode is `list`, render `ListView` through the canonical board composition. Verify sorting, selection, batch actions, export, filters and drawer.
+
+- [ ] **Step 4: testar Calendário sem cards**
 
 Switch to Calendar and expect zero `executive-card` elements.
 
-- [ ] **Step 4: implementar composição**
+- [ ] **Step 5: implementar composição**
 
 Ações:
 
@@ -423,8 +519,8 @@ ActionPlanHeader
 ActionPlanTabs
 ExecutiveCardsStrip
 ActionsToolbar + ExecutiveFilters
-FocusView | BoardView | List mode
-ActionDrawer and mutation modals
+FocusView | BoardView(Kanban) | ListView(Lista)
+ActionDrawer and canonical mutation modals
 DeleteActionDialog
 ```
 
@@ -437,31 +533,22 @@ CalendarView
 calendar-specific filters and dialogs
 ```
 
-- [ ] **Step 5: adaptar componentes legados somente por props**
+- [ ] **Step 6: adaptar componentes por props, sem forks**
 
-Do not fork existing components. Add props when necessary:
+Add only capabilities/policy, loading, onDelete, onMoveTo, active card and focus sections.
 
-```text
-capabilities/policy;
-loading/disabled;
-onDelete;
-onMoveTo;
-active executive filter;
-focus sections.
-```
-
-- [ ] **Step 6: GREEN e commit**
+- [ ] **Step 7: GREEN e commit**
 
 ```bash
 bun test src/features/action-plan/ActionPlanWorkspace.test.tsx src/features/action-plan/components
 npm run typecheck
 git add src/features/action-plan/ActionPlanWorkspace.tsx src/features/action-plan/ActionPlanWorkspace.test.tsx src/components/owner/actionplan
-git commit -m "feat(actions): add shared action plan workspace"
+git commit -m "feat(actions): add shared action workspace"
 ```
 
 ---
 
-### Task 7: Converter as páginas em wrappers
+### Task 9: Converter as páginas em wrappers
 
 **Files:**
 - Modify: `src/pages/owner/PlanoDeAcao.jsx`
@@ -469,23 +556,22 @@ git commit -m "feat(actions): add shared action plan workspace"
 - Modify: `src/test/internal-mx-planning-pages.test.ts`
 
 **Interfaces:**
-- Consumes: `ActionPlanWorkspace` and planning adapters.
-- Produces: owner/internal parity without page duplication.
+- Produces: Dono e perfis internos sobre o mesmo workspace.
 
 - [ ] **Step 1: escrever contrato RED**
 
 ```ts
 expect(read('src/pages/owner/PlanoDeAcao.jsx')).toContain('ActionPlanWorkspace')
 expect(read('src/features/internal-mx-planning/InternalActionPlanPage.tsx')).toContain('ActionPlanWorkspace')
+expect(read('src/pages/owner/PlanoDeAcao.jsx')).not.toContain('window.confirm')
 expect(read('src/features/internal-mx-planning/InternalActionPlanPage.tsx')).not.toContain('window.confirm')
-expect(read('src/features/internal-mx-planning/InternalActionPlanPage.tsx')).not.toContain('linear calendar')
 ```
 
-- [ ] **Step 2: reduzir a página do Dono**
+- [ ] **Step 2: reduzir página do Dono**
 
-Mount `PlanningWorkspaceProvider shell="owner"` and `ActionPlanWorkspace`, passing `openConsultantModal` through a callback prop.
+Mount `PlanningWorkspaceProvider shell="owner"` and `ActionPlanWorkspace`, passing consultant callback through props.
 
-- [ ] **Step 3: reduzir a página interna**
+- [ ] **Step 3: reduzir página interna**
 
 ```tsx
 export default function InternalActionPlanPage() {
@@ -498,7 +584,7 @@ export default function InternalActionPlanPage() {
 }
 ```
 
-- [ ] **Step 4: executar testes e commit**
+- [ ] **Step 4: executar GREEN e commit**
 
 ```bash
 bun test src/features/action-plan src/test/internal-mx-planning-pages.test.ts
@@ -509,14 +595,14 @@ git commit -m "refactor(actions): share owner and internal workspace"
 
 ---
 
-### Task 8: Validar persistência, Realtime e responsividade
+### Task 10: Validar lifecycle, Realtime and responsive behavior
 
 **Files:**
 - Create: `src/test/action-plan-shared.playwright.ts`
 - Create: `docs/qa/evidence/internal-mx-functional/action-plan.md`
 
 **Interfaces:**
-- Produces: evidência completa do ciclo de ação.
+- Produces: evidence of the complete lifecycle.
 
 - [ ] **Step 1: criar E2E autenticado**
 
@@ -524,21 +610,24 @@ Scenarios:
 
 ```text
 Ações e Foco abrem por padrão;
-cinco cards usam contagens reais e alternam filtro;
+cinco cards usam dados reais e alternam filtro;
 criar ação atualiza cards, Foco, Kanban, Lista e Calendário;
 iniciar, bloquear, desbloquear, validar, devolver e reabrir preservam histórico;
 arrastar e Mover para produzem a mesma transição;
+Lista é funcional, não placeholder;
 Calendário não exibe cards;
-alterar prazo no Calendário atualiza demais modos;
-exclusão exige código exato;
-Dono e perfil interno enxergam o mesmo registro;
-nenhuma ação duplicada após Realtime.
+alterar prazo sincroniza os modos;
+exclusão interna exige código exato;
+Dono não recebe exclusão definitiva;
+Dono e perfil interno veem o mesmo registro;
+nenhuma ação é duplicada após rajada Realtime.
 ```
 
 - [ ] **Step 2: executar gates**
 
 ```bash
-bun test src/features/action-plan src/components/owner/actionplan src/test/internal-mx-planning-pages.test.ts
+supabase db reset
+bun test src/features/action-plan src/components/owner/actionplan src/lib/action-plan-realtime-migration.test.ts src/test/internal-mx-planning-pages.test.ts
 npx playwright test src/test/action-plan-shared.playwright.ts
 npm run typecheck
 npm run lint
@@ -547,11 +636,11 @@ npm run build
 
 - [ ] **Step 3: registrar evidência**
 
-Include screenshots in 1440/1024/768/390, action IDs used, transitions executed, SQL/history verification and zero blocking console errors.
+Include screenshots 1440/1024/768/390, action IDs, transitions, SQL/history verification and zero blocking console errors.
 
 - [ ] **Step 4: commit**
 
 ```bash
 git add src/test/action-plan-shared.playwright.ts docs/qa/evidence/internal-mx-functional/action-plan.md
-git commit -m "test(actions): verify shared action plan lifecycle"
+git commit -m "test(actions): verify shared action lifecycle"
 ```
