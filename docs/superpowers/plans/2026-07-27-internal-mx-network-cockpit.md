@@ -4,23 +4,24 @@
 
 **Goal:** Evoluir o Painel Geral para um cockpit rastreável em tempo real, com progresso de lojas, vendedores, gerentes e responsáveis, além de drill-down para planejamento, ações, consultoria e fechamento diário.
 
-**Architecture:** Uma RPC segura consolida fontes existentes por loja e período sem criar score opaco ou tabela paralela. O controller atual preserva debounce/single-flight, passa a consumir o snapshot tipado e expõe drill-down contextual. Componentes novos mostram evolução e origem dos números, mantendo a tabela atual como ponto central.
+**Architecture:** Uma RPC segura consolida fontes existentes por loja e período sem criar score opaco ou tabela paralela. O controller atual preserva debounce/single-flight, passa a consumir snapshot tipado e expõe drill-down contextual. O plano depende das migrations de Plano de Ação e Consultoria já integradas, inclusive participantes, Entrega, evidências e antecipação.
 
 **Tech Stack:** React 19, TypeScript 5.8, React Router 7, Supabase PostgreSQL 17/RPC/Realtime, Bun Test, Testing Library, Playwright.
 
 ## Global Constraints
 
-- Acesso ao snapshot completo somente para `administrador_geral`, `administrador_mx` e `consultor_mx`.
+- Snapshot completo apenas para `administrador_geral`, `administrador_mx` e `consultor_mx`.
 - Não criar score de Dono sem fonte e fórmula explicável.
 - Vendedor: snapshots, fechamento, carteira, vendas e conversão.
 - Gerente: snapshots, equipe, ações e indicadores.
 - Dono/responsável: estratégia, ações, consultoria e resultados da unidade.
 - Loja: agregação rastreável dos papéis e módulos.
-- Todo número agregado informa universo/período e oferece origem ou drill-down.
-- Preservar debounce de 450 ms, espera máxima de 2000 ms, single-flight e recarga final.
-- Reutilizar `seller_routine_snapshots`, `manager_routine_snapshots`, `planos_acao`, metas, indicadores e Consultoria.
+- Todo número informa universo, período, fonte e destino de drill-down.
+- Preservar debounce 450 ms, espera máxima 2000 ms, single-flight e recarga final.
+- Reutilizar snapshots, ações, metas, indicadores e Consultoria.
+- Realtime inclui `consultoria_participantes_encontro`, além de progresso, Entrega, evidências e antecipação.
 - Não substituir dados reais por fixtures.
-- Tema global permanece fora deste plano.
+- Nenhuma alteração de tema global neste plano.
 
 ---
 
@@ -44,7 +45,7 @@
 - Modify: `src/features/network-dashboard/hooks/useNetworkDashboardController.test.tsx`
 - Modify: `src/features/network-dashboard/networkDashboardRealtime.test.ts`
 
-### Interface e rotas
+### Interface e evidência
 
 - Modify: `src/features/network-dashboard/NetworkDashboardPage.tsx`
 - Modify: `src/features/network-dashboard/components/StoreHealthTable.tsx`
@@ -67,9 +68,9 @@
 - Create: `src/features/network-dashboard/lib/networkCockpitCalculations.test.ts`
 
 **Interfaces:**
-- Produces: `NetworkCockpitStore`, `SellerEvolution`, `ManagerEvolution`, `OwnerEvolution`, `buildStoreRiskReasons`, `calculateTraceableProgress`.
+- Produces: `NetworkCockpitStore`, `PersonEvolution`, `TraceableMetric`, `buildStoreRiskReasons`, `calculateTraceableProgress`.
 
-- [ ] **Step 1: escrever testes RED de risco**
+- [ ] **Step 1: escrever RED de risco explicado**
 
 ```ts
 import { expect, test } from 'bun:test'
@@ -83,6 +84,7 @@ test('explica cada risco sem score opaco', () => {
     blockedActions: 1,
     pendingClosures: 2,
     consultingEvidencePending: 1,
+    consultingParticipantsPending: 2,
   })).toEqual([
     'Disciplina diária abaixo de 50%',
     'Projeção abaixo de 80% da meta',
@@ -90,11 +92,12 @@ test('explica cada risco sem score opaco', () => {
     '1 ação bloqueada',
     '2 fechamentos pendentes',
     '1 evidência de consultoria pendente',
+    '2 participantes obrigatórios sem confirmação',
   ])
 })
 ```
 
-- [ ] **Step 2: escrever teste RED de progresso do Dono**
+- [ ] **Step 2: escrever RED de progresso rastreável**
 
 ```ts
 expect(calculateTraceableProgress({ completed: 6, total: 10 })).toEqual({ completed: 6, total: 10, percentage: 60 })
@@ -128,6 +131,8 @@ export type NetworkCockpitStore = StoreDiagnostic & {
   awaitingValidationActions: number
   strategicProgress: TraceableMetric
   consultingProgress: TraceableMetric
+  consultingEvidencePending: number
+  consultingParticipantsPending: number
   sellersEvolution: PersonEvolution[]
   managersEvolution: PersonEvolution[]
   ownerEvolution: PersonEvolution | null
@@ -135,7 +140,7 @@ export type NetworkCockpitStore = StoreDiagnostic & {
 }
 ```
 
-- [ ] **Step 4: implementar funções puras e GREEN**
+- [ ] **Step 4: implementar, executar GREEN e commit**
 
 ```bash
 bun test src/features/network-dashboard/lib/networkCockpitCalculations.test.ts
@@ -155,7 +160,7 @@ git commit -m "feat(network): add traceable cockpit contracts"
 **Interfaces:**
 - Produces: `get_internal_mx_network_cockpit(p_start_date date, p_end_date date)`.
 
-- [ ] **Step 1: escrever teste RED do SQL**
+- [ ] **Step 1: escrever RED do SQL**
 
 ```ts
 import { expect, test } from 'bun:test'
@@ -163,12 +168,16 @@ import { readFileSync } from 'node:fs'
 
 const sql = readFileSync('supabase/migrations/20260727182000_internal_mx_network_cockpit.sql', 'utf8')
 
-test('consolida fontes existentes sem criar tabela de score', () => {
+test('consolida fontes canônicas sem tabela de score', () => {
+  for (const source of [
+    'seller_routine_snapshots',
+    'manager_routine_snapshots',
+    'planos_acao',
+    'visitas_consultoria',
+    'consultoria_itens_entrega',
+    'consultoria_participantes_encontro',
+  ]) expect(sql).toContain(source)
   expect(sql).toContain('get_internal_mx_network_cockpit')
-  expect(sql).toContain('seller_routine_snapshots')
-  expect(sql).toContain('manager_routine_snapshots')
-  expect(sql).toContain('planos_acao')
-  expect(sql).toContain('visitas_consultoria')
   expect(sql).not.toContain('CREATE TABLE public.owner_score')
 })
 ```
@@ -177,15 +186,17 @@ test('consolida fontes existentes sem criar tabela de score', () => {
 
 Run: `bun test src/lib/internal-mx-network-cockpit-migration.test.ts`
 
-- [ ] **Step 3: implementar função SECURITY DEFINER**
-
-Signature:
+- [ ] **Step 3: implementar função**
 
 ```sql
 CREATE OR REPLACE FUNCTION public.get_internal_mx_network_cockpit(
   p_start_date date,
   p_end_date date
 ) RETURNS jsonb
+LANGUAGE plpgsql
+STABLE
+SECURITY DEFINER
+SET search_path = public
 ```
 
 Authorization:
@@ -196,60 +207,63 @@ IF NOT public.eh_area_interna_mx(auth.uid()) THEN
 END IF;
 ```
 
-The JSON must return:
+Validate non-null dates, `start <= end` and range <= 366 days.
 
-```text
-period;
-stores[];
-per store: operational totals, goals, sellers count, checked-in/closure counts,
-action counts, strategic completed/total, consulting completed/total,
-sellers evolution, managers evolution, owner/responsible evolution, source labels.
-```
-
-- [ ] **Step 4: usar CTEs por fonte**
+- [ ] **Step 4: consolidar por CTEs**
 
 Required CTEs:
 
 ```text
 active_stores;
-operational_summary using get_resumo_rede_periodo or canonical operational tables;
+operational_summary;
 active_sellers;
 daily_closures;
 seller_snapshot_latest;
 manager_snapshot_latest;
 action_summary;
 strategic_summary;
-consulting_summary;
+consulting_visit_summary;
+consulting_delivery_summary;
+consulting_evidence_summary;
+consulting_participant_summary;
 store_owners.
 ```
 
-Owner evolution must use named metrics:
+JSON per store:
+
+```text
+operational totals and goal;
+active sellers and closures;
+action counts by condition/state;
+strategic completed/total;
+consulting visits, delivery, evidence and participants completed/total;
+seller, manager and owner evolution;
+source metadata for every group.
+```
+
+Owner metrics remain separate:
 
 ```text
 strategic actions completed / total;
 consulting visits completed / total;
-store sales / goal;
+store sales / goal.
 ```
 
-Do not combine them into one unexplained score.
+No combined unexplained score.
 
-- [ ] **Step 5: grants and performance**
+- [ ] **Step 5: grants, indexes and pgTAP**
 
 ```text
-REVOKE ALL FROM PUBLIC/anon;
-GRANT EXECUTE TO authenticated;
-STABLE SECURITY DEFINER;
-SET search_path=public;
-validate p_start_date <= p_end_date;
-reject ranges longer than 366 days;
-indexes used by date/store/status must exist or be added additively.
+REVOKE ALL ON FUNCTION ... FROM PUBLIC;
+GRANT EXECUTE ON FUNCTION ... TO authenticated;
+internal roles allowed;
+Dono/Gerente/Vendedor/anon denied;
+empty store returns zero/null safely;
+every store includes sources metadata;
+indexes added only when required by EXPLAIN.
 ```
 
-- [ ] **Step 6: pgTAP**
-
-Test internal roles allowed, Dono/Gerente/Vendedor/anon denied, empty store returns zero/null safely, and every returned store includes `sources` metadata.
-
-- [ ] **Step 7: local validation and commit**
+- [ ] **Step 6: validar localmente e commit**
 
 ```bash
 supabase db reset
@@ -269,29 +283,31 @@ git commit -m "feat(network): add secure cockpit snapshot"
 - Create: `src/features/network-dashboard/data/networkCockpitRepository.test.ts`
 - Modify: `src/features/network-dashboard/hooks/useNetworkDashboardController.ts`
 - Modify: `src/features/network-dashboard/hooks/useNetworkDashboardController.test.tsx`
+- Modify: `src/features/network-dashboard/networkDashboardRealtime.test.ts`
 
 **Interfaces:**
 - Produces: `networkCockpitRepository.load(range)` and enriched controller rows.
 
-- [ ] **Step 1: regenerate types**
+- [ ] **Step 1: regenerar tipos**
 
 ```bash
 npm run gen:db-types
 npm run verify:db-types
 ```
 
-- [ ] **Step 2: write RED repository mapping test**
+- [ ] **Step 2: escrever RED do mapping**
 
 ```ts
-test('maps source metadata and person evolution', async () => {
+test('mapeia fontes, pessoas e pendências consultivas', async () => {
   const repository = createNetworkCockpitRepository(fakeSupabase(payload))
   const result = await repository.load({ start: '2026-07-01', end: '2026-07-31' })
   expect(result[0].sellersEvolution[0].metrics.sales.source).toBe('get_resumo_rede_periodo')
   expect(result[0].ownerEvolution?.metrics.strategicProgress.universe).toBe(10)
+  expect(result[0].consultingParticipantsPending).toBe(2)
 })
 ```
 
-- [ ] **Step 3: implement repository**
+- [ ] **Step 3: implementar repositório**
 
 ```ts
 export function createNetworkCockpitRepository(client = supabase) {
@@ -308,9 +324,9 @@ export function createNetworkCockpitRepository(client = supabase) {
 }
 ```
 
-- [ ] **Step 4: update controller RED tests**
+- [ ] **Step 4: migrar controller sem perder resiliência**
 
-Replace four independent initial queries with one repository call. Preserve:
+Replace four initial queries with one repository call. Preserve:
 
 ```text
 requestSequence;
@@ -319,24 +335,31 @@ reloadQueued;
 REALTIME_DEBOUNCE_MS=450;
 REALTIME_MAX_WAIT_MS=2000;
 report triggers;
-search/status/timeframe/sort.
+search/status/timeframe/sort;
+manual refresh and status connected/degraded.
 ```
 
-- [ ] **Step 5: add consulting/strategic Realtime sources**
+- [ ] **Step 5: ampliar Realtime**
 
-Tables:
+Subscribe to:
 
 ```text
 valores_indicadores_planejamento;
+regras_metas_loja;
+planos_acao;
+historico_planos_acao;
+evidencias_planos_acao;
+itens_plano_acao;
 clientes_consultoria;
 visitas_consultoria;
 evidencias_visita;
 consultoria_progresso_aula;
 consultoria_itens_entrega;
+consultoria_participantes_encontro;
 consultoria_solicitacoes_antecipacao.
 ```
 
-- [ ] **Step 6: GREEN and commit**
+- [ ] **Step 6: GREEN e commit**
 
 ```bash
 bun test src/features/network-dashboard/data src/features/network-dashboard/hooks/useNetworkDashboardController.test.tsx src/features/network-dashboard/networkDashboardRealtime.test.ts
@@ -358,9 +381,9 @@ git commit -m "refactor(network): consume typed cockpit snapshot"
 - Modify: `src/features/network-dashboard/components/StoreHealthTable.tsx`
 
 **Interfaces:**
-- Produces: store drawer with person/module drill-down and source labels.
+- Produces: drawer de loja com pessoas, módulos e fontes.
 
-- [ ] **Step 1: write RED UI test**
+- [ ] **Step 1: escrever RED da interface**
 
 ```tsx
 render(<NetworkDrilldownDrawer open store={store} onOpenChange={() => {}} />)
@@ -372,9 +395,7 @@ expect(screen.getByRole('tab', { name: 'Módulos' })).toBeInTheDocument()
 expect(screen.getByText('Origem dos dados')).toBeInTheDocument()
 ```
 
-- [ ] **Step 2: test links with store context**
-
-Expected destinations:
+- [ ] **Step 2: testar links contextuais**
 
 ```text
 /plano-estrategico?storeId=<uuid>
@@ -384,17 +405,17 @@ Expected destinations:
 /lojas/<slug>?tab=desempenho
 ```
 
-Seller/manager links must use existing person routes when available; otherwise open a local detail panel instead of inventing a broken route.
+Use existing person route when available. Otherwise open local detail, never invent a dead route.
 
-- [ ] **Step 3: implement source trace**
+- [ ] **Step 3: implementar SourceTrace**
 
-For every metric show label, value, universe, period and source. `null` displays `Sem dados`, not zero.
+Each metric shows label, value, universe, period and source. `null` is `Sem dados`, not zero.
 
-- [ ] **Step 4: implement risk reasons**
+- [ ] **Step 4: implementar risco explicado**
 
-Use `buildStoreRiskReasons`; no unexplained red/yellow/green score.
+Use `buildStoreRiskReasons`; no unexplained traffic-light score.
 
-- [ ] **Step 5: GREEN and commit**
+- [ ] **Step 5: GREEN e commit**
 
 ```bash
 bun test src/features/network-dashboard/components/NetworkDrilldownDrawer.test.tsx
@@ -413,28 +434,27 @@ git commit -m "feat(network): add traceable store drilldown"
 - Modify: `src/pages/PainelConsultor.tsx`
 
 **Interfaces:**
-- Consumes: enriched controller and drawer.
-- Produces: cockpit entry route with preserved filters and drill-down.
+- Produces: cockpit entry route with filters and drill-down.
 
-- [ ] **Step 1: write RED contract test**
+- [ ] **Step 1: escrever RED de navegação**
 
 ```text
 click store row opens drawer;
 click actions metric opens Plano de Ação with storeId;
 click strategic metric opens Plano Estratégico;
 click consulting metric opens Consultoria;
-back navigation preserves timeframe/search/status/sort;
+back preserves timeframe/search/status/sort;
 Realtime status remains visible;
 manual refresh remains available.
 ```
 
-- [ ] **Step 2: integrate without changing report buttons**
+- [ ] **Step 2: preservar relatórios e estados**
 
-Preserve `Relatório matinal`, `semanal`, `mensal` triggers and current error/loading states.
+Keep matinal/semanal/mensal report triggers, loading, partial error and retry behavior.
 
-- [ ] **Step 3: update table columns carefully**
+- [ ] **Step 3: adaptar tabela**
 
-Desktop may show:
+Desktop:
 
 ```text
 Loja;
@@ -447,9 +467,9 @@ Risco explicado;
 Abrir.
 ```
 
-Tablet/mobile use cards or prioritized columns; no global horizontal overflow.
+Tablet/mobile use priority columns/cards without global horizontal overflow.
 
-- [ ] **Step 4: tests and commit**
+- [ ] **Step 4: GREEN e commit**
 
 ```bash
 bun test src/features/network-dashboard
@@ -460,7 +480,7 @@ git commit -m "feat(network): integrate global evolution cockpit"
 
 ---
 
-### Task 6: E2E, performance and final evidence
+### Task 6: E2E, performance and evidence
 
 **Files:**
 - Create: `src/test/internal-mx-network-cockpit.playwright.ts`
@@ -469,7 +489,7 @@ git commit -m "feat(network): integrate global evolution cockpit"
 **Interfaces:**
 - Produces: evidence that numbers, navigation and Realtime are traceable.
 
-- [ ] **Step 1: create authenticated E2E**
+- [ ] **Step 1: criar E2E autenticado**
 
 Scenarios:
 
@@ -480,14 +500,15 @@ search/status/sort work;
 open store and inspect sellers/managers/owner/modules;
 source metadata appears;
 links preserve storeId;
-create/update action elsewhere and see action counts update;
-complete consulting item and see consulting progress update;
+create/update action and see counts update;
+complete consulting item and see progress update;
+confirm required participant and see pending count update;
 change target/result and see strategic progress update;
 Realtime burst produces one reconciled reload;
 no console errors or global overflow.
 ```
 
-- [ ] **Step 2: run database and frontend gates**
+- [ ] **Step 2: executar gates**
 
 ```bash
 supabase db reset
@@ -500,11 +521,11 @@ npm run lint
 npm run build
 ```
 
-- [ ] **Step 3: inspect query performance**
+- [ ] **Step 3: inspecionar performance**
 
-Run `EXPLAIN (ANALYZE, BUFFERS)` for one month and all active stores. Record execution time and scans. Add indexes only when the plan shows a real sequential-scan bottleneck on a large table.
+Run `EXPLAIN (ANALYZE, BUFFERS)` for one month and all active stores. Record execution time and scans. Add indexes only for proven bottlenecks.
 
-- [ ] **Step 4: record evidence and commit**
+- [ ] **Step 4: registrar evidência e commit**
 
 ```bash
 git add src/test/internal-mx-network-cockpit.playwright.ts docs/qa/evidence/internal-mx-functional/network-cockpit.md
