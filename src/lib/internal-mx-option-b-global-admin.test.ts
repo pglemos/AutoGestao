@@ -26,6 +26,7 @@ describe('Opção B: administração global equivalente da área interna MX', ()
     expect(manageGlobalUser).toContain("const internalAdminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']")
     expect(manageGlobalUser).toContain("type GlobalUserAction = 'update' | 'delete' | 'force_password_change'")
     expect(migration).not.toMatch(/GRANT UPDATE ON public\.usuarios TO authenticated/i)
+    expect(migration).toContain('REVOKE UPDATE ON public.usuarios FROM authenticated')
   })
 
   test('persists the canonical role contract on create and update', () => {
