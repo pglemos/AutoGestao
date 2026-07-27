@@ -5184,6 +5184,63 @@ export type Database = {
           },
         ]
       }
+      internal_mx_admin_audit: {
+        Row: {
+          action: string
+          actor_id: string | null
+          actor_role: string
+          after_data: Json | null
+          before_data: Json | null
+          created_at: string
+          entity_id: string | null
+          entity_type: string
+          id: string
+          metadata: Json
+          store_id: string | null
+        }
+        Insert: {
+          action: string
+          actor_id?: string | null
+          actor_role: string
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type: string
+          id?: string
+          metadata?: Json
+          store_id?: string | null
+        }
+        Update: {
+          action?: string
+          actor_id?: string | null
+          actor_role?: string
+          after_data?: Json | null
+          before_data?: Json | null
+          created_at?: string
+          entity_id?: string | null
+          entity_type?: string
+          id?: string
+          metadata?: Json
+          store_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "internal_mx_admin_audit_actor_id_fkey"
+            columns: ["actor_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "internal_mx_admin_audit_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inventory: {
         Row: {
           agency_id: string | null
@@ -12460,6 +12517,10 @@ export type Database = {
       }
       admin_archive_store: { Args: { p_store_id: string }; Returns: Json }
       admin_create_store: { Args: { p_payload: Json }; Returns: Json }
+      admin_hard_delete_store: {
+        Args: { p_confirmation: string; p_store_id: string }
+        Returns: Json
+      }
       admin_restore_store: { Args: { p_store_id: string }; Returns: Json }
       admin_store_live_overview: {
         Args: { p_reference_date?: string; p_store_id: string }
@@ -14080,6 +14141,10 @@ export type Database = {
         Returns: string
       }
       run_d1_consolidation_clock: { Args: never; Returns: undefined }
+      run_manager_routine_snapshot_refresh_clock: {
+        Args: never
+        Returns: undefined
+      }
       run_seller_routine_snapshot_refresh_clock: {
         Args: never
         Returns: undefined
