@@ -39,55 +39,44 @@ GRANT EXECUTE ON FUNCTION public.eh_administrador_mx(uuid) TO authenticated, ser
 GRANT EXECUTE ON FUNCTION public.eh_admin_master_mx(uuid) TO authenticated, service_role;
 
 -- As RPCs de loja tinham listas de papéis locais e ignoravam o contrato
--- central. A substituição abaixo preserva integralmente a versão remota da
--- função e altera apenas o gate de autorização e sua mensagem.
+-- central. O patch abaixo aceita tanto o estado legado quanto o estado já
+-- migrado, tornando a migration reaplicável sem mascarar implementações
+-- desconhecidas.
 DO $$
 DECLARE
   v_definition text;
+  v_old_gate constant text := 'IF v_caller_role NOT IN (''administrador_geral'', ''administrador_mx'') THEN';
+  v_new_gate constant text := 'IF NOT public.eh_area_interna_mx(v_caller_id) THEN';
 BEGIN
   SELECT pg_get_functiondef('public.admin_create_store(jsonb)'::regprocedure)
     INTO v_definition;
 
-  IF position(
-    'IF v_caller_role NOT IN (''administrador_geral'', ''administrador_mx'') THEN'
-    IN v_definition
-  ) = 0 THEN
-    RAISE EXCEPTION 'Gate esperado não encontrado em public.admin_create_store(jsonb).';
+  IF position(v_old_gate IN v_definition) > 0 THEN
+    v_definition := replace(v_definition, v_old_gate, v_new_gate);
+    v_definition := replace(
+      v_definition,
+      'Apenas administradores MX podem criar lojas.',
+      'Apenas a área interna MX pode criar lojas.'
+    );
+    EXECUTE v_definition;
+  ELSIF position(v_new_gate IN v_definition) = 0 THEN
+    RAISE EXCEPTION 'Gate reconhecido não encontrado em public.admin_create_store(jsonb).';
   END IF;
-
-  v_definition := replace(
-    v_definition,
-    'IF v_caller_role NOT IN (''administrador_geral'', ''administrador_mx'') THEN',
-    'IF NOT public.eh_area_interna_mx(v_caller_id) THEN'
-  );
-  v_definition := replace(
-    v_definition,
-    'Apenas administradores MX podem criar lojas.',
-    'Apenas a área interna MX pode criar lojas.'
-  );
-  EXECUTE v_definition;
 
   SELECT pg_get_functiondef('public.admin_update_store(uuid,jsonb)'::regprocedure)
     INTO v_definition;
 
-  IF position(
-    'IF v_caller_role NOT IN (''administrador_geral'', ''administrador_mx'') THEN'
-    IN v_definition
-  ) = 0 THEN
-    RAISE EXCEPTION 'Gate esperado não encontrado em public.admin_update_store(uuid,jsonb).';
+  IF position(v_old_gate IN v_definition) > 0 THEN
+    v_definition := replace(v_definition, v_old_gate, v_new_gate);
+    v_definition := replace(
+      v_definition,
+      'Apenas administradores MX podem editar lojas.',
+      'Apenas a área interna MX pode editar lojas.'
+    );
+    EXECUTE v_definition;
+  ELSIF position(v_new_gate IN v_definition) = 0 THEN
+    RAISE EXCEPTION 'Gate reconhecido não encontrado em public.admin_update_store(uuid,jsonb).';
   END IF;
-
-  v_definition := replace(
-    v_definition,
-    'IF v_caller_role NOT IN (''administrador_geral'', ''administrador_mx'') THEN',
-    'IF NOT public.eh_area_interna_mx(v_caller_id) THEN'
-  );
-  v_definition := replace(
-    v_definition,
-    'Apenas administradores MX podem editar lojas.',
-    'Apenas a área interna MX pode editar lojas.'
-  );
-  EXECUTE v_definition;
 END
 $$;
 
@@ -102,12 +91,14 @@ GRANT EXECUTE ON FUNCTION public.admin_restore_store(uuid) TO authenticated, ser
 
 CREATE TABLE IF NOT EXISTS public.internal_mx_admin_audit (
   id uuid PRIMARY KEY DEFAULT gen_random_uuid(),
-  actor_id uuid REFERENCES public.usuarios(id) ON DELETE SET NULL,
+  -- Identificadores deliberadamente sem FK: a auditoria deve preservar quem
+  -- executou a ação e qual loja foi afetada mesmo após hard delete.
+  actor_id uuid NOT NULL,
   actor_role text NOT NULL,
   action text NOT NULL,
   entity_type text NOT NULL,
   entity_id uuid,
-  store_id uuid REFERENCES public.lojas(id) ON DELETE SET NULL,
+  store_id uuid,
   before_data jsonb,
   after_data jsonb,
   metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
@@ -142,7 +133,7 @@ GRANT SELECT ON TABLE public.internal_mx_admin_audit TO authenticated;
 GRANT ALL ON TABLE public.internal_mx_admin_audit TO service_role;
 
 COMMENT ON TABLE public.internal_mx_admin_audit IS
-  'Trilha imutável das mutações globais executadas pelos três perfis internos MX.';
+  'Trilha imutável das mutações globais executadas pelos três perfis internos MX; identificadores são preservados mesmo após exclusões definitivas.';
 
 -- Exclusão definitiva literal da Opção B. A confirmação nominal reduz erro
 -- operacional; a função remove primeiro as referências RESTRICT/NO ACTION e a
