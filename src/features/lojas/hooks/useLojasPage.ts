@@ -3,6 +3,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { canManageStore } from '@/lib/auth/capabilities'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
+import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
 import { getPreRegistrationLink } from '@/lib/utils'
 import type { Store } from '@/types/database'
@@ -175,6 +176,35 @@ export function useLojasPage() {
     [toggleStoreStatus]
   )
 
+  const handleHardDeleteStore = useCallback(
+    async (store: Store) => {
+      const confirmation = window.prompt(
+        `Exclusão definitiva: digite exatamente o nome da loja para confirmar:\n\n${store.name}`,
+      )
+      if (confirmation === null) return
+      if (confirmation !== store.name) {
+        toast.error('O nome informado não corresponde exatamente à loja.')
+        return
+      }
+
+      setIsRefetching(true)
+      try {
+        const { error } = await supabase.rpc(
+          'admin_hard_delete_store' as never,
+          { p_store_id: store.id, p_confirmation: confirmation } as never,
+        )
+        if (error) throw error
+        toast.success('Loja e dependências excluídas definitivamente.')
+        await Promise.all([refetchStores(), refetchStats()])
+      } catch (cause) {
+        toast.error(cause instanceof Error ? cause.message : 'Não foi possível excluir a loja definitivamente.')
+      } finally {
+        setIsRefetching(false)
+      }
+    },
+    [refetchStats, refetchStores],
+  )
+
   return {
     // role flags
     role,
@@ -211,6 +241,7 @@ export function useLojasPage() {
     copyRegistrationLink,
     copyError,
     handleArchiveStore,
+    handleHardDeleteStore,
     toggleStoreStatus,
   }
 }
