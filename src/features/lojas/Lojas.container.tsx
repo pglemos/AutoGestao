@@ -25,6 +25,7 @@ export function Lojas() {
         copyRegistrationLink: page.copyRegistrationLink,
         getRegistrationLink: page.getRegistrationLink,
         handleArchiveStore: page.handleArchiveStore,
+        handleHardDeleteStore: page.handleHardDeleteStore,
         toggleStoreStatus: page.toggleStoreStatus,
       }),
     [
@@ -34,6 +35,7 @@ export function Lojas() {
       page.copyRegistrationLink,
       page.getRegistrationLink,
       page.handleArchiveStore,
+      page.handleHardDeleteStore,
       page.toggleStoreStatus,
     ],
   )
