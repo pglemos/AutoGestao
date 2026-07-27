@@ -11,6 +11,14 @@ const globallyCreatableRoles = [
   'gerente',
   'vendedor',
 ]
+const roleCodeByLegacyRole: Record<string, string> = {
+  administrador_geral: 'admin_mx',
+  administrador_mx: 'admin_mx',
+  consultor_mx: 'consultant',
+  dono: 'master',
+  gerente: 'sales_manager',
+  vendedor: 'seller',
+}
 
 interface RegisterUserPayload {
   email: string
@@ -34,6 +42,18 @@ function isStrongPassword(password: string) {
 
 function todayISO() {
   return new Date().toISOString().slice(0, 10)
+}
+
+async function resolveRoleId(adminClient: SupabaseClient, role: string) {
+  const code = roleCodeByLegacyRole[role]
+  if (!code) return null
+  const { data, error } = await adminClient
+    .from('roles')
+    .select('id')
+    .eq('code', code)
+    .maybeSingle()
+  if (error) throw error
+  return data?.id || null
 }
 
 async function findAuthUserByEmail(adminClient: SupabaseClient, email: string) {
@@ -94,7 +114,7 @@ serve(async (req) => {
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
   const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
 
-  if (!supabaseUrl || !serviceKey) {
+  if (!supabaseUrl || !serviceKey || !anonKey) {
     return jsonResponse({ success: false, error: 'Service is misconfigured (missing env)' }, 500)
   }
 
@@ -177,7 +197,18 @@ serve(async (req) => {
     }
   }
 
+  let roleId: string | null = null
+  try {
+    roleId = await resolveRoleId(adminClient, role)
+  } catch (error) {
+    return jsonResponse({ success: false, error: error instanceof Error ? error.message : 'Não foi possível resolver o papel canônico.' }, 500)
+  }
+  if (!roleId) {
+    return jsonResponse({ success: false, error: `Papel canônico não encontrado para "${role}".` }, 500)
+  }
+
   const normalizedEmail = email.trim().toLowerCase()
+  const normalizedName = name.trim().toLocaleUpperCase('pt-BR')
 
   const { data: existingProfile } = await adminClient
     .from('usuarios')
@@ -192,12 +223,12 @@ serve(async (req) => {
   let existingAuthUser: Awaited<ReturnType<typeof findAuthUserByEmail>> = null
   try {
     existingAuthUser = await findAuthUserByEmail(adminClient, normalizedEmail)
-  } catch (err) {
-    return jsonResponse({ success: false, error: err instanceof Error ? err.message : 'Não foi possível validar o e-mail no Auth.' }, 500)
+  } catch (error) {
+    return jsonResponse({ success: false, error: error instanceof Error ? error.message : 'Não foi possível validar o e-mail no Auth.' }, 500)
   }
 
   const userMetadata = {
-    name,
+    name: normalizedName,
     role,
     phone: phone || null,
     must_change_password: true,
@@ -239,8 +270,9 @@ serve(async (req) => {
       {
         id: newUserId,
         email: normalizedEmail,
-        name,
+        name: normalizedName,
         role,
+        role_id: roleId,
         phone: phone || null,
         active: true,
         must_change_password: true,
@@ -302,8 +334,9 @@ serve(async (req) => {
     after_data: {
       id: newUserId,
       email: normalizedEmail,
-      name,
+      name: normalizedName,
       role,
+      role_id: roleId,
       active: true,
       is_venda_loja: is_venda_loja ?? false,
     },
@@ -318,6 +351,7 @@ serve(async (req) => {
     success: true,
     user_id: newUserId,
     email: normalizedEmail,
+    role_id: roleId,
     must_change_password: true,
     membership_created: membershipCreated,
   })
