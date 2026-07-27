@@ -48,7 +48,7 @@ export function Lojas() {
         <LojasErrorBoundary sectionName="LojasHeader">
           <LojasHeader
             isOwner={page.isOwner}
-            isAdminMx={page.isAdminMx}
+            canManageNetwork={page.canManageNetwork}
             searchTerm={page.searchTerm}
             onSearchChange={page.setSearchTerm}
             filterActive={page.filterActive}
