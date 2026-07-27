@@ -1,9 +1,8 @@
 name: Fix legacy migration and sync contracts
 
 on:
-  push:
-    branches:
-      - feat/internal-mx-option-b-global-admin
+  pull_request:
+    branches: [main]
     paths:
       - '.github/workflows/fix-legacy-migration-and-sync.yml'
 
