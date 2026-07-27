@@ -13930,10 +13930,7 @@ export type Database = {
         }
         Returns: string
       }
-      internal_mx_role_id: {
-        Args: { p_legacy_role: string }
-        Returns: string
-      }
+      internal_mx_role_id: { Args: { p_legacy_role: string }; Returns: string }
       is_admin:
         | { Args: never; Returns: boolean }
         | { Args: { uid: string }; Returns: boolean }
