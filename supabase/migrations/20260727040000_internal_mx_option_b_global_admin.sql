@@ -144,6 +144,90 @@ GRANT ALL ON TABLE public.internal_mx_admin_audit TO service_role;
 COMMENT ON TABLE public.internal_mx_admin_audit IS
   'Trilha imutável das mutações globais executadas pelos três perfis internos MX.';
 
+-- Exclusão definitiva literal da Opção B. A confirmação nominal reduz erro
+-- operacional; a função remove primeiro as referências RESTRICT/NO ACTION e a
+-- exclusão da loja aciona os CASCADE/SET NULL definidos pelo próprio schema.
+CREATE OR REPLACE FUNCTION public.admin_hard_delete_store(
+  p_store_id uuid,
+  p_confirmation text
+)
+RETURNS jsonb
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  v_actor_id uuid := auth.uid();
+  v_actor_role text;
+  v_store public.lojas%ROWTYPE;
+BEGIN
+  IF v_actor_id IS NULL OR NOT public.eh_area_interna_mx(v_actor_id) THEN
+    RAISE EXCEPTION 'Apenas a área interna MX pode excluir lojas definitivamente.'
+      USING ERRCODE = 'insufficient_privilege';
+  END IF;
+
+  SELECT public.papel_usuario(v_actor_id) INTO v_actor_role;
+  SELECT * INTO v_store
+  FROM public.lojas
+  WHERE id = p_store_id
+  FOR UPDATE;
+
+  IF NOT FOUND THEN
+    RAISE EXCEPTION 'Loja não encontrada.' USING ERRCODE = 'no_data_found';
+  END IF;
+
+  IF coalesce(p_confirmation, '') IS DISTINCT FROM v_store.name THEN
+    RAISE EXCEPTION 'A confirmação deve ser exatamente o nome da loja.'
+      USING ERRCODE = 'check_violation';
+  END IF;
+
+  INSERT INTO public.internal_mx_admin_audit (
+    actor_id,
+    actor_role,
+    action,
+    entity_type,
+    entity_id,
+    store_id,
+    before_data,
+    after_data,
+    metadata
+  ) VALUES (
+    v_actor_id,
+    coalesce(v_actor_role, 'area_interna_mx'),
+    'hard_delete',
+    'loja',
+    v_store.id,
+    v_store.id,
+    to_jsonb(v_store),
+    NULL,
+    jsonb_build_object('confirmation', p_confirmation)
+  );
+
+  -- Referências configuradas como RESTRICT ou NO ACTION no schema remoto.
+  DELETE FROM public.d1_snapshot_items WHERE store_id = p_store_id;
+  DELETE FROM public.d1_contact_audit WHERE store_id = p_store_id;
+  DELETE FROM public.manager_daily_tasks WHERE store_id = p_store_id;
+  DELETE FROM public.manager_lead_conferences WHERE store_id = p_store_id;
+  DELETE FROM public.manager_routine_snapshots WHERE store_id = p_store_id;
+  DELETE FROM public.seller_routine_snapshots WHERE store_id = p_store_id;
+  DELETE FROM public.store_target_plans WHERE store_id = p_store_id;
+  DELETE FROM public.solicitacoes_correcao_lancamento WHERE store_id = p_store_id;
+  DELETE FROM public.d1_snapshot_batches WHERE store_id = p_store_id;
+
+  DELETE FROM public.lojas WHERE id = p_store_id;
+
+  RETURN jsonb_build_object(
+    'success', true,
+    'store_id', v_store.id,
+    'store_name', v_store.name,
+    'deleted_at', now()
+  );
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.admin_hard_delete_store(uuid,text) FROM PUBLIC, anon;
+GRANT EXECUTE ON FUNCTION public.admin_hard_delete_store(uuid,text) TO authenticated, service_role;
+
 -- Habilita as fontes que as telas já assinam e as fontes necessárias ao
 -- cockpit global de evolução e progresso. O bloco é idempotente e ignora
 -- tabelas ainda não existentes em ambientes defasados.
@@ -186,5 +270,6 @@ COMMIT;
 -- 1. Restaurar eh_administrador_mx para somente administrador_geral/administrador_mx.
 -- 2. Restaurar eh_admin_master_mx conforme a política anterior aprovada.
 -- 3. Restaurar os gates originais das RPCs admin_create_store/admin_update_store.
--- 4. Remover das publicações apenas as tabelas que não eram publicadas antes desta migração.
--- 5. Manter internal_mx_admin_audit para retenção forense; não descartar histórico.
+-- 4. Revogar e remover admin_hard_delete_store(uuid,text).
+-- 5. Remover das publicações apenas as tabelas que não eram publicadas antes desta migração.
+-- 6. Manter internal_mx_admin_audit para retenção forense; não descartar histórico.
