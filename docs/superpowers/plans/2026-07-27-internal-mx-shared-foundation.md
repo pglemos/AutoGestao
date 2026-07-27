@@ -2,23 +2,25 @@
 
 > **For agentic workers:** REQUIRED SUB-SKILL: Use superpowers:subagent-driven-development (recommended) or superpowers:executing-plans to implement this plan task-by-task. Steps use checkbox (`- [ ]`) syntax for tracking.
 
-**Goal:** Criar a fundação tipada e compartilhada de contexto, capacidades, seleção de loja e Realtime usada por Plano Estratégico, Plano de Ação e Consultoria nos shells de Dono e módulo interno.
+**Goal:** Criar a fundação tipada e compartilhada de contexto, capacidades, seleção de loja e Realtime para Plano Estratégico, Plano de Ação e Consultoria nos shells de Dono e módulo interno.
 
-**Architecture:** Um provider neutro recebe `storeId`, ator, papel e shell por adaptadores explícitos. A seleção global continua no módulo interno, enquanto o Dono fornece a própria unidade. As assinaturas Realtime são consolidadas por escopo, com debounce, single-flight e recarga final após reconexão.
+**Architecture:** Um provider neutro recebe `storeId`, ator e shell por adapters explícitos. O módulo interno controla a seleção global de loja; o Dono fornece a própria unidade. Cada workspace solicita apenas seu escopo Realtime e usa debounce, single-flight e recarga final após reconexão.
 
 **Tech Stack:** React 19, TypeScript 5.8, React Router 7, Supabase JS 2, Bun Test, Testing Library, Vite 6.
 
 ## Global Constraints
 
 - Perfis internos equivalentes: `administrador_geral`, `administrador_mx`, `consultor_mx`.
-- `dono`, `gerente` e `vendedor` não recebem permissões adicionais.
+- Dono, Gerente e Vendedor não recebem permissões novas.
+- Dono não pode excluir ações definitivamente nem revisar antecipação.
 - `InternalMxPlanningShell` permanece o shell interno.
 - `OwnerLayout` permanece o shell do Dono.
-- Não importar páginas de `src/pages/owner` no módulo interno.
-- Não usar `as any` fora de um adapter legado isolado e documentado.
+- O módulo interno não importa arquivos de `src/pages/owner`.
+- Não usar `as any` fora de um único adapter legado isolado e documentado.
 - `storeId` deve sobreviver à navegação entre os três módulos.
 - Não selecionar loja inativa automaticamente.
-- Realtime não pode disparar recargas paralelas ilimitadas.
+- Realtime não dispara recargas paralelas ilimitadas.
+- Tabelas filhas de Plano de Ação só entram no Realtime depois da migration prevista no plano do Plano de Ação.
 - Nenhuma alteração de tema global neste plano.
 
 ---
@@ -33,14 +35,15 @@
 - Create: `src/features/planning-workspace/usePlanningRealtime.ts`
 - Create: `src/features/planning-workspace/index.ts`
 - Create: `src/features/planning-workspace/planningCapabilities.test.ts`
-- Create: `src/features/planning-workspace/usePlanningRealtime.test.tsx`
 - Create: `src/features/planning-workspace/PlanningWorkspaceProvider.test.tsx`
+- Create: `src/features/planning-workspace/usePlanningRealtime.test.tsx`
 
 ### Adapters e shell
 
-- Modify: `src/features/internal-mx-planning/InternalMxPlanningShell.tsx`
 - Create: `src/features/internal-mx-planning/internalPlanningAdapter.ts`
+- Modify: `src/features/internal-mx-planning/InternalMxPlanningShell.tsx`
 - Create: `src/components/owner/ownerPlanningAdapter.ts`
+- Create: `src/components/owner/ownerPlanningAdapter.test.ts`
 - Modify: `src/test/internal-mx-planning-pages.test.ts`
 
 ---
@@ -55,7 +58,7 @@
 **Interfaces:**
 - Produces: `PlanningShell`, `PlanningRole`, `PlanningActor`, `PlanningCapabilities`, `resolvePlanningCapabilities(role)`.
 
-- [ ] **Step 1: escrever o teste RED da matriz de capacidades**
+- [ ] **Step 1: escrever o teste RED da matriz**
 
 ```ts
 import { describe, expect, test } from 'bun:test'
@@ -65,7 +68,7 @@ const internalRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx'
 
 describe('resolvePlanningCapabilities', () => {
   test.each(internalRoles)('%s recebe administração global', role => {
-    expect(resolvePlanningCapabilities(role)).toMatchObject({
+    expect(resolvePlanningCapabilities(role)).toEqual({
       scope: 'global',
       canEditTargets: true,
       canCreateActions: true,
@@ -73,22 +76,26 @@ describe('resolvePlanningCapabilities', () => {
       canReviewActions: true,
       canManageConsulting: true,
       canReviewAnticipation: true,
+      canViewStrategicPpa: true,
     })
   })
 
-  test('dono permanece restrito à própria loja', () => {
-    expect(resolvePlanningCapabilities('dono')).toMatchObject({
+  test('dono permanece na própria loja sem exclusão definitiva', () => {
+    expect(resolvePlanningCapabilities('dono')).toEqual({
       scope: 'store',
       canEditTargets: true,
+      canCreateActions: true,
+      canDeleteActions: false,
+      canReviewActions: true,
       canManageConsulting: false,
       canReviewAnticipation: false,
+      canViewStrategicPpa: true,
     })
   })
 
   test('gerente e vendedor não recebem administração global', () => {
-    expect(resolvePlanningCapabilities('gerente').scope).toBe('store')
-    expect(resolvePlanningCapabilities('vendedor').scope).toBe('self')
-    expect(resolvePlanningCapabilities('vendedor').canDeleteActions).toBe(false)
+    expect(resolvePlanningCapabilities('gerente')).toMatchObject({ scope: 'store', canDeleteActions: false, canViewStrategicPpa: false })
+    expect(resolvePlanningCapabilities('vendedor')).toMatchObject({ scope: 'self', canCreateActions: false, canDeleteActions: false })
   })
 })
 ```
@@ -97,7 +104,7 @@ describe('resolvePlanningCapabilities', () => {
 
 Run: `bun test src/features/planning-workspace/planningCapabilities.test.ts`
 
-Expected: FAIL porque os arquivos ainda não existem.
+Expected: FAIL porque os módulos ainda não existem.
 
 - [ ] **Step 3: implementar os tipos**
 
@@ -147,17 +154,44 @@ const INTERNAL: PlanningCapabilities = {
   canViewStrategicPpa: true,
 }
 
+const OWNER: PlanningCapabilities = {
+  scope: 'store',
+  canEditTargets: true,
+  canCreateActions: true,
+  canDeleteActions: false,
+  canReviewActions: true,
+  canManageConsulting: false,
+  canReviewAnticipation: false,
+  canViewStrategicPpa: true,
+}
+
+const MANAGER: PlanningCapabilities = {
+  scope: 'store',
+  canEditTargets: false,
+  canCreateActions: true,
+  canDeleteActions: false,
+  canReviewActions: false,
+  canManageConsulting: false,
+  canReviewAnticipation: false,
+  canViewStrategicPpa: false,
+}
+
+const SELLER: PlanningCapabilities = {
+  scope: 'self',
+  canEditTargets: false,
+  canCreateActions: false,
+  canDeleteActions: false,
+  canReviewActions: false,
+  canManageConsulting: false,
+  canReviewAnticipation: false,
+  canViewStrategicPpa: false,
+}
+
 export function resolvePlanningCapabilities(role: PlanningRole): PlanningCapabilities {
   if (role === 'administrador_geral' || role === 'administrador_mx' || role === 'consultor_mx') return INTERNAL
-  if (role === 'dono') return { ...INTERNAL, scope: 'store', canManageConsulting: false, canReviewAnticipation: false }
-  if (role === 'gerente') return {
-    scope: 'store', canEditTargets: false, canCreateActions: true, canDeleteActions: false,
-    canReviewActions: false, canManageConsulting: false, canReviewAnticipation: false, canViewStrategicPpa: false,
-  }
-  return {
-    scope: 'self', canEditTargets: false, canCreateActions: false, canDeleteActions: false,
-    canReviewActions: false, canManageConsulting: false, canReviewAnticipation: false, canViewStrategicPpa: false,
-  }
+  if (role === 'dono') return OWNER
+  if (role === 'gerente') return MANAGER
+  return SELLER
 }
 ```
 
@@ -171,7 +205,7 @@ git commit -m "feat(planning): add shared capability contracts"
 
 ---
 
-### Task 2: Criar o provider de workspace
+### Task 2: Criar o provider do workspace
 
 **Files:**
 - Create: `src/features/planning-workspace/PlanningWorkspaceProvider.tsx`
@@ -179,10 +213,10 @@ git commit -m "feat(planning): add shared capability contracts"
 - Create: `src/features/planning-workspace/index.ts`
 
 **Interfaces:**
-- Consumes: `PlanningActor`, `PlanningShell`, `resolvePlanningCapabilities`.
+- Consumes: tipos e matriz da Task 1.
 - Produces: `PlanningWorkspaceProvider`, `usePlanningWorkspace`, `PlanningWorkspaceValue`.
 
-- [ ] **Step 1: escrever o teste RED do provider**
+- [ ] **Step 1: escrever o teste RED**
 
 ```tsx
 import { renderHook } from '@testing-library/react'
@@ -194,22 +228,17 @@ const actor = { id: 'admin-1', name: 'Admin MX', email: null, role: 'administrad
 
 test('expõe loja, ator, shell e capacidades', () => {
   const wrapper = ({ children }: PropsWithChildren) => (
-    <PlanningWorkspaceProvider shell="internal" storeId="store-1" actor={actor}>
-      {children}
-    </PlanningWorkspaceProvider>
+    <PlanningWorkspaceProvider shell="internal" storeId="store-1" actor={actor}>{children}</PlanningWorkspaceProvider>
   )
   const { result } = renderHook(() => usePlanningWorkspace(), { wrapper })
-  expect(result.current.storeId).toBe('store-1')
-  expect(result.current.shell).toBe('internal')
+  expect(result.current).toMatchObject({ shell: 'internal', storeId: 'store-1', actor })
   expect(result.current.capabilities.scope).toBe('global')
 })
 ```
 
-- [ ] **Step 2: executar e confirmar RED**
+- [ ] **Step 2: executar RED**
 
 Run: `bun test src/features/planning-workspace/PlanningWorkspaceProvider.test.tsx`
-
-Expected: FAIL por módulo inexistente.
 
 - [ ] **Step 3: implementar o provider**
 
@@ -225,25 +254,26 @@ export type PlanningWorkspaceValue = {
   capabilities: PlanningCapabilities
 }
 
-const PlanningWorkspaceContext = createContext<PlanningWorkspaceValue | null>(null)
+const Context = createContext<PlanningWorkspaceValue | null>(null)
 
 export function PlanningWorkspaceProvider({ shell, storeId, actor, children }: PropsWithChildren<{
   shell: PlanningShell
   storeId: string | null
   actor: PlanningActor
 }>) {
-  const value = useMemo(() => ({ shell, storeId, actor, capabilities: resolvePlanningCapabilities(actor.role) }), [actor, shell, storeId])
-  return <PlanningWorkspaceContext.Provider value={value}>{children}</PlanningWorkspaceContext.Provider>
+  const capabilities = resolvePlanningCapabilities(actor.role)
+  const value = useMemo(() => ({ shell, storeId, actor, capabilities }), [actor, capabilities, shell, storeId])
+  return <Context.Provider value={value}>{children}</Context.Provider>
 }
 
-export function usePlanningWorkspace() {
-  const value = useContext(PlanningWorkspaceContext)
+export function usePlanningWorkspace(): PlanningWorkspaceValue {
+  const value = useContext(Context)
   if (!value) throw new Error('usePlanningWorkspace must be used inside PlanningWorkspaceProvider')
   return value
 }
 ```
 
-- [ ] **Step 4: exportar o contrato público e executar GREEN**
+- [ ] **Step 4: exportar o contrato público**
 
 ```ts
 export * from './planningWorkspace.types'
@@ -252,18 +282,17 @@ export * from './PlanningWorkspaceProvider'
 export * from './usePlanningRealtime'
 ```
 
-Run: `bun test src/features/planning-workspace/PlanningWorkspaceProvider.test.tsx`
-
-- [ ] **Step 5: commit**
+- [ ] **Step 5: executar GREEN e commit**
 
 ```bash
+bun test src/features/planning-workspace/PlanningWorkspaceProvider.test.tsx
 git add src/features/planning-workspace
 git commit -m "feat(planning): add shared workspace provider"
 ```
 
 ---
 
-### Task 3: Consolidar Realtime com debounce e single-flight
+### Task 3: Consolidar Realtime por escopo
 
 **Files:**
 - Create: `src/features/planning-workspace/usePlanningRealtime.ts`
@@ -272,64 +301,84 @@ git commit -m "feat(planning): add shared workspace provider"
 **Interfaces:**
 - Produces: `PlanningRealtimeScope`, `PLANNING_REALTIME_TABLES`, `usePlanningRealtime(options)`.
 
-- [ ] **Step 1: escrever os testes RED das tabelas e do agrupamento**
+- [ ] **Step 1: escrever testes RED das fontes**
 
-```tsx
+```ts
 import { expect, test } from 'bun:test'
 import { PLANNING_REALTIME_TABLES } from './usePlanningRealtime'
 
-test('separa fontes por domínio sem perder tabelas compartilhadas', () => {
-  expect(PLANNING_REALTIME_TABLES.strategic).toContain('valores_indicadores_planejamento')
-  expect(PLANNING_REALTIME_TABLES.strategic).toContain('regras_metas_loja')
-  expect(PLANNING_REALTIME_TABLES.action).toContain('planos_acao')
-  expect(PLANNING_REALTIME_TABLES.consulting).toContain('visitas_consultoria')
+test('usa apenas fontes publicadas nesta etapa', () => {
+  expect(PLANNING_REALTIME_TABLES.strategic).toEqual([
+    'catalogo_indicadores_planejamento',
+    'valores_indicadores_planejamento',
+    'regras_metas_loja',
+    'planos_acao',
+  ])
+  expect(PLANNING_REALTIME_TABLES.action).toEqual(['planos_acao'])
+  expect(PLANNING_REALTIME_TABLES.consulting).toEqual([
+    'clientes_consultoria',
+    'visitas_consultoria',
+    'evidencias_visita',
+    'eventos_agenda_consultoria',
+    'solicitacoes_consultoria',
+  ])
 })
 ```
 
-Add a hook test with fake timers that emits three events and expects one reload call after 450 ms.
+- [ ] **Step 2: escrever teste RED do agrupamento**
 
-- [ ] **Step 2: executar e confirmar RED**
+With fake timers, emit three callbacks inside 450 ms and expect one reload. While reload promise is pending, emit another event and expect exactly one final reload after resolution.
+
+- [ ] **Step 3: executar RED**
 
 Run: `bun test src/features/planning-workspace/usePlanningRealtime.test.tsx`
 
-- [ ] **Step 3: implementar registros e hook**
+- [ ] **Step 4: implementar o registro**
 
 ```ts
+export type PlanningRealtimeScope = 'strategic' | 'action' | 'consulting'
+
 export const PLANNING_REALTIME_TABLES = {
   strategic: ['catalogo_indicadores_planejamento', 'valores_indicadores_planejamento', 'regras_metas_loja', 'planos_acao'],
-  action: ['planos_acao', 'historico_planos_acao', 'evidencias_planos_acao', 'itens_plano_acao'],
+  action: ['planos_acao'],
   consulting: ['clientes_consultoria', 'visitas_consultoria', 'evidencias_visita', 'eventos_agenda_consultoria', 'solicitacoes_consultoria'],
 } as const
 ```
 
-The hook must:
+- [ ] **Step 5: implementar o hook**
 
-```text
-- create one channel per mounted scope;
-- debounce bursts at 450 ms with a maximum wait of 2000 ms;
-- set queued=true when reload is in flight;
-- run one final reload after the in-flight promise finishes;
-- expose connecting/connected/degraded;
-- call reload after reconnect;
-- remove channel and timers on unmount.
+Signature:
+
+```ts
+export function usePlanningRealtime(options: {
+  scope: PlanningRealtimeScope
+  storeId: string | null
+  reload: () => Promise<void> | void
+}): { status: 'connecting' | 'connected' | 'degraded' }
 ```
 
-- [ ] **Step 4: executar GREEN**
+Rules:
+
+```text
+one channel per mounted scope/store;
+filter by store_id when the table contract supports it;
+debounce 450 ms, max wait 2000 ms;
+queue one final reload while another is in flight;
+reload after reconnect;
+remove timers and channel on unmount.
+```
+
+- [ ] **Step 6: GREEN e commit**
 
 ```bash
 bun test src/features/planning-workspace/usePlanningRealtime.test.tsx
-```
-
-- [ ] **Step 5: commit**
-
-```bash
 git add src/features/planning-workspace/usePlanningRealtime.ts src/features/planning-workspace/usePlanningRealtime.test.tsx
 git commit -m "feat(planning): consolidate realtime reloads"
 ```
 
 ---
 
-### Task 4: Adaptar o módulo interno sem duplicar contexto
+### Task 4: Adaptar o módulo interno
 
 **Files:**
 - Create: `src/features/internal-mx-planning/internalPlanningAdapter.ts`
@@ -337,12 +386,9 @@ git commit -m "feat(planning): consolidate realtime reloads"
 - Modify: `src/test/internal-mx-planning-pages.test.ts`
 
 **Interfaces:**
-- Consumes: `PlanningWorkspaceProvider`.
-- Produces: `useInternalPlanningStore`, `InternalPlanningProvider`, seleção de loja persistida em URL.
+- Produces: `toInternalPlanningActor`, seleção de loja persistida e montagem do provider.
 
-- [ ] **Step 1: substituir o contrato de teste que proíbe compartilhamento**
-
-Replace the first test in `src/test/internal-mx-planning-pages.test.ts` with:
+- [ ] **Step 1: substituir o contrato antigo que proíbe compartilhamento**
 
 ```ts
 test('usa workspaces compartilhados sem importar páginas do Dono', () => {
@@ -356,29 +402,26 @@ test('usa workspaces compartilhados sem importar páginas do Dono', () => {
 })
 ```
 
-- [ ] **Step 2: executar e confirmar RED**
-
-Run: `bun test src/test/internal-mx-planning-pages.test.ts`
-
-Expected: FAIL porque o shell ainda não monta o provider.
-
-- [ ] **Step 3: criar o adapter do ator interno**
+- [ ] **Step 2: criar o adapter do ator**
 
 ```ts
 import type { PlanningActor, PlanningRole } from '@/features/planning-workspace'
 
-export function toInternalPlanningActor(user: { id: string; email?: string | null; full_name?: string | null; role?: string | null }): PlanningActor {
+const allowed = new Set<PlanningRole>(['administrador_geral', 'administrador_mx', 'consultor_mx'])
+
+export function toInternalPlanningActor(user: {
+  id: string
+  email?: string | null
+  full_name?: string | null
+  role?: string | null
+}): PlanningActor {
   const role = user.role as PlanningRole
-  if (!['administrador_geral', 'administrador_mx', 'consultor_mx'].includes(role)) {
-    throw new Error('Perfil sem acesso ao workspace interno MX')
-  }
+  if (!allowed.has(role)) throw new Error('Perfil sem acesso ao workspace interno MX')
   return { id: user.id, email: user.email ?? null, name: user.full_name || user.email || 'Usuário MX', role }
 }
 ```
 
-- [ ] **Step 4: montar o provider dentro do shell**
-
-`InternalMxPlanningShell` must receive the authenticated user from `useAuth`, convert it with `toInternalPlanningActor`, and wrap `children`:
+- [ ] **Step 3: montar provider no shell**
 
 ```tsx
 <PlanningWorkspaceProvider shell="internal" storeId={store.selectedStoreId || null} actor={actor}>
@@ -386,20 +429,21 @@ export function toInternalPlanningActor(user: { id: string; email?: string | nul
 </PlanningWorkspaceProvider>
 ```
 
-Remove `useInternalPlanningRealtime`; each workspace will request its own scope through `usePlanningRealtime`.
+Remove `useInternalPlanningRealtime`. Cada workspace chamará `usePlanningRealtime` com seu escopo.
 
-- [ ] **Step 5: preservar URL e store ativo**
+- [ ] **Step 4: testar seleção de loja**
 
-Add tests for:
+Cover:
 
 ```text
-?storeId=<uuid> wins over activeStoreId when active;
-selectStore updates activeStoreId and history.replaceState;
-inactive store is rejected;
-empty active list renders the no-store state.
+query storeId válido vence activeStoreId;
+loja inativa da query é rejeitada;
+selectStore atualiza activeStoreId e history.replaceState;
+troca de módulo preserva storeId;
+sem loja ativa mantém estado vazio, sem selecionar registro arbitrário.
 ```
 
-- [ ] **Step 6: executar testes e commit**
+- [ ] **Step 5: executar testes e commit**
 
 ```bash
 bun test src/test/internal-mx-planning-pages.test.ts src/features/planning-workspace
@@ -410,14 +454,14 @@ git commit -m "refactor(mx): mount shared planning context"
 
 ---
 
-### Task 5: Criar o adapter do Dono e validar isolamento
+### Task 5: Criar adapter do Dono
 
 **Files:**
 - Create: `src/components/owner/ownerPlanningAdapter.ts`
 - Create: `src/components/owner/ownerPlanningAdapter.test.ts`
 
 **Interfaces:**
-- Produces: `toOwnerPlanningActor(user)`, `resolveOwnerPlanningStoreId(unitId, currentUnits)`.
+- Produces: `toOwnerPlanningActor`, `resolveOwnerPlanningStoreId`.
 
 - [ ] **Step 1: escrever testes RED**
 
@@ -425,37 +469,36 @@ git commit -m "refactor(mx): mount shared planning context"
 import { expect, test } from 'bun:test'
 import { resolveOwnerPlanningStoreId, toOwnerPlanningActor } from './ownerPlanningAdapter'
 
-test('usa unitId antes da primeira unidade', () => {
+test('unitId vence a primeira unidade', () => {
   expect(resolveOwnerPlanningStoreId('store-2', [{ id: 'store-1' }])).toBe('store-2')
 })
 
-test('força papel dono no adapter do shell do Dono', () => {
-  expect(toOwnerPlanningActor({ id: 'u1', full_name: 'Dono', email: 'dono@example.com' }).role).toBe('dono')
+test('adapter força papel dono sem ampliar capacidades', () => {
+  expect(toOwnerPlanningActor({ id: 'u1', full_name: 'Dono', email: 'dono@example.com' })).toEqual({
+    id: 'u1', name: 'Dono', email: 'dono@example.com', role: 'dono',
+  })
 })
 ```
 
-- [ ] **Step 2: executar RED e implementar funções puras**
-
-Run: `bun test src/components/owner/ownerPlanningAdapter.test.ts`
-
-Implementation:
+- [ ] **Step 2: implementar funções puras**
 
 ```ts
+import type { PlanningActor } from '@/features/planning-workspace'
+
 export function resolveOwnerPlanningStoreId(unitId: string | null | undefined, units: Array<{ id: string }> | null | undefined) {
   return unitId || units?.[0]?.id || null
 }
+
+export function toOwnerPlanningActor(user: { id: string; full_name?: string | null; email?: string | null }): PlanningActor {
+  return { id: user.id, name: user.full_name || user.email || 'Dono', email: user.email ?? null, role: 'dono' }
+}
 ```
 
-- [ ] **Step 3: executar matriz de isolamento**
+- [ ] **Step 3: executar GREEN e commit**
 
 ```bash
 bun test src/components/owner/ownerPlanningAdapter.test.ts src/features/planning-workspace/planningCapabilities.test.ts
 npm run typecheck
-```
-
-- [ ] **Step 4: commit**
-
-```bash
 git add src/components/owner/ownerPlanningAdapter.ts src/components/owner/ownerPlanningAdapter.test.ts
 git commit -m "feat(owner): add shared planning adapter"
 ```
@@ -470,7 +513,7 @@ git commit -m "feat(owner): add shared planning adapter"
 **Interfaces:**
 - Produces: contrato estável para os quatro planos seguintes.
 
-- [ ] **Step 1: executar testes focados**
+- [ ] **Step 1: executar gates**
 
 ```bash
 bun test src/features/planning-workspace src/components/owner/ownerPlanningAdapter.test.ts src/test/internal-mx-planning-pages.test.ts
@@ -488,7 +531,7 @@ grep -R "as any" src/features/planning-workspace src/features/internal-mx-planni
 
 Expected: nenhum resultado.
 
-- [ ] **Step 3: confirmar escopo do diff**
+- [ ] **Step 3: confirmar escopo**
 
 ```bash
 git diff --stat origin/main...HEAD
