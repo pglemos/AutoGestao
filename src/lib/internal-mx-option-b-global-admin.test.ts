@@ -12,19 +12,27 @@ const manageGlobalUser = compact(read('supabase/functions/manage-global-user/ind
 
 describe('Opção B: administração global equivalente da área interna MX', () => {
   test('treats the three internal roles as the same database administrator contract', () => {
-    expect(migration).toContain("SELECT public.eh_area_interna_mx(uid)")
+    expect(migration).toContain('SELECT public.eh_area_interna_mx(uid)')
     expect(migration).toContain('CREATE OR REPLACE FUNCTION public.eh_administrador_mx')
     expect(migration).toContain('CREATE OR REPLACE FUNCTION public.eh_admin_master_mx')
-    expect(migration).not.toContain("lower(u.email) = ANY")
+    expect(migration).not.toContain('lower(u.email) = ANY')
   })
 
   test('keeps privileged user mutations behind authenticated service-role functions', () => {
     expect(registerUser).toContain("const internalAdminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']")
-    expect(registerUser).toContain("const globallyCreatableRoles")
+    expect(registerUser).toContain('const globallyCreatableRoles')
     expect(manageStoreTeam).toContain("const adminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']")
     expect(manageGlobalUser).toContain("const internalAdminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']")
     expect(manageGlobalUser).toContain("type GlobalUserAction = 'update' | 'delete' | 'force_password_change'")
     expect(migration).not.toMatch(/GRANT UPDATE ON public\.usuarios TO authenticated/i)
+  })
+
+  test('provides literal audited store deletion with exact-name confirmation', () => {
+    expect(migration).toContain('CREATE OR REPLACE FUNCTION public.admin_hard_delete_store')
+    expect(migration).toContain("'hard_delete'")
+    expect(migration).toContain("p_confirmation, '') IS DISTINCT FROM v_store.name")
+    expect(migration).toContain('DELETE FROM public.lojas WHERE id = p_store_id')
+    expect(migration).toContain('REVOKE ALL ON FUNCTION public.admin_hard_delete_store(uuid,text) FROM PUBLIC, anon')
   })
 
   test('publishes operational progress sources used by the global real-time cockpit', () => {
