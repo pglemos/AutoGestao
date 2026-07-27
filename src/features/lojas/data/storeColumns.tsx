@@ -1,4 +1,4 @@
-import { Building2, Copy, Link2, X } from 'lucide-react'
+import { Building2, Copy, Link2, Trash2, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { canManageStore } from '@/lib/auth/capabilities'
 import { cn, slugify } from '@/lib/utils'
@@ -23,6 +23,7 @@ interface BuildColumnsParams {
   copyRegistrationLink: (storeName: string) => void
   getRegistrationLink: (storeName: string) => string
   handleArchiveStore: (store: Store) => void
+  handleHardDeleteStore: (store: Store) => void | Promise<void>
   toggleStoreStatus: (storeId: string, active: boolean) => Promise<{ error?: string | null }>
 }
 
@@ -33,6 +34,7 @@ export function buildStoreColumns({
   copyRegistrationLink,
   getRegistrationLink,
   handleArchiveStore,
+  handleHardDeleteStore,
   toggleStoreStatus,
 }: BuildColumnsParams): Column<Store>[] {
   const canManageNetwork = canManageStore(role)
@@ -204,13 +206,25 @@ export function buildStoreColumns({
               ) : null}
             </>
           ) : canManageNetwork ? (
-            <Button
-              variant="secondary"
-              size="sm"
-              onClick={() => toggleStoreStatus(store.id, true)}
-            >
-              Restaurar
-            </Button>
+            <>
+              <Button
+                variant="secondary"
+                size="sm"
+                onClick={() => toggleStoreStatus(store.id, true)}
+              >
+                Restaurar
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => { void handleHardDeleteStore(store) }}
+                className="text-status-error hover:bg-status-error-surface"
+                aria-label={`Excluir definitivamente ${store.name}`}
+                title="Excluir definitivamente"
+              >
+                <Trash2 size={16} aria-hidden="true" />
+              </Button>
+            </>
           ) : null}
         </div>
       ),
