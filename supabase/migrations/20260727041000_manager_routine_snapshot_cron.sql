@@ -37,6 +37,17 @@ BEGIN
         local_date
       );
     EXCEPTION WHEN OTHERS THEN
+      PERFORM public.log_rpc_error(
+        'run_manager_routine_snapshot_refresh_clock',
+        SQLSTATE,
+        SQLERRM,
+        NULL,
+        jsonb_build_object(
+          'manager_user_id', manager_row.manager_user_id,
+          'store_id', manager_row.store_id,
+          'reference_date', local_date
+        )
+      );
       RAISE WARNING
         'Falha ao consolidar rotina do gerente % na loja %: %',
         manager_row.manager_user_id,
