@@ -57,4 +57,19 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps
       - name: Unit tests (bun test)
-        run: npm test
+        id: unit-tests
+        shell: bash
+        run: |
+          set +e
+          npm test > /tmp/unit-tests.log 2>&1
+          status=$?
+          tail -300 /tmp/unit-tests.log
+          exit "$status"
+      - name: Upload unit-test diagnostics
+        if: failure() && steps.unit-tests.conclusion == 'failure'
+        uses: actions/upload-artifact@v4
+        with:
+          name: unit-test-diagnostics
+          path: /tmp/unit-tests.log
+          if-no-files-found: error
+          retention-days: 2
