@@ -45,7 +45,7 @@ export type Database = {
       }
       agenda_d1_late_changes: {
         Row: {
-          actor_id: string
+          actor_id: string | null
           agendamento_id: string
           authorization_note: string | null
           authorized: boolean
@@ -61,7 +61,7 @@ export type Database = {
           snapshot: Json
         }
         Insert: {
-          actor_id: string
+          actor_id?: string | null
           agendamento_id: string
           authorization_note?: string | null
           authorized?: boolean
@@ -77,7 +77,7 @@ export type Database = {
           snapshot: Json
         }
         Update: {
-          actor_id?: string
+          actor_id?: string | null
           agendamento_id?: string
           authorization_note?: string | null
           authorized?: boolean
@@ -5187,7 +5187,7 @@ export type Database = {
       internal_mx_admin_audit: {
         Row: {
           action: string
-          actor_id: string | null
+          actor_id: string
           actor_role: string
           after_data: Json | null
           before_data: Json | null
@@ -5200,7 +5200,7 @@ export type Database = {
         }
         Insert: {
           action: string
-          actor_id?: string | null
+          actor_id: string
           actor_role: string
           after_data?: Json | null
           before_data?: Json | null
@@ -5213,7 +5213,7 @@ export type Database = {
         }
         Update: {
           action?: string
-          actor_id?: string | null
+          actor_id?: string
           actor_role?: string
           after_data?: Json | null
           before_data?: Json | null
@@ -13889,6 +13889,50 @@ export type Database = {
           p_user_id: string
         }
         Returns: Json
+      }
+      internal_mx_consume_admin_rate_limit: {
+        Args: {
+          p_action: string
+          p_actor_id: string
+          p_max_attempts?: number
+          p_window_seconds?: number
+        }
+        Returns: boolean
+      }
+      internal_mx_finalize_registered_user: {
+        Args: {
+          p_actor_id: string
+          p_closing_month_grace?: boolean
+          p_email: string
+          p_ended_at?: string
+          p_is_active?: boolean
+          p_is_venda_loja?: boolean
+          p_name: string
+          p_phone?: string
+          p_role: string
+          p_started_at?: string
+          p_store_id?: string
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      internal_mx_global_user_delete_preflight: {
+        Args: { p_actor_id: string; p_user_id: string }
+        Returns: Json
+      }
+      internal_mx_record_hard_deleted_user: {
+        Args: {
+          p_actor_id: string
+          p_actor_role: string
+          p_before_data: Json
+          p_reason?: string
+          p_user_id: string
+        }
+        Returns: string
+      }
+      internal_mx_role_id: {
+        Args: { p_legacy_role: string }
+        Returns: string
       }
       is_admin:
         | { Args: never; Returns: boolean }
