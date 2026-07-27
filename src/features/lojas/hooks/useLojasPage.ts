@@ -1,5 +1,6 @@
 import { useStores, useStoresStats } from '@/hooks/useTeam'
-import { isAdministradorMx, useAuth } from '@/hooks/useAuth'
+import { useAuth } from '@/hooks/useAuth'
+import { canManageStore } from '@/lib/auth/capabilities'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { toast } from '@/lib/toast'
@@ -19,7 +20,7 @@ export function useLojasPage() {
   const { stats, loading: statsLoading, refetch: refetchStats } = useStoresStats()
   const { role } = useAuth()
   const isOwner = role === 'dono'
-  const isAdminMx = isAdministradorMx(role)
+  const canManageNetwork = canManageStore(role)
 
   const [searchTerm, setSearchTerm] = useState('')
   const [filterActive, setFilterActive] = useState(true)
@@ -178,7 +179,7 @@ export function useLojasPage() {
     // role flags
     role,
     isOwner,
-    isAdminMx,
+    canManageNetwork,
     // data
     lojas,
     stats,
