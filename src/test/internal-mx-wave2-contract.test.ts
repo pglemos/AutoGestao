@@ -29,7 +29,7 @@ describe('internal mx wave 2 architecture', () => {
     expect(registry).toContain('EquipeUsuariosTabRouter')
     expect(registry).not.toContain("readOnlyRoles: ['consultor_mx', 'dono']")
     expect(registry).not.toContain("readOnlyRoles: ['consultor_mx']")
-    expect(registry).toContain("readOnlyRoles: ['dono']")
+    expect(registry.match(/readOnlyRoles: \['dono'\]/g) ?? []).toHaveLength(3)
   })
 
   test('development is decomposed into canonical metrics, filters and tables', () => {
