@@ -2,6 +2,16 @@ import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
 import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
 import { corsHeaders } from '../_shared/cors.ts'
 
+const internalAdminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']
+const globallyCreatableRoles = [
+  'administrador_geral',
+  'administrador_mx',
+  'consultor_mx',
+  'dono',
+  'gerente',
+  'vendedor',
+]
+
 interface RegisterUserPayload {
   email: string
   password?: string
@@ -117,7 +127,7 @@ serve(async (req) => {
     return jsonResponse({ success: false, error: 'Inactive user' }, 403)
   }
 
-  if (!['administrador_geral', 'administrador_mx', 'dono', 'gerente'].includes(callerRole)) {
+  if (![...internalAdminRoles, 'dono', 'gerente'].includes(callerRole)) {
     return jsonResponse({ success: false, error: 'Insufficient privileges' }, 403)
   }
 
@@ -138,13 +148,14 @@ serve(async (req) => {
     return jsonResponse({ success: false, error: PASSWORD_POLICY_MESSAGE }, 400)
   }
 
-  if (!['administrador_geral', 'administrador_mx', 'consultor_mx'].includes(role) && !store_id) {
+  if (!internalAdminRoles.includes(role) && !store_id) {
     return jsonResponse({ success: false, error: 'store_id is required for store-scoped roles' }, 400)
   }
 
   const allowedRolesByCaller: Record<string, string[]> = {
-    administrador_geral: ['administrador_mx', 'consultor_mx', 'dono', 'gerente', 'vendedor'],
-    administrador_mx: ['consultor_mx', 'dono', 'gerente', 'vendedor'],
+    administrador_geral: globallyCreatableRoles,
+    administrador_mx: globallyCreatableRoles,
+    consultor_mx: globallyCreatableRoles,
     dono: ['gerente', 'vendedor'],
     gerente: ['vendedor'],
   }
@@ -197,9 +208,6 @@ serve(async (req) => {
   let createdAuthUser = true
 
   if (existingAuthUser) {
-    // Identidade órfã: existe em auth.users mas sem linha em usuarios (ex.: import antigo
-    // que falhou no meio do caminho). Em vez de barrar com "e-mail já registrado", adota
-    // a identidade existente e completa o cadastro nela.
     createdAuthUser = false
     newUserId = existingAuthUser.id
     const { error: updateAuthError } = await adminClient.auth.admin.updateUserById(newUserId, {
@@ -247,7 +255,7 @@ serve(async (req) => {
   }
 
   let membershipCreated = false
-  if (!['administrador_geral', 'administrador_mx', 'consultor_mx'].includes(role) && store_id) {
+  if (!internalAdminRoles.includes(role) && store_id) {
     const { error: membershipError } = await adminClient
       .from('vinculos_loja')
       .upsert(
@@ -283,10 +291,33 @@ serve(async (req) => {
     }
   }
 
+  const { error: auditError } = await adminClient.from('internal_mx_admin_audit').insert({
+    actor_id: caller.user.id,
+    actor_role: callerRole,
+    action: 'create',
+    entity_type: 'usuario',
+    entity_id: newUserId,
+    store_id: store_id || null,
+    before_data: null,
+    after_data: {
+      id: newUserId,
+      email: normalizedEmail,
+      name,
+      role,
+      active: true,
+      is_venda_loja: is_venda_loja ?? false,
+    },
+    metadata: { membership_created: membershipCreated },
+  })
+  if (auditError) {
+    await rollbackCreatedUser(adminClient, newUserId, createdAuthUser)
+    return jsonResponse({ success: false, error: `User created but audit insert failed: ${auditError.message}` }, 500)
+  }
+
   return jsonResponse({
     success: true,
     user_id: newUserId,
-    email: email.trim().toLowerCase(),
+    email: normalizedEmail,
     must_change_password: true,
     membership_created: membershipCreated,
   })
