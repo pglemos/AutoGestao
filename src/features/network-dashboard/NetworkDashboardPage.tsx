@@ -18,7 +18,8 @@ export function NetworkDashboardPage() {
 
   return (
     <MxModulePage id="internal-network-dashboard">
-      <NetworkDashboardHeader refreshing={controller.refreshing} lastUpdatedAt={controller.lastUpdatedAt} onRefresh={controller.refresh} />
+      <NetworkDashboardHeader refreshing={controller.refreshing} lastUpdatedAt={controller.lastUpdatedAt} realtimeStatus={controller.realtimeStatus} onRefresh={controller.refresh} />
+      {controller.realtimeStatus === 'degraded' ? <MxStatusBanner tone="warning">A conexão Realtime foi interrompida. Os dados permanecem disponíveis e podem ser sincronizados pelo botão Atualizar.</MxStatusBanner> : null}
       {controller.error && controller.allRows.length > 0 ? <MxStatusBanner tone="warning">Os dados anteriores foram mantidos. {controller.error}</MxStatusBanner> : null}
       {controller.loading && controller.allRows.length === 0 ? <MxLoadingState label="Carregando rede" /> : controller.error && controller.allRows.length === 0 ? <MxErrorState description={controller.error} retry={controller.refresh} /> : (
         <>
