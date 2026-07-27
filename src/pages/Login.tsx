@@ -10,7 +10,7 @@ import { supabase } from '@/lib/supabase'
 import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from '@/lib/auth/passwordPolicy'
 import { resolvePostLoginRedirect } from '@/lib/auth/postLoginRedirect'
 import { PasswordRecoveryRequestError, requestPasswordRecovery } from '@/lib/auth/passwordRecovery'
-import { readSignoutReason } from '@/hooks/auth/authHelpers'
+import { readSignoutReason, AUTH_SIGNOUT_REASON_STORAGE_KEY } from '@/hooks/auth/authHelpers'
 
 const RECOVERY_EXPIRED_MESSAGE = 'Link de redefinição inválido ou expirado. Solicite um novo acesso.'
 
@@ -18,6 +18,11 @@ const SIGNOUT_REASON_MESSAGES: Record<string, string> = {
     inactive: 'Sua conta está desativada. Fale com o administrador da sua loja para reativar o acesso.',
     'no-profile': 'Não encontramos um perfil operacional para esta conta. Fale com o administrador da sua loja ou com o suporte MX.',
     'no-store': 'Sua conta não está vinculada a nenhuma loja ativa no momento. Fale com o administrador da sua loja.',
+}
+
+function clearSignoutReason() {
+    if (typeof window === 'undefined') return
+    window.sessionStorage.removeItem(AUTH_SIGNOUT_REASON_STORAGE_KEY)
 }
 
 /**
@@ -127,6 +132,9 @@ export default function Login() {
     useEffect(() => {
         if (mode !== 'recovery') return
 
+        // Garante que nenhuma mensagem de signout anterior apareça durante a recuperação
+        clearSignoutReason()
+
         let mounted = true
         const ensureRecoverySession = async () => {
             const recoverySession = getRecoverySessionFromHash()
@@ -156,7 +164,7 @@ export default function Login() {
 
             const { data } = await supabase.auth.getSession()
             if (mounted && !data.session) {
-                setError(consumeSignoutReasonMessage() || RECOVERY_EXPIRED_MESSAGE)
+                setError(RECOVERY_EXPIRED_MESSAGE)
             }
         }
 
@@ -262,6 +270,9 @@ export default function Login() {
         e.preventDefault()
         if (loading) return
 
+        // Garante que nenhuma stale reason de sessões anteriores afete o recovery
+        clearSignoutReason()
+
         const newFieldErrors: Record<string, string> = {}
         if (!newPassword.trim()) newFieldErrors.newPassword = 'Nova senha e obrigatoria'
         else if (!isStrongPassword(newPassword)) newFieldErrors.newPassword = PASSWORD_POLICY_MESSAGE
@@ -277,14 +288,16 @@ export default function Login() {
 
         const { data: sessionData } = await supabase.auth.getSession()
         if (!sessionData.session?.user.id) {
+            clearSignoutReason()
             setLoading(false)
-            setError(consumeSignoutReasonMessage() || RECOVERY_EXPIRED_MESSAGE)
+            setError(RECOVERY_EXPIRED_MESSAGE)
             return
         }
 
         const { data: challengeData, error: challengeError } = await supabase.rpc('begin_password_change')
         const challengeResult = challengeData as { ok?: boolean; error?: string } | null
         if (challengeError || !challengeResult?.ok) {
+            clearSignoutReason()
             setLoading(false)
             setError(challengeError?.message || challengeResult?.error || 'Não foi possível iniciar a troca de senha.')
             return
@@ -292,6 +305,7 @@ export default function Login() {
 
         const { error: updateError } = await supabase.auth.updateUser({ password: newPassword })
         if (updateError) {
+            clearSignoutReason()
             setLoading(false)
             setError(updateError.message)
             return
@@ -300,10 +314,9 @@ export default function Login() {
         const { data: profileData, error: profileError } = await supabase.rpc('complete_password_change')
         const profileResult = profileData as { ok?: boolean; error?: string } | null
 
-        await supabase.auth.signOut()
-        setLoading(false)
-
         if (profileError || !profileResult?.ok) {
+            clearSignoutReason()
+            setLoading(false)
             setError(profileError?.message || profileResult?.error || 'Não foi possível concluir a troca de senha.')
             return
         }
@@ -311,6 +324,10 @@ export default function Login() {
         setNewPassword('')
         setConfirmPassword('')
         setPassword('')
+
+        clearSignoutReason()
+        await supabase.auth.signOut()
+        setLoading(false)
         setMode('login')
         window.history.replaceState(null, '', '/login')
         setSuccess('Senha redefinida com sucesso. Entre com a nova senha.')
