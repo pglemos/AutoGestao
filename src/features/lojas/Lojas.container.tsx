@@ -8,6 +8,7 @@ import { OwnerExecutiveSection } from './sections/OwnerExecutiveSection'
 import { CorporateMetricsSection } from './sections/CorporateMetricsSection'
 import { StoresGridSection } from './sections/StoresGridSection'
 import { CreateStoreModal } from './modals/CreateStoreModal'
+import { HardDeleteStoreModal } from './modals/HardDeleteStoreModal'
 import {
   MxModulePage,
   MxStatusBanner,
@@ -102,6 +103,15 @@ export function Lojas() {
           creating={page.creating}
           onSubmit={page.handleCreateStore}
           onClose={() => page.setIsCreateModalOpen(false)}
+        />
+
+        <HardDeleteStoreModal
+          store={page.hardDeleteStore}
+          confirmation={page.hardDeleteConfirmation}
+          deleting={page.hardDeleting}
+          onConfirmationChange={page.setHardDeleteConfirmation}
+          onClose={page.closeHardDeleteStore}
+          onConfirm={() => void page.confirmHardDeleteStore()}
         />
       </MxModulePage>
     </LojasErrorBoundary>
