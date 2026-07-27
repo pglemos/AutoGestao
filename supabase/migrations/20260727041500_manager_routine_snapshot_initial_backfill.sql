@@ -7,5 +7,6 @@ SELECT public.run_manager_routine_snapshot_refresh_clock();
 
 COMMIT;
 
--- Sem DOWN: snapshots são registros históricos versionados e não devem ser
--- removidos durante rollback da automação.
+-- DOWN
+-- Nenhuma exclusão é executada: snapshots são registros históricos versionados
+-- e devem permanecer disponíveis mesmo após rollback da automação horária.
