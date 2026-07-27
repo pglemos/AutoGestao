@@ -20,8 +20,11 @@ const reportLabels: Record<NetworkReportType, string> = {
   mensal: 'Relatório mensal',
 }
 
+type RealtimeStatus = 'connecting' | 'connected' | 'degraded'
+
 export function useNetworkDashboardController() {
   const requestSequence = useRef(0)
+  const realtimeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const { metas, loading: goalsLoading } = useAllStoreGoals()
   const initialRange = useMemo<NetworkDateRange>(() => ({
     start: format(new Date(new Date().getFullYear(), new Date().getMonth(), 1), 'yyyy-MM-dd'),
@@ -33,6 +36,7 @@ export function useNetworkDashboardController() {
   const [refreshing, setRefreshing] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null)
+  const [realtimeStatus, setRealtimeStatus] = useState<RealtimeStatus>('connecting')
   const [search, setSearch] = useState('')
   const [status, setStatus] = useState<NetworkStatusFilter>('all')
   const [timeframe, setTimeframe] = useState<NetworkTimeframe>('mensal')
@@ -119,6 +123,43 @@ export function useNetworkDashboardController() {
     if (!goalsLoading) void fetchSnapshot(false)
   }, [fetchSnapshot, goalsLoading])
 
+  useEffect(() => {
+    const scheduleReload = () => {
+      if (realtimeTimer.current) clearTimeout(realtimeTimer.current)
+      realtimeTimer.current = setTimeout(() => { void fetchSnapshot(false) }, 450)
+    }
+
+    const channel = supabase.channel('internal-network-dashboard-live')
+    for (const table of [
+      'lancamentos_diarios',
+      'clientes',
+      'agendamentos',
+      'atendimentos',
+      'oportunidades',
+      'vendedores_loja',
+      'vinculos_loja',
+      'lojas',
+      'regras_metas_loja',
+      'seller_routine_snapshots',
+      'manager_routine_snapshots',
+      'planos_acao',
+    ]) {
+      channel.on('postgres_changes', { event: '*', schema: 'public', table }, scheduleReload)
+    }
+
+    channel.subscribe((nextStatus) => {
+      if (nextStatus === 'SUBSCRIBED') setRealtimeStatus('connected')
+      if (nextStatus === 'CHANNEL_ERROR' || nextStatus === 'TIMED_OUT' || nextStatus === 'CLOSED') {
+        setRealtimeStatus('degraded')
+      }
+    })
+
+    return () => {
+      if (realtimeTimer.current) clearTimeout(realtimeTimer.current)
+      void supabase.removeChannel(channel)
+    }
+  }, [fetchSnapshot])
+
   const triggerReport = useCallback(async (type: NetworkReportType) => {
     if (reportLoading) return
     setReportLoading(type)
@@ -149,6 +190,7 @@ export function useNetworkDashboardController() {
     refreshing,
     error,
     lastUpdatedAt,
+    realtimeStatus,
     search,
     setSearch,
     status,
