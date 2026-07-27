@@ -273,6 +273,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
       setCliente(c);
       setForm(c);
       setHistorico(h || []);
+      console.log('[FichaClienteSheet] loaded client', c?.id, 'data:', { etapa: c?.etapa, vendedor_id: c?.vendedor_id, closed_at: c?.closed_at })
       setLoading(false);
     }).catch(() => setLoading(false));
   }, [open, clienteId]);
@@ -363,6 +364,12 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
   const isVendaAtiva = cliente?.etapa === "ganho";
   const isOwnClient = cliente?.vendedor_id === supabaseUser?.id;
   const podeCancelarVenda = isVendaAtiva && (isPrivileged || (isOwnClient && dentroJanelaCancelamento(cliente?.closed_at)));
+
+  useEffect(() => {
+    if (cliente && supabaseUser) {
+      console.log('[FichaClienteSheet] podeCancelarVenda', podeCancelarVenda, { role, supabaseUserId: supabaseUser.id, etapa: cliente.etapa, vendedor_id: cliente.vendedor_id, closed_at: cliente.closed_at, isPrivileged, isVendaAtiva, isOwnClient, dentroJanela: dentroJanelaCancelamento(cliente?.closed_at) })
+    }
+  }, [podeCancelarVenda, cliente?.etapa, cliente?.vendedor_id, cliente?.closed_at, supabaseUser?.id, role])
 
   const situacao = cliente?.situacao_atual || cliente?.momento || "—";
   const canal = cliente?.canal_comercial || cliente?.canal_origem || "—";
