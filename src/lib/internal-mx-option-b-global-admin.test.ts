@@ -28,6 +28,13 @@ describe('Opção B: administração global equivalente da área interna MX', ()
     expect(migration).not.toMatch(/GRANT UPDATE ON public\.usuarios TO authenticated/i)
   })
 
+  test('persists the canonical role contract on create and update', () => {
+    expect(registerUser).toContain('const roleCodeByLegacyRole')
+    expect(registerUser).toContain('role_id: roleId')
+    expect(manageGlobalUser).toContain('const roleCodeByLegacyRole')
+    expect(manageGlobalUser).toContain('role_id: roleId')
+  })
+
   test('provides literal audited store deletion with exact-name confirmation', () => {
     expect(migration).toContain('CREATE OR REPLACE FUNCTION public.admin_hard_delete_store')
     expect(migration).toContain("'hard_delete'")
