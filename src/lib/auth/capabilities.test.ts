@@ -9,11 +9,18 @@ import {
   hasCapability,
 } from './capabilities'
 
+const internalRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx'] as const
+
 describe('role capabilities', () => {
-  it('keeps simulation and store management internal/admin scoped', () => {
-    expect(canSimulateRole('administrador_mx')).toBe(true)
-    expect(canSimulateRole('dono')).toBe(false)
-    expect(canManageStore('administrador_mx')).toBe(true)
+  it('gives all internal MX roles equal global administration capabilities', () => {
+    for (const role of internalRoles) {
+      expect(canSimulateRole(role)).toBe(true)
+      expect(canManageStore(role)).toBe(true)
+      expect(canManageTeam(role)).toBe(true)
+      expect(hasCapability(role, 'manageStore')).toBe(true)
+      expect(hasCapability(role, 'manageTeam')).toBe(true)
+    }
+
     expect(canManageStore('dono')).toBe(false)
     expect(canManageTeam('dono')).toBe(false)
     expect(canManageTeam('gerente')).toBe(true)
