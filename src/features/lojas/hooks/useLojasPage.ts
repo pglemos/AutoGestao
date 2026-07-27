@@ -31,6 +31,9 @@ export function useLojasPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [newStore, setNewStore] = useState({ name: '', manager_email: '' })
   const [creating, setCreating] = useState(false)
+  const [hardDeleteStore, setHardDeleteStore] = useState<Store | null>(null)
+  const [hardDeleteConfirmation, setHardDeleteConfirmation] = useState('')
+  const [hardDeleting, setHardDeleting] = useState(false)
   const createModalRef = useRef<HTMLDivElement>(null)
   useFocusTrap(createModalRef, isCreateModalOpen)
 
@@ -50,18 +53,18 @@ export function useLojasPage() {
       active: (lojas || []).filter(store => store.active).length,
       archived: (lojas || []).filter(store => !store.active).length,
     }),
-    [lojas]
+    [lojas],
   )
 
   const filteredStores = useMemo(() => {
     return (lojas || [])
-      .filter(s => (isOwner ? s.active : s.active === filterActive))
-      .filter(s => s.name.toLowerCase().includes(searchTerm.toLowerCase()))
+      .filter(store => (isOwner ? store.active : store.active === filterActive))
+      .filter(store => store.name.toLowerCase().includes(searchTerm.toLowerCase()))
   }, [lojas, searchTerm, filterActive, isOwner])
 
   const ownerActiveStores = useMemo(
     () => (lojas || []).filter(store => store.active),
-    [lojas]
+    [lojas],
   )
 
   const ownerAttentionStores = useMemo(() => {
@@ -75,26 +78,28 @@ export function useLojasPage() {
   }, [ownerActiveStores, stats])
 
   const corporateMetrics = useMemo(() => {
-    if (!lojas || !stats) return { totalSellers: 0, totalStores: 0, activeStores: 0, avgDiscipline: 0 }
+    if (!lojas || !stats) {
+      return { totalSellers: 0, totalStores: 0, activeStores: 0, avgDiscipline: 0 }
+    }
 
     let totalSellers = 0
     let totalDiscipline = 0
     let activeStoresCount = 0
 
-    lojas.filter(s => s.active).forEach(s => {
-      const sStat = stats[s.id]
-      if (sStat) {
-        totalSellers += sStat.sellers
-        if (sStat.sellers > 0) {
-          totalDiscipline += sStat.disciplinePct
-          activeStoresCount++
+    lojas.filter(store => store.active).forEach(store => {
+      const storeStat = stats[store.id]
+      if (storeStat) {
+        totalSellers += storeStat.sellers
+        if (storeStat.sellers > 0) {
+          totalDiscipline += storeStat.disciplinePct
+          activeStoresCount += 1
         }
       }
     })
 
     return {
       totalSellers,
-      totalStores: lojas.filter(s => s.active).length,
+      totalStores: lojas.filter(store => store.active).length,
       activeStores: activeStoresCount,
       avgDiscipline: activeStoresCount > 0 ? Math.round(totalDiscipline / activeStoresCount) : 0,
     }
@@ -114,8 +119,8 @@ export function useLojasPage() {
   }, [refetchStores, refetchStats])
 
   const handleCreateStore = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault()
+    async (event: React.FormEvent) => {
+      event.preventDefault()
       if (!newStore.name) {
         toast.error('Nome da unidade é obrigatório')
         return
@@ -132,7 +137,7 @@ export function useLojasPage() {
         await handleRefresh()
       }
     },
-    [createStore, handleRefresh, newStore.manager_email, newStore.name]
+    [createStore, handleRefresh, newStore.manager_email, newStore.name],
   )
 
   const getRegistrationLink = useCallback((storeName: string) => getPreRegistrationLink(storeName), [])
@@ -156,7 +161,7 @@ export function useLojasPage() {
         toast.error(message)
       }
     },
-    [getRegistrationLink]
+    [getRegistrationLink],
   )
 
   const handleArchiveStore = useCallback(
@@ -173,61 +178,65 @@ export function useLojasPage() {
         },
       })
     },
-    [toggleStoreStatus]
+    [toggleStoreStatus],
   )
 
-  const handleHardDeleteStore = useCallback(
-    async (store: Store) => {
-      const confirmation = window.prompt(
-        `Exclusão definitiva: digite exatamente o nome da loja para confirmar:\n\n${store.name}`,
-      )
-      if (confirmation === null) return
-      if (confirmation !== store.name) {
-        toast.error('O nome informado não corresponde exatamente à loja.')
-        return
-      }
+  const handleHardDeleteStore = useCallback((store: Store) => {
+    setHardDeleteStore(store)
+    setHardDeleteConfirmation('')
+  }, [])
 
-      setIsRefetching(true)
-      try {
-        const { error } = await supabase.rpc(
-          'admin_hard_delete_store' as never,
-          { p_store_id: store.id, p_confirmation: confirmation } as never,
-        )
-        if (error) throw error
-        toast.success('Loja e dependências excluídas definitivamente.')
-        await Promise.all([refetchStores(), refetchStats()])
-      } catch (cause) {
-        toast.error(cause instanceof Error ? cause.message : 'Não foi possível excluir a loja definitivamente.')
-      } finally {
-        setIsRefetching(false)
-      }
-    },
-    [refetchStats, refetchStores],
-  )
+  const closeHardDeleteStore = useCallback(() => {
+    if (hardDeleting) return
+    setHardDeleteStore(null)
+    setHardDeleteConfirmation('')
+  }, [hardDeleting])
+
+  const confirmHardDeleteStore = useCallback(async () => {
+    if (!hardDeleteStore) return
+    if (hardDeleteConfirmation !== hardDeleteStore.name) {
+      toast.error('O nome informado não corresponde exatamente à loja.')
+      return
+    }
+
+    setHardDeleting(true)
+    setIsRefetching(true)
+    try {
+      const { error } = await supabase.rpc('admin_hard_delete_store', {
+        p_store_id: hardDeleteStore.id,
+        p_confirmation: hardDeleteConfirmation,
+      })
+      if (error) throw error
+      toast.success('Loja e dependências excluídas definitivamente.')
+      setHardDeleteStore(null)
+      setHardDeleteConfirmation('')
+      await Promise.all([refetchStores(), refetchStats()])
+    } catch (cause) {
+      toast.error(cause instanceof Error ? cause.message : 'Não foi possível excluir a loja definitivamente.')
+    } finally {
+      setHardDeleting(false)
+      setIsRefetching(false)
+    }
+  }, [hardDeleteConfirmation, hardDeleteStore, refetchStats, refetchStores])
 
   return {
-    // role flags
     role,
     isOwner,
     canManageNetwork,
-    // data
     lojas,
     stats,
     loading,
     isRefetching,
     lastUpdatedAt,
-    // search/filter
     searchTerm,
     setSearchTerm,
     filterActive,
     setFilterActive,
-    // derived
     storeStatusCounts,
     filteredStores,
     ownerActiveStores,
     ownerAttentionStores,
     corporateMetrics,
-    // modal create
     isCreateModalOpen,
     setIsCreateModalOpen,
     newStore,
@@ -235,7 +244,12 @@ export function useLojasPage() {
     creating,
     createModalRef,
     handleCreateStore,
-    // actions
+    hardDeleteStore,
+    hardDeleteConfirmation,
+    setHardDeleteConfirmation,
+    hardDeleting,
+    closeHardDeleteStore,
+    confirmHardDeleteStore,
     handleRefresh,
     getRegistrationLink,
     copyRegistrationLink,
