@@ -45,7 +45,7 @@ export type Database = {
       }
       agenda_d1_late_changes: {
         Row: {
-          actor_id: string | null
+          actor_id: string
           agendamento_id: string
           authorization_note: string | null
           authorized: boolean
@@ -61,7 +61,7 @@ export type Database = {
           snapshot: Json
         }
         Insert: {
-          actor_id?: string | null
+          actor_id: string
           agendamento_id: string
           authorization_note?: string | null
           authorized?: boolean
@@ -77,7 +77,7 @@ export type Database = {
           snapshot: Json
         }
         Update: {
-          actor_id?: string | null
+          actor_id?: string
           agendamento_id?: string
           authorization_note?: string | null
           authorized?: boolean
@@ -5224,22 +5224,31 @@ export type Database = {
           metadata?: Json
           store_id?: string | null
         }
-        Relationships: [
-          {
-            foreignKeyName: "internal_mx_admin_audit_actor_id_fkey"
-            columns: ["actor_id"]
-            isOneToOne: false
-            referencedRelation: "usuarios"
-            referencedColumns: ["id"]
-          },
-          {
-            foreignKeyName: "internal_mx_admin_audit_store_id_fkey"
-            columns: ["store_id"]
-            isOneToOne: false
-            referencedRelation: "lojas"
-            referencedColumns: ["id"]
-          },
-        ]
+        Relationships: []
+      }
+      internal_mx_admin_rate_limits: {
+        Row: {
+          action: string
+          actor_id: string
+          attempt_count: number
+          updated_at: string
+          window_started_at: string
+        }
+        Insert: {
+          action: string
+          actor_id: string
+          attempt_count?: number
+          updated_at?: string
+          window_started_at?: string
+        }
+        Update: {
+          action?: string
+          actor_id?: string
+          attempt_count?: number
+          updated_at?: string
+          window_started_at?: string
+        }
+        Relationships: []
       }
       inventory: {
         Row: {
@@ -13859,6 +13868,27 @@ export type Database = {
       inicializar_progresso_trilha: {
         Args: { p_assignment_id: string }
         Returns: number
+      }
+      internal_mx_apply_global_user_mutation: {
+        Args: {
+          p_action: string
+          p_actor_id: string
+          p_reason?: string
+          p_updates?: Json
+          p_user_id: string
+        }
+        Returns: Json
+      }
+      internal_mx_apply_store_team_mutation: {
+        Args: {
+          p_action: string
+          p_actor_id: string
+          p_previous_store_id?: string
+          p_store_id: string
+          p_updates?: Json
+          p_user_id: string
+        }
+        Returns: Json
       }
       is_admin:
         | { Args: never; Returns: boolean }
