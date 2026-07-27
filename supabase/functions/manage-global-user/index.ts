@@ -1,42 +1,39 @@
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
-import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
+import { z } from 'https://esm.sh/zod@3.23.8'
 import { corsHeaders } from '../_shared/cors.ts'
 
-const internalAdminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']
-const supportedRoles = [...internalAdminRoles, 'dono', 'gerente', 'vendedor']
-const roleCodeByLegacyRole: Record<string, string> = {
-  administrador_geral: 'admin_mx',
-  administrador_mx: 'admin_mx',
-  consultor_mx: 'consultant',
-  dono: 'master',
-  gerente: 'sales_manager',
-  vendedor: 'seller',
-}
+const internalAdminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx'] as const
+const supportedRoles = [...internalAdminRoles, 'dono', 'gerente', 'vendedor'] as const
 
 type GlobalUserAction = 'update' | 'delete' | 'force_password_change'
 
-type GlobalUserUpdates = {
-  name?: string
-  email?: string
-  phone?: string | null
-  role?: string
-  active?: boolean
-  is_venda_loja?: boolean
-  store_id?: string | null
-  previous_store_id?: string | null
-  started_at?: string
-  ended_at?: string | null
-  is_active?: boolean
-  closing_month_grace?: boolean
-}
+const uuidSchema = z.string().uuid()
+const dateSchema = z.string().regex(/^\d{4}-\d{2}-\d{2}$/)
+const updatesSchema = z.object({
+  name: z.string().trim().min(1).max(160).optional(),
+  email: z.string().trim().email().max(320).optional(),
+  phone: z.string().trim().max(40).nullable().optional(),
+  role: z.enum(supportedRoles).optional(),
+  active: z.boolean().optional(),
+  is_venda_loja: z.boolean().optional(),
+  store_id: uuidSchema.nullable().optional(),
+  previous_store_id: uuidSchema.nullable().optional(),
+  started_at: dateSchema.optional(),
+  ended_at: dateSchema.nullable().optional(),
+  is_active: z.boolean().optional(),
+  closing_month_grace: z.boolean().optional(),
+}).strict()
 
-type GlobalUserPayload = {
-  action?: GlobalUserAction
-  user_id?: string
-  updates?: GlobalUserUpdates
-  hard_delete?: boolean
-  reason?: string
-}
+const payloadSchema = z.object({
+  action: z.enum(['update', 'delete', 'force_password_change']),
+  user_id: uuidSchema,
+  updates: updatesSchema.optional(),
+  hard_delete: z.boolean().optional(),
+  reason: z.string().trim().max(500).optional(),
+}).strict()
+
+type GlobalUserPayload = z.infer<typeof payloadSchema>
 
 type UserProfile = {
   id: string
@@ -57,75 +54,8 @@ function jsonResponse(body: Record<string, unknown>, status = 200) {
   })
 }
 
-function todayISO() {
-  return new Date().toISOString().slice(0, 10)
-}
-
-async function writeAudit(
-  adminClient: SupabaseClient,
-  input: {
-    actorId: string
-    actorRole: string
-    action: string
-    entityId: string
-    storeId?: string | null
-    beforeData?: unknown
-    afterData?: unknown
-    metadata?: Record<string, unknown>
-  },
-) {
-  const { error } = await adminClient.from('internal_mx_admin_audit').insert({
-    actor_id: input.actorId,
-    actor_role: input.actorRole,
-    action: input.action,
-    entity_type: 'usuario',
-    entity_id: input.entityId,
-    store_id: input.storeId || null,
-    before_data: input.beforeData ?? null,
-    after_data: input.afterData ?? null,
-    metadata: input.metadata || {},
-  })
-  if (error) throw error
-}
-
-async function resolveRoleId(adminClient: SupabaseClient, role: string) {
-  const code = roleCodeByLegacyRole[role]
-  if (!code) return null
-  const { data, error } = await adminClient
-    .from('roles')
-    .select('id')
-    .eq('code', code)
-    .maybeSingle()
-  if (error) throw error
-  return data?.id || null
-}
-
-async function findHardDeleteBlockers(adminClient: SupabaseClient, userId: string) {
-  const checks = [
-    ['lancamentos_diarios', 'seller_user_id'],
-    ['clientes', 'seller_user_id'],
-    ['oportunidades', 'seller_user_id'],
-    ['agendamentos', 'seller_user_id'],
-    ['atendimentos', 'seller_user_id'],
-    ['seller_routine_snapshots', 'seller_user_id'],
-    ['manager_routine_snapshots', 'manager_user_id'],
-    ['pdis', 'seller_id'],
-    ['pdis', 'manager_id'],
-    ['devolutivas', 'seller_id'],
-    ['devolutivas', 'manager_id'],
-    ['planos_acao', 'responsavel_id'],
-  ] as const
-
-  const blockers: Array<{ table: string; column: string; count: number }> = []
-  for (const [table, column] of checks) {
-    const { count, error } = await adminClient
-      .from(table)
-      .select('*', { count: 'exact', head: true })
-      .eq(column, userId)
-    if (error) throw error
-    if ((count || 0) > 0) blockers.push({ table, column, count: count || 0 })
-  }
-  return blockers
+function genericFailure(status = 500) {
+  return jsonResponse({ success: false, error: 'Não foi possível concluir a operação global.' }, status)
 }
 
 serve(async (req) => {
@@ -135,9 +65,7 @@ serve(async (req) => {
   const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
   const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
   const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-  if (!supabaseUrl || !serviceKey || !anonKey) {
-    return jsonResponse({ success: false, error: 'Service is misconfigured (missing env)' }, 500)
-  }
+  if (!supabaseUrl || !serviceKey || !anonKey) return genericFailure()
 
   const authHeader = req.headers.get('Authorization') || ''
   if (!authHeader.startsWith('Bearer ')) {
@@ -159,24 +87,49 @@ serve(async (req) => {
     .select('role, active')
     .eq('id', caller.user.id)
     .maybeSingle()
-  if (callerProfileError) return jsonResponse({ success: false, error: callerProfileError.message }, 500)
+
+  if (callerProfileError) {
+    console.error('manage-global-user caller profile failure', { callerId: caller.user.id, callerProfileError })
+    return genericFailure()
+  }
 
   const callerRole = String(callerProfile?.role || '').toLowerCase()
-  if (!callerProfile?.active || !internalAdminRoles.includes(callerRole)) {
+  if (!callerProfile?.active || !internalAdminRoles.includes(callerRole as typeof internalAdminRoles[number])) {
     return jsonResponse({ success: false, error: 'Insufficient privileges' }, 403)
   }
 
-  let payload: GlobalUserPayload
+  let rawPayload: unknown
   try {
-    payload = await req.json()
+    rawPayload = await req.json()
   } catch {
     return jsonResponse({ success: false, error: 'Invalid JSON body' }, 400)
   }
 
-  const action = payload.action
+  const parsed = payloadSchema.safeParse(rawPayload)
+  if (!parsed.success) {
+    return jsonResponse({ success: false, error: 'Invalid payload' }, 400)
+  }
+
+  const payload: GlobalUserPayload = parsed.data
+  const action: GlobalUserAction = payload.action
   const userId = payload.user_id
-  if (!action || !['update', 'delete', 'force_password_change'].includes(action) || !userId) {
-    return jsonResponse({ success: false, error: 'Missing required fields (action, user_id)' }, 400)
+
+  const { data: rateLimitAllowed, error: rateLimitError } = await adminClient.rpc(
+    'internal_mx_consume_admin_rate_limit',
+    {
+      p_actor_id: caller.user.id,
+      p_action: `global-user:${action}`,
+      p_max_attempts: 30,
+      p_window_seconds: 60,
+    },
+  )
+
+  if (rateLimitError) {
+    console.error('manage-global-user rate limit failure', { callerId: caller.user.id, action, rateLimitError })
+    return genericFailure()
+  }
+  if (!rateLimitAllowed) {
+    return jsonResponse({ success: false, error: 'Muitas operações em sequência. Aguarde e tente novamente.' }, 429)
   }
 
   const { data: before, error: beforeError } = await adminClient
@@ -184,221 +137,124 @@ serve(async (req) => {
     .select('id, email, name, phone, role, role_id, active, is_venda_loja, must_change_password')
     .eq('id', userId)
     .maybeSingle()
-  if (beforeError) return jsonResponse({ success: false, error: beforeError.message }, 500)
+
+  if (beforeError) {
+    console.error('manage-global-user target lookup failure', { userId, beforeError })
+    return genericFailure()
+  }
   if (!before) return jsonResponse({ success: false, error: 'Target user not found' }, 404)
+
   const beforeProfile = before as UserProfile
 
   try {
-    if (action === 'force_password_change') {
-      const { error } = await adminClient
-        .from('usuarios')
-        .update({ must_change_password: true, updated_at: new Date().toISOString() })
-        .eq('id', userId)
-      if (error) throw error
-
-      await writeAudit(adminClient, {
-        actorId: caller.user.id,
-        actorRole: callerRole,
-        action: 'force_password_change',
-        entityId: userId,
-        beforeData: { must_change_password: beforeProfile.must_change_password },
-        afterData: { must_change_password: true },
-        metadata: { reason: payload.reason || null },
-      })
-      return jsonResponse({ success: true })
-    }
-
-    if (action === 'delete') {
-      if (payload.hard_delete) {
-        const blockers = await findHardDeleteBlockers(adminClient, userId)
-        if (blockers.length) {
-          return jsonResponse({
-            success: false,
-            error: 'Exclusão definitiva bloqueada porque o usuário possui histórico operacional.',
-            blocking_references: blockers,
-          }, 409)
-        }
-
-        await writeAudit(adminClient, {
-          actorId: caller.user.id,
-          actorRole: callerRole,
-          action: 'hard_delete_requested',
-          entityId: userId,
-          beforeData: beforeProfile,
-          metadata: { reason: payload.reason || null },
-        })
-
-        const { error } = await adminClient.auth.admin.deleteUser(userId)
-        if (error) throw error
-        return jsonResponse({ success: true, hard_deleted: true })
+    if (action === 'delete' && payload.hard_delete) {
+      if (userId === caller.user.id) {
+        return jsonResponse({ success: false, error: 'Não é permitido excluir definitivamente a própria conta.' }, 400)
       }
 
-      const endedAt = todayISO()
-      const { error: membershipsError } = await adminClient
-        .from('vinculos_loja')
-        .update({ is_active: false, ended_at: endedAt })
-        .eq('user_id', userId)
-      if (membershipsError) throw membershipsError
+      const { data: blockers, error: blockersError } = await adminClient.rpc(
+        'internal_mx_global_user_delete_preflight',
+        { p_actor_id: caller.user.id, p_user_id: userId },
+      )
+      if (blockersError) throw blockersError
 
-      const { error: tenuresError } = await adminClient
-        .from('vendedores_loja')
-        .update({ is_active: false, ended_at: endedAt })
-        .eq('seller_user_id', userId)
-      if (tenuresError) throw tenuresError
+      const blockingReferences = Array.isArray(blockers) ? blockers : []
+      if (blockingReferences.length > 0) {
+        return jsonResponse({
+          success: false,
+          error: 'Exclusão definitiva bloqueada porque o usuário possui histórico operacional.',
+          blocking_references: blockingReferences,
+        }, 409)
+      }
 
-      const { error: profileError } = await adminClient
-        .from('usuarios')
-        .update({ active: false, updated_at: new Date().toISOString() })
-        .eq('id', userId)
-      if (profileError) throw profileError
+      const { data: auditRow, error: pendingAuditError } = await adminClient
+        .from('internal_mx_admin_audit')
+        .insert({
+          actor_id: caller.user.id,
+          actor_role: callerRole,
+          action: 'hard_delete_requested',
+          entity_type: 'usuario',
+          entity_id: userId,
+          before_data: beforeProfile,
+          after_data: null,
+          metadata: { reason: payload.reason || null, status: 'pending' },
+        })
+        .select('id')
+        .single()
+      if (pendingAuditError) throw pendingAuditError
 
-      await writeAudit(adminClient, {
-        actorId: caller.user.id,
-        actorRole: callerRole,
-        action: 'deactivate',
-        entityId: userId,
-        beforeData: beforeProfile,
-        afterData: { ...beforeProfile, active: false },
-        metadata: { reason: payload.reason || null },
-      })
-      return jsonResponse({ success: true, hard_deleted: false })
+      const { error: deleteError } = await adminClient.auth.admin.deleteUser(userId)
+      if (deleteError) {
+        await adminClient
+          .from('internal_mx_admin_audit')
+          .update({
+            action: 'hard_delete_failed',
+            metadata: { reason: payload.reason || null, status: 'failed' },
+          })
+          .eq('id', auditRow.id)
+        throw deleteError
+      }
+
+      const { error: completedAuditError } = await adminClient
+        .from('internal_mx_admin_audit')
+        .update({
+          action: 'hard_delete',
+          metadata: { reason: payload.reason || null, status: 'completed' },
+        })
+        .eq('id', auditRow.id)
+      if (completedAuditError) {
+        console.error('manage-global-user hard-delete audit completion failure', {
+          auditId: auditRow.id,
+          userId,
+          completedAuditError,
+        })
+      }
+
+      return jsonResponse({ success: true, hard_deleted: true })
     }
 
+    const rpcAction = action === 'delete' ? 'deactivate' : action
     const updates = payload.updates || {}
-    const nextRole = String(updates.role || beforeProfile.role).toLowerCase()
-    if (!supportedRoles.includes(nextRole)) {
-      return jsonResponse({ success: false, error: `Unsupported role "${nextRole}"` }, 400)
-    }
-
-    const nextStoreId = updates.store_id || null
-    if (!internalAdminRoles.includes(nextRole) && !nextStoreId) {
-      return jsonResponse({ success: false, error: 'store_id is required for store-scoped roles' }, 400)
-    }
-
-    const roleId = await resolveRoleId(adminClient, nextRole)
-    const nextEmail = typeof updates.email === 'string'
+    const nextEmail = action === 'update' && typeof updates.email === 'string'
       ? updates.email.trim().toLowerCase()
       : beforeProfile.email
-    const nextName = typeof updates.name === 'string'
-      ? updates.name.trim().toLocaleUpperCase('pt-BR')
-      : beforeProfile.name
+    const emailChanged = nextEmail !== beforeProfile.email
 
-    if (nextEmail !== beforeProfile.email) {
-      const { error } = await adminClient.auth.admin.updateUserById(userId, {
+    if (emailChanged) {
+      const { error: authEmailError } = await adminClient.auth.admin.updateUserById(userId, {
         email: nextEmail,
         email_confirm: true,
       })
-      if (error) throw error
+      if (authEmailError) throw authEmailError
     }
 
-    const userUpdate = {
-      email: nextEmail,
-      name: nextName,
-      phone: typeof updates.phone === 'undefined' ? beforeProfile.phone : updates.phone || null,
-      role: nextRole,
-      role_id: roleId,
-      active: typeof updates.active === 'boolean' ? updates.active : beforeProfile.active,
-      is_venda_loja: typeof updates.is_venda_loja === 'boolean'
-        ? updates.is_venda_loja
-        : beforeProfile.is_venda_loja,
-      updated_at: new Date().toISOString(),
-    }
+    const { data: result, error: mutationError } = await adminClient.rpc(
+      'internal_mx_apply_global_user_mutation',
+      {
+        p_actor_id: caller.user.id,
+        p_action: rpcAction,
+        p_user_id: userId,
+        p_updates: updates,
+        p_reason: payload.reason || null,
+      },
+    )
 
-    const { error: profileError } = await adminClient
-      .from('usuarios')
-      .update(userUpdate)
-      .eq('id', userId)
-    if (profileError) {
-      if (nextEmail !== beforeProfile.email) {
-        await adminClient.auth.admin.updateUserById(userId, {
+    if (mutationError) {
+      if (emailChanged) {
+        const { error: compensationError } = await adminClient.auth.admin.updateUserById(userId, {
           email: beforeProfile.email,
           email_confirm: true,
         })
+        if (compensationError) {
+          console.error('manage-global-user email compensation failure', { userId, compensationError })
+        }
       }
-      throw profileError
+      throw mutationError
     }
 
-    const endedAt = updates.ended_at || todayISO()
-    if (internalAdminRoles.includes(nextRole)) {
-      const { error: membershipError } = await adminClient
-        .from('vinculos_loja')
-        .update({ is_active: false, ended_at: endedAt })
-        .eq('user_id', userId)
-      if (membershipError) throw membershipError
-
-      const { error: tenureError } = await adminClient
-        .from('vendedores_loja')
-        .update({ is_active: false, ended_at: endedAt })
-        .eq('seller_user_id', userId)
-      if (tenureError) throw tenureError
-    } else {
-      const previousStoreId = updates.previous_store_id || null
-      if (previousStoreId && previousStoreId !== nextStoreId) {
-        const { error: previousMembershipError } = await adminClient
-          .from('vinculos_loja')
-          .update({ is_active: false, ended_at: endedAt })
-          .eq('user_id', userId)
-          .eq('store_id', previousStoreId)
-        if (previousMembershipError) throw previousMembershipError
-
-        const { error: previousTenureError } = await adminClient
-          .from('vendedores_loja')
-          .update({ is_active: false, ended_at: endedAt })
-          .eq('seller_user_id', userId)
-          .eq('store_id', previousStoreId)
-        if (previousTenureError) throw previousTenureError
-      }
-
-      const { error: membershipError } = await adminClient
-        .from('vinculos_loja')
-        .upsert({
-          user_id: userId,
-          store_id: nextStoreId,
-          role: nextRole,
-          is_active: true,
-          ended_at: null,
-        }, { onConflict: 'user_id,store_id' })
-      if (membershipError) throw membershipError
-
-      if (nextRole === 'vendedor') {
-        const { error: tenureError } = await adminClient
-          .from('vendedores_loja')
-          .upsert({
-            store_id: nextStoreId,
-            seller_user_id: userId,
-            started_at: updates.started_at || todayISO(),
-            ended_at: updates.ended_at || null,
-            is_active: updates.is_active ?? updates.active ?? true,
-            closing_month_grace: updates.closing_month_grace ?? false,
-          }, { onConflict: 'store_id,seller_user_id' })
-        if (tenureError) throw tenureError
-      } else {
-        const { error: tenureError } = await adminClient
-          .from('vendedores_loja')
-          .update({ is_active: false, ended_at: endedAt })
-          .eq('seller_user_id', userId)
-          .eq('store_id', nextStoreId)
-        if (tenureError) throw tenureError
-      }
-    }
-
-    const afterProfile = { ...beforeProfile, ...userUpdate }
-    await writeAudit(adminClient, {
-      actorId: caller.user.id,
-      actorRole: callerRole,
-      action: 'update',
-      entityId: userId,
-      storeId: nextStoreId,
-      beforeData: beforeProfile,
-      afterData: afterProfile,
-      metadata: { reason: payload.reason || null },
-    })
-
-    return jsonResponse({ success: true, user: afterProfile })
+    return jsonResponse({ success: true, hard_deleted: false, user: result })
   } catch (error) {
-    return jsonResponse({
-      success: false,
-      error: error instanceof Error ? error.message : 'Unexpected global user management error',
-    }, 500)
+    console.error('manage-global-user failure', { action, userId, error })
+    return genericFailure()
   }
 })
