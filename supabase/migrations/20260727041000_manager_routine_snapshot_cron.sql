@@ -1,0 +1,74 @@
+-- Consolidação horária da rotina dos gerentes ativos.
+-- O pipeline equivalente já existia para vendedores; esta migration fecha a
+-- lacuna que deixava a evolução gerencial sem atualização automática.
+
+BEGIN;
+
+CREATE OR REPLACE FUNCTION public.run_manager_routine_snapshot_refresh_clock()
+RETURNS void
+LANGUAGE plpgsql
+SECURITY DEFINER
+SET search_path = public
+AS $$
+DECLARE
+  manager_row record;
+  local_date date := timezone('America/Sao_Paulo', now())::date;
+BEGIN
+  FOR manager_row IN
+    SELECT DISTINCT
+      vl.user_id AS manager_user_id,
+      vl.store_id
+    FROM public.vinculos_loja vl
+    JOIN public.usuarios u
+      ON u.id = vl.user_id
+     AND u.active = true
+     AND u.role = 'gerente'
+    JOIN public.lojas l
+      ON l.id = vl.store_id
+     AND l.active = true
+    WHERE vl.role = 'gerente'
+      AND vl.is_active = true
+      AND vl.ended_at IS NULL
+  LOOP
+    BEGIN
+      PERFORM public.consolidate_manager_routine_snapshot(
+        manager_row.manager_user_id,
+        manager_row.store_id,
+        local_date
+      );
+    EXCEPTION WHEN OTHERS THEN
+      RAISE WARNING
+        'Falha ao consolidar rotina do gerente % na loja %: %',
+        manager_row.manager_user_id,
+        manager_row.store_id,
+        SQLERRM;
+    END;
+  END LOOP;
+END;
+$$;
+
+REVOKE ALL ON FUNCTION public.run_manager_routine_snapshot_refresh_clock()
+  FROM PUBLIC, anon, authenticated;
+GRANT EXECUTE ON FUNCTION public.run_manager_routine_snapshot_refresh_clock()
+  TO service_role;
+
+DO $$
+BEGIN
+  PERFORM cron.unschedule(jobid)
+  FROM cron.job
+  WHERE jobname = 'mx-refresh-manager-routine-snapshots';
+
+  PERFORM cron.schedule(
+    'mx-refresh-manager-routine-snapshots',
+    '25 * * * *',
+    'SELECT public.run_manager_routine_snapshot_refresh_clock();'
+  );
+END
+$$;
+
+COMMIT;
+
+-- DOWN (manual):
+-- SELECT cron.unschedule(jobid) FROM cron.job
+-- WHERE jobname = 'mx-refresh-manager-routine-snapshots';
+-- DROP FUNCTION IF EXISTS public.run_manager_routine_snapshot_refresh_clock();
