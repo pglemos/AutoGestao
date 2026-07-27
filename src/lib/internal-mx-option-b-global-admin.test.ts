@@ -8,6 +8,7 @@ const migrationPath = 'supabase/migrations/20260727040000_internal_mx_option_b_g
 const migration = compact(read(migrationPath))
 const transactionMigration = compact(read('supabase/migrations/20260727043000_internal_mx_transactional_admin_rpcs.sql'))
 const managerCron = compact(read('supabase/migrations/20260727041000_manager_routine_snapshot_cron.sql'))
+const managerWarningHardening = compact(read('supabase/migrations/20260727043500_manager_snapshot_remove_direct_warning.sql'))
 const registerUser = compact(read('supabase/functions/register-user/index.ts'))
 const manageStoreTeam = compact(read('supabase/functions/manage-store-team/index.ts'))
 const manageGlobalUser = compact(read('supabase/functions/manage-global-user/index.ts'))
@@ -20,7 +21,7 @@ describe('Opção B: administração global equivalente da área interna MX', ()
     expect(migration).not.toContain('lower(u.email) = ANY')
   })
 
-  test('keeps privileged mutations behind authenticated service-role functions', () => {
+  test('keeps privileged user mutations behind authenticated service-role functions', () => {
     expect(registerUser).toContain("const internalAdminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']")
     expect(registerUser).toContain('const globallyCreatableRoles')
     expect(manageStoreTeam).toContain("const adminRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']")
@@ -82,6 +83,8 @@ describe('Opção B: administração global equivalente da área interna MX', ()
     expect(managerCron).toContain("'mx-refresh-manager-routine-snapshots'")
     expect(managerCron).toContain("'25 * * * *'")
     expect(managerCron).toContain('TO service_role')
+    expect(managerWarningHardening).toContain('public.log_rpc_error')
+    expect(managerWarningHardening).not.toContain('RAISE WARNING')
   })
 
   test('records privileged mutations in an immutable audit surface', () => {
