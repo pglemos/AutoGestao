@@ -93,7 +93,7 @@ export const TAB_REGISTRY: ConfigTabDefinition[] = [
         description: 'Salários, comissão e bônus',
         icon: Wallet,
         component: RemuneracaoPage,
-        roles: ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente'],
+        roles: ['administrador_geral', 'administrador_mx', 'dono', 'gerente'],
         section: 'gestao',
     },
     {

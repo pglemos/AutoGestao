@@ -14,10 +14,10 @@ describe('configuration tab policy', () => {
     expect(keys('consultor_mx')).toHaveLength(12)
   })
 
-  test('consultant read-only tabs stay centralized', () => {
+  test('consultant manages the global tabs without owner-only read-only restrictions', () => {
     const readOnly = getVisibleTabs('consultor_mx')
       .filter((tab) => tab.readOnlyRoles?.includes('consultor_mx'))
       .map((tab) => tab.key)
-    expect(readOnly).toEqual(['equipe-usuarios', 'lojas-rede', 'operacional-loja', 'sistema-mx'])
+    expect(readOnly).toEqual([])
   })
 })
