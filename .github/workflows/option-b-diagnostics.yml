@@ -1,6 +1,9 @@
 name: Option B diagnostics
 
 on:
+  pull_request:
+    branches:
+      - main
   push:
     branches:
       - feat/internal-mx-option-b-global-admin
