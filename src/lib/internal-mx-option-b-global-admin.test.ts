@@ -6,6 +6,7 @@ const compact = (value: string) => value.replace(/\s+/g, ' ').trim()
 
 const migrationPath = 'supabase/migrations/20260727040000_internal_mx_option_b_global_admin.sql'
 const migration = compact(read(migrationPath))
+const managerCron = compact(read('supabase/migrations/20260727041000_manager_routine_snapshot_cron.sql'))
 const registerUser = compact(read('supabase/functions/register-user/index.ts'))
 const manageStoreTeam = compact(read('supabase/functions/manage-store-team/index.ts'))
 const manageGlobalUser = compact(read('supabase/functions/manage-global-user/index.ts'))
@@ -49,6 +50,17 @@ describe('Opção B: administração global equivalente da área interna MX', ()
       expect(migration).toContain(`'${table}'`)
     }
     expect(migration).toContain('ALTER PUBLICATION supabase_realtime ADD TABLE')
+  })
+
+  test('refreshes manager routine snapshots hourly for active managers and stores', () => {
+    expect(managerCron).toContain('CREATE OR REPLACE FUNCTION public.run_manager_routine_snapshot_refresh_clock()')
+    expect(managerCron).toContain("u.role = 'gerente'")
+    expect(managerCron).toContain('u.active = true')
+    expect(managerCron).toContain('l.active = true')
+    expect(managerCron).toContain('public.consolidate_manager_routine_snapshot')
+    expect(managerCron).toContain("'mx-refresh-manager-routine-snapshots'")
+    expect(managerCron).toContain("'25 * * * *'")
+    expect(managerCron).toContain('TO service_role')
   })
 
   test('records privileged mutations in an immutable audit surface', () => {
