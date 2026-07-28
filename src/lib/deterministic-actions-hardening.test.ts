@@ -86,7 +86,11 @@ describe('deterministic action hardening', () => {
     })
 
     expect(actions.filter((action) => action.scenarioCode === 'PENDING_CLOSING')).toHaveLength(1)
-    expect(actions[0]?.priority).toBe('critical')
-    expect(actions.map((action) => action.id)).toEqual([...actions.map((action) => action.id)].sort())
+    expect(actions.filter((action) => action.scenarioCode === 'MISSING_NEXT_STEP')).toHaveLength(1)
+
+    const priorityRank = { critical: 0, high: 1, medium: 2, low: 3 } as const
+    for (let index = 1; index < actions.length; index += 1) {
+      expect(priorityRank[actions[index - 1].priority]).toBeLessThanOrEqual(priorityRank[actions[index].priority])
+    }
   })
 })
