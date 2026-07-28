@@ -35,7 +35,7 @@ ALTER TABLE public.deterministic_action_resolutions FORCE ROW LEVEL SECURITY;
 ALTER TABLE public.deterministic_action_resolutions REPLICA IDENTITY FULL;
 
 REVOKE ALL ON TABLE public.deterministic_action_resolutions FROM PUBLIC, anon;
-GRANT SELECT, INSERT, DELETE ON TABLE public.deterministic_action_resolutions TO authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE public.deterministic_action_resolutions TO authenticated;
 GRANT ALL ON TABLE public.deterministic_action_resolutions TO service_role;
 
 DROP POLICY IF EXISTS deterministic_action_resolutions_select ON public.deterministic_action_resolutions;
@@ -62,6 +62,30 @@ CREATE POLICY deterministic_action_resolutions_insert
   TO authenticated
   WITH CHECK (
     completed_by = auth.uid()
+    AND user_id = auth.uid()
+    AND public.central_can_access_store(store_id)
+    AND (
+      seller_user_id IS NULL
+      OR seller_user_id = auth.uid()
+      OR public.user_has_role(
+        ARRAY['admin_mx', 'consultant', 'master', 'sales_manager']::text[],
+        auth.uid()
+      )
+    )
+  );
+
+DROP POLICY IF EXISTS deterministic_action_resolutions_update ON public.deterministic_action_resolutions;
+CREATE POLICY deterministic_action_resolutions_update
+  ON public.deterministic_action_resolutions
+  FOR UPDATE
+  TO authenticated
+  USING (
+    completed_by = auth.uid()
+    AND public.central_can_access_store(store_id)
+  )
+  WITH CHECK (
+    completed_by = auth.uid()
+    AND user_id = auth.uid()
     AND public.central_can_access_store(store_id)
     AND (
       seller_user_id IS NULL
