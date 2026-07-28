@@ -103,6 +103,22 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
   const section = getOwnerSection(location.pathname, location.search)
   const selectedDepartmentCode = getOwnerDepartmentCode(location.pathname, location.search)
 
+  if (section === 'rotina') return <RotinaDoDia />
+  if (section === 'decisoes') return <CentralDeDecisoes />
+  if (section === 'departamentos') {
+    const deptMap: Record<string, React.ReactNode> = {
+      comercial: <DepartamentoComercial />,
+      marketing: <DepartamentoMarketing />,
+      produto: <DepartamentoProdutoEstoque />,
+      rh: <DepartamentoPessoasRH />,
+      financeiro: <DepartamentoFinanceiro />,
+      operacional: <DepartamentoOperacoes />,
+    }
+    return deptMap[selectedDepartmentCode ?? ''] ?? <DepartamentosVisaoGeral />
+  }
+  if (section === 'mercado') return <Mercado />
+  if (section === 'universidade') return <UniversidadeMX />
+
   const universityContent = (
     <>
       <UniversidadeMx userId={profile?.id ?? null} />
@@ -140,10 +156,6 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
         />
       )}
 
-      {section === 'rotina' && <RotinaDoDia />}
-
-      {section === 'decisoes' && <CentralDeDecisoes />}
-
       {section === 'planejamento' && (
         <StrategicPlanningView data={data} planningIndicators={centralMx.planningIndicators} />
       )}
@@ -159,24 +171,6 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
       {section === 'consultoria' && (
         <OwnerConsultingView data={data} />
       )}
-
-      {section === 'departamentos' && (
-        (() => {
-          const deptPlaceholder: Record<string, React.ReactNode> = {
-            'comercial': <DepartamentoComercial />,
-            'marketing': <DepartamentoMarketing />,
-            'produto': <DepartamentoProdutoEstoque />,
-            'rh': <DepartamentoPessoasRH />,
-            'financeiro': <DepartamentoFinanceiro />,
-            'operacional': <DepartamentoOperacoes />,
-          }
-          return deptPlaceholder[selectedDepartmentCode ?? ''] ?? <DepartamentosVisaoGeral />
-        })()
-      )}
-
-      {section === 'mercado' && <Mercado />}
-
-      {section === 'universidade' && <UniversidadeMX />}
 
       {section === 'benchmarking' && <BenchmarkingView data={data} mxScore={mxScore} marginPercent={marginPercent} />}
 
