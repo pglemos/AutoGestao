@@ -49,6 +49,10 @@ export default function VendedorHomePage() {
   const home = useVendedorHomePage()
   const { agendamentos, metrics: agendaMetrics } = useAgendamentos()
   const deterministic = useDeterministicActions()
+  const filteredActions = useMemo(
+    () => deterministic.actions.filter(a => a.scenarioCode !== 'AUTOMATIC_TASK_ORIGIN_PENDING'),
+    [deterministic.actions],
+  )
 
   const firstName = profile?.name?.trim().split(/\s+/)[0] || 'Nome não informado'
 
@@ -299,12 +303,12 @@ export default function VendedorHomePage() {
           </div>
           <div className="lg:w-[40%]">
             <DeterministicActionsPanel
-              actions={deterministic.actions}
+              actions={filteredActions}
               loading={deterministic.loading}
               error={deterministic.error}
               refresh={deterministic.refresh}
               resolveAction={deterministic.resolveAction}
-              title="Ação sugerida"
+              title={filteredActions.length > 0 ? "Ação sugerida" : "Nenhuma pendência"}
               maxItems={1}
               compact
             />

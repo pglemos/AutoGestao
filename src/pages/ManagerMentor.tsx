@@ -43,6 +43,10 @@ export default function ManagerMentor() {
     [data.metrics.totalSales, days.decorridos, days.total, effectiveStoreId, goal],
   )
   const deterministic = useDeterministicActions({ targetPace })
+  const filteredActions = useMemo(
+    () => deterministic.actions.filter(a => a.scenarioCode !== 'AUTOMATIC_TASK_ORIGIN_PENDING'),
+    [deterministic.actions],
+  )
 
   useFocusTrap(mentorDialogRef, Boolean(selectedGuidance))
 
@@ -76,7 +80,7 @@ export default function ManagerMentor() {
   }, [data.funilData.agd_total, data.funilData.leads, data.pendingDisciplineSellers])
 
   const isEvaluating = data.loading || deterministic.loading
-  const hasAttention = operationalWarnings.length > 0 || deterministic.actions.length > 0 || Boolean(deterministic.error)
+  const hasAttention = operationalWarnings.length > 0 || filteredActions.length > 0 || Boolean(deterministic.error)
 
   return (
     <main className="min-h-full bg-gray-50">
@@ -131,7 +135,7 @@ export default function ManagerMentor() {
         </section>
 
         <DeterministicActionsPanel
-          actions={deterministic.actions}
+          actions={filteredActions}
           loading={deterministic.loading}
           error={deterministic.error}
           refresh={deterministic.refresh}
