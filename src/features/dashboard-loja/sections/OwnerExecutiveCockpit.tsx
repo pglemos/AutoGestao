@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import React, { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
@@ -20,11 +20,7 @@ import {
 import { CentralMxBenchmarkInteractive } from './CentralMxBenchmarkInteractive'
 import { CentralMxPlanoSegmentadoPanel } from './CentralMxPlanoSegmentadoPanel'
 import { ConsultorIaStoreSection } from '@/features/central-mx/sections/ConsultorIaStoreSection'
-import { DepartamentoDashboard } from '@/features/departamentos/sections/DepartamentoDashboard'
-import type { DepartamentoCode } from '@/features/departamentos/hooks/useDepartamentoDashboard'
-import { MarketingModulo } from '@/features/marketing/sections/MarketingModulo'
 import { UniversidadeMx } from '@/features/universidade/sections/UniversidadeMx'
-import { CulturaFelicidade } from '@/features/cultura-felicidade/sections/CulturaFelicidade'
 import { OwnerCockpitHeader } from './owner-cockpit/primitives'
 import { OwnerHome } from './owner-cockpit/OwnerHome'
 import { StrategicPlanningView } from './owner-cockpit/StrategicPlanningView'
@@ -32,22 +28,30 @@ import { ResultsView } from './owner-cockpit/ResultsView'
 import { AlertsView } from './owner-cockpit/AlertsView'
 import { BenchmarkingView } from './owner-cockpit/BenchmarkingView'
 import { AgendaView } from './owner-cockpit/AgendaView'
-import { DepartmentsView } from './owner-cockpit/DepartmentsView'
 import { OwnerModuleGrid } from './owner-cockpit/OwnerModuleGrid'
+import { OwnerConsultingView } from './owner-cockpit/OwnerBase44Views'
 import {
-  OwnerConsultingView,
-  OwnerDecisionCenter,
-  OwnerRoutineView,
-} from './owner-cockpit/OwnerBase44Views'
-import {
-  alertFromEngine,
-  buildCentralMx,
-  buildPanoramaData,
-  currentPeriodLabel,
-  departmentFromEngine,
-  getOwnerDepartmentCode,
-  getOwnerSection,
-} from './owner-cockpit/format'
+  RotinaDoDia,
+  CentralDeDecisoes,
+  DepartamentosVisaoGeral,
+  DepartamentoComercial,
+  DepartamentoMarketing,
+  DepartamentoProdutoEstoque,
+  DepartamentoPessoasRH,
+  DepartamentoFinanceiro,
+  DepartamentoOperacoes,
+  Mercado,
+  UniversidadeMX,
+} from '@/pages/owner/Placeholders'
+  import {
+    alertFromEngine,
+    buildCentralMx,
+    buildPanoramaData,
+    currentPeriodLabel,
+    departmentFromEngine,
+    getOwnerDepartmentCode,
+    getOwnerSection,
+  } from './owner-cockpit/format'
 
 type DashboardData = ReturnType<typeof useDashboardLojaData>
 
@@ -136,20 +140,9 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
         />
       )}
 
-      {section === 'rotina' && (
-        <>
-          <OwnerRoutineView data={data} alerts={ownerAlerts} actions={actions} />
-          <AgendaView alerts={ownerAlerts} />
-          <CentralMxPersistedAgendaPanel storeId={data.operationalStore?.id || null} />
-        </>
-      )}
+      {section === 'rotina' && <RotinaDoDia />}
 
-      {section === 'decisoes' && (
-        <>
-          <OwnerDecisionCenter alerts={ownerAlerts} actions={actions} storeId={data.operationalStore?.id || null} />
-          <CentralMxPersistedAlertsPanel storeId={data.operationalStore?.id || null} />
-        </>
-      )}
+      {section === 'decisoes' && <CentralDeDecisoes />}
 
       {section === 'planejamento' && (
         <StrategicPlanningView data={data} planningIndicators={centralMx.planningIndicators} />
@@ -168,31 +161,26 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
       )}
 
       {section === 'departamentos' && (
-        <>
-          <DepartmentsView departments={departments} selectedDepartmentCode={selectedDepartmentCode} />
-          <DepartamentoDashboard
-            storeId={data.operationalStore?.id || null}
-            code={(selectedDepartmentCode ?? 'comercial') as DepartamentoCode}
-            periodLabel={periodLabel}
-            period={data.periodEndDate}
-          />
-          {selectedDepartmentCode === 'marketing' && (
-            <MarketingModulo storeId={data.operationalStore?.id || null} />
-          )}
-          {selectedDepartmentCode === 'rh' && (
-            <CulturaFelicidade storeId={data.operationalStore?.id || null} />
-          )}
-        </>
+        (() => {
+          const deptPlaceholder: Record<string, React.ReactNode> = {
+            'comercial': <DepartamentoComercial />,
+            'marketing': <DepartamentoMarketing />,
+            'produto': <DepartamentoProdutoEstoque />,
+            'rh': <DepartamentoPessoasRH />,
+            'financeiro': <DepartamentoFinanceiro />,
+            'operacional': <DepartamentoOperacoes />,
+          }
+          return deptPlaceholder[selectedDepartmentCode ?? ''] ?? <DepartamentosVisaoGeral />
+        })()
       )}
 
-      {(section === 'mercado' || section === 'benchmarking') && (
-        <>
-          <BenchmarkingView data={data} mxScore={mxScore} marginPercent={marginPercent} />
-          <CentralMxBenchmarkInteractive storeId={data.operationalStore?.id || null} period={data.periodEndDate} />
-        </>
-      )}
+      {section === 'mercado' && <Mercado />}
 
-      {(section === 'universidade' || section === 'biblioteca') && universityContent}
+      {section === 'universidade' && <UniversidadeMX />}
+
+      {section === 'benchmarking' && <BenchmarkingView data={data} mxScore={mxScore} marginPercent={marginPercent} />}
+
+      {section === 'biblioteca' && universityContent}
 
       {section === 'consultor' && (
         <ConsultorIaStoreSection storeId={data.operationalStore?.id || null} />

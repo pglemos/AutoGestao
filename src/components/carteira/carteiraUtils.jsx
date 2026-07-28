@@ -297,6 +297,10 @@ export function explicacaoCliente(cliente) {
     return "Este cliente está em negociação ativa e aguarda follow-up.";
   if (s === "Financiamento em análise")
     return "Este cliente tem financiamento em análise e precisa de acompanhamento.";
+  if (s === "Venda cancelada")
+    return "A venda deste cliente foi cancelada. A oportunidade está encerrada. Analise o motivo e decida se vale reativar o relacionamento.";
+  if (s === "Venda perdida")
+    return "Este cliente não fechou negócio. Entenda o motivo e avalie se há espaço para retomar o relacionamento.";
   if (s === "Oportunidade futura")
     return "Este cliente pediu contato futuro. Mantenha o relacionamento.";
   if (s === "Pós-venda ativo")
@@ -315,9 +319,17 @@ export function calcularScore(cliente) {
     return { score: 100, motivos: [] };
   }
 
+  const s = cliente.situacao_atual || cliente.momento || "";
+
+  // Estados terminais encerrados (perdida, cancelada, cadência encerrada):
+  // não há o que pontuar — a oportunidade acabou. Score 100 evita que essas
+  // oportunidades apareçam como "precisam de atenção" em rankings ou dashboards.
+  if (SITUACOES_ENCERRADAS_SEM_VENDA.includes(s) || s === "Venda realizada") {
+    return { score: 100, motivos: ["Oportunidade encerrada."] };
+  }
+
   let score = 100;
   const motivos = [];
-  const s = cliente.situacao_atual || cliente.momento || "";
   const agora = moment();
 
   // Sem próximo passo definido - corrigido para usar proxima_acao_data

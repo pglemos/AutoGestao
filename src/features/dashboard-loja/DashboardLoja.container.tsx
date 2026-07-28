@@ -4,6 +4,7 @@ import { isAdministradorMx, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
 import { StoreEditModal } from '@/features/admin/components/StoreEditModal'
 import { StoreGoalsPanel } from '@/features/lojas/components/StoreGoalsPanel'
+import { SellerGoalsEditor } from '@/features/lojas/components/SellerGoalsEditor'
 import { StoreTeamPanel } from '@/features/lojas/components/StoreTeamPanel'
 import { ManagerTeamPerformance } from '@/features/manager/team/ManagerTeamPerformance'
 import { ManagerStoreGoalReference } from '@/features/manager/meta/ManagerStoreGoalReference'
@@ -137,9 +138,14 @@ export function DashboardLoja() {
       )}
 
       {activeTab === 'metas' ? (
-        role === 'gerente'
-          ? <ManagerStoreGoalReference data={data} />
-          : <StoreGoalsPanel storeId={selectedStoreId} storeName={data.metrics.storeName} />
+        role === 'gerente' || role === 'dono'
+          ? <SellerGoalsEditor storeId={selectedStoreId} storeName={data.metrics.storeName} />
+          : <>
+              <StoreGoalsPanel storeId={selectedStoreId} storeName={data.metrics.storeName} />
+              <div className="mt-6">
+                <SellerGoalsEditor storeId={selectedStoreId} storeName={data.metrics.storeName} />
+              </div>
+            </>
       ) : activeTab === 'equipe' ? (
         role === 'gerente'
           ? <ManagerTeamPerformance data={data} storeName={data.metrics.storeName} selectableStores={selectableStores} onStoreChange={setActiveStoreId} />

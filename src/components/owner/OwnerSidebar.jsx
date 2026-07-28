@@ -46,13 +46,13 @@ const NAV = [
         icon: LayoutGrid,
         group: "departments",
         children: [
-          { label: "Visão Geral", to: "/dono/departamentos" },
-          { label: "Comercial", to: "/dono/departamentos/comercial" },
-          { label: "Marketing", to: "/dono/departamentos/marketing" },
-          { label: "Produto e Estoque", to: "/dono/departamentos/produto-e-estoque" },
-          { label: "Pessoas — RH", to: "/dono/departamentos/pessoas-rh" },
-          { label: "Financeiro", to: "/dono/departamentos/financeiro" },
-          { label: "Operações", to: "/dono/departamentos/operacoes" },
+          { label: "Visão Geral", to: "/dono/departamentos", badge: "Em construção" },
+          { label: "Comercial", to: "/dono/departamentos/comercial", badge: "Em construção" },
+          { label: "Marketing", to: "/dono/departamentos/marketing", badge: "Em construção" },
+          { label: "Produto e Estoque", to: "/dono/departamentos/produto-e-estoque", badge: "Em construção" },
+          { label: "Pessoas — RH", to: "/dono/departamentos/pessoas-rh", badge: "Em construção" },
+          { label: "Financeiro", to: "/dono/departamentos/financeiro", badge: "Em construção" },
+          { label: "Operações", to: "/dono/departamentos/operacoes", badge: "Em construção" },
         ],
       },
       { label: "Mercado", to: "/dono/mercado", icon: TrendingUp, badge: "Em construção" },
@@ -158,12 +158,17 @@ export default function OwnerSidebar({
                               onClick={onNavigate}
                               className={({ isActive }) =>
                                 cn(
-                                  "block rounded-md px-3 py-1.5 text-[13px] text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                  "flex items-center justify-between rounded-md px-3 py-1.5 text-[13px] text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                                   isActive && "bg-primary/10 font-medium text-primary"
                                 )
                               }
                             >
-                              {child.label}
+                              <span>{child.label}</span>
+                              {child.badge && (
+                                <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-[9px] font-medium text-amber-700">
+                                  {child.badge}
+                                </span>
+                              )}
                             </NavLink>
                           ))}
                         </div>

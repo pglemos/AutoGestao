@@ -13,7 +13,7 @@ export default function OwnerPlaceholder({ title, description }) {
       <p className="mt-4 rounded-full bg-amber-50 px-3 py-1 text-xs font-medium text-amber-700">
         Esta área será construída na próxima etapa
       </p>
-      <Button asChild className="mt-6">
+      <Button asChild className="mt-6 shadow">
         <Link to="/dono">
           <ArrowLeft className="h-4 w-4" />
           Voltar ao Início
