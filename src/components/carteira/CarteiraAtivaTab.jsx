@@ -5,6 +5,7 @@ import moment from "moment";
 import {
   calcularObjetivoEProximoPasso, calcularScore, calcularPrioridade,
   classificacaoScore, tempColor, prioridadeColor, explicacaoCliente,
+  SITUACOES_ENCERRADAS_SEM_VENDA,
 } from "./carteiraUtils";
 
 // ─── DIAS DA SEMANA ────────────────────────────────────────────────────────────
@@ -380,7 +381,7 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente, onWhats
     const activeN = safeClientes.filter(c => {
       if (!c) return false;
       const s = c.situacao_atual || c.momento || "";
-      return c.ativo !== false && !isComprador(c) && !["Venda perdida", "Cadência encerrada"].includes(s);
+      return c.ativo !== false && !isComprador(c) && !SITUACOES_ENCERRADAS_SEM_VENDA.includes(s);
     });
     return {
       hoje: activeN.filter(CARDS[0].filtro).length,
@@ -404,7 +405,7 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente, onWhats
       lista = lista.filter(c => {
         if (!c) return false;
         const s = c.situacao_atual || c.momento || "";
-        return c.ativo !== false && !isComprador(c) && !["Venda perdida", "Cadência encerrada"].includes(s);
+        return c.ativo !== false && !isComprador(c) && !SITUACOES_ENCERRADAS_SEM_VENDA.includes(s);
       }).filter(cardConfig.filtro);
     }
 
