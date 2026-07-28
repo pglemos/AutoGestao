@@ -44,6 +44,15 @@ jobs:
       - name: Deterministic data adapter contracts
         run: bun test src/features/deterministic-actions/deterministic-action-data.test.ts
 
+      - name: Page tests
+        run: bun test --isolate --max-concurrency=1 src/pages
+
+      - name: Feature tests
+        run: bun test --isolate --max-concurrency=1 src/features
+
+      - name: Cross-cutting test contracts
+        run: bun test --isolate --max-concurrency=1 src/test
+
       - name: Unit and integration tests
         run: npm test
 
