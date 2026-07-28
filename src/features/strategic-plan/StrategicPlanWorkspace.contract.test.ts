@@ -9,6 +9,9 @@ describe('workspace estratégico compartilhado', () => {
     const internal = read('src/features/internal-mx-planning/InternalStrategicPlanPage.tsx')
     expect(owner).toContain('StrategicPlanWorkspace')
     expect(owner).toContain('PlanningWorkspaceProvider')
+    expect(owner).toContain('useCallback')
+    expect(owner).toContain('onUpdated={handleUpdated}')
+    expect(owner).not.toContain('onUpdated={(at) =>')
     expect(internal).toContain('StrategicPlanWorkspace')
     expect(internal).toContain('InternalMxPlanningShell')
     expect(internal).not.toContain('@/pages/owner/')
@@ -22,5 +25,14 @@ describe('workspace estratégico compartilhado', () => {
     expect(source).toContain('StrategicIndicatorChart')
     expect(source).toContain('xl:grid-cols-[58%_42%]')
     expect(source).toContain('height={360}')
+  })
+
+  test('Consultoria do Dono preserva o resumo aprovado com dados reais', () => {
+    const source = read('src/pages/owner/Consultoria.jsx')
+
+    expect(source).toContain('useOwnerConsultingProgram')
+    expect(source).toContain('Acompanhe o programa e os encontros persistidos da unidade.')
+    expect(source).toContain('Jornada do programa')
+    expect(source).not.toContain('ConsultingJourneyWorkspace')
   })
 })

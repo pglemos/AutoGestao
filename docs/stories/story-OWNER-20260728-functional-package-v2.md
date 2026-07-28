@@ -36,6 +36,21 @@ ordem e os gates definidos em `ROLLOUT.md` e nos manifestos `PHASES/`.
 Os arquivos de cada fase são os manifestos canônicos do pacote:
 
 - `PHASES/01-fundacao-compartilhada.txt`
+- `src/pages/owner/PlanoEstrategico.jsx`
+- `src/pages/owner/Consultoria.jsx`
+- `src/features/strategic-plan/StrategicPlanWorkspace.contract.test.ts`
+
+## Dev Agent Record
+
+### Completion Notes
+
+- Corrigido loop de recarga do Plano Estratégico causado por callback `onUpdated` instável.
+- Restaurado o layout anterior da Consultoria do Dono com dados persistidos pelo `useOwnerConsultingProgram`.
+- Validado localmente com perfil Dono em desktop e mobile, sem skeleton persistente ou overflow horizontal.
+
+### Change Log
+
+- 2026-07-28: correção de regressão visual e funcional nas rotas `/dono/plano-estrategico` e `/dono/consultoria`.
 - `PHASES/02-plano-estrategico.txt`
 - `PHASES/03-plano-de-acao.txt`
 - `PHASES/04-consultoria.txt`

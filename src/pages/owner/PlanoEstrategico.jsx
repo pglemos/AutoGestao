@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { useOwner } from '@/components/owner/OwnerContext'
 import { useAuth } from '@/lib/owner-b44/AuthContext'
@@ -10,6 +11,9 @@ export default function PlanoEstrategico() {
   const { currentUnits, unitId } = useOwner()
   const { user } = useAuth()
   const storeId = resolveOwnerPlanningStoreId(unitId, currentUnits)
+  const handleUpdated = useCallback((at) => {
+    setLastUpdated?.(at)
+  }, [setLastUpdated])
 
   if (!user) {
     return <div className="rounded-xl border border-destructive/30 bg-card p-6 text-sm text-muted-foreground">Sessão do Dono indisponível.</div>
@@ -18,7 +22,7 @@ export default function PlanoEstrategico() {
   const actor = toOwnerPlanningActor(user)
   return (
     <PlanningWorkspaceProvider shell="owner" storeId={storeId} actor={actor}>
-      <StrategicPlanWorkspace onUpdated={(at) => setLastUpdated?.(at)} />
+      <StrategicPlanWorkspace onUpdated={handleUpdated} />
     </PlanningWorkspaceProvider>
   )
 }
