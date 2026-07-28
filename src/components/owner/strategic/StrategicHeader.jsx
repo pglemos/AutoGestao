@@ -1,15 +1,13 @@
-// Cabeçalho compacto do Plano Estratégico.
+import { Target } from "lucide-react";
+import OwnerPageHeading from "@/components/owner/OwnerPageHeading";
+
+// Cabecalho do Plano Estrategico no padrao dos demais modulos.
 export default function StrategicHeader() {
   return (
-    <section>
-      <div className="flex items-center gap-3">
-        <h1 className="text-xl font-semibold tracking-tight text-foreground lg:text-2xl">
-          Planejamento Estratégico
-        </h1>
-      </div>
-      <p className="mt-1 text-sm text-muted-foreground">
-        Acompanhe metas, resultados e evolução dos principais indicadores da empresa.
-      </p>
-    </section>
+    <OwnerPageHeading
+      icon={Target}
+      title="Planejamento Estratégico"
+      subtitle="Acompanhe metas, resultados e evolução dos principais indicadores da empresa."
+    />
   );
 }

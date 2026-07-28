@@ -4,6 +4,7 @@ import { X } from "lucide-react";
 import { OwnerProvider } from "@/components/owner/OwnerContext";
 import OwnerSidebar from "@/components/owner/OwnerSidebar";
 import OwnerTopbar from "@/components/owner/OwnerTopbar";
+import OwnerFilterBar from "@/components/owner/OwnerFilterBar";
 import ConsultantRequestModal from "@/components/owner/ConsultantRequestModal";
 
 export default function OwnerLayout() {
@@ -48,14 +49,15 @@ export default function OwnerLayout() {
         ) : null}
 
         <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
-          <OwnerTopbar lastUpdated={lastUpdated} onOpenSidebar={() => setSidebarOpen(true)} />
+          <OwnerTopbar onOpenSidebar={() => setSidebarOpen(true)} />
           <div
             id="owner-main-content"
             role="region"
             aria-label="Conteúdo do módulo Dono"
             className="min-h-0 flex-1 overflow-y-auto"
           >
-            <div className="mx-auto w-full max-w-[1400px] px-4 pb-24 pt-6 lg:px-8 lg:pb-8 lg:pt-8">
+            <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-6 px-4 pb-24 pt-6 lg:px-8 lg:pb-8 lg:pt-8">
+              <OwnerFilterBar lastUpdated={lastUpdated} />
               <Outlet context={{ setLastUpdated }} />
             </div>
           </div>

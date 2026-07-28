@@ -34,7 +34,12 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
     for (const label of ['Início', 'Plano Estratégico', 'Plano de Ação', 'Consultoria', 'Departamentos', 'Mercado', 'Universidade MX', 'Falar com Consultor']) {
       expect(sidebar).toContain(label)
     }
-    expect(topbar).toContain('owner-base44-exact__topbar')
+    // Header do Dono segue o padrão dos demais módulos (MxSidebarShell):
+    // sem topbar no desktop e header de marca + sino + avatar no mobile.
+    expect(topbar).toContain('xl:hidden')
+    expect(topbar).toContain('NotificationBellButton')
+    expect(topbar).toContain('Módulo Executivo')
+    expect(topbar).not.toContain('owner-base44-exact__topbar')
     expect(styles).toContain('.owner-b44')
     expect(styles).toContain('--color-primary: hsl(var(--primary))')
   })

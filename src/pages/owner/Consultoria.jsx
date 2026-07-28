@@ -7,6 +7,7 @@ import { useOwner } from "@/components/owner/OwnerContext";
 import { useOwnerConsultingProgram } from "@/features/dashboard-loja/hooks/useOwnerConsultingProgram";
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
+import OwnerPageHeading from "@/components/owner/OwnerPageHeading";
 
 function formatDate(value) {
   if (!value) return "A agendar";
@@ -70,16 +71,17 @@ export default function Consultoria() {
 
   return (
     <div className="space-y-5 pb-20 lg:pb-0">
-      <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-        <div>
-          <h1 className="text-xl font-bold text-foreground">Consultoria</h1>
-          <p className="mt-0.5 text-sm text-muted-foreground">Acompanhe o programa e os encontros persistidos da unidade.</p>
-        </div>
-        <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-xs font-medium text-primary">
-          <TrendingUp className="h-3.5 w-3.5" />
-          {program ? `Status: ${program.clientStatus}` : "Sem programa vinculado"}
-        </span>
-      </div>
+      <OwnerPageHeading
+        icon={Users}
+        title="Consultoria"
+        subtitle="Acompanhe o programa e os encontros persistidos da unidade."
+        actions={(
+          <span className="inline-flex w-fit items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+            <TrendingUp className="h-3.5 w-3.5" />
+            {program ? `Status: ${program.clientStatus}` : "Sem programa vinculado"}
+          </span>
+        )}
+      />
 
       {!program ? (
         <section className="rounded-xl border border-border bg-card p-6 shadow-sm">
