@@ -81,11 +81,11 @@ function calcularPendencias(cliente) {
   const diasSemContato = cliente.ultimo_contato
     ? moment().diff(moment(cliente.ultimo_contato), "days") : 99;
 
-  if (!cliente.valor_negociado && !["Venda realizada", "Venda perdida"].includes(s))
+  if (!cliente.valor_negociado && !SITUACOES_TERMINAIS.includes(s))
     items.push("Confirmar orçamento");
-  if (cliente.interesse_financiamento == null && !["Venda realizada", "Venda perdida"].includes(s))
+  if (cliente.interesse_financiamento == null && !SITUACOES_TERMINAIS.includes(s))
     items.push("Definir forma de pagamento");
-  if (cliente.interesse_troca == null && !["Venda realizada", "Venda perdida"].includes(s))
+  if (cliente.interesse_troca == null && !SITUACOES_TERMINAIS.includes(s))
     items.push("Entender se possui troca");
   if (!cliente.visita_agendada_em && ["Cliente quente sem visita", "Veículo definido", "Necessidade em qualificação", "Cliente respondeu"].includes(s))
     items.push("Agendar visita");
@@ -99,7 +99,7 @@ function calcularPendencias(cliente) {
     items.push("Revisar condição de financiamento");
   if (cliente.motivo_perda && cliente.motivo_perda.toLowerCase().includes("avaliação"))
     items.push("Resolver avaliação do usado");
-  if (diasSemContato >= 4 && !["Venda realizada", "Venda perdida"].includes(s))
+  if (diasSemContato >= 4 && !SITUACOES_TERMINAIS.includes(s))
     items.push("Recuperar contato");
   if (!cliente.proxima_acao_data && !SITUACOES_TERMINAIS.includes(s))
     items.push("Registrar próximo passo");
@@ -504,23 +504,27 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                     )}
                   </div>
 
-                  <div className="flex gap-2 pt-1 flex-wrap">
-                    {onExecutar && (
+                  {/* Venda cancelada não tem próximo passo a executar nem a
+                      alterar: o passo antigo pertencia à venda revertida. */}
+                  {!isVendaCancelada && (
+                    <div className="flex gap-2 pt-1 flex-wrap">
+                      {onExecutar && (
+                        <Button
+                          onClick={() => { onClose(); onExecutar(cliente); }}
+                          className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm gap-2"
+                        >
+                          <Zap className="w-3.5 h-3.5" /> Executar
+                        </Button>
+                      )}
                       <Button
-                        onClick={() => { onClose(); onExecutar(cliente); }}
-                        className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm gap-2"
+                        variant="outline"
+                        onClick={() => abrirAlterarPasso(null)}
+                        className="rounded-xl text-sm border-slate-200 text-slate-600 hover:bg-slate-50 gap-1.5"
                       >
-                        <Zap className="w-3.5 h-3.5" /> Executar
+                        <Pencil className="w-3.5 h-3.5" /> Alterar próximo passo
                       </Button>
-                    )}
-                    <Button
-                      variant="outline"
-                      onClick={() => abrirAlterarPasso(null)}
-                      className="rounded-xl text-sm border-slate-200 text-slate-600 hover:bg-slate-50 gap-1.5"
-                    >
-                      <Pencil className="w-3.5 h-3.5" /> Alterar próximo passo
-                    </Button>
-                  </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -546,7 +550,11 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                 </Bloco>
               )}
 
-              {!editando && pendencias.length === 0 && (
+              {/* Sem pendências numa oportunidade encerrada não é sucesso: não
+                  há nada a evoluir porque a oportunidade acabou. Verde aqui
+                  leria como "venda bem qualificada" logo abaixo do aviso de
+                  cancelamento. */}
+              {!editando && pendencias.length === 0 && !isVendaCancelada && (
                 <div className="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-100 rounded-2xl">
                   <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
                   <p className="text-sm text-green-700 font-medium">Oportunidade bem qualificada. Execute o próximo passo.</p>

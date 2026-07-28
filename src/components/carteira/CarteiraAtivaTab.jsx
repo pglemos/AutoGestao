@@ -101,6 +101,9 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
   const explicacao = explicacaoCliente(cliente);
   const situacao = cliente.situacao_atual || cliente.momento || "—";
   const canal = cliente.canal_comercial || cliente.canal_origem || "—";
+  // Oportunidade encerrada sem venda (perdida, cancelada, cadência encerrada)
+  // não tem próximo passo a executar: o passo antigo morreu com ela.
+  const encerradoSemVenda = SITUACOES_ENCERRADAS_SEM_VENDA.includes(situacao);
 
   // Calcular iniciais com proteção contra espaços em branco
   const nomeLimpo = (cliente.nome || "").trim();
@@ -140,10 +143,12 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
         <p className="text-[11px] text-slate-400 leading-snug italic">{explicacao}</p>
         <ScoreBadge score={score} motivos={motivos} />
         <div className="flex gap-2">
+          {!encerradoSemVenda && (
           <button onClick={() => onExecutar(cliente)}
             className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
             <Zap className="w-3.5 h-3.5" /> Executar
           </button>
+          )}
           <button onClick={() => onFicha(cliente.id)}
             className="flex items-center gap-1.5 text-xs font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
             <FileText className="w-3.5 h-3.5" /> Ficha
@@ -184,10 +189,12 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           <p className="text-[10px] text-slate-400 italic leading-snug">{explicacao}</p>
         </div>
         <div className="flex flex-col gap-1.5 px-4 py-3.5 shrink-0 w-40 justify-center">
+          {!encerradoSemVenda && (
           <button onClick={() => onExecutar(cliente)}
             className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-3 py-2 rounded-xl transition-colors justify-center">
             <Zap className="w-3.5 h-3.5" /> Executar próximo passo
           </button>
+          )}
           <button onClick={() => onFicha(cliente.id)}
             className="flex items-center gap-1.5 text-xs font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-xl transition-colors justify-center">
             <FileText className="w-3.5 h-3.5" /> Abrir ficha
