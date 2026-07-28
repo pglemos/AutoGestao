@@ -72,6 +72,14 @@ export interface DeterministicActionContext {
   targetPace?: TargetPaceInfo
 }
 
+const SOURCE_BOUND_SCENARIOS = new Set([
+  'OVERDUE_ACTION',
+  'MISSING_NEXT_STEP',
+  'UNCONFIRMED_VISIT',
+  'PROPOSAL_NO_RETURN',
+  'PENDING_CLOSING',
+])
+
 function toNumber(value: number | string | null | undefined): number {
   const parsed = typeof value === 'number' ? value : Number(value ?? 0)
   return Number.isFinite(parsed) ? parsed : 0
@@ -98,6 +106,19 @@ function saoPauloDateTime(value: string): { date: string; time: string } {
     date: `${values.year}-${values.month}-${values.day}`,
     time: `${values.hour}:${values.minute}`,
   }
+}
+
+function formatCompletedAt(value: string): string {
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return value
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    hour: '2-digit',
+    minute: '2-digit',
+    timeZone: 'America/Sao_Paulo',
+  }).format(date)
 }
 
 export function toManualCompletions(
@@ -175,16 +196,55 @@ export function buildDeterministicActionInput(
       created_at: proposal.data_evento,
       status: 'sent',
     })),
-    manualCompletions: toManualCompletions(rows.resolutions),
   }
+}
+
+export function applyDeterministicResolutions(
+  actions: DeterministicAction[],
+  resolutions: DeterministicResolutionRow[],
+): DeterministicAction[] {
+  const resolutionByAction = new Map(
+    resolutions.map((resolution) => [
+      `${resolution.action_id}:${resolution.rule_version}`,
+      resolution,
+    ]),
+  )
+  const output: DeterministicAction[] = []
+
+  for (const action of actions) {
+    const resolution = resolutionByAction.get(`${action.id}:${action.ruleVersion}`)
+    if (!resolution) {
+      output.push(action)
+      continue
+    }
+
+    if (!SOURCE_BOUND_SCENARIOS.has(action.scenarioCode)) continue
+
+    output.push({
+      ...action,
+      id: `act-origin-pending-${action.id}`,
+      scenarioCode: 'AUTOMATIC_TASK_ORIGIN_PENDING',
+      title: `Pendência de origem ainda ativa — ${action.title}`,
+      explanation: `A ação foi marcada como tratada em ${formatCompletedAt(resolution.completed_at)}, mas a condição de origem continua presente nos dados oficiais.`,
+      priority: 'high',
+      actionType: 'REGULARIZE_ORIGIN',
+      evidence: {
+        originalActionId: action.id,
+        originalScenarioCode: action.scenarioCode,
+        completedAt: resolution.completed_at,
+        completedBy: resolution.completed_by,
+        sourceEvidence: action.evidence,
+      },
+      resolutionKey: 'ORIGIN_ENTITY_RESOLVED',
+    })
+  }
+
+  return output
 }
 
 export function filterResolvedActions(
   actions: DeterministicAction[],
   resolutions: DeterministicResolutionRow[],
 ): DeterministicAction[] {
-  const resolved = new Set(
-    resolutions.map((resolution) => `${resolution.action_id}:${resolution.rule_version}`),
-  )
-  return actions.filter((action) => !resolved.has(`${action.id}:${action.ruleVersion}`))
+  return applyDeterministicResolutions(actions, resolutions)
 }
