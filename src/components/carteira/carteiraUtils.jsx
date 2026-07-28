@@ -24,6 +24,7 @@ export const SITUACOES_ATUAIS = [
   "Aguardando ação do vendedor",
   "Venda realizada",
   "Venda perdida",
+  "Venda cancelada",
   "Pós-venda ativo",
   "Garantia em acompanhamento",
   "Oportunidade futura",
@@ -32,6 +33,30 @@ export const SITUACOES_ATUAIS = [
 
 // Mantido para compatibilidade com código legado
 export const MOMENTOS = SITUACOES_ATUAIS;
+
+// ─── SITUAÇÕES TERMINAIS ─────────────────────────────────────────────────────
+// Situações encerradas: o cliente não é oportunidade ativa e não pode ser
+// capturado por missão, plano de ataque ou prioridade. "Venda cancelada" é
+// terminal próprio — a venda existiu e foi revertida, o que é diferente de
+// "Venda perdida" (nunca fechou) e governa a estratégia de recuperação.
+export const SITUACOES_ENCERRADAS_SEM_VENDA = [
+  "Venda perdida",
+  "Venda cancelada",
+  "Cadência encerrada",
+];
+
+export const SITUACOES_TERMINAIS = [
+  "Venda realizada",
+  ...SITUACOES_ENCERRADAS_SEM_VENDA,
+];
+
+export function isSituacaoTerminal(cliente) {
+  return SITUACOES_TERMINAIS.includes(cliente?.situacao_atual || cliente?.momento || "");
+}
+
+export function isSituacaoEncerradaSemVenda(cliente) {
+  return SITUACOES_ENCERRADAS_SEM_VENDA.includes(cliente?.situacao_atual || cliente?.momento || "");
+}
 
 // ─── CANAIS ──────────────────────────────────────────────────────────────────
 export const CANAIS_COMERCIAIS = ["Porta", "Internet", "Carteira"];
@@ -64,6 +89,7 @@ export const STATUS_COMERCIAIS = [
   "Agendado",
   "Vendido",
   "Perdido",
+  "Cancelada",
   "Pós-venda",
   "Garantia",
   "Futuro",
@@ -223,6 +249,10 @@ export function calcularObjetivoEProximoPasso(cliente) {
     return { objetivo: "Acompanhar garantia", proximoPasso: "Acompanhar garantia" };
   if (s === "Oportunidade futura")
     return { objetivo: "Criar recompra/troca futura", proximoPasso: "Programar troca futura" };
+  // A venda cancelada não volta a ser negociação por decisão do sistema: o
+  // primeiro passo é registrar a estratégia de recuperação.
+  if (s === "Venda cancelada")
+    return { objetivo: "Analisar recuperação", proximoPasso: "Analisar recuperação" };
   if (s === "Venda perdida" || s === "Cadência encerrada")
     return { objetivo: "Recuperar oportunidade", proximoPasso: "Reativar cliente antigo" };
   if (canal === "Carteira")
@@ -376,6 +406,9 @@ export function prioridadeColor(p) {
 export function statusComercialColor(s) {
   if (s === "Vendido") return "bg-green-50 text-green-600";
   if (s === "Perdido") return "bg-red-50 text-red-500";
+  // Cancelada é neutra e âmbar: não é sucesso (verde), não é perda de
+  // negociação (vermelho) e não é erro técnico.
+  if (s === "Cancelada") return "bg-amber-50 text-amber-700";
   if (s === "Agendado") return "bg-blue-50 text-blue-600";
   if (s === "Em negociação") return "bg-purple-50 text-purple-600";
   if (s === "Futuro") return "bg-slate-100 text-slate-500";
@@ -636,7 +669,17 @@ export function preencherScript(script, cliente) {
 }
 
 // ─── MISSÕES DO PLANO DE ATAQUE ───────────────────────────────────────────────
-export const MISSOES = [
+// Nenhuma missão comercial deve capturar um cliente cuja oportunidade foi
+// encerrada sem venda (perdida, cancelada ou cadência encerrada) — sem esta
+// guarda, uma visita antiga vencida devolvia o cliente com venda cancelada
+// para "Reagendar visitas". "Venda realizada" não entra na guarda: existe
+// missão de pós-venda que mira justamente quem comprou.
+const semOportunidadesEncerradas = (missoes) => missoes.map(missao => ({
+  ...missao,
+  filtro: cliente => !isSituacaoEncerradaSemVenda(cliente) && missao.filtro(cliente),
+}));
+
+export const MISSOES = semOportunidadesEncerradas([
   {
     id: "proposta_sem_retorno",
     nome: "Recuperar propostas",
@@ -757,4 +800,4 @@ export const MISSOES = [
     scriptId: "Reativar cliente antigo",
     filtro: c => c.situacao_atual === "Oportunidade futura" || c.interesse_troca || c.momento === "Oportunidade futura de troca",
   },
-];
+]);

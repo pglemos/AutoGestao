@@ -44,3 +44,16 @@ export async function loginAsInternalMx(page: Page) {
   const { email, password } = getE2EInternalCredentials()
   await loginWithCredentials(page, email, password)
 }
+
+export function getE2ESellerEmail() {
+  const email = process.env.E2E_SELLER_EMAIL
+  if (!email) {
+    test.skip(true, 'E2E seller tests require E2E_SELLER_EMAIL in the local environment.')
+    return '__missing_e2e_seller_email__@example.test'
+  }
+  return email
+}
+
+export async function loginAsSeller(page: Page) {
+  await loginWithCredentials(page, getE2ESellerEmail(), getE2ERolePassword())
+}

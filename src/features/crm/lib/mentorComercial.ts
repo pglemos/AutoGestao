@@ -7,7 +7,7 @@
 import type { Cliente, CrmEtapaFunil } from '@/lib/schemas/crm.schema'
 import type { OportunidadeComCliente } from '@/features/crm/hooks/useOportunidades'
 import type { ProgressoCadencia } from '@/features/crm/lib/cadencia'
-import { toDateOnlyBR } from '@/lib/schemas/crm.schema'
+import { isEtapaTerminal, toDateOnlyBR } from '@/lib/schemas/crm.schema'
 
 export type Temperatura = 'quente' | 'morno' | 'frio'
 export type Prioridade = 'maxima' | 'alta' | 'media' | 'baixa'
@@ -26,8 +26,8 @@ function diasEntre(dataIso: string | null | undefined, refDateOnly: string): num
 /** Temperatura derivada da etapa do funil (Base44 guarda isso num campo próprio; MX deriva da etapa real). */
 export function derivarTemperatura(oportunidade: OportunidadeComCliente | undefined): Temperatura {
   const etapa: CrmEtapaFunil | undefined = oportunidade?.etapa
-  // Negócio encerrado (ganho ou perdido) não tem mais "calor" de oportunidade ativa.
-  if (etapa === 'ganho' || etapa === 'perdido') return 'frio'
+  // Negócio encerrado (ganho, perdido ou cancelado) não tem mais "calor".
+  if (isEtapaTerminal(etapa)) return 'frio'
   if (etapa === 'negociacao' || etapa === 'fechamento') return 'quente'
   if (etapa === 'apresentacao' || etapa === 'qualificacao') return 'morno'
   return 'frio'
@@ -98,6 +98,7 @@ const ETAPA_CADENCIA_LABEL: Record<string, string> = {
 export function derivarSituacao(cliente: Cliente, oportunidade: OportunidadeComCliente | undefined, etapaCadenciaLabel?: string): string {
   if (oportunidade?.etapa === 'ganho') return 'Venda realizada'
   if (oportunidade?.etapa === 'perdido') return 'Venda perdida'
+  if (oportunidade?.etapa === 'cancelada') return 'Venda cancelada'
   if (etapaCadenciaLabel && ETAPA_CADENCIA_LABEL[etapaCadenciaLabel]) return ETAPA_CADENCIA_LABEL[etapaCadenciaLabel]
   if (cliente.status === 'pos_venda') return 'Pós-venda ativo'
   if (cliente.status === 'aguardando_contato') return 'Aguardando resposta do cliente'
@@ -114,6 +115,7 @@ export function explicacaoCliente(cliente: Cliente, oportunidade: OportunidadeCo
 
   if (situacao === 'Venda realizada') return 'Este cliente já comprou. Mantenha o relacionamento e peça indicação.'
   if (situacao === 'Venda perdida') return 'Esta oportunidade foi perdida. Avalie reativar o contato futuramente.'
+  if (situacao === 'Venda cancelada') return 'A venda foi cancelada. Registre a estratégia de recuperação antes de retomar o contato.'
   if (situacao === 'Aguardando resposta do cliente') return 'Este cliente aguarda retorno e precisa da sua ação agora.'
   if (situacao === 'Em negociação ativa') return 'Este cliente está em negociação ativa e aguarda follow-up.'
   if (situacao === 'Fechamento em andamento') return 'Este cliente está perto de fechar — não deixe esfriar.'

@@ -429,7 +429,7 @@ function DisciplinaBloco({ form, clientes }) {
   const totalAgend = form.agendamentos_carteira + form.agendamentos_internet;
   // Calcula quantos clientes têm agendamento D+1
   const agendDetalhados = clientes.filter(c => {
-    if (c.status_comercial === "Vendido" || c.status_comercial === "Perdido") return false;
+    if (c.status_comercial === "Vendido" || c.status_comercial === "Perdido" || c.status_comercial === "Cancelada") return false;
     if (!c.visita_agendada_em) return false;
     return true;
   }).length;
@@ -553,7 +553,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
     const temMovimento = (movimento.atendimentos_showroom + movimento.atendimentos_carteira + movimento.atendimentos_internet + movimento.leads_carteira + movimento.leads_internet) > 0;
     const baseScore = temMovimento ? 70 : 0;
     const totalAgend = movimento.agendamentos_carteira + movimento.agendamentos_internet;
-    const agendDetalhados = clientes.filter(c => c.visita_agendada_em && c.status_comercial !== "Vendido" && c.status_comercial !== "Perdido").length;
+    const agendDetalhados = clientes.filter(c => c.visita_agendada_em && c.status_comercial !== "Vendido" && c.status_comercial !== "Perdido" && c.status_comercial !== "Cancelada").length;
     const bonusScore = totalAgend > 0 ? Math.round(Math.min(agendDetalhados / totalAgend, 1) * 30) : 0;
     return Math.max(0, baseScore + bonusScore - 10);
   }, [movimento, clientes]);

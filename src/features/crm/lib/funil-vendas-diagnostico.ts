@@ -220,8 +220,42 @@ function isCompareceu(row: FunnelRow) {
   })
 }
 
+/**
+ * Chave da venda para efeito de cancelamento. O cancelamento é sempre de uma
+ * oportunidade específica — um cliente pode ter uma venda cancelada e outra
+ * válida, e só a cancelada pode ser descontada.
+ */
+function saleKey(row: FunnelRow) {
+  const opportunity = firstString(row, ['oportunidade_id', 'cliente_oportunidade_id'])
+  return opportunity ? `opp:${opportunity}` : entityKey(row)
+}
+
+/**
+ * O cancelamento preserva o evento `venda_realizada` original (histórico é
+ * imutável) e acrescenta um `venda_cancelada`. Sem descontar o par, o funil, a
+ * meta e o realizado seguiam contando a venda revertida.
+ */
+function dropCancelledSaleEvents(rows: FunnelRow[]) {
+  const cancelled = new Set(
+    rows
+      .filter((row) => normalizeEventType(row) === 'venda_cancelada')
+      .map(saleKey)
+      .filter((key): key is string => Boolean(key)),
+  )
+  if (cancelled.size === 0) return rows
+  return rows.filter((row) => {
+    if (normalizeEventType(row) !== 'venda_realizada') return true
+    const key = saleKey(row)
+    return !key || !cancelled.has(key)
+  })
+}
+
 function filterBaseRows(rows: FunnelRow[], period: PeriodRange, sellerIds: string[], storeId?: string | null) {
-  return rows.filter((row) => matchesSeller(row, sellerIds) && matchesStore(row, storeId) && inPeriod(firstDate(row, EVENT_DATE_KEYS), period))
+  // O desconto do cancelamento roda antes do recorte de período: a venda pode
+  // ter sido feita em junho e cancelada em julho, e ainda assim não é uma
+  // venda realizada.
+  return dropCancelledSaleEvents(rows)
+    .filter((row) => matchesSeller(row, sellerIds) && matchesStore(row, storeId) && inPeriod(firstDate(row, EVENT_DATE_KEYS), period))
 }
 
 function filterCustomers(rows: FunnelRow[], period: PeriodRange, sellerIds: string[], storeId?: string | null) {

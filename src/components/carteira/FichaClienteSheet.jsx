@@ -14,6 +14,7 @@ moment.locale("pt-br");
 import {
   SITUACOES_ATUAIS, TEMPERATURAS, CANAIS_COMERCIAIS, STATUS_COMERCIAIS,
   calcularObjetivoEProximoPasso, calcularScore, explicacaoCliente, tempColor,
+  SITUACOES_ENCERRADAS_SEM_VENDA, SITUACOES_TERMINAIS,
 } from "./carteiraUtils";
 
 /**
@@ -43,7 +44,7 @@ function calcularQualidade(cliente) {
     return { label: "Em desenvolvimento", color: "bg-amber-50 text-amber-700 border-amber-200" };
   if (temContato && temVeiculo)
     return { label: "Precisa de informação", color: "bg-orange-50 text-orange-700 border-orange-200" };
-  if (["Venda perdida", "Cadência encerrada"].includes(s))
+  if (SITUACOES_ENCERRADAS_SEM_VENDA.includes(s))
     return { label: "Recuperação", color: "bg-red-50 text-red-700 border-red-200" };
   return { label: "Nova oportunidade", color: "bg-slate-50 text-slate-600 border-slate-200" };
 }
@@ -80,11 +81,11 @@ function calcularPendencias(cliente) {
   const diasSemContato = cliente.ultimo_contato
     ? moment().diff(moment(cliente.ultimo_contato), "days") : 99;
 
-  if (!cliente.valor_negociado && !["Venda realizada", "Venda perdida"].includes(s))
+  if (!cliente.valor_negociado && !SITUACOES_TERMINAIS.includes(s))
     items.push("Confirmar orçamento");
-  if (cliente.interesse_financiamento == null && !["Venda realizada", "Venda perdida"].includes(s))
+  if (cliente.interesse_financiamento == null && !SITUACOES_TERMINAIS.includes(s))
     items.push("Definir forma de pagamento");
-  if (cliente.interesse_troca == null && !["Venda realizada", "Venda perdida"].includes(s))
+  if (cliente.interesse_troca == null && !SITUACOES_TERMINAIS.includes(s))
     items.push("Entender se possui troca");
   if (!cliente.visita_agendada_em && ["Cliente quente sem visita", "Veículo definido", "Necessidade em qualificação", "Cliente respondeu"].includes(s))
     items.push("Agendar visita");
@@ -98,9 +99,9 @@ function calcularPendencias(cliente) {
     items.push("Revisar condição de financiamento");
   if (cliente.motivo_perda && cliente.motivo_perda.toLowerCase().includes("avaliação"))
     items.push("Resolver avaliação do usado");
-  if (diasSemContato >= 4 && !["Venda realizada", "Venda perdida"].includes(s))
+  if (diasSemContato >= 4 && !SITUACOES_TERMINAIS.includes(s))
     items.push("Recuperar contato");
-  if (!cliente.proxima_acao_data && !["Venda realizada", "Venda perdida", "Cadência encerrada"].includes(s))
+  if (!cliente.proxima_acao_data && !SITUACOES_TERMINAIS.includes(s))
     items.push("Registrar próximo passo");
 
   return items;
@@ -371,6 +372,9 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
   }
 
   const situacao = cliente?.situacao_atual || cliente?.momento || "—";
+  // Venda cancelada é estado encerrado: o próximo passo antigo pertencia à
+  // venda revertida e não pode ser executado nem editado a partir da ficha.
+  const isVendaCancelada = situacao === "Venda cancelada";
   const canal = cliente?.canal_comercial || cliente?.canal_origem || "—";
   const tel = (cliente?.whatsapp || cliente?.telefone || "").replace(/\D/g, "");
   const iniciais = (cliente?.nome || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase();
@@ -412,6 +416,29 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                 <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura || "Morno"}</span>
                 <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200">{situacao}</span>
               </div>
+
+              {/* Venda cancelada — motivo, data e responsável ficam visíveis
+                  para que ninguém precise consultar a auditoria para entender
+                  por que o cliente saiu da esteira. */}
+              {isVendaCancelada && (
+                <div className="rounded-xl border border-amber-200 bg-amber-50 px-3 py-2.5">
+                  <div className="flex items-start gap-2">
+                    <AlertCircle className="w-3.5 h-3.5 text-amber-600 mt-0.5 shrink-0" />
+                    <div className="min-w-0">
+                      <p className="text-[11px] font-bold text-amber-800">
+                        Venda cancelada
+                        {cliente.cancelada_em ? ` em ${moment(cliente.cancelada_em).format("DD/MM/YYYY [às] HH:mm")}` : ""}
+                      </p>
+                      <p className="text-[11px] text-amber-700 mt-0.5">
+                        Motivo: {cliente.motivo_cancelamento || "Não informado"}
+                      </p>
+                      <p className="text-[10px] text-amber-600 mt-0.5">
+                        Oportunidade encerrada. O histórico da venda foi preservado.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              )}
 
               {/* Qualidade x Urgência */}
               <div className="grid grid-cols-2 gap-2">
@@ -477,23 +504,27 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                     )}
                   </div>
 
-                  <div className="flex gap-2 pt-1 flex-wrap">
-                    {onExecutar && (
+                  {/* Venda cancelada não tem próximo passo a executar nem a
+                      alterar: o passo antigo pertencia à venda revertida. */}
+                  {!isVendaCancelada && (
+                    <div className="flex gap-2 pt-1 flex-wrap">
+                      {onExecutar && (
+                        <Button
+                          onClick={() => { onClose(); onExecutar(cliente); }}
+                          className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm gap-2"
+                        >
+                          <Zap className="w-3.5 h-3.5" /> Executar
+                        </Button>
+                      )}
                       <Button
-                        onClick={() => { onClose(); onExecutar(cliente); }}
-                        className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm gap-2"
+                        variant="outline"
+                        onClick={() => abrirAlterarPasso(null)}
+                        className="rounded-xl text-sm border-slate-200 text-slate-600 hover:bg-slate-50 gap-1.5"
                       >
-                        <Zap className="w-3.5 h-3.5" /> Executar
+                        <Pencil className="w-3.5 h-3.5" /> Alterar próximo passo
                       </Button>
-                    )}
-                    <Button
-                      variant="outline"
-                      onClick={() => abrirAlterarPasso(null)}
-                      className="rounded-xl text-sm border-slate-200 text-slate-600 hover:bg-slate-50 gap-1.5"
-                    >
-                      <Pencil className="w-3.5 h-3.5" /> Alterar próximo passo
-                    </Button>
-                  </div>
+                    </div>
+                  )}
                 </div>
               )}
 
@@ -519,7 +550,11 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                 </Bloco>
               )}
 
-              {!editando && pendencias.length === 0 && (
+              {/* Sem pendências numa oportunidade encerrada não é sucesso: não
+                  há nada a evoluir porque a oportunidade acabou. Verde aqui
+                  leria como "venda bem qualificada" logo abaixo do aviso de
+                  cancelamento. */}
+              {!editando && pendencias.length === 0 && !isVendaCancelada && (
                 <div className="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-100 rounded-2xl">
                   <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
                   <p className="text-sm text-green-700 font-medium">Oportunidade bem qualificada. Execute o próximo passo.</p>
@@ -652,7 +687,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                   Cancelar venda
                 </Button>
               )}
-              {onExecutar && !editando && (
+              {onExecutar && !editando && !isVendaCancelada && (
                 <Button
                   onClick={() => { onClose(); onExecutar(cliente); }}
                   className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm gap-2"

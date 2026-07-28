@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { AlertTriangle, ArrowLeft, Plus, Users, Zap } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
-import { MISSOES, prioridadeColor } from "@/components/carteira/carteiraUtils";
+import { MISSOES, SITUACOES_TERMINAIS, prioridadeColor } from "@/components/carteira/carteiraUtils";
 import VeiculosChegaram from "@/components/carteira/VeiculosChegaram";
 
 const RESUMABLE_STATUSES = ["Preparando", "Enviando mensagens", "Respondendo clientes", "Pausada"];
@@ -127,7 +127,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
   }
 
   async function iniciarCampanha(campanha) {
-    const elegiveis = clientes.filter(client => client.ativo !== false && !["Venda realizada", "Venda perdida", "Cadência encerrada"].includes(client.situacao_atual || client.momento));
+    const elegiveis = clientes.filter(client => client.ativo !== false && !SITUACOES_TERMINAIS.includes(client.situacao_atual || client.momento));
     if (elegiveis.length === 0 || missionBlock) return;
     setIniciando(true);
     setError("");
@@ -205,7 +205,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
         {campanhaError && <Warning message={campanhaError} />}
         <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
           {campanhas.map(campanha => {
-            const elegiveis = clientes.filter(client => client.ativo !== false && !["Venda realizada", "Venda perdida", "Cadência encerrada"].includes(client.situacao_atual || client.momento)).length;
+            const elegiveis = clientes.filter(client => client.ativo !== false && !SITUACOES_TERMINAIS.includes(client.situacao_atual || client.momento)).length;
             return <div key={campanha.id} className="rounded-xl border border-slate-100 p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-[#031B3D]">{campanha.titulo}</p><p className="mt-1 text-xs text-slate-400">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-slate-100 px-2 py-1 text-[10px] font-bold text-slate-500">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#005BFF] px-3 py-2 text-xs font-bold text-[#005BFF] disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} cliente(s)</button></div>;
           })}
         </div>
