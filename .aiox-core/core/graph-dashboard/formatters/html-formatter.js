@@ -32,11 +32,11 @@ const THEME = {
   },
   agent: {
     dev: '#22c55e',        // --agent-dev
-    sm: '#f472b6',         // --agent-sm
+    sm: '#14b8a6',         // --agent-sm
     po: '#f97316',         // --agent-po
     qa: '#eab308',         // --agent-qa
     architect: '#8b5cf6',  // --agent-architect
-    devops: '#ec4899',     // --agent-devops
+    devops: '#0ea5e9',     // --agent-devops
     analyst: '#06b6d4',    // --agent-analyst
   },
   tooltip: {

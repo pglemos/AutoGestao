@@ -36,7 +36,6 @@ try {
     gray: (s) => s,
     bold: (s) => s,
     dim: (s) => s,
-    magenta: (s) => s,
   };
 }
 

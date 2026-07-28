@@ -165,7 +165,7 @@ class ProgressTracker:
 
         # ETA
         eta_text = Text()
-        eta_text.append(f"ETA: {self.state.eta_formatted}", style="magenta")
+        eta_text.append(f"ETA: {self.state.eta_formatted}", style="cyan")
         elapsed_min = int(self.state.elapsed_seconds // 60)
         elapsed_sec = int(self.state.elapsed_seconds % 60)
         eta_text.append(f" (elapsed: {elapsed_min}m {elapsed_sec}s)", style="dim")

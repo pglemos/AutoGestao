@@ -146,7 +146,7 @@ flowchart TB
 
     style PHASE_0 fill:#e1f5fe
     style PHASE_1 fill:#e8f5e9
-    style PHASE_2 fill:#f3e5f5
+    style PHASE_2 fill:#e5f0f5
     style PHASE_3 fill:#e0f7fa
     style PHASE_4 fill:#fff3e0
     style PHASE_5 fill:#ffcdd2
@@ -287,7 +287,7 @@ flowchart TB
     style PHASE_0 fill:#e1f5fe
     style PHASE_1 fill:#e8f5e9
     style HANDOFF_1 fill:#ffcdd2
-    style PHASE_2 fill:#f3e5f5
+    style PHASE_2 fill:#e5f0f5
     style HANDOFF_2 fill:#ffcdd2
     style PHASE_3 fill:#e0f7fa
     style PHASE_4 fill:#c8e6c9
@@ -382,7 +382,7 @@ sequenceDiagram
         end
     end
 
-    rect rgb(243, 229, 245)
+    rect rgb(229, 240, 245)
         Note over PV: Fase 2: Operationalization
         loop Until no invention
             PV->>PV: SOP creation (from framework)
@@ -993,7 +993,7 @@ flowchart LR
     end
 
     style KNOWLEDGE_LOOP fill:#e8f5e9
-    style OPERATIONALIZATION_LOOP fill:#f3e5f5
+    style OPERATIONALIZATION_LOOP fill:#e5f0f5
     style ASSEMBLY_LOOP fill:#e0f7fa
 ```
 

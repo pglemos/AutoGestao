@@ -7,7 +7,7 @@ describe('MXScoreCard UI Logic', () => {
         brand: 'bg-mx-green-50 border-mx-green-200 text-mx-green-700',
         success: 'bg-status-success-surface border-mx-emerald-100 text-status-success',
         warning: 'bg-status-warning-surface border-mx-amber-100 text-status-warning',
-        error: 'bg-status-error-surface border-mx-rose-100 text-status-error',
+        error: 'bg-status-error-surface border-mx-red-100 text-status-error',
       }
       return map[tone] || map.error
     }

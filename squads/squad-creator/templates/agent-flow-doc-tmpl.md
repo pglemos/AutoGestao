@@ -123,7 +123,7 @@ flowchart TB
     style ACTIVATION fill:#e3f2fd
     style COMMAND_ROUTING fill:#e8f5e9
     style EXECUTION fill:#fff8e1
-    style HANDOFF fill:#f3e5f5
+    style HANDOFF fill:#e5f0f5
 ```
 
 ### Diagrama de Estados do @{{agent_id}}
@@ -229,7 +229,7 @@ flowchart TB
     style AGENT fill:#e8f5e9
     style UP1 fill:#e3f2fd
     style UP2 fill:#e3f2fd
-    style PEER1 fill:#fce4ec
+    style PEER1 fill:#e4ecfc
     style DOWN1 fill:#fff3e0
 ```
 

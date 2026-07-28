@@ -480,7 +480,7 @@ module.exports = {
     }
     
     console.log(`Usage Efficiency: ${chalk.cyan(summary.usage_efficiency + '%')}`);
-    console.log(`Redundancy Level: ${chalk.magenta(summary.redundancy_level)}`);
+    console.log(`Redundancy Level: ${chalk.cyan(summary.redundancy_level)}`);
 
     // Top concerns
     if (summary.top_concerns.length > 0) {

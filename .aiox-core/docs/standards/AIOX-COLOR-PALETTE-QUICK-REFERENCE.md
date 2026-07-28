@@ -10,7 +10,7 @@
 
 ```
 🟣 PRIMARY   #8B5CF6  │ Purple  │ ClickUp-inspired │ Questions, headers, CTAs
-🔴 SECONDARY #EC4899  │ Magenta │ Logo gradient    │ Highlights, emphasis
+🔴 SECONDARY #06B6D4  │ Ciano │ Logo gradient    │ Highlights, emphasis
 🔵 TERTIARY  #3B82F6  │ Blue    │ Logo gradient    │ Secondary actions, links
 ```
 
@@ -172,7 +172,7 @@ Expected output:
 
 ## 🔗 Brand References
 
-- **Logo:** Gradient (Magenta → Orange → Purple → Blue)
+- **Logo:** Gradient (Ciano → Orange → Purple → Blue)
 - **Primary Brand:** ClickUp Purple (#8B5CF6)
 - **Accessibility:** WCAG AA compliant
 

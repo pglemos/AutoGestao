@@ -18,9 +18,6 @@
 --color-mx-teal: #00A896;
 --color-mx-teal-light: #D0F5F2;
 --color-mx-teal-soft: #E6FAF7;
-/* Legacy pink aliases: deprecated; mapped to brand teal. Do not reintroduce pink. */
---color-mx-pink: #00A89D;
---color-mx-pink-light: #E6FAF7;
 --color-mx-action: #00A89D;
 --color-mx-action-hover: #00857D;
 --color-mx-action-light: #E6FAF7;
@@ -164,7 +161,7 @@ to { height: 0; }
   --color-sidebar-item-active-text: #FFFFFF;
   --color-sidebar-border: #1A3E4D;
 
-  /* Legacy purple/pink aliases: deprecated; use mx-action tokens. */
+  /* Aliases legados de accent: descontinuados; use os tokens mx-action. */
   --color-accent-purple: #005BFF;
   --color-accent-purple-strong: #004BE0;
   --color-accent-purple-soft: #EAF1FF;
@@ -353,7 +350,7 @@ to { height: 0; }
   --color-mx-amber-300: #fcd34d;
   --color-mx-amber-400: #fbbf24;
   --color-mx-emerald-100: #d1fae5;
-  --color-mx-rose-100: #fecaca;
+  --color-mx-red-100: #fecaca;
   --color-electric-blue: #00A89D;
   --color-mars-orange: #f97316;
 

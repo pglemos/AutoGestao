@@ -48,7 +48,7 @@ GREEN='\033[0;32m'
 YELLOW='\033[0;33m'
 BLUE='\033[0;34m'
 CYAN='\033[0;36m'
-MAGENTA='\033[0;35m'
+CYAN2='\033[0;36m'
 NC='\033[0m'
 BOLD='\033[1m'
 
@@ -990,7 +990,7 @@ analyze_with_claude() {
     return 0
   fi
 
-  echo -e "${MAGENTA}Running Claude analysis with $MODEL_QUALITY...${NC}"
+  echo -e "${CYAN2}Running Claude analysis with $MODEL_QUALITY...${NC}"
 
   # Collect sample files for analysis
   local sample_agent=$(find "$SQUAD_DIR/agents" -name "*.md" 2>/dev/null | head -1)

@@ -312,7 +312,7 @@ google_ecosystem:
           surface-variant: "#49454F"
           primary: "#D0BCFF"
           secondary: "#CCC2DC"
-          tertiary: "#EFB8C8"
+          tertiary: "#B8CFEF"
           on-primary: "#381E72"
           on-surface: "#E6E0E9"
           on-surface-variant: "#CAC4D0"
@@ -519,7 +519,7 @@ tech_companies:
           text-tertiary: "#8898AA"
           border: "#E3E8EE"
           success: "#00D4AA"
-          error: "#DF1B41"
+          error: "#DF2B1B"
           warning: "#F7B955"
         dark:
           background: "#0A2540"
@@ -577,7 +577,7 @@ tech_companies:
           border: "#E9E9E7"
           highlight-yellow: "#FBF3DB"
           highlight-blue: "#DDEBF1"
-          highlight-pink: "#F4DFEB"
+          highlight-soft: "#DFEBF4"
           highlight-green: "#DDEDEA"
         dark:
           background: "#191919"
@@ -947,18 +947,18 @@ design_movements:
           background: "#F0E6FF"
           surface: "#FFFFFF"
           primary: "#7B2FBE"
-          secondary: "#FF6B9D"
+          secondary: "#3BC9DB"
           accent: "#00FFAA"
           text-primary: "#2D1B69"
-          gradient_hero: "linear-gradient(135deg, #667eea, #764ba2, #FF6B9D)"
+          gradient_hero: "linear-gradient(135deg, #667eea, #764ba2, #3BC9DB)"
         dark:
           background: "#0D0221"
           surface: "#1A0A3E"
           primary: "#B266FF"
-          secondary: "#FF6B9D"
+          secondary: "#3BC9DB"
           accent: "#00FFAA"
           text-primary: "#F0E6FF"
-          gradient_hero: "linear-gradient(135deg, #B266FF, #FF6B9D, #00FFAA)"
+          gradient_hero: "linear-gradient(135deg, #B266FF, #3BC9DB, #00FFAA)"
       typography:
         font_family: "'Space Grotesk', 'Outfit', system-ui, sans-serif"
         font_display: "'Clash Display', 'Syne', sans-serif"
@@ -994,7 +994,7 @@ design_movements:
           background: "#F0EDFF"
           surface: "#FFFFFF"
           primary: "#7C5CFC"
-          secondary: "#FF6B8A"
+          secondary: "#FF8A6B"
           accent: "#36D6B5"
           text-primary: "#2D2B55"
           text-secondary: "#6B6B8D"
@@ -1029,23 +1029,23 @@ design_movements:
           background: "#FFFFFF"
           surface: "rgba(255,255,255,0.85)"
           primary: "#6366F1"
-          secondary: "#EC4899"
+          secondary: "#06B6D4"
           tertiary: "#06B6D4"
           text-primary: "#111827"
           aurora_gradient: >
             radial-gradient(at 40% 20%, #6366F1 0%, transparent 50%),
-            radial-gradient(at 80% 0%, #EC4899 0%, transparent 50%),
+            radial-gradient(at 80% 0%, #06B6D4 0%, transparent 50%),
             radial-gradient(at 0% 50%, #06B6D4 0%, transparent 50%),
             radial-gradient(at 80% 50%, #F59E0B 0%, transparent 50%)
         dark:
           background: "#030712"
           surface: "rgba(15,23,42,0.85)"
           primary: "#818CF8"
-          secondary: "#F472B6"
+          secondary: "#14B8A6"
           tertiary: "#22D3EE"
           aurora_gradient: >
             radial-gradient(at 40% 20%, #4F46E5 0%, transparent 50%),
-            radial-gradient(at 80% 0%, #DB2777 0%, transparent 50%),
+            radial-gradient(at 80% 0%, #0E7490 0%, transparent 50%),
             radial-gradient(at 0% 50%, #0891B2 0%, transparent 50%)
       radius: { sm: 8, md: 12, lg: 20, xl: 28 }
       effects:
@@ -1388,7 +1388,7 @@ dark_themes:
           border: "#1E1E1E"
           accent-blue: "#1D9BF0"
           accent-purple: "#7856FF"
-          accent-pink: "#F91880"
+          accent-azure: "#18B9F9"
           accent-orange: "#FF7A00"
           accent-green: "#00BA7C"
       typography:
@@ -1512,13 +1512,13 @@ experimental:
           surface: "#12121A"
           surface-elevated: "#1A1A25"
           primary: "#00FFE0"
-          secondary: "#FF00FF"
+          secondary: "#00FFF0"
           accent: "#FFFF00"
           text-primary: "#E0E0FF"
           text-secondary: "#8080A0"
           border: "#2A2A3A"
           neon-cyan: "#00FFE0"
-          neon-magenta: "#FF00FF"
+          neon-cyan: "#00FFF0"
           neon-yellow: "#FFFF00"
       typography:
         font_family: "'Rajdhani', 'Orbitron', 'Share Tech Mono', monospace"

@@ -320,7 +320,7 @@ flowchart TB
     style ACTIVATION fill:#e3f2fd
     style TRIAGE fill:#e8f5e9
     style ROUTING fill:#fff8e1
-    style EXECUTION fill:#f3e5f5
+    style EXECUTION fill:#e5f0f5
 ```
 
 ### Diagrama de Estados do @squad-chief
@@ -443,8 +443,8 @@ flowchart TB
     style PHASE_0 fill:#e3f2fd
     style PHASE_1 fill:#e8f5e9
     style PHASE_2 fill:#fff8e1
-    style PHASE_3 fill:#f3e5f5
-    style PHASE_4 fill:#fce4ec
+    style PHASE_3 fill:#e5f0f5
+    style PHASE_4 fill:#e4ecfc
     style PHASE_5 fill:#e0f2f1
     style PHASE_6 fill:#fff3e0
 ```
@@ -570,8 +570,8 @@ flowchart TB
     style CHIEF fill:#e8f5e9
     style AN fill:#e3f2fd
     style PV fill:#fff8e1
-    style TF fill:#fce4ec
-    style QA fill:#f3e5f5
+    style TF fill:#e4ecfc
+    style QA fill:#e5f0f5
     style DEV fill:#e0f2f1
     style DESIGN fill:#fff3e0
 ```

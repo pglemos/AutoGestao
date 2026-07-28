@@ -15,7 +15,7 @@ tools:
   - WebFetch
 permissionMode: bypassPermissions
 memory: project
-color: pink
+color: cyan
 hooks:
   PreToolUse:
     - matcher: Bash

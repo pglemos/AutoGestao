@@ -794,9 +794,9 @@ workflow:
         style G fill:#F0E68C
         style H fill:#F0E68C
         style I fill:#F0E68C
-        style M fill:#DDA0DD
-        style N fill:#DDA0DD
-        style O fill:#DDA0DD
+        style M fill:#9DC3DD
+        style N fill:#9DC3DD
+        style O fill:#9DC3DD
     ```
 
   # ═══════════════════════════════════════════════════════════════════════════════════════

@@ -40,7 +40,7 @@ export function GlobalStatsCards({
               stat.tone === 'info' ? 'bg-status-info-surface border-status-info/20 text-status-info' :
                 stat.tone === 'warning' ? 'bg-status-warning-surface border-mx-amber-100 text-status-warning' :
                   stat.tone === 'success' ? 'bg-status-success-surface border-mx-emerald-100 text-status-success' :
-                    'bg-status-error-surface border-mx-rose-100 text-status-error'
+                    'bg-status-error-surface border-mx-red-100 text-status-error'
           )}>
             <stat.icon size={20} strokeWidth={2} />
           </div>

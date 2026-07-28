@@ -56,7 +56,6 @@ try {
     gray: (s) => s,
     bold: (s) => s,
     dim: (s) => s,
-    magenta: (s) => s,
   };
 }
 
@@ -1574,7 +1573,7 @@ class MasterOrchestrator extends EventEmitter {
    * @private
    */
   _defaultStateChange(from, to, _context) {
-    console.log(chalk.magenta(`   📊 State: ${from} → ${to}`));
+    console.log(chalk.cyan(`   📊 State: ${from} → ${to}`));
   }
 }
 

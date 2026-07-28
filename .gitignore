@@ -55,3 +55,7 @@ tmp/
 .claude_backup/
 playwright-transform-cache-*/
 core-js-banners
+
+# Cache de compilacao do V8 e relatorios Lighthouse gerados
+node-compile-cache/
+output/lighthouse-*/

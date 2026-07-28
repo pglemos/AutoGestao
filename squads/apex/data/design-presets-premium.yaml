@@ -134,13 +134,13 @@ luxury_haute:
           surface-elevated: "#FFFFFF"
           primary: "#000000"
           secondary: "#8C8C8C"
-          accent: "#C41E3A"
+          accent: "#C4341E"
           text-primary: "#000000"
           text-secondary: "#4A4A4A"
           text-tertiary: "#8C8C8C"
           border: "rgba(0,0,0,0.10)"
           separator: "#E5E5E5"
-          destructive: "#C41E3A"
+          destructive: "#C4341E"
           success: "#1A1A1A"
           warning: "#8C8C8C"
         dark:
@@ -203,7 +203,7 @@ luxury_haute:
     tailwind_extend:
       colors:
         atelier-black: "#000000"
-        atelier-rouge: "#C41E3A"
+        atelier-rouge: "#C4341E"
         atelier-gray: "#8C8C8C"
 
   - id: luxury-artisan

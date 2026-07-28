@@ -211,7 +211,7 @@ workflow:
         style B fill:#87CEEB
         style C fill:#FFE4B5
         style F fill:#98FB98
-        style G fill:#DDA0DD
+        style G fill:#9DC3DD
         style E fill:#FFB6C1
         style I fill:#FFB6C1
     ```

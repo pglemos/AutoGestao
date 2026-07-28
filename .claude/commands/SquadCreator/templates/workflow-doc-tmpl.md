@@ -140,7 +140,7 @@ flowchart TD
     end
 
     style PHASE_1 fill:#e8f5e9
-    style PHASE_2 fill:#f3e5f5
+    style PHASE_2 fill:#e5f0f5
     style COMPLETION fill:#e3f2fd
     style DONE fill:#90EE90
 ```
@@ -184,7 +184,7 @@ sequenceDiagram
         A1-->>U: {{step_1_output}}
     end
 
-    rect rgb(243, 229, 245)
+    rect rgb(229, 240, 245)
         Note over A2: Fase 2: {{fase_2_nome}}
         A1->>A2: Handoff
         A2->>A2: {{step_2_action}}

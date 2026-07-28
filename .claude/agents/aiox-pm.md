@@ -22,7 +22,7 @@ hooks:
 skills:
   - synapse:tasks:diagnose-synapse
   - checklist-runner
-color: pink
+color: cyan
 ---
 
 # AIOX Project Manager - Autonomous Agent

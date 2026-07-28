@@ -11,9 +11,6 @@ export default {
           teal: '#00A896',
           'teal-light': '#D0F5F2',
           'teal-soft': '#E6FAF7',
-          // Legacy pink aliases: deprecated; mapped to brand teal.
-          pink: '#00A89D',
-          'pink-light': '#E6FAF7',
           action: '#00A89D',
           'action-hover': '#00857D',
           'action-light': '#E6FAF7',

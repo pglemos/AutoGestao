@@ -12,7 +12,7 @@
 ### Logo Inspiration
 
 The AIOX color palette is derived from the brand logo's vibrant gradient:
-- **Top gradient:** Magenta → Pink → Orange → Yellow
+- **Top gradient:** Ciano → Teal → Orange → Yellow
 - **Bottom gradient:** Purple → Blue → Cyan
 
 ### Primary Brand Reference
@@ -28,7 +28,7 @@ The primary purple color (#8B5CF6) references **ClickUp's brand purple**, establ
 | Color | Hex | Chalk Variable | Usage |
 |-------|-----|----------------|-------|
 | **Primary Purple** | `#8B5CF6` | `chalk.hex('#8B5CF6')` | Main questions, headers, CTAs, branding |
-| **Secondary Magenta** | `#EC4899` | `chalk.hex('#EC4899')` | Important highlights, special emphasis |
+| **Secondary Ciano** | `#06B6D4` | `chalk.hex('#06B6D4')` | Important highlights, special emphasis |
 | **Tertiary Blue** | `#3B82F6` | `chalk.hex('#3B82F6')` | Secondary actions, links, info accents |
 
 ### Functional Colors
@@ -53,7 +53,7 @@ For special effects, animations, and branding moments:
 
 | Position | Hex | Chalk Variable | Visual |
 |----------|-----|----------------|--------|
-| **Start** | `#EC4899` | `chalk.hex('#EC4899')` | Magenta (logo top) |
+| **Start** | `#06B6D4` | `chalk.hex('#06B6D4')` | Ciano (logo top) |
 | **Middle** | `#8B5CF6` | `chalk.hex('#8B5CF6')` | Purple (brand) |
 | **End** | `#3B82F6` | `chalk.hex('#3B82F6')` | Blue (logo bottom) |
 
@@ -70,7 +70,7 @@ const chalk = require('chalk');
 const colors = {
   // Core Brand Colors
   primary: chalk.hex('#8B5CF6'),      // ClickUp-inspired purple
-  secondary: chalk.hex('#EC4899'),    // Magenta accent
+  secondary: chalk.hex('#06B6D4'),    // Ciano accent
   tertiary: chalk.hex('#3B82F6'),     // Blue accent
   
   // Functional Colors
@@ -85,13 +85,13 @@ const colors = {
   
   // Gradient System
   gradient: {
-    start: chalk.hex('#EC4899'),      // Magenta
+    start: chalk.hex('#06B6D4'),      // Ciano
     middle: chalk.hex('#8B5CF6'),     // Purple
     end: chalk.hex('#3B82F6')         // Blue
   },
   
   // Semantic Shortcuts
-  highlight: chalk.hex('#EC4899').bold,
+  highlight: chalk.hex('#06B6D4').bold,
   brandPrimary: chalk.hex('#8B5CF6').bold,
   brandSecondary: chalk.hex('#06B6D4')
 };
@@ -105,7 +105,7 @@ module.exports = colors;
 :root {
   /* Brand Colors */
   --aiox-primary: #8B5CF6;
-  --aiox-secondary: #EC4899;
+  --aiox-secondary: #06B6D4;
   --aiox-tertiary: #3B82F6;
   
   /* Functional Colors */
@@ -119,7 +119,7 @@ module.exports = colors;
   --aiox-dim: #64748B;
   
   /* Gradient */
-  --aiox-gradient: linear-gradient(135deg, #EC4899 0%, #8B5CF6 50%, #3B82F6 100%);
+  --aiox-gradient: linear-gradient(135deg, #06B6D4 0%, #8B5CF6 50%, #3B82F6 100%);
 }
 ```
 
@@ -133,7 +133,7 @@ module.exports = {
       colors: {
         aiox: {
           primary: '#8B5CF6',
-          secondary: '#EC4899',
+          secondary: '#06B6D4',
           tertiary: '#3B82F6',
           success: '#10B981',
           warning: '#F59E0B',
@@ -144,7 +144,7 @@ module.exports = {
         }
       },
       backgroundImage: {
-        'aiox-gradient': 'linear-gradient(135deg, #EC4899 0%, #8B5CF6 50%, #3B82F6 100%)',
+        'aiox-gradient': 'linear-gradient(135deg, #06B6D4 0%, #8B5CF6 50%, #3B82F6 100%)',
       }
     }
   }
@@ -265,7 +265,7 @@ All colors have been tested for contrast ratios against both dark and light term
 | Color Pair | Contrast Ratio | WCAG Level |
 |------------|----------------|------------|
 | Purple on Black | 7.2:1 | AAA |
-| Magenta on Black | 6.8:1 | AAA |
+| Ciano on Black | 6.8:1 | AAA |
 | Blue on Black | 5.1:1 | AA |
 | Green on Black | 8.4:1 | AAA |
 | Orange on Black | 6.2:1 | AAA |
@@ -303,8 +303,8 @@ For future design system integration:
       },
       "secondary": {
         "$type": "color",
-        "$value": "#EC4899",
-        "$description": "AIOX secondary brand color (magenta accent)"
+        "$value": "#06B6D4",
+        "$description": "AIOX secondary brand color (ciano accent)"
       },
       "success": {
         "$type": "color",
@@ -316,7 +316,7 @@ For future design system integration:
       "brand": {
         "$type": "gradient",
         "$value": [
-          { "color": "#EC4899", "position": 0 },
+          { "color": "#06B6D4", "position": 0 },
           { "color": "#8B5CF6", "position": 0.5 },
           { "color": "#3B82F6", "position": 1 }
         ],

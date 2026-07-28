@@ -62,7 +62,6 @@ try {
     dim: (s) => s,
     bgRed: (s) => s,
     bgGreen: (s) => s,
-    magenta: (s) => s,
   };
 }
 

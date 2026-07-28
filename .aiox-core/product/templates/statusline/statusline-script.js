@@ -34,7 +34,7 @@ function buildStatusLine(data) {
   const green = '\x1b[32m';
   const yellow = '\x1b[33m';
   const blue = '\x1b[34m';
-  const magenta = '\x1b[35m';
+  const cyan = '\x1b[36m';
   const cyan = '\x1b[36m';
   const white = '\x1b[37m';
   const orange = '\x1b[38;5;208m';
@@ -83,7 +83,7 @@ function buildStatusLine(data) {
   // 7. Project:Branch
   const gitInfo = getGitInfo();
   if (gitInfo.project) {
-    parts.push(`${yellow}${gitInfo.project}${reset}:${magenta}${gitInfo.branch}${reset}`);
+    parts.push(`${yellow}${gitInfo.project}${reset}:${cyan}${gitInfo.branch}${reset}`);
   }
 
   // 8. Git changes

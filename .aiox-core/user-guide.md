@@ -261,7 +261,7 @@ graph TD
 
     style Start fill:#e1f5ff
     style Brief fill:#fff4e1
-    style PRD fill:#ffe1f5
+    style PRD fill:#e1f5ff
     style Arch fill:#f5e1ff
     style UXDesign fill:#e1ffe1
     style Switch fill:#ffe1e1
@@ -365,7 +365,7 @@ graph TD
 
     style Docs fill:#e1f5ff
     style SM fill:#fff4e1
-    style Story fill:#ffe1f5
+    style Story fill:#e1f5ff
     style Dev fill:#f5e1ff
     style Code fill:#e1ffe1
     style QA fill:#ffe1e1
