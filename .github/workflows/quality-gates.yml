@@ -35,6 +35,15 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Production hardening contracts
+        run: bun test src/test/production-hardening-contract.test.ts
+
+      - name: Deterministic engine contracts
+        run: bun test src/lib/deterministic-actions.test.ts src/lib/deterministic-actions-hardening.test.ts
+
+      - name: Deterministic data adapter contracts
+        run: bun test src/features/deterministic-actions/deterministic-action-data.test.ts
+
       - name: Unit and integration tests
         run: npm test
 
