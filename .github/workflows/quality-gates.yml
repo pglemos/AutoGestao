@@ -47,44 +47,11 @@ jobs:
       - name: Deterministic data adapter contracts
         run: bun test src/features/deterministic-actions/deterministic-action-data.test.ts
 
-      - name: Typecheck diagnostics
-        shell: bash
-        run: |
-          set -o pipefail
-          npx tsc --noEmit 2>&1 | tee typecheck.log
-
-      - name: Upload typecheck report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: typecheck-${{ github.run_id }}
-          path: typecheck.log
-          if-no-files-found: ignore
-          retention-days: 3
-
-      - name: Page tests
-        shell: bash
-        run: |
-          set -o pipefail
-          bun test --isolate --max-concurrency=1 src/pages 2>&1 | tee page-tests.log
-
-      - name: Upload page test report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: page-tests-${{ github.run_id }}
-          path: page-tests.log
-          if-no-files-found: ignore
-          retention-days: 3
-
-      - name: Feature tests
-        run: bun test --isolate --max-concurrency=1 src/features
-
-      - name: Cross-cutting test contracts
-        run: bun test --isolate --max-concurrency=1 src/test
-
       - name: Unit and integration tests
         run: npm test
+
+      - name: Typecheck
+        run: npx tsc --noEmit
 
       - name: Lint
         run: npm run lint
