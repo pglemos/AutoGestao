@@ -17,6 +17,9 @@ jobs:
   verify:
     runs-on: ubuntu-latest
     timeout-minutes: 30
+    env:
+      VITE_SUPABASE_URL: https://test.supabase.co
+      VITE_SUPABASE_ANON_KEY: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoyMDAwMDAwMDAwfQ.test-signature
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -44,6 +47,21 @@ jobs:
       - name: Deterministic data adapter contracts
         run: bun test src/features/deterministic-actions/deterministic-action-data.test.ts
 
+      - name: Typecheck diagnostics
+        shell: bash
+        run: |
+          set -o pipefail
+          npx tsc --noEmit 2>&1 | tee typecheck.log
+
+      - name: Upload typecheck report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: typecheck-${{ github.run_id }}
+          path: typecheck.log
+          if-no-files-found: ignore
+          retention-days: 3
+
       - name: Page tests
         shell: bash
         run: |
@@ -67,9 +85,6 @@ jobs:
 
       - name: Unit and integration tests
         run: npm test
-
-      - name: Typecheck
-        run: npm run typecheck
 
       - name: Lint
         run: npm run lint
