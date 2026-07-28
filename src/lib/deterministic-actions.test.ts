@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import {
+  DETERMINISTIC_RULE_VERSION,
   deriveDeterministicActions,
   type DeterministicActionInput,
 } from './deterministic-actions'
@@ -55,7 +56,7 @@ describe('deriveDeterministicActions', () => {
       valorOriginal: 50000,
     })
     expect(action.resolutionKey).toBe('STRATEGY_REGISTERED_OR_NEW_OPP')
-    expect(action.ruleVersion).toBe('v1.0-deterministic')
+    expect(action.ruleVersion).toBe(DETERMINISTIC_RULE_VERSION)
   })
 
   test('Cenário 2 — OVERDUE_ACTION: identifica ação vencida em oportunidade ativa', () => {
@@ -180,7 +181,7 @@ describe('deriveDeterministicActions', () => {
     expect(targetAction).toBeDefined()
     expect(targetAction?.role).toBe('manager')
     expect(targetAction?.priority).toBe('critical')
-    expect(targetAction?.explanation).toContain('5 vendas')
+    expect(targetAction?.explanation).toContain('Realizado no mês: 5')
     expect(targetAction?.explanation).toContain('Meta: 30')
     expect(targetAction?.resolutionKey).toBe('CLOSING_PIPELINE_REVIEWED')
   })
@@ -222,8 +223,8 @@ describe('deriveDeterministicActions', () => {
     const originPending = actions.find((a) => a.scenarioCode === 'AUTOMATIC_TASK_ORIGIN_PENDING')
     expect(originPending).toBeDefined()
     expect(originPending?.priority).toBe('high')
-    expect(originPending?.explanation).toContain('foi concluída manualmente')
-    expect(originPending?.explanation).toContain('origem na etapa fechamento continua ativa')
+    expect(originPending?.explanation).toContain('foi marcada como resolvida')
+    expect(originPending?.explanation).toContain('continua na etapa fechamento')
     expect(originPending?.resolutionKey).toBe('ORIGIN_ENTITY_RESOLVED')
   })
 })
