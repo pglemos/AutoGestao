@@ -86,6 +86,41 @@ Situação `Venda cancelada`, status `Cancelada`, temperatura `Frio`, sem dados 
 **Files:**
 - Modify: componentes existentes da ficha (sem nova rota)
 
-### Task 6 — Próxima ação e agendamentos antigos ao cancelar
-**Files:**
-- Create: migration que encerra próxima ação/agendamentos vinculados à oportunidade cancelada, preservando histórico.
+### Task 6 — Próxima ação e agendamentos antigos ao cancelar — **BLOQUEADO**
+
+A projeção já está correta (Task 1, coberta por teste): a ficha não deriva
+`Visita agendada` nem pendência a partir de um agendamento vinculado a uma
+oportunidade cancelada. O que falta é encerrar o fato no banco, para os
+consumidores que leem `agendamentos` direto (agenda, rotina do gerente).
+
+**O vínculo existe:** `public.agendamentos.oportunidade_id` (uuid).
+
+# Bloqueio
+
+**Decisão necessária:** como marcar um agendamento cujo motivo deixou de existir.
+
+**Evidência:** `crm_agendamento_status` em produção tem exatamente quatro
+valores — `confirmado`, `aguardando`, `compareceu`, `nao_compareceu`.
+Não há estado terminal de "não vai acontecer".
+
+**Por que não pode ser inferida:** nenhuma das opções é neutra.
+
+**Impacto:** `nao_compareceu` alimenta métricas de comparecimento por vendedor.
+
+## Opção A — `ALTER TYPE crm_agendamento_status ADD VALUE 'cancelado'`
+Modela o fato corretamente. Aditivo e retrocompatível no banco, mas **irreversível**
+(Postgres não remove valor de enum) e exige varrer todos os consumidores de
+`status` no frontend antes de gravar o valor novo.
+
+## Opção B — manter o status e registrar o encerramento em `observacoes` + evento
+Zero risco de enum, reversível, mas não é um estado consultável: cada consumidor
+teria que fazer join com `oportunidades` para saber que o agendamento morreu.
+
+## Recomendação
+Opção A, em duas fases: (1) adicionar o valor e atualizar os consumidores;
+(2) só então passar a gravá-lo dentro de `cancelar_venda`. Não executada porque
+`nao_compareceu` distorceria métrica de comparecimento e o `ADD VALUE` é
+irreversível — decisão do dono do domínio.
+
+## Trabalho já concluído
+Tasks 1, 2, 3, 4 e 5. Ver `docs/auditoria/cancelamento-reproducao.md`.
