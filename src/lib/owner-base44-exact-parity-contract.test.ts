@@ -28,7 +28,10 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
     expect(sidebar).toContain('src="/landing/logo-mx.png"')
     expect(sidebar).toContain('MÓDULO EXECUTIVO')
     expect(sidebar).toContain('aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}')
-    expect(sidebar).toContain('Abrir perfil de ${displayName}')
+    // Cartao de perfil compartilhado com os demais modulos: abre o menu de
+    // conta (perfil, preferencias, notificacoes e sair) em vez de navegar.
+    expect(sidebar).toContain('<MxSidebarProfileCard')
+    expect(sidebar).toContain('onSignOut={')
     expect(layout).toContain('<OwnerTopbar')
     expect(layout).toContain('<ConsultantRequestModal />')
     for (const label of ['Início', 'Plano Estratégico', 'Plano de Ação', 'Consultoria', 'Departamentos', 'Mercado', 'Universidade MX', 'Falar com Consultor']) {

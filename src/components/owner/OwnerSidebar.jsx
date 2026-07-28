@@ -1,9 +1,10 @@
 import { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useOwner } from "@/components/owner/OwnerContext";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
+import { MxSidebarProfileCard } from "@/components/MxSidebarProfileCard";
 import {
   Home,
   CalendarDays,
@@ -71,9 +72,9 @@ export default function OwnerSidebar({
 }) {
   const [openGroups, setOpenGroups] = useState({ departments: true });
   const { openConsultantModal } = useOwner();
-  const { profile } = useAuth();
+  const { profile, signOut } = useAuth();
+  const navigate = useNavigate();
   const displayName = profile?.name?.trim() || "Dono MX";
-  const initial = displayName.charAt(0).toUpperCase() || "D";
 
   const toggleGroup = (g) => setOpenGroups((s) => ({ ...s, [g]: !s[g] }));
 
@@ -234,30 +235,20 @@ export default function OwnerSidebar({
       </div>
 
       <div className={cn("border-t border-sidebar-border py-3", collapsed ? "px-2" : "px-3")}>
-        <NavLink
-          to="/perfil"
-          onClick={onNavigate}
-          aria-label={`Abrir perfil de ${displayName}`}
-          className={cn(
-            "flex min-h-14 w-full items-center gap-3 rounded-2xl border border-sidebar-border bg-sidebar-accent/60 py-2 transition-colors hover:bg-sidebar-accent",
-            collapsed ? "justify-center px-0" : "px-3.5"
-          )}
-        >
-          <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-emerald-100 bg-emerald-50 text-sm font-bold text-emerald-600">
-            {initial}
-          </span>
-          {!collapsed && (
-            <>
-              <span className="min-w-0 flex-1">
-                <span className="block truncate text-[13px] font-bold text-slate-800" title={displayName}>
-                  {displayName}
-                </span>
-                <span className="mt-1 block text-[11px] font-medium text-slate-500">Dono</span>
-              </span>
-              <ChevronDown className="h-4 w-4 shrink-0 text-slate-400" />
-            </>
-          )}
-        </NavLink>
+        <MxSidebarProfileCard
+          displayName={displayName}
+          roleLabel="Dono"
+          avatarUrl={profile?.avatar_url}
+          collapsed={collapsed}
+          onNavigate={(path) => {
+            onNavigate?.();
+            navigate(path);
+          }}
+          onSignOut={() => {
+            onNavigate?.();
+            void signOut();
+          }}
+        />
       </div>
     </div>
   );
