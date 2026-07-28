@@ -38,6 +38,9 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Unit and integration tests
+        run: npm test
+
       - name: Production hardening contracts
         run: bun test src/test/production-hardening-contract.test.ts
 
@@ -46,21 +49,6 @@ jobs:
 
       - name: Deterministic data adapter contracts
         run: bun test src/features/deterministic-actions/deterministic-action-data.test.ts
-
-      - name: Unit and integration tests
-        shell: bash
-        run: |
-          set -o pipefail
-          npm test 2>&1 | tee unit-tests.log
-
-      - name: Upload unit test report
-        if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: unit-tests-${{ github.run_id }}
-          path: unit-tests.log
-          if-no-files-found: ignore
-          retention-days: 3
 
       - name: Typecheck
         run: npx tsc --noEmit
