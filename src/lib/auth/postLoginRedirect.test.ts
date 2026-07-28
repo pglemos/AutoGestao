@@ -21,6 +21,10 @@ describe('resolvePostLoginRedirect', () => {
     expect(resolvePostLoginRedirect(null, 'vendedor')).toBe('/home')
   })
 
+  it('sends dono to Owner Module by default', () => {
+    expect(resolvePostLoginRedirect(null, 'dono')).toBe('/dono')
+  })
+
   it('rejects login loops and external redirect targets', () => {
     expect(resolvePostLoginRedirect({ from: { pathname: '/login' } })).toBe('/')
     expect(resolvePostLoginRedirect({ from: { pathname: 'https://evil.example' } })).toBe('/')

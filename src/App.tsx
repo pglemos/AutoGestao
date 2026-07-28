@@ -212,7 +212,8 @@ function RoleRedirect() {
 
 function TeamAliasRedirect() {
   const { role, membership } = useAuth()
-  if (isPerfilInternoMx(role) || role === 'dono') return <Navigate to="/lojas" replace />
+  if (isPerfilInternoMx(role)) return <Navigate to="/lojas" replace />
+  if (role === 'dono') return <Navigate to="/dono" replace />
   if (role === 'gerente' && membership?.store?.name) {
     return <RedirectWithSearch to="/gerente/minha-equipe" />
   }

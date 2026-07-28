@@ -89,7 +89,7 @@ export function useStoreActions({
           const { error } = await deleteStore(selectedStoreId)
           if (error) { toast.error(error); return }
           toast.success('Loja arquivada.')
-          navigate(isPerfilInternoMx(role) || role === 'dono' ? '/lojas' : '/classificacao', { replace: true })
+          navigate(isPerfilInternoMx(role) ? '/lojas' : role === 'dono' ? '/dono' : '/classificacao', { replace: true })
         } finally {
           setDeletingStore(false)
         }

@@ -11,7 +11,7 @@ type SimulationRole = Extract<UserRole, 'dono' | 'gerente' | 'vendedor'>
 const OPTIONS: Array<{ role: SimulationRole; title: string; description: string; icon: typeof UserRound; path: string }> = [
   { role: 'vendedor', title: 'Vendedor', description: 'Rotina, carteira, funil, desenvolvimento e treinamentos.', icon: UserRound, path: '/terminal-mx' },
   { role: 'gerente', title: 'Gerente', description: 'Painel da loja, equipe, metas, rotina e desenvolvimento.', icon: ShieldCheck, path: '/rotina' },
-  { role: 'dono', title: 'Dono', description: 'Visão executiva, lojas, relatórios e governança.', icon: Crown, path: '/lojas' },
+  { role: 'dono', title: 'Dono', description: 'Visão executiva, departamentos, relatórios e governança.', icon: Crown, path: '/dono' },
 ]
 
 export default function Simulacao() {

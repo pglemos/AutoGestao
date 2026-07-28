@@ -60,7 +60,7 @@ const PERM_MATRIX = [
   { route: '/rotina',                      v:'BLOQUEADO', g:'PERMITIDO', d:'BLOQUEADO',a:'PERMITIDO' },
   { route: '/relatorio-matinal',           v:'BLOQUEADO', g:'PERMITIDO', d:'BLOQUEADO',a:'PERMITIDO' },
   { route: '/auditoria',                   v:'BLOQUEADO', g:'PERMITIDO', d:'BLOQUEADO',a:'PERMITIDO' },
-  { route: '/lojas',                       v:'BLOQUEADO', g:'BLOQUEADO', d:'PERMITIDO',a:'PERMITIDO' },
+  { route: '/lojas',                       v:'BLOQUEADO', g:'BLOQUEADO', d:'BLOQUEADO',a:'PERMITIDO' },
   { route: '/lojas/mx-consultoria',        v:'BLOQUEADO', g:'PERMITIDO', d:'PERMITIDO',a:'PERMITIDO' },
   { route: '/organograma',                 v:'BLOQUEADO', g:'BLOQUEADO', d:'PERMITIDO',a:'PERMITIDO' },
   { route: '/banco-talentos',              v:'BLOQUEADO', g:'BLOQUEADO', d:'PERMITIDO',a:'PERMITIDO' },

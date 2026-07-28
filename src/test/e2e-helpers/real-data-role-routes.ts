@@ -45,7 +45,7 @@ const OWNER_ROUTES = [
   '/dono/departamentos/comercial', '/dono/departamentos/marketing',
   '/dono/departamentos/produto-e-estoque', '/dono/departamentos/pessoas-rh',
   '/dono/departamentos/financeiro', '/dono/departamentos/operacoes', '/dono/mercado',
-  '/dono/universidade', '/lojas', '/home', '/gerente/fechamento-diario',
+  '/dono/universidade', '/home', '/gerente/fechamento-diario',
   '/gerente/minha-equipe', '/gerente/meta-loja', '/gerente/mentor', '/gerente/feedbacks-pdis',
   '/gerente/ranking', '/gerente/universidade-mx', '/funil-vendas', '/metas', '/falar-consultor',
   '/organograma', '/banco-talentos',

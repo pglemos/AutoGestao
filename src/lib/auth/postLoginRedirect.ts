@@ -22,7 +22,7 @@ function safeHash(value: unknown) {
 function defaultRedirectForRole(role: UserRole | null | undefined): string {
   if (role === 'vendedor') return '/home'
   if (role === 'gerente') return '/home'
-  if (role === 'dono') return '/lojas'
+  if (role === 'dono') return '/dono'
   // administrador_*, consultor_mx
   if (role) return '/painel'
   return '/'

@@ -260,9 +260,6 @@ export default function Layout() {
     )
   }
 
-  const isExactOwnerWorkspace = role === 'dono' && location.pathname.startsWith('/lojas/')
-  if (isExactOwnerWorkspace) return <Outlet />
-
   const pageOutlet = (
     <MotionPage key={location.pathname} className="h-full">
       <Outlet />
