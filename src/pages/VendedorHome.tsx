@@ -2,7 +2,6 @@ import { useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { chartTokens } from '@/lib/charts/tokens'
 import {
-  AlertTriangle,
   BookOpen,
   CalendarClock,
   CheckCircle,
@@ -10,7 +9,6 @@ import {
   ChevronRight,
   Circle,
   ClipboardCheck,
-  Lightbulb,
   RefreshCw,
   Target,
   Trophy,
@@ -21,6 +19,8 @@ import { isEtapaTerminal } from '@/lib/schemas/crm.schema'
 import { useAuth } from '@/hooks/useAuth'
 import { useVendedorHomePage } from '@/features/vendedor-home/hooks/useVendedorHomePage'
 import { useAgendamentos } from '@/features/crm/hooks/useAgendamentos'
+import DeterministicActionsPanel from '@/features/deterministic-actions/DeterministicActionsPanel'
+import { useDeterministicActions } from '@/features/deterministic-actions/useDeterministicActions'
 
 function saudacao() {
   const h = new Date().getHours()
@@ -48,6 +48,7 @@ export default function VendedorHomePage() {
   const { profile } = useAuth()
   const home = useVendedorHomePage()
   const { agendamentos, metrics: agendaMetrics } = useAgendamentos()
+  const deterministic = useDeterministicActions()
 
   const firstName = profile?.name?.trim().split(/\s+/)[0] || 'Nome não informado'
 
@@ -106,8 +107,6 @@ export default function VendedorHomePage() {
   return (
     <div className="min-h-screen bg-gray-50 text-gray-800">
       <div className="mx-auto max-w-7xl space-y-5 px-4 py-6 pb-24">
-
-        {/* Header */}
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
@@ -143,21 +142,22 @@ export default function VendedorHomePage() {
                 </button>
                 <button
                   type="button"
-                  onClick={() => void home.handleRefresh?.()}
-                  disabled={home.isRefetching}
+                  onClick={() => {
+                    void home.handleRefresh?.()
+                    void deterministic.refresh()
+                  }}
+                  disabled={home.isRefetching || deterministic.loading}
                   aria-label="Atualizar"
                   className="grid h-[38px] w-10 place-items-center rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-50"
                 >
-                  <RefreshCw size={16} className={home.isRefetching ? 'animate-spin' : ''} />
+                  <RefreshCw size={16} className={home.isRefetching || deterministic.loading ? 'animate-spin' : ''} />
                 </button>
               </div>
             </div>
           </div>
         </header>
 
-        {/* Cards de métricas — 4 colunas como o gerente */}
         <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4" aria-label="Métricas do dia">
-          {/* Card destaque verde */}
           <article className="flex min-h-[140px] flex-col justify-between rounded-2xl bg-gradient-to-br from-emerald-600 to-emerald-800 p-5 text-white shadow-md">
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-emerald-100">Atingimento do Mês</p>
@@ -173,7 +173,6 @@ export default function VendedorHomePage() {
             </div>
           </article>
 
-          {/* Faltam para a meta */}
           <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Faltam para a Meta</p>
@@ -201,10 +200,17 @@ export default function VendedorHomePage() {
             </div>
           </article>
 
-          {/* Agenda hoje */}
           <article
             className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors"
+            role="link"
+            tabIndex={0}
             onClick={() => navigate('/central-execucao')}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                navigate('/central-execucao')
+              }
+            }}
           >
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Agenda Hoje</p>
@@ -222,12 +228,19 @@ export default function VendedorHomePage() {
             </div>
           </article>
 
-          {/* Ranking */}
           <article
             className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors ${
               posicaoRanking === 1 ? 'border-amber-200' : 'border-gray-100'
             }`}
+            role="link"
+            tabIndex={0}
             onClick={() => navigate('/classificacao')}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                navigate('/classificacao')
+              }
+            }}
           >
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Ranking</p>
@@ -244,7 +257,6 @@ export default function VendedorHomePage() {
           </article>
         </section>
 
-        {/* Leitura do dia (60%) + Ação sugerida (40%) */}
         <section className="flex flex-col gap-4 lg:flex-row">
           <div className="lg:w-[60%]">
             <article className="h-full rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
@@ -286,27 +298,19 @@ export default function VendedorHomePage() {
             </article>
           </div>
           <div className="lg:w-[40%]">
-            <article className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-              <div className="mb-3 flex items-center gap-2">
-                <span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50">
-                  <Lightbulb size={16} className="text-amber-500" />
-                </span>
-                <h2 className="text-sm font-bold text-gray-800">Ação sugerida</h2>
-              </div>
-              <p className="flex-1 text-sm leading-relaxed text-gray-600">
-                {!home.todayCheckin
-                  ? 'Registre seu fechamento diário agora para manter sua disciplina e garantir que seus resultados sejam contabilizados corretamente.'
-                  : agendaMetrics.agendamentosHoje === 0
-                  ? 'Você não tem agendamentos para hoje. Acesse a Rotina do Dia e crie novos contatos para aumentar sua previsão de vendas.'
-                  : faltam > 0
-                  ? `Faltam ${faltam} venda${faltam !== 1 ? 's' : ''} para bater a meta. Foque nos clientes com maior chance de fechamento na sua carteira.`
-                  : '🎯 Meta batida! Mantenha o ritmo e superem os resultados do mês passado.'}
-              </p>
-            </article>
+            <DeterministicActionsPanel
+              actions={deterministic.actions}
+              loading={deterministic.loading}
+              error={deterministic.error}
+              refresh={deterministic.refresh}
+              resolveAction={deterministic.resolveAction}
+              title="Ação sugerida"
+              maxItems={1}
+              compact
+            />
           </div>
         </section>
 
-        {/* Checklist do Dia */}
         <section aria-label="Checklist do dia" className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-sm font-bold text-gray-800">Checklist do Dia</h2>
@@ -323,7 +327,6 @@ export default function VendedorHomePage() {
           </div>
         </section>
 
-        {/* Agenda hoje + Atalhos */}
         <section className="flex flex-col gap-4 lg:flex-row">
           <div className="lg:w-[55%]">
             <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
@@ -406,7 +409,6 @@ export default function VendedorHomePage() {
             </div>
           </div>
         </section>
-
       </div>
     </div>
   )

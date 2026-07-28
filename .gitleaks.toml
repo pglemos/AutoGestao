@@ -40,6 +40,7 @@ regexes = [
     '''eyJxxx\.\.\.''',
     '''sk-test-.*''',
     '''sbp_test_.*''',
+    '''eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9\.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTcwMDAwMDAwMCwiZXhwIjoyMDAwMDAwMDAwfQ\.test-signature''',
 ]
 
 # Regras customizadas Supabase/Sentry (além das default)

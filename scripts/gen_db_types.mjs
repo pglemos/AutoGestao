@@ -1,5 +1,5 @@
 #!/usr/bin/env node
-// Story 0.1 / DB-014 — Gera src/types/database.generated.ts a partir do Supabase linked.
+// Story 0.1 / DB-014 — Gera src/types/database.generated.ts via Management API.
 // Strip de banner inicial ("Initialising login role...") e rodape ("A new version of Supabase CLI...").
 
 import { execSync } from 'node:child_process';
@@ -26,11 +26,14 @@ function isNoise(line) {
 
 try {
   console.log('Gerando types via supabase CLI...');
-  const raw = execSync('supabase gen types typescript --linked --schema public', {
-    encoding: 'utf8',
-    maxBuffer: 50 * 1024 * 1024,
-    stdio: ['inherit', 'pipe', 'inherit'],
-  });
+  const raw = execSync(
+    `supabase gen types typescript --project-id ${PROJECT_REF} --schema public`,
+    {
+      encoding: 'utf8',
+      maxBuffer: 50 * 1024 * 1024,
+      stdio: ['inherit', 'pipe', 'inherit'],
+    },
+  );
 
   const clean = raw
     .split('\n')
