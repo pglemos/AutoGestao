@@ -82,6 +82,8 @@ canceladas antes da correção; `anon` perde EXECUTE na RPC.
 | `20260727210000` | View classifica `cancelada` | dry-run: `ativa 91` → `ativa 89 + cancelada 2` |
 | `20260727230000` | RPC encerra agenda e próxima ação; revoga `anon` | dry-run em venda real com agendamento aberto |
 | `20260727234500` | Backfill das canceladas anteriores | dry-run + 2ª execução comprovou idempotência |
+| `20260728010000` | Protege valor de venda cancelada contra adulteração | dry-run: seller movia R$ 100.000 → 999.999; depois bloqueia com P0001; exceção do gerente preservada |
+| `20260728020000` | Meta da Loja desconta venda cancelada | dry-run: `realized` 12 → 10; tela passou a mostrar "10 de 27 / 37%" |
 
 ## 8. Regras de negócio finais
 
@@ -168,7 +170,33 @@ agendamento aberto restante.
 | E2E CAN-02/08/09/10 | Spec escrita (`src/test/cancelamento-venda.playwright.ts`), **não executada**: autenticar exige submeter senha em formulário de login, o que não faço nem via runner. Rode com as variáveis exportadas no seu shell — ver §19 |
 | E2E CAN-01, 03…07, 11…28 | Não escritos |
 | Deploy do frontend | Não promovido |
-| Filtro de "ativos" do gerente/dono | Não auditado |
+| Módulo Dono (`/dono`) | **Não afetado**: a rota não consulta `oportunidades`, `eventos_comerciais` nem `lancamentos_diarios` — só `usuarios`, `vinculos_loja`, `notificacoes`, `devolutivas` e `lojas`. Os números exibidos (18 vendas, R$ 218.450, estoque 42) são fixtures do port Base44, não dados reais. Cancelamento não se propaga porque não há leitura real a propagar |
+| Perfil administrador MX | Não auditado no runtime |
+| Rotina da Equipe / Mentor Gerencial | Não auditados no runtime |
+
+## 20. Varredura sistêmica (2ª rodada)
+
+Depois que a validação em runtime mostrou que os testes não cobriam as telas,
+foi feita uma varredura por listas literais de etapas/situações terminais.
+
+**Frontend — 9 focos**, todos com a mesma causa: cada ponto decidia "esta
+oportunidade está viva?" com uma lista literal de duas etapas. O pior era
+`CRM_ETAPAS_FUNIL` alimentando `z.enum()` em `OportunidadeSchema`, que
+**rejeitava qualquer oportunidade cancelada lida do banco**. Corrigido com
+fonte única `CRM_ETAPAS_TERMINAIS` / `isEtapaTerminal`.
+
+**SQL — 7 funções analisadas**, 2 bugs reais:
+
+| Função | Veredito |
+|---|---|
+| `prevent_valor_negociado_tamper_after_close` | **BUG** — valor de venda cancelada era editável por qualquer vendedor |
+| `consolidate_store_target_plan` | **BUG** — meta da loja contava venda cancelada |
+| `compute_individual_score_mvp` | OK — cancelada sai do numerador, score cai ao cancelar |
+| `upsert_funnel_metrics_snapshot` | OK — `ganhos` conta só `'ganho'` |
+| `admin_store_live_overview` | OK |
+| `registrar_venda_direta` | OK |
+| `pode_ler_cliente_por_oportunidade` | OK — e **não deve** ser alterada: incluir `'cancelada'` no `NOT IN` removeria o acesso do vendedor ao cliente e quebraria a recuperação |
+| `carteira_salvar_cliente` (v1) | Código morto — sem grant para `authenticated`; a v2 é a que roda |
 
 ## 18. Evidências
 
