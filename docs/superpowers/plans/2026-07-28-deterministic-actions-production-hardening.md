@@ -35,6 +35,7 @@
 - Modify `src/pages/ManagerMentor.tsx`: remove duplicated target warning and render the real action panel.
 - Modify `src/pages/VendedorHome.tsx`: replace the static suggestion with the seller’s highest-priority deterministic action and real CTA.
 - Create `supabase/migrations/20260728061728_deterministic_actions_runtime_and_security.sql`: resolution ledger, RLS, Realtime and trigger-function ACL hardening.
+- Create `supabase/migrations/20260728070054_deterministic_actions_rls_private_access_helper.sql`: keep the store-scope helper outside the exposed API while allowing authenticated RLS evaluation.
 - Create focused tests under `src/lib`, `src/features/deterministic-actions` and `src/test`.
 
 ### Task 1: Establish failing production contracts

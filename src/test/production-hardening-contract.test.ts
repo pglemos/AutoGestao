@@ -75,4 +75,29 @@ describe('production hardening contracts', () => {
     expect(hook).toContain("if (!normalizedRole)")
     expect(roleAdapter).toContain('return null')
   })
+
+  test('resolution policies call store authorization through a non-exposed helper', () => {
+    const migration = readRepoFile(
+      'supabase/migrations/20260728070054_deterministic_actions_rls_private_access_helper.sql',
+    )
+
+    expect(migration).toContain('CREATE SCHEMA IF NOT EXISTS private')
+    expect(migration).toContain(
+      'FUNCTION private.deterministic_actions_can_access_store(p_store_id uuid)',
+    )
+    expect(migration).toContain('SECURITY DEFINER')
+    expect(migration).toContain('SET search_path = pg_catalog')
+    expect(migration).toContain(
+      'private.deterministic_actions_can_access_store(store_id)',
+    )
+    expect(migration).toMatch(
+      /REVOKE\s+ALL\s+ON\s+FUNCTION\s+private\.deterministic_actions_can_access_store\(uuid\)\s+FROM\s+PUBLIC,\s*anon/i,
+    )
+    expect(migration).toMatch(
+      /GRANT\s+EXECUTE\s+ON\s+FUNCTION\s+private\.deterministic_actions_can_access_store\(uuid\)\s+TO\s+authenticated,\s*service_role/i,
+    )
+    expect(migration).not.toMatch(
+      /GRANT\s+EXECUTE\s+ON\s+FUNCTION\s+public\.central_can_access_store/i,
+    )
+  })
 })
