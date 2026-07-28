@@ -1,22 +1,22 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import {
   DETERMINISTIC_RULE_VERSION,
   deriveDeterministicActions,
   type DeterministicAction,
-  type DeterministicActionInput,
   type TargetPaceInfo,
 } from '@/lib/deterministic-actions'
 import {
+  applyDeterministicResolutions,
   buildDeterministicActionInput,
-  filterResolvedActions,
   type AppointmentRow,
   type CustomerRow,
   type DeterministicResolutionRow,
   type OpportunityRow,
   type ProposalEventRow,
 } from './deterministic-action-data'
+import { toDeterministicRole } from './deterministic-role'
 
 interface UseDeterministicActionsOptions {
   targetPace?: TargetPaceInfo
@@ -30,13 +30,6 @@ interface UseDeterministicActionsResult {
   resolveAction: (action: DeterministicAction) => Promise<{ error: string | null }>
 }
 
-function normalizeRole(role: string | null | undefined): DeterministicActionInput['role'] {
-  if (role === 'vendedor') return 'seller'
-  if (role === 'gerente') return 'manager'
-  if (role === 'dono') return 'owner'
-  return 'admin'
-}
-
 function saoPauloDate(): string {
   return new Intl.DateTimeFormat('en-CA', {
     year: 'numeric',
@@ -44,10 +37,6 @@ function saoPauloDate(): string {
     day: '2-digit',
     timeZone: 'America/Sao_Paulo',
   }).format(new Date())
-}
-
-function startOfSaoPauloDayIso(date: string): string {
-  return `${date}T00:00:00-03:00`
 }
 
 function errorMessage(error: unknown): string {
@@ -62,30 +51,25 @@ export function useDeterministicActions(
 ): UseDeterministicActionsResult {
   const { supabaseUser, activeStoreId, storeId, role } = useAuth()
   const effectiveStoreId = activeStoreId || storeId || null
-  const normalizedRole = normalizeRole(role)
+  const normalizedRole = toDeterministicRole(role)
+  const targetPace = options.targetPace
   const [actions, setActions] = useState<DeterministicAction[]>([])
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
   const refreshTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
-
-  const targetPaceKey = useMemo(
-    () => options.targetPace
-      ? [
-          options.targetPace.storeId,
-          options.targetPace.targetSales,
-          options.targetPace.realizedSales,
-          options.targetPace.dayOfMonth,
-          options.targetPace.daysInMonth,
-        ].join(':')
-      : '',
-    [options.targetPace],
-  )
 
   const refresh = useCallback(async () => {
     if (!supabaseUser || !effectiveStoreId) {
       setActions([])
       setLoading(false)
       setError(null)
+      return
+    }
+
+    if (!normalizedRole) {
+      setActions([])
+      setLoading(false)
+      setError('Perfil sem permissão para receber ações determinísticas.')
       return
     }
 
@@ -108,7 +92,7 @@ export function useDeterministicActions(
         .from('agendamentos')
         .select('id, cliente_id, oportunidade_id, data_hora, status')
         .eq('loja_id', effectiveStoreId)
-        .in('status', ['aguardando', 'confirmado'])
+        .eq('status', 'aguardando')
 
       let proposalsQuery = supabase
         .from('eventos_comerciais')
@@ -122,7 +106,6 @@ export function useDeterministicActions(
         .select('action_id, scenario_code, opportunity_id, customer_id, completed_at, completed_by, rule_version')
         .eq('store_id', effectiveStoreId)
         .eq('rule_version', DETERMINISTIC_RULE_VERSION)
-        .gte('completed_at', startOfSaoPauloDayIso(refDate))
 
       if (normalizedRole === 'seller') {
         opportunitiesQuery = opportunitiesQuery.eq('seller_user_id', supabaseUser.id)
@@ -164,22 +147,26 @@ export function useDeterministicActions(
         role: normalizedRole,
         userId: supabaseUser.id,
         storeId: effectiveStoreId,
-        targetPace: options.targetPace,
+        targetPace,
       })
       const derived = deriveDeterministicActions(input)
-      setActions(filterResolvedActions(derived, rows.resolutions))
+      setActions(applyDeterministicResolutions(derived, rows.resolutions))
     } catch (refreshError) {
       setActions([])
       setError(errorMessage(refreshError))
     } finally {
       setLoading(false)
     }
-  }, [effectiveStoreId, normalizedRole, options.targetPace, supabaseUser, targetPaceKey])
+  }, [effectiveStoreId, normalizedRole, supabaseUser, targetPace])
 
   const resolveAction = useCallback(async (action: DeterministicAction) => {
     if (!supabaseUser || !effectiveStoreId) return { error: 'Sessão ou loja não identificada.' }
+    if (!normalizedRole) return { error: 'Perfil sem permissão para tratar esta ação.' }
+    if (action.scenarioCode === 'AUTOMATIC_TASK_ORIGIN_PENDING') {
+      return { error: 'Regularize a origem da pendência antes de concluir esta ação.' }
+    }
 
-    const { error: insertError } = await supabase
+    const { error: upsertError } = await supabase
       .from('deterministic_action_resolutions')
       .upsert({
         action_id: action.id,
@@ -187,7 +174,7 @@ export function useDeterministicActions(
         resolution_key: action.resolutionKey,
         rule_version: action.ruleVersion,
         store_id: effectiveStoreId,
-        user_id: action.userId,
+        user_id: supabaseUser.id,
         seller_user_id: action.sellerUserId,
         customer_id: action.customerId,
         opportunity_id: action.opportunityId,
@@ -199,17 +186,17 @@ export function useDeterministicActions(
         ignoreDuplicates: false,
       })
 
-    if (insertError) return { error: insertError.message }
+    if (upsertError) return { error: upsertError.message }
     await refresh()
     return { error: null }
-  }, [effectiveStoreId, refresh, supabaseUser])
+  }, [effectiveStoreId, normalizedRole, refresh, supabaseUser])
 
   useEffect(() => {
     void refresh()
   }, [refresh])
 
   useEffect(() => {
-    if (!supabaseUser || !effectiveStoreId) return
+    if (!supabaseUser || !effectiveStoreId || !normalizedRole) return
 
     const scheduleRefresh = () => {
       if (refreshTimer.current) clearTimeout(refreshTimer.current)
@@ -229,7 +216,7 @@ export function useDeterministicActions(
       if (refreshTimer.current) clearTimeout(refreshTimer.current)
       void supabase.removeChannel(channel)
     }
-  }, [effectiveStoreId, refresh, supabaseUser])
+  }, [effectiveStoreId, normalizedRole, refresh, supabaseUser])
 
   return { actions, loading, error, refresh, resolveAction }
 }
