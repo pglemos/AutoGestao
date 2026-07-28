@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import { deriveDeterministicActions } from '@/lib/deterministic-actions'
 import {
+  applyDeterministicResolutions,
   buildDeterministicActionInput,
   filterResolvedActions,
   toManualCompletions,
@@ -50,17 +51,7 @@ describe('deterministic action production data adapter', () => {
             data_evento: '2026-07-24T13:00:00Z',
           },
         ],
-        resolutions: [
-          {
-            action_id: 'act-overdue-client-1',
-            scenario_code: 'OVERDUE_ACTION',
-            opportunity_id: 'opp-1',
-            customer_id: 'client-1',
-            completed_at: '2026-07-27T18:00:00Z',
-            completed_by: 'seller-1',
-            rule_version: 'v1.0-deterministic',
-          },
-        ],
+        resolutions: [],
       },
       {
         refDate: '2026-07-28',
@@ -88,13 +79,10 @@ describe('deterministic action production data adapter', () => {
       id: 'proposal-event-1',
       oportunidade_id: 'opp-1',
     })
-    expect(input.manualCompletions?.[0]).toMatchObject({
-      taskId: 'act-overdue-client-1',
-      completedBy: 'seller-1',
-    })
+    expect(input.manualCompletions).toBeUndefined()
   })
 
-  test('filters only exact resolved actions for the same rule version', () => {
+  test('permanently suppresses resolved non-recurring actions for the same rule version', () => {
     const input = buildDeterministicActionInput(
       {
         opportunities: [
@@ -127,20 +115,109 @@ describe('deterministic action production data adapter', () => {
       {
         action_id: action!.id,
         scenario_code: action!.scenarioCode,
-        completed_at: '2026-07-28T10:00:00Z',
-        completed_by: 'seller-1',
-        rule_version: action!.ruleVersion,
-      },
-      {
-        action_id: 'some-other-action',
-        scenario_code: 'CANCELLED_SALE',
-        completed_at: '2026-07-28T10:00:00Z',
+        completed_at: '2026-07-27T10:00:00Z',
         completed_by: 'seller-1',
         rule_version: action!.ruleVersion,
       },
     ])
 
     expect(filtered.some((item) => item.id === action!.id)).toBe(false)
+    expect(filtered.some((item) => item.scenarioCode === 'AUTOMATIC_TASK_ORIGIN_PENDING')).toBe(false)
+  })
+
+  test('replaces a resolved source-bound action when its canonical origin remains active', () => {
+    const input = buildDeterministicActionInput(
+      {
+        opportunities: [
+          {
+            id: 'opp-3',
+            cliente_id: 'client-3',
+            etapa: 'negociacao',
+            seller_user_id: 'seller-1',
+            updated_at: '2026-07-20T10:00:00Z',
+          },
+        ],
+        customers: [
+          {
+            id: 'client-3',
+            nome: 'Cliente Pendente',
+            proxima_acao: 'Retornar',
+            proxima_acao_em: '2026-07-20',
+            seller_user_id: 'seller-1',
+          },
+        ],
+        appointments: [],
+        proposalEvents: [],
+        resolutions: [],
+      },
+      {
+        refDate: '2026-07-28',
+        role: 'seller',
+        userId: 'seller-1',
+        storeId: 'store-1',
+      },
+    )
+    const actions = deriveDeterministicActions(input)
+    const overdue = actions.find((item) => item.scenarioCode === 'OVERDUE_ACTION')
+    expect(overdue).toBeDefined()
+
+    const applied = applyDeterministicResolutions(actions, [
+      {
+        action_id: overdue!.id,
+        scenario_code: overdue!.scenarioCode,
+        completed_at: '2026-07-27T10:00:00Z',
+        completed_by: 'seller-1',
+        rule_version: overdue!.ruleVersion,
+      },
+    ])
+
+    expect(applied.some((item) => item.id === overdue!.id)).toBe(false)
+    const originPending = applied.find((item) => item.scenarioCode === 'AUTOMATIC_TASK_ORIGIN_PENDING')
+    expect(originPending).toMatchObject({
+      actionType: 'REGULARIZE_ORIGIN',
+      actionUrl: overdue!.actionUrl,
+      customerId: overdue!.customerId,
+      opportunityId: overdue!.opportunityId,
+    })
+    expect(originPending?.evidence).toMatchObject({
+      originalActionId: overdue!.id,
+      originalScenarioCode: 'OVERDUE_ACTION',
+    })
+  })
+
+  test('does not apply a resolution from another rule version or action id', () => {
+    const action = deriveDeterministicActions({
+      refDate: '2026-07-28',
+      role: 'manager',
+      userId: 'manager-1',
+      storeId: 'store-1',
+      targetPace: {
+        storeId: 'store-1',
+        targetSales: 30,
+        realizedSales: 2,
+        dayOfMonth: 28,
+        daysInMonth: 31,
+      },
+    })[0]
+
+    const result = applyDeterministicResolutions([action], [
+      {
+        action_id: action.id,
+        scenario_code: action.scenarioCode,
+        completed_at: '2026-07-28T10:00:00Z',
+        completed_by: 'manager-1',
+        rule_version: 'old-rule-version',
+      },
+      {
+        action_id: 'another-action',
+        scenario_code: action.scenarioCode,
+        completed_at: '2026-07-28T10:00:00Z',
+        completed_by: 'manager-1',
+        rule_version: action.ruleVersion,
+      },
+    ])
+
+    expect(result).toEqual([action])
   })
 
   test('converts persisted resolutions into manual completion evidence', () => {
@@ -152,7 +229,7 @@ describe('deterministic action production data adapter', () => {
         customer_id: 'client-9',
         completed_at: '2026-07-28T10:00:00Z',
         completed_by: 'manager-1',
-        rule_version: 'v1.0-deterministic',
+        rule_version: 'v1.2-deterministic',
       },
     ])
 
