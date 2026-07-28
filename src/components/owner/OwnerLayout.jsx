@@ -9,15 +9,21 @@ import ConsultantRequestModal from "@/components/owner/ConsultantRequestModal";
 export default function OwnerLayout() {
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   return (
     <OwnerProvider>
       <div className="flex h-full min-h-0 overflow-hidden bg-background">
         <aside
-          className="hidden w-64 shrink-0 border-r border-sidebar-border xl:block"
+          className={`hidden shrink-0 border-r border-sidebar-border transition-[width] duration-300 xl:block ${
+            sidebarCollapsed ? "w-16" : "w-64"
+          }`}
           aria-label="Menu principal do Dono"
         >
-          <OwnerSidebar />
+          <OwnerSidebar
+            collapsed={sidebarCollapsed}
+            onCollapsedChange={setSidebarCollapsed}
+          />
         </aside>
 
         {sidebarOpen ? (

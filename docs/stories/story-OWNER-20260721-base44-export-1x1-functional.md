@@ -97,6 +97,11 @@ quality_gate_tools: ["browser", "playwright", "coderabbit", "vitest"]
   - [x] Recuar os sete departamentos em subnavegação com trilho vertical e sem ícones individuais.
   - [x] Manter Mercado e Universidade MX fora do grupo, com estado Em construção.
   - [x] Validar expansão, item ativo, desktop e drawer mobile em navegador real.
+- [x] 7. Reproduzir os componentes anexados do sidebar executivo (correção do usuário em 2026-07-28)
+  - [x] Aplicar somente ao Dono a largura, cabeçalho da marca, recolhimento e estado ativo verde-claro da referência.
+  - [x] Preservar os quatro badges `Em construção` visíveis na referência.
+  - [x] Ampliar e alinhar o cartão de perfil do Dono sem alterar Gerente, Vendedor ou Admin.
+  - [x] Validar desktop e mobile com sessão real, console, overflow e regressão completa.
 
 ## Dev Notes
 
@@ -123,6 +128,7 @@ quality_gate_tools: ["browser", "playwright", "coderabbit", "vitest"]
 | 2026-07-21 | 1.2 | Sidebar do Dono unificado ao shell de Vendedor/Gerente e revalidado em 68 combinações responsivas. | @dev |
 | 2026-07-21 | 1.3 | Contratos globais obsoletos corrigidos, Playwright alinhado em 1.61.1 e todos os gates fechados para revisão. | @dev |
 | 2026-07-21 | 1.4 | Hierarquia visual de Departamentos restaurada no shell universal, incluindo subnavegação responsiva e estados Em construção. | @dev |
+| 2026-07-28 | 1.5 | Componentes anexados do sidebar reproduzidos no shell dedicado do Dono e validados em sessão real. | @dev |
 
 ## Dev Agent Record
 
@@ -148,6 +154,8 @@ GPT-5 Codex / Dex
 - DoD concluído: requisitos, estrutura, segurança, testes focados/globais/E2E, verificação visual, lint, typecheck e build passaram; story pronta para revisão e publicação pelo `@devops`.
 - Correção visual 1.4 validada localmente em 1440x900 e 390x844: Departamentos expansível, 7 filhos recuados, 0 ícones nos filhos, Visão Geral como único item ativo, 0 overflow e 0 erros de console.
 - Regressão da correção 1.4: `1317 pass / 0 fail`, lint com 0 erros e 7 warnings preexistentes, typecheck e build aprovados; matriz Playwright autenticada passou em 2 projetos (`2 passed`, 3,3 min) cobrindo 68 combinações por execução.
+- Correção visual 1.5 validada com a conta Dono real em `16 rotas x 4 viewports`: `1 passed`, sem overflow, page errors ou console errors; cabeçalho, recolhimento, ativo, badges e cartão de perfil confirmados por screenshot estável.
+- Gates finais da correção 1.5: `1631 pass / 0 fail`, lint com 0 erros e 5 warnings preexistentes, typecheck e build (`5359` módulos) aprovados.
 
 ### Completion Notes List
 
@@ -160,6 +168,7 @@ GPT-5 Codex / Dex
 - O E2E mutável exige opt-in explícito, credenciais próprias e limpeza administrativa por ID, sem deixar dados artificiais no ambiente remoto.
 - A atualização local de Playwright solicitada no conjunto “de tudo” foi preservada e corrigida ao alinhar `@playwright/test` e `playwright` em `1.61.1`.
 - A story está `Ready for Review`; commit, push e validação de produção foram delegados ao `@devops` conforme a autoridade AIOX.
+- O shell dedicado do Dono agora usa o símbolo MX oficial, o rótulo `MÓDULO EXECUTIVO`, recolhimento desktop funcional e cartão de perfil alimentado pela sessão autenticada, sem alterar os shells dos demais papéis.
 
 ### File List
 

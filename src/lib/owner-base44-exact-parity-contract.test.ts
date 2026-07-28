@@ -23,7 +23,12 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
     expect(module).toContain("import '@/styles/owner-base44-exact.css'")
     expect(module).toContain('<Route element={<OwnerLayout />}>')
     expect(module).toContain('<Route path="*" element={<OwnerLiveDataPage />} />')
-    expect(layout).toContain('<OwnerSidebar />')
+    expect(layout).toContain('<OwnerSidebar')
+    expect(layout).toContain('collapsed={sidebarCollapsed}')
+    expect(sidebar).toContain('src="/landing/logo-mx.png"')
+    expect(sidebar).toContain('MÓDULO EXECUTIVO')
+    expect(sidebar).toContain('aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}')
+    expect(sidebar).toContain('Abrir perfil de ${displayName}')
     expect(layout).toContain('<OwnerTopbar')
     expect(layout).toContain('<ConsultantRequestModal />')
     for (const label of ['Início', 'Plano Estratégico', 'Plano de Ação', 'Consultoria', 'Departamentos', 'Mercado', 'Universidade MX', 'Falar com Consultor']) {
