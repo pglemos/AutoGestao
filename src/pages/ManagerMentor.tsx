@@ -2,6 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react'
 import { AlertTriangle, BookOpen, BrainCircuit, CheckSquare, MessageSquare, Target, Users, X } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
 import { calcularProjecao, getDiasInfo } from '@/lib/calculations'
+import { deriveDeterministicActions } from '@/lib/deterministic-actions'
 import { useDashboardLojaData } from '@/features/dashboard-loja/hooks/useDashboardLojaData'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 
@@ -33,7 +34,14 @@ export default function ManagerMentor() {
   }, [selectedGuidance])
 
   const recommendations = useMemo(() => {
-    const items: Array<{ message: string; level: 'critical' | 'warning' }> = []
+    const items: Array<{
+      message: string
+      level: 'critical' | 'warning' | 'info'
+      actionUrl?: string | null
+      resolutionKey?: string
+      evidenceText?: string
+    }> = []
+
     for (const seller of data.pendingDisciplineSellers) {
       items.push({ message: `${seller.name} ainda não realizou o fechamento diário.`, level: 'warning' })
     }
@@ -45,8 +53,33 @@ export default function ManagerMentor() {
     if (data.funilData.leads > 0 && data.funilData.agd_total === 0) {
       items.push({ message: 'Há leads no período sem agendamentos registrados. Revise a cadência comercial da equipe.', level: 'warning' })
     }
+
+    // Engine de Ações Determinísticas
+    const deterministicActions = deriveDeterministicActions({
+      refDate: data.referenceDate || new Date().toISOString().slice(0, 10),
+      role: 'manager',
+      userId: membership?.user_id || 'gerente',
+      storeId: storeId || 'store-1',
+      targetPace: goal > 0 ? {
+        storeId: storeId || 'store-1',
+        targetSales: goal,
+        realizedSales: data.metrics.totalSales,
+        dayOfMonth: days.decorridos,
+        daysInMonth: days.total,
+      } : undefined,
+    })
+
+    deterministicActions.forEach((act) => {
+      items.push({
+        message: `${act.title}: ${act.explanation}`,
+        level: act.priority === 'critical' ? 'critical' : act.priority === 'high' ? 'warning' : 'info',
+        actionUrl: act.actionUrl,
+        resolutionKey: act.resolutionKey,
+      })
+    })
+
     return items
-  }, [data.funilData.agd_total, data.funilData.leads, data.metrics.goalValue, data.metrics.totalSales, data.pendingDisciplineSellers, days.decorridos, days.total])
+  }, [data.funilData.agd_total, data.funilData.leads, data.metrics.goalValue, data.metrics.totalSales, data.pendingDisciplineSellers, data.referenceDate, days.decorridos, days.total, membership?.user_id, storeId])
 
   return (
     <main className="min-h-full bg-gray-50">
