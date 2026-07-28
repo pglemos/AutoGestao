@@ -41,7 +41,7 @@ const Perfil = lazy(() => import('@/pages/Perfil'))
 
 // Gerente e Dono
 const DashboardLoja = lazy(() => import('@/pages/DashboardLoja'))
-const ActionPlanWorkspace = lazy(() => import('@/features/action-plan/ActionPlanWorkspace'))
+const ScopedActionPlanPage = lazy(() => import('@/features/action-plan/ScopedActionPlanPage'))
 const InternalActionPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalActionPlanPage'))
 const InternalStrategicPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalStrategicPlanPage'))
 const InternalConsultingPage = lazy(() => import('@/features/internal-mx-planning/InternalConsultingPage'))
@@ -261,7 +261,7 @@ export default function App() {
               <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                 <Route path="settings" element={<Navigate to="/configuracoes" replace />} />
                 <Route path="plano-estrategico" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /></Suspense>} />
-                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ActionPlanWorkspace />} gerente={<ActionPlanWorkspace />} dono={<ActionPlanWorkspace />} admin={<InternalActionPlanPage />} /></Suspense>} />
+                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ScopedActionPlanPage />} gerente={<ScopedActionPlanPage />} dono={<ScopedActionPlanPage />} admin={<InternalActionPlanPage />} /></Suspense>} />
                 <Route path="team" element={<TeamAliasRedirect />} />
                 <Route path="equipe" element={<TeamAliasRedirect />} />
 

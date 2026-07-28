@@ -41,4 +41,13 @@ describe('páginas de planejamento do módulo interno MX', () => {
     expect(realtime).toContain('action:')
     expect(realtime).toContain('consulting:')
   })
+
+  test('monta gerente e vendedor dentro do provider compartilhado', () => {
+    const app = read('src/App.tsx')
+    const scopedPage = read('src/features/action-plan/ScopedActionPlanPage.tsx')
+    expect(app).toContain('gerente={<ScopedActionPlanPage />}')
+    expect(app).toContain('vendedor={<ScopedActionPlanPage />}')
+    expect(scopedPage).toContain('PlanningWorkspaceProvider')
+    expect(scopedPage).toContain('<ActionPlanWorkspace />')
+  })
 })
