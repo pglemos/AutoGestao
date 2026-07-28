@@ -51,3 +51,7 @@ tmp/
 # Tool session artifacts
 .zcode/
 .audit-snapshots/
+.agents/
+.claude_backup/
+playwright-transform-cache-*/
+core-js-banners
