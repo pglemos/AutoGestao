@@ -7,10 +7,13 @@
 - Commit local: `6a117e27`
 - Branch remota: `origin/main`
 - Commit remoto: `6a117e27`
-- Projeto Vercel: `synvolt/mx-gestao-preditiva`
-- Deployment de produção: `dpl_FuqGSYvj7b9Hn8UDdNskozS88t6r` (Ready)
-- Commit em produção: `6a117e27` — **local = remoto = produção, sem drift**
-- Domínios: `mx-gestao-preditiva.vercel.app`, `mx-gestao-preditiva-synvolt.vercel.app`
+- Projeto Vercel canônico: `synvolt/mxperformance`
+  (`prj_fpYjxc851kMs55GzR6tgQEr7uWUj`)
+- A evidência original deste baseline apontava por engano para o projeto manual
+  `mx-gestao-preditiva`, que não possuía integração Git e foi removido em
+  2026-07-28.
+- Domínios canônicos: `mxperformance.vercel.app`, `mxperformance.com.br` e
+  `www.mxperformance.com.br`
 - Projeto Supabase: `fbhcmzzgwjdgkctlfvbo` (PostgreSQL 17.6)
 - Migration mais recente no baseline: `20260727140000_cancelamento_venda_regras_perfil`
   (305 registradas em `supabase_migrations.schema_migrations`; 307 arquivos locais,

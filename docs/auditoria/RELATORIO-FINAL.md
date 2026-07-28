@@ -208,7 +208,7 @@ O token GitHub fornecido já estava inválido — usei as credenciais da máquin
 ```bash
 export E2E_SELLER_EMAIL='vendedor@mxgestaopreditiva.com.br'
 export E2E_ROLE_PASSWORD='...'
-export VITE_APP_URL='https://mx-gestao-preditiva-ppd58ffo6-synvolt.vercel.app'
+export VITE_APP_URL='https://mxperformance.vercel.app'
 export PLAYWRIGHT_SKIP_WEB_SERVER=1
 npx playwright test src/test/cancelamento-venda.playwright.ts --project=chromium
 ```
