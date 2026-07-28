@@ -28,22 +28,23 @@ describe('sidebar universal MX', () => {
     for (const legacyUrl of legacyUrls) expect(existsSync(legacyUrl)).toBe(false)
   })
 
-  test('reproduz as dimensões e superfícies da sidebar oficial do Gerente', () => {
+  test('reproduz as dimensões e superfícies da sidebar oficial do Dono', () => {
     expect(shellSource).toContain('border-gray-100 bg-white shadow-sm')
     expect(shellSource).toContain("collapsed ? 'w-16'")
-    expect(shellSource).toContain(": 'w-56'")
-    expect(shellSource).toContain("collapsed ? 'md:pl-16' : 'md:pl-56'")
+    expect(shellSource).toContain(": 'w-64'")
+    expect(shellSource).toContain("collapsed ? 'md:pl-16' : 'md:pl-64'")
 
     expect(shellSource).not.toContain("w-[264px]")
     expect(shellSource).not.toContain("w-[80px]")
     expect(shellSource).not.toContain('border-slate-200 bg-white shadow-lg')
   })
 
-  test('usa um único item ativo verde sólido sem trilho lateral ou caixa de ícone paralela', () => {
+  test('usa um único item ativo em verde suave, sem trilho lateral ou caixa de ícone paralela', () => {
     expect(shellSource).toContain('const activeNavItem = useMemo')
     expect(shellSource).toContain('const active = item === activeNavItem')
-    expect(shellSource).toContain('bg-emerald-600 text-white shadow-sm')
+    expect(shellSource).toContain('bg-emerald-50 font-semibold text-emerald-700')
     expect(shellSource).toContain('text-gray-600 hover:bg-gray-50 hover:text-gray-900')
+    expect(shellSource).not.toContain('bg-emerald-600 text-white shadow-sm')
     expect(shellSource).not.toContain('bg-emerald-50 text-emerald-800')
     expect(shellSource).not.toContain('absolute bottom-2 left-0 top-2 w-1')
   })

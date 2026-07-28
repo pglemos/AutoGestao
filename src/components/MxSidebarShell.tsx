@@ -276,19 +276,19 @@ export default function MxSidebarShell({
         aria-current={active ? 'page' : false}
         onClick={() => setMobileOpen(false)}
         className={cn(
-          'group relative flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-medium outline-none transition-all duration-200 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+          'group relative flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
           active
-            ? 'bg-emerald-600 text-white shadow-sm'
+            ? 'bg-emerald-50 font-semibold text-emerald-700'
             : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
           isCollapsed && 'justify-center px-0',
         )}
       >
         <NavItemIcon
           icon={item.icon}
-          size={18}
+          size={16}
           className={cn(
             'shrink-0 transition-colors',
-            active ? 'text-white' : 'text-gray-500 group-hover:text-gray-800',
+            active ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-700',
           )}
         />
         {!isCollapsed ? (
@@ -302,11 +302,9 @@ export default function MxSidebarShell({
             {item.badge ? (
               <span
                 className={cn(
-                  'inline-flex min-h-5 shrink-0 items-center justify-center rounded-full px-1.5 text-[10px] font-bold',
+                  'inline-flex shrink-0 items-center justify-center rounded-full px-1.5 py-0.5 text-[9px] font-medium',
                   item.badgeTone === 'warning'
                     ? 'bg-amber-50 text-amber-700'
-                    : active
-                    ? 'bg-white/20 text-white'
                     : 'bg-emerald-50 text-emerald-700',
                 )}
               >
@@ -331,13 +329,25 @@ export default function MxSidebarShell({
         aria-current={active ? 'page' : false}
         onClick={() => setMobileOpen(false)}
         className={cn(
-          'flex min-h-10 w-full items-center rounded-xl px-3 py-2 text-left text-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+          'flex w-full items-center gap-1.5 rounded-md px-2.5 py-1 text-left text-[13px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
           active
-            ? 'bg-emerald-50 font-semibold text-emerald-700'
-            : 'font-medium text-gray-500 hover:bg-gray-50 hover:text-gray-800',
+            ? 'bg-emerald-50 font-medium text-emerald-700'
+            : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800',
         )}
       >
         <span className="min-w-0 flex-1 truncate">{item.label}</span>
+        {item.badge ? (
+          <span
+            className={cn(
+              'shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-medium',
+              item.badgeTone === 'warning'
+                ? 'bg-amber-50 text-amber-700'
+                : 'bg-emerald-50 text-emerald-700',
+            )}
+          >
+            {item.badge}
+          </span>
+        ) : null}
       </NavLink>
     )
   }
@@ -363,20 +373,20 @@ export default function MxSidebarShell({
           aria-expanded={expanded}
           onClick={toggleGroup}
           className={cn(
-            'group relative flex min-h-11 w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-sm font-semibold text-gray-600 outline-none transition-colors hover:bg-gray-50 hover:text-gray-900 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+            'group relative flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-600 outline-none transition-colors hover:bg-gray-50 hover:text-gray-900 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
             isCollapsed && 'justify-center px-0',
           )}
         >
           <NavItemIcon
             icon={item.icon}
-            size={18}
-            className="shrink-0 text-gray-500 transition-colors group-hover:text-gray-800"
+            size={16}
+            className="shrink-0 text-gray-400 transition-colors group-hover:text-gray-700"
           />
           {!isCollapsed ? (
             <>
               <span className="min-w-0 flex-1 truncate">{item.label}</span>
               <ChevronDown
-                size={16}
+                size={14}
                 className={cn(
                   'shrink-0 text-gray-400 transition-transform duration-200',
                   expanded && 'rotate-180',
@@ -391,7 +401,7 @@ export default function MxSidebarShell({
         {!isCollapsed && expanded ? (
           <div
             data-sidebar-subnav={item.label}
-            className="ml-5 space-y-1 border-l border-gray-200 pl-2.5"
+            className="ml-3 mt-0.5 space-y-0.5 border-l border-gray-200 pl-3"
           >
             {item.children?.map(renderNestedNavItem)}
           </div>
@@ -450,8 +460,8 @@ export default function MxSidebarShell({
         aria-label={`Abrir menu de usuário de ${displayName}`}
         onClick={() => setUserMenuOpen((open) => !open)}
         className={cn(
-          'group flex min-h-14 w-full items-center gap-3 rounded-xl border border-gray-100 bg-gray-50 px-3 py-2 text-left outline-none transition-colors hover:border-emerald-100 hover:bg-emerald-50/60 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
-          isCollapsed && 'justify-center px-0',
+          'group flex min-h-14 w-full items-center gap-3 rounded-2xl border border-gray-100 bg-gray-50/60 py-2 text-left outline-none transition-colors hover:border-emerald-100 hover:bg-emerald-50/60 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+          isCollapsed ? 'justify-center px-0' : 'px-3.5',
         )}
       >
         <Avatar
@@ -459,13 +469,13 @@ export default function MxSidebarShell({
           alt={`Avatar de ${displayName}`}
           fallback={initials}
           size="md"
-          className="shrink-0 border-emerald-100 bg-emerald-50 font-bold text-emerald-700"
+          className="shrink-0 border-emerald-100 bg-emerald-50 font-bold text-emerald-600"
         />
         {!isCollapsed ? (
           <>
             <span className="min-w-0 flex-1 overflow-hidden">
               <span
-                className="block truncate text-xs font-bold leading-tight text-gray-800"
+                className="block truncate text-[13px] font-bold leading-tight text-gray-800"
                 title={displayName}
               >
                 {displayName}
@@ -478,7 +488,7 @@ export default function MxSidebarShell({
               </span>
             </span>
             <ChevronDown
-              size={17}
+              size={16}
               strokeWidth={2}
               className={cn(
                 'shrink-0 text-gray-400 transition-transform duration-200',
@@ -500,7 +510,7 @@ export default function MxSidebarShell({
     <>
       <div
         className={cn(
-          'flex min-h-16 items-center border-b border-gray-100',
+          'flex h-[54px] shrink-0 items-center border-b border-gray-100',
           isCollapsed ? 'justify-center px-2' : 'justify-between px-4',
         )}
       >
@@ -513,14 +523,14 @@ export default function MxSidebarShell({
           <img
             src={MxLogo}
             alt="MX"
-            className="h-8 w-8 shrink-0 object-contain"
+            className="h-7 w-7 shrink-0 object-contain"
           />
           {!isCollapsed ? (
-            <div className="min-w-0">
-              <p className="truncate text-xs font-black tracking-tight text-gray-900">
+            <div className="min-w-0 leading-tight">
+              <p className="truncate text-[13px] font-black tracking-tight text-gray-900">
                 MX PERFORMANCE
               </p>
-              <p className="mt-0.5 truncate text-[9px] font-bold uppercase tracking-[0.12em] text-emerald-700">
+              <p className="mt-0.5 truncate text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-700">
                 {moduleLabel}
               </p>
             </div>
@@ -544,19 +554,19 @@ export default function MxSidebarShell({
 
       <nav
         className={cn(
-          'no-scrollbar flex-1 space-y-4 overflow-y-auto py-4',
-          isCollapsed ? 'px-2' : 'px-2.5',
+          'no-scrollbar min-h-0 flex-1 space-y-5 overflow-y-auto py-4',
+          isCollapsed ? 'px-2' : 'px-3',
         )}
         aria-label={sidebarLabel}
       >
         {navSections.map((section) => (
-          <section key={section.key ?? section.label} className="space-y-1.5">
+          <section key={section.key ?? section.label}>
             {!isCollapsed && section.label !== 'MENU' ? (
-              <p className="px-3 text-[10px] font-semibold uppercase tracking-[0.12em] text-gray-400">
+              <p className="truncate px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
                 {section.label}
               </p>
             ) : null}
-            <div className="space-y-1">
+            <div className="space-y-0.5">
               {section.items.map(item => item.children?.length
                 ? renderNavGroup(item, isCollapsed)
                 : renderNavItem(item, isCollapsed))}
@@ -565,7 +575,7 @@ export default function MxSidebarShell({
         ))}
       </nav>
 
-      <div className={cn('border-t border-gray-100 py-3', isCollapsed ? 'px-2' : 'px-2.5')}>
+      <div className={cn('border-t border-gray-100 py-3', isCollapsed ? 'px-2' : 'px-3')}>
         {renderProfileCard(isCollapsed)}
       </div>
     </>
@@ -609,7 +619,7 @@ export default function MxSidebarShell({
       <aside
         className={cn(
           'fixed left-0 top-0 z-[80] hidden h-screen flex-col border-r border-gray-100 bg-white shadow-sm transition-[width] duration-300 ease-in-out md:flex',
-          collapsed ? 'w-16' : 'w-56',
+          collapsed ? 'w-16' : 'w-64',
         )}
         aria-label={sidebarLabel}
       >
@@ -658,7 +668,7 @@ export default function MxSidebarShell({
         className={cn(
           'h-[100dvh] overflow-hidden bg-gray-50 outline-none transition-[padding] duration-300 md:h-screen',
           'pt-[calc(72px+env(safe-area-inset-top))] md:pt-0',
-          collapsed ? 'md:pl-16' : 'md:pl-56',
+          collapsed ? 'md:pl-16' : 'md:pl-64',
         )}
       >
         {isSimulating ? (
