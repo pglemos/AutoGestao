@@ -115,7 +115,7 @@ com motivo e data/hora; CTA "Executar próximo passo" oculto; qualidade passa a
 | Lint | `npm run lint` | 0 erros, 7 warnings preexistentes |
 | Build | `npm run build` | OK |
 | Gate de paridade | `node scripts/verify_carteira_base44_parity.mjs` | passa |
-| E2E autenticado | `npm run test:e2e` | **não executado** — ver §17 |
+| E2E CAN-02/08/09/10 | `npx playwright test src/test/cancelamento-venda.playwright.ts` | **escrito, não executado** — pula sem credencial; ver §17 |
 
 ## 12. Segurança
 
@@ -165,7 +165,8 @@ agendamento aberto restante.
 | Ações determinísticas (`DeterministicAction`) | Não iniciado |
 | Atualização em tempo real | Não iniciado |
 | Matriz rota-dado por perfil | Não iniciado |
-| E2E CAN-01…28 | **Bloqueado** — o Preview exige SSO da Vercel e a validação autenticada exige digitar senhas em formulário, o que não faço |
+| E2E CAN-02/08/09/10 | Spec escrita (`src/test/cancelamento-venda.playwright.ts`), **não executada**: autenticar exige submeter senha em formulário de login, o que não faço nem via runner. Rode com as variáveis exportadas no seu shell — ver §19 |
+| E2E CAN-01, 03…07, 11…28 | Não escritos |
 | Deploy do frontend | Não promovido |
 | Filtro de "ativos" do gerente/dono | Não auditado |
 
@@ -178,3 +179,25 @@ agendamento aberto restante.
 - Preview `mx-gestao-preditiva-e2ixiprri-synvolt.vercel.app`
 - Baseline: `docs/auditoria/production-baseline.md`
 - Causas raiz: `docs/auditoria/cancelamento-reproducao.md`
+
+Verificado no Preview sem autenticação: rota protegida `/carteira` redireciona
+para `/login`, todos os assets respondem 200/304, console sem erros.
+
+## 19. Como rodar o E2E do cancelamento
+
+Exporte as credenciais no seu shell (elas não passam por aqui) e aponte para o
+Preview:
+
+```bash
+export E2E_SELLER_EMAIL='vendedor@...'
+export E2E_ROLE_PASSWORD='...'
+export VITE_APP_URL='https://mx-gestao-preditiva-e2ixiprri-synvolt.vercel.app'
+export PLAYWRIGHT_SKIP_WEB_SERVER=1
+npx playwright test src/test/cancelamento-venda.playwright.ts --project=chromium
+```
+
+Sem as variáveis a suíte pula em vez de falhar (confirmado: `4 skipped`).
+Os quatro casos são de leitura — nenhum cancela venda, para não tocar dados
+reais de clientes. As duas vendas canceladas hoje em produção pertencem ao
+vendedor de teste na loja MX CONSULTORIA (clientes "TESTE" e
+"TESTE CANCELAMENTO QA"), então é essa a conta que enxerga os casos.
