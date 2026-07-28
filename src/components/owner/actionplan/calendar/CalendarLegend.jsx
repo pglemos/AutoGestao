@@ -4,7 +4,7 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 
 const DEPT_LEGEND = [
   { value: "commercial", label: "Comercial", color: "bg-violet-500" },
-  { value: "marketing", label: "Marketing", color: "bg-pink-500" },
+  { value: "marketing", label: "Marketing", color: "bg-indigo-500" },
   { value: "product_stock", label: "Produto e Estoque", color: "bg-blue-500" },
   { value: "financial", label: "Financeiro", color: "bg-emerald-500" },
   { value: "operations", label: "Operações", color: "bg-orange-500" },

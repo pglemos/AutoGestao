@@ -26,7 +26,7 @@ const TIPO_COLOR_BAR = {
   "Documentação": "bg-slate-400",
   "Entrega": "bg-purple-500",
   "Pós-venda": "bg-teal-500",
-  "Aniversário": "bg-pink-500",
+  "Aniversário": "bg-indigo-500",
   "Garantia": "bg-orange-500",
   "Outra atividade comercial": "bg-slate-400",
 };
@@ -37,7 +37,7 @@ const TIPO_COLOR_BADGE = {
   "Documentação": "bg-slate-100 text-slate-600",
   "Entrega": "bg-purple-50 text-purple-700",
   "Pós-venda": "bg-teal-50 text-teal-700",
-  "Aniversário": "bg-pink-50 text-pink-700",
+  "Aniversário": "bg-indigo-50 text-indigo-700",
   "Garantia": "bg-orange-50 text-orange-700",
   "Outra atividade comercial": "bg-slate-100 text-slate-600",
 };

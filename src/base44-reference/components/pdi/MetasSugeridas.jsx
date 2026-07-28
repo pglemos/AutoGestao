@@ -122,7 +122,7 @@ export default function MetasSugeridas() {
       label: "Taxa de Conversão",
       valor: `${metrics.taxaConversao}%`,
       sugestao: `${Math.min(100, bump(metrics.taxaConversao))}%`,
-      cor: "border-pink-100 bg-pink-50/40",
+      cor: "border-indigo-100 bg-indigo-50/40",
       detalhe: "Vendas / atendimentos totais",
     },
     {

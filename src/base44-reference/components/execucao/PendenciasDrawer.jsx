@@ -14,7 +14,7 @@ const TIPO_COLOR = {
   "Documentação": "bg-slate-400",
   "Entrega": "bg-purple-500",
   "Pós-venda": "bg-teal-500",
-  "Aniversário": "bg-pink-500",
+  "Aniversário": "bg-indigo-500",
   "Garantia": "bg-orange-500",
   "Outra atividade comercial": "bg-slate-500",
 };

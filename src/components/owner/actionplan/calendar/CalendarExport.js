@@ -114,7 +114,7 @@ export function printCalendar(actions, refDate, companyName, unitName) {
     .day-num { font-weight: bold; font-size: 12px; margin-bottom: 2px; }
     .event { font-size: 9px; padding: 1px 3px; margin: 1px 0; border-radius: 2px; background: #f5f5f5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
     .event.commercial { border-left: 3px solid #8b5cf6; }
-    .event.marketing { border-left: 3px solid #ec4899; }
+    .event.marketing { border-left: 3px solid #6366F1; }
     .event.product_stock { border-left: 3px solid #3b82f6; }
     .event.financial { border-left: 3px solid #10b981; }
     .event.operations { border-left: 3px solid #f97316; }
@@ -135,7 +135,7 @@ export function printCalendar(actions, refDate, companyName, unitName) {
   </table>
   <div class="legend">
     <div class="legend-item"><div class="legend-dot" style="background:#8b5cf6"></div>Comercial</div>
-    <div class="legend-item"><div class="legend-dot" style="background:#ec4899"></div>Marketing</div>
+    <div class="legend-item"><div class="legend-dot" style="background:#6366F1"></div>Marketing</div>
     <div class="legend-item"><div class="legend-dot" style="background:#3b82f6"></div>Produto e Estoque</div>
     <div class="legend-item"><div class="legend-dot" style="background:#10b981"></div>Financeiro</div>
     <div class="legend-item"><div class="legend-dot" style="background:#f97316"></div>Operações</div>

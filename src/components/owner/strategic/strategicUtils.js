@@ -20,7 +20,7 @@ export const DISPLAY_MODES = [
 
 export const AREA_STYLES = {
   Vendas: { bg: "bg-violet-50", text: "text-violet-700", iconBg: "bg-violet-100 text-violet-600", dot: "bg-violet-500", border: "border-violet-200", hex: "#7C3AED", lightBg: "bg-violet-50/50" },
-  Marketing: { bg: "bg-pink-50", text: "text-pink-700", iconBg: "bg-pink-100 text-pink-600", dot: "bg-pink-500", border: "border-pink-200", hex: "#DB2777", lightBg: "bg-pink-50/50" },
+  Marketing: { bg: "bg-indigo-50", text: "text-indigo-700", iconBg: "bg-indigo-100 text-indigo-600", dot: "bg-indigo-500", border: "border-indigo-200", hex: "#4F46E5", lightBg: "bg-indigo-50/50" },
   Estoque: { bg: "bg-blue-50", text: "text-blue-700", iconBg: "bg-blue-100 text-blue-600", dot: "bg-blue-500", border: "border-blue-200", hex: "#2563EB", lightBg: "bg-blue-50/50" },
   Financeiro: { bg: "bg-emerald-50", text: "text-emerald-700", iconBg: "bg-emerald-100 text-emerald-600", dot: "bg-emerald-500", border: "border-emerald-200", hex: "#16A34A", lightBg: "bg-emerald-50/50" },
   Operacional: { bg: "bg-orange-50", text: "text-orange-700", iconBg: "bg-orange-100 text-orange-600", dot: "bg-orange-500", border: "border-orange-200", hex: "#F97316", lightBg: "bg-orange-50/50" },
@@ -33,7 +33,7 @@ export const AREA_HEX = Object.fromEntries(
 export const CARD_ICON_STYLES = {
   green: "bg-emerald-100 text-emerald-600",
   purple: "bg-violet-100 text-violet-600",
-  orange: "bg-pink-100 text-pink-600",
+  orange: "bg-indigo-100 text-indigo-600",
   blue: "bg-blue-100 text-blue-600",
   teal: "bg-orange-100 text-orange-600",
 };
@@ -41,7 +41,7 @@ export const CARD_ICON_STYLES = {
 export const SPARK_COLORS = {
   green: "text-emerald-500",
   purple: "text-violet-500",
-  orange: "text-pink-500",
+  orange: "text-indigo-500",
   blue: "text-blue-500",
   teal: "text-orange-500",
 };

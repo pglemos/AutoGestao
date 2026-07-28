@@ -18,11 +18,12 @@
 --color-mx-teal: #00A896;
 --color-mx-teal-light: #D0F5F2;
 --color-mx-teal-soft: #E6FAF7;
---color-mx-pink: #F15BB5;
---color-mx-pink-light: #FDE8F5;
---color-mx-action: #F15BB5;
---color-mx-action-hover: #D93E9E;
---color-mx-action-light: #FDE8F5;
+/* Legacy pink aliases: deprecated; mapped to brand teal. Do not reintroduce pink. */
+--color-mx-pink: #00A89D;
+--color-mx-pink-light: #E6FAF7;
+--color-mx-action: #00A89D;
+--color-mx-action-hover: #00857D;
+--color-mx-action-light: #E6FAF7;
 --color-mx-success: #22C55E;
 --color-mx-success-light: #D1FADD;
 --color-mx-warning: #F59E0B;
@@ -290,7 +291,7 @@ to { height: 0; }
   --shadow-card-hover: 0 8px 24px rgba(15, 23, 42, 0.08);
   --shadow-popover: 0 16px 40px rgba(15, 23, 42, 0.14);
   --shadow-modal: 0 24px 60px rgba(15, 23, 42, 0.22);
-  --shadow-action: 0 8px 20px rgba(241, 91, 181, 0.20);
+  --shadow-action: 0 8px 20px rgba(0, 168, 157, 0.20);
 
   /* Effects */
   --blur-mx-huge: 80px;
@@ -352,7 +353,7 @@ to { height: 0; }
   --color-mx-amber-300: #fcd34d;
   --color-mx-amber-400: #fbbf24;
   --color-mx-emerald-100: #d1fae5;
-  --color-mx-rose-100: #ffe4e6;
+  --color-mx-rose-100: #fecaca;
   --color-electric-blue: #00A89D;
   --color-mars-orange: #f97316;
 
@@ -368,7 +369,7 @@ to { height: 0; }
 
   /* Alert Consultive — 4o tipo de alerta (FR-ALERT-1 / .docx §225–§228) */
   --color-alert-consultive: #005BFF;
-  --color-alert-consultive-surface: rgba(241, 91, 186, 0.08);
+  --color-alert-consultive-surface: rgba(0, 91, 255, 0.08);
 
   /* MX Score Bands — 5 faixas (FR-SCORE-2 / .docx §244–§249) */
   --color-score-elite: #00A89D;     /* 90–100 — verde marca (consolidacao) */

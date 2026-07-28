@@ -29,7 +29,7 @@ function barColor(type: CentralExecutionAction['activityType']) {
   if (type === 'entrega') return 'bg-purple-500'
   if (type === 'pos_venda') return 'bg-teal-500'
   if (type === 'garantia') return 'bg-orange-500'
-  if (type === 'aniversario') return 'bg-pink-500'
+  if (type === 'aniversario') return 'bg-indigo-500'
   return 'bg-slate-400'
 }
 
