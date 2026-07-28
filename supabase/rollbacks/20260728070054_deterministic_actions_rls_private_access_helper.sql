@@ -1,3 +1,4 @@
+-- DOWN
 BEGIN;
 
 DROP POLICY IF EXISTS deterministic_action_resolutions_select
