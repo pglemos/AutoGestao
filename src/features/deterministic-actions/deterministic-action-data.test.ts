@@ -115,6 +115,13 @@ describe('deterministic action production data adapter', () => {
       {
         action_id: action!.id,
         scenario_code: action!.scenarioCode,
+        completed_at: '2026-07-26T10:00:00Z',
+        completed_by: 'seller-1',
+        rule_version: 'deterministic-actions/v0',
+      },
+      {
+        action_id: action!.id,
+        scenario_code: action!.scenarioCode,
         completed_at: '2026-07-27T10:00:00Z',
         completed_by: 'seller-1',
         rule_version: action!.ruleVersion,
@@ -123,6 +130,17 @@ describe('deterministic action production data adapter', () => {
 
     expect(filtered.some((item) => item.id === action!.id)).toBe(false)
     expect(filtered.some((item) => item.scenarioCode === 'AUTOMATIC_TASK_ORIGIN_PENDING')).toBe(false)
+
+    const staleOnly = filterResolvedActions(actions, [
+      {
+        action_id: action!.id,
+        scenario_code: action!.scenarioCode,
+        completed_at: '2026-07-26T10:00:00Z',
+        completed_by: 'seller-1',
+        rule_version: 'deterministic-actions/v0',
+      },
+    ])
+    expect(staleOnly.some((item) => item.id === action!.id)).toBe(true)
   })
 
   test('replaces a resolved source-bound action when its canonical origin remains active', () => {

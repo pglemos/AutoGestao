@@ -3271,6 +3271,107 @@ export type Database = {
           },
         ]
       }
+      deterministic_action_resolutions: {
+        Row: {
+          action_id: string
+          completed_at: string
+          completed_by: string
+          created_at: string
+          customer_id: string | null
+          evidence: Json
+          id: string
+          opportunity_id: string | null
+          resolution_key: string
+          rule_version: string
+          scenario_code: string
+          seller_user_id: string | null
+          store_id: string
+          user_id: string | null
+        }
+        Insert: {
+          action_id: string
+          completed_at?: string
+          completed_by?: string
+          created_at?: string
+          customer_id?: string | null
+          evidence?: Json
+          id?: string
+          opportunity_id?: string | null
+          resolution_key: string
+          rule_version: string
+          scenario_code: string
+          seller_user_id?: string | null
+          store_id: string
+          user_id?: string | null
+        }
+        Update: {
+          action_id?: string
+          completed_at?: string
+          completed_by?: string
+          created_at?: string
+          customer_id?: string | null
+          evidence?: Json
+          id?: string
+          opportunity_id?: string | null
+          resolution_key?: string
+          rule_version?: string
+          scenario_code?: string
+          seller_user_id?: string | null
+          store_id?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "deterministic_action_resolutions_completed_by_fkey"
+            columns: ["completed_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deterministic_action_resolutions_customer_id_fkey"
+            columns: ["customer_id"]
+            isOneToOne: false
+            referencedRelation: "clientes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deterministic_action_resolutions_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_oportunidades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deterministic_action_resolutions_opportunity_id_fkey"
+            columns: ["opportunity_id"]
+            isOneToOne: false
+            referencedRelation: "oportunidades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deterministic_action_resolutions_seller_user_id_fkey"
+            columns: ["seller_user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deterministic_action_resolutions_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "deterministic_action_resolutions_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       devolutiva_acoes: {
         Row: {
           action_text: string

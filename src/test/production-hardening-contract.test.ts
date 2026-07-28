@@ -9,17 +9,28 @@ describe('production hardening contracts', () => {
     const vercel = JSON.parse(readRepoFile('vercel.json')) as {
       headers?: Array<{ source: string; headers: Array<{ key: string; value: string }> }>
     }
-    const globalHeaders = vercel.headers?.find((entry) => entry.source === '/(.*)')?.headers ?? []
-    const keys = globalHeaders.map((header) => header.key.toLowerCase())
+    const cspRules = (vercel.headers ?? []).filter((entry) =>
+      entry.headers.some((header) =>
+        header.key.toLowerCase().startsWith('content-security-policy'),
+      ),
+    )
 
-    expect(keys).toContain('content-security-policy')
-    expect(keys).not.toContain('content-security-policy-report-only')
+    expect(cspRules.length).toBeGreaterThan(0)
+    for (const rule of cspRules) {
+      const keys = rule.headers.map((header) => header.key.toLowerCase())
+      expect(keys).not.toContain('content-security-policy-report-only')
 
-    const csp = globalHeaders.find((header) => header.key.toLowerCase() === 'content-security-policy')?.value ?? ''
-    expect(csp).not.toContain("'unsafe-eval'")
-    expect(csp).not.toContain('PLACEHOLDER')
-    expect(csp).toContain("object-src 'none'")
-    expect(csp).toContain("frame-ancestors 'none'")
+      const enforcedPolicies = rule.headers.filter(
+        (header) => header.key.toLowerCase() === 'content-security-policy',
+      )
+      expect(enforcedPolicies.length).toBeGreaterThan(0)
+      for (const header of enforcedPolicies) {
+        expect(header.value).not.toContain("'unsafe-eval'")
+        expect(header.value).not.toContain('PLACEHOLDER')
+        expect(header.value).toContain("object-src 'none'")
+        expect(header.value).toContain("frame-ancestors 'none'")
+      }
+    }
   })
 
   test('the pre-registration cache reset uses an external script allowed by CSP', () => {
@@ -38,10 +49,18 @@ describe('production hardening contracts', () => {
 
     expect(migration).toContain('CREATE TABLE IF NOT EXISTS public.deterministic_action_resolutions')
     expect(migration).toContain('ENABLE ROW LEVEL SECURITY')
+    expect(migration).toContain('FORCE ROW LEVEL SECURITY')
     expect(migration).toContain('supabase_realtime')
     expect(migration).toContain('GRANT SELECT, INSERT, UPDATE, DELETE')
+    expect(migration).toContain('CREATE POLICY deterministic_action_resolutions_select')
+    expect(migration).toContain('CREATE POLICY deterministic_action_resolutions_insert')
     expect(migration).toContain('CREATE POLICY deterministic_action_resolutions_update')
+    expect(migration).toContain('CREATE POLICY deterministic_action_resolutions_delete')
+    expect(migration).toContain('public.central_can_access_store(store_id)')
+    expect(migration).toContain('completed_by = auth.uid()')
+    expect(migration).toContain('seller_user_id = auth.uid()')
     expect(migration).toContain('user_id = auth.uid()')
+    expect(migration).toContain('TO authenticated')
     expect(migration).toMatch(
       /REVOKE\s+ALL\s+ON\s+FUNCTION\s+public\.prevent_valor_negociado_tamper_after_close\(\)\s+FROM\s+PUBLIC,\s*anon,\s*authenticated/i,
     )

@@ -202,7 +202,15 @@ export default function VendedorHomePage() {
 
           <article
             className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors"
+            role="link"
+            tabIndex={0}
             onClick={() => navigate('/central-execucao')}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                navigate('/central-execucao')
+              }
+            }}
           >
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Agenda Hoje</p>
@@ -224,7 +232,15 @@ export default function VendedorHomePage() {
             className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors ${
               posicaoRanking === 1 ? 'border-amber-200' : 'border-gray-100'
             }`}
+            role="link"
+            tabIndex={0}
             onClick={() => navigate('/classificacao')}
+            onKeyDown={(event) => {
+              if (event.key === 'Enter' || event.key === ' ') {
+                event.preventDefault()
+                navigate('/classificacao')
+              }
+            }}
           >
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Ranking</p>

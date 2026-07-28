@@ -16,7 +16,9 @@
 - All recommendations must be deterministic and based on canonical database facts.
 - Database changes must be idempotent and safe for the production project `fbhcmzzgwjdgkctlfvbo`.
 - Every behavior change follows RED, GREEN, REFACTOR.
-- Production promotion requires tests, typecheck, lint, build, Preview smoke test, migration verification and post-deploy smoke test.
+- Automated merge gates require tests, typecheck, lint, build, database type drift, migration checks, RLS regression, secret scanning and an accepted Vercel Preview deployment.
+- Manual pre-merge evidence remains mandatory for authenticated Preview smoke, enforced CSP headers, production ACL/RLS/Realtime queries and a persisted-resolution reread; any failure blocks merge even when GitHub reports the PR as mergeable.
+- Manual post-merge evidence validates the production deployment against the merged SHA, including the production-domain smoke and response headers. A failure blocks promotion completion and triggers rollback; it cannot retroactively block the already completed merge.
 
 ---
 
@@ -32,7 +34,7 @@
 - Create `src/features/deterministic-actions/DeterministicActionsPanel.tsx`: reusable accessible action list with navigation and resolve control.
 - Modify `src/pages/ManagerMentor.tsx`: remove duplicated target warning and render the real action panel.
 - Modify `src/pages/VendedorHome.tsx`: replace the static suggestion with the seller’s highest-priority deterministic action and real CTA.
-- Create `supabase/migrations/20260728050000_deterministic_actions_runtime_and_security.sql`: resolution ledger, RLS, Realtime and trigger-function ACL hardening.
+- Create `supabase/migrations/20260728061728_deterministic_actions_runtime_and_security.sql`: resolution ledger, RLS, Realtime and trigger-function ACL hardening.
 - Create focused tests under `src/lib`, `src/features/deterministic-actions` and `src/test`.
 
 ### Task 1: Establish failing production contracts
@@ -113,7 +115,7 @@
 ### Task 5: Add auditable resolution ledger and privilege hardening
 
 **Files:**
-- Create: `supabase/migrations/20260728050000_deterministic_actions_runtime_and_security.sql`
+- Create: `supabase/migrations/20260728061728_deterministic_actions_runtime_and_security.sql`
 - Extend: `src/test/production-hardening-contract.test.ts`
 
 **Interfaces:**
@@ -173,3 +175,9 @@
 - [ ] **Step 6: Merge only after all gates are green**
 - [ ] **Step 7: Verify production deployment commit, domain HTTP 200 and headers**
 - [ ] **Step 8: Query production ACL/policies/publication and document exact results**
+
+**Automated GitHub merge gates:** Quality Gates, db-types-diff, migration checksum/reversibility, RLS matrix, secret scanning, accessibility, bundle budget and Vercel Preview status.
+
+**Manual pre-merge gates:** authenticated seller/manager Preview smoke, enforced CSP response headers, resolution insert followed by persisted reread and Realtime UI removal, and the production ACL/policy/publication query. Any failure blocks merge.
+
+**Manual post-merge promotion gates:** production deployment must be READY for the merged SHA, and the production domain must pass HTTP, CSP and authenticated route smoke checks. Any failure blocks promotion completion and triggers rollback.
