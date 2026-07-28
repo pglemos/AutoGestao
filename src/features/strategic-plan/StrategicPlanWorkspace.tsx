@@ -77,7 +77,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
         {controller.tab === 'resumo' && controller.indicator ? (
           <div className="space-y-4">
             <div className="flex flex-col gap-2 rounded-xl border border-border bg-card px-4 py-2.5 shadow-sm lg:flex-row lg:items-center lg:justify-between">
-              <div className="flex flex-1 flex-wrap items-center gap-2">
+              <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
                 <StrategicIndicatorSelector
                   value={controller.selectedIndicatorId}
                   onChange={controller.setSelectedIndicatorId}

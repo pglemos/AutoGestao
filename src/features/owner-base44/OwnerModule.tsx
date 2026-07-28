@@ -19,7 +19,7 @@ export default function OwnerModule() {
 
   return (
     <DashboardErrorBoundary sectionName="OwnerModule">
-      <div className="owner-b44 owner-base44-exact h-full min-h-0">
+      <div className="owner-b44 owner-base44-exact h-dvh min-h-0 overflow-hidden">
         <Routes>
           <Route element={<OwnerLayout />}>
             <Route index element={<OwnerHome />} />

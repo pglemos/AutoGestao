@@ -55,7 +55,7 @@ export default function OwnerLayout() {
             aria-label="Conteúdo do módulo Dono"
             className="min-h-0 flex-1 overflow-y-auto"
           >
-            <div className="mx-auto w-full max-w-[1400px] px-4 py-6 lg:px-8 lg:py-8">
+            <div className="mx-auto w-full max-w-[1400px] px-4 pb-24 pt-6 lg:px-8 lg:pb-8 lg:pt-8">
               <Outlet context={{ setLastUpdated }} />
             </div>
           </div>

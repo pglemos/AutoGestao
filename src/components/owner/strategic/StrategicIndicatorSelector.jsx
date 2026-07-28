@@ -18,13 +18,14 @@ export default function StrategicIndicatorSelector({ value, onChange, areaFilter
   }, [areaFilter]);
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex w-full min-w-0 flex-wrap items-center gap-2">
       <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild>
           <button
-            className={`flex items-center justify-between gap-2 rounded-md border border-input bg-card px-3 text-sm shadow-sm hover:bg-muted/40 focus:outline-none focus:ring-2 focus:ring-primary/20 ${compact ? "h-9 min-w-[200px] flex-1" : "h-10 w-full"}`}
+            className={`flex items-center justify-between gap-2 rounded-md border border-input bg-card px-3 text-sm shadow-sm hover:bg-muted/40 focus:outline-none focus:ring-2 focus:ring-primary/20 ${compact ? "h-9 min-w-0 flex-1 basis-[200px]" : "h-10 w-full"}`}
             role="combobox"
             aria-expanded={open}
+            aria-controls="strategic-indicator-listbox"
           >
             <span className={`truncate ${selected ? "font-medium text-foreground" : "text-muted-foreground"}`}>
               {selected ? selected.name : "Selecione um indicador"}
@@ -32,7 +33,7 @@ export default function StrategicIndicatorSelector({ value, onChange, areaFilter
             <ChevronsUpDown className="h-4 w-4 shrink-0 opacity-50" />
           </button>
         </PopoverTrigger>
-        <PopoverContent className="w-[400px] p-0" align="start">
+        <PopoverContent className="w-[min(400px,calc(100vw-2rem))] p-0" align="start">
           <Command
             filter={(val, search) => (normalizeText(val).includes(normalizeText(search)) ? 1 : 0)}
           >
@@ -40,7 +41,7 @@ export default function StrategicIndicatorSelector({ value, onChange, areaFilter
               <Search className="mr-2 h-4 w-4 shrink-0 opacity-50" />
               <CommandInput placeholder="Buscar indicador por nome, código ou área..." className="flex-1" />
             </div>
-            <CommandList className="max-h-[320px]">
+            <CommandList id="strategic-indicator-listbox" className="max-h-[320px]">
               <CommandEmpty>Nenhum indicador encontrado.</CommandEmpty>
               {AREA_LIST.map((area) => {
                 const items = filtered.filter((i) => i.area === area);

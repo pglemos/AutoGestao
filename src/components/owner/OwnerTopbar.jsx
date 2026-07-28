@@ -100,7 +100,7 @@ export default function OwnerTopbar({ lastUpdated, onOpenSidebar }) {
 
       {/* Seletores */}
       <div className="grid w-full min-w-0 flex-1 grid-cols-2 gap-2 sm:grid-cols-3">
-        <div className="col-span-2 min-w-0 lg:col-span-1">
+        <div className="col-span-2 min-w-0 sm:col-span-1">
           <Select
             label="Empresa"
             icon={Building2}
