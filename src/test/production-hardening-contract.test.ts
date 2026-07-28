@@ -39,8 +39,21 @@ describe('production hardening contracts', () => {
     expect(migration).toContain('CREATE TABLE IF NOT EXISTS public.deterministic_action_resolutions')
     expect(migration).toContain('ENABLE ROW LEVEL SECURITY')
     expect(migration).toContain('supabase_realtime')
+    expect(migration).toContain('GRANT SELECT, INSERT, UPDATE, DELETE')
+    expect(migration).toContain('CREATE POLICY deterministic_action_resolutions_update')
+    expect(migration).toContain('user_id = auth.uid()')
     expect(migration).toMatch(
       /REVOKE\s+ALL\s+ON\s+FUNCTION\s+public\.prevent_valor_negociado_tamper_after_close\(\)\s+FROM\s+PUBLIC,\s*anon,\s*authenticated/i,
     )
+  })
+
+  test('runtime reads persisted resolutions across days and fails closed on roles', () => {
+    const hook = readRepoFile('src/features/deterministic-actions/useDeterministicActions.ts')
+    const roleAdapter = readRepoFile('src/features/deterministic-actions/deterministic-role.ts')
+
+    expect(hook).not.toMatch(/resolutionsQuery[\s\S]{0,300}\.gte\(['"]completed_at['"]/)
+    expect(hook).toContain('toDeterministicRole(role)')
+    expect(hook).toContain("if (!normalizedRole)")
+    expect(roleAdapter).toContain('return null')
   })
 })
