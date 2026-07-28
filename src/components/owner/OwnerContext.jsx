@@ -35,7 +35,8 @@ export const OwnerProvider = ({ children }) => {
       setUnitId("");
       return;
     }
-    setUnitId((current) => units.some((unit) => unit.id === current)
+    // "all" (todas as lojas) é uma seleção válida e deve ser preservada.
+    setUnitId((current) => current === "all" || units.some((unit) => unit.id === current)
       ? current
       : (activeStoreId && units.some((unit) => unit.id === activeStoreId) ? activeStoreId : units[0].id));
   }, [activeStoreId, units]);
@@ -76,7 +77,8 @@ export const OwnerProvider = ({ children }) => {
     unitId,
     setUnitId: (nextUnitId) => {
       setUnitId(nextUnitId);
-      setRootActiveStoreId?.(nextUnitId || null);
+      // Em "todas as lojas" nao existe loja ativa unica no escopo raiz.
+      setRootActiveStoreId?.(nextUnitId && nextUnitId !== "all" ? nextUnitId : null);
     },
     period,
     setPeriod,
