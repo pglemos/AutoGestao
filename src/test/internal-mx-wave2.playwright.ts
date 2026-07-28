@@ -48,7 +48,10 @@ test.describe('Onda 2 interna MX', () => {
           await expect(page.locator('[data-mx-module-header]')).toHaveCount(1)
           expect(await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth + 1)).toBe(false)
           expect(consoleErrors).toEqual([])
-          if (route.page === 'configuracoes' || route.page === 'desenvolvimento') await expect(page.locator('[data-mx-page-tabs]')).toHaveCount(1)
+          if (route.page === 'configuracoes' || route.page === 'desenvolvimento') {
+            const label = route.page === 'configuracoes' ? 'Configurações' : 'Desenvolvimento'
+            await expect(page.locator(`[data-mx-page-tabs][aria-label="${label}"]`)).toHaveCount(1)
+          }
           if (profile.role === 'consultor_mx' && route.consultantAccess === 'read-only') {
             await expect(page.locator('[data-mx-access-mode="read-only"]')).toHaveCount(1)
             await expect(page.locator('[data-mx-requires-manage]:not(:disabled)')).toHaveCount(0)

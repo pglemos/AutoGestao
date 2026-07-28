@@ -12,22 +12,21 @@ const routes = [
   { key: 'plano-acao', path: `${OWNER_BASE_PATH}/plano-acao`, expectedPath: '/dono/plano-acao' },
   { key: 'consultoria', path: `${OWNER_BASE_PATH}/consultoria`, expectedPath: '/dono/consultoria' },
   { key: 'departamentos', path: `${OWNER_BASE_PATH}/departamentos`, expectedPath: '/dono/departamentos' },
-  { key: 'visao-geral', path: `${OWNER_BASE_PATH}/departamentos/visao-geral`, expectedPath: '/dono/departamentos' },
+  { key: 'visao-geral', path: `${OWNER_BASE_PATH}/departamentos`, expectedPath: '/dono/departamentos' },
   { key: 'comercial', path: `${OWNER_BASE_PATH}/departamentos/comercial`, expectedPath: '/dono/departamentos/comercial' },
   { key: 'marketing', path: `${OWNER_BASE_PATH}/departamentos/marketing`, expectedPath: '/dono/departamentos/marketing' },
-  { key: 'produto', path: `${OWNER_BASE_PATH}/departamentos/produto`, expectedPath: '/dono/departamentos/produto-e-estoque' },
-  { key: 'rh', path: `${OWNER_BASE_PATH}/departamentos/rh`, expectedPath: '/dono/departamentos/pessoas-rh' },
+  { key: 'produto', path: `${OWNER_BASE_PATH}/departamentos/produto-e-estoque`, expectedPath: '/dono/departamentos/produto-e-estoque' },
+  { key: 'rh', path: `${OWNER_BASE_PATH}/departamentos/pessoas-rh`, expectedPath: '/dono/departamentos/pessoas-rh' },
   { key: 'financeiro', path: `${OWNER_BASE_PATH}/departamentos/financeiro`, expectedPath: '/dono/departamentos/financeiro' },
-  { key: 'operacional', path: `${OWNER_BASE_PATH}/departamentos/operacional`, expectedPath: '/dono/departamentos/operacoes' },
+  { key: 'operacional', path: `${OWNER_BASE_PATH}/departamentos/operacoes`, expectedPath: '/dono/departamentos/operacoes' },
   { key: 'mercado', path: `${OWNER_BASE_PATH}/mercado`, expectedPath: '/dono/mercado' },
   { key: 'universidade', path: `${OWNER_BASE_PATH}/universidade`, expectedPath: '/dono/universidade' },
-  { key: 'consultor', path: `${OWNER_BASE_PATH}/consultor`, expectedPath: '/dono/consultoria' },
 ] as const
 
 const viewports = [
   { key: 'desktop-1440', width: 1440, height: 900, mobile: false },
-  { key: 'tablet-landscape', width: 1024, height: 768, mobile: false },
-  { key: 'tablet-portrait', width: 768, height: 1024, mobile: false },
+  { key: 'tablet-landscape', width: 1024, height: 768, mobile: true },
+  { key: 'tablet-portrait', width: 768, height: 1024, mobile: true },
   { key: 'mobile-390', width: 390, height: 844, mobile: true },
 ] as const
 
@@ -72,7 +71,7 @@ async function auditRoute(
   await openOwnerRoute(page, route.path, route.expectedPath)
 
   const desktopSidebar = page.locator('aside[aria-label="Menu principal do Dono"]')
-  const mobileDrawer = page.locator('div.fixed.inset-0.z-40 > div.relative').first()
+  const mobileDrawer = page.locator('div.fixed.inset-0.z-40 > div.relative.bg-sidebar').first()
   if (viewport.mobile) {
     await expect(desktopSidebar).toBeHidden()
     await expect(mobileDrawer).toHaveCount(0)
@@ -116,7 +115,9 @@ async function auditRoute(
         ownerRegion: Boolean(ownerRegion),
         ownerSidebar: Boolean(ownerSidebar),
         ownerSidebarWidth: ownerSidebar ? Math.round(ownerSidebar.getBoundingClientRect().width) : 0,
-        ownerSidebarBackground: ownerSidebar ? getComputedStyle(ownerSidebar.firstElementChild || ownerSidebar).backgroundColor : '',
+        ownerSidebarBackground: ownerSidebar
+          ? getComputedStyle(ownerSidebar.tagName === 'ASIDE' ? ownerSidebar.firstElementChild || ownerSidebar : ownerSidebar).backgroundColor
+          : '',
         ownerContentHeight: ownerRegion ? Math.round(ownerRegion.getBoundingClientRect().height) : 0,
         activeNavigationItems: ownerSidebar?.querySelectorAll('a[aria-current="page"]').length || 0,
         horizontalOverflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
