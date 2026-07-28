@@ -98,7 +98,10 @@ export function buildRpcPayload(data, clientId) {
   const nextActionDate = data.proxima_acao_data ?? data.proxima_acao_em
   const channel = data.canal_comercial ?? data.canal_entrada ?? data.canal_origem
   const clientStatus = mapClientStatus(data)
-  const terminal = data.ativo === false || data.status_comercial === 'Vendido' || data.status_comercial === 'Perdido'
+  const terminal = data.ativo === false
+    || data.status_comercial === 'Vendido'
+    || data.status_comercial === 'Perdido'
+    || data.status_comercial === 'Cancelada'
 
   put(payload, 'cliente_id', clientId ?? data.cliente_id)
   put(payload, 'oportunidade_id', data.oportunidade_id)

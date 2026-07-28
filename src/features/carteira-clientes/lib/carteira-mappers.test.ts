@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import {
+  assertNotTerminalPresentation,
   mapMxClientToCarteiraVisual,
   selectActiveOpportunity,
   selectLatestCancelledOpportunity,
@@ -197,5 +198,15 @@ describe('cancelled sale is a terminal state', () => {
   test('CAN-10 — estados terminais não podem ser rebaixados por situationToStage', () => {
     expect(() => situationToStage({ situacao_atual: 'Venda cancelada' })).toThrow(/terminais/i)
     expect(() => situationToStage({ status_comercial: 'Cancelada' })).toThrow(/terminais/i)
+  })
+
+  test('assertNotTerminalPresentation protege o caminho de escrita do adaptador Base44', () => {
+    // base44Client.updateCliente derivava `etapa` do rótulo de apresentação e
+    // caía em 'prospeccao' para qualquer rótulo desconhecido — inclusive
+    // 'Cancelada'. Salvar a ficha reabriria a venda cancelada em produção.
+    expect(() => assertNotTerminalPresentation('Venda cancelada', undefined)).toThrow(/terminais/i)
+    expect(() => assertNotTerminalPresentation(undefined, 'Cancelada')).toThrow(/terminais/i)
+    expect(() => assertNotTerminalPresentation('Em negociação ativa', 'Em Negociação')).not.toThrow()
+    expect(() => assertNotTerminalPresentation(undefined, undefined)).not.toThrow()
   })
 })

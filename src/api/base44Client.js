@@ -1,6 +1,7 @@
 import { supabase } from '@/lib/supabase';
 import moment from 'moment';
 import { resolveStoreId } from './resolveStoreId';
+import { assertNotTerminalPresentation } from '@/features/carteira-clientes/lib/carteira-mappers';
 
 // Helper to filter items in Javascript (MongoDB-like selector)
 function matchQuery(row, filter) {
@@ -404,16 +405,24 @@ export const base44 = {
           const op = r.oportunidades?.[0] || {};
           const agd = r.agendamentos?.[0] || {};
 
-          const isGanho = op.etapa === 'ganho' || r.situacao_atual === 'Venda realizada' || r.status_comercial === 'Vendido' || r.status === 'ganho';
-          const isPerdido = op.etapa === 'perdido' || r.situacao_atual === 'Venda perdida' || r.status === 'inativo';
+          // `cancelada` é terminal próprio e precisa ser checada antes de
+          // 'ganho': a oportunidade cancelada tem closed_at de uma venda que
+          // existiu, e sem este ramo caía em 'Em Negociação'.
+          const isCancelada = op.etapa === 'cancelada' || r.situacao_atual === 'Venda cancelada' || r.status_comercial === 'Cancelada';
+          const isGanho = !isCancelada && (op.etapa === 'ganho' || r.situacao_atual === 'Venda realizada' || r.status_comercial === 'Vendido' || r.status === 'ganho');
+          const isPerdido = !isCancelada && (op.etapa === 'perdido' || r.situacao_atual === 'Venda perdida' || r.status === 'inativo');
 
-          const situacaoMapped = isGanho
+          const situacaoMapped = isCancelada
+            ? 'Venda cancelada'
+            : isGanho
             ? 'Venda realizada'
             : isPerdido
             ? 'Venda perdida'
             : op.etapa || r.situacao_atual || 'prospeccao';
 
-          const statusComercialMapped = isGanho
+          const statusComercialMapped = isCancelada
+            ? 'Cancelada'
+            : isGanho
             ? 'Vendido'
             : isPerdido
             ? 'Perdido'
@@ -538,6 +547,9 @@ export const base44 = {
         const opPayload = {};
         if (data.veiculo_interesse !== undefined) opPayload.veiculo_interesse = data.veiculo_interesse;
         if (data.valor_negociado !== undefined) opPayload.valor_negociado = toNumberValue(data.valor_negociado);
+        // Sem esta guarda, salvar a ficha de uma venda cancelada derivava
+        // etapa='prospeccao' e reabria a venda, apagando o estado terminal.
+        assertNotTerminalPresentation(data.situacao_atual, data.status_comercial);
         if (data.status_comercial !== undefined) {
           opPayload.etapa = data.status_comercial === 'Vendido' ? 'ganho' : data.status_comercial === 'Perdido' ? 'perdido' : 'prospeccao';
           if (data.status_comercial === 'Vendido') opPayload.closed_at = new Date().toISOString();

@@ -59,6 +59,19 @@ const OPEN_APPOINTMENT_STATUSES = new Set(['confirmado', 'aguardando'])
 const TERMINAL_SITUATIONS = new Set(['Venda cancelada'])
 const TERMINAL_COMMERCIAL_STATUSES = new Set(['Cancelada'])
 
+/**
+ * Guarda contra rebaixamento silencioso de estado terminal. Tanto
+ * `situationToStage` quanto o caminho de escrita do adaptador Base44 derivavam
+ * a etapa de um rótulo de apresentação e caíam em `'prospeccao'` quando o
+ * rótulo não era reconhecido — o que reabriria uma venda cancelada e apagaria
+ * `cancelada_em`, `cancelada_por` e `motivo_cancelamento`.
+ */
+export function assertNotTerminalPresentation(situation?: string | null, status?: string | null): void {
+  if (TERMINAL_SITUATIONS.has(String(situation || '')) || TERMINAL_COMMERCIAL_STATUSES.has(String(status || ''))) {
+    throw new Error('Estados terminais devem ser alterados por uma operação de domínio.')
+  }
+}
+
 function isTerminal(opportunity: OpportunityRow): boolean {
   return TERMINAL_STAGES.has(String(opportunity.etapa || ''))
 }
@@ -313,12 +326,7 @@ export function situationToStage(data: Record<string, unknown>): string {
   const situation = String(data.situacao_atual || data.momento || '')
   const status = String(data.status_comercial || '')
 
-  // Sem esta guarda, `Venda cancelada` não casava com nenhuma regra e caía no
-  // `return 'prospeccao'` do final, reabrindo silenciosamente uma venda
-  // cancelada e apagando o estado terminal ao salvar a ficha.
-  if (TERMINAL_SITUATIONS.has(situation) || TERMINAL_COMMERCIAL_STATUSES.has(status)) {
-    throw new Error('Estados terminais devem ser alterados por uma operação de domínio.')
-  }
+  assertNotTerminalPresentation(situation, status)
 
   if (status === 'Vendido' || situation === 'Venda realizada') return 'ganho'
   if (status === 'Perdido' || situation === 'Venda perdida' || situation === 'Cadência encerrada') return 'perdido'
