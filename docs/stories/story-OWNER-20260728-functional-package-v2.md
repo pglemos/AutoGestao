@@ -12,7 +12,7 @@ ordem e os gates definidos em `ROLLOUT.md` e nos manifestos `PHASES/`.
 ## Critérios de aceitação
 
 - [x] Fase 1 — fundação compartilhada integrada e validada localmente.
-- [ ] Fase 2 — Plano Estratégico integrado e validado.
+- [x] Fase 2 — Plano Estratégico integrado e validado em produção.
 - [ ] Fase 3 — Plano de Ação integrado e validado.
 - [ ] Fase 4 — Consultoria integrada e validada.
 - [ ] Fase 5 — Cockpit global integrado e validado.
