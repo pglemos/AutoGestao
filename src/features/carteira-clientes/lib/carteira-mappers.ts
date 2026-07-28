@@ -13,6 +13,9 @@ type OpportunityRow = {
   motivo_perda?: string | null
   canal?: string | null
   closed_at?: string | null
+  cancelada_em?: string | null
+  cancelada_por?: string | null
+  motivo_cancelamento?: string | null
 }
 
 type AppointmentRow = {
@@ -46,8 +49,23 @@ type ClientRow = {
   agendamentos?: AppointmentRow[] | null
 }
 
-const CLOSED_STAGES = new Set(['ganho', 'perdido'])
+// Espelha os valores terminais do enum `crm_etapa_funil` em produção.
+// `cancelada` é terminal próprio — não é sinônimo de `perdido`: a venda existiu,
+// foi faturada e depois revertida, e essa diferença governa comissão,
+// performance e estratégia de recuperação.
+export const TERMINAL_STAGES = new Set(['ganho', 'perdido', 'cancelada'])
 const OPEN_APPOINTMENT_STATUSES = new Set(['confirmado', 'aguardando'])
+
+const TERMINAL_SITUATIONS = new Set(['Venda cancelada'])
+const TERMINAL_COMMERCIAL_STATUSES = new Set(['Cancelada'])
+
+function isTerminal(opportunity: OpportunityRow): boolean {
+  return TERMINAL_STAGES.has(String(opportunity.etapa || ''))
+}
+
+function byRecencyDesc(left: OpportunityRow, right: OpportunityRow): number {
+  return timestamp(right.updated_at || right.created_at) - timestamp(left.updated_at || left.created_at)
+}
 
 function timestamp(value?: string | null): number {
   const parsed = value ? new Date(value).getTime() : 0
@@ -69,15 +87,25 @@ function financingLabel(value?: string | null): string {
   return 'Não se aplica'
 }
 
+/**
+ * Oportunidade que governa o estado atual do cliente. Devolve `null` quando
+ * todas as oportunidades estão encerradas — uma oportunidade terminal nunca
+ * pode ser apresentada como ativa.
+ */
 export function selectActiveOpportunity(opportunities: OpportunityRow[] = []): OpportunityRow | null {
-  const sorted = [...opportunities].sort((left, right) => {
-    const leftActive = !CLOSED_STAGES.has(String(left.etapa || ''))
-    const rightActive = !CLOSED_STAGES.has(String(right.etapa || ''))
-    if (leftActive !== rightActive) return leftActive ? -1 : 1
-    return timestamp(right.updated_at || right.created_at) - timestamp(left.updated_at || left.created_at)
-  })
+  return [...opportunities].filter(item => !isTerminal(item)).sort(byRecencyDesc)[0] ?? null
+}
 
-  return sorted[0] ?? null
+/** Última oportunidade encerrada — contexto histórico, nunca estado ativo. */
+export function selectLatestClosedOpportunity(opportunities: OpportunityRow[] = []): OpportunityRow | null {
+  return [...opportunities].filter(isTerminal).sort(byRecencyDesc)[0] ?? null
+}
+
+/** Última oportunidade cancelada — base da estratégia de recuperação. */
+export function selectLatestCancelledOpportunity(opportunities: OpportunityRow[] = []): OpportunityRow | null {
+  return [...opportunities]
+    .filter(item => String(item.etapa || '') === 'cancelada')
+    .sort(byRecencyDesc)[0] ?? null
 }
 
 export function selectRelevantAppointment(
@@ -97,11 +125,24 @@ export function selectRelevantAppointment(
   return [...appointments].sort((left, right) => timestamp(right.data_hora) - timestamp(left.data_hora))[0] ?? null
 }
 
-function deriveSituation(client: ClientRow, opportunity: OpportunityRow | null, appointment: AppointmentRow | null, now: Date): string {
+function deriveSituation(
+  client: ClientRow,
+  opportunity: OpportunityRow | null,
+  latestClosed: OpportunityRow | null,
+  appointment: AppointmentRow | null,
+  now: Date,
+): string {
   if (client.do_not_contact) return 'Cadência encerrada'
   if (client.reactivation_at && timestamp(client.reactivation_at) > now.getTime()) return 'Oportunidade futura'
-  if (opportunity?.etapa === 'ganho') return 'Venda realizada'
-  if (opportunity?.etapa === 'perdido') return 'Venda perdida'
+
+  // Sem oportunidade ativa, a situação deriva exclusivamente do último estado
+  // terminal — nenhum fato da oportunidade encerrada gera estado ativo.
+  if (!opportunity) {
+    if (latestClosed?.etapa === 'cancelada') return 'Venda cancelada'
+    if (latestClosed?.etapa === 'ganho') return 'Venda realizada'
+    if (latestClosed?.etapa === 'perdido') return 'Venda perdida'
+  }
+
   if (appointment?.status === 'nao_compareceu') return 'Não compareceu'
 
   if (appointment && OPEN_APPOINTMENT_STATUSES.has(String(appointment.status || ''))) {
@@ -147,6 +188,7 @@ function deriveTemperature(situation: string): 'Frio' | 'Morno' | 'Quente' {
 
 function deriveCommercialStatus(situation: string): string {
   if (situation === 'Venda realizada') return 'Vendido'
+  if (situation === 'Venda cancelada') return 'Cancelada'
   if (situation === 'Venda perdida' || situation === 'Cadência encerrada') return 'Perdido'
   if (situation === 'Oportunidade futura') return 'Futuro'
   if (situation === 'Visita realizada') return 'Em negociação'
@@ -156,19 +198,34 @@ function deriveCommercialStatus(situation: string): string {
 
 export function mapMxClientToCarteiraVisual(client: ClientRow, now = new Date()) {
   const opportunity = selectActiveOpportunity(client.oportunidades || [])
-  const appointment = selectRelevantAppointment(client.agendamentos || [], now)
-  const situation = deriveSituation(client, opportunity, appointment, now)
+  const latestClosed = selectLatestClosedOpportunity(client.oportunidades || [])
+  const cancelled = selectLatestCancelledOpportunity(client.oportunidades || [])
+  const relevantAppointment = selectRelevantAppointment(client.agendamentos || [], now)
+  const situation = deriveSituation(client, opportunity, latestClosed, relevantAppointment, now)
+
+  // Venda cancelada é estado encerrado: agendamentos e próximas ações que
+  // pertenciam à venda revertida não podem gerar visita ativa, prioridade nem
+  // pendência. O histórico continua íntegro no banco.
+  const isCancelled = situation === 'Venda cancelada'
+  const appointment = isCancelled ? null : relevantAppointment
+  const nextAction = isCancelled ? '' : (client.proxima_acao || appointment?.proxima_acao || '')
+  const nextActionDate = isCancelled
+    ? null
+    : (appointment?.data_hora || client.proxima_acao_em || client.reactivation_at || null)
   const phone = client.telefone || ''
-  const nextActionDate = appointment?.data_hora || client.proxima_acao_em || client.reactivation_at || null
 
   return {
     id: client.id,
     cliente_id: client.id,
     oportunidade_id: opportunity?.id || null,
+    oportunidade_cancelada_id: cancelled?.id || null,
+    motivo_cancelamento: cancelled?.motivo_cancelamento || null,
+    cancelada_em: cancelled?.cancelada_em || null,
+    cancelada_por: cancelled?.cancelada_por || null,
     agendamento_id: appointment?.id || null,
     vendedor_id: client.seller_user_id || null,
-    etapa: opportunity?.etapa || null,
-    closed_at: opportunity?.closed_at || null,
+    etapa: opportunity?.etapa || latestClosed?.etapa || null,
+    closed_at: opportunity?.closed_at || latestClosed?.closed_at || null,
     loja_id: client.loja_id || null,
     nome: client.nome || 'Cliente sem nome',
     telefone: phone,
@@ -195,8 +252,8 @@ export function mapMxClientToCarteiraVisual(client: ClientRow, now = new Date())
     proposta_enviada: opportunity?.etapa === 'apresentacao',
     motivo_perda: opportunity?.motivo_perda || '',
     visita_agendada_em: appointment?.data_hora || null,
-    proxima_acao: client.proxima_acao || appointment?.proxima_acao || '',
-    proximo_passo: client.proxima_acao || appointment?.proxima_acao || '',
+    proxima_acao: nextAction,
+    proximo_passo: nextAction,
     proxima_acao_data: nextActionDate,
     objetivo_atual: '',
     ultimo_contato: client.ultima_interacao || null,
@@ -255,6 +312,14 @@ const KNOWN_SITUATION_STAGE: Record<string, string> = {
 export function situationToStage(data: Record<string, unknown>): string {
   const situation = String(data.situacao_atual || data.momento || '')
   const status = String(data.status_comercial || '')
+
+  // Sem esta guarda, `Venda cancelada` não casava com nenhuma regra e caía no
+  // `return 'prospeccao'` do final, reabrindo silenciosamente uma venda
+  // cancelada e apagando o estado terminal ao salvar a ficha.
+  if (TERMINAL_SITUATIONS.has(situation) || TERMINAL_COMMERCIAL_STATUSES.has(status)) {
+    throw new Error('Estados terminais devem ser alterados por uma operação de domínio.')
+  }
+
   if (status === 'Vendido' || situation === 'Venda realizada') return 'ganho'
   if (status === 'Perdido' || situation === 'Venda perdida' || situation === 'Cadência encerrada') return 'perdido'
   if (KNOWN_SITUATION_STAGE[situation]) return KNOWN_SITUATION_STAGE[situation]
