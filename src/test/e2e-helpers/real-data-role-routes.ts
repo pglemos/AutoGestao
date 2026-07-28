@@ -3,7 +3,6 @@ import type { UserRole } from '@/types/database'
 export const MX_STORE_SLUG = 'mx-consultoria'
 
 const SELLER_ROUTES = [
-  '/plano-acao',
   '/home', '/meu-dia', '/minha-remuneracao', '/lancamento-diario', '/fechamento-diario',
   '/terminal-mx', '/carteira-clientes', '/carteira', '/vendedor/carteira', '/mentor-comercial',
   '/vendedor/mentor-comercial', '/meu-funil', '/minha-meta', '/vendedor/minha-meta',

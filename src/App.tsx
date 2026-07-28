@@ -262,7 +262,7 @@ export default function App() {
               <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
                 <Route path="settings" element={<Navigate to="/configuracoes" replace />} />
                 <Route path="plano-estrategico" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /></Suspense>} />
-                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ScopedActionPlanPage />} gerente={<ScopedActionPlanPage />} dono={<ScopedActionPlanPage />} admin={<InternalActionPlanPage />} /></Suspense>} />
+                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ScopedActionPlanPage />} dono={<ScopedActionPlanPage />} admin={<InternalActionPlanPage />} /></Suspense>} />
                 <Route path="team" element={<TeamAliasRedirect />} />
                 <Route path="equipe" element={<TeamAliasRedirect />} />
 

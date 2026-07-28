@@ -30,7 +30,7 @@ const LEGACY_OWNER_WORKSPACE_SEGMENTS = new Set([
 export const ROUTE_ACCESS_RULES = [
   { pattern: '/dono', roles: ['dono'] },
   { pattern: '/dono/*', roles: ['dono'] },
-  { pattern: '/plano-acao', roles: USER_ROLES },
+  { pattern: '/plano-acao', roles: INTERNAL_AND_LEADERS },
   { pattern: '/plano-estrategico', roles: INTERNAL_ROLES },
   { pattern: '/settings', roles: CONFIGURATION_ROLES, capability: 'view_configurations' },
   { pattern: '/team', capability: 'manage_team' },

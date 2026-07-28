@@ -140,7 +140,6 @@ const navConfig: Record<string, NavCategory[]> = {
       icon: <Home size={22} />,
       items: [
         { label: 'Início', path: '/home', icon: <Home size={16} />, activePaths: ['/home'] },
-        { label: 'Plano de Ação', path: '/plano-acao', icon: <ClipboardList size={16} /> },
         { label: 'Fechamento Diário', path: '/fechamento-diario', icon: <CheckSquare size={16} /> },
         { label: 'Rotina do Dia', path: '/central-execucao', icon: <CalendarCheck size={16} /> },
         { label: 'Mentor Comercial', path: '/carteira-clientes', icon: <Users size={16} /> },

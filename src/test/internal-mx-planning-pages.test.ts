@@ -46,7 +46,7 @@ describe('páginas de planejamento do módulo interno MX', () => {
     const app = read('src/App.tsx')
     const scopedPage = read('src/features/action-plan/ScopedActionPlanPage.tsx')
     expect(app).toContain('gerente={<ScopedActionPlanPage />}')
-    expect(app).toContain('vendedor={<ScopedActionPlanPage />}')
+    expect(app).toContain('vendedor={<ForbiddenRoute />}')
     expect(scopedPage).toContain('PlanningWorkspaceProvider')
     expect(scopedPage).toContain('<ActionPlanWorkspace />')
   })
