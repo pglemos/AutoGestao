@@ -100,7 +100,7 @@ export interface DeterministicActionInput {
   manualCompletions?: ManualCompletionItem[]
 }
 
-export const DETERMINISTIC_RULE_VERSION = 'v1.1-deterministic'
+export const DETERMINISTIC_RULE_VERSION = 'v1.2-deterministic'
 
 const TERMINAL_STAGES = new Set(['ganho', 'perdido', 'cancelada'])
 const PRIORITY_RANK: Record<ActionPriority, number> = {
@@ -112,6 +112,11 @@ const PRIORITY_RANK: Record<ActionPriority, number> = {
 
 function datePart(value: string): string {
   return value.substring(0, 10)
+}
+
+function stateToken(value: string | null | undefined): string {
+  const normalized = String(value || 'state').replace(/[^0-9A-Za-z_-]/g, '')
+  return normalized.slice(0, 48) || 'state'
 }
 
 function daysBetween(from: string, to: string): number {
@@ -224,7 +229,7 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
     if (customer.proxima_acao_em && customer.proxima_acao_em < refDate) {
       const overdueDays = daysBetween(customer.proxima_acao_em, refDate)
       actions.push({
-        id: `act-overdue-${customer.id}`,
+        id: `act-overdue-${customer.id}-${stateToken(customer.proxima_acao_em)}`,
         scenarioCode: 'OVERDUE_ACTION',
         role,
         userId,
@@ -247,8 +252,9 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
         ruleVersion: DETERMINISTIC_RULE_VERSION,
       })
     } else if (!customer.proxima_acao || !customer.proxima_acao_em) {
+      const sourceState = opportunity.updated_at || opportunity.created_at || refDate
       actions.push({
-        id: `act-missing-step-${customer.id}`,
+        id: `act-missing-step-${customer.id}-${stateToken(sourceState)}`,
         scenarioCode: 'MISSING_NEXT_STEP',
         role,
         userId,
@@ -262,7 +268,7 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
         dueAt: refDate,
         actionType: 'DEFINE_NEXT_STEP',
         actionUrl: customerUrl(customer.id),
-        evidence: { etapaAtual: opportunity.etapa },
+        evidence: { etapaAtual: opportunity.etapa, sourceState },
         resolutionKey: 'NEXT_STEP_DEFINED',
         ruleVersion: DETERMINISTIC_RULE_VERSION,
       })
@@ -276,7 +282,7 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
     if (!canRecommendContact(customer)) continue
 
     actions.push({
-      id: `act-unconfirmed-visit-${appointment.id}`,
+      id: `act-unconfirmed-visit-${appointment.id}-${stateToken(`${appointment.data_agendamento}-${appointment.status}`)}`,
       scenarioCode: 'UNCONFIRMED_VISIT',
       role,
       userId,
@@ -344,7 +350,7 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
     if (closingDays < 1) continue
 
     actions.push({
-      id: `act-pending-closing-${opportunity.id}`,
+      id: `act-pending-closing-${opportunity.id}-${stateToken(startDate)}`,
       scenarioCode: 'PENDING_CLOSING',
       role,
       userId,
@@ -358,7 +364,7 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
       dueAt: refDate,
       actionType: 'COMPLETE_CLOSING',
       actionUrl: customerUrl(opportunity.cliente_id),
-      evidence: { diasEmFechamento: closingDays, valor: opportunity.valor || 0 },
+      evidence: { diasEmFechamento: closingDays, valor: opportunity.valor || 0, sourceState: startDate },
       resolutionKey: 'CLOSING_FINALIZED_OR_STAGE_CHANGED',
       ruleVersion: DETERMINISTIC_RULE_VERSION,
     })
@@ -371,7 +377,7 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
 
     if (targetSales > 0 && realizedSales < expectedPace) {
       actions.push({
-        id: `act-target-pace-${input.targetPace.storeId}`,
+        id: `act-target-pace-${input.targetPace.storeId}-${stateToken(refDate)}`,
         scenarioCode: 'TARGET_BEHIND_PACE',
         role,
         userId,
