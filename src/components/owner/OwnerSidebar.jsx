@@ -119,7 +119,7 @@ export default function OwnerSidebar({
         {NAV.map((group) => (
           <div key={group.section} className="mb-5">
             {!collapsed && (
-              <p className="px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
+              <p className="truncate px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-muted-foreground/70">
                 {group.section}
               </p>
             )}
@@ -143,7 +143,7 @@ export default function OwnerSidebar({
                         <Icon className="h-4 w-4 shrink-0 text-muted-foreground/80" />
                         {!collapsed && (
                           <>
-                            <span className="flex-1 text-left">{item.label}</span>
+                            <span className="flex-1 truncate text-left">{item.label}</span>
                             {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
                           </>
                         )}
@@ -158,14 +158,14 @@ export default function OwnerSidebar({
                               onClick={onNavigate}
                               className={({ isActive }) =>
                                 cn(
-                                  "flex items-center justify-between rounded-md px-3 py-1.5 text-[13px] text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
+                                  "flex items-center gap-1.5 rounded-md px-2.5 py-1 text-[13px] text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                                   isActive && "bg-primary/10 font-medium text-primary"
                                 )
                               }
                             >
-                              <span>{child.label}</span>
+                              <span className="min-w-0 flex-1 truncate">{child.label}</span>
                               {child.badge && (
-                                <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-[9px] font-medium text-amber-700">
+                                <span className="shrink-0 rounded-full bg-amber-50 px-1.5 py-0.5 text-[9px] font-medium text-amber-700">
                                   {child.badge}
                                 </span>
                               )}
@@ -196,7 +196,7 @@ export default function OwnerSidebar({
                     }
                   >
                     <Icon className="h-4 w-4 shrink-0 text-muted-foreground/80" />
-                    {!collapsed && <span className="flex-1">{item.label}</span>}
+                    {!collapsed &&                     <span className="flex-1 truncate">{item.label}</span>}
                     {item.badge && !collapsed && (
                       <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-[9px] font-medium text-amber-700">
                         {item.badge}

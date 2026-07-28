@@ -51,7 +51,7 @@ export default function OwnerTopbar({ lastUpdated, onOpenSidebar }) {
 
   return (
     <header className="owner-base44-exact__topbar sticky top-0 z-30 flex min-h-16 flex-col gap-2 border-b border-border bg-card/90 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-card/75 xl:h-16 xl:flex-row xl:items-center xl:py-0 2xl:px-6">
-      <div className="flex items-center gap-2 xl:hidden">
+      <div className="flex items-center justify-between gap-2 lg:hidden">
         <Button
           variant="ghost"
           size="icon"
@@ -60,15 +60,46 @@ export default function OwnerTopbar({ lastUpdated, onOpenSidebar }) {
         >
           <Menu className="h-5 w-5" />
         </Button>
+        <div className="flex items-center gap-1">
+          <Button variant="ghost" size="icon" onClick={reload} aria-label="Atualizar dados">
+            <RefreshCw className="h-4 w-4" />
+          </Button>
+          <div className="relative">
+            <button
+              onClick={() => setProfileOpen((v) => !v)}
+              className="flex h-8 w-8 items-center justify-center rounded-full bg-primary text-xs font-semibold text-primary-foreground"
+            >
+              {firstName.charAt(0).toUpperCase()}
+            </button>
+            {profileOpen && (
+              <>
+                <div className="fixed inset-0 z-10" onClick={() => setProfileOpen(false)} />
+                <div className="absolute right-0 top-10 z-20 w-48 rounded-xl border border-border bg-card p-2 shadow-lg">
+                  <div className="px-2 py-1.5">
+                    <p className="truncate text-sm font-medium text-foreground">{user?.full_name || "Nome não informado"}</p>
+                    <p className="truncate text-xs text-muted-foreground">{user?.email}</p>
+                  </div>
+                  <div className="my-1 h-px bg-border" />
+                  <button
+                    onClick={() => { setProfileOpen(false); logout(); }}
+                    className="w-full rounded-md px-2 py-1.5 text-left text-sm text-muted-foreground hover:bg-muted"
+                  >
+                    Sair
+                  </button>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
       {/* Identificação do contexto */}
-      <div className="hidden shrink-0 items-center gap-2 rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground 2xl:flex">
+      <div className="hidden shrink-0 items-center gap-2 rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground lg:flex">
         <ShieldCheck className="h-3.5 w-3.5" />
         Visão do Dono
       </div>
 
       {/* Seletores */}
-      <div className="grid w-full min-w-0 flex-1 grid-cols-2 gap-2 lg:grid-cols-3">
+      <div className="grid w-full min-w-0 flex-1 grid-cols-2 gap-2 sm:grid-cols-3">
         <div className="col-span-2 min-w-0 lg:col-span-1">
           <Select
             label="Empresa"
@@ -100,7 +131,7 @@ export default function OwnerTopbar({ lastUpdated, onOpenSidebar }) {
       </div>
 
       {/* Lado direito */}
-      <div className="hidden shrink-0 items-center gap-2 xl:flex">
+      <div className="hidden shrink-0 items-center gap-2 lg:flex">
         <div className="hidden text-right lg:block">
           <p className="text-[11px] text-muted-foreground/80">Última atualização</p>
           <p className="text-xs font-medium text-muted-foreground">{lastUpdated ? formatDateTime(lastUpdated) : "—"}</p>
