@@ -39,8 +39,8 @@ describe('production hardening contracts', () => {
     expect(migration).toContain('CREATE TABLE IF NOT EXISTS public.deterministic_action_resolutions')
     expect(migration).toContain('ENABLE ROW LEVEL SECURITY')
     expect(migration).toContain('supabase_realtime')
-    expect(migration).toContain(
-      'REVOKE ALL ON FUNCTION public.prevent_valor_negociado_tamper_after_close() FROM PUBLIC, anon, authenticated',
+    expect(migration).toMatch(
+      /REVOKE\s+ALL\s+ON\s+FUNCTION\s+public\.prevent_valor_negociado_tamper_after_close\(\)\s+FROM\s+PUBLIC,\s*anon,\s*authenticated/i,
     )
   })
 })
