@@ -83,7 +83,9 @@ export function useVendedorTreinamentos() {
                     .select('etapa')
                     .eq('seller_user_id', supabaseUser.id)
                     .is('data_venda', null)
-                    .not('etapa', 'in', '("ganho","perdido")'),
+                    // 'cancelada' é terminal como 'ganho'/'perdido' — sem ela,
+                    // a venda revertida voltava a contar como pipeline aberto.
+                    .not('etapa', 'in', '("ganho","perdido","cancelada")'),
                 supabase
                     .from('devolutiva_acoes')
                     .select('id', { count: 'exact', head: true })

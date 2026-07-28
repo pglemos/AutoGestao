@@ -57,6 +57,45 @@ describe('funil de vendas diagnostico', () => {
     expect(dashboard.kpis.faltam).toBe(2)
   })
 
+  it('CAN-13/CAN-23 — nao conta como realizado a venda que foi cancelada', () => {
+    // O cancelamento preserva o evento `venda_realizada` original (histórico) e
+    // acrescenta um `venda_cancelada`. Sem descontar o par, o funil e a meta
+    // continuavam contando a venda revertida como realizada.
+    const dashboard = buildFunnelDashboard({
+      events: [
+        event({ id: 'sale-1', tipo_evento: 'venda_realizada', cliente_id: 'client-1', oportunidade_id: 'opp-1' }),
+        event({ id: 'sale-2', tipo_evento: 'venda_realizada', cliente_id: 'client-2', oportunidade_id: 'opp-2' }),
+        event({ id: 'cancel-1', tipo_evento: 'venda_cancelada', cliente_id: 'client-1', oportunidade_id: 'opp-1', data_evento: '2026-06-20T12:00:00-03:00' }),
+      ],
+      customers: [],
+      period,
+      sellerIds: ['seller-1'],
+      storeId: 'store-1',
+      meta: 5,
+      referenceDate: new Date('2026-06-25T12:00:00-03:00'),
+    })
+
+    expect(dashboard.kpis.realizado).toBe(1)
+  })
+
+  it('cancelamento nao remove a venda de outra oportunidade do mesmo cliente', () => {
+    const dashboard = buildFunnelDashboard({
+      events: [
+        event({ id: 'sale-1', tipo_evento: 'venda_realizada', cliente_id: 'client-1', oportunidade_id: 'opp-1' }),
+        event({ id: 'sale-2', tipo_evento: 'venda_realizada', cliente_id: 'client-1', oportunidade_id: 'opp-2' }),
+        event({ id: 'cancel-1', tipo_evento: 'venda_cancelada', cliente_id: 'client-1', oportunidade_id: 'opp-1', data_evento: '2026-06-20T12:00:00-03:00' }),
+      ],
+      customers: [],
+      period,
+      sellerIds: ['seller-1'],
+      storeId: 'store-1',
+      meta: 5,
+      referenceDate: new Date('2026-06-25T12:00:00-03:00'),
+    })
+
+    expect(dashboard.kpis.realizado).toBe(1)
+  })
+
   it('monta os tres canais com etapas esperadas e modalidades discretas', () => {
     const dashboard = buildFunnelDashboard({
       events: [
