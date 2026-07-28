@@ -135,7 +135,7 @@ function customerUrl(customerId: string): string {
   return `/carteira-clientes?clienteId=${encodeURIComponent(customerId)}`
 }
 
-function canRecommendContact(customer: CustomerItem | undefined): boolean {
+function canRecommendContact(customer: CustomerItem | undefined): customer is CustomerItem {
   return Boolean(customer && customer.do_not_contact !== true)
 }
 
@@ -195,10 +195,10 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
       role,
       userId,
       storeId,
-      sellerUserId: opportunity.vendedor_id || customer?.vendedor_id || null,
+      sellerUserId: opportunity.vendedor_id || customer.vendedor_id || null,
       customerId: opportunity.cliente_id,
       opportunityId: opportunity.id,
-      title: `Recuperação de venda cancelada — ${customer?.nome || 'Cliente'}`,
+      title: `Recuperação de venda cancelada — ${customer.nome}`,
       explanation: `A venda foi cancelada em ${formatDatePtBr(cancellationDate)}. Motivo: "${reason}".`,
       priority: 'high',
       dueAt: refDate,
