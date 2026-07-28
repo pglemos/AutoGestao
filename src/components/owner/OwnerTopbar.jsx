@@ -51,7 +51,7 @@ export default function OwnerTopbar({ lastUpdated, onOpenSidebar }) {
 
   return (
     <header className="owner-base44-exact__topbar sticky top-0 z-30 flex min-h-16 flex-col gap-2 border-b border-border bg-card/90 px-4 py-3 backdrop-blur supports-[backdrop-filter]:bg-card/75 xl:h-16 xl:flex-row xl:items-center xl:py-0 2xl:px-6">
-      <div className="flex items-center justify-between gap-2 lg:hidden">
+      <div className="flex items-center justify-between gap-2 xl:hidden">
         <Button
           variant="ghost"
           size="icon"
@@ -93,7 +93,7 @@ export default function OwnerTopbar({ lastUpdated, onOpenSidebar }) {
         </div>
       </div>
       {/* Identificação do contexto */}
-      <div className="hidden shrink-0 items-center gap-2 rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground lg:flex">
+      <div className="hidden shrink-0 items-center gap-2 rounded-full bg-primary px-2.5 py-1 text-xs font-medium text-primary-foreground xl:flex">
         <ShieldCheck className="h-3.5 w-3.5" />
         Visão do Dono
       </div>
@@ -131,8 +131,8 @@ export default function OwnerTopbar({ lastUpdated, onOpenSidebar }) {
       </div>
 
       {/* Lado direito */}
-      <div className="hidden shrink-0 items-center gap-2 lg:flex">
-        <div className="hidden text-right lg:block">
+      <div className="hidden shrink-0 items-center gap-2 xl:flex">
+        <div className="hidden text-right 2xl:block">
           <p className="text-[11px] text-muted-foreground/80">Última atualização</p>
           <p className="text-xs font-medium text-muted-foreground">{lastUpdated ? formatDateTime(lastUpdated) : "—"}</p>
         </div>

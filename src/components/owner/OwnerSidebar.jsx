@@ -80,9 +80,13 @@ export default function OwnerSidebar({
   return (
     <div className="flex h-full flex-col bg-sidebar text-sidebar-foreground">
       {/* Marca */}
-      <div className={`flex h-[54px] shrink-0 items-center border-b border-sidebar-border ${
-        collapsed ? "justify-center px-2" : "justify-between px-5"
-      }`}>
+      <div
+        className={cn(
+          "flex h-[54px] shrink-0 items-center gap-2 border-b border-sidebar-border",
+          collapsed ? "justify-center px-2" : "justify-between px-4",
+          !collapsed && !onCollapsedChange && "pr-12"
+        )}
+      >
         {!collapsed && (
           <div className="flex min-w-0 items-center gap-2.5">
             <img
@@ -105,7 +109,7 @@ export default function OwnerSidebar({
             type="button"
             aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}
             onClick={() => onCollapsedChange(!collapsed)}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border border-sidebar-border bg-white text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-800"
+            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-sidebar-border bg-white text-slate-500 transition-colors hover:bg-slate-50 hover:text-slate-800"
           >
             {collapsed
               ? <PanelLeftOpen className="h-[18px] w-[18px]" />
@@ -115,7 +119,7 @@ export default function OwnerSidebar({
       </div>
 
       {/* Navegação */}
-      <nav className={`flex-1 overflow-y-auto py-4 ${collapsed ? "px-2" : "px-3"}`}>
+      <nav className={cn("flex-1 min-h-0 overflow-y-auto py-4", collapsed ? "px-2" : "px-3")}>
         {NAV.map((group) => (
           <div key={group.section} className="mb-5">
             {!collapsed && (
@@ -135,16 +139,17 @@ export default function OwnerSidebar({
                         aria-label={collapsed ? item.label : undefined}
                         aria-expanded={isOpen}
                         aria-controls={`sidebar-subnav-${item.group}`}
-                        className={`flex w-full items-center gap-2.5 rounded-lg py-2 text-sm font-medium text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground ${
+                        className={cn(
+                          "flex w-full items-center gap-2.5 rounded-lg py-2 text-sm font-medium text-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground",
                           collapsed ? "justify-center px-0" : "px-3"
-                        }`}
+                        )}
                         title={collapsed ? item.label : undefined}
                       >
                         <Icon className="h-4 w-4 shrink-0 text-muted-foreground/80" />
                         {!collapsed && (
                           <>
                             <span className="flex-1 truncate text-left">{item.label}</span>
-                            {isOpen ? <ChevronDown className="h-3.5 w-3.5" /> : <ChevronRight className="h-3.5 w-3.5" />}
+                            {isOpen ? <ChevronDown className="h-3.5 w-3.5 shrink-0" /> : <ChevronRight className="h-3.5 w-3.5 shrink-0" />}
                           </>
                         )}
                       </button>
@@ -186,9 +191,8 @@ export default function OwnerSidebar({
                     aria-label={collapsed ? item.label : undefined}
                     className={({ isActive }) =>
                       cn(
-                        `flex items-center gap-2.5 rounded-lg py-2 text-sm font-medium transition-colors ${
-                          collapsed ? "justify-center px-0" : "px-3"
-                        }`,
+                        "flex items-center gap-2.5 rounded-lg py-2 text-sm font-medium transition-colors",
+                        collapsed ? "justify-center px-0" : "px-3",
                         isActive
                           ? "bg-primary/10 text-primary font-semibold"
                           : "text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-accent-foreground"
@@ -196,9 +200,9 @@ export default function OwnerSidebar({
                     }
                   >
                     <Icon className="h-4 w-4 shrink-0 text-muted-foreground/80" />
-                    {!collapsed &&                     <span className="flex-1 truncate">{item.label}</span>}
+                    {!collapsed && <span className="min-w-0 flex-1 truncate">{item.label}</span>}
                     {item.badge && !collapsed && (
-                      <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-[9px] font-medium text-amber-700">
+                      <span className="shrink-0 rounded-full bg-amber-50 px-1.5 py-0.5 text-[9px] font-medium text-amber-700">
                         {item.badge}
                       </span>
                     )}
@@ -215,9 +219,10 @@ export default function OwnerSidebar({
         <Button
           variant="default"
           aria-label={collapsed ? "Falar com Consultor" : undefined}
-          className={`w-full gap-2.5 bg-primary hover:bg-primary/90 ${
+          className={cn(
+            "w-full gap-2.5 bg-primary hover:bg-primary/90",
             collapsed ? "justify-center px-0" : "justify-start"
-          }`}
+          )}
           onClick={() => {
             onNavigate?.();
             openConsultantModal(null);
@@ -228,14 +233,15 @@ export default function OwnerSidebar({
         </Button>
       </div>
 
-      <div className={`border-t border-sidebar-border py-3 ${collapsed ? "px-2" : "px-3"}`}>
+      <div className={cn("border-t border-sidebar-border py-3", collapsed ? "px-2" : "px-3")}>
         <NavLink
           to="/perfil"
           onClick={onNavigate}
           aria-label={`Abrir perfil de ${displayName}`}
-          className={`flex min-h-14 w-full items-center gap-3 rounded-2xl border border-sidebar-border bg-sidebar-accent/60 py-2 transition-colors hover:bg-sidebar-accent ${
+          className={cn(
+            "flex min-h-14 w-full items-center gap-3 rounded-2xl border border-sidebar-border bg-sidebar-accent/60 py-2 transition-colors hover:bg-sidebar-accent",
             collapsed ? "justify-center px-0" : "px-3.5"
-          }`}
+          )}
         >
           <span className="grid h-9 w-9 shrink-0 place-items-center rounded-full border border-emerald-100 bg-emerald-50 text-sm font-bold text-emerald-600">
             {initial}

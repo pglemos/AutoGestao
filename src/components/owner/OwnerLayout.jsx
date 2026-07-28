@@ -33,7 +33,7 @@ export default function OwnerLayout() {
               role="presentation"
               onClick={() => setSidebarOpen(false)}
             />
-            <div className="relative flex h-full w-72 max-w-[85vw] flex-col bg-sidebar shadow-xl sm:w-80 sm:max-w-sm">
+            <div className="relative flex h-full w-72 max-w-[85vw] flex-col overflow-hidden bg-sidebar pb-[72px] shadow-xl sm:w-80 sm:max-w-sm lg:pb-0">
               <button
                 type="button"
                 onClick={() => setSidebarOpen(false)}
