@@ -13,7 +13,7 @@ ordem e os gates definidos em `ROLLOUT.md` e nos manifestos `PHASES/`.
 
 - [x] Fase 1 — fundação compartilhada integrada e validada localmente.
 - [x] Fase 2 — Plano Estratégico integrado e validado em produção.
-- [ ] Fase 3 — Plano de Ação integrado e validado.
+- [x] Fase 3 — Plano de Ação integrado e validado em produção.
 - [ ] Fase 4 — Consultoria integrada e validada.
 - [ ] Fase 5 — Cockpit global integrado e validado.
 - [ ] Migrations validadas primeiro em branch Supabase de desenvolvimento.
