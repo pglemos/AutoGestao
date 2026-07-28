@@ -40,6 +40,7 @@ function evidenceSummary(action: DeterministicAction): string | null {
     .map(([, value]) => {
       if (typeof value === 'number') return new Intl.NumberFormat('pt-BR').format(value)
       if (typeof value === 'boolean') return value ? 'Sim' : 'Não'
+      if (typeof value === 'object') return 'Dados de origem preservados'
       return String(value)
     })
 
@@ -126,6 +127,7 @@ export default function DeterministicActionsPanel({
               const dueDate = formatDueDate(action.dueAt)
               const evidence = evidenceSummary(action)
               const resolving = resolvingId === action.id
+              const requiresSourceRegularization = action.scenarioCode === 'AUTOMATIC_TASK_ORIGIN_PENDING'
 
               return (
                 <article key={action.id} className={`rounded-xl border p-4 ${priority.border} bg-white`}>
@@ -152,14 +154,20 @@ export default function DeterministicActionsPanel({
                         Abrir ação <ArrowRight size={14} aria-hidden="true" />
                       </button>
                     )}
-                    <button
-                      type="button"
-                      onClick={() => void handleResolve(action)}
-                      disabled={resolving}
-                      className="inline-flex min-h-9 items-center rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gray-100 disabled:opacity-50"
-                    >
-                      {resolving ? 'Registrando...' : 'Marcar como tratada'}
-                    </button>
+                    {requiresSourceRegularization ? (
+                      <span className="inline-flex min-h-9 items-center rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs font-semibold text-amber-700">
+                        Regularize a origem para concluir
+                      </span>
+                    ) : (
+                      <button
+                        type="button"
+                        onClick={() => void handleResolve(action)}
+                        disabled={resolving}
+                        className="inline-flex min-h-9 items-center rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gray-100 disabled:opacity-50"
+                      >
+                        {resolving ? 'Registrando...' : 'Marcar como tratada'}
+                      </button>
+                    )}
                   </div>
                 </article>
               )
