@@ -1,4 +1,3 @@
-import '@happy-dom/global-registrator/register'
 import { describe, expect, test } from 'bun:test'
 import { renderHook, waitFor } from '@testing-library/react'
 import type { PropsWithChildren } from 'react'

@@ -10,12 +10,12 @@ export function getStoreDiagnosticStatus(row: StoreDiagnostic): Exclude<NetworkS
   return 'alert'
 }
 
-export function filterAndSortStoreDiagnostics(input: {
-  rows: StoreDiagnostic[]
+export function filterAndSortStoreDiagnostics<T extends StoreDiagnostic>(input: {
+  rows: T[]
   search: string
   status: NetworkStatusFilter
   sort: NetworkSort
-}): StoreDiagnostic[] {
+}): T[] {
   const term = normalize(input.search)
   return input.rows
     .map((row, index) => ({ row, index }))

@@ -14,6 +14,6 @@ export function toOwnerPlanningActor(user: {
   full_name?: string | null
 }): PlanningActor {
   const email = user.email?.trim() || null
-  const name = user.name?.trim() || user.full_name?.trim() || email || 'Dono'
+  const name = user.name?.trim() || user.full_name?.trim() || email || user.id
   return { id: user.id, name, email, role: 'dono' }
 }

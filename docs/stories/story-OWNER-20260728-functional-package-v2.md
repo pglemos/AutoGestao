@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress
+Ready for Review
 
 ## Origem
 
@@ -15,16 +15,18 @@ ordem e os gates definidos em `ROLLOUT.md` e nos manifestos `PHASES/`.
 - [x] Fase 2 — Plano Estratégico integrado e validado em produção.
 - [x] Fase 3 — Plano de Ação integrado e validado em produção.
 - [x] Fase 4 — Consultoria integrada e validada em produção.
-- [ ] Fase 5 — Cockpit global integrado e validado.
-- [ ] Migrations validadas primeiro em branch Supabase de desenvolvimento.
-- [ ] Tipos Supabase regenerados após as migrations.
-- [ ] `npm run lint`, `npm run typecheck`, `npm test` e `npm run build` verdes.
+- [x] Fase 5 — Cockpit global integrado e validado em produção.
+- [x] Migrations aplicadas e relidas no Supabase de produção por autorização do usuário.
+- [x] Tipos Supabase regenerados após as migrations.
+- [x] `npm run lint`, `npm run typecheck`, `npm test` e `npm run build` verdes.
+- [x] Contratos focados do pacote e regressões do Dono verdes.
 - [ ] Previews Vercel `READY` e smoke autenticado dos perfis aplicáveis.
-- [ ] Nenhum segredo privilegiado novo versionado.
+- [x] Nenhum segredo privilegiado novo versionado.
 
 ## Restrições
 
-- Não aplicar migrations pela primeira vez no banco de produção.
+- Migrations aplicadas diretamente no banco de produção por autorização
+  explícita do usuário em 2026-07-28.
 - Não avançar uma fase sem os gates da fase anterior.
 - Preservar correções posteriores à base auditada pelo pacote.
 - Tratar credenciais fornecidas como dados de runtime, sem persistência.
@@ -42,3 +44,12 @@ Os arquivos de cada fase são os manifestos canônicos do pacote:
 Arquivos de governança adicionados:
 
 - `docs/stories/story-OWNER-20260728-functional-package-v2.md`
+
+## Validação local
+
+- `npm run lint`: verde, sem erros (7 avisos preexistentes).
+- `npm run typecheck`: verde.
+- `npm test`: 1600/1600 verdes.
+- `npm run build`: verde.
+- `verify_package_contracts.mjs`: verde.
+- Contratos Dono/dados reais/tabela: 22/22 verdes.

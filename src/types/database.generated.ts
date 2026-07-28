@@ -2578,6 +2578,446 @@ export type Database = {
           },
         ]
       }
+      consultoria_historico_antecipacao: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          id: string
+          metadata: Json
+          new_status: string
+          note: string | null
+          old_status: string | null
+          request_id: string
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          new_status: string
+          note?: string | null
+          old_status?: string | null
+          request_id: string
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          metadata?: Json
+          new_status?: string
+          note?: string | null
+          old_status?: string | null
+          request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultoria_historico_antecipacao_changed_by_fkey"
+            columns: ["changed_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_historico_antecipacao_request_id_fkey"
+            columns: ["request_id"]
+            isOneToOne: false
+            referencedRelation: "consultoria_solicitacoes_antecipacao"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consultoria_itens_entrega: {
+        Row: {
+          client_id: string
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          description: string | null
+          due_at: string | null
+          evidence_id: string | null
+          id: string
+          item_type: string
+          lesson_id: string | null
+          note: string | null
+          required: boolean
+          responsible_user_id: string | null
+          sort_order: number
+          source_key: string
+          status: string
+          store_id: string
+          title: string
+          updated_at: string
+          visit_id: string
+        }
+        Insert: {
+          client_id: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          evidence_id?: string | null
+          id?: string
+          item_type: string
+          lesson_id?: string | null
+          note?: string | null
+          required?: boolean
+          responsible_user_id?: string | null
+          sort_order?: number
+          source_key: string
+          status?: string
+          store_id: string
+          title: string
+          updated_at?: string
+          visit_id: string
+        }
+        Update: {
+          client_id?: string
+          completed_at?: string | null
+          completed_by?: string | null
+          created_at?: string
+          description?: string | null
+          due_at?: string | null
+          evidence_id?: string | null
+          id?: string
+          item_type?: string
+          lesson_id?: string | null
+          note?: string | null
+          required?: boolean
+          responsible_user_id?: string | null
+          sort_order?: number
+          source_key?: string
+          status?: string
+          store_id?: string
+          title?: string
+          updated_at?: string
+          visit_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultoria_itens_entrega_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_itens_entrega_completed_by_fkey"
+            columns: ["completed_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_itens_entrega_evidence_id_fkey"
+            columns: ["evidence_id"]
+            isOneToOne: false
+            referencedRelation: "evidencias_visita"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_itens_entrega_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "universidade_aulas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_itens_entrega_responsible_user_id_fkey"
+            columns: ["responsible_user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_itens_entrega_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_itens_entrega_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "visitas_consultoria"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consultoria_participantes_encontro: {
+        Row: {
+          client_id: string
+          confirmed: boolean
+          confirmed_at: string | null
+          confirmed_by: string | null
+          created_at: string
+          id: string
+          name: string
+          note: string | null
+          participant_key: string
+          required: boolean
+          role_label: string | null
+          store_id: string
+          updated_at: string
+          user_id: string | null
+          visit_id: string
+        }
+        Insert: {
+          client_id: string
+          confirmed?: boolean
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          created_at?: string
+          id?: string
+          name: string
+          note?: string | null
+          participant_key: string
+          required?: boolean
+          role_label?: string | null
+          store_id: string
+          updated_at?: string
+          user_id?: string | null
+          visit_id: string
+        }
+        Update: {
+          client_id?: string
+          confirmed?: boolean
+          confirmed_at?: string | null
+          confirmed_by?: string | null
+          created_at?: string
+          id?: string
+          name?: string
+          note?: string | null
+          participant_key?: string
+          required?: boolean
+          role_label?: string | null
+          store_id?: string
+          updated_at?: string
+          user_id?: string | null
+          visit_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultoria_participantes_encontro_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_participantes_encontro_confirmed_by_fkey"
+            columns: ["confirmed_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_participantes_encontro_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_participantes_encontro_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_participantes_encontro_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "visitas_consultoria"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consultoria_progresso_aula: {
+        Row: {
+          client_id: string
+          completed_at: string | null
+          created_at: string
+          duration_seconds: number
+          id: string
+          last_played_at: string | null
+          lesson_id: string
+          percentage: number
+          played_seconds: number
+          position_seconds: number
+          started_at: string | null
+          store_id: string
+          updated_at: string
+          user_id: string
+          visit_id: string | null
+        }
+        Insert: {
+          client_id: string
+          completed_at?: string | null
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          last_played_at?: string | null
+          lesson_id: string
+          percentage?: number
+          played_seconds?: number
+          position_seconds?: number
+          started_at?: string | null
+          store_id: string
+          updated_at?: string
+          user_id: string
+          visit_id?: string | null
+        }
+        Update: {
+          client_id?: string
+          completed_at?: string | null
+          created_at?: string
+          duration_seconds?: number
+          id?: string
+          last_played_at?: string | null
+          lesson_id?: string
+          percentage?: number
+          played_seconds?: number
+          position_seconds?: number
+          started_at?: string | null
+          store_id?: string
+          updated_at?: string
+          user_id?: string
+          visit_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultoria_progresso_aula_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_progresso_aula_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "universidade_aulas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_progresso_aula_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_progresso_aula_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_progresso_aula_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "visitas_consultoria"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      consultoria_solicitacoes_antecipacao: {
+        Row: {
+          approved_at: string | null
+          cancelled_at: string | null
+          client_id: string
+          created_at: string
+          eligibility_snapshot: Json
+          id: string
+          preferred_dates: Json
+          reason: string
+          requested_by: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          store_id: string
+          updated_at: string
+          visit_id: string
+        }
+        Insert: {
+          approved_at?: string | null
+          cancelled_at?: string | null
+          client_id: string
+          created_at?: string
+          eligibility_snapshot?: Json
+          id?: string
+          preferred_dates?: Json
+          reason: string
+          requested_by: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          store_id: string
+          updated_at?: string
+          visit_id: string
+        }
+        Update: {
+          approved_at?: string | null
+          cancelled_at?: string | null
+          client_id?: string
+          created_at?: string
+          eligibility_snapshot?: Json
+          id?: string
+          preferred_dates?: Json
+          reason?: string
+          requested_by?: string
+          review_note?: string | null
+          reviewed_at?: string | null
+          reviewed_by?: string | null
+          status?: string
+          store_id?: string
+          updated_at?: string
+          visit_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "consultoria_solicitacoes_antecipacao_client_id_fkey"
+            columns: ["client_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_solicitacoes_antecipacao_requested_by_fkey"
+            columns: ["requested_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_solicitacoes_antecipacao_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_solicitacoes_antecipacao_store_id_fkey"
+            columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "consultoria_solicitacoes_antecipacao_visit_id_fkey"
+            columns: ["visit_id"]
+            isOneToOne: false
+            referencedRelation: "visitas_consultoria"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       contatos_cliente_consultoria: {
         Row: {
           client_id: string
@@ -4398,47 +4838,98 @@ export type Database = {
       }
       evidencias_visita: {
         Row: {
+          analisada_at: string | null
+          analisada_por: string | null
           caminho_storage: string | null
           content_type: string | null
           created_at: string
+          devolutiva: string | null
           enviado_por: string | null
           id: string
           nome_arquivo: string | null
           observacao: string | null
+          status: string
+          substituida_at: string | null
+          substituida_por: string | null
           tamanho_bytes: number | null
+          texto_conteudo: string | null
           tipo: string
+          updated_at: string
+          url_externa: string | null
+          versao_anterior_id: string | null
           visita_id: string
         }
         Insert: {
+          analisada_at?: string | null
+          analisada_por?: string | null
           caminho_storage?: string | null
           content_type?: string | null
           created_at?: string
+          devolutiva?: string | null
           enviado_por?: string | null
           id?: string
           nome_arquivo?: string | null
           observacao?: string | null
+          status?: string
+          substituida_at?: string | null
+          substituida_por?: string | null
           tamanho_bytes?: number | null
+          texto_conteudo?: string | null
           tipo: string
+          updated_at?: string
+          url_externa?: string | null
+          versao_anterior_id?: string | null
           visita_id: string
         }
         Update: {
+          analisada_at?: string | null
+          analisada_por?: string | null
           caminho_storage?: string | null
           content_type?: string | null
           created_at?: string
+          devolutiva?: string | null
           enviado_por?: string | null
           id?: string
           nome_arquivo?: string | null
           observacao?: string | null
+          status?: string
+          substituida_at?: string | null
+          substituida_por?: string | null
           tamanho_bytes?: number | null
+          texto_conteudo?: string | null
           tipo?: string
+          updated_at?: string
+          url_externa?: string | null
+          versao_anterior_id?: string | null
           visita_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "evidencias_visita_analisada_por_fkey"
+            columns: ["analisada_por"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "evidencias_visita_enviado_por_fkey"
             columns: ["enviado_por"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "evidencias_visita_substituida_por_fkey"
+            columns: ["substituida_por"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "evidencias_visita_versao_anterior_id_fkey"
+            columns: ["versao_anterior_id"]
+            isOneToOne: false
+            referencedRelation: "evidencias_visita"
             referencedColumns: ["id"]
           },
           {
@@ -5196,6 +5687,64 @@ export type Database = {
           {
             foreignKeyName: "store_meta_rules_history_store_id_fkey"
             columns: ["store_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      historico_valores_indicadores_planejamento: {
+        Row: {
+          changed_by: string | null
+          created_at: string
+          id: string
+          indicator_code: string
+          loja_id: string
+          new_values: Json
+          note: string | null
+          previous_values: Json
+          year: number
+        }
+        Insert: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          indicator_code: string
+          loja_id: string
+          new_values: Json
+          note?: string | null
+          previous_values: Json
+          year: number
+        }
+        Update: {
+          changed_by?: string | null
+          created_at?: string
+          id?: string
+          indicator_code?: string
+          loja_id?: string
+          new_values?: Json
+          note?: string | null
+          previous_values?: Json
+          year?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "historico_valores_indicadores_planejamento_changed_by_fkey"
+            columns: ["changed_by"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "historico_valores_indicadores_planejamento_indicator_code_fkey"
+            columns: ["indicator_code"]
+            isOneToOne: false
+            referencedRelation: "catalogo_indicadores_planejamento"
+            referencedColumns: ["code"]
+          },
+          {
+            foreignKeyName: "historico_valores_indicadores_planejamento_loja_id_fkey"
+            columns: ["loja_id"]
             isOneToOne: false
             referencedRelation: "lojas"
             referencedColumns: ["id"]
@@ -12256,9 +12805,11 @@ export type Database = {
           analysis_period_end: string | null
           analysis_period_preset: string | null
           analysis_period_start: string | null
+          anticipation_override: boolean
           auxiliary_consultant_id: string | null
           checklist_data: Json | null
           client_id: string
+          confidentiality_level: string
           consultant_id: string | null
           consultant_name_manual: string | null
           created_at: string
@@ -12273,6 +12824,8 @@ export type Database = {
           google_synced_at: string | null
           id: string
           leads_mes: string | null
+          lesson_id: string | null
+          materiais: Json
           meta_mensal: string | null
           modality: string
           next_cycle_goal: string | null
@@ -12295,9 +12848,11 @@ export type Database = {
           analysis_period_end?: string | null
           analysis_period_preset?: string | null
           analysis_period_start?: string | null
+          anticipation_override?: boolean
           auxiliary_consultant_id?: string | null
           checklist_data?: Json | null
           client_id: string
+          confidentiality_level?: string
           consultant_id?: string | null
           consultant_name_manual?: string | null
           created_at?: string
@@ -12312,6 +12867,8 @@ export type Database = {
           google_synced_at?: string | null
           id?: string
           leads_mes?: string | null
+          lesson_id?: string | null
+          materiais?: Json
           meta_mensal?: string | null
           modality?: string
           next_cycle_goal?: string | null
@@ -12334,9 +12891,11 @@ export type Database = {
           analysis_period_end?: string | null
           analysis_period_preset?: string | null
           analysis_period_start?: string | null
+          anticipation_override?: boolean
           auxiliary_consultant_id?: string | null
           checklist_data?: Json | null
           client_id?: string
+          confidentiality_level?: string
           consultant_id?: string | null
           consultant_name_manual?: string | null
           created_at?: string
@@ -12351,6 +12910,8 @@ export type Database = {
           google_synced_at?: string | null
           id?: string
           leads_mes?: string | null
+          lesson_id?: string | null
+          materiais?: Json
           meta_mensal?: string | null
           modality?: string
           next_cycle_goal?: string | null
@@ -12394,6 +12955,13 @@ export type Database = {
             columns: ["consultant_id"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "visitas_consultoria_lesson_id_fkey"
+            columns: ["lesson_id"]
+            isOneToOne: false
+            referencedRelation: "universidade_aulas"
             referencedColumns: ["id"]
           },
         ]
@@ -12679,6 +13247,37 @@ export type Database = {
         Args: { p_seller_id?: string }
         Returns: string
       }
+      atualizar_item_entrega_consultoria: {
+        Args: { p_item_id: string; p_note?: string; p_status: string }
+        Returns: {
+          client_id: string
+          completed_at: string | null
+          completed_by: string | null
+          created_at: string
+          description: string | null
+          due_at: string | null
+          evidence_id: string | null
+          id: string
+          item_type: string
+          lesson_id: string | null
+          note: string | null
+          required: boolean
+          responsible_user_id: string | null
+          sort_order: number
+          source_key: string
+          status: string
+          store_id: string
+          title: string
+          updated_at: string
+          visit_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "consultoria_itens_entrega"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       atualizar_plano_acao: {
         Args: {
           p_acao?: string
@@ -12879,6 +13478,33 @@ export type Database = {
           uid?: string
         }
         Returns: boolean
+      }
+      cancelar_antecipacao_consultoria: {
+        Args: { p_note?: string; p_request_id: string }
+        Returns: {
+          approved_at: string | null
+          cancelled_at: string | null
+          client_id: string
+          created_at: string
+          eligibility_snapshot: Json
+          id: string
+          preferred_dates: Json
+          reason: string
+          requested_by: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          store_id: string
+          updated_at: string
+          visit_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "consultoria_solicitacoes_antecipacao"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       cancelar_regularizacao_fechamento: {
         Args: { p_request_id: string }
@@ -13097,9 +13723,11 @@ export type Database = {
           analysis_period_end: string | null
           analysis_period_preset: string | null
           analysis_period_start: string | null
+          anticipation_override: boolean
           auxiliary_consultant_id: string | null
           checklist_data: Json | null
           client_id: string
+          confidentiality_level: string
           consultant_id: string | null
           consultant_name_manual: string | null
           created_at: string
@@ -13114,6 +13742,8 @@ export type Database = {
           google_synced_at: string | null
           id: string
           leads_mes: string | null
+          lesson_id: string | null
+          materiais: Json
           meta_mensal: string | null
           modality: string
           next_cycle_goal: string | null
@@ -13169,6 +13799,36 @@ export type Database = {
       configure_weekly_feedback_cron: {
         Args: { p_bearer_token: string; p_function_url: string }
         Returns: undefined
+      }
+      confirmar_participante_consultoria: {
+        Args: {
+          p_confirmed: boolean
+          p_note?: string
+          p_participant_id: string
+        }
+        Returns: {
+          client_id: string
+          confirmed: boolean
+          confirmed_at: string | null
+          confirmed_by: string | null
+          created_at: string
+          id: string
+          name: string
+          note: string | null
+          participant_key: string
+          required: boolean
+          role_label: string | null
+          store_id: string
+          updated_at: string
+          user_id: string | null
+          visit_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "consultoria_participantes_encontro"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       consolidar_dashboard_departamento: {
         Args: { p_code: string; p_loja_id: string; p_period?: string }
@@ -13330,6 +13990,93 @@ export type Database = {
           p_responsavel_id?: string
           p_scope_id: string
           p_scope_type: Database["public"]["Enums"]["score_scope_type"]
+        }
+        Returns: {
+          acao: string
+          approval_note: string | null
+          approved_at: string | null
+          approved_by: string | null
+          block_category: string | null
+          block_note: string | null
+          block_responsible: string | null
+          block_responsible_id: string | null
+          blocked_reason: string | null
+          budget: number | null
+          cancel_note: string | null
+          cancel_reason: string | null
+          checklist: Json
+          codigo: string | null
+          comentarios: Json
+          como: string | null
+          concluido_at: string | null
+          created_at: string
+          created_by: string | null
+          delegated_at: string | null
+          delegated_by: string | null
+          delegation_note: string | null
+          departamento: string
+          eficacia_nota: string | null
+          eficacia_score: number | null
+          evidence_required: boolean
+          expected_unblock_date: string | null
+          financial_impact: number | null
+          id: string
+          impact_measurement_date: string | null
+          impact_status: string | null
+          impact_value_after: number | null
+          impact_value_before: number | null
+          indicador: string
+          iniciado_at: string | null
+          next_step: string | null
+          objetivo: string | null
+          origem: Database["public"]["Enums"]["action_origin"]
+          origem_ref_id: string | null
+          origem_ref_table: string | null
+          prazo: string | null
+          prioridade: Database["public"]["Enums"]["action_priority"]
+          problema: string
+          progress_note: string | null
+          progresso: number
+          projected_date: string | null
+          realized_impact: string | null
+          reopen_note: string | null
+          reopen_reason: string | null
+          requires_owner: boolean
+          reschedule_note: string | null
+          reschedule_reason: string | null
+          rescheduled_at: string | null
+          rescheduled_by: string | null
+          responsavel_id: string | null
+          return_guidance: string | null
+          return_reason: string | null
+          scope_id: string
+          scope_type: Database["public"]["Enums"]["score_scope_type"]
+          status: Database["public"]["Enums"]["action_status"]
+          transition_metadata: Json
+          unblock_note: string | null
+          unblock_solution: string | null
+          updated_at: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "planos_acao"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      criar_plano_acao_planejamento_unico: {
+        Args: {
+          p_action: string
+          p_area?: string
+          p_deadline?: string
+          p_indicator_code: string
+          p_note?: string
+          p_priority?: string
+          p_problem: string
+          p_responsible_name?: string
+          p_store_id: string
+          p_title: string
+          p_year: number
         }
         Returns: {
           acao: string
@@ -13584,7 +14331,15 @@ export type Database = {
           peer_top: number
         }[]
       }
+      get_consultoria_jornada_loja: {
+        Args: { p_store_id: string }
+        Returns: Json
+      }
       get_correlation_id: { Args: never; Returns: string }
+      get_internal_mx_network_cockpit: {
+        Args: { p_end_date: string; p_start_date: string }
+        Returns: Json
+      }
       get_lancamento_por_dia: {
         Args: {
           p_reference_date: string
@@ -14155,6 +14910,14 @@ export type Database = {
         Args: { p_cliente_id: string }
         Returns: boolean
       }
+      pode_acessar_jornada_consultoria: {
+        Args: { p_client_id: string; p_store_id: string; uid?: string }
+        Returns: boolean
+      }
+      pode_gerir_metas_planejamento: {
+        Args: { p_store_id: string; uid?: string }
+        Returns: boolean
+      }
       pode_lancar_checkin: {
         Args: {
           p_reference_date?: string
@@ -14257,6 +15020,46 @@ export type Database = {
         }
         Returns: string
       }
+      registrar_evidencia_consultoria: {
+        Args: {
+          p_external_url?: string
+          p_name?: string
+          p_note?: string
+          p_previous_id?: string
+          p_storage_path?: string
+          p_text_content?: string
+          p_type: string
+          p_visit_id: string
+        }
+        Returns: {
+          analisada_at: string | null
+          analisada_por: string | null
+          caminho_storage: string | null
+          content_type: string | null
+          created_at: string
+          devolutiva: string | null
+          enviado_por: string | null
+          id: string
+          nome_arquivo: string | null
+          observacao: string | null
+          status: string
+          substituida_at: string | null
+          substituida_por: string | null
+          tamanho_bytes: number | null
+          texto_conteudo: string | null
+          tipo: string
+          updated_at: string
+          url_externa: string | null
+          versao_anterior_id: string | null
+          visita_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "evidencias_visita"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       registrar_status_acao_cadencia: {
         Args: {
           p_canal_contato?: string
@@ -14312,6 +15115,68 @@ export type Database = {
         }
         Returns: string
       }
+      restaurar_metas_indicador_planejamento: {
+        Args: { p_history_id: string; p_note?: string }
+        Returns: Json
+      }
+      revisar_antecipacao_consultoria: {
+        Args: { p_note?: string; p_request_id: string; p_status: string }
+        Returns: {
+          approved_at: string | null
+          cancelled_at: string | null
+          client_id: string
+          created_at: string
+          eligibility_snapshot: Json
+          id: string
+          preferred_dates: Json
+          reason: string
+          requested_by: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          store_id: string
+          updated_at: string
+          visit_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "consultoria_solicitacoes_antecipacao"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
+      revisar_evidencia_consultoria: {
+        Args: { p_evidence_id: string; p_feedback?: string; p_status: string }
+        Returns: {
+          analisada_at: string | null
+          analisada_por: string | null
+          caminho_storage: string | null
+          content_type: string | null
+          created_at: string
+          devolutiva: string | null
+          enviado_por: string | null
+          id: string
+          nome_arquivo: string | null
+          observacao: string | null
+          status: string
+          substituida_at: string | null
+          substituida_por: string | null
+          tamanho_bytes: number | null
+          texto_conteudo: string | null
+          tipo: string
+          updated_at: string
+          url_externa: string | null
+          versao_anterior_id: string | null
+          visita_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "evidencias_visita"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       run_d1_consolidation_clock: { Args: never; Returns: undefined }
       run_manager_routine_snapshot_refresh_clock: {
         Args: never
@@ -14322,6 +15187,50 @@ export type Database = {
         Returns: undefined
       }
       run_store_target_plan_refresh_clock: { Args: never; Returns: undefined }
+      salvar_metas_indicador_planejamento: {
+        Args: {
+          p_indicator_code: string
+          p_note?: string
+          p_store_id: string
+          p_values: Json
+          p_year: number
+        }
+        Returns: Json
+      }
+      salvar_progresso_aula_consultoria: {
+        Args: {
+          p_client_id: string
+          p_duration_seconds: number
+          p_lesson_id: string
+          p_played_delta_seconds: number
+          p_position_seconds: number
+          p_store_id: string
+          p_visit_id: string
+        }
+        Returns: {
+          client_id: string
+          completed_at: string | null
+          created_at: string
+          duration_seconds: number
+          id: string
+          last_played_at: string | null
+          lesson_id: string
+          percentage: number
+          played_seconds: number
+          position_seconds: number
+          started_at: string | null
+          store_id: string
+          updated_at: string
+          user_id: string
+          visit_id: string | null
+        }
+        SetofOptions: {
+          from: "*"
+          to: "consultoria_progresso_aula"
+          isOneToOne: true
+          isSetofReturn: false
+        }
+      }
       save_manager_lead_conference: {
         Args: {
           p_items: Json
@@ -14344,6 +15253,37 @@ export type Database = {
           p_type?: string
         }
         Returns: string
+      }
+      sincronizar_jornada_consultoria_visita: {
+        Args: { p_visit_id: string }
+        Returns: undefined
+      }
+      solicitar_antecipacao_consultoria: {
+        Args: { p_preferred_dates?: Json; p_reason: string; p_visit_id: string }
+        Returns: {
+          approved_at: string | null
+          cancelled_at: string | null
+          client_id: string
+          created_at: string
+          eligibility_snapshot: Json
+          id: string
+          preferred_dates: Json
+          reason: string
+          requested_by: string
+          review_note: string | null
+          reviewed_at: string | null
+          reviewed_by: string | null
+          status: string
+          store_id: string
+          updated_at: string
+          visit_id: string
+        }
+        SetofOptions: {
+          from: "*"
+          to: "consultoria_solicitacoes_antecipacao"
+          isOneToOne: true
+          isSetofReturn: false
+        }
       }
       solicitar_liberacao_fechamento: {
         Args: { p_data_fechamento: string }
