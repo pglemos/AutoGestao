@@ -33,7 +33,7 @@ describe('production hardening contracts', () => {
 
   test('database migration persists deterministic resolutions and revokes trigger RPC exposure', () => {
     const migration = readRepoFile(
-      'supabase/migrations/20260728050000_deterministic_actions_runtime_and_security.sql',
+      'supabase/migrations/20260728061728_deterministic_actions_runtime_and_security.sql',
     )
 
     expect(migration).toContain('CREATE TABLE IF NOT EXISTS public.deterministic_action_resolutions')
