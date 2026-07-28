@@ -1,7 +1,8 @@
 /**
- * Módulo de Ações Determinísticas do MX Gestão Preditiva (Sem IA).
- * Produz recomendações, prioridades e próximos passos estritamente baseados em
- * regras de negócio determinísticas, fatos canônicos do banco e condições de resolução auditáveis.
+ * Motor de Ações Determinísticas do MX Gestão Preditiva.
+ *
+ * Não usa IA. Toda saída deriva de fatos canônicos do banco, regras versionadas
+ * e condições de resolução auditáveis.
  */
 
 export type ActionPriority = 'critical' | 'high' | 'medium' | 'low'
@@ -49,6 +50,7 @@ export interface CustomerItem {
   proxima_acao_em?: string | null
   ultima_interacao?: string | null
   vendedor_id?: string | null
+  do_not_contact?: boolean | null
 }
 
 export interface AppointmentItem {
@@ -86,7 +88,7 @@ export interface ManualCompletionItem {
 }
 
 export interface DeterministicActionInput {
-  refDate: string // Formato YYYY-MM-DD
+  refDate: string
   role: 'seller' | 'manager' | 'owner' | 'admin' | string
   userId: string
   storeId: string
@@ -98,86 +100,151 @@ export interface DeterministicActionInput {
   manualCompletions?: ManualCompletionItem[]
 }
 
-const RULE_VERSION = 'v1.0-deterministic'
+export const DETERMINISTIC_RULE_VERSION = 'v1.1-deterministic'
 
-function diasDiff(d1: string, d2: string): number {
-  const date1 = new Date(`${d1.substring(0, 10)}T00:00:00`)
-  const date2 = new Date(`${d2.substring(0, 10)}T00:00:00`)
-  return Math.round((date2.getTime() - date1.getTime()) / 86400000)
+const TERMINAL_STAGES = new Set(['ganho', 'perdido', 'cancelada'])
+const PRIORITY_RANK: Record<ActionPriority, number> = {
+  critical: 0,
+  high: 1,
+  medium: 2,
+  low: 3,
+}
+
+function datePart(value: string): string {
+  return value.substring(0, 10)
+}
+
+function daysBetween(from: string, to: string): number {
+  const start = new Date(`${datePart(from)}T12:00:00Z`)
+  const end = new Date(`${datePart(to)}T12:00:00Z`)
+  return Math.max(0, Math.round((end.getTime() - start.getTime()) / 86_400_000))
+}
+
+function formatDatePtBr(value: string): string {
+  const date = new Date(value.length === 10 ? `${value}T12:00:00Z` : value)
+  if (Number.isNaN(date.getTime())) return datePart(value)
+  return new Intl.DateTimeFormat('pt-BR', {
+    day: '2-digit',
+    month: '2-digit',
+    year: 'numeric',
+    timeZone: 'America/Sao_Paulo',
+  }).format(date)
+}
+
+function customerUrl(customerId: string): string {
+  return `/carteira-clientes?clienteId=${encodeURIComponent(customerId)}`
+}
+
+function canRecommendContact(customer: CustomerItem | undefined): boolean {
+  return Boolean(customer && customer.do_not_contact !== true)
+}
+
+function dedupeAndSort(actions: DeterministicAction[]): DeterministicAction[] {
+  const deduped = new Map<string, DeterministicAction>()
+
+  for (const action of actions) {
+    const entityKey = action.opportunityId || action.customerId || action.storeId || action.id
+    const key = `${action.scenarioCode}:${entityKey}`
+    const current = deduped.get(key)
+
+    if (!current) {
+      deduped.set(key, action)
+      continue
+    }
+
+    const currentDue = current.dueAt || '9999-12-31'
+    const nextDue = action.dueAt || '9999-12-31'
+    if (nextDue < currentDue || (nextDue === currentDue && action.id < current.id)) {
+      deduped.set(key, action)
+    }
+  }
+
+  return [...deduped.values()].sort((left, right) => {
+    const priority = PRIORITY_RANK[left.priority] - PRIORITY_RANK[right.priority]
+    if (priority !== 0) return priority
+
+    const leftDue = left.dueAt || '9999-12-31'
+    const rightDue = right.dueAt || '9999-12-31'
+    if (leftDue !== rightDue) return leftDue.localeCompare(rightDue)
+
+    return left.id.localeCompare(right.id)
+  })
 }
 
 export function deriveDeterministicActions(input: DeterministicActionInput): DeterministicAction[] {
   const actions: DeterministicAction[] = []
   const { refDate, role, userId, storeId } = input
-
   const customersMap = new Map<string, CustomerItem>()
-  input.customers?.forEach((c) => customersMap.set(c.id, c))
+  const opportunitiesMap = new Map<string, OpportunityItem>()
 
-  // Scenario 1: CANCELLED_SALE
-  input.opportunities?.forEach((opp) => {
-    if (opp.etapa === 'cancelada') {
-      const customer = customersMap.get(opp.cliente_id)
-      const customerName = customer?.nome || 'Cliente'
-      const dataCancelamento = opp.cancelada_em || opp.closed_at || refDate
-      const motivo = opp.motivo_cancelamento || 'Sem motivo registrado'
+  input.customers?.forEach((customer) => customersMap.set(customer.id, customer))
+  input.opportunities?.forEach((opportunity) => opportunitiesMap.set(opportunity.id, opportunity))
 
-      actions.push({
-        id: `act-cancelled-${opp.id}`,
-        scenarioCode: 'CANCELLED_SALE',
-        role,
-        userId,
-        storeId,
-        sellerUserId: opp.vendedor_id || customer?.vendedor_id || null,
-        customerId: opp.cliente_id,
-        opportunityId: opp.id,
-        title: `Recuperação de venda cancelada — ${customerName}`,
-        explanation: `A venda de ${customerName} foi cancelada em ${new Date(dataCancelamento).toLocaleDateString('pt-BR')}. Motivo: "${motivo}".`,
-        priority: 'high',
-        dueAt: refDate,
-        actionType: 'ANALYZE_RECOVERY',
-        actionUrl: `/carteira?clienteId=${opp.cliente_id}`,
-        evidence: {
-          motivo,
-          dataCancelamento,
-          autor: opp.cancelada_por || 'desconhecido',
-          valorOriginal: opp.valor || 0,
-        },
-        resolutionKey: 'STRATEGY_REGISTERED_OR_NEW_OPP',
-        ruleVersion: RULE_VERSION,
-      })
-    }
-  })
+  for (const opportunity of input.opportunities ?? []) {
+    if (opportunity.etapa !== 'cancelada') continue
 
-  // Scenario 2: OVERDUE_ACTION & Scenario 3: MISSING_NEXT_STEP
-  input.opportunities?.forEach((opp) => {
-    if (['ganho', 'perdido', 'cancelada'].includes(opp.etapa)) return
-    const customer = customersMap.get(opp.cliente_id)
-    if (!customer) return
+    const customer = customersMap.get(opportunity.cliente_id)
+    if (!canRecommendContact(customer)) continue
+
+    const cancellationDate = opportunity.cancelada_em || opportunity.closed_at || refDate
+    const reason = opportunity.motivo_cancelamento || 'Sem motivo registrado'
+
+    actions.push({
+      id: `act-cancelled-${opportunity.id}`,
+      scenarioCode: 'CANCELLED_SALE',
+      role,
+      userId,
+      storeId,
+      sellerUserId: opportunity.vendedor_id || customer?.vendedor_id || null,
+      customerId: opportunity.cliente_id,
+      opportunityId: opportunity.id,
+      title: `Recuperação de venda cancelada — ${customer?.nome || 'Cliente'}`,
+      explanation: `A venda foi cancelada em ${formatDatePtBr(cancellationDate)}. Motivo: "${reason}".`,
+      priority: 'high',
+      dueAt: refDate,
+      actionType: 'ANALYZE_RECOVERY',
+      actionUrl: customerUrl(opportunity.cliente_id),
+      evidence: {
+        motivo: reason,
+        dataCancelamento: cancellationDate,
+        autor: opportunity.cancelada_por || 'desconhecido',
+        valorOriginal: opportunity.valor || 0,
+      },
+      resolutionKey: 'STRATEGY_REGISTERED_OR_NEW_OPP',
+      ruleVersion: DETERMINISTIC_RULE_VERSION,
+    })
+  }
+
+  for (const opportunity of input.opportunities ?? []) {
+    if (TERMINAL_STAGES.has(opportunity.etapa)) continue
+
+    const customer = customersMap.get(opportunity.cliente_id)
+    if (!canRecommendContact(customer)) continue
 
     if (customer.proxima_acao_em && customer.proxima_acao_em < refDate) {
-      const diasAtraso = diasDiff(customer.proxima_acao_em, refDate)
+      const overdueDays = daysBetween(customer.proxima_acao_em, refDate)
       actions.push({
         id: `act-overdue-${customer.id}`,
         scenarioCode: 'OVERDUE_ACTION',
         role,
         userId,
         storeId,
-        sellerUserId: customer.vendedor_id || opp.vendedor_id || null,
+        sellerUserId: customer.vendedor_id || opportunity.vendedor_id || null,
         customerId: customer.id,
-        opportunityId: opp.id,
+        opportunityId: opportunity.id,
         title: `Próxima ação vencida — ${customer.nome}`,
-        explanation: `A ação "${customer.proxima_acao || 'Contato previsto'}" venceu há ${diasAtraso} dia(s) (em ${customer.proxima_acao_em}).`,
+        explanation: `A ação "${customer.proxima_acao || 'Contato previsto'}" venceu há ${overdueDays} dia(s), em ${formatDatePtBr(customer.proxima_acao_em)}.`,
         priority: 'critical',
         dueAt: customer.proxima_acao_em,
         actionType: 'EXECUTE_NEXT_STEP',
-        actionUrl: `/carteira?clienteId=${customer.id}`,
+        actionUrl: customerUrl(customer.id),
         evidence: {
           proximaAcao: customer.proxima_acao,
           dataPrevista: customer.proxima_acao_em,
-          diasAtraso,
+          diasAtraso: overdueDays,
         },
         resolutionKey: 'NEW_INTERACTION_OR_RESCHEDULED',
-        ruleVersion: RULE_VERSION,
+        ruleVersion: DETERMINISTIC_RULE_VERSION,
       })
     } else if (!customer.proxima_acao || !customer.proxima_acao_em) {
       actions.push({
@@ -186,127 +253,123 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
         role,
         userId,
         storeId,
-        sellerUserId: customer.vendedor_id || opp.vendedor_id || null,
+        sellerUserId: customer.vendedor_id || opportunity.vendedor_id || null,
         customerId: customer.id,
-        opportunityId: opp.id,
+        opportunityId: opportunity.id,
         title: `Sem próxima ação definida — ${customer.nome}`,
-        explanation: `Oportunidade ativa na etapa de ${opp.etapa} sem próxima ação agendada.`,
+        explanation: `Oportunidade ativa na etapa ${opportunity.etapa} sem próxima ação agendada.`,
         priority: 'medium',
         dueAt: refDate,
         actionType: 'DEFINE_NEXT_STEP',
-        actionUrl: `/carteira?clienteId=${customer.id}`,
-        evidence: {
-          etapaAtual: opp.etapa,
-        },
+        actionUrl: customerUrl(customer.id),
+        evidence: { etapaAtual: opportunity.etapa },
         resolutionKey: 'NEXT_STEP_DEFINED',
-        ruleVersion: RULE_VERSION,
+        ruleVersion: DETERMINISTIC_RULE_VERSION,
       })
     }
-  })
+  }
 
-  // Scenario 4: UNCONFIRMED_VISIT
-  input.appointments?.forEach((apt) => {
-    if (apt.status === 'aguardando') {
-      const customer = customersMap.get(apt.cliente_id)
-      const customerName = customer?.nome || 'Cliente'
-      actions.push({
-        id: `act-unconfirmed-visit-${apt.id}`,
-        scenarioCode: 'UNCONFIRMED_VISIT',
-        role,
-        userId,
-        storeId,
-        sellerUserId: customer?.vendedor_id || null,
-        customerId: apt.cliente_id,
-        opportunityId: apt.oportunidade_id || null,
-        title: `Visita pendente de confirmação — ${customerName}`,
-        explanation: `Agendamento para ${apt.data_agendamento} às ${apt.horario || 'horário não especificado'} aguarda confirmação.`,
-        priority: 'high',
-        dueAt: apt.data_agendamento,
-        actionType: 'CONFIRM_APPOINTMENT',
-        actionUrl: `/carteira?clienteId=${apt.cliente_id}`,
-        evidence: {
-          dataAgendamento: apt.data_agendamento,
-          horario: apt.horario,
-          statusAtual: apt.status,
-        },
-        resolutionKey: 'VISIT_CONFIRMED_OR_CANCELLED',
-        ruleVersion: RULE_VERSION,
-      })
-    }
-  })
+  for (const appointment of input.appointments ?? []) {
+    if (appointment.status !== 'aguardando') continue
 
-  // Scenario 5: PROPOSAL_NO_RETURN
-  input.proposals?.forEach((prop) => {
-    const opp = input.opportunities?.find((o) => o.id === prop.oportunidade_id)
-    if (opp && ['apresentacao', 'negociacao'].includes(opp.etapa)) {
-      const diasEnviada = diasDiff(prop.created_at, refDate)
-      if (diasEnviada >= 3) {
-        const customer = customersMap.get(prop.cliente_id)
-        actions.push({
-          id: `act-proposal-no-return-${prop.id}`,
-          scenarioCode: 'PROPOSAL_NO_RETURN',
-          role,
-          userId,
-          storeId,
-          sellerUserId: opp.vendedor_id || customer?.vendedor_id || null,
-          customerId: prop.cliente_id,
-          opportunityId: prop.oportunidade_id,
-          title: `Proposta sem retorno há ${diasEnviada} dias — ${customer?.nome || 'Cliente'}`,
-          explanation: `Proposta enviada em ${new Date(prop.created_at).toLocaleDateString('pt-BR')} aguarda devolutiva comercial.`,
-          priority: 'high',
-          dueAt: refDate,
-          actionType: 'FOLLOWUP_PROPOSAL',
-          actionUrl: `/carteira?clienteId=${prop.cliente_id}`,
-          evidence: {
-            diasEnviada,
-            dataProposta: prop.created_at,
-            etapaAtual: opp.etapa,
-          },
-          resolutionKey: 'PROPOSAL_RETURN_REGISTERED',
-          ruleVersion: RULE_VERSION,
-        })
-      }
-    }
-  })
+    const customer = customersMap.get(appointment.cliente_id)
+    if (!canRecommendContact(customer)) continue
 
-  // Scenario 6: PENDING_CLOSING
-  input.opportunities?.forEach((opp) => {
-    if (opp.etapa === 'fechamento') {
-      const customer = customersMap.get(opp.cliente_id)
-      const dataInicio = opp.updated_at || opp.created_at || refDate
-      const diasEmFechamento = diasDiff(dataInicio, refDate)
-      if (diasEmFechamento >= 1) {
-        actions.push({
-          id: `act-pending-closing-${opp.id}`,
-          scenarioCode: 'PENDING_CLOSING',
-          role,
-          userId,
-          storeId,
-          sellerUserId: opp.vendedor_id || customer?.vendedor_id || null,
-          customerId: opp.cliente_id,
-          opportunityId: opp.id,
-          title: `Fechamento pendente — ${customer?.nome || 'Cliente'}`,
-          explanation: `Oportunidade está em fase de fechamento há ${diasEmFechamento} dia(s).`,
-          priority: 'critical',
-          dueAt: refDate,
-          actionType: 'COMPLETE_CLOSING',
-          actionUrl: `/carteira?clienteId=${opp.cliente_id}`,
-          evidence: {
-            diasEmFechamento,
-            valor: opp.valor || 0,
-          },
-          resolutionKey: 'CLOSING_FINALIZED_OR_STAGE_CHANGED',
-          ruleVersion: RULE_VERSION,
-        })
-      }
-    }
-  })
+    actions.push({
+      id: `act-unconfirmed-visit-${appointment.id}`,
+      scenarioCode: 'UNCONFIRMED_VISIT',
+      role,
+      userId,
+      storeId,
+      sellerUserId: customer.vendedor_id || null,
+      customerId: appointment.cliente_id,
+      opportunityId: appointment.oportunidade_id || null,
+      title: `Visita pendente de confirmação — ${customer.nome}`,
+      explanation: `Agendamento para ${formatDatePtBr(appointment.data_agendamento)} às ${appointment.horario || 'horário não informado'} aguarda confirmação.`,
+      priority: 'high',
+      dueAt: appointment.data_agendamento,
+      actionType: 'CONFIRM_APPOINTMENT',
+      actionUrl: customerUrl(appointment.cliente_id),
+      evidence: {
+        dataAgendamento: appointment.data_agendamento,
+        horario: appointment.horario,
+        statusAtual: appointment.status,
+      },
+      resolutionKey: 'VISIT_CONFIRMED_OR_CANCELLED',
+      ruleVersion: DETERMINISTIC_RULE_VERSION,
+    })
+  }
 
-  // Scenario 7: TARGET_BEHIND_PACE
-  if (input.targetPace && (role === 'manager' || role === 'owner' || role === 'admin')) {
+  for (const proposal of input.proposals ?? []) {
+    const opportunity = opportunitiesMap.get(proposal.oportunidade_id)
+    if (!opportunity || !['apresentacao', 'negociacao'].includes(opportunity.etapa)) continue
+
+    const customer = customersMap.get(proposal.cliente_id)
+    if (!canRecommendContact(customer)) continue
+
+    const sentDaysAgo = daysBetween(proposal.created_at, refDate)
+    if (sentDaysAgo < 3) continue
+
+    actions.push({
+      id: `act-proposal-no-return-${proposal.id}`,
+      scenarioCode: 'PROPOSAL_NO_RETURN',
+      role,
+      userId,
+      storeId,
+      sellerUserId: opportunity.vendedor_id || customer.vendedor_id || null,
+      customerId: proposal.cliente_id,
+      opportunityId: proposal.oportunidade_id,
+      title: `Proposta sem retorno há ${sentDaysAgo} dias — ${customer.nome}`,
+      explanation: `Proposta enviada em ${formatDatePtBr(proposal.created_at)} ainda não possui devolutiva comercial registrada.`,
+      priority: 'high',
+      dueAt: refDate,
+      actionType: 'FOLLOWUP_PROPOSAL',
+      actionUrl: customerUrl(proposal.cliente_id),
+      evidence: {
+        diasEnviada: sentDaysAgo,
+        dataProposta: proposal.created_at,
+        etapaAtual: opportunity.etapa,
+      },
+      resolutionKey: 'PROPOSAL_RETURN_REGISTERED',
+      ruleVersion: DETERMINISTIC_RULE_VERSION,
+    })
+  }
+
+  for (const opportunity of input.opportunities ?? []) {
+    if (opportunity.etapa !== 'fechamento') continue
+
+    const customer = customersMap.get(opportunity.cliente_id)
+    const startDate = opportunity.updated_at || opportunity.created_at || refDate
+    const closingDays = daysBetween(startDate, refDate)
+    if (closingDays < 1) continue
+
+    actions.push({
+      id: `act-pending-closing-${opportunity.id}`,
+      scenarioCode: 'PENDING_CLOSING',
+      role,
+      userId,
+      storeId,
+      sellerUserId: opportunity.vendedor_id || customer?.vendedor_id || null,
+      customerId: opportunity.cliente_id,
+      opportunityId: opportunity.id,
+      title: `Fechamento pendente — ${customer?.nome || 'Cliente'}`,
+      explanation: `A oportunidade está em fechamento há ${closingDays} dia(s) e precisa ser concluída ou reclassificada.`,
+      priority: 'critical',
+      dueAt: refDate,
+      actionType: 'COMPLETE_CLOSING',
+      actionUrl: customerUrl(opportunity.cliente_id),
+      evidence: { diasEmFechamento: closingDays, valor: opportunity.valor || 0 },
+      resolutionKey: 'CLOSING_FINALIZED_OR_STAGE_CHANGED',
+      ruleVersion: DETERMINISTIC_RULE_VERSION,
+    })
+  }
+
+  if (input.targetPace && ['manager', 'owner', 'admin'].includes(role)) {
     const { targetSales, realizedSales, dayOfMonth, daysInMonth } = input.targetPace
-    const expectedPace = Math.round((targetSales * dayOfMonth) / daysInMonth)
-    if (realizedSales < expectedPace) {
+    const safeDaysInMonth = Math.max(daysInMonth, 1)
+    const expectedPace = Math.round((targetSales * dayOfMonth) / safeDaysInMonth)
+
+    if (targetSales > 0 && realizedSales < expectedPace) {
       actions.push({
         id: `act-target-pace-${input.targetPace.storeId}`,
         scenarioCode: 'TARGET_BEHIND_PACE',
@@ -316,58 +379,51 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
         sellerUserId: null,
         customerId: null,
         opportunityId: null,
-        title: `Meta da loja abaixo do ritmo esperado`,
-        explanation: `Realizado no mês (${realizedSales} vendas) está abaixo do ritmo esperado (${expectedPace} vendas) para o dia ${dayOfMonth} do mês (Meta: ${targetSales}).`,
+        title: 'Meta da loja abaixo do ritmo esperado',
+        explanation: `Realizado no mês: ${realizedSales}. Ritmo esperado até hoje: ${expectedPace}. Meta: ${targetSales}.`,
         priority: 'critical',
         dueAt: refDate,
         actionType: 'REVIEW_TEAM_PIPELINE',
-        actionUrl: `/rotina-gerente`,
-        evidence: {
-          targetSales,
-          realizedSales,
-          expectedPace,
-          dayOfMonth,
-          daysInMonth,
-        },
+        actionUrl: '/gerente/rotina-equipe',
+        evidence: { targetSales, realizedSales, expectedPace, dayOfMonth, daysInMonth },
         resolutionKey: 'CLOSING_PIPELINE_REVIEWED',
-        ruleVersion: RULE_VERSION,
+        ruleVersion: DETERMINISTIC_RULE_VERSION,
       })
     }
   }
 
-  // Scenario 8: AUTOMATIC_TASK_ORIGIN_PENDING
-  input.manualCompletions?.forEach((mc) => {
-    if (mc.opportunityId) {
-      const opp = input.opportunities?.find((o) => o.id === mc.opportunityId)
-      if (opp && (opp.etapa === 'fechamento' || opp.etapa === 'apresentacao' || opp.etapa === 'negociacao')) {
-        const customer = customersMap.get(opp.cliente_id)
-        actions.push({
-          id: `act-origin-pending-${mc.taskId}`,
-          scenarioCode: 'AUTOMATIC_TASK_ORIGIN_PENDING',
-          role,
-          userId,
-          storeId,
-          sellerUserId: opp.vendedor_id || customer?.vendedor_id || null,
-          customerId: opp.cliente_id,
-          opportunityId: opp.id,
-          title: `Pendência de origem ativa — ${customer?.nome || 'Cliente'}`,
-          explanation: `A tarefa "${mc.scenarioCode}" foi concluída manualmente em ${new Date(mc.completedAt).toLocaleDateString('pt-BR')}, mas a pendência de origem na etapa ${opp.etapa} continua ativa.`,
-          priority: 'high',
-          dueAt: refDate,
-          actionType: 'REGULARIZE_ORIGIN',
-          actionUrl: `/carteira?clienteId=${opp.cliente_id}`,
-          evidence: {
-            scenarioCode: mc.scenarioCode,
-            completedBy: mc.completedBy,
-            completedAt: mc.completedAt,
-            etapaAtual: opp.etapa,
-          },
-          resolutionKey: 'ORIGIN_ENTITY_RESOLVED',
-          ruleVersion: RULE_VERSION,
-        })
-      }
-    }
-  })
+  for (const completion of input.manualCompletions ?? []) {
+    if (!completion.opportunityId) continue
 
-  return actions
+    const opportunity = opportunitiesMap.get(completion.opportunityId)
+    if (!opportunity || !['fechamento', 'apresentacao', 'negociacao'].includes(opportunity.etapa)) continue
+
+    const customer = customersMap.get(opportunity.cliente_id)
+    actions.push({
+      id: `act-origin-pending-${completion.taskId}`,
+      scenarioCode: 'AUTOMATIC_TASK_ORIGIN_PENDING',
+      role,
+      userId,
+      storeId,
+      sellerUserId: opportunity.vendedor_id || customer?.vendedor_id || null,
+      customerId: opportunity.cliente_id,
+      opportunityId: opportunity.id,
+      title: `Pendência de origem ainda ativa — ${customer?.nome || 'Cliente'}`,
+      explanation: `A ação ${completion.scenarioCode} foi marcada como resolvida em ${formatDatePtBr(completion.completedAt)}, mas a oportunidade continua na etapa ${opportunity.etapa}.`,
+      priority: 'high',
+      dueAt: refDate,
+      actionType: 'REGULARIZE_ORIGIN',
+      actionUrl: customerUrl(opportunity.cliente_id),
+      evidence: {
+        scenarioCode: completion.scenarioCode,
+        completedBy: completion.completedBy,
+        completedAt: completion.completedAt,
+        etapaAtual: opportunity.etapa,
+      },
+      resolutionKey: 'ORIGIN_ENTITY_RESOLVED',
+      ruleVersion: DETERMINISTIC_RULE_VERSION,
+    })
+  }
+
+  return dedupeAndSort(actions)
 }
