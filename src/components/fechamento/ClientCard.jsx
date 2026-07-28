@@ -69,7 +69,7 @@ const getD1Suggestion = (closingDate) => {
 // Verifica se um cliente da Carteira é D+1 para a data de fechamento
 export function isClienteD1(cliente, closingDate) {
   if (!cliente) return false;
-  if (cliente.status_comercial === "Vendido" || cliente.status_comercial === "Perdido") return false;
+  if (cliente.status_comercial === "Vendido" || cliente.status_comercial === "Perdido" || cliente.status_comercial === "Cancelada") return false;
   if (!cliente.visita_agendada_em) return false;
   if (cliente._d1_excluido === true) return false;
   const d1Date = moment(closingDate).add(1, "day").format("YYYY-MM-DD");

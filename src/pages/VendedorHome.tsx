@@ -17,6 +17,7 @@ import {
   TrendingUp,
   Users,
 } from 'lucide-react'
+import { isEtapaTerminal } from '@/lib/schemas/crm.schema'
 import { useAuth } from '@/hooks/useAuth'
 import { useVendedorHomePage } from '@/features/vendedor-home/hooks/useVendedorHomePage'
 import { useAgendamentos } from '@/features/crm/hooks/useAgendamentos'
@@ -67,7 +68,7 @@ export default function VendedorHomePage() {
   const agendaHoje = useMemo(() => agendamentos.filter(a => isToday(a.data_hora)), [agendamentos])
 
   const oportunidadesAtivas = useMemo(
-    () => (home.oportunidades || []).filter(o => o.etapa !== 'ganho' && o.etapa !== 'perdido'),
+    () => (home.oportunidades || []).filter(o => !isEtapaTerminal(o.etapa)),
     [home.oportunidades],
   )
 

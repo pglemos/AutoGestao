@@ -1,4 +1,4 @@
-import { toDateOnlyBR, type Cliente } from '@/lib/schemas/crm.schema'
+import { isEtapaTerminal, toDateOnlyBR, type Cliente } from '@/lib/schemas/crm.schema'
 import type { OportunidadeComCliente } from '@/features/crm/hooks/useOportunidades'
 import type { AgendamentoComCliente } from '@/features/crm/hooks/useAgendamentos'
 
@@ -499,7 +499,7 @@ export type ProgressoCadencia = {
   etapaAtual: EtapaCadencia
   etapaAtualIndex: number
   cadencia: number
-  encerramento: 'ganho' | 'perdido' | null
+  encerramento: 'ganho' | 'perdido' | 'cancelada' | null
 }
 
 const ETAPA_FUNIL_ORDEM: Record<string, number> = {
@@ -510,6 +510,10 @@ const ETAPA_FUNIL_ORDEM: Record<string, number> = {
   fechamento: 4,
   ganho: 5,
   perdido: -1,
+  // Encerradas sem venda não representam avanço de funil. Sem esta entrada,
+  // o `?? 0` colocava a oportunidade cancelada no nível de prospecção e o
+  // cliente parecia estar avançando na cadência.
+  cancelada: -1,
 }
 
 /** Deriva o progresso real do cliente na cadência do seu canal de origem. */
@@ -527,6 +531,7 @@ export function derivarProgresso(
   const maxFunil = opps.reduce((acc, o) => Math.max(acc, ETAPA_FUNIL_ORDEM[o.etapa] ?? 0), opps.length > 0 ? 0 : -Infinity)
   const temGanho = opps.some(o => o.etapa === 'ganho')
   const soPerdido = opps.length > 0 && opps.every(o => o.etapa === 'perdido')
+  const soCancelada = opps.length > 0 && opps.every(o => isEtapaTerminal(o.etapa)) && opps.some(o => o.etapa === 'cancelada')
 
   const atingiu: Record<string, boolean> = {
     lead: true,
@@ -553,7 +558,7 @@ export function derivarProgresso(
     etapaAtual: etapas[etapaAtualIndex],
     etapaAtualIndex,
     cadencia: Math.round((concluidas / etapas.length) * 100),
-    encerramento: temGanho ? 'ganho' : soPerdido ? 'perdido' : null,
+    encerramento: temGanho ? 'ganho' : soCancelada ? 'cancelada' : soPerdido ? 'perdido' : null,
   }
 }
 

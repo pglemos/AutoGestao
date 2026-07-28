@@ -3,7 +3,7 @@ import { AlertTriangle, ArrowLeft, Car, MessageCircle, Plus, Users, X, Zap } fro
 import { toast } from '@/lib/toast'
 import { FormField } from '@/components/molecules/FormField'
 import type { Cliente } from '@/lib/schemas/crm.schema'
-import { toDateOnlyBR } from '@/lib/schemas/crm.schema'
+import { isEtapaTerminal, toDateOnlyBR } from '@/lib/schemas/crm.schema'
 import type { OportunidadeComCliente } from '@/features/crm/hooks/useOportunidades'
 import type { AgendamentoComCliente } from '@/features/crm/hooks/useAgendamentos'
 import { useVeiculosEstoque, type VeiculoEstoque } from '@/features/crm/hooks/useVeiculosEstoque'
@@ -83,12 +83,21 @@ type MissaoDef = {
   filtro: (ctx: ClienteContexto) => boolean
 }
 
-const MISSOES: MissaoDef[] = [
+// Nenhuma missão comercial deve capturar um cliente cuja venda foi cancelada:
+// a oportunidade acabou e o próximo passo pertence à estratégia de
+// recuperação, não à esteira. As missões de pós-venda e de perda continuam
+// mirando 'Venda realizada'/'Venda perdida' de propósito.
+const semVendaCancelada = (missoes: MissaoDef[]): MissaoDef[] => missoes.map(missao => ({
+  ...missao,
+  filtro: (ctx: ClienteContexto) => ctx.situacao !== 'Venda cancelada' && missao.filtro(ctx),
+}))
+
+const MISSOES: MissaoDef[] = semVendaCancelada([
   {
     id: 'financiamento_aprovado', nome: 'Converter aprovações', icone: '💳', prioridade: 'Máxima',
     objetivo: 'Converter financiamento aprovado em venda.',
     porqueAgora: 'Financiamento aprovado sem compra é a oportunidade mais quente da carteira.',
-    filtro: ctx => ctx.oportunidade?.financiamento === 'aprovado' && ctx.oportunidade?.etapa !== 'ganho' && ctx.oportunidade?.etapa !== 'perdido',
+    filtro: ctx => ctx.oportunidade?.financiamento === 'aprovado' && !isEtapaTerminal(ctx.oportunidade?.etapa),
   },
   {
     id: 'nao_compareceu', nome: 'Reagendar visitas', icone: '📅', prioridade: 'Alta',
@@ -156,7 +165,7 @@ const MISSOES: MissaoDef[] = [
     porqueAgora: 'Clientes com intenção futura podem antecipar a compra.',
     filtro: ctx => ctx.situacao === 'Venda perdida',
   },
-]
+])
 
 const PRIORIDADE_ORDEM: Record<MissaoDef['prioridade'], number> = { Máxima: 0, Alta: 1, Média: 2, Baixa: 3 }
 

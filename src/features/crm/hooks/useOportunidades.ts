@@ -5,6 +5,7 @@ import {
   OportunidadeSchema,
   CRM_ETAPAS_FUNIL,
   CRM_ETAPAS_ATIVAS,
+  isEtapaTerminal,
   type Oportunidade,
   type CrmEtapaFunil,
   type CrmCanal,
@@ -83,7 +84,7 @@ export function buildOportunidadePayload(
   context: { loja_id: string; seller_user_id: string },
   nowIso = () => new Date().toISOString(),
 ): OportunidadePayload {
-  const isTerminal = input.etapa === 'ganho' || input.etapa === 'perdido'
+  const isTerminal = isEtapaTerminal(input.etapa)
   const payload: OportunidadePayload = {
     cliente_id: input.cliente_id,
     loja_id: context.loja_id,
@@ -229,7 +230,7 @@ export function useOportunidades() {
 
   const updateEtapa = useCallback(async (id: string, etapa: CrmEtapaFunil, motivoPerda?: string): Promise<{ error: string | null }> => {
     if (!supabaseUser) return { error: 'Sessão inválida.' }
-    const isTerminal = etapa === 'ganho' || etapa === 'perdido'
+    const isTerminal = isEtapaTerminal(etapa)
     const patch: Record<string, unknown> = {
       etapa,
       closed_at: isTerminal ? new Date().toISOString() : null,

@@ -8,7 +8,10 @@ import { z } from 'zod'
 export const CRM_CANAIS = ['carteira', 'internet', 'showroom', 'porta'] as const
 export const CRM_CLIENTE_STATUS = ['oportunidade', 'ativo', 'pos_venda', 'aguardando_contato', 'inativo'] as const
 export const CRM_RELACIONAMENTO = ['excelente', 'bom', 'neutro', 'ruim', 'critico'] as const
-export const CRM_ETAPAS_FUNIL = ['prospeccao', 'qualificacao', 'apresentacao', 'negociacao', 'fechamento', 'ganho', 'perdido'] as const
+// `cancelada` existe no enum `crm_etapa_funil` de produção desde o
+// cancelamento de venda. Sem ela aqui, `z.enum(CRM_ETAPAS_FUNIL)` rejeitava
+// qualquer oportunidade cancelada lida do banco.
+export const CRM_ETAPAS_FUNIL = ['prospeccao', 'qualificacao', 'apresentacao', 'negociacao', 'fechamento', 'ganho', 'perdido', 'cancelada'] as const
 export const CRM_FINANCIAMENTO = ['aprovado', 'reprovado', 'nao_aplica', 'pendente'] as const
 export const CRM_TIPO_VEICULO = ['carro', 'moto', 'caminhao'] as const
 export const CRM_AGENDAMENTO_TIPO = ['visita', 'retorno', 'test_drive', 'entrega', 'negociacao', 'garantia', 'pos_venda'] as const
@@ -70,6 +73,22 @@ export function moedaBRParaNumero(value: string | number | null | undefined): nu
 // Etapas que compõem o funil "vivo" (exclui terminais ganho/perdido)
 export const CRM_ETAPAS_ATIVAS: CrmEtapaFunil[] = ['prospeccao', 'qualificacao', 'apresentacao', 'negociacao', 'fechamento']
 
+/**
+ * Etapas terminais: a oportunidade acabou e não pode ser tratada como viva.
+ * `cancelada` é terminal próprio — a venda existiu e foi revertida, o que é
+ * diferente de `perdido` (nunca fechou) e governa comissão, performance e
+ * estratégia de recuperação.
+ *
+ * Fonte única de verdade: cada lugar que decidia "esta oportunidade ainda está
+ * viva?" com uma lista literal de duas etapas ficava para trás quando o enum
+ * de produção crescia.
+ */
+export const CRM_ETAPAS_TERMINAIS: CrmEtapaFunil[] = ['ganho', 'perdido', 'cancelada']
+
+export function isEtapaTerminal(etapa?: string | null): boolean {
+  return CRM_ETAPAS_TERMINAIS.includes(etapa as CrmEtapaFunil)
+}
+
 export const CRM_ETAPA_LABEL: Record<CrmEtapaFunil, string> = {
   prospeccao: 'Prospecção',
   qualificacao: 'Qualificação',
@@ -78,6 +97,7 @@ export const CRM_ETAPA_LABEL: Record<CrmEtapaFunil, string> = {
   fechamento: 'Fechamento',
   ganho: 'Vendas Realizadas',
   perdido: 'Perdido',
+  cancelada: 'Cancelada',
 }
 
 export const CRM_CANAL_LABEL: Record<CrmCanal, string> = {
