@@ -149,6 +149,33 @@ com o código-fonte original visível em ambos os frames, `release` igual ao SHA
 do commit e `environment: preview`. É o critério do item "Source map" da seção
 13 do runbook, cumprido.
 
+### Teste dos 4 perfis
+
+Login real no preview, conferindo as tags do escopo de isolamento do Sentry após
+cada autenticação:
+
+| Perfil | `mx.user_role` | `mx.store_scope` | `user` enviado |
+|---|---|---|---|
+| Vendedor | `vendedor` | `467a19d1…` | `{id, role, store_id}` |
+| Gerente | `gerente` | `467a19d1…` | `{id, role, store_id}` |
+| Dono | `dono` | `467a19d1…` | `{id, role, store_id}` |
+| Admin MX | `administrador_geral` | ausente | `{id, role}` |
+
+O Admin MX corretamente não recebe escopo de loja — é perfil interno, sem
+vínculo com uma loja específica.
+
+**Nenhum e-mail, nome ou telefone aparece em `user`** em nenhum dos perfis: só o
+UUID interno e os identificadores de escopo.
+
+Troca de rota atualiza o contexto sem perder a identidade: navegando de `/home`
+para `/carteira-clientes`, `mx.route` e `mx.module` acompanham e `mx.user_role`
+permanece.
+
+**Limpeza no logout comprovada** (gerente, dono e Admin MX): após clicar em Sair,
+`user` fica vazio e as tags `mx.user_role` e `mx.store_scope` são removidas do
+escopo, com redirecionamento para `/login`. Sem isso, o erro do próximo usuário
+herdaria a identidade do anterior.
+
 ### Dashboards
 
 | Dashboard | Widgets |
@@ -246,12 +273,7 @@ acima:
   - AÇÃO RESTANTE: resolver as 3 violações de token; então mesclar e deployar
 - STATUS: PARCIAL — smoke test de erro no frontend com stack em TS/TSX
   - MOTIVO: exige a build em produção com os source maps já publicados
-- STATUS: PENDENTE — teste dos 4 perfis (vendedor, gerente, dono, Admin MX)
-  - MOTIVO: exige login com credenciais reais contra o banco de produção; não
-    executado nesta sessão para não gerar eventos de autenticação e dados de
-    sessão em nome de usuários reais sem necessidade
-  - AÇÃO RESTANTE: rodar o roteiro por perfil após o merge, conferindo
-    `mx.user_role` e `mx.store_scope` nas tags e a limpeza no logout
+Os 4 perfis foram testados e estão registrados acima.
 - STATUS: PARCIAL — Metric Monitors
   - MOTIVO: os 8 alertas de issue estão ativos; alertas por métrica precisam de
     baseline real, que só existe após o primeiro deploy com tráfego
@@ -280,6 +302,9 @@ evento real em cada etapa:
 7. Nenhum secret vazou para o bundle, para o repositório ou para os relatórios,
    e nenhum recurso pago foi ativado.
 
+8. Os quatro perfis carregam papel e escopo corretos, sem PII, e o logout limpa
+   a identidade do escopo.
+
 O que **não** está comprovado, e portanto não é declarado como pronto: o
-comportamento em produção e o roteiro por perfil de usuário. Ambos dependem do
-merge, que hoje está bloqueado por uma alteração externa a este trabalho.
+comportamento sob tráfego de produção. Depende do merge, que hoje está bloqueado
+por uma alteração externa a este trabalho.
