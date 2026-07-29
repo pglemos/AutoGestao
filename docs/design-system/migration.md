@@ -76,7 +76,7 @@
 | 0 | Diagnóstico + inventário + baseline visual | ✅ |
 | 1 | Fundação de tokens (primitive → semantic → component → motion) | ✅ |
 | 2 | Átomos e moléculas consolidados | ✅ 12 átomos + 11 moléculas |
-| 3 | App Shell único (Dono migrado sem mudança de aparência) | 🔄 moldura pronta; sidebar/topbar por convergir |
+| 3 | App Shell único (Dono migrado sem mudança de aparência) | ✅ moldura + superfície da sidebar convergidas |
 | 4 | Gerente | ⬜ |
 | 5 | Admin / Consultor | ⬜ |
 | 6 | Vendedor (maior risco — tema escuro) | ⬜ |
@@ -98,6 +98,26 @@ Confirmadas por inspeção do código e verificadas em runtime:
 > `document.title` é estático (`MX PERFORMANCE`) em todas as rotas — nenhuma
 > tela o atualiza. Por isso o anúncio de rota lê o `h1` da tela montada, e não
 > o título do documento, que repetiria a mesma frase a cada navegação.
+
+## 6.2 Pendências de verificação autenticada
+
+Mudanças aplicadas que só podem ser confirmadas com sessão logada:
+
+| Mudança | Perfis afetados | O que conferir |
+|---|---|---|
+| Drawer mobile perdeu a borda direita | gerente, vendedor, admin, consultor | Abrir o menu em < 1280px e comparar com o drawer do Dono |
+| Landmark do Dono virou `<main>` | dono | Navegar entre telas e conferir que o conteúdo não deslocou |
+| Densidade por perfil | todos | `comfortable` no Dono, `compact` nos perfis internos |
+
+## 6.3 Dívida de z-index
+
+61 ocorrências de `z-[N]` em 21 valores distintos (80 → 9999). Não foram
+migradas: reescrever o empilhamento sem percorrer todas as telas arriscaria
+sobrepor modal, drawer e topbar.
+
+`scripts/lint-z-index.mjs` congela o inventário em `scripts/z-index-baseline.json`
+e falha se o total subir ou surgir valor novo — a dívida só pode diminuir. Ao
+migrar um arquivo para a escala `--mx-z-*`, rode `npm run lint:z-index -- --update`.
 
 ## 7. Débito registrado
 
