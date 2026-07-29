@@ -1,5 +1,9 @@
 # Relatório de Observabilidade MX
 
+> **Estado final:** entregue e validado em produção no deployment `8ea36206`.
+> `/api/health` responde `healthy`, o source map resolve para o TypeScript
+> original em produção, e nenhum recurso pago foi ativado.
+
 ## Resumo executivo
 
 A camada de observabilidade do frontend, do build e do banco foi implementada e
@@ -283,6 +287,34 @@ Concluídos desde a primeira versão deste relatório: instrumentação das Edge
 Functions críticas, agregador de cron com check-in, Uptime Monitor, Cron
 Monitor, alertas por e-mail, e os dois advisors do Supabase.
 
+## Validação em produção
+
+Executada em 2026-07-29, contra `https://mxperformance.com.br`, no deployment de
+produção `8ea36206` (estado READY).
+
+| Verificação | Resultado |
+|---|---|
+| `GET /api/health` | **200 `healthy`** — `vercel`, `supabase_api`, `database` e `critical_crons` todos `ok` |
+| Release do health | `8ea362061289180321dbb632c4f942f188aaf468` — igual ao SHA do commit e ao do deployment |
+| `correlation_id` | ecoado na resposta |
+| DSN no bundle | presente |
+| `SENTRY_AUTH_TOKEN` no bundle | **ausente** — busca por `sntryu_` sem ocorrência |
+| `sourceMappingURL` no bundle | ausente (modo `hidden`) |
+| `.map` por HTTP | não existe — cai no fallback do SPA |
+| Source maps no Sentry | **430 artefatos** associados à release `8ea36206` |
+| Erro real em produção | resolvido para `sanitize.ts:86` e `sentry.ts:98`, com código-fonte visível, `environment: production`, `mx.branch: main`, `mx.route: /login` |
+| Web Analytics | `POST /_vercel/insights/view` → **200** |
+| Speed Insights | `POST /_vercel/speed-insights/vitals` → **200** |
+| Session Replay | ativo |
+| Tag de rota | acompanha a navegação (`/privacy` após pushState) |
+| Agregador de cron | 8 jobs, 0 degradados |
+| Cron Monitor | ambiente `production` com status `ok` |
+| Uptime Monitor | ativo, apontado para o health de produção, intervalo 300 s |
+
+`SENTRY_RELEASE` das Edge Functions foi alinhado ao SHA de produção e as funções
+foram reimplantadas, para que um erro no Edge e um erro no frontend apontem para
+a mesma release.
+
 ## Conclusão baseada em evidências
 
 O circuito de observabilidade está comprovado ponta a ponta em preview, com
@@ -305,6 +337,10 @@ evento real em cada etapa:
 8. Os quatro perfis carregam papel e escopo corretos, sem PII, e o logout limpa
    a identidade do escopo.
 
-O que **não** está comprovado, e portanto não é declarado como pronto: o
-comportamento sob tráfego de produção. Depende do merge, que hoje está bloqueado
-por uma alteração externa a este trabalho.
+9. Em produção, o mesmo circuito responde: health saudável, source map
+   resolvido, analytics e speed insights aceitos, cron monitor `ok` e uptime
+   ativo.
+
+O trabalho está em `main` e implantado. O que resta não é verificação, é
+observação: os Metric Monitors precisam de thresholds vindos de uma semana de
+tráfego real, e é isso que a seção de pendências registra.
