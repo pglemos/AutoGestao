@@ -63,7 +63,7 @@
 
 | Risco | Severidade | Mitigação |
 |---|---|---|
-| Tema escuro do Vendedor é identidade paralela inteira; migrar quebra reconhecimento de tela do usuário final | Alta | Migrar por último (Fase 6), com validação visual por tela e aprovação explícita |
+| ~~Tema escuro do Vendedor é identidade paralela inteira~~ — **medido na Fase 6: confinado a `features/remuneracao`, 8 arquivos** | Média | Decisão de produto pendente (§6.1.3), não repintado |
 | 1.442 hex literais — substituição em massa pode alterar cores sem querer | Alta | Substituição por mapa hex→token auditado, commit por módulo, regressão visual |
 | `base44-reference/` é referência congelada, não deve ser migrada | Média | Excluir de todo lint/codemod |
 | RLS/grants recém-remediados (2026-07-17) | Média | Nenhuma mudança de banco nesta migração |
@@ -79,7 +79,7 @@
 | 3 | App Shell único (Dono migrado sem mudança de aparência) | ✅ moldura + superfície da sidebar convergidas |
 | 4 | Gerente | ✅ superfícies alinhadas ao visual aprovado |
 | 5 | Admin / Consultor | ✅ já recebiam o modo aprovado; verificado |
-| 6 | Vendedor (maior risco — tema escuro) | ⬜ |
+| 6 | Vendedor | 🔄 medido; 32 tokens mortos removidos; painel de comissão aguarda decisão de produto |
 | 7 | Páginas compartilhadas (login, perfil, erros) | ⬜ |
 | 8 | Remoção do legado | ⬜ |
 | 9 | Deploy preview → produção | ⬜ |
@@ -152,6 +152,44 @@ Cobertura do modo aprovado por escopo:
 | Dono (`OwnerShell`) | ✅ | Fase 4 |
 | Vendedor | ❌ por decisão | Fase 6 |
 | Login, Termos, fluxo de senha | ❌ | Fase 7 |
+
+## 6.1.3 Correção de leitura: o tema do vendedor
+
+Na Fase 0 registrei o tema escuro do vendedor como "a identidade paralela mais
+divergente e o maior risco da migração". A estimativa veio da **declaração** de
+tokens, não do uso. Medido:
+
+| Família | Tokens declarados | Usos reais |
+|---|---:|---:|
+| `--mx-seller-*` | 32 | **0** |
+| `--color-seller-*` | 19 | 51 (via `var()`) |
+
+Os 32 `--mx-seller-*` eram código morto — removidos nesta fase.
+
+O tema escuro vivo está confinado a **uma feature**: `src/features/remuneracao`
+(“Minha Remuneração”), 8 arquivos:
+
+| Arquivo | Usos |
+|---|---:|
+| `components/dashboard/CommissionHeroCard.tsx` | 8 |
+| `components/dashboard/LastSixMonthsCard.tsx` | 6 |
+| `components/dashboard/RecordRoutineCard.tsx` | 5 |
+| `components/dashboard/PotentialCommissionCard.tsx` | 4 |
+| `components/dashboard/HotOpportunitiesCard.tsx` | 4 |
+| `components/dashboard/PerformanceCard.tsx` | 3 |
+| `MinhaRemuneracaoPage.tsx` | 2 |
+| `components/dashboard/MilestoneCard.tsx` | 1 |
+
+Não é o módulo do vendedor inteiro: é o painel de comissão. As demais telas do
+vendedor já usam os componentes comuns.
+
+> **Decisão pendente do produto.** O painel de comissão é deliberadamente
+> escuro e celebratório (verde-dinheiro `#39FF5A`, gradientes). Repintá-lo no
+> visual claro aprovado é o que o §43.1 pede, mas descaracteriza a tela mais
+> motivacional do vendedor. Não foi repintado: é uma decisão de produto, não
+> técnica. As alternativas são (a) migrar para o visual claro, (b) mantê-lo
+> como exceção formalmente documentada — o §43.4 admite exceção "salvo decisão
+> formal documentada".
 
 ## 6.2 Pendências de verificação autenticada
 
