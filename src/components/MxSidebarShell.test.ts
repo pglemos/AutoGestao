@@ -1,6 +1,7 @@
 import { describe, expect, test } from 'bun:test'
 import { existsSync, readFileSync } from 'node:fs'
 import { SIDEBAR } from '@/design-system/sidebar/tokens'
+import { isNavItemActive } from './MxSidebarShell'
 
 const layoutUrl = new URL('./Layout.tsx', import.meta.url)
 const shellUrl = new URL('./MxSidebarShell.tsx', import.meta.url)
@@ -17,6 +18,33 @@ const occurrences = (source: string, pattern: string) =>
   source.split(pattern).length - 1
 
 describe('sidebar universal MX', () => {
+  test('resolve rota ativa por destino canônico, alias legado e query exata', () => {
+    const item = {
+      label: 'Início',
+      path: '/dono',
+      activePaths: ['/dono', '/home'],
+    }
+    expect(isNavItemActive(item, { pathname: '/dono', search: '' })).toBe(true)
+    expect(isNavItemActive(item, { pathname: '/home', search: '' })).toBe(true)
+    expect(isNavItemActive(item, { pathname: '/mercado', search: '' })).toBe(false)
+
+    const consultant = {
+      label: 'Falar com Consultor',
+      path: '/dono/consultoria?openConsultant=1',
+      activePaths: [
+        '/dono/consultoria?openConsultant=1',
+        '/consultoria?openConsultant=1',
+      ],
+    }
+    expect(isNavItemActive(consultant, {
+      pathname: '/consultoria',
+      search: '?openConsultant=1',
+    })).toBe(true)
+    expect(isNavItemActive(consultant, {
+      pathname: '/consultoria',
+      search: '',
+    })).toBe(false)
+  })
   test('renderiza um único shell canônico para todos os perfis autenticados', () => {
     expect(layoutSource).toContain("from './MxSidebarShell'")
     expect(occurrences(layoutSource, '<MxSidebarShell')).toBe(1)
@@ -95,9 +123,11 @@ describe('sidebar universal MX', () => {
     expect(shellSource).toContain('moduleLabel')
     expect(layoutSource).toContain('dono: ownerNavConfig')
     expect(layoutSource).toContain('path: ownerNavigationCanonicalPath(item)')
+    expect(layoutSource).toContain('activePaths: ownerNavigationActivePaths(item)')
     expect(layoutSource).toContain('children: item.children?.map')
     expect(layoutSource).toContain("badge: item.badge ?? badgeForPath(item.path)")
     expect(layoutSource).toContain('key: `${sectionLabel}:${item.label}`')
     expect(layoutSource).toContain('key: item.key')
+    expect(shellSource).toContain('data-sidebar-surface="true"')
   })
 })

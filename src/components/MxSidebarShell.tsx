@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
-import { NavLink, useLocation, useNavigate } from 'react-router-dom'
+import { Link, useLocation, useNavigate } from 'react-router-dom'
 import {
   Bell,
   ChevronDown,
@@ -62,7 +62,7 @@ export type MxSidebarShellProps = {
   }
 }
 
-function isNavItemActive(
+export function isNavItemActive(
   item: MxSidebarNavItem,
   location: { pathname: string; search: string },
 ) {
@@ -188,6 +188,7 @@ export default function MxSidebarShell({
     let selectedScore = -1
 
     for (const item of candidates) {
+      if (!isNavItemActive(item, location)) continue
       const paths = item.activePaths ?? [item.path]
       for (const rawPath of paths) {
         const [path, query = ''] = rawPath.split('?')
@@ -255,7 +256,7 @@ export default function MxSidebarShell({
     const active = item === activeNavItem
 
     return (
-      <NavLink
+      <Link
         key={item.key ?? item.path}
         to={item.path}
         aria-label={item.label}
@@ -287,7 +288,7 @@ export default function MxSidebarShell({
           </>
         ) : null}
         {isCollapsed ? <CollapsedTooltip label={item.label} /> : null}
-      </NavLink>
+      </Link>
     )
   }
 
@@ -295,7 +296,7 @@ export default function MxSidebarShell({
     const active = item === activeNavItem
 
     return (
-      <NavLink
+      <Link
         key={item.key ?? item.path}
         to={item.path}
         aria-label={item.label}
@@ -317,7 +318,7 @@ export default function MxSidebarShell({
             {item.badge}
           </span>
         ) : null}
-      </NavLink>
+      </Link>
     )
   }
 
@@ -537,7 +538,9 @@ export default function MxSidebarShell({
         )}
         aria-label={sidebarLabel}
       >
-        <div className={SIDEBAR.root}>{renderSidebarContent(collapsed, true)}</div>
+        <div data-sidebar-surface="true" className={SIDEBAR.root}>
+          {renderSidebarContent(collapsed, true)}
+        </div>
       </aside>
 
       {mobileOpen ? (
@@ -566,7 +569,7 @@ export default function MxSidebarShell({
             >
               <X size={16} aria-hidden="true" />
             </button>
-            <div className={cn(SIDEBAR.root, 'min-h-0 flex-1')}>
+            <div data-sidebar-surface="true" className={cn(SIDEBAR.root, 'min-h-0 flex-1')}>
               {renderSidebarContent(false)}
             </div>
           </div>

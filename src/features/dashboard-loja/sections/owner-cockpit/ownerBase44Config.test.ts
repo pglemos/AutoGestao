@@ -4,6 +4,7 @@ import {
   OWNER_BASE44_SECTION_VALUES,
   OWNER_LEGACY_SECTION_VALUES,
   ownerNavigationCanonicalPath,
+  ownerNavigationActivePaths,
   ownerNavigationSectionValue,
   resolveOwnerDepartmentFromPath,
   resolveOwnerLocation,
@@ -98,6 +99,26 @@ describe('contrato do módulo Dono inspirado no Base44', () => {
       'Universidade MX': '/dono/universidade',
       'Falar com Consultor': '/dono/consultoria?openConsultant=1',
     })
+  })
+
+  test('mantém um único item ativo nas rotas canônicas e nos aliases legados', () => {
+    const activePaths = Object.fromEntries(
+      OWNER_BASE44_NAVIGATION.flatMap(section =>
+        flattenItems(section.items).map(item => [item.label, ownerNavigationActivePaths(item)] as const),
+      ),
+    )
+
+    expect(activePaths['Início']).toEqual(['/dono', '/home'])
+    expect(activePaths['Plano Estratégico']).toEqual(['/dono/plano-estrategico', '/plano-estrategico'])
+    expect(activePaths['Produto e Estoque']).toEqual([
+      '/dono/departamentos/produto-e-estoque',
+      '/departamentos/produto-e-estoque',
+    ])
+    expect(activePaths['Universidade MX']).toEqual(['/dono/universidade', '/universidade-mx'])
+    expect(activePaths['Falar com Consultor']).toEqual([
+      '/dono/consultoria?openConsultant=1',
+      '/consultoria?openConsultant=1',
+    ])
   })
 
   test('resolve todas as seções sem criar nova árvore de rotas', () => {

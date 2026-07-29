@@ -23,6 +23,7 @@ import { MxRoleVisualScope } from '@/components/module/MxRoleVisualScope'
 import {
   OWNER_BASE44_NAVIGATION,
   type OwnerBase44NavigationItem,
+  ownerNavigationActivePaths,
   ownerNavigationCanonicalPath,
 } from '@/features/dashboard-loja/sections/owner-cockpit/ownerBase44Config'
 import { OwnerProvider } from '@/components/owner/OwnerContext'
@@ -104,6 +105,7 @@ const mapOwnerNavigationItem = (
   key: `${sectionLabel}:${item.label}`,
   label: item.label,
   path: ownerNavigationCanonicalPath(item),
+  activePaths: ownerNavigationActivePaths(item),
   icon: ownerItemIcons[item.label] ?? <Grid size={16} />,
   defaultExpanded: item.defaultExpanded,
   badge: item.badge,

@@ -173,8 +173,39 @@ const OWNER_DEPARTMENT_PATHS: Record<OwnerDepartmentNavigationCode, string> = {
   operacional: '/dono/departamentos/operacoes',
 }
 
+const OWNER_LEGACY_PATHS: Record<OwnerBase44Section, string> = {
+  home: '/home',
+  rotina: '/rotina',
+  decisoes: '/decisoes',
+  planejamento: '/plano-estrategico',
+  'plano-acao': '/plano-acao',
+  consultoria: '/consultoria',
+  departamentos: '/departamentos',
+  mercado: '/mercado',
+  universidade: '/universidade-mx',
+  consultor: '/consultoria?openConsultant=1',
+}
+
+const OWNER_LEGACY_DEPARTMENT_PATHS: Record<OwnerDepartmentNavigationCode, string> = {
+  'visao-geral': '/departamentos',
+  comercial: '/departamentos/comercial',
+  marketing: '/departamentos/marketing',
+  produto: '/departamentos/produto-e-estoque',
+  rh: '/departamentos/pessoas-rh',
+  financeiro: '/departamentos/financeiro',
+  operacional: '/departamentos/operacoes',
+}
+
 export function ownerNavigationCanonicalPath(item: OwnerBase44NavigationItem): string {
   return item.departmentCode
     ? OWNER_DEPARTMENT_PATHS[item.departmentCode]
     : OWNER_CANONICAL_PATHS[item.section]
+}
+
+export function ownerNavigationActivePaths(item: OwnerBase44NavigationItem): string[] {
+  const canonicalPath = ownerNavigationCanonicalPath(item)
+  const legacyPath = item.departmentCode
+    ? OWNER_LEGACY_DEPARTMENT_PATHS[item.departmentCode]
+    : OWNER_LEGACY_PATHS[item.section]
+  return canonicalPath === legacyPath ? [canonicalPath] : [canonicalPath, legacyPath]
 }

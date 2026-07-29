@@ -107,9 +107,7 @@ async function auditRoute(
         document.querySelectorAll<HTMLElement>('aside[aria-label="Menu principal do Dono"], [role="dialog"][aria-label="Menu principal do Dono"]'),
       ).find((node) => node.getBoundingClientRect().width > 0) || null
       const ownerSidebarSurface =
-        ownerSidebar?.matches('[data-sidebar="sidebar"], aside[data-sidebar]')
-          ? ownerSidebar
-          : ownerSidebar?.querySelector<HTMLElement>('[data-sidebar="sidebar"], aside[data-sidebar]') || ownerSidebar
+        ownerSidebar?.querySelector<HTMLElement>('[data-sidebar-surface="true"]') || ownerSidebar
 
       return {
         route: routeKey,
@@ -118,7 +116,7 @@ async function auditRoute(
         ownerShell: Boolean(ownerShell),
         ownerRegion: Boolean(ownerRegion),
         ownerSidebar: Boolean(ownerSidebar),
-        ownerSidebarWidth: ownerSidebarSurface ? Math.round(ownerSidebarSurface.getBoundingClientRect().width) : 0,
+        ownerSidebarWidth: ownerSidebar ? Math.round(ownerSidebar.getBoundingClientRect().width) : 0,
         ownerSidebarBackground: ownerSidebarSurface
           ? getComputedStyle(ownerSidebarSurface).backgroundColor
           : '',
@@ -143,7 +141,12 @@ async function auditRoute(
   expect.soft(metric.horizontalOverflow, `${route.key}/${viewport.key}: overflow horizontal`).toBe(false)
   expect.soft(metric.activeNavigationItems, `${route.key}/${viewport.key}: item ativo`).toBe(1)
   expect.soft(metric.ownerContentHeight, `${route.key}/${viewport.key}: conteúdo`).toBeGreaterThan(0)
-  expect.soft(metric.ownerSidebarWidth, `${route.key}/${viewport.key}: sidebar`).toBe(256)
+  const expectedSidebarWidth = viewport.key === 'desktop-1440'
+    ? 256
+    : viewport.key === 'mobile-390'
+      ? 288
+      : 320
+  expect.soft(metric.ownerSidebarWidth, `${route.key}/${viewport.key}: sidebar`).toBe(expectedSidebarWidth)
   expect.soft(metric.ownerSidebarBackground, `${route.key}/${viewport.key}: fundo da sidebar`).toBe('rgb(250, 250, 250)')
   expect.soft(metric.pageErrors, `${route.key}/${viewport.key}: erros de página`).toEqual([])
   expect.soft(metric.consoleErrors, `${route.key}/${viewport.key}: erros de console`).toEqual([])
