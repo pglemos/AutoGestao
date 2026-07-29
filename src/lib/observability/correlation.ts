@@ -2,18 +2,22 @@
  * Story 0.9 — Correlation ID FE → RPC → logs_auditoria
  * X-8 / GAP-09 observability
  *
- * Gera UUID v4 por request (ou reusa o da sessão atual via React context futuro)
- * e injeta como header `x-correlation-id`. Backend lê via PostgREST
- * `current_setting('request.headers', true)` → `get_correlation_id()` SQL helper.
+ * Gera UUID v4 por operação e injeta como header `x-correlation-id`. Backend lê
+ * via PostgREST `current_setting('request.headers', true)` → `get_correlation_id()`.
  *
  * Uso:
- *   const correlationId = newCorrelationId()
- *   const { data, error } = await callWithCorrelation(supabase, correlationId, (client) =>
- *     client.rpc('submit_checkin', { p_payload: payload })
- *   )
+ *   const { result, correlationId } = await traced(() => supabase.rpc('foo', {...}))
+ *   // ou, com id já conhecido:
+ *   await withCorrelation(correlationId, () => supabase.rpc('foo', {...}))
  *
- * Para Sentry tracking (Story 0.3), o helper Sentry.setTag('correlation_id', ...) é
- * chamado automaticamente.
+ * Implementação — por que não trocar `globalThis.fetch` por chamada:
+ * a versão anterior salvava `originalFetch`, substituía o global e restaurava no
+ * `finally`. Com duas chamadas concorrentes, a segunda captura o fetch já
+ * instrumentado pela primeira, e o `finally` da primeira restaura o global por
+ * cima do da segunda — o header vaza para requisições alheias e, no pior caso,
+ * o wrapper fica instalado permanentemente. Aqui há um único interceptador,
+ * instalado uma vez, que lê o correlation_id de uma pilha de escopo. O fetch
+ * original nunca é perdido e chamadas concorrentes não se sobrescrevem.
  */
 
 import type { SupabaseClient } from '@supabase/supabase-js'
@@ -36,46 +40,49 @@ export function newCorrelationId(): string {
 /** Tenta marcar tag Sentry sem falhar se Sentry não estiver inicializado */
 function tagSentry(correlationId: string): void {
     try {
-        // Lazy require para evitar import circular se Sentry init ainda não rodou
         const sentry = (globalThis as unknown as { Sentry?: { setTag?: (k: string, v: string) => void } }).Sentry
         if (sentry && typeof sentry.setTag === 'function') {
             sentry.setTag('correlation_id', correlationId)
         }
     } catch {
-        // No-op — Sentry pode não estar inicializado ainda (Story 0.3 pendente)
+        // No-op — Sentry pode não estar inicializado ainda.
     }
 }
 
 /**
- * Executa uma chamada Supabase com correlation_id injetado no header.
+ * Pilha de escopos ativos. O topo é o correlation_id aplicado às requisições
+ * disparadas de forma síncrona dentro do escopo corrente.
  *
- * Por que não modificar o SupabaseClient global?
- * - O cliente é singleton (src/lib/supabase.ts) — mudar header por request via
- *   `headers` no construtor exige reset da sessão, perdendo Auth.
- * - Wrapper per-call mantém isolamento e permite múltiplos correlation_ids
- *   coexistirem (ex: race condition entre 2 RPCs paralelas).
- *
- * Implementação: o Supabase JS client (v2) aceita `fetch` customizado por chamada
- * via `global.fetch` override no construtor — mas isso é global.
- * Alternativa: usar `rest` builder explícito com `headers()` per request.
- *
- * O pattern aqui usa `client.functions.invoke` ou `client.rpc(...).abortSignal(...)`
- * — para `.rpc()` o método não aceita headers customizados nativamente.
- *
- * Workaround: usar `client.schema('public').rpc(...)` que sob o capô faz fetch
- * direto, e patch global `fetch` por escopo via `withCorrelationContext`.
+ * Limitação conhecida e aceita: o JavaScript de navegador não tem
+ * AsyncLocalStorage, então o escopo vale para o fetch iniciado sincronamente
+ * dentro do callback. Chamadas realmente paralelas (Promise.all de escopos
+ * distintos) devem usar `withCorrelationHeaders` para anexar o header
+ * explicitamente. O importante é que, mesmo nesse caso, nada é corrompido:
+ * cada requisição recebe um id válido ou nenhum, nunca o fetch de outra pilha.
  */
-export async function callWithCorrelation<T>(
-    client: SupabaseClient,
-    correlationId: string,
-    fn: (c: SupabaseClient) => Promise<T>,
-): Promise<T> {
-    tagSentry(correlationId)
+const scopeStack: string[] = []
 
-    // Patch global fetch para anexar header durante o escopo da chamada.
-    // Isso funciona porque o supabase-js usa `fetch` global do ambiente.
-    const originalFetch = globalThis.fetch
-    globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+let interceptorInstalled = false
+
+/** Instala o único interceptador de fetch. Idempotente. */
+function ensureInterceptor(): void {
+    if (interceptorInstalled) return
+    if (typeof globalThis.fetch !== 'function') return
+
+    const originalFetch = globalThis.fetch.bind(globalThis)
+
+    const instrumented = (async (input: RequestInfo | URL, init?: RequestInit) => {
+        const correlationId = scopeStack[scopeStack.length - 1]
+        if (!correlationId) return originalFetch(input, init)
+
+        // Request como primeiro argumento já carrega os próprios headers.
+        if (typeof Request !== 'undefined' && input instanceof Request && !init?.headers) {
+            if (input.headers.has(CORRELATION_HEADER)) return originalFetch(input, init)
+            const headers = new Headers(input.headers)
+            headers.set(CORRELATION_HEADER, correlationId)
+            return originalFetch(new Request(input, { headers }), init)
+        }
+
         const headers = new Headers(init?.headers)
         if (!headers.has(CORRELATION_HEADER)) {
             headers.set(CORRELATION_HEADER, correlationId)
@@ -83,35 +90,56 @@ export async function callWithCorrelation<T>(
         return originalFetch(input, { ...init, headers })
     }) as typeof fetch
 
-    try {
-        return await fn(client)
-    } finally {
-        globalThis.fetch = originalFetch
-    }
+    globalThis.fetch = instrumented
+    interceptorInstalled = true
+}
+
+/** correlation_id do escopo ativo, se houver. Usado por logger e métricas. */
+export function getActiveCorrelationId(): string | undefined {
+    return scopeStack[scopeStack.length - 1]
 }
 
 /**
- * Variante para uso com supabase-js `.rpc()` direto:
- *   const result = await withCorrelation(corrId, () => supabase.rpc('foo', {...}))
+ * Headers prontos para anexar manualmente quando o escopo implícito não serve
+ * (por exemplo, requisições realmente paralelas com ids distintos).
+ */
+export function withCorrelationHeaders(
+    correlationId: string,
+    headers?: HeadersInit,
+): Headers {
+    const merged = new Headers(headers)
+    merged.set(CORRELATION_HEADER, correlationId)
+    return merged
+}
+
+/**
+ * Executa `fn` com o correlation_id ativo. As requisições disparadas dentro do
+ * escopo recebem o header automaticamente.
  */
 export async function withCorrelation<T>(
     correlationId: string,
     fn: () => Promise<T>,
 ): Promise<T> {
+    ensureInterceptor()
     tagSentry(correlationId)
-    const originalFetch = globalThis.fetch
-    globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
-        const headers = new Headers(init?.headers)
-        if (!headers.has(CORRELATION_HEADER)) {
-            headers.set(CORRELATION_HEADER, correlationId)
-        }
-        return originalFetch(input, { ...init, headers })
-    }) as typeof fetch
+    scopeStack.push(correlationId)
     try {
         return await fn()
     } finally {
-        globalThis.fetch = originalFetch
+        // Remove a própria entrada, não necessariamente o topo — assim escopos
+        // que terminam fora de ordem não descartam o id de outro escopo.
+        const index = scopeStack.lastIndexOf(correlationId)
+        if (index !== -1) scopeStack.splice(index, 1)
     }
+}
+
+/** Variante que recebe o SupabaseClient para composição explícita. */
+export async function callWithCorrelation<T>(
+    client: SupabaseClient,
+    correlationId: string,
+    fn: (c: SupabaseClient) => Promise<T>,
+): Promise<T> {
+    return withCorrelation(correlationId, () => fn(client))
 }
 
 /**

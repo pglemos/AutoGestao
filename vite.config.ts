@@ -9,20 +9,29 @@ import { VitePWA } from 'vite-plugin-pwa';
 const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN;
 const sentryOrg = process.env.SENTRY_ORG;
 const sentryProject = process.env.SENTRY_PROJECT;
+const sentryUploadEnabled = Boolean(sentryAuthToken && sentryOrg && sentryProject);
+const sentryRelease =
+  process.env.VITE_RELEASE ?? process.env.VERCEL_GIT_COMMIT_SHA ?? 'dev';
 
 export default defineConfig({
   plugins: [
     react(),
     tailwindcss(),
-    sentryAuthToken && sentryOrg && sentryProject
+    sentryUploadEnabled
       ? sentryVitePlugin({
           authToken: sentryAuthToken,
           org: sentryOrg,
           project: sentryProject,
-          release: { name: process.env.VITE_RELEASE ?? 'dev' },
+          release: { name: sentryRelease },
           sourcemaps: {
             // upload + delete local após upload — não servir .map publicamente
             filesToDeleteAfterUpload: '**/*.map',
+          },
+          // Falha o build se o upload não acontecer: source map silenciosamente
+          // ausente produz stack minificada em produção, que é o defeito que
+          // esta configuração existe para evitar.
+          errorHandler: (err) => {
+            throw err;
           },
           telemetry: false,
         })
@@ -95,9 +104,22 @@ export default defineConfig({
       '@': path.resolve(__dirname, 'src'),
     },
   },
+  define: {
+    // A Vercel expõe VERCEL_GIT_COMMIT_SHA apenas ao processo de build, não ao
+    // bundle. Injetamos aqui para que a release do Sentry, do /api/health e do
+    // deployment sejam literalmente o mesmo SHA.
+    'import.meta.env.VITE_RELEASE': JSON.stringify(sentryRelease),
+    'import.meta.env.VITE_VERCEL_ENV': JSON.stringify(process.env.VERCEL_ENV ?? ''),
+    'import.meta.env.VITE_VERCEL_GIT_COMMIT_REF': JSON.stringify(
+      process.env.VERCEL_GIT_COMMIT_REF ?? '',
+    ),
+  },
   build: {
-    // Source maps necessários para Sentry decoder; arquivo .map é uploadado e removido do output público
-    sourcemap: true,
+    // Source maps só são gerados quando o upload para o Sentry está configurado.
+    // 'hidden' omite o comentário //# sourceMappingURL do bundle, e o plugin
+    // apaga os .map após o upload — sem isso, `sourcemap: true` publicaria o
+    // código-fonte original em produção sempre que o token estivesse ausente.
+    sourcemap: sentryUploadEnabled ? 'hidden' : false,
     target: 'esnext',
     minify: 'esbuild',
     cssCodeSplit: true,
