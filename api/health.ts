@@ -15,7 +15,6 @@
 const TIMEOUT_MS = 8_000
 
 /** Idade máxima tolerada para o cron crítico mais recente. */
-const CRON_MAX_AGE_MS = 26 * 60 * 60 * 1000 // 26h — cobre janela diária + atraso
 
 type CheckState = 'ok' | 'degraded' | 'fail' | 'unknown'
 
@@ -83,58 +82,70 @@ async function checkSupabaseApi(url: string, anonKey: string): Promise<CheckStat
 }
 
 /**
- * Consulta mínima ao banco: pede zero linhas de uma tabela pública e confere
- * apenas o código HTTP. Não expõe dado algum.
+ * Sonda de liveness do banco via RPC `mx_database_health`, que retorna `true` e não
+ * lê tabela alguma.
+ *
+ * A versão anterior consultava `system_health_log` com a chave anon e tratava
+ * `401/403` como sinal de saúde. Isso tinha dois defeitos: gravava
+ * `permission denied for table system_health_log` no Postgres a cada sondagem, e
+ * transformava "negado" em "saudável" — depois do lockdown de telemetria a sonda
+ * passaria a responder `ok` mesmo com o banco fora do ar.
+ *
+ * Aqui só um `200` com corpo `true` conta como saúde. Nada mais.
  */
 async function checkDatabase(url: string, anonKey: string): Promise<CheckState> {
     if (!url || !anonKey) return 'fail'
     try {
-        const response = await fetchWithTimeout(
-            `${url}/rest/v1/system_health_log?select=id&limit=1`,
-            {
-                method: 'GET',
-                headers: {
-                    apikey: anonKey,
-                    Authorization: `Bearer ${anonKey}`,
-                    Prefer: 'count=none',
-                },
+        const response = await fetchWithTimeout(`${url}/rest/v1/rpc/mx_database_health`, {
+            method: 'POST',
+            headers: {
+                apikey: anonKey,
+                Authorization: `Bearer ${anonKey}`,
+                'Content-Type': 'application/json',
             },
-        )
-        // 200 = consulta ok. 401/403 = RLS ativa e negando anon, o que também
-        // prova que PostgREST e Postgres responderam.
-        if (response.ok || response.status === 401 || response.status === 403) return 'ok'
-        // 404 = PostgREST respondeu, mas a tabela não existe neste ambiente.
-        // O banco está de pé; o que falta é a migration.
+            body: '{}',
+        })
+
+        // 404/PGRST202 = PostgREST respondeu, mas a RPC ainda não existe neste
+        // ambiente. O banco está de pé; falta a migration. Estado transitório de
+        // rollout, não falha de plataforma.
         if (response.status === 404) return 'degraded'
-        return 'fail'
+        if (!response.ok) return 'fail'
+
+        return (await response.json()) === true ? 'ok' : 'fail'
     } catch {
         return 'fail'
     }
 }
 
 /**
- * Idade da última execução registrada de cron crítico. Depende da RPC
- * `mx_critical_cron_age_seconds`, que expõe apenas um número.
+ * Saúde dos crons via `mx_critical_cron_status`, que avalia **cada job contra o
+ * próprio schedule** e devolve o pior caso.
+ *
+ * A versão anterior usava `mx_critical_cron_age_seconds`, que era um
+ * `max(finished_at)` sobre todos os jobs juntos, comparado a uma janela fixa de 26h.
+ * Um único cron saudável zerava a idade global e mascarava todos os outros — foi
+ * assim que `mx-google-meet-ata` falhou com 401 em toda execução sem nunca aparecer
+ * como degradado.
  */
 async function checkCriticalCrons(url: string, anonKey: string): Promise<CheckState> {
     if (!url || !anonKey) return 'unknown'
     try {
-        const response = await fetchWithTimeout(
-            `${url}/rest/v1/rpc/mx_critical_cron_age_seconds`,
-            {
-                method: 'POST',
-                headers: {
-                    apikey: anonKey,
-                    Authorization: `Bearer ${anonKey}`,
-                    'Content-Type': 'application/json',
-                },
-                body: '{}',
+        const response = await fetchWithTimeout(`${url}/rest/v1/rpc/mx_critical_cron_status`, {
+            method: 'POST',
+            headers: {
+                apikey: anonKey,
+                Authorization: `Bearer ${anonKey}`,
+                'Content-Type': 'application/json',
             },
-        )
+            body: '{}',
+        })
         if (!response.ok) return 'unknown'
-        const ageSeconds = Number(await response.json())
-        if (!Number.isFinite(ageSeconds)) return 'unknown'
-        return ageSeconds * 1000 <= CRON_MAX_AGE_MS ? 'ok' : 'degraded'
+
+        const result = (await response.json()) as { status?: string; degraded?: number } | null
+        if (!result || typeof result.status !== 'string') return 'unknown'
+
+        return result.status === 'ok' ? 'ok' : 'degraded'
     } catch {
         return 'unknown'
     }
