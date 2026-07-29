@@ -62,15 +62,21 @@ async function fetchWithTimeout(url: string, init: RequestInit): Promise<Respons
     }
 }
 
-/** Alcançabilidade da API do Supabase (não valida dados). */
+/**
+ * Alcançabilidade da API do Supabase.
+ *
+ * Usa /auth/v1/health, que é público e barato. A raiz /rest/v1/ não serve como
+ * sonda: ela aceita apenas a service_role e responde 401 para a anon key, o que
+ * pareceria uma falha de plataforma quando na verdade é o comportamento normal.
+ */
 async function checkSupabaseApi(url: string, anonKey: string): Promise<CheckState> {
     if (!url || !anonKey) return 'fail'
     try {
-        const response = await fetchWithTimeout(`${url}/rest/v1/`, {
+        const response = await fetchWithTimeout(`${url}/auth/v1/health`, {
             method: 'GET',
-            headers: { apikey: anonKey, Authorization: `Bearer ${anonKey}` },
+            headers: { apikey: anonKey },
         })
-        return response.ok || response.status === 404 ? 'ok' : 'fail'
+        return response.ok ? 'ok' : 'fail'
     } catch {
         return 'fail'
     }
@@ -97,6 +103,9 @@ async function checkDatabase(url: string, anonKey: string): Promise<CheckState> 
         // 200 = consulta ok. 401/403 = RLS ativa e negando anon, o que também
         // prova que PostgREST e Postgres responderam.
         if (response.ok || response.status === 401 || response.status === 403) return 'ok'
+        // 404 = PostgREST respondeu, mas a tabela não existe neste ambiente.
+        // O banco está de pé; o que falta é a migration.
+        if (response.status === 404) return 'degraded'
         return 'fail'
     } catch {
         return 'fail'
