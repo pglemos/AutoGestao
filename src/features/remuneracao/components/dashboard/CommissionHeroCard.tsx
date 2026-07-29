@@ -1,4 +1,4 @@
-import { Info, CircleDollarSign, Coins } from 'lucide-react'
+import { Info, CircleDollarSign } from 'lucide-react'
 import { formatBRLWhole } from './formatBRLWhole'
 
 type Props = {
@@ -9,91 +9,84 @@ type Props = {
   detalhesVisiveis: boolean
 }
 
-export function CommissionHeroCard({ comissaoEstimada, qtdVendas, onVerCalculo, semPolitica, detalhesVisiveis }: Props) {
+/**
+ * Destaque da comissão do mês.
+ *
+ * Migrado do tema escuro próprio para a aparência aprovada (§43.1): card
+ * branco, acento esmeralda e valor em destaque tipográfico. O impacto vem da
+ * escala do número, não de gradiente e brilho.
+ */
+export function CommissionHeroCard({
+  comissaoEstimada,
+  qtdVendas,
+  onVerCalculo,
+  semPolitica,
+  detalhesVisiveis,
+}: Props) {
   return (
-    <div
-      className="relative overflow-hidden rounded-2xl p-6 lg:p-8"
-      style={{
-        background: 'linear-gradient(135deg, var(--color-seller-commission-bg-start) 0%, var(--color-seller-commission-bg-mid) 40%, var(--color-seller-commission-bg-end) 100%)',
-        border: '1px solid rgba(34,197,94,0.25)',
-        boxShadow: '0 0 40px rgba(34,197,94,0.08), inset 0 1px 0 rgba(34,197,94,0.1)',
-        minHeight: '240px',
-      }}
-    >
-      <div className="absolute inset-0 pointer-events-none">
-        <div
-          className="absolute top-0 right-0 w-72 h-72 rounded-full opacity-20"
-          style={{ background: 'radial-gradient(circle, var(--color-seller-green) 0%, transparent 70%)', transform: 'translate(30%, -30%)' }}
-        />
-        <div
-          className="absolute bottom-0 left-0 w-48 h-48 rounded-full opacity-10"
-          style={{ background: 'radial-gradient(circle, var(--color-seller-green-strong) 0%, transparent 70%)', transform: 'translate(-30%, 30%)' }}
-        />
-      </div>
-
-      <div className="relative z-10 flex flex-col lg:flex-row lg:items-center justify-between gap-6">
+    <div className="relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:p-8">
+      <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
         <div className="flex-1">
-          <div className="flex items-center gap-2 mb-3">
-            <span className="text-emerald-400 text-xs font-bold uppercase tracking-widest">Comissão Estimada</span>
+          <div className="mb-3 flex items-center gap-2">
+            <span className="text-xs font-semibold uppercase tracking-wide text-gray-500">
+              Comissão estimada
+            </span>
             {detalhesVisiveis && (
-              <button type="button" onClick={onVerCalculo} className="text-emerald-600 hover:text-emerald-400 transition-colors">
-                <Info className="w-3.5 h-3.5" />
+              <button
+                type="button"
+                onClick={onVerCalculo}
+                aria-label="Ver como a comissão foi calculada"
+                className="rounded-full p-0.5 text-emerald-600 transition-colors hover:bg-emerald-50 hover:text-emerald-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/20"
+              >
+                <Info className="h-3.5 w-3.5" aria-hidden="true" />
               </button>
             )}
           </div>
 
           {semPolitica ? (
             <div>
-              <p className="text-slate-300 text-lg font-semibold mt-2">Nenhuma política de remuneração ativa encontrada.</p>
-              <p className="text-slate-500 text-sm mt-2">Peça ao gestor ou RH para configurar sua remuneração em Departamento / RH / Remuneração.</p>
+              <p className="mt-2 text-lg font-semibold text-gray-800">
+                Nenhuma política de remuneração ativa encontrada.
+              </p>
+              <p className="mt-2 text-sm text-gray-500">
+                Peça ao gestor ou RH para configurar sua remuneração em Departamento / RH /
+                Remuneração.
+              </p>
             </div>
           ) : (
             <>
               <p
-                className="font-black leading-none tabular-nums"
-                style={{ fontSize: 'clamp(3rem, 8vw, 5.5rem)', color: 'var(--color-seller-money)', textShadow: '0 0 30px rgba(57,255,90,0.4)' }}
+                className="font-bold leading-none tabular-nums text-emerald-700"
+                style={{ fontSize: 'clamp(2.5rem, 7vw, 4.5rem)' }}
               >
                 {formatBRLWhole(comissaoEstimada)}
               </p>
 
               {qtdVendas === 0 ? (
-                <p className="text-slate-400 text-sm mt-4">
-                  Ainda não há vendas confirmadas neste período. Assim que suas vendas forem registradas, sua comissão aparecerá aqui.
+                <p className="mt-4 text-sm text-gray-500">
+                  Ainda não há vendas confirmadas neste período. Assim que suas vendas forem
+                  registradas, sua comissão aparecerá aqui.
                 </p>
               ) : (
-                <p className="text-slate-300 text-sm mt-4">
-                  💰 Você já vendeu <span className="text-emerald-400 font-bold">{qtdVendas} veículo{qtdVendas !== 1 ? 's' : ''}</span> neste mês.
+                <p className="mt-4 text-sm text-gray-600">
+                  Você já vendeu{' '}
+                  <span className="font-semibold text-emerald-700">
+                    {qtdVendas} veículo{qtdVendas !== 1 ? 's' : ''}
+                  </span>{' '}
+                  neste mês.
                 </p>
               )}
             </>
           )}
         </div>
 
-        <div className="hidden lg:flex items-center justify-center flex-shrink-0 w-48 h-48 relative">
-          <div className="relative flex items-center justify-center">
-            <div
-              className="absolute w-40 h-40 rounded-full opacity-20"
-              style={{ background: 'radial-gradient(circle, var(--color-seller-green), transparent)', filter: 'blur(20px)' }}
-            />
-            <div
-              className="relative w-28 h-28 rounded-full flex items-center justify-center"
-              style={{ background: 'linear-gradient(135deg, var(--color-seller-green-strong), var(--color-seller-green))', boxShadow: '0 0 30px rgba(34,197,94,0.4)' }}
-            >
-              <CircleDollarSign className="w-14 h-14 text-white" strokeWidth={1.5} />
-            </div>
-            <div
-              className="absolute -bottom-2 -right-2 w-10 h-10 rounded-full flex items-center justify-center"
-              style={{ background: 'var(--color-seller-green-dark)', border: '2px solid var(--color-seller-green)' }}
-            >
-              <Coins className="w-5 h-5 text-emerald-300" />
-            </div>
-            <div
-              className="absolute -top-1 -left-2 w-7 h-7 rounded-full flex items-center justify-center"
-              style={{ background: 'var(--color-seller-green-deep)', border: '2px solid var(--color-seller-green)' }}
-            >
-              <span className="text-emerald-300 text-xs font-bold">$</span>
-            </div>
-          </div>
+        <div className="hidden flex-shrink-0 items-center justify-center lg:flex">
+          <span
+            aria-hidden="true"
+            className="grid h-28 w-28 place-items-center rounded-full bg-emerald-50 text-emerald-600"
+          >
+            <CircleDollarSign className="h-14 w-14" strokeWidth={1.5} />
+          </span>
         </div>
       </div>
     </div>

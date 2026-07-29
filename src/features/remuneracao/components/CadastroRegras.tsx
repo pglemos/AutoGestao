@@ -142,7 +142,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
   return (
     <div className="space-y-mx-lg">
       <form onSubmit={handleSubmit} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-        <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">
+        <Typography variant="caption" tone="muted" className="font-bold uppercase tracking-wide">
           Regras de comissão e bônus
         </Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-2 xl:grid-cols-[1fr_1.3fr_1fr_1fr_1fr]">
@@ -153,7 +153,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
             <select
               value={form.tipo}
               onChange={e => setForm(p => ({ ...p, tipo: e.target.value as RemuneracaoRegraTipo }))}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-border-default rounded-mx-xl font-black uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-border-default rounded-mx-xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
             >
               <option value="comissao_por_venda">Comissão por venda</option>
               <option value="bonus_meta">Bônus por meta</option>
@@ -189,7 +189,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
               value={form.tipo_veiculo}
               onChange={e => setForm(p => ({ ...p, tipo_veiculo: e.target.value as FormState['tipo_veiculo'] }))}
               disabled={!regraUsaCategoria}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-border-default rounded-mx-xl font-black uppercase text-xs focus:outline-none focus:border-brand-primary disabled:cursor-not-allowed disabled:bg-surface-alt disabled:text-text-tertiary appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-border-default rounded-mx-xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary disabled:cursor-not-allowed disabled:bg-surface-alt disabled:text-text-tertiary appearance-none cursor-pointer"
             >
               <option value="">Não se aplica</option>
               <option value="carro">Carro</option>
@@ -202,7 +202,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
               value={form.nivel_carreira}
               onChange={e => setForm(p => ({ ...p, nivel_carreira: e.target.value as NivelCarreiraForm }))}
               disabled={!regraUsaCarreira}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-border-default rounded-mx-xl font-black uppercase text-xs focus:outline-none focus:border-brand-primary disabled:cursor-not-allowed disabled:bg-surface-alt disabled:text-text-tertiary appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-border-default rounded-mx-xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary disabled:cursor-not-allowed disabled:bg-surface-alt disabled:text-text-tertiary appearance-none cursor-pointer"
             >
               <option value="">Não se aplica</option>
               <option value="junior">Júnior</option>
@@ -213,15 +213,15 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
         </div>
         {regraUsaConfigEquipe && (
           <div className="mt-mx-sm flex flex-wrap gap-mx-md">
-            <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-text-tertiary">
+            <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-text-tertiary">
               <input type="checkbox" checked={form.cumulativo} onChange={e => setForm(p => ({ ...p, cumulativo: e.target.checked }))} />
               Cumulativo com outras faixas
             </label>
-            <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-text-tertiary">
+            <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-text-tertiary">
               <input type="checkbox" checked={form.valor_por_unidade} onChange={e => setForm(p => ({ ...p, valor_por_unidade: e.target.checked }))} />
               Valor multiplica pelos carros do vendedor
             </label>
-            <label className="flex items-center gap-2 text-xs font-black uppercase tracking-widest text-text-tertiary">
+            <label className="flex items-center gap-2 text-xs font-bold uppercase tracking-wide text-text-tertiary">
               <input type="checkbox" checked={form.requer_bonus_individual} onChange={e => setForm(p => ({ ...p, requer_bonus_individual: e.target.checked }))} />
               Só paga se vendedor bateu o próprio mínimo
             </label>
@@ -244,7 +244,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
         <div className="overflow-x-auto rounded-mx-xl border border-border-default">
           <table className="w-full text-sm">
             <thead className="bg-surface-alt text-text-secondary">
-              <tr className="text-left uppercase tracking-widest text-xs font-black">
+              <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Cargo</th>
                 <th className="px-mx-md py-mx-sm">Tipo</th>
                 <th className="px-mx-md py-mx-sm">Categoria / Nível</th>
@@ -257,7 +257,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
             <tbody>
               {regras.map(regra => (
                 <tr key={regra.id} className="border-t border-border-default">
-                  <td className="px-mx-md py-mx-sm font-black uppercase">{regra.cargo}</td>
+                  <td className="px-mx-md py-mx-sm font-bold uppercase">{regra.cargo}</td>
                   <td className="px-mx-md py-mx-sm">{TIPO_LABEL[regra.tipo]}</td>
                   <td className="px-mx-md py-mx-sm">
                     {regra.tipo_veiculo
@@ -266,7 +266,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
                         ? NIVEL_CARREIRA_LABEL[regra.nivel_carreira as 'junior' | 'pleno' | 'lider'] || regra.nivel_carreira
                         : '—'}
                   </td>
-                  <td className="px-mx-md py-mx-sm text-right font-black">{BRL.format(Number(regra.valor))}</td>
+                  <td className="px-mx-md py-mx-sm text-right font-bold">{BRL.format(Number(regra.valor))}</td>
                   <td className="px-mx-md py-mx-sm text-right">
                     {regra.unidade_meta_min != null
                       ? `${regra.unidade_meta_min} carro(s)`
@@ -299,7 +299,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-mx-xs">
-      <span className="block px-1 text-xs font-black uppercase tracking-widest text-text-tertiary">{label}</span>
+      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-text-tertiary">{label}</span>
       {children}
     </label>
   )

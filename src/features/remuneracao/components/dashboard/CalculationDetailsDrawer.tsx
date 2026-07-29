@@ -26,7 +26,7 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
         <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
           <h2 className="text-base font-bold text-mx-navy">Detalhamento do Cálculo</h2>
           <button type="button" onClick={onClose} className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center">
-            <X className="w-4 h-4 text-slate-500" />
+            <X className="w-4 h-4 text-gray-500" />
           </button>
         </div>
 
@@ -51,7 +51,7 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
           <div className="border-t border-slate-200 pt-4">
             <div className="flex justify-between items-center">
               <span className="font-bold text-mx-navy">Total previsto</span>
-              <span className="text-2xl font-black text-emerald-600">{formatCurrency(calculo.total)}</span>
+              <span className="text-2xl font-bold text-emerald-600">{formatCurrency(calculo.total)}</span>
             </div>
           </div>
         </div>
@@ -63,7 +63,7 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{title}</p>
+      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{title}</p>
       <div className="text-sm text-slate-700 font-medium">{children}</div>
     </div>
   )

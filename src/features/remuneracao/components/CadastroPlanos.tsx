@@ -59,7 +59,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
   return (
     <div className="space-y-mx-lg">
       <form onSubmit={handleSubmit} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-        <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">
+        <Typography variant="caption" tone="muted" className="font-bold uppercase tracking-wide">
           Adicionar / atualizar plano por cargo
         </Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-4">
@@ -93,7 +93,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
         <div className="overflow-x-auto rounded-mx-xl border border-border-default">
           <table className="w-full text-sm">
             <thead className="bg-surface-alt text-text-secondary">
-              <tr className="text-left uppercase tracking-widest text-xs font-black">
+              <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Cargo</th>
                 <th className="px-mx-md py-mx-sm text-right">Fixo</th>
                 <th className="px-mx-md py-mx-sm text-right">Variável</th>
@@ -105,11 +105,11 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
             <tbody>
               {planos.map(p => (
                 <tr key={p.id} className="border-t border-border-default">
-                  <td className="px-mx-md py-mx-sm font-black uppercase">{p.cargo}</td>
+                  <td className="px-mx-md py-mx-sm font-bold uppercase">{p.cargo}</td>
                   <td className="px-mx-md py-mx-sm text-right">{BRL.format(Number(p.salario_fixo))}</td>
                   <td className="px-mx-md py-mx-sm text-right">{BRL.format(Number(p.salario_variavel))}</td>
                   <td className="px-mx-md py-mx-sm text-right">{BRL.format(Number(p.beneficios))}</td>
-                  <td className="px-mx-md py-mx-sm text-right font-black">{BRL.format(totalPlano(p))}</td>
+                  <td className="px-mx-md py-mx-sm text-right font-bold">{BRL.format(totalPlano(p))}</td>
                   <td className="px-mx-md py-mx-sm text-right">
                     <Button type="button" variant="ghost" size="icon" aria-label="Remover" onClick={() => handleRemove(p)}>
                       <Trash2 size={16} />
@@ -128,7 +128,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-mx-xs">
-      <span className="block px-1 text-xs font-black uppercase tracking-widest text-text-tertiary">{label}</span>
+      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-text-tertiary">{label}</span>
       {children}
     </label>
   )

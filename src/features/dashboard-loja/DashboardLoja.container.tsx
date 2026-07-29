@@ -109,7 +109,7 @@ export function DashboardLoja() {
   }
 
   return (
-  <main className={`h-full w-full overflow-y-auto no-scrollbar ${isFocusedRolePerformance ? role === 'gerente' ? 'bg-surface-alt' : 'bg-seller-screen-bg' : isManagerSection ? 'bg-surface-alt' : 'bg-surface-alt p-mx-lg'}`}>
+  <main className={`h-full w-full overflow-y-auto no-scrollbar ${isFocusedRolePerformance ? 'bg-surface-alt' : isManagerSection ? 'bg-surface-alt' : 'bg-surface-alt p-mx-lg'}`}>
       {!isFocusedRolePerformance && !isManagerSection && (
         <DashboardErrorBoundary sectionName="Header">
           <DashboardHeader

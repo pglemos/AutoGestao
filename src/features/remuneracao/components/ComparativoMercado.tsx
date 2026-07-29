@@ -39,7 +39,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
   return (
     <div className="space-y-mx-lg">
       <div className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-        <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">
+        <Typography variant="caption" tone="muted" className="font-bold uppercase tracking-wide">
           Parâmetros de comparação
         </Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
@@ -51,7 +51,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
               aria-label="Tamanho da loja"
               value={faixaTamanho}
               onChange={e => setFaixaTamanho(e.target.value)}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-border-default rounded-mx-xl font-black uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-border-default rounded-mx-xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
             >
               {TAMANHOS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
@@ -72,7 +72,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
         <div className="overflow-x-auto rounded-mx-xl border border-border-default">
           <table className="w-full text-sm">
             <thead className="bg-surface-alt text-text-secondary">
-              <tr className="text-left uppercase tracking-widest text-xs font-black">
+              <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Cargo</th>
                 <th className="px-mx-md py-mx-sm text-right">Total atual</th>
                 <th className="px-mx-md py-mx-sm text-right">Faixa de mercado</th>
@@ -82,13 +82,13 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
             <tbody>
               {linhas.map(l => (
                 <tr key={l.cargo} className="border-t border-border-default">
-                  <td className="px-mx-md py-mx-sm font-black uppercase">{l.cargo}</td>
-                  <td className="px-mx-md py-mx-sm text-right font-black">{BRL.format(l.total)}</td>
+                  <td className="px-mx-md py-mx-sm font-bold uppercase">{l.cargo}</td>
+                  <td className="px-mx-md py-mx-sm text-right font-bold">{BRL.format(l.total)}</td>
                   <td className="px-mx-md py-mx-sm text-right text-text-secondary">
                     {l.faixa ? `${BRL.format(l.faixa.min)} – ${BRL.format(l.faixa.max)}` : '—'}
                   </td>
                   <td className="px-mx-md py-mx-sm">
-                    <span className={`inline-flex rounded-mx-full px-mx-sm py-1 text-xs font-black uppercase tracking-widest ${BADGE[l.classificacao].cls}`}>
+                    <span className={`inline-flex rounded-mx-full px-mx-sm py-1 text-xs font-bold uppercase tracking-wide ${BADGE[l.classificacao].cls}`}>
                       {BADGE[l.classificacao].label}
                     </span>
                   </td>
@@ -105,7 +105,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-mx-xs">
-      <span className="block px-1 text-xs font-black uppercase tracking-widest text-text-tertiary">{label}</span>
+      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-text-tertiary">{label}</span>
       {children}
     </label>
   )

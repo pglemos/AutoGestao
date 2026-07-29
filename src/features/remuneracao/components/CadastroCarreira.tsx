@@ -39,7 +39,7 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
   return (
     <div className="space-y-mx-lg">
       <div>
-        <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">
+        <Typography variant="caption" tone="muted" className="font-bold uppercase tracking-wide">
           Nível de carreira
         </Typography>
         <Typography variant="tiny" tone="muted" className="mt-1">
@@ -57,7 +57,7 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
         <div className="overflow-x-auto rounded-mx-xl border border-border-default">
           <table className="w-full text-sm">
             <thead className="bg-surface-alt text-text-secondary">
-              <tr className="text-left uppercase tracking-widest text-xs font-black">
+              <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Vendedor</th>
                 <th className="px-mx-md py-mx-sm">Nível</th>
               </tr>
@@ -65,13 +65,13 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
             <tbody>
               {vendedores.map(vendedor => (
                 <tr key={vendedor.id} className="border-t border-border-default">
-                  <td className="px-mx-md py-mx-sm font-black">{vendedor.name}</td>
+                  <td className="px-mx-md py-mx-sm font-bold">{vendedor.name}</td>
                   <td className="px-mx-md py-mx-sm">
                     <select
                       value={niveis[vendedor.id] || ''}
                       disabled={savingIds.has(vendedor.id)}
                       onChange={e => handleChange(vendedor.id, e.target.value as NivelCarreira)}
-                      className="h-mx-12 px-mx-sm bg-white border border-border-default rounded-mx-xl font-black uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+                      className="h-mx-12 px-mx-sm bg-white border border-border-default rounded-mx-xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
                     >
                       <option value="" disabled>Não definido</option>
                       {(Object.keys(NIVEL_LABEL) as NivelCarreira[]).map(nivel => (
