@@ -37,7 +37,7 @@ export const SIDEBAR_LOGO = '/landing/logo-mx.png'
 
 export const SIDEBAR = {
   /** Coluna fixa no desktop. */
-  aside: 'hidden shrink-0 border-r border-mxsb-line font-sans text-[14px] leading-[21px] text-[#0A0A0A] antialiased transition-[width] duration-300 xl:block',
+  aside: 'hidden shrink-0 border-r border-mxsb-line font-sans text-[14px] leading-[21px] text-mxsb-base antialiased transition-[width] duration-300 xl:block',
   asideWidth: 'w-64',
   asideWidthCollapsed: 'w-16',
 

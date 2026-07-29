@@ -66,6 +66,7 @@
 --color-mxsb-muted: #737373;
 --color-mxsb-active: #198653;
 --color-mxsb-active-surface: rgba(25, 134, 83, 0.1);
+--color-mxsb-base: #0A0A0A;
 
 /* shadcn/Base44 semantic tokens */
 --color-background: hsl(var(--background));
