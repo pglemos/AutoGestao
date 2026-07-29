@@ -265,6 +265,10 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - 2026-07-29: CodeRabbit apontou um conflito de rotulagem da contagem
   intermediária; corrigido. A repetição do review foi limitada por cota por 38
   minutos, sem novo parecer final.
+- 2026-07-29: `npm audit --omit=dev` isolou 2 pacotes high de runtime por um
+  advisory RSC sem superfície nesta SPA. O teste de downgrade para React Router
+  7.11.0 foi revertido por introduzir open redirect/XSS e DoS aplicáveis; a
+  árvore voltou integralmente a 7.18.2.
 
 ### Completion Notes List
 

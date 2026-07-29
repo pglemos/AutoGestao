@@ -53,6 +53,18 @@ foram repetidos com o caminho explícito do Node 24.
   Vite durante a otimização de dependências. Ele foi substituído pela linha
   segura e compatível `0.25.12`; o servidor dev voltou a responder sem erros e
   o audit permaneceu em 48 alertas, 0 críticos.
+- `npm audit --omit=dev` separou o runtime: 2 pacotes high
+  (`react-router`/`react-router-dom`) derivados de um único advisory de CSRF em
+  RSC Actions (`GHSA-qwww-vcr4-c8h2`). Esta SPA Vite usa `BrowserRouter` e não
+  possui RSC, Server Actions, SSR nem action handlers do React Router.
+- Foi testado o downgrade para 7.11.0, fora desse advisory, mas ele introduziu
+  advisories aplicáveis à SPA, incluindo open redirect/XSS em
+  `<Link>`/`useNavigate` e DoS de route matching. O downgrade foi revertido e
+  7.18.2 foi preservado.
+- Os outros 46 alertas estão na árvore de desenvolvimento; os 40 high se
+  concentram em Storybook, Vercel CLI, ESLint, Workbox e `xlsx` legado de
+  importadores CLI. Eles não entram no bundle publicado, mas continuam dívida
+  de supply chain e não foram declarados corrigidos.
 
 ### Acessibilidade
 
@@ -86,8 +98,10 @@ foram repetidos com o caminho explícito do Node 24.
 | `npm audit` inicial | 51 total; 1 crítica | 1 |
 | `npm audit` após correção | 48 total; 0 crítica | 1 |
 
-O código 1 de `npm audit` permanece porque existem vulnerabilidades altas sem
-correção compatível confirmada. Esse gate ainda está bloqueado.
+O código 1 de `npm audit` permanece. O advisory high do runtime foi aceito
+explicitamente por ausência comprovada da superfície RSC; a árvore de
+desenvolvimento ainda exige upgrades maiores e esse gate agregado continua
+bloqueado.
 
 Execuções intermediárias tiveram contagens menores enquanto testes eram
 adicionados. A linha canônica acima corresponde à regressão final desta
@@ -205,7 +219,7 @@ cota por 38 minutos, portanto este bloco permanece em `InProgress`.
 
 | ID | Gravidade | Problema | Evidência | Próxima correção |
 |---|---:|---|---|---|
-| AUD-001 | P0 | Dependências com 40 alertas altos | `npm audit` | separar runtime/dev, atualizar ferramentas e substituir `xlsx` |
+| AUD-001 | P1 | 40 alertas high na árvore dev; runtime tem 1 advisory RSC sem superfície no produto | `npm audit` e `npm audit --omit=dev` | atualizar Storybook/Vercel/ESLint/Workbox em branch própria; manter prova de ausência de RSC |
 | AUD-002 | P1 | Shell ainda possui caminhos paralelos | `AppShell.tsx` | contrato literal + convergência testada |
 | AUD-003 | P1 | Browser por perfil não revalidado | sem evidência nova | matriz autenticada completa |
 | AUD-004 | P1 | Supabase remoto/RLS parcialmente revalidado | inventário, advisors e 327/327 migrations | backup e matriz remota de papéis ainda bloqueiam mutations |

@@ -51,6 +51,18 @@
 - Consequence: remote inventory, advisors, migrations and function source may
   be read, but no DDL or data mutation is authorized in this story state.
 
+### Preserve React Router 7.18.2 and accept the RSC-only advisory
+
+- Evidence: `npm audit --omit=dev` reports one high advisory across
+  `react-router` and `react-router-dom`: CSRF in RSC Action execution.
+- Applicability: the product is a Vite SPA using `BrowserRouter`; it has no
+  RSC, SSR, Server Actions or React Router action handlers.
+- Alternative tested: 7.11.0 removed that advisory but introduced high
+  advisories for open redirect/XSS and route-matching DoS that are closer to
+  this SPA's actual surface.
+- Decision: restore 7.18.2, document the bounded acceptance and keep the
+  aggregate development-tree audit as unresolved supply-chain debt.
+
 ## Rollback
 
 - Code changes: revert only commits produced for this story.
