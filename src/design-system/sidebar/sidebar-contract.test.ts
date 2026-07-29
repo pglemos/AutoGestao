@@ -1,6 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
-import { SIDEBAR, SIDEBAR_METRICS } from './tokens'
+import { SIDEBAR, SIDEBAR_LOGO, SIDEBAR_METRICS } from './tokens'
 
 /**
  * Contrato do design system da sidebar.
@@ -56,6 +56,27 @@ describe('design tokens da sidebar', () => {
     expect(SIDEBAR.drawerScrim).toContain('bg-black/40')
   })
 
+  test('usa uma única marca e um ícone neutro também no item ativo', () => {
+    expect(SIDEBAR_LOGO).toBe('/landing/logo-mx.png')
+    expect(shell).toContain('src={SIDEBAR_LOGO}')
+    expect(ownerSidebar).toContain('src={SIDEBAR_LOGO}')
+    expect(shell).not.toContain('@/assets/mx-logo.png')
+    // o Dono mantém o ícone em cinza mesmo no item ativo
+    expect(SIDEBAR).not.toHaveProperty('itemIconActive')
+    expect(shell).toContain('className={SIDEBAR.itemIcon}')
+  })
+
+  test('expõe o CTA do rodapé como token compartilhado', () => {
+    expect(SIDEBAR.ctaButton).toContain('bg-mxsb-active')
+    expect(SIDEBAR.ctaButton).toContain('h-9')
+    expect(shell).toContain('SIDEBAR.ctaButton')
+    expect(ownerSidebar).toContain('SIDEBAR.ctaButton')
+  })
+
+  test('herda a mesma escala tipográfica em toda a coluna', () => {
+    expect(SIDEBAR.root).toContain('text-sm')
+  })
+
   test('não reintroduz o verde sólido nem sombra na coluna', () => {
     expect(SIDEBAR.itemActive).not.toContain('bg-emerald-600')
     expect(SIDEBAR.aside).not.toContain('shadow')
@@ -81,7 +102,7 @@ describe('consumidores do design system', () => {
 
   test('respeitam o corte xl para a coluna fixa', () => {
     expect(shell).toContain("collapsed ? 'xl:pl-16' : 'xl:pl-64'")
-    expect(shell).toContain('xl:flex')
+    expect(shell).toContain('xl:block')
     expect(shell).toContain('xl:hidden')
     expect(SIDEBAR.aside).toContain('xl:block')
   })

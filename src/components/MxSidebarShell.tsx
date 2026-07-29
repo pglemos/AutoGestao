@@ -14,9 +14,8 @@ import {
 import { cn } from '@/lib/utils'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { MxSidebarProfileCard } from './MxSidebarProfileCard'
-import { SIDEBAR } from '@/design-system/sidebar/tokens'
+import { SIDEBAR, SIDEBAR_LOGO } from '@/design-system/sidebar/tokens'
 import { NotificationBellButton } from './NotificationBellButton'
-import MxLogo from '@/assets/mx-logo.png'
 
 export type MxSidebarNavItem = {
   key?: string
@@ -54,6 +53,13 @@ export type MxSidebarShellProps = {
   simulationBase?: string
   simulationStore?: string
   onStopSimulation?: () => void
+  /** Ação fixa acima do cartão de perfil (ex.: "Falar com Consultor"). */
+  cta?: {
+    label: string
+    icon: LucideIcon
+    onClick?: () => void
+    path?: string
+  }
 }
 
 function isNavItemActive(
@@ -160,6 +166,7 @@ export default function MxSidebarShell({
   simulationBase = 'Admin MX',
   simulationStore = 'Sandbox MX',
   onStopSimulation,
+  cta,
 }: MxSidebarShellProps) {
   const [collapsed, setCollapsed] = useState(false)
   const [mobileOpen, setMobileOpen] = useState(false)
@@ -270,7 +277,7 @@ export default function MxSidebarShell({
         <NavItemIcon
           icon={item.icon}
           size={16}
-          className={active ? SIDEBAR.itemIconActive : SIDEBAR.itemIcon}
+          className={SIDEBAR.itemIcon}
         />
         {!isCollapsed ? (
           <>
@@ -417,7 +424,7 @@ export default function MxSidebarShell({
           )}
         >
           <img
-            src={MxLogo}
+            src={SIDEBAR_LOGO}
             alt="MX"
             className={SIDEBAR.brandLogo}
           />
@@ -472,6 +479,28 @@ export default function MxSidebarShell({
         ))}
       </nav>
 
+      {cta ? (
+        <div className={SIDEBAR.ctaSlot}>
+          <button
+            type="button"
+            aria-label={isCollapsed ? cta.label : undefined}
+            title={isCollapsed ? cta.label : undefined}
+            onClick={() => {
+              setMobileOpen(false)
+              if (cta.onClick) cta.onClick()
+              else if (cta.path) navigate(cta.path)
+            }}
+            className={cn(
+              SIDEBAR.ctaButton,
+              isCollapsed ? SIDEBAR.ctaButtonCollapsed : SIDEBAR.ctaButtonExpanded,
+            )}
+          >
+            <cta.icon size={16} strokeWidth={1.8} aria-hidden="true" />
+            {!isCollapsed ? cta.label : null}
+          </button>
+        </div>
+      ) : null}
+
       <div className={cn(SIDEBAR.footer, isCollapsed ? SIDEBAR.footerCollapsed : SIDEBAR.footerExpanded)}>
         {renderProfileCard(isCollapsed)}
       </div>
@@ -487,7 +516,7 @@ export default function MxSidebarShell({
           onClick={() => setMobileOpen(true)}
           className="flex min-w-0 items-center gap-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
         >
-          <img src={MxLogo} alt="MX" className="h-9 w-9 shrink-0 object-contain" />
+          <img src={SIDEBAR_LOGO} alt="MX" className="h-9 w-9 shrink-0 object-contain" />
           <span className="hidden min-w-0 leading-tight min-[430px]:block">
             <span className="block text-[15px] font-black tracking-tight text-gray-900">
               MX PERFORMANCE
@@ -515,12 +544,12 @@ export default function MxSidebarShell({
 
       <aside
         className={cn(
-          'fixed left-0 top-0 z-[80] hidden h-screen flex-col border-r border-mxsb-line bg-mxsb-surface text-mxsb-ink transition-[width] duration-300 xl:flex',
+          'fixed left-0 top-0 z-[80] hidden h-screen border-r border-mxsb-line transition-[width] duration-300 xl:block',
           collapsed ? SIDEBAR.asideWidthCollapsed : SIDEBAR.asideWidth,
         )}
         aria-label={sidebarLabel}
       >
-        {renderSidebarContent(collapsed, true)}
+        <div className={SIDEBAR.root}>{renderSidebarContent(collapsed, true)}</div>
       </aside>
 
       {mobileOpen ? (
@@ -537,7 +566,7 @@ export default function MxSidebarShell({
             role="dialog"
             aria-modal="true"
             aria-label={sidebarLabel}
-            className={cn(SIDEBAR.drawerPanel, 'border-r border-mxsb-line text-mxsb-ink')}
+            className={cn(SIDEBAR.drawerPanel, 'border-r border-mxsb-line')}
             onClick={(event) => event.stopPropagation()}
             onKeyDown={(event) => event.stopPropagation()}
           >
@@ -549,7 +578,7 @@ export default function MxSidebarShell({
             >
               <X size={16} aria-hidden="true" />
             </button>
-            <div className="flex min-h-0 flex-1 flex-col">
+            <div className={cn(SIDEBAR.root, 'min-h-0 flex-1')}>
               {renderSidebarContent(false)}
             </div>
           </div>

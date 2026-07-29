@@ -25,7 +25,7 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
     expect(module).toContain('<Route path="*" element={<OwnerLiveDataPage />} />')
     expect(layout).toContain('<OwnerSidebar')
     expect(layout).toContain('collapsed={sidebarCollapsed}')
-    expect(sidebar).toContain('src="/landing/logo-mx.png"')
+    expect(sidebar).toContain('src={SIDEBAR_LOGO}')
     expect(sidebar).toContain('MÓDULO EXECUTIVO')
     expect(sidebar).toContain('aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}')
     // Cartao de perfil compartilhado com os demais modulos: abre o menu de

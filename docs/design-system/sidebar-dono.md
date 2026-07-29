@@ -276,9 +276,23 @@ Tokens de cor disponíveis como utilities: `bg-mxsb-surface`, `text-mxsb-ink`, `
 **Proibido**: `bg-white shadow-sm` na coluna, item ativo em verde sólido (`bg-emerald-600 text-white`),
 larguras próprias (`w-56`, `w-[264px]`), breakpoint diferente de `xl` para a coluna fixa.
 
-## 15. Onde cada módulo ainda difere (por dado, não por estilo)
+## 15. Regras obrigatórias para todos os módulos
 
-1. **CTA "Falar com Consultor"** — o slot `SIDEBAR.ctaSlot` existe para todos, mas só o Dono o preenche.
-2. **Badges** — o shell exibe contadores dinâmicos (notificações, devolutivas) com o tom `badgeDefault`;
-   o Dono usa `badgeWarning` estático ("Em construção").
-3. **Seção "MENU"** — quando um módulo tem uma única seção com esse nome, o rótulo é omitido.
+1. **Marca única** — todos usam `SIDEBAR_LOGO` (`/landing/logo-mx.png`), 28px.
+2. **Escala tipográfica** — a coluna herda `text-sm`; nada de 16px vazando para CTA/cartão.
+3. **Ícone do item ativo permanece cinza** (`text-mxsb-muted/80`); só o texto e o fundo mudam.
+4. **Navegação sempre agrupada em seções nomeadas** em caixa alta. Nenhum módulo pode ter uma lista
+   solta — vendedor e gerente usam GESTÃO / COMERCIAL ou ESTRATÉGIA / EQUIPE / DESENVOLVIMENTO.
+5. **CTA do rodapé** — `SIDEBAR.ctaSlot` + `SIDEBAR.ctaButton`, acima do cartão de perfil. Aparece onde
+   há destino: Dono (abre o modal do consultor) e Gerente (`/falar-consultor`). Vendedor e Admin MX
+   não têm CTA porque não existe destino equivalente.
+6. **Cartão de perfil** — sempre `MxSidebarProfileCard`, com o menu de conta.
+
+### Diferenças legítimas (dado, não estilo)
+
+| Módulo | Seções | CTA | Badges |
+|---|---|---|---|
+| Dono | GESTÃO · ESTRATÉGIA · NEGÓCIO · DESENVOLVIMENTO | Falar com Consultor (modal) | âmbar "Em construção" |
+| Gerente | GESTÃO · ESTRATÉGIA · EQUIPE · DESENVOLVIMENTO | Falar com Consultor (`/falar-consultor`) | contadores |
+| Vendedor | GESTÃO · COMERCIAL · DESENVOLVIMENTO | — | contadores |
+| Admin MX / geral / consultor | Rede e Gestão · Simulação · Rotina e Conteúdo · Relatórios e Diagnóstico · Configurações | — | contadores |

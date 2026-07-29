@@ -32,6 +32,9 @@ export const SIDEBAR_METRICS = {
   widthTransitionMs: 300,
 } as const
 
+/** Marca usada no cabeçalho (mesmo arquivo em todos os módulos). */
+export const SIDEBAR_LOGO = '/landing/logo-mx.png'
+
 export const SIDEBAR = {
   /** Coluna fixa no desktop. */
   aside: 'hidden shrink-0 border-r border-mxsb-line transition-[width] duration-300 xl:block',
@@ -39,7 +42,7 @@ export const SIDEBAR = {
   asideWidthCollapsed: 'w-16',
 
   /** Container interno (superfície + cor de texto base). */
-  root: 'flex h-full flex-col bg-mxsb-surface text-mxsb-ink',
+  root: 'flex h-full flex-col bg-mxsb-surface text-sm text-mxsb-ink',
 
   /** Cabeçalho de marca. */
   header: 'flex h-[54px] shrink-0 items-center gap-2 border-b border-mxsb-line',
@@ -67,7 +70,6 @@ export const SIDEBAR = {
   itemActive: 'bg-mxsb-active-surface font-semibold text-mxsb-active',
   itemIdle: 'text-mxsb-ink hover:bg-mxsb-hover hover:text-mxsb-ink-strong',
   itemIcon: 'h-4 w-4 shrink-0 text-mxsb-muted/80',
-  itemIconActive: 'h-4 w-4 shrink-0 text-mxsb-active',
   itemLabel: 'min-w-0 flex-1 truncate',
 
   /** Grupo expansível. */
@@ -90,6 +92,10 @@ export const SIDEBAR = {
   footerExpanded: 'px-3',
   footerCollapsed: 'px-2',
   ctaSlot: 'border-t border-mxsb-line p-3',
+  ctaButton:
+    'flex h-9 w-full items-center gap-2.5 rounded-md bg-mxsb-active px-4 text-sm font-medium text-white shadow outline-none transition-colors hover:bg-mxsb-active/90 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+  ctaButtonExpanded: 'justify-start',
+  ctaButtonCollapsed: 'justify-center px-0',
 
   /** Drawer mobile/tablet. */
   drawerOverlay: 'fixed inset-0 z-40 xl:hidden',

@@ -117,33 +117,63 @@ const navConfig: Record<string, NavCategory[]> = {
   dono: ownerNavConfig,
   gerente: [
     {
-      category: 'MENU',
+      category: 'GESTÃO',
       icon: <Home size={22} />,
       items: [
         { label: 'Início', path: '/home', icon: <Home size={16} /> },
-        { label: 'Plano de Ação', path: '/plano-acao', icon: <ClipboardList size={16} /> },
         { label: 'Rotina do Dia', path: '/rotina', icon: <CalendarClock size={16} /> },
         { label: 'Fechamento Diário', path: '/fechamento-diario', icon: <CheckSquare size={16} /> },
-        { label: 'Rotina da Equipe', path: '/gerente/rotina-equipe', icon: <CalendarCheck size={16} /> },
-        { label: 'Minha Equipe', path: '/gerente/minha-equipe', icon: <Users size={16} /> },
+      ],
+    },
+    {
+      category: 'ESTRATÉGIA',
+      icon: <Target size={22} />,
+      items: [
+        { label: 'Plano de Ação', path: '/plano-acao', icon: <ClipboardList size={16} /> },
         { label: 'Meta da Loja', path: '/gerente/meta-loja', icon: <Target size={16} /> },
         { label: 'Mentor Gerencial', path: '/gerente/mentor', icon: <BrainCircuit size={16} /> },
+      ],
+    },
+    {
+      category: 'EQUIPE',
+      icon: <Users size={22} />,
+      items: [
+        { label: 'Rotina da Equipe', path: '/gerente/rotina-equipe', icon: <CalendarCheck size={16} /> },
+        { label: 'Minha Equipe', path: '/gerente/minha-equipe', icon: <Users size={16} /> },
         { label: 'Desenvolvimento', path: '/gerente/feedbacks-pdis', icon: <BookOpen size={16} /> },
         { label: 'Ranking', path: '/gerente/ranking', icon: <Trophy size={16} /> },
+      ],
+    },
+    {
+      category: 'DESENVOLVIMENTO',
+      icon: <GraduationCap size={22} />,
+      items: [
         { label: 'Universidade MX', path: '/gerente/universidade-mx', icon: <GraduationCap size={16} /> },
       ],
     },
   ],
   vendedor: [
     {
-      category: 'MENU',
+      category: 'GESTÃO',
       icon: <Home size={22} />,
       items: [
         { label: 'Início', path: '/home', icon: <Home size={16} />, activePaths: ['/home'] },
-        { label: 'Fechamento Diário', path: '/fechamento-diario', icon: <CheckSquare size={16} /> },
         { label: 'Rotina do Dia', path: '/central-execucao', icon: <CalendarCheck size={16} /> },
+        { label: 'Fechamento Diário', path: '/fechamento-diario', icon: <CheckSquare size={16} /> },
+      ],
+    },
+    {
+      category: 'COMERCIAL',
+      icon: <TrendingUp size={22} />,
+      items: [
         { label: 'Mentor Comercial', path: '/carteira-clientes', icon: <Users size={16} /> },
         { label: 'Minha Meta', path: '/meu-funil', icon: <Filter size={16} /> },
+      ],
+    },
+    {
+      category: 'DESENVOLVIMENTO',
+      icon: <GraduationCap size={22} />,
+      items: [
         { label: 'Ranking', path: '/classificacao', icon: <Trophy size={16} /> },
         { label: 'Universidade MX', path: '/universidade-mx', icon: <GraduationCap size={16} /> },
         { label: 'Desenvolvimento', path: '/desenvolvimento', icon: <BookOpen size={16} /> },
@@ -294,6 +324,9 @@ export default function Layout() {
       simulationBase={perfilBaseVisivel}
       simulationStore={membership?.store?.name || 'Sandbox MX'}
       onStopSimulation={stopCurrentSimulation}
+      cta={role === 'gerente'
+        ? { label: 'Falar com Consultor', icon: MessageSquare, path: '/falar-consultor' }
+        : undefined}
     >
       {pageContent}
     </MxSidebarShell>

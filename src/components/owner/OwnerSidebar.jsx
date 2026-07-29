@@ -2,10 +2,9 @@ import { useState } from "react";
 import { NavLink, useNavigate } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { useOwner } from "@/components/owner/OwnerContext";
-import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 import { MxSidebarProfileCard } from "@/components/MxSidebarProfileCard";
-import { SIDEBAR } from "@/design-system/sidebar/tokens";
+import { SIDEBAR, SIDEBAR_LOGO } from "@/design-system/sidebar/tokens";
 import {
   Home,
   CalendarDays,
@@ -92,7 +91,7 @@ export default function OwnerSidebar({
         {!collapsed && (
           <div className="flex min-w-0 items-center gap-2.5">
             <img
-              src="/landing/logo-mx.png"
+              src={SIDEBAR_LOGO}
               alt="MX"
               className={SIDEBAR.brandLogo}
             />
@@ -217,21 +216,22 @@ export default function OwnerSidebar({
 
       {/* Falar com Consultor — fixo na base */}
       <div className={SIDEBAR.ctaSlot}>
-        <Button
-          variant="default"
+        <button
+          type="button"
           aria-label={collapsed ? "Falar com Consultor" : undefined}
+          title={collapsed ? "Falar com Consultor" : undefined}
           className={cn(
-            "w-full gap-2.5 bg-primary hover:bg-primary/90",
-            collapsed ? "justify-center px-0" : "justify-start"
+            SIDEBAR.ctaButton,
+            collapsed ? SIDEBAR.ctaButtonCollapsed : SIDEBAR.ctaButtonExpanded,
           )}
           onClick={() => {
             onNavigate?.();
             openConsultantModal(null);
           }}
         >
-          <MessageCircle className="h-4 w-4" />
+          <MessageCircle className="h-4 w-4" aria-hidden="true" />
           {!collapsed && "Falar com Consultor"}
-        </Button>
+        </button>
       </div>
 
       <div className={cn(SIDEBAR.footer, collapsed ? SIDEBAR.footerCollapsed : SIDEBAR.footerExpanded)}>
