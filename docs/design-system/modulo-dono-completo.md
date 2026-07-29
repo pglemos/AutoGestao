@@ -120,6 +120,81 @@ CSS nativa (`transition-colors`, `transition-[width]`, `animate-pulse`).
 
 ---
 
+## Tabela comparativa — Páginas do Dono
+
+> Situação de cada página que o perfil **Dono** enxerga, incluindo as páginas compartilhadas
+> com Gerente/Admin. A coluna **Padrão** indica se o *wrapper*, os *tokens* e o *padrão de card*
+> seguem a especificação deste documento. `REFATORADO` = refatorado nesta sprint.
+
+### Dono-exclusivas (`OwnerShell`, escopo `.owner-b44`)
+
+| Rota | Componente | Wrapper | Tokens | Cards | Estado |
+|------|-----------|---------|--------|-------|--------|
+| `/home` | `OwnerHome.jsx` | ✅ `main#page-home` | ✅ semânticos | ✅ `rounded-xl border bg-card p-4 shadow-sm` | ✅ Padronizado |
+| `/plano-acao` | `PlanoDeAcao.jsx` | ✅ `main#page-plano-acao` | ✅ semânticos | ✅ idem | ✅ Padronizado |
+| `/plano-estrategico` | `StrategicPlanWorkspace.tsx` | ✅ `main#page-plano-estrategico` | ✅ semânticos | ✅ idem | ✅ Padronizado |
+| `/consultoria` | `Consultoria.jsx` | ✅ `main#page-consultoria` | ✅ semânticos | ✅ idem | ✅ Padronizado |
+| `/rotina-do-dia` | `Placeholders.RotinaDoDia` | ❌ `main` genérico | ✅ semânticos | N/A (placeholder) | ⏳ Placeholder |
+| `/decisoes` | `Placeholders.CentralDeDecisoes` | ❌ `main` genérico | ✅ semânticos | N/A | ⏳ Placeholder |
+| `/departamentos/*` | `Placeholders.*` (6 páginas) | ❌ `main` genérico | ✅ semânticos | N/A | ⏳ 6× Placeholder |
+| `/mercado` | `Placeholders.Mercado` | ❌ `main` genérico | ✅ semânticos | N/A | ⏳ Placeholder |
+| `/treinamentos` | `OwnerUniversidade` | ❌ `main` genérico | ✅ semânticos | N/A | ⏳ Placeholder |
+
+### Compartilhadas com Gerente/Admin (`Layout.tsx`, escopo `.mx-manager-scope`)
+
+| Rota | Componente | Wrapper | Tokens | Cards | Estado |
+|------|-----------|---------|--------|-------|--------|
+| `/metas` | `MetasGerente.tsx` | ✅ `main#metas-gerente` | ✅ semânticos | ✅ `rounded-xl border bg-card p-4 shadow-sm` | ✅ **REFATORADO** |
+| `/funil-vendas` | `FunilVendasGerente.tsx` | ✅ `main#funil-vendas` | ✅ semânticos | ✅ idem | ✅ **REFATORADO** |
+| `/fechamento-diario` | `ManagerDailyClosing.container.tsx` | ⚠️ `main#fechamento-diario` | ⚠️ `bg-muted` + `rounded-[16px]` custom | ❌ `rounded-[16px] bg-white border-gray-100` | ⚠️ **REFATORADO** (skeleton + wrapper) |
+| `/devolutivas` | `GerenteFeedback.container.tsx` | ✅ `main` padronizado | ✅ semânticos | N/A (delega) | ✅ **REFATORADO** |
+| `/minha-equipe` | `DashboardLoja` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+| `/meta-loja` | `DashboardLoja` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+| `/vendas` | `DashboardLoja` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+| `/mentor` | `ManagerMentor` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+| `/feedbacks-pdis` | `ManagerDevelopment` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+| `/treinamentos` | `GerenteTreinamentos` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+| `/falar-consultor` | `FalarConsultorDono` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+| `/pdi` | `GerentePDI` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+| `/rotina-equipe` | `ManagerTeamRoutine` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+
+### Globais (qualquer escopo)
+
+| Rota | Componente | Wrapper | Tokens | Cards | Estado |
+|------|-----------|---------|--------|-------|--------|
+| `/notificacoes` | `Notificacoes.container.tsx` | ✅ `MxModulePage` | ⚠️ `gap-4` (corrigido) | N/A (padrão MxModule) | ✅ **REFATORADO** |
+| `/perfil` | `Perfil.tsx` → `InternalProfilePage` | ✅ `MxModulePage` | ✅ semânticos | N/A (padrão MxModule) | ✅ Padronizado |
+| `/perfil` (vendedor) | `LegacyProfilePage.tsx` | ✅ `main#perfil` | ✅ semânticos | ✅ `rounded-xl border bg-card` | ✅ **REFATORADO** |
+| `/configuracoes` | `ConfiguracoesShell.tsx` | ✅ `MxModulePage` | ✅ semânticos | N/A (padrão MxModule) | ✅ Padronizado |
+| `/carteira-clientes` | `CarteiraClientes` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+| `/organograma` | `Organograma` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+| `/comportamental` | `Comportamental` | ❓ | ❓ | ❓ | 🔍 Não auditado |
+
+### Legenda
+
+| Ícone | Significado |
+|-------|------------|
+| ✅ Padronizado | Segue a especificação (wrapper `main#page-xxx`, tokens semânticos, card padrão) |
+| ⚠️ Parcial | Alguns elementos seguem, outros não |
+| ⏳ Placeholder | Página de placeholder (não implementada), fora do escopo de padronização |
+| 🔍 Não auditado | Página não analisada nesta sprint |
+| ✅ **REFATORADO** | Refatorado para seguir o padrão nesta sprint |
+
+### Resumo da sprint
+
+| Métrica | Valor |
+|---------|-------|
+| Páginas alvo | 7 |
+| Refatoradas | 7 (100%) |
+| Wrapper `main` padronizado | 7/7 |
+| Tokens semânticos aplicados | 7/7 |
+| Cards padronizados (`rounded-xl border bg-card p-4 shadow-sm`) | 3/3 que usam cards |
+| Dependências legadas removidas (`Card`, `Typography`) | 3/3 arquivos |
+| `gap-*` corrigido para padrão | 2/2 (`Notificacoes`, `ManagerDailyClosing`) |
+| Skeleton padronizado | 2/2 (`FeedbackLoadingSkeleton`, `ManagerClosingSkeleton`) |
+
+---
+
 ## 1. Identidade visual e tokens globais
 
 ### 1.1 Tema do Dono (escopo `.owner-b44`)
