@@ -52,7 +52,15 @@ Variáveis configuradas (valores ocultos): `VITE_SENTRY_DSN`,
 | Item | Estado | Evidência |
 |---|---|---|
 | Projeto | `fbhcmzzgwjdgkctlfvbo`, região `sa-east-1` | Management API |
-| Migration aplicada | `20260729050000_observability_persistent_logs.sql` | HTTP 201 |
+| Security Advisor | **0 issues** | `GET /advisors?lint_type=security` |
+| Performance Advisor | **0 issues** | `GET /advisors?lint_type=performance` |
+| Extensões | `pg_cron` 1.6.4, `pg_net` 0.19.5 | `pg_extension` |
+| Cron jobs ativos | 8 | `cron.job` |
+| Agregador de cron | roda e grava 9 linhas por execução | `mx_critical_jobs_health()` → `{"status":"ok","total":8,"degraded":0}` |
+| Idade do cron crítico | passou de sentinela para 14 s | `mx_critical_cron_age_seconds()` |
+| Edge Functions instrumentadas | 5 (4 críticas + agregador) | `deno check` limpo, deploy ACTIVE |
+| Secrets de Edge | `SENTRY_DSN`, `SENTRY_ENVIRONMENT`, `SENTRY_RELEASE`, `SENTRY_CRON_DSN` | listados por nome; valores ocultos |
+| Migrations aplicadas | `20260729050000_…persistent_logs.sql`, `20260729060000_…cron_health.sql` | HTTP 201 |
 | RLS | ativa nas 5 tabelas novas | `pg_tables.rowsecurity = true` |
 | Policies | 1 policy de SELECT por tabela, via `eh_administrador_mx()` | `pg_policies` |
 | Grants para `anon` | nenhum | `role_table_grants` vazio |
@@ -76,7 +84,16 @@ de aplicar, e corrigido antes de qualquer execução.
 | Releases | `917dfddb…`, `88cae017…` | `GET /organizations/synvolt/releases/` |
 | Source maps | 2 artifact bundles, **360 arquivos cada**, associados ao SHA | `files/artifact-bundles/` |
 | Token no bundle | **não vazou** | busca por `sntryu_` no JS publicado → sem ocorrência |
+| Cron Monitor | `mx-critical-jobs-health` ativo, schedule `0 * * * *` | HTTP 201 |
+| Check-ins | `in_progress`, `ok`, `error` — os três registrados | `GET /monitors/…/checkins/` |
+| Check-in automático | publicado pela Edge Function | `{"status":"ok","duration":506000}` em 05:01:35Z |
+| Uptime Monitor | `MX health endpoint`, GET a cada 300 s, ativo | id `7931281` |
+| Alert rules | 8 regras por e-mail nos 3 projetos | `GET /projects/…/rules/` |
 | Recurso pago ativado | nenhum | — |
+
+Regras de alerta criadas: novo erro no frontend, regressão, pico de erros
+(>50/h), muitos usuários afetados (>10/h), erro em Edge Function, pico de falhas
+Edge (>20/h), falha de health/cron.
 
 ## Testes executados
 
@@ -95,6 +112,13 @@ de aplicar, e corrigido antes de qualquer execução.
 | `.map` servido por HTTP | GET `/assets/index-*.js.map` | não existe (cai no SPA fallback) | `content-type: text/html` |
 | Vazamento de token no bundle | busca por `sntryu_` | nenhum | — |
 | RLS das tabelas novas | `pg_tables`, `pg_policies`, grants | conforme | — |
+| `deno check` das Edge Functions | 5 fontes | PASSOU | 0 erros |
+| Deploy das Edge Functions | Supabase CLI, uma a uma | 5 ACTIVE | versões v12/v32/v49/v62 + nova |
+| Correlation no Edge (OPTIONS) | 4 funções | header ecoado nas 4 | `x-correlation-id` + `x-trace-id` |
+| Correlation no log do Supabase | busca pelo id do smoke | encontrado | log com `deno_deployment_id`, `sb_execution_id`, `duration_ms` |
+| Agregador de cron ponta a ponta | POST na Edge Function | 200, 8 jobs, 0 degradados | check-in `ok` no Sentry |
+| Advisors do Supabase | security + performance | 0 issues | — |
+| Sonda nova do health | `GET /auth/v1/health` | 200 (GoTrue) | confirma a correção do falso negativo |
 
 ## Correlação ponta a ponta
 
@@ -179,12 +203,19 @@ acima:
   - AÇÃO RESTANTE: resolver as 3 violações de token; então mesclar e deployar
 - STATUS: PARCIAL — smoke test de erro no frontend com stack em TS/TSX
   - MOTIVO: exige a build em produção com os source maps já publicados
-- STATUS: PENDENTE — instrumentação das Edge Functions críticas
-- STATUS: PENDENTE — agregador de cron `mx-critical-jobs-health` e check-ins
-- STATUS: PENDENTE — Uptime Monitor, Cron Monitor, Metric Monitors, dashboards
-  e alertas no Sentry
-- STATUS: PENDENTE — Security Advisor e Performance Advisor do Supabase
+- STATUS: PENDENTE — dashboards do Sentry
+  - MOTIVO: dashboards sem dado real de produção ficariam vazios; fazem sentido
+    depois do primeiro deploy com tráfego
 - STATUS: PENDENTE — teste dos 4 perfis (vendedor, gerente, dono, Admin MX)
+  - MOTIVO: depende do frontend instrumentado estar em produção
+- STATUS: PARCIAL — Metric Monitors
+  - MOTIVO: os 8 alertas de issue estão ativos; alertas por métrica precisam de
+    baseline real, que só existe após o primeiro deploy com tráfego
+  - AÇÃO RESTANTE: definir thresholds a partir de 7 dias de dados
+
+Concluídos desde a primeira versão deste relatório: instrumentação das Edge
+Functions críticas, agregador de cron com check-in, Uptime Monitor, Cron
+Monitor, alertas por e-mail, e os dois advisors do Supabase.
 
 ## Conclusão baseada em evidências
 
