@@ -1,9 +1,11 @@
 import { useState, useRef } from 'react'
-import { User, Mail, Shield, Save, Camera, LogOut, Key, ChevronRight, ShieldCheck, RefreshCw, X } from 'lucide-react'
+import { User, Key, ChevronRight, ShieldCheck, RefreshCw, X, LogOut, Camera } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { useAuth } from '@/hooks/useAuth'
+import { useFocusTrap } from '@/hooks/useFocusTrap'
+import OwnerPageHeading from '@/components/owner/OwnerPageHeading'
 import { toast } from '@/lib/toast'
 import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from '@/lib/auth/passwordPolicy'
 import { getAvatarDisplayUrl, uploadUserAvatar } from '@/lib/avatar'
@@ -17,7 +19,7 @@ function LegacyProfileAvatar({ url, name }: { url: string; name: string }) {
 
 function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAuth>['profile']> }) {
   const { role, signOut, updateProfile, changePassword } = useAuth()
-  const isSeller = role === 'vendedor'
+  const isOwner = role === 'dono'
   const [saving, setSaving] = useState(false)
   const [name, setName] = useState(profile?.name || '')
   const [phone, setPhone] = useState(profile?.phone || '')
@@ -27,6 +29,9 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
   const [changingPassword, setChangingPassword] = useState(false)
   const [uploadingAvatar, setUploadingAvatar] = useState(false)
   const fileInputRef = useRef<HTMLInputElement>(null)
+  const modalRef = useRef<HTMLDivElement>(null)
+
+  useFocusTrap(modalRef, showPasswordModal)
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -86,30 +91,26 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
 
   return (
     <>
-      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between border-b border-border pb-6 shrink-0">
-        <div className="flex flex-col gap-1">
-          <div className="flex items-center gap-3">
-            <div className="w-1 h-10 bg-brand-primary rounded-full shadow-md" aria-hidden="true" />
-            <h1 className="text-3xl font-black tracking-tight md:text-4xl">{isSeller ? 'Minha Conta' : 'Painel de Identidade'}</h1>
-          </div>
-          <p className="pl-4 text-xs font-black uppercase tracking-widest text-muted-foreground">
-            {isSeller ? 'Dados pessoais, telefone, foto e senha' : 'Gestão de credenciais e segurança MX'}
-          </p>
-        </div>
+      <OwnerPageHeading
+        icon={User}
+        title="Meu Perfil"
+        subtitle="Gestão de credenciais e segurança MX"
+        showFilter={false}
+        actions={(
+          <>
+            <Button variant="outline" size="icon" onClick={() => signOut()} className="h-10 w-10 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface">
+              <LogOut size={18} />
+            </Button>
+            <Button onClick={handleSave} disabled={saving}>
+              {saving ? <RefreshCw className="animate-spin mr-2" size={16} /> : <ShieldCheck size={16} className="mr-2" />}
+              {isOwner ? 'Firmar alterações' : 'Salvar conta'}
+            </Button>
+          </>
+        )}
+      />
 
-        <div className="flex items-center gap-3 shrink-0">
-          <Button variant="outline" size="icon" onClick={() => signOut()} className="h-14 w-14 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface shadow-sm bg-card">
-            <LogOut size={24} />
-          </Button>
-          <Button onClick={handleSave} disabled={saving} className="h-14 px-10 rounded-full shadow-xl">
-            {saving ? <RefreshCw className="animate-spin mr-2" /> : <ShieldCheck size={18} className="mr-2" />}
-            <span className="text-xs font-black uppercase tracking-widest">{isSeller ? 'Salvar conta' : 'Firmar alterações'}</span>
-          </Button>
-        </div>
-      </header>
-
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-        <aside className="lg:col-span-4 flex flex-col gap-6">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_2fr]">
+        <aside className="flex flex-col gap-6">
           <div className="rounded-xl border border-border bg-card p-10 md:p-12 flex flex-col items-center text-center group relative overflow-hidden shadow-lg">
             <div className="absolute top-0 left-0 w-full h-4xl bg-brand-secondary z-0 opacity-10" aria-hidden="true" />
             <div className="relative z-10 space-y-6">
@@ -142,16 +143,14 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
           </div>
         </aside>
 
-        <section className="lg:col-span-8 flex flex-col gap-6">
+        <section className="flex flex-col gap-6">
           <div className="rounded-xl border border-border bg-card shadow-xl group flex flex-col overflow-hidden">
             <header className="bg-muted/30 border-b border-border p-10 md:p-14 flex flex-row items-center justify-between relative overflow-hidden">
               <div className="flex items-center gap-4 relative z-10">
                 <div className="w-2xl h-2xl rounded-2xl bg-brand-secondary text-white flex items-center justify-center shadow-xl transform rotate-2"><User size={32} /></div>
                 <div>
-                  <h2 className="text-2xl uppercase tracking-tighter leading-none text-foreground">{isSeller ? 'Minha conta' : 'Configurações de Conta'}</h2>
-                  <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mt-1">
-                    {isSeller ? 'Informações usadas na rotina da loja' : 'Sinc: Identity Gateway v4.0'}
-                  </p>
+                  <h2 className="text-2xl uppercase tracking-tighter leading-none text-foreground">Configurações de Conta</h2>
+                  <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mt-1">Sinc: Identity Gateway v4.0</p>
                 </div>
               </div>
             </header>
@@ -182,9 +181,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
               <div className="pt-14 border-t border-border space-y-10">
                 <div className="flex items-center gap-3">
                   <div className="h-10 w-10 rounded-lg bg-indigo-50 text-brand-primary flex items-center justify-center shadow-inner border border-indigo-100"><ShieldCheck size={20} /></div>
-                  <p className="text-xs font-black uppercase tracking-widest text-brand-primary">
-                    {isSeller ? 'Segurança da minha conta' : 'Segurança & Criptografia MX'}
-                  </p>
+                  <p className="text-xs font-black uppercase tracking-widest text-brand-primary">Segurança & Criptografia MX</p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -228,6 +225,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
           }}
         >
           <div
+            ref={modalRef}
             role="presentation"
             className="bg-card rounded-xl shadow-xl w-full max-w-md p-6"
             onClick={(e) => e.stopPropagation()}
@@ -272,13 +270,9 @@ export default function Perfil() {
       <main id="page-perfil" role="main" className={pageClass} aria-busy="true" aria-label="Meu Perfil">
         <div className="space-y-6">
           <div className="h-16 animate-pulse rounded-xl bg-white/60" />
-          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
-            <div className="lg:col-span-4">
-              <div className="h-[320px] animate-pulse rounded-xl bg-white/60" />
-            </div>
-            <div className="lg:col-span-8">
-              <div className="h-[480px] animate-pulse rounded-xl bg-white/60" />
-            </div>
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_2fr]">
+            <div className="h-[320px] animate-pulse rounded-xl bg-white/60" />
+            <div className="h-[480px] animate-pulse rounded-xl bg-white/60" />
           </div>
         </div>
       </main>
