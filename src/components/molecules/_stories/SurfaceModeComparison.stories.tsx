@@ -7,7 +7,9 @@ import { Input } from '@/components/atoms/Input'
 import { Textarea } from '@/components/atoms/Textarea'
 import { Skeleton } from '@/components/atoms/Skeleton'
 import { Typography } from '@/components/atoms/Typography'
+import { Select } from '@/components/atoms/Select'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/molecules/Card'
+import { PageHeading } from '@/components/molecules/PageHeading'
 
 /**
  * Comparação lado a lado dos dois modos de superfície.
@@ -37,6 +39,12 @@ function Amostra() {
 
       <Input placeholder="Nome do cliente" defaultValue="Loja Centro" />
       <Textarea placeholder="Observações" rows={2} />
+      <Select label="Período" defaultValue="30">
+        <option value="7">Últimos 7 dias</option>
+        <option value="30">Últimos 30 dias</option>
+      </Select>
+
+      <PageHeading title="Equipe" subtitle="Desempenho por vendedor" />
 
       <Card>
         <CardHeader>
@@ -48,7 +56,9 @@ function Amostra() {
         </CardContent>
       </Card>
 
-      <Skeleton />
+      <Skeleton variant="rect" />
+      <Skeleton variant="table-row" />
+      <Skeleton variant="avatar" />
     </div>
   )
 }

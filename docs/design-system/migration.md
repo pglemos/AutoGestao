@@ -77,8 +77,8 @@
 | 1 | Fundação de tokens (primitive → semantic → component → motion) | ✅ |
 | 2 | Átomos e moléculas consolidados | ✅ 12 átomos + 11 moléculas |
 | 3 | App Shell único (Dono migrado sem mudança de aparência) | ✅ moldura + superfície da sidebar convergidas |
-| 4 | Gerente | 🔄 superfícies alinhadas ao visual aprovado |
-| 5 | Admin / Consultor | ⬜ |
+| 4 | Gerente | ✅ superfícies alinhadas ao visual aprovado |
+| 5 | Admin / Consultor | ✅ já recebiam o modo aprovado; verificado |
 | 6 | Vendedor (maior risco — tema escuro) | ⬜ |
 | 7 | Páginas compartilhadas (login, perfil, erros) | ⬜ |
 | 8 | Remoção do legado | ⬜ |
@@ -125,6 +125,34 @@ Delta medido em runtime (`Design System/Modos de superfície`):
 | Campo | altura 48px, peso 700 | altura 40px, peso 400 |
 | Descrição de card | CAIXA ALTA, peso 900, 16px | caixa normal, peso 400, 14px |
 
+## 6.1.2 Por que o ramo legado ainda não pode ser removido
+
+Medição em runtime dos dois ramos (story `Modos de superfície`):
+
+| Componente | Legado | Aprovado |
+|---|---|---|
+| `Input` | 48px, raio 12px, peso 700 | 40px, raio 20px, peso 400 |
+| `Select` | 56px, raio 12px, peso 700 | 40px, raio 20px, peso 400 |
+| `Textarea` | raio 16px, peso 700 | raio 20px, peso 400 |
+| `PageHeading` | sem card, sem sombra | card branco, raio 24px, padding 20px, sombra |
+| `Badge` | teal sólido, texto branco | verde suave, pill |
+| `Card` (descrição) | CAIXA ALTA, peso 900, 16px | caixa normal, peso 400, 14px |
+
+**Nenhum par é equivalente.** Promover o ramo aprovado a único repintaria também
+o vendedor (que renderiza os mesmos átomos sem provider), o login e os Termos.
+O §26 coloca a remoção do legado na Fase 8, depois de internos (5) e vendedor
+(6) — a ordem existe por este motivo.
+
+Cobertura do modo aprovado por escopo:
+
+| Escopo | Fornece modo aprovado | Desde |
+|---|---|---|
+| Perfis internos MX | ✅ | já existia |
+| Gerente (`MxRoleVisualScope`) | ✅ | Fase 4 |
+| Dono (`OwnerShell`) | ✅ | Fase 4 |
+| Vendedor | ❌ por decisão | Fase 6 |
+| Login, Termos, fluxo de senha | ❌ | Fase 7 |
+
 ## 6.2 Pendências de verificação autenticada
 
 Mudanças aplicadas que só podem ser confirmadas com sessão logada:
@@ -133,6 +161,7 @@ Mudanças aplicadas que só podem ser confirmadas com sessão logada:
 |---|---|---|
 | Drawer mobile perdeu a borda direita | gerente, vendedor, admin, consultor | Abrir o menu em < 1280px e comparar com o drawer do Dono |
 | Superfícies passam ao visual aprovado | **gerente** | Badges, campos, cards e tabelas em todas as telas do Gerente (ver delta em §6.1.1) |
+| Campos do Dono passam ao visual aprovado | **dono** | 2 campos: assunto em `FalarConsultorDono` e confirmação em `DeleteActionDialog` |
 | Landmark do Dono virou `<main>` | dono | Navegar entre telas e conferir que o conteúdo não deslocou |
 | Densidade por perfil | todos | `comfortable` no Dono, `compact` nos perfis internos |
 

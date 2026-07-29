@@ -33,9 +33,20 @@ describe('alinhamento de superfície nos módulos sob o shell universal', () => 
     expect(scope).toContain('<MxSurfaceVisualProvider mode="manager">')
   })
 
-  it('o modo aprovado continua sendo fornecido ao cabeçalho do Dono', () => {
+  it('o módulo do Dono inteiro recebe o modo aprovado, não só o cabeçalho', () => {
     const ownerHeading = read('src/components/owner/OwnerPageHeading.jsx')
     expect(ownerHeading).toContain('<MxSurfaceVisualProvider mode="manager">')
+
+    // Sem o provider no shell, telas compartilhadas com o Gerente (por exemplo
+    // FalarConsultorDono) renderizavam campos legados para o Dono e aprovados
+    // para o Gerente — a mesma tela com duas aparências.
+    const ownerShell = read('src/features/owner-base44/OwnerShell.tsx')
+    expect(ownerShell).toContain('<MxSurfaceVisualProvider mode="manager">')
+  })
+
+  it('os perfis internos MX já recebem o modo aprovado', () => {
+    const internalScope = read('src/components/module/InternalMxVisualScope.tsx')
+    expect(internalScope).toContain('<MxSurfaceVisualProvider mode="manager">')
   })
 
   it('o inventário de componentes bifurcados não cresce', () => {
