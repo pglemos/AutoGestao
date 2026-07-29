@@ -8,11 +8,10 @@
       "port": 3457
     },
     {
-      "name": "dev-verify",
-      "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3458,
-      "autoPort": true
+      "name": "storybook",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": ["storybook", "dev", "-p", "6007", "--no-open", "--quiet"],
+      "port": 6007
     }
   ]
 }
