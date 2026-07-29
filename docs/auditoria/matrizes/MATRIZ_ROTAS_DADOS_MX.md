@@ -1,0 +1,619 @@
+# Matriz reproduzível de rotas, autorização e dados
+
+- Rotas declaradas em `src/App.tsx`: **111**
+- Rotas protegidas: **103**
+- Rotas públicas: **8**
+- Rotas protegidas sem regra canônica e sem redirect: **0**
+- Caminhos declarados mais de uma vez: **0**
+- Tabelas referenciadas pelo runtime: **127**
+- RPCs referenciadas pelo runtime: **84**
+- Edge Functions invocadas pelo runtime: **14**
+- Pares tabela/operação encontrados: **247**
+
+## Rotas
+
+| Caminho | Tipo | Superfície | Redirect | Regra canônica | RoleSwitch negado | Elemento |
+|---|---|---|---|---|---|---|
+| `/` | route | pública | — | n/a | — | `<PublicHome />` |
+| `/login` | route | pública | — | n/a | — | `<Suspense fallback={<Spinner />}><Login /></Suspense>` |
+| `/forgot-password` | route | pública | — | n/a | — | `<Suspense fallback={<Spinner />}><Login /></Suspense>` |
+| `/reset-password` | route | pública | — | n/a | — | `<Suspense fallback={<Spinner />}><Login /></Suspense>` |
+| `/pre-cadastro/:storeSlug` | route | pública | — | n/a | — | `<Suspense fallback={<Spinner />}><StorePreRegistration /></Suspense>` |
+| `/privacy` | route | pública | — | n/a | — | `<Suspense fallback={<Spinner />}><Privacy /></Suspense>` |
+| `/terms` | route | pública | — | n/a | — | `<Suspense fallback={<Spinner />}><Terms /></Suspense>` |
+| `/dono/*` | route | pública | — | n/a | — | `<OwnerLegacyPathRedirect />` |
+| `/` | container | protegida | — | n/a | — | `<ProtectedRoute><Suspense fallback={<Spinner />}><AppShell /></Suspense></ProtectedRoute>` |
+| `/settings` | route | protegida | `/configuracoes` | `/settings` | — | `<Navigate to="/configuracoes" replace />` |
+| `/plano-estrategico` | route | protegida | — | `/plano-estrategico` | vendedor, gerente | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S` |
+| `/plano-acao` | route | protegida | — | `/plano-acao` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ScopedActionPlanPage />} dono={<OwnerPlanoDeAcao />} admin={<InternalActionPlanPage />} /></Sus` |
+| `/decisoes` | route | protegida | — | `/decisoes` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerCentralDeDecisoes />} admin={<ForbiddenRoute />} /></Suspense>` |
+| `/departamentos` | route | protegida | — | `/departamentos` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDepartamentos />} admin={<ForbiddenRoute />} /></Suspense>` |
+| `/departamentos/comercial` | route | protegida | — | `/departamentos/*` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptComercial />} admin={<ForbiddenRoute />} /></Suspense>` |
+| `/departamentos/marketing` | route | protegida | — | `/departamentos/*` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptMarketing />} admin={<ForbiddenRoute />} /></Suspense>` |
+| `/departamentos/produto-e-estoque` | route | protegida | — | `/departamentos/*` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptProduto />} admin={<ForbiddenRoute />} /></Suspense>` |
+| `/departamentos/pessoas-rh` | route | protegida | — | `/departamentos/*` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptPessoas />} admin={<ForbiddenRoute />} /></Suspense>` |
+| `/departamentos/financeiro` | route | protegida | — | `/departamentos/*` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptFinanceiro />} admin={<ForbiddenRoute />} /></Suspense>` |
+| `/departamentos/operacoes` | route | protegida | — | `/departamentos/*` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptOperacoes />} admin={<ForbiddenRoute />} /></Suspense>` |
+| `/mercado` | route | protegida | — | `/mercado` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerMercado />} admin={<ForbiddenRoute />} /></Suspense>` |
+| `/team` | route | protegida | — | `/team` | — | `<TeamAliasRedirect />` |
+| `/equipe` | route | protegida | — | `/equipe` | — | `<TeamAliasRedirect />` |
+| `/meu-dia` | route | protegida | `/home` | `/meu-dia` | — | `<RedirectWithSearch to="/home" />` |
+| `/home` | route | protegida | — | `/home` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<OwnerHome />} admin={<RoleRedirect />} /> </Suspense>` |
+| `/minha-remuneracao` | route | protegida | `/home` | `/minha-remuneracao` | — | `<RedirectWithSearch to="/home" />` |
+| `/lancamento-diario` | route | protegida | `/terminal-mx` | `/lancamento-diario` | — | `<RedirectWithSearch to="/terminal-mx" />` |
+| `/fechamento-diario` | route | protegida | — | `/fechamento-diario` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ManagerDailyClosing />} dono={<ManagerDailyClosing />} admin={<ManagerDailyClosing />} /> </Suspense>` |
+| `/vendedor/terminal-mx` | route | protegida | — | `/vendedor/terminal-mx` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/terminal-mx` | route | protegida | — | `/terminal-mx` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/liberacao-fechamento` | route | protegida | — | `/liberacao-fechamento` | — | `<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>` |
+| `/carteira-clientes` | route | protegida | — | `/carteira-clientes` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense>` |
+| `/carteira` | route | protegida | `/carteira-clientes` | `/carteira` | — | `<RedirectWithSearch to="/carteira-clientes" />` |
+| `/vendedor/carteira` | route | protegida | `/carteira-clientes` | `/vendedor/carteira` | — | `<RedirectWithSearch to="/carteira-clientes" />` |
+| `/mentor-comercial` | route | protegida | `/carteira-clientes` | `/mentor-comercial` | — | `<RedirectWithSearch to="/carteira-clientes" />` |
+| `/vendedor/mentor-comercial` | route | protegida | `/carteira-clientes` | `/vendedor/mentor-comercial` | — | `<RedirectWithSearch to="/carteira-clientes" />` |
+| `/funil` | route | protegida | `/meu-funil` | `/funil` | — | `<RedirectWithSearch to="/meu-funil" />` |
+| `/minha-meta` | route | protegida | `/meu-funil` | `/minha-meta` | — | `<RedirectWithSearch to="/meu-funil" />` |
+| `/vendedor/minha-meta` | route | protegida | `/meu-funil` | `/vendedor/minha-meta` | — | `<RedirectWithSearch to="/meu-funil" />` |
+| `/meu-funil` | route | protegida | — | `/meu-funil` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<FunilVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/funil-comercial` | route | protegida | — | `/funil-comercial` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<FunilVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/central-execucao` | route | protegida | — | `/central-execucao` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CentralExecucao />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/rotina-do-dia` | route | protegida | `/central-execucao` | `/rotina-do-dia` | — | `<RedirectWithSearch to="/central-execucao" />` |
+| `/vendedor/rotina-do-dia` | route | protegida | `/central-execucao` | `/vendedor/rotina-do-dia` | — | `<RedirectWithSearch to="/central-execucao" />` |
+| `/central-de-execucao` | route | protegida | — | `/central-de-execucao` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CentralExecucao />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/relatorios-vendedor` | route | protegida | — | `/relatorios-vendedor` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RelatoriosVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/relatorios` | route | protegida | — | `/relatorios` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RelatoriosVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/feedback` | route | protegida | `/devolutivas` | `/feedback` | — | `<RedirectWithSearch to="/devolutivas" />` |
+| `/feedbacks` | route | protegida | `/desenvolvimento?tab=feedback` | `/feedbacks` | — | `<RedirectWithSearch to="/desenvolvimento?tab=feedback" />` |
+| `/vendedor/funil` | route | protegida | `/meu-funil` | `/vendedor/funil` | — | `<RedirectWithSearch to="/meu-funil" />` |
+| `/vendedor/meu-funil` | route | protegida | `/meu-funil` | `/vendedor/meu-funil` | — | `<RedirectWithSearch to="/meu-funil" />` |
+| `/vendedor/feedback` | route | protegida | `/desenvolvimento?tab=feedback` | `/vendedor/feedback` | — | `<RedirectWithSearch to="/desenvolvimento?tab=feedback" />` |
+| `/vendedor/devolutivas` | route | protegida | `/desenvolvimento?tab=feedback` | `/vendedor/devolutivas` | — | `<RedirectWithSearch to="/desenvolvimento?tab=feedback" />` |
+| `/vendedor/desenvolvimento` | route | protegida | `/desenvolvimento` | `/vendedor/desenvolvimento` | — | `<RedirectWithSearch to="/desenvolvimento" />` |
+| `/vendedor/treinamentos` | route | protegida | `/universidade-mx` | `/vendedor/treinamentos` | — | `<RedirectWithSearch to="/universidade-mx" />` |
+| `/vendedor/universidade-mx` | route | protegida | `/universidade-mx` | `/vendedor/universidade-mx` | — | `<RedirectWithSearch to="/universidade-mx" />` |
+| `/vendedor/configuracoes` | route | protegida | `/configuracoes` | `/vendedor/configuracoes` | — | `<RedirectWithSearch to="/configuracoes" />` |
+| `/funil-vendas` | route | protegida | — | `/funil-vendas` | vendedor, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FunilVendasGerente />} dono={<FunilVendasGerente />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/metas` | route | protegida | — | `/metas` | vendedor, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<MetasGerente />} dono={<MetasGerente />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/falar-consultor` | route | protegida | — | `/falar-consultor` | vendedor, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FalarConsultorDono />} dono={<FalarConsultorDono />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/organograma` | route | protegida | — | `/organograma` | vendedor, gerente | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Organograma />} admin={<Organograma />} /> </Suspense>` |
+| `/banco-talentos` | route | protegida | — | `/banco-talentos` | vendedor, gerente | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Comportamental />} admin={<Comportamental />} /> </Suspense>` |
+| `/ajuda` | route | protegida | — | `/ajuda` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorAjuda />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/ranking` | route | protegida | — | `/ranking` | — | `<Suspense fallback={<Spinner />}><Ranking /></Suspense>` |
+| `/classificacao` | route | protegida | — | `/classificacao` | — | `<Suspense fallback={<Spinner />}><Ranking /></Suspense>` |
+| `/universidade-mx` | route | protegida | `/treinamentos` | `/universidade-mx` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorTreinamentos />} gerente={<RedirectWithSearch to="/treinamentos" />} dono={<OwnerUniversidade />} admin={<RedirectW` |
+| `/treinamentos` | route | protegida | `/universidade-mx` | `/treinamentos` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to="/universidade-mx" />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<Consu` |
+| `/desenvolvimento` | route | protegida | — | `/desenvolvimento` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense` |
+| `/devolutivas` | route | protegida | — | `/devolutivas` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<GerenteFeedback />} dono={<GerenteFeedback />} admin={<GerenteFeedback />} /> </Suspe` |
+| `/notificacoes` | route | protegida | — | `/notificacoes` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Notificacoes />} gerente={<Notificacoes />} dono={<Notificacoes />} admin={<Notificacoes />} /> </Suspense>` |
+| `/perfil` | route | protegida | — | `/perfil` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<MeuPerfilVendedor />} gerente={<Perfil />} dono={<Perfil />} admin={<Perfil />} /> </Suspense>` |
+| `/meu-perfil` | route | protegida | `/perfil` | `/meu-perfil` | — | `<RedirectWithSearch to="/perfil" />` |
+| `/meu-perfil-vendedor` | route | protegida | `/perfil` | `/meu-perfil-vendedor` | — | `<RedirectWithSearch to="/perfil" />` |
+| `/vendedor/perfil` | route | protegida | `/perfil` | `/vendedor/perfil` | — | `<RedirectWithSearch to="/perfil" />` |
+| `/gerente/fechamento-diario` | route | protegida | `/fechamento-diario` | `/gerente/*` | — | `<RedirectWithSearch to="/fechamento-diario" />` |
+| `/gerente/rotina-equipe` | route | protegida | — | `/gerente/rotina-equipe` | vendedor, dono | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ForbiddenRoute />} admin={<ManagerTeamRoutine />} /></Suspense>` |
+| `/gerente/minha-equipe` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
+| `/gerente/meta-loja` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
+| `/gerente/vendas` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
+| `/gerente/mentor` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>` |
+| `/gerente/feedbacks-pdis` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens` |
+| `/gerente/ranking` | route | protegida | — | `/gerente/*` | — | `<Suspense fallback={<Spinner />}><Ranking /></Suspense>` |
+| `/gerente/universidade-mx` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<ConsultorTreinamentos />} /></Su` |
+| `/lojas/:storeSlug/consultor-ia` | route | protegida | — | `/lojas/:storeSlug/consultor-ia` | dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<ForbiddenRoute />} admin={<StoreConsultorIa />} /> </Suspense>` |
+| `/lojas/:storeSlug` | route | protegida | — | `/lojas/:storeSlug` | vendedor, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<ForbiddenRoute />} admin={<DashboardLoja />} /> </Suspense>` |
+| `/lojas/:storeSlug/equipe` | route | protegida | — | `/lojas/:storeSlug/*` | vendedor, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<ForbiddenRoute />} admin={<DashboardLoja />} /> </Suspense>` |
+| `/consultor-ia` | route | protegida | — | `/consultor-ia` | — | `<ConsultorIaAliasRedirect />` |
+| `/pdi` | route | protegida | `/desenvolvimento?tab=pdi` | `/pdi` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to="/desenvolvimento?tab=pdi" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />` |
+| `/pdi/:id/print` | route | protegida | — | `/pdi/:id/print` | — | `<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>` |
+| `/rotina` | route | protegida | — | `/rotina` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRotinaDoDia />} admin={<RotinaGerente />} /> </Suspense>` |
+| `/painel` | route | protegida | — | `/painel` | — | `<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>` |
+| `/lojas` | route | protegida | — | `/lojas` | — | `<Suspense fallback={<Spinner />}><Lojas /></Suspense>` |
+| `/simulacao` | route | protegida | — | `/simulacao` | — | `<Suspense fallback={<Spinner />}><Simulacao /></Suspense>` |
+| `/simulacao/:simulationRole` | route | protegida | — | `/simulacao/*` | — | `<Suspense fallback={<Spinner />}><Simulacao /></Suspense>` |
+| `/agenda` | route | protegida | — | `/agenda` | — | `<Suspense fallback={<Spinner />}><AgendaAdmin /></Suspense>` |
+| `/consultoria` | container | protegida | — | `/consultoria` | — | `(grupo)` |
+| `/consultoria` | index | protegida | — | `/consultoria` | vendedor, gerente | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>` |
+| `/consultoria/clientes` | route | protegida | — | `/consultoria/*` | — | `<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>` |
+| `/consultoria/clientes/:clientSlug` | route | protegida | — | `/consultoria/*` | — | `<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>` |
+| `/consultoria/clientes/:clientSlug/visitas/:visitNumber` | route | protegida | — | `/consultoria/*` | — | `<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>` |
+| `/produtos` | route | protegida | — | `/produtos` | — | `<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>` |
+| `/configuracoes` | route | protegida | — | `/configuracoes` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense>` |
+| `/configuracoes/remuneracao` | route | protegida | — | `/configuracoes/remuneracao` | — | `<Suspense fallback={<Spinner />}><Configuracoes initialTab="remuneracao" /></Suspense>` |
+| `/configuracoes/operacional` | route | protegida | — | `/configuracoes/operacional` | — | `<Suspense fallback={<Spinner />}><OperationalSettings /></Suspense>` |
+| `/configuracoes/consultoria-pmr` | route | protegida | — | `/configuracoes/consultoria-pmr` | — | `<Suspense fallback={<Spinner />}><ConsultoriaParametros /></Suspense>` |
+| `/configuracoes/reprocessamento` | route | protegida | — | `/configuracoes/reprocessamento` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<Reprocessamento />} /> </Suspense>` |
+| `/relatorio-matinal` | route | protegida | — | `/relatorio-matinal` | — | `<Suspense fallback={<Spinner />}><MorningReport /></Suspense>` |
+| `/relatorios/performance-vendas` | route | protegida | — | `/relatorios/performance-vendas` | — | `<Suspense fallback={<Spinner />}><SalesPerformance /></Suspense>` |
+| `/relatorios/performance-vendedor` | route | protegida | — | `/relatorios/performance-vendedor` | — | `<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>` |
+| `/auditoria` | route | protegida | — | `/auditoria` | vendedor, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<AiDiagnostics />} dono={<ForbiddenRoute />} admin={<AiDiagnostics />} /> </Suspense>` |
+| `/*` | fallback | protegida | — | n/a | — | `<Suspense fallback={<Spinner />}><NotFound /></Suspense>` |
+
+## Tabelas
+
+| Recurso | Arquivos consumidores |
+|---|---:|
+| `agenda_estrategica_marketing` | 1 |
+| `agendamentos` | 10 |
+| `alerts` | 1 |
+| `artefatos_gerados_consultoria` | 1 |
+| `atendimentos` | 2 |
+| `atribuicoes_consultoria` | 5 |
+| `atribuicoes_trilha_desenvolvimento` | 1 |
+| `aula_presencas` | 1 |
+| `aulas_ao_vivo` | 1 |
+| `banco_talentos` | 1 |
+| `benchmark_snapshots` | 1 |
+| `benchmarks_loja` | 2 |
+| `cadencia_estado_cliente` | 1 |
+| `cadencia_fluxos` | 1 |
+| `carreira_niveis` | 1 |
+| `carteira_empresa` | 1 |
+| `carteira_missoes` | 1 |
+| `catalogo_metricas_consultoria` | 2 |
+| `central_execucao_aberturas` | 3 |
+| `clientes` | 6 |
+| `clientes_consultoria` | 7 |
+| `clientes_oportunidades` | 1 |
+| `comportamental_perfis` | 1 |
+| `comportamental_questoes` | 1 |
+| `comportamental_respostas` | 1 |
+| `comportamental_sessoes` | 1 |
+| `conjuntos_parametros_consultoria` | 1 |
+| `consultor_solucoes` | 1 |
+| `contatos_cliente_consultoria` | 2 |
+| `cultura_resultado_registros` | 1 |
+| `d1_audit_log` | 2 |
+| `departamentos_mx` | 2 |
+| `deterministic_action_resolutions` | 1 |
+| `devolutiva_acoes` | 4 |
+| `devolutivas` | 2 |
+| `entradas_vendas_consultoria` | 1 |
+| `etapas_metodologia_consultoria` | 1 |
+| `etapas_modelo_visita_consultoria` | 1 |
+| `eventos_agenda_consultoria` | 3 |
+| `eventos_agenda_executiva` | 2 |
+| `eventos_comerciais` | 6 |
+| `evidencias_planos_acao` | 1 |
+| `evidencias_visita` | 2 |
+| `evidencias-consultoria` | 2 |
+| `execution_actions` | 7 |
+| `fechamento_liberacoes` | 2 |
+| `financeiro_consultoria` | 4 |
+| `funnel_metrics` | 1 |
+| `historico_valores_indicadores_planejamento` | 1 |
+| `importacoes_brutas` | 1 |
+| `indice_felicidade_agregado` | 1 |
+| `itens_plano_acao` | 2 |
+| `lancamentos_diarios` | 15 |
+| `logs_auditoria_loja` | 2 |
+| `logs_compartilhamento_whatsapp` | 1 |
+| `logs_reprocessamento` | 1 |
+| `logs_rotina_gerente` | 1 |
+| `lojas` | 18 |
+| `manager_daily_tasks` | 1 |
+| `manager_lead_conferences` | 1 |
+| `marketing_mensal_consultoria` | 1 |
+| `metas` | 2 |
+| `metas_metricas_cliente` | 1 |
+| `modelos_formulario_pmr` | 1 |
+| `modulos_cliente_consultoria` | 3 |
+| `notificacoes` | 4 |
+| `opcoes_agenda_consultoria` | 1 |
+| `oportunidades` | 7 |
+| `organograma_nos` | 1 |
+| `pdi_avaliacoes_competencia` | 1 |
+| `pdi_metas` | 1 |
+| `pdi_niveis_cargo` | 1 |
+| `pdi_plano_acao` | 2 |
+| `pdi_reviews` | 1 |
+| `pdi_sessoes` | 2 |
+| `pdis` | 4 |
+| `planejamentos_estrategicos` | 1 |
+| `planos_acao` | 4 |
+| `posicionamento_empresa` | 1 |
+| `pre_cadastros_loja` | 2 |
+| `produtos_digitais` | 2 |
+| `programas_visita_consultoria` | 1 |
+| `progresso_etapa_trilha` | 1 |
+| `progresso_treinamentos` | 3 |
+| `prospecting_schedule` | 3 |
+| `push_subscriptions` | 1 |
+| `recomendacoes_desenvolvimento` | 1 |
+| `regras_entrega_loja` | 2 |
+| `regras_metas_loja` | 6 |
+| `regularizacao_fechamento` | 2 |
+| `relatorios_devolutivas_semanais` | 1 |
+| `remuneracao_benchmark` | 1 |
+| `remuneracao_planos` | 3 |
+| `remuneracao_regras` | 1 |
+| `respostas_formulario_pmr` | 1 |
+| `resultados_metricas_cliente` | 1 |
+| `reunioes_google_meet_atas` | 1 |
+| `routine_activity_templates` | 2 |
+| `score_calculations` | 1 |
+| `seller_routine_snapshots` | 1 |
+| `snapshots_estoque_consultoria` | 2 |
+| `solicitacoes_consultoria` | 2 |
+| `solicitacoes_correcao_lancamento` | 2 |
+| `store_target_plans` | 2 |
+| `story_ideas` | 2 |
+| `sugestoes_conteudo` | 1 |
+| `tokens_oauth_consultoria` | 1 |
+| `treinamento_avaliacoes` | 2 |
+| `treinamento_presencas` | 1 |
+| `treinamento_quiz_questoes` | 1 |
+| `treinamento_tarefa_respostas` | 1 |
+| `treinamento_tarefas` | 1 |
+| `treinamentos` | 4 |
+| `trilhas_desenvolvimento` | 1 |
+| `unidades_cliente_consultoria` | 2 |
+| `universidade_aulas` | 1 |
+| `universidade_certificacoes` | 1 |
+| `universidade_trilhas` | 1 |
+| `usuarios` | 14 |
+| `valores_indicadores_planejamento` | 1 |
+| `valores_parametros_consultoria` | 1 |
+| `veiculos_estoque` | 4 |
+| `vendedor_nivel_carreira` | 1 |
+| `vendedor_perfil` | 4 |
+| `vendedores_loja` | 8 |
+| `vinculos_loja` | 16 |
+| `visitas_consultoria` | 8 |
+
+## Operações por tabela
+
+| Recurso | Arquivos consumidores |
+|---|---:|
+| `agenda_estrategica_marketing:select` | 1 |
+| `agendamentos:delete` | 1 |
+| `agendamentos:insert` | 2 |
+| `agendamentos:select` | 10 |
+| `agendamentos:update` | 2 |
+| `agendamentos:upsert` | 1 |
+| `alerts:select` | 1 |
+| `artefatos_gerados_consultoria:insert` | 1 |
+| `artefatos_gerados_consultoria:select` | 1 |
+| `atendimentos:delete` | 1 |
+| `atendimentos:insert` | 1 |
+| `atendimentos:select` | 2 |
+| `atribuicoes_consultoria:delete` | 1 |
+| `atribuicoes_consultoria:select` | 4 |
+| `atribuicoes_consultoria:update` | 2 |
+| `atribuicoes_consultoria:upsert` | 3 |
+| `atribuicoes_trilha_desenvolvimento:select` | 1 |
+| `atribuicoes_trilha_desenvolvimento:upsert` | 1 |
+| `aula_presencas:select` | 1 |
+| `aulas_ao_vivo:select` | 1 |
+| `banco_talentos:insert` | 1 |
+| `banco_talentos:select` | 1 |
+| `benchmark_snapshots:select` | 1 |
+| `benchmarks_loja:select` | 2 |
+| `benchmarks_loja:upsert` | 2 |
+| `cadencia_estado_cliente:select` | 1 |
+| `cadencia_fluxos:select` | 1 |
+| `carreira_niveis:select` | 1 |
+| `carreira_niveis:upsert` | 1 |
+| `carteira_empresa:select` | 1 |
+| `carteira_missoes:select` | 1 |
+| `catalogo_metricas_consultoria:select` | 2 |
+| `central_execucao_aberturas:select` | 1 |
+| `central_execucao_aberturas:upsert` | 2 |
+| `clientes_consultoria:delete` | 1 |
+| `clientes_consultoria:insert` | 3 |
+| `clientes_consultoria:select` | 7 |
+| `clientes_consultoria:update` | 1 |
+| `clientes_oportunidades:select` | 1 |
+| `clientes:delete` | 2 |
+| `clientes:insert` | 2 |
+| `clientes:select` | 6 |
+| `clientes:update` | 2 |
+| `comportamental_perfis:upsert` | 1 |
+| `comportamental_questoes:insert` | 1 |
+| `comportamental_questoes:select` | 1 |
+| `comportamental_respostas:insert` | 1 |
+| `comportamental_sessoes:insert` | 1 |
+| `comportamental_sessoes:select` | 1 |
+| `conjuntos_parametros_consultoria:select` | 1 |
+| `consultor_solucoes:select` | 1 |
+| `contatos_cliente_consultoria:insert` | 2 |
+| `contatos_cliente_consultoria:select` | 2 |
+| `cultura_resultado_registros:select` | 1 |
+| `d1_audit_log:insert` | 2 |
+| `d1_audit_log:select` | 2 |
+| `departamentos_mx:select` | 2 |
+| `deterministic_action_resolutions:select` | 1 |
+| `deterministic_action_resolutions:upsert` | 1 |
+| `devolutiva_acoes:delete` | 1 |
+| `devolutiva_acoes:select` | 3 |
+| `devolutiva_acoes:update` | 1 |
+| `devolutiva_acoes:upsert` | 1 |
+| `devolutivas:insert` | 1 |
+| `devolutivas:select` | 2 |
+| `devolutivas:update` | 2 |
+| `devolutivas:upsert` | 1 |
+| `entradas_vendas_consultoria:select` | 1 |
+| `etapas_metodologia_consultoria:select` | 1 |
+| `etapas_modelo_visita_consultoria:select` | 1 |
+| `eventos_agenda_consultoria:delete` | 1 |
+| `eventos_agenda_consultoria:insert` | 1 |
+| `eventos_agenda_consultoria:select` | 3 |
+| `eventos_agenda_consultoria:update` | 1 |
+| `eventos_agenda_executiva:select` | 2 |
+| `eventos_comerciais:insert` | 2 |
+| `eventos_comerciais:select` | 6 |
+| `eventos_comerciais:update` | 1 |
+| `eventos_comerciais:upsert` | 1 |
+| `evidencias_planos_acao:delete` | 1 |
+| `evidencias_planos_acao:insert` | 1 |
+| `evidencias_planos_acao:select` | 1 |
+| `evidencias_visita:delete` | 1 |
+| `evidencias_visita:insert` | 1 |
+| `evidencias_visita:select` | 2 |
+| `execution_actions:insert` | 2 |
+| `execution_actions:select` | 7 |
+| `execution_actions:update` | 2 |
+| `fechamento_liberacoes:insert` | 1 |
+| `fechamento_liberacoes:select` | 2 |
+| `financeiro_consultoria:delete` | 3 |
+| `financeiro_consultoria:insert` | 2 |
+| `financeiro_consultoria:select` | 4 |
+| `financeiro_consultoria:update` | 2 |
+| `financeiro_consultoria:upsert` | 1 |
+| `funnel_metrics:select` | 1 |
+| `historico_valores_indicadores_planejamento:select` | 1 |
+| `importacoes_brutas:insert` | 1 |
+| `indice_felicidade_agregado:select` | 1 |
+| `itens_plano_acao:insert` | 2 |
+| `itens_plano_acao:select` | 1 |
+| `itens_plano_acao:update` | 1 |
+| `lancamentos_diarios:select` | 15 |
+| `logs_auditoria_loja:insert` | 1 |
+| `logs_auditoria_loja:select` | 1 |
+| `logs_compartilhamento_whatsapp:insert` | 1 |
+| `logs_reprocessamento:insert` | 1 |
+| `logs_reprocessamento:select` | 1 |
+| `logs_reprocessamento:update` | 1 |
+| `logs_rotina_gerente:select` | 1 |
+| `logs_rotina_gerente:upsert` | 1 |
+| `lojas:select` | 18 |
+| `lojas:update` | 1 |
+| `manager_daily_tasks:select` | 1 |
+| `manager_daily_tasks:update` | 1 |
+| `manager_lead_conferences:select` | 1 |
+| `marketing_mensal_consultoria:select` | 1 |
+| `metas_metricas_cliente:select` | 1 |
+| `metas_metricas_cliente:upsert` | 1 |
+| `metas:delete` | 1 |
+| `metas:insert` | 1 |
+| `metas:select` | 2 |
+| `metas:update` | 1 |
+| `modelos_formulario_pmr:select` | 1 |
+| `modulos_cliente_consultoria:insert` | 1 |
+| `modulos_cliente_consultoria:select` | 3 |
+| `modulos_cliente_consultoria:upsert` | 1 |
+| `notificacoes:delete` | 1 |
+| `notificacoes:insert` | 2 |
+| `notificacoes:select` | 3 |
+| `notificacoes:update` | 1 |
+| `opcoes_agenda_consultoria:delete` | 1 |
+| `opcoes_agenda_consultoria:insert` | 1 |
+| `opcoes_agenda_consultoria:select` | 1 |
+| `opcoes_agenda_consultoria:update` | 1 |
+| `oportunidades:delete` | 1 |
+| `oportunidades:insert` | 2 |
+| `oportunidades:select` | 7 |
+| `oportunidades:update` | 2 |
+| `organograma_nos:delete` | 1 |
+| `organograma_nos:insert` | 1 |
+| `organograma_nos:select` | 1 |
+| `pdi_avaliacoes_competencia:select` | 1 |
+| `pdi_metas:select` | 1 |
+| `pdi_niveis_cargo:select` | 1 |
+| `pdi_plano_acao:select` | 2 |
+| `pdi_reviews:insert` | 1 |
+| `pdi_reviews:select` | 1 |
+| `pdi_sessoes:select` | 2 |
+| `pdis:insert` | 1 |
+| `pdis:select` | 4 |
+| `pdis:update` | 1 |
+| `planejamentos_estrategicos:insert` | 1 |
+| `planejamentos_estrategicos:select` | 1 |
+| `planos_acao:delete` | 1 |
+| `planos_acao:insert` | 1 |
+| `planos_acao:select` | 4 |
+| `planos_acao:update` | 1 |
+| `posicionamento_empresa:select` | 1 |
+| `pre_cadastros_loja:select` | 2 |
+| `produtos_digitais:insert` | 1 |
+| `produtos_digitais:select` | 2 |
+| `produtos_digitais:update` | 1 |
+| `programas_visita_consultoria:select` | 1 |
+| `progresso_etapa_trilha:select` | 1 |
+| `progresso_treinamentos:select` | 3 |
+| `progresso_treinamentos:upsert` | 1 |
+| `prospecting_schedule:select` | 3 |
+| `push_subscriptions:update` | 1 |
+| `push_subscriptions:upsert` | 1 |
+| `recomendacoes_desenvolvimento:select` | 1 |
+| `recomendacoes_desenvolvimento:update` | 1 |
+| `regras_entrega_loja:select` | 2 |
+| `regras_entrega_loja:upsert` | 2 |
+| `regras_metas_loja:delete` | 1 |
+| `regras_metas_loja:select` | 6 |
+| `regras_metas_loja:upsert` | 3 |
+| `regularizacao_fechamento:insert` | 1 |
+| `regularizacao_fechamento:select` | 2 |
+| `regularizacao_fechamento:update` | 1 |
+| `relatorios_devolutivas_semanais:select` | 1 |
+| `remuneracao_benchmark:select` | 1 |
+| `remuneracao_planos:delete` | 1 |
+| `remuneracao_planos:select` | 3 |
+| `remuneracao_planos:upsert` | 1 |
+| `remuneracao_regras:delete` | 1 |
+| `remuneracao_regras:insert` | 1 |
+| `remuneracao_regras:select` | 1 |
+| `respostas_formulario_pmr:insert` | 1 |
+| `respostas_formulario_pmr:select` | 1 |
+| `respostas_formulario_pmr:update` | 1 |
+| `resultados_metricas_cliente:select` | 1 |
+| `resultados_metricas_cliente:upsert` | 1 |
+| `reunioes_google_meet_atas:select` | 1 |
+| `routine_activity_templates:select` | 2 |
+| `score_calculations:select` | 1 |
+| `seller_routine_snapshots:select` | 1 |
+| `snapshots_estoque_consultoria:select` | 2 |
+| `solicitacoes_consultoria:insert` | 2 |
+| `solicitacoes_consultoria:select` | 2 |
+| `solicitacoes_correcao_lancamento:select` | 2 |
+| `store_target_plans:select` | 2 |
+| `story_ideas:select` | 2 |
+| `sugestoes_conteudo:insert` | 1 |
+| `sugestoes_conteudo:select` | 1 |
+| `tokens_oauth_consultoria:select` | 1 |
+| `treinamento_avaliacoes:select` | 2 |
+| `treinamento_avaliacoes:upsert` | 2 |
+| `treinamento_presencas:select` | 1 |
+| `treinamento_presencas:upsert` | 1 |
+| `treinamento_quiz_questoes:select` | 1 |
+| `treinamento_tarefa_respostas:select` | 1 |
+| `treinamento_tarefa_respostas:upsert` | 1 |
+| `treinamento_tarefas:select` | 1 |
+| `treinamentos:insert` | 1 |
+| `treinamentos:select` | 3 |
+| `trilhas_desenvolvimento:select` | 1 |
+| `unidades_cliente_consultoria:insert` | 2 |
+| `unidades_cliente_consultoria:select` | 2 |
+| `universidade_aulas:select` | 1 |
+| `universidade_certificacoes:select` | 1 |
+| `universidade_trilhas:select` | 1 |
+| `usuarios:delete` | 1 |
+| `usuarios:select` | 12 |
+| `usuarios:update` | 4 |
+| `usuarios:upsert` | 1 |
+| `valores_indicadores_planejamento:select` | 1 |
+| `valores_parametros_consultoria:select` | 1 |
+| `valores_parametros_consultoria:upsert` | 1 |
+| `veiculos_estoque:insert` | 1 |
+| `veiculos_estoque:select` | 4 |
+| `veiculos_estoque:upsert` | 1 |
+| `vendedor_nivel_carreira:select` | 1 |
+| `vendedor_nivel_carreira:upsert` | 1 |
+| `vendedor_perfil:select` | 4 |
+| `vendedor_perfil:upsert` | 3 |
+| `vendedores_loja:insert` | 2 |
+| `vendedores_loja:select` | 8 |
+| `vendedores_loja:update` | 1 |
+| `vinculos_loja:delete` | 1 |
+| `vinculos_loja:insert` | 1 |
+| `vinculos_loja:select` | 15 |
+| `vinculos_loja:update` | 1 |
+| `visitas_consultoria:delete` | 2 |
+| `visitas_consultoria:insert` | 5 |
+| `visitas_consultoria:select` | 8 |
+| `visitas_consultoria:update` | 4 |
+
+## RPCs
+
+| Recurso | Arquivos consumidores |
+|---|---:|
+| `ack_alert` | 1 |
+| `admin_archive_store` | 1 |
+| `admin_create_store` | 1 |
+| `admin_hard_delete_store` | 1 |
+| `admin_restore_store` | 1 |
+| `admin_store_live_overview` | 1 |
+| `admin_update_store` | 1 |
+| `aplicar_regularizacao_fechamento` | 1 |
+| `atribuir_trilha_maturidade_vendedor` | 1 |
+| `atualizar_plano_acao` | 2 |
+| `atualizar_plano_acao_patch` | 1 |
+| `begin_password_change` | 2 |
+| `cancelar_regularizacao_fechamento` | 1 |
+| `cancelar_venda` | 1 |
+| `carteira_atualizar_missao_v2` | 1 |
+| `carteira_iniciar_missao_v2` | 1 |
+| `carteira_listar_campanhas` | 1 |
+| `carteira_salvar_campanha` | 1 |
+| `carteira_salvar_cliente_v2` | 1 |
+| `complete_password_change` | 2 |
+| `compute_individual_score_mvp` | 1 |
+| `concluir_etapa_trilha` | 1 |
+| `concluir_visita_consultoria` | 1 |
+| `concluir_visitas_legadas_consultoria` | 2 |
+| `consolidar_dashboard_departamento` | 1 |
+| `consolidate_seller_routine_snapshots` | 1 |
+| `consolidate_store_target_plan` | 2 |
+| `consultar_liberacao_por_token` | 1 |
+| `consultor_ia_sugerir_acao` | 1 |
+| `contar_vendedores_ativos_loja` | 1 |
+| `create_pdi_session_bundle` | 1 |
+| `criar_plano_acao_planejamento_unico` | 1 |
+| `criar_plano_acao_v2` | 2 |
+| `dismiss_alert` | 1 |
+| `enviar_cobranca_diaria` | 1 |
+| `exportar_contatos_cadastros_mx` | 2 |
+| `foo` | 1 |
+| `gerar_recomendacoes_desenvolvimento_feedback` | 1 |
+| `gerar_recomendacoes_desenvolvimento_pdi` | 1 |
+| `get_benchmark` | 1 |
+| `get_internal_mx_network_cockpit` | 1 |
+| `get_lancamento_por_dia` | 2 |
+| `get_lancamentos_por_loja_periodo` | 7 |
+| `get_lancamentos_por_vendedor_periodo` | 3 |
+| `get_lancamentos_rede_periodo` | 4 |
+| `get_lancamentos_referencia_dia` | 6 |
+| `get_owner_consultant_contact` | 1 |
+| `get_owner_consulting_program_summary` | 1 |
+| `get_pdi_form_template` | 1 |
+| `get_pdi_print_bundle` | 1 |
+| `get_prova_aula` | 1 |
+| `get_suggested_actions` | 1 |
+| `inicializar_cadencia_cliente` | 1 |
+| `inicializar_progresso_trilha` | 1 |
+| `liberar_fechamento_por_token` | 1 |
+| `listar_acoes_cadencia_vendedor` | 1 |
+| `listar_responsaveis_tratativa_loja` | 1 |
+| `process_import_data` | 1 |
+| `record_d1_contact_action` | 1 |
+| `refresh_manager_daily_tasks` | 1 |
+| `registrar_status_acao_cadencia` | 1 |
+| `registrar_venda_direta` | 1 |
+| `rejeitar_regularizacao_fechamento` | 1 |
+| `resolve_alert` | 1 |
+| `restaurar_metas_indicador_planejamento` | 1 |
+| `salvar_metas_indicador_planejamento` | 1 |
+| `save_manager_lead_conference` | 1 |
+| `send_broadcast_notification` | 1 |
+| `solicitar_liberacao_fechamento` | 1 |
+| `solicitar_regularizacao_fechamento` | 1 |
+| `submeter_prova_aula` | 1 |
+| `submeter_quiz_treinamento` | 1 |
+| `submit_checkin` | 2 |
+| `update_d1_confirmation` | 1 |
+| `update_my_profile` | 1 |
+| `upsert_funnel_metrics_snapshot` | 1 |
+| `vendedor_atualizar_pdi_acao` | 1 |
+| `vendedor_atualizar_pdi_acao_status` | 1 |
+| `vendedor_atualizar_pdi_metas` | 1 |
+| `vendedor_concluir_execution_action` | 1 |
+| `vendedor_criar_pdi_acao` | 1 |
+| `vendedor_enviar_pdi_acao_central` | 1 |
+| `vendedor_performance_oficial` | 2 |
+| `vendedor_vincular_conteudo_pdi_acao` | 1 |
+
+## Edge Functions
+
+| Recurso | Arquivos consumidores |
+|---|---:|
+| `approve-store-registration` | 2 |
+| `executive-agenda-google-sync` | 1 |
+| `google-calendar-events` | 1 |
+| `google-calendar-merged` | 1 |
+| `google-calendar-sync` | 2 |
+| `google-drive-files` | 1 |
+| `google-oauth-handler` | 2 |
+| `manage-global-user` | 1 |
+| `manage-store-team` | 1 |
+| `openrouter-generate` | 1 |
+| `register-user` | 2 |
+| `relatorio-${type}` | 1 |
+| `relatorio-matinal` | 1 |
+| `send-visit-report` | 1 |

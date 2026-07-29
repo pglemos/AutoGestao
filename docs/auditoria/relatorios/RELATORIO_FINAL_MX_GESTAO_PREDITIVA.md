@@ -80,7 +80,7 @@ foram repetidos com o caminho explícito do Node 24.
 |---|---:|---:|
 | `npm run lint` | 842 arquivos de tokens; 61 z-index; 0 warnings | 0 |
 | `npm run typecheck` | 4 pass / 0 fail + TypeScript | 0 |
-| `npm test` | 1.684 pass / 0 fail / 13.894 expects | 0 |
+| `npm test` | 1.686 pass / 0 fail / 13.896 expects | 0 |
 | `npm run build` | 5.123 módulos transformados | 0 |
 | `npm run check:bundle-size` | 1.857,80/1.860 KB gzip | 0 |
 | `npm audit` inicial | 51 total; 1 crítica | 1 |
@@ -91,7 +91,7 @@ correção compatível confirmada. Esse gate ainda está bloqueado.
 
 Execuções intermediárias tiveram contagens menores enquanto testes eram
 adicionados. A linha canônica acima corresponde à regressão final desta
-worktree: 1.684 testes e 13.894 asserts.
+worktree: 1.686 testes e 13.896 asserts.
 
 ## 5. GitHub
 
@@ -173,6 +173,33 @@ worktree: 1.684 testes e 13.894 asserts.
 | Admin MX | credencial fornecida resolveu como Administrador Geral | 5 rotas reais validadas | papel real difere do rótulo informado |
 | Administrador Geral | shell e contratos verdes | `/painel`, `/lojas`, `/agenda`, `/configuracoes`, `/auditoria` | parcial |
 | Consultor MX | 2 perfis reais encontrados | login funcional bloqueado | conta nominal autentica, mas `usuarios.active` retorna 401/nulo; segunda conta retorna Auth 400 |
+
+### 9.1 Inventário reproduzível de rotas, autorização e dados
+
+O comando `npm run audit:routes-data` analisa o AST de `src/App.tsx`, cruza
+rotas protegidas com `ROUTE_ACCESS_RULES` e percorre os consumidores runtime
+em `src/`. O resultado versionado está em
+`docs/auditoria/matrizes/MATRIZ_ROTAS_DADOS_MX.md`.
+
+Resultado atual:
+
+- 111 declarações de rota: 103 protegidas e 8 públicas;
+- zero rota protegida de folha sem regra canônica ou redirect;
+- zero caminho de folha declarado mais de uma vez;
+- 127 tabelas, 84 RPCs e 14 Edge Functions referenciadas;
+- 247 pares tabela/operação, distinguindo `select`, `insert`, `update`,
+  `upsert` e `delete`;
+- contrato automatizado garante que a matriz versionada permanece idêntica às
+  fontes atuais.
+
+Esse inventário prova cobertura estrutural e rastreabilidade dos consumidores.
+Ele não substitui a prova E2E de autorização, mutation e persistência por
+perfil, que continua pendente onde indicado.
+
+O CodeRabbit apontou um conflito documental entre uma contagem intermediária e
+a contagem canônica de testes; o registro foi corrigido para identificar
+explicitamente a execução intermediária. A repetição final foi limitada por
+cota por 38 minutos, portanto este bloco permanece em `InProgress`.
 
 ## 10. Dívida priorizada
 

@@ -102,8 +102,8 @@ anteriores de conclusão não contam como evidência nova.
   - [x] Registrar versões, processos, Git, worktrees e alterações existentes.
   - [x] Criar estrutura de evidências sem dados sensíveis.
   - [x] Registrar SHA-base e plano de rollback.
-- [ ] Fases 1–3 — descoberta e baseline reproduzível (AC: 2, 3)
-  - [ ] Inventariar rotas, perfis, dados, mutations, visual e dívida.
+- [x] Fases 1–3 — descoberta e baseline reproduzível (AC: 2, 3)
+  - [x] Inventariar rotas, perfis, dados, mutations, visual e dívida.
   - [x] Inventariar GitHub, Supabase, Vercel e Sentry.
   - [x] Executar instalação limpa e gates atuais individualmente.
 - [ ] Fases 4–5 — Design System, shell e perfis (AC: 4, 5, 6)
@@ -199,6 +199,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-07-29 | 0.1 | Story criada a partir do prompt mestre autorizado | River (SM) |
 | 2026-07-29 | 0.2.0 | Validated GO (9/10) — Status: Draft → Ready | Pax (PO) |
 | 2026-07-29 | 0.2.1 | Development started (yolo mode) — Status: Ready → InProgress | Dex (Dev) |
+| 2026-07-29 | 0.3.0 | Inventário reproduzível de rotas, autorização, dados e mutations | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -208,9 +209,10 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 
 ### Debug Log References
 
-- 2026-07-29: `npm run lint && npm run typecheck && npm test && npm run build
-  && npm run check:bundle-size` retornou 0; resultado canônico: 1.668 testes,
-  13.851 asserts, 5.123 módulos e 1.857,54/1.860 KB gzip. Evidência resumida:
+- 2026-07-29: execução intermediária de `npm run lint && npm run typecheck &&
+  npm test && npm run build && npm run check:bundle-size` retornou 0: 1.668
+  testes, 13.851 asserts, 5.123 módulos e 1.857,54/1.860 KB gzip. A contagem
+  canônica atual está registrada nas entradas posteriores. Evidência resumida:
   seção 4 de `docs/auditoria/relatorios/RELATORIO_FINAL_MX_GESTAO_PREDITIVA.md`.
 - 2026-07-29: `npx playwright --version`, `npx supabase --version`,
   `npx vercel --version` e `npx sentry-cli --version` retornaram 0 e
@@ -254,9 +256,15 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   tomada de conta/reativação indevida no pré-cadastro. O endpoint não adota,
   redefine senha nem reativa identidade existente.
 - 2026-07-29: regressão atual retornou 0 em lint, typecheck, build e bundle;
-  1.684 testes, 13.894 asserts, zero falhas e 1.857,80/1.860 KB gzip.
+  1.686 testes, 13.896 asserts, zero falhas e 1.857,80/1.860 KB gzip.
 - 2026-07-29: CodeRabbit revisou o diff final e retornou código 0, zero
   achados, após uma espera de rate limit.
+- 2026-07-29: `npm run audit:routes-data` retornou 0 e catalogou 111 rotas,
+  127 tabelas, 84 RPCs, 14 Edge Functions e 247 pares tabela/operação; zero
+  rota protegida de folha ficou sem regra canônica.
+- 2026-07-29: CodeRabbit apontou um conflito de rotulagem da contagem
+  intermediária; corrigido. A repetição do review foi limitada por cota por 38
+  minutos, sem novo parecer final.
 
 ### Completion Notes List
 
@@ -279,6 +287,7 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 
 - `.ai/decision-log-MX-AUD-20260729.md`
 - `docs/auditoria/relatorios/RELATORIO_FINAL_MX_GESTAO_PREDITIVA.md`
+- `docs/auditoria/matrizes/MATRIZ_ROTAS_DADOS_MX.md`
 - `docs/auth/first-login-flow.md`
 - `docs/audits/auditoria-completa-sistema-2026-05-01.md`
 - `docs/stories/story-MX-AUD-20260729-autonomous-master-audit.md`
@@ -294,6 +303,7 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `output/playwright/admin-geral-drawer-320x568.png`
 - `package.json`
 - `package-lock.json`
+- `scripts/audit_route_data_inventory.mjs`
 - `docs/superpowers/plans/2026-07-07-plano-remuneracao-brothers-car.md`
 - `scripts/capture_mx_v2.js`
 - `scripts/capture_mx_v3.js`
@@ -332,6 +342,7 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/lib/owner-base44-exact-parity-contract.test.ts`
 - `src/lib/owner-flow-contract.test.ts`
 - `src/lib/real-data-runtime-contract.test.ts`
+- `src/lib/route-data-inventory-contract.test.ts`
 - `src/lib/store-pre-registration-auth-hardening.test.ts`
 - `src/lib/export.ts`
 - `src/lib/export.test.ts`
