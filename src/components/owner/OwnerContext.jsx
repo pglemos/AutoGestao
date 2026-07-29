@@ -5,6 +5,9 @@ import { resolveOwnerPeriodRange } from "@/lib/owner-period";
 
 const OwnerContext = createContext(null);
 
+/** Versão tolerante: retorna null fora do provider (telas compartilhadas). */
+export const useOwnerOptional = () => useContext(OwnerContext);
+
 export const useOwner = () => {
   const ctx = useContext(OwnerContext);
   if (!ctx) throw new Error("useOwner deve ser usado dentro de OwnerProvider");

@@ -28,10 +28,12 @@ const LEGACY_OWNER_WORKSPACE_SEGMENTS = new Set([
 ])
 
 export const ROUTE_ACCESS_RULES = [
-  { pattern: '/dono', roles: ['dono'] },
-  { pattern: '/dono/*', roles: ['dono'] },
   { pattern: '/plano-acao', roles: INTERNAL_AND_LEADERS },
-  { pattern: '/plano-estrategico', roles: INTERNAL_ROLES },
+  { pattern: '/plano-estrategico', roles: [...INTERNAL_ROLES, 'dono'] },
+  { pattern: '/decisoes', roles: ['dono'] },
+  { pattern: '/departamentos', roles: ['dono'] },
+  { pattern: '/departamentos/*', roles: ['dono'] },
+  { pattern: '/mercado', roles: ['dono'] },
   { pattern: '/settings', roles: CONFIGURATION_ROLES, capability: 'view_configurations' },
   { pattern: '/team', capability: 'manage_team' },
   { pattern: '/equipe', capability: 'manage_team' },
@@ -39,6 +41,7 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/simulacao', roles: INTERNAL_ROLES, capability: 'simulate_role' },
   { pattern: '/simulacao/*', roles: INTERNAL_ROLES, capability: 'simulate_role' },
   { pattern: '/agenda', roles: INTERNAL_ROLES },
+  { pattern: '/consultoria', roles: [...INTERNAL_ROLES, 'dono'] },
   { pattern: '/consultoria/*', roles: INTERNAL_ROLES },
   { pattern: '/configuracoes/consultoria-pmr', roles: INTERNAL_ROLES },
   { pattern: '/configuracoes/reprocessamento', roles: INTERNAL_ROLES },
@@ -46,7 +49,7 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/lojas/:storeSlug', roles: INTERNAL_AND_MANAGER },
   { pattern: '/lojas/:storeSlug/*', roles: INTERNAL_AND_MANAGER },
   { pattern: '/lojas', roles: ['administrador_geral', 'administrador_mx', 'consultor_mx'] },
-  { pattern: '/rotina', roles: ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente'] },
+  { pattern: '/rotina', roles: ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente', 'dono'] },
   { pattern: '/gerente/rotina-equipe', roles: MANAGER_AND_INTERNAL_ROLES },
   { pattern: '/gerente/*', roles: MANAGEMENT_ROLES },
   { pattern: '/configuracoes/operacional', roles: INTERNAL_ROLES },

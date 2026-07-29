@@ -46,7 +46,22 @@ const ScopedActionPlanPage = lazy(() => import('@/features/action-plan/ScopedAct
 const InternalActionPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalActionPlanPage'))
 const InternalStrategicPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalStrategicPlanPage'))
 const InternalConsultingPage = lazy(() => import('@/features/internal-mx-planning/InternalConsultingPage'))
-const OwnerModule = lazy(() => import('@/features/owner-base44/OwnerModule'))
+const AppShell = lazy(() => import('@/components/AppShell'))
+const OwnerHome = lazy(() => import('@/pages/owner/OwnerHome'))
+const OwnerPlanoEstrategico = lazy(() => import('@/pages/owner/PlanoEstrategico'))
+const OwnerPlanoDeAcao = lazy(() => import('@/pages/owner/PlanoDeAcao'))
+const OwnerConsultoria = lazy(() => import('@/pages/owner/Consultoria'))
+const OwnerRotinaDoDia = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.RotinaDoDia })))
+const OwnerCentralDeDecisoes = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.CentralDeDecisoes })))
+const OwnerDepartamentos = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentosVisaoGeral })))
+const OwnerDeptComercial = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentoComercial })))
+const OwnerDeptMarketing = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentoMarketing })))
+const OwnerDeptProduto = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentoProdutoEstoque })))
+const OwnerDeptPessoas = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentoPessoasRH })))
+const OwnerDeptFinanceiro = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentoFinanceiro })))
+const OwnerDeptOperacoes = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentoOperacoes })))
+const OwnerMercado = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.Mercado })))
+const OwnerUniversidade = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.UniversidadeMX })))
 const StoreConsultorIa = lazy(() => import('@/pages/StoreConsultorIa'))
 const GerenteFeedback = lazy(() => import('@/pages/GerenteFeedback'))
 const GerentePDI = lazy(() => import('@/pages/GerentePDI'))
@@ -202,7 +217,7 @@ function ForbiddenRoute() {
 function RoleRedirect() {
   const { role, membership } = useAuth()
   if (isPerfilInternoMx(role)) return <Navigate to="/painel" replace />
-  if (role === 'dono') return <Navigate to="/dono" replace />
+  if (role === 'dono') return <Navigate to="/home" replace />
   if (role === 'gerente') {
     const storeDashboardPath = membership?.store?.name ? `/lojas/${slugify(membership.store.name)}` : '/classificacao'
     return <Navigate to={storeDashboardPath} replace />
@@ -211,10 +226,32 @@ function RoleRedirect() {
   return <Navigate to="/login" replace />
 }
 
+const OWNER_LEGACY_PATHS: Record<string, string> = {
+  '': '/home',
+  'rotina': '/rotina',
+  'decisoes': '/decisoes',
+  'plano-estrategico': '/plano-estrategico',
+  'plano-acao': '/plano-acao',
+  'consultoria': '/consultoria',
+  'departamentos': '/departamentos',
+  'mercado': '/mercado',
+  'universidade': '/universidade-mx',
+}
+
+/** As telas do Dono passaram a viver na raiz; mantém links antigos vivos. */
+function OwnerLegacyPathRedirect() {
+  const location = useLocation()
+  const rest = location.pathname.replace(/^\/dono\/?/, '')
+  const target = OWNER_LEGACY_PATHS[rest]
+    ?? (rest.startsWith('departamentos/') ? `/${rest}` : '/home')
+  return <Navigate to={`${target}${location.search}`} replace />
+}
+
+
 function TeamAliasRedirect() {
   const { role, membership } = useAuth()
   if (isPerfilInternoMx(role)) return <Navigate to="/lojas" replace />
-  if (role === 'dono') return <Navigate to="/dono" replace />
+  if (role === 'dono') return <Navigate to="/home" replace />
   if (role === 'gerente' && membership?.store?.name) {
     return <RedirectWithSearch to="/gerente/minha-equipe" />
   }
@@ -280,17 +317,26 @@ export default function App() {
               <Route path="/pre-cadastro/:storeSlug" element={<Suspense fallback={<Spinner />}><StorePreRegistration /></Suspense>} />
               <Route path="/privacy" element={<Suspense fallback={<Spinner />}><Privacy /></Suspense>} />
               <Route path="/terms" element={<Suspense fallback={<Spinner />}><Terms /></Suspense>} />
-              <Route path="/dono/*" element={<ProtectedRoute><Suspense fallback={<Spinner />}><OwnerModule /></Suspense></ProtectedRoute>} />
-              <Route path="/" element={<ProtectedRoute><Layout /></ProtectedRoute>}>
+              <Route path="/dono/*" element={<OwnerLegacyPathRedirect />} />
+              <Route path="/" element={<ProtectedRoute><Suspense fallback={<Spinner />}><AppShell /></Suspense></ProtectedRoute>}>
                 <Route path="settings" element={<Navigate to="/configuracoes" replace />} />
-                <Route path="plano-estrategico" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<InternalStrategicPlanPage />} /></Suspense>} />
-                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ScopedActionPlanPage />} dono={<ScopedActionPlanPage />} admin={<InternalActionPlanPage />} /></Suspense>} />
+                <Route path="plano-estrategico" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></Suspense>} />
+                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ScopedActionPlanPage />} dono={<OwnerPlanoDeAcao />} admin={<InternalActionPlanPage />} /></Suspense>} />
+                <Route path="decisoes" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerCentralDeDecisoes />} admin={<ForbiddenRoute />} /></Suspense>} />
+                <Route path="departamentos" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDepartamentos />} admin={<ForbiddenRoute />} /></Suspense>} />
+                <Route path="departamentos/comercial" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptComercial />} admin={<ForbiddenRoute />} /></Suspense>} />
+                <Route path="departamentos/marketing" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptMarketing />} admin={<ForbiddenRoute />} /></Suspense>} />
+                <Route path="departamentos/produto-e-estoque" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptProduto />} admin={<ForbiddenRoute />} /></Suspense>} />
+                <Route path="departamentos/pessoas-rh" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptPessoas />} admin={<ForbiddenRoute />} /></Suspense>} />
+                <Route path="departamentos/financeiro" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptFinanceiro />} admin={<ForbiddenRoute />} /></Suspense>} />
+                <Route path="departamentos/operacoes" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptOperacoes />} admin={<ForbiddenRoute />} /></Suspense>} />
+                <Route path="mercado" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerMercado />} admin={<ForbiddenRoute />} /></Suspense>} />
                 <Route path="team" element={<TeamAliasRedirect />} />
                 <Route path="equipe" element={<TeamAliasRedirect />} />
 
                 <Route path="meu-dia" element={<RedirectWithSearch to="/home" />} />
                 <Route path="home" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<RoleRedirect />} admin={<RoleRedirect />} />
+                  <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<OwnerHome />} admin={<RoleRedirect />} />
                 </Suspense>} />
                 <Route path="minha-remuneracao" element={<RedirectWithSearch to="/home" />} />
                 <Route path="lancamento-diario" element={<RedirectWithSearch to="/terminal-mx" />} />
@@ -365,7 +411,7 @@ export default function App() {
                 <Route path="ranking" element={<Suspense fallback={<Spinner />}><Ranking /></Suspense>} />
                 <Route path="classificacao" element={<Suspense fallback={<Spinner />}><Ranking /></Suspense>} />
                 <Route path="universidade-mx" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<VendedorTreinamentos />} gerente={<RedirectWithSearch to="/treinamentos" />} dono={<RedirectWithSearch to="/treinamentos" />} admin={<RedirectWithSearch to="/treinamentos" />} />
+                  <RoleSwitch vendedor={<VendedorTreinamentos />} gerente={<RedirectWithSearch to="/treinamentos" />} dono={<OwnerUniversidade />} admin={<RedirectWithSearch to="/treinamentos" />} />
                 </Suspense>} />
                 <Route path="treinamentos" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<RedirectWithSearch to="/universidade-mx" />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<ConsultorTreinamentos />} />
@@ -410,7 +456,7 @@ export default function App() {
                 </Suspense>} />
                 <Route path="pdi/:id/print" element={<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>} />
                 <Route path="rotina" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<ForbiddenRoute />} admin={<RotinaGerente />} />
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRotinaDoDia />} admin={<RotinaGerente />} />
                 </Suspense>} />
 
                 <Route path="painel" element={<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>} />
@@ -419,7 +465,7 @@ export default function App() {
                 <Route path="simulacao/:simulationRole" element={<Suspense fallback={<Spinner />}><Simulacao /></Suspense>} />
                 <Route path="agenda" element={<Suspense fallback={<Spinner />}><AgendaAdmin /></Suspense>} />
                 <Route path="consultoria">
-                  <Route index element={<Suspense fallback={<Spinner />}><InternalConsultingPage /></Suspense>} />
+                  <Route index element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>} />
                   <Route path="clientes" element={<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>} />
                   <Route path="clientes/:clientSlug" element={<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>} />
                   <Route path="clientes/:clientSlug/visitas/:visitNumber" element={<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>} />

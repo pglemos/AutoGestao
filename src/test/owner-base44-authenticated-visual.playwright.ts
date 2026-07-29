@@ -2,25 +2,25 @@ import { test, expect, type Page, type TestInfo } from '@playwright/test'
 import { writeFileSync } from 'node:fs'
 import { loginAsOwner } from './e2e-helpers/owner-auth'
 
-const OWNER_BASE_PATH = '/dono'
+const OWNER_BASE_PATH = ''
 
 const routes = [
-  { key: 'inicio', path: OWNER_BASE_PATH, expectedPath: '/dono' },
-  { key: 'rotina', path: `${OWNER_BASE_PATH}/rotina`, expectedPath: '/dono/rotina' },
-  { key: 'decisoes', path: `${OWNER_BASE_PATH}/decisoes`, expectedPath: '/dono/decisoes' },
-  { key: 'plano-estrategico', path: `${OWNER_BASE_PATH}/plano-estrategico`, expectedPath: '/dono/plano-estrategico' },
-  { key: 'plano-acao', path: `${OWNER_BASE_PATH}/plano-acao`, expectedPath: '/dono/plano-acao' },
-  { key: 'consultoria', path: `${OWNER_BASE_PATH}/consultoria`, expectedPath: '/dono/consultoria' },
-  { key: 'departamentos', path: `${OWNER_BASE_PATH}/departamentos`, expectedPath: '/dono/departamentos' },
-  { key: 'visao-geral', path: `${OWNER_BASE_PATH}/departamentos`, expectedPath: '/dono/departamentos' },
-  { key: 'comercial', path: `${OWNER_BASE_PATH}/departamentos/comercial`, expectedPath: '/dono/departamentos/comercial' },
-  { key: 'marketing', path: `${OWNER_BASE_PATH}/departamentos/marketing`, expectedPath: '/dono/departamentos/marketing' },
-  { key: 'produto', path: `${OWNER_BASE_PATH}/departamentos/produto-e-estoque`, expectedPath: '/dono/departamentos/produto-e-estoque' },
-  { key: 'rh', path: `${OWNER_BASE_PATH}/departamentos/pessoas-rh`, expectedPath: '/dono/departamentos/pessoas-rh' },
-  { key: 'financeiro', path: `${OWNER_BASE_PATH}/departamentos/financeiro`, expectedPath: '/dono/departamentos/financeiro' },
-  { key: 'operacional', path: `${OWNER_BASE_PATH}/departamentos/operacoes`, expectedPath: '/dono/departamentos/operacoes' },
-  { key: 'mercado', path: `${OWNER_BASE_PATH}/mercado`, expectedPath: '/dono/mercado' },
-  { key: 'universidade', path: `${OWNER_BASE_PATH}/universidade`, expectedPath: '/dono/universidade' },
+  { key: 'inicio', path: '/home', expectedPath: '/home' },
+  { key: 'rotina', path: `/rotina`, expectedPath: '/rotina' },
+  { key: 'decisoes', path: `/decisoes`, expectedPath: '/decisoes' },
+  { key: 'plano-estrategico', path: `/plano-estrategico`, expectedPath: '/plano-estrategico' },
+  { key: 'plano-acao', path: `/plano-acao`, expectedPath: '/plano-acao' },
+  { key: 'consultoria', path: `/consultoria`, expectedPath: '/consultoria' },
+  { key: 'departamentos', path: `/departamentos`, expectedPath: '/departamentos' },
+  { key: 'visao-geral', path: `/departamentos`, expectedPath: '/departamentos' },
+  { key: 'comercial', path: `/departamentos/comercial`, expectedPath: '/departamentos/comercial' },
+  { key: 'marketing', path: `/departamentos/marketing`, expectedPath: '/departamentos/marketing' },
+  { key: 'produto', path: `/departamentos/produto-e-estoque`, expectedPath: '/departamentos/produto-e-estoque' },
+  { key: 'rh', path: `/departamentos/pessoas-rh`, expectedPath: '/departamentos/pessoas-rh' },
+  { key: 'financeiro', path: `/departamentos/financeiro`, expectedPath: '/departamentos/financeiro' },
+  { key: 'operacional', path: `/departamentos/operacoes`, expectedPath: '/departamentos/operacoes' },
+  { key: 'mercado', path: `/mercado`, expectedPath: '/mercado' },
+  { key: 'universidade', path: '/universidade-mx', expectedPath: '/universidade-mx' },
 ] as const
 
 const viewports = [

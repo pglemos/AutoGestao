@@ -14,7 +14,7 @@ export default function OwnerPlaceholder({ title, description }) {
         Esta área será construída na próxima etapa
       </p>
       <Button asChild className="mt-6 shadow">
-        <Link to="/dono">
+        <Link to="/home">
           <ArrowLeft className="h-4 w-4" />
           Voltar ao Início
         </Link>

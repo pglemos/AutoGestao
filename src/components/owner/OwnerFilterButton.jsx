@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { useOwner } from "@/components/owner/OwnerContext";
+import { useOwnerOptional } from "@/components/owner/OwnerContext";
 import { formatDateTime } from "@/lib/owner-b44/format";
 import { cn } from "@/lib/utils";
 import { Check, ChevronDown, RefreshCw, SlidersHorizontal } from "lucide-react";
@@ -32,18 +32,9 @@ function Option({ active, children, onClick }) {
 // Filtro unico do modulo Dono (loja + periodo), aberto a partir de um botao no
 // cabecalho da pagina — evita um card de filtros separado do cabecalho.
 export default function OwnerFilterButton({ lastUpdated }) {
-  const {
-    currentUnits,
-    unitId,
-    setUnitId,
-    period,
-    setPeriod,
-    customStart,
-    customEnd,
-    setCustomStart,
-    setCustomEnd,
-    reload,
-  } = useOwner();
+  // O cabeçalho é compartilhado com telas de gerente e Admin MX, que não têm
+  // o contexto do Dono: nesses casos o filtro simplesmente não aparece.
+  const owner = useOwnerOptional();
   const [open, setOpen] = useState(false);
   const containerRef = useRef(null);
 
@@ -63,6 +54,21 @@ export default function OwnerFilterButton({ lastUpdated }) {
       document.removeEventListener("keydown", onKeyDown);
     };
   }, [open]);
+
+  if (!owner) return null;
+
+  const {
+    currentUnits,
+    unitId,
+    setUnitId,
+    period,
+    setPeriod,
+    customStart,
+    customEnd,
+    setCustomStart,
+    setCustomEnd,
+    reload,
+  } = owner;
 
   const unitLabel =
     unitId === ALL_UNITS

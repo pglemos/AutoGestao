@@ -39,12 +39,12 @@ const MANAGER_ROUTES = [
 ] as const
 
 const OWNER_ROUTES = [
-  ...SHARED_LEADERSHIP_ROUTES, '/dono', '/dono/rotina', '/dono/decisoes',
-  '/dono/plano-estrategico', '/dono/plano-acao', '/dono/consultoria', '/dono/departamentos',
-  '/dono/departamentos/comercial', '/dono/departamentos/marketing',
-  '/dono/departamentos/produto-e-estoque', '/dono/departamentos/pessoas-rh',
-  '/dono/departamentos/financeiro', '/dono/departamentos/operacoes', '/dono/mercado',
-  '/dono/universidade', '/home', '/gerente/fechamento-diario',
+  ...SHARED_LEADERSHIP_ROUTES, '/rotina', '/decisoes',
+  '/plano-estrategico', '/consultoria', '/departamentos',
+  '/departamentos/comercial', '/departamentos/marketing',
+  '/departamentos/produto-e-estoque', '/departamentos/pessoas-rh',
+  '/departamentos/financeiro', '/departamentos/operacoes', '/mercado',
+  '/home', '/gerente/fechamento-diario',
   '/gerente/minha-equipe', '/gerente/meta-loja', '/gerente/mentor', '/gerente/feedbacks-pdis',
   '/gerente/ranking', '/gerente/universidade-mx', '/funil-vendas', '/metas', '/falar-consultor',
   '/organograma', '/banco-talentos',

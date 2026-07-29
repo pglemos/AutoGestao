@@ -26,17 +26,17 @@ const NAV = [
   {
     section: "GESTÃO",
     items: [
-      { label: "Início", to: "/dono", icon: Home, end: true },
-      { label: "Rotina do Dia", to: "/dono/rotina", icon: CalendarDays, badge: "Em construção" },
-      { label: "Central de Decisões", to: "/dono/decisoes", icon: ClipboardCheck, badge: "Em construção" },
+      { label: "Início", to: "/home", icon: Home, end: true },
+      { label: "Rotina do Dia", to: "/rotina", icon: CalendarDays, badge: "Em construção" },
+      { label: "Central de Decisões", to: "/decisoes", icon: ClipboardCheck, badge: "Em construção" },
     ],
   },
   {
     section: "ESTRATÉGIA",
     items: [
-      { label: "Plano Estratégico", to: "/dono/plano-estrategico", icon: Target },
-      { label: "Plano de Ação", to: "/dono/plano-acao", icon: ListChecks },
-      { label: "Consultoria", to: "/dono/consultoria", icon: Users },
+      { label: "Plano Estratégico", to: "/plano-estrategico", icon: Target },
+      { label: "Plano de Ação", to: "/plano-acao", icon: ListChecks },
+      { label: "Consultoria", to: "/consultoria", icon: Users },
     ],
   },
   {
@@ -47,21 +47,21 @@ const NAV = [
         icon: LayoutGrid,
         group: "departments",
         children: [
-          { label: "Visão Geral", to: "/dono/departamentos", badge: "Em construção" },
-          { label: "Comercial", to: "/dono/departamentos/comercial", badge: "Em construção" },
-          { label: "Marketing", to: "/dono/departamentos/marketing", badge: "Em construção" },
-          { label: "Produto e Estoque", to: "/dono/departamentos/produto-e-estoque", badge: "Em construção" },
-          { label: "Pessoas — RH", to: "/dono/departamentos/pessoas-rh", badge: "Em construção" },
-          { label: "Financeiro", to: "/dono/departamentos/financeiro", badge: "Em construção" },
-          { label: "Operações", to: "/dono/departamentos/operacoes", badge: "Em construção" },
+          { label: "Visão Geral", to: "/departamentos", badge: "Em construção" },
+          { label: "Comercial", to: "/departamentos/comercial", badge: "Em construção" },
+          { label: "Marketing", to: "/departamentos/marketing", badge: "Em construção" },
+          { label: "Produto e Estoque", to: "/departamentos/produto-e-estoque", badge: "Em construção" },
+          { label: "Pessoas — RH", to: "/departamentos/pessoas-rh", badge: "Em construção" },
+          { label: "Financeiro", to: "/departamentos/financeiro", badge: "Em construção" },
+          { label: "Operações", to: "/departamentos/operacoes", badge: "Em construção" },
         ],
       },
-      { label: "Mercado", to: "/dono/mercado", icon: TrendingUp, badge: "Em construção" },
+      { label: "Mercado", to: "/mercado", icon: TrendingUp, badge: "Em construção" },
     ],
   },
   {
     section: "DESENVOLVIMENTO",
-    items: [{ label: "Universidade MX", to: "/dono/universidade", icon: GraduationCap, badge: "Em construção" }],
+    items: [{ label: "Universidade MX", to: "/universidade-mx", icon: GraduationCap, badge: "Em construção" }],
   },
 ];
 
@@ -160,7 +160,7 @@ export default function OwnerSidebar({
                             <NavLink
                               key={child.to}
                               to={child.to}
-                              end={child.to === "/dono/departamentos"}
+                              end={child.to === "/departamentos"}
                               onClick={onNavigate}
                               className={({ isActive }) =>
                                 cn(

@@ -47,7 +47,7 @@ test.describe('interações funcionais do módulo Dono Base44', () => {
     })
 
     await test.step('Plano Estratégico: edição persistida e exportação CSV', async () => {
-      await page.goto('/dono/plano-estrategico', { waitUntil: 'networkidle' })
+      await page.goto('/plano-estrategico', { waitUntil: 'networkidle' })
       await expect(page.getByRole('heading', { name: 'Planejamento Estratégico' })).toBeVisible()
       await page.getByRole('button', { name: 'Editar Metas' }).click()
 
@@ -78,7 +78,7 @@ test.describe('interações funcionais do módulo Dono Base44', () => {
     })
 
     await test.step('Plano de Ação: modos, calendário e criação persistida', async () => {
-      await page.goto('/dono/plano-acao', { waitUntil: 'networkidle' })
+      await page.goto('/plano-acao', { waitUntil: 'networkidle' })
       await expect(page.getByRole('heading', { name: 'Plano de Ação' })).toBeVisible()
 
       await page.getByRole('button', { name: 'Kanban', exact: true }).click()
@@ -116,7 +116,7 @@ test.describe('interações funcionais do módulo Dono Base44', () => {
       const attachmentPath = testInfo.outputPath('evidencia-owner-base44.txt')
       writeFileSync(attachmentPath, 'Evidência funcional do módulo Dono Base44.\n')
 
-      await page.goto('/dono/consultoria', { waitUntil: 'networkidle' })
+      await page.goto('/consultoria', { waitUntil: 'networkidle' })
       await expect(page.getByRole('heading', { name: 'Consultoria' })).toBeVisible()
       await page.getByRole('button', { name: 'Assistir aula' }).click()
 

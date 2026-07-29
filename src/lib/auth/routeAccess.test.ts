@@ -2,8 +2,9 @@ import { describe, expect, it } from 'bun:test'
 import { canAccessPath, getRouteAccessRule } from './routeAccess'
 
 describe('route access matrix', () => {
-  it('keeps the dedicated owner module exclusive to the dono role', () => {
-    for (const route of ['/dono', '/dono/plano-estrategico', '/dono/departamentos/financeiro?period=month']) {
+  it('mantém as telas executivas do Dono na raiz, fechadas para os demais perfis', () => {
+    // O módulo deixou de ter prefixo /dono: cada URL é resolvida pelo perfil.
+    for (const route of ['/decisoes', '/departamentos', '/departamentos/financeiro?period=month', '/mercado']) {
       expect(canAccessPath(route, 'dono')).toBe(true)
       expect(canAccessPath(route, 'gerente')).toBe(false)
       expect(canAccessPath(route, 'vendedor')).toBe(false)
@@ -11,6 +12,10 @@ describe('route access matrix', () => {
       expect(canAccessPath(route, 'administrador_geral')).toBe(false)
       expect(canAccessPath(route, 'consultor_mx')).toBe(false)
     }
+    // rotas compartilhadas continuam abertas ao Dono
+    expect(canAccessPath('/plano-acao', 'dono')).toBe(true)
+    expect(canAccessPath('/plano-estrategico', 'dono')).toBe(true)
+    expect(canAccessPath('/consultoria', 'dono')).toBe(true)
   })
 
   it('keeps admin-only modules closed to store roles', () => {

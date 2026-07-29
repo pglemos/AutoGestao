@@ -6,14 +6,19 @@ const root = process.cwd()
 const read = (file: string) => readFileSync(resolve(root, file), 'utf8')
 
 describe('Dono — contratos dos fluxos corrigidos', () => {
-  test('rotas executivas usam o módulo Base44 aprovado e os dados live', () => {
-    const module = read('src/features/owner-base44/OwnerModule.tsx')
-    expect(module).toContain("import OwnerLiveDataPage from '@/features/owner-base44/OwnerLiveDataPage'")
-    expect(module).toContain('<Route path="*" element={<OwnerLiveDataPage />} />')
-    expect(module).toContain('<Route path="plano-acao" element={<PlanoDeAcao />} />')
-    expect(module).toContain("import OwnerLayout from '@/components/owner/OwnerLayout'")
-    expect(module).toContain('<Route element={<OwnerLayout />}>')
-    expect(module).toContain('owner-base44-exact')
+  test('telas executivas ficam registradas na raiz do roteador e usam o shell do Dono', () => {
+    const app = read('src/App.tsx')
+    const shell = read('src/features/owner-base44/OwnerShell.tsx')
+    const appShell = read('src/components/AppShell.tsx')
+    // sem prefixo /dono: o perfil decide o componente de cada URL
+    expect(app).toContain("const OwnerPlanoDeAcao = lazy(() => import('@/pages/owner/PlanoDeAcao'))")
+    expect(app).toContain('dono={<OwnerPlanoDeAcao />}')
+    expect(app).toContain('dono={<OwnerPlanoEstrategico />}')
+    expect(app).toContain('dono={<OwnerHome />}')
+    expect(app).toContain('<Route path="/dono/*" element={<OwnerLegacyPathRedirect />} />')
+    expect(appShell).toContain("role === 'dono'")
+    expect(shell).toContain("import OwnerLayout from '@/components/owner/OwnerLayout'")
+    expect(shell).toContain('owner-base44-exact')
   })
 
   test('plano estratégico monta uma única matriz real', () => {
@@ -39,9 +44,7 @@ describe('Dono — contratos dos fluxos corrigidos', () => {
   })
 
   test('cockpit não esconde erro de fonte nem deixa o período só no texto', () => {
-    const livePage = read('src/features/owner-base44/OwnerLiveDataPage.tsx')
     const dashboard = read('src/features/dashboard-loja/hooks/useDashboardLojaData.ts')
-    expect(livePage).toContain('data.error')
     expect(dashboard).toContain('periodRange?.start')
     expect(dashboard).toContain('periodRange?.end')
     expect(dashboard).toContain('periodLabel')

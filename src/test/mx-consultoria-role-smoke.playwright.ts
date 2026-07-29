@@ -113,7 +113,7 @@ async function auditAuthenticatedRole(browser: Browser, roleCase: RoleCase) {
       await expect(page, `${roleCase.role}: ${route}`).not.toHaveURL(/\/login(?:[?#]|$)/)
       await expect(page.getByText(/Acesso não autorizado|Página não encontrada/i), `${roleCase.role}: ${route}`).toHaveCount(0)
       await expect(page.locator('body'), `${roleCase.role}: ${route}`).not.toContainText(/dados\s+fict[ií]cios|dados\s+demonstrativos|dados\s+de\s+demonstra[cç][aã]o|modelo\s+em\s+valida[cç][aã]o|valida[cç][aã]o\s+visual/i)
-      if (route === '/plano-acao' || route === '/dono/plano-acao') {
+      if (route === '/plano-acao') {
         await expect(page.getByRole('heading', { name: 'Plano de Ação', exact: true }).first(), `${roleCase.role}: Plano de Ação não renderizado`).toBeVisible()
         if (roleCase.role === 'gerente' || roleCase.role === 'vendedor') {
           await expect(page.getByRole('button', { name: 'Novo plano', exact: true }), `${roleCase.role}: não pode criar plano`).toHaveCount(0)

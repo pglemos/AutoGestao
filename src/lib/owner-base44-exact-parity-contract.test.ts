@@ -6,14 +6,17 @@ const root = process.cwd()
 const read = (path: string) => readFileSync(resolve(root, path), 'utf8')
 
 describe('contrato do módulo Dono Base44 aprovado', () => {
-  it('monta /dono/* como módulo protegido e independente do shell universal', () => {
+  it('registra as telas do Dono na raiz e mantém o shell dedicado', () => {
     const app = read('src/App.tsx')
-    expect(app).toContain("const OwnerModule = lazy(() => import('@/features/owner-base44/OwnerModule'))")
-    expect(app).toContain('<Route path="/dono/*" element={<ProtectedRoute><Suspense fallback={<Spinner />}><OwnerModule /></Suspense></ProtectedRoute>} />')
+    const appShell = read('src/components/AppShell.tsx')
+    expect(app).toContain("const AppShell = lazy(() => import('@/components/AppShell'))")
+    expect(app).toContain('<Route path="/dono/*" element={<OwnerLegacyPathRedirect />} />')
+    expect(app).not.toContain('owner-base44/OwnerModule')
+    expect(appShell).toContain("role === 'dono'")
   })
 
   it('preserva o layout, a navegação e os tokens visuais aprovados', () => {
-    const module = read('src/features/owner-base44/OwnerModule.tsx')
+    const module = read('src/features/owner-base44/OwnerShell.tsx')
     const layout = read('src/components/owner/OwnerLayout.jsx')
     const sidebar = read('src/components/owner/OwnerSidebar.jsx')
     const topbar = read('src/components/owner/OwnerTopbar.jsx')
@@ -21,8 +24,7 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
 
     expect(module).toContain("import OwnerLayout from '@/components/owner/OwnerLayout'")
     expect(module).toContain("import '@/styles/owner-base44-exact.css'")
-    expect(module).toContain('<Route element={<OwnerLayout />}>')
-    expect(module).toContain('<Route path="*" element={<OwnerLiveDataPage />} />')
+    expect(module).toContain('<OwnerLayout />')
     expect(layout).toContain('<OwnerSidebar')
     expect(layout).toContain('collapsed={sidebarCollapsed}')
     expect(sidebar).toContain('src={SIDEBAR_LOGO}')
@@ -49,7 +51,7 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
 
   it('mantém todas as superfícies aprovadas disponíveis', () => {
     for (const file of [
-      'src/features/owner-base44/OwnerModule.tsx',
+      'src/features/owner-base44/OwnerShell.tsx',
       'src/components/owner/OwnerLayout.jsx',
       'src/components/owner/OwnerSidebar.jsx',
       'src/components/owner/OwnerTopbar.jsx',

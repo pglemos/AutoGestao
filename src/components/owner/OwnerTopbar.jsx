@@ -8,15 +8,15 @@ import { Menu } from "lucide-react";
 // existe topbar — a navegacao fica na sidebar e cada pagina traz seu proprio
 // cabecalho. No mobile, um header com marca, titulo da tela, sino e avatar.
 const TITLES = [
-  { path: "/dono/plano-estrategico", label: "Plano Estratégico" },
-  { path: "/dono/plano-acao", label: "Plano de Ação" },
-  { path: "/dono/consultoria", label: "Consultoria" },
-  { path: "/dono/rotina", label: "Rotina do Dia" },
-  { path: "/dono/decisoes", label: "Central de Decisões" },
-  { path: "/dono/departamentos", label: "Departamentos" },
-  { path: "/dono/mercado", label: "Mercado" },
-  { path: "/dono/universidade", label: "Universidade MX" },
-  { path: "/dono", label: "Início" },
+  { path: "/plano-estrategico", label: "Plano Estratégico" },
+  { path: "/plano-acao", label: "Plano de Ação" },
+  { path: "/consultoria", label: "Consultoria" },
+  { path: "/rotina", label: "Rotina do Dia" },
+  { path: "/decisoes", label: "Central de Decisões" },
+  { path: "/departamentos", label: "Departamentos" },
+  { path: "/mercado", label: "Mercado" },
+  { path: "/universidade-mx", label: "Universidade MX" },
+  { path: "/home", label: "Início" },
 ];
 
 export default function OwnerTopbar({ onOpenSidebar }) {
