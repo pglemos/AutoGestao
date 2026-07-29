@@ -41,7 +41,7 @@ export function MxModulePage({ children, className, contentClassName, maxWidth =
           data-mx-module-page=""
           data-mx-visual-system="manager"
           data-mx-access-mode={accessMode}
-          className={cn('min-h-full w-full overflow-y-auto bg-gray-50 text-gray-800', className)}
+          className={cn('min-h-full w-full overflow-y-auto text-gray-800', className)}
         >
           <div className={cn('mx-auto w-full space-y-5 px-4 py-6 pb-24', maxWidth === '7xl' ? 'max-w-7xl' : 'max-w-none', contentClassName)}>{children}</div>
         </InternalMxTemplatePage>

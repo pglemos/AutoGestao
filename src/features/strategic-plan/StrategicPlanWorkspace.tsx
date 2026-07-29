@@ -26,7 +26,7 @@ export function StrategicPlanWorkspace({ onUpdated }: { onUpdated?: (at: Date) =
 export function StrategicPlanView({ controller }: { controller: StrategicPlanController }) {
   const { shell, capabilities, storeId } = usePlanningWorkspace()
   const pageClass = shell === 'owner'
-    ? '-mx-4 -my-6 min-h-[calc(100vh-3.5rem)] bg-gray-50 px-4 py-6 lg:-mx-8 lg:-my-8 lg:px-8 lg:py-8'
+    ? '-mx-4 -my-6 min-h-[calc(100vh-3.5rem)] px-4 py-6 lg:-mx-8 lg:-my-8 lg:px-8 lg:py-8'
     : 'space-y-4'
 
   if (controller.loading) {
