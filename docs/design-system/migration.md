@@ -73,16 +73,31 @@
 
 | Fase | Escopo | Status |
 |---|---|---|
-| 0 | Diagnóstico + inventário + baseline visual | 🔄 em andamento |
-| 1 | Fundação de tokens (primitive → semantic → component → motion) | ⬜ |
-| 2 | Átomos e moléculas consolidados | ⬜ |
-| 3 | App Shell único (Dono migrado sem mudança de aparência) | ⬜ |
+| 0 | Diagnóstico + inventário + baseline visual | ✅ |
+| 1 | Fundação de tokens (primitive → semantic → component → motion) | ✅ |
+| 2 | Átomos e moléculas consolidados | ✅ 12 átomos + 11 moléculas |
+| 3 | App Shell único (Dono migrado sem mudança de aparência) | 🔄 moldura pronta; sidebar/topbar por convergir |
 | 4 | Gerente | ⬜ |
 | 5 | Admin / Consultor | ⬜ |
 | 6 | Vendedor (maior risco — tema escuro) | ⬜ |
 | 7 | Páginas compartilhadas (login, perfil, erros) | ⬜ |
 | 8 | Remoção do legado | ⬜ |
 | 9 | Deploy preview → produção | ⬜ |
+
+## 6.1 Lacunas de acessibilidade encontradas na Fase 3
+
+Confirmadas por inspeção do código e verificadas em runtime:
+
+| Lacuna | Situação antes | Depois |
+|---|---|---|
+| Skip-link | **Inexistente em todo o produto**, apesar de `src/test/navigation.playwright.ts:132` já testar `a[href="#main-content"]` | `SkipLink` na moldura, primeiro elemento focável |
+| Foco ao trocar de rota | Inexistente — o foco ficava no link clicado | `RouteAnnouncer` move o foco para o landmark |
+| Landmark do módulo do Dono | `<div role="region">`, não focável | `<main tabIndex={-1}>` |
+| Anúncio de navegação | Inexistente | `aria-live="polite"` com o `h1` da tela |
+
+> `document.title` é estático (`MX PERFORMANCE`) em todas as rotas — nenhuma
+> tela o atualiza. Por isso o anúncio de rota lê o `h1` da tela montada, e não
+> o título do documento, que repetiria a mesma frase a cada navegação.
 
 ## 7. Débito registrado
 
