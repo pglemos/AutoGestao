@@ -1,0 +1,38 @@
+import * as React from 'react'
+import * as CheckboxPrimitive from '@radix-ui/react-checkbox'
+import { Check, Minus } from 'lucide-react'
+import { cn } from '@/lib/utils'
+
+export interface CheckboxProps
+  extends React.ComponentPropsWithoutRef<typeof CheckboxPrimitive.Root> {}
+
+/** Caixa de seleção. Estado indeterminado via `checked="indeterminate"`. */
+const Checkbox = React.forwardRef<
+  React.ElementRef<typeof CheckboxPrimitive.Root>,
+  CheckboxProps
+>(({ className, ...props }, ref) => (
+  <CheckboxPrimitive.Root
+    ref={ref}
+    className={cn(
+      'peer h-4 w-4 shrink-0 rounded-[4px] border border-[hsl(var(--mx-color-border-strong))]',
+      'transition-colors duration-[var(--mx-duration-fast)] ease-[var(--mx-easing-standard)]',
+      'focus-visible:outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-2',
+      'disabled:cursor-not-allowed disabled:opacity-50',
+      'data-[state=checked]:border-[hsl(var(--mx-color-primary))] data-[state=checked]:bg-[hsl(var(--mx-color-primary))] data-[state=checked]:text-[hsl(var(--mx-color-primary-foreground))]',
+      'data-[state=indeterminate]:border-[hsl(var(--mx-color-primary))] data-[state=indeterminate]:bg-[hsl(var(--mx-color-primary))] data-[state=indeterminate]:text-[hsl(var(--mx-color-primary-foreground))]',
+      className,
+    )}
+    {...props}
+  >
+    <CheckboxPrimitive.Indicator className="flex items-center justify-center text-current">
+      {props.checked === 'indeterminate' ? (
+        <Minus aria-hidden className="h-3 w-3" strokeWidth={3} />
+      ) : (
+        <Check aria-hidden className="h-3 w-3" strokeWidth={3} />
+      )}
+    </CheckboxPrimitive.Indicator>
+  </CheckboxPrimitive.Root>
+))
+Checkbox.displayName = 'Checkbox'
+
+export { Checkbox }
