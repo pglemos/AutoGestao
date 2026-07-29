@@ -2,6 +2,7 @@
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
 import { corsHeaders } from '../_shared/cors.ts'
+import { initSentryForEdge, withSentry } from '../_shared/sentry.ts'
 import { sendReportEmail } from '../_shared/email.ts'
 import { createResendClient } from '../_shared/supabase-client.ts'
 
@@ -56,7 +57,9 @@ function escapeHtml(value: string) {
   })[character] || character)
 }
 
-serve(async (req) => {
+initSentryForEdge()
+
+serve((req) => withSentry('approve-store-registration', req, async () => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders })
   if (req.method !== 'POST') return jsonResponse({ success: false, error: 'Method not allowed' }, 405)
 
@@ -266,4 +269,4 @@ serve(async (req) => {
     ...(emailWarning ? { email_warning: emailWarning } : {}),
     ...(emailStatus === 'sent' ? {} : { temporary_password: temporaryPassword }),
   })
-})
+}))

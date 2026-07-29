@@ -2,6 +2,7 @@
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
 import { corsHeaders } from '../_shared/cors.ts'
+import { initSentryForEdge, withSentry } from '../_shared/sentry.ts'
 
 const allowedRoles = ['dono', 'gerente', 'vendedor']
 const protectedExistingRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']
@@ -166,7 +167,9 @@ async function cleanupPendingUser(
   if (deleteAuthUser) await adminClient.auth.admin.deleteUser(userId)
 }
 
-serve(async (req) => {
+initSentryForEdge()
+
+serve((req) => withSentry('store-pre-registration', req, async () => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders })
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
@@ -585,4 +588,4 @@ serve(async (req) => {
     login_email: email,
     status: 'pending_approval',
   })
-})
+}))

@@ -1,4 +1,5 @@
 import { corsHeaders } from '../_shared/cors.ts'
+import { initSentryForEdge, withSentry } from '../_shared/sentry.ts'
 import { sendReportEmail } from '../_shared/email.ts'
 import { createResendClient, createServiceClient } from '../_shared/supabase-client.ts'
 
@@ -73,7 +74,9 @@ function genericSuccess() {
   })
 }
 
-Deno.serve(async req => {
+initSentryForEdge()
+
+Deno.serve(req => withSentry('request-password-recovery', req, async () => {
   if (req.method === 'OPTIONS') return new Response(null, { headers: corsHeaders })
   if (req.method !== 'POST') return jsonResponse({ success: false, error: 'Method not allowed' }, 405)
 
@@ -142,4 +145,4 @@ Deno.serve(async req => {
   }
 
   return genericSuccess()
-})
+}))
