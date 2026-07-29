@@ -1,23 +1,39 @@
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Outlet } from "react-router-dom";
 import { X } from "lucide-react";
 import { OwnerProvider } from "@/components/owner/OwnerContext";
 import OwnerSidebar from "@/components/owner/OwnerSidebar";
 import OwnerTopbar from "@/components/owner/OwnerTopbar";
 import ConsultantRequestModal from "@/components/owner/ConsultantRequestModal";
+import { useFocusTrap } from "@/hooks/useFocusTrap";
+import { cn } from "@/lib/utils";
+import { SIDEBAR } from "@/design-system/sidebar/tokens";
 
 export default function OwnerLayout() {
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const drawerRef = useRef(null);
+
+  useFocusTrap(drawerRef, sidebarOpen);
+
+  useEffect(() => {
+    if (!sidebarOpen) return undefined;
+    const onKeyDown = (event) => {
+      if (event.key === "Escape") setSidebarOpen(false);
+    };
+    document.addEventListener("keydown", onKeyDown);
+    return () => document.removeEventListener("keydown", onKeyDown);
+  }, [sidebarOpen]);
 
   return (
     <OwnerProvider>
       <div className="flex h-full min-h-0 overflow-hidden bg-background">
         <aside
-          className={`hidden shrink-0 border-r border-sidebar-border transition-[width] duration-300 xl:block ${
-            sidebarCollapsed ? "w-16" : "w-64"
-          }`}
+          className={cn(
+            SIDEBAR.aside,
+            sidebarCollapsed ? SIDEBAR.asideWidthCollapsed : SIDEBAR.asideWidth,
+          )}
           aria-label="Menu principal do Dono"
         >
           <OwnerSidebar
@@ -27,20 +43,26 @@ export default function OwnerLayout() {
         </aside>
 
         {sidebarOpen ? (
-          <div className="fixed inset-0 z-40 xl:hidden">
+          <div className={SIDEBAR.drawerOverlay}>
             <div
-              className="absolute inset-0 bg-black/40"
+              className={SIDEBAR.drawerScrim}
               role="presentation"
               onClick={() => setSidebarOpen(false)}
             />
-            <div className="relative flex h-full w-72 max-w-[85vw] flex-col overflow-hidden bg-sidebar pb-[72px] shadow-xl sm:w-80 sm:max-w-sm lg:pb-0">
+            <div
+              ref={drawerRef}
+              role="dialog"
+              aria-modal="true"
+              aria-label="Menu principal do Dono"
+              className={cn(SIDEBAR.drawerPanel, "pb-[72px] lg:pb-0")}
+            >
               <button
                 type="button"
                 onClick={() => setSidebarOpen(false)}
                 aria-label="Fechar menu principal"
-                className="absolute right-2 top-2 z-10 flex h-8 w-8 items-center justify-center rounded-lg text-sidebar-foreground hover:bg-sidebar-accent"
+                className={SIDEBAR.drawerClose}
               >
-                <X className="h-4 w-4" />
+                <X className="h-4 w-4" aria-hidden="true" />
               </button>
               <OwnerSidebar onNavigate={() => setSidebarOpen(false)} />
             </div>

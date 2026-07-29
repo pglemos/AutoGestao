@@ -55,6 +55,18 @@
 --color-seller-milestone-bg-end: #1F3010;
 --color-whatsapp: #25D366;
 
+/* Sidebar canônica — docs/design-system/sidebar-dono.md
+   Mesmos valores dos tokens .owner-b44, porém resolvidos fora daquele escopo
+   para que todos os módulos rendam a sidebar do Dono pixel a pixel. */
+--color-mxsb-surface: #FAFAFA;
+--color-mxsb-ink: #3F3F46;
+--color-mxsb-ink-strong: #18181B;
+--color-mxsb-hover: #F4F4F5;
+--color-mxsb-line: #E5E7EB;
+--color-mxsb-muted: #737373;
+--color-mxsb-active: #198653;
+--color-mxsb-active-surface: rgba(25, 134, 83, 0.1);
+
 /* shadcn/Base44 semantic tokens */
 --color-background: hsl(var(--background));
 --color-foreground: hsl(var(--foreground));

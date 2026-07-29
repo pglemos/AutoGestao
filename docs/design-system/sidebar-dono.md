@@ -1,4 +1,20 @@
-# Sidebar do Módulo do Dono — especificação completa
+# Sidebar MX — design system (padrão do módulo do Dono)
+
+> **Regra do sistema.** Este documento é normativo: a sidebar do Dono é o padrão de **todos** os
+> módulos (vendedor, gerente, dono, consultoria, Admin MX e administrador geral). As classes estão
+> implementadas em `src/design-system/sidebar/tokens.ts` e são consumidas por
+> `MxSidebarShell` (shell universal) e `OwnerSidebar` (módulo do Dono).
+>
+> **Nenhuma tela deve escrever classes de sidebar à mão.** Para mudar a aparência: altere o token,
+> atualize este documento e rode `bun test src/design-system/sidebar` — o contrato
+> `sidebar-contract.test.ts` falha se um consumidor divergir.
+>
+> Cores vêm dos tokens `mxsb-*` declarados no `@theme` de `src/index.css`, que replicam os valores
+> do escopo `.owner-b44` fora dele — por isso o resultado é idêntico dentro e fora do módulo do Dono.
+
+---
+
+## Especificação
 
 Estado em produção (`https://www.mxperformance.com.br/dono`), deploy `jtliqqy52`, medido em runtime
 com `getComputedStyle` em 1440×900, 768×1024 e 375×812.
@@ -237,13 +253,32 @@ Itens que a sidebar **não** possui, com o equivalente no módulo:
 
 ---
 
-## 14. Diferenças em relação aos demais módulos
+## 14. Como consumir
 
-O `MxSidebarShell` (vendedor, gerente, consultoria, Admin MX) usa as mesmas medidas, tipografia,
-raios e o mesmo cartão de perfil. Restam três diferenças de comportamento, todas por origem de dados:
+```tsx
+import { SIDEBAR, SIDEBAR_METRICS } from '@/design-system/sidebar/tokens'
 
-1. **Cores por token vs. classe** — o Dono usa `bg-sidebar`/`text-primary` (tokens `.owner-b44`);
-   o shell usa `bg-white`/`bg-emerald-50` fixos. O resultado renderizado é equivalente.
-2. **CTA "Falar com Consultor"** — existe só no Dono.
-3. **Badges de contagem** — o shell exibe contadores dinâmicos (notificações, devolutivas);
-   no Dono os badges são estáticos ("Em construção").
+<aside className={cn(SIDEBAR.aside, collapsed ? SIDEBAR.asideWidthCollapsed : SIDEBAR.asideWidth)}>
+  <div className={SIDEBAR.root}>
+    <div className={cn(SIDEBAR.header, collapsed ? SIDEBAR.headerCollapsed : SIDEBAR.headerExpanded)}>…</div>
+    <nav className={cn(SIDEBAR.nav, collapsed ? SIDEBAR.navCollapsed : SIDEBAR.navExpanded)}>
+      <p className={SIDEBAR.sectionLabel}>SEÇÃO</p>
+      <a className={cn(SIDEBAR.item, SIDEBAR.itemExpanded, active ? SIDEBAR.itemActive : SIDEBAR.itemIdle)}>…</a>
+    </nav>
+    <div className={cn(SIDEBAR.footer, SIDEBAR.footerExpanded)}><MxSidebarProfileCard … /></div>
+  </div>
+</aside>
+```
+
+Tokens de cor disponíveis como utilities: `bg-mxsb-surface`, `text-mxsb-ink`, `text-mxsb-ink-strong`,
+`bg-mxsb-hover`, `border-mxsb-line`, `text-mxsb-muted`, `text-mxsb-active`, `bg-mxsb-active-surface`.
+
+**Proibido**: `bg-white shadow-sm` na coluna, item ativo em verde sólido (`bg-emerald-600 text-white`),
+larguras próprias (`w-56`, `w-[264px]`), breakpoint diferente de `xl` para a coluna fixa.
+
+## 15. Onde cada módulo ainda difere (por dado, não por estilo)
+
+1. **CTA "Falar com Consultor"** — o slot `SIDEBAR.ctaSlot` existe para todos, mas só o Dono o preenche.
+2. **Badges** — o shell exibe contadores dinâmicos (notificações, devolutivas) com o tom `badgeDefault`;
+   o Dono usa `badgeWarning` estático ("Em construção").
+3. **Seção "MENU"** — quando um módulo tem uma única seção com esse nome, o rótulo é omitido.

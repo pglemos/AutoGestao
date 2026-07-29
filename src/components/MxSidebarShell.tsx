@@ -14,6 +14,7 @@ import {
 import { cn } from '@/lib/utils'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { MxSidebarProfileCard } from './MxSidebarProfileCard'
+import { SIDEBAR } from '@/design-system/sidebar/tokens'
 import { NotificationBellButton } from './NotificationBellButton'
 import MxLogo from '@/assets/mx-logo.png'
 
@@ -258,37 +259,29 @@ export default function MxSidebarShell({
         aria-label={item.label}
         aria-current={active ? 'page' : false}
         onClick={() => setMobileOpen(false)}
+        title={isCollapsed ? item.label : undefined}
         className={cn(
-          'group relative flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-medium outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
-          active
-            ? 'bg-emerald-50 font-semibold text-emerald-700'
-            : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900',
-          isCollapsed && 'justify-center px-0',
+          SIDEBAR.item,
+          'text-left',
+          active ? SIDEBAR.itemActive : SIDEBAR.itemIdle,
+          isCollapsed ? SIDEBAR.itemCollapsed : SIDEBAR.itemExpanded,
         )}
       >
         <NavItemIcon
           icon={item.icon}
           size={16}
-          className={cn(
-            'shrink-0 transition-colors',
-            active ? 'text-emerald-600' : 'text-gray-400 group-hover:text-gray-700',
-          )}
+          className={active ? SIDEBAR.itemIconActive : SIDEBAR.itemIcon}
         />
         {!isCollapsed ? (
           <>
-            <span className={cn(
-              'min-w-0 flex-1',
-              item.badgeTone === 'warning' ? 'whitespace-normal leading-tight' : 'truncate',
-            )}>
+            <span className={SIDEBAR.itemLabel}>
               {item.label}
             </span>
             {item.badge ? (
               <span
                 className={cn(
-                  'inline-flex shrink-0 items-center justify-center rounded-full px-1.5 py-0.5 text-[9px] font-medium',
-                  item.badgeTone === 'warning'
-                    ? 'bg-amber-50 text-amber-700'
-                    : 'bg-emerald-50 text-emerald-700',
+                  SIDEBAR.badge,
+                  item.badgeTone === 'warning' ? SIDEBAR.badgeWarning : SIDEBAR.badgeDefault,
                 )}
               >
                 {item.badge}
@@ -312,20 +305,17 @@ export default function MxSidebarShell({
         aria-current={active ? 'page' : false}
         onClick={() => setMobileOpen(false)}
         className={cn(
-          'flex w-full items-center gap-1.5 rounded-md px-2.5 py-1 text-left text-[13px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
-          active
-            ? 'bg-emerald-50 font-medium text-emerald-700'
-            : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800',
+          SIDEBAR.nestedItem,
+          'text-left',
+          active ? SIDEBAR.nestedItemActive : SIDEBAR.nestedItemIdle,
         )}
       >
-        <span className="min-w-0 flex-1 truncate">{item.label}</span>
+        <span className={SIDEBAR.itemLabel}>{item.label}</span>
         {item.badge ? (
           <span
             className={cn(
-              'shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-medium',
-              item.badgeTone === 'warning'
-                ? 'bg-amber-50 text-amber-700'
-                : 'bg-emerald-50 text-emerald-700',
+              SIDEBAR.badge,
+              item.badgeTone === 'warning' ? SIDEBAR.badgeWarning : SIDEBAR.badgeDefault,
             )}
           >
             {item.badge}
@@ -339,6 +329,7 @@ export default function MxSidebarShell({
     const key = item.key ?? item.path
     const containsActiveItem = containsNavItem(item, activeNavItem)
     const expanded = expandedGroups[key] ?? item.defaultExpanded ?? containsActiveItem
+    const subnavId = `sidebar-subnav-${key.replace(/[^a-zA-Z0-9_-]+/g, '-').toLowerCase()}`
 
     const toggleGroup = () => {
       if (isCollapsed) {
@@ -354,37 +345,38 @@ export default function MxSidebarShell({
         <button
           type="button"
           aria-expanded={expanded}
+          aria-controls={subnavId}
+          aria-label={isCollapsed ? item.label : undefined}
+          title={isCollapsed ? item.label : undefined}
           onClick={toggleGroup}
           className={cn(
-            'group relative flex w-full items-center gap-2.5 rounded-lg px-3 py-2 text-left text-sm font-medium text-gray-600 outline-none transition-colors hover:bg-gray-50 hover:text-gray-900 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
-            isCollapsed && 'justify-center px-0',
+            SIDEBAR.groupTrigger,
+            'text-left',
+            isCollapsed ? SIDEBAR.itemCollapsed : SIDEBAR.itemExpanded,
           )}
         >
-          <NavItemIcon
-            icon={item.icon}
-            size={16}
-            className="shrink-0 text-gray-400 transition-colors group-hover:text-gray-700"
-          />
+          <NavItemIcon icon={item.icon} size={16} className={SIDEBAR.itemIcon} />
           {!isCollapsed ? (
             <>
-              <span className="min-w-0 flex-1 truncate">{item.label}</span>
+              <span className={SIDEBAR.itemLabel}>{item.label}</span>
               <ChevronDown
                 size={14}
                 className={cn(
-                  'shrink-0 text-gray-400 transition-transform duration-200',
+                  SIDEBAR.groupChevron,
+                  'transition-transform duration-200',
                   expanded && 'rotate-180',
                 )}
                 aria-hidden="true"
               />
             </>
           ) : null}
-          {isCollapsed ? <CollapsedTooltip label={item.label} /> : null}
         </button>
 
         {!isCollapsed && expanded ? (
           <div
+            id={subnavId}
             data-sidebar-subnav={item.label}
-            className="ml-3 mt-0.5 space-y-0.5 border-l border-gray-200 pl-3"
+            className={SIDEBAR.subnav}
           >
             {item.children?.map(renderNestedNavItem)}
           </div>
@@ -414,8 +406,8 @@ export default function MxSidebarShell({
     <>
       <div
         className={cn(
-          'flex h-[54px] shrink-0 items-center border-b border-gray-100',
-          isCollapsed ? 'justify-center px-2' : 'justify-between px-4',
+          SIDEBAR.header,
+          isCollapsed ? SIDEBAR.headerCollapsed : SIDEBAR.headerExpanded,
         )}
       >
         <div
@@ -427,14 +419,14 @@ export default function MxSidebarShell({
           <img
             src={MxLogo}
             alt="MX"
-            className="h-7 w-7 shrink-0 object-contain"
+            className={SIDEBAR.brandLogo}
           />
           {!isCollapsed ? (
             <div className="min-w-0 leading-tight">
-              <p className="truncate text-[13px] font-black tracking-tight text-gray-900">
+              <p className={SIDEBAR.brandTitle}>
                 MX PERFORMANCE
               </p>
-              <p className="mt-0.5 truncate text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-700">
+              <p className={SIDEBAR.brandModule}>
                 {moduleLabel}
               </p>
             </div>
@@ -445,12 +437,12 @@ export default function MxSidebarShell({
             type="button"
             aria-label={isCollapsed ? 'Expandir sidebar' : 'Recolher sidebar'}
             onClick={() => setCollapsed((value) => !value)}
-            className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl border border-gray-100 bg-white text-gray-500 outline-none transition-colors hover:bg-gray-50 hover:text-gray-900 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+            className={SIDEBAR.toggle}
           >
             {isCollapsed ? (
-              <PanelLeftOpen size={17} aria-hidden="true" />
+              <PanelLeftOpen size={18} aria-hidden="true" />
             ) : (
-              <PanelLeftClose size={17} aria-hidden="true" />
+              <PanelLeftClose size={18} aria-hidden="true" />
             )}
           </button>
         ) : null}
@@ -458,19 +450,20 @@ export default function MxSidebarShell({
 
       <nav
         className={cn(
-          'no-scrollbar min-h-0 flex-1 space-y-5 overflow-y-auto py-4',
-          isCollapsed ? 'px-2' : 'px-3',
+          'no-scrollbar',
+          SIDEBAR.nav,
+          isCollapsed ? SIDEBAR.navCollapsed : SIDEBAR.navExpanded,
         )}
         aria-label={sidebarLabel}
       >
         {navSections.map((section) => (
-          <section key={section.key ?? section.label}>
+          <section key={section.key ?? section.label} className={SIDEBAR.section}>
             {!isCollapsed && section.label !== 'MENU' ? (
-              <p className="truncate px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-gray-400">
+              <p className={SIDEBAR.sectionLabel}>
                 {section.label}
               </p>
             ) : null}
-            <div className="space-y-0.5">
+            <div className={SIDEBAR.sectionItems}>
               {section.items.map(item => item.children?.length
                 ? renderNavGroup(item, isCollapsed)
                 : renderNavItem(item, isCollapsed))}
@@ -479,7 +472,7 @@ export default function MxSidebarShell({
         ))}
       </nav>
 
-      <div className={cn('border-t border-gray-100 py-3', isCollapsed ? 'px-2' : 'px-3')}>
+      <div className={cn(SIDEBAR.footer, isCollapsed ? SIDEBAR.footerCollapsed : SIDEBAR.footerExpanded)}>
         {renderProfileCard(isCollapsed)}
       </div>
     </>
@@ -487,7 +480,7 @@ export default function MxSidebarShell({
 
   return (
     <div className="h-[100dvh] overflow-hidden bg-gray-50 font-display text-gray-800">
-      <header className="fixed left-0 right-0 top-0 z-[90] flex h-[calc(72px+env(safe-area-inset-top))] items-center justify-between border-b border-gray-100 bg-white px-4 pt-[env(safe-area-inset-top)] shadow-sm md:hidden">
+      <header className="fixed left-0 right-0 top-0 z-[90] flex h-[calc(72px+env(safe-area-inset-top))] items-center justify-between border-b border-gray-100 bg-white px-4 pt-[env(safe-area-inset-top)] shadow-sm xl:hidden">
         <button
           type="button"
           aria-label="Abrir menu principal"
@@ -522,8 +515,8 @@ export default function MxSidebarShell({
 
       <aside
         className={cn(
-          'fixed left-0 top-0 z-[80] hidden h-screen flex-col border-r border-gray-100 bg-white shadow-sm transition-[width] duration-300 ease-in-out md:flex',
-          collapsed ? 'w-16' : 'w-64',
+          'fixed left-0 top-0 z-[80] hidden h-screen flex-col border-r border-mxsb-line bg-mxsb-surface text-mxsb-ink transition-[width] duration-300 xl:flex',
+          collapsed ? SIDEBAR.asideWidthCollapsed : SIDEBAR.asideWidth,
         )}
         aria-label={sidebarLabel}
       >
@@ -532,7 +525,7 @@ export default function MxSidebarShell({
 
       {mobileOpen ? (
         <div
-          className="fixed inset-0 z-[100] bg-gray-950/30 backdrop-blur-sm md:hidden"
+          className="fixed inset-0 z-[100] bg-black/40 xl:hidden"
           role="presentation"
           onClick={() => setMobileOpen(false)}
           onKeyDown={(event) => {
@@ -544,20 +537,18 @@ export default function MxSidebarShell({
             role="dialog"
             aria-modal="true"
             aria-label={sidebarLabel}
-            className="flex h-full w-[min(304px,calc(100vw-1rem))] flex-col border-r border-gray-100 bg-white shadow-2xl"
+            className={cn(SIDEBAR.drawerPanel, 'border-r border-mxsb-line text-mxsb-ink')}
             onClick={(event) => event.stopPropagation()}
             onKeyDown={(event) => event.stopPropagation()}
           >
-            <div className="flex h-14 items-center justify-end border-b border-gray-100 px-3">
-              <button
-                type="button"
-                aria-label="Fechar menu principal"
-                onClick={() => setMobileOpen(false)}
-                className="flex h-10 w-10 items-center justify-center rounded-xl text-gray-500 outline-none transition-colors hover:bg-gray-50 hover:text-gray-900 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
-              >
-                <X size={21} aria-hidden="true" />
-              </button>
-            </div>
+            <button
+              type="button"
+              aria-label="Fechar menu principal"
+              onClick={() => setMobileOpen(false)}
+              className={SIDEBAR.drawerClose}
+            >
+              <X size={16} aria-hidden="true" />
+            </button>
             <div className="flex min-h-0 flex-1 flex-col">
               {renderSidebarContent(false)}
             </div>
@@ -570,9 +561,9 @@ export default function MxSidebarShell({
         role="main"
         tabIndex={-1}
         className={cn(
-          'h-[100dvh] overflow-hidden bg-gray-50 outline-none transition-[padding] duration-300 md:h-screen',
-          'pt-[calc(72px+env(safe-area-inset-top))] md:pt-0',
-          collapsed ? 'md:pl-16' : 'md:pl-64',
+          'h-[100dvh] overflow-hidden bg-gray-50 outline-none transition-[padding] duration-300 xl:h-screen',
+          'pt-[calc(72px+env(safe-area-inset-top))] xl:pt-0',
+          collapsed ? 'xl:pl-16' : 'xl:pl-64',
         )}
       >
         {isSimulating ? (
