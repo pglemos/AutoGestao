@@ -91,23 +91,47 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
 
   return (
     <>
-      <OwnerPageHeading
-        icon={User}
-        title="Meu Perfil"
-        subtitle="Gestão de credenciais e segurança MX"
-        showFilter={false}
-        actions={(
-          <>
-            <Button variant="outline" size="icon" onClick={() => signOut()} className="h-10 w-10 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface">
-              <LogOut size={18} />
+      {isOwner ? (
+        <OwnerPageHeading
+          icon={User}
+          title="Meu Perfil"
+          subtitle="Gestão de credenciais e segurança MX"
+          showFilter={false}
+          actions={(
+            <>
+              <Button variant="outline" size="icon" onClick={() => signOut()} className="h-10 w-10 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface">
+                <LogOut size={18} />
+              </Button>
+              <Button onClick={handleSave} disabled={saving}>
+                {saving ? <RefreshCw className="animate-spin mr-2" size={16} /> : <ShieldCheck size={16} className="mr-2" />}
+                Firmar alterações
+              </Button>
+            </>
+          )}
+        />
+      ) : (
+        <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between border-b border-border pb-6 shrink-0">
+          <div className="flex flex-col gap-1">
+            <div className="flex items-center gap-3">
+              <div className="w-1 h-10 bg-brand-primary rounded-full shadow-md" aria-hidden="true" />
+              <h1 className="text-3xl font-black tracking-tight md:text-4xl">Painel de Identidade</h1>
+            </div>
+            <p className="pl-4 text-xs font-black uppercase tracking-widest text-muted-foreground">
+              Gestão de credenciais e segurança MX
+            </p>
+          </div>
+
+          <div className="flex items-center gap-3 shrink-0">
+            <Button variant="outline" size="icon" onClick={() => signOut()} className="h-14 w-14 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface shadow-sm bg-card">
+              <LogOut size={24} />
             </Button>
-            <Button onClick={handleSave} disabled={saving}>
-              {saving ? <RefreshCw className="animate-spin mr-2" size={16} /> : <ShieldCheck size={16} className="mr-2" />}
-              {isOwner ? 'Firmar alterações' : 'Salvar conta'}
+            <Button onClick={handleSave} disabled={saving} className="h-14 px-10 rounded-full shadow-xl">
+              {saving ? <RefreshCw className="animate-spin mr-2" /> : <ShieldCheck size={18} className="mr-2" />}
+              <span className="text-xs font-black uppercase tracking-widest">Salvar conta</span>
             </Button>
-          </>
-        )}
-      />
+          </div>
+        </header>
+      )}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_2fr]">
         <aside className="flex flex-col gap-6">
