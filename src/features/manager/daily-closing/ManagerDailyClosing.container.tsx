@@ -358,8 +358,8 @@ export default function ManagerDailyClosing() {
   if (sellersLoading || checkinsLoading) return <ManagerClosingSkeleton />;
 
   return (
-    <main className="min-h-full bg-gray-50">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 px-4 py-6 pb-20">
+    <main id="fechamento-diario" className="min-h-full bg-muted" aria-label="Fechamento Diário">
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 pb-20">
         <ManagerHomeReturnLink />
         <section className="bg-white rounded-[16px] border border-gray-100 shadow-sm p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -1258,11 +1258,11 @@ function Empty({ text }: { text: string }) {
 }
 function ManagerClosingSkeleton() {
   return (
-    <main className="space-y-mx-lg bg-surface-alt p-mx-lg" aria-busy="true">
-      <Skeleton className="h-mx-20" />
-      <div className="grid grid-cols-1 gap-mx-md sm:grid-cols-2 xl:grid-cols-4">
+    <main className="flex min-h-0 flex-1 flex-col space-y-6 p-6" aria-busy="true" aria-label="Carregando fechamento diário">
+      <Skeleton className="h-20" />
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: 4 }).map((_, index) => (
-          <Skeleton key={index} className="h-mx-32" />
+          <Skeleton key={index} className="h-32" />
         ))}
       </div>
       <Skeleton className="h-[420px]" />

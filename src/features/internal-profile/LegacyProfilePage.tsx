@@ -1,11 +1,8 @@
 import { useState, useRef } from 'react'
 import { User, Mail, Shield, Save, Camera, LogOut, Key, ChevronRight, ShieldCheck, RefreshCw, X } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
-import { Typography } from '@/components/atoms/Typography'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
-import { Card, CardHeader, CardContent } from '@/components/molecules/Card'
-import { cn } from '@/lib/utils'
 import { useAuth } from '@/hooks/useAuth'
 import { toast } from '@/lib/toast'
 import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from '@/lib/auth/passwordPolicy'
@@ -83,38 +80,38 @@ export default function Perfil() {
   if (!profile) return null
 
   return (
-    <main className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg overflow-y-auto no-scrollbar">
+    <main id="perfil" className="flex min-h-0 flex-1 flex-col space-y-6 p-6 pb-20 lg:pb-0" aria-label="Meu Perfil">
 
-      <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border-default pb-mx-lg shrink-0">
-        <div className="flex flex-col gap-mx-tiny">
-          <div className="flex items-center gap-mx-sm">
-            <div className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-mx-md" aria-hidden="true" />
-            <Typography variant="h1">{isSeller ? 'Minha' : 'Painel de'} <Typography as="span" className="text-brand-primary">{isSeller ? 'Conta' : 'Identidade'}</Typography></Typography>
+      <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between border-b border-border pb-6 shrink-0">
+        <div className="flex flex-col gap-1">
+          <div className="flex items-center gap-3">
+            <div className="w-1 h-10 bg-brand-primary rounded-full shadow-md" aria-hidden="true" />
+            <h1 className="text-3xl font-black tracking-tight md:text-4xl">{isSeller ? 'Minha Conta' : 'Painel de Identidade'}</h1>
           </div>
-          <Typography variant="caption" className="pl-mx-md uppercase tracking-mx-wide font-black">
+          <p className="pl-4 text-xs font-black uppercase tracking-widest text-muted-foreground">
             {isSeller ? 'Dados pessoais, telefone, foto e senha' : 'Gestão de credenciais e segurança MX'}
-          </Typography>
+          </p>
         </div>
 
-        <div className="flex items-center gap-mx-sm shrink-0">
-          <Button variant="outline" size="icon" onClick={() => signOut()} className="w-mx-14 h-mx-14 rounded-mx-xl text-status-error border-status-error/20 hover:bg-status-error-surface shadow-mx-sm bg-white">
+        <div className="flex items-center gap-3 shrink-0">
+          <Button variant="outline" size="icon" onClick={() => signOut()} className="h-14 w-14 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface shadow-sm bg-card">
             <LogOut size={24} />
           </Button>
-          <Button onClick={handleSave} disabled={saving} className="h-mx-14 px-10 rounded-mx-full shadow-mx-xl">
+          <Button onClick={handleSave} disabled={saving} className="h-14 px-10 rounded-full shadow-xl">
             {saving ? <RefreshCw className="animate-spin mr-2" /> : <ShieldCheck size={18} className="mr-2" />}
-            <Typography variant="tiny" as="span" className="font-black uppercase tracking-widest">{isSeller ? 'Salvar conta' : 'Firmar alterações'}</Typography>
+            <span className="text-xs font-black uppercase tracking-widest">{isSeller ? 'Salvar conta' : 'Firmar alterações'}</span>
           </Button>
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-mx-lg flex-1 min-h-0 pb-32">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
 
-        <aside className="lg:col-span-4 flex flex-col gap-mx-lg h-full">
-          <Card className="p-mx-10 md:p-12 flex flex-col items-center text-center group relative overflow-hidden border-none shadow-mx-lg bg-white">
-            <div className="absolute top-mx-0 left-mx-0 w-full h-mx-4xl bg-brand-secondary z-0 opacity-10" aria-hidden="true" />
-            <div className="relative z-10 space-y-mx-lg">
+        <aside className="lg:col-span-4 flex flex-col gap-6 h-full">
+          <div className="rounded-xl border border-border bg-card p-10 md:p-12 flex flex-col items-center text-center group relative overflow-hidden shadow-lg">
+            <div className="absolute top-0 left-0 w-full h-4xl bg-brand-secondary z-0 opacity-10" aria-hidden="true" />
+            <div className="relative z-10 space-y-6">
               <div className="relative group/avatar inline-block">
-                <div className="w-mx-4xl h-mx-4xl rounded-mx-3xl border-8 border-white shadow-mx-xl overflow-hidden bg-surface-alt transition-transform group-hover/avatar:scale-105 duration-500">
+                <div className="w-4xl h-4xl rounded-3xl border-8 border-card shadow-xl overflow-hidden bg-muted transition-transform group-hover/avatar:scale-105 duration-500">
                   <img
                     src={getAvatarDisplayUrl(profile.avatar_url, profile.name, { size: 256, background: '4f46e5', color: 'fff' })}
                     alt={`Avatar de ${profile.name}`}
@@ -125,97 +122,97 @@ export default function Perfil() {
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadingAvatar}
-                  className="absolute inset-0 bg-black/60 rounded-mx-3xl opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center text-white gap-mx-xs disabled:opacity-50"
+                  className="absolute inset-0 bg-black/60 rounded-3xl opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center text-white gap-2 disabled:opacity-50"
                 >
                   {uploadingAvatar ? <RefreshCw size={24} className="animate-spin" /> : <Camera size={24} />}
-                  <Typography variant="tiny" tone="white">{uploadingAvatar ? 'Enviando...' : 'ALTERAR'}</Typography>
+                  <span className="text-xs font-bold text-white">{uploadingAvatar ? 'Enviando...' : 'ALTERAR'}</span>
                 </button>
                 <input aria-label="Selecionar arquivo" ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" capture="user" onChange={handleAvatarUpload} className="hidden" />
               </div>
 
               <div>
-                <Typography variant="h2" className="text-2xl uppercase tracking-tighter font-black">{profile.name}</Typography>
-                <div className="flex items-center justify-center gap-mx-xs mt-3">
+                <h2 className="text-2xl uppercase tracking-tighter font-black text-foreground">{profile.name}</h2>
+                <div className="flex items-center justify-center gap-2 mt-3">
                   <Badge variant="brand" className="px-4 py-1 shadow-sm">
-                    <Typography variant="tiny" as="span" className="font-black uppercase">{role} tier</Typography>
+                    <span className="text-xs font-black uppercase">{role} tier</span>
                   </Badge>
-                  <div className="w-1.5 h-1.5 rounded-mx-full bg-status-success shadow-mx-sm animate-pulse" />
+                  <div className="w-1.5 h-1.5 rounded-full bg-status-success shadow-sm animate-pulse" />
                 </div>
               </div>
             </div>
-          </Card>
+          </div>
         </aside>
 
-        <section className="lg:col-span-8 flex flex-col gap-mx-lg h-full">
-          <Card className="h-full flex flex-col overflow-hidden border-none shadow-mx-xl bg-white group">
-            <CardHeader className="bg-surface-alt/30 border-b border-border-default p-mx-10 md:p-14 flex flex-row items-center justify-between relative overflow-hidden">
-              <div className="flex items-center gap-mx-md relative z-10">
-                <div className="w-mx-2xl h-mx-2xl rounded-mx-2xl bg-brand-secondary text-white flex items-center justify-center shadow-mx-xl transform rotate-2"><User size={32} /></div>
+        <section className="lg:col-span-8 flex flex-col gap-6 h-full">
+          <div className="rounded-xl border border-border bg-card shadow-xl group h-full flex flex-col overflow-hidden">
+            <header className="bg-muted/30 border-b border-border p-10 md:p-14 flex flex-row items-center justify-between relative overflow-hidden">
+              <div className="flex items-center gap-4 relative z-10">
+                <div className="w-2xl h-2xl rounded-2xl bg-brand-secondary text-white flex items-center justify-center shadow-xl transform rotate-2"><User size={32} /></div>
                 <div>
-              <Typography variant="h2" className="text-2xl uppercase tracking-tighter leading-none">{isSeller ? 'Minha conta' : 'Configurações de Conta'}</Typography>
-                  <Typography variant="caption" tone="muted" className="uppercase tracking-mx-wide font-black mt-1 font-black">
+                  <h2 className="text-2xl uppercase tracking-tighter leading-none text-foreground">{isSeller ? 'Minha conta' : 'Configurações de Conta'}</h2>
+                  <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mt-1">
                     {isSeller ? 'Informações usadas na rotina da loja' : 'Sinc: Identity Gateway v4.0'}
-                  </Typography>
+                  </p>
                 </div>
               </div>
-            </CardHeader>
+            </header>
 
-            <CardContent className="p-mx-10 md:p-14 space-y-mx-14 flex-1 overflow-y-auto no-scrollbar relative z-10">
-              <div className="grid md:grid-cols-2 gap-mx-10">
-                <div className="space-y-mx-sm">
-                  <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest leading-none">Nome Operacional</Typography>
+            <div className="p-10 md:p-14 space-y-14 flex-1 overflow-y-auto no-scrollbar relative z-10">
+              <div className="grid md:grid-cols-2 gap-10">
+                <div className="space-y-3">
+                  <p className="ml-2 text-xs font-black uppercase tracking-widest leading-none text-muted-foreground">Nome Operacional</p>
                   <Input aria-label="Nome Operacional" value={name} onChange={e => setName(e.target.value)} className="!h-14 px-6 font-bold" />
                 </div>
-                <div className="space-y-mx-sm">
-                  <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest leading-none">E-mail Fixado</Typography>
-                  <Input aria-label="E-mail Fixado" value={profile.email} disabled className="!h-14 px-6 font-bold opacity-50 bg-surface-alt" />
+                <div className="space-y-3">
+                  <p className="ml-2 text-xs font-black uppercase tracking-widest leading-none text-muted-foreground">E-mail Fixado</p>
+                  <Input aria-label="E-mail Fixado" value={profile.email} disabled className="!h-14 px-6 font-bold opacity-50 bg-muted" />
                 </div>
               </div>
 
-              <div className="grid md:grid-cols-2 gap-mx-10">
-                <div className="space-y-mx-sm">
-                  <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest leading-none">Telefone</Typography>
+              <div className="grid md:grid-cols-2 gap-10">
+                <div className="space-y-3">
+                  <p className="ml-2 text-xs font-black uppercase tracking-widest leading-none text-muted-foreground">Telefone</p>
                   <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="(11) 99999-9999" className="!h-14 px-6 font-bold" />
                 </div>
-                <div className="space-y-mx-sm">
-                  <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest leading-none">Cargo</Typography>
-                  <Input aria-label="Cargo" value={role || ''} disabled className="!h-14 px-6 font-bold opacity-50 bg-surface-alt capitalize" />
+                <div className="space-y-3">
+                  <p className="ml-2 text-xs font-black uppercase tracking-widest leading-none text-muted-foreground">Cargo</p>
+                  <Input aria-label="Cargo" value={role || ''} disabled className="!h-14 px-6 font-bold opacity-50 bg-muted capitalize" />
                 </div>
               </div>
 
-              <div className="pt-14 border-t border-border-default space-y-mx-10">
-                <div className="flex items-center gap-mx-sm">
-                  <div className="w-mx-10 h-mx-10 rounded-mx-lg bg-mx-indigo-50 text-brand-primary flex items-center justify-center shadow-inner border border-mx-indigo-100"><ShieldCheck size={20} /></div>
-                  <Typography variant="caption" tone="brand" className="font-black uppercase tracking-mx-wide">
+              <div className="pt-14 border-t border-border space-y-10">
+                <div className="flex items-center gap-3">
+                  <div className="h-10 w-10 rounded-lg bg-indigo-50 text-brand-primary flex items-center justify-center shadow-inner border border-indigo-100"><ShieldCheck size={20} /></div>
+                  <p className="text-xs font-black uppercase tracking-widest text-brand-primary">
                     {isSeller ? 'Segurança da minha conta' : 'Segurança & Criptografia MX'}
-                  </Typography>
+                  </p>
                 </div>
 
-                <div className="grid md:grid-cols-2 gap-mx-lg">
-                  <Card
-                    className="p-mx-lg bg-surface-alt/50 border border-border-subtle rounded-mx-2xl flex items-center justify-between group/sec cursor-pointer hover:bg-white hover:shadow-mx-lg transition-all"
+                <div className="grid md:grid-cols-2 gap-6">
+                  <div
+                    className="rounded-xl border border-border bg-muted/50 p-6 flex items-center justify-between group/sec cursor-pointer hover:bg-card hover:shadow-lg transition-all"
                     onClick={() => setShowPasswordModal(true)}
                   >
-                    <div className="flex items-center gap-mx-sm">
-                      <div className="w-mx-xl h-mx-xl rounded-mx-xl bg-white border border-border-default flex items-center justify-center text-text-tertiary group-hover/sec:text-brand-primary transition-colors shadow-mx-sm"><Key size={20} /></div>
-                      <Typography variant="tiny" className="font-black uppercase tracking-widest">Alterar Senha</Typography>
+                    <div className="flex items-center gap-3">
+                      <div className="h-xl w-xl rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground group-hover/sec:text-brand-primary transition-colors shadow-sm"><Key size={20} /></div>
+                      <span className="text-xs font-black uppercase tracking-widest text-foreground">Alterar Senha</span>
                     </div>
-                    <ChevronRight size={18} className="text-text-tertiary opacity-30 group-hover/sec:translate-x-1 transition-all" />
-                  </Card>
+                    <ChevronRight size={18} className="text-muted-foreground opacity-30 group-hover/sec:translate-x-1 transition-all" />
+                  </div>
 
-                  <Card className="p-mx-lg bg-surface-alt/50 border border-border-subtle rounded-mx-2xl flex items-center justify-between group/sec">
-                    <div className="flex items-center gap-mx-sm">
-                      <div className="w-mx-xl h-mx-xl rounded-mx-xl bg-white border border-border-default flex items-center justify-center text-status-success shadow-mx-sm"><ShieldCheck size={20} /></div>
-                      <Typography variant="tiny" className="font-black uppercase tracking-widest">Verificação de acesso</Typography>
+                  <div className="rounded-xl border border-border bg-muted/50 p-6 flex items-center justify-between group/sec">
+                    <div className="flex items-center gap-3">
+                      <div className="h-xl w-xl rounded-xl bg-card border border-border flex items-center justify-center text-status-success shadow-sm"><ShieldCheck size={20} /></div>
+                      <span className="text-xs font-black uppercase tracking-widest text-foreground">Verificação de acesso</span>
                     </div>
-                    <Badge variant="success" className="px-4 py-1 rounded-mx-full border-none">
-                      <Typography variant="tiny" as="span" className="font-black uppercase">Ativo</Typography>
+                    <Badge variant="success" className="px-4 py-1 rounded-full border-none">
+                      <span className="text-xs font-black uppercase">Ativo</span>
                     </Badge>
-                  </Card>
+                  </div>
                 </div>
               </div>
-            </CardContent>
-          </Card>
+            </div>
+          </div>
         </section>
       </div>
 
@@ -224,7 +221,7 @@ export default function Perfil() {
           role="dialog"
           aria-modal="true"
           aria-labelledby="profile-password-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-mx-md"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
           onClick={() => setShowPasswordModal(false)}
           onKeyDown={(event) => {
             if (event.key === 'Escape') setShowPasswordModal(false)
@@ -232,27 +229,27 @@ export default function Perfil() {
         >
           <div
             role="presentation"
-            className="bg-white rounded-mx-2xl shadow-mx-xl w-full max-w-md p-mx-xl"
+            className="bg-card rounded-xl shadow-xl w-full max-w-md p-6"
             onClick={(e) => e.stopPropagation()}
             onKeyDown={(e) => e.stopPropagation()}
           >
-            <div className="flex items-center justify-between mb-mx-lg">
-              <Typography variant="h3" id="profile-password-modal-title">Alterar Senha</Typography>
-              <button onClick={() => setShowPasswordModal(false)} className="text-text-tertiary hover:text-text-primary"><X size={20} /></button>
+            <div className="flex items-center justify-between mb-6">
+              <h3 className="text-lg font-black text-foreground" id="profile-password-modal-title">Alterar Senha</h3>
+              <button onClick={() => setShowPasswordModal(false)} className="text-muted-foreground hover:text-foreground"><X size={20} /></button>
             </div>
 
-            <div className="space-y-mx-md">
+            <div className="space-y-4">
               <div>
-                <label htmlFor="profile-password-modal-new" className="text-xs font-bold text-text-secondary uppercase tracking-wider block mb-1">Nova Senha</label>
+                <label htmlFor="profile-password-modal-new" className="text-xs font-bold text-foreground uppercase tracking-wider block mb-1">Nova Senha</label>
                 <Input id="profile-password-modal-new" name="new-password" autoComplete="new-password" type="password" minLength={6} value={newPassword} onChange={(e) => setNewPassword(e.target.value)} placeholder="Mínimo 6 caracteres" className="w-full" />
               </div>
               <div>
-                <label htmlFor="profile-password-modal-confirm" className="text-xs font-bold text-text-secondary uppercase tracking-wider block mb-1">Confirmar Senha</label>
-                <Input id="profile-password-modal-confirm" name="confirm-password" autoComplete="new-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Repita a nova senha" className="w-full" />
+                <label htmlFor="profile-password-modal-confirm" className="text-xs font-bold text-foreground uppercase tracking-wider block mb-1">Confirmar Senha</label>
+                <Input id="profile-password-modal-confirm" name="new-password" autoComplete="new-password" type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} placeholder="Repita a nova senha" className="w-full" />
               </div>
             </div>
 
-            <div className="flex justify-end gap-mx-sm mt-mx-xl">
+            <div className="flex justify-end gap-3 mt-6">
               <Button variant="outline" size="sm" onClick={() => setShowPasswordModal(false)}>Cancelar</Button>
               <Button size="sm" className="bg-brand-primary text-white" onClick={handleChangePassword} disabled={changingPassword}>
                 {changingPassword ? 'Alterando...' : 'Alterar Senha'}

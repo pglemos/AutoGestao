@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
 import { Target, TrendingUp, AlertTriangle, CheckCircle2, Clock3 } from 'lucide-react'
-import { Card } from '@/components/molecules/Card'
-import { Typography } from '@/components/atoms/Typography'
 import { cn } from '@/lib/utils'
 
 type SellerMeta = {
@@ -46,119 +44,114 @@ export default function MetasGerente() {
   }), [])
 
   return (
-    <div className="flex flex-col gap-mx-lg p-mx-lg pb-28">
-      <header className="flex flex-col gap-mx-md border-b border-border-subtle pb-mx-lg lg:flex-row lg:items-center lg:justify-between">
-        <div className="min-w-0">
-          <Typography variant="h1" className="text-3xl md:text-4xl">Metas da Equipe</Typography>
-          <Typography variant="p" tone="muted" className="mt-mx-xs">Acompanhe o atingimento e a projeção de cada vendedor.</Typography>
-        </div>
+    <main id="metas-gerente" className="flex min-h-0 flex-1 flex-col space-y-6 p-6 pb-20 lg:pb-0" aria-label="Metas da Equipe">
+      <header className="flex flex-col gap-1">
+        <h1 className="text-3xl font-black tracking-tight md:text-4xl">Metas da Equipe</h1>
+        <p className="text-sm text-muted-foreground">Acompanhe o atingimento e a projeção de cada vendedor.</p>
       </header>
 
-      {/* KPI cards */}
-      <section className="grid grid-cols-1 gap-mx-md sm:grid-cols-2 xl:grid-cols-4">
-        <Card className="rounded-mx-2xl bg-white p-mx-md shadow-mx-sm border-none">
-          <div className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-status-info text-white shadow-mx-sm" aria-hidden="true">
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-status-info text-white shadow-sm" aria-hidden="true">
               <Target size={18} />
             </span>
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">Meta do Mês</Typography>
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Meta do Mês</span>
           </div>
-          <Typography variant="h2" className="mt-mx-md text-3xl font-black tabular-nums">{totals.meta}</Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold normal-case">veículos · soma da equipe</Typography>
-        </Card>
+          <p className="mt-4 text-3xl font-black tabular-nums">{totals.meta}</p>
+          <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">veículos · soma da equipe</p>
+        </div>
 
-        <Card className="rounded-mx-2xl bg-white p-mx-md shadow-mx-sm border-none">
-          <div className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-status-success text-white shadow-mx-sm" aria-hidden="true">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-status-success text-white shadow-sm" aria-hidden="true">
               <CheckCircle2 size={18} />
             </span>
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">Realizado</Typography>
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Realizado</span>
           </div>
-          <Typography variant="h2" className="mt-mx-md text-3xl font-black tabular-nums">{totals.realizado}</Typography>
-          <div className="mt-mx-xs flex items-baseline gap-mx-xs">
-            <Typography variant="tiny" tone="success" className="font-black tabular-nums">{totals.atingimento}%</Typography>
-            <Typography variant="tiny" tone="muted" className="font-bold normal-case">da meta</Typography>
+          <p className="mt-4 text-3xl font-black tabular-nums">{totals.realizado}</p>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-xs font-black tabular-nums text-status-success">{totals.atingimento}%</span>
+            <span className="text-xs font-bold text-muted-foreground normal-case">da meta</span>
           </div>
-        </Card>
+        </div>
 
-        <Card className="rounded-mx-2xl bg-white p-mx-md shadow-mx-sm border-none">
-          <div className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-status-warning text-white shadow-mx-sm" aria-hidden="true">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-status-warning text-white shadow-sm" aria-hidden="true">
               <TrendingUp size={18} />
             </span>
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">Projeção</Typography>
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Projeção</span>
           </div>
-          <Typography variant="h2" className="mt-mx-md text-3xl font-black tabular-nums">{totals.projecao}</Typography>
-          <div className="mt-mx-xs flex items-baseline gap-mx-xs">
-            <Typography variant="tiny" className="font-black tabular-nums text-status-warning">{totals.projetado}%</Typography>
-            <Typography variant="tiny" tone="muted" className="font-bold normal-case">se mantiver ritmo</Typography>
+          <p className="mt-4 text-3xl font-black tabular-nums">{totals.projecao}</p>
+          <div className="mt-2 flex items-baseline gap-2">
+            <span className="text-xs font-black tabular-nums text-status-warning">{totals.projetado}%</span>
+            <span className="text-xs font-bold text-muted-foreground normal-case">se mantiver ritmo</span>
           </div>
-        </Card>
+        </div>
 
-        <Card className="rounded-mx-2xl bg-white p-mx-md shadow-mx-sm border-none">
-          <div className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-status-error text-white shadow-mx-sm" aria-hidden="true">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-status-error text-white shadow-sm" aria-hidden="true">
               <AlertTriangle size={18} />
             </span>
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">Gap</Typography>
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Gap</span>
           </div>
-          <Typography variant="h2" className="mt-mx-md text-3xl font-black tabular-nums">{totals.gap}</Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold normal-case">faltam para bater meta</Typography>
-        </Card>
+          <p className="mt-4 text-3xl font-black tabular-nums">{totals.gap}</p>
+          <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">faltam para bater meta</p>
+        </div>
       </section>
 
-      {/* Resumo por tier */}
-      <section className="grid grid-cols-2 gap-mx-md md:grid-cols-4">
+      <section className="grid grid-cols-2 gap-4 md:grid-cols-4">
         {(Object.keys(statusConfig) as Array<SellerMeta['status']>).map((tier) => (
-          <Card key={tier} className="rounded-mx-2xl bg-white p-mx-md shadow-mx-sm border-none">
+          <div key={tier} className="rounded-xl border border-border bg-card p-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className={cn('inline-flex rounded-mx-md px-mx-sm py-mx-tiny text-mx-tiny font-black uppercase tracking-tight', statusConfig[tier].pill)}>
+              <span className={cn('inline-flex rounded-md px-3 py-0.5 text-xs font-black uppercase tracking-tight', statusConfig[tier].pill)}>
                 {statusConfig[tier].label}
               </span>
-              <Clock3 size={14} className="text-text-tertiary" />
+              <Clock3 size={14} className="text-muted-foreground" />
             </div>
-            <Typography variant="h2" className="mt-mx-md text-3xl font-black tabular-nums">{tierCounts[tier]}</Typography>
-            <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold normal-case">vendedores</Typography>
-          </Card>
+            <p className="mt-4 text-3xl font-black tabular-nums">{tierCounts[tier]}</p>
+            <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">vendedores</p>
+          </div>
         ))}
       </section>
 
-      {/* Tabela individual */}
-      <Card className="rounded-mx-2xl bg-white p-mx-lg shadow-mx-sm border-none">
-        <Typography variant="h3" className="text-xl font-black">Meta por Vendedor</Typography>
-        <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold normal-case">Atingimento individual e ritmo projetado.</Typography>
+      <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+        <h2 className="text-xl font-black">Meta por Vendedor</h2>
+        <p className="mt-1 text-xs font-bold text-muted-foreground normal-case">Atingimento individual e ritmo projetado.</p>
 
-        <div className="mt-mx-lg overflow-x-auto">
+        <div className="mt-6 overflow-x-auto">
           <table className="w-full min-w-[600px] text-sm">
-            <thead className="bg-surface-alt/60">
+            <thead className="bg-muted/60">
               <tr>
                 {['Vendedor', 'Meta', 'Realizado', 'Projeção', 'Atingimento', 'Status'].map(h => (
-                  <th key={h} className="px-mx-md py-mx-sm text-left text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">{h}</th>
                 ))}
               </tr>
             </thead>
-            <tbody className="divide-y divide-border-subtle">
+            <tbody className="divide-y divide-border">
               {teamMetas.map((m) => {
                 const att = m.meta > 0 ? Math.round((m.realizado / m.meta) * 100) : 0
                 const status = statusConfig[m.status]
                 return (
                   <tr key={m.id}>
-                    <td className="px-mx-md py-mx-sm">
-                      <Typography variant="p" className="truncate font-black">{m.name}</Typography>
+                    <td className="px-4 py-3">
+                      <p className="truncate font-black text-foreground">{m.name}</p>
                     </td>
-                    <td className="px-mx-md py-mx-sm text-center"><Typography variant="mono">{m.meta}</Typography></td>
-                    <td className="px-mx-md py-mx-sm text-center"><Typography variant="mono" tone="success">{m.realizado}</Typography></td>
-                    <td className="px-mx-md py-mx-sm text-center"><Typography variant="mono" tone="warning">{m.projecao}</Typography></td>
-                    <td className="px-mx-md py-mx-sm">
-                      <div className="flex items-center gap-mx-xs">
-                        <div className="flex-1 h-mx-xs overflow-hidden rounded-mx-full bg-surface-alt">
-                          <div className={cn('h-full rounded-mx-full transition-all', status.bar)} style={{ width: `${Math.min(att, 100)}%` }} />
+                    <td className="px-4 py-3 text-center font-mono tabular-nums">{m.meta}</td>
+                    <td className="px-4 py-3 text-center font-mono tabular-nums text-status-success">{m.realizado}</td>
+                    <td className="px-4 py-3 text-center font-mono tabular-nums text-status-warning">{m.projecao}</td>
+                    <td className="px-4 py-3">
+                      <div className="flex items-center gap-2">
+                        <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
+                          <div className={cn('h-full rounded-full transition-all', status.bar)} style={{ width: `${Math.min(att, 100)}%` }} />
                         </div>
-                        <span className="text-mx-tiny font-black text-text-tertiary tabular-nums w-mx-9 text-right">{att}%</span>
+                        <span className="w-9 text-right text-xs font-black text-muted-foreground tabular-nums">{att}%</span>
                       </div>
                     </td>
-                    <td className="px-mx-md py-mx-sm">
-                      <span className={cn('inline-flex rounded-mx-full px-mx-sm py-mx-tiny text-mx-tiny font-black uppercase tracking-tight', status.pill)}>
+                    <td className="px-4 py-3">
+                      <span className={cn('inline-flex rounded-full px-3 py-0.5 text-xs font-black uppercase tracking-tight', status.pill)}>
                         {status.label}
                       </span>
                     </td>
@@ -168,7 +161,7 @@ export default function MetasGerente() {
             </tbody>
           </table>
         </div>
-      </Card>
-    </div>
+      </div>
+    </main>
   )
 }

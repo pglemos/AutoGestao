@@ -13,13 +13,13 @@ export function Notificacoes() {
       <MxModulePage id="internal-notifications" maxWidth="full" contentClassName="max-w-[1500px]">
         <NotificacoesHeader isRefetching={state.isRefetching} handleRefresh={state.handleRefresh} markAllAsRead={state.markAllAsRead} />
         <NotificacoesRoleBanners isOwner={state.isOwner} />
-        <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-12">
+        <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-12">
           <section className="order-2 flex flex-col lg:order-1 lg:col-span-8">
             <NotificacoesErrorBoundary sectionName="Lista de Notificações">
               <NotificacoesListSection unreadCount={state.unreadCount} grouped={state.grouped} isOwner={state.isOwner} markRead={state.markRead} markUnread={state.markUnread} deleteNotification={state.deleteNotification} isApprovalNotification={state.isApprovalNotification} getApprovalForNotification={state.getApprovalForNotification} reviewingPreRegistrationId={state.reviewingPreRegistrationId} handleReviewPreRegistration={state.handleReviewPreRegistration} />
             </NotificacoesErrorBoundary>
           </section>
-          <aside className="order-1 flex flex-col gap-5 lg:order-2 lg:col-span-4">
+          <aside className="order-1 flex flex-col gap-4 lg:order-2 lg:col-span-4">
             <NotificacoesErrorBoundary sectionName="Filtros">
               <NotificacoesFiltersBar searchTerm={state.searchTerm} setSearchTerm={state.setSearchTerm} filterType={state.filterType} setFilterType={state.setFilterType} />
             </NotificacoesErrorBoundary>

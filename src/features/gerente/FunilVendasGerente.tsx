@@ -1,7 +1,5 @@
 import { useMemo } from 'react'
 import { ChevronRight, Filter, Users, Phone, MapPin, Trophy, TrendingUp, TrendingDown } from 'lucide-react'
-import { Card } from '@/components/molecules/Card'
-import { Typography } from '@/components/atoms/Typography'
 import { cn } from '@/lib/utils'
 
 type Tone = 'info' | 'success' | 'warning' | 'purple'
@@ -25,7 +23,7 @@ const tonePalette: Record<Tone, { iconBg: string; iconText: string; barBg: strin
   info: { iconBg: 'bg-status-info-surface', iconText: 'text-status-info', barBg: 'bg-status-info', pill: 'bg-status-info-surface text-status-info' },
   success: { iconBg: 'bg-status-success-surface', iconText: 'text-status-success', barBg: 'bg-status-success', pill: 'bg-status-success-surface text-status-success' },
   warning: { iconBg: 'bg-status-warning-surface', iconText: 'text-status-warning', barBg: 'bg-status-warning', pill: 'bg-status-warning-surface text-status-warning' },
-  purple: { iconBg: 'bg-[var(--color-accent-purple-soft)]', iconText: 'text-[var(--color-accent-purple)]', barBg: 'bg-[var(--color-accent-purple)]', pill: 'bg-[var(--color-accent-purple-soft)] text-[var(--color-accent-purple)]' },
+  purple: { iconBg: 'bg-purple-100', iconText: 'text-purple-700', barBg: 'bg-purple-600', pill: 'bg-purple-100 text-purple-700' },
 }
 
 const funnelData: FunnelRow[] = [
@@ -82,101 +80,101 @@ export default function FunilVendasGerente() {
   const conversaoGeral = totalLeads > 0 ? Math.round((totalSales / totalLeads) * 100) : 0
 
   return (
-    <div className="flex flex-col gap-mx-lg p-mx-lg pb-28">
-      <header className="flex flex-col gap-mx-md border-b border-border-subtle pb-mx-lg lg:flex-row lg:items-center lg:justify-between">
+    <main id="funil-vendas" className="flex min-h-0 flex-1 flex-col space-y-6 p-6 pb-20 lg:pb-0" aria-label="Funil de Vendas">
+      <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <Typography variant="h1" className="text-3xl md:text-4xl">Funil de Vendas</Typography>
-          <Typography variant="p" tone="muted" className="mt-mx-xs">Desempenho completo da equipe por canal de origem.</Typography>
+          <h1 className="text-3xl font-black tracking-tight md:text-4xl">Funil de Vendas</h1>
+          <p className="text-sm text-muted-foreground">Desempenho completo da equipe por canal de origem.</p>
         </div>
-        <div className="flex flex-wrap gap-mx-sm">
-          <button type="button" className="flex h-mx-11 items-center gap-mx-xs rounded-mx-xl border border-border-default bg-white px-mx-md text-sm font-black text-text-secondary hover:bg-surface-alt transition-all">
+        <div className="flex flex-wrap gap-3">
+          <button type="button" className="flex h-11 items-center gap-2 rounded-lg border border-border bg-card px-4 text-sm font-bold text-muted-foreground shadow-sm hover:bg-muted/50 transition-all">
             <Filter size={16} /> Filtros
           </button>
         </div>
       </header>
 
-      <section className="grid grid-cols-1 gap-mx-md sm:grid-cols-2 xl:grid-cols-4">
-        <Card className="rounded-mx-2xl bg-white p-mx-md shadow-mx-sm border-none">
-          <div className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-status-info text-white shadow-mx-sm" aria-hidden="true">
+      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-status-info text-white shadow-sm" aria-hidden="true">
               <Users size={18} />
             </span>
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">Total Leads</Typography>
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Total Leads</span>
           </div>
-          <Typography variant="h2" className="mt-mx-md text-3xl font-black tabular-nums">{totalLeads}</Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold normal-case">de todos os canais</Typography>
-        </Card>
+          <p className="mt-4 text-3xl font-black tabular-nums">{totalLeads}</p>
+          <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">de todos os canais</p>
+        </div>
 
-        <Card className="rounded-mx-2xl bg-white p-mx-md shadow-mx-sm border-none">
-          <div className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-status-success text-white shadow-mx-sm" aria-hidden="true">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-status-success text-white shadow-sm" aria-hidden="true">
               <Trophy size={18} />
             </span>
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">Vendas Realizadas</Typography>
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Vendas Realizadas</span>
           </div>
-          <Typography variant="h2" className="mt-mx-md text-3xl font-black tabular-nums">{totalSales}</Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold normal-case">fechadas no período</Typography>
-        </Card>
+          <p className="mt-4 text-3xl font-black tabular-nums">{totalSales}</p>
+          <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">fechadas no período</p>
+        </div>
 
-        <Card className="rounded-mx-2xl bg-white p-mx-md shadow-mx-sm border-none">
-          <div className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-status-warning text-white shadow-mx-sm" aria-hidden="true">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-status-warning text-white shadow-sm" aria-hidden="true">
               <TrendingUp size={18} />
             </span>
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">Conversão Geral</Typography>
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Conversão Geral</span>
           </div>
-          <Typography variant="h2" className="mt-mx-md text-3xl font-black tabular-nums">{conversaoGeral}<span className="text-2xl">%</span></Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold normal-case">lead → venda</Typography>
-        </Card>
+          <p className="mt-4 text-3xl font-black tabular-nums">{conversaoGeral}<span className="text-2xl">%</span></p>
+          <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">lead → venda</p>
+        </div>
 
-        <Card className="rounded-mx-2xl bg-white p-mx-md shadow-mx-sm border-none">
-          <div className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full text-white shadow-mx-sm" style={{ background: 'linear-gradient(135deg, var(--color-accent-purple) 0%, var(--color-accent-purple-strong) 100%)' }} aria-hidden="true">
+        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
+          <div className="flex items-center gap-3">
+            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600 text-white shadow-sm" aria-hidden="true">
               <TrendingDown size={18} />
             </span>
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">Gargalo Principal</Typography>
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Gargalo Principal</span>
           </div>
-          <Typography variant="h2" className="mt-mx-md text-3xl font-black tabular-nums">Visita → Venda</Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold normal-case">Conversão abaixo da meta</Typography>
-        </Card>
+          <p className="mt-4 text-3xl font-black tabular-nums">Visita → Venda</p>
+          <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">Conversão abaixo da meta</p>
+        </div>
       </section>
 
-      <section className="grid grid-cols-1 gap-mx-md xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <Card className="rounded-mx-2xl bg-white p-mx-lg shadow-mx-sm border-none">
-          <Typography variant="h3" className="text-xl font-black">Funil por Canal</Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold normal-case">Cada linha representa o ciclo lead → venda por origem.</Typography>
+      <section className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
+        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <h2 className="text-xl font-black">Funil por Canal</h2>
+          <p className="mt-1 text-xs font-bold text-muted-foreground normal-case">Cada linha representa o ciclo lead → venda por origem.</p>
 
-          <div className="mt-mx-lg flex flex-col gap-mx-md">
+          <div className="mt-6 flex flex-col gap-4">
             {funnelData.map((row) => {
               const palette = tonePalette[row.tone]
               return (
-                <div key={row.id} className="rounded-mx-xl border border-border-default p-mx-md">
-                  <div className="flex items-center justify-between gap-mx-md">
-                    <div className="flex items-center gap-mx-sm">
-                      <span className={cn('flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-lg', palette.iconBg, palette.iconText)} aria-hidden="true">
+                <div key={row.id} className="rounded-lg border border-border p-4">
+                  <div className="flex items-center justify-between gap-4">
+                    <div className="flex items-center gap-3">
+                      <span className={cn('flex h-10 w-10 items-center justify-center rounded-lg', palette.iconBg, palette.iconText)} aria-hidden="true">
                         {row.icon}
                       </span>
                       <div>
-                        <Typography variant="tiny" className={cn('font-black uppercase tracking-widest', palette.iconText)}>{row.title}</Typography>
-                        <Typography variant="tiny" tone="muted" className="block font-bold normal-case">{row.description}</Typography>
+                        <span className={cn('text-xs font-black uppercase tracking-widest', palette.iconText)}>{row.title}</span>
+                        <p className="text-xs font-bold text-muted-foreground normal-case">{row.description}</p>
                       </div>
                     </div>
                   </div>
 
-                  <div className={cn('mt-mx-md grid gap-mx-sm', row.stages.length === 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-2')}>
+                  <div className={cn('mt-4 grid gap-3', row.stages.length === 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-2')}>
                     {row.stages.map((stage, i) => (
                       <div key={stage.label} className="relative">
                         {i > 0 && (
-                          <span className="absolute -left-mx-tiny top-1/2 hidden -translate-y-1/2 text-text-tertiary md:block" aria-hidden="true">
+                          <span className="absolute -left-0.5 top-1/2 hidden -translate-y-1/2 text-muted-foreground md:block" aria-hidden="true">
                             <ChevronRight size={14} />
                           </span>
                         )}
-                        <div className="rounded-mx-lg bg-surface-alt px-mx-sm py-mx-sm">
-                          <Typography variant="tiny" tone="muted" className="block truncate font-black uppercase tracking-tight">{stage.label}</Typography>
-                          <div className="mt-mx-tiny flex items-baseline gap-mx-xs">
-                            <Typography variant="h3" className="font-mono-numbers text-text-primary">{stage.value}</Typography>
+                        <div className="rounded-md bg-muted px-3 py-3">
+                          <span className="block truncate text-xs font-black uppercase tracking-tight text-muted-foreground">{stage.label}</span>
+                          <div className="mt-0.5 flex items-baseline gap-2">
+                            <span className="font-mono text-lg font-bold text-foreground">{stage.value}</span>
                             {typeof stage.rate === 'number' && (
-                              <span className={cn('inline-flex rounded-mx-md px-mx-tiny py-mx-tiny text-mx-tiny font-black tabular-nums', palette.pill)}>
+                              <span className={cn('inline-flex rounded-md px-1.5 py-0.5 text-xs font-black tabular-nums', palette.pill)}>
                                 {stage.rate}%
                               </span>
                             )}
@@ -189,41 +187,41 @@ export default function FunilVendasGerente() {
               )
             })}
           </div>
-        </Card>
+        </div>
 
-        <Card className="rounded-mx-2xl bg-white p-mx-lg shadow-mx-sm border-none">
-          <Typography variant="h3" className="text-xl font-black">Ranking por Origem</Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold normal-case">Vendas da equipe por canal (mês).</Typography>
+        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
+          <h2 className="text-xl font-black">Ranking por Origem</h2>
+          <p className="mt-1 text-xs font-bold text-muted-foreground normal-case">Vendas da equipe por canal (mês).</p>
 
-          <div className="mt-mx-lg overflow-x-auto">
+          <div className="mt-6 overflow-x-auto">
             <table className="w-full text-sm">
-              <thead className="bg-surface-alt/60">
+              <thead className="bg-muted/60">
                 <tr>
                   {['Vendedor', 'Leads', 'Carteira', 'Porta', 'Total'].map(h => (
-                    <th key={h} className="px-mx-sm py-mx-sm text-left text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">{h}</th>
+                    <th key={h} className="px-3 py-3 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">{h}</th>
                   ))}
                 </tr>
               </thead>
-              <tbody className="divide-y divide-border-subtle">
+              <tbody className="divide-y divide-border">
                 {teamRanking.map((member, idx) => (
                   <tr key={member.id}>
-                    <td className="px-mx-sm py-mx-sm">
-                      <div className="flex items-center gap-mx-xs">
-                        <span className={cn('flex h-mx-7 w-mx-7 items-center justify-center rounded-mx-full font-black tabular-nums text-mx-tiny', idx === 0 ? 'bg-status-warning-surface text-status-warning' : 'bg-surface-alt text-text-tertiary')}>{idx + 1}</span>
-                        <Typography variant="p" className="truncate font-black">{member.name}</Typography>
+                    <td className="px-3 py-3">
+                      <div className="flex items-center gap-2">
+                        <span className={cn('flex h-7 w-7 items-center justify-center rounded-full font-black tabular-nums text-xs', idx === 0 ? 'bg-status-warning-surface text-status-warning' : 'bg-muted text-muted-foreground')}>{idx + 1}</span>
+                        <p className="truncate font-black text-foreground">{member.name}</p>
                       </div>
                     </td>
-                    <td className="px-mx-sm py-mx-sm text-center"><Typography variant="mono" tone="info">{member.leads}</Typography></td>
-                    <td className="px-mx-sm py-mx-sm text-center"><Typography variant="mono" tone="success">{member.carteira}</Typography></td>
-                    <td className="px-mx-sm py-mx-sm text-center"><Typography variant="mono" className="text-[var(--color-accent-purple)]">{member.porta}</Typography></td>
-                    <td className="px-mx-sm py-mx-sm text-center"><Typography variant="mono" className="font-black">{member.total}</Typography></td>
+                    <td className="px-3 py-3 text-center font-mono tabular-nums text-status-info">{member.leads}</td>
+                    <td className="px-3 py-3 text-center font-mono tabular-nums text-status-success">{member.carteira}</td>
+                    <td className="px-3 py-3 text-center font-mono tabular-nums text-purple-700">{member.porta}</td>
+                    <td className="px-3 py-3 text-center font-mono tabular-nums font-bold">{member.total}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-        </Card>
+        </div>
       </section>
-    </div>
+    </main>
   )
 }

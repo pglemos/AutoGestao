@@ -13,7 +13,7 @@ export function StoreFeedbackContainer() {
   if (vm.isLoading) return <FeedbackLoadingSkeleton ariaLabel="Carregando devolutivas" />
 
   return (
-    <main className="w-full h-full flex flex-col gap-mx-lg overflow-y-auto no-scrollbar relative p-mx-lg bg-surface-alt">
+    <main className="flex min-h-0 flex-1 flex-col space-y-6 overflow-y-auto p-6 pb-20 lg:pb-0" aria-label="Devolutivas">
       <FeedbackErrorBoundary sectionName="Cabeçalho">
         <StoreFeedbackHeader
           isOwner={vm.isOwner}
@@ -45,7 +45,7 @@ export function StoreFeedbackContainer() {
         />
       </FeedbackErrorBoundary>
 
-      <div className="flex-1 min-h-0 pb-32" aria-live="polite">
+      <div className="flex-1 min-h-0" aria-live="polite">
         {vm.activeTab === 'individual' ? (
           <FeedbackErrorBoundary sectionName="Lista de devolutivas">
             <FeedbackList
