@@ -16,25 +16,33 @@
 
 do $$
 declare
-  v_service_role text;
-  v_cron_secret  text;
+  v_has_cron    boolean;
+  v_has_vault   boolean;
+  v_has_secrets boolean := false;
 begin
-  select decrypted_secret into v_service_role
-  from vault.decrypted_secrets where name = 'mx-service-role-key' limit 1;
+  -- Bancos efemeros de CI e ambientes locais sobem sem `pg_cron` e sem os segredos do
+  -- Vault. Abortar ali quebraria o bootstrap limpo inteiro sem indicar defeito algum,
+  -- entao a migration apenas registra e sai. Em producao os dois existem e o
+  -- agendamento e aplicado normalmente.
+  select exists (select 1 from pg_extension where extname = 'pg_cron') into v_has_cron;
+  select exists (select 1 from pg_namespace where nspname = 'vault') into v_has_vault;
 
-  select decrypted_secret into v_cron_secret
-  from vault.decrypted_secrets where name = 'mx-google-meet-ata-cron-secret' limit 1;
-
-  if v_service_role is null then
-    raise exception 'Vault secret ausente: mx-service-role-key';
+  if v_has_vault then
+    select
+      count(*) filter (where name = 'mx-service-role-key') > 0
+      and count(*) filter (where name = 'mx-google-meet-ata-cron-secret') > 0
+    into v_has_secrets
+    from vault.decrypted_secrets;
   end if;
 
-  if v_cron_secret is null then
-    raise exception 'Vault secret ausente: mx-google-meet-ata-cron-secret';
+  if not (v_has_cron and v_has_vault and v_has_secrets) then
+    raise notice
+      'Agendamento de mx-google-meet-ata ignorado (pg_cron=%, vault=%, secrets=%). Esperado fora de producao.',
+      v_has_cron, v_has_vault, v_has_secrets;
+    return;
   end if;
-end $$;
 
-select cron.schedule(
+  perform cron.schedule(
   'mx-google-meet-ata',
   '*/30 * * * *',
   $cron$
@@ -58,10 +66,14 @@ select cron.schedule(
       timeout_milliseconds := 60000
     );
   $cron$
-);
+  );
+end $$;
 
--- ROLLBACK (nao executar salvo necessidade):
---   O comando anterior nao tinha header Authorization e por isso estava 100% quebrado.
---   Reverter significa voltar ao estado com falha. Se precisar desativar:
---     select cron.unschedule('mx-google-meet-ata');
---   Para restaurar o agendamento corrigido, reaplique esta migration.
+-- ============================================================
+-- DOWN
+-- ============================================================
+-- O comando anterior nao tinha header Authorization e falhava 100% das vezes.
+-- Reverter recria o estado quebrado; o DOWN apenas desagenda o job.
+-- BEGIN;
+-- select cron.unschedule('mx-google-meet-ata');
+-- COMMIT;
