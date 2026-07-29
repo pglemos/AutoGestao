@@ -15,8 +15,8 @@ function LegacyProfileAvatar({ url, name }: { url: string; name: string }) {
   return <img src={url} alt={`Avatar de ${name}`} className="w-full h-full object-cover" onError={() => setErro(true)} />
 }
 
-export default function Perfil() {
-  const { profile, role, signOut, updateProfile, changePassword } = useAuth()
+function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAuth>['profile']> }) {
+  const { role, signOut, updateProfile, changePassword } = useAuth()
   const isSeller = role === 'vendedor'
   const [saving, setSaving] = useState(false)
   const [name, setName] = useState(profile?.name || '')
@@ -84,11 +84,8 @@ export default function Perfil() {
     }
   }
 
-  if (!profile) return null
-
   return (
-    <main id="page-perfil" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Meu Perfil">
-
+    <>
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between border-b border-border pb-6 shrink-0">
         <div className="flex flex-col gap-1">
           <div className="flex items-center gap-3">
@@ -111,9 +108,8 @@ export default function Perfil() {
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 flex-1 min-h-0">
-
-        <aside className="lg:col-span-4 flex flex-col gap-6 h-full">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <aside className="lg:col-span-4 flex flex-col gap-6">
           <div className="rounded-xl border border-border bg-card p-10 md:p-12 flex flex-col items-center text-center group relative overflow-hidden shadow-lg">
             <div className="absolute top-0 left-0 w-full h-4xl bg-brand-secondary z-0 opacity-10" aria-hidden="true" />
             <div className="relative z-10 space-y-6">
@@ -130,7 +126,7 @@ export default function Perfil() {
                   {uploadingAvatar ? <RefreshCw size={24} className="animate-spin" /> : <Camera size={24} />}
                   <span className="text-xs font-bold text-white">{uploadingAvatar ? 'Enviando...' : 'ALTERAR'}</span>
                 </button>
-                <input aria-label="Selecionar arquivo" ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" capture="user" onChange={handleAvatarUpload} className="hidden" />
+                <input aria-label="Selecionar foto" ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" capture="user" onChange={handleAvatarUpload} className="hidden" />
               </div>
 
               <div>
@@ -146,8 +142,8 @@ export default function Perfil() {
           </div>
         </aside>
 
-        <section className="lg:col-span-8 flex flex-col gap-6 h-full">
-          <div className="rounded-xl border border-border bg-card shadow-xl group h-full flex flex-col overflow-hidden">
+        <section className="lg:col-span-8 flex flex-col gap-6">
+          <div className="rounded-xl border border-border bg-card shadow-xl group flex flex-col overflow-hidden">
             <header className="bg-muted/30 border-b border-border p-10 md:p-14 flex flex-row items-center justify-between relative overflow-hidden">
               <div className="flex items-center gap-4 relative z-10">
                 <div className="w-2xl h-2xl rounded-2xl bg-brand-secondary text-white flex items-center justify-center shadow-xl transform rotate-2"><User size={32} /></div>
@@ -160,7 +156,7 @@ export default function Perfil() {
               </div>
             </header>
 
-            <div className="p-10 md:p-14 space-y-14 flex-1 overflow-y-auto no-scrollbar relative z-10">
+            <div className="p-10 md:p-14 space-y-14 relative z-10">
               <div className="grid md:grid-cols-2 gap-10">
                 <div className="space-y-3">
                   <p className="ml-2 text-xs font-black uppercase tracking-widest leading-none text-muted-foreground">Nome Operacional</p>
@@ -262,6 +258,48 @@ export default function Perfil() {
           </div>
         </div>
       )}
+    </>
+  )
+}
+
+export default function Perfil() {
+  const { profile, role, loading } = useAuth()
+  const isOwner = role === 'dono'
+  const pageClass = `flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0${isOwner ? '' : ' px-4 lg:px-8'}`
+
+  if (loading) {
+    return (
+      <main id="page-perfil" role="main" className={pageClass} aria-busy="true" aria-label="Meu Perfil">
+        <div className="space-y-6">
+          <div className="h-16 animate-pulse rounded-xl bg-white/60" />
+          <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
+            <div className="lg:col-span-4">
+              <div className="h-[320px] animate-pulse rounded-xl bg-white/60" />
+            </div>
+            <div className="lg:col-span-8">
+              <div className="h-[480px] animate-pulse rounded-xl bg-white/60" />
+            </div>
+          </div>
+        </div>
+      </main>
+    )
+  }
+
+  if (!profile) {
+    return (
+      <main id="page-perfil" role="main" className={pageClass} aria-label="Meu Perfil">
+        <div className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
+          <h2 className="text-lg font-semibold text-foreground">Não foi possível carregar o perfil</h2>
+          <p className="mt-2 text-sm text-muted-foreground">Perfil não encontrado. Tente novamente ou entre em contato com o suporte.</p>
+          <Button className="mt-4" onClick={() => window.location.reload()}>Tentar novamente</Button>
+        </div>
+      </main>
+    )
+  }
+
+  return (
+    <main id="page-perfil" role="main" className={pageClass} aria-label="Meu Perfil">
+      <ProfileView profile={profile} />
     </main>
   )
 }
