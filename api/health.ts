@@ -138,7 +138,7 @@ function overallStatus(checks: HealthChecks): { status: string; httpStatus: numb
     return { status: 'healthy', httpStatus: 200 }
 }
 
-export default async function handler(request: Request): Promise<Response> {
+async function health(request: Request): Promise<Response> {
     if (request.method === 'OPTIONS') {
         return new Response(null, {
             status: 204,
@@ -193,4 +193,9 @@ export default async function handler(request: Request): Promise<Response> {
             },
         },
     )
+}
+
+// Mesma assinatura das demais funções deste projeto (api/store-pre-registration.ts).
+export default {
+    fetch: health,
 }
