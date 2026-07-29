@@ -71,16 +71,18 @@ export default function OwnerLayout() {
 
         <div className="flex h-full min-h-0 flex-1 flex-col overflow-hidden">
           <OwnerTopbar onOpenSidebar={() => setSidebarOpen(true)} />
-          <div
+          {/* Landmark principal do módulo. É o alvo do skip-link e o elemento
+              que recebe o foco a cada troca de rota (AppShellFrame). */}
+          <main
             id="owner-main-content"
-            role="region"
+            tabIndex={-1}
             aria-label="Conteúdo do módulo Dono"
-            className="min-h-0 flex-1 overflow-y-auto"
+            className="min-h-0 flex-1 overflow-y-auto outline-none"
           >
             <div className="mx-auto flex w-full max-w-[1400px] flex-col gap-6 px-4 pb-24 pt-6 lg:px-8 lg:pb-8 lg:pt-8">
               <Outlet context={{ setLastUpdated, lastUpdated }} />
             </div>
-          </div>
+          </main>
         </div>
 
         <ConsultantRequestModal />
