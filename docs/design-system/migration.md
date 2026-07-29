@@ -79,9 +79,9 @@
 | 3 | App Shell único (Dono migrado sem mudança de aparência) | ✅ moldura + superfície da sidebar convergidas |
 | 4 | Gerente | ✅ superfícies alinhadas ao visual aprovado |
 | 5 | Admin / Consultor | ✅ já recebiam o modo aprovado; verificado |
-| 6 | Vendedor | 🔄 medido; 32 tokens mortos removidos; painel de comissão aguarda decisão de produto |
+| 6 | Vendedor | ✅ tema escuro removido; painel de comissão migrado |
 | 7 | Páginas compartilhadas (login, perfil, erros) | 🔄 senha obrigatória e 403 migrados; Termos/Privacidade/404 pendentes |
-| 8 | Remoção do legado | ⬜ |
+| 8 | Remoção do legado | ✅ ramo legado, contextos e tokens removidos |
 | 9 | Deploy preview → produção | ⬜ |
 
 ## 6.1 Lacunas de acessibilidade encontradas na Fase 3
@@ -217,6 +217,37 @@ não resolve, então a saída oferecida é voltar, não "tentar novamente".
 > próximas da landing do que do produto. Sobrescrevem o `Card` com classes
 > próprias, então o modo aprovado mudaria pouco e o risco de quebrar o layout
 > sob medida é maior que o ganho. Decisão de produto, como o painel de comissão.
+
+## 6.1.5 Unificação concluída (Fase 8)
+
+O ramo legado foi removido: a aparência aprovada é a única do produto.
+
+| Item | Antes | Depois |
+|---|---|---|
+| Componentes bifurcados | 10 + 4 features | 0 |
+| Contextos de seleção visual | 2 (`MxSurfaceVisualContext`, `ButtonVisualContext`) | 0 |
+| Variantes `manager*` de botão | 4, em 29 call sites | 0 |
+| Tokens `--mx-seller-*` | 32 (mortos) | 0 |
+| Tokens `--color-seller-*` | 19 (tema escuro vivo) | 0 |
+
+O painel de comissão foi migrado para o visual aprovado: card branco, acento
+esmeralda, impacto pela escala tipográfica em vez de gradiente e brilho.
+
+> **A rota `/minha-remuneracao` redireciona para `/home`** (`App.tsx`), ou seja,
+> a tela migrada está desativada no roteador. A migração remove o tema paralelo
+> do código, mas **não foi possível validá-la visualmente** — a tela não é
+> alcançável. Quando a rota for reativada, ela precisa de conferência.
+
+### Validação autenticada no preview
+
+Preview: `mxperformance-e5c5hdppt-synvolt.vercel.app`. Login por magic link do
+Supabase (link de sessão gerado pela Admin API — nenhuma senha digitada).
+
+| Perfil | Rota | Resultado |
+|---|---|---|
+| Dono | `/home` | ✅ aparência aprovada íntegra; skip-link presente |
+| Gerente | `/home` | ✅ cards e botões no visual unificado |
+| Vendedor | `/home` | ✅ mesma sidebar e mesma linguagem do Dono |
 
 ## 6.2 Pendências de verificação autenticada
 
