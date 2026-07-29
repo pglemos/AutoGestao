@@ -1,5 +1,6 @@
 import type { ReactNode } from 'react'
 import { ButtonVisualProvider } from '@/components/atoms/Button'
+import { MxSurfaceVisualProvider } from '@/components/module/MxSurfaceVisualContext'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { cn } from '@/lib/utils'
 import { InternalMxVisualScope } from './InternalMxVisualScope'
@@ -25,17 +26,23 @@ export function MxRoleVisualScope({
 
   if (!manager) return <>{children}</>
 
+  // O modo `manager` é a aparência aprovada do Base44/Dono — não um tema do
+  // perfil Gerente. Até aqui o escopo o fornecia apenas aos botões, então a
+  // mesma tela combinava botão Base44 com campo, card e tabela no visual
+  // legado. Fornecer também às superfícies alinha a tela inteira à referência.
   return (
     <ButtonVisualProvider mode="manager">
-      <div
-        data-mx-visual-system="manager"
-        className={cn(
-          'mx-manager-scope h-full min-h-0 w-full bg-gray-50 text-gray-800',
-          className,
-        )}
-      >
-        {children}
-      </div>
+      <MxSurfaceVisualProvider mode="manager">
+        <div
+          data-mx-visual-system="manager"
+          className={cn(
+            'mx-manager-scope h-full min-h-0 w-full bg-gray-50 text-gray-800',
+            className,
+          )}
+        >
+          {children}
+        </div>
+      </MxSurfaceVisualProvider>
     </ButtonVisualProvider>
   )
 }

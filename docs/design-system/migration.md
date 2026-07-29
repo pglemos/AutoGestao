@@ -77,7 +77,7 @@
 | 1 | Fundação de tokens (primitive → semantic → component → motion) | ✅ |
 | 2 | Átomos e moléculas consolidados | ✅ 12 átomos + 11 moléculas |
 | 3 | App Shell único (Dono migrado sem mudança de aparência) | ✅ moldura + superfície da sidebar convergidas |
-| 4 | Gerente | ⬜ |
+| 4 | Gerente | 🔄 superfícies alinhadas ao visual aprovado |
 | 5 | Admin / Consultor | ⬜ |
 | 6 | Vendedor (maior risco — tema escuro) | ⬜ |
 | 7 | Páginas compartilhadas (login, perfil, erros) | ⬜ |
@@ -99,6 +99,32 @@ Confirmadas por inspeção do código e verificadas em runtime:
 > tela o atualiza. Por isso o anúncio de rota lê o `h1` da tela montada, e não
 > o título do documento, que repetiria a mesma frase a cada navegação.
 
+## 6.1.1 Correção de leitura: o que é o modo `manager`
+
+Na Fase 2 registrei os ramos `useMxSurfaceVisualMode() === 'manager'` como "um
+tema do perfil Gerente". **Está errado.** O único fornecedor de
+`mode="manager"` no código era `src/components/owner/OwnerPageHeading.jsx` — o
+cabeçalho do **Dono**.
+
+`manager` é a aparência aprovada do Base44/Dono. `default` é o visual legado do
+MX. A unificação caminha para `manager`, não para longe dele.
+
+Nove componentes bifurcam: `Badge`, `Input`, `Select`, `Textarea`, `Skeleton`,
+`Typography`, `Card`, `PageHeading`, `DataGrid`.
+
+**Inconsistência encontrada:** `MxRoleVisualScope` já fornecia
+`ButtonVisualProvider mode="manager"` às rotas não-vendedor, mas não o
+equivalente de superfície. A mesma tela do Gerente combinava botão Base44 com
+campo, card e tabela legados. Corrigido na Fase 4.
+
+Delta medido em runtime (`Design System/Modos de superfície`):
+
+| Elemento | Legado | Aprovado |
+|---|---|---|
+| Badge sucesso | teal sólido `rgb(0,168,157)`, texto branco, raio 12px | verde suave sobre fundo claro, pill |
+| Campo | altura 48px, peso 700 | altura 40px, peso 400 |
+| Descrição de card | CAIXA ALTA, peso 900, 16px | caixa normal, peso 400, 14px |
+
 ## 6.2 Pendências de verificação autenticada
 
 Mudanças aplicadas que só podem ser confirmadas com sessão logada:
@@ -106,6 +132,7 @@ Mudanças aplicadas que só podem ser confirmadas com sessão logada:
 | Mudança | Perfis afetados | O que conferir |
 |---|---|---|
 | Drawer mobile perdeu a borda direita | gerente, vendedor, admin, consultor | Abrir o menu em < 1280px e comparar com o drawer do Dono |
+| Superfícies passam ao visual aprovado | **gerente** | Badges, campos, cards e tabelas em todas as telas do Gerente (ver delta em §6.1.1) |
 | Landmark do Dono virou `<main>` | dono | Navegar entre telas e conferir que o conteúdo não deslocou |
 | Densidade por perfil | todos | `comfortable` no Dono, `compact` nos perfis internos |
 
