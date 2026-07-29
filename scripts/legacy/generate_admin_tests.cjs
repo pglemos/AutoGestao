@@ -39,7 +39,7 @@ tests.push({
   steps: [
     { type: "action", description: "Navigate to http://localhost:3000/login" },
     { type: "action", description: "Enter admin@mxperformance.com.br in the email field" },
-    { type: "action", description: "Enter Mx#2026! in the password field" },
+    { type: "action", description: "Enter the value from MX_E2E_PASSWORD in the password field" },
     { type: "action", description: "Click the login button" },
     { type: "assertion", description: "Verify URL changes to include /painel or /lojas" }
   ],
@@ -54,7 +54,7 @@ adminRoutes.forEach(route => {
     description: `Verify that the ${route.name} page is accessible and displays content for Admin.`,
     category: "Admin Module - Navigation",
     steps: [
-      { type: "action", description: "Login as Admin (admin@mxperformance.com.br / Mx#2026!)" },
+      { type: "action", description: "Login as Admin using admin@mxperformance.com.br and MX_E2E_PASSWORD" },
       { type: "action", description: `Directly navigate to http://localhost:3000${route.path}` },
       { type: "assertion", description: `Verify the page title or a specific element for ${route.name} is visible` }
     ],

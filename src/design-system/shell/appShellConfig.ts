@@ -22,7 +22,7 @@ export interface AppShellProfileConfig {
 /** Perfil do Dono: mais respiro, telas executivas de leitura. */
 const OWNER_CONFIG: AppShellProfileConfig = {
   density: 'comfortable',
-  mainContentId: 'owner-main-content',
+  mainContentId: 'main-content',
   mainContentLabel: 'Conteúdo principal',
   skipLinkLabel: 'Pular para o conteúdo',
 }

@@ -1,12 +1,13 @@
 /*
- * Tokens visuais EXATOS do export Base44 do módulo do Dono, escopados a `.owner-b44`.
+ * Tokens visuais EXATOS do export Base44 do módulo do Dono, configurados pelo
+ * atributo de perfil do AppShellFrame.
  * Sobrescreve os custom properties crus (--primary, --card, --border, --sidebar-*, --radius…)
  * que o tema Tailwind v4 do MX referencia via hsl(var(--token)). Assim, dentro do módulo do
  * Dono, todas as utilities (bg-primary, border-border, bg-sidebar…) resolvem para o verde e a
  * tipografia do Base44, sem afetar o resto do app.
  */
 
-.owner-b44 {
+.mx-ds[data-mx-role='dono'] {
   --background: 0 0% 100%;
   --foreground: 0 0% 4%;
   --card: 0 0% 100%;
@@ -88,59 +89,59 @@
 }
 
 /* Sidebar background - Base44 uses light theme */
-.owner-b44 [data-sidebar="sidebar"],
-.owner-b44 aside[data-sidebar] {
+.mx-ds[data-mx-role='dono'] [data-sidebar="sidebar"],
+.mx-ds[data-mx-role='dono'] aside[data-sidebar] {
   background-color: hsl(0, 0%, 98%) !important;
   border-color: hsl(220, 13%, 91%) !important;
 }
 
 /* Sidebar text color - dark text on light background */
-.owner-b44 [data-sidebar="sidebar"] span,
-.owner-b44 [data-sidebar="sidebar"] a,
-.owner-b44 [data-sidebar="sidebar"] button,
-.owner-b44 aside[data-sidebar] span,
-.owner-b44 aside[data-sidebar] a,
-.owner-b44 aside[data-sidebar] button {
+.mx-ds[data-mx-role='dono'] [data-sidebar="sidebar"] span,
+.mx-ds[data-mx-role='dono'] [data-sidebar="sidebar"] a,
+.mx-ds[data-mx-role='dono'] [data-sidebar="sidebar"] button,
+.mx-ds[data-mx-role='dono'] aside[data-sidebar] span,
+.mx-ds[data-mx-role='dono'] aside[data-sidebar] a,
+.mx-ds[data-mx-role='dono'] aside[data-sidebar] button {
   color: hsl(240, 5%, 26%) !important;
 }
 
 /* Sidebar active item */
-.owner-b44 [data-sidebar="sidebar"] [data-active="true"],
-.owner-b44 aside[data-sidebar] [data-active="true"] {
+.mx-ds[data-mx-role='dono'] [data-sidebar="sidebar"] [data-active="true"],
+.mx-ds[data-mx-role='dono'] aside[data-sidebar] [data-active="true"] {
   background-color: hsl(240, 5%, 96%) !important;
   color: hsl(240, 6%, 10%) !important;
 }
 
 /* Primary button color - Base44 green */
-.owner-b44 .bg-primary,
-.owner-b44 button.bg-primary {
+.mx-ds[data-mx-role='dono'] .bg-primary,
+.mx-ds[data-mx-role='dono'] button.bg-primary {
   background-color: hsl(152, 69%, 31%) !important;
 }
 
 /* Primary text color */
-.owner-b44 .text-primary,
-.owner-b44 a.text-primary {
+.mx-ds[data-mx-role='dono'] .text-primary,
+.mx-ds[data-mx-role='dono'] a.text-primary {
   color: hsl(152, 69%, 31%) !important;
 }
 
 /* Tipografia base do Base44 (index.css @layer base) escopada ao módulo. */
-.owner-b44 h1 {
+.mx-ds[data-mx-role='dono'] h1 {
   font-size: 28px;
   font-weight: 700;
   line-height: 1.2;
 }
-.owner-b44 h2 {
+.mx-ds[data-mx-role='dono'] h2 {
   font-size: 22px;
   font-weight: 700;
   line-height: 1.3;
 }
-.owner-b44 h3 {
+.mx-ds[data-mx-role='dono'] h3 {
   font-size: 18px;
   font-weight: 600;
   line-height: 1.35;
 }
-.owner-b44 h4,
-.owner-b44 h5,
-.owner-b44 h6 {
+.mx-ds[data-mx-role='dono'] h4,
+.mx-ds[data-mx-role='dono'] h5,
+.mx-ds[data-mx-role='dono'] h6 {
   font-weight: 600;
 }

@@ -6,55 +6,48 @@ const root = process.cwd()
 const read = (path: string) => readFileSync(resolve(root, path), 'utf8')
 
 describe('contrato do módulo Dono Base44 aprovado', () => {
-  it('registra as telas do Dono na raiz e mantém o shell dedicado', () => {
+  it('registra as telas do Dono na raiz e usa o shell compartilhado', () => {
     const app = read('src/App.tsx')
     const appShell = read('src/components/AppShell.tsx')
     expect(app).toContain("const AppShell = lazy(() => import('@/components/AppShell'))")
     expect(app).toContain('<Route path="/dono/*" element={<OwnerLegacyPathRedirect />} />')
     expect(app).not.toContain('owner-base44/OwnerModule')
-    expect(appShell).toContain("role === 'dono'")
+    expect(appShell).toContain('<Layout />')
+    expect(appShell).not.toContain('OwnerShell')
   })
 
   it('preserva o layout, a navegação e os tokens visuais aprovados', () => {
-    const module = read('src/features/owner-base44/OwnerShell.tsx')
-    const layout = read('src/components/owner/OwnerLayout.jsx')
-    const sidebar = read('src/components/owner/OwnerSidebar.jsx')
-    const topbar = read('src/components/owner/OwnerTopbar.jsx')
+    const layout = read('src/components/Layout.tsx')
+    const sidebar = read('src/components/MxSidebarShell.tsx')
     const styles = read('src/styles/owner-base44-exact.css')
 
-    expect(module).toContain("import OwnerLayout from '@/components/owner/OwnerLayout'")
-    expect(module).toContain("import '@/styles/owner-base44-exact.css'")
-    expect(module).toContain('<OwnerLayout />')
-    expect(layout).toContain('<OwnerSidebar')
-    expect(layout).toContain('collapsed={sidebarCollapsed}')
+    expect(layout).toContain("import '@/styles/owner-base44-exact.css'")
+    expect(layout).toContain('<OwnerProvider>')
+    expect(layout).toContain('<MxSidebarShell')
     expect(sidebar).toContain('src={SIDEBAR_LOGO}')
-    expect(sidebar).toContain('MÓDULO EXECUTIVO')
-    expect(sidebar).toContain('aria-label={collapsed ? "Expandir sidebar" : "Recolher sidebar"}')
+    expect(layout).toContain("'Módulo Executivo'")
+    expect(sidebar).toContain("isCollapsed ? 'Expandir sidebar' : 'Recolher sidebar'")
     // Cartao de perfil compartilhado com os demais modulos: abre o menu de
     // conta (perfil, preferencias, notificacoes e sair) em vez de navegar.
     expect(sidebar).toContain('<MxSidebarProfileCard')
     expect(sidebar).toContain('onSignOut={')
-    expect(layout).toContain('<OwnerTopbar')
     expect(layout).toContain('<ConsultantRequestModal />')
     for (const label of ['Início', 'Plano Estratégico', 'Plano de Ação', 'Consultoria', 'Departamentos', 'Mercado', 'Universidade MX', 'Falar com Consultor']) {
-      expect(sidebar).toContain(label)
+      expect(layout).toContain(label)
     }
     // Header do Dono segue o padrão dos demais módulos (MxSidebarShell):
     // sem topbar no desktop e header de marca + sino + avatar no mobile.
-    expect(topbar).toContain('xl:hidden')
-    expect(topbar).toContain('NotificationBellButton')
-    expect(topbar).toContain('Módulo Executivo')
-    expect(topbar).not.toContain('owner-base44-exact__topbar')
-    expect(styles).toContain('.owner-b44')
+    expect(sidebar).toContain('xl:hidden')
+    expect(sidebar).toContain('NotificationBellButton')
+    expect(styles).toContain(".mx-ds[data-mx-role='dono']")
+    expect(styles).not.toContain('.owner-b44')
     expect(styles).toContain('--color-primary: hsl(var(--primary))')
   })
 
   it('mantém todas as superfícies aprovadas disponíveis', () => {
     for (const file of [
-      'src/features/owner-base44/OwnerShell.tsx',
-      'src/components/owner/OwnerLayout.jsx',
-      'src/components/owner/OwnerSidebar.jsx',
-      'src/components/owner/OwnerTopbar.jsx',
+      'src/components/Layout.tsx',
+      'src/components/MxSidebarShell.tsx',
       'src/pages/owner/OwnerHome.jsx',
       'src/pages/owner/PlanoEstrategico.jsx',
       'src/pages/owner/PlanoDeAcao.jsx',

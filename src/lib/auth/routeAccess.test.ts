@@ -18,6 +18,17 @@ describe('route access matrix', () => {
     expect(canAccessPath('/consultoria', 'dono')).toBe(true)
   })
 
+  it('autoriza somente o Dono a usar os atalhos que redirecionam para as rotas raiz', () => {
+    for (const route of ['/dono', '/dono/rotina', '/dono/departamentos/financeiro']) {
+      expect(canAccessPath(route, 'dono')).toBe(true)
+      expect(canAccessPath(route, 'gerente')).toBe(false)
+      expect(canAccessPath(route, 'vendedor')).toBe(false)
+      expect(canAccessPath(route, 'administrador_mx')).toBe(false)
+      expect(canAccessPath(route, 'administrador_geral')).toBe(false)
+      expect(canAccessPath(route, 'consultor_mx')).toBe(false)
+    }
+  })
+
   it('keeps admin-only modules closed to store roles', () => {
     for (const route of ['/painel', '/agenda', '/consultoria/clientes', '/configuracoes/operacional', '/configuracoes/reprocessamento']) {
       expect(canAccessPath(route, 'administrador_geral')).toBe(true)

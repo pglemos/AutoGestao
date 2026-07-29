@@ -25,6 +25,10 @@ import {
   type OwnerBase44NavigationItem,
   ownerNavigationCanonicalPath,
 } from '@/features/dashboard-loja/sections/owner-cockpit/ownerBase44Config'
+import { OwnerProvider } from '@/components/owner/OwnerContext'
+import ConsultantRequestModal from '@/components/owner/ConsultantRequestModal'
+import { Toaster as OwnerToaster } from '@/components/ui/toaster'
+import '@/styles/owner-base44-exact.css'
 
 type SubItem = {
   key?: string
@@ -182,7 +186,7 @@ const navConfig: Record<string, NavCategory[]> = {
   ],
 }
 
-export default function Layout() {
+function LayoutContent() {
   const {
     profile,
     role,
@@ -200,6 +204,7 @@ export default function Layout() {
     : 0
   const navigate = useNavigate()
   const location = useLocation()
+  const [ownerLastUpdated, setOwnerLastUpdated] = React.useState(() => new Date())
 
   const storeDashboardPath = membership?.store?.name
     ? `/lojas/${slugify(membership.store.name)}`
@@ -295,7 +300,11 @@ export default function Layout() {
 
   const pageOutlet = (
     <MotionPage key={location.pathname} className="h-full">
-      <Outlet />
+      <Outlet
+        context={role === 'dono'
+          ? { setLastUpdated: setOwnerLastUpdated, lastUpdated: ownerLastUpdated }
+          : undefined}
+      />
     </MotionPage>
   )
   const isOwnerRoute = location.pathname === '/dono' || location.pathname.startsWith('/dono/')
@@ -334,5 +343,25 @@ export default function Layout() {
     >
       {pageContent}
     </MxSidebarShell>
+  )
+}
+
+/**
+ * Único shell autenticado. Providers e tokens específicos de domínio podem
+ * variar por perfil, mas sidebar, drawer, landmark e área de conteúdo não.
+ */
+export default function Layout() {
+  const { role } = useAuth()
+
+  if (role !== 'dono') return <LayoutContent />
+
+  return (
+    <OwnerProvider>
+      <div className="owner-base44-exact h-dvh min-h-0 overflow-hidden">
+        <LayoutContent />
+        <ConsultantRequestModal />
+        <OwnerToaster />
+      </div>
+    </OwnerProvider>
   )
 }

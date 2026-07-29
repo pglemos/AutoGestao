@@ -16,11 +16,14 @@ const BREAKPOINTS = [
   { name: 'Mobile', width: 390, height: 844 }
 ];
 
+const MX_E2E_PASSWORD = process.env.MX_E2E_PASSWORD;
+if (!MX_E2E_PASSWORD) throw new Error('MX_E2E_PASSWORD is required');
+
 const PROFILES = [
-  { id: 'VENDEDOR', email: 'vendedor@mxgestaopreditiva.com.br', pass: 'Mx#2026!' },
-  { id: 'GERENTE', email: 'gerente@mxgestaopreditiva.com.br', pass: 'Mx#2026!' },
-  { id: 'DONO', email: 'dono@mxgestaopreditiva.com.br', pass: 'Mx#2026!' },
-  { id: 'ADMIN', email: 'synvollt@gmail.com', pass: 'Mx#2026!' }
+  { id: 'VENDEDOR', email: 'vendedor@mxgestaopreditiva.com.br', pass: MX_E2E_PASSWORD },
+  { id: 'GERENTE', email: 'gerente@mxgestaopreditiva.com.br', pass: MX_E2E_PASSWORD },
+  { id: 'DONO', email: 'dono@mxgestaopreditiva.com.br', pass: MX_E2E_PASSWORD },
+  { id: 'ADMIN', email: 'synvollt@gmail.com', pass: MX_E2E_PASSWORD }
 ];
 
 // O capturador escreve no manifesto provisório. Nunca decide se está VALIDADO.

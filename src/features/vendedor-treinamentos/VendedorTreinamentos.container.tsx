@@ -369,7 +369,7 @@ export default function VendedorTreinamentosContainer() {
             </Tabs>
 
             {selectedTraining && (
-                <div className="fixed inset-0 z-[160] grid place-items-center bg-black/55 p-4" onClick={(event) => { if (event.target === event.currentTarget) setSelectedTraining(null) }}>
+                <div className="fixed inset-0 z-[160] grid place-items-center bg-black/55 p-4" onPointerDown={(event) => { if (event.target === event.currentTarget) setSelectedTraining(null) }}>
                     <div role="dialog" aria-modal="true" aria-labelledby="training-detail-title" className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
                         <header className="flex items-start justify-between border-b border-slate-200 p-5">
                             <div>

@@ -56,14 +56,14 @@ describe('aparência única do MX', () => {
     const scope = read('src/components/module/MxRoleVisualScope.tsx')
     expect(scope).not.toContain('MxSurfaceVisualProvider')
     expect(scope).not.toContain('ButtonVisualProvider')
-    // O recorte permanece: é o que aplica a superfície de fundo do módulo.
-    expect(scope).toContain('mx-manager-scope')
+    // O recorte permanece como atributo semântico, sem classe de escopo.
+    expect(scope).toContain('data-mx-visual-system="manager"')
+    expect(scope).not.toContain('mx-manager-scope')
   })
 
   it('nenhum shell fornece mais um modo visual', () => {
     for (const path of [
       'src/components/Layout.tsx',
-      'src/features/owner-base44/OwnerShell.tsx',
       'src/components/owner/OwnerPageHeading.jsx',
       'src/App.tsx',
     ]) {

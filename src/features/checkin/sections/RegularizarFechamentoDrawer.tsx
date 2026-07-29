@@ -176,8 +176,14 @@ export function RegularizarFechamentoDrawer({
   }
 
   return (
-    <div className="fixed inset-0 z-[140] grid place-items-center bg-black/40 p-4 backdrop-blur-[2px]" onClick={(e) => { if (e.target === e.currentTarget) onClose() }}>
-      <div className="flex w-full max-w-4xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-[#F8FAFC] shadow-2xl">
+    <div className="fixed inset-0 z-[140] grid place-items-center p-4">
+      <button
+        type="button"
+        aria-label="Fechar regularização"
+        className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
+        onClick={onClose}
+      />
+      <div className="relative z-10 flex w-full max-w-4xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-[#F8FAFC] shadow-2xl">
           {/* Header */}
           <div className="flex flex-shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-5 py-4">
             <CalendarDays className="h-5 w-5 shrink-0 text-[#005BFF]" />

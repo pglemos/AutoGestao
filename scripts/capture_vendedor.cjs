@@ -27,7 +27,9 @@ async function run() {
     console.log('Logging in...');
     await page.goto('http://localhost:3100/login');
     await page.fill('input[type="email"]', 'vendedor@mxgestaopreditiva.com.br');
-    await page.fill('input[type="password"]', 'Mx#2026!');
+    const password = process.env.MX_E2E_PASSWORD;
+    if (!password) throw new Error('MX_E2E_PASSWORD is required');
+    await page.fill('input[type="password"]', password);
     await page.click('button[type="submit"]');
 
     // Wait for redirect to dashboard
@@ -47,6 +49,7 @@ async function run() {
 
   } catch (error) {
     console.error('Error during capture:', error);
+    process.exitCode = 1;
   } finally {
     await browser.close();
     console.log('Finished capturing screenshots.');

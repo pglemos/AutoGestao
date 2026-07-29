@@ -19,10 +19,10 @@ const endpoints = [
 ];
 
 const tests = [
-  { id: "TC001", title: "Login Admin", description: "Admin login with admin@mxperformance.com.br / Mx#2026!" },
-  { id: "TC002", title: "Login Dono", description: "Dono login with dono@mxperformance.com.br / Mx#2026!" },
-  { id: "TC003", title: "Login Gerente", description: "Gerente login with gerente@mxperformance.com.br / Mx#2026!" },
-  { id: "TC004", title: "Login Vendedor", description: "Vendedor login with vendedor@mxperformance.com.br / Mx#2026!" },
+  { id: "TC001", title: "Login Admin", description: "Admin login with admin@mxperformance.com.br and MX_E2E_PASSWORD" },
+  { id: "TC002", title: "Login Dono", description: "Dono login with dono@mxperformance.com.br and MX_E2E_PASSWORD" },
+  { id: "TC003", title: "Login Gerente", description: "Gerente login with gerente@mxperformance.com.br and MX_E2E_PASSWORD" },
+  { id: "TC004", title: "Login Vendedor", description: "Vendedor login with vendedor@mxperformance.com.br and MX_E2E_PASSWORD" },
   { id: "TC005", title: "Auth User Details", description: "Verify GET /auth/v1/user returns correct profile for logged in user." }
 ];
 

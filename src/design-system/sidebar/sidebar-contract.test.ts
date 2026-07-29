@@ -6,16 +6,14 @@ import { SIDEBAR, SIDEBAR_LOGO, SIDEBAR_METRICS } from './tokens'
  * Contrato do design system da sidebar.
  * Fonte da verdade: docs/design-system/sidebar-dono.md
  *
- * Toda sidebar do sistema (shell universal e módulo do Dono) precisa consumir
- * os tokens deste módulo — nada de classe escrita à mão na superfície.
+ * A única sidebar do sistema precisa consumir os tokens deste módulo — nada
+ * de classe escrita à mão na superfície.
  */
 const read = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf8')
 
 const shell = read('../../components/MxSidebarShell.tsx')
-const ownerSidebar = read('../../components/owner/OwnerSidebar.jsx')
-const ownerLayout = read('../../components/owner/OwnerLayout.jsx')
 const profileCard = read('../../components/MxSidebarProfileCard.tsx')
-const consumers = { shell, ownerSidebar, ownerLayout }
+const consumers = { shell }
 
 describe('design tokens da sidebar', () => {
   test('mantém as medidas documentadas', () => {
@@ -59,7 +57,6 @@ describe('design tokens da sidebar', () => {
   test('usa uma única marca e um ícone neutro também no item ativo', () => {
     expect(SIDEBAR_LOGO).toBe('/landing/logo-mx.png')
     expect(shell).toContain('src={SIDEBAR_LOGO}')
-    expect(ownerSidebar).toContain('src={SIDEBAR_LOGO}')
     expect(shell).not.toContain('@/assets/mx-logo.png')
     // o Dono mantém o ícone em cinza mesmo no item ativo
     expect(SIDEBAR).not.toHaveProperty('itemIconActive')
@@ -70,7 +67,6 @@ describe('design tokens da sidebar', () => {
     expect(SIDEBAR.ctaButton).toContain('bg-mxsb-active')
     expect(SIDEBAR.ctaButton).toContain('h-9')
     expect(shell).toContain('SIDEBAR.ctaButton')
-    expect(ownerSidebar).toContain('SIDEBAR.ctaButton')
   })
 
   test('herda a mesma escala tipográfica e a mesma fonte em toda a coluna', () => {
@@ -107,7 +103,7 @@ describe('design tokens da sidebar', () => {
 })
 
 describe('consumidores do design system', () => {
-  test('shell e sidebar do Dono importam os tokens', () => {
+  test('o shell único importa os tokens', () => {
     for (const [name, source] of Object.entries(consumers)) {
       expect(source, `${name} deve importar os tokens`).toContain('design-system/sidebar/tokens')
       expect(source).toContain('SIDEBAR')
@@ -140,12 +136,8 @@ describe('consumidores do design system', () => {
     expect(SIDEBAR.asideFixed).toContain('fixed')
   })
 
-  test('os dois shells montam o mesmo painel de drawer', () => {
-    // O shell universal acrescentava borda e tipografia próprias ao painel; o
-    // do Dono, que é a referência visual, não tem nenhuma das duas. A
-    // tipografia já vem de `SIDEBAR.root`, aplicado dentro do painel nos dois.
+  test('o shell único monta o painel canônico de drawer', () => {
     expect(shell).toContain('className={SIDEBAR.drawerPanel}')
-    expect(ownerLayout).toContain('SIDEBAR.drawerPanel')
     expect(SIDEBAR.drawerPanel).not.toContain('border-r')
   })
 
@@ -154,12 +146,9 @@ describe('consumidores do design system', () => {
     expect(shell).toContain("aria-current={active ? 'page' : false}")
     expect(shell).toContain('aria-controls={subnavId}')
     expect(shell).toContain('useFocusTrap(drawerRef, mobileOpen)')
-    expect(ownerLayout).toContain('useFocusTrap(drawerRef, sidebarOpen)')
-    expect(ownerLayout).toContain('aria-modal="true"')
-    expect(ownerSidebar).toContain('aria-controls={`sidebar-subnav-${item.group}`}')
+    expect(shell).toContain('aria-modal="true"')
     // rótulo quando recolhida
     expect(shell).toContain('title={isCollapsed ? item.label : undefined}')
-    expect(ownerSidebar).toContain('title={collapsed ? item.label : undefined}')
     // menu de conta
     expect(profileCard).toContain('aria-haspopup="menu"')
     expect(profileCard).toContain('role="menuitem"')

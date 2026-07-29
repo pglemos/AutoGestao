@@ -49,7 +49,7 @@ type RouteMetric = {
 async function openOwnerRoute(page: Page, path: string, expectedPath: string) {
   await page.goto(path, { waitUntil: 'networkidle' })
   await expect(page).toHaveURL(new RegExp(`${expectedPath.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?:[?#]|$)`))
-  await expect(page.locator('#owner-main-content')).toBeVisible({ timeout: 30_000 })
+  await expect(page.locator('#main-content')).toBeVisible({ timeout: 30_000 })
 }
 
 async function auditRoute(
@@ -71,7 +71,7 @@ async function auditRoute(
   await openOwnerRoute(page, route.path, route.expectedPath)
 
   const desktopSidebar = page.locator('aside[aria-label="Menu principal do Dono"]')
-  const mobileDrawer = page.locator('div.fixed.inset-0.z-40 > div.relative.bg-sidebar').first()
+  const mobileDrawer = page.getByRole('dialog', { name: 'Menu principal do Dono' })
   if (viewport.mobile) {
     await expect(desktopSidebar).toBeHidden()
     await expect(mobileDrawer).toHaveCount(0)
@@ -102,10 +102,14 @@ async function auditRoute(
   const metric = await page.evaluate(
     ({ routeKey, viewportKey, collectedPageErrors, collectedConsoleErrors }) => {
       const ownerShell = document.querySelector<HTMLElement>('.owner-base44-exact')
-      const ownerRegion = document.querySelector<HTMLElement>('#owner-main-content')
+      const ownerRegion = document.querySelector<HTMLElement>('#main-content')
       const ownerSidebar = Array.from(
-        document.querySelectorAll<HTMLElement>('aside[aria-label="Menu principal do Dono"], div.fixed.inset-0.z-40 > div.relative'),
+        document.querySelectorAll<HTMLElement>('aside[aria-label="Menu principal do Dono"], [role="dialog"][aria-label="Menu principal do Dono"]'),
       ).find((node) => node.getBoundingClientRect().width > 0) || null
+      const ownerSidebarSurface =
+        ownerSidebar?.matches('[data-sidebar="sidebar"], aside[data-sidebar]')
+          ? ownerSidebar
+          : ownerSidebar?.querySelector<HTMLElement>('[data-sidebar="sidebar"], aside[data-sidebar]') || ownerSidebar
 
       return {
         route: routeKey,
@@ -114,9 +118,9 @@ async function auditRoute(
         ownerShell: Boolean(ownerShell),
         ownerRegion: Boolean(ownerRegion),
         ownerSidebar: Boolean(ownerSidebar),
-        ownerSidebarWidth: ownerSidebar ? Math.round(ownerSidebar.getBoundingClientRect().width) : 0,
-        ownerSidebarBackground: ownerSidebar
-          ? getComputedStyle(ownerSidebar.tagName === 'ASIDE' ? ownerSidebar.firstElementChild || ownerSidebar : ownerSidebar).backgroundColor
+        ownerSidebarWidth: ownerSidebarSurface ? Math.round(ownerSidebarSurface.getBoundingClientRect().width) : 0,
+        ownerSidebarBackground: ownerSidebarSurface
+          ? getComputedStyle(ownerSidebarSurface).backgroundColor
           : '',
         ownerContentHeight: ownerRegion ? Math.round(ownerRegion.getBoundingClientRect().height) : 0,
         activeNavigationItems: ownerSidebar?.querySelectorAll('a[aria-current="page"]').length || 0,

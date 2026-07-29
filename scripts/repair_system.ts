@@ -15,7 +15,8 @@ const USERS = [
     { email: 'gerente@mxgestaopreditiva.com.br', role: 'gerente', name: 'Gerente MX' },
     { email: 'vendedor@mxgestaopreditiva.com.br', role: 'vendedor', name: 'Vendedor MX' }
 ]
-const PASSWORD = 'Mx#2026!'
+const PASSWORD = process.env.MX_E2E_PASSWORD
+if (!PASSWORD) throw new Error('MX_E2E_PASSWORD is required')
 
 async function repairSystem() {
     console.log('--- REPAIRING AUTH AND USERS ---')

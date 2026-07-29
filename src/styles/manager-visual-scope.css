@@ -1,6 +1,6 @@
 /* Matriz visual canônica do Gerente aplicada aos perfis de gestão.
    O escopo troca somente tokens semânticos. Vendedor permanece isolado. */
-.mx-manager-scope {
+[data-mx-visual-system='manager'] {
   --color-brand-primary: #059669;
   --color-brand-primary-hover: #047857;
   --color-brand-secondary: #1f2937;
@@ -42,7 +42,7 @@
 /* O projeto global ampliava xl/2xl para 20/24 px. A referência Base44 usa
    a escala padrão do Tailwind: 12 px em rounded-xl e 16 px em rounded-2xl.
    O mesmo contrato precisa alcançar a sidebar, que fica fora do wrapper da página. */
-.mx-manager-scope,
+[data-mx-visual-system='manager'],
 aside[aria-label^='Menu principal do ']:not([aria-label='Menu principal do Vendedor']),
 [role='dialog'][aria-label^='Menu principal do ']:not([aria-label='Menu principal do Vendedor']) {
   --radius: 0.5rem;

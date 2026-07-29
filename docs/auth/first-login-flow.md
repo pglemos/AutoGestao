@@ -7,8 +7,8 @@
 ## Resumo
 
 Todo usuário criado pelo sistema (via UI Equipe → modal "Novo Recruta", via script de
-provisionamento, ou via edge function `register-user`) recebe a senha padrão **`123456`**
-e o flag `must_change_password = true`. No primeiro login, o componente
+provisionamento, ou via edge function `register-user`) recebia uma senha padrão
+previsível e o flag `must_change_password = true`. No primeiro login, o componente
 `<ForcePasswordChange />` (renderizado em `src/components/Layout.tsx:153`) bloqueia 100%
 da UI até que o usuário escolha uma nova senha.
 

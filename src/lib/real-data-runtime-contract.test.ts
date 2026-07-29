@@ -70,7 +70,7 @@ describe('contrato de dados reais do runtime ativo', () => {
 
   test('parte do App e cobre um grafo amplo de módulos carregáveis', () => {
     expect(sources.length).toBeGreaterThan(250)
-    expect(sources.some(file => file.endsWith('/features/owner-base44/OwnerShell.tsx'))).toBe(true)
+    expect(sources.some(file => file.endsWith('/components/owner/OwnerContext.jsx'))).toBe(true)
     expect(sources.some(file => file.endsWith('/features/carteira-clientes/pages/CarteiraClientesBase44Page.tsx'))).toBe(true)
     expect(sources.some(file => file.endsWith('/features/carteira-clientes/lib/installCarteiraBase44Adapter.js'))).toBe(true)
     expect(sources.some(file => file.endsWith('/api/base44Client.js'))).toBe(true)
@@ -89,7 +89,8 @@ describe('contrato de dados reais do runtime ativo', () => {
 
   test('garante o carregamento do Módulo do Dono Base44 no bundle ativo', () => {
     const active = new Set(sources.map(file => relative(root, file)))
-    expect(active.has('src/features/owner-base44/OwnerShell.tsx')).toBe(true)
+    expect(active.has('src/components/owner/OwnerContext.jsx')).toBe(true)
+    expect(active.has('src/components/owner/ConsultantRequestModal.jsx')).toBe(true)
     expect(active.has('src/components/MxSidebarShell.tsx')).toBe(true)
   })
 

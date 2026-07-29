@@ -36,7 +36,7 @@ tests.push({
   steps: [
     { type: "action", description: "Navigate to /login" },
     { type: "action", description: "Fill in email with admin@mxperformance.com.br" },
-    { type: "action", description: "Fill in password with Mx#2026!" },
+    { type: "action", description: "Fill in password with the value from MX_E2E_PASSWORD" },
     { type: "action", description: "Submit login form" },
     { type: "assertion", description: "Verify successful login" }
   ]
@@ -52,7 +52,7 @@ adminRoutes.forEach(route => {
     steps: [
       { type: "action", description: "Navigate to /login" },
       { type: "action", description: "Fill in email with admin@mxperformance.com.br" },
-      { type: "action", description: "Fill in password with Mx#2026!" },
+      { type: "action", description: "Fill in password with the value from MX_E2E_PASSWORD" },
       { type: "action", description: "Submit login form" },
       { type: "action", description: `Navigate to ${route.path}` },
       { type: "assertion", description: `Verify ${route.name} page is rendered` }
@@ -70,7 +70,7 @@ for(let i = idCounter; i <= 31; i++) {
     steps: [
       { type: "action", description: "Navigate to /login" },
       { type: "action", description: "Fill in email with admin@mxperformance.com.br" },
-      { type: "action", description: "Fill in password with Mx#2026!" },
+      { type: "action", description: "Fill in password with the value from MX_E2E_PASSWORD" },
       { type: "action", description: "Submit login form" },
       { type: "action", description: `Navigate to /painel` },
       { type: "assertion", description: `Verify layout structure` }

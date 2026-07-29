@@ -1,5 +1,8 @@
 const { chromium } = require('playwright');
 
+const password = process.env.MX_E2E_PASSWORD;
+if (!password) throw new Error('MX_E2E_PASSWORD is required');
+
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const context = await browser.newContext();
@@ -7,7 +10,7 @@ const { chromium } = require('playwright');
 
   await page.goto('https://mxperformance.vercel.app/login');
   await page.fill('input[type="email"]', 'admin@mxperformance.com.br');
-  await page.fill('input[type="password"]', 'Mx#2026!');
+  await page.fill('input[type="password"]', password);
   await page.click('button[type="submit"]');
   await page.waitForURL('**/painel');
   await page.waitForLoadState('networkidle');

@@ -22,7 +22,8 @@ const USERS = [
     routes: ['/home', '/lancamento-diario', '/historico', '/classificacao', '/devolutivas', '/pdi', '/treinamentos']
   }
 ];
-const PASSWORD = 'Mx#2026!';
+const PASSWORD = process.env.MX_E2E_PASSWORD;
+if (!PASSWORD) throw new Error('MX_E2E_PASSWORD is required');
 const BASE_URL = 'https://mxperformance.vercel.app';
 
 async function auditUser(user) {

@@ -136,7 +136,11 @@ Arquivos:
 
 Impacto:
 
-O fluxo de criação usa fallback de senha provisória previsível (`Mx#2026!` no client e `123456` na function). O Supabase local está configurado com mínimo 6, sem complexidade e `secure_password_change = false`. Mesmo com `must_change_password`, a janela entre criação e troca é um risco real, principalmente para contas internas.
+O fluxo de criação usava fallbacks de senha provisória previsíveis (um valor
+compartilhado no client e outro fallback previsível na function). O Supabase
+local está configurado com mínimo 6, sem complexidade e
+`secure_password_change = false`. Mesmo com `must_change_password`, a janela
+entre criação e troca é um risco real, principalmente para contas internas.
 
 Correção recomendada:
 
@@ -225,7 +229,8 @@ Correções aplicadas e validadas:
 
 - P1-01 E2E/schema: helpers e testes agora usam tabelas canonicas em portugues.
 - P1-02 Edge Functions: adicionado `_shared/auth.ts` e autorização por JWT/role/loja/consultor nas funções críticas.
-- P1-03 Senhas: removido fallback `123456`, adicionada política forte compartilhada e validação server-side em `register-user`.
+- P1-03 Senhas: removido fallback previsível, adicionada política forte
+  compartilhada e validação server-side em `register-user`.
 - P1-04 RLS legado: migration `20260501030000_harden_legacy_open_policies.sql` aplicada no Supabase remoto.
 - P2-01 Observabilidade: `Sistema MX` usa health check real via Supabase/latência/navegador e não mais status 100% hardcoded.
 - P2-02 Agenda: botão de atualizar tem nome acessível compatível com Playwright.

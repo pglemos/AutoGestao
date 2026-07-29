@@ -14,7 +14,8 @@ if (!supabaseUrl || !anonKey || !serviceRoleKey) {
 const supabaseUrlValue: string = supabaseUrl
 const anonKeyValue: string = anonKey
 const serviceRoleKeyValue: string = serviceRoleKey
-const password = 'Mx#2026!'
+const password = process.env.MX_E2E_PASSWORD
+if (!password) throw new Error('MX_E2E_PASSWORD is required')
 
 type SmokeUser = {
   label: string

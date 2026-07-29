@@ -8,7 +8,7 @@ const read = (file: string) => readFileSync(resolve(root, file), 'utf8')
 describe('Dono — contratos dos fluxos corrigidos', () => {
   test('telas executivas ficam registradas na raiz do roteador e usam o shell do Dono', () => {
     const app = read('src/App.tsx')
-    const shell = read('src/features/owner-base44/OwnerShell.tsx')
+    const layout = read('src/components/Layout.tsx')
     const appShell = read('src/components/AppShell.tsx')
     // sem prefixo /dono: o perfil decide o componente de cada URL
     expect(app).toContain("const OwnerPlanoDeAcao = lazy(() => import('@/pages/owner/PlanoDeAcao'))")
@@ -16,9 +16,10 @@ describe('Dono — contratos dos fluxos corrigidos', () => {
     expect(app).toContain('dono={<OwnerPlanoEstrategico />}')
     expect(app).toContain('dono={<OwnerHome />}')
     expect(app).toContain('<Route path="/dono/*" element={<OwnerLegacyPathRedirect />} />')
-    expect(appShell).toContain("role === 'dono'")
-    expect(shell).toContain("import OwnerLayout from '@/components/owner/OwnerLayout'")
-    expect(shell).toContain('owner-base44-exact')
+    expect(appShell).toContain('<Layout />')
+    expect(appShell).not.toContain('OwnerShell')
+    expect(layout).toContain('<OwnerProvider>')
+    expect(layout).toContain('owner-base44-exact')
   })
 
   test('plano estratégico monta uma única matriz real', () => {

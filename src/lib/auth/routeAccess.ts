@@ -28,6 +28,10 @@ const LEGACY_OWNER_WORKSPACE_SEGMENTS = new Set([
 ])
 
 export const ROUTE_ACCESS_RULES = [
+  // Navegação executiva canônica. O roteador converte estes caminhos legados
+  // para as rotas raiz, mas o shell precisa autorizá-los antes de renderizar
+  // seus itens de menu.
+  { pattern: '/dono/*', roles: ['dono'] },
   { pattern: '/plano-acao', roles: INTERNAL_AND_LEADERS },
   { pattern: '/plano-estrategico', roles: [...INTERNAL_ROLES, 'dono'] },
   { pattern: '/decisoes', roles: ['dono'] },

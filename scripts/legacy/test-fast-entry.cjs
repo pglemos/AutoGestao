@@ -6,7 +6,8 @@ const USERS = [
   { email: 'gerente@mxperformance.com.br', role: 'gerente', path: '/loja' },
   { email: 'vendedor@mxperformance.com.br', role: 'vendedor', path: '/home' }
 ];
-const PASSWORD = 'Mx#2026!';
+const PASSWORD = process.env.MX_E2E_PASSWORD;
+if (!PASSWORD) throw new Error('MX_E2E_PASSWORD is required');
 const BASE_URL = 'https://mxperformance.vercel.app';
 
 async function fastEntryTest(user) {

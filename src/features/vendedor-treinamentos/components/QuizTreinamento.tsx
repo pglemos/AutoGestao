@@ -40,7 +40,6 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
             })
             .catch(() => { if (ativo) onCarregado?.(0) })
         return () => { ativo = false }
-        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [trainingId])
 
     if (questoes.length < 5) return null

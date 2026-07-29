@@ -11,7 +11,11 @@ if (!supabaseUrl || !anonKey || !serviceRoleKey) {
   throw new Error('SUPABASE_URL/VITE_SUPABASE_URL, SUPABASE_ANON_KEY/VITE_SUPABASE_ANON_KEY and SUPABASE_SERVICE_ROLE_KEY are required.')
 }
 
-const password = 'Mx#2026!'
+const password = (() => {
+  const value = process.env.MX_E2E_PASSWORD
+  if (!value) throw new Error('MX_E2E_PASSWORD is required')
+  return value
+})()
 const supabaseUrlValue = supabaseUrl
 const anonKeyValue = anonKey
 const serviceRoleKeyValue = serviceRoleKey

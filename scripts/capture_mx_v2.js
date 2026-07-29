@@ -40,12 +40,14 @@ const INTER_STEP_WAIT = 800;// ms entre ações de interação
 
 const COMMIT = '2f8e40fdf4f187027f3231c799b5b886c82b8906';
 const BRANCH = 'main';
+const MX_E2E_PASSWORD = process.env.MX_E2E_PASSWORD;
+if (!MX_E2E_PASSWORD) throw new Error('MX_E2E_PASSWORD is required');
 
 const CREDENTIALS = {
-  VENDEDOR: { email: 'vendedor@mxgestaopreditiva.com.br', password: 'Mx#2026!' },
-  GERENTE: { email: 'gerente@mxgestaopreditiva.com.br', password: 'Mx#2026!' },
-  DONO: { email: 'dono@mxgestaopreditiva.com.br', password: 'Mx#2026!' },
-  ADMIN: { email: 'synvollt@gmail.com', password: 'Mx#2026!' },
+  VENDEDOR: { email: 'vendedor@mxgestaopreditiva.com.br', password: MX_E2E_PASSWORD },
+  GERENTE: { email: 'gerente@mxgestaopreditiva.com.br', password: MX_E2E_PASSWORD },
+  DONO: { email: 'dono@mxgestaopreditiva.com.br', password: MX_E2E_PASSWORD },
+  ADMIN: { email: 'synvollt@gmail.com', password: MX_E2E_PASSWORD },
 };
 
 // ─── ESTADO GLOBAL ─────────────────────────────────────────────────────────────

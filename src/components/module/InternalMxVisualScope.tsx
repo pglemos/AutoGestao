@@ -21,7 +21,8 @@ export function InternalMxVisualScope({
         <div
           data-testid="internal-mx-visual-scope"
           data-mx-visual-system="manager"
-          className="mx-manager-scope mx-internal-scope h-full min-h-0 w-full bg-gray-50 text-gray-800"
+          data-mx-internal-scope="true"
+          className="h-full min-h-0 w-full bg-gray-50 text-gray-800"
         >
           <InternalManagerRouteFrame role={role} pathname={location.pathname}>
             {children}

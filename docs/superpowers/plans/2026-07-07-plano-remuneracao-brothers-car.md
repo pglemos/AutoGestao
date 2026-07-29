@@ -13,7 +13,7 @@
 - Projeto Supabase: `fbhcmzzgwjdgkctlfvbo` (MX GESTAO PREDITIVA). MCP Supabase **sem permissão** nesse projeto — usar CLI linked (`supabase db push --linked` / `supabase gen types typescript --linked`), autenticada via keychain macOS.
 - **NUNCA `supabase db push --include-all`**: 3 migrations out-of-order nunca aplicadas (`20260521120000_drop_migration_backups_pii`, `20260521130000_db016_revoke_lancamentos_diarios`, `20260521131000_db016_revoke_rollback`) seriam arrastadas. Mover pra fora de `supabase/migrations/` antes de `db push`, restaurar depois (`trap ... EXIT`).
 - Loja de testes: **MX CONSULTORIA**, `loja_id = 467a19d1-af51-4b4f-9b05-d67187a2a759`, cargo `Vendedor`.
-- Contas de teste: `dono@mxgestaopreditiva.com.br`, `gerente@mxgestaopreditiva.com.br`, `vendedor@mxgestaopreditiva.com.br` (nível líder), `mari.vendedor@mxgestaopreditiva.com.br` (pleno), `jose.vendedor@mxgestaopreditiva.com.br` (júnior), `daniel.vendedor@mxgestaopreditiva.com.br` (júnior). Senha padrão: `Mx#2026!`.
+- Contas de teste: `dono@mxgestaopreditiva.com.br`, `gerente@mxgestaopreditiva.com.br`, `vendedor@mxgestaopreditiva.com.br` (nível líder), `mari.vendedor@mxgestaopreditiva.com.br` (pleno), `jose.vendedor@mxgestaopreditiva.com.br` (júnior), `daniel.vendedor@mxgestaopreditiva.com.br` (júnior). Senha fornecida somente em runtime via `MX_E2E_PASSWORD`.
 - Migrations aditivas (`IF NOT EXISTS` em toda `ADD COLUMN`/`ADD VALUE`), zero impacto em regras/planos existentes de outras lojas.
 - Após qualquer migration: `npm run gen:db-types` seguido de `npm run typecheck`.
 - Spec completa: `docs/superpowers/specs/2026-07-07-plano-remuneracao-brothers-car-design.md`.
@@ -1714,7 +1714,7 @@ Expected: tudo verde.
 
 - [ ] **Step 2: Iniciar o dev server e logar como dono**
 
-Usar `preview_start` (config `dev`, porta 3457). Login `dono@mxgestaopreditiva.com.br` / `Mx#2026!`. Navegar pra `/configuracoes/remuneracao`, selecionar loja MX CONSULTORIA.
+Usar `preview_start` (config `dev`, porta 3457). Login `dono@mxgestaopreditiva.com.br` com a senha de `MX_E2E_PASSWORD`. Navegar pra `/configuracoes/remuneracao`, selecionar loja MX CONSULTORIA.
 
 Expected: aba "Plano atual" mostra Fixo R$ 1.500,00 / Variável R$ 0,00 / Benefícios R$ 0,00. Aba "Regras e bônus" lista as 7 regras (comissão 500, bônus 1.000 com "8 carro(s)", 4 faixas de equipe com badges `cumulativo`/`por unidade`/`trava individual`, 2 bônus de carreira). Aba "Nível de carreira" lista os 4 vendedores com os níveis certos (líder/pleno/júnior/júnior) e o select é editável.
 
@@ -1726,7 +1726,7 @@ Depois reverter de volta pra júnior (pra manter o cenário de demo descrito na 
 
 - [ ] **Step 4: Logar como vendedor e conferir o extrato**
 
-Login `vendedor@mxgestaopreditiva.com.br` / `Mx#2026!` (nível líder, seedado). Navegar pra `/minha-remuneracao`. Abrir o detalhamento do cálculo (`CalculationDetailsDrawer`).
+Login `vendedor@mxgestaopreditiva.com.br` com a senha de `MX_E2E_PASSWORD` (nível líder, seedado). Navegar pra `/minha-remuneracao`. Abrir o detalhamento do cálculo (`CalculationDetailsDrawer`).
 
 Expected: `formulaItens` mostra as 6 linhas (fixo, variável=0, benefícios=0, comissão, bônus, bônus de carreira=800 já que é líder). Total bate com a fórmula da planilha pro número de vendas reais desse vendedor no mês (sem depender de dados fictícios — usa vendas reais do CRM). Não deve haver nenhum controle de edição na tela (somente leitura).
 

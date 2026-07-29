@@ -41,7 +41,7 @@ A Admin Master MX Mariane esqueceu a senha. O acesso precisa ser restaurado com 
 - Corrigido `/login?recovery=1` para aceitar tanto recovery por hash (`access_token`/`refresh_token`) quanto por query `code`, limpando tokens da URL após criar sessão.
 - Corrigido envio administrativo de redefinição para redirecionar explicitamente para `/login?recovery=1`.
 - Criado script operacional seguro `scripts/reset_user_password.ts` com dry-run, validação de mínimo 6 caracteres, geração opcional, atualização Auth + `usuarios.must_change_password=true` e validação de login via anon key.
-- Scripts legados de reset/provisionamento passaram a rejeitar senha curta antes de chamar Supabase; `provision_mx_team.ts` não usa mais `123456` para novos Admin Master MX.
+- Scripts legados de reset/provisionamento passaram a rejeitar senha curta antes de chamar Supabase; `provision_mx_team.ts` não usa mais o fallback previsível para novos Admin Master MX.
 - Dry-run do novo script confirmou que `danieljsvendas@gmail.com` pode ser resetado pelo processo operacional seguro.
 - Gates locais 2026-05-17 passaram: `bun test src/lib/auth/passwordPolicy.test.ts`, `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npx playwright test src/test/auth-password-recovery.playwright.ts --project=chromium`.
 - Incidente Diego 2026-07-13: Auth estava ativo e confirmado, mas a senha temporária informada não correspondia; o login foi resetado e o fluxo real revelou que o trigger de hardening bloqueava o RPC `complete_password_change`.

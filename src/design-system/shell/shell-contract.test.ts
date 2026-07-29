@@ -22,12 +22,12 @@ const readCode = (path: string) =>
     .replace(/^\s*\/\/.*$/gm, '')
 
 describe('App Shell unificado', () => {
-  it('envolve os dois shells na mesma moldura', () => {
+  it('renderiza uma única implementação de shell na moldura', () => {
     const appShell = read('src/components/AppShell.tsx')
     expect(appShell).toContain('<AppShellFrame role={role}>')
-    // Nenhum dos dois ramos escapa da moldura.
-    expect(appShell).toContain('<OwnerShell />')
     expect(appShell).toContain('<Layout />')
+    expect(appShell).not.toContain('OwnerShell')
+    expect(appShell).not.toContain("role === 'dono'")
   })
 
   it('aplica o escopo de tokens e a densidade do perfil', () => {
@@ -75,18 +75,13 @@ describe('App Shell unificado', () => {
 
   it('aponta o skip-link para o landmark real de cada shell', () => {
     expect(UNIVERSAL_CONFIG.mainContentId).toBe('main-content')
-    expect(OWNER_CONFIG.mainContentId).toBe('owner-main-content')
+    expect(OWNER_CONFIG.mainContentId).toBe('main-content')
 
     // O contrato existente exige um único `main-content`, no shell universal.
     const sidebarShell = read('src/components/MxSidebarShell.tsx')
     expect(sidebarShell.split('id="main-content"').length - 1).toBe(1)
 
-    // O módulo do Dono passa a ter landmark próprio, focável.
-    const ownerLayout = read('src/components/owner/OwnerLayout.jsx')
-    expect(ownerLayout).toContain('<main')
-    expect(ownerLayout).toContain('id="owner-main-content"')
-    expect(ownerLayout).toContain('tabIndex={-1}')
-    expect(ownerLayout).not.toContain('id="main-content"')
+    expect(OWNER_CONFIG.mainContentId).toBe(UNIVERSAL_CONFIG.mainContentId)
   })
 
   it('move o foco e anuncia a rota após navegar, mas não na montagem', () => {
@@ -102,15 +97,11 @@ describe('App Shell unificado', () => {
   })
 
   it('preserva a aparência aprovada do Dono', () => {
-    // A moldura é aditiva: o escopo visual do módulo continua intacto.
-    const ownerShell = read('src/features/owner-base44/OwnerShell.tsx')
-    expect(ownerShell).toContain('owner-b44 owner-base44-exact')
-    expect(ownerShell).toContain('<OwnerLayout />')
-
-    const ownerLayout = read('src/components/owner/OwnerLayout.jsx')
-    expect(ownerLayout).toContain('max-w-[1400px]')
-    expect(ownerLayout).toContain('<OwnerSidebar')
-    expect(ownerLayout).toContain('<OwnerTopbar')
+    const layout = read('src/components/Layout.tsx')
+    expect(layout).toContain('owner-base44-exact')
+    expect(layout).not.toContain('owner-b44')
+    expect(layout).toContain('<OwnerProvider>')
+    expect(layout).toContain('<MxSidebarShell')
   })
 
   it('expõe a classe raiz esperada pelo Storybook e pelo runtime', () => {

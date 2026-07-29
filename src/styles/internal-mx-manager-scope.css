@@ -1,4 +1,4 @@
-.mx-internal-scope {
+[data-mx-internal-scope='true'] {
   color-scheme: light;
   --mx-page-bg: #f9fafb;
   --mx-surface: #ffffff;
@@ -11,28 +11,28 @@
   --mx-accent-soft: #ecfdf5;
 }
 
-.mx-internal-scope :is(h1, h2, h3, h4, h5, h6, p, button, label).font-black {
+[data-mx-internal-scope='true'] :is(h1, h2, h3, h4, h5, h6, p, button, label).font-black {
   font-weight: 600;
 }
 
-.mx-internal-scope :is(h1, h2, h3, h4, h5, h6, p, button, label).uppercase {
+[data-mx-internal-scope='true'] :is(h1, h2, h3, h4, h5, h6, p, button, label).uppercase {
   text-transform: none;
 }
 
-.mx-internal-scope :is(h1, h2, h3, h4, h5, h6, p, button, label)[class*='tracking-widest'],
-.mx-internal-scope :is(h1, h2, h3, h4, h5, h6, p, button, label)[class*='tracking-mx-'] {
+[data-mx-internal-scope='true'] :is(h1, h2, h3, h4, h5, h6, p, button, label)[class*='tracking-widest'],
+[data-mx-internal-scope='true'] :is(h1, h2, h3, h4, h5, h6, p, button, label)[class*='tracking-mx-'] {
   letter-spacing: normal;
 }
 
-.mx-internal-scope :is(.shadow-mx-md, .shadow-mx-lg, .shadow-mx-xl) {
+[data-mx-internal-scope='true'] :is(.shadow-mx-md, .shadow-mx-lg, .shadow-mx-xl) {
   box-shadow: 0 1px 2px rgb(15 23 42 / 0.05);
 }
 
-.mx-internal-scope :is(.rounded-mx-2xl, .rounded-mx-3xl, .rounded-mx-4xl) {
+[data-mx-internal-scope='true'] :is(.rounded-mx-2xl, .rounded-mx-3xl, .rounded-mx-4xl) {
   border-radius: 1rem;
 }
 
-.mx-internal-scope :is(input, select, textarea):not([type='checkbox']):not([type='radio']):not([type='file']) {
+[data-mx-internal-scope='true'] :is(input, select, textarea):not([type='checkbox']):not([type='radio']):not([type='file']) {
   border-color: var(--mx-border-strong);
   border-radius: 0.75rem;
   background-color: var(--mx-surface);
@@ -43,15 +43,15 @@
   text-transform: none;
 }
 
-.mx-internal-scope :is(input, select):not([type='checkbox']):not([type='radio']):not([type='file']) {
+[data-mx-internal-scope='true'] :is(input, select):not([type='checkbox']):not([type='radio']):not([type='file']) {
   min-height: 2.5rem;
 }
 
-.mx-internal-scope textarea {
+[data-mx-internal-scope='true'] textarea {
   min-height: 7rem;
 }
 
-.mx-internal-scope :is(input, select, textarea):focus-visible {
+[data-mx-internal-scope='true'] :is(input, select, textarea):focus-visible {
   border-color: var(--mx-accent);
   outline: none;
   box-shadow: 0 0 0 3px rgb(5 150 105 / 0.15);

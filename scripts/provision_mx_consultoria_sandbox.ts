@@ -18,7 +18,8 @@ const supabase = createClient(SUPABASE_URL, SERVICE_ROLE_KEY, {
 
 const STORE_NAME = 'MX CONSULTORIA'
 const STORE_ALIASES = ['MX CONSULTORIA', 'MX PERFORMANCE', 'LOJA TESTE AIOX', 'LOJA TESTE E2E', 'TESTE']
-const PASSWORD = 'Mx#2026!'
+const PASSWORD = process.env.MX_E2E_PASSWORD
+if (!PASSWORD) throw new Error('MX_E2E_PASSWORD is required')
 const STARTED_AT = '2026-05-01'
 
 const ADMIN_MASTER_MX_USERS = [
@@ -396,7 +397,6 @@ async function main() {
     console.log('\nUsuarios internos legados desativados:')
     for (const email of LEGACY_INTERNAL_TEST_EMAILS) console.log(`- ${email}`)
   }
-  console.log(`\nSenha padrao: ${PASSWORD}`)
 }
 
 main().catch((error: unknown) => {
