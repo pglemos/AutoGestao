@@ -276,7 +276,20 @@ Tokens de cor disponíveis como utilities: `bg-mxsb-surface`, `text-mxsb-ink`, `
 **Proibido**: `bg-white shadow-sm` na coluna, item ativo em verde sólido (`bg-emerald-600 text-white`),
 larguras próprias (`w-56`, `w-[264px]`), breakpoint diferente de `xl` para a coluna fixa.
 
-## 15. Regras obrigatórias para todos os módulos
+## 15. Armadilhas de escopo (por que os tokens usam valores absolutos)
+
+Cada módulo roda em um escopo visual diferente, e três heranças quebravam a paridade:
+
+| Herança | Efeito | Solução no token |
+|---|---|---|
+| `font-display` (Inter) no shell universal | sidebar em Inter, Dono no stack do sistema | `font-sans` + `antialiased` no `aside` e no `root` |
+| `--radius: 1rem` global (vendedor roda fora do `.mx-manager-scope`, que usa `0.5rem`) | itens com 16px de raio em vez de 8px; cartão 24px em vez de 16px | raios em pixel: `rounded-[8px]`, `rounded-[6px]`, `rounded-[12px]`, `rounded-[16px]` |
+| `font-size` herdado (16px) | CTA e cartão de perfil maiores | `text-[14px] leading-[21px]` no `aside` e `text-sm` no `root` |
+
+Os ícones também precisam do mesmo peso: tamanho pela classe (`h-4 w-4`) e traço padrão do lucide (2).
+Passar `size`/`strokeWidth` numéricos deixa o traço mais fino que o do Dono.
+
+## 16. Regras obrigatórias para todos os módulos
 
 1. **Marca única** — todos usam `SIDEBAR_LOGO` (`/landing/logo-mx.png`), 28px.
 2. **Escala tipográfica** — a coluna herda `text-sm`; nada de 16px vazando para CTA/cartão.

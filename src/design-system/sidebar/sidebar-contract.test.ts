@@ -34,9 +34,9 @@ describe('design tokens da sidebar', () => {
     expect(SIDEBAR.asideWidthCollapsed).toBe('w-16')
     expect(SIDEBAR.root).toContain('bg-mxsb-surface')
     expect(SIDEBAR.header).toContain('h-[54px]')
-    expect(SIDEBAR.item).toContain('rounded-lg')
+    expect(SIDEBAR.item).toContain('rounded-[8px]')
     expect(SIDEBAR.item).toContain('gap-2.5')
-    expect(SIDEBAR.nestedItem).toContain('rounded-md')
+    expect(SIDEBAR.nestedItem).toContain('rounded-[6px]')
     expect(SIDEBAR.nestedItem).toContain('text-[13px]')
     expect(SIDEBAR.itemActive).toContain('bg-mxsb-active-surface')
     expect(SIDEBAR.itemActive).toContain('text-mxsb-active')
@@ -73,8 +73,30 @@ describe('design tokens da sidebar', () => {
     expect(ownerSidebar).toContain('SIDEBAR.ctaButton')
   })
 
-  test('herda a mesma escala tipográfica em toda a coluna', () => {
+  test('herda a mesma escala tipográfica e a mesma fonte em toda a coluna', () => {
     expect(SIDEBAR.root).toContain('text-sm')
+    expect(SIDEBAR.root).toContain('font-sans')
+    expect(SIDEBAR.root).toContain('antialiased')
+    expect(SIDEBAR.aside).toContain('font-sans')
+    expect(SIDEBAR.aside).toContain('antialiased')
+  })
+
+  test('fixa os raios em pixel, imunes ao --radius de cada escopo', () => {
+    // O vendedor roda fora do escopo manager, onde --radius vale 1rem; sem
+    // valor absoluto os cantos da sidebar dobravam de tamanho.
+    for (const key of ['item', 'nestedItem', 'toggle', 'ctaButton'] as const) {
+      expect(SIDEBAR[key], key).not.toMatch(/rounded-(sm|md|lg|xl|2xl)\b/)
+    }
+    expect(SIDEBAR.item).toContain('rounded-[8px]')
+    expect(SIDEBAR.nestedItem).toContain('rounded-[6px]')
+    expect(SIDEBAR.toggle).toContain('rounded-[12px]')
+    expect(profileCard).toContain('rounded-[16px]')
+  })
+
+  test('renderiza os ícones com o mesmo peso do Dono', () => {
+    // tamanho pela classe (h-4 w-4) e traço padrão do lucide (2)
+    expect(shell).not.toContain('strokeWidth={1.8}')
+    expect(SIDEBAR.itemIcon).toContain('h-4 w-4')
   })
 
   test('não reintroduz o verde sólido nem sombra na coluna', () => {

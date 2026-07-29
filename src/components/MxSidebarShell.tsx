@@ -94,36 +94,31 @@ function containsNavItem(
 
 function NavItemIcon({
   icon,
-  size,
   className,
 }: {
   icon: MxSidebarNavItem['icon']
-  size: number
   className?: string
 }) {
+  // Mesma renderização da sidebar do Dono: tamanho pela classe (h-4 w-4) e
+  // traço padrão do lucide (2), para o peso do ícone ser idêntico.
   if (
     typeof icon === 'function' ||
     (typeof icon === 'object' && icon !== null && 'render' in icon)
   ) {
     const Icon = icon as LucideIcon
-    return (
-      <Icon
-        size={size}
-        strokeWidth={1.8}
-        className={className}
-        aria-hidden="true"
-      />
-    )
+    return <Icon className={className} aria-hidden="true" />
   }
 
   if (React.isValidElement(icon)) {
     return React.cloneElement(
       icon as React.ReactElement<Record<string, unknown>>,
       {
-        size,
-        strokeWidth: 1.8,
+        size: undefined,
+        strokeWidth: undefined,
         className: cn(
-          (icon.props as { className?: string }).className,
+          String((icon.props as { className?: string }).className ?? '')
+            .replace(/\b(h|w)-\d+(\.\d+)?\b/g, '')
+            .trim(),
           className,
         ),
         'aria-hidden': true,
@@ -269,16 +264,11 @@ export default function MxSidebarShell({
         title={isCollapsed ? item.label : undefined}
         className={cn(
           SIDEBAR.item,
-          'text-left',
           active ? SIDEBAR.itemActive : SIDEBAR.itemIdle,
           isCollapsed ? SIDEBAR.itemCollapsed : SIDEBAR.itemExpanded,
         )}
       >
-        <NavItemIcon
-          icon={item.icon}
-          size={16}
-          className={SIDEBAR.itemIcon}
-        />
+        <NavItemIcon icon={item.icon} className={SIDEBAR.itemIcon} />
         {!isCollapsed ? (
           <>
             <span className={SIDEBAR.itemLabel}>
@@ -313,7 +303,6 @@ export default function MxSidebarShell({
         onClick={() => setMobileOpen(false)}
         className={cn(
           SIDEBAR.nestedItem,
-          'text-left',
           active ? SIDEBAR.nestedItemActive : SIDEBAR.nestedItemIdle,
         )}
       >
@@ -358,16 +347,14 @@ export default function MxSidebarShell({
           onClick={toggleGroup}
           className={cn(
             SIDEBAR.groupTrigger,
-            'text-left',
             isCollapsed ? SIDEBAR.itemCollapsed : SIDEBAR.itemExpanded,
           )}
         >
-          <NavItemIcon icon={item.icon} size={16} className={SIDEBAR.itemIcon} />
+          <NavItemIcon icon={item.icon} className={SIDEBAR.itemIcon} />
           {!isCollapsed ? (
             <>
               <span className={SIDEBAR.itemLabel}>{item.label}</span>
               <ChevronDown
-                size={14}
                 className={cn(
                   SIDEBAR.groupChevron,
                   'transition-transform duration-200',
@@ -447,9 +434,9 @@ export default function MxSidebarShell({
             className={SIDEBAR.toggle}
           >
             {isCollapsed ? (
-              <PanelLeftOpen size={18} aria-hidden="true" />
+              <PanelLeftOpen className="h-[18px] w-[18px]" aria-hidden="true" />
             ) : (
-              <PanelLeftClose size={18} aria-hidden="true" />
+              <PanelLeftClose className="h-[18px] w-[18px]" aria-hidden="true" />
             )}
           </button>
         ) : null}
@@ -495,7 +482,7 @@ export default function MxSidebarShell({
               isCollapsed ? SIDEBAR.ctaButtonCollapsed : SIDEBAR.ctaButtonExpanded,
             )}
           >
-            <cta.icon size={16} strokeWidth={1.8} aria-hidden="true" />
+            <cta.icon className="h-4 w-4" aria-hidden="true" />
             {!isCollapsed ? cta.label : null}
           </button>
         </div>
@@ -544,7 +531,7 @@ export default function MxSidebarShell({
 
       <aside
         className={cn(
-          'fixed left-0 top-0 z-[80] hidden h-screen border-r border-mxsb-line transition-[width] duration-300 xl:block',
+          'fixed left-0 top-0 z-[80] hidden h-screen border-r border-mxsb-line font-sans text-[14px] leading-[21px] text-[#0A0A0A] antialiased transition-[width] duration-300 xl:block',
           collapsed ? SIDEBAR.asideWidthCollapsed : SIDEBAR.asideWidth,
         )}
         aria-label={sidebarLabel}
@@ -566,7 +553,7 @@ export default function MxSidebarShell({
             role="dialog"
             aria-modal="true"
             aria-label={sidebarLabel}
-            className={cn(SIDEBAR.drawerPanel, 'border-r border-mxsb-line')}
+            className={cn(SIDEBAR.drawerPanel, 'border-r border-mxsb-line font-sans text-[14px] leading-[21px] text-[#0A0A0A] antialiased')}
             onClick={(event) => event.stopPropagation()}
             onKeyDown={(event) => event.stopPropagation()}
           >
