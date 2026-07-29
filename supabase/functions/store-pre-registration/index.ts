@@ -81,90 +81,17 @@ async function findAuthUserByEmail(adminClient: any, email: string) {
   return null
 }
 
-async function reactivateApprovedStoreAccess(
-  adminClient: any,
-  userId: string,
-  storeId: string,
-  role: string,
-  existingAuthUser: any,
-) {
-  const { data: previousRegistration, error: previousRegistrationError } = await adminClient
-    .from('pre_cadastros_loja')
-    .select('id, role')
-    .eq('auth_user_id', userId)
-    .eq('store_id', storeId)
-    .eq('status', 'synced')
-    .maybeSingle()
-
-  if (previousRegistrationError) throw previousRegistrationError
-  if (!previousRegistration || previousRegistration.role !== role) return false
-
-  const { error: profileError } = await adminClient
-    .from('usuarios')
-    .update({ active: true, must_change_password: true })
-    .eq('id', userId)
-  if (profileError) throw profileError
-
-  const { error: membershipError } = await adminClient
-    .from('vinculos_loja')
-    .upsert({ user_id: userId, store_id: storeId, role, is_active: true, ended_at: null }, { onConflict: 'user_id,store_id' })
-  if (membershipError) throw membershipError
-
-  if (role === 'vendedor') {
-    const { data: existingSeller, error: existingSellerError } = await adminClient
-      .from('vendedores_loja')
-      .select('id')
-      .eq('seller_user_id', userId)
-      .eq('store_id', storeId)
-      .maybeSingle()
-    if (existingSellerError) throw existingSellerError
-
-    const sellerMutation = existingSeller
-      ? adminClient
-          .from('vendedores_loja')
-          .update({ is_active: true, ended_at: null })
-          .eq('id', existingSeller.id)
-      : adminClient
-          .from('vendedores_loja')
-          .insert({
-            seller_user_id: userId,
-            store_id: storeId,
-            started_at: new Date().toISOString().slice(0, 10),
-            ended_at: null,
-            is_active: true,
-            closing_month_grace: false,
-          })
-    const { error: sellerError } = await sellerMutation
-    if (sellerError) throw sellerError
-  }
-
-  const { error: authError } = await adminClient.auth.admin.updateUserById(userId, {
-    user_metadata: {
-      ...(existingAuthUser?.user_metadata || {}),
-      role,
-      store_id: storeId,
-      must_change_password: true,
-    },
-  })
-  if (authError) throw authError
-
-  return true
-}
-
 async function cleanupPendingUser(
   adminClient: any,
   userId: string,
   storeId: string,
   avatarStoragePath: string | null,
-  deleteAuthUser = true,
 ) {
   await adminClient.from('vendedores_loja').delete().eq('seller_user_id', userId).eq('store_id', storeId)
   await adminClient.from('vinculos_loja').update({ is_active: false, ended_at: new Date().toISOString().slice(0, 10) }).eq('user_id', userId).eq('store_id', storeId)
   await adminClient.from('usuarios').delete().eq('id', userId)
   if (avatarStoragePath) await adminClient.storage.from('pre-cadastro-avatares').remove([avatarStoragePath])
-  // Identidade órfã adotada (auth.users pré-existente sem linha em usuarios): nunca deletar
-  // o auth user nesse caso, só o que criamos nesta chamada (profile/vínculo/avatar acima).
-  if (deleteAuthUser) await adminClient.auth.admin.deleteUser(userId)
+  await adminClient.auth.admin.deleteUser(userId)
 }
 
 initSentryForEdge()
@@ -353,47 +280,22 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
     }, 409)
   }
 
-  // Identidade órfã: existe em auth.users mas sem linha em usuarios (ex.: import antigo que
-  // nunca completou o perfil). Não é um cadastro real em uso — adota a identidade em vez de
-  // barrar o pré-cadastro com "e-mail já existe".
-  const isOrphanAuthUser = !existingUser && Boolean(existingAuthUser)
-
-  if ((existingUser || existingAuthUser) && !isOrphanAuthUser) {
-    let reactivated = false
-    if (
-      existingUser &&
-      existingAuthUser &&
-      existingUser.id === existingAuthUser.id &&
-      existingUser.active === false
-    ) {
-      try {
-        reactivated = await reactivateApprovedStoreAccess(
-          adminClient,
-          existingAuthUser.id,
-          store.id,
-          role,
-          existingAuthUser,
-        )
-      } catch (err) {
-        return jsonResponse({
-          success: false,
-          error: err instanceof Error ? err.message : 'Não foi possível reativar o acesso existente.',
-        }, 500)
-      }
-    }
-
+  // Este endpoint é público e opera com service role. Uma identidade já existente no Auth,
+  // mesmo sem perfil em usuarios, nunca pode ser adotada nem ter a senha redefinida aqui:
+  // conhecer o e-mail não prova autoridade sobre a conta. A recuperação/autorização deve
+  // ocorrer pelos fluxos autenticados e auditáveis do Admin MX.
+  if (existingUser || existingAuthUser) {
     return jsonResponse({
       success: false,
       code: 'existing_user',
       requires_password_reset: true,
-      reactivated,
+      reactivated: false,
       login_email: email,
-      error: 'Este e-mail já possui cadastro. Não criamos outro usuário. Enviamos um link para redefinir sua senha.',
+      error: 'Este e-mail já possui cadastro. Não criamos outro usuário. Enviamos um link para redefinir sua senha; a reativação depende do Admin MX.',
     }, 409)
   }
 
   let userId = ''
-  let createdAuthUser = true
 
   const userMetadata = {
     name: fullName,
@@ -405,29 +307,14 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
 
   const temporaryPassword = generateTemporaryPassword()
 
-  if (isOrphanAuthUser) {
-    createdAuthUser = false
-    userId = existingAuthUser.id
-    const { error: updateAuthError } = await adminClient.auth.admin.updateUserById(userId, {
-      password: temporaryPassword,
-      email_confirm: true,
-      user_metadata: userMetadata,
-    })
-    if (updateAuthError) {
-      return jsonResponse({ success: false, error: updateAuthError.message }, 500)
-    }
-  }
+  const { data: createdUser, error: createUserError } = await adminClient.auth.admin.createUser({
+    email,
+    password: temporaryPassword,
+    email_confirm: true,
+    user_metadata: userMetadata,
+  })
 
-  const { data: createdUser, error: createUserError } = isOrphanAuthUser
-    ? { data: null, error: null }
-    : await adminClient.auth.admin.createUser({
-        email,
-        password: temporaryPassword,
-        email_confirm: true,
-        user_metadata: userMetadata,
-      })
-
-  if (!isOrphanAuthUser && (createUserError || !createdUser?.user)) {
+  if (createUserError || !createdUser?.user) {
     const createMessage = createUserError?.message?.toLowerCase() || ''
     let existingAuthAfterRace: any = null
     try {
@@ -447,9 +334,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
     return jsonResponse({ success: false, error: createUserError?.message || 'Não foi possível criar o login provisório.' }, 500)
   }
 
-  if (!isOrphanAuthUser) {
-    userId = createdUser!.user!.id
-  }
+  userId = createdUser.user.id
 
   let avatarUrl: string | null = null
   let avatarStoragePath: string | null = null
@@ -469,7 +354,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
       const { data: publicUrlData } = adminClient.storage.from('pre-cadastro-avatares').getPublicUrl(avatarStoragePath)
       avatarUrl = publicUrlData.publicUrl
     } catch (err) {
-      await cleanupPendingUser(adminClient, userId, store.id, avatarStoragePath, createdAuthUser)
+      await cleanupPendingUser(adminClient, userId, store.id, avatarStoragePath)
       return jsonResponse({ success: false, error: err instanceof Error ? err.message : 'Não foi possível salvar a foto.' }, 500)
     }
   }
@@ -487,7 +372,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
   }, { onConflict: 'id' })
 
   if (profileError) {
-    await cleanupPendingUser(adminClient, userId, store.id, avatarStoragePath, createdAuthUser)
+    await cleanupPendingUser(adminClient, userId, store.id, avatarStoragePath)
     return jsonResponse({ success: false, error: profileError.message }, 500)
   }
 
@@ -500,7 +385,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
   }, { onConflict: 'user_id,store_id' })
 
   if (membershipError) {
-    await cleanupPendingUser(adminClient, userId, store.id, avatarStoragePath, createdAuthUser)
+    await cleanupPendingUser(adminClient, userId, store.id, avatarStoragePath)
     return jsonResponse({ success: false, error: membershipError.message }, 500)
   }
 
@@ -532,7 +417,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
     .single()
 
   if (insertError) {
-    await cleanupPendingUser(adminClient, userId, store.id, avatarStoragePath, createdAuthUser)
+    await cleanupPendingUser(adminClient, userId, store.id, avatarStoragePath)
     const insertMessage = insertError.message.toLowerCase()
     if (insertMessage.includes('duplicate key') || insertMessage.includes('pre_cadastros_loja_active_email_normalized_uidx')) {
       return jsonResponse({

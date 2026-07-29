@@ -34,6 +34,23 @@
 - Decision: prefer existing authenticated CLI/browser sessions and inject a
   token only into a single process if a service cannot be reached otherwise.
 
+### Never recover authority from possession of an email address
+
+- Reason: `store-pre-registration` is public and uses `service_role`. The
+  previous orphan-adoption branch reset an existing Auth password, and its
+  reactivation branch could activate a deliberately disabled account.
+- Alternatives: keep orphan adoption; require an authenticated Admin MX action;
+  treat every existing Auth identity as an existing account.
+- Decision: the public endpoint never resets, adopts or reactivates an existing
+  identity. Recovery remains email-controlled; activation requires Admin MX.
+
+### Keep remote database changes blocked without a restorable backup
+
+- Reason: the Management API still reports no listed backup and PITR disabled,
+  despite WAL-G being enabled.
+- Consequence: remote inventory, advisors, migrations and function source may
+  be read, but no DDL or data mutation is authorized in this story state.
+
 ## Rollback
 
 - Code changes: revert only commits produced for this story.

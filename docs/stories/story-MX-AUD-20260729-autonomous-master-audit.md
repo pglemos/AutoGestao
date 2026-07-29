@@ -25,7 +25,7 @@ quality_gate_tools:
   - tool: Supabase CLI
     command: npx supabase --version
     expected_version: 2.110.0
-    success: versão confirmada; validação operacional permanece bloqueada por backup e drift
+    success: versão confirmada; migrations 327/327 e operação remota permanece bloqueada por backup
   - tool: Vercel CLI
     command: npx vercel --version
     expected_version: 50.44.0
@@ -242,6 +242,21 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   `src/lib/pdf/downloadHtmlAsPdf.test.ts`.
 - 2026-07-29: `$HOME/.local/bin/coderabbit review --uncommitted --agent`
   retornou 0; quatro achados documentais foram triados e os válidos corrigidos.
+- 2026-07-29: matriz autenticada do Dono percorreu 16 rotas × 4 viewports:
+  64/64 combinações, um único `aria-current`, zero overflow e zero erro de
+  console/página. Aliases legados passaram a usar o mesmo cálculo ativo.
+- 2026-07-29: comparação Supabase read-only confirmou 327 migrations locais e
+  327 remotas, `remote_only_count=0`; nenhuma migration foi reaplicada.
+- 2026-07-29: API Sentry GET confirmou um único issue frontend não resolvido em
+  produção nas últimas 24h, correspondente ao smoke controlado e simbolizado
+  para `sanitize.ts`; Edge e Health retornaram zero.
+- 2026-07-29: auditoria das funções públicas encontrou e corrigiu localmente
+  tomada de conta/reativação indevida no pré-cadastro. O endpoint não adota,
+  redefine senha nem reativa identidade existente.
+- 2026-07-29: regressão atual retornou 0 em lint, typecheck, build e bundle;
+  1.684 testes, 13.894 asserts, zero falhas e 1.857,80/1.860 KB gzip.
+- 2026-07-29: CodeRabbit revisou o diff final e retornou código 0, zero
+  achados, após uma espera de rate limit.
 
 ### Completion Notes List
 
@@ -257,6 +272,8 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   removido, preservando downloads `.xlsx` e `.pdf` reais.
 - O “READY para validação do PO” acima pertence ao checklist histórico de
   draft; o estado operacional vigente permanece `InProgress` e parcial.
+- O P0 do pré-cadastro está corrigido apenas nesta branch; produção permanece
+  vulnerável até preview, revisão e deploy aprovados.
 
 ### File List
 
@@ -315,6 +332,7 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/lib/owner-base44-exact-parity-contract.test.ts`
 - `src/lib/owner-flow-contract.test.ts`
 - `src/lib/real-data-runtime-contract.test.ts`
+- `src/lib/store-pre-registration-auth-hardening.test.ts`
 - `src/lib/export.ts`
 - `src/lib/export.test.ts`
 - `src/lib/pdf/downloadHtmlAsPdf.ts`
@@ -324,3 +342,4 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/styles/internal-mx-manager-scope.css`
 - `src/styles/manager-visual-scope.css`
 - `src/styles/owner-base44-exact.css`
+- `supabase/functions/store-pre-registration/index.ts`

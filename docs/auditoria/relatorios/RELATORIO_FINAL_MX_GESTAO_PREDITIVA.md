@@ -61,15 +61,28 @@ foram repetidos com o caminho explícito do Node 24.
 - Removida diretiva ESLint sem efeito.
 - Resultado: ESLint de 5 warnings para 0.
 
+### Autorização de pré-cadastro
+
+- A auditoria das Edge Functions com `verify_jwt=false` encontrou um P0 em
+  `store-pre-registration`: o endpoint público adotava uma identidade existente
+  apenas no Auth e redefinia sua senha com `service_role`.
+- O mesmo endpoint também podia reativar perfil e vínculo previamente
+  desativados sem decisão do Admin MX.
+- Os dois caminhos foram removidos. Identidades existentes agora seguem para
+  recuperação de senha e ajuste administrativo, sem reset nem reativação pelo
+  endpoint público.
+- Contrato regressivo: 3 testes, 9 asserts e zero falhas.
+- `deno check supabase/functions/store-pre-registration/index.ts` retornou 0.
+
 ## 4. Evidências atuais
 
 | Gate | Resultado | Código |
 |---|---:|---:|
 | `npm run lint` | 842 arquivos de tokens; 61 z-index; 0 warnings | 0 |
 | `npm run typecheck` | 4 pass / 0 fail + TypeScript | 0 |
-| `npm test` | 1.668 pass / 0 fail / 13.851 expects | 0 |
+| `npm test` | 1.684 pass / 0 fail / 13.894 expects | 0 |
 | `npm run build` | 5.123 módulos transformados | 0 |
-| `npm run check:bundle-size` | 1.857,54/1.860 KB gzip | 0 |
+| `npm run check:bundle-size` | 1.857,80/1.860 KB gzip | 0 |
 | `npm audit` inicial | 51 total; 1 crítica | 1 |
 | `npm audit` após correção | 48 total; 0 crítica | 1 |
 
@@ -78,7 +91,7 @@ correção compatível confirmada. Esse gate ainda está bloqueado.
 
 Execuções intermediárias tiveram contagens menores enquanto testes eram
 adicionados. A linha canônica acima corresponde à regressão final desta
-worktree: 1.668 testes e 13.851 asserts.
+worktree: 1.684 testes e 13.894 asserts.
 
 ## 5. GitHub
 
@@ -113,11 +126,10 @@ worktree: 1.668 testes e 13.851 asserts.
   funções privilegiadas. A migration `20260717273000` já corrige seis RPCs,
   porém o advisor continua apontando 59 funções, incluindo helpers, mutations
   e uma trigger que não deveriam constituir API anônima.
-- O histórico remoto contém migrations até `20260729130000`, enquanto esta
-  branch termina antes disso. As migrations `20260729120000` e
-  `20260729130000` existem em outra branch (`fix/observabilidade-producao`) e
-  não em `main`, caracterizando drift Git/banco que deve ser reconciliado antes
-  de novo DDL.
+- O histórico remoto e esta branch agora contêm 327 migrations, até
+  `20260729130000`; a comparação read-only confirmou `remote_only_count=0`.
+  As cinco migrations de observabilidade já aplicadas remotamente foram
+  incorporadas ao Git por cherry-pick, sem reaplicação no banco.
 - Backup físico: a CLI retornou `backups: []`, `pitr_enabled: false` e
   `walg_enabled: true`. Isso **não comprova backup restaurável**; por segurança,
   nenhuma migration/DDL foi aplicada nesta story.
@@ -136,10 +148,20 @@ worktree: 1.668 testes e 13.851 asserts.
 
 ## 8. Sentry
 
-- Pacotes de runtime e build existem no código.
-- A CLI não está instalada.
-- Evento controlado, release, source maps, environment e alertas ainda não
-  foram provados nesta execução.
+- Consulta atual via API oficial, somente GET, confirmou a organização
+  `synvolt` e os projetos `mx-performance-frontend`, `mx-performance-edge` e
+  `mx-performance-health`.
+- Nas últimas 24 horas há um único issue não resolvido em `production` no
+  frontend. É o erro controlado de smoke, com três ocorrências totais e uma no
+  ambiente de produção; o evento traz `mx.smoke=producao`, rota `/login` e
+  release `8ea36206…`.
+- O stack foi resolvido pelo source map para
+  `src/lib/observability/sanitize.ts`, comprovando simbolização da release
+  publicada.
+- Edge e Health retornaram zero issues não resolvidos nas últimas 24 horas.
+- A release da branch desta story, seu preview e um novo evento controlado
+  permanecem pendentes; a evidência acima comprova o circuito atual de
+  produção, não o código ainda não publicado desta branch.
 
 ## 9. Matriz de perfis
 
@@ -159,12 +181,12 @@ worktree: 1.668 testes e 13.851 asserts.
 | AUD-001 | P0 | Dependências com 40 alertas altos | `npm audit` | separar runtime/dev, atualizar ferramentas e substituir `xlsx` |
 | AUD-002 | P1 | Shell ainda possui caminhos paralelos | `AppShell.tsx` | contrato literal + convergência testada |
 | AUD-003 | P1 | Browser por perfil não revalidado | sem evidência nova | matriz autenticada completa |
-| AUD-004 | P1 | Supabase remoto/RLS não revalidado | worktree não vinculada | backup, link e matriz remota |
-| AUD-005 | P1 | Sentry operacional não provado | CLI ausente | instalar/usar API oficial e gerar evento de preview |
+| AUD-004 | P1 | Supabase remoto/RLS parcialmente revalidado | inventário, advisors e 327/327 migrations | backup e matriz remota de papéis ainda bloqueiam mutations |
+| AUD-005 | P1 | Sentry da branch ainda não provado | produção atual simboliza smoke; Edge/Health sem issues 24h | gerar evento somente no preview desta branch |
 | AUD-006 | P1 | `bundle-budget` remoto falhou | GitHub Actions | reproduzir localmente e corrigir |
 | AUD-007 | P2 | Testes contradizem shell único | contratos atuais | consolidar contrato arquitetural |
 | AUD-008 | P2 | previews recentes em erro | lista Vercel | inspecionar logs e separar falhas antigas |
-| AUD-009 | P0 | Banco remoto está à frente de `main` | migrations remotas `20260729120000`–`130000` | reconciliar Git/SHA/autoridade antes de DDL |
+| AUD-009 | resolvido local | Drift de migrations remoto/branch | 327/327; `remote_only_count=0` | manter gate de drift em CI |
 | AUD-010 | P0 | Backup restaurável não comprovado | `backups: []`, PITR desabilitado | obter snapshot/backup validado antes de mutation |
 | AUD-011 | P1 | 59 `SECURITY DEFINER` expostas a `anon` | grants remotos/advisor | classificar e revogar `PUBLIC` com contrato por RPC |
 | AUD-012 | P1 | Buckets públicos permitem listagem ampla | policies `SELECT TO public` | desenhar acesso por objeto sem quebrar URLs |
@@ -172,6 +194,7 @@ worktree: 1.668 testes e 13.851 asserts.
 | AUD-014 | P1 | Override esbuild inicialmente quebrou Vite dev | 2.860 erros no optimizer | corrigido para 0.25.12 e revalidado |
 | AUD-015 | P0 | Senha operacional previsível estava versionada | busca inicial: 21 arquivos; busca final literal: zero | corrigido no código; rotacionar contas ainda é obrigatório |
 | AUD-016 | P0 | Consultor MX não possui caminho funcional validável | conta nominal autentica, mas leitura de `usuarios.active` retorna 401/nulo; segunda conta falha no Auth 400 | recuperar a conta existente sem duplicar identidade e revalidar |
+| AUD-017 | P0 | Endpoint público adotava/resetava identidade Auth órfã e reativava conta desativada | `store-pre-registration` usava `service_role` sem prova de autoridade | corrigido localmente; deploy bloqueado até preview/gates |
 
 ## 11. Rollback
 
@@ -185,9 +208,8 @@ worktree: 1.668 testes e 13.851 asserts.
 
 - Inventário completo de rotas e actions.
 - Backup e validação remota de migrations/RLS/Auth/Storage/Realtime.
-- Reconciliação do drift entre migrations aplicadas no banco e branches Git.
 - E2E autenticado dos seis perfis e 13 viewports.
-- Preview desta story, Sentry controlado e `/api/health`.
+- Preview desta story, evento Sentry controlado e `/api/health`.
 - Correção/aceite explícito das vulnerabilidades altas.
 - CI completo, PR, produção, smoke e monitoramento.
 - Recuperação da conta Consultor MX existente; não criar identidade duplicada.
@@ -237,6 +259,13 @@ A correção final preservou o minificador oficial e o orçamento de 1.860 KB:
   de console e nenhuma resposta HTTP finita com status 4xx/5xx.
 - A navegação real `Plano de Ação` resolveu para `/plano-acao`, manteve o shell
   único e exibiu o `h1` correto sem erro de console/network.
+- Aliases legados como `/home` e `/departamentos/comercial` agora participam
+  do cálculo central de rota ativa. A sidebar mantém exatamente um
+  `aria-current="page"` mesmo quando o destino canônico é `/dono/*`.
+- A matriz autenticada adicional percorreu 16 rotas em quatro viewports:
+  64/64 combinações, zero overflow, zero erro de console/página e exatamente
+  um item ativo. A superfície real mediu 256 px no desktop, 320 px em tablets
+  e 288 px no mobile.
 - Evidência visual:
   `output/playwright/dono-shell-unificado-nav-1440x900.png`.
 
@@ -269,7 +298,10 @@ Também foram capturados os quatro drawers em
 
 ## 16. Secret scan
 
-- `gitleaks` não está instalado na worktree; o gate oficial permanece pendente.
+- `gitleaks` não está instalado na worktree; o gate oficial de histórico
+  completo permanece pendente.
+- O scan atual de arquivos rastreados, diff e staged diff retornou zero
+  arquivos/linhas compatíveis com tokens GitHub, Supabase, Sentry ou Vercel.
 - Busca local por padrões de tokens reais GitHub/Supabase/Sentry não encontrou
   os valores fornecidos nesta execução em arquivos do repositório.
 - A senha operacional compartilhada estava versionada em 21 arquivos,
@@ -282,10 +314,14 @@ Também foram capturados os quatro drawers em
   histórico e nesta conversa.
 - Nenhum segredo fornecido nesta conversa foi adicionado pelas mudanças desta
   story.
+- A revisão CodeRabbit repetida sobre o diff final terminou com código 0 e zero
+  achados nos quatro arquivos rastreados pelo revisor.
 
 ## 17. Conclusão baseada em evidências
 
 **PARCIALMENTE CONCLUÍDO.** O baseline local, o shell único, a matriz
 responsiva de quatro perfis, o saneamento do segredo e o orçamento total do
-bundle passaram. Permanecem bloqueantes o Consultor MX, banco/backup, preview,
-Sentry, CI remoto e publicação.
+bundle passaram. Migrations estão alinhadas em 327/327, o Sentry atual foi
+validado em modo read-only e o P0 do pré-cadastro foi corrigido localmente.
+Permanecem bloqueantes o Consultor MX, backup restaurável, advisors de
+segurança, preview da branch, CI remoto e publicação.
