@@ -5,6 +5,8 @@ import { AuthProvider, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { Toaster } from 'sonner'
 import { MotionConfig } from 'motion/react'
 import Layout from '@/components/Layout'
+import { ErrorState } from '@/components/molecules/ErrorState'
+import { MxSurfaceVisualProvider } from '@/components/module/MxSurfaceVisualContext'
 import { slugify } from '@/lib/utils'
 import { canAccessPath } from '@/lib/auth/routeAccess'
 
@@ -189,28 +191,28 @@ function ForbiddenRoute() {
   const location = useLocation()
   const navigate = useNavigate()
 
+  // Usa o estado de erro do Design System em vez de um layout próprio (§9.5).
+  // Em um 403 repetir não resolve, então a saída oferecida é voltar.
   return (
-    <main className="min-h-screen bg-surface-alt flex items-center justify-center p-mx-lg">
-      <section className="w-full max-w-lg rounded-mx-3xl border border-border-default bg-white p-mx-xl text-center shadow-mx-xl">
-        <div className="mx-auto mb-mx-lg flex h-mx-20 w-mx-20 items-center justify-center rounded-mx-2xl bg-status-warning-surface text-status-warning">
-          <span className="text-2xl font-black" aria-hidden="true">403</span>
-        </div>
-        <h1 className="text-2xl font-black tracking-mx-wide text-text-primary">Acesso não autorizado</h1>
-        <p className="mt-mx-sm text-sm font-bold leading-relaxed tracking-normal text-text-tertiary">
-          O perfil atual não tem permissão para acessar esta rota. Se esse acesso faz parte da sua rotina, solicite liberação ao Admin MX ou ao gestor responsável pela unidade.
-        </p>
-        <p className="mt-mx-md rounded-mx-xl bg-surface-alt px-mx-md py-mx-sm text-xs font-black uppercase tracking-mx-wide text-text-secondary">
-          Perfil: {role || 'indefinido'} · Rota: {location.pathname}
-        </p>
-        <button
-          type="button"
-          onClick={() => navigate('/', { replace: true })}
-          className="mt-mx-xl rounded-mx-full bg-brand-primary px-mx-xl py-mx-sm text-sm font-black uppercase tracking-mx-wide text-white transition-colors hover:bg-brand-primary-hover focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/20"
-        >
-          Voltar para minha área
-        </button>
-      </section>
-    </main>
+    <MxSurfaceVisualProvider mode="manager">
+      <main className="flex min-h-screen items-center justify-center bg-[hsl(var(--mx-color-surface-muted))] p-[var(--mx-space-6)]">
+        <section className="w-full max-w-lg rounded-[var(--mx-card-radius)] border border-[hsl(var(--mx-color-border))] bg-[hsl(var(--mx-color-surface))] shadow-[var(--mx-shadow-lg)]">
+          <ErrorState
+            kind="permission"
+            description={`O perfil ${role || 'indefinido'} não tem permissão para acessar ${location.pathname}. Se esse acesso faz parte da sua rotina, solicite liberação ao Admin MX ou ao gestor responsável pela unidade.`}
+            action={(
+              <button
+                type="button"
+                onClick={() => navigate('/', { replace: true })}
+                className="inline-flex h-[var(--mx-button-height-md)] items-center rounded-[var(--mx-button-radius)] bg-[hsl(var(--mx-color-primary))] px-[var(--mx-button-padding-inline-md)] text-[length:var(--mx-font-size-base)] font-semibold text-[hsl(var(--mx-color-primary-foreground))] transition-colors hover:bg-[hsl(var(--mx-color-primary-hover))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-2"
+              >
+                Voltar para minha área
+              </button>
+            )}
+          />
+        </section>
+      </main>
+    </MxSurfaceVisualProvider>
   )
 }
 

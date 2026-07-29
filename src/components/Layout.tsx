@@ -20,6 +20,7 @@ import { canAccessPath } from '@/lib/auth/routeAccess'
 import { MotionPage } from '@/design/motion'
 import { buildInternalMxNavigation } from '@/design-system/internal-mx/internalMxNavigation'
 import { MxRoleVisualScope } from '@/components/module/MxRoleVisualScope'
+import { MxSurfaceVisualProvider } from '@/components/module/MxSurfaceVisualContext'
 import {
   OWNER_BASE44_NAVIGATION,
   type OwnerBase44NavigationItem,
@@ -282,10 +283,16 @@ export default function Layout() {
   if (!profile || !role) return null
 
   if (profile.must_change_password) {
+    // Este retorno antecipado escapa do MxRoleVisualScope aplicado abaixo, de
+    // modo que a troca obrigatória de senha renderizava campos legados para
+    // todos os perfis — inclusive os que já veem o visual aprovado no resto do
+    // produto. O modo é fornecido aqui explicitamente.
     return (
-      <div className="min-h-screen bg-mx-black flex items-center justify-center p-mx-lg">
-        <ForcePasswordChange />
-      </div>
+      <MxSurfaceVisualProvider mode="manager">
+        <div className="min-h-screen bg-mx-black flex items-center justify-center p-mx-lg">
+          <ForcePasswordChange />
+        </div>
+      </MxSurfaceVisualProvider>
     )
   }
 

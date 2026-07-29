@@ -80,7 +80,7 @@
 | 4 | Gerente | ✅ superfícies alinhadas ao visual aprovado |
 | 5 | Admin / Consultor | ✅ já recebiam o modo aprovado; verificado |
 | 6 | Vendedor | 🔄 medido; 32 tokens mortos removidos; painel de comissão aguarda decisão de produto |
-| 7 | Páginas compartilhadas (login, perfil, erros) | ⬜ |
+| 7 | Páginas compartilhadas (login, perfil, erros) | 🔄 senha obrigatória e 403 migrados; Termos/Privacidade/404 pendentes |
 | 8 | Remoção do legado | ⬜ |
 | 9 | Deploy preview → produção | ⬜ |
 
@@ -191,6 +191,33 @@ vendedor já usam os componentes comuns.
 > como exceção formalmente documentada — o §43.4 admite exceção "salvo decisão
 > formal documentada".
 
+## 6.1.4 Fase 7 — páginas compartilhadas
+
+Medição do uso dos componentes bifurcados:
+
+| Página | Componentes | Ação |
+|---|---|---|
+| `ForcePasswordChange` | 6 `Typography`, 2 `Input` | ✅ modo aprovado — renderizava fora do `MxRoleVisualScope` |
+| `ForbiddenRoute` (403) | nenhum — layout próprio | ✅ migrada para `ErrorState kind="permission"` |
+| `Login` | 1 `Typography`, com `className` sobrescrevendo | delta nulo; não alterada |
+| `Privacy`, `Terms` | 14 e 11 `Typography`, 4 `Card` cada | ⏸ ver abaixo |
+| `NotFound` (404) | `Card`, `Typography` | ⏸ pendente |
+
+**`ForcePasswordChange` estava fora do escopo visual.** O retorno antecipado em
+`Layout.tsx:284` acontece antes do `MxRoleVisualScope`, então a troca
+obrigatória de senha renderizava campos legados para todos os perfis, inclusive
+os que já veem o visual aprovado no resto do produto.
+
+**403 deixou de inventar o próprio layout de erro** (§9.5). Passou a usar o
+`ErrorState` do Design System, com um novo slot `action` — em um 403, repetir
+não resolve, então a saída oferecida é voltar, não "tentar novamente".
+
+> **`Privacy` e `Terms` não foram migradas.** São páginas institucionais com
+> linguagem visual própria (herói escuro, gradientes, `shadow-mx-elite`), mais
+> próximas da landing do que do produto. Sobrescrevem o `Card` com classes
+> próprias, então o modo aprovado mudaria pouco e o risco de quebrar o layout
+> sob medida é maior que o ganho. Decisão de produto, como o painel de comissão.
+
 ## 6.2 Pendências de verificação autenticada
 
 Mudanças aplicadas que só podem ser confirmadas com sessão logada:
@@ -200,6 +227,8 @@ Mudanças aplicadas que só podem ser confirmadas com sessão logada:
 | Drawer mobile perdeu a borda direita | gerente, vendedor, admin, consultor | Abrir o menu em < 1280px e comparar com o drawer do Dono |
 | Superfícies passam ao visual aprovado | **gerente** | Badges, campos, cards e tabelas em todas as telas do Gerente (ver delta em §6.1.1) |
 | Campos do Dono passam ao visual aprovado | **dono** | 2 campos: assunto em `FalarConsultorDono` e confirmação em `DeleteActionDialog` |
+| Troca obrigatória de senha no visual aprovado | todos | Forçar `must_change_password` e conferir os 2 campos |
+| 403 usa o `ErrorState` do DS | todos | Acessar rota sem permissão; conferir texto, ação e foco |
 | Landmark do Dono virou `<main>` | dono | Navegar entre telas e conferir que o conteúdo não deslocou |
 | Densidade por perfil | todos | `comfortable` no Dono, `compact` nos perfis internos |
 

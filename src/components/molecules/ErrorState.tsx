@@ -39,6 +39,11 @@ export interface ErrorStateProps extends React.HTMLAttributes<HTMLDivElement> {
   /** Nova tentativa. Ausente apenas quando repetir não pode resolver. */
   onRetry?: () => void
   retrying?: boolean
+  /**
+   * Caminho alternativo, para quando repetir não resolve — em um 403, por
+   * exemplo, a saída é voltar, não tentar de novo.
+   */
+  action?: React.ReactNode
   /** Referência técnica para o suporte. Nunca exiba stack trace ao usuário. */
   reference?: string
 }
@@ -46,7 +51,17 @@ export interface ErrorStateProps extends React.HTMLAttributes<HTMLDivElement> {
 /** Estado de erro recuperável. Único no sistema — páginas não criam o seu (§9.5). */
 const ErrorState = React.forwardRef<HTMLDivElement, ErrorStateProps>(
   (
-    { className, kind = 'unknown', title, description, onRetry, retrying = false, reference, ...props },
+    {
+      className,
+      kind = 'unknown',
+      title,
+      description,
+      onRetry,
+      retrying = false,
+      action,
+      reference,
+      ...props
+    },
     ref,
   ) => {
     const config = kinds[kind]
@@ -98,6 +113,8 @@ const ErrorState = React.forwardRef<HTMLDivElement, ErrorStateProps>(
             {retrying ? 'Tentando…' : 'Tentar novamente'}
           </button>
         ) : null}
+
+        {action ? <div className="mt-[var(--mx-space-2)]">{action}</div> : null}
 
         {reference ? (
           <p className="text-[length:var(--mx-font-size-micro)] text-[hsl(var(--mx-color-text-disabled))]">

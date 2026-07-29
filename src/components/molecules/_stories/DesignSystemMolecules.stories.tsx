@@ -121,7 +121,19 @@ export const Catalogo: Story = {
               <ErrorState kind="network" onRetry={() => {}} />
             </div>
             <div className="rounded-[var(--mx-card-radius)] border border-[hsl(var(--mx-color-border))]">
-              <ErrorState kind="permission" reference="MX-4021" />
+              {/* Mesma composição usada pela rota 403 em App.tsx. */}
+              <ErrorState
+                kind="permission"
+                reference="Perfil: vendedor · Rota: /plano-estrategico"
+                action={(
+                  <button
+                    type="button"
+                    className="inline-flex h-[var(--mx-button-height-md)] items-center rounded-[var(--mx-button-radius)] bg-[hsl(var(--mx-color-primary))] px-[var(--mx-button-padding-inline-md)] text-[length:var(--mx-font-size-base)] font-semibold text-[hsl(var(--mx-color-primary-foreground))]"
+                  >
+                    Voltar para minha área
+                  </button>
+                )}
+              />
             </div>
           </div>
         </Section>
