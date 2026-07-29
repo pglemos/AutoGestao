@@ -1,0 +1,72 @@
+# As Edge Functions nunca passaram por checagem de tipos na CI. Elas rodam em Deno,
+# fora do `tsc --noEmit` do projeto, então um erro de tipo só aparecia depois do deploy
+# — em produção, sem etapa intermediária.
+#
+# Só as funções alteradas no PR são checadas: parte da base ainda não passa em
+# `deno check` por dependências de tipo herdadas, e reprovar o repositório inteiro de
+# uma vez transformaria este gate em ruído ignorado.
+name: edge-functions-check
+
+on:
+  push:
+    branches: [main]
+    paths: ['supabase/functions/**']
+  pull_request:
+    paths: ['supabase/functions/**']
+
+permissions:
+  contents: read
+
+concurrency:
+  group: edge-functions-check-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  deno-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: denoland/setup-deno@v2
+        with:
+          deno-version: v2.x
+
+      - name: Descobrir funções alteradas
+        id: changed
+        shell: bash
+        run: |
+          if [ "${{ github.event_name }}" = "pull_request" ]; then
+            base="origin/${{ github.base_ref }}"
+            git fetch --no-tags --depth=1 origin "${{ github.base_ref }}"
+          else
+            base="${{ github.event.before }}"
+          fi
+
+          files=$(git diff --name-only "$base"...HEAD -- 'supabase/functions/**/index.ts' || true)
+          echo "Funções alteradas:"
+          echo "$files"
+          {
+            echo 'files<<EOF'
+            echo "$files"
+            echo 'EOF'
+          } >> "$GITHUB_OUTPUT"
+
+      - name: deno check
+        if: steps.changed.outputs.files != ''
+        shell: bash
+        run: |
+          failed=0
+          while IFS= read -r file; do
+            [ -z "$file" ] && continue
+            [ -f "$file" ] || continue
+            echo "::group::deno check $file"
+            if ! deno check "$file"; then
+              echo "::error file=$file::deno check falhou"
+              failed=1
+            fi
+            echo "::endgroup::"
+          done <<< "${{ steps.changed.outputs.files }}"
+          exit $failed
