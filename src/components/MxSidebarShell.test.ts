@@ -1,5 +1,6 @@
 import { describe, expect, test } from 'bun:test'
 import { existsSync, readFileSync } from 'node:fs'
+import { SIDEBAR } from '@/design-system/sidebar/tokens'
 
 const layoutUrl = new URL('./Layout.tsx', import.meta.url)
 const shellUrl = new URL('./MxSidebarShell.tsx', import.meta.url)
@@ -33,7 +34,9 @@ describe('sidebar universal MX', () => {
     expect(shellSource).toContain("from '@/design-system/sidebar/tokens'")
     expect(shellSource).toContain('SIDEBAR.asideWidthCollapsed : SIDEBAR.asideWidth')
     expect(shellSource).toContain("collapsed ? 'xl:pl-16' : 'xl:pl-64'")
-    expect(shellSource).toContain('border-mxsb-line')
+    // A borda canônica vem do token, não de classe reescrita no shell.
+    expect(shellSource).toContain('SIDEBAR.aside')
+    expect(SIDEBAR.aside).toContain('border-mxsb-line')
 
     expect(shellSource).not.toContain('bg-white shadow-sm')
     expect(shellSource).not.toContain("w-[264px]")

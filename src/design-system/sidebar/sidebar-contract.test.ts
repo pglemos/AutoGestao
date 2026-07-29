@@ -124,9 +124,29 @@ describe('consumidores do design system', () => {
 
   test('respeitam o corte xl para a coluna fixa', () => {
     expect(shell).toContain("collapsed ? 'xl:pl-16' : 'xl:pl-64'")
-    expect(shell).toContain('xl:block')
     expect(shell).toContain('xl:hidden')
+    // O corte `xl:block` vive no token e é composto pelo shell — não é mais
+    // reescrito à mão, para que os dois shells não divirjam.
     expect(SIDEBAR.aside).toContain('xl:block')
+    expect(shell).toContain('SIDEBAR.aside')
+    expect(shell).toContain('SIDEBAR.asideFixed')
+  })
+
+  test('não reescrevem a superfície da coluna fixa fora do token', () => {
+    // Antes, MxSidebarShell duplicava a lista de classes de `SIDEBAR.aside`
+    // acrescentando o posicionamento fixo; qualquer ajuste na superfície
+    // canônica precisaria ser feito em dois lugares.
+    expect(shell).not.toContain('border-r border-mxsb-line font-sans')
+    expect(SIDEBAR.asideFixed).toContain('fixed')
+  })
+
+  test('os dois shells montam o mesmo painel de drawer', () => {
+    // O shell universal acrescentava borda e tipografia próprias ao painel; o
+    // do Dono, que é a referência visual, não tem nenhuma das duas. A
+    // tipografia já vem de `SIDEBAR.root`, aplicado dentro do painel nos dois.
+    expect(shell).toContain('className={SIDEBAR.drawerPanel}')
+    expect(ownerLayout).toContain('SIDEBAR.drawerPanel')
+    expect(SIDEBAR.drawerPanel).not.toContain('border-r')
   })
 
   test('cumprem os requisitos de acessibilidade documentados', () => {

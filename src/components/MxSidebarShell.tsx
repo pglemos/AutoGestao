@@ -531,7 +531,8 @@ export default function MxSidebarShell({
 
       <aside
         className={cn(
-          'fixed left-0 top-0 z-[80] hidden h-screen border-r border-mxsb-line font-sans text-[14px] leading-[21px] text-mxsb-base antialiased transition-[width] duration-300 xl:block',
+          SIDEBAR.aside,
+          SIDEBAR.asideFixed,
           collapsed ? SIDEBAR.asideWidthCollapsed : SIDEBAR.asideWidth,
         )}
         aria-label={sidebarLabel}
@@ -553,7 +554,7 @@ export default function MxSidebarShell({
             role="dialog"
             aria-modal="true"
             aria-label={sidebarLabel}
-            className={cn(SIDEBAR.drawerPanel, 'border-r border-mxsb-line font-sans text-[14px] leading-[21px] text-mxsb-base antialiased')}
+            className={SIDEBAR.drawerPanel}
             onClick={(event) => event.stopPropagation()}
             onKeyDown={(event) => event.stopPropagation()}
           >

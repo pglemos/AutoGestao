@@ -40,6 +40,12 @@ export const SIDEBAR = {
   aside: 'hidden shrink-0 border-r border-mxsb-line font-sans text-[14px] leading-[21px] text-mxsb-base antialiased transition-[width] duration-300 xl:block',
   asideWidth: 'w-64',
   asideWidthCollapsed: 'w-16',
+  /**
+   * Variante fixa, usada pelo shell universal (o do Dono é uma coluna no
+   * fluxo). Só acrescenta posicionamento — a superfície continua vindo de
+   * `aside`, para que os dois shells não divirjam quando ela mudar.
+   */
+  asideFixed: 'fixed left-0 top-0 h-screen z-[80]',
 
   /** Container interno (superfície + cor de texto base). */
   root: 'flex h-full flex-col bg-mxsb-surface font-sans text-sm antialiased text-mxsb-ink',
