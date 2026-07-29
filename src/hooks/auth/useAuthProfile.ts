@@ -12,6 +12,7 @@ import { supabase } from '@/lib/supabase'
 import type { User as SupabaseUser } from '@supabase/supabase-js'
 import type { User as AppUser } from '@/types/database'
 import { normalizeRole, isPerfilInternoMx } from '@/lib/auth/roles'
+import { setUserScope, clearUserScope } from '@/lib/observability'
 import { isTransientFetchError, PROFILE_SELECT, MEMBERSHIP_SELECT, writeSignoutReason } from './authHelpers'
 import type { StoreMembership, StoreMembershipRow } from './authTypes'
 
@@ -210,6 +211,25 @@ export function useAuthProfile(options: UseAuthProfileOptions): UseAuthProfileRe
     // Refs (devBypassRef, lastLoadedUserIdRef) are stable; including `profile`
     // would loop because the effect mutates it via fetchProfile.
   }, [supabaseUser, initialized, fetchProfile, fetchMemberships, setLoading])
+
+  // Contexto de observabilidade: propaga papel e escopo de loja para o Sentry.
+  //
+  // Fica em um efeito próprio, reagindo ao perfil já carregado, para não
+  // interferir na sequência de autenticação. Nenhum dado pessoal é enviado —
+  // apenas o UUID interno, o papel e os identificadores de loja e empresa.
+  useEffect(() => {
+    if (!profile) {
+      clearUserScope()
+      return
+    }
+    const scoped = profile as unknown as Record<string, unknown>
+    setUserScope({
+      userId: profile.id,
+      role: normalizeRole(profile.role) ?? undefined,
+      storeId: activeStoreId ?? undefined,
+      companyId: typeof scoped.company_id === 'string' ? scoped.company_id : undefined,
+    })
+  }, [profile, activeStoreId])
 
   return {
     profile,

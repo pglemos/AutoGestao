@@ -1,4 +1,5 @@
-import React, { Suspense, lazy, Component, type ReactNode, type ErrorInfo } from 'react'
+import React, { Suspense, lazy, Component, useEffect, type ReactNode, type ErrorInfo } from 'react'
+import { setOperationScope } from '@/lib/observability'
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { AuthProvider, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { Toaster } from 'sonner'
@@ -244,12 +245,33 @@ function PublicHome() {
   )
 }
 
+/**
+ * Marca a rota corrente no contexto de observabilidade.
+ *
+ * O path é normalizado (UUIDs e números viram :id) para que a tag `mx.route`
+ * agrupe por rota em vez de explodir em cardinalidade — uma tag por registro
+ * visitado tornaria os dashboards inúteis.
+ */
+function ObservabilityRouteScope() {
+  const location = useLocation()
+
+  useEffect(() => {
+    const route = location.pathname
+      .replace(/\/[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}/gi, '/:id')
+      .replace(/\/\d+/g, '/:id')
+    setOperationScope({ route, module: route.split('/')[1] || 'root' })
+  }, [location.pathname])
+
+  return null
+}
+
 export default function App() {
   return (
     <AuthProvider>
       <ErrorBoundary>
         <MotionConfig reducedMotion="user">
           <Router>
+            <ObservabilityRouteScope />
             <Routes>
               <Route path="/" element={<PublicHome />} />
               <Route path="/login" element={<Suspense fallback={<Spinner />}><Login /></Suspense>} />
