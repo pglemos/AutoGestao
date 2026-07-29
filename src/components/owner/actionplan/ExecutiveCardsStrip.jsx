@@ -62,8 +62,8 @@ const CARDS = [
 
 export default function ExecutiveCardsStrip({ actions, activeCard, onCardClick }) {
   return (
-    <div className="grid grid-cols-2 gap-3 lg:grid-cols-5">
-      {CARDS.map((card, idx) => {
+    <div role="list" aria-label="Resumo executivo das ações" className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+      {CARDS.map((card) => {
         const Icon = card.icon;
         const value = card.getValue(actions);
         const selected = activeCard === card.key;
@@ -71,6 +71,9 @@ export default function ExecutiveCardsStrip({ actions, activeCard, onCardClick }
         return (
           <button
             key={card.key}
+            role="listitem"
+            aria-pressed={selected}
+            aria-label={`${card.title}: ${value} ${card.complement}`}
             onClick={() => onCardClick(card.key)}
             className={`group relative overflow-hidden rounded-xl border bg-card p-4 text-left shadow-sm transition-all hover:shadow-md hover:-translate-y-0.5 ${
               selected
@@ -78,10 +81,10 @@ export default function ExecutiveCardsStrip({ actions, activeCard, onCardClick }
                 : "border-border"
             } ${isTotal ? "col-span-2 lg:col-span-1" : ""}`}
           >
-            <div className={`absolute left-0 top-0 h-full w-1 ${card.strip}`} />
+            <div className={`absolute left-0 top-0 h-full w-1 ${card.strip}`} aria-hidden="true" />
             <div className="flex items-start justify-between gap-2 pl-1.5">
               <div className="min-w-0 flex-1">
-                <div className={`mb-2 inline-flex h-9 w-9 items-center justify-center rounded-lg ${card.iconBg}`}>
+                <div className={`mb-2 inline-flex h-9 w-9 items-center justify-center rounded-lg ${card.iconBg}`} aria-hidden="true">
                   <Icon className="h-[18px] w-[18px]" />
                 </div>
                 <p className="text-3xl font-bold leading-none text-foreground">{value}</p>

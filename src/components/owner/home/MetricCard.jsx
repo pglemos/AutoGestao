@@ -17,24 +17,24 @@ export default function MetricCard({ indicator }) {
   const sparkColor = SPARK_COLORS[indicator.sparkColor] || SPARK_COLORS.green;
 
   return (
-    <div className={`rounded-xl border ${style.cardAccent} bg-card p-4 shadow-sm`}>
+    <article role="listitem" className={`rounded-xl border ${style.cardAccent} bg-card p-4 shadow-sm`} aria-label={indicator.title}>
       <div className="flex items-center justify-between">
-        <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${iconStyle}`}>
+        <div className={`flex h-9 w-9 items-center justify-center rounded-lg ${iconStyle}`} aria-hidden="true">
           <Icon className="h-5 w-5" />
         </div>
-        <span className={`inline-flex h-2 w-2 rounded-full ${style.dot}`} />
+        <span className={`inline-flex h-2 w-2 rounded-full ${style.dot}`} role="status" aria-label={`Status: ${indicator.status}`} />
       </div>
       <p className="mt-2.5 text-sm font-medium text-muted-foreground">{indicator.title}</p>
-      <p className="mt-0.5 text-2xl font-bold tracking-tight text-foreground">{indicator.value}</p>
+      <p className="mt-0.5 text-2xl font-bold tracking-tight text-foreground" aria-label={`${indicator.title}: ${indicator.value}`}>{indicator.value}</p>
       {indicator.complement && <p className="mt-0.5 text-xs text-muted-foreground">{indicator.complement}</p>}
       <div className="mt-2 flex items-end justify-between gap-2">
-        <p className={`text-xs font-medium ${indicator.trendUp ? "text-primary" : "text-red-600"}`}>
+        <p className={`text-xs font-medium ${indicator.trendUp ? "text-primary" : "text-red-600"}`} aria-label={`Tendência: ${indicator.trend}`}>
           {indicator.trend}
         </p>
-        <div className="h-8 w-16 shrink-0">
+        <div className="h-8 w-16 shrink-0" aria-hidden="true">
           <Sparkline data={indicator.sparkline} colorClass={sparkColor} />
         </div>
       </div>
-    </div>
+    </article>
   );
 }

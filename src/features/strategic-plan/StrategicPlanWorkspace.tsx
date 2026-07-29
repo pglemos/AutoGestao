@@ -26,12 +26,12 @@ export function StrategicPlanWorkspace({ onUpdated }: { onUpdated?: (at: Date) =
 export function StrategicPlanView({ controller }: { controller: StrategicPlanController }) {
   const { shell, capabilities, storeId } = usePlanningWorkspace()
   const pageClass = shell === 'owner'
-    ? '-mx-4 -my-6 min-h-[calc(100vh-3.5rem)] px-4 py-6 lg:-mx-8 lg:-my-8 lg:px-8 lg:py-8'
+    ? 'flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0'
     : 'space-y-4'
 
   if (controller.loading) {
     return (
-      <div className={pageClass} aria-busy="true">
+      <main id="page-plano-estrategico" aria-label="Plano Estratégico" role="main" className={pageClass} aria-busy="true">
         <div className="space-y-4">
           {shell === 'owner' ? <div className="h-16 animate-pulse rounded-lg bg-white/60" /> : null}
           <div className="h-10 w-64 animate-pulse rounded-lg bg-white/60" />
@@ -42,40 +42,40 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
             <div className="h-[360px] animate-pulse rounded-xl bg-white/60" />
           </div>
         </div>
-      </div>
+      </main>
     )
   }
 
   if (controller.error) {
     return (
-      <div className={pageClass}>
+      <main id="page-plano-estrategico" aria-label="Plano Estratégico" role="main" className={pageClass}>
         <div className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
           <h2 className="text-lg font-semibold text-foreground">Não foi possível carregar o Plano Estratégico</h2>
           <p className="mt-2 text-sm text-muted-foreground">{controller.error}</p>
           <Button className="mt-4" onClick={() => void controller.reload()}>Tentar novamente</Button>
         </div>
-      </div>
+      </main>
     )
   }
 
   if (!storeId) {
     return (
-      <div className={pageClass}>
+      <main id="page-plano-estrategico" aria-label="Plano Estratégico" role="main" className={pageClass}>
         <div className="rounded-xl border border-border bg-card p-6 text-sm text-muted-foreground">
           Selecione uma loja para carregar o Plano Estratégico.
         </div>
-      </div>
+      </main>
     )
   }
 
   return (
-    <div className={pageClass}>
+    <main id="page-plano-estrategico" aria-label="Plano Estratégico" role="main" className={pageClass}>
       <div className="space-y-4">
         {shell === 'owner' ? <StrategicHeader /> : null}
         <StrategicPlanTabs tab={controller.tab} onTabChange={controller.setTab} />
 
         {controller.tab === 'resumo' && controller.indicator ? (
-          <div className="space-y-4">
+          <section id="spe-tab-panel-resumo" role="tabpanel" aria-label="Resumo" className="space-y-4">
             <div className="flex flex-col gap-2 rounded-xl border border-border bg-card px-4 py-2.5 shadow-sm lg:flex-row lg:items-center lg:justify-between">
               <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
                 <StrategicIndicatorSelector
@@ -142,17 +142,19 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
               year={controller.year}
               onRestored={() => void controller.handleSaved()}
             />
-          </div>
+          </section>
         ) : null}
 
         {controller.tab === 'visao-geral' ? (
-          <StrategicPlanOverview
+          <section id="spe-tab-panel-visao-geral" role="tabpanel" aria-label="Visão Geral">
+            <StrategicPlanOverview
             repository={controller.repository}
             onCardClick={controller.handleCardClick}
             onRowClick={controller.handleRowClick}
             year={controller.year}
             refreshKey={controller.refreshKey}
           />
+          </section>
         ) : null}
 
         {capabilities.canEditTargets ? (
@@ -177,6 +179,6 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
         ) : null}
         <FiltersDrawer open={controller.filtersOpen} onOpenChange={controller.setFiltersOpen} />
       </div>
-    </div>
+    </main>
   )
 }

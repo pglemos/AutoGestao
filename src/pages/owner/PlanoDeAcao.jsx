@@ -428,7 +428,7 @@ export default function PlanoDeAcao() {
   const filteredActions = filterActions(actions, filters);
 
   return (
-    <div className="space-y-4 p-4 lg:p-6">
+    <main id="page-plano-acao" aria-label="Plano de Ação" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0">
       <ActionPlanHeader
         onNewAction={() => handleNewAction()}
         onExport={handleExport}
@@ -443,7 +443,7 @@ export default function PlanoDeAcao() {
       )}
 
       {tab === "acoes" && (
-        <>
+        <section id="tab-panel-acoes" role="tabpanel" aria-label="Ações" className="space-y-6">
           <ExecutiveCardsStrip
             actions={actions}
             activeCard={activeCard}
@@ -496,11 +496,12 @@ export default function PlanoDeAcao() {
               responsiblePeople={responsiblePeople}
             />
           )}
-        </>
+        </section>
       )}
 
       {tab === "calendario" && (
-        <CalendarView
+        <section id="tab-panel-calendario" role="tabpanel" aria-label="Calendário">
+          <CalendarView
           actions={filteredActions}
           loading={loading}
           filters={filters}
@@ -514,6 +515,7 @@ export default function PlanoDeAcao() {
           user={user}
           responsiblePeople={responsiblePeople}
         />
+        </section>
       )}
 
       {/* Mobile filters drawer */}
@@ -583,6 +585,6 @@ export default function PlanoDeAcao() {
         onConfirm={handleModalConfirm}
         responsiblePeople={responsiblePeople}
       />
-    </div>
+    </main>
   );
 }

@@ -56,21 +56,28 @@ export default function Consultoria() {
   }, [openConsultantModal, searchParams, setSearchParams]);
 
   if (loading) {
-    return <div className="space-y-4" aria-busy="true"><div className="h-8 w-56 animate-pulse rounded bg-muted" /><div className="h-64 animate-pulse rounded-xl bg-card" /></div>;
+    return (
+      <main id="page-consultoria" aria-label="Consultoria" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0" aria-busy="true">
+        <div className="h-8 w-56 animate-pulse rounded bg-muted" />
+        <div className="h-64 animate-pulse rounded-xl bg-card" />
+      </main>
+    );
   }
 
   if (error) {
     return (
-      <section className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
-        <h1 className="text-lg font-semibold text-foreground">Não foi possível carregar a Consultoria</h1>
-        <p className="mt-2 text-sm text-muted-foreground">{error}</p>
-        <Button className="mt-4" onClick={() => void refresh()}>Tentar novamente</Button>
-      </section>
+      <main id="page-consultoria" aria-label="Consultoria" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0">
+        <section className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
+          <h1 className="text-lg font-semibold text-foreground">Não foi possível carregar a Consultoria</h1>
+          <p className="mt-2 text-sm text-muted-foreground">{error}</p>
+          <Button className="mt-4" onClick={() => void refresh()}>Tentar novamente</Button>
+        </section>
+      </main>
     );
   }
 
   return (
-    <div className="space-y-5 pb-20 lg:pb-0">
+    <main id="page-consultoria" aria-label="Consultoria" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0">
       <OwnerPageHeading
         icon={Users}
         title="Consultoria"
@@ -96,7 +103,7 @@ export default function Consultoria() {
       ) : (
         <>
           <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
-            <div className="flex flex-col gap-5 lg:flex-row">
+            <div className="flex flex-col gap-4 lg:flex-row">
               <div className="flex-1 space-y-4">
                 <div>
                   <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">Programa contratado</span>
@@ -132,7 +139,7 @@ export default function Consultoria() {
             </div>
           </section>
 
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-[minmax(0,1fr)_280px]">
+          <div className="grid grid-cols-1 gap-4 lg:grid-cols-[minmax(0,1fr)_280px]">
             <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
               <div className="flex items-center gap-2"><Clock3 className="h-4 w-4 text-muted-foreground" /><h3 className="text-sm font-semibold text-foreground">Jornada do programa</h3></div>
               <div className="mt-4 rounded-lg border border-dashed border-border p-5 text-sm text-muted-foreground">
@@ -150,6 +157,6 @@ export default function Consultoria() {
           </div>
         </>
       )}
-    </div>
+    </main>
   );
 }
