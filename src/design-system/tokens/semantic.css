@@ -1,0 +1,92 @@
+/**
+ * MX Design System — Camada 2: Semantic Tokens
+ *
+ * Traduz primitivos em intenção de uso. É esta camada que componentes e
+ * páginas consomem (via classes Tailwind mapeadas ou `var(--mx-...)`).
+ *
+ * ESTRATÉGIA DE MIGRAÇÃO INCREMENTAL
+ * ----------------------------------
+ * Os tokens são publicados sob o escopo `.mx-ds`, não em `:root`. Isso permite
+ * migrar módulo a módulo (Fases 3→7 de docs/design-system/migration.md) sem
+ * repintar o app inteiro num único commit e sem rollback big-bang.
+ *
+ * `.mx-ds` também redefine as variáveis shadcn (`--primary`, `--background`,
+ * …) com exatamente os valores medidos em `.owner-b44`, de modo que qualquer
+ * componente shadcn existente passa a renderizar na identidade do Dono assim
+ * que entra sob o escopo — sem alteração de código no componente.
+ *
+ * Quando todos os módulos estiverem migrados (Fase 8), o conteúdo de `.mx-ds`
+ * é promovido para `:root` e o escopo removido.
+ */
+
+.mx-ds {
+  /* ------------------------------------------------- superfícies e texto */
+  --mx-color-background: var(--mx-neutral-0);
+  --mx-color-surface: var(--mx-neutral-0);
+  --mx-color-surface-muted: var(--mx-neutral-100);
+  --mx-color-surface-elevated: var(--mx-neutral-0);
+
+  --mx-color-text-primary: var(--mx-neutral-950);
+  --mx-color-text-secondary: var(--mx-neutral-500);
+  --mx-color-text-disabled: var(--mx-neutral-400);
+
+  --mx-color-border: var(--mx-neutral-200);
+  --mx-color-border-strong: var(--mx-neutral-300);
+
+  /* ------------------------------------------------------------- primária */
+  --mx-color-primary: var(--mx-green-600);
+  --mx-color-primary-hover: var(--mx-green-700);
+  --mx-color-primary-active: var(--mx-green-800);
+  --mx-color-primary-foreground: var(--mx-neutral-50);
+  --mx-color-primary-subtle: var(--mx-green-50);
+
+  /* --------------------------------------------------- estados semânticos */
+  --mx-color-success: var(--mx-emerald-500);
+  --mx-color-success-subtle: var(--mx-emerald-100);
+  --mx-color-warning: var(--mx-amber-500);
+  --mx-color-warning-subtle: var(--mx-amber-100);
+  --mx-color-danger: var(--mx-red-500);
+  --mx-color-danger-subtle: var(--mx-red-100);
+  --mx-color-info: var(--mx-blue-500);
+  --mx-color-info-subtle: var(--mx-blue-100);
+
+  --mx-color-focus-ring: var(--mx-green-600);
+
+  /* -------------------------------------------------------------- sidebar */
+  --mx-color-sidebar-background: var(--mx-neutral-50);
+  --mx-color-sidebar-foreground: 240 5% 26%;
+  --mx-color-sidebar-accent: 240 5% 96%;
+  --mx-color-sidebar-border: 220 13% 91%;
+
+  /* ==================================================================== */
+  /* Ponte shadcn — valores medidos em src/styles/owner-base44-exact.css  */
+  /* ==================================================================== */
+  --background: var(--mx-color-background);
+  --foreground: var(--mx-color-text-primary);
+  --card: var(--mx-color-surface);
+  --card-foreground: var(--mx-color-text-primary);
+  --popover: var(--mx-color-surface-elevated);
+  --popover-foreground: var(--mx-color-text-primary);
+  --primary: var(--mx-color-primary);
+  --primary-foreground: var(--mx-color-primary-foreground);
+  --secondary: var(--mx-neutral-100);
+  --secondary-foreground: var(--mx-neutral-900);
+  --muted: var(--mx-neutral-100);
+  --muted-foreground: var(--mx-color-text-secondary);
+  --accent: var(--mx-neutral-100);
+  --accent-foreground: var(--mx-neutral-900);
+  --destructive: var(--mx-color-danger);
+  --destructive-foreground: var(--mx-neutral-50);
+  --border: var(--mx-color-border);
+  --input: var(--mx-color-border);
+  --ring: var(--mx-neutral-950);
+  --radius: 0.625rem;
+  --sidebar-background: var(--mx-color-sidebar-background);
+  --sidebar-foreground: var(--mx-color-sidebar-foreground);
+  --sidebar-primary: 240 6% 10%;
+  --sidebar-primary-foreground: var(--mx-neutral-50);
+  --sidebar-accent: var(--mx-color-sidebar-accent);
+  --sidebar-accent-foreground: 240 6% 10%;
+  --sidebar-border: var(--mx-color-sidebar-border);
+  --sidebar-ring: var(--mx-blue-500);
+}

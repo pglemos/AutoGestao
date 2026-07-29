@@ -1,0 +1,90 @@
+/**
+ * MX Design System — Camada 1: Primitive Tokens
+ *
+ * Valores crus da paleta. NUNCA consumidos diretamente por componentes ou
+ * páginas — apenas referenciados pela camada semântica (`semantic.css`).
+ *
+ * Fonte de verdade visual: módulo do Dono (`.owner-b44`), formalizado em
+ * docs/adr/ADR-MX-002-branding-color-decision.md (Opção B — marca verde).
+ *
+ * Formato: canais HSL sem `hsl()` para permitir composição com alpha
+ * (`hsl(var(--mx-green-600) / 0.1)`), padrão já usado pelo shadcn no projeto.
+ */
+
+:root {
+  /* ---------------------------------------------------------------- cores */
+  /* Verde MX — primary da identidade do Dono (#198653 = 152 69% 31%) */
+  --mx-green-50: 152 60% 96%;
+  --mx-green-100: 152 58% 90%;
+  --mx-green-200: 152 55% 80%;
+  --mx-green-300: 152 52% 66%;
+  --mx-green-400: 152 55% 48%;
+  --mx-green-500: 152 65% 38%;
+  --mx-green-600: 152 69% 31%;
+  --mx-green-700: 152 72% 25%;
+  --mx-green-800: 152 74% 20%;
+  --mx-green-900: 152 76% 15%;
+
+  /* Neutros — escala do Dono (#0A0A0A / #F5F5F5 / #E5E5E5 / #737373) */
+  --mx-neutral-0: 0 0% 100%;
+  --mx-neutral-50: 0 0% 98%;
+  --mx-neutral-100: 0 0% 96%;
+  --mx-neutral-200: 0 0% 90%;
+  --mx-neutral-300: 0 0% 83%;
+  --mx-neutral-400: 0 0% 64%;
+  --mx-neutral-500: 0 0% 45%;
+  --mx-neutral-600: 0 0% 32%;
+  --mx-neutral-700: 0 0% 26%;
+  --mx-neutral-800: 0 0% 15%;
+  --mx-neutral-900: 0 0% 9%;
+  --mx-neutral-950: 0 0% 4%;
+
+  /* Estados semânticos — bases fixadas em §7.2 do documento normativo */
+  --mx-emerald-500: 152 76% 40%;
+  --mx-emerald-100: 152 76% 92%;
+  --mx-amber-500: 38 92% 50%;
+  --mx-amber-100: 38 92% 92%;
+  --mx-red-500: 0 84% 60%;
+  --mx-red-100: 0 84% 95%;
+  --mx-blue-500: 217 91% 60%;
+  --mx-blue-100: 217 91% 94%;
+
+  /* ------------------------------------------------------------ espaçamento */
+  /* Escala de 4 — §7.6 */
+  --mx-space-1: 4px;
+  --mx-space-2: 8px;
+  --mx-space-3: 12px;
+  --mx-space-4: 16px;
+  --mx-space-5: 20px;
+  --mx-space-6: 24px;
+  --mx-space-8: 32px;
+  --mx-space-10: 40px;
+  --mx-space-12: 48px;
+  --mx-space-16: 64px;
+
+  /* ------------------------------------------------------------------ raios */
+  --mx-radius-sm: 6px;
+  --mx-radius-md: 8px;
+  --mx-radius-lg: 10px;
+  --mx-radius-xl: 12px;
+  --mx-radius-full: 9999px;
+
+  /* ---------------------------------------------------------------- sombras */
+  --mx-shadow-sm: 0 1px 2px 0 hsl(var(--mx-neutral-950) / 0.05);
+  --mx-shadow-md: 0 4px 8px -2px hsl(var(--mx-neutral-950) / 0.08);
+  --mx-shadow-lg: 0 12px 24px -6px hsl(var(--mx-neutral-950) / 0.12);
+  --mx-shadow-xl: 0 24px 48px -12px hsl(var(--mx-neutral-950) / 0.18);
+
+  /* --------------------------------------------------------------- duração */
+  --mx-duration-instant: 0ms;
+  --mx-duration-fast: 150ms;
+  --mx-duration-normal: 200ms;
+  --mx-duration-slow: 300ms;
+  --mx-duration-deliberate: 600ms;
+
+  /* --------------------------------------------------------------- easings */
+  --mx-easing-standard: cubic-bezier(0.2, 0, 0, 1);
+  --mx-easing-enter: cubic-bezier(0, 0, 0, 1);
+  --mx-easing-exit: cubic-bezier(0.3, 0, 1, 1);
+  --mx-easing-emphasized: cubic-bezier(0.2, 0, 0, 1.2);
+}

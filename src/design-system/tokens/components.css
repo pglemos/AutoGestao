@@ -1,0 +1,114 @@
+/**
+ * MX Design System — Camada 3: Component Tokens + Motion
+ *
+ * Dimensões e ritmos por família de componente. Consumidos apenas pelos
+ * componentes do DS (átomos/moléculas/organismos), nunca por páginas.
+ *
+ * Densidade: `data-mx-density` altera apenas altura/padding/gap. Nunca cor,
+ * família de componente ou linguagem de interação (§10.2 do normativo).
+ */
+
+.mx-ds {
+  /* --------------------------------------------------------------- botão */
+  --mx-button-height-sm: 32px;
+  --mx-button-height-md: 40px;
+  --mx-button-height-lg: 48px;
+  --mx-button-padding-inline-sm: var(--mx-space-3);
+  --mx-button-padding-inline-md: var(--mx-space-4);
+  --mx-button-padding-inline-lg: var(--mx-space-5);
+  --mx-button-radius: var(--mx-radius-sm);
+  --mx-button-font-size: 14px;
+  --mx-button-font-weight: 600;
+
+  /* --------------------------------------------------------------- campo */
+  --mx-input-height: 40px;
+  --mx-input-radius: var(--mx-radius-sm);
+  --mx-input-border-width: 1px;
+  --mx-input-focus-ring-width: 2px;
+
+  /* ---------------------------------------------------------------- card */
+  --mx-card-radius: var(--mx-radius-xl);
+  --mx-card-padding: var(--mx-space-4);
+  --mx-card-gap: var(--mx-space-4);
+  --mx-card-border: 1px solid hsl(var(--mx-color-border));
+  --mx-card-shadow: var(--mx-shadow-sm);
+  --mx-card-hover-shadow: var(--mx-shadow-md);
+
+  /* ------------------------------------------------------------- sidebar */
+  --mx-sidebar-width-expanded: 256px;
+  --mx-sidebar-width-collapsed: 64px;
+  --mx-sidebar-drawer-width: 288px;
+  --mx-sidebar-item-height: 36px;
+  --mx-sidebar-item-radius: var(--mx-radius-md);
+
+  /* --------------------------------------------------------------- modal */
+  --mx-modal-radius: var(--mx-radius-lg);
+  --mx-modal-padding: var(--mx-space-6);
+  --mx-modal-max-height: calc(100dvh - var(--mx-space-16));
+
+  /* ---------------------------------------------------------------- tabs */
+  --mx-tabs-container-radius: var(--mx-radius-md);
+  --mx-tabs-item-radius: var(--mx-radius-sm);
+
+  /* -------------------------------------------------------------- layout */
+  --mx-content-max-width: 1400px;
+  --mx-content-padding-inline: var(--mx-space-4);
+  --mx-widget-gap: var(--mx-space-6);
+
+  /* --------------------------------------------------------- tipografia */
+  --mx-font-size-micro: 11px;
+  --mx-font-size-xs: 12px;
+  --mx-font-size-base: 14px;
+  --mx-font-size-h3: 18px;
+  --mx-font-size-h1: 20px;
+  --mx-font-size-h2: 22px;
+  --mx-font-size-metric: 24px;
+  --mx-font-size-metric-lg: 30px;
+
+  /* ------------------------------------------------------------- z-index */
+  /* Lista fechada — §34: nenhum z-index novo fora desta escala. */
+  --mx-z-base: 0;
+  --mx-z-sticky: 10;
+  --mx-z-sidebar: 20;
+  --mx-z-topbar: 30;
+  --mx-z-drawer: 40;
+  --mx-z-overlay: 50;
+  --mx-z-modal: 60;
+  --mx-z-popover: 70;
+  --mx-z-toast: 80;
+  --mx-z-tooltip: 90;
+}
+
+@media (min-width: 1024px) {
+  .mx-ds {
+    --mx-content-padding-inline: var(--mx-space-8);
+    --mx-font-size-h1: 24px;
+  }
+}
+
+/* ------------------------------------------------------------- densidade */
+
+.mx-ds[data-mx-density='comfortable'] {
+  --mx-card-padding: var(--mx-space-5);
+  --mx-widget-gap: var(--mx-space-6);
+  --mx-sidebar-item-height: 40px;
+}
+
+.mx-ds[data-mx-density='compact'] {
+  --mx-card-padding: var(--mx-space-3);
+  --mx-widget-gap: var(--mx-space-4);
+  --mx-sidebar-item-height: 32px;
+  --mx-button-height-md: 36px;
+  --mx-input-height: 36px;
+}
+
+/* ---------------------------------------------------------------- motion */
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-ds {
+    --mx-duration-fast: 0ms;
+    --mx-duration-normal: 0ms;
+    --mx-duration-slow: 0ms;
+    --mx-duration-deliberate: 0ms;
+  }
+}
