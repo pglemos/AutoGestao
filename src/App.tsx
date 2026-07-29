@@ -6,7 +6,6 @@ import { Toaster } from 'sonner'
 import { MotionConfig } from 'motion/react'
 import Layout from '@/components/Layout'
 import { ErrorState } from '@/components/molecules/ErrorState'
-import { MxSurfaceVisualProvider } from '@/components/module/MxSurfaceVisualContext'
 import { slugify } from '@/lib/utils'
 import { canAccessPath } from '@/lib/auth/routeAccess'
 
@@ -194,7 +193,6 @@ function ForbiddenRoute() {
   // Usa o estado de erro do Design System em vez de um layout próprio (§9.5).
   // Em um 403 repetir não resolve, então a saída oferecida é voltar.
   return (
-    <MxSurfaceVisualProvider mode="manager">
       <main className="flex min-h-screen items-center justify-center bg-[hsl(var(--mx-color-surface-muted))] p-[var(--mx-space-6)]">
         <section className="w-full max-w-lg rounded-[var(--mx-card-radius)] border border-[hsl(var(--mx-color-border))] bg-[hsl(var(--mx-color-surface))] shadow-[var(--mx-shadow-lg)]">
           <ErrorState
@@ -212,7 +210,6 @@ function ForbiddenRoute() {
           />
         </section>
       </main>
-    </MxSurfaceVisualProvider>
   )
 }
 

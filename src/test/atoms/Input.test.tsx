@@ -12,9 +12,9 @@ describe("Input", () => {
     render(<Input aria-label="Campo" />);
 
     const input = screen.getByRole("textbox", { name: "Campo" });
-    expect(input.className).toContain("h-12");
+    expect(input.className).toContain("h-10");
     expect(input.className).not.toContain("h-mx-14");
-    expect(input.className).toContain("focus-visible:ring-4");
-    expect(input.className).not.toContain("focus:ring-4");
+    expect(input.className).toContain("focus-visible:ring-2");
+    expect(input.className).not.toContain("shadow-inner");
   });
 });

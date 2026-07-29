@@ -1,6 +1,5 @@
 import { Crown } from 'lucide-react'
 import { Avatar } from '@/components/atoms/Avatar'
-import { useMxSurfaceVisualMode } from '@/components/module/MxSurfaceVisualContext'
 import { cn } from '@/lib/utils'
 
 type PodiumEntry = {
@@ -21,7 +20,6 @@ type Props = {
  * Preserva visual: 2º à esquerda, 1º centro elevado, 3º à direita.
  */
 export function RankingPodium({ entries, onSelect }: Props) {
-  const manager = useMxSurfaceVisualMode() === 'manager'
 
   return (
     <div className="flex justify-center items-end gap-mx-sm sm:gap-mx-xl relative pt-4 min-h-48 sm:min-h-56 md:min-h-mx-64">
@@ -55,7 +53,7 @@ export function RankingPodium({ entries, onSelect }: Props) {
                   fallback={seller.user_name}
                   className={cn(
                     'rounded-full border-4',
-                    manager ? 'border-white' : 'border-mx-black',
+                    'border-white',
                     isFirst
                       ? 'w-mx-20 h-mx-20 sm:w-mx-32 sm:h-mx-32'
                       : isSecond
@@ -67,9 +65,7 @@ export function RankingPodium({ entries, onSelect }: Props) {
               <div className={cn(
                 'absolute -bottom-3 px-3 py-1 rounded-full text-mx-micro font-black uppercase tracking-wider shadow-lg border border-white/20 whitespace-nowrap z-20',
                 isFirst
-                  ? manager
-                    ? 'bg-emerald-600 text-white'
-                    : 'bg-mx-black text-brand-primary'
+                  ? 'bg-emerald-600 text-white'
                   : 'bg-surface-alt text-text-primary',
               )}>
                 {isFirst ? '1º lugar' : `#${seller.position} lugar`}

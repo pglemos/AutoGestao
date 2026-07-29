@@ -1,11 +1,9 @@
 import type { ReactNode } from 'react'
 import { useLocation } from 'react-router-dom'
-import { ButtonVisualProvider } from '@/components/atoms/Button'
 import { isPerfilInternoMx } from '@/hooks/useAuth'
 import type { UserRole } from '@/types/database'
 import '@/styles/internal-mx-manager-scope.css'
 import '@/styles/internal-mx-template-slots.css'
-import { MxSurfaceVisualProvider } from './MxSurfaceVisualContext'
 import { InternalManagerRouteFrame } from './InternalManagerRouteFrame'
 
 export function InternalMxVisualScope({
@@ -20,8 +18,6 @@ export function InternalMxVisualScope({
   if (!isPerfilInternoMx(role)) return <>{children}</>
 
   return (
-    <ButtonVisualProvider mode="manager">
-      <MxSurfaceVisualProvider mode="manager">
         <div
           data-testid="internal-mx-visual-scope"
           data-mx-visual-system="manager"
@@ -31,7 +27,5 @@ export function InternalMxVisualScope({
             {children}
           </InternalManagerRouteFrame>
         </div>
-      </MxSurfaceVisualProvider>
-    </ButtonVisualProvider>
   )
 }

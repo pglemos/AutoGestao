@@ -88,7 +88,7 @@ export function ConfiguracoesShell({
             </span>
           }
           actions={
-            <Button variant="managerOutline" onClick={() => void onSignOut()}>
+            <Button variant="outline" onClick={() => void onSignOut()}>
               <LogOut size={16} className="mr-2" aria-hidden="true" />
               Encerrar sessão
             </Button>

@@ -27,7 +27,7 @@ export function ConsultingClientFormModal(props: {
           <MxField label="Observações" className="sm:col-span-2"><MxTextarea rows={4} value={props.draft.notes} onChange={event => props.onDraft({ ...props.draft, notes: event.target.value })} /></MxField>
           <div className="sm:col-span-2"><ConsultingModuleSelector modules={props.modules} value={props.draft.enabled_modules} onChange={enabled_modules => props.onDraft({ ...props.draft, enabled_modules })} /></div>
         </div>
-        <div className="mt-6 flex justify-end gap-2"><Button variant="managerSecondary" onClick={props.onClose} disabled={props.submitting}>Cancelar</Button><Button onClick={props.onSubmit} disabled={props.submitting}>{props.submitting ? 'Salvando...' : props.editing ? 'Salvar alterações' : 'Criar cliente'}</Button></div>
+        <div className="mt-6 flex justify-end gap-2"><Button variant="secondary" onClick={props.onClose} disabled={props.submitting}>Cancelar</Button><Button onClick={props.onSubmit} disabled={props.submitting}>{props.submitting ? 'Salvando...' : props.editing ? 'Salvar alterações' : 'Criar cliente'}</Button></div>
       </section>
     </div>
   )

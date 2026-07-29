@@ -9,21 +9,20 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        primary: "bg-mx-action text-white shadow-action hover:bg-mx-action-hover data-[legacy-primary=true]:bg-brand-secondary",
-        brand: "bg-mx-teal text-white shadow-sm hover:bg-mx-teal/90",
-        secondary: "bg-white text-mx-text border border-mx-border hover:bg-mx-bg hover:border-mx-action/40",
-        success: "bg-status-success text-white hover:opacity-90",
-        warning: "bg-status-warning text-white hover:opacity-90",
-        info: "bg-status-info text-white hover:opacity-90",
-        danger: "bg-status-error text-white hover:bg-status-error/90",
-        whatsapp: "bg-whatsapp text-white hover:bg-whatsapp/90",
-        outline: "border border-mx-border bg-white text-mx-text hover:bg-mx-bg",
-        ghost: "text-mx-muted hover:text-mx-text hover:bg-mx-bg",
-        "mx-elite": "bg-mx-black text-brand-primary border border-brand-primary shadow-mx-glow-brand hover:bg-mx-green-950",
-        managerPrimary: "rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500/20 disabled:bg-gray-100 disabled:text-gray-400",
-        managerOutline: "rounded-xl border border-emerald-200 bg-white text-emerald-700 shadow-none hover:bg-emerald-50 focus-visible:ring-emerald-500/20 disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-400",
-        managerSecondary: "rounded-xl border border-gray-200 bg-white text-gray-700 shadow-none hover:bg-gray-50 hover:text-gray-900 focus-visible:ring-emerald-500/20 disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400",
-        managerGhost: "rounded-xl bg-transparent text-gray-500 shadow-none hover:bg-gray-50 hover:text-gray-800 focus-visible:ring-emerald-500/20 disabled:bg-transparent disabled:text-gray-300",
+        // Aparência única — sem variação por perfil (§8.5). Estes são os
+        // estilos aprovados do Base44/Dono, antes acessíveis só sob o modo
+        // `manager`.
+        primary: "rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500/20 disabled:bg-gray-100 disabled:text-gray-400",
+        brand: "rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500/20 disabled:bg-gray-100 disabled:text-gray-400",
+        secondary: "rounded-xl border border-gray-200 bg-white text-gray-700 shadow-none hover:bg-gray-50 hover:text-gray-900 focus-visible:ring-emerald-500/20 disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400",
+        outline: "rounded-xl border border-gray-200 bg-white text-gray-700 shadow-none hover:bg-gray-50 hover:text-gray-900 focus-visible:ring-emerald-500/20 disabled:border-gray-100 disabled:bg-gray-50 disabled:text-gray-400",
+        ghost: "rounded-xl bg-transparent text-gray-500 shadow-none hover:bg-gray-50 hover:text-gray-800 focus-visible:ring-emerald-500/20 disabled:bg-transparent disabled:text-gray-300",
+        success: "rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500/20",
+        warning: "rounded-xl bg-amber-500 text-white shadow-sm hover:bg-amber-600 focus-visible:ring-amber-500/20",
+        info: "rounded-xl bg-blue-600 text-white shadow-sm hover:bg-blue-700 focus-visible:ring-blue-500/20",
+        danger: "rounded-xl bg-red-600 text-white shadow-sm hover:bg-red-700 focus-visible:ring-red-500/20",
+        whatsapp: "rounded-xl bg-whatsapp text-white shadow-sm hover:bg-whatsapp/90",
+        "mx-elite": "rounded-xl bg-emerald-700 text-white shadow-sm hover:bg-emerald-800 focus-visible:ring-emerald-500/20",
       },
       size: {
         default: "h-mx-11 px-6 sm:h-10 sm:px-4",
@@ -40,24 +39,6 @@ const buttonVariants = cva(
   }
 )
 
-export type ButtonVisualMode = 'default' | 'manager'
-
-const ButtonVisualContext = React.createContext<ButtonVisualMode>('default')
-
-export function ButtonVisualProvider({
-  mode,
-  children,
-}: {
-  mode: ButtonVisualMode
-  children: React.ReactNode
-}) {
-  return (
-    <ButtonVisualContext.Provider value={mode}>
-      {children}
-    </ButtonVisualContext.Provider>
-  )
-}
-
 export interface ButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement>,
     VariantProps<typeof buttonVariants> {
@@ -66,30 +47,9 @@ export interface ButtonProps
   icon?: React.ReactNode
 }
 
-type ButtonVariant = NonNullable<ButtonProps['variant']>
-
-function resolveVisualVariant(
-  variant: ButtonProps['variant'],
-  mode: ButtonVisualMode,
-): ButtonVariant {
-  const requested = variant ?? 'primary'
-  if (mode !== 'manager') return requested
-
-  const managerMap: Partial<Record<ButtonVariant, ButtonVariant>> = {
-    primary: 'managerPrimary',
-    brand: 'managerPrimary',
-    outline: 'managerSecondary',
-    secondary: 'managerSecondary',
-    ghost: 'managerGhost',
-  }
-
-  return managerMap[requested] ?? requested
-}
-
 const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, children, asChild = false, loading = false, icon, ...props }, ref) => {
-    const visualMode = React.useContext(ButtonVisualContext)
-    const resolvedVariant = resolveVisualVariant(variant, visualMode)
+    const resolvedVariant = variant ?? 'primary'
     const iconTooltip = size === 'icon' && typeof props['aria-label'] === 'string' ? props['aria-label'] : null
     const decoratedChildren = React.Children.map(children, (child) => {
       if (!React.isValidElement(child)) return child

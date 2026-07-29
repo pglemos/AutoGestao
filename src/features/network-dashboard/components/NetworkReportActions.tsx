@@ -18,7 +18,7 @@ export function NetworkReportActions({ loading, onTrigger }: {
       <MxSectionHeader title="Relatórios da rede" description="Disparos controlados para os ciclos operacionais existentes." />
       <MxActionGroup className="p-5">
         {options.map(option => (
-          <Button key={option.type} variant="managerOutline" disabled={Boolean(loading)} onClick={() => onTrigger(option.type)}>
+          <Button key={option.type} variant="outline" disabled={Boolean(loading)} onClick={() => onTrigger(option.type)}>
             <FileText size={17} />
             {loading === option.type ? 'Disparando...' : option.label}
           </Button>

@@ -1,6 +1,5 @@
 import { Toaster as OwnerToaster } from '@/components/ui/toaster'
 import OwnerLayout from '@/components/owner/OwnerLayout'
-import { MxSurfaceVisualProvider } from '@/components/module/MxSurfaceVisualContext'
 import '@/styles/owner-base44-exact.css'
 
 /**
@@ -18,11 +17,9 @@ import '@/styles/owner-base44-exact.css'
  */
 export default function OwnerShell() {
   return (
-    <MxSurfaceVisualProvider mode="manager">
       <div className="owner-b44 owner-base44-exact h-dvh min-h-0 overflow-hidden">
         <OwnerLayout />
         <OwnerToaster />
       </div>
-    </MxSurfaceVisualProvider>
   )
 }

@@ -89,7 +89,7 @@ export default function ManagerPDIReference() {
           <DevelopmentPdiMetrics reviews={reviews} active={active} overdue={overdue} overdueActions={overdueActions} />
           <div className="flex flex-wrap gap-2">
             <Button data-mx-requires-manage="" onClick={() => setShowWizard(true)}><Plus size={16} className="mr-2" />Iniciar novo PDI</Button>
-            <Button variant="managerOutline" onClick={() => setShowMap(true)}><MapIcon size={16} className="mr-2" />Ver mapa da equipe</Button>
+            <Button variant="outline" onClick={() => setShowMap(true)}><MapIcon size={16} className="mr-2" />Ver mapa da equipe</Button>
           </div>
           <DevelopmentPdiFilters sellers={sellers.map((seller: { id: string; name?: string | null }) => ({ id: seller.id, name: seller.name || 'Vendedor' }))} sellerId={sellerId} status={statusFilter} onSellerChange={setSellerId} onStatusChange={setStatusFilter} />
           <DevelopmentPdiTable rows={filteredRows} onOpenOrStart={(row) => row.pdi ? navigate(`/pdi/${row.pdi.id}/print`) : setShowWizard(true)} />

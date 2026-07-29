@@ -1,6 +1,5 @@
 import { useOutletContext } from "react-router-dom";
 import { PageHeading } from "@/components/molecules/PageHeading";
-import { MxSurfaceVisualProvider } from "@/components/module/MxSurfaceVisualContext";
 import OwnerFilterButton from "@/components/owner/OwnerFilterButton";
 
 // Cabecalho padrao das paginas do modulo Dono.
@@ -16,7 +15,6 @@ export default function OwnerPageHeading({ actions, showFilter = true, ...props 
   }
 
   return (
-    <MxSurfaceVisualProvider mode="manager">
       <PageHeading
         {...props}
         actions={(
@@ -26,6 +24,5 @@ export default function OwnerPageHeading({ actions, showFilter = true, ...props 
           </>
         )}
       />
-    </MxSurfaceVisualProvider>
   );
 }

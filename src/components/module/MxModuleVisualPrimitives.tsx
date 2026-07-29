@@ -1,7 +1,7 @@
 import type { ElementType, HTMLAttributes, LabelHTMLAttributes, ReactNode } from 'react'
 import type { LucideIcon } from 'lucide-react'
 import { AlertTriangle, Inbox, LoaderCircle } from 'lucide-react'
-import { Button, ButtonVisualProvider } from '@/components/atoms/Button'
+import { Button } from '@/components/atoms/Button'
 import { Input, type InputProps } from '@/components/atoms/Input'
 import { Select, type SelectProps } from '@/components/atoms/Select'
 import { Skeleton, type SkeletonProps } from '@/components/atoms/Skeleton'
@@ -9,7 +9,6 @@ import { Textarea, type TextareaProps } from '@/components/atoms/Textarea'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { cn } from '@/lib/utils'
-import { MxSurfaceVisualProvider } from './MxSurfaceVisualContext'
 import {
   InternalMxTemplateHeader,
   InternalMxTemplatePage,
@@ -34,8 +33,6 @@ const toneStyles: Record<MxTone, ToneStyle> = {
 
 export function MxModulePage({ children, className, contentClassName, maxWidth = '7xl', id, accessMode }: { children: ReactNode; className?: string; contentClassName?: string; maxWidth?: 'full' | '7xl'; id?: string; accessMode?: MxAccessMode }) {
   return (
-    <ButtonVisualProvider mode="manager">
-      <MxSurfaceVisualProvider mode="manager">
         <InternalMxTemplatePage
           id={id}
           data-mx-module-page=""
@@ -45,8 +42,6 @@ export function MxModulePage({ children, className, contentClassName, maxWidth =
         >
           <div className={cn('mx-auto w-full space-y-5 px-4 py-6 pb-24', maxWidth === '7xl' ? 'max-w-7xl' : 'max-w-none', contentClassName)}>{children}</div>
         </InternalMxTemplatePage>
-      </MxSurfaceVisualProvider>
-    </ButtonVisualProvider>
   )
 }
 
@@ -84,7 +79,7 @@ export function MxMetricCard({ title, value, detail, icon: Icon, tone = 'brand',
         <Typography variant="h2" className={cn('text-3xl font-bold leading-none', styles.value)}>{value}</Typography>
         {children}
       </div>
-      {actionLabel && onAction ? <Button variant="managerGhost" size="sm" className="mt-3 min-h-10 w-full justify-between px-0 text-emerald-700" onClick={onAction}>{actionLabel}<span aria-hidden="true">→</span></Button> : null}
+      {actionLabel && onAction ? <Button variant="ghost" size="sm" className="mt-3 min-h-10 w-full justify-between px-0 text-emerald-700" onClick={onAction}>{actionLabel}<span aria-hidden="true">→</span></Button> : null}
     </Card>
   )
 }
@@ -157,7 +152,7 @@ export function MxErrorState({ title = 'Não foi possível carregar', descriptio
       <span className="grid h-14 w-14 place-items-center rounded-2xl bg-red-50 text-red-600"><AlertTriangle size={24} aria-hidden="true" /></span>
       <Typography variant="h3" className="mt-4 text-base text-gray-800">{title}</Typography>
       <Typography variant="p" className="mt-2 max-w-md text-sm leading-6 text-gray-500">{description}</Typography>
-      {retry ? <Button variant="managerOutline" className="mt-4" onClick={retry}>Tentar novamente</Button> : null}
+      {retry ? <Button variant="outline" className="mt-4" onClick={retry}>Tentar novamente</Button> : null}
     </div>
   )
 }

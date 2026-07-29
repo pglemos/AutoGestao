@@ -21,10 +21,10 @@ export default function AdminMorningReportPage() {
       onRetry={state.refresh}
       actions={(
         <>
-          <Button variant="managerSecondary" size="icon" onClick={() => void state.refresh()} aria-label="Atualizar relatório">
+          <Button variant="secondary" size="icon" onClick={() => void state.refresh()} aria-label="Atualizar relatório">
             <RefreshCw size={18} className={state.refreshing ? 'animate-spin' : ''} />
           </Button>
-          <Button variant="managerSecondary" onClick={state.exportCsv} disabled={state.allRows.length === 0}>
+          <Button variant="secondary" onClick={state.exportCsv} disabled={state.allRows.length === 0}>
             <Download size={18} /> Exportar CSV
           </Button>
         </>

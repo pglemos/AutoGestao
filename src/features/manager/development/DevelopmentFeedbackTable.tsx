@@ -30,7 +30,7 @@ export function DevelopmentFeedbackTable({ feedbacks, onOpen, onShareWhatsApp }:
               <td className="max-w-56 truncate px-4 py-3 text-gray-600">{item.action || '—'}</td>
               <td className="px-4 py-3 text-gray-600">{formatSafeDate(item.week_reference)}</td>
               <td className="px-4 py-3"><span className={`rounded-lg px-2 py-1 text-xs font-medium ${!item.visible_to_seller ? 'bg-gray-100 text-gray-600' : item.acknowledged ? 'bg-emerald-100 text-emerald-700' : 'bg-indigo-100 text-indigo-700'}`}>{!item.visible_to_seller ? 'Somente liderança' : item.acknowledged ? 'Ciência registrada' : 'Aguardando ciência'}</span></td>
-              <td className="px-4 py-3"><div className="flex gap-2"><Button variant="managerGhost" size="sm" onClick={() => onOpen(item)}>Ver</Button><Button variant="managerGhost" size="sm" onClick={() => onShareWhatsApp(item)}>WhatsApp</Button></div></td>
+              <td className="px-4 py-3"><div className="flex gap-2"><Button variant="ghost" size="sm" onClick={() => onOpen(item)}>Ver</Button><Button variant="ghost" size="sm" onClick={() => onShareWhatsApp(item)}>WhatsApp</Button></div></td>
             </tr>
           ))}
         </tbody>

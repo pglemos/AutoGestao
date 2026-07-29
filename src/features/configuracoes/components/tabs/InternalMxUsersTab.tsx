@@ -442,7 +442,7 @@ export function InternalMxUsersTab() {
           description="Administrador Geral, Administrador MX e Consultor MX possuem o mesmo CRUD global nesta superfície."
           actions={(
             <div className="flex gap-2">
-              <Button variant="managerSecondary" onClick={() => void load()}>
+              <Button variant="secondary" onClick={() => void load()}>
                 <RefreshCw size={16} />
                 Atualizar
               </Button>
@@ -537,14 +537,14 @@ export function InternalMxUsersTab() {
               </p>
               <div className="flex gap-2">
                 <Button
-                  variant="managerSecondary"
+                  variant="secondary"
                   disabled={page === 0 || loading}
                   onClick={() => setPage((current) => Math.max(0, current - 1))}
                 >
                   Anterior
                 </Button>
                 <Button
-                  variant="managerSecondary"
+                  variant="secondary"
                   disabled={page + 1 >= totalPages || loading}
                   onClick={() => setPage((current) => Math.min(totalPages - 1, current + 1))}
                 >
@@ -598,7 +598,7 @@ export function InternalMxUsersTab() {
         footer={(
           <>
             <Button
-              variant="managerSecondary"
+              variant="secondary"
               onClick={() => setHardDeleteTarget(null)}
               disabled={saving}
             >
@@ -675,7 +675,7 @@ function UserRow({
         <div className="flex justify-end gap-1">
           <Button
             size="icon"
-            variant="managerSecondary"
+            variant="secondary"
             aria-label={`Editar ${user.name}`}
             onClick={() => onEdit(user)}
             disabled={saving}
@@ -684,7 +684,7 @@ function UserRow({
           </Button>
           <Button
             size="icon"
-            variant="managerSecondary"
+            variant="secondary"
             aria-label={`Forçar troca de senha de ${user.name}`}
             onClick={() => void onForcePasswordChange(user)}
             disabled={saving}
@@ -693,7 +693,7 @@ function UserRow({
           </Button>
           <Button
             size="icon"
-            variant="managerSecondary"
+            variant="secondary"
             aria-label={`Desativar ${user.name}`}
             onClick={() => onDeactivate(user)}
             disabled={saving}
@@ -702,7 +702,7 @@ function UserRow({
           </Button>
           <Button
             size="icon"
-            variant="managerSecondary"
+            variant="secondary"
             aria-label={`Excluir definitivamente ${user.name}`}
             onClick={() => onHardDelete(user)}
             disabled={saving}
@@ -749,7 +749,7 @@ function UserFormModal({
       size="xl"
       footer={(
         <>
-          <Button variant="managerSecondary" onClick={onClose} disabled={saving}>
+          <Button variant="secondary" onClick={onClose} disabled={saving}>
             Cancelar
           </Button>
           <Button onClick={onSave} loading={saving}>

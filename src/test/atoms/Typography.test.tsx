@@ -7,7 +7,7 @@ afterEach(() => {
 })
 
 describe('Typography Atom', () => {
-  test('uses weights aligned to the Base44 seller typography spec (h1 font-black, h2 font-bold, h3/h4 font-semibold)', () => {
+  test('uses weights aligned to the approved Base44 typography (h1/h2 font-bold, h3/h4 font-semibold)', () => {
     render(
       <div>
         <Typography variant="h1">Title</Typography>
@@ -20,7 +20,9 @@ describe('Typography Atom', () => {
       </div>,
     )
 
-    expect(screen.getByText('Title').className).toContain('font-black')
+    // h1 passou de font-black para font-bold: o peso 900 era do visual legado
+    // do MX; o aprovado (Base44/Dono) usa 700.
+    expect(screen.getByText('Title').className).toContain('font-bold')
     expect(screen.getByText('Subtitle').className).toContain('font-bold')
     expect(screen.getByText('Card title').className).toContain('font-semibold')
     expect(screen.getByText('Small heading').className).toContain('font-semibold')

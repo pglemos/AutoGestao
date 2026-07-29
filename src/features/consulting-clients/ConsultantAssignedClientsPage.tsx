@@ -118,7 +118,7 @@ export function ConsultantAssignedClientsPage() {
         eyebrow="Minha carteira consultiva"
         title="CRM de Consultoria"
         description="Acesso limitado aos clientes com atribuição ativa para o seu perfil."
-        actions={<><Button asChild variant="managerSecondary"><Link to="/agenda"><CalendarDays size={18} />Agenda MX</Link></Button><Button variant="managerSecondary" onClick={() => void refetch()}><RefreshCw size={18} />Atualizar</Button></>}
+        actions={<><Button asChild variant="secondary"><Link to="/agenda"><CalendarDays size={18} />Agenda MX</Link></Button><Button variant="secondary" onClick={() => void refetch()}><RefreshCw size={18} />Atualizar</Button></>}
       />
       <MxStatusBanner tone="info">Somente clientes vinculados ao seu usuário são consultados e exibidos.</MxStatusBanner>
       {loading ? <MxLoadingState label="Carregando clientes vinculados" /> : error ? <MxErrorState description={error} retry={() => void refetch()} /> : <><ConsultingClientMetrics metrics={metrics} /><ConsultingClientToolbar search={search} onSearch={setSearch} /><MxSectionCard><MxSectionHeader title="Clientes vinculados" description={`${rows.length} registro(s) visível(is).`} /><div className="p-5"><ConsultingClientTable rows={rows} /></div></MxSectionCard></>}

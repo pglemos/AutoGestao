@@ -26,13 +26,13 @@ describe("Select", () => {
   test("applies default variant", () => {
     render(<Select>{options}</Select>);
     const select = screen.getByRole("combobox");
-    expect(select.className).toContain("border-border-default");
+    expect(select.className).toContain("border-gray-200");
   });
 
   test("applies error variant", () => {
     render(<Select variant="error">{options}</Select>);
     const select = screen.getByRole("combobox");
-    expect(select.className).toContain("border-status-error");
+    expect(select.className).toContain("border-red-300");
   });
 
   test("applies ghost variant", () => {

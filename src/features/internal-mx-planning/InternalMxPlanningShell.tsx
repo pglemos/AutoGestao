@@ -91,7 +91,7 @@ export function InternalMxPlanningShell({
         description={description}
         actions={(
           <>
-            <Button variant="managerSecondary" size="icon" onClick={onRefresh || (() => void store.refetch())} disabled={refreshing} aria-label={`Atualizar ${title}`}>
+            <Button variant="secondary" size="icon" onClick={onRefresh || (() => void store.refetch())} disabled={refreshing} aria-label={`Atualizar ${title}`}>
               <RefreshCw size={17} className={refreshing ? 'animate-spin' : undefined} aria-hidden="true" />
             </Button>
             <div className="min-w-[260px]">

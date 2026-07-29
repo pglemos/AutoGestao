@@ -130,7 +130,7 @@ export default function OperationalSettings() {
         actions={(
           <>
             <Button
-              variant="managerSecondary"
+              variant="secondary"
               size="icon"
               onClick={() => void handleRefresh()}
               disabled={refreshing || !selectedStoreId}
@@ -141,7 +141,7 @@ export default function OperationalSettings() {
             {canManage ? (
               <Button
                 data-mx-requires-manage=""
-                variant="managerPrimary"
+                variant="primary"
                 onClick={() => void handleSave()}
                 disabled={saving || !selectedStoreId}
                 loading={saving}
@@ -217,7 +217,7 @@ export default function OperationalSettings() {
               <div className="grid gap-3 p-5 sm:grid-cols-2">
                 <Button
                   data-mx-requires-manage=""
-                  variant={metaRules?.projection_mode === 'calendar' ? 'managerPrimary' : 'managerSecondary'}
+                  variant={metaRules?.projection_mode === 'calendar' ? 'primary' : 'secondary'}
                   onClick={() => void handleProjectionMode('calendar')}
                   disabled={!canManage || !selectedStoreId}
                   aria-pressed={metaRules?.projection_mode === 'calendar'}
@@ -226,7 +226,7 @@ export default function OperationalSettings() {
                 </Button>
                 <Button
                   data-mx-requires-manage=""
-                  variant={metaRules?.projection_mode === 'business' ? 'managerPrimary' : 'managerSecondary'}
+                  variant={metaRules?.projection_mode === 'business' ? 'primary' : 'secondary'}
                   onClick={() => void handleProjectionMode('business')}
                   disabled={!canManage || !selectedStoreId}
                   aria-pressed={metaRules?.projection_mode === 'business'}

@@ -45,11 +45,11 @@ export function DigitalProductToolbar({ controller }: { controller: DigitalProdu
       </MxField>
 
       <div className="flex flex-wrap items-end gap-2">
-        <Button variant="managerOutline" size="icon" onClick={() => void controller.refresh()} aria-label="Atualizar produtos">
+        <Button variant="outline" size="icon" onClick={() => void controller.refresh()} aria-label="Atualizar produtos">
           <RefreshCw size={18} className={controller.isRefetching ? 'animate-spin' : ''} />
         </Button>
         {controller.canManage && controller.missingDefaultProducts.length > 0 ? (
-          <Button data-mx-requires-manage="" variant="managerOutline" onClick={controller.requestCreateDefaults} disabled={controller.creatingDefaults}>
+          <Button data-mx-requires-manage="" variant="outline" onClick={controller.requestCreateDefaults} disabled={controller.creatingDefaults}>
             <Package size={16} className="mr-2" />
             {controller.creatingDefaults ? 'Criando...' : `Criar padrão (${controller.missingDefaultProducts.length})`}
           </Button>

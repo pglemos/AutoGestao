@@ -1,6 +1,4 @@
 import type { ReactNode } from 'react'
-import { ButtonVisualProvider } from '@/components/atoms/Button'
-import { MxSurfaceVisualProvider } from '@/components/module/MxSurfaceVisualContext'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { cn } from '@/lib/utils'
 import { InternalMxVisualScope } from './InternalMxVisualScope'
@@ -31,8 +29,6 @@ export function MxRoleVisualScope({
   // mesma tela combinava botão Base44 com campo, card e tabela no visual
   // legado. Fornecer também às superfícies alinha a tela inteira à referência.
   return (
-    <ButtonVisualProvider mode="manager">
-      <MxSurfaceVisualProvider mode="manager">
         <div
           data-mx-visual-system="manager"
           className={cn(
@@ -42,7 +38,5 @@ export function MxRoleVisualScope({
         >
           {children}
         </div>
-      </MxSurfaceVisualProvider>
-    </ButtonVisualProvider>
   )
 }

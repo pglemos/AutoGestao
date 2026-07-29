@@ -6,14 +6,15 @@ const root = process.cwd()
 const read = (path: string) => readFileSync(resolve(root, path), 'utf8')
 
 /**
- * Componentes que bifurcam a aparência conforme `MxSurfaceVisualMode`.
+ * Componentes que antes bifurcavam a aparência conforme o perfil.
  *
- * O modo `manager` é a aparência aprovada do Base44/Dono; `default` é o visual
- * legado do MX (caixa alta, pesos black, tracking largo, sombra interna).
- * A unificação caminha para o primeiro.
+ * O ramo `manager` era a aparência aprovada do Base44/Dono e o `default` era o
+ * visual legado do MX. A unificação promoveu o primeiro a único e removeu o
+ * contexto que os selecionava. Esta lista existe para impedir o retorno.
  */
-const FORKED_COMPONENTS = [
+const PREVIOUSLY_FORKED = [
   'src/components/atoms/Badge.tsx',
+  'src/components/atoms/Button.tsx',
   'src/components/atoms/Input.tsx',
   'src/components/atoms/Select.tsx',
   'src/components/atoms/Textarea.tsx',
@@ -24,40 +25,23 @@ const FORKED_COMPONENTS = [
   'src/components/organisms/DataGrid.tsx',
 ] as const
 
-describe('alinhamento de superfície nos módulos sob o shell universal', () => {
-  it('o escopo por perfil fornece o mesmo modo a botões e superfícies', () => {
-    const scope = read('src/components/module/MxRoleVisualScope.tsx')
-    // Antes, só os botões recebiam o modo aprovado: a mesma tela misturava
-    // botão Base44 com campo, card e tabela legados.
-    expect(scope).toContain('<ButtonVisualProvider mode="manager">')
-    expect(scope).toContain('<MxSurfaceVisualProvider mode="manager">')
+describe('aparência única do MX', () => {
+  it('removeu o contexto que selecionava a aparência por perfil', () => {
+    expect(() => read('src/components/module/MxSurfaceVisualContext.tsx')).toThrow()
   })
 
-  it('o módulo do Dono inteiro recebe o modo aprovado, não só o cabeçalho', () => {
-    const ownerHeading = read('src/components/owner/OwnerPageHeading.jsx')
-    expect(ownerHeading).toContain('<MxSurfaceVisualProvider mode="manager">')
-
-    // Sem o provider no shell, telas compartilhadas com o Gerente (por exemplo
-    // FalarConsultorDono) renderizavam campos legados para o Dono e aprovados
-    // para o Gerente — a mesma tela com duas aparências.
-    const ownerShell = read('src/features/owner-base44/OwnerShell.tsx')
-    expect(ownerShell).toContain('<MxSurfaceVisualProvider mode="manager">')
+  it('nenhum componente antes bifurcado voltou a bifurcar', () => {
+    for (const path of PREVIOUSLY_FORKED) {
+      const source = read(path)
+      expect(source, `${path} lê o modo de superfície`).not.toContain('useMxSurfaceVisualMode')
+      expect(source, `${path} lê o modo de botão`).not.toContain('ButtonVisualContext')
+      expect(source, `${path} mantém variante "manager"`).not.toMatch(
+        /manager(Primary|Secondary|Outline|Ghost)/,
+      )
+    }
   })
 
-  it('os perfis internos MX já recebem o modo aprovado', () => {
-    const internalScope = read('src/components/module/InternalMxVisualScope.tsx')
-    expect(internalScope).toContain('<MxSurfaceVisualProvider mode="manager">')
-  })
-
-  it('o inventário de componentes bifurcados não cresce', () => {
-    // Nenhum componente novo pode introduzir bifurcação por perfil (§8.5).
-    // Quando um for unificado, remova-o desta lista.
-    const forked = FORKED_COMPONENTS.filter((path) =>
-      read(path).includes('useMxSurfaceVisualMode'),
-    )
-    expect(forked).toEqual([...FORKED_COMPONENTS])
-
-    // Os átomos e moléculas criados na Fase 2 não bifurcam.
+  it('os átomos e moléculas da fundação seguem sem bifurcação', () => {
     for (const path of [
       'src/components/atoms/IconButton.tsx',
       'src/components/atoms/Checkbox.tsx',
@@ -68,10 +52,22 @@ describe('alinhamento de superfície nos módulos sob o shell universal', () => 
     }
   })
 
-  it('o vendedor permanece fora do escopo, por decisão explícita', () => {
-    // O tema escuro do vendedor é a maior divergência da referência e migra
-    // por último (Fase 6) — não pode ser arrastado junto sem validação.
-    const layout = read('src/components/Layout.tsx')
-    expect(layout).toContain("<MxRoleVisualScope manager={role !== 'vendedor'}>")
+  it('o escopo por perfil não carrega mais aparência, só o recorte do módulo', () => {
+    const scope = read('src/components/module/MxRoleVisualScope.tsx')
+    expect(scope).not.toContain('MxSurfaceVisualProvider')
+    expect(scope).not.toContain('ButtonVisualProvider')
+    // O recorte permanece: é o que aplica a superfície de fundo do módulo.
+    expect(scope).toContain('mx-manager-scope')
+  })
+
+  it('nenhum shell fornece mais um modo visual', () => {
+    for (const path of [
+      'src/components/Layout.tsx',
+      'src/features/owner-base44/OwnerShell.tsx',
+      'src/components/owner/OwnerPageHeading.jsx',
+      'src/App.tsx',
+    ]) {
+      expect(read(path), `${path} ainda fornece um modo`).not.toContain('MxSurfaceVisualProvider')
+    }
   })
 })

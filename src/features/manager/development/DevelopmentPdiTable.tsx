@@ -33,7 +33,7 @@ export function DevelopmentPdiTable({ rows, onOpenOrStart }: { rows: Development
               <td className="max-w-60 px-4 py-3 text-xs text-gray-600">{(row.pdi?.top_5_gaps ?? []).map((gap: PDIAvaliacao360) => gap.competencia).slice(0, 3).join(', ') || '—'}</td>
               <td className="min-w-40 px-4 py-3">{row.pdi ? <MxProgress value={row.progress} /> : '—'}</td>
               <td className="px-4 py-3"><span className={row.overdueActions > 0 ? 'font-medium text-red-600' : 'text-gray-400'}>{row.overdueActions}</span></td>
-              <td className="px-4 py-3"><Button variant="managerGhost" size="sm" onClick={() => onOpenOrStart(row)}>{row.pdi ? 'Abrir' : 'Iniciar'}<ChevronRight size={14} className="ml-1" /></Button></td>
+              <td className="px-4 py-3"><Button variant="ghost" size="sm" onClick={() => onOpenOrStart(row)}>{row.pdi ? 'Abrir' : 'Iniciar'}<ChevronRight size={14} className="ml-1" /></Button></td>
             </tr>
           ))}
         </tbody>

@@ -110,7 +110,6 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
   test('escopa a matriz do Gerente em todos os perfis de gestão sem contaminar o Vendedor', () => {
     expect(layout).toContain("from '@/components/module/MxRoleVisualScope'")
     expect(layout).toContain("<MxRoleVisualScope manager={role !== 'vendedor'}>")
-    expect(roleVisualScope).toContain('<ButtonVisualProvider mode="manager">')
     expect(roleVisualScope).toContain('data-mx-visual-system="manager"')
     expect(roleVisualScope).toContain('mx-manager-scope')
     expect(managerScopeCss).toContain('.mx-manager-scope')
@@ -119,25 +118,24 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     expect(managerScopeCss).toContain('--color-text-primary: #1f2937')
   })
 
-  test('aplica variantes gerenciais por escopo sem substituir o primary do vendedor', () => {
+  test('aplica a variante aprovada a todos os perfis, sem par legado', () => {
     for (const variant of [
-      'managerPrimary',
-      'managerOutline',
-      'managerSecondary',
-      'managerGhost',
+      'primary',
+      'outline',
+      'secondary',
+      'ghost',
     ]) {
       expect(button).toContain(`${variant}:`)
     }
-    expect(button).toContain('ButtonVisualProvider')
-    expect(button).toContain("mode: ButtonVisualMode")
-    expect(button).toContain("primary: 'managerPrimary'")
-    expect(button).toContain("outline: 'managerSecondary'")
+    // As variantes deixaram de ter par "manager": a aparência aprovada é a
+    // única, então não há mais provider nem modo a resolver (§8.5).
+    expect(button).not.toContain('ButtonVisualProvider')
+    expect(button).not.toContain('managerPrimary')
+    expect(button).not.toContain('bg-mx-action')
     expect(button).toContain('bg-emerald-600')
     expect(button).toContain('hover:bg-emerald-700')
-    expect(button).toContain('border-emerald-200')
     expect(button).toContain('border-gray-200')
-    expect(button).toContain('primary: "bg-mx-action')
-    expect(universalPrimitives).toContain('<ButtonVisualProvider mode="manager">')
+    expect(universalPrimitives).not.toContain('ButtonVisualProvider')
   })
 
   test('landing pages de Admin, Dono e Consultoria usam as mesmas primitives do Gerente', () => {

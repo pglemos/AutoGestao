@@ -1,7 +1,6 @@
 import { Building2, Eye, EyeOff, RefreshCw, Swords, Trophy } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
-import { useMxSurfaceVisualMode } from '@/components/module/MxSurfaceVisualContext'
 import { LastUpdated } from '@/components/molecules/LastUpdated'
 import { cn } from '@/lib/utils'
 
@@ -31,10 +30,7 @@ export function GlobalRankingHeader({
   hideStoreNames, onToggleHideStoreNames,
   onRefresh, isRefetching, lastUpdatedAt,
 }: Props) {
-  const manager = useMxSurfaceVisualMode() === 'manager'
-  const activeTabClass = manager
-    ? 'bg-emerald-600 text-white shadow-sm'
-    : 'bg-mx-black text-brand-primary shadow-lg'
+  const activeTabClass = 'bg-emerald-600 text-white shadow-sm'
 
   return (
     <header data-mx-module-header="" className="flex min-w-0 shrink-0 flex-col justify-between gap-mx-lg rounded-2xl border border-gray-100 bg-white p-5 shadow-sm 2xl:flex-row 2xl:items-center">

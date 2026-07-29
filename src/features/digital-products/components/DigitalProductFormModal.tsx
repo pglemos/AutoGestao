@@ -26,7 +26,7 @@ export function DigitalProductFormModal({ open, editingProduct, form, saving, ca
       title={editingProduct ? 'Editar produto digital' : 'Novo produto digital'}
       description="Defina público, status, ordem e descrição do catálogo."
       size="2xl"
-      footer={canManage ? <><Button type="button" variant="managerGhost" onClick={onClose}>Cancelar</Button><Button data-mx-requires-manage="" type="submit" form="digital-product-form" disabled={saving}>{saving ? 'Salvando...' : editingProduct ? 'Salvar alterações' : 'Criar produto'}</Button></> : undefined}
+      footer={canManage ? <><Button type="button" variant="ghost" onClick={onClose}>Cancelar</Button><Button data-mx-requires-manage="" type="submit" form="digital-product-form" disabled={saving}>{saving ? 'Salvando...' : editingProduct ? 'Salvar alterações' : 'Criar produto'}</Button></> : undefined}
       referenceStyle
     >
       <form id="digital-product-form" onSubmit={onSubmit} className="space-y-5">

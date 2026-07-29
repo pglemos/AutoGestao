@@ -8,7 +8,6 @@ import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Select } from '@/components/atoms/Select'
 import { Typography } from '@/components/atoms/Typography'
-import { useMxSurfaceVisualMode } from '@/components/module/MxSurfaceVisualContext'
 import { cn } from '@/lib/utils'
 import type { AgendaConsultant, DateFilter } from '@/hooks/agenda'
 import { statusFilters } from '../data/agendaFilters'
@@ -71,7 +70,6 @@ export function AgendaHeader({
   consultants = [],
   canViewAllAgendas = false,
 }: AgendaHeaderProps) {
-  const manager = useMxSurfaceVisualMode() === 'manager'
 
   const handleViewModeChange = (mode: AdminCalendarViewMode) => {
     setCalendarViewMode(mode)
@@ -111,7 +109,7 @@ export function AgendaHeader({
             </button>
           </div>
 
-          <h1 className={cn('text-lg text-text-primary capitalize', manager ? 'font-semibold' : 'font-extrabold')}>
+          <h1 className={cn('text-lg text-text-primary capitalize', 'font-semibold')}>
             {monthLabel}
           </h1>
         </div>

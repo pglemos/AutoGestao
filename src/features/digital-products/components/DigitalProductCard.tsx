@@ -37,8 +37,8 @@ export function DigitalProductCard({ product, canManage, onEdit, onArchive }: { 
       <div className="mt-5 border-t border-gray-100 pt-4">
         {canManage ? (
           <div className="grid grid-cols-2 gap-2">
-            <Button data-mx-requires-manage="" variant="managerGhost" size="sm" onClick={() => onEdit(product)}><Edit3 size={14} className="mr-2" />Editar</Button>
-            <Button data-mx-requires-manage="" variant="managerGhost" size="sm" onClick={() => onArchive(product)} className="text-red-600"><Archive size={14} className="mr-2" />Arquivar</Button>
+            <Button data-mx-requires-manage="" variant="ghost" size="sm" onClick={() => onEdit(product)}><Edit3 size={14} className="mr-2" />Editar</Button>
+            <Button data-mx-requires-manage="" variant="ghost" size="sm" onClick={() => onArchive(product)} className="text-red-600"><Archive size={14} className="mr-2" />Arquivar</Button>
           </div>
         ) : <Badge variant="success">Disponível para seu perfil</Badge>}
       </div>

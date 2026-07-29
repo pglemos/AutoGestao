@@ -148,7 +148,7 @@ export function ConsultingParametersView() {
         actions={(
           <>
             <Button
-              variant="managerSecondary"
+              variant="secondary"
               size="icon"
               onClick={() => void handleRefresh()}
               disabled={refreshing}
@@ -259,7 +259,7 @@ export function ConsultingParametersView() {
             <Button
               data-mx-requires-manage=""
               type="submit"
-              variant="managerPrimary"
+              variant="primary"
               className="w-full"
               disabled={!canManage || submitting || !selectedMetric}
               loading={submitting}

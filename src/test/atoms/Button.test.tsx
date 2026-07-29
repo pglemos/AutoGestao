@@ -17,12 +17,12 @@ describe("Button Atom", () => {
   test("applies variant classes correctly", () => {
     const { rerender } = render(<Button variant="primary">Primary</Button>);
     let button = screen.getByRole("button");
-    // We expect some classes from the primary variant
-    expect(button.className).toContain("bg-brand-secondary");
+    // Aparência aprovada (Base44/Dono), agora a única do produto.
+    expect(button.className).toContain("bg-emerald-600");
 
     rerender(<Button variant="danger">Danger</Button>);
     button = screen.getByRole("button");
-    expect(button.className).toContain("bg-status-error");
+    expect(button.className).toContain("bg-red-600");
   });
 
   test("applies adaptive sizing classes", () => {

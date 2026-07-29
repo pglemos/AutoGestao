@@ -13,7 +13,6 @@ import {
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
-import { useMxSurfaceVisualMode } from '@/components/module/MxSurfaceVisualContext'
 import { Card, CardContent, CardHeader } from '@/components/molecules/Card'
 import { cn } from '@/lib/utils'
 import type { StorePreRegistration } from '@/types/database'
@@ -82,7 +81,6 @@ export function NotificacoesListSection({
   handleReviewPreRegistration,
 }: Props) {
   const navigate = useNavigate()
-  const manager = useMxSurfaceVisualMode() === 'manager'
 
   return (
     <Card className="flex min-h-[420px] flex-col overflow-hidden bg-white shadow-mx-sm">
@@ -90,9 +88,7 @@ export function NotificacoesListSection({
         <div className="flex items-center gap-mx-md">
           <div className={cn(
             'flex h-mx-11 w-mx-11 shrink-0 items-center justify-center rounded-mx-xl',
-            manager
-              ? 'bg-emerald-50 text-emerald-600 shadow-none'
-              : 'bg-mx-black text-white shadow-mx-md',
+            'bg-emerald-50 text-emerald-600 shadow-none',
           )}>
             <Bell size={22} strokeWidth={2} />
           </div>
