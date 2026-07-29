@@ -63,7 +63,10 @@ jobs:
             [ -z "$file" ] && continue
             [ -f "$file" ] || continue
             echo "::group::deno check $file"
-            if ! deno check "$file"; then
+            # `--node-modules-dir=auto` é necessário: os tipos de
+            # `jsr:@supabase/functions-js/edge-runtime.d.ts` referenciam `npm:openai`,
+            # e sem auto-install o check falha na resolução antes de olhar o código.
+            if ! deno check --node-modules-dir=auto "$file"; then
               echo "::error file=$file::deno check falhou"
               failed=1
             fi

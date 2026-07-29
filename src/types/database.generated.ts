@@ -2136,6 +2136,9 @@ export type Database = {
           legacy_migrated_by: string | null
           legacy_migration_summary: string | null
           legal_name: string | null
+          merge_reason: string | null
+          merged_at: string | null
+          merged_into_id: string | null
           modality: string | null
           name: string
           notes: string | null
@@ -2158,6 +2161,9 @@ export type Database = {
           legacy_migrated_by?: string | null
           legacy_migration_summary?: string | null
           legal_name?: string | null
+          merge_reason?: string | null
+          merged_at?: string | null
+          merged_into_id?: string | null
           modality?: string | null
           name: string
           notes?: string | null
@@ -2180,6 +2186,9 @@ export type Database = {
           legacy_migrated_by?: string | null
           legacy_migration_summary?: string | null
           legal_name?: string | null
+          merge_reason?: string | null
+          merged_at?: string | null
+          merged_into_id?: string | null
           modality?: string | null
           name?: string
           notes?: string | null
@@ -2198,6 +2207,13 @@ export type Database = {
             columns: ["legacy_migrated_by"]
             isOneToOne: false
             referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "clientes_consultoria_merged_into_id_fkey"
+            columns: ["merged_into_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_consultoria"
             referencedColumns: ["id"]
           },
           {
@@ -3062,6 +3078,87 @@ export type Database = {
           },
         ]
       }
+      critical_cron_job: {
+        Row: {
+          active: boolean
+          description: string | null
+          job_name: string
+          max_age_minutes: number
+        }
+        Insert: {
+          active?: boolean
+          description?: string | null
+          job_name: string
+          max_age_minutes: number
+        }
+        Update: {
+          active?: boolean
+          description?: string | null
+          job_name?: string
+          max_age_minutes?: number
+        }
+        Relationships: []
+      }
+      cron_execution_log: {
+        Row: {
+          correlation_id: string | null
+          created_at: string
+          duration_ms: number | null
+          environment: string
+          error_code: string | null
+          failed_count: number | null
+          finished_at: string | null
+          id: string
+          job_name: string
+          metadata: Json
+          processed_count: number | null
+          release: string | null
+          safe_message: string | null
+          scheduled_at: string | null
+          started_at: string | null
+          status: string
+          trace_id: string | null
+        }
+        Insert: {
+          correlation_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          environment: string
+          error_code?: string | null
+          failed_count?: number | null
+          finished_at?: string | null
+          id?: string
+          job_name: string
+          metadata?: Json
+          processed_count?: number | null
+          release?: string | null
+          safe_message?: string | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status: string
+          trace_id?: string | null
+        }
+        Update: {
+          correlation_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          environment?: string
+          error_code?: string | null
+          failed_count?: number | null
+          finished_at?: string | null
+          id?: string
+          job_name?: string
+          metadata?: Json
+          processed_count?: number | null
+          release?: string | null
+          safe_message?: string | null
+          scheduled_at?: string | null
+          started_at?: string | null
+          status?: string
+          trace_id?: string | null
+        }
+        Relationships: []
+      }
       cultura_resultado_registros: {
         Row: {
           alvo_role: string | null
@@ -3480,6 +3577,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      data_correction_audit: {
+        Row: {
+          action: string
+          correction_key: string
+          created_at: string
+          id: number
+          payload: Json
+          row_identity: Json
+          table_name: string
+        }
+        Insert: {
+          action: string
+          correction_key: string
+          created_at?: string
+          id?: never
+          payload: Json
+          row_identity?: Json
+          table_name: string
+        }
+        Update: {
+          action?: string
+          correction_key?: string
+          created_at?: string
+          id?: never
+          payload?: Json
+          row_identity?: Json
+          table_name?: string
+        }
+        Relationships: []
       }
       departamento_biblioteca: {
         Row: {
@@ -5834,6 +5961,57 @@ export type Database = {
           },
         ]
       }
+      integration_error_log: {
+        Row: {
+          correlation_id: string | null
+          created_at: string
+          duration_ms: number | null
+          environment: string
+          error_code: string | null
+          http_status: number | null
+          id: string
+          integration: string
+          metadata: Json
+          operation: string | null
+          release: string | null
+          safe_message: string | null
+          status: string
+          trace_id: string | null
+        }
+        Insert: {
+          correlation_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          environment: string
+          error_code?: string | null
+          http_status?: number | null
+          id?: string
+          integration: string
+          metadata?: Json
+          operation?: string | null
+          release?: string | null
+          safe_message?: string | null
+          status: string
+          trace_id?: string | null
+        }
+        Update: {
+          correlation_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          environment?: string
+          error_code?: string | null
+          http_status?: number | null
+          id?: string
+          integration?: string
+          metadata?: Json
+          operation?: string | null
+          release?: string | null
+          safe_message?: string | null
+          status?: string
+          trace_id?: string | null
+        }
+        Relationships: []
+      }
       internal_mx_admin_audit: {
         Row: {
           action: string
@@ -7573,6 +7751,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notification_delivery_log: {
+        Row: {
+          channel: string
+          correlation_id: string | null
+          created_at: string
+          duration_ms: number | null
+          environment: string
+          error_code: string | null
+          id: string
+          metadata: Json
+          operation: string | null
+          release: string | null
+          safe_message: string | null
+          status: string
+          trace_id: string | null
+        }
+        Insert: {
+          channel: string
+          correlation_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          environment: string
+          error_code?: string | null
+          id?: string
+          metadata?: Json
+          operation?: string | null
+          release?: string | null
+          safe_message?: string | null
+          status: string
+          trace_id?: string | null
+        }
+        Update: {
+          channel?: string
+          correlation_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          environment?: string
+          error_code?: string | null
+          id?: string
+          metadata?: Json
+          operation?: string | null
+          release?: string | null
+          safe_message?: string | null
+          status?: string
+          trace_id?: string | null
+        }
+        Relationships: []
       }
       notification_reads: {
         Row: {
@@ -9828,6 +10054,45 @@ export type Database = {
           },
         ]
       }
+      release_health_log: {
+        Row: {
+          correlation_id: string | null
+          created_at: string
+          deployment_id: string | null
+          environment: string
+          error_code: string | null
+          id: string
+          metadata: Json
+          release: string
+          safe_message: string | null
+          status: string
+        }
+        Insert: {
+          correlation_id?: string | null
+          created_at?: string
+          deployment_id?: string | null
+          environment: string
+          error_code?: string | null
+          id?: string
+          metadata?: Json
+          release: string
+          safe_message?: string | null
+          status: string
+        }
+        Update: {
+          correlation_id?: string | null
+          created_at?: string
+          deployment_id?: string | null
+          environment?: string
+          error_code?: string | null
+          id?: string
+          metadata?: Json
+          release?: string
+          safe_message?: string | null
+          status?: string
+        }
+        Relationships: []
+      }
       remuneracao_benchmark: {
         Row: {
           cargo: string
@@ -11461,6 +11726,54 @@ export type Database = {
           },
         ]
       }
+      system_health_log: {
+        Row: {
+          component: string
+          correlation_id: string | null
+          created_at: string
+          duration_ms: number | null
+          environment: string
+          error_code: string | null
+          id: string
+          metadata: Json
+          operation: string | null
+          release: string | null
+          safe_message: string | null
+          status: string
+          trace_id: string | null
+        }
+        Insert: {
+          component: string
+          correlation_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          environment: string
+          error_code?: string | null
+          id?: string
+          metadata?: Json
+          operation?: string | null
+          release?: string | null
+          safe_message?: string | null
+          status: string
+          trace_id?: string | null
+        }
+        Update: {
+          component?: string
+          correlation_id?: string | null
+          created_at?: string
+          duration_ms?: number | null
+          environment?: string
+          error_code?: string | null
+          id?: string
+          metadata?: Json
+          operation?: string | null
+          release?: string | null
+          safe_message?: string | null
+          status?: string
+          trace_id?: string | null
+        }
+        Relationships: []
+      }
       tokens_oauth_consultoria: {
         Row: {
           access_token: string
@@ -12192,9 +12505,14 @@ export type Database = {
           active: boolean | null
           avatar_url: string | null
           created_at: string | null
+          deactivated_at: string | null
+          deactivation_reason: string | null
           email: string
           id: string
           is_venda_loja: boolean | null
+          merge_reason: string | null
+          merged_at: string | null
+          merged_into_id: string | null
           must_change_password: boolean | null
           name: string
           notification_preferences: Json | null
@@ -12207,9 +12525,14 @@ export type Database = {
           active?: boolean | null
           avatar_url?: string | null
           created_at?: string | null
+          deactivated_at?: string | null
+          deactivation_reason?: string | null
           email: string
           id: string
           is_venda_loja?: boolean | null
+          merge_reason?: string | null
+          merged_at?: string | null
+          merged_into_id?: string | null
           must_change_password?: boolean | null
           name: string
           notification_preferences?: Json | null
@@ -12222,9 +12545,14 @@ export type Database = {
           active?: boolean | null
           avatar_url?: string | null
           created_at?: string | null
+          deactivated_at?: string | null
+          deactivation_reason?: string | null
           email?: string
           id?: string
           is_venda_loja?: boolean | null
+          merge_reason?: string | null
+          merged_at?: string | null
+          merged_into_id?: string | null
           must_change_password?: boolean | null
           name?: string
           notification_preferences?: Json | null
@@ -12234,6 +12562,13 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: [
+          {
+            foreignKeyName: "usuarios_merged_into_id_fkey"
+            columns: ["merged_into_id"]
+            isOneToOne: false
+            referencedRelation: "usuarios"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "usuarios_role_id_fkey"
             columns: ["role_id"]
@@ -14870,6 +15205,10 @@ export type Database = {
         }
         Returns: boolean
       }
+      mx_critical_cron_age_seconds: { Args: never; Returns: number }
+      mx_critical_cron_status: { Args: never; Returns: Json }
+      mx_critical_jobs_health: { Args: never; Returns: Json }
+      mx_database_health: { Args: never; Returns: boolean }
       mx_development_theme_from_text: {
         Args: { p_text: string }
         Returns: string
@@ -14940,6 +15279,30 @@ export type Database = {
         Returns: boolean
       }
       process_import_data: { Args: { p_log_id: string }; Returns: undefined }
+      prune_observability_logs: {
+        Args: { p_retention_days?: number }
+        Returns: number
+      }
+      record_cron_execution: {
+        Args: {
+          p_correlation_id?: string
+          p_duration_ms?: number
+          p_environment: string
+          p_error_code?: string
+          p_failed_count?: number
+          p_finished_at?: string
+          p_job_name: string
+          p_metadata?: Json
+          p_processed_count?: number
+          p_release?: string
+          p_safe_message?: string
+          p_scheduled_at?: string
+          p_started_at?: string
+          p_status: string
+          p_trace_id?: string
+        }
+        Returns: string
+      }
       record_d1_contact_action: {
         Args: {
           p_action_type: string
@@ -14968,6 +15331,22 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      record_system_health: {
+        Args: {
+          p_component: string
+          p_correlation_id?: string
+          p_duration_ms?: number
+          p_environment: string
+          p_error_code?: string
+          p_metadata?: Json
+          p_operation?: string
+          p_release?: string
+          p_safe_message?: string
+          p_status: string
+          p_trace_id?: string
+        }
+        Returns: string
       }
       refresh_manager_daily_tasks: {
         Args: {

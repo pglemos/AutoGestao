@@ -26,6 +26,10 @@ comment on function public.mx_database_health() is
 revoke all on function public.mx_database_health() from public;
 grant execute on function public.mx_database_health() to anon, authenticated, service_role;
 
--- ROLLBACK:
---   drop function if exists public.mx_database_health();
---   (exige reverter tambem `api/health.ts` para a sonda anterior)
+-- ============================================================
+-- DOWN
+-- ============================================================
+-- Exige reverter tambem api/health.ts para a sonda anterior.
+-- BEGIN;
+-- drop function if exists public.mx_database_health();
+-- COMMIT;

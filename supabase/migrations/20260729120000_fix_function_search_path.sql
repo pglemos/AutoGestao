@@ -37,5 +37,20 @@ begin
   raise notice 'search_path fixado em % funcao(oes)', touched;
 end $$;
 
--- ROLLBACK (por funcao, se alguma regredir):
---   alter function public.<nome>(<args>) reset search_path;
+-- ============================================================
+-- DOWN
+-- ============================================================
+-- Remove o search_path fixo das funcoes que esta migration tocou.
+-- BEGIN;
+-- do $$
+-- declare fn record;
+-- begin
+--   for fn in
+--     select p.oid::regprocedure as sig
+--     from pg_proc p join pg_namespace n on n.oid = p.pronamespace
+--     where n.nspname = 'public' and p.prokind = 'f'
+--   loop
+--     execute format('alter function %s reset search_path', fn.sig);
+--   end loop;
+-- end $$;
+-- COMMIT;

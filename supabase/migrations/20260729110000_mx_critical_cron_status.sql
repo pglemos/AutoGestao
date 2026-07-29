@@ -10,13 +10,21 @@
 -- A funcao nova avalia cada job contra a periodicidade do proprio agendamento e
 -- reporta o pior caso. Nao expoe dado de negocio: so nomes de job, contagens e idades.
 
+-- `language sql` valida o corpo no momento da criacao, e o corpo le `cron.job`. Em
+-- banco efemero de CI, que sobe sem `pg_cron`, isso derrubaria o bootstrap. O corpo vai
+-- por EXECUTE e so quando a extensao existe; sem ela, cria-se um stub que responde
+-- `unknown` para `/api/health` nao interpretar ausencia de cron como falha.
+do $$
+begin
+if exists (select 1 from pg_extension where extname = 'pg_cron') then
+  execute $ddl$
 create or replace function public.mx_critical_cron_status()
 returns jsonb
 language sql
 stable
 security definer
 set search_path = public, pg_catalog
-as $$
+as $fn$
   with expected as (
     select
       j.jobname,
@@ -75,7 +83,23 @@ as $$
     'worst_age_seconds', coalesce(min(age_seconds) filter (where rn = 1), -1)
   )
   from ranked;
-$$;
+$fn$
+  $ddl$;
+else
+  raise notice 'pg_cron ausente — criando stub de mx_critical_cron_status (esperado fora de producao)';
+  execute $ddl$
+create or replace function public.mx_critical_cron_status()
+returns jsonb
+language sql
+stable
+security definer
+set search_path = public, pg_catalog
+as $fn$
+  select jsonb_build_object('status', 'unknown', 'total', 0, 'degraded', 0);
+$fn$
+  $ddl$;
+end if;
+end $$;
 
 comment on function public.mx_critical_cron_status() is
   'Saude de cron agregada por job, cada um comparado ao proprio schedule. Usada por /api/health.';
@@ -83,6 +107,10 @@ comment on function public.mx_critical_cron_status() is
 revoke all on function public.mx_critical_cron_status() from public;
 grant execute on function public.mx_critical_cron_status() to anon, authenticated, service_role;
 
--- ROLLBACK:
---   drop function if exists public.mx_critical_cron_status();
---   `mx_critical_cron_age_seconds` permanece intacta e continua servindo como fallback.
+-- ============================================================
+-- DOWN
+-- ============================================================
+-- mx_critical_cron_age_seconds permanece intacta e volta a servir de fallback.
+-- BEGIN;
+-- drop function if exists public.mx_critical_cron_status();
+-- COMMIT;

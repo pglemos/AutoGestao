@@ -42,8 +42,12 @@ revoke all on table public.cron_execution_log  from anon, authenticated;
 grant select, insert, update, delete on table public.system_health_log  to service_role;
 grant select, insert, update, delete on table public.cron_execution_log to service_role;
 
--- ROLLBACK (nao executar salvo regressao comprovada):
---   grant execute on function public.record_system_health(text,text,text,text,text,text,text,integer,text,text,jsonb) to authenticated;
---   grant execute on function public.record_cron_execution(text,text,text,text,text,text,timestamptz,timestamptz,timestamptz,integer,integer,integer,text,text,jsonb) to authenticated;
---   grant select, insert, update, delete on table public.system_health_log  to authenticated;
---   grant select, insert, update, delete on table public.cron_execution_log to authenticated;
+-- ============================================================
+-- DOWN
+-- ============================================================
+-- BEGIN;
+-- grant execute on function public.record_system_health(text,text,text,text,text,text,text,integer,text,text,jsonb) to authenticated;
+-- grant execute on function public.record_cron_execution(text,text,text,text,text,text,timestamptz,timestamptz,timestamptz,integer,integer,integer,text,text,jsonb) to authenticated;
+-- grant select, insert, update, delete on table public.system_health_log to authenticated;
+-- grant select, insert, update, delete on table public.cron_execution_log to authenticated;
+-- COMMIT;
