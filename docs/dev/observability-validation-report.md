@@ -119,6 +119,42 @@ Edge (>20/h), falha de health/cron.
 | Agregador de cron ponta a ponta | POST na Edge Function | 200, 8 jobs, 0 degradados | check-in `ok` no Sentry |
 | Advisors do Supabase | security + performance | 0 issues | — |
 | Sonda nova do health | `GET /auth/v1/health` | 200 (GoTrue) | confirma a correção do falso negativo |
+| `npm run lint` na branch limpa | branch sem o commit de terceiro | **PASSOU (exit 0)** | confirma que as 3 violações eram todas externas |
+| Build de preview | `feat/observability-clean` @ `fc36e770` | READY | — |
+| `/api/health` completo | GET no preview | **200 `healthy`** | 4/4 checks `ok`, release = SHA |
+| Sentry ativo no navegador | inspeção do cliente | release = SHA, env `preview`, traces 1, replay-on-error 1 | integrações `BrowserTracing` e `Replay` carregadas |
+| **Source map ponta a ponta** | erro real nascido no bundle | **resolvido para o TypeScript original** | ver abaixo |
+| Web Analytics | `POST /_vercel/insights/view` | **200** | pageview aceito |
+| Speed Insights | `POST /_vercel/speed-insights/vitals` | **200** | data point aceito |
+| Session Replay | 2 replays gravados | 1 deles com **4 erros anexados** | prova `replaysOnErrorSampleRate: 1` |
+| Sanitização | `beforeSend` com evento realista | e-mail removido de `user`, `id` preservado | — |
+
+### Source map — evidência
+
+Erro provocado dentro do próprio bundle (chamada de `beforeSend` com argumento
+inválido). No navegador a stack era minificada:
+
+```
+at T9 (…/assets/index-BzXVa40Q.js:540:6973)
+```
+
+No Sentry, o mesmo evento (`48514ccb61b94facadf853cbb11c27fc`) aparece como:
+
+```
+../../src/lib/observability/sanitize.ts   linha 86   sanitizeSentryEvent
+../../src/lib/observability/sentry.ts     linha 98   beforeSend
+```
+
+com o código-fonte original visível em ambos os frames, `release` igual ao SHA
+do commit e `environment: preview`. É o critério do item "Source map" da seção
+13 do runbook, cumprido.
+
+### Dashboards
+
+| Dashboard | Widgets |
+|---|---|
+| MX — Saúde Geral | erros no tempo, por módulo, por papel, usuários afetados, por release, edge functions com falha |
+| MX — Performance | p95, transações mais lentas, throughput, rotas mais acessadas |
 
 ## Correlação ponta a ponta
 
@@ -176,6 +212,13 @@ Durante a execução, os arquivos `src/components/MxSidebarShell.tsx` e
 `feat/observability-full`**. Esse commit não foi criado nem solicitado aqui, e
 não foi alterado nem revertido.
 
+Para destravar a validação sem tocar no trabalho de terceiro, os commits de
+observabilidade foram isolados na branch `feat/observability-clean`, criada a
+partir de `21a7fd43` e sem o commit `0406cabf`. Nela `npm run lint` passa com
+exit 0 e o preview constrói normalmente — o que confirma que as três violações
+de token são inteiramente externas a esta entrega. A branch
+`feat/observability-full` permanece como está, sem alteração.
+
 ### 2. Produção com build quebrado — causa externa
 
 O commit `0406cabf` também foi para `main`. O deployment de produção resultante
@@ -203,11 +246,12 @@ acima:
   - AÇÃO RESTANTE: resolver as 3 violações de token; então mesclar e deployar
 - STATUS: PARCIAL — smoke test de erro no frontend com stack em TS/TSX
   - MOTIVO: exige a build em produção com os source maps já publicados
-- STATUS: PENDENTE — dashboards do Sentry
-  - MOTIVO: dashboards sem dado real de produção ficariam vazios; fazem sentido
-    depois do primeiro deploy com tráfego
 - STATUS: PENDENTE — teste dos 4 perfis (vendedor, gerente, dono, Admin MX)
-  - MOTIVO: depende do frontend instrumentado estar em produção
+  - MOTIVO: exige login com credenciais reais contra o banco de produção; não
+    executado nesta sessão para não gerar eventos de autenticação e dados de
+    sessão em nome de usuários reais sem necessidade
+  - AÇÃO RESTANTE: rodar o roteiro por perfil após o merge, conferindo
+    `mx.user_role` e `mx.store_scope` nas tags e a limpeza no logout
 - STATUS: PARCIAL — Metric Monitors
   - MOTIVO: os 8 alertas de issue estão ativos; alertas por métrica precisam de
     baseline real, que só existe após o primeiro deploy com tráfego
@@ -219,12 +263,23 @@ Monitor, alertas por e-mail, e os dois advisors do Supabase.
 
 ## Conclusão baseada em evidências
 
-O que está comprovado por evento real: projetos e releases no Sentry, 720
-artefatos de source map associados aos SHAs corretos, DSN ativo no bundle sem
-vazamento do token de build, `/api/health` respondendo com release e correlation
-corretos, e as cinco tabelas de telemetria criadas com RLS e sem acesso `anon`.
+O circuito de observabilidade está comprovado ponta a ponta em preview, com
+evento real em cada etapa:
 
-O que **não** está comprovado, e portanto não é declarado como pronto: o fluxo
-completo de um incidente em produção. Esse passo depende de um deploy de
-produção bem-sucedido, que hoje está bloqueado por uma alteração externa a este
-trabalho.
+1. Um erro nascido no bundle chega ao Sentry e é resolvido para o arquivo
+   TypeScript e a linha originais, com código-fonte visível.
+2. A release desse evento é o SHA do commit, que é o mesmo SHA do deployment na
+   Vercel e o mesmo que `/api/health` retorna.
+3. O replay da sessão fica anexado ao erro, com texto e mídia mascarados.
+4. Web Analytics e Speed Insights recebem e aceitam dados.
+5. Uma chamada a Edge Function propaga o `correlation_id` de volta no header e
+   grava no log do Supabase junto com `deno_deployment_id`, `sb_execution_id` e
+   duração — buscável pelo mesmo id.
+6. O agregador de cron avalia os 8 jobs reais, grava no banco e publica o
+   check-in no Sentry, que passa a enxergar o job como saudável.
+7. Nenhum secret vazou para o bundle, para o repositório ou para os relatórios,
+   e nenhum recurso pago foi ativado.
+
+O que **não** está comprovado, e portanto não é declarado como pronto: o
+comportamento em produção e o roteiro por perfil de usuário. Ambos dependem do
+merge, que hoje está bloqueado por uma alteração externa a este trabalho.
