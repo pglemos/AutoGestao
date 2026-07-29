@@ -13,7 +13,7 @@ export function StoreFeedbackContainer() {
   if (vm.isLoading) return <FeedbackLoadingSkeleton ariaLabel="Carregando devolutivas" />
 
   return (
-    <main className="flex min-h-0 flex-1 flex-col space-y-6 overflow-y-auto p-6 pb-20 lg:pb-0" aria-label="Devolutivas">
+    <main id="page-devolutivas" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Devolutivas">
       <FeedbackErrorBoundary sectionName="Cabeçalho">
         <StoreFeedbackHeader
           isOwner={vm.isOwner}
@@ -45,19 +45,23 @@ export function StoreFeedbackContainer() {
         />
       </FeedbackErrorBoundary>
 
-      <div className="flex-1 min-h-0" aria-live="polite">
+      <div className="flex-1 min-h-0">
         {vm.activeTab === 'individual' ? (
-          <FeedbackErrorBoundary sectionName="Lista de devolutivas">
-            <FeedbackList
-              feedbacks={vm.filteredFeedbacks}
-              onShareWhatsApp={vm.handleShareWhatsApp}
-              variant="store"
-            />
-          </FeedbackErrorBoundary>
+          <section id="feedback-tab-panel-individual" role="tabpanel" aria-label="Individual">
+            <FeedbackErrorBoundary sectionName="Lista de devolutivas">
+              <FeedbackList
+                feedbacks={vm.filteredFeedbacks}
+                onShareWhatsApp={vm.handleShareWhatsApp}
+                variant="store"
+              />
+            </FeedbackErrorBoundary>
+          </section>
         ) : (
-          <FeedbackErrorBoundary sectionName="Relatórios semanais">
-            <WeeklyReportsList reports={vm.reports} variant="store" />
-          </FeedbackErrorBoundary>
+          <section id="feedback-tab-panel-weekly" role="tabpanel" aria-label="Relatórios semanais">
+            <FeedbackErrorBoundary sectionName="Relatórios semanais">
+              <WeeklyReportsList reports={vm.reports} variant="store" />
+            </FeedbackErrorBoundary>
+          </section>
         )}
       </div>
     </main>

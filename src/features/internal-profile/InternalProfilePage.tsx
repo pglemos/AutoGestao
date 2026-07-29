@@ -1,9 +1,17 @@
+import { useState } from 'react'
 import { Camera, Key, LogOut, RefreshCw, Save, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { getAvatarDisplayUrl } from '@/lib/avatar'
 import { MxField, MxModuleHeader, MxModulePage, MxSectionCard, MxSectionHeader, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { useInternalProfileController } from './hooks/useInternalProfileController'
+
+function ProfileAvatar({ url, name }: { url: string; name: string }) {
+  const [erro, setErro] = useState(false)
+  const initials = name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()
+  if (erro) return <div className="flex h-32 w-32 items-center justify-center rounded-2xl bg-brand-primary text-3xl font-black text-white">{initials}</div>
+  return <img className="h-32 w-32 rounded-2xl object-cover" src={url} alt={`Avatar de ${name}`} onError={() => setErro(true)} />
+}
 
 export function InternalProfilePage() {
   const state = useInternalProfileController()
@@ -13,7 +21,7 @@ export function InternalProfilePage() {
       <MxModuleHeader eyebrow="Conta" title="Meu Perfil" description="Dados pessoais, foto e segurança da conta MX." actions={<><Button variant="managerSecondary" onClick={() => void state.signOut()}><LogOut size={18} />Sair</Button><Button onClick={() => void state.save()} disabled={!state.canEdit || state.saving}>{state.saving ? <RefreshCw size={18} className="animate-spin motion-reduce:animate-none" /> : <Save size={18} />}Salvar</Button></>} />
       {!state.canEdit ? <MxStatusBanner tone="warning">Este perfil está disponível somente para leitura.</MxStatusBanner> : null}
       <div className="grid grid-cols-1 gap-5 lg:grid-cols-12">
-        <MxSectionCard className="lg:col-span-4"><MxSectionHeader title="Identidade" description="Imagem e contexto do perfil atual." /><div className="flex flex-col items-center gap-4 p-5 text-center"><img className="h-32 w-32 rounded-2xl object-cover" src={getAvatarDisplayUrl(state.profile.avatar_url, state.profile.name, { size: 256, background: '0D3B2E', color: 'fff' })} alt={`Avatar de ${state.profile.name}`} /><div><strong className="block text-lg text-gray-800">{state.profile.name}</strong><span className="text-sm text-gray-500">{state.role}</span></div><input ref={state.fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" aria-label="Selecionar avatar" onChange={event => { const file = event.target.files?.[0] || null; state.setPendingAvatarFile(file); if (file) void state.uploadAvatar(file) }} /><Button variant="managerOutline" onClick={() => state.fileInputRef.current?.click()} disabled={!state.canEdit || state.uploading}><Camera size={18} />{state.uploading ? 'Enviando...' : 'Alterar avatar'}</Button>{state.pendingAvatarFile ? <Button variant="managerSecondary" onClick={() => void state.uploadAvatar()} disabled={state.uploading}>Tentar novamente</Button> : null}</div></MxSectionCard>
+        <MxSectionCard className="lg:col-span-4"><MxSectionHeader title="Identidade" description="Imagem e contexto do perfil atual." /><div className="flex flex-col items-center gap-4 p-5 text-center"><ProfileAvatar url={getAvatarDisplayUrl(state.profile.avatar_url, state.profile.name, { size: 256, background: '0D3B2E', color: 'fff' })} name={state.profile.name} /><div><strong className="block text-lg text-gray-800">{state.profile.name}</strong><span className="text-sm text-gray-500">{state.role}</span></div><input ref={state.fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" className="hidden" aria-label="Selecionar avatar" onChange={event => { const file = event.target.files?.[0] || null; state.setPendingAvatarFile(file); if (file) void state.uploadAvatar(file) }} /><Button variant="managerOutline" onClick={() => state.fileInputRef.current?.click()} disabled={!state.canEdit || state.uploading}><Camera size={18} />{state.uploading ? 'Enviando...' : 'Alterar avatar'}</Button>{state.pendingAvatarFile ? <Button variant="managerSecondary" onClick={() => void state.uploadAvatar()} disabled={state.uploading}>Tentar novamente</Button> : null}</div></MxSectionCard>
         <div className="space-y-5 lg:col-span-8">
           <MxSectionCard><MxSectionHeader title="Dados da conta" description="Informações utilizadas na operação interna." /><div className="grid gap-4 p-5 sm:grid-cols-2"><MxField label="Nome"><Input value={state.name} disabled={!state.canEdit} onChange={event => state.setName(event.target.value)} /></MxField><MxField label="E-mail"><Input value={state.profile.email} disabled /></MxField><MxField label="Telefone"><Input value={state.phone} disabled={!state.canEdit} onChange={event => state.setPhone(event.target.value)} /></MxField><MxField label="Cargo"><Input value={state.role || ''} disabled /></MxField></div></MxSectionCard>
           <MxSectionCard><MxSectionHeader title="Segurança" description="A senha nunca é exibida ou armazenada nesta tela." actions={<Button variant="managerOutline" onClick={() => state.setPasswordOpen(true)} disabled={!state.canEdit}><Key size={18} />Alterar senha</Button>} /><div className="flex items-center gap-3 p-5 text-sm text-gray-600"><ShieldCheck className="text-emerald-600" size={20} />Verificação de acesso ativa.</div></MxSectionCard>

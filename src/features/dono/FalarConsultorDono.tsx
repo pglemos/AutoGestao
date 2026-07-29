@@ -88,6 +88,12 @@ function normalizePhone(phone: string | null) {
   return phone?.replace(/\D/g, '') || ''
 }
 
+function ConsultantAvatar({ avatarUrl, name, initialsFn }: { avatarUrl: string | null | undefined; name: string; initialsFn: (name: string) => string }) {
+  const [erro, setErro] = useState(false)
+  if (!avatarUrl || erro) return <div className="flex h-mx-20 w-mx-20 items-center justify-center rounded-mx-full bg-brand-primary text-2xl font-black text-white shadow-mx-md">{initialsFn(name)}</div>
+  return <img src={avatarUrl} alt="" className="h-mx-20 w-mx-20 rounded-mx-full object-cover" onError={() => setErro(true)} />
+}
+
 export default function FalarConsultorDono() {
   const { membership, profile, vinculos_loja } = useAuth()
   const [searchParams] = useSearchParams()
@@ -257,13 +263,7 @@ export default function FalarConsultorDono() {
           ) : (
             <>
               <div className="flex items-center gap-mx-md">
-                {contact?.consultant_avatar_url ? (
-                  <img src={contact.consultant_avatar_url} alt="" className="h-mx-20 w-mx-20 rounded-mx-full object-cover" />
-                ) : (
-                  <div className="flex h-mx-20 w-mx-20 items-center justify-center rounded-mx-full bg-brand-primary text-2xl font-black text-white shadow-mx-md">
-                    {initials(contactName)}
-                  </div>
-                )}
+                <ConsultantAvatar avatarUrl={contact?.consultant_avatar_url} name={contactName} initialsFn={initials} />
                 <div className="min-w-0">
                   <Typography variant="h3" className="truncate text-xl font-black">{contactName}</Typography>
                   <Typography variant="p" tone="muted" className="text-sm font-bold">{contactRole}</Typography>

@@ -8,6 +8,13 @@ import { toast } from '@/lib/toast'
 import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from '@/lib/auth/passwordPolicy'
 import { getAvatarDisplayUrl, uploadUserAvatar } from '@/lib/avatar'
 
+function LegacyProfileAvatar({ url, name }: { url: string; name: string }) {
+  const [erro, setErro] = useState(false)
+  const initials = name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()
+  if (erro) return <div className="w-full h-full flex items-center justify-center bg-muted text-2xl font-black text-muted-foreground">{initials}</div>
+  return <img src={url} alt={`Avatar de ${name}`} className="w-full h-full object-cover" onError={() => setErro(true)} />
+}
+
 export default function Perfil() {
   const { profile, role, signOut, updateProfile, changePassword } = useAuth()
   const isSeller = role === 'vendedor'
@@ -80,7 +87,7 @@ export default function Perfil() {
   if (!profile) return null
 
   return (
-    <main id="perfil" className="flex min-h-0 flex-1 flex-col space-y-6 p-6 pb-20 lg:pb-0" aria-label="Meu Perfil">
+    <main id="page-perfil" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Meu Perfil">
 
       <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between border-b border-border pb-6 shrink-0">
         <div className="flex flex-col gap-1">
@@ -112,11 +119,7 @@ export default function Perfil() {
             <div className="relative z-10 space-y-6">
               <div className="relative group/avatar inline-block">
                 <div className="w-4xl h-4xl rounded-3xl border-8 border-card shadow-xl overflow-hidden bg-muted transition-transform group-hover/avatar:scale-105 duration-500">
-                  <img
-                    src={getAvatarDisplayUrl(profile.avatar_url, profile.name, { size: 256, background: '4f46e5', color: 'fff' })}
-                    alt={`Avatar de ${profile.name}`}
-                    className="w-full h-full object-cover"
-                  />
+                  <LegacyProfileAvatar url={getAvatarDisplayUrl(profile.avatar_url, profile.name, { size: 256, background: '4f46e5', color: 'fff' })} name={profile.name} />
                 </div>
                 <button
                   type="button"
@@ -189,16 +192,17 @@ export default function Perfil() {
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
-                  <div
-                    className="rounded-xl border border-border bg-muted/50 p-6 flex items-center justify-between group/sec cursor-pointer hover:bg-card hover:shadow-lg transition-all"
+                  <button
+                    type="button"
+                    className="rounded-xl border border-border bg-muted/50 p-6 flex items-center justify-between group/sec cursor-pointer hover:bg-card hover:shadow-lg transition-all w-full text-left"
                     onClick={() => setShowPasswordModal(true)}
                   >
                     <div className="flex items-center gap-3">
                       <div className="h-xl w-xl rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground group-hover/sec:text-brand-primary transition-colors shadow-sm"><Key size={20} /></div>
                       <span className="text-xs font-black uppercase tracking-widest text-foreground">Alterar Senha</span>
                     </div>
-                    <ChevronRight size={18} className="text-muted-foreground opacity-30 group-hover/sec:translate-x-1 transition-all" />
-                  </div>
+                    <ChevronRight size={18} className="text-muted-foreground opacity-30 group-hover/sec:translate-x-1 transition-all shrink-0" />
+                  </button>
 
                   <div className="rounded-xl border border-border bg-muted/50 p-6 flex items-center justify-between group/sec">
                     <div className="flex items-center gap-3">

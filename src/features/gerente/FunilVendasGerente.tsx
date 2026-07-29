@@ -80,7 +80,7 @@ export default function FunilVendasGerente() {
   const conversaoGeral = totalLeads > 0 ? Math.round((totalSales / totalLeads) * 100) : 0
 
   return (
-    <main id="funil-vendas" className="flex min-h-0 flex-1 flex-col space-y-6 p-6 pb-20 lg:pb-0" aria-label="Funil de Vendas">
+    <main id="funil-vendas" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Funil de Vendas">
       <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <h1 className="text-3xl font-black tracking-tight md:text-4xl">Funil de Vendas</h1>

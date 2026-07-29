@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { Ban, BriefcaseBusiness, Check, ClipboardList, Copy, Link2, Mail, Phone, ShieldCheck, User } from 'lucide-react'
 import { Typography } from '@/components/atoms/Typography'
 import { Skeleton } from '@/components/atoms/Skeleton'
@@ -5,6 +6,12 @@ import { Button } from '@/components/atoms/Button'
 import { Badge } from '@/components/atoms/Badge'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/molecules/Card'
 import type { StorePreRegistration } from '@/types/database'
+
+function PreRegistrationAvatar({ url, name }: { url: string | null; name: string }) {
+  const [erro, setErro] = useState(false)
+  if (!url || erro) return <div className="h-full w-full flex items-center justify-center text-brand-primary"><User size={20} /></div>
+  return <img src={url} alt={name} className="h-full w-full object-cover" onError={() => setErro(true)} />
+}
 
 const getPreRegistrationConfirmationKey = (item: StorePreRegistration) => `pre-registration:${item.id}`
 
@@ -91,11 +98,7 @@ export function PreRegistrationQueue({
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-mx-sm">
                     <div className="flex items-start gap-mx-sm min-w-0">
                       <div className="h-mx-14 w-mx-14 overflow-hidden rounded-mx-2xl border border-border-default bg-white shrink-0">
-                        {item.avatar_url ? (
-                          <img src={item.avatar_url} alt={item.full_name} className="h-full w-full object-cover" />
-                        ) : (
-                          <div className="h-full w-full flex items-center justify-center text-brand-primary"><User size={20} /></div>
-                        )}
+                        <PreRegistrationAvatar url={item.avatar_url} name={item.full_name} />
                       </div>
                       <div className="min-w-0 flex-1">
                         <Typography variant="caption" className="block max-w-full font-black uppercase tracking-tight truncate">{item.full_name}</Typography>

@@ -11,7 +11,8 @@ export function FeedbackLoadingSkeleton({
 }: Props) {
   return (
     <main
-      className="flex min-h-0 flex-1 flex-col space-y-6 p-6 pb-20 lg:pb-0"
+      role="main"
+      className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0"
       aria-busy="true"
       aria-live="polite"
       aria-label={ariaLabel}

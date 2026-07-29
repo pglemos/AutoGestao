@@ -1,4 +1,4 @@
-import React from 'react'
+import { useState } from 'react'
 import type { ConsultingClientDetail, ConsultingVisit, VisitHeaderBaseData, VisitOneQuantData } from '@/features/consultoria/types'
 import { Typography } from '@/components/atoms/Typography'
 import { Badge } from '@/components/atoms/Badge'
@@ -6,8 +6,15 @@ import { format } from 'date-fns'
 import { ptBR } from 'date-fns/locale'
 import { getPmrVisitDisplayLabel } from '@/lib/consultoria/pmr-visit-rules'
 import { formatVisitAnalysisPeriodLabel } from '@/lib/consultoria/visit-analysis-period'
+import { getSupabaseUrl } from '@/lib/supabase'
 
-const STORAGE_URL = 'https://fbhcmzzgwjdgkctlfvbo.supabase.co/storage/v1/object/evidencias-consultoria/'
+const STORAGE_URL = () => `${getSupabaseUrl().replace(/\/$/, '')}/storage/v1/object/evidencias-consultoria/`
+
+function EvidenceImage({ src, alt, style }: { src: string; alt: string; style: React.CSSProperties }) {
+  const [erro, setErro] = useState(false)
+  if (erro) return <div style={{ ...style, display: 'flex', alignItems: 'center', justifyContent: 'center', backgroundColor: '#F3F4F6', color: '#6B7280', fontSize: '12px', fontWeight: 700 }}>Falha ao carregar imagem</div>
+  return <img src={src} alt={alt} style={style} crossOrigin="anonymous" onError={() => setErro(true)} />
+}
 
 interface Props {
   client: ConsultingClientDetail
@@ -136,11 +143,10 @@ export function VisitReportTemplate({ client, visit, headerBase, quantData }: Pr
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               {imageAttachments.map((att) => (
                 <div key={att.id} style={{ border: `1px solid ${colors.border}`, borderRadius: '12px', overflow: 'hidden', backgroundColor: '#F3F4F6' }}>
-                  <img
-                    src={`${STORAGE_URL}${att.storage_path}`}
+                  <EvidenceImage
+                    src={`${STORAGE_URL()}${att.storage_path}`}
                     alt={att.filename}
                     style={{ width: '100%', height: '180px', objectFit: 'cover' }}
-                    crossOrigin="anonymous"
                   />
                   <div style={{ padding: '8px', fontSize: '10px', color: colors.textMuted, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', backgroundColor: '#FFFFFF' }}>
                     {att.filename}

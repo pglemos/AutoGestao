@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { CheckCircle2, UserRound, X } from 'lucide-react'
 import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
@@ -19,6 +20,12 @@ type Props = {
  * Card de aprovação de pré-cadastro embutido na notificação.
  * Story 3.1 — extraído da Notificacoes original.
  */
+function ApprovalAvatar({ url, name }: { url: string | null; name: string }) {
+  const [erro, setErro] = useState(false)
+  if (!url || erro) return <div className="h-full w-full flex items-center justify-center text-brand-primary"><UserRound size={20} /></div>
+  return <img src={url} alt={name} className="h-full w-full object-cover" onError={() => setErro(true)} />
+}
+
 export function NotificacaoApprovalCard({
   approval,
   notificationId,
@@ -35,13 +42,7 @@ export function NotificacaoApprovalCard({
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-mx-sm">
         <div className="flex items-start gap-mx-sm min-w-0">
           <div className="h-mx-14 w-mx-14 overflow-hidden rounded-mx-2xl border border-border-default bg-surface-alt shrink-0">
-            {approval.avatar_url ? (
-              <img src={approval.avatar_url} alt={approval.full_name} className="h-full w-full object-cover" />
-            ) : (
-              <div className="h-full w-full flex items-center justify-center text-brand-primary">
-                <UserRound size={20} />
-              </div>
-            )}
+            <ApprovalAvatar url={approval.avatar_url} name={approval.full_name} />
           </div>
           <div className="min-w-0">
             <Typography variant="caption" className="font-black uppercase tracking-tight truncate">

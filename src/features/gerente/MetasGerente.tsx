@@ -44,7 +44,7 @@ export default function MetasGerente() {
   }), [])
 
   return (
-    <main id="metas-gerente" className="flex min-h-0 flex-1 flex-col space-y-6 p-6 pb-20 lg:pb-0" aria-label="Metas da Equipe">
+    <main id="metas-gerente" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Metas da Equipe">
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-black tracking-tight md:text-4xl">Metas da Equipe</h1>
         <p className="text-sm text-muted-foreground">Acompanhe o atingimento e a projeção de cada vendedor.</p>
