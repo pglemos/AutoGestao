@@ -96,9 +96,11 @@ describe('App Shell unificado', () => {
     expect(announcer).toContain("querySelector('h1')")
   })
 
-  it('preserva a aparência aprovada do Dono', () => {
+  it('preserva a aparência aprovada do Dono sem escopo próprio', () => {
     const layout = read('src/components/Layout.tsx')
-    expect(layout).toContain('owner-base44-exact')
+    // A aparência do Dono agora vem da camada semântica, igual para todos os
+    // perfis. O shell não pode reintroduzir um escopo visual por perfil.
+    expect(layout).not.toContain('owner-base44-exact')
     expect(layout).not.toContain('owner-b44')
     expect(layout).toContain('<OwnerProvider>')
     expect(layout).toContain('<MxSidebarShell')

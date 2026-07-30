@@ -19,9 +19,8 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
   it('preserva o layout, a navegação e os tokens visuais aprovados', () => {
     const layout = read('src/components/Layout.tsx')
     const sidebar = read('src/components/MxSidebarShell.tsx')
-    const styles = read('src/styles/owner-base44-exact.css')
+    const tokens = read('src/design-system/tokens/semantic.css')
 
-    expect(layout).toContain("import '@/styles/owner-base44-exact.css'")
     expect(layout).toContain('<OwnerProvider>')
     expect(layout).toContain('<MxSidebarShell')
     expect(sidebar).toContain('src={SIDEBAR_LOGO}')
@@ -39,9 +38,13 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
     // sem topbar no desktop e header de marca + sino + avatar no mobile.
     expect(sidebar).toContain('xl:hidden')
     expect(sidebar).toContain('NotificationBellButton')
-    expect(styles).toContain(".mx-ds[data-mx-role='dono']")
-    expect(styles).not.toContain('.owner-b44')
-    expect(styles).toContain('--color-primary: hsl(var(--primary))')
+    // Os tokens medidos do export Base44 agora vivem na camada semântica e
+    // valem para todo perfil — ver owner-base44-design-scope.test.ts.
+    // (`--color-*` é o mapa do Tailwind, declarado em index.css; aqui checamos
+    // a ponte shadcn, que é o que a camada semântica de fato publica.)
+    expect(tokens).toContain('--primary: var(--mx-color-primary)')
+    expect(tokens).toContain('--mx-color-primary: var(--mx-green-600)')
+    expect(tokens).not.toMatch(/\.mx-ds\[data-mx-role/)
   })
 
   it('mantém todas as superfícies aprovadas disponíveis', () => {
@@ -52,7 +55,9 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
       'src/pages/owner/PlanoEstrategico.jsx',
       'src/pages/owner/PlanoDeAcao.jsx',
       'src/pages/owner/Consultoria.jsx',
-      'src/styles/owner-base44-exact.css',
+      // A folha de estilo do Dono saiu desta lista: seus valores foram
+      // absorvidos por src/design-system/tokens/semantic.css.
+      'src/design-system/tokens/semantic.css',
     ]) {
       expect(existsSync(resolve(root, file)), `${file} must exist`).toBe(true)
     }

@@ -7,7 +7,7 @@ const main = read('../main.tsx')
 const app = read('../App.tsx')
 const layout = read('../components/Layout.tsx')
 const appShell = read('../components/AppShell.tsx')
-const ownerStyles = read('../styles/owner-base44-exact.css')
+const semanticTokens = read('../design-system/tokens/semantic.css')
 
 describe('escopo visual Base44 aprovado do módulo Dono', () => {
   test('monta o Dono no shell universal com providers e tokens executivos', () => {
@@ -16,15 +16,27 @@ describe('escopo visual Base44 aprovado do módulo Dono', () => {
     expect(appShell).not.toContain('OwnerShell')
     expect(main).not.toContain('owner-base44-visual-scope')
     expect(layout).toContain('<OwnerProvider>')
-    expect(layout).toContain('owner-base44-exact')
     expect(layout).toContain('sidebarLabel={`Menu principal do ${perfilVisivel}`}')
     expect(ownerCockpit).not.toContain('owner-base44-scope')
   })
 
-  test('tokens do design aprovado ficam escopados ao módulo', () => {
-    expect(ownerStyles).toContain(".mx-ds[data-mx-role='dono']")
-    expect(ownerStyles).not.toContain('.owner-b44')
-    expect(ownerStyles).toContain('--primary: 152 69% 31%')
-    expect(ownerStyles).toContain('--color-primary: hsl(var(--primary))')
+  test('os tokens aprovados do Base44 valem para todos os perfis', () => {
+    // A verificação mudou de lugar de propósito. Antes exigia que
+    // `owner-base44-exact.css` existisse e escopasse os tokens ao Dono; medimos
+    // que 28 dos 33 tokens shadcn daquele arquivo já eram idênticos aos que
+    // `.mx-ds` entrega a todo perfil, e que os cinco restantes (--chart-*) só
+    // faltavam aos outros. Escopar ao Dono era a identidade por perfil que §5
+    // proíbe, então os valores subiram para `.mx-ds` e o arquivo saiu.
+    expect(semanticTokens).toContain('--primary: var(--mx-color-primary)')
+    expect(semanticTokens).toContain('--chart-1: 12 76% 61%')
+    expect(semanticTokens).toContain('--chart-5: 27 87% 67%')
+    expect(semanticTokens).toContain('font-size: 14px')
+
+    // Nenhum token de identidade pode voltar a depender do perfil. Casa o
+    // seletor, não a menção: o próprio comentário da camada explica de onde os
+    // valores vieram, e um `toContain` cru reprovaria a documentação.
+    expect(semanticTokens).not.toMatch(/\.mx-ds\[data-mx-role/)
+    expect(semanticTokens).not.toMatch(/\.owner-b44\s*[,{]/)
+    expect(layout).not.toContain('owner-base44-exact')
   })
 })

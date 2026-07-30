@@ -19,7 +19,8 @@ describe('Dono — contratos dos fluxos corrigidos', () => {
     expect(appShell).toContain('<Layout />')
     expect(appShell).not.toContain('OwnerShell')
     expect(layout).toContain('<OwnerProvider>')
-    expect(layout).toContain('owner-base44-exact')
+    // Sem escopo visual próprio: a identidade vem da camada semântica.
+    expect(layout).not.toContain('owner-base44-exact')
   })
 
   test('plano estratégico monta uma única matriz real', () => {

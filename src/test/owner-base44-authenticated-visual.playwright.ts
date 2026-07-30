@@ -101,7 +101,9 @@ async function auditRoute(
 
   const metric = await page.evaluate(
     ({ routeKey, viewportKey, collectedPageErrors, collectedConsoleErrors }) => {
-      const ownerShell = document.querySelector<HTMLElement>('.owner-base44-exact')
+      // O escopo `.owner-base44-exact` foi absorvido pela camada semântica; a
+      // moldura do Dono é agora a raiz do design system, comum a todo perfil.
+      const ownerShell = document.querySelector<HTMLElement>('.mx-ds')
       const ownerRegion = document.querySelector<HTMLElement>('#main-content')
       const ownerSidebar = Array.from(
         document.querySelectorAll<HTMLElement>('aside[aria-label="Menu principal do Dono"], [role="dialog"][aria-label="Menu principal do Dono"]'),

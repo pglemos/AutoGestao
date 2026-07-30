@@ -29,7 +29,6 @@ import {
 import { OwnerProvider } from '@/components/owner/OwnerContext'
 import ConsultantRequestModal from '@/components/owner/ConsultantRequestModal'
 import { Toaster as OwnerToaster } from '@/components/ui/toaster'
-import '@/styles/owner-base44-exact.css'
 
 type SubItem = {
   key?: string
@@ -359,7 +358,7 @@ export default function Layout() {
 
   return (
     <OwnerProvider>
-      <div className="owner-base44-exact h-dvh min-h-0 overflow-hidden">
+      <div className="h-dvh min-h-0 overflow-hidden">
         <LayoutContent />
         <ConsultantRequestModal />
         <OwnerToaster />

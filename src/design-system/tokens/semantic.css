@@ -4,22 +4,32 @@
  * Traduz primitivos em intenção de uso. É esta camada que componentes e
  * páginas consomem (via classes Tailwind mapeadas ou `var(--mx-...)`).
  *
- * ESTRATÉGIA DE MIGRAÇÃO INCREMENTAL
- * ----------------------------------
- * Os tokens são publicados sob o escopo `.mx-ds`, não em `:root`. Isso permite
- * migrar módulo a módulo (Fases 3→7 de docs/design-system/migration.md) sem
- * repintar o app inteiro num único commit e sem rollback big-bang.
+ * ESCOPO DE COR: `.mx-ds`
+ * -----------------------
+ * As cores são publicadas sob `.mx-ds`, não em `:root`, para permitir migrar
+ * aparência módulo a módulo sem repintar o app num único commit. Quando todo
+ * módulo estiver migrado, o conteúdo pode ser promovido para `:root` e o escopo
+ * removido. A geometria de página já foi promovida — ver o bloco `:root` mais
+ * abaixo e a justificativa lá.
  *
- * `.mx-ds` também redefine as variáveis shadcn (`--primary`, `--background`,
- * …) com exatamente os valores medidos em `.owner-b44`, de modo que qualquer
- * componente shadcn existente passa a renderizar na identidade do Dono assim
- * que entra sob o escopo — sem alteração de código no componente.
+ * `.mx-ds` redefine as variáveis shadcn (`--primary`, `--background`, …) com os
+ * valores medidos no export Base44, de modo que qualquer componente shadcn
+ * existente renderiza na identidade aprovada só por entrar sob o escopo, sem
+ * alteração de código.
  *
- * Quando todos os módulos estiverem migrados (Fase 8), o conteúdo de `.mx-ds`
- * é promovido para `:root` e o escopo removido.
+ * IDENTIDADE ÚNICA, SEM VARIANTE POR PERFIL
+ * -----------------------------------------
+ * Estes valores vinham de uma folha à parte que os escopava a
+ * `[data-mx-role='dono']`. Medimos que 28 dos 33 tokens shadcn de lá já eram
+ * idênticos aos daqui, e que os 5 restantes (`--chart-*`) simplesmente faltavam
+ * aos outros perfis. Escopar identidade a um perfil é o que §5 do briefing
+ * proíbe, então os valores subiram para cá e a folha foi removida.
+ *
+ * Nada nesta camada pode voltar a depender do perfil. Densidade (§10.2) é a
+ * única variação permitida, e ela mexe em ritmo, não em identidade.
  */
 
-.mx-ds {
+:root {
   /* ------------------------------------------------- superfícies e texto */
   --mx-color-background: var(--mx-neutral-0);
   --mx-color-surface: var(--mx-neutral-0);
@@ -58,9 +68,30 @@
   --mx-color-sidebar-accent: 240 5% 96%;
   --mx-color-sidebar-border: 220 13% 91%;
 
-  /* ==================================================================== */
-  /* Ponte shadcn — valores medidos em src/styles/owner-base44-exact.css  */
-  /* ==================================================================== */
+  /* A ponte shadcn foi promovida para o bloco `:root` logo abaixo. Ver a
+     justificativa lá: sob `.mx-ds` ela nunca chegava às utilities. */
+}
+
+/*
+ * PONTE SHADCN EM `:root` — correção do conflito teal × verde
+ * ----------------------------------------------------------
+ * O Tailwind 4 materializa os `--color-*` do `@theme` no `:root`, resolvendo
+ * `hsl(var(--primary))` ali mesmo. Um `--primary` declarado sob `.mx-ds` nunca
+ * volta a ser enxergado por `bg-primary`, `bg-sidebar` e companhia — a utility
+ * lê o valor já materializado na raiz.
+ *
+ * `src/index.css` declara em `:root` a identidade *antiga* completa: primária
+ * teal `176 100% 33%`, sidebar escura, radius 1rem. Por isso, durante a
+ * absorção da folha do Dono, o botão primário dele voltou a renderizar teal
+ * `rgb(0,168,157)` — medido no navegador. O `!important` daquela folha não era
+ * redundante como as demais regras: ele mascarava este conflito, e só para o
+ * Dono.
+ *
+ * A correção é aqui, na origem: a raiz passa a publicar a identidade aprovada
+ * (§6). Isto vale para todos os perfis de uma vez, que é o requisito de §5, e
+ * dispensa qualquer regra `!important` por perfil.
+ */
+:root {
   --background: var(--mx-color-background);
   --foreground: var(--mx-color-text-primary);
   --card: var(--mx-color-surface);
@@ -89,6 +120,75 @@
   --sidebar-accent-foreground: 240 6% 10%;
   --sidebar-border: var(--mx-color-sidebar-border);
   --sidebar-ring: var(--mx-blue-500);
+
+  /* Séries de gráfico do export Base44. Estavam declaradas só para o Dono, em
+     folha exclusiva do Dono, de modo que os demais perfis liam `--chart-*` como
+     indefinido. Promovidas aqui: um gráfico de barras é o mesmo gráfico em
+     qualquer perfil (§13.1). */
+  --chart-1: 12 76% 61%;
+  --chart-2: 173 58% 39%;
+  --chart-3: 197 37% 24%;
+  --chart-4: 43 74% 66%;
+  --chart-5: 27 87% 67%;
+  --color-chart-1: hsl(var(--chart-1));
+  --color-chart-2: hsl(var(--chart-2));
+  --color-chart-3: hsl(var(--chart-3));
+  --color-chart-4: hsl(var(--chart-4));
+  --color-chart-5: hsl(var(--chart-5));
+
+}
+
+/*
+ * Base tipográfica do produto — §6. Era exclusiva do Dono.
+ *
+ * Fica sob `.mx-ds` porque é propriedade herdada, não token: aplicar no elemento
+ * que o AppShell marca mantém o efeito restrito à árvore da aplicação, sem
+ * repintar `<body>` nas rotas públicas.
+ */
+.mx-ds {
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/*
+ * Tipografia de tag, absorvida da folha exclusiva do Dono.
+ *
+ * Escala do export Base44, que o briefing adota como direção aprovada (§6): era
+ * aplicada só sob `[data-mx-role='dono']`, o que deixava o mesmo `<h1>` com
+ * tamanho diferente conforme o perfil — exatamente a identidade por perfil que
+ * §5 proíbe.
+ *
+ * Vale registrar o alcance real: onde o produto usa o componente `Typography`,
+ * a classe utilitária vence estas regras de tag. Isto governa os headings sem
+ * classe, não todos. Não é, portanto, a unificação completa da tipografia — é
+ * a remoção da divergência por perfil na camada de tag.
+ */
+.mx-ds h1 {
+  font-size: 28px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.mx-ds h2 {
+  font-size: 22px;
+  font-weight: 700;
+  line-height: 1.3;
+}
+
+.mx-ds h3 {
+  font-size: 18px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+
+.mx-ds h4,
+.mx-ds h5,
+.mx-ds h6 {
+  font-weight: 600;
 }
 
 /* ====================================================================== */

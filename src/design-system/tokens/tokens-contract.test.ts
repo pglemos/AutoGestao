@@ -10,7 +10,19 @@ const read = (path: string) => readFileSync(resolve(root, path), 'utf8')
 const primitives = read('src/design-system/tokens/primitives.css')
 const semantic = read('src/design-system/tokens/semantic.css')
 const components = read('src/design-system/tokens/components.css')
-const ownerExact = read('src/styles/owner-base44-exact.css')
+/**
+ * Valores medidos no export Base44 do módulo do Dono.
+ *
+ * Vinham de `src/styles/owner-base44-exact.css`, que este teste lia para
+ * confrontar com o DS. O arquivo foi absorvido: escopava a identidade a
+ * `[data-mx-role='dono']`, o que §5 proíbe. Como o arquivo era a fonte da
+ * medição, os números passam a viver aqui — é o teste que impede o DS de
+ * derivar da referência aprovada, e para isso ele precisa da referência.
+ */
+const BASE44_MEASURED = {
+  primary: '152 69% 31%',
+  radius: '0.625rem',
+} as const
 
 /** Extrai `--nome: valor;` de um bloco CSS. */
 function declarations(css: string): Map<string, string> {
@@ -55,14 +67,11 @@ describe('arquitetura de tokens do MX Design System', () => {
     expect(orphans).toEqual([])
   })
 
-  it('reproduz a identidade aprovada do Dono nas variáveis shadcn', () => {
-    // As duas fontes precisam concordar: o DS não pode divergir de .owner-b44
-    // enquanto o módulo do Dono for a referência visual normativa.
-    const owner = declarations(ownerExact)
-    expect(owner.get('--primary')).toBe('152 69% 31%')
-
+  it('reproduz a identidade aprovada do Base44 nas variáveis shadcn', () => {
+    // O DS não pode divergir da referência visual aprovada — que agora é a
+    // identidade de todos os perfis, não de um.
     const prim = declarations(primitives)
-    expect(prim.get('--mx-green-600')).toBe('152 69% 31%')
+    expect(prim.get('--mx-green-600')).toBe(BASE44_MEASURED.primary)
     expect(prim.get('--mx-neutral-0')).toBe('0 0% 100%')
     expect(prim.get('--mx-neutral-950')).toBe('0 0% 4%')
     expect(prim.get('--mx-neutral-200')).toBe('0 0% 90%')
@@ -71,7 +80,7 @@ describe('arquitetura de tokens do MX Design System', () => {
     const sem = declarations(semantic)
     expect(sem.get('--primary')).toBe('var(--mx-color-primary)')
     expect(sem.get('--mx-color-primary')).toBe('var(--mx-green-600)')
-    expect(sem.get('--radius')).toBe(owner.get('--radius'))
+    expect(sem.get('--radius')).toBe(BASE44_MEASURED.radius)
   })
 
   it('mantém a escala de z-index fechada e sincronizada com o CSS', () => {
