@@ -240,7 +240,7 @@ export default function FalarConsultorDono() {
               Envie uma solicitação contextual, acompanhe o histórico e acione o consultor responsável pela loja.
             </Typography>
           </div>
-          <Button type="button" variant="outline" className="rounded-mx-xl bg-white" onClick={() => void loadConsultingData()} disabled={loading}>
+          <Button type="button" variant="outline" className="bg-white" onClick={() => void loadConsultingData()} disabled={loading}>
             <RefreshCw size={17} className={loading ? 'animate-spin' : ''} /> Atualizar
           </Button>
         </div>
@@ -253,7 +253,7 @@ export default function FalarConsultorDono() {
       )}
 
       <section className="grid grid-cols-1 gap-mx-md xl:grid-cols-[340px_minmax(0,1fr)]">
-        <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
+        <Card className="border bg-white p-mx-lg">
           {loading ? (
             <div className="space-y-mx-md animate-pulse">
               <div className="h-mx-20 w-mx-20 rounded-mx-full bg-surface-alt" />
@@ -265,7 +265,7 @@ export default function FalarConsultorDono() {
               <div className="flex items-center gap-mx-md">
                 <ConsultantAvatar avatarUrl={contact?.consultant_avatar_url} name={contactName} initialsFn={initials} />
                 <div className="min-w-0">
-                  <Typography variant="h3" className="truncate text-xl font-black">{contactName}</Typography>
+                  <Typography variant="h3" className="truncate text-xl">{contactName}</Typography>
                   <Typography variant="p" tone="muted" className="text-sm font-bold">{contactRole}</Typography>
                   <div className="mt-mx-tiny flex items-center gap-mx-xs text-mx-tiny text-text-tertiary">
                     <MapPin size={12} aria-hidden="true" />
@@ -313,11 +313,11 @@ export default function FalarConsultorDono() {
           )}
         </Card>
 
-        <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
+        <Card className="border bg-white p-mx-lg">
           <div className="flex items-center gap-mx-sm">
             <Send size={22} className="text-brand-primary" />
             <div>
-              <Typography variant="h3" className="text-xl font-black">Nova solicitação</Typography>
+              <Typography variant="h3" className="text-xl">Nova solicitação</Typography>
               <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-bold normal-case">
                 O registro permanece no histórico e recebe o contexto da tela de origem.
               </Typography>
@@ -370,7 +370,7 @@ export default function FalarConsultorDono() {
             </div>
 
             <div className="flex justify-end">
-              <Button type="submit" className="min-w-[190px] rounded-mx-xl" disabled={submitting || !storeId}>
+              <Button type="submit" className="min-w-[190px]" disabled={submitting || !storeId}>
                 {submitting ? <><RefreshCw size={17} className="animate-spin" /> Enviando...</> : <><Send size={17} /> Enviar solicitação</>}
               </Button>
             </div>
@@ -378,11 +378,11 @@ export default function FalarConsultorDono() {
         </Card>
       </section>
 
-      <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
+      <Card className="border bg-white p-mx-lg">
         <div className="flex items-center gap-mx-sm">
           <Clock3 size={21} className="text-brand-primary" />
           <div>
-            <Typography variant="h3" className="text-xl font-black">Histórico de solicitações</Typography>
+            <Typography variant="h3" className="text-xl">Histórico de solicitações</Typography>
             <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-bold normal-case">Últimos registros persistidos para esta loja.</Typography>
           </div>
         </div>

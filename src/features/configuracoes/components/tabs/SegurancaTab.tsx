@@ -50,20 +50,20 @@ export function SegurancaTab() {
     return (
         <div className="space-y-mx-lg">
             {/* Alterar senha */}
-            <Card className="p-mx-lg md:p-mx-xl border-none shadow-mx-lg bg-white">
+            <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100 shadow-inner">
                         <KeyRound size={26} />
                     </div>
                     <div>
-                        <Typography variant="h3" className="uppercase tracking-tight">Alterar Credenciais</Typography>
-                        <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black">Senha de acesso ao sistema</Typography>
+                        <Typography variant="h3" className="tracking-tight">Alterar Credenciais</Typography>
+                        <Typography variant="caption" tone="muted" className="">Senha de acesso ao sistema</Typography>
                     </div>
                 </header>
 
                 <div className="grid md:grid-cols-2 gap-mx-lg">
                     <div className="space-y-mx-sm md:col-span-2">
-                        <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">Nova Senha</Typography>
+                        <Typography variant="caption" tone="muted" className="ml-2">Nova Senha</Typography>
                         <div className="relative">
                             <Lock size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
                             <Input
@@ -88,7 +88,7 @@ export function SegurancaTab() {
                         </div>
                     </div>
                     <div className="space-y-mx-sm md:col-span-2">
-                        <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">Confirmar Nova Senha</Typography>
+                        <Typography variant="caption" tone="muted" className="ml-2">Confirmar Nova Senha</Typography>
                         <div className="relative">
                             <Lock size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
                             <Input
@@ -109,7 +109,7 @@ export function SegurancaTab() {
                     <Button
                         onClick={handleChangePassword}
                         disabled={saving || !form.next || !form.confirm}
-                        className="h-mx-xl px-8 rounded-mx-full font-black uppercase tracking-widest"
+                        className="h-mx-xl px-8 rounded-mx-full"
                     >
                         {saving ? <RefreshCw className="animate-spin mr-2" size={16} /> : <ShieldCheck size={16} className="mr-2" />}
                         Atualizar Senha
@@ -123,7 +123,7 @@ export function SegurancaTab() {
                     <div className="flex items-start gap-mx-sm">
                         <AlertTriangle size={20} className="text-status-warning shrink-0 mt-0.5" />
                         <div>
-                            <Typography variant="caption" tone="warning" className="font-black uppercase tracking-widest">Troca de Senha Obrigatória</Typography>
+                            <Typography variant="caption" tone="warning" className="">Troca de Senha Obrigatória</Typography>
                             <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">
                                 Você está usando uma senha provisória. Por favor, defina uma senha pessoal acima.
                             </Typography>
@@ -133,14 +133,14 @@ export function SegurancaTab() {
             )}
 
             {/* Sessões ativas */}
-            <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+            <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-surface-alt text-text-tertiary flex items-center justify-center border border-border-default shadow-inner">
                         <Smartphone size={26} />
                     </div>
                     <div>
-                        <Typography variant="h3" className="uppercase tracking-tight">Sessões Ativas</Typography>
-                        <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black">Dispositivos conectados</Typography>
+                        <Typography variant="h3" className="tracking-tight">Sessões Ativas</Typography>
+                        <Typography variant="caption" tone="muted" className="">Dispositivos conectados</Typography>
                     </div>
                 </header>
 
@@ -151,17 +151,17 @@ export function SegurancaTab() {
                                 <ShieldCheck size={18} />
                             </div>
                             <div>
-                                <Typography variant="caption" className="font-black uppercase tracking-widest">Esta sessão</Typography>
+                                <Typography variant="caption" className="">Esta sessão</Typography>
                                 <Typography variant="tiny" tone="muted" className="font-bold">Sessão expira em 24h por protocolo de segurança.</Typography>
                             </div>
                         </div>
-                        <Badge variant="success" className="font-black uppercase">Ativa</Badge>
+                        <Badge variant="success" className="">Ativa</Badge>
                     </div>
 
                     <Button
                         variant="outline"
                         onClick={handleForceLogoutAll}
-                        className="w-full h-mx-xl rounded-mx-xl border-status-error/30 text-status-error hover:bg-status-error-surface font-black uppercase tracking-widest"
+                        className="w-full h-mx-xl border-status-error/30 text-status-error hover:bg-status-error-surface"
                     >
                         <LogOut size={16} className="mr-2" /> Encerrar todas as sessões
                     </Button>
@@ -169,21 +169,21 @@ export function SegurancaTab() {
             </Card>
 
             {/* 2FA placeholder */}
-            <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+            <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100 shadow-inner">
                         <ShieldCheck size={26} />
                     </div>
                     <div>
-                        <Typography variant="h3" className="uppercase tracking-tight">Autenticação em Dois Fatores</Typography>
-                        <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black">Recurso não habilitado</Typography>
+                        <Typography variant="h3" className="tracking-tight">Autenticação em Dois Fatores</Typography>
+                        <Typography variant="caption" tone="muted" className="">Recurso não habilitado</Typography>
                     </div>
                 </header>
                 <div className="flex items-center justify-between">
                     <Typography variant="caption" tone="muted" className="font-bold leading-relaxed">
                         2FA ainda não está disponível neste ambiente. A segurança ativa hoje é feita por senha com mínimo de 6 caracteres, troca obrigatória e encerramento global de sessões.
                     </Typography>
-                    <Badge variant="outline" className="font-black uppercase shrink-0">Indisponível</Badge>
+                    <Badge variant="outline" className="shrink-0">Indisponível</Badge>
                 </div>
             </Card>
         </div>

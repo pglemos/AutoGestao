@@ -12,7 +12,7 @@ type Props = {
 
 export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
   return (
-    <Card className="xl:col-span-5 border-none shadow-mx-lg bg-white overflow-hidden">
+    <Card className="xl:col-span-5 border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
           <BarChart3 size={18} className="text-brand-primary" /> Top lojas por sell-out
@@ -43,13 +43,13 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
                 {i + 1}
               </span>
               <span className="min-w-0">
-                <Typography variant="tiny" className="font-black truncate">
+                <Typography variant="tiny" className="truncate">
                   {store.storeName}
                 </Typography>
                 <Typography
                   variant="tiny"
                   tone="muted"
-                  className="text-mx-nano uppercase font-black"
+                  className="text-mx-nano"
                 >
                   {store.sellers} vend. | {store.managers} ger. | ult.{' '}
                   {shortDate(store.lastActivity)}
@@ -59,7 +59,7 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
                 <Typography variant="h3" className="text-base font-mono-numbers">
                   {formatNumber(store.sales)}
                 </Typography>
-                <Typography variant="tiny" tone="muted" className="text-mx-nano uppercase">
+                <Typography variant="tiny" tone="muted" className="text-mx-nano">
                   {formatPercent(store.reaching)}
                 </Typography>
               </span>

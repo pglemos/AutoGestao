@@ -65,7 +65,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
 
   return (
     <div className="fixed inset-0 z-[300] grid place-items-center bg-black/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Alterar próximo passo">
-      <Card className="w-full max-w-md space-y-mx-sm rounded-mx-2xl p-mx-lg">
+      <Card className="w-full max-w-md space-y-mx-sm p-mx-lg">
         <div className="flex items-start justify-between">
           <div>
             <Typography variant="h3">Alterar próximo passo</Typography>
@@ -75,7 +75,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
         </div>
 
         <div>
-          <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold uppercase tracking-widest">Sugestões</Typography>
+          <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Sugestões</Typography>
           <div className="flex flex-wrap gap-1.5">
             {SUGESTOES_PROXIMA_ACAO.map(sugestao => (
               <button
@@ -95,7 +95,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
         </div>
 
         <div>
-          <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold uppercase tracking-widest">Próxima ação *</Typography>
+          <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Próxima ação *</Typography>
           <textarea
             value={acao}
             onChange={event => setAcao(event.target.value)}
@@ -107,7 +107,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
 
         <div className="grid grid-cols-2 gap-mx-xs">
           <div>
-            <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold uppercase tracking-widest">Data</Typography>
+            <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Data</Typography>
             <input
               type="date"
               value={dataStr}
@@ -116,7 +116,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
             />
           </div>
           <div>
-            <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold uppercase tracking-widest">Horário (opcional)</Typography>
+            <Typography variant="caption" tone="muted" className="mb-mx-xs block font-bold">Horário (opcional)</Typography>
             <input
               type="time"
               value={horario}

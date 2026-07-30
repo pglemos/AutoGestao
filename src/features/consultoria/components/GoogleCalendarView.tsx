@@ -48,13 +48,13 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
             <Calendar size={24} />
           </div>
           <div>
-            <Typography variant="h3" className="text-text-primary font-bold">
+            <Typography variant="h3" className="font-bold">
               Gestao de Agendas
             </Typography>
-            <Typography variant="caption" className="text-text-tertiary">
+            <Typography variant="caption" className="">
               Sincronizacao com Google Calendar API
             </Typography>
-            <Typography variant="caption" className="text-text-tertiary block mt-mx-xs">
+            <Typography variant="caption" className="block mt-mx-xs">
               {context.title}
             </Typography>
           </div>
@@ -76,15 +76,15 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
 
       {!isConnected ? (
         <div className="text-center py-mx-xl border-2 border-dashed border-border-default rounded-mx-xl">
-          <Typography variant="p" className="text-text-secondary mb-mx-lg">
+          <Typography variant="p" className="mb-mx-lg">
             {context.description}
           </Typography>
-          <Typography variant="caption" className="text-text-tertiary block mb-mx-md">
+          <Typography variant="caption" className="block mb-mx-md">
             Conecte sua conta Google para liberar a leitura dos eventos futuros.
           </Typography>
           <Button
             onClick={connectGoogleCalendar}
-            className="bg-brand-primary hover:bg-brand-primary-hover text-white flex items-center gap-mx-xs mx-auto"
+            className="hover:bg-brand-primary-hover text-white flex items-center gap-mx-xs mx-auto"
           >
             <ExternalLink size={18} />
             Conectar Google Calendar
@@ -136,16 +136,16 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
                     <Clock size={14} className="text-brand-primary" />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <Typography variant="caption" className="font-bold text-text-primary block truncate">
+                    <Typography variant="caption" className="font-bold block truncate">
                       {event.summary || '(Sem titulo)'}
                     </Typography>
-                    <Typography variant="caption" className="text-text-tertiary block">
+                    <Typography variant="caption" className="block">
                       {formatEventTime(event.start)}
                     </Typography>
                     {event.location && (
                       <div className="flex items-center gap-mx-xs mt-mx-xs">
                         <MapPin size={12} className="text-text-tertiary shrink-0" />
-                        <Typography variant="caption" className="text-text-tertiary truncate">
+                        <Typography variant="caption" className="truncate">
                           {event.location}
                         </Typography>
                       </div>

@@ -10,7 +10,7 @@ type Props = { consultingData: ConsultingItem[]; metrics: NetworkMetrics }
 export function AdminConsultingCard({ consultingData, metrics }: Props) {
   const palette = getChartPalette()
   return (
-    <Card className="border-none shadow-mx-lg bg-white overflow-hidden">
+    <Card className="border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
           <BriefcaseBusiness size={18} className="text-brand-primary" /> Consultoria MX
@@ -20,7 +20,7 @@ export function AdminConsultingCard({ consultingData, metrics }: Props) {
       <CardContent className="p-mx-lg flex flex-col gap-mx-md">
         <div className="grid grid-cols-2 gap-mx-md">
           <div className="p-mx-md rounded-mx-2xl bg-surface-alt border border-border-subtle">
-            <Typography variant="tiny" tone="muted" className="uppercase font-black">
+            <Typography variant="tiny" tone="muted" className="">
               Clientes
             </Typography>
             <Typography variant="h1" className="text-4xl tabular-nums">
@@ -28,7 +28,7 @@ export function AdminConsultingCard({ consultingData, metrics }: Props) {
             </Typography>
           </div>
           <div className="p-mx-md rounded-mx-2xl bg-surface-alt border border-border-subtle">
-            <Typography variant="tiny" tone="muted" className="uppercase font-black">
+            <Typography variant="tiny" tone="muted" className="">
               Visitas
             </Typography>
             <Typography variant="h1" className="text-4xl tabular-nums">
@@ -44,7 +44,7 @@ export function AdminConsultingCard({ consultingData, metrics }: Props) {
                   className="w-mx-xs h-mx-xs rounded-full shrink-0"
                   style={{ backgroundColor: palette[index % palette.length] }}
                 />
-                <Typography variant="tiny" className="uppercase font-black truncate">
+                <Typography variant="tiny" className="truncate">
                   {item.name}
                 </Typography>
               </div>

@@ -51,7 +51,7 @@ export function BancoTalentos() {
       </div>
 
       <form onSubmit={handleSubmit} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-        <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">Registrar perfil vencedor</Typography>
+        <Typography variant="caption" tone="muted" className="">Registrar perfil vencedor</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <Field label="Cargo (opcional)"><Input value={form.cargo} onChange={e => setForm(p => ({ ...p, cargo: e.target.value }))} placeholder="Ex.: Vendedor" /></Field>
           <Field label="Amostra (nº)"><Input inputMode="numeric" value={form.amostra_n} onChange={e => setForm(p => ({ ...p, amostra_n: e.target.value }))} placeholder="0" /></Field>

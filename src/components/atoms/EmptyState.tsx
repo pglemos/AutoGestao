@@ -54,7 +54,7 @@ const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
             {icon}
           </div>
         )}
-        <Typography variant="h3" className="text-text-primary">
+        <Typography variant="h3" className="">
           {title}
         </Typography>
         {description && (
@@ -64,10 +64,10 @@ const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
         )}
         {nextStep && (
           <div className="mt-mx-xs max-w-md rounded-mx-xl border border-border-default bg-surface-alt px-mx-md py-mx-sm text-left">
-            <Typography variant="caption" className="block text-text-secondary">
+            <Typography variant="caption" className="block">
               Próximo passo
             </Typography>
-            <Typography variant="p" className="mt-mx-tiny text-text-secondary">
+            <Typography variant="p" className="mt-mx-tiny">
               {nextStep}
             </Typography>
           </div>

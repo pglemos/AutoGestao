@@ -83,7 +83,7 @@ export function NotificacoesListSection({
   const navigate = useNavigate()
 
   return (
-    <Card className="flex min-h-[420px] flex-col overflow-hidden bg-white shadow-mx-sm">
+    <Card className="flex min-h-[420px] flex-col overflow-hidden bg-white">
       <CardHeader className="relative z-10 flex flex-col items-start justify-between gap-mx-md border-b border-border-default bg-surface-alt/30 p-mx-md sm:flex-row sm:items-center sm:p-mx-lg">
         <div className="flex items-center gap-mx-md">
           <div className={cn(
@@ -101,7 +101,7 @@ export function NotificacoesListSection({
             </Typography>
           </div>
         </div>
-        <Badge variant="brand" className="w-full rounded-mx-full px-4 py-1 text-center font-black uppercase sm:w-auto">
+        <Badge variant="brand" className="w-full rounded-mx-full px-4 py-1 text-center sm:w-auto">
           {unreadCount} {unreadCount === 1 ? 'nova' : 'novas'}
         </Badge>
       </CardHeader>
@@ -122,7 +122,7 @@ export function NotificacoesListSection({
             (Object.entries(grouped) as Array<[string, NotificationLike[]]>).map(([group, list]) => (
               <div key={group} className="mb-mx-lg space-y-mx-sm last:mb-0">
                 <div className="flex items-center gap-mx-sm px-mx-xs">
-                  <Typography variant="caption" tone="muted" className="whitespace-nowrap font-black uppercase tracking-wider">
+                  <Typography variant="caption" tone="muted" className="whitespace-nowrap tracking-wider">
                     {group}
                   </Typography>
                   <div className="h-px flex-1 bg-border-default opacity-50" />
@@ -162,7 +162,7 @@ export function NotificacoesListSection({
                               {n.title}
                             </Typography>
                             {!n.read && n.priority === 'high' && (
-                              <Badge variant="danger" className="text-mx-nano sm:text-xs font-black h-mx-5 px-3 rounded-mx-full animate-pulse shadow-sm shrink-0">
+                              <Badge variant="danger" className="text-mx-nano sm:text-xs h-mx-5 px-3 rounded-mx-full animate-pulse shadow-sm shrink-0">
                                 CRÍTICO
                               </Badge>
                             )}
@@ -187,7 +187,7 @@ export function NotificacoesListSection({
                             <Typography
                               variant="caption"
                               tone="brand"
-                              className="flex items-center gap-mx-xs text-xs font-black uppercase tracking-wider transition-transform group-hover/item:translate-x-1"
+                              className="flex items-center gap-mx-xs text-xs tracking-wider transition-transform group-hover/item:translate-x-1"
                             >
                               Ação Imediata <ChevronRight size={12} strokeWidth={3} />
                             </Typography>

@@ -55,7 +55,7 @@ export function MarketingModulo({ storeId }: Props) {
             <Megaphone size={22} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h2" className="font-black uppercase tracking-tight">
+            <Typography variant="h2" className="tracking-tight">
               Marketing
             </Typography>
             <Typography variant="tiny" tone="muted" className="block font-bold normal-case tracking-normal">
@@ -71,19 +71,19 @@ export function MarketingModulo({ storeId }: Props) {
 
       {error && (
         <div className="rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="font-black text-status-error">
+          <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
         </div>
       )}
 
-      <Card className="rounded-mx-2xl p-mx-md">
+      <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
           <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
             <Briefcase size={18} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Posicionamento empresarial
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -97,7 +97,7 @@ export function MarketingModulo({ storeId }: Props) {
 
         {!posicionamento ? (
           <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               Loja ainda sem posicionamento cadastrado.
             </Typography>
           </div>
@@ -120,7 +120,7 @@ export function MarketingModulo({ storeId }: Props) {
                 <dt>
                   <Typography
                     variant="caption"
-                    className="font-black uppercase tracking-widest text-text-secondary"
+                    className=""
                   >
                     {label}
                   </Typography>
@@ -136,14 +136,14 @@ export function MarketingModulo({ storeId }: Props) {
         )}
       </Card>
 
-      <Card className="rounded-mx-2xl p-mx-md">
+      <Card className="p-mx-md">
         <header className="mb-mx-sm flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-mx-xs">
             <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
               <Users size={18} aria-hidden="true" />
             </div>
             <div>
-              <Typography variant="h3" className="font-black">
+              <Typography variant="h3" className="">
                 Carteira da Empresa
               </Typography>
               <Typography variant="tiny" tone="muted" className="block">
@@ -166,7 +166,7 @@ export function MarketingModulo({ storeId }: Props) {
 
         {carteira.length === 0 ? (
           <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhum cliente em carteira para esta loja.
             </Typography>
           </div>
@@ -223,13 +223,13 @@ export function MarketingModulo({ storeId }: Props) {
         )}
       </Card>
 
-      <Card className="rounded-mx-2xl p-mx-md">
+      <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
           <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
             <Calendar size={18} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Agenda Estratégica de Marketing
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -240,7 +240,7 @@ export function MarketingModulo({ storeId }: Props) {
 
         {agendaMensal.length === 0 ? (
           <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               Sem agenda estratégica registrada para o trimestre.
             </Typography>
           </div>
@@ -252,23 +252,23 @@ export function MarketingModulo({ storeId }: Props) {
                 className="rounded-mx-xl border border-border-default bg-white p-mx-sm"
               >
                 <div className="flex flex-wrap items-center gap-mx-xs">
-                  <Badge variant="outline" className="font-black uppercase tracking-widest">
+                  <Badge variant="outline" className="">
                     {new Date(`${item.mes_referencia}T12:00:00`).toLocaleDateString('pt-BR', {
                       month: 'short',
                       year: 'numeric',
                     })}
                   </Badge>
-                  <Badge variant="outline" className="font-black uppercase tracking-widest">
+                  <Badge variant="outline" className="">
                     {item.status.replaceAll('_', ' ')}
                   </Badge>
                   {item.canais.map((canal) => (
-                    <Badge key={canal} variant="outline" className="font-black uppercase tracking-widest">
+                    <Badge key={canal} variant="outline" className="">
                       <Star size={10} className="mr-1" />
                       {canal}
                     </Badge>
                   ))}
                 </div>
-                <Typography variant="p" className="mt-mx-xs font-black">
+                <Typography variant="p" className="mt-mx-xs">
                   {item.acao}
                 </Typography>
                 {item.observacoes && (

@@ -132,7 +132,7 @@ export function CentralMxCriarPlanoModal({
         onKeyDown={(event) => event.stopPropagation()}
       >
         <div className="flex items-center justify-between gap-mx-sm">
-          <Typography variant="h3" id="criar-plano-title" className="font-black">
+          <Typography variant="h3" id="criar-plano-title" className="">
             Novo plano de ação
           </Typography>
           <button

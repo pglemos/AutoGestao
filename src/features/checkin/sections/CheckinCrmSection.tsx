@@ -611,7 +611,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               4
             </span>
  <div className="min-w-0">
- <Typography variant="h2" className="!text-[16px] !leading-tight font-extrabold uppercase tracking-tight text-[#071822] sm:!text-[17px]">
+ <Typography variant="h2" className="!text-[16px] !leading-tight font-extrabold tracking-tight text-[#071822] sm:!text-[17px]">
                 CADASTRAR VENDA/AGENDAMENTOS
               </Typography>
  <Typography variant="p" className="mt-1 text-sm font-medium leading-snug text-[#526B7A]">
@@ -1417,7 +1417,7 @@ function VendaBadge({ value }: { value: ClienteRow['vendaRealizada'] }) {
     return (
       <Badge
         variant="outline"
-        className="border-[#FFF7E6] bg-[#FFF7E6] text-[#F59F0A] px-2 py-0 text-[10px] font-semibold shadow-mx-sm"
+        className="border-[#FFF7E6] bg-[#FFF7E6] text-[#F59F0A] px-2 py-0 text-[10px] font-semibold"
       >
         Em Negociação
       </Badge>

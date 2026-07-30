@@ -28,7 +28,7 @@ export function OwnerCockpitHeader({
       <p className="mt-mx-tiny text-sm font-medium text-text-secondary">Aqui está o panorama da sua loja no período selecionado.</p>
       <div className="mt-mx-md inline-flex h-mx-11 items-center gap-mx-xs rounded-mx-full border border-border-subtle bg-white px-mx-md shadow-mx-sm">
         <CalendarDays size={16} className="text-text-tertiary" />
-        <Typography variant="tiny" className="font-black">{periodLabel}</Typography>
+        <Typography variant="tiny" className="">{periodLabel}</Typography>
       </div>
     </header>
   )
@@ -76,7 +76,7 @@ export function OwnerKpiCard({
   const classes = toneClasses[tone]
   const vivid = vividIconClasses[tone]
   return (
-    <Card className="relative min-h-[140px] rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <Card className="relative min-h-[140px] border bg-white p-mx-md">
       {showStatusDot && (
         <span
           className={cn('absolute right-mx-sm top-mx-sm h-mx-6 w-mx-6 rounded-mx-full', statusDotClasses[statusTone ?? tone])}
@@ -88,10 +88,10 @@ export function OwnerKpiCard({
           <Typography variant="p" className={cn('block text-sm font-black', classes.text)}>
             {title}
           </Typography>
-          <Typography variant="h2" className="mt-mx-xs text-3xl md:text-4xl font-black tabular-nums text-text-primary leading-none">
+          <Typography variant="h2" className="mt-mx-xs text-3xl md:text-4xl tabular-nums leading-none">
             {value}
           </Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-black">
+          <Typography variant="tiny" tone="muted" className="mt-mx-xs block">
             {detail}
           </Typography>
           {trend && (
@@ -162,9 +162,9 @@ export function MXScoreCompact({ score }: { score: number | null }) {
   const circumference = 2 * Math.PI * radius
   const dashOffset = circumference * (1 - safeScore / 100)
   return (
-    <Card className="min-h-[140px] rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <Card className="min-h-[140px] border bg-white p-mx-md">
       <div className="flex items-center justify-between">
-        <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">
+        <Typography variant="tiny" tone="muted" className="">
           MX Score da Loja
         </Typography>
         <CircleHelp size={14} className="text-text-tertiary" />
@@ -200,7 +200,7 @@ export function MetricPill({ label, value, tone }: { label: string; value: strin
   const classes = toneClasses[tone]
   return (
     <div className={cn('rounded-mx-lg border border-border-subtle p-mx-sm text-center', classes.soft)}>
-      <Typography variant="tiny" className="block font-black leading-tight">{label}</Typography>
+      <Typography variant="tiny" className="block leading-tight">{label}</Typography>
       <div className="mt-mx-xs truncate text-base font-black tabular-nums" title={value}>{value}</div>
     </div>
   )
@@ -245,7 +245,7 @@ export function OwnerSemiGauge({ value, muted = false }: { value: number; muted?
 export function SectionTitle({ title, subtitle }: { title: string; subtitle: string }) {
   return (
     <div>
-      <Typography variant="h2" className="text-2xl md:text-3xl font-black text-text-primary">{title}</Typography>
+      <Typography variant="h2" className="text-2xl md:text-3xl">{title}</Typography>
       <Typography variant="p" tone="muted" className="mt-1 font-bold">{subtitle}</Typography>
     </div>
   )
@@ -254,7 +254,7 @@ export function SectionTitle({ title, subtitle }: { title: string; subtitle: str
 export function SideList({ title, items, className }: { title: string; items: string[]; className?: string }) {
   return (
     <Card className={cn('rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm', className)}>
-      <Typography variant="h3" className="text-lg font-black">{title}</Typography>
+      <Typography variant="h3" className="text-lg">{title}</Typography>
       <div className="mt-mx-md space-y-mx-sm">
         {items.map((item, index) => (
           <div key={`${item}-${index}`} className="flex items-center gap-mx-sm">
@@ -301,11 +301,11 @@ export function SummaryCard({
 }) {
   const classes = toneClasses[tone]
   return (
-    <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <Card className="border bg-white p-mx-md">
       <div className="flex items-start gap-mx-sm">
         <span className={cn('h-mx-12 w-mx-12 rounded-mx-lg flex shrink-0 items-center justify-center', classes.bg)}>{icon}</span>
         <div>
-          <Typography variant="p" className="font-black">{title}</Typography>
+          <Typography variant="p" className="">{title}</Typography>
           <div className={cn('mt-mx-xs text-3xl font-black tabular-nums', classes.text)}>{value}</div>
           <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold">{detail}</Typography>
         </div>

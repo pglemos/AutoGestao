@@ -39,7 +39,7 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
   return (
     <div className="space-y-mx-lg">
       <div>
-        <Typography variant="caption" tone="muted" className="font-bold uppercase tracking-wide">
+        <Typography variant="caption" tone="muted" className="font-bold tracking-wide">
           Nível de carreira
         </Typography>
         <Typography variant="tiny" tone="muted" className="mt-1">

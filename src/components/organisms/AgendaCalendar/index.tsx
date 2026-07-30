@@ -72,7 +72,7 @@ export function AgendaCalendar({
           </button>
 
           <div className="flex min-w-0 items-center justify-center gap-mx-xs sm:gap-mx-sm px-mx-xs">
-            <Typography variant="h3" className="truncate text-lg font-semibold normal-case tracking-normal text-text-primary sm:text-xl">
+            <Typography variant="h3" className="truncate text-lg font-semibold normal-case tracking-normal sm:text-xl">
               {monthLabel}
             </Typography>
             {showTodayButton && (

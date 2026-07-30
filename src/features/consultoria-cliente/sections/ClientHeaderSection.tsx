@@ -21,12 +21,12 @@ export function ClientHeaderSection({ client }: Props) {
             <Typography variant="h1" className="text-2xl text-black">{client.name}</Typography>
             <Badge
               variant={client.status === 'ativo' ? 'success' : 'outline'}
-              className="font-black h-mx-5 uppercase text-mx-micro"
+              className="h-mx-5 text-mx-micro"
             >
               {client.status}
             </Badge>
           </div>
-          <Typography variant="tiny" tone="muted" className="font-black tracking-mx-widest uppercase">
+          <Typography variant="tiny" tone="muted" className="">
             Módulo de Gestão Preditiva MX
           </Typography>
         </div>

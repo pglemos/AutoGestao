@@ -177,7 +177,7 @@ function OportunidadeCard({
           </button>
         </div>
 
-        <Button onClick={onExecutar} className="h-14 w-full rounded-2xl bg-[#005BFF] text-base font-black text-white shadow-lg shadow-blue-200 hover:bg-blue-700">
+        <Button onClick={onExecutar} className="h-14 w-full rounded-2xl bg-[#005BFF] text-base text-white shadow-lg shadow-blue-200 hover:bg-blue-700">
           <Zap className="h-5 w-5" /> Executar próximo passo
         </Button>
       </div>
@@ -356,7 +356,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
         )}
 
         {clienteAtual && executando && (
-          <Card className="overflow-hidden rounded-mx-2xl p-0">
+          <Card className="overflow-hidden p-0">
             <div className="bg-gradient-to-br from-[#005BFF] to-blue-700 p-mx-lg text-white">
               <div className="flex items-center gap-mx-sm">
                 <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/20 text-xl font-black">
@@ -371,12 +371,12 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
 
             <div className="space-y-mx-md p-mx-lg">
               <div className="rounded-mx-lg border border-amber-200 bg-amber-50 p-mx-sm">
-                <Typography variant="caption" className="font-bold uppercase tracking-widest text-amber-600">Próxima ação</Typography>
-                <Typography variant="p" className="mt-1 font-semibold text-text-primary">{clienteAtual.proxima_acao || 'Definir próximo passo'}</Typography>
+                <Typography variant="caption" className="font-bold text-amber-600">Próxima ação</Typography>
+                <Typography variant="p" className="mt-1 font-semibold">{clienteAtual.proxima_acao || 'Definir próximo passo'}</Typography>
               </div>
 
               <div>
-                <Typography variant="caption" tone="muted" className="mb-mx-xs block font-semibold uppercase tracking-widest">Tom da mensagem</Typography>
+                <Typography variant="caption" tone="muted" className="mb-mx-xs block font-semibold">Tom da mensagem</Typography>
                 <div className="mb-mx-sm flex flex-wrap gap-1.5">
                   {TONS.map(t => (
                     <button
@@ -394,7 +394,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                     </button>
                   ))}
                 </div>
-                <Typography variant="caption" tone="muted" className="mb-mx-xs block font-semibold uppercase tracking-widest">Script sugerido</Typography>
+                <Typography variant="caption" tone="muted" className="mb-mx-xs block font-semibold">Script sugerido</Typography>
                 <textarea
                   value={script}
                   onChange={event => setScriptEditado(event.target.value)}
@@ -429,7 +429,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
               )}
 
               <div className={voltouDoWhatsApp ? 'rounded-mx-lg ring-4 ring-blue-100 transition-shadow' : ''}>
-                <Typography variant="caption" tone="muted" className="mb-mx-xs block font-semibold uppercase tracking-widest">
+                <Typography variant="caption" tone="muted" className="mb-mx-xs block font-semibold">
                   {voltouDoWhatsApp ? 'Como terminou esse contato?' : 'Resultado do contato'}
                 </Typography>
                 <div className="grid grid-cols-3 gap-mx-xs">
@@ -458,7 +458,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
 
       {pausarOpen && (
         <div className="fixed inset-0 z-[210] grid place-items-center bg-black/50 p-4">
-          <Card className="w-full max-w-xs space-y-mx-sm rounded-mx-2xl p-mx-lg text-center">
+          <Card className="w-full max-w-xs space-y-mx-sm p-mx-lg text-center">
             <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-amber-50 text-amber-600">
               <Pause size={20} />
             </span>

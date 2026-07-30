@@ -28,7 +28,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.01 }}
             >
-              <Card className="rounded-mx-lg border border-border-subtle p-mx-md h-full flex flex-col justify-between group hover:shadow-mx-xl transition-all shadow-mx-sm bg-white relative overflow-hidden">
+              <Card className="border p-mx-md h-full flex flex-col justify-between group hover:shadow-mx-xl transition-all bg-white relative overflow-hidden">
                 <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <article>
                   <header className="flex items-start justify-between mb-8 border-b border-border-subtle pb-6 relative z-10">
@@ -45,7 +45,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                       <div>
                         <Typography
                           variant="h3"
-                          className="text-base font-semibold uppercase tracking-tight"
+                          className="text-base font-semibold tracking-tight"
                         >
                           {sellerName}
                         </Typography>
@@ -64,7 +64,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                     </div>
                     <Badge
                       variant={f.acknowledged ? 'success' : 'danger'}
-                      className="px-4 py-1 rounded-mx-lg text-mx-micro font-semibold uppercase shadow-sm border-none"
+                      className="px-4 py-1 text-mx-micro font-semibold shadow-sm border-none"
                     >
                       {f.acknowledged ? 'LIDO' : 'PENDENTE'}
                     </Badge>
@@ -75,13 +75,13 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                         <Typography
                           variant="tiny"
                           tone="warning"
-                          className="font-semibold uppercase tracking-widest text-mx-micro mb-3 block"
+                          className="font-semibold text-mx-micro mb-3 block"
                         >
                           Caso/Motivo
                         </Typography>
                         <Typography
                           variant="p"
-                          className="text-xs font-bold leading-relaxed text-text-secondary line-clamp-3"
+                          className="text-xs font-bold leading-relaxed line-clamp-3"
                         >
                           {f.caso_motivo}
                         </Typography>
@@ -93,7 +93,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                           <Typography
                             variant="tiny"
                             tone="brand"
-                            className="font-semibold uppercase tracking-widest text-mx-micro"
+                            className="font-semibold text-mx-micro"
                           >
                             Plano de Ação
                           </Typography>
@@ -103,14 +103,14 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                         <Typography
                           variant="tiny"
                           tone="brand"
-                          className="font-semibold uppercase tracking-widest text-mx-micro mb-4 block"
+                          className="font-semibold text-mx-micro mb-4 block"
                         >
                           Plano de Ação
                         </Typography>
                       )}
                       <Typography
                         variant="p"
-                        className="text-xs font-bold leading-relaxed italic uppercase tracking-tight text-text-secondary line-clamp-3"
+                        className="text-xs font-bold leading-relaxed italic tracking-tight line-clamp-3"
                       >
                         "{f.action}"
                       </Typography>

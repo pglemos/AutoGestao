@@ -200,7 +200,7 @@ export function FunilVendedor() {
               <span className="mt-1 text-brand-primary"><Info size={20} /></span>
               <div>
                 <Typography variant="h3">Principal limitador</Typography>
-                <Typography variant="p" className="mt-1 text-sm font-semibold text-text-secondary">{limitador}</Typography>
+                <Typography variant="p" className="mt-1 text-sm font-semibold">{limitador}</Typography>
               </div>
             </div>
           </DashboardCard>
@@ -233,15 +233,15 @@ function EffortCard({ effort }: { effort: ChannelEffort }) {
   const ui = CHANNEL_UI[effort.canal]
   const tone = TONE_CLASS[ui.tone]
   return (
-    <Card className={`rounded-mx-lg border ${tone.border} bg-white p-mx-md shadow-mx-sm`}>
+    <Card className={`border ${tone.border} bg-white p-mx-md`}>
       <div className="flex items-start gap-mx-sm">
         <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-mx-md ${tone.badge}`}>{ui.icon}</span>
         <div className="min-w-0">
           <Typography variant="h2" className={`text-lg ${tone.text}`}>{ui.title}</Typography>
-          <Typography variant="p" className="mt-1 text-xs font-semibold text-text-secondary">{ui.flow}</Typography>
+          <Typography variant="p" className="mt-1 text-xs font-semibold">{ui.flow}</Typography>
         </div>
       </div>
-      <Typography variant="p" className="mt-mx-sm text-sm font-semibold text-text-primary">{effort.message}</Typography>
+      <Typography variant="p" className="mt-mx-sm text-sm font-semibold">{effort.message}</Typography>
       {effort.ok && <div className="mt-mx-sm grid gap-mx-xs">{effort.rows.map(row => <CompactRow key={row.label} label={row.label} value={String(row.value)} />)}</div>}
       <div className={`mt-mx-sm rounded-mx-md px-mx-sm py-mx-xs text-sm font-semibold ${tone.soft} ${tone.text}`}>{effort.conversionLabel}</div>
     </Card>
@@ -268,7 +268,7 @@ function EfficiencyCard({ metrics }: { metrics: ChannelMetrics }) {
           { label: 'Venda', value: metrics.vendas },
         ]
   return (
-    <Card className={`rounded-mx-lg border ${tone.border} bg-white p-mx-md shadow-mx-sm`}>
+    <Card className={`border ${tone.border} bg-white p-mx-md`}>
       <div className="flex items-center justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm"><span className={tone.text}>{ui.icon}</span><Typography variant="h2" className="text-lg">{ui.title}</Typography></div>
         <span className={`rounded-mx-md px-mx-sm py-1 text-xs font-semibold ${tone.badge}`}>{PCT(metrics.conversaoGeral)}</span>
@@ -320,7 +320,7 @@ function MetricCard({ label, value, hint, tone = 'dark' }: { label: string; valu
     <DashboardCard className="min-h-[116px]">
       <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
       <Typography variant="h2" className={`mt-mx-xs text-2xl ${color}`}>{value}</Typography>
-      {hint && <Typography variant="p" className="mt-1 text-xs font-semibold text-text-secondary">{hint}</Typography>}
+      {hint && <Typography variant="p" className="mt-1 text-xs font-semibold">{hint}</Typography>}
     </DashboardCard>
   )
 }
@@ -331,29 +331,29 @@ function ProjectionStat({ label, value, hint, tone = 'dark' }: { label: string; 
     <div className="rounded-mx-md border border-border-subtle bg-surface-alt p-mx-sm">
       <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
       <Typography variant="h3" className={`mt-1 ${color}`}>{value}</Typography>
-      {hint && <Typography variant="p" className="mt-1 text-sm font-semibold text-text-secondary">{hint}</Typography>}
+      {hint && <Typography variant="p" className="mt-1 text-sm font-semibold">{hint}</Typography>}
     </div>
   )
 }
 
 function BaseStat({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-mx-md border border-border-subtle bg-surface-alt p-mx-sm"><Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography><Typography variant="p" className="mt-1 text-sm font-semibold text-text-primary">{value}</Typography></div>
+  return <div className="rounded-mx-md border border-border-subtle bg-surface-alt p-mx-sm"><Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography><Typography variant="p" className="mt-1 text-sm font-semibold">{value}</Typography></div>
 }
 
 function CompactRow({ label, value }: { label: string; value: string }) {
-  return <div className="flex min-h-8 items-center justify-between gap-mx-sm rounded-mx-md bg-surface-alt px-mx-sm py-1"><Typography variant="p" className="text-sm font-semibold text-text-secondary">{label}</Typography><Typography variant="p" className="text-sm font-bold text-text-primary">{value}</Typography></div>
+  return <div className="flex min-h-8 items-center justify-between gap-mx-sm rounded-mx-md bg-surface-alt px-mx-sm py-1"><Typography variant="p" className="text-sm font-semibold">{label}</Typography><Typography variant="p" className="text-sm font-bold">{value}</Typography></div>
 }
 
 function MiniBar({ label, value, max, className }: { label: string; value: number; max: number; className: string }) {
-  return <div className="grid grid-cols-[128px_1fr_34px] items-center gap-mx-xs"><Typography variant="tiny" tone="muted" className="normal-case tracking-normal">{label}</Typography><div className="h-2 rounded-full bg-surface-alt"><div className={`h-2 rounded-full ${className}`} style={{ width: `${Math.max(4, (value / max) * 100)}%` }} /></div><Typography variant="tiny" className="text-right font-semibold text-text-secondary">{value}</Typography></div>
+  return <div className="grid grid-cols-[128px_1fr_34px] items-center gap-mx-xs"><Typography variant="tiny" tone="muted" className="normal-case tracking-normal">{label}</Typography><div className="h-2 rounded-full bg-surface-alt"><div className={`h-2 rounded-full ${className}`} style={{ width: `${Math.max(4, (value / max) * 100)}%` }} /></div><Typography variant="tiny" className="text-right font-semibold">{value}</Typography></div>
 }
 
 function SectionHeader({ icon, title, subtitle }: { icon: ReactNode; title: string; subtitle?: string }) {
-  return <div className="flex items-start gap-mx-sm"><span className="mt-1 text-brand-primary">{icon}</span><div><Typography variant="h2" className="text-xl">{title}</Typography>{subtitle && <Typography variant="p" className="mt-1 text-sm font-semibold text-text-secondary">{subtitle}</Typography>}</div></div>
+  return <div className="flex items-start gap-mx-sm"><span className="mt-1 text-brand-primary">{icon}</span><div><Typography variant="h2" className="text-xl">{title}</Typography>{subtitle && <Typography variant="p" className="mt-1 text-sm font-semibold">{subtitle}</Typography>}</div></div>
 }
 
 function DashboardCard({ children, className = '' }: { children: ReactNode; className?: string }) {
-  return <Card className={`rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm ${className}`}>{children}</Card>
+  return <Card className={`border bg-white p-mx-md ${className}`}>{children}</Card>
 }
 
 function buildStatsPeriod(oportunidades: OportunidadeLike[], agendamentos: AgendamentoLike[], period: PeriodInfo) {

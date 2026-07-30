@@ -29,7 +29,7 @@ type StatCardProps = {
  */
 export function StatCard({ icon, label, value, detail, tone = 'brand', action }: StatCardProps) {
   return (
-    <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-md">
+    <Card className="border bg-white p-mx-lg">
       {(icon || action) && (
         <div className="flex items-start justify-between gap-mx-sm">
           {icon ? (
@@ -40,7 +40,7 @@ export function StatCard({ icon, label, value, detail, tone = 'brand', action }:
           {action}
         </div>
       )}
-      <Typography variant="caption" tone="muted" className="mt-mx-md block uppercase tracking-wide leading-tight break-words">
+      <Typography variant="caption" tone="muted" className="mt-mx-md block tracking-wide leading-tight break-words">
         {label}
       </Typography>
       <Typography variant="h2" className="mt-mx-xs tabular-nums leading-tight">

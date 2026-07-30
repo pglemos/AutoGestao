@@ -20,7 +20,7 @@ export default function NotFound() {
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 className="w-full max-w-2xl relative z-10"
             >
-                <Card className="border-none shadow-mx-elite bg-white overflow-hidden flex flex-col">
+                <Card className="border-none bg-white overflow-hidden flex flex-col">
                     <header className="bg-brand-secondary p-mx-10 md:p-16 relative overflow-hidden text-center">
                         <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-transparent z-0 pointer-events-none" />
                         
@@ -33,13 +33,13 @@ export default function NotFound() {
                             <ShieldAlert size={48} strokeWidth={2} />
                         </motion.div>
                         <Typography variant="h1" tone="white" className="text-7xl md:text-9xl mb-4 relative z-10 font-mono-numbers leading-none">404</Typography>
-                        <Typography variant="caption" tone="white" className="max-w-xl mx-auto opacity-60 relative z-10 uppercase tracking-widest font-black block">Ponto Fora da Malha</Typography>
+                        <Typography variant="caption" tone="white" className="max-w-xl mx-auto opacity-60 relative z-10 block">Ponto Fora da Malha</Typography>
                     </header>
 
                     <CardContent className="p-mx-10 md:p-16 text-center flex flex-col items-center gap-mx-10">
                         <div className="max-w-md space-y-mx-sm">
-                            <Typography variant="h2" className="text-2xl uppercase tracking-tighter">Destino Inexistente</Typography>
-                            <Typography variant="p" tone="muted" className="text-base leading-relaxed font-bold italic opacity-60 uppercase tracking-tight">
+                            <Typography variant="h2" className="text-2xl tracking-tighter">Destino Inexistente</Typography>
+                            <Typography variant="p" tone="muted" className="text-base leading-relaxed font-bold italic opacity-60 tracking-tight">
                                 "A coordenada solicitada não foi localizada nos servidores de inteligência MX. A rota pode ter sido alterada ou o acesso expirou."
                             </Typography>
                         </div>
@@ -60,7 +60,7 @@ export default function NotFound() {
                         </div>
 
                         <footer className="pt-10 border-t border-border-default w-full">
-                            <Typography variant="caption" tone="muted" className="text-xs font-black uppercase tracking-widest opacity-20">MX PERFORMANCE • PROTOCOLO AIOX SECURITY</Typography>
+                            <Typography variant="caption" tone="muted" className="text-xs opacity-20">MX PERFORMANCE • PROTOCOLO AIOX SECURITY</Typography>
                         </footer>
                     </CardContent>
                 </Card>

@@ -142,7 +142,7 @@ export function PlanejamentoEstrategico({ planningIndicators, periodLabel }: Pro
   return (
     <section className="space-y-mx-lg" aria-label="Planejamento estratégico">
       <header className="space-y-mx-xs">
-        <Typography variant="h2" className="font-black uppercase tracking-tight">
+        <Typography variant="h2" className="tracking-tight">
           Planejamento estratégico
         </Typography>
         <Typography variant="p" tone="muted" className="font-bold normal-case tracking-normal">
@@ -163,12 +163,12 @@ export function PlanejamentoEstrategico({ planningIndicators, periodLabel }: Pro
               </div>
               <Typography
                 variant="caption"
-                className="font-black uppercase tracking-widest"
+                className=""
               >
                 {card.label}
               </Typography>
             </div>
-            <Typography as="p" variant="h2" className="mt-mx-sm font-black">
+            <Typography as="p" variant="h2" className="mt-mx-sm">
               {card.value}
             </Typography>
             <Typography variant="tiny" className="block font-bold normal-case tracking-normal">
@@ -178,13 +178,13 @@ export function PlanejamentoEstrategico({ planningIndicators, periodLabel }: Pro
         ))}
       </div>
 
-      <Card className="rounded-mx-2xl p-mx-md">
+      <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-sm">
           <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
             <LineChart size={18} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Tabela anual — Meta vs. Realizado vs. Ano Anterior
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -245,7 +245,7 @@ export function PlanejamentoEstrategico({ planningIndicators, periodLabel }: Pro
               {!indicators.length && (
                 <tr>
                   <td colSpan={7} className="px-mx-sm py-mx-md text-center">
-                    <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+                    <Typography variant="tiny" tone="muted" className="font-bold">
                       Catálogo ainda sem indicadores cadastrados.
                     </Typography>
                   </td>

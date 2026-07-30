@@ -114,7 +114,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
       <div className="min-h-mx-section-lg bg-white border-2 border-dashed border-border-default rounded-mx-3xl flex flex-col items-center justify-center text-center p-mx-14">
         <Target size={48} className="text-text-tertiary mb-6" />
         <Typography variant="h2" className="mb-3">Selecione uma loja</Typography>
-        <Typography variant="p" tone="muted" className="max-w-sm uppercase tracking-tight">A aba de metas precisa de uma unidade ativa para carregar as regras oficiais.</Typography>
+        <Typography variant="p" tone="muted" className="max-w-sm tracking-tight">A aba de metas precisa de uma unidade ativa para carregar as regras oficiais.</Typography>
       </div>
     )
   }
@@ -133,7 +133,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
         <header className="mb-5 flex flex-col gap-mx-sm border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-wider">Status da meta</Typography>
+            <Typography variant="tiny" tone="muted" className="font-bold tracking-wider">Status da meta</Typography>
             <Typography variant="p" tone="muted" className="mt-1 text-sm">Meta mensal e benchmarks oficiais de {storeName || 'Unidade MX'}.</Typography>
           </div>
         {canManageGoals ? (
@@ -142,7 +142,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
               variant="outline"
               onClick={handleDelete}
               disabled={deleting || saving || !hasPersistedRules}
-              className="h-mx-10 w-full rounded-mx-xl text-mx-tiny sm:h-mx-11 sm:w-auto"
+              className="h-mx-10 w-full text-mx-tiny sm:h-mx-11 sm:w-auto"
             >
               {deleting ? <RefreshCw className="animate-spin mr-2" /> : <Trash2 size={16} className="mr-2" />}
               Excluir
@@ -150,14 +150,14 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
             <Button
               onClick={handleSave}
               disabled={saving || deleting || !hasChanges}
-              className="h-mx-10 w-full rounded-mx-xl text-mx-tiny sm:h-mx-11 sm:w-auto"
+              className="h-mx-10 w-full text-mx-tiny sm:h-mx-11 sm:w-auto"
             >
               {saving ? <RefreshCw className="animate-spin mr-2" /> : <Save size={16} className="mr-2" />}
               Salvar
             </Button>
           </div>
         ) : (
-          <Typography variant="caption" tone="muted" className="font-bold uppercase tracking-wider">Somente leitura</Typography>
+          <Typography variant="caption" tone="muted" className="font-bold tracking-wider">Somente leitura</Typography>
         )}
         </header>
 
@@ -167,7 +167,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
               <Target size={24} />
             </div>
             <div className="min-w-0 flex-1">
-              <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-wider">Meta mensal de vendas</Typography>
+              <Typography variant="tiny" tone="muted" className="font-bold tracking-wider">Meta mensal de vendas</Typography>
                 <input
                   type="text"
                   inputMode="numeric"
@@ -202,7 +202,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
                     <benchmark.icon size={18} strokeWidth={2} />
                   </div>
                   <div className="min-w-0 flex-1">
-                    <Typography variant="tiny" tone="muted" className="block font-bold uppercase tracking-wide">{benchmark.label}</Typography>
+                    <Typography variant="tiny" tone="muted" className="block font-bold tracking-wide">{benchmark.label}</Typography>
                     <div className="flex items-baseline gap-mx-xs">
                       <input
                         type="text"

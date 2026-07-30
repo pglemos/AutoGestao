@@ -56,7 +56,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
   }
 
   return (
-    <Card className="space-y-mx-md rounded-mx-lg border border-border-strong bg-white p-mx-lg shadow-none">
+    <Card className="space-y-mx-md border bg-white p-mx-lg shadow-none">
       <header className="flex min-w-0 items-center justify-between gap-mx-sm">
         <div className="flex min-w-0 items-center gap-mx-sm">
           <div className="flex h-mx-12 w-mx-12 shrink-0 items-center justify-center rounded-mx-lg border border-mx-indigo-100 bg-mx-indigo-50 text-brand-primary">
@@ -64,7 +64,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
           </div>
           <div className="min-w-0">
             <Typography variant="h3" className="text-base">Google Calendar</Typography>
-            <Typography variant="caption" tone="muted" className="uppercase tracking-widest text-mx-tiny">
+            <Typography variant="caption" tone="muted" className="text-mx-tiny">
               Sincronização híbrida
             </Typography>
           </div>
@@ -122,7 +122,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
             </div>
             {centralConnected && centralMeetCohostsAuthorized ? (
               <div className="min-w-0">
-                <Typography variant="tiny" className="block truncate rounded-mx-md bg-brand-primary px-2 py-1 font-black uppercase tracking-widest text-white">
+                <Typography variant="tiny" className="block truncate px-2 py-1 text-white">
                   {centralGoogleEmail || 'gestao@mxconsultoria.com.br'}
                 </Typography>
               </div>
@@ -157,7 +157,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
 
       {upcoming.length > 0 && (
         <div className="space-y-mx-xs">
-          <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black text-mx-tiny">
+          <Typography variant="caption" tone="muted" className="text-mx-tiny">
             Próximos eventos
           </Typography>
           <ul className="space-y-mx-tiny">

@@ -3,8 +3,8 @@ import { Card } from '@/components/molecules/Card'
 
 export function ManagerScopeBanner() {
   return (
-    <Card className="border border-status-info/20 bg-status-info-surface p-mx-lg shadow-mx-sm">
-      <Typography variant="h3" className="uppercase tracking-tight text-status-info">
+    <Card className="border border-status-info/20 bg-status-info-surface p-mx-lg">
+      <Typography variant="h3" className="tracking-tight text-status-info">
         Escopo do gerente
       </Typography>
       <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
@@ -17,8 +17,8 @@ export function ManagerScopeBanner() {
 
 export function OwnerScopeBanner() {
   return (
-    <Card className="border border-status-info/20 bg-status-info-surface p-mx-lg shadow-mx-sm">
-      <Typography variant="h3" className="uppercase tracking-tight text-status-info">
+    <Card className="border border-status-info/20 bg-status-info-surface p-mx-lg">
+      <Typography variant="h3" className="tracking-tight text-status-info">
         Devolutivas como governança
       </Typography>
       <Typography variant="p" className="mt-mx-xs text-sm text-status-info">

@@ -77,14 +77,14 @@ export function StoreFeedbackHeader({
           size="icon"
           onClick={onRefresh}
           aria-label="Sincronizar devolutivas"
-          className="rounded-mx-xl shadow-mx-sm h-mx-xl w-mx-xl bg-white"
+          className="h-mx-xl w-mx-xl bg-white"
         >
           <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
         </Button>
         {activeTab === 'individual' && canCreateFeedback && (
           <Button
             onClick={onOpenForm}
-            className="h-mx-xl px-8 shadow-mx-lg bg-brand-secondary font-black uppercase text-xs tracking-widest w-full sm:w-auto"
+            className="h-mx-xl px-8 text-xs w-full sm:w-auto"
           >
             <Plus size={18} className="mr-2" /> NOVO FEEDBACK
           </Button>

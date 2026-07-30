@@ -84,7 +84,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
             <def.icon size={22} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h2" className="font-black uppercase tracking-tight">
+            <Typography variant="h2" className="tracking-tight">
               Departamento {def.name}
             </Typography>
             <Typography variant="tiny" tone="muted" className="block font-bold normal-case tracking-normal">
@@ -100,7 +100,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
 
       {error && (
         <div className="rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="font-black text-status-error">
+          <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
         </div>
@@ -113,8 +113,8 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
         ))}
         {top4.length < 4 &&
           Array.from({ length: 4 - top4.length }).map((_, idx) => (
-            <Card key={`empty-${idx}`} className="rounded-mx-2xl border border-dashed border-border-default p-mx-md">
-              <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Card key={`empty-${idx}`} className="border border-dashed p-mx-md">
+              <Typography variant="tiny" tone="muted" className="font-bold">
                 Sem KPI registrado
               </Typography>
               <Typography variant="p" tone="muted" className="mt-mx-sm font-bold normal-case">
@@ -141,7 +141,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
                   <span className="rounded-mx-md bg-brand-primary px-mx-xs py-mx-tiny text-mx-tiny font-black uppercase tracking-widest text-pure-white">
                     {step.passo}
                   </span>
-                  <Typography variant="caption" className="font-black uppercase tracking-widest">
+                  <Typography variant="caption" className="">
                     {step.titulo}
                   </Typography>
                 </div>
@@ -151,7 +151,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
                   </Typography>
                 )}
                 {step.responsavel_papel && (
-                  <Typography variant="tiny" className="block font-black uppercase tracking-widest text-text-secondary">
+                  <Typography variant="tiny" className="block">
                     Responsável: {step.responsavel_papel}
                   </Typography>
                 )}
@@ -186,7 +186,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
                   aria-hidden="true"
                 />
                 <div className="min-w-0">
-                  <Typography variant="caption" className="font-black">
+                  <Typography variant="caption" className="">
                     {item.titulo}
                   </Typography>
                   {item.descricao && (
@@ -194,7 +194,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
                       {item.descricao}
                     </Typography>
                   )}
-                  <Badge variant="outline" className="mt-mx-tiny font-black uppercase tracking-widest">
+                  <Badge variant="outline" className="mt-mx-tiny">
                     {item.obrigatorio ? 'Obrigatório' : 'Opcional'}
                   </Badge>
                 </div>
@@ -213,10 +213,10 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
             {data?.biblioteca?.map((entry) => (
               <li key={entry.id} className="rounded-mx-xl border border-border-default bg-white p-mx-sm">
                 <div className="flex items-center gap-mx-xs">
-                  <Badge variant="outline" className="font-black uppercase tracking-widest">
+                  <Badge variant="outline" className="">
                     {entry.categoria}
                   </Badge>
-                  <Typography variant="caption" className="font-black">
+                  <Typography variant="caption" className="">
                     {entry.titulo}
                   </Typography>
                 </div>
@@ -249,10 +249,10 @@ function ScoreCard({ tone, value }: { tone: string; value: string }) {
   }
   return (
     <Card className={cn('rounded-mx-2xl border p-mx-md', toneClass[tone])}>
-      <Typography variant="caption" className="font-black uppercase tracking-widest">
+      <Typography variant="caption" className="">
         Índice de eficiência
       </Typography>
-      <Typography as="p" variant="h2" className="mt-mx-sm font-black">
+      <Typography as="p" variant="h2" className="mt-mx-sm">
         {value}
       </Typography>
       <Typography variant="tiny" className="block font-bold normal-case tracking-normal">
@@ -283,10 +283,10 @@ function KpiCard({ kpi }: { kpi: DepartamentoKpi }) {
   }
   return (
     <Card className={cn('rounded-mx-2xl border p-mx-md', toneClass[tone])}>
-      <Typography variant="caption" className="font-black uppercase tracking-widest">
+      <Typography variant="caption" className="">
         {kpi.indicador_code}
       </Typography>
-      <Typography as="p" variant="h2" className="mt-mx-sm font-black">
+      <Typography as="p" variant="h2" className="mt-mx-sm">
         {kpi.realizado == null ? '—' : Number(kpi.realizado).toLocaleString('pt-BR')}
       </Typography>
       <Typography variant="tiny" className="block font-bold normal-case tracking-normal">
@@ -311,18 +311,18 @@ function SectionBlock({
   children: React.ReactNode
 }) {
   return (
-    <Card className="rounded-mx-2xl p-mx-md">
+    <Card className="p-mx-md">
       <header className="mb-mx-sm flex items-center gap-mx-xs">
         <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
           <Icon size={18} aria-hidden="true" />
         </div>
-        <Typography variant="h3" className="font-black">
+        <Typography variant="h3" className="">
           {title}
         </Typography>
       </header>
       {empty ? (
         <div className="rounded-mx-md border border-dashed border-border-default p-mx-sm text-center">
-          <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+          <Typography variant="tiny" tone="muted" className="font-bold">
             {emptyLabel}
           </Typography>
         </div>

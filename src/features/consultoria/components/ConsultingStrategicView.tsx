@@ -230,7 +230,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
 
   if (metrics.loading || parameters.loading || strategic.loading || diagnostics.loading || actionPlan.loading) {
     return (
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="p">Carregando dados estrategicos...</Typography>
       </Card>
     )
@@ -239,7 +239,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
   const error = metrics.error || parameters.error || strategic.error || diagnostics.error || actionPlan.error
   if (error) {
     return (
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="h3" tone="error">Estrategico indisponivel</Typography>
         <Typography variant="p" tone="muted">{error}</Typography>
       </Card>
@@ -249,7 +249,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
   return (
     <section className="space-y-mx-lg">
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-mx-lg">
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white xl:col-span-2">
+        <Card className="p-mx-lg border-none bg-white xl:col-span-2">
           <div className="flex items-start justify-between gap-mx-md mb-mx-md">
             <div>
               <Typography variant="h3">ESTRATEGICO PMR</Typography>
@@ -280,7 +280,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
                   return (
                     <tr key={row.metric_key} className="border-b border-border-subtle">
                       <td className="py-mx-sm pr-mx-md">
-                        <Typography variant="p" className="font-black">{row.label}</Typography>
+                        <Typography variant="p" className="">{row.label}</Typography>
                         <Typography variant="tiny" tone="muted">{getPmrMvpIndicator(row.metric_key)?.group || row.area}</Typography>
                       </td>
                       <td className="py-mx-sm pr-mx-md">
@@ -318,8 +318,8 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
           <div className="mt-mx-md grid grid-cols-1 md:grid-cols-3 gap-mx-sm">
             {strategicRows.filter((row) => row.status === 'danger' || row.status === 'warning').slice(0, 3).map((row) => (
               <div key={row.metric_key} className="rounded-mx-lg border border-border-default bg-surface-alt p-mx-sm">
-                <Typography variant="tiny" tone="muted" className="font-black uppercase">Alerta</Typography>
-                <Typography variant="p" className="text-sm font-black">{row.label}</Typography>
+                <Typography variant="tiny" tone="muted" className="">Alerta</Typography>
+                <Typography variant="p" className="text-sm">{row.label}</Typography>
                 <Typography variant="tiny" tone="muted">
                   Realizado {formatOptionalMetricValue(row.latest_result, row.value_type)} contra planejado {formatOptionalMetricValue(row.target_value, row.value_type)}.
                 </Typography>
@@ -328,11 +328,11 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
           </div>
         </Card>
 
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+        <Card className="p-mx-lg border-none bg-white">
           <Typography variant="h3" className="mb-mx-md">PLANEJAMENTO</Typography>
           {strategic.latestPlan ? (
             <div className="p-mx-md rounded-mx-lg bg-surface-alt border border-border-default mb-mx-md">
-              <Typography variant="p" className="font-black">{strategic.latestPlan.title}</Typography>
+              <Typography variant="p" className="">{strategic.latestPlan.title}</Typography>
               <Typography variant="tiny" tone="muted">
                 Gerado em {new Date(strategic.latestPlan.generated_at).toLocaleDateString('pt-BR')}
               </Typography>
@@ -343,7 +343,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
           )}
 
           <div className="space-y-mx-md mb-mx-md pt-4 border-t border-border-default">
-            <Typography variant="h3" className="uppercase text-xs font-black text-text-tertiary">Entregáveis Disponíveis</Typography>
+            <Typography variant="h3" className="text-xs">Entregáveis Disponíveis</Typography>
             {strategic.artifacts.length === 0 && (
                 <Typography variant="tiny" tone="muted">Nenhum arquivo gerado via CLI ainda.</Typography>
             )}
@@ -368,7 +368,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
             {selectedArtifact?.content_md && (
               <div className="rounded-mx-lg border border-border-default bg-white p-mx-sm">
                 <div className="flex items-center justify-between gap-mx-sm mb-mx-xs">
-                  <Typography variant="tiny" tone="muted" className="font-black uppercase">
+                  <Typography variant="tiny" tone="muted" className="">
                     {selectedArtifact.title}
                   </Typography>
                   <Badge variant="outline" className="rounded-mx-full px-2 py-0.5">
@@ -390,7 +390,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
           />
 
           <div className="space-y-mx-sm mb-mx-md p-mx-md rounded-mx-lg bg-surface-alt border border-border-default">
-            <Typography variant="h3" className="uppercase text-xs font-black text-text-tertiary">Prévia autônoma</Typography>
+            <Typography variant="h3" className="text-xs">Prévia autônoma</Typography>
             <Typography variant="p" className="text-sm">{planDraft.diagnosisSummary}</Typography>
             <div className="flex flex-wrap gap-mx-xs">
               <Badge variant={planDraft.criticalGaps.length ? 'danger' : 'success'} className="rounded-mx-full px-3 py-1">
@@ -406,7 +406,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
           </div>
 
           <div className="space-y-mx-md mb-mx-md pt-4 border-t border-border-default">
-            <Typography variant="h3" className="uppercase text-xs font-black text-text-tertiary">Análise SWOT (Forças e Fraquezas)</Typography>
+            <Typography variant="h3" className="text-xs">Análise SWOT (Forças e Fraquezas)</Typography>
             <div className="grid grid-cols-1 gap-mx-sm">
                 <div className="space-y-mx-xs">
                   <Typography as="label" variant="caption">Forças (Pontos Fortes)</Typography>
@@ -450,7 +450,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-2 gap-mx-lg">
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+        <Card className="p-mx-lg border-none bg-white">
           <Typography variant="h3" className="mb-mx-md">LANÇAR REALIZADO</Typography>
           <form onSubmit={handleSaveResult} className="grid grid-cols-1 md:grid-cols-2 gap-mx-md">
             <Select
@@ -476,7 +476,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
           </form>
         </Card>
 
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+        <Card className="p-mx-lg border-none bg-white">
           <Typography variant="h3" className="mb-mx-md">LANÇAR META</Typography>
           <form onSubmit={handleSaveTarget} className="grid grid-cols-1 md:grid-cols-2 gap-mx-md">
             <Select

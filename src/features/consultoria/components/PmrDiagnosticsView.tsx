@@ -169,7 +169,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
 
   if (loading) {
     return (
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="p">Carregando formularios PMR...</Typography>
       </Card>
     )
@@ -177,7 +177,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
 
   if (error) {
     return (
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="h3" tone="error">Diagnostico indisponivel</Typography>
         <Typography variant="p" tone="muted">{error}</Typography>
       </Card>
@@ -186,7 +186,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
 
   return (
     <section className="grid grid-cols-1 xl:grid-cols-3 gap-mx-lg">
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white xl:col-span-2">
+      <Card className="p-mx-lg border-none bg-white xl:col-span-2">
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-mx-md mb-mx-lg">
           <div>
             <Typography variant="h3">DIAGNOSTICO PMR NATIVO</Typography>
@@ -223,7 +223,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
               <div className="space-y-mx-xs">
                 <Typography variant="caption">Tipo</Typography>
                 <div className="h-mx-14 sm:h-12 rounded-mx-md border border-border-default bg-surface-alt px-5 flex items-center">
-                  <Typography variant="p" className="font-black">
+                  <Typography variant="p" className="">
                     {formLabels[selectedTemplate.form_key] || selectedTemplate.title}
                   </Typography>
                 </div>
@@ -299,7 +299,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
         )}
       </Card>
 
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="h3" className="mb-mx-md">RESPOSTAS COLETADAS</Typography>
         <div className="space-y-mx-sm">
           {templates.map((template) => {
@@ -307,7 +307,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
             return (
               <div key={template.id} className="p-mx-md rounded-mx-lg bg-surface-alt border border-border-default">
                 <div className="flex items-center justify-between gap-mx-sm">
-                  <Typography variant="p" className="font-black">{template.title}</Typography>
+                  <Typography variant="p" className="">{template.title}</Typography>
                   <Badge variant={responses.length ? 'success' : 'outline'} className="rounded-mx-full px-3 py-1">
                     {responses.length}
                   </Badge>

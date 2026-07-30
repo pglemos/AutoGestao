@@ -417,7 +417,7 @@ export default function VendedorTreinamentosContainer() {
                             />
                             {tarefasDaAula.length > 0 && (
                                 <section className="rounded-xl border border-slate-200 bg-slate-50 p-4">
-                                    <Typography variant="p" className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide text-mx-navy">
+                                    <Typography variant="p" className="flex items-center gap-2 text-sm font-bold tracking-wide text-mx-navy">
                                         <CheckCircle2 size={16} className="text-mx-blue" />
                                         Plano de Ação — Tarefa Prática da Aula
                                     </Typography>

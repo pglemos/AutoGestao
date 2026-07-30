@@ -89,11 +89,11 @@ export function BenchmarkingView({
   return (
     <div className="space-y-mx-md">
       <SectionTitle title="Benchmarking" subtitle={`Compare sua loja com dados reais do recorte ${peerGroup}.`} />
-      <Card className="rounded-mx-2xl p-mx-lg">
+      <Card className="p-mx-lg">
         <div className="grid grid-cols-1 gap-mx-sm md:grid-cols-4">
           {Object.entries(filterOptions).map(([label, { current, set, options }]) => (
             <div key={label} className="rounded-mx-xl border border-border-default bg-white px-mx-md py-mx-sm flex flex-col gap-1">
-              <Typography variant="tiny" tone="muted" className="block font-black uppercase text-xs">{label}</Typography>
+              <Typography variant="tiny" tone="muted" className="block text-xs">{label}</Typography>
               <select
                 value={current}
                 onChange={(e) => set(e.target.value)}
@@ -108,8 +108,8 @@ export function BenchmarkingView({
         </div>
       </Card>
       <div className="grid grid-cols-1 gap-mx-md xl:grid-cols-[minmax(0,1fr)_320px]">
-        <Card className="rounded-mx-2xl p-mx-lg">
-          <Typography variant="h3" className="text-xl font-black">Indicadores Comparados</Typography>
+        <Card className="p-mx-lg">
+          <Typography variant="h3" className="text-xl">Indicadores Comparados</Typography>
           <div className="mt-mx-md overflow-x-auto">
             <table className="min-w-[760px] w-full text-sm">
               <thead className="bg-surface-alt text-left text-mx-tiny font-black uppercase text-text-secondary">

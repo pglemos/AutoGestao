@@ -88,8 +88,8 @@ export function RelatoriosVendedor() {
         </section>
 
         <div className="grid grid-cols-1 gap-mx-lg xl:grid-cols-2">
-          <Card className="border-none bg-white p-mx-lg shadow-mx-md">
-            <Typography variant="h3" className="uppercase tracking-tight">Oportunidades por etapa</Typography>
+          <Card className="border-none bg-white p-mx-lg">
+            <Typography variant="h3" className="tracking-tight">Oportunidades por etapa</Typography>
             <div className="mt-mx-lg flex flex-col gap-mx-md">
               {funil.porEtapa.map(e => (
                 <BarRow key={e.etapa} label={CRM_ETAPA_LABEL[e.etapa]} value={e.quantidade} max={maxEtapa} valueLabel={`${e.quantidade} · ${BRL(e.valor)}`} />
@@ -97,8 +97,8 @@ export function RelatoriosVendedor() {
             </div>
           </Card>
 
-          <Card className="border-none bg-white p-mx-lg shadow-mx-md">
-            <Typography variant="h3" className="uppercase tracking-tight">Atendimentos por canal (hoje)</Typography>
+          <Card className="border-none bg-white p-mx-lg">
+            <Typography variant="h3" className="tracking-tight">Atendimentos por canal (hoje)</Typography>
             <div className="mt-mx-lg flex flex-col gap-mx-md">
               <BarRow label={CRM_CANAL_LABEL.showroom} value={porCanal.showroom} max={maxCanal} />
               <BarRow label={CRM_CANAL_LABEL.carteira} value={porCanal.carteira} max={maxCanal} />
@@ -106,7 +106,7 @@ export function RelatoriosVendedor() {
               <BarRow label={CRM_CANAL_LABEL.porta} value={porCanal.porta} max={maxCanal} />
             </div>
             <div className="mt-mx-lg border-t border-border-subtle pt-mx-md">
-              <Typography variant="caption" tone="muted" className="uppercase tracking-wide">Carteira por status</Typography>
+              <Typography variant="caption" tone="muted" className="tracking-wide">Carteira por status</Typography>
               <div className="mt-mx-sm grid grid-cols-2 gap-mx-sm sm:grid-cols-3">
                 <StatusPill label="Ativos" value={clienteMetrics.ativos} />
                 <StatusPill label="Oportunidades" value={clienteMetrics.oportunidades} />
@@ -119,16 +119,16 @@ export function RelatoriosVendedor() {
           </Card>
         </div>
 
-        <Card className="border-none bg-white p-mx-lg shadow-mx-md">
+        <Card className="border-none bg-white p-mx-lg">
           <div className="flex flex-col gap-mx-xs sm:flex-row sm:items-start sm:justify-between">
             <div>
-              <Typography variant="h3" className="uppercase tracking-tight">Analytics de cadência</Typography>
+              <Typography variant="h3" className="tracking-tight">Analytics de cadência</Typography>
               <Typography variant="caption" tone="muted">
                 Gargalos por etapa, demanda real e conversão por fluxo versionado.
               </Typography>
             </div>
             <div className="rounded-mx-md bg-surface-alt px-mx-md py-mx-sm text-right">
-              <Typography variant="caption" tone="muted" className="uppercase tracking-wide">Clientes em cadência</Typography>
+              <Typography variant="caption" tone="muted" className="tracking-wide">Clientes em cadência</Typography>
               <Typography variant="h2" className="mt-mx-xs text-2xl">{cadenciaAnalytics.totalEstados}</Typography>
             </div>
           </div>
@@ -146,7 +146,7 @@ export function RelatoriosVendedor() {
           ) : (
             <div className="mt-mx-lg grid grid-cols-1 gap-mx-lg xl:grid-cols-3">
               <div>
-                <Typography variant="caption" tone="muted" className="uppercase tracking-wide">Gargalos por etapa</Typography>
+                <Typography variant="caption" tone="muted" className="tracking-wide">Gargalos por etapa</Typography>
                 <div className="mt-mx-md flex flex-col gap-mx-sm">
                   {cadenciaAnalytics.gargalos.slice(0, 5).map(item => (
                     <BarRow
@@ -160,7 +160,7 @@ export function RelatoriosVendedor() {
                 </div>
               </div>
               <div>
-                <Typography variant="caption" tone="muted" className="uppercase tracking-wide">Demanda por veículo</Typography>
+                <Typography variant="caption" tone="muted" className="tracking-wide">Demanda por veículo</Typography>
                 <div className="mt-mx-md flex flex-col gap-mx-sm">
                   {cadenciaAnalytics.demandaVeiculos.slice(0, 5).map(item => (
                     <BarRow
@@ -174,7 +174,7 @@ export function RelatoriosVendedor() {
                 </div>
               </div>
               <div>
-                <Typography variant="caption" tone="muted" className="uppercase tracking-wide">Conversão por fluxo</Typography>
+                <Typography variant="caption" tone="muted" className="tracking-wide">Conversão por fluxo</Typography>
                 <div className="mt-mx-md flex flex-col gap-mx-sm">
                   {cadenciaAnalytics.conversaoPorFluxo.slice(0, 5).map(item => (
                     <BarRow

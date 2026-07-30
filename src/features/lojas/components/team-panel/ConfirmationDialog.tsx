@@ -42,7 +42,7 @@ export function ConfirmationDialog({
             aria-describedby="team-confirm-description"
             className="relative z-10 w-full max-w-md rounded-mx-3xl border border-border-default bg-white p-mx-xl shadow-mx-elite"
           >
-            <Typography id="team-confirm-title" variant="h2" className="font-black uppercase tracking-tight text-text-primary">
+            <Typography id="team-confirm-title" variant="h2" className="tracking-tight">
               {pendingConfirmation.title}
             </Typography>
             <Typography id="team-confirm-description" variant="caption" tone="muted" className="mt-mx-sm block font-bold leading-relaxed">

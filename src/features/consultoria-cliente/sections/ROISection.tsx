@@ -82,7 +82,7 @@ export function ROISection({ client }: Props) {
       <div className="flex justify-end">
         <Button
           variant="secondary"
-          className="font-black bg-brand-primary text-white"
+          className="text-white"
           onClick={handleDownloadROI}
           icon={<Download className="w-mx-4 h-mx-4" />}
         >
@@ -91,12 +91,12 @@ export function ROISection({ client }: Props) {
       </div>
 
       <div id="roi-report-content" className="space-y-mx-lg bg-surface-alt p-mx-md rounded-mx-2xl print:p-0 print:bg-white">
-        <Card className="p-mx-xl bg-brand-primary text-white border-none shadow-mx-2xl relative overflow-hidden">
+        <Card className="p-mx-xl text-white border-none shadow-mx-2xl relative overflow-hidden">
           <div className="absolute top-mx-0 right-mx-0 p-mx-lg opacity-10"><TrendingUp size={200} strokeWidth={1} /></div>
           <div className="relative z-10">
-            <Typography variant="h3" className="text-white/70 mb-mx-xs uppercase tracking-mx-widest">Relatório de Choque: ROI da Consultoria</Typography>
+            <Typography variant="h3" className="text-white/70 mb-mx-xs">Relatório de Choque: ROI da Consultoria</Typography>
             <div className="flex items-baseline gap-mx-md">
-              <Typography variant="h1" className="text-6xl font-black">{roi > 0 ? '+' : ''}{roi.toFixed(1)}%</Typography>
+              <Typography variant="h1" className="text-6xl">{roi > 0 ? '+' : ''}{roi.toFixed(1)}%</Typography>
               <Typography variant="h3" className="text-white/80">DE CRESCIMENTO EM VENDAS</Typography>
             </div>
           </div>
@@ -104,8 +104,8 @@ export function ROISection({ client }: Props) {
 
         <div className="grid grid-cols-1 xl:grid-cols-3 gap-mx-lg">
           <div className="xl:col-span-2">
-            <Card className="p-mx-lg bg-white border border-border-default shadow-mx-md h-full rounded-mx-2xl">
-              <Typography variant="h3" className="mb-mx-md uppercase font-black tracking-widest">Evolução Histórica (PMR)</Typography>
+            <Card className="p-mx-lg bg-white border h-full">
+              <Typography variant="h3" className="mb-mx-md">Evolução Histórica (PMR)</Typography>
               <div className="h-mx-80 w-full">
                 <ResponsiveContainer width="100%" height="100%">
                   <LineChart data={chartData}>
@@ -126,44 +126,44 @@ export function ROISection({ client }: Props) {
           </div>
 
           <div className="space-y-mx-lg">
-            <Card className="p-mx-lg bg-white border border-border-default shadow-mx-md rounded-mx-2xl">
+            <Card className="p-mx-lg bg-white border">
               <Typography variant="h3" className="mb-mx-md flex items-center gap-mx-xs">
                 <div className="w-mx-xs h-mx-xs bg-status-error rounded-mx-full" /> MÉDIA ANTES (D0)
               </Typography>
               <div className="space-y-mx-md">
                 <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
-                  <Typography variant="p" className="font-bold text-text-tertiary">VENDAS/MÊS</Typography>
+                  <Typography variant="p" className="font-bold">VENDAS/MÊS</Typography>
                   <Typography variant="h3">{before.sales.toFixed(1)}</Typography>
                 </div>
                 <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
-                  <Typography variant="p" className="font-bold text-text-tertiary">LEADS/MÊS</Typography>
+                  <Typography variant="p" className="font-bold">LEADS/MÊS</Typography>
                   <Typography variant="h3">{before.leads}</Typography>
                 </div>
                 <div className="flex justify-between items-center">
-                  <Typography variant="p" className="font-bold text-text-tertiary">CONVERSÃO GERAL</Typography>
+                  <Typography variant="p" className="font-bold">CONVERSÃO GERAL</Typography>
                   <Typography variant="h3">{before.conversion.toFixed(1)}%</Typography>
                 </div>
               </div>
             </Card>
 
-            <Card className="p-mx-lg bg-white border border-border-default shadow-mx-md rounded-mx-2xl">
+            <Card className="p-mx-lg bg-white border">
               <Typography variant="h3" className="mb-mx-md flex items-center gap-mx-xs">
                 <div className="w-mx-xs h-mx-xs bg-status-success rounded-mx-full" /> RESULTADO ATUAL
               </Typography>
               <div className="space-y-mx-md">
                 <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
-                  <Typography variant="p" className="font-bold text-text-tertiary">VENDAS/MÊS</Typography>
+                  <Typography variant="p" className="font-bold">VENDAS/MÊS</Typography>
                   <div className="flex items-center gap-mx-xs">
                     <Typography variant="h3" className="text-status-success">{after.sales}</Typography>
                     {after.sales > before.sales && <Badge className="bg-status-success/10 text-status-success border-none text-mx-micro">+{((after.sales - before.sales)).toFixed(0)}</Badge>}
                   </div>
                 </div>
                 <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
-                  <Typography variant="p" className="font-bold text-text-tertiary">LEADS/MÊS</Typography>
+                  <Typography variant="p" className="font-bold">LEADS/MÊS</Typography>
                   <Typography variant="h3">{after.leads}</Typography>
                 </div>
                 <div className="flex justify-between items-center">
-                  <Typography variant="p" className="font-bold text-text-tertiary">CONVERSÃO GERAL</Typography>
+                  <Typography variant="p" className="font-bold">CONVERSÃO GERAL</Typography>
                   <div className="flex items-center gap-mx-xs">
                     <Typography variant="h3" className={after.conversion > before.conversion ? 'text-status-success' : ''}>{after.conversion.toFixed(1)}%</Typography>
                     {after.conversion > before.conversion && <Badge className="bg-status-success/10 text-status-success border-none text-mx-micro">+{((after.conversion - before.conversion)).toFixed(1)}pp</Badge>}
@@ -172,21 +172,21 @@ export function ROISection({ client }: Props) {
               </div>
             </Card>
 
-            <Card className="p-mx-lg bg-white border border-border-default shadow-mx-md rounded-mx-2xl">
+            <Card className="p-mx-lg bg-white border">
               <Typography variant="h3" className="mb-mx-md flex items-center gap-mx-xs">
                 <div className="w-mx-xs h-mx-xs bg-brand-primary rounded-mx-full" /> GANHOS DE EFICIÊNCIA
               </Typography>
               <div className="space-y-mx-md">
                 <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
-                  <Typography variant="p" className="font-bold text-text-tertiary">TEMPO DE RESPOSTA</Typography>
+                  <Typography variant="p" className="font-bold">TEMPO DE RESPOSTA</Typography>
                   <Typography variant="h3" className="text-status-success">-45%</Typography>
                 </div>
                 <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
-                  <Typography variant="p" className="font-bold text-text-tertiary">ADERÊNCIA RITUAIS</Typography>
+                  <Typography variant="p" className="font-bold">ADERÊNCIA RITUAIS</Typography>
                   <Typography variant="h3" className="text-status-success">98%</Typography>
                 </div>
                 <div className="flex justify-between items-center">
-                  <Typography variant="p" className="font-bold text-text-tertiary">QUALIDADE CRM</Typography>
+                  <Typography variant="p" className="font-bold">QUALIDADE CRM</Typography>
                   <Typography variant="h3" className="text-status-success">A+</Typography>
                 </div>
               </div>

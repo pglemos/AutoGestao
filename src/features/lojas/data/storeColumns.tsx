@@ -52,7 +52,7 @@ export function buildStoreColumns({
             <Building2 size={18} />
           </span>
           <div className="min-w-0 flex-1">
-            <Typography variant="p" className="font-semibold text-text-primary">
+            <Typography variant="p" className="font-semibold">
               {store.name}
             </Typography>
             <Typography variant="tiny" tone="muted" className="mt-mx-tiny block">
@@ -102,7 +102,7 @@ export function buildStoreColumns({
               <Typography variant="tiny" tone="muted">
                 Equipe
               </Typography>
-              <Typography variant="p" className="mt-mx-tiny font-semibold tabular-nums text-text-primary">
+              <Typography variant="p" className="mt-mx-tiny font-semibold tabular-nums">
                 {stat.teamMembers}
               </Typography>
             </div>
@@ -149,7 +149,7 @@ export function buildStoreColumns({
           {canManageNetwork ? (
             <Typography
               variant="tiny"
-              className="block max-w-mx-64 truncate rounded-mx-md bg-surface-alt px-mx-xs py-mx-tiny font-mono text-text-secondary"
+              className="block max-w-mx-64 truncate bg-surface-alt px-mx-xs py-mx-tiny font-mono"
               title={getRegistrationLink(store.name)}
             >
               {getRegistrationLink(store.name)}

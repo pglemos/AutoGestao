@@ -115,7 +115,7 @@ export function TimeGrid({
                 isSelected && 'bg-mx-green-50',
               )}
             >
-              <Typography variant="tiny" tone="muted" className="block text-[10px] font-semibold uppercase tracking-normal">
+              <Typography variant="tiny" tone="muted" className="block text-[10px] font-semibold tracking-normal">
                 {format(dayInfo.date, 'EEE', { locale: ptBR })}
               </Typography>
               <span className={cn(

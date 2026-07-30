@@ -76,7 +76,7 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
 
   if (metrics.loading) {
     return (
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="p">Carregando fechamento mensal...</Typography>
       </Card>
     )
@@ -84,7 +84,7 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
 
   if (metrics.error) {
     return (
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="h3" tone="error">Fechamento indisponível</Typography>
         <Typography variant="p" tone="muted">{metrics.error}</Typography>
       </Card>
@@ -106,22 +106,22 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-mx-md">
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+        <Card className="p-mx-lg border-none bg-white">
           <Megaphone className="w-mx-5 h-mx-5 text-brand-primary mb-mx-sm" />
           <Typography variant="caption" tone="muted">Leads recebidos</Typography>
           <Typography variant="h2">{formatNumber(summary.leads)}</Typography>
         </Card>
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+        <Card className="p-mx-lg border-none bg-white">
           <ShoppingCart className="w-mx-5 h-mx-5 text-brand-primary mb-mx-sm" />
           <Typography variant="caption" tone="muted">Vendas registradas</Typography>
           <Typography variant="h2">{formatNumber(summary.salesRows.length || summary.internetSales)}</Typography>
         </Card>
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+        <Card className="p-mx-lg border-none bg-white">
           <Car className="w-mx-5 h-mx-5 text-brand-primary mb-mx-sm" />
           <Typography variant="caption" tone="muted">Estoque total</Typography>
           <Typography variant="h2">{formatNumber(summary.inventory?.total_stock || 0)}</Typography>
         </Card>
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+        <Card className="p-mx-lg border-none bg-white">
           <Database className="w-mx-5 h-mx-5 text-brand-primary mb-mx-sm" />
           <Typography variant="caption" tone="muted">Investimento internet</Typography>
           <Typography variant="h2">{formatCurrency(summary.investment)}</Typography>
@@ -129,7 +129,7 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
       </div>
 
       <div className="grid grid-cols-1 xl:grid-cols-3 gap-mx-lg">
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white xl:col-span-2">
+        <Card className="p-mx-lg border-none bg-white xl:col-span-2">
           <div className="flex items-center justify-between gap-mx-sm mb-mx-md">
             <Typography variant="h3">MARKETING POR CANAL</Typography>
             <Badge variant="outline" className="rounded-mx-full px-3 py-1">{summary.marketingRows.length} CANAIS</Badge>
@@ -147,7 +147,7 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
               <tbody>
                 {summary.marketingRows.map((row) => (
                   <tr key={`${row.reference_month}-${row.media}`} className="border-b border-border-subtle">
-                    <td className="py-mx-sm pr-mx-md"><Typography variant="p" className="font-black">{row.media}</Typography></td>
+                    <td className="py-mx-sm pr-mx-md"><Typography variant="p" className="">{row.media}</Typography></td>
                     <td className="py-mx-sm pr-mx-md"><Typography variant="p">{formatNumber(row.leads_volume)}</Typography></td>
                     <td className="py-mx-sm pr-mx-md"><Typography variant="p">{formatNumber(row.sales_volume)}</Typography></td>
                     <td className="py-mx-sm"><Typography variant="p">{formatCurrency(row.investment)}</Typography></td>
@@ -165,7 +165,7 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
           </div>
         </Card>
 
-        <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+        <Card className="p-mx-lg border-none bg-white">
           <Typography variant="h3" className="mb-mx-md">INDICADORES DERIVADOS</Typography>
           <div className="space-y-mx-sm">
             <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-mx-md bg-surface-alt">
@@ -173,19 +173,19 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
                 <Users className="w-mx-4 h-mx-4 text-brand-primary" />
                 <Typography variant="p" className="font-bold">Vendedores ativos</Typography>
               </div>
-              <Typography variant="p" className="font-black">{summary.sellers}</Typography>
+              <Typography variant="p" className="">{summary.sellers}</Typography>
             </div>
             <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-mx-md bg-surface-alt">
               <div className="flex items-center gap-mx-xs">
                 <BarChart3 className="w-mx-4 h-mx-4 text-brand-primary" />
                 <Typography variant="p" className="font-bold">Ticket médio</Typography>
               </div>
-              <Typography variant="p" className="font-black">{formatCurrency(summary.avgTicket)}</Typography>
+              <Typography variant="p" className="">{formatCurrency(summary.avgTicket)}</Typography>
             </div>
             {derived.map((item) => item && (
               <div key={item.metric.metric_key} className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-mx-md bg-surface-alt">
                 <Typography variant="p" className="font-bold">{item.metric.label}</Typography>
-                <Typography variant="p" className="font-black">
+                <Typography variant="p" className="">
                   {item.metric.value_type === 'currency'
                     ? formatCurrency(item.result.result_value)
                     : item.metric.value_type === 'percent'

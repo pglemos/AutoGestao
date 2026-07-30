@@ -31,7 +31,7 @@ export function ConsultingModulesPanel({ modules, loading = false, canManage = f
   }
 
   return (
-    <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+    <Card className="p-mx-lg border-none bg-white">
       <div className="flex items-start justify-between gap-mx-md mb-mx-md">
         <div>
           <Typography variant="h3">MODULOS INTERNOS</Typography>
@@ -49,7 +49,7 @@ export function ConsultingModulesPanel({ modules, loading = false, canManage = f
           <div key={module.module_key} className="p-mx-md rounded-mx-lg bg-surface-alt border border-border-default space-y-mx-sm">
             <div className="flex items-start justify-between gap-mx-sm">
               <div>
-                <Typography variant="p" className="font-black">{module.label}</Typography>
+                <Typography variant="p" className="">{module.label}</Typography>
                 <Typography variant="tiny" tone="muted">{module.module_key}</Typography>
               </div>
               <Badge variant={module.enabled ? 'success' : 'outline'} className="rounded-mx-full px-3 py-1">

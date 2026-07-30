@@ -47,7 +47,7 @@ export function AdminFeedbackHeader({
         </div>
         <Typography
           variant="caption"
-          className="pl-mx-md uppercase tracking-widest font-black text-text-label"
+          className="pl-mx-md"
         >
           ADMIN — VISÃO DA REDE • METODOLOGIA MX
         </Typography>
@@ -82,7 +82,7 @@ export function AdminFeedbackHeader({
           variant="outline"
           size="icon"
           onClick={onRefresh}
-          className="rounded-mx-xl shadow-mx-sm h-mx-xl w-mx-xl bg-white"
+          className="h-mx-xl w-mx-xl bg-white"
           aria-label="Sincronizar"
         >
           <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
@@ -90,7 +90,7 @@ export function AdminFeedbackHeader({
         {activeTab === 'individual' && (
           <Button
             onClick={onOpenForm}
-            className="h-mx-xl px-8 shadow-mx-lg bg-brand-secondary font-black uppercase text-xs tracking-widest w-full sm:w-auto"
+            className="h-mx-xl px-8 text-xs w-full sm:w-auto"
           >
             <Plus size={18} className="mr-2" /> NOVO FEEDBACK
           </Button>

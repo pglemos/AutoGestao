@@ -43,7 +43,7 @@ export function EditMemberModal({
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} onClick={onClose} className="absolute inset-0 bg-mx-black/60 backdrop-blur-md" />
 
       <motion.div initial={{ opacity: 0, scale: 0.9, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }} exit={{ opacity: 0, scale: 0.9, y: 20 }} className="w-full max-w-2xl relative z-10 my-mx-lg">
-        <Card className="shadow-mx-elite border-none overflow-hidden">
+        <Card className="border-none overflow-hidden">
           <CardHeader className="bg-mx-black border-none text-white p-mx-xl relative">
               <div className="absolute top-mx-0 left-mx-0 w-full h-mx-px bg-brand-primary shadow-mx-glow-brand" />
               <div className="flex items-center justify-between">
@@ -53,7 +53,7 @@ export function EditMemberModal({
                       </div>
                       <div>
                           <CardTitle id="edit-team-member-title" className="text-white text-2xl">Editar integrante</CardTitle>
-                          <Typography variant="caption" tone="white" className="opacity-60 block uppercase font-black tracking-mx-widest text-mx-nano">Dados de acesso, vínculo e vigência de {editingMember.name}</Typography>
+                          <Typography variant="caption" tone="white" className="opacity-60 block text-mx-nano">Dados de acesso, vínculo e vigência de {editingMember.name}</Typography>
                       </div>
                   </div>
                   <Button type="button" variant="ghost" size="icon" aria-label="Fechar edição de integrante" onClick={onClose} className="text-white/40 hover:text-white hover:bg-white/10 rounded-mx-full">
@@ -167,8 +167,8 @@ export function EditMemberModal({
                     <div className="flex items-center gap-mx-md">
                       <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-status-success-surface text-status-success flex items-center justify-center border border-status-success/10"><ShieldCheck size={20} /></div>
                       <div className="space-y-0.5">
-                        <Typography variant="h3" className="text-sm font-black uppercase tracking-tight">Usuário ativo</Typography>
-                        <Typography variant="caption" tone="muted" className="text-mx-nano uppercase font-black">Permite acesso ao sistema</Typography>
+                        <Typography variant="h3" className="text-sm tracking-tight">Usuário ativo</Typography>
+                        <Typography variant="caption" tone="muted" className="text-mx-nano">Permite acesso ao sistema</Typography>
                       </div>
                     </div>
                     <input type="checkbox" name="active" checked={editingMember.active ?? true} onChange={e => onChange({ ...editingMember, active: e.target.checked })} className="w-mx-sm h-mx-sm rounded-mx-md accent-status-success cursor-pointer" />
@@ -177,8 +177,8 @@ export function EditMemberModal({
                     <div className="flex items-center gap-mx-md">
                       <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary"><Power size={20} /></div>
                       <div className="space-y-0.5">
-                        <Typography variant="h3" className="text-sm font-black uppercase tracking-tight">Vigência ativa</Typography>
-                        <Typography variant="caption" tone="muted" className="text-mx-nano uppercase font-black">Conta na lista operacional da loja</Typography>
+                        <Typography variant="h3" className="text-sm tracking-tight">Vigência ativa</Typography>
+                        <Typography variant="caption" tone="muted" className="text-mx-nano">Conta na lista operacional da loja</Typography>
                       </div>
                     </div>
                     <input type="checkbox" name="is_active" checked={editingMember.is_active} onChange={e => onChange({ ...editingMember, is_active: e.target.checked })} className="w-mx-sm h-mx-sm rounded-mx-md accent-brand-primary cursor-pointer" />
@@ -188,8 +188,8 @@ export function EditMemberModal({
                     <div className="flex items-center gap-mx-md">
                       <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-brand-primary/10 flex items-center justify-center text-brand-primary"><TrendingUp size={20} /></div>
                       <div className="space-y-0.5">
-                        <Typography variant="h3" className="text-sm font-black uppercase tracking-tight">Venda loja</Typography>
-                        <Typography variant="caption" tone="muted" className="text-mx-nano uppercase font-black">Conta como indicador operacional da unidade</Typography>
+                        <Typography variant="h3" className="text-sm tracking-tight">Venda loja</Typography>
+                        <Typography variant="caption" tone="muted" className="text-mx-nano">Conta como indicador operacional da unidade</Typography>
                       </div>
                     </div>
                     <input type="checkbox" name="is_venda_loja" checked={editingMember.is_venda_loja ?? false} onChange={e => onChange({ ...editingMember, is_venda_loja: e.target.checked })} className="w-mx-sm h-mx-sm rounded-mx-md accent-brand-primary cursor-pointer" />
@@ -199,8 +199,8 @@ export function EditMemberModal({
                     <div className="flex items-center gap-mx-md">
                       <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-status-warning-surface text-status-warning border border-status-warning/10"><ShieldAlert size={20} /></div>
                       <div className="space-y-0.5">
-                        <Typography variant="h3" className="text-sm font-black uppercase tracking-tight">Carência MX</Typography>
-                        <Typography variant="caption" tone="muted" className="text-mx-nano uppercase font-black">Ignorar metas do mês vigente</Typography>
+                        <Typography variant="h3" className="text-sm tracking-tight">Carência MX</Typography>
+                        <Typography variant="caption" tone="muted" className="text-mx-nano">Ignorar metas do mês vigente</Typography>
                       </div>
                     </div>
                     <input type="checkbox" name="closing_month_grace" checked={editingMember.closing_month_grace} onChange={e => onChange({ ...editingMember, closing_month_grace: e.target.checked })} className="w-mx-sm h-mx-sm rounded-mx-md accent-status-warning cursor-pointer" />
@@ -221,7 +221,7 @@ export function EditMemberModal({
                 </Button>
                 <Button
                   type="submit" disabled={saving}
-                  className="h-mx-16 flex-1 rounded-mx-2xl font-black uppercase tracking-mx-wide text-xs shadow-mx-lg"
+                  className="h-mx-16 flex-1 text-xs"
                 >
                   {saving ? <RefreshCw className="animate-spin mr-2" /> : <Save size={20} className="mr-2" />}
                   SALVAR INTEGRANTE

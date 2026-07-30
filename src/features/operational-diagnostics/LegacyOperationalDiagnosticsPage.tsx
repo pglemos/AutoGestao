@@ -104,8 +104,8 @@ export default function AiDiagnostics() {
     return (
       <main className="h-full w-full flex flex-col items-center justify-center text-center p-mx-lg bg-surface-alt">
         <ShieldCheck size={48} className="text-brand-primary opacity-20 mb-6" aria-hidden="true" />
-        <Typography variant="h2" className="uppercase tracking-tighter text-text-primary">Acesso Restrito</Typography>
-        <Typography variant="caption" tone="muted" className="max-w-sm mx-auto uppercase tracking-widest mt-4 font-black">Diagnóstico operacional disponível para Admin MX e Gerente.</Typography>
+        <Typography variant="h2" className="tracking-tighter">Acesso Restrito</Typography>
+        <Typography variant="caption" tone="muted" className="max-w-sm mx-auto mt-4">Diagnóstico operacional disponível para Admin MX e Gerente.</Typography>
       </main>
     )
   }
@@ -119,12 +119,12 @@ export default function AiDiagnostics() {
           actions={(
             <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-end gap-mx-md shrink-0 w-full sm:w-auto">
               <div className="flex flex-col items-center sm:items-end">
-                <Typography variant="tiny" tone="muted" className="uppercase tracking-widest font-black">Status do Motor</Typography>
-                <Badge variant={isScanning ? 'warning' : 'success'} className="mt-1 shadow-mx-sm px-6 py-2 rounded-mx-lg font-black border-none">
+                <Typography variant="tiny" tone="muted" className="">Status do Motor</Typography>
+                <Badge variant={isScanning ? 'warning' : 'success'} className="mt-1 px-6 py-2 border-none">
                   <Typography variant="tiny" as="span">{isScanning ? 'PROCESSANDO...' : 'SISTEMA EM STANDBY'}</Typography>
                 </Badge>
               </div>
-              <Button size="icon" onClick={handleScan} disabled={isScanning} className="w-mx-2xl h-mx-2xl rounded-mx-lg bg-brand-primary hover:bg-brand-primary-hover text-white shadow-mx-xl active:scale-95 transition-all" aria-label="Reiniciar diagnóstico operacional">
+              <Button size="icon" onClick={handleScan} disabled={isScanning} className="w-mx-2xl h-mx-2xl hover:bg-brand-primary-hover text-white active:scale-95 transition-all" aria-label="Reiniciar diagnóstico operacional">
                 <Zap size={32} className={cn(isScanning ? 'animate-bounce' : 'fill-white')} aria-hidden="true" />
               </Button>
             </div>
@@ -132,15 +132,15 @@ export default function AiDiagnostics() {
         />
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-mx-lg flex-1 min-h-0">
           <section className="lg:col-span-7 flex flex-col min-h-mx-chart lg:min-h-0">
-            <Card className="flex-1 bg-mx-black border-none rounded-mx-lg p-mx-md shadow-mx-sm relative overflow-hidden flex flex-col">
+            <Card className="flex-1 border-none p-mx-md relative overflow-hidden flex flex-col">
               <div className="flex items-center gap-mx-sm mb-8 relative z-10">
                 <TerminalIcon size={18} className="text-brand-primary/80" aria-hidden="true" />
-                <Typography variant="caption" tone="white" className="font-black tracking-mx-wide uppercase">Eventos do diagnóstico operacional</Typography>
+                <Typography variant="caption" tone="white" className="">Eventos do diagnóstico operacional</Typography>
               </div>
               <div className="flex-1 font-mono text-sm leading-relaxed space-y-mx-xs overflow-y-auto pr-4 no-scrollbar border-t border-white/5 pt-8 relative z-10" role="log" aria-live="polite">
                 {logs.map((log, index) => (
                   <div key={`${log.msg}-${index}`} className="flex gap-mx-sm group hover:bg-white/5 p-mx-xs rounded-mx-sm transition-colors">
-                    <Typography variant="tiny" tone="muted" as="span" className="font-black opacity-10" aria-hidden="true">{(index + 1).toString().padStart(3, '0')}</Typography>
+                    <Typography variant="tiny" tone="muted" as="span" className="opacity-10" aria-hidden="true">{(index + 1).toString().padStart(3, '0')}</Typography>
                     <Typography as="span" variant="caption" className={cn('font-black tracking-tight uppercase text-xs sm:text-sm', log.type === 'error' ? 'text-status-error' : log.type === 'warning' ? 'text-status-warning' : log.type === 'success' ? 'text-status-success' : 'text-sidebar-foreground')}>{log.msg}</Typography>
                   </div>
                 ))}
@@ -150,22 +150,22 @@ export default function AiDiagnostics() {
             </Card>
           </section>
           <aside className="lg:col-span-5 flex flex-col pb-20 lg:pb-0">
-            <Card className="p-mx-md bg-white border border-border-subtle shadow-mx-sm h-full space-y-mx-md flex flex-col rounded-mx-lg">
+            <Card className="p-mx-md bg-white border h-full space-y-mx-md flex flex-col">
               <header className="flex items-center gap-mx-sm border-b border-border-subtle pb-4">
                 <div className="w-mx-2xl h-mx-2xl rounded-mx-lg bg-brand-primary text-white flex items-center justify-center shadow-mx-sm shrink-0" aria-hidden="true"><ShieldCheck size={32} /></div>
-                <div><Typography variant="h2" className="text-xl sm:text-2xl tracking-tight">Resumo operacional</Typography><Typography variant="caption" tone="muted" className="tracking-mx-wide font-black uppercase">Conclusão e ação sugerida</Typography></div>
+                <div><Typography variant="h2" className="text-xl sm:text-2xl tracking-tight">Resumo operacional</Typography><Typography variant="caption" tone="muted" className="">Conclusão e ação sugerida</Typography></div>
               </header>
               <div className="flex-1" aria-live="polite">
                 <AnimatePresence mode="wait">
                   {summary ? (
                     <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-mx-xl">
-                      <Card className="p-mx-md bg-mx-indigo-50 border border-border-subtle shadow-inner relative group rounded-mx-lg"><Quote size={64} className="absolute -right-4 -bottom-4 text-brand-primary opacity-5 -rotate-12" aria-hidden="true" /><Typography variant="p" className="text-lg sm:text-xl font-black italic text-brand-primary leading-relaxed relative z-10 uppercase tracking-tight">“{summary.diagnostic}”</Typography></Card>
-                      <div className="space-y-mx-md"><div className="flex items-center gap-mx-xs"><div className="w-mx-10 h-mx-10 rounded-mx-lg bg-status-success-surface text-status-success flex items-center justify-center border border-status-success/20" aria-hidden="true"><TrendingUp size={20} /></div><Typography variant="tiny" tone="success" className="font-black uppercase tracking-widest">Plano de Ação Gerencial</Typography></div><Typography variant="p" className="text-sm sm:text-base font-bold text-text-secondary leading-relaxed bg-surface-alt p-mx-md rounded-mx-lg border border-border-subtle uppercase tracking-tight">{summary.action}</Typography></div>
+                      <Card className="p-mx-md bg-mx-indigo-50 border relative group"><Quote size={64} className="absolute -right-4 -bottom-4 text-brand-primary opacity-5 -rotate-12" aria-hidden="true" /><Typography variant="p" className="text-lg sm:text-xl italic leading-relaxed relative z-10 tracking-tight">“{summary.diagnostic}”</Typography></Card>
+                      <div className="space-y-mx-md"><div className="flex items-center gap-mx-xs"><div className="w-mx-10 h-mx-10 rounded-mx-lg bg-status-success-surface text-status-success flex items-center justify-center border border-status-success/20" aria-hidden="true"><TrendingUp size={20} /></div><Typography variant="tiny" tone="success" className="">Plano de Ação Gerencial</Typography></div><Typography variant="p" className="text-sm sm:text-base font-bold leading-relaxed bg-surface-alt p-mx-md border tracking-tight">{summary.action}</Typography></div>
                     </motion.div>
-                  ) : <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-mx-md"><div className="w-mx-3xl h-mx-3xl rounded-mx-full border-4 border-border-subtle border-t-brand-primary animate-spin" aria-hidden="true" /><Typography variant="caption" tone="muted" className="animate-pulse tracking-widest font-black uppercase">ANALISANDO MALHA...</Typography></div>}
+                  ) : <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-mx-md"><div className="w-mx-3xl h-mx-3xl rounded-mx-full border-4 border-border-subtle border-t-brand-primary animate-spin" aria-hidden="true" /><Typography variant="caption" tone="muted" className="animate-pulse">ANALISANDO MALHA...</Typography></div>}
                 </AnimatePresence>
               </div>
-              <footer className="pt-8 border-t border-border-subtle mt-auto"><Typography variant="tiny" tone="muted" className="text-center block uppercase tracking-mx-wide font-black opacity-60">Referência operacional: critério 20/60/33</Typography></footer>
+              <footer className="pt-8 border-t border-border-subtle mt-auto"><Typography variant="tiny" tone="muted" className="text-center block opacity-60">Referência operacional: critério 20/60/33</Typography></footer>
             </Card>
           </aside>
         </div>

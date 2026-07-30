@@ -47,7 +47,7 @@ export function CreateStoreModal({
             exit={{ opacity: 0, scale: 0.95, y: 20 }}
             className="w-full max-w-lg"
           >
-            <Card className="p-mx-lg md:p-14 border-none shadow-mx-2xl bg-white overflow-hidden relative rounded-mx-3xl">
+            <Card className="p-mx-lg md:p-14 border-none shadow-mx-2xl bg-white overflow-hidden relative">
               <form onSubmit={onSubmit} className="space-y-mx-xl relative z-10">
                 <header className="flex items-center justify-between border-b border-border-default pb-8">
                   <div className="flex items-center gap-mx-sm">
@@ -61,7 +61,7 @@ export function CreateStoreModal({
                       <Typography
                         variant="caption"
                         tone="muted"
-                        className="mt-1 block uppercase tracking-mx-wide"
+                        className="mt-1 block"
                       >
                         Cadastro único da rede MX
                       </Typography>
@@ -84,7 +84,7 @@ export function CreateStoreModal({
                       as="label"
                       htmlFor="store-name"
                       variant="caption"
-                      className="ml-2 font-black uppercase tracking-widest text-text-tertiary"
+                      className="ml-2"
                     >
                       Nome da Unidade
                     </Typography>
@@ -106,11 +106,11 @@ export function CreateStoreModal({
                         as="label"
                         htmlFor="manager-email"
                         variant="caption"
-                        className="font-black uppercase tracking-widest text-text-tertiary"
+                        className=""
                       >
                         E-mail do Gestor
                       </Typography>
-                      <Badge variant="outline" className="text-mx-micro font-black uppercase">
+                      <Badge variant="outline" className="text-mx-micro">
                         Opcional
                       </Badge>
                     </div>
@@ -139,7 +139,7 @@ export function CreateStoreModal({
                   <Button
                     type="submit"
                     disabled={creating}
-                    className="w-full sm:w-auto h-mx-2xl px-12 rounded-mx-full shadow-mx-xl bg-brand-secondary font-black uppercase tracking-widest"
+                    className="w-full sm:w-auto h-mx-2xl px-12 rounded-mx-full"
                   >
                     {creating ? (
                       <RefreshCw className="animate-spin mr-2" aria-hidden="true" />

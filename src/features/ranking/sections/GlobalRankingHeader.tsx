@@ -38,7 +38,7 @@ export function GlobalRankingHeader({
         <div className="flex items-center justify-center lg:justify-start gap-mx-sm">
           <Typography variant="h1">Ranking <span className="text-mx-green-700">Global</span></Typography>
         </div>
-        <Typography variant="caption" className="pl-mx-md uppercase tracking-widest font-black text-text-label">
+        <Typography variant="caption" className="pl-mx-md">
           {totalLojas} UNIDADES • {totalVendedores} VENDEDORES • PERFORMANCE EM TEMPO REAL
         </Typography>
       </div>
@@ -63,18 +63,18 @@ export function GlobalRankingHeader({
             onClick={onToggleHideStoreNames}
             aria-label={hideStoreNames ? 'Mostrar lojas' : 'Ocultar lojas'}
             title={hideStoreNames ? 'Mostrar lojas' : 'Ocultar lojas'}
-            className="rounded-mx-xl shadow-mx-sm h-mx-xl bg-white px-mx-md"
+            className="h-mx-xl bg-white px-mx-md"
           >
             {hideStoreNames ? <EyeOff size={20} /> : <Eye size={20} />}
             {hideStoreNames ? 'Mostrar lojas' : 'Ocultar lojas'}
           </Button>
-          <Button variant="outline" onClick={onRefresh} aria-label="Atualizar ranking global" className="rounded-mx-xl shadow-mx-sm h-mx-xl bg-white px-mx-md">
+          <Button variant="outline" onClick={onRefresh} aria-label="Atualizar ranking global" className="h-mx-xl bg-white px-mx-md">
             <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
             Atualizar
           </Button>
           <div className="flex-1 sm:flex-none flex items-center justify-center gap-mx-sm bg-white border border-border-default px-6 h-mx-xl rounded-mx-full shadow-mx-sm">
             <Trophy size={18} className="text-status-warning shrink-0" />
-            <Typography variant="caption" className="whitespace-nowrap uppercase font-black text-mx-micro">{filteredCount} no ranking</Typography>
+            <Typography variant="caption" className="whitespace-nowrap text-mx-micro">{filteredCount} no ranking</Typography>
           </div>
         </div>
       </div>

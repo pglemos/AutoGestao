@@ -142,7 +142,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
   return (
     <div className="space-y-mx-lg">
       <form onSubmit={handleSubmit} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-        <Typography variant="caption" tone="muted" className="font-bold uppercase tracking-wide">
+        <Typography variant="caption" tone="muted" className="font-bold tracking-wide">
           Regras de comissão e bônus
         </Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-2 xl:grid-cols-[1fr_1.3fr_1fr_1fr_1fr]">

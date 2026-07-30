@@ -255,12 +255,12 @@ export function DashboardHeader({
     <>
       <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-mx-md md:gap-mx-lg border-b border-border-default pb-10 shrink-0">
         <div className="flex flex-col gap-mx-xs text-center xl:text-left min-w-0">
-          <Typography variant="tiny" tone="brand" className="font-black uppercase tracking-widest opacity-60 text-mx-tiny">
+          <Typography variant="tiny" tone="brand" className="opacity-60 text-mx-tiny">
             Status de Unidade
           </Typography>
           <div className="flex items-center justify-center lg:justify-start gap-mx-sm">
             <div className="h-mx-10 w-mx-xs shrink-0 rounded-mx-full bg-brand-primary shadow-mx-md" aria-hidden="true" />
-            <Typography variant="h1" className="max-w-full text-3xl sm:text-5xl font-black uppercase tracking-tighter break-words">
+            <Typography variant="h1" className="max-w-full text-3xl sm:text-5xl tracking-tighter break-words">
               {storeName}
             </Typography>
           </div>
@@ -287,7 +287,7 @@ export function DashboardHeader({
           <TabNavPill tabs={LOJA_TABS} activeTab={activeTab} onTabChange={onTabChange} className="mx-store-dashboard-tabs max-w-full overflow-x-auto" buttonClassName="h-mx-8 sm:h-mx-10 px-2 sm:px-6 shrink-0" aria-label="Abas da loja" />
 
           {activeTab === 'performance' && (
-            <Button variant="outline" onClick={onRefresh} aria-label={`Atualizar performance. ${lastSyncLabel}`} title={lastSyncLabel} className="h-mx-10 sm:h-mx-14 rounded-mx-xl shadow-mx-sm bg-white px-mx-md border-border-subtle hover:bg-surface-alt">
+            <Button variant="outline" onClick={onRefresh} aria-label={`Atualizar performance. ${lastSyncLabel}`} title={lastSyncLabel} className="h-mx-10 sm:h-mx-14 bg-white px-mx-md hover:bg-surface-alt">
               <RefreshCw size={18} className={cn(isRefetching && 'animate-spin')} />
               Atualizar
             </Button>
@@ -305,10 +305,10 @@ export function DashboardHeader({
       </div>
 
       {activeTab === 'performance' && (
-        <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+        <Card className="border bg-white p-mx-md">
           <div className="grid grid-cols-1 gap-mx-md xl:grid-cols-[auto_1fr_auto] xl:items-center">
             <div className="min-w-0">
-              <Typography variant="h3" className="uppercase tracking-tight">{periodContext.title}</Typography>
+              <Typography variant="h3" className="tracking-tight">{periodContext.title}</Typography>
               <Typography variant="p" tone="muted" className="mt-mx-tiny text-sm">{periodContext.description}</Typography>
             </div>
             <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center">

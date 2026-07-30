@@ -11,7 +11,7 @@ export function ResolvingStoreSpinner() {
   return (
     <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt" role="status" aria-busy="true" aria-live="polite">
       <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-brand-primary mb-6" aria-hidden="true" />
-      <Typography variant="caption" tone="muted" className="animate-pulse font-black uppercase tracking-widest">
+      <Typography variant="caption" tone="muted" className="animate-pulse">
         Identificando Unidade...
       </Typography>
     </div>
@@ -54,7 +54,7 @@ export function OwnerStoreUnavailable({ requestedStoreForbidden, storeResolution
   const navigate = useNavigate()
   return (
     <main className="w-full h-full bg-surface-alt p-mx-lg">
-      <Card className="mx-auto max-w-2xl border-none bg-white shadow-mx-xl">
+      <Card className="mx-auto max-w-2xl border-none bg-white">
         <EmptyState
           size="lg"
           icon={<Building2 />}

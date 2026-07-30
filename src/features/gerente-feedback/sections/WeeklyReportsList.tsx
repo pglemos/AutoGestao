@@ -56,11 +56,11 @@ function ReportHeader({ report }: { report: WeeklyFeedbackReport }) {
           <Typography
             variant="tiny"
             tone="muted"
-            className="uppercase tracking-widest font-black text-mx-micro"
+            className="text-mx-micro"
           >
             FECHAMENTO SEMANAL
           </Typography>
-          <Typography variant="h3" className="text-lg uppercase font-black tracking-tight">
+          <Typography variant="h3" className="text-lg tracking-tight">
             {formatSafeDate(report.week_start, 'dd/MM')} -{' '}
             {formatSafeDate(report.week_end, 'dd/MM')}
           </Typography>
@@ -68,7 +68,7 @@ function ReportHeader({ report }: { report: WeeklyFeedbackReport }) {
       </div>
       <Badge
         variant={report.email_status === 'sent' ? 'success' : 'danger'}
-        className="px-4 py-1 rounded-mx-lg text-mx-micro font-black shadow-sm uppercase border-none"
+        className="px-4 py-1 text-mx-micro shadow-sm border-none"
       >
         {report.email_status === 'sent' ? 'ENVIADO' : 'FALHA'}
       </Badge>
@@ -95,7 +95,7 @@ function ReportMetrics({
         <Typography
           variant="tiny"
           tone="muted"
-          className="text-mx-micro mb-2 block uppercase tracking-widest font-black"
+          className="text-mx-micro mb-2 block"
         >
           META
         </Typography>
@@ -114,7 +114,7 @@ function ReportMetrics({
         <Typography
           variant="tiny"
           tone="muted"
-          className="text-mx-micro mb-2 block uppercase tracking-widest font-black"
+          className="text-mx-micro mb-2 block"
         >
           MÉDIA
         </Typography>

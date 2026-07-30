@@ -66,7 +66,7 @@ export function ConsultingDailyTrackingView({ clientId, storeId }: Props) {
         return (
           <div className="flex items-center gap-mx-xs">
             <CheckCircle2 size={14} className="text-brand-primary" />
-            <Typography variant="p" className="font-black">{total}</Typography>
+            <Typography variant="p" className="">{total}</Typography>
           </div>
         )
       }
@@ -89,7 +89,7 @@ export function ConsultingDailyTrackingView({ clientId, storeId }: Props) {
 
   if (!storeId) {
     return (
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="p" tone="muted">
           Este cliente não possui uma Loja MX vinculada para acompanhamento diário automático.
           Vincule uma loja nas configurações do cliente.
@@ -112,7 +112,7 @@ export function ConsultingDailyTrackingView({ clientId, storeId }: Props) {
         </Badge>
       </div>
 
-      <Card className="border-none shadow-mx-md bg-white overflow-hidden">
+      <Card className="border-none bg-white overflow-hidden">
         <DataGrid
           columns={columns}
           data={checkins}

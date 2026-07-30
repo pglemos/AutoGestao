@@ -18,7 +18,7 @@ type Props = { funnelData: FunnelItem[]; metrics: NetworkMetrics }
 
 export function AdminFunnelChart({ funnelData, metrics }: Props) {
   return (
-    <Card className="border-none shadow-mx-lg bg-white overflow-hidden">
+    <Card className="border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
           <Layers3 size={18} className="text-brand-primary" /> Funil agregado

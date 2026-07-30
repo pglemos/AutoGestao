@@ -49,14 +49,14 @@ export default function VendedorConfiguracoes() {
           title="Configurações"
           subtitle="Preferências e atalhos operacionais do vendedor."
           actions={
-            <Badge variant="brand" className="rounded-mx-full px-mx-md py-mx-sm uppercase">
+            <Badge variant="brand" className="rounded-mx-full px-mx-md py-mx-sm">
               {role || 'Perfil não informado'}
             </Badge>
           }
         />
 
         <section className="grid items-start grid-cols-1 gap-mx-lg xl:grid-cols-[320px_minmax(0,1fr)]">
-          <Card className="h-fit rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-md">
+          <Card className="h-fit border bg-white p-mx-lg">
             <div className="flex items-start gap-mx-md">
               <span className="grid h-mx-14 w-mx-14 shrink-0 place-items-center rounded-mx-2xl bg-brand-primary/10 text-brand-primary">
                 <ShieldCheck size={26} />
@@ -72,7 +72,7 @@ export default function VendedorConfiguracoes() {
             </div>
 
             <div className="mt-mx-lg rounded-mx-md border border-border-default bg-surface-alt p-mx-md">
-              <Typography variant="caption" className="uppercase tracking-mx-wide text-text-primary">
+              <Typography variant="caption" className="">
                 Acesso
               </Typography>
               <Typography variant="p" tone="muted" className="mt-mx-xs">
@@ -83,14 +83,14 @@ export default function VendedorConfiguracoes() {
 
           <section className="grid grid-cols-1 gap-mx-md md:grid-cols-2" aria-label="Configurações do vendedor">
             {SETTINGS.map((item) => (
-              <Card key={item.title} className="rounded-mx-2xl border border-border-subtle bg-white p-mx-md shadow-mx-md sm:p-mx-lg">
+              <Card key={item.title} className="border bg-white p-mx-md sm:p-mx-lg">
                 <div className="flex h-full flex-col gap-mx-md">
                   <div className="flex items-start gap-mx-md">
                     <span className="grid h-mx-12 w-mx-12 shrink-0 place-items-center rounded-mx-2xl bg-status-success-surface text-mx-green-700">
                       <item.icon size={22} />
                     </span>
                     <div className="min-w-0">
-                      <Typography variant="h3" className="uppercase">
+                      <Typography variant="h3" className="">
                         {item.title}
                       </Typography>
                       <Typography variant="p" tone="muted" className="mt-mx-xs">
@@ -98,7 +98,7 @@ export default function VendedorConfiguracoes() {
                       </Typography>
                     </div>
                   </div>
-                  <Button asChild variant="outline" className="mt-auto min-h-10 justify-center rounded-mx-xl">
+                  <Button asChild variant="outline" className="mt-auto min-h-10 justify-center">
                     <Link to={item.to}>{item.cta}</Link>
                   </Button>
                 </div>

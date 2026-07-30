@@ -31,7 +31,7 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
       </Card>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
-        <Card className="p-mx-lg bg-white border border-border-default shadow-sm rounded-mx-2xl flex flex-col justify-center gap-mx-md">
+        <Card className="p-mx-lg bg-white border shadow-sm flex flex-col justify-center gap-mx-md">
           <div className="flex items-center gap-mx-sm">
             <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><Zap className="w-mx-5 h-mx-5" /></div>
             <Typography variant="h3">Ferramentas de Gestão</Typography>
@@ -40,20 +40,20 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
             <div className="flex items-center gap-mx-sm"><Target className="w-mx-4 h-mx-4 text-text-tertiary" />Planejamento Estratégico</div>
             <ExternalLink className="w-mx-4 h-mx-4 text-text-tertiary" />
           </Button>
-          <Button className="w-full justify-between h-mx-12 shadow-sm font-bold border-brand-primary text-brand-primary bg-white" variant="outline" onClick={() => window.open(`/consultoria/clientes/${clientSlug}?tab=daily`, '_blank')}>
+          <Button className="w-full justify-between h-mx-12 shadow-sm font-bold border-brand-primary bg-white" variant="outline" onClick={() => window.open(`/consultoria/clientes/${clientSlug}?tab=daily`, '_blank')}>
             <div className="flex items-center gap-mx-sm"><BarChart3 className="w-mx-4 h-mx-4" />Validar SGAP Diário</div>
             <ExternalLink className="w-mx-4 h-mx-4 opacity-50" />
           </Button>
         </Card>
 
-        <Card className="p-mx-lg bg-surface-alt/30 border border-border-default shadow-sm rounded-mx-2xl flex flex-col items-center justify-center text-center">
+        <Card className="p-mx-lg bg-surface-alt/30 border shadow-sm flex flex-col items-center justify-center text-center">
           {latestPlan ? (
             <div className="space-y-mx-xs">
               <div className="w-mx-12 h-mx-12 bg-white rounded-mx-full flex items-center justify-center mx-auto shadow-sm border border-border-default">
                 <CheckCircle2 className="w-mx-6 h-mx-6 text-status-success" />
               </div>
-              <Typography variant="h3" className="text-text-primary">P.E. Validado</Typography>
-              <Typography variant="p" className="text-mx-micro text-text-tertiary">{latestPlan.title}</Typography>
+              <Typography variant="h3" className="">P.E. Validado</Typography>
+              <Typography variant="p" className="text-mx-micro">{latestPlan.title}</Typography>
             </div>
           ) : (
             <div className="space-y-mx-xs opacity-50">
@@ -71,20 +71,20 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
 
 export function VisitThreeExecution() {
   return (
-    <Card className="p-mx-lg shadow-sm border border-border-default bg-white rounded-mx-2xl">
+    <Card className="p-mx-lg shadow-sm border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><Clock size={20} /></div>
         <Typography variant="h3" className="text-lg">Ritual de Rotinas (Disciplina)</Typography>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
         <div className="p-mx-md bg-surface-alt/30 rounded-mx-xl border border-border-default relative">
-          <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro bg-brand-secondary text-white border-none px-mx-sm py-0.5 shadow-sm">GERENTE</Badge>
+          <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro text-white border-none px-mx-sm py-0.5 shadow-sm">GERENTE</Badge>
           <ul className="space-y-mx-md text-sm font-medium text-text-secondary mt-2">
             {[ '09:30 - Cobrar preenchimento SGAP', '10:30 - Reunião Matinal / Ranking', '14:00 - Auditoria de CRM / Funil', '17:00 - Devolutiva Imediata' ].map(li => (<li key={li} className="flex items-center gap-mx-xs"><div className="w-mx-xs h-mx-xs rounded-mx-full bg-brand-secondary shrink-0" /> {li}</li>))}
           </ul>
         </div>
         <div className="p-mx-md bg-surface-alt/30 rounded-mx-xl border border-border-default relative">
-          <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro bg-brand-primary text-white border-none px-mx-sm py-0.5 shadow-sm">VENDEDOR</Badge>
+          <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro text-white border-none px-mx-sm py-0.5 shadow-sm">VENDEDOR</Badge>
           <ul className="space-y-mx-md text-sm font-medium text-text-secondary mt-2">
             {[ 'Registro Leads Porta/Online', 'Agendamentos Carteira', 'Atendimento e Prospecção', 'Lançamento Vendas Ontem' ].map(li => (<li key={li} className="flex items-center gap-mx-xs"><div className="w-mx-xs h-mx-xs rounded-mx-full bg-brand-primary shrink-0" /> {li}</li>))}
           </ul>
@@ -128,7 +128,7 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
   }
 
   return (
-    <Card className="p-mx-lg shadow-mx-md border border-border-default bg-white rounded-mx-2xl">
+    <Card className="p-mx-lg border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><TrendingUp size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 4: Ritual de Devolutiva e Funil</Typography>
@@ -137,13 +137,13 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
       <div className="space-y-mx-md">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
           <div className="space-y-mx-md">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Dados do Vendedor</Typography>
+            <Typography variant="tiny" className="font-bold">Dados do Vendedor</Typography>
             <select aria-label="Dados do Vendedor" value={v} onChange={e => setV(e.target.value)} disabled={!storeId || loading} className="w-full h-mx-10 px-mx-md rounded-mx-lg border border-border-default bg-white text-sm font-bold disabled:opacity-60">
               <option value="">{loading ? 'Carregando vendedores...' : 'Selecione o vendedor...'}</option>
               {sellers.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
             {!storeId && (
-              <Typography variant="tiny" className="block text-status-error font-bold uppercase">
+              <Typography variant="tiny" className="block text-status-error font-bold">
                 Cliente sem loja vinculada. Vincule a loja para listar apenas os vendedores dela.
               </Typography>
             )}
@@ -169,7 +169,7 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
           </div>
 
           <div className="space-y-mx-md">
-             <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Acordos de Melhoria</Typography>
+             <Typography variant="tiny" className="font-bold">Acordos de Melhoria</Typography>
              <Textarea value={p} onChange={e => setP(e.target.value)} className="min-h-mx-20 text-sm" placeholder="Pontos Fortes observados..." />
              <Textarea value={a} onChange={e => setA(e.target.value)} className="min-h-mx-20 text-sm" placeholder="Ação de correção (O que vai mudar?)" />
           </div>
@@ -177,10 +177,10 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
 
         <div className="flex gap-mx-md items-end border-t border-border-subtle pt-mx-md">
           <div className="w-1/3 md:w-1/4">
-            <Typography variant="tiny" tone="muted" className="mb-1 block uppercase text-mx-tiny">META ACORDADA</Typography>
+            <Typography variant="tiny" tone="muted" className="mb-1 block text-mx-tiny">META ACORDADA</Typography>
             <Input aria-label="META ACORDADA" type="number" value={m} onChange={e => setM(parseInt(e.target.value) || 0)} className="h-mx-12 font-black text-brand-primary text-center text-xl" />
           </div>
-          <Button className="flex-1 h-mx-12 shadow-mx-md text-sm font-black" variant="primary" onClick={save} loading={s} icon={<CheckCircle2 size={16} />}>SALVAR FEEDBACK NO CRM</Button>
+          <Button className="flex-1 h-mx-12 text-sm" variant="primary" onClick={save} loading={s} icon={<CheckCircle2 size={16} />}>SALVAR FEEDBACK NO CRM</Button>
         </div>
       </div>
     </Card>
@@ -230,7 +230,7 @@ export function VisitFiveExecution({ storeId, onGenerateSummary }: { storeId: st
   }
 
   return (
-    <Card className="p-mx-lg shadow-mx-md border border-border-default bg-white rounded-mx-2xl">
+    <Card className="p-mx-lg border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><Award size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 5: Plano de Desenvolvimento Individual (PDI)</Typography>
@@ -238,38 +238,38 @@ export function VisitFiveExecution({ storeId, onGenerateSummary }: { storeId: st
       <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
         <div className="space-y-mx-md">
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Vendedor / Gerente</Typography>
+            <Typography variant="tiny" className="font-bold">Vendedor / Gerente</Typography>
             <select aria-label="Vendedor / Gerente" value={sellerId} onChange={e => setSellerId(e.target.value)} disabled={!storeId || loading} className="w-full h-mx-10 px-mx-md rounded-mx-lg border border-border-default bg-white text-sm font-bold disabled:opacity-60">
               <option value="">{loading ? 'Carregando vendedores...' : 'Selecione o vendedor...'}</option>
               {sellers.map(seller => <option key={seller.id} value={seller.id}>{seller.name}</option>)}
             </select>
             {!storeId && (
-              <Typography variant="tiny" className="block text-status-error font-bold uppercase">
+              <Typography variant="tiny" className="block text-status-error font-bold">
                 Cliente sem loja vinculada. Vincule a loja para listar apenas os vendedores dela.
               </Typography>
             )}
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Objetivo em 6 meses</Typography>
+            <Typography variant="tiny" className="font-bold">Objetivo em 6 meses</Typography>
             <Textarea value={goal6m} onChange={e => setGoal6m(e.target.value)} placeholder="Onde essa pessoa precisa estar em 6 meses?" className="min-h-mx-20" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Objetivo em 12 meses</Typography>
+            <Typography variant="tiny" className="font-bold">Objetivo em 12 meses</Typography>
             <Input value={goal12m} onChange={e => setGoal12m(e.target.value)} placeholder="Opcional" className="h-mx-10" />
           </div>
         </div>
         <div className="space-y-mx-md">
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Ação inicial combinada</Typography>
+            <Typography variant="tiny" className="font-bold">Ação inicial combinada</Typography>
             <Textarea value={action} onChange={e => setAction(e.target.value)} placeholder="Primeira ação prática do PDI" className="min-h-mx-24" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Observações do consultor</Typography>
+            <Typography variant="tiny" className="font-bold">Observações do consultor</Typography>
             <Textarea value={notes} onChange={e => setNotes(e.target.value)} placeholder="Contexto, riscos ou apoio necessário" className="min-h-mx-24" />
           </div>
         </div>
       </div>
-      <Button className="w-full mt-mx-md h-mx-12 font-black" variant="primary" onClick={handleSave} loading={isSaving} icon={<Award size={16} />}>SALVAR PDI NO SISTEMA</Button>
+      <Button className="w-full mt-mx-md h-mx-12" variant="primary" onClick={handleSave} loading={isSaving} icon={<Award size={16} />}>SALVAR PDI NO SISTEMA</Button>
     </Card>
   )
 }
@@ -292,40 +292,40 @@ export function VisitSixExecution({ onGenerateSummary }: { onGenerateSummary: (t
   }
 
   return (
-    <Card className="p-mx-lg shadow-mx-md border border-border-default bg-white rounded-mx-2xl">
+    <Card className="p-mx-lg border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><Presentation size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 6: Posicionamento de Marketing, Conteúdo e Tráfego Pago</Typography>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg mb-mx-md">
         <div className="space-y-mx-xs">
-          <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Posicionamento da loja</Typography>
+          <Typography variant="tiny" className="font-bold">Posicionamento da loja</Typography>
           <Textarea value={plan.positioning} onChange={e => setPlan({ ...plan, positioning: e.target.value })} placeholder="Qual mensagem a loja vai sustentar nos canais?" className="min-h-mx-24" />
         </div>
         <div className="space-y-mx-xs">
-          <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Pilares de conteúdo</Typography>
+          <Typography variant="tiny" className="font-bold">Pilares de conteúdo</Typography>
           <Textarea value={plan.contentPillars} onChange={e => setPlan({ ...plan, contentPillars: e.target.value })} placeholder="Ex: oferta, autoridade, bastidores, prova social" className="min-h-mx-24" />
         </div>
       </div>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-mx-md mb-mx-md">
         <div className="space-y-mx-xs">
-          <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Responsável</Typography>
+          <Typography variant="tiny" className="font-bold">Responsável</Typography>
           <Input value={plan.owner} onChange={e => setPlan({ ...plan, owner: e.target.value })} className="h-mx-10 font-bold" placeholder="Nome do responsável" />
         </div>
         <div className="space-y-mx-xs">
-          <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Prazo de início</Typography>
+          <Typography variant="tiny" className="font-bold">Prazo de início</Typography>
           <Input aria-label="Prazo de início" type="date" value={plan.startDate} onChange={e => setPlan({ ...plan, startDate: e.target.value })} className="h-mx-10 font-bold" />
         </div>
         <div className="space-y-mx-xs">
-          <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Ação de tráfego pago</Typography>
+          <Typography variant="tiny" className="font-bold">Ação de tráfego pago</Typography>
           <Input value={plan.trafficAction} onChange={e => setPlan({ ...plan, trafficAction: e.target.value })} className="h-mx-10 font-bold" placeholder="Campanha, verba ou público" />
         </div>
       </div>
       <div className="space-y-mx-xs mb-mx-md">
-        <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Observações e próximos passos</Typography>
+        <Typography variant="tiny" className="font-bold">Observações e próximos passos</Typography>
         <Textarea value={plan.notes} onChange={e => setPlan({ ...plan, notes: e.target.value })} placeholder="Pendências, materiais necessários ou decisões do proprietário" className="min-h-mx-20" />
       </div>
-      <Button className="w-full h-mx-12 font-black" variant="primary" onClick={handleSave} icon={<Presentation size={16} />}>REGISTRAR PLANO DE MARKETING</Button>
+      <Button className="w-full h-mx-12" variant="primary" onClick={handleSave} icon={<Presentation size={16} />}>REGISTRAR PLANO DE MARKETING</Button>
     </Card>
   )
 }
@@ -348,7 +348,7 @@ export function VisitSevenExecution({ onGenerateSummary }: { onGenerateSummary: 
   }
 
   return (
-    <Card className="p-mx-lg shadow-mx-md border border-border-default bg-white rounded-mx-2xl">
+    <Card className="p-mx-lg border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><Rocket size={20} /></div>
         <Typography variant="h3" className="text-lg">Visita 7: Análise das Implementações e Plano de Ação Trimestral</Typography>
@@ -357,36 +357,36 @@ export function VisitSevenExecution({ onGenerateSummary }: { onGenerateSummary: 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
         <div className="space-y-mx-md">
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Resultado do trimestre</Typography>
+            <Typography variant="tiny" className="font-bold">Resultado do trimestre</Typography>
             <Textarea value={review.results} onChange={e => setReview({ ...review, results: e.target.value })} className="min-h-mx-24 text-sm" placeholder="Indicadores, implementações concluídas e impacto observado" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Pontos positivos</Typography>
+            <Typography variant="tiny" className="font-bold">Pontos positivos</Typography>
             <Textarea value={review.positives} onChange={e => setReview({ ...review, positives: e.target.value })} className="min-h-mx-20 text-sm" placeholder="O que evoluiu e deve ser mantido" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Pontos a melhorar</Typography>
+            <Typography variant="tiny" className="font-bold">Pontos a melhorar</Typography>
             <Textarea value={review.improvements} onChange={e => setReview({ ...review, improvements: e.target.value })} className="min-h-mx-20 text-sm" placeholder="Gargalos, riscos e ajustes necessários" />
           </div>
         </div>
 
         <div className="space-y-mx-md">
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Feedback do cliente</Typography>
+            <Typography variant="tiny" className="font-bold">Feedback do cliente</Typography>
             <Textarea value={review.clientFeedback} onChange={e => setReview({ ...review, clientFeedback: e.target.value })} className="min-h-mx-20 text-sm" placeholder="Percepção do proprietário/gestor sobre o ciclo" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Plano dos próximos 3 meses</Typography>
+            <Typography variant="tiny" className="font-bold">Plano dos próximos 3 meses</Typography>
             <Textarea value={review.nextQuarterPlan} onChange={e => setReview({ ...review, nextQuarterPlan: e.target.value })} className="min-h-mx-24 text-sm" placeholder="Prioridades, responsáveis e prazos do próximo trimestre" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Modelo de acompanhamento / renovação</Typography>
+            <Typography variant="tiny" className="font-bold">Modelo de acompanhamento / renovação</Typography>
             <Textarea value={review.followUpModel} onChange={e => setReview({ ...review, followUpModel: e.target.value })} className="min-h-mx-20 text-sm" placeholder="Como será acompanhado após a visita 7" />
           </div>
         </div>
       </div>
 
-      <Button className="w-full mt-mx-md h-mx-12 font-black" variant="primary" onClick={save} icon={<Target size={16} />}>REGISTRAR ANÁLISE E PLANO TRIMESTRAL</Button>
+      <Button className="w-full mt-mx-md h-mx-12" variant="primary" onClick={save} icon={<Target size={16} />}>REGISTRAR ANÁLISE E PLANO TRIMESTRAL</Button>
     </Card>
   )
 }
@@ -412,7 +412,7 @@ export function VisitEightExecution({ onGenerateSummary }: { onGenerateSummary: 
   }
 
   return (
-    <Card className="p-mx-lg shadow-mx-md border border-border-default bg-white rounded-mx-2xl">
+    <Card className="p-mx-lg border bg-white">
       <div className="flex items-center gap-mx-sm mb-mx-md">
         <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><Clock size={20} /></div>
         <Typography variant="h3" className="text-lg">Acompanhamento Mensal</Typography>
@@ -421,36 +421,36 @@ export function VisitEightExecution({ onGenerateSummary }: { onGenerateSummary: 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
         <div className="space-y-mx-md">
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Resultado do periodo</Typography>
+            <Typography variant="tiny" className="font-bold">Resultado do periodo</Typography>
             <Textarea value={review.periodResult} onChange={e => setReview({ ...review, periodResult: e.target.value })} className="min-h-mx-24 text-sm" placeholder="Indicadores, fatos relevantes e evolucao observada" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Pendencias do plano de acao</Typography>
+            <Typography variant="tiny" className="font-bold">Pendencias do plano de acao</Typography>
             <Textarea value={review.pendingActions} onChange={e => setReview({ ...review, pendingActions: e.target.value })} className="min-h-mx-20 text-sm" placeholder="O que ficou pendente, atrasado ou sem dono claro" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Pontos positivos</Typography>
+            <Typography variant="tiny" className="font-bold">Pontos positivos</Typography>
             <Textarea value={review.positives} onChange={e => setReview({ ...review, positives: e.target.value })} className="min-h-mx-20 text-sm" placeholder="O que evoluiu no periodo" />
           </div>
         </div>
 
         <div className="space-y-mx-md">
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Pontos a melhorar</Typography>
+            <Typography variant="tiny" className="font-bold">Pontos a melhorar</Typography>
             <Textarea value={review.improvements} onChange={e => setReview({ ...review, improvements: e.target.value })} className="min-h-mx-20 text-sm" placeholder="Gargalos, riscos e ajustes" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Proximas acoes e responsaveis</Typography>
+            <Typography variant="tiny" className="font-bold">Proximas acoes e responsaveis</Typography>
             <Textarea value={review.nextActions} onChange={e => setReview({ ...review, nextActions: e.target.value })} className="min-h-mx-24 text-sm" placeholder="Acoes, responsaveis e prazos" />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Proxima data</Typography>
+            <Typography variant="tiny" className="font-bold">Proxima data</Typography>
             <Input aria-label="Proxima data" type="date" value={review.nextDate} onChange={e => setReview({ ...review, nextDate: e.target.value })} className="h-mx-10 font-bold" />
           </div>
         </div>
       </div>
 
-      <Button className="w-full mt-mx-md h-mx-12 font-black" variant="primary" onClick={save} icon={<Target size={16} />}>REGISTRAR ACOMPANHAMENTO</Button>
+      <Button className="w-full mt-mx-md h-mx-12" variant="primary" onClick={save} icon={<Target size={16} />}>REGISTRAR ACOMPANHAMENTO</Button>
     </Card>
   )
 }

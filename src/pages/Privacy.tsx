@@ -20,40 +20,40 @@ export default function Privacy() {
                 transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
                 className="w-full max-w-4xl"
             >
-                <Card className="border-none shadow-mx-elite bg-white overflow-hidden flex flex-col relative z-10">
+                <Card className="border-none bg-white overflow-hidden flex flex-col relative z-10">
                     <header className="bg-brand-secondary p-mx-10 md:p-16 relative overflow-hidden text-center">
                         <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-transparent z-0 pointer-events-none" />
                         
                         <div className="w-mx-20 h-mx-header rounded-mx-3xl bg-white/10 text-white flex items-center justify-center mx-auto mb-8 shadow-mx-xl backdrop-blur-xl relative z-10 border border-white/10">
                             <Lock size={32} strokeWidth={2} />
                         </div>
-                        <Typography variant="h1" tone="white" className="text-4xl md:text-5xl mb-4 relative z-10 uppercase tracking-tighter">Política de <span className="text-brand-primary">Privacidade</span></Typography>
-                        <Typography variant="tiny" tone="white" className="max-w-xl mx-auto opacity-60 relative z-10 block font-black">MX PERFORMANCE - PROTECAO & TRATAMENTO DE DADOS</Typography>
+                        <Typography variant="h1" tone="white" className="text-4xl md:text-5xl mb-4 relative z-10 tracking-tighter">Política de <span className="text-brand-primary">Privacidade</span></Typography>
+                        <Typography variant="tiny" tone="white" className="max-w-xl mx-auto opacity-60 relative z-10 block">MX PERFORMANCE - PROTECAO & TRATAMENTO DE DADOS</Typography>
                     </header>
 
                     <CardContent className="p-mx-10 md:p-20 space-y-mx-14">
                         <div className="space-y-mx-10">
-                            <Typography variant="p" className="text-xl font-bold text-text-secondary leading-relaxed border-l-4 border-brand-primary pl-8 uppercase tracking-tight">
+                            <Typography variant="p" className="text-xl font-bold leading-relaxed border-l-4 border-brand-primary pl-8 tracking-tight">
                                 O MX PERFORMANCE e uma plataforma da MX Consultoria para gestao de visitas, rotinas comerciais e sincronizacao autorizada com o Google Calendar.
                             </Typography>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
-                                <Card className="bg-surface-alt p-mx-10 rounded-mx-3xl border-none shadow-inner group hover:bg-white hover:shadow-mx-lg transition-all">
+                                <Card className="bg-surface-alt p-mx-10 border-none group hover:bg-white hover:shadow-mx-lg transition-all">
                                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <FileText size={24} strokeWidth={2} />
                                     </div>
-                                    <Typography variant="h2" className="text-2xl mb-4 uppercase tracking-tight">Coleta de Métricas</Typography>
-                                    <Typography variant="caption" tone="muted" className="leading-relaxed uppercase font-black opacity-60">
+                                    <Typography variant="h2" className="text-2xl mb-4 tracking-tight">Coleta de Métricas</Typography>
+                                    <Typography variant="caption" tone="muted" className="leading-relaxed opacity-60">
                                         Registramos dados operacionais informados pelos usuarios, como visitas, lojas, equipe, metas, indicadores e historico de acompanhamento.
                                     </Typography>
                                 </Card>
 
-                                <Card className="bg-surface-alt p-mx-10 rounded-mx-3xl border-none shadow-inner group hover:bg-white hover:shadow-mx-lg transition-all">
+                                <Card className="bg-surface-alt p-mx-10 border-none group hover:bg-white hover:shadow-mx-lg transition-all">
                                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-status-success-surface text-status-success flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <Shield size={24} strokeWidth={2} />
                                     </div>
-                                    <Typography variant="h2" className="text-2xl mb-4 uppercase tracking-tight">Privilégios RLS</Typography>
-                                    <Typography variant="caption" tone="muted" className="leading-relaxed uppercase font-black opacity-60">
+                                    <Typography variant="h2" className="text-2xl mb-4 tracking-tight">Privilégios RLS</Typography>
+                                    <Typography variant="caption" tone="muted" className="leading-relaxed opacity-60">
                                         O acesso e controlado por autenticacao, papeis internos e Row-Level Security para limitar a visualizacao conforme a hierarquia do usuario.
                                     </Typography>
                                 </Card>
@@ -62,12 +62,12 @@ export default function Privacy() {
                             <div className="space-y-mx-md pt-10 border-t border-border-default">
                                 <header className="flex items-center gap-mx-sm">
                                     <div className="w-mx-10 h-mx-10 rounded-mx-lg bg-mx-black text-brand-primary flex items-center justify-center shadow-mx-lg"><CalendarDays size={20} /></div>
-                                    <Typography variant="h2" className="text-2xl uppercase tracking-tighter">Uso de Dados do Google Calendar e Meet</Typography>
+                                    <Typography variant="h2" className="text-2xl tracking-tighter">Uso de Dados do Google Calendar e Meet</Typography>
                                 </header>
-                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight">
+                                <Typography variant="caption" tone="muted" className="text-base leading-relaxed tracking-tight">
                                     Quando um usuario autoriza a integracao, o MX PERFORMANCE acessa eventos do Google Calendar e artefatos autorizados do Google Meet somente para exibir, criar, atualizar e sincronizar visitas, aulas, eventos online, links de reuniao, transcricoes e atas relacionadas ao trabalho da MX Consultoria. O sistema nao vende dados do Google, nao usa dados do Google Calendar ou Google Meet para publicidade e nao compartilha essas informacoes com terceiros fora da operacao autorizada.
                                 </Typography>
-                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight block">
+                                <Typography variant="caption" tone="muted" className="text-base leading-relaxed tracking-tight block">
                                     O usuario pode revogar o acesso a qualquer momento pela conta Google em Seguranca &gt; Apps e servicos de terceiros, ou solicitar remocao de dados pelo canal administrativo da MX Consultoria.
                                 </Typography>
                             </div>
@@ -75,9 +75,9 @@ export default function Privacy() {
                             <div className="space-y-mx-md pt-10 border-t border-border-default">
                                 <header className="flex items-center gap-mx-sm">
                                     <div className="w-mx-10 h-mx-10 rounded-mx-lg bg-mx-black text-brand-primary flex items-center justify-center shadow-mx-lg"><ShieldCheck size={20} /></div>
-                                    <Typography variant="h2" className="text-2xl uppercase tracking-tighter">Arquitetura de Blindagem</Typography>
+                                    <Typography variant="h2" className="text-2xl tracking-tighter">Arquitetura de Blindagem</Typography>
                                 </header>
-                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight">
+                                <Typography variant="caption" tone="muted" className="text-base leading-relaxed tracking-tight">
                                     Mantemos registros de auditoria para alteracoes relevantes no sistema e aplicamos controles de acesso para proteger informacoes operacionais, comerciais e de agenda.
                                 </Typography>
                             </div>
@@ -89,8 +89,8 @@ export default function Privacy() {
                             </Button>
                             <div className="text-center sm:text-right space-y-mx-tiny">
                                 <Link to="/" className="text-xs font-black text-mx-green-800 uppercase tracking-widest hover:text-mx-green-900">MX PERFORMANCE</Link>
-                                <Typography variant="tiny" tone="muted" className="font-black">MX CONSULTORIA LTDA © {new Date().getFullYear()}</Typography>
-                                <Typography variant="tiny" tone="muted" className="font-black block tracking-widest">POLITICA PUBLICA DE PRIVACIDADE</Typography>
+                                <Typography variant="tiny" tone="muted" className="">MX CONSULTORIA LTDA © {new Date().getFullYear()}</Typography>
+                                <Typography variant="tiny" tone="muted" className="block">POLITICA PUBLICA DE PRIVACIDADE</Typography>
                             </div>
                         </footer>
                     </CardContent>

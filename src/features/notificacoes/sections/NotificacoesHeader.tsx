@@ -22,7 +22,7 @@ export function NotificacoesHeader({ isRefetching, handleRefresh, markAllAsRead 
           size="icon"
           onClick={handleRefresh}
           aria-label="Atualizar"
-          className="rounded-mx-xl bg-white shadow-mx-sm"
+          className="bg-white"
         >
           <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
         </Button>

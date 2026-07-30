@@ -10,14 +10,14 @@ export function IntegracoesTab() {
     return (
         <div className="space-y-mx-lg">
             {/* Google Calendar pessoal + central */}
-            <Card className="p-mx-lg md:p-mx-xl border-none shadow-mx-lg bg-white">
+            <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100">
                         <Calendar size={26} />
                     </div>
                     <div>
-                        <Typography variant="h3" className="uppercase tracking-tight">Google Calendar</Typography>
-                        <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black">Sincronização pessoal e Agenda Central MX</Typography>
+                        <Typography variant="h3" className="tracking-tight">Google Calendar</Typography>
+                        <Typography variant="caption" tone="muted" className="">Sincronização pessoal e Agenda Central MX</Typography>
                     </div>
                 </header>
                 <GoogleCalendarStatus />
@@ -56,18 +56,18 @@ export function IntegracoesTab() {
             </div>
 
             {/* Webhooks placeholder */}
-            <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+            <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center justify-between pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="flex items-center gap-mx-sm">
                         <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-surface-alt text-text-tertiary flex items-center justify-center border border-border-default">
                             <Webhook size={26} />
                         </div>
                         <div>
-                            <Typography variant="h3" className="uppercase tracking-tight">Webhooks</Typography>
-                            <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black">Integrações externas</Typography>
+                            <Typography variant="h3" className="tracking-tight">Webhooks</Typography>
+                            <Typography variant="caption" tone="muted" className="">Integrações externas</Typography>
                         </div>
                     </div>
-                    <Badge variant="outline" className="font-black uppercase">Em breve</Badge>
+                    <Badge variant="outline" className="">Em breve</Badge>
                 </header>
                 <Typography variant="caption" tone="muted" className="font-bold leading-relaxed">
                     Conecte sistemas externos via webhooks (Slack, Notion, ERPs, CRMs).
@@ -76,14 +76,14 @@ export function IntegracoesTab() {
             </Card>
 
             {/* Edge Functions */}
-            <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+            <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-status-success/10 text-status-success flex items-center justify-center border border-status-success/20">
                         <Globe size={26} />
                     </div>
                     <div>
-                        <Typography variant="h3" className="uppercase tracking-tight">Edge Functions Registradas</Typography>
-                        <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black">Inventário local; saúde real via logs e Supabase</Typography>
+                        <Typography variant="h3" className="tracking-tight">Edge Functions Registradas</Typography>
+                        <Typography variant="caption" tone="muted" className="">Inventário local; saúde real via logs e Supabase</Typography>
                     </div>
                 </header>
                 <div className="grid md:grid-cols-2 gap-mx-sm">
@@ -101,7 +101,7 @@ export function IntegracoesTab() {
                     ].map(fn => (
                         <div key={fn} className="flex items-center justify-between p-mx-sm bg-surface-alt rounded-mx-xl border border-border-subtle">
                             <Typography variant="tiny" className="font-mono-numbers font-bold">{fn}</Typography>
-                            <Badge variant="outline" className="text-mx-micro font-black uppercase">Registrada</Badge>
+                            <Badge variant="outline" className="text-mx-micro">Registrada</Badge>
                         </div>
                     ))}
                 </div>
@@ -119,17 +119,17 @@ function IntegrationCard({ icon, title, desc, badge, route, disabled }: {
     disabled?: boolean
 }) {
     return (
-        <Card className="p-mx-md border-none shadow-mx-md bg-white hover:shadow-mx-lg transition-shadow">
+        <Card className="p-mx-md border-none bg-white hover:shadow-mx-lg transition-shadow">
             <div className="flex items-start gap-mx-sm">
                 <div className="w-mx-12 h-mx-12 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center shrink-0">{icon}</div>
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-mx-xs">
-                        <Typography variant="caption" className="font-black uppercase tracking-tight">{title}</Typography>
-                        <Badge variant="outline" className="text-mx-micro font-black uppercase shrink-0">{badge}</Badge>
+                        <Typography variant="caption" className="tracking-tight">{title}</Typography>
+                        <Badge variant="outline" className="text-mx-micro shrink-0">{badge}</Badge>
                     </div>
                     <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed mt-1 mb-mx-sm">{desc}</Typography>
                     {route && !disabled && (
-                        <Button asChild variant="outline" size="sm" className="h-mx-9 px-3 rounded-mx-lg font-black uppercase text-mx-micro tracking-widest">
+                        <Button asChild variant="outline" size="sm" className="h-mx-9 px-3 text-mx-micro">
                             <Link to={route}>Acessar <ExternalLink size={11} className="ml-1" /></Link>
                         </Button>
                     )}

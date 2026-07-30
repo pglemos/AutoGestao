@@ -45,7 +45,7 @@ export function NotificacaoApprovalCard({
             <ApprovalAvatar url={approval.avatar_url} name={approval.full_name} />
           </div>
           <div className="min-w-0">
-            <Typography variant="caption" className="font-black uppercase tracking-tight truncate">
+            <Typography variant="caption" className="tracking-tight truncate">
               {approval.full_name}
             </Typography>
             <Typography variant="tiny" tone="muted" className="mt-1 block font-bold break-all">
@@ -53,7 +53,7 @@ export function NotificacaoApprovalCard({
             </Typography>
           </div>
         </div>
-        <Badge variant="warning" className="font-black uppercase shrink-0">
+        <Badge variant="warning" className="shrink-0">
           Pendente
         </Badge>
       </div>
@@ -77,7 +77,7 @@ export function NotificacaoApprovalCard({
       </div>
       {approval.role === 'dono' && (
         <div className="mt-mx-sm rounded-mx-xl border border-brand-primary/15 bg-surface-alt p-mx-sm">
-          <Typography variant="tiny" tone="brand" className="mb-mx-xs block font-black uppercase tracking-widest">
+          <Typography variant="tiny" tone="brand" className="mb-mx-xs block">
             Dados administrativos
           </Typography>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-xs text-mx-micro font-bold text-text-secondary">

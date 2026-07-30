@@ -48,7 +48,7 @@ export function PreRegistrationQueue({
 
   return (
     <aside className="order-2 min-w-0 xl:sticky xl:top-[var(--spacing-mx-layout-offset-top)]">
-      <Card className="border border-border-default bg-white shadow-mx-sm overflow-hidden rounded-mx-3xl">
+      <Card className="border bg-white overflow-hidden">
         <CardHeader className="border-b border-border-default bg-surface-alt/60 p-mx-md">
           <div className="flex flex-col gap-mx-md">
             <div className="flex items-start gap-mx-sm min-w-0">
@@ -81,7 +81,7 @@ export function PreRegistrationQueue({
           {!canApprovePreRegistrations ? (
             <div className="rounded-mx-2xl border border-dashed border-border-default bg-surface-alt p-mx-lg text-center">
               <ShieldCheck size={24} className="mx-auto text-brand-primary" />
-              <Typography variant="caption" className="mt-mx-sm block font-black uppercase tracking-widest">Aprovação restrita ao Admin MX</Typography>
+              <Typography variant="caption" className="mt-mx-sm block">Aprovação restrita ao Admin MX</Typography>
               <Typography variant="tiny" tone="muted" className="mt-2 block font-bold">A loja pode compartilhar o link; a fila de validação fica visível apenas para Admin MX e MX Master.</Typography>
             </div>
           ) : loadingPreRegistrations ? (
@@ -101,14 +101,14 @@ export function PreRegistrationQueue({
                         <PreRegistrationAvatar url={item.avatar_url} name={item.full_name} />
                       </div>
                       <div className="min-w-0 flex-1">
-                        <Typography variant="caption" className="block max-w-full font-black uppercase tracking-tight truncate">{item.full_name}</Typography>
+                        <Typography variant="caption" className="block max-w-full tracking-tight truncate">{item.full_name}</Typography>
                         <div className="mt-1 flex flex-wrap gap-x-mx-md gap-y-mx-tiny text-mx-micro font-bold text-text-tertiary">
                           <span className="inline-flex items-center gap-mx-tiny"><Mail size={11} aria-hidden="true" />{detailsExpanded ? item.email : redactEmail(item.email)}</span>
                           <span className="inline-flex items-center gap-mx-tiny"><Phone size={11} aria-hidden="true" />{detailsExpanded ? item.phone : redactPhone(item.phone)}</span>
                         </div>
                       </div>
                     </div>
-                    <Badge variant={item.status === 'pending' ? 'warning' : item.status === 'synced' ? 'success' : 'outline'} className="font-black uppercase shrink-0">
+                    <Badge variant={item.status === 'pending' ? 'warning' : item.status === 'synced' ? 'success' : 'outline'} className="shrink-0">
                       {item.status}
                     </Badge>
                   </div>
@@ -141,7 +141,7 @@ export function PreRegistrationQueue({
                   </Button>
                   {item.role === 'dono' && detailsExpanded && (
                     <div className="mt-mx-sm rounded-mx-xl border border-brand-primary/15 bg-white p-mx-sm">
-                      <Typography variant="tiny" tone="brand" className="mb-mx-xs block font-black uppercase tracking-widest">
+                      <Typography variant="tiny" tone="brand" className="mb-mx-xs block">
                         Dados administrativos
                       </Typography>
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-xs text-mx-micro font-bold text-text-secondary">
@@ -185,7 +185,7 @@ export function PreRegistrationQueue({
             </div>
           ) : (
             <div className="rounded-mx-2xl border border-dashed border-border-default bg-surface-alt p-mx-md text-center">
-              <Typography variant="h4" className="font-black uppercase tracking-tight">Nenhum pré-cadastro recebido</Typography>
+              <Typography variant="h4" className="tracking-tight">Nenhum pré-cadastro recebido</Typography>
               <Typography variant="p" tone="muted" className="mt-2 block text-sm font-bold">Assim que alguém preencher o link da loja, os dados aparecem aqui.</Typography>
             </div>
           )}

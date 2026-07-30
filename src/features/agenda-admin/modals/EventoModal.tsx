@@ -76,7 +76,7 @@ export function EventoModal({
       footer={
         <>
           <Button type="button" variant="ghost" onClick={onClose}>CANCELAR</Button>
-          <Button type="submit" form="agenda-event-form" disabled={submitDisabled} className="bg-brand-secondary">
+          <Button type="submit" form="agenda-event-form" disabled={submitDisabled} className="">
             {submitting ? 'SALVANDO...' : isBlock ? 'SALVAR BLOQUEIO' : 'SALVAR EVENTO/AULA'}
           </Button>
         </>
@@ -108,7 +108,7 @@ export function EventoModal({
         </div>
 
         <div className="space-y-mx-xs">
-          <Typography as="label" htmlFor="agenda-event-title" variant="caption" className="font-black uppercase tracking-widest">
+          <Typography as="label" htmlFor="agenda-event-title" variant="caption" className="">
             {isBlock ? 'Motivo do bloqueio *' : 'Evento/Aula *'}
           </Typography>
           <Input
@@ -120,7 +120,7 @@ export function EventoModal({
         </div>
 
         <div className="space-y-mx-xs">
-          <Typography as="label" htmlFor="agenda-event-topic" variant="caption" className="font-black uppercase tracking-widest">
+          <Typography as="label" htmlFor="agenda-event-topic" variant="caption" className="">
             {isBlock ? 'Observação' : 'Tema'}
           </Typography>
           <Input
@@ -149,7 +149,7 @@ export function EventoModal({
 
         <div className="grid grid-cols-1 sm:grid-cols-3 gap-mx-md">
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="agenda-event-date" variant="caption" className="font-black uppercase tracking-widest">Data *</Typography>
+            <Typography as="label" htmlFor="agenda-event-date" variant="caption" className="">Data *</Typography>
             <DatePicker
               id="agenda-event-date"
               value={eventForm.starts_at}
@@ -157,7 +157,7 @@ export function EventoModal({
             />
           </div>
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="agenda-event-time" variant="caption" className="font-black uppercase tracking-widest">Horário *</Typography>
+            <Typography as="label" htmlFor="agenda-event-time" variant="caption" className="">Horário *</Typography>
             <Input
               id="agenda-event-time"
               type="time"
@@ -166,7 +166,7 @@ export function EventoModal({
             />
           </div>
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="agenda-event-duration" variant="caption" className="font-black uppercase tracking-widest">Duração</Typography>
+            <Typography as="label" htmlFor="agenda-event-duration" variant="caption" className="">Duração</Typography>
             <Input
               id="agenda-event-duration"
               type="number"
@@ -198,7 +198,7 @@ export function EventoModal({
             ))}
           </Select>
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="agenda-event-location" variant="caption" className="font-black uppercase tracking-widest">Local</Typography>
+            <Typography as="label" htmlFor="agenda-event-location" variant="caption" className="">Local</Typography>
             <Input
               id="agenda-event-location"
               value={eventForm.location}
@@ -234,7 +234,7 @@ export function EventoModal({
                 ))}
               </Select>
               <div className="space-y-mx-xs">
-                <Typography as="label" htmlFor="agenda-event-goal" variant="caption" className="font-black uppercase tracking-widest">Meta de público</Typography>
+                <Typography as="label" htmlFor="agenda-event-goal" variant="caption" className="">Meta de público</Typography>
                 <Input
                   id="agenda-event-goal"
                   type="number"
@@ -247,7 +247,7 @@ export function EventoModal({
 
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
               <div className="space-y-mx-xs">
-                <Typography as="label" htmlFor="agenda-event-ticket" variant="caption" className="font-black uppercase tracking-widest">Valor do ingresso</Typography>
+                <Typography as="label" htmlFor="agenda-event-ticket" variant="caption" className="">Valor do ingresso</Typography>
                 <Input
                   id="agenda-event-ticket"
                   value={eventForm.ticket_price_text}
@@ -256,7 +256,7 @@ export function EventoModal({
                 />
               </div>
               <div className="space-y-mx-xs">
-                <Typography as="label" htmlFor="agenda-event-google-id" variant="caption" className="font-black uppercase tracking-widest">ID Google</Typography>
+                <Typography as="label" htmlFor="agenda-event-google-id" variant="caption" className="">ID Google</Typography>
                 <Input
                   id="agenda-event-google-id"
                   value={eventForm.google_event_id}

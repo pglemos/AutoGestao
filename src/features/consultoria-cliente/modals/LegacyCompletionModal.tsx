@@ -59,7 +59,7 @@ export function LegacyCompletionModal({
             type="submit"
             form="legacy-visit-completion-form"
             loading={legacyCompletionSubmitting}
-            className="bg-brand-primary"
+            className=""
           >
             CONCLUIR SELECIONADAS
           </Button>
@@ -69,7 +69,7 @@ export function LegacyCompletionModal({
       <form id="legacy-visit-completion-form" onSubmit={handleSubmit} className="space-y-mx-lg">
         <div className="space-y-mx-sm">
           <div className="flex flex-wrap items-center justify-between gap-mx-sm">
-            <Typography variant="caption" className="font-black uppercase tracking-widest">Visitas concluídas fora do sistema</Typography>
+            <Typography variant="caption" className="">Visitas concluídas fora do sistema</Typography>
             <div className="flex flex-wrap gap-mx-xs">
               <Button type="button" variant="outline" size="xs" onClick={() => setLegacyVisitNumbers([...LEGACY_PMR_VISITS])}>
                 V1,V2,V3,V5,V6,V7
@@ -100,8 +100,8 @@ export function LegacyCompletionModal({
                     className="h-mx-sm w-mx-sm accent-brand-primary"
                   />
                   <span className="min-w-0">
-                    <Typography variant="p" className="text-sm font-black">V{step.visit_number}</Typography>
-                    <Typography variant="tiny" tone={visit?.status === 'concluida' ? 'success' : 'muted'} className="font-bold uppercase">
+                    <Typography variant="p" className="text-sm">V{step.visit_number}</Typography>
+                    <Typography variant="tiny" tone={visit?.status === 'concluida' ? 'success' : 'muted'} className="font-bold">
                       {visit?.status === 'concluida' ? 'Concluída' : 'Pendente'}
                     </Typography>
                   </span>
@@ -113,7 +113,7 @@ export function LegacyCompletionModal({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="legacy-effective-date" variant="caption" className="font-black uppercase tracking-widest">Data de referência *</Typography>
+            <Typography as="label" htmlFor="legacy-effective-date" variant="caption" className="">Data de referência *</Typography>
             <DatePicker
               id="legacy-effective-date"
               value={legacyEffectiveDate}
@@ -123,7 +123,7 @@ export function LegacyCompletionModal({
         </div>
 
         <div className="space-y-mx-xs">
-          <Typography as="label" htmlFor="legacy-summary" variant="caption" className="font-black uppercase tracking-widest">Resumo geral da migração *</Typography>
+          <Typography as="label" htmlFor="legacy-summary" variant="caption" className="">Resumo geral da migração *</Typography>
           <Textarea
             id="legacy-summary"
             value={legacySummary}
@@ -136,7 +136,7 @@ export function LegacyCompletionModal({
 
       {clientId && (
         <div className="space-y-mx-xs mt-mx-lg">
-          <Typography variant="caption" className="font-black uppercase tracking-widest">Anexos gerais do cliente</Typography>
+          <Typography variant="caption" className="">Anexos gerais do cliente</Typography>
           <ConsultingDriveFilesView clientId={clientId} />
         </div>
       )}

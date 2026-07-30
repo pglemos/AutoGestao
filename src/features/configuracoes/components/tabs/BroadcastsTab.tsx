@@ -19,7 +19,7 @@ export function BroadcastsTab() {
 
     return (
         <div className="space-y-mx-lg">
-            <Card className="p-mx-lg border-none shadow-mx-lg bg-pure-black text-white relative overflow-hidden">
+            <Card className="p-mx-lg border-none bg-pure-black text-white relative overflow-hidden">
                 <div className="absolute -right-20 -top-20 w-mx-48 h-mx-48 bg-brand-primary/20 rounded-mx-full blur-3xl pointer-events-none" />
                 <div className="relative z-10 flex items-start justify-between gap-mx-md">
                     <div className="flex items-start gap-mx-md flex-1">
@@ -27,13 +27,13 @@ export function BroadcastsTab() {
                             <Megaphone size={28} />
                         </div>
                         <div className="space-y-mx-xs">
-                            <Typography variant="h3" tone="white" className="uppercase tracking-tight">Comunicados da Rede</Typography>
-                            <Typography variant="caption" tone="white" className="uppercase tracking-widest font-black opacity-60">
+                            <Typography variant="h3" tone="white" className="tracking-tight">Comunicados da Rede</Typography>
+                            <Typography variant="caption" tone="white" className="opacity-60">
                                 Broadcasts oficiais MX para vendedores, gerentes e donos
                             </Typography>
                         </div>
                     </div>
-                    <Button asChild variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 rounded-mx-xl font-black uppercase tracking-widest text-xs shrink-0">
+                    <Button asChild variant="outline" className="bg-white/10 border-white/20 text-white hover:bg-white/20 text-xs shrink-0">
                         <Link to="/notificacoes">
                             <Send size={14} className="mr-2" /> Compor
                         </Link>
@@ -41,10 +41,10 @@ export function BroadcastsTab() {
                 </div>
             </Card>
 
-            <Card className="border-none shadow-mx-lg bg-white overflow-hidden">
+            <Card className="border-none bg-white overflow-hidden">
                 <header className="flex items-center justify-between p-mx-md border-b border-border-default">
                     <div>
-                        <Typography variant="caption" className="font-black uppercase tracking-widest">Últimos Broadcasts</Typography>
+                        <Typography variant="caption" className="">Últimos Broadcasts</Typography>
                         <Typography variant="tiny" tone="muted" className="font-bold">Histórico de comunicados disparados</Typography>
                     </div>
                     <Button variant="ghost" size="icon" onClick={() => refetch()} className="rounded-mx-xl" aria-label="Atualizar broadcasts">
@@ -57,7 +57,7 @@ export function BroadcastsTab() {
                 ) : broadcasts.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
                         <Megaphone size={40} className="mx-auto text-text-tertiary opacity-30" />
-                        <Typography variant="caption" tone="muted" className="font-black uppercase">Nenhum broadcast disparado ainda</Typography>
+                        <Typography variant="caption" tone="muted" className="">Nenhum broadcast disparado ainda</Typography>
                     </div>
                 ) : (
                     <div className="divide-y divide-border-default">
@@ -65,14 +65,14 @@ export function BroadcastsTab() {
                             <div key={b.broadcast_id || b.id} className="p-mx-md hover:bg-surface-alt transition-colors">
                                 <div className="flex items-start justify-between gap-mx-sm">
                                     <div className="flex-1 min-w-0">
-                                        <Typography variant="caption" className="font-black uppercase tracking-tight">
+                                        <Typography variant="caption" className="tracking-tight">
                                             {b.titulo || b.title || 'Sem título'}
                                         </Typography>
                                         <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed mt-1 line-clamp-2">
                                             {b.mensagem || b.message || ''}
                                         </Typography>
                                     </div>
-                                    <Badge variant="outline" className="text-mx-micro font-black uppercase shrink-0">
+                                    <Badge variant="outline" className="text-mx-micro shrink-0">
                                         {b.created_at ? format(new Date(b.created_at), 'dd/MM HH:mm', { locale: ptBR }) : '—'}
                                     </Badge>
                                 </div>

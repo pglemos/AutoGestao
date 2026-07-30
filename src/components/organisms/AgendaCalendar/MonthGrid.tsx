@@ -35,7 +35,7 @@ export function MonthGrid({
       <div className="grid grid-cols-7 border-b border-border-strong bg-surface-alt/40 select-none">
         {WEEKDAY_LABELS.map((label) => (
           <div key={label} className="border-r border-border-default py-1.5 text-center last:border-r-0">
-            <Typography variant="tiny" tone="muted" className="text-[10px] font-bold uppercase tracking-wider">{label}</Typography>
+            <Typography variant="tiny" tone="muted" className="text-[10px] font-bold tracking-wider">{label}</Typography>
           </div>
         ))}
       </div>
@@ -96,7 +96,7 @@ export function MonthGrid({
                     />
                   ))}
                   {dayVisits.length > 3 && (
-                    <Typography variant="tiny" className="px-1 text-[10px] font-bold leading-none text-brand-primary hover:underline">
+                    <Typography variant="tiny" className="px-1 text-[10px] font-bold leading-none hover:underline">
                       +{dayVisits.length - 3} mais
                     </Typography>
                   )}

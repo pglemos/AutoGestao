@@ -13,13 +13,13 @@ export default function VendedorAjuda() {
         <SellerPageHeader icon={LifeBuoy} title="Ajuda" subtitle="Suporte operacional para o vendedor" />
 
         <section className="grid grid-cols-1 gap-mx-lg lg:grid-cols-3">
-        <Card className="border-none bg-white p-mx-lg shadow-mx-lg lg:col-span-2">
+        <Card className="border-none bg-white p-mx-lg lg:col-span-2">
           <div className="flex items-start gap-mx-md">
             <div className="w-mx-2xl h-mx-2xl rounded-mx-2xl bg-brand-primary/10 text-brand-primary flex items-center justify-center shrink-0">
               <LifeBuoy size={28} />
             </div>
             <div className="space-y-mx-xs">
-              <Typography variant="h2" className="uppercase tracking-tight">Precisa destravar algo hoje?</Typography>
+              <Typography variant="h2" className="tracking-tight">Precisa destravar algo hoje?</Typography>
               <Typography variant="p" tone="muted" className="text-sm">
                 Use esta rota para saber onde agir sem procurar no menu. Problemas de número, prazo, correção ou feedback devem seguir um caminho claro antes de acionar o gestor.
               </Typography>
@@ -33,7 +33,7 @@ export default function VendedorAjuda() {
               { title: 'Alertas pendentes', desc: 'Ver cobranças, feedback e avisos obrigatórios.', icon: Bell, to: '/notificacoes' },
               { title: 'Feedback', desc: 'Confirmar ciência e ver próximos passos do gestor.', icon: MessageSquare, to: '/devolutivas' },
             ].map(item => (
-              <Button key={item.title} asChild variant="outline" className="h-auto justify-start rounded-mx-2xl bg-white p-mx-md text-left">
+              <Button key={item.title} asChild variant="outline" className="h-auto justify-start bg-white p-mx-md text-left">
                 <Link to={item.to}>
                   <item.icon size={18} className="mr-mx-sm shrink-0 text-brand-primary" />
                   <span className="min-w-0">
@@ -46,21 +46,21 @@ export default function VendedorAjuda() {
           </div>
         </Card>
 
-        <Card className="border-none bg-white p-mx-lg shadow-mx-lg">
+        <Card className="border-none bg-white p-mx-lg">
           <div className="space-y-mx-md">
             <Badge variant="brand" className="rounded-mx-full px-4 py-1">Escala de suporte</Badge>
             <div className="space-y-mx-sm">
               <div className="flex items-start gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
                 <UserRound size={18} className="mt-0.5 text-brand-primary" />
                 <div>
-                  <Typography variant="caption" className="font-black uppercase tracking-tight">1. Gerente da unidade</Typography>
+                  <Typography variant="caption" className="tracking-tight">1. Gerente da unidade</Typography>
                   <Typography variant="p" tone="muted" className="text-xs">Correção de lançamento, dúvida de meta ou devolutiva.</Typography>
                 </div>
               </div>
               <div className="flex items-start gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
                 <Phone size={18} className="mt-0.5 text-brand-primary" />
                 <div>
-                  <Typography variant="caption" className="font-black uppercase tracking-tight">2. Admin MX</Typography>
+                  <Typography variant="caption" className="tracking-tight">2. Admin MX</Typography>
                   <Typography variant="p" tone="muted" className="text-xs">Acesso, produto digital, configuração de perfil ou erro técnico persistente.</Typography>
                 </div>
               </div>

@@ -44,23 +44,23 @@ export function TeamListSection({
             <ShieldAlert size={34} />
           </div>
           <div className="space-y-mx-sm max-w-lg">
-            <Typography variant="h1" className="text-3xl font-black uppercase tracking-tight">Falha ao carregar equipe</Typography>
-            <Typography variant="p" tone="muted" className="uppercase tracking-mx-widest font-black text-mx-tiny leading-relaxed">{teamError}</Typography>
+            <Typography variant="h1" className="text-3xl tracking-tight">Falha ao carregar equipe</Typography>
+            <Typography variant="p" tone="muted" className="text-mx-tiny leading-relaxed">{teamError}</Typography>
           </div>
-          <Button type="button" variant="outline" onClick={onRetry} className="h-mx-12 rounded-mx-xl font-black uppercase tracking-widest">
+          <Button type="button" variant="outline" onClick={onRetry} className="h-mx-12">
             <RefreshCw size={16} className="mr-2" />
             Tentar novamente
           </Button>
         </motion.div>
       ) : filteredTeam.length > 0 ? (
-        <Card className="border-none shadow-mx-lg bg-white overflow-hidden">
+        <Card className="border-none bg-white overflow-hidden">
           <CardHeader className="border-b border-border-default bg-white p-mx-lg">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-mx-sm">
               <div>
                 <CardTitle className="text-lg">Integrantes vinculados</CardTitle>
                 <CardDescription>Equipe operacional ativa no sistema de performance da loja.</CardDescription>
               </div>
-              <Badge variant="outline" className="w-fit font-black uppercase">{filteredTeam.length} registros</Badge>
+              <Badge variant="outline" className="w-fit">{filteredTeam.length} registros</Badge>
             </div>
           </CardHeader>
           <div className="hidden lg:grid store-team-grid gap-mx-md px-mx-lg py-mx-sm bg-surface-alt border-b border-border-default text-mx-nano font-black uppercase tracking-mx-widest text-text-tertiary">
@@ -91,7 +91,7 @@ export function TeamListSection({
                         className="rounded-mx-xl bg-brand-primary/10 text-brand-primary border-brand-primary/10"
                       />
                       <div className="min-w-0 flex-1">
-                        <Typography variant="caption" className="block max-w-full font-black uppercase tracking-tight truncate">{member.name}</Typography>
+                        <Typography variant="caption" className="block max-w-full tracking-tight truncate">{member.name}</Typography>
                         <div className="mt-1 flex flex-wrap gap-x-mx-md gap-y-mx-tiny text-mx-micro font-bold text-text-tertiary">
                           <span className="inline-flex items-center gap-mx-tiny min-w-0"><Mail size={11} />{member.email || 'sem e-mail'}</span>
                           <span className="inline-flex items-center gap-mx-tiny"><Phone size={11} />{member.phone || 'sem telefone'}</span>
@@ -101,15 +101,15 @@ export function TeamListSection({
                   </div>
 
                   <div className="flex flex-wrap items-center gap-mx-xs">
-                    <Badge variant={member.role === 'vendedor' ? 'outline' : 'warning'} className="font-black uppercase">
+                    <Badge variant={member.role === 'vendedor' ? 'outline' : 'warning'} className="">
                       {member.role || 'vendedor'}
                     </Badge>
-                    {member.is_venda_loja && <Badge variant="brand" className="font-black uppercase">Venda loja</Badge>}
+                    {member.is_venda_loja && <Badge variant="brand" className="">Venda loja</Badge>}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-mx-xs">
-                    <Badge variant={vigencia.variant} className="font-black uppercase">{vigencia.label}</Badge>
-                    <Badge variant={member.checkin_today ? 'success' : 'danger'} className="font-black uppercase">
+                    <Badge variant={vigencia.variant} className="">{vigencia.label}</Badge>
+                    <Badge variant={member.checkin_today ? 'success' : 'danger'} className="">
                       {member.checkin_today ? 'Fechamento feito' : 'Fechamento pendente'}
                     </Badge>
                   </div>
@@ -146,7 +146,7 @@ export function TeamListSection({
                     <Button variant="outline" size="icon" onClick={() => member.phone && window.open(`tel:${member.phone}`)} disabled={!member.phone} className="h-mx-10 w-mx-10 rounded-mx-xl" aria-label={member.phone ? `Ligar para ${member.name}` : `Telefone não informado para ${member.name}`}>
                       <Phone size={16} />
                     </Button>
-                    <Button variant="outline" size="icon" asChild className="h-mx-10 w-mx-10 rounded-mx-xl bg-mx-black text-white border-none hover:bg-brand-primary" aria-label={`Ver performance de ${member.name}`}>
+                    <Button variant="outline" size="icon" asChild className="h-mx-10 w-mx-10 text-white border-none hover:bg-brand-primary" aria-label={`Ver performance de ${member.name}`}>
                       <Link to={`/relatorios/performance-vendedor?id=${member.id}`}>
                         <TrendingUp size={16} />
                       </Link>
@@ -158,14 +158,14 @@ export function TeamListSection({
           </div>
         </Card>
       ) : (
-        <Card className="border-none shadow-mx-lg bg-white overflow-hidden">
+        <Card className="border-none bg-white overflow-hidden">
           <CardHeader className="border-b border-border-default bg-white p-mx-lg">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-mx-sm">
               <div>
                 <CardTitle className="text-lg">Integrantes vinculados</CardTitle>
                 <CardDescription>Equipe operacional ativa no sistema de performance da loja.</CardDescription>
               </div>
-              <Badge variant="outline" className="w-fit font-black uppercase">0 registros</Badge>
+              <Badge variant="outline" className="w-fit">0 registros</Badge>
             </div>
           </CardHeader>
           <CardContent className="p-mx-lg">
@@ -178,7 +178,7 @@ export function TeamListSection({
                 <Users size={28} strokeWidth={1.8} />
               </div>
               <div className="space-y-mx-xs max-w-sm">
-                <Typography variant="h3" className="font-black uppercase tracking-tight">Nenhum integrante vinculado</Typography>
+                <Typography variant="h3" className="tracking-tight">Nenhum integrante vinculado</Typography>
                 <Typography variant="p" tone="muted" className="block text-sm font-bold leading-relaxed">
                   Esta loja ainda não possui equipe operacional cadastrada no sistema. Use o cadastro direto ou compartilhe o link de pré-cadastro.
                 </Typography>
@@ -186,7 +186,7 @@ export function TeamListSection({
               {canCreateMembers && (
                 <Button
                   onClick={onCreateMember}
-                  className="h-mx-12 rounded-mx-xl px-mx-lg font-black uppercase tracking-widest text-mx-tiny shadow-mx-lg"
+                  className="h-mx-12 px-mx-lg text-mx-tiny"
                 >
                   <UserPlus size={18} className="mr-2" /> Novo integrante
                 </Button>

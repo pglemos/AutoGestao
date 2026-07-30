@@ -150,14 +150,14 @@ export function OwnerRoutineView({
       </div>
 
       {/* Fechamento Diário da Equipe */}
-      <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
+      <Card className="border bg-white p-mx-lg">
         <div className="flex items-center justify-between gap-mx-sm">
           <div className="flex items-center gap-mx-sm">
             <span className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-xl bg-brand-primary/10">
               <Users size={20} className="text-brand-primary" />
             </span>
             <div>
-              <Typography variant="h3" className="text-xl font-black">Fechamento Diário da Equipe</Typography>
+              <Typography variant="h3" className="text-xl">Fechamento Diário da Equipe</Typography>
               <Typography variant="p" tone="muted" className="mt-1 text-sm font-bold">
                 {checkedInCount}/{activeSellers.length} vendedores realizaram o fechamento
               </Typography>
@@ -212,7 +212,7 @@ export function OwnerRoutineView({
 
         {pendingSellers.length > 0 && (
           <div className="mt-mx-md rounded-mx-xl border border-status-warning/20 bg-status-warning-surface p-mx-md">
-            <Typography variant="tiny" className="block font-black uppercase tracking-mx-wide text-status-warning">
+            <Typography variant="tiny" className="block text-status-warning">
               Vendedores pendentes
             </Typography>
             <Typography variant="p" className="mt-mx-xs text-sm font-bold text-status-warning">
@@ -223,13 +223,13 @@ export function OwnerRoutineView({
       </Card>
 
       <div className="grid grid-cols-1 gap-mx-md xl:grid-cols-[minmax(0,1.15fr)_minmax(320px,0.85fr)]">
-        <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
+        <Card className="border bg-white p-mx-lg">
           <div className="flex items-center justify-between gap-mx-sm">
             <div>
-              <Typography variant="h3" className="text-xl font-black">Próximas ações do Dono</Typography>
+              <Typography variant="h3" className="text-xl">Próximas ações do Dono</Typography>
               <Typography variant="p" tone="muted" className="mt-1 text-sm font-bold">Acompanhe, delegue ou converta o desvio em execução.</Typography>
             </div>
-            <Button type="button" variant="outline" className="rounded-mx-xl bg-white" onClick={() => navigate(ownerPath('plano-acao'))}>
+            <Button type="button" variant="outline" className="bg-white" onClick={() => navigate(ownerPath('plano-acao'))}>
               Ver plano <ArrowRight size={16} />
             </Button>
           </div>
@@ -257,8 +257,8 @@ export function OwnerRoutineView({
           </div>
         </Card>
 
-        <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
-          <Typography variant="h3" className="text-xl font-black">Riscos e intervenções</Typography>
+        <Card className="border bg-white p-mx-lg">
+          <Typography variant="h3" className="text-xl">Riscos e intervenções</Typography>
           <div className="mt-mx-md space-y-mx-sm">
             {alertPreview.length === 0 ? (
               <p className="rounded-mx-xl bg-surface-alt p-mx-md text-sm font-bold text-text-tertiary">Nenhum alerta prioritário no período.</p>
@@ -298,12 +298,12 @@ function RoutineMetric({
 }) {
   const classes = toneClasses[tone]
   return (
-    <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
+    <Card className="border bg-white p-mx-lg">
       <div className="flex items-center gap-mx-sm">
         <span className={cn('flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-xl', classes.soft)}>{icon}</span>
         <div>
-          <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-mx-wide">{label}</Typography>
-          <Typography variant="h2" className="text-3xl font-black tabular-nums">{value}</Typography>
+          <Typography variant="tiny" tone="muted" className="">{label}</Typography>
+          <Typography variant="h2" className="text-3xl tabular-nums">{value}</Typography>
         </div>
       </div>
       <Typography variant="p" tone="muted" className="mt-mx-sm text-sm font-bold">{detail}</Typography>
@@ -340,9 +340,9 @@ export function OwnerDecisionCenter({
 
       <div className="space-y-mx-md">
         {itemPreview.length === 0 ? (
-          <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-xl text-center shadow-mx-sm">
+          <Card className="border bg-white p-mx-xl text-center">
             <CheckCircle2 size={32} className="mx-auto text-status-success" />
-            <Typography variant="h3" className="mt-mx-sm text-xl font-black">Fila executiva tratada</Typography>
+            <Typography variant="h3" className="mt-mx-sm text-xl">Fila executiva tratada</Typography>
             <Typography variant="p" tone="muted" className="mt-mx-xs font-bold">Não há decisões prioritárias neste recorte.</Typography>
           </Card>
         ) : itemPreview.map(item => {
@@ -357,7 +357,7 @@ export function OwnerDecisionCenter({
                     <span className="rounded-mx-md bg-surface-alt px-mx-sm py-mx-xs text-mx-tiny font-black text-text-secondary">{item.department}</span>
                     <span className="text-mx-tiny font-black uppercase tracking-mx-wide text-text-tertiary">{item.origin}</span>
                   </div>
-                  <Typography variant="h3" className="mt-mx-sm text-xl font-black text-text-primary">{item.title}</Typography>
+                  <Typography variant="h3" className="mt-mx-sm text-xl">{item.title}</Typography>
                   <Typography variant="p" tone="muted" className="mt-mx-xs font-bold leading-relaxed">{item.context}</Typography>
                   <div className="mt-mx-sm flex flex-wrap gap-x-mx-lg gap-y-mx-xs text-sm font-bold text-text-secondary">
                     <span>Prazo: <strong className={classes.text}>{item.due}</strong></span>
@@ -371,16 +371,16 @@ export function OwnerDecisionCenter({
                   )}
                 </div>
                 <div className="flex flex-wrap gap-mx-sm xl:max-w-[390px] xl:justify-end">
-                  <Button type="button" variant="outline" className="rounded-mx-xl bg-white" onClick={() => setExpandedId(expanded ? null : item.id)}>
+                  <Button type="button" variant="outline" className="bg-white" onClick={() => setExpandedId(expanded ? null : item.id)}>
                     {expanded ? 'Fechar análise' : 'Analisar'}
                   </Button>
-                  <Button type="button" className="rounded-mx-xl" onClick={() => navigate(ownerPath('plano-acao'))}>
+                  <Button type="button" className="" onClick={() => navigate(ownerPath('plano-acao'))}>
                     Abrir plano de ação
                   </Button>
                   <Button
                     type="button"
                     variant="ghost"
-                    className="rounded-mx-xl"
+                    className=""
                     onClick={() => navigate(`/falar-consultor?storeId=${encodeURIComponent(storeId || '')}&origem=central-decisoes&titulo=${encodeURIComponent(item.title)}`)}
                   >
                     <MessageSquareText size={16} /> Falar com Consultor
@@ -398,12 +398,12 @@ export function OwnerDecisionCenter({
 function DecisionMetric({ label, value, icon, tone }: { label: string; value: number; icon: ReactNode; tone: ActionRow['tone'] }) {
   const classes = toneClasses[tone]
   return (
-    <Card className="rounded-mx-2xl border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
+    <Card className="border bg-white p-mx-lg">
       <div className="flex items-center gap-mx-sm">
         <span className={cn('flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-xl', classes.soft)}>{icon}</span>
         <div>
-          <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-mx-wide">{label}</Typography>
-          <Typography variant="h2" className="text-3xl font-black tabular-nums">{value}</Typography>
+          <Typography variant="tiny" tone="muted" className="">{label}</Typography>
+          <Typography variant="h2" className="text-3xl tabular-nums">{value}</Typography>
         </div>
       </div>
     </Card>
@@ -445,15 +445,15 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
       </div>
 
       {data.consultingLoading ? (
-        <Card className="rounded-mx-xl border border-border-subtle bg-white p-mx-lg"><Typography variant="p" tone="muted">Carregando programa de consultoria…</Typography></Card>
+        <Card className="border bg-white p-mx-lg"><Typography variant="p" tone="muted">Carregando programa de consultoria…</Typography></Card>
       ) : data.consultingError || !program ? (
-        <Card className="rounded-mx-xl border border-dashed border-border-default bg-white p-mx-lg text-center">
+        <Card className="border border-dashed bg-white p-mx-lg text-center">
           <Typography variant="h3">Nenhum programa de consultoria ativo</Typography>
           <Typography variant="p" tone="muted" className="mt-mx-xs">{data.consultingError || 'Esta unidade ainda não possui um programa vinculado.'}</Typography>
         </Card>
       ) : (
         <>
-          <Card className="rounded-mx-xl border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+          <Card className="border bg-white p-mx-md">
             <div className="grid gap-mx-md xl:grid-cols-[minmax(0,1fr)_280px]">
               <div>
                 <span className="inline-flex rounded-mx-full bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-success">Programa contratado</span>
@@ -500,7 +500,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
             })}
           </div>
 
-          <Card className="rounded-mx-xl border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+          <Card className="border bg-white p-mx-md">
             <Typography variant="h3" className="text-base font-bold">Jornada do Programa</Typography>
             <div className="mt-mx-sm flex gap-mx-xs"><span className="flex-1 rounded-mx-lg border border-border-subtle px-mx-sm py-mx-xs text-mx-tiny"><strong>Implementação</strong> 1–{journeyTotal}</span><span className="flex-1 rounded-mx-lg border border-border-subtle px-mx-sm py-mx-xs text-mx-tiny"><strong>Acompanhamento</strong> —</span></div>
             <div className="mt-mx-md flex flex-wrap gap-x-1 gap-y-mx-sm">
@@ -513,14 +513,14 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
             </div>
           </Card>
 
-          <Card className="rounded-mx-xl border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+          <Card className="border bg-white p-mx-md">
             <Typography variant="h3" className="text-base font-bold">Focos atuais do ciclo</Typography>
             <div className="mt-mx-sm grid gap-mx-sm sm:grid-cols-2 xl:grid-cols-4">
               {departmentFocus.map(focus => <div key={focus.label} className="rounded-mx-lg border border-border-subtle bg-surface-alt/50 p-mx-sm"><Typography variant="tiny" className="font-bold">{focus.label}</Typography><Typography variant="p" className="mt-mx-xs font-bold">{focus.value}</Typography><Typography variant="tiny" tone="muted" className="mt-mx-xs block">{focus.score == null ? 'Sem score registrado' : `${Math.max(0, Math.min(100, Math.round(focus.score)))}% no recorte atual`}</Typography></div>)}
             </div>
           </Card>
 
-          <Card className="rounded-mx-xl border border-border-subtle bg-white p-mx-md shadow-mx-sm"><Typography variant="h3" className="text-base font-bold">Detalhes</Typography><div className="mt-mx-sm grid gap-x-mx-md gap-y-mx-xs text-mx-tiny text-text-secondary sm:grid-cols-3"><span>Consultor: <strong className="text-text-primary">Não informado</strong></span><span>Cliente: <strong className="text-text-primary">{program.clientId}</strong></span><span>Início: <strong className="text-text-primary">Não informado</strong></span></div></Card>
+          <Card className="border bg-white p-mx-md"><Typography variant="h3" className="text-base font-bold">Detalhes</Typography><div className="mt-mx-sm grid gap-x-mx-md gap-y-mx-xs text-mx-tiny text-text-secondary sm:grid-cols-3"><span>Consultor: <strong className="text-text-primary">Não informado</strong></span><span>Cliente: <strong className="text-text-primary">{program.clientId}</strong></span><span>Início: <strong className="text-text-primary">Não informado</strong></span></div></Card>
         </>
       )}
     </div>

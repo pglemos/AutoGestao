@@ -48,7 +48,7 @@ export function StoreKpiCards({ metrics }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.05 }}
         >
-          <Card className="p-mx-lg border-none shadow-mx-sm hover:shadow-mx-lg transition-all group relative overflow-hidden bg-white">
+          <Card className="p-mx-lg border-none hover:shadow-mx-lg transition-all group relative overflow-hidden bg-white">
             <div className="absolute top-mx-0 right-mx-0 w-mx-3xl h-mx-3xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-12 -mt-12" />
             <div className="flex items-center gap-mx-md relative z-10">
               <div
@@ -67,7 +67,7 @@ export function StoreKpiCards({ metrics }: Props) {
                 <Typography
                   variant="caption"
                   tone="muted"
-                  className="mb-1 block uppercase font-black tracking-widest text-mx-micro"
+                  className="mb-1 block text-mx-micro"
                 >
                   {stat.title}
                 </Typography>
@@ -77,7 +77,7 @@ export function StoreKpiCards({ metrics }: Props) {
                   </Typography>
                   <Badge
                     variant={stat.tone}
-                    className="text-mx-micro px-3 py-1 font-black shadow-sm"
+                    className="text-mx-micro px-3 py-1 shadow-sm"
                   >
                     {stat.trend}
                   </Badge>

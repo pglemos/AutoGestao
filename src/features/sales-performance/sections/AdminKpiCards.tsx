@@ -50,7 +50,7 @@ export function AdminKpiCards({ metrics }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.05 }}
         >
-          <Card className="p-mx-lg border-none shadow-mx-sm hover:shadow-mx-lg transition-all group relative overflow-hidden bg-white min-h-mx-36">
+          <Card className="p-mx-lg border-none hover:shadow-mx-lg transition-all group relative overflow-hidden bg-white min-h-mx-36">
             <div className="flex items-center gap-mx-md relative z-10">
               <div
                 className={cn(
@@ -70,7 +70,7 @@ export function AdminKpiCards({ metrics }: Props) {
                 <Typography
                   variant="caption"
                   tone="muted"
-                  className="mb-1 block uppercase font-black tracking-widest text-mx-micro"
+                  className="mb-1 block text-mx-micro"
                 >
                   {stat.title}
                 </Typography>
@@ -87,7 +87,7 @@ export function AdminKpiCards({ metrics }: Props) {
                           ? 'success'
                           : 'brand'
                   }
-                  className="text-mx-micro px-3 py-1 mt-3 font-black shadow-sm"
+                  className="text-mx-micro px-3 py-1 mt-3 shadow-sm"
                 >
                   {stat.trend}
                 </Badge>

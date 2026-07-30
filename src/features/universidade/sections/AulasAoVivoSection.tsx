@@ -99,12 +99,12 @@ export function AulasAoVivoSection() {
       <div className="grid grid-cols-1 gap-mx-xl xl:grid-cols-[minmax(0,1fr)_420px]">
         <div className="space-y-mx-lg">
           <div>
-            <Typography variant="h3" className="mb-mx-sm uppercase">Próxima Aula ao Vivo</Typography>
+            <Typography variant="h3" className="mb-mx-sm">Próxima Aula ao Vivo</Typography>
             {aulaPrincipal ? (
             <div className="grid grid-cols-1 overflow-hidden rounded-mx-lg border border-border-default bg-white shadow-mx-sm lg:grid-cols-[minmax(0,1fr)_260px]">
               <div className="grid min-h-[220px] grid-cols-[100px_minmax(0,260px)_1fr] bg-sidebar-bg-strong text-white">
                 <div className="flex flex-col items-center justify-center bg-status-info text-white">
-                  <Badge variant="info" className="mb-mx-sm rounded-mx-md">{aulaPrincipal.status === 'ao_vivo' ? 'Ao vivo' : 'Agendada'}</Badge>
+                  <Badge variant="info" className="mb-mx-sm">{aulaPrincipal.status === 'ao_vivo' ? 'Ao vivo' : 'Agendada'}</Badge>
                   <span className="text-sm font-black uppercase">{formatDate(aulaPrincipal.inicio).slice(0, 3)}</span>
                   <span className="text-5xl font-black leading-none">{new Date(aulaPrincipal.inicio).getDate()}</span>
                   <span className="text-xl font-black uppercase">{new Date(aulaPrincipal.inicio).toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')}</span>
@@ -140,7 +140,7 @@ export function AulasAoVivoSection() {
             <div className="grid min-h-[220px] place-items-center rounded-mx-lg border border-border-default bg-white p-mx-lg text-center shadow-mx-sm">
               <div>
                 <Video size={36} className="mx-auto text-text-tertiary" />
-                <Typography variant="p" className="mt-mx-sm font-black">{loading ? 'Carregando aulas...' : 'Nenhuma aula ao vivo agendada'}</Typography>
+                <Typography variant="p" className="mt-mx-sm">{loading ? 'Carregando aulas...' : 'Nenhuma aula ao vivo agendada'}</Typography>
                 {!loading && <Typography variant="caption" tone="muted" className="normal-case tracking-normal">Quando sua loja ou a MX agendar uma aula, ela aparece aqui com link, prova e presença.</Typography>}
               </div>
             </div>
@@ -148,7 +148,7 @@ export function AulasAoVivoSection() {
           </div>
 
           <div id="aulas-como-funciona">
-            <Typography variant="h3" className="mb-mx-md uppercase">Como funciona</Typography>
+            <Typography variant="h3" className="mb-mx-md">Como funciona</Typography>
             <div className="grid grid-cols-1 gap-mx-md md:grid-cols-4">
               <Step icon={<CalendarDays size={24} />} title="1. Participe da aula" text="Participe ao vivo ou assista a gravação." />
               <Step icon={<FileQuestion size={24} />} title="2. Faça a prova" text="Responda o quiz com 5 a 10 perguntas." />
@@ -157,8 +157,8 @@ export function AulasAoVivoSection() {
             </div>
           </div>
 
-          <Card className="rounded-mx-lg border border-border-default bg-status-info-surface p-mx-lg shadow-none">
-            <Typography variant="h3" className="uppercase">Suas aulas recentes</Typography>
+          <Card className="border bg-status-info-surface p-mx-lg shadow-none">
+            <Typography variant="h3" className="">Suas aulas recentes</Typography>
             <div className="mt-mx-md grid grid-cols-1 gap-mx-md md:grid-cols-4">
               <MiniMetric icon={<CalendarDays size={22} />} value={String(indicadores.presencasValidadas)} label="Presenças validadas" hint="provas aprovadas" />
               <MiniMetric icon={<CheckCircle size={22} />} value={indicadores.mediaProvas === null ? '—' : `${indicadores.mediaProvas}%`} label="Média de acertos" hint={indicadores.mediaProvas === null ? 'nenhuma prova feita' : 'nas provas'} />
@@ -169,9 +169,9 @@ export function AulasAoVivoSection() {
         </div>
 
         <aside className="space-y-mx-md">
-          <Card className="rounded-mx-lg border border-border-default p-mx-lg shadow-none">
+          <Card className="border p-mx-lg shadow-none">
             <div className="mb-mx-sm flex items-center justify-between">
-              <Typography variant="h3" className="uppercase">Agenda de Aulas</Typography>
+              <Typography variant="h3" className="">Agenda de Aulas</Typography>
             </div>
             <div className="divide-y divide-border-default">
               {agenda.length === 0 && (
@@ -185,7 +185,7 @@ export function AulasAoVivoSection() {
                     <span className="text-xs font-black uppercase text-text-secondary">{new Date(aula.inicio).toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')}</span>
                   </div>
                   <div className="min-w-0 flex-1">
-                    <Typography variant="p" className="font-black text-text-primary">{aula.titulo}</Typography>
+                    <Typography variant="p" className="">{aula.titulo}</Typography>
                     <Typography variant="tiny" tone="muted" className="tracking-normal">{formatHour(aula.inicio)} às {formatHour(new Date(new Date(aula.inicio).getTime() + aula.duracao_minutos * 60000).toISOString())}</Typography>
                     {aula.instrutor && <Typography variant="tiny" tone="muted" className="block tracking-normal">Com {aula.instrutor}</Typography>}
                   </div>
@@ -195,9 +195,9 @@ export function AulasAoVivoSection() {
             </div>
           </Card>
 
-          <Card className="rounded-mx-lg border border-border-default p-mx-lg shadow-none">
+          <Card className="border p-mx-lg shadow-none">
             <div className="mb-mx-sm flex items-center justify-between">
-              <Typography variant="h3" className="uppercase">Gravações disponíveis</Typography>
+              <Typography variant="h3" className="">Gravações disponíveis</Typography>
             </div>
             <div className="space-y-mx-sm">
               {gravacoesDisplay.length === 0 && (
@@ -211,13 +211,13 @@ export function AulasAoVivoSection() {
                       <PlayCircle size={28} />
                     </div>
                     <div className="min-w-0 flex-1">
-                      <Typography variant="p" className="truncate font-black text-text-primary">{aula.titulo}</Typography>
+                      <Typography variant="p" className="truncate">{aula.titulo}</Typography>
                       <Typography variant="tiny" tone="muted" className="tracking-normal">{aula.instrutor ? `Com ${aula.instrutor}` : 'Universidade MX'}</Typography>
                       <Typography variant="tiny" tone="muted" className="block tracking-normal">{new Date(aula.inicio).toLocaleDateString('pt-BR')} • {aula.duracao_minutos} min</Typography>
                     </div>
                     <div className="text-right">
                       <Typography variant="tiny" tone="muted" className="tracking-normal">Nota</Typography>
-                      <Typography variant="p" className="font-black text-text-primary">{presenca?.nota !== null && presenca?.nota !== undefined ? `${presenca.nota}%` : '—'}</Typography>
+                      <Typography variant="p" className="">{presenca?.nota !== null && presenca?.nota !== undefined ? `${presenca.nota}%` : '—'}</Typography>
                     </div>
                   </>
                 )
@@ -234,7 +234,7 @@ export function AulasAoVivoSection() {
         </aside>
       </div>
 
-      <Card className="rounded-mx-lg border border-accent-blue/20 bg-accent-blue-soft p-mx-lg shadow-none">
+      <Card className="border border-accent-blue/20 bg-accent-blue-soft p-mx-lg shadow-none">
         <div className="flex flex-col gap-mx-md md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-mx-md">
             <Award size={34} className="text-accent-blue" />
@@ -291,7 +291,7 @@ function Step({ icon, title, text }: { icon: ReactNode; title: string; text: str
   return (
     <div className="text-center">
       <span className="mx-auto flex h-mx-16 w-mx-16 items-center justify-center rounded-full bg-status-info-surface text-status-info">{icon}</span>
-      <Typography variant="p" className="mt-mx-sm font-black text-text-primary">{title}</Typography>
+      <Typography variant="p" className="mt-mx-sm">{title}</Typography>
       <Typography variant="p" tone="muted" className="text-sm">{text}</Typography>
     </div>
   )

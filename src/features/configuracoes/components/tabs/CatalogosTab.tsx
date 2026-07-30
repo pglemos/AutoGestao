@@ -23,7 +23,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
     if (active === 'agenda') {
         return (
             <div className="space-y-mx-lg">
-                <Card className="p-mx-xs border-none shadow-mx-md bg-white">
+                <Card className="p-mx-xs border-none bg-white">
                     <div className="flex flex-wrap gap-mx-tiny">
                         {SUBTABS.map(tab => {
                             const TabIcon = tab.icon
@@ -53,7 +53,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
     return (
         <div className="space-y-mx-lg">
             {/* Sub-nav */}
-            <Card className="p-mx-xs border-none shadow-mx-md bg-white">
+            <Card className="p-mx-xs border-none bg-white">
                 <div className="flex flex-wrap gap-mx-tiny">
                     {SUBTABS.map(tab => {
                         const TabIcon = tab.icon
@@ -77,16 +77,16 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
             </Card>
 
             {/* Conteúdo do sub-tab */}
-            <Card className="p-mx-lg md:p-mx-xl border-none shadow-mx-lg bg-white">
+            <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-start gap-mx-md pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100">
                         <Icon size={26} />
                     </div>
                     <div className="flex-1">
-                        <Typography variant="h3" className="uppercase tracking-tight">{current.label}</Typography>
-                        <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black">{current.desc}</Typography>
+                        <Typography variant="h3" className="tracking-tight">{current.label}</Typography>
+                        <Typography variant="caption" tone="muted" className="">{current.desc}</Typography>
                     </div>
-                    <Badge variant="success" className="font-black uppercase">Catálogo Ativo</Badge>
+                    <Badge variant="success" className="">Catálogo Ativo</Badge>
                 </header>
 
                 <Typography variant="caption" tone="muted" className="font-bold leading-relaxed">
@@ -94,7 +94,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
                 </Typography>
 
                 <div className="mt-mx-md">
-                    <Button asChild className="h-mx-xl px-8 rounded-mx-full font-black uppercase tracking-widest">
+                    <Button asChild className="h-mx-xl px-8 rounded-mx-full">
                         <a href={current.route || '#'}>
                             Abrir gestão completa <ExternalLink size={14} className="ml-2" />
                         </a>
@@ -103,7 +103,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
             </Card>
 
             {/* Atalhos secundários */}
-            <Card className="p-mx-md border-none shadow-mx-sm bg-surface-alt">
+            <Card className="p-mx-md border-none bg-surface-alt">
                 <div className="flex items-start gap-mx-sm">
                     <FolderTree size={18} className="text-brand-primary shrink-0 mt-1" />
                     <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">

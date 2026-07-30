@@ -20,7 +20,7 @@ const FilterBar = React.forwardRef<HTMLDivElement, FilterBarProps>(
       >
         <div className="flex items-center gap-mx-xs shrink-0">
           {icon && <span className="text-text-tertiary">{icon}</span>}
-          <Typography variant="caption" className="font-black uppercase tracking-widest">
+          <Typography variant="caption" className="">
             {label}
           </Typography>
         </div>

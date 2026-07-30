@@ -100,7 +100,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
       footer={
         <>
           <Button type="button" variant="ghost" onClick={onClose} disabled={saving}>CANCELAR</Button>
-          <Button type="submit" form="store-edit-form" disabled={saving || !store} className="bg-brand-secondary">
+          <Button type="submit" form="store-edit-form" disabled={saving || !store} className="">
             {saving ? <RefreshCw size={16} className="mr-2 animate-spin" /> : <Save size={16} className="mr-2" />}
             SALVAR
           </Button>
@@ -111,7 +111,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
         <div className="rounded-mx-2xl border border-border-default bg-surface-alt p-mx-md">
           <div className="flex items-center justify-between gap-mx-sm mb-mx-sm">
             <div className="min-w-0">
-              <Typography variant="caption" className="font-black uppercase tracking-widest text-text-primary">Link de pré-cadastro</Typography>
+              <Typography variant="caption" className="">Link de pré-cadastro</Typography>
               <Typography variant="tiny" tone="muted" className="mt-1 block font-bold">Envie este link para dono, gerente e vendedores preencherem os dados.</Typography>
             </div>
             <Button
@@ -130,13 +130,13 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
             <Input
               readOnly
               value={registrationLink}
-              className="!pl-14 !h-14 font-bold text-text-secondary"
+              className="!pl-14 !h-14 font-bold"
             />
           </div>
         </div>
 
         <div className="space-y-mx-xs">
-          <Typography as="label" htmlFor="edit-store-name" variant="caption" className="font-black uppercase tracking-widest text-text-tertiary">
+          <Typography as="label" htmlFor="edit-store-name" variant="caption" className="">
             Nome da Loja
           </Typography>
           <div className="relative">
@@ -153,7 +153,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-md">
           <div className="space-y-mx-xs md:col-span-2">
-            <Typography as="label" htmlFor="edit-store-legal-name" variant="caption" className="font-black uppercase tracking-widest text-text-tertiary">
+            <Typography as="label" htmlFor="edit-store-legal-name" variant="caption" className="">
               Razão Social
             </Typography>
             <Input
@@ -166,7 +166,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
           </div>
 
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="edit-store-cnpj" variant="caption" className="font-black uppercase tracking-widest text-text-tertiary">
+            <Typography as="label" htmlFor="edit-store-cnpj" variant="caption" className="">
               CNPJ
             </Typography>
             <Input
@@ -179,7 +179,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
           </div>
 
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="edit-store-address" variant="caption" className="font-black uppercase tracking-widest text-text-tertiary">
+            <Typography as="label" htmlFor="edit-store-address" variant="caption" className="">
               Endereço
             </Typography>
             <div className="relative">
@@ -195,7 +195,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
           </div>
 
           <div className="space-y-mx-xs md:col-span-2">
-            <Typography as="label" htmlFor="edit-store-administrative-phone" variant="caption" className="font-black uppercase tracking-widest text-text-tertiary">
+            <Typography as="label" htmlFor="edit-store-administrative-phone" variant="caption" className="">
               Telefone administrativo
             </Typography>
             <div className="relative">
@@ -213,10 +213,10 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
 
         <div className="space-y-mx-xs">
           <div className="flex items-center justify-between">
-            <Typography as="label" htmlFor="edit-store-manager-email" variant="caption" className="font-black uppercase tracking-widest text-text-tertiary">
+            <Typography as="label" htmlFor="edit-store-manager-email" variant="caption" className="">
               E-mail do Gestor
             </Typography>
-            <Badge variant="outline" className="text-mx-micro font-black uppercase">Opcional</Badge>
+            <Badge variant="outline" className="text-mx-micro">Opcional</Badge>
           </div>
           <div className="relative">
             <Mail size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" aria-hidden="true" />
@@ -234,7 +234,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
         <div className="space-y-mx-sm">
           <div className="flex items-center justify-between gap-mx-md">
             <div>
-              <Typography variant="caption" className="font-black uppercase tracking-widest text-text-tertiary">
+              <Typography variant="caption" className="">
                 Sócios da loja
               </Typography>
               <Typography variant="tiny" tone="muted" className="mt-1 block font-bold">
@@ -259,7 +259,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                 <div className="flex items-center justify-between mb-mx-sm">
                   <div className="flex items-center gap-mx-xs">
                     <UserRound size={16} className="text-brand-primary" />
-                    <Typography variant="tiny" className="font-black uppercase tracking-widest">Sócio {index + 1}</Typography>
+                    <Typography variant="tiny" className="">Sócio {index + 1}</Typography>
                   </div>
                   <Button
                     type="button"

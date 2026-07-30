@@ -37,7 +37,7 @@ export interface VisitCardProps {
 
 function getVisitStatusBadge(status: string) {
   switch (status) {
-    case 'agendada': return <Badge variant="outline" className="border-brand-primary/30 text-brand-primary">AGENDADA</Badge>
+    case 'agendada': return <Badge variant="outline" className="border-brand-primary/30">AGENDADA</Badge>
     case 'em_andamento': return <Badge variant="info">EM ANDAMENTO</Badge>
     case 'concluida': return <Badge variant="success">CONCLUÍDA</Badge>
     case 'cancelada': return <Badge variant="danger">CANCELADA</Badge>
@@ -73,7 +73,7 @@ export function VisitCard({
             'w-mx-10 h-mx-10 rounded-mx-lg border flex items-center justify-center shrink-0',
             isToday(scheduledDate) ? 'bg-brand-primary/10 border-brand-primary/20 text-brand-primary' : 'bg-surface-alt border-border-default text-text-tertiary'
           )}>
-            <Typography variant="h3" className="text-lg font-black">
+            <Typography variant="h3" className="text-lg">
               {format(scheduledDate, 'dd')}
             </Typography>
           </div>
@@ -100,17 +100,17 @@ export function VisitCard({
             {(visit.visit_reason || visit.target_audience || visit.product_name) && (
               <div className="mt-mx-xs flex flex-wrap gap-mx-xs">
                 {visit.visit_reason && (
-                  <Badge variant="outline" className="max-w-full overflow-hidden text-mx-nano uppercase tracking-widest">
+                  <Badge variant="outline" className="max-w-full overflow-hidden text-mx-nano">
                     <span className="block max-w-full truncate">{visit.visit_reason}</span>
                   </Badge>
                 )}
                 {visit.target_audience && (
-                  <Badge variant="ghost" className="max-w-full overflow-hidden text-mx-nano uppercase tracking-widest">
+                  <Badge variant="ghost" className="max-w-full overflow-hidden text-mx-nano">
                     <span className="block max-w-full truncate">{visit.target_audience}</span>
                   </Badge>
                 )}
                 {visit.product_name && (
-                  <Badge variant="brand" className="max-w-full overflow-hidden text-mx-nano uppercase tracking-widest">
+                  <Badge variant="brand" className="max-w-full overflow-hidden text-mx-nano">
                     <span className="block max-w-full truncate">{visit.product_name}</span>
                   </Badge>
                 )}
@@ -144,7 +144,7 @@ export function VisitCard({
 
           <div className="flex items-center gap-mx-xs shrink-0">
             {onEdit && visit.status !== 'concluida' && (
-              <Button type="button" variant="ghost" size="sm" className="cursor-pointer text-brand-primary" onClick={() => onEdit(visit.id)} aria-label={`Editar visita de ${visit.client_name}`}>
+              <Button type="button" variant="ghost" size="sm" className="cursor-pointer" onClick={() => onEdit(visit.id)} aria-label={`Editar visita de ${visit.client_name}`}>
                 <Pencil size={14} />
               </Button>
             )}

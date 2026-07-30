@@ -23,7 +23,7 @@ export function StoreHeader({ isRefetching, onRefresh, onExport }: Props) {
             Análise de <span className="text-mx-green-700">Performance</span>
           </Typography>
         </div>
-        <Typography variant="caption" className="pl-mx-md uppercase tracking-widest">
+        <Typography variant="caption" className="pl-mx-md">
           BUSINESS INTELLIGENCE • LIVE AUDIT MX
         </Typography>
       </div>
@@ -33,20 +33,20 @@ export function StoreHeader({ isRefetching, onRefresh, onExport }: Props) {
           size="icon"
           onClick={onRefresh}
           aria-label="Atualizar"
-          className="w-mx-14 h-mx-14 rounded-mx-xl shadow-mx-sm"
+          className="w-mx-14 h-mx-14"
         >
           <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
         </Button>
         <div className="flex items-center gap-mx-xs px-6 h-mx-14 rounded-mx-full border border-border-default bg-white shadow-mx-sm">
           <Calendar size={18} className="text-brand-primary" />
-          <Typography variant="caption" className="font-black uppercase tracking-widest">
+          <Typography variant="caption" className="">
             Ciclo {format(new Date(), 'yyyy')}
           </Typography>
         </div>
         <Button
           variant="secondary"
           onClick={onExport}
-          className="h-mx-14 px-8 rounded-mx-full shadow-mx-xl font-black uppercase tracking-widest text-mx-tiny"
+          className="h-mx-14 px-8 rounded-mx-full text-mx-tiny"
         >
           <Download size={18} className="mr-2" /> EXPORTAR BI
         </Button>

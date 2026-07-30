@@ -27,7 +27,7 @@ const FILTERS = [
 
 export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, setFilterType }: Props) {
   return (
-    <Card className="space-y-mx-lg bg-white p-mx-md shadow-mx-sm sm:p-mx-lg">
+    <Card className="space-y-mx-lg bg-white p-mx-md sm:p-mx-lg">
       <header className="border-b border-border-default pb-mx-md">
         <Typography variant="h3">
           Filtrar notificações
@@ -86,7 +86,7 @@ export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, 
       <footer className="pt-8 border-t border-border-default hidden">
         <Button
           variant="outline"
-          className="w-full h-mx-14 rounded-mx-full shadow-sm font-black uppercase tracking-widest text-xs bg-white border-border-strong hover:border-brand-primary"
+          className="w-full h-mx-14 rounded-mx-full shadow-sm text-xs bg-white hover:border-brand-primary"
         >
           AJUSTES DE ALERTA
         </Button>

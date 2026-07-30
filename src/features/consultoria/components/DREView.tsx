@@ -253,13 +253,13 @@ export const DREView: React.FC<DREViewProps> = ({ clientId }) => {
     <section className="flex flex-col gap-mx-lg">
       <div className="flex items-center justify-between">
         <Typography variant="h3">DRE & EVOLUÇÃO FINANCEIRA</Typography>
-        <Button size="sm" className="rounded-mx-xl" onClick={openCreate}>
+        <Button size="sm" className="" onClick={openCreate}>
           <Plus size={16} className="mr-2" /> LANÇAR MÊS
         </Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-mx-md">
-        <Card className="p-mx-lg bg-brand-secondary text-white border-none shadow-mx-xl">
+        <Card className="p-mx-lg text-white border-none">
           <Typography variant="caption" tone="white" className="opacity-60 mb-2 block">LUCRO LÍQUIDO (MÊS ATUAL)</Typography>
           <div className="flex items-baseline gap-mx-xs">
             <Typography variant="h1" tone="white" className="text-4xl">
@@ -272,18 +272,18 @@ export const DREView: React.FC<DREViewProps> = ({ clientId }) => {
             )}
           </div>
         </Card>
-        <Card className="p-mx-lg bg-white border-none shadow-mx-sm">
+        <Card className="p-mx-lg bg-white border-none">
           <Typography variant="caption" tone="muted" className="mb-2 block">RENTABILIDADE / CAPITAL</Typography>
           <div className="flex items-baseline gap-mx-xs">
             <Typography variant="h1" className="text-4xl">{pct((latestComputed?.rentability ?? 0) * 100)}</Typography>
-            <Typography variant="tiny" tone="muted" className="uppercase font-black">a.m.</Typography>
+            <Typography variant="tiny" tone="muted" className="">a.m.</Typography>
           </div>
         </Card>
-        <Card className="p-mx-lg bg-white border-none shadow-mx-sm">
+        <Card className="p-mx-lg bg-white border-none">
           <Typography variant="caption" tone="muted" className="mb-2 block">LUCRO / CARRO</Typography>
           <div className="flex items-baseline gap-mx-xs">
             <Typography variant="h1" className="text-4xl">R$ {fmt(latestComputed?.profit_per_car ?? 0)}</Typography>
-            <Typography variant="tiny" tone="muted" className="uppercase font-black">unidade</Typography>
+            <Typography variant="tiny" tone="muted" className="">unidade</Typography>
           </div>
         </Card>
       </div>

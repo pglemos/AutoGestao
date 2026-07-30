@@ -339,8 +339,8 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
 
   if (!storeId) return (
     <section className="w-full rounded-mx-3xl border border-border-default bg-white p-mx-xl text-center shadow-mx-sm">
-      <Typography variant="h2" className="uppercase tracking-tight">Selecione uma loja</Typography>
-      <Typography variant="caption" tone="muted" className="mt-2 block uppercase tracking-widest font-black">
+      <Typography variant="h2" className="tracking-tight">Selecione uma loja</Typography>
+      <Typography variant="caption" tone="muted" className="mt-2 block">
         A equipe agora é administrada dentro do dashboard operacional de cada loja.
       </Typography>
     </section>
@@ -414,7 +414,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
                       type="button"
                       onClick={handleRefresh}
                       aria-label="Atualizar equipe e pré-cadastros"
-                      className="w-mx-14 h-mx-14 rounded-mx-xl bg-white shadow-mx-sm border-border-default shrink-0"
+                      className="w-mx-14 h-mx-14 bg-white shrink-0"
                   >
                     <RefreshCw size={20} aria-hidden="true" className={cn(isRefetching && "animate-spin")} />
                   </Button>

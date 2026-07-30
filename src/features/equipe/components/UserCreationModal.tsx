@@ -137,22 +137,22 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                             <UserPlus size={40} strokeWidth={1.5} />
                         </div>
                         <div className="space-y-mx-xs">
-                            <Typography variant="h2" className="text-3xl font-black uppercase tracking-tighter">Novo <span className="text-brand-primary">Integrante</span></Typography>
-                            <Typography variant="tiny" tone="muted" className="uppercase tracking-mx-widest font-black leading-relaxed">Cadastro completo de acesso, vínculo e vigência operacional na loja.</Typography>
+                            <Typography variant="h2" className="text-3xl tracking-tighter">Novo <span className="text-brand-primary">Integrante</span></Typography>
+                            <Typography variant="tiny" tone="muted" className="leading-relaxed">Cadastro completo de acesso, vínculo e vigência operacional na loja.</Typography>
                         </div>
 
                         <div className="space-y-mx-md pt-mx-lg">
                             <div className="flex items-center gap-mx-sm">
                                 <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-white border border-border-default flex items-center justify-center text-brand-primary shadow-mx-sm"><ShieldCheck size={20} /></div>
-                                <Typography variant="tiny" tone="muted" className="uppercase font-black tracking-mx-widest text-mx-nano">Acesso ao sistema</Typography>
+                                <Typography variant="tiny" tone="muted" className="text-mx-nano">Acesso ao sistema</Typography>
                             </div>
                             <div className="flex items-center gap-mx-sm">
                                 <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-white border border-border-default flex items-center justify-center text-brand-primary shadow-mx-sm"><Sparkles size={20} /></div>
-                                <Typography variant="tiny" tone="muted" className="uppercase font-black tracking-mx-widest text-mx-nano">Vínculo com a loja</Typography>
+                                <Typography variant="tiny" tone="muted" className="text-mx-nano">Vínculo com a loja</Typography>
                             </div>
                             <div className="flex items-center gap-mx-sm">
                                 <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-white border border-border-default flex items-center justify-center text-status-warning shadow-mx-sm"><Zap size={20} /></div>
-                                <Typography variant="tiny" tone="muted" className="uppercase font-black tracking-mx-widest text-mx-nano">Senha provisória obrigatória</Typography>
+                                <Typography variant="tiny" tone="muted" className="text-mx-nano">Senha provisória obrigatória</Typography>
                             </div>
                         </div>
                     </div>
@@ -160,7 +160,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                     <div className="relative z-10 pt-mx-lg">
                         <button type="button" onClick={onClose} className="group flex items-center gap-mx-sm text-text-tertiary hover:text-brand-primary transition-colors">
                             <X size={20} />
-                            <Typography variant="tiny" className="font-black tracking-mx-widest">CANCELAR</Typography>
+                            <Typography variant="tiny" className="">CANCELAR</Typography>
                         </button>
                     </div>
                 </div>
@@ -170,7 +170,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
                         {/* Nome */}
                         <div className="space-y-mx-xs">
-                          <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-mx-widest truncate">Nome completo</Typography>
+                          <Typography variant="tiny" tone="muted" className="px-1 truncate">Nome completo</Typography>
                           <div className="relative group">
                             <User size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" />
                             <input 
@@ -186,7 +186,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
 
                         {/* Telefone */}
                         <div className="space-y-mx-xs">
-                          <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-mx-widest">Telefone / WhatsApp</Typography>
+                          <Typography variant="tiny" tone="muted" className="px-1">Telefone / WhatsApp</Typography>
                           <div className="relative group">
                             <Phone size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" />
                             <input 
@@ -202,7 +202,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
 
                         {/* Email */}
                         <div className="space-y-mx-xs">
-                          <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-mx-widest">E-mail de acesso</Typography>
+                          <Typography variant="tiny" tone="muted" className="px-1">E-mail de acesso</Typography>
                           <div className="relative group">
                             <Mail size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" />
                             <input 
@@ -218,7 +218,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
 
                         {/* Senha */}
                         <div className="space-y-mx-xs">
-                          <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-mx-widest truncate">Senha provisória</Typography>
+                          <Typography variant="tiny" tone="muted" className="px-1 truncate">Senha provisória</Typography>
                           <div className="relative group">
                             <Lock size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" />
                             <input 
@@ -237,7 +237,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
 
                         {/* Hierarquia */}
                         <div className="space-y-mx-xs">
-                          <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-mx-widest">Papel na loja</Typography>
+                          <Typography variant="tiny" tone="muted" className="px-1">Papel na loja</Typography>
                           <div className="relative group">
                             <Shield size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors z-10 pointer-events-none" />
                             <select
@@ -259,7 +259,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
 
                         {/* Unidade */}
                         <div className="space-y-mx-xs">
-                          <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-mx-widest">Loja vinculada</Typography>
+                          <Typography variant="tiny" tone="muted" className="px-1">Loja vinculada</Typography>
                           <div className="relative group">
                             <Building2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors z-10 pointer-events-none" />
                             <select
@@ -282,7 +282,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         </div>
 
                         <div className="space-y-mx-xs">
-                          <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-mx-widest">Início da vigência</Typography>
+                          <Typography variant="tiny" tone="muted" className="px-1">Início da vigência</Typography>
                           <input aria-label="Início da vigência"
                             id="new-user-started-at"
                             name="started_at"
@@ -296,7 +296,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         </div>
 
                         <div className="space-y-mx-xs">
-                          <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-mx-widest">Fim da vigência</Typography>
+                          <Typography variant="tiny" tone="muted" className="px-1">Fim da vigência</Typography>
                           <input aria-label="Fim da vigência"
                             id="new-user-ended-at"
                             name="ended_at"
@@ -333,7 +333,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                             {loading ? <RefreshCw className="animate-spin" /> : <Zap size={24} className="fill-white" />}
                             CRIAR INTEGRANTE
                         </button>
-                        <Typography variant="tiny" tone="muted" className="mt-mx-md text-center uppercase font-black tracking-mx-widest opacity-40">
+                        <Typography variant="tiny" tone="muted" className="mt-mx-md text-center opacity-40">
                             O usuário será criado com acesso, vínculo e regras operacionais da loja selecionada.
                         </Typography>
                     </div>

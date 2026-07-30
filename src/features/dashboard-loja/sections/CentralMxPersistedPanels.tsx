@@ -70,14 +70,14 @@ export function CentralMxPersistedAlertsPanel({ storeId }: Props) {
   )
 
   return (
-    <Card className="rounded-mx-2xl p-mx-lg">
+    <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
           <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-sm text-brand-primary">
             <Bell size={20} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Alertas Persistidos
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -97,7 +97,7 @@ export function CentralMxPersistedAlertsPanel({ storeId }: Props) {
 
       {error && (
         <div className="mt-mx-md rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="font-black text-status-error">
+          <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
         </div>
@@ -122,7 +122,7 @@ export function CentralMxPersistedAlertsPanel({ storeId }: Props) {
         ))}
         {!alerts.length && !loading && (
           <li className="rounded-mx-xl border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhum alerta aberto.
             </Typography>
           </li>
@@ -143,10 +143,10 @@ function CountTile({
 }) {
   return (
     <div className={cn('rounded-mx-xl border p-mx-sm text-center', ALERT_TONE[tone])}>
-      <Typography variant="caption" className="font-black uppercase tracking-widest">
+      <Typography variant="caption" className="">
         {label}
       </Typography>
-      <Typography as="p" variant="h3" className="mt-mx-tiny font-black">
+      <Typography as="p" variant="h3" className="mt-mx-tiny">
         {value}
       </Typography>
     </div>
@@ -170,14 +170,14 @@ function PersistedAlertRow({
       <div className="flex flex-col gap-mx-xs md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
           <div className="flex items-center gap-mx-xs">
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {alert.type}
             </Badge>
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {ALERT_STATUS_LABEL[alert.status]}
             </Badge>
           </div>
-          <Typography variant="p" className="mt-mx-xs font-black">
+          <Typography variant="p" className="mt-mx-xs">
             {alert.problem}
           </Typography>
           <Typography variant="tiny" tone="muted" className="block">
@@ -225,14 +225,14 @@ export function CentralMxPersistedPlanosPanel({ storeId }: Props) {
     useCentralMxPlanosAcao(storeId)
   const total = planos.length
   return (
-    <Card className="rounded-mx-2xl p-mx-lg">
+    <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
           <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-sm text-brand-primary">
             <ClipboardList size={20} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Plano de Ação Persistido
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -252,7 +252,7 @@ export function CentralMxPersistedPlanosPanel({ storeId }: Props) {
 
       {error && (
         <div className="mt-mx-md rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="font-black text-status-error">
+          <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
         </div>
@@ -271,7 +271,7 @@ export function CentralMxPersistedPlanosPanel({ storeId }: Props) {
         ))}
         {!planos.length && !loading && (
           <li className="rounded-mx-xl border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               Sem planos de ação ativos para esta loja.
             </Typography>
           </li>
@@ -294,17 +294,17 @@ function PersistedPlanoRow({
       <div className="flex flex-col gap-mx-xs md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-mx-xs">
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {plano.departamento}
             </Badge>
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {plano.status.replace('_', ' ')}
             </Badge>
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {plano.origem}
             </Badge>
           </div>
-          <Typography variant="p" className="mt-mx-xs font-black">
+          <Typography variant="p" className="mt-mx-xs">
             <span className="mr-mx-xs text-brand-primary">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
             {plano.acao}
           </Typography>
@@ -346,14 +346,14 @@ export function CentralMxPersistedAgendaPanel({ storeId }: Props) {
     if (ok) refresh()
   }
   return (
-    <Card className="rounded-mx-2xl p-mx-lg">
+    <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
           <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-sm text-brand-primary">
             <Bell size={20} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Agenda Executiva
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -371,7 +371,7 @@ export function CentralMxPersistedAgendaPanel({ storeId }: Props) {
 
       {error && (
         <div className="mt-mx-md rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="font-black text-status-error">
+          <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
         </div>
@@ -388,7 +388,7 @@ export function CentralMxPersistedAgendaPanel({ storeId }: Props) {
         ))}
         {!events.length && !loading && (
           <li className="rounded-mx-xl border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               Sem eventos nos próximos 30 dias.
             </Typography>
           </li>
@@ -419,17 +419,17 @@ function PersistedAgendaRow({
       <div className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-mx-xs">
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {event.kind.replaceAll('_', ' ')}
             </Badge>
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {event.source}
             </Badge>
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {event.integration_status}
             </Badge>
           </div>
-          <Typography variant="p" className="mt-mx-xs font-black">
+          <Typography variant="p" className="mt-mx-xs">
             {event.title}
           </Typography>
           {event.public_summary && (
@@ -439,7 +439,7 @@ function PersistedAgendaRow({
           )}
         </div>
         <div className="flex flex-col items-end gap-mx-xs">
-          <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">
+          <Typography variant="tiny" tone="muted" className="">
             {startLabel}
           </Typography>
           <div className="flex items-center gap-mx-xs">

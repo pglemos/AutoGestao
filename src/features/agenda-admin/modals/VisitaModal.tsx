@@ -72,7 +72,7 @@ export function VisitaModal({
       footer={
         <>
           <Button type="button" variant="ghost" onClick={onClose}>CANCELAR</Button>
-          <Button type="submit" form="agenda-schedule-form" disabled={submitting || !scheduleForm.client_id} className="bg-brand-secondary">
+          <Button type="submit" form="agenda-schedule-form" disabled={submitting || !scheduleForm.client_id} className="">
             {submitting ? 'SALVANDO...' : editingVisitId ? 'SALVAR ALTERAÇÕES' : 'CONFIRMAR AGENDAMENTO'}
           </Button>
         </>
@@ -101,7 +101,7 @@ export function VisitaModal({
         {editingVisitId && (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
             <div className="space-y-mx-xs">
-              <Typography as="label" htmlFor="agenda-visit-number" variant="caption" className="font-black uppercase tracking-widest">Número da visita</Typography>
+              <Typography as="label" htmlFor="agenda-visit-number" variant="caption" className="">Número da visita</Typography>
               <Input
                 id="agenda-visit-number"
                 type="number"
@@ -127,7 +127,7 @@ export function VisitaModal({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="agenda-date" variant="caption" className="font-black uppercase tracking-widest">Data *</Typography>
+            <Typography as="label" htmlFor="agenda-date" variant="caption" className="">Data *</Typography>
             <DatePicker
               id="agenda-date"
               value={scheduleForm.scheduled_at}
@@ -135,7 +135,7 @@ export function VisitaModal({
             />
           </div>
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="agenda-time" variant="caption" className="font-black uppercase tracking-widest">Horário *</Typography>
+            <Typography as="label" htmlFor="agenda-time" variant="caption" className="">Horário *</Typography>
             <Input
               id="agenda-time"
               type="time"
@@ -147,7 +147,7 @@ export function VisitaModal({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="agenda-duration" variant="caption" className="font-black uppercase tracking-widest">Duração (horas)</Typography>
+            <Typography as="label" htmlFor="agenda-duration" variant="caption" className="">Duração (horas)</Typography>
             <Input
               id="agenda-duration"
               type="number"
@@ -233,7 +233,7 @@ export function VisitaModal({
         </div>
 
         <div className="space-y-mx-xs">
-          <Typography as="label" htmlFor="agenda-objective" variant="caption" className="font-black uppercase tracking-widest">Objetivo da Visita</Typography>
+          <Typography as="label" htmlFor="agenda-objective" variant="caption" className="">Objetivo da Visita</Typography>
           <Textarea
             id="agenda-objective"
             value={scheduleForm.objective}

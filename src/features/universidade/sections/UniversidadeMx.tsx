@@ -81,7 +81,7 @@ export function UniversidadeMx({ userId }: Props) {
             <GraduationCap size={22} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h2" className="font-bold uppercase tracking-tight">
+            <Typography variant="h2" className="font-bold tracking-tight">
               Universidade MX
             </Typography>
             <Typography variant="tiny" tone="muted" className="block font-bold normal-case tracking-normal">
@@ -104,7 +104,7 @@ export function UniversidadeMx({ userId }: Props) {
       )}
 
       <div className="flex flex-wrap items-center gap-mx-xs">
-        <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+        <Typography variant="tiny" tone="muted" className="font-bold">
           Filtrar por público
         </Typography>
         {(Object.keys(PUBLICO_LABEL) as UniversidadePublico[]).map((publico) => (
@@ -142,7 +142,7 @@ export function UniversidadeMx({ userId }: Props) {
       </div>
 
       {certificacoes.length > 0 && (
-        <Card className="rounded-mx-2xl p-mx-md">
+        <Card className="p-mx-md">
           <header className="mb-mx-sm flex items-center gap-mx-xs">
             <div className="rounded-mx-xl bg-status-success-surface p-mx-xs text-status-success">
               <Trophy size={18} aria-hidden="true" />
@@ -159,7 +159,7 @@ export function UniversidadeMx({ userId }: Props) {
               >
                 <div className="flex items-center gap-mx-xs">
                   <Award size={16} className="text-status-success" />
-                  <Typography variant="caption" className="font-bold uppercase tracking-widest">
+                  <Typography variant="caption" className="font-bold">
                     {cert.trilha_id}
                   </Typography>
                 </div>
@@ -167,7 +167,7 @@ export function UniversidadeMx({ userId }: Props) {
                   Emitida em {new Date(cert.emitida_em).toLocaleDateString('pt-BR')}
                 </Typography>
                 {cert.pontuacao != null && (
-                  <Typography variant="tiny" className="block font-bold uppercase tracking-widest">
+                  <Typography variant="tiny" className="block font-bold">
                     Pontuação {cert.pontuacao}
                   </Typography>
                 )}
@@ -188,9 +188,9 @@ export function UniversidadeMx({ userId }: Props) {
       )}
 
       {!trilhas.length ? (
-        <Card className="rounded-mx-2xl p-mx-md">
+        <Card className="p-mx-md">
           <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               {filtros.length === 0
                 ? 'Selecione ao menos um público para listar trilhas.'
                 : searchQuery.trim()
@@ -211,16 +211,16 @@ export function UniversidadeMx({ userId }: Props) {
             >
               <header className="mb-mx-sm">
                 <div className="flex flex-wrap items-center gap-mx-xs">
-                  <Badge variant="outline" className="font-bold uppercase tracking-widest">
+                  <Badge variant="outline" className="font-bold">
                     {PUBLICO_LABEL[trilha.publico_alvo]}
                   </Badge>
                   {trilha.duracao_horas != null && (
-                    <Badge variant="outline" className="font-bold uppercase tracking-widest">
+                    <Badge variant="outline" className="font-bold">
                       {trilha.duracao_horas}h
                     </Badge>
                   )}
                   {recomendadaId === trilha.id && (
-                    <Badge className="flex items-center gap-1 border-brand-primary bg-brand-primary font-bold uppercase tracking-widest text-pure-white">
+                    <Badge className="flex items-center gap-1 border-brand-primary font-bold text-pure-white">
                       <Sparkles size={10} aria-hidden="true" />
                       Recomendada para você · {NIVEL_TRILHA_LABEL[nivelTrilha]}
                     </Badge>
@@ -245,10 +245,10 @@ export function UniversidadeMx({ userId }: Props) {
                     )}
                   >
                     <div className="flex flex-wrap items-center gap-mx-xs">
-                      <Badge variant="outline" className="font-bold uppercase tracking-widest">
+                      <Badge variant="outline" className="font-bold">
                         {aula.ordem.toString().padStart(2, '0')}
                       </Badge>
-                      <Badge variant="outline" className="font-bold uppercase tracking-widest">
+                      <Badge variant="outline" className="font-bold">
                         {aula.tipo === 'aula_ao_vivo' ? (
                           <Radio size={10} className="mr-1" />
                         ) : (
@@ -257,7 +257,7 @@ export function UniversidadeMx({ userId }: Props) {
                         {TIPO_LABEL[aula.tipo]}
                       </Badge>
                       {aula.data_ao_vivo && (
-                        <Badge variant="outline" className="font-bold uppercase tracking-widest">
+                        <Badge variant="outline" className="font-bold">
                           {new Date(aula.data_ao_vivo).toLocaleString('pt-BR', {
                             day: '2-digit',
                             month: 'short',
@@ -284,7 +284,7 @@ export function UniversidadeMx({ userId }: Props) {
                 ))}
                 {!(aulas[trilha.id] ?? []).length && (
                   <li className="rounded-mx-md border border-dashed border-border-default p-mx-sm text-center">
-                    <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+                    <Typography variant="tiny" tone="muted" className="font-bold">
                       Trilha sem aulas publicadas ainda.
                     </Typography>
                   </li>

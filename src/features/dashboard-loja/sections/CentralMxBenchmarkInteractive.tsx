@@ -67,13 +67,13 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
   }, [benchmark.data, benchmark.privacyApplied, lojaValue, peerAvg, peerCount])
 
   return (
-    <Card className="rounded-mx-2xl p-mx-lg">
+    <Card className="p-mx-lg">
       <div className="flex items-start gap-mx-sm">
         <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-sm text-brand-primary">
           <Gauge size={20} aria-hidden="true" />
         </div>
         <div className="flex-1 min-w-0">
-          <Typography variant="h3" className="font-black">
+          <Typography variant="h3" className="">
             Benchmark interativo
           </Typography>
           <Typography variant="tiny" tone="muted" className="block">
@@ -81,7 +81,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
           </Typography>
         </div>
         {benchmark.privacyApplied && (
-          <Badge variant="outline" className="font-black uppercase tracking-widest">
+          <Badge variant="outline" className="">
             <Lock size={12} className="mr-1" />
             Privacidade
           </Badge>
@@ -152,7 +152,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
 
       {benchmark.error && (
         <div className="mt-mx-md rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="font-black text-status-error">
+          <Typography variant="tiny" className="text-status-error">
             {benchmark.error}
           </Typography>
         </div>
@@ -168,18 +168,18 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
       {benchmark.data && (
         <div className="mt-mx-md flex flex-wrap items-center justify-between gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-sm">
           <div className="flex items-center gap-mx-xs">
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="">
               Ranking
             </Typography>
-            <Typography variant="caption" className="font-black">
+            <Typography variant="caption" className="">
               {rank ?? '—'} de {peerCount}
             </Typography>
           </div>
           <div className="flex items-center gap-mx-xs">
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="">
               Percentil
             </Typography>
-            <Typography variant="caption" className="font-black">
+            <Typography variant="caption" className="">
               {percentile != null ? `${Number(percentile).toFixed(1)}%` : '—'}
             </Typography>
           </div>
@@ -192,7 +192,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
       )}
 
       <div className="mt-mx-md flex flex-wrap items-center gap-mx-xs">
-        <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">
+        <Typography variant="tiny" tone="muted" className="">
           Sugestões
         </Typography>
         {SUGGESTED_METRICS.map((code) => (
@@ -214,10 +214,10 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
 function MetricCell({ label, value }: { label: string; value: number | null | undefined }) {
   return (
     <div className="rounded-mx-xl border border-border-default bg-white p-mx-sm">
-      <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">
+      <Typography variant="tiny" tone="muted" className="">
         {label}
       </Typography>
-      <Typography as="p" variant="h3" className="mt-mx-tiny font-black">
+      <Typography as="p" variant="h3" className="mt-mx-tiny">
         {value == null ? '—' : Number(value).toFixed(2)}
       </Typography>
     </div>

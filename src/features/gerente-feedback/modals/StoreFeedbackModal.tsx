@@ -81,7 +81,7 @@ export function StoreFeedbackModal({
           aria-modal="true"
           aria-labelledby="feedback-store-title"
         >
-          <Card className="flex max-h-full w-full max-w-[var(--container-mx-4xl)] flex-col overflow-hidden border-none bg-white shadow-mx-2xl rounded-mx-2xl">
+          <Card className="flex max-h-full w-full max-w-[var(--container-mx-4xl)] flex-col overflow-hidden border-none bg-white shadow-mx-2xl">
             <header className="p-mx-lg md:p-10 border-b border-border-default flex items-center justify-between sticky top-mx-0 bg-white z-10">
               <div className="flex items-center gap-mx-sm">
                 <div className="w-mx-xl h-mx-xl rounded-mx-2xl bg-brand-primary text-white flex items-center justify-center shadow-mx-lg">
@@ -91,14 +91,14 @@ export function StoreFeedbackModal({
                   <Typography
                     id="feedback-store-title"
                     variant="h2"
-                    className="uppercase tracking-tighter"
+                    className="tracking-tighter"
                   >
                     Nova Mentoria
                   </Typography>
                   <Typography
                     variant="tiny"
                     tone="muted"
-                    className="font-black uppercase"
+                    className=""
                   >
                     Ciclo de Devolutiva Semanal
                   </Typography>
@@ -187,13 +187,13 @@ export function StoreFeedbackModal({
                           <Typography
                             variant="tiny"
                             tone="muted"
-                            className="mb-1 block uppercase text-mx-micro font-black"
+                            className="mb-1 block text-mx-micro"
                           >
                             {item.label}
                           </Typography>
                           <Typography
                             variant="h2"
-                            className="text-xl font-mono-numbers font-black"
+                            className="text-xl font-mono-numbers"
                           >
                             {item.val}
                           </Typography>
@@ -318,7 +318,7 @@ export function StoreFeedbackModal({
               <Button
                 variant="ghost"
                 onClick={onClose}
-                className="h-mx-14 w-full px-8 rounded-mx-full font-black uppercase tracking-widest sm:w-auto"
+                className="h-mx-14 w-full px-8 rounded-mx-full sm:w-auto"
               >
                 CANCELAR
               </Button>
@@ -332,7 +332,7 @@ export function StoreFeedbackModal({
                   !formData.attention_points.trim() ||
                   !formData.action.trim()
                 }
-                className="h-mx-14 w-full px-12 rounded-mx-full shadow-mx-xl font-black uppercase tracking-widest sm:w-auto"
+                className="h-mx-14 w-full px-12 rounded-mx-full sm:w-auto"
               >
                 {saving ? (
                   <RefreshCw className="animate-spin mr-2" />

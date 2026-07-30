@@ -24,7 +24,7 @@ const HEADERS = [
 
 export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
   return (
-    <Card className="border-none shadow-mx-lg bg-white overflow-hidden mb-32">
+    <Card className="border-none bg-white overflow-hidden mb-32">
       <CardHeader className="p-mx-lg flex flex-col md:flex-row md:items-center justify-between gap-mx-md">
         <div>
           <CardTitle className="text-lg flex items-center gap-mx-sm">

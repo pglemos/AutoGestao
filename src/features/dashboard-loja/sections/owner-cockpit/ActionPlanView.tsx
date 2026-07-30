@@ -88,13 +88,13 @@ export function ActionPlanView({
       <div className="flex flex-col gap-mx-sm md:flex-row md:items-center md:justify-between">
         <SectionTitle title="Plano de Ação" subtitle="Transforme problemas em execução e acompanhe eficácia." />
         <div className="flex gap-mx-sm">
-          <Button type="button" className="rounded-mx-xl" onClick={onNewAction} disabled={disableNewAction}>
+          <Button type="button" className="" onClick={onNewAction} disabled={disableNewAction}>
             <Plus size={16} /> Nova Ação
           </Button>
           <Button
             type="button"
             variant="outline"
-            className="rounded-mx-xl bg-white"
+            className="bg-white"
             onClick={handleExport}
             disabled={filteredActions.length === 0}
           >
@@ -144,7 +144,7 @@ export function ActionPlanView({
             return (
               <div key={column.status} className="flex flex-col gap-mx-sm">
                 <div className="flex items-center justify-between px-mx-xs">
-                  <Typography variant="tiny" className="font-black uppercase tracking-widest text-text-tertiary">
+                  <Typography variant="tiny" className="">
                     {column.label}
                   </Typography>
                   <span className="rounded-mx-full bg-surface-alt px-mx-sm py-mx-tiny text-mx-tiny font-black text-text-secondary">
@@ -155,11 +155,11 @@ export function ActionPlanView({
                   {columnActions.map((action, index) => {
                     const classes = toneClasses[action.tone]
                     return (
-                      <Card key={`${action.id}-${index}`} className="rounded-mx-lg border border-border-subtle bg-white p-mx-sm shadow-mx-sm">
+                      <Card key={`${action.id}-${index}`} className="border bg-white p-mx-sm">
                         <span className={cn('inline-flex rounded-mx-md border px-mx-sm py-mx-tiny text-mx-tiny font-black', classes.soft)}>
                           {action.priority}
                         </span>
-                        <Typography variant="p" className="mt-mx-xs text-sm font-black leading-tight">{action.problem}</Typography>
+                        <Typography variant="p" className="mt-mx-xs text-sm leading-tight">{action.problem}</Typography>
                         <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-bold">{action.department}</Typography>
                         <div className="mt-mx-sm flex items-center justify-between gap-mx-xs text-mx-tiny font-bold text-text-tertiary">
                           <span className="flex min-w-0 items-center gap-1 truncate">

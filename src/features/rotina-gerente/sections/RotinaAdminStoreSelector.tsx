@@ -16,17 +16,17 @@ type Props = {
  */
 export function RotinaAdminStoreSelector({ lojas, onSelect }: Props) {
   return (
-    <Card className="p-mx-10 md:p-14 border-none shadow-mx-xl bg-white text-center space-y-mx-lg">
+    <Card className="p-mx-10 md:p-14 border-none bg-white text-center space-y-mx-lg">
       <div className="w-mx-3xl h-mx-3xl rounded-mx-3xl bg-brand-primary/10 flex items-center justify-center mx-auto">
         <Store size={48} className="text-brand-primary" />
       </div>
-      <Typography variant="h2" className="uppercase tracking-tighter">
+      <Typography variant="h2" className="tracking-tighter">
         Selecione uma Unidade
       </Typography>
       <Typography
         variant="p"
         tone="muted"
-        className="max-w-md mx-auto uppercase tracking-widest font-black text-xs"
+        className="max-w-md mx-auto text-xs"
       >
         Como administrador, escolha qual unidade gerenciar no Centro de Comando.
       </Typography>

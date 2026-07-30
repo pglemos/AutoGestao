@@ -55,7 +55,7 @@ export function VisitFormModal({
       footer={
         <>
           <Button type="button" variant="ghost" onClick={onClose}>CANCELAR</Button>
-          <Button type="submit" form="client-manual-visit-form" disabled={visitSubmitting} className="bg-brand-secondary">
+          <Button type="submit" form="client-manual-visit-form" disabled={visitSubmitting} className="">
             {visitSubmitting ? 'SALVANDO...' : visitForm.visit_id ? 'SALVAR VISITA' : 'CRIAR VISITA'}
           </Button>
         </>
@@ -93,7 +93,7 @@ export function VisitFormModal({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="client-visit-date" variant="caption" className="font-black uppercase tracking-widest">Data *</Typography>
+            <Typography as="label" htmlFor="client-visit-date" variant="caption" className="">Data *</Typography>
             <DatePicker
               id="client-visit-date"
               value={visitForm.scheduled_at}
@@ -101,7 +101,7 @@ export function VisitFormModal({
             />
           </div>
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="client-visit-time" variant="caption" className="font-black uppercase tracking-widest">Horário *</Typography>
+            <Typography as="label" htmlFor="client-visit-time" variant="caption" className="">Horário *</Typography>
             <Input
               id="client-visit-time"
               type="time"
@@ -113,7 +113,7 @@ export function VisitFormModal({
 
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="client-visit-duration" variant="caption" className="font-black uppercase tracking-widest">Duração (horas)</Typography>
+            <Typography as="label" htmlFor="client-visit-duration" variant="caption" className="">Duração (horas)</Typography>
             <Input
               id="client-visit-duration"
               type="number"
@@ -197,7 +197,7 @@ export function VisitFormModal({
         </div>
 
         <div className="space-y-mx-xs">
-          <Typography as="label" htmlFor="client-visit-objective" variant="caption" className="font-black uppercase tracking-widest">Objetivo da visita</Typography>
+          <Typography as="label" htmlFor="client-visit-objective" variant="caption" className="">Objetivo da visita</Typography>
           <Textarea
             id="client-visit-objective"
             value={visitForm.objective}

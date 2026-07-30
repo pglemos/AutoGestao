@@ -16,7 +16,7 @@ type Props = { chartData: Point[] }
 
 export function StoreSellOutEvolution({ chartData }: Props) {
   return (
-    <Card className="h-full border-none shadow-mx-lg bg-white overflow-hidden">
+    <Card className="h-full border-none bg-white overflow-hidden">
       <CardHeader className="bg-surface-alt/30 border-b border-border-default p-mx-10 flex flex-row items-center justify-between">
         <div>
           <CardTitle className="text-2xl uppercase">Evolução de Sell-out</CardTitle>

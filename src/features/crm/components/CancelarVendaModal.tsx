@@ -64,7 +64,7 @@ export function CancelarVendaModal({
         </div>
         <div>
           <label htmlFor="cancelar-venda-motivo" className="mb-1 block">
-            <Typography variant="caption" tone="muted" className="font-bold uppercase tracking-normal">Motivo do cancelamento *</Typography>
+            <Typography variant="caption" tone="muted" className="font-bold tracking-normal">Motivo do cancelamento *</Typography>
           </label>
           <Textarea
             id="cancelar-venda-motivo"

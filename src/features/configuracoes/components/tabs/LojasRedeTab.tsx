@@ -79,7 +79,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                 <Mini icon={<Users size={18} />} label="Vendedores" value={totals.vendedores} tone="brand" />
             </div>
 
-            <Card className="p-mx-md border-none shadow-mx-md bg-white flex flex-col md:flex-row items-stretch md:items-center gap-mx-md">
+            <Card className="p-mx-md border-none bg-white flex flex-col md:flex-row items-stretch md:items-center gap-mx-md">
                 <div className="relative flex-1">
                     <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
                     <Input
@@ -102,7 +102,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                     />
                     Mostrar inativas
                 </label>
-                <Button variant="outline" onClick={refetch} className="h-mx-12 px-mx-sm rounded-mx-xl" aria-label="Atualizar lojas">
+                <Button variant="outline" onClick={refetch} className="h-mx-12 px-mx-sm" aria-label="Atualizar lojas">
                     <RefreshCw size={14} />
                 </Button>
                 {canManage && (
@@ -112,13 +112,13 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                 )}
             </Card>
 
-            <Card className="border-none shadow-mx-lg bg-white overflow-hidden">
+            <Card className="border-none bg-white overflow-hidden">
                 {loading ? (
                     <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-brand-primary" /></div>
                 ) : filtered.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
                         <Building2 size={40} className="mx-auto text-text-tertiary opacity-30" />
-                        <Typography variant="caption" tone="muted" className="font-black uppercase">Nenhuma loja encontrada</Typography>
+                        <Typography variant="caption" tone="muted" className="">Nenhuma loja encontrada</Typography>
                     </div>
                 ) : (
                     <div className="divide-y divide-border-default">
@@ -131,7 +131,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                                             <Building2 size={20} />
                                         </div>
                                         <div className="min-w-0 flex-1">
-                                            <Typography variant="caption" className="font-black uppercase tracking-tight truncate">{store.name}</Typography>
+                                            <Typography variant="caption" className="tracking-tight truncate">{store.name}</Typography>
                                             <div className="flex items-center gap-mx-md flex-wrap mt-1">
                                                 {store.manager_email && (
                                                     <span className="text-mx-micro font-bold text-text-tertiary">{store.manager_email}</span>
@@ -142,7 +142,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                                             </div>
                                         </div>
                                     </div>
-                                    <Badge variant={store.active ? 'success' : 'outline'} className="font-black uppercase shrink-0">
+                                    <Badge variant={store.active ? 'success' : 'outline'} className="shrink-0">
                                         {store.active ? 'Ativa' : 'Inativa'}
                                     </Badge>
                                     {canManage && (
@@ -210,12 +210,12 @@ function Mini({ icon, label, value, tone }: { icon: React.ReactNode; label: stri
         tone === 'brand' ? 'text-brand-primary' :
         tone === 'error' ? 'text-status-error' : 'text-text-primary'
     return (
-        <Card className="p-mx-md border-none shadow-mx-sm bg-white">
+        <Card className="p-mx-md border-none bg-white">
             <div className="flex items-center gap-mx-sm">
                 <div className={`w-mx-10 h-mx-10 rounded-mx-xl bg-surface-alt flex items-center justify-center ${toneColor}`}>{icon}</div>
                 <div>
-                    <Typography variant="tiny" tone="muted" className="font-black uppercase">{label}</Typography>
-                    <Typography variant="h3" className="font-black tabular-nums">{value}</Typography>
+                    <Typography variant="tiny" tone="muted" className="">{label}</Typography>
+                    <Typography variant="h3" className="tabular-nums">{value}</Typography>
                 </div>
             </div>
         </Card>

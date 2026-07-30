@@ -16,7 +16,7 @@ type Props = { roleData: RoleItem[]; metrics: NetworkMetrics }
 export function AdminPeopleChart({ roleData, metrics }: Props) {
   const palette = getChartPalette()
   return (
-    <Card className="border-none shadow-mx-lg bg-white overflow-hidden">
+    <Card className="border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
           <UsersRound size={18} className="text-brand-primary" /> Pessoas e papeis

@@ -65,14 +65,14 @@ export function NotificacoesTab() {
 
     return (
         <div className="space-y-mx-lg">
-            <Card className="p-mx-lg md:p-mx-xl border-none shadow-mx-lg bg-white">
+            <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100 shadow-inner">
                         <BellRing size={26} />
                     </div>
                     <div className="flex-1 min-w-0">
-                        <Typography variant="h3" className="uppercase tracking-tight">Notificações Push do Navegador</Typography>
-                        <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black">
+                        <Typography variant="h3" className="tracking-tight">Notificações Push do Navegador</Typography>
+                        <Typography variant="caption" tone="muted" className="">
                             {push.supported
                                 ? push.subscribed
                                     ? 'Ativo — você receberá alertas em tempo real.'
@@ -100,19 +100,19 @@ export function NotificacoesTab() {
                     </Button>
                 </header>
                 {push.error && (
-                    <Typography variant="tiny" className="block font-black text-status-error">
+                    <Typography variant="tiny" className="block text-status-error">
                         {push.error}
                     </Typography>
                 )}
             </Card>
-            <Card className="p-mx-lg md:p-mx-xl border-none shadow-mx-lg bg-white">
+            <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100 shadow-inner">
                         <Bell size={26} />
                     </div>
                     <div>
-                        <Typography variant="h3" className="uppercase tracking-tight">Canais de Entrega</Typography>
-                        <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black">Como você quer receber notificações</Typography>
+                        <Typography variant="h3" className="tracking-tight">Canais de Entrega</Typography>
+                        <Typography variant="caption" tone="muted" className="">Como você quer receber notificações</Typography>
                     </div>
                 </header>
                 <div className="space-y-mx-md">
@@ -132,14 +132,14 @@ export function NotificacoesTab() {
                 </div>
             </Card>
 
-            <Card className="p-mx-lg md:p-mx-xl border-none shadow-mx-lg bg-white">
+            <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-surface-alt text-text-tertiary flex items-center justify-center border border-border-default shadow-inner">
                         <BarChart3 size={26} />
                     </div>
                     <div>
-                        <Typography variant="h3" className="uppercase tracking-tight">Tópicos de Notificação</Typography>
-                        <Typography variant="caption" tone="muted" className="uppercase tracking-widest font-black">Quais assuntos você quer acompanhar</Typography>
+                        <Typography variant="h3" className="tracking-tight">Tópicos de Notificação</Typography>
+                        <Typography variant="caption" tone="muted" className="">Quais assuntos você quer acompanhar</Typography>
                     </div>
                 </header>
                 <div className="space-y-mx-md">
@@ -162,7 +162,7 @@ export function NotificacoesTab() {
                     <Button
                         onClick={handleSave}
                         disabled={saving}
-                        className="h-mx-xl px-8 rounded-mx-full font-black uppercase tracking-widest"
+                        className="h-mx-xl px-8 rounded-mx-full"
                     >
                         {saving ? <RefreshCw className="animate-spin mr-2" size={16} /> : <Save size={16} className="mr-2" />}
                         Salvar Preferências
@@ -187,14 +187,14 @@ function PrefRow({ icon, label, desc, checked, onToggle }: {
                     {icon}
                 </div>
                 <div className="space-y-mx-tiny min-w-0">
-                    <Typography variant="caption" className="font-black uppercase tracking-tight">{label}</Typography>
+                    <Typography variant="caption" className="tracking-tight">{label}</Typography>
                     <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">{desc}</Typography>
                 </div>
             </div>
             <Button
                 variant={checked ? 'primary' : 'outline'}
                 onClick={onToggle}
-                className="w-full h-mx-xl rounded-mx-full font-black text-mx-tiny shadow-sm shrink-0 sm:w-mx-3xl"
+                className="w-full h-mx-xl rounded-mx-full text-mx-tiny shadow-sm shrink-0 sm:w-mx-3xl"
                 aria-pressed={checked}
             >
                 {checked ? 'ATIVADO' : 'OFF'}

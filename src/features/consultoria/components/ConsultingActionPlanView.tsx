@@ -88,7 +88,7 @@ export function ConsultingActionPlanView({ clientId }: Props) {
 
   if (loading || metrics.loading) {
     return (
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="p">Carregando plano de acao...</Typography>
       </Card>
     )
@@ -96,7 +96,7 @@ export function ConsultingActionPlanView({ clientId }: Props) {
 
   if (error || metrics.error) {
     return (
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="h3" tone="error">Plano indisponivel</Typography>
         <Typography variant="p" tone="muted">{error || metrics.error}</Typography>
       </Card>
@@ -105,7 +105,7 @@ export function ConsultingActionPlanView({ clientId }: Props) {
 
   return (
     <section className="grid grid-cols-1 xl:grid-cols-3 gap-mx-lg">
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white xl:col-span-2">
+      <Card className="p-mx-lg border-none bg-white xl:col-span-2">
         <div className="flex items-start justify-between gap-mx-md mb-mx-md">
           <div>
             <Typography variant="h3">PLANO DE AÇÃO</Typography>
@@ -130,7 +130,7 @@ export function ConsultingActionPlanView({ clientId }: Props) {
                     <Badge variant={item.priority === 1 ? 'danger' : item.priority === 2 ? 'warning' : 'outline'} className="rounded-mx-full px-3 py-1">
                       P{item.priority}
                     </Badge>
-                    <Typography variant="p" className="font-black">{item.action}</Typography>
+                    <Typography variant="p" className="">{item.action}</Typography>
                   </div>
                   {item.how && <Typography variant="p" className="text-sm">{item.how}</Typography>}
                   <Typography variant="tiny" tone="muted">
@@ -163,7 +163,7 @@ export function ConsultingActionPlanView({ clientId }: Props) {
         </div>
       </Card>
 
-      <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+      <Card className="p-mx-lg border-none bg-white">
         <Typography variant="h3" className="mb-mx-md">NOVA AÇÃO</Typography>
         <form onSubmit={handleCreate} className="space-y-mx-md">
           <div className="space-y-mx-xs">

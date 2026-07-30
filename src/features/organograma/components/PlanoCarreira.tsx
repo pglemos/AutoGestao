@@ -44,7 +44,7 @@ export function PlanoCarreira() {
   return (
     <div className="space-y-mx-lg">
       <form onSubmit={handleSubmit} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-        <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">Adicionar nível de carreira</Typography>
+        <Typography variant="caption" tone="muted" className="">Adicionar nível de carreira</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <Field label="Cargo"><Input value={form.cargo} onChange={e => setForm(p => ({ ...p, cargo: e.target.value }))} placeholder="Ex.: Vendedor" /></Field>
           <Field label="Nível (nº)"><Input inputMode="numeric" value={form.nivel} onChange={e => setForm(p => ({ ...p, nivel: e.target.value }))} placeholder="1" /></Field>
@@ -65,7 +65,7 @@ export function PlanoCarreira() {
         <div className="grid gap-mx-md md:grid-cols-2">
           {cargos.map(cargo => (
             <div key={cargo} className="rounded-mx-xl border border-border-default p-mx-md">
-              <Typography variant="caption" className="font-black uppercase tracking-widest text-text-primary">{cargo}</Typography>
+              <Typography variant="caption" className="">{cargo}</Typography>
               <ol className="mt-mx-sm space-y-mx-sm">
                 {porCargo.get(cargo)!.map(n => (
                   <li key={n.id} className="rounded-mx-lg bg-surface-alt p-mx-sm">

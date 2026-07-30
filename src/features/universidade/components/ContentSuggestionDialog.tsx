@@ -70,7 +70,7 @@ export function ContentSuggestionDialog() {
           >
             <header className="flex items-start justify-between gap-4">
               <div>
-                <Typography id="content-suggestion-title" variant="h3" className="text-lg font-black text-slate-900">
+                <Typography id="content-suggestion-title" variant="h3" className="text-lg text-slate-900">
                   Sugerir tema de aula
                 </Typography>
                 <Typography variant="caption" tone="muted">

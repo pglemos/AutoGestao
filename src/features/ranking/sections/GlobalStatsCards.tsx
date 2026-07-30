@@ -33,7 +33,7 @@ export function GlobalStatsCards({
   return (
     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-mx-md shrink-0 mb-4">
       {stats.map((stat) => (
-        <Card key={stat.label} className="p-mx-md border-none shadow-mx-sm bg-white flex items-center gap-mx-sm">
+        <Card key={stat.label} className="p-mx-md border-none bg-white flex items-center gap-mx-sm">
           <div className={cn(
             "w-mx-14 h-mx-14 rounded-mx-xl flex items-center justify-center border shrink-0",
             stat.tone === 'brand' ? 'bg-mx-green-50 border-mx-green-200 text-mx-green-700' :
@@ -45,7 +45,7 @@ export function GlobalStatsCards({
             <stat.icon size={20} strokeWidth={2} />
           </div>
           <div className="min-w-0">
-            <Typography variant="tiny" tone="muted" className="uppercase block truncate">{stat.label}</Typography>
+            <Typography variant="tiny" tone="muted" className="block truncate">{stat.label}</Typography>
             <Typography variant="h2" className="text-xl tabular-nums leading-none">{stat.value}</Typography>
           </div>
         </Card>

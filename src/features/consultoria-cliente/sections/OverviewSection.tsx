@@ -13,28 +13,28 @@ export function OverviewSection({ client }: Props) {
 
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
-      <Card className="p-mx-lg bg-white border border-border-default shadow-mx-md rounded-mx-2xl">
-        <Typography variant="h3" className="mb-mx-md uppercase font-black tracking-widest text-brand-primary">Dados do Contrato</Typography>
+      <Card className="p-mx-lg bg-white border">
+        <Typography variant="h3" className="mb-mx-md">Dados do Contrato</Typography>
         <div className="space-y-mx-md">
           <div className="flex justify-between border-b border-border-subtle pb-mx-xs">
-            <Typography variant="tiny" tone="muted" className="uppercase font-bold">Produto</Typography>
-            <Typography variant="p" className="font-black">{client.product_name || 'GESTAO PREDITIVA'}</Typography>
+            <Typography variant="tiny" tone="muted" className="font-bold">Produto</Typography>
+            <Typography variant="p" className="">{client.product_name || 'GESTAO PREDITIVA'}</Typography>
           </div>
           <div className="flex justify-between border-b border-border-subtle pb-mx-xs">
-            <Typography variant="tiny" tone="muted" className="uppercase font-bold">Modalidade</Typography>
+            <Typography variant="tiny" tone="muted" className="font-bold">Modalidade</Typography>
             <Badge variant="outline">{client.modality || 'Presencial'}</Badge>
           </div>
           <div className="flex justify-between">
-            <Typography variant="tiny" tone="muted" className="uppercase font-bold">Início</Typography>
-            <Typography variant="p" className="font-black">
+            <Typography variant="tiny" tone="muted" className="font-bold">Início</Typography>
+            <Typography variant="p" className="">
               {format(new Date(client.created_at), 'MMMM / yyyy', { locale: ptBR }).toUpperCase()}
             </Typography>
           </div>
         </div>
       </Card>
 
-      <Card className="p-mx-lg bg-white border border-border-default shadow-mx-md rounded-mx-2xl">
-        <Typography variant="h3" className="mb-mx-md uppercase font-black tracking-widest text-brand-primary">Performance Atual</Typography>
+      <Card className="p-mx-lg bg-white border">
+        <Typography variant="h3" className="mb-mx-md">Performance Atual</Typography>
         <div className="space-y-mx-md">
           <div className="flex justify-between border-b border-border-subtle pb-mx-xs">
             <Typography variant="p" className="font-bold">Vendas (Mês Ref)</Typography>
@@ -46,7 +46,7 @@ export function OverviewSection({ client }: Props) {
           </div>
           <div className="flex justify-between">
             <Typography variant="p" className="font-bold">Ciclo de Visitas</Typography>
-            <Typography variant="h3" className="text-brand-primary">{finishedVisits} / 7</Typography>
+            <Typography variant="h3" className="">{finishedVisits} / 7</Typography>
           </div>
         </div>
       </Card>

@@ -27,14 +27,14 @@ export default function PDIPrint() {
 
     if (loading) return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-surface-alt">
-            <Typography variant="h3" className="animate-pulse uppercase tracking-widest font-black">Carregando Bundle Documental...</Typography>
+            <Typography variant="h3" className="animate-pulse">Carregando Bundle Documental...</Typography>
         </div>
     )
 
     if (error || !bundle) return (
         <div className="min-h-screen p-mx-20 text-center flex flex-col items-center justify-center bg-surface-alt">
             <History size={48} className="text-text-tertiary mb-6 opacity-20" />
-            <Typography variant="h3" tone="muted" className="uppercase tracking-tighter">Plano ou permissão não localizados.</Typography>
+            <Typography variant="h3" tone="muted" className="tracking-tighter">Plano ou permissão não localizados.</Typography>
             <button onClick={() => navigate(-1)} className="mt-8 px-8 py-4 bg-brand-primary text-white rounded-mx-full font-black text-xs uppercase tracking-widest">VOLTAR</button>
         </div>
     )
@@ -83,10 +83,10 @@ export default function PDIPrint() {
                                 <div className="w-mx-xl h-mx-xl bg-mx-black text-white flex items-center justify-center rounded-mx-xl shadow-md"><Target size={24} /></div>
                                 <Typography variant="h2" className="text-xl tracking-tighter">MX <span className="text-mx-green-700">PERFORMANCE</span></Typography>
                             </div>
-                            <Typography variant="h1" className="text-4xl font-black uppercase tracking-tighter leading-none">Plano de Desenvolvimento<br/>Individual <span className="text-mx-green-700">(PDI)</span></Typography>
+                            <Typography variant="h1" className="text-4xl tracking-tighter leading-none">Plano de Desenvolvimento<br/>Individual <span className="text-mx-green-700">(PDI)</span></Typography>
                         </div>
                         <div className="text-right">
-                            <Typography variant="mono" className="text-xs uppercase font-black bg-surface-alt px-4 py-2 rounded">Protocolo: {bundle.sessao.id.split('-')[0]}</Typography>
+                            <Typography variant="mono" className="text-xs bg-surface-alt px-4 py-2 rounded">Protocolo: {bundle.sessao.id.split('-')[0]}</Typography>
                         </div>
                     </header>
 
@@ -95,17 +95,17 @@ export default function PDIPrint() {
                             <User size={24} className="text-text-tertiary" />
                         </div>
                         <div>
-                            <Typography variant="tiny" tone="muted" className="uppercase font-black tracking-widest">Colaborador (Especialista)</Typography>
-                            <Typography variant="h2" className="text-2xl font-black uppercase border-b-2 border-brand-primary inline-block pb-1 mt-1">{colaboradorNome}</Typography>
+                            <Typography variant="tiny" tone="muted" className="">Colaborador (Especialista)</Typography>
+                            <Typography variant="h2" className="text-2xl border-b-2 border-brand-primary inline-block pb-1 mt-1">{colaboradorNome}</Typography>
                             {lojaNome && (
-                                <Typography variant="tiny" tone="muted" className="uppercase font-black tracking-widest mt-2 block">{lojaNome}</Typography>
+                                <Typography variant="tiny" tone="muted" className="mt-2 block">{lojaNome}</Typography>
                             )}
                         </div>
                     </div>
 
                     <div className="flex-1 flex flex-col justify-center space-y-mx-xl">
                         <div>
-                            <Typography variant="h3" className="uppercase font-black tracking-widest text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Curto Prazo (6 Meses)</Typography>
+                            <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Curto Prazo (6 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas6.map((m, i) => (
                                     <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
@@ -115,7 +115,7 @@ export default function PDIPrint() {
                             </ul>
                         </div>
                         <div>
-                            <Typography variant="h3" className="uppercase font-black tracking-widest text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Médio Prazo (12 Meses)</Typography>
+                            <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Médio Prazo (12 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas12.map((m, i) => (
                                     <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
@@ -125,7 +125,7 @@ export default function PDIPrint() {
                             </ul>
                         </div>
                         <div>
-                            <Typography variant="h3" className="uppercase font-black tracking-widest text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Longo Prazo (24 Meses)</Typography>
+                            <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Longo Prazo (24 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas24.map((m, i) => (
                                     <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
@@ -138,7 +138,7 @@ export default function PDIPrint() {
 
                     <footer className="mt-auto pt-10 text-center space-y-mx-sm">
                         <Sparkles size={24} className="mx-auto text-brand-primary opacity-30" />
-                        <Typography variant="p" className="text-sm font-bold italic leading-relaxed uppercase">
+                        <Typography variant="p" className="text-sm font-bold italic leading-relaxed">
                             "Comprometa-se com suas metas e encare os obstáculos como etapas para atingir o objetivo final. 
                             Disciplina é a ponte entre metas e realizações."
                         </Typography>
@@ -148,13 +148,13 @@ export default function PDIPrint() {
                 {/* --- PÁGINA 2: VENDEDOR 1 / MAPA DE COMPETÊNCIAS --- */}
                 <div className="p-[20mm] min-h-[297mm] break-after-page flex flex-col border border-border-default print:border-none relative">
                     <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10">
-                        <Typography variant="h2" className="text-2xl font-black uppercase tracking-tighter">Mapa de Competências</Typography>
-                        <Typography variant="caption" tone="muted" className="text-mx-tiny font-black uppercase tracking-mx-wide">Página 2 / Vendedor 1</Typography>
+                        <Typography variant="h2" className="text-2xl tracking-tighter">Mapa de Competências</Typography>
+                        <Typography variant="caption" tone="muted" className="text-mx-tiny">Página 2 / Vendedor 1</Typography>
                     </header>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-10 mb-10">
                         <div className="space-y-mx-sm">
-                            <Typography variant="tiny" className="font-black uppercase tracking-widest text-brand-primary">Mapeamento Técnico & Comportamental</Typography>
+                            <Typography variant="tiny" className="">Mapeamento Técnico & Comportamental</Typography>
                             <table className="w-full text-xs font-bold border-collapse">
                                 <thead>
                                     <tr className="bg-surface-alt border-b-2 border-mx-black">
@@ -176,7 +176,7 @@ export default function PDIPrint() {
                         </div>
 
                         <div className="flex flex-col items-center justify-center border-l-2 border-border-default pl-10">
-                            <Typography variant="tiny" className="font-black uppercase tracking-widest text-brand-primary mb-4 text-center">Gráfico Radar (Atigimento vs. Alvo)</Typography>
+                            <Typography variant="tiny" className="mb-4 text-center">Gráfico Radar (Atigimento vs. Alvo)</Typography>
                             <div className="w-full h-mx-80">
                                 <ResponsiveContainer width="100%" height="100%">
                                     <RadarChart cx="50%" cy="50%" outerRadius="75%" data={radarData}>
@@ -191,10 +191,10 @@ export default function PDIPrint() {
                     </div>
 
                     <div className="mt-auto">
-                        <Typography variant="tiny" className="font-black uppercase tracking-widest text-status-error mb-4">Top 5 Maiores Lacunas (Gaps) Identificadas</Typography>
+                        <Typography variant="tiny" className="text-status-error mb-4">Top 5 Maiores Lacunas (Gaps) Identificadas</Typography>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-sm">                            {bundle.top_5_gaps.map((gap, i) => (
                                 <div key={i} className="bg-status-error-surface p-mx-sm border-l-4 border-status-error flex justify-between items-center">
-                                    <Typography variant="p" className="text-xs font-bold uppercase">{gap.competencia}</Typography>
+                                    <Typography variant="p" className="text-xs font-bold">{gap.competencia}</Typography>
                                     <Typography variant="h3" tone="error" className="text-lg">-{gap.gap}</Typography>
                                 </div>
                             ))}
@@ -205,12 +205,12 @@ export default function PDIPrint() {
                 {/* --- PÁGINA 3: PLANO DE AÇÃO (PDI TABULAR) --- */}
                 <div className="p-[20mm] min-h-[297mm] flex flex-col border border-border-default print:border-none">
                     <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10">
-                        <Typography variant="h2" className="text-2xl font-black uppercase tracking-tighter">Plano de Desenvolvimento Individual</Typography>
-                        <Typography variant="caption" tone="muted" className="text-mx-tiny font-black uppercase tracking-mx-wide">Página 3 / Ações Mandatórias</Typography>
+                        <Typography variant="h2" className="text-2xl tracking-tighter">Plano de Desenvolvimento Individual</Typography>
+                        <Typography variant="caption" tone="muted" className="text-mx-tiny">Página 3 / Ações Mandatórias</Typography>
                     </header>
 
                     <div className="mb-14">
-                        <Typography variant="tiny" className="font-black uppercase tracking-widest text-brand-primary mb-6 block">Ações de Desenvolvimento (Próximos 6 Meses)</Typography>
+                        <Typography variant="tiny" className="mb-6 block">Ações de Desenvolvimento (Próximos 6 Meses)</Typography>
                         <table className="w-full text-xs border-collapse">
                             <thead>
                                 <tr className="bg-mx-black text-white text-left">
@@ -236,9 +236,9 @@ export default function PDIPrint() {
                     </div>
 
                     <div className="mt-10 p-mx-lg border-4 border-mx-black rounded-mx-2xl flex flex-col items-center justify-center text-center space-y-mx-sm">
-                        <Typography variant="h3" className="uppercase font-black tracking-widest">A Equação da Motivação no Trabalho</Typography>
-                        <Typography variant="h1" tone="brand" className="text-5xl font-black font-mono-numbers my-4">$ = QI + DC</Typography>
-                        <Typography variant="p" className="text-sm font-bold uppercase text-text-secondary">
+                        <Typography variant="h3" className="">A Equação da Motivação no Trabalho</Typography>
+                        <Typography variant="h1" tone="brand" className="text-5xl font-mono-numbers my-4">$ = QI + DC</Typography>
+                        <Typography variant="p" className="text-sm font-bold">
                             (Remuneração) = (Qualificação Individual) + (Demanda do Cargo)
                         </Typography>
                     </div>
@@ -246,15 +246,15 @@ export default function PDIPrint() {
                     <footer className="mt-auto pt-24 grid grid-cols-1 sm:grid-cols-2 gap-mx-20">
                         <div className="text-center space-y-mx-sm">
                             <div className="border-t-2 border-mx-black pt-4">
-                                <Typography variant="p" className="text-sm font-black uppercase tracking-widest">Assinatura do Gestor (MX)</Typography>
-                                <Typography variant="tiny" tone="muted" className="text-mx-micro uppercase font-bold mt-1 block">{gerenteNome}</Typography>
-                                <Typography variant="tiny" tone="muted" className="text-mx-micro uppercase font-bold mt-1 block">Responsável Técnico</Typography>
+                                <Typography variant="p" className="text-sm">Assinatura do Gestor (MX)</Typography>
+                                <Typography variant="tiny" tone="muted" className="text-mx-micro font-bold mt-1 block">{gerenteNome}</Typography>
+                                <Typography variant="tiny" tone="muted" className="text-mx-micro font-bold mt-1 block">Responsável Técnico</Typography>
                             </div>
                         </div>
                         <div className="text-center space-y-mx-sm">
                             <div className="border-t-2 border-mx-black pt-4">
-                                <Typography variant="p" className="text-sm font-black uppercase tracking-widest">Assinatura do Vendedor</Typography>
-                                <Typography variant="tiny" tone="muted" className="text-mx-micro uppercase font-bold mt-1 block">Concordância com as Metas</Typography>
+                                <Typography variant="p" className="text-sm">Assinatura do Vendedor</Typography>
+                                <Typography variant="tiny" tone="muted" className="text-mx-micro font-bold mt-1 block">Concordância com as Metas</Typography>
                             </div>
                         </div>
                     </footer>

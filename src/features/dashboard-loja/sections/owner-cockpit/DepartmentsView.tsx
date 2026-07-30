@@ -33,10 +33,10 @@ export function DepartmentsView({
       <OwnerDepartmentScoreGrid departments={departments} />
       {selectedDepartment && (
         <div className="grid grid-cols-1 gap-mx-md xl:grid-cols-[minmax(0,1fr)_360px]">
-          <Card className="rounded-mx-2xl p-mx-lg">
+          <Card className="p-mx-lg">
             <div className="flex flex-col gap-mx-sm md:flex-row md:items-start md:justify-between">
               <div>
-                <Typography variant="h3" className="text-xl font-black">{selectedDepartment.name}</Typography>
+                <Typography variant="h3" className="text-xl">{selectedDepartment.name}</Typography>
                 <Typography variant="p" tone="muted" className="mt-1 font-bold">{selectedDepartment.detail}</Typography>
               </div>
               <span className={cn('w-fit rounded-mx-md border px-mx-sm py-mx-xs text-mx-tiny font-black', toneClasses[selectedDepartment.tone].soft)}>
@@ -46,8 +46,8 @@ export function DepartmentsView({
             <div className="mt-mx-md grid grid-cols-1 gap-mx-sm md:grid-cols-2 xl:grid-cols-4">
               {selectedDepartment.dashboardCards.map(card => (
                 <div key={card.label} className="rounded-mx-xl border border-border-default bg-white p-mx-md">
-                  <Typography variant="tiny" tone="muted" className="block font-black uppercase">{card.label}</Typography>
-                  <Typography variant="h3" className="mt-mx-xs font-black tabular-nums">{formatPlanningValue(card.value, card.unit)}</Typography>
+                  <Typography variant="tiny" tone="muted" className="block">{card.label}</Typography>
+                  <Typography variant="h3" className="mt-mx-xs tabular-nums">{formatPlanningValue(card.value, card.unit)}</Typography>
                   <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold">
                     {card.status === 'completo' ? 'Completo' : card.status === 'parcial' ? 'Parcial' : 'Pendente'}
                   </Typography>

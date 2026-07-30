@@ -25,7 +25,7 @@ export function AgendaView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
         title="Prioridades operacionais"
         subtitle="Alertas calculados exclusivamente a partir dos indicadores atuais da loja."
       />
-      <Card className="rounded-mx-2xl p-mx-lg">
+      <Card className="p-mx-lg">
         <div className="space-y-mx-sm">
           {priorities.length === 0 ? (
             <div className="rounded-mx-xl border border-border-subtle bg-white p-mx-lg" role="status">
@@ -37,7 +37,7 @@ export function AgendaView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
               const classes = toneClasses[item.tone]
               return (
                 <div key={`${item.title}-${index}`} className={cn('rounded-mx-xl border p-mx-md', classes.soft)}>
-                  <Typography variant="p" className="font-black">{item.title}</Typography>
+                  <Typography variant="p" className="">{item.title}</Typography>
                   <Typography variant="tiny" className="mt-mx-xs block font-bold opacity-80">{item.detail}</Typography>
                 </div>
               )

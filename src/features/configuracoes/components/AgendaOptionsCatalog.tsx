@@ -172,7 +172,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
 
   return (
     <div className="space-y-mx-lg">
-      <Card className="border-none bg-white p-mx-sm shadow-mx-md">
+      <Card className="border-none bg-white p-mx-sm">
         <div className="grid grid-cols-1 gap-mx-sm lg:flex lg:items-center lg:justify-between">
           <div className="grid grid-cols-2 gap-mx-xs">
             {(Object.keys(KIND_META) as AgendaOptionKind[]).map((kind) => {
@@ -208,7 +208,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
               <RefreshCw size={18} className={cn(refreshing && 'animate-spin')} />
             </Button>
             {mayManage && (
-              <Button onClick={openCreateForm} className="bg-brand-secondary">
+              <Button onClick={openCreateForm} className="">
                 <Plus size={18} className="mr-2" /> NOVA OPÇÃO
               </Button>
             )}
@@ -222,8 +222,8 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
           ['Ativos', metrics.ativos],
           ['Arquivados', metrics.arquivados],
         ].map(([label, value]) => (
-          <Card key={label} className="border-none bg-white p-mx-md text-center shadow-mx-md">
-            <Typography variant="tiny" tone="muted" className="block text-mx-micro tracking-widest">
+          <Card key={label} className="border-none bg-white p-mx-md text-center">
+            <Typography variant="tiny" tone="muted" className="block text-mx-micro">
               {label}
             </Typography>
             <Typography variant="h2" className="mt-1 text-2xl">{value}</Typography>
@@ -231,7 +231,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
         ))}
       </div>
 
-      <Card className="border-none bg-white p-mx-sm sm:p-mx-md shadow-mx-md">
+      <Card className="border-none bg-white p-mx-sm sm:p-mx-md">
         <div className="grid grid-cols-1 gap-mx-xs sm:grid-cols-3">
           <Select
             id="agenda-options-status-filter"
@@ -257,16 +257,16 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
       </Card>
 
       {error && (
-        <Card className="border-none bg-status-warning/10 p-mx-md shadow-mx-sm">
-          <Typography variant="tiny" tone="muted" className="uppercase tracking-widest">
+        <Card className="border-none bg-status-warning/10 p-mx-md">
+          <Typography variant="tiny" tone="muted" className="">
             Não foi possível carregar o catálogo oficial: {error}
           </Typography>
         </Card>
       )}
 
       {!mayManage && (
-        <Card className="border-none bg-brand-primary/5 p-mx-md shadow-mx-sm">
-          <Typography variant="tiny" tone="muted" className="uppercase tracking-widest">
+        <Card className="border-none /5 p-mx-md">
+          <Typography variant="tiny" tone="muted" className="">
             Somente Administrador MX e Admin Master podem editar, arquivar ou excluir opções.
           </Typography>
         </Card>
@@ -274,14 +274,14 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
 
       <section aria-live="polite">
         {loading ? (
-          <Card className="border-none bg-white p-mx-lg shadow-mx-md">
+          <Card className="border-none bg-white p-mx-lg">
             <div className="flex items-center gap-mx-sm text-brand-primary">
               <RefreshCw size={18} className="animate-spin" />
-              <Typography variant="caption" className="font-black uppercase tracking-widest">Carregando catálogo...</Typography>
+              <Typography variant="caption" className="">Carregando catálogo...</Typography>
             </div>
           </Card>
         ) : filteredOptions.length === 0 ? (
-          <Card className="border-none bg-white shadow-mx-md">
+          <Card className="border-none bg-white">
             <EmptyState
               size="lg"
               icon={<ListChecks />}
@@ -294,14 +294,14 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
           <ul className="grid grid-cols-1 gap-mx-sm">
             {filteredOptions.map((option) => (
               <li key={option.id}>
-                <Card className="border-none bg-white p-mx-md shadow-mx-md">
+                <Card className="border-none bg-white p-mx-md">
                   <div className="grid grid-cols-1 gap-mx-md lg:grid-cols-[1fr_auto] lg:items-center">
                     <div className="min-w-0">
                       <div className="mb-mx-xs flex flex-wrap items-center gap-mx-xs">
                         <Badge variant={getStatusVariant(option.status)} className="text-mx-micro">{option.status}</Badge>
                         <Badge variant="outline" className="text-mx-micro">Ordem {option.sort_order ?? 0}</Badge>
                       </div>
-                      <Typography variant="p" className="font-black leading-snug">{option.label}</Typography>
+                      <Typography variant="p" className="leading-snug">{option.label}</Typography>
                     </div>
                     {mayManage && (
                       <div className="grid grid-cols-3 gap-mx-xs sm:flex">
@@ -341,7 +341,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
             }}>
               CANCELAR
             </Button>
-            <Button type="submit" form="agenda-option-form" disabled={saving} className="bg-brand-secondary">
+            <Button type="submit" form="agenda-option-form" disabled={saving} className="">
               {saving ? 'SALVANDO...' : editingOption ? 'SALVAR ALTERAÇÕES' : 'CRIAR OPÇÃO'}
             </Button>
           </>
@@ -368,7 +368,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
               <option value="arquivado">Arquivado</option>
             </Select>
             <div className="space-y-mx-xs">
-              <Typography as="label" htmlFor="agenda-option-order" variant="caption" className="font-black uppercase tracking-widest">
+              <Typography as="label" htmlFor="agenda-option-order" variant="caption" className="">
                 Ordem
               </Typography>
               <Input
@@ -383,7 +383,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
           </div>
 
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor="agenda-option-label" variant="caption" className="font-black uppercase tracking-widest">
+            <Typography as="label" htmlFor="agenda-option-label" variant="caption" className="">
               Nome da opção *
             </Typography>
             <Input

@@ -116,7 +116,7 @@ export default function GerentePDI() {
                                 className="!pl-11 !h-12 uppercase tracking-widest text-mx-tiny font-black"
                             />
                         </div>
-                        <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar lista de PDIs" className="rounded-mx-xl shadow-mx-sm h-mx-xl w-mx-xl bg-white border-border-subtle hover:bg-surface-alt">
+                        <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar lista de PDIs" className="h-mx-xl w-mx-xl bg-white hover:bg-surface-alt">
                             <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
                         </Button>
                         {canManagePDI && (
@@ -129,8 +129,8 @@ export default function GerentePDI() {
             />
 
             {isManager && (
-                <Card className="rounded-mx-lg border border-status-info/20 bg-status-info-surface p-mx-md shadow-mx-sm">
-                    <Typography variant="h3" className="uppercase tracking-tight text-status-info">Escopo do gerente</Typography>
+                <Card className="border border-status-info/20 bg-status-info-surface p-mx-md">
+                    <Typography variant="h3" className="tracking-tight text-status-info">Escopo do gerente</Typography>
                     <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
                         Esta tela mostra os PDIs da sua unidade. Use o botão de novo PDI para conduzir desenvolvimento da equipe; Admin MX e Dono usam a mesma rota em escopos diferentes.
                     </Typography>
@@ -138,8 +138,8 @@ export default function GerentePDI() {
             )}
 
             {isOwner && (
-                <Card className="rounded-mx-lg border border-status-info/20 bg-status-info-surface p-mx-md shadow-mx-sm">
-                    <Typography variant="h3" className="uppercase tracking-tight text-status-info">PDI como acompanhamento do Dono</Typography>
+                <Card className="border border-status-info/20 bg-status-info-surface p-mx-md">
+                    <Typography variant="h3" className="tracking-tight text-status-info">PDI como acompanhamento do Dono</Typography>
                     <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
                         Esta visão mostra evolução, prazos e consistência dos planos. Criação e condução de PDI ficam com gerente/Admin MX; aqui o foco é decidir onde cobrar cadência.
                     </Typography>
@@ -168,7 +168,7 @@ export default function GerentePDI() {
                                 const status = statusCfg[p.status as keyof typeof statusCfg] || statusCfg.aberto
                                 return (
                                     <motion.article key={p.id} layout initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.02 }}>
-                                        <Card className="rounded-mx-lg border border-border-subtle p-mx-md h-full flex flex-col justify-between group hover:shadow-mx-xl transition-all shadow-mx-sm bg-white relative overflow-hidden">
+                                        <Card className="border p-mx-md h-full flex flex-col justify-between group hover:shadow-mx-xl transition-all bg-white relative overflow-hidden">
                                             <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
                                             
                                             <div>
@@ -182,17 +182,17 @@ export default function GerentePDI() {
                                                             className="w-mx-14 h-mx-14 rounded-mx-lg shadow-mx-inner group-hover:border-brand-primary transition-all transform group-hover:rotate-3"
                                                         />
                                                         <div className="min-w-0">
-                                                            <Typography variant="h3" className="text-base uppercase tracking-tight truncate group-hover:text-brand-primary transition-colors font-black">{p.seller_name}</Typography>
-                                                            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">ESPECIALISTA</Typography>
+                                                            <Typography variant="h3" className="text-base tracking-tight truncate group-hover:text-brand-primary transition-colors">{p.seller_name}</Typography>
+                                                            <Typography variant="tiny" tone="muted" className="">ESPECIALISTA</Typography>
                                                         </div>
                                                     </div>
-                                                    <Badge variant={status.variant} className="px-4 py-1 rounded-mx-lg text-mx-tiny font-black shadow-sm uppercase border-none">{status.label}</Badge>
+                                                    <Badge variant={status.variant} className="px-4 py-1 text-mx-tiny shadow-sm border-none">{status.label}</Badge>
                                                 </header>
 
                                                 <div className="space-y-mx-lg relative z-10">
                                                     <div className="space-y-mx-xs">
-                                                        <Typography variant="tiny" tone="brand" className="font-black uppercase tracking-widest mb-2 block">Objetivo 06 Meses</Typography>
-                                                        <Typography variant="h2" className="text-xl leading-snug line-clamp-2 uppercase tracking-tighter font-black">"{p.meta_6m || 'N/A'}"</Typography>
+                                                        <Typography variant="tiny" tone="brand" className="mb-2 block">Objetivo 06 Meses</Typography>
+                                                        <Typography variant="h2" className="text-xl leading-snug line-clamp-2 tracking-tighter">"{p.meta_6m || 'N/A'}"</Typography>
                                                     </div>
                                                 </div>
                                             </div>
@@ -201,7 +201,7 @@ export default function GerentePDI() {
                                                 <div className="flex items-center gap-mx-md">
                                                     <div className="flex items-center gap-mx-xs">
                                                         <Calendar size={14} className="text-brand-primary" />
-                                                        <Typography variant="mono" tone="muted" className="text-mx-tiny font-black uppercase">
+                                                        <Typography variant="mono" tone="muted" className="text-mx-tiny">
                                                             {formatSafeDate(p.due_date)}
                                                         </Typography>
                                                     </div>
@@ -224,8 +224,8 @@ export default function GerentePDI() {
                         <div className="w-mx-3xl h-mx-3xl rounded-mx-lg bg-surface-alt shadow-mx-sm flex items-center justify-center mb-8 border border-border-subtle group-hover:rotate-12 transition-transform duration-500">
                             <TrendingUp size={48} className="text-text-tertiary opacity-20" />
                         </div>
-                        <Typography variant="h2" className="mb-4 uppercase tracking-tighter">Matriz de Evolução Limpa</Typography>
-                        <Typography variant="caption" tone="muted" className="max-w-sm mx-auto uppercase tracking-widest mb-10 font-black">Não localizamos planos de desenvolvimento para os filtros atuais.</Typography>
+                        <Typography variant="h2" className="mb-4 tracking-tighter">Matriz de Evolução Limpa</Typography>
+                        <Typography variant="caption" tone="muted" className="max-w-sm mx-auto mb-10">Não localizamos planos de desenvolvimento para os filtros atuais.</Typography>
                         {canManagePDI && (
                             <Button onClick={() => setShowForm(true)} className="h-mx-2xl px-12 rounded-mx-xl shadow-mx-elite font-black uppercase tracking-widest text-xs">
                                 <Plus size={20} className="mr-3" /> INICIAR PRIMEIRO PDI

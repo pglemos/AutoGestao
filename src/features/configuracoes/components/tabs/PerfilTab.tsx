@@ -64,7 +64,7 @@ export function PerfilTab() {
 
     return (
         <div className="space-y-mx-lg">
-            <Card className="p-mx-lg md:p-mx-xl border-none shadow-mx-lg bg-white">
+            <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-lg pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="relative group">
                         <div className="w-mx-28 h-mx-28 rounded-mx-3xl bg-surface-alt border border-border-default flex items-center justify-center shadow-inner overflow-hidden">
@@ -96,14 +96,14 @@ export function PerfilTab() {
                         />
                     </div>
                     <div className="flex-1 space-y-mx-xs">
-                        <Typography variant="h2" className="uppercase tracking-tighter">{form.name || 'Sem nome'}</Typography>
+                        <Typography variant="h2" className="tracking-tighter">{form.name || 'Sem nome'}</Typography>
                         <div className="flex items-center gap-mx-sm flex-wrap">
-                            <Badge variant="brand" className="px-4 py-1 uppercase font-black">
+                            <Badge variant="brand" className="px-4 py-1">
                                 {role ? ROLE_LABELS[role] : '—'}
                             </Badge>
                             <div className="flex items-center gap-mx-xs">
                                 <div className="w-1.5 h-1.5 rounded-mx-full bg-status-success animate-pulse" />
-                                <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">Membro Ativo MX</Typography>
+                                <Typography variant="caption" tone="muted" className="">Membro Ativo MX</Typography>
                             </div>
                         </div>
                     </div>
@@ -111,7 +111,7 @@ export function PerfilTab() {
 
                 <div className="grid md:grid-cols-2 gap-mx-lg">
                     <div className="space-y-mx-sm">
-                        <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest flex items-center gap-mx-xs">
+                        <Typography variant="caption" tone="muted" className="ml-2 flex items-center gap-mx-xs">
                             <UserIcon size={14} /> Nome Completo
                         </Typography>
                         <Input
@@ -124,7 +124,7 @@ export function PerfilTab() {
                         />
                     </div>
                     <div className="space-y-mx-sm">
-                        <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest flex items-center gap-mx-xs">
+                        <Typography variant="caption" tone="muted" className="ml-2 flex items-center gap-mx-xs">
                             <Mail size={14} /> E-mail Corporativo
                         </Typography>
                         <Input
@@ -137,7 +137,7 @@ export function PerfilTab() {
                         />
                     </div>
                     <div className="space-y-mx-sm">
-                        <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest flex items-center gap-mx-xs">
+                        <Typography variant="caption" tone="muted" className="ml-2 flex items-center gap-mx-xs">
                             <Phone size={14} /> Telefone (WhatsApp)
                         </Typography>
                         <Input
@@ -150,7 +150,7 @@ export function PerfilTab() {
                         />
                     </div>
                     <div className="space-y-mx-sm">
-                        <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest flex items-center gap-mx-xs">
+                        <Typography variant="caption" tone="muted" className="ml-2 flex items-center gap-mx-xs">
                             <Shield size={14} /> Hierarquia
                         </Typography>
                         <Input
@@ -167,14 +167,14 @@ export function PerfilTab() {
                 <div className="mt-mx-lg pt-mx-md border-t border-border-default flex items-center justify-between gap-mx-md">
                     <div className="flex items-start gap-mx-sm flex-1">
                         <Info size={16} className="text-brand-primary shrink-0 mt-1" />
-                        <Typography variant="tiny" tone="muted" className="uppercase font-bold leading-relaxed">
+                        <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">
                             E-mail e hierarquia são gerenciados pela administração MX para fins de auditoria imutável.
                         </Typography>
                     </div>
                     <Button
                         onClick={handleSave}
                         disabled={saving}
-                        className="h-mx-xl px-8 rounded-mx-full font-black uppercase tracking-widest shrink-0"
+                        className="h-mx-xl px-8 rounded-mx-full shrink-0"
                     >
                         {saving ? <RefreshCw className="animate-spin mr-2" size={16} /> : <Save size={16} className="mr-2" />}
                         Salvar Perfil
@@ -182,11 +182,11 @@ export function PerfilTab() {
                 </div>
             </Card>
 
-            <Card className="p-mx-lg border-none shadow-mx-md bg-mx-indigo-50 border border-mx-indigo-100">
+            <Card className="p-mx-lg border-none bg-mx-indigo-50 border border-mx-indigo-100">
                 <div className="flex items-start gap-mx-md">
                     <Upload size={20} className="text-brand-primary shrink-0 mt-1" />
                     <div className="space-y-mx-xs">
-                        <Typography variant="caption" tone="brand" className="font-black uppercase tracking-widest">Avatar</Typography>
+                        <Typography variant="caption" tone="brand" className="">Avatar</Typography>
                         <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">
                             Formato JPG/PNG/WebP, até 2MB. O avatar aparece em rankings, devolutivas e relatórios da rede MX.
                         </Typography>

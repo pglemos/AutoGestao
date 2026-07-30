@@ -59,7 +59,7 @@ export function AdminSettingsForm({
       <section className="xl:col-span-4 space-y-mx-md">
         <div className="flex items-center gap-mx-xs">
           <Target size={16} className="text-brand-primary" />
-          <Typography variant="caption" className="font-black uppercase tracking-widest">Meta e Regras</Typography>
+          <Typography variant="caption" className="">Meta e Regras</Typography>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-mx-md">
           <label className="space-y-mx-xs">
@@ -112,7 +112,7 @@ export function AdminSettingsForm({
       <section className="xl:col-span-4 space-y-mx-md">
         <div className="flex items-center gap-mx-xs">
           <ShieldCheck size={16} className="text-brand-primary" />
-          <Typography variant="caption" className="font-black uppercase tracking-widest">Benchmarks</Typography>
+          <Typography variant="caption" className="">Benchmarks</Typography>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-mx-md">
           <label className="space-y-mx-xs">
@@ -136,7 +136,7 @@ export function AdminSettingsForm({
       <section className="xl:col-span-4 space-y-mx-md">
         <div className="flex items-center gap-mx-xs">
           <Mail size={16} className="text-brand-primary" />
-          <Typography variant="caption" className="font-black uppercase tracking-widest">Relatórios</Typography>
+          <Typography variant="caption" className="">Relatórios</Typography>
         </div>
         <div className="grid grid-cols-1 gap-mx-md">
           <label className="space-y-mx-xs">
@@ -179,20 +179,20 @@ export function AdminSettingsForm({
         <div className="rounded-mx-xl border border-status-error/20 bg-status-error-surface p-mx-md">
           <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <Typography variant="caption" className="font-black uppercase tracking-mx-wide text-status-error">Zona de risco</Typography>
+              <Typography variant="caption" className="text-status-error">Zona de risco</Typography>
               <Typography variant="p" className="mt-mx-tiny text-sm text-status-error">Arquivar preserva histórico, mas remove a loja da operação ativa.</Typography>
             </div>
-            <Button type="button" variant="danger" onClick={onDelete} disabled={deletingStore} className="h-mx-10 rounded-mx-xl">
+            <Button type="button" variant="danger" onClick={onDelete} disabled={deletingStore} className="h-mx-10">
               {deletingStore ? <RefreshCw size={16} className="mr-2 animate-spin" /> : <Archive size={16} className="mr-2" />}
               Arquivar loja
             </Button>
           </div>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-mx-sm">
-          <Button type="button" variant="ghost" onClick={onReload} disabled={operationalLoading || saving} className="h-mx-10 rounded-mx-xl">
+          <Button type="button" variant="ghost" onClick={onReload} disabled={operationalLoading || saving} className="h-mx-10">
             <RefreshCw size={16} className={cn('mr-2', operationalLoading && 'animate-spin')} /> Recarregar
           </Button>
-          <Button type="submit" disabled={saving || operationalLoading} className="h-mx-10 rounded-mx-xl bg-brand-secondary">
+          <Button type="submit" disabled={saving || operationalLoading} className="h-mx-10">
             {saving ? <RefreshCw size={16} className="mr-2 animate-spin" /> : <Save size={16} className="mr-2" />}
             Salvar dados
           </Button>

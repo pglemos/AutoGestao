@@ -228,14 +228,14 @@ export function AgendaHeader({
             size="icon"
             onClick={onRefresh}
             aria-label="Atualizar"
-            className="h-8 w-8 shrink-0 rounded-mx-lg bg-white border-border-strong"
+            className="h-8 w-8 shrink-0 bg-white"
           >
             <RefreshCw size={14} />
           </Button>
 
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
-              <Button className="h-8 rounded-mx-lg bg-brand-primary px-3 font-bold text-xs text-white shadow-xs hover:bg-brand-primary/90">
+              <Button className="h-8 px-3 font-bold text-xs text-white shadow-xs hover:bg-brand-primary/90">
                 <Plus size={15} className="mr-1" />
                 Criar
                 <ChevronDown size={13} className="ml-1 opacity-80" />

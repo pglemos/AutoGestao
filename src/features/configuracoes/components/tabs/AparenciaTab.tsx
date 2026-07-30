@@ -80,14 +80,14 @@ export function AparenciaTab() {
     return (
         <div className="space-y-mx-lg">
             {/* Tema */}
-            <Card className="p-mx-lg md:p-mx-xl border-none shadow-mx-lg bg-white">
+            <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100">
                         <Palette size={26} />
                     </div>
                     <div>
-                        <Typography variant="h3" className="uppercase tracking-tight">Tema Visual</Typography>
-                        <Typography variant="caption" className="uppercase tracking-widest font-black text-text-secondary">Modo de exibição da interface</Typography>
+                        <Typography variant="h3" className="tracking-tight">Tema Visual</Typography>
+                        <Typography variant="caption" className="">Modo de exibição da interface</Typography>
                     </div>
                 </header>
 
@@ -99,14 +99,14 @@ export function AparenciaTab() {
             </Card>
 
             {/* Densidade */}
-            <Card className="p-mx-lg border-none shadow-mx-lg bg-white">
+            <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-surface-alt text-text-tertiary flex items-center justify-center border border-border-default">
                         <Sparkles size={26} />
                     </div>
                     <div>
-                        <Typography variant="h3" className="uppercase tracking-tight">Densidade</Typography>
-                        <Typography variant="caption" className="uppercase tracking-widest font-black text-text-secondary">Espaçamento da interface</Typography>
+                        <Typography variant="h3" className="tracking-tight">Densidade</Typography>
+                        <Typography variant="caption" className="">Espaçamento da interface</Typography>
                     </div>
                 </header>
 
@@ -117,20 +117,20 @@ export function AparenciaTab() {
             </Card>
 
             {/* Branding */}
-            <Card className="p-mx-lg border-none shadow-mx-md bg-white">
+            <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center justify-between pb-mx-md border-b border-border-default mb-mx-lg">
                     <div className="flex items-center gap-mx-sm">
                         <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-pure-black text-brand-primary flex items-center justify-center">
                             <Sparkles size={26} />
                         </div>
                         <div>
-                            <Typography variant="h3" className="uppercase tracking-tight">Branding</Typography>
-                            <Typography variant="caption" className="uppercase tracking-widest font-black text-text-secondary">Cores e logo da marca</Typography>
+                            <Typography variant="h3" className="tracking-tight">Branding</Typography>
+                            <Typography variant="caption" className="">Cores e logo da marca</Typography>
                         </div>
                     </div>
-                    <Badge variant="outline" className="font-black uppercase">Em breve</Badge>
+                    <Badge variant="outline" className="">Em breve</Badge>
                 </header>
-                <Typography variant="caption" className="font-bold leading-relaxed text-text-secondary">
+                <Typography variant="caption" className="font-bold leading-relaxed">
                     Personalização de cores primárias, logo e favicon será liberada em breve para administradores master.
                     Por enquanto, o branding MX (verde MX 0D3B2E + accent 22C55E) é fixo em toda a rede.
                 </Typography>
@@ -161,10 +161,10 @@ function ThemeOption({ icon, label, desc, active, onClick, badge }: {
                 <div className={`w-mx-10 h-mx-10 rounded-mx-xl flex items-center justify-center ${active ? 'bg-brand-primary text-white' : 'bg-surface-alt text-brand-primary'}`}>
                     {icon}
                 </div>
-                {badge && <Badge variant="outline" className="text-mx-micro font-black uppercase">{badge}</Badge>}
+                {badge && <Badge variant="outline" className="text-mx-micro">{badge}</Badge>}
             </div>
-            <Typography variant="caption" className="font-black uppercase tracking-tight !text-text-primary">{label}</Typography>
-            <Typography variant="tiny" className="font-bold leading-relaxed mt-1 text-text-secondary">{desc}</Typography>
+            <Typography variant="caption" className="tracking-tight !">{label}</Typography>
+            <Typography variant="tiny" className="font-bold leading-relaxed mt-1">{desc}</Typography>
         </button>
     )
 }
@@ -180,8 +180,8 @@ function DensityOption({ label, desc, active, onClick }: { label: string; desc: 
                     : 'border-border-default bg-white hover:border-brand-primary/30'
             }`}
         >
-            <Typography variant="caption" className="font-black uppercase tracking-tight !text-text-primary">{label}</Typography>
-            <Typography variant="tiny" className="font-bold leading-relaxed mt-1 text-text-secondary">{desc}</Typography>
+            <Typography variant="caption" className="tracking-tight !">{label}</Typography>
+            <Typography variant="tiny" className="font-bold leading-relaxed mt-1">{desc}</Typography>
         </button>
     )
 }

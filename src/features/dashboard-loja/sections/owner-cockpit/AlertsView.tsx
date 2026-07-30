@@ -42,7 +42,7 @@ export function AlertsView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
         <SummaryCard title="Tendência de Risco" value={critical + warning > 0 ? 'Alta' : 'Baixa'} detail="atenção redobrada" icon={<TrendingUp size={22} />} tone={critical + warning > 0 ? 'danger' : 'success'} />
       </div>
       <div className="grid grid-cols-1 gap-mx-md xl:grid-cols-[minmax(0,1fr)_320px]">
-        <Card className="rounded-mx-2xl p-mx-lg">
+        <Card className="p-mx-lg">
           <div className="flex flex-col gap-mx-sm lg:flex-row lg:items-center lg:justify-between">
             <div className="grid grid-cols-1 gap-mx-sm sm:grid-cols-3">
               <select aria-label="Filtrar status dos alertas" value={statusFilter} onChange={event => setStatusFilter(event.target.value)} className="h-mx-10 rounded-mx-lg border border-border-subtle bg-white px-mx-sm text-xs font-black text-text-secondary">
@@ -71,11 +71,11 @@ export function AlertsView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
                 <div key={`${alert.title}-${index}`} className="grid grid-cols-1 gap-mx-sm py-mx-md lg:grid-cols-[120px_minmax(0,1.2fr)_minmax(0,1fr)_minmax(0,1fr)_90px_80px_40px] lg:items-center">
                   <span className={cn('w-fit rounded-mx-md border px-mx-sm py-mx-xs text-mx-tiny font-black', classes.soft)}>{tone === 'danger' ? 'Crítico' : tone === 'warning' ? 'Atenção' : tone === 'success' ? 'Positivo' : 'Informativo'}</span>
                   <div>
-                    <Typography variant="p" className="font-black">{alert.title}</Typography>
+                    <Typography variant="p" className="">{alert.title}</Typography>
                     <Typography variant="tiny" tone="muted" className="block">{alert.description}</Typography>
                   </div>
-                  <Typography variant="p" tone="brand" className="font-black">{alert.recommendation}</Typography>
-                  <Typography variant="p" className="font-bold text-text-secondary">{alert.action}</Typography>
+                  <Typography variant="p" tone="brand" className="">{alert.recommendation}</Typography>
+                  <Typography variant="p" className="font-bold">{alert.action}</Typography>
                   <Typography variant="tiny" className={cn('font-black', classes.text)}>Impacto {alert.impact}</Typography>
                   <Typography variant="tiny" className={cn('font-black', classes.text)}>Sistema</Typography>
                   <MoreVertical size={18} className="text-text-tertiary" />
@@ -87,8 +87,8 @@ export function AlertsView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
         </Card>
         <div className="space-y-mx-md">
           <SideList title="Indicadores mais críticos" items={alerts.slice(0, 5).map(alert => alert.title)} />
-          <Card className="rounded-mx-2xl bg-mx-indigo-50 p-mx-lg">
-            <Typography variant="h3" className="font-black text-brand-primary">Dica do Consultor MX</Typography>
+          <Card className="bg-mx-indigo-50 p-mx-lg">
+            <Typography variant="h3" className="">Dica do Consultor MX</Typography>
             <Typography variant="p" tone="muted" className="mt-mx-sm font-bold">Foque nas ações críticas para evitar impacto no resultado do mês.</Typography>
           </Card>
         </div>

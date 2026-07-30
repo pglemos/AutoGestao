@@ -50,7 +50,7 @@ export function RotinaRitualMatinal({
   ]
 
   return (
-    <Card className="rounded-mx-lg border border-border-subtle p-mx-md space-y-mx-md shadow-mx-sm bg-white relative overflow-hidden">
+    <Card className="border p-mx-md space-y-mx-md bg-white relative overflow-hidden">
       <div
         className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-32 -mt-32"
         aria-hidden="true"
@@ -61,13 +61,13 @@ export function RotinaRitualMatinal({
             <Zap size={32} />
           </div>
           <div>
-            <Typography variant="h2" className="uppercase tracking-tighter leading-none">
+            <Typography variant="h2" className="tracking-tighter leading-none">
               Ritual Matinal
             </Typography>
             <Typography
               variant="caption"
               tone="muted"
-              className="uppercase tracking-widest mt-1 font-black"
+              className="mt-1"
             >
               SEQUÊNCIA MANDATÁRIA • LIMITE 10:30
             </Typography>
@@ -75,7 +75,7 @@ export function RotinaRitualMatinal({
         </div>
         <Badge
           variant="danger"
-          className="animate-pulse shadow-mx-md px-6 py-2 rounded-mx-lg font-black uppercase text-tiny"
+          className="animate-pulse px-6 py-2 text-tiny"
         >
           Prioridade 01
         </Badge>
@@ -124,7 +124,7 @@ export function RotinaRitualMatinal({
                   <Typography
                     variant="tiny"
                     tone="muted"
-                    className="italic mt-1 opacity-60 font-black"
+                    className="italic mt-1 opacity-60"
                   >
                     &quot;{step.desc}&quot;
                   </Typography>
@@ -134,7 +134,7 @@ export function RotinaRitualMatinal({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full sm:w-auto rounded-mx-lg px-6 h-mx-10 font-black text-tiny uppercase tracking-widest bg-white shadow-sm border-border-subtle hover:bg-surface-alt"
+                  className="w-full sm:w-auto px-6 h-mx-10 text-tiny bg-white shadow-sm hover:bg-surface-alt"
                 >
                   Concluir
                 </Button>
@@ -166,14 +166,14 @@ export function RotinaRitualMatinal({
               <Typography
                 variant="h3"
                 tone={canTriggerMatinal ? 'white' : 'default'}
-                className="text-lg uppercase tracking-tight leading-none"
+                className="text-lg tracking-tight leading-none"
               >
                 Disparar Matinal
               </Typography>
               <Typography
                 variant="caption"
                 tone={canTriggerMatinal ? 'white' : 'muted'}
-                className="uppercase tracking-widest mt-1 font-black"
+                className="mt-1"
               >
                 DIREÇÃO &amp; GOVERNANÇA REDE
               </Typography>

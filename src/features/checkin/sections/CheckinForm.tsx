@@ -374,7 +374,7 @@ Confirmar Internet
           <CheckinCrmSection ctx={ctx} allowInlineQuickEdit={false} />
 
           {mandatoryFeedbackActionsCount > 0 && metricScope === 'daily' && (
-            <Card className="rounded-mx-xl border border-status-error/20 bg-status-error-surface p-mx-md shadow-mx-sm">
+            <Card className="border border-status-error/20 bg-status-error-surface p-mx-md">
               <div className="flex items-start gap-mx-sm">
                 <AlertTriangle size={22} className="mt-1 shrink-0 text-status-error" />
                 <div>

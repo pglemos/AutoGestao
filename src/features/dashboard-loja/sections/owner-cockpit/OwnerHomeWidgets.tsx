@@ -41,16 +41,16 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
         : { label: 'Abaixo da meta', arrow: '▼', tone: 'danger' as const }
 
   return (
-    <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <Card className="border bg-white p-mx-md">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-mx-sm">
           <Target size={24} className="text-brand-primary" />
-          <Typography variant="h3" className="text-xl font-black">Meta de Venda do Mês</Typography>
+          <Typography variant="h3" className="text-xl">Meta de Venda do Mês</Typography>
         </div>
-        <Typography variant="p" className="font-black tabular-nums">{goal > 0 ? `${progress}%` : '--'}</Typography>
+        <Typography variant="p" className="tabular-nums">{goal > 0 ? `${progress}%` : '--'}</Typography>
       </div>
       <div className="mt-mx-md flex items-center justify-between">
-        <Typography variant="p" tone="muted" className="font-black">Meta: {goal > 0 ? `${formatInteger(goal)} veículos` : 'Pendente'}</Typography>
+        <Typography variant="p" tone="muted" className="">Meta: {goal > 0 ? `${formatInteger(goal)} veículos` : 'Pendente'}</Typography>
       </div>
       <div className="mt-mx-sm h-mx-3 rounded-mx-full bg-surface-alt overflow-hidden">
         <div className="h-full rounded-mx-full bg-status-success" style={{ width: `${progress}%` }} />
@@ -61,9 +61,9 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
         <MetricPill label="Ritmo ideal" value={idealPace > 0 ? `${idealPace.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}/d` : '--'} tone="info" />
       </div>
       <div className="mt-mx-md flex flex-wrap items-center justify-between gap-mx-sm rounded-mx-lg border border-border-subtle bg-surface-alt px-mx-md py-mx-sm">
-        <Typography variant="p" className="font-black">Projeção atual</Typography>
+        <Typography variant="p" className="">Projeção atual</Typography>
         <div className="flex items-center gap-mx-xs">
-          <Typography variant="p" className="font-black text-brand-primary">{goal > 0 ? `${formatInteger(projected)} veículos` : 'Pendente'}</Typography>
+          <Typography variant="p" className="">{goal > 0 ? `${formatInteger(projected)} veículos` : 'Pendente'}</Typography>
           {projectionStatus && (
             <span className={cn('shrink-0 whitespace-nowrap text-xs font-black', toneClasses[projectionStatus.tone].text)}>
               {projectionStatus.arrow} {projectionStatus.label}
@@ -100,25 +100,25 @@ export function PriorityIntervention({
     <Card className={cn('rounded-mx-lg border p-mx-md shadow-mx-sm', isCritical ? 'border-status-error/30' : 'border-status-warning/30')}>
       <div className="flex items-center gap-mx-sm">
         <Zap size={20} className={toneClass} />
-        <Typography variant="h3" className="text-lg font-black">Intervenção prioritária</Typography>
+        <Typography variant="h3" className="text-lg">Intervenção prioritária</Typography>
       </div>
       <div className="mt-mx-md rounded-mx-lg border border-border-subtle bg-white p-mx-md">
         <div className="flex items-start justify-between gap-mx-sm">
           <div className="flex items-center gap-mx-sm">
             <AlertTriangle size={18} className={toneClass} />
-            <Typography variant="p" className="font-black">{alert.title}</Typography>
+            <Typography variant="p" className="">{alert.title}</Typography>
           </div>
           <span className={cn('shrink-0 rounded-mx-full px-mx-sm py-mx-tiny text-mx-tiny font-black uppercase', badgeClass)}>
             {isCritical ? 'Crítico' : 'Atenção'}
           </span>
         </div>
         <div className="mt-mx-md">
-          <Typography variant="tiny" className="font-black uppercase tracking-widest text-text-tertiary">Por que isso importa</Typography>
-          <Typography variant="p" className="mt-mx-xs text-sm font-bold text-text-secondary">{alert.description}</Typography>
+          <Typography variant="tiny" className="">Por que isso importa</Typography>
+          <Typography variant="p" className="mt-mx-xs text-sm font-bold">{alert.description}</Typography>
         </div>
         <div className="mt-mx-md rounded-mx-lg bg-status-success-surface p-mx-sm">
-          <Typography variant="tiny" className="font-black uppercase tracking-widest text-status-success">Direcionamento MX</Typography>
-          <Typography variant="p" className="mt-mx-xs text-sm font-bold text-text-secondary">{alert.recommendation}</Typography>
+          <Typography variant="tiny" className="text-status-success">Direcionamento MX</Typography>
+          <Typography variant="p" className="mt-mx-xs text-sm font-bold">{alert.recommendation}</Typography>
         </div>
         <div className="mt-mx-md flex flex-wrap gap-mx-sm">
           <Button type="button" variant="outline" onClick={() => navigate(alert.ctaTo)}>
@@ -141,14 +141,14 @@ export function PriorityIntervention({
 
 export function ConsultantMxCard({ onOpenConsultant }: { onOpenConsultant: () => void }) {
   return (
-    <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <Card className="border bg-white p-mx-md">
       <div className="flex flex-wrap items-center justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
           <span className="flex h-mx-10 w-mx-10 shrink-0 items-center justify-center rounded-mx-lg bg-status-success-surface text-status-success">
             <MessageCircle size={20} />
           </span>
           <div>
-            <Typography variant="p" className="font-black">Consultor MX</Typography>
+            <Typography variant="p" className="">Consultor MX</Typography>
             <Typography variant="tiny" tone="muted" className="block font-bold">Precisa de ajuda para decidir? Fale com seu consultor usando o contexto desta tela.</Typography>
           </div>
         </div>
@@ -162,11 +162,11 @@ export function OwnerAlertList({ alerts }: { alerts: OwnerPerformanceAlert[] }) 
   const navigate = useNavigate()
   const visibleAlerts = alerts.slice(0, 6)
   return (
-    <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <Card className="border bg-white p-mx-md">
       <div className="flex items-center justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
           <Bell size={24} className="text-status-error" />
-          <Typography variant="h3" className="text-xl font-black">Alertas que exigem sua atenção</Typography>
+          <Typography variant="h3" className="text-xl">Alertas que exigem sua atenção</Typography>
         </div>
         <span className="min-w-mx-7 h-mx-7 rounded-mx-full bg-status-error px-mx-xs text-white text-xs font-black flex items-center justify-center">{visibleAlerts.length}</span>
       </div>
@@ -180,7 +180,7 @@ export function OwnerAlertList({ alerts }: { alerts: OwnerPerformanceAlert[] }) 
                 {tone === 'danger' ? <AlertTriangle size={18} /> : tone === 'warning' ? <Clock3 size={18} /> : <CheckCircle2 size={18} />}
               </span>
               <span className="min-w-0 flex-1">
-                <Typography variant="p" className="font-black text-sm leading-tight">{alert.title}</Typography>
+                <Typography variant="p" className="text-sm leading-tight">{alert.title}</Typography>
                 <Typography variant="tiny" tone="muted" className="block truncate">
                   {alert.department ? `${alert.department} · ` : ''}{alert.description}
                 </Typography>
@@ -202,10 +202,10 @@ export function OwnerAlertList({ alerts }: { alerts: OwnerPerformanceAlert[] }) 
 export function NextActionsCard({ actions }: { actions: ActionRow[] }) {
   const navigate = useNavigate()
   return (
-    <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <Card className="border bg-white p-mx-md">
       <div className="flex items-center gap-mx-sm">
         <CheckCircle2 size={24} className="text-brand-primary" />
-        <Typography variant="h3" className="text-xl font-black">Próximas ações do Dono</Typography>
+        <Typography variant="h3" className="text-xl">Próximas ações do Dono</Typography>
       </div>
       <div className="mt-mx-md divide-y divide-border-subtle">
         {actions.slice(0, 5).map((action, index) => (
@@ -252,15 +252,15 @@ export function OwnerPanoramaChart({
   }, [data.length, goalValue])
 
   return (
-    <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <Card className="border bg-white p-mx-md">
       <div className="flex flex-col gap-mx-md md:flex-row md:items-start md:justify-between">
         <div>
-          <Typography variant="h3" className="text-xl font-black">Evolução planejado x realizado</Typography>
+          <Typography variant="h3" className="text-xl">Evolução planejado x realizado</Typography>
           <Typography variant="p" tone="muted" className="mt-1 block font-bold">Ritmo da loja no período selecionado.</Typography>
         </div>
         <div className="rounded-mx-lg border border-border-subtle bg-surface-alt px-mx-md py-mx-sm">
-          <Typography variant="tiny" tone="muted" className="block font-black">Meta mensal</Typography>
-          <Typography variant="p" className="font-black tabular-nums">{goalValue > 0 ? formatInteger(goalValue) : 'Pendente'}</Typography>
+          <Typography variant="tiny" tone="muted" className="block">Meta mensal</Typography>
+          <Typography variant="p" className="tabular-nums">{goalValue > 0 ? formatInteger(goalValue) : 'Pendente'}</Typography>
           <Typography variant="tiny" tone={attainment >= 80 ? 'success' : 'warning'} className="block font-black">
             {goalValue > 0 ? `${attainment}% atingida` : 'Cadastre a meta'}
           </Typography>
@@ -283,7 +283,7 @@ export function OwnerPanoramaChart({
       ) : (
         <div className="mt-mx-md min-h-[250px] rounded-mx-lg border border-dashed border-border-subtle bg-surface-alt flex flex-col items-center justify-center text-center p-mx-lg">
           <LineChartIcon size={40} className="text-text-tertiary" />
-          <Typography variant="h3" className="mt-mx-md text-lg font-black">Dados pendentes</Typography>
+          <Typography variant="h3" className="mt-mx-md text-lg">Dados pendentes</Typography>
           <Typography variant="p" tone="muted" className="mt-mx-xs max-w-sm">A evolução aparece quando a rotina diária tiver histórico no período.</Typography>
         </div>
       )}
@@ -302,8 +302,8 @@ export function OwnerActionPlanSummary({ actions }: { actions: ActionRow[] }) {
   const ineficazesPct = total > 0 ? Math.max(0, 100 - eficazesPct - parciaisPct) : 0
 
   return (
-    <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
-      <Typography variant="h3" className="text-xl font-black">Eficácia das Ações</Typography>
+    <Card className="border bg-white p-mx-md">
+      <Typography variant="h3" className="text-xl">Eficácia das Ações</Typography>
       <div className="mt-mx-md flex items-center gap-mx-md">
         <EficaciaDonut eficazes={eficazesPct} parciais={parciaisPct} ineficazes={ineficazesPct} />
         <div className="flex flex-col gap-mx-sm flex-1 min-w-0">
@@ -317,7 +317,7 @@ export function OwnerActionPlanSummary({ actions }: { actions: ActionRow[] }) {
         <MetricPill label="Críticas" value={String(critical)} tone={critical > 0 ? 'danger' : 'success'} />
         <MetricPill label="Andamento" value={String(inProgress)} tone="info" />
       </div>
-      <Button type="button" className="mt-mx-md w-full rounded-mx-xl" onClick={() => navigate(ownerPath('plano-acao'))}>
+      <Button type="button" className="mt-mx-md w-full" onClick={() => navigate(ownerPath('plano-acao'))}>
         Ver ações
       </Button>
     </Card>
@@ -382,10 +382,10 @@ function EficaciaLegendRow({ color, label, value }: { color: string; label: stri
 export function OwnerDepartmentScoreGrid({ departments }: { departments: DepartmentScore[] }) {
   const navigate = useNavigate()
   return (
-    <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <Card className="border bg-white p-mx-md">
       <div className="mb-mx-md flex items-center justify-between gap-mx-md">
         <div className="flex items-center gap-mx-xs">
-          <Typography variant="h3" className="text-xl font-black">Desempenho por Departamento</Typography>
+          <Typography variant="h3" className="text-xl">Desempenho por Departamento</Typography>
           <CircleHelp size={14} className="text-text-tertiary" />
         </div>
         <Button type="button" variant="ghost" size="sm" onClick={() => navigate(ownerPath('departamentos'))}>Ver todas</Button>
@@ -398,7 +398,7 @@ export function OwnerDepartmentScoreGrid({ departments }: { departments: Departm
             <button key={department.name} type="button" onClick={() => navigate(department.path)} className="rounded-mx-lg border border-border-subtle bg-white p-mx-md text-left hover:shadow-mx-md transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/15 flex flex-col items-center">
               <div className="flex w-full items-center gap-mx-sm">
                 <span className={cn('h-mx-9 w-mx-9 rounded-mx-lg flex shrink-0 items-center justify-center', classes.bg)}>{department.icon}</span>
-                <Typography variant="p" className="font-black text-sm truncate">{department.name}</Typography>
+                <Typography variant="p" className="text-sm truncate">{department.name}</Typography>
               </div>
               <div className="mt-mx-sm">
                 {hasData ? <OwnerSemiGauge value={department.score as number} /> : <OwnerSemiGauge value={0} muted />}

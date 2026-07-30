@@ -30,10 +30,10 @@ const MXScoreCardInner = React.forwardRef<HTMLDivElement, MXScoreCardProps>(
       >
         <div className="flex items-center justify-between">
           <div className="space-y-mx-tiny">
-            <Typography variant="caption" tone="muted" className="block uppercase tracking-widest text-mx-micro">{label}</Typography>
+            <Typography variant="caption" tone="muted" className="block text-mx-micro">{label}</Typography>
             <div className="flex items-baseline gap-mx-xs">
                 <Typography variant="h1" className="text-4xl tabular-nums leading-none">{value}</Typography>
-                <Typography variant="caption" tone="muted" className="text-mx-micro font-black uppercase">{sub}</Typography>
+                <Typography variant="caption" tone="muted" className="text-mx-micro">{sub}</Typography>
             </div>
           </div>
           <div className={cn(
@@ -54,7 +54,7 @@ MXScoreCardInner.displayName = "MXScoreCard"
 
 function MXScoreCardSkeleton() {
   return (
-    <Card className="p-mx-lg border-none shadow-mx-sm bg-white overflow-hidden relative">
+    <Card className="p-mx-lg border-none bg-white overflow-hidden relative">
       <div className="flex items-center justify-between">
         <div className="space-y-mx-sm flex-1">
           <Skeleton className="h-mx-xs w-mx-20" />

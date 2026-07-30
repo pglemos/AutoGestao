@@ -37,7 +37,7 @@ export function StoreConsultorIa() {
   if (!selectedStoreId) {
     return (
       <main className="w-full h-full bg-surface-alt p-mx-lg">
-        <Card className="mx-auto max-w-2xl border-none bg-white shadow-mx-xl">
+        <Card className="mx-auto max-w-2xl border-none bg-white">
           <EmptyState
             size="lg"
             icon={<Building2 />}
@@ -64,17 +64,17 @@ export function StoreConsultorIa() {
       <div className="flex flex-col gap-mx-md pb-28">
         <header className="flex flex-col gap-mx-md border-b border-border-subtle pb-mx-lg lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
-            <Typography variant="h1" className="text-3xl md:text-4xl font-black text-text-primary">
+            <Typography variant="h1" className="text-3xl md:text-4xl">
               Consultor IA
             </Typography>
             <Typography variant="p" tone="muted" className="mt-1 text-base font-bold">
               Prioridades da unidade, orientações registradas e recomendações de ação.
             </Typography>
-            <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-black uppercase">
+            <Typography variant="tiny" tone="muted" className="mt-mx-xs block">
               {selectedStore?.name || 'Unidade MX'}
             </Typography>
           </div>
-          <Button type="button" variant="outline" className="h-mx-11 w-fit rounded-mx-xl bg-white" onClick={() => navigate(backPath)}>
+          <Button type="button" variant="outline" className="h-mx-11 w-fit bg-white" onClick={() => navigate(backPath)}>
             <ArrowLeft size={16} />
             Voltar para loja
           </Button>

@@ -207,14 +207,14 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                 </div>
 
                 <div className="pt-mx-md border-t border-border-default space-y-mx-sm">
-                    <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">Ações de Segurança</Typography>
+                    <Typography variant="caption" tone="muted" className="">Ações de Segurança</Typography>
                     <div className="flex flex-wrap gap-mx-sm">
                         <Button
                             type="button"
                             variant="outline"
                             onClick={handleResetPassword}
                             disabled={resetting}
-                            className="h-mx-xl rounded-mx-xl font-black uppercase tracking-widest text-xs"
+                            className="h-mx-xl text-xs"
                         >
                             <KeyRound size={14} className="mr-2" />
                             {resetting ? 'Aplicando...' : 'Forçar troca de senha'}
@@ -223,7 +223,7 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                             type="button"
                             variant="outline"
                             onClick={handleSendMagicLink}
-                            className="h-mx-xl rounded-mx-xl font-black uppercase tracking-widest text-xs"
+                            className="h-mx-xl text-xs"
                         >
                             <Mail size={14} className="mr-2" />
                             Enviar e-mail de redefinição
@@ -238,7 +238,7 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
 function FormGroup({ icon, label, children }: { icon: React.ReactNode; label: string; children: React.ReactNode }) {
     return (
         <div className="space-y-mx-xs">
-            <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-widest">{label}</Typography>
+            <Typography variant="tiny" tone="muted" className="px-1">{label}</Typography>
             <div className="relative">
                 <span className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary z-10 pointer-events-none">{icon}</span>
                 {children}

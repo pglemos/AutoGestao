@@ -63,14 +63,14 @@ export function ConsultorIaChat({ storeId }: Props) {
   }, [lastUpdate])
 
   return (
-    <Card className="rounded-mx-2xl p-mx-lg">
+    <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
           <div className="rounded-mx-xl bg-brand-primary p-mx-sm text-pure-white">
             <Bot size={22} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Consultor IA
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -117,7 +117,7 @@ export function ConsultorIaChat({ storeId }: Props) {
       {consultor.error && (
         <div className="mt-mx-md flex items-start gap-mx-xs rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
           <AlertTriangle size={16} className="mt-mx-tiny text-status-error" />
-          <Typography variant="tiny" className="font-black text-status-error">
+          <Typography variant="tiny" className="text-status-error">
             {consultor.error}
           </Typography>
         </div>
@@ -132,10 +132,10 @@ export function ConsultorIaChat({ storeId }: Props) {
               PRIORITY_TONE[p],
             )}
           >
-            <Typography variant="caption" className="font-black uppercase tracking-widest">
+            <Typography variant="caption" className="">
               {PRIORITY_LABEL[p]}
             </Typography>
-            <Typography as="p" variant="h3" className="mt-mx-tiny font-black">
+            <Typography as="p" variant="h3" className="mt-mx-tiny">
               {consultor.counts[p]}
             </Typography>
           </div>
@@ -155,7 +155,7 @@ export function ConsultorIaChat({ storeId }: Props) {
         ))}
         {!consultor.solucoes.length && !consultor.loading && (
           <li className="rounded-mx-xl border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhuma sugestão registrada para esta loja.
             </Typography>
           </li>
@@ -189,14 +189,14 @@ function ConsultorIaBalloon({
       </div>
       <div className={cn('flex-1 min-w-0 rounded-mx-xl border p-mx-sm shadow-mx-sm', toneClass)}>
         <div className="flex flex-wrap items-center gap-mx-xs">
-          <Badge variant="outline" className="font-black uppercase tracking-widest">
+          <Badge variant="outline" className="">
             {PRIORITY_LABEL[solucao.priority]}
           </Badge>
-          <Badge variant="outline" className="max-w-full whitespace-normal break-all font-black uppercase tracking-wide">
+          <Badge variant="outline" className="max-w-full whitespace-normal break-all tracking-wide">
             {solucao.rule_code}
           </Badge>
         </div>
-        <Typography variant="p" className="mt-mx-xs font-black">
+        <Typography variant="p" className="mt-mx-xs">
           {solucao.problem}
         </Typography>
         <Typography variant="p" className="mt-mx-xs text-sm font-bold">

@@ -59,30 +59,30 @@ export function SellerListItem({
           </div>
           <div className="min-w-0 flex-1 space-y-mx-xs">
             <div className="flex flex-wrap items-center gap-mx-xs sm:gap-mx-sm min-w-0">
-              <Typography variant="h2" tone={isTop1 ? 'white' : 'default'} className="min-w-0 max-w-full truncate text-xl sm:text-2xl md:text-3xl font-black uppercase tracking-tight">{seller.user_name}</Typography>
-              {isTop1 && <Badge variant="warning" className="animate-pulse shadow-mx-md px-3 text-mx-nano sm:text-xs">LÍDER</Badge>}
+              <Typography variant="h2" tone={isTop1 ? 'white' : 'default'} className="min-w-0 max-w-full truncate text-xl sm:text-2xl md:text-3xl tracking-tight">{seller.user_name}</Typography>
+              {isTop1 && <Badge variant="warning" className="animate-pulse px-3 text-mx-nano sm:text-xs">LÍDER</Badge>}
               {seller.atingimento >= 100 && !isTop1 && <Badge variant="success" className="px-3 text-mx-nano sm:text-xs"><Flame size={12} className="mr-1 inline-block" /> META BATIDA</Badge>}
               {isMe && !isTop1 && <Badge variant="brand" className="px-3 text-mx-nano sm:text-xs">VOCÊ</Badge>}
             </div>
             {showStoreName && (
               <div className="flex items-center gap-mx-xs mb-mx-xs">
                 <Building2 size={12} className={cn("shrink-0", isTop1 ? 'text-white/60' : 'text-text-tertiary')} />
-                <Typography variant="tiny" tone={isTop1 ? 'white' : 'muted'} className="truncate uppercase font-bold">{seller.store_name}</Typography>
+                <Typography variant="tiny" tone={isTop1 ? 'white' : 'muted'} className="truncate font-bold">{seller.store_name}</Typography>
               </div>
             )}
             <div className={cn("flex flex-wrap items-center gap-mx-md sm:gap-mx-10", showStoreName && "pt-2")}>
               <div className="flex flex-col">
-                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="uppercase tracking-widest font-black text-mx-nano sm:text-mx-micro">Vendas</Typography>
+                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="text-mx-nano sm:text-mx-micro">Vendas</Typography>
                 <Typography variant="h2" tone={isTop1 ? 'white' : 'default'} className="text-lg sm:text-2xl font-mono-numbers">{seller.vnd_total} v</Typography>
               </div>
               <div className="w-px h-mx-lg bg-current opacity-10 hidden sm:block" />
               <div className="flex flex-col">
-                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="uppercase tracking-widest font-black text-mx-nano sm:text-mx-micro">Objetivo</Typography>
+                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="text-mx-nano sm:text-mx-micro">Objetivo</Typography>
                 <Typography variant="h2" tone={isTop1 ? 'white' : 'default'} className="text-lg sm:text-2xl font-mono-numbers">{seller.meta} v</Typography>
               </div>
               <div className="w-px h-mx-lg bg-current opacity-10 hidden sm:block" />
               <div className="flex flex-col">
-                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="uppercase tracking-widest font-black text-mx-nano sm:text-mx-micro">Ritmo</Typography>
+                <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="text-mx-nano sm:text-mx-micro">Ritmo</Typography>
                 <Typography variant="h2" tone={isTop1 ? 'white' : 'default'} className="text-lg sm:text-2xl font-mono-numbers">{seller.ritmo} v/d</Typography>
               </div>
             </div>
@@ -90,9 +90,9 @@ export function SellerListItem({
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-end gap-mx-md lg:gap-mx-10 shrink-0 mt-6 lg:mt-0 border-t lg:border-none border-current border-opacity-10 pt-6 lg:pt-0 w-full lg:w-auto max-w-full">
           <div className="text-left lg:text-right">
-            <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="uppercase tracking-widest font-black text-mx-micro mb-1">Atingimento</Typography>
+            <Typography variant="caption" tone={isTop1 ? 'white' : 'muted'} className="text-mx-micro mb-1">Atingimento</Typography>
             <div className="flex items-center gap-mx-sm">
-              <Typography variant="h1" tone={isTop1 ? 'white' : 'brand'} className="text-4xl sm:text-5xl font-mono-numbers tracking-tighter leading-none font-black">{seller.atingimento}%</Typography>
+              <Typography variant="h1" tone={isTop1 ? 'white' : 'brand'} className="text-4xl sm:text-5xl font-mono-numbers tracking-tighter leading-none">{seller.atingimento}%</Typography>
               <div className={cn(
                 "w-mx-2xl h-mx-2xl rounded-mx-2xl flex items-center justify-center border shadow-inner shrink-0",
                 isTop1 ? "bg-white/10 border-white/20 text-white" : "bg-surface-alt border-border-default text-brand-primary"

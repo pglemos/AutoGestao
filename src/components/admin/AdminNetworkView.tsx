@@ -64,7 +64,7 @@ export function AdminNetworkView() {
         const total = store.members.length
 
         return (
-          <Card key={store.store_id} className="overflow-hidden shadow-mx-sm border-border-default bg-white">
+          <Card key={store.store_id} className="overflow-hidden bg-white">
             <div
               role="button"
               tabIndex={0}
@@ -83,15 +83,15 @@ export function AdminNetworkView() {
                   <Building2 size={20} className="sm:size-mx-md" />
                 </div>
                 <div className="min-w-0">
-                  <Typography variant="h3" className="text-sm sm:text-lg font-black uppercase tracking-tight leading-tight whitespace-normal break-words">{store.store_name}</Typography>
-                  <Typography variant="tiny" tone="muted" className="uppercase tracking-widest text-mx-nano sm:text-mx-micro">{total} ESPECIALISTAS</Typography>
+                  <Typography variant="h3" className="text-sm sm:text-lg tracking-tight leading-tight whitespace-normal break-words">{store.store_name}</Typography>
+                  <Typography variant="tiny" tone="muted" className="text-mx-nano sm:text-mx-micro">{total} ESPECIALISTAS</Typography>
                 </div>
               </div>
               
               <div className="flex items-center gap-mx-xs sm:gap-mx-lg shrink-0">
                 <div className="flex items-center gap-mx-tiny text-status-success">
                   <Zap size={14} className="sm:size-mx-sm" />
-                  <Typography variant="mono" className="font-black text-mx-tiny sm:text-sm">{operacionais}/{total}</Typography>
+                  <Typography variant="mono" className="text-mx-tiny sm:text-sm">{operacionais}/{total}</Typography>
                 </div>
                 <ChevronDown className={cn("transition-transform w-mx-sm h-mx-sm sm:w-5 sm:h-5", isExpanded && "rotate-180")} />
               </div>
@@ -113,15 +113,15 @@ export function AdminNetworkView() {
                             {member.avatar_url ? <img src={member.avatar_url} alt="" className="w-full h-full object-cover" /> : <Users size={16} className="text-text-tertiary" />}
                           </div>
                           <div className="flex-1 min-w-0">
-                            <Typography className="font-black text-xs sm:text-sm uppercase tracking-tight leading-tight whitespace-normal break-words">{member.name}</Typography>
-                            <Typography variant="tiny" tone="muted" className="uppercase text-mx-tiny font-bold">{member.role}</Typography>
+                            <Typography className="text-xs sm:text-sm tracking-tight leading-tight whitespace-normal break-words">{member.name}</Typography>
+                            <Typography variant="tiny" tone="muted" className="text-mx-tiny font-bold">{member.role}</Typography>
                           </div>
                           {member.checkin_today ? <Zap size={16} className="text-status-success fill-status-success/20" /> : <Clock size={16} className="text-text-tertiary opacity-20" />}
                         </div>
                         
                         <div className="flex gap-mx-xs border-t border-border-default pt-mx-xs mt-1 relative z-10">
                           <Button 
-                            variant="outline" size="sm" className="flex-1 h-mx-lg sm:h-mx-10 text-mx-micro sm:text-mx-tiny uppercase font-black tracking-widest border-border-strong"
+                            variant="outline" size="sm" className="flex-1 h-mx-lg sm:h-mx-10 text-mx-micro sm:text-mx-tiny"
                             disabled={!!processing}
                             onClick={(e) => { e.stopPropagation(); handleRoleChange(member.id, store.store_id, member.role) }}
                           >

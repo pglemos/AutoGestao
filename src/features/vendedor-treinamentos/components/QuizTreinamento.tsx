@@ -66,7 +66,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
 
     return (
         <section className="rounded-mx-xl border border-border-subtle bg-surface-alt/40 p-4" aria-label="Prova oficial da aula">
-            <Typography variant="p" className="flex items-center gap-2 text-sm font-bold uppercase tracking-wide">
+            <Typography variant="p" className="flex items-center gap-2 text-sm font-bold tracking-wide">
                 <ClipboardCheck size={16} className="text-brand-primary" />
                 Prova Oficial — nota mínima 70%
             </Typography>

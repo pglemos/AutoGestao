@@ -31,7 +31,7 @@ export function CreateStoreModal({ open, newStore, setNewStore, creating, onClos
       footer={
         <>
           <Button type="button" variant="ghost" onClick={onClose} disabled={creating}>CANCELAR</Button>
-          <Button type="submit" form="store-create-form" disabled={creating} className="bg-brand-secondary">
+          <Button type="submit" form="store-create-form" disabled={creating} className="">
             {creating ? <RefreshCw size={16} className="mr-2 animate-spin" /> : <Plus size={16} className="mr-2" />}
             CADASTRAR
           </Button>
@@ -40,7 +40,7 @@ export function CreateStoreModal({ open, newStore, setNewStore, creating, onClos
     >
       <form id="store-create-form" onSubmit={onSubmit} className="space-y-mx-lg">
         <label className="space-y-mx-xs block">
-          <Typography as="span" variant="caption" className="font-black uppercase tracking-widest text-text-tertiary">Nome da Loja</Typography>
+          <Typography as="span" variant="caption" className="">Nome da Loja</Typography>
           <Input
             id="dashboard-new-store-name"
             name="store_name"
@@ -51,7 +51,7 @@ export function CreateStoreModal({ open, newStore, setNewStore, creating, onClos
           />
         </label>
         <label className="space-y-mx-xs block">
-          <Typography as="span" variant="caption" className="font-black uppercase tracking-widest text-text-tertiary">E-mail do Gestor</Typography>
+          <Typography as="span" variant="caption" className="">E-mail do Gestor</Typography>
           <Input
             id="dashboard-new-store-manager-email"
             name="manager_email"

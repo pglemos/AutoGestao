@@ -26,7 +26,7 @@ export function AgendaFiltersBar({
         variant="ghost"
         size="sm"
         onClick={clearFilters}
-        className="h-6 text-xs font-semibold text-brand-primary hover:bg-brand-primary/10"
+        className="h-6 text-xs font-semibold hover:bg-brand-primary/10"
       >
         <X size={12} className="mr-1" /> Limpar filtros
       </Button>

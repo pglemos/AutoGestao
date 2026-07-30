@@ -55,7 +55,7 @@ export function CreateStoreModal({ open, onClose, onSubmit }: CreateStoreModalPr
         >
             <form id="create-store-form" onSubmit={handleSubmit} className="space-y-mx-lg">
                 <div className="space-y-mx-xs">
-                    <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-widest">Nome da Loja</Typography>
+                    <Typography variant="tiny" tone="muted" className="px-1">Nome da Loja</Typography>
                     <div className="relative">
                         <Building2 size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
                         <Input
@@ -71,7 +71,7 @@ export function CreateStoreModal({ open, onClose, onSubmit }: CreateStoreModalPr
                 </div>
 
                 <div className="space-y-mx-xs">
-                    <Typography variant="tiny" tone="muted" className="px-1 font-black uppercase tracking-widest">E-mail do Gestor (opcional)</Typography>
+                    <Typography variant="tiny" tone="muted" className="px-1">E-mail do Gestor (opcional)</Typography>
                     <div className="relative">
                         <Mail size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
                         <Input
@@ -87,7 +87,7 @@ export function CreateStoreModal({ open, onClose, onSubmit }: CreateStoreModalPr
                 </div>
 
                 <div className="bg-mx-indigo-50 border border-mx-indigo-100 rounded-mx-xl p-mx-md">
-                    <Typography variant="tiny" tone="brand" className="font-black uppercase leading-relaxed">
+                    <Typography variant="tiny" tone="brand" className="leading-relaxed">
                         Ao criar a loja, o sistema provisiona automaticamente:
                         regras de entrega de e-mails, regras de meta padrão (modo calendário, projeção uniforme),
                         e benchmarks padrão (lead→agend 20%, agend→visita 60%, visita→venda 33%).

@@ -76,7 +76,7 @@ export function LiberacaoFechamento() {
     return (
       <main className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-surface-alt">
         <ShieldCheck size={64} className="text-status-error/20 mb-6" />
-        <Typography variant="h2" className="mb-2 text-status-error font-extrabold uppercase">
+        <Typography variant="h2" className="mb-2 text-status-error font-extrabold">
           Acesso Restrito
         </Typography>
         <Typography variant="p" tone="muted" className="max-w-md mx-auto text-xs font-semibold leading-relaxed">
@@ -93,7 +93,7 @@ export function LiberacaoFechamento() {
     return (
       <main className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-surface-alt">
         <AlertTriangle size={64} className="text-status-warning/20 mb-6" />
-        <Typography variant="h2" className="mb-2 text-text-primary font-extrabold uppercase">
+        <Typography variant="h2" className="mb-2 font-extrabold">
           Solicitação Não Encontrada
         </Typography>
         <Typography variant="p" tone="muted" className="max-w-md mx-auto text-xs font-semibold leading-relaxed">
@@ -116,10 +116,10 @@ export function LiberacaoFechamento() {
 
   return (
     <main className="min-h-screen w-full bg-surface-alt flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
-      <Card className="w-full max-w-lg bg-white rounded-mx-lg border border-border-subtle p-mx-md shadow-mx-sm space-y-mx-md">
+      <Card className="w-full max-w-lg bg-white border p-mx-md space-y-mx-md">
         <header className="border-b border-border-subtle pb-4 flex items-center justify-between">
           <div>
-            <Typography variant="h1" className="!text-lg !font-black text-brand-primary uppercase">
+            <Typography variant="h1" className="!text-lg !">
               Liberação de Fechamento
             </Typography>
             <Typography variant="p" tone="muted" className="text-xs font-semibold mt-1">
@@ -203,7 +203,7 @@ export function LiberacaoFechamento() {
             <Button
               onClick={handleLiberar}
               disabled={liberando}
-              className="h-9 px-6 text-xs font-bold bg-brand-primary hover:bg-brand-primary-hover text-white rounded-mx-lg shadow-sm"
+              className="h-9 px-6 text-xs font-bold hover:bg-brand-primary-hover text-white shadow-sm"
             >
               {liberando ? 'Processando...' : 'Liberar Fechamento'}
             </Button>

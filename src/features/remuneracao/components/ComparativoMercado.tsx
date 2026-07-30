@@ -39,7 +39,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
   return (
     <div className="space-y-mx-lg">
       <div className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-        <Typography variant="caption" tone="muted" className="font-bold uppercase tracking-wide">
+        <Typography variant="caption" tone="muted" className="font-bold tracking-wide">
           Parâmetros de comparação
         </Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">

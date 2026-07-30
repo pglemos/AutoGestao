@@ -90,7 +90,7 @@ export default function ConsultorTreinamentos() {
                 {showForm && (
                     <motion.section initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.95 }} className="shrink-0 mb-10">
                         <form onSubmit={handleSubmit}>
-                            <Card className="rounded-mx-lg border border-border-subtle p-mx-md shadow-mx-sm bg-white relative">
+                            <Card className="border p-mx-md bg-white relative">
                                 <div className="absolute top-mx-0 right-mx-0 w-mx-96 h-mx-96 bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-48 -mt-48" />
                                 
                                 <header className="flex items-center justify-between border-b border-border-subtle pb-4 mb-4 relative z-10">
@@ -98,7 +98,7 @@ export default function ConsultorTreinamentos() {
                                         <div className="w-mx-14 h-mx-14 rounded-mx-lg bg-brand-primary text-white flex items-center justify-center shadow-mx-sm transform rotate-2"><GraduationCap size={24} /></div>
                                         <div>
                                             <Typography variant="h3">Publicar Treinamento</Typography>
-                                            <Typography variant="caption" tone="muted" className="uppercase tracking-widest mt-1">EXPANSÃO DE BASE TÉCNICA</Typography>
+                                            <Typography variant="caption" tone="muted" className="mt-1">EXPANSÃO DE BASE TÉCNICA</Typography>
                                         </div>
                                     </div>
                                     <Button variant="ghost" size="icon" onClick={() => setShowForm(false)} aria-label="Fechar" className="rounded-mx-full w-mx-xl h-mx-xl bg-surface-alt hover:bg-white shadow-sm"><X size={24} /></Button>
@@ -107,11 +107,11 @@ export default function ConsultorTreinamentos() {
                                 <div className="grid lg:grid-cols-2 gap-mx-14 relative z-10">
                                     <div className="space-y-mx-lg">
                                         <div className="space-y-mx-sm">
-                                            <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">Título da Aula</Typography>
+                                            <Typography variant="caption" tone="muted" className="ml-2">Título da Aula</Typography>
                                             <Input value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Ex: Masterizando o Script de Fechamento" required className="!h-14 px-6 font-bold" />
                                         </div>
                                         <div className="space-y-mx-sm">
-                                            <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">Ementa / Descrição</Typography>
+                                            <Typography variant="caption" tone="muted" className="ml-2">Ementa / Descrição</Typography>
                                             <textarea 
                                                 value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
                                                 className="w-full bg-surface-alt border border-border-subtle rounded-mx-lg p-mx-md text-sm font-bold text-text-primary placeholder:text-text-tertiary focus:outline-none focus:border-brand-primary focus:ring-8 focus:ring-brand-primary/5 transition-all resize-none shadow-inner h-mx-xl"
@@ -122,31 +122,31 @@ export default function ConsultorTreinamentos() {
 
                                     <div className="space-y-mx-10">
                                         <div className="space-y-mx-sm">
-                                            <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">URL do Material (Vídeo)</Typography>
+                                            <Typography variant="caption" tone="muted" className="ml-2">URL do Material (Vídeo)</Typography>
                                             <Input value={form.video_url} onChange={e => setForm(p => ({ ...p, video_url: e.target.value }))} placeholder="https://youtube.com/v/..." required className="!h-14 px-6 font-medium" />
                                         </div>
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
                                             <div className="space-y-mx-sm">
-                                                <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">Pilar de Vendas</Typography>
+                                                <Typography variant="caption" tone="muted" className="ml-2">Pilar de Vendas</Typography>
                                                 <select aria-label="Pilar de Vendas" value={form.type} onChange={e => setForm(p => ({ ...p, type: e.target.value }))} className="w-full h-mx-14 bg-surface-alt border border-border-subtle rounded-mx-lg px-6 text-sm font-bold text-text-primary focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-inner">
                                                     {types.map(t => <option key={t} value={t}>{t.toUpperCase()}</option>)}
                                                 </select>
                                             </div>
                                             <div className="space-y-mx-sm">
-                                                <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">Público Alvo</Typography>
+                                                <Typography variant="caption" tone="muted" className="ml-2">Público Alvo</Typography>
                                                 <select aria-label="Público Alvo" value={form.target_audience} onChange={e => setForm(p => ({ ...p, target_audience: e.target.value }))} className="w-full h-mx-14 bg-surface-alt border border-border-subtle rounded-mx-lg px-6 text-sm font-bold text-text-primary focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-inner">
                                                     {audiences.map(a => <option key={a} value={a}>{a.toUpperCase()}</option>)}
                                                 </select>
                                             </div>
                                             <div className="space-y-mx-sm">
-                                                <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">Origem / Curadoria</Typography>
+                                                <Typography variant="caption" tone="muted" className="ml-2">Origem / Curadoria</Typography>
                                                 <select aria-label="Origem / Curadoria" value={form.source_kind} onChange={e => setForm(p => ({ ...p, source_kind: e.target.value }))} className="w-full h-mx-14 bg-surface-alt border border-border-subtle rounded-mx-lg px-6 text-sm font-bold text-text-primary focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-inner">
                                                     {sources.map(source => <option key={source} value={source}>{source.toUpperCase()}</option>)}
                                                 </select>
                                             </div>
                                             {form.source_kind === 'loja_institucional' && (
                                                 <div className="space-y-mx-sm">
-                                                    <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">Loja vinculada</Typography>
+                                                    <Typography variant="caption" tone="muted" className="ml-2">Loja vinculada</Typography>
                                                     <select aria-label="Loja vinculada" value={form.store_id} onChange={e => setForm(p => ({ ...p, store_id: e.target.value, type: 'institucional' }))} className="w-full h-mx-14 bg-surface-alt border border-border-subtle rounded-mx-lg px-6 text-sm font-bold text-text-primary focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-inner">
                                                         <option value="">SELECIONE A LOJA</option>
                                                         {lojas.map(loja => <option key={loja.id} value={loja.id}>{loja.name.toUpperCase()}</option>)}
@@ -154,19 +154,19 @@ export default function ConsultorTreinamentos() {
                                                 </div>
                                             )}
                                             <div className="space-y-mx-sm">
-                                                <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">Duração / XP</Typography>
+                                                <Typography variant="caption" tone="muted" className="ml-2">Duração / XP</Typography>
                                                 <Input aria-label="Duração / XP" type="number" value={String(form.duration_minutes)} onChange={e => setForm(p => ({ ...p, duration_minutes: Number(e.target.value) || 15 }))} className="!h-14 px-6 font-bold" />
                                             </div>
                                         </div>
                                         <div className="space-y-mx-sm">
-                                            <Typography variant="caption" tone="muted" className="ml-2 font-black uppercase tracking-widest">Notas de Curadoria</Typography>
+                                            <Typography variant="caption" tone="muted" className="ml-2">Notas de Curadoria</Typography>
                                             <Input value={form.curation_notes} onChange={e => setForm(p => ({ ...p, curation_notes: e.target.value }))} placeholder="Fonte, specialist, fornecedor ou revisão necessária" className="!h-14 px-6 font-bold" />
                                         </div>
                                     </div>
                                 </div>
 
                                 <footer className="pt-10 flex justify-end gap-mx-sm border-t border-border-subtle mt-10 relative z-10">
-                                    <Button type="submit" disabled={saving} className="h-mx-2xl px-14 rounded-mx-lg shadow-mx-xl font-black uppercase tracking-mx-wide bg-brand-primary hover:bg-brand-primary-hover text-white">
+                                    <Button type="submit" disabled={saving} className="h-mx-2xl px-14 hover:bg-brand-primary-hover text-white">
                                         {saving ? <RefreshCw className="animate-spin mr-3" /> : <Save size={20} className="mr-3" />} <Typography variant="caption" as="span">PUBLICAR TREINAMENTO</Typography>
                                     </Button>
                                 </footer>
@@ -179,19 +179,19 @@ export default function ConsultorTreinamentos() {
             <AulasAoVivoSection />
 
             {suggestions.length > 0 && (
-                <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+                <Card className="border bg-white p-mx-md">
                     <div className="flex flex-col md:flex-row md:items-center justify-between gap-mx-md mb-mx-md">
                         <div>
-                            <Typography variant="h3" className="uppercase tracking-tight">Backlog editorial</Typography>
-                            <Typography variant="caption" tone="muted" className="uppercase tracking-widest">Sugestões recebidas da rede para curadoria MX</Typography>
+                            <Typography variant="h3" className="tracking-tight">Backlog editorial</Typography>
+                            <Typography variant="caption" tone="muted" className="">Sugestões recebidas da rede para curadoria MX</Typography>
                         </div>
-                        <Badge variant="brand" className="rounded-mx-lg px-4 py-1">{suggestions.length} sugestões</Badge>
+                        <Badge variant="brand" className="px-4 py-1">{suggestions.length} sugestões</Badge>
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-mx-sm">
                         {suggestions.slice(0, 9).map(suggestion => (
                             <div key={suggestion.id} className="rounded-mx-lg border border-border-subtle bg-surface-alt/50 p-mx-md">
-                                <Badge variant={suggestion.priority === 'high' ? 'danger' : 'outline'} className="rounded-mx-lg">{suggestion.theme}</Badge>
-                                <Typography variant="p" className="font-black uppercase text-sm mt-mx-xs">{suggestion.title}</Typography>
+                                <Badge variant={suggestion.priority === 'high' ? 'danger' : 'outline'} className="">{suggestion.theme}</Badge>
+                                <Typography variant="p" className="text-sm mt-mx-xs">{suggestion.title}</Typography>
                                 <Typography variant="caption" tone="muted" className="line-clamp-2">{suggestion.description || 'Sem descrição adicional.'}</Typography>
                             </div>
                         ))}
@@ -203,7 +203,7 @@ export default function ConsultorTreinamentos() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-mx-lg pb-32" aria-live="polite">
                 {treinamentos.map((t, i) => (
                     <motion.article key={t.id} initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} transition={{ delay: i * 0.05 }}>
-                        <Card className="rounded-mx-lg border border-border-subtle bg-white shadow-mx-sm p-mx-md hover:shadow-mx-md transition-all relative flex flex-col">
+                        <Card className="border bg-white p-mx-md hover:shadow-mx-md transition-all relative flex flex-col">
                             <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-huge -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                             
                             <div className="flex items-start justify-between mb-8 border-b border-border-subtle pb-6 relative z-10">
@@ -211,20 +211,20 @@ export default function ConsultorTreinamentos() {
                                     {t.watched ? <CheckCircle size={20} /> : <Play size={20} className="ml-1" />}
                                 </div>
                                 <div className="flex flex-col items-end gap-mx-xs">
-                                    <Badge variant="brand" className="px-4 py-1 rounded-mx-lg">{t.type}</Badge>
-                                    {t.store_id && <Badge variant="outline" className="px-4 py-1 rounded-mx-lg max-w-mx-40 truncate">{storeNameById.get(t.store_id) || 'Loja institucional'}</Badge>}
-                                    {t.watched && <Typography variant="tiny" tone="success" className="font-black tracking-widest uppercase">CONCLUÍDO</Typography>}
+                                    <Badge variant="brand" className="px-4 py-1">{t.type}</Badge>
+                                    {t.store_id && <Badge variant="outline" className="px-4 py-1 max-w-mx-40 truncate">{storeNameById.get(t.store_id) || 'Loja institucional'}</Badge>}
+                                    {t.watched && <Typography variant="tiny" tone="success" className="">CONCLUÍDO</Typography>}
                                 </div>
                             </div>
 
                             <div className="flex-1 mb-8 relative z-10 space-y-mx-xs">
-                                <Typography variant="h3" className="uppercase leading-tight group-hover:text-brand-primary transition-colors line-clamp-2">{t.title}</Typography>
+                                <Typography variant="h3" className="leading-tight group-hover:text-brand-primary transition-colors line-clamp-2">{t.title}</Typography>
                                 <Typography variant="p" tone="muted" className="leading-relaxed line-clamp-3 italic">"{t.description}"</Typography>
                                 
                                 <div className="flex flex-wrap gap-mx-xs pt-4">
-                                    <Badge variant="outline" className="border-border-subtle px-3"><Typography variant="tiny" as="span">{t.target_audience?.toUpperCase()}</Typography></Badge>
-                                    <Badge variant="outline" className="border-border-subtle px-3"><Typography variant="tiny" as="span">12 MIN</Typography></Badge>
-                                    <Badge variant={t.needs_review ? 'danger' : 'outline'} className="border-border-subtle px-3"><Typography variant="tiny" as="span">{t.average_rating || 0} ({t.rating_count || 0})</Typography></Badge>
+                                    <Badge variant="outline" className="px-3"><Typography variant="tiny" as="span">{t.target_audience?.toUpperCase()}</Typography></Badge>
+                                    <Badge variant="outline" className="px-3"><Typography variant="tiny" as="span">12 MIN</Typography></Badge>
+                                    <Badge variant={t.needs_review ? 'danger' : 'outline'} className="px-3"><Typography variant="tiny" as="span">{t.average_rating || 0} ({t.rating_count || 0})</Typography></Badge>
                                 </div>
                             </div>
 
@@ -239,7 +239,7 @@ export default function ConsultorTreinamentos() {
                                         <Typography variant="tiny" as="span">+12</Typography>
                                     </div>
                                 </div>
-                                <Button asChild size="icon" variant="secondary" className="w-mx-xl h-mx-xl rounded-mx-lg shadow-mx-md bg-brand-primary hover:bg-brand-primary-hover text-white group-hover:scale-110 transition-transform" aria-label="Ação">
+                                <Button asChild size="icon" variant="secondary" className="w-mx-xl h-mx-xl hover:bg-brand-primary-hover text-white group-hover:scale-110 transition-transform" aria-label="Ação">
                                     <a href={t.video_url} target="_blank" rel="noopener noreferrer">
                                         <ExternalLink size={20} />
                                     </a>

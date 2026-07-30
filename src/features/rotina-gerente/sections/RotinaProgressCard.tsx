@@ -10,10 +10,10 @@ type Props = { routineProgress: RoutineProgress }
  */
 export function RotinaProgressCard({ routineProgress }: Props) {
   return (
-    <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <Card className="border bg-white p-mx-md">
       <div className="flex flex-col gap-mx-md lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <Typography variant="h3" className="uppercase tracking-tight">
+          <Typography variant="h3" className="tracking-tight">
             Progresso da rotina
           </Typography>
           <Typography variant="p" tone="muted" className="mt-mx-tiny text-sm">

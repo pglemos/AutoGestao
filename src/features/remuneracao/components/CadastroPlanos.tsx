@@ -59,7 +59,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
   return (
     <div className="space-y-mx-lg">
       <form onSubmit={handleSubmit} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-        <Typography variant="caption" tone="muted" className="font-bold uppercase tracking-wide">
+        <Typography variant="caption" tone="muted" className="font-bold tracking-wide">
           Adicionar / atualizar plano por cargo
         </Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-4">

@@ -16,7 +16,7 @@ type Props = { topStores: StoreRow[] }
 
 export function AdminGoalCompareChart({ topStores }: Props) {
   return (
-    <Card className="xl:col-span-7 border-none shadow-mx-lg bg-white overflow-hidden">
+    <Card className="xl:col-span-7 border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
           <Target size={18} className="text-brand-primary" /> Comparativo loja x meta

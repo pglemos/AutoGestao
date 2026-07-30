@@ -9,7 +9,7 @@ type Props = { metrics: NetworkMetrics }
 
 export function AdminHealthCard({ metrics }: Props) {
   return (
-    <Card className="p-mx-lg md:p-mx-10 bg-brand-secondary text-white border-none shadow-mx-xl relative overflow-hidden flex-1 group">
+    <Card className="p-mx-lg md:p-mx-10 text-white border-none relative overflow-hidden flex-1 group">
       <div className="relative z-10 flex flex-col justify-between h-full">
         <div>
           <div className="w-mx-2xl h-mx-2xl rounded-mx-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-inner mb-8 transform group-hover:rotate-6 transition-transform">
@@ -18,14 +18,14 @@ export function AdminHealthCard({ metrics }: Props) {
           <Typography
             variant="h2"
             tone="white"
-            className="text-3xl leading-none mb-4 uppercase tracking-tighter"
+            className="text-3xl leading-none mb-4 tracking-tighter"
           >
             Saude Executiva
           </Typography>
           <Typography
             variant="p"
             tone="white"
-            className="opacity-70 text-xs font-bold uppercase tracking-mx-wide leading-relaxed"
+            className="opacity-70 text-xs font-bold leading-relaxed"
           >
             Rede completa, base historica, metas, pessoas e consultoria no mesmo cockpit.
           </Typography>
@@ -36,7 +36,7 @@ export function AdminHealthCard({ metrics }: Props) {
               <Typography
                 variant="caption"
                 tone="white"
-                className="font-black uppercase tracking-widest mb-2 block opacity-70"
+                className="mb-2 block opacity-70"
               >
                 Lojas ativas
               </Typography>
@@ -52,7 +52,7 @@ export function AdminHealthCard({ metrics }: Props) {
               <Typography
                 variant="caption"
                 tone="white"
-                className="font-black uppercase tracking-widest mb-2 block opacity-70"
+                className="mb-2 block opacity-70"
               >
                 Vendedores ativos
               </Typography>

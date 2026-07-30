@@ -339,7 +339,7 @@ export default function Login() {
         return (
             <main className="min-h-screen bg-brand-secondary flex flex-col items-center justify-center p-mx-md text-center">
                 <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-brand-primary mb-6" />
-                <Typography variant="caption" tone="white" className="animate-pulse tracking-widest uppercase font-black">Sincronizando...</Typography>
+                <Typography variant="caption" tone="white" className="animate-pulse">Sincronizando...</Typography>
             </main>
         )
     }

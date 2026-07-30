@@ -55,7 +55,7 @@ export function CulturaFelicidade({ storeId }: Props) {
             <Heart size={22} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h2" className="font-black uppercase tracking-tight">
+            <Typography variant="h2" className="tracking-tight">
               Cultura + Felicidade
             </Typography>
             <Typography variant="tiny" tone="muted" className="block font-bold normal-case tracking-normal">
@@ -71,18 +71,18 @@ export function CulturaFelicidade({ storeId }: Props) {
 
       {error && (
         <div className="rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="font-black text-status-error">
+          <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
         </div>
       )}
 
       <div className="grid grid-cols-1 gap-mx-md md:grid-cols-3">
-        <Card className="rounded-mx-2xl border border-brand-primary/40 bg-mx-indigo-50 p-mx-md text-brand-primary">
-          <Typography variant="caption" className="font-black uppercase tracking-widest">
+        <Card className="border border-brand-primary/40 bg-mx-indigo-50 p-mx-md">
+          <Typography variant="caption" className="">
             Ciclo atual
           </Typography>
-          <Typography as="p" variant="h2" className="mt-mx-sm font-black">
+          <Typography as="p" variant="h2" className="mt-mx-sm">
             {cicloAtual?.ciclo ?? '—'}
           </Typography>
           <Typography variant="tiny" className="block font-bold normal-case tracking-normal">
@@ -101,13 +101,13 @@ export function CulturaFelicidade({ storeId }: Props) {
         />
       </div>
 
-      <Card className="rounded-mx-2xl p-mx-md">
+      <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
           <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
             <TrendingUp size={18} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Tendência últimos 3 ciclos
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -117,7 +117,7 @@ export function CulturaFelicidade({ storeId }: Props) {
         </header>
         {mediasUltimos3.length === 0 ? (
           <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               Sem ciclos registrados ainda.
             </Typography>
           </div>
@@ -131,11 +131,11 @@ export function CulturaFelicidade({ storeId }: Props) {
                 <Typography
                   variant="tiny"
                   tone="muted"
-                  className="font-black uppercase tracking-widest"
+                  className=""
                 >
                   {item.ciclo}
                 </Typography>
-                <Typography as="p" variant="h3" className="mt-mx-tiny font-black">
+                <Typography as="p" variant="h3" className="mt-mx-tiny">
                   {item.clima == null ? '—' : item.clima.toFixed(1)}
                 </Typography>
               </li>
@@ -144,13 +144,13 @@ export function CulturaFelicidade({ storeId }: Props) {
         )}
       </Card>
 
-      <Card className="rounded-mx-2xl p-mx-md">
+      <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
           <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
             <Sparkles size={18} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Cultura de Resultado — registros recentes
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -161,7 +161,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 
         {registros.length === 0 ? (
           <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhum registro de cultura cadastrado.
             </Typography>
           </div>
@@ -173,11 +173,11 @@ export function CulturaFelicidade({ storeId }: Props) {
                 className={cn('rounded-mx-xl border p-mx-sm', TIPO_TONE[reg.tipo])}
               >
                 <div className="flex flex-wrap items-center gap-mx-xs">
-                  <Badge variant="outline" className="font-black uppercase tracking-widest">
+                  <Badge variant="outline" className="">
                     {TIPO_LABEL[reg.tipo]}
                   </Badge>
                   {reg.alvo_role && (
-                    <Badge variant="outline" className="font-black uppercase tracking-widest">
+                    <Badge variant="outline" className="">
                       {reg.alvo_role}
                     </Badge>
                   )}
@@ -189,7 +189,7 @@ export function CulturaFelicidade({ storeId }: Props) {
                     {new Date(`${reg.data_referencia}T12:00:00`).toLocaleDateString('pt-BR')}
                   </Typography>
                 </div>
-                <Typography variant="p" className="mt-mx-xs font-black">
+                <Typography variant="p" className="mt-mx-xs">
                   {reg.titulo}
                 </Typography>
                 {reg.mensagem && (
@@ -204,9 +204,9 @@ export function CulturaFelicidade({ storeId }: Props) {
       </Card>
 
       {ciclos.length > 0 && (
-        <Card className="rounded-mx-2xl p-mx-md">
+        <Card className="p-mx-md">
           <header className="mb-mx-sm">
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Histórico de ciclos (anônimo)
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -262,10 +262,10 @@ function MediaCard({ label, value }: { label: string; value: number | null }) {
           : 'border-status-error/30 bg-status-error-surface text-status-error'
   return (
     <Card className={cn('rounded-mx-2xl border p-mx-md', tone)}>
-      <Typography variant="caption" className="font-black uppercase tracking-widest">
+      <Typography variant="caption" className="">
         {label}
       </Typography>
-      <Typography as="p" variant="h2" className="mt-mx-sm font-black">
+      <Typography as="p" variant="h2" className="mt-mx-sm">
         {value == null ? '—' : value.toFixed(1)}
       </Typography>
       <Typography variant="tiny" className="block font-bold normal-case tracking-normal">

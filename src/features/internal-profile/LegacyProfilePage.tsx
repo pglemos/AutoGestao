@@ -273,7 +273,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
 
             <div className="flex justify-end gap-3 mt-6">
               <Button variant="outline" size="sm" onClick={() => setShowPasswordModal(false)}>Cancelar</Button>
-              <Button size="sm" className="bg-brand-primary text-white" onClick={handleChangePassword} disabled={changingPassword}>
+              <Button size="sm" className="text-white" onClick={handleChangePassword} disabled={changingPassword}>
                 {changingPassword ? 'Alterando...' : 'Alterar Senha'}
               </Button>
             </div>

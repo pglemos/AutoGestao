@@ -80,22 +80,22 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
     <div className="space-y-mx-lg">
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-mx-lg">
         {/* Vendas Trimestre */}
-        <Card className="p-mx-lg bg-white border border-border-default shadow-mx-md overflow-hidden relative rounded-mx-2xl group/card">
+        <Card className="p-mx-lg bg-white border overflow-hidden relative group/card">
           <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-brand-primary">
             <BarChart3 size={140} />
           </div>
           <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">
             <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><TrendingUp size={20} /></div>
             <div>
-              <Typography variant="h3" className="text-lg font-black text-text-primary">Vendas Trimestre</Typography>
-              <Typography variant="tiny" tone="muted" className="uppercase font-black tracking-mx-widest opacity-60">Volume de emplacamentos/entregas</Typography>
+              <Typography variant="h3" className="text-lg">Vendas Trimestre</Typography>
+              <Typography variant="tiny" tone="muted" className="opacity-60">Volume de emplacamentos/entregas</Typography>
             </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-mx-md mb-mx-lg">
              {data.sales.map((s, i) => (
                 <div key={s.month} className="space-y-mx-xs">
-                   <Typography variant="tiny" className="font-black text-text-tertiary">{s.month.toUpperCase()}</Typography>
+                   <Typography variant="tiny" className="">{s.month.toUpperCase()}</Typography>
                    <Input
                       id={`sales-${s.month}-${i}`}
                       name={`sales-${s.month}`}
@@ -110,32 +110,32 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
 
           <div className="flex items-center justify-between p-mx-md bg-surface-alt rounded-mx-xl border border-border-default">
              <div>
-                <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Total Trimestre</Typography>
-                <Typography variant="h2" className="text-3xl text-brand-primary">{totalSales} <span className="text-sm font-bold text-text-tertiary">CARROS</span></Typography>
+                <Typography variant="tiny" className="font-bold">Total Trimestre</Typography>
+                <Typography variant="h2" className="text-3xl">{totalSales} <span className="text-sm font-bold text-text-tertiary">CARROS</span></Typography>
              </div>
              <div className="text-right">
-                <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Média Mensal</Typography>
+                <Typography variant="tiny" className="font-bold">Média Mensal</Typography>
                 <Typography variant="h2" className="text-3xl">{(totalSales / 3).toFixed(1)}</Typography>
              </div>
           </div>
         </Card>
 
         {/* Marketing ROI */}
-        <Card className="p-mx-lg bg-white border border-border-default shadow-mx-md overflow-hidden relative rounded-mx-2xl group/card">
+        <Card className="p-mx-lg bg-white border overflow-hidden relative group/card">
           <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-brand-secondary">
             <PieChart size={140} />
           </div>
           <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">
             <div className="p-mx-xs bg-brand-secondary/10 rounded-mx-lg text-brand-secondary"><Zap size={20} /></div>
             <div>
-              <Typography variant="h3" className="text-lg font-black text-text-primary">Performance MKT</Typography>
-              <Typography variant="tiny" tone="muted" className="uppercase font-black tracking-mx-widest opacity-60">CPL e Origem de Leads</Typography>
+              <Typography variant="h3" className="text-lg">Performance MKT</Typography>
+              <Typography variant="tiny" tone="muted" className="opacity-60">CPL e Origem de Leads</Typography>
             </div>
           </div>
 
           <div className="grid grid-cols-2 gap-mx-md mb-mx-lg">
              <div className="space-y-mx-xs">
-                <Typography variant="tiny" className="font-black text-text-tertiary uppercase">Investimento Total (R$)</Typography>
+                <Typography variant="tiny" className="">Investimento Total (R$)</Typography>
                 <Input
                   id="marketing-investment"
                   name="marketing-investment"
@@ -147,7 +147,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
                 />
              </div>
              <div className="space-y-mx-xs">
-                <Typography variant="tiny" className="font-black text-text-tertiary uppercase">Leads Totais (UN)</Typography>
+                <Typography variant="tiny" className="">Leads Totais (UN)</Typography>
                 <Input
                   id="marketing-leads"
                   name="marketing-leads"
@@ -162,7 +162,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
 
           <div className="flex items-center justify-between p-mx-md bg-brand-secondary/5 rounded-mx-xl border border-brand-secondary/10">
              <div>
-                <Typography variant="tiny" className="font-bold text-brand-secondary uppercase">Custo por Lead (CPL)</Typography>
+                <Typography variant="tiny" className="font-bold text-brand-secondary">Custo por Lead (CPL)</Typography>
                 <Typography variant="h1" className="text-3xl text-brand-secondary">R$ {cpl}</Typography>
              </div>
              <div className="h-mx-14 w-mx-14 overflow-visible">
@@ -179,8 +179,8 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
              {data.marketing.origin.map((o, i) => (
                 <div key={o.name} className="text-center">
                    <div className="w-mx-2 h-mx-2 rounded-full mx-auto mb-1" style={{ backgroundColor: COLORS[i % COLORS.length] }} />
-                   <Typography variant="tiny" className="text-mx-micro font-black uppercase opacity-60">{o.name}</Typography>
-                   <Typography variant="p" className="text-xs font-black">{o.value}</Typography>
+                   <Typography variant="tiny" className="text-mx-micro opacity-60">{o.name}</Typography>
+                   <Typography variant="p" className="text-xs">{o.value}</Typography>
                 </div>
              ))}
           </div>
@@ -188,15 +188,15 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
       </div>
 
       {/* Raio-X do Estoque */}
-      <Card className="p-mx-lg bg-white border border-border-default shadow-mx-md overflow-hidden relative rounded-mx-2xl group/card">
+      <Card className="p-mx-lg bg-white border overflow-hidden relative group/card">
           <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-status-warning">
             <Layers size={140} />
           </div>
           <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">
             <div className="p-mx-xs bg-status-warning/10 rounded-mx-lg text-status-warning"><Layers size={20} /></div>
             <div>
-              <Typography variant="h3" className="text-lg font-black text-text-primary">Raio-X do Estoque</Typography>
-              <Typography variant="tiny" tone="muted" className="uppercase font-black tracking-mx-widest opacity-60">Saúde financeira do pátio</Typography>
+              <Typography variant="h3" className="text-lg">Raio-X do Estoque</Typography>
+              <Typography variant="tiny" tone="muted" className="opacity-60">Saúde financeira do pátio</Typography>
             </div>
           </div>
 
@@ -209,7 +209,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
                { k: 'total_inv', l: 'INVESTIMENTO (R$)', p: 'Ex: 2.5M' }
              ] satisfies Array<{ k: VisitOneStockKey; l: string; p: string }>).map(f => (
                 <div key={f.k} className="space-y-mx-xs">
-                   <Typography variant="tiny" className="font-black text-text-tertiary uppercase tracking-mx-widest text-mx-tiny">{f.l}</Typography>
+                   <Typography variant="tiny" className="text-mx-tiny">{f.l}</Typography>
                    <Input
                       id={`stock-${f.k}`}
                       name={`stock-${f.k}`}
@@ -229,14 +229,14 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
 
 function VisitOneBenchmark({ data }: { data: VisitOneQuantData }) {
   return (
-    <Card className="p-mx-20 text-center bg-white border border-border-default rounded-mx-2xl border-dashed relative overflow-hidden group">
+    <Card className="p-mx-20 text-center bg-white border border-dashed relative overflow-hidden group">
        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-transparent to-brand-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
        <div className="relative z-10">
          <div className="w-mx-16 h-mx-16 bg-surface-alt rounded-mx-full flex items-center justify-center mx-auto mb-mx-md border border-border-subtle group-hover:scale-110 transition-transform">
            <Globe size={48} className="text-brand-primary opacity-40" />
          </div>
-         <Typography variant="h3" className="text-xl font-black text-text-primary uppercase tracking-mx-widest mb-mx-xs">Comparativo de Mercado</Typography>
-         <Typography variant="p" className="text-sm text-text-tertiary max-w-mx-80 mx-auto font-medium uppercase tracking-tighter">
+         <Typography variant="h3" className="text-xl mb-mx-xs">Comparativo de Mercado</Typography>
+         <Typography variant="p" className="text-sm max-w-mx-80 mx-auto font-medium tracking-tighter">
            Inteligência preditiva em processamento. Os dados de benchmarking regional serão liberados após a consolidação do primeiro ciclo mensal.
          </Typography>
        </div>
@@ -377,15 +377,15 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
         })}
       </div>
 
-      <Card className="p-mx-lg bg-white border border-border-default shadow-mx-md rounded-mx-2xl">
+      <Card className="p-mx-lg bg-white border">
         <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-mx-md mb-mx-lg border-b border-border-subtle pb-mx-md">
           <div className="flex items-start gap-mx-sm">
             <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><Users size={20} /></div>
             <div>
-              <Typography variant="tiny" tone="muted" className="uppercase font-black tracking-mx-widest">
+              <Typography variant="tiny" tone="muted" className="">
                 Visita 1 - Diagnóstico PMR
               </Typography>
-              <Typography variant="h3" className="text-xl font-black text-text-primary uppercase tracking-tight">
+              <Typography variant="h3" className="text-xl tracking-tight">
                 {getInterviewLabel(currentTmpl.form_key, currentTmpl.title)}
               </Typography>
             </div>
@@ -397,24 +397,24 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-md mb-mx-lg">
           <div className="space-y-mx-xs">
-            <Typography as="label" htmlFor={`interview-${currentTmpl.id}-respondent`} variant="tiny" className="font-black uppercase tracking-mx-widest text-text-tertiary">
+            <Typography as="label" htmlFor={`interview-${currentTmpl.id}-respondent`} variant="tiny" className="">
               Respondente
             </Typography>
             <Input
               id={`interview-${currentTmpl.id}-respondent`}
               name={`interview-${currentTmpl.id}-respondent`}
-              className="bg-surface-alt/30 border-border-default focus:bg-white"
+              className="bg-surface-alt/30 focus:bg-white"
               value={respondentName}
               onChange={e => setRespondentName(e.target.value)}
               placeholder="Nome da pessoa entrevistada"
             />
           </div>
           <div className="space-y-mx-xs">
-            <Typography variant="tiny" className="font-black uppercase tracking-mx-widest text-text-tertiary">
+            <Typography variant="tiny" className="">
               Escopo
             </Typography>
             <div className="h-mx-12 rounded-mx-lg border border-border-default bg-surface-alt/30 px-mx-md flex items-center">
-              <Typography variant="p" className="text-sm font-bold text-text-secondary">
+              <Typography variant="p" className="text-sm font-bold">
                 Diagnóstico consolidado da Visita 1.
               </Typography>
             </div>
@@ -426,7 +426,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
             const value = answers[field.key]
             return (
               <div key={field.key} className={cn("space-y-mx-xs p-mx-md bg-surface-alt/30 rounded-mx-xl border border-border-default", field.type === 'textarea' ? 'md:col-span-2' : '')}>
-                <Typography as="label" htmlFor={`interview-${currentTmpl.id}-${field.key}`} variant="p" className="font-black text-xs text-text-secondary uppercase">
+                <Typography as="label" htmlFor={`interview-${currentTmpl.id}-${field.key}`} variant="p" className="text-xs">
                   {field.label}{field.required ? ' *' : ''}
                 </Typography>
 
@@ -495,13 +495,13 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
         </div>
 
         <div className="mt-mx-md space-y-mx-xs">
-          <Typography as="label" htmlFor={`interview-${currentTmpl.id}-summary`} variant="p" className="font-black text-xs text-text-secondary uppercase">
+          <Typography as="label" htmlFor={`interview-${currentTmpl.id}-summary`} variant="p" className="text-xs">
             Resumo para planejamento
           </Typography>
           <Textarea
             id={`interview-${currentTmpl.id}-summary`}
             name={`interview-${currentTmpl.id}-summary`}
-            className="bg-surface-alt/30 border-border-default focus:bg-white min-h-mx-28"
+            className="bg-surface-alt/30 focus:bg-white min-h-mx-28"
             value={summary}
             onChange={e => setSummary(e.target.value)}
             placeholder="Síntese consultiva para alimentar o planejamento estratégico e o plano de ação..."
@@ -512,7 +512,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
           <Button
             type="button"
             variant="primary"
-            className="h-mx-11 px-mx-lg font-black uppercase tracking-mx-widest text-xs shadow-mx-md"
+            className="h-mx-11 px-mx-lg text-xs"
             loading={saving}
             onClick={handleSaveInterview}
             icon={<Save size={16} />}

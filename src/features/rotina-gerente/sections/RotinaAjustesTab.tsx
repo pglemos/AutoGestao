@@ -31,7 +31,7 @@ export function RotinaAjustesTab({
       exit={{ opacity: 0, y: -20 }}
       className="space-y-mx-lg"
     >
-      <Card className="rounded-mx-lg border border-border-subtle p-mx-md shadow-mx-sm bg-white relative overflow-hidden">
+      <Card className="border p-mx-md bg-white relative overflow-hidden">
         <div
           className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-32 -mt-32"
           aria-hidden="true"
@@ -42,13 +42,13 @@ export function RotinaAjustesTab({
               <ShieldAlert size={32} />
             </div>
             <div>
-              <Typography variant="h2" className="uppercase tracking-tighter leading-none">
+              <Typography variant="h2" className="tracking-tighter leading-none">
                 Auditoria de Ajustes
               </Typography>
               <Typography
                 variant="caption"
                 tone="muted"
-                className="uppercase tracking-widest mt-1 font-black"
+                className="mt-1"
               >
                 SOLICITAÇÕES RETROATIVAS PENDENTES
               </Typography>
@@ -69,7 +69,7 @@ export function RotinaAjustesTab({
               <Typography
                 variant="p"
                 tone="muted"
-                className="uppercase tracking-widest font-black"
+                className=""
               >
                 Malha 100% Sincronizada
               </Typography>
@@ -78,7 +78,7 @@ export function RotinaAjustesTab({
             pendingRequests.map((req) => (
               <Card
                 key={req.id}
-                className="rounded-mx-lg border border-border-subtle bg-surface-alt/30 hover:bg-white hover:shadow-mx-sm transition-all group p-mx-md"
+                className="border bg-surface-alt/30 hover:bg-white hover:shadow-mx-sm transition-all group p-mx-md"
               >
                 <div className="flex flex-col lg:flex-row gap-mx-lg">
                   <div className="flex-1 space-y-mx-md">
@@ -91,13 +91,13 @@ export function RotinaAjustesTab({
                           className="w-mx-10 h-mx-10 rounded-mx-lg bg-brand-primary text-white shadow-inner"
                         />
                         <div>
-                          <Typography variant="h3" className="text-base uppercase font-black">
+                          <Typography variant="h3" className="text-base">
                             {req.seller?.name || 'Nome não informado'}
                           </Typography>
                           <Typography
                             variant="tiny"
                             tone="muted"
-                            className="font-black uppercase"
+                            className=""
                           >
                             Solicitado em {new Date(req.created_at).toLocaleDateString('pt-BR')}
                           </Typography>
@@ -113,7 +113,7 @@ export function RotinaAjustesTab({
                         <MessageSquare size={14} className="text-brand-primary" />
                         <Typography
                           variant="tiny"
-                          className="font-black uppercase tracking-widest text-brand-primary"
+                          className=""
                         >
                           Justificativa Operacional
                         </Typography>
@@ -128,7 +128,7 @@ export function RotinaAjustesTab({
                     <div className="rounded-mx-lg border border-status-warning/20 bg-status-warning-surface p-mx-md">
                       <Typography
                         variant="tiny"
-                        className="mb-mx-xs block font-black uppercase tracking-widest text-status-warning"
+                        className="mb-mx-xs block text-status-warning"
                       >
                         Decisão crítica
                       </Typography>
@@ -138,7 +138,7 @@ export function RotinaAjustesTab({
                       </Typography>
                       <Typography
                         variant="tiny"
-                        className="mt-mx-xs block font-black uppercase text-status-warning"
+                        className="mt-mx-xs block text-status-warning"
                       >
                         Referência: {req.requested_values.reference_date || 'não informada'}
                       </Typography>
@@ -149,7 +149,7 @@ export function RotinaAjustesTab({
                     <Typography
                       variant="tiny"
                       tone="muted"
-                      className="ml-2 font-black uppercase tracking-widest"
+                      className="ml-2"
                     >
                       Valores Solicitados
                     </Typography>
@@ -186,13 +186,13 @@ export function RotinaAjustesTab({
                           key={val.l}
                           className="bg-white p-mx-sm rounded-mx-lg border border-border-subtle shadow-sm text-center"
                         >
-                          <Typography variant="tiny" tone="muted" className="font-black block">
+                          <Typography variant="tiny" tone="muted" className="block">
                             {val.l}
                           </Typography>
                           <Typography
                             variant="h3"
                             tone={val.t}
-                            className="text-xl tabular-nums font-black"
+                            className="text-xl tabular-nums"
                           >
                             {val.v}
                           </Typography>

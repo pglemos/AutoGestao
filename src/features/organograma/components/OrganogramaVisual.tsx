@@ -54,7 +54,7 @@ export function OrganogramaVisual({ lojaId }: { lojaId: string }) {
   return (
     <div className="space-y-mx-lg">
       <form onSubmit={handleAdd} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-        <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">Adicionar cargo ao organograma</Typography>
+        <Typography variant="caption" tone="muted" className="">Adicionar cargo ao organograma</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <label className="block space-y-mx-xs md:col-span-1">
             <span className="block px-1 text-xs font-black uppercase tracking-widest text-text-tertiary">Cargo</span>

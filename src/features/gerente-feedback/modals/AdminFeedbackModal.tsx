@@ -102,7 +102,7 @@ export function AdminFeedbackModal({
           aria-modal="true"
           aria-labelledby="feedback-admin-title"
         >
-          <Card className="w-full max-w-mx-4xl max-h-full overflow-y-auto no-scrollbar shadow-mx-2xl border-none flex flex-col bg-white rounded-mx-2xl">
+          <Card className="w-full max-w-mx-4xl max-h-full overflow-y-auto no-scrollbar shadow-mx-2xl border-none flex flex-col bg-white">
             <header className="p-mx-lg md:p-10 border-b border-border-default flex items-center justify-between sticky top-mx-0 bg-white z-10">
               <div className="flex items-center gap-mx-sm">
                 <div className="w-mx-xl h-mx-xl rounded-mx-2xl bg-brand-primary text-white flex items-center justify-center shadow-mx-lg">
@@ -112,14 +112,14 @@ export function AdminFeedbackModal({
                   <Typography
                     id="feedback-admin-title"
                     variant="h2"
-                    className="uppercase tracking-tighter"
+                    className="tracking-tighter"
                   >
                     Nova Mentoria
                   </Typography>
                   <Typography
                     variant="tiny"
                     tone="muted"
-                    className="font-black uppercase"
+                    className=""
                   >
                     Selecione a loja e o especialista
                   </Typography>
@@ -142,7 +142,7 @@ export function AdminFeedbackModal({
                     htmlFor="feedback-admin-store"
                     variant="tiny"
                     tone="muted"
-                    className="ml-2 uppercase font-black tracking-widest"
+                    className="ml-2"
                   >
                     Loja
                   </Typography>
@@ -176,7 +176,7 @@ export function AdminFeedbackModal({
                     htmlFor="feedback-admin-seller"
                     variant="tiny"
                     tone="muted"
-                    className="ml-2 uppercase font-black tracking-widest"
+                    className="ml-2"
                   >
                     Especialista
                   </Typography>
@@ -221,7 +221,7 @@ export function AdminFeedbackModal({
                   <Typography
                     variant="tiny"
                     tone="muted"
-                    className="ml-2 uppercase font-black tracking-widest"
+                    className="ml-2"
                   >
                     Semana
                   </Typography>
@@ -253,13 +253,13 @@ export function AdminFeedbackModal({
                           <Typography
                             variant="tiny"
                             tone="muted"
-                            className="mb-1 block uppercase text-mx-micro font-black"
+                            className="mb-1 block text-mx-micro"
                           >
                             {item.label}
                           </Typography>
                           <Typography
                             variant="h2"
-                            className="text-xl font-mono-numbers font-black"
+                            className="text-xl font-mono-numbers"
                           >
                             {item.val}
                           </Typography>
@@ -370,14 +370,14 @@ export function AdminFeedbackModal({
               <Button
                 variant="ghost"
                 onClick={onClose}
-                className="h-mx-14 px-8 rounded-mx-full font-black uppercase tracking-widest"
+                className="h-mx-14 px-8 rounded-mx-full"
               >
                 CANCELAR
               </Button>
               <Button
                 onClick={onSubmit}
                 disabled={saving || !formData.seller_id || !formData.action}
-                className="h-mx-14 px-12 rounded-mx-full shadow-mx-xl font-black uppercase tracking-widest"
+                className="h-mx-14 px-12 rounded-mx-full"
               >
                 {saving ? (
                   <RefreshCw className="animate-spin mr-2" />

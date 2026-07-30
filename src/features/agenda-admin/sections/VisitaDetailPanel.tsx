@@ -26,9 +26,9 @@ export function VisitaDetailPanel({
   onClearSelection, onScheduleVisit, onBlockDate, onEditEvent,
 }: VisitaDetailPanelProps) {
   return (
-    <Card className="border-none shadow-mx-md bg-white overflow-hidden">
+    <Card className="border-none bg-white overflow-hidden">
       <div className="p-mx-md border-b border-border-default flex items-center justify-between">
-        <Typography variant="caption" className="font-black uppercase tracking-widest">
+        <Typography variant="caption" className="">
           {selectedDate
             ? format(selectedDate, "dd 'de' MMMM", { locale: ptBR })
             : 'Selecione um dia'}
@@ -84,7 +84,7 @@ export function VisitaDetailPanel({
                   <div className="p-mx-sm rounded-mx-lg border border-border-default hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all group overflow-hidden">
                     <div className="flex items-center gap-mx-xs mb-1">
                       <div className={cn('w-2 h-2 rounded-mx-full', getVisitDotColor(visit.status))} />
-                      <Typography variant="tiny" className="font-black">
+                      <Typography variant="tiny" className="">
                         {format(scheduledDate, 'HH:mm')}
                       </Typography>
                       <Typography variant="tiny" tone="muted">• {visit.duration_hours}h</Typography>
@@ -102,17 +102,17 @@ export function VisitaDetailPanel({
                     {(visit.visit_reason || visit.target_audience || visit.product_name) && (
                       <div className="mt-mx-xs flex flex-wrap gap-mx-xs">
                         {visit.visit_reason && (
-                          <Badge variant="outline" className="max-w-full overflow-hidden text-mx-nano uppercase tracking-widest">
+                          <Badge variant="outline" className="max-w-full overflow-hidden text-mx-nano">
                             <span className="block max-w-full truncate">{visit.visit_reason}</span>
                           </Badge>
                         )}
                         {visit.target_audience && (
-                          <Badge variant="ghost" className="max-w-full overflow-hidden text-mx-nano uppercase tracking-widest">
+                          <Badge variant="ghost" className="max-w-full overflow-hidden text-mx-nano">
                             <span className="block max-w-full truncate">{visit.target_audience}</span>
                           </Badge>
                         )}
                         {visit.product_name && (
-                          <Badge variant="brand" className="max-w-full overflow-hidden text-mx-nano uppercase tracking-widest">
+                          <Badge variant="brand" className="max-w-full overflow-hidden text-mx-nano">
                             <span className="block max-w-full truncate">{visit.product_name}</span>
                           </Badge>
                         )}
@@ -137,7 +137,7 @@ export function VisitaDetailPanel({
                 >
                   <div className="flex items-center gap-mx-xs mb-1">
                     <CalendarDays size={12} className="text-brand-primary shrink-0" />
-                    <Typography variant="tiny" className="font-black">{format(startsAt, 'HH:mm')}</Typography>
+                    <Typography variant="tiny" className="">{format(startsAt, 'HH:mm')}</Typography>
                     <Badge variant="outline" className="text-mx-nano">{getEventTypeLabel(event.event_type)}</Badge>
                   </div>
                   <Typography variant="tiny" className="font-bold truncate block">{event.title}</Typography>
@@ -147,17 +147,17 @@ export function VisitaDetailPanel({
                   {(event.visit_reason || event.target_audience || event.product_name) && (
                     <div className="mt-mx-xs flex flex-wrap gap-mx-xs">
                       {event.visit_reason && (
-                        <Badge variant="outline" className="max-w-full overflow-hidden text-mx-nano uppercase tracking-widest">
+                        <Badge variant="outline" className="max-w-full overflow-hidden text-mx-nano">
                           <span className="block max-w-full truncate">{event.visit_reason}</span>
                         </Badge>
                       )}
                       {event.target_audience && (
-                        <Badge variant="ghost" className="max-w-full overflow-hidden text-mx-nano uppercase tracking-widest">
+                        <Badge variant="ghost" className="max-w-full overflow-hidden text-mx-nano">
                           <span className="block max-w-full truncate">{event.target_audience}</span>
                         </Badge>
                       )}
                       {event.product_name && (
-                        <Badge variant="brand" className="max-w-full overflow-hidden text-mx-nano uppercase tracking-widest">
+                        <Badge variant="brand" className="max-w-full overflow-hidden text-mx-nano">
                           <span className="block max-w-full truncate">{event.product_name}</span>
                         </Badge>
                       )}

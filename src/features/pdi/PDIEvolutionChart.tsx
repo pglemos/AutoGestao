@@ -67,8 +67,8 @@ export function PDIEvolutionChart({ evolution }: PDIEvolutionChartProps) {
 
   if (!evolution.comparavel) {
     return (
-      <Card className="mt-mx-sm rounded-mx-lg border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
-        <Typography variant="h3" className="text-base uppercase tracking-normal">
+      <Card className="mt-mx-sm border bg-white p-mx-lg">
+        <Typography variant="h3" className="text-base tracking-normal">
           Grafico de Evolucao
         </Typography>
         <Typography variant="caption" tone="muted" className="mt-1 block normal-case tracking-normal">
@@ -81,8 +81,8 @@ export function PDIEvolutionChart({ evolution }: PDIEvolutionChartProps) {
   const colors = chartSeriesArray()
 
   return (
-    <Card className="mt-mx-sm rounded-mx-lg border border-border-subtle bg-white p-mx-lg shadow-mx-sm">
-      <Typography variant="h3" className="mb-mx-md text-base uppercase tracking-normal">
+    <Card className="mt-mx-sm border bg-white p-mx-lg">
+      <Typography variant="h3" className="mb-mx-md text-base tracking-normal">
         Evolucao de Competencias entre Sessoes
       </Typography>
 

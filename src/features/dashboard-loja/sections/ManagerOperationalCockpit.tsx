@@ -105,10 +105,10 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
       <ManagerHeader storeName={data.metrics.storeName} periodLabel={formatPeriodLabel(data.referenceDate)} />
 
       <section className="grid grid-cols-1 gap-mx-lg md:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-[minmax(320px,1.5fr)_repeat(4,minmax(190px,1fr))]" aria-label="Indicadores gerenciais">
-        <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+        <Card className="border bg-white p-mx-md">
           <div className="flex items-center gap-mx-sm">
             <MetricIcon tone="brand"><Target size={22} /></MetricIcon>
-            <Typography variant="h3" className="uppercase tracking-tight">Meta do Mês</Typography>
+            <Typography variant="h3" className="tracking-tight">Meta do Mês</Typography>
           </div>
           <div className="mt-mx-lg grid grid-cols-3 divide-x divide-border-subtle text-center">
             <MiniStat label="Meta" value={formatInteger(data.metrics.goalValue)} detail="veículos" />
@@ -117,7 +117,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
           </div>
           <ProgressBar value={data.metrics.attainment} className="mt-mx-lg" tone={data.metrics.attainment >= 80 ? 'success' : 'brand'} />
           <div className="mt-mx-sm flex flex-col gap-mx-xs sm:flex-row sm:items-center sm:justify-between">
-            <Typography variant="tiny" tone="muted" className="font-black">{data.metrics.attainment}% da meta alcançada</Typography>
+            <Typography variant="tiny" tone="muted" className="">{data.metrics.attainment}% da meta alcançada</Typography>
             <Typography variant="tiny" tone={gap > 0 ? 'warning' : 'success'} className="font-black">{gap > 0 ? `Faltam ${gap} veículos` : 'Meta atingida'}</Typography>
           </div>
         </Card>
@@ -146,9 +146,9 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
           icon={<CalendarDays size={22} />}
           tone={data.metrics.totalAgd > 0 ? 'success' : 'warning'}
         />
-        <Card className="min-h-[190px] rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+        <Card className="min-h-[190px] border bg-white p-mx-md">
           <div className="flex items-center justify-between gap-mx-sm">
-            <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">MX Score Loja</Typography>
+            <Typography variant="tiny" tone="muted" className="">MX Score Loja</Typography>
             <Gauge size={18} className="text-text-tertiary" />
           </div>
           <div className="mt-mx-md flex items-center justify-center">
@@ -161,7 +161,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
       </section>
 
       <section className="grid grid-cols-1 gap-mx-lg xl:grid-cols-2 2xl:grid-cols-12" aria-label="Operação da equipe">
-        <Card className="rounded-mx-lg border border-border-subtle bg-white shadow-mx-sm xl:col-span-1 2xl:col-span-5">
+        <Card className="border bg-white xl:col-span-1 2xl:col-span-5">
           <PanelHeader title="Desempenho da Equipe" action="Ver equipe" onAction={() => navigate('?tab=equipe')} />
           <div className="overflow-x-auto">
             <table className="w-full min-w-[620px]">
@@ -187,11 +187,11 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
           </div>
         </Card>
 
-        <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm xl:col-span-1 2xl:col-span-4">
+        <Card className="border bg-white p-mx-md xl:col-span-1 2xl:col-span-4">
           <div className="flex items-center justify-between gap-mx-md">
             <div>
-              <Typography variant="h3" className="uppercase tracking-tight">Funil de Vendas da Equipe</Typography>
-              <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-black uppercase tracking-widest">Leads, agenda, visitas e vendas</Typography>
+              <Typography variant="h3" className="tracking-tight">Funil de Vendas da Equipe</Typography>
+              <Typography variant="tiny" tone="muted" className="mt-mx-tiny block">Leads, agenda, visitas e vendas</Typography>
             </div>
             <Badge variant="outline" className="shrink-0 rounded-mx-full">Mês atual</Badge>
           </div>
@@ -201,13 +201,13 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
             ))}
           </div>
           <div className="mt-mx-lg flex items-center justify-between rounded-mx-lg bg-mx-indigo-50 px-mx-md py-mx-sm">
-            <Typography variant="tiny" tone="brand" className="font-black uppercase tracking-widest">Total de Vendas: {formatInteger(data.funilData.vnd_total)}</Typography>
-            <Typography variant="tiny" tone="brand" className="font-black uppercase tracking-widest">Conversão geral</Typography>
+            <Typography variant="tiny" tone="brand" className="">Total de Vendas: {formatInteger(data.funilData.vnd_total)}</Typography>
+            <Typography variant="tiny" tone="brand" className="">Conversão geral</Typography>
             <Typography variant="h3" tone={data.funilData.tx_visita_vnd >= data.funnelBenchmarks.visitaVnd ? 'success' : 'error'}>{data.funilData.tx_visita_vnd}%</Typography>
           </div>
         </Card>
 
-        <Card className="rounded-mx-lg border border-border-subtle bg-white shadow-mx-sm xl:col-span-2 2xl:col-span-3">
+        <Card className="border bg-white xl:col-span-2 2xl:col-span-3">
           <PanelHeader title="Alertas Importantes" badge={alerts.length} action="Ver todos" onAction={() => navigate('/rotina')} />
           <div className="space-y-mx-sm p-mx-lg pt-0">
             {alerts.slice(0, 6).map(alert => (
@@ -218,9 +218,9 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
       </section>
 
       <section className="grid grid-cols-1 gap-mx-lg xl:grid-cols-2 2xl:grid-cols-12" aria-label="Agenda e engajamento">
-        <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm xl:col-span-2 2xl:col-span-6">
+        <Card className="border bg-white p-mx-md xl:col-span-2 2xl:col-span-6">
           <div className="flex items-center justify-between gap-mx-md">
-            <Typography variant="h3" className="uppercase tracking-tight">Engajamento da Equipe</Typography>
+            <Typography variant="h3" className="tracking-tight">Engajamento da Equipe</Typography>
             <Badge variant={teamEngagement >= 75 ? 'success' : teamEngagement >= 60 ? 'warning' : 'danger'} className="rounded-mx-full">{teamEngagement}%</Badge>
           </div>
           <div className="mt-mx-lg grid grid-cols-1 gap-mx-lg lg:grid-cols-[auto_1fr] lg:items-center">
@@ -235,9 +235,9 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
           </div>
         </Card>
 
-        <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm xl:col-span-1 2xl:col-span-3">
+        <Card className="border bg-white p-mx-md xl:col-span-1 2xl:col-span-3">
           <div className="flex items-center justify-between gap-mx-md">
-            <Typography variant="h3" className="uppercase tracking-tight">Ranking da Loja</Typography>
+            <Typography variant="h3" className="tracking-tight">Ranking da Loja</Typography>
             <button type="button" onClick={() => navigate('/classificacao')} className="text-mx-tiny font-black uppercase tracking-widest text-brand-primary">Ver ranking</button>
           </div>
           <div className="mt-mx-lg space-y-mx-sm">
@@ -249,8 +249,8 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
                   </span>
                   <Avatar src={row.avatar_url || undefined} alt={`Avatar de ${row.user_name}`} fallback={row.user_name} size="sm" className="rounded-mx-lg" />
                   <div className="min-w-0">
-                    <Typography variant="p" className="truncate font-black">{row.user_name}</Typography>
-                    <Typography variant="tiny" tone="muted" className="block font-black uppercase tracking-tight">{index + 1}º lugar</Typography>
+                    <Typography variant="p" className="truncate">{row.user_name}</Typography>
+                    <Typography variant="tiny" tone="muted" className="block tracking-tight">{index + 1}º lugar</Typography>
                   </div>
                 </div>
                 <Typography variant="mono" tone="brand">{row.vnd_total}</Typography>
@@ -260,7 +260,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
           </div>
         </Card>
 
-        <Card className="rounded-mx-lg border border-border-subtle bg-white shadow-mx-sm xl:col-span-1 2xl:col-span-3">
+        <Card className="border bg-white xl:col-span-1 2xl:col-span-3">
           <PanelHeader title="Agenda de Hoje" action="Abrir rotina" onAction={() => navigate('/rotina')} />
           <div className="space-y-mx-sm p-mx-lg pt-0">
             {data.metrics.totalAgd > 0 ? (
@@ -287,8 +287,8 @@ function ManagerHeader({ storeName, periodLabel }: { storeName: string; periodLa
       subtitle={`${storeName.toUpperCase()} · DESEMPENHO DA EQUIPE`}
       actions={(
         <div className="flex flex-wrap gap-mx-sm">
-          <Badge variant="outline" className="h-mx-11 rounded-mx-xl px-mx-md border-border-subtle bg-white text-text-secondary">Período: {periodLabel}</Badge>
-          <Button type="button" variant="outline" size="sm" className="h-mx-11 rounded-mx-xl bg-white border-border-subtle hover:bg-surface-alt">
+          <Badge variant="outline" className="h-mx-11 px-mx-md bg-white">Período: {periodLabel}</Badge>
+          <Button type="button" variant="outline" size="sm" className="h-mx-11 bg-white hover:bg-surface-alt">
             Filtros
           </Button>
         </div>
@@ -314,12 +314,12 @@ function ManagerKpiCard({
 }) {
   const arrow = tone === 'success' ? '↑' : tone === 'danger' ? '↓' : ''
   return (
-    <Card className="min-h-[190px] rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm flex flex-col">
+    <Card className="min-h-[190px] border bg-white p-mx-md flex flex-col">
       <div className="flex items-center gap-mx-sm">
         <MetricIcon tone={tone}>{icon}</MetricIcon>
-        <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-widest">{title}</Typography>
+        <Typography variant="tiny" tone="muted" className="">{title}</Typography>
       </div>
-      <Typography variant="h1" className="mt-mx-md text-4xl font-mono-numbers text-text-primary">{value}</Typography>
+      <Typography variant="h1" className="mt-mx-md text-4xl font-mono-numbers">{value}</Typography>
       <Typography variant="p" tone="muted" className="mt-mx-xs text-sm">{detail}</Typography>
       <div className={cn('mt-mx-md rounded-mx-xl px-mx-md py-mx-sm text-center text-mx-tiny font-black uppercase tracking-widest flex items-center justify-center gap-mx-xs', toneSurface(tone))}>
         {arrow && <span aria-hidden="true">{arrow}</span>}
@@ -361,7 +361,7 @@ function TeamRow({ row }: { row: RankingEntry }) {
       <td className="px-mx-md py-mx-sm">
         <div className="flex min-w-0 items-center gap-mx-sm">
           <Avatar src={row.avatar_url || undefined} alt={`Avatar de ${row.user_name}`} fallback={row.user_name} size="sm" className="rounded-mx-lg" />
-          <Typography variant="p" className="truncate font-black">{row.user_name}</Typography>
+          <Typography variant="p" className="truncate">{row.user_name}</Typography>
         </div>
       </td>
       <td className="px-mx-md py-mx-sm text-center"><Typography variant="mono" tone="brand">{row.vnd_total}</Typography></td>
@@ -398,7 +398,7 @@ function PanelHeader({
   return (
     <div className="flex items-center justify-between gap-mx-md p-mx-lg">
       <div className="flex items-center gap-mx-sm">
-        <Typography variant="h3" className="uppercase tracking-tight">{title}</Typography>
+        <Typography variant="h3" className="tracking-tight">{title}</Typography>
         {typeof badge === 'number' && <Badge variant={badge > 0 ? 'danger' : 'success'} className="rounded-mx-full px-2 py-0.5">{badge}</Badge>}
       </div>
       {action && onAction && (
@@ -416,10 +416,10 @@ function AlertItem({ alert }: { alert: OwnerPerformanceAlert }) {
     <div className="flex gap-mx-sm rounded-mx-lg border border-border-subtle bg-surface-alt p-mx-sm">
       <MetricIcon tone={tone} className="h-mx-9 w-mx-9"><AlertTriangle size={16} /></MetricIcon>
       <div className="min-w-0">
-        <Typography variant="p" className="font-black leading-tight">{alert.title}</Typography>
+        <Typography variant="p" className="leading-tight">{alert.title}</Typography>
         <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-bold normal-case tracking-normal">{alert.description}</Typography>
-        <Typography variant="tiny" tone="brand" className="mt-mx-xs block font-black normal-case tracking-normal">{alert.recommendation}</Typography>
-        <Typography variant="tiny" className="mt-mx-xs block font-black uppercase tracking-tight">{alert.action}</Typography>
+        <Typography variant="tiny" tone="brand" className="mt-mx-xs block normal-case tracking-normal">{alert.recommendation}</Typography>
+        <Typography variant="tiny" className="mt-mx-xs block tracking-tight">{alert.action}</Typography>
       </div>
     </div>
   )
@@ -440,16 +440,16 @@ function FunnelSegmentRow({
         <MetricIcon tone={tone} className="h-mx-8 w-mx-8 rounded-mx-lg">
           <Gauge size={14} />
         </MetricIcon>
-        <Typography variant="tiny" tone={tone === 'success' ? 'success' : tone === 'warning' ? 'warning' : 'brand'} className="font-black uppercase tracking-widest">{label}</Typography>
+        <Typography variant="tiny" tone={tone === 'success' ? 'success' : tone === 'warning' ? 'warning' : 'brand'} className="">{label}</Typography>
       </div>
       <div className={cn('mt-mx-md grid gap-mx-sm', stages.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-4')}>
         {stages.map((stage, index) => (
           <div key={stage.label} className="relative min-w-0 rounded-mx-lg bg-surface-alt px-mx-sm py-mx-xs text-center">
             {index > 0 && <span className="absolute -left-mx-sm top-1/2 hidden -translate-y-1/2 text-text-tertiary md:block">&gt;</span>}
-            <Typography variant="tiny" tone="muted" className="block truncate font-black uppercase tracking-tight">{stage.label}</Typography>
+            <Typography variant="tiny" tone="muted" className="block truncate tracking-tight">{stage.label}</Typography>
             <div className="mt-mx-xs flex items-baseline justify-center gap-mx-xs">
               <Typography variant="h3" className="font-mono-numbers">{formatInteger(stage.value)}</Typography>
-              {typeof stage.pct === 'number' && <Typography variant="tiny" tone="muted" className="font-black">{stage.pct}%</Typography>}
+              {typeof stage.pct === 'number' && <Typography variant="tiny" tone="muted" className="">{stage.pct}%</Typography>}
             </div>
           </div>
         ))}
@@ -473,7 +473,7 @@ function EngagementMetric({ label, value, icon, accent = 'info' }: { label: stri
       <div className={cn('mx-auto flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-lg shadow-mx-sm', styles.iconBg, styles.iconText)}>
         {icon}
       </div>
-      <Typography variant="tiny" tone="muted" className="mt-mx-sm block min-h-[28px] font-black uppercase tracking-tight leading-tight">{label}</Typography>
+      <Typography variant="tiny" tone="muted" className="mt-mx-sm block min-h-[28px] tracking-tight leading-tight">{label}</Typography>
       <Typography variant="h3" className={cn('mt-mx-xs font-mono-numbers', styles.iconText)}>
         {clamped}%
       </Typography>
@@ -498,7 +498,7 @@ function GaugeScore({ value, label, size = 'md' }: { value: number; label: strin
     >
       <div className={cn('flex flex-col items-center justify-center rounded-mx-full bg-white text-center', inner)}>
         <Typography variant={size === 'lg' ? 'h1' : 'h2'} className="leading-none font-mono-numbers">{clamped}%</Typography>
-        <Typography variant="tiny" tone={tone === 'success' ? 'success' : tone === 'warning' ? 'warning' : 'error'} className="mt-mx-tiny block font-black uppercase tracking-tight">{label}</Typography>
+        <Typography variant="tiny" tone={tone === 'success' ? 'success' : tone === 'warning' ? 'warning' : 'error'} className="mt-mx-tiny block tracking-tight">{label}</Typography>
       </div>
     </div>
   )
@@ -561,7 +561,7 @@ function AgendaItem({ time, title, detail }: { time: string; title: string; deta
         {time}
       </div>
       <div className="min-w-0">
-        <Typography variant="p" className="font-black leading-tight">{title}</Typography>
+        <Typography variant="p" className="leading-tight">{title}</Typography>
         <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-bold normal-case tracking-normal">{detail}</Typography>
       </div>
     </div>
@@ -571,7 +571,7 @@ function AgendaItem({ time, title, detail }: { time: string; title: string; deta
 function MiniStat({ label, value, detail }: { label: string; value: string | number; detail?: string }) {
   return (
     <div className="min-w-0 px-mx-xs">
-      <Typography variant="tiny" tone="muted" className="block text-[10px] font-black uppercase leading-tight tracking-normal sm:text-xs">{label}</Typography>
+      <Typography variant="tiny" tone="muted" className="block text-[10px] leading-tight tracking-normal sm:text-xs">{label}</Typography>
       <Typography variant="h3" className="mt-mx-xs truncate font-mono-numbers">{value}</Typography>
       {detail && <Typography variant="tiny" tone="muted" className="block font-bold normal-case tracking-normal">{detail}</Typography>}
     </div>

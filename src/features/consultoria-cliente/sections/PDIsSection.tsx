@@ -51,12 +51,12 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg animate-in fade-in slide-in-from-bottom-4 duration-500 pb-mx-xl">
       {pdis.length === 0 && visitPdiAttachments.length === 0 && (
-        <Card className="p-mx-lg border-dashed text-center opacity-50 md:col-span-2 rounded-mx-2xl">
+        <Card className="p-mx-lg border-dashed text-center opacity-50 md:col-span-2">
           <Typography variant="p">Nenhum PDI registrado para esta loja.</Typography>
         </Card>
       )}
       {visitPdiAttachments.map((attachment) => (
-        <Card key={`visit-pdi-${attachment.id}`} className="p-mx-lg bg-white border border-border-default shadow-mx-md rounded-mx-2xl">
+        <Card key={`visit-pdi-${attachment.id}`} className="p-mx-lg bg-white border">
           <div className="flex justify-between items-start gap-mx-md mb-mx-md">
             <div className="min-w-0">
               <Typography variant="h3" className="text-lg truncate">{attachment.filename}</Typography>
@@ -88,7 +88,7 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
         const canManagerSign = (isPerfilInternoMx(role) || role === 'gerente') && !pdi.manager_acknowledged_at
 
         return (
-          <Card key={pdi.id} className="p-mx-lg bg-white border border-border-default shadow-mx-md hover:border-brand-primary/30 transition-all group rounded-mx-2xl">
+          <Card key={pdi.id} className="p-mx-lg bg-white border hover:border-brand-primary/30 transition-all group">
             <div className="flex justify-between items-start mb-mx-md">
               <div>
                 <Typography variant="h3" className="text-lg group-hover:text-brand-primary transition-colors">{pdi.seller_name || 'Nome não informado'}</Typography>
@@ -99,16 +99,16 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
 
             <div className="space-y-mx-md mb-mx-md">
               <div className="p-mx-md bg-surface-alt/30 rounded-mx-xl">
-                <Typography variant="tiny" className="font-bold text-text-tertiary uppercase mb-1 block">Objetivo 6 Meses</Typography>
+                <Typography variant="tiny" className="font-bold mb-1 block">Objetivo 6 Meses</Typography>
                 <Typography variant="p" className="text-sm font-bold italic">"{pdi.meta_6m}"</Typography>
               </div>
               <div className="grid grid-cols-2 gap-mx-md">
                 <div>
-                  <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Meta 1 Ano</Typography>
+                  <Typography variant="tiny" className="font-bold">Meta 1 Ano</Typography>
                   <Typography variant="p" className="text-xs">{pdi.meta_12m || '-'}</Typography>
                 </div>
                 <div>
-                  <Typography variant="tiny" className="font-bold text-text-tertiary uppercase">Meta 2 Anos</Typography>
+                  <Typography variant="tiny" className="font-bold">Meta 2 Anos</Typography>
                   <Typography variant="p" className="text-xs">{pdi.meta_24m || '-'}</Typography>
                 </div>
               </div>
@@ -119,12 +119,12 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
                 {pdi.seller_acknowledged_at ? (
                   <div className="flex items-center gap-mx-xs text-status-success">
                     <ShieldCheck className="w-mx-4 h-mx-4" />
-                    <Typography variant="tiny" className="font-black uppercase tracking-widest text-mx-micro">Vendedor OK</Typography>
+                    <Typography variant="tiny" className="text-mx-micro">Vendedor OK</Typography>
                   </div>
                 ) : canSellerSign ? (
-                  <Button variant="primary" size="sm" className="w-full font-black text-mx-micro" onClick={() => acknowledge(pdi.id, 'seller')}>ASSINAR VENDEDOR</Button>
+                  <Button variant="primary" size="sm" className="w-full text-mx-micro" onClick={() => acknowledge(pdi.id, 'seller')}>ASSINAR VENDEDOR</Button>
                 ) : (
-                  <Typography variant="tiny" className="uppercase font-bold text-mx-micro opacity-30">Pendente Vendedor</Typography>
+                  <Typography variant="tiny" className="font-bold text-mx-micro opacity-30">Pendente Vendedor</Typography>
                 )}
               </div>
 
@@ -132,12 +132,12 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
                 {pdi.manager_acknowledged_at ? (
                   <div className="flex items-center gap-mx-xs text-status-success">
                     <ShieldCheck className="w-mx-4 h-mx-4" />
-                    <Typography variant="tiny" className="font-black uppercase tracking-widest text-mx-micro">Gestor OK</Typography>
+                    <Typography variant="tiny" className="text-mx-micro">Gestor OK</Typography>
                   </div>
                 ) : canManagerSign ? (
-                  <Button variant="outline" size="sm" className="w-full font-black text-mx-micro border-brand-primary text-brand-primary" onClick={() => acknowledge(pdi.id, 'manager')}>ASSINAR GESTOR</Button>
+                  <Button variant="outline" size="sm" className="w-full text-mx-micro border-brand-primary" onClick={() => acknowledge(pdi.id, 'manager')}>ASSINAR GESTOR</Button>
                 ) : (
-                  <Typography variant="tiny" className="uppercase font-bold text-mx-micro opacity-30">Pendente Gestor</Typography>
+                  <Typography variant="tiny" className="font-bold text-mx-micro opacity-30">Pendente Gestor</Typography>
                 )}
               </div>
             </div>

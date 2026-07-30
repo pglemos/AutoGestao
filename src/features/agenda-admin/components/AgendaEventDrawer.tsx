@@ -98,7 +98,7 @@ export function AgendaEventDrawer({
             <div className="flex h-14 w-14 items-center justify-center rounded-mx-full bg-surface-alt text-text-tertiary mb-3">
               <CalendarDays size={28} />
             </div>
-            <Typography variant="p" className="font-semibold text-text-primary">Nenhum compromisso agendado</Typography>
+            <Typography variant="p" className="font-semibold">Nenhum compromisso agendado</Typography>
             <Typography variant="tiny" tone="muted" className="mt-1 max-w-[240px]">
               Este dia está livre na agenda. Clique acima para criar um agendamento ou bloqueio.
             </Typography>

@@ -78,7 +78,7 @@ export function DREForm({
       </div>
       <div className="flex gap-mx-sm">
         <Button variant="outline" size="sm" onClick={handleClose}>Cancelar</Button>
-        <Button size="sm" className="bg-brand-primary text-white" onClick={onSubmit} disabled={loading}>
+        <Button size="sm" className="text-white" onClick={onSubmit} disabled={loading}>
           {loading ? 'Salvando...' : 'Salvar'}
         </Button>
       </div>
@@ -96,7 +96,7 @@ export function DREForm({
     >
       <div className="space-y-mx-md mb-mx-lg">
         <div className="max-w-xs">
-          <Typography as="label" variant="caption" className="block mb-1 font-black uppercase tracking-widest">Mês de Referência</Typography>
+          <Typography as="label" variant="caption" className="block mb-1">Mês de Referência</Typography>
           <Input
             type="month"
             value={values.reference_date || ''}
@@ -122,7 +122,7 @@ export function DREForm({
               <div className="p-mx-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-sm">
                 {sec.fields.map((f) => (
                   <div key={f.key}>
-                    <Typography as="label" variant="caption" className="block mb-1 font-black uppercase tracking-widest">{f.label} (R$)</Typography>
+                    <Typography as="label" variant="caption" className="block mb-1">{f.label} (R$)</Typography>
                     <Input
                       type="number"
                       value={values[f.key] || ''}
@@ -140,22 +140,22 @@ export function DREForm({
       {computedPreview && (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-mx-sm mt-mx-lg p-mx-md bg-brand-primary/5 rounded-mx-lg border border-brand-primary/20">
           <div>
-            <Typography variant="tiny" tone="muted" className="uppercase">Lucro Bruto</Typography>
-            <Typography variant="h3" className="text-brand-primary font-black">R$ {fmt(computedPreview.gross_profit)}</Typography>
+            <Typography variant="tiny" tone="muted" className="">Lucro Bruto</Typography>
+            <Typography variant="h3" className="">R$ {fmt(computedPreview.gross_profit)}</Typography>
           </div>
           <div>
-            <Typography variant="tiny" tone="muted" className="uppercase">Despesas Totais</Typography>
-            <Typography variant="h3" className="text-status-error font-black">R$ {fmt(computedPreview.total_expenses)}</Typography>
+            <Typography variant="tiny" tone="muted" className="">Despesas Totais</Typography>
+            <Typography variant="h3" className="text-status-error">R$ {fmt(computedPreview.total_expenses)}</Typography>
           </div>
           <div>
-            <Typography variant="tiny" tone="muted" className="uppercase">Lucro Líquido</Typography>
+            <Typography variant="tiny" tone="muted" className="">Lucro Líquido</Typography>
             <Typography variant="h3" className={computedPreview.net_profit >= 0 ? 'text-status-success font-black' : 'text-status-error font-black'}>
               R$ {fmt(computedPreview.net_profit)}
             </Typography>
           </div>
           <div>
-            <Typography variant="tiny" tone="muted" className="uppercase">Rentabilidade</Typography>
-            <Typography variant="h3" className="font-black">{pct(computedPreview.rentability * 100)}</Typography>
+            <Typography variant="tiny" tone="muted" className="">Rentabilidade</Typography>
+            <Typography variant="h3" className="">{pct(computedPreview.rentability * 100)}</Typography>
           </div>
         </div>
       )}

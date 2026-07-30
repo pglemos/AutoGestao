@@ -18,7 +18,7 @@ interface ScheduleEventCardProps {
 export function ScheduleEventCard({ event, onEdit, onDelete }: ScheduleEventCardProps) {
   const date = parseISO(event.starts_at)
   return (
-    <Card className="p-mx-md border-none shadow-mx-md bg-white hover:shadow-mx-xl transition-all group">
+    <Card className="p-mx-md border-none bg-white hover:shadow-mx-xl transition-all group">
       <div className="flex flex-col sm:flex-row sm:items-center gap-mx-md">
         <div className="flex items-center gap-mx-md min-w-0 flex-1">
           <div className={cn(
@@ -69,15 +69,15 @@ export function ScheduleEventCard({ event, onEdit, onDelete }: ScheduleEventCard
             {(event.visit_reason || event.target_audience || event.product_name) && (
               <div className="mt-mx-xs flex flex-wrap gap-mx-xs">
                 {event.visit_reason && (
-                  <Badge variant="outline" className="max-w-full text-mx-nano uppercase tracking-widest">
+                  <Badge variant="outline" className="max-w-full text-mx-nano">
                     <span className="truncate">{event.visit_reason}</span>
                   </Badge>
                 )}
                 {event.target_audience && (
-                  <Badge variant="ghost" className="text-mx-nano uppercase tracking-widest">{event.target_audience}</Badge>
+                  <Badge variant="ghost" className="text-mx-nano">{event.target_audience}</Badge>
                 )}
                 {event.product_name && (
-                  <Badge variant="brand" className="text-mx-nano uppercase tracking-widest">{event.product_name}</Badge>
+                  <Badge variant="brand" className="text-mx-nano">{event.product_name}</Badge>
                 )}
               </div>
             )}
@@ -85,7 +85,7 @@ export function ScheduleEventCard({ event, onEdit, onDelete }: ScheduleEventCard
         </div>
 
         <div className="flex items-center gap-mx-xs">
-          <Button variant="ghost" size="sm" className="text-text-secondary" onClick={() => onEdit(event)} aria-label={`Editar ${event.title}`}>
+          <Button variant="ghost" size="sm" className="" onClick={() => onEdit(event)} aria-label={`Editar ${event.title}`}>
             <Pencil size={14} />
           </Button>
           <Button variant="ghost" size="sm" className="text-status-error" onClick={() => onDelete(event.id)} aria-label={`Excluir ${event.title}`}>

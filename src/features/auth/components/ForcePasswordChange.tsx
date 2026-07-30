@@ -101,10 +101,10 @@ export function ForcePasswordChange() {
                 </div>
                 
                 <div className="space-y-mx-tiny">
-                  <Typography variant="h2" className="text-3xl font-black uppercase tracking-tighter">
+                  <Typography variant="h2" className="text-3xl tracking-tighter">
                     Segurança <span className="text-brand-primary">MX</span>
                   </Typography>
-                  <Typography variant="p" tone="muted" className="font-bold uppercase tracking-tight leading-relaxed">
+                  <Typography variant="p" tone="muted" className="font-bold tracking-tight leading-relaxed">
                     Olá, <span className="text-mx-black font-black">{profile?.name?.split(' ')[0]}</span>. <br/>
                     Proteja sua conta com uma nova senha de acesso.
                   </Typography>
@@ -115,7 +115,7 @@ export function ForcePasswordChange() {
                 {/* Password Input */}
                 <div className="space-y-mx-xs">
                   <div className="flex items-center justify-between px-mx-xs">
-                    <Typography variant="tiny" tone="muted" className="font-black uppercase tracking-mx-widest">Nova Credencial</Typography>
+                    <Typography variant="tiny" tone="muted" className="">Nova Credencial</Typography>
                     {formData.password && (
                       <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-mx-xs">
                         <div className={cn("h-mx-tiny w-12 rounded-mx-full overflow-hidden bg-surface-alt")}>
@@ -153,7 +153,7 @@ export function ForcePasswordChange() {
 
                 {/* Confirm Password Input */}
                 <div className="space-y-mx-xs">
-                  <Typography variant="tiny" tone="muted" className="px-mx-xs font-black uppercase tracking-mx-widest">Confirmação</Typography>
+                  <Typography variant="tiny" tone="muted" className="px-mx-xs">Confirmação</Typography>
                   <div className="relative group/input">
                     <Lock size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within/input:text-brand-primary transition-colors z-10" />
                     <Input 
@@ -173,7 +173,7 @@ export function ForcePasswordChange() {
                 <div className="p-mx-xs rounded-mx-md bg-brand-primary/10 text-brand-primary">
                   <Sparkles size={16} />
                 </div>
-                <Typography variant="tiny" tone="muted" className="uppercase font-black leading-relaxed tracking-tight">
+                <Typography variant="tiny" tone="muted" className="leading-relaxed tracking-tight">
                   Sua nova senha será validada pela malha de segurança <span className="text-mx-black">MX PERFORMANCE</span>. 
                   Use uma senha com pelo menos 6 caracteres.
                 </Typography>
@@ -183,7 +183,7 @@ export function ForcePasswordChange() {
                 <Button 
                   type="submit" 
                   disabled={loading} 
-                  className="w-full h-mx-16 rounded-mx-2xl shadow-mx-lg bg-brand-primary hover:bg-brand-primary-hover font-black uppercase tracking-mx-wide text-white flex items-center justify-center transition-all active:scale-[0.98]"
+                  className="w-full h-mx-16 hover:bg-brand-primary-hover text-white flex items-center justify-center transition-all active:scale-[0.98]"
                 >
                   {loading ? (
                     <RefreshCw className="animate-spin" />

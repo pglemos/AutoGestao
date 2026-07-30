@@ -8,7 +8,7 @@ type Props = { reaching: number }
 
 export function StoreHealthCard({ reaching }: Props) {
   return (
-    <Card className="p-mx-10 md:p-14 bg-brand-secondary text-white border-none shadow-mx-xl relative overflow-hidden flex-1 group">
+    <Card className="p-mx-10 md:p-14 text-white border-none relative overflow-hidden flex-1 group">
       <div className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-brand-primary/10 rounded-mx-full blur-mx-xl -mr-32 -mt-32 transition-opacity group-hover:opacity-100" />
       <div className="relative z-10 flex flex-col justify-between h-full">
         <div>
@@ -18,14 +18,14 @@ export function StoreHealthCard({ reaching }: Props) {
           <Typography
             variant="h2"
             tone="white"
-            className="text-3xl leading-none mb-4 uppercase tracking-tighter"
+            className="text-3xl leading-none mb-4 tracking-tighter"
           >
             Saúde da Loja
           </Typography>
           <Typography
             variant="p"
             tone="white"
-            className="opacity-60 text-xs font-bold uppercase tracking-mx-wide italic leading-relaxed"
+            className="opacity-60 text-xs font-bold italic leading-relaxed"
           >
             "Ritmo operacional sincronizado com a meta projetada."
           </Typography>
@@ -36,7 +36,7 @@ export function StoreHealthCard({ reaching }: Props) {
               <Typography
                 variant="caption"
                 tone="white"
-                className="font-black uppercase tracking-widest mb-2 block"
+                className="mb-2 block"
               >
                 Eficiência Real
               </Typography>
@@ -50,7 +50,7 @@ export function StoreHealthCard({ reaching }: Props) {
             </div>
             <Badge
               variant="outline"
-              className="text-white border-white/20 mb-2 uppercase font-black"
+              className="text-white border-white/20 mb-2"
             >
               {reaching >= 80 ? 'TARGET OK' : 'ATENÇÃO'}
             </Badge>

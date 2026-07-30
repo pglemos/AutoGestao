@@ -142,7 +142,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
             </div>
 
             {/* Toolbar */}
-            <Card className="p-mx-md border-none shadow-mx-md bg-white flex flex-col md:flex-row items-stretch md:items-center gap-mx-md">
+            <Card className="p-mx-md border-none bg-white flex flex-col md:flex-row items-stretch md:items-center gap-mx-md">
                 <div className="relative flex-1">
                     <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
                     <Input
@@ -164,7 +164,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                     <option value="">Todos os papéis</option>
                     {Object.entries(ROLE_LABEL).map(([k, v]) => <option key={k} value={k}>{v.toUpperCase()}</option>)}
                 </select>
-                <Button variant="outline" onClick={refetch} className="h-mx-12 px-mx-sm rounded-mx-xl" aria-label="Atualizar equipe">
+                <Button variant="outline" onClick={refetch} className="h-mx-12 px-mx-sm" aria-label="Atualizar equipe">
                     <RefreshCw size={14} />
                 </Button>
                 {canExportContacts && (
@@ -173,7 +173,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                         variant="outline"
                         onClick={handleExportContacts}
                         disabled={exportingContacts}
-                        className="h-mx-12 px-5 rounded-mx-xl font-black uppercase tracking-widest text-xs"
+                        className="h-mx-12 px-5 text-xs"
                     >
                         {exportingContacts ? (
                             <RefreshCw size={16} className="mr-2 animate-spin" />
@@ -194,7 +194,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
             </Card>
 
             {/* Lista */}
-            <Card className="border-none shadow-mx-lg bg-white overflow-hidden">
+            <Card className="border-none bg-white overflow-hidden">
                 {loading ? (
                     <div className="p-mx-xl text-center">
                         <RefreshCw size={24} className="animate-spin mx-auto text-brand-primary" />
@@ -202,7 +202,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                 ) : filtered.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
                         <Users size={40} className="mx-auto text-text-tertiary opacity-30" />
-                        <Typography variant="caption" tone="muted" className="font-black uppercase">Nenhum usuário encontrado</Typography>
+                        <Typography variant="caption" tone="muted" className="">Nenhum usuário encontrado</Typography>
                     </div>
                 ) : (
                     <div className="divide-y divide-border-default">
@@ -220,11 +220,11 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                                         />
                                         <div className="min-w-0 flex-1">
                                             <div className="flex items-center gap-mx-sm">
-                                                <Typography variant="caption" className="font-black uppercase tracking-tight truncate">
+                                                <Typography variant="caption" className="tracking-tight truncate">
                                                     {user.name || '—'}
                                                 </Typography>
-                                                {isInactive && <Badge variant="outline" className="text-mx-micro font-black uppercase">Inativo</Badge>}
-                                                {user.must_change_password && <Badge variant="warning" className="text-mx-micro font-black uppercase">Trocar Senha</Badge>}
+                                                {isInactive && <Badge variant="outline" className="text-mx-micro">Inativo</Badge>}
+                                                {user.must_change_password && <Badge variant="warning" className="text-mx-micro">Trocar Senha</Badge>}
                                             </div>
                                             <div className="flex items-center gap-mx-md flex-wrap mt-1">
                                                 <span className="flex items-center gap-mx-tiny text-mx-micro font-bold text-text-tertiary">
@@ -238,7 +238,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                                             </div>
                                         </div>
                                     </div>
-                                    <Badge variant={ROLE_BADGE[user.role || ''] || 'outline'} className="font-black uppercase shrink-0">
+                                    <Badge variant={ROLE_BADGE[user.role || ''] || 'outline'} className="shrink-0">
                                         {ROLE_LABEL[user.role || ''] || user.role}
                                     </Badge>
                                     {canMutateExisting && (
@@ -299,14 +299,14 @@ function StatCard({ icon, label, value, tone }: { icon: React.ReactNode; label: 
     const toneColor = tone === 'success' ? 'text-status-success' :
         tone === 'brand' ? 'text-brand-primary' : 'text-text-primary'
     return (
-        <Card className="p-mx-md border-none shadow-mx-sm bg-white">
+        <Card className="p-mx-md border-none bg-white">
             <div className="flex items-center gap-mx-sm">
                 <div className={`w-mx-10 h-mx-10 rounded-mx-xl bg-surface-alt flex items-center justify-center ${toneColor}`}>
                     {icon}
                 </div>
                 <div>
-                    <Typography variant="tiny" tone="muted" className="font-black uppercase">{label}</Typography>
-                    <Typography variant="h3" className="font-black tabular-nums">{value}</Typography>
+                    <Typography variant="tiny" tone="muted" className="">{label}</Typography>
+                    <Typography variant="h3" className="tabular-nums">{value}</Typography>
                 </div>
             </div>
         </Card>

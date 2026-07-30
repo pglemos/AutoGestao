@@ -41,7 +41,7 @@ export function TesteComportamental() {
   return (
     <div className="space-y-mx-lg">
       <form onSubmit={handleAddQuestao} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-        <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">Adicionar questão ao teste</Typography>
+        <Typography variant="caption" tone="muted" className="">Adicionar questão ao teste</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-[1fr_200px_auto]">
           <Input aria-label="Enunciado da questão" value={novaQuestao} onChange={e => setNovaQuestao(e.target.value)} placeholder="Enunciado da questão" />
           <Input aria-label="Dimensão da questão" value={novaDimensao} onChange={e => setNovaDimensao(e.target.value)} placeholder="Dimensão (ex.: disciplina)" />
@@ -55,7 +55,7 @@ export function TesteComportamental() {
         <EmptyState icon={<ClipboardCheck size={28} />} title="Nenhuma questão" description="Cadastre as questões do teste comportamental." />
       ) : (
         <div className="space-y-mx-md">
-          <Typography variant="caption" tone="muted" className="font-black uppercase tracking-widest">
+          <Typography variant="caption" tone="muted" className="">
             Aplicar teste (você responde como exemplo de onboarding) — escala 1 (discordo) a 5 (concordo)
           </Typography>
           {questoes.map((q, i) => (

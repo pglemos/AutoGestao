@@ -148,14 +148,14 @@ export function CentralMxPlanoSegmentadoPanel({
   }, [pendingCreateRequest, storeId, orderedChoices.length])
 
   return (
-    <Card className="rounded-mx-2xl p-mx-lg">
+    <Card className="p-mx-lg">
       <header className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
           <div className="rounded-mx-xl bg-brand-primary p-mx-sm text-pure-white shadow-mx-md">
             <ClipboardList size={22} aria-hidden="true" />
           </div>
           <div>
-            <Typography variant="h3" className="font-black">
+            <Typography variant="h3" className="">
               Plano de Ação segmentado
             </Typography>
             <Typography variant="tiny" tone="muted" className="block">
@@ -196,7 +196,7 @@ export function CentralMxPlanoSegmentadoPanel({
 
       {segmentado.error && (
         <div className="mt-mx-md rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="font-black text-status-error">
+          <Typography variant="tiny" className="text-status-error">
             {segmentado.error}
           </Typography>
         </div>
@@ -222,7 +222,7 @@ export function CentralMxPlanoSegmentadoPanel({
             >
               <def.icon size={14} aria-hidden="true" />
               {def.label}
-              <Badge variant="outline" className="font-black uppercase tracking-widest">
+              <Badge variant="outline" className="">
                 {segmentado.totals[scope]}
               </Badge>
             </button>
@@ -264,7 +264,7 @@ export function CentralMxPlanoSegmentadoPanel({
         ))}
         {!activeList.length && !segmentado.loading && (
           <li className="rounded-mx-xl border border-dashed border-border-default p-mx-md text-center">
-            <Typography variant="tiny" tone="muted" className="font-bold uppercase tracking-widest">
+            <Typography variant="tiny" tone="muted" className="font-bold">
               Sem planos de ação ativos no escopo {SCOPE_LABEL[activeScope].label}.
             </Typography>
           </li>
@@ -299,10 +299,10 @@ function CountTile({
   }
   return (
     <div className={cn('rounded-mx-xl border p-mx-sm text-center', toneClass[tone])}>
-      <Typography variant="caption" className="font-black uppercase tracking-widest">
+      <Typography variant="caption" className="">
         {label}
       </Typography>
-      <Typography as="p" variant="h3" className="mt-mx-tiny font-black">
+      <Typography as="p" variant="h3" className="mt-mx-tiny">
         {value}
       </Typography>
     </div>
@@ -323,20 +323,20 @@ function PlanoRow({
       <div className="flex flex-col gap-mx-xs md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-mx-xs">
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {plano.departamento}
             </Badge>
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {plano.status.replace('_', ' ')}
             </Badge>
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {plano.origem}
             </Badge>
-            <Badge variant="outline" className="font-black uppercase tracking-widest">
+            <Badge variant="outline" className="">
               {plano.prioridade}
             </Badge>
           </div>
-          <Typography variant="p" className="mt-mx-xs font-black">
+          <Typography variant="p" className="mt-mx-xs">
             <span className="mr-mx-xs text-brand-primary">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
             {plano.acao}
           </Typography>

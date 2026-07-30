@@ -46,7 +46,7 @@ function ConsultorIaModuleGrid({
   return (
     <div className="space-y-mx-md">
       <div>
-        <Typography variant="h2" className="text-2xl md:text-3xl font-black text-text-primary">
+        <Typography variant="h2" className="text-2xl md:text-3xl">
           {title}
         </Typography>
         <Typography variant="p" tone="muted" className="mt-1 font-bold">
@@ -55,18 +55,18 @@ function ConsultorIaModuleGrid({
       </div>
       <div className="grid grid-cols-1 gap-mx-md md:grid-cols-3">
         {items.map((item) => (
-          <Card key={item.title} className="min-h-[180px] rounded-mx-2xl p-mx-lg">
+          <Card key={item.title} className="min-h-[180px] p-mx-lg">
             <div className={cn('h-mx-12 w-mx-12 rounded-mx-xl flex items-center justify-center shadow-mx-sm', toneClasses[item.tone])}>
               {item.icon}
             </div>
-            <Typography variant="h3" className="mt-mx-md text-lg font-black">
+            <Typography variant="h3" className="mt-mx-md text-lg">
               {item.title}
             </Typography>
             <Typography variant="p" tone="muted" className="mt-mx-xs text-sm font-bold">
               {item.detail}
             </Typography>
             <div className="mt-mx-md flex items-center gap-mx-xs text-brand-primary">
-              <Typography variant="tiny" className="font-black uppercase">
+              <Typography variant="tiny" className="">
                 Abrir
               </Typography>
               <ChevronRight size={16} />

@@ -37,7 +37,7 @@ export function AgendaListView({
     return (
       <div className="space-y-mx-md">
         {Array.from({ length: 2 }).map((_, i) => (
-          <Card key={i} className="p-mx-lg border-none shadow-mx-md bg-white">
+          <Card key={i} className="p-mx-lg border-none bg-white">
             <Skeleton className="h-mx-10 w-mx-sidebar-expanded mb-mx-md" />
             <div className="space-y-mx-md">
               <Skeleton className="h-mx-2xl w-full" />
@@ -51,7 +51,7 @@ export function AgendaListView({
 
   if (groupedVisits.length === 0) {
     return (
-      <Card className="border-none shadow-mx-md bg-white">
+      <Card className="border-none bg-white">
         <EmptyState
           size="lg"
           icon={<CalendarDays />}
@@ -72,7 +72,7 @@ export function AgendaListView({
             isToday(group.date) && 'text-brand-primary'
           )}>
             <Calendar size={16} />
-            <Typography variant="caption" className="font-black uppercase tracking-widest">
+            <Typography variant="caption" className="">
               {group.label}
             </Typography>
             <div className="flex-1 h-px bg-border-default" />

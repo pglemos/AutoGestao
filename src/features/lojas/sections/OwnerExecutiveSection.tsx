@@ -48,7 +48,7 @@ export function OwnerExecutiveSection({
             <Typography as="h2" variant="h3" className="text-lg">
               O que decidir hoje
             </Typography>
-            <Typography variant="p" className="mt-mx-xs text-sm text-text-secondary">
+            <Typography variant="p" className="mt-mx-xs text-sm">
               Prioridades calculadas a partir da estrutura e da disciplina das lojas.
             </Typography>
           </div>
@@ -59,7 +59,7 @@ export function OwnerExecutiveSection({
 
         <div className="mt-mx-md space-y-mx-sm">
           <div className="rounded-mx-lg border border-border-subtle bg-surface-alt p-mx-md">
-            <Typography variant="caption" className="font-semibold text-text-secondary">
+            <Typography variant="caption" className="font-semibold">
               Unidades que exigem atenção
             </Typography>
             <Typography
@@ -69,7 +69,7 @@ export function OwnerExecutiveSection({
             >
               {ownerAttentionStores.length}
             </Typography>
-            <Typography variant="p" className="mt-mx-xs text-sm text-text-secondary">
+            <Typography variant="p" className="mt-mx-xs text-sm">
               {ownerAttentionStores.length > 0
                 ? 'Revise unidades sem equipe, sem vendedores ou com disciplina abaixo de 80%.'
                 : 'Todas as unidades ativas estão dentro do mínimo operacional esperado.'}
@@ -87,7 +87,7 @@ export function OwnerExecutiveSection({
           <Typography as="h2" variant="h3" className="text-lg">
             Comparativo entre lojas
           </Typography>
-          <Typography variant="p" className="mt-mx-xs text-sm text-text-secondary">
+          <Typography variant="p" className="mt-mx-xs text-sm">
             Identifique onde cobrar plano de ação e onde apenas acompanhar a execução.
           </Typography>
         </div>
@@ -113,7 +113,7 @@ export function OwnerExecutiveSection({
               >
                 <div className="flex items-start justify-between gap-mx-sm">
                   <div className="min-w-0">
-                    <Typography variant="p" className="font-semibold text-text-primary group-hover:text-brand-primary">
+                    <Typography variant="p" className="font-semibold group-hover:text-brand-primary">
                       {store.name}
                     </Typography>
                     <Typography variant="tiny" tone="muted" className="mt-mx-xs block">
@@ -127,7 +127,7 @@ export function OwnerExecutiveSection({
 
                 <div className="mt-mx-md flex items-end justify-between gap-mx-sm">
                   <div>
-                    <Typography variant="caption" className="text-text-secondary">
+                    <Typography variant="caption" className="">
                       Disciplina
                     </Typography>
                     <Typography

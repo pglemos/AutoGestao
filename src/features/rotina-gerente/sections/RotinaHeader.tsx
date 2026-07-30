@@ -52,13 +52,13 @@ export function RotinaHeader({
           <Store size={16} className="text-brand-primary" />
           <Typography
             variant="tiny"
-            className="font-black uppercase tracking-widest text-text-tertiary"
+            className=""
           >
             Unidade:
           </Typography>
           <Typography
             variant="tiny"
-            className="font-black uppercase tracking-widest text-brand-primary"
+            className=""
           >
             {lojas.find((s) => s.id === selectedStoreId)?.name || '...'}
           </Typography>
@@ -66,7 +66,7 @@ export function RotinaHeader({
             variant="ghost"
             size="sm"
             onClick={onClearStore}
-            className="h-mx-10 px-4 text-xs uppercase font-black ml-2"
+            className="h-mx-10 px-4 text-xs ml-2"
           >
             Trocar
           </Button>
@@ -90,7 +90,7 @@ export function RotinaHeader({
               size="icon"
               onClick={onRefresh}
               aria-label="Atualizar"
-              className="w-mx-14 h-mx-14 rounded-mx-lg shadow-mx-sm bg-white border-border-subtle hover:bg-surface-alt"
+              className="w-mx-14 h-mx-14 bg-white hover:bg-surface-alt"
             >
               <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
             </Button>
@@ -99,18 +99,18 @@ export function RotinaHeader({
       />
 
       {!isAdmin && membership?.store?.name && (
-        <Card className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+        <Card className="border bg-white p-mx-md">
           <div className="flex flex-col gap-mx-xs sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-center gap-mx-sm">
               <Store size={18} className="text-brand-primary" aria-hidden="true" />
-              <Typography variant="p" className="font-black uppercase">
+              <Typography variant="p" className="">
                 Unidade atual: {membership.store.name}
               </Typography>
             </div>
             <Typography
               variant="tiny"
               tone="muted"
-              className="font-black uppercase tracking-widest"
+              className=""
             >
               Contexto vindo do seu vínculo de gerente
             </Typography>

@@ -41,7 +41,7 @@ export function DRETable({
     <Card className={cn('border-none shadow-mx-md bg-white overflow-hidden', className)}>
       <div className="p-mx-lg border-b border-border-subtle flex items-center justify-between">
         <Typography variant="h3">DRE ANUAL</Typography>
-        <Button variant="outline" size="sm" className="rounded-mx-lg">
+        <Button variant="outline" size="sm" className="">
           <FileText size={16} className="mr-2" /> EXPORTAR PDF
         </Button>
       </div>

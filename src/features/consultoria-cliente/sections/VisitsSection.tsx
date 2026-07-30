@@ -29,7 +29,7 @@ export function VisitsSection({
       {canManage && (
         <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <Typography variant="h3" className="uppercase font-black tracking-widest">Agenda manual do cliente</Typography>
+            <Typography variant="h3" className="">Agenda manual do cliente</Typography>
             <Typography variant="tiny" tone="muted">Crie ou ajuste diretamente qualquer visita V1 a V7.</Typography>
           </div>
           <div className="flex flex-wrap gap-mx-xs">
@@ -55,12 +55,12 @@ export function VisitsSection({
       {methodologySteps.map((step) => {
         const v = client.visits?.find((x) => x.visit_number === step.visit_number)
         return (
-          <Card key={step.id} className="p-mx-lg bg-white border border-border-default shadow-mx-sm hover:border-brand-primary transition-all rounded-mx-2xl">
+          <Card key={step.id} className="p-mx-lg bg-white border hover:border-brand-primary transition-all">
             <div className="flex flex-col gap-mx-md lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center gap-mx-md">
                 <div className="w-mx-12 h-mx-12 rounded-mx-full bg-surface-alt flex items-center justify-center font-black">V{step.visit_number}</div>
                 <div>
-                  <Typography variant="h3" className="text-sm font-black uppercase">{step.objective}</Typography>
+                  <Typography variant="h3" className="text-sm">{step.objective}</Typography>
                   <Typography variant="tiny" tone="muted" className="font-bold">{step.target} • {step.duration}</Typography>
                 </div>
               </div>
