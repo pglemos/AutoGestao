@@ -16,7 +16,7 @@ export function SkeletonTable({ rows = 5, cols = 4, className, showHeader = true
   return (
     <div className={cn('w-full space-y-mx-xs', className)}>
       {showHeader && (
-        <div className="grid gap-mx-sm pb-mx-xs border-b border-border-default" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
+        <div className="grid gap-mx-sm pb-mx-xs border-b border-gray-200" style={{ gridTemplateColumns: `repeat(${cols}, minmax(0, 1fr))` }}>
           {Array.from({ length: cols }).map((_, i) => (
             <Skeleton key={`h-${i}`} variant="text" className="h-mx-sm" />
           ))}

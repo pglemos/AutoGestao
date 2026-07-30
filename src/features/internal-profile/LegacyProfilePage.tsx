@@ -13,7 +13,7 @@ import { getAvatarDisplayUrl, uploadUserAvatar } from '@/lib/avatar'
 function LegacyProfileAvatar({ url, name }: { url: string; name: string }) {
   const [erro, setErro] = useState(false)
   const initials = name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()
-  if (erro) return <div className="w-full h-full flex items-center justify-center bg-muted text-2xl font-black text-muted-foreground">{initials}</div>
+  if (erro) return <div className="w-full h-full flex items-center justify-center bg-muted text-2xl font-bold text-muted-foreground">{initials}</div>
   return <img src={url} alt={`Avatar de ${name}`} className="w-full h-full object-cover" onError={() => setErro(true)} />
 }
 
@@ -113,10 +113,10 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
         <header className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between border-b border-border pb-6 shrink-0">
           <div className="flex flex-col gap-1">
             <div className="flex items-center gap-3">
-              <div className="w-1 h-10 bg-brand-primary rounded-full shadow-md" aria-hidden="true" />
-              <h1 className="text-3xl font-black tracking-tight md:text-4xl">Painel de Identidade</h1>
+              <div className="w-1 h-10 bg-emerald-600 rounded-full shadow-md" aria-hidden="true" />
+              <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Painel de Identidade</h1>
             </div>
-            <p className="pl-4 text-xs font-black uppercase tracking-widest text-muted-foreground">
+            <p className="pl-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
               Gestão de credenciais e segurança MX
             </p>
           </div>
@@ -127,7 +127,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
             </Button>
             <Button onClick={handleSave} disabled={saving} className="h-14 px-10 rounded-full shadow-xl">
               {saving ? <RefreshCw className="animate-spin mr-2" /> : <ShieldCheck size={18} className="mr-2" />}
-              <span className="text-xs font-black uppercase tracking-widest">Salvar conta</span>
+              <span className="text-xs font-bold uppercase tracking-widest">Salvar conta</span>
             </Button>
           </div>
         </header>
@@ -136,7 +136,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_2fr]">
         <aside className="flex flex-col gap-6">
           <div className="rounded-xl border border-border bg-card p-10 md:p-12 flex flex-col items-center text-center group relative overflow-hidden shadow-lg">
-            <div className="absolute top-0 left-0 w-full h-4xl bg-brand-secondary z-0 opacity-10" aria-hidden="true" />
+            <div className="absolute top-0 left-0 w-full h-4xl bg-gray-900 z-0 opacity-10" aria-hidden="true" />
             <div className="relative z-10 space-y-6">
               <div className="relative group/avatar inline-block">
                 <div className="w-4xl h-4xl rounded-3xl border-8 border-card shadow-xl overflow-hidden bg-muted transition-transform group-hover/avatar:scale-105 duration-500">
@@ -155,10 +155,10 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
               </div>
 
               <div>
-                <h2 className="text-2xl uppercase tracking-tighter font-black text-foreground">{profile.name}</h2>
+                <h2 className="text-2xl uppercase tracking-tighter font-bold text-foreground">{profile.name}</h2>
                 <div className="flex items-center justify-center gap-2 mt-3">
                   <Badge variant="brand" className="px-4 py-1 shadow-sm">
-                    <span className="text-xs font-black uppercase">{role} tier</span>
+                    <span className="text-xs font-bold uppercase">{role} tier</span>
                   </Badge>
                   <div className="w-1.5 h-1.5 rounded-full bg-status-success shadow-sm animate-pulse" />
                 </div>
@@ -171,10 +171,10 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
           <div className="rounded-xl border border-border bg-card shadow-xl group flex flex-col overflow-hidden">
             <header className="bg-muted/30 border-b border-border p-10 md:p-14 flex flex-row items-center justify-between relative overflow-hidden">
               <div className="flex items-center gap-4 relative z-10">
-                <div className="w-2xl h-2xl rounded-2xl bg-brand-secondary text-white flex items-center justify-center shadow-xl transform rotate-2"><User size={32} /></div>
+                <div className="w-2xl h-2xl rounded-2xl bg-gray-900 text-white flex items-center justify-center shadow-xl transform rotate-2"><User size={32} /></div>
                 <div>
                   <h2 className="text-2xl uppercase tracking-tighter leading-none text-foreground">Configurações de Conta</h2>
-                  <p className="text-xs font-black uppercase tracking-widest text-muted-foreground mt-1">Sinc: Identity Gateway v4.0</p>
+                  <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground mt-1">Sinc: Identity Gateway v4.0</p>
                 </div>
               </div>
             </header>
@@ -182,30 +182,30 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
             <div className="p-10 md:p-14 space-y-14 relative z-10">
               <div className="grid md:grid-cols-2 gap-10">
                 <div className="space-y-3">
-                  <p className="ml-2 text-xs font-black uppercase tracking-widest leading-none text-muted-foreground">Nome Operacional</p>
+                  <p className="ml-2 text-xs font-bold uppercase tracking-widest leading-none text-muted-foreground">Nome Operacional</p>
                   <Input aria-label="Nome Operacional" value={name} onChange={e => setName(e.target.value)} className="!h-14 px-6 font-bold" />
                 </div>
                 <div className="space-y-3">
-                  <p className="ml-2 text-xs font-black uppercase tracking-widest leading-none text-muted-foreground">E-mail Fixado</p>
+                  <p className="ml-2 text-xs font-bold uppercase tracking-widest leading-none text-muted-foreground">E-mail Fixado</p>
                   <Input aria-label="E-mail Fixado" value={profile.email} disabled className="!h-14 px-6 font-bold opacity-50 bg-muted" />
                 </div>
               </div>
 
               <div className="grid md:grid-cols-2 gap-10">
                 <div className="space-y-3">
-                  <p className="ml-2 text-xs font-black uppercase tracking-widest leading-none text-muted-foreground">Telefone</p>
+                  <p className="ml-2 text-xs font-bold uppercase tracking-widest leading-none text-muted-foreground">Telefone</p>
                   <Input value={phone} onChange={e => setPhone(e.target.value)} placeholder="(11) 99999-9999" className="!h-14 px-6 font-bold" />
                 </div>
                 <div className="space-y-3">
-                  <p className="ml-2 text-xs font-black uppercase tracking-widest leading-none text-muted-foreground">Cargo</p>
+                  <p className="ml-2 text-xs font-bold uppercase tracking-widest leading-none text-muted-foreground">Cargo</p>
                   <Input aria-label="Cargo" value={role || ''} disabled className="!h-14 px-6 font-bold opacity-50 bg-muted capitalize" />
                 </div>
               </div>
 
               <div className="pt-14 border-t border-border space-y-10">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-indigo-50 text-brand-primary flex items-center justify-center shadow-inner border border-indigo-100"><ShieldCheck size={20} /></div>
-                  <p className="text-xs font-black uppercase tracking-widest text-brand-primary">Segurança & Criptografia MX</p>
+                  <div className="h-10 w-10 rounded-lg bg-indigo-50 text-emerald-600 flex items-center justify-center shadow-none border border-indigo-100"><ShieldCheck size={20} /></div>
+                  <p className="text-xs font-bold uppercase tracking-widest text-emerald-600">Segurança & Criptografia MX</p>
                 </div>
 
                 <div className="grid md:grid-cols-2 gap-6">
@@ -215,8 +215,8 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
                     onClick={() => setShowPasswordModal(true)}
                   >
                     <div className="flex items-center gap-3">
-                      <div className="h-xl w-xl rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground group-hover/sec:text-brand-primary transition-colors shadow-sm"><Key size={20} /></div>
-                      <span className="text-xs font-black uppercase tracking-widest text-foreground">Alterar Senha</span>
+                      <div className="h-xl w-xl rounded-xl bg-card border border-border flex items-center justify-center text-muted-foreground group-hover/sec:text-emerald-600 transition-colors shadow-sm"><Key size={20} /></div>
+                      <span className="text-xs font-bold uppercase tracking-widest text-foreground">Alterar Senha</span>
                     </div>
                     <ChevronRight size={18} className="text-muted-foreground opacity-30 group-hover/sec:translate-x-1 transition-all shrink-0" />
                   </button>
@@ -224,10 +224,10 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
                   <div className="rounded-xl border border-border bg-muted/50 p-6 flex items-center justify-between group/sec">
                     <div className="flex items-center gap-3">
                       <div className="h-xl w-xl rounded-xl bg-card border border-border flex items-center justify-center text-status-success shadow-sm"><ShieldCheck size={20} /></div>
-                      <span className="text-xs font-black uppercase tracking-widest text-foreground">Verificação de acesso</span>
+                      <span className="text-xs font-bold uppercase tracking-widest text-foreground">Verificação de acesso</span>
                     </div>
                     <Badge variant="success" className="px-4 py-1 rounded-full border-none">
-                      <span className="text-xs font-black uppercase">Ativo</span>
+                      <span className="text-xs font-bold uppercase">Ativo</span>
                     </Badge>
                   </div>
                 </div>
@@ -256,7 +256,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
             onKeyDown={(e) => e.stopPropagation()}
           >
             <div className="flex items-center justify-between mb-6">
-              <h3 className="text-lg font-black text-foreground" id="profile-password-modal-title">Alterar Senha</h3>
+              <h3 className="text-lg font-bold text-foreground" id="profile-password-modal-title">Alterar Senha</h3>
               <button onClick={() => setShowPasswordModal(false)} className="text-muted-foreground hover:text-foreground"><X size={20} /></button>
             </div>
 

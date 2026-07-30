@@ -44,7 +44,7 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
     <Card className="border bg-white p-mx-md">
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-mx-sm">
-          <Target size={24} className="text-brand-primary" />
+          <Target size={24} className="text-emerald-600" />
           <Typography variant="h3" className="text-xl">Meta de Venda do Mês</Typography>
         </div>
         <Typography variant="p" className="tabular-nums">{goal > 0 ? `${progress}%` : '--'}</Typography>
@@ -52,7 +52,7 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
       <div className="mt-mx-md flex items-center justify-between">
         <Typography variant="p" tone="muted" className="">Meta: {goal > 0 ? `${formatInteger(goal)} veículos` : 'Pendente'}</Typography>
       </div>
-      <div className="mt-mx-sm h-mx-3 rounded-mx-full bg-surface-alt overflow-hidden">
+      <div className="mt-mx-sm h-mx-3 rounded-mx-full bg-gray-50 overflow-hidden">
         <div className="h-full rounded-mx-full bg-status-success" style={{ width: `${progress}%` }} />
       </div>
       <div className="mt-mx-lg grid grid-cols-3 gap-mx-sm">
@@ -60,12 +60,12 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
         <MetricPill label="Faltam" value={goal > 0 ? formatInteger(missing) : '--'} tone="danger" />
         <MetricPill label="Ritmo ideal" value={idealPace > 0 ? `${idealPace.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}/d` : '--'} tone="info" />
       </div>
-      <div className="mt-mx-md flex flex-wrap items-center justify-between gap-mx-sm rounded-mx-lg border border-border-subtle bg-surface-alt px-mx-md py-mx-sm">
+      <div className="mt-mx-md flex flex-wrap items-center justify-between gap-mx-sm rounded-xl border border-gray-100 bg-gray-50 px-mx-md py-mx-sm">
         <Typography variant="p" className="">Projeção atual</Typography>
         <div className="flex items-center gap-mx-xs">
           <Typography variant="p" className="">{goal > 0 ? `${formatInteger(projected)} veículos` : 'Pendente'}</Typography>
           {projectionStatus && (
-            <span className={cn('shrink-0 whitespace-nowrap text-xs font-black', toneClasses[projectionStatus.tone].text)}>
+            <span className={cn('shrink-0 whitespace-nowrap text-xs font-bold', toneClasses[projectionStatus.tone].text)}>
               {projectionStatus.arrow} {projectionStatus.label}
             </span>
           )}
@@ -97,18 +97,18 @@ export function PriorityIntervention({
   const toneClass = isCritical ? 'text-status-error' : 'text-status-warning'
   const badgeClass = isCritical ? 'bg-status-error-surface text-status-error' : 'bg-status-warning-surface text-status-warning'
   return (
-    <Card className={cn('rounded-mx-lg border p-mx-md shadow-mx-sm', isCritical ? 'border-status-error/30' : 'border-status-warning/30')}>
+    <Card className={cn('rounded-xl border p-mx-md shadow-sm', isCritical ? 'border-status-error/30' : 'border-status-warning/30')}>
       <div className="flex items-center gap-mx-sm">
         <Zap size={20} className={toneClass} />
         <Typography variant="h3" className="text-lg">Intervenção prioritária</Typography>
       </div>
-      <div className="mt-mx-md rounded-mx-lg border border-border-subtle bg-white p-mx-md">
+      <div className="mt-mx-md rounded-xl border border-gray-100 bg-white p-mx-md">
         <div className="flex items-start justify-between gap-mx-sm">
           <div className="flex items-center gap-mx-sm">
             <AlertTriangle size={18} className={toneClass} />
             <Typography variant="p" className="">{alert.title}</Typography>
           </div>
-          <span className={cn('shrink-0 rounded-mx-full px-mx-sm py-mx-tiny text-mx-tiny font-black uppercase', badgeClass)}>
+          <span className={cn('shrink-0 rounded-mx-full px-mx-sm py-mx-tiny text-mx-tiny font-bold uppercase', badgeClass)}>
             {isCritical ? 'Crítico' : 'Atenção'}
           </span>
         </div>
@@ -116,7 +116,7 @@ export function PriorityIntervention({
           <Typography variant="tiny" className="">Por que isso importa</Typography>
           <Typography variant="p" className="mt-mx-xs text-sm font-bold">{alert.description}</Typography>
         </div>
-        <div className="mt-mx-md rounded-mx-lg bg-status-success-surface p-mx-sm">
+        <div className="mt-mx-md rounded-xl bg-status-success-surface p-mx-sm">
           <Typography variant="tiny" className="text-status-success">Direcionamento MX</Typography>
           <Typography variant="p" className="mt-mx-xs text-sm font-bold">{alert.recommendation}</Typography>
         </div>
@@ -144,7 +144,7 @@ export function ConsultantMxCard({ onOpenConsultant }: { onOpenConsultant: () =>
     <Card className="border bg-white p-mx-md">
       <div className="flex flex-wrap items-center justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <span className="flex h-mx-10 w-mx-10 shrink-0 items-center justify-center rounded-mx-lg bg-status-success-surface text-status-success">
+          <span className="flex h-mx-10 w-mx-10 shrink-0 items-center justify-center rounded-xl bg-status-success-surface text-status-success">
             <MessageCircle size={20} />
           </span>
           <div>
@@ -168,7 +168,7 @@ export function OwnerAlertList({ alerts }: { alerts: OwnerPerformanceAlert[] }) 
           <Bell size={24} className="text-status-error" />
           <Typography variant="h3" className="text-xl">Alertas que exigem sua atenção</Typography>
         </div>
-        <span className="min-w-mx-7 h-mx-7 rounded-mx-full bg-status-error px-mx-xs text-white text-xs font-black flex items-center justify-center">{visibleAlerts.length}</span>
+        <span className="min-w-mx-7 h-mx-7 rounded-mx-full bg-status-error px-mx-xs text-white text-xs font-bold flex items-center justify-center">{visibleAlerts.length}</span>
       </div>
       <div className="mt-mx-md divide-y divide-border-subtle">
         {visibleAlerts.map((alert, index) => {
@@ -176,7 +176,7 @@ export function OwnerAlertList({ alerts }: { alerts: OwnerPerformanceAlert[] }) 
           const classes = toneClasses[tone]
           return (
             <button key={alert.title} type="button" onClick={() => navigate(alert.ctaTo)} className="flex w-full items-center gap-mx-sm py-mx-sm text-left">
-              <span className={cn('h-mx-9 w-mx-9 rounded-mx-lg flex shrink-0 items-center justify-center border', classes.soft)}>
+              <span className={cn('h-mx-9 w-mx-9 rounded-xl flex shrink-0 items-center justify-center border', classes.soft)}>
                 {tone === 'danger' ? <AlertTriangle size={18} /> : tone === 'warning' ? <Clock3 size={18} /> : <CheckCircle2 size={18} />}
               </span>
               <span className="min-w-0 flex-1">
@@ -185,7 +185,7 @@ export function OwnerAlertList({ alerts }: { alerts: OwnerPerformanceAlert[] }) 
                   {alert.department ? `${alert.department} · ` : ''}{alert.description}
                 </Typography>
               </span>
-              <Typography variant="tiny" className={cn('font-black', index === 0 ? 'text-status-error' : 'text-text-secondary')}>
+              <Typography variant="tiny" className={cn('font-bold', index === 0 ? 'text-status-error' : 'text-gray-500')}>
                 {index === 0 ? 'Hoje' : `${index + 1} dias`}
               </Typography>
             </button>
@@ -204,20 +204,20 @@ export function NextActionsCard({ actions }: { actions: ActionRow[] }) {
   return (
     <Card className="border bg-white p-mx-md">
       <div className="flex items-center gap-mx-sm">
-        <CheckCircle2 size={24} className="text-brand-primary" />
+        <CheckCircle2 size={24} className="text-emerald-600" />
         <Typography variant="h3" className="text-xl">Próximas ações do Dono</Typography>
       </div>
       <div className="mt-mx-md divide-y divide-border-subtle">
         {actions.slice(0, 5).map((action, index) => (
           <div key={`${action.problem}-${index}`} className="flex items-center gap-mx-sm py-mx-sm">
-            <span className="w-mx-20 shrink-0 rounded-mx-lg bg-mx-indigo-50 px-mx-sm py-mx-xs text-center text-xs font-black text-brand-primary truncate">
+            <span className="w-mx-20 shrink-0 rounded-xl bg-mx-indigo-50 px-mx-sm py-mx-xs text-center text-xs font-bold text-emerald-600 truncate">
               {action.due || 'Pendente'}
             </span>
             <Typography variant="p" className="min-w-0 flex-1 truncate text-sm font-bold">
               {action.action}
             </Typography>
             <CheckCircle2 size={16} className="shrink-0 text-status-success" aria-hidden="true" />
-            <Users size={16} className="shrink-0 text-text-tertiary" aria-hidden="true" />
+            <Users size={16} className="shrink-0 text-gray-500" aria-hidden="true" />
           </div>
         ))}
       </div>
@@ -258,10 +258,10 @@ export function OwnerPanoramaChart({
           <Typography variant="h3" className="text-xl">Evolução planejado x realizado</Typography>
           <Typography variant="p" tone="muted" className="mt-1 block font-bold">Ritmo da loja no período selecionado.</Typography>
         </div>
-        <div className="rounded-mx-lg border border-border-subtle bg-surface-alt px-mx-md py-mx-sm">
+        <div className="rounded-xl border border-gray-100 bg-gray-50 px-mx-md py-mx-sm">
           <Typography variant="tiny" tone="muted" className="block">Meta mensal</Typography>
           <Typography variant="p" className="tabular-nums">{goalValue > 0 ? formatInteger(goalValue) : 'Pendente'}</Typography>
-          <Typography variant="tiny" tone={attainment >= 80 ? 'success' : 'warning'} className="block font-black">
+          <Typography variant="tiny" tone={attainment >= 80 ? 'success' : 'warning'} className="block font-bold">
             {goalValue > 0 ? `${attainment}% atingida` : 'Cadastre a meta'}
           </Typography>
         </div>
@@ -281,8 +281,8 @@ export function OwnerPanoramaChart({
           </ResponsiveContainer> : null}
         </div>
       ) : (
-        <div className="mt-mx-md min-h-[250px] rounded-mx-lg border border-dashed border-border-subtle bg-surface-alt flex flex-col items-center justify-center text-center p-mx-lg">
-          <LineChartIcon size={40} className="text-text-tertiary" />
+        <div className="mt-mx-md min-h-[250px] rounded-xl border border-dashed border-gray-100 bg-gray-50 flex flex-col items-center justify-center text-center p-mx-lg">
+          <LineChartIcon size={40} className="text-gray-500" />
           <Typography variant="h3" className="mt-mx-md text-lg">Dados pendentes</Typography>
           <Typography variant="p" tone="muted" className="mt-mx-xs max-w-sm">A evolução aparece quando a rotina diária tiver histórico no período.</Typography>
         </div>
@@ -362,8 +362,8 @@ function EficaciaDonut({ eficazes, parciais, ineficazes }: { eficazes: number; p
         {arcs}
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-black tabular-nums text-text-primary leading-none">{headlinePct}%</span>
-        <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Média geral</span>
+        <span className="text-2xl font-bold tabular-nums text-gray-800 leading-none">{headlinePct}%</span>
+        <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Média geral</span>
       </div>
     </div>
   )
@@ -373,8 +373,8 @@ function EficaciaLegendRow({ color, label, value }: { color: string; label: stri
   return (
     <div className="flex items-center gap-mx-xs text-sm">
       <span className="h-mx-2 w-mx-2 rounded-full shrink-0" style={{ backgroundColor: color }} aria-hidden="true" />
-      <span className="flex-1 truncate font-bold text-text-secondary">{label}</span>
-      <span className="font-black tabular-nums text-text-primary">{value}</span>
+      <span className="flex-1 truncate font-bold text-gray-500">{label}</span>
+      <span className="font-bold tabular-nums text-gray-800">{value}</span>
     </div>
   )
 }
@@ -386,7 +386,7 @@ export function OwnerDepartmentScoreGrid({ departments }: { departments: Departm
       <div className="mb-mx-md flex items-center justify-between gap-mx-md">
         <div className="flex items-center gap-mx-xs">
           <Typography variant="h3" className="text-xl">Desempenho por Departamento</Typography>
-          <CircleHelp size={14} className="text-text-tertiary" />
+          <CircleHelp size={14} className="text-gray-500" />
         </div>
         <Button type="button" variant="ghost" size="sm" onClick={() => navigate(ownerPath('departamentos'))}>Ver todas</Button>
       </div>
@@ -395,17 +395,17 @@ export function OwnerDepartmentScoreGrid({ departments }: { departments: Departm
           const classes = toneClasses[department.tone]
           const hasData = department.score !== null
           return (
-            <button key={department.name} type="button" onClick={() => navigate(department.path)} className="rounded-mx-lg border border-border-subtle bg-white p-mx-md text-left hover:shadow-mx-md transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/15 flex flex-col items-center">
+            <button key={department.name} type="button" onClick={() => navigate(department.path)} className="rounded-xl border border-gray-100 bg-white p-mx-md text-left hover:shadow-sm transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/15 flex flex-col items-center">
               <div className="flex w-full items-center gap-mx-sm">
-                <span className={cn('h-mx-9 w-mx-9 rounded-mx-lg flex shrink-0 items-center justify-center', classes.bg)}>{department.icon}</span>
+                <span className={cn('h-mx-9 w-mx-9 rounded-xl flex shrink-0 items-center justify-center', classes.bg)}>{department.icon}</span>
                 <Typography variant="p" className="text-sm truncate">{department.name}</Typography>
               </div>
               <div className="mt-mx-sm">
                 {hasData ? <OwnerSemiGauge value={department.score as number} /> : <OwnerSemiGauge value={0} muted />}
               </div>
               <div className="mt-mx-tiny flex flex-col items-center gap-mx-tiny">
-                <span className="text-3xl font-black tabular-nums text-text-primary leading-none">{department.score ?? '--'}</span>
-                <span className={cn('inline-flex items-center rounded-mx-md px-mx-sm py-mx-tiny text-mx-tiny font-black uppercase tracking-tight', classes.soft)}>{department.status}</span>
+                <span className="text-3xl font-bold tabular-nums text-gray-800 leading-none">{department.score ?? '--'}</span>
+                <span className={cn('inline-flex items-center rounded-xl px-mx-sm py-mx-tiny text-mx-tiny font-bold uppercase tracking-tight', classes.soft)}>{department.status}</span>
               </div>
               <Typography variant="tiny" tone="muted" className="mt-mx-sm block min-h-mx-8 font-bold text-center w-full">{department.detail}</Typography>
             </button>

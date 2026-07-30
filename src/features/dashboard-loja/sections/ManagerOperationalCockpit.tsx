@@ -118,7 +118,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
           <ProgressBar value={data.metrics.attainment} className="mt-mx-lg" tone={data.metrics.attainment >= 80 ? 'success' : 'brand'} />
           <div className="mt-mx-sm flex flex-col gap-mx-xs sm:flex-row sm:items-center sm:justify-between">
             <Typography variant="tiny" tone="muted" className="">{data.metrics.attainment}% da meta alcançada</Typography>
-            <Typography variant="tiny" tone={gap > 0 ? 'warning' : 'success'} className="font-black">{gap > 0 ? `Faltam ${gap} veículos` : 'Meta atingida'}</Typography>
+            <Typography variant="tiny" tone={gap > 0 ? 'warning' : 'success'} className="font-bold">{gap > 0 ? `Faltam ${gap} veículos` : 'Meta atingida'}</Typography>
           </div>
         </Card>
 
@@ -149,7 +149,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
         <Card className="min-h-[190px] border bg-white p-mx-md">
           <div className="flex items-center justify-between gap-mx-sm">
             <Typography variant="tiny" tone="muted" className="">MX Score Loja</Typography>
-            <Gauge size={18} className="text-text-tertiary" />
+            <Gauge size={18} className="text-gray-500" />
           </div>
           <div className="mt-mx-md flex items-center justify-center">
             <SemiCircularGauge value={mxScore} label={scoreLabel(mxScore)} />
@@ -165,10 +165,10 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
           <PanelHeader title="Desempenho da Equipe" action="Ver equipe" onAction={() => navigate('?tab=equipe')} />
           <div className="overflow-x-auto">
             <table className="w-full min-w-[620px]">
-              <thead className="bg-surface-alt/60">
+              <thead className="bg-gray-50/60">
                 <tr>
                   {['Vendedor', 'Vendas', 'Meta', 'Agenda', 'Disciplina', 'Status'].map(header => (
-                    <th key={header} className="px-mx-md py-mx-sm text-left text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">{header}</th>
+                    <th key={header} className="px-mx-md py-mx-sm text-left text-mx-tiny font-bold uppercase tracking-widest text-gray-500">{header}</th>
                   ))}
                 </tr>
               </thead>
@@ -200,7 +200,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
               <FunnelSegmentRow key={row.label} label={row.label} tone={row.tone} stages={row.stages} />
             ))}
           </div>
-          <div className="mt-mx-lg flex items-center justify-between rounded-mx-lg bg-mx-indigo-50 px-mx-md py-mx-sm">
+          <div className="mt-mx-lg flex items-center justify-between rounded-xl bg-mx-indigo-50 px-mx-md py-mx-sm">
             <Typography variant="tiny" tone="brand" className="">Total de Vendas: {formatInteger(data.funilData.vnd_total)}</Typography>
             <Typography variant="tiny" tone="brand" className="">Conversão geral</Typography>
             <Typography variant="h3" tone={data.funilData.tx_visita_vnd >= data.funnelBenchmarks.visitaVnd ? 'success' : 'error'}>{data.funilData.tx_visita_vnd}%</Typography>
@@ -238,16 +238,16 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
         <Card className="border bg-white p-mx-md xl:col-span-1 2xl:col-span-3">
           <div className="flex items-center justify-between gap-mx-md">
             <Typography variant="h3" className="tracking-tight">Ranking da Loja</Typography>
-            <button type="button" onClick={() => navigate('/classificacao')} className="text-mx-tiny font-black uppercase tracking-widest text-brand-primary">Ver ranking</button>
+            <button type="button" onClick={() => navigate('/classificacao')} className="text-mx-tiny font-bold uppercase tracking-widest text-emerald-600">Ver ranking</button>
           </div>
           <div className="mt-mx-lg space-y-mx-sm">
             {visibleRanking.slice(0, 3).map((row, index) => (
-              <div key={row.user_id} className="flex items-center justify-between gap-mx-sm rounded-mx-lg bg-surface-alt px-mx-md py-mx-sm">
+              <div key={row.user_id} className="flex items-center justify-between gap-mx-sm rounded-xl bg-gray-50 px-mx-md py-mx-sm">
                 <div className="flex min-w-0 items-center gap-mx-sm">
-                  <span className={cn('flex h-mx-9 w-mx-9 shrink-0 items-center justify-center rounded-mx-lg border bg-white', medalTone(index))}>
+                  <span className={cn('flex h-mx-9 w-mx-9 shrink-0 items-center justify-center rounded-xl border bg-white', medalTone(index))}>
                     {index === 0 ? <Trophy size={16} /> : <Medal size={16} />}
                   </span>
-                  <Avatar src={row.avatar_url || undefined} alt={`Avatar de ${row.user_name}`} fallback={row.user_name} size="sm" className="rounded-mx-lg" />
+                  <Avatar src={row.avatar_url || undefined} alt={`Avatar de ${row.user_name}`} fallback={row.user_name} size="sm" className="rounded-xl" />
                   <div className="min-w-0">
                     <Typography variant="p" className="truncate">{row.user_name}</Typography>
                     <Typography variant="tiny" tone="muted" className="block tracking-tight">{index + 1}º lugar</Typography>
@@ -269,7 +269,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
                 <AgendaItem time="Agora" title="Cobrar pendências de rotina" detail={pendingNames.length ? pendingNames.slice(0, 3).join(', ') : 'Equipe com rotina sincronizada.'} />
               </>
             ) : (
-              <div className="rounded-mx-lg border border-dashed border-border-subtle bg-surface-alt p-mx-md">
+              <div className="rounded-xl border border-dashed border-gray-100 bg-gray-50 p-mx-md">
                 <Typography variant="p" tone="muted">Agenda operacional pendente de integração ou lançamentos do dia.</Typography>
               </div>
             )}
@@ -283,12 +283,12 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
 function ManagerHeader({ storeName, periodLabel }: { storeName: string; periodLabel: string }) {
   return (
     <PageHeading
-      title={<>Bom dia, <span className="text-brand-primary">Gerente</span>!</>}
+      title={<>Bom dia, <span className="text-emerald-600">Gerente</span>!</>}
       subtitle={`${storeName.toUpperCase()} · DESEMPENHO DA EQUIPE`}
       actions={(
         <div className="flex flex-wrap gap-mx-sm">
           <Badge variant="outline" className="h-mx-11 px-mx-md bg-white">Período: {periodLabel}</Badge>
-          <Button type="button" variant="outline" size="sm" className="h-mx-11 bg-white hover:bg-surface-alt">
+          <Button type="button" variant="outline" size="sm" className="h-mx-11 bg-white hover:bg-gray-50">
             Filtros
           </Button>
         </div>
@@ -321,7 +321,7 @@ function ManagerKpiCard({
       </div>
       <Typography variant="h1" className="mt-mx-md text-4xl font-mono-numbers">{value}</Typography>
       <Typography variant="p" tone="muted" className="mt-mx-xs text-sm">{detail}</Typography>
-      <div className={cn('mt-mx-md rounded-mx-xl px-mx-md py-mx-sm text-center text-mx-tiny font-black uppercase tracking-widest flex items-center justify-center gap-mx-xs', toneSurface(tone))}>
+      <div className={cn('mt-mx-md rounded-2xl px-mx-md py-mx-sm text-center text-mx-tiny font-bold uppercase tracking-widest flex items-center justify-center gap-mx-xs', toneSurface(tone))}>
         {arrow && <span aria-hidden="true">{arrow}</span>}
         <span>{status}</span>
       </div>
@@ -360,7 +360,7 @@ function TeamRow({ row }: { row: RankingEntry }) {
     <tr className="bg-white">
       <td className="px-mx-md py-mx-sm">
         <div className="flex min-w-0 items-center gap-mx-sm">
-          <Avatar src={row.avatar_url || undefined} alt={`Avatar de ${row.user_name}`} fallback={row.user_name} size="sm" className="rounded-mx-lg" />
+          <Avatar src={row.avatar_url || undefined} alt={`Avatar de ${row.user_name}`} fallback={row.user_name} size="sm" className="rounded-xl" />
           <Typography variant="p" className="truncate">{row.user_name}</Typography>
         </div>
       </td>
@@ -370,11 +370,11 @@ function TeamRow({ row }: { row: RankingEntry }) {
       <td className="px-mx-md py-mx-sm">
         <div className="flex items-center gap-mx-xs">
           <ProgressBar value={attainment} tone={disciplineTone} className="flex-1" />
-          <span className="text-mx-tiny font-black text-text-tertiary tabular-nums w-mx-9 text-right">{attainment}%</span>
+          <span className="text-mx-tiny font-bold text-gray-500 tabular-nums w-mx-9 text-right">{attainment}%</span>
         </div>
       </td>
       <td className="px-mx-md py-mx-sm">
-        <span className={cn('inline-flex items-center rounded-mx-full px-mx-sm py-mx-tiny text-mx-tiny font-black uppercase tracking-tight', tierStyles[tier])}>
+        <span className={cn('inline-flex items-center rounded-mx-full px-mx-sm py-mx-tiny text-mx-tiny font-bold uppercase tracking-tight', tierStyles[tier])}>
           {tierLabels[tier]}
         </span>
         {/* discipline reserved for future use */}
@@ -402,7 +402,7 @@ function PanelHeader({
         {typeof badge === 'number' && <Badge variant={badge > 0 ? 'danger' : 'success'} className="rounded-mx-full px-2 py-0.5">{badge}</Badge>}
       </div>
       {action && onAction && (
-        <button type="button" onClick={onAction} className="text-mx-tiny font-black uppercase tracking-widest text-brand-primary">
+        <button type="button" onClick={onAction} className="text-mx-tiny font-bold uppercase tracking-widest text-emerald-600">
           {action}
         </button>
       )}
@@ -413,7 +413,7 @@ function PanelHeader({
 function AlertItem({ alert }: { alert: OwnerPerformanceAlert }) {
   const tone = alert.variant === 'danger' ? 'danger' : alert.variant === 'warning' ? 'warning' : alert.variant === 'success' ? 'success' : 'info'
   return (
-    <div className="flex gap-mx-sm rounded-mx-lg border border-border-subtle bg-surface-alt p-mx-sm">
+    <div className="flex gap-mx-sm rounded-xl border border-gray-100 bg-gray-50 p-mx-sm">
       <MetricIcon tone={tone} className="h-mx-9 w-mx-9"><AlertTriangle size={16} /></MetricIcon>
       <div className="min-w-0">
         <Typography variant="p" className="leading-tight">{alert.title}</Typography>
@@ -435,17 +435,17 @@ function FunnelSegmentRow({
   stages: Array<{ label: string; value: number; pct?: number }>
 }) {
   return (
-    <div className="rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm">
+    <div className="rounded-xl border border-gray-100 bg-white p-mx-md shadow-sm">
       <div className="flex items-center gap-mx-sm">
-        <MetricIcon tone={tone} className="h-mx-8 w-mx-8 rounded-mx-lg">
+        <MetricIcon tone={tone} className="h-mx-8 w-mx-8 rounded-xl">
           <Gauge size={14} />
         </MetricIcon>
         <Typography variant="tiny" tone={tone === 'success' ? 'success' : tone === 'warning' ? 'warning' : 'brand'} className="">{label}</Typography>
       </div>
       <div className={cn('mt-mx-md grid gap-mx-sm', stages.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-4')}>
         {stages.map((stage, index) => (
-          <div key={stage.label} className="relative min-w-0 rounded-mx-lg bg-surface-alt px-mx-sm py-mx-xs text-center">
-            {index > 0 && <span className="absolute -left-mx-sm top-1/2 hidden -translate-y-1/2 text-text-tertiary md:block">&gt;</span>}
+          <div key={stage.label} className="relative min-w-0 rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-center">
+            {index > 0 && <span className="absolute -left-mx-sm top-1/2 hidden -translate-y-1/2 text-gray-500 md:block">&gt;</span>}
             <Typography variant="tiny" tone="muted" className="block truncate tracking-tight">{stage.label}</Typography>
             <div className="mt-mx-xs flex items-baseline justify-center gap-mx-xs">
               <Typography variant="h3" className="font-mono-numbers">{formatInteger(stage.value)}</Typography>
@@ -463,21 +463,21 @@ function EngagementMetric({ label, value, icon, accent = 'info' }: { label: stri
     info: { iconBg: 'bg-[var(--color-status-info-surface)]', iconText: 'text-status-info', bar: 'bg-status-info' },
     success: { iconBg: 'bg-[var(--color-status-success-surface)]', iconText: 'text-status-success', bar: 'bg-status-success' },
     warning: { iconBg: 'bg-[var(--color-status-warning-surface)]', iconText: 'text-status-warning', bar: 'bg-status-warning' },
-    teal: { iconBg: 'bg-secondary', iconText: 'text-brand-primary', bar: 'bg-brand-primary' },
-    brand: { iconBg: 'bg-[var(--color-brand-primary)]/10', iconText: 'text-brand-primary', bar: 'bg-brand-primary' },
+    teal: { iconBg: 'bg-secondary', iconText: 'text-emerald-600', bar: 'bg-emerald-600' },
+    brand: { iconBg: 'bg-[var(--color-brand-primary)]/10', iconText: 'text-emerald-600', bar: 'bg-emerald-600' },
   }
   const styles = accentClasses[accent]
   const clamped = Math.min(Math.max(value, 0), 100)
   return (
-    <div className="rounded-mx-xl bg-white p-mx-sm text-center">
-      <div className={cn('mx-auto flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-lg shadow-mx-sm', styles.iconBg, styles.iconText)}>
+    <div className="rounded-2xl bg-white p-mx-sm text-center">
+      <div className={cn('mx-auto flex h-mx-10 w-mx-10 items-center justify-center rounded-xl shadow-sm', styles.iconBg, styles.iconText)}>
         {icon}
       </div>
       <Typography variant="tiny" tone="muted" className="mt-mx-sm block min-h-[28px] tracking-tight leading-tight">{label}</Typography>
       <Typography variant="h3" className={cn('mt-mx-xs font-mono-numbers', styles.iconText)}>
         {clamped}%
       </Typography>
-      <div className="mt-mx-xs h-1.5 w-full overflow-hidden rounded-mx-full bg-surface-alt">
+      <div className="mt-mx-xs h-1.5 w-full overflow-hidden rounded-mx-full bg-gray-50">
         <div className={cn('h-full rounded-mx-full transition-all', styles.bar)} style={{ width: `${clamped}%` }} />
       </div>
     </div>
@@ -547,8 +547,8 @@ function SemiCircularGauge({ value, label, suffix = '' }: { value: number; label
         <circle cx={pointerX} cy={pointerY} r={3} fill="var(--color-pure-white)" />
       </svg>
       <div className="-mt-mx-md flex flex-col items-center">
-        <span className="text-4xl font-black font-mono-numbers leading-none text-text-primary">{clamped}{suffix}</span>
-        <span className={cn('mt-mx-tiny text-mx-tiny font-black uppercase tracking-widest', labelTone)}>{label}</span>
+        <span className="text-4xl font-bold font-mono-numbers leading-none text-gray-800">{clamped}{suffix}</span>
+        <span className={cn('mt-mx-tiny text-mx-tiny font-bold uppercase tracking-widest', labelTone)}>{label}</span>
       </div>
     </div>
   )
@@ -556,8 +556,8 @@ function SemiCircularGauge({ value, label, suffix = '' }: { value: number; label
 
 function AgendaItem({ time, title, detail }: { time: string; title: string; detail: string }) {
   return (
-    <div className="flex gap-mx-sm rounded-mx-lg bg-surface-alt p-mx-sm">
-      <div className="flex h-mx-10 w-mx-12 shrink-0 items-center justify-center rounded-mx-lg bg-white text-mx-tiny font-black uppercase text-brand-primary shadow-mx-sm">
+    <div className="flex gap-mx-sm rounded-xl bg-gray-50 p-mx-sm">
+      <div className="flex h-mx-10 w-mx-12 shrink-0 items-center justify-center rounded-xl bg-white text-mx-tiny font-bold uppercase text-emerald-600 shadow-sm">
         {time}
       </div>
       <div className="min-w-0">
@@ -580,7 +580,7 @@ function MiniStat({ label, value, detail }: { label: string; value: string | num
 
 function MetricIcon({ tone, className, children }: { tone: ManagerTone; className?: string; children: ReactNode }) {
   return (
-    <div className={cn('flex h-mx-12 w-mx-12 shrink-0 items-center justify-center rounded-mx-lg border shadow-mx-inner', toneBorder(tone), className)}>
+    <div className={cn('flex h-mx-12 w-mx-12 shrink-0 items-center justify-center rounded-xl border shadow-mx-inner', toneBorder(tone), className)}>
       {children}
     </div>
   )
@@ -588,7 +588,7 @@ function MetricIcon({ tone, className, children }: { tone: ManagerTone; classNam
 
 function ProgressBar({ value, tone = 'brand', className }: { value: number; tone?: ManagerTone; className?: string }) {
   return (
-    <div className={cn('h-mx-xs w-full overflow-hidden rounded-mx-full bg-surface-alt', className)}>
+    <div className={cn('h-mx-xs w-full overflow-hidden rounded-mx-full bg-gray-50', className)}>
       <div className={cn('h-full rounded-mx-full transition-all', toneFill(tone))} style={{ width: `${Math.min(Math.max(value, 0), 100)}%` }} />
     </div>
   )
@@ -596,29 +596,29 @@ function ProgressBar({ value, tone = 'brand', className }: { value: number; tone
 
 function toneBorder(tone: ManagerTone) {
   return {
-    brand: 'border-mx-indigo-100 bg-mx-indigo-50 text-brand-primary',
+    brand: 'border-mx-indigo-100 bg-mx-indigo-50 text-emerald-600',
     success: 'border-status-success/20 bg-status-success-surface text-status-success',
     warning: 'border-status-warning/20 bg-status-warning-surface text-status-warning',
     danger: 'border-status-error/20 bg-status-error-surface text-status-error',
     info: 'border-status-info/20 bg-status-info-surface text-status-info',
-    neutral: 'border-border-default bg-white text-text-tertiary',
+    neutral: 'border-gray-200 bg-white text-gray-500',
   }[tone]
 }
 
 function toneSurface(tone: ManagerTone) {
   return {
-    brand: 'bg-mx-indigo-50 text-brand-primary',
+    brand: 'bg-mx-indigo-50 text-emerald-600',
     success: 'bg-status-success-surface text-status-success',
     warning: 'bg-status-warning-surface text-status-warning',
     danger: 'bg-status-error-surface text-status-error',
     info: 'bg-status-info-surface text-status-info',
-    neutral: 'bg-surface-alt text-text-tertiary',
+    neutral: 'bg-gray-50 text-gray-500',
   }[tone]
 }
 
 function toneFill(tone: ManagerTone) {
   return {
-    brand: 'bg-brand-primary',
+    brand: 'bg-emerald-600',
     success: 'bg-status-success',
     warning: 'bg-status-warning',
     danger: 'bg-status-error',
@@ -647,7 +647,7 @@ function gaugeGradient(tone: ManagerTone, value: number) {
 
 function medalTone(index: number) {
   if (index === 0) return 'border-status-warning/30 text-status-warning'
-  if (index === 1) return 'border-text-tertiary/30 text-text-tertiary'
+  if (index === 1) return 'border-text-tertiary/30 text-gray-500'
   return 'border-status-warning/20 text-status-warning'
 }
 

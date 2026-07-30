@@ -65,9 +65,9 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
     }
 
     return (
-        <section className="rounded-mx-xl border border-border-subtle bg-surface-alt/40 p-4" aria-label="Prova oficial da aula">
+        <section className="rounded-2xl border border-gray-100 bg-gray-50/40 p-4" aria-label="Prova oficial da aula">
             <Typography variant="p" className="flex items-center gap-2 text-sm font-bold tracking-wide">
-                <ClipboardCheck size={16} className="text-brand-primary" />
+                <ClipboardCheck size={16} className="text-emerald-600" />
                 Prova Oficial — nota mínima 70%
             </Typography>
             <Typography variant="caption" tone="muted" className="mb-3 mt-1 block">
@@ -76,20 +76,20 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
 
             <div className="space-y-4">
                 {questoes.map((questao, indice) => (
-                    <fieldset key={questao.id} className="rounded-mx-md border border-border-subtle bg-white p-3">
-                        <legend className="px-1 text-sm font-semibold text-text-primary">
+                    <fieldset key={questao.id} className="rounded-xl border border-gray-100 bg-white p-3">
+                        <legend className="px-1 text-sm font-semibold text-gray-800">
                             {indice + 1}. {questao.pergunta}
                         </legend>
                         <div className="mt-2 space-y-1.5">
                             {questao.opcoes.map((opcao, opcaoIndice) => (
-                                <label key={opcaoIndice} className="flex cursor-pointer select-none items-start gap-2.5 rounded-mx-md p-1.5 text-sm hover:bg-surface-alt">
+                                <label key={opcaoIndice} className="flex cursor-pointer select-none items-start gap-2.5 rounded-xl p-1.5 text-sm hover:bg-gray-50">
                                     <input
                                         type="radio"
                                         name={`quiz-${questao.id}`}
                                         checked={respostas[questao.id] === opcaoIndice}
                                         onChange={() => setRespostas(atual => ({ ...atual, [questao.id]: opcaoIndice }))}
                                         disabled={Boolean(resultado?.aprovado)}
-                                        className="mt-0.5 h-4 w-4 border-border-strong text-brand-primary focus:ring-brand-primary"
+                                        className="mt-0.5 h-4 w-4 border-gray-200 text-emerald-600 focus:ring-brand-primary"
                                     />
                                     <span>{opcao}</span>
                                 </label>
@@ -102,7 +102,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
             {resultado && (
                 <div
                     role="status"
-                    className={`mt-4 flex items-center gap-2 rounded-mx-md border p-3 text-sm font-semibold ${resultado.aprovado
+                    className={`mt-4 flex items-center gap-2 rounded-xl border p-3 text-sm font-semibold ${resultado.aprovado
                         ? 'border-status-success/30 bg-status-success/5 text-status-success'
                         : 'border-status-error/30 bg-status-error/5 text-status-error'}`}
                 >
@@ -117,7 +117,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
                         type="button"
                         disabled={enviando || !todasRespondidas}
                         onClick={() => void enviar()}
-                        className="rounded-mx-xl bg-brand-primary px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+                        className="rounded-2xl bg-emerald-600 px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
                     >
                         {enviando ? 'Corrigindo...' : resultado ? 'Tentar novamente' : 'Enviar prova'}
                     </button>

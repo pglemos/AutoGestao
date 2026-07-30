@@ -104,10 +104,10 @@ export function ActionPlanView({
       </div>
 
       <div className="flex flex-wrap gap-mx-sm">
-        <label className="flex flex-col gap-1 text-mx-tiny font-black uppercase text-text-tertiary">
+        <label className="flex flex-col gap-1 text-mx-tiny font-bold uppercase text-gray-500">
           Departamento
           <select
-            className="h-mx-10 rounded-mx-lg border border-border-subtle bg-white px-mx-sm text-sm font-bold text-text-primary normal-case"
+            className="h-mx-10 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-gray-800 normal-case"
             value={departmentFilter}
             onChange={(event) => setDepartmentFilter(event.target.value)}
           >
@@ -117,10 +117,10 @@ export function ActionPlanView({
             ))}
           </select>
         </label>
-        <label className="flex flex-col gap-1 text-mx-tiny font-black uppercase text-text-tertiary">
+        <label className="flex flex-col gap-1 text-mx-tiny font-bold uppercase text-gray-500">
           Responsável
           <select
-            className="h-mx-10 rounded-mx-lg border border-border-subtle bg-white px-mx-sm text-sm font-bold text-text-primary normal-case"
+            className="h-mx-10 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-gray-800 normal-case"
             value={ownerFilter}
             onChange={(event) => setOwnerFilter(event.target.value)}
           >
@@ -133,9 +133,9 @@ export function ActionPlanView({
       </div>
 
       {filteredActions.length === 0 ? (
-        <div className="rounded-mx-xl border border-border-subtle bg-white p-mx-lg" role="status">
-          <strong className="text-base font-black text-text-primary">Nenhuma ação encontrada</strong>
-          <p className="text-sm text-text-secondary">Ajuste os filtros ou cadastre uma nova ação para esta unidade.</p>
+        <div className="rounded-2xl border border-gray-100 bg-white p-mx-lg" role="status">
+          <strong className="text-base font-bold text-gray-800">Nenhuma ação encontrada</strong>
+          <p className="text-sm text-gray-500">Ajuste os filtros ou cadastre uma nova ação para esta unidade.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 gap-mx-md md:grid-cols-2 xl:grid-cols-5">
@@ -147,7 +147,7 @@ export function ActionPlanView({
                   <Typography variant="tiny" className="">
                     {column.label}
                   </Typography>
-                  <span className="rounded-mx-full bg-surface-alt px-mx-sm py-mx-tiny text-mx-tiny font-black text-text-secondary">
+                  <span className="rounded-mx-full bg-gray-50 px-mx-sm py-mx-tiny text-mx-tiny font-bold text-gray-500">
                     {columnActions.length}
                   </span>
                 </div>
@@ -156,12 +156,12 @@ export function ActionPlanView({
                     const classes = toneClasses[action.tone]
                     return (
                       <Card key={`${action.id}-${index}`} className="border bg-white p-mx-sm">
-                        <span className={cn('inline-flex rounded-mx-md border px-mx-sm py-mx-tiny text-mx-tiny font-black', classes.soft)}>
+                        <span className={cn('inline-flex rounded-xl border px-mx-sm py-mx-tiny text-mx-tiny font-bold', classes.soft)}>
                           {action.priority}
                         </span>
                         <Typography variant="p" className="mt-mx-xs text-sm leading-tight">{action.problem}</Typography>
                         <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-bold">{action.department}</Typography>
-                        <div className="mt-mx-sm flex items-center justify-between gap-mx-xs text-mx-tiny font-bold text-text-tertiary">
+                        <div className="mt-mx-sm flex items-center justify-between gap-mx-xs text-mx-tiny font-bold text-gray-500">
                           <span className="flex min-w-0 items-center gap-1 truncate">
                             <User size={12} /> <span className="truncate">{action.owner}</span>
                           </span>
@@ -173,7 +173,7 @@ export function ActionPlanView({
                     )
                   })}
                   {columnActions.length === 0 && (
-                    <div className="rounded-mx-lg border border-dashed border-border-subtle p-mx-sm text-center text-mx-tiny font-bold text-text-tertiary">
+                    <div className="rounded-xl border border-dashed border-gray-100 p-mx-sm text-center text-mx-tiny font-bold text-gray-500">
                       Vazio
                     </div>
                   )}

@@ -30,11 +30,11 @@ export function MonthGrid({
   onEventClick,
 }: MonthGridProps) {
   return (
-    <div className="overflow-hidden rounded-mx-lg border border-border-strong bg-white shadow-2xs">
+    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xs">
       {/* Weekday Labels Header */}
-      <div className="grid grid-cols-7 border-b border-border-strong bg-surface-alt/40 select-none">
+      <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50/40 select-none">
         {WEEKDAY_LABELS.map((label) => (
-          <div key={label} className="border-r border-border-default py-1.5 text-center last:border-r-0">
+          <div key={label} className="border-r border-gray-200 py-1.5 text-center last:border-r-0">
             <Typography variant="tiny" tone="muted" className="text-[10px] font-bold tracking-wider">{label}</Typography>
           </div>
         ))}
@@ -67,19 +67,19 @@ export function MonthGrid({
                 if (dayInfo.isCurrentMonth) onDateClick?.(dayInfo.date)
               }}
               className={cn(
-                'relative flex min-h-[90px] md:min-h-[105px] flex-col items-start gap-1 border-b border-r border-border-subtle p-1.5 text-left transition-colors',
-                !dayInfo.isCurrentMonth && 'bg-surface-alt/40 text-text-tertiary/40',
-                dayInfo.isCurrentMonth && 'hover:bg-surface-alt/50',
-                isSelected && 'bg-brand-primary/10 ring-1 ring-brand-primary ring-inset',
-                isTodayDate && !isSelected && 'bg-brand-primary/5',
+                'relative flex min-h-[90px] md:min-h-[105px] flex-col items-start gap-1 border-b border-r border-gray-100 p-1.5 text-left transition-colors',
+                !dayInfo.isCurrentMonth && 'bg-gray-50/40 text-gray-500/40',
+                dayInfo.isCurrentMonth && 'hover:bg-gray-50/50',
+                isSelected && 'bg-emerald-600/10 ring-1 ring-brand-primary ring-inset',
+                isTodayDate && !isSelected && 'bg-emerald-600/5',
               )}
             >
               {/* Day Number Badge */}
               <span className={cn(
                 'flex h-6 min-w-6 items-center justify-center rounded-full text-xs font-bold transition-all',
-                isTodayDate && 'bg-brand-primary text-white shadow-2xs',
-                !isTodayDate && dayInfo.isCurrentMonth && 'text-text-primary',
-                !dayInfo.isCurrentMonth && 'text-text-tertiary/40',
+                isTodayDate && 'bg-emerald-600 text-white shadow-2xs',
+                !isTodayDate && dayInfo.isCurrentMonth && 'text-gray-800',
+                !dayInfo.isCurrentMonth && 'text-gray-500/40',
               )}>
                 {dayInfo.day}
               </span>

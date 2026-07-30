@@ -189,7 +189,7 @@ export function RegularizarFechamentoDrawer({
             <CalendarDays className="h-5 w-5 shrink-0 text-[#005BFF]" />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-[16px] font-black text-[#0F172A]">Regularizar Fechamento</h2>
+                <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>
                 <span className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[11px] font-bold text-red-600">Fechamento atrasado</span>
               </div>
               <p className="mt-0.5 text-[13px] text-slate-500">
@@ -215,14 +215,14 @@ export function RegularizarFechamentoDrawer({
             {/* Movimento do Dia */}
  <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
               <div className="border-b border-slate-100 px-5 py-4">
-                <h3 className="text-[14px] font-black uppercase tracking-wide text-[#0F172A]">Movimento do Dia</h3>
+                <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Movimento do Dia</h3>
                 <p className="mt-0.5 text-[12px] text-slate-400">Informe os atendimentos realizados neste dia</p>
               </div>
               <div className="space-y-4 p-5">
                 <div className="space-y-3 rounded-xl border border-orange-200 bg-orange-50 p-4">
                   <div className="flex items-center gap-2">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-500"><Store className="h-4 w-4 text-white" /></div>
-                    <span className="text-[13px] font-black uppercase tracking-wide text-orange-700">Showroom</span>
+                    <span className="text-[13px] font-bold uppercase tracking-wide text-orange-700">Showroom</span>
                   </div>
                   <FieldRow label="Atendimentos" value={formValues.visitas_porta} onChange={(v) => onFieldChange('visitas_porta', v)} disabled={false} />
                 </div>
@@ -230,7 +230,7 @@ export function RegularizarFechamentoDrawer({
                 <div className="space-y-3 rounded-xl border border-green-200 bg-green-50 p-4">
                   <div className="flex items-center gap-2">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-500"><Users className="h-4 w-4 text-white" /></div>
-                    <span className="text-[13px] font-black uppercase tracking-wide text-green-700">Carteira</span>
+                    <span className="text-[13px] font-bold uppercase tracking-wide text-green-700">Carteira</span>
                   </div>
                   <FieldRow label="Leads recebidos" value={formValues.leads_cart} onChange={(v) => onFieldChange('leads_cart', v)} disabled={false} />
                   <FieldRow label="Atendimentos" value={formValues.visitas_cart} onChange={(v) => onFieldChange('visitas_cart', v)} disabled={false} />
@@ -240,7 +240,7 @@ export function RegularizarFechamentoDrawer({
                 <div className="space-y-3 rounded-xl border border-blue-200 bg-blue-50 p-4">
                   <div className="flex items-center gap-2">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600"><Globe className="h-4 w-4 text-white" /></div>
-                    <span className="text-[13px] font-black uppercase tracking-wide text-blue-700">Internet</span>
+                    <span className="text-[13px] font-bold uppercase tracking-wide text-blue-700">Internet</span>
                   </div>
                   <FieldRow label="Leads recebidos" value={formValues.leads_net} onChange={(v) => onFieldChange('leads_net', v)} disabled={false} />
                   <FieldRow label="Atendimentos" value={formValues.visitas_net} onChange={(v) => onFieldChange('visitas_net', v)} disabled={false} />
@@ -257,7 +257,7 @@ export function RegularizarFechamentoDrawer({
             {/* Resumo do Dia */}
  <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
               <div className="border-b border-slate-100 px-5 py-4">
-                <h3 className="text-[14px] font-black uppercase tracking-wide text-[#0F172A]">Resumo do Dia</h3>
+                <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Resumo do Dia</h3>
               </div>
               <div className="grid grid-cols-2 divide-y divide-slate-100 sm:grid-cols-5 sm:divide-x sm:divide-y-0">
                 {[
@@ -268,7 +268,7 @@ export function RegularizarFechamentoDrawer({
                   { label: 'Faturamento', value: totalFaturamento > 0 ? BRL(totalFaturamento) : '—', color: 'text-green-700' },
                 ].map((s) => (
                   <div key={s.label} className="p-4 text-center">
-                    <p className={`text-[20px] font-black tabular-nums ${s.color}`}>{s.value}</p>
+                    <p className={`text-[20px] font-bold tabular-nums ${s.color}`}>{s.value}</p>
                     <p className="mt-0.5 text-[11px] font-medium text-slate-400">{s.label}</p>
                   </div>
                 ))}
@@ -278,7 +278,7 @@ export function RegularizarFechamentoDrawer({
             {/* Disciplina */}
  <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
               <div className="border-b border-slate-100 px-5 py-4">
-                <h3 className="text-[14px] font-black uppercase tracking-wide text-[#0F172A]">Disciplina — Fechamento Diário</h3>
+                <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Disciplina — Fechamento Diário</h3>
                 <p className="mt-0.5 text-[12px] text-slate-400">Estimativa com penalização de -10% por atraso</p>
               </div>
               <div className="flex items-center gap-6 p-5">
@@ -291,7 +291,7 @@ export function RegularizarFechamentoDrawer({
                       strokeLinecap="round" className="transition-all duration-700"
                     />
                   </svg>
-                  <span className={`absolute inset-0 flex items-center justify-center text-[18px] font-black tabular-nums ${ringColorClass}`}>
+                  <span className={`absolute inset-0 flex items-center justify-center text-[18px] font-bold tabular-nums ${ringColorClass}`}>
                     {disciplina.pontuacaoDisciplinaFinal}%
                   </span>
                 </div>
@@ -306,7 +306,7 @@ export function RegularizarFechamentoDrawer({
                   </div>
                   <div className="flex justify-between border-t border-slate-100 pt-2 text-[13px]">
                     <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
-                    <span className={`text-[15px] font-black ${ringColorClass}`}>{disciplina.pontuacaoDisciplinaFinal}%</span>
+                    <span className={`text-[15px] font-bold ${ringColorClass}`}>{disciplina.pontuacaoDisciplinaFinal}%</span>
                   </div>
                   <div className="flex justify-between text-[12px]">
                     <span className="text-slate-400">Agendamentos D+1</span>

@@ -50,7 +50,7 @@ function DiasBadge({ dataAgendamento, selectedDate, vendaRealizada }: { dataAgen
   const dias = diasAgendamento(dataAgendamento, selectedDate)
   if (dias === null || dias < 1) return null
   return (
-    <span className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-[10px] font-black ${dias === 1 ? 'bg-[#EFF6FF] text-[#2563EB]' : 'bg-[#F0F9FF] text-[#0284C7]'}`}>
+    <span className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold ${dias === 1 ? 'bg-[#EFF6FF] text-[#2563EB]' : 'bg-[#F0F9FF] text-[#0284C7]'}`}>
       D+{dias}
     </span>
   )
@@ -60,7 +60,7 @@ function DiasBadge({ dataAgendamento, selectedDate, vendaRealizada }: { dataAgen
 function VendaTipoBadge({ vendaRealizada }: { vendaRealizada: string }) {
   if (vendaRealizada !== 'Sim' && (vendaRealizada as string) !== 'ganho') return null
   return (
-    <span className="inline-flex shrink-0 items-center rounded-full bg-[#F0FDF4] px-1.5 py-0.5 text-[10px] font-black text-[#16A34A]">
+    <span className="inline-flex shrink-0 items-center rounded-full bg-[#F0FDF4] px-1.5 py-0.5 text-[10px] font-bold text-[#16A34A]">
       $
     </span>
   )

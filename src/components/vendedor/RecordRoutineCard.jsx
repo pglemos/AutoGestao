@@ -23,7 +23,7 @@ export default function RecordRoutineCard({ melhorMes }) {
 
         <p className="text-slate-400 text-sm mb-1">Seu recorde foi</p>
         <p
-          className="font-black tabular-nums"
+          className="font-bold tabular-nums"
           style={{ fontSize: "2.25rem", color: "#39FF5A", textShadow: "0 0 20px rgba(57,255,90,0.3)" }}
         >
           {melhorMes > 0 ? formatBRL(melhorMes).replace(",00", "") : "—"}
@@ -36,7 +36,7 @@ export default function RecordRoutineCard({ melhorMes }) {
 
       <Link to="/execucao">
         <button
-          className="w-full mt-5 flex items-center justify-center gap-3 py-4 rounded-xl font-black text-base tracking-wide transition-all hover:brightness-110 active:scale-95"
+          className="w-full mt-5 flex items-center justify-center gap-3 py-4 rounded-xl font-bold text-base tracking-wide transition-all hover:brightness-110 active:scale-95"
           style={{
             background: "linear-gradient(135deg, #16a34a, #22c55e)",
             color: "#030B14",

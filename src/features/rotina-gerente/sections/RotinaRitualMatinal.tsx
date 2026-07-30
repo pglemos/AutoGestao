@@ -52,12 +52,12 @@ export function RotinaRitualMatinal({
   return (
     <Card className="border p-mx-md space-y-mx-md bg-white relative overflow-hidden">
       <div
-        className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-32 -mt-32"
+        className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-32 -mt-32"
         aria-hidden="true"
       />
-      <header className="flex items-center justify-between border-b border-border-subtle pb-8 relative z-10">
+      <header className="flex items-center justify-between border-b border-gray-100 pb-8 relative z-10">
         <div className="flex items-center gap-mx-md">
-          <div className="w-mx-2xl h-mx-2xl rounded-mx-lg bg-brand-primary text-white flex items-center justify-center shadow-mx-xl transform -rotate-2">
+          <div className="w-mx-2xl h-mx-2xl rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm transform -rotate-2">
             <Zap size={32} />
           </div>
           <div>
@@ -87,20 +87,20 @@ export function RotinaRitualMatinal({
             key={step.idx}
             onClick={() => step.set(!step.done)}
             className={cn(
-              'rounded-mx-lg border p-mx-md cursor-pointer group transition-all',
+              'rounded-xl border p-mx-md cursor-pointer group transition-all',
               step.done
                 ? 'bg-status-success-surface/30 border-status-success/20 text-status-success'
-                : 'bg-surface-alt border-border-subtle hover:bg-white hover:border-brand-primary/20 hover:shadow-mx-sm',
+                : 'bg-gray-50 border-gray-100 hover:bg-white hover:border-brand-primary/20 hover:shadow-sm',
             )}
           >
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-mx-md">
               <div className="flex items-start sm:items-center gap-mx-md min-w-0">
                 <div
                   className={cn(
-                    'w-mx-xl h-mx-xl rounded-mx-lg flex items-center justify-center border shadow-mx-inner transition-all',
+                    'w-mx-xl h-mx-xl rounded-xl flex items-center justify-center border shadow-mx-inner transition-all',
                     step.done
                       ? 'bg-white text-status-success border-status-success/30'
-                      : 'bg-white text-text-tertiary border-border-subtle group-hover:scale-110',
+                      : 'bg-white text-gray-500 border-gray-100 group-hover:scale-110',
                   )}
                 >
                   {step.done ? (
@@ -134,7 +134,7 @@ export function RotinaRitualMatinal({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full sm:w-auto px-6 h-mx-10 text-tiny bg-white shadow-sm hover:bg-surface-alt"
+                  className="w-full sm:w-auto px-6 h-mx-10 text-tiny bg-white shadow-sm hover:bg-gray-50"
                 >
                   Concluir
                 </Button>
@@ -145,19 +145,19 @@ export function RotinaRitualMatinal({
 
         <Card
           className={cn(
-            'rounded-mx-lg border border-border-subtle p-mx-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-mx-lg',
+            'rounded-xl border border-gray-100 p-mx-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-mx-lg',
             canTriggerMatinal
-              ? 'bg-mx-black text-white shadow-mx-elite border-none'
-              : 'bg-surface-alt opacity-40',
+              ? 'bg-gray-900 text-white shadow-sm border-none'
+              : 'bg-gray-50 opacity-40',
           )}
         >
           <div className="flex items-center gap-mx-md">
             <div
               className={cn(
-                'w-mx-14 h-mx-14 rounded-mx-lg flex items-center justify-center border transition-all',
+                'w-mx-14 h-mx-14 rounded-xl flex items-center justify-center border transition-all',
                 canTriggerMatinal
                   ? 'bg-white/10 text-white border-white/10 shadow-mx-inner'
-                  : 'bg-white text-text-tertiary',
+                  : 'bg-white text-gray-500',
               )}
             >
               <Mail size={28} strokeWidth={2} />
@@ -183,10 +183,10 @@ export function RotinaRitualMatinal({
             disabled={!canTriggerMatinal || executing}
             onClick={onTriggerMatinal}
             className={cn(
-              'h-mx-14 px-10 rounded-mx-lg font-black uppercase tracking-widest text-tiny',
+              'h-mx-14 px-10 rounded-xl font-bold uppercase tracking-widest text-tiny',
               canTriggerMatinal
-                ? 'bg-brand-primary shadow-mx-xl text-white'
-                : 'bg-white border-border-subtle text-text-tertiary',
+                ? 'bg-emerald-600 shadow-sm text-white'
+                : 'bg-white border-gray-100 text-gray-500',
             )}
           >
             {executing ? (
@@ -199,7 +199,7 @@ export function RotinaRitualMatinal({
           {matinalAudit && (
             <div
               className={cn(
-                'w-full rounded-mx-lg border px-mx-md py-mx-sm text-sm font-bold md:basis-full',
+                'w-full rounded-xl border px-mx-md py-mx-sm text-sm font-bold md:basis-full',
                 matinalAudit.tone === 'success'
                   ? 'border-status-success/20 bg-status-success-surface text-status-success'
                   : 'border-status-error/20 bg-status-error-surface text-status-error',
@@ -207,7 +207,7 @@ export function RotinaRitualMatinal({
             >
               <div className="flex flex-col gap-mx-tiny sm:flex-row sm:items-center sm:justify-between">
                 <span>{matinalAudit.message}</span>
-                <span className="text-mx-tiny font-black uppercase opacity-70">
+                <span className="text-mx-tiny font-bold uppercase opacity-70">
                   {matinalAudit.at.toLocaleString('pt-BR')}
                 </span>
               </div>

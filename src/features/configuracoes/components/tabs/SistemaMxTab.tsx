@@ -123,7 +123,7 @@ export function SistemaMxTab() {
                 <div className="absolute -right-20 -top-20 w-mx-48 h-mx-48 bg-status-success/20 rounded-mx-full blur-3xl pointer-events-none" />
                 <div className="relative z-10 flex items-center justify-between gap-mx-md flex-wrap">
                     <div className="flex items-center gap-mx-md">
-                        <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-white/10 border border-white/10 flex items-center justify-center text-status-success">
+                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-status-success">
                             <Server size={28} />
                         </div>
                         <div>
@@ -172,9 +172,9 @@ export function SistemaMxTab() {
 
             {/* Auditoria */}
             <Card className="border-none bg-white overflow-hidden">
-                <header className="flex items-center justify-between p-mx-md border-b border-border-default">
+                <header className="flex items-center justify-between p-mx-md border-b border-gray-200">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-12 h-mx-12 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center">
+                        <div className="w-mx-12 h-mx-12 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center">
                             <Activity size={20} />
                         </div>
                         <div>
@@ -182,23 +182,23 @@ export function SistemaMxTab() {
                             <Typography variant="tiny" tone="muted" className="font-bold">Últimas 20 ações sensíveis</Typography>
                         </div>
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => { fetchAudit(); fetchHealth() }} className="rounded-mx-xl" aria-label="Atualizar auditoria e saúde">
+                    <Button variant="ghost" size="icon" onClick={() => { fetchAudit(); fetchHealth() }} className="rounded-2xl" aria-label="Atualizar auditoria e saúde">
                         <RefreshCw size={16} />
                     </Button>
                 </header>
 
                 {loading ? (
-                    <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-brand-primary" /></div>
+                    <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-emerald-600" /></div>
                 ) : audit.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
-                        <Activity size={40} className="mx-auto text-text-tertiary opacity-30" />
+                        <Activity size={40} className="mx-auto text-gray-500 opacity-30" />
                         <Typography variant="caption" tone="muted" className="">Nenhum registro de auditoria</Typography>
                     </div>
                 ) : (
                     <div className="divide-y divide-border-default">
                         {audit.map(entry => (
-                            <div key={entry.id} className="flex items-start gap-mx-md p-mx-md hover:bg-surface-alt transition-colors">
-                                <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-status-warning/10 text-status-warning flex items-center justify-center shrink-0">
+                            <div key={entry.id} className="flex items-start gap-mx-md p-mx-md hover:bg-gray-50 transition-colors">
+                                <div className="w-mx-10 h-mx-10 rounded-2xl bg-status-warning/10 text-status-warning flex items-center justify-center shrink-0">
                                     <AlertTriangle size={16} />
                                 </div>
                                 <div className="flex-1 min-w-0">
@@ -219,7 +219,7 @@ export function SistemaMxTab() {
             </Card>
 
             {/* Versão */}
-            <Card className="p-mx-md border-none bg-surface-alt">
+            <Card className="p-mx-md border-none bg-gray-50">
                 <div className="flex items-center justify-between">
                     <Typography variant="tiny" tone="muted" className="">Versão / Último check</Typography>
                     <Typography variant="tiny" className="font-mono-numbers">
@@ -233,8 +233,8 @@ export function SistemaMxTab() {
 
 function ExportContactsCard({ exporting, onExport }: { exporting: boolean; onExport: () => void }) {
     return (
-        <Card className="p-mx-md border-none bg-white hover:shadow-mx-lg transition-shadow">
-            <div className="w-mx-12 h-mx-12 rounded-mx-xl border border-status-success/20 bg-status-success/5 text-status-success flex items-center justify-center mb-mx-sm">
+        <Card className="p-mx-md border-none bg-white hover:shadow-sm transition-shadow">
+            <div className="w-mx-12 h-mx-12 rounded-2xl border border-status-success/20 bg-status-success/5 text-status-success flex items-center justify-center mb-mx-sm">
                 {exporting ? <RefreshCw size={22} className="animate-spin" /> : <Download size={22} />}
             </div>
             <Typography variant="caption" className="tracking-tight">Exportar Contatos</Typography>
@@ -264,8 +264,8 @@ function StatusPill({ icon, label, value, tone }: { icon: React.ReactNode; label
     return (
         <div className={`flex items-center gap-mx-xs px-3 h-mx-10 rounded-mx-full border ${colors[tone]}`}>
             {icon}
-            <span className="text-xs font-black uppercase tracking-widest">{label}</span>
-            <span className="text-xs font-black tabular-nums opacity-70">{value}</span>
+            <span className="text-xs font-bold uppercase tracking-widest">{label}</span>
+            <span className="text-xs font-bold tabular-nums opacity-70">{value}</span>
         </div>
     )
 }
@@ -279,12 +279,12 @@ function CriticalOpCard({ icon, label, desc, route, severity }: {
 }) {
     const sev = {
         warning: 'border-status-warning/20 bg-status-warning/5 text-status-warning',
-        info: 'border-mx-indigo-100 bg-mx-indigo-50 text-brand-primary',
+        info: 'border-mx-indigo-100 bg-mx-indigo-50 text-emerald-600',
         error: 'border-status-error/20 bg-status-error/5 text-status-error',
     }
     return (
-        <Card className="p-mx-md border-none bg-white hover:shadow-mx-lg transition-shadow">
-            <div className={`w-mx-12 h-mx-12 rounded-mx-xl border flex items-center justify-center mb-mx-sm ${sev[severity]}`}>
+        <Card className="p-mx-md border-none bg-white hover:shadow-sm transition-shadow">
+            <div className={`w-mx-12 h-mx-12 rounded-2xl border flex items-center justify-center mb-mx-sm ${sev[severity]}`}>
                 {icon}
             </div>
             <Typography variant="caption" className="tracking-tight">{label}</Typography>

@@ -69,7 +69,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
   return (
     <Card className="p-mx-lg">
       <div className="flex items-start gap-mx-sm">
-        <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-sm text-brand-primary">
+        <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-emerald-600">
           <Gauge size={20} aria-hidden="true" />
         </div>
         <div className="flex-1 min-w-0">
@@ -92,7 +92,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
         <div>
           <label
             htmlFor="benchmark-metric-code"
-            className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+            className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
           >
             Indicador (code)
           </label>
@@ -107,7 +107,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
         <div>
           <label
             htmlFor="benchmark-peer-group"
-            className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+            className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
           >
             Grupo de comparação
           </label>
@@ -115,7 +115,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
             id="benchmark-peer-group"
             value={peerGroup}
             onChange={(event) => setPeerGroup(event.target.value as CentralMxBenchmarkPeerGroup)}
-            className="w-full h-mx-14 sm:h-12 rounded-mx-md border border-border-default bg-white px-5 text-sm font-black uppercase shadow-inner outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
+            className="w-full h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
           >
             {PEER_OPTIONS.map((option) => (
               <option key={option.value} value={option.value}>
@@ -151,7 +151,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
       </div>
 
       {benchmark.error && (
-        <div className="mt-mx-md rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
+        <div className="mt-mx-md rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
           <Typography variant="tiny" className="text-status-error">
             {benchmark.error}
           </Typography>
@@ -166,7 +166,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
       </div>
 
       {benchmark.data && (
-        <div className="mt-mx-md flex flex-wrap items-center justify-between gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-sm">
+        <div className="mt-mx-md flex flex-wrap items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm">
           <div className="flex items-center gap-mx-xs">
             <Typography variant="tiny" tone="muted" className="">
               Ranking
@@ -200,7 +200,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
             key={code}
             type="button"
             onClick={() => setMetricCode(code)}
-            className="rounded-mx-md border border-border-default bg-white px-mx-xs py-mx-tiny text-mx-tiny font-black uppercase tracking-widest text-text-secondary hover:border-brand-primary/40 hover:text-brand-primary"
+            className="rounded-xl border border-gray-200 bg-white px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest text-gray-500 hover:border-brand-primary/40 hover:text-emerald-600"
           >
             {code}
             <ArrowRight size={10} className="ml-1 inline" />
@@ -213,7 +213,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
 
 function MetricCell({ label, value }: { label: string; value: number | null | undefined }) {
   return (
-    <div className="rounded-mx-xl border border-border-default bg-white p-mx-sm">
+    <div className="rounded-2xl border border-gray-200 bg-white p-mx-sm">
       <Typography variant="tiny" tone="muted" className="">
         {label}
       </Typography>

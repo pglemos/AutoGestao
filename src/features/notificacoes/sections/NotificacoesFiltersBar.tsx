@@ -28,7 +28,7 @@ const FILTERS = [
 export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, setFilterType }: Props) {
   return (
     <Card className="space-y-mx-lg bg-white p-mx-md sm:p-mx-lg">
-      <header className="border-b border-border-default pb-mx-md">
+      <header className="border-b border-gray-200 pb-mx-md">
         <Typography variant="h3">
           Filtrar notificações
         </Typography>
@@ -40,7 +40,7 @@ export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, 
       <div className="relative group">
         <Search
           size={16}
-          className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors"
+          className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors"
         />
         <Input
           placeholder="Buscar notificações"
@@ -60,30 +60,30 @@ export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, 
             key={f.label}
             onClick={() => setFilterType(filterType === f.type ? null : f.type)}
             className={cn(
-              'flex w-full items-center justify-between rounded-mx-xl border p-mx-sm text-left transition-all group/f',
+              'flex w-full items-center justify-between rounded-2xl border p-mx-sm text-left transition-all group/f',
               filterType === f.type
-                ? 'bg-brand-primary border-brand-primary text-white shadow-mx-lg'
-                : 'bg-surface-alt border-border-default hover:bg-white hover:border-brand-primary/20 shadow-inner',
+                ? 'bg-emerald-600 border-brand-primary text-white shadow-sm'
+                : 'bg-gray-50 border-gray-200 hover:bg-white hover:border-brand-primary/20 shadow-none',
             )}
           >
             <div className="flex items-center gap-mx-sm">
-              <f.icon size={16} className={cn(filterType === f.type ? 'text-white' : 'text-text-label')} />
+              <f.icon size={16} className={cn(filterType === f.type ? 'text-white' : 'text-gray-500')} />
               <Typography
                 variant="caption"
-                className={cn('font-bold', filterType === f.type ? 'text-white' : 'text-text-primary')}
+                className={cn('font-bold', filterType === f.type ? 'text-white' : 'text-gray-800')}
               >
                 {f.label}
               </Typography>
             </div>
             <ChevronRight
               size={14}
-              className={cn(filterType === f.type ? 'text-white/40' : 'text-text-tertiary opacity-20 group-hover/f:text-brand-primary')}
+              className={cn(filterType === f.type ? 'text-white/40' : 'text-gray-500 opacity-20 group-hover/f:text-emerald-600')}
             />
           </button>
         ))}
       </nav>
 
-      <footer className="pt-8 border-t border-border-default hidden">
+      <footer className="pt-8 border-t border-gray-200 hidden">
         <Button
           variant="outline"
           className="w-full h-mx-14 rounded-mx-full shadow-sm text-xs bg-white hover:border-brand-primary"

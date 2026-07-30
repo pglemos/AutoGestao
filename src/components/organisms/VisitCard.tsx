@@ -59,7 +59,7 @@ export function VisitCard({
 
   return (
     <Card className={cn(
-      'p-mx-md border-none shadow-mx-md bg-white hover:shadow-mx-xl transition-all group overflow-hidden',
+      'p-mx-md border-none shadow-sm bg-white hover:shadow-sm transition-all group overflow-hidden',
       isExpired && 'border-l-4 border-l-status-warning',
       visit.status === 'em_andamento' && 'border-l-4 border-l-status-info',
       className,
@@ -70,8 +70,8 @@ export function VisitCard({
           className="flex items-center gap-mx-md min-w-0 flex-1 cursor-pointer"
         >
           <div className={cn(
-            'w-mx-10 h-mx-10 rounded-mx-lg border flex items-center justify-center shrink-0',
-            isToday(scheduledDate) ? 'bg-brand-primary/10 border-brand-primary/20 text-brand-primary' : 'bg-surface-alt border-border-default text-text-tertiary'
+            'w-mx-10 h-mx-10 rounded-xl border flex items-center justify-center shrink-0',
+            isToday(scheduledDate) ? 'bg-emerald-600/10 border-brand-primary/20 text-emerald-600' : 'bg-gray-50 border-gray-200 text-gray-500'
           )}>
             <Typography variant="h3" className="text-lg">
               {format(scheduledDate, 'dd')}
@@ -80,10 +80,10 @@ export function VisitCard({
 
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-mx-xs mb-1 min-w-0">
-              <Building2 size={14} className="text-brand-primary shrink-0" />
+              <Building2 size={14} className="text-emerald-600 shrink-0" />
               <Typography variant="h3" className="text-sm leading-tight break-words sm:truncate">{visit.client_name}</Typography>
             </div>
-            <div className="flex flex-wrap items-center gap-x-mx-sm gap-y-mx-xs text-text-tertiary">
+            <div className="flex flex-wrap items-center gap-x-mx-sm gap-y-mx-xs text-gray-500">
               <div className="flex items-center gap-mx-xs min-w-0">
                 <Clock size={12} className="shrink-0" />
                 <Typography variant="tiny">
@@ -137,7 +137,7 @@ export function VisitCard({
 
           {visit.consultant && (
             <div className="hidden md:flex items-center gap-mx-xs">
-              <User size={14} className="text-text-tertiary" />
+              <User size={14} className="text-gray-500" />
               <Typography variant="tiny" tone="muted">{visit.consultant.name}</Typography>
             </div>
           )}
@@ -163,12 +163,12 @@ export function VisitCard({
                 href={visit.google_meet_link}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-mx-9 items-center justify-center gap-mx-xs rounded-mx-sm px-3 text-brand-primary hover:bg-surface-alt transition-all"
+                className="inline-flex h-mx-9 items-center justify-center gap-mx-xs rounded-lg px-3 text-emerald-600 hover:bg-gray-50 transition-all"
                 aria-label={`Abrir Google Meet da visita de ${visit.client_name}`}
                 onClick={(event) => event.stopPropagation()}
               >
                 <Video size={14} aria-hidden="true" />
-                <span className="text-mx-micro font-black uppercase tracking-widest">Meet</span>
+                <span className="text-mx-micro font-bold uppercase tracking-widest">Meet</span>
               </a>
             )}
             {visit.status === 'cancelada' && onDelete && (
@@ -177,7 +177,7 @@ export function VisitCard({
               </Button>
             )}
             <Link to={linkTo} aria-label={`Abrir visita de ${visit.client_name}`} className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-mx-full">
-              <ChevronRight size={18} className="text-text-tertiary group-hover:text-brand-primary transition-colors shrink-0" />
+              <ChevronRight size={18} className="text-gray-500 group-hover:text-emerald-600 transition-colors shrink-0" />
             </Link>
           </div>
         </div>

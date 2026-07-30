@@ -36,7 +36,7 @@ export function StoreConsultorIa() {
 
   if (!selectedStoreId) {
     return (
-      <main className="w-full h-full bg-surface-alt p-mx-lg">
+      <main className="w-full h-full bg-gray-50 p-mx-lg">
         <Card className="mx-auto max-w-2xl border-none bg-white">
           <EmptyState
             size="lg"
@@ -49,7 +49,7 @@ export function StoreConsultorIa() {
             }
             nextStep="Volte para sua área principal e escolha uma loja ativa. Se a loja foi renomeada ou criada recentemente, solicite ao Admin MX revisar seu vínculo."
             action={
-              <Button onClick={() => navigate(fallbackPath, { replace: true })} className="rounded-mx-full bg-brand-secondary px-mx-xl">
+              <Button onClick={() => navigate(fallbackPath, { replace: true })} className="rounded-mx-full bg-gray-900 px-mx-xl">
                 Voltar
               </Button>
             }
@@ -60,9 +60,9 @@ export function StoreConsultorIa() {
   }
 
   return (
-  <main className="h-full w-full overflow-y-auto bg-surface-alt p-mx-lg no-scrollbar">
+  <main className="h-full w-full overflow-y-auto bg-gray-50 p-mx-lg no-scrollbar">
       <div className="flex flex-col gap-mx-md pb-28">
-        <header className="flex flex-col gap-mx-md border-b border-border-subtle pb-mx-lg lg:flex-row lg:items-start lg:justify-between">
+        <header className="flex flex-col gap-mx-md border-b border-gray-100 pb-mx-lg lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
             <Typography variant="h1" className="text-3xl md:text-4xl">
               Consultor IA

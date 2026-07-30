@@ -92,12 +92,12 @@ export function BenchmarkingView({
       <Card className="p-mx-lg">
         <div className="grid grid-cols-1 gap-mx-sm md:grid-cols-4">
           {Object.entries(filterOptions).map(([label, { current, set, options }]) => (
-            <div key={label} className="rounded-mx-xl border border-border-default bg-white px-mx-md py-mx-sm flex flex-col gap-1">
+            <div key={label} className="rounded-2xl border border-gray-200 bg-white px-mx-md py-mx-sm flex flex-col gap-1">
               <Typography variant="tiny" tone="muted" className="block text-xs">{label}</Typography>
               <select
                 value={current}
                 onChange={(e) => set(e.target.value)}
-                className="mt-mx-xs w-full bg-transparent font-black text-text-primary text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary rounded-mx-md p-1 border border-border-subtle cursor-pointer"
+                className="mt-mx-xs w-full bg-transparent font-bold text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary rounded-xl p-1 border border-gray-100 cursor-pointer"
               >
                 {options.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -112,7 +112,7 @@ export function BenchmarkingView({
           <Typography variant="h3" className="text-xl">Indicadores Comparados</Typography>
           <div className="mt-mx-md overflow-x-auto">
             <table className="min-w-[760px] w-full text-sm">
-              <thead className="bg-surface-alt text-left text-mx-tiny font-black uppercase text-text-secondary">
+              <thead className="bg-gray-50 text-left text-mx-tiny font-bold uppercase text-gray-500">
                 <tr>
                   <th className="px-mx-sm py-mx-sm">Indicador</th>
                   <th className="px-mx-sm py-mx-sm">Sua Loja</th>
@@ -124,11 +124,11 @@ export function BenchmarkingView({
               <tbody className="divide-y divide-border-subtle">
                 {rows.map(row => (
                   <tr key={row.label}>
-                    <td className="px-mx-sm py-mx-sm font-black">{row.label}</td>
+                    <td className="px-mx-sm py-mx-sm font-bold">{row.label}</td>
                     <td className="px-mx-sm py-mx-sm font-bold">{formatPlanningValue(row.store)}</td>
                     <td className="px-mx-sm py-mx-sm font-bold">{formatPlanningValue(row.group)}</td>
                     <td className="px-mx-sm py-mx-sm font-bold">{formatPlanningValue(row.best)}</td>
-                    <td className="px-mx-sm py-mx-sm"><span className="rounded-mx-md border border-status-warning/20 bg-status-warning-surface px-mx-sm py-mx-xs text-mx-tiny font-black text-status-warning">{row.status}</span></td>
+                    <td className="px-mx-sm py-mx-sm"><span className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-warning">{row.status}</span></td>
                   </tr>
                 ))}
               </tbody>

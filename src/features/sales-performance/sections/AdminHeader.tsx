@@ -16,11 +16,11 @@ type Props = {
 
 export function AdminHeader({ metrics, isRefetching, onRefresh, onExport }: Props) {
   return (
-    <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-mx-lg border-b border-border-default pb-8 shrink-0">
+    <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-mx-lg border-b border-gray-200 pb-8 shrink-0">
       <div className="flex flex-col gap-mx-tiny">
         <div className="flex items-center gap-mx-sm">
           <div
-            className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-mx-md"
+            className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm"
             aria-hidden="true"
           />
           <Typography variant="h1">
@@ -46,8 +46,8 @@ export function AdminHeader({ metrics, isRefetching, onRefresh, onExport }: Prop
         >
           <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
         </Button>
-        <div className="flex items-center gap-mx-xs px-6 h-mx-14 rounded-mx-full border border-border-default bg-white shadow-mx-sm">
-          <Calendar size={18} className="text-brand-primary" />
+        <div className="flex items-center gap-mx-xs px-6 h-mx-14 rounded-mx-full border border-gray-200 bg-white shadow-sm">
+          <Calendar size={18} className="text-emerald-600" />
           <Typography variant="caption" className="">
             Ciclo {format(new Date(), 'yyyy')}
           </Typography>

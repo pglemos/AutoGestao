@@ -56,11 +56,11 @@ function ComparisonRow({ label, v1, v2, format = v => Math.round(v).toString(), 
           initial={{ scale: 0.95, opacity: 0.6 }}
           animate={{ scale: winner === 'p1' ? 1.12 : 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 220, damping: 18 }}
-          className={cn('tabular-nums font-display', winner === 'p1' ? 'text-brand-primary drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'text-text-tertiary')}
+          className={cn('tabular-nums font-display', winner === 'p1' ? 'text-emerald-600 drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'text-gray-500')}
         >
           {format(a1)}
         </motion.span>
-        <span className="flex items-center gap-mx-xs text-mx-tiny uppercase text-text-tertiary tracking-widest">
+        <span className="flex items-center gap-mx-xs text-mx-tiny uppercase text-gray-500 tracking-widest">
           <Icon size={12} className="opacity-60" />
           {label}
         </span>
@@ -69,19 +69,19 @@ function ComparisonRow({ label, v1, v2, format = v => Math.round(v).toString(), 
           initial={{ scale: 0.95, opacity: 0.6 }}
           animate={{ scale: winner === 'p2' ? 1.12 : 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 220, damping: 18 }}
-          className={cn('tabular-nums font-display', winner === 'p2' ? 'text-status-info drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'text-text-tertiary')}
+          className={cn('tabular-nums font-display', winner === 'p2' ? 'text-status-info drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'text-gray-500')}
         >
           {format(a2)}
         </motion.span>
       </div>
-      <div className="h-mx-sm bg-mx-black rounded-full overflow-hidden flex relative shadow-inner">
+      <div className="h-mx-sm bg-gray-900 rounded-full overflow-hidden flex relative shadow-none">
         <motion.div
-          className={cn('h-full', winner === 'p1' ? 'bg-brand-primary shadow-mx-glow-brand' : 'bg-brand-primary/40')}
+          className={cn('h-full', winner === 'p1' ? 'bg-emerald-600 shadow-mx-glow-brand' : 'bg-emerald-600/40')}
           initial={{ width: 0 }}
           animate={{ width: `${pct1}%` }}
           transition={{ duration: 0.9, ease: 'easeOut' }}
         />
-        <div className="w-mx-tiny bg-surface-alt z-10 skew-x-[-20deg]" />
+        <div className="w-mx-tiny bg-gray-50 z-10 skew-x-[-20deg]" />
         <motion.div
           className={cn('h-full flex-1', winner === 'p2' ? 'bg-status-info shadow-mx-glow-brand' : 'bg-status-info/40')}
           initial={{ width: 0 }}
@@ -128,10 +128,10 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
           animate={{ scale: 1, opacity: 1 }}
           className="inline-flex flex-col items-center gap-mx-md"
         >
-          <div className="w-mx-3xl h-mx-3xl rounded-mx-3xl bg-mx-black flex items-center justify-center shadow-mx-xl">
-            <Building2 size={36} className="text-brand-primary" />
+          <div className="w-mx-3xl h-mx-3xl rounded-2xl bg-gray-900 flex items-center justify-center shadow-sm">
+            <Building2 size={36} className="text-emerald-600" />
           </div>
-          <p className="font-bold uppercase tracking-widest text-text-tertiary">
+          <p className="font-bold uppercase tracking-widest text-gray-500">
             Selecione 2 lojas para iniciar o comparativo
           </p>
         </motion.div>
@@ -155,7 +155,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
               animate={{ scale: [0, 1.4, 1], rotate: [0, 10, 0] }}
               exit={{ scale: 0, opacity: 0 }}
               transition={{ duration: 1.2, ease: 'easeOut' }}
-              className="w-mx-4xl h-mx-4xl rounded-full bg-mx-black border-4 border-status-warning/70 flex items-center justify-center shadow-2xl"
+              className="w-mx-4xl h-mx-4xl rounded-full bg-gray-900 border-4 border-status-warning/70 flex items-center justify-center shadow-2xl"
             >
               <Crown size={84} className="text-status-warning fill-status-warning/25" />
             </motion.div>
@@ -170,9 +170,9 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
           initial={{ scale: 0, rotate: -180 }}
           animate={{ scale: 1, rotate: 0 }}
           transition={{ type: 'spring', stiffness: 200, damping: 15, delay: 0.2 }}
-          className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-mx-2xl h-mx-2xl rounded-full bg-mx-black border-4 border-surface-alt items-center justify-center z-20 shadow-2xl"
+          className="hidden md:flex absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-mx-2xl h-mx-2xl rounded-full bg-gray-900 border-4 border-surface-alt items-center justify-center z-20 shadow-2xl"
         >
-          <span className="font-display font-black text-3xl italic text-brand-primary">VS</span>
+          <span className="font-display font-bold text-3xl italic text-emerald-600">VS</span>
         </motion.div>
 
         {/* Loja 1 */}
@@ -180,7 +180,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
           whileHover={{ y: -4, scale: 1.02 }}
           transition={{ type: 'spring', stiffness: 300 }}
           className={cn(
-            'bg-mx-black p-mx-lg rounded-mx-3xl flex flex-col items-center w-full md:flex-1 relative overflow-hidden shadow-mx-xl border',
+            'bg-gray-900 p-mx-lg rounded-2xl flex flex-col items-center w-full md:flex-1 relative overflow-hidden shadow-sm border',
             winnerSide === 'p1' ? 'border-brand-primary/60 shadow-mx-glow-brand' : 'border-brand-primary/20'
           )}
         >
@@ -188,7 +188,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
             aria-hidden="true"
             animate={{ opacity: winnerSide === 'p1' ? [0.15, 0.35, 0.15] : 0.12 }}
             transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut' }}
-            className="absolute inset-mx-0 border-2 border-brand-primary/30 rounded-mx-3xl"
+            className="absolute inset-mx-0 border-2 border-brand-primary/30 rounded-2xl"
           />
           {winnerSide === 'p1' && (
             <motion.div
@@ -199,11 +199,11 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
               <Crown size={24} className="text-status-warning fill-status-warning/30" />
             </motion.div>
           )}
-          <div className="w-mx-2xl h-mx-2xl rounded-mx-2xl bg-brand-primary/10 border-2 border-brand-primary flex items-center justify-center mb-4 relative z-10">
-            <Building2 size={32} className="text-brand-primary" />
+          <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-emerald-600/10 border-2 border-brand-primary flex items-center justify-center mb-4 relative z-10">
+            <Building2 size={32} className="text-emerald-600" />
           </div>
-          <h3 className="font-display font-black text-2xl text-white text-center relative z-10 truncate max-w-full">{p1.storeName}</h3>
-          <p className="text-mx-tiny font-black text-brand-primary uppercase tracking-widest text-center mt-1 relative z-10">
+          <h3 className="font-display font-bold text-2xl text-white text-center relative z-10 truncate max-w-full">{p1.storeName}</h3>
+          <p className="text-mx-tiny font-bold text-emerald-600 uppercase tracking-widest text-center mt-1 relative z-10">
             {p1.reaching}% atingido
           </p>
           {winnerSide === 'p1' && (
@@ -213,14 +213,14 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
               className="mt-3 px-3 py-1 rounded-full bg-status-warning/20 border border-status-warning/40 flex items-center gap-mx-xs relative z-10"
             >
               <Flame size={12} className="text-status-warning" />
-              <span className="text-mx-tiny font-black uppercase tracking-widest text-status-warning">Líder</span>
+              <span className="text-mx-tiny font-bold uppercase tracking-widest text-status-warning">Líder</span>
             </motion.div>
           )}
         </motion.div>
 
         {/* Mobile VS */}
         <div className="md:hidden text-center">
-          <span className="font-display font-black text-3xl italic text-brand-primary">VS</span>
+          <span className="font-display font-bold text-3xl italic text-emerald-600">VS</span>
         </div>
 
         {/* Loja 2 */}
@@ -228,7 +228,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
           whileHover={{ y: -4, scale: 1.02 }}
           transition={{ type: 'spring', stiffness: 300 }}
           className={cn(
-            'bg-mx-black p-mx-lg rounded-mx-3xl flex flex-col items-center w-full md:flex-1 relative overflow-hidden shadow-mx-xl border',
+            'bg-gray-900 p-mx-lg rounded-2xl flex flex-col items-center w-full md:flex-1 relative overflow-hidden shadow-sm border',
             winnerSide === 'p2' ? 'border-status-info/60 shadow-mx-glow-brand' : 'border-status-info/20'
           )}
         >
@@ -236,7 +236,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
             aria-hidden="true"
             animate={{ opacity: winnerSide === 'p2' ? [0.15, 0.35, 0.15] : 0.12 }}
             transition={{ duration: 2.4, repeat: Infinity, ease: 'easeInOut', delay: 0.2 }}
-            className="absolute inset-mx-0 border-2 border-status-info/30 rounded-mx-3xl"
+            className="absolute inset-mx-0 border-2 border-status-info/30 rounded-2xl"
           />
           {winnerSide === 'p2' && (
             <motion.div
@@ -247,11 +247,11 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
               <Crown size={24} className="text-status-warning fill-status-warning/30" />
             </motion.div>
           )}
-          <div className="w-mx-2xl h-mx-2xl rounded-mx-2xl bg-status-info/10 border-2 border-status-info flex items-center justify-center mb-4 relative z-10">
+          <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-status-info/10 border-2 border-status-info flex items-center justify-center mb-4 relative z-10">
             <Building2 size={32} className="text-status-info" />
           </div>
-          <h3 className="font-display font-black text-2xl text-white text-center relative z-10 truncate max-w-full">{p2.storeName}</h3>
-          <p className="text-mx-tiny font-black text-status-info uppercase tracking-widest text-center mt-1 relative z-10">
+          <h3 className="font-display font-bold text-2xl text-white text-center relative z-10 truncate max-w-full">{p2.storeName}</h3>
+          <p className="text-mx-tiny font-bold text-status-info uppercase tracking-widest text-center mt-1 relative z-10">
             {p2.reaching}% atingido
           </p>
           {winnerSide === 'p2' && (
@@ -261,7 +261,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
               className="mt-3 px-3 py-1 rounded-full bg-status-warning/20 border border-status-warning/40 flex items-center gap-mx-xs relative z-10"
             >
               <Flame size={12} className="text-status-warning" />
-              <span className="text-mx-tiny font-black uppercase tracking-widest text-status-warning">Líder</span>
+              <span className="text-mx-tiny font-bold uppercase tracking-widest text-status-warning">Líder</span>
             </motion.div>
           )}
         </motion.div>
@@ -272,17 +272,17 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
         initial={{ opacity: 0, y: 30 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ delay: 0.3 }}
-        className="bg-mx-black/85 backdrop-blur-xl p-mx-xl rounded-mx-3xl border border-white/10 shadow-2xl"
+        className="bg-gray-900/85 backdrop-blur-xl p-mx-xl rounded-2xl border border-white/10 shadow-2xl"
       >
         <div className="flex items-center justify-between mb-mx-lg">
-          <h4 className="font-display font-black text-xl text-white uppercase flex items-center gap-mx-sm">
-            <Sparkles size={18} className="text-brand-primary" /> Duelo de indicadores
+          <h4 className="font-display font-bold text-xl text-white uppercase flex items-center gap-mx-sm">
+            <Sparkles size={18} className="text-emerald-600" /> Duelo de indicadores
           </h4>
-          <div className="hidden sm:flex items-center gap-mx-sm text-mx-tiny font-black uppercase tracking-widest">
-            <span className="text-brand-primary">●</span>
-            <span className="text-text-tertiary">Loja A</span>
-            <span className="text-text-tertiary">vs</span>
-            <span className="text-text-tertiary">Loja B</span>
+          <div className="hidden sm:flex items-center gap-mx-sm text-mx-tiny font-bold uppercase tracking-widest">
+            <span className="text-emerald-600">●</span>
+            <span className="text-gray-500">Loja A</span>
+            <span className="text-gray-500">vs</span>
+            <span className="text-gray-500">Loja B</span>
             <span className="text-status-info">●</span>
           </div>
         </div>
@@ -311,8 +311,8 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
         >
           <div
             className={cn(
-              'inline-flex items-center gap-mx-sm px-6 py-3 rounded-full font-display font-black uppercase tracking-widest shadow-mx-xl border',
-              winnerSide === 'p1' && 'bg-brand-primary/15 border-brand-primary/40 text-brand-primary',
+              'inline-flex items-center gap-mx-sm px-6 py-3 rounded-full font-display font-bold uppercase tracking-widest shadow-sm border',
+              winnerSide === 'p1' && 'bg-emerald-600/15 border-brand-primary/40 text-emerald-600',
               winnerSide === 'p2' && 'bg-status-info/15 border-status-info/40 text-status-info',
               winnerSide === 'draw' && 'bg-status-warning/15 border-status-warning/40 text-status-warning'
             )}

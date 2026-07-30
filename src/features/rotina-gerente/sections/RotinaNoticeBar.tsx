@@ -13,7 +13,7 @@ export function RotinaNoticeBar({ notice }: Props) {
     <div
       role="status"
       className={cn(
-        'rounded-mx-lg border px-mx-md py-mx-sm text-sm font-bold',
+        'rounded-xl border px-mx-md py-mx-sm text-sm font-bold',
         notice.tone === 'success' &&
           'border-status-success/20 bg-status-success-surface text-status-success',
         notice.tone === 'warning' &&
@@ -26,7 +26,7 @@ export function RotinaNoticeBar({ notice }: Props) {
     >
       <div className="flex flex-col gap-mx-tiny sm:flex-row sm:items-center sm:justify-between">
         <span>{notice.message}</span>
-        <span className="text-mx-tiny font-black uppercase opacity-70">
+        <span className="text-mx-tiny font-bold uppercase opacity-70">
           {notice.at.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
         </span>
       </div>

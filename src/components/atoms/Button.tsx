@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { Typography } from '@/components/atoms/Typography'
 
 const buttonVariants = cva(
-  "group relative inline-flex items-center justify-center gap-mx-xs whitespace-nowrap rounded-mx-md font-semibold tracking-normal transition-all duration-[120ms] focus-visible:ring-4 focus-visible:ring-mx-action/20 outline-none disabled:pointer-events-none disabled:bg-mx-bg disabled:text-mx-muted disabled:opacity-100 data-[legacy-disabled=true]:disabled:opacity-50 active:scale-[0.98] active:duration-[80ms] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "group relative inline-flex items-center justify-center gap-mx-xs whitespace-nowrap rounded-xl font-semibold tracking-normal transition-all duration-[120ms] focus-visible:ring-4 focus-visible:ring-mx-action/20 outline-none disabled:pointer-events-none disabled:bg-gray-50 disabled:text-mx-muted disabled:opacity-100 data-[legacy-disabled=true]:disabled:opacity-50 active:scale-[0.98] active:duration-[80ms] [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
@@ -26,9 +26,9 @@ const buttonVariants = cva(
       },
       size: {
         default: "h-mx-11 px-6 sm:h-10 sm:px-4",
-        sm: "h-mx-9 rounded-mx-sm px-3",
-        xs: "h-mx-8 rounded-mx-sm px-2 text-[10px]",
-        lg: "h-mx-14 rounded-mx-lg px-8",
+        sm: "h-mx-9 rounded-lg px-3",
+        xs: "h-mx-8 rounded-lg px-2 text-[10px]",
+        lg: "h-mx-14 rounded-xl px-8",
         icon: "h-mx-11 w-mx-11 sm:h-10 sm:w-10",
       },
     },
@@ -103,7 +103,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               decoratedChildren
             )}
             {iconTooltip && (
-              <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-mx-xs -translate-x-1/2 rounded-mx-md bg-brand-secondary px-mx-xs py-mx-tiny text-mx-micro font-medium text-white opacity-0 shadow-mx-lg transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+              <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-mx-xs -translate-x-1/2 rounded-xl bg-gray-900 px-mx-xs py-mx-tiny text-mx-micro font-medium text-white opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                 {iconTooltip}
               </span>
             )}

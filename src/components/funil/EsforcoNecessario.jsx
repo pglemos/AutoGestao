@@ -61,7 +61,7 @@ function AlavancaItem({ label, valor }) {
   return (
     <div className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
       <span className="text-[13px] text-slate-600">{label}</span>
-      <span className="text-[18px] font-black text-[#0F172A] tabular-nums">{valor}</span>
+      <span className="text-[18px] font-bold text-[#0F172A] tabular-nums">{valor}</span>
     </div>
   );
 }
@@ -123,7 +123,7 @@ export default function EsforcoNecessario({ funis, faltam, funisBase90, usou90 }
           {/* Canal principal — destaque */}
           <div className={`rounded-xl border p-4 mb-4 ${corPrincipal}`}>
             <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1">
-              Sua melhor base hoje é <span className="font-black text-[#0F172A]">{canalPrincipal}</span>
+              Sua melhor base hoje é <span className="font-bold text-[#0F172A]">{canalPrincipal}</span>
             </p>
             <p className="text-[12px] text-slate-500 mb-3">
               Esses números mostram o esforço estimado em cada ponto do funil. Você pode acompanhar sua evolução por qualquer uma dessas alavancas.

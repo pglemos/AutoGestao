@@ -35,7 +35,7 @@ export function GlobalStatsCards({
       {stats.map((stat) => (
         <Card key={stat.label} className="p-mx-md border-none bg-white flex items-center gap-mx-sm">
           <div className={cn(
-            "w-mx-14 h-mx-14 rounded-mx-xl flex items-center justify-center border shrink-0",
+            "w-mx-14 h-mx-14 rounded-2xl flex items-center justify-center border shrink-0",
             stat.tone === 'brand' ? 'bg-mx-green-50 border-mx-green-200 text-mx-green-700' :
               stat.tone === 'info' ? 'bg-status-info-surface border-status-info/20 text-status-info' :
                 stat.tone === 'warning' ? 'bg-status-warning-surface border-mx-amber-100 text-status-warning' :

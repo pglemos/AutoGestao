@@ -80,11 +80,11 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
           <div className="mt-6 space-y-6">
             {/* Cabeçalho do cliente */}
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-[16px] font-black text-[#005BFF]">
+              <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-[16px] font-bold text-[#005BFF]">
                 {(cliente.name || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase()}
               </div>
               <div>
-                <h3 className="text-[17px] font-black text-[#0F172A]">{cliente.name}</h3>
+                <h3 className="text-[17px] font-bold text-[#0F172A]">{cliente.name}</h3>
                 <p className="text-[12px] text-slate-400">{cliente.channel} · {cliente.status}</p>
               </div>
               {cliente.status && (
@@ -112,7 +112,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
 
             {/* Dados do cliente */}
             <div className="bg-slate-50 rounded-2xl p-4 space-y-4">
-              <p className="text-[11px] font-black text-slate-400 uppercase tracking-wider">Informações</p>
+              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Informações</p>
               <div className="grid grid-cols-2 gap-4">
                 <InfoRow label="Telefone" value={cliente.phone} />
                 <InfoRow label="Canal" value={cliente.channel} />

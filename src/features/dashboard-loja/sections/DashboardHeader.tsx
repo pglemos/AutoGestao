@@ -253,13 +253,13 @@ export function DashboardHeader({
 
   return (
     <>
-      <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-mx-md md:gap-mx-lg border-b border-border-default pb-10 shrink-0">
+      <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-mx-md md:gap-mx-lg border-b border-gray-200 pb-10 shrink-0">
         <div className="flex flex-col gap-mx-xs text-center xl:text-left min-w-0">
           <Typography variant="tiny" tone="brand" className="opacity-60 text-mx-tiny">
             Status de Unidade
           </Typography>
           <div className="flex items-center justify-center lg:justify-start gap-mx-sm">
-            <div className="h-mx-10 w-mx-xs shrink-0 rounded-mx-full bg-brand-primary shadow-mx-md" aria-hidden="true" />
+            <div className="h-mx-10 w-mx-xs shrink-0 rounded-mx-full bg-emerald-600 shadow-sm" aria-hidden="true" />
             <Typography variant="h1" className="max-w-full text-3xl sm:text-5xl tracking-tighter break-words">
               {storeName}
             </Typography>
@@ -268,15 +268,15 @@ export function DashboardHeader({
 
         <div className="flex flex-wrap items-center justify-center xl:justify-end gap-mx-sm shrink-0 w-full xl:w-auto max-w-full">
           {isOwner && selectableStores.length > 1 && (
-            <label htmlFor="owner-store-select" className="flex w-full flex-col gap-mx-tiny rounded-mx-lg border border-border-subtle bg-white px-mx-md py-mx-xs shadow-mx-sm sm:w-mx-sidebar-expanded">
-              <span className="text-mx-micro font-black uppercase tracking-widest text-text-secondary">Trocar unidade</span>
+            <label htmlFor="owner-store-select" className="flex w-full flex-col gap-mx-tiny rounded-xl border border-gray-100 bg-white px-mx-md py-mx-xs shadow-sm sm:w-mx-sidebar-expanded">
+              <span className="text-mx-micro font-bold uppercase tracking-widest text-gray-500">Trocar unidade</span>
               <select
                 aria-label="Trocar unidade"
                 id="owner-store-select"
                 name="owner-store-select"
                 value={selectedStoreId || ''}
                 onChange={event => navigateToStore(event.target.value)}
-                className="min-w-0 bg-transparent text-sm font-black uppercase text-text-primary outline-none"
+                className="min-w-0 bg-transparent text-sm font-bold uppercase text-gray-800 outline-none"
               >
                 {selectableStores.map(store => (
                   <option key={store.id} value={store.id}>{store.name}</option>
@@ -287,7 +287,7 @@ export function DashboardHeader({
           <TabNavPill tabs={LOJA_TABS} activeTab={activeTab} onTabChange={onTabChange} className="mx-store-dashboard-tabs max-w-full overflow-x-auto" buttonClassName="h-mx-8 sm:h-mx-10 px-2 sm:px-6 shrink-0" aria-label="Abas da loja" />
 
           {activeTab === 'performance' && (
-            <Button variant="outline" onClick={onRefresh} aria-label={`Atualizar performance. ${lastSyncLabel}`} title={lastSyncLabel} className="h-mx-10 sm:h-mx-14 bg-white px-mx-md hover:bg-surface-alt">
+            <Button variant="outline" onClick={onRefresh} aria-label={`Atualizar performance. ${lastSyncLabel}`} title={lastSyncLabel} className="h-mx-10 sm:h-mx-14 bg-white px-mx-md hover:bg-gray-50">
               <RefreshCw size={18} className={cn(isRefetching && 'animate-spin')} />
               Atualizar
             </Button>
@@ -298,7 +298,7 @@ export function DashboardHeader({
       <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center sm:justify-between">
         <LastUpdated value={lastSyncAt} />
         {syncWarning && (
-          <div role="alert" className="rounded-mx-lg border border-status-warning/20 bg-status-warning-surface px-mx-md py-mx-sm text-mx-tiny font-black uppercase tracking-tight text-status-warning">
+          <div role="alert" className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-mx-md py-mx-sm text-mx-tiny font-bold uppercase tracking-tight text-status-warning">
             {syncWarning}
           </div>
         )}
@@ -314,20 +314,20 @@ export function DashboardHeader({
             <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center">
               <TabNavPill tabs={PERIODO_TABS} activeTab={viewMode} onTabChange={(mode) => setViewMode(mode as ViewMode)} buttonClassName="h-mx-11 px-5" aria-label="Período do dashboard" />
               <div className={cn(
-                'grid grid-cols-1 gap-mx-sm rounded-mx-lg border border-border-subtle bg-surface-alt p-mx-sm sm:grid-cols-2',
+                'grid grid-cols-1 gap-mx-sm rounded-xl border border-gray-100 bg-gray-50 p-mx-sm sm:grid-cols-2',
                 viewMode === 'day' && 'opacity-50',
               )}>
                 <label className="space-y-mx-tiny">
-                  <span className="block text-mx-micro font-black uppercase tracking-widest text-text-secondary">Início</span>
-                  <input type="date" aria-label="Data inicial do período" disabled={viewMode === 'day'} value={startDate} onChange={event => { setStartDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-mx-lg border border-border-subtle bg-white px-mx-sm text-sm font-black text-text-primary outline-none focus:border-brand-primary" />
+                  <span className="block text-mx-micro font-bold uppercase tracking-widest text-gray-500">Início</span>
+                  <input type="date" aria-label="Data inicial do período" disabled={viewMode === 'day'} value={startDate} onChange={event => { setStartDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-gray-800 outline-none focus:border-brand-primary" />
                 </label>
                 <label className="space-y-mx-tiny">
-                  <span className="block text-mx-micro font-black uppercase tracking-widest text-text-secondary">Fim</span>
-                  <input type="date" aria-label="Data final do período" disabled={viewMode === 'day'} value={endDate} onChange={event => { setEndDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-mx-lg border border-border-subtle bg-white px-mx-sm text-sm font-black text-text-primary outline-none focus:border-brand-primary" />
+                  <span className="block text-mx-micro font-bold uppercase tracking-widest text-gray-500">Fim</span>
+                  <input type="date" aria-label="Data final do período" disabled={viewMode === 'day'} value={endDate} onChange={event => { setEndDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-gray-800 outline-none focus:border-brand-primary" />
                 </label>
               </div>
             </div>
-            <Button type="button" variant="outline" onClick={() => onTabChange('metas')} className="h-mx-11 rounded-mx-xl bg-white border-border-subtle hover:bg-surface-alt">
+            <Button type="button" variant="outline" onClick={() => onTabChange('metas')} className="h-mx-11 rounded-2xl bg-white border-gray-100 hover:bg-gray-50">
               <Target size={16} className="mr-2" />
               Metas que alimentam a leitura
             </Button>

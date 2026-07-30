@@ -26,7 +26,7 @@ export function StoreRankingView() {
 
   return (
     <RankingErrorBoundary sectionName="Ranking da Loja">
-      <main className="h-full w-full min-w-0 overflow-y-auto bg-surface-alt font-body no-scrollbar px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg pb-12">
+      <main className="h-full w-full min-w-0 overflow-y-auto bg-gray-50 font-body no-scrollbar px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg pb-12">
         <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-4">
           <SellerPageHeader
             icon={Trophy}

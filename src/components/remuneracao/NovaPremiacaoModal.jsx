@@ -49,7 +49,7 @@ export default function NovaPremiacaoModal({ open, onClose, onSaved, politicas, 
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-[17px] font-black text-[#0F172A]">Nova Premiação</DialogTitle>
+          <DialogTitle className="text-[17px] font-bold text-[#0F172A]">Nova Premiação</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>

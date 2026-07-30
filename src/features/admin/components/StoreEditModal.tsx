@@ -108,7 +108,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
       }
     >
       <form id="store-edit-form" onSubmit={handleSubmit} className="space-y-mx-lg">
-        <div className="rounded-mx-2xl border border-border-default bg-surface-alt p-mx-md">
+        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
           <div className="flex items-center justify-between gap-mx-sm mb-mx-sm">
             <div className="min-w-0">
               <Typography variant="caption" className="">Link de pré-cadastro</Typography>
@@ -119,14 +119,14 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               variant="outline"
               size="sm"
               onClick={() => void handleCopyRegistrationLink()}
-              className="shrink-0 rounded-mx-xl"
+              className="shrink-0 rounded-2xl"
             >
               <Copy size={14} className="mr-2" />
               COPIAR
             </Button>
           </div>
           <div className="relative">
-            <Link2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-brand-primary" aria-hidden="true" />
+            <Link2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-emerald-600" aria-hidden="true" />
             <Input
               readOnly
               value={registrationLink}
@@ -140,13 +140,13 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
             Nome da Loja
           </Typography>
           <div className="relative">
-            <Building2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" aria-hidden="true" />
+            <Building2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
             <Input
               id="edit-store-name"
               required
               value={form.name}
               onChange={(event) => setForm((prev) => ({ ...prev, name: event.target.value.toUpperCase() }))}
-              className="!pl-14 !h-14 font-black uppercase tracking-widest"
+              className="!pl-14 !h-14 font-bold uppercase tracking-widest"
             />
           </div>
         </div>
@@ -161,7 +161,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               value={form.legal_name || ''}
               onChange={(event) => setForm((prev) => ({ ...prev, legal_name: event.target.value.toUpperCase() }))}
               placeholder="RAZÃO SOCIAL DA LOJA"
-              className="!h-14 font-black uppercase tracking-widest"
+              className="!h-14 font-bold uppercase tracking-widest"
             />
           </div>
 
@@ -183,7 +183,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               Endereço
             </Typography>
             <div className="relative">
-              <MapPin size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" aria-hidden="true" />
+              <MapPin size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
               <Input
                 id="edit-store-address"
                 value={form.address || ''}
@@ -199,7 +199,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               Telefone administrativo
             </Typography>
             <div className="relative">
-              <Phone size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" aria-hidden="true" />
+              <Phone size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
               <Input
                 id="edit-store-administrative-phone"
                 value={form.administrative_phone || ''}
@@ -219,7 +219,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
             <Badge variant="outline" className="text-mx-micro">Opcional</Badge>
           </div>
           <div className="relative">
-            <Mail size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" aria-hidden="true" />
+            <Mail size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
             <Input
               id="edit-store-manager-email"
               type="email"
@@ -246,7 +246,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               variant="outline"
               size="sm"
               onClick={() => setForm((prev) => ({ ...prev, partners: [...(prev.partners || []), { name: '', document: '', phone: '', email: '' }] }))}
-              className="rounded-mx-xl"
+              className="rounded-2xl"
             >
               <Plus size={14} className="mr-2" />
               SÓCIO
@@ -255,10 +255,10 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
 
           <div className="space-y-mx-sm">
             {(form.partners || []).map((partner, index) => (
-              <div key={index} className="rounded-mx-2xl border border-border-default bg-white p-mx-md">
+              <div key={index} className="rounded-2xl border border-gray-200 bg-white p-mx-md">
                 <div className="flex items-center justify-between mb-mx-sm">
                   <div className="flex items-center gap-mx-xs">
-                    <UserRound size={16} className="text-brand-primary" />
+                    <UserRound size={16} className="text-emerald-600" />
                     <Typography variant="tiny" className="">Sócio {index + 1}</Typography>
                   </div>
                   <Button
@@ -266,7 +266,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                     variant="ghost"
                     size="icon"
                     onClick={() => setForm((prev) => ({ ...prev, partners: (prev.partners || []).filter((_, itemIndex) => itemIndex !== index) }))}
-                    className="h-mx-10 w-mx-10 rounded-mx-xl text-status-error"
+                    className="h-mx-10 w-mx-10 rounded-2xl text-status-error"
                     aria-label={`Remover sócio ${index + 1}`}
                   >
                     <Trash2 size={15} />
@@ -281,7 +281,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                       partners: (prev.partners || []).map((item, itemIndex) => itemIndex === index ? { ...item, name: event.target.value.toUpperCase() } : item),
                     }))}
                     placeholder="NOME DO SÓCIO"
-                    className="!h-12 font-black uppercase"
+                    className="!h-12 font-bold uppercase"
                   />
                   <Input
                     value={partner.document || ''}
@@ -317,7 +317,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
           </div>
         </div>
 
-        <label htmlFor="edit-store-active" className="flex items-start gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-md cursor-pointer">
+        <label htmlFor="edit-store-active" className="flex items-start gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
           <input
             id="edit-store-active"
             type="checkbox"
@@ -326,15 +326,15 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
             className="mt-1 h-mx-sm w-mx-sm accent-brand-primary"
           />
           <span className="flex-1">
-            <span className="block text-sm font-black uppercase tracking-widest text-text-primary">Loja ativa</span>
-            <span className="block text-xs font-bold text-text-tertiary mt-1">
+            <span className="block text-sm font-bold uppercase tracking-widest text-gray-800">Loja ativa</span>
+            <span className="block text-xs font-bold text-gray-500 mt-1">
               Desmarcar arquiva a unidade sem excluir dados historicos.
             </span>
           </span>
         </label>
 
         {!form.active && (
-          <div className="flex items-start gap-mx-sm rounded-mx-xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-status-warning">
+          <div className="flex items-start gap-mx-sm rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-status-warning">
             <AlertTriangle size={18} className="shrink-0 mt-0.5" />
             <Typography variant="tiny" className="font-bold">
               A loja arquivada sai da lista de unidades ativas. Os registros historicos continuam preservados.

@@ -11,8 +11,8 @@ export function IntegracoesTab() {
         <div className="space-y-mx-lg">
             {/* Google Calendar pessoal + central */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100">
                         <Calendar size={26} />
                     </div>
                     <div>
@@ -57,9 +57,9 @@ export function IntegracoesTab() {
 
             {/* Webhooks placeholder */}
             <Card className="p-mx-lg border-none bg-white">
-                <header className="flex items-center justify-between pb-mx-md border-b border-border-default mb-mx-lg">
+                <header className="flex items-center justify-between pb-mx-md border-b border-gray-200 mb-mx-lg">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-surface-alt text-text-tertiary flex items-center justify-center border border-border-default">
+                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-gray-500 flex items-center justify-center border border-gray-200">
                             <Webhook size={26} />
                         </div>
                         <div>
@@ -77,8 +77,8 @@ export function IntegracoesTab() {
 
             {/* Edge Functions */}
             <Card className="p-mx-lg border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-status-success/10 text-status-success flex items-center justify-center border border-status-success/20">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success/10 text-status-success flex items-center justify-center border border-status-success/20">
                         <Globe size={26} />
                     </div>
                     <div>
@@ -99,7 +99,7 @@ export function IntegracoesTab() {
                         'google-calendar-merged',
                         'google-oauth-handler',
                     ].map(fn => (
-                        <div key={fn} className="flex items-center justify-between p-mx-sm bg-surface-alt rounded-mx-xl border border-border-subtle">
+                        <div key={fn} className="flex items-center justify-between p-mx-sm bg-gray-50 rounded-2xl border border-gray-100">
                             <Typography variant="tiny" className="font-mono-numbers font-bold">{fn}</Typography>
                             <Badge variant="outline" className="text-mx-micro">Registrada</Badge>
                         </div>
@@ -119,9 +119,9 @@ function IntegrationCard({ icon, title, desc, badge, route, disabled }: {
     disabled?: boolean
 }) {
     return (
-        <Card className="p-mx-md border-none bg-white hover:shadow-mx-lg transition-shadow">
+        <Card className="p-mx-md border-none bg-white hover:shadow-sm transition-shadow">
             <div className="flex items-start gap-mx-sm">
-                <div className="w-mx-12 h-mx-12 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center shrink-0">{icon}</div>
+                <div className="w-mx-12 h-mx-12 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shrink-0">{icon}</div>
                 <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between gap-mx-xs">
                         <Typography variant="caption" className="tracking-tight">{title}</Typography>

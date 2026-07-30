@@ -343,7 +343,7 @@ function ComoFazerDrawer({ acao, onClose }) {
             <ol className="space-y-2">
               {acao.instrucoes.map((inst, i) => (
                 <li key={i} className="flex items-start gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-[#005BFF] text-white text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                  <span className="w-5 h-5 rounded-full bg-[#005BFF] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
                   <span className="text-[13px] text-slate-700">{inst}</span>
                 </li>
               ))}
@@ -561,7 +561,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className={`text-[11px] font-bold px-2 py-0.5 rounded-lg ${isCurrent ? "bg-[#005BFF] text-white" : "bg-slate-100 text-slate-500"}`}>{time}</span>
                     <span className={`text-[14px] font-bold ${isCurrent ? "text-[#0F172A]" : "text-slate-600"}`}>{step.label}</span>
-                    {isCurrent && <span className="text-[10px] font-black text-[#005BFF] bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Agora</span>}
+                    {isCurrent && <span className="text-[10px] font-bold text-[#005BFF] bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Agora</span>}
                   </div>
                   {/* Frase contextual no card recolhido */}
                   {!isExpanded && (
@@ -604,7 +604,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                           <ol className="space-y-2">
                             {instrucoesDinamicas.map((inst, i) => (
                               <li key={i} className="flex items-start gap-2.5">
-                                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
                                 <span className="text-[13px] text-slate-700">{inst}</span>
                               </li>
                             ))}
@@ -640,7 +640,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                         <ol className="space-y-2">
                           {instrucoesDinamicas.map((inst, i) => (
                             <li key={i} className="flex items-start gap-2.5">
-                              <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 text-[10px] font-black flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                              <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
                               <span className="text-[13px] text-slate-700">{inst}</span>
                             </li>
                           ))}

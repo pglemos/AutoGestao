@@ -176,11 +176,11 @@ export function AtividadeCard({
           </div>
 
           <div className="mb-2 flex items-center gap-2.5">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[12px] font-black text-slate-500">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[12px] font-bold text-slate-500">
               {initials(clientName)}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-[14px] font-bold text-mx-text">{clientName}</p>
+              <p className="truncate text-[14px] font-bold text-gray-800">{clientName}</p>
               {vehicle && <p className="truncate text-[12px] text-slate-400">{vehicle}</p>}
               {phoneDisplay && <p className="truncate text-[11px] text-slate-400">{phoneDisplay}</p>}
             </div>
@@ -232,12 +232,12 @@ export function AtividadeCard({
           </div>
 
           <div className="flex min-w-0 flex-1 items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[12px] font-black text-slate-500">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[12px] font-bold text-slate-500">
               {initials(clientName)}
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <p className="truncate text-[14px] font-bold text-mx-text">{clientName}</p>
+                <p className="truncate text-[14px] font-bold text-gray-800">{clientName}</p>
                 <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold', TYPE_BADGE[action.activityType])}>{typeLabel}</span>
                 <span className={cn('rounded-full px-2 py-0.5 text-[10px] font-bold', PRIORITY_BADGE[action.priority])}>{PRIORITY_LABEL[action.priority]}</span>
                 {overdue && <span className="rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold text-red-500">Vencido</span>}

@@ -107,7 +107,7 @@ function MovimentoDia({ form, onChange }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="px-5 py-4 border-b border-slate-100">
-        <h3 className="text-[14px] font-black text-[#0F172A] uppercase tracking-wide">Movimento do Dia</h3>
+        <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Movimento do Dia</h3>
         <p className="text-[12px] text-slate-400 mt-0.5">Informe os atendimentos realizados neste dia</p>
       </div>
       <div className="p-5 space-y-6">
@@ -115,7 +115,7 @@ function MovimentoDia({ form, onChange }) {
         <div className="bg-orange-50 rounded-xl border border-orange-200 p-4 space-y-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0"><Store className="w-4 h-4 text-white" /></div>
-            <span className="text-[13px] font-black text-orange-700 uppercase tracking-wide">Showroom</span>
+            <span className="text-[13px] font-bold text-orange-700 uppercase tracking-wide">Showroom</span>
           </div>
           <FieldRow label="Atendimentos" value={form.atendimentos_showroom} onChange={v => set("atendimentos_showroom", v)} />
         </div>
@@ -123,7 +123,7 @@ function MovimentoDia({ form, onChange }) {
         <div className="bg-green-50 rounded-xl border border-green-200 p-4 space-y-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0"><Users className="w-4 h-4 text-white" /></div>
-            <span className="text-[13px] font-black text-green-700 uppercase tracking-wide">Carteira</span>
+            <span className="text-[13px] font-bold text-green-700 uppercase tracking-wide">Carteira</span>
           </div>
           <FieldRow label="Leads recebidos" value={form.leads_carteira} onChange={v => set("leads_carteira", v)} />
           <FieldRow label="Atendimentos" value={form.atendimentos_carteira} onChange={v => set("atendimentos_carteira", v)} />
@@ -133,7 +133,7 @@ function MovimentoDia({ form, onChange }) {
         <div className="bg-blue-50 rounded-xl border border-blue-200 p-4 space-y-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0"><Globe className="w-4 h-4 text-white" /></div>
-            <span className="text-[13px] font-black text-blue-700 uppercase tracking-wide">Internet</span>
+            <span className="text-[13px] font-bold text-blue-700 uppercase tracking-wide">Internet</span>
           </div>
           <FieldRow label="Leads recebidos" value={form.leads_internet} onChange={v => set("leads_internet", v)} />
           <FieldRow label="Atendimentos" value={form.atendimentos_internet} onChange={v => set("atendimentos_internet", v)} />
@@ -244,8 +244,8 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
           <div>
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded-full bg-purple-600 text-white text-[10px] font-black flex items-center justify-center"><ShoppingCart className="w-3 h-3" /></div>
-              <h3 className="text-[14px] font-black text-[#0F172A] uppercase tracking-wide">Cadastrar Venda / Agendamentos</h3>
+              <div className="w-5 h-5 rounded-full bg-purple-600 text-white text-[10px] font-bold flex items-center justify-center"><ShoppingCart className="w-3 h-3" /></div>
+              <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Cadastrar Venda / Agendamentos</h3>
             </div>
             <p className="text-[12px] text-slate-400 mt-0.5">Clientes são salvos na Carteira de Clientes (base única).</p>
           </div>
@@ -409,12 +409,12 @@ function ResumoDia({ form, clientes }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="px-5 py-4 border-b border-slate-100">
-        <h3 className="text-[14px] font-black text-[#0F172A] uppercase tracking-wide">Resumo do Dia</h3>
+        <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Resumo do Dia</h3>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-0 divide-x divide-y sm:divide-y-0 divide-slate-100">
         {stats.map(s => (
           <div key={s.label} className="p-4 text-center">
-            <p className={`text-[22px] font-black tabular-nums ${s.color}`}>{s.value}</p>
+            <p className={`text-[22px] font-bold tabular-nums ${s.color}`}>{s.value}</p>
             <p className="text-[11px] text-slate-400 font-medium mt-0.5">{s.label}</p>
           </div>
         ))}
@@ -447,7 +447,7 @@ function DisciplinaBloco({ form, clientes }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="px-5 py-4 border-b border-slate-100">
-        <h3 className="text-[14px] font-black text-[#0F172A] uppercase tracking-wide">Disciplina — Fechamento Diário</h3>
+        <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Disciplina — Fechamento Diário</h3>
         <p className="text-[12px] text-slate-400 mt-0.5">Estimativa com penalização de -10% por atraso</p>
       </div>
       <div className="p-5 flex items-center gap-6">
@@ -460,7 +460,7 @@ function DisciplinaBloco({ form, clientes }) {
               strokeLinecap="round" className="transition-all duration-700"
             />
           </svg>
-          <span className={`absolute inset-0 flex items-center justify-center text-[18px] font-black tabular-nums ${scoreColor}`}>{scoreFinal}%</span>
+          <span className={`absolute inset-0 flex items-center justify-center text-[18px] font-bold tabular-nums ${scoreColor}`}>{scoreFinal}%</span>
         </div>
         <div className="space-y-2 flex-1">
           <div className="flex justify-between text-[13px]">
@@ -473,7 +473,7 @@ function DisciplinaBloco({ form, clientes }) {
           </div>
           <div className="flex justify-between text-[13px] border-t border-slate-100 pt-2">
             <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
-            <span className={`font-black text-[15px] ${scoreColor}`}>{scoreFinal}%</span>
+            <span className={`font-bold text-[15px] ${scoreColor}`}>{scoreFinal}%</span>
           </div>
           <div className="flex justify-between text-[12px]">
             <span className="text-slate-400">Agendamentos D+1</span>
@@ -615,7 +615,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
             <CalendarDays className="w-5 h-5 text-[#005BFF] flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-[16px] font-black text-[#0F172A]">Regularizar Fechamento</h2>
+                <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>
                 <span className="text-[11px] font-bold text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">Fechamento atrasado</span>
               </div>
               <p className="text-[13px] text-slate-500 mt-0.5">
@@ -639,7 +639,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
                   <CheckCircle2 className="w-8 h-8 text-amber-500" />
                 </div>
                 <div>
-                  <p className="text-[18px] font-black text-[#0F172A]">Regularização enviada!</p>
+                  <p className="text-[18px] font-bold text-[#0F172A]">Regularização enviada!</p>
                   <p className="text-[13px] text-slate-500 mt-1 max-w-sm">O fechamento foi salvo e está aguardando aprovação do responsável. Ele só contará nos indicadores após a aprovação.</p>
                 </div>
                 <button onClick={onClose} className="px-8 py-3 rounded-xl bg-[#005BFF] text-white text-[14px] font-bold hover:bg-blue-700 transition-colors mt-2">

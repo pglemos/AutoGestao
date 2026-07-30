@@ -56,7 +56,7 @@ export function GoogleMeetArtifactsPanel({ artifact, hasMeetLink }: GoogleMeetAr
     : null
 
   return (
-    <div className="mt-mx-sm rounded-mx-lg border border-border-default bg-surface-alt/60 p-mx-sm">
+    <div className="mt-mx-sm rounded-xl border border-gray-200 bg-gray-50/60 p-mx-sm">
       <div className="flex flex-wrap items-center justify-between gap-mx-xs">
         <div className="flex flex-wrap items-center gap-mx-xs">
           <Badge variant={status.variant} className="text-mx-nano">{status.label}</Badge>
@@ -74,38 +74,38 @@ export function GoogleMeetArtifactsPanel({ artifact, hasMeetLink }: GoogleMeetAr
 
       {artifact?.status === 'processed' && (
         <div className="mt-mx-sm space-y-mx-xs">
-          <details className="rounded-mx-md border border-border-default bg-white p-mx-sm">
+          <details className="rounded-xl border border-gray-200 bg-white p-mx-sm">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-mx-sm">
               <span className="flex items-center gap-mx-xs">
-                <FileText size={14} className="text-brand-primary" />
+                <FileText size={14} className="text-emerald-600" />
                 <Typography variant="tiny" className="">Ata da reunião</Typography>
               </span>
-              <span className="text-mx-nano font-bold uppercase tracking-widest text-text-tertiary">{textStats(ataText)}</span>
+              <span className="text-mx-nano font-bold uppercase tracking-widest text-gray-500">{textStats(ataText)}</span>
             </summary>
             <div className="mt-mx-sm flex justify-end">
               <Button type="button" variant="ghost" size="xs" onClick={() => copyText('Ata', ataText)}>
                 <Clipboard size={12} /> Copiar ata
               </Button>
             </div>
-            <pre className="mt-mx-xs max-h-96 overflow-auto whitespace-pre-wrap rounded-mx-md bg-white p-mx-sm text-mx-xs leading-relaxed text-text-primary">
+            <pre className="mt-mx-xs max-h-96 overflow-auto whitespace-pre-wrap rounded-xl bg-white p-mx-sm text-mx-xs leading-relaxed text-gray-800">
               {ataText || 'Ata ainda não disponível.'}
             </pre>
           </details>
 
-          <details className="rounded-mx-md border border-border-default bg-white p-mx-sm">
+          <details className="rounded-xl border border-gray-200 bg-white p-mx-sm">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-mx-sm">
               <span className="flex items-center gap-mx-xs">
-                <ScrollText size={14} className="text-brand-primary" />
+                <ScrollText size={14} className="text-emerald-600" />
                 <Typography variant="tiny" className="">Transcrição oficial</Typography>
               </span>
-              <span className="text-mx-nano font-bold uppercase tracking-widest text-text-tertiary">{textStats(transcriptText)}</span>
+              <span className="text-mx-nano font-bold uppercase tracking-widest text-gray-500">{textStats(transcriptText)}</span>
             </summary>
             <div className="mt-mx-sm flex justify-end">
               <Button type="button" variant="ghost" size="xs" onClick={() => copyText('Transcrição', transcriptText)}>
                 <Clipboard size={12} /> Copiar transcrição
               </Button>
             </div>
-            <pre className="mt-mx-xs max-h-96 overflow-auto whitespace-pre-wrap rounded-mx-md bg-white p-mx-sm text-mx-xs leading-relaxed text-text-primary">
+            <pre className="mt-mx-xs max-h-96 overflow-auto whitespace-pre-wrap rounded-xl bg-white p-mx-sm text-mx-xs leading-relaxed text-gray-800">
               {transcriptText || 'Transcrição ainda não disponível.'}
             </pre>
           </details>

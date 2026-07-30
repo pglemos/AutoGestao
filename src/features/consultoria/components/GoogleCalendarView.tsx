@@ -38,13 +38,13 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
     return '';
   };
 
-  if (isLoading) return <div className="p-mx-md text-center text-text-tertiary">Verificando contexto da agenda...</div>;
+  if (isLoading) return <div className="p-mx-md text-center text-gray-500">Verificando contexto da agenda...</div>;
 
   return (
-    <div className="bg-white rounded-mx-xl shadow-mx-sm border border-border-default p-mx-lg">
+    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-mx-lg">
       <div className="flex items-center justify-between mb-mx-lg">
         <div className="flex items-center gap-mx-sm">
-          <div className="p-mx-xs bg-mx-indigo-50 text-brand-primary rounded-mx-lg">
+          <div className="p-mx-xs bg-mx-indigo-50 text-emerald-600 rounded-xl">
             <Calendar size={24} />
           </div>
           <div>
@@ -75,7 +75,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
       </div>
 
       {!isConnected ? (
-        <div className="text-center py-mx-xl border-2 border-dashed border-border-default rounded-mx-xl">
+        <div className="text-center py-mx-xl border-2 border-dashed border-gray-200 rounded-2xl">
           <Typography variant="p" className="mb-mx-lg">
             {context.description}
           </Typography>
@@ -93,32 +93,32 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
       ) : (
         <div className="space-y-mx-sm">
           {!context.linkedToClient && (
-            <div className="p-mx-md bg-surface-alt text-text-secondary rounded-mx-lg border border-border-default">
+            <div className="p-mx-md bg-gray-50 text-gray-500 rounded-xl border border-gray-200">
               <Typography variant="caption">{context.description}</Typography>
             </div>
           )}
 
-          <div className="p-mx-md bg-status-success-surface text-status-success rounded-mx-lg border border-status-success/20 flex items-center gap-mx-xs">
+          <div className="p-mx-md bg-status-success-surface text-status-success rounded-xl border border-status-success/20 flex items-center gap-mx-xs">
             <Typography variant="caption" className="font-medium">
               Agenda Conectada! {events.length > 0 ? `${events.length} evento(s) futuro(s).` : ''}
             </Typography>
           </div>
 
           {error && (
-            <div className="p-mx-md bg-status-error-surface text-status-error rounded-mx-lg border border-status-error/20">
+            <div className="p-mx-md bg-status-error-surface text-status-error rounded-xl border border-status-error/20">
               <Typography variant="caption">{error}</Typography>
             </div>
           )}
 
           {isRefreshing && events.length === 0 && (
-            <div className="p-mx-lg text-center text-text-tertiary">
+            <div className="p-mx-lg text-center text-gray-500">
               <RefreshCcw size={20} className="animate-spin mx-auto mb-mx-xs" />
               <Typography variant="caption">Buscando eventos...</Typography>
             </div>
           )}
 
           {!isRefreshing && events.length === 0 && !error && (
-            <div className="p-mx-lg text-center text-text-tertiary opacity-60">
+            <div className="p-mx-lg text-center text-gray-500 opacity-60">
               <Typography variant="caption">
                 Nenhum evento futuro encontrado para este cliente nos proximos 30 dias.
               </Typography>
@@ -130,10 +130,10 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
               {events.map((event) => (
                 <div
                   key={event.id}
-                  className="flex items-start gap-mx-sm p-mx-md rounded-mx-lg border border-border-default hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-colors"
+                  className="flex items-start gap-mx-sm p-mx-md rounded-xl border border-gray-200 hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-colors"
                 >
-                  <div className="p-mx-xs bg-brand-primary/10 rounded-mx-md mt-0.5">
-                    <Clock size={14} className="text-brand-primary" />
+                  <div className="p-mx-xs bg-emerald-600/10 rounded-xl mt-0.5">
+                    <Clock size={14} className="text-emerald-600" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <Typography variant="caption" className="font-bold block truncate">
@@ -144,7 +144,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
                     </Typography>
                     {event.location && (
                       <div className="flex items-center gap-mx-xs mt-mx-xs">
-                        <MapPin size={12} className="text-text-tertiary shrink-0" />
+                        <MapPin size={12} className="text-gray-500 shrink-0" />
                         <Typography variant="caption" className="truncate">
                           {event.location}
                         </Typography>
@@ -156,7 +156,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
                       href={event.htmlLink}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="text-brand-primary hover:text-brand-primary-hover shrink-0"
+                      className="text-emerald-600 hover:text-brand-primary-hover shrink-0"
                     >
                       <ExternalLink size={14} />
                     </a>

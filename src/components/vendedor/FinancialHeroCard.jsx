@@ -32,14 +32,14 @@ export default function FinancialHeroCard({ calcResult, userName, periodLabel, o
 
             {nenhuma ? (
               <div>
-                <p className="text-4xl lg:text-6xl font-black text-slate-400 mt-2">R$ 0,00</p>
+                <p className="text-4xl lg:text-6xl font-bold text-slate-400 mt-2">R$ 0,00</p>
                 <p className="text-slate-400 text-sm mt-3 max-w-md">
                   Ainda não há vendas confirmadas neste período. Assim que suas vendas forem registradas, seu salário previsto aparecerá aqui.
                 </p>
               </div>
             ) : (
               <div>
-                <p className="text-5xl lg:text-7xl font-black text-white mt-2 tracking-tight">
+                <p className="text-5xl lg:text-7xl font-bold text-white mt-2 tracking-tight">
                   {formatBRL(salarioPrevisto)}
                 </p>
                 <p className="text-slate-400 text-xs mt-3 max-w-sm">

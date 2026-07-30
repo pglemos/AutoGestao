@@ -39,8 +39,8 @@ const TIPO_LABEL: Record<UniversidadeAulaTipo, string> = {
 }
 
 const TIPO_TONE: Record<UniversidadeAulaTipo, string> = {
-  biblioteca: 'border-border-default bg-surface-alt text-text-secondary',
-  aula_gravada: 'border-brand-primary/30 bg-mx-indigo-50 text-brand-primary',
+  biblioteca: 'border-gray-200 bg-gray-50 text-gray-500',
+  aula_gravada: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
   aula_ao_vivo: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   quiz: 'border-status-success/30 bg-status-success-surface text-status-success',
   desafio: 'border-status-error/30 bg-status-error-surface text-status-error',
@@ -77,7 +77,7 @@ export function UniversidadeMx({ userId }: Props) {
     <section className="space-y-mx-lg" aria-label="Universidade MX">
       <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-mx-xl bg-brand-primary p-mx-sm text-pure-white shadow-mx-md">
+          <div className="rounded-2xl bg-emerald-600 p-mx-sm text-pure-white shadow-sm">
             <GraduationCap size={22} aria-hidden="true" />
           </div>
           <div>
@@ -96,7 +96,7 @@ export function UniversidadeMx({ userId }: Props) {
       </header>
 
       {error && (
-        <div className="rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
+        <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
           <Typography variant="tiny" className="font-bold text-status-error">
             {error}
           </Typography>
@@ -113,10 +113,10 @@ export function UniversidadeMx({ userId }: Props) {
             type="button"
             onClick={() => toggleFiltro(publico)}
             className={cn(
-              'rounded-mx-md border px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest transition-colors',
+              'rounded-xl border px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest transition-colors',
               filtros.includes(publico)
-                ? 'border-brand-primary bg-brand-primary text-pure-white'
-                : 'border-border-default bg-white text-text-secondary',
+                ? 'border-brand-primary bg-emerald-600 text-pure-white'
+                : 'border-gray-200 bg-white text-gray-500',
             )}
             aria-pressed={filtros.includes(publico)}
           >
@@ -128,7 +128,7 @@ export function UniversidadeMx({ userId }: Props) {
       <div className="relative">
         <Search
           size={14}
-          className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-secondary"
+          className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500"
           aria-hidden="true"
         />
         <input
@@ -136,7 +136,7 @@ export function UniversidadeMx({ userId }: Props) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Buscar por tema, nível ou título…"
-          className="w-full rounded-mx-md border border-border-default bg-white py-mx-xs pl-8 pr-mx-sm text-mx-tiny font-bold placeholder-text-secondary focus:border-brand-primary focus:outline-none"
+          className="w-full rounded-xl border border-gray-200 bg-white py-mx-xs pl-8 pr-mx-sm text-mx-tiny font-bold placeholder-text-secondary focus:border-brand-primary focus:outline-none"
           aria-label="Buscar trilhas e aulas"
         />
       </div>
@@ -144,7 +144,7 @@ export function UniversidadeMx({ userId }: Props) {
       {certificacoes.length > 0 && (
         <Card className="p-mx-md">
           <header className="mb-mx-sm flex items-center gap-mx-xs">
-            <div className="rounded-mx-xl bg-status-success-surface p-mx-xs text-status-success">
+            <div className="rounded-2xl bg-status-success-surface p-mx-xs text-status-success">
               <Trophy size={18} aria-hidden="true" />
             </div>
             <Typography variant="h3" className="font-bold">
@@ -155,7 +155,7 @@ export function UniversidadeMx({ userId }: Props) {
             {certificacoes.map((cert) => (
               <li
                 key={cert.id}
-                className="rounded-mx-xl border border-status-success/30 bg-status-success-surface/40 p-mx-sm"
+                className="rounded-2xl border border-status-success/30 bg-status-success-surface/40 p-mx-sm"
               >
                 <div className="flex items-center gap-mx-xs">
                   <Award size={16} className="text-status-success" />
@@ -176,7 +176,7 @@ export function UniversidadeMx({ userId }: Props) {
                     href={cert.certificado_url}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="mt-mx-xs inline-block text-mx-tiny font-bold uppercase tracking-widest text-brand-primary underline"
+                    className="mt-mx-xs inline-block text-mx-tiny font-bold uppercase tracking-widest text-emerald-600 underline"
                   >
                     Baixar certificado
                   </a>
@@ -189,7 +189,7 @@ export function UniversidadeMx({ userId }: Props) {
 
       {!trilhas.length ? (
         <Card className="p-mx-md">
-          <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               {filtros.length === 0
                 ? 'Selecione ao menos um público para listar trilhas.'
@@ -205,7 +205,7 @@ export function UniversidadeMx({ userId }: Props) {
             <Card
               key={trilha.id}
               className={cn(
-                'rounded-mx-2xl p-mx-md',
+                'rounded-2xl p-mx-md',
                 recomendadaId === trilha.id && 'ring-2 ring-brand-primary ring-offset-2',
               )}
             >
@@ -240,7 +240,7 @@ export function UniversidadeMx({ userId }: Props) {
                   <li
                     key={aula.id}
                     className={cn(
-                      'rounded-mx-xl border p-mx-sm',
+                      'rounded-2xl border p-mx-sm',
                       TIPO_TONE[aula.tipo],
                     )}
                   >
@@ -283,7 +283,7 @@ export function UniversidadeMx({ userId }: Props) {
                   </li>
                 ))}
                 {!(aulas[trilha.id] ?? []).length && (
-                  <li className="rounded-mx-md border border-dashed border-border-default p-mx-sm text-center">
+                  <li className="rounded-xl border border-dashed border-gray-200 p-mx-sm text-center">
                     <Typography variant="tiny" tone="muted" className="font-bold">
                       Trilha sem aulas publicadas ainda.
                     </Typography>

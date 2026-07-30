@@ -109,13 +109,13 @@ export function DREForm({
       {sections.map((sec) => {
         const isCollapsed = collapsed[sec.key] ?? false
         return (
-          <div key={sec.key} className="border border-border-default rounded-mx-lg mb-mx-sm overflow-hidden">
+          <div key={sec.key} className="border border-gray-200 rounded-xl mb-mx-sm overflow-hidden">
             <button
               type="button"
               className="w-full flex items-center justify-between px-mx-md py-mx-sm bg-mx-green-900 text-white hover:bg-mx-green-950 transition-colors"
               onClick={() => toggleSection(sec.key)}
             >
-              <span className="font-black text-sm uppercase tracking-wider">{sec.title}</span>
+              <span className="font-bold text-sm uppercase tracking-wider">{sec.title}</span>
               {isCollapsed ? <ChevronDown size={16} /> : <ChevronUp size={16} />}
             </button>
             {!isCollapsed && (
@@ -138,7 +138,7 @@ export function DREForm({
       })}
 
       {computedPreview && (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-mx-sm mt-mx-lg p-mx-md bg-brand-primary/5 rounded-mx-lg border border-brand-primary/20">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-mx-sm mt-mx-lg p-mx-md bg-emerald-600/5 rounded-xl border border-brand-primary/20">
           <div>
             <Typography variant="tiny" tone="muted" className="">Lucro Bruto</Typography>
             <Typography variant="h3" className="">R$ {fmt(computedPreview.gross_profit)}</Typography>
@@ -149,7 +149,7 @@ export function DREForm({
           </div>
           <div>
             <Typography variant="tiny" tone="muted" className="">Lucro Líquido</Typography>
-            <Typography variant="h3" className={computedPreview.net_profit >= 0 ? 'text-status-success font-black' : 'text-status-error font-black'}>
+            <Typography variant="h3" className={computedPreview.net_profit >= 0 ? 'text-status-success font-bold' : 'text-status-error font-bold'}>
               R$ {fmt(computedPreview.net_profit)}
             </Typography>
           </div>

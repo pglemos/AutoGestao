@@ -77,7 +77,7 @@ export function LojasHeader({
         <div className="relative min-w-0 flex-1 sm:max-w-mx-sidebar-expanded">
           <Search
             size={17}
-            className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary"
+            className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500"
             aria-hidden="true"
           />
           <label htmlFor="search-lojas" className="sr-only">

@@ -41,14 +41,14 @@ export function VisitOneHighFidelity({ clientId, clientSlug, data, onChange }: {
   return (
     <div className="space-y-mx-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Navegação de Contexto */}
-      <div className="flex bg-white/50 backdrop-blur-sm p-mx-xs rounded-mx-xl border border-border-default shadow-mx-inner">
+      <div className="flex bg-white/50 backdrop-blur-sm p-mx-xs rounded-2xl border border-gray-200 shadow-mx-inner">
         {VISIT_ONE_TABS.map((t) => (
           <button
             key={t.id}
             onClick={() => setTab(t.id)}
             className={cn(
-              "flex-1 flex items-center justify-center gap-mx-xs py-mx-sm px-mx-md rounded-mx-lg text-xs font-black uppercase tracking-mx-wider transition-all",
-              tab === t.id ? "bg-brand-primary text-white shadow-mx-md" : "text-text-tertiary hover:text-text-primary hover:bg-white"
+              "flex-1 flex items-center justify-center gap-mx-xs py-mx-sm px-mx-md rounded-xl text-xs font-bold uppercase tracking-mx-wider transition-all",
+              tab === t.id ? "bg-emerald-600 text-white shadow-sm" : "text-gray-500 hover:text-gray-800 hover:bg-white"
             )}
           >
             <t.icon size={14} />
@@ -81,11 +81,11 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-mx-lg">
         {/* Vendas Trimestre */}
         <Card className="p-mx-lg bg-white border overflow-hidden relative group/card">
-          <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-brand-primary">
+          <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-emerald-600">
             <BarChart3 size={140} />
           </div>
           <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">
-            <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><TrendingUp size={20} /></div>
+            <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><TrendingUp size={20} /></div>
             <div>
               <Typography variant="h3" className="text-lg">Vendas Trimestre</Typography>
               <Typography variant="tiny" tone="muted" className="opacity-60">Volume de emplacamentos/entregas</Typography>
@@ -102,16 +102,16 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
                       type="number"
                       value={s.value}
                       onChange={e => handleSalesChange(i, parseInt(e.target.value) || 0)}
-                      className="h-mx-12 font-black text-xl text-center border-border-default bg-surface-alt/20 focus:bg-white focus:border-brand-primary transition-all shadow-sm"
+                      className="h-mx-12 font-bold text-xl text-center border-gray-200 bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all shadow-sm"
                    />
                 </div>
              ))}
           </div>
 
-          <div className="flex items-center justify-between p-mx-md bg-surface-alt rounded-mx-xl border border-border-default">
+          <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-gray-200">
              <div>
                 <Typography variant="tiny" className="font-bold">Total Trimestre</Typography>
-                <Typography variant="h2" className="text-3xl">{totalSales} <span className="text-sm font-bold text-text-tertiary">CARROS</span></Typography>
+                <Typography variant="h2" className="text-3xl">{totalSales} <span className="text-sm font-bold text-gray-500">CARROS</span></Typography>
              </div>
              <div className="text-right">
                 <Typography variant="tiny" className="font-bold">Média Mensal</Typography>
@@ -126,7 +126,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
             <PieChart size={140} />
           </div>
           <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">
-            <div className="p-mx-xs bg-brand-secondary/10 rounded-mx-lg text-brand-secondary"><Zap size={20} /></div>
+            <div className="p-mx-xs bg-gray-900/10 rounded-xl text-brand-secondary"><Zap size={20} /></div>
             <div>
               <Typography variant="h3" className="text-lg">Performance MKT</Typography>
               <Typography variant="tiny" tone="muted" className="opacity-60">CPL e Origem de Leads</Typography>
@@ -142,7 +142,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
                   type="number"
                   value={data.marketing?.investment}
                   onChange={e => onChange({ ...data, marketing: { ...data.marketing, investment: parseFloat(e.target.value) || 0 } })}
-                  className="h-mx-12 font-black text-xl border-border-default bg-surface-alt/20 focus:bg-white focus:border-brand-primary transition-all"
+                  className="h-mx-12 font-bold text-xl border-gray-200 bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all"
                   placeholder="Ex: 5000"
                 />
              </div>
@@ -154,13 +154,13 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
                   type="number"
                   value={data.marketing?.leads}
                   onChange={e => onChange({ ...data, marketing: { ...data.marketing, leads: parseInt(e.target.value) || 0 } })}
-                  className="h-mx-12 font-black text-xl border-border-default bg-surface-alt/20 focus:bg-white focus:border-brand-primary transition-all"
+                  className="h-mx-12 font-bold text-xl border-gray-200 bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all"
                   placeholder="Ex: 250"
                 />
              </div>
           </div>
 
-          <div className="flex items-center justify-between p-mx-md bg-brand-secondary/5 rounded-mx-xl border border-brand-secondary/10">
+          <div className="flex items-center justify-between p-mx-md bg-gray-900/5 rounded-2xl border border-brand-secondary/10">
              <div>
                 <Typography variant="tiny" className="font-bold text-brand-secondary">Custo por Lead (CPL)</Typography>
                 <Typography variant="h1" className="text-3xl text-brand-secondary">R$ {cpl}</Typography>
@@ -193,7 +193,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
             <Layers size={140} />
           </div>
           <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">
-            <div className="p-mx-xs bg-status-warning/10 rounded-mx-lg text-status-warning"><Layers size={20} /></div>
+            <div className="p-mx-xs bg-status-warning/10 rounded-xl text-status-warning"><Layers size={20} /></div>
             <div>
               <Typography variant="h3" className="text-lg">Raio-X do Estoque</Typography>
               <Typography variant="tiny" tone="muted" className="opacity-60">Saúde financeira do pátio</Typography>
@@ -216,7 +216,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
                       type="number"
                       value={data.stock?.[f.k]}
                       onChange={e => onChange({ ...data, stock: { ...data.stock, [f.k]: parseFloat(e.target.value) || 0 } })}
-                      className="h-mx-10 font-bold border-border-default bg-surface-alt/20 focus:bg-white focus:border-brand-primary transition-all shadow-sm"
+                      className="h-mx-10 font-bold border-gray-200 bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all shadow-sm"
                       placeholder={f.p}
                    />
                 </div>
@@ -232,8 +232,8 @@ function VisitOneBenchmark({ data }: { data: VisitOneQuantData }) {
     <Card className="p-mx-20 text-center bg-white border border-dashed relative overflow-hidden group">
        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-transparent to-brand-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
        <div className="relative z-10">
-         <div className="w-mx-16 h-mx-16 bg-surface-alt rounded-mx-full flex items-center justify-center mx-auto mb-mx-md border border-border-subtle group-hover:scale-110 transition-transform">
-           <Globe size={48} className="text-brand-primary opacity-40" />
+         <div className="w-mx-16 h-mx-16 bg-gray-50 rounded-mx-full flex items-center justify-center mx-auto mb-mx-md border border-gray-100 group-hover:scale-110 transition-transform">
+           <Globe size={48} className="text-emerald-600 opacity-40" />
          </div>
          <Typography variant="h3" className="text-xl mb-mx-xs">Comparativo de Mercado</Typography>
          <Typography variant="p" className="text-sm max-w-mx-80 mx-auto font-medium tracking-tighter">
@@ -348,28 +348,28 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
               type="button"
               onClick={() => setActiveTmpl(t.id)}
               className={cn(
-                "text-left p-mx-md rounded-mx-xl border transition-all relative overflow-hidden shadow-sm min-h-mx-28",
+                "text-left p-mx-md rounded-2xl border transition-all relative overflow-hidden shadow-sm min-h-mx-28",
                 isActive
-                  ? "bg-brand-primary border-brand-primary text-white shadow-mx-lg"
-                  : "bg-white border-border-default hover:border-brand-primary/30 hover:bg-surface-alt"
+                  ? "bg-emerald-600 border-brand-primary text-white shadow-sm"
+                  : "bg-white border-gray-200 hover:border-brand-primary/30 hover:bg-gray-50"
               )}
             >
               <div className="flex items-start justify-between gap-mx-sm">
                 <div>
-                  <Typography variant="tiny" className={cn("uppercase font-black tracking-mx-widest text-mx-tiny", isActive ? "text-white/70" : "text-text-tertiary")}>
+                  <Typography variant="tiny" className={cn("uppercase font-bold tracking-mx-widest text-mx-tiny", isActive ? "text-white/70" : "text-gray-500")}>
                     Entrevista
                   </Typography>
-                  <Typography variant="h3" className={cn("text-base font-black leading-tight", isActive ? "text-white" : "text-text-primary")}>
+                  <Typography variant="h3" className={cn("text-base font-bold leading-tight", isActive ? "text-white" : "text-gray-800")}>
                     {getInterviewLabel(t.form_key, t.title)}
                   </Typography>
                 </div>
                 {responses.length ? (
                   <CheckCircle2 className={cn("w-mx-5 h-mx-5 shrink-0", isActive ? "text-white/70" : "text-status-success")} />
                 ) : (
-                  <Circle className={cn("w-mx-5 h-mx-5 shrink-0", isActive ? "text-white/40" : "text-text-tertiary/50")} />
+                  <Circle className={cn("w-mx-5 h-mx-5 shrink-0", isActive ? "text-white/40" : "text-gray-500/50")} />
                 )}
               </div>
-              <Typography variant="tiny" className={cn("mt-mx-md block font-bold", isActive ? "text-white/70" : "text-text-tertiary")}>
+              <Typography variant="tiny" className={cn("mt-mx-md block font-bold", isActive ? "text-white/70" : "text-gray-500")}>
                 {responses.length ? `${responses.length} resposta(s) agrupada(s)` : 'Pendente'}
               </Typography>
             </button>
@@ -378,9 +378,9 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
       </div>
 
       <Card className="p-mx-lg bg-white border">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-mx-md mb-mx-lg border-b border-border-subtle pb-mx-md">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-mx-md mb-mx-lg border-b border-gray-100 pb-mx-md">
           <div className="flex items-start gap-mx-sm">
-            <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><Users size={20} /></div>
+            <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Users size={20} /></div>
             <div>
               <Typography variant="tiny" tone="muted" className="">
                 Visita 1 - Diagnóstico PMR
@@ -403,7 +403,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
             <Input
               id={`interview-${currentTmpl.id}-respondent`}
               name={`interview-${currentTmpl.id}-respondent`}
-              className="bg-surface-alt/30 focus:bg-white"
+              className="bg-gray-50/30 focus:bg-white"
               value={respondentName}
               onChange={e => setRespondentName(e.target.value)}
               placeholder="Nome da pessoa entrevistada"
@@ -413,7 +413,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
             <Typography variant="tiny" className="">
               Escopo
             </Typography>
-            <div className="h-mx-12 rounded-mx-lg border border-border-default bg-surface-alt/30 px-mx-md flex items-center">
+            <div className="h-mx-12 rounded-xl border border-gray-200 bg-gray-50/30 px-mx-md flex items-center">
               <Typography variant="p" className="text-sm font-bold">
                 Diagnóstico consolidado da Visita 1.
               </Typography>
@@ -425,7 +425,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
           {currentTmpl.fields.map(field => {
             const value = answers[field.key]
             return (
-              <div key={field.key} className={cn("space-y-mx-xs p-mx-md bg-surface-alt/30 rounded-mx-xl border border-border-default", field.type === 'textarea' ? 'md:col-span-2' : '')}>
+              <div key={field.key} className={cn("space-y-mx-xs p-mx-md bg-gray-50/30 rounded-2xl border border-gray-200", field.type === 'textarea' ? 'md:col-span-2' : '')}>
                 <Typography as="label" htmlFor={`interview-${currentTmpl.id}-${field.key}`} variant="p" className="text-xs">
                   {field.label}{field.required ? ' *' : ''}
                 </Typography>
@@ -447,10 +447,10 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
                         type="button"
                         onClick={() => updateField(field, option)}
                         className={cn(
-                          "h-10 w-10 min-w-10 sm:h-12 sm:w-12 sm:min-w-12 rounded-mx-xl font-black transition-all border-2 flex items-center justify-center text-lg",
+                          "h-10 w-10 min-w-10 sm:h-12 sm:w-12 sm:min-w-12 rounded-2xl font-bold transition-all border-2 flex items-center justify-center text-lg",
                           value === option
-                            ? "bg-brand-primary border-brand-primary text-white shadow-mx-lg scale-105"
-                            : "bg-white border-border-default text-text-tertiary hover:border-brand-primary/40 hover:text-brand-primary"
+                            ? "bg-emerald-600 border-brand-primary text-white shadow-sm scale-105"
+                            : "bg-white border-gray-200 text-gray-500 hover:border-brand-primary/40 hover:text-emerald-600"
                         )}
                       >
                         {option}
@@ -458,7 +458,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
                     ))}
                   </div>
                 ) : field.type === 'boolean' ? (
-                  <label className="h-mx-12 rounded-mx-lg bg-white border border-border-default px-mx-md flex items-center gap-mx-sm font-bold text-sm">
+                  <label className="h-mx-12 rounded-xl bg-white border border-gray-200 px-mx-md flex items-center gap-mx-sm font-bold text-sm">
                     <input
                       type="checkbox"
                       checked={Boolean(value)}
@@ -501,7 +501,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
           <Textarea
             id={`interview-${currentTmpl.id}-summary`}
             name={`interview-${currentTmpl.id}-summary`}
-            className="bg-surface-alt/30 focus:bg-white min-h-mx-28"
+            className="bg-gray-50/30 focus:bg-white min-h-mx-28"
             value={summary}
             onChange={e => setSummary(e.target.value)}
             placeholder="Síntese consultiva para alimentar o planejamento estratégico e o plano de ação..."

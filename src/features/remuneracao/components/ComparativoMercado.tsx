@@ -20,7 +20,7 @@ const TAMANHOS = [
 
 const BADGE: Record<Classificacao, { label: string; cls: string }> = {
   abaixo: { label: 'Abaixo da média', cls: 'bg-status-warning-surface text-status-warning' },
-  dentro: { label: 'Dentro da média', cls: 'bg-secondary text-brand-primary' },
+  dentro: { label: 'Dentro da média', cls: 'bg-secondary text-emerald-600' },
   acima: { label: 'Acima da média', cls: 'bg-accent text-accent-foreground' },
   sem_referencia: { label: 'Sem referência', cls: 'bg-muted text-muted-foreground' },
 }
@@ -38,7 +38,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
 
   return (
     <div className="space-y-mx-lg">
-      <div className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
+      <div className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
         <Typography variant="caption" tone="muted" className="font-bold tracking-wide">
           Parâmetros de comparação
         </Typography>
@@ -51,7 +51,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
               aria-label="Tamanho da loja"
               value={faixaTamanho}
               onChange={e => setFaixaTamanho(e.target.value)}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-border-default rounded-mx-xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
             >
               {TAMANHOS.map(t => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
@@ -65,13 +65,13 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
       {!paramsOk ? (
         <EmptyState title="Defina os parâmetros" description="Informe região e tamanho da loja para comparar contra o mercado." />
       ) : loadingPlanos || loadingBench ? (
-        <p className="text-sm font-bold text-text-tertiary">Calculando comparativo…</p>
+        <p className="text-sm font-bold text-gray-500">Calculando comparativo…</p>
       ) : linhas.length === 0 ? (
         <EmptyState title="Sem planos para comparar" description="Cadastre planos de remuneração na aba anterior." />
       ) : (
-        <div className="overflow-x-auto rounded-mx-xl border border-border-default">
+        <div className="overflow-x-auto rounded-2xl border border-gray-200">
           <table className="w-full text-sm">
-            <thead className="bg-surface-alt text-text-secondary">
+            <thead className="bg-gray-50 text-gray-500">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Cargo</th>
                 <th className="px-mx-md py-mx-sm text-right">Total atual</th>
@@ -81,10 +81,10 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
             </thead>
             <tbody>
               {linhas.map(l => (
-                <tr key={l.cargo} className="border-t border-border-default">
+                <tr key={l.cargo} className="border-t border-gray-200">
                   <td className="px-mx-md py-mx-sm font-bold uppercase">{l.cargo}</td>
                   <td className="px-mx-md py-mx-sm text-right font-bold">{BRL.format(l.total)}</td>
-                  <td className="px-mx-md py-mx-sm text-right text-text-secondary">
+                  <td className="px-mx-md py-mx-sm text-right text-gray-500">
                     {l.faixa ? `${BRL.format(l.faixa.min)} – ${BRL.format(l.faixa.max)}` : '—'}
                   </td>
                   <td className="px-mx-md py-mx-sm">
@@ -105,7 +105,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-mx-xs">
-      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-text-tertiary">{label}</span>
+      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-gray-500">{label}</span>
       {children}
     </label>
   )

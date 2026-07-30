@@ -101,7 +101,7 @@ const Spinner = () => (
       <div className="absolute inset-0 border-4 border-brand-primary/10 rounded-mx-full"></div>
       <div className="absolute inset-0 border-4 border-t-brand-primary rounded-mx-full animate-spin"></div>
     </div>
-    <p className="text-mx-tiny font-black text-text-tertiary uppercase tracking-mx-widest animate-pulse">MX PERFORMANCE</p>
+    <p className="text-mx-tiny font-bold text-gray-500 uppercase tracking-mx-widest animate-pulse">MX PERFORMANCE</p>
   </div>
 )
 
@@ -142,20 +142,20 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
   render() {
     if (!this.state.hasError) return this.props.children
     return (
-      <div className="min-h-screen bg-mx-black flex flex-col items-center justify-center gap-mx-lg p-mx-xl">
-        <div className="w-mx-2xl h-mx-2xl rounded-mx-2xl bg-brand-primary/10 flex items-center justify-center">
-          <span className="text-brand-primary font-black text-4xl">MX</span>
+      <div className="min-h-screen bg-gray-900 flex flex-col items-center justify-center gap-mx-lg p-mx-xl">
+        <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-emerald-600/10 flex items-center justify-center">
+          <span className="text-emerald-600 font-bold text-4xl">MX</span>
         </div>
-        <h1 className="text-white text-xl font-black uppercase tracking-wider">Algo deu errado</h1>
+        <h1 className="text-white text-xl font-bold uppercase tracking-wider">Algo deu errado</h1>
         <p className="text-white/50 text-sm text-center max-w-md">
           A aplicação encontrou um erro inesperado. Tente recarregar a página.
         </p>
         {import.meta.env.DEV && this.state.error && (
-          <pre className="text-status-error text-xs bg-white/5 p-mx-md rounded-mx-lg max-w-lg overflow-auto text-left">{this.state.error.message}</pre>
+          <pre className="text-status-error text-xs bg-white/5 p-mx-md rounded-xl max-w-lg overflow-auto text-left">{this.state.error.message}</pre>
         )}
         <button
           onClick={() => { this.setState({ hasError: false, error: null }); window.location.reload() }}
-          className="mt-mx-md px-8 py-3 bg-brand-primary text-white rounded-mx-full font-black uppercase tracking-widest hover:bg-brand-primary-hover transition-colors"
+          className="mt-mx-md px-8 py-3 bg-emerald-600 text-white rounded-mx-full font-bold uppercase tracking-widest hover:bg-brand-primary-hover transition-colors"
         >
           Recarregar
         </button>
@@ -170,7 +170,7 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const isSimulationRoute = location.pathname === '/simulacao' || location.pathname.startsWith('/simulacao/')
   const routeAccessRole = isSimulationRoute ? baseRole || role : role
 
-  if (loading || !initialized) return <div className="h-screen flex items-center justify-center bg-mx-black"><Spinner /></div>
+  if (loading || !initialized) return <div className="h-screen flex items-center justify-center bg-gray-900"><Spinner /></div>
   if (!profile) {
     if (import.meta.env.DEV) console.warn('Audit Warn [ProtectedRoute]: No profile found, redirecting to login.')
     return <Navigate to="/login" state={{ from: location }} replace />

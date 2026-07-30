@@ -73,7 +73,7 @@ export default function CorridaPeriodo({ vendedores, meta, isVolume, meuId }) {
                 </p>
                 <Avatar nome={v.nome} foto={v.foto} isMe={isMe} size={36} />
                 {isMe && (
-                  <span className="mt-0.5 text-[9px] font-black text-white bg-blue-500 px-1.5 py-0.5 rounded-full">VOCÊ</span>
+                  <span className="mt-0.5 text-[9px] font-bold text-white bg-blue-500 px-1.5 py-0.5 rounded-full">VOCÊ</span>
                 )}
               </div>
             );

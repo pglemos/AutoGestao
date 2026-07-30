@@ -34,9 +34,9 @@ export function ConsultingProgramCard({
 
   if (error || !program) {
     return (
-      <div className="rounded-mx-xl border border-border-subtle bg-white p-mx-lg" role="status">
-        <strong className="text-base font-black text-text-primary">Nenhum programa de consultoria ativo</strong>
-        <p className="text-sm text-text-secondary">{error || 'Esta loja ainda não possui um programa de consultoria vinculado.'}</p>
+      <div className="rounded-2xl border border-gray-100 bg-white p-mx-lg" role="status">
+        <strong className="text-base font-bold text-gray-800">Nenhum programa de consultoria ativo</strong>
+        <p className="text-sm text-gray-500">{error || 'Esta loja ainda não possui um programa de consultoria vinculado.'}</p>
       </div>
     )
   }
@@ -47,7 +47,7 @@ export function ConsultingProgramCard({
     <Card className="border bg-white p-mx-lg">
       <div className="flex flex-col gap-mx-md md:flex-row md:items-start md:justify-between">
         <div>
-          <span className="inline-flex rounded-mx-md border border-status-success/30 bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-black uppercase text-status-success">
+          <span className="inline-flex rounded-xl border border-status-success/30 bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-bold uppercase text-status-success">
             Programa contratado
           </span>
           <Typography variant="h2" className="mt-mx-sm text-2xl">{program.programName}</Typography>
@@ -58,7 +58,7 @@ export function ConsultingProgramCard({
         </div>
 
         {program.nextVisitNumber ? (
-          <div className="rounded-mx-lg border border-border-subtle bg-surface-alt p-mx-md md:w-[280px]">
+          <div className="rounded-xl border border-gray-100 bg-gray-50 p-mx-md md:w-[280px]">
             <Typography variant="tiny" tone="muted" className="">Próximo encontro</Typography>
             <Typography variant="p" className="mt-mx-xs">Encontro {program.nextVisitNumber}</Typography>
             {nextVisitDate && (

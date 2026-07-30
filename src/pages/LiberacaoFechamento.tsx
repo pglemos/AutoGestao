@@ -74,7 +74,7 @@ export function LiberacaoFechamento() {
 
   if (!hasPermission) {
     return (
-      <main className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-surface-alt">
+      <main className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-gray-50">
         <ShieldCheck size={64} className="text-status-error/20 mb-6" />
         <Typography variant="h2" className="mb-2 text-status-error font-extrabold">
           Acesso Restrito
@@ -82,7 +82,7 @@ export function LiberacaoFechamento() {
         <Typography variant="p" tone="muted" className="max-w-md mx-auto text-xs font-semibold leading-relaxed">
           Apenas gestores, supervisores, administradores ou donos de loja podem aprovar a liberação de fechamentos diários atrasados.
         </Typography>
-        <Button onClick={() => navigate('/home')} className="mt-6 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-mx-lg">
+        <Button onClick={() => navigate('/home')} className="mt-6 bg-emerald-600 hover:bg-brand-primary-hover text-white font-bold rounded-xl">
           Voltar para Início
         </Button>
       </main>
@@ -91,7 +91,7 @@ export function LiberacaoFechamento() {
 
   if (!loading && (!solicitacao || loadError)) {
     return (
-      <main className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-surface-alt">
+      <main className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-gray-50">
         <AlertTriangle size={64} className="text-status-warning/20 mb-6" />
         <Typography variant="h2" className="mb-2 font-extrabold">
           Solicitação Não Encontrada
@@ -99,7 +99,7 @@ export function LiberacaoFechamento() {
         <Typography variant="p" tone="muted" className="max-w-md mx-auto text-xs font-semibold leading-relaxed">
           {loadError || 'O link de liberação é inválido ou a solicitação expirou. Confirme o link enviado pelo vendedor.'}
         </Typography>
-        <Button onClick={() => navigate('/home')} className="mt-6 bg-brand-primary hover:bg-brand-primary-hover text-white font-bold rounded-mx-lg">
+        <Button onClick={() => navigate('/home')} className="mt-6 bg-emerald-600 hover:bg-brand-primary-hover text-white font-bold rounded-xl">
           Voltar para Início
         </Button>
       </main>
@@ -108,16 +108,16 @@ export function LiberacaoFechamento() {
 
   if (loading || !solicitacao) {
     return (
-      <main className="h-screen w-screen flex items-center justify-center bg-surface-alt">
+      <main className="h-screen w-screen flex items-center justify-center bg-gray-50">
         <Typography variant="p" tone="muted" className="text-xs font-semibold">Carregando solicitação...</Typography>
       </main>
     )
   }
 
   return (
-    <main className="min-h-screen w-full bg-surface-alt flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
+    <main className="min-h-screen w-full bg-gray-50 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
       <Card className="w-full max-w-lg bg-white border p-mx-md space-y-mx-md">
-        <header className="border-b border-border-subtle pb-4 flex items-center justify-between">
+        <header className="border-b border-gray-100 pb-4 flex items-center justify-between">
           <div>
             <Typography variant="h1" className="!text-lg !">
               Liberação de Fechamento
@@ -126,35 +126,35 @@ export function LiberacaoFechamento() {
               Aprove o fechamento operacional retroativo para o vendedor.
             </Typography>
           </div>
-          <ShieldCheck size={32} className="text-brand-primary shrink-0" />
+          <ShieldCheck size={32} className="text-emerald-600 shrink-0" />
         </header>
 
-        <div className="space-y-4 text-xs leading-relaxed text-text-secondary">
+        <div className="space-y-4 text-xs leading-relaxed text-gray-500">
           {/* Details */}
-          <div className="bg-surface-alt p-4 rounded-mx-lg border border-border-subtle space-y-3 shadow-inner">
+          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-3 shadow-none">
             <div className="flex items-center gap-2">
-              <User size={15} className="text-brand-primary" />
-              <span className="font-bold text-text-primary">Vendedor:</span>
+              <User size={15} className="text-emerald-600" />
+              <span className="font-bold text-gray-800">Vendedor:</span>
               <span className="font-semibold">{solicitacao.vendedorNome}</span>
             </div>
             <div className="flex items-center gap-2">
-              <Calendar size={15} className="text-brand-primary" />
-              <span className="font-bold text-text-primary">Data do Fechamento:</span>
-              <span className="font-extrabold text-brand-primary">
+              <Calendar size={15} className="text-emerald-600" />
+              <span className="font-bold text-gray-800">Data do Fechamento:</span>
+              <span className="font-extrabold text-emerald-600">
                 {solicitacao.dataFechamento.split('-').reverse().join('/')}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <Clock size={15} className="text-brand-primary" />
-              <span className="font-bold text-text-primary">Data/Hora Solicitação:</span>
+              <Clock size={15} className="text-emerald-600" />
+              <span className="font-bold text-gray-800">Data/Hora Solicitação:</span>
               <span className="font-semibold">
                 {new Date(solicitacao.dataHoraSolicitacao).toLocaleString('pt-BR')}
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <CheckCircle2 size={15} className="text-brand-primary" />
-              <span className="font-bold text-text-primary">Status:</span>
-              <span className={`inline-block px-2 py-0.5 rounded-mx-lg text-[10px] font-extrabold ${
+              <CheckCircle2 size={15} className="text-emerald-600" />
+              <span className="font-bold text-gray-800">Status:</span>
+              <span className={`inline-block px-2 py-0.5 rounded-xl text-[10px] font-extrabold ${
                 solicitacao.status === 'liberado'
                   ? 'bg-status-success-surface text-status-success border border-status-success/20'
                   : 'bg-status-warning-surface text-status-warning border border-status-warning/20 animate-pulse'
@@ -167,7 +167,7 @@ export function LiberacaoFechamento() {
           {/* Action Input */}
           {solicitacao.status === 'pendente' ? (
             <div className="flex flex-col gap-2">
-              <label htmlFor="motivo-liberacao" className="font-bold text-text-primary">
+              <label htmlFor="motivo-liberacao" className="font-bold text-gray-800">
                 Motivo da Liberação (Opcional)
               </label>
               <textarea
@@ -175,14 +175,14 @@ export function LiberacaoFechamento() {
                 value={motivo}
                 onChange={e => setMotivo(e.target.value)}
                 placeholder="Ex: Vendedor teve problemas com a conexão ou ausência justificada..."
-                className="h-20 w-full resize-none rounded-mx-lg border border-border-subtle p-3 text-xs text-text-primary outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 transition-all"
+                className="h-20 w-full resize-none rounded-xl border border-gray-100 p-3 text-xs text-gray-800 outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 transition-all"
               />
             </div>
           ) : (
-            <div className="bg-status-success-surface text-status-success border border-status-success/20 p-mx-md rounded-mx-lg flex items-start gap-2.5 shadow-sm">
+            <div className="bg-status-success-surface text-status-success border border-status-success/20 p-mx-md rounded-xl flex items-start gap-2.5 shadow-sm">
               <CheckCircle2 size={18} className="shrink-0 text-status-success mt-0.5" />
               <div>
-                <p className="font-black text-xs uppercase text-status-success">Fechamento Liberado</p>
+                <p className="font-bold text-xs uppercase text-status-success">Fechamento Liberado</p>
                 <p className="font-semibold mt-1">
                   Este fechamento já foi liberado e o vendedor já pode preencher e finalizar os dados.
                 </p>
@@ -191,11 +191,11 @@ export function LiberacaoFechamento() {
           )}
         </div>
 
-        <footer className="flex items-center justify-between pt-4 border-t border-border-subtle">
+        <footer className="flex items-center justify-between pt-4 border-t border-gray-100">
           <Button
             onClick={() => navigate('/home')}
             variant="outline"
-            className="h-9 px-4 text-xs font-bold border-border-subtle text-text-secondary hover:bg-background flex items-center gap-1.5 rounded-mx-lg"
+            className="h-9 px-4 text-xs font-bold border-gray-100 text-gray-500 hover:bg-background flex items-center gap-1.5 rounded-xl"
           >
             <ArrowLeft size={13} /> Cockpit
           </Button>

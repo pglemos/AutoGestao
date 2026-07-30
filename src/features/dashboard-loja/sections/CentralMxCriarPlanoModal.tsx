@@ -127,7 +127,7 @@ export function CentralMxCriarPlanoModal({
     >
       <div
         role="presentation"
-        className="w-full max-w-2xl rounded-mx-2xl bg-white p-mx-xl shadow-mx-xl"
+        className="w-full max-w-2xl rounded-2xl bg-white p-mx-xl shadow-sm"
         onClick={(event) => event.stopPropagation()}
         onKeyDown={(event) => event.stopPropagation()}
       >
@@ -139,7 +139,7 @@ export function CentralMxCriarPlanoModal({
             type="button"
             onClick={onClose}
             aria-label="Fechar"
-            className="rounded-mx-md p-mx-tiny text-text-tertiary hover:bg-surface-alt"
+            className="rounded-xl p-mx-tiny text-gray-500 hover:bg-gray-50"
           >
             <X size={18} />
           </button>
@@ -150,7 +150,7 @@ export function CentralMxCriarPlanoModal({
             <div>
               <label
                 htmlFor="plano-scope"
-                className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+                className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
               >
                 Escopo
               </label>
@@ -158,7 +158,7 @@ export function CentralMxCriarPlanoModal({
                 id="plano-scope"
                 value={form.scopeIdx}
                 onChange={(event) => update('scopeIdx', Number(event.target.value))}
-                className="w-full h-mx-14 rounded-mx-md border border-border-default bg-white px-5 text-sm font-black uppercase shadow-inner outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
+                className="w-full h-mx-14 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
               >
                 {scopeOptions.map((option, index) => (
                   <option key={`${option.scope}-${option.scopeId}-${index}`} value={index}>
@@ -170,7 +170,7 @@ export function CentralMxCriarPlanoModal({
             <div>
               <label
                 htmlFor="plano-departamento"
-                className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+                className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
               >
                 Departamento
               </label>
@@ -178,7 +178,7 @@ export function CentralMxCriarPlanoModal({
                 id="plano-departamento"
                 value={form.departamento}
                 onChange={(event) => update('departamento', event.target.value)}
-                className="w-full h-mx-14 rounded-mx-md border border-border-default bg-white px-5 text-sm font-black uppercase shadow-inner outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
+                className="w-full h-mx-14 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
               >
                 <option value="comercial">Comercial</option>
                 <option value="marketing">Marketing</option>
@@ -193,7 +193,7 @@ export function CentralMxCriarPlanoModal({
           <div>
             <label
               htmlFor="plano-indicador"
-              className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+              className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
             >
               Indicador
             </label>
@@ -209,7 +209,7 @@ export function CentralMxCriarPlanoModal({
           <div>
             <label
               htmlFor="plano-problema"
-              className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+              className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
             >
               Problema
             </label>
@@ -225,7 +225,7 @@ export function CentralMxCriarPlanoModal({
           <div>
             <label
               htmlFor="plano-acao"
-              className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+              className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
             >
               Ação
             </label>
@@ -241,7 +241,7 @@ export function CentralMxCriarPlanoModal({
           <div>
             <label
               htmlFor="plano-como"
-              className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+              className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
             >
               Como (opcional)
             </label>
@@ -257,7 +257,7 @@ export function CentralMxCriarPlanoModal({
             <div>
               <label
                 htmlFor="plano-prazo"
-                className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+                className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
               >
                 Prazo
               </label>
@@ -271,7 +271,7 @@ export function CentralMxCriarPlanoModal({
             <div>
               <label
                 htmlFor="plano-prioridade"
-                className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+                className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
               >
                 Prioridade
               </label>
@@ -279,7 +279,7 @@ export function CentralMxCriarPlanoModal({
                 id="plano-prioridade"
                 value={form.prioridade}
                 onChange={(event) => update('prioridade', event.target.value as FormState['prioridade'])}
-                className="w-full h-mx-14 rounded-mx-md border border-border-default bg-white px-5 text-sm font-black uppercase shadow-inner outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
+                className="w-full h-mx-14 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
               >
                 <option value="baixa">Baixa</option>
                 <option value="media">Média</option>
@@ -290,7 +290,7 @@ export function CentralMxCriarPlanoModal({
             <div>
               <label
                 htmlFor="plano-origem"
-                className="block text-mx-tiny font-black uppercase tracking-widest text-text-tertiary"
+                className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
               >
                 Origem
               </label>
@@ -298,7 +298,7 @@ export function CentralMxCriarPlanoModal({
                 id="plano-origem"
                 value={form.origem}
                 onChange={(event) => update('origem', event.target.value as FormState['origem'])}
-                className="w-full h-mx-14 rounded-mx-md border border-border-default bg-white px-5 text-sm font-black uppercase shadow-inner outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
+                className="w-full h-mx-14 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
               >
                 <option value="manual">Manual</option>
                 <option value="alertas">Alerta</option>
@@ -308,7 +308,7 @@ export function CentralMxCriarPlanoModal({
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-mx-xs pt-mx-sm border-t border-border-default">
+          <div className="flex items-center justify-end gap-mx-xs pt-mx-sm border-t border-gray-200">
             <Button type="button" variant="ghost" onClick={onClose} disabled={saving}>
               Cancelar
             </Button>

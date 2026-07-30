@@ -34,7 +34,7 @@ const CounterItem = ({ label, bgColor, textColor, icon: Icon, value, onDecrement
       {/* Label */}
       <span className={`${compact ? "text-[9px]" : "text-[10px]"} font-semibold text-slate-400 text-center leading-tight tracking-widest uppercase`}>{label}</span>
       {/* Big number */}
-      <span className={`${compact ? "text-[30px]" : "text-[52px]"} font-black leading-none tracking-tight tabular-nums ${textColor}`}>{value}</span>
+      <span className={`${compact ? "text-[30px]" : "text-[52px]"} font-bold leading-none tracking-tight tabular-nums ${textColor}`}>{value}</span>
       {/* Stepper */}
       <div className={`flex items-center border border-slate-200 rounded-xl shadow-sm w-full focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.15)] transition-all ${compact ? "h-7" : "h-9"}`}>
         <button
@@ -72,7 +72,7 @@ const Divider = () => (
 const SectionCard = ({ number, title, accent, tooltip, children }) => (
   <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col">
     <div className={`flex items-center gap-2.5 px-5 py-3.5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white`}>
-      <span className={`w-5 h-5 rounded-full ${accent} text-white text-[10px] font-black flex items-center justify-center flex-shrink-0`}>{number}</span>
+      <span className={`w-5 h-5 rounded-full ${accent} text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0`}>{number}</span>
       <span className="text-[12px] font-bold text-slate-600 uppercase tracking-[0.1em]">{title}</span>
       <div className="ml-auto"><InfoTooltip text={tooltip} /></div>
     </div>

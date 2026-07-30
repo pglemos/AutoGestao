@@ -237,7 +237,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
 
         <div className="bg-gradient-to-r from-[#005BFF] to-blue-600 rounded-2xl p-5 text-white">
           <p className="text-xs font-bold uppercase tracking-wide text-blue-200">Veículo que chegou</p>
-          <p className="text-xl font-black mt-1">{veiculoAtaque.marca} {veiculoAtaque.modelo} {veiculoAtaque.versao}</p>
+          <p className="text-xl font-bold mt-1">{veiculoAtaque.marca} {veiculoAtaque.modelo} {veiculoAtaque.versao}</p>
           <p className="text-sm text-blue-100 mt-1">
             {veiculoAtaque.ano}{veiculoAtaque.preco ? ` · ${veiculoAtaque.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}` : ''}
           </p>
@@ -250,12 +250,12 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
           </div>
         ) : (
           <div className="space-y-2">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-wider">
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
               {listaCompativeis.length} cliente{listaCompativeis.length !== 1 ? 's' : ''} compatível{listaCompativeis.length !== 1 ? 'eis' : ''}
             </p>
             {listaCompativeis.map(cliente => (
               <div key={cliente.id} className="bg-white border border-slate-100 rounded-xl px-4 py-3 flex items-center gap-3">
-                <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-blue-50 text-xs font-black text-[#005BFF]">
+                <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-blue-50 text-xs font-bold text-[#005BFF]">
                   {(cliente.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                 </span>
                 <div className="min-w-0 flex-1">
@@ -296,7 +296,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
             <span className="text-3xl">{missao.icone}</span>
             <div className="flex-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-xl font-black text-slate-900">{missao.nome}</h2>
+                <h2 className="text-xl font-bold text-slate-900">{missao.nome}</h2>
                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${prioridadeBadgeClass(missao.prioridade)}`}>{missao.prioridade}</span>
               </div>
               <p className="text-sm text-slate-500 mt-1">{missao.objetivo}</p>
@@ -305,7 +305,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
           </div>
           <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-50">
             <div className="text-center">
-              <p className="text-2xl font-black text-slate-900">{missao.contextos.length}</p>
+              <p className="text-2xl font-bold text-slate-900">{missao.contextos.length}</p>
               <p className="text-xs text-slate-400">Clientes</p>
             </div>
             <div className="text-center">
@@ -321,7 +321,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
           </div>
         ) : (
           <div>
-            <p className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3">Clientes da missão</p>
+            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Clientes da missão</p>
             <div className="space-y-2">
               {missao.contextos.map(ctx => {
                 const progresso = progressoPorCliente.get(ctx.cliente.id)
@@ -331,7 +331,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                   : null
                 return (
                   <div key={ctx.cliente.id} className="bg-white border border-slate-100 rounded-xl px-4 py-3 flex items-center gap-3">
-                    <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-blue-50 text-xs font-black text-[#005BFF]">
+                    <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-blue-50 text-xs font-bold text-[#005BFF]">
                       {(ctx.cliente.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                     </span>
                     <div className="min-w-0 flex-1">
@@ -407,14 +407,14 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-black text-slate-900">Plano de Ataque</h1>
+        <h1 className="text-2xl font-bold text-slate-900">Plano de Ataque</h1>
         <p className="text-sm text-slate-400 mt-1">Missões calculadas a partir das situações reais da sua carteira.</p>
       </div>
 
       <div className="bg-white border border-slate-100 rounded-2xl p-5 space-y-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-black text-slate-900">Veículos que chegaram</h2>
+            <h2 className="text-lg font-bold text-slate-900">Veículos que chegaram</h2>
             <p className="text-sm text-slate-400 mt-1">Encontre clientes da carteira interessados nos veículos recém-entrados.</p>
           </div>
           <button
@@ -490,7 +490,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                       <Car size={20} />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-black text-slate-900 truncate">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
+                      <p className="text-sm font-bold text-slate-900 truncate">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
                       <p className="text-xs text-slate-400">
                         {veiculo.ano}{veiculo.preco ? ` · ${veiculo.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}` : ''}
                       </p>
@@ -520,13 +520,13 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
 
       <div className="bg-gradient-to-r from-[#005BFF] to-blue-600 rounded-2xl p-5 text-white">
         <p className="text-base font-bold leading-snug">
-          Olá, {vendedorNome}! Hoje existem <span className="text-blue-200 font-black">{totalOportunidades} oportunidades</span> na sua carteira.
+          Olá, {vendedorNome}! Hoje existem <span className="text-blue-200 font-bold">{totalOportunidades} oportunidades</span> na sua carteira.
         </p>
         <p className="mt-1 text-sm text-blue-100">Comece pelas missões com maior prioridade.</p>
       </div>
 
       <div>
-        <p className="text-xs font-black text-slate-400 uppercase tracking-wider mb-3">Missões recomendadas</p>
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Missões recomendadas</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {missoesOrdenadas.map(missao => {
             const count = missao.contextos.length
@@ -605,7 +605,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvar }: { onClose: () => void; onS
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Registrar veículo que chegou">
       <div className="w-full max-w-[440px] space-y-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.24)]">
         <div className="flex items-center justify-between">
-          <p className="text-lg font-black text-slate-900">Registrar veículo que chegou</p>
+          <p className="text-lg font-bold text-slate-900">Registrar veículo que chegou</p>
           <button type="button" onClick={onClose} aria-label="Fechar"><X size={18} className="text-slate-400" /></button>
         </div>
         <div className="grid grid-cols-2 gap-3">

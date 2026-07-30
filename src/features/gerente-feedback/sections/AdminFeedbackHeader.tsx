@@ -32,13 +32,13 @@ export function AdminFeedbackHeader({
 }: Props) {
   return (
     <header
-      className="flex flex-col xl:flex-row xl:items-center justify-between gap-mx-lg border-b border-border-default pb-10 shrink-0"
+      className="flex flex-col xl:flex-row xl:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10 shrink-0"
       role="banner"
     >
       <div className="flex flex-col gap-mx-tiny min-w-0 max-w-full">
         <div className="flex items-center gap-mx-sm">
           <div
-            className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-mx-md"
+            className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm"
             aria-hidden="true"
           />
           <Typography variant="h1">
@@ -63,7 +63,7 @@ export function AdminFeedbackHeader({
         <div className="relative group w-full sm:w-mx-sidebar-expanded">
           <Search
             size={16}
-            className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors"
+            className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors"
             aria-hidden="true"
           />
           <label htmlFor="feedback-admin-search" className="sr-only">
@@ -75,7 +75,7 @@ export function AdminFeedbackHeader({
             placeholder="BUSCAR MENTORIA..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="!pl-11 !h-12 !text-mx-tiny uppercase tracking-widest font-black"
+            className="!pl-11 !h-12 !text-mx-tiny uppercase tracking-widest font-bold"
           />
         </div>
         <Button

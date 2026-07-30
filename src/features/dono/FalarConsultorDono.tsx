@@ -90,7 +90,7 @@ function normalizePhone(phone: string | null) {
 
 function ConsultantAvatar({ avatarUrl, name, initialsFn }: { avatarUrl: string | null | undefined; name: string; initialsFn: (name: string) => string }) {
   const [erro, setErro] = useState(false)
-  if (!avatarUrl || erro) return <div className="flex h-mx-20 w-mx-20 items-center justify-center rounded-mx-full bg-brand-primary text-2xl font-black text-white shadow-mx-md">{initialsFn(name)}</div>
+  if (!avatarUrl || erro) return <div className="flex h-mx-20 w-mx-20 items-center justify-center rounded-mx-full bg-emerald-600 text-2xl font-bold text-white shadow-sm">{initialsFn(name)}</div>
   return <img src={avatarUrl} alt="" className="h-mx-20 w-mx-20 rounded-mx-full object-cover" onError={() => setErro(true)} />
 }
 
@@ -231,8 +231,8 @@ export default function FalarConsultorDono() {
   }
 
   return (
-    <div className="flex flex-col gap-mx-lg bg-surface-alt p-mx-sm pb-28 md:p-mx-lg">
-      <header className="flex flex-col gap-mx-sm border-b border-border-subtle pb-mx-lg">
+    <div className="flex flex-col gap-mx-lg bg-gray-50 p-mx-sm pb-28 md:p-mx-lg">
+      <header className="flex flex-col gap-mx-sm border-b border-gray-100 pb-mx-lg">
         <div className="flex flex-wrap items-center justify-between gap-mx-md">
           <div className="min-w-0">
             <Typography variant="h1" className="text-3xl md:text-4xl">Falar com Consultor</Typography>
@@ -247,7 +247,7 @@ export default function FalarConsultorDono() {
       </header>
 
       {loadError && (
-        <div role="alert" className="rounded-mx-xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-sm font-bold text-status-warning">
+        <div role="alert" className="rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-sm font-bold text-status-warning">
           {loadError}
         </div>
       )}
@@ -256,9 +256,9 @@ export default function FalarConsultorDono() {
         <Card className="border bg-white p-mx-lg">
           {loading ? (
             <div className="space-y-mx-md animate-pulse">
-              <div className="h-mx-20 w-mx-20 rounded-mx-full bg-surface-alt" />
-              <div className="h-mx-5 w-40 rounded bg-surface-alt" />
-              <div className="h-mx-4 w-28 rounded bg-surface-alt" />
+              <div className="h-mx-20 w-mx-20 rounded-mx-full bg-gray-50" />
+              <div className="h-mx-5 w-40 rounded bg-gray-50" />
+              <div className="h-mx-4 w-28 rounded bg-gray-50" />
             </div>
           ) : (
             <>
@@ -267,7 +267,7 @@ export default function FalarConsultorDono() {
                 <div className="min-w-0">
                   <Typography variant="h3" className="truncate text-xl">{contactName}</Typography>
                   <Typography variant="p" tone="muted" className="text-sm font-bold">{contactRole}</Typography>
-                  <div className="mt-mx-tiny flex items-center gap-mx-xs text-mx-tiny text-text-tertiary">
+                  <div className="mt-mx-tiny flex items-center gap-mx-xs text-mx-tiny text-gray-500">
                     <MapPin size={12} aria-hidden="true" />
                     <span>{storeName}</span>
                   </div>
@@ -276,35 +276,35 @@ export default function FalarConsultorDono() {
 
               <div className="mt-mx-lg space-y-mx-sm">
                 {whatsappUrl && (
-                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-mx-xl bg-status-success text-sm font-black text-white transition-colors hover:bg-status-success/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-status-success/30">
+                  <a href={whatsappUrl} target="_blank" rel="noopener noreferrer" className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-2xl bg-status-success text-sm font-bold text-white transition-colors hover:bg-status-success/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-status-success/30">
                     <MessageCircle size={18} /> Abrir WhatsApp
                   </a>
                 )}
                 {phoneDigits && (
-                  <a href={`tel:${phoneDigits}`} className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-mx-xl border border-border-default bg-white text-sm font-black text-text-primary transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/20">
+                  <a href={`tel:${phoneDigits}`} className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-800 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/20">
                     <Phone size={18} /> Ligar
                   </a>
                 )}
                 {scheduleUrl && (
-                  <a href={scheduleUrl} className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-mx-xl bg-status-info text-sm font-black text-white transition-colors hover:bg-status-info/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-status-info/30">
+                  <a href={scheduleUrl} className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-2xl bg-status-info text-sm font-bold text-white transition-colors hover:bg-status-info/90 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-status-info/30">
                     <CalendarPlus size={18} /> Solicitar agendamento
                   </a>
                 )}
               </div>
 
-              <div className="mt-mx-lg space-y-mx-xs border-t border-border-subtle pt-mx-md">
+              <div className="mt-mx-lg space-y-mx-xs border-t border-gray-100 pt-mx-md">
                 {contact?.consultant_email && (
-                  <a href={mailtoUrl || undefined} className="flex items-center gap-mx-xs break-all text-sm font-bold text-text-secondary hover:text-brand-primary">
-                    <Mail size={14} className="shrink-0 text-text-tertiary" /> {contact.consultant_email}
+                  <a href={mailtoUrl || undefined} className="flex items-center gap-mx-xs break-all text-sm font-bold text-gray-500 hover:text-emerald-600">
+                    <Mail size={14} className="shrink-0 text-gray-500" /> {contact.consultant_email}
                   </a>
                 )}
                 {contact?.consultant_phone && (
-                  <div className="flex items-center gap-mx-xs text-sm font-bold text-text-secondary">
-                    <Phone size={14} className="text-text-tertiary" /> {contact.consultant_phone}
+                  <div className="flex items-center gap-mx-xs text-sm font-bold text-gray-500">
+                    <Phone size={14} className="text-gray-500" /> {contact.consultant_phone}
                   </div>
                 )}
                 {!contact?.consultant_user_id && (
-                  <p className="rounded-mx-lg bg-surface-alt p-mx-sm text-xs font-bold text-text-tertiary">
+                  <p className="rounded-xl bg-gray-50 p-mx-sm text-xs font-bold text-gray-500">
                     Nenhum consultor individual está vinculado. A solicitação será registrada na fila da equipe MX.
                   </p>
                 )}
@@ -315,7 +315,7 @@ export default function FalarConsultorDono() {
 
         <Card className="border bg-white p-mx-lg">
           <div className="flex items-center gap-mx-sm">
-            <Send size={22} className="text-brand-primary" />
+            <Send size={22} className="text-emerald-600" />
             <div>
               <Typography variant="h3" className="text-xl">Nova solicitação</Typography>
               <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-bold normal-case">
@@ -325,13 +325,13 @@ export default function FalarConsultorDono() {
           </div>
 
           {contextSummary.length > 0 && (
-            <div className="mt-mx-md rounded-mx-xl border border-brand-primary/15 bg-mx-indigo-50 p-mx-md">
-              <div className="flex items-center gap-mx-xs text-xs font-black uppercase tracking-mx-wide text-brand-primary">
+            <div className="mt-mx-md rounded-2xl border border-brand-primary/15 bg-mx-indigo-50 p-mx-md">
+              <div className="flex items-center gap-mx-xs text-xs font-bold uppercase tracking-mx-wide text-emerald-600">
                 <Paperclip size={15} /> Contexto anexado automaticamente
               </div>
               <div className="mt-mx-sm flex flex-wrap gap-mx-xs">
                 {contextSummary.map(item => (
-                  <span key={item} className="rounded-mx-md bg-white px-mx-sm py-mx-xs text-xs font-bold text-text-secondary shadow-mx-xs">{item}</span>
+                  <span key={item} className="rounded-xl bg-white px-mx-sm py-mx-xs text-xs font-bold text-gray-500 shadow-mx-xs">{item}</span>
                 ))}
               </div>
             </div>
@@ -339,33 +339,33 @@ export default function FalarConsultorDono() {
 
           <form onSubmit={submitRequest} className="mt-mx-md space-y-mx-md">
             <div className="grid grid-cols-1 gap-mx-md md:grid-cols-2">
-              <label className="space-y-mx-xs text-sm font-black text-text-secondary">
+              <label className="space-y-mx-xs text-sm font-bold text-gray-500">
                 Assunto
                 <Input value={subject} onChange={event => setSubject(event.target.value)} maxLength={180} required />
               </label>
-              <label className="space-y-mx-xs text-sm font-black text-text-secondary">
+              <label className="space-y-mx-xs text-sm font-bold text-gray-500">
                 Tipo da solicitação
-                <select value={requestType} onChange={event => setRequestType(event.target.value)} className="h-12 w-full rounded-mx-md border border-mx-border bg-white px-mx-md text-sm font-bold text-mx-text focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
+                <select value={requestType} onChange={event => setRequestType(event.target.value)} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-mx-md text-sm font-bold text-gray-800 focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
                   {requestTypes.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
                 </select>
               </label>
             </div>
 
-            <label className="block space-y-mx-xs text-sm font-black text-text-secondary">
+            <label className="block space-y-mx-xs text-sm font-bold text-gray-500">
               Mensagem
-              <textarea value={message} onChange={event => setMessage(event.target.value)} rows={6} maxLength={5000} required className="w-full resize-y rounded-mx-md border border-mx-border bg-white px-mx-md py-mx-sm text-sm font-bold text-mx-text shadow-inner placeholder:text-mx-subtle focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20" placeholder="Descreva a decisão, dúvida ou análise necessária." />
+              <textarea value={message} onChange={event => setMessage(event.target.value)} rows={6} maxLength={5000} required className="w-full resize-y rounded-xl border border-gray-200 bg-white px-mx-md py-mx-sm text-sm font-bold text-gray-800 shadow-none placeholder:text-mx-subtle focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20" placeholder="Descreva a decisão, dúvida ou análise necessária." />
             </label>
 
             <div className="grid grid-cols-1 gap-mx-md sm:grid-cols-[180px_minmax(0,1fr)]">
-              <label className="space-y-mx-xs text-sm font-black text-text-secondary">
+              <label className="space-y-mx-xs text-sm font-bold text-gray-500">
                 Prioridade
-                <select value={priority} onChange={event => setPriority(event.target.value)} className="h-12 w-full rounded-mx-md border border-mx-border bg-white px-mx-md text-sm font-bold text-mx-text focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
+                <select value={priority} onChange={event => setPriority(event.target.value)} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-mx-md text-sm font-bold text-gray-800 focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
                   {priorities.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
                 </select>
               </label>
-              <div className="rounded-mx-xl bg-surface-alt p-mx-md text-sm font-bold text-text-tertiary">
-                <strong className="text-text-primary">Empresa:</strong> {contact?.client_name || storeName}<br />
-                <strong className="text-text-primary">Consultor:</strong> {contactName}
+              <div className="rounded-2xl bg-gray-50 p-mx-md text-sm font-bold text-gray-500">
+                <strong className="text-gray-800">Empresa:</strong> {contact?.client_name || storeName}<br />
+                <strong className="text-gray-800">Consultor:</strong> {contactName}
               </div>
             </div>
 
@@ -380,7 +380,7 @@ export default function FalarConsultorDono() {
 
       <Card className="border bg-white p-mx-lg">
         <div className="flex items-center gap-mx-sm">
-          <Clock3 size={21} className="text-brand-primary" />
+          <Clock3 size={21} className="text-emerald-600" />
           <div>
             <Typography variant="h3" className="text-xl">Histórico de solicitações</Typography>
             <Typography variant="tiny" tone="muted" className="mt-mx-tiny block font-bold normal-case">Últimos registros persistidos para esta loja.</Typography>
@@ -389,24 +389,24 @@ export default function FalarConsultorDono() {
 
         <div className="mt-mx-md space-y-mx-sm">
           {loading ? (
-            <div className="h-24 animate-pulse rounded-mx-xl bg-surface-alt" />
+            <div className="h-24 animate-pulse rounded-2xl bg-gray-50" />
           ) : requests.length === 0 ? (
-            <div className="rounded-mx-xl border border-dashed border-border-default p-mx-lg text-center">
-              <UserRoundCheck size={26} className="mx-auto text-text-tertiary" />
-              <p className="mt-mx-sm text-sm font-black text-text-primary">Nenhuma solicitação registrada</p>
-              <p className="mt-mx-xs text-xs font-bold text-text-tertiary">O primeiro envio aparecerá aqui com status e data.</p>
+            <div className="rounded-2xl border border-dashed border-gray-200 p-mx-lg text-center">
+              <UserRoundCheck size={26} className="mx-auto text-gray-500" />
+              <p className="mt-mx-sm text-sm font-bold text-gray-800">Nenhuma solicitação registrada</p>
+              <p className="mt-mx-xs text-xs font-bold text-gray-500">O primeiro envio aparecerá aqui com status e data.</p>
             </div>
           ) : requests.map(request => (
-            <div key={request.id} className="flex flex-col gap-mx-sm rounded-mx-xl border border-border-default p-mx-md md:flex-row md:items-center md:justify-between">
+            <div key={request.id} className="flex flex-col gap-mx-sm rounded-2xl border border-gray-200 p-mx-md md:flex-row md:items-center md:justify-between">
               <div className="min-w-0">
-                <p className="truncate font-black text-text-primary">{request.subject}</p>
-                <p className="mt-mx-tiny text-xs font-bold text-text-tertiary">
+                <p className="truncate font-bold text-gray-800">{request.subject}</p>
+                <p className="mt-mx-tiny text-xs font-bold text-gray-500">
                   {requestTypeLabels[request.request_type] || request.request_type} · {new Date(request.created_at).toLocaleString('pt-BR')}
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-mx-xs">
-                <span className="rounded-mx-md bg-surface-alt px-mx-sm py-mx-xs text-xs font-black text-text-secondary">{request.priority}</span>
-                <span className={request.status === 'respondida' || request.status === 'encerrada' ? 'rounded-mx-md bg-status-success-surface px-mx-sm py-mx-xs text-xs font-black text-status-success' : 'rounded-mx-md bg-status-info-surface px-mx-sm py-mx-xs text-xs font-black text-status-info'}>
+                <span className="rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-xs font-bold text-gray-500">{request.priority}</span>
+                <span className={request.status === 'respondida' || request.status === 'encerrada' ? 'rounded-xl bg-status-success-surface px-mx-sm py-mx-xs text-xs font-bold text-status-success' : 'rounded-xl bg-status-info-surface px-mx-sm py-mx-xs text-xs font-bold text-status-info'}>
                   {request.status === 'respondida' || request.status === 'encerrada' ? <CheckCircle2 size={13} className="mr-1 inline" /> : <Clock3 size={13} className="mr-1 inline" />}
                   {statusLabels[request.status] || request.status}
                 </span>

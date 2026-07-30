@@ -37,7 +37,7 @@ function MetaCard({ label, valor, sugestao, cor, detalhe }) {
     <div className={`rounded-xl border p-4 ${cor}`}>
       <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{label}</p>
       <div className="flex items-end gap-2">
-        <span className="text-[28px] font-black tabular-nums text-slate-800 leading-none">{sugestao}</span>
+        <span className="text-[28px] font-bold tabular-nums text-slate-800 leading-none">{sugestao}</span>
         <span className="text-[11px] text-slate-400 mb-1">sugerido</span>
       </div>
       {detalhe && <p className="text-[11px] text-slate-400 mt-1">{detalhe}</p>}

@@ -428,13 +428,13 @@ return (
               <div className="flex min-w-0 items-center gap-2 rounded-[14px] border border-slate-200 bg-white px-3 py-1.5 shadow-sm">
                 <CalendarDays size={18} className="shrink-0 text-[#005BFF]" aria-hidden="true" />
                 <div className="min-w-0">
-                  <p className="text-[10px] font-black uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
-                  <p className="truncate text-[13px] font-black text-[#071822]">{dateStr}</p>
+                  <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
+                  <p className="truncate text-[13px] font-bold text-[#071822]">{dateStr}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setCustomReferenceDate('')}
-                  className="ml-1 inline-flex h-8 shrink-0 items-center gap-2 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[12px] font-black text-[#071822] shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]"
+                  className="ml-1 inline-flex h-8 shrink-0 items-center gap-2 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[12px] font-bold text-[#071822] shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]"
                 >
                   Ver data atual
                 </button>
@@ -464,7 +464,7 @@ previousCard.type === 'previous_done' ? 'bg-emerald-50 text-emerald-700' : 'bg-a
 {previousCard.type === 'previous_done' ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
 </span>
 <div className="min-w-0">
-<p className={`text-[11px] font-black uppercase tracking-[0.08em] ${
+<p className={`text-[11px] font-bold uppercase tracking-[0.08em] ${
 previousCard.type === 'previous_done' ? 'text-emerald-700' : 'text-amber-800'
 }`}>
 {previousCard.type === 'previous_done' ? 'FECHAMENTO ANTERIOR CONCLUÍDO' : 'FECHAMENTO ANTERIOR PENDENTE'}
@@ -477,10 +477,10 @@ previousCard.type === 'previous_done' ? 'text-emerald-700' : 'text-amber-800'
 </div>
 </div>
 <div className="flex shrink-0 gap-2">
-<button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-black text-slate-600 shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]">
+<button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-bold text-slate-600 shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]">
 Ver histórico
 </button>
-<button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-[11px] font-black text-white shadow-sm ${
+<button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-[11px] font-bold text-white shadow-sm ${
 previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-amber-600'
 }`}>
 {previousCard.type === 'previous_done' ? 'Ajustar fechamento' : `Regularizar ${previousCard.date.slice(8, 10)}/${previousCard.date.slice(5, 7)}`}
@@ -496,14 +496,14 @@ previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-amber-600'
 <div className="flex min-w-0 items-center gap-2">
 <CalendarDays size={18} className="shrink-0 text-[#005BFF]" aria-hidden="true" />
 <div className="min-w-0">
-<p className="text-[10px] font-black uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
-<h2 id="checkin-operational-date" className="truncate text-[15px] font-black text-[#071822] sm:text-[17px]">{dateStr}</h2>
+<p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
+<h2 id="checkin-operational-date" className="truncate text-[15px] font-bold text-[#071822] sm:text-[17px]">{dateStr}</h2>
 </div>
 </div>
 <button
 type="button"
 onClick={() => setCustomReferenceDate('')}
-className="inline-flex h-9 items-center gap-2 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[12px] font-black text-[#071822] shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]"
+className="inline-flex h-9 items-center gap-2 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[12px] font-bold text-[#071822] shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]"
 >
 Ver data atual
 </button>
@@ -516,15 +516,15 @@ Ver data atual
 <div className="flex items-start justify-between gap-4">
 <div>
 <div className="flex items-center gap-1.5">
-<p className="text-[16px] font-black tracking-tight text-[#071822]">Progresso do Fechamento</p>
-<span className="grid h-5 w-5 place-items-center rounded-full border border-[#526B7A] text-[12px] font-black text-[#526B7A]">i</span>
+<p className="text-[16px] font-bold tracking-tight text-[#071822]">Progresso do Fechamento</p>
+<span className="grid h-5 w-5 place-items-center rounded-full border border-[#526B7A] text-[12px] font-bold text-[#526B7A]">i</span>
 </div>
 <p className="mt-3 text-[13px] font-bold text-[#334155]">
 Etapa {activeStep} de 4 <span className="text-[#526B7A]">•</span> <span className="text-[#00A89D]">{activeStepLabel}</span>
 </p>
 </div>
 <div className="text-right">
-<p className="text-[31px] font-black leading-none text-[#00A89D]">{progressPercent}%</p>
+<p className="text-[31px] font-bold leading-none text-[#00A89D]">{progressPercent}%</p>
 <p className="mt-1 text-[12px] font-semibold text-[#526B7A]">preenchido</p>
 </div>
 </div>
@@ -538,13 +538,13 @@ Etapa {activeStep} de 4 <span className="text-[#526B7A]">•</span> <span classN
 const active = item.step === activeStep
 return (
 <div key={item.step} className="flex min-w-0 flex-col items-center gap-1 border-r border-[#DFE0E1] px-2 py-3 text-center last:border-r-0">
-<span className={item.done ? 'grid h-8 w-8 place-items-center rounded-full bg-[#34c759] text-[15px] font-black text-white' : active ? 'grid h-8 w-8 place-items-center rounded-full bg-[#00A89D] text-[14px] font-black text-white' : 'grid h-8 w-8 place-items-center rounded-full border border-[#526B7A] text-[14px] font-black text-[#526B7A]'}>
+<span className={item.done ? 'grid h-8 w-8 place-items-center rounded-full bg-[#34c759] text-[15px] font-bold text-white' : active ? 'grid h-8 w-8 place-items-center rounded-full bg-[#00A89D] text-[14px] font-bold text-white' : 'grid h-8 w-8 place-items-center rounded-full border border-[#526B7A] text-[14px] font-bold text-[#526B7A]'}>
 {item.done ? '✓' : item.step}
 </span>
-<span className={active ? 'max-w-full text-[11px] font-black leading-tight text-[#00A89D]' : 'max-w-full text-[11px] font-bold leading-tight text-[#071822]'}>
+<span className={active ? 'max-w-full text-[11px] font-bold leading-tight text-[#00A89D]' : 'max-w-full text-[11px] font-bold leading-tight text-[#071822]'}>
 {item.step}. {item.label}
 </span>
-<span className={active ? 'text-[11px] font-black text-[#00A89D]' : 'text-[11px] font-semibold text-[#526B7A]'}>
+<span className={active ? 'text-[11px] font-bold text-[#00A89D]' : 'text-[11px] font-semibold text-[#526B7A]'}>
 {item.percent}%
 </span>
 </div>
@@ -623,22 +623,22 @@ return (
                           {row.finalized && (
                             <div className="flex items-center gap-3 text-xs flex-wrap">
                               <div>
-                                <span className="text-[#00A89D] font-black">{row.leads}</span>{' '}
+                                <span className="text-[#00A89D] font-bold">{row.leads}</span>{' '}
                                 <span className="text-[#526B7A] font-semibold">leads</span>
                               </div>
                               <div className="h-3 w-px bg-[#DFE0E1]" />
                               <div>
-                                <span className="text-mx-action font-black">{row.atend}</span>{' '}
+                                <span className="text-emerald-600 font-bold">{row.atend}</span>{' '}
                                 <span className="text-[#526B7A] font-semibold">atend.</span>
                               </div>
                               <div className="h-3 w-px bg-[#DFE0E1]" />
                               <div>
-                                <span className="text-[#ea580c] font-black">{row.agend}</span>{' '}
+                                <span className="text-[#ea580c] font-bold">{row.agend}</span>{' '}
                                 <span className="text-[#526B7A] font-semibold">agend.</span>
                               </div>
                               <div className="h-3 w-px bg-[#DFE0E1]" />
                               <div>
-                                <span className="text-[#00A89D] font-black">{row.vendas}</span>{' '}
+                                <span className="text-[#00A89D] font-bold">{row.vendas}</span>{' '}
                                 <span className="text-[#526B7A] font-semibold">vendas</span>
                               </div>
                             </div>
@@ -686,7 +686,7 @@ return (
                                   setDetailRequest(row.latestRequest)
                                   setActiveView('detail')
                                 }}
-                                className="inline-flex h-7 items-center justify-center rounded-lg border border-[#DFE0E1] bg-white px-3 text-[10px] font-black text-[#00A89D] hover:bg-[#E8F3F2] transition-colors shadow-sm cursor-pointer"
+                                className="inline-flex h-7 items-center justify-center rounded-lg border border-[#DFE0E1] bg-white px-3 text-[10px] font-bold text-[#00A89D] hover:bg-[#E8F3F2] transition-colors shadow-sm cursor-pointer"
                               >
                                 {label[action]}
                               </button>
@@ -855,7 +855,7 @@ return (
                 <div className="flex flex-col gap-4">
                   <div>
                     <span className="text-xs font-bold uppercase text-[#526B7A]">Status</span>
-                    <p className="font-black text-[#071822]">
+                    <p className="font-bold text-[#071822]">
                       {detailRequest.status === 'pending' && 'Em análise'}
                       {detailRequest.status === 'approved' && 'Aprovada'}
                       {detailRequest.status === 'rejected' && 'Recusada'}
@@ -893,7 +893,7 @@ return (
                         const row = historyRows.find(r => r.date === selectedRow?.date)
                         if (row) handleSelectRow(row)
                       }}
-                      className="mt-2 inline-flex h-9 items-center justify-center rounded-lg bg-[#00A89D] px-4 text-xs font-black text-white shadow-sm transition-colors hover:bg-[#00968c]"
+                      className="mt-2 inline-flex h-9 items-center justify-center rounded-lg bg-[#00A89D] px-4 text-xs font-bold text-white shadow-sm transition-colors hover:bg-[#00968c]"
                     >
                       Criar nova versão de regularização
                     </button>

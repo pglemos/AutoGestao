@@ -117,7 +117,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
             animate={{ opacity: 1 }} 
             exit={{ opacity: 0 }} 
             onClick={onClose}
-            className="absolute inset-0 bg-surface-alt/80 backdrop-blur-md" 
+            className="absolute inset-0 bg-gray-50/80 backdrop-blur-md" 
           />
           
           <motion.div 
@@ -126,39 +126,39 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
             exit={{ opacity: 0, scale: 0.9, y: 40 }} 
             className="w-full max-w-6xl relative z-10"
           >
-            <div className="relative w-full bg-white/90 backdrop-blur-2xl border border-border-default rounded-mx-4xl shadow-mx-elite overflow-hidden">
+            <div className="relative w-full bg-white/90 backdrop-blur-2xl border border-gray-200 rounded-mx-4xl shadow-sm overflow-hidden">
               <div className="absolute top-mx-0 left-mx-0 w-full h-mx-xs bg-gradient-to-r from-brand-primary/50 via-brand-primary to-brand-primary/50" />
             
               <form onSubmit={handleSubmit} autoComplete="off" className="flex flex-col lg:flex-row max-h-[85vh] w-full overflow-hidden">
                 {/* Sidebar Context */}
-                <div className="w-full lg:w-mx-sidebar-expanded shrink-0 bg-surface-alt/50 border-b lg:border-b-0 lg:border-r border-border-default p-mx-lg flex flex-col justify-between relative overflow-y-auto lg:overflow-hidden">
+                <div className="w-full lg:w-mx-sidebar-expanded shrink-0 bg-gray-50/50 border-b lg:border-b-0 lg:border-r border-gray-200 p-mx-lg flex flex-col justify-between relative overflow-y-auto lg:overflow-hidden">
                     <div className="space-y-mx-lg relative z-10">
-                        <div className="w-mx-20 h-mx-20 rounded-mx-3xl bg-brand-primary/10 border border-brand-primary/20 flex items-center justify-center text-brand-primary shadow-mx-md">
+                        <div className="w-mx-20 h-mx-20 rounded-2xl bg-emerald-600/10 border border-brand-primary/20 flex items-center justify-center text-emerald-600 shadow-sm">
                             <UserPlus size={40} strokeWidth={1.5} />
                         </div>
                         <div className="space-y-mx-xs">
-                            <Typography variant="h2" className="text-3xl tracking-tighter">Novo <span className="text-brand-primary">Integrante</span></Typography>
+                            <Typography variant="h2" className="text-3xl tracking-tighter">Novo <span className="text-emerald-600">Integrante</span></Typography>
                             <Typography variant="tiny" tone="muted" className="leading-relaxed">Cadastro completo de acesso, vínculo e vigência operacional na loja.</Typography>
                         </div>
 
                         <div className="space-y-mx-md pt-mx-lg">
                             <div className="flex items-center gap-mx-sm">
-                                <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-white border border-border-default flex items-center justify-center text-brand-primary shadow-mx-sm"><ShieldCheck size={20} /></div>
+                                <div className="w-mx-10 h-mx-10 rounded-2xl bg-white border border-gray-200 flex items-center justify-center text-emerald-600 shadow-sm"><ShieldCheck size={20} /></div>
                                 <Typography variant="tiny" tone="muted" className="text-mx-nano">Acesso ao sistema</Typography>
                             </div>
                             <div className="flex items-center gap-mx-sm">
-                                <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-white border border-border-default flex items-center justify-center text-brand-primary shadow-mx-sm"><Sparkles size={20} /></div>
+                                <div className="w-mx-10 h-mx-10 rounded-2xl bg-white border border-gray-200 flex items-center justify-center text-emerald-600 shadow-sm"><Sparkles size={20} /></div>
                                 <Typography variant="tiny" tone="muted" className="text-mx-nano">Vínculo com a loja</Typography>
                             </div>
                             <div className="flex items-center gap-mx-sm">
-                                <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-white border border-border-default flex items-center justify-center text-status-warning shadow-mx-sm"><Zap size={20} /></div>
+                                <div className="w-mx-10 h-mx-10 rounded-2xl bg-white border border-gray-200 flex items-center justify-center text-status-warning shadow-sm"><Zap size={20} /></div>
                                 <Typography variant="tiny" tone="muted" className="text-mx-nano">Senha provisória obrigatória</Typography>
                             </div>
                         </div>
                     </div>
 
                     <div className="relative z-10 pt-mx-lg">
-                        <button type="button" onClick={onClose} className="group flex items-center gap-mx-sm text-text-tertiary hover:text-brand-primary transition-colors">
+                        <button type="button" onClick={onClose} className="group flex items-center gap-mx-sm text-gray-500 hover:text-emerald-600 transition-colors">
                             <X size={20} />
                             <Typography variant="tiny" className="">CANCELAR</Typography>
                         </button>
@@ -172,14 +172,14 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         <div className="space-y-mx-xs">
                           <Typography variant="tiny" tone="muted" className="px-1 truncate">Nome completo</Typography>
                           <div className="relative group">
-                            <User size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" />
+                            <User size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" />
                             <input 
                               id="new-user-name"
                               name="new_user_name"
                               autoComplete="off"
                               required placeholder="NOME COMPLETO" 
                               value={formData.name} onChange={e => setFormData({...formData, name: e.target.value.toUpperCase()})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-surface-alt border border-border-default rounded-mx-xl text-text-primary font-black uppercase tracking-mx-widest text-xs focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-text-tertiary/50"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-mx-widest text-xs focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-gray-500/50"
                             />
                           </div>
                         </div>
@@ -188,14 +188,14 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         <div className="space-y-mx-xs">
                           <Typography variant="tiny" tone="muted" className="px-1">Telefone / WhatsApp</Typography>
                           <div className="relative group">
-                            <Phone size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" />
+                            <Phone size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" />
                             <input 
                               id="new-user-phone"
                               name="new_user_phone"
                               autoComplete="off"
                               required placeholder="(00) 00000-0000" 
                               value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-surface-alt border border-border-default rounded-mx-xl text-text-primary font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-text-tertiary/50"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-gray-500/50"
                             />
                           </div>
                         </div>
@@ -204,14 +204,14 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         <div className="space-y-mx-xs">
                           <Typography variant="tiny" tone="muted" className="px-1">E-mail de acesso</Typography>
                           <div className="relative group">
-                            <Mail size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" />
+                            <Mail size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" />
                             <input 
                               id="new-user-email"
                               name="new_user_email"
                               autoComplete="off"
                               required type="email" placeholder="USUARIO@MX PERFORMANCE.COM" 
                               value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-surface-alt border border-border-default rounded-mx-xl text-text-primary font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-text-tertiary/50"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-gray-500/50"
                             />
                           </div>
                         </div>
@@ -220,7 +220,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         <div className="space-y-mx-xs">
                           <Typography variant="tiny" tone="muted" className="px-1 truncate">Senha provisória</Typography>
                           <div className="relative group">
-                            <Lock size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" />
+                            <Lock size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" />
                             <input 
                               id="new-user-password"
                               name="new_user_password"
@@ -230,7 +230,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                               pattern=".{6,}"
                               type="password" placeholder="MÍN. 6 CARACTERES"
                               value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-surface-alt border border-border-default rounded-mx-xl text-text-primary font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-text-tertiary/50"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-gray-500/50"
                             />
                           </div>
                         </div>
@@ -239,17 +239,17 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         <div className="space-y-mx-xs">
                           <Typography variant="tiny" tone="muted" className="px-1">Papel na loja</Typography>
                           <div className="relative group">
-                            <Shield size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors z-10 pointer-events-none" />
+                            <Shield size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors z-10 pointer-events-none" />
                             <select
                               aria-label="Papel na loja"
                               id="new-user-role"
                               name="role"
                               value={formData.role} 
                               onChange={e => setFormData({...formData, role: e.target.value as UserRole})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-surface-alt border border-border-default rounded-mx-xl text-text-primary font-black uppercase tracking-mx-widest text-mx-nano focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all appearance-none cursor-pointer"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-mx-widest text-mx-nano focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all appearance-none cursor-pointer"
                             >
                               {allowedRoles.map(role => (
-                                <option key={role} value={role} className="bg-white text-text-primary">
+                                <option key={role} value={role} className="bg-white text-gray-800">
                                   {(rotulosPapel[role] || role).toUpperCase()}
                                 </option>
                               ))}
@@ -261,7 +261,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         <div className="space-y-mx-xs">
                           <Typography variant="tiny" tone="muted" className="px-1">Loja vinculada</Typography>
                           <div className="relative group">
-                            <Building2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors z-10 pointer-events-none" />
+                            <Building2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors z-10 pointer-events-none" />
                             <select
                               aria-label="Loja vinculada"
                               id="new-user-store"
@@ -269,13 +269,13 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                               value={formData.store_id} 
                               onChange={e => setFormData({...formData, store_id: e.target.value})}
                               disabled={(!!initialStoreId && initialStoreId !== 'all') && !isAdministradorMx(currentUserRole)}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-surface-alt border border-border-default rounded-mx-xl text-text-primary font-black uppercase tracking-mx-widest text-mx-nano focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all appearance-none cursor-pointer disabled:opacity-40"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-mx-widest text-mx-nano focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all appearance-none cursor-pointer disabled:opacity-40"
                             >
-                              <option value="" className="bg-white text-text-tertiary/40">
+                              <option value="" className="bg-white text-gray-500/40">
                                 {papelSelecionadoInterno ? 'SEM UNIDADE OBRIGATÓRIA' : 'SELECIONE A UNIDADE'}
                               </option>
                               {lojas?.map(store => (
-                                <option key={store.id} value={store.id} className="bg-white text-text-primary">{store.name}</option>
+                                <option key={store.id} value={store.id} className="bg-white text-gray-800">{store.name}</option>
                               ))}
                             </select>
                           </div>
@@ -291,7 +291,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                             value={formData.started_at}
                             onChange={e => setFormData({...formData, started_at: e.target.value})}
                             disabled={papelSelecionadoInterno || formData.role !== 'vendedor'}
-                            className="w-full h-mx-14 px-mx-md bg-surface-alt border border-border-default rounded-mx-xl text-text-primary font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all disabled:opacity-40"
+                            className="w-full h-mx-14 px-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all disabled:opacity-40"
                           />
                         </div>
 
@@ -304,22 +304,22 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                             value={formData.ended_at}
                             onChange={e => setFormData({...formData, ended_at: e.target.value})}
                             disabled={papelSelecionadoInterno || formData.role !== 'vendedor'}
-                            className="w-full h-mx-14 px-mx-md bg-surface-alt border border-border-default rounded-mx-xl text-text-primary font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all disabled:opacity-40"
+                            className="w-full h-mx-14 px-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all disabled:opacity-40"
                           />
                         </div>
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-mx-md">
-                      <label className="flex items-center justify-between gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-md cursor-pointer">
-                        <span className="text-mx-tiny font-black uppercase tracking-mx-widest text-text-tertiary">Operacional ativo</span>
+                      <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
+                        <span className="text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">Operacional ativo</span>
                         <input type="checkbox" checked={formData.is_active} onChange={e => setFormData({...formData, is_active: e.target.checked})} disabled={papelSelecionadoInterno || formData.role !== 'vendedor'} className="h-mx-sm w-mx-sm accent-brand-primary disabled:opacity-40" />
                       </label>
-                      <label className="flex items-center justify-between gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-md cursor-pointer">
-                        <span className="text-mx-tiny font-black uppercase tracking-mx-widest text-text-tertiary">Venda loja</span>
+                      <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
+                        <span className="text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">Venda loja</span>
                         <input type="checkbox" checked={formData.is_venda_loja} onChange={e => setFormData({...formData, is_venda_loja: e.target.checked})} disabled={papelSelecionadoInterno || formData.role !== 'vendedor'} className="h-mx-sm w-mx-sm accent-brand-primary disabled:opacity-40" />
                       </label>
-                      <label className="flex items-center justify-between gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-md cursor-pointer">
-                        <span className="text-mx-tiny font-black uppercase tracking-mx-widest text-text-tertiary">Carência no mês</span>
+                      <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
+                        <span className="text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">Carência no mês</span>
                         <input type="checkbox" checked={formData.closing_month_grace} onChange={e => setFormData({...formData, closing_month_grace: e.target.checked})} disabled={papelSelecionadoInterno || formData.role !== 'vendedor'} className="h-mx-sm w-mx-sm accent-brand-primary disabled:opacity-40" />
                       </label>
                     </div>
@@ -327,7 +327,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                     <div className="pt-mx-md">
                         <button 
                             type="submit" disabled={loading} 
-                            className="w-full h-mx-20 bg-brand-primary hover:bg-brand-primary-hover text-white rounded-mx-3xl font-black uppercase tracking-mx-widest text-sm shadow-mx-lg active:scale-[0.98] transition-all flex items-center justify-center gap-mx-sm relative overflow-hidden group/btn"
+                            className="w-full h-mx-20 bg-emerald-600 hover:bg-brand-primary-hover text-white rounded-2xl font-bold uppercase tracking-mx-widest text-sm shadow-sm active:scale-[0.98] transition-all flex items-center justify-center gap-mx-sm relative overflow-hidden group/btn"
                         >
                             <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-500 skew-x-12" />
                             {loading ? <RefreshCw className="animate-spin" /> : <Zap size={24} className="fill-white" />}

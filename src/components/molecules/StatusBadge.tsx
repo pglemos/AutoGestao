@@ -12,7 +12,7 @@ const statusBadgeVariants = cva(
         warning: "border-status-warning/20 bg-status-warning-surface",
         error: "border-status-error/20 bg-status-error-surface",
         info: "border-status-info/20 bg-status-info-surface",
-        neutral: "border-border-default bg-surface-alt",
+        neutral: "border-gray-200 bg-gray-50",
         pending: "border-status-warning/20 bg-status-warning-surface border-dashed",
       },
     },
@@ -42,7 +42,7 @@ const dotVariants = cva(
 )
 
 const labelVariants = cva(
-  "font-black uppercase tracking-widest",
+  "font-bold uppercase tracking-widest",
   {
     variants: {
       status: {
@@ -50,7 +50,7 @@ const labelVariants = cva(
         warning: "text-status-warning",
         error: "text-status-error",
         info: "text-status-info",
-        neutral: "text-text-secondary",
+        neutral: "text-gray-500",
         pending: "text-status-warning",
       },
     },
@@ -79,7 +79,7 @@ const StatusBadge = React.forwardRef<HTMLDivElement, StatusBadgeProps>(
         </span>
         {description && (
           <>
-            <span className="text-text-tertiary" aria-hidden="true">&middot;</span>
+            <span className="text-gray-500" aria-hidden="true">&middot;</span>
             <Typography variant="tiny" tone="muted">{description}</Typography>
           </>
         )}

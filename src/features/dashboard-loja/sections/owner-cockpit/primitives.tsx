@@ -21,13 +21,13 @@ export function OwnerCockpitHeader({
   periodLabel: string
 }) {
   return (
-    <header className="border-b border-border-default pb-mx-md sm:pb-mx-lg">
-      <h1 className="text-2xl font-black leading-tight text-text-primary sm:text-3xl md:text-[2rem]">
-        {greeting()}, <span className="text-brand-primary">{name.split(' ')[0]}</span>! 👋
+    <header className="border-b border-gray-200 pb-mx-md sm:pb-mx-lg">
+      <h1 className="text-2xl font-bold leading-tight text-gray-800 sm:text-3xl md:text-[2rem]">
+        {greeting()}, <span className="text-emerald-600">{name.split(' ')[0]}</span>! 👋
       </h1>
-      <p className="mt-mx-tiny text-sm font-medium text-text-secondary">Aqui está o panorama da sua loja no período selecionado.</p>
-      <div className="mt-mx-md inline-flex h-mx-11 items-center gap-mx-xs rounded-mx-full border border-border-subtle bg-white px-mx-md shadow-mx-sm">
-        <CalendarDays size={16} className="text-text-tertiary" />
+      <p className="mt-mx-tiny text-sm font-medium text-gray-500">Aqui está o panorama da sua loja no período selecionado.</p>
+      <div className="mt-mx-md inline-flex h-mx-11 items-center gap-mx-xs rounded-mx-full border border-gray-100 bg-white px-mx-md shadow-sm">
+        <CalendarDays size={16} className="text-gray-500" />
         <Typography variant="tiny" className="">{periodLabel}</Typography>
       </div>
     </header>
@@ -40,7 +40,7 @@ const statusDotClasses: Record<KpiTone, string> = {
   warning: 'bg-status-warning',
   danger: 'bg-status-error',
   muted: 'bg-border-default',
-  brand: 'bg-brand-primary',
+  brand: 'bg-emerald-600',
   purple: 'bg-[var(--color-accent-purple)]',
 }
 
@@ -85,7 +85,7 @@ export function OwnerKpiCard({
       )}
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="min-w-0 flex-1">
-          <Typography variant="p" className={cn('block text-sm font-black', classes.text)}>
+          <Typography variant="p" className={cn('block text-sm font-bold', classes.text)}>
             {title}
           </Typography>
           <Typography variant="h2" className="mt-mx-xs text-3xl md:text-4xl tabular-nums leading-none">
@@ -95,12 +95,12 @@ export function OwnerKpiCard({
             {detail}
           </Typography>
           {trend && (
-            <Typography variant="tiny" className={cn('mt-mx-tiny block font-black', toneClasses[trend.tone].text)}>
+            <Typography variant="tiny" className={cn('mt-mx-tiny block font-bold', toneClasses[trend.tone].text)}>
               {trend.label}
             </Typography>
           )}
         </div>
-        <div className={cn('h-mx-10 w-mx-10 rounded-mx-lg flex shrink-0 items-center justify-center shadow-mx-sm', vivid)}>
+        <div className={cn('h-mx-10 w-mx-10 rounded-xl flex shrink-0 items-center justify-center shadow-sm', vivid)}>
           {icon}
         </div>
       </div>
@@ -167,7 +167,7 @@ export function MXScoreCompact({ score }: { score: number | null }) {
         <Typography variant="tiny" tone="muted" className="">
           MX Score da Loja
         </Typography>
-        <CircleHelp size={14} className="text-text-tertiary" />
+        <CircleHelp size={14} className="text-gray-500" />
       </div>
       <div className="mt-mx-sm flex flex-col items-center">
         <div className="relative" style={{ width: 120, height: 120 }}>
@@ -187,8 +187,8 @@ export function MXScoreCompact({ score }: { score: number | null }) {
             />
           </svg>
           <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-3xl font-black font-mono-numbers leading-none text-text-primary">{score ?? '--'}</div>
-            <Typography variant="tiny" className={cn('mt-mx-tiny block font-black uppercase tracking-widest', statusColor)}>{status}</Typography>
+            <div className="text-3xl font-bold font-mono-numbers leading-none text-gray-800">{score ?? '--'}</div>
+            <Typography variant="tiny" className={cn('mt-mx-tiny block font-bold uppercase tracking-widest', statusColor)}>{status}</Typography>
           </div>
         </div>
       </div>
@@ -199,9 +199,9 @@ export function MXScoreCompact({ score }: { score: number | null }) {
 export function MetricPill({ label, value, tone }: { label: string; value: string; tone: KpiTone }) {
   const classes = toneClasses[tone]
   return (
-    <div className={cn('rounded-mx-lg border border-border-subtle p-mx-sm text-center', classes.soft)}>
+    <div className={cn('rounded-xl border border-gray-100 p-mx-sm text-center', classes.soft)}>
       <Typography variant="tiny" className="block leading-tight">{label}</Typography>
-      <div className="mt-mx-xs truncate text-base font-black tabular-nums" title={value}>{value}</div>
+      <div className="mt-mx-xs truncate text-base font-bold tabular-nums" title={value}>{value}</div>
     </div>
   )
 }
@@ -253,12 +253,12 @@ export function SectionTitle({ title, subtitle }: { title: string; subtitle: str
 
 export function SideList({ title, items, className }: { title: string; items: string[]; className?: string }) {
   return (
-    <Card className={cn('rounded-mx-lg border border-border-subtle bg-white p-mx-md shadow-mx-sm', className)}>
+    <Card className={cn('rounded-xl border border-gray-100 bg-white p-mx-md shadow-sm', className)}>
       <Typography variant="h3" className="text-lg">{title}</Typography>
       <div className="mt-mx-md space-y-mx-sm">
         {items.map((item, index) => (
           <div key={`${item}-${index}`} className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-7 w-mx-7 shrink-0 items-center justify-center rounded-mx-lg bg-mx-indigo-50 text-xs font-black text-brand-primary">{index + 1}</span>
+            <span className="flex h-mx-7 w-mx-7 shrink-0 items-center justify-center rounded-xl bg-mx-indigo-50 text-xs font-bold text-emerald-600">{index + 1}</span>
             <Typography variant="p" className="text-sm font-bold">{item}</Typography>
           </div>
         ))}
@@ -272,15 +272,15 @@ export function ToolbarPlaceholder({ searchPlaceholder }: { searchPlaceholder: s
     <div className="flex flex-col gap-mx-sm lg:flex-row lg:items-center lg:justify-between">
       <div className="grid grid-cols-1 gap-mx-sm sm:grid-cols-4">
         {['Todos os departamentos', 'Todas as origens', 'Todos os status', 'Todas as prioridades'].map(label => (
-          <button key={label} type="button" className="h-mx-10 rounded-mx-lg border border-border-subtle bg-white px-mx-sm text-left text-xs font-black text-text-secondary">
+          <button key={label} type="button" className="h-mx-10 rounded-xl border border-gray-100 bg-white px-mx-sm text-left text-xs font-bold text-gray-500">
             {label}
           </button>
         ))}
       </div>
       <label className="relative min-w-0 lg:w-[320px]">
         <span className="sr-only">{searchPlaceholder}</span>
-        <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
-        <input className="h-mx-10 w-full rounded-mx-lg border border-border-subtle bg-white pl-mx-xl pr-mx-sm text-sm font-bold outline-none focus:border-brand-primary" placeholder={searchPlaceholder} />
+        <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
+        <input className="h-mx-10 w-full rounded-xl border border-gray-100 bg-white pl-mx-xl pr-mx-sm text-sm font-bold outline-none focus:border-brand-primary" placeholder={searchPlaceholder} />
       </label>
     </div>
   )
@@ -303,10 +303,10 @@ export function SummaryCard({
   return (
     <Card className="border bg-white p-mx-md">
       <div className="flex items-start gap-mx-sm">
-        <span className={cn('h-mx-12 w-mx-12 rounded-mx-lg flex shrink-0 items-center justify-center', classes.bg)}>{icon}</span>
+        <span className={cn('h-mx-12 w-mx-12 rounded-xl flex shrink-0 items-center justify-center', classes.bg)}>{icon}</span>
         <div>
           <Typography variant="p" className="">{title}</Typography>
-          <div className={cn('mt-mx-xs text-3xl font-black tabular-nums', classes.text)}>{value}</div>
+          <div className={cn('mt-mx-xs text-3xl font-bold tabular-nums', classes.text)}>{value}</div>
           <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold">{detail}</Typography>
         </div>
       </div>

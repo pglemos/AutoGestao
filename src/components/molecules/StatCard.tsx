@@ -10,7 +10,7 @@ const TONE_CHIP: Record<StatTone, string> = {
   red: 'bg-status-error/10 text-status-error',
   orange: 'bg-status-warning/10 text-status-warning',
   blue: 'bg-status-info/10 text-status-info',
-  brand: 'bg-brand-primary/10 text-brand-primary',
+  brand: 'bg-emerald-600/10 text-emerald-600',
 }
 
 type StatCardProps = {
@@ -33,7 +33,7 @@ export function StatCard({ icon, label, value, detail, tone = 'brand', action }:
       {(icon || action) && (
         <div className="flex items-start justify-between gap-mx-sm">
           {icon ? (
-            <span className={`grid h-mx-12 w-mx-12 shrink-0 place-items-center rounded-mx-2xl ${TONE_CHIP[tone]}`}>
+            <span className={`grid h-mx-12 w-mx-12 shrink-0 place-items-center rounded-2xl ${TONE_CHIP[tone]}`}>
               {icon}
             </span>
           ) : <span />}

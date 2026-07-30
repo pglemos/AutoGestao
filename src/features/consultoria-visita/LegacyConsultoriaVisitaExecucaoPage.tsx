@@ -588,7 +588,7 @@ export default function ConsultoriaVisitaExecucao() {
     }
   }
 
-  if (clientLoading || methodologyLoading) return <div className="flex w-full items-center justify-center p-mx-20"><Loader2 className="w-mx-8 h-mx-8 animate-spin text-brand-primary" /></div>
+  if (clientLoading || methodologyLoading) return <div className="flex w-full items-center justify-center p-mx-20"><Loader2 className="w-mx-8 h-mx-8 animate-spin text-emerald-600" /></div>
 
   if (!client) return <div className="p-mx-20 text-center opacity-50"><Typography variant="h3">Cliente não localizado.</Typography></div>
 
@@ -631,34 +631,34 @@ export default function ConsultoriaVisitaExecucao() {
          </div>
       </div>
 
-      <div className="sticky top-mx-0 z-40 bg-surface-alt/80 backdrop-blur-xl px-mx-md py-mx-sm flex flex-col md:flex-row md:items-center justify-between gap-mx-sm mb-mx-md print:hidden border-b border-border-subtle shadow-mx-md transition-all">
+      <div className="sticky top-mx-0 z-40 bg-gray-50/80 backdrop-blur-xl px-mx-md py-mx-sm flex flex-col md:flex-row md:items-center justify-between gap-mx-sm mb-mx-md print:hidden border-b border-gray-100 shadow-sm transition-all">
         <div className="flex items-center gap-mx-md">
-          <Link to={`/consultoria/clientes/${client?.slug}`} className="p-mx-xs border border-border-subtle rounded-mx-xl hover:bg-white hover:shadow-mx-md transition-all text-text-secondary bg-white/50 backdrop-blur-sm shadow-mx-sm group">
+          <Link to={`/consultoria/clientes/${client?.slug}`} className="p-mx-xs border border-gray-100 rounded-2xl hover:bg-white hover:shadow-sm transition-all text-gray-500 bg-white/50 backdrop-blur-sm shadow-sm group">
             <ArrowLeft className="w-mx-5 h-mx-5 group-hover:-translate-x-1 transition-transform" />
           </Link>
           <div>
             <div className="flex items-center gap-mx-sm">
                <Typography variant="h1" className="text-2xl text-black tracking-tighter">{getPmrVisitDisplayLabel(visitNum)}</Typography>
                <div className={cn(
-                 "px-mx-sm py-0.5 rounded-mx-full text-mx-nano font-black tracking-mx-widest uppercase shadow-mx-sm border",
+                 "px-mx-sm py-0.5 rounded-mx-full text-mx-nano font-bold tracking-mx-widest uppercase shadow-sm border",
                  visit?.status === 'concluida' ? "bg-status-success/10 text-status-success border-status-success/20" : "bg-mx-orange-500/10 text-mx-orange-600 border-mx-orange-200 animate-pulse"
                )}>
                  {visit?.status || 'EM ABERTO'}
                </div>
             </div>
             <Typography variant="tiny" tone="muted" className="opacity-70 flex items-center gap-mx-xs mt-0.5">
-              <Target size={12} className="text-brand-primary" />
+              <Target size={12} className="text-emerald-600" />
               {step?.objective}
             </Typography>
           </div>
         </div>
 
         <div className="grid grid-cols-2 gap-mx-sm w-full md:flex md:items-center md:w-auto">
-          <Button variant="outline" className="w-full md:w-auto h-mx-11 text-xs bg-white px-mx-sm md:px-mx-md hover:bg-surface-alt transition-all" onClick={() => handleSave(false)} loading={isSaving}>SALVAR</Button>
+          <Button variant="outline" className="w-full md:w-auto h-mx-11 text-xs bg-white px-mx-sm md:px-mx-md hover:bg-gray-50 transition-all" onClick={() => handleSave(false)} loading={isSaving}>SALVAR</Button>
           <div className="relative min-w-0">
             <Button
               variant="primary"
-              className={cn("w-full md:w-auto h-mx-11 text-[10px] sm:text-xs font-black shadow-mx-lg transition-all uppercase tracking-mx-widest px-mx-sm md:px-mx-lg hover:translate-y-[-2px] active:translate-y-0", !hasRequiredEvidence ? "bg-status-error/20 text-status-error border-status-error/30" : "bg-gradient-to-r from-brand-primary to-brand-primary/80 border-none")}
+              className={cn("w-full md:w-auto h-mx-11 text-[10px] sm:text-xs font-bold shadow-sm transition-all uppercase tracking-mx-widest px-mx-sm md:px-mx-lg hover:translate-y-[-2px] active:translate-y-0", !hasRequiredEvidence ? "bg-status-error/20 text-status-error border-status-error/30" : "bg-gradient-to-r from-brand-primary to-brand-primary/80 border-none")}
               onClick={() => handleSave(true)}
               loading={isSaving}
               icon={!hasRequiredEvidence ? <AlertCircle className="w-mx-4 h-mx-4" /> : <CheckCircle2 className="w-mx-4 h-mx-4" />}
@@ -667,7 +667,7 @@ export default function ConsultoriaVisitaExecucao() {
             </Button>
             {!hasRequiredEvidence && step?.evidence_required && (
               <span className="absolute -top-1 right-mx-0 flex h-mx-4 w-mx-4 animate-pulse">
-                <span className="relative inline-flex rounded-mx-full h-mx-4 w-mx-4 bg-status-error items-center justify-center text-mx-micro text-white font-black">!</span>
+                <span className="relative inline-flex rounded-mx-full h-mx-4 w-mx-4 bg-status-error items-center justify-center text-mx-micro text-white font-bold">!</span>
               </span>
             )}
           </div>
@@ -678,10 +678,10 @@ export default function ConsultoriaVisitaExecucao() {
 
         <div className="lg:col-span-2 space-y-mx-lg">
 
-          <div className="rounded-mx-2xl border border-border-default bg-white p-mx-md shadow-mx-sm">
+          <div className="rounded-2xl border border-gray-200 bg-white p-mx-md shadow-sm">
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-mx-sm">
               {VISIT_FLOW_STEPS.map((item, index) => (
-                <div key={item} className="min-h-mx-14 rounded-mx-xl border border-border-subtle bg-surface-alt/40 px-mx-sm py-mx-xs">
+                <div key={item} className="min-h-mx-14 rounded-2xl border border-gray-100 bg-gray-50/40 px-mx-sm py-mx-xs">
                   <Typography variant="tiny" tone="muted" className="block">{String(index + 1).padStart(2, '0')}</Typography>
                   <Typography variant="p" className="text-xs leading-tight text-black">{item}</Typography>
                 </div>
@@ -697,8 +697,8 @@ export default function ConsultoriaVisitaExecucao() {
 
           <Card className="p-mx-lg border bg-white overflow-hidden">
             <div className="flex flex-col gap-mx-md">
-              <div className="flex items-center gap-mx-sm border-b border-border-subtle pb-mx-md">
-                <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><Calendar size={20} /></div>
+              <div className="flex items-center gap-mx-sm border-b border-gray-100 pb-mx-md">
+                <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Calendar size={20} /></div>
                 <div>
                   <Typography variant="h3" className="text-lg">Periodo de Analise</Typography>
                   <Typography variant="tiny" tone="muted" className="font-bold">
@@ -741,8 +741,8 @@ export default function ConsultoriaVisitaExecucao() {
           </Card>
 
           <Card className="p-mx-lg border bg-white overflow-hidden">
-             <div className="flex items-center gap-mx-sm mb-mx-lg border-b border-border-subtle pb-mx-md">
-                <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><ClipboardCheck size={20} /></div>
+             <div className="flex items-center gap-mx-sm mb-mx-lg border-b border-gray-100 pb-mx-md">
+                <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><ClipboardCheck size={20} /></div>
                 <Typography variant="h3" className="text-lg">Execução Metodológica</Typography>
              </div>
 
@@ -755,7 +755,7 @@ export default function ConsultoriaVisitaExecucao() {
              {visitNum === 7 && <VisitSevenExecution onGenerateSummary={(t) => setExecutiveSummary(prev => prev + '\n' + t)} />}
              {visitNum === 8 && <VisitEightExecution onGenerateSummary={(t) => setExecutiveSummary(prev => prev + '\n' + t)} />}
 
-             <div className="mt-mx-lg pt-mx-lg border-t border-border-subtle">
+             <div className="mt-mx-lg pt-mx-lg border-t border-gray-100">
                 <Typography variant="tiny" tone="muted" className="mb-mx-sm block">Checklist de Tarefas</Typography>
                 <VisitChecklist items={checklist} onToggle={handleToggleCheck} />
              </div>
@@ -763,15 +763,15 @@ export default function ConsultoriaVisitaExecucao() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
             <Card className="p-mx-lg border bg-white relative overflow-hidden group">
-              <div className="absolute top-mx-0 right-mx-0 p-mx-md opacity-[0.02] group-hover:opacity-[0.05] transition-opacity pointer-events-none text-brand-primary">
+              <div className="absolute top-mx-0 right-mx-0 p-mx-md opacity-[0.02] group-hover:opacity-[0.05] transition-opacity pointer-events-none text-emerald-600">
                 <FileText size={120} />
               </div>
               <div className="flex items-center justify-between mb-mx-md relative z-10">
                 <div className="flex items-center gap-mx-sm">
-                  <div className="p-mx-xs bg-brand-primary/10 rounded-mx-lg text-brand-primary"><FileText size={20} /></div>
+                  <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><FileText size={20} /></div>
                   <Typography variant="h3" className="text-lg">Relato Executivo (CRM)</Typography>
                 </div>
-                <Button size="xs" variant="outline" className="h-mx-9 border-brand-primary/30 text-mx-tiny px-mx-md hover:bg-brand-primary hover:text-white transition-all" onClick={handleGenerateAISummary} disabled={isGeneratingAiSummary} icon={isGeneratingAiSummary ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}>RESUMIR PARA GRUPO</Button>
+                <Button size="xs" variant="outline" className="h-mx-9 border-brand-primary/30 text-mx-tiny px-mx-md hover:bg-emerald-600 hover:text-white transition-all" onClick={handleGenerateAISummary} disabled={isGeneratingAiSummary} icon={isGeneratingAiSummary ? <Loader2 size={14} className="animate-spin" /> : <Sparkles size={14} />}>RESUMIR PARA GRUPO</Button>
               </div>
               <Textarea
                 id="visit-executive-summary"
@@ -780,7 +780,7 @@ export default function ConsultoriaVisitaExecucao() {
                 value={executiveSummary}
                 onChange={(e) => setExecutiveSummary(e.target.value)}
                 placeholder="Insira o rascunho da visita. Depois clique em RESUMIR PARA GRUPO para deixar a mensagem pronta para enviar..."
-                className="min-h-mx-64 text-sm bg-surface-alt/20 border-border-default focus:border-brand-primary focus:bg-white rounded-mx-xl p-mx-md shadow-mx-inner resize-none transition-all mb-mx-md font-medium leading-relaxed relative z-10"
+                className="min-h-mx-64 text-sm bg-gray-50/20 border-gray-200 focus:border-brand-primary focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all mb-mx-md font-medium leading-relaxed relative z-10"
               />
               <div className="relative z-10">
                 <VisitActionQuickAdd clientId={clientId!} visitNumber={visitNum} />
@@ -793,7 +793,7 @@ export default function ConsultoriaVisitaExecucao() {
                   <MessageSquare size={100} />
                 </div>
                 <div className="flex items-center gap-mx-sm mb-mx-md relative z-10">
-                  <div className="p-mx-xs bg-brand-secondary/10 rounded-mx-lg text-brand-secondary"><MessageSquare size={20} /></div>
+                  <div className="p-mx-xs bg-gray-900/10 rounded-xl text-brand-secondary"><MessageSquare size={20} /></div>
                   <Typography variant="h3" className="text-lg">Devolutiva ao Cliente</Typography>
                 </div>
                 <Textarea
@@ -803,7 +803,7 @@ export default function ConsultoriaVisitaExecucao() {
                   value={feedbackClient}
                   onChange={(e) => setFeedbackClient(e.target.value)}
                   placeholder="Pontos de atenção emergenciais..."
-                  className="min-h-mx-32 text-sm bg-surface-alt/20 border-border-default focus:border-brand-secondary focus:bg-white rounded-mx-xl p-mx-md shadow-mx-inner resize-none transition-all font-medium leading-relaxed relative z-10"
+                  className="min-h-mx-32 text-sm bg-gray-50/20 border-gray-200 focus:border-brand-secondary focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all font-medium leading-relaxed relative z-10"
                 />
               </Card>
 
@@ -812,7 +812,7 @@ export default function ConsultoriaVisitaExecucao() {
                   <Target size={100} />
                 </div>
                 <div className="flex items-center gap-mx-sm mb-mx-md relative z-10">
-                  <div className="p-mx-xs bg-mx-orange-500/10 rounded-mx-lg text-mx-orange-500"><Target size={20} /></div>
+                  <div className="p-mx-xs bg-mx-orange-500/10 rounded-xl text-mx-orange-500"><Target size={20} /></div>
                   <Typography variant="h3" className="text-lg text-mx-orange-600">Objetivo Próximo Ciclo</Typography>
                 </div>
                 <Textarea
@@ -822,7 +822,7 @@ export default function ConsultoriaVisitaExecucao() {
                   value={nextCycleGoal}
                   onChange={(e) => setNextCycleGoal(e.target.value)}
                   placeholder="O que deve ser o foco da loja até a próxima visita da consultoria?"
-                  className="min-h-mx-32 text-sm bg-surface-alt/20 border-border-default focus:border-mx-orange-500 focus:bg-white rounded-mx-xl p-mx-md shadow-mx-inner resize-none transition-all font-bold leading-relaxed relative z-10 text-mx-orange-700"
+                  className="min-h-mx-32 text-sm bg-gray-50/20 border-gray-200 focus:border-mx-orange-500 focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all font-bold leading-relaxed relative z-10 text-mx-orange-700"
                 />
               </Card>
             </div>
@@ -834,14 +834,14 @@ export default function ConsultoriaVisitaExecucao() {
             <div className="absolute top-mx-0 right-mx-0 p-mx-md opacity-mx-5"><Info size={80} /></div>
             <Typography variant="tiny" tone="muted" className="mb-mx-md block">Informações da Etapa</Typography>
             <div className="space-y-mx-md">
-              <div className="p-mx-md bg-surface-alt rounded-mx-xl border border-border-subtle">
+              <div className="p-mx-md bg-gray-50 rounded-2xl border border-gray-100">
                 <Typography variant="tiny" tone="muted" className="text-mx-micro mb-1">Participantes</Typography>
                 <Typography variant="p" className="text-sm font-bold text-black">{step?.target || 'Todos'}</Typography>
               </div>
-              <div className="p-mx-md bg-surface-alt rounded-mx-xl border border-border-subtle">
+              <div className="p-mx-md bg-gray-50 rounded-2xl border border-gray-100">
                 <Typography variant="tiny" tone="muted" className="text-mx-micro mb-1">Duração Estimada</Typography>
                 <div className="flex items-center gap-mx-xs">
-                   <Clock className="w-mx-4 h-mx-4 text-text-tertiary" />
+                   <Clock className="w-mx-4 h-mx-4 text-gray-500" />
                    <Typography variant="p" className="text-sm font-bold text-black">{step?.duration || '4 horas'}</Typography>
                 </div>
               </div>
@@ -852,21 +852,21 @@ export default function ConsultoriaVisitaExecucao() {
             <div className="flex items-center justify-between mb-mx-md">
                <Typography variant="tiny" tone="muted" className="text-mx-micro">Evidências ({attachments.length})</Typography>
                <input aria-label="Selecionar arquivo" id="visit-evidence-upload" name="visit_evidence_upload" type="file" multiple className="hidden" ref={fileInputRef} onChange={handleFileUpload} accept="image/*,application/pdf" />
-               <Button size="sm" variant="secondary" onClick={() => fileInputRef.current?.click()} loading={isUploading} className="h-mx-10 font-black uppercase text-xs tracking-widest px-mx-md shadow-mx-sm" icon={<Plus size={14} />}>ADICIONAR</Button>
+               <Button size="sm" variant="secondary" onClick={() => fileInputRef.current?.click()} loading={isUploading} className="h-mx-10 font-bold uppercase text-xs tracking-widest px-mx-md shadow-sm" icon={<Plus size={14} />}>ADICIONAR</Button>
             </div>
 
             {attachments.length === 0 ? (
-               <div className="p-mx-md border border-dashed border-border-subtle rounded-mx-xl text-center opacity-50">
-                  <Paperclip className="w-mx-6 h-mx-6 mx-auto mb-mx-xs text-text-tertiary" />
+               <div className="p-mx-md border border-dashed border-gray-100 rounded-2xl text-center opacity-50">
+                  <Paperclip className="w-mx-6 h-mx-6 mx-auto mb-mx-xs text-gray-500" />
                   <Typography variant="tiny" className="font-bold text-mx-micro">Nenhuma evidência anexada.</Typography>
                </div>
             ) : (
                <div className="space-y-mx-md">
                   {attachments.map(att => (
-                     <div key={att.id} className="group p-mx-xs bg-surface-alt rounded-mx-xl border border-border-default flex items-center justify-between hover:bg-white transition-colors shadow-sm">
+                     <div key={att.id} className="group p-mx-xs bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between hover:bg-white transition-colors shadow-sm">
                         <div className="flex items-center gap-mx-sm min-w-0">
-                           <div className="w-mx-10 h-mx-10 rounded-mx-lg bg-white flex items-center justify-center border border-border-subtle shadow-sm shrink-0">
-                              {att.content_type?.includes('image') ? <Image className="w-mx-5 h-mx-5 text-brand-primary" /> : <FileText className="w-mx-5 h-mx-5 text-text-tertiary" />}
+                           <div className="w-mx-10 h-mx-10 rounded-xl bg-white flex items-center justify-center border border-gray-100 shadow-sm shrink-0">
+                              {att.content_type?.includes('image') ? <Image className="w-mx-5 h-mx-5 text-emerald-600" /> : <FileText className="w-mx-5 h-mx-5 text-gray-500" />}
                            </div>
                            <div className="min-w-0">
                               <Typography variant="p" className="text-xs font-bold truncate max-w-mx-40 text-black">{att.filename}</Typography>
@@ -884,7 +884,7 @@ export default function ConsultoriaVisitaExecucao() {
             )}
 
             {step?.evidence_required && (
-               <div className="mt-mx-md p-mx-md bg-status-error/10 border border-status-error/30 rounded-mx-xl flex gap-mx-sm animate-pulse shadow-sm">
+               <div className="mt-mx-md p-mx-md bg-status-error/10 border border-status-error/30 rounded-2xl flex gap-mx-sm animate-pulse shadow-sm">
                   <ShieldAlert className="w-mx-5 h-mx-5 text-status-error shrink-0" />
                   <div>
                     <Typography variant="tiny" className="text-status-error leading-none tracking-tighter block mb-0.5">Evidência Obrigatória</Typography>
@@ -895,8 +895,8 @@ export default function ConsultoriaVisitaExecucao() {
           </Card>
 
           <Card className="p-mx-lg bg-white border text-center">
-             <div className="w-mx-12 h-mx-12 bg-brand-primary/10 rounded-mx-full flex items-center justify-center mx-auto mb-mx-md">
-               <Presentation className="w-mx-6 h-mx-6 text-brand-primary" />
+             <div className="w-mx-12 h-mx-12 bg-emerald-600/10 rounded-mx-full flex items-center justify-center mx-auto mb-mx-md">
+               <Presentation className="w-mx-6 h-mx-6 text-emerald-600" />
              </div>
              <Typography variant="h3" className="text-lg mb-mx-xs">Reporte Oficial MX</Typography>
              <Typography variant="p" className="text-mx-micro mb-mx-lg leading-tight font-bold tracking-tighter">O relatório compila os dados e o diagnóstico da visita.</Typography>
@@ -908,7 +908,7 @@ export default function ConsultoriaVisitaExecucao() {
 
                {visit?.status === 'concluida' && (
                  <Button
-                   className={cn("w-full shadow-mx-md font-black h-mx-11 uppercase tracking-widest text-xs", visit.acknowledged_at ? "bg-status-success/10 text-status-success border-status-success/20 hover:bg-status-success/20" : "")}
+                   className={cn("w-full shadow-sm font-bold h-mx-11 uppercase tracking-widest text-xs", visit.acknowledged_at ? "bg-status-success/10 text-status-success border-status-success/20 hover:bg-status-success/20" : "")}
                    variant="outline"
                    icon={visit.acknowledged_at ? <ShieldCheck size={14} /> : <Award size={14} />}
                    onClick={handleAcknowledge}
@@ -924,8 +924,8 @@ export default function ConsultoriaVisitaExecucao() {
 
       <Modal open={showReportModal} onClose={() => setShowReportModal(false)} title="DOCUMENTO DE AUDITORIA">
          <div className="p-mx-md">
-            <div className="p-mx-lg bg-surface-alt rounded-mx-2xl font-mono text-xs whitespace-pre-wrap border border-border-subtle max-h-mx-96 overflow-y-auto mb-mx-md">
-               <div className="relative z-10 text-text-primary">{generateReportText()}</div>
+            <div className="p-mx-lg bg-gray-50 rounded-2xl font-mono text-xs whitespace-pre-wrap border border-gray-100 max-h-mx-96 overflow-y-auto mb-mx-md">
+               <div className="relative z-10 text-gray-800">{generateReportText()}</div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
                <Button className="h-mx-11 text-sm bg-white" variant="outline" onClick={() => window.print()} icon={<Printer className="w-mx-4 h-mx-4" />}>IMPRIMIR PDF</Button>

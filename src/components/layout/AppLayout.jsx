@@ -7,7 +7,7 @@ export default function AppLayout() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   return (
-    <div className="min-h-screen bg-mx-bg">
+    <div className="min-h-screen bg-gray-50">
       {/* Desktop sidebar */}
       <div className="hidden lg:block">
         <Sidebar />

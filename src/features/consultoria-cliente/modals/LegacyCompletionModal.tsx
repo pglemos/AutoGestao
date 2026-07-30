@@ -91,7 +91,7 @@ export function LegacyCompletionModal({
               return (
                 <label
                   key={step.id}
-                  className={`flex cursor-pointer items-center gap-mx-xs rounded-mx-xl border p-mx-sm transition-colors ${selected ? 'border-brand-primary bg-brand-primary/10' : 'border-border-default bg-white'}`}
+                  className={`flex cursor-pointer items-center gap-mx-xs rounded-2xl border p-mx-sm transition-colors ${selected ? 'border-brand-primary bg-emerald-600/10' : 'border-gray-200 bg-white'}`}
                 >
                   <input
                     type="checkbox"

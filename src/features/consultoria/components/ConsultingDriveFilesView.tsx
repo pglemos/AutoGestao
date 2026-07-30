@@ -102,7 +102,7 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
       <Card className="p-mx-lg bg-white border">
         <div className="flex flex-col gap-mx-md lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-center gap-mx-md min-w-0">
-            <div className="h-mx-12 w-mx-12 rounded-mx-xl bg-brand-primary/10 text-brand-primary flex items-center justify-center shrink-0">
+            <div className="h-mx-12 w-mx-12 rounded-2xl bg-emerald-600/10 text-emerald-600 flex items-center justify-center shrink-0">
               <FolderOpen className="h-mx-6 w-mx-6" />
             </div>
             <div className="min-w-0">
@@ -130,7 +130,7 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
         </div>
 
         {error && (
-          <div className="mt-mx-lg rounded-mx-xl border border-status-warning/30 bg-status-warning/10 p-mx-md flex flex-col gap-mx-sm md:flex-row md:items-center md:justify-between">
+          <div className="mt-mx-lg rounded-2xl border border-status-warning/30 bg-status-warning/10 p-mx-md flex flex-col gap-mx-sm md:flex-row md:items-center md:justify-between">
             <Typography variant="p" className="text-sm font-bold">{error}</Typography>
             {needsReconnect && canReconnect && (
               <Button variant="warning" size="sm" onClick={connectCentral}>
@@ -141,16 +141,16 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
         )}
 
         {!loading && totalFiles === 0 && (
-          <div className="mt-mx-lg rounded-mx-xl border border-dashed border-border-default p-mx-xl text-center">
-            <FileUp className="h-mx-10 w-mx-10 mx-auto text-text-tertiary mb-mx-sm" />
+          <div className="mt-mx-lg rounded-2xl border border-dashed border-gray-200 p-mx-xl text-center">
+            <FileUp className="h-mx-10 w-mx-10 mx-auto text-gray-500 mb-mx-sm" />
             <Typography variant="p" tone="muted" className="font-bold">Nenhum arquivo registrado.</Typography>
           </div>
         )}
 
         {totalFiles > 0 && (
-          <div className="mt-mx-lg overflow-hidden rounded-mx-xl border border-border-subtle">
+          <div className="mt-mx-lg overflow-hidden rounded-2xl border border-gray-100">
             {visitEvidenceFiles.map((file) => (
-              <div key={`visit-${file.id}`} className="grid grid-cols-1 gap-mx-sm border-b border-border-subtle p-mx-md last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div key={`visit-${file.id}`} className="grid grid-cols-1 gap-mx-sm border-b border-gray-100 p-mx-md last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
                 <div className="min-w-0">
                   <div className="flex items-center gap-mx-xs min-w-0">
                     <Badge variant="brand" className="shrink-0">Visita {file.visitNumber}</Badge>
@@ -172,7 +172,7 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
               </div>
             ))}
             {files.map((file) => (
-              <div key={file.id} className="grid grid-cols-1 gap-mx-sm border-b border-border-subtle p-mx-md last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div key={file.id} className="grid grid-cols-1 gap-mx-sm border-b border-gray-100 p-mx-md last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
                 <div className="min-w-0">
                   <div className="flex items-center gap-mx-xs min-w-0">
                     <Badge variant="outline" className="shrink-0">{getKind(file)}</Badge>

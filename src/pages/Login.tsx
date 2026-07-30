@@ -337,22 +337,22 @@ export default function Login() {
 
     if (authLoading && !profile) {
         return (
-            <main className="min-h-screen bg-brand-secondary flex flex-col items-center justify-center p-mx-md text-center">
-                <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-brand-primary mb-6" />
+            <main className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-mx-md text-center">
+                <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" />
                 <Typography variant="caption" tone="white" className="animate-pulse">Sincronizando...</Typography>
             </main>
         )
     }
 
     return (
-        <main className="min-h-screen flex selection:bg-brand-primary/20">
+        <main className="min-h-screen flex selection:bg-emerald-600/20">
             {/* Left Panel — Brand */}
-            <div className="hidden lg:flex bg-brand-secondary relative overflow-hidden flex-col items-center justify-center p-mx-2xl" style={{ width: '52%' }}>
+            <div className="hidden lg:flex bg-gray-900 relative overflow-hidden flex-col items-center justify-center p-mx-2xl" style={{ width: '52%' }}>
                 {/* Gradient mesh */}
                 <div className="absolute inset-0" aria-hidden="true">
-                    <div className="absolute bg-brand-primary/10 rounded-full" style={{ top: '-20%', left: '-10%', width: '70%', height: '70%', filter: 'blur(140px)' }} />
+                    <div className="absolute bg-emerald-600/10 rounded-full" style={{ top: '-20%', left: '-10%', width: '70%', height: '70%', filter: 'blur(140px)' }} />
                     <div className="absolute bg-mx-green-900/40 rounded-full" style={{ bottom: '-15%', right: '-10%', width: '60%', height: '60%', filter: 'blur(120px)' }} />
-                    <div className="absolute bg-brand-primary/6 rounded-full" style={{ top: '40%', right: '20%', width: '30%', height: '30%', filter: 'blur(80px)' }} />
+                    <div className="absolute bg-emerald-600/6 rounded-full" style={{ top: '40%', right: '20%', width: '30%', height: '30%', filter: 'blur(80px)' }} />
                 </div>
                 {/* Grid pattern */}
                 <div className="absolute inset-0 bg-mx-matrix opacity-30" />
@@ -372,8 +372,8 @@ export default function Login() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.3 }}
                     >
-                        <h1 className="text-5xl font-black text-white tracking-tight mb-4">
-                            MX <span className="text-brand-primary">PERFORMANCE</span>
+                        <h1 className="text-5xl font-bold text-white tracking-tight mb-4">
+                            MX <span className="text-emerald-600">PERFORMANCE</span>
                         </h1>
                         <p className="text-white/50 text-sm font-bold uppercase mb-16" style={{ letterSpacing: '0.3em' }}>
                             Sistema de Gestao de Elite
@@ -393,8 +393,8 @@ export default function Login() {
                             { icon: ShieldCheck, text: 'Controle preditivo de resultados' },
                         ].map(({ icon: Icon, text }) => (
                             <div key={text} className="flex items-center gap-mx-sm group">
-                                <div className="w-mx-10 h-mx-10 rounded-xl bg-brand-primary/10 border border-brand-primary/15 flex items-center justify-center shrink-0 group-hover:bg-brand-primary/20 transition-colors">
-                                    <Icon size={18} className="text-brand-primary" />
+                                <div className="w-mx-10 h-mx-10 rounded-xl bg-emerald-600/10 border border-brand-primary/15 flex items-center justify-center shrink-0 group-hover:bg-emerald-600/20 transition-colors">
+                                    <Icon size={18} className="text-emerald-600" />
                                 </div>
                                 <span className="text-white/60 text-sm font-medium group-hover:text-white/80 transition-colors">{text}</span>
                             </div>
@@ -412,7 +412,7 @@ export default function Login() {
                 {/* Mobile logo */}
                 <div className="lg:hidden mb-12 text-center">
                     <img src={MxLogo} alt="MX Performance" className="w-mx-20 h-mx-20 object-contain mx-auto mb-6" />
-                    <h1 className="text-2xl font-black text-text-primary tracking-tight">
+                    <h1 className="text-2xl font-bold text-gray-800 tracking-tight">
                         MX <span className="text-mx-green-800">PERFORMANCE</span>
                     </h1>
                 </div>
@@ -424,12 +424,12 @@ export default function Login() {
                     className="w-full max-w-sm"
                 >
                     <div className="mb-10">
-                        <h2 className="text-2xl font-black text-text-primary tracking-tight mb-2">
+                        <h2 className="text-2xl font-bold text-gray-800 tracking-tight mb-2">
                             {mode === 'login' && 'Acessar sistema'}
                             {mode === 'forgot' && 'Recuperar acesso'}
                             {mode === 'recovery' && 'Definir nova senha'}
                         </h2>
-                        <p className="text-text-tertiary text-sm">
+                        <p className="text-gray-500 text-sm">
                             {mode === 'login' && 'Entre com suas credenciais para continuar'}
                             {mode === 'forgot' && 'Informe seu e-mail para receber o link seguro'}
                             {mode === 'recovery' && 'Crie uma nova senha para finalizar a recuperação'}
@@ -477,7 +477,7 @@ export default function Login() {
                                         onClick={() => setShowPassword(v => !v)}
                                         aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                                         aria-pressed={showPassword}
-                                        className="w-mx-lg h-mx-lg p-mx-tiny rounded-mx-md text-text-tertiary hover:text-brand-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 transition-colors"
+                                        className="w-mx-lg h-mx-lg p-mx-tiny rounded-xl text-gray-500 hover:text-emerald-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 transition-colors"
                                         tabIndex={-1}
                                     >
                                         {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -506,7 +506,7 @@ export default function Login() {
                                             onClick={() => setShowPassword(v => !v)}
                                             aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
                                             aria-pressed={showPassword}
-                                            className="w-mx-lg h-mx-lg p-mx-tiny rounded-mx-md text-text-tertiary hover:text-brand-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 transition-colors"
+                                            className="w-mx-lg h-mx-lg p-mx-tiny rounded-xl text-gray-500 hover:text-emerald-600 focus:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/40 transition-colors"
                                             tabIndex={-1}
                                         >
                                             {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -545,7 +545,7 @@ export default function Login() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-brand-secondary hover:bg-mx-green-950 text-white rounded-xl font-black text-sm uppercase tracking-wider flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand-primary/25 hover:shadow-brand-primary/40 active:scale-[0.98] mt-2"
+                            className="w-full bg-gray-900 hover:bg-mx-green-950 text-white rounded-xl font-bold text-sm uppercase tracking-wider flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand-primary/25 hover:shadow-brand-primary/40 active:scale-[0.98] mt-2"
                             style={{ height: '3.25rem', gap: '0.5rem' }}
                         >
                             {loading ? (
@@ -563,7 +563,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => switchMode('forgot')}
-                                className="h-mx-11 rounded-xl border border-border-default bg-white text-text-secondary hover:text-brand-primary hover:border-brand-primary/30 hover:bg-surface-alt font-black text-xs uppercase tracking-widest transition-colors flex items-center justify-center"
+                                className="h-mx-11 rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-xs uppercase tracking-widest transition-colors flex items-center justify-center"
                                 style={{ gap: '0.5rem' }}
                             >
                                 <KeyRound size={16} />
@@ -575,7 +575,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => switchMode('login')}
-                                className="h-mx-11 rounded-xl border border-border-default bg-white text-text-secondary hover:text-brand-primary hover:border-brand-primary/30 hover:bg-surface-alt font-black text-xs uppercase tracking-widest transition-colors flex items-center justify-center"
+                                className="h-mx-11 rounded-xl border border-gray-200 bg-white text-gray-500 hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-xs uppercase tracking-widest transition-colors flex items-center justify-center"
                                 style={{ gap: '0.5rem' }}
                             >
                                 <ArrowLeft size={16} />
@@ -584,8 +584,8 @@ export default function Login() {
                         )}
                     </form>
 
-                    <div className="mt-8 pt-6 border-t border-border-default text-center">
-                        <span className="text-text-tertiary text-xs font-medium">Acesso restrito a usuarios autorizados</span>
+                    <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+                        <span className="text-gray-500 text-xs font-medium">Acesso restrito a usuarios autorizados</span>
                     </div>
                 </motion.div>
             </div>

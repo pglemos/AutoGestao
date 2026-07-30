@@ -28,13 +28,13 @@ export default function HotOpportunitiesCard({ qtdOportunidades, comissaoPotenci
         ) : (
           <>
             <div className="flex items-baseline gap-2">
-              <span className="font-black" style={{ fontSize: "4rem", lineHeight: 1, color: "#3B82F6", textShadow: "0 0 20px rgba(59,130,246,0.4)" }}>
+              <span className="font-bold" style={{ fontSize: "4rem", lineHeight: 1, color: "#3B82F6", textShadow: "0 0 20px rgba(59,130,246,0.4)" }}>
                 {qtdOportunidades}
               </span>
               <span className="text-blue-400 text-xl font-bold">oportunidades</span>
             </div>
             <p className="text-slate-400 text-sm mt-1">que podem gerar</p>
-            <p className="font-black mt-1" style={{ fontSize: "2rem", color: "#60A5FA", textShadow: "0 0 15px rgba(96,165,250,0.3)" }}>
+            <p className="font-bold mt-1" style={{ fontSize: "2rem", color: "#60A5FA", textShadow: "0 0 15px rgba(96,165,250,0.3)" }}>
               {formatBRL(comissaoPotencial).replace(",00", "")}
             </p>
           </>

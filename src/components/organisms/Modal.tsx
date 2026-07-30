@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 import { X } from "lucide-react";
 
 const modalSizeVariants = cva(
-  "w-auto sm:w-full bg-white shadow-mx-lg rounded-mx-2xl sm:rounded-mx-3xl overflow-hidden flex flex-col max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-4rem)]",
+  "w-auto sm:w-full bg-white shadow-sm rounded-2xl sm:rounded-2xl overflow-hidden flex flex-col max-h-[calc(100dvh-2rem)] sm:max-h-[calc(100dvh-4rem)]",
   {
     variants: {
       size: {
@@ -83,7 +83,7 @@ export function Modal({
           data-reference-overlay={referenceStyle ? "true" : undefined}
           className={cn(
             "fixed inset-0 z-[100]",
-            referenceStyle ? "bg-black/30" : "bg-mx-black/60 backdrop-blur-md",
+            referenceStyle ? "bg-black/30" : "bg-gray-900/60 backdrop-blur-md",
           )}
         />
         <Dialog.Content
@@ -113,7 +113,7 @@ export function Modal({
             "border-b flex justify-between gap-mx-md bg-white z-10 shrink-0",
             referenceStyle
               ? "items-center border-gray-100 px-5 py-4"
-              : "items-start border-border-default p-mx-md sm:p-mx-lg",
+              : "items-start border-gray-200 p-mx-md sm:p-mx-lg",
           )}>
             <div className="min-w-0">
               <Dialog.Title asChild>
@@ -124,7 +124,7 @@ export function Modal({
                   {referenceStyle ? (
                     <p className="mt-0.5 text-sm text-gray-500">{description}</p>
                   ) : (
-                    <p className="mt-1 text-sm text-text-secondary">{description}</p>
+                    <p className="mt-1 text-sm text-gray-500">{description}</p>
                   )}
                 </Dialog.Description>
               )}
@@ -138,7 +138,7 @@ export function Modal({
                     "flex items-center justify-center transition-colors shrink-0",
                     referenceStyle
                       ? "h-5 w-5 !min-h-0 rounded-none bg-transparent p-0 text-gray-400 hover:text-gray-600"
-                      : "h-mx-xl w-mx-xl rounded-mx-xl bg-surface-alt",
+                      : "h-mx-xl w-mx-xl rounded-2xl bg-gray-50",
                   )}
                 >
                   <X size={referenceStyle ? 18 : 20} />
@@ -162,7 +162,7 @@ export function Modal({
                 "border-t flex bg-white shrink-0",
                 referenceStyle
                   ? "flex-row justify-end gap-3 border-gray-100 px-5 py-4"
-                  : "flex-col-reverse gap-mx-sm border-border-default sm:flex-row sm:justify-end p-mx-md sm:p-mx-lg",
+                  : "flex-col-reverse gap-mx-sm border-gray-200 sm:flex-row sm:justify-end p-mx-md sm:p-mx-lg",
               )}
               style={referenceStyle ? undefined : {
                 paddingBottom: "max(env(safe-area-inset-bottom, 0px), 1rem)",

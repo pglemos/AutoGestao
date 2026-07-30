@@ -47,7 +47,7 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
               <p className={`text-xs font-medium mb-1 ${isAtual ? "text-slate-300" : "text-slate-400"}`}>
                 {isAtual ? "Atual" : `+${i} venda${i !== 1 ? "s" : ""}`}
               </p>
-              <p className={`text-lg font-black tabular-nums ${isAtual ? "text-white" : ponto.novaFaixa ? "text-emerald-700" : "text-mx-navy"}`}>
+              <p className={`text-lg font-bold tabular-nums ${isAtual ? "text-white" : ponto.novaFaixa ? "text-emerald-700" : "text-mx-navy"}`}>
                 {ponto.vendas} <span className="text-xs font-normal">vend.</span>
               </p>
               <p className={`text-sm font-bold mt-1 tabular-nums ${isAtual ? "text-emerald-400" : "text-mx-navy"}`}>

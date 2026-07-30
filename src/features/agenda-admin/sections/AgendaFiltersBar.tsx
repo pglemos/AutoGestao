@@ -16,8 +16,8 @@ export function AgendaFiltersBar({
   if (activeFilters === 0) return null
 
   return (
-    <div className="flex items-center justify-between py-1 px-1 bg-brand-primary/5 rounded-mx-lg border border-brand-primary/10 my-1">
-      <div className="flex items-center gap-2 text-xs font-semibold text-brand-primary">
+    <div className="flex items-center justify-between py-1 px-1 bg-emerald-600/5 rounded-xl border border-brand-primary/10 my-1">
+      <div className="flex items-center gap-2 text-xs font-semibold text-emerald-600">
         <Filter size={13} />
         <span>{activeFilters} filtro{activeFilters > 1 ? 's' : ''} ativo{activeFilters > 1 ? 's' : ''}</span>
       </div>
@@ -26,7 +26,7 @@ export function AgendaFiltersBar({
         variant="ghost"
         size="sm"
         onClick={clearFilters}
-        className="h-6 text-xs font-semibold hover:bg-brand-primary/10"
+        className="h-6 text-xs font-semibold hover:bg-emerald-600/10"
       >
         <X size={12} className="mr-1" /> Limpar filtros
       </Button>

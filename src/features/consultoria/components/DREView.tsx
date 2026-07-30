@@ -243,7 +243,7 @@ export const DREView: React.FC<DREViewProps> = ({ clientId }) => {
 
   if (loading) {
     return (
-      <div className="p-mx-lg text-center text-text-tertiary">
+      <div className="p-mx-lg text-center text-gray-500">
         Carregando DRE...
       </div>
     )

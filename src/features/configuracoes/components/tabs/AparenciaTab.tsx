@@ -81,8 +81,8 @@ export function AparenciaTab() {
         <div className="space-y-mx-lg">
             {/* Tema */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100">
                         <Palette size={26} />
                     </div>
                     <div>
@@ -100,8 +100,8 @@ export function AparenciaTab() {
 
             {/* Densidade */}
             <Card className="p-mx-lg border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-surface-alt text-text-tertiary flex items-center justify-center border border-border-default">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-gray-500 flex items-center justify-center border border-gray-200">
                         <Sparkles size={26} />
                     </div>
                     <div>
@@ -118,9 +118,9 @@ export function AparenciaTab() {
 
             {/* Branding */}
             <Card className="p-mx-lg border-none bg-white">
-                <header className="flex items-center justify-between pb-mx-md border-b border-border-default mb-mx-lg">
+                <header className="flex items-center justify-between pb-mx-md border-b border-gray-200 mb-mx-lg">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-pure-black text-brand-primary flex items-center justify-center">
+                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-pure-black text-emerald-600 flex items-center justify-center">
                             <Sparkles size={26} />
                         </div>
                         <div>
@@ -151,14 +151,14 @@ function ThemeOption({ icon, label, desc, active, onClick, badge }: {
         <button
             type="button"
             onClick={onClick}
-            className={`text-left p-mx-md rounded-mx-xl border-2 transition-all ${
+            className={`text-left p-mx-md rounded-2xl border-2 transition-all ${
                 active
-                    ? 'border-brand-primary bg-brand-primary/5 shadow-mx-md'
-                    : 'border-border-default bg-white hover:border-brand-primary/30 hover:bg-surface-alt'
+                    ? 'border-brand-primary bg-emerald-600/5 shadow-sm'
+                    : 'border-gray-200 bg-white hover:border-brand-primary/30 hover:bg-gray-50'
             }`}
         >
             <div className="flex items-center justify-between mb-mx-sm">
-                <div className={`w-mx-10 h-mx-10 rounded-mx-xl flex items-center justify-center ${active ? 'bg-brand-primary text-white' : 'bg-surface-alt text-brand-primary'}`}>
+                <div className={`w-mx-10 h-mx-10 rounded-2xl flex items-center justify-center ${active ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-emerald-600'}`}>
                     {icon}
                 </div>
                 {badge && <Badge variant="outline" className="text-mx-micro">{badge}</Badge>}
@@ -174,10 +174,10 @@ function DensityOption({ label, desc, active, onClick }: { label: string; desc: 
         <button
             type="button"
             onClick={onClick}
-            className={`text-left p-mx-md rounded-mx-xl border-2 transition-all ${
+            className={`text-left p-mx-md rounded-2xl border-2 transition-all ${
                 active
-                    ? 'border-brand-primary bg-brand-primary/5'
-                    : 'border-border-default bg-white hover:border-brand-primary/30'
+                    ? 'border-brand-primary bg-emerald-600/5'
+                    : 'border-gray-200 bg-white hover:border-brand-primary/30'
             }`}
         >
             <Typography variant="caption" className="tracking-tight !">{label}</Typography>

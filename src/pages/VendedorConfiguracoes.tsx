@@ -42,7 +42,7 @@ export default function VendedorConfiguracoes() {
   const { membership, profile, role } = useAuth()
 
   return (
-    <main className="h-full w-full overflow-y-auto bg-surface-alt px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg no-scrollbar">
+    <main className="h-full w-full overflow-y-auto bg-gray-50 px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg no-scrollbar">
       <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-mx-lg pb-32">
         <SellerPageHeader
           icon={ShieldCheck}
@@ -58,7 +58,7 @@ export default function VendedorConfiguracoes() {
         <section className="grid items-start grid-cols-1 gap-mx-lg xl:grid-cols-[320px_minmax(0,1fr)]">
           <Card className="h-fit border bg-white p-mx-lg">
             <div className="flex items-start gap-mx-md">
-              <span className="grid h-mx-14 w-mx-14 shrink-0 place-items-center rounded-mx-2xl bg-brand-primary/10 text-brand-primary">
+              <span className="grid h-mx-14 w-mx-14 shrink-0 place-items-center rounded-2xl bg-emerald-600/10 text-emerald-600">
                 <ShieldCheck size={26} />
               </span>
               <div className="min-w-0">
@@ -71,7 +71,7 @@ export default function VendedorConfiguracoes() {
               </div>
             </div>
 
-            <div className="mt-mx-lg rounded-mx-md border border-border-default bg-surface-alt p-mx-md">
+            <div className="mt-mx-lg rounded-xl border border-gray-200 bg-gray-50 p-mx-md">
               <Typography variant="caption" className="">
                 Acesso
               </Typography>
@@ -86,7 +86,7 @@ export default function VendedorConfiguracoes() {
               <Card key={item.title} className="border bg-white p-mx-md sm:p-mx-lg">
                 <div className="flex h-full flex-col gap-mx-md">
                   <div className="flex items-start gap-mx-md">
-                    <span className="grid h-mx-12 w-mx-12 shrink-0 place-items-center rounded-mx-2xl bg-status-success-surface text-mx-green-700">
+                    <span className="grid h-mx-12 w-mx-12 shrink-0 place-items-center rounded-2xl bg-status-success-surface text-mx-green-700">
                       <item.icon size={22} />
                     </span>
                     <div className="min-w-0">

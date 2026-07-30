@@ -107,22 +107,22 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-mx-md">
         <Card className="p-mx-lg border-none bg-white">
-          <Megaphone className="w-mx-5 h-mx-5 text-brand-primary mb-mx-sm" />
+          <Megaphone className="w-mx-5 h-mx-5 text-emerald-600 mb-mx-sm" />
           <Typography variant="caption" tone="muted">Leads recebidos</Typography>
           <Typography variant="h2">{formatNumber(summary.leads)}</Typography>
         </Card>
         <Card className="p-mx-lg border-none bg-white">
-          <ShoppingCart className="w-mx-5 h-mx-5 text-brand-primary mb-mx-sm" />
+          <ShoppingCart className="w-mx-5 h-mx-5 text-emerald-600 mb-mx-sm" />
           <Typography variant="caption" tone="muted">Vendas registradas</Typography>
           <Typography variant="h2">{formatNumber(summary.salesRows.length || summary.internetSales)}</Typography>
         </Card>
         <Card className="p-mx-lg border-none bg-white">
-          <Car className="w-mx-5 h-mx-5 text-brand-primary mb-mx-sm" />
+          <Car className="w-mx-5 h-mx-5 text-emerald-600 mb-mx-sm" />
           <Typography variant="caption" tone="muted">Estoque total</Typography>
           <Typography variant="h2">{formatNumber(summary.inventory?.total_stock || 0)}</Typography>
         </Card>
         <Card className="p-mx-lg border-none bg-white">
-          <Database className="w-mx-5 h-mx-5 text-brand-primary mb-mx-sm" />
+          <Database className="w-mx-5 h-mx-5 text-emerald-600 mb-mx-sm" />
           <Typography variant="caption" tone="muted">Investimento internet</Typography>
           <Typography variant="h2">{formatCurrency(summary.investment)}</Typography>
         </Card>
@@ -137,7 +137,7 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-border-default">
+                <tr className="border-b border-gray-200">
                   <th className="py-mx-sm pr-mx-md"><Typography variant="tiny" tone="muted">MÍDIA</Typography></th>
                   <th className="py-mx-sm pr-mx-md"><Typography variant="tiny" tone="muted">LEADS</Typography></th>
                   <th className="py-mx-sm pr-mx-md"><Typography variant="tiny" tone="muted">VENDAS</Typography></th>
@@ -146,7 +146,7 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
               </thead>
               <tbody>
                 {summary.marketingRows.map((row) => (
-                  <tr key={`${row.reference_month}-${row.media}`} className="border-b border-border-subtle">
+                  <tr key={`${row.reference_month}-${row.media}`} className="border-b border-gray-100">
                     <td className="py-mx-sm pr-mx-md"><Typography variant="p" className="">{row.media}</Typography></td>
                     <td className="py-mx-sm pr-mx-md"><Typography variant="p">{formatNumber(row.leads_volume)}</Typography></td>
                     <td className="py-mx-sm pr-mx-md"><Typography variant="p">{formatNumber(row.sales_volume)}</Typography></td>
@@ -168,22 +168,22 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
         <Card className="p-mx-lg border-none bg-white">
           <Typography variant="h3" className="mb-mx-md">INDICADORES DERIVADOS</Typography>
           <div className="space-y-mx-sm">
-            <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-mx-md bg-surface-alt">
+            <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-gray-50">
               <div className="flex items-center gap-mx-xs">
-                <Users className="w-mx-4 h-mx-4 text-brand-primary" />
+                <Users className="w-mx-4 h-mx-4 text-emerald-600" />
                 <Typography variant="p" className="font-bold">Vendedores ativos</Typography>
               </div>
               <Typography variant="p" className="">{summary.sellers}</Typography>
             </div>
-            <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-mx-md bg-surface-alt">
+            <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-gray-50">
               <div className="flex items-center gap-mx-xs">
-                <BarChart3 className="w-mx-4 h-mx-4 text-brand-primary" />
+                <BarChart3 className="w-mx-4 h-mx-4 text-emerald-600" />
                 <Typography variant="p" className="font-bold">Ticket médio</Typography>
               </div>
               <Typography variant="p" className="">{formatCurrency(summary.avgTicket)}</Typography>
             </div>
             {derived.map((item) => item && (
-              <div key={item.metric.metric_key} className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-mx-md bg-surface-alt">
+              <div key={item.metric.metric_key} className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-gray-50">
                 <Typography variant="p" className="font-bold">{item.metric.label}</Typography>
                 <Typography variant="p" className="">
                   {item.metric.value_type === 'currency'

@@ -22,19 +22,19 @@ export function SuaPosicao({ posicao, total, atingimento, faltamValor }: Props) 
       <Trophy className="absolute right-2 top-2 opacity-[0.06]" style={{ width: 120, height: 120, color: 'var(--color-brand-primary)' }} />
       <div>
         <p className="text-[13px] font-semibold text-slate-500 mb-1">Sua posição</p>
-        <p className="text-[32px] font-black text-slate-800 leading-tight">{posLabel}</p>
+        <p className="text-[32px] font-bold text-slate-800 leading-tight">{posLabel}</p>
         <p className="text-[12px] text-slate-400 mt-0.5">de {total || '—'} vendedores</p>
       </div>
       <div className="grid grid-cols-2 gap-3 mt-4">
         <div className="bg-green-50 border border-green-100 rounded-xl p-3 flex flex-col items-center gap-1">
           <Target className="w-5 h-5 text-green-600" />
           <p className="text-[11px] text-slate-500 font-medium">Atingimento</p>
-          <p className="text-[22px] font-black text-green-600 leading-tight">{pct}%</p>
+          <p className="text-[22px] font-bold text-green-600 leading-tight">{pct}%</p>
         </div>
         <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 flex flex-col items-center gap-1 text-center">
           <TrendingUp className="w-5 h-5 text-blue-500" />
           <p className="text-[11px] text-slate-500 font-medium">Faltam</p>
-          <p className="text-[16px] font-black text-blue-600 leading-tight">{formatFaltam(faltamValor)}</p>
+          <p className="text-[16px] font-bold text-blue-600 leading-tight">{formatFaltam(faltamValor)}</p>
           {posicao > 1 && <p className="text-[10px] text-slate-400">{proxLabel}</p>}
           {posicao === 1 && <p className="text-[10px] text-green-500 font-semibold">Você lidera!</p>}
         </div>

@@ -90,7 +90,7 @@ export function ROISection({ client }: Props) {
         </Button>
       </div>
 
-      <div id="roi-report-content" className="space-y-mx-lg bg-surface-alt p-mx-md rounded-mx-2xl print:p-0 print:bg-white">
+      <div id="roi-report-content" className="space-y-mx-lg bg-gray-50 p-mx-md rounded-2xl print:p-0 print:bg-white">
         <Card className="p-mx-xl text-white border-none shadow-mx-2xl relative overflow-hidden">
           <div className="absolute top-mx-0 right-mx-0 p-mx-lg opacity-10"><TrendingUp size={200} strokeWidth={1} /></div>
           <div className="relative z-10">
@@ -131,11 +131,11 @@ export function ROISection({ client }: Props) {
                 <div className="w-mx-xs h-mx-xs bg-status-error rounded-mx-full" /> MÉDIA ANTES (D0)
               </Typography>
               <div className="space-y-mx-md">
-                <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
+                <div className="flex justify-between items-center border-b border-gray-100 pb-mx-xs">
                   <Typography variant="p" className="font-bold">VENDAS/MÊS</Typography>
                   <Typography variant="h3">{before.sales.toFixed(1)}</Typography>
                 </div>
-                <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
+                <div className="flex justify-between items-center border-b border-gray-100 pb-mx-xs">
                   <Typography variant="p" className="font-bold">LEADS/MÊS</Typography>
                   <Typography variant="h3">{before.leads}</Typography>
                 </div>
@@ -151,14 +151,14 @@ export function ROISection({ client }: Props) {
                 <div className="w-mx-xs h-mx-xs bg-status-success rounded-mx-full" /> RESULTADO ATUAL
               </Typography>
               <div className="space-y-mx-md">
-                <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
+                <div className="flex justify-between items-center border-b border-gray-100 pb-mx-xs">
                   <Typography variant="p" className="font-bold">VENDAS/MÊS</Typography>
                   <div className="flex items-center gap-mx-xs">
                     <Typography variant="h3" className="text-status-success">{after.sales}</Typography>
                     {after.sales > before.sales && <Badge className="bg-status-success/10 text-status-success border-none text-mx-micro">+{((after.sales - before.sales)).toFixed(0)}</Badge>}
                   </div>
                 </div>
-                <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
+                <div className="flex justify-between items-center border-b border-gray-100 pb-mx-xs">
                   <Typography variant="p" className="font-bold">LEADS/MÊS</Typography>
                   <Typography variant="h3">{after.leads}</Typography>
                 </div>
@@ -174,14 +174,14 @@ export function ROISection({ client }: Props) {
 
             <Card className="p-mx-lg bg-white border">
               <Typography variant="h3" className="mb-mx-md flex items-center gap-mx-xs">
-                <div className="w-mx-xs h-mx-xs bg-brand-primary rounded-mx-full" /> GANHOS DE EFICIÊNCIA
+                <div className="w-mx-xs h-mx-xs bg-emerald-600 rounded-mx-full" /> GANHOS DE EFICIÊNCIA
               </Typography>
               <div className="space-y-mx-md">
-                <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
+                <div className="flex justify-between items-center border-b border-gray-100 pb-mx-xs">
                   <Typography variant="p" className="font-bold">TEMPO DE RESPOSTA</Typography>
                   <Typography variant="h3" className="text-status-success">-45%</Typography>
                 </div>
-                <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
+                <div className="flex justify-between items-center border-b border-gray-100 pb-mx-xs">
                   <Typography variant="p" className="font-bold">ADERÊNCIA RITUAIS</Typography>
                   <Typography variant="h3" className="text-status-success">98%</Typography>
                 </div>

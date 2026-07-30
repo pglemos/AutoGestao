@@ -39,7 +39,7 @@ export default function PotentialCommissionCard({ comissaoProjetada, ganhoPotenc
         </div>
         <p className="text-slate-400 text-sm mt-3">Sua comissão sobe para</p>
         <p
-          className="font-black mt-1 tabular-nums"
+          className="font-bold mt-1 tabular-nums"
           style={{ fontSize: "2.25rem", color: "#39FF5A", textShadow: "0 0 20px rgba(57,255,90,0.3)" }}
         >
           {formatBRL(comissaoProjetada).replace(",00", "")}
@@ -52,7 +52,7 @@ export default function PotentialCommissionCard({ comissaoProjetada, ganhoPotenc
       >
         <span className="text-lg">🔥</span>
         <span className="text-emerald-400 text-sm font-semibold">
-          Potencial de ganho: <span className="font-black">{formatBRL(ganhoPotencial).replace(",00","")}</span>
+          Potencial de ganho: <span className="font-bold">{formatBRL(ganhoPotencial).replace(",00","")}</span>
         </span>
       </div>
     </div>

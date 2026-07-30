@@ -9,8 +9,8 @@ import { Button } from '@/components/atoms/Button'
 /** Spinner "Identificando Unidade" — usado durante store resolution. */
 export function ResolvingStoreSpinner() {
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt" role="status" aria-busy="true" aria-live="polite">
-      <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-brand-primary mb-6" aria-hidden="true" />
+    <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50" role="status" aria-busy="true" aria-live="polite">
+      <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" aria-hidden="true" />
       <Typography variant="caption" tone="muted" className="animate-pulse">
         Identificando Unidade...
       </Typography>
@@ -22,23 +22,23 @@ export function ResolvingStoreSpinner() {
 export function PerformanceLoadingSkeleton() {
   return (
     <main
-      className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-surface-alt animate-in fade-in duration-500"
+      className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
       aria-busy="true"
       aria-live="polite"
       aria-label="Carregando performance"
     >
-      <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border-default pb-10">
+      <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10">
         <div className="space-y-mx-xs">
           <Skeleton className="h-mx-10 w-full max-w-mx-64" />
           <Skeleton className="h-mx-xs w-full max-w-mx-48" />
         </div>
         <div className="flex gap-mx-sm">
-          <Skeleton className="h-mx-14 w-mx-14 rounded-mx-xl" />
-          <Skeleton className="h-mx-14 w-mx-48 rounded-mx-xl" />
+          <Skeleton className="h-mx-14 w-mx-14 rounded-2xl" />
+          <Skeleton className="h-mx-14 w-mx-48 rounded-2xl" />
         </div>
       </header>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-mx-lg shrink-0">
-        {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-mx-xl rounded-mx-2xl" />)}
+        {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-mx-xl rounded-2xl" />)}
       </div>
     </main>
   )
@@ -53,7 +53,7 @@ type OwnerStoreUnavailableProps = {
 export function OwnerStoreUnavailable({ requestedStoreForbidden, storeResolutionIssue }: OwnerStoreUnavailableProps) {
   const navigate = useNavigate()
   return (
-    <main className="w-full h-full bg-surface-alt p-mx-lg">
+    <main className="w-full h-full bg-gray-50 p-mx-lg">
       <Card className="mx-auto max-w-2xl border-none bg-white">
         <EmptyState
           size="lg"
@@ -66,7 +66,7 @@ export function OwnerStoreUnavailable({ requestedStoreForbidden, storeResolution
           }
           nextStep="Volte para a visão executiva da rede e escolha uma loja ativa. Se a loja foi renomeada ou criada recentemente, solicite ao Admin MX revisar seu vínculo."
           action={
-            <Button onClick={() => navigate('/lojas', { replace: true })} className="rounded-mx-full bg-brand-secondary px-mx-xl">
+            <Button onClick={() => navigate('/lojas', { replace: true })} className="rounded-mx-full bg-gray-900 px-mx-xl">
               Voltar para minhas lojas
             </Button>
           }

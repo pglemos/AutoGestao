@@ -18,8 +18,8 @@ function Section({ title, icon: Icon, children }: { title: string; icon: typeof 
     return (
         <Card className="p-mx-lg">
             <div className="mb-mx-lg flex items-center gap-mx-sm">
-                <div className="flex h-mx-10 w-mx-10 shrink-0 items-center justify-center rounded-mx-lg bg-brand-primary/10">
-                    <Icon className="h-4 w-4 text-brand-primary" aria-hidden="true" />
+                <div className="flex h-mx-10 w-mx-10 shrink-0 items-center justify-center rounded-xl bg-emerald-600/10">
+                    <Icon className="h-4 w-4 text-emerald-600" aria-hidden="true" />
                 </div>
                 <Typography variant="h3" className="text-base font-semibold">{title}</Typography>
             </div>
@@ -34,7 +34,7 @@ function ReadOnlyField({ label, value }: { label: string; value: string }) {
             <span className="ml-2 block">
                 <Typography variant="caption" tone="muted">{label}</Typography>
             </span>
-            <div className="flex min-h-[48px] items-center rounded-mx-md border border-border-subtle bg-surface-alt px-5 py-3 text-sm font-bold text-text-secondary">
+            <div className="flex min-h-[48px] items-center rounded-xl border border-gray-100 bg-gray-50 px-5 py-3 text-sm font-bold text-gray-500">
                 {value}
             </div>
         </div>
@@ -94,7 +94,7 @@ export default function MeuPerfilVendedorContainer() {
     }
 
     return (
-        <div className="h-full w-full overflow-y-auto bg-surface-alt px-mx-sm py-mx-md no-scrollbar sm:px-mx-md lg:px-mx-lg">
+        <div className="h-full w-full overflow-y-auto bg-gray-50 px-mx-sm py-mx-md no-scrollbar sm:px-mx-md lg:px-mx-lg">
             <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-mx-lg pb-32">
             <PageHeading
                 title="Meu Perfil"
@@ -107,7 +107,7 @@ export default function MeuPerfilVendedorContainer() {
             />
 
             {erroSalvar && (
-                <div role="alert" className="rounded-mx-md border border-status-error/30 bg-status-error/5 px-mx-md py-mx-sm text-sm font-semibold text-status-error">
+                <div role="alert" className="rounded-xl border border-status-error/30 bg-status-error/5 px-mx-md py-mx-sm text-sm font-semibold text-status-error">
                     {erroSalvar}
                 </div>
             )}

@@ -115,7 +115,7 @@ export default function RecuperarVendas({ funis }) {
   if (recomendacoes.length === 0) {
     return (
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-        <h2 className="text-[16px] font-black text-[#0F172A] mb-1">Onde recuperar vendas?</h2>
+        <h2 className="text-[16px] font-bold text-[#0F172A] mb-1">Onde recuperar vendas?</h2>
         <p className="text-[13px] text-slate-400">
           {Object.values(funis).every(f => !f || Object.values(f).every(v => v === 0))
             ? "Registre atendimentos no Fechamento Diário para ver onde há oportunidades de melhoria."
@@ -127,7 +127,7 @@ export default function RecuperarVendas({ funis }) {
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-      <h2 className="text-[16px] font-black text-[#0F172A] mb-1">Onde recuperar vendas?</h2>
+      <h2 className="text-[16px] font-bold text-[#0F172A] mb-1">Onde recuperar vendas?</h2>
       <p className="text-[12px] text-slate-400 mb-5">Os maiores pontos de perda no seu funil.</p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {recomendacoes.map((rec, idx) => {
@@ -139,7 +139,7 @@ export default function RecuperarVendas({ funis }) {
               <div className="flex items-start gap-2">
                 <AlertTriangle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${c.icon}`} />
                 <div className="flex-1">
-                  <p className="text-[13px] font-black text-[#0F172A] leading-snug">{msg.titulo}</p>
+                  <p className="text-[13px] font-bold text-[#0F172A] leading-snug">{msg.titulo}</p>
                   <span className={`inline-block text-[10px] font-bold px-2 py-0.5 rounded-full mt-1 ${c.badge}`}>{rec.canal}</span>
                 </div>
               </div>

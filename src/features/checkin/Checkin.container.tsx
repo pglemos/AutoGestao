@@ -53,8 +53,8 @@ export function Checkin() {
 
     if (hookLoading) {
         return (
-            <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt">
-                <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-brand-primary mb-6" />
+            <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50">
+                <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" />
                 <Typography variant="caption" tone="muted" className="animate-pulse">Sincronizando Fechamento Diário...</Typography>
             </div>
         )
@@ -63,7 +63,7 @@ export function Checkin() {
     if (role !== 'vendedor') {
         return (
             <main className="h-full w-full flex flex-col items-center justify-center text-center p-mx-xl bg-white">
-                <ShieldCheck size={64} className="text-text-tertiary/20 mb-8" aria-hidden="true" />
+                <ShieldCheck size={64} className="text-gray-500/20 mb-8" aria-hidden="true" />
                 <Typography variant="h2" className="mb-4">Acesso Reservado</Typography>
                 <Typography variant="p" tone="muted" className="max-w-sm mx-auto leading-relaxed opacity-60">O Fechamento Diário operacional é restrito ao corpo de vendas. Gestores e equipe MX auditam via malha de rede.</Typography>
             </main>
@@ -89,16 +89,16 @@ const previousCard = ctx.activeClosingContext.previousCard
     ]
 
   return (
-    <main className="relative min-h-full w-full min-w-0 bg-surface-alt px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg no-scrollbar pb-12">
+    <main className="relative min-h-full w-full min-w-0 bg-gray-50 px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg no-scrollbar pb-12">
       <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-4">
             {checkinLoadError && (
-                <div role="alert" className="rounded-mx-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error">
+                <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error">
                     {checkinLoadError}
                 </div>
             )}
 
             {!isOnline && (
-                <div role="status" className="flex items-center gap-2 rounded-mx-2xl border border-status-warning/20 bg-status-warning-surface px-mx-md py-mx-sm text-sm font-bold text-status-warning">
+                <div role="status" className="flex items-center gap-2 rounded-2xl border border-status-warning/20 bg-status-warning-surface px-mx-md py-mx-sm text-sm font-bold text-status-warning">
                     <WifiOff className="h-mx-md w-mx-md shrink-0" aria-hidden="true" />
                     Sem conexão. O envio pode falhar até a conexão ser restabelecida.
                 </div>
@@ -106,7 +106,7 @@ const previousCard = ctx.activeClosingContext.previousCard
 
             {showConfetti && (
                 <div className="fixed inset-0 pointer-events-none z-[100] flex items-center justify-center bg-white/20 backdrop-blur-sm" aria-hidden="true">
-                    <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: [0, 1.25, 1], rotate: 0 }} className="flex h-mx-32 w-mx-32 items-center justify-center rounded-mx-4xl bg-brand-primary text-white shadow-mx-2xl">
+                    <motion.div initial={{ scale: 0, rotate: -20 }} animate={{ scale: [0, 1.25, 1], rotate: 0 }} className="flex h-mx-32 w-mx-32 items-center justify-center rounded-mx-4xl bg-emerald-600 text-white shadow-mx-2xl">
                         <Sparkles size={64} aria-hidden="true" />
                     </motion.div>
                 </div>

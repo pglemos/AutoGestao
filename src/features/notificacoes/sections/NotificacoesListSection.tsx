@@ -56,7 +56,7 @@ type Props = {
 function getTypeIcon(type: string) {
   switch (type) {
     case 'approval':
-      return <ShieldCheck size={20} className="text-brand-primary" />
+      return <ShieldCheck size={20} className="text-emerald-600" />
     case 'discipline':
       return <AlertTriangle size={20} className="text-status-error" />
     case 'performance':
@@ -64,7 +64,7 @@ function getTypeIcon(type: string) {
     case 'alert':
       return <Clock size={20} className="text-status-warning" />
     default:
-      return <Bell size={20} className="text-brand-primary" />
+      return <Bell size={20} className="text-emerald-600" />
   }
 }
 
@@ -84,10 +84,10 @@ export function NotificacoesListSection({
 
   return (
     <Card className="flex min-h-[420px] flex-col overflow-hidden bg-white">
-      <CardHeader className="relative z-10 flex flex-col items-start justify-between gap-mx-md border-b border-border-default bg-surface-alt/30 p-mx-md sm:flex-row sm:items-center sm:p-mx-lg">
+      <CardHeader className="relative z-10 flex flex-col items-start justify-between gap-mx-md border-b border-gray-200 bg-gray-50/30 p-mx-md sm:flex-row sm:items-center sm:p-mx-lg">
         <div className="flex items-center gap-mx-md">
           <div className={cn(
-            'flex h-mx-11 w-mx-11 shrink-0 items-center justify-center rounded-mx-xl',
+            'flex h-mx-11 w-mx-11 shrink-0 items-center justify-center rounded-2xl',
             'bg-emerald-50 text-emerald-600 shadow-none',
           )}>
             <Bell size={22} strokeWidth={2} />
@@ -109,8 +109,8 @@ export function NotificacoesListSection({
       <CardContent className="relative z-10 flex-1 p-mx-md sm:p-mx-lg">
         <AnimatePresence mode="popLayout">
           {Object.entries(grouped).length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center text-text-label">
-              <ShieldCheck size={48} className="mb-mx-md text-text-tertiary" />
+            <div className="flex flex-col items-center justify-center py-16 text-center text-gray-500">
+              <ShieldCheck size={48} className="mb-mx-md text-gray-500" />
               <Typography variant="h2">
                 Inbox Limpo
               </Typography>
@@ -142,15 +142,15 @@ export function NotificacoesListSection({
                         if (n.link && !approvalNotification) navigate(n.link)
                       }}
                       className={cn(
-                        'relative flex cursor-pointer flex-col gap-mx-md rounded-mx-2xl border p-mx-md transition-all group/item sm:flex-row',
-                        n.read ? 'border-border-default bg-surface-alt/30 opacity-80' : 'border-brand-primary/20 bg-white shadow-mx-sm',
+                        'relative flex cursor-pointer flex-col gap-mx-md rounded-2xl border p-mx-md transition-all group/item sm:flex-row',
+                        n.read ? 'border-gray-200 bg-gray-50/30 opacity-80' : 'border-brand-primary/20 bg-white shadow-sm',
                         !n.read && n.priority === 'high' && 'border-status-error/20 bg-status-error-surface/30',
                       )}
                     >
                       <div
                         className={cn(
-                          'flex h-mx-11 w-mx-11 shrink-0 items-center justify-center rounded-mx-xl shadow-inner transition-transform group-hover/item:scale-105',
-                          n.read ? 'bg-surface-alt text-text-tertiary' : 'bg-white border border-border-default',
+                          'flex h-mx-11 w-mx-11 shrink-0 items-center justify-center rounded-2xl shadow-none transition-transform group-hover/item:scale-105',
+                          n.read ? 'bg-gray-50 text-gray-500' : 'bg-white border border-gray-200',
                         )}
                       >
                         {getTypeIcon(n.type)}
@@ -158,7 +158,7 @@ export function NotificacoesListSection({
                       <div className="flex-1 min-w-0">
                         <header className="flex justify-between items-start mb-2 gap-mx-sm">
                           <div className="flex items-center gap-mx-sm min-w-0">
-                            <Typography variant="h3" className="truncate text-base font-bold transition-colors group-hover/item:text-brand-primary">
+                            <Typography variant="h3" className="truncate text-base font-bold transition-colors group-hover/item:text-emerald-600">
                               {n.title}
                             </Typography>
                             {!n.read && n.priority === 'high' && (
@@ -205,7 +205,7 @@ export function NotificacoesListSection({
                                 toast.success('Alerta marcado como lido.')
                               }
                             }}
-                            className="h-auto p-mx-0 text-xs font-semibold text-text-tertiary hover:bg-transparent hover:text-brand-primary"
+                            className="h-auto p-mx-0 text-xs font-semibold text-gray-500 hover:bg-transparent hover:text-emerald-600"
                           >
                             {n.read ? 'Marcar não lida' : 'Marcar lida'}
                           </Button>
@@ -218,7 +218,7 @@ export function NotificacoesListSection({
                                 void deleteNotification(n.id)
                                 toast.success('Alerta removido!')
                               }}
-                              className="h-auto p-mx-0 text-xs font-semibold text-text-tertiary hover:bg-transparent hover:text-status-error"
+                              className="h-auto p-mx-0 text-xs font-semibold text-gray-500 hover:bg-transparent hover:text-status-error"
                             >
                               Remover
                             </Button>
@@ -226,7 +226,7 @@ export function NotificacoesListSection({
                         </footer>
                       </div>
                       {!n.read && (
-                        <div className="absolute right-mx-lg top-mx-sm sm:top-1/2 sm:-translate-y-1/2 w-2.5 h-2.5 rounded-mx-full bg-brand-primary shadow-mx-md animate-pulse" />
+                        <div className="absolute right-mx-lg top-mx-sm sm:top-1/2 sm:-translate-y-1/2 w-2.5 h-2.5 rounded-mx-full bg-emerald-600 shadow-sm animate-pulse" />
                       )}
                     </motion.article>
                   )

@@ -56,7 +56,7 @@ export default function BonusDisputeCard({ bonificacoes }) {
                 </div>
               </div>
               <div className="text-right ml-3">
-                <p className="text-sm font-black text-slate-700">{formatBRL(bon.valor)}</p>
+                <p className="text-sm font-bold text-slate-700">{formatBRL(bon.valor)}</p>
               </div>
             </div>
           );

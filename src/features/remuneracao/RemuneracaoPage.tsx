@@ -32,12 +32,12 @@ export default function RemuneracaoPage() {
         subtitle="CADASTRE O PLANO DE REMUNERAÇÃO POR CARGO E COMPARE COM A MÉDIA DE MERCADO"
         actions={
           <label className="flex items-center gap-mx-sm">
-            <span className="text-xs font-bold uppercase tracking-wide text-text-tertiary">Loja</span>
+            <span className="text-xs font-bold uppercase tracking-wide text-gray-500">Loja</span>
             <select
               value={lojaSelecionada}
               onChange={e => setLojaId(e.target.value)}
               disabled={loading || lojas.length === 0}
-              className="h-mx-12 px-mx-sm bg-surface-alt border border-border-subtle rounded-mx-lg font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+              className="h-mx-12 px-mx-sm bg-gray-50 border border-gray-100 rounded-xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
             >
               <option value="">Selecione…</option>
               {lojas.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}

@@ -41,15 +41,15 @@ export default function NextCommissionJumpCard({ calcResult }) {
         ) : (
           <div>
             <p className="text-slate-400 text-sm">Venda mais</p>
-            <p className="text-5xl font-black text-white mt-1">
+            <p className="text-5xl font-bold text-white mt-1">
               {proxSaltoVendas} <span className="text-2xl font-semibold text-slate-300">veículo{proxSaltoVendas !== 1 ? "s" : ""}</span>
             </p>
             <p className="text-slate-400 text-sm mt-2">e sua comissão salta para</p>
-            <p className="text-3xl font-black text-emerald-400 mt-1">{formatBRL(comissaoProxSalto)}</p>
+            <p className="text-3xl font-bold text-emerald-400 mt-1">{formatBRL(comissaoProxSalto)}</p>
 
             <div className="mt-4 bg-emerald-500/15 border border-emerald-500/20 rounded-xl px-4 py-3">
               <p className="text-emerald-300 text-xs font-medium">Ganho adicional estimado</p>
-              <p className="text-emerald-400 text-2xl font-black">+ {formatBRL(ganhoAdicionalSalto)}</p>
+              <p className="text-emerald-400 text-2xl font-bold">+ {formatBRL(ganhoAdicionalSalto)}</p>
             </div>
 
             <p className="text-slate-500 text-xs mt-3">

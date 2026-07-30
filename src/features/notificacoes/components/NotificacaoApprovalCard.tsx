@@ -22,7 +22,7 @@ type Props = {
  */
 function ApprovalAvatar({ url, name }: { url: string | null; name: string }) {
   const [erro, setErro] = useState(false)
-  if (!url || erro) return <div className="h-full w-full flex items-center justify-center text-brand-primary"><UserRound size={20} /></div>
+  if (!url || erro) return <div className="h-full w-full flex items-center justify-center text-emerald-600"><UserRound size={20} /></div>
   return <img src={url} alt={name} className="h-full w-full object-cover" onError={() => setErro(true)} />
 }
 
@@ -35,13 +35,13 @@ export function NotificacaoApprovalCard({
   return (
     <div
       role="presentation"
-      className="mt-mx-md rounded-mx-2xl border border-brand-primary/15 bg-white p-mx-md shadow-mx-sm"
+      className="mt-mx-md rounded-2xl border border-brand-primary/15 bg-white p-mx-md shadow-sm"
       onClick={event => event.stopPropagation()}
       onKeyDown={event => event.stopPropagation()}
     >
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-mx-sm">
         <div className="flex items-start gap-mx-sm min-w-0">
-          <div className="h-mx-14 w-mx-14 overflow-hidden rounded-mx-2xl border border-border-default bg-surface-alt shrink-0">
+          <div className="h-mx-14 w-mx-14 overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 shrink-0">
             <ApprovalAvatar url={approval.avatar_url} name={approval.full_name} />
           </div>
           <div className="min-w-0">
@@ -57,30 +57,30 @@ export function NotificacaoApprovalCard({
           Pendente
         </Badge>
       </div>
-      <div className="mt-mx-md grid grid-cols-1 sm:grid-cols-4 gap-mx-sm text-mx-tiny font-black uppercase">
+      <div className="mt-mx-md grid grid-cols-1 sm:grid-cols-4 gap-mx-sm text-mx-tiny font-bold uppercase">
         <div>
-          <span className="block text-mx-nano text-text-tertiary tracking-mx-widest">Loja</span>
+          <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Loja</span>
           {approval.store_name_snapshot}
         </div>
         <div>
-          <span className="block text-mx-nano text-text-tertiary tracking-mx-widest">Função</span>
+          <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Função</span>
           {approval.role}
         </div>
         <div>
-          <span className="block text-mx-nano text-text-tertiary tracking-mx-widest">Na loja</span>
+          <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Na loja</span>
           {approval.store_tenure}
         </div>
         <div>
-          <span className="block text-mx-nano text-text-tertiary tracking-mx-widest">Mercado</span>
+          <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Mercado</span>
           {approval.market_experience}
         </div>
       </div>
       {approval.role === 'dono' && (
-        <div className="mt-mx-sm rounded-mx-xl border border-brand-primary/15 bg-surface-alt p-mx-sm">
+        <div className="mt-mx-sm rounded-2xl border border-brand-primary/15 bg-gray-50 p-mx-sm">
           <Typography variant="tiny" tone="brand" className="mb-mx-xs block">
             Dados administrativos
           </Typography>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-xs text-mx-micro font-bold text-text-secondary">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-xs text-mx-micro font-bold text-gray-500">
             <span><b>Razão:</b> {approval.company_legal_name || 'não informado'}</span>
             <span><b>CNPJ:</b> {approval.company_cnpj || 'não informado'}</span>
             <span><b>Telefone:</b> {approval.company_administrative_phone || 'não informado'}</span>
@@ -93,7 +93,7 @@ export function NotificacaoApprovalCard({
           type="button"
           onClick={() => void onReview(approval, 'approve', notificationId)}
           disabled={reviewingPreRegistrationId === approval.id}
-          className="h-mx-11 rounded-mx-xl font-black uppercase tracking-widest text-mx-nano"
+          className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-nano"
         >
           <CheckCircle2 size={15} className="mr-2" />
           Aprovar login
@@ -103,7 +103,7 @@ export function NotificacaoApprovalCard({
           variant="outline"
           onClick={() => void onReview(approval, 'reject', notificationId)}
           disabled={reviewingPreRegistrationId === approval.id}
-          className="h-mx-11 rounded-mx-xl font-black uppercase tracking-widest text-mx-nano text-status-error hover:bg-status-error-surface"
+          className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-nano text-status-error hover:bg-status-error-surface"
         >
           <X size={15} className="mr-2" />
           Rejeitar

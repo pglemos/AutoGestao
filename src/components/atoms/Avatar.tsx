@@ -3,7 +3,7 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 const avatarVariants = cva(
-  "relative inline-flex items-center justify-center rounded-mx-full overflow-hidden bg-surface-alt border border-border-default shrink-0",
+  "relative inline-flex items-center justify-center rounded-mx-full overflow-hidden bg-gray-50 border border-gray-200 shrink-0",
   {
     variants: {
       size: {
@@ -79,7 +79,7 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
       {...props}
     >
       {showFallback ? (
-        <span className="font-black uppercase text-brand-primary select-none" aria-hidden="true">
+        <span className="font-bold uppercase text-emerald-600 select-none" aria-hidden="true">
           {initials}
         </span>
       ) : (

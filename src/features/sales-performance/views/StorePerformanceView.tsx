@@ -13,8 +13,8 @@ export function StorePerformanceView() {
 
   if (loading) {
     return (
-      <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt">
-        <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-brand-primary mb-6" />
+      <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50">
+        <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" />
         <Typography variant="caption" tone="muted" className="animate-pulse">
           Calculando Matriz BI...
         </Typography>
@@ -23,7 +23,7 @@ export function StorePerformanceView() {
   }
 
   return (
-    <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-surface-alt">
+    <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
       <StoreHeader
         isRefetching={isRefetching}
         onRefresh={handleRefresh}

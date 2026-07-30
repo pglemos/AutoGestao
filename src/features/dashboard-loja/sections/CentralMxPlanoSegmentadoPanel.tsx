@@ -42,9 +42,9 @@ const SCOPE_LABEL: Record<CentralMxPlanoScope, { label: string; icon: typeof Bui
 
 const STATUS_TONE: Record<CentralMxPlanoStatus, string> = {
   pendente: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-  em_andamento: 'border-brand-primary/40 bg-mx-indigo-50 text-brand-primary',
+  em_andamento: 'border-brand-primary/40 bg-mx-indigo-50 text-emerald-600',
   atrasado: 'border-status-error/30 bg-status-error-surface text-status-error',
-  validando_eficacia: 'border-border-default bg-surface-alt text-text-secondary',
+  validando_eficacia: 'border-gray-200 bg-gray-50 text-gray-500',
   concluido: 'border-status-success/30 bg-status-success-surface text-status-success',
 }
 
@@ -151,7 +151,7 @@ export function CentralMxPlanoSegmentadoPanel({
     <Card className="p-mx-lg">
       <header className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-mx-xl bg-brand-primary p-mx-sm text-pure-white shadow-mx-md">
+          <div className="rounded-2xl bg-emerald-600 p-mx-sm text-pure-white shadow-sm">
             <ClipboardList size={22} aria-hidden="true" />
           </div>
           <div>
@@ -195,7 +195,7 @@ export function CentralMxPlanoSegmentadoPanel({
       </header>
 
       {segmentado.error && (
-        <div className="mt-mx-md rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
+        <div className="mt-mx-md rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
           <Typography variant="tiny" className="text-status-error">
             {segmentado.error}
           </Typography>
@@ -214,10 +214,10 @@ export function CentralMxPlanoSegmentadoPanel({
               aria-selected={isActive}
               onClick={() => setActiveScope(scope)}
               className={cn(
-                'inline-flex items-center gap-mx-xs rounded-mx-xl border px-mx-sm py-mx-xs text-mx-tiny font-black uppercase tracking-widest transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/30',
+                'inline-flex items-center gap-mx-xs rounded-2xl border px-mx-sm py-mx-xs text-mx-tiny font-bold uppercase tracking-widest transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/30',
                 isActive
-                  ? 'border-brand-primary bg-brand-primary text-pure-white shadow-mx-sm'
-                  : 'border-border-default bg-white text-text-secondary',
+                  ? 'border-brand-primary bg-emerald-600 text-pure-white shadow-sm'
+                  : 'border-gray-200 bg-white text-gray-500',
               )}
             >
               <def.icon size={14} aria-hidden="true" />
@@ -263,7 +263,7 @@ export function CentralMxPlanoSegmentadoPanel({
           />
         ))}
         {!activeList.length && !segmentado.loading && (
-          <li className="rounded-mx-xl border border-dashed border-border-default p-mx-md text-center">
+          <li className="rounded-2xl border border-dashed border-gray-200 p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Sem planos de ação ativos no escopo {SCOPE_LABEL[activeScope].label}.
             </Typography>
@@ -293,12 +293,12 @@ function CountTile({
 }) {
   const toneClass: Record<typeof tone, string> = {
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-    brand: 'border-brand-primary/30 bg-mx-indigo-50 text-brand-primary',
+    brand: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error',
-    muted: 'border-border-default bg-surface-alt text-text-secondary',
+    muted: 'border-gray-200 bg-gray-50 text-gray-500',
   }
   return (
-    <div className={cn('rounded-mx-xl border p-mx-sm text-center', toneClass[tone])}>
+    <div className={cn('rounded-2xl border p-mx-sm text-center', toneClass[tone])}>
       <Typography variant="caption" className="">
         {label}
       </Typography>
@@ -319,7 +319,7 @@ function PlanoRow({
   readOnly: boolean
 }) {
   return (
-    <li className={cn('rounded-mx-xl border p-mx-md', STATUS_TONE[plano.status])}>
+    <li className={cn('rounded-2xl border p-mx-md', STATUS_TONE[plano.status])}>
       <div className="flex flex-col gap-mx-xs md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-mx-xs">
@@ -337,7 +337,7 @@ function PlanoRow({
             </Badge>
           </div>
           <Typography variant="p" className="mt-mx-xs">
-            <span className="mr-mx-xs text-brand-primary">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
+            <span className="mr-mx-xs text-emerald-600">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
             {plano.acao}
           </Typography>
           <Typography variant="tiny" tone="muted" className="block">

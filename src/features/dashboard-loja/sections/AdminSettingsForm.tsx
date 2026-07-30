@@ -58,32 +58,32 @@ export function AdminSettingsForm({
     <form onSubmit={onSubmit} className="grid grid-cols-1 xl:grid-cols-12 gap-mx-lg">
       <section className="xl:col-span-4 space-y-mx-md">
         <div className="flex items-center gap-mx-xs">
-          <Target size={16} className="text-brand-primary" />
+          <Target size={16} className="text-emerald-600" />
           <Typography variant="caption" className="">Meta e Regras</Typography>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-mx-md">
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Meta Mensal</span>
-            <Input aria-label="Meta Mensal" type="number" min="0" value={form.monthly_goal} onChange={e => setForm(prev => ({ ...prev, monthly_goal: e.target.value }))} className="font-mono-numbers font-black" />
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Meta Mensal</span>
+            <Input aria-label="Meta Mensal" type="number" min="0" value={form.monthly_goal} onChange={e => setForm(prev => ({ ...prev, monthly_goal: e.target.value }))} className="font-mono-numbers font-bold" />
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Modo de Projeção</span>
-            <select aria-label="Modo de Projeção" value={form.projection_mode} onChange={e => setForm(prev => ({ ...prev, projection_mode: e.target.value as ProjectionMode }))} className="w-full h-mx-14 sm:h-12 rounded-mx-md border border-border-default bg-white px-5 text-sm font-black uppercase shadow-inner outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Modo de Projeção</span>
+            <select aria-label="Modo de Projeção" value={form.projection_mode} onChange={e => setForm(prev => ({ ...prev, projection_mode: e.target.value as ProjectionMode }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
               <option value="calendar">Calendário</option>
               <option value="business">Dias úteis</option>
             </select>
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Meta Individual</span>
-            <select aria-label="Meta Individual" value={form.individual_goal_mode} onChange={e => setForm(prev => ({ ...prev, individual_goal_mode: e.target.value as StoreSettingsPayload['meta']['individual_goal_mode'] }))} className="w-full h-mx-14 sm:h-12 rounded-mx-md border border-border-default bg-white px-5 text-sm font-black uppercase shadow-inner outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Meta Individual</span>
+            <select aria-label="Meta Individual" value={form.individual_goal_mode} onChange={e => setForm(prev => ({ ...prev, individual_goal_mode: e.target.value as StoreSettingsPayload['meta']['individual_goal_mode'] }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
               <option value="even">Igual</option>
               <option value="custom">Customizada</option>
               <option value="proportional">Proporcional</option>
             </select>
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Fonte</span>
-            <select aria-label="Fonte" value={form.source_mode} onChange={e => setForm(prev => ({ ...prev, source_mode: e.target.value as StoreSourceMode }))} className="w-full h-mx-14 sm:h-12 rounded-mx-md border border-border-default bg-white px-5 text-sm font-black uppercase shadow-inner outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Fonte</span>
+            <select aria-label="Fonte" value={form.source_mode} onChange={e => setForm(prev => ({ ...prev, source_mode: e.target.value as StoreSourceMode }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
               <option value="native_app">App nativo</option>
               <option value="legacy_forms">Forms legado</option>
               <option value="hybrid">Híbrido</option>
@@ -94,40 +94,40 @@ export function AdminSettingsForm({
           </label>
         </div>
         <div className="grid grid-cols-1 gap-mx-sm">
-          <label className="flex items-center gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-sm cursor-pointer">
+          <label className="flex items-center gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
             <input type="checkbox" checked={form.active} onChange={e => setForm(prev => ({ ...prev, active: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
-            <span className="text-mx-tiny font-black uppercase tracking-widest">Loja ativa</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest">Loja ativa</span>
           </label>
-          <label className="flex items-center gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-sm cursor-pointer">
+          <label className="flex items-center gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
             <input type="checkbox" checked={form.include_venda_loja_in_store_total} onChange={e => setForm(prev => ({ ...prev, include_venda_loja_in_store_total: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
-            <span className="text-mx-tiny font-black uppercase tracking-widest">Venda loja no total</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest">Venda loja no total</span>
           </label>
-          <label className="flex items-center gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-sm cursor-pointer">
+          <label className="flex items-center gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
             <input type="checkbox" checked={form.include_venda_loja_in_individual_goal} onChange={e => setForm(prev => ({ ...prev, include_venda_loja_in_individual_goal: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
-            <span className="text-mx-tiny font-black uppercase tracking-widest">Venda loja na meta individual</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest">Venda loja na meta individual</span>
           </label>
         </div>
       </section>
 
       <section className="xl:col-span-4 space-y-mx-md">
         <div className="flex items-center gap-mx-xs">
-          <ShieldCheck size={16} className="text-brand-primary" />
+          <ShieldCheck size={16} className="text-emerald-600" />
           <Typography variant="caption" className="">Benchmarks</Typography>
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-mx-md">
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Lead / Agendamento (%)</span>
-            <Input aria-label="Lead / Agendamento (%)" type="number" min="0" step="0.01" value={form.bench_lead_agd} onChange={e => setForm(prev => ({ ...prev, bench_lead_agd: e.target.value }))} className="font-mono-numbers font-black" />
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Lead / Agendamento (%)</span>
+            <Input aria-label="Lead / Agendamento (%)" type="number" min="0" step="0.01" value={form.bench_lead_agd} onChange={e => setForm(prev => ({ ...prev, bench_lead_agd: e.target.value }))} className="font-mono-numbers font-bold" />
             <Typography variant="tiny" tone="muted" className="block normal-case tracking-normal">Impacta a régua visual Lead → Agendamento.</Typography>
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Agendamento / Visita (%)</span>
-            <Input aria-label="Agendamento / Visita (%)" type="number" min="0" step="0.01" value={form.bench_agd_visita} onChange={e => setForm(prev => ({ ...prev, bench_agd_visita: e.target.value }))} className="font-mono-numbers font-black" />
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Agendamento / Visita (%)</span>
+            <Input aria-label="Agendamento / Visita (%)" type="number" min="0" step="0.01" value={form.bench_agd_visita} onChange={e => setForm(prev => ({ ...prev, bench_agd_visita: e.target.value }))} className="font-mono-numbers font-bold" />
             <Typography variant="tiny" tone="muted" className="block normal-case tracking-normal">Impacta a régua visual Agendamento → Visita.</Typography>
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Visita / Venda (%)</span>
-            <Input aria-label="Visita / Venda (%)" type="number" min="0" step="0.01" value={form.bench_visita_vnd} onChange={e => setForm(prev => ({ ...prev, bench_visita_vnd: e.target.value }))} className="font-mono-numbers font-black" />
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Visita / Venda (%)</span>
+            <Input aria-label="Visita / Venda (%)" type="number" min="0" step="0.01" value={form.bench_visita_vnd} onChange={e => setForm(prev => ({ ...prev, bench_visita_vnd: e.target.value }))} className="font-mono-numbers font-bold" />
             <Typography variant="tiny" tone="muted" className="block normal-case tracking-normal">Impacta a régua visual Visita → Venda.</Typography>
           </label>
         </div>
@@ -135,48 +135,48 @@ export function AdminSettingsForm({
 
       <section className="xl:col-span-4 space-y-mx-md">
         <div className="flex items-center gap-mx-xs">
-          <Mail size={16} className="text-brand-primary" />
+          <Mail size={16} className="text-emerald-600" />
           <Typography variant="caption" className="">Relatórios</Typography>
         </div>
         <div className="grid grid-cols-1 gap-mx-md">
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">E-mail do gestor</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">E-mail do gestor</span>
             <Input type="email" value={form.manager_email} onChange={e => setForm(prev => ({ ...prev, manager_email: e.target.value }))} placeholder="gestor@loja.com.br" />
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Matinal</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Matinal</span>
             <Input value={form.matinal_recipients} onChange={e => setForm(prev => ({ ...prev, matinal_recipients: e.target.value }))} placeholder="email1@loja.com.br, email2@loja.com.br" />
             <RecipientPreview value={form.matinal_recipients} />
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Semanal</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Semanal</span>
             <Input value={form.weekly_recipients} onChange={e => setForm(prev => ({ ...prev, weekly_recipients: e.target.value }))} placeholder="email1@loja.com.br, email2@loja.com.br" />
             <RecipientPreview value={form.weekly_recipients} />
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Mensal</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Mensal</span>
             <Input value={form.monthly_recipients} onChange={e => setForm(prev => ({ ...prev, monthly_recipients: e.target.value }))} placeholder="email1@loja.com.br, email2@loja.com.br" />
             <RecipientPreview value={form.monthly_recipients} />
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
             <label className="space-y-mx-xs">
-              <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">WhatsApp</span>
+              <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">WhatsApp</span>
               <Input value={form.whatsapp_group_ref} onChange={e => setForm(prev => ({ ...prev, whatsapp_group_ref: e.target.value }))} placeholder="grupo ou link" />
             </label>
             <label className="space-y-mx-xs">
-              <span className="text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Timezone</span>
+              <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Timezone</span>
               <Input aria-label="Timezone" value={form.timezone} onChange={e => setForm(prev => ({ ...prev, timezone: e.target.value }))} />
             </label>
           </div>
-          <label className="flex items-center gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-sm cursor-pointer">
+          <label className="flex items-center gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
             <input type="checkbox" checked={form.delivery_active} onChange={e => setForm(prev => ({ ...prev, delivery_active: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
-            <span className="text-mx-tiny font-black uppercase tracking-widest">Envios ativos</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest">Envios ativos</span>
           </label>
         </div>
       </section>
 
-      <footer className="xl:col-span-12 flex flex-col gap-mx-md pt-mx-md border-t border-border-default">
-        <div className="rounded-mx-xl border border-status-error/20 bg-status-error-surface p-mx-md">
+      <footer className="xl:col-span-12 flex flex-col gap-mx-md pt-mx-md border-t border-gray-200">
+        <div className="rounded-2xl border border-status-error/20 bg-status-error-surface p-mx-md">
           <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center sm:justify-between">
             <div>
               <Typography variant="caption" className="text-status-error">Zona de risco</Typography>

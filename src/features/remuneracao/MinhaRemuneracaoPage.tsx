@@ -51,7 +51,7 @@ export default function MinhaRemuneracaoPage() {
   const userName = data.profile?.name?.split(' ')[0] || 'Nome não informado'
 
   return (
-    <main className="h-full w-full min-w-0 overflow-y-auto bg-[#030B14] text-text-primary no-scrollbar px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg">
+    <main className="h-full w-full min-w-0 overflow-y-auto bg-[#030B14] text-gray-800 no-scrollbar px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg">
       <div className="mx-auto flex w-full max-w-[1500px] min-w-0 flex-col gap-4 pb-20">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4">
           <div>

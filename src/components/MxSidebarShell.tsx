@@ -506,7 +506,7 @@ export default function MxSidebarShell({
         >
           <img src={SIDEBAR_LOGO} alt="MX" className="h-9 w-9 shrink-0 object-contain" />
           <span className="hidden min-w-0 leading-tight min-[430px]:block">
-            <span className="block text-[15px] font-black tracking-tight text-gray-900">
+            <span className="block text-[15px] font-bold tracking-tight text-gray-900">
               MX PERFORMANCE
             </span>
             <span className="block text-[9px] font-bold uppercase tracking-[0.12em] text-emerald-700">
@@ -523,7 +523,7 @@ export default function MxSidebarShell({
             type="button"
             aria-label={`Abrir perfil de ${displayName}`}
             onClick={() => goTo(profilePath)}
-            className="grid h-9 w-9 place-items-center rounded-full bg-emerald-50 text-[11px] font-black uppercase text-emerald-700 ring-1 ring-emerald-100 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+            className="grid h-9 w-9 place-items-center rounded-full bg-emerald-50 text-[11px] font-bold uppercase text-emerald-700 ring-1 ring-emerald-100 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
           >
             {initials}
           </button>

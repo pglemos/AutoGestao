@@ -458,7 +458,7 @@ export function InternalMxUsersTab() {
           <div className="relative">
             <Search
               size={16}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-text-tertiary"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
             />
             <Input
               aria-label="Buscar usuários"
@@ -476,7 +476,7 @@ export function InternalMxUsersTab() {
               setRoleFilter(event.target.value as RoleFilter)
               setPage(0)
             }}
-            className="h-11 rounded-xl border border-border-default bg-white px-3 text-sm font-semibold"
+            className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold"
           >
             <option value="all">Todos os papéis</option>
             {ALL_ROLES.map((role) => (
@@ -491,7 +491,7 @@ export function InternalMxUsersTab() {
               setStatusFilter(event.target.value as StatusFilter)
               setPage(0)
             }}
-            className="h-11 rounded-xl border border-border-default bg-white px-3 text-sm font-semibold"
+            className="h-11 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold"
           >
             <option value="all">Todos</option>
             <option value="active">Ativos</option>
@@ -506,7 +506,7 @@ export function InternalMxUsersTab() {
             <MxTableSurface className="rounded-none border-x-0 border-b-0">
               <table className="min-w-[1120px] w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border-default bg-surface-alt text-left text-xs uppercase text-text-tertiary">
+                  <tr className="border-b border-gray-200 bg-gray-50 text-left text-xs uppercase text-gray-500">
                     <th className="px-4 py-3">Usuário</th>
                     <th className="px-4 py-3">Papel</th>
                     <th className="px-4 py-3">Loja</th>
@@ -531,8 +531,8 @@ export function InternalMxUsersTab() {
               </table>
             </MxTableSurface>
 
-            <div className="flex flex-col gap-3 border-t border-border-default px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-text-secondary">
+            <div className="flex flex-col gap-3 border-t border-gray-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+              <p className="text-sm text-gray-500">
                 {totalFiltered} resultado{totalFiltered === 1 ? '' : 's'} · página {page + 1} de {totalPages}
               </p>
               <div className="flex gap-2">
@@ -650,10 +650,10 @@ function UserRow({
   onHardDelete,
 }: UserRowProps) {
   return (
-    <tr className="border-b border-border-subtle last:border-0">
+    <tr className="border-b border-gray-100 last:border-0">
       <td className="px-4 py-4">
-        <div className="font-semibold text-text-primary">{user.name}</div>
-        <div className="text-xs text-text-tertiary">
+        <div className="font-semibold text-gray-800">{user.name}</div>
+        <div className="text-xs text-gray-500">
           {user.email}{user.phone ? ` · ${user.phone}` : ''}
         </div>
       </td>
@@ -793,7 +793,7 @@ function UserFormModal({
 
         <MxField label="Papel">
           <select
-            className="h-11 w-full rounded-xl border border-border-default bg-white px-3"
+            className="h-11 w-full rounded-xl border border-gray-200 bg-white px-3"
             value={draft.role}
             onChange={(event) => {
               const role = event.target.value as UserRole
@@ -813,7 +813,7 @@ function UserFormModal({
         {!internal ? (
           <MxField label="Loja">
             <select
-              className="h-11 w-full rounded-xl border border-border-default bg-white px-3"
+              className="h-11 w-full rounded-xl border border-gray-200 bg-white px-3"
               value={draft.store_id}
               onChange={(event) => onDraft({ ...draft, store_id: event.target.value })}
             >
@@ -827,7 +827,7 @@ function UserFormModal({
           </MxField>
         ) : null}
 
-        <label className="flex items-center gap-3 rounded-xl border border-border-default p-4">
+        <label className="flex items-center gap-3 rounded-xl border border-gray-200 p-4">
           <input
             type="checkbox"
             checked={draft.active}
@@ -836,7 +836,7 @@ function UserFormModal({
           Usuário ativo
         </label>
 
-        <label className="flex items-center gap-3 rounded-xl border border-border-default p-4">
+        <label className="flex items-center gap-3 rounded-xl border border-gray-200 p-4">
           <input
             type="checkbox"
             checked={draft.is_venda_loja}

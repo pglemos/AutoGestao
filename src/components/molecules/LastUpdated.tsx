@@ -17,7 +17,7 @@ function formatLastUpdated(value?: Date | string | number | null) {
 
 export function LastUpdated({ value, label = 'Última atualização', className }: LastUpdatedProps) {
   return (
-    <div className={cn('inline-flex min-w-0 items-center gap-mx-xs rounded-mx-full border border-border-default bg-white px-mx-sm py-mx-xs text-text-tertiary shadow-mx-sm', className)}>
+    <div className={cn('inline-flex min-w-0 items-center gap-mx-xs rounded-mx-full border border-gray-200 bg-white px-mx-sm py-mx-xs text-gray-500 shadow-sm', className)}>
       <Clock size={14} aria-hidden="true" className="shrink-0" />
       <Typography variant="tiny" className="truncate normal-case tracking-normal">
         {label}: {formatLastUpdated(value)}

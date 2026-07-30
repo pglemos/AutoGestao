@@ -39,7 +39,7 @@ const ALERT_TONE: Record<string, string> = {
   critical: 'bg-status-error-surface text-status-error border-status-error/30',
   warning: 'bg-status-warning-surface text-status-warning border-status-warning/30',
   positive: 'bg-status-success-surface text-status-success border-status-success/30',
-  consultive: 'bg-mx-indigo-50 text-brand-primary border-brand-primary/30',
+  consultive: 'bg-mx-indigo-50 text-emerald-600 border-brand-primary/30',
 }
 
 const ALERT_STATUS_LABEL: Record<CentralMxAlertStatus, string> = {
@@ -51,9 +51,9 @@ const ALERT_STATUS_LABEL: Record<CentralMxAlertStatus, string> = {
 
 const PLANO_TONE: Record<string, string> = {
   pendente: 'bg-status-warning-surface text-status-warning border-status-warning/30',
-  em_andamento: 'bg-mx-indigo-50 text-brand-primary border-brand-primary/30',
+  em_andamento: 'bg-mx-indigo-50 text-emerald-600 border-brand-primary/30',
   atrasado: 'bg-status-error-surface text-status-error border-status-error/30',
-  validando_eficacia: 'bg-surface-alt text-text-secondary border-border-default',
+  validando_eficacia: 'bg-gray-50 text-gray-500 border-gray-200',
   concluido: 'bg-status-success-surface text-status-success border-status-success/30',
 }
 
@@ -73,7 +73,7 @@ export function CentralMxPersistedAlertsPanel({ storeId }: Props) {
     <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-sm text-brand-primary">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-emerald-600">
             <Bell size={20} aria-hidden="true" />
           </div>
           <div>
@@ -96,7 +96,7 @@ export function CentralMxPersistedAlertsPanel({ storeId }: Props) {
       </div>
 
       {error && (
-        <div className="mt-mx-md rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
+        <div className="mt-mx-md rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
           <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
@@ -121,7 +121,7 @@ export function CentralMxPersistedAlertsPanel({ storeId }: Props) {
           />
         ))}
         {!alerts.length && !loading && (
-          <li className="rounded-mx-xl border border-dashed border-border-default p-mx-md text-center">
+          <li className="rounded-2xl border border-dashed border-gray-200 p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhum alerta aberto.
             </Typography>
@@ -142,7 +142,7 @@ function CountTile({
   tone: keyof typeof ALERT_TONE
 }) {
   return (
-    <div className={cn('rounded-mx-xl border p-mx-sm text-center', ALERT_TONE[tone])}>
+    <div className={cn('rounded-2xl border p-mx-sm text-center', ALERT_TONE[tone])}>
       <Typography variant="caption" className="">
         {label}
       </Typography>
@@ -166,7 +166,7 @@ function PersistedAlertRow({
 }) {
   const toneClass = ALERT_TONE[alert.type] ?? ALERT_TONE.consultive
   return (
-    <li className={cn('rounded-mx-xl border p-mx-md', toneClass)}>
+    <li className={cn('rounded-2xl border p-mx-md', toneClass)}>
       <div className="flex flex-col gap-mx-xs md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
           <div className="flex items-center gap-mx-xs">
@@ -228,7 +228,7 @@ export function CentralMxPersistedPlanosPanel({ storeId }: Props) {
     <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-sm text-brand-primary">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-emerald-600">
             <ClipboardList size={20} aria-hidden="true" />
           </div>
           <div>
@@ -251,7 +251,7 @@ export function CentralMxPersistedPlanosPanel({ storeId }: Props) {
       </div>
 
       {error && (
-        <div className="mt-mx-md rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
+        <div className="mt-mx-md rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
           <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
@@ -270,7 +270,7 @@ export function CentralMxPersistedPlanosPanel({ storeId }: Props) {
           <PersistedPlanoRow key={plano.id} plano={plano} onConcluir={marcarConcluido} />
         ))}
         {!planos.length && !loading && (
-          <li className="rounded-mx-xl border border-dashed border-border-default p-mx-md text-center">
+          <li className="rounded-2xl border border-dashed border-gray-200 p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Sem planos de ação ativos para esta loja.
             </Typography>
@@ -290,7 +290,7 @@ function PersistedPlanoRow({
 }) {
   const toneClass = PLANO_TONE[plano.status] ?? PLANO_TONE.em_andamento
   return (
-    <li className={cn('rounded-mx-xl border p-mx-md', toneClass)}>
+    <li className={cn('rounded-2xl border p-mx-md', toneClass)}>
       <div className="flex flex-col gap-mx-xs md:flex-row md:items-start md:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-mx-xs">
@@ -305,7 +305,7 @@ function PersistedPlanoRow({
             </Badge>
           </div>
           <Typography variant="p" className="mt-mx-xs">
-            <span className="mr-mx-xs text-brand-primary">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
+            <span className="mr-mx-xs text-emerald-600">{plano.codigo || `PA-${plano.id.slice(0, 8).toUpperCase()}`}</span>
             {plano.acao}
           </Typography>
           <Typography variant="tiny" tone="muted" className="block">
@@ -349,7 +349,7 @@ export function CentralMxPersistedAgendaPanel({ storeId }: Props) {
     <Card className="p-mx-lg">
       <div className="flex items-start justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-sm text-brand-primary">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-emerald-600">
             <Bell size={20} aria-hidden="true" />
           </div>
           <div>
@@ -370,7 +370,7 @@ export function CentralMxPersistedAgendaPanel({ storeId }: Props) {
       </div>
 
       {error && (
-        <div className="mt-mx-md rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
+        <div className="mt-mx-md rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
           <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
@@ -387,7 +387,7 @@ export function CentralMxPersistedAgendaPanel({ storeId }: Props) {
           />
         ))}
         {!events.length && !loading && (
-          <li className="rounded-mx-xl border border-dashed border-border-default p-mx-md text-center">
+          <li className="rounded-2xl border border-dashed border-gray-200 p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Sem eventos nos próximos 30 dias.
             </Typography>
@@ -415,7 +415,7 @@ function PersistedAgendaRow({
     minute: '2-digit',
   })
   return (
-    <li className="rounded-mx-xl border border-border-default bg-white p-mx-md">
+    <li className="rounded-2xl border border-gray-200 bg-white p-mx-md">
       <div className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-mx-xs">

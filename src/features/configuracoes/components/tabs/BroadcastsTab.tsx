@@ -20,10 +20,10 @@ export function BroadcastsTab() {
     return (
         <div className="space-y-mx-lg">
             <Card className="p-mx-lg border-none bg-pure-black text-white relative overflow-hidden">
-                <div className="absolute -right-20 -top-20 w-mx-48 h-mx-48 bg-brand-primary/20 rounded-mx-full blur-3xl pointer-events-none" />
+                <div className="absolute -right-20 -top-20 w-mx-48 h-mx-48 bg-emerald-600/20 rounded-mx-full blur-3xl pointer-events-none" />
                 <div className="relative z-10 flex items-start justify-between gap-mx-md">
                     <div className="flex items-start gap-mx-md flex-1">
-                        <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-white/10 border border-white/10 flex items-center justify-center text-brand-primary">
+                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-emerald-600">
                             <Megaphone size={28} />
                         </div>
                         <div className="space-y-mx-xs">
@@ -42,27 +42,27 @@ export function BroadcastsTab() {
             </Card>
 
             <Card className="border-none bg-white overflow-hidden">
-                <header className="flex items-center justify-between p-mx-md border-b border-border-default">
+                <header className="flex items-center justify-between p-mx-md border-b border-gray-200">
                     <div>
                         <Typography variant="caption" className="">Últimos Broadcasts</Typography>
                         <Typography variant="tiny" tone="muted" className="font-bold">Histórico de comunicados disparados</Typography>
                     </div>
-                    <Button variant="ghost" size="icon" onClick={() => refetch()} className="rounded-mx-xl" aria-label="Atualizar broadcasts">
+                    <Button variant="ghost" size="icon" onClick={() => refetch()} className="rounded-2xl" aria-label="Atualizar broadcasts">
                         <RefreshCw size={16} />
                     </Button>
                 </header>
 
                 {loading ? (
-                    <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-brand-primary" /></div>
+                    <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-emerald-600" /></div>
                 ) : broadcasts.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
-                        <Megaphone size={40} className="mx-auto text-text-tertiary opacity-30" />
+                        <Megaphone size={40} className="mx-auto text-gray-500 opacity-30" />
                         <Typography variant="caption" tone="muted" className="">Nenhum broadcast disparado ainda</Typography>
                     </div>
                 ) : (
                     <div className="divide-y divide-border-default">
                         {broadcasts.slice(0, 10).map((b: BroadcastDisplay) => (
-                            <div key={b.broadcast_id || b.id} className="p-mx-md hover:bg-surface-alt transition-colors">
+                            <div key={b.broadcast_id || b.id} className="p-mx-md hover:bg-gray-50 transition-colors">
                                 <div className="flex items-start justify-between gap-mx-sm">
                                     <div className="flex-1 min-w-0">
                                         <Typography variant="caption" className="tracking-tight">

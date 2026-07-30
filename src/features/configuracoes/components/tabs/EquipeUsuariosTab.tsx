@@ -144,7 +144,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
             {/* Toolbar */}
             <Card className="p-mx-md border-none bg-white flex flex-col md:flex-row items-stretch md:items-center gap-mx-md">
                 <div className="relative flex-1">
-                    <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
+                    <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
                     <Input
                         id="team-search"
                         name="team-search"
@@ -159,7 +159,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                     name="role-filter"
                     value={roleFilter}
                     onChange={e => setRoleFilter(e.target.value)}
-                    className="h-mx-12 px-mx-sm bg-surface-alt border border-border-default rounded-mx-xl font-black uppercase text-xs cursor-pointer"
+                    className="h-mx-12 px-mx-sm bg-gray-50 border border-gray-200 rounded-2xl font-bold uppercase text-xs cursor-pointer"
                 >
                     <option value="">Todos os papéis</option>
                     {Object.entries(ROLE_LABEL).map(([k, v]) => <option key={k} value={k}>{v.toUpperCase()}</option>)}
@@ -186,7 +186,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                 {canCreate && allowedRolesForCreate.length > 0 && (
                     <Button
                         onClick={() => setShowCreate(true)}
-                        className="h-mx-12 px-6 rounded-mx-xl font-black uppercase tracking-widest text-xs"
+                        className="h-mx-12 px-6 rounded-2xl font-bold uppercase tracking-widest text-xs"
                     >
                         <Plus size={16} className="mr-2" /> Novo Usuário
                     </Button>
@@ -197,11 +197,11 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
             <Card className="border-none bg-white overflow-hidden">
                 {loading ? (
                     <div className="p-mx-xl text-center">
-                        <RefreshCw size={24} className="animate-spin mx-auto text-brand-primary" />
+                        <RefreshCw size={24} className="animate-spin mx-auto text-emerald-600" />
                     </div>
                 ) : filtered.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
-                        <Users size={40} className="mx-auto text-text-tertiary opacity-30" />
+                        <Users size={40} className="mx-auto text-gray-500 opacity-30" />
                         <Typography variant="caption" tone="muted" className="">Nenhum usuário encontrado</Typography>
                     </div>
                 ) : (
@@ -209,14 +209,14 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                         {filtered.map(user => {
                             const isInactive = user.is_active === false || user.active === false
                             return (
-                                <div key={`${user.id}-${user.store_id || 'no-store'}`} className="flex items-center justify-between gap-mx-md p-mx-md hover:bg-surface-alt transition-colors">
+                                <div key={`${user.id}-${user.store_id || 'no-store'}`} className="flex items-center justify-between gap-mx-md p-mx-md hover:bg-gray-50 transition-colors">
                                     <div className="flex items-center gap-mx-sm flex-1 min-w-0">
                                         <Avatar
                                             src={user.avatar_url || undefined}
                                             alt={`Avatar de ${user.name || 'usuário'}`}
                                             fallback={user.name || '?'}
                                             size="lg"
-                                            className={`rounded-mx-xl text-sm ${isInactive ? 'bg-text-tertiary text-white' : 'bg-brand-primary text-white'}`}
+                                            className={`rounded-2xl text-sm ${isInactive ? 'bg-text-tertiary text-white' : 'bg-emerald-600 text-white'}`}
                                         />
                                         <div className="min-w-0 flex-1">
                                             <div className="flex items-center gap-mx-sm">
@@ -227,11 +227,11 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                                                 {user.must_change_password && <Badge variant="warning" className="text-mx-micro">Trocar Senha</Badge>}
                                             </div>
                                             <div className="flex items-center gap-mx-md flex-wrap mt-1">
-                                                <span className="flex items-center gap-mx-tiny text-mx-micro font-bold text-text-tertiary">
+                                                <span className="flex items-center gap-mx-tiny text-mx-micro font-bold text-gray-500">
                                                     <Mail size={11} />{user.email}
                                                 </span>
                                                 {user.store_name && (
-                                                    <span className="flex items-center gap-mx-tiny text-mx-micro font-bold text-text-tertiary">
+                                                    <span className="flex items-center gap-mx-tiny text-mx-micro font-bold text-gray-500">
                                                         <Building2 size={11} />{user.store_name}
                                                     </span>
                                                 )}
@@ -248,7 +248,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                                                 size="icon"
                                                 onClick={() => setEditingUser(user)}
                                                 aria-label={`Editar ${user.name}`}
-                                                className="h-mx-10 w-mx-10 rounded-mx-xl"
+                                                className="h-mx-10 w-mx-10 rounded-2xl"
                                             >
                                                 <Edit3 size={16} />
                                             </Button>
@@ -257,7 +257,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                                                 size="icon"
                                                 onClick={() => handleDelete(user)}
                                                 aria-label={`Remover ${user.name}`}
-                                                className="h-mx-10 w-mx-10 rounded-mx-xl text-status-error hover:bg-status-error-surface"
+                                                className="h-mx-10 w-mx-10 rounded-2xl text-status-error hover:bg-status-error-surface"
                                             >
                                                 <Trash2 size={16} />
                                             </Button>
@@ -297,11 +297,11 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
 
 function StatCard({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone?: 'success' | 'brand' | 'muted' }) {
     const toneColor = tone === 'success' ? 'text-status-success' :
-        tone === 'brand' ? 'text-brand-primary' : 'text-text-primary'
+        tone === 'brand' ? 'text-emerald-600' : 'text-gray-800'
     return (
         <Card className="p-mx-md border-none bg-white">
             <div className="flex items-center gap-mx-sm">
-                <div className={`w-mx-10 h-mx-10 rounded-mx-xl bg-surface-alt flex items-center justify-center ${toneColor}`}>
+                <div className={`w-mx-10 h-mx-10 rounded-2xl bg-gray-50 flex items-center justify-center ${toneColor}`}>
                     {icon}
                 </div>
                 <div>

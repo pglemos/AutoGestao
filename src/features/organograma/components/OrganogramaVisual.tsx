@@ -53,19 +53,19 @@ export function OrganogramaVisual({ lojaId }: { lojaId: string }) {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleAdd} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
+      <form onSubmit={handleAdd} className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
         <Typography variant="caption" tone="muted" className="">Adicionar cargo ao organograma</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <label className="block space-y-mx-xs md:col-span-1">
-            <span className="block px-1 text-xs font-black uppercase tracking-widest text-text-tertiary">Cargo</span>
+            <span className="block px-1 text-xs font-bold uppercase tracking-widest text-gray-500">Cargo</span>
             <Input value={cargo} onChange={e => setCargo(e.target.value)} placeholder="Ex.: Gerente" />
           </label>
           <label className="block space-y-mx-xs md:col-span-1">
-            <span className="block px-1 text-xs font-black uppercase tracking-widest text-text-tertiary">Reporta a</span>
+            <span className="block px-1 text-xs font-bold uppercase tracking-widest text-gray-500">Reporta a</span>
             <select aria-label="Reporta a"
               value={parentId}
               onChange={e => setParentId(e.target.value)}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-border-default rounded-mx-xl font-black uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
             >
               <option value="">— Topo (sem chefia) —</option>
               {nos.map(n => <option key={n.id} value={n.id}>{n.cargo}</option>)}
@@ -80,11 +80,11 @@ export function OrganogramaVisual({ lojaId }: { lojaId: string }) {
       {error && <p className="text-sm font-bold text-status-error">Erro: {error}</p>}
 
       {loading ? (
-        <p className="text-sm font-bold text-text-tertiary">Carregando organograma…</p>
+        <p className="text-sm font-bold text-gray-500">Carregando organograma…</p>
       ) : tree.length === 0 ? (
         <EmptyState icon={<Users size={28} />} title="Organograma vazio" description="Adicione o primeiro cargo (topo da estrutura)." />
       ) : (
-        <div className="rounded-mx-xl border border-border-default p-mx-sm">
+        <div className="rounded-2xl border border-gray-200 p-mx-sm">
           {tree.map(node => (
             <OrgNodeRow key={node.id} node={node} depth={0} expanded={expanded} onToggle={toggle} onRemove={handleRemove} />
           ))}
@@ -108,16 +108,16 @@ function OrgNodeRow({
   return (
     <div>
       <div
-        className="flex items-center gap-mx-sm rounded-mx-lg px-mx-sm py-mx-xs hover:bg-surface-alt"
+        className="flex items-center gap-mx-sm rounded-xl px-mx-sm py-mx-xs hover:bg-gray-50"
         style={{ paddingLeft: `${depth * 20 + 8}px` }}
       >
         {hasChildren ? (
-          <button type="button" onClick={() => onToggle(node.id)} aria-label={isOpen ? 'Recolher' : 'Expandir'} className="text-text-tertiary">
+          <button type="button" onClick={() => onToggle(node.id)} aria-label={isOpen ? 'Recolher' : 'Expandir'} className="text-gray-500">
             {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
           </button>
         ) : <span className="w-4" />}
-        <span className="font-black uppercase text-sm text-text-primary">{node.cargo}</span>
-        {hasChildren && <span className="text-xs font-bold text-text-tertiary">({node.children.length})</span>}
+        <span className="font-bold uppercase text-sm text-gray-800">{node.cargo}</span>
+        {hasChildren && <span className="text-xs font-bold text-gray-500">({node.children.length})</span>}
         <Button type="button" variant="ghost" size="icon" aria-label="Remover" className="ml-auto" onClick={() => onRemove(node)}>
           <Trash2 size={14} />
         </Button>

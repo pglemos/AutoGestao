@@ -207,13 +207,13 @@ export default function VendedorTreinamentosContainer() {
     }
 
     if (loading) {
-        return <div className="flex h-64 items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-border-subtle border-t-brand-primary" /></div>
+        return <div className="flex h-64 items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-100 border-t-brand-primary" /></div>
     }
 
     const progressoPercent = trainings.length > 0 ? Math.round((completedCount / trainings.length) * 100) : 0
 
     return (
-        <main className="h-full w-full min-w-0 overflow-y-auto bg-surface-alt font-body no-scrollbar px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg pb-12">
+        <main className="h-full w-full min-w-0 overflow-y-auto bg-gray-50 font-body no-scrollbar px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg pb-12">
           <div className="mx-auto w-full max-w-[1500px] space-y-8">
             <PageHeader title="Treinamentos" subtitle="Desenvolva suas habilidades de vendas">
                 <ContentSuggestionDialog />
@@ -321,7 +321,7 @@ export default function VendedorTreinamentosContainer() {
                             <div className="space-y-3">
                                 {upcomingLive.map(t => (
                                     <Card key={t.id} className="flex items-center gap-4 p-mx-md">
-                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-mx-xl bg-status-error/10">
+                                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-status-error/10">
                                             <Video className="h-5 w-5 text-status-error" />
                                         </div>
                                         <div className="flex-1">
@@ -332,14 +332,14 @@ export default function VendedorTreinamentosContainer() {
                                             </Typography>
                                         </div>
                                         {presencas.has(t.id) ? (
-                                            <span className="inline-flex items-center gap-1.5 rounded-mx-xl bg-status-success/10 px-3 py-1.5 text-xs font-semibold text-status-success">
+                                            <span className="inline-flex items-center gap-1.5 rounded-2xl bg-status-success/10 px-3 py-1.5 text-xs font-semibold text-status-success">
                                                 <CheckCircle2 size={14} /> Presença confirmada
                                             </span>
                                         ) : (
                                             <button
                                                 type="button"
                                                 onClick={() => void confirmarPresenca(t.id)}
-                                                className="rounded-mx-xl border border-brand-primary px-3 py-1.5 text-xs font-semibold text-brand-primary hover:bg-brand-primary/5"
+                                                className="rounded-2xl border border-brand-primary px-3 py-1.5 text-xs font-semibold text-emerald-600 hover:bg-emerald-600/5"
                                             >
                                                 Confirmar presença
                                             </button>
@@ -433,7 +433,7 @@ export default function VendedorTreinamentosContainer() {
                                                     onChange={e => void handleToggleTask(tarefa, e.target.checked)}
                                                     className="mt-0.5 h-4 w-4 rounded border-slate-300 text-mx-blue focus:ring-mx-blue"
                                                 />
-                                                <span className={`text-xs ${tarefa.concluida ? 'font-medium text-text-tertiary line-through' : 'font-semibold text-text-primary'}`}>
+                                                <span className={`text-xs ${tarefa.concluida ? 'font-medium text-gray-500 line-through' : 'font-semibold text-gray-800'}`}>
                                                     {tarefa.descricao}
                                                 </span>
                                             </label>

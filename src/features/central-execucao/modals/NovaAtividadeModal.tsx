@@ -173,7 +173,7 @@ export function NovaAtividadeModal({
         <div className="space-y-2">
           <p className="mb-3 text-[13px] text-slate-500">Selecione o tipo de atividade comercial:</p>
           {TYPES.map(type => (
-            <button key={type.value} type="button" onClick={() => { setActivityType(type.value); setStep('form') }} className="w-full rounded-xl border border-slate-200 px-4 py-3 text-left text-[13px] font-semibold text-mx-text transition-colors hover:border-status-info hover:bg-blue-50">
+            <button key={type.value} type="button" onClick={() => { setActivityType(type.value); setStep('form') }} className="w-full rounded-xl border border-slate-200 px-4 py-3 text-left text-[13px] font-semibold text-gray-800 transition-colors hover:border-status-info hover:bg-blue-50">
               {type.label}
             </button>
           ))}

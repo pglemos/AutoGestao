@@ -33,10 +33,10 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
                                     key={tab.key}
                                     onClick={() => setActive(tab.key)}
                                     className={cn(
-                                        "flex-1 min-w-[140px] flex items-center justify-center gap-mx-sm h-mx-xl px-4 rounded-mx-xl font-black uppercase text-xs tracking-widest transition-all",
+                                        "flex-1 min-w-[140px] flex items-center justify-center gap-mx-sm h-mx-xl px-4 rounded-2xl font-bold uppercase text-xs tracking-widest transition-all",
                                         isActive
-                                            ? "bg-brand-primary text-white shadow-mx-sm"
-                                            : "bg-transparent text-text-tertiary hover:bg-surface-alt"
+                                            ? "bg-emerald-600 text-white shadow-sm"
+                                            : "bg-transparent text-gray-500 hover:bg-gray-50"
                                     )}
                                 >
                                     <TabIcon size={14} /> {tab.label}
@@ -63,10 +63,10 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
                                 key={tab.key}
                                 onClick={() => setActive(tab.key)}
                                 className={cn(
-                                    "flex-1 min-w-[140px] flex items-center justify-center gap-mx-sm h-mx-xl px-4 rounded-mx-xl font-black uppercase text-xs tracking-widest transition-all",
+                                    "flex-1 min-w-[140px] flex items-center justify-center gap-mx-sm h-mx-xl px-4 rounded-2xl font-bold uppercase text-xs tracking-widest transition-all",
                                     isActive
-                                        ? "bg-brand-primary text-white shadow-mx-sm"
-                                        : "bg-transparent text-text-tertiary hover:bg-surface-alt"
+                                        ? "bg-emerald-600 text-white shadow-sm"
+                                        : "bg-transparent text-gray-500 hover:bg-gray-50"
                                 )}
                             >
                                 <TabIcon size={14} /> {tab.label}
@@ -78,8 +78,8 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
 
             {/* Conteúdo do sub-tab */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-start gap-mx-md pb-mx-md border-b border-border-default mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100">
+                <header className="flex items-start gap-mx-md pb-mx-md border-b border-gray-200 mb-mx-lg">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100">
                         <Icon size={26} />
                     </div>
                     <div className="flex-1">
@@ -103,9 +103,9 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
             </Card>
 
             {/* Atalhos secundários */}
-            <Card className="p-mx-md border-none bg-surface-alt">
+            <Card className="p-mx-md border-none bg-gray-50">
                 <div className="flex items-start gap-mx-sm">
-                    <FolderTree size={18} className="text-brand-primary shrink-0 mt-1" />
+                    <FolderTree size={18} className="text-emerald-600 shrink-0 mt-1" />
                     <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">
                         Os catálogos alimentam treinamentos, devolutivas e produtos digitais consumidos por toda a rede.
                         Alterações são propagadas em tempo real via realtime sync.

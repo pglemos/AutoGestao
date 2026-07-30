@@ -91,7 +91,7 @@ function ShowroomCard({ dc, updateCounter, setCounter, bloqueado }) {
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Store className="w-5 h-5 text-white" />}
         </div>
         <div>
-          <p className={`text-[13px] font-black uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-orange-700"}`}>Showroom</p>
+          <p className={`text-[13px] font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-orange-700"}`}>Showroom</p>
           <p className={`text-[11px] mt-0.5 font-medium ${bloqueado ? "text-slate-300" : "text-orange-400"}`}>Atendimento presencial</p>
         </div>
       </div>
@@ -139,7 +139,7 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Users className="w-5 h-5 text-white" />}
         </div>
         <div>
-          <p className={`text-[13px] font-black uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-green-700"}`}>Carteira</p>
+          <p className={`text-[13px] font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-green-700"}`}>Carteira</p>
           <p className={`text-[11px] mt-0.5 font-medium ${bloqueado ? "text-slate-300" : "text-green-400"}`}>Relacionamento e prospecção</p>
         </div>
       </div>
@@ -176,7 +176,7 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
               Agendamentos D+1 ativos
             </span>
             <div className="w-[120px] flex-shrink-0 flex items-center justify-center">
-              <span className={`text-[22px] font-black tabular-nums ${bloqueado ? "text-slate-400" : "text-green-700"}`}>{ativos}</span>
+              <span className={`text-[22px] font-bold tabular-nums ${bloqueado ? "text-slate-400" : "text-green-700"}`}>{ativos}</span>
             </div>
           </div>
         )}
@@ -229,7 +229,7 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Globe className="w-5 h-5 text-white" />}
         </div>
         <div>
-          <p className={`text-[13px] font-black uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-blue-700"}`}>Internet</p>
+          <p className={`text-[13px] font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-blue-700"}`}>Internet</p>
           <p className={`text-[11px] mt-0.5 font-medium ${bloqueado ? "text-slate-300" : "text-blue-400"}`}>Leads digitais</p>
         </div>
       </div>
@@ -265,7 +265,7 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
               Agendamentos D+1 ativos
             </span>
             <div className="w-[120px] flex-shrink-0 flex items-center justify-center">
-              <span className={`text-[22px] font-black tabular-nums ${bloqueado ? "text-slate-400" : "text-blue-700"}`}>{ativos}</span>
+              <span className={`text-[22px] font-bold tabular-nums ${bloqueado ? "text-slate-400" : "text-blue-700"}`}>{ativos}</span>
             </div>
           </div>
         )}
@@ -300,9 +300,9 @@ export default function MovimentoDia({ dc, updateCounter, setCounter, clients = 
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
-          <span className="w-6 h-6 rounded-full bg-[#005BFF] text-white text-[11px] font-black flex items-center justify-center flex-shrink-0">1</span>
+          <span className="w-6 h-6 rounded-full bg-[#005BFF] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">1</span>
           <div>
-            <h2 className="text-[14px] font-black text-[#0F172A] uppercase tracking-wide leading-none">Movimento do Dia</h2>
+            <h2 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide leading-none">Movimento do Dia</h2>
             <p className="text-[12px] text-slate-400 mt-0.5 font-medium">Informe rapidamente o que aconteceu hoje em cada canal.</p>
           </div>
         </div>

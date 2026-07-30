@@ -9,10 +9,10 @@ type Props = { reaching: number }
 export function StoreHealthCard({ reaching }: Props) {
   return (
     <Card className="p-mx-10 md:p-14 text-white border-none relative overflow-hidden flex-1 group">
-      <div className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-brand-primary/10 rounded-mx-full blur-mx-xl -mr-32 -mt-32 transition-opacity group-hover:opacity-100" />
+      <div className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-emerald-600/10 rounded-mx-full blur-mx-xl -mr-32 -mt-32 transition-opacity group-hover:opacity-100" />
       <div className="relative z-10 flex flex-col justify-between h-full">
         <div>
-          <div className="w-mx-2xl h-mx-2xl rounded-mx-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-inner mb-10 transform group-hover:rotate-6 transition-transform">
+          <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-none mb-10 transform group-hover:rotate-6 transition-transform">
             <Activity size={32} />
           </div>
           <Typography
@@ -55,7 +55,7 @@ export function StoreHealthCard({ reaching }: Props) {
               {reaching >= 80 ? 'TARGET OK' : 'ATENÇÃO'}
             </Badge>
           </div>
-          <div className="h-mx-sm w-full bg-white/5 rounded-mx-full overflow-hidden p-mx-tiny shadow-inner border border-white/5">
+          <div className="h-mx-sm w-full bg-white/5 rounded-mx-full overflow-hidden p-mx-tiny shadow-none border border-white/5">
             <motion.div
               initial={{ width: 0 }}
               animate={{ width: `${Math.min(reaching, 100)}%` }}

@@ -38,8 +38,8 @@ export function DRETable({
   className,
 }: DRETableProps) {
   return (
-    <Card className={cn('border-none shadow-mx-md bg-white overflow-hidden', className)}>
-      <div className="p-mx-lg border-b border-border-subtle flex items-center justify-between">
+    <Card className={cn('border-none shadow-sm bg-white overflow-hidden', className)}>
+      <div className="p-mx-lg border-b border-gray-100 flex items-center justify-between">
         <Typography variant="h3">DRE ANUAL</Typography>
         <Button variant="outline" size="sm" className="">
           <FileText size={16} className="mr-2" /> EXPORTAR PDF
@@ -48,7 +48,7 @@ export function DRETable({
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="bg-surface-alt/50 border-b border-border-default">
+            <tr className="bg-gray-50/50 border-b border-gray-200">
               <th className="p-mx-md w-1/4">
                 <Typography variant="tiny" tone="muted">DEMONSTRATIVO</Typography>
               </th>
@@ -64,15 +64,15 @@ export function DRETable({
               if (row.isHeader) {
                 return (
                   <tr key={idx} className="bg-mx-green-900">
-                    <td className="p-mx-md text-white font-black text-sm uppercase tracking-wider" colSpan={months.length + 1}>
+                    <td className="p-mx-md text-white font-bold text-sm uppercase tracking-wider" colSpan={months.length + 1}>
                       {row.label}
                     </td>
                   </tr>
                 )
               }
               return (
-                <tr key={idx} className="hover:bg-surface-alt/30 transition-colors">
-                  <td className={cn('p-mx-md text-sm', row.bold ? 'font-black' : 'font-bold')}>
+                <tr key={idx} className="hover:bg-gray-50/30 transition-colors">
+                  <td className={cn('p-mx-md text-sm', row.bold ? 'font-bold' : 'font-bold')}>
                     {row.label}
                   </td>
                   {months.map((m) => {
@@ -82,7 +82,7 @@ export function DRETable({
                     return (
                       <td key={m} className={cn(
                         'p-mx-md text-sm text-right',
-                        row.bold ? 'font-black' : 'font-bold',
+                        row.bold ? 'font-bold' : 'font-bold',
                         row.color === 'red' && val !== null && val < 0 ? 'text-status-error' : '',
                         row.color === 'green' && val !== null && val > 0 ? 'text-status-success' : '',
                         !row.color && isNeg ? 'text-status-error' : '',
@@ -95,8 +95,8 @@ export function DRETable({
               )
             })}
             {onEdit && (
-              <tr className="bg-surface-alt/50 border-t-2 border-border-default">
-                <td className="p-mx-md font-black text-sm">AÇÕES</td>
+              <tr className="bg-gray-50/50 border-t-2 border-gray-200">
+                <td className="p-mx-md font-bold text-sm">AÇÕES</td>
                 {months.map((m) => {
                   const entry = data.get(m)
                   return (
@@ -106,7 +106,7 @@ export function DRETable({
                           <Pencil size={14} />
                         </Button>
                       ) : (
-                        <span className="text-text-tertiary text-xs">—</span>
+                        <span className="text-gray-500 text-xs">—</span>
                       )}
                     </td>
                   )

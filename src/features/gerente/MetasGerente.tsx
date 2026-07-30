@@ -46,7 +46,7 @@ export default function MetasGerente() {
   return (
     <main id="metas-gerente" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Metas da Equipe">
       <header className="flex flex-col gap-1">
-        <h1 className="text-3xl font-black tracking-tight md:text-4xl">Metas da Equipe</h1>
+        <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Metas da Equipe</h1>
         <p className="text-sm text-muted-foreground">Acompanhe o atingimento e a projeção de cada vendedor.</p>
       </header>
 
@@ -58,7 +58,7 @@ export default function MetasGerente() {
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Meta do Mês</span>
           </div>
-          <p className="mt-4 text-3xl font-black tabular-nums">{totals.meta}</p>
+          <p className="mt-4 text-3xl font-bold tabular-nums">{totals.meta}</p>
           <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">veículos · soma da equipe</p>
         </div>
 
@@ -69,9 +69,9 @@ export default function MetasGerente() {
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Realizado</span>
           </div>
-          <p className="mt-4 text-3xl font-black tabular-nums">{totals.realizado}</p>
+          <p className="mt-4 text-3xl font-bold tabular-nums">{totals.realizado}</p>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-xs font-black tabular-nums text-status-success">{totals.atingimento}%</span>
+            <span className="text-xs font-bold tabular-nums text-status-success">{totals.atingimento}%</span>
             <span className="text-xs font-bold text-muted-foreground normal-case">da meta</span>
           </div>
         </div>
@@ -83,9 +83,9 @@ export default function MetasGerente() {
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Projeção</span>
           </div>
-          <p className="mt-4 text-3xl font-black tabular-nums">{totals.projecao}</p>
+          <p className="mt-4 text-3xl font-bold tabular-nums">{totals.projecao}</p>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-xs font-black tabular-nums text-status-warning">{totals.projetado}%</span>
+            <span className="text-xs font-bold tabular-nums text-status-warning">{totals.projetado}%</span>
             <span className="text-xs font-bold text-muted-foreground normal-case">se mantiver ritmo</span>
           </div>
         </div>
@@ -97,7 +97,7 @@ export default function MetasGerente() {
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Gap</span>
           </div>
-          <p className="mt-4 text-3xl font-black tabular-nums">{totals.gap}</p>
+          <p className="mt-4 text-3xl font-bold tabular-nums">{totals.gap}</p>
           <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">faltam para bater meta</p>
         </div>
       </section>
@@ -106,19 +106,19 @@ export default function MetasGerente() {
         {(Object.keys(statusConfig) as Array<SellerMeta['status']>).map((tier) => (
           <div key={tier} className="rounded-xl border border-border bg-card p-4 shadow-sm">
             <div className="flex items-center justify-between">
-              <span className={cn('inline-flex rounded-md px-3 py-0.5 text-xs font-black uppercase tracking-tight', statusConfig[tier].pill)}>
+              <span className={cn('inline-flex rounded-md px-3 py-0.5 text-xs font-bold uppercase tracking-tight', statusConfig[tier].pill)}>
                 {statusConfig[tier].label}
               </span>
               <Clock3 size={14} className="text-muted-foreground" />
             </div>
-            <p className="mt-4 text-3xl font-black tabular-nums">{tierCounts[tier]}</p>
+            <p className="mt-4 text-3xl font-bold tabular-nums">{tierCounts[tier]}</p>
             <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">vendedores</p>
           </div>
         ))}
       </section>
 
       <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-        <h2 className="text-xl font-black">Meta por Vendedor</h2>
+        <h2 className="text-xl font-bold">Meta por Vendedor</h2>
         <p className="mt-1 text-xs font-bold text-muted-foreground normal-case">Atingimento individual e ritmo projetado.</p>
 
         <div className="mt-6 overflow-x-auto">
@@ -126,7 +126,7 @@ export default function MetasGerente() {
             <thead className="bg-muted/60">
               <tr>
                 {['Vendedor', 'Meta', 'Realizado', 'Projeção', 'Atingimento', 'Status'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-xs font-bold uppercase tracking-widest text-muted-foreground">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -137,7 +137,7 @@ export default function MetasGerente() {
                 return (
                   <tr key={m.id}>
                     <td className="px-4 py-3">
-                      <p className="truncate font-black text-foreground">{m.name}</p>
+                      <p className="truncate font-bold text-foreground">{m.name}</p>
                     </td>
                     <td className="px-4 py-3 text-center font-mono tabular-nums">{m.meta}</td>
                     <td className="px-4 py-3 text-center font-mono tabular-nums text-status-success">{m.realizado}</td>
@@ -147,11 +147,11 @@ export default function MetasGerente() {
                         <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
                           <div className={cn('h-full rounded-full transition-all', status.bar)} style={{ width: `${Math.min(att, 100)}%` }} />
                         </div>
-                        <span className="w-9 text-right text-xs font-black text-muted-foreground tabular-nums">{att}%</span>
+                        <span className="w-9 text-right text-xs font-bold text-muted-foreground tabular-nums">{att}%</span>
                       </div>
                     </td>
                     <td className="px-4 py-3">
-                      <span className={cn('inline-flex rounded-full px-3 py-0.5 text-xs font-black uppercase tracking-tight', status.pill)}>
+                      <span className={cn('inline-flex rounded-full px-3 py-0.5 text-xs font-bold uppercase tracking-tight', status.pill)}>
                         {status.label}
                       </span>
                     </td>

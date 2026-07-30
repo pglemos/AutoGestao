@@ -47,7 +47,7 @@ export function CreateStoreModal({ open, newStore, setNewStore, creating, onClos
             required
             value={newStore.name}
             onChange={event => setNewStore(prev => ({ ...prev, name: event.target.value.toUpperCase() }))}
-            className="!h-14 font-black uppercase tracking-widest"
+            className="!h-14 font-bold uppercase tracking-widest"
           />
         </label>
         <label className="space-y-mx-xs block">

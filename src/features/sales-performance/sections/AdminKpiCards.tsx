@@ -50,13 +50,13 @@ export function AdminKpiCards({ metrics }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.05 }}
         >
-          <Card className="p-mx-lg border-none hover:shadow-mx-lg transition-all group relative overflow-hidden bg-white min-h-mx-36">
+          <Card className="p-mx-lg border-none hover:shadow-sm transition-all group relative overflow-hidden bg-white min-h-mx-36">
             <div className="flex items-center gap-mx-md relative z-10">
               <div
                 className={cn(
-                  'w-mx-14 h-mx-14 rounded-mx-xl flex items-center justify-center border shadow-inner transition-transform group-hover:scale-110',
+                  'w-mx-14 h-mx-14 rounded-2xl flex items-center justify-center border shadow-none transition-transform group-hover:scale-110',
                   stat.color === 'brand'
-                    ? 'bg-mx-indigo-50 border-mx-indigo-100 text-brand-primary'
+                    ? 'bg-mx-indigo-50 border-mx-indigo-100 text-emerald-600'
                     : stat.color === 'info'
                       ? 'bg-status-info-surface border-status-info/20 text-status-info'
                       : stat.color === 'warning'

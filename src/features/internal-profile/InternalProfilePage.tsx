@@ -9,7 +9,7 @@ import { useInternalProfileController } from './hooks/useInternalProfileControll
 function ProfileAvatar({ url, name }: { url: string; name: string }) {
   const [erro, setErro] = useState(false)
   const initials = name.split(' ').map(n => n[0]).slice(0, 2).join('').toUpperCase()
-  if (erro) return <div className="flex h-32 w-32 items-center justify-center rounded-2xl bg-brand-primary text-3xl font-black text-white">{initials}</div>
+  if (erro) return <div className="flex h-32 w-32 items-center justify-center rounded-2xl bg-emerald-600 text-3xl font-bold text-white">{initials}</div>
   return <img className="h-32 w-32 rounded-2xl object-cover" src={url} alt={`Avatar de ${name}`} onError={() => setErro(true)} />
 }
 

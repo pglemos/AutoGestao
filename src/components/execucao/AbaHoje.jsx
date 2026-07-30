@@ -190,7 +190,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           </div>
 
           <div className="flex items-center gap-2.5 mb-2">
-            <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-[12px] font-black text-slate-500 flex-shrink-0">
+            <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-[12px] font-bold text-slate-500 flex-shrink-0">
               {avatarIniciais(op.nome_cliente_snapshot)}
             </div>
             <div className="min-w-0">
@@ -246,7 +246,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
 
         {/* Avatar + nome + info */}
         <div className="flex items-center gap-3 flex-1 min-w-0">
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[12px] font-black text-slate-500 flex-shrink-0">
+          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[12px] font-bold text-slate-500 flex-shrink-0">
             {avatarIniciais(op.nome_cliente_snapshot)}
           </div>
           <div className="min-w-0 flex-1">
@@ -537,7 +537,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                     : "bg-white text-slate-600 border-slate-200 hover:border-[#005BFF] hover:text-[#005BFF]"
                 }`}>
                 {f.label}
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-black ${ativo ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"}`}>
+                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${ativo ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"}`}>
                   {count}
                 </span>
               </button>
@@ -550,7 +550,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
       <div>
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
           <div>
-            <h3 className="text-[14px] font-black text-[#0F172A]">O que você não pode deixar de fazer hoje</h3>
+            <h3 className="text-[14px] font-bold text-[#0F172A]">O que você não pode deixar de fazer hoje</h3>
             <p className="text-[12px] text-slate-400">Atividades vencidas ou previstas para hoje. Execute e registre o resultado.</p>
           </div>
           <div className="flex items-center gap-2">
@@ -585,7 +585,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
               <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
                 <CheckCircle2 className="w-7 h-7 text-[#005BFF]" />
               </div>
-              <p className="text-[16px] font-black text-[#0F172A] mb-1">Tela limpa por hoje.</p>
+              <p className="text-[16px] font-bold text-[#0F172A] mb-1">Tela limpa por hoje.</p>
               <p className="text-[13px] text-slate-400 mb-5 max-w-sm mx-auto">
                 Você não possui oportunidades pendentes para executar agora.
               </p>
@@ -624,7 +624,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
             {listaHoje.length > 0 && listaFiltrada.length === 0 && filtroTipo === "todos" && (
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-10 text-center">
                 <CheckCircle2 className="w-10 h-10 text-[#005BFF] mx-auto mb-3" />
-                <p className="text-[15px] font-black text-[#0F172A] mb-1">Todas as oportunidades de hoje foram resolvidas.</p>
+                <p className="text-[15px] font-bold text-[#0F172A] mb-1">Todas as oportunidades de hoje foram resolvidas.</p>
                 <p className="text-[12px] text-slate-400 mb-5 max-w-sm mx-auto">
                   Novas oportunidades aparecerão aqui conforme sua agenda, carteira e processos comerciais forem atualizados.
                 </p>

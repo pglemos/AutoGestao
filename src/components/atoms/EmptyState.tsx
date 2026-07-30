@@ -20,7 +20,7 @@ const emptyStateVariants = cva(
 )
 
 const iconSizeVariants = cva(
-  "text-text-tertiary",
+  "text-gray-500",
   {
     variants: {
       size: {
@@ -63,7 +63,7 @@ const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
           </Typography>
         )}
         {nextStep && (
-          <div className="mt-mx-xs max-w-md rounded-mx-xl border border-border-default bg-surface-alt px-mx-md py-mx-sm text-left">
+          <div className="mt-mx-xs max-w-md rounded-2xl border border-gray-200 bg-gray-50 px-mx-md py-mx-sm text-left">
             <Typography variant="caption" className="block">
               Próximo passo
             </Typography>

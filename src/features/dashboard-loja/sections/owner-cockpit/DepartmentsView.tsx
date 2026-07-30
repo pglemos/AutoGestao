@@ -18,9 +18,9 @@ export function DepartmentsView({
     return (
       <div className="space-y-mx-md">
         <SectionTitle title="Departamentos" subtitle="Marketing, produto, financeiro, RH, operações e comercial com indicators, rotina e playbook." />
-        <div className="rounded-mx-xl border border-border-subtle bg-white p-mx-lg" role="status">
-          <strong className="text-base font-black text-text-primary">Nenhum departamento disponível</strong>
-          <p className="text-sm text-text-secondary">Os dados de departamentos para esta unidade não estão configurados.</p>
+        <div className="rounded-2xl border border-gray-100 bg-white p-mx-lg" role="status">
+          <strong className="text-base font-bold text-gray-800">Nenhum departamento disponível</strong>
+          <p className="text-sm text-gray-500">Os dados de departamentos para esta unidade não estão configurados.</p>
         </div>
       </div>
     )
@@ -39,13 +39,13 @@ export function DepartmentsView({
                 <Typography variant="h3" className="text-xl">{selectedDepartment.name}</Typography>
                 <Typography variant="p" tone="muted" className="mt-1 font-bold">{selectedDepartment.detail}</Typography>
               </div>
-              <span className={cn('w-fit rounded-mx-md border px-mx-sm py-mx-xs text-mx-tiny font-black', toneClasses[selectedDepartment.tone].soft)}>
+              <span className={cn('w-fit rounded-xl border px-mx-sm py-mx-xs text-mx-tiny font-bold', toneClasses[selectedDepartment.tone].soft)}>
                 Score {selectedDepartment.score ?? '--'} · {selectedDepartment.status}
               </span>
             </div>
             <div className="mt-mx-md grid grid-cols-1 gap-mx-sm md:grid-cols-2 xl:grid-cols-4">
               {selectedDepartment.dashboardCards.map(card => (
-                <div key={card.label} className="rounded-mx-xl border border-border-default bg-white p-mx-md">
+                <div key={card.label} className="rounded-2xl border border-gray-200 bg-white p-mx-md">
                   <Typography variant="tiny" tone="muted" className="block">{card.label}</Typography>
                   <Typography variant="h3" className="mt-mx-xs tabular-nums">{formatPlanningValue(card.value, card.unit)}</Typography>
                   <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold">
@@ -56,7 +56,7 @@ export function DepartmentsView({
             </div>
             <div className="mt-mx-lg overflow-x-auto">
               <table className="min-w-[760px] w-full text-sm">
-                <thead className="bg-surface-alt text-left text-mx-tiny font-black uppercase text-text-secondary">
+                <thead className="bg-gray-50 text-left text-mx-tiny font-bold uppercase text-gray-500">
                   <tr>
                     <th className="px-mx-sm py-mx-sm">Indicador</th>
                     <th className="px-mx-sm py-mx-sm">Meta</th>
@@ -68,11 +68,11 @@ export function DepartmentsView({
                 <tbody className="divide-y divide-border-subtle">
                   {selectedDepartment.indicators.map(indicator => (
                     <tr key={indicator.code}>
-                      <td className="px-mx-sm py-mx-sm font-black">{indicator.label}</td>
+                      <td className="px-mx-sm py-mx-sm font-bold">{indicator.label}</td>
                       <td className="px-mx-sm py-mx-sm font-bold tabular-nums">{formatPlanningValue(indicator.meta, indicator.unit)}</td>
                       <td className="px-mx-sm py-mx-sm font-bold tabular-nums">{formatPlanningValue(indicator.realizado, indicator.unit)}</td>
                       <td className="px-mx-sm py-mx-sm font-bold tabular-nums">{formatPlanningValue(indicator.anoAnterior, indicator.unit)}</td>
-                      <td className="px-mx-sm py-mx-sm font-black tabular-nums">{indicator.score ?? '--'}</td>
+                      <td className="px-mx-sm py-mx-sm font-bold tabular-nums">{indicator.score ?? '--'}</td>
                     </tr>
                   ))}
                 </tbody>

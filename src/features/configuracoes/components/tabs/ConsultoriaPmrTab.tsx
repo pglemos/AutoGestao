@@ -9,9 +9,9 @@ export function ConsultoriaPmrTab() {
     return (
         <div className="space-y-mx-lg">
             <Card className="p-mx-lg border-none bg-pure-black text-white relative overflow-hidden">
-                <div className="absolute -right-20 -top-20 w-mx-48 h-mx-48 bg-brand-primary/20 rounded-mx-full blur-3xl pointer-events-none" />
+                <div className="absolute -right-20 -top-20 w-mx-48 h-mx-48 bg-emerald-600/20 rounded-mx-full blur-3xl pointer-events-none" />
                 <div className="relative z-10 flex items-start gap-mx-md">
-                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-white/10 border border-white/10 flex items-center justify-center text-brand-primary">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-emerald-600">
                         <Sparkles size={28} />
                     </div>
                     <div className="flex-1 space-y-mx-xs">
@@ -45,7 +45,7 @@ export function ConsultoriaPmrTab() {
             </div>
 
             {/* Embed da view existente */}
-            <div className="rounded-mx-2xl overflow-hidden border border-border-default">
+            <div className="rounded-2xl overflow-hidden border border-gray-200">
                 <ConsultingParametersView />
             </div>
         </div>
@@ -56,7 +56,7 @@ function ShortcutCard({ icon, label, desc, badge }: { icon: React.ReactNode; lab
     return (
         <Card className="p-mx-md border-none bg-white">
             <div className="flex items-start gap-mx-sm">
-                <div className="w-mx-12 h-mx-12 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center">
+                <div className="w-mx-12 h-mx-12 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center">
                     {icon}
                 </div>
                 <div className="flex-1 min-w-0">

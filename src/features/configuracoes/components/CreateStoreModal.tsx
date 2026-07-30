@@ -57,7 +57,7 @@ export function CreateStoreModal({ open, onClose, onSubmit }: CreateStoreModalPr
                 <div className="space-y-mx-xs">
                     <Typography variant="tiny" tone="muted" className="px-1">Nome da Loja</Typography>
                     <div className="relative">
-                        <Building2 size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
+                        <Building2 size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
                         <Input
                             id="create-store-name"
                             name="store-name"
@@ -65,7 +65,7 @@ export function CreateStoreModal({ open, onClose, onSubmit }: CreateStoreModalPr
                             value={name}
                             onChange={e => setName(e.target.value.toUpperCase())}
                             placeholder="EX: MX FORTALEZA"
-                            className="!pl-mx-12 !h-mx-14 font-black uppercase tracking-widest"
+                            className="!pl-mx-12 !h-mx-14 font-bold uppercase tracking-widest"
                         />
                     </div>
                 </div>
@@ -73,7 +73,7 @@ export function CreateStoreModal({ open, onClose, onSubmit }: CreateStoreModalPr
                 <div className="space-y-mx-xs">
                     <Typography variant="tiny" tone="muted" className="px-1">E-mail do Gestor (opcional)</Typography>
                     <div className="relative">
-                        <Mail size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
+                        <Mail size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
                         <Input
                             id="create-store-manager-email"
                             name="manager-email"
@@ -86,7 +86,7 @@ export function CreateStoreModal({ open, onClose, onSubmit }: CreateStoreModalPr
                     </div>
                 </div>
 
-                <div className="bg-mx-indigo-50 border border-mx-indigo-100 rounded-mx-xl p-mx-md">
+                <div className="bg-mx-indigo-50 border border-mx-indigo-100 rounded-2xl p-mx-md">
                     <Typography variant="tiny" tone="brand" className="leading-relaxed">
                         Ao criar a loja, o sistema provisiona automaticamente:
                         regras de entrega de e-mails, regras de meta padrão (modo calendário, projeção uniforme),

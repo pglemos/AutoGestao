@@ -183,11 +183,11 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
                   type="button"
                   onClick={() => setActiveKind(kind)}
                   className={cn(
-                    'min-h-mx-14 rounded-mx-xl px-4 text-left transition-all',
-                    active ? 'bg-brand-primary text-white shadow-mx-sm' : 'bg-surface-alt text-text-secondary hover:bg-border-default',
+                    'min-h-mx-14 rounded-2xl px-4 text-left transition-all',
+                    active ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-gray-500 hover:bg-border-default',
                   )}
                 >
-                  <span className="block text-xs font-black uppercase tracking-widest">{KIND_META[kind].label}</span>
+                  <span className="block text-xs font-bold uppercase tracking-widest">{KIND_META[kind].label}</span>
                   <span className="mt-1 block text-mx-micro font-bold uppercase tracking-widest opacity-70">{KIND_META[kind].description}</span>
                 </button>
               )
@@ -203,7 +203,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
                 refetch().finally(() => setRefreshing(false))
               }}
               aria-label="Atualizar assuntos da agenda"
-              className="rounded-mx-xl bg-white"
+              className="rounded-2xl bg-white"
             >
               <RefreshCw size={18} className={cn(refreshing && 'animate-spin')} />
             </Button>
@@ -245,7 +245,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
             <option value="todos">Todos</option>
           </Select>
           <div className="relative min-w-0 sm:col-span-2">
-            <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" aria-hidden="true" />
+            <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
             <Input
               placeholder="BUSCAR OPÇÃO..."
               value={searchTerm}
@@ -275,7 +275,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
       <section aria-live="polite">
         {loading ? (
           <Card className="border-none bg-white p-mx-lg">
-            <div className="flex items-center gap-mx-sm text-brand-primary">
+            <div className="flex items-center gap-mx-sm text-emerald-600">
               <RefreshCw size={18} className="animate-spin" />
               <Typography variant="caption" className="">Carregando catálogo...</Typography>
             </div>
@@ -305,10 +305,10 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
                     </div>
                     {mayManage && (
                       <div className="grid grid-cols-3 gap-mx-xs sm:flex">
-                        <Button variant="ghost" size="sm" onClick={() => openEditForm(option)} className="text-brand-primary">
+                        <Button variant="ghost" size="sm" onClick={() => openEditForm(option)} className="text-emerald-600">
                           <Edit3 size={14} className="mr-2" /> EDITAR
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleArchive(option)} className="text-text-secondary" disabled={option.status === 'arquivado'}>
+                        <Button variant="ghost" size="sm" onClick={() => handleArchive(option)} className="text-gray-500" disabled={option.status === 'arquivado'}>
                           <Archive size={14} className="mr-2" /> ARQUIVAR
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => handleDelete(option)} className="text-status-error">

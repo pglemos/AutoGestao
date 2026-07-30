@@ -80,7 +80,7 @@ export function AgendaHeader({
   }
 
   return (
-    <header className="flex shrink-0 flex-col gap-3 border-b border-border-strong pb-3 bg-white">
+    <header className="flex shrink-0 flex-col gap-3 border-b border-gray-200 pb-3 bg-white">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1">
@@ -88,14 +88,14 @@ export function AgendaHeader({
               type="button"
               onClick={onPrevMonth}
               aria-label="Anterior"
-              className="flex h-8 w-8 items-center justify-center rounded-mx-lg text-text-secondary hover:bg-surface-alt hover:text-text-primary transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-colors"
             >
               <ChevronLeft size={18} />
             </button>
             <button
               type="button"
               onClick={onTodayClick}
-              className="rounded-mx-lg border border-border-strong bg-white px-3 py-1.5 text-xs font-bold text-text-primary hover:bg-surface-alt transition-colors"
+              className="rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold text-gray-800 hover:bg-gray-50 transition-colors"
             >
               Hoje
             </button>
@@ -103,13 +103,13 @@ export function AgendaHeader({
               type="button"
               onClick={onNextMonth}
               aria-label="Próximo"
-              className="flex h-8 w-8 items-center justify-center rounded-mx-lg text-text-secondary hover:bg-surface-alt hover:text-text-primary transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-colors"
             >
               <ChevronRight size={18} />
             </button>
           </div>
 
-          <h1 className={cn('text-lg text-text-primary capitalize', 'font-semibold')}>
+          <h1 className={cn('text-lg text-gray-800 capitalize', 'font-semibold')}>
             {monthLabel}
           </h1>
         </div>
@@ -117,7 +117,7 @@ export function AgendaHeader({
         <div className="flex flex-wrap items-center gap-2">
           <AgendaSearchBar searchQuery={searchQuery} onSearchChange={onSearchChange} />
 
-          <div className="flex rounded-mx-lg border border-border-strong bg-surface-alt/60 p-0.5 shrink-0">
+          <div className="flex rounded-xl border border-gray-200 bg-gray-50/60 p-0.5 shrink-0">
             {VIEW_OPTIONS.map((option) => (
               <button
                 key={option.key}
@@ -125,10 +125,10 @@ export function AgendaHeader({
                 onClick={() => handleViewModeChange(option.key)}
                 aria-pressed={calendarViewMode === option.key}
                 className={cn(
-                  'flex items-center gap-1 rounded-mx-md px-2.5 py-1.5 text-xs font-bold transition-all',
+                  'flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-bold transition-all',
                   calendarViewMode === option.key
-                    ? 'bg-brand-primary text-white shadow-2xs'
-                    : 'text-text-secondary hover:bg-surface-alt hover:text-text-primary',
+                    ? 'bg-emerald-600 text-white shadow-2xs'
+                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800',
                 )}
               >
                 {option.key === 'list' && <List size={13} />}
@@ -143,10 +143,10 @@ export function AgendaHeader({
                 type="button"
                 aria-label="Filtros"
                 className={cn(
-                  'relative flex h-8 items-center gap-1.5 rounded-mx-lg border px-2.5 text-xs font-bold transition-colors',
+                  'relative flex h-8 items-center gap-1.5 rounded-xl border px-2.5 text-xs font-bold transition-colors',
                   activeFilters > 0
-                    ? 'border-brand-primary bg-brand-primary/10 text-brand-primary'
-                    : 'border-border-strong bg-white text-text-secondary hover:bg-surface-alt hover:text-text-primary',
+                    ? 'border-brand-primary bg-emerald-600/10 text-emerald-600'
+                    : 'border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-800',
                 )}
               >
                 <Filter size={14} />
@@ -163,15 +163,15 @@ export function AgendaHeader({
                 side="bottom"
                 align="end"
                 sideOffset={8}
-                className="z-[90] w-72 rounded-mx-xl border border-border-strong bg-white p-4 shadow-xl animate-in fade-in-80"
+                className="z-[90] w-72 rounded-2xl border border-gray-200 bg-white p-4 shadow-xl animate-in fade-in-80"
               >
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-between border-b border-border-subtle pb-2">
-                    <span className="text-xs font-bold uppercase tracking-wider text-text-tertiary">
+                  <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                    <span className="text-xs font-bold uppercase tracking-wider text-gray-500">
                       Filtros
                     </span>
                     {activeFilters > 0 && (
-                      <button type="button" onClick={clearFilters} className="text-xs text-brand-primary font-semibold hover:underline">
+                      <button type="button" onClick={clearFilters} className="text-xs text-emerald-600 font-semibold hover:underline">
                         Limpar
                       </button>
                     )}
@@ -179,14 +179,14 @@ export function AgendaHeader({
 
                   {canViewAllAgendas && (
                     <div>
-                      <label htmlFor="agenda-consultant-select" className="block text-xs font-semibold text-text-secondary mb-1">
+                      <label htmlFor="agenda-consultant-select" className="block text-xs font-semibold text-gray-500 mb-1">
                         Consultor
                       </label>
                       <Select
                         id="agenda-consultant-select"
                         value={consultantFilter}
                         onChange={(event) => setConsultantFilter(event.target.value)}
-                        className="!h-8 !rounded-mx-lg text-xs"
+                        className="!h-8 !rounded-xl text-xs"
                       >
                         <option value="todos">Todos os consultores</option>
                         {consultants.map((consultant) => (
@@ -197,7 +197,7 @@ export function AgendaHeader({
                   )}
 
                   <div>
-                    <span className="block text-xs font-semibold text-text-secondary mb-1">
+                    <span className="block text-xs font-semibold text-gray-500 mb-1">
                       Status
                     </span>
                     <div className="flex flex-wrap gap-1">
@@ -207,10 +207,10 @@ export function AgendaHeader({
                           type="button"
                           onClick={() => setStatusFilter(filter.key)}
                           className={cn(
-                            'rounded-mx-md px-2.5 py-1 text-xs font-medium transition-colors',
+                            'rounded-xl px-2.5 py-1 text-xs font-medium transition-colors',
                             statusFilter === filter.key
-                              ? 'bg-brand-primary text-white font-bold'
-                              : 'border border-border-strong bg-white text-text-secondary hover:bg-surface-alt',
+                              ? 'bg-emerald-600 text-white font-bold'
+                              : 'border border-gray-200 bg-white text-gray-500 hover:bg-gray-50',
                           )}
                         >
                           {filter.label}
@@ -235,7 +235,7 @@ export function AgendaHeader({
 
           <DropdownMenu.Root>
             <DropdownMenu.Trigger asChild>
-              <Button className="h-8 px-3 font-bold text-xs text-white shadow-xs hover:bg-brand-primary/90">
+              <Button className="h-8 px-3 font-bold text-xs text-white shadow-xs hover:bg-emerald-600/90">
                 <Plus size={15} className="mr-1" />
                 Criar
                 <ChevronDown size={13} className="ml-1 opacity-80" />
@@ -245,24 +245,24 @@ export function AgendaHeader({
               <DropdownMenu.Content
                 align="end"
                 sideOffset={6}
-                className="z-[90] w-52 rounded-mx-xl border border-border-strong bg-white p-1.5 shadow-xl animate-in fade-in-80"
+                className="z-[90] w-52 rounded-2xl border border-gray-200 bg-white p-1.5 shadow-xl animate-in fade-in-80"
               >
                 <DropdownMenu.Item
                   onSelect={onCreateVisit}
-                  className="flex cursor-pointer items-center gap-2 rounded-mx-lg px-3 py-2 text-xs font-bold text-text-primary outline-none transition-colors hover:bg-surface-alt"
+                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 outline-none transition-colors hover:bg-gray-50"
                 >
-                  <CalendarDays size={15} className="text-brand-primary" /> Agendar Visita
+                  <CalendarDays size={15} className="text-emerald-600" /> Agendar Visita
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
                   onSelect={onCreateEvent}
-                  className="flex cursor-pointer items-center gap-2 rounded-mx-lg px-3 py-2 text-xs font-bold text-text-primary outline-none transition-colors hover:bg-surface-alt"
+                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 outline-none transition-colors hover:bg-gray-50"
                 >
                   <Users size={15} className="text-status-info" /> Evento / Aula
                 </DropdownMenu.Item>
                 <DropdownMenu.Separator className="my-1 h-px bg-border-default" />
                 <DropdownMenu.Item
                   onSelect={onCreateBlock}
-                  className="flex cursor-pointer items-center gap-2 rounded-mx-lg px-3 py-2 text-xs font-bold text-text-primary outline-none transition-colors hover:bg-surface-alt text-status-error"
+                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-gray-800 outline-none transition-colors hover:bg-gray-50 text-status-error"
                 >
                   <Ban size={15} /> Bloquear Agenda
                 </DropdownMenu.Item>

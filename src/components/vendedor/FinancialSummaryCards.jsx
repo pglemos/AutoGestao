@@ -13,7 +13,7 @@ function SummaryCard({ icon: IconComp, iconColor, iconBg, label, value, sub }) {
         </div>
       </div>
       <p className="text-xs font-medium text-slate-500 mb-1">{label}</p>
-      <p className={`text-2xl font-black tabular-nums ${isZero ? "text-slate-300" : "text-mx-navy"}`}>
+      <p className={`text-2xl font-bold tabular-nums ${isZero ? "text-slate-300" : "text-mx-navy"}`}>
         {formatBRL(value)}
       </p>
       <p className={`text-xs mt-1.5 ${isZero ? "text-slate-300" : "text-slate-500"}`}>

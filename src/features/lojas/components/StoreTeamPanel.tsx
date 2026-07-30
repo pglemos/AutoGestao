@@ -259,7 +259,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
 
   const getVigenciaStatus = (m: TeamMember) => {
     const today = new Date().toISOString().slice(0, 10)
-    if (!m.is_active) return { label: 'INATIVO', variant: 'outline' as const, color: 'text-text-tertiary border-border-default bg-surface-alt' }
+    if (!m.is_active) return { label: 'INATIVO', variant: 'outline' as const, color: 'text-gray-500 border-gray-200 bg-gray-50' }
     if (m.ended_at && m.ended_at.slice(0, 10) < today) return { label: 'ENCERRADO', variant: 'danger' as const, color: 'text-status-error border-status-error/10 bg-status-error-surface' }
     return { label: 'ATIVO', variant: 'success' as const, color: 'text-status-success border-status-success/10 bg-status-success-surface' }
   }
@@ -338,7 +338,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
   }, [canApprovePreRegistrations, executeReviewPreRegistration, requestConfirmation])
 
   if (!storeId) return (
-    <section className="w-full rounded-mx-3xl border border-border-default bg-white p-mx-xl text-center shadow-mx-sm">
+    <section className="w-full rounded-2xl border border-gray-200 bg-white p-mx-xl text-center shadow-sm">
       <Typography variant="h2" className="tracking-tight">Selecione uma loja</Typography>
       <Typography variant="caption" tone="muted" className="mt-2 block">
         A equipe agora é administrada dentro do dashboard operacional de cada loja.
@@ -348,7 +348,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
 
   if (loading) return (
     <section className="w-full flex flex-col gap-mx-lg animate-in fade-in duration-500 overflow-hidden">
-        <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border-default pb-10">
+        <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10">
             <div className="space-y-mx-xs">
                 <Skeleton className="h-mx-10 w-mx-64" />
                 <div className="flex gap-mx-sm">
@@ -357,8 +357,8 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
                 </div>
             </div>
             <div className="flex gap-mx-sm">
-                <Skeleton className="h-mx-14 w-mx-14 rounded-mx-xl" />
-                <Skeleton className="h-mx-14 w-mx-48 rounded-mx-xl" />
+                <Skeleton className="h-mx-14 w-mx-14 rounded-2xl" />
+                <Skeleton className="h-mx-14 w-mx-48 rounded-2xl" />
             </div>
         </header>
 
@@ -372,7 +372,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
         <div className="flex-1 mt-mx-lg">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-mx-lg">
                 {[1,2,3,4,5,6,7,8].map(i => (
-                    <div key={i} className="h-mx-96 rounded-mx-4xl bg-white/50 border-2 border-dashed border-border-default flex flex-col items-center justify-center p-mx-xl">
+                    <div key={i} className="h-mx-96 rounded-mx-4xl bg-white/50 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center p-mx-xl">
                         <Skeleton className="w-mx-24 h-mx-24 rounded-mx-4xl mb-6" />
                         <Skeleton className="h-mx-sm w-full mb-2" />
                         <Skeleton className="h-mx-xs w-1/2" />
@@ -397,14 +397,14 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
               <div className="flex flex-col sm:flex-row items-center gap-mx-sm w-full lg:w-auto">
                 <div className="relative group w-full sm:w-mx-96">
                   <label htmlFor="search-specialist" className="sr-only">Buscar integrante da equipe</label>
-                  <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" />
+                  <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" />
                   <Input
                     id="search-specialist"
                     name="search-specialist"
                     placeholder="Buscar por nome ou perfil"
                     value={searchTerm}
                     onChange={e => setSearchTerm(e.target.value)}
-                    className="!pl-12 !h-mx-14 uppercase font-black tracking-widest text-mx-tiny"
+                    className="!pl-12 !h-mx-14 uppercase font-bold tracking-widest text-mx-tiny"
                   />
                 </div>
                 <div className="flex w-full sm:w-auto gap-mx-sm">
@@ -421,7 +421,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
                   {canCreateMembers && (
                     <Button
                       onClick={() => setIsUserModalOpen(true)}
-                      className="flex-1 sm:flex-none h-mx-14 px-8 rounded-mx-xl bg-brand-secondary !text-white hover:bg-brand-secondary/90 font-black uppercase tracking-widest text-mx-tiny shadow-mx-lg"
+                      className="flex-1 sm:flex-none h-mx-14 px-8 rounded-2xl bg-gray-900 !text-white hover:bg-gray-900/90 font-bold uppercase tracking-widest text-mx-tiny shadow-sm"
                     >
                       <UserPlus size={18} className="mr-2" /> NOVO INTEGRANTE
                     </Button>

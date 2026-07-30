@@ -131,11 +131,11 @@ function OportunidadeCard({
     <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-xl">
       <div className="bg-gradient-to-br from-[#005BFF] to-blue-700 p-6 text-white">
         <div className="flex items-center gap-4">
-          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-xl font-black">
+          <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-xl font-bold">
             {iniciais}
           </div>
           <div className="min-w-0">
-            <p className="truncate text-xl font-black">{cliente.nome}</p>
+            <p className="truncate text-xl font-bold">{cliente.nome}</p>
             <p className="mt-0.5 truncate text-sm text-blue-200">{canal} · {veiculo || cliente.empresa || 'Veículo não informado'}</p>
           </div>
         </div>
@@ -289,7 +289,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
             <Typography variant="h2">Nenhuma oportunidade ativa para atacar agora.</Typography>
           ) : (
             <div>
-              <p className="text-3xl font-black text-[#031B3D]">🎉 Excelente!</p>
+              <p className="text-3xl font-bold text-[#031B3D]">🎉 Excelente!</p>
               <p className="mt-2 text-sm text-slate-500">Você concluiu todas as oportunidades prioritárias de hoje.</p>
             </div>
           )}
@@ -301,8 +301,8 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                 { label: 'Propostas enviadas', value: stats.propostas, tone: 'bg-amber-50 text-amber-600' },
                 { label: 'Recuperações', value: stats.recuperacoes, tone: 'bg-purple-50 text-purple-600' },
               ].map(s => (
-                <div key={s.label} className={`rounded-mx-2xl p-mx-md ${s.tone}`}>
-                  <p className="text-2xl font-black">{s.value}</p>
+                <div key={s.label} className={`rounded-2xl p-mx-md ${s.tone}`}>
+                  <p className="text-2xl font-bold">{s.value}</p>
                   <p className="mt-1 text-[11px] font-semibold leading-snug">{s.label}</p>
                 </div>
               ))}
@@ -322,7 +322,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
     <div className="fixed inset-0 z-[200] overflow-y-auto bg-[#F0F4FF]">
       <div className="sticky top-0 z-10 bg-[#031B3D] px-mx-md py-mx-sm text-white shadow-lg">
         <div className="mx-auto flex max-w-xl flex-wrap items-center gap-3 sm:flex-nowrap">
-          <span className="flex shrink-0 items-center gap-2 text-sm font-black tracking-wide">
+          <span className="flex shrink-0 items-center gap-2 text-sm font-bold tracking-wide">
             <span className="grid h-7 w-7 place-items-center rounded-lg bg-[#005BFF]">
               <Zap size={16} className="text-white" />
             </span>
@@ -359,7 +359,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
           <Card className="overflow-hidden p-0">
             <div className="bg-gradient-to-br from-[#005BFF] to-blue-700 p-mx-lg text-white">
               <div className="flex items-center gap-mx-sm">
-                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/20 text-xl font-black">
+                <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/20 text-xl font-bold">
                   {(clienteAtual.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                 </span>
                 <div className="min-w-0">
@@ -370,7 +370,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
             </div>
 
             <div className="space-y-mx-md p-mx-lg">
-              <div className="rounded-mx-lg border border-amber-200 bg-amber-50 p-mx-sm">
+              <div className="rounded-xl border border-amber-200 bg-amber-50 p-mx-sm">
                 <Typography variant="caption" className="font-bold text-amber-600">Próxima ação</Typography>
                 <Typography variant="p" className="mt-1 font-semibold">{clienteAtual.proxima_acao || 'Definir próximo passo'}</Typography>
               </div>
@@ -384,7 +384,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                       type="button"
                       title={t.desc}
                       onClick={() => { setTom(t.id); setScriptEditado(null) }}
-                      className={`rounded-mx-lg border px-2.5 py-1 text-[11px] font-semibold transition-all ${
+                      className={`rounded-xl border px-2.5 py-1 text-[11px] font-semibold transition-all ${
                         tom === t.id
                           ? 'border-[#005BFF] bg-[#005BFF] text-white'
                           : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:text-[#005BFF]'
@@ -399,23 +399,23 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                   value={script}
                   onChange={event => setScriptEditado(event.target.value)}
                   rows={5}
-                  className="w-full resize-none rounded-mx-lg border border-slate-200 bg-slate-50 p-mx-sm text-sm text-slate-900 outline-none focus:border-[#005BFF] focus:ring-4 focus:ring-blue-100"
+                  className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 p-mx-sm text-sm text-slate-900 outline-none focus:border-[#005BFF] focus:ring-4 focus:ring-blue-100"
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-mx-xs">
                 {tel && (
-                  <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 rounded-mx-lg border border-border-subtle bg-white py-mx-sm hover:bg-surface-alt">
-                    <Phone size={16} className="text-text-secondary" />
+                  <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white py-mx-sm hover:bg-gray-50">
+                    <Phone size={16} className="text-gray-500" />
                     <Typography variant="caption" className="font-semibold">Ligar</Typography>
                   </a>
                 )}
-                <button type="button" onClick={handleCopiar} className="flex flex-col items-center gap-1.5 rounded-mx-lg border border-border-subtle bg-white py-mx-sm hover:bg-surface-alt">
-                  <Copy size={16} className="text-text-secondary" />
+                <button type="button" onClick={handleCopiar} className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white py-mx-sm hover:bg-gray-50">
+                  <Copy size={16} className="text-gray-500" />
                   <Typography variant="caption" className="font-semibold">Copiar</Typography>
                 </button>
-                <button type="button" onClick={() => onAbrirFicha(clienteAtual.id)} className="flex flex-col items-center gap-1.5 rounded-mx-lg border border-border-subtle bg-white py-mx-sm hover:bg-surface-alt">
-                  <FileText size={16} className="text-text-secondary" />
+                <button type="button" onClick={() => onAbrirFicha(clienteAtual.id)} className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white py-mx-sm hover:bg-gray-50">
+                  <FileText size={16} className="text-gray-500" />
                   <Typography variant="caption" className="font-semibold">Ficha</Typography>
                 </button>
               </div>
@@ -428,7 +428,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                 </a>
               )}
 
-              <div className={voltouDoWhatsApp ? 'rounded-mx-lg ring-4 ring-blue-100 transition-shadow' : ''}>
+              <div className={voltouDoWhatsApp ? 'rounded-xl ring-4 ring-blue-100 transition-shadow' : ''}>
                 <Typography variant="caption" tone="muted" className="mb-mx-xs block font-semibold">
                   {voltouDoWhatsApp ? 'Como terminou esse contato?' : 'Resultado do contato'}
                 </Typography>
@@ -439,7 +439,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                       type="button"
                       disabled={salvando}
                       onClick={() => handleResultado(card)}
-                      className={`flex flex-col items-center gap-1 rounded-mx-lg border-2 px-2 py-3 transition-all disabled:opacity-50 ${COR_MAP[card.cor]}`}
+                      className={`flex flex-col items-center gap-1 rounded-xl border-2 px-2 py-3 transition-all disabled:opacity-50 ${COR_MAP[card.cor]}`}
                     >
                       <span className="text-2xl leading-none">{card.emoji}</span>
                       <span className="text-center text-[10px] font-semibold leading-tight">{card.label}</span>
@@ -448,7 +448,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                 </div>
               </div>
 
-              <button type="button" onClick={avancar} className="w-full text-center text-xs font-semibold text-text-tertiary hover:underline">
+              <button type="button" onClick={avancar} className="w-full text-center text-xs font-semibold text-gray-500 hover:underline">
                 Pular sem registrar resultado
               </button>
             </div>

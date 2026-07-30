@@ -22,7 +22,7 @@ export function TabNav<T extends string = string>({
   return (
     <nav
       className={cn(
-        'flex flex-wrap gap-mx-xs border-b border-border-subtle mb-mx-md overflow-visible',
+        'flex flex-wrap gap-mx-xs border-b border-gray-100 mb-mx-md overflow-visible',
         className
       )}
       role="tablist"
@@ -41,10 +41,10 @@ export function TabNav<T extends string = string>({
             aria-controls={panelId}
             onClick={() => onTabChange(key)}
             className={cn(
-              'px-mx-md py-mx-sm text-xs font-black uppercase tracking-mx-widest transition-all border-b-2 whitespace-nowrap',
+              'px-mx-md py-mx-sm text-xs font-bold uppercase tracking-mx-widest transition-all border-b-2 whitespace-nowrap',
               activeTab === key
-                ? 'border-brand-primary text-brand-primary bg-brand-primary/5'
-                : 'border-transparent text-text-tertiary hover:text-text-primary hover:bg-surface-alt'
+                ? 'border-brand-primary text-emerald-600 bg-emerald-600/5'
+                : 'border-transparent text-gray-500 hover:text-gray-800 hover:bg-gray-50'
             )}
           >
             {label}

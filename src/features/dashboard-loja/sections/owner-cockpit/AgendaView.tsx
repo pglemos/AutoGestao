@@ -28,15 +28,15 @@ export function AgendaView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
       <Card className="p-mx-lg">
         <div className="space-y-mx-sm">
           {priorities.length === 0 ? (
-            <div className="rounded-mx-xl border border-border-subtle bg-white p-mx-lg" role="status">
-              <strong className="text-base font-black text-text-primary">Nenhuma prioridade calculada</strong>
-              <p className="text-sm text-text-secondary">Não há alertas derivados dos dados atuais da loja.</p>
+            <div className="rounded-2xl border border-gray-100 bg-white p-mx-lg" role="status">
+              <strong className="text-base font-bold text-gray-800">Nenhuma prioridade calculada</strong>
+              <p className="text-sm text-gray-500">Não há alertas derivados dos dados atuais da loja.</p>
             </div>
           ) : (
             priorities.map((item, index) => {
               const classes = toneClasses[item.tone]
               return (
-                <div key={`${item.title}-${index}`} className={cn('rounded-mx-xl border p-mx-md', classes.soft)}>
+                <div key={`${item.title}-${index}`} className={cn('rounded-2xl border p-mx-md', classes.soft)}>
                   <Typography variant="p" className="">{item.title}</Typography>
                   <Typography variant="tiny" className="mt-mx-xs block font-bold opacity-80">{item.detail}</Typography>
                 </div>

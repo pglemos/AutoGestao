@@ -76,15 +76,15 @@ export function StoreFeedbackModal({
           initial={{ opacity: 0, scale: 0.95 }}
           animate={{ opacity: 1, scale: 1 }}
           exit={{ opacity: 0, scale: 0.95 }}
-          className="fixed inset-0 z-[140] flex items-end justify-center p-mx-sm bg-mx-black/60 backdrop-blur-sm sm:items-center md:p-10"
+          className="fixed inset-0 z-[140] flex items-end justify-center p-mx-sm bg-gray-900/60 backdrop-blur-sm sm:items-center md:p-10"
           role="dialog"
           aria-modal="true"
           aria-labelledby="feedback-store-title"
         >
           <Card className="flex max-h-full w-full max-w-[var(--container-mx-4xl)] flex-col overflow-hidden border-none bg-white shadow-mx-2xl">
-            <header className="p-mx-lg md:p-10 border-b border-border-default flex items-center justify-between sticky top-mx-0 bg-white z-10">
+            <header className="p-mx-lg md:p-10 border-b border-gray-200 flex items-center justify-between sticky top-mx-0 bg-white z-10">
               <div className="flex items-center gap-mx-sm">
-                <div className="w-mx-xl h-mx-xl rounded-mx-2xl bg-brand-primary text-white flex items-center justify-center shadow-mx-lg">
+                <div className="w-mx-xl h-mx-xl rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
                   <MessageSquare size={24} />
                 </div>
                 <div>
@@ -118,7 +118,7 @@ export function StoreFeedbackModal({
                 <div className="space-y-mx-xs">
                   <label
                     htmlFor="feedback-seller"
-                    className="ml-2 text-mx-tiny uppercase font-black tracking-widest text-text-tertiary"
+                    className="ml-2 text-mx-tiny uppercase font-bold tracking-widest text-gray-500"
                   >
                     Especialista
                   </label>
@@ -128,7 +128,7 @@ export function StoreFeedbackModal({
                       name="seller_id"
                       value={formData.seller_id}
                       onChange={(e) => onSellerSelect(e.target.value)}
-                      className="w-full h-mx-14 px-6 bg-surface-alt border border-border-default rounded-mx-md text-sm font-bold uppercase shadow-inner appearance-none cursor-pointer"
+                      className="w-full h-mx-14 px-6 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
                     >
                       <option value="">Selecione...</option>
                       {sellers.map((s) => (
@@ -139,14 +139,14 @@ export function StoreFeedbackModal({
                     </select>
                     <ChevronDown
                       size={18}
-                      className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none"
+                      className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
                     />
                   </div>
                 </div>
                 <div className="space-y-mx-xs">
                   <label
                     htmlFor="feedback-week-reference"
-                    className="ml-2 text-mx-tiny uppercase font-black tracking-widest text-text-tertiary"
+                    className="ml-2 text-mx-tiny uppercase font-bold tracking-widest text-gray-500"
                   >
                     Semana
                   </label>
@@ -161,7 +161,7 @@ export function StoreFeedbackModal({
                       type="date"
                       value={formData.week_reference}
                       onChange={(e) => onWeekReferenceChange(e.target.value)}
-                      className="w-full h-mx-14 pl-12 pr-6 bg-surface-alt border border-border-default rounded-mx-md text-sm font-black text-brand-primary shadow-inner"
+                      className="w-full h-mx-14 pl-12 pr-6 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold text-emerald-600 shadow-none"
                     />
                   </div>
                 </div>
@@ -172,7 +172,7 @@ export function StoreFeedbackModal({
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-mx-xl"
                 >
-                  <div className="p-mx-lg bg-surface-alt rounded-mx-xl border border-border-default space-y-mx-lg shadow-inner">
+                  <div className="p-mx-lg bg-gray-50 rounded-2xl border border-gray-200 space-y-mx-lg shadow-none">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-mx-md">
                       {[
                         { label: 'Leads', val: formData.leads_week },
@@ -182,7 +182,7 @@ export function StoreFeedbackModal({
                       ].map((item) => (
                         <div
                           key={item.label}
-                          className="bg-white p-mx-5 rounded-mx-2xl border border-border-default shadow-sm text-center"
+                          className="bg-white p-mx-5 rounded-2xl border border-gray-200 shadow-sm text-center"
                         >
                           <Typography
                             variant="tiny"
@@ -204,7 +204,7 @@ export function StoreFeedbackModal({
                   <div className="space-y-mx-sm">
                     <label
                       htmlFor="feedback-caso-motivo"
-                      className="text-mx-tiny font-black uppercase tracking-widest text-brand-primary ml-2 flex items-center gap-mx-xs"
+                      className="text-mx-tiny font-bold uppercase tracking-widest text-emerald-600 ml-2 flex items-center gap-mx-xs"
                     >
                       <AlertCircle size={14} /> Caso/Motivo
                     </label>
@@ -215,14 +215,14 @@ export function StoreFeedbackModal({
                       onChange={(e) =>
                         setFormData((f) => ({ ...f, caso_motivo: e.target.value }))
                       }
-                      className="w-full h-mx-3xl p-mx-md bg-white border border-border-default rounded-mx-2xl text-sm font-bold focus:border-brand-primary transition-all shadow-sm outline-none resize-none"
+                      className="w-full h-mx-3xl p-mx-md bg-white border border-gray-200 rounded-2xl text-sm font-bold focus:border-brand-primary transition-all shadow-sm outline-none resize-none"
                     />
                   </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
                     <div className="space-y-mx-sm">
                       <label
                         htmlFor="feedback-positives"
-                        className="text-mx-tiny font-black uppercase tracking-widest text-status-success ml-2 flex items-center gap-mx-xs"
+                        className="text-mx-tiny font-bold uppercase tracking-widest text-status-success ml-2 flex items-center gap-mx-xs"
                       >
                         <Award size={14} /> Pontos Fortes
                       </label>
@@ -233,13 +233,13 @@ export function StoreFeedbackModal({
                         onChange={(e) =>
                           setFormData((f) => ({ ...f, positives: e.target.value }))
                         }
-                        className="w-full h-mx-4xl p-mx-md bg-white border border-border-default rounded-mx-2xl text-sm font-bold focus:border-status-success transition-all shadow-sm outline-none resize-none"
+                        className="w-full h-mx-4xl p-mx-md bg-white border border-gray-200 rounded-2xl text-sm font-bold focus:border-status-success transition-all shadow-sm outline-none resize-none"
                       />
                     </div>
                     <div className="space-y-mx-sm">
                       <label
                         htmlFor="feedback-attention"
-                        className="text-mx-tiny font-black uppercase tracking-widest text-status-error ml-2 flex items-center gap-mx-xs"
+                        className="text-mx-tiny font-bold uppercase tracking-widest text-status-error ml-2 flex items-center gap-mx-xs"
                       >
                         <AlertCircle size={14} /> Pontos de Atenção
                       </label>
@@ -250,21 +250,21 @@ export function StoreFeedbackModal({
                         onChange={(e) =>
                           setFormData((f) => ({ ...f, attention_points: e.target.value }))
                         }
-                        className="w-full h-mx-4xl p-mx-md bg-white border border-border-default rounded-mx-2xl text-sm font-bold focus:border-status-error transition-all shadow-sm outline-none resize-none"
+                        className="w-full h-mx-4xl p-mx-md bg-white border border-gray-200 rounded-2xl text-sm font-bold focus:border-status-error transition-all shadow-sm outline-none resize-none"
                       />
                     </div>
                   </div>
                   <div className="space-y-mx-sm">
                     <label
                       htmlFor="feedback-action"
-                      className="text-mx-tiny font-black uppercase tracking-widest text-brand-primary ml-2 flex items-center gap-mx-xs"
+                      className="text-mx-tiny font-bold uppercase tracking-widest text-emerald-600 ml-2 flex items-center gap-mx-xs"
                     >
                       <Target size={16} /> Ação
                     </label>
                     <div className="space-y-mx-xs">
                       <label
                         htmlFor="feedback-store-action-template"
-                        className="ml-2 text-mx-tiny uppercase font-black tracking-widest text-text-tertiary"
+                        className="ml-2 text-mx-tiny uppercase font-bold tracking-widest text-gray-500"
                       >
                         Ação padronizada
                       </label>
@@ -273,7 +273,7 @@ export function StoreFeedbackModal({
                           id="feedback-store-action-template"
                           value=""
                           onChange={(e) => handleFeedbackActionSelect(e.target.value)}
-                          className="w-full h-mx-14 px-6 bg-surface-alt border border-border-default rounded-mx-md text-sm font-bold uppercase shadow-inner appearance-none cursor-pointer"
+                          className="w-full h-mx-14 px-6 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
                         >
                           <option value="">Selecionar ação...</option>
                           {FEEDBACK_ACTIONS_CATALOG.map((action) => (
@@ -284,7 +284,7 @@ export function StoreFeedbackModal({
                         </select>
                         <ChevronDown
                           size={18}
-                          className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary pointer-events-none"
+                          className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
                         />
                       </div>
                     </div>
@@ -295,26 +295,26 @@ export function StoreFeedbackModal({
                       onChange={(e) =>
                         setFormData((f) => ({ ...f, action: e.target.value }))
                       }
-                      className="w-full h-mx-3xl p-mx-md bg-white border-2 border-brand-primary/20 rounded-mx-2xl text-base font-black focus:border-brand-primary transition-all shadow-mx-lg outline-none resize-none"
+                      className="w-full h-mx-3xl p-mx-md bg-white border-2 border-brand-primary/20 rounded-2xl text-base font-bold focus:border-brand-primary transition-all shadow-sm outline-none resize-none"
                     />
                   </div>
-                  <label className="flex items-start gap-mx-xs text-xs text-text-secondary">
+                  <label className="flex items-start gap-mx-xs text-xs text-gray-500">
                     <input
                       aria-label="Enviar este feedback ao vendedor"
                       type="checkbox"
                       checked={formData.visible_to_seller !== false}
                       onChange={(e) => setFormData((f) => ({ ...f, visible_to_seller: e.target.checked }))}
-                      className="mt-0.5 rounded border-border-default text-brand-primary focus:ring-brand-primary"
+                      className="mt-0.5 rounded border-gray-200 text-emerald-600 focus:ring-brand-primary"
                     />
                     <span>
-                      <span className="font-semibold text-text-primary">Enviar este feedback ao vendedor</span>
-                      <span className="block text-[11px] text-text-tertiary">Desmarque para manter a observação somente com a liderança.</span>
+                      <span className="font-semibold text-gray-800">Enviar este feedback ao vendedor</span>
+                      <span className="block text-[11px] text-gray-500">Desmarque para manter a observação somente com a liderança.</span>
                     </span>
                   </label>
                 </motion.div>
               )}
             </div>
-            <footer className="p-mx-lg md:p-10 border-t border-border-default sticky bottom-mx-0 bg-white z-10 flex flex-col gap-mx-sm sm:flex-row sm:justify-end">
+            <footer className="p-mx-lg md:p-10 border-t border-gray-200 sticky bottom-mx-0 bg-white z-10 flex flex-col gap-mx-sm sm:flex-row sm:justify-end">
               <Button
                 variant="ghost"
                 onClick={onClose}

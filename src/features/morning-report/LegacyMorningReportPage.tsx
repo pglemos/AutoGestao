@@ -275,17 +275,17 @@ function AdminMorningReport() {
 
     if (loading) return (
         <main
-            className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-surface-alt animate-in fade-in duration-500"
+            className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
             aria-busy="true"
             aria-live="polite"
             aria-label="Consolidando rede"
         >
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border-default pb-10">
+            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10">
                 <div className="space-y-mx-xs">
                     <Skeleton className="h-mx-10 w-mx-64" />
                     <Skeleton className="h-mx-xs w-mx-48" />
                 </div>
-                <Skeleton className="h-mx-14 w-mx-48 rounded-mx-xl" />
+                <Skeleton className="h-mx-14 w-mx-48 rounded-2xl" />
             </header>
             <SkeletonStats count={4} />
             <SkeletonList items={5} showAvatar />
@@ -293,11 +293,11 @@ function AdminMorningReport() {
     )
 
     return (
-        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-surface-alt">
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border-default pb-10 shrink-0">
+        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10 shrink-0">
                 <div className="flex flex-col gap-mx-tiny">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-mx-md" aria-hidden="true" />
+                        <div className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm" aria-hidden="true" />
                         <Typography variant="h1">Matinal <Typography as="span" className="">Rede MX</Typography></Typography>
                     </div>
                     <Typography variant="caption" className="pl-mx-md">Visão Administrativa • Todas as Unidades • {range.label}</Typography>
@@ -319,10 +319,10 @@ function AdminMorningReport() {
 
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-mx-lg shrink-0">
                 <Card className="p-mx-lg md:p-10 group relative overflow-hidden border-none bg-white">
-                    <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
+                    <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-mx-2xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center shadow-inner border border-mx-indigo-100" aria-hidden="true"><Target size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Target size={24} /></div>
                             <Badge variant="brand" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">META REDE</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-5xl tabular-nums leading-none mb-3 tracking-tighter">{networkMetrics.totalGoal}</Typography>
@@ -338,7 +338,7 @@ function AdminMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-48 h-mx-48 bg-white/5 rounded-mx-full blur-3xl -mr-24 -mt-24" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-mx-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-inner" aria-hidden="true"><TrendingUp size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-none" aria-hidden="true"><TrendingUp size={24} /></div>
                             <Badge variant="outline" className="bg-white text-brand-secondary border-white px-4 py-1"><Typography variant="tiny" as="span" className="text-inherit">PROJEÇÃO</Typography></Badge>
                         </div>
                         <Typography variant="h1" tone="white" className="text-5xl tabular-nums leading-none mb-3 tracking-tighter">{networkMetrics.totalProjection}</Typography>
@@ -350,7 +350,7 @@ function AdminMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-status-success-surface rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-mx-2xl bg-status-success-surface text-status-success flex items-center justify-center shadow-inner border border-mx-emerald-100" aria-hidden="true"><Activity size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success flex items-center justify-center shadow-none border border-mx-emerald-100" aria-hidden="true"><Activity size={24} /></div>
                             <Badge variant="success" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">SAÚDE REDE</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-5xl tabular-nums leading-none mb-3 tracking-tighter">{networkMetrics.totalCheckedIn}<Typography as="span" variant="h3" tone="muted" className="text-2xl">/{networkMetrics.totalSellers}</Typography></Typography>
@@ -362,7 +362,7 @@ function AdminMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-status-info-surface rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-mx-2xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center shadow-inner border border-mx-indigo-100" aria-hidden="true"><Users size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Users size={24} /></div>
                             <Badge variant="outline" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">UNIDADES</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-5xl tabular-nums leading-none mb-3 tracking-tighter">{storeData.length}</Typography>
@@ -372,9 +372,9 @@ function AdminMorningReport() {
             </div>
 
             <Card className="w-full border-none bg-white overflow-hidden">
-                <CardHeader className="p-mx-lg bg-surface-alt/30 border-b border-border-default flex flex-row items-center justify-between">
+                <CardHeader className="p-mx-lg bg-gray-50/30 border-b border-gray-200 flex flex-row items-center justify-between">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-xl h-mx-xl rounded-mx-xl bg-white border border-border-default flex items-center justify-center shadow-mx-sm" aria-hidden="true"><Building2 size={24} className="text-brand-primary" /></div>
+                        <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-gray-200 flex items-center justify-center shadow-sm" aria-hidden="true"><Building2 size={24} className="text-emerald-600" /></div>
                         <div>
                             <CardTitle className="text-xl uppercase tracking-tighter">Grade Operacional da Rede</CardTitle>
                             <Typography variant="tiny" tone="muted" className="block mt-1">TODAS AS UNIDADES • {range.label}</Typography>
@@ -385,7 +385,7 @@ function AdminMorningReport() {
                 <div className="overflow-x-auto no-scrollbar">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-surface-alt/50 border-b border-border-default">
+                            <tr className="bg-gray-50/50 border-b border-gray-200">
                                 <th scope="col" className="pl-10 py-6"><Typography variant="caption" className="">UNIDADE</Typography></th>
                                 <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">META</Typography></th>
                                 <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">VENDAS</Typography></th>
@@ -402,20 +402,20 @@ function AdminMorningReport() {
                                 const healthPct = store.totalSellers > 0 ? Math.round((store.checkedInCount / store.totalSellers) * 100) : 0
                                 return (
                                     <React.Fragment key={store.store_id}>
-                                        <tr className="hover:bg-surface-alt/30 transition-colors group cursor-pointer" onClick={() => setExpandedStoreId(isExpanded ? null : store.store_id)}>
+                                        <tr className="hover:bg-gray-50/30 transition-colors group cursor-pointer" onClick={() => setExpandedStoreId(isExpanded ? null : store.store_id)}>
                                             <td className="pl-10">
                                                 <div className="flex items-center gap-mx-sm">
-                                                    <div className="w-mx-xl h-mx-xl rounded-mx-xl bg-surface-alt border border-border-default flex items-center justify-center group-hover:bg-brand-primary transition-all shadow-mx-inner" aria-hidden="true">
+                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-center group-hover:bg-emerald-600 transition-all shadow-mx-inner" aria-hidden="true">
                                                         <Typography variant="tiny" className="group-hover:text-white">{store.store_name.substring(0, 2)}</Typography>
                                                     </div>
-                                                    <Typography variant="h3" className="text-base group-hover:text-brand-primary transition-colors tracking-tight">{store.store_name}</Typography>
-                                                    <ChevronDown size={16} className={cn("transition-transform text-text-tertiary", isExpanded && "rotate-180")} />
+                                                    <Typography variant="h3" className="text-base group-hover:text-emerald-600 transition-colors tracking-tight">{store.store_name}</Typography>
+                                                    <ChevronDown size={16} className={cn("transition-transform text-gray-500", isExpanded && "rotate-180")} />
                                                 </div>
                                             </td>
                                             <td className="text-center"><Typography variant="mono" className="text-sm tabular-nums opacity-60">{store.goal}</Typography></td>
                                             <td className="text-center"><Typography variant="mono" tone="brand" className="text-lg tabular-nums">{store.totalSales}</Typography></td>
                                             <td className="text-center">
-                                                <Badge variant={store.reaching >= 100 ? 'success' : store.reaching >= 50 ? 'outline' : 'danger'} className="px-3 py-1 rounded-mx-full border-none font-black">{store.reaching}%</Badge>
+                                                <Badge variant={store.reaching >= 100 ? 'success' : store.reaching >= 50 ? 'outline' : 'danger'} className="px-3 py-1 rounded-mx-full border-none font-bold">{store.reaching}%</Badge>
                                             </td>
                                             <td className="text-center"><Typography variant="mono" className="text-sm tabular-nums">{store.projection}</Typography></td>
                                             <td className="text-center"><Typography variant="mono" className="text-sm tabular-nums opacity-60">{store.totalLeads}</Typography></td>
@@ -425,7 +425,7 @@ function AdminMorningReport() {
                                                 </div>
                                             </td>
                                             <td className="pr-10 text-right">
-                                                <Badge variant={healthPct >= 80 ? 'success' : healthPct >= 50 ? 'outline' : 'danger'} className="px-4 py-1.5 rounded-mx-lg shadow-sm border-none uppercase">
+                                                <Badge variant={healthPct >= 80 ? 'success' : healthPct >= 50 ? 'outline' : 'danger'} className="px-4 py-1.5 rounded-xl shadow-sm border-none uppercase">
                                                     <Typography variant="tiny" as="span" className="">{healthPct >= 80 ? 'SAUDÁVEL' : healthPct >= 50 ? 'ATENÇÃO' : 'CRÍTICO'}</Typography>
                                                 </Badge>
                                             </td>
@@ -438,18 +438,18 @@ function AdminMorningReport() {
                                                             initial={{ height: 0, opacity: 0 }}
                                                             animate={{ height: 'auto', opacity: 1 }}
                                                             exit={{ height: 0, opacity: 0 }}
-                                                            className="overflow-hidden bg-surface-alt/30"
+                                                            className="overflow-hidden bg-gray-50/30"
                                                         >
                                                             <div className="p-mx-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-sm">
                                                                 {store.sellers.map(seller => (
-                                                                    <div key={seller.id} className={cn("flex items-center justify-between p-mx-sm rounded-mx-lg border", seller.checkin_today ? "bg-white border-border-default" : "bg-status-error-surface/50 border-status-error/20")}>
+                                                                    <div key={seller.id} className={cn("flex items-center justify-between p-mx-sm rounded-xl border", seller.checkin_today ? "bg-white border-gray-200" : "bg-status-error-surface/50 border-status-error/20")}>
                                                                         <div className="flex items-center gap-mx-xs min-w-0">
                                                                             <Avatar
                                                                                 src={seller.avatar_url || undefined}
                                                                                 alt={`Avatar de ${seller.name}`}
                                                                                 fallback={seller.name}
                                                                                 size="sm"
-                                                                                className={cn("rounded-mx-lg", seller.checkin_today ? "bg-status-success-surface text-status-success" : "bg-status-error-surface text-status-error")}
+                                                                                className={cn("rounded-xl", seller.checkin_today ? "bg-status-success-surface text-status-success" : "bg-status-error-surface text-status-error")}
                                                                             />
                                                                             <Typography variant="tiny" className="truncate">{seller.name}</Typography>
                                                                         </div>
@@ -561,17 +561,17 @@ function StoreMorningReport() {
 
     if (loadingCheckins || loadingGoals) return (
         <main
-            className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-surface-alt animate-in fade-in duration-500"
+            className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
             aria-busy="true"
             aria-live="polite"
             aria-label="Consolidando matinal"
         >
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border-default pb-10">
+            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10">
                 <div className="space-y-mx-xs">
                     <Skeleton className="h-mx-10 w-mx-64" />
                     <Skeleton className="h-mx-xs w-mx-48" />
                 </div>
-                <Skeleton className="h-mx-14 w-mx-48 rounded-mx-xl" />
+                <Skeleton className="h-mx-14 w-mx-48 rounded-2xl" />
             </header>
             <SkeletonStats count={4} />
             <SkeletonList items={5} showAvatar />
@@ -579,11 +579,11 @@ function StoreMorningReport() {
     )
 
     return (
-        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-surface-alt">
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border-default pb-10 shrink-0">
+        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10 shrink-0">
                 <div className="flex flex-col gap-mx-tiny">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-mx-md" aria-hidden="true" />
+                        <div className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm" aria-hidden="true" />
                         <Typography variant="h1">Matinal <Typography as="span" className="">Oficial</Typography></Typography>
                     </div>
                     <Typography variant="caption" className="pl-mx-md">Unidade Operacional • Ritual D+1 • {referenceDateLabel}</Typography>
@@ -607,14 +607,14 @@ function StoreMorningReport() {
 
             {reportAudit && (
                 <div role="status" className={cn(
-                    "rounded-mx-xl border px-mx-md py-mx-sm text-sm font-bold",
+                    "rounded-2xl border px-mx-md py-mx-sm text-sm font-bold",
                     reportAudit.status === 'success' && "border-status-success/20 bg-status-success-surface text-status-success",
                     reportAudit.status === 'error' && "border-status-error/20 bg-status-error-surface text-status-error",
                     reportAudit.status === 'info' && "border-status-info/20 bg-status-info-surface text-status-info"
                 )}>
                     <div className="flex flex-col gap-mx-tiny sm:flex-row sm:items-center sm:justify-between">
                         <span>{reportAudit.action}</span>
-                        <span className="text-mx-tiny font-black uppercase opacity-70">{reportAudit.at.toLocaleString('pt-BR')}</span>
+                        <span className="text-mx-tiny font-bold uppercase opacity-70">{reportAudit.at.toLocaleString('pt-BR')}</span>
                     </div>
                     <p className="mt-mx-tiny text-xs opacity-80">{reportAudit.detail}</p>
                 </div>
@@ -622,10 +622,10 @@ function StoreMorningReport() {
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-mx-lg shrink-0">
                 <Card className="p-mx-lg md:p-10 group relative overflow-hidden border-none bg-white">
-                    <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
+                    <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-mx-2xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center shadow-inner border border-mx-indigo-100" aria-hidden="true"><Target size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Target size={24} /></div>
                             <Badge variant="brand" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">META MENSAL</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-6xl tabular-nums leading-none mb-3 tracking-tighter">{metrics.teamGoal}</Typography>
@@ -641,7 +641,7 @@ function StoreMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-48 h-mx-48 bg-white/5 rounded-mx-full blur-3xl -mr-24 -mt-24" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-mx-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-inner" aria-hidden="true"><TrendingUp size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 text-white flex items-center justify-center border border-white/10 shadow-none" aria-hidden="true"><TrendingUp size={24} /></div>
                             <Badge variant="outline" className="bg-white text-brand-secondary border-white px-4 py-1"><Typography variant="tiny" as="span" className="text-inherit">PROJEÇÃO MX</Typography></Badge>
                         </div>
                         <Typography variant="h1" tone="white" className="text-6xl tabular-nums leading-none mb-3 tracking-tighter">{metrics.projection}</Typography>
@@ -653,7 +653,7 @@ function StoreMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-status-success-surface rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-mx-2xl bg-status-success-surface text-status-success flex items-center justify-center shadow-inner border border-mx-emerald-100" aria-hidden="true"><Activity size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success flex items-center justify-center shadow-none border border-mx-emerald-100" aria-hidden="true"><Activity size={24} /></div>
                             <Badge variant="success" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">SAÚDE DA MALHA</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-6xl tabular-nums leading-none mb-3 tracking-tighter">{metrics.checkedInCount}<Typography as="span" variant="h3" tone="muted" className="text-2xl">/{(sellers || []).length}</Typography></Typography>
@@ -664,9 +664,9 @@ function StoreMorningReport() {
 
             <section className="grid grid-cols-1 xl:grid-cols-12 gap-mx-lg pb-32">
                 <Card className="xl:col-span-8 border-none bg-white overflow-hidden">
-                    <CardHeader className="p-mx-10 bg-surface-alt/30 border-b border-border-default flex flex-row items-center justify-between">
+                    <CardHeader className="p-mx-10 bg-gray-50/30 border-b border-gray-200 flex flex-row items-center justify-between">
                         <div className="flex items-center gap-mx-sm">
-                            <div className="w-mx-xl h-mx-xl rounded-mx-xl bg-white border border-border-default flex items-center justify-center shadow-mx-sm" aria-hidden="true"><BarChart3 size={24} className="text-brand-primary" /></div>
+                            <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-gray-200 flex items-center justify-center shadow-sm" aria-hidden="true"><BarChart3 size={24} className="text-emerald-600" /></div>
                             <div>
                                 <CardTitle className="text-xl uppercase tracking-tighter">Grade Operacional do Time</CardTitle>
                                 <Typography variant="tiny" tone="muted" className="block mt-1">EFICIÊNCIA INDIVIDUAL ACUMULADA</Typography>
@@ -676,7 +676,7 @@ function StoreMorningReport() {
                     <div className="overflow-x-auto no-scrollbar">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-surface-alt/50 border-b border-border-default">
+                                <tr className="bg-gray-50/50 border-b border-gray-200">
                                     <th scope="col" className="pl-10 py-6"><Typography variant="caption" className="">ESPECIALISTA</Typography></th>
                                     <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">LEADS</Typography></th>
                                     <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">AGEND.</Typography></th>
@@ -689,13 +689,13 @@ function StoreMorningReport() {
                                 {(ranking || []).map((r) => {
                                     const isDone = sellers.find(s => s.id === r.user_id)?.checkin_today
                                     return (
-                                        <tr key={r.user_id} className="hover:bg-surface-alt/30 transition-colors group h-mx-3xl">
+                                        <tr key={r.user_id} className="hover:bg-gray-50/30 transition-colors group h-mx-3xl">
                                             <td className="pl-10">
                                                 <div className="flex items-center gap-mx-sm">
-                                                    <div className="w-mx-xl h-mx-xl rounded-mx-xl bg-surface-alt border border-border-default flex items-center justify-center group-hover:bg-brand-primary transition-all shadow-mx-inner" aria-hidden="true">
+                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-center group-hover:bg-emerald-600 transition-all shadow-mx-inner" aria-hidden="true">
                                                         <Typography variant="tiny" className="group-hover:text-white">{r.user_name.substring(0, 2)}</Typography>
                                                     </div>
-                                                    <Typography variant="h3" className="text-base group-hover:text-brand-primary transition-colors tracking-tight">{r.user_name}</Typography>
+                                                    <Typography variant="h3" className="text-base group-hover:text-emerald-600 transition-colors tracking-tight">{r.user_name}</Typography>
                                                 </div>
                                             </td>
                                             <td className="text-center"><Typography variant="mono" className="text-lg opacity-60 tabular-nums">{r.leads}</Typography></td>
@@ -717,9 +717,9 @@ function StoreMorningReport() {
 
                 <aside className="xl:col-span-4 flex flex-col gap-mx-lg">
                     <Card className="p-mx-10 md:p-14 space-y-mx-10 border-none bg-white relative overflow-hidden group">
-                        <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
-                        <header className="flex items-center gap-mx-sm border-b border-border-default pb-8 relative z-10">
-                            <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center shadow-mx-sm" aria-hidden="true"><Zap size={28} /></div>
+                        <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
+                        <header className="flex items-center gap-mx-sm border-b border-gray-200 pb-8 relative z-10">
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shadow-sm" aria-hidden="true"><Zap size={28} /></div>
                             <Typography variant="h3" className="tracking-tight">Foco do Dia</Typography>
                         </header>
                         <div className="space-y-mx-md relative z-10">
@@ -748,7 +748,7 @@ function StoreMorningReport() {
                                     </Button>
                                 </Card>
                             )}
-                            <div className="p-mx-lg bg-surface-alt rounded-mx-2xl border border-border-default shadow-inner">
+                            <div className="p-mx-lg bg-gray-50 rounded-2xl border border-gray-200 shadow-none">
                                 <Typography variant="caption" tone="muted" className="mb-4 block">Sugestão MX</Typography>
                                 <Typography variant="p" className="text-xs font-bold leading-relaxed italic tracking-tight">"Manter o ritmo de agendamentos D-0 para garantir o escoamento projetado."</Typography>
                             </div>

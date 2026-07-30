@@ -34,8 +34,8 @@ function BarRow({ label, value, max, valueLabel }: { label: string; value: numbe
   return (
     <div className="flex items-center gap-mx-md">
       <div className="w-40 shrink-0"><Typography variant="p" className="font-medium">{label}</Typography></div>
-      <div className="h-3 flex-1 overflow-hidden rounded-full bg-surface-alt">
-        <div className="h-full rounded-full bg-brand-secondary" style={{ width: `${Math.max(2, pct)}%` }} />
+      <div className="h-3 flex-1 overflow-hidden rounded-full bg-gray-50">
+        <div className="h-full rounded-full bg-gray-900" style={{ width: `${Math.max(2, pct)}%` }} />
       </div>
       <div className="min-w-0 text-right sm:w-24 sm:shrink-0"><Typography variant="p" className="break-words font-semibold">{valueLabel ?? value}</Typography></div>
     </div>
@@ -61,7 +61,7 @@ export function RelatoriosVendedor() {
 
   if (isLoading) {
     return (
-      <main className="w-full h-full overflow-y-auto bg-surface-alt p-mx-lg no-scrollbar">
+      <main className="w-full h-full overflow-y-auto bg-gray-50 p-mx-lg no-scrollbar">
         <div className="flex flex-col gap-mx-lg pb-28">
           <SellerPageHeader icon={BarChart3} title="Relatórios" subtitle="Visão consolidada da sua performance comercial, com dados reais." />
           <div className="flex items-center justify-center h-64">
@@ -73,7 +73,7 @@ export function RelatoriosVendedor() {
   }
 
   return (
-    <main className="w-full h-full overflow-y-auto bg-surface-alt p-mx-lg no-scrollbar">
+    <main className="w-full h-full overflow-y-auto bg-gray-50 p-mx-lg no-scrollbar">
       <div className="flex flex-col gap-mx-lg pb-28">
 <SellerPageHeader icon={BarChart3} title="Relatórios" subtitle="Visão consolidada da sua performance comercial, com dados reais." />
 
@@ -105,7 +105,7 @@ export function RelatoriosVendedor() {
               <BarRow label={CRM_CANAL_LABEL.internet} value={porCanal.internet} max={maxCanal} />
               <BarRow label={CRM_CANAL_LABEL.porta} value={porCanal.porta} max={maxCanal} />
             </div>
-            <div className="mt-mx-lg border-t border-border-subtle pt-mx-md">
+            <div className="mt-mx-lg border-t border-gray-100 pt-mx-md">
               <Typography variant="caption" tone="muted" className="tracking-wide">Carteira por status</Typography>
               <div className="mt-mx-sm grid grid-cols-2 gap-mx-sm sm:grid-cols-3">
                 <StatusPill label="Ativos" value={clienteMetrics.ativos} />
@@ -127,7 +127,7 @@ export function RelatoriosVendedor() {
                 Gargalos por etapa, demanda real e conversão por fluxo versionado.
               </Typography>
             </div>
-            <div className="rounded-mx-md bg-surface-alt px-mx-md py-mx-sm text-right">
+            <div className="rounded-xl bg-gray-50 px-mx-md py-mx-sm text-right">
               <Typography variant="caption" tone="muted" className="tracking-wide">Clientes em cadência</Typography>
               <Typography variant="h2" className="mt-mx-xs text-2xl">{cadenciaAnalytics.totalEstados}</Typography>
             </div>
@@ -201,7 +201,7 @@ export function RelatoriosVendedor() {
 
 function StatusPill({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-mx-md bg-surface-alt p-mx-sm text-center">
+    <div className="rounded-xl bg-gray-50 p-mx-sm text-center">
       <Typography variant="h3" className="text-lg">{value}</Typography>
       <Typography variant="caption" tone="muted">{label}</Typography>
     </div>

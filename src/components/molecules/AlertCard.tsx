@@ -90,7 +90,7 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
         role={cfg.ariaRole}
         aria-live={cfg.ariaLive}
         className={cn(
-          'rounded-mx-2xl border border-border-default border-l-4 bg-white shadow-mx-sm p-mx-lg transition-shadow hover:shadow-mx-md',
+          'rounded-2xl border border-gray-200 border-l-4 bg-white shadow-sm p-mx-lg transition-shadow hover:shadow-sm',
           cfg.border,
           cfg.bgSurface,
           className
@@ -100,19 +100,19 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
         <div className="flex items-start gap-3">
           <Icon className={cn('w-5 h-5 mt-0.5 shrink-0', cfg.iconColor)} aria-hidden="true" />
           <div className="flex-1 min-w-0">
-            <p className={cn('text-xs font-black uppercase tracking-wider mb-2', cfg.iconColor)}>{cfg.title}</p>
+            <p className={cn('text-xs font-bold uppercase tracking-wider mb-2', cfg.iconColor)}>{cfg.title}</p>
             <dl className="space-y-1.5 text-sm">
               <div>
                 <dt className="sr-only">Problema</dt>
-                <dd className="font-semibold text-text-primary">{problem}</dd>
+                <dd className="font-semibold text-gray-800">{problem}</dd>
               </div>
               <div>
-                <dt className="text-text-tertiary text-xs uppercase tracking-wide font-bold">Impacto</dt>
-                <dd className="text-text-secondary">{impact}</dd>
+                <dt className="text-gray-500 text-xs uppercase tracking-wide font-bold">Impacto</dt>
+                <dd className="text-gray-500">{impact}</dd>
               </div>
               <div>
-                <dt className="text-text-tertiary text-xs uppercase tracking-wide font-bold">Recomendação</dt>
-                <dd className="text-text-secondary">{recommendation}</dd>
+                <dt className="text-gray-500 text-xs uppercase tracking-wide font-bold">Recomendação</dt>
+                <dd className="text-gray-500">{recommendation}</dd>
               </div>
             </dl>
             {quickActionLabel && (
@@ -122,8 +122,8 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
                     type="button"
                     onClick={onQuickAction}
                     className={cn(
-                      'inline-flex items-center gap-1.5 text-sm font-bold px-3 py-1.5 rounded-mx-lg transition-colors',
-                      'bg-white border border-border-strong hover:bg-surface-alt',
+                      'inline-flex items-center gap-1.5 text-sm font-bold px-3 py-1.5 rounded-xl transition-colors',
+                      'bg-white border border-gray-200 hover:bg-gray-50',
                       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1',
                       type === 'critical' && 'focus-visible:ring-status-error',
                       type === 'warning' && 'focus-visible:ring-status-warning',
@@ -138,7 +138,7 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
                     role="button"
                     aria-disabled="true"
                     tabIndex={-1}
-                    className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-mx-lg border border-border-subtle bg-surface-alt px-3 py-1.5 text-sm font-bold text-text-tertiary"
+                    className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-xl border border-gray-100 bg-gray-50 px-3 py-1.5 text-sm font-bold text-gray-500"
                   >
                     {quickActionLabel}
                   </span>

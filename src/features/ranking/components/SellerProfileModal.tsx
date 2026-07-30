@@ -44,34 +44,34 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
         <div className="fixed inset-0 z-[100] flex items-center justify-center p-mx-md">
             <motion.div 
                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }}
-                className="absolute inset-0 bg-mx-black/80 backdrop-blur-sm" 
+                className="absolute inset-0 bg-gray-900/80 backdrop-blur-sm" 
                 onClick={onClose} 
             />
             
             <motion.div 
                 ref={dialogRef}
                 initial={{ opacity: 0, scale: 0.95, y: 20 }} animate={{ opacity: 1, scale: 1, y: 0 }}
-                className="bg-mx-black w-full max-w-3xl rounded-mx-3xl shadow-2xl relative z-10 overflow-hidden flex flex-col md:flex-row text-white max-h-[90vh] border border-white/10"
+                className="bg-gray-900 w-full max-w-3xl rounded-2xl shadow-2xl relative z-10 overflow-hidden flex flex-col md:flex-row text-white max-h-[90vh] border border-white/10"
                 role="dialog"
                 aria-modal="true"
                 aria-labelledby="seller-profile-title"
             >
                 <button ref={closeButtonRef} type="button" aria-label="Fechar perfil do vendedor" onClick={onClose} className="absolute top-mx-sm right-mx-sm p-mx-xs hover:bg-white/10 rounded-full transition-colors z-20">
-                    <X className="w-mx-md h-mx-md text-text-tertiary" aria-hidden="true" />
+                    <X className="w-mx-md h-mx-md text-gray-500" aria-hidden="true" />
                 </button>
 
                 {/* Left: Avatar & Badges */}
                 <div className="w-full md:w-mx-tiny/3 bg-white/5 p-mx-xl flex flex-col items-center border-r border-white/5 relative overflow-hidden">
                     <div className="absolute top-mx-0 left-mx-0 w-full h-mx-tiny bg-gradient-to-r from-brand-primary to-transparent" aria-hidden="true"></div>
                     <div className="w-mx-32 h-mx-32 rounded-full p-mx-tiny bg-gradient-to-b from-brand-primary to-transparent mb-6 relative shrink-0">
-                        <Avatar src={seller.avatar_url || undefined} alt={`Avatar de ${seller.user_name}`} fallback={seller.user_name} className="w-full h-full rounded-full border-4 border-mx-black bg-surface-alt" />
-                        <div className="absolute -bottom-2 -right-2 w-mx-10 h-mx-10 bg-mx-black rounded-full flex items-center justify-center border-2 border-brand-primary text-brand-primary font-black shadow-lg">
+                        <Avatar src={seller.avatar_url || undefined} alt={`Avatar de ${seller.user_name}`} fallback={seller.user_name} className="w-full h-full rounded-full border-4 border-mx-black bg-gray-50" />
+                        <div className="absolute -bottom-2 -right-2 w-mx-10 h-mx-10 bg-gray-900 rounded-full flex items-center justify-center border-2 border-brand-primary text-emerald-600 font-bold shadow-lg">
                             {seller.position}º
                         </div>
                     </div>
                     
-                    <h2 id="seller-profile-title" className="font-display font-black text-2xl text-white mb-1 text-center">{seller.user_name}</h2>
-                    <p className="text-xs font-bold text-text-tertiary uppercase tracking-widest mb-6">{seller.store_name || 'Loja não informada'}</p>
+                    <h2 id="seller-profile-title" className="font-display font-bold text-2xl text-white mb-1 text-center">{seller.user_name}</h2>
+                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6">{seller.store_name || 'Loja não informada'}</p>
 
                     <div className="flex gap-mx-xs justify-center w-full flex-wrap mb-8">
                         {badge === 'fire' && <div className="p-mx-xs bg-status-warning-surface text-status-warning rounded-xl border border-status-warning/30" title="On Fire"><Flame className="w-mx-sm h-mx-sm" /></div>}
@@ -80,26 +80,26 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
                     </div>
 
                     <div className="w-full space-y-mx-xs mt-auto">
-                        <div className="w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-mx-xs bg-brand-primary text-mx-black shadow-mx-glow-brand">
+                        <div className="w-full py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center justify-center gap-mx-xs bg-emerald-600 text-mx-black shadow-mx-glow-brand">
                             <Activity className="w-mx-sm h-mx-sm" /> Performance
                         </div>
                     </div>
                 </div>
 
                 {/* Right: Content */}
-                <div className="w-full md:w-mx-xs/3 p-mx-xl overflow-y-auto custom-scrollbar bg-mx-black/50">
+                <div className="w-full md:w-mx-xs/3 p-mx-xl overflow-y-auto custom-scrollbar bg-gray-900/50">
                     
                     <motion.div initial={{ opacity: 0, x: 20 }} animate={{ opacity: 1, x: 0 }} className="h-full flex flex-col">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="text-lg font-bold flex items-center gap-mx-xs">
                                     Atributos do Vendedor
                                 </h3>
-                                <div className="px-3 py-1 bg-white/10 rounded-lg text-xs font-black uppercase text-text-secondary">
+                                <div className="px-3 py-1 bg-white/10 rounded-lg text-xs font-bold uppercase text-gray-500">
                                     Nível {Math.floor(seller.atingimento / 10) || 1}
                                 </div>
                             </div>
 
-                            <p className="mb-4 text-xs font-bold uppercase tracking-widest text-text-tertiary">
+                            <p className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-500">
                                 Atributos derivados de atingimento, volume operacional, conversão, ritmo e visitas.
                             </p>
                             <div className="flex-1 flex flex-col items-center justify-center mb-6 min-h-mx-64" aria-label="Radar de atributos derivados">
@@ -128,21 +128,21 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
 
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-mx-sm w-full">
                                 <div className="bg-white/5 p-mx-md rounded-xl border border-white/5">
-                                    <div className="text-mx-tiny text-text-tertiary uppercase font-bold mb-1">Vendas</div>
-                                    <div className="text-2xl font-display font-black text-white">{seller.vnd_total}</div>
+                                    <div className="text-mx-tiny text-gray-500 uppercase font-bold mb-1">Vendas</div>
+                                    <div className="text-2xl font-display font-bold text-white">{seller.vnd_total}</div>
                                 </div>
                                 <div className="bg-white/5 p-mx-md rounded-xl border border-white/5 relative overflow-hidden">
-                                    <div className="text-mx-tiny text-text-tertiary uppercase font-bold mb-1">Leads</div>
-                                    <div className="text-2xl font-display font-black text-white">{seller.leads}</div>
+                                    <div className="text-mx-tiny text-gray-500 uppercase font-bold mb-1">Leads</div>
+                                    <div className="text-2xl font-display font-bold text-white">{seller.leads}</div>
                                 </div>
                                 <div className="bg-white/5 p-mx-md rounded-xl border border-white/5 relative overflow-hidden">
-                                    <div className="text-mx-tiny text-text-tertiary uppercase font-bold mb-1">Agend.</div>
-                                    <div className="text-2xl font-display font-black text-white">{seller.agd_total}</div>
+                                    <div className="text-mx-tiny text-gray-500 uppercase font-bold mb-1">Agend.</div>
+                                    <div className="text-2xl font-display font-bold text-white">{seller.agd_total}</div>
                                 </div>
                                 <div className="bg-white/5 p-mx-md rounded-xl border border-white/5 relative overflow-hidden">
                                     <div className="absolute right-mx-0 top-mx-0 p-mx-xs opacity-10"><CheckCircle2 className="w-mx-10 h-mx-10" /></div>
-                                    <div className="text-mx-tiny text-text-tertiary uppercase font-bold mb-1">Meta</div>
-                                    <div className="text-2xl font-display font-black text-brand-primary">{seller.meta}</div>
+                                    <div className="text-mx-tiny text-gray-500 uppercase font-bold mb-1">Meta</div>
+                                    <div className="text-2xl font-display font-bold text-emerald-600">{seller.meta}</div>
                                 </div>
                             </div>
                     </motion.div>

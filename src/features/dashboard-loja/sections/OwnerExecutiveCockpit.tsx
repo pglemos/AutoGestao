@@ -138,7 +138,7 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
   )
 
   return (
-    <section className="min-h-full space-y-mx-md bg-surface-alt p-mx-sm md:p-mx-lg">
+    <section className="min-h-full space-y-mx-md bg-gray-50 p-mx-sm md:p-mx-lg">
       <OwnerCockpitHeader
         name={profile?.name || 'Nome não informado'}
         periodLabel={periodLabel}

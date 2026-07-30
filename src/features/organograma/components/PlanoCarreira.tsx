@@ -43,7 +43,7 @@ export function PlanoCarreira() {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleSubmit} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
+      <form onSubmit={handleSubmit} className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
         <Typography variant="caption" tone="muted" className="">Adicionar nível de carreira</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <Field label="Cargo"><Input value={form.cargo} onChange={e => setForm(p => ({ ...p, cargo: e.target.value }))} placeholder="Ex.: Vendedor" /></Field>
@@ -58,23 +58,23 @@ export function PlanoCarreira() {
       </form>
 
       {loading ? (
-        <p className="text-sm font-bold text-text-tertiary">Carregando trilhas…</p>
+        <p className="text-sm font-bold text-gray-500">Carregando trilhas…</p>
       ) : cargos.length === 0 ? (
         <EmptyState icon={<TrendingUp size={28} />} title="Sem trilhas de carreira" description="Defina os níveis e requisitos de cada cargo." />
       ) : (
         <div className="grid gap-mx-md md:grid-cols-2">
           {cargos.map(cargo => (
-            <div key={cargo} className="rounded-mx-xl border border-border-default p-mx-md">
+            <div key={cargo} className="rounded-2xl border border-gray-200 p-mx-md">
               <Typography variant="caption" className="">{cargo}</Typography>
               <ol className="mt-mx-sm space-y-mx-sm">
                 {porCargo.get(cargo)!.map(n => (
-                  <li key={n.id} className="rounded-mx-lg bg-surface-alt p-mx-sm">
+                  <li key={n.id} className="rounded-xl bg-gray-50 p-mx-sm">
                     <div className="flex items-center gap-mx-sm">
-                      <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-mx-full bg-brand-primary px-2 text-xs font-black text-white">{n.nivel}</span>
-                      <span className="font-black uppercase text-sm">{n.nome}</span>
-                      {n.proximo_cargo && <span className="ml-auto text-xs font-bold text-text-tertiary">→ {n.proximo_cargo}</span>}
+                      <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-mx-full bg-emerald-600 px-2 text-xs font-bold text-white">{n.nivel}</span>
+                      <span className="font-bold uppercase text-sm">{n.nome}</span>
+                      {n.proximo_cargo && <span className="ml-auto text-xs font-bold text-gray-500">→ {n.proximo_cargo}</span>}
                     </div>
-                    {n.requisitos && <p className="mt-mx-xs text-xs font-medium text-text-secondary">{n.requisitos}</p>}
+                    {n.requisitos && <p className="mt-mx-xs text-xs font-medium text-gray-500">{n.requisitos}</p>}
                   </li>
                 ))}
               </ol>
@@ -89,7 +89,7 @@ export function PlanoCarreira() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-mx-xs">
-      <span className="block px-1 text-xs font-black uppercase tracking-widest text-text-tertiary">{label}</span>
+      <span className="block px-1 text-xs font-bold uppercase tracking-widest text-gray-500">{label}</span>
       {children}
     </label>
   )

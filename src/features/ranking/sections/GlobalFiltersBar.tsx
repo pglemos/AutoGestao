@@ -26,7 +26,7 @@ export function GlobalFiltersBar({
         <Search
           size={16}
           aria-hidden="true"
-          className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors"
+          className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors"
         />
         <Input
           id="ranking-global-search"
@@ -38,16 +38,16 @@ export function GlobalFiltersBar({
           placeholder="LOCALIZAR VENDEDOR OU LOJA..."
           value={searchTerm}
           onChange={(e) => onSearchChange(e.target.value)}
-          className="!pl-11 !h-mx-14 !text-mx-tiny uppercase tracking-widest font-black"
+          className="!pl-11 !h-mx-14 !text-mx-tiny uppercase tracking-widest font-bold"
         />
       </label>
-      <div className="flex items-center gap-mx-xs bg-white border border-border-default px-4 h-mx-14 sm:h-mx-14 rounded-mx-md shadow-inner overflow-x-auto no-scrollbar">
+      <div className="flex items-center gap-mx-xs bg-white border border-gray-200 px-4 h-mx-14 sm:h-mx-14 rounded-xl shadow-none overflow-x-auto no-scrollbar">
         <button
           type="button"
           onClick={() => onFilterStoreChange('all')}
           className={cn(
-            "px-3 py-1 rounded-mx-sm text-mx-tiny font-black uppercase tracking-widest whitespace-nowrap transition-colors",
-            filterStore === 'all' ? 'bg-brand-primary text-white' : 'text-text-tertiary hover:bg-surface-alt'
+            "px-3 py-1 rounded-lg text-mx-tiny font-bold uppercase tracking-widest whitespace-nowrap transition-colors",
+            filterStore === 'all' ? 'bg-emerald-600 text-white' : 'text-gray-500 hover:bg-gray-50'
           )}
         >Todas</button>
         {lojas.map(store => (
@@ -56,8 +56,8 @@ export function GlobalFiltersBar({
             type="button"
             onClick={() => onFilterStoreChange(store === filterStore ? 'all' : (store || 'all'))}
             className={cn(
-              "px-3 py-1 rounded-mx-sm text-mx-tiny font-black uppercase tracking-widest whitespace-nowrap transition-colors",
-              filterStore === store ? 'bg-brand-primary text-mx-black' : 'text-text-tertiary hover:bg-surface-alt'
+              "px-3 py-1 rounded-lg text-mx-tiny font-bold uppercase tracking-widest whitespace-nowrap transition-colors",
+              filterStore === store ? 'bg-emerald-600 text-mx-black' : 'text-gray-500 hover:bg-gray-50'
             )}
           >{hideStoreNames ? getHiddenStoreName(store) : store}</button>
         ))}

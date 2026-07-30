@@ -697,7 +697,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
         <div className="flex items-start justify-between px-6 py-4 border-b border-[#E5E7EB]">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="w-5 h-5 rounded-full bg-[#6D28D9] text-white text-[10px] font-black flex items-center justify-center flex-shrink-0">4</span>
+              <span className="w-5 h-5 rounded-full bg-[#6D28D9] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">4</span>
               <h2 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Cadastrar Venda/Agendamentos</h2>
               <InfoTooltip text="Registros criados aqui são salvos diretamente na Carteira de Clientes — base única do sistema. Nenhum dado é duplicado." />
             </div>

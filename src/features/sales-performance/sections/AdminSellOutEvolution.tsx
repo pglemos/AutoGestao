@@ -17,10 +17,10 @@ type Props = { metrics: NetworkMetrics; hasHistoricalData: boolean }
 export function AdminSellOutEvolution({ metrics, hasHistoricalData }: Props) {
   return (
     <Card className="h-full border-none bg-white overflow-hidden">
-      <CardHeader className="bg-surface-alt/30 border-b border-border-default p-mx-lg md:p-mx-10 flex flex-col md:flex-row md:items-center justify-between gap-mx-md">
+      <CardHeader className="bg-gray-50/30 border-b border-gray-200 p-mx-lg md:p-mx-10 flex flex-col md:flex-row md:items-center justify-between gap-mx-md">
         <div>
           <CardTitle className="text-xl md:text-2xl uppercase">Evolucao de Sell-out</CardTitle>
-          <CardDescription className="uppercase tracking-widest font-black text-mx-micro mt-1 opacity-60">
+          <CardDescription className="uppercase tracking-widest font-bold text-mx-micro mt-1 opacity-60">
             Historico consolidado da rede | 180 dias
           </CardDescription>
         </div>

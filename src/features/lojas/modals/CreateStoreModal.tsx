@@ -36,7 +36,7 @@ export function CreateStoreModal({
       {isOpen && (
         <div
           ref={modalRef}
-          className="fixed inset-0 z-50 flex items-center justify-center p-mx-md bg-mx-black/60 backdrop-blur-md"
+          className="fixed inset-0 z-50 flex items-center justify-center p-mx-md bg-gray-900/60 backdrop-blur-md"
           role="dialog"
           aria-modal="true"
           aria-labelledby="create-store-title"
@@ -49,9 +49,9 @@ export function CreateStoreModal({
           >
             <Card className="p-mx-lg md:p-14 border-none shadow-mx-2xl bg-white overflow-hidden relative">
               <form onSubmit={onSubmit} className="space-y-mx-xl relative z-10">
-                <header className="flex items-center justify-between border-b border-border-default pb-8">
+                <header className="flex items-center justify-between border-b border-gray-200 pb-8">
                   <div className="flex items-center gap-mx-sm">
-                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 flex items-center justify-center text-brand-primary border border-mx-indigo-100 shadow-inner shrink-0">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 flex items-center justify-center text-emerald-600 border border-mx-indigo-100 shadow-none shrink-0">
                       <Building2 size={28} />
                     </div>
                     <div>
@@ -71,7 +71,7 @@ export function CreateStoreModal({
                     variant="ghost"
                     size="sm"
                     onClick={onClose}
-                    className="rounded-mx-full w-mx-xl h-mx-xl bg-surface-alt hover:bg-white shadow-sm transition-all"
+                    className="rounded-mx-full w-mx-xl h-mx-xl bg-gray-50 hover:bg-white shadow-sm transition-all"
                     aria-label="Fechar modal"
                   >
                     <X size={24} />
@@ -97,7 +97,7 @@ export function CreateStoreModal({
                       onChange={e =>
                         setNewStore(p => ({ ...p, name: e.target.value.toUpperCase() }))
                       }
-                      className="!h-14 !px-6 font-black uppercase tracking-widest"
+                      className="!h-14 !px-6 font-bold uppercase tracking-widest"
                     />
                   </div>
                   <div className="space-y-mx-xs">
@@ -117,7 +117,7 @@ export function CreateStoreModal({
                     <div className="relative group">
                       <Mail
                         size={18}
-                        className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors"
+                        className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors"
                         aria-hidden="true"
                       />
                       <Input
@@ -135,7 +135,7 @@ export function CreateStoreModal({
                   </div>
                 </div>
 
-                <footer className="pt-10 flex justify-end border-t border-border-default">
+                <footer className="pt-10 flex justify-end border-t border-gray-200">
                   <Button
                     type="submit"
                     disabled={creating}

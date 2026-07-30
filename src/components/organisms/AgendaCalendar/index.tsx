@@ -59,14 +59,14 @@ export function AgendaCalendar({
   const isTimeGrid = viewMode === 'day' || viewMode === 'week'
 
   return (
-    <Card className={cn('border border-border-strong shadow-none bg-white overflow-hidden rounded-mx-lg flex flex-col', className)}>
+    <Card className={cn('border border-gray-200 shadow-none bg-white overflow-hidden rounded-xl flex flex-col', className)}>
       {showNavigation && (
-        <div className="flex items-center justify-between gap-mx-xs p-mx-sm sm:p-mx-md border-b border-border-strong bg-white">
+        <div className="flex items-center justify-between gap-mx-xs p-mx-sm sm:p-mx-md border-b border-gray-200 bg-white">
           <button
             type="button"
             onClick={onPrevMonth}
             aria-label={viewMode === 'day' ? 'Dia anterior' : viewMode === 'week' ? 'Semana anterior' : 'Mês anterior'}
-            className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-white text-text-secondary transition-colors hover:bg-surface-alt hover:text-text-primary"
+            className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-white text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800"
           >
             <ChevronLeft size={18} />
           </button>
@@ -79,7 +79,7 @@ export function AgendaCalendar({
               <button
                 type="button"
                 onClick={onToday}
-                className="rounded-mx-lg border border-border-strong bg-white px-3 py-1.5 text-xs font-semibold text-text-secondary transition-colors hover:bg-surface-alt hover:text-text-primary"
+                className="rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800"
               >
                 Hoje
               </button>
@@ -90,7 +90,7 @@ export function AgendaCalendar({
             type="button"
             onClick={onNextMonth}
             aria-label={viewMode === 'day' ? 'Próximo dia' : viewMode === 'week' ? 'Próxima semana' : 'Próximo mês'}
-            className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-white text-text-secondary transition-colors hover:bg-surface-alt hover:text-text-primary"
+            className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-white text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800"
           >
             <ChevronRightIcon size={18} />
           </button>

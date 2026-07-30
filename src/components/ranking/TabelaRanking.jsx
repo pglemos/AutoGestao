@@ -75,7 +75,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                       <div>
                         <div className="flex items-center gap-1.5">
                           <span className="text-[13px] font-semibold text-slate-800">{v.nome}</span>
-                          {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-[9px] font-black rounded-full">Você</span>}
+                          {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-[9px] font-bold rounded-full">Você</span>}
                         </div>
                       </div>
                     </div>

@@ -57,7 +57,7 @@ export function CancelarVendaModal({
       )}
     >
       <div className="space-y-mx-md">
-        <div className="rounded-mx-lg border border-status-warning/20 bg-status-warning/5 p-mx-md">
+        <div className="rounded-xl border border-status-warning/20 bg-status-warning/5 p-mx-md">
           <Typography variant="p" className="text-sm">
             Esta ação marca a venda{resumo ? ` de ${BRL(resumo.valor)}` : ''} como cancelada e fica registrada para auditoria. O evento original da venda não é apagado.
           </Typography>

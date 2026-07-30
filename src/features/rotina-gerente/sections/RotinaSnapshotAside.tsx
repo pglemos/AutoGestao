@@ -41,7 +41,7 @@ export function RotinaSnapshotAside({
         <div className="relative z-10 space-y-mx-lg">
           <header className="flex items-center justify-between mb-10 border-b border-white/10 pb-6">
             <div className="flex items-center gap-mx-sm">
-              <div className="w-mx-xl h-mx-xl rounded-mx-lg bg-white/10 flex items-center justify-center border border-white/10 shadow-mx-inner">
+              <div className="w-mx-xl h-mx-xl rounded-xl bg-white/10 flex items-center justify-center border border-white/10 shadow-mx-inner">
                 <History size={24} />
               </div>
               <Typography
@@ -99,7 +99,7 @@ export function RotinaSnapshotAside({
 
       <Card className="border bg-white p-mx-md space-y-mx-md">
         <header className="flex items-center gap-mx-sm mb-4">
-          <div className="w-mx-xl h-mx-xl rounded-mx-lg bg-status-success-surface text-status-success flex items-center justify-center border border-status-success/20 shadow-mx-inner">
+          <div className="w-mx-xl h-mx-xl rounded-xl bg-status-success-surface text-status-success flex items-center justify-center border border-status-success/20 shadow-mx-inner">
             <ShieldCheck size={24} />
           </div>
           <div>

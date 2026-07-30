@@ -12,7 +12,7 @@ export interface SkeletonCardProps {
  */
 export function SkeletonCard({ className, showAvatar = false, lines = 3 }: SkeletonCardProps) {
   return (
-    <div className={cn('rounded-mx-2xl border border-border-default/50 bg-surface-base p-mx-md space-y-mx-sm', className)}>
+    <div className={cn('rounded-2xl border border-gray-200/50 bg-surface-base p-mx-md space-y-mx-sm', className)}>
       <div className="flex items-center gap-mx-sm">
         {showAvatar && <Skeleton variant="avatar" />}
         <div className="flex-1 space-y-mx-xs">

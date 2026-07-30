@@ -40,7 +40,7 @@ export function TeamListSection({
     <section className="order-1 min-w-0 pb-24">
       {teamError ? (
         <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center justify-center min-h-[40vh] space-y-mx-lg text-center border-2 border-dashed border-status-error/20 rounded-mx-4xl bg-status-error-surface/40 p-mx-xl">
-          <div className="w-mx-20 h-mx-20 rounded-mx-3xl bg-white flex items-center justify-center text-status-error shadow-mx-lg border border-status-error/10">
+          <div className="w-mx-20 h-mx-20 rounded-2xl bg-white flex items-center justify-center text-status-error shadow-sm border border-status-error/10">
             <ShieldAlert size={34} />
           </div>
           <div className="space-y-mx-sm max-w-lg">
@@ -54,7 +54,7 @@ export function TeamListSection({
         </motion.div>
       ) : filteredTeam.length > 0 ? (
         <Card className="border-none bg-white overflow-hidden">
-          <CardHeader className="border-b border-border-default bg-white p-mx-lg">
+          <CardHeader className="border-b border-gray-200 bg-white p-mx-lg">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-mx-sm">
               <div>
                 <CardTitle className="text-lg">Integrantes vinculados</CardTitle>
@@ -63,7 +63,7 @@ export function TeamListSection({
               <Badge variant="outline" className="w-fit">{filteredTeam.length} registros</Badge>
             </div>
           </CardHeader>
-          <div className="hidden lg:grid store-team-grid gap-mx-md px-mx-lg py-mx-sm bg-surface-alt border-b border-border-default text-mx-nano font-black uppercase tracking-mx-widest text-text-tertiary">
+          <div className="hidden lg:grid store-team-grid gap-mx-md px-mx-lg py-mx-sm bg-gray-50 border-b border-gray-200 text-mx-nano font-bold uppercase tracking-mx-widest text-gray-500">
             <span>Integrante</span>
             <span>Papel</span>
             <span>Status</span>
@@ -79,7 +79,7 @@ export function TeamListSection({
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.02 }}
-                  className="grid grid-cols-1 lg:store-team-grid gap-mx-md p-mx-lg items-center hover:bg-surface-alt/60 transition-colors"
+                  className="grid grid-cols-1 lg:store-team-grid gap-mx-md p-mx-lg items-center hover:bg-gray-50/60 transition-colors"
                 >
                   <div className="min-w-0">
                     <div className="flex items-center gap-mx-sm min-w-0">
@@ -88,11 +88,11 @@ export function TeamListSection({
                         alt={`Avatar de ${member.name || 'integrante'}`}
                         fallback={member.name || '?'}
                         size="lg"
-                        className="rounded-mx-xl bg-brand-primary/10 text-brand-primary border-brand-primary/10"
+                        className="rounded-2xl bg-emerald-600/10 text-emerald-600 border-brand-primary/10"
                       />
                       <div className="min-w-0 flex-1">
                         <Typography variant="caption" className="block max-w-full tracking-tight truncate">{member.name}</Typography>
-                        <div className="mt-1 flex flex-wrap gap-x-mx-md gap-y-mx-tiny text-mx-micro font-bold text-text-tertiary">
+                        <div className="mt-1 flex flex-wrap gap-x-mx-md gap-y-mx-tiny text-mx-micro font-bold text-gray-500">
                           <span className="inline-flex items-center gap-mx-tiny min-w-0"><Mail size={11} />{member.email || 'sem e-mail'}</span>
                           <span className="inline-flex items-center gap-mx-tiny"><Phone size={11} />{member.phone || 'sem telefone'}</span>
                         </div>
@@ -114,20 +114,20 @@ export function TeamListSection({
                     </Badge>
                   </div>
 
-                  <div className="grid grid-cols-2 gap-mx-sm text-mx-tiny font-black uppercase">
+                  <div className="grid grid-cols-2 gap-mx-sm text-mx-tiny font-bold uppercase">
                     <div>
-                      <span className="block text-mx-nano text-text-tertiary tracking-mx-widest">Início</span>
+                      <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Início</span>
                       {member.started_at ? format(parseISO(member.started_at), 'dd/MM/yyyy') : '--'}
                     </div>
                     <div>
-                      <span className="block text-mx-nano text-text-tertiary tracking-mx-widest">Fim</span>
+                      <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Fim</span>
                       {member.ended_at ? format(parseISO(member.ended_at), 'dd/MM/yyyy') : '--'}
                     </div>
                   </div>
 
                   <div className="flex items-center justify-start lg:justify-end gap-mx-xs">
                     {canManageTeamMembers && (
-                      <Button variant="outline" size="icon" onClick={() => onEditMember(member)} className="h-mx-10 w-mx-10 rounded-mx-xl" aria-label={`Editar ${member.name}`}>
+                      <Button variant="outline" size="icon" onClick={() => onEditMember(member)} className="h-mx-10 w-mx-10 rounded-2xl" aria-label={`Editar ${member.name}`}>
                         <Settings2 size={16} />
                       </Button>
                     )}
@@ -137,16 +137,16 @@ export function TeamListSection({
                         size="icon"
                         onClick={() => onDeleteMember(member)}
                         disabled={pendingConfirmations.has(getDeleteMemberConfirmationKey(member))}
-                        className="h-mx-10 w-mx-10 rounded-mx-xl text-status-error hover:bg-status-error-surface"
+                        className="h-mx-10 w-mx-10 rounded-2xl text-status-error hover:bg-status-error-surface"
                         aria-label={`Encerrar vínculo de ${member.name}`}
                       >
                         <Trash2 size={16} />
                       </Button>
                     )}
-                    <Button variant="outline" size="icon" onClick={() => member.phone && window.open(`tel:${member.phone}`)} disabled={!member.phone} className="h-mx-10 w-mx-10 rounded-mx-xl" aria-label={member.phone ? `Ligar para ${member.name}` : `Telefone não informado para ${member.name}`}>
+                    <Button variant="outline" size="icon" onClick={() => member.phone && window.open(`tel:${member.phone}`)} disabled={!member.phone} className="h-mx-10 w-mx-10 rounded-2xl" aria-label={member.phone ? `Ligar para ${member.name}` : `Telefone não informado para ${member.name}`}>
                       <Phone size={16} />
                     </Button>
-                    <Button variant="outline" size="icon" asChild className="h-mx-10 w-mx-10 text-white border-none hover:bg-brand-primary" aria-label={`Ver performance de ${member.name}`}>
+                    <Button variant="outline" size="icon" asChild className="h-mx-10 w-mx-10 text-white border-none hover:bg-emerald-600" aria-label={`Ver performance de ${member.name}`}>
                       <Link to={`/relatorios/performance-vendedor?id=${member.id}`}>
                         <TrendingUp size={16} />
                       </Link>
@@ -159,7 +159,7 @@ export function TeamListSection({
         </Card>
       ) : (
         <Card className="border-none bg-white overflow-hidden">
-          <CardHeader className="border-b border-border-default bg-white p-mx-lg">
+          <CardHeader className="border-b border-gray-200 bg-white p-mx-lg">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-mx-sm">
               <div>
                 <CardTitle className="text-lg">Integrantes vinculados</CardTitle>
@@ -172,9 +172,9 @@ export function TeamListSection({
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center justify-center space-y-mx-md text-center rounded-mx-3xl border border-dashed border-border-default bg-surface-alt p-mx-lg"
+              className="flex flex-col items-center justify-center space-y-mx-md text-center rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-mx-lg"
             >
-              <div className="w-mx-16 h-mx-16 rounded-mx-2xl bg-white flex items-center justify-center text-brand-primary shadow-mx-sm border border-border-default">
+              <div className="w-mx-16 h-mx-16 rounded-2xl bg-white flex items-center justify-center text-emerald-600 shadow-sm border border-gray-200">
                 <Users size={28} strokeWidth={1.8} />
               </div>
               <div className="space-y-mx-xs max-w-sm">

@@ -111,8 +111,8 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
                   <div className="min-w-0 flex-1">
                     <div className="flex flex-wrap items-center gap-2">
                       <span className={`rounded-lg px-2 py-0.5 text-[11px] font-bold ${slot.isCurrent ? 'bg-status-info text-white' : 'bg-slate-100 text-slate-500'}`}>{slot.time}</span>
-                      <span className={`text-[14px] font-bold ${slot.isCurrent ? 'text-mx-text' : 'text-slate-600'}`}>{template?.nome || STEP_LABELS[slot.key] || slot.key}</span>
-                      {slot.isCurrent && <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-black uppercase tracking-wider text-status-info">Agora</span>}
+                      <span className={`text-[14px] font-bold ${slot.isCurrent ? 'text-gray-800' : 'text-slate-600'}`}>{template?.nome || STEP_LABELS[slot.key] || slot.key}</span>
+                      {slot.isCurrent && <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider text-status-info">Agora</span>}
                     </div>
                     {!isExpanded && <p className={`mt-0.5 truncate text-[12px] ${slot.isCurrent ? 'font-semibold text-status-info' : 'text-slate-400'}`}>{template?.objetivo || 'Execute esta etapa da rotina.'}</p>}
                   </div>
@@ -133,7 +133,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
                             {playbook.prospeccaoHoje.map(item => (
                               <div key={item.id} className="flex flex-col rounded-xl border border-slate-200 bg-white p-4">
                                 <div className="mb-3 flex items-start justify-between gap-3">
-                                  <div><p className="text-[13px] font-bold text-mx-text">{TIPO_ACAO_LABEL[item.tipo_acao] || item.tipo_acao}</p><p className="text-[11px] text-slate-400">{item.publico || 'Todos'}</p></div>
+                                  <div><p className="text-[13px] font-bold text-gray-800">{TIPO_ACAO_LABEL[item.tipo_acao] || item.tipo_acao}</p><p className="text-[11px] text-slate-400">{item.publico || 'Todos'}</p></div>
                                   <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-[11px] font-bold text-status-info">{item.quantidade ? `${item.quantidade}/${item.periodicidade || 'dia'}` : item.periodicidade || 'Hoje'}</span>
                                 </div>
                                 {item.objetivo && <p className="mb-3 text-[12px] text-slate-500">{item.objetivo}</p>}
@@ -147,7 +147,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
                       <ol className="space-y-2">
                         {instructions.map((instruction, index) => (
                           <li key={`${slot.key}-${index}`} className="flex items-start gap-2.5">
-                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-status-info text-[10px] font-black text-white">{index + 1}</span>
+                            <span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-status-info text-[10px] font-bold text-white">{index + 1}</span>
                             <span className="text-[13px] leading-5 text-slate-700">{instruction}</span>
                           </li>
                         ))}
@@ -173,7 +173,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
         </div>
 
         <aside className="hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:block">
-          <h3 className="mb-4 text-[13px] font-black uppercase tracking-wider text-slate-400">Linha do dia</h3>
+          <h3 className="mb-4 text-[13px] font-bold uppercase tracking-wider text-slate-400">Linha do dia</h3>
           <ol className="space-y-0">
             {playbook.slots.map((slot, index) => (
               <li key={`timeline-${slot.key}`} className="relative flex gap-3 pb-5 last:pb-0">
@@ -191,7 +191,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
           <div className="space-y-4">
             <div className="rounded-xl bg-blue-50 p-3 text-[12px] text-slate-600"><strong className="text-status-info">Objetivo:</strong> {howTo.objetivo || 'Executar a ação de prospecção.'}</div>
             <p className="text-[13px] leading-6 text-slate-600">Use uma mensagem simples, pessoal e com uma chamada clara para conversa. Registre os retornos relevantes na Carteira.</p>
-            {playbook.storyIdeaHoje && <div className="rounded-xl bg-slate-50 p-3"><p className="text-[12px] font-bold text-mx-text">{playbook.storyIdeaHoje.titulo}</p><ol className="mt-2 space-y-1 text-[12px] text-slate-600">{playbook.storyIdeaHoje.passos.map((step, index) => <li key={index}>{index + 1}. {step}</li>)}</ol></div>}
+            {playbook.storyIdeaHoje && <div className="rounded-xl bg-slate-50 p-3"><p className="text-[12px] font-bold text-gray-800">{playbook.storyIdeaHoje.titulo}</p><ol className="mt-2 space-y-1 text-[12px] text-slate-600">{playbook.storyIdeaHoje.passos.map((step, index) => <li key={index}>{index + 1}. {step}</li>)}</ol></div>}
           </div>
         )}
       </Modal>

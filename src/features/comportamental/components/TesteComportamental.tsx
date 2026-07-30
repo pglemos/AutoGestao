@@ -40,7 +40,7 @@ export function TesteComportamental() {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleAddQuestao} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
+      <form onSubmit={handleAddQuestao} className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
         <Typography variant="caption" tone="muted" className="">Adicionar questão ao teste</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-[1fr_200px_auto]">
           <Input aria-label="Enunciado da questão" value={novaQuestao} onChange={e => setNovaQuestao(e.target.value)} placeholder="Enunciado da questão" />
@@ -50,7 +50,7 @@ export function TesteComportamental() {
       </form>
 
       {loading ? (
-        <p className="text-sm font-bold text-text-tertiary">Carregando questões…</p>
+        <p className="text-sm font-bold text-gray-500">Carregando questões…</p>
       ) : questoes.length === 0 ? (
         <EmptyState icon={<ClipboardCheck size={28} />} title="Nenhuma questão" description="Cadastre as questões do teste comportamental." />
       ) : (
@@ -59,19 +59,19 @@ export function TesteComportamental() {
             Aplicar teste (você responde como exemplo de onboarding) — escala 1 (discordo) a 5 (concordo)
           </Typography>
           {questoes.map((q, i) => (
-            <div key={q.id} className="rounded-mx-xl border border-border-default p-mx-md">
+            <div key={q.id} className="rounded-2xl border border-gray-200 p-mx-md">
               <div className="flex items-start gap-mx-sm">
-                <span className="text-xs font-black text-text-tertiary">{i + 1}.</span>
+                <span className="text-xs font-bold text-gray-500">{i + 1}.</span>
                 <div className="flex-1">
-                  <p className="font-bold text-text-primary">{q.texto}</p>
-                  <span className="text-xs font-black uppercase tracking-widest text-text-tertiary">{q.dimensao}</span>
+                  <p className="font-bold text-gray-800">{q.texto}</p>
+                  <span className="text-xs font-bold uppercase tracking-widest text-gray-500">{q.dimensao}</span>
                   <div className="mt-mx-sm flex gap-mx-xs">
                     {ESCALA.map(v => (
                       <button
                         key={v}
                         type="button"
                         onClick={() => setRespostas(p => ({ ...p, [q.id]: v }))}
-                        className={`h-9 w-9 rounded-mx-full text-sm font-black transition-colors ${respostas[q.id] === v ? 'bg-brand-primary text-white' : 'bg-surface-alt text-text-secondary hover:bg-border-default'}`}
+                        className={`h-9 w-9 rounded-mx-full text-sm font-bold transition-colors ${respostas[q.id] === v ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-gray-500 hover:bg-border-default'}`}
                       >
                         {v}
                       </button>

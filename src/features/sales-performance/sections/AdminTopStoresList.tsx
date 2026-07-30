@@ -15,7 +15,7 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
     <Card className="xl:col-span-5 border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
-          <BarChart3 size={18} className="text-brand-primary" /> Top lojas por sell-out
+          <BarChart3 size={18} className="text-emerald-600" /> Top lojas por sell-out
         </CardTitle>
         <CardDescription>Ranking historico com meta, equipe e ultima atividade</CardDescription>
       </CardHeader>
@@ -26,18 +26,18 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
               key={store.storeId}
               type="button"
               onClick={() => onStoreClick(store.storeId, store.storeName)}
-              className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-mx-sm px-mx-lg py-mx-sm hover:bg-surface-alt/60 transition-colors text-left"
+              className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-mx-sm px-mx-lg py-mx-sm hover:bg-gray-50/60 transition-colors text-left"
             >
               <span
                 className={cn(
-                  'w-mx-8 h-mx-8 rounded-mx-lg flex items-center justify-center text-mx-nano font-black',
+                  'w-mx-8 h-mx-8 rounded-xl flex items-center justify-center text-mx-nano font-bold',
                   i === 0
                     ? 'bg-status-warning text-white'
                     : i === 1
-                      ? 'bg-brand-primary text-white'
+                      ? 'bg-emerald-600 text-white'
                       : i === 2
                         ? 'bg-status-info text-white'
-                        : 'bg-surface-alt text-text-secondary',
+                        : 'bg-gray-50 text-gray-500',
                 )}
               >
                 {i + 1}

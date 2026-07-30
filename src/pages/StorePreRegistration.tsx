@@ -473,7 +473,7 @@ export default function StorePreRegistration() {
                 </div>
               ) : error && !store ? (
                 <div className="mx-pre-state">
-                  <Building2 size={42} className="text-text-tertiary" />
+                  <Building2 size={42} className="text-gray-500" />
                   <h2>Link indisponível</h2>
                   <p>{error}</p>
                   <button
@@ -687,7 +687,7 @@ function Field({ label, icon: Icon, children, error }: { label: string; icon: Re
     <motion.div whileFocus={{ y: -1 }}>
       <label className="mx-public-label">{label}</label>
       <div className="relative mt-2">
-        <Icon size={17} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
+        <Icon size={17} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
         <div className="mx-public-field-control">{children}</div>
       </div>
       {error && <FieldError>{error}</FieldError>}
@@ -697,7 +697,7 @@ function Field({ label, icon: Icon, children, error }: { label: string; icon: Re
 
 function FieldError({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <p className={cn('mt-mx-tiny text-mx-tiny font-black text-status-error', className)}>
+    <p className={cn('mt-mx-tiny text-mx-tiny font-bold text-status-error', className)}>
       {children}
     </p>
   )

@@ -52,13 +52,13 @@ export function OwnerExecutiveSection({
               Prioridades calculadas a partir da estrutura e da disciplina das lojas.
             </Typography>
           </div>
-          <span className="grid h-mx-10 w-mx-10 shrink-0 place-items-center rounded-mx-lg bg-status-success-surface text-brand-primary">
+          <span className="grid h-mx-10 w-mx-10 shrink-0 place-items-center rounded-xl bg-status-success-surface text-emerald-600">
             <Compass size={20} aria-hidden="true" />
           </span>
         </div>
 
         <div className="mt-mx-md space-y-mx-sm">
-          <div className="rounded-mx-lg border border-border-subtle bg-surface-alt p-mx-md">
+          <div className="rounded-xl border border-gray-100 bg-gray-50 p-mx-md">
             <Typography variant="caption" className="font-semibold">
               Unidades que exigem atenção
             </Typography>
@@ -83,7 +83,7 @@ export function OwnerExecutiveSection({
       </MxSectionCard>
 
       <MxSectionCard className="xl:col-span-8">
-        <div className="border-b border-border-subtle p-mx-md">
+        <div className="border-b border-gray-100 p-mx-md">
           <Typography as="h2" variant="h3" className="text-lg">
             Comparativo entre lojas
           </Typography>
@@ -109,11 +109,11 @@ export function OwnerExecutiveSection({
               <Link
                 key={store.id}
                 to={`/lojas/${slugify(store.name)}?id=${store.id}`}
-                className="group rounded-mx-lg border border-border-subtle bg-white p-mx-md transition-colors hover:border-brand-primary hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/15"
+                className="group rounded-xl border border-gray-100 bg-white p-mx-md transition-colors hover:border-brand-primary hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/15"
               >
                 <div className="flex items-start justify-between gap-mx-sm">
                   <div className="min-w-0">
-                    <Typography variant="p" className="font-semibold group-hover:text-brand-primary">
+                    <Typography variant="p" className="font-semibold group-hover:text-emerald-600">
                       {store.name}
                     </Typography>
                     <Typography variant="tiny" tone="muted" className="mt-mx-xs block">
@@ -140,7 +140,7 @@ export function OwnerExecutiveSection({
                   </div>
                   <ArrowRight
                     size={18}
-                    className="text-text-tertiary transition-transform group-hover:translate-x-1 group-hover:text-brand-primary"
+                    className="text-gray-500 transition-transform group-hover:translate-x-1 group-hover:text-emerald-600"
                     aria-hidden="true"
                   />
                 </div>

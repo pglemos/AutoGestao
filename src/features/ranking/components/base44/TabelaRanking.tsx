@@ -59,7 +59,7 @@ const pct = vendedorMeta > 0 ? Math.round((v.vendas / vendedorMeta) * 100) : 0
                       <RankingAvatar nome={v.nome} foto={v.foto} size={32} />
                       <div className="flex items-center gap-1.5">
                         <span className="text-[13px] font-semibold text-slate-800">{v.nome}</span>
-                        {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-[9px] font-black rounded-full">Você</span>}
+                        {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-[9px] font-bold rounded-full">Você</span>}
                       </div>
                     </div>
                   </td>

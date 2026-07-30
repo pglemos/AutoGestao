@@ -8,14 +8,14 @@ import { SellerPageHeader } from '@/components/seller/SellerPageHeader'
 
 export default function VendedorAjuda() {
   return (
-    <main className="w-full h-full flex flex-col overflow-y-auto no-scrollbar bg-surface-alt px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg">
+    <main className="w-full h-full flex flex-col overflow-y-auto no-scrollbar bg-gray-50 px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg">
       <div className="mx-auto w-full max-w-[1500px] flex flex-col gap-4 pb-32">
         <SellerPageHeader icon={LifeBuoy} title="Ajuda" subtitle="Suporte operacional para o vendedor" />
 
         <section className="grid grid-cols-1 gap-mx-lg lg:grid-cols-3">
         <Card className="border-none bg-white p-mx-lg lg:col-span-2">
           <div className="flex items-start gap-mx-md">
-            <div className="w-mx-2xl h-mx-2xl rounded-mx-2xl bg-brand-primary/10 text-brand-primary flex items-center justify-center shrink-0">
+            <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-emerald-600/10 text-emerald-600 flex items-center justify-center shrink-0">
               <LifeBuoy size={28} />
             </div>
             <div className="space-y-mx-xs">
@@ -35,10 +35,10 @@ export default function VendedorAjuda() {
             ].map(item => (
               <Button key={item.title} asChild variant="outline" className="h-auto justify-start bg-white p-mx-md text-left">
                 <Link to={item.to}>
-                  <item.icon size={18} className="mr-mx-sm shrink-0 text-brand-primary" />
+                  <item.icon size={18} className="mr-mx-sm shrink-0 text-emerald-600" />
                   <span className="min-w-0">
-                    <span className="block text-sm font-black uppercase tracking-tight text-text-primary">{item.title}</span>
-                    <span className="block text-xs font-bold normal-case tracking-normal text-text-tertiary">{item.desc}</span>
+                    <span className="block text-sm font-bold uppercase tracking-tight text-gray-800">{item.title}</span>
+                    <span className="block text-xs font-bold normal-case tracking-normal text-gray-500">{item.desc}</span>
                   </span>
                 </Link>
               </Button>
@@ -50,15 +50,15 @@ export default function VendedorAjuda() {
           <div className="space-y-mx-md">
             <Badge variant="brand" className="rounded-mx-full px-4 py-1">Escala de suporte</Badge>
             <div className="space-y-mx-sm">
-              <div className="flex items-start gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-                <UserRound size={18} className="mt-0.5 text-brand-primary" />
+              <div className="flex items-start gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
+                <UserRound size={18} className="mt-0.5 text-emerald-600" />
                 <div>
                   <Typography variant="caption" className="tracking-tight">1. Gerente da unidade</Typography>
                   <Typography variant="p" tone="muted" className="text-xs">Correção de lançamento, dúvida de meta ou devolutiva.</Typography>
                 </div>
               </div>
-              <div className="flex items-start gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
-                <Phone size={18} className="mt-0.5 text-brand-primary" />
+              <div className="flex items-start gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
+                <Phone size={18} className="mt-0.5 text-emerald-600" />
                 <div>
                   <Typography variant="caption" className="tracking-tight">2. Admin MX</Typography>
                   <Typography variant="p" tone="muted" className="text-xs">Acesso, produto digital, configuração de perfil ou erro técnico persistente.</Typography>

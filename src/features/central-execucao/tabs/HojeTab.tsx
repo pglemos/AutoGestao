@@ -71,7 +71,7 @@ export function HojeTab({
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-[14px] font-black text-mx-text">O que você não pode deixar de fazer hoje</h2>
+          <h2 className="text-[14px] font-bold text-gray-800">O que você não pode deixar de fazer hoje</h2>
           <p className="text-[12px] text-slate-400">Atividades previstas para hoje. Execute e registre o resultado.</p>
         </div>
         <div className="flex items-center gap-2">

@@ -26,16 +26,16 @@ export default function PDIPrint() {
     }, [id, fetchPrintBundle])
 
     if (loading) return (
-        <div className="min-h-screen flex flex-col items-center justify-center bg-surface-alt">
+        <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
             <Typography variant="h3" className="animate-pulse">Carregando Bundle Documental...</Typography>
         </div>
     )
 
     if (error || !bundle) return (
-        <div className="min-h-screen p-mx-20 text-center flex flex-col items-center justify-center bg-surface-alt">
-            <History size={48} className="text-text-tertiary mb-6 opacity-20" />
+        <div className="min-h-screen p-mx-20 text-center flex flex-col items-center justify-center bg-gray-50">
+            <History size={48} className="text-gray-500 mb-6 opacity-20" />
             <Typography variant="h3" tone="muted" className="tracking-tighter">Plano ou permissão não localizados.</Typography>
-            <button onClick={() => navigate(-1)} className="mt-8 px-8 py-4 bg-brand-primary text-white rounded-mx-full font-black text-xs uppercase tracking-widest">VOLTAR</button>
+            <button onClick={() => navigate(-1)} className="mt-8 px-8 py-4 bg-emerald-600 text-white rounded-mx-full font-bold text-xs uppercase tracking-widest">VOLTAR</button>
         </div>
     )
 
@@ -63,36 +63,36 @@ export default function PDIPrint() {
             
             {/* Action Bar (Not Printed) */}
             <div className="w-full max-w-[210mm] flex items-center justify-between mb-8 print:hidden px-4">
-                <button onClick={() => navigate(-1)} className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border-default rounded-mx-full text-xs font-black uppercase tracking-widest shadow-sm hover:bg-surface-alt">
+                <button onClick={() => navigate(-1)} className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-gray-200 rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-gray-50">
                     <ChevronLeft size={16} /> Voltar
                 </button>
-                <button onClick={handlePrint} className="flex items-center gap-mx-xs px-8 py-3 bg-brand-secondary text-white rounded-mx-full text-xs font-black uppercase tracking-widest shadow-mx-lg hover:scale-105 active:scale-95 transition-transform">
+                <button onClick={handlePrint} className="flex items-center gap-mx-xs px-8 py-3 bg-gray-900 text-white rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:scale-105 active:scale-95 transition-transform">
                     <Printer size={16} /> Imprimir Bundle PDI (A4)
                 </button>
             </div>
 
             {/* A4 Document Container */}
-            <div ref={printRef} className="w-[210mm] bg-white shadow-2xl print:shadow-none print:w-full print:max-w-none text-text-primary flex flex-col gap-y-[20mm]">
+            <div ref={printRef} className="w-[210mm] bg-white shadow-2xl print:shadow-none print:w-full print:max-w-none text-gray-800 flex flex-col gap-y-[20mm]">
                 
                 {/* --- PÁGINA 1: CAPA --- */}
-                <div className="p-[20mm] h-[297mm] relative break-after-page flex flex-col border border-border-default print:border-none">
-                    <div className="absolute top-mx-0 left-mx-0 w-full h-mx-lg bg-brand-secondary" />
+                <div className="p-[20mm] h-[297mm] relative break-after-page flex flex-col border border-gray-200 print:border-none">
+                    <div className="absolute top-mx-0 left-mx-0 w-full h-mx-lg bg-gray-900" />
                     <header className="flex justify-between items-start mt-10 mb-20 border-b-4 border-mx-black pb-8">
                         <div>
                             <div className="flex items-center gap-mx-sm mb-4">
-                                <div className="w-mx-xl h-mx-xl bg-mx-black text-white flex items-center justify-center rounded-mx-xl shadow-md"><Target size={24} /></div>
+                                <div className="w-mx-xl h-mx-xl bg-gray-900 text-white flex items-center justify-center rounded-2xl shadow-md"><Target size={24} /></div>
                                 <Typography variant="h2" className="text-xl tracking-tighter">MX <span className="text-mx-green-700">PERFORMANCE</span></Typography>
                             </div>
                             <Typography variant="h1" className="text-4xl tracking-tighter leading-none">Plano de Desenvolvimento<br/>Individual <span className="text-mx-green-700">(PDI)</span></Typography>
                         </div>
                         <div className="text-right">
-                            <Typography variant="mono" className="text-xs bg-surface-alt px-4 py-2 rounded">Protocolo: {bundle.sessao.id.split('-')[0]}</Typography>
+                            <Typography variant="mono" className="text-xs bg-gray-50 px-4 py-2 rounded">Protocolo: {bundle.sessao.id.split('-')[0]}</Typography>
                         </div>
                     </header>
 
                     <div className="mb-14 flex gap-mx-md items-center">
-                        <div className="w-mx-2xl h-mx-2xl rounded-mx-full bg-surface-alt border border-border-default flex items-center justify-center">
-                            <User size={24} className="text-text-tertiary" />
+                        <div className="w-mx-2xl h-mx-2xl rounded-mx-full bg-gray-50 border border-gray-200 flex items-center justify-center">
+                            <User size={24} className="text-gray-500" />
                         </div>
                         <div>
                             <Typography variant="tiny" tone="muted" className="">Colaborador (Especialista)</Typography>
@@ -108,8 +108,8 @@ export default function PDIPrint() {
                             <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Curto Prazo (6 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas6.map((m, i) => (
-                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
-                                        <span className="text-brand-primary text-xs mr-2">[{m.tipo}]</span> {m.descricao}
+                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-emerald-600 before:rounded-full">
+                                        <span className="text-emerald-600 text-xs mr-2">[{m.tipo}]</span> {m.descricao}
                                     </li>
                                 ))}
                             </ul>
@@ -118,8 +118,8 @@ export default function PDIPrint() {
                             <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Médio Prazo (12 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas12.map((m, i) => (
-                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
-                                        <span className="text-brand-primary text-xs mr-2">[{m.tipo}]</span> {m.descricao}
+                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-emerald-600 before:rounded-full">
+                                        <span className="text-emerald-600 text-xs mr-2">[{m.tipo}]</span> {m.descricao}
                                     </li>
                                 ))}
                             </ul>
@@ -128,8 +128,8 @@ export default function PDIPrint() {
                             <Typography variant="h3" className="text-brand-secondary border-l-4 border-brand-primary pl-4 mb-4">Metas de Longo Prazo (24 Meses)</Typography>
                             <ul className="space-y-mx-xs pl-8 list-none">
                                 {metas24.map((m, i) => (
-                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-brand-primary before:rounded-full">
-                                        <span className="text-brand-primary text-xs mr-2">[{m.tipo}]</span> {m.descricao}
+                                    <li key={i} className="text-sm font-bold uppercase relative before:content-[''] before:absolute before:-left-5 before:top-1.5 before:w-2 before:h-2 before:bg-emerald-600 before:rounded-full">
+                                        <span className="text-emerald-600 text-xs mr-2">[{m.tipo}]</span> {m.descricao}
                                     </li>
                                 ))}
                             </ul>
@@ -137,7 +137,7 @@ export default function PDIPrint() {
                     </div>
 
                     <footer className="mt-auto pt-10 text-center space-y-mx-sm">
-                        <Sparkles size={24} className="mx-auto text-brand-primary opacity-30" />
+                        <Sparkles size={24} className="mx-auto text-emerald-600 opacity-30" />
                         <Typography variant="p" className="text-sm font-bold italic leading-relaxed">
                             "Comprometa-se com suas metas e encare os obstáculos como etapas para atingir o objetivo final. 
                             Disciplina é a ponte entre metas e realizações."
@@ -146,7 +146,7 @@ export default function PDIPrint() {
                 </div>
 
                 {/* --- PÁGINA 2: VENDEDOR 1 / MAPA DE COMPETÊNCIAS --- */}
-                <div className="p-[20mm] min-h-[297mm] break-after-page flex flex-col border border-border-default print:border-none relative">
+                <div className="p-[20mm] min-h-[297mm] break-after-page flex flex-col border border-gray-200 print:border-none relative">
                     <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10">
                         <Typography variant="h2" className="text-2xl tracking-tighter">Mapa de Competências</Typography>
                         <Typography variant="caption" tone="muted" className="text-mx-tiny">Página 2 / Vendedor 1</Typography>
@@ -157,7 +157,7 @@ export default function PDIPrint() {
                             <Typography variant="tiny" className="">Mapeamento Técnico & Comportamental</Typography>
                             <table className="w-full text-xs font-bold border-collapse">
                                 <thead>
-                                    <tr className="bg-surface-alt border-b-2 border-mx-black">
+                                    <tr className="bg-gray-50 border-b-2 border-mx-black">
                                         <th className="py-2 px-3 text-left uppercase">Competência</th>
                                         <th className="py-2 px-3 text-center uppercase">Nota</th>
                                         <th className="py-2 px-3 text-center uppercase">Alvo</th>
@@ -165,17 +165,17 @@ export default function PDIPrint() {
                                 </thead>
                                 <tbody>
                                     {bundle.avaliacoes.map((av, i) => (
-                                        <tr key={i} className="border-b border-border-default">
+                                        <tr key={i} className="border-b border-gray-200">
                                             <td className="py-2 px-3">{av.competencia}</td>
-                                            <td className="py-2 px-3 text-center text-brand-primary">{av.nota}</td>
-                                            <td className="py-2 px-3 text-center text-text-tertiary">{av.alvo}</td>
+                                            <td className="py-2 px-3 text-center text-emerald-600">{av.nota}</td>
+                                            <td className="py-2 px-3 text-center text-gray-500">{av.alvo}</td>
                                         </tr>
                                     ))}
                                 </tbody>
                             </table>
                         </div>
 
-                        <div className="flex flex-col items-center justify-center border-l-2 border-border-default pl-10">
+                        <div className="flex flex-col items-center justify-center border-l-2 border-gray-200 pl-10">
                             <Typography variant="tiny" className="mb-4 text-center">Gráfico Radar (Atigimento vs. Alvo)</Typography>
                             <div className="w-full h-mx-80">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -203,7 +203,7 @@ export default function PDIPrint() {
                 </div>
 
                 {/* --- PÁGINA 3: PLANO DE AÇÃO (PDI TABULAR) --- */}
-                <div className="p-[20mm] min-h-[297mm] flex flex-col border border-border-default print:border-none">
+                <div className="p-[20mm] min-h-[297mm] flex flex-col border border-gray-200 print:border-none">
                     <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10">
                         <Typography variant="h2" className="text-2xl tracking-tighter">Plano de Desenvolvimento Individual</Typography>
                         <Typography variant="caption" tone="muted" className="text-mx-tiny">Página 3 / Ações Mandatórias</Typography>
@@ -213,29 +213,29 @@ export default function PDIPrint() {
                         <Typography variant="tiny" className="mb-6 block">Ações de Desenvolvimento (Próximos 6 Meses)</Typography>
                         <table className="w-full text-xs border-collapse">
                             <thead>
-                                <tr className="bg-mx-black text-white text-left">
-                                    <th className="py-4 px-4 font-black uppercase tracking-widest">Item a Desenvolver</th>
-                                    <th className="py-4 px-4 font-black uppercase tracking-widest w-1/3">Ação de Desenvolvimento</th>
-                                    <th className="py-4 px-4 font-black uppercase tracking-widest text-center">Prazo</th>
-                                    <th className="py-4 px-4 font-black uppercase tracking-widest text-center">Impacto</th>
-                                    <th className="py-4 px-4 font-black uppercase tracking-widest text-center">Custo</th>
+                                <tr className="bg-gray-900 text-white text-left">
+                                    <th className="py-4 px-4 font-bold uppercase tracking-widest">Item a Desenvolver</th>
+                                    <th className="py-4 px-4 font-bold uppercase tracking-widest w-1/3">Ação de Desenvolvimento</th>
+                                    <th className="py-4 px-4 font-bold uppercase tracking-widest text-center">Prazo</th>
+                                    <th className="py-4 px-4 font-bold uppercase tracking-widest text-center">Impacto</th>
+                                    <th className="py-4 px-4 font-bold uppercase tracking-widest text-center">Custo</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {bundle.plano_acao.map((acao: PDIPlanoAcao360, i: number) => (
-                                    <tr key={i} className="border-b-2 border-border-default">
-                                        <td className="py-4 px-4 font-bold uppercase text-text-secondary">{acao.competencia}</td>
-                                        <td className="py-4 px-4 font-bold text-text-primary">{acao.descricao_acao}</td>
-                                        <td className="py-4 px-4 font-bold text-center text-brand-primary">{format(parseISO(acao.data_conclusao), 'dd/MM/yyyy')}</td>
-                                        <td className="py-4 px-4 font-black text-center uppercase">{acao.impacto}</td>
-                                        <td className="py-4 px-4 font-black text-center uppercase">{acao.custo}</td>
+                                    <tr key={i} className="border-b-2 border-gray-200">
+                                        <td className="py-4 px-4 font-bold uppercase text-gray-500">{acao.competencia}</td>
+                                        <td className="py-4 px-4 font-bold text-gray-800">{acao.descricao_acao}</td>
+                                        <td className="py-4 px-4 font-bold text-center text-emerald-600">{format(parseISO(acao.data_conclusao), 'dd/MM/yyyy')}</td>
+                                        <td className="py-4 px-4 font-bold text-center uppercase">{acao.impacto}</td>
+                                        <td className="py-4 px-4 font-bold text-center uppercase">{acao.custo}</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
 
-                    <div className="mt-10 p-mx-lg border-4 border-mx-black rounded-mx-2xl flex flex-col items-center justify-center text-center space-y-mx-sm">
+                    <div className="mt-10 p-mx-lg border-4 border-mx-black rounded-2xl flex flex-col items-center justify-center text-center space-y-mx-sm">
                         <Typography variant="h3" className="">A Equação da Motivação no Trabalho</Typography>
                         <Typography variant="h1" tone="brand" className="text-5xl font-mono-numbers my-4">$ = QI + DC</Typography>
                         <Typography variant="p" className="text-sm font-bold">

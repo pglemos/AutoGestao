@@ -33,7 +33,7 @@ export function EstadoVazio({
       <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-2xl bg-blue-50">
         <CheckCircle2 className="h-7 w-7 text-status-info" aria-hidden="true" />
       </div>
-      <p className="mb-1 text-[16px] font-black text-mx-text">Tela limpa por hoje.</p>
+      <p className="mb-1 text-[16px] font-bold text-gray-800">Tela limpa por hoje.</p>
       <p className="mx-auto mb-5 max-w-sm text-[13px] text-slate-400">
         Você não possui oportunidades pendentes para executar agora.
       </p>

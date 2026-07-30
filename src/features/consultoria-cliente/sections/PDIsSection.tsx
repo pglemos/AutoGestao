@@ -65,8 +65,8 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
             <Badge variant="brand">ANEXO</Badge>
           </div>
 
-          <div className="p-mx-md bg-surface-alt/30 rounded-mx-xl flex items-center gap-mx-sm mb-mx-md">
-            <FileText className="w-mx-5 h-mx-5 text-brand-primary shrink-0" />
+          <div className="p-mx-md bg-gray-50/30 rounded-2xl flex items-center gap-mx-sm mb-mx-md">
+            <FileText className="w-mx-5 h-mx-5 text-emerald-600 shrink-0" />
             <div className="min-w-0">
               <Typography variant="p" className="text-sm font-bold truncate">{attachment.filename}</Typography>
               <Typography variant="tiny" tone="muted">{formatFileSize(attachment.size_bytes)}</Typography>
@@ -91,14 +91,14 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
           <Card key={pdi.id} className="p-mx-lg bg-white border hover:border-brand-primary/30 transition-all group">
             <div className="flex justify-between items-start mb-mx-md">
               <div>
-                <Typography variant="h3" className="text-lg group-hover:text-brand-primary transition-colors">{pdi.seller_name || 'Nome não informado'}</Typography>
+                <Typography variant="h3" className="text-lg group-hover:text-emerald-600 transition-colors">{pdi.seller_name || 'Nome não informado'}</Typography>
                 <Typography variant="tiny" tone="muted">Plano criado em {format(new Date(pdi.created_at), 'dd/MM/yyyy')}</Typography>
               </div>
               <Badge variant={pdi.status === 'ativo' ? 'success' : 'outline'}>{pdi.status.toUpperCase()}</Badge>
             </div>
 
             <div className="space-y-mx-md mb-mx-md">
-              <div className="p-mx-md bg-surface-alt/30 rounded-mx-xl">
+              <div className="p-mx-md bg-gray-50/30 rounded-2xl">
                 <Typography variant="tiny" className="font-bold mb-1 block">Objetivo 6 Meses</Typography>
                 <Typography variant="p" className="text-sm font-bold italic">"{pdi.meta_6m}"</Typography>
               </div>
@@ -114,7 +114,7 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
               </div>
             </div>
 
-            <div className="pt-mx-md border-t border-border-subtle grid grid-cols-2 gap-mx-md">
+            <div className="pt-mx-md border-t border-gray-100 grid grid-cols-2 gap-mx-md">
               <div className="space-y-mx-xs">
                 {pdi.seller_acknowledged_at ? (
                   <div className="flex items-center gap-mx-xs text-status-success">

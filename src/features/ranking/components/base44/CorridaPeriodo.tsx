@@ -59,7 +59,7 @@ export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
                   border={isMe ? '3px solid var(--color-chart-2)' : undefined}
                 />
                 {isMe && (
-                  <span className="mt-0.5 text-[9px] font-black text-white bg-blue-500 px-1.5 py-0.5 rounded-full">VOCÊ</span>
+                  <span className="mt-0.5 text-[9px] font-bold text-white bg-blue-500 px-1.5 py-0.5 rounded-full">VOCÊ</span>
                 )}
               </div>
             )

@@ -27,7 +27,7 @@ export function VisitaDetailPanel({
 }: VisitaDetailPanelProps) {
   return (
     <Card className="border-none bg-white overflow-hidden">
-      <div className="p-mx-md border-b border-border-default flex items-center justify-between">
+      <div className="p-mx-md border-b border-gray-200 flex items-center justify-between">
         <Typography variant="caption" className="">
           {selectedDate
             ? format(selectedDate, "dd 'de' MMMM", { locale: ptBR })
@@ -37,7 +37,7 @@ export function VisitaDetailPanel({
           <button
             type="button"
             onClick={onClearSelection}
-            className="w-mx-lg h-mx-lg rounded-mx-md hover:bg-surface-alt flex items-center justify-center text-text-tertiary transition-all"
+            className="w-mx-lg h-mx-lg rounded-xl hover:bg-gray-50 flex items-center justify-center text-gray-500 transition-all"
           >
             <X size={14} />
           </button>
@@ -47,12 +47,12 @@ export function VisitaDetailPanel({
       <div className="p-mx-md max-h-mx-6xl overflow-y-auto no-scrollbar">
         {!selectedDate ? (
           <div className="flex flex-col items-center justify-center py-mx-2xl text-center gap-mx-sm">
-            <CalendarDays size={32} className="text-text-label" />
+            <CalendarDays size={32} className="text-gray-500" />
             <Typography variant="tiny" tone="muted">Clique em um dia no calendário para ver os detalhes</Typography>
           </div>
         ) : selectedDayVisits.length === 0 && selectedDayEvents.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-mx-2xl text-center gap-mx-sm">
-            <CalendarDays size={32} className="text-text-label" />
+            <CalendarDays size={32} className="text-gray-500" />
             <Typography variant="tiny" tone="muted">Nenhum item neste dia</Typography>
             <div className="mt-mx-sm flex flex-wrap justify-center gap-mx-xs">
               <Button variant="secondary" size="sm" onClick={() => onScheduleVisit(selectedDate)}>
@@ -81,7 +81,7 @@ export function VisitaDetailPanel({
                   to={`/consultoria/clientes/${visit.client_slug}/visitas/${visit.visit_number}`}
                   className="block"
                 >
-                  <div className="p-mx-sm rounded-mx-lg border border-border-default hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all group overflow-hidden">
+                  <div className="p-mx-sm rounded-xl border border-gray-200 hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-all group overflow-hidden">
                     <div className="flex items-center gap-mx-xs mb-1">
                       <div className={cn('w-2 h-2 rounded-mx-full', getVisitDotColor(visit.status))} />
                       <Typography variant="tiny" className="">
@@ -90,12 +90,12 @@ export function VisitaDetailPanel({
                       <Typography variant="tiny" tone="muted">• {visit.duration_hours}h</Typography>
                     </div>
                     <div className="flex items-center gap-mx-xs mb-1 min-w-0">
-                      <Building2 size={12} className="text-brand-primary shrink-0" />
+                      <Building2 size={12} className="text-emerald-600 shrink-0" />
                       <Typography variant="tiny" className="font-bold truncate">{visit.client_name}</Typography>
                     </div>
                     {visit.consultant && (
                       <div className="flex items-center gap-mx-xs min-w-0">
-                        <User size={10} className="text-text-tertiary shrink-0" />
+                        <User size={10} className="text-gray-500 shrink-0" />
                         <Typography variant="tiny" tone="muted" className="truncate">{visit.consultant.name}</Typography>
                       </div>
                     )}
@@ -120,7 +120,7 @@ export function VisitaDetailPanel({
                     )}
                     <div className="flex items-center justify-between mt-1">
                       <Typography variant="tiny" tone="muted">{getPmrVisitDisplayLabel(visit.visit_number)}</Typography>
-                      <ChevronRight size={14} className="text-text-tertiary group-hover:text-brand-primary transition-colors" />
+                      <ChevronRight size={14} className="text-gray-500 group-hover:text-emerald-600 transition-colors" />
                     </div>
                   </div>
                 </Link>
@@ -133,10 +133,10 @@ export function VisitaDetailPanel({
                   key={event.id}
                   type="button"
                   onClick={() => onEditEvent(event)}
-                  className="w-full text-left p-mx-sm rounded-mx-lg border border-border-default hover:border-brand-primary/30 hover:bg-brand-primary/5 transition-all group overflow-hidden"
+                  className="w-full text-left p-mx-sm rounded-xl border border-gray-200 hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-all group overflow-hidden"
                 >
                   <div className="flex items-center gap-mx-xs mb-1">
-                    <CalendarDays size={12} className="text-brand-primary shrink-0" />
+                    <CalendarDays size={12} className="text-emerald-600 shrink-0" />
                     <Typography variant="tiny" className="">{format(startsAt, 'HH:mm')}</Typography>
                     <Badge variant="outline" className="text-mx-nano">{getEventTypeLabel(event.event_type)}</Badge>
                   </div>

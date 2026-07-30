@@ -28,7 +28,7 @@ function EtapaRow({ label, value, modalidades, isLast, onClickEtapa }) {
         onClick={onClickEtapa}
       >
         <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{label}</p>
-        <p className="text-[28px] font-black text-[#0F172A] tabular-nums leading-none">{value}</p>
+        <p className="text-[28px] font-bold text-[#0F172A] tabular-nums leading-none">{value}</p>
         {value === 0 && <p className="text-[10px] text-slate-300 mt-0.5">Sem registros</p>}
       </div>
       {modalidades && modalidades.length > 0 && (
@@ -70,7 +70,7 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
           <Icone className="w-4 h-4 text-white" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className={`text-[14px] font-black uppercase tracking-wider ${c.title}`}>{titulo}</p>
+          <p className={`text-[14px] font-bold uppercase tracking-wider ${c.title}`}>{titulo}</p>
           {descricao && <p className="text-[11px] text-slate-400 mt-0.5">{descricao}</p>}
         </div>
         {conversaoGeral !== null && !semDados && (

@@ -58,7 +58,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleSubmit} className="rounded-mx-xl border border-border-default bg-surface-alt p-mx-md">
+      <form onSubmit={handleSubmit} className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
         <Typography variant="caption" tone="muted" className="font-bold tracking-wide">
           Adicionar / atualizar plano por cargo
         </Typography>
@@ -86,13 +86,13 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
       {error && <p className="text-sm font-bold text-status-error">Erro ao carregar: {error}</p>}
 
       {loading ? (
-        <p className="text-sm font-bold text-text-tertiary">Carregando planos…</p>
+        <p className="text-sm font-bold text-gray-500">Carregando planos…</p>
       ) : planos.length === 0 ? (
         <EmptyState title="Nenhum plano cadastrado" description="Adicione o plano de remuneração de cada cargo desta loja." />
       ) : (
-        <div className="overflow-x-auto rounded-mx-xl border border-border-default">
+        <div className="overflow-x-auto rounded-2xl border border-gray-200">
           <table className="w-full text-sm">
-            <thead className="bg-surface-alt text-text-secondary">
+            <thead className="bg-gray-50 text-gray-500">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Cargo</th>
                 <th className="px-mx-md py-mx-sm text-right">Fixo</th>
@@ -104,7 +104,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
             </thead>
             <tbody>
               {planos.map(p => (
-                <tr key={p.id} className="border-t border-border-default">
+                <tr key={p.id} className="border-t border-gray-200">
                   <td className="px-mx-md py-mx-sm font-bold uppercase">{p.cargo}</td>
                   <td className="px-mx-md py-mx-sm text-right">{BRL.format(Number(p.salario_fixo))}</td>
                   <td className="px-mx-md py-mx-sm text-right">{BRL.format(Number(p.salario_variavel))}</td>
@@ -128,7 +128,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-mx-xs">
-      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-text-tertiary">{label}</span>
+      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-gray-500">{label}</span>
       {children}
     </label>
   )

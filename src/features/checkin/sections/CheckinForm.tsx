@@ -94,14 +94,14 @@ export function InfoTooltip({ text }: { text: string }) {
         onMouseLeave={() => setVisible(false)}
         onClick={() => setVisible(!visible)}
         onBlur={() => setVisible(false)}
-        className="text-text-tertiary/50 hover:text-brand-primary transition-colors focus:outline-none"
+        className="text-gray-500/50 hover:text-emerald-600 transition-colors focus:outline-none"
         aria-label="Informação adicional"
       >
         <HelpCircle size={14} className="stroke-[2.5]" />
       </button>
       {visible && (
         <div
-          className="fixed z-[9999] w-64 -translate-x-1/2 -translate-y-full rounded-lg border border-border-default bg-white p-3 text-[12px] font-medium leading-relaxed text-text-secondary shadow-lg pointer-events-none transition-all"
+          className="fixed z-[9999] w-64 -translate-x-1/2 -translate-y-full rounded-lg border border-gray-200 bg-white p-3 text-[12px] font-medium leading-relaxed text-gray-500 shadow-lg pointer-events-none transition-all"
           style={{
             top: `${coords.top}px`,
             left: `${coords.left}px`,
@@ -289,7 +289,7 @@ return (
 <Globe size={24} aria-hidden="true" />
 </span>
 <div>
-<h2 className="text-[18px] font-black tracking-tight text-[#071822]">Internet</h2>
+<h2 className="text-[18px] font-bold tracking-tight text-[#071822]">Internet</h2>
 <p className="mt-0.5 text-[13px] font-semibold text-[#526B7A]">Leads digitais</p>
 </div>
 </div>
@@ -313,7 +313,7 @@ return (
 {label}
 </label>
 <div className="grid w-[152px] grid-cols-[38px_minmax(0,1fr)_38px] gap-1.5">
-<button type="button" disabled={disabled} onClick={() => setMobileCounter(field, value - 1)} className="grid h-10 place-items-center rounded-[10px] border border-[#DFE0E1] bg-white text-[18px] font-black text-[#071822] shadow-sm disabled:opacity-45">
+<button type="button" disabled={disabled} onClick={() => setMobileCounter(field, value - 1)} className="grid h-10 place-items-center rounded-[10px] border border-[#DFE0E1] bg-white text-[18px] font-bold text-[#071822] shadow-sm disabled:opacity-45">
 <Minus size={16} aria-hidden="true" />
 </button>
 <input
@@ -326,9 +326,9 @@ onChange={(event) => updateNumberField(field, event.target.value.replace(/\D/g, 
 onBlur={() => commitNumberField(field)}
 disabled={disabled}
 aria-invalid={Boolean(fieldErrors[field])}
-className="h-10 min-w-0 rounded-[10px] border border-[#DFE0E1] bg-white text-center text-[18px] font-black tabular-nums text-[#071822] shadow-sm outline-none focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10 disabled:bg-[#F7F8F8] disabled:text-[#526B7A]"
+className="h-10 min-w-0 rounded-[10px] border border-[#DFE0E1] bg-white text-center text-[18px] font-bold tabular-nums text-[#071822] shadow-sm outline-none focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10 disabled:bg-[#F7F8F8] disabled:text-[#526B7A]"
 />
-<button type="button" disabled={disabled} onClick={() => setMobileCounter(field, value + 1)} className="grid h-10 place-items-center rounded-[10px] border border-[#DFE0E1] bg-white text-[18px] font-black text-[#071822] shadow-sm disabled:opacity-45">
+<button type="button" disabled={disabled} onClick={() => setMobileCounter(field, value + 1)} className="grid h-10 place-items-center rounded-[10px] border border-[#DFE0E1] bg-white text-[18px] font-bold text-[#071822] shadow-sm disabled:opacity-45">
 <Plus size={16} aria-hidden="true" />
 </button>
 </div>
@@ -338,7 +338,7 @@ className="h-10 min-w-0 rounded-[10px] border border-[#DFE0E1] bg-white text-cen
 </div>
 
 <div className="flex items-center gap-2 pb-3 text-[13px] font-bold text-[#526B7A]">
-<span className={cn('grid h-6 w-6 place-items-center rounded-full text-[12px] font-black text-white', detalhesD1Concluidos ? 'bg-[#34c759]' : 'bg-[#F59F0A]')}>
+<span className={cn('grid h-6 w-6 place-items-center rounded-full text-[12px] font-bold text-white', detalhesD1Concluidos ? 'bg-[#34c759]' : 'bg-[#F59F0A]')}>
 {detalhesD1Concluidos ? '✓' : '!'}
 </span>
 {totalAgendamentosD1 > 0 ? `Detalhados: ${creditosValidos} de ${totalAgendamentosD1}` : 'Sem D+1 pendente'}
@@ -348,7 +348,7 @@ className="h-10 min-w-0 rounded-[10px] border border-[#DFE0E1] bg-white text-cen
 type="button"
 onClick={() => mobileInternetRows.forEach(({ field }) => commitNumberField(field))}
  disabled={fechamentoConcluido}
-className="h-11 w-full rounded-[12px] bg-[#00A89D] text-[14px] font-black text-white shadow-[0_12px_30px_rgba(0,168,157,0.25)] transition-colors hover:bg-[#00A89D] disabled:cursor-not-allowed disabled:bg-[#526B7A]"
+className="h-11 w-full rounded-[12px] bg-[#00A89D] text-[14px] font-bold text-white shadow-[0_12px_30px_rgba(0,168,157,0.25)] transition-colors hover:bg-[#00A89D] disabled:cursor-not-allowed disabled:bg-[#526B7A]"
 >
 Confirmar Internet
 </button>
@@ -402,19 +402,19 @@ Confirmar Internet
           {/* 4 metrics: 2x2 grid on mobile, single row with dividers from sm+ */}
           <div className="grid grid-cols-2 gap-y-4 sm:flex sm:items-stretch sm:gap-y-0 sm:divide-x sm:divide-[#DFE0E1]">
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4 sm:first:pl-0">
-              <span className="text-[28px] font-black leading-none tabular-nums text-[#005BFF]">{display.leads}</span>
+              <span className="text-[28px] font-bold leading-none tabular-nums text-[#005BFF]">{display.leads}</span>
               <span className="mt-1 text-[11px] font-semibold text-[#526B7A] text-center leading-tight">Leads Recebidos</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4">
-              <span className="text-[28px] font-black leading-none tabular-nums text-[#6D28D9]">{display.visitas}</span>
+              <span className="text-[28px] font-bold leading-none tabular-nums text-[#6D28D9]">{display.visitas}</span>
               <span className="mt-1 text-[11px] font-semibold text-[#526B7A] text-center leading-tight">Atendimentos</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4">
-              <span className="text-[28px] font-black leading-none tabular-nums text-[#F59E0B]">{display.agd}</span>
+              <span className="text-[28px] font-bold leading-none tabular-nums text-[#F59E0B]">{display.agd}</span>
               <span className="mt-1 text-[11px] font-semibold text-[#526B7A] text-center leading-tight">Agendamentos D+1</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4 sm:last:pr-0">
-              <span className="text-[28px] font-black leading-none tabular-nums text-[#EF4343]">{realSalesCount}</span>
+              <span className="text-[28px] font-bold leading-none tabular-nums text-[#EF4343]">{realSalesCount}</span>
               <span className="mt-1 text-[11px] font-semibold text-[#526B7A] text-center leading-tight">Vendas Realizadas</span>
             </div>
           </div>
@@ -422,7 +422,7 @@ Confirmar Internet
           {/* Faturamento bar */}
           <div className="flex items-center justify-between border-t border-[#DFE0E1] pt-3">
             <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#526B7A]">FATURAMENTO</span>
-            <span className="text-[22px] font-black tabular-nums text-[#22C55E]">{BRL(realFaturamento)}</span>
+            <span className="text-[22px] font-bold tabular-nums text-[#22C55E]">{BRL(realFaturamento)}</span>
           </div>
         </div>
 
@@ -453,7 +453,7 @@ Confirmar Internet
                   className="absolute rounded-full bg-white flex flex-col items-center justify-center"
                   style={{ inset: 11 }}
                 >
-                  <span className="text-[23px] font-black leading-none tabular-nums text-[#071822]">
+                  <span className="text-[23px] font-bold leading-none tabular-nums text-[#071822]">
                     {disciplinePercent}%
                   </span>
                 </div>

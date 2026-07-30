@@ -31,14 +31,14 @@ export function StoreFeedbackHeader({
   return (
     <SellerPageHeader icon={MessageSquare} title={isOwner ? 'Devolutivas da Rede' : 'Feedbacks'} subtitle={isOwner ? 'Acompanhe qualidade e cobranças semanais' : 'Rotina semanal obrigatória'} actions={<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-mx-sm shrink-0 w-full xl:w-auto max-w-full">
         <nav
-          className="flex p-mx-tiny bg-white border border-border-default rounded-mx-full shadow-mx-sm xl:mr-2"
+          className="flex p-mx-tiny bg-white border border-gray-200 rounded-mx-full shadow-sm xl:mr-2"
           role="tablist"
         >
           <Button
             variant={activeTab === 'individual' ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => onTabChange('individual')}
-            className="h-mx-9 rounded-mx-full px-6 text-mx-tiny font-black uppercase"
+            className="h-mx-9 rounded-mx-full px-6 text-mx-tiny font-bold uppercase"
             role="tab"
             aria-selected={activeTab === 'individual'}
           >
@@ -48,7 +48,7 @@ export function StoreFeedbackHeader({
             variant={activeTab === 'weekly' ? 'secondary' : 'ghost'}
             size="sm"
             onClick={() => onTabChange('weekly')}
-            className="h-mx-9 rounded-mx-full px-6 text-mx-tiny font-black uppercase"
+            className="h-mx-9 rounded-mx-full px-6 text-mx-tiny font-bold uppercase"
             role="tab"
             aria-selected={activeTab === 'weekly'}
           >
@@ -58,7 +58,7 @@ export function StoreFeedbackHeader({
         <div className="relative group w-full sm:w-mx-sidebar-expanded">
           <Search
             size={16}
-            className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors"
+            className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors"
           />
           <label htmlFor="feedback-store-search" className="sr-only">
             Buscar mentoria
@@ -69,7 +69,7 @@ export function StoreFeedbackHeader({
             placeholder="BUSCAR MENTORIA..."
             value={searchTerm}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="!pl-11 !h-12 !text-mx-tiny uppercase tracking-widest font-black"
+            className="!pl-11 !h-12 !text-mx-tiny uppercase tracking-widest font-bold"
           />
         </div>
         <Button

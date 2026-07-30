@@ -23,8 +23,8 @@ export function WeeklyReportsList({ reports, variant = 'admin' }: Props) {
           <Card
             className={
               variant === 'admin'
-                ? 'rounded-mx-lg border border-border-subtle p-mx-md hover:shadow-mx-xl transition-all h-full shadow-mx-sm bg-white relative overflow-hidden flex flex-col'
-                : 'rounded-mx-lg border border-border-subtle p-mx-md hover:shadow-mx-xl transition-all h-full shadow-mx-sm bg-white flex flex-col'
+                ? 'rounded-xl border border-gray-100 p-mx-md hover:shadow-sm transition-all h-full shadow-sm bg-white relative overflow-hidden flex flex-col'
+                : 'rounded-xl border border-gray-100 p-mx-md hover:shadow-sm transition-all h-full shadow-sm bg-white flex flex-col'
             }
           >
             {variant === 'admin' ? (
@@ -49,7 +49,7 @@ function ReportHeader({ report }: { report: WeeklyFeedbackReport }) {
   return (
     <div className="flex items-center justify-between mb-10 relative z-10">
       <div className="flex items-center gap-mx-sm">
-        <div className="w-mx-14 h-mx-14 rounded-mx-lg bg-brand-primary text-white flex items-center justify-center shadow-mx-md">
+        <div className="w-mx-14 h-mx-14 rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
           <Calendar size={24} />
         </div>
         <div>
@@ -87,11 +87,11 @@ function ReportMetrics({
     <div
       className={
         dense
-          ? 'grid grid-cols-2 gap-mx-md py-8 border-y border-border-subtle'
-          : 'grid grid-cols-1 sm:grid-cols-2 gap-mx-md py-8 border-y border-border-subtle relative z-10'
+          ? 'grid grid-cols-2 gap-mx-md py-8 border-y border-gray-100'
+          : 'grid grid-cols-1 sm:grid-cols-2 gap-mx-md py-8 border-y border-gray-100 relative z-10'
       }
     >
-      <div className="bg-surface-alt rounded-mx-lg p-mx-md shadow-mx-inner text-center">
+      <div className="bg-gray-50 rounded-xl p-mx-md shadow-mx-inner text-center">
         <Typography
           variant="tiny"
           tone="muted"
@@ -103,14 +103,14 @@ function ReportMetrics({
           variant="h2"
           className={
             dense
-              ? 'text-2xl font-mono-numbers font-black'
-              : 'text-2xl font-mono-numbers tabular-nums font-black'
+              ? 'text-2xl font-mono-numbers font-bold'
+              : 'text-2xl font-mono-numbers tabular-nums font-bold'
           }
         >
           {report.weekly_goal}v
         </Typography>
       </div>
-      <div className="bg-surface-alt rounded-mx-lg p-mx-md shadow-mx-inner text-center">
+      <div className="bg-gray-50 rounded-xl p-mx-md shadow-mx-inner text-center">
         <Typography
           variant="tiny"
           tone="muted"
@@ -123,8 +123,8 @@ function ReportMetrics({
           tone="brand"
           className={
             dense
-              ? 'text-2xl font-mono-numbers font-black'
-              : 'text-2xl font-mono-numbers tabular-nums font-black'
+              ? 'text-2xl font-mono-numbers font-bold'
+              : 'text-2xl font-mono-numbers tabular-nums font-bold'
           }
         >
           {getWeeklyAverageSales(report)}v

@@ -22,9 +22,9 @@ const TIPO_LABEL: Record<CulturaTipo, string> = {
 
 const TIPO_TONE: Record<CulturaTipo, string> = {
   repescagem: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-  campanha: 'border-brand-primary/30 bg-mx-indigo-50 text-brand-primary',
+  campanha: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
   reconhecimento: 'border-status-success/30 bg-status-success-surface text-status-success',
-  feed_cultural: 'border-border-default bg-surface-alt text-text-secondary',
+  feed_cultural: 'border-gray-200 bg-gray-50 text-gray-500',
 }
 
 type Props = {
@@ -51,7 +51,7 @@ export function CulturaFelicidade({ storeId }: Props) {
     <section className="space-y-mx-lg" aria-label="Cultura e Felicidade">
       <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-mx-xl bg-brand-primary p-mx-sm text-pure-white shadow-mx-md">
+          <div className="rounded-2xl bg-emerald-600 p-mx-sm text-pure-white shadow-sm">
             <Heart size={22} aria-hidden="true" />
           </div>
           <div>
@@ -70,7 +70,7 @@ export function CulturaFelicidade({ storeId }: Props) {
       </header>
 
       {error && (
-        <div className="rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
+        <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
           <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
@@ -103,7 +103,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
-          <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-emerald-600">
             <TrendingUp size={18} aria-hidden="true" />
           </div>
           <div>
@@ -116,7 +116,7 @@ export function CulturaFelicidade({ storeId }: Props) {
           </div>
         </header>
         {mediasUltimos3.length === 0 ? (
-          <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Sem ciclos registrados ainda.
             </Typography>
@@ -126,7 +126,7 @@ export function CulturaFelicidade({ storeId }: Props) {
             {mediasUltimos3.map((item) => (
               <li
                 key={item.ciclo}
-                className="rounded-mx-xl border border-border-default bg-white p-mx-sm text-center"
+                className="rounded-2xl border border-gray-200 bg-white p-mx-sm text-center"
               >
                 <Typography
                   variant="tiny"
@@ -146,7 +146,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
-          <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-emerald-600">
             <Sparkles size={18} aria-hidden="true" />
           </div>
           <div>
@@ -160,7 +160,7 @@ export function CulturaFelicidade({ storeId }: Props) {
         </header>
 
         {registros.length === 0 ? (
-          <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhum registro de cultura cadastrado.
             </Typography>
@@ -170,7 +170,7 @@ export function CulturaFelicidade({ storeId }: Props) {
             {registros.map((reg) => (
               <li
                 key={reg.id}
-                className={cn('rounded-mx-xl border p-mx-sm', TIPO_TONE[reg.tipo])}
+                className={cn('rounded-2xl border p-mx-sm', TIPO_TONE[reg.tipo])}
               >
                 <div className="flex flex-wrap items-center gap-mx-xs">
                   <Badge variant="outline" className="">
@@ -216,18 +216,18 @@ export function CulturaFelicidade({ storeId }: Props) {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[560px] text-sm">
               <thead className="text-left">
-                <tr className="bg-surface-alt">
-                  <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Ciclo</th>
-                  <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Respostas</th>
-                  <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Clima</th>
-                  <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Liderança</th>
-                  <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Carreira</th>
+                <tr className="bg-gray-50">
+                  <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Ciclo</th>
+                  <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Respostas</th>
+                  <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Clima</th>
+                  <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Liderança</th>
+                  <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Carreira</th>
                 </tr>
               </thead>
               <tbody>
                 {ciclos.map((c) => (
-                  <tr key={c.ciclo} className="border-t border-border-default/60">
-                    <td className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">
+                  <tr key={c.ciclo} className="border-t border-gray-200/60">
+                    <td className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">
                       {c.ciclo}
                     </td>
                     <td className="px-mx-sm py-mx-xs">{c.total_respostas}</td>
@@ -254,14 +254,14 @@ export function CulturaFelicidade({ storeId }: Props) {
 function MediaCard({ label, value }: { label: string; value: number | null }) {
   const tone =
     value == null
-      ? 'border-border-default bg-surface-alt text-text-secondary'
+      ? 'border-gray-200 bg-gray-50 text-gray-500'
       : value >= 8
         ? 'border-status-success/30 bg-status-success-surface text-status-success'
         : value >= 6
           ? 'border-status-warning/30 bg-status-warning-surface text-status-warning'
           : 'border-status-error/30 bg-status-error-surface text-status-error'
   return (
-    <Card className={cn('rounded-mx-2xl border p-mx-md', tone)}>
+    <Card className={cn('rounded-2xl border p-mx-md', tone)}>
       <Typography variant="caption" className="">
         {label}
       </Typography>

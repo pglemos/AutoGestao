@@ -46,7 +46,7 @@ export function buildStoreColumns({
       render: (store) => (
         <div className="flex min-w-0 items-center gap-mx-sm">
           <span
-            className="grid h-mx-10 w-mx-10 shrink-0 place-items-center rounded-mx-lg bg-status-success-surface text-brand-primary"
+            className="grid h-mx-10 w-mx-10 shrink-0 place-items-center rounded-xl bg-status-success-surface text-emerald-600"
             aria-hidden="true"
           >
             <Building2 size={18} />
@@ -134,7 +134,7 @@ export function buildStoreColumns({
               size={14}
               className={cn(
                 'shrink-0',
-                canManageNetwork ? 'text-brand-primary' : 'text-text-tertiary',
+                canManageNetwork ? 'text-emerald-600' : 'text-gray-500',
               )}
               aria-hidden="true"
             />
@@ -149,7 +149,7 @@ export function buildStoreColumns({
           {canManageNetwork ? (
             <Typography
               variant="tiny"
-              className="block max-w-mx-64 truncate bg-surface-alt px-mx-xs py-mx-tiny font-mono"
+              className="block max-w-mx-64 truncate bg-gray-50 px-mx-xs py-mx-tiny font-mono"
               title={getRegistrationLink(store.name)}
             >
               {getRegistrationLink(store.name)}
@@ -197,7 +197,7 @@ export function buildStoreColumns({
                     variant="ghost"
                     size="icon"
                     onClick={() => handleArchiveStore(store)}
-                    className="text-text-tertiary hover:bg-status-error-surface hover:text-status-error"
+                    className="text-gray-500 hover:bg-status-error-surface hover:text-status-error"
                     aria-label={`Desativar ${store.name}`}
                   >
                     <X size={16} aria-hidden="true" />

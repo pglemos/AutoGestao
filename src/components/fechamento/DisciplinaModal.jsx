@@ -65,7 +65,7 @@ export default function DisciplinaModal({ open, onClose }) {
         <div className="flex-shrink-0 px-7 pt-6 pb-5 border-b border-slate-100 bg-white">
           <div className="flex items-start justify-between gap-4">
             <div>
-              <h2 className="text-[18px] font-black text-[#0F172A] leading-tight">
+              <h2 className="text-[18px] font-bold text-[#0F172A] leading-tight">
                 Entenda sua pontuação de Disciplina
               </h2>
               <p className="text-[13px] text-[#64748B] mt-1 leading-relaxed">
@@ -112,11 +112,11 @@ export default function DisciplinaModal({ open, onClose }) {
               <P>Então você precisa cadastrar 2 clientes, sendo 1 do canal Carteira e 1 do canal Internet.</P>
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <div className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-center">
-                  <span className="text-[18px] font-black text-[#22C55E]">100%</span>
+                  <span className="text-[18px] font-bold text-[#22C55E]">100%</span>
                   <p className="text-[10px] text-slate-500 mt-0.5">Cadastrou os 2 clientes</p>
                 </div>
                 <div className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-center">
-                  <span className="text-[18px] font-black text-[#F59E0B]">85%</span>
+                  <span className="text-[18px] font-bold text-[#F59E0B]">85%</span>
                   <p className="text-[10px] text-slate-500 mt-0.5">Cadastrou apenas 1 dos 2</p>
                 </div>
               </div>

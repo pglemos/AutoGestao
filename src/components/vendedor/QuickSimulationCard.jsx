@@ -67,7 +67,7 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
           <p className="text-slate-500 text-sm">
             Com mais <span className="font-bold text-mx-navy">{resultado.va} venda{resultado.va !== 1 ? "s" : ""}</span>, seu salário previsto iria para:
           </p>
-          <p className="text-4xl font-black text-mx-navy">{formatBRL(resultado.salario)}</p>
+          <p className="text-4xl font-bold text-mx-navy">{formatBRL(resultado.salario)}</p>
           <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200">
             <SimLine label="Comissão estimada" value={resultado.novaComissao} />
             <SimLine label="Prêmios estimados" value={resultado.premiacoes} />

@@ -222,7 +222,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
               </div>
               <div className="space-y-mx-xs">
                 <Typography variant="caption">Tipo</Typography>
-                <div className="h-mx-14 sm:h-12 rounded-mx-md border border-border-default bg-surface-alt px-5 flex items-center">
+                <div className="h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-gray-50 px-5 flex items-center">
                   <Typography variant="p" className="">
                     {formLabels[selectedTemplate.form_key] || selectedTemplate.title}
                   </Typography>
@@ -244,7 +244,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
                       className="min-h-mx-24"
                     />
                   ) : field.type === 'boolean' ? (
-                    <label className="h-mx-14 sm:h-12 rounded-mx-md border border-border-default bg-white px-5 flex items-center gap-mx-sm font-bold">
+                    <label className="h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 flex items-center gap-mx-sm font-bold">
                       <input
                         type="checkbox"
                         checked={Boolean(currentAnswers[field.key])}
@@ -305,7 +305,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
           {templates.map((template) => {
             const responses = responsesByTemplate.get(template.id) || []
             return (
-              <div key={template.id} className="p-mx-md rounded-mx-lg bg-surface-alt border border-border-default">
+              <div key={template.id} className="p-mx-md rounded-xl bg-gray-50 border border-gray-200">
                 <div className="flex items-center justify-between gap-mx-sm">
                   <Typography variant="p" className="">{template.title}</Typography>
                   <Badge variant={responses.length ? 'success' : 'outline'} className="rounded-mx-full px-3 py-1">

@@ -24,7 +24,7 @@ export function AdminNetworkView() {
 
   if (loading) return (
     <div className="flex flex-col gap-mx-sm animate-pulse">
-      {[1,2,3].map(i => <div key={i} className="h-mx-3xl bg-white/10 rounded-mx-xl" />)}
+      {[1,2,3].map(i => <div key={i} className="h-mx-3xl bg-white/10 rounded-2xl" />)}
     </div>
   )
 
@@ -69,7 +69,7 @@ export function AdminNetworkView() {
               role="button"
               tabIndex={0}
               aria-expanded={isExpanded}
-              className="p-mx-sm sm:p-mx-md flex items-center justify-between cursor-pointer hover:bg-surface-alt transition-colors"
+              className="p-mx-sm sm:p-mx-md flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
               onClick={() => setExpandedStoreId(isExpanded ? null : store.store_id)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
@@ -79,7 +79,7 @@ export function AdminNetworkView() {
               }}
             >
               <div className="flex items-center gap-mx-sm min-w-0">
-                <div className="w-mx-10 h-mx-10 sm:w-mx-xl sm:h-mx-xl rounded-mx-lg bg-brand-primary/10 flex items-center justify-center text-brand-primary shrink-0">
+                <div className="w-mx-10 h-mx-10 sm:w-mx-xl sm:h-mx-xl rounded-xl bg-emerald-600/10 flex items-center justify-center text-emerald-600 shrink-0">
                   <Building2 size={20} className="sm:size-mx-md" />
                 </div>
                 <div className="min-w-0">
@@ -103,23 +103,23 @@ export function AdminNetworkView() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="border-t border-border-default bg-surface-alt/30"
+                  className="border-t border-gray-200 bg-gray-50/30"
                 >
                   <div className="p-mx-sm sm:p-mx-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-sm">
                     {members.map((member) => (
-                      <div key={member.id} className="bg-white p-mx-sm rounded-mx-lg border border-border-default flex flex-col gap-mx-sm shadow-sm relative overflow-hidden group">
+                      <div key={member.id} className="bg-white p-mx-sm rounded-xl border border-gray-200 flex flex-col gap-mx-sm shadow-sm relative overflow-hidden group">
                         <div className="flex items-center gap-mx-sm relative z-10">
-                          <div className="w-mx-10 h-mx-10 rounded-mx-lg bg-surface-alt flex items-center justify-center border border-border-default overflow-hidden shrink-0">
-                            {member.avatar_url ? <img src={member.avatar_url} alt="" className="w-full h-full object-cover" /> : <Users size={16} className="text-text-tertiary" />}
+                          <div className="w-mx-10 h-mx-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-200 overflow-hidden shrink-0">
+                            {member.avatar_url ? <img src={member.avatar_url} alt="" className="w-full h-full object-cover" /> : <Users size={16} className="text-gray-500" />}
                           </div>
                           <div className="flex-1 min-w-0">
                             <Typography className="text-xs sm:text-sm tracking-tight leading-tight whitespace-normal break-words">{member.name}</Typography>
                             <Typography variant="tiny" tone="muted" className="text-mx-tiny font-bold">{member.role}</Typography>
                           </div>
-                          {member.checkin_today ? <Zap size={16} className="text-status-success fill-status-success/20" /> : <Clock size={16} className="text-text-tertiary opacity-20" />}
+                          {member.checkin_today ? <Zap size={16} className="text-status-success fill-status-success/20" /> : <Clock size={16} className="text-gray-500 opacity-20" />}
                         </div>
                         
-                        <div className="flex gap-mx-xs border-t border-border-default pt-mx-xs mt-1 relative z-10">
+                        <div className="flex gap-mx-xs border-t border-gray-200 pt-mx-xs mt-1 relative z-10">
                           <Button 
                             variant="outline" size="sm" className="flex-1 h-mx-lg sm:h-mx-10 text-mx-micro sm:text-mx-tiny"
                             disabled={!!processing}

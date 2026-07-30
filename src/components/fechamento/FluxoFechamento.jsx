@@ -276,7 +276,7 @@ function ShowroomStep({ dc, updateCounter, setCounter, bloqueado, onConfirm, onG
           <Store className="w-5 h-5 text-white" />
         </div>
         <div>
-          <p className={`text-[14px] font-black uppercase tracking-wider leading-none ${c.title}`}>1. Showroom</p>
+          <p className={`text-[14px] font-bold uppercase tracking-wider leading-none ${c.title}`}>1. Showroom</p>
           <p className={`text-[11px] mt-0.5 font-medium ${c.sub}`}>Atendimento presencial</p>
         </div>
       </div>
@@ -292,7 +292,7 @@ function ShowroomStep({ dc, updateCounter, setCounter, bloqueado, onConfirm, onG
         />
       </div>
       {!bloqueado && (
-        <button onClick={onConfirm} className={`w-full py-3.5 rounded-xl text-white text-[14px] font-black ${c.btn} transition-colors shadow-sm active:scale-95`}>
+        <button onClick={onConfirm} className={`w-full py-3.5 rounded-xl text-white text-[14px] font-bold ${c.btn} transition-colors shadow-sm active:scale-95`}>
           Confirmar Showroom ✓
         </button>
       )}
@@ -319,7 +319,7 @@ function CarteiraStep({ dc, updateCounter, setCounter, clients, closingDate, blo
           <Users className="w-5 h-5 text-white" />
         </div>
         <div>
-          <p className={`text-[14px] font-black uppercase tracking-wider leading-none ${c.title}`}>2. Carteira</p>
+          <p className={`text-[14px] font-bold uppercase tracking-wider leading-none ${c.title}`}>2. Carteira</p>
           <p className={`text-[11px] mt-0.5 font-medium ${c.sub}`}>Relacionamento e prospecção</p>
         </div>
       </div>
@@ -338,7 +338,7 @@ function CarteiraStep({ dc, updateCounter, setCounter, clients, closingDate, blo
         ) : (
           <div className="flex items-center justify-between gap-3">
             <span className="text-[13px] font-semibold text-slate-500 flex-1">Agendamentos D+1 ativos</span>
-            <span className={`text-[22px] font-black tabular-nums ${c.title}`}>{ativos}</span>
+            <span className={`text-[22px] font-bold tabular-nums ${c.title}`}>{ativos}</span>
           </div>
         )}
         {showPostFinalizado && (
@@ -346,7 +346,7 @@ function CarteiraStep({ dc, updateCounter, setCounter, clients, closingDate, blo
         )}
       </div>
       {!bloqueado && !d1Editavel && (
-        <button onClick={onConfirm} className={`w-full py-3.5 rounded-xl text-white text-[14px] font-black ${c.btn} transition-colors shadow-sm active:scale-95`}>
+        <button onClick={onConfirm} className={`w-full py-3.5 rounded-xl text-white text-[14px] font-bold ${c.btn} transition-colors shadow-sm active:scale-95`}>
           Confirmar Carteira ✓
         </button>
       )}
@@ -372,7 +372,7 @@ function InternetStep({ dc, updateCounter, setCounter, clients, closingDate, blo
           <Globe className="w-5 h-5 text-white" />
         </div>
         <div>
-          <p className={`text-[14px] font-black uppercase tracking-wider leading-none ${c.title}`}>3. Internet</p>
+          <p className={`text-[14px] font-bold uppercase tracking-wider leading-none ${c.title}`}>3. Internet</p>
           <p className={`text-[11px] mt-0.5 font-medium ${c.sub}`}>Leads digitais</p>
         </div>
       </div>
@@ -391,7 +391,7 @@ function InternetStep({ dc, updateCounter, setCounter, clients, closingDate, blo
         ) : (
           <div className="flex items-center justify-between gap-3">
             <span className="text-[13px] font-semibold text-slate-500 flex-1">Agendamentos D+1 ativos</span>
-            <span className={`text-[22px] font-black tabular-nums ${c.title}`}>{ativos}</span>
+            <span className={`text-[22px] font-bold tabular-nums ${c.title}`}>{ativos}</span>
           </div>
         )}
         {showPostFinalizado && (
@@ -399,7 +399,7 @@ function InternetStep({ dc, updateCounter, setCounter, clients, closingDate, blo
         )}
       </div>
       {!bloqueado && !d1Editavel && (
-        <button onClick={onConfirm} className={`w-full py-3.5 rounded-xl text-white text-[14px] font-black ${c.btn} transition-colors shadow-sm active:scale-95`}>
+        <button onClick={onConfirm} className={`w-full py-3.5 rounded-xl text-white text-[14px] font-bold ${c.btn} transition-colors shadow-sm active:scale-95`}>
           Confirmar Internet ✓
         </button>
       )}
@@ -427,7 +427,7 @@ function VendasStep({ onGoBack, agendCarteira, agendInternet, children }) {
           <ShoppingCart className="w-5 h-5 text-white" />
         </div>
         <div className="flex-1">
-          <p className={`text-[14px] font-black uppercase tracking-wider leading-none ${c.title}`}>4. Vendas e Agendamentos</p>
+          <p className={`text-[14px] font-bold uppercase tracking-wider leading-none ${c.title}`}>4. Vendas e Agendamentos</p>
           <p className={`text-[11px] mt-0.5 font-medium ${c.sub}`}>Registros de vendas e agendamentos D+1</p>
         </div>
       </div>
@@ -497,10 +497,10 @@ export default function FluxoFechamento({ dc, updateCounter, setCounter, clients
       <div className="hidden sm:block bg-white rounded-2xl border border-slate-200 shadow-sm p-4 sm:p-5">
         <div className="flex items-center justify-between mb-1">
           <div className="flex-1 min-w-0 pr-3">
-            <h2 className="text-[13px] sm:text-[14px] font-black text-[#0F172A] uppercase tracking-wide">Progresso do Fechamento</h2>
+            <h2 className="text-[13px] sm:text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Progresso do Fechamento</h2>
             <p className="text-[10px] sm:text-[11px] text-slate-400 mt-0.5 leading-tight">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
           </div>
-          <span className={`text-[26px] sm:text-[28px] font-black tabular-nums flex-shrink-0 ${totalPct === 100 ? "text-green-600" : "text-[#0F172A]"}`}>
+          <span className={`text-[26px] sm:text-[28px] font-bold tabular-nums flex-shrink-0 ${totalPct === 100 ? "text-green-600" : "text-[#0F172A]"}`}>
             {totalPct}%
           </span>
         </div>

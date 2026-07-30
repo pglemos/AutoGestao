@@ -216,7 +216,7 @@ export default function FinalizarMobile({
           <button
             onClick={() => setConfirmModalOpen(true)}
             disabled={isBlocked}
-            className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-white font-black text-[15px] tracking-widest uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed shadow-md
+            className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-white font-bold text-[15px] tracking-widest uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed shadow-md
               ${isBlocked
                 ? "bg-[#EF4444] shadow-red-200 opacity-70"
                 : "bg-[#22C55E] hover:bg-green-600 shadow-green-200"

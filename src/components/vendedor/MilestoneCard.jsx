@@ -26,7 +26,7 @@ export default function MilestoneCard({ veiculosFaltam, valorProjetado, percentu
           <>
             <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Faltam</p>
             <div className="flex items-baseline gap-2">
-              <span className="font-black text-white" style={{ fontSize: "4rem", lineHeight: 1 }}>
+              <span className="font-bold text-white" style={{ fontSize: "4rem", lineHeight: 1 }}>
                 {veiculosFaltam}
               </span>
               <span className="text-amber-400 text-2xl font-bold">
@@ -34,7 +34,7 @@ export default function MilestoneCard({ veiculosFaltam, valorProjetado, percentu
               </span>
             </div>
             <p className="text-slate-400 text-sm mt-1">para você ganhar</p>
-            <p className="font-black mt-1" style={{ fontSize: "2rem", color: "#F59E0B", textShadow: "0 0 15px rgba(245,158,11,0.3)" }}>
+            <p className="font-bold mt-1" style={{ fontSize: "2rem", color: "#F59E0B", textShadow: "0 0 15px rgba(245,158,11,0.3)" }}>
               {formatBRL(valorProjetado).replace(",00", "")}
             </p>
 

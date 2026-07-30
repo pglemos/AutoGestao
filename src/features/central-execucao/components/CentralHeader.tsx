@@ -22,19 +22,19 @@ export function CentralHeader({ date = new Date() }: { date?: Date }) {
   const formatted = formatHeaderDate(date)
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-mx-border bg-white px-5 sm:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-5 sm:px-6">
       <div className="flex min-w-0 items-center gap-3">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-status-info to-blue-400">
           <Target className="h-4 w-4 text-white" aria-hidden="true" />
         </div>
         <div className="min-w-0">
-          <h1 className="truncate text-[20px] font-black leading-none tracking-tight text-mx-text">Rotina do Dia</h1>
+          <h1 className="truncate text-[20px] font-bold leading-none tracking-tight text-gray-800">Rotina do Dia</h1>
           <p className="mt-0.5 truncate text-[11px] font-medium text-slate-400">Organize e execute seu dia com foco</p>
         </div>
       </div>
 
       <div className="hidden text-right sm:block">
-        <p className="text-[13px] font-bold text-mx-text">{formatted.weekday}</p>
+        <p className="text-[13px] font-bold text-gray-800">{formatted.weekday}</p>
         <p className="text-[12px] text-slate-400">{formatted.fullDate}</p>
       </div>
     </header>

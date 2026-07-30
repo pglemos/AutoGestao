@@ -218,7 +218,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
           {step === "confirm" && (
             <div className="space-y-4">
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
-                <p className="text-[14px] font-black text-amber-900 mb-1">Enviar regularização para aprovação?</p>
+                <p className="text-[14px] font-bold text-amber-900 mb-1">Enviar regularização para aprovação?</p>
                 <p className="text-[13px] text-amber-800">
                   Este fechamento foi realizado fora do prazo. Ele será salvo, mas só contará nos indicadores após aprovação do responsável.
                 </p>
@@ -248,7 +248,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
               <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6 text-amber-500" />
               </div>
-              <p className="text-[15px] font-black text-[#0F172A]">Regularização enviada!</p>
+              <p className="text-[15px] font-bold text-[#0F172A]">Regularização enviada!</p>
               <p className="text-[13px] text-slate-500 max-w-xs mx-auto">
                 O fechamento foi salvo e está aguardando aprovação do responsável. Ele só contará nos indicadores após a aprovação.
               </p>

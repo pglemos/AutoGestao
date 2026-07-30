@@ -32,7 +32,7 @@ export function NotificacoesHeader({ isRefetching, handleRefresh, markAllAsRead 
             void markAllAsRead()
             toast.success('Tudo lido!')
           }}
-          className="flex-1 rounded-mx-xl bg-white px-4 text-xs font-black uppercase tracking-wider shadow-mx-sm sm:flex-none"
+          className="flex-1 rounded-2xl bg-white px-4 text-xs font-bold uppercase tracking-wider shadow-sm sm:flex-none"
         >
           <CheckCheck size={18} className="mr-2" /> MARCAR TUDO
         </Button>

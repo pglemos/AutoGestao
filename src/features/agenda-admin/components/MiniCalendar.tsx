@@ -23,17 +23,17 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
   const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 
   return (
-    <div className="rounded-mx-xl border border-border-strong bg-white p-3 shadow-sm select-none">
+    <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm select-none">
       {/* Header Navigation */}
       <div className="mb-2 flex items-center justify-between px-1">
-        <span className="text-xs font-bold text-text-primary capitalize">
+        <span className="text-xs font-bold text-gray-800 capitalize">
           {format(currentMonth, 'MMMM yyyy', { locale: ptBR })}
         </span>
         <div className="flex items-center gap-1">
           <button
             type="button"
             onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-            className="flex h-6 w-6 items-center justify-center rounded-mx-md text-text-tertiary hover:bg-surface-alt hover:text-text-primary transition-colors"
+            className="flex h-6 w-6 items-center justify-center rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-colors"
             aria-label="Mês anterior"
           >
             <ChevronLeft size={14} />
@@ -41,7 +41,7 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
           <button
             type="button"
             onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-            className="flex h-6 w-6 items-center justify-center rounded-mx-md text-text-tertiary hover:bg-surface-alt hover:text-text-primary transition-colors"
+            className="flex h-6 w-6 items-center justify-center rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-colors"
             aria-label="Próximo mês"
           >
             <ChevronRight size={14} />
@@ -52,7 +52,7 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
       {/* Weekday headers */}
       <div className="grid grid-cols-7 mb-1 text-center">
         {weekDays.map((day) => (
-          <span key={day} className="text-[10px] font-semibold text-text-tertiary uppercase">
+          <span key={day} className="text-[10px] font-semibold text-gray-500 uppercase">
             {day}
           </span>
         ))}
@@ -73,10 +73,10 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
               onClick={() => onDateSelect(day)}
               className={cn(
                 'relative flex h-7 w-7 items-center justify-center mx-auto rounded-mx-full text-xs font-medium transition-all',
-                !isCurrentM && 'text-text-tertiary/40',
-                isCurrentM && !isSelected && !isCurrentDay && 'text-text-primary hover:bg-surface-alt',
-                isCurrentDay && !isSelected && 'border border-brand-primary text-brand-primary font-bold',
-                isSelected && 'bg-brand-primary text-white font-bold shadow-sm',
+                !isCurrentM && 'text-gray-500/40',
+                isCurrentM && !isSelected && !isCurrentDay && 'text-gray-800 hover:bg-gray-50',
+                isCurrentDay && !isSelected && 'border border-brand-primary text-emerald-600 font-bold',
+                isSelected && 'bg-emerald-600 text-white font-bold shadow-sm',
               )}
             >
               {format(day, 'd')}
@@ -84,7 +84,7 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
                 <span
                   className={cn(
                     'absolute bottom-0.5 h-1 w-1 rounded-full',
-                    isCurrentDay ? 'bg-brand-primary' : 'bg-brand-secondary',
+                    isCurrentDay ? 'bg-emerald-600' : 'bg-gray-900',
                   )}
                 />
               )}

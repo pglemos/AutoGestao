@@ -250,7 +250,7 @@ export default function FunilVendedor() {
   const showEmptyState = !hasAnyData
 
   return (
-    <main className="min-h-full bg-surface-alt px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg">
+    <main className="min-h-full bg-gray-50 px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg">
       <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-4">
 <SellerPageHeader icon={TrendingUp} title="Minha Meta" actions={(
 <div className="flex items-center gap-1 rounded-xl bg-slate-100 p-1">
@@ -268,7 +268,7 @@ export default function FunilVendedor() {
 )} />
 
         {errors.length > 0 && (
-          <div role="status" className="rounded-mx-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-sm font-semibold text-status-warning">
+          <div role="status" className="rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-sm font-semibold text-status-warning">
             Algumas fontes ainda não retornaram dados. A tela continua somente leitura e mostra vazio quando base não existe.
           </div>
         )}
@@ -334,7 +334,7 @@ function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: Peri
         <div className="flex items-center gap-3">
           <CheckCircle className="h-6 w-6 shrink-0 text-green-500" />
           <div>
-            <p className="text-[20px] font-black text-green-600">Meta batida!</p>
+            <p className="text-[20px] font-bold text-green-600">Meta batida!</p>
             <p className="text-[13px] text-slate-500">{realizado} de {meta} vendas realizadas</p>
           </div>
         </div>
@@ -343,7 +343,7 @@ function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: Peri
           <div className="flex-1 space-y-3">
             <div>
               <p className="mb-0.5 text-[12px] text-slate-400">Realizado</p>
-              <p className="text-[32px] font-black leading-none tabular-nums text-slate-900">
+              <p className="text-[32px] font-bold leading-none tabular-nums text-slate-900">
                 {realizado}
                 <span className="ml-1 text-[16px] font-semibold text-slate-300">/ {meta}</span>
               </p>
@@ -366,34 +366,34 @@ function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: Peri
           <div className="grid flex-1 grid-cols-2 gap-3">
             <div className="rounded-xl bg-slate-50 p-3">
               <p className="mb-0.5 text-[10px] uppercase tracking-wide text-slate-400">Faltam</p>
-              <p className="text-[22px] font-black leading-none tabular-nums text-red-500">{faltam}</p>
+              <p className="text-[22px] font-bold leading-none tabular-nums text-red-500">{faltam}</p>
               <p className="text-[11px] text-slate-400">vendas</p>
             </div>
             <div className="rounded-xl bg-slate-50 p-3">
               <p className="mb-0.5 text-[10px] uppercase tracking-wide text-slate-400">Dias úteis restantes</p>
-              <p className="text-[22px] font-black leading-none tabular-nums text-slate-900">{isCurrentMonth ? diasUteisRestantes : '—'}</p>
+              <p className="text-[22px] font-bold leading-none tabular-nums text-slate-900">{isCurrentMonth ? diasUteisRestantes : '—'}</p>
               <p className="text-[11px] text-slate-400">seg–sáb</p>
             </div>
             <div className="rounded-xl bg-slate-50 p-3">
               <p className="mb-0.5 text-[10px] uppercase tracking-wide text-slate-400">Ritmo necessário</p>
               {!isCurrentMonth || necessarioPorDia === null ? (
                 <>
-                  <p className="text-[22px] font-black leading-none tabular-nums text-amber-600">—</p>
+                  <p className="text-[22px] font-bold leading-none tabular-nums text-amber-600">—</p>
                   <p className="text-[11px] text-slate-400">sem dados</p>
                 </>
               ) : faltam !== null && faltam <= 0 ? (
                 <>
-                  <p className="text-[18px] font-black leading-tight text-green-600">Meta batida</p>
+                  <p className="text-[18px] font-bold leading-tight text-green-600">Meta batida</p>
                   <p className="text-[11px] text-slate-400">Continue o ritmo.</p>
                 </>
               ) : diasUteisRestantes <= 0 ? (
                 <>
-                  <p className="text-[18px] font-black leading-tight text-red-500">Prazo encerrado</p>
+                  <p className="text-[18px] font-bold leading-tight text-red-500">Prazo encerrado</p>
                   <p className="text-[11px] text-slate-400">Revise o fechamento.</p>
                 </>
               ) : necessarioPorDia >= 1 ? (
                 <>
-                  <p className="text-[22px] font-black leading-none tabular-nums text-amber-600">
+                  <p className="text-[22px] font-bold leading-none tabular-nums text-amber-600">
                     {necessarioPorDia % 1 === 0 ? necessarioPorDia : necessarioPorDia.toFixed(2)}
                   </p>
                   <p className="text-[11px] text-slate-400">vendas por dia útil</p>
@@ -401,8 +401,8 @@ function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: Peri
                 </>
               ) : (
                 <>
-                  <p className="text-[14px] font-black leading-tight text-amber-600">1 venda a cada</p>
-                  <p className="text-[22px] font-black leading-none tabular-nums text-amber-600">
+                  <p className="text-[14px] font-bold leading-tight text-amber-600">1 venda a cada</p>
+                  <p className="text-[22px] font-bold leading-none tabular-nums text-amber-600">
                     {faltam && faltam > 0 ? (diasUteisRestantes / faltam).toFixed(1) : '—'} dias
                   </p>
                   <p className="mt-1 text-[10px] text-slate-400">≈ {Math.floor(necessarioPorDia * 6)}–{Math.ceil(necessarioPorDia * 6)} por semana</p>
@@ -411,7 +411,7 @@ function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: Peri
             </div>
             <div className="rounded-xl bg-slate-50 p-3">
               <p className="mb-0.5 text-[10px] uppercase tracking-wide text-slate-400">Probabilidade</p>
-              <p className={`text-[22px] font-black leading-none tabular-nums ${probCor}`}>{probPct !== null ? `${probPct}%` : '—'}</p>
+              <p className={`text-[22px] font-bold leading-none tabular-nums ${probCor}`}>{probPct !== null ? `${probPct}%` : '—'}</p>
               <p className="text-[11px] text-slate-400">com ritmo atual</p>
             </div>
           </div>
@@ -425,7 +425,7 @@ function AlavancaItem({ label, valor }: { label: string; valor: number }) {
   return (
     <div className="flex items-center justify-between border-b border-slate-100 py-2 last:border-0">
       <span className="text-[13px] text-slate-600">{label}</span>
-      <span className="text-[18px] font-black tabular-nums text-slate-900">{valor}</span>
+      <span className="text-[18px] font-bold tabular-nums text-slate-900">{valor}</span>
     </div>
   )
 }
@@ -476,7 +476,7 @@ function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelFunnel[]
         <>
           <div className={`mb-4 rounded-xl border p-4 ${EFFORT_PRINCIPAL_BG[canalPrincipal]}`}>
             <p className="mb-1 text-[11px] font-bold uppercase tracking-wide text-slate-500">
-              Sua melhor base hoje é <span className="font-black text-slate-900">{canalPrincipal}</span>
+              Sua melhor base hoje é <span className="font-bold text-slate-900">{canalPrincipal}</span>
             </p>
             <p className="mb-3 text-[12px] text-slate-500">
               Esses números mostram o esforço estimado em cada ponto do funil. Você pode acompanhar sua evolução por qualquer uma dessas alavancas.
@@ -567,7 +567,7 @@ function CanalCard({ channel }: { channel: ChannelFunnel }) {
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className={`flex items-center justify-between border-b px-4 py-2.5 ${cor.header}`}>
-        <p className="text-[12px] font-black uppercase tracking-wide text-slate-900">{channel.channel}</p>
+        <p className="text-[12px] font-bold uppercase tracking-wide text-slate-900">{channel.channel}</p>
         {conv !== null && !semDados ? (
           <span className={`rounded-full px-2 py-0.5 text-[10px] font-bold ${cor.badge}`}>{conv}% conv.</span>
         ) : (
@@ -582,15 +582,15 @@ function CanalCard({ channel }: { channel: ChannelFunnel }) {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-[10px] text-slate-400">{VOLUME_LABEL[channel.channel]}</p>
-              <p className="text-[20px] font-black tabular-nums text-slate-900">{volume}</p>
+              <p className="text-[20px] font-bold tabular-nums text-slate-900">{volume}</p>
             </div>
             <div className="text-center">
               <p className="text-[10px] text-slate-400">Vendas</p>
-              <p className="text-[20px] font-black tabular-nums text-green-600">{vendas}</p>
+              <p className="text-[20px] font-bold tabular-nums text-green-600">{vendas}</p>
             </div>
             <div className="text-center">
               <p className="text-[10px] text-slate-400">Conversão</p>
-              <p className="text-[20px] font-black tabular-nums text-slate-900">{conv !== null ? `${conv}%` : '—'}</p>
+              <p className="text-[20px] font-bold tabular-nums text-slate-900">{conv !== null ? `${conv}%` : '—'}</p>
             </div>
           </div>
         )}
@@ -623,7 +623,7 @@ function EtapaLinha({ label, valor, conv }: { label: string; valor: number; conv
         <span className="text-[12px] text-slate-600">{label}</span>
         {conv && <span className="text-[10px] text-slate-400">→ {conv}</span>}
       </div>
-      <span className="text-[14px] font-black tabular-nums text-slate-900">{valor}</span>
+      <span className="text-[14px] font-bold tabular-nums text-slate-900">{valor}</span>
     </div>
   )
 }

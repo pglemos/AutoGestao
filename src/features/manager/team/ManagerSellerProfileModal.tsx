@@ -168,7 +168,7 @@ function TrainingTab({ onOpenTraining }: { onOpenTraining: () => void }) {
 
 function HeroMetric({ icon: Icon, label, value, detail, tone }: { icon: typeof TrendingUp; label: string; value: string; detail: string; tone: 'critical' | 'attention' | 'success' | 'muted' }) {
   const theme = { critical: 'border-red-100 bg-red-50 text-red-600', attention: 'border-amber-100 bg-amber-50 text-amber-600', success: 'border-emerald-100 bg-emerald-50 text-emerald-600', muted: 'border-gray-100 bg-gray-50 text-gray-500' }[tone]
-  return <div className={`rounded-xl border p-4 ${theme}`}><div className="flex items-center gap-2 text-sm font-bold"><Icon size={15} />{label}</div><p className="mt-3 text-2xl font-black">{value}</p><p className="mt-1 text-xs text-gray-500">{detail}</p></div>
+  return <div className={`rounded-xl border p-4 ${theme}`}><div className="flex items-center gap-2 text-sm font-bold"><Icon size={15} />{label}</div><p className="mt-3 text-2xl font-bold">{value}</p><p className="mt-1 text-xs text-gray-500">{detail}</p></div>
 }
 
 function ConsistencyLine({ label, value, strong = false }: { label: string; value: number | null; strong?: boolean }) { return <div className="flex items-center justify-between gap-3 py-2"><span>{label}:</span><strong className={strong ? 'text-gray-800' : 'font-semibold text-gray-700'}>{formatPercent(value)}</strong></div> }

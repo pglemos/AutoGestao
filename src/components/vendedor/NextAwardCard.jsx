@@ -41,12 +41,12 @@ export default function NextAwardCard({ calcResult }) {
                 <p className="text-slate-500 text-xs mb-2">Próxima premiação:</p>
               )}
               <p className="text-slate-500 text-sm">Faltam</p>
-              <p className="text-5xl font-black text-mx-navy mt-1">
+              <p className="text-5xl font-bold text-mx-navy mt-1">
                 {(proximaPremiacao.quantidade_vendas_necessarias || 0) - qtdVendas}
                 <span className="text-xl font-semibold text-slate-400 ml-2">vendas</span>
               </p>
               <p className="text-slate-500 text-sm mt-2">para desbloquear</p>
-              <p className="text-3xl font-black text-amber-500 mt-1">+ {formatBRL(proximaPremiacao.valor_premio)}</p>
+              <p className="text-3xl font-bold text-amber-500 mt-1">+ {formatBRL(proximaPremiacao.valor_premio)}</p>
 
               <div className="mt-4 bg-slate-50 rounded-xl p-3">
                 <p className="text-slate-500 text-xs">

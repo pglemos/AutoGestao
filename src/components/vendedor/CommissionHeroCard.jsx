@@ -39,7 +39,7 @@ export default function CommissionHeroCard({ comissaoEstimada, qtdVendas, onVerC
           ) : (
             <>
               <p
-                className="font-black leading-none tabular-nums"
+                className="font-bold leading-none tabular-nums"
                 style={{
                   fontSize: "clamp(3rem, 8vw, 5.5rem)",
                   color: "#39FF5A",

@@ -29,7 +29,7 @@ export function AgendaSearchBar({ searchQuery, onSearchChange, placeholder = 'Bu
 
   return (
     <div className="relative flex items-center flex-1 max-w-md min-w-[200px]">
-      <Search size={16} className="absolute left-3 text-text-tertiary pointer-events-none" />
+      <Search size={16} className="absolute left-3 text-gray-500 pointer-events-none" />
       <input
         ref={inputRef}
         type="text"
@@ -37,19 +37,19 @@ export function AgendaSearchBar({ searchQuery, onSearchChange, placeholder = 'Bu
         onChange={(e) => onSearchChange(e.target.value)}
         placeholder={placeholder}
         aria-label="Buscar agendamentos"
-        className="w-full h-9 pl-9 pr-14 text-xs bg-surface-alt/60 hover:bg-surface-alt border border-border-strong focus:border-brand-primary focus:bg-white focus:outline-none rounded-mx-lg text-text-primary placeholder:text-text-tertiary transition-all"
+        className="w-full h-9 pl-9 pr-14 text-xs bg-gray-50/60 hover:bg-gray-50 border border-gray-200 focus:border-brand-primary focus:bg-white focus:outline-none rounded-xl text-gray-800 placeholder:text-gray-500 transition-all"
       />
       {searchQuery ? (
         <button
           type="button"
           onClick={() => onSearchChange('')}
-          className="absolute right-2 text-text-tertiary hover:text-text-primary p-1 rounded-mx-md"
+          className="absolute right-2 text-gray-500 hover:text-gray-800 p-1 rounded-xl"
           aria-label="Limpar busca"
         >
           <X size={14} />
         </button>
       ) : (
-        <kbd className="absolute right-2.5 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-text-tertiary bg-white border border-border-strong rounded shadow-2xs pointer-events-none">
+        <kbd className="absolute right-2.5 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-gray-500 bg-white border border-gray-200 rounded shadow-2xs pointer-events-none">
           /
         </kbd>
       )}

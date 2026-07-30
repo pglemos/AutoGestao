@@ -21,7 +21,7 @@ export function AdminFunnelChart({ funnelData, metrics }: Props) {
     <Card className="border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
-          <Layers3 size={18} className="text-brand-primary" /> Funil agregado
+          <Layers3 size={18} className="text-emerald-600" /> Funil agregado
         </CardTitle>
         <CardDescription>Leads ate vendas no historico</CardDescription>
       </CardHeader>
@@ -60,7 +60,7 @@ export function AdminFunnelChart({ funnelData, metrics }: Props) {
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-        <div className="grid grid-cols-3 gap-mx-xs pt-mx-md border-t border-border-subtle">
+        <div className="grid grid-cols-3 gap-mx-xs pt-mx-md border-t border-gray-100">
           <Badge variant="info" className="justify-center text-mx-nano">
             {formatPercent(metrics.convLeadAgd)} L-A
           </Badge>

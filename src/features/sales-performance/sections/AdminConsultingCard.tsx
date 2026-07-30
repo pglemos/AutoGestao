@@ -13,13 +13,13 @@ export function AdminConsultingCard({ consultingData, metrics }: Props) {
     <Card className="border-none bg-white overflow-hidden">
       <CardHeader className="p-mx-lg">
         <CardTitle className="text-lg flex items-center gap-mx-sm">
-          <BriefcaseBusiness size={18} className="text-brand-primary" /> Consultoria MX
+          <BriefcaseBusiness size={18} className="text-emerald-600" /> Consultoria MX
         </CardTitle>
         <CardDescription>Clientes, visitas e execucao PMR</CardDescription>
       </CardHeader>
       <CardContent className="p-mx-lg flex flex-col gap-mx-md">
         <div className="grid grid-cols-2 gap-mx-md">
-          <div className="p-mx-md rounded-mx-2xl bg-surface-alt border border-border-subtle">
+          <div className="p-mx-md rounded-2xl bg-gray-50 border border-gray-100">
             <Typography variant="tiny" tone="muted" className="">
               Clientes
             </Typography>
@@ -27,7 +27,7 @@ export function AdminConsultingCard({ consultingData, metrics }: Props) {
               {metrics.consultingClients}
             </Typography>
           </div>
-          <div className="p-mx-md rounded-mx-2xl bg-surface-alt border border-border-subtle">
+          <div className="p-mx-md rounded-2xl bg-gray-50 border border-gray-100">
             <Typography variant="tiny" tone="muted" className="">
               Visitas
             </Typography>
@@ -54,7 +54,7 @@ export function AdminConsultingCard({ consultingData, metrics }: Props) {
             </div>
           ))}
         </div>
-        <div className="grid grid-cols-2 gap-mx-sm mt-auto pt-mx-md border-t border-border-subtle">
+        <div className="grid grid-cols-2 gap-mx-sm mt-auto pt-mx-md border-t border-gray-100">
           <Badge variant="success" className="justify-center text-mx-nano">
             {metrics.completedConsultingVisits} concluidas
           </Badge>

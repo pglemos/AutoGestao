@@ -35,15 +35,15 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
   if (compact) {
     return (
       <div className="flex min-w-0 items-center gap-mx-sm text-mx-tiny">
-        <Calendar size={14} className="shrink-0 text-brand-primary" />
-        <span className="flex items-center gap-1 font-bold text-text-secondary">
+        <Calendar size={14} className="shrink-0 text-emerald-600" />
+        <span className="flex items-center gap-1 font-bold text-gray-500">
           {personalConnected
             ? <CheckCircle2 size={12} className="text-status-success" />
-            : <AlertCircle size={12} className="text-text-tertiary" />}
+            : <AlertCircle size={12} className="text-gray-500" />}
           Sua agenda
         </span>
         {canViewCentralAgenda && (
-          <span className="flex items-center gap-1 font-bold text-text-secondary">
+          <span className="flex items-center gap-1 font-bold text-gray-500">
             {centralConnected && centralMeetCohostsAuthorized
               ? <CheckCircle2 size={12} className="text-status-success" />
               : <AlertCircle size={12} className="text-status-warning" />}
@@ -59,7 +59,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
     <Card className="space-y-mx-md border bg-white p-mx-lg shadow-none">
       <header className="flex min-w-0 items-center justify-between gap-mx-sm">
         <div className="flex min-w-0 items-center gap-mx-sm">
-          <div className="flex h-mx-12 w-mx-12 shrink-0 items-center justify-center rounded-mx-lg border border-mx-indigo-100 bg-mx-indigo-50 text-brand-primary">
+          <div className="flex h-mx-12 w-mx-12 shrink-0 items-center justify-center rounded-xl border border-mx-indigo-100 bg-mx-indigo-50 text-emerald-600">
             <Calendar size={20} />
           </div>
           <div className="min-w-0">
@@ -78,13 +78,13 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`min-w-0 rounded-mx-lg border p-mx-sm ${personalConnected ? 'bg-status-success-surface border-status-success/20' : 'bg-surface-alt border-border-default'}`}
+          className={`min-w-0 rounded-xl border p-mx-sm ${personalConnected ? 'bg-status-success-surface border-status-success/20' : 'bg-gray-50 border-gray-200'}`}
         >
           <div className="mb-1 flex min-w-0 items-center justify-between gap-mx-xs">
-            <span className="min-w-0 truncate text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">Sua agenda</span>
+            <span className="min-w-0 truncate text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Sua agenda</span>
             {personalConnected
               ? <CheckCircle2 size={16} className="shrink-0 text-status-success" />
-              : <AlertCircle size={16} className="shrink-0 text-text-tertiary" />}
+              : <AlertCircle size={16} className="shrink-0 text-gray-500" />}
           </div>
           {personalConnected ? (
             <div className="flex min-w-0 flex-col gap-mx-tiny">
@@ -109,10 +109,10 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className={`min-w-0 rounded-mx-lg border p-mx-sm ${centralConnected && centralMeetCohostsAuthorized ? 'bg-mx-green-50 border-mx-green-200' : 'bg-surface-alt border-border-default'}`}
+            className={`min-w-0 rounded-xl border p-mx-sm ${centralConnected && centralMeetCohostsAuthorized ? 'bg-mx-green-50 border-mx-green-200' : 'bg-gray-50 border-gray-200'}`}
           >
             <div className="mb-1 flex min-w-0 items-center justify-between gap-mx-xs">
-              <span className="flex min-w-0 items-center gap-mx-xs text-mx-tiny font-black uppercase tracking-widest text-text-tertiary">
+              <span className="flex min-w-0 items-center gap-mx-xs text-mx-tiny font-bold uppercase tracking-widest text-gray-500">
                 <Building2 size={12} className="shrink-0" />
                 <span className="truncate">Agenda Central MX</span>
               </span>
@@ -138,19 +138,19 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
       </div>
 
       {error && (
-        <div className="p-mx-sm rounded-mx-md bg-status-error-surface border border-status-error/20 text-status-error text-mx-tiny font-bold">
+        <div className="p-mx-sm rounded-xl bg-status-error-surface border border-status-error/20 text-status-error text-mx-tiny font-bold">
           {error}
         </div>
       )}
 
       {!compact && canViewCentralAgenda && centralConnected && !personalConnected && (
-        <div className="p-mx-sm rounded-mx-md bg-mx-indigo-50 border border-mx-indigo-100 text-text-secondary text-mx-tiny font-bold leading-relaxed">
+        <div className="p-mx-sm rounded-xl bg-mx-indigo-50 border border-mx-indigo-100 text-gray-500 text-mx-tiny font-bold leading-relaxed">
           A Agenda Central MX está conectada. Para receber os compromissos na própria conta Google, cada admin MX precisa entrar no sistema com seu usuário e conectar a agenda pessoal.
         </div>
       )}
 
       {!compact && canViewCentralAgenda && centralConnected && !centralMeetCohostsAuthorized && (
-        <div className="p-mx-sm rounded-mx-md bg-status-warning-surface border border-status-warning/20 text-text-secondary text-mx-tiny font-bold leading-relaxed">
+        <div className="p-mx-sm rounded-xl bg-status-warning-surface border border-status-warning/20 text-gray-500 text-mx-tiny font-bold leading-relaxed">
           Reconecte a Agenda Central MX para autorizar Daniel, Jose, Mariane e Joao como co-hosts das reunioes Google Meet.
         </div>
       )}
@@ -165,8 +165,8 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
               const start = ev.start?.dateTime || ev.start?.date || ''
               const dt = start ? new Date(start) : null
               return (
-                <li key={`${ev._source}-${ev.id}`} className="flex min-w-0 items-center gap-mx-sm rounded-mx-md p-mx-xs transition-colors hover:bg-surface-alt">
-                  <span className={`h-mx-md w-mx-tiny shrink-0 rounded-full ${ev._source === 'central' ? 'bg-brand-primary' : 'bg-status-info'}`} />
+                <li key={`${ev._source}-${ev.id}`} className="flex min-w-0 items-center gap-mx-sm rounded-xl p-mx-xs transition-colors hover:bg-gray-50">
+                  <span className={`h-mx-md w-mx-tiny shrink-0 rounded-full ${ev._source === 'central' ? 'bg-emerald-600' : 'bg-status-info'}`} />
                   <div className="min-w-0 flex-1">
                     <Typography variant="caption" className="font-bold truncate block">
                       {ev.summary || '(sem título)'}

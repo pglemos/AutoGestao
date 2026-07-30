@@ -28,16 +28,16 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: i * 0.01 }}
             >
-              <Card className="border p-mx-md h-full flex flex-col justify-between group hover:shadow-mx-xl transition-all bg-white relative overflow-hidden">
-                <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
+              <Card className="border p-mx-md h-full flex flex-col justify-between group hover:shadow-sm transition-all bg-white relative overflow-hidden">
+                <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                 <article>
-                  <header className="flex items-start justify-between mb-8 border-b border-border-subtle pb-6 relative z-10">
+                  <header className="flex items-start justify-between mb-8 border-b border-gray-100 pb-6 relative z-10">
                     <div className="flex items-center gap-mx-sm">
                       <div
                         className={
                           variant === 'admin'
-                            ? 'w-mx-xl h-mx-xl rounded-mx-lg bg-surface-alt border border-border-subtle flex items-center justify-center font-bold text-text-primary text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-inner uppercase'
-                            : 'w-mx-xl h-mx-xl rounded-mx-lg bg-surface-alt border border-border-subtle flex items-center justify-center font-bold text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-inner uppercase'
+                            ? 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center font-bold text-gray-800 text-sm group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-none uppercase'
+                            : 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center font-bold text-sm group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-none uppercase'
                         }
                       >
                         {sellerName.substring(0, 2)}
@@ -71,7 +71,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                   </header>
                   <div className="space-y-mx-md relative z-10">
                     {f.caso_motivo && (
-                      <div className="p-mx-md bg-status-warning-surface rounded-mx-lg border border-status-warning/10">
+                      <div className="p-mx-md bg-status-warning-surface rounded-xl border border-status-warning/10">
                         <Typography
                           variant="tiny"
                           tone="warning"
@@ -87,9 +87,9 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                         </Typography>
                       </div>
                     )}
-                    <div className="p-mx-md bg-surface-alt rounded-mx-lg group-hover:bg-white group-hover:shadow-mx-sm transition-all">
+                    <div className="p-mx-md bg-gray-50 rounded-xl group-hover:bg-white group-hover:shadow-sm transition-all">
                       {showActionHeader ? (
-                        <header className="flex items-center justify-between mb-4 border-b border-border-strong/10 pb-3">
+                        <header className="flex items-center justify-between mb-4 border-b border-gray-200/10 pb-3">
                           <Typography
                             variant="tiny"
                             tone="brand"
@@ -97,7 +97,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                           >
                             Plano de Ação
                           </Typography>
-                          <Zap size={14} className="text-brand-primary" />
+                          <Zap size={14} className="text-emerald-600" />
                         </header>
                       ) : (
                         <Typography
@@ -117,14 +117,14 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                     </div>
                   </div>
                 </article>
-                <footer className="mt-10 pt-8 border-t border-border-subtle flex items-center justify-between relative z-10">
+                <footer className="mt-10 pt-8 border-t border-gray-100 flex items-center justify-between relative z-10">
                   {variant === 'admin' ? (
                     <div className="flex gap-mx-xs">
                       <Button
                         variant="ghost"
                         size="icon"
                         onClick={() => onShareWhatsApp(f)}
-                        className="w-mx-10 h-mx-10 p-mx-0 text-status-success hover:bg-status-success-surface rounded-mx-lg border border-border-subtle shadow-sm bg-white"
+                        className="w-mx-10 h-mx-10 p-mx-0 text-status-success hover:bg-status-success-surface rounded-xl border border-gray-100 shadow-sm bg-white"
                       >
                         <MessageSquare size={18} />
                       </Button>
@@ -134,7 +134,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                       variant="ghost"
                       size="icon"
                       onClick={() => onShareWhatsApp(f)}
-                      className="w-mx-10 h-mx-10 p-mx-0 text-status-success hover:bg-status-success-surface rounded-mx-lg border border-border-subtle shadow-sm bg-white"
+                      className="w-mx-10 h-mx-10 p-mx-0 text-status-success hover:bg-status-success-surface rounded-xl border border-gray-100 shadow-sm bg-white"
                     >
                       <MessageSquare size={18} />
                     </Button>

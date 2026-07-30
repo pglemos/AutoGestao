@@ -93,7 +93,7 @@ export function DashboardLoja() {
   }
   if (!resolving && !storesLoading && role === 'gerente' && activeTab === 'performance' && !selectedStoreId) {
     return (
-      <main className="h-full w-full overflow-y-auto bg-surface-alt no-scrollbar">
+      <main className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
         <ManagerSellerParityHomeCanonical data={data} alerts={[]} />
       </main>
     )
@@ -109,7 +109,7 @@ export function DashboardLoja() {
   }
 
   return (
-  <main className={`h-full w-full overflow-y-auto no-scrollbar ${isFocusedRolePerformance ? 'bg-surface-alt' : isManagerSection ? 'bg-surface-alt' : 'bg-surface-alt p-mx-lg'}`}>
+  <main className={`h-full w-full overflow-y-auto no-scrollbar ${isFocusedRolePerformance ? 'bg-gray-50' : isManagerSection ? 'bg-gray-50' : 'bg-gray-50 p-mx-lg'}`}>
       {!isFocusedRolePerformance && !isManagerSection && (
         <DashboardErrorBoundary sectionName="Header">
           <DashboardHeader

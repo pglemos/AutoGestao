@@ -163,7 +163,7 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                             name="role"
                             value={form.role || ''}
                             onChange={e => setForm(p => ({ ...p, role: e.target.value as UserRole }))}
-                            className="w-full h-mx-14 pl-mx-12 pr-mx-sm bg-surface-alt border border-border-default rounded-mx-xl font-black uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+                            className="w-full h-mx-14 pl-mx-12 pr-mx-sm bg-gray-50 border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
                         >
                             {ROLE_OPTIONS.filter(r => allowedRoles.includes(r.value)).map(r => (
                                 <option key={r.value} value={r.value}>{r.label.toUpperCase()}</option>
@@ -178,7 +178,7 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                                 name="store_id"
                                 value={form.store_id || ''}
                                 onChange={e => setForm(p => ({ ...p, store_id: e.target.value }))}
-                                className="w-full h-mx-14 pl-mx-12 pr-mx-sm bg-surface-alt border border-border-default rounded-mx-xl font-black uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+                                className="w-full h-mx-14 pl-mx-12 pr-mx-sm bg-gray-50 border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
                             >
                                 <option value="">Selecione a loja</option>
                                 {lojas.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -187,7 +187,7 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                     )}
 
                     <div className="md:col-span-2">
-                        <label htmlFor="user-active" className="flex items-start gap-mx-sm rounded-mx-xl border border-border-default bg-surface-alt p-mx-md cursor-pointer">
+                        <label htmlFor="user-active" className="flex items-start gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
                             <input
                                 id="user-active"
                                 name="active"
@@ -197,8 +197,8 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                                 className="mt-1 h-mx-sm w-mx-sm accent-brand-primary"
                             />
                             <span className="flex-1">
-                                <span className="block text-sm font-black uppercase tracking-widest text-text-primary">Usuário ativo</span>
-                                <span className="block text-xs font-bold text-text-tertiary mt-1">
+                                <span className="block text-sm font-bold uppercase tracking-widest text-gray-800">Usuário ativo</span>
+                                <span className="block text-xs font-bold text-gray-500 mt-1">
                                     Desativar bloqueia o login mas preserva o histórico operacional.
                                 </span>
                             </span>
@@ -206,7 +206,7 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                     </div>
                 </div>
 
-                <div className="pt-mx-md border-t border-border-default space-y-mx-sm">
+                <div className="pt-mx-md border-t border-gray-200 space-y-mx-sm">
                     <Typography variant="caption" tone="muted" className="">Ações de Segurança</Typography>
                     <div className="flex flex-wrap gap-mx-sm">
                         <Button
@@ -240,7 +240,7 @@ function FormGroup({ icon, label, children }: { icon: React.ReactNode; label: st
         <div className="space-y-mx-xs">
             <Typography variant="tiny" tone="muted" className="px-1">{label}</Typography>
             <div className="relative">
-                <span className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary z-10 pointer-events-none">{icon}</span>
+                <span className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 z-10 pointer-events-none">{icon}</span>
                 {children}
             </div>
         </div>

@@ -22,7 +22,7 @@ export function OwnerModuleGrid({
           const classes = toneClasses[item.tone]
           return (
             <Card key={item.title} className="min-h-[168px] p-mx-lg">
-              <div className={cn('flex h-mx-12 w-mx-12 items-center justify-center rounded-mx-xl shadow-mx-sm', classes.bg)}>
+              <div className={cn('flex h-mx-12 w-mx-12 items-center justify-center rounded-2xl shadow-sm', classes.bg)}>
                 {item.icon}
               </div>
               <Typography variant="h3" className="mt-mx-md text-lg">{item.title}</Typography>

@@ -27,7 +27,7 @@ function EtapaLinha({ label, valor, conv }) {
           <span className="text-[10px] text-slate-400">→ {conv}</span>
         )}
       </div>
-      <span className="text-[14px] font-black tabular-nums text-[#0F172A]">{valor}</span>
+      <span className="text-[14px] font-bold tabular-nums text-[#0F172A]">{valor}</span>
     </div>
   );
 }
@@ -46,7 +46,7 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
     <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
       {/* Header */}
       <div className={`px-4 py-2.5 border-b flex items-center justify-between ${c.header}`}>
-        <p className="text-[12px] font-black text-[#0F172A] uppercase tracking-wide">{titulo}</p>
+        <p className="text-[12px] font-bold text-[#0F172A] uppercase tracking-wide">{titulo}</p>
         {conversaoGeral !== null && !semDados ? (
           <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${c.badge}`}>{conversaoGeral}% conv.</span>
         ) : (
@@ -62,15 +62,15 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-[10px] text-slate-400">{volumeLabel}</p>
-              <p className="text-[20px] font-black tabular-nums text-[#0F172A]">{volume}</p>
+              <p className="text-[20px] font-bold tabular-nums text-[#0F172A]">{volume}</p>
             </div>
             <div className="text-center">
               <p className="text-[10px] text-slate-400">Vendas</p>
-              <p className="text-[20px] font-black tabular-nums text-green-600">{vendas}</p>
+              <p className="text-[20px] font-bold tabular-nums text-green-600">{vendas}</p>
             </div>
             <div className="text-center">
               <p className="text-[10px] text-slate-400">Conversão</p>
-              <p className="text-[20px] font-black tabular-nums text-[#0F172A]">{conversaoGeral !== null ? `${conversaoGeral}%` : "—"}</p>
+              <p className="text-[20px] font-bold tabular-nums text-[#0F172A]">{conversaoGeral !== null ? `${conversaoGeral}%` : "—"}</p>
             </div>
           </div>
         )}

@@ -123,7 +123,7 @@ export function ConsultingActionPlanView({ clientId }: Props) {
             <Typography variant="p" tone="muted">Nenhuma acao cadastrada ainda.</Typography>
           )}
           {items.map((item) => (
-            <div key={item.id} className="p-mx-md rounded-mx-lg bg-surface-alt border border-border-default">
+            <div key={item.id} className="p-mx-md rounded-xl bg-gray-50 border border-gray-200">
               <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-mx-md">
                 <div className="space-y-mx-xs">
                   <div className="flex items-center gap-mx-sm">

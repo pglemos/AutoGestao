@@ -143,7 +143,7 @@ function formatAppointmentDate(value: string): string {
 function ClienteFichaResumo({ form, ultimoAgendamento }: { form: FormState; ultimoAgendamento: ExistingAppointmentRecord | null }) {
   return (
     <section aria-label="Ficha do cliente carregada" className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50/60 p-3">
-      <p className="text-[11px] font-black uppercase tracking-wide text-emerald-800">Ficha carregada da Carteira</p>
+      <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-800">Ficha carregada da Carteira</p>
       <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 text-[11px] text-slate-600">
         <p><strong className="text-slate-700">Veículo:</strong> {form.veiculo_texto || 'Não informado'}</p>
         <p><strong className="text-slate-700">Negociação:</strong> {CRM_ETAPA_LABEL[form.negociacao as CrmEtapaFunil] || 'Não informada'}</p>
@@ -183,7 +183,7 @@ export function QualificadoStatusHelp() {
         >
           {SITUACOES_OPORTUNIDADE.map(s => (
             <div key={s} className="mb-2 last:mb-0">
-              <p className="text-[11px] font-black text-slate-700">{s}</p>
+              <p className="text-[11px] font-bold text-slate-700">{s}</p>
               <p className="text-[11px] text-slate-500">{SITUACOES_OPORTUNIDADE_AJUDA[s]}</p>
             </div>
           ))}
@@ -362,7 +362,7 @@ function FormQualificado({ form, setF, clienteEncontrado, clienteJaVendido, onPh
       </Select>
       <div className="space-y-1">
         <div className="ml-2 flex items-center gap-1">
-          <span className="text-[10px] font-black uppercase tracking-widest text-slate-400">Passo Atual da Oportunidade *</span>
+          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Passo Atual da Oportunidade *</span>
           <QualificadoStatusHelp />
         </div>
         <Select value={form.passo_atual || ''} onChange={e => setF('passo_atual', e.target.value)}>

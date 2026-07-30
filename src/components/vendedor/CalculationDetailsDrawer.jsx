@@ -82,7 +82,7 @@ export default function CalculationDetailsDrawer({ open, onClose, calcResult, pe
           <div className="border-t border-slate-200 pt-4">
             <div className="flex justify-between items-center">
               <span className="font-bold text-mx-navy">Total previsto</span>
-              <span className="text-2xl font-black text-emerald-600">{formatBRL(salarioPrevisto)}</span>
+              <span className="text-2xl font-bold text-emerald-600">{formatBRL(salarioPrevisto)}</span>
             </div>
           </div>
         </div>

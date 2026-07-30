@@ -81,7 +81,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
 
             <Card className="p-mx-md border-none bg-white flex flex-col md:flex-row items-stretch md:items-center gap-mx-md">
                 <div className="relative flex-1">
-                    <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary" />
+                    <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
                     <Input
                         id="store-search"
                         name="store-search"
@@ -91,7 +91,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                         className="!pl-mx-10 !h-mx-12 font-bold"
                     />
                 </div>
-                <label className="flex items-center gap-mx-xs cursor-pointer text-xs font-black uppercase tracking-widest">
+                <label className="flex items-center gap-mx-xs cursor-pointer text-xs font-bold uppercase tracking-widest">
                     <input
                         id="show-inactive-stores"
                         name="show-inactive-stores"
@@ -106,7 +106,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                     <RefreshCw size={14} />
                 </Button>
                 {canManage && (
-                    <Button onClick={() => setShowCreate(true)} className="h-mx-12 px-6 rounded-mx-xl font-black uppercase tracking-widest text-xs">
+                    <Button onClick={() => setShowCreate(true)} className="h-mx-12 px-6 rounded-2xl font-bold uppercase tracking-widest text-xs">
                         <Plus size={16} className="mr-2" /> Nova Loja
                     </Button>
                 )}
@@ -114,10 +114,10 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
 
             <Card className="border-none bg-white overflow-hidden">
                 {loading ? (
-                    <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-brand-primary" /></div>
+                    <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-emerald-600" /></div>
                 ) : filtered.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
-                        <Building2 size={40} className="mx-auto text-text-tertiary opacity-30" />
+                        <Building2 size={40} className="mx-auto text-gray-500 opacity-30" />
                         <Typography variant="caption" tone="muted" className="">Nenhuma loja encontrada</Typography>
                     </div>
                 ) : (
@@ -125,18 +125,18 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                         {filtered.map(store => {
                             const s = stats[store.id] || { sellers: 0, checkedIn: 0, disciplinePct: 0 }
                             return (
-                                <div key={store.id} className="flex items-center justify-between gap-mx-md p-mx-md hover:bg-surface-alt transition-colors">
+                                <div key={store.id} className="flex items-center justify-between gap-mx-md p-mx-md hover:bg-gray-50 transition-colors">
                                     <div className="flex items-center gap-mx-sm flex-1 min-w-0">
-                                        <div className={`w-mx-12 h-mx-12 rounded-mx-xl flex items-center justify-center text-white shrink-0 ${store.active ? 'bg-brand-primary' : 'bg-text-tertiary'}`}>
+                                        <div className={`w-mx-12 h-mx-12 rounded-2xl flex items-center justify-center text-white shrink-0 ${store.active ? 'bg-emerald-600' : 'bg-text-tertiary'}`}>
                                             <Building2 size={20} />
                                         </div>
                                         <div className="min-w-0 flex-1">
                                             <Typography variant="caption" className="tracking-tight truncate">{store.name}</Typography>
                                             <div className="flex items-center gap-mx-md flex-wrap mt-1">
                                                 {store.manager_email && (
-                                                    <span className="text-mx-micro font-bold text-text-tertiary">{store.manager_email}</span>
+                                                    <span className="text-mx-micro font-bold text-gray-500">{store.manager_email}</span>
                                                 )}
-                                                <span className="text-mx-micro font-bold text-text-tertiary">
+                                                <span className="text-mx-micro font-bold text-gray-500">
                                                     {s.sellers} vendedor{s.sellers !== 1 ? 'es' : ''} · {s.disciplinePct}% disciplina
                                                 </span>
                                             </div>
@@ -152,7 +152,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                                                 size="icon"
                                                 onClick={() => handleToggle(store)}
                                                 aria-label={store.active ? 'Desativar' : 'Ativar'}
-                                                className="h-mx-10 w-mx-10 rounded-mx-xl"
+                                                className="h-mx-10 w-mx-10 rounded-2xl"
                                             >
                                                 <Power size={16} />
                                             </Button>
@@ -161,7 +161,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                                                 size="icon"
                                                 onClick={() => setEditing(store)}
                                                 aria-label="Editar"
-                                                className="h-mx-10 w-mx-10 rounded-mx-xl"
+                                                className="h-mx-10 w-mx-10 rounded-2xl"
                                             >
                                                 <Edit3 size={16} />
                                             </Button>
@@ -171,7 +171,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                                                     size="icon"
                                                     onClick={() => handleDelete(store)}
                                                     aria-label="Excluir"
-                                                    className="h-mx-10 w-mx-10 rounded-mx-xl text-status-error hover:bg-status-error-surface"
+                                                    className="h-mx-10 w-mx-10 rounded-2xl text-status-error hover:bg-status-error-surface"
                                                 >
                                                     <Trash2 size={16} />
                                                 </Button>
@@ -207,12 +207,12 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
 
 function Mini({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone?: 'success' | 'brand' | 'error' }) {
     const toneColor = tone === 'success' ? 'text-status-success' :
-        tone === 'brand' ? 'text-brand-primary' :
-        tone === 'error' ? 'text-status-error' : 'text-text-primary'
+        tone === 'brand' ? 'text-emerald-600' :
+        tone === 'error' ? 'text-status-error' : 'text-gray-800'
     return (
         <Card className="p-mx-md border-none bg-white">
             <div className="flex items-center gap-mx-sm">
-                <div className={`w-mx-10 h-mx-10 rounded-mx-xl bg-surface-alt flex items-center justify-center ${toneColor}`}>{icon}</div>
+                <div className={`w-mx-10 h-mx-10 rounded-2xl bg-gray-50 flex items-center justify-center ${toneColor}`}>{icon}</div>
                 <div>
                     <Typography variant="tiny" tone="muted" className="">{label}</Typography>
                     <Typography variant="h3" className="tabular-nums">{value}</Typography>

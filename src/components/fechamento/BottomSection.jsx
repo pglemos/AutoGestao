@@ -119,7 +119,7 @@ function isD1WindowOpen(closingDate) {
 
 const StatItem = ({ value, label, color }) => (
   <div className="flex flex-col items-center gap-1.5 flex-1">
-    <span className={`font-black leading-none tabular-nums text-[28px] ${color}`}>{value}</span>
+    <span className={`font-bold leading-none tabular-nums text-[28px] ${color}`}>{value}</span>
     <span className="text-[10px] text-[#64748B] text-center leading-tight font-medium">{label}</span>
   </div>
 );
@@ -305,21 +305,21 @@ export default function BottomSection({
           <div className="flex items-start gap-2 divide-x divide-slate-100">
             <StatItem value={totalLeads} label="Leads Recebidos" color="text-[#005BFF]" />
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">
-              <span className="text-[28px] font-black leading-none tabular-nums text-[#6D28D9]">{totalAtend}</span>
+              <span className="text-[28px] font-bold leading-none tabular-nums text-[#6D28D9]">{totalAtend}</span>
               <span className="text-[10px] text-[#64748B] text-center leading-tight font-medium">Atendimentos</span>
             </div>
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">
-              <span className="text-[28px] font-black leading-none tabular-nums text-[#F59E0B]">{totalAgend}</span>
+              <span className="text-[28px] font-bold leading-none tabular-nums text-[#F59E0B]">{totalAgend}</span>
               <span className="text-[10px] text-[#64748B] text-center leading-tight font-medium">Agendamentos D+1</span>
             </div>
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">
-              <span className="text-[28px] font-black leading-none tabular-nums text-[#EF4444]">{totalVendas}</span>
+              <span className="text-[28px] font-bold leading-none tabular-nums text-[#EF4444]">{totalVendas}</span>
               <span className="text-[10px] text-[#64748B] text-center leading-tight font-medium">Vendas Realizadas</span>
             </div>
           </div>
           <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
             <span className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.12em]">Faturamento</span>
-            <span className="text-[20px] font-black tabular-nums text-[#22C55E]">{faturamentoStr}</span>
+            <span className="text-[20px] font-bold tabular-nums text-[#22C55E]">{faturamentoStr}</span>
           </div>
         </div>
 
@@ -442,7 +442,7 @@ export default function BottomSection({
               <button
                 onClick={handleFinalizarClick}
                 disabled={isBlocked}
-                className={`flex items-center gap-3 transition-all text-white font-black tracking-widest text-[13px] px-10 h-[52px] rounded-xl shadow-md flex-shrink-0 uppercase active:scale-[0.98] disabled:cursor-not-allowed
+                className={`flex items-center gap-3 transition-all text-white font-bold tracking-widest text-[13px] px-10 h-[52px] rounded-xl shadow-md flex-shrink-0 uppercase active:scale-[0.98] disabled:cursor-not-allowed
                   ${isBlocked
                     ? "bg-[#EF4444] shadow-red-200 opacity-70 cursor-not-allowed"
                     : "bg-[#22C55E] hover:bg-green-600 shadow-green-200"

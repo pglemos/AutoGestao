@@ -145,7 +145,7 @@ export function ResolverAtividadeModal({
     >
       <div className="space-y-5">
         <div className="space-y-1">
-          <p className="text-[13px] font-semibold text-mx-text">{clientName}</p>
+          <p className="text-[13px] font-semibold text-gray-800">{clientName}</p>
           <p className="text-[12px] text-slate-400">{currentAction.title}{currentAction.description ? ` · ${currentAction.description}` : ''}</p>
           {vehicle && <p className="text-[12px] text-slate-500">{vehicle}</p>}
           <p className="text-[11px] text-slate-400">{formatDateTime(currentAction.dueAt)}</p>

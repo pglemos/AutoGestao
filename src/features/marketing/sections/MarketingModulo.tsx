@@ -24,8 +24,8 @@ const FLUXO_LABEL: Record<CarteiraFluxoEstado, string> = {
 }
 
 const FLUXO_TONE: Record<CarteiraFluxoEstado, string> = {
-  novo: 'border-border-default bg-surface-alt text-text-secondary',
-  contato_inicial: 'border-brand-primary/30 bg-mx-indigo-50 text-brand-primary',
+  novo: 'border-gray-200 bg-gray-50 text-gray-500',
+  contato_inicial: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
   aquecimento: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   negociacao: 'border-status-warning/40 bg-status-warning-surface text-status-warning',
   convertido: 'border-status-success/30 bg-status-success-surface text-status-success',
@@ -51,7 +51,7 @@ export function MarketingModulo({ storeId }: Props) {
     <section className="space-y-mx-lg" aria-label="Módulo Marketing">
       <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-mx-sm">
-          <div className="rounded-mx-xl bg-brand-primary p-mx-sm text-pure-white shadow-mx-md">
+          <div className="rounded-2xl bg-emerald-600 p-mx-sm text-pure-white shadow-sm">
             <Megaphone size={22} aria-hidden="true" />
           </div>
           <div>
@@ -70,7 +70,7 @@ export function MarketingModulo({ storeId }: Props) {
       </header>
 
       {error && (
-        <div className="rounded-mx-md border border-status-error/40 bg-status-error-surface p-mx-sm">
+        <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
           <Typography variant="tiny" className="text-status-error">
             {error}
           </Typography>
@@ -79,7 +79,7 @@ export function MarketingModulo({ storeId }: Props) {
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
-          <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-emerald-600">
             <Briefcase size={18} aria-hidden="true" />
           </div>
           <div>
@@ -96,7 +96,7 @@ export function MarketingModulo({ storeId }: Props) {
         </header>
 
         {!posicionamento ? (
-          <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Loja ainda sem posicionamento cadastrado.
             </Typography>
@@ -115,7 +115,7 @@ export function MarketingModulo({ storeId }: Props) {
             ).map(([label, value]) => (
               <div
                 key={label}
-                className="rounded-mx-xl border border-border-default bg-white p-mx-sm"
+                className="rounded-2xl border border-gray-200 bg-white p-mx-sm"
               >
                 <dt>
                   <Typography
@@ -139,7 +139,7 @@ export function MarketingModulo({ storeId }: Props) {
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-mx-xs">
-            <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
+            <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-emerald-600">
               <Users size={18} aria-hidden="true" />
             </div>
             <div>
@@ -156,7 +156,7 @@ export function MarketingModulo({ storeId }: Props) {
               <Badge
                 key={estado}
                 variant="outline"
-                className={cn('font-black uppercase tracking-widest', FLUXO_TONE[estado])}
+                className={cn('font-bold uppercase tracking-widest', FLUXO_TONE[estado])}
               >
                 {FLUXO_LABEL[estado]} {carteiraCounts[estado]}
               </Badge>
@@ -165,7 +165,7 @@ export function MarketingModulo({ storeId }: Props) {
         </header>
 
         {carteira.length === 0 ? (
-          <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhum cliente em carteira para esta loja.
             </Typography>
@@ -174,18 +174,18 @@ export function MarketingModulo({ storeId }: Props) {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] text-sm">
               <thead className="text-left">
-                <tr className="bg-surface-alt">
-                  <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Cliente</th>
-                  <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Canal</th>
-                  <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Score</th>
-                  <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Estado</th>
-                  <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Próx. contato</th>
+                <tr className="bg-gray-50">
+                  <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Cliente</th>
+                  <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Canal</th>
+                  <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Score</th>
+                  <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Estado</th>
+                  <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Próx. contato</th>
                 </tr>
               </thead>
               <tbody>
                 {carteira.map((cliente) => (
-                  <tr key={cliente.id} className="border-t border-border-default/60">
-                    <td className="px-mx-sm py-mx-xs font-black">
+                  <tr key={cliente.id} className="border-t border-gray-200/60">
+                    <td className="px-mx-sm py-mx-xs font-bold">
                       {cliente.nome_cliente}
                       <Typography
                         variant="tiny"
@@ -203,7 +203,7 @@ export function MarketingModulo({ storeId }: Props) {
                       <Badge
                         variant="outline"
                         className={cn(
-                          'font-black uppercase tracking-widest',
+                          'font-bold uppercase tracking-widest',
                           FLUXO_TONE[cliente.fluxo_estado],
                         )}
                       >
@@ -225,7 +225,7 @@ export function MarketingModulo({ storeId }: Props) {
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
-          <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-emerald-600">
             <Calendar size={18} aria-hidden="true" />
           </div>
           <div>
@@ -239,7 +239,7 @@ export function MarketingModulo({ storeId }: Props) {
         </header>
 
         {agendaMensal.length === 0 ? (
-          <div className="rounded-mx-md border border-dashed border-border-default p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Sem agenda estratégica registrada para o trimestre.
             </Typography>
@@ -249,7 +249,7 @@ export function MarketingModulo({ storeId }: Props) {
             {agendaMensal.map((item) => (
               <li
                 key={item.id}
-                className="rounded-mx-xl border border-border-default bg-white p-mx-sm"
+                className="rounded-2xl border border-gray-200 bg-white p-mx-sm"
               >
                 <div className="flex flex-wrap items-center gap-mx-xs">
                   <Badge variant="outline" className="">

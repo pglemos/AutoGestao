@@ -237,10 +237,10 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
       <div className="hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:block sm:p-5">
         <div className="mb-1 flex items-center justify-between">
           <div className="min-w-0 flex-1 pr-3">
-            <h2 className="text-[13px] font-black uppercase tracking-wide text-[#0F172A] sm:text-[14px]">Progresso do Fechamento</h2>
+            <h2 className="text-[13px] font-bold uppercase tracking-wide text-[#0F172A] sm:text-[14px]">Progresso do Fechamento</h2>
             <p className="mt-0.5 text-[10px] leading-tight text-slate-400 sm:text-[11px]">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
           </div>
-          <span className={`shrink-0 text-[26px] font-black tabular-nums sm:text-[28px] ${totalPct === 100 ? 'text-green-600' : 'text-[#0F172A]'}`}>{totalPct}%</span>
+          <span className={`shrink-0 text-[26px] font-bold tabular-nums sm:text-[28px] ${totalPct === 100 ? 'text-green-600' : 'text-[#0F172A]'}`}>{totalPct}%</span>
         </div>
         <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-slate-100">
           <div className={`h-full rounded-full transition-all duration-500 ${progressColor}`} style={{ width: `${totalPct}%` }} />
@@ -258,7 +258,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <Store className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className={`text-[14px] font-black uppercase leading-none tracking-wider ${co.title}`}>1. Showroom</p>
+              <p className={`text-[14px] font-bold uppercase leading-none tracking-wider ${co.title}`}>1. Showroom</p>
               <p className={`mt-0.5 text-[11px] font-medium ${co.sub}`}>Atendimento presencial</p>
             </div>
           </div>
@@ -274,7 +274,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             />
           </div>
           {!disabled && (
-            <button type="button" onClick={() => handleConfirm('showroom')} className={`w-full rounded-xl py-3.5 text-[14px] font-black text-white shadow-sm transition-colors active:scale-95 ${co.btn}`}>
+            <button type="button" onClick={() => handleConfirm('showroom')} className={`w-full rounded-xl py-3.5 text-[14px] font-bold text-white shadow-sm transition-colors active:scale-95 ${co.btn}`}>
               Confirmar Showroom ✓
             </button>
           )}
@@ -290,7 +290,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <Users className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className={`text-[14px] font-black uppercase leading-none tracking-wider ${cg.title}`}>2. Carteira</p>
+              <p className={`text-[14px] font-bold uppercase leading-none tracking-wider ${cg.title}`}>2. Carteira</p>
               <p className={`mt-0.5 text-[11px] font-medium ${cg.sub}`}>Relacionamento e prospecção</p>
             </div>
           </div>
@@ -303,7 +303,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             ) : (
               <div className="flex items-center justify-between gap-3">
                 <span className="flex-1 text-[13px] font-semibold text-slate-500">Agendamentos D+1 ativos</span>
-                <span className={`text-[22px] font-black tabular-nums ${cg.title}`}>{agdCartAtivos}</span>
+                <span className={`text-[22px] font-bold tabular-nums ${cg.title}`}>{agdCartAtivos}</span>
               </div>
             )}
             {disabled && (
@@ -311,7 +311,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             )}
           </div>
           {!disabled && (
-            <button type="button" onClick={() => handleConfirm('carteira')} className={`w-full rounded-xl py-3.5 text-[14px] font-black text-white shadow-sm transition-colors active:scale-95 ${cg.btn}`}>
+            <button type="button" onClick={() => handleConfirm('carteira')} className={`w-full rounded-xl py-3.5 text-[14px] font-bold text-white shadow-sm transition-colors active:scale-95 ${cg.btn}`}>
               Confirmar Carteira ✓
             </button>
           )}
@@ -326,7 +326,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <Globe className="h-5 w-5 text-white" />
             </div>
             <div>
-              <p className={`text-[14px] font-black uppercase leading-none tracking-wider ${cb.title}`}>3. Internet</p>
+              <p className={`text-[14px] font-bold uppercase leading-none tracking-wider ${cb.title}`}>3. Internet</p>
               <p className={`mt-0.5 text-[11px] font-medium ${cb.sub}`}>Leads digitais</p>
             </div>
           </div>
@@ -339,7 +339,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             ) : (
               <div className="flex items-center justify-between gap-3">
                 <span className="flex-1 text-[13px] font-semibold text-slate-500">Agendamentos D+1 ativos</span>
-                <span className={`text-[22px] font-black tabular-nums ${cb.title}`}>{agdNetAtivos}</span>
+                <span className={`text-[22px] font-bold tabular-nums ${cb.title}`}>{agdNetAtivos}</span>
               </div>
             )}
             {disabled && (
@@ -347,7 +347,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             )}
           </div>
           {!disabled && (
-            <button type="button" onClick={() => handleConfirm('internet')} className={`w-full rounded-xl py-3.5 text-[14px] font-black text-white shadow-sm transition-colors active:scale-95 ${cb.btn}`}>
+            <button type="button" onClick={() => handleConfirm('internet')} className={`w-full rounded-xl py-3.5 text-[14px] font-bold text-white shadow-sm transition-colors active:scale-95 ${cb.btn}`}>
               Confirmar Internet ✓
             </button>
           )}
@@ -362,7 +362,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <ShoppingCart className="h-5 w-5 text-white" />
             </div>
             <div className="flex-1">
-              <p className={`text-[14px] font-black uppercase leading-none tracking-wider ${cp.title}`}>4. Vendas e Agendamentos</p>
+              <p className={`text-[14px] font-bold uppercase leading-none tracking-wider ${cp.title}`}>4. Vendas e Agendamentos</p>
               <p className={`mt-0.5 text-[11px] font-medium ${cp.sub}`}>Registros de vendas e agendamentos D+1</p>
             </div>
           </div>

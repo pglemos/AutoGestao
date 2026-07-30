@@ -31,11 +31,11 @@ type Props = {
 const TONE_MAP: Record<string, string> = {
   completo: 'border-status-success/30 bg-status-success-surface text-status-success',
   parcial: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-  pendente: 'border-border-default bg-surface-alt text-text-secondary',
+  pendente: 'border-gray-200 bg-gray-50 text-gray-500',
   ok: 'border-status-success/30 bg-status-success-surface text-status-success',
   watch: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   miss: 'border-status-error/30 bg-status-error-surface text-status-error',
-  pending: 'border-border-default bg-surface-alt text-text-secondary',
+  pending: 'border-gray-200 bg-gray-50 text-gray-500',
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -155,10 +155,10 @@ export function PlanejamentoEstrategico({ planningIndicators, periodLabel }: Pro
         {cards.map((card) => (
           <Card
             key={card.label}
-            className={cn('rounded-mx-2xl border p-mx-md', TONE_MAP[card.tone])}
+            className={cn('rounded-2xl border p-mx-md', TONE_MAP[card.tone])}
           >
             <div className="flex items-center gap-mx-sm">
-              <div className="rounded-mx-xl bg-white/40 p-mx-xs">
+              <div className="rounded-2xl bg-white/40 p-mx-xs">
                 <card.icon size={18} aria-hidden="true" />
               </div>
               <Typography
@@ -180,7 +180,7 @@ export function PlanejamentoEstrategico({ planningIndicators, periodLabel }: Pro
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-sm">
-          <div className="rounded-mx-xl bg-mx-indigo-50 p-mx-xs text-brand-primary">
+          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-emerald-600">
             <LineChart size={18} aria-hidden="true" />
           </div>
           <div>
@@ -196,20 +196,20 @@ export function PlanejamentoEstrategico({ planningIndicators, periodLabel }: Pro
         <div className="overflow-x-auto">
           <table className="w-full min-w-[640px] text-sm">
             <thead className="text-left">
-              <tr className="bg-surface-alt">
-                <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Indicador</th>
-                <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Depto</th>
-                <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Meta</th>
-                <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Realizado</th>
-                <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Ano anterior</th>
-                <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">% Ating.</th>
-                <th className="px-mx-sm py-mx-xs font-black uppercase tracking-widest">Status</th>
+              <tr className="bg-gray-50">
+                <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Indicador</th>
+                <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Depto</th>
+                <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Meta</th>
+                <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Realizado</th>
+                <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Ano anterior</th>
+                <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">% Ating.</th>
+                <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Status</th>
               </tr>
             </thead>
             <tbody>
               {indicators.map((indicator) => (
-                <tr key={indicator.code} className="border-t border-border-default/60">
-                  <td className="px-mx-sm py-mx-xs font-black">
+                <tr key={indicator.code} className="border-t border-gray-200/60">
+                  <td className="px-mx-sm py-mx-xs font-bold">
                     {indicator.label}
                     <Typography variant="tiny" tone="muted" className="block font-normal normal-case">
                       {indicator.code}
@@ -236,7 +236,7 @@ export function PlanejamentoEstrategico({ planningIndicators, periodLabel }: Pro
                     })()}
                   </td>
                   <td className="px-mx-sm py-mx-xs">
-                    <Badge variant="outline" className={cn('font-black', TONE_MAP[indicator.status])}>
+                    <Badge variant="outline" className={cn('font-bold', TONE_MAP[indicator.status])}>
                       {STATUS_LABEL[indicator.status] ?? indicator.status}
                     </Badge>
                   </td>

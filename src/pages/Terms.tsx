@@ -10,9 +10,9 @@ export default function Terms() {
     const navigate = useNavigate()
 
     return (
-        <main className="min-h-screen bg-surface-alt flex items-center justify-center p-mx-sm sm:p-10 selection:bg-brand-primary selection:text-white relative overflow-hidden">
+        <main className="min-h-screen bg-gray-50 flex items-center justify-center p-mx-sm sm:p-10 selection:bg-emerald-600 selection:text-white relative overflow-hidden">
 
-            <div className="absolute top-mx-0 right-mx-0 w-mx-hero h-mx-hero bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-mx-lg -mt-mx-lg pointer-events-none" aria-hidden="true" />
+            <div className="absolute top-mx-0 right-mx-0 w-mx-hero h-mx-hero bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-mx-lg -mt-mx-lg pointer-events-none" aria-hidden="true" />
             <div className="absolute bottom-mx-0 left-mx-0 w-mx-hero h-mx-hero bg-status-success-surface rounded-mx-full blur-mx-xl -ml-mx-lg -mb-mx-lg pointer-events-none" aria-hidden="true" />
 
             <motion.div
@@ -22,11 +22,11 @@ export default function Terms() {
                 className="w-full max-w-4xl"
             >
                 <Card className="border-none bg-white overflow-hidden flex flex-col relative z-10">
-                    <header className="bg-brand-secondary p-mx-10 md:p-16 relative overflow-hidden text-center">
+                    <header className="bg-gray-900 p-mx-10 md:p-16 relative overflow-hidden text-center">
                         <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-transparent z-0 pointer-events-none" />
                         <div className="absolute inset-0 bg-mx-matrix opacity-20 pointer-events-none" />
 
-                        <div className="w-mx-20 h-mx-header rounded-mx-3xl bg-white/10 text-white flex items-center justify-center mx-auto mb-8 shadow-mx-xl backdrop-blur-xl relative z-10 border border-white/10">
+                        <div className="w-mx-20 h-mx-header rounded-2xl bg-white/10 text-white flex items-center justify-center mx-auto mb-8 shadow-sm backdrop-blur-xl relative z-10 border border-white/10">
                             <FileText size={32} strokeWidth={2} />
                         </div>
                         <Typography variant="h1" tone="white" className="text-4xl md:text-5xl mb-4 relative z-10 tracking-tighter">Termos de <Typography as="span" variant="h1" tone="brand">Serviço</Typography></Typography>
@@ -40,8 +40,8 @@ export default function Terms() {
                             </Typography>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
-                                <Card className="bg-surface-alt p-mx-10 border-none shadow-mx-inner group hover:bg-white hover:shadow-mx-lg transition-all">
-                                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
+                                <Card className="bg-gray-50 p-mx-10 border-none shadow-mx-inner group hover:bg-white hover:shadow-sm transition-all">
+                                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <Lock size={24} strokeWidth={2} />
                                     </div>
                                     <Typography variant="h2" className="text-2xl mb-4 tracking-tight">Autoridade de Acesso</Typography>
@@ -50,8 +50,8 @@ export default function Terms() {
                                     </Typography>
                                 </Card>
 
-                                <Card className="bg-surface-alt p-mx-10 border-none shadow-mx-inner group hover:bg-white hover:shadow-mx-lg transition-all">
-                                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-status-warning-surface text-status-warning flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
+                                <Card className="bg-gray-50 p-mx-10 border-none shadow-mx-inner group hover:bg-white hover:shadow-sm transition-all">
+                                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-warning-surface text-status-warning flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <AlertTriangle size={24} strokeWidth={2} />
                                     </div>
                                     <Typography variant="h2" className="text-2xl mb-4 tracking-tight">Obrigações & Sanções</Typography>
@@ -61,9 +61,9 @@ export default function Terms() {
                                 </Card>
                             </div>
 
-                            <div className="space-y-mx-md pt-10 border-t border-border-default">
+                            <div className="space-y-mx-md pt-10 border-t border-gray-200">
                                 <header className="flex items-center gap-mx-sm">
-                                    <div className="w-mx-10 h-mx-10 rounded-mx-lg bg-mx-black text-brand-primary flex items-center justify-center shadow-mx-lg"><Zap size={20} /></div>
+                                    <div className="w-mx-10 h-mx-10 rounded-xl bg-gray-900 text-emerald-600 flex items-center justify-center shadow-sm"><Zap size={20} /></div>
                                     <Typography variant="h2" className="text-2xl tracking-tighter">Desempenho e Disponibilidade</Typography>
                                 </header>
                                 <Typography variant="caption" tone="muted" className="text-base leading-relaxed tracking-tight">
@@ -72,8 +72,8 @@ export default function Terms() {
                             </div>
                         </div>
 
-                        <footer className="pt-10 border-t border-border-default flex flex-col sm:flex-row items-center justify-between gap-mx-10">
-                            <Button variant="ghost" onClick={() => navigate(-1)} className="text-tiny font-black uppercase tracking-widest text-text-tertiary hover:text-brand-primary bg-white shadow-sm rounded-mx-full px-8 h-mx-xl">
+                        <footer className="pt-10 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-mx-10">
+                            <Button variant="ghost" onClick={() => navigate(-1)} className="text-tiny font-bold uppercase tracking-widest text-gray-500 hover:text-emerald-600 bg-white shadow-sm rounded-mx-full px-8 h-mx-xl">
                                 <ArrowLeft size={16} className="mr-2" /> VOLTAR AO SISTEMA
                             </Button>
                             <div className="text-center sm:text-right space-y-mx-tiny">

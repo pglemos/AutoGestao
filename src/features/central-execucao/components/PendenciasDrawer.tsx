@@ -81,7 +81,7 @@ export function PendenciasDrawer({
                       <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{action.title}</span>
                       <span className="rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold text-red-500">{late === 0 ? 'Hoje' : `${late}d atraso`}</span>
                     </div>
-                    <p className="truncate text-[13px] font-bold text-mx-text">{clientName}</p>
+                    <p className="truncate text-[13px] font-bold text-gray-800">{clientName}</p>
                     {vehicle && <p className="truncate text-[12px] text-slate-500">{vehicle}</p>}
                     {action.description && <p className="mt-0.5 text-[12px] text-slate-400">{action.description}</p>}
                     <p className="mt-0.5 text-[11px] text-slate-300">{formatDate(action.dueAt)}</p>

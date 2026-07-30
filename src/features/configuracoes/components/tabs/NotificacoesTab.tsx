@@ -66,8 +66,8 @@ export function NotificacoesTab() {
     return (
         <div className="space-y-mx-lg">
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100 shadow-inner">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100 shadow-none">
                         <BellRing size={26} />
                     </div>
                     <div className="flex-1 min-w-0">
@@ -106,8 +106,8 @@ export function NotificacoesTab() {
                 )}
             </Card>
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-mx-indigo-50 text-brand-primary flex items-center justify-center border border-mx-indigo-100 shadow-inner">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100 shadow-none">
                         <Bell size={26} />
                     </div>
                     <div>
@@ -133,8 +133,8 @@ export function NotificacoesTab() {
             </Card>
 
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border-default mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-mx-xl bg-surface-alt text-text-tertiary flex items-center justify-center border border-border-default shadow-inner">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-gray-500 flex items-center justify-center border border-gray-200 shadow-none">
                         <BarChart3 size={26} />
                     </div>
                     <div>
@@ -158,7 +158,7 @@ export function NotificacoesTab() {
                     })}
                 </div>
 
-                <div className="mt-mx-lg pt-mx-md border-t border-border-default flex justify-end">
+                <div className="mt-mx-lg pt-mx-md border-t border-gray-200 flex justify-end">
                     <Button
                         onClick={handleSave}
                         disabled={saving}
@@ -181,9 +181,9 @@ function PrefRow({ icon, label, desc, checked, onToggle }: {
     onToggle: () => void
 }) {
     return (
-        <div className="flex flex-col gap-mx-md p-mx-md bg-surface-alt rounded-mx-xl border border-border-subtle hover:bg-white hover:border-brand-primary/20 transition-all sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-mx-md p-mx-md bg-gray-50 rounded-2xl border border-gray-100 hover:bg-white hover:border-brand-primary/20 transition-all sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-mx-sm flex-1 min-w-0">
-                <div className="w-mx-10 h-mx-10 rounded-mx-xl bg-white border border-border-default flex items-center justify-center text-brand-primary shrink-0">
+                <div className="w-mx-10 h-mx-10 rounded-2xl bg-white border border-gray-200 flex items-center justify-center text-emerald-600 shrink-0">
                     {icon}
                 </div>
                 <div className="space-y-mx-tiny min-w-0">

@@ -21,7 +21,7 @@ const MXScoreCardInner = React.forwardRef<HTMLDivElement, MXScoreCardProps>(
       <Card
         ref={ref}
         className={cn(
-          "p-mx-lg border-none shadow-mx-sm group hover:shadow-mx-lg transition-all bg-white",
+          "p-mx-lg border-none shadow-sm group hover:shadow-sm transition-all bg-white",
           isHighlight && "ring-2 ring-brand-primary/20 shadow-mx-glow-brand",
           className
         )}
@@ -37,7 +37,7 @@ const MXScoreCardInner = React.forwardRef<HTMLDivElement, MXScoreCardProps>(
             </div>
           </div>
           <div className={cn(
-            'h-mx-xl w-mx-xl rounded-mx-xl flex items-center justify-center border shadow-inner transition-transform group-hover:scale-110',
+            'h-mx-xl w-mx-xl rounded-2xl flex items-center justify-center border shadow-none transition-transform group-hover:scale-110',
             tone === 'brand' ? 'bg-mx-green-50 border-mx-green-200 text-mx-green-700' :
             tone === 'success' ? 'bg-status-success-surface border-mx-emerald-100 text-status-success' :
             tone === 'warning' ? 'bg-status-warning-surface border-mx-amber-100 text-status-warning' :
@@ -63,7 +63,7 @@ function MXScoreCardSkeleton() {
             <Skeleton className="h-mx-xs w-mx-14" />
           </div>
         </div>
-        <Skeleton className="h-mx-xl w-mx-xl rounded-mx-xl" />
+        <Skeleton className="h-mx-xl w-mx-xl rounded-2xl" />
       </div>
     </Card>
   )

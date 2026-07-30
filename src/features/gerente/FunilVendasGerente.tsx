@@ -83,7 +83,7 @@ export default function FunilVendasGerente() {
     <main id="funil-vendas" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Funil de Vendas">
       <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
-          <h1 className="text-3xl font-black tracking-tight md:text-4xl">Funil de Vendas</h1>
+          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Funil de Vendas</h1>
           <p className="text-sm text-muted-foreground">Desempenho completo da equipe por canal de origem.</p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -101,7 +101,7 @@ export default function FunilVendasGerente() {
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Total Leads</span>
           </div>
-          <p className="mt-4 text-3xl font-black tabular-nums">{totalLeads}</p>
+          <p className="mt-4 text-3xl font-bold tabular-nums">{totalLeads}</p>
           <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">de todos os canais</p>
         </div>
 
@@ -112,7 +112,7 @@ export default function FunilVendasGerente() {
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Vendas Realizadas</span>
           </div>
-          <p className="mt-4 text-3xl font-black tabular-nums">{totalSales}</p>
+          <p className="mt-4 text-3xl font-bold tabular-nums">{totalSales}</p>
           <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">fechadas no período</p>
         </div>
 
@@ -123,7 +123,7 @@ export default function FunilVendasGerente() {
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Conversão Geral</span>
           </div>
-          <p className="mt-4 text-3xl font-black tabular-nums">{conversaoGeral}<span className="text-2xl">%</span></p>
+          <p className="mt-4 text-3xl font-bold tabular-nums">{conversaoGeral}<span className="text-2xl">%</span></p>
           <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">lead → venda</p>
         </div>
 
@@ -134,14 +134,14 @@ export default function FunilVendasGerente() {
             </span>
             <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Gargalo Principal</span>
           </div>
-          <p className="mt-4 text-3xl font-black tabular-nums">Visita → Venda</p>
+          <p className="mt-4 text-3xl font-bold tabular-nums">Visita → Venda</p>
           <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">Conversão abaixo da meta</p>
         </div>
       </section>
 
       <section className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="text-xl font-black">Funil por Canal</h2>
+          <h2 className="text-xl font-bold">Funil por Canal</h2>
           <p className="mt-1 text-xs font-bold text-muted-foreground normal-case">Cada linha representa o ciclo lead → venda por origem.</p>
 
           <div className="mt-6 flex flex-col gap-4">
@@ -155,7 +155,7 @@ export default function FunilVendasGerente() {
                         {row.icon}
                       </span>
                       <div>
-                        <span className={cn('text-xs font-black uppercase tracking-widest', palette.iconText)}>{row.title}</span>
+                        <span className={cn('text-xs font-bold uppercase tracking-widest', palette.iconText)}>{row.title}</span>
                         <p className="text-xs font-bold text-muted-foreground normal-case">{row.description}</p>
                       </div>
                     </div>
@@ -170,11 +170,11 @@ export default function FunilVendasGerente() {
                           </span>
                         )}
                         <div className="rounded-md bg-muted px-3 py-3">
-                          <span className="block truncate text-xs font-black uppercase tracking-tight text-muted-foreground">{stage.label}</span>
+                          <span className="block truncate text-xs font-bold uppercase tracking-tight text-muted-foreground">{stage.label}</span>
                           <div className="mt-0.5 flex items-baseline gap-2">
                             <span className="font-mono text-lg font-bold text-foreground">{stage.value}</span>
                             {typeof stage.rate === 'number' && (
-                              <span className={cn('inline-flex rounded-md px-1.5 py-0.5 text-xs font-black tabular-nums', palette.pill)}>
+                              <span className={cn('inline-flex rounded-md px-1.5 py-0.5 text-xs font-bold tabular-nums', palette.pill)}>
                                 {stage.rate}%
                               </span>
                             )}
@@ -190,7 +190,7 @@ export default function FunilVendasGerente() {
         </div>
 
         <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="text-xl font-black">Ranking por Origem</h2>
+          <h2 className="text-xl font-bold">Ranking por Origem</h2>
           <p className="mt-1 text-xs font-bold text-muted-foreground normal-case">Vendas da equipe por canal (mês).</p>
 
           <div className="mt-6 overflow-x-auto">
@@ -198,7 +198,7 @@ export default function FunilVendasGerente() {
               <thead className="bg-muted/60">
                 <tr>
                   {['Vendedor', 'Leads', 'Carteira', 'Porta', 'Total'].map(h => (
-                    <th key={h} className="px-3 py-3 text-left text-xs font-black uppercase tracking-widest text-muted-foreground">{h}</th>
+                    <th key={h} className="px-3 py-3 text-left text-xs font-bold uppercase tracking-widest text-muted-foreground">{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -207,8 +207,8 @@ export default function FunilVendasGerente() {
                   <tr key={member.id}>
                     <td className="px-3 py-3">
                       <div className="flex items-center gap-2">
-                        <span className={cn('flex h-7 w-7 items-center justify-center rounded-full font-black tabular-nums text-xs', idx === 0 ? 'bg-status-warning-surface text-status-warning' : 'bg-muted text-muted-foreground')}>{idx + 1}</span>
-                        <p className="truncate font-black text-foreground">{member.name}</p>
+                        <span className={cn('flex h-7 w-7 items-center justify-center rounded-full font-bold tabular-nums text-xs', idx === 0 ? 'bg-status-warning-surface text-status-warning' : 'bg-muted text-muted-foreground')}>{idx + 1}</span>
+                        <p className="truncate font-bold text-foreground">{member.name}</p>
                       </div>
                     </td>
                     <td className="px-3 py-3 text-center font-mono tabular-nums text-status-info">{member.leads}</td>

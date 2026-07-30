@@ -48,14 +48,14 @@ export function StoreKpiCards({ metrics }: Props) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: i * 0.05 }}
         >
-          <Card className="p-mx-lg border-none hover:shadow-mx-lg transition-all group relative overflow-hidden bg-white">
-            <div className="absolute top-mx-0 right-mx-0 w-mx-3xl h-mx-3xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-12 -mt-12" />
+          <Card className="p-mx-lg border-none hover:shadow-sm transition-all group relative overflow-hidden bg-white">
+            <div className="absolute top-mx-0 right-mx-0 w-mx-3xl h-mx-3xl bg-emerald-600/5 rounded-mx-full blur-3xl -mr-12 -mt-12" />
             <div className="flex items-center gap-mx-md relative z-10">
               <div
                 className={cn(
-                  'w-mx-14 h-mx-14 rounded-mx-xl flex items-center justify-center border shadow-inner transition-transform group-hover:scale-110',
+                  'w-mx-14 h-mx-14 rounded-2xl flex items-center justify-center border shadow-none transition-transform group-hover:scale-110',
                   stat.tone === 'brand'
-                    ? 'bg-mx-indigo-50 border-mx-indigo-100 text-brand-primary'
+                    ? 'bg-mx-indigo-50 border-mx-indigo-100 text-emerald-600'
                     : stat.tone === 'info'
                       ? 'bg-status-info-surface border-status-info/20 text-status-info'
                       : 'bg-status-success-surface border-mx-emerald-100 text-status-success',

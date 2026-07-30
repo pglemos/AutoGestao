@@ -143,14 +143,14 @@ export function FunilVendedor() {
   }
 
   return (
-    <main className="h-full w-full overflow-y-auto bg-surface-alt px-mx-sm pb-mx-sm pt-0 no-scrollbar sm:px-mx-md sm:pb-mx-md 2xl:px-mx-lg 2xl:pb-mx-lg">
+    <main className="h-full w-full overflow-y-auto bg-gray-50 px-mx-sm pb-mx-sm pt-0 no-scrollbar sm:px-mx-md sm:pb-mx-md 2xl:px-mx-lg 2xl:pb-mx-lg">
       <div className="flex flex-col gap-mx-lg pb-mx-md">
-        <header className="relative z-40 -mx-mx-sm shrink-0 border-b border-border-default/60 bg-surface-alt px-mx-sm pb-3 pt-2 shadow-[0_10px_24px_rgba(15,23,42,0.08)] sm:-mx-mx-md sm:px-mx-md md:sticky md:top-0 md:pt-3 2xl:-mx-mx-lg 2xl:px-mx-lg">
+        <header className="relative z-40 -mx-mx-sm shrink-0 border-b border-gray-200/60 bg-gray-50 px-mx-sm pb-3 pt-2 shadow-[0_10px_24px_rgba(15,23,42,0.08)] sm:-mx-mx-md sm:px-mx-md md:sticky md:top-0 md:pt-3 2xl:-mx-mx-lg 2xl:px-mx-lg">
           <PageHeading
             title="Funil de Vendas"
             subtitle="Com sua conversão atual, veja o que precisa produzir para atingir a meta."
             actions={(
-              <label className="inline-flex h-11 items-center gap-mx-sm rounded-mx-md border border-border-subtle bg-white px-mx-md text-sm font-semibold shadow-mx-xs">
+              <label className="inline-flex h-11 items-center gap-mx-sm rounded-xl border border-gray-100 bg-white px-mx-md text-sm font-semibold shadow-mx-xs">
                 <Filter size={16} />
                 <select className="bg-transparent font-semibold outline-none" value={period} onChange={(event) => setPeriod(event.target.value as PeriodKey)} aria-label="Período do funil">
                   {PERIOD_OPTIONS.map((option) => <option key={option.key} value={option.key}>{option.label}</option>)}
@@ -161,9 +161,9 @@ export function FunilVendedor() {
         </header>
 
         <section aria-label="Filtro de período">
-          <div className="inline-flex flex-wrap gap-mx-xs rounded-mx-md border border-border-subtle bg-white p-mx-xs shadow-mx-sm">
+          <div className="inline-flex flex-wrap gap-mx-xs rounded-xl border border-gray-100 bg-white p-mx-xs shadow-sm">
             {PERIOD_OPTIONS.map(option => (
-              <button key={option.key} type="button" className={`h-9 rounded-mx-md px-mx-md text-sm font-semibold transition ${period === option.key ? 'bg-brand-primary text-white' : 'text-text-secondary hover:bg-surface-alt'}`} onClick={() => setPeriod(option.key)}>
+              <button key={option.key} type="button" className={`h-9 rounded-xl px-mx-md text-sm font-semibold transition ${period === option.key ? 'bg-emerald-600 text-white' : 'text-gray-500 hover:bg-gray-50'}`} onClick={() => setPeriod(option.key)}>
                 {option.label}
               </button>
             ))}
@@ -197,7 +197,7 @@ export function FunilVendedor() {
           <div className="mt-mx-sm grid gap-mx-sm xl:grid-cols-3">{CHANNELS.map(canal => <EfficiencyCard key={canal} metrics={statsPeriod.channels[canal]} />)}</div>
           <DashboardCard className="mt-mx-sm">
             <div className="flex items-start gap-mx-sm">
-              <span className="mt-1 text-brand-primary"><Info size={20} /></span>
+              <span className="mt-1 text-emerald-600"><Info size={20} /></span>
               <div>
                 <Typography variant="h3">Principal limitador</Typography>
                 <Typography variant="p" className="mt-1 text-sm font-semibold">{limitador}</Typography>
@@ -235,7 +235,7 @@ function EffortCard({ effort }: { effort: ChannelEffort }) {
   return (
     <Card className={`border ${tone.border} bg-white p-mx-md`}>
       <div className="flex items-start gap-mx-sm">
-        <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-mx-md ${tone.badge}`}>{ui.icon}</span>
+        <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${tone.badge}`}>{ui.icon}</span>
         <div className="min-w-0">
           <Typography variant="h2" className={`text-lg ${tone.text}`}>{ui.title}</Typography>
           <Typography variant="p" className="mt-1 text-xs font-semibold">{ui.flow}</Typography>
@@ -243,7 +243,7 @@ function EffortCard({ effort }: { effort: ChannelEffort }) {
       </div>
       <Typography variant="p" className="mt-mx-sm text-sm font-semibold">{effort.message}</Typography>
       {effort.ok && <div className="mt-mx-sm grid gap-mx-xs">{effort.rows.map(row => <CompactRow key={row.label} label={row.label} value={String(row.value)} />)}</div>}
-      <div className={`mt-mx-sm rounded-mx-md px-mx-sm py-mx-xs text-sm font-semibold ${tone.soft} ${tone.text}`}>{effort.conversionLabel}</div>
+      <div className={`mt-mx-sm rounded-xl px-mx-sm py-mx-xs text-sm font-semibold ${tone.soft} ${tone.text}`}>{effort.conversionLabel}</div>
     </Card>
   )
 }
@@ -271,7 +271,7 @@ function EfficiencyCard({ metrics }: { metrics: ChannelMetrics }) {
     <Card className={`border ${tone.border} bg-white p-mx-md`}>
       <div className="flex items-center justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm"><span className={tone.text}>{ui.icon}</span><Typography variant="h2" className="text-lg">{ui.title}</Typography></div>
-        <span className={`rounded-mx-md px-mx-sm py-1 text-xs font-semibold ${tone.badge}`}>{PCT(metrics.conversaoGeral)}</span>
+        <span className={`rounded-xl px-mx-sm py-1 text-xs font-semibold ${tone.badge}`}>{PCT(metrics.conversaoGeral)}</span>
       </div>
       <div className="mt-mx-sm grid gap-mx-xs">{rows.map(row => <CompactRow key={row.label} label={row.label} value={String(row.value)} />)}</div>
       <Typography variant="caption" tone="muted" className="mt-mx-sm block normal-case tracking-normal">Conversão geral: {PCT(metrics.conversaoGeral)}</Typography>
@@ -315,7 +315,7 @@ function HistoryChart({ rows }: { rows: Array<{ label: string; oportunidades: nu
 }
 
 function MetricCard({ label, value, hint, tone = 'dark' }: { label: string; value: string; hint?: string; tone?: 'dark' | 'green' | 'red' }) {
-  const color = tone === 'green' ? 'text-status-success' : tone === 'red' ? 'text-status-error' : 'text-text-primary'
+  const color = tone === 'green' ? 'text-status-success' : tone === 'red' ? 'text-status-error' : 'text-gray-800'
   return (
     <DashboardCard className="min-h-[116px]">
       <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
@@ -326,9 +326,9 @@ function MetricCard({ label, value, hint, tone = 'dark' }: { label: string; valu
 }
 
 function ProjectionStat({ label, value, hint, tone = 'dark' }: { label: string; value: string; hint?: string; tone?: 'dark' | 'green' | 'orange' }) {
-  const color = tone === 'green' ? 'text-status-success' : tone === 'orange' ? 'text-status-warning' : 'text-text-primary'
+  const color = tone === 'green' ? 'text-status-success' : tone === 'orange' ? 'text-status-warning' : 'text-gray-800'
   return (
-    <div className="rounded-mx-md border border-border-subtle bg-surface-alt p-mx-sm">
+    <div className="rounded-xl border border-gray-100 bg-gray-50 p-mx-sm">
       <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
       <Typography variant="h3" className={`mt-1 ${color}`}>{value}</Typography>
       {hint && <Typography variant="p" className="mt-1 text-sm font-semibold">{hint}</Typography>}
@@ -337,19 +337,19 @@ function ProjectionStat({ label, value, hint, tone = 'dark' }: { label: string; 
 }
 
 function BaseStat({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-mx-md border border-border-subtle bg-surface-alt p-mx-sm"><Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography><Typography variant="p" className="mt-1 text-sm font-semibold">{value}</Typography></div>
+  return <div className="rounded-xl border border-gray-100 bg-gray-50 p-mx-sm"><Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography><Typography variant="p" className="mt-1 text-sm font-semibold">{value}</Typography></div>
 }
 
 function CompactRow({ label, value }: { label: string; value: string }) {
-  return <div className="flex min-h-8 items-center justify-between gap-mx-sm rounded-mx-md bg-surface-alt px-mx-sm py-1"><Typography variant="p" className="text-sm font-semibold">{label}</Typography><Typography variant="p" className="text-sm font-bold">{value}</Typography></div>
+  return <div className="flex min-h-8 items-center justify-between gap-mx-sm rounded-xl bg-gray-50 px-mx-sm py-1"><Typography variant="p" className="text-sm font-semibold">{label}</Typography><Typography variant="p" className="text-sm font-bold">{value}</Typography></div>
 }
 
 function MiniBar({ label, value, max, className }: { label: string; value: number; max: number; className: string }) {
-  return <div className="grid grid-cols-[128px_1fr_34px] items-center gap-mx-xs"><Typography variant="tiny" tone="muted" className="normal-case tracking-normal">{label}</Typography><div className="h-2 rounded-full bg-surface-alt"><div className={`h-2 rounded-full ${className}`} style={{ width: `${Math.max(4, (value / max) * 100)}%` }} /></div><Typography variant="tiny" className="text-right font-semibold">{value}</Typography></div>
+  return <div className="grid grid-cols-[128px_1fr_34px] items-center gap-mx-xs"><Typography variant="tiny" tone="muted" className="normal-case tracking-normal">{label}</Typography><div className="h-2 rounded-full bg-gray-50"><div className={`h-2 rounded-full ${className}`} style={{ width: `${Math.max(4, (value / max) * 100)}%` }} /></div><Typography variant="tiny" className="text-right font-semibold">{value}</Typography></div>
 }
 
 function SectionHeader({ icon, title, subtitle }: { icon: ReactNode; title: string; subtitle?: string }) {
-  return <div className="flex items-start gap-mx-sm"><span className="mt-1 text-brand-primary">{icon}</span><div><Typography variant="h2" className="text-xl">{title}</Typography>{subtitle && <Typography variant="p" className="mt-1 text-sm font-semibold">{subtitle}</Typography>}</div></div>
+  return <div className="flex items-start gap-mx-sm"><span className="mt-1 text-emerald-600">{icon}</span><div><Typography variant="h2" className="text-xl">{title}</Typography>{subtitle && <Typography variant="p" className="mt-1 text-sm font-semibold">{subtitle}</Typography>}</div></div>
 }
 
 function DashboardCard({ children, className = '' }: { children: ReactNode; className?: string }) {

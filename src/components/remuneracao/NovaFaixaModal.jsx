@@ -60,7 +60,7 @@ export default function NovaFaixaModal({ open, onClose, onSaved, politicas, me }
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-[17px] font-black text-[#0F172A]">Nova Faixa de Comissão</DialogTitle>
+          <DialogTitle className="text-[17px] font-bold text-[#0F172A]">Nova Faixa de Comissão</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>

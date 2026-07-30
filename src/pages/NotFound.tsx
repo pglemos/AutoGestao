@@ -9,9 +9,9 @@ export default function NotFound() {
     const navigate = useNavigate()
 
     return (
-        <main className="min-h-screen bg-surface-alt flex items-center justify-center p-mx-sm sm:p-10 selection:bg-brand-primary selection:text-white relative overflow-hidden">
+        <main className="min-h-screen bg-gray-50 flex items-center justify-center p-mx-sm sm:p-10 selection:bg-emerald-600 selection:text-white relative overflow-hidden">
 
-            <div className="absolute top-mx-0 right-mx-0 w-mx-hero h-mx-hero bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-mx-lg -mt-mx-lg pointer-events-none" aria-hidden="true" />
+            <div className="absolute top-mx-0 right-mx-0 w-mx-hero h-mx-hero bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-mx-lg -mt-mx-lg pointer-events-none" aria-hidden="true" />
             <div className="absolute bottom-mx-0 left-mx-0 w-mx-xl h-mx-xl bg-status-error-surface rounded-mx-full blur-mx-lg -ml-mx-lg -mb-mx-lg pointer-events-none" aria-hidden="true" />
 
             <motion.div
@@ -21,14 +21,14 @@ export default function NotFound() {
                 className="w-full max-w-2xl relative z-10"
             >
                 <Card className="border-none bg-white overflow-hidden flex flex-col">
-                    <header className="bg-brand-secondary p-mx-10 md:p-16 relative overflow-hidden text-center">
+                    <header className="bg-gray-900 p-mx-10 md:p-16 relative overflow-hidden text-center">
                         <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/20 to-transparent z-0 pointer-events-none" />
                         
                         <motion.div
                             initial={{ rotate: -10, scale: 0.9 }}
                             animate={{ rotate: 0, scale: 1 }}
                             transition={{ type: 'spring', stiffness: 200, damping: 10, delay: 0.2 }}
-                            className="w-mx-3xl h-mx-3xl rounded-mx-3xl bg-white/10 text-white flex items-center justify-center mx-auto mb-8 shadow-mx-xl backdrop-blur-xl relative z-10 border border-white/10"
+                            className="w-mx-3xl h-mx-3xl rounded-2xl bg-white/10 text-white flex items-center justify-center mx-auto mb-8 shadow-sm backdrop-blur-xl relative z-10 border border-white/10"
                         >
                             <ShieldAlert size={48} strokeWidth={2} />
                         </motion.div>
@@ -47,19 +47,19 @@ export default function NotFound() {
                         <div className="flex flex-col sm:flex-row items-center gap-mx-md w-full sm:w-auto">
                             <Button 
                                 variant="outline" onClick={() => navigate(-1)} 
-                                className="w-full sm:w-auto h-mx-14 px-10 rounded-mx-full font-black uppercase tracking-widest text-xs shadow-sm bg-white border-border-strong hover:border-brand-primary"
+                                className="w-full sm:w-auto h-mx-14 px-10 rounded-mx-full font-bold uppercase tracking-widest text-xs shadow-sm bg-white border-gray-200 hover:border-brand-primary"
                             >
                                 <ArrowLeft size={16} className="mr-2" /> RECUAR
                             </Button>
                             <Button 
                                 onClick={() => navigate('/')} 
-                                className="w-full sm:w-auto h-mx-14 px-12 rounded-mx-full shadow-mx-xl font-black uppercase tracking-widest text-xs bg-brand-primary"
+                                className="w-full sm:w-auto h-mx-14 px-12 rounded-mx-full shadow-sm font-bold uppercase tracking-widest text-xs bg-emerald-600"
                             >
                                 <Zap size={16} className="mr-2 fill-current" /> CENTRAL DE COMANDO
                             </Button>
                         </div>
 
-                        <footer className="pt-10 border-t border-border-default w-full">
+                        <footer className="pt-10 border-t border-gray-200 w-full">
                             <Typography variant="caption" tone="muted" className="text-xs opacity-20">MX PERFORMANCE • PROTOCOLO AIOX SECURITY</Typography>
                         </footer>
                     </CardContent>

@@ -49,7 +49,7 @@ export function PodioRanking({ top3 }: { top3: RankedVendedor[] }) {
                 <p className="text-[11px] font-semibold" style={{ color: 'var(--color-brand-primary)' }}>{formatVendas(v.vendas)}</p>
               </div>
               <div className="relative rounded-t-md flex items-center justify-center w-16 sm:w-20" style={{ height, background: bg }}>
-                <span className="text-white font-black text-xl drop-shadow">{label}</span>
+                <span className="text-white font-bold text-xl drop-shadow">{label}</span>
               </div>
             </div>
           )

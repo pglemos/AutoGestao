@@ -44,13 +44,13 @@ export function AgendaEventCard({
         }
       }}
       className={cn(
-        'group/event relative min-w-0 overflow-hidden rounded-mx-md border px-2 py-1 text-left shadow-mx-sm transition-shadow outline-none',
+        'group/event relative min-w-0 overflow-hidden rounded-xl border px-2 py-1 text-left shadow-sm transition-shadow outline-none',
         item.kind === 'event'
           ? 'border-status-info/20 bg-status-info-surface text-status-info'
           : 'border-brand-primary/20 bg-mx-green-50 text-brand-secondary',
         compact ? 'min-h-mx-6' : 'h-full min-h-mx-8',
-        !compact && 'cursor-grab hover:z-10 hover:shadow-mx-md active:cursor-grabbing',
-        ghost && 'opacity-60 shadow-mx-lg ring-2 ring-brand-primary/40',
+        !compact && 'cursor-grab hover:z-10 hover:shadow-sm active:cursor-grabbing',
+        ghost && 'opacity-60 shadow-sm ring-2 ring-brand-primary/40',
         'focus-visible:ring-2 focus-visible:ring-brand-primary/50',
       )}
     >
@@ -111,7 +111,7 @@ export function AgendaEventCompactChip({
           onOpen?.(event as unknown as React.MouseEvent<HTMLDivElement>)
         }
       }}
-      className="flex min-w-0 items-center gap-1 rounded-mx-sm px-1 py-0.5 text-left transition-colors hover:bg-surface-alt"
+      className="flex min-w-0 items-center gap-1 rounded-lg px-1 py-0.5 text-left transition-colors hover:bg-gray-50"
     >
       <span className={cn('h-mx-tiny w-mx-tiny shrink-0 rounded-mx-full', dotColor)} aria-hidden="true" />
       <Typography variant="tiny" className="shrink-0 text-[10px] font-semibold tabular-nums">

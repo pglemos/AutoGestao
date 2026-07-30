@@ -25,7 +25,7 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
         </label>
         <div className="relative group">
           {icon && (
-            <div className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-text-tertiary group-focus-within:text-brand-primary transition-colors" aria-hidden="true">
+            <div className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" aria-hidden="true">
               {icon}
             </div>
           )}
@@ -48,7 +48,7 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
           )}
         </div>
         {error && (
-          <p id={errorId} className="text-status-error text-mx-tiny font-black uppercase ml-2 animate-in fade-in slide-in-from-top-1" role="alert">
+          <p id={errorId} className="text-status-error text-mx-tiny font-bold uppercase ml-2 animate-in fade-in slide-in-from-top-1" role="alert">
             {error}
           </p>
         )}

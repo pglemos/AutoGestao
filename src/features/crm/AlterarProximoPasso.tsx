@@ -71,7 +71,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
             <Typography variant="h3">Alterar próximo passo</Typography>
             <Typography variant="caption" tone="muted">Defina o que precisa acontecer para {cliente.nome.split(' ')[0]} evoluir.</Typography>
           </div>
-          <button type="button" onClick={onClose} aria-label="Fechar"><X size={18} className="text-text-tertiary" /></button>
+          <button type="button" onClick={onClose} aria-label="Fechar"><X size={18} className="text-gray-500" /></button>
         </div>
 
         <div>
@@ -82,10 +82,10 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
                 key={sugestao}
                 type="button"
                 onClick={() => setAcao(sugestao)}
-                className={`rounded-mx-lg border px-mx-xs py-1 text-xs font-semibold transition-colors ${
+                className={`rounded-xl border px-mx-xs py-1 text-xs font-semibold transition-colors ${
                   acao === sugestao
                     ? 'border-[#005BFF] bg-[#005BFF] text-white'
-                    : 'border-border-subtle bg-surface-alt text-text-secondary hover:border-[#005BFF]/40'
+                    : 'border-gray-100 bg-gray-50 text-gray-500 hover:border-[#005BFF]/40'
                 }`}
               >
                 {sugestao}
@@ -101,7 +101,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
             onChange={event => setAcao(event.target.value)}
             rows={2}
             placeholder="Descreva o próximo passo..."
-            className="w-full resize-none rounded-mx-lg border border-border-subtle bg-white p-mx-sm text-sm outline-none focus:border-[#005BFF] focus:ring-4 focus:ring-[#005BFF]/10"
+            className="w-full resize-none rounded-xl border border-gray-100 bg-white p-mx-sm text-sm outline-none focus:border-[#005BFF] focus:ring-4 focus:ring-[#005BFF]/10"
           />
         </div>
 
@@ -112,7 +112,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
               type="date"
               value={dataStr}
               onChange={event => setDataStr(event.target.value)}
-              className="h-9 w-full rounded-mx-lg border border-border-subtle bg-white px-mx-xs text-sm outline-none focus:border-[#005BFF]"
+              className="h-9 w-full rounded-xl border border-gray-100 bg-white px-mx-xs text-sm outline-none focus:border-[#005BFF]"
             />
           </div>
           <div>
@@ -121,7 +121,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
               type="time"
               value={horario}
               onChange={event => setHorario(event.target.value)}
-              className="h-9 w-full rounded-mx-lg border border-border-subtle bg-white px-mx-xs text-sm outline-none focus:border-[#005BFF]"
+              className="h-9 w-full rounded-xl border border-gray-100 bg-white px-mx-xs text-sm outline-none focus:border-[#005BFF]"
             />
           </div>
         </div>
