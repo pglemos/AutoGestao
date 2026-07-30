@@ -20,6 +20,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { AulasAoVivoSection } from '@/features/universidade/sections/AulasAoVivoSection'
 import { ManagerUniversityReference } from '@/features/manager/development/ManagerUniversityReference'
 import { ContentSuggestionDialog } from '@/features/universidade/components/ContentSuggestionDialog'
+import { PageCanvas } from '@/design-system/page'
 
 export default function GerenteTreinamentos() {
     const { role, membership } = useAuth()
@@ -197,7 +198,8 @@ export default function GerenteTreinamentos() {
     )
 
     if (isLoading && !isRefetching) return (
-        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500">
+        <div className="w-full h-full bg-gray-50 animate-in fade-in duration-500">
+        <PageCanvas as="div" width="dashboard" className="flex flex-col gap-mx-lg" aria-busy="true" aria-live="polite">
             <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-mx-lg">
                 <div className="space-y-mx-xs">
                     <div className="h-mx-10 w-mx-64 bg-border-default rounded animate-pulse" />
@@ -212,11 +214,13 @@ export default function GerenteTreinamentos() {
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-lg">
                 {[1,2,3].map(i => <div key={i} className="h-mx-64 rounded-2xl bg-white animate-pulse" />)}
             </div>
-        </main>
+        </PageCanvas>
+        </div>
     )
 
     return (
-        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+        <div className="w-full h-full overflow-y-auto no-scrollbar bg-gray-50">
+        <PageCanvas as="div" width="dashboard" className="flex flex-col gap-mx-lg">
             
             <SellerPageHeader
                 icon={GraduationCap}
@@ -422,6 +426,7 @@ export default function GerenteTreinamentos() {
                 </AnimatePresence>
             </div>
 
-        </main>
+        </PageCanvas>
+        </div>
     )
 }

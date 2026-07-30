@@ -147,18 +147,23 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // prejudica a leitura em vez de ajudar (§12).
   desenvolvimento: { width: 'focused' },
   'vendedor/desenvolvimento': { width: 'focused' },
-  treinamentos: { width: 'focused' },
+  // GerenteTreinamentos (migrada) para gerente e dono, ConsultorTreinamentos
+  // (não migrada) para admin — por isso não adotada ainda.
+  treinamentos: { width: 'dashboard' },
   'vendedor/treinamentos': { width: 'focused' },
   'universidade-mx': { width: 'focused' },
   'vendedor/universidade-mx': { width: 'focused' },
-  'gerente/universidade-mx': { width: 'focused' },
+  // Mesma divisão de `treinamentos`: admin cai em ConsultorTreinamentos.
+  'gerente/universidade-mx': { width: 'dashboard' },
   feedback: { width: 'focused' },
   feedbacks: { width: 'focused' },
   devolutivas: { width: 'focused' },
   'vendedor/devolutivas': { width: 'focused' },
   'vendedor/feedback': { width: 'focused' },
   'gerente/feedbacks-pdis': { width: 'focused' },
-  pdi: { width: 'focused' },
+  // GerentePDI para gerente, dono e admin; vendedor é redirect. `dashboard` e
+  // não `focused`: grid de até três colunas de cards.
+  pdi: { width: 'dashboard', adopted: true },
   'pdi/:id/print': { width: 'reading', bottomClearance: 'none' },
   // `dashboard`, não `reading`: a tela tem grid de três colunas e vivia em
   // max-w-[1500px]. A largura de leitura estreita quebraria o layout aprovado.

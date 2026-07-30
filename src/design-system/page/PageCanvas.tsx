@@ -31,7 +31,8 @@ export type PageDensity = (typeof PAGE_DENSITIES)[number]
 export const PAGE_CLEARANCES = ['none', 'navigation', 'actions'] as const
 export type PageBottomClearance = (typeof PAGE_CLEARANCES)[number]
 
-export interface PageCanvasProps {
+export interface PageCanvasProps
+  extends Omit<React.HTMLAttributes<HTMLElement>, 'style' | 'children'> {
   children: React.ReactNode
   /** Largura semântica. Default `dashboard`, o caso mais comum no produto. */
   width?: PageWidth
@@ -71,6 +72,10 @@ export function PageCanvas({
   as: Element = 'main',
   id,
   className,
+  // Estados de carregamento e erro precisam de aria-busy/aria-live na mesma
+  // caixa que define o layout, então o container repassa o resto.
+  // `style` fica de fora: o padding e a largura são decisão exclusiva daqui.
+  ...rest
 }: PageCanvasProps) {
   const style: React.CSSProperties & Record<string, string> = {
     // A largura vem do token da variante; nunca de um literal aqui.
@@ -87,6 +92,7 @@ export function PageCanvas({
 
   return (
     <Element
+      {...rest}
       id={id}
       className={className}
       style={style}

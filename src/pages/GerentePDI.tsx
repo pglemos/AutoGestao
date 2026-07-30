@@ -20,6 +20,7 @@ import { Avatar } from '@/components/atoms/Avatar'
 import { Card } from '@/components/molecules/Card'
 import { SellerPageHeader } from '@/components/seller/SellerPageHeader'
 import { WizardPDI } from '@/features/pdi/WizardPDI'
+import { PageCanvas } from '@/design-system/page'
 
 const statusCfg = {
     aberto: { variant: 'danger' as const, label: 'ABERTO' },
@@ -72,8 +73,11 @@ export default function GerentePDI() {
     }, [pdis, searchTerm])
 
     if (loading) return (
-        <main
-            className="w-full h-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50 animate-in fade-in duration-500"
+        <div className="w-full h-full bg-gray-50 animate-in fade-in duration-500">
+        <PageCanvas
+            as="div"
+            width="dashboard"
+            className="flex flex-col gap-mx-lg"
             aria-busy="true"
             aria-live="polite"
             aria-label="Carregando PDI"
@@ -94,11 +98,13 @@ export default function GerentePDI() {
                 <Skeleton className="h-mx-64 rounded-2xl" />
                 <Skeleton className="h-mx-64 rounded-2xl" />
             </div>
-        </main>
+        </PageCanvas>
+        </div>
     )
 
     return (
-        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+        <div className="w-full h-full overflow-y-auto no-scrollbar bg-gray-50">
+        <PageCanvas as="div" width="dashboard" className="flex flex-col gap-mx-lg">
             <SellerPageHeader
                 icon={TrendingUp}
                 title={isOwner ? 'PDI da Rede' : 'Evolução do Vendedor'}
@@ -234,6 +240,7 @@ export default function GerentePDI() {
                     </div>
                 )}
             </div>
-        </main>
+        </PageCanvas>
+        </div>
     )
 }

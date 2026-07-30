@@ -31,12 +31,25 @@ import ts from 'typescript'
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const ROOT_DIR = path.resolve(__dirname, '..')
-const PAGES_DIR = path.join(ROOT_DIR, 'src', 'pages')
 const INVENTORY_PATH = path.join(__dirname, 'page-roots-inventory.json')
 
 const argv = process.argv.slice(2)
 const UPDATE = argv.includes('--update')
 const JSON_OUT = argv.includes('--json')
+
+/**
+ * `--dir` existe para diagnóstico, não para o gate.
+ *
+ * A catraca vigia `src/pages`, mas parte das telas reais mora em
+ * `src/features` — `/treinamentos` para gerente, por exemplo, delega a
+ * `ManagerUniversityReference`. Poder apontar o mesmo scanner para outro
+ * diretório mostra o tamanho do que ainda está fora da regra, sem misturar
+ * esse número no inventário congelado.
+ */
+const dirArg = argv.find((arg) => arg.startsWith('--dir='))
+const SCAN_DIR = path.join(ROOT_DIR, dirArg ? dirArg.slice('--dir='.length) : 'src/pages')
+const PAGES_DIR = SCAN_DIR
+const DIAGNOSTIC_ONLY = Boolean(dirArg)
 
 /**
  * Utilitários que representam uma decisão de layout de página.
@@ -50,6 +63,30 @@ const PROHIBITED = [
   { re: /(^|\s)container(\s|$)/, rule: 'container', fix: 'PageCanvas' },
   { re: /(^|\s)space-y-\S+/, rule: 'space-y', fix: 'var(--mx-gap-section)' },
 ]
+
+/**
+ * Linhas com exceção declarada.
+ *
+ * Existe para um caso legítimo que o lint não distingue sozinho: telas
+ * centradas em viewport cheio (acesso negado, recurso inexistente, aguardando
+ * carregamento) não são páginas em canvas — o padding ali serve a
+ * centralização, não à margem de página. Forçar `PageCanvas` nelas seria
+ * aplicar a regra contra o próprio objetivo.
+ *
+ * Exige comentário na linha justamente para aparecer no diff. Sem isso a
+ * exceção viraria escape hatch silencioso.
+ */
+const IGNORE_LOOKBEHIND = 4
+
+function isIgnored(lines, lineNumber) {
+  // Olha para trás em vez de projetar offsets para frente: a justificativa
+  // costuma ocupar duas ou três linhas de comentário antes da tag, e contar
+  // offsets fixos erra silenciosamente quando ela cresce.
+  const start = Math.max(0, lineNumber - 1 - IGNORE_LOOKBEHIND)
+  return lines
+    .slice(start, lineNumber)
+    .some((line) => /lint-page-roots-ignore/.test(line))
+}
 
 function walkPages(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -157,6 +194,7 @@ function scanFile(filePath) {
   const text = fs.readFileSync(filePath, 'utf8')
   const sourceFile = ts.createSourceFile(filePath, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
   const exportedNames = exportedComponentNames(sourceFile)
+  const lines = text.split('\n')
   const violations = []
 
   function checkRoot(element) {
@@ -173,6 +211,7 @@ function scanFile(filePath) {
       const match = classes.match(re)
       if (!match) continue
       const { line } = sourceFile.getLineAndCharacterOfPosition(opening.getStart(sourceFile))
+      if (isIgnored(lines, line + 1)) continue
       violations.push({
         file: path.relative(ROOT_DIR, filePath).replace(/\\/g, '/'),
         line: line + 1,
@@ -217,6 +256,18 @@ for (const violation of violations) {
 
 if (JSON_OUT) {
   process.stdout.write(JSON.stringify({ counts, violations }, null, 2))
+  process.exit(0)
+}
+
+if (DIAGNOSTIC_ONLY) {
+  const total = Object.values(counts).reduce((sum, count) => sum + count, 0)
+  const files = Object.entries(counts).sort(([, a], [, b]) => b - a)
+  console.log(
+    `[lint-page-roots] diagnóstico de ${path.relative(ROOT_DIR, SCAN_DIR)} — ` +
+      `${total} ocorrência(s) em ${files.length} arquivo(s). Fora do inventário congelado.`,
+  )
+  for (const [file, count] of files.slice(0, 15)) console.log(`  ${count}  ${file}`)
+  if (files.length > 15) console.log(`  … e ${files.length - 15} arquivo(s)`)
   process.exit(0)
 }
 

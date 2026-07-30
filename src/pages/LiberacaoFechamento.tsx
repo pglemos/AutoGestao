@@ -74,6 +74,8 @@ export function LiberacaoFechamento() {
 
   if (!hasPermission) {
     return (
+      // lint-page-roots-ignore: tela de estado centrada em viewport cheio, não
+      // página em canvas — o padding serve à centralização.
       <main className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-gray-50">
         <ShieldCheck size={64} className="text-status-error/20 mb-6" />
         <Typography variant="h2" className="mb-2 text-status-error font-extrabold">
@@ -91,6 +93,7 @@ export function LiberacaoFechamento() {
 
   if (!loading && (!solicitacao || loadError)) {
     return (
+      // lint-page-roots-ignore: idem — estado de recurso inexistente.
       <main className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-gray-50">
         <AlertTriangle size={64} className="text-status-warning/20 mb-6" />
         <Typography variant="h2" className="mb-2 font-extrabold">
@@ -115,6 +118,8 @@ export function LiberacaoFechamento() {
   }
 
   return (
+    // lint-page-roots-ignore: fluxo de aprovação por link, um card centrado em
+    // max-w-lg. Não tem sidebar nem margem de página para padronizar.
     <main className="min-h-screen w-full bg-gray-50 flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
       <Card className="w-full max-w-lg bg-white border p-mx-md space-y-mx-md">
         <header className="border-b border-gray-100 pb-4 flex items-center justify-between">
