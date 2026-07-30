@@ -61,6 +61,18 @@
   --mx-space-10: 40px;
   --mx-space-12: 48px;
   --mx-space-16: 64px;
+  --mx-space-20: 80px;
+  --mx-space-24: 96px;
+
+  /* ------------------------------------------------------------ breakpoints */
+  /* Classes adaptativas do Material Design 3 — §7.2. Publicados como tokens
+     para que o valor seja legível em JS/testes; as media queries em si vivem
+     em `semantic.css`, porque CSS não aceita var() em @media. */
+  --mx-breakpoint-compact: 0px;
+  --mx-breakpoint-medium: 600px;
+  --mx-breakpoint-expanded: 840px;
+  --mx-breakpoint-large: 1200px;
+  --mx-breakpoint-extra-large: 1600px;
 
   /* ------------------------------------------------------------------ raios */
   --mx-radius-sm: 6px;

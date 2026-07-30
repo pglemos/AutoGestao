@@ -89,4 +89,69 @@
   --sidebar-accent-foreground: 240 6% 10%;
   --sidebar-border: var(--mx-color-sidebar-border);
   --sidebar-ring: var(--mx-blue-500);
+
+  /* ==================================================================== */
+  /* Layout de página — §7 e §8                                           */
+  /* ==================================================================== */
+
+  /* Espaçamento entre blocos, nomeado pela relação semântica que expressa,
+     não pela medida. Trocar o valor aqui muda o ritmo do produto inteiro. */
+  --mx-gap-inline: var(--mx-space-2);
+  --mx-gap-control: var(--mx-space-3);
+  --mx-gap-form: var(--mx-space-4);
+  --mx-gap-card: var(--mx-space-4);
+  --mx-gap-section: var(--mx-space-6);
+  --mx-gap-section-large: var(--mx-space-8);
+  --mx-gap-page-region: var(--mx-space-12);
+
+  /* Larguras semânticas — §8.1. O conteúdo escolhe pelo que ele é
+     (formulário, leitura, dashboard), nunca por um número solto na página. */
+  --mx-page-width-fluid: 100%;
+  --mx-page-width-dashboard: 1400px;
+  --mx-page-width-wide: 1280px;
+  --mx-page-width-focused: 960px;
+  --mx-page-width-form: 768px;
+  --mx-page-width-reading: 720px;
+
+  /* Margem lateral e padding vertical — sobrescritos por breakpoint abaixo.
+     Compact é o caso base: mobile-first, não desktop reduzido (§14). */
+  --mx-page-margin: var(--mx-space-4);
+  --mx-page-padding-top: var(--mx-space-4);
+  --mx-page-padding-bottom: var(--mx-space-6);
+
+  /* Espaço reservado no fim da página para que o último conteúdo não fique
+     sob a navegação móvel ou uma barra de ações fixa (§8.4, §15). */
+  --mx-page-clearance-none: 0px;
+  --mx-page-clearance-navigation: var(--mx-space-16);
+  --mx-page-clearance-actions: var(--mx-space-20);
+  --mx-page-bottom-clearance: var(--mx-page-clearance-none);
+}
+
+/* Margens e ritmo vertical por classe de tela — §7.3 e §7.4.
+   Os breakpoints são declarados uma única vez, aqui. Nenhuma rota decide a
+   própria margem lateral; é isso que mantém títulos alinhados entre perfis. */
+@media (min-width: 600px) {
+  .mx-ds {
+    --mx-page-margin: var(--mx-space-6);
+    --mx-page-padding-top: var(--mx-space-6);
+    --mx-page-padding-bottom: var(--mx-space-8);
+  }
+}
+
+@media (min-width: 840px) {
+  .mx-ds {
+    --mx-page-margin: var(--mx-space-8);
+    --mx-page-padding-top: var(--mx-space-8);
+    --mx-page-padding-bottom: var(--mx-space-12);
+  }
+}
+
+/* Densidade compacta reduz o ritmo vertical sem mexer na margem lateral: o
+   alinhamento horizontal entre telas é invariante, a densidade não. */
+.mx-ds[data-mx-density='compact'] {
+  --mx-page-padding-top: var(--mx-space-4);
+  --mx-page-padding-bottom: var(--mx-space-6);
+  --mx-gap-section: var(--mx-space-4);
+  --mx-gap-section-large: var(--mx-space-6);
+  --mx-gap-page-region: var(--mx-space-8);
 }

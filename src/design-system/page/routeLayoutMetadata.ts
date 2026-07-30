@@ -1,0 +1,179 @@
+import type { PageBottomClearance, PageDensity, PageWidth } from './PageCanvas'
+
+/**
+ * Decisão de layout de uma rota — §8.6.
+ *
+ * Fica fora do componente de página de propósito: assim a decisão é auditável
+ * em bloco ("todos os formulários usam a mesma largura?") sem abrir 54
+ * arquivos, e um teste consegue afirmar que nenhuma rota ficou sem decisão.
+ */
+export interface RouteLayoutMetadata {
+  width: PageWidth
+  density?: PageDensity
+  bottomClearance?: PageBottomClearance
+}
+
+/**
+ * Larguras agrupadas pela natureza do conteúdo.
+ *
+ * A ordem de resolução é: correspondência exata → prefixo mais longo →
+ * default. Prefixo mais longo, não o primeiro que casa, para que
+ * `configuracoes/operacional` possa divergir de `configuracoes` sem depender
+ * da ordem de declaração neste objeto.
+ */
+const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
+  // ------------------------------------------------------ públicas e de conta
+  '/login': { width: 'form' },
+  '/forgot-password': { width: 'form' },
+  '/reset-password': { width: 'form' },
+  '/pre-cadastro/:storeSlug': { width: 'form' },
+  '/terms': { width: 'reading' },
+  '/privacy': { width: 'reading' },
+
+  // ------------------------------------------------------------- dashboards
+  // Visões de indicadores: aproveitam a largura, limitadas a 1400px para que
+  // os cards não virem faixas em telas ultrawide (§14.4).
+  home: { width: 'dashboard' },
+  painel: { width: 'dashboard' },
+  'meu-dia': { width: 'dashboard', bottomClearance: 'navigation' },
+  'central-de-execucao': { width: 'dashboard' },
+  'central-execucao': { width: 'dashboard' },
+  'terminal-mx': { width: 'dashboard', bottomClearance: 'navigation' },
+  'vendedor/terminal-mx': { width: 'dashboard', bottomClearance: 'navigation' },
+  'relatorio-matinal': { width: 'dashboard' },
+  'gerente/minha-equipe': { width: 'dashboard' },
+  'gerente/vendas': { width: 'dashboard' },
+  'gerente/ranking': { width: 'dashboard' },
+  ranking: { width: 'dashboard' },
+  classificacao: { width: 'dashboard' },
+  mercado: { width: 'dashboard' },
+  'plano-estrategico': { width: 'dashboard' },
+  organograma: { width: 'dashboard' },
+  auditoria: { width: 'dashboard' },
+  decisoes: { width: 'dashboard' },
+
+  // ------------------------------------------------------- tabelas e listagens
+  // `wide` e não `dashboard`: tabelas densas ficam mais legíveis um pouco mais
+  // estreitas, porque a linha de leitura horizontal encurta.
+  lojas: { width: 'wide' },
+  'lojas/:storeSlug': { width: 'wide' },
+  'lojas/:storeSlug/equipe': { width: 'wide' },
+  'lojas/:storeSlug/consultor-ia': { width: 'focused' },
+  clientes: { width: 'wide' },
+  carteira: { width: 'wide' },
+  'carteira-clientes': { width: 'wide' },
+  'vendedor/carteira': { width: 'wide', bottomClearance: 'navigation' },
+  equipe: { width: 'wide' },
+  team: { width: 'wide' },
+  'banco-talentos': { width: 'wide' },
+  produtos: { width: 'wide' },
+  notificacoes: { width: 'wide' },
+  relatorios: { width: 'wide' },
+  'relatorios-vendedor': { width: 'wide' },
+  'relatorios/performance-vendas': { width: 'wide' },
+  'relatorios/performance-vendedor': { width: 'wide' },
+  agenda: { width: 'wide' },
+  'liberacao-fechamento': { width: 'wide' },
+  departamentos: { width: 'wide' },
+  consultoria: { width: 'wide' },
+  clientes_visita: { width: 'wide' },
+
+  // ------------------------------------------------------------------- funis
+  // Colunas de funil precisam de largura; a rolagem horizontal é do board,
+  // não da página (§14.5).
+  funil: { width: 'dashboard', bottomClearance: 'navigation' },
+  'meu-funil': { width: 'dashboard', bottomClearance: 'navigation' },
+  'vendedor/funil': { width: 'dashboard', bottomClearance: 'navigation' },
+  'vendedor/meu-funil': { width: 'dashboard', bottomClearance: 'navigation' },
+  'funil-comercial': { width: 'dashboard' },
+  'funil-vendas': { width: 'dashboard' },
+
+  // --------------------------------------------------- fluxos e formulários
+  // Barra de ações fixa: a reserva impede que o botão salvar cubra o último
+  // campo (§15).
+  'fechamento-diario': { width: 'focused', bottomClearance: 'actions' },
+  'gerente/fechamento-diario': { width: 'focused', bottomClearance: 'actions' },
+  'lancamento-diario': { width: 'focused', bottomClearance: 'actions' },
+  rotina: { width: 'focused', bottomClearance: 'actions' },
+  'rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },
+  'vendedor/rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },
+  'gerente/rotina-equipe': { width: 'focused', bottomClearance: 'actions' },
+  'plano-acao': { width: 'focused', bottomClearance: 'actions' },
+  simulacao: { width: 'focused' },
+  'simulacao/:simulationRole': { width: 'focused' },
+  reprocessamento: { width: 'form' },
+
+  // -------------------------------------------------- configurações e perfil
+  configuracoes: { width: 'form' },
+  'configuracoes/operacional': { width: 'focused' },
+  'configuracoes/remuneracao': { width: 'focused' },
+  'configuracoes/consultoria-pmr': { width: 'focused' },
+  'configuracoes/reprocessamento': { width: 'form' },
+  settings: { width: 'form' },
+  'vendedor/configuracoes': { width: 'form' },
+  perfil: { width: 'form' },
+  'meu-perfil': { width: 'form' },
+  'meu-perfil-vendedor': { width: 'form' },
+  'vendedor/perfil': { width: 'form' },
+  'minha-remuneracao': { width: 'focused' },
+  metas: { width: 'focused' },
+  'minha-meta': { width: 'focused' },
+  'vendedor/minha-meta': { width: 'focused' },
+  'gerente/meta-loja': { width: 'focused' },
+
+  // ------------------------------------------- desenvolvimento e conversação
+  // `focused` e `reading`: conteúdo textual longo, onde largura excessiva
+  // prejudica a leitura em vez de ajudar (§12).
+  desenvolvimento: { width: 'focused' },
+  'vendedor/desenvolvimento': { width: 'focused' },
+  treinamentos: { width: 'focused' },
+  'vendedor/treinamentos': { width: 'focused' },
+  'universidade-mx': { width: 'focused' },
+  'vendedor/universidade-mx': { width: 'focused' },
+  'gerente/universidade-mx': { width: 'focused' },
+  feedback: { width: 'focused' },
+  feedbacks: { width: 'focused' },
+  devolutivas: { width: 'focused' },
+  'vendedor/devolutivas': { width: 'focused' },
+  'vendedor/feedback': { width: 'focused' },
+  'gerente/feedbacks-pdis': { width: 'focused' },
+  pdi: { width: 'focused' },
+  'pdi/:id/print': { width: 'reading', bottomClearance: 'none' },
+  ajuda: { width: 'reading' },
+
+  // Conversação com IA: coluna estreita, porque diálogo é leitura sequencial
+  // e não se beneficia de largura (§12).
+  'consultor-ia': { width: 'reading', bottomClearance: 'actions' },
+  'mentor-comercial': { width: 'reading', bottomClearance: 'actions' },
+  'vendedor/mentor-comercial': { width: 'reading', bottomClearance: 'actions' },
+  'gerente/mentor': { width: 'reading', bottomClearance: 'actions' },
+  'falar-consultor': { width: 'reading', bottomClearance: 'actions' },
+}
+
+/** Default consciente, não acidental: a maioria das telas é dashboard. */
+export const DEFAULT_ROUTE_LAYOUT: RouteLayoutMetadata = { width: 'dashboard' }
+
+/**
+ * Resolve a decisão de layout de uma rota.
+ *
+ * Nunca lança e nunca devolve `undefined`: uma rota nova renderiza com o
+ * default em vez de quebrar. O custo dessa tolerância é uma rota podendo
+ * passar despercebida, e é por isso que existe o teste de cobertura que
+ * confronta este mapa com os `path=` reais de `App.tsx`.
+ */
+export function resolveRouteLayout(path: string): RouteLayoutMetadata {
+  const normalized = path.replace(/^\/+|\/+$/g, '')
+
+  const exact = ROUTE_LAYOUTS[path] ?? ROUTE_LAYOUTS[normalized]
+  if (exact) return exact
+
+  // Prefixo mais longo primeiro, para que a rota mais específica ganhe.
+  const prefixes = Object.keys(ROUTE_LAYOUTS)
+    .filter((key) => normalized.startsWith(`${key.replace(/^\/+/, '')}/`))
+    .sort((a, b) => b.length - a.length)
+
+  return prefixes.length > 0 ? ROUTE_LAYOUTS[prefixes[0]] : DEFAULT_ROUTE_LAYOUT
+}
+
+/** Exposto para o teste de cobertura. Não use para navegação. */
+export const REGISTERED_ROUTE_PATHS = Object.keys(ROUTE_LAYOUTS)
