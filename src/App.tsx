@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Routes, Route, Navigate, useLocation, useNavig
 import { AuthProvider, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { Toaster } from 'sonner'
 import { MotionConfig } from 'motion/react'
-import Layout from '@/components/Layout'
 import { ErrorState } from '@/components/molecules/ErrorState'
 import { slugify } from '@/lib/utils'
 import { canAccessPath } from '@/lib/auth/routeAccess'
