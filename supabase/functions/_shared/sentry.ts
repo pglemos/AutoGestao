@@ -45,6 +45,12 @@ export function initSentryForEdge(): void {
         tracesSampleRate: 1,
         sendDefaultPii: false,
         beforeSend(event) {
+            // `sendDefaultPii: false` não basta: quem preenche o IP é a ingestão do
+            // Sentry a partir da conexão, não o SDK. Verificado em 2026-07-29 — um
+            // evento real chegou com a tag `user = ip:2600:1f1e:...`. Sob a LGPD o IP
+            // é dado pessoal, então o campo é zerado aqui, na saída da função.
+            delete event.user;
+            if (event.request) delete event.request.env;
             return sanitizeEdgeEvent(event);
         },
     });

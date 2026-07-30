@@ -4,6 +4,7 @@ import { requireAuthenticatedRole } from "../_shared/auth.ts";
 import { isInternalTokenAuthorized } from "../_shared/internal-token.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
 import { getCentralGoogleAccessToken, CENTRAL_MEET_READ_SCOPE } from "../_shared/google.ts";
+import { initSentryForEdge, withSentry, Sentry } from "../_shared/sentry.ts";
 
 type SourceKind = "visit" | "schedule_event";
 
@@ -696,7 +697,9 @@ async function processSource(adminClient: any, sourceKind: SourceKind, source: V
   };
 }
 
-Deno.serve(async (req) => {
+initSentryForEdge();
+
+Deno.serve((req) => withSentry("google-meet-ata", req, async () => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return jsonResponse({ success: false, error: "Method not allowed" }, 405);
 
@@ -737,7 +740,12 @@ Deno.serve(async (req) => {
     const result = await processSource(adminClient, loaded.sourceKind, loaded.source);
     return jsonResponse({ success: true, mode, result });
   } catch (error) {
+    // O catch devolve 400 para não alterar o contrato com os chamadores, mas sem
+    // capturar aqui o erro morreria neste ponto: `withSentry` só enxerga exceções que
+    // escapam do handler. Era por isso que nenhuma falha desta função aparecia no
+    // Sentry.
+    Sentry.captureException(error);
     const message = error instanceof Error ? error.message : "Falha ao gerar ata do Google Meet";
     return jsonResponse({ success: false, error: message }, 400);
   }
-});
+}));

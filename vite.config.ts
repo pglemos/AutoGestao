@@ -24,8 +24,14 @@ export default defineConfig({
           project: sentryProject,
           release: { name: sentryRelease },
           sourcemaps: {
-            // upload + delete local após upload — não servir .map publicamente
-            filesToDeleteAfterUpload: '**/*.map',
+            // Upload e então apagar do output — `.map` servido publicamente expõe o
+            // código-fonte TypeScript original.
+            //
+            // O glob precisa apontar para `./dist`. Com `'**/*.map'` o plugin não
+            // casava nada e os arquivos seguiam no bundle: verificado em produção em
+            // 2026-07-29, `/assets/index-*.js.map` respondia 200 mesmo com os 430
+            // artefatos já enviados ao Sentry.
+            filesToDeleteAfterUpload: ['./dist/**/*.map'],
           },
           // Falha o build se o upload não acontecer: source map silenciosamente
           // ausente produz stack minificada em produção, que é o defeito que
