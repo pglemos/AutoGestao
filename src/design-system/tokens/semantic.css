@@ -152,11 +152,14 @@
   }
 }
 
-/* Densidade compacta reduz o ritmo vertical sem mexer na margem lateral: o
-   alinhamento horizontal entre telas é invariante, a densidade não. */
+/* Densidade compacta adensa o ritmo *interno* — o espaço entre seções — e não
+   toca no padding de topo nem na margem lateral.
+
+   Medido: com padding-top variável, a mesma rota (/treinamentos) começava em
+   16px para os perfis internos MX e 24px para gerente e dono, deixando o título
+   em linha diferente conforme quem olha. Alinhamento de entrada é invariante do
+   produto (§28.4); densidade decide o quão densa é a leitura depois disso. */
 .mx-ds[data-mx-density='compact'] {
-  --mx-page-padding-top: var(--mx-space-4);
-  --mx-page-padding-bottom: var(--mx-space-6);
   --mx-gap-section: var(--mx-space-4);
   --mx-gap-section-large: var(--mx-space-6);
   --mx-gap-page-region: var(--mx-space-8);

@@ -2,7 +2,6 @@
   "generatedAt": "2026-07-30",
   "counts": {
     "src/pages/ConsultorNotificacoes.tsx": 1,
-    "src/pages/ConsultorTreinamentos.tsx": 1,
     "src/pages/Login.tsx": 1,
     "src/pages/NotFound.tsx": 1,
     "src/pages/PDIPrint.tsx": 2,

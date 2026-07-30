@@ -16,6 +16,7 @@ import { Input } from '@/components/atoms/Input'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/molecules/Card'
 import { PageHeading } from '@/components/molecules/PageHeading'
 import { AulasAoVivoSection } from '@/features/universidade/sections/AulasAoVivoSection'
+import { PageCanvas } from '@/design-system/page'
 
 const types = ['prospeccao', 'agendamento', 'atendimento', 'apresentacao', 'financiamento', 'carro_de_troca', 'fechamento', 'funil', 'rotina_diaria', 'crm', 'institucional', 'gestao', 'pre-vendas']
 const audiences = ['vendedor', 'gerente', 'dono', 'todos']
@@ -60,7 +61,8 @@ export default function ConsultorTreinamentos() {
     )
 
     return (
-        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+        <div className="w-full h-full overflow-y-auto no-scrollbar bg-gray-50">
+        <PageCanvas as="div" width="dashboard" className="flex flex-col gap-mx-lg">
             
             <PageHeading
                 title={<span>Curadoria <span className="text-emerald-600">Academy</span></span>}
@@ -249,6 +251,7 @@ export default function ConsultorTreinamentos() {
                     </motion.article>
                 ))}
             </div>
-        </main>
+        </PageCanvas>
+        </div>
     )
 }
