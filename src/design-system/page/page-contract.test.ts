@@ -3,7 +3,7 @@ import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 
 import { PAGE_CLEARANCES, PAGE_WIDTHS } from './PageCanvas'
-import { DEFAULT_ROUTE_LAYOUT, resolveRouteLayout } from './routeLayoutMetadata'
+import { DEFAULT_ROUTE_LAYOUT, isRouteAdopted, resolveRouteLayout } from './routeLayoutMetadata'
 
 const root = process.cwd()
 const read = (path: string) => readFileSync(resolve(root, path), 'utf8')
@@ -93,6 +93,13 @@ describe('registro de layout por rota', () => {
     expect(resolveRouteLayout('vendedor/carteira').bottomClearance).toBe(
       'navigation',
     )
+  })
+
+  it('trata rota não migrada como não adotada', () => {
+    // Enquanto a rota não tiver perdido o padding próprio, o shell não pode
+    // envolvê-la no PageCanvas: os dois paddings somariam.
+    expect(isRouteAdopted('ranking')).toBe(false)
+    expect(isRouteAdopted('rota-que-nao-existe')).toBe(false)
   })
 
   it('reserva espaço de ações nos fluxos com barra fixa de salvar', () => {

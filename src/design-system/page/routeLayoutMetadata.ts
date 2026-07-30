@@ -11,6 +11,19 @@ export interface RouteLayoutMetadata {
   width: PageWidth
   density?: PageDensity
   bottomClearance?: PageBottomClearance
+  /**
+   * A rota já teve o padding e a largura próprios removidos, e por isso o
+   * `PageCanvas` pode envolvê-la no shell.
+   *
+   * Existe porque a migração não pode ser atômica: aplicar o canvas a uma
+   * página que ainda tem `px-6` na raiz **soma** os dois paddings, e o
+   * resultado é pior que o ponto de partida. O flag deixa o shell aplicar o
+   * canvas rota por rota, mantendo cada passo verificável, em vez de trocar
+   * 100 rotas num commit que ninguém consegue revisar.
+   *
+   * Some quando a migração terminar: o default passa a ser adotado.
+   */
+  adopted?: true
 }
 
 /**
@@ -173,6 +186,16 @@ export function resolveRouteLayout(path: string): RouteLayoutMetadata {
     .sort((a, b) => b.length - a.length)
 
   return prefixes.length > 0 ? ROUTE_LAYOUTS[prefixes[0]] : DEFAULT_ROUTE_LAYOUT
+}
+
+/**
+ * A rota já foi migrada e pode receber o `PageCanvas` no shell.
+ *
+ * Rota não adotada renderiza exatamente como antes — nenhuma tela muda de
+ * aparência até que seu padding próprio tenha sido removido.
+ */
+export function isRouteAdopted(path: string): boolean {
+  return resolveRouteLayout(path).adopted === true
 }
 
 /** Exposto para o teste de cobertura. Não use para navegação. */
