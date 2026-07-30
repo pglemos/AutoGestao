@@ -6,6 +6,7 @@ import { EmptyState } from '@/components/atoms/EmptyState'
 import { useLojasDoUsuario } from '@/hooks/useLojasDoUsuario'
 import { OrganogramaVisual } from './components/OrganogramaVisual'
 import { PlanoCarreira } from './components/PlanoCarreira'
+import { PageCanvas } from '@/design-system/page'
 
 type TabKey = 'organograma' | 'carreira'
 
@@ -22,7 +23,7 @@ export default function OrganogramaPage() {
   const lojaSelecionada = lojaId || (lojas.length === 1 ? lojas[0].id : '')
 
   return (
-<div className="w-full space-y-mx-lg">
+    <PageCanvas as="div" width="dashboard" className="flex flex-col gap-mx-lg">
       <PageHeading
         title="Organograma & Plano de Carreira"
         subtitle="ESTRUTURA HIERÁRQUICA DA EMPRESA E A TRILHA DE EVOLUÇÃO POR CARGO"
@@ -53,6 +54,6 @@ export default function OrganogramaPage() {
 <OrganogramaVisual lojaId={lojaSelecionada} />
 )}
 </section>
-</div>
+    </PageCanvas>
   )
 }

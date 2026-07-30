@@ -3,6 +3,7 @@ import { PageHeading } from '@/components/molecules/PageHeading'
 import { TabNav, type TabNavItem } from '@/components/molecules/TabNav'
 import { TesteComportamental } from './components/TesteComportamental'
 import { BancoTalentos } from './components/BancoTalentos'
+import { PageCanvas } from '@/design-system/page'
 
 type TabKey = 'teste' | 'banco'
 
@@ -15,7 +16,7 @@ export default function ComportamentalPage() {
   const [tab, setTab] = useState<TabKey>('teste')
 
   return (
-<div className="w-full space-y-mx-lg">
+    <PageCanvas as="div" width="dashboard" className="flex flex-col gap-mx-lg">
       <PageHeading
         title="Teste Comportamental & Banco de Talentos"
         subtitle="APLIQUE O TESTE NO ONBOARDING E CONSTRUA O BANCO DE PERFIS VENCEDORES"
@@ -24,6 +25,6 @@ export default function ComportamentalPage() {
       <section id={`${tab}-panel`} role="tabpanel" aria-labelledby={`${tab}-tab`}>
         {tab === 'teste' ? <TesteComportamental /> : <BancoTalentos />}
       </section>
-    </div>
+    </PageCanvas>
   )
 }

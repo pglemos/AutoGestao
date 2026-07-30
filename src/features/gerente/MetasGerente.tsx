@@ -1,6 +1,7 @@
 import { useMemo } from 'react'
 import { Target, TrendingUp, AlertTriangle, CheckCircle2, Clock3 } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { PageCanvas } from '@/design-system/page'
 
 type SellerMeta = {
   id: string
@@ -44,7 +45,15 @@ export default function MetasGerente() {
   }), [])
 
   return (
-    <main id="metas-gerente" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Metas da Equipe">
+    <PageCanvas
+      as="main"
+      width="dashboard"
+      bottomClearance="navigation"
+      id="metas-gerente"
+      role="main"
+      className="flex min-h-0 flex-1 flex-col gap-6"
+      aria-label="Metas da Equipe"
+    >
       <header className="flex flex-col gap-1">
         <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Metas da Equipe</h1>
         <p className="text-sm text-muted-foreground">Acompanhe o atingimento e a projeção de cada vendedor.</p>
@@ -162,6 +171,6 @@ export default function MetasGerente() {
           </table>
         </div>
       </div>
-    </main>
+    </PageCanvas>
   )
 }

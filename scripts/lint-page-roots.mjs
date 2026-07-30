@@ -98,6 +98,33 @@ function isIgnored(lines, lineNumber) {
     .some((line) => /lint-page-roots-ignore/.test(line))
 }
 
+/**
+ * Telas que vivem em `src/features` mas são montadas direto por uma rota.
+ *
+ * `src/pages` não é a fronteira real do produto: `App.tsx` monta doze telas
+ * vindas de `src/features` (Checkin, ManagerDailyClosing, MetasGerente…), e
+ * essas são raízes de rota tanto quanto qualquer arquivo em `pages`. Vigiar só
+ * `pages` deixaria justamente as telas mais novas fora da regra.
+ *
+ * A lista é derivada dos imports dinâmicos de `App.tsx`, não escrita à mão:
+ * assim uma tela nova entra no gate por ser montada, sem depender de alguém
+ * lembrar de cadastrá-la aqui.
+ */
+function routeMountedFeatureFiles() {
+  const app = fs.readFileSync(path.join(ROOT_DIR, 'src', 'App.tsx'), 'utf8')
+  const files = []
+  for (const [, specifier] of app.matchAll(/import\('@\/(features\/[^']+)'\)/g)) {
+    for (const extension of ['.tsx', '.ts']) {
+      const candidate = path.join(ROOT_DIR, 'src', `${specifier}${extension}`)
+      if (fs.existsSync(candidate)) {
+        files.push(candidate)
+        break
+      }
+    }
+  }
+  return files
+}
+
 function walkPages(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name)
@@ -257,7 +284,9 @@ function scanFile(filePath) {
   return violations
 }
 
-const files = walkPages(PAGES_DIR)
+const files = DIAGNOSTIC_ONLY
+  ? walkPages(PAGES_DIR)
+  : [...walkPages(PAGES_DIR), ...routeMountedFeatureFiles()]
 const violations = files.flatMap(scanFile)
 
 /** Contagem por arquivo — a unidade que a catraca controla. */

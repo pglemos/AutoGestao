@@ -61,7 +61,10 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   classificacao: { width: 'dashboard' },
   mercado: { width: 'dashboard' },
   'plano-estrategico': { width: 'dashboard' },
-  organograma: { width: 'dashboard' },
+  // Estas duas tinham conteúdo encostado na sidebar antes do canvas: o header
+  // começava exatamente em 256px, sem margem alguma. Ver commit desta onda.
+  organograma: { width: 'dashboard', adopted: true },
+  'banco-talentos': { width: 'dashboard', adopted: true },
   auditoria: { width: 'dashboard' },
   decisoes: { width: 'dashboard' },
 
@@ -78,7 +81,6 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'vendedor/carteira': { width: 'wide', bottomClearance: 'navigation' },
   equipe: { width: 'wide' },
   team: { width: 'wide' },
-  'banco-talentos': { width: 'wide' },
   produtos: { width: 'wide' },
   notificacoes: { width: 'wide' },
   relatorios: { width: 'wide' },
@@ -101,7 +103,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'vendedor/funil': { width: 'dashboard', bottomClearance: 'navigation' },
   'vendedor/meu-funil': { width: 'dashboard', bottomClearance: 'navigation' },
   'funil-comercial': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
-  'funil-vendas': { width: 'dashboard' },
+  'funil-vendas': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
 
   // --------------------------------------------------- fluxos e formulários
   // Barra de ações fixa: a reserva impede que o botão salvar cubra o último
@@ -137,7 +139,8 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'meu-perfil-vendedor': { width: 'form' },
   'vendedor/perfil': { width: 'form' },
   'minha-remuneracao': { width: 'focused' },
-  metas: { width: 'focused' },
+  // MetasGerente para gerente e dono; vendedor e admin caem em ForbiddenRoute.
+  metas: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'minha-meta': { width: 'focused' },
   'vendedor/minha-meta': { width: 'focused' },
   'gerente/meta-loja': { width: 'focused' },
