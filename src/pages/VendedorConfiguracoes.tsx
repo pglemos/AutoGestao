@@ -6,6 +6,7 @@ import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { SellerPageHeader } from '@/components/seller/SellerPageHeader'
 import { useAuth } from '@/hooks/useAuth'
+import { PageCanvas } from '@/design-system/page'
 
 const SETTINGS = [
   {
@@ -42,8 +43,8 @@ export default function VendedorConfiguracoes() {
   const { membership, profile, role } = useAuth()
 
   return (
-    <main className="h-full w-full overflow-y-auto bg-gray-50 px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg no-scrollbar">
-      <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-mx-lg pb-32">
+    <div className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
         <SellerPageHeader
           icon={ShieldCheck}
           title="Configurações"
@@ -106,7 +107,7 @@ export default function VendedorConfiguracoes() {
             ))}
           </section>
         </section>
-      </div>
-    </main>
+      </PageCanvas>
+    </div>
   )
 }

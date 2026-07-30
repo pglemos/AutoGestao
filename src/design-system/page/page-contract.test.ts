@@ -71,9 +71,10 @@ describe('registro de layout por rota', () => {
   })
 
   it('prefere a rota mais específica, independente da ordem de declaração', () => {
-    // `configuracoes` é form; a subrota operacional precisa de mais largura.
-    expect(resolveRouteLayout('configuracoes').width).toBe('form')
+    // A subrota tem decisão própria e não herda a do prefixo.
+    expect(resolveRouteLayout('configuracoes').width).toBe('dashboard')
     expect(resolveRouteLayout('configuracoes/operacional').width).toBe('focused')
+    expect(resolveRouteLayout('configuracoes/reprocessamento').width).toBe('form')
   })
 
   it('normaliza barras iniciais e finais', () => {

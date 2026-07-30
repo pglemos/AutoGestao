@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom'
 import { SellerPageHeader } from '@/components/seller/SellerPageHeader'
 import { useAuth } from '@/hooks/useAuth'
 import { chartTokens } from '@/lib/charts/tokens'
+import { PageCanvas } from '@/design-system/page'
 import { supabase } from '@/lib/supabase'
 import { useOfficialSellerPerformance } from '@/hooks/useOfficialSellerPerformance'
 import { resolveIndividualGoal } from '@/lib/storeSalesRules'
@@ -250,8 +251,8 @@ export default function FunilVendedor() {
   const showEmptyState = !hasAnyData
 
   return (
-    <main className="min-h-full bg-gray-50 px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg">
-      <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-4">
+    <div className="min-h-full bg-gray-50">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-4">
 <SellerPageHeader icon={TrendingUp} title="Minha Meta" actions={(
 <div className="flex items-center gap-1 rounded-xl bg-slate-100 p-1">
             {Object.entries(periodLabels).map(([value, label]) => (
@@ -291,8 +292,8 @@ export default function FunilVendedor() {
             <EvolucaoCollapsible data={dashboard.evolution} chartAberto={chartAberto} onToggle={() => setChartAberto(v => !v)} />
           </>
         )}
-      </div>
-    </main>
+      </PageCanvas>
+    </div>
   )
 }
 

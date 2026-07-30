@@ -95,10 +95,12 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // Colunas de funil precisam de largura; a rolagem horizontal é do board,
   // não da página (§14.5).
   funil: { width: 'dashboard', bottomClearance: 'navigation' },
-  'meu-funil': { width: 'dashboard', bottomClearance: 'navigation' },
+  // FunilVendedor. As outras variantes de perfil são ForbiddenRoute, que não
+  // tem layout próprio, então a rota pode ser adotada.
+  'meu-funil': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'vendedor/funil': { width: 'dashboard', bottomClearance: 'navigation' },
   'vendedor/meu-funil': { width: 'dashboard', bottomClearance: 'navigation' },
-  'funil-comercial': { width: 'dashboard' },
+  'funil-comercial': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'funil-vendas': { width: 'dashboard' },
 
   // --------------------------------------------------- fluxos e formulários
@@ -117,13 +119,19 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   reprocessamento: { width: 'form' },
 
   // -------------------------------------------------- configurações e perfil
-  configuracoes: { width: 'form' },
+  // Dividida por RoleSwitch: vendedor renderiza VendedorConfiguracoes (já
+  // migrada, painel de 1500px), gerente e dono renderizam Configuracoes (não
+  // migrada). Não marcada como adotada justamente por isso — ver a nota sobre
+  // rotas divididas no fim deste arquivo.
+  configuracoes: { width: 'dashboard' },
   'configuracoes/operacional': { width: 'focused' },
   'configuracoes/remuneracao': { width: 'focused' },
   'configuracoes/consultoria-pmr': { width: 'focused' },
   'configuracoes/reprocessamento': { width: 'form' },
   settings: { width: 'form' },
-  'vendedor/configuracoes': { width: 'form' },
+  // Alias que redireciona para `configuracoes`; mantido no registro para que a
+  // decisão continue resolvível se o redirect for removido.
+  'vendedor/configuracoes': { width: 'dashboard', bottomClearance: 'navigation' },
   perfil: { width: 'form' },
   'meu-perfil': { width: 'form' },
   'meu-perfil-vendedor': { width: 'form' },
@@ -199,6 +207,23 @@ export function resolveRouteLayout(path: string): RouteLayoutMetadata {
 export function isRouteAdopted(path: string): boolean {
   return resolveRouteLayout(path).adopted === true
 }
+
+/**
+ * LIMITE CONHECIDO — rotas divididas por perfil.
+ *
+ * `App.tsx` usa `RoleSwitch` para fazer um mesmo path renderizar componentes
+ * diferentes por perfil (`configuracoes`, `funil`, `ranking`, entre outros).
+ * Este registro é indexado por path, então nesses casos ele descreve a decisão
+ * de layout comum, não a de cada variante.
+ *
+ * Consequência prática: `adopted` só pode ser marcado quando **todas** as
+ * variantes daquele path já estiverem migradas. Marcar antes faria o registro
+ * afirmar algo falso sobre as telas que ainda não foram tocadas.
+ *
+ * Enquanto o `PageCanvas` é aplicado dentro de cada página, esse limite é
+ * apenas de documentação. Ele passa a importar se o canvas migrar para o shell,
+ * e nesse momento o registro precisará de uma dimensão por perfil.
+ */
 
 /** Exposto para o teste de cobertura. Não use para navegação. */
 export const REGISTERED_ROUTE_PATHS = Object.keys(ROUTE_LAYOUTS)
