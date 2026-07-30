@@ -63,6 +63,7 @@ Auditoria somente leitura em 2026-06-02 encontrou 3 visitas canceladas ainda com
 - Follow-up 2026-06-10: regra de espelho pessoal reabilitada para administradores quando eles estao explicitamente como consultor responsavel/auxiliar. Caso real validado: Ideal Automotive 2026-06-16 09:00, auxiliar Jose com espelho pessoal criado e `sync_error` nulo.
 - Reconciliacao remota reaplicada apos o ajuste: 14 visitas futuras ativas, 0 falhas, 10 espelhos pessoais criados/atualizados; 4 espelhos sem sucesso por usuarios sem Google pessoal conectado.
 - Follow-up 2026-06-10: bloqueios de agenda deixam de incluir `creator_email` e `associated_admins` como convidados do evento central. Caso real validado: bloqueio de Jose em 2026-06-23 08:00-16:00, criado por Mariane, reprocessado sem warnings e com espelho pessoal ativo apenas para Jose.
+- Follow-up 2026-07-29: a produção bloqueava o POST de `google-calendar-merged`/`google-calendar-sync` no preflight porque o Sentry envia `baggage` e `sentry-trace`, mas o CORS compartilhado não os declarava. O Chrome registrou `HeaderDisallowedByPreflightResponse` e a Agenda exibia `Failed to send a request to the Edge Function`; o contrato foi ampliado e coberto por teste de regressão.
 
 ### Gates
 
@@ -111,6 +112,7 @@ Auditoria somente leitura em 2026-06-02 encontrou 3 visitas canceladas ainda com
 - [x] `npm test` - 412 passed apos ajuste de bloqueio sem convite ao criador.
 - [x] `npm run build` - passed apos ajuste de bloqueio sem convite ao criador.
 - [x] `git diff --check` - passed.
+- [x] Teste de contrato CORS: `bun test supabase/functions/_shared/cors.test.ts`.
 
 ### File List
 
@@ -120,3 +122,5 @@ Auditoria somente leitura em 2026-06-02 encontrou 3 visitas canceladas ainda com
 - `supabase/functions/_shared/google_calendar_sync_rules.ts`
 - `scripts/reconcile_google_calendar_sync.ts`
 - `src/lib/agenda/google-calendar-sync-rules.test.ts`
+- `supabase/functions/_shared/cors.ts`
+- `supabase/functions/_shared/cors.test.ts`
