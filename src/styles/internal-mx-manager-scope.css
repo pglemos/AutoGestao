@@ -7,8 +7,11 @@
   --mx-border-strong: #e5e7eb;
   --mx-text: #1f2937;
   --mx-text-muted: #6b7280;
-  --mx-accent: #059669;
-  --mx-accent-soft: #ecfdf5;
+  /* Marca referenciada, não literal — §5 e §6. Este escopo declarava o mesmo
+     #059669 divergente que o escopo de gestão declarava, terceira cópia de um
+     verde que não é o do produto (#198653). */
+  --mx-accent: hsl(var(--mx-color-primary));
+  --mx-accent-soft: hsl(var(--mx-color-primary-subtle));
 }
 
 [data-mx-internal-scope='true'] :is(h1, h2, h3, h4, h5, h6, p, button, label).font-black {
@@ -325,7 +328,8 @@
 .mx-canonical-template [role='tab'][aria-selected='true'],
 .mx-canonical-template [role='tab'][aria-current='page'] {
   background: var(--mx-accent-soft);
-  color: #047857;
+  /* Tom escuro da marca, referenciado em vez de literal — §5 e §6. */
+  color: hsl(var(--mx-color-primary-active));
 }
 
 .mx-canonical-template :is([role='dialog'], [data-radix-dialog-content]) {
