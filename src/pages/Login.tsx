@@ -337,6 +337,8 @@ export default function Login() {
 
     if (authLoading && !profile) {
         return (
+            // lint-page-roots-ignore: estado de sincronização centrado, antes
+            // de o shell existir.
             <main className="min-h-screen bg-gray-900 flex flex-col items-center justify-center p-mx-md text-center">
                 <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" />
                 <Typography variant="caption" tone="white" className="animate-pulse">Sincronizando...</Typography>

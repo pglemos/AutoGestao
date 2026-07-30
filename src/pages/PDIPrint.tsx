@@ -32,6 +32,7 @@ export default function PDIPrint() {
     )
 
     if (error || !bundle) return (
+        // lint-page-roots-ignore: estado centrado de documento não encontrado.
         <div className="min-h-screen p-mx-20 text-center flex flex-col items-center justify-center bg-gray-50">
             <History size={48} className="text-gray-500 mb-6 opacity-20" />
             <Typography variant="h3" tone="muted" className="tracking-tighter">Plano ou permissão não localizados.</Typography>
@@ -59,6 +60,9 @@ export default function PDIPrint() {
     const metas24 = bundle.metas.filter((m: PDIMeta360) => m.prazo === '24_meses')
 
     return (
+        // lint-page-roots-ignore: documento para impressão. A largura é A4
+        // (max-w-[210mm]) e o padding vertical existe só na visualização em
+        // tela (print:py-0) — não é margem de página, é folha.
         <div className="min-h-screen bg-mx-indigo-50 font-sans print:bg-white flex flex-col items-center py-10 print:py-0 overflow-x-hidden">
             
             {/* Action Bar (Not Printed) */}

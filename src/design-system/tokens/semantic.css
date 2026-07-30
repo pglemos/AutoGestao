@@ -89,11 +89,31 @@
   --sidebar-accent-foreground: 240 6% 10%;
   --sidebar-border: var(--mx-color-sidebar-border);
   --sidebar-ring: var(--mx-blue-500);
+}
 
-  /* ==================================================================== */
-  /* Layout de página — §7 e §8                                           */
-  /* ==================================================================== */
+/* ====================================================================== */
+/* Layout de página — §7 e §8                                             */
+/* ====================================================================== */
 
+/*
+ * Publicados em `:root`, e não sob `.mx-ds` como as cores.
+ *
+ * A razão é que estes tokens são geometria, não identidade. O escopo `.mx-ds`
+ * existe para migrar *aparência* módulo a módulo sem repintar o app num único
+ * commit — faz sentido para cor, superfície e sombra. Margem de página não tem
+ * variante por módulo: 16/24/32 é o mesmo em toda rota, por definição.
+ *
+ * Consequência verificada: em `/terms`, que renderiza fora do AppShell e
+ * portanto fora de `.mx-ds`, `--mx-page-margin` resolve para 32px. Sob o escopo
+ * resolveria vazio, e qualquer container que dependesse dele cairia para
+ * padding zero.
+ *
+ * Ressalva honesta: nenhuma rota pública usa o PageCanvas hoje — login, termos,
+ * privacidade, 404 e pré-cadastro são cards centrados em viewport cheio, sem
+ * margem de página a padronizar. Esta promoção é correção de princípio e
+ * remoção de uma armadilha futura, não a solução de um bug ativo.
+ */
+:root {
   /* Espaçamento entre blocos, nomeado pela relação semântica que expressa,
      não pela medida. Trocar o valor aqui muda o ritmo do produto inteiro. */
   --mx-gap-inline: var(--mx-space-2);
@@ -133,7 +153,7 @@
    Os breakpoints são declarados uma única vez, aqui. Nenhuma rota decide a
    própria margem lateral; é isso que mantém títulos alinhados entre perfis. */
 @media (min-width: 600px) {
-  .mx-ds {
+  :root {
     --mx-page-margin: var(--mx-space-6);
     --mx-page-padding-top: var(--mx-space-6);
     --mx-page-padding-bottom: var(--mx-space-8);
@@ -141,7 +161,7 @@
 }
 
 @media (min-width: 840px) {
-  .mx-ds {
+  :root {
     --mx-page-margin: var(--mx-space-8);
     /* Vertical fica em 24px, não 32px: é o que o produto já pratica em toda
        rota autenticada (`py-mx-md`), medido em /ajuda antes da migração. §7.4

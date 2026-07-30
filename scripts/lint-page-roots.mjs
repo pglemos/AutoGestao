@@ -55,6 +55,16 @@ const DIAGNOSTIC_ONLY = Boolean(dirArg)
  * Utilitários que representam uma decisão de layout de página.
  * Cada um tem um substituto explícito no PageCanvas.
  */
+/**
+ * Classes próprias do projeto cuja forma coincide com utilitário de espaçamento.
+ *
+ * `mx-pre-shell` (definida em src/index.css) é um componente de página inteira,
+ * não `margin-x: pre-shell`. Estruturalmente é indistinguível de `p-mx-lg`
+ * — prefixo, hífen, nome — então a única saída correta é listar as exceções em
+ * vez de inventar uma heurística que erra nos dois sentidos.
+ */
+const PROJECT_CLASS_PREFIXES = [/^mx-pre-/, /^mx-ds$/]
+
 const PROHIBITED = [
   { re: /(^|\s)-?p[xylrtb]?-\S+/, rule: 'padding', fix: 'padding do PageCanvas' },
   { re: /(^|\s)-?m[xylrtb]?-(?!auto)\S+/, rule: 'margin', fix: 'gap semântico ou PageCanvas' },
@@ -210,13 +220,15 @@ function scanFile(filePath) {
     for (const { re, rule, fix } of PROHIBITED) {
       const match = classes.match(re)
       if (!match) continue
+      const utility = match[0].trim()
+      if (PROJECT_CLASS_PREFIXES.some((pattern) => pattern.test(utility))) continue
       const { line } = sourceFile.getLineAndCharacterOfPosition(opening.getStart(sourceFile))
       if (isIgnored(lines, line + 1)) continue
       violations.push({
         file: path.relative(ROOT_DIR, filePath).replace(/\\/g, '/'),
         line: line + 1,
         rule,
-        utility: match[0].trim(),
+        utility,
         fix,
       })
     }

@@ -40,6 +40,20 @@ describe('contrato de layout de página', () => {
     expect(semantic).toMatch(/@media \(min-width: 840px\)/)
   })
 
+  it('publica a geometria em :root, fora do escopo de migração de cor', () => {
+    // Login, termos, privacidade, 404 e pré-cadastro renderizam fora do
+    // AppShell. Se estes tokens ficassem sob `.mx-ds`, o PageCanvas cairia para
+    // padding zero justamente nas telas que um visitante vê primeiro.
+    const layoutBlock = semantic.slice(semantic.indexOf('Layout de página'))
+    expect(layoutBlock).toMatch(/:root \{/)
+    expect(layoutBlock).not.toMatch(/\.mx-ds \{[^}]*--mx-page-margin/)
+
+    for (const media of ['600px', '840px']) {
+      const query = semantic.slice(semantic.indexOf(`@media (min-width: ${media})`))
+      expect(query.slice(0, 200)).toMatch(/:root \{/)
+    }
+  })
+
   it('soma a safe area do dispositivo à reserva inferior', () => {
     // A regressão que isto pega: alguém trocar o calc() por um valor fixo e o
     // último botão sumir sob a barra de gestos do iOS.
