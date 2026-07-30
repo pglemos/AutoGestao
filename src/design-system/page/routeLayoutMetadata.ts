@@ -51,8 +51,9 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'meu-dia': { width: 'dashboard', bottomClearance: 'navigation' },
   'central-de-execucao': { width: 'dashboard' },
   'central-execucao': { width: 'dashboard' },
-  'terminal-mx': { width: 'dashboard', bottomClearance: 'navigation' },
-  'vendedor/terminal-mx': { width: 'dashboard', bottomClearance: 'navigation' },
+  // Checkin para vendedor; os outros perfis caem em ForbiddenRoute.
+  'terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
+  'vendedor/terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'relatorio-matinal': { width: 'dashboard' },
   'gerente/minha-equipe': { width: 'dashboard' },
   'gerente/vendas': { width: 'dashboard' },
@@ -178,7 +179,9 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'mentor-comercial': { width: 'reading', bottomClearance: 'actions' },
   'vendedor/mentor-comercial': { width: 'reading', bottomClearance: 'actions' },
   'gerente/mentor': { width: 'reading', bottomClearance: 'actions' },
-  'falar-consultor': { width: 'reading', bottomClearance: 'actions' },
+  // Não é conversa em coluna estreita como o consultor IA: é um painel de
+  // solicitações com cards e histórico. Medido em /falar-consultor.
+  'falar-consultor': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
 }
 
 /** Default consciente, não acidental: a maioria das telas é dashboard. */

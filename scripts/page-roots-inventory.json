@@ -1,8 +1,6 @@
 {
   "generatedAt": "2026-07-30",
   "counts": {
-    "src/features/checkin/Checkin.container.tsx": 2,
-    "src/features/dono/FalarConsultorDono.tsx": 1,
     "src/pages/ConsultorNotificacoes.tsx": 1
   }
 }

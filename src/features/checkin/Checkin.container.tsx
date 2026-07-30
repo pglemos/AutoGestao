@@ -8,6 +8,7 @@ import { CheckinHeader } from './sections/CheckinHeader'
 import { CheckinForm } from './sections/CheckinForm'
 import { CheckinErrorBoundary } from './components/CheckinErrorBoundary'
 import { useCheckinPage } from './hooks/useCheckinPage'
+import { PageCanvas } from '@/design-system/page'
 
 /**
  * Checkin.container — orquestra a tela de Fechamento Diário (UX-001 / ADR-0050).
@@ -62,6 +63,7 @@ export function Checkin() {
 
     if (role !== 'vendedor') {
         return (
+            // lint-page-roots-ignore: estado de acesso reservado centrado.
             <main className="h-full w-full flex flex-col items-center justify-center text-center p-mx-xl bg-white">
                 <ShieldCheck size={64} className="text-gray-500/20 mb-8" aria-hidden="true" />
                 <Typography variant="h2" className="mb-4">Acesso Reservado</Typography>
@@ -89,8 +91,8 @@ const previousCard = ctx.activeClosingContext.previousCard
     ]
 
   return (
-    <main className="relative min-h-full w-full min-w-0 bg-gray-50 px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg no-scrollbar pb-12">
-      <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-4">
+    <div className="relative min-h-full w-full min-w-0 bg-gray-50 no-scrollbar">
+      <PageCanvas as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-4">
             {checkinLoadError && (
                 <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error">
                     {checkinLoadError}
@@ -137,8 +139,8 @@ const previousCard = ctx.activeClosingContext.previousCard
                     onOpenHistory={() => setHistoryOpen(true)}
                 />
             </CheckinErrorBoundary>
-        </div>
-      </main>
+      </PageCanvas>
+    </div>
     )
 }
 

@@ -20,6 +20,7 @@ import { Card } from '@/components/molecules/Card'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
+import { PageCanvas } from '@/design-system/page'
 import {
   buildOwnerConsultantInitialMessage,
   buildOwnerConsultantInitialSubject,
@@ -231,7 +232,7 @@ export default function FalarConsultorDono() {
   }
 
   return (
-    <div className="flex flex-col gap-mx-lg bg-gray-50 p-mx-sm pb-28 md:p-mx-lg">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
       <header className="flex flex-col gap-mx-sm border-b border-gray-100 pb-mx-lg">
         <div className="flex flex-wrap items-center justify-between gap-mx-md">
           <div className="min-w-0">
@@ -415,6 +416,6 @@ export default function FalarConsultorDono() {
           ))}
         </div>
       </Card>
-    </div>
+    </PageCanvas>
   )
 }
