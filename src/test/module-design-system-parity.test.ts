@@ -114,7 +114,15 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     expect(roleVisualScope).not.toContain('mx-manager-scope')
     expect(managerScopeCss).toContain("[data-mx-visual-system='manager']")
     expect(managerScopeCss).not.toContain('.mx-manager-scope')
-    expect(managerScopeCss).toContain('--color-mx-action: #059669')
+    // A ação de gestão referencia o token único de marca, não um verde próprio.
+    // Media-se #059669 aqui contra hsl(152 69% 31%) na raiz: duas marcas verdes
+    // no mesmo produto, que §5 proíbe. Um hex literal de marca neste arquivo é
+    // regressão, então a asserção passou a exigir a referência.
+    expect(managerScopeCss).toContain('--color-mx-action: hsl(var(--mx-color-primary))')
+    // Casa declaração, não menção: o comentário do arquivo cita o hex antigo
+    // para explicar a correção, e um `toContain` cru reprovaria a documentação.
+    expect(managerScopeCss).not.toMatch(/--[\w-]+:\s*#059669/)
+    // Neutros e escala Base44 seguem literais: são contrato visual à parte.
     expect(managerScopeCss).toContain('--color-surface-alt: #f9fafb')
     expect(managerScopeCss).toContain('--color-text-primary: #1f2937')
   })

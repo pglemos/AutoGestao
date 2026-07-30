@@ -1,15 +1,25 @@
-/* Matriz visual canônica do Gerente aplicada aos perfis de gestão.
-   O escopo troca somente tokens semânticos. Vendedor permanece isolado. */
+/* Matriz visual canônica aplicada aos perfis de gestão.
+   O escopo troca somente tokens semânticos.
+
+   CORREÇÃO DE MARCA — §5 e §6
+   Os tokens de marca aqui eram #059669 (emerald do Tailwind), enquanto a raiz do
+   design system publica #198653 (152 69% 31%). Medido no navegador: o gerente
+   lia --color-brand-primary #059669 e a raiz, hsl(152 69% 31%) — duas marcas
+   verdes coexistindo no mesmo produto, que é a divergência que §5 proíbe e §6
+   resolve nomeando #198653 como a primária.
+
+   Agora referenciam o token único. Só a marca mudou; os neutros, raios e sombras
+   seguem sendo a escala medida do Base44, que é contrato visual à parte. */
 [data-mx-visual-system='manager'] {
-  --color-brand-primary: #059669;
-  --color-brand-primary-hover: #047857;
+  --color-brand-primary: hsl(var(--mx-color-primary));
+  --color-brand-primary-hover: hsl(var(--mx-color-primary-hover));
   --color-brand-secondary: #1f2937;
-  --color-mx-teal: #059669;
-  --color-mx-teal-light: #d1fae5;
-  --color-mx-teal-soft: #ecfdf5;
-  --color-mx-action: #059669;
-  --color-mx-action-hover: #047857;
-  --color-mx-action-light: #ecfdf5;
+  --color-mx-teal: hsl(var(--mx-color-primary));
+  --color-mx-teal-light: hsl(var(--mx-color-success-subtle));
+  --color-mx-teal-soft: hsl(var(--mx-color-primary-subtle));
+  --color-mx-action: hsl(var(--mx-color-primary));
+  --color-mx-action-hover: hsl(var(--mx-color-primary-hover));
+  --color-mx-action-light: hsl(var(--mx-color-primary-subtle));
   --color-mx-bg: #f9fafb;
   --color-mx-surface: #ffffff;
   --color-mx-border: #e5e7eb;
