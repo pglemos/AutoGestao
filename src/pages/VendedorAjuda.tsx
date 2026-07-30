@@ -5,11 +5,12 @@ import { Typography } from '@/components/atoms/Typography'
 import { Button } from '@/components/atoms/Button'
 import { Badge } from '@/components/atoms/Badge'
 import { SellerPageHeader } from '@/components/seller/SellerPageHeader'
+import { PageCanvas } from '@/design-system/page'
 
 export default function VendedorAjuda() {
   return (
-    <main className="w-full h-full flex flex-col overflow-y-auto no-scrollbar bg-gray-50 px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg">
-      <div className="mx-auto w-full max-w-[1500px] flex flex-col gap-4 pb-32">
+    <div className="w-full h-full overflow-y-auto no-scrollbar bg-gray-50">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-4">
         <SellerPageHeader icon={LifeBuoy} title="Ajuda" subtitle="Suporte operacional para o vendedor" />
 
         <section className="grid grid-cols-1 gap-mx-lg lg:grid-cols-3">
@@ -68,7 +69,7 @@ export default function VendedorAjuda() {
           </div>
         </Card>
       </section>
+      </PageCanvas>
     </div>
-  </main>
-)
+  )
 }

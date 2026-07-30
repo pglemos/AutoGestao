@@ -116,7 +116,9 @@
   /* Margem lateral e padding vertical — sobrescritos por breakpoint abaixo.
      Compact é o caso base: mobile-first, não desktop reduzido (§14). */
   --mx-page-margin: var(--mx-space-4);
-  --mx-page-padding-top: var(--mx-space-4);
+  /* 24px em todos os breakpoints: `py-mx-md` é constante nas páginas atuais,
+     só a margem lateral escalona. Medido em /ajuda antes da migração. */
+  --mx-page-padding-top: var(--mx-space-6);
   --mx-page-padding-bottom: var(--mx-space-6);
 
   /* Espaço reservado no fim da página para que o último conteúdo não fique
@@ -141,7 +143,11 @@
 @media (min-width: 840px) {
   .mx-ds {
     --mx-page-margin: var(--mx-space-8);
-    --mx-page-padding-top: var(--mx-space-8);
+    /* Vertical fica em 24px, não 32px: é o que o produto já pratica em toda
+       rota autenticada (`py-mx-md`), medido em /ajuda antes da migração. §7.4
+       permite 24 ou 32 em Expanded+; escolher o valor que já existe evita
+       deslocar o topo de todas as telas em 8px sem ganho. */
+    --mx-page-padding-top: var(--mx-space-6);
     --mx-page-padding-bottom: var(--mx-space-12);
   }
 }

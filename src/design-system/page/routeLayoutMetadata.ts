@@ -152,7 +152,9 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'gerente/feedbacks-pdis': { width: 'focused' },
   pdi: { width: 'focused' },
   'pdi/:id/print': { width: 'reading', bottomClearance: 'none' },
-  ajuda: { width: 'reading' },
+  // `dashboard`, não `reading`: a tela tem grid de três colunas e vivia em
+  // max-w-[1500px]. A largura de leitura estreita quebraria o layout aprovado.
+  ajuda: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
 
   // Conversação com IA: coluna estreita, porque diálogo é leitura sequencial
   // e não se beneficia de largura (§12).
