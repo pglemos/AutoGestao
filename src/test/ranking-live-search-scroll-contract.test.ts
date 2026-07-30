@@ -56,4 +56,15 @@ describe('contrato da classificação global', () => {
     expect(filters).toContain('type="search"')
     expect(filters).toContain('pointer-events-none')
   })
+
+  test('reserva espaço visual para a lupa mesmo sob o padding canônico', () => {
+    const css = read('src/styles/search-interactions.css')
+    const lojasHeader = read('src/features/lojas/sections/LojasHeader.tsx')
+    const networkFilters = read('src/features/network-dashboard/sections/NetworkFiltersSection.tsx')
+
+    expect(css).toContain(':where(.relative, [data-search-field]):has(svg.lucide-search) > input')
+    expect(css).toContain('padding-left: 2.75rem !important')
+    expect(lojasHeader).toContain('className="pl-mx-10"')
+    expect(networkFilters).toContain('className="pl-9"')
+  })
 })
