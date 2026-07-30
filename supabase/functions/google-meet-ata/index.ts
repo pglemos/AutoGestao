@@ -1,6 +1,7 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { requireAuthenticatedRole } from "../_shared/auth.ts";
+import { isInternalTokenAuthorized } from "../_shared/internal-token.ts";
 import { createServiceClient } from "../_shared/supabase-client.ts";
 import { getCentralGoogleAccessToken, CENTRAL_MEET_READ_SCOPE } from "../_shared/google.ts";
 
@@ -119,27 +120,11 @@ function isOnlineScheduleEvent(event: ScheduleEventSource) {
   return event.event_type === "evento_online" || isOnline(event.modality);
 }
 
-function isServiceRoleJwt(authHeader: string) {
-  if (!authHeader.startsWith("Bearer ")) return false;
-  const token = authHeader.slice("Bearer ".length);
-  const payload = token.split(".")[1];
-  if (!payload) return false;
-  try {
-    const normalized = payload.replace(/-/g, "+").replace(/_/g, "/");
-    const decoded = JSON.parse(atob(normalized.padEnd(Math.ceil(normalized.length / 4) * 4, "=")));
-    return decoded?.role === "service_role";
-  } catch {
-    return false;
-  }
-}
-
 async function authorize(req: Request) {
-  const serviceKey = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-  const authHeader = req.headers.get("Authorization") || "";
-  if ((serviceKey && authHeader === `Bearer ${serviceKey}`) || isServiceRoleJwt(authHeader)) return { ok: true, service: true };
-
   const cronSecret = Deno.env.get("MX_CRON_SECRET");
-  if (cronSecret && req.headers.get("x-mx-cron-secret") === cronSecret) return { ok: true, service: true };
+  if (isInternalTokenAuthorized(req.headers.get("x-mx-cron-secret"), cronSecret)) {
+    return { ok: true, service: true };
+  }
 
   const auth = await requireAuthenticatedRole(req, ["administrador_geral", "administrador_mx", "consultor_mx"]);
   if (auth.response) return { ok: false, response: auth.response };

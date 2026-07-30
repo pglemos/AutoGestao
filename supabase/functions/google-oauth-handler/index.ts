@@ -9,7 +9,6 @@ const GOOGLE_CLIENT_ID = Deno.env.get("GOOGLE_CLIENT_ID");
 const GOOGLE_CLIENT_SECRET = Deno.env.get("GOOGLE_CLIENT_SECRET");
 const GOOGLE_REDIRECT_URI = Deno.env.get("GOOGLE_REDIRECT_URI");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_JWT = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 const getSupabaseAdminKey = () => resolveSupabaseSecretKey(Deno.env.get);
 const getSupabasePublicKey = () => resolveSupabasePublishableKey(Deno.env.get);
 
@@ -53,10 +52,14 @@ async function fetchGoogleEmail(accessToken: string): Promise<string | null> {
 }
 
 async function invokeCalendarSync(body: Record<string, unknown>): Promise<boolean> {
+  const internalToken = requireEnv(
+    "GOOGLE_CALENDAR_SYNC_ADMIN_TOKEN",
+    Deno.env.get("GOOGLE_CALENDAR_SYNC_ADMIN_TOKEN"),
+  );
   const response = await fetch(`${requireEnv("SUPABASE_URL", SUPABASE_URL)}/functions/v1/google-calendar-sync`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_JWT)}`,
+      "x-google-calendar-sync-admin-token": internalToken,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),

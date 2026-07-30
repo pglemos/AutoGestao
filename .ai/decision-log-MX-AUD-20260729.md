@@ -92,9 +92,12 @@
   `SUPABASE_ANON_KEY` only as temporary cutover fallbacks. Invalid or absent
   maps without a fallback fail closed.
 - Scope: administrative and session clients in 15 Edge sources now use the
-  resolver. `google-calendar-sync`, `google-oauth-handler`,
-  `google-meet-ata` and `mx-critical-jobs-health` still need the legacy JWT
-  where it is used as `Authorization: Bearer`; a modern `sb_secret_...` key is
+  resolver. `google-calendar-sync` and `google-oauth-handler` replaced the
+  legacy Bearer with the existing dedicated internal token and manual
+  user-session verification. `google-meet-ata` now uses its dedicated cron
+  secret from Vault with manual user-session verification.
+  `mx-critical-jobs-health` still needs the legacy JWT because no dedicated
+  health token exists in the Postgres Vault; a modern `sb_secret_...` key is
   not a JWT and cannot replace that authentication contract directly.
 - Validation: 4 resolver tests, 16 focused tests, TypeScript typecheck and
   `deno check --node-modules-dir=auto` for all 11 changed Edge entrypoints

@@ -5,6 +5,7 @@ import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { resolveSupabaseSecretKey } from "../_shared/api-keys.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { requireEnv, encryptToken, decryptToken } from "../_shared/crypto.ts";
+import { isInternalTokenAuthorized } from "../_shared/internal-token.ts";
 import {
   createSessionClient,
   refreshAccessToken,
@@ -33,7 +34,6 @@ import {
 } from "../_shared/google_calendar_sync_rules.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_JWT = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 const getSupabaseAdminKey = () => resolveSupabaseSecretKey(Deno.env.get);
 const TIMEZONE = "America/Sao_Paulo";
 // Full system visibility is handled by google_calendar_privacy.ts/RLS.
@@ -235,28 +235,6 @@ function normalizeAttendees(attendees: (GoogleAttendee | null | undefined)[]): G
     normalized.push({ email, displayName: attendee?.displayName });
   }
   return normalized;
-}
-
-function getBearerJwtRole(authHeader?: string | null): string | null {
-  const token = authHeader?.match(/^Bearer\s+(.+)$/i)?.[1];
-  const payloadPart = token?.split(".")[1];
-  if (!payloadPart) return null;
-
-  try {
-    const normalized = payloadPart.replaceAll("-", "+").replaceAll("_", "/");
-    const padded = normalized + "=".repeat((4 - (normalized.length % 4)) % 4);
-    const payload = JSON.parse(atob(padded));
-    return typeof payload?.role === "string" ? payload.role : null;
-  } catch {
-    return null;
-  }
-}
-
-function isServiceRoleRequest(authHeader: string | null, serviceRoleBearer: string): boolean {
-  if (authHeader === serviceRoleBearer) return true;
-  // google-calendar-sync keeps Supabase JWT verification enabled; this only
-  // accepts a service_role JWT after the platform has validated the signature.
-  return getBearerJwtRole(authHeader) === "service_role";
 }
 
 function isOnlineModality(value?: string | null): boolean {
@@ -702,14 +680,19 @@ Deno.serve(async (req) => {
 
   try {
     const authHeader = req.headers.get("Authorization");
-    const serviceRoleBearer = `Bearer ${requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_JWT)}`;
     const adminSyncToken = Deno.env.get("GOOGLE_CALENDAR_SYNC_ADMIN_TOKEN");
     const adminSyncHeader = req.headers.get("x-google-calendar-sync-admin-token");
-    const isServiceRoleCall = isServiceRoleRequest(authHeader, serviceRoleBearer) || (adminSyncToken ? adminSyncHeader === adminSyncToken : false);
+    const isInternalCall = isInternalTokenAuthorized(adminSyncHeader, adminSyncToken);
     let sessionClient: any = null;
     let authUserId: string | null = null;
 
-    if (!isServiceRoleCall) {
+    if (!isInternalCall) {
+      if (!authHeader?.startsWith("Bearer ")) {
+        return new Response(JSON.stringify({ error: "Unauthorized" }), {
+          status: 401,
+          headers: { ...corsHeaders, "Content-Type": "application/json" },
+        });
+      }
       sessionClient = createSessionClient(authHeader);
       const { data: authData, error: authError } = await sessionClient.auth.getUser();
       if (authError || !authData.user) {
@@ -732,7 +715,7 @@ Deno.serve(async (req) => {
       return new Response(JSON.stringify({ error: "event.id, event.title and event.starts_at are required" }), { status: 400, headers: { ...corsHeaders, "Content-Type": "application/json" } });
     }
 
-    if (!isServiceRoleCall && sessionClient) {
+    if (!isInternalCall && sessionClient) {
       if (syncKind === "visit" && visit?.id) {
         visit = await loadAuthorizedVisit(sessionClient, visit.id);
       } else if (syncKind === "schedule_event" && scheduleEvent?.id) {

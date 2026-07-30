@@ -124,6 +124,13 @@ worktree: 1.686 testes e 13.896 asserts.
   policy. Existem 203 funções `SECURITY DEFINER`; 59 são executáveis por
   `anon` e 147 por `authenticated`.
 - Security Advisors: 218 achados, sendo 8 `INFO` e 210 `WARN`.
+- Performance Advisors: 578 achados, sendo 289 `INFO` e 289 `WARN`:
+  225 chaves estrangeiras sem índice de cobertura, 166 políticas com
+  `auth_rls_initplan`, 120 combinações com múltiplas policies permissivas,
+  62 índices não usados, 3 índices duplicados e 2 tabelas sem chave primária.
+  O inventário foi atualizado somente por leitura; remediação em massa
+  permanece bloqueada até haver snapshot restaurável, validação de hot paths
+  e rollback por lote.
 - As tabelas sem policy incluem `ai_model_daily_usage`,
   `carteira_missao_mutations`, `data_correction_audit`,
   `internal_mx_admin_rate_limits`, `password_change_challenges`,
@@ -424,10 +431,18 @@ as combinações.
   com fallback legado temporário. A tentativa de criar um secret customizado
   `SUPABASE_SECRET_KEY` foi rejeitada porque `SUPABASE_*` é reservado e não
   produziu alteração remota.
-- Permanecem usos legados intencionais em fluxos que tratam a `service_role`
-  JWT como Bearer (`google-calendar-sync`, `google-oauth-handler`,
-  `google-meet-ata` e `mx-critical-jobs-health`). Eles exigem autenticação
-  interna própria e testes negativos antes da desativação do JWT legado.
+- `google-calendar-sync` e `google-oauth-handler` deixaram de usar a
+  `service_role` JWT como Bearer: a chamada interna usa o secret dedicado já
+  presente e o endpoint valida manualmente token interno ou sessão do usuário,
+  retornando 401 sem autenticação. A publicação e o smoke ainda estão
+  pendentes.
+- `google-meet-ata` passou localmente a usar somente o segredo dedicado
+  `MX_CRON_SECRET`, já presente também no Vault do Postgres, com
+  `verify_jwt=false`, autenticação manual de usuários e migration reversível
+  que remove a service-role do transporte do cron.
+- Permanece um uso legado intencional em `mx-critical-jobs-health`: o segredo
+  dedicado existe apenas no runtime Edge, não no Vault do Postgres que invoca
+  o job. Removê-lo agora quebraria o cron ou exigiria mutação remota sem backup.
 - A migração local passou em 4 testes do resolver, 16 testes focados,
   typecheck e `deno check --node-modules-dir=auto` nos 11 entrypoints
   alterados. Ainda faltam revisão integral, deploy e smoke de runtime.

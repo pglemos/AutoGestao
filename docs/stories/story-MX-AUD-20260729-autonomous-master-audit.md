@@ -221,6 +221,10 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   `fbhcmzzgwjdgkctlfvbo`, estado `ACTIVE_HEALTHY`; backup restaurável não
   comprovado e drift banco/Git identificado. Evidência: seções 6–7 do
   relatório final e `.ai/decision-log-MX-AUD-20260729.md`.
+- 2026-07-29: advisors Supabase atualizados somente por leitura: segurança
+  permaneceu em 218 achados (8 `INFO`, 210 `WARN`) e performance retornou 578
+  achados (289 `INFO`, 289 `WARN`). Nenhuma remediação remota foi executada
+  sem snapshot restaurável e rollback por lote.
 - 2026-07-29: login real do Dono revelou e permitiu corrigir o contexto de
   `Outlet`; `/home` e `/plano-acao` passaram sem erro de console/network.
   Evidência: `output/playwright/dono-shell-unificado-nav-1440x900.png`.
@@ -317,8 +321,9 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   `SUPABASE_PUBLISHABLE_KEYS.default`, mantendo fallback temporário.
 - 2026-07-29: o resolver moderno passou 4/4 testes, a seleção focada passou
   16/16, typecheck retornou 0 e 11 entrypoints passaram em
-  `deno check --node-modules-dir=auto`. Quatro fluxos Bearer continuam
-  dependentes do JWT legado até receberem autenticação interna própria.
+  `deno check --node-modules-dir=auto`. Após a migração OAuth/Calendar, dois
+  fluxos Bearer continuam dependentes do JWT legado até receberem autenticação
+  interna própria.
 - 2026-07-29: o Deno check com `node-modules-dir=auto` substituiu links do
   `node_modules` pelo layout Deno e fez 219 testes DOM falharem. `npm ci`
   restaurou o lockfile; o teste novo deixou de depender de `screen` global e a
@@ -330,15 +335,22 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - 2026-07-29: CodeRabbit integral revisou os 39 arquivos e retornou cinco
   achados. Foram aplicados a validação explícita de `SUPABASE_URL`, resolução
   tardia de chaves para preservar OPTIONS/CORS e remoção do Dono da matriz
-  pública. Foi rejeitada a troca da JWT Bearer por `sb_secret_...` porque a
-  chave moderna não é JWT; `google-meet-ata` e `mx-critical-jobs-health`
-  permanecem na matriz de consumidores, mas não na File List porque não foram
-  modificados.
+  pública. Foi rejeitada a troca direta da JWT Bearer por `sb_secret_...`
+  porque a chave moderna não é JWT.
 - 2026-07-29: a segunda revisão integral retornou quatro achados. Foram
   aplicados WCAG 2.2 AA e o gate auditável da exceção. A segregação de scripts
   foi documentada por identidade/RPC/broker porque `sb_secret_...` não oferece
   escopo read-only por chave. A sugestão de usar essa chave moderna como Bearer
   foi rejeitada novamente porque ela não é JWT.
+- 2026-07-29: `google-oauth-handler` e `google-calendar-sync` migraram
+  localmente do Bearer legado para `GOOGLE_CALENDAR_SYNC_ADMIN_TOKEN`; a
+  presença remota do nome foi confirmada sem ler o valor. O endpoint usa
+  `verify_jwt=false`, valida token interno ou sessão manualmente e retorna 401
+  sem autenticação. Testes negativos impedem reintrodução do Bearer legado.
+- 2026-07-29: `google-meet-ata` migrou localmente para o segredo dedicado
+  `MX_CRON_SECRET`; a migration usa o nome correspondente já confirmado no
+  Vault e não transporta service-role. `mx-critical-jobs-health` permanece
+  legado porque não há token dedicado correspondente no Vault do Postgres.
 ### Completion Notes List
 
 - AppShell ativo convergiu para uma única implementação `Layout` /
@@ -442,7 +454,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/pages/Terms.tsx`
 - `src/test/public-routes-a11y.playwright.ts`
 - `src/lib/supabase-edge-api-keys.test.ts`
+- `src/lib/google-calendar-internal-auth.test.ts`
+- `src/lib/google-meet-ata-internal-auth.test.ts`
+- `supabase/config.toml`
 - `supabase/functions/_shared/api-keys.ts`
+- `supabase/functions/_shared/internal-token.ts`
 - `supabase/functions/_shared/auth.ts`
 - `supabase/functions/_shared/drive-upload.ts`
 - `supabase/functions/_shared/google.ts`
@@ -451,6 +467,9 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `supabase/functions/executive-agenda-google-sync/index.ts`
 - `supabase/functions/google-calendar-events/index.ts`
 - `supabase/functions/google-calendar-sync/index.ts`
+- `supabase/functions/google-meet-ata/index.ts`
+- `supabase/functions/google-oauth-handler/index.ts`
+- `supabase/migrations/20260729140000_google_meet_ata_dedicated_cron_auth.sql`
 - `supabase/functions/google-drive-files/index.ts`
 - `supabase/functions/google-oauth-handler/index.ts`
 - `supabase/functions/manage-global-user/index.ts`
