@@ -1,6 +1,7 @@
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
 import { z } from 'https://esm.sh/zod@3.23.8'
+import { findSupabasePublishableKey, findSupabaseSecretKey } from '../_shared/api-keys.ts'
 import { corsHeaders } from '../_shared/cors.ts'
 import { initSentryForEdge, withSentry } from '../_shared/sentry.ts'
 
@@ -53,8 +54,8 @@ serve((req) => withSentry('manage-store-team', req, async () => {
   if (req.method !== 'POST') return jsonResponse({ success: false, error: 'Method not allowed' }, 405)
 
   const supabaseUrl = Deno.env.get('SUPABASE_URL') ?? ''
-  const serviceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-  const anonKey = Deno.env.get('SUPABASE_ANON_KEY') ?? ''
+  const serviceKey = findSupabaseSecretKey(Deno.env.get) ?? ''
+  const anonKey = findSupabasePublishableKey(Deno.env.get) ?? ''
   if (!supabaseUrl || !serviceKey || !anonKey) return genericFailure()
 
   const authHeader = req.headers.get('Authorization') || ''

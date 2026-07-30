@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { resolveSupabasePublishableKey, resolveSupabaseSecretKey } from "./api-keys.ts";
 import { requireEnv, encryptToken, decryptToken } from "./crypto.ts";
 import {
   getGoogleMeetCohostActions,
@@ -33,10 +34,9 @@ export async function refreshAccessToken(refreshToken: string): Promise<{ access
 export function createSessionClient(authHeader: string | null) {
   if (!authHeader?.startsWith("Bearer ")) throw new Error("Missing bearer token");
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-  const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
   return createClient(
     requireEnv("SUPABASE_URL", SUPABASE_URL),
-    requireEnv("SUPABASE_ANON_KEY", SUPABASE_ANON_KEY ?? undefined),
+    resolveSupabasePublishableKey(Deno.env.get),
     {
       global: { headers: { Authorization: authHeader } },
       auth: { persistSession: false, autoRefreshToken: false },
@@ -87,10 +87,9 @@ export async function getCentralGoogleAccessToken(requiredScopes: string[] = [])
   }
 
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-  const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   const adminClient = createClient(
     requireEnv("SUPABASE_URL", SUPABASE_URL),
-    requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY),
+    resolveSupabaseSecretKey(Deno.env.get),
     { auth: { persistSession: false, autoRefreshToken: false } },
   );
   const { data: tokenRow } = await adminClient
@@ -144,10 +143,9 @@ export async function getCentralDriveAccessToken(): Promise<string | null> {
   if (token) return token;
 
   const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-  const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
   const adminClient = createClient(
     requireEnv("SUPABASE_URL", SUPABASE_URL),
-    requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY),
+    resolveSupabaseSecretKey(Deno.env.get),
     { auth: { persistSession: false, autoRefreshToken: false } },
   );
   const { data: tokenRow } = await adminClient

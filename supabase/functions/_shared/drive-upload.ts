@@ -1,9 +1,9 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { resolveSupabaseSecretKey } from "./api-keys.ts";
 import { requireEnv } from "./crypto.ts";
 import { getCentralDriveAccessToken } from "./google.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
 const INTERNAL_ROLES = ["administrador_geral", "administrador_mx", "consultor_mx"];
 
 export type DriveDocTipo = "pdi" | "feedback" | "relatorios" | "plano_acao" | "dre_financeiro" | "visitas";
@@ -15,7 +15,7 @@ type SupabaseAdminClient = {
 function makeAdminClient() {
   return createClient(
     requireEnv("SUPABASE_URL", SUPABASE_URL),
-    requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY),
+    resolveSupabaseSecretKey(Deno.env.get),
     { auth: { persistSession: false, autoRefreshToken: false } },
   ) as unknown as SupabaseAdminClient;
 }

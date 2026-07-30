@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { resolveSupabaseSecretKey } from "../_shared/api-keys.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { requireEnv } from "../_shared/crypto.ts";
 import {
@@ -13,7 +14,7 @@ import {
 declare const EdgeRuntime: { waitUntil?: (promise: Promise<unknown>) => void } | undefined;
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const getSupabaseAdminKey = () => resolveSupabaseSecretKey(Deno.env.get);
 const FOLDER_MIME_TYPE = "application/vnd.google-apps.folder";
 const MAX_FILE_SIZE_BYTES = 25 * 1024 * 1024;
 const INTERNAL_ROLES = new Set(["administrador_geral", "administrador_mx", "consultor_mx"]);
@@ -105,8 +106,6 @@ function decodeJwtPayload(token: string): Record<string, unknown> | null {
 }
 
 function isServiceRoleBearer(authHeader: string): boolean {
-  const serviceRoleKey = requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY);
-  if (authHeader === `Bearer ${serviceRoleKey}`) return true;
   if (!authHeader.startsWith("Bearer ")) return false;
   return decodeJwtPayload(authHeader.slice("Bearer ".length))?.role === "service_role";
 }
@@ -570,7 +569,7 @@ async function authenticate(req: Request): Promise<
 
   const adminClient = createClient(
     requireEnv("SUPABASE_URL", SUPABASE_URL),
-    requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY),
+    getSupabaseAdminKey(),
   ) as unknown as SupabaseEdgeClient;
   const { data: profile, error: profileError } = await adminClient
     .from("usuarios")
@@ -656,7 +655,7 @@ Deno.serve(async (req) => {
     if (isServiceRole) {
       adminClient = createClient(
         requireEnv("SUPABASE_URL", SUPABASE_URL),
-        requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY),
+        getSupabaseAdminKey(),
       ) as unknown as SupabaseEdgeClient;
       userId = ""; // service role — created_by will be null
     } else if (action === "setup_all") {

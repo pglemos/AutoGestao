@@ -64,10 +64,10 @@ export default function Privacy() {
                                     <div className="w-mx-10 h-mx-10 rounded-mx-lg bg-mx-black text-brand-primary flex items-center justify-center shadow-mx-lg"><CalendarDays size={20} /></div>
                                     <Typography variant="h2" className="text-2xl uppercase tracking-tighter">Uso de Dados do Google Calendar e Meet</Typography>
                                 </header>
-                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight opacity-70">
+                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight">
                                     Quando um usuario autoriza a integracao, o MX PERFORMANCE acessa eventos do Google Calendar e artefatos autorizados do Google Meet somente para exibir, criar, atualizar e sincronizar visitas, aulas, eventos online, links de reuniao, transcricoes e atas relacionadas ao trabalho da MX Consultoria. O sistema nao vende dados do Google, nao usa dados do Google Calendar ou Google Meet para publicidade e nao compartilha essas informacoes com terceiros fora da operacao autorizada.
                                 </Typography>
-                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight opacity-70 block">
+                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight block">
                                     O usuario pode revogar o acesso a qualquer momento pela conta Google em Seguranca &gt; Apps e servicos de terceiros, ou solicitar remocao de dados pelo canal administrativo da MX Consultoria.
                                 </Typography>
                             </div>
@@ -77,7 +77,7 @@ export default function Privacy() {
                                     <div className="w-mx-10 h-mx-10 rounded-mx-lg bg-mx-black text-brand-primary flex items-center justify-center shadow-mx-lg"><ShieldCheck size={20} /></div>
                                     <Typography variant="h2" className="text-2xl uppercase tracking-tighter">Arquitetura de Blindagem</Typography>
                                 </header>
-                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight opacity-70">
+                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight">
                                     Mantemos registros de auditoria para alteracoes relevantes no sistema e aplicamos controles de acesso para proteger informacoes operacionais, comerciais e de agenda.
                                 </Typography>
                             </div>
@@ -88,9 +88,9 @@ export default function Privacy() {
                                 <ArrowLeft size={16} className="mr-2" /> VOLTAR AO SISTEMA
                             </Button>
                             <div className="text-center sm:text-right space-y-mx-tiny">
-                                <Link to="/" className="text-xs font-black text-brand-primary uppercase tracking-widest hover:text-brand-primary-hover">MX PERFORMANCE</Link>
+                                <Link to="/" className="text-xs font-black text-mx-green-800 uppercase tracking-widest hover:text-mx-green-900">MX PERFORMANCE</Link>
                                 <Typography variant="tiny" tone="muted" className="font-black">MX CONSULTORIA LTDA © {new Date().getFullYear()}</Typography>
-                                <Typography variant="tiny" tone="muted" className="font-black opacity-20 block tracking-widest">POLITICA PUBLICA DE PRIVACIDADE</Typography>
+                                <Typography variant="tiny" tone="muted" className="font-black block tracking-widest">POLITICA PUBLICA DE PRIVACIDADE</Typography>
                             </div>
                         </footer>
                     </CardContent>

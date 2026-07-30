@@ -66,7 +66,7 @@ export default function Terms() {
                                     <div className="w-mx-10 h-mx-10 rounded-mx-lg bg-mx-black text-brand-primary flex items-center justify-center shadow-mx-lg"><Zap size={20} /></div>
                                     <Typography variant="h2" className="text-2xl uppercase tracking-tighter">Desempenho e Disponibilidade</Typography>
                                 </header>
-                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight opacity-70">
+                                <Typography variant="caption" tone="muted" className="text-base font-black leading-relaxed uppercase tracking-tight">
                                     As informações transacionadas via interface (Lançamentos Diários, Metas, Feedbacks) são estritamente para fins de consultoria operacional. A MX assegura as melhores tecnologias para processamento dos índices preditivos com alta disponibilidade.
                                 </Typography>
                             </div>
@@ -78,7 +78,7 @@ export default function Terms() {
                             </Button>
                             <div className="text-center sm:text-right space-y-mx-tiny">
                                 <Typography variant="tiny" tone="muted" className="font-black uppercase">MX CONSULTORIA LTDA © {new Date().getFullYear()}</Typography>
-                                <Typography variant="tiny" tone="muted" className="font-black opacity-20 block tracking-widest uppercase">PLATAFORMA LICENCIADA</Typography>
+                                <Typography variant="tiny" tone="muted" className="font-black block tracking-widest uppercase">PLATAFORMA LICENCIADA</Typography>
                             </div>
                         </footer>
                     </CardContent>

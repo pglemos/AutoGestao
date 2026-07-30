@@ -413,7 +413,7 @@ export default function Login() {
                 <div className="lg:hidden mb-12 text-center">
                     <img src={MxLogo} alt="MX Performance" className="w-mx-20 h-mx-20 object-contain mx-auto mb-6" />
                     <h1 className="text-2xl font-black text-text-primary tracking-tight">
-                        MX <span className="text-mx-green-700">PERFORMANCE</span>
+                        MX <span className="text-mx-green-800">PERFORMANCE</span>
                     </h1>
                 </div>
 

@@ -1,5 +1,6 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { resolveSupabasePublishableKey, resolveSupabaseSecretKey } from "../_shared/api-keys.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { requireEnv, encryptToken } from "../_shared/crypto.ts";
 import { parseClientId, assertClientAccess } from "../_shared/google.ts";
@@ -8,8 +9,9 @@ const GOOGLE_CLIENT_ID = Deno.env.get("GOOGLE_CLIENT_ID");
 const GOOGLE_CLIENT_SECRET = Deno.env.get("GOOGLE_CLIENT_SECRET");
 const GOOGLE_REDIRECT_URI = Deno.env.get("GOOGLE_REDIRECT_URI");
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
-const SUPABASE_ANON_KEY = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
+const SUPABASE_SERVICE_ROLE_JWT = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const getSupabaseAdminKey = () => resolveSupabaseSecretKey(Deno.env.get);
+const getSupabasePublicKey = () => resolveSupabasePublishableKey(Deno.env.get);
 
 const GOOGLE_PERSONAL_SCOPE = "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/userinfo.email";
 const GOOGLE_CENTRAL_SCOPE = "https://www.googleapis.com/auth/calendar.events https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/meetings.space.created https://www.googleapis.com/auth/meetings.space.readonly https://www.googleapis.com/auth/userinfo.email";
@@ -54,7 +56,7 @@ async function invokeCalendarSync(body: Record<string, unknown>): Promise<boolea
   const response = await fetch(`${requireEnv("SUPABASE_URL", SUPABASE_URL)}/functions/v1/google-calendar-sync`, {
     method: "POST",
     headers: {
-      Authorization: `Bearer ${requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY)}`,
+      Authorization: `Bearer ${requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_JWT)}`,
       "Content-Type": "application/json",
     },
     body: JSON.stringify(body),
@@ -325,7 +327,7 @@ Deno.serve(async (req) => {
         if (!req.headers.get("Authorization")?.startsWith("Bearer ")) throw new Error("Missing bearer token");
         const sessionClient = createClient(
           requireEnv("SUPABASE_URL", SUPABASE_URL),
-          requireEnv("SUPABASE_ANON_KEY", SUPABASE_ANON_KEY),
+          getSupabasePublicKey(),
           { global: { headers: { Authorization: req.headers.get("Authorization")! } }, auth: { persistSession: false, autoRefreshToken: false } },
         );
         const { data, error } = await sessionClient.auth.getUser();
@@ -336,7 +338,7 @@ Deno.serve(async (req) => {
       const body = await req.json().catch(() => ({}));
       const clientId = parseClientId(body.clientId);
       const isCentralConnection = body?.central === true || body?.purpose === "central";
-      const adminClient = createClient(requireEnv("SUPABASE_URL", SUPABASE_URL), requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY));
+      const adminClient = createClient(requireEnv("SUPABASE_URL", SUPABASE_URL), getSupabaseAdminKey());
 
       if (isCentralConnection) {
         const { data: roleCheck, error: roleError } = await adminClient
@@ -350,7 +352,7 @@ Deno.serve(async (req) => {
 
       if (clientId) {
         await assertClientAccess(
-          createClient(requireEnv("SUPABASE_URL", SUPABASE_URL), requireEnv("SUPABASE_ANON_KEY", SUPABASE_ANON_KEY), {
+          createClient(requireEnv("SUPABASE_URL", SUPABASE_URL), getSupabasePublicKey(), {
             global: { headers: { Authorization: req.headers.get("Authorization") ?? "" } },
             auth: { persistSession: false, autoRefreshToken: false },
           }),
@@ -379,7 +381,7 @@ Deno.serve(async (req) => {
 
     if (!state) throw new Error("Missing state");
 
-    const adminClient = createClient(requireEnv("SUPABASE_URL", SUPABASE_URL), requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY));
+    const adminClient = createClient(requireEnv("SUPABASE_URL", SUPABASE_URL), getSupabaseAdminKey());
 
     const { data: stateRow, error: stateError } = await adminClient
       .from("estados_oauth_google_consultoria")

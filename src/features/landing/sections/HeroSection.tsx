@@ -26,7 +26,6 @@ export function HeroSection({ heroVapourRef, consoleRef }: Props) {
                   ref={heroVapourRef}
                   id="hero-vapour"
                   className="vapour-host"
-                  aria-label="ciclo de palavras-chave da operação"
                 >
                   improviso.
                 </span>

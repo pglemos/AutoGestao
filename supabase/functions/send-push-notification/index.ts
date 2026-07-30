@@ -10,18 +10,19 @@
 //
 // ENV requeridos:
 //   • SUPABASE_URL
-//   • SUPABASE_SERVICE_ROLE_KEY
+//   • SUPABASE_SECRET_KEYS (fallback temporário: SUPABASE_SERVICE_ROLE_KEY)
 //   • VAPID_PUBLIC_KEY
 //   • VAPID_PRIVATE_KEY
 //   • VAPID_SUBJECT (ex.: "mailto:gestao@mxconsultoria.com.br")
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import webPush from "https://esm.sh/web-push@3.6.7";
+import { resolveSupabaseSecretKey } from "../_shared/api-keys.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { canManageStore, isAdminRole, requireAuthenticatedRole } from "../_shared/auth.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const getSupabaseAdminKey = () => resolveSupabaseSecretKey(Deno.env.get);
 const VAPID_PUBLIC_KEY = Deno.env.get("VAPID_PUBLIC_KEY");
 const VAPID_PRIVATE_KEY = Deno.env.get("VAPID_PRIVATE_KEY");
 const VAPID_SUBJECT = Deno.env.get("VAPID_SUBJECT") || "mailto:gestao@mxconsultoria.com.br";
@@ -97,7 +98,7 @@ Deno.serve(async (req) => {
       }
     }
 
-    const admin = createClient(SUPABASE_URL!, SUPABASE_SERVICE_ROLE_KEY!);
+    const admin = createClient(SUPABASE_URL!, getSupabaseAdminKey());
 
     // Carrega subscriptions ativas conforme filtro
     let query = admin

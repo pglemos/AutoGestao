@@ -1,4 +1,5 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { resolveSupabasePublishableKey, resolveSupabaseSecretKey } from "./api-keys.ts";
 import { corsHeaders } from "./cors.ts";
 
 export type MxRole = "administrador_geral" | "administrador_mx" | "consultor_mx" | "dono" | "gerente" | "vendedor";
@@ -40,9 +41,8 @@ export async function requireAuthenticatedRole(req: Request, allowedRoles: MxRol
   }
 
   const supabaseUrl = requireEnv("SUPABASE_URL");
-  const serviceKey = requireEnv("SUPABASE_SERVICE_ROLE_KEY");
-  const anonKey = Deno.env.get("SUPABASE_ANON_KEY") ?? Deno.env.get("SUPABASE_PUBLISHABLE_KEY");
-  if (!anonKey) throw new Error("Missing env var: SUPABASE_ANON_KEY");
+  const serviceKey = resolveSupabaseSecretKey(Deno.env.get);
+  const anonKey = resolveSupabasePublishableKey(Deno.env.get);
 
   const sessionClient = createClient(supabaseUrl, anonKey, {
     global: { headers: { Authorization: authHeader } },

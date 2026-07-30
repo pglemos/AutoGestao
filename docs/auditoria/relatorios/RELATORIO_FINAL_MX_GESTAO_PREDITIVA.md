@@ -188,6 +188,14 @@ worktree: 1.686 testes e 13.896 asserts.
 | Administrador Geral | shell e contratos verdes | `/painel`, `/lojas`, `/agenda`, `/configuracoes`, `/auditoria` | parcial |
 | Consultor MX | 2 perfis reais encontrados | login funcional bloqueado | conta nominal autentica, mas `usuarios.active` retorna 401/nulo; segunda conta retorna Auth 400 |
 
+Uma reconciliação read-only posterior, sem expor identificadores, confirmou que
+os dois perfis têm identidade Auth confirmada e histórico de login. O primeiro
+está inativo no perfil; o segundo está ativo e com troca de senha pendente.
+Nenhum está banido ou excluído no Auth. Isso descarta criação de duplicata, mas
+não autoriza redefinir credencial ou reativar identidade: o caminho seguro
+continua sendo recuperação controlada pelo titular ou ação autenticada do Admin
+MX sobre a identidade correta, seguida de login e releitura persistida.
+
 ### 9.1 Inventário reproduzível de rotas, autorização e dados
 
 O comando `npm run audit:routes-data` analisa o AST de `src/App.tsx`, cruza
@@ -337,12 +345,51 @@ Em todas as combinações:
 Também foram capturados os quatro drawers em
 `output/playwright/*-drawer-320x568.png`.
 
+### Rotas públicas
+
+O Chrome real percorreu as oito rotas públicas catalogadas. `/`, `/login`,
+`/forgot-password`, `/reset-password`, `/privacy` e `/terms` responderam 200
+sem erro de console ou falha de rede; `/dono/home` redirecionou para `/login`.
+`/pre-cadastro/:storeSlug` foi validada com uma loja ativa derivada somente em
+memória: loja carregada, formulário visível, zero erro de console e zero falha
+de rede, sem registrar nome ou slug.
+
+A landing `/` não possuía landmark principal. Um teste de componente reproduziu
+a ausência, a raiz visual foi alterada de `div` para `main` sem mudança de
+classes e a revalidação confirmou exatamente um `main`, um `h1`, zero erro de
+console e zero falha de rede.
+
+Axe 4.11.4, com movimento reduzido para estabilizar as transições, reproduziu
+violações sérias de ARIA e contraste. As correções removeram o atributo ARIA
+proibido, elevaram o contraste de textos da landing com tokens existentes e
+ajustaram os textos pequenos de Privacidade/Termos. O teste Playwright passou em
+7/7 rotas públicas; o pré-cadastro com loja real também retornou zero violação
+séria/crítica.
+
+A matriz responsiva pública percorreu 8 rotas × 13 viewports, totalizando
+104/104 combinações. Um overflow móvel da landing foi reproduzido e atribuído
+a decorações absolutas do hero/veredito e ao título do rodapé; regras
+responsivas mantiveram as decorações dentro do container. A repetição terminou
+com um `main`, zero overflow, zero erro de console e zero falha de rede em todas
+as combinações.
+
 ## 16. Secret scan
 
-- `gitleaks` não está instalado na worktree; o gate oficial de histórico
-  completo permanece pendente.
-- O scan atual de arquivos rastreados, diff e staged diff retornou zero
-  arquivos/linhas compatíveis com tokens GitHub, Supabase, Sentry ou Vercel.
+- O binário oficial Gitleaks 8.30.1 foi baixado em diretório temporário e teve
+  checksum verificado; nenhum binário foi adicionado ao repositório.
+- O scan redigido de 2.074 commits encontrou 86 ocorrências históricas: 53
+  `generic-api-key`, 15 `jwt`, 15 `supabase-service-role-key-suspicious` e 3
+  `private-key`.
+- Dez scripts diagnósticos atuais continham JWTs/service-role Supabase reais e
+  foram removidos. Eram scripts avulsos não referenciados, imprimiam dados
+  sensíveis/PII e continuam recuperáveis pelo histórico Git.
+- Após as remoções, o scan do diretório retornou 34 ocorrências: 28 rastreadas
+  e 6 no `dist/` ignorado. As seis do build são a chave pública `anon`; as 28
+  rastreadas foram revisadas como falsos positivos de exemplos documentais,
+  referência a GitHub Secret, checksums de migrations e identificadores PMR.
+- Um segundo scan sobre a cópia dos arquivos rastreados existentes confirmou
+  as mesmas 28 ocorrências revisadas, sem JWT/service-role real no estado
+  corrente rastreado.
 - Busca local por padrões de tokens reais GitHub/Supabase/Sentry não encontrou
   os valores fornecidos nesta execução em arquivos do repositório.
 - A senha operacional compartilhada estava versionada em 21 arquivos,
@@ -353,10 +400,60 @@ Também foram capturados os quatro drawers em
   alterados passaram em `node --check`.
 - A rotação das contas continua obrigatória porque o segredo foi exposto no
   histórico e nesta conversa.
+- A exposição da `service_role` Supabase é um incidente ativo: a rotação é
+  imediata e não depende de preview, backup ou deploy. A documentação oficial
+  atual orienta criar uma nova `sb_secret_...`, substituir consumidor por
+  consumidor e só então desabilitar a chave JWT legada; as duas famílias
+  coexistem durante a migração. Rotacionar diretamente o JWT legado antes da
+  substituição quebraria consumidores e a verificação JWT de Edge Functions.
+- O inventário por nome/presença confirmou
+  `SUPABASE_SERVICE_ROLE_KEY` e `SUPABASE_SECRET_KEY` na Vercel em
+  development/preview/production, nenhuma `service_role` nos secrets do GitHub
+  Actions, 17 fontes de Edge Functions e 34 scripts operacionais dependentes do
+  nome legado. A chave publishable moderna existe, mas a `anon` legada segue
+  habilitada. O ledger individual de responsável, evidência, substituição,
+  teste e desativação está em
+  `docs/auditoria/matrizes/MATRIZ_ROTACAO_CREDENCIAIS_MX.md`.
+- A variável moderna desalinhada na Vercel foi corrigida pela autoridade
+  DevOps e uma comparação efêmera confirmou correspondência em development,
+  preview e production. O runtime da aplicação ainda consome o nome legado;
+  portanto a ação prepara o cutover, mas não encerra a rotação.
+- Os clientes Edge administrativos e de sessão foram migrados localmente para
+  preferir `SUPABASE_SECRET_KEYS.default` e
+  `SUPABASE_PUBLISHABLE_KEYS.default`, mapas JSON gerenciados pela plataforma,
+  com fallback legado temporário. A tentativa de criar um secret customizado
+  `SUPABASE_SECRET_KEY` foi rejeitada porque `SUPABASE_*` é reservado e não
+  produziu alteração remota.
+- Permanecem usos legados intencionais em fluxos que tratam a `service_role`
+  JWT como Bearer (`google-calendar-sync`, `google-oauth-handler`,
+  `google-meet-ata` e `mx-critical-jobs-health`). Eles exigem autenticação
+  interna própria e testes negativos antes da desativação do JWT legado.
+- A migração local passou em 4 testes do resolver, 16 testes focados,
+  typecheck e `deno check --node-modules-dir=auto` nos 11 entrypoints
+  alterados. Ainda faltam revisão integral, deploy e smoke de runtime.
+- A exceção operacional expira em **2026-07-30 18:00 BRT**. Até o corte, os dez
+  consumidores obsoletos foram removidos, novos usos humanos da chave exposta
+  ficam bloqueados e os consumidores produtivos remanescentes são classificados
+  como expostos. No prazo, devem migrar para chaves secretas separadas por
+  backend e ter o legado desabilitado; se isso não ocorrer, os workloads
+  afetados devem ser desabilitados e qualquer exceção renovada precisa de
+  responsável e expiração menor. Reescrita de histórico é separada e não
+  substitui rotação.
 - Nenhum segredo fornecido nesta conversa foi adicionado pelas mudanças desta
   story.
-- A revisão CodeRabbit repetida sobre o diff final terminou com código 0 e zero
-  achados nos quatro arquivos rastreados pelo revisor.
+- A revisão CodeRabbit mais recente executou e apontou um achado major válido:
+  a documentação condicionava indevidamente a rotação ao preview/backup. O
+  texto foi corrigido para tratar a exposição como incidente imediato, com
+  substituição coordenada e exceção curta.
+- A repetição seguinte apontou dois majors válidos: ausência de ledger
+  consumidor por consumidor e ausência de gate explícito para Git completo,
+  logs, screenshots, caches e artefatos de CI. Ambos foram incorporados; o gate
+  permanece pendente até uma nova revisão retornar sem achados.
+- A revisão posterior retornou zero achados, mas seu payload comprovou que os
+  três arquivos ainda não rastreados não entraram na análise. Após preparar o
+  índice com todos os arquivos desta story, a tentativa integral retornou
+  `rate_limit` com espera de 40 minutos. Portanto, o parecer parcial não
+  autoriza commit e o gate integral continua pendente.
 
 ## 17. Conclusão baseada em evidências
 
@@ -366,3 +463,8 @@ bundle passaram. Migrations estão alinhadas em 327/327, o Sentry atual foi
 validado em modo read-only e o P0 do pré-cadastro foi corrigido localmente.
 Permanecem bloqueantes o Consultor MX, backup restaurável, advisors de
 segurança, preview da branch, CI remoto e publicação.
+
+A regressão local mais recente passou com lint, typecheck, 1.691 testes,
+13.903 asserts, build, bundle em 1.853,78/1.860 KB e `git diff --check`. O teste
+Playwright/Axe das seis rotas públicas passou 12/12 em Chromium desktop e
+mobile; o Dono permanece coberto pelas matrizes autenticadas separadas.

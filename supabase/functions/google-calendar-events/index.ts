@@ -1,12 +1,13 @@
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { resolveSupabaseSecretKey } from "../_shared/api-keys.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { requireEnv, encryptToken, decryptToken } from "../_shared/crypto.ts";
 import { parseClientId, createSessionClient, assertClientAccess, refreshAccessToken } from "../_shared/google.ts";
 import { parseStrictBody, calendarEventsSchema } from "../_shared/schemas.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const getSupabaseAdminKey = () => resolveSupabaseSecretKey(Deno.env.get);
 
 async function fetchCalendarEvents(accessToken: string, calendarId: string, timeMin: string, timeMax: string, maxResults: number) {
   return fetch(
@@ -55,7 +56,7 @@ Deno.serve(async (req) => {
 
     const adminClient = createClient(
       requireEnv("SUPABASE_URL", SUPABASE_URL),
-      requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY),
+      getSupabaseAdminKey(),
     );
     const { data: userProfile } = await adminClient
       .from("usuarios")

@@ -2,6 +2,7 @@
 // POST { action: 'upsert' | 'delete', visit?: {...}, event?: {...} }
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { resolveSupabaseSecretKey } from "../_shared/api-keys.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { requireEnv, encryptToken, decryptToken } from "../_shared/crypto.ts";
 import {
@@ -32,7 +33,8 @@ import {
 } from "../_shared/google_calendar_sync_rules.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const SUPABASE_SERVICE_ROLE_JWT = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const getSupabaseAdminKey = () => resolveSupabaseSecretKey(Deno.env.get);
 const TIMEZONE = "America/Sao_Paulo";
 // Full system visibility is handled by google_calendar_privacy.ts/RLS.
 // Personal mirrors are narrower: global mirrors go only to this allowlist,
@@ -700,7 +702,7 @@ Deno.serve(async (req) => {
 
   try {
     const authHeader = req.headers.get("Authorization");
-    const serviceRoleBearer = `Bearer ${requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY)}`;
+    const serviceRoleBearer = `Bearer ${requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_JWT)}`;
     const adminSyncToken = Deno.env.get("GOOGLE_CALENDAR_SYNC_ADMIN_TOKEN");
     const adminSyncHeader = req.headers.get("x-google-calendar-sync-admin-token");
     const isServiceRoleCall = isServiceRoleRequest(authHeader, serviceRoleBearer) || (adminSyncToken ? adminSyncHeader === adminSyncToken : false);
@@ -742,7 +744,7 @@ Deno.serve(async (req) => {
 
     const adminClient = createClient(
       requireEnv("SUPABASE_URL", SUPABASE_URL),
-      requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY),
+      getSupabaseAdminKey(),
     );
 
     const personalOwnerUserId = syncKind === "schedule_event"

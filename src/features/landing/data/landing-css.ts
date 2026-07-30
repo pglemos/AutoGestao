@@ -8,7 +8,7 @@ export const LANDING_CSS = `
 :root{
   --bg:#070A08; --bg-1:#0B100C; --bg-2:#0F1612;
   --line:#172019; --line-2:#243227;
-  --ink:#E8F0EA; --ink-2:#9BA89F; --ink-3:#5C6A60; --ink-4:#37423B;
+  --ink:#E8F0EA; --ink-2:#9BA89F; --ink-3:#748178; --ink-4:#37423B;
   --mx:#1FCB6E; --mx-2:#0FB060; --mx-deep:#0A2A1A; --mx-glow:#22ff88;
   --warn:#FFB547; --crit:#FF6B5B;
 --serif:'Inter', system-ui, sans-serif;
@@ -415,7 +415,7 @@ body.mxp-active::before{
 
 .mxp-root footer.mxp-footer{background:#050706;border-top:1px solid var(--line);padding:80px 0 36px;margin-top:80px;position:relative;overflow:hidden}
 .mxp-root footer.mxp-footer::before{content:"";position:absolute;top:0;left:50%;width:1px;height:100%;background:linear-gradient(to bottom, var(--mx), transparent);opacity:.05;transform:translateX(-50%)}
-.mxp-root .foot-mega{font-family:var(--serif);font-size:clamp(80px,16vw,260px);font-weight:600;letter-spacing:-0.05em;line-height:.85;color:var(--ink-4);margin:0 0 60px;text-align:center}
+.mxp-root .foot-mega{font-family:var(--serif);font-size:clamp(80px,16vw,260px);font-weight:600;letter-spacing:-0.05em;line-height:.85;color:var(--ink-3);margin:0 0 60px;text-align:center}
 .mxp-root .foot-mega .it{font-family:var(--instrument);font-style:italic;color:var(--mx);font-weight:400;opacity:.65}
 .mxp-root .foot-grid{display:grid;grid-template-columns:1.6fr 1fr 1fr 1fr;gap:50px;margin-bottom:60px}
 .mxp-root .foot-grid h6{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.2em;color:var(--ink-3);margin:0 0 18px}
@@ -461,6 +461,7 @@ body.mxp-active::before{
   .mxp-root .cta-mega{padding:50px 28px}
   .mxp-root .sec-pad{padding:90px 0}
   .mxp-root .hero{padding:120px 0 80px;min-height:auto}
+  .mxp-root .hero-bg .glow{width:100vw;height:100vw;right:0;top:-25vw}
   .mxp-root .hero-strip{grid-template-columns:1fr 1fr;gap:0}
   .mxp-root .strip-cell{padding:14px 0;border-left:none !important}
   .mxp-root .strip-cell:nth-child(2n){padding-left:18px;border-left:1px solid var(--line) !important}
@@ -474,7 +475,9 @@ body.mxp-active::before{
   .mxp-root .top-cta .btn{padding:9px 14px;font-size:12.5px}
   .mxp-root .pill-status{display:none}
   .mxp-root .verdict{position:static}
+  .mxp-root .verdict::after{inset:auto 0 0 auto;width:200px;height:200px}
   .mxp-root .quote-mark{font-size:90px}
+  .mxp-root .foot-mega{font-size:clamp(46px,15vw,80px)}
   .mxp-root .foot-bottom{flex-direction:column;align-items:flex-start;gap:14px}
 }
 

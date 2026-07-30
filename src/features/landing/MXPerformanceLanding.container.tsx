@@ -37,7 +37,7 @@ export function MXPerformanceLanding() {
       <div ref={cursorRef} className="mxp-cursor" />
       <div ref={progRef} className="mxp-scroll-progress" />
 
-      <div className="mxp-root">
+      <main className="mxp-root">
         <LandingErrorBoundary sectionName="TopBar">
           <TopBarSection topbarRef={topbarRef} />
         </LandingErrorBoundary>
@@ -97,7 +97,7 @@ export function MXPerformanceLanding() {
         <LandingErrorBoundary sectionName="Footer">
           <FooterSection />
         </LandingErrorBoundary>
-      </div>
+      </main>
     </>
   )
 }

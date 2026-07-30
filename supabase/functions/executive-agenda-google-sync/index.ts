@@ -14,6 +14,7 @@
 // (token central, payload, atualizacao da linha) é resolvido aqui dentro.
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { resolveSupabaseSecretKey } from "../_shared/api-keys.ts";
 import { corsHeaders } from "../_shared/cors.ts";
 import { requireAuthenticatedRole } from "../_shared/auth.ts";
 import { requireEnv } from "../_shared/crypto.ts";
@@ -27,7 +28,7 @@ import {
 } from "../_shared/google.ts";
 
 const SUPABASE_URL = Deno.env.get("SUPABASE_URL");
-const SUPABASE_SERVICE_ROLE_KEY = Deno.env.get("SUPABASE_SERVICE_ROLE_KEY");
+const getSupabaseAdminKey = () => resolveSupabaseSecretKey(Deno.env.get);
 const TIMEZONE = "America/Sao_Paulo";
 
 type ExecutiveAgendaRow = {
@@ -108,7 +109,7 @@ Deno.serve(async (req) => {
 
     const adminClient = createClient(
       requireEnv("SUPABASE_URL", SUPABASE_URL),
-      requireEnv("SUPABASE_SERVICE_ROLE_KEY", SUPABASE_SERVICE_ROLE_KEY),
+      getSupabaseAdminKey(),
     );
 
     const { data: row, error: loadError } = await adminClient

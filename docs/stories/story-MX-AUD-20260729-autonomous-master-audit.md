@@ -269,7 +269,76 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   advisory RSC sem superfície nesta SPA. O teste de downgrade para React Router
   7.11.0 foi revertido por introduzir open redirect/XSS e DoS aplicáveis; a
   árvore voltou integralmente a 7.18.2.
-
+- 2026-07-29: Gitleaks oficial 8.30.1 auditou 2.074 commits e retornou 86
+  findings históricos redigidos. Dez scripts diagnósticos com JWT/service-role
+  reais foram removidos; o estado corrente rastreado ficou com 28 falsos
+  positivos revisados e nenhum JWT/service-role real.
+- 2026-07-29: regressão após as remoções retornou 0 em lint, typecheck, 1.686
+  testes/13.896 asserts, build, bundle 1.857,80/1.860 KB e
+  `git diff --check`. A nova revisão CodeRabbit retornou `rate_limit` antes da
+  análise, com espera de 26 minutos; o gate pré-commit permanece pendente.
+- 2026-07-29: as oito rotas públicas foram percorridas no Chrome real.
+  Pré-cadastro com loja ativa carregou formulário sem registrar dados da loja;
+  a landing passou a expor um único landmark `main` após teste RED/GREEN.
+- 2026-07-29: Axe 4.11.4 reproduziu violações sérias de ARIA/contraste nas
+  páginas públicas. Após correção por tokens, Playwright passou 7/7 rotas e o
+  pré-cadastro real ficou sem violação séria/crítica.
+- 2026-07-29: matriz pública percorreu 8 rotas × 13 viewports. Após reproduzir
+  e corrigir overflow móvel da landing, 104/104 combinações passaram com um
+  `main`, zero overflow, zero erro de console e zero falha de rede.
+- 2026-07-29: CodeRabbit executou e apontou um major válido na resposta ao
+  incidente de credenciais. A rotação deixou de ser condicionada a
+  preview/backup: o inventário por nome confirmou legado e chave moderna na
+  Vercel nos três ambientes, nenhuma `service_role` no GitHub Actions, 17
+  fontes de Edge Functions e 34 scripts com dependência do nome legado. A
+  exceção de cutover expira em 2026-07-30 18:00 BRT; depois disso os consumidores
+  devem estar migrados e o legado desabilitado, ou os workloads afetados devem
+  ser bloqueados com nova exceção nominal mais curta.
+- 2026-07-29: a repetição do CodeRabbit apontou dois majors válidos. Foi criada
+  uma matriz consumidor por consumidor com owner, evidência, substituição,
+  teste e desativação, além de gate de expurgo para Git completo, logs,
+  screenshots, caches e artefatos CI. Nova revisão ficou limitada por cota de
+  7 minutos; não há parecer limpo ainda.
+- 2026-07-29: reconciliação read-only do Consultor confirmou dois perfis com
+  identidades Auth confirmadas e histórico de login: um perfil inativo e outro
+  ativo com troca de senha pendente; nenhum banido/excluído. Não foi criada
+  duplicata nem alterada identidade sem autoridade do titular/Admin MX.
+- 2026-07-29: regressão final local retornou 0 em lint, typecheck, 1.687
+  testes/13.897 asserts, build, bundle 1.857,44/1.860 KB e diff-check; o
+  Playwright/Axe público passou 12/12 em Chromium desktop/mobile.
+- 2026-07-29: CodeRabbit retornou zero achados nos arquivos rastreados, mas
+  omitiu os três arquivos novos. Todos foram preparados no índice; a revisão
+  integral seguinte retornou `rate_limit` de 40 minutos. Nenhum commit foi
+  criado porque o gate completo ainda está pendente.
+- 2026-07-29: a Vercel recebeu a chave moderna correta nos três targets e uma
+  comparação efêmera confirmou match; o runtime ainda usa o nome legado, logo
+  o cutover não está concluído. Edge clients passaram a preferir os mapas
+  gerenciados `SUPABASE_SECRET_KEYS.default` e
+  `SUPABASE_PUBLISHABLE_KEYS.default`, mantendo fallback temporário.
+- 2026-07-29: o resolver moderno passou 4/4 testes, a seleção focada passou
+  16/16, typecheck retornou 0 e 11 entrypoints passaram em
+  `deno check --node-modules-dir=auto`. Quatro fluxos Bearer continuam
+  dependentes do JWT legado até receberem autenticação interna própria.
+- 2026-07-29: o Deno check com `node-modules-dir=auto` substituiu links do
+  `node_modules` pelo layout Deno e fez 219 testes DOM falharem. `npm ci`
+  restaurou o lockfile; o teste novo deixou de depender de `screen` global e a
+  regressão isolada final passou com 1.691 testes/13.903 asserts. Lint,
+  typecheck, build, bundle 1.853,78/1.860 KB e diff-check retornaram 0.
+- 2026-07-29: Gitleaks 8.30.1 confirmou novamente 34 findings na árvore
+  (28 rastreados revisados e 6 no `dist/`) e 86 históricos redigidos. Esses
+  findings mantêm a rotação/expurgo como incidente aberto.
+- 2026-07-29: CodeRabbit integral revisou os 39 arquivos e retornou cinco
+  achados. Foram aplicados a validação explícita de `SUPABASE_URL`, resolução
+  tardia de chaves para preservar OPTIONS/CORS e remoção do Dono da matriz
+  pública. Foi rejeitada a troca da JWT Bearer por `sb_secret_...` porque a
+  chave moderna não é JWT; `google-meet-ata` e `mx-critical-jobs-health`
+  permanecem na matriz de consumidores, mas não na File List porque não foram
+  modificados.
+- 2026-07-29: a segunda revisão integral retornou quatro achados. Foram
+  aplicados WCAG 2.2 AA e o gate auditável da exceção. A segregação de scripts
+  foi documentada por identidade/RPC/broker porque `sb_secret_...` não oferece
+  escopo read-only por chave. A sugestão de usar essa chave moderna como Bearer
+  foi rejeitada novamente porque ela não é JWT.
 ### Completion Notes List
 
 - AppShell ativo convergiu para uma única implementação `Layout` /
@@ -286,12 +355,20 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   draft; o estado operacional vigente permanece `InProgress` e parcial.
 - O P0 do pré-cadastro está corrigido apenas nesta branch; produção permanece
   vulnerável até preview, revisão e deploy aprovados.
+- Segredos removidos do estado corrente permanecem no histórico. A rotação da
+  `service_role` e das demais credenciais expostas é um incidente imediato, não
+  um gate posterior ao preview; a substituição coordenada dos consumidores tem
+  exceção operacional somente até 2026-07-30 18:00 BRT.
+- A migração moderna das Edge Functions está implementada e validada somente
+  localmente; fallback legado, revisão integral, deploy e smoke permanecem
+  pendentes.
 
 ### File List
 
 - `.ai/decision-log-MX-AUD-20260729.md`
 - `docs/auditoria/relatorios/RELATORIO_FINAL_MX_GESTAO_PREDITIVA.md`
 - `docs/auditoria/matrizes/MATRIZ_ROTAS_DADOS_MX.md`
+- `docs/auditoria/matrizes/MATRIZ_ROTACAO_CREDENCIAIS_MX.md`
 - `docs/auth/first-login-flow.md`
 - `docs/audits/auditoria-completa-sistema-2026-05-01.md`
 - `docs/stories/story-MX-AUD-20260729-autonomous-master-audit.md`
@@ -308,12 +385,16 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `package.json`
 - `package-lock.json`
 - `scripts/audit_route_data_inventory.mjs`
+- `check_db.mjs` (removido)
+- `check_db2.mjs` (removido)
+- `check_rls.mjs` (removido)
+- `check_schema.mjs` (removido)
 - `docs/superpowers/plans/2026-07-07-plano-remuneracao-brothers-car.md`
 - `scripts/capture_mx_v2.js`
 - `scripts/capture_mx_v3.js`
 - `scripts/capture_vendedor.cjs`
 - `scripts/legacy/audit-performance.cjs`
-- `scripts/legacy/debug-auth.mjs`
+- `scripts/legacy/debug-auth.mjs` (removido)
 - `scripts/legacy/debug-content.cjs`
 - `scripts/legacy/generate_admin_tests.cjs`
 - `scripts/legacy/generate_admin_tests.js`
@@ -322,7 +403,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `scripts/legacy/playwright-click-button.mjs`
 - `scripts/legacy/playwright-test-app.mjs`
 - `scripts/legacy/test-fast-entry.cjs`
-- `scripts/legacy/test-login.mjs`
+- `scripts/legacy/test-login.mjs` (removido)
+- `scripts/legacy/test-queries.mjs` (removido)
+- `scripts/legacy/test-queries-error-handling.mjs` (removido)
+- `scripts/legacy/test-queries-error-handling2.mjs` (removido)
+- `scripts/legacy/test-queries-final.mjs` (removido)
 - `scripts/provision_mx_consultoria_sandbox.ts`
 - `scripts/repair_retry.ts`
 - `scripts/repair_system.ts`
@@ -338,6 +423,10 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/design-system/shell/appShellConfig.ts`
 - `src/design-system/shell/shell-contract.test.ts`
 - `src/features/checkin/sections/RegularizarFechamentoDrawer.tsx`
+- `src/features/landing/MXPerformanceLanding.container.tsx`
+- `src/features/landing/MXPerformanceLanding.test.tsx`
+- `src/features/landing/data/landing-css.ts`
+- `src/features/landing/sections/HeroSection.tsx`
 - `src/features/owner-base44/OwnerShell.tsx` (removido)
 - `src/features/vendedor-treinamentos/VendedorTreinamentos.container.tsx`
 - `src/features/vendedor-treinamentos/components/QuizTreinamento.tsx`
@@ -348,6 +437,27 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/lib/real-data-runtime-contract.test.ts`
 - `src/lib/route-data-inventory-contract.test.ts`
 - `src/lib/store-pre-registration-auth-hardening.test.ts`
+- `src/pages/Privacy.tsx`
+- `src/pages/Login.tsx`
+- `src/pages/Terms.tsx`
+- `src/test/public-routes-a11y.playwright.ts`
+- `src/lib/supabase-edge-api-keys.test.ts`
+- `supabase/functions/_shared/api-keys.ts`
+- `supabase/functions/_shared/auth.ts`
+- `supabase/functions/_shared/drive-upload.ts`
+- `supabase/functions/_shared/google.ts`
+- `supabase/functions/_shared/supabase-client.ts`
+- `supabase/functions/approve-store-registration/index.ts`
+- `supabase/functions/executive-agenda-google-sync/index.ts`
+- `supabase/functions/google-calendar-events/index.ts`
+- `supabase/functions/google-calendar-sync/index.ts`
+- `supabase/functions/google-drive-files/index.ts`
+- `supabase/functions/google-oauth-handler/index.ts`
+- `supabase/functions/manage-global-user/index.ts`
+- `supabase/functions/manage-store-team/index.ts`
+- `supabase/functions/register-user/index.ts`
+- `supabase/functions/send-push-notification/index.ts`
+- `supabase/functions/store-pre-registration/index.ts`
 - `src/lib/export.ts`
 - `src/lib/export.test.ts`
 - `src/lib/pdf/downloadHtmlAsPdf.ts`

@@ -1,10 +1,14 @@
 import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 import { Resend } from "https://esm.sh/resend@3";
+import { resolveSupabaseSecretKey } from "./api-keys.ts";
 
 export function createServiceClient() {
+  const supabaseUrl = Deno.env.get("SUPABASE_URL");
+  if (!supabaseUrl) throw new Error("Missing Supabase URL");
+
   return createClient(
-    Deno.env.get("SUPABASE_URL")!,
-    Deno.env.get("SUPABASE_SERVICE_ROLE_KEY")!,
+    supabaseUrl,
+    resolveSupabaseSecretKey(Deno.env.get),
   );
 }
 
