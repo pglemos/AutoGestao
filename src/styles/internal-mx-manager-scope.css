@@ -14,18 +14,28 @@
   --mx-accent-soft: hsl(var(--mx-color-primary-subtle));
 }
 
-/* A regra que normalizava `.font-black` foi removida: medida em produção nas
-   cinco rotas internas, alcançava zero elementos. As classes que ela existia
-   para conter já saíram dos componentes. */
+/* As três regras de normalização tipográfica que ficavam aqui foram removidas
+   por serem redundantes — não por mudarem o resultado.
 
-[data-mx-internal-scope='true'] :is(h1, h2, h3, h4, h5, h6, p, button, label).uppercase {
-  text-transform: none;
-}
+   `.font-black` alcançava zero elementos: as classes que ela existia para conter
+   já haviam deixado os componentes.
 
-[data-mx-internal-scope='true'] :is(h1, h2, h3, h4, h5, h6, p, button, label)[class*='tracking-widest'],
-[data-mx-internal-scope='true'] :is(h1, h2, h3, h4, h5, h6, p, button, label)[class*='tracking-mx-'] {
-  letter-spacing: normal;
-}
+   `.uppercase` e `tracking-widest` alcançavam dois, os pills "Ativas" e
+   "Arquivadas" de /lojas. Removê-las não mudou nada na tela, e vale registrar o
+   porquê: `.mx-canonical-template` mais abaixo neste mesmo arquivo já desliga
+   `uppercase` para p/label/button/span, cobrindo os mesmos elementos. Duas
+   regras faziam o mesmo trabalho; sobrou uma.
+
+   A regra do template NÃO foi removida junto. Ela alcança dez elementos, entre
+   eles os dias da semana no cabeçalho da agenda ("Dom", "Seg", …), que voltariam
+   a "DOM", "SEG". Isso é decisão de design, não limpeza de duplicata.
+
+   A divergência de fundo continua de pé e está documentada aqui para quem
+   continuar: `TabNavPill` declara `uppercase tracking-widest`, e o template
+   desliga isso só para os perfis internos, então o mesmo pill aparece em caixa
+   alta para Gerente, Dono e Vendedor e em caixa normal para o Admin — o tipo de
+   diferença por perfil que §5 proíbe. Resolver exige escolher um dos dois lados
+   e aplicar no componente, não num escopo. */
 
 /* As regras que achatavam sombra e raio aqui foram removidas: existiam para
    neutralizar a escala antiga do :root (sombras de até 24px, raio base 1rem).
