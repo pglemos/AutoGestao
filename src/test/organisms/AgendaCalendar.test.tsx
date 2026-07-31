@@ -9,12 +9,23 @@ afterEach(() => {
   cleanup();
 });
 
+/**
+ * Grade do mês corrente, com a quantidade real de dias.
+ *
+ * Era fixa em 30. Em todo dia 31 de um mês de 31 dias — 31/07/2026, por exemplo
+ * — "hoje" ficava fora da grade, o evento ancorado em `today` não renderizava e
+ * dois testes falhavam por motivo nenhum. Falha dependente de calendário é pior
+ * que teste ausente: aparece longe da mudança que a expôs e treina a equipe a
+ * ignorar vermelho.
+ */
 function makeCalendarDays(): CalendarDay[] {
   const days: CalendarDay[] = [];
   const today = new Date();
   const year = today.getFullYear();
   const month = today.getMonth();
-  for (let d = 1; d <= 30; d++) {
+  // Dia 0 do mês seguinte é o último dia deste mês.
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+  for (let d = 1; d <= daysInMonth; d++) {
     const date = new Date(year, month, d);
     days.push({ date, day: d, isCurrentMonth: true });
   }
