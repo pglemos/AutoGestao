@@ -17,7 +17,7 @@ const routes = [
   // "Metas Individuais" e a meta da loja aparece na linha de contexto.
   { path: '/gerente/meta-loja', slug: 'meta', heading: 'Metas Individuais', uniqueText: /Meta da loja: .* vendas/i },
   { path: '/gerente/mentor', slug: 'mentor', heading: 'Mentor Gerencial', uniqueText: /Biblioteca de orientações/i },
-  { path: '/gerente/feedbacks-pdis', slug: 'desenvolvimento', heading: 'Desenvolvimento', uniqueText: /Central de gestão de pessoas/i },
+  { path: '/gerente/feedbacks-pdis', slug: 'desenvolvimento', heading: 'Desenvolvimento', uniqueText: /Reconheça, oriente e desenvolva sua equipe com Feedback e PDI/i },
   { path: '/gerente/ranking', slug: 'ranking', heading: 'Ranking', uniqueText: /Acompanhe a classificação da equipe por resultado, conversão e execução/i },
   { path: '/gerente/universidade-mx', slug: 'universidade', heading: /Universidade|Desenvolvimento/i, uniqueText: /Desenvolvimento do gerente/i },
 ] as const

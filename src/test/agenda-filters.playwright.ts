@@ -72,7 +72,11 @@ test.describe('Agenda admin filters', () => {
     await loginWithCredentials(page, adminCredentials.email, adminCredentials.password)
     await page.goto(`/agenda?range=todos&consultant=${consultantA.id}`)
 
-    await expect(page.getByText('Agenda MX')).toBeVisible({ timeout: 15000 })
+    // A tela não expõe um título "Agenda MX" — seu único h1 é o mês corrente
+    // do calendário (ver docs/audits/2026-07-31-achados-visuais-agenda.md).
+    // Ancorar no conteúdo principal e no controle de filtros, que são estáveis.
+    await expect(page.locator('main#main-content')).toBeVisible({ timeout: 15000 })
+    await expect(page.getByText('Filtros').first()).toBeVisible({ timeout: 15000 })
     await expect(page.locator('#agenda-consultant-filter')).toHaveValue(consultantA.id)
     await expectVisitListed(page, clientToday.name)
     await expectVisitListed(page, clientNextWeek.name)
@@ -127,7 +131,11 @@ test.describe('Agenda admin filters', () => {
     await login(page, consultantA.email, consultantA.password)
     await page.goto(`/agenda?range=todos&consultant=${consultantB.id}`)
 
-    await expect(page.getByText('Agenda MX')).toBeVisible({ timeout: 15000 })
+    // A tela não expõe um título "Agenda MX" — seu único h1 é o mês corrente
+    // do calendário (ver docs/audits/2026-07-31-achados-visuais-agenda.md).
+    // Ancorar no conteúdo principal e no controle de filtros, que são estáveis.
+    await expect(page.locator('main#main-content')).toBeVisible({ timeout: 15000 })
+    await expect(page.getByText('Filtros').first()).toBeVisible({ timeout: 15000 })
     await expect(page.locator('#agenda-consultant-filter')).toHaveCount(0)
     await expect(page).not.toHaveURL(/consultant=/)
     await expectVisitListed(page, ownClient.name)

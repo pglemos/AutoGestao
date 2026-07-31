@@ -220,11 +220,18 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
     })
   }
 
+  // `proxima_acao_em` e a ausência de próximo passo são estado do CLIENTE, não
+  // da oportunidade. Sem esta guarda, um cliente com duas oportunidades abertas
+  // rende duas ações idênticas — mesmo id, mesma chave React.
+  const customerStateHandled = new Set<string>()
+
   for (const opportunity of input.opportunities ?? []) {
     if (TERMINAL_STAGES.has(opportunity.etapa)) continue
 
     const customer = customersMap.get(opportunity.cliente_id)
     if (!canRecommendContact(customer)) continue
+    if (customerStateHandled.has(customer.id)) continue
+    customerStateHandled.add(customer.id)
 
     if (customer.proxima_acao_em && customer.proxima_acao_em < refDate) {
       const overdueDays = daysBetween(customer.proxima_acao_em, refDate)

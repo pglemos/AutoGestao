@@ -55,6 +55,33 @@ describe('deterministic action hardening', () => {
     expect(actions.some((action) => action.scenarioCode === 'MISSING_NEXT_STEP')).toBe(false)
   })
 
+  test('emits one customer-state action per customer, not one per open opportunity', () => {
+    // `proxima_acao_em` é estado do CLIENTE, mas a varredura percorre
+    // oportunidades. Um cliente com duas oportunidades abertas produzia duas
+    // ações com o mesmo id — React então reclamava de chave duplicada em
+    // /gerente/mentor e podia omitir ou duplicar o item renderizado.
+    const actions = deriveDeterministicActions({
+      ...base,
+      opportunities: [
+        { id: 'opp-a', cliente_id: 'client-4', etapa: 'negociacao', vendedor_id: 'seller-1' },
+        { id: 'opp-b', cliente_id: 'client-4', etapa: 'proposta', vendedor_id: 'seller-1' },
+      ],
+      customers: [
+        {
+          id: 'client-4',
+          nome: 'Cliente com duas oportunidades',
+          proxima_acao: 'Ligar',
+          proxima_acao_em: '2026-07-20',
+          vendedor_id: 'seller-1',
+        },
+      ],
+    })
+
+    const overdue = actions.filter((action) => action.scenarioCode === 'OVERDUE_ACTION')
+    expect(overdue).toHaveLength(1)
+    expect(new Set(actions.map((action) => action.id)).size).toBe(actions.length)
+  })
+
   test('returns deterministic priority order and removes duplicate scenario/entity actions', () => {
     const actions = deriveDeterministicActions({
       ...base,
