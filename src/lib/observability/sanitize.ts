@@ -83,6 +83,11 @@ interface SentryLikeEvent {
  * (descartar esconderia incidentes reais).
  */
 export function sanitizeSentryEvent<T extends SentryLikeEvent>(event: T): T {
+    // Um beforeSend que lança faz o Sentry descartar o evento: o incidente real
+    // some e o relatado passa a ser a falha da sanitização. Foi o que aconteceu
+    // em /login (issue 7639492646), com o evento chegando sem corpo.
+    if (!event || typeof event !== 'object') return event
+
     if (event.request) {
         if (event.request.headers) {
             event.request.headers = sanitizeValue(event.request.headers) as Record<string, unknown>
