@@ -9,7 +9,7 @@ import { Input } from '@/components/atoms/Input'
 import { Typography } from '@/components/atoms/Typography'
 import { Badge } from '@/components/atoms/Badge'
 import { StoreEditModal } from '@/features/admin/components/StoreEditModal'
-import { CreateStoreModal } from '@/features/configuracoes/components/CreateStoreModal'
+import { CreateStoreModal, type NewStoreDraft } from '@/components/organisms/CreateStoreModal'
 import type { Store } from '@/types/database'
 import type { StoreUpdateFields } from '@/hooks/useTeam'
 import type { TabContext } from '@/features/configuracoes/types'
@@ -22,6 +22,29 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
     const { stats } = useStoresStats()
 
     const [showCreate, setShowCreate] = useState(false)
+    // O modal canônico deixa o rascunho com o chamador — a versão que esta aba
+    // usava guardava o estado por dentro, e era a única das três a fazer isso.
+    const [newStore, setNewStore] = useState<NewStoreDraft>({ name: '', manager_email: '' })
+    const [creatingStore, setCreatingStore] = useState(false)
+
+    const closeCreate = () => {
+        setShowCreate(false)
+        setNewStore({ name: '', manager_email: '' })
+    }
+
+    const handleCreateStore = async (event: React.FormEvent<HTMLFormElement>) => {
+        event.preventDefault()
+        if (creatingStore) return
+        setCreatingStore(true)
+        const { error } = await createStore(newStore.name, newStore.manager_email || undefined)
+        setCreatingStore(false)
+        if (error) {
+            toast.error(error)
+            return
+        }
+        toast.success('Loja criada com sucesso.')
+        closeCreate()
+    }
     const [editing, setEditing] = useState<Store | null>(null)
     const [savingEdit, setSavingEdit] = useState(false)
     const [filter, setFilter] = useState('')
@@ -189,8 +212,11 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                 <>
                     <CreateStoreModal
                         open={showCreate}
-                        onClose={() => setShowCreate(false)}
-                        onSubmit={createStore}
+                        newStore={newStore}
+                        setNewStore={setNewStore}
+                        creating={creatingStore}
+                        onClose={closeCreate}
+                        onSubmit={handleCreateStore}
                     />
                     <StoreEditModal
                         open={Boolean(editing)}

@@ -7,7 +7,7 @@ import { LojasHeader } from './sections/LojasHeader'
 import { OwnerExecutiveSection } from './sections/OwnerExecutiveSection'
 import { CorporateMetricsSection } from './sections/CorporateMetricsSection'
 import { StoresGridSection } from './sections/StoresGridSection'
-import { CreateStoreModal } from './modals/CreateStoreModal'
+import { CreateStoreModal } from '@/components/organisms/CreateStoreModal'
 import { HardDeleteStoreModal } from './modals/HardDeleteStoreModal'
 import {
   MxModulePage,
@@ -96,7 +96,7 @@ export function Lojas() {
         </LojasErrorBoundary>
 
         <CreateStoreModal
-          isOpen={page.isCreateModalOpen}
+          open={page.isCreateModalOpen}
           modalRef={page.createModalRef}
           newStore={page.newStore}
           setNewStore={page.setNewStore}

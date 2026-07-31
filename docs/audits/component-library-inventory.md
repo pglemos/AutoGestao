@@ -29,7 +29,23 @@ Os três coletam exatamente os mesmos dois campos: nome da loja e e-mail do gest
 
 O de `lojas` é o único que satisfaz o §20 (foco preso, Escape fecha, nome acessível). Deve ser o canônico.
 
-### Por que não consolidei junto com este inventário
+### Consolidado em 2026-07-31
+
+Feito. O canônico é `src/components/organisms/CreateStoreModal.tsx`, derivado do de
+`lojas`. A API escolhida foi a de estado externo, porque serve tanto a quem já
+mantém o rascunho num hook (`useLojasPage`, `useStoreActions`) quanto a quem só
+precisa de `useState` — Configurações passou a manter o rascunho e o `creating`
+localmente, com a submissão adaptada ao `createStore(name, email)` que aquela aba
+já usava.
+
+Verificado no navegador, com o modal aberto e os campos exercitados:
+`/lojas` e `/configuracoes?aba=lojas-rede` — ambos abrem, os dois campos escrevem,
+o nome aplica caixa alta e o botão de fechar tem nome acessível. O Dashboard da
+Loja renderiza sem erro com o import novo, mas o gatilho do modal depende de um
+estado do painel de admin que não consegui alcançar na verificação; ficou como
+pendência de teste, não de código.
+
+### Por que a consolidação não era mover arquivo
 
 A consolidação não é mover arquivo: as três APIs são incompatíveis entre si. Uma guarda o estado internamente e devolve erro pelo retorno; as outras duas recebem estado de fora, e mesmo entre elas o `onSubmit` tem assinatura diferente (`FormEvent` contra nada). Unificar exige escolher uma forma e reescrever os três pontos de uso, com verificação em três telas — Lojas, Configurações e Dashboard da Loja — cada uma com fluxo de criação real contra o Supabase.
 

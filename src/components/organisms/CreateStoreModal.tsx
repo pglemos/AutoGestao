@@ -6,24 +6,36 @@ import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Card } from '@/components/molecules/Card'
 
-interface CreateStoreModalProps {
-  isOpen: boolean
-  modalRef: React.RefObject<HTMLDivElement | null>
-  newStore: { name: string; manager_email: string }
-  setNewStore: React.Dispatch<React.SetStateAction<{ name: string; manager_email: string }>>
+export interface NewStoreDraft {
+  name: string
+  manager_email: string
+}
+
+export interface CreateStoreModalProps {
+  open: boolean
+  newStore: NewStoreDraft
+  setNewStore: React.Dispatch<React.SetStateAction<NewStoreDraft>>
   creating: boolean
-  onSubmit: (e: React.FormEvent) => void
+  onSubmit: (event: React.FormEvent<HTMLFormElement>) => void | Promise<void>
   onClose: () => void
+  /** Alvo do focus trap, quando o chamador o gerencia (ver useLojasPage). */
+  modalRef?: React.RefObject<HTMLDivElement | null>
 }
 
 /**
- * Modal "Criar loja" com focus trap, ESC handler e submit.
+ * Modal "Criar loja" — único do produto.
  *
- * Extraído de `src/pages/Lojas.tsx` (Story 3.5 reconciliada, ADR-0050).
- * Focus trap e ESC tratados pelo hook `useLojasPage`.
+ * Consolida três implementações que existiam uma por feature (Lojas,
+ * Configurações e Dashboard da Loja), todas coletando os mesmos dois campos e
+ * divergindo em placeholder, em quem guardava o estado e em quanto cumpriam de
+ * §20. Esta é a que tinha foco preso, Escape e botão de fechar com nome
+ * acessível, então é ela que ficou.
+ *
+ * Estado fica com o chamador: das três APIs, é a que serve tanto a quem já
+ * mantém o rascunho num hook quanto a quem só precisa de `useState`.
  */
 export function CreateStoreModal({
-  isOpen,
+  open,
   modalRef,
   newStore,
   setNewStore,
@@ -33,7 +45,7 @@ export function CreateStoreModal({
 }: CreateStoreModalProps) {
   return (
     <AnimatePresence>
-      {isOpen && (
+      {open && (
         <div
           ref={modalRef}
           className="fixed inset-0 z-50 flex items-center justify-center p-mx-md bg-gray-900/60 backdrop-blur-md"

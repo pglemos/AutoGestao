@@ -13,7 +13,7 @@ import { ManagerSellerParityHomeCanonical } from './sections/ManagerSellerParity
 import { DashboardHeader, type DashboardTab } from './sections/DashboardHeader'
 import { PerformanceTab } from './sections/PerformanceTab'
 import { VendasFechadasLoja } from '@/features/vendas-loja/VendasFechadasLoja'
-import { CreateStoreModal } from './sections/CreateStoreModal'
+import { CreateStoreModal } from '@/components/organisms/CreateStoreModal'
 import {
   OwnerStoreUnavailable,
   PerformanceLoadingSkeleton,
