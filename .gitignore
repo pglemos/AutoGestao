@@ -53,8 +53,9 @@ tmp/
 .audit-snapshots/
 .agents/
 .claude_backup/
-playwright-transform-cache-*/
+.playwright-transform-cache-*/
 core-js-banners
+.opencode/
 
 # Cache de compilacao do V8 e relatorios Lighthouse gerados
 node-compile-cache/

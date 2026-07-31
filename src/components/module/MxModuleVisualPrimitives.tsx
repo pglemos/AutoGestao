@@ -40,7 +40,11 @@ export function MxModulePage({ children, className, contentClassName, maxWidth =
           data-mx-access-mode={accessMode}
           className={cn('min-h-full w-full overflow-y-auto text-gray-800', className)}
         >
-          <div className={cn('mx-auto w-full space-y-5 px-4 py-6 pb-24', maxWidth === '7xl' ? 'max-w-7xl' : 'max-w-none', contentClassName)}>{children}</div>
+          {/* Margem e ritmo vindos dos tokens de página, não de `px-4` fixo.
+              Com o valor cravado, estas 21 telas ficavam em 16px em qualquer
+              viewport — medido em /notificacoes, /painel, /produtos e
+              /auditoria contra os 32px que §7.3 pede em Expanded. */}
+          <div className={cn('mx-auto w-full space-y-5 px-[var(--mx-page-margin)] py-[var(--mx-page-padding-top)] pb-24', maxWidth === '7xl' ? 'max-w-7xl' : 'max-w-none', contentClassName)}>{children}</div>
         </InternalMxTemplatePage>
   )
 }

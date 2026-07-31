@@ -92,7 +92,11 @@
   overflow-x: hidden;
   overflow-y: auto;
   background: var(--mx-page-bg);
-  padding: 1.5rem 1rem 6rem;
+  /* Margem lateral pelo token de página, não cravada: 1rem aqui e 1.5rem no
+     media query abaixo mantinham as telas internas em 16/24px enquanto o resto
+     do produto ia a 32px em Expanded — margem decidida pelo perfil, que é o que
+     §7.3 proíbe. O vertical segue local por ser ritmo do template. */
+  padding: 1.5rem var(--mx-page-margin) 6rem;
 }
 
 .mx-canonical-template [data-mx-module-page] {
@@ -106,7 +110,11 @@
 .mx-canonical-template [data-mx-module-page] > div {
   width: 100%;
   margin-inline: auto;
-  padding: 1.5rem 1rem 6rem;
+  /* Margem lateral pelo token de página, não cravada: 1rem aqui e 1.5rem no
+     media query abaixo mantinham as telas internas em 16/24px enquanto o resto
+     do produto ia a 32px em Expanded — margem decidida pelo perfil, que é o que
+     §7.3 proíbe. O vertical segue local por ser ritmo do template. */
+  padding: 1.5rem var(--mx-page-margin) 6rem;
 }
 
 .mx-canonical-dashboard main:not([data-mx-module-page]),
@@ -131,7 +139,7 @@
 @media (min-width: 768px) {
   .mx-canonical-template main:not([data-mx-module-page]),
   .mx-canonical-template [data-mx-module-page] > div {
-    padding-inline: 1.5rem;
+    padding-inline: var(--mx-page-margin);
   }
 }
 

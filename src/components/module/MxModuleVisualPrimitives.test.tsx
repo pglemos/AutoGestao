@@ -44,8 +44,13 @@ describe('MxModuleVisualPrimitives', () => {
     expect(html).toContain('bg-gray-50')
     expect(html).toContain('max-w-7xl')
     expect(html).toContain('space-y-5')
-    expect(html).toContain('px-4')
-    expect(html).toContain('py-6')
+    // §7.6: a margem lateral e o padding vertical pertencem ao container
+    // canônico (PageCanvas / --mx-page-*), não a `px-4`/`py-6` cravados no
+    // módulo. A div-filha direta do MxModulePage é o ponto de regressão: se
+    // ela voltar a carregar `px-4`/`py-6` literais, a página Gerente volta a
+    // decidir sua própria margem, que é o que o §7.3 proíbe.
+    expect(html).toMatch(/<div class="mx-auto w-full space-y-5 px-\[var\(--mx-page-margin\)\] py-\[var\(--mx-page-padding-top\)\] pb-24/)
+    expect(html).not.toMatch(/<div class="mx-auto w-full space-y-5 px-4 py-6 pb-24/)
     expect(html).toContain('rounded-2xl')
     expect(html).toContain('border-gray-100')
     expect(html).toContain('bg-white')
