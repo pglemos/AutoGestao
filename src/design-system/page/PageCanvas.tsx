@@ -64,6 +64,26 @@ export interface PageCanvasProps
  * breakpoints do Material Design 3. Este componente não conhece breakpoint
  * nenhum — deliberadamente.
  */
+/**
+ * Aplica o canvas só quando a tela precisa dele.
+ *
+ * Existe para telas cujo ramo de render decide entre conteúdo que traz o próprio
+ * recuo e conteúdo que não traz — `DashboardLoja` é o caso. A alternativa seria
+ * duplicar a árvore inteira nos dois ramos, o que garante que um dos dois vai
+ * divergir do outro com o tempo.
+ *
+ * Não é atalho para "canvas opcional": `enabled` deve refletir uma diferença
+ * real de conteúdo, não indecisão sobre a tela.
+ */
+export function ConditionalPageCanvas({
+  enabled,
+  children,
+  ...props
+}: PageCanvasProps & { enabled: boolean }) {
+  if (!enabled) return <>{children}</>
+  return <PageCanvas {...props}>{children}</PageCanvas>
+}
+
 export function PageCanvas({
   children,
   width = 'dashboard',

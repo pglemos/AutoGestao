@@ -1,5 +1,6 @@
 export {
   PageCanvas,
+  ConditionalPageCanvas,
   PAGE_WIDTHS,
   PAGE_DENSITIES,
   PAGE_CLEARANCES,

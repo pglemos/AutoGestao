@@ -1,4 +1,5 @@
 import { useCallback, useMemo, useState } from 'react'
+import { ConditionalPageCanvas } from '@/design-system/page'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { isAdministradorMx, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
@@ -109,7 +110,19 @@ export function DashboardLoja() {
   }
 
   return (
-  <main className={`h-full w-full overflow-y-auto no-scrollbar ${isFocusedRolePerformance ? 'bg-gray-50' : isManagerSection ? 'bg-gray-50' : 'bg-gray-50 p-mx-lg'}`}>
+  /*
+   * A margem lateral vinha de um ternário na raiz: `p-mx-lg` só no caso
+   * default, nada para `isManagerSection` nem para `isFocusedRolePerformance`,
+   * na expectativa de que as seções internas fornecessem a sua. Em
+   * /gerente/vendas nenhuma fornecia, e o título encostava na borda da área de
+   * conteúdo — medido em 0px de respiro por scripts/audit-page-gutters.mjs.
+   *
+   * `isFocusedRolePerformance` segue sem canvas de propósito: aquele ramo
+   * renderiza componentes de performance que já trazem o próprio recuo, e
+   * envolvê-los somaria as duas margens.
+   */
+  <main className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
+    <ConditionalPageCanvas enabled={!isFocusedRolePerformance}>
       {!isFocusedRolePerformance && !isManagerSection && (
         <DashboardErrorBoundary sectionName="Header">
           <DashboardHeader
@@ -193,6 +206,7 @@ export function DashboardLoja() {
         onClose={() => actions.setCreateStoreOpen(false)}
         onSubmit={actions.handleCreateStore}
       />
+    </ConditionalPageCanvas>
     </main>
   )
 }
