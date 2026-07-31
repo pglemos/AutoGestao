@@ -19,6 +19,7 @@ import { VisitaModal } from './modals/VisitaModal'
 import { EventoModal } from './modals/EventoModal'
 import { AgendaErrorBoundary } from './components/AgendaErrorBoundary'
 import { getRelativeDateLabel } from './data/agendaHelpers'
+import { PageCanvas } from '@/design-system/page'
 
 export function AgendaAdmin() {
   const [calendarViewMode, setCalendarViewMode] = useState<AdminCalendarViewMode>('week')
@@ -323,7 +324,7 @@ export function AgendaAdmin() {
   }
 
   return (
-    <main className="flex h-full w-full flex-col overflow-y-auto bg-white p-4 lg:p-6 no-scrollbar">
+    <PageCanvas as="main" width="fluid" className="flex h-full w-full flex-col overflow-y-auto bg-white no-scrollbar">
       {/* Unified Top Header */}
       <AgendaErrorBoundary sectionName="header">
         <AgendaHeader
@@ -468,7 +469,7 @@ export function AgendaAdmin() {
         targetAudienceSelectOptions={targetAudienceSelectOptions}
         productSelectOptions={productSelectOptions}
       />
-    </main>
+    </PageCanvas>
   )
 }
 

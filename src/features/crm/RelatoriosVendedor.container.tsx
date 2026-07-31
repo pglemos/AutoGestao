@@ -11,6 +11,7 @@ import { useCadenciaAnalytics } from '@/features/crm/hooks/useCadenciaAnalytics'
 import { CRM_ETAPA_LABEL, CRM_CANAL_LABEL } from '@/lib/schemas/crm.schema'
 import { useAuth } from '@/hooks/useAuth'
 import { useOfficialSellerPerformance } from '@/hooks/useOfficialSellerPerformance'
+import { PageCanvas } from '@/design-system/page'
 
 const BRL = (v: number) => v.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL', maximumFractionDigits: 0 })
 const CADENCIA_ETAPA_LABEL: Record<string, string> = {
@@ -61,20 +62,20 @@ export function RelatoriosVendedor() {
 
   if (isLoading) {
     return (
-      <main className="w-full h-full overflow-y-auto bg-gray-50 p-mx-lg no-scrollbar">
-        <div className="flex flex-col gap-mx-lg pb-28">
+      <div className="w-full h-full overflow-y-auto bg-gray-50 no-scrollbar">
+        <PageCanvas as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
           <SellerPageHeader icon={BarChart3} title="Relatórios" subtitle="Visão consolidada da sua performance comercial, com dados reais." />
           <div className="flex items-center justify-center h-64">
             <div className="w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin" />
           </div>
-        </div>
-      </main>
+        </PageCanvas>
+      </div>
     )
   }
 
   return (
-    <main className="w-full h-full overflow-y-auto bg-gray-50 p-mx-lg no-scrollbar">
-      <div className="flex flex-col gap-mx-lg pb-28">
+    <div className="w-full h-full overflow-y-auto bg-gray-50 no-scrollbar">
+      <PageCanvas as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
 <SellerPageHeader icon={BarChart3} title="Relatórios" subtitle="Visão consolidada da sua performance comercial, com dados reais." />
 
         <section className="grid grid-cols-2 gap-mx-md md:grid-cols-3 xl:grid-cols-4" aria-label="KPIs">
@@ -194,8 +195,8 @@ export function RelatoriosVendedor() {
         {clientes.length === 0 && (
           <Typography variant="caption" tone="muted">Os relatórios se preenchem conforme você cadastra clientes, oportunidades e atendimentos.</Typography>
         )}
-      </div>
-    </main>
+      </PageCanvas>
+    </div>
   )
 }
 

@@ -125,6 +125,31 @@ function routeMountedFeatureFiles() {
   return files
 }
 
+/**
+ * Segue o re-export de uma página fina até o arquivo que tem a tela.
+ *
+ * Boa parte de `src/pages` é só uma linha — `export { X as default } from
+ * '@/features/…/X.container'` — mantida para preservar imports legados. O
+ * scanner via AST não acha raiz JSX nesses arquivos e simplesmente os ignorava,
+ * o que deixava 24 das telas principais do produto (Ranking, Lojas, Carteira,
+ * Central de Execução, Notificações…) fora do gate sem que nada acusasse.
+ *
+ * Segue um nível só: é o padrão usado no projeto, e recursão sem limite aqui
+ * abriria espaço para ciclo.
+ */
+function resolveReExport(filePath) {
+  const text = fs.readFileSync(filePath, 'utf8')
+  // Arquivo de tela real tem JSX; só seguimos quando não há nenhum.
+  if (/<[A-Za-z]/.test(text)) return null
+  const match = text.match(/export\s*\{[^}]*\}\s*from\s*'@\/([^']+)'/)
+  if (!match) return null
+  for (const extension of ['.tsx', '.ts']) {
+    const candidate = path.join(ROOT_DIR, 'src', `${match[1]}${extension}`)
+    if (fs.existsSync(candidate)) return candidate
+  }
+  return null
+}
+
 function walkPages(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name)
@@ -284,9 +309,14 @@ function scanFile(filePath) {
   return violations
 }
 
-const files = DIAGNOSTIC_ONLY
+const scanned = DIAGNOSTIC_ONLY
   ? walkPages(PAGES_DIR)
   : [...walkPages(PAGES_DIR), ...routeMountedFeatureFiles()]
+
+/** Troca páginas de re-export pelo arquivo que realmente tem a tela. */
+const files = [
+  ...new Set(scanned.map((file) => (DIAGNOSTIC_ONLY ? file : resolveReExport(file) ?? file))),
+]
 const violations = files.flatMap(scanFile)
 
 /** Contagem por arquivo — a unidade que a catraca controla. */

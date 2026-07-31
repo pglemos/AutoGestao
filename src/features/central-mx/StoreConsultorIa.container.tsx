@@ -12,6 +12,7 @@ import { DashboardErrorBoundary } from '@/features/dashboard-loja/components/Das
 import { ResolvingStoreSpinner } from '@/features/dashboard-loja/sections/DashboardEmptyStates'
 import { useStoreResolution } from '@/features/dashboard-loja/hooks/useStoreResolution'
 import { ConsultorIaStoreSection } from './sections/ConsultorIaStoreSection'
+import { PageCanvas } from '@/design-system/page'
 
 export function StoreConsultorIa() {
   const navigate = useNavigate()
@@ -36,7 +37,8 @@ export function StoreConsultorIa() {
 
   if (!selectedStoreId) {
     return (
-      <main className="w-full h-full bg-gray-50 p-mx-lg">
+      <div className="w-full h-full bg-gray-50">
+        <PageCanvas as="main" width="focused">
         <Card className="mx-auto max-w-2xl border-none bg-white">
           <EmptyState
             size="lg"
@@ -55,13 +57,14 @@ export function StoreConsultorIa() {
             }
           />
         </Card>
-      </main>
+        </PageCanvas>
+      </div>
     )
   }
 
   return (
-  <main className="h-full w-full overflow-y-auto bg-gray-50 p-mx-lg no-scrollbar">
-      <div className="flex flex-col gap-mx-md pb-28">
+  <div className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
+      <PageCanvas as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-md">
         <header className="flex flex-col gap-mx-md border-b border-gray-100 pb-mx-lg lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
             <Typography variant="h1" className="text-3xl md:text-4xl">
@@ -83,8 +86,8 @@ export function StoreConsultorIa() {
         <DashboardErrorBoundary sectionName="ConsultorIaStoreSection">
           <ConsultorIaStoreSection storeId={selectedStoreId} />
         </DashboardErrorBoundary>
-      </div>
-    </main>
+      </PageCanvas>
+    </div>
   )
 }
 

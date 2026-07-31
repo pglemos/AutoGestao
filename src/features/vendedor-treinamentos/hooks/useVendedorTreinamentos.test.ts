@@ -55,8 +55,18 @@ describe('VendedorTreinamentos — contrato visual anterior', () => {
         expect(containerSource).not.toContain('<TabNavPill')
     })
 
-    test('usa os mesmos limites, margens e padding responsivo da tela de Ranking', () => {
-        expect(containerSource).toContain('overflow-y-auto bg-gray-50 font-body no-scrollbar px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg pb-12')
-        expect(containerSource).toContain('mx-auto w-full max-w-[1500px] space-y-8')
+    test('delega limites, margens e padding ao container canônico', () => {
+        // Este teste afirmava as classes literais copiadas da tela de Ranking
+        // (`px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg` e `max-w-[1500px]`). A
+        // intenção — que esta tela tenha a mesma geometria das equivalentes —
+        // continua valendo; o mecanismo mudou. Repetir a mesma string em cada
+        // tela é justamente o que fazia títulos começarem em linhas diferentes
+        // quando uma delas divergia. Agora a decisão é do PageCanvas, e a
+        // igualdade entre telas é verificada de fato no navegador por
+        // src/test/canvas-matrix.playwright.ts.
+        expect(containerSource).toContain('<PageCanvas')
+        expect(containerSource).toContain('width="dashboard"')
+        expect(containerSource).not.toContain('max-w-[1500px]')
+        expect(containerSource).not.toMatch(/className="[^"]*px-mx-sm py-mx-md/)
     })
 })

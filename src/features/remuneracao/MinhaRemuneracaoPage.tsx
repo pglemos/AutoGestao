@@ -9,6 +9,7 @@ import { PotentialCommissionCard } from './components/dashboard/PotentialCommiss
 import { LastSixMonthsCard } from './components/dashboard/LastSixMonthsCard'
 import { RecordRoutineCard } from './components/dashboard/RecordRoutineCard'
 import { CalculationDetailsDrawer } from './components/dashboard/CalculationDetailsDrawer'
+import { PageCanvas } from '@/design-system/page'
 
 function saudacaoPorHora(): string {
   const hora = new Date().getHours()
@@ -51,8 +52,8 @@ export default function MinhaRemuneracaoPage() {
   const userName = data.profile?.name?.split(' ')[0] || 'Nome não informado'
 
   return (
-    <main className="h-full w-full min-w-0 overflow-y-auto bg-[#030B14] text-gray-800 no-scrollbar px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg">
-      <div className="mx-auto flex w-full max-w-[1500px] min-w-0 flex-col gap-4 pb-20">
+    <div className="h-full w-full min-w-0 overflow-y-auto bg-[#030B14] text-gray-800 no-scrollbar">
+      <PageCanvas as="main" width="dashboard" bottomClearance="navigation" className="flex min-w-0 flex-col gap-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4">
           <div>
             <h1 className="text-2xl lg:text-3xl font-bold text-gray-800">{saudacaoPorHora()}, {userName}! 🚀</h1>
@@ -107,11 +108,11 @@ export default function MinhaRemuneracaoPage() {
             <span className="text-emerald-500">⚡</span> Disciplina hoje, liberdade amanhã. Você no controle dos seus resultados.
           </p>
         </div>
-      </div>
+      </PageCanvas>
 
       {data.detalhesVisiveis && (
         <CalculationDetailsDrawer open={showCalcDrawer} onClose={() => setShowCalcDrawer(false)} calculo={data.calculo} />
       )}
-    </main>
+    </div>
   )
 }

@@ -29,6 +29,7 @@ import {
 import { QuizTreinamento } from './components/QuizTreinamento'
 import { confirmarPresencaTreinamento, listarPresencasTreinamentos } from '@/features/universidade/services/universidade-service'
 import { ContentSuggestionDialog } from '@/features/universidade/components/ContentSuggestionDialog'
+import { PageCanvas } from '@/design-system/page'
 
 const CATEGORIES = ['Atendimento', 'Prospecção', 'WhatsApp', 'Negociação', 'Financiamento', 'Fechamento', 'Pós-venda', 'Carteira', 'Mentalidade']
 const LEVELS = ['N1 Iniciante', 'N2 Intermediário', 'N3 Performance', 'N4 Alta Performance']
@@ -213,8 +214,8 @@ export default function VendedorTreinamentosContainer() {
     const progressoPercent = trainings.length > 0 ? Math.round((completedCount / trainings.length) * 100) : 0
 
     return (
-        <main className="h-full w-full min-w-0 overflow-y-auto bg-gray-50 font-body no-scrollbar px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg pb-12">
-          <div className="mx-auto w-full max-w-[1500px] space-y-8">
+        <div className="h-full w-full min-w-0 overflow-y-auto bg-gray-50 font-body no-scrollbar">
+          <PageCanvas as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-8">
             <PageHeader title="Treinamentos" subtitle="Desenvolva suas habilidades de vendas">
                 <ContentSuggestionDialog />
             </PageHeader>
@@ -461,7 +462,7 @@ export default function VendedorTreinamentosContainer() {
                     </div>
                 </div>
             )}
-          </div>
-        </main>
+          </PageCanvas>
+        </div>
     )
 }
