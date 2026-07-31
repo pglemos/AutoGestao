@@ -150,6 +150,67 @@ function resolveReExport(filePath) {
   return null
 }
 
+/**
+ * Segue containers que só escolhem qual view renderizar.
+ *
+ * `Ranking.container.tsx` é vinte linhas que devolvem `<GlobalRankingView />`,
+ * `<ManagerRankingReference />` ou `<StoreRankingView />` conforme o perfil. O
+ * scanner encontra raízes JSX ali, mas nenhuma tem `className`, então o arquivo
+ * passava limpo enquanto as telas de verdade — as views — ficavam sem vigilância.
+ *
+ * Aqui resolvemos os componentes devolvidos para os arquivos que os declaram,
+ * seguindo apenas imports relativos do próprio pacote. Um nível, como no
+ * re-export: cobre o padrão usado no projeto sem abrir espaço para ciclo.
+ */
+function resolveDelegatedViews(filePath) {
+  const text = fs.readFileSync(filePath, 'utf8')
+  const sourceFile = ts.createSourceFile(filePath, text, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX)
+  const exportedNames = exportedComponentNames(sourceFile)
+
+  /** Componentes devolvidos direto, sem nenhum atributo de layout. */
+  const delegated = new Set()
+  function visit(node) {
+    const isComponent =
+      (ts.isFunctionDeclaration(node) && node.body) ||
+      (ts.isVariableDeclaration(node) &&
+        node.initializer &&
+        (ts.isArrowFunction(node.initializer) || ts.isFunctionExpression(node.initializer)))
+    if (isComponent) {
+      const fn = ts.isVariableDeclaration(node) ? node.initializer : node
+      const name = ts.isVariableDeclaration(node) ? node.name.getText(sourceFile) : node.name?.getText(sourceFile)
+      if (name && /^[A-Z]/.test(name) && exportedNames.has(name)) {
+        for (const root of findRootJsxElements(fn, sourceFile)) {
+          if (ts.isJsxFragment(root)) continue
+          const opening = ts.isJsxElement(root) ? root.openingElement : root
+          const tag = opening.tagName.getText(sourceFile)
+          const hasClassName = opening.attributes.properties.some(
+            (p) => ts.isJsxAttribute(p) && p.name.getText(sourceFile) === 'className',
+          )
+          if (/^[A-Z]/.test(tag) && !hasClassName) delegated.add(tag)
+        }
+      }
+    }
+    ts.forEachChild(node, visit)
+  }
+  visit(sourceFile)
+  if (delegated.size === 0) return []
+
+  const dir = path.dirname(filePath)
+  const resolved = []
+  for (const [, names, specifier] of text.matchAll(/import\s*\{([^}]+)\}\s*from\s*'(\.[^']+)'/g)) {
+    const imported = names.split(',').map((n) => n.trim().split(/\s+as\s+/).pop())
+    if (!imported.some((n) => delegated.has(n))) continue
+    for (const extension of ['.tsx', '.ts']) {
+      const candidate = path.resolve(dir, `${specifier}${extension}`)
+      if (fs.existsSync(candidate)) {
+        resolved.push(candidate)
+        break
+      }
+    }
+  }
+  return resolved
+}
+
 function walkPages(dir, files = []) {
   for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
     const full = path.join(dir, entry.name)
@@ -313,10 +374,21 @@ const scanned = DIAGNOSTIC_ONLY
   ? walkPages(PAGES_DIR)
   : [...walkPages(PAGES_DIR), ...routeMountedFeatureFiles()]
 
-/** Troca páginas de re-export pelo arquivo que realmente tem a tela. */
-const files = [
-  ...new Set(scanned.map((file) => (DIAGNOSTIC_ONLY ? file : resolveReExport(file) ?? file))),
-]
+/**
+ * Resolve as duas indireções que o projeto usa até chegar na tela de verdade:
+ * a página de re-export e o container que só escolhe a view por perfil.
+ */
+const files = (() => {
+  if (DIAGNOSTIC_ONLY) return scanned
+  const resolved = new Set()
+  for (const file of scanned) {
+    const target = resolveReExport(file) ?? file
+    const views = resolveDelegatedViews(target)
+    if (views.length > 0) for (const view of views) resolved.add(view)
+    else resolved.add(target)
+  }
+  return [...resolved]
+})()
 const violations = files.flatMap(scanFile)
 
 /** Contagem por arquivo — a unidade que a catraca controla. */

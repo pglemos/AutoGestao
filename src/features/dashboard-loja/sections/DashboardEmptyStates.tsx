@@ -5,6 +5,7 @@ import { Card } from '@/components/molecules/Card'
 import { EmptyState } from '@/components/atoms/EmptyState'
 import { Typography } from '@/components/atoms/Typography'
 import { Button } from '@/components/atoms/Button'
+import { PageCanvas } from '@/design-system/page'
 
 /** Spinner "Identificando Unidade" — usado durante store resolution. */
 export function ResolvingStoreSpinner() {
@@ -21,8 +22,11 @@ export function ResolvingStoreSpinner() {
 /** Skeleton de carregamento da aba performance. */
 export function PerformanceLoadingSkeleton() {
   return (
-    <main
-      className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
+    <div className="w-full h-full bg-gray-50 animate-in fade-in duration-500">
+    <PageCanvas
+      as="main"
+      width="dashboard"
+      className="flex flex-col gap-mx-lg"
       aria-busy="true"
       aria-live="polite"
       aria-label="Carregando performance"
@@ -40,7 +44,8 @@ export function PerformanceLoadingSkeleton() {
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-mx-lg shrink-0">
         {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-mx-xl rounded-2xl" />)}
       </div>
-    </main>
+    </PageCanvas>
+    </div>
   )
 }
 
@@ -53,7 +58,8 @@ type OwnerStoreUnavailableProps = {
 export function OwnerStoreUnavailable({ requestedStoreForbidden, storeResolutionIssue }: OwnerStoreUnavailableProps) {
   const navigate = useNavigate()
   return (
-    <main className="w-full h-full bg-gray-50 p-mx-lg">
+    <div className="w-full h-full bg-gray-50">
+      <PageCanvas as="main" width="focused">
       <Card className="mx-auto max-w-2xl border-none bg-white">
         <EmptyState
           size="lg"
@@ -72,6 +78,7 @@ export function OwnerStoreUnavailable({ requestedStoreForbidden, storeResolution
           }
         />
       </Card>
-    </main>
+      </PageCanvas>
+    </div>
   )
 }
