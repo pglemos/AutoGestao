@@ -130,7 +130,10 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }: { currentSt
                 {done ? <CheckCircle2 className="h-4 w-4 text-white" /> : <Icon className="h-4 w-4" />}
               </div>
               <span className={`text-center text-[9px] font-bold leading-tight ${done || active ? c.title : 'text-slate-600'}`}>{step.label}</span>
-              <span className={`text-[8px] font-semibold ${done || active ? c.note : 'text-slate-300'}`}>{step.pct}%</span>
+              {/* 10px e slate-500: em 8px com slate-300 o percentual ficava
+                  abaixo do contraste AA e perto do limite legível (§12 pede
+                  evitar texto excessivamente pequeno). */}
+              <span className={`text-[10px] font-semibold ${done || active ? c.note : 'text-slate-500'}`}>{step.pct}%</span>
             </button>
             {idx < STEPS.length - 1 && (
               <div className={`h-0.5 max-w-[24px] flex-1 rounded-full transition-all ${completedSteps.has(step.id) ? COLOR_MAP[STEPS[idx + 1].color].progress : 'bg-slate-100'}`} />

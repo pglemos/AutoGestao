@@ -260,7 +260,7 @@ export default function FunilVendedor() {
                 key={value}
                 type="button"
                 onClick={() => setPeriodKey(value as PeriodKey)}
-                className={`rounded-lg px-3 py-1.5 text-[12px] font-semibold transition-all ${periodKey === value ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'}`}
+                className={`rounded-lg px-3 py-1.5 text-[12px] font-semibold transition-all ${periodKey === value ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-800'}`}
               >
                 {label}
               </button>
