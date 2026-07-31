@@ -29,7 +29,7 @@ import {
 import { QuizTreinamento } from './components/QuizTreinamento'
 import { confirmarPresencaTreinamento, listarPresencasTreinamentos } from '@/features/universidade/services/universidade-service'
 import { ContentSuggestionDialog } from '@/features/universidade/components/ContentSuggestionDialog'
-import { PageCanvas } from '@/design-system/page'
+import { PageTemplate } from '@/components/templates/PageTemplate'
 
 const CATEGORIES = ['Atendimento', 'Prospecção', 'WhatsApp', 'Negociação', 'Financiamento', 'Fechamento', 'Pós-venda', 'Carteira', 'Mentalidade']
 const LEVELS = ['N1 Iniciante', 'N2 Intermediário', 'N3 Performance', 'N4 Alta Performance']
@@ -214,8 +214,7 @@ export default function VendedorTreinamentosContainer() {
     const progressoPercent = trainings.length > 0 ? Math.round((completedCount / trainings.length) * 100) : 0
 
     return (
-        <div className="h-full w-full min-w-0 overflow-y-auto bg-gray-50 font-body no-scrollbar">
-          <PageCanvas as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-8">
+        <PageTemplate as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-8" scrollerClassName="font-body">
             <PageHeader title="Treinamentos" subtitle="Desenvolva suas habilidades de vendas">
                 <ContentSuggestionDialog />
             </PageHeader>
@@ -462,7 +461,6 @@ export default function VendedorTreinamentosContainer() {
                     </div>
                 </div>
             )}
-          </PageCanvas>
-        </div>
+          </PageTemplate>
     )
 }

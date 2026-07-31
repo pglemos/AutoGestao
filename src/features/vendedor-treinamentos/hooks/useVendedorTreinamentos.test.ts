@@ -64,7 +64,9 @@ describe('VendedorTreinamentos — contrato visual anterior', () => {
         // quando uma delas divergia. Agora a decisão é do PageCanvas, e a
         // igualdade entre telas é verificada de fato no navegador por
         // src/test/canvas-matrix.playwright.ts.
-        expect(containerSource).toContain('<PageCanvas')
+        // `PageTemplate` envolve o `PageCanvas` com a casca que rola — a decisão
+        // de largura e margem continua sendo do canvas, agora por dentro dele.
+        expect(containerSource).toContain('<PageTemplate')
         expect(containerSource).toContain('width="dashboard"')
         expect(containerSource).not.toContain('max-w-[1500px]')
         expect(containerSource).not.toMatch(/className="[^"]*px-mx-sm py-mx-md/)

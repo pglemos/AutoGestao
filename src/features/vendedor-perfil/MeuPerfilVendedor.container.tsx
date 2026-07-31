@@ -10,7 +10,7 @@ import { Textarea } from '@/components/atoms/Textarea'
 import { Typography } from '@/components/atoms/Typography'
 import { Skeleton } from '@/components/atoms/Skeleton'
 import { useMeuPerfilVendedor, type PerfilVendedor } from './hooks/useMeuPerfilVendedor'
-import { PageCanvas } from '@/design-system/page'
+import { PageTemplate } from '@/components/templates/PageTemplate'
 
 const formatBRL = (value: number) =>
     `R$ ${Number(value || 0).toLocaleString('pt-BR', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`
@@ -85,18 +85,17 @@ export default function MeuPerfilVendedorContainer() {
 
     if (loading) {
         return (
-            <PageCanvas as="div" width="dashboard" className="flex flex-col gap-mx-xl" aria-busy="true">
+            <PageTemplate as="div" width="dashboard" className="flex flex-col gap-mx-xl" aria-busy="true">
                 <Skeleton className="h-16 w-full max-w-md" />
                 <div className="grid grid-cols-1 gap-mx-lg lg:grid-cols-2">
                     {Array.from({ length: 4 }).map((_, i) => <Skeleton key={i} className="h-48 w-full" />)}
                 </div>
-            </PageCanvas>
+            </PageTemplate>
         )
     }
 
     return (
-        <div className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
-            <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
+        <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
             <PageHeading
                 title="Meu Perfil"
                 subtitle="Gerencie suas informações pessoais e profissionais"
@@ -250,7 +249,6 @@ export default function MeuPerfilVendedorContainer() {
                     </div>
                 </Section>
             </div>
-            </PageCanvas>
-        </div>
+            </PageTemplate>
     )
 }

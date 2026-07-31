@@ -6,7 +6,7 @@ import { StoreKpiCards } from '../sections/StoreKpiCards'
 import { StoreSellOutEvolution } from '../sections/StoreSellOutEvolution'
 import { StoreHealthCard } from '../sections/StoreHealthCard'
 import { SalesPerformanceErrorBoundary } from '../components/SalesPerformanceErrorBoundary'
-import { PageCanvas } from '@/design-system/page'
+import { PageTemplate } from '@/components/templates/PageTemplate'
 
 export function StorePerformanceView() {
   const { loading, isRefetching, metrics, chartData, handleExport, handleRefresh } =
@@ -24,8 +24,7 @@ export function StorePerformanceView() {
   }
 
   return (
-    <div className="w-full h-full overflow-y-auto no-scrollbar bg-gray-50">
-    <PageCanvas as="main" width="dashboard" className="flex flex-col gap-mx-lg">
+    <PageTemplate as="main" width="dashboard" className="flex flex-col gap-mx-lg">
       <StoreHeader
         isRefetching={isRefetching}
         onRefresh={handleRefresh}
@@ -46,8 +45,7 @@ export function StorePerformanceView() {
           <StoreHealthCard reaching={metrics.reaching} />
         </aside>
       </div>
-    </PageCanvas>
-    </div>
+    </PageTemplate>
   )
 }
 
