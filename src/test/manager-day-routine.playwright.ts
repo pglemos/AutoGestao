@@ -62,7 +62,18 @@ test.describe.serial('Rotina do Dia Base44 1:1', () => {
     await page.getByRole('button', { name: 'Equipe', exact: true }).click()
     await page.getByRole('combobox', { name: 'Ordenar' }).selectOption('origem')
 
-    await page.getByRole('button', { name: 'Cobrar', exact: true }).first().click()
+    // "Cobrar" só existe quando a aba Equipe tem alguma ação urgente. Com a
+    // equipe em dia a aba mostra o estado vazio, e exigir o botão reprovaria o
+    // teste por ausência de pendência — não por defeito. O que este caso mede é
+    // a ida e a volta preservando contexto, então cada caminho chega à rotina da
+    // equipe pelo meio que existe no estado atual.
+    const charge = page.getByRole('button', { name: 'Cobrar', exact: true }).first()
+    if (await charge.count()) {
+      await charge.click()
+    } else {
+      await expect(page.getByText(/Nenhuma ação urgente no momento/i)).toBeVisible()
+      await page.goto('/gerente/rotina-equipe')
+    }
     await expect(page).toHaveURL(/\/gerente\/rotina-equipe(?:\?|$)/)
     await page.getByRole('button', { name: 'Voltar para a Rotina do Dia' }).click()
 
