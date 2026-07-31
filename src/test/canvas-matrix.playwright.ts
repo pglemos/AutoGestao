@@ -60,27 +60,34 @@ const EXPECTED_PADDING_TOP = 24
 /**
  * Dívida de acessibilidade conhecida, por rota e regra — §21 e §27.6.
  *
- * Medida na primeira execução desta matriz, em 2026-07-31. Os números são teto:
- * podem cair, nunca subir. Zerar uma entrada é a forma de fechá-la.
+ * Os números são teto: podem cair, nunca subir. Zerar uma entrada é a forma de
+ * fechá-la. Cada valor é o maior entre desktop e mobile, porque os dois
+ * viewports expõem conjuntos diferentes.
  *
- * Natureza do que está aqui:
- *   - `color-contrast`: texto pequeno em laranja e cinza claros sobre branco,
- *     usado em rótulos de percentual e avisos. Corrigir exige decidir a paleta
- *     de status, que é escolha de design e não de layout.
+ * Já fechado desde a medição inicial de 2026-07-31, com auditoria de contraste
+ * por par de cor em vez de tela a tela:
+ *   - `label` e `button-name`, as duas únicas violações `critical`. Não resta
+ *     nenhuma crítica.
+ *   - `text-slate-400`/`300` em texto pequeno, que davam 4.47:1 sobre branco.
+ *   - `--mx-neutral-500`, corrigido de 45% para 42% no primitives: era a origem
+ *     de todo `text-secondary`/`muted-foreground` reprovado sobre cinza-claro.
+ *   Efeito medido: /meu-funil 21 → 2, /funil-vendas 15 → 7, /terminal-mx 11 → 8.
+ *
+ * O que sobra:
+ *   - `color-contrast` em badges de percentual coloridos por categoria (azul
+ *     #005bff e teal #00a89d sobre seus fundos claros). Fechar exige decidir a
+ *     paleta de categorias, que é escolha de design, não de layout.
  *   - `scrollable-region-focusable`: contêineres de rolagem sem `tabindex`, que
  *     um teclado não alcança.
- *   - `label`: um campo sem rótulo acessível no fechamento diário. É a única
- *     violação `critical` e a de menor esforço.
  */
 const A11Y_BUDGET: Record<string, Record<string, number>> = {
   '/ajuda': { 'color-contrast': 1 },
   '/configuracoes': { 'color-contrast': 1 },
-  '/meu-funil': { 'color-contrast': 21 },
-  '/terminal-mx': { 'color-contrast': 11, label: 1 },
+  '/meu-funil': { 'color-contrast': 2 },
+  '/terminal-mx': { 'color-contrast': 8 },
   '/pdi': { 'color-contrast': 5 },
-  // O mobile expõe uma região rolável a mais que o desktop, por isso 2.
   '/metas': { 'color-contrast': 7, 'scrollable-region-focusable': 2 },
-  '/funil-vendas': { 'color-contrast': 15, 'scrollable-region-focusable': 1 },
+  '/funil-vendas': { 'color-contrast': 7, 'scrollable-region-focusable': 1 },
   '/falar-consultor': { 'color-contrast': 1 },
   '/treinamentos': {},
   '/organograma': { 'color-contrast': 2 },

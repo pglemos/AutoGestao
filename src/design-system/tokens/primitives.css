@@ -32,7 +32,12 @@
   --mx-neutral-200: 0 0% 90%;
   --mx-neutral-300: 0 0% 83%;
   --mx-neutral-400: 0 0% 64%;
-  --mx-neutral-500: 0 0% 45%;
+  /* 42%, não 45%: em 45% o texto secundário renderiza #737373, que sobre a
+     superfície cinza-clara (#f5f5f5) fica em 4.47:1 e reprova o mínimo AA de
+     4.5:1 — medido com axe em /funil-vendas. Escurecer 3 pontos é imperceptível
+     e leva todo consumidor de `text-secondary`/`muted-foreground` para o lado
+     certo do limite de uma vez (§21). */
+  --mx-neutral-500: 0 0% 42%;
   --mx-neutral-600: 0 0% 32%;
   --mx-neutral-700: 0 0% 26%;
   --mx-neutral-800: 0 0% 15%;

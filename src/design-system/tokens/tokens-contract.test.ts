@@ -75,7 +75,9 @@ describe('arquitetura de tokens do MX Design System', () => {
     expect(prim.get('--mx-neutral-0')).toBe('0 0% 100%')
     expect(prim.get('--mx-neutral-950')).toBe('0 0% 4%')
     expect(prim.get('--mx-neutral-200')).toBe('0 0% 90%')
-    expect(prim.get('--mx-neutral-500')).toBe('0 0% 45%')
+    // 42% e não os 45% do export: em 45% o texto secundário reprovava contraste
+    // AA sobre superfície cinza-clara. Ver a justificativa em primitives.css.
+    expect(prim.get('--mx-neutral-500')).toBe('0 0% 42%')
 
     const sem = declarations(semantic)
     expect(sem.get('--primary')).toBe('var(--mx-color-primary)')

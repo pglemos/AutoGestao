@@ -52,7 +52,7 @@ function clampCounter(value: number): number {
   return Math.min(999, Math.max(0, value))
 }
 
-function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }: { value: number; onDecrement: () => void; onIncrement: () => void; onSet: (v: number) => void; disabled?: boolean }) {
+function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled }: { label: string; value: number; onDecrement: () => void; onIncrement: () => void; onSet: (v: number) => void; disabled?: boolean }) {
   const [inputVal, setInputVal] = useState<string | null>(null)
 
   const commit = () => {
@@ -66,7 +66,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }: { va
     return (
       <div className="flex h-11 cursor-not-allowed items-center rounded-xl border border-slate-100 bg-slate-50 opacity-60">
         <div className="flex h-full w-11 items-center justify-center border-r border-slate-100 text-[20px] font-light text-slate-300">−</div>
-        <span className="flex-1 text-center text-[16px] font-bold tabular-nums text-slate-400">{value}</span>
+        <span className="flex-1 text-center text-[16px] font-bold tabular-nums text-slate-600">{value}</span>
         <div className="flex h-full w-11 items-center justify-center border-l border-slate-100 text-[20px] font-light text-slate-300">+</div>
       </div>
     )
@@ -74,7 +74,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }: { va
 
   return (
     <div className="flex h-11 items-center rounded-xl border border-slate-200 bg-white shadow-sm transition-all focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
-      <button type="button" onClick={onDecrement} className="flex h-full w-11 shrink-0 items-center justify-center rounded-l-xl border-r border-slate-200 text-[20px] font-light text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-700 active:bg-slate-100">−</button>
+      <button type="button" onClick={onDecrement} className="flex h-full w-11 shrink-0 items-center justify-center rounded-l-xl border-r border-slate-200 text-[20px] font-light text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700 active:bg-slate-100">−</button>
       <input
         type="text"
         inputMode="numeric"
@@ -84,9 +84,12 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }: { va
         onChange={event => setInputVal(event.target.value.replace(/\D/g, ''))}
         onBlur={commit}
         onKeyDown={event => { if (event.key === 'Enter' || event.key === 'Tab') commit() }}
+        // O rótulo existe visualmente no <span> do FieldRow, mas nada o
+        // associava a este campo: um leitor de tela anunciava só "editar texto".
+        aria-label={label}
         className="h-full min-w-0 flex-1 border-none bg-transparent text-center text-[16px] font-bold tabular-nums text-slate-700 outline-none"
       />
-      <button type="button" onClick={onIncrement} className="flex h-full w-11 shrink-0 items-center justify-center rounded-r-xl border-l border-slate-200 text-[20px] font-light text-slate-400 transition-colors hover:bg-slate-50 hover:text-slate-700 active:bg-slate-100">+</button>
+      <button type="button" onClick={onIncrement} className="flex h-full w-11 shrink-0 items-center justify-center rounded-r-xl border-l border-slate-200 text-[20px] font-light text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700 active:bg-slate-100">+</button>
     </div>
   )
 }
@@ -96,7 +99,7 @@ function FieldRow({ label, value, onDecrement, onIncrement, onSet, disabled }: {
     <div className="flex items-center justify-between gap-3">
       <span className={`min-w-0 flex-1 text-[13px] font-semibold leading-tight ${disabled ? 'text-slate-300' : 'text-slate-600'}`}>{label}</span>
       <div className="w-[140px] shrink-0">
-        <StepperInput value={value} onDecrement={onDecrement} onIncrement={onIncrement} onSet={onSet} disabled={disabled} />
+        <StepperInput label={label} value={value} onDecrement={onDecrement} onIncrement={onIncrement} onSet={onSet} disabled={disabled} />
       </div>
     </div>
   )
@@ -123,10 +126,10 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }: { currentSt
         return (
           <Fragment key={step.id}>
             <button type="button" onClick={() => onStepClick(step.id)} className="flex min-w-0 flex-1 flex-col items-center gap-1 transition-all">
-              <div className={`flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-all ${done ? c.stepDone : active ? c.stepActive : 'bg-slate-100 text-slate-400'}`}>
+              <div className={`flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-all ${done ? c.stepDone : active ? c.stepActive : 'bg-slate-100 text-slate-600'}`}>
                 {done ? <CheckCircle2 className="h-4 w-4 text-white" /> : <Icon className="h-4 w-4" />}
               </div>
-              <span className={`text-center text-[9px] font-bold leading-tight ${done || active ? c.title : 'text-slate-400'}`}>{step.label}</span>
+              <span className={`text-center text-[9px] font-bold leading-tight ${done || active ? c.title : 'text-slate-600'}`}>{step.label}</span>
               <span className={`text-[8px] font-semibold ${done || active ? c.note : 'text-slate-300'}`}>{step.pct}%</span>
             </button>
             {idx < STEPS.length - 1 && (
@@ -238,7 +241,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
         <div className="mb-1 flex items-center justify-between">
           <div className="min-w-0 flex-1 pr-3">
             <h2 className="text-[13px] font-bold uppercase tracking-wide text-[#0F172A] sm:text-[14px]">Progresso do Fechamento</h2>
-            <p className="mt-0.5 text-[10px] leading-tight text-slate-400 sm:text-[11px]">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
+            <p className="mt-0.5 text-[10px] leading-tight text-slate-600 sm:text-[11px]">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
           </div>
           <span className={`shrink-0 text-[26px] font-bold tabular-nums sm:text-[28px] ${totalPct === 100 ? 'text-green-600' : 'text-[#0F172A]'}`}>{totalPct}%</span>
         </div>
