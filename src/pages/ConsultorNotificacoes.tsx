@@ -2,9 +2,9 @@ import { useNotifications, useSystemBroadcasts } from '@/hooks/useData';
 import { useStores } from '@/hooks/useTeam'
 import { useState, useCallback } from 'react'
 import { toast } from '@/lib/toast'
-import { 
-    Bell, Plus, X, Send, Building2, Globe, AlertCircle, 
-    Calendar, RefreshCw, Zap, ShieldCheck, Mail, Users
+import {
+    Bell, Plus, X, Send, Building2, Globe,
+    Calendar, RefreshCw, Zap, Mail
 } from 'lucide-react'
 import { motion, AnimatePresence } from 'motion/react'
 import { cn } from '@/lib/utils'
@@ -12,7 +12,13 @@ import { Badge } from '@/components/atoms/Badge'
 import { Typography } from '@/components/atoms/Typography'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/molecules/Card'
+import { Card } from '@/components/molecules/Card'
+import {
+    MxEmptyState,
+    MxLoadingState,
+    MxModuleHeader,
+    MxModulePage,
+} from '@/components/module/MxModuleVisualPrimitives'
 
 type NotificationTargetRole = 'todos' | 'dono' | 'gerente' | 'vendedor'
 const NOTIFICATION_TARGET_ROLES: NotificationTargetRole[] = ['todos', 'dono', 'gerente', 'vendedor']
@@ -22,10 +28,10 @@ export default function ConsultorNotificacoes() {
     const { broadcasts, loading, refetch } = useSystemBroadcasts()
     const { lojas } = useStores()
     const [showForm, setShowForm] = useState(false)
-    const [form, setForm] = useState({ 
-        title: '', 
-        message: '', 
-        target_type: 'all' as 'all' | 'store', 
+    const [form, setForm] = useState({
+        title: '',
+        message: '',
+        target_type: 'all' as 'all' | 'store',
         target_store_id: '',
         target_role: 'todos' as NotificationTargetRole
     })
@@ -36,8 +42,8 @@ export default function ConsultorNotificacoes() {
         e.preventDefault()
         if (!form.title || !form.message) { toast.error('Preencha os campos obrigatórios.'); return }
         setSaving(true)
-        
-        const { error } = await sendNotification({ 
+
+        const { error } = await sendNotification({
             store_id: form.target_type === 'store' ? form.target_store_id : undefined,
             target_role: form.target_role,
             title: form.title,
@@ -45,7 +51,7 @@ export default function ConsultorNotificacoes() {
             type: 'system',
             priority: 'medium'
         })
-        
+
         setSaving(false)
         if (error) { toast.error(error); return }
         toast.success('Comunicado disparado na rede!')
@@ -59,35 +65,24 @@ export default function ConsultorNotificacoes() {
         toast.success('Gateway sincronizado!')
     }, [refetch])
 
-    if (loading) return (
-        <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50">
-            <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-emerald-600 mb-6" />
-            <Typography variant="caption" tone="muted" className="animate-pulse">Sincronizando Gateway...</Typography>
-        </div>
-    )
+    if (loading) return <MxLoadingState label="Sincronizando Gateway..." />
 
     return (
-        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
-            
-            {/* Header / Alerts Toolbar */}
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10 shrink-0">
-                <div className="flex flex-col gap-mx-tiny">
-                    <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm" aria-hidden="true" />
-                        <Typography variant="h1">Central de <span className="text-mx-green-700">Mensagens</span></Typography>
-                    </div>
-                    <Typography variant="caption" className="pl-mx-md">COMUNICAÇÃO ESTRATÉGICA DE REDE</Typography>
-                </div>
-
-                <div className="flex items-center gap-mx-sm shrink-0">
-                    <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar" className="h-mx-xl w-mx-xl">
-                        <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
-                    </Button>
-                    <Button onClick={() => setShowForm(true)} className="h-mx-xl px-8 shadow-sm">
-                        <Plus size={18} className="mr-2" /> DISPARAR ALERTA
-                    </Button>
-                </div>
-            </header>
+        <MxModulePage id="consultor-central-mensagens">
+            <MxModuleHeader
+                title={<>Central de <span className="text-mx-green-700">Mensagens</span></>}
+                description="COMUNICAÇÃO ESTRATÉGICA DE REDE"
+                actions={(
+                    <>
+                        <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar" className="h-mx-xl w-mx-xl">
+                            <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
+                        </Button>
+                        <Button onClick={() => setShowForm(true)} className="h-mx-xl px-8 shadow-sm">
+                            <Plus size={18} className="mr-2" /> DISPARAR ALERTA
+                        </Button>
+                    </>
+                )}
+            />
 
             <AnimatePresence>
                 {showForm && (
@@ -95,7 +90,7 @@ export default function ConsultorNotificacoes() {
                         <form onSubmit={handleSubmit}>
                             <Card className="p-mx-10 md:p-14 border-none bg-white overflow-hidden relative">
                                 <div className="absolute top-mx-0 right-mx-0 w-mx-96 h-mx-96 bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-48 -mt-48" />
-                                
+
                                 <header className="flex items-center justify-between border-b border-gray-200 pb-8 mb-10 relative z-10">
                                     <div className="flex items-center gap-mx-md">
                                         <div className="w-mx-14 h-mx-14 rounded-2xl bg-pure-black text-white flex items-center justify-center shadow-sm transform rotate-2"><Mail size={24} className="text-emerald-600" /></div>
@@ -115,7 +110,7 @@ export default function ConsultorNotificacoes() {
                                         </div>
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Corpo da Mensagem</Typography>
-                                            <textarea 
+                                            <textarea
                                                 value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
                                                 className="w-full bg-gray-50 border border-gray-200 rounded-2xl p-mx-lg text-sm font-bold text-gray-800 placeholder:text-gray-500 focus:outline-none focus:border-brand-primary focus:ring-8 focus:ring-brand-primary/5 transition-all resize-none shadow-none h-mx-48"
                                                 placeholder="Detalhes técnicos ou operacionais..." required
@@ -189,7 +184,7 @@ export default function ConsultorNotificacoes() {
                         <motion.article key={n.id} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: i * 0.05 }}>
                             <Card className="p-mx-lg h-full border-none bg-white group hover:shadow-sm transition-all relative overflow-hidden flex flex-col">
                                 <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
-                                
+
                                 <header className="flex items-start justify-between mb-8 border-b border-gray-200 pb-6 relative z-10">
                                     <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 flex items-center justify-center text-gray-500 group-hover:bg-pure-black group-hover:text-white transition-all shadow-none transform group-hover:rotate-6">
                                         <Zap size={20} />
@@ -218,6 +213,6 @@ export default function ConsultorNotificacoes() {
                     ))
                 )}
             </div>
-        </main>
+        </MxModulePage>
     )
 }

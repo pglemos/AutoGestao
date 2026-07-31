@@ -54,6 +54,7 @@ tmp/
 .agents/
 .claude_backup/
 .playwright-transform-cache-*/
+playwright-transform-cache-*/
 core-js-banners
 .opencode/
 
