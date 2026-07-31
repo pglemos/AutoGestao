@@ -13,6 +13,14 @@
  * onde está errada é correção.
  *
  *   E2E_AUTH_PASSWORD='…' node scripts/audit-page-margins.mjs
+ *
+ * LEIA ANTES DE AGIR SOBRE O RESULTADO: margem 0 não significa
+ * necessariamente defeito. As três rotas do Dono que aparecem com 0px
+ * (/plano-estrategico, /mercado, /decisoes) renderizam `OwnerPlaceholder` —
+ * telas com "esta área será construída na próxima etapa", centradas em viewport.
+ * Como as telas de acesso negado e 404, elas não têm margem de página a
+ * padronizar. Migrá-las para o canvas seria dar container a conteúdo que ainda
+ * não existe.
  */
 import { chromium } from '@playwright/test'
 
