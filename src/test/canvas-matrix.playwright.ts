@@ -96,10 +96,10 @@ const A11Y_BUDGET: Record<string, Record<string, number>> = {
   '/funil-vendas': {},
   '/meu-funil': {},
   '/metas': {},
+  '/pdi': {},
+  '/organograma': {},
+  '/banco-talentos': {},
   '/terminal-mx': { 'color-contrast': 5, 'scrollable-region-focusable': 1 },
-  '/pdi': { 'color-contrast': 3 },
-  '/organograma': { 'color-contrast': 1 },
-  '/banco-talentos': { 'color-contrast': 1 },
 }
 
 async function signIn(page: Page, role: RoleKey): Promise<void> {

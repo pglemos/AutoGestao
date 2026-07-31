@@ -79,7 +79,7 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
       {...props}
     >
       {showFallback ? (
-        <span className="font-bold uppercase text-emerald-600 select-none" aria-hidden="true">
+        <span className="font-bold uppercase text-status-success-text select-none" aria-hidden="true">
           {initials}
         </span>
       ) : (
