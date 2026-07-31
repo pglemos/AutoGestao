@@ -14,9 +14,9 @@
   --mx-accent-soft: hsl(var(--mx-color-primary-subtle));
 }
 
-[data-mx-internal-scope='true'] :is(h1, h2, h3, h4, h5, h6, p, button, label).font-black {
-  font-weight: 600;
-}
+/* A regra que normalizava `.font-black` foi removida: medida em produção nas
+   cinco rotas internas, alcançava zero elementos. As classes que ela existia
+   para conter já saíram dos componentes. */
 
 [data-mx-internal-scope='true'] :is(h1, h2, h3, h4, h5, h6, p, button, label).uppercase {
   text-transform: none;
