@@ -689,7 +689,9 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 )}
 </div>
 
-<div className="hidden max-w-full overflow-x-auto md:block">
+{/* Rolagem horizontal alcançável por teclado: sem tabIndex, as colunas
+          fora da viewport ficam inacessíveis a quem não usa mouse (§21). */}
+      <div className="hidden max-w-full overflow-x-auto md:block" tabIndex={0} role="region" aria-label="Clientes e agendamentos">
   <table className="w-full min-w-[1180px] table-fixed text-left text-[13px]">
             <colgroup>
               <col className="w-[14%]" />
@@ -1351,7 +1353,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <button
                 type="button"
                 onClick={() => setCoerenciaModalOpen(false)}
-                className="h-11 rounded-xl bg-[#F59E0B] px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-amber-600"
+                className="h-11 rounded-xl bg-[#F59E0B] px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-amber-700"
               >
                 Corrigir canal ou atendimento
               </button>

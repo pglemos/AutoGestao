@@ -99,7 +99,10 @@ const A11Y_BUDGET: Record<string, Record<string, number>> = {
   '/pdi': {},
   '/organograma': {},
   '/banco-talentos': {},
-  '/terminal-mx': { 'color-contrast': 5, 'scrollable-region-focusable': 1 },
+  // Único teto restante. São botões e rótulos em laranja no fechamento diário;
+  // o laranja é a cor da etapa Showroom, então escurecer mais mexe na
+  // identidade da etapa e não só no contraste.
+  '/terminal-mx': { 'color-contrast': 4 },
 }
 
 async function signIn(page: Page, role: RoleKey): Promise<void> {

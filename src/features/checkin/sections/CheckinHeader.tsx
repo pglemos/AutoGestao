@@ -481,7 +481,7 @@ previousCard.type === 'previous_done' ? 'text-emerald-700' : 'text-amber-800'
 Ver histórico
 </button>
 <button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-[11px] font-bold text-white shadow-sm ${
-previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-amber-600'
+previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-amber-700'
 }`}>
 {previousCard.type === 'previous_done' ? 'Ajustar fechamento' : `Regularizar ${previousCard.date.slice(8, 10)}/${previousCard.date.slice(5, 7)}`}
 </button>

@@ -23,8 +23,8 @@ const STEPS: Array<{ id: StepId; label: string; pct: number; icon: typeof Store;
 const COLOR_MAP = {
   orange: {
     bg: 'bg-orange-50', border: 'border-orange-200', iconBg: 'bg-orange-500', iconShadow: 'shadow-orange-200',
-    title: 'text-orange-700', sub: 'text-orange-400', btn: 'bg-orange-500 hover:bg-orange-600',
-    stepActive: 'bg-orange-500 text-white', stepDone: 'bg-orange-500 text-white', divider: 'border-orange-100', note: 'text-orange-400', progress: 'bg-orange-500',
+    title: 'text-orange-700', sub: 'text-orange-600', btn: 'bg-orange-600 hover:bg-orange-700',
+    stepActive: 'bg-orange-500 text-white', stepDone: 'bg-orange-500 text-white', divider: 'border-orange-100', note: 'text-orange-600', progress: 'bg-orange-500',
   },
   green: {
     bg: 'bg-green-50', border: 'border-green-200', iconBg: 'bg-green-500', iconShadow: 'shadow-green-200',
@@ -268,7 +268,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <p className={`mt-0.5 text-[11px] font-medium ${co.sub}`}>Atendimento presencial</p>
             </div>
           </div>
-          <p className="text-[12px] text-slate-500">Informe os atendimentos presenciais realizados no dia.</p>
+          <p className="text-[12px] text-slate-600">Informe os atendimentos presenciais realizados no dia.</p>
           <div className={`space-y-4 border-t ${co.divider} pt-4`}>
             <FieldRow
               label="Atendimentos realizados"
@@ -300,7 +300,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <p className={`mt-0.5 text-[11px] font-medium ${cg.sub}`}>Relacionamento e prospecção</p>
             </div>
           </div>
-          <p className="text-[12px] text-slate-500">Informe os contatos, atendimentos e agendamentos gerados pela sua carteira.</p>
+          <p className="text-[12px] text-slate-600">Informe os contatos, atendimentos e agendamentos gerados pela sua carteira.</p>
           <div className={`space-y-4 border-t ${cg.divider} pt-4`}>
             <FieldRow label="Leads recebidos" value={leadsCart} onDecrement={() => updateField('leads_cart', clampCounter(leadsCart - 1))} onIncrement={() => updateField('leads_cart', clampCounter(leadsCart + 1))} onSet={v => updateField('leads_cart', clampCounter(v))} disabled={disabled} />
             <FieldRow label="Atendimentos realizados" value={visitasCart} onDecrement={() => updateField('visitas_cart', clampCounter(visitasCart - 1))} onIncrement={() => updateField('visitas_cart', clampCounter(visitasCart + 1))} onSet={v => updateField('visitas_cart', clampCounter(v))} disabled={disabled} />
@@ -336,7 +336,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <p className={`mt-0.5 text-[11px] font-medium ${cb.sub}`}>Leads digitais</p>
             </div>
           </div>
-          <p className="text-[12px] text-slate-500">Informe os leads digitais recebidos e o andamento dos atendimentos.</p>
+          <p className="text-[12px] text-slate-600">Informe os leads digitais recebidos e o andamento dos atendimentos.</p>
           <div className={`space-y-4 border-t ${cb.divider} pt-4`}>
             <FieldRow label="Leads recebidos" value={leadsNet} onDecrement={() => updateField('leads_net', clampCounter(leadsNet - 1))} onIncrement={() => updateField('leads_net', clampCounter(leadsNet + 1))} onSet={v => updateField('leads_net', clampCounter(v))} disabled={disabled} />
             <FieldRow label="Atendimentos realizados" value={visitasNet} onDecrement={() => updateField('visitas_net', clampCounter(visitasNet - 1))} onIncrement={() => updateField('visitas_net', clampCounter(visitasNet + 1))} onSet={v => updateField('visitas_net', clampCounter(v))} disabled={disabled} />
@@ -372,7 +372,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <p className={`mt-0.5 text-[11px] font-medium ${cp.sub}`}>Registros de vendas e agendamentos D+1</p>
             </div>
           </div>
-          <p className="text-[12px] text-slate-500">{vendasMsg}</p>
+          <p className="text-[12px] text-slate-600">{vendasMsg}</p>
         </div>
       )}
     </div>
