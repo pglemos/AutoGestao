@@ -36,7 +36,9 @@ test.describe('Ranking store privacy regression', () => {
     await login(page, user.email, user.password)
     await page.goto('/ranking')
 
-    await expect(page.getByText('Arena Global')).toBeVisible({ timeout: 15000 })
+    // O cabeçalho é "Ranking Global" desde a unificação; "Arena" sobrou apenas
+    // no nome do seletor de comparação entre lojas.
+    await expect(page.getByRole('heading', { name: /Ranking\s+Global/i }).first()).toBeVisible({ timeout: 15000 })
     await expect.poll(async () => (await page.locator('body').textContent()) || '', { timeout: 15000 })
       .toContain(storeName!)
 

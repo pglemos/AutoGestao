@@ -428,7 +428,7 @@ export default function PlanoDeAcao() {
   const filteredActions = filterActions(actions, filters);
 
   return (
-    <main id="page-plano-acao" aria-label="Plano de Ação" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0">
+    <div id="page-plano-acao" aria-label="Plano de Ação" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0">
       <ActionPlanHeader
         onNewAction={() => handleNewAction()}
         onExport={handleExport}
@@ -585,6 +585,6 @@ export default function PlanoDeAcao() {
         onConfirm={handleModalConfirm}
         responsiblePeople={responsiblePeople}
       />
-    </main>
+    </div>
   );
 }

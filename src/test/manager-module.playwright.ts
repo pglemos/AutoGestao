@@ -10,9 +10,12 @@ const routes = [
   { path: '/home', slug: 'inicio', heading: 'Início', uniqueText: /Previsibilidade comercial para conduzir o resultado do dia/i },
   { path: '/rotina', slug: 'rotina-dia', heading: 'Rotina do Dia', uniqueText: /Alertas e ações essenciais para conduzir o dia/i },
   { path: '/fechamento-diario', slug: 'fechamento', heading: 'Fechamento Diário', uniqueText: /Movimento da Equipe/i },
-  { path: '/gerente/rotina-equipe', slug: 'rotina', heading: 'Rotina da Equipe', uniqueText: /Acompanhe a execução das atividades comerciais da equipe/i },
+  { path: '/plano-acao', slug: 'plano-acao', heading: 'Plano de Ação', uniqueText: /Plano de Ação/i },
+  { path: '/gerente/rotina-equipe', slug: 'rotina', heading: 'Rotina da Equipe', uniqueText: /Acompanhe a execução oficial das atividades comerciais da equipe/i },
   { path: '/gerente/minha-equipe', slug: 'equipe', heading: 'Minha Equipe', uniqueText: /Visão do Kanban/i },
-  { path: '/gerente/meta-loja', slug: 'meta', heading: 'Meta da Loja', uniqueText: /Acompanhe o resultado da loja e saiba o que fazer para alcançar a meta/i },
+  // A rota serve o dashboard canônico desde 5962d573; o título da tela é
+  // "Metas Individuais" e a meta da loja aparece na linha de contexto.
+  { path: '/gerente/meta-loja', slug: 'meta', heading: 'Metas Individuais', uniqueText: /Meta da loja: .* vendas/i },
   { path: '/gerente/mentor', slug: 'mentor', heading: 'Mentor Gerencial', uniqueText: /Biblioteca de orientações/i },
   { path: '/gerente/feedbacks-pdis', slug: 'desenvolvimento', heading: 'Desenvolvimento', uniqueText: /Central de gestão de pessoas/i },
   { path: '/gerente/ranking', slug: 'ranking', heading: 'Ranking', uniqueText: /Acompanhe a classificação da equipe por resultado, conversão e execução/i },
@@ -58,8 +61,11 @@ async function expectNoEligibleTeam(page: import('@playwright/test').Page) {
 test.describe('Módulo Gerencial canônico', () => {
   test.beforeEach(async ({ page }) => loginWithCredentials(page, credentials.email, credentials.password))
 
-  test('exibe exatamente os dez menus na ordem contratada e abre todas as rotas', async ({ page }) => {
-    const expectedLabels = ['Início', 'Rotina do Dia', 'Fechamento Diário', 'Rotina da Equipe', 'Minha Equipe', 'Meta da Loja', 'Mentor Gerencial', 'Desenvolvimento', 'Ranking', 'Universidade MX']
+  test('exibe exatamente os onze menus na ordem contratada e abre todas as rotas', async ({ page }) => {
+    // A ordem é a das seções da sidebar (GESTÃO, ESTRATÉGIA, EQUIPE), não a
+    // ordem plana anterior. "Plano de Ação" entrou com o workspace multiperfil
+    // e é item deliberado do menu do Gerente, não resíduo.
+    const expectedLabels = ['Início', 'Rotina do Dia', 'Fechamento Diário', 'Plano de Ação', 'Meta da Loja', 'Mentor Gerencial', 'Rotina da Equipe', 'Minha Equipe', 'Desenvolvimento', 'Ranking', 'Universidade MX']
     const mobileMenu = page.getByRole('button', { name: 'Abrir menu principal' })
     if (await mobileMenu.isVisible().catch(() => false)) await mobileMenu.click()
     const menu = page.getByRole('navigation', { name: 'Menu principal do Gerente' })
@@ -97,7 +103,7 @@ test.describe('Módulo Gerencial canônico', () => {
     }
   })
 
-  test('carrega conteúdo exclusivo das dez telas em desktop, tablet e mobile', async ({ page }) => {
+  test('carrega conteúdo exclusivo das onze telas em desktop, tablet e mobile', async ({ page }) => {
     test.setTimeout(120_000)
     for (const viewport of [
       { name: 'desktop-1440', width: 1440, height: 900 },
@@ -121,7 +127,7 @@ test.describe('Módulo Gerencial canônico', () => {
     }
   })
 
-  test('mantém console e network limpos nas dez rotas', async ({ page }) => {
+  test('mantém console e network limpos nas onze rotas', async ({ page }) => {
     test.setTimeout(120_000)
     const consoleErrors: string[] = []
     const failedRequests: string[] = []
@@ -213,7 +219,8 @@ test.describe('Módulo Gerencial canônico', () => {
     await page.keyboard.press('Escape')
 
     await page.getByRole('tab', { name: 'Feedback', exact: true }).click()
-    await page.getByRole('button', { name: 'Novo Feedback', exact: true }).click()
+    // O rótulo do botão é "Novo feedback"; só o título do modal usa maiúscula.
+    await page.getByRole('button', { name: /^Novo feedback$/i }).first().click()
     const feedbackSeller = page.getByLabel('Vendedor', { exact: true })
     await expect(feedbackSeller).toBeVisible()
     await expect(feedbackSeller).not.toContainText(/Gerente MX Consultoria|Dono/i)
@@ -237,7 +244,8 @@ test.describe('Módulo Gerencial canônico', () => {
     await page.screenshot({ path: 'output/playwright/manager-parity-20260712-fresh/local-desenvolvimento-v3-pdi-wizard-mobile.png', fullPage: true })
     await page.keyboard.press('Escape')
     await page.getByRole('tab', { name: 'Feedback', exact: true }).click()
-    await page.getByRole('button', { name: 'Novo Feedback', exact: true }).click()
+    // O rótulo do botão é "Novo feedback"; só o título do modal usa maiúscula.
+    await page.getByRole('button', { name: /^Novo feedback$/i }).first().click()
     const mobileFeedbackDialog = page.getByRole('dialog', { name: 'Novo Feedback' })
     await expect(mobileFeedbackDialog).toHaveCSS('opacity', '1')
     await expectWithinViewport(mobileFeedbackDialog.locator(':scope > div').first())
@@ -248,15 +256,16 @@ test.describe('Módulo Gerencial canônico', () => {
     await page.setViewportSize({ width: 1280, height: 720 })
 
     await page.getByRole('tab', { name: 'PDI', exact: true }).click()
-    await expect(page.getByRole('button', { name: 'Ver Mapa da Equipe', exact: true })).toBeVisible()
+    await expect(page.getByRole('button', { name: /^Ver mapa da equipe$/i })).toBeVisible()
 
+    // A tela de meta do Gerente é o dashboard canônico (5962d573): metas
+    // individuais rateáveis, com a meta da loja na linha de contexto. Os
+    // seletores de horizonte e o "Plano de Sustentação" pertenciam à tela
+    // anterior e saíram do produto junto com ela.
     await page.goto('/gerente/meta-loja')
-    await expect(page.getByRole('heading', { name: 'Meta da Loja' })).toBeVisible()
-    for (const horizon of ['Hoje', 'Esta semana', 'Esta dezena', 'Este mês']) {
-      await expect(page.getByRole('button', { name: horizon, exact: true })).toBeVisible()
-    }
-    await page.getByRole('button', { name: 'Esta dezena', exact: true }).click()
-    await expect(page.getByText('Plano de Sustentação')).toBeVisible()
+    await expect(page.getByRole('heading', { name: 'Metas Individuais' })).toBeVisible()
+    await expect(page.getByText(/Meta da loja: .* vendas/i).first()).toBeVisible()
+    await expect(page.getByRole('button', { name: 'Ratear igual', exact: true })).toBeVisible()
 
     await page.goto('/gerente/mentor')
     await page.getByRole('button').filter({ hasText: 'Reunião matinal' }).click()

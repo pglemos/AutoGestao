@@ -102,17 +102,17 @@ export default function AiDiagnostics() {
 
   if (!internalProfile && role !== 'gerente') {
     return (
-      <main className="h-full w-full flex flex-col items-center justify-center text-center p-mx-lg bg-gray-50">
+      <div className="h-full w-full flex flex-col items-center justify-center text-center p-mx-lg bg-gray-50">
         <ShieldCheck size={48} className="text-emerald-600 opacity-20 mb-6" aria-hidden="true" />
         <Typography variant="h2" className="tracking-tighter">Acesso Restrito</Typography>
         <Typography variant="caption" tone="muted" className="max-w-sm mx-auto mt-4">Diagnóstico operacional disponível para Admin MX e Gerente.</Typography>
-      </main>
+      </div>
     )
   }
 
   if (!internalProfile) {
     return (
-      <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+      <div className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
         <PageHeading
           title={<span>Diagnóstico <span className="text-emerald-600">Operacional</span></span>}
           subtitle="Leitura de funil MX 20/60/33"
@@ -169,7 +169,7 @@ export default function AiDiagnostics() {
             </Card>
           </aside>
         </div>
-      </main>
+      </div>
     )
   }
 

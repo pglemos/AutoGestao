@@ -144,27 +144,48 @@ export async function createE2EStoreUser(options: {
   return user
 }
 
+export async function createE2EStore(name: string) {
+  const admin = getSupabaseAdmin()
+  const { data, error } = await admin
+    .from('lojas')
+    // `stores_source_mode_check` só aceita legacy_forms | native_app | hybrid.
+    .insert({ name, active: true, source_mode: 'native_app' })
+    .select('id, name')
+    .single()
+
+  if (error || !data) throw new Error(`Failed to create E2E store: ${error?.message || 'missing row'}`)
+  return data as { id: string; name: string }
+}
+
 export async function createE2EConsultingClient(options: {
   name: string
   createdBy: string
+  storeId?: string
 }) {
   const admin = getSupabaseAdmin()
   const slug = options.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '')
+  // `clientes_consultoria_active_requires_store_check` recusa cliente ativo sem
+  // loja primária. A fixture cria a loja junto quando o chamador não fornece
+  // uma, porque um cliente inativo não é navegável pelas telas em teste.
+  const store = options.storeId
+    ? { id: options.storeId }
+    : await createE2EStore(`E2E Loja ${slug}`.slice(0, 60))
   const { data, error } = await admin
     .from('clientes_consultoria')
     .insert({
       name: options.name,
       slug,
       status: 'ativo',
+      primary_store_id: store.id,
       current_visit_step: 0,
       modality: 'Presencial',
       created_by: options.createdBy,
     })
-    .select('id, slug, name')
+    .select('id, slug, name, primary_store_id')
     .single()
 
   if (error || !data) throw new Error(`Failed to create E2E consulting client: ${error?.message || 'missing row'}`)
-  return data as { id: string; slug: string; name: string }
+  return data as { id: string; slug: string; name: string; primary_store_id: string }
 }
 
 export async function createE2EConsultingVisit(options: {
@@ -207,9 +228,20 @@ export async function createE2EConsultingVisit(options: {
 export async function deleteE2EConsultingData(clientIds: string[]) {
   if (!clientIds.length) return
   const admin = getSupabaseAdmin()
+  // Guarda as lojas criadas junto com os clientes antes de apagar o cliente,
+  // senão a loja de fixture fica órfã no banco a cada execução.
+  const { data: clients } = await admin
+    .from('clientes_consultoria')
+    .select('primary_store_id, name')
+    .in('id', clientIds)
+  const fixtureStoreIds = (clients || [])
+    .filter((client) => client.primary_store_id && String(client.name).startsWith('E2E '))
+    .map((client) => client.primary_store_id as string)
+
   await admin.from('atribuicoes_consultoria').delete().in('client_id', clientIds)
   await admin.from('visitas_consultoria').delete().in('client_id', clientIds)
   await admin.from('clientes_consultoria').delete().in('id', clientIds)
+  if (fixtureStoreIds.length) await admin.from('lojas').delete().in('id', fixtureStoreIds)
 }
 
 export async function deleteE2EUser(userId: string) {

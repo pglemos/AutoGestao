@@ -549,7 +549,7 @@ export default function ManagerDailyClosing() {
   if (sellersLoading || checkinsLoading) return <ManagerClosingSkeleton />;
 
   return (
-    <main className="min-h-full bg-gray-50 px-4 py-6">
+    <div className="min-h-full bg-gray-50 px-4 py-6">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 pb-20">
         <ManagerHomeReturnLink />
 
@@ -825,7 +825,7 @@ export default function ManagerDailyClosing() {
           onSubmit={handleCorrectLeads}
         />
       </div>
-    </main>
+    </div>
   );
 }
 
@@ -1074,7 +1074,7 @@ function Empty({ text }: { text: string }) {
 }
 
 function ManagerClosingSkeleton() {
-  return <main className="space-y-5 bg-gray-50 p-6" aria-busy="true"><Skeleton className="h-36" /><div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">{Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="h-[164px]" />)}</div><Skeleton className="h-[420px]" /></main>;
+  return <div className="space-y-5 bg-gray-50 p-6" aria-busy="true"><Skeleton className="h-36" /><div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">{Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="h-[164px]" />)}</div><Skeleton className="h-[420px]" /></div>;
 }
 
 function initials(name: string) {

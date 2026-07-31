@@ -91,7 +91,6 @@ export default function FunilVendasGerente() {
       width="dashboard"
       bottomClearance="navigation"
       id="funil-vendas"
-      role="main"
       className="flex min-h-0 flex-1 flex-col gap-6"
       aria-label="Funil de Vendas"
     >

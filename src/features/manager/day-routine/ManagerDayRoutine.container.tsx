@@ -396,7 +396,7 @@ export function ManagerDayRoutine() {
     : null
 
   return (
-    <main className="min-h-full bg-gray-50">
+    <div className="min-h-full bg-gray-50">
       <ManagerDayRoutineView
         returnLink={<ManagerHomeReturnLink />}
         referenceDate={referenceDate}
@@ -414,7 +414,7 @@ export function ManagerDayRoutine() {
         onCreate={createTask}
         onComplete={completeTask}
       />
-    </main>
+    </div>
   )
 }
 

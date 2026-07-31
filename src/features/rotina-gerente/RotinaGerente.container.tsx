@@ -22,7 +22,7 @@ export function RotinaGerenteContainer() {
   const showContent = !page.isAdmin || page.selectedStoreId
 
   return (
-    <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+    <div className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
       {showSelector && (
         <RotinaErrorBoundary sectionName="seletor de unidade">
           <RotinaAdminStoreSelector
@@ -94,7 +94,7 @@ export function RotinaGerenteContainer() {
           </div>
         </>
       )}
-    </main>
+    </div>
   )
 }
 

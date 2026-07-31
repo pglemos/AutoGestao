@@ -8,7 +8,7 @@
 - Tabelas referenciadas pelo runtime: **127**
 - RPCs referenciadas pelo runtime: **84**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **247**
+- Pares tabela/operação encontrados: **249**
 
 ## Rotas
 
@@ -187,7 +187,7 @@
 | `logs_compartilhamento_whatsapp` | 1 |
 | `logs_reprocessamento` | 1 |
 | `logs_rotina_gerente` | 1 |
-| `lojas` | 18 |
+| `lojas` | 19 |
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
@@ -373,7 +373,9 @@
 | `logs_reprocessamento:update` | 1 |
 | `logs_rotina_gerente:select` | 1 |
 | `logs_rotina_gerente:upsert` | 1 |
-| `lojas:select` | 18 |
+| `lojas:delete` | 1 |
+| `lojas:insert` | 1 |
+| `lojas:select` | 19 |
 | `lojas:update` | 1 |
 | `manager_daily_tasks:select` | 1 |
 | `manager_daily_tasks:update` | 1 |

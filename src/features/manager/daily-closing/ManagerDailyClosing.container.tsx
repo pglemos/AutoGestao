@@ -358,7 +358,7 @@ export default function ManagerDailyClosing() {
   if (sellersLoading || checkinsLoading) return <ManagerClosingSkeleton />;
 
   return (
-    <main id="page-fechamento-diario" role="main" className="min-h-full" aria-label="Fechamento Diário">
+    <div id="page-fechamento-diario" className="min-h-full" aria-label="Fechamento Diário">
       <div className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 pb-20">
         <ManagerHomeReturnLink />
         <section className="bg-white rounded-[16px] border border-gray-100 shadow-sm p-5">
@@ -658,7 +658,7 @@ export default function ManagerDailyClosing() {
           onSubmit={handleCorrectLeads}
         />
       </div>
-    </main>
+    </div>
   );
 }
 
@@ -1258,7 +1258,7 @@ function Empty({ text }: { text: string }) {
 }
 function ManagerClosingSkeleton() {
   return (
-    <main role="main" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-busy="true" aria-label="Carregando fechamento diário">
+    <div className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-busy="true" aria-label="Carregando fechamento diário">
       <Skeleton className="h-20" />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: 4 }).map((_, index) => (
@@ -1266,6 +1266,6 @@ function ManagerClosingSkeleton() {
         ))}
       </div>
       <Skeleton className="h-[420px]" />
-    </main>
+    </div>
   );
 }

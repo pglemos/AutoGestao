@@ -94,9 +94,9 @@ export function DashboardLoja() {
   }
   if (!resolving && !storesLoading && role === 'gerente' && activeTab === 'performance' && !selectedStoreId) {
     return (
-      <main className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
+      <div className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
         <ManagerSellerParityHomeCanonical data={data} alerts={[]} />
-      </main>
+      </div>
     )
   }
   if (!resolving && !storesLoading && !selectedStoreId && (isPerfilInternoMx(role) || role === 'dono')) {
@@ -121,7 +121,7 @@ export function DashboardLoja() {
    * renderiza componentes de performance que já trazem o próprio recuo, e
    * envolvê-los somaria as duas margens.
    */
-  <main className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
+  <div className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
     <ConditionalPageCanvas enabled={!isFocusedRolePerformance}>
       {!isFocusedRolePerformance && !isManagerSection && (
         <DashboardErrorBoundary sectionName="Header">
@@ -207,7 +207,7 @@ export function DashboardLoja() {
         onSubmit={actions.handleCreateStore}
       />
     </ConditionalPageCanvas>
-    </main>
+    </div>
   )
 }
 

@@ -10,8 +10,7 @@ export function FeedbackLoadingSkeleton({
   errorMessage = null,
 }: Props) {
   return (
-    <main
-      role="main"
+    <div
       className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0"
       aria-busy="true"
       aria-live="polite"
@@ -36,7 +35,7 @@ export function FeedbackLoadingSkeleton({
         <Skeleton className="h-64 rounded-xl" />
         <Skeleton className="h-64 rounded-xl" />
       </div>
-    </main>
+    </div>
   )
 }
 

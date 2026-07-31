@@ -13,7 +13,7 @@ export function StoreFeedbackContainer() {
   if (vm.isLoading) return <FeedbackLoadingSkeleton ariaLabel="Carregando devolutivas" />
 
   return (
-    <main id="page-devolutivas" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Devolutivas">
+    <div id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Devolutivas">
       <FeedbackErrorBoundary sectionName="Cabeçalho">
         <StoreFeedbackHeader
           isOwner={vm.isOwner}
@@ -64,7 +64,7 @@ export function StoreFeedbackContainer() {
           </section>
         )}
       </div>
-    </main>
+    </div>
   )
 }
 

@@ -174,7 +174,7 @@ export function CentralExecucaoPage() {
       <CentralHeader />
       <CentralTabs value={tab} onChange={setTab} />
 
-      <main className="mx-auto w-full max-w-[1440px] p-5 lg:p-6">
+      <div className="mx-auto w-full max-w-[1440px] p-5 lg:p-6">
         <section
           id={`central-panel-${tab}`}
           role="tabpanel"
@@ -198,7 +198,7 @@ export function CentralExecucaoPage() {
             <RotinaDiaTab actions={todayActions} />
           )}
         </section>
-      </main>
+      </div>
 
       <NovaAtividadeModal
         open={newActivityOpen}

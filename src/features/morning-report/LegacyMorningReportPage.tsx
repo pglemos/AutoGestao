@@ -274,7 +274,7 @@ function AdminMorningReport() {
     }, [])
 
     if (loading) return (
-        <main
+        <div
             className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
             aria-busy="true"
             aria-live="polite"
@@ -289,11 +289,11 @@ function AdminMorningReport() {
             </header>
             <SkeletonStats count={4} />
             <SkeletonList items={5} showAvatar />
-        </main>
+        </div>
     )
 
     return (
-        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+        <div className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
             <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10 shrink-0">
                 <div className="flex flex-col gap-mx-tiny">
                     <div className="flex items-center gap-mx-sm">
@@ -476,7 +476,7 @@ function AdminMorningReport() {
             </Card>
 
             <div className="pb-32" />
-        </main>
+        </div>
     )
 }
 
@@ -560,7 +560,7 @@ function StoreMorningReport() {
     }, [refetchCheckins, refetchGoals, fetchMetaRules, refetchRanking, refetchTeam])
 
     if (loadingCheckins || loadingGoals) return (
-        <main
+        <div
             className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
             aria-busy="true"
             aria-live="polite"
@@ -575,11 +575,11 @@ function StoreMorningReport() {
             </header>
             <SkeletonStats count={4} />
             <SkeletonList items={5} showAvatar />
-        </main>
+        </div>
     )
 
     return (
-        <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+        <div className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
             <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10 shrink-0">
                 <div className="flex flex-col gap-mx-tiny">
                     <div className="flex items-center gap-mx-sm">
@@ -756,6 +756,6 @@ function StoreMorningReport() {
                     </Card>
                 </aside>
             </section>
-        </main>
+        </div>
     )
 }

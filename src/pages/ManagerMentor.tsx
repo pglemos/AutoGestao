@@ -83,7 +83,7 @@ export default function ManagerMentor() {
   const hasAttention = operationalWarnings.length > 0 || filteredActions.length > 0 || Boolean(deterministic.error)
 
   return (
-    <main className="min-h-full bg-gray-50">
+    <div className="min-h-full bg-gray-50">
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-6 pb-24">
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex items-center gap-3">
@@ -178,6 +178,6 @@ export default function ManagerMentor() {
           </section>
         </div>
       )}
-    </main>
+    </div>
   )
 }

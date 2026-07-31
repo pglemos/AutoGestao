@@ -31,7 +31,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
 
   if (controller.loading) {
     return (
-      <main id="page-plano-estrategico" aria-label="Plano Estratégico" role="main" className={pageClass} aria-busy="true">
+      <div id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass} aria-busy="true">
         <div className="space-y-4">
           {shell === 'owner' ? <div className="h-16 animate-pulse rounded-lg bg-white/60" /> : null}
           <div className="h-10 w-64 animate-pulse rounded-lg bg-white/60" />
@@ -42,34 +42,34 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
             <div className="h-[360px] animate-pulse rounded-xl bg-white/60" />
           </div>
         </div>
-      </main>
+      </div>
     )
   }
 
   if (controller.error) {
     return (
-      <main id="page-plano-estrategico" aria-label="Plano Estratégico" role="main" className={pageClass}>
+      <div id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
         <div className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
           <h2 className="text-lg font-semibold text-foreground">Não foi possível carregar o Plano Estratégico</h2>
           <p className="mt-2 text-sm text-muted-foreground">{controller.error}</p>
           <Button className="mt-4" onClick={() => void controller.reload()}>Tentar novamente</Button>
         </div>
-      </main>
+      </div>
     )
   }
 
   if (!storeId) {
     return (
-      <main id="page-plano-estrategico" aria-label="Plano Estratégico" role="main" className={pageClass}>
+      <div id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
         <div className="rounded-xl border border-border bg-card p-6 text-sm text-muted-foreground">
           Selecione uma loja para carregar o Plano Estratégico.
         </div>
-      </main>
+      </div>
     )
   }
 
   return (
-    <main id="page-plano-estrategico" aria-label="Plano Estratégico" role="main" className={pageClass}>
+    <div id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
       <div className="space-y-4">
         {shell === 'owner' ? <StrategicHeader /> : null}
         <StrategicPlanTabs tab={controller.tab} onTabChange={controller.setTab} />
@@ -179,6 +179,6 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
         ) : null}
         <FiltersDrawer open={controller.filtersOpen} onOpenChange={controller.setFiltersOpen} />
       </div>
-    </main>
+    </div>
   )
 }

@@ -101,7 +101,7 @@ export function DashboardHeader({
   if (isPerfilInternoMx(role)) {
     return (
       <div className="mx-auto w-full max-w-7xl space-y-4">
-        <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <header data-mx-module-header="" className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex min-w-0 items-start gap-3">
               <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">

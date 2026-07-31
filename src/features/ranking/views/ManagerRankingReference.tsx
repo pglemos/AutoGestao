@@ -32,7 +32,7 @@ export function ManagerRankingReference() {
   ]
 
   return (
-    <main className="min-h-full bg-gray-50">
+    <div className="min-h-full bg-gray-50">
       <div className="mx-auto max-w-7xl space-y-5 px-4 py-6 pb-24">
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
@@ -50,7 +50,7 @@ export function ManagerRankingReference() {
           {data.loading ? <div className="flex justify-center py-12"><div className="h-6 w-6 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" /></div> : ranking.length === 0 ? <div className="flex flex-col items-center justify-center py-16 text-center"><Trophy className="mb-3 text-gray-300" size={48} /><p className="font-medium text-gray-500">Ainda não há dados suficientes para montar o ranking.</p></div> : <div className="overflow-x-auto"><table className="w-full min-w-[820px] text-sm"><thead className="border-b border-gray-100 bg-gray-50"><tr>{['#', 'Vendedor', 'Vendas', 'Meta', '% Meta', 'Conversão', 'Rotina', 'Pontuação'].map(label => <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</th>)}</tr></thead><tbody className="divide-y divide-gray-50">{ranking.map((seller, index) => <RankingRow key={seller.id} seller={seller} index={index} />)}</tbody></table></div>}
         </section>
       </div>
-    </main>
+    </div>
   )
 }
 

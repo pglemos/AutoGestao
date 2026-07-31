@@ -61,3 +61,4 @@ core-js-banners
 # Cache de compilacao do V8 e relatorios Lighthouse gerados
 node-compile-cache/
 output/lighthouse-*/
+visual-evidence/

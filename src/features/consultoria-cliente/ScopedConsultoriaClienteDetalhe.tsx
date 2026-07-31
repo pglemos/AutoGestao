@@ -111,7 +111,7 @@ export function ScopedConsultoriaClienteDetalhe() {
   if (error || !client) return <div className="p-mx-20 text-center text-status-error">{error || 'Cliente não encontrado'}</div>
 
   return (
-    <main className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+    <div className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
       <ClientHeaderSection client={client} />
 
       <TabNav tabs={TABS} activeTab={activeTab} onTabChange={handleTabChange} />
@@ -162,7 +162,7 @@ export function ScopedConsultoriaClienteDetalhe() {
         handleVisitNumberChange={visitFormApi.handleVisitNumberChange}
         handleSubmit={visitFormApi.handleSubmitManualVisit}
       />
-    </main>
+    </div>
   )
 }
 

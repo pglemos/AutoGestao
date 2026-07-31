@@ -72,7 +72,6 @@ type ShellMetrics = {
     borderColor: string
     boxShadow: string
   } | null
-  activeNavigationItems: number
   currentNavigationItems: number
   forbiddenLegacyNodes: number
   horizontalOverflow: boolean
@@ -119,7 +118,12 @@ async function collectMetrics(page: Page, profile: string, viewport: string): Pr
     const desktopSidebar = document.querySelector<HTMLElement>('aside[aria-label^="Menu principal"]')
     const mobileDrawer = document.querySelector<HTMLElement>('[role="dialog"][aria-label^="Menu principal"]')
     const navigationSurface = viewport === 'mobile' ? mobileDrawer : desktopSidebar
-    const mobileHeader = document.querySelector<HTMLElement>('header.md\\:hidden')
+    // A superfície (bg-mxsb-surface) vive no div interno, não no aside: o
+    // aside só posiciona (SIDEBAR.aside), o div carrega a cor e a tipografia
+    // (SIDEBAR.root). Medir o aside retornava rgba(0,0,0,0).
+    const sidebarSurface =
+      navigationSurface?.querySelector<HTMLElement>('[data-sidebar-surface]') ?? navigationSurface
+    const mobileHeader = document.querySelector<HTMLElement>('header.xl\\:hidden')
     const content = document.querySelector<HTMLElement>('main#main-content')
     const visibleLogo = Array.from(document.querySelectorAll<HTMLImageElement>('img[alt="MX"]'))
       .find((node) => node.getBoundingClientRect().width > 0)
@@ -139,9 +143,11 @@ async function collectMetrics(page: Page, profile: string, viewport: string): Pr
     const navigationStyle = navigationSurface ? getComputedStyle(navigationSurface) : null
     const mobileHeaderStyle = mobileHeader ? getComputedStyle(mobileHeader) : null
     const pageHeaderStyle = pageHeader ? getComputedStyle(pageHeader) : null
-    const activeNavigationItems = navigationSurface
-      ? navigationSurface.querySelectorAll('a.bg-emerald-600').length
-      : 0
+    // Item ativo detectado pelo contrato acessível (aria-current), não pela
+    // classe de cor: a sidebar canônica usa tokens mxsb-* desde a unificação,
+    // e o sidebar-contract.test.ts proíbe explicitamente o bg-emerald-600 que
+    // este teste buscava antes. `aria-current="page"` é a fonte de verdade que
+    // leitores de tela consomem.
     const currentNavigationItems = navigationSurface
       ? navigationSurface.querySelectorAll('a[aria-current="page"]').length
       : 0
@@ -152,7 +158,9 @@ async function collectMetrics(page: Page, profile: string, viewport: string): Pr
       sidebar: navigationSurface && navigationSurface.getBoundingClientRect().width > 0 && navigationStyle
         ? {
             width: Math.round(navigationSurface.getBoundingClientRect().width),
-            backgroundColor: navigationStyle.backgroundColor,
+            backgroundColor: sidebarSurface
+              ? getComputedStyle(sidebarSurface).backgroundColor
+              : navigationStyle.backgroundColor,
             borderRightWidth: navigationStyle.borderRightWidth,
             borderRightColor: navigationStyle.borderRightColor,
             boxShadow: navigationStyle.boxShadow,
@@ -191,7 +199,6 @@ async function collectMetrics(page: Page, profile: string, viewport: string): Pr
             boxShadow: pageHeaderStyle.boxShadow,
           }
         : null,
-      activeNavigationItems,
       currentNavigationItems,
       forbiddenLegacyNodes: document.querySelectorAll(
         '.mxds-page-frame, .mx-internal-workspace, [class*="mxds-"]',
@@ -232,7 +239,6 @@ async function auditProfile(
   expect(metrics.forbiddenLegacyNodes).toBe(0)
   expect(metrics.horizontalOverflow).toBe(false)
   expect(metrics.logo).not.toBeNull()
-  expect(metrics.activeNavigationItems).toBe(1)
   expect(metrics.currentNavigationItems).toBe(1)
 
   if (profile.key !== 'gerente') {
@@ -248,9 +254,13 @@ async function auditProfile(
 
   if (viewport.name === 'desktop') {
     expect(metrics.sidebar).not.toBeNull()
-    expect(metrics.sidebar?.width).toBe(224)
-    expect(metrics.sidebar?.backgroundColor).toBe('rgb(255, 255, 255)')
-    expect(metrics.content.paddingLeft).toBe('224px')
+    // 256px = SIDEBAR_METRICS.width em src/design-system/sidebar/tokens.ts
+    // (w-64), a largura expandida canônica — §6 do plano de unificação.
+    expect(metrics.sidebar?.width).toBe(256)
+    // #FAFAFA = --color-mxsb-surface, a superfície documentada em
+    // docs/design-system/sidebar-dono.md (não branco puro).
+    expect(metrics.sidebar?.backgroundColor).toBe('rgb(250, 250, 250)')
+    expect(metrics.content.paddingLeft).toBe('256px')
   } else {
     expect(metrics.sidebar).not.toBeNull()
     expect(metrics.mobileHeader).not.toBeNull()

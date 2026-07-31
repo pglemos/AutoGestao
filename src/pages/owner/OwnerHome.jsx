@@ -25,7 +25,7 @@ class OwnerHomeErrorBoundary extends Component {
   render() {
     if (this.state.hasError) {
       return (
-        <main id="page-home" aria-label="Início — erro" role="main" className="flex min-h-0 flex-1 flex-col items-center justify-center p-6">
+        <div id="page-home" aria-label="Início — erro" className="flex min-h-0 flex-1 flex-col items-center justify-center p-6">
           <div className="max-w-md rounded-xl border border-destructive/30 bg-card p-6 text-center" role="alert">
             <h1 className="text-lg font-semibold text-foreground">Algo deu errado</h1>
             <p className="mt-2 text-sm text-muted-foreground">
@@ -39,7 +39,7 @@ class OwnerHomeErrorBoundary extends Component {
               Recarregar
             </button>
           </div>
-        </main>
+        </div>
       );
     }
 
@@ -58,7 +58,7 @@ export default function OwnerHome() {
 
   return (
     <OwnerHomeErrorBoundary>
-      <main id="page-home" aria-label="Início" role="main" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0">
+      <div id="page-home" aria-label="Início" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0">
         <HomeHeader />
 
         <section aria-label="Indicadores principais">
@@ -84,7 +84,7 @@ export default function OwnerHome() {
           onClose={() => setDrawerDept(null)}
           onTalkToConsultant={openConsultantModal}
         />
-      </main>
+      </div>
     </OwnerHomeErrorBoundary>
   );
 }

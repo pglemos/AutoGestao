@@ -156,7 +156,7 @@ export function ManagerUniversityReference({
   const attention = allTrainings.length > 0 ? allTeamRows.length - inDay : 0
 
   return (
-    <main className="min-h-full bg-gray-50">
+    <div className="min-h-full bg-gray-50">
       <div className="mx-auto max-w-7xl space-y-5 px-4 py-6 pb-24">
         <UniversityHeader />
 
@@ -215,7 +215,7 @@ export function ManagerUniversityReference({
           onClose={() => setSelectedTeamMember(null)}
         />
       </div>
-    </main>
+    </div>
   )
 }
 
