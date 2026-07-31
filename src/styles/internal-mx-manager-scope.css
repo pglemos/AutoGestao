@@ -27,13 +27,11 @@
   letter-spacing: normal;
 }
 
-[data-mx-internal-scope='true'] :is(.shadow-mx-md, .shadow-mx-lg, .shadow-mx-xl) {
-  box-shadow: 0 1px 2px rgb(15 23 42 / 0.05);
-}
-
-[data-mx-internal-scope='true'] :is(.rounded-mx-2xl, .rounded-mx-3xl, .rounded-mx-4xl) {
-  border-radius: 1rem;
-}
+/* As regras que achatavam sombra e raio aqui foram removidas: existiam para
+   neutralizar a escala antiga do :root (sombras de até 24px, raio base 1rem).
+   Com a escala do Base44 promovida para a raiz, mantê-las passaria a criar a
+   divergência que elas nasceram para evitar — perfis internos com um raio, o
+   resto do produto com outro. */
 
 [data-mx-internal-scope='true'] :is(input, select, textarea):not([type='checkbox']):not([type='radio']):not([type='file']) {
   border-color: var(--mx-border-strong);
