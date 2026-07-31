@@ -313,7 +313,9 @@ return (
 {label}
 </label>
 <div className="grid w-[152px] grid-cols-[38px_minmax(0,1fr)_38px] gap-1.5">
-<button type="button" disabled={disabled} onClick={() => setMobileCounter(field, value - 1)} className="grid h-10 place-items-center rounded-[10px] border border-[#DFE0E1] bg-white text-[18px] font-bold text-[#071822] shadow-sm disabled:opacity-45">
+{/* O ícone é aria-hidden, então sem rótulo o botão é anunciado apenas como
+    "botão". Nomear com o campo diferencia os seis contadores da tela. */}
+<button type="button" disabled={disabled} aria-label={`Diminuir ${label}`} onClick={() => setMobileCounter(field, value - 1)} className="grid h-10 place-items-center rounded-[10px] border border-[#DFE0E1] bg-white text-[18px] font-bold text-[#071822] shadow-sm disabled:opacity-45">
 <Minus size={16} aria-hidden="true" />
 </button>
 <input
@@ -328,7 +330,7 @@ disabled={disabled}
 aria-invalid={Boolean(fieldErrors[field])}
 className="h-10 min-w-0 rounded-[10px] border border-[#DFE0E1] bg-white text-center text-[18px] font-bold tabular-nums text-[#071822] shadow-sm outline-none focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10 disabled:bg-[#F7F8F8] disabled:text-[#526B7A]"
 />
-<button type="button" disabled={disabled} onClick={() => setMobileCounter(field, value + 1)} className="grid h-10 place-items-center rounded-[10px] border border-[#DFE0E1] bg-white text-[18px] font-bold text-[#071822] shadow-sm disabled:opacity-45">
+<button type="button" disabled={disabled} aria-label={`Aumentar ${label}`} onClick={() => setMobileCounter(field, value + 1)} className="grid h-10 place-items-center rounded-[10px] border border-[#DFE0E1] bg-white text-[18px] font-bold text-[#071822] shadow-sm disabled:opacity-45">
 <Plus size={16} aria-hidden="true" />
 </button>
 </div>
