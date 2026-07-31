@@ -50,6 +50,27 @@ Cada onda = commit atômico + gate verde antes da próxima.
 - **Onda 5 — validação.** Playwright matriz perfil × rota × viewport (390/600/840/1024/1280/1440/1600/1920), axe, console/rede limpos, regressão visual.
 - **Onda 6 — publicação.** Preview → validação → produção → smoke → monitoramento Sentry.
 
+## 2.1 Estado das ondas medido em 2026-07-31
+
+| Onda | Estado | Evidência (comando, exit code) |
+|---|---|---|
+| 1 — PageCanvas + tokens de layout | **concluída** | `src/design-system/page/` com `PageCanvas.tsx`, `FullBleed.tsx`, `routeLayoutMetadata.ts`, `page-contract.test.ts`; tokens `--mx-page-*` em `semantic.css` |
+| 2 — lint anti-padding na raiz | **concluída** | `npm run lint` → `[lint-page-roots] OK — 0 ocorrência(s) em 64 páginas, teto 0` (partiu de 15) |
+| 3 — shell único | **concluída** | `src/App.tsx` importa só `AppShell` → `AppShellFrame`; `Layout.tsx` só aparece em testes de contrato |
+| 4 — migração por perfil | **concluída** | inventário de raiz zerado; `lint-tokens-ast` 847 arquivos, 0 hex; `lint-z-index` 60 |
+| 5 — validação | **em curso** | matriz interna MX 19 rotas × 3 viewports × 3 perfis verde (exit 0); demais suítes em medição |
+| 6 — publicação | **não iniciada** | — |
+
+Gates medidos em 2026-07-31: `npm run lint` exit 0, `npm run test` exit 0 (1697 testes), `npm run build` exit 0.
+
+### Lacuna conhecida na Onda 5
+
+`administrador_mx` e `consultor_mx` não têm conta E2E; a auditoria de rotas entra por bypass de
+desenvolvimento e, por isso, não afirma nada sobre conteúdo carregado (título, cabeçalho da área,
+erros de console vindos de consulta real) para esses dois perfis — só sobre anatomia de página.
+Fechar essa lacuna exige contas de teste dedicadas, o que é criação de usuário em produção e
+depende de decisão do solicitante.
+
 ## 3. Decisões que precisam do solicitante
 
 1. **Gap 3:** manter a paridade visual Base44 (e portanto os scopes CSS e seus contratos de teste) ou removê-los, quebrando deliberadamente contratos de paridade que já foram aprovados? O briefing pede remoção; a memória do projeto registra "paridade Base44↔MX é visual, não só funcional" como requisito firme. Não resolvo isso por conta própria.
