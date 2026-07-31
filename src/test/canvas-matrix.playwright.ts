@@ -95,9 +95,9 @@ const A11Y_BUDGET: Record<string, Record<string, number>> = {
   '/treinamentos': {},
   '/funil-vendas': {},
   '/meu-funil': {},
+  '/metas': {},
   '/terminal-mx': { 'color-contrast': 5, 'scrollable-region-focusable': 1 },
   '/pdi': { 'color-contrast': 3 },
-  '/metas': { 'color-contrast': 6 },
   '/organograma': { 'color-contrast': 1 },
   '/banco-talentos': { 'color-contrast': 1 },
 }

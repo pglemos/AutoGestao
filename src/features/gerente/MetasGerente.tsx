@@ -20,11 +20,16 @@ const teamMetas: SellerMeta[] = [
   { id: '5', name: 'Pedro Santos', meta: 8, realizado: 0, projecao: 1, status: 'critico' },
 ]
 
+/**
+ * O `pill` usa o tom `-text`, mais escuro, porque é texto sobre a superfície do
+ * próprio estado — com o tom de preenchimento reprovava contraste AA. A barra
+ * segue no tom cheio, que é a cor do estado (§13.1).
+ */
 const statusConfig: Record<SellerMeta['status'], { label: string; pill: string; bar: string }> = {
-  excelente: { label: 'Excelente', pill: 'bg-status-success-surface text-status-success', bar: 'bg-status-success' },
-  bom: { label: 'Bom', pill: 'bg-status-info-surface text-status-info', bar: 'bg-status-info' },
-  atencao: { label: 'Atenção', pill: 'bg-status-warning-surface text-status-warning', bar: 'bg-status-warning' },
-  critico: { label: 'Crítico', pill: 'bg-status-error-surface text-status-error', bar: 'bg-status-error' },
+  excelente: { label: 'Excelente', pill: 'bg-status-success-surface text-status-success-text', bar: 'bg-status-success' },
+  bom: { label: 'Bom', pill: 'bg-status-info-surface text-status-info-text', bar: 'bg-status-info' },
+  atencao: { label: 'Atenção', pill: 'bg-status-warning-surface text-status-warning-text', bar: 'bg-status-warning' },
+  critico: { label: 'Crítico', pill: 'bg-status-error-surface text-status-error-text', bar: 'bg-status-error' },
 }
 
 export default function MetasGerente() {
@@ -80,7 +85,7 @@ export default function MetasGerente() {
           </div>
           <p className="mt-4 text-3xl font-bold tabular-nums">{totals.realizado}</p>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-xs font-bold tabular-nums text-status-success">{totals.atingimento}%</span>
+            <span className="text-xs font-bold tabular-nums text-status-success-text">{totals.atingimento}%</span>
             <span className="text-xs font-bold text-muted-foreground normal-case">da meta</span>
           </div>
         </div>
@@ -94,7 +99,7 @@ export default function MetasGerente() {
           </div>
           <p className="mt-4 text-3xl font-bold tabular-nums">{totals.projecao}</p>
           <div className="mt-2 flex items-baseline gap-2">
-            <span className="text-xs font-bold tabular-nums text-status-warning">{totals.projetado}%</span>
+            <span className="text-xs font-bold tabular-nums text-status-warning-text">{totals.projetado}%</span>
             <span className="text-xs font-bold text-muted-foreground normal-case">se mantiver ritmo</span>
           </div>
         </div>
@@ -151,8 +156,8 @@ export default function MetasGerente() {
                       <p className="truncate font-bold text-foreground">{m.name}</p>
                     </td>
                     <td className="px-4 py-3 text-center font-mono tabular-nums">{m.meta}</td>
-                    <td className="px-4 py-3 text-center font-mono tabular-nums text-status-success">{m.realizado}</td>
-                    <td className="px-4 py-3 text-center font-mono tabular-nums text-status-warning">{m.projecao}</td>
+                    <td className="px-4 py-3 text-center font-mono tabular-nums text-status-success-text">{m.realizado}</td>
+                    <td className="px-4 py-3 text-center font-mono tabular-nums text-status-warning-text">{m.projecao}</td>
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-2">
                         <div className="h-2 flex-1 overflow-hidden rounded-full bg-muted">
