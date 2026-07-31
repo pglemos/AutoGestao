@@ -9,7 +9,6 @@ import './index.css'
 import './design-system/tokens/primitives.css'
 import './design-system/tokens/semantic.css'
 import './design-system/tokens/components.css'
-import './styles/manager-visual-scope.css'
 import './styles/search-interactions.css'
 
 initSentry()

@@ -39,13 +39,18 @@
 --color-mx-warning-light: #FEF3C7;
 --color-mx-danger: #EF4444;
 --color-mx-danger-light: #FEE2E2;
---color-mx-bg: #F8FAFC;
---color-mx-surface: #FFFFFF;
---color-mx-border: #E5E7EB;
---color-mx-divider: #F1F5F9;
---color-mx-text: #0F172A;
---color-mx-muted: #64748B;
---color-mx-subtle: #94A3B8;
+/* Neutros derivados do design system em vez de cinzas azulados próprios.
+   Eram a última divergência de manager-visual-scope.css: o escopo usava cinza
+   puro (#1f2937, #6b7280) e o :root, azulado (#0F172A, #64748B), então a mesma
+   superfície mudava de tom conforme o perfil. Os tokens `--mx-neutral-*` são
+   cinza puro e já passaram pela verificação de contraste. */
+--color-mx-bg: hsl(var(--mx-color-surface-muted));
+--color-mx-surface: hsl(var(--mx-color-surface));
+--color-mx-border: hsl(var(--mx-color-border));
+--color-mx-divider: hsl(var(--mx-neutral-100));
+--color-mx-text: hsl(var(--mx-color-text-primary));
+--color-mx-muted: hsl(var(--mx-color-text-secondary));
+--color-mx-subtle: hsl(var(--mx-neutral-400));
 --color-whatsapp: #25D366;
 
 /* Sidebar canônica — docs/design-system/sidebar-dono.md
@@ -159,18 +164,18 @@ to { height: 0; }
   --color-chart-grid-dark: #334155;
   --color-chart-dot-stroke: #FFFFFF;
 
-  /* Surface & Borders */
-  --color-surface-default: #FFFFFF;
-  --color-surface-alt: #F7F8F8;
-  --color-border-default: #DFE0E1;
-  --color-border-subtle: #DFE0E1;
-  --color-border-strong: #DFE0E1;
+  /* Surface & Borders — ver nota sobre neutros na paleta core. */
+  --color-surface-default: hsl(var(--mx-color-surface));
+  --color-surface-alt: hsl(var(--mx-color-surface-muted));
+  --color-border-default: hsl(var(--mx-color-border));
+  --color-border-subtle: hsl(var(--mx-neutral-100));
+  --color-border-strong: hsl(var(--mx-color-border-strong));
 
   /* Typography Colors */
-  --color-text-primary: #071822;
-  --color-text-secondary: #526B7A;
-  --color-text-tertiary: #526B7A;
-  --color-text-label: #526B7A;
+  --color-text-primary: hsl(var(--mx-color-text-primary));
+  --color-text-secondary: hsl(var(--mx-color-text-secondary));
+  --color-text-tertiary: hsl(var(--mx-color-text-secondary));
+  --color-text-label: hsl(var(--mx-color-text-secondary));
 
   --color-surface-overlay: #1A1A1D;
   --color-surface-elevated: #121214;

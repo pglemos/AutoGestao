@@ -14,7 +14,7 @@ const managerPrimitives = read('../features/manager/shared/ManagerVisualPrimitiv
 const universalPrimitives = read('../components/module/MxModuleVisualPrimitives.tsx')
 const button = read('../components/atoms/Button.tsx')
 const roleVisualScope = read('../components/module/MxRoleVisualScope.tsx')
-const managerScopeCss = read('../styles/manager-visual-scope.css')
+const rootTokens = read('../index.css')
 const painelConsultor = [
   read('../pages/PainelConsultor.tsx'),
   read('../features/network-dashboard/NetworkDashboardPage.tsx'),
@@ -36,6 +36,7 @@ const legacyFiles = [
   '../design-system/internal-mx/internal-mx-frame.css',
   '../design-system/internal-mx/internal-mx-components.css',
   '../design-system/internal-mx/internal-mx-routes.css',
+  '../styles/manager-visual-scope.css',
 ]
 
 function runtimeFiles(directory: string, files: string[] = []) {
@@ -79,7 +80,9 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     expect(main).not.toContain('internal-mx-components.css')
     expect(main).not.toContain('internal-mx-routes.css')
     expect(main).not.toContain('../packages/mx-tokens/src/theme.css')
-    expect(main).toContain("./styles/manager-visual-scope.css")
+    // manager-visual-scope.css saiu do runtime: existia para corrigir a marca e
+    // a escala do :root, e ambas foram promovidas para lá.
+    expect(main).not.toContain('./styles/manager-visual-scope.css')
     for (const file of legacyFiles) {
       expect(existsSync(new URL(file, import.meta.url))).toBe(false)
     }
@@ -107,24 +110,26 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     expect(universalPrimitives).not.toContain('border-border-subtle')
   })
 
-  test('escopa a matriz do Gerente em todos os perfis de gestão sem contaminar o Vendedor', () => {
+  test('a matriz de gestão não tem mais escopo próprio — vale para todo perfil', () => {
     expect(layout).toContain("from '@/components/module/MxRoleVisualScope'")
     expect(layout).toContain("<MxRoleVisualScope manager={role !== 'vendedor'}>")
     expect(roleVisualScope).toContain('data-mx-visual-system="manager"')
     expect(roleVisualScope).not.toContain('mx-manager-scope')
-    expect(managerScopeCss).toContain("[data-mx-visual-system='manager']")
-    expect(managerScopeCss).not.toContain('.mx-manager-scope')
-    // A ação de gestão referencia o token único de marca, não um verde próprio.
-    // Media-se #059669 aqui contra hsl(152 69% 31%) na raiz: duas marcas verdes
-    // no mesmo produto, que §5 proíbe. Um hex literal de marca neste arquivo é
-    // regressão, então a asserção passou a exigir a referência.
-    expect(managerScopeCss).toContain('--color-mx-action: hsl(var(--mx-color-primary))')
-    // Casa declaração, não menção: o comentário do arquivo cita o hex antigo
-    // para explicar a correção, e um `toContain` cru reprovaria a documentação.
-    expect(managerScopeCss).not.toMatch(/--[\w-]+:\s*#059669/)
-    // Neutros e escala Base44 seguem literais: são contrato visual à parte.
-    expect(managerScopeCss).toContain('--color-surface-alt: #f9fafb')
-    expect(managerScopeCss).toContain('--color-text-primary: #1f2937')
+
+    // Este teste exigia que manager-visual-scope.css declarasse a marca, os
+    // neutros e a escala de raio da gestão. O arquivo existia para corrigir o
+    // :root, não para especializá-lo: 38 das suas 42 variáveis divergiam da
+    // raiz porque a raiz ainda carregava a identidade teal. Com marca, escala e
+    // neutros promovidos, o escopo ficou sem nada a dizer e foi removido.
+    //
+    // As asserções passam a valer sobre a raiz, que é onde a decisão mora agora.
+    expect(rootTokens).toContain('--color-brand-primary: hsl(var(--mx-color-primary))')
+    expect(rootTokens).toContain('--color-mx-action: hsl(var(--mx-color-primary))')
+    expect(rootTokens).not.toMatch(/--color-brand-primary:\s*#00A89D/i)
+    expect(rootTokens).not.toMatch(/--color-mx-action:\s*#00A89D/i)
+    // Escala do §13.2 — controle 6px, card 12px.
+    expect(rootTokens).toContain('--radius-md: 0.375rem')
+    expect(rootTokens).toContain('--radius-xl: 0.75rem')
   })
 
   test('aplica a variante aprovada a todos os perfis, sem par legado', () => {
