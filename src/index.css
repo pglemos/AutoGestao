@@ -27,6 +27,14 @@
 --color-mx-navy: #051923;
 --color-mx-dark: #031B3D;
 --color-mx-dark-2: #0F172A;
+/* `emerald-600` é o verde que 192 arquivos usam para a marca — o botão primário
+   inclusive. Vinha da paleta padrão do Tailwind (#009966), que não é o #198653
+   do produto: medido com axe, os dois apareciam lado a lado em seis rotas.
+   Redefinir aqui alinha os 192 sem tocá-los. O nome `emerald` fica, pelo mesmo
+   motivo que `teal` ficou: renomear é troca mecânica, e misturá-la aqui
+   esconderia a mudança de cor. */
+--color-emerald-600: hsl(var(--mx-color-primary));
+--color-emerald-700: hsl(var(--mx-color-primary-hover));
 --color-mx-teal: hsl(var(--mx-color-primary));
 --color-mx-teal-light: hsl(var(--mx-color-success-subtle));
 --color-mx-teal-soft: hsl(var(--mx-color-primary-subtle));

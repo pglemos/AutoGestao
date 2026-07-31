@@ -73,7 +73,12 @@ const EXPECTED_PADDING_TOP = 24
  *     de todo `text-secondary`/`muted-foreground` reprovado sobre cinza-claro.
  *   Efeito medido: /meu-funil 21 → 2, /funil-vendas 15 → 7, /terminal-mx 11 → 8.
  *
- * Fechado depois disso:
+ * Fechado também: o `emerald-600` do Tailwind (#009966) usado como marca em 192
+ * arquivos, inclusive no botão primário. Convivia com o #198653 real em seis
+ * rotas. Redefinido no @theme, zerou /ajuda, /configuracoes e /falar-consultor,
+ * e reduziu /pdi, /organograma e /banco-talentos.
+ *
+ * Fechado antes disso:
  *   - badges de percentual por categoria, via tons `--color-status-*-text`
  *     escurecidos, e `status-success` deixando de ser o teal herdado. Zerou
  *     /funil-vendas por completo e levou /metas de 7 para 6.
@@ -84,17 +89,17 @@ const EXPECTED_PADDING_TOP = 24
  * mesma natureza do que já foi corrigido, sem causa única identificada.
  */
 const A11Y_BUDGET: Record<string, Record<string, number>> = {
-  '/ajuda': { 'color-contrast': 1 },
-  '/configuracoes': { 'color-contrast': 1 },
-  '/meu-funil': { 'color-contrast': 2 },
-  '/terminal-mx': { 'color-contrast': 8 },
-  '/pdi': { 'color-contrast': 5 },
-  '/metas': { 'color-contrast': 6 },
-  '/funil-vendas': {},
-  '/falar-consultor': { 'color-contrast': 1 },
+  '/ajuda': {},
+  '/configuracoes': {},
+  '/falar-consultor': {},
   '/treinamentos': {},
-  '/organograma': { 'color-contrast': 2 },
-  '/banco-talentos': { 'color-contrast': 2 },
+  '/funil-vendas': {},
+  '/meu-funil': { 'color-contrast': 2 },
+  '/terminal-mx': { 'color-contrast': 8, 'scrollable-region-focusable': 1 },
+  '/pdi': { 'color-contrast': 3 },
+  '/metas': { 'color-contrast': 6 },
+  '/organograma': { 'color-contrast': 1 },
+  '/banco-talentos': { 'color-contrast': 1 },
 }
 
 async function signIn(page: Page, role: RoleKey): Promise<void> {
