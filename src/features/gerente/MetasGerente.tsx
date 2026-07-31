@@ -130,7 +130,9 @@ export default function MetasGerente() {
         <h2 className="text-xl font-bold">Meta por Vendedor</h2>
         <p className="mt-1 text-xs font-bold text-muted-foreground normal-case">Atingimento individual e ritmo projetado.</p>
 
-        <div className="mt-6 overflow-x-auto">
+        {/* Rolagem horizontal alcançável por teclado — ver nota equivalente em
+            FunilVendasGerente. */}
+        <div className="mt-6 overflow-x-auto" tabIndex={0} role="region" aria-label="Metas por vendedor">
           <table className="w-full min-w-[600px] text-sm">
             <thead className="bg-muted/60">
               <tr>

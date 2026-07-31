@@ -73,12 +73,15 @@ const EXPECTED_PADDING_TOP = 24
  *     de todo `text-secondary`/`muted-foreground` reprovado sobre cinza-claro.
  *   Efeito medido: /meu-funil 21 → 2, /funil-vendas 15 → 7, /terminal-mx 11 → 8.
  *
- * O que sobra:
- *   - `color-contrast` em badges de percentual coloridos por categoria (azul
- *     #005bff e teal #00a89d sobre seus fundos claros). Fechar exige decidir a
- *     paleta de categorias, que é escolha de design, não de layout.
- *   - `scrollable-region-focusable`: contêineres de rolagem sem `tabindex`, que
- *     um teclado não alcança.
+ * Fechado depois disso:
+ *   - badges de percentual por categoria, via tons `--color-status-*-text`
+ *     escurecidos, e `status-success` deixando de ser o teal herdado. Zerou
+ *     /funil-vendas por completo e levou /metas de 7 para 6.
+ *   - `scrollable-region-focusable`, com tabIndex e role nas tabelas roláveis
+ *     de /metas e /funil-vendas.
+ *
+ * O que sobra é contraste pontual em telas ainda não auditadas par a par —
+ * mesma natureza do que já foi corrigido, sem causa única identificada.
  */
 const A11Y_BUDGET: Record<string, Record<string, number>> = {
   '/ajuda': { 'color-contrast': 1 },
@@ -86,8 +89,8 @@ const A11Y_BUDGET: Record<string, Record<string, number>> = {
   '/meu-funil': { 'color-contrast': 2 },
   '/terminal-mx': { 'color-contrast': 8 },
   '/pdi': { 'color-contrast': 5 },
-  '/metas': { 'color-contrast': 7, 'scrollable-region-focusable': 2 },
-  '/funil-vendas': { 'color-contrast': 7, 'scrollable-region-focusable': 1 },
+  '/metas': { 'color-contrast': 6 },
+  '/funil-vendas': {},
   '/falar-consultor': { 'color-contrast': 1 },
   '/treinamentos': {},
   '/organograma': { 'color-contrast': 2 },

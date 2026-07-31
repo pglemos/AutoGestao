@@ -20,11 +20,16 @@ type FunnelRow = {
   stages: FunnelStage[]
 }
 
+/**
+ * O `pill` usa o tom `-text`, mais escuro, porque é texto pequeno sobre a
+ * superfície do próprio estado — com o tom de preenchimento ficava no limite de
+ * 4.5:1 e reprovava AA. Ícone e barra seguem no tom cheio, que é a cor do estado.
+ */
 const tonePalette: Record<Tone, { iconBg: string; iconText: string; barBg: string; pill: string }> = {
-  info: { iconBg: 'bg-status-info-surface', iconText: 'text-status-info', barBg: 'bg-status-info', pill: 'bg-status-info-surface text-status-info' },
-  success: { iconBg: 'bg-status-success-surface', iconText: 'text-status-success', barBg: 'bg-status-success', pill: 'bg-status-success-surface text-status-success' },
-  warning: { iconBg: 'bg-status-warning-surface', iconText: 'text-status-warning', barBg: 'bg-status-warning', pill: 'bg-status-warning-surface text-status-warning' },
-  purple: { iconBg: 'bg-purple-100', iconText: 'text-purple-700', barBg: 'bg-purple-600', pill: 'bg-purple-100 text-purple-700' },
+  info: { iconBg: 'bg-status-info-surface', iconText: 'text-status-info-text', barBg: 'bg-status-info', pill: 'bg-status-info-surface text-status-info-text' },
+  success: { iconBg: 'bg-status-success-surface', iconText: 'text-status-success-text', barBg: 'bg-status-success', pill: 'bg-status-success-surface text-status-success-text' },
+  warning: { iconBg: 'bg-status-warning-surface', iconText: 'text-status-warning-text', barBg: 'bg-status-warning', pill: 'bg-status-warning-surface text-status-warning-text' },
+  purple: { iconBg: 'bg-purple-100', iconText: 'text-purple-800', barBg: 'bg-purple-600', pill: 'bg-purple-100 text-purple-800' },
 }
 
 const funnelData: FunnelRow[] = [
@@ -202,7 +207,10 @@ export default function FunilVendasGerente() {
           <h2 className="text-xl font-bold">Ranking por Origem</h2>
           <p className="mt-1 text-xs font-bold text-muted-foreground normal-case">Vendas da equipe por canal (mês).</p>
 
-          <div className="mt-6 overflow-x-auto">
+          {/* tabIndex e role: uma região que rola precisa ser alcançável e
+              operável por teclado — sem isso quem não usa mouse não consegue
+              ver as colunas fora da viewport (§21). */}
+          <div className="mt-6 overflow-x-auto" tabIndex={0} role="region" aria-label="Vendas da equipe por canal">
             <table className="w-full text-sm">
               <thead className="bg-muted/60">
                 <tr>

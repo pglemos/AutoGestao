@@ -95,15 +95,30 @@ from { height: var(--radix-accordion-content-height); }
 to { height: 0; }
 }
   
-  /* Status Semantics */
-  --color-status-success: #00A89D;
-  --color-status-success-surface: rgba(0, 168, 157, 0.08);
+  /* Status Semantics
+   *
+   * Os tons de texto são escurecidos em relação ao tom de preenchimento porque
+   * a mesma cor cumpre dois papéis: pintar barra e ícone, e escrever texto
+   * pequeno sobre a própria superfície a 8% de opacidade. Medido com axe em
+   * /funil-vendas: os badges de percentual ficavam em 4.5:1 no limite exato de
+   * AA e reprovavam. `*-text` resolve isso sem alterar a cor de preenchimento,
+   * que continua sendo a identidade do estado (§13.1).
+   *
+   * `success` também deixa de ser o teal #00A89D, herdado da identidade antiga,
+   * e passa a derivar do verde da marca.
+   */
+  --color-status-success: #198653;
+  --color-status-success-text: #0F6B41;
+  --color-status-success-surface: rgba(25, 134, 83, 0.08);
   --color-status-warning: #F59F0A;
+  --color-status-warning-text: #A65F00;
   --color-status-warning-surface: rgba(245, 158, 11, 0.05);
   --color-status-error: #EF4343;
   --color-status-error-strong: #EF4343;
+  --color-status-error-text: #C42121;
   --color-status-error-surface: rgba(239, 67, 67, 0.08);
   --color-status-info: #005BFF;
+  --color-status-info-text: #0047CC;
   --color-status-info-surface: rgba(0, 91, 255, 0.08);
 
   /* Chart Series (Story 3.7 / UX-005) — paleta canônica para recharts.
