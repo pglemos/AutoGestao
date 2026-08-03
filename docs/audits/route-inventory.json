@@ -1,0 +1,1147 @@
+{
+  "generatedBy": "scripts/audit_route_data_inventory.mjs",
+  "source": [
+    "src/App.tsx",
+    "src/lib/auth/routeAccess.ts",
+    "src"
+  ],
+  "summary": {
+    "Rotas declaradas em src/App.tsx": 111,
+    "Rotas protegidas": 103,
+    "Rotas públicas": 8,
+    "Rotas protegidas sem regra canônica e sem redirect": 0,
+    "Caminhos declarados mais de uma vez": 0,
+    "Tabelas referenciadas pelo runtime": 127,
+    "RPCs referenciadas pelo runtime": 84,
+    "Edge Functions invocadas pelo runtime": 14,
+    "Pares tabela/operação encontrados": 249
+  },
+  "routes": [
+    {
+      "path": "/",
+      "kind": "route",
+      "surface": "pública",
+      "redirect": null,
+      "canonicalRule": null,
+      "forbiddenRoles": [],
+      "element": "<PublicHome />"
+    },
+    {
+      "path": "/login",
+      "kind": "route",
+      "surface": "pública",
+      "redirect": null,
+      "canonicalRule": null,
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Login /></Suspense>"
+    },
+    {
+      "path": "/forgot-password",
+      "kind": "route",
+      "surface": "pública",
+      "redirect": null,
+      "canonicalRule": null,
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Login /></Suspense>"
+    },
+    {
+      "path": "/reset-password",
+      "kind": "route",
+      "surface": "pública",
+      "redirect": null,
+      "canonicalRule": null,
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Login /></Suspense>"
+    },
+    {
+      "path": "/pre-cadastro/:storeSlug",
+      "kind": "route",
+      "surface": "pública",
+      "redirect": null,
+      "canonicalRule": null,
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><StorePreRegistration /></Suspense>"
+    },
+    {
+      "path": "/privacy",
+      "kind": "route",
+      "surface": "pública",
+      "redirect": null,
+      "canonicalRule": null,
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Privacy /></Suspense>"
+    },
+    {
+      "path": "/terms",
+      "kind": "route",
+      "surface": "pública",
+      "redirect": null,
+      "canonicalRule": null,
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Terms /></Suspense>"
+    },
+    {
+      "path": "/dono/*",
+      "kind": "route",
+      "surface": "pública",
+      "redirect": null,
+      "canonicalRule": null,
+      "forbiddenRoles": [],
+      "element": "<OwnerLegacyPathRedirect />"
+    },
+    {
+      "path": "/",
+      "kind": "container",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": null,
+      "forbiddenRoles": [],
+      "element": "<ProtectedRoute><Suspense fallback={<Spinner />}><AppShell /></Suspense></ProtectedRoute>"
+    },
+    {
+      "path": "/settings",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/configuracoes",
+      "canonicalRule": "/settings",
+      "forbiddenRoles": [],
+      "element": "<Navigate to=\"/configuracoes\" replace />"
+    },
+    {
+      "path": "/plano-estrategico",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/plano-estrategico",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S"
+    },
+    {
+      "path": "/plano-acao",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/plano-acao",
+      "forbiddenRoles": [
+        "vendedor"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ScopedActionPlanPage />} dono={<OwnerPlanoDeAcao />} admin={<InternalActionPlanPage />} /></Sus"
+    },
+    {
+      "path": "/decisoes",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/decisoes",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerCentralDeDecisoes />} admin={<ForbiddenRoute />} /></Suspense>"
+    },
+    {
+      "path": "/departamentos",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/departamentos",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDepartamentos />} admin={<ForbiddenRoute />} /></Suspense>"
+    },
+    {
+      "path": "/departamentos/comercial",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/departamentos/*",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptComercial />} admin={<ForbiddenRoute />} /></Suspense>"
+    },
+    {
+      "path": "/departamentos/marketing",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/departamentos/*",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptMarketing />} admin={<ForbiddenRoute />} /></Suspense>"
+    },
+    {
+      "path": "/departamentos/produto-e-estoque",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/departamentos/*",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptProduto />} admin={<ForbiddenRoute />} /></Suspense>"
+    },
+    {
+      "path": "/departamentos/pessoas-rh",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/departamentos/*",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptPessoas />} admin={<ForbiddenRoute />} /></Suspense>"
+    },
+    {
+      "path": "/departamentos/financeiro",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/departamentos/*",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptFinanceiro />} admin={<ForbiddenRoute />} /></Suspense>"
+    },
+    {
+      "path": "/departamentos/operacoes",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/departamentos/*",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptOperacoes />} admin={<ForbiddenRoute />} /></Suspense>"
+    },
+    {
+      "path": "/mercado",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/mercado",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerMercado />} admin={<ForbiddenRoute />} /></Suspense>"
+    },
+    {
+      "path": "/team",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/team",
+      "forbiddenRoles": [],
+      "element": "<TeamAliasRedirect />"
+    },
+    {
+      "path": "/equipe",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/equipe",
+      "forbiddenRoles": [],
+      "element": "<TeamAliasRedirect />"
+    },
+    {
+      "path": "/meu-dia",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/home",
+      "canonicalRule": "/meu-dia",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/home\" />"
+    },
+    {
+      "path": "/home",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/home",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<OwnerHome />} admin={<RoleRedirect />} /> </Suspense>"
+    },
+    {
+      "path": "/minha-remuneracao",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/home",
+      "canonicalRule": "/minha-remuneracao",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/home\" />"
+    },
+    {
+      "path": "/lancamento-diario",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/terminal-mx",
+      "canonicalRule": "/lancamento-diario",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/terminal-mx\" />"
+    },
+    {
+      "path": "/fechamento-diario",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/fechamento-diario",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ManagerDailyClosing />} dono={<ManagerDailyClosing />} admin={<ManagerDailyClosing />} /> </Suspense>"
+    },
+    {
+      "path": "/vendedor/terminal-mx",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/vendedor/terminal-mx",
+      "forbiddenRoles": [
+        "gerente",
+        "dono",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/terminal-mx",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/terminal-mx",
+      "forbiddenRoles": [
+        "gerente",
+        "dono",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/liberacao-fechamento",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/liberacao-fechamento",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
+    },
+    {
+      "path": "/carteira-clientes",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/carteira-clientes",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense>"
+    },
+    {
+      "path": "/carteira",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/carteira-clientes",
+      "canonicalRule": "/carteira",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/carteira-clientes\" />"
+    },
+    {
+      "path": "/vendedor/carteira",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/carteira-clientes",
+      "canonicalRule": "/vendedor/carteira",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/carteira-clientes\" />"
+    },
+    {
+      "path": "/mentor-comercial",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/carteira-clientes",
+      "canonicalRule": "/mentor-comercial",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/carteira-clientes\" />"
+    },
+    {
+      "path": "/vendedor/mentor-comercial",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/carteira-clientes",
+      "canonicalRule": "/vendedor/mentor-comercial",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/carteira-clientes\" />"
+    },
+    {
+      "path": "/funil",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/meu-funil",
+      "canonicalRule": "/funil",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/meu-funil\" />"
+    },
+    {
+      "path": "/minha-meta",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/meu-funil",
+      "canonicalRule": "/minha-meta",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/meu-funil\" />"
+    },
+    {
+      "path": "/vendedor/minha-meta",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/meu-funil",
+      "canonicalRule": "/vendedor/minha-meta",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/meu-funil\" />"
+    },
+    {
+      "path": "/meu-funil",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/meu-funil",
+      "forbiddenRoles": [
+        "gerente",
+        "dono",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<FunilVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/funil-comercial",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/funil-comercial",
+      "forbiddenRoles": [
+        "gerente",
+        "dono",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<FunilVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/central-execucao",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/central-execucao",
+      "forbiddenRoles": [
+        "gerente",
+        "dono",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CentralExecucao />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/rotina-do-dia",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/central-execucao",
+      "canonicalRule": "/rotina-do-dia",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/central-execucao\" />"
+    },
+    {
+      "path": "/vendedor/rotina-do-dia",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/central-execucao",
+      "canonicalRule": "/vendedor/rotina-do-dia",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/central-execucao\" />"
+    },
+    {
+      "path": "/central-de-execucao",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/central-de-execucao",
+      "forbiddenRoles": [
+        "gerente",
+        "dono",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CentralExecucao />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/relatorios-vendedor",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/relatorios-vendedor",
+      "forbiddenRoles": [
+        "gerente",
+        "dono",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RelatoriosVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/relatorios",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/relatorios",
+      "forbiddenRoles": [
+        "gerente",
+        "dono",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RelatoriosVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/feedback",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/devolutivas",
+      "canonicalRule": "/feedback",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/devolutivas\" />"
+    },
+    {
+      "path": "/feedbacks",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/desenvolvimento?tab=feedback",
+      "canonicalRule": "/feedbacks",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/desenvolvimento?tab=feedback\" />"
+    },
+    {
+      "path": "/vendedor/funil",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/meu-funil",
+      "canonicalRule": "/vendedor/funil",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/meu-funil\" />"
+    },
+    {
+      "path": "/vendedor/meu-funil",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/meu-funil",
+      "canonicalRule": "/vendedor/meu-funil",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/meu-funil\" />"
+    },
+    {
+      "path": "/vendedor/feedback",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/desenvolvimento?tab=feedback",
+      "canonicalRule": "/vendedor/feedback",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/desenvolvimento?tab=feedback\" />"
+    },
+    {
+      "path": "/vendedor/devolutivas",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/desenvolvimento?tab=feedback",
+      "canonicalRule": "/vendedor/devolutivas",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/desenvolvimento?tab=feedback\" />"
+    },
+    {
+      "path": "/vendedor/desenvolvimento",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/desenvolvimento",
+      "canonicalRule": "/vendedor/desenvolvimento",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/desenvolvimento\" />"
+    },
+    {
+      "path": "/vendedor/treinamentos",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/universidade-mx",
+      "canonicalRule": "/vendedor/treinamentos",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/universidade-mx\" />"
+    },
+    {
+      "path": "/vendedor/universidade-mx",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/universidade-mx",
+      "canonicalRule": "/vendedor/universidade-mx",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/universidade-mx\" />"
+    },
+    {
+      "path": "/vendedor/configuracoes",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/configuracoes",
+      "canonicalRule": "/vendedor/configuracoes",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/configuracoes\" />"
+    },
+    {
+      "path": "/funil-vendas",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/funil-vendas",
+      "forbiddenRoles": [
+        "vendedor",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FunilVendasGerente />} dono={<FunilVendasGerente />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/metas",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/metas",
+      "forbiddenRoles": [
+        "vendedor",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<MetasGerente />} dono={<MetasGerente />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/falar-consultor",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/falar-consultor",
+      "forbiddenRoles": [
+        "vendedor",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FalarConsultorDono />} dono={<FalarConsultorDono />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/organograma",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/organograma",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Organograma />} admin={<Organograma />} /> </Suspense>"
+    },
+    {
+      "path": "/banco-talentos",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/banco-talentos",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Comportamental />} admin={<Comportamental />} /> </Suspense>"
+    },
+    {
+      "path": "/ajuda",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/ajuda",
+      "forbiddenRoles": [
+        "gerente",
+        "dono",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorAjuda />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+    },
+    {
+      "path": "/ranking",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/ranking",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+    },
+    {
+      "path": "/classificacao",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/classificacao",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+    },
+    {
+      "path": "/universidade-mx",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/treinamentos",
+      "canonicalRule": "/universidade-mx",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorTreinamentos />} gerente={<RedirectWithSearch to=\"/treinamentos\" />} dono={<OwnerUniversidade />} admin={<RedirectW"
+    },
+    {
+      "path": "/treinamentos",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/universidade-mx",
+      "canonicalRule": "/treinamentos",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=\"/universidade-mx\" />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<Consu"
+    },
+    {
+      "path": "/desenvolvimento",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/desenvolvimento",
+      "forbiddenRoles": [
+        "gerente",
+        "dono",
+        "admin"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense"
+    },
+    {
+      "path": "/devolutivas",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/devolutivas",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<GerenteFeedback />} dono={<GerenteFeedback />} admin={<GerenteFeedback />} /> </Suspe"
+    },
+    {
+      "path": "/notificacoes",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/notificacoes",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Notificacoes />} gerente={<Notificacoes />} dono={<Notificacoes />} admin={<Notificacoes />} /> </Suspense>"
+    },
+    {
+      "path": "/perfil",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/perfil",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<MeuPerfilVendedor />} gerente={<Perfil />} dono={<Perfil />} admin={<Perfil />} /> </Suspense>"
+    },
+    {
+      "path": "/meu-perfil",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/perfil",
+      "canonicalRule": "/meu-perfil",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/perfil\" />"
+    },
+    {
+      "path": "/meu-perfil-vendedor",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/perfil",
+      "canonicalRule": "/meu-perfil-vendedor",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/perfil\" />"
+    },
+    {
+      "path": "/vendedor/perfil",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/perfil",
+      "canonicalRule": "/vendedor/perfil",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/perfil\" />"
+    },
+    {
+      "path": "/gerente/fechamento-diario",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/fechamento-diario",
+      "canonicalRule": "/gerente/*",
+      "forbiddenRoles": [],
+      "element": "<RedirectWithSearch to=\"/fechamento-diario\" />"
+    },
+    {
+      "path": "/gerente/rotina-equipe",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/gerente/rotina-equipe",
+      "forbiddenRoles": [
+        "vendedor",
+        "dono"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ForbiddenRoute />} admin={<ManagerTeamRoutine />} /></Suspense>"
+    },
+    {
+      "path": "/gerente/minha-equipe",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/gerente/*",
+      "forbiddenRoles": [
+        "vendedor"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+    },
+    {
+      "path": "/gerente/meta-loja",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/gerente/*",
+      "forbiddenRoles": [
+        "vendedor"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+    },
+    {
+      "path": "/gerente/vendas",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/gerente/*",
+      "forbiddenRoles": [
+        "vendedor"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+    },
+    {
+      "path": "/gerente/mentor",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/gerente/*",
+      "forbiddenRoles": [
+        "vendedor"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>"
+    },
+    {
+      "path": "/gerente/feedbacks-pdis",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/gerente/*",
+      "forbiddenRoles": [
+        "vendedor"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens"
+    },
+    {
+      "path": "/gerente/ranking",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/gerente/*",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+    },
+    {
+      "path": "/gerente/universidade-mx",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/gerente/*",
+      "forbiddenRoles": [
+        "vendedor"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<ConsultorTreinamentos />} /></Su"
+    },
+    {
+      "path": "/lojas/:storeSlug/consultor-ia",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/lojas/:storeSlug/consultor-ia",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} /> </Suspense>"
+    },
+    {
+      "path": "/lojas/:storeSlug",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/lojas/:storeSlug",
+      "forbiddenRoles": [
+        "vendedor"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+    },
+    {
+      "path": "/lojas/:storeSlug/equipe",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/lojas/:storeSlug/*",
+      "forbiddenRoles": [
+        "vendedor"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+    },
+    {
+      "path": "/consultor-ia",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/consultor-ia",
+      "forbiddenRoles": [],
+      "element": "<ConsultorIaAliasRedirect />"
+    },
+    {
+      "path": "/pdi",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": "/desenvolvimento?tab=pdi",
+      "canonicalRule": "/pdi",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to=\"/desenvolvimento?tab=pdi\" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />"
+    },
+    {
+      "path": "/pdi/:id/print",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/pdi/:id/print",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
+    },
+    {
+      "path": "/rotina",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/rotina",
+      "forbiddenRoles": [
+        "vendedor"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRotinaDoDia />} admin={<RotinaGerente />} /> </Suspense>"
+    },
+    {
+      "path": "/painel",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/painel",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>"
+    },
+    {
+      "path": "/lojas",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/lojas",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Lojas /></Suspense>"
+    },
+    {
+      "path": "/simulacao",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/simulacao",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Simulacao /></Suspense>"
+    },
+    {
+      "path": "/simulacao/:simulationRole",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/simulacao/*",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Simulacao /></Suspense>"
+    },
+    {
+      "path": "/agenda",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/agenda",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><AgendaAdmin /></Suspense>"
+    },
+    {
+      "path": "/consultoria",
+      "kind": "container",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/consultoria",
+      "forbiddenRoles": [],
+      "element": "(grupo)"
+    },
+    {
+      "path": "/consultoria",
+      "kind": "index",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/consultoria",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente"
+      ],
+      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>"
+    },
+    {
+      "path": "/consultoria/clientes",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/consultoria/*",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>"
+    },
+    {
+      "path": "/consultoria/clientes/:clientSlug",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/consultoria/*",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>"
+    },
+    {
+      "path": "/consultoria/clientes/:clientSlug/visitas/:visitNumber",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/consultoria/*",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>"
+    },
+    {
+      "path": "/produtos",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/produtos",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+    },
+    {
+      "path": "/configuracoes",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/configuracoes",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense>"
+    },
+    {
+      "path": "/configuracoes/remuneracao",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/configuracoes/remuneracao",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><Configuracoes initialTab=\"remuneracao\" /></Suspense>"
+    },
+    {
+      "path": "/configuracoes/operacional",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/configuracoes/operacional",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><OperationalSettings /></Suspense>"
+    },
+    {
+      "path": "/configuracoes/consultoria-pmr",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/configuracoes/consultoria-pmr",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><ConsultoriaParametros /></Suspense>"
+    },
+    {
+      "path": "/configuracoes/reprocessamento",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/configuracoes/reprocessamento",
+      "forbiddenRoles": [
+        "vendedor",
+        "gerente",
+        "dono"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<Reprocessamento />} /> </Suspense>"
+    },
+    {
+      "path": "/relatorio-matinal",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/relatorio-matinal",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><MorningReport /></Suspense>"
+    },
+    {
+      "path": "/relatorios/performance-vendas",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/relatorios/performance-vendas",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><SalesPerformance /></Suspense>"
+    },
+    {
+      "path": "/relatorios/performance-vendedor",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/relatorios/performance-vendedor",
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>"
+    },
+    {
+      "path": "/auditoria",
+      "kind": "route",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": "/auditoria",
+      "forbiddenRoles": [
+        "vendedor",
+        "dono"
+      ],
+      "element": "<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<AiDiagnostics />} dono={<ForbiddenRoute />} admin={<AiDiagnostics />} /> </Suspense>"
+    },
+    {
+      "path": "/*",
+      "kind": "fallback",
+      "surface": "protegida",
+      "redirect": null,
+      "canonicalRule": null,
+      "forbiddenRoles": [],
+      "element": "<Suspense fallback={<Spinner />}><NotFound /></Suspense>"
+    }
+  ]
+}

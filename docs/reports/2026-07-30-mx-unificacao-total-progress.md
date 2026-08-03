@@ -1,6 +1,6 @@
 # MX Unificação Total — Progresso
 
-Atualizado em 2026-08-03. Execução direta no branch `main`, sem criar branch ou worktree, conforme decisão explícita do solicitante.
+Atualizado em 2026-08-03 após o SHA `a81c3f86`. Execução direta no branch `main`, sem criar branch ou worktree, conforme decisão explícita do solicitante.
 
 ## Tarefa
 
@@ -24,10 +24,19 @@ Os gates locais anteriores estavam verdes, mas a matriz E2E longa encontrou a ro
 - Aplicadas as classes canônicas de superfície, mantendo as ações, a responsividade e a hierarquia existentes.
 - Plano de execução atualizado para refletir os gates reais de 03/08.
 - Corrigidos os quatro `ResponsiveContainer` da Performance de Vendas com `minWidth={0}`, `minHeight={0}` e dimensões iniciais positivas para eliminar o warning de montagem `width(-1)/height(-1)`.
+- Gerado o inventário estruturado atual em `docs/audits/route-inventory.md` e `docs/audits/route-inventory.json`: 111 rotas, 103 protegidas, 8 públicas, 127 tabelas, 84 RPCs e 14 Edge Functions.
+- CI do SHA `a81c3f86`: Quality Gates, Typecheck/unit, ESLint a11y, bundle-budget, Module Design System Parity e MX Atomic Design Enforcement passaram.
+- Gitleaks no evento `push` passou (run `30847358188`); a execução manual histórica (run `30847366721`) encontrou 77 achados em commits antigos e permanece registrada como dívida de rotação/limpeza, sem allowlist.
 
 ### Arquivos
 
 - `src/features/sales-performance/sections/AdminHeader.tsx`
+- `src/features/sales-performance/sections/AdminFunnelChart.tsx`
+- `src/features/sales-performance/sections/AdminGoalCompareChart.tsx`
+- `src/features/sales-performance/sections/AdminPeopleChart.tsx`
+- `src/features/sales-performance/sections/AdminSellOutEvolution.tsx`
+- `docs/audits/route-inventory.md`
+- `docs/audits/route-inventory.json`
 - `docs/superpowers/plans/2026-07-30-mx-unificacao-total.md`
 - `docs/reports/2026-07-30-mx-unificacao-total-progress.md`
 - `docs/reports/2026-07-30-mx-unificacao-total-final.md`
@@ -47,7 +56,7 @@ Os gates locais anteriores estavam verdes, mas a matriz E2E longa encontrou a ro
 - `npm run validate:agents`: exit 0, 121 warnings históricos.
 - Produção: `/relatorios/performance-vendas` autenticada como Administrador Geral, dados reais renderizados e sem overflow horizontal; deployment vigente sem a correção local.
 - Pós-patch final: `npm test` 1707 pass, 0 fail, 13.988 asserts; `npm run build` exit 0; `npm run lint` exit 0; `npm run check:bundle-size` 1831,32/1860 KB, todos os chunks dentro do budget.
-- Produção final: `f51ad48e` em `dpl_m2uGGrqo3PezodqcwTFPDagDepYw`, `READY`, alias oficial, console sem warnings/errors, dados reais, header canônico e zero overflow.
+- Produção final do código funcional: `f51ad48e`; deployment atual da `main`/evidência operacional: `a81c3f86` em `dpl_7bfYjjwodRs4sM8zHtD66N8RV9fh`, `READY`, aliases oficiais ativos.
 - `/home`: bloqueio de autorização esperado para `administrador_geral`, sem erro de console e sem overflow.
 - Evidência visual final revisada: `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas-final-f51ad48e.png`.
 
@@ -60,9 +69,11 @@ Correção local aplicada, publicada e validada em produção. O warning Rechart
 - `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas.png`
 - `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas-metrics.json`
 - Commits desta etapa: `b841d50e`, `59b1c51e`, `f51ad48e`.
-- Deployment final: `dpl_m2uGGrqo3PezodqcwTFPDagDepYw`, `READY`, aliases oficiais ativos.
-- CLI `sentry-cli`: ausente; validação real do Sentry ainda não comprovada.
+- Deployment funcional validado: `dpl_m2uGGrqo3PezodqcwTFPDagDepYw`; deployment atual da `main`: `dpl_7bfYjjwodRs4sM8zHtD66N8RV9fh`, `READY`, aliases oficiais ativos.
+- CodeRabbit CLI `0.7.1` autenticado executou revisão contra `1480ea42`: 6 issues; as duas issues documentais foram corrigidas, três issues permanecem em arquivos concorrentes de pré-cadastro e uma em teste concorrente.
+- Sentry API read-only confirmou organização `synvolt`, projeto `mx-performance-frontend` e release `a81c3f86d391dd5646feaab8f8443adad1a370d5`; evento controlado `21d41cfbda2d407e9c424f0ae488313f` chegou com tags de produção, rota e release, issue `MX-PERFORMANCE-FRONTEND-5` foi resolvida. O plugin local informou upload de source maps, mas a listagem Sentry/CLI retornou 0 arquivos; stack trace desminificado permanece não comprovado.
+- `sentry-cli` global está ausente; `npx @sentry/cli` 2.58.5 foi usado somente para validação read-only.
 
 ### Próximo passo
 
-Manter o relatório final como fonte de verdade: a correção está liberada e as pendências de Sentry, CodeRabbit, CI GitHub completo e rotação de credenciais permanecem explícitas.
+Manter o relatório final como fonte de verdade: a correção está liberada; source maps desminificados, dívida histórica de segredos, rotação de credenciais e issues CodeRabbit em arquivos concorrentes permanecem explícitos.
