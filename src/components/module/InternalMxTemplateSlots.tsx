@@ -5,16 +5,16 @@ export function InternalMxTemplatePage({
   children,
   className,
   ...props
-}: HTMLAttributes<HTMLElement> & { children: ReactNode }) {
+}: HTMLAttributes<HTMLDivElement> & { children: ReactNode }) {
   return (
-    <main
+    <div
       data-mx-template-page=""
       data-mx-template-slot="page"
       className={cn('min-h-full w-full', className)}
       {...props}
     >
       {children}
-    </main>
+    </div>
   )
 }
 

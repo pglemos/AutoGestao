@@ -66,6 +66,7 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
 
   test('mantém um único landmark main-content, pertencente ao shell universal', () => {
     expect(sidebarShell.split('id="main-content"').length - 1).toBe(1)
+    expect(read('../components/module/InternalMxTemplateSlots.tsx')).not.toMatch(/<main[\s>]/)
 
     for (const file of runtimeFiles(srcRoot)) {
       if (file.endsWith('/components/MxSidebarShell.tsx')) continue
