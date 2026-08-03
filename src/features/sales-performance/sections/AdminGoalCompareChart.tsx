@@ -26,7 +26,7 @@ export function AdminGoalCompareChart({ topStores }: Props) {
         </CardDescription>
       </CardHeader>
       <CardContent className="h-mx-96 p-mx-lg">
-        <ResponsiveContainer width="100%" height="100%">
+        <ResponsiveContainer width="100%" height="100%" minWidth={0}>
           <BarChart data={topStores} margin={{ top: 10, right: 16, left: 0, bottom: 0 }}>
             <CartesianGrid
               strokeDasharray="3 3"
