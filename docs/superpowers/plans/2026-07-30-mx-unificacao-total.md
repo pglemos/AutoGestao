@@ -68,8 +68,8 @@ Gates medidos em 2026-07-31: `npm run lint` exit 0, `npm run test` exit 0 (1697 
 | Onda | Estado | Evidência (comando, exit code) |
 |---|---|---|
 | 1–4 | **concluídas** | inalteradas desde 2026-07-31 |
-| 5 — validação | **concluída localmente** | `npm test` 1711 pass / 0 fail / 14000 asserts; `npm run lint`, `npm run typecheck`, `npm run build`, `deno check` e `git diff --check` verdes; dois timeouts transitórios de foco/cleanup passaram isoladamente e na suíte completa subsequente |
-| 6 — publicação | **parcialmente validada** | commit `75147ef3` publicado; seis workflows GitHub verdes; Supabase `store-pre-registration` versão 76; Vercel `dpl_5RuA6xgKUgHaEUNXxZyhHkd76Fuq` `Ready`; Chrome real validou `/pre-cadastro/acertt` sem console error/warn e POST de duplicidade retornou `409`; Sentry controlado, smoke autenticado completo e rollback operacional continuam pendentes |
+| 5 — validação | **concluída localmente** | `npm test` 1712 pass / 0 fail / 14004 asserts; `npm run lint`, `npm run typecheck`, `npm run build`, `npm run check:bundle-size` e `git diff --check` verdes; smoke real do consultor e rota crítica revalidados em produção |
+| 6 — publicação | **parcialmente validada** | Snapshot histórico de 2026-08-03: commit `75147ef3`, seis workflows GitHub verdes, Supabase `store-pre-registration` versão 76, Vercel `dpl_5RuA6xgKUgHaEUNXxZyhHkd76Fuq` `Ready`, Chrome real em `/pre-cadastro/acertt` sem console error/warn e POST de duplicidade `409`. O estado corrente está registrado abaixo em `7387fb32`/`dpl_DNhwTvPwY9tQTQrrZ69WZAmVK6HS`; Sentry controlado, smoke autenticado completo e rollback operacional continuam pendentes. |
 
 ### Estado operacional atualizado em 2026-08-03
 
@@ -78,9 +78,16 @@ Gates medidos em 2026-07-31: `npm run lint` exit 0, `npm run test` exit 0 (1697 
 - Acesso GitHub, Supabase e Vercel confirmado por CLIs; `sentry-cli` não está instalado nesta máquina, e `npx @sentry/cli` 2.58.5 foi usado apenas para consultas sem persistir credenciais.
 - Produção autenticada como Administrador Geral em `/relatorios/performance-vendas` mostrou dados reais (`49 lojas`, `204` sell-outs históricos, `476` meta consolidada) e nenhum overflow horizontal, porém o deployment vigente ainda não contém `data-mx-module-header` nessa rota.
 - O warning Recharts `width(-1)/height(-1)` foi observado no deployment vigente e precisa ser revalidado após o novo deploy.
-- O SHA `7a2333120f9ec16143915b7cc13c98d3bd350347` está em `origin/main`; CI do SHA está verde e o deployment `dpl_2afY6n86SsmiTGu8xeta6K8atzZb` está `READY` com aliases oficiais. O build log confirma upload de artifact bundle e o debug ID `ff71a893-c507-4440-9653-17416b1f2be4`; ainda não há prova de stack trace desminificado a partir de frame do bundle.
-- `npm audit --omit=dev` ficou em 2 high após atualização lockfile de `brace-expansion`; 129 alertas Dependabot e findings CodeRabbit em arquivos concorrentes permanecem pendentes.
+- O SHA `7387fb325dd645aaa2f832895e341c541c1f1d60` está em `origin/main`; CI, `/api/health` e o deployment observado `dpl_DNhwTvPwY9tQTQrrZ69WZAmVK6HS` estão verdes/`READY`, com aliases oficiais. Bundle e health declaram a mesma release Sentry; ainda não há prova de stack trace desminificado a partir de frame do bundle.
+- `npm audit --omit=dev` ficou em 2 high após atualização lockfile de `brace-expansion`; a API atual lista 100 alertas Dependabot (1 critical, 55 high, 33 medium, 11 low) e findings CodeRabbit em arquivos concorrentes permanecem pendentes.
 - Não declarar conclusão total enquanto a matriz integral de rotas/estados/viewports, a dívida histórica de segredos, os alertas críticos, a dívida CodeRabbit concorrente e a prova do stack trace desminificado permanecerem abertas.
+
+### Revalidação complementar de 2026-08-03
+
+- O perfil `consultor_mx` foi coberto por fixture Auth temporário e smoke real contra o deployment da `main`: `1 passed` em `2,1 min`; nenhuma conta permanente foi reativada.
+- O teste `src/test/mx-consultoria-role-smoke.playwright.ts` passou a diferenciar requisições por navegação, leituras secundárias do shell e falhas HTTP reais. A mudança não mascara status HTTP, `requestfailed` de API, `pageerror` ou `console.error` de aplicação.
+- Os gates locais após a mudança passaram: `typecheck`, `lint`, `npm test`, `build`, `check:bundle-size` e `git diff --check`.
+- O Supabase continua sem backup restaurável verificável: `backups: []`, `pitr_enabled: false`; esse gate permanece bloqueado externamente.
 
 ### Defeitos reais encontrados na medição de 2026-08-03
 

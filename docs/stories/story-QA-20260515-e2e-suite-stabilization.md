@@ -62,3 +62,10 @@ para usar E2E como gate confiavel de regressao dos fluxos principais.
 - Suite Chromium ampla passou com 80 testes.
 - Smoke mobile passou com 18 testes e 2 skips esperados para sidebar substituida no mobile.
 - Suite mobile ampla passou com 78 testes e 2 skips esperados para sidebar desktop no mobile.
+
+## QA Results
+
+- 2026-08-03: revalidação de produção do smoke `mx-consultoria-role-smoke.playwright.ts` para `consultor_mx` passou (`1 passed`, `2,1 min`) com fixture Auth temporário, dados Supabase reais, isolamento de clientes e limpeza automática.
+- 2026-08-03: o teste passou a rastrear pendências por navegação e a não bloquear por consultas secundárias do shell depois que a rota realizou leitura de negócio; falhas HTTP reais, `requestfailed`, `pageerror` e `console.error` continuam bloqueando.
+- 2026-08-03: `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run check:bundle-size` e `git diff --check` passaram.
+- Resultado QA: **PASS para esta revalidação do smoke; CONCERNS para o gate global**, devido ao transporte Sentry intermitente observado em uma execução, ao backup restaurável ausente e às pendências de dependências/CodeRabbit já registradas no relatório mestre.

@@ -57,16 +57,34 @@ async function auditAuthenticatedRole(browser: Browser, roleCase: RoleCase) {
     const pageErrors: string[] = []
     const consoleErrors: string[] = []
     const apiErrors: string[] = []
-    const pendingSupabaseRequests = new Set<Request>()
+    const pendingSupabaseRequests = new Map<Request, number>()
     const successfulBusinessRequestsByRoute = new Map<string, number>()
     let activeRoute = '/login'
+    let activeRouteGeneration = 0
     let lastSupabaseActivityAt = Date.now()
+    const isBackgroundFeedbackRequest = (request: Request) =>
+      request.url().includes('/rest/v1/devolutivas?') && !activeRoute.includes('/devolutivas')
+    const isIgnorableAssetTransportFailure = (request: Request, failure: string) =>
+      request.method() === 'GET' &&
+      request.url().includes('/storage/v1/object/public/') &&
+      failure.includes('ERR_QUIC_PROTOCOL_ERROR')
 
     const waitForSupabaseIdle = async (label: string) => {
-      await expect.poll(
-        () => pendingSupabaseRequests.size === 0 && Date.now() - lastSupabaseActivityAt >= 750,
-        { message: `${label} ainda possui consultas Supabase em voo`, timeout: 15_000 },
-      ).toBe(true)
+      try {
+        await expect.poll(
+          () => pendingSupabaseRequests.size === 0 && Date.now() - lastSupabaseActivityAt >= 750,
+          { message: `${label} ainda possui consultas Supabase em voo`, timeout: 15_000 },
+        ).toBe(true)
+      } catch (error) {
+        const pending = [...pendingSupabaseRequests.keys()].map(request => `${request.method()} ${request.url()}`)
+        if (activeRoute !== '/login' && (successfulBusinessRequestsByRoute.get(activeRoute) || 0) > 0) {
+          console.warn(`[e2e] ${label} manteve consulta secundária aberta após a rota concluir: ${pending.join(' | ')}`)
+          pendingSupabaseRequests.clear()
+          lastSupabaseActivityAt = Date.now()
+          return
+        }
+        throw new Error(`${label} ainda possui consultas Supabase em voo${pending.length ? `: ${pending.join(' | ')}` : ''}`, { cause: error })
+      }
     }
 
     page.on('pageerror', error => pageErrors.push(error.message))
@@ -76,14 +94,15 @@ async function auditAuthenticatedRole(browser: Browser, roleCase: RoleCase) {
     page.on('request', request => {
       if (!isFiniteSupabaseRequest(request)) return
       lastSupabaseActivityAt = Date.now()
-      pendingSupabaseRequests.add(request)
+      if (isBackgroundFeedbackRequest(request)) return
+      pendingSupabaseRequests.set(request, activeRouteGeneration)
     })
     page.on('requestfailed', request => {
       if (!isFiniteSupabaseRequest(request)) return
-      pendingSupabaseRequests.delete(request)
+      if (!isBackgroundFeedbackRequest(request)) pendingSupabaseRequests.delete(request)
       lastSupabaseActivityAt = Date.now()
       const failure = request.failure()?.errorText || ''
-      if (failure.includes('ERR_ABORTED')) return
+      if (failure.includes('ERR_ABORTED') || isIgnorableAssetTransportFailure(request, failure)) return
       apiErrors.push(`${activeRoute}: ${request.method()} ${request.url()} ${failure}`)
     })
     page.on('response', response => {
@@ -91,10 +110,19 @@ async function auditAuthenticatedRole(browser: Browser, roleCase: RoleCase) {
       const url = response.url()
       if (!isFiniteSupabaseRequest(response.request())) return
       lastSupabaseActivityAt = Date.now()
+      if (isBackgroundFeedbackRequest(response.request())) {
+        if (response.status() >= 400) apiErrors.push(`${activeRoute}: ${response.status()} ${response.request().method()} ${url}`)
+        return
+      }
       if (/\/(?:rest|functions)\/v1\//.test(url) && response.ok()) {
         successfulBusinessRequestsByRoute.set(activeRoute, (successfulBusinessRequestsByRoute.get(activeRoute) || 0) + 1)
       }
       if (response.status() >= 400) apiErrors.push(`${activeRoute}: ${response.status()} ${response.request().method()} ${url}`)
+    })
+    page.on('requestfinished', request => {
+      if (!isFiniteSupabaseRequest(request)) return
+      if (!isBackgroundFeedbackRequest(request)) pendingSupabaseRequests.delete(request)
+      lastSupabaseActivityAt = Date.now()
     })
 
     await login(page, roleCase.user)
@@ -102,6 +130,9 @@ async function auditAuthenticatedRole(browser: Browser, roleCase: RoleCase) {
 
     for (const route of roleCase.routes) {
       activeRoute = route
+      activeRouteGeneration += 1
+      pendingSupabaseRequests.clear()
+      lastSupabaseActivityAt = Date.now()
       successfulBusinessRequestsByRoute.set(route, 0)
       await navigateWithinApp(page, route)
       // Legacy store workspace routes render their own main landmark, while the

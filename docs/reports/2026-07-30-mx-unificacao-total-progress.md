@@ -1,6 +1,6 @@
 # MX Unificação Total — Progresso
 
-Atualizado em 2026-08-03 após o SHA `7a233312`. Execução direta no branch `main`, sem criar branch ou worktree, conforme decisão explícita do solicitante.
+Atualizado em 2026-08-03 após o SHA `7387fb32`. Execução direta no branch `main`, sem criar branch ou worktree, conforme decisão explícita do solicitante.
 
 ## Tarefa
 
@@ -28,7 +28,7 @@ Os gates locais anteriores estavam verdes, mas a matriz E2E longa encontrou a ro
 - CI do SHA `a81c3f86`: Quality Gates, Typecheck/unit, ESLint a11y, bundle-budget, Module Design System Parity e MX Atomic Design Enforcement passaram.
 - Gitleaks no evento `push` passou (run `30847358188`); a execução manual histórica (run `30847366721`) encontrou 77 achados em commits antigos e permanece registrada como dívida de rotação/limpeza, sem allowlist.
 - `npm update brace-expansion --package-lock-only --ignore-scripts` atualizou os pacotes compatíveis para `brace-expansion` 5.0.9/2.1.4/1.1.18; `npm audit --omit=dev` caiu de 3 para 2 findings high, ambos em `react-router`/`react-router-dom`.
-- Dependabot revalidado pela API: 129 alertas abertos (3 critical, 69 high, 44 medium, 13 low). Os alertas distribuídos em `.aiox-core`, `whatsapp-service` e backends auxiliares permanecem fora do escopo seguro desta correção.
+- Dependabot revalidado pela API: 100 alertas abertos (1 critical, 55 high, 33 medium, 11 low). Os alertas distribuídos em `.aiox-core`, `whatsapp-service` e backends auxiliares permanecem fora do escopo seguro desta correção.
 
 ### Arquivos
 
@@ -59,8 +59,8 @@ Os gates locais anteriores estavam verdes, mas a matriz E2E longa encontrou a ro
 - `npm run validate:agents`: exit 0, 121 warnings históricos.
 - Produção: `/relatorios/performance-vendas` autenticada como Administrador Geral, dados reais renderizados e sem overflow horizontal; deployment vigente sem a correção local.
 - Pós-patch final: `npm test` 1707 pass, 0 fail, 13.988 asserts; `npm run build` exit 0; `npm run lint` exit 0; `npm run check:bundle-size` 1831,32/1860 KB, todos os chunks dentro do budget.
-- Produção final: SHA `7a2333120f9ec16143915b7cc13c98d3bd350347`; deployment `dpl_2afY6n86SsmiTGu8xeta6K8atzZb`, `READY`, aliases oficiais ativos.
-- `/api/health`: HTTP 200, `healthy`, Vercel/Supabase API/database/crons críticos `ok`, release `7a2333120f9ec16143915b7cc13c98d3bd350347`.
+- Produção atual observada: SHA `7387fb325dd645aaa2f832895e341c541c1f1d60`; deployment `dpl_DNhwTvPwY9tQTQrrZ69WZAmVK6HS`, `READY`, aliases oficiais ativos.
+- `/api/health`: HTTP 200, `healthy`, Vercel/Supabase API/database/crons críticos `ok`, release `7387fb325dd645aaa2f832895e341c541c1f1d60`.
 - `/relatorios/performance-vendas`: HTTP 200 em `https://mxperformance.com.br`.
 - `/home`: bloqueio de autorização esperado para `administrador_geral`, sem erro de console e sem overflow.
 - Evidência visual final revisada: `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas-final-f51ad48e.png`.
@@ -74,11 +74,28 @@ Correção local aplicada, publicada e validada em produção. O warning Rechart
 - `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas.png`
 - `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas-metrics.json`
 - Commits desta etapa: `b841d50e`, `59b1c51e`, `f51ad48e`.
-- Deployment funcional validado: `dpl_m2uGGrqo3PezodqcwTFPDagDepYw`; deployment atual da `main`: `dpl_Fo6p841PvUk6aLMKcnUkUyrUwCAY`, `READY`, aliases oficiais ativos.
+- Deployment atual observado da `main`: `dpl_DNhwTvPwY9tQTQrrZ69WZAmVK6HS`, `READY`, aliases oficiais ativos.
 - CodeRabbit CLI `0.7.1` autenticado executou revisão contra `1480ea42`: 6 issues; as duas issues documentais foram corrigidas, 1 crítica, 1 major e 2 menores permanecem em arquivos concorrentes de pré-cadastro/teste.
-- Sentry confirmou organização `synvolt`, projeto `mx-performance-frontend` e release `7a2333120f9ec16143915b7cc13c98d3bd350347`; evento controlado `08093d7cae174d23824a5273fa42bb91` chegou com tags de produção, rota, deployment e release. O build log confirma artifact bundle e o debug ID `ff71a893-c507-4440-9653-17416b1f2be4`; a API legada retornou 0 arquivos e stack trace desminificado de frame do bundle permanece não comprovado.
+- Sentry confirmou organização `synvolt` e projeto `mx-performance-frontend`; bundle e `/api/health` atuais convergem para release `7387fb325dd645aaa2f832895e341c541c1f1d60`. O evento histórico `08093d7cae174d23824a5273fa42bb91` e o debug ID `ff71a893-c507-4440-9653-17416b1f2be4` permanecem evidências antigas; stack trace desminificado da release atual permanece aberto.
 - `sentry-cli` global está ausente; `npx @sentry/cli` 2.58.5 foi usado somente para validação read-only.
 
 ### Próximo passo
 
-Manter o relatório final como fonte de verdade: a correção está liberada e a atualização transitiva de `brace-expansion` está no lockfile; dívida histórica de segredos, rotação de credenciais, React Router vulnerável, findings CodeRabbit concorrentes e stack trace desminificado de frame do bundle permanecem explícitos.
+Manter o relatório final como fonte de verdade: a correção está liberada e a atualização transitiva de `brace-expansion` está no lockfile; dívida histórica de segredos, rotação de credenciais, React Router vulnerável, findings CodeRabbit concorrentes, stack trace desminificado de frame do bundle e backup restaurável permanecem explícitos.
+
+## Revalidação autônoma — 2026-08-03
+
+- O smoke real do perfil `consultor_mx` foi executado contra `https://mxperformance.com.br` com fixture temporário de Auth/perfil, dados Supabase reais, isolamento de consultoria e limpeza automática: `1 passed` em `2,1 min`.
+- Durante reexecuções, o runner revelou consultas secundárias do shell mantidas abertas após a rota concluir e `ERR_QUIC_PROTOCOL_ERROR` em um avatar público; a query equivalente de `devolutivas` respondeu em `131–223 ms`, e o avatar respondeu `HTTP/1.1 200` com curl. O teste agora rastreia pendências por navegação, não bloqueia por consulta secundária após uma leitura de negócio bem-sucedida e mantém falhas HTTP/console reais como bloqueadores.
+- O smoke também observou uma tentativa intermitente de envio ao Sentry sem CORS; a repetição passou, e a inspeção CDP capturou o envelope com `HTTP 200` e `Access-Control-Allow-Origin: *`. A prova de stack trace desminificado continua aberta.
+- Gates locais após a alteração do teste: `npm run typecheck`, `npm run lint`, `npm test`, `npm run build`, `npm run check:bundle-size` e `git diff --check` passaram; bundle `1844,83/1860 KB`, sem sourcemaps públicos.
+- Nenhuma conta permanente foi reativada; fixtures temporários foram removidos pelo `afterAll` do teste.
+- Reexecução local final: `npm test` 1712 pass / 0 fail / 14.004 asserts; `npm run typecheck` exit 0; `npm run lint` exit 0; `npm run build` exit 0; `npm run check:bundle-size` 1844,83/1860 KB; `git diff --check` exit 0.
+
+## Revalidação de produção — 2026-08-03 (sessão final)
+
+- Navegador autenticado como Administrador Geral abriu `https://www.mxperformance.com.br/relatorios/performance-vendas`: dados reais visíveis (`204` sell-outs e `476` meta), `main` presente, zero logs de erro e `scrollWidth === clientWidth` em viewport padrão de 1721 px.
+- A mesma rota foi recarregada em `390×844`: `scrollWidth === clientWidth === 390`, títulos `BI Executivo da Rede`, `204` e `476` presentes, zero elementos fixos fora da viewport e zero logs de erro.
+- Smoke Playwright contra produção, filtrado para `consultor_mx`, com fixture Auth/consultoria temporário e limpeza automática: `1 passed (2.0m)`.
+- CI do SHA `7387fb325dd645aaa2f832895e341c541c1f1d60`: `Quality Gates`, `Typecheck`, `unit-tests`, `eslint-a11y`, `Atomic Design`, `parity`, `Detect Secrets` e `Supabase Preview` concluídos com sucesso.
+- O `npx @sentry/cli` local está disponível (`2.58.6`), porém o token operacional fornecido para esta sessão retornou `401 Invalid token`; source maps e stack trace desminificado da release atual continuam sem prova independente da API.
