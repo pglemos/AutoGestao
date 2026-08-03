@@ -319,6 +319,28 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   o cutover não está concluído. Edge clients passaram a preferir os mapas
   gerenciados `SUPABASE_SECRET_KEYS.default` e
   `SUPABASE_PUBLISHABLE_KEYS.default`, mantendo fallback temporário.
+- 2026-08-03: incidente ACERTT reproduzido em produção: `/pre-cadastro/acertt`
+  carregou a loja e o GET retornou 200, enquanto o POST podia responder
+  `Muitas tentativas de cadastro` antes de criar qualquer identidade. A causa
+  local era o balde compartilhado `unknown` do rate limit e o consumo da cota
+  antes de validar payload/duplicidade.
+- 2026-08-03: correção local aplicada para identificar IPs encaminhados com
+  fallback por e-mail, limitar somente novas criações e manter `existing_user`
+  orientado para recovery. O contrato de hardening passou 4/4 testes; o
+  hotfix específico foi então publicado pelo fluxo DevOps, sem push do
+  worktree sujo nem aprovação do cadastro real.
+- 2026-08-03: o hotfix de `store-pre-registration` foi publicado no Supabase
+  remoto como versão 72, mantendo `verify_jwt=false`. Os gates locais passaram:
+  lint, typecheck, 1.707 testes/13.988 asserts, build, `deno check` das três
+  funções tocadas, validação estrutural e `git diff --check`. O GET público de
+  ACERTT retornou 200 e o browser real carregou `/pre-cadastro/acertt` sem erro
+  de console; nenhum POST real foi enviado, portanto inbox e aprovação ainda
+  não são alegadas como comprovadas.
+- 2026-08-03: hardening adicional aplicado no `main` local: o endpoint público
+  deixou de reutilizar qualquer identidade Auth/perfil existente, inclusive
+  inativa, e passou a gerar caminho UUID por avatar. O teste de contrato passou
+  6/6, `deno check` passou nas três Edge Functions e a suíte completa passou
+  1.711/1.711 após repetição de dois timeouts transitórios de foco/cleanup.
 - 2026-07-29: o resolver moderno passou 4/4 testes, a seleção focada passou
   16/16, typecheck retornou 0 e 11 entrypoints passaram em
   `deno check --node-modules-dir=auto`. Após a migração OAuth/Calendar, dois
@@ -365,8 +387,12 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   removido, preservando downloads `.xlsx` e `.pdf` reais.
 - O “READY para validação do PO” acima pertence ao checklist histórico de
   draft; o estado operacional vigente permanece `InProgress` e parcial.
-- O P0 do pré-cadastro está corrigido apenas nesta branch; produção permanece
-  vulnerável até preview, revisão e deploy aprovados.
+- O P0 do pré-cadastro foi corrigido no hotfix publicado da função
+  `store-pre-registration` (versão remota 72) e validado no GET/browser da
+  rota ACERTT. O hardening adicional desta retomada está somente no checkout
+  local até passar por commit, CI, preview e deploy. A story ampla continua
+  `InProgress` por seus gates independentes de revisão, observabilidade, backup
+  e rollback.
 - Segredos removidos do estado corrente permanecem no histórico. A rotação da
   `service_role` e das demais credenciais expostas é um incidente imediato, não
   um gate posterior ao preview; a substituição coordenada dos consumidores tem

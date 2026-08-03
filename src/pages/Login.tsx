@@ -132,9 +132,6 @@ export default function Login() {
     useEffect(() => {
         if (mode !== 'recovery') return
 
-        // Garante que nenhuma mensagem de signout anterior apareça durante a recuperação
-        clearSignoutReason()
-
         let mounted = true
         const ensureRecoverySession = async () => {
             const recoverySession = getRecoverySessionFromHash()
@@ -147,6 +144,7 @@ export default function Login() {
                     setError(RECOVERY_EXPIRED_MESSAGE)
                     return
                 }
+                clearSignoutReason()
                 clearRecoveryTokensFromUrl()
                 return
             }
@@ -158,13 +156,16 @@ export default function Login() {
                     setError(RECOVERY_EXPIRED_MESSAGE)
                     return
                 }
+                clearSignoutReason()
                 clearRecoveryTokensFromUrl()
                 return
             }
 
             const { data } = await supabase.auth.getSession()
             if (mounted && !data.session) {
-                setError(RECOVERY_EXPIRED_MESSAGE)
+                setError(consumeSignoutReasonMessage() || RECOVERY_EXPIRED_MESSAGE)
+            } else if (data.session) {
+                clearSignoutReason()
             }
         }
 
@@ -272,9 +273,6 @@ export default function Login() {
         e.preventDefault()
         if (loading) return
 
-        // Garante que nenhuma stale reason de sessões anteriores afete o recovery
-        clearSignoutReason()
-
         const newFieldErrors: Record<string, string> = {}
         if (!newPassword.trim()) newFieldErrors.newPassword = 'Nova senha e obrigatoria'
         else if (!isStrongPassword(newPassword)) newFieldErrors.newPassword = PASSWORD_POLICY_MESSAGE
@@ -290,11 +288,12 @@ export default function Login() {
 
         const { data: sessionData } = await supabase.auth.getSession()
         if (!sessionData.session?.user.id) {
-            clearSignoutReason()
             setLoading(false)
-            setError(RECOVERY_EXPIRED_MESSAGE)
+            setError(consumeSignoutReasonMessage() || RECOVERY_EXPIRED_MESSAGE)
             return
         }
+
+        clearSignoutReason()
 
         const { data: challengeData, error: challengeError } = await supabase.rpc('begin_password_change')
         const challengeResult = challengeData as { ok?: boolean; error?: string } | null

@@ -66,6 +66,9 @@ A Admin Master MX Mariane esqueceu a senha. O acesso precisa ser restaurado com 
 - Função `store-pre-registration` publicada na versão 53; tentativa de pré-cadastro do Bruno retornou `409 existing_user` sem aumentar a contagem de registros.
 - Frontend publicado com orientação de recuperação mesmo quando o disparo automático falha e headers `no-store` nas rotas de autenticação para evitar bundle legado em cache.
 - Browser limpo em produção confirmou chamada exclusiva à Edge Function `/functions/v1/request-password-recovery` (`200`) e nenhuma chamada a `/auth/v1/recover`.
+- Incidente ACERTT em 2026-08-03: Bruno concluiu `auth.updateUser`, mas o perfil `usuarios.active=false` bloqueava `complete_password_change()`; o Login também apagava a razão `inactive` e mostrava “link expirado”.
+- Corrigido `src/pages/Login.tsx` para preservar/consumir a razão real antes de limpar o estado de sign-out; o usuário existente foi reconciliado para `active=true`, `must_change_password=false`, role `dono` e vínculo ativo com ACERTT, sem criar duplicata nem trocar a senha novamente.
+- Teste estático `src/lib/login-recovery-inactive-state.test.ts` passou 2/2; produção publicada no deployment `dpl_32XFsZQ4NqMk3gDjiWEnPYGJ4Ryp` (`READY`) e `/login?recovery=1` abriu a tela de nova senha sem “link expirado” ou conta inativa.
 
 ### Completion Notes
 
@@ -101,6 +104,7 @@ A Admin Master MX Mariane esqueceu a senha. O acesso precisa ser restaurado com 
 - `supabase/migrations/20260713143000_require_password_update_proof.sql`
 - `supabase/migrations/20260713150000_server_owned_password_change_challenge.sql`
 - `src/lib/auth-password-change-migration.test.ts`
+- `src/lib/login-recovery-inactive-state.test.ts`
 - `src/hooks/auth/useAuthActions.ts`
 - `src/types/database.generated.ts`
 - `supabase/functions/request-password-recovery/index.ts`

@@ -12,6 +12,8 @@ const managerWarningHardening = compact(read('supabase/migrations/20260727043500
 const registerUser = compact(read('supabase/functions/register-user/index.ts'))
 const manageStoreTeam = compact(read('supabase/functions/manage-store-team/index.ts'))
 const manageGlobalUser = compact(read('supabase/functions/manage-global-user/index.ts'))
+const approveStoreRegistration = compact(read('supabase/functions/approve-store-registration/index.ts'))
+const storePreRegistration = compact(read('supabase/functions/store-pre-registration/index.ts'))
 
 describe('Opção B: administração global equivalente da área interna MX', () => {
   test('treats the three internal roles as the same database administrator contract', () => {
@@ -31,6 +33,11 @@ describe('Opção B: administração global equivalente da área interna MX', ()
     expect(migration).toContain('REVOKE UPDATE ON public.usuarios FROM authenticated')
   })
 
+  test('keeps pre-registration approval and notifications aligned with all internal roles', () => {
+    expect(approveStoreRegistration).toContain("const internalReviewerRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']")
+    expect(storePreRegistration).toContain(".in('role', ['administrador_geral', 'administrador_mx', 'consultor_mx'])")
+  })
+
   test('persists the canonical role and multi-table state inside transactional RPCs', () => {
     expect(transactionMigration).toContain('CREATE OR REPLACE FUNCTION public.internal_mx_role_id')
     expect(transactionMigration).toContain('role_id = v_role_id')
@@ -48,6 +55,11 @@ describe('Opção B: administração global equivalente da área interna MX', ()
       expect(source).toContain('internal_mx_consume_admin_rate_limit')
       expect(source).not.toContain('error.message }, 500')
     }
+  })
+
+  test('accepts store routing fields sent by the team editor', () => {
+    expect(manageStoreTeam).toContain('store_id: uuidSchema.nullable().optional()')
+    expect(manageStoreTeam).toContain('previous_store_id: uuidSchema.nullable().optional()')
   })
 
   test('provides literal audited store deletion with exact-name confirmation', () => {

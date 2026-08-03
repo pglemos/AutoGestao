@@ -8,6 +8,7 @@ import { OwnerExecutiveSection } from './sections/OwnerExecutiveSection'
 import { CorporateMetricsSection } from './sections/CorporateMetricsSection'
 import { StoresGridSection } from './sections/StoresGridSection'
 import { CreateStoreModal } from '@/components/organisms/CreateStoreModal'
+import { StoreEditModal } from '@/features/admin/components/StoreEditModal'
 import { HardDeleteStoreModal } from './modals/HardDeleteStoreModal'
 import {
   MxModulePage,
@@ -28,6 +29,7 @@ export function Lojas() {
         handleArchiveStore: page.handleArchiveStore,
         handleHardDeleteStore: page.handleHardDeleteStore,
         toggleStoreStatus: page.toggleStoreStatus,
+        onEditStore: page.setEditingStore,
       }),
     [
       page.stats,
@@ -38,6 +40,7 @@ export function Lojas() {
       page.handleArchiveStore,
       page.handleHardDeleteStore,
       page.toggleStoreStatus,
+      page.setEditingStore,
     ],
   )
 
@@ -112,6 +115,14 @@ export function Lojas() {
           onConfirmationChange={page.setHardDeleteConfirmation}
           onClose={page.closeHardDeleteStore}
           onConfirm={() => void page.confirmHardDeleteStore()}
+        />
+
+        <StoreEditModal
+          open={Boolean(page.editingStore)}
+          store={page.editingStore}
+          saving={page.savingStore}
+          onClose={() => page.setEditingStore(null)}
+          onSubmit={page.handleStoreUpdate}
         />
       </MxModulePage>
     </LojasErrorBoundary>

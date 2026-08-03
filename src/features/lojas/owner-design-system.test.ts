@@ -53,4 +53,10 @@ describe('design system do módulo Dono', () => {
     expect(sources.header).toContain('Nova loja')
     expect(sources.header).toContain('Localizar loja')
   })
+
+  test('expõe edição da filial e o link real do pré-cadastro na rede', () => {
+    expect(sources.container).toContain('<StoreEditModal')
+    expect(sources.columns).toContain('onEditStore: (store: Store) => void')
+    expect(sources.columns).toContain('href={getRegistrationLink(store.name)}')
+  })
 })

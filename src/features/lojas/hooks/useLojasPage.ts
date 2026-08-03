@@ -1,4 +1,4 @@
-import { useStores, useStoresStats } from '@/hooks/useTeam'
+import { useStores, useStoresStats, type StoreUpdateFields } from '@/hooks/useTeam'
 import { useAuth } from '@/hooks/useAuth'
 import { canManageStore } from '@/lib/auth/capabilities'
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
@@ -17,7 +17,14 @@ import { DESTRUCTIVE_ACTION_LABELS } from '@/lib/ui/actionLabels'
  * Centraliza estado, derivações e handlers da tela de gestão de lojas.
  */
 export function useLojasPage() {
-  const { lojas, loading: storesLoading, refetch: refetchStores, createStore, toggleStoreStatus } = useStores()
+  const {
+    lojas,
+    loading: storesLoading,
+    refetch: refetchStores,
+    createStore,
+    updateStore,
+    toggleStoreStatus,
+  } = useStores()
   const { stats, loading: statsLoading, refetch: refetchStats } = useStoresStats()
   const { role } = useAuth()
   const isOwner = role === 'dono'
@@ -31,6 +38,8 @@ export function useLojasPage() {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
   const [newStore, setNewStore] = useState({ name: '', manager_email: '' })
   const [creating, setCreating] = useState(false)
+  const [editingStore, setEditingStore] = useState<Store | null>(null)
+  const [savingStore, setSavingStore] = useState(false)
   const [hardDeleteStore, setHardDeleteStore] = useState<Store | null>(null)
   const [hardDeleteConfirmation, setHardDeleteConfirmation] = useState('')
   const [hardDeleting, setHardDeleting] = useState(false)
@@ -140,6 +149,20 @@ export function useLojasPage() {
     [createStore, handleRefresh, newStore.manager_email, newStore.name],
   )
 
+  const handleStoreUpdate = useCallback(async (id: string, updates: Partial<StoreUpdateFields>) => {
+    setSavingStore(true)
+    try {
+      const { error } = await updateStore(id, updates)
+      if (error) {
+        toast.error(error)
+        return
+      }
+      setEditingStore(null)
+    } finally {
+      setSavingStore(false)
+    }
+  }, [updateStore])
+
   const getRegistrationLink = useCallback((storeName: string) => getPreRegistrationLink(storeName), [])
 
   const copyRegistrationLink = useCallback(
@@ -243,6 +266,10 @@ export function useLojasPage() {
     setNewStore,
     creating,
     createModalRef,
+    editingStore,
+    setEditingStore,
+    savingStore,
+    handleStoreUpdate,
     handleCreateStore,
     hardDeleteStore,
     hardDeleteConfirmation,

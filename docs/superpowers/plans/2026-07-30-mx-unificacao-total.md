@@ -68,8 +68,8 @@ Gates medidos em 2026-07-31: `npm run lint` exit 0, `npm run test` exit 0 (1697 
 | Onda | Estado | Evidência (comando, exit code) |
 |---|---|---|
 | 1–4 | **concluídas** | inalteradas desde 2026-07-31 |
-| 5 — validação | **concluída localmente, com flake isolado documentado** | `npm test` 1703 pass; lint/typecheck/build/bundle verdes; auditoria visual isolada `9 passed`; smoke consultoria isolado `1 passed`; `agenda-filters` mobile reexecutado com o caso afetado aprovado; a suíte combinada teve 184 passed e falhas transitórias de cleanup/navegação, sem repetição isolada |
-| 6 — publicação | **em curso** | `main` está em `1480ea42`, sincronizada com `origin/main`; produção possui deployment `dpl_8gzZzXj6QGey2r4Wu8nG4bJugpeH` `READY`, mas o smoke atual ainda mostra o artefato anterior sem o contrato do cabeçalho; novo push/deploy e validação da rota corrigida são obrigatórios |
+| 5 — validação | **concluída localmente** | `npm test` 1711 pass / 0 fail / 14000 asserts; `npm run lint`, `npm run typecheck`, `npm run build`, `deno check` e `git diff --check` verdes; dois timeouts transitórios de foco/cleanup passaram isoladamente e na suíte completa subsequente |
+| 6 — publicação | **em curso** | `main` local e `origin/main` estavam em `129301d7` antes desta retomada; Supabase/Vercel/GitHub estão autenticados no projeto correto, mas o hardening local ainda precisa de commit, CI, preview, deploy e smoke da rota alterada |
 
 ### Estado operacional atualizado em 2026-08-03
 

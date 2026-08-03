@@ -2,17 +2,18 @@
 
 **Data de início:** 2026-07-29
 **Estado atual:** PARCIALMENTE CONCLUÍDO
-**Branch:** `feat/unified-mx-design-system`
-**Base de rollback:** `41ec4d39e165cab013988fab9aef54649b616095`
+**Branch atual:** `main` (execução direta conforme decisão explícita do solicitante)
+**HEAD verificado antes desta retomada:** `129301d71a8d566f78bfa94064e80ebb0cac143f`
+**Base histórica de rollback:** `41ec4d39e165cab013988fab9aef54649b616095`
 
 > Este documento é atualizado durante a execução. “Parcialmente concluído” é
 > obrigatório enquanto qualquer gate do prompt mestre permanecer sem prova.
 
 ## 1. Resumo executivo
 
-A auditoria foi retomada em uma worktree isolada e limpa. A árvore principal
-continha alterações do proprietário e permaneceu intocada. A branch de Design
-System contém a `main` atual e 17 commits incrementais.
+A auditoria foi retomada diretamente na `main`, conforme autorização explícita
+do solicitante. O worktree contém alterações concorrentes já existentes, que
+foram preservadas; `mx-v3-csv-VzMBNx/` permanece não rastreado e não foi incluído.
 
 No baseline de 2026-07-29, a alegação anterior de “App Shell único” não foi
 aceita: o runtime ainda selecionava `OwnerShell` para Dono e `Layout` para os
@@ -85,6 +86,11 @@ foram repetidos com o caminho explícito do Node 24.
   endpoint público.
 - Contrato regressivo: 3 testes, 9 asserts e zero falhas.
 - `deno check supabase/functions/store-pre-registration/index.ts` retornou 0.
+- Hardening adicional em 2026-08-03: o endpoint público não reutiliza, reativa,
+  atualiza ou redefine nenhuma identidade já existente, inclusive inativa; a
+  foto usa caminho `pre-cadastros/{store}/{user}/{uuid}.{ext}` e o perfil novo
+  recebe apenas o avatar criado nesta requisição. Isso elimina sobrescrita de
+  avatar e rollback destrutivo de conta preexistente.
 
 ## 4. Evidências atuais
 
@@ -92,7 +98,7 @@ foram repetidos com o caminho explícito do Node 24.
 |---|---:|---:|
 | `npm run lint` | 842 arquivos de tokens; 61 z-index; 0 warnings | 0 |
 | `npm run typecheck` | 4 pass / 0 fail + TypeScript | 0 |
-| `npm test` | 1.686 pass / 0 fail / 13.896 expects | 0 |
+| `npm test` | 1.711 pass / 0 fail / 14.000 expects | 0 |
 | `npm run build` | 5.123 módulos transformados | 0 |
 | `npm run check:bundle-size` | 1.857,80/1.860 KB gzip | 0 |
 | `npm audit` inicial | 51 total; 1 crítica | 1 |
@@ -250,11 +256,11 @@ cota por 38 minutos, portanto este bloco permanece em `InProgress`.
 | AUD-014 | P1 | Override esbuild inicialmente quebrou Vite dev | 2.860 erros no optimizer | corrigido para 0.25.12 e revalidado |
 | AUD-015 | P0 | Senha operacional previsível estava versionada | busca inicial: 21 arquivos; busca final literal: zero | corrigido no código; rotacionar contas ainda é obrigatório |
 | AUD-016 | P0 | Consultor MX não possui caminho funcional validável | conta nominal autentica, mas leitura de `usuarios.active` retorna 401/nulo; segunda conta falha no Auth 400 | recuperar a conta existente sem duplicar identidade e revalidar |
-| AUD-017 | P0 | Endpoint público adotava/resetava identidade Auth órfã e reativava conta desativada | `store-pre-registration` usava `service_role` sem prova de autoridade | corrigido localmente; deploy bloqueado até preview/gates |
+| AUD-017 | P0 | Endpoint público adotava/resetava identidade Auth órfã e reativava conta desativada | `store-pre-registration` usava `service_role` sem prova de autoridade | hotfix remoto versão 72; hardening adicional local aguardando CI/preview/deploy |
 
 ## 11. Rollback
 
-- Código: commits desta story serão isolados sobre `41ec4d39`.
+- Código: rollback do checkout volta ao SHA anterior `129301d7` após registrar o commit novo; o deployment anterior permanece referência operacional.
 - Dependências: remover `overrides` e restaurar o lockfile do SHA-base.
 - Banco: nenhuma mutation de produção executada.
 - Deploy: produção atual será registrada antes de qualquer promoção; rollback

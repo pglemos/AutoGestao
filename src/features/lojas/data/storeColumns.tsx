@@ -1,4 +1,4 @@
-import { Building2, Copy, Link2, Trash2, X } from 'lucide-react'
+import { Building2, Copy, Edit3, Link2, Trash2, X } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { canManageStore } from '@/lib/auth/capabilities'
 import { cn, slugify } from '@/lib/utils'
@@ -25,6 +25,7 @@ interface BuildColumnsParams {
   handleArchiveStore: (store: Store) => void
   handleHardDeleteStore: (store: Store) => void | Promise<void>
   toggleStoreStatus: (storeId: string, active: boolean) => Promise<{ error?: string | null }>
+  onEditStore: (store: Store) => void
 }
 
 export function buildStoreColumns({
@@ -36,6 +37,7 @@ export function buildStoreColumns({
   handleArchiveStore,
   handleHardDeleteStore,
   toggleStoreStatus,
+  onEditStore,
 }: BuildColumnsParams): Column<Store>[] {
   const canManageNetwork = canManageStore(role)
 
@@ -147,13 +149,15 @@ export function buildStoreColumns({
             </Typography>
           </div>
           {canManageNetwork ? (
-            <Typography
-              variant="tiny"
-              className="block max-w-mx-64 truncate bg-gray-50 px-mx-xs py-mx-tiny font-mono"
-              title={getRegistrationLink(store.name)}
+            <a
+              href={getRegistrationLink(store.name)}
+              target="_blank"
+              rel="noreferrer"
+              className="block max-w-mx-64 truncate bg-gray-50 px-mx-xs py-mx-tiny font-mono text-emerald-700 underline-offset-2 hover:underline"
+              title={`Abrir pré-cadastro de ${store.name}`}
             >
               {getRegistrationLink(store.name)}
-            </Typography>
+            </a>
           ) : null}
         </div>
       ),
@@ -188,6 +192,15 @@ export function buildStoreColumns({
                   <Button
                     variant="outline"
                     size="icon"
+                    onClick={() => onEditStore(store)}
+                    aria-label={`Editar ${store.name}`}
+                    title={`Editar ${store.name}`}
+                  >
+                    <Edit3 size={16} aria-hidden="true" />
+                  </Button>
+                  <Button
+                    variant="outline"
+                    size="icon"
                     onClick={() => copyRegistrationLink(store.name)}
                     aria-label={`Copiar link de pré-cadastro de ${store.name}`}
                   >
@@ -207,6 +220,15 @@ export function buildStoreColumns({
             </>
           ) : canManageNetwork ? (
             <>
+              <Button
+                variant="outline"
+                size="icon"
+                onClick={() => onEditStore(store)}
+                aria-label={`Editar ${store.name}`}
+                title={`Editar ${store.name}`}
+              >
+                <Edit3 size={16} aria-hidden="true" />
+              </Button>
               <Button
                 variant="secondary"
                 size="sm"

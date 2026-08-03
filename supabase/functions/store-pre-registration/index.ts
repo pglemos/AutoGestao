@@ -39,7 +39,23 @@ function normalizeEmail(value: unknown) {
 
 function clientIp(req: Request) {
   const forwarded = req.headers.get('x-forwarded-for') || ''
-  return forwarded.split(',')[0]?.trim() || null
+  const candidates = [
+    req.headers.get('cf-connecting-ip'),
+    req.headers.get('x-real-ip'),
+    forwarded.split(',')[0],
+    req.headers.get('x-client-ip'),
+  ]
+
+  return candidates
+    .map(value => value?.trim() || '')
+    .find(value => value && !['unknown', 'null', 'undefined'].includes(value.toLowerCase())) || null
+}
+
+function registrationRateLimitKey(req: Request, email: string) {
+  const ip = clientIp(req)
+  return ip
+    ? `store-pre-registration:ip:${ip}`
+    : `store-pre-registration:email:${email}`
 }
 
 function imageExtension(mimeType: string) {
@@ -82,16 +98,11 @@ async function findAuthUserByEmail(adminClient: any, email: string) {
   return null
 }
 
-async function cleanupPendingUser(
-  adminClient: any,
-  userId: string,
-  storeId: string,
-  avatarStoragePath: string | null,
-) {
+async function cleanupPendingUser(adminClient: any, userId: string, storeId: string, avatarStoragePath: string | null) {
+  if (avatarStoragePath) await adminClient.storage.from('pre-cadastro-avatares').remove([avatarStoragePath])
   await adminClient.from('vendedores_loja').delete().eq('seller_user_id', userId).eq('store_id', storeId)
   await adminClient.from('vinculos_loja').update({ is_active: false, ended_at: new Date().toISOString().slice(0, 10) }).eq('user_id', userId).eq('store_id', storeId)
   await adminClient.from('usuarios').delete().eq('id', userId)
-  if (avatarStoragePath) await adminClient.storage.from('pre-cadastro-avatares').remove([avatarStoragePath])
   await adminClient.auth.admin.deleteUser(userId)
 }
 
@@ -135,23 +146,6 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
   }
 
   if (req.method !== 'POST') return jsonResponse({ success: false, error: 'Method not allowed' }, 405)
-
-  // Endpoint público e sem autenticação: qualquer chamador cria auth.users +
-  // usuarios + notifica todos os admins. Sem limite, um bot conseguiria
-  // floodar contas fantasma e a fila de aprovação dos admins. Reaproveita o
-  // mesmo contador atômico em Postgres da recuperação de senha (mesma tabela,
-  // chave com prefixo próprio).
-  const rateLimitKey = `store-pre-registration:${clientIp(req) || 'unknown'}`
-  const { data: rateLimitAllowed, error: rateLimitError } = await adminClient.rpc(
-    'check_and_increment_recovery_rate_limit',
-    { p_key: rateLimitKey, p_window_seconds: 60 * 60, p_max_attempts: 5 },
-  )
-  if (rateLimitError) {
-    return jsonResponse({ success: false, error: 'Não foi possível processar agora. Tente novamente em alguns minutos.' }, 502)
-  }
-  if (!rateLimitAllowed) {
-    return jsonResponse({ success: false, error: 'Muitas tentativas de cadastro. Aguarde antes de tentar novamente.' }, 429)
-  }
 
   let payload: any
   try {
@@ -239,7 +233,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
   // 1000 assim que a base crescer — falso negativo silencioso de duplicidade.
   const { data: existingUser, error: existingUserError } = await adminClient
     .from('usuarios')
-    .select('id, email, active, role')
+    .select('id, email, active, role, name, phone, avatar_url, must_change_password, is_venda_loja')
     .ilike('email', email)
     .maybeSingle()
 
@@ -260,7 +254,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
   }
 
   const existingAuthRole = clean(existingAuthUser?.user_metadata?.role, 80)
-  if (!existingUser && existingAuthUser && protectedExistingRoles.includes(existingAuthRole)) {
+  if (existingAuthUser && protectedExistingRoles.includes(existingAuthRole)) {
     return jsonResponse({
       success: false,
       error: 'Este e-mail pertence a um perfil interno da MX e não pode ser sobrescrito pelo pré-cadastro da loja.',
@@ -281,10 +275,11 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
     }, 409)
   }
 
-  // Este endpoint é público e opera com service role. Uma identidade já existente no Auth,
-  // mesmo sem perfil em usuarios, nunca pode ser adotada nem ter a senha redefinida aqui:
-  // conhecer o e-mail não prova autoridade sobre a conta. A recuperação/autorização deve
-  // ocorrer pelos fluxos autenticados e auditáveis do Admin MX.
+  // Este endpoint é público e não prova a posse do e-mail. Nunca adote, atualize,
+  // reative ou redefina uma identidade existente, inclusive perfis inativos: isso
+  // evita sobrescrever dados, vínculos ou avatar de uma conta apenas porque alguém
+  // conhece o endereço. A recuperação/alteração deve passar por um fluxo autenticado
+  // e auditável do Admin MX.
   if (existingUser || existingAuthUser) {
     return jsonResponse({
       success: false,
@@ -292,8 +287,27 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
       requires_password_reset: true,
       reactivated: false,
       login_email: email,
-      error: 'Este e-mail já possui cadastro. Não criamos outro usuário. Enviamos um link para redefinir sua senha; a reativação depende do Admin MX.',
+      error: 'Este e-mail já possui cadastro. Solicite a alteração pelo Admin MX.',
     }, 409)
+  }
+
+  // O endpoint é público e sem autenticação: limitar somente a tentativa de
+  // criação/sobrescrita de uma identidade evita duas falhas de UX e segurança:
+  // payloads inválidos não queimam a cota e todos os usuários não caem no
+  // mesmo balde quando o proxy não fornece um IP confiável ("unknown").
+  const { data: rateLimitAllowed, error: rateLimitError } = await adminClient.rpc(
+    'check_and_increment_recovery_rate_limit',
+    {
+      p_key: registrationRateLimitKey(req, email),
+      p_window_seconds: 60 * 60,
+      p_max_attempts: 5,
+    },
+  )
+  if (rateLimitError) {
+    return jsonResponse({ success: false, error: 'Não foi possível processar agora. Tente novamente em alguns minutos.' }, 502)
+  }
+  if (!rateLimitAllowed) {
+    return jsonResponse({ success: false, error: 'Muitas tentativas de cadastro. Aguarde antes de tentar novamente.' }, 429)
   }
 
   let userId = ''
@@ -307,7 +321,6 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
   }
 
   const temporaryPassword = generateTemporaryPassword()
-
   const { data: createdUser, error: createUserError } = await adminClient.auth.admin.createUser({
     email,
     password: temporaryPassword,
@@ -329,7 +342,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
         code: 'existing_user',
         requires_password_reset: true,
         login_email: email,
-        error: 'Este e-mail já possui cadastro. Não criamos outro usuário. Solicite a redefinição da senha para continuar.',
+        error: 'Este e-mail já possui cadastro. Solicite a alteração pelo Admin MX.',
       }, 409)
     }
     return jsonResponse({ success: false, error: createUserError?.message || 'Não foi possível criar o login provisório.' }, 500)
@@ -343,7 +356,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
   if (hasAvatar) {
     try {
       const imageBytes = decodeBase64Image(avatarBase64.replace(/^data:image\/[a-zA-Z0-9.+-]+;base64,/, ''))
-      avatarStoragePath = `pre-cadastros/${store.id}/${userId}.${imageExtension(avatarMimeType)}`
+      avatarStoragePath = `pre-cadastros/${store.id}/${userId}/${crypto.randomUUID()}.${imageExtension(avatarMimeType)}`
       const { error: uploadError } = await adminClient.storage
         .from('pre-cadastro-avatares')
         .upload(avatarStoragePath, imageBytes, {
@@ -447,7 +460,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
   const { data: admins } = await adminClient
     .from('usuarios')
     .select('id')
-    .in('role', ['administrador_geral', 'administrador_mx'])
+    .in('role', ['administrador_geral', 'administrador_mx', 'consultor_mx'])
     .eq('active', true)
 
   if (admins?.length) {

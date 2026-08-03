@@ -20,6 +20,11 @@ const updatesSchema = z.object({
   phone: z.string().trim().max(40).nullable().optional(),
   active: z.boolean().optional(),
   is_venda_loja: z.boolean().optional(),
+  // The team editor keeps routing fields in the same update object as the
+  // member fields. The destination/source are also validated at the payload
+  // level and passed to the transactional RPC as explicit arguments.
+  store_id: uuidSchema.nullable().optional(),
+  previous_store_id: uuidSchema.nullable().optional(),
   started_at: dateSchema.optional(),
   ended_at: dateSchema.nullable().optional(),
   is_active: z.boolean().optional(),

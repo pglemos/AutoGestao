@@ -8,6 +8,7 @@ import { sendReportEmail } from '../_shared/email.ts'
 import { createResendClient } from '../_shared/supabase-client.ts'
 
 const allowedRoles = ['dono', 'gerente', 'vendedor']
+const internalReviewerRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']
 const passwordChars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*'
 const recoveryRedirectTo = 'https://mxperformance.vercel.app/login?recovery=1'
 const PRE_REGISTRATION_SELECT = [
@@ -86,8 +87,8 @@ serve((req) => withSentry('approve-store-registration', req, async () => {
     .maybeSingle()
 
   if (reviewerError) return jsonResponse({ success: false, error: reviewerError.message }, 500)
-  if (!reviewer?.active || !['administrador_geral', 'administrador_mx'].includes(reviewer.role)) {
-    return jsonResponse({ success: false, error: 'Apenas Admin MX e MX Master podem aprovar logins.' }, 403)
+  if (!reviewer?.active || !internalReviewerRoles.includes(reviewer.role)) {
+    return jsonResponse({ success: false, error: 'Apenas a área interna MX pode aprovar logins.' }, 403)
   }
 
   let payload: any
