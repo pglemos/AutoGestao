@@ -22,7 +22,7 @@ describe('role capabilities', () => {
     }
 
     expect(canManageStore('dono')).toBe(false)
-    expect(canManageTeam('dono')).toBe(false)
+    expect(canManageTeam('dono')).toBe(true)
     expect(canManageTeam('gerente')).toBe(true)
     expect(canManageTeam('vendedor')).toBe(false)
   })

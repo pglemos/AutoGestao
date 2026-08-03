@@ -37,7 +37,7 @@ export function canManageStore(role: UserRole | string | null | undefined): bool
 }
 
 export function canManageTeam(role: UserRole | string | null | undefined): boolean {
-  return isPerfilInternoMx(role) || role === 'gerente'
+  return isPerfilInternoMx(role) || role === 'gerente' || role === 'dono'
 }
 
 export function canManageFeedback(role: UserRole | string | null | undefined): boolean {

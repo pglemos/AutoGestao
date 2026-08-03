@@ -10,10 +10,10 @@ describe('owner legacy route removal', () => {
     expect(canAccessPath(path, 'vendedor')).toBe(false)
   })
 
-  it('keeps the canonical store dashboard for managers and internal MX only', () => {
+  it('keeps the canonical store dashboard for managers, store owners and internal MX', () => {
     const path = '/lojas/mx-consultoria'
 
-    expect(canAccessPath(path, 'dono')).toBe(false)
+    expect(canAccessPath(path, 'dono')).toBe(true)
     expect(canAccessPath(path, 'gerente')).toBe(true)
     expect(canAccessPath(path, 'administrador_mx')).toBe(true)
   })
@@ -23,7 +23,7 @@ describe('owner legacy route removal', () => {
 
     expect(canAccessPath(path, 'vendedor')).toBe(true)
     expect(canAccessPath(path, 'gerente')).toBe(true)
-    expect(canAccessPath(path, 'dono')).toBe(false)
+    expect(canAccessPath(path, 'dono')).toBe(true)
     expect(canAccessPath(path, 'administrador_mx')).toBe(true)
   })
 })

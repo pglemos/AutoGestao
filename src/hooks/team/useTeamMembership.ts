@@ -43,7 +43,7 @@ export function useTeamMembership({
   const storeId = storeIdOverride || authStoreId
 
   const updateVigencia = async (userId: string, data: SellerTenureUpdateFields) => {
-    if (!isAdministradorMx(role) && role !== 'gerente') {
+    if (!isAdministradorMx(role) && role !== 'gerente' && role !== 'dono') {
       return { error: 'Apenas gestores da loja podem alterar vigência.' }
     }
     const scopedStoreId = storeId && storeId !== 'all' ? storeId : null
@@ -74,7 +74,7 @@ export function useTeamMembership({
   }
 
   const updateTeamMember = async (userId: string, updates: TeamMemberUpdateFields) => {
-    if (!isAdministradorMx(role) && role !== 'gerente') {
+    if (!isAdministradorMx(role) && role !== 'gerente' && role !== 'dono') {
       return { error: 'Apenas gestores da loja podem editar integrantes.' }
     }
     const targetStoreId = updates.store_id || (storeId && storeId !== 'all' ? storeId : null)
@@ -104,7 +104,7 @@ export function useTeamMembership({
   }
 
   const deleteTeamMember = async (userId: string, targetStoreId?: string | null) => {
-    if (!isAdministradorMx(role) && role !== 'gerente')
+    if (!isAdministradorMx(role) && role !== 'gerente' && role !== 'dono')
       return { error: 'Apenas gestores da loja podem excluir integrantes.' }
     const scopedStoreId = targetStoreId || (storeId && storeId !== 'all' ? storeId : null)
     if (!scopedStoreId) return { error: 'Selecione a loja do integrante.' }

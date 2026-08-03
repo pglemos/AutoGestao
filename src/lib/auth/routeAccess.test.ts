@@ -58,11 +58,10 @@ describe('route access matrix', () => {
     expect(canAccessPath('/lojas', 'gerente')).toBe(false)
   })
 
-  it('allows scoped store subroutes only to managers and internal MX profiles', () => {
-    for (const role of ['gerente', 'administrador_geral', 'administrador_mx', 'consultor_mx'] as const) {
+  it('allows scoped store subroutes to managers, store owners and internal MX profiles', () => {
+    for (const role of ['gerente', 'dono', 'administrador_geral', 'administrador_mx', 'consultor_mx'] as const) {
       expect(canAccessPath('/lojas/mx-consultoria/equipe', role)).toBe(true)
     }
-    expect(canAccessPath('/lojas/mx-consultoria/equipe', 'dono')).toBe(false)
     expect(canAccessPath('/lojas/mx-consultoria/equipe', 'vendedor')).toBe(false)
     expect(canAccessPath('/lojas/mx-consultoria/consultor-ia', 'vendedor')).toBe(true)
   })
@@ -123,7 +122,7 @@ describe('route access matrix', () => {
     expect(canAccessPath('/home', 'gerente')).toBe(true)
     expect(canAccessPath('/home', 'dono')).toBe(true)
     expect(canAccessPath('/lojas/acertt/consultor-ia', 'vendedor')).toBe(true)
-    expect(canAccessPath('/lojas/acertt/consultor-ia', 'dono')).toBe(false)
+    expect(canAccessPath('/lojas/acertt/consultor-ia', 'dono')).toBe(true)
     expect(canAccessPath('/lojas/acertt/consultor-ia', 'administrador_mx')).toBe(true)
     expect(canAccessPath('/lancamento-diario', 'vendedor')).toBe(true)
     expect(canAccessPath('/lancamento-diario', 'gerente')).toBe(false)
@@ -163,9 +162,11 @@ describe('route access matrix', () => {
     expect(canAccessPath('/pdi/abc/print', 'vendedor')).toBe(false)
   })
 
-  it('keeps the legacy team alias capability scoped', () => {
+  it('keeps the legacy team alias governed by the team management capability', () => {
     expect(canAccessPath('/team', 'administrador_mx')).toBe(true)
-    expect(canAccessPath('/team', 'dono')).toBe(false)
+    expect(canAccessPath('/team', 'dono')).toBe(true)
+    expect(canAccessPath('/equipe', 'dono')).toBe(true)
+    expect(canAccessPath('/team', 'vendedor')).toBe(false)
     expect(canAccessPath('/team', 'gerente')).toBe(true)
     expect(canAccessPath('/team', 'vendedor')).toBe(false)
   })

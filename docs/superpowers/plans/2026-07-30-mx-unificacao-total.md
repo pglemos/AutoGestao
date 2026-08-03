@@ -63,6 +63,46 @@ Cada onda = commit atômico + gate verde antes da próxima.
 
 Gates medidos em 2026-07-31: `npm run lint` exit 0, `npm run test` exit 0 (1697 testes), `npm run build` exit 0.
 
+## 2.2 Estado das ondas medido em 2026-08-03
+
+| Onda | Estado | Evidência (comando, exit code) |
+|---|---|---|
+| 1–4 | **concluídas** | inalteradas desde 2026-07-31 |
+| 5 — validação | **concluída para vendedor, gerente, dono, administrador_geral e administrador_mx** | `npx playwright test --project=chromium` → 72 passed, 0 failed; `--project=mobile-chrome` → 72 passed, 0 failed; `npm run test` → 1701 pass; `npm run lint`, `npm run build`, `check:bundle-size` → exit 0 |
+| 6 — publicação | **não iniciada** | produção roda o release `07d2e9ea` de 2026-07-31, 50+ commits atrás de `main`; `git push` é operação exclusiva do @devops e depende de autorização |
+
+### Defeitos reais encontrados na medição de 2026-08-03
+
+Todos reproduzidos antes de corrigir e re-medidos depois:
+
+1. **`veiculos_estoque` legível e não gravável pela área interna MX.** A policy de
+   SELECT aceitava `eh_area_interna_mx()`, as de INSERT/UPDATE/DELETE não. O botão
+   "Registrar veículo" aparecia e o POST voltava 403. Achado no Sentry (issue
+   7642316051, 2026-07-30), não em leitura de código. Migration
+   `20260803120000_veiculos_estoque_internal_mx_write.sql`, aplicada em produção.
+2. **`/devolutivas` no perfil interno fora do template canônico.** Cabeçalho
+   próprio, sem slot canônico, raio 0, margem lateral cravada em `px-4 lg:px-8`.
+3. **`/meu-funil` com uma violação `serious` de contraste.** `amber-600` sobre
+   `slate-50` em 14px bold mede 3.05:1 contra os 4.5:1 exigidos.
+4. **Atividade manual da Rotina do Dia impossível de concluir.** A linha vinda de
+   `execution_actions` era mapeada com `actions: []`, então o card pendente
+   renderizava sem botão nenhum.
+5. **Modal de referência vazando 16px à direita em 390px.** `w-full` somado a
+   `left-4 right-4` faz a largura ser 100% da viewport a partir de x=16.
+6. **Login sem retorno para leitor de tela.** Os banners de erro e sucesso não
+   eram live regions.
+
+### Lacuna da Onda 5 fechada em 2026-08-03
+
+`administrador_mx` tem conta real (`admin@mxgestaopreditiva.com.br`), aceita a senha
+padrão dos perfis de teste e passa as dezenove áreas nos três viewports com sessão
+autenticada — não mais por bypass.
+
+`consultor_mx` **continua sem cobertura de sessão real**: a conta de teste
+`consultor.mx@mxgestaopreditiva.com.br` está com `active=false` no banco e o app
+corretamente recusa o login. A única outra conta do papel pertence a uma pessoa real.
+Reativar a conta de teste é decisão do solicitante — ver §3.3.
+
 ### Lacuna conhecida na Onda 5
 
 `administrador_mx` e `consultor_mx` não têm conta E2E; a auditoria de rotas entra por bypass de
@@ -74,7 +114,14 @@ depende de decisão do solicitante.
 ## 3. Decisões que precisam do solicitante
 
 1. **Gap 3:** manter a paridade visual Base44 (e portanto os scopes CSS e seus contratos de teste) ou removê-los, quebrando deliberadamente contratos de paridade que já foram aprovados? O briefing pede remoção; a memória do projeto registra "paridade Base44↔MX é visual, não só funcional" como requisito firme. Não resolvo isso por conta própria.
-2. **Escopo vs. sessão:** 110 rotas × 8 viewports × ~13 estados de captura = ordem de 10⁴ artefatos visuais. Isso é um programa de semanas, não de uma sessão. Executo por ondas, com evidência por onda.
+2. **Conta de teste do consultor:** reativar `consultor.mx@mxgestaopreditiva.com.br`
+   (`active=false` hoje) para fechar a última faixa da matriz, ou aceitar que
+   `consultor_mx` siga coberto só por bypass? Ativar login em produção não é decisão
+   que eu tome sozinho.
+3. **Publicação:** `main` está 50+ commits à frente da produção. O push dispara deploy
+   de produção na Vercel e é operação exclusiva do @devops — precisa de autorização
+   explícita.
+4. **Escopo vs. sessão:** 110 rotas × 8 viewports × ~13 estados de captura = ordem de 10⁴ artefatos visuais. Isso é um programa de semanas, não de uma sessão. Executo por ondas, com evidência por onda.
 
 ## 4. Gates por onda
 

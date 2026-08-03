@@ -19,8 +19,8 @@ export function useTeamInvites({ refetchMembers }: UseTeamInvitesInput): UseTeam
   const { role } = useAuth()
 
   const registerUser = async (userData: RegisterUserInput) => {
-    if (!isAdministradorMx(role) && role !== 'gerente')
-      return { error: 'Apenas Admin MX ou gerente podem criar integrantes.' }
+    if (!isAdministradorMx(role) && role !== 'gerente' && role !== 'dono')
+      return { error: 'Apenas Admin MX, dono ou gerente podem criar integrantes.' }
     const { data, error } = await supabase.functions.invoke('register-user', {
       body: userData,
     })

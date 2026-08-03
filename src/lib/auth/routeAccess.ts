@@ -14,7 +14,8 @@ const MANAGER_AND_INTERNAL_ROLES = ['administrador_geral', 'administrador_mx', '
 const INTERNAL_AND_OWNER = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono'] as const satisfies readonly UserRole[]
 const INTERNAL_AND_LEADERS = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente'] as const satisfies readonly UserRole[]
 const INTERNAL_AND_MANAGER = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente'] as const satisfies readonly UserRole[]
-const STORE_CONSULTOR_ROLES = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente', 'vendedor'] as const satisfies readonly UserRole[]
+const INTERNAL_MANAGER_AND_OWNER = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente', 'dono'] as const satisfies readonly UserRole[]
+const STORE_CONSULTOR_ROLES = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente', 'vendedor', 'dono'] as const satisfies readonly UserRole[]
 const LEGACY_OWNER_WORKSPACE_SEGMENTS = new Set([
   'rotina',
   'decisoes',
@@ -50,8 +51,8 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/configuracoes/consultoria-pmr', roles: INTERNAL_ROLES },
   { pattern: '/configuracoes/reprocessamento', roles: INTERNAL_ROLES },
   { pattern: '/lojas/:storeSlug/consultor-ia', roles: STORE_CONSULTOR_ROLES },
-  { pattern: '/lojas/:storeSlug', roles: INTERNAL_AND_MANAGER },
-  { pattern: '/lojas/:storeSlug/*', roles: INTERNAL_AND_MANAGER },
+  { pattern: '/lojas/:storeSlug', roles: INTERNAL_MANAGER_AND_OWNER },
+  { pattern: '/lojas/:storeSlug/*', roles: INTERNAL_MANAGER_AND_OWNER },
   { pattern: '/lojas', roles: ['administrador_geral', 'administrador_mx', 'consultor_mx'] },
   { pattern: '/rotina', roles: ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente', 'dono'] },
   { pattern: '/gerente/rotina-equipe', roles: MANAGER_AND_INTERNAL_ROLES },

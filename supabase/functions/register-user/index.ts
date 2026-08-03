@@ -233,6 +233,21 @@ serve(async (req) => {
       rollbackError,
     })
 
+    const rpcMessage = (finalizeError as { message?: string } | null)?.message || ''
+
+    if (rpcMessage === 'forbidden') {
+      return jsonResponse({
+        success: false,
+        error: 'Seu perfil não está vinculado como dono ou gerente desta loja, ou não pode cadastrar este perfil.',
+      }, 403)
+    }
+    if (rpcMessage === 'store_required') {
+      return jsonResponse({ success: false, error: 'A loja informada não existe no sistema.' }, 400)
+    }
+    if (rpcMessage === 'invalid_role' || rpcMessage === 'canonical_role_not_found') {
+      return jsonResponse({ success: false, error: 'O perfil informado não é válido para cadastro.' }, 400)
+    }
+
     return genericFailure(
       500,
       rollbackError

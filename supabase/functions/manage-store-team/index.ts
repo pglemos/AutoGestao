@@ -176,6 +176,39 @@ serve((req) => withSentry('manage-store-team', req, async () => {
       throw mutationError
     }
 
+    if (action === 'delete') {
+      // Remove o histórico de pré-cadastro da loja junto com a exclusão do
+      // integrante (fila de pré-cadastro do painel de equipe).
+      const { error: preRegDeleteError } = await adminClient
+        .from('pre_cadastros_loja')
+        .delete()
+        .eq('store_id', payload.store_id)
+        .eq('auth_user_id', payload.user_id)
+
+      if (preRegDeleteError) {
+        console.error('manage-store-team pre-registration cleanup failure', {
+          userId: payload.user_id,
+          storeId: payload.store_id,
+          preRegDeleteError,
+        })
+      } else {
+        const { error: preRegByEmailError } = await adminClient
+          .from('pre_cadastros_loja')
+          .delete()
+          .eq('store_id', payload.store_id)
+          .is('auth_user_id', null)
+          .ilike('email', before.email ?? '')
+
+        if (preRegByEmailError) {
+          console.error('manage-store-team pre-registration email cleanup failure', {
+            userId: payload.user_id,
+            storeId: payload.store_id,
+            preRegByEmailError,
+          })
+        }
+      }
+    }
+
     return jsonResponse({ success: true, user: result })
   } catch (error) {
     console.error('manage-store-team failure', {
@@ -184,6 +217,32 @@ serve((req) => withSentry('manage-store-team', req, async () => {
       storeId: payload.store_id,
       error,
     })
+
+    const rpcMessage = (error as { message?: string } | null)?.message || ''
+    const rpcCode = (error as { code?: string } | null)?.code || ''
+
+    if (rpcMessage === 'forbidden' || rpcMessage === 'self_mutation_forbidden' || rpcMessage === 'cross_store_move_forbidden') {
+      return jsonResponse({
+        success: false,
+        error: 'Seu perfil não está vinculado como dono ou gerente desta loja, ou não pode operar esta alteração.',
+      }, 403)
+    }
+    if (rpcMessage === 'manager_scope_forbidden') {
+      return jsonResponse({ success: false, error: 'Gerentes só podem gerenciar vendedores.' }, 403)
+    }
+    if (rpcMessage === 'owner_scope_forbidden') {
+      return jsonResponse({ success: false, error: 'Um dono não pode alterar o vínculo de outro dono.' }, 403)
+    }
+    if (rpcMessage === 'user_not_found' || rpcCode === 'P0002') {
+      return jsonResponse({ success: false, error: 'Integrante não encontrado no sistema.' }, 404)
+    }
+    if (rpcMessage === 'store_not_found') {
+      return jsonResponse({ success: false, error: 'Loja não encontrada no sistema.' }, 404)
+    }
+    if (rpcMessage === 'invalid_store_role' || rpcMessage === 'invalid_action') {
+      return jsonResponse({ success: false, error: 'Dados inválidos para a alteração da equipe.' }, 400)
+    }
+
     return genericFailure()
   }
 }))
