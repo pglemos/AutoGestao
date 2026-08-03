@@ -104,7 +104,11 @@ export function Modal({
               ? "fixed left-4 right-4 top-1/2 -translate-y-1/2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-[101] focus:outline-none"
               : "fixed left-mx-md right-mx-md top-mx-md bottom-mx-md sm:left-1/2 sm:right-auto sm:top-1/2 sm:bottom-auto sm:-translate-x-1/2 sm:-translate-y-1/2 z-[101] focus:outline-none",
             referenceStyle
-              ? `w-full max-h-[90vh] flex flex-col bg-white shadow-xl rounded-2xl ${referenceModalSizes[resolvedSize]}`
+              // `w-auto` abaixo de sm, como no shell não-reference: com
+              // `left-4 right-4` e `width:100%` o painel mede 100% da viewport
+              // a partir de x=16 e vaza 16px à direita. Medido em 390px na
+              // "Nova atividade" da Rotina do Dia: borda direita em 406.
+              ? `w-auto sm:w-full max-h-[90vh] flex flex-col bg-white shadow-xl rounded-2xl ${referenceModalSizes[resolvedSize]}`
               : modalSizeVariants({ size: resolvedSize }),
             className,
           )}
