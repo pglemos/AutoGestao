@@ -478,6 +478,30 @@ as combinações.
 
 ## 17. Conclusão baseada em evidências
 
+### Atualização operacional de 2026-08-03
+
+- Commit `75147ef30964489d02f4f44b94b9a1323b458baf` foi publicado em
+  `origin/main`.
+- Os seis workflows do SHA passaram: Quality Gates, Typecheck/unit tests,
+  ESLint/a11y, Atomic Design, Module Design System Parity, Edge Functions e
+  Gitleaks. O Quality Gates run foi
+  `https://github.com/pglemos/MXGESTAOPREDITIVA/actions/runs/30852695634`.
+- Vercel publicou `dpl_5RuA6xgKUgHaEUNXxZyhHkd76Fuq` como `Ready`, com aliases
+  `https://www.mxperformance.com.br` e `https://mxperformance.vercel.app`.
+  A rota `/pre-cadastro/acertt` foi aberta no Chrome real, exibiu ACERTT e o
+  formulário 1/3, sem console error/warn. Screenshot da validação foi exibido
+  no registro da execução.
+- O proxy `/api/store-pre-registration?store_slug=acertt` retornou HTTP 200
+  com a loja real. Um POST controlado para um e-mail já existente retornou
+  `409 existing_user` e `requires_password_reset=true`; nenhum cadastro novo
+  foi enviado.
+- `store-pre-registration` foi publicado no Supabase como versão 76,
+  `verify_jwt=false`, contendo o hardening de não adoção de identidades e
+  caminho UUID de avatar.
+- CodeRabbit CLI conectou e iniciou análise, mas não entregou veredicto dentro
+  do limite operacional; não foi contado como aprovação. `npm audit --omit=dev`
+  continua retornando 2 vulnerabilidades high do advisory RSC do React Router.
+
 **PARCIALMENTE CONCLUÍDO.** O baseline local, o shell único, a matriz
 responsiva de quatro perfis, o saneamento do segredo e o orçamento total do
 bundle passaram. Migrations estão alinhadas em 327/327, o Sentry atual foi

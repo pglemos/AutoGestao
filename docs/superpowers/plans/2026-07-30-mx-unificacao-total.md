@@ -69,7 +69,7 @@ Gates medidos em 2026-07-31: `npm run lint` exit 0, `npm run test` exit 0 (1697 
 |---|---|---|
 | 1–4 | **concluídas** | inalteradas desde 2026-07-31 |
 | 5 — validação | **concluída localmente** | `npm test` 1711 pass / 0 fail / 14000 asserts; `npm run lint`, `npm run typecheck`, `npm run build`, `deno check` e `git diff --check` verdes; dois timeouts transitórios de foco/cleanup passaram isoladamente e na suíte completa subsequente |
-| 6 — publicação | **em curso** | `main` local e `origin/main` estavam em `129301d7` antes desta retomada; Supabase/Vercel/GitHub estão autenticados no projeto correto, mas o hardening local ainda precisa de commit, CI, preview, deploy e smoke da rota alterada |
+| 6 — publicação | **parcialmente validada** | commit `75147ef3` publicado; seis workflows GitHub verdes; Supabase `store-pre-registration` versão 76; Vercel `dpl_5RuA6xgKUgHaEUNXxZyhHkd76Fuq` `Ready`; Chrome real validou `/pre-cadastro/acertt` sem console error/warn e POST de duplicidade retornou `409`; Sentry controlado, smoke autenticado completo e rollback operacional continuam pendentes |
 
 ### Estado operacional atualizado em 2026-08-03
 

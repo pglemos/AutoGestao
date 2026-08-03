@@ -341,6 +341,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   inativa, e passou a gerar caminho UUID por avatar. O teste de contrato passou
   6/6, `deno check` passou nas três Edge Functions e a suíte completa passou
   1.711/1.711 após repetição de dois timeouts transitórios de foco/cleanup.
+- 2026-08-03: commit `75147ef3` publicado no `origin/main`; os seis workflows
+  do SHA passaram. Vercel publicou `dpl_5RuA6xgKUgHaEUNXxZyhHkd76Fuq` como
+  `Ready`, Supabase publicou `store-pre-registration` versão 76, e o Chrome
+  real validou `/pre-cadastro/acertt` sem console error/warn. O POST controlado
+  com e-mail já existente retornou `409 existing_user` sem criar cadastro.
 - 2026-07-29: o resolver moderno passou 4/4 testes, a seleção focada passou
   16/16, typecheck retornou 0 e 11 entrypoints passaram em
   `deno check --node-modules-dir=auto`. Após a migração OAuth/Calendar, dois
