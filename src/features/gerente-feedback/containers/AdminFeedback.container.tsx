@@ -18,8 +18,11 @@ export function AdminFeedbackContainer() {
     )
   }
 
+  // Margem lateral pelos tokens de página (§7.3): com `px-4 lg:px-8` a tela
+  // ficava em 16px até 1024px, inclusive na faixa tablet onde a régua pede
+  // 24px, e divergia das outras dezoito áreas internas.
   return (
-    <div id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Devolutivas">
+    <div id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6 px-[var(--mx-page-margin)] pb-20 lg:pb-0" aria-label="Devolutivas">
       <FeedbackErrorBoundary sectionName="Cabeçalho">
         <AdminFeedbackHeader
           activeTab={vm.activeTab}

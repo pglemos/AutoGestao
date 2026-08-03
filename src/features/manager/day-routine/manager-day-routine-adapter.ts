@@ -65,6 +65,7 @@ export function executionActionToHistoryTask(
   const automaticKey = stringValue(metadata.automatic_key)
   const origin = isManagerRoutineOrigin(metadata.origin) ? metadata.origin : 'manual'
   const category = isManagerRoutineCategory(metadata.category) ? metadata.category : 'operacao'
+  const status = resolveManagerRoutineResult(row.status, metadata)
   return {
     id: row.id,
     rowId: row.id,
@@ -80,10 +81,17 @@ export function executionActionToHistoryTask(
     dueTime: due.time,
     automatic: Boolean(automaticKey),
     icon: stringValue(metadata.icon) || (automaticKey ? 'ClipboardCheck' : 'Plus'),
-    actions: [],
+    // A mesma linha alimenta a lista de pendentes e o histórico. Sem ação, o
+    // card pendente renderiza sem botão algum e a atividade criada pelo "Nova
+    // atividade" não pode ser concluída pela tela que a criou — reproduzido em
+    // src/test/manager-day-routine.playwright.ts, que expirava esperando
+    // "Concluir" depois do reload. No histórico não há o que concluir.
+    actions: status === 'pendente'
+      ? [{ label: 'Concluir', kind: 'acao' as const, action: 'concluir_manual' as const }]
+      : [],
     priority: classifyManagerRoutineUrgency(due.date, due.time, now),
     daysLate: calculateManagerRoutineDaysLate(due.date, now),
-    status: resolveManagerRoutineResult(row.status, metadata),
+    status,
     countsForScore: Boolean(automaticKey),
     observation: row.justificativa || stringValue(metadata.observation),
   }

@@ -40,6 +40,23 @@ describe('manager day routine Supabase adapter', () => {
     })
   })
 
+  test('atividade manual pendente oferece o botão de concluir; concluída não', async () => {
+    const module = await import('./manager-day-routine-adapter') as Record<string, unknown>
+    const executionActionToHistoryTask = module.executionActionToHistoryTask
+    if (typeof executionActionToHistoryTask !== 'function') throw new Error('adaptador ausente')
+
+    // Sem esta ação o card renderiza sem botão nenhum: a atividade criada pelo
+    // "Nova atividade" fica impossível de concluir pela tela que a criou.
+    const pendente = executionActionToHistoryTask(actionRow()) as { actions: Array<{ label: string; action?: string }> }
+    expect(pendente.actions).toEqual([{ label: 'Concluir', kind: 'acao', action: 'concluir_manual' }])
+
+    const concluida = executionActionToHistoryTask(actionRow({
+      status: 'concluida',
+      completed_at: '2026-07-13T15:00:00.000Z',
+    })) as { actions: unknown[] }
+    expect(concluida.actions).toEqual([])
+  })
+
   test('gera payload de criação único e escopado ao gerente e à loja', async () => {
     const module = await import('./manager-day-routine-adapter').catch(() => ({})) as Record<string, unknown>
     const buildManagerRoutineCreatePayload = module.buildManagerRoutineCreatePayload

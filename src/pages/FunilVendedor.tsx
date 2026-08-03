@@ -402,7 +402,10 @@ function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: Peri
                 </>
               ) : (
                 <>
-                  <p className="text-[14px] font-bold leading-tight text-amber-600">1 venda a cada</p>
+                  {/* amber-700, não 600: em 14px o texto deixa de contar como
+                      grande e passa a exigir 4.5:1. Medido em /meu-funil, o
+                      amber-600 sobre slate-50 dá 3.05:1. */}
+                  <p className="text-[14px] font-bold leading-tight text-amber-700">1 venda a cada</p>
                   <p className="text-[22px] font-bold leading-none tabular-nums text-amber-600">
                     {faltam && faltam > 0 ? (diasUteisRestantes / faltam).toFixed(1) : '—'} dias
                   </p>

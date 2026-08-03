@@ -3,6 +3,7 @@ import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Typography } from '@/components/atoms/Typography'
 import { TabNavPill, type TabNavPillItem } from '@/components/molecules/TabNavPill'
+import { MxModuleHeader } from '@/components/module/MxModuleVisualPrimitives'
 import { cn } from '@/lib/utils'
 import type { FeedbackTab } from '../lib/helpers'
 
@@ -31,28 +32,11 @@ export function AdminFeedbackHeader({
   onOpenForm,
 }: Props) {
   return (
-    <header
-      className="flex flex-col xl:flex-row xl:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10 shrink-0"
-      role="banner"
-    >
-      <div className="flex flex-col gap-mx-tiny min-w-0 max-w-full">
-        <div className="flex items-center gap-mx-sm">
-          <div
-            className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm"
-            aria-hidden="true"
-          />
-          <Typography variant="h1">
-            Gestão de <span className="text-mx-green-700">Devolutivas</span>
-          </Typography>
-        </div>
-        <Typography
-          variant="caption"
-          className="pl-mx-md"
-        >
-          ADMIN — VISÃO DA REDE • METODOLOGIA MX
-        </Typography>
-      </div>
-      <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-mx-sm shrink-0 w-full xl:w-auto max-w-full">
+    <MxModuleHeader
+      eyebrow="ADMIN — VISÃO DA REDE • METODOLOGIA MX"
+      title="Gestão de Devolutivas"
+      actions={
+        <div className="flex w-full min-w-0 max-w-full flex-col items-stretch gap-mx-sm sm:flex-row sm:items-center xl:w-auto">
         <TabNavPill
           tabs={FEEDBACK_TABS}
           activeTab={activeTab}
@@ -95,8 +79,9 @@ export function AdminFeedbackHeader({
             <Plus size={18} className="mr-2" /> NOVO FEEDBACK
           </Button>
         )}
-      </div>
-    </header>
+        </div>
+      }
+    />
   )
 }
 
