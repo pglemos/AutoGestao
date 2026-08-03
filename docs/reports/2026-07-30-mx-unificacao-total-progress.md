@@ -99,3 +99,5 @@ Manter o relatório final como fonte de verdade: a correção está liberada e a
 - Smoke Playwright contra produção, filtrado para `consultor_mx`, com fixture Auth/consultoria temporário e limpeza automática: `1 passed (2.0m)`.
 - CI do SHA `7387fb325dd645aaa2f832895e341c541c1f1d60`: `Quality Gates`, `Typecheck`, `unit-tests`, `eslint-a11y`, `Atomic Design`, `parity`, `Detect Secrets` e `Supabase Preview` concluídos com sucesso.
 - O `npx @sentry/cli` local está disponível (`2.58.6`), porém o token operacional fornecido para esta sessão retornou `401 Invalid token`; source maps e stack trace desminificado da release atual continuam sem prova independente da API.
+- Após o follow-up documental `6d5eebe2`, a Vercel publicou `dpl_2nEL2EZ6yhxXz3E3TGeMzh6VBFmh` como `READY`; `/api/health` e o bundle servido convergiram para `6d5eebe206c89481336f3f1584c14ee67d6ee842`, e o smoke pós-deploy do `consultor_mx` passou `1 passed (2.4m)`.
+- A checagem de `index-C5PCw3sv.js.map` respondeu `200` por rewrite, mas com `Content-Type: text/html` e `content-disposition: index.html`; não havia source map público servido.
