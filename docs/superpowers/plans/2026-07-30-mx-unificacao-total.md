@@ -75,10 +75,12 @@ Gates medidos em 2026-07-31: `npm run lint` exit 0, `npm run test` exit 0 (1697 
 
 - A execução permanece diretamente em `main`, conforme decisão explícita do solicitante; o diretório não rastreado `mx-v3-csv-VzMBNx/` foi preservado sem alterações.
 - Inventário medido: 111 rotas, 103 protegidas, 8 públicas, 127 tabelas, 84 RPCs e 14 Edge Functions.
-- Acesso GitHub, Supabase e Vercel confirmado por CLIs; `sentry-cli` não está instalado nesta máquina.
+- Acesso GitHub, Supabase e Vercel confirmado por CLIs; `sentry-cli` não está instalado nesta máquina, e `npx @sentry/cli` 2.58.5 foi usado apenas para consultas sem persistir credenciais.
 - Produção autenticada como Administrador Geral em `/relatorios/performance-vendas` mostrou dados reais (`49 lojas`, `204` sell-outs históricos, `476` meta consolidada) e nenhum overflow horizontal, porém o deployment vigente ainda não contém `data-mx-module-header` nessa rota.
 - O warning Recharts `width(-1)/height(-1)` foi observado no deployment vigente e precisa ser revalidado após o novo deploy.
-- Não declarar conclusão total enquanto E2E, CI do SHA novo, produção com a correção e validação real do Sentry permanecerem pendentes.
+- O SHA `7a2333120f9ec16143915b7cc13c98d3bd350347` está em `origin/main`; CI do SHA está verde e o deployment `dpl_2afY6n86SsmiTGu8xeta6K8atzZb` está `READY` com aliases oficiais. O build log confirma upload de artifact bundle e o debug ID `ff71a893-c507-4440-9653-17416b1f2be4`; ainda não há prova de stack trace desminificado a partir de frame do bundle.
+- `npm audit --omit=dev` ficou em 2 high após atualização lockfile de `brace-expansion`; 129 alertas Dependabot e findings CodeRabbit em arquivos concorrentes permanecem pendentes.
+- Não declarar conclusão total enquanto a matriz integral de rotas/estados/viewports, a dívida histórica de segredos, os alertas críticos, a dívida CodeRabbit concorrente e a prova do stack trace desminificado permanecerem abertas.
 
 ### Defeitos reais encontrados na medição de 2026-08-03
 
