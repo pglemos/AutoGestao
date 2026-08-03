@@ -531,14 +531,18 @@ export default function Login() {
                         )}
 
                         {error && (
-                            <div className="flex items-center px-4 py-3 bg-status-error-surface border border-status-error/20 rounded-xl" style={{ gap: '0.75rem' }}>
+                            // role="alert": a falha de login é o único retorno da
+                            // ação e aparece sem mudar de rota nem mover o foco.
+                            // Sem o papel, quem usa leitor de tela envia o
+                            // formulário e não recebe resposta nenhuma.
+                            <div role="alert" className="flex items-center px-4 py-3 bg-status-error-surface border border-status-error/20 rounded-xl" style={{ gap: '0.75rem' }}>
                                 <AlertCircle size={16} className="text-status-error shrink-0" />
                                 <span className="text-status-error text-sm font-medium">{error}</span>
                             </div>
                         )}
 
                         {success && (
-                            <div className="flex items-center px-4 py-3 bg-status-success/10 border border-status-success/20 rounded-xl" style={{ gap: '0.75rem' }}>
+                            <div role="status" className="flex items-center px-4 py-3 bg-status-success/10 border border-status-success/20 rounded-xl" style={{ gap: '0.75rem' }}>
                                 <CheckCircle2 size={16} className="text-status-success shrink-0" />
                                 <span className="text-status-success text-sm font-medium">{success}</span>
                             </div>
