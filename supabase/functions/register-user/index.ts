@@ -242,7 +242,7 @@ serve(async (req) => {
       }, 403)
     }
     if (rpcMessage === 'store_required') {
-      return jsonResponse({ success: false, error: 'A loja informada não existe no sistema.' }, 400)
+      return jsonResponse({ success: false, error: 'Informe uma loja para cadastrar este perfil.' }, 400)
     }
     if (rpcMessage === 'invalid_role' || rpcMessage === 'canonical_role_not_found') {
       return jsonResponse({ success: false, error: 'O perfil informado não é válido para cadastro.' }, 400)

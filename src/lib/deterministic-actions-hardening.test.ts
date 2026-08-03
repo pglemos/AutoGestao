@@ -82,6 +82,49 @@ describe('deterministic action hardening', () => {
     expect(new Set(actions.map((action) => action.id)).size).toBe(actions.length)
   })
 
+  test('chooses the same canonical opportunity when input order changes', () => {
+    const opportunities = [
+      {
+        id: 'opp-older',
+        cliente_id: 'client-order-independent',
+        etapa: 'negociacao',
+        updated_at: '2026-07-20T10:00:00Z',
+        vendedor_id: 'seller-older',
+      },
+      {
+        id: 'opp-newer',
+        cliente_id: 'client-order-independent',
+        etapa: 'proposta',
+        updated_at: '2026-07-27T10:00:00Z',
+        vendedor_id: 'seller-newer',
+      },
+    ]
+    const customers = [{ id: 'client-order-independent', nome: 'Cliente estável' }]
+
+    const select = (orderedOpportunities: typeof opportunities) => {
+      const action = deriveDeterministicActions({
+        ...base,
+        opportunities: orderedOpportunities,
+        customers,
+      }).find((candidate) => candidate.scenarioCode === 'MISSING_NEXT_STEP')
+
+      return {
+        id: action?.id,
+        sellerUserId: action?.sellerUserId,
+        opportunityId: action?.opportunityId,
+        sourceState: action?.evidence.sourceState,
+      }
+    }
+
+    expect(select(opportunities)).toEqual(select([...opportunities].reverse()))
+    expect(select(opportunities)).toEqual({
+      id: 'act-missing-step-client-order-independent-2026-07-27T100000Z',
+      sellerUserId: 'seller-newer',
+      opportunityId: 'opp-newer',
+      sourceState: '2026-07-27T10:00:00Z',
+    })
+  })
+
   test('returns deterministic priority order and removes duplicate scenario/entity actions', () => {
     const actions = deriveDeterministicActions({
       ...base,

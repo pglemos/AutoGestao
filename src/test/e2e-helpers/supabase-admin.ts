@@ -19,6 +19,7 @@ type E2ERole = 'administrador_geral' | 'administrador_mx' | 'consultor_mx' | 'do
 
 let cachedAdmin: SupabaseClient | null = null
 let cachedAnon: SupabaseClient | null = null
+const fixtureStoreByClientId = new Map<string, string>()
 
 export function getSupabaseAdmin() {
   if (cachedAdmin) return cachedAdmin
@@ -170,6 +171,7 @@ export async function createE2EConsultingClient(options: {
   const store = options.storeId
     ? { id: options.storeId }
     : await createE2EStore(`E2E Loja ${slug}`.slice(0, 60))
+  const createdFixtureStoreId = options.storeId ? null : store.id
   const { data, error } = await admin
     .from('clientes_consultoria')
     .insert({
@@ -184,7 +186,11 @@ export async function createE2EConsultingClient(options: {
     .select('id, slug, name, primary_store_id')
     .single()
 
-  if (error || !data) throw new Error(`Failed to create E2E consulting client: ${error?.message || 'missing row'}`)
+  if (error || !data) {
+    if (createdFixtureStoreId) await admin.from('lojas').delete().eq('id', createdFixtureStoreId)
+    throw new Error(`Failed to create E2E consulting client: ${error?.message || 'missing row'}`)
+  }
+  if (createdFixtureStoreId) fixtureStoreByClientId.set(data.id, createdFixtureStoreId)
   return data as { id: string; slug: string; name: string; primary_store_id: string }
 }
 
@@ -228,20 +234,15 @@ export async function createE2EConsultingVisit(options: {
 export async function deleteE2EConsultingData(clientIds: string[]) {
   if (!clientIds.length) return
   const admin = getSupabaseAdmin()
-  // Guarda as lojas criadas junto com os clientes antes de apagar o cliente,
-  // senão a loja de fixture fica órfã no banco a cada execução.
-  const { data: clients } = await admin
-    .from('clientes_consultoria')
-    .select('primary_store_id, name')
-    .in('id', clientIds)
-  const fixtureStoreIds = (clients || [])
-    .filter((client) => client.primary_store_id && String(client.name).startsWith('E2E '))
-    .map((client) => client.primary_store_id as string)
+  const fixtureStoreIds = clientIds
+    .map((clientId) => fixtureStoreByClientId.get(clientId))
+    .filter((storeId): storeId is string => Boolean(storeId))
 
   await admin.from('atribuicoes_consultoria').delete().in('client_id', clientIds)
   await admin.from('visitas_consultoria').delete().in('client_id', clientIds)
   await admin.from('clientes_consultoria').delete().in('id', clientIds)
   if (fixtureStoreIds.length) await admin.from('lojas').delete().in('id', fixtureStoreIds)
+  clientIds.forEach((clientId) => fixtureStoreByClientId.delete(clientId))
 }
 
 export async function deleteE2EUser(userId: string) {

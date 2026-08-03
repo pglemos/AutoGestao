@@ -119,6 +119,18 @@ function stateToken(value: string | null | undefined): string {
   return normalized.slice(0, 48) || 'state'
 }
 
+function compareCustomerStateOpportunity(left: OpportunityItem, right: OpportunityItem): number {
+  const leftUpdated = left.updated_at || ''
+  const rightUpdated = right.updated_at || ''
+  if (leftUpdated !== rightUpdated) return rightUpdated.localeCompare(leftUpdated)
+
+  const leftCreated = left.created_at || ''
+  const rightCreated = right.created_at || ''
+  if (leftCreated !== rightCreated) return rightCreated.localeCompare(leftCreated)
+
+  return left.id.localeCompare(right.id)
+}
+
 function daysBetween(from: string, to: string): number {
   const start = new Date(`${datePart(from)}T12:00:00Z`)
   const end = new Date(`${datePart(to)}T12:00:00Z`)
@@ -225,9 +237,11 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
   // rende duas ações idênticas — mesmo id, mesma chave React.
   const customerStateHandled = new Set<string>()
 
-  for (const opportunity of input.opportunities ?? []) {
-    if (TERMINAL_STAGES.has(opportunity.etapa)) continue
+  const customerStateOpportunities = [...(input.opportunities ?? [])]
+    .filter((opportunity) => !TERMINAL_STAGES.has(opportunity.etapa))
+    .sort(compareCustomerStateOpportunity)
 
+  for (const opportunity of customerStateOpportunities) {
     const customer = customersMap.get(opportunity.cliente_id)
     if (!canRecommendContact(customer)) continue
     if (customerStateHandled.has(customer.id)) continue

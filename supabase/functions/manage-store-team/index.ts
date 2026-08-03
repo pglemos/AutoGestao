@@ -191,13 +191,13 @@ serve((req) => withSentry('manage-store-team', req, async () => {
           storeId: payload.store_id,
           preRegDeleteError,
         })
-      } else {
+      } else if (before.email) {
         const { error: preRegByEmailError } = await adminClient
           .from('pre_cadastros_loja')
           .delete()
           .eq('store_id', payload.store_id)
           .is('auth_user_id', null)
-          .ilike('email', before.email ?? '')
+          .eq('email', before.email)
 
         if (preRegByEmailError) {
           console.error('manage-store-team pre-registration email cleanup failure', {

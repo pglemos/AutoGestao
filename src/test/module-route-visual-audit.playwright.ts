@@ -165,12 +165,6 @@ async function auditRoute(
   page.on('console', onConsole)
   page.on('pageerror', onPageErrorLog)
 
-  await page.addInitScript(() => {
-    window.addEventListener('vite:preloadError', (e) => {
-      console.error(`[INSTRUMENT vite:preloadError] ${(e as Event & { message?: string }).message ?? ''}`)
-    })
-  })
-
   const gotoAttempts = await gotoRouteStable(page, path)
   if (gotoAttempts > 1) consoleErrors.length = 0
 
@@ -310,6 +304,11 @@ test.describe('auditoria visual canônica das rotas internas MX', () => {
       test(`${profile.role} percorre as dezenove áreas em ${viewport.key}`, async ({ page }, testInfo) => {
         mkdirSync(EVIDENCE_DIR, { recursive: true })
         await page.setViewportSize({ width: viewport.width, height: viewport.height })
+        await page.addInitScript(() => {
+          window.addEventListener('vite:preloadError', (e) => {
+            console.error(`[INSTRUMENT vite:preloadError] ${(e as Event & { message?: string }).message ?? ''}`)
+          })
+        })
         if (profile.email) {
           await login(page, profile.email)
         } else {
