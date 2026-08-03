@@ -16,7 +16,10 @@ type Props = {
 
 export function AdminHeader({ metrics, isRefetching, onRefresh, onExport }: Props) {
   return (
-    <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-mx-lg border-b border-gray-200 pb-8 shrink-0">
+    <header
+      data-mx-module-header=""
+      className="flex shrink-0 flex-col justify-between gap-mx-lg rounded-2xl border border-gray-100 bg-white p-5 shadow-sm xl:flex-row xl:items-end"
+    >
       <div className="flex flex-col gap-mx-tiny">
         <div className="flex items-center gap-mx-sm">
           <div

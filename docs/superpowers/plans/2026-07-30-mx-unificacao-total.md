@@ -68,8 +68,17 @@ Gates medidos em 2026-07-31: `npm run lint` exit 0, `npm run test` exit 0 (1697 
 | Onda | Estado | Evidência (comando, exit code) |
 |---|---|---|
 | 1–4 | **concluídas** | inalteradas desde 2026-07-31 |
-| 5 — validação | **concluída para vendedor, gerente, dono, administrador_geral e administrador_mx** | `npx playwright test --project=chromium` → 72 passed, 0 failed; `--project=mobile-chrome` → 72 passed, 0 failed; `npm run test` → 1701 pass; `npm run lint`, `npm run build`, `check:bundle-size` → exit 0 |
-| 6 — publicação | **não iniciada** | produção roda o release `07d2e9ea` de 2026-07-31, 50+ commits atrás de `main`; `git push` é operação exclusiva do @devops e depende de autorização |
+| 5 — validação | **concluída localmente, com flake isolado documentado** | `npm test` 1703 pass; lint/typecheck/build/bundle verdes; auditoria visual isolada `9 passed`; smoke consultoria isolado `1 passed`; `agenda-filters` mobile reexecutado com o caso afetado aprovado; a suíte combinada teve 184 passed e falhas transitórias de cleanup/navegação, sem repetição isolada |
+| 6 — publicação | **em curso** | `main` está em `1480ea42`, sincronizada com `origin/main`; produção possui deployment `dpl_8gzZzXj6QGey2r4Wu8nG4bJugpeH` `READY`, mas o smoke atual ainda mostra o artefato anterior sem o contrato do cabeçalho; novo push/deploy e validação da rota corrigida são obrigatórios |
+
+### Estado operacional atualizado em 2026-08-03
+
+- A execução permanece diretamente em `main`, conforme decisão explícita do solicitante; o diretório não rastreado `mx-v3-csv-VzMBNx/` foi preservado sem alterações.
+- Inventário medido: 111 rotas, 103 protegidas, 8 públicas, 127 tabelas, 84 RPCs e 14 Edge Functions.
+- Acesso GitHub, Supabase e Vercel confirmado por CLIs; `sentry-cli` não está instalado nesta máquina.
+- Produção autenticada como Administrador Geral em `/relatorios/performance-vendas` mostrou dados reais (`49 lojas`, `204` sell-outs históricos, `476` meta consolidada) e nenhum overflow horizontal, porém o deployment vigente ainda não contém `data-mx-module-header` nessa rota.
+- O warning Recharts `width(-1)/height(-1)` foi observado no deployment vigente e precisa ser revalidado após o novo deploy.
+- Não declarar conclusão total enquanto E2E, CI do SHA novo, produção com a correção e validação real do Sentry permanecerem pendentes.
 
 ### Defeitos reais encontrados na medição de 2026-08-03
 
@@ -105,11 +114,9 @@ Reativar a conta de teste é decisão do solicitante — ver §3.3.
 
 ### Lacuna conhecida na Onda 5
 
-`administrador_mx` e `consultor_mx` não têm conta E2E; a auditoria de rotas entra por bypass de
-desenvolvimento e, por isso, não afirma nada sobre conteúdo carregado (título, cabeçalho da área,
-erros de console vindos de consulta real) para esses dois perfis — só sobre anatomia de página.
-Fechar essa lacuna exige contas de teste dedicadas, o que é criação de usuário em produção e
-depende de decisão do solicitante.
+`administrador_mx` tem conta E2E real e cobertura autenticada das dezenove áreas nos três
+viewports. `consultor_mx` permanece sem conta E2E ativa: a auditoria desse papel continua
+limitada ao bypass de desenvolvimento e não comprova conteúdo carregado por consultas reais.
 
 ## 3. Decisões que precisam do solicitante
 
@@ -118,9 +125,9 @@ depende de decisão do solicitante.
    hoje) para fechar a última faixa da matriz, ou aceitar que
    `consultor_mx` siga coberto só por bypass? Ativar login em produção não é decisão
    que eu tome sozinho.
-3. **Publicação:** `main` está 50+ commits à frente da produção. O push dispara deploy
-   de produção na Vercel e é operação exclusiva do @devops — precisa de autorização
-   explícita.
+3. **Publicação:** o solicitante autorizou explicitamente a execução diretamente em `main`; o
+push dispara deploy de produção na Vercel e deve ser seguido por CI, deployment `READY` e
+smoke autenticado.
 4. **Escopo vs. sessão:** 110 rotas × 8 viewports × ~13 estados de captura = ordem de 10⁴ artefatos visuais. Isso é um programa de semanas, não de uma sessão. Executo por ondas, com evidência por onda.
 
 ## 4. Gates por onda
