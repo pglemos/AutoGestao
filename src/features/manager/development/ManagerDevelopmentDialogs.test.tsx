@@ -6,10 +6,6 @@ import { DevelopmentTeamCompetencyMap } from './DevelopmentTeamCompetencyMap'
 
 beforeEach(() => {
   cleanup()
-  document.body.replaceChildren()
-  document.body.removeAttribute('aria-hidden')
-  document.body.removeAttribute('data-scroll-locked')
-  document.body.style.pointerEvents = ''
 })
 
 afterEach(() => cleanup())
@@ -65,7 +61,13 @@ describe('Desenvolvimento manager dialogs', () => {
     fireEvent.keyDown(close, { key: 'Escape' })
     expect(onClose).toHaveBeenCalledTimes(1)
 
-    rerender(<></>)
+    rerender(
+      <Modal open={false} onClose={onClose} title="Detalhes do feedback" description={feedback.seller_name} referenceStyle>
+        <p>{feedback.positives}</p>
+        <p>{feedback.attention_points}</p>
+        <p>{feedback.action}</p>
+      </Modal>,
+    )
     await waitFor(() => expect(document.activeElement).toBe(trigger))
   })
 
@@ -83,7 +85,7 @@ describe('Desenvolvimento manager dialogs', () => {
     fireEvent.keyDown(close, { key: 'Escape' })
     expect(onClose).toHaveBeenCalledTimes(1)
 
-    rerender(<></>)
+    rerender(<DevelopmentTeamCompetencyMap open={false} pdis={[]} onClose={onClose} />)
     await waitFor(() => expect(document.activeElement).toBe(trigger))
   })
 })

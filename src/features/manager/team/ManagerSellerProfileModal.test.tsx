@@ -6,10 +6,6 @@ import type { RankingEntry } from '@/types/database'
 
 beforeEach(() => {
   cleanup()
-  document.body.replaceChildren()
-  document.body.removeAttribute('aria-hidden')
-  document.body.removeAttribute('data-scroll-locked')
-  document.body.style.pointerEvents = ''
 })
 
 afterEach(() => cleanup())

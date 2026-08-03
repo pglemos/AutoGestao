@@ -23,6 +23,7 @@ paths = [
     '''docs/runbooks/.*\.md''',
     '''docs/reviews/.*\.md''',
     '''docs/adr/.*\.md''',
+    '''(?i)supabase/migrations/\.migration-checksums\.json''',
 ]
 
 # Strings comuns em template/example/test que não são secrets reais
