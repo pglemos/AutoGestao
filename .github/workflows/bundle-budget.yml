@@ -9,6 +9,7 @@ on:
       - 'vite.config.ts'
       - 'scripts/check_bundle_size.mjs'
       - '.github/workflows/bundle-budget.yml'
+  workflow_dispatch:
 
 jobs:
   budget:

@@ -12,6 +12,7 @@ on:
       - 'src/**'
       - 'packages/**'
       - '.github/workflows/module-design-system-parity.yml'
+  workflow_dispatch:
 
 permissions:
   contents: read
