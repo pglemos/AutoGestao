@@ -24,7 +24,7 @@ export function AdminPeopleChart({ roleData, metrics }: Props) {
         <CardDescription>Donos, gerentes, vendedores e equipe MX</CardDescription>
       </CardHeader>
       <CardContent className="h-mx-80 p-mx-lg">
-        <ResponsiveContainer width="100%" height="70%" minWidth={0}>
+        <ResponsiveContainer width="100%" height="70%" minWidth={0} minHeight={0}>
           <RechartsPieChart>
             <Pie
               data={roleData}
