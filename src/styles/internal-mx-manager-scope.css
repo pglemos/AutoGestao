@@ -110,11 +110,10 @@
 .mx-canonical-template [data-mx-module-page] > div {
   width: 100%;
   margin-inline: auto;
-  /* Margem lateral pelo token de página, não cravada: 1rem aqui e 1.5rem no
-     media query abaixo mantinham as telas internas em 16/24px enquanto o resto
-     do produto ia a 32px em Expanded — margem decidida pelo perfil, que é o que
-     §7.3 proíbe. O vertical segue local por ser ritmo do template. */
-  padding: 1.5rem var(--mx-page-margin) 6rem;
+  /* MxModulePage já é o container canônico e possui a margem, o ritmo vertical
+     e a safe area. Este escopo só fornece o limite semântico; repetir padding
+     aqui duplicava a margem e o espaço inferior nas páginas migradas. */
+  padding: 0;
 }
 
 .mx-canonical-dashboard main:not([data-mx-module-page]),
@@ -137,8 +136,7 @@
 }
 
 @media (min-width: 768px) {
-  .mx-canonical-template main:not([data-mx-module-page]),
-  .mx-canonical-template [data-mx-module-page] > div {
+  .mx-canonical-template main:not([data-mx-module-page]) {
     padding-inline: var(--mx-page-margin);
   }
 }

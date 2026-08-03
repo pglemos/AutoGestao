@@ -55,6 +55,10 @@ export function getSupabaseAnon() {
   return cachedAnon
 }
 
+function assertSupabaseSuccess(operation: string, error: { message: string } | null | undefined) {
+  if (error) throw new Error(`Failed to ${operation}: ${error.message}`)
+}
+
 export async function createE2EAdminUser(options?: {
   prefix?: string
   email?: string
@@ -187,7 +191,12 @@ export async function createE2EConsultingClient(options: {
     .single()
 
   if (error || !data) {
-    if (createdFixtureStoreId) await admin.from('lojas').delete().eq('id', createdFixtureStoreId)
+    if (createdFixtureStoreId) {
+      const { error: cleanupError } = await admin.from('lojas').delete().eq('id', createdFixtureStoreId)
+      if (cleanupError) {
+        throw new Error(`Failed to clean E2E store after client creation failure: ${cleanupError.message}`)
+      }
+    }
     throw new Error(`Failed to create E2E consulting client: ${error?.message || 'missing row'}`)
   }
   if (createdFixtureStoreId) fixtureStoreByClientId.set(data.id, createdFixtureStoreId)
@@ -202,7 +211,7 @@ export async function createE2EConsultingVisit(options: {
   objective?: string
 }) {
   const admin = getSupabaseAdmin()
-  await admin
+  const { error: assignmentError } = await admin
     .from('atribuicoes_consultoria')
     .upsert({
       client_id: options.clientId,
@@ -210,6 +219,7 @@ export async function createE2EConsultingVisit(options: {
       assignment_role: 'responsavel',
       active: true,
     }, { onConflict: 'client_id,user_id' })
+  assertSupabaseSuccess('create E2E consulting assignment', assignmentError)
 
   const { data, error } = await admin
     .from('visitas_consultoria')
@@ -238,10 +248,16 @@ export async function deleteE2EConsultingData(clientIds: string[]) {
     .map((clientId) => fixtureStoreByClientId.get(clientId))
     .filter((storeId): storeId is string => Boolean(storeId))
 
-  await admin.from('atribuicoes_consultoria').delete().in('client_id', clientIds)
-  await admin.from('visitas_consultoria').delete().in('client_id', clientIds)
-  await admin.from('clientes_consultoria').delete().in('id', clientIds)
-  if (fixtureStoreIds.length) await admin.from('lojas').delete().in('id', fixtureStoreIds)
+  const cleanupResults = await Promise.all([
+    admin.from('atribuicoes_consultoria').delete().in('client_id', clientIds),
+    admin.from('visitas_consultoria').delete().in('client_id', clientIds),
+    admin.from('clientes_consultoria').delete().in('id', clientIds),
+    fixtureStoreIds.length ? admin.from('lojas').delete().in('id', fixtureStoreIds) : Promise.resolve({ error: null }),
+  ])
+  const cleanupErrors = cleanupResults
+    .map((result, index) => result.error ? `${['assignments', 'visits', 'clients', 'stores'][index]}: ${result.error.message}` : null)
+    .filter((message): message is string => Boolean(message))
+  if (cleanupErrors.length) throw new Error(`Failed to clean E2E consulting data: ${cleanupErrors.join('; ')}`)
   clientIds.forEach((clientId) => fixtureStoreByClientId.delete(clientId))
 }
 

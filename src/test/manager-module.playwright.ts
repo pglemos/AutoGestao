@@ -10,7 +10,7 @@ const routes = [
   { path: '/home', slug: 'inicio', heading: 'Início', uniqueText: /Previsibilidade comercial para conduzir o resultado do dia/i },
   { path: '/rotina', slug: 'rotina-dia', heading: 'Rotina do Dia', uniqueText: /Alertas e ações essenciais para conduzir o dia/i },
   { path: '/fechamento-diario', slug: 'fechamento', heading: 'Fechamento Diário', uniqueText: /Movimento da Equipe/i },
-  { path: '/plano-acao', slug: 'plano-acao', heading: 'Plano de Ação', uniqueText: /Plano de Ação/i },
+  { path: '/plano-acao', slug: 'plano-acao', heading: 'Plano de Ação', uniqueText: /Transforme as prioridades estratégicas em execução/i },
   { path: '/gerente/rotina-equipe', slug: 'rotina', heading: 'Rotina da Equipe', uniqueText: /Acompanhe a execução oficial das atividades comerciais da equipe/i },
   { path: '/gerente/minha-equipe', slug: 'equipe', heading: 'Minha Equipe', uniqueText: /Visão do Kanban/i },
   // A rota serve o dashboard canônico desde 5962d573; o título da tela é

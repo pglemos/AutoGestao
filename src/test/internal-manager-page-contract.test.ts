@@ -67,6 +67,13 @@ describe('contrato canônico do módulo interno MX', () => {
     expect(css).not.toContain('data-mx-manager-page="')
   })
 
+  test('o escopo não duplica o padding do MxModulePage', () => {
+    const legacyCss = read('src/styles/internal-mx-manager-scope.css')
+    const modulePageRule = legacyCss.split('.mx-canonical-template [data-mx-module-page] > div')[1]?.split('}')[0] ?? ''
+    expect(modulePageRule).toContain('padding: 0')
+    expect(modulePageRule).not.toMatch(/padding:\s*1\.5rem/)
+  })
+
   test('o escopo visual importa a camada explícita de slots', () => {
     const scope = read('src/components/module/InternalMxVisualScope.tsx')
     expect(scope).toContain("@/styles/internal-mx-template-slots.css")

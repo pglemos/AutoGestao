@@ -176,39 +176,6 @@ serve((req) => withSentry('manage-store-team', req, async () => {
       throw mutationError
     }
 
-    if (action === 'delete') {
-      // Remove o histórico de pré-cadastro da loja junto com a exclusão do
-      // integrante (fila de pré-cadastro do painel de equipe).
-      const { error: preRegDeleteError } = await adminClient
-        .from('pre_cadastros_loja')
-        .delete()
-        .eq('store_id', payload.store_id)
-        .eq('auth_user_id', payload.user_id)
-
-      if (preRegDeleteError) {
-        console.error('manage-store-team pre-registration cleanup failure', {
-          userId: payload.user_id,
-          storeId: payload.store_id,
-          preRegDeleteError,
-        })
-      } else if (before.email) {
-        const { error: preRegByEmailError } = await adminClient
-          .from('pre_cadastros_loja')
-          .delete()
-          .eq('store_id', payload.store_id)
-          .is('auth_user_id', null)
-          .eq('email', before.email)
-
-        if (preRegByEmailError) {
-          console.error('manage-store-team pre-registration email cleanup failure', {
-            userId: payload.user_id,
-            storeId: payload.store_id,
-            preRegByEmailError,
-          })
-        }
-      }
-    }
-
     return jsonResponse({ success: true, user: result })
   } catch (error) {
     console.error('manage-store-team failure', {

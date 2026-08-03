@@ -109,9 +109,13 @@ export function AgendaHeader({
             </button>
           </div>
 
-          <h1 className={cn('text-lg text-gray-800 capitalize', 'font-semibold')}>
-            {monthLabel}
-          </h1>
+          <div className="min-w-0">
+            <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">Consultoria</p>
+            <h1 className="text-lg font-bold text-gray-800">Agenda MX</h1>
+            <h2 className={cn('text-sm text-gray-600 capitalize', 'font-semibold')}>
+              {monthLabel}
+            </h2>
+          </div>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">

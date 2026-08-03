@@ -139,6 +139,20 @@ VALUES (
 )
 ON CONFLICT (id) DO NOTHING;
 
+INSERT INTO public.veiculos_estoque (id, loja_id, created_by, marca, modelo, status)
+VALUES (
+  'eeeeeeee-0000-0000-0000-000000000002',
+  '11111111-1111-1111-1111-111111111111',
+  'aaaaaaaa-0000-0000-0000-000000000004',
+  'Fixture',
+  'Estoque',
+  'disponivel'
+)
+ON CONFLICT (id) DO UPDATE
+SET loja_id = EXCLUDED.loja_id,
+    created_by = EXCLUDED.created_by,
+    status = EXCLUDED.status;
+
 -- RLS tests need table privileges in order to reach the policy layer.  The
 -- grants are scoped to this ephemeral test database; production access stays
 -- governed by the migration-owned grants and RLS policies.
@@ -152,6 +166,7 @@ GRANT SELECT, INSERT, UPDATE, DELETE ON
   public.metas,
   public.logs_auditoria,
   public.role_assignments_audit,
+  public.veiculos_estoque,
   public.clientes,
   public.oportunidades
 TO anon, authenticated;

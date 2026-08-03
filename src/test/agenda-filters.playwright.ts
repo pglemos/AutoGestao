@@ -72,9 +72,7 @@ test.describe('Agenda admin filters', () => {
     await loginWithCredentials(page, adminCredentials.email, adminCredentials.password)
     await page.goto(`/agenda?range=todos&consultant=${consultantA.id}`)
 
-    // A tela não expõe um título "Agenda MX" — seu único h1 é o mês corrente
-    // do calendário (ver docs/audits/2026-07-31-achados-visuais-agenda.md).
-    // Ancorar no conteúdo principal e no controle de filtros, que são estáveis.
+    await expect(page.getByRole('heading', { name: 'Agenda MX', level: 1 })).toBeVisible({ timeout: 15000 })
     // Pelo nome acessível, e não pelo texto: abaixo de sm o rótulo do botão é
     // `hidden sm:inline` e sobra só o ícone, então `getByText` reprovava a
     // suíte mobile por uma decisão de layout, não por defeito.
@@ -134,9 +132,7 @@ test.describe('Agenda admin filters', () => {
     await login(page, consultantA.email, consultantA.password)
     await page.goto(`/agenda?range=todos&consultant=${consultantB.id}`)
 
-    // A tela não expõe um título "Agenda MX" — seu único h1 é o mês corrente
-    // do calendário (ver docs/audits/2026-07-31-achados-visuais-agenda.md).
-    // Ancorar no conteúdo principal e no controle de filtros, que são estáveis.
+    await expect(page.getByRole('heading', { name: 'Agenda MX', level: 1 })).toBeVisible({ timeout: 15000 })
     // Pelo nome acessível, e não pelo texto: abaixo de sm o rótulo do botão é
     // `hidden sm:inline` e sobra só o ícone, então `getByText` reprovava a
     // suíte mobile por uma decisão de layout, não por defeito.

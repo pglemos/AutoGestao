@@ -43,6 +43,9 @@
 \echo === RLS Matrix: role_assignments_audit ===
 \i supabase/tests/rls-matrix/role_assignments_audit.test.sql
 
+\echo === RLS Matrix: veiculos_estoque ===
+\i supabase/tests/rls-matrix/veiculos_estoque.test.sql
+
 \echo === RLS Matrix: feature_flags ===
 \i supabase/tests/rls-matrix/feature_flags.test.sql
 

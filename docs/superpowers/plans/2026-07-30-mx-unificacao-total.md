@@ -77,8 +77,8 @@ Todos reproduzidos antes de corrigir e re-medidos depois:
 
 1. **`veiculos_estoque` legível e não gravável pela área interna MX.** A policy de
    SELECT aceitava `eh_area_interna_mx()`, as de INSERT/UPDATE/DELETE não. O botão
-   "Registrar veículo" aparecia e o POST voltava 403. Achado no Sentry (issue
-   7642316051, 2026-07-30), não em leitura de código. Migration
+   "Registrar veículo" aparecia e o POST voltava 403. Achado em evento real de
+   produção registrado em 2026-07-30, não em leitura de código. Migration
    `20260803120000_veiculos_estoque_internal_mx_write.sql`, aplicada em produção.
 2. **`/devolutivas` no perfil interno fora do template canônico.** Cabeçalho
    próprio, sem slot canônico, raio 0, margem lateral cravada em `px-4 lg:px-8`.
@@ -94,12 +94,12 @@ Todos reproduzidos antes de corrigir e re-medidos depois:
 
 ### Lacuna da Onda 5 fechada em 2026-08-03
 
-`administrador_mx` tem conta real (`admin@mxgestaopreditiva.com.br`), aceita a senha
+`administrador_mx` tem conta real de teste, aceita a senha
 padrão dos perfis de teste e passa as dezenove áreas nos três viewports com sessão
 autenticada — não mais por bypass.
 
-`consultor_mx` **continua sem cobertura de sessão real**: a conta de teste
-`consultor.mx@mxgestaopreditiva.com.br` está com `active=false` no banco e o app
+`consultor_mx` **continua sem cobertura de sessão real**: a conta de teste dedicada
+está com `active=false` no banco e o app
 corretamente recusa o login. A única outra conta do papel pertence a uma pessoa real.
 Reativar a conta de teste é decisão do solicitante — ver §3.3.
 
@@ -114,8 +114,8 @@ depende de decisão do solicitante.
 ## 3. Decisões que precisam do solicitante
 
 1. **Gap 3:** manter a paridade visual Base44 (e portanto os scopes CSS e seus contratos de teste) ou removê-los, quebrando deliberadamente contratos de paridade que já foram aprovados? O briefing pede remoção; a memória do projeto registra "paridade Base44↔MX é visual, não só funcional" como requisito firme. Não resolvo isso por conta própria.
-2. **Conta de teste do consultor:** reativar `consultor.mx@mxgestaopreditiva.com.br`
-   (`active=false` hoje) para fechar a última faixa da matriz, ou aceitar que
+2. **Conta de teste do consultor:** reativar a conta dedicada (`active=false`
+   hoje) para fechar a última faixa da matriz, ou aceitar que
    `consultor_mx` siga coberto só por bypass? Ativar login em produção não é decisão
    que eu tome sozinho.
 3. **Publicação:** `main` está 50+ commits à frente da produção. O push dispara deploy

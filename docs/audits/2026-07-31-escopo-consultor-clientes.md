@@ -80,9 +80,9 @@ nunca chegava a executar: falhava antes, na criação da fixture.
 A migração não foi aplicada, e a verificação de impacto explica por quê:
 
 ```text
-consultores ativos: 1  (diegosouza270496@gmail.com)
+consultores ativos: 1  (conta real do consultor ativo)
 atribuicoes ativas no banco: 115
-  diegosouza270496@gmail.com -> 0 clientes atribuídos
+  conta real do consultor ativo -> 0 clientes atribuídos
 ```
 
 **O único consultor ativo em produção não tem nenhuma atribuição registrada.**
