@@ -79,7 +79,7 @@ Gates medidos em 2026-07-31: `npm run lint` exit 0, `npm run test` exit 0 (1697 
 - Produção autenticada como Administrador Geral em `/relatorios/performance-vendas` mostrou dados reais (`49 lojas`, `204` sell-outs históricos, `476` meta consolidada) e nenhum overflow horizontal, porém o deployment vigente ainda não contém `data-mx-module-header` nessa rota.
 - O warning Recharts `width(-1)/height(-1)` foi observado no deployment vigente e precisa ser revalidado após o novo deploy.
 - O SHA `7387fb325dd645aaa2f832895e341c541c1f1d60` está em `origin/main`; CI, `/api/health` e o deployment observado `dpl_DNhwTvPwY9tQTQrrZ69WZAmVK6HS` estão verdes/`READY`, com aliases oficiais. Bundle e health declaram a mesma release Sentry; ainda não há prova de stack trace desminificado a partir de frame do bundle.
-- `npm audit --omit=dev` ficou em 2 high após atualização lockfile de `brace-expansion`; a API atual lista 100 alertas Dependabot (1 critical, 55 high, 33 medium, 11 low) e findings CodeRabbit em arquivos concorrentes permanecem pendentes.
+- `npm audit --omit=dev` ficou em 2 high após atualização lockfile de `brace-expansion`; a API paginada atual lista 133 alertas Dependabot (3 critical, 70 high, 47 medium, 13 low) e findings CodeRabbit em arquivos concorrentes permanecem pendentes.
 - Não declarar conclusão total enquanto a matriz integral de rotas/estados/viewports, a dívida histórica de segredos, os alertas críticos, a dívida CodeRabbit concorrente e a prova do stack trace desminificado permanecerem abertas.
 
 ### Revalidação complementar de 2026-08-03
