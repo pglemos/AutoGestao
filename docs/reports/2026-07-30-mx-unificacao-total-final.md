@@ -21,11 +21,11 @@ Status atual: **release da correção concluído; prompt mestre permanece parcia
 
 ## 39.3 Evidências técnicas
 
-- Branch: `main`; SHA do código funcional publicado: `f51ad48e`; os commits documentais posteriores permanecem na mesma `main`.
+- Branch: `main`; SHA do código funcional: `f51ad48e`; SHA documental/operacional validado: `d8f10447f6ce77c5e94c5510927ef78c8dc3f7b5`.
 - Commits desta correção: `dd571f23`, `b841d50e`, `59b1c51e`, `f51ad48e`.
 - Gates finais: `npm test` 1707 pass / 0 fail / 13.988 asserts; `npm run lint` exit 0; `npm run build` exit 0; `npm run check:bundle-size` 1831,32/1860 KB; sem sourcemaps públicos.
-- GitHub: Quality Gates, Typecheck/unit, ESLint a11y, bundle-budget, Module Design System Parity e MX Atomic Design Enforcement passaram no SHA `a81c3f86` (Quality run `30847366641`; Gitleaks push `30847358188`). A auditoria manual histórica do Gitleaks (run `30847366721`) encontrou 77 achados antigos; isso não foi mascarado.
-- Vercel: deployment atual da `main` `dpl_7bfYjjwodRs4sM8zHtD66N8RV9fh`, `READY`.
+- GitHub: Quality Gates, Typecheck/unit, ESLint a11y, bundle-budget, Module Design System Parity e MX Atomic Design Enforcement passaram no SHA `d8f10447` (Quality run `30848652260`; Gitleaks push `30848652381`). A auditoria manual histórica do Gitleaks (run `30847366721`) encontrou 77 achados antigos; isso não foi mascarado.
+- Vercel: deployment atual da `main` `dpl_Fo6p841PvUk6aLMKcnUkUyrUwCAY`, `READY`.
 - Preview/deployment URL: `https://mxperformance-c6fdi33ax-synvolt.vercel.app`; produção: `https://mxperformance.com.br`.
 
 ## 39.4 Evidências visuais
@@ -47,7 +47,9 @@ Status atual: **release da correção concluído; prompt mestre permanece parcia
 
 - Projeto: `mxperformance` / equipe `synvolt`.
 - Node configurado: `24.x`.
-- Deployment funcional da correção: `dpl_m2uGGrqo3PezodqcwTFPDagDepYw`; deployment atual da `main`: `dpl_7bfYjjwodRs4sM8zHtD66N8RV9fh`, `READY`, com aliases `www.mxperformance.com.br`, `mxperformance.com.br` e `mxperformance.vercel.app`.
+- Deployment funcional da correção: `dpl_m2uGGrqo3PezodqcwTFPDagDepYw`; deployment atual da `main`: `dpl_Fo6p841PvUk6aLMKcnUkUyrUwCAY`, `READY`, com aliases `www.mxperformance.com.br`, `mxperformance.com.br` e `mxperformance.vercel.app`.
+- `/api/health` retornou HTTP 200, `healthy`, com Vercel, Supabase API, database e crons críticos `ok`; release reportada pelo health: `d8f10447f6ce77c5e94c5510927ef78c8dc3f7b5`.
+- `/relatorios/performance-vendas` retornou HTTP 200 no domínio oficial.
 - Smoke final autenticado confirmou os aliases oficiais, a rota corrigida e os dados reais.
 
 ## 39.7 Sentry

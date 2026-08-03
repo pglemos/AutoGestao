@@ -1,6 +1,6 @@
 # MX Unificação Total — Progresso
 
-Atualizado em 2026-08-03 após o SHA `a81c3f86`. Execução direta no branch `main`, sem criar branch ou worktree, conforme decisão explícita do solicitante.
+Atualizado em 2026-08-03 após o SHA `d8f10447`. Execução direta no branch `main`, sem criar branch ou worktree, conforme decisão explícita do solicitante.
 
 ## Tarefa
 
@@ -56,7 +56,9 @@ Os gates locais anteriores estavam verdes, mas a matriz E2E longa encontrou a ro
 - `npm run validate:agents`: exit 0, 121 warnings históricos.
 - Produção: `/relatorios/performance-vendas` autenticada como Administrador Geral, dados reais renderizados e sem overflow horizontal; deployment vigente sem a correção local.
 - Pós-patch final: `npm test` 1707 pass, 0 fail, 13.988 asserts; `npm run build` exit 0; `npm run lint` exit 0; `npm run check:bundle-size` 1831,32/1860 KB, todos os chunks dentro do budget.
-- Produção final do código funcional: `f51ad48e`; deployment atual da `main`/evidência operacional: `a81c3f86` em `dpl_7bfYjjwodRs4sM8zHtD66N8RV9fh`, `READY`, aliases oficiais ativos.
+- Produção final do código funcional: `f51ad48e`; deployment atual da `main`/evidência operacional: `d8f10447` em `dpl_Fo6p841PvUk6aLMKcnUkUyrUwCAY`, `READY`, aliases oficiais ativos.
+- `/api/health`: HTTP 200, `healthy`, Vercel/Supabase API/database/crons críticos `ok`, release `d8f10447f6ce77c5e94c5510927ef78c8dc3f7b5`.
+- `/relatorios/performance-vendas`: HTTP 200 em `https://mxperformance.com.br`.
 - `/home`: bloqueio de autorização esperado para `administrador_geral`, sem erro de console e sem overflow.
 - Evidência visual final revisada: `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas-final-f51ad48e.png`.
 
@@ -69,7 +71,7 @@ Correção local aplicada, publicada e validada em produção. O warning Rechart
 - `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas.png`
 - `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas-metrics.json`
 - Commits desta etapa: `b841d50e`, `59b1c51e`, `f51ad48e`.
-- Deployment funcional validado: `dpl_m2uGGrqo3PezodqcwTFPDagDepYw`; deployment atual da `main`: `dpl_7bfYjjwodRs4sM8zHtD66N8RV9fh`, `READY`, aliases oficiais ativos.
+- Deployment funcional validado: `dpl_m2uGGrqo3PezodqcwTFPDagDepYw`; deployment atual da `main`: `dpl_Fo6p841PvUk6aLMKcnUkUyrUwCAY`, `READY`, aliases oficiais ativos.
 - CodeRabbit CLI `0.7.1` autenticado executou revisão contra `1480ea42`: 6 issues; as duas issues documentais foram corrigidas, três issues permanecem em arquivos concorrentes de pré-cadastro e uma em teste concorrente.
 - Sentry API read-only confirmou organização `synvolt`, projeto `mx-performance-frontend` e release `a81c3f86d391dd5646feaab8f8443adad1a370d5`; evento controlado `21d41cfbda2d407e9c424f0ae488313f` chegou com tags de produção, rota e release, issue `MX-PERFORMANCE-FRONTEND-5` foi resolvida. O plugin local informou upload de source maps, mas a listagem Sentry/CLI retornou 0 arquivos; stack trace desminificado permanece não comprovado.
 - `sentry-cli` global está ausente; `npx @sentry/cli` 2.58.5 foi usado somente para validação read-only.
