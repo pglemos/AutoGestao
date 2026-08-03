@@ -20,7 +20,7 @@ Status atual: **release da correção concluído; prompt mestre permanece parcia
 
 ## 39.3 Evidências técnicas
 
-- Branch: `main`; `HEAD` e `origin/main`: `f51ad48e`.
+- Branch: `main`; SHA do código funcional publicado: `f51ad48e`; os commits documentais posteriores permanecem na mesma `main`.
 - Commits desta correção: `dd571f23`, `b841d50e`, `59b1c51e`, `f51ad48e`.
 - Gates finais: `npm test` 1707 pass / 0 fail / 13.988 asserts; `npm run lint` exit 0; `npm run build` exit 0; `npm run check:bundle-size` 1831,32/1860 KB; sem sourcemaps públicos.
 - GitHub: nenhum workflow Actions foi associado ao SHA; o check externo Vercel terminou `success`.
