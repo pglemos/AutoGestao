@@ -75,8 +75,11 @@ test.describe('Agenda admin filters', () => {
     // A tela não expõe um título "Agenda MX" — seu único h1 é o mês corrente
     // do calendário (ver docs/audits/2026-07-31-achados-visuais-agenda.md).
     // Ancorar no conteúdo principal e no controle de filtros, que são estáveis.
+    // Pelo nome acessível, e não pelo texto: abaixo de sm o rótulo do botão é
+    // `hidden sm:inline` e sobra só o ícone, então `getByText` reprovava a
+    // suíte mobile por uma decisão de layout, não por defeito.
     await expect(page.locator('main#main-content')).toBeVisible({ timeout: 15000 })
-    await expect(page.getByText('Filtros').first()).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('button', { name: 'Filtros' }).first()).toBeVisible({ timeout: 15000 })
     await expect(page.locator('#agenda-consultant-filter')).toHaveValue(consultantA.id)
     await expectVisitListed(page, clientToday.name)
     await expectVisitListed(page, clientNextWeek.name)
@@ -134,8 +137,11 @@ test.describe('Agenda admin filters', () => {
     // A tela não expõe um título "Agenda MX" — seu único h1 é o mês corrente
     // do calendário (ver docs/audits/2026-07-31-achados-visuais-agenda.md).
     // Ancorar no conteúdo principal e no controle de filtros, que são estáveis.
+    // Pelo nome acessível, e não pelo texto: abaixo de sm o rótulo do botão é
+    // `hidden sm:inline` e sobra só o ícone, então `getByText` reprovava a
+    // suíte mobile por uma decisão de layout, não por defeito.
     await expect(page.locator('main#main-content')).toBeVisible({ timeout: 15000 })
-    await expect(page.getByText('Filtros').first()).toBeVisible({ timeout: 15000 })
+    await expect(page.getByRole('button', { name: 'Filtros' }).first()).toBeVisible({ timeout: 15000 })
     await expect(page.locator('#agenda-consultant-filter')).toHaveCount(0)
     await expect(page).not.toHaveURL(/consultant=/)
     await expectVisitListed(page, ownClient.name)
