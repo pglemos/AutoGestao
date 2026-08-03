@@ -231,7 +231,7 @@ export function buildTeamRows(teamProgress: TeamProgress, trainingCount: number)
 function UniversityHeader() {
   return (
     <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-      <div className="flex items-center gap-3">
+      <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-center">
         <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
           <GraduationCap size={20} />
         </span>
@@ -241,7 +241,7 @@ function UniversityHeader() {
             Desenvolva suas habilidades de liderança e acompanhe a evolução da sua equipe.
           </p>
         </div>
-        <div className="ml-auto shrink-0">
+        <div className="w-full shrink-0 md:ml-auto md:w-auto">
           <ContentSuggestionDialog />
         </div>
       </div>

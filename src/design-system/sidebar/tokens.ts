@@ -56,7 +56,7 @@ export const SIDEBAR = {
   headerCollapsed: 'justify-center px-2',
   brandLogo: 'h-7 w-7 shrink-0 object-contain',
   brandTitle: 'truncate text-[13px] font-black tracking-tight text-slate-900',
-  brandModule: 'mt-0.5 truncate text-[10px] font-bold uppercase tracking-[0.14em] text-emerald-700',
+  brandModule: 'mt-0.5 truncate text-[8px] font-bold uppercase tracking-[0.14em] text-emerald-700',
   toggle:
     'flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] border border-mxsb-line bg-white text-slate-500 outline-none transition-colors hover:bg-slate-50 hover:text-slate-800 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
 

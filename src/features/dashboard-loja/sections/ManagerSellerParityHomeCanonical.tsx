@@ -540,7 +540,7 @@ function FinancialRadar({ team }: { team: ManagerTeamFocusItem[] }) {
   const active = team.filter(item => item.appointmentsToday > 0).length
 
   return (
-    <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <article className="min-w-0 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
         <DollarSign size={18} className="text-emerald-600" />
         <div>
@@ -595,7 +595,7 @@ function AppointmentsChart({
           Nenhum agendamento confirmado válido hoje.
         </div>
       ) : (
-        <div className="h-64">
+        <div className="h-64 min-w-0">
           <ResponsiveContainer width="100%" height="100%">
             <BarChart data={data} layout="vertical" margin={{ top: 0, right: 28, left: 20, bottom: 0 }}>
               <XAxis

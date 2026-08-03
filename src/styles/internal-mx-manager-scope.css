@@ -277,6 +277,21 @@
   font-weight: 400;
 }
 
+/*
+ * Campos com ícone à esquerda precisam preservar a área reservada pelo
+ * componente (`pl-9`, `pl-10`, `pl-12`, etc.). O padding-inline do template
+ * tem especificidade maior que as utilities do Tailwind e, antes deste
+ * ajuste, recolocava o texto sobre o ícone em modais e filtros.
+ *
+ * O seletor usa a anatomia real do controle: um wrapper relativo com um
+ * ícone absoluto imediatamente antes do input/select. Assim campos comuns
+ * continuam com o padding canônico e apenas controles com adornment recebem
+ * a reserva necessária.
+ */
+.mx-canonical-template .relative:has(> svg[class*='left-'], > .absolute[class*='left-'] > svg, > .absolute[class*='left-'] svg) > :is(input, select, textarea) {
+  padding-left: 3rem !important;
+}
+
 .mx-canonical-template textarea {
   min-height: 7rem;
   border: 1px solid var(--mx-border-strong);

@@ -49,7 +49,7 @@ export function ContentSuggestionDialog() {
         type="button"
         variant="outline"
         onClick={() => setOpen(true)}
-        className="h-10 rounded-xl border-emerald-200 bg-white px-3 text-xs font-bold text-emerald-700 hover:bg-emerald-50"
+        className="h-10 w-full justify-center rounded-xl border-emerald-200 bg-white px-3 text-xs font-bold text-emerald-700 hover:bg-emerald-50 md:w-auto"
       >
         <Lightbulb size={15} className="mr-2" />
         Sugerir tema de aula
