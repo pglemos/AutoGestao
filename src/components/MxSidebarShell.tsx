@@ -497,7 +497,7 @@ export default function MxSidebarShell({
 
   return (
     <div className="h-[100dvh] overflow-hidden bg-gray-50 font-display text-gray-800">
-      <header className="fixed left-0 right-0 top-0 z-[90] flex h-[calc(72px+env(safe-area-inset-top))] items-center justify-between border-b border-gray-100 bg-white px-4 pt-[env(safe-area-inset-top)] shadow-sm xl:hidden">
+      <header className="fixed left-0 right-0 top-0 z-[90] grid h-[calc(72px+env(safe-area-inset-top))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-gray-100 bg-white px-4 pt-[env(safe-area-inset-top)] shadow-sm xl:hidden">
         <button
           type="button"
           aria-label="Abrir menu principal"
@@ -505,19 +505,19 @@ export default function MxSidebarShell({
           className="flex min-w-0 items-center gap-2 text-left outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
         >
           <img src={SIDEBAR_LOGO} alt="MX" className="h-9 w-9 shrink-0 object-contain" />
-          <span className="hidden min-w-0 leading-tight min-[430px]:block">
-            <span className="block text-[15px] font-bold tracking-tight text-gray-900">
+          <span className="hidden min-w-0 leading-tight min-[500px]:block">
+            <span className="block truncate text-[13px] font-bold tracking-tight text-gray-900">
               MX PERFORMANCE
             </span>
-            <span className="block text-[9px] font-bold uppercase tracking-[0.12em] text-emerald-700">
+            <span className="block truncate text-[8px] font-bold uppercase tracking-[0.12em] text-emerald-700">
               {moduleLabel}
             </span>
           </span>
         </button>
-        <div className="pointer-events-none absolute left-1/2 top-[calc(50%+env(safe-area-inset-top)/2)] max-w-[42vw] -translate-x-1/2 -translate-y-1/2 truncate text-center text-sm font-bold text-gray-800">
+        <div className="pointer-events-none min-w-0 max-w-[42vw] truncate px-1 text-center text-sm font-bold text-gray-800">
           {mobileTitle}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex items-center justify-self-end gap-2">
           <NotificationBellButton variant="light" />
           <button
             type="button"

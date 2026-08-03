@@ -101,6 +101,13 @@ describe('sidebar universal MX', () => {
     expect(shellSource).toContain('onStopSimulation')
   })
 
+  test('mantém o cabeçalho móvel em três colunas sem sobrepor a marca e o título', () => {
+    expect(shellSource).toContain('grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]')
+    expect(shellSource).toContain('min-[500px]:block')
+    expect(shellSource).toContain('justify-self-end')
+    expect(shellSource).not.toContain('absolute left-1/2 top-[calc(50%+env(safe-area-inset-top)/2)]')
+  })
+
   test('não depende do pacote visual legado', () => {
     expect(shellSource).not.toContain('mxds-')
     expect(shellSource).not.toContain('AppShell')
