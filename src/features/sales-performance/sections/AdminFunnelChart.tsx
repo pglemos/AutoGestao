@@ -26,7 +26,7 @@ export function AdminFunnelChart({ funnelData, metrics }: Props) {
         <CardDescription>Leads ate vendas no historico</CardDescription>
       </CardHeader>
       <CardContent className="h-mx-80 p-mx-lg">
-        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0}>
+        <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={0} initialDimension={{ width: 320, height: 280 }}>
           <BarChart data={funnelData} margin={{ top: 10, right: 10, left: 0, bottom: 0 }}>
             <CartesianGrid
               strokeDasharray="3 3"
