@@ -23,6 +23,7 @@ Os gates locais anteriores estavam verdes, mas a matriz E2E longa encontrou a ro
 - Adicionado `data-mx-module-header=""` ao cabeçalho.
 - Aplicadas as classes canônicas de superfície, mantendo as ações, a responsividade e a hierarquia existentes.
 - Plano de execução atualizado para refletir os gates reais de 03/08.
+- Corrigidos os quatro `ResponsiveContainer` da Performance de Vendas com `minWidth={0}`, `minHeight={0}` e dimensões iniciais positivas para eliminar o warning de montagem `width(-1)/height(-1)`.
 
 ### Arquivos
 
@@ -45,18 +46,23 @@ Os gates locais anteriores estavam verdes, mas a matriz E2E longa encontrou a ro
 - `npm run validate:structure`, `validate:parity`, `sync:ide:check`, `audit:routes-data`: exit 0.
 - `npm run validate:agents`: exit 0, 121 warnings históricos.
 - Produção: `/relatorios/performance-vendas` autenticada como Administrador Geral, dados reais renderizados e sem overflow horizontal; deployment vigente sem a correção local.
+- Pós-patch final: `npm test` 1707 pass, 0 fail, 13.988 asserts; `npm run build` exit 0; `npm run lint` exit 0; `npm run check:bundle-size` 1831,32/1860 KB, todos os chunks dentro do budget.
+- Produção final: `f51ad48e` em `dpl_m2uGGrqo3PezodqcwTFPDagDepYw`, `READY`, alias oficial, console sem warnings/errors, dados reais, header canônico e zero overflow.
+- `/home`: bloqueio de autorização esperado para `administrador_geral`, sem erro de console e sem overflow.
+- Evidência visual final revisada: `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas-final-f51ad48e.png`.
 
 ### Resultado
 
-Correção local aplicada e aprovada pela auditoria visual isolada. A aprovação de release depende do push/CI, do novo deployment `READY` e da repetição do smoke de produção.
+Correção local aplicada, publicada e validada em produção. O warning Recharts não reapareceu no carregamento limpo do SHA final.
 
 ### Evidências
 
 - `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas.png`
 - `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas-metrics.json`
-- Deployment observado: `dpl_8gzZzXj6QGey2r4Wu8nG4bJugpeH`, `READY`, aliases oficiais ativos.
+- Commits desta etapa: `b841d50e`, `59b1c51e`, `f51ad48e`.
+- Deployment final: `dpl_m2uGGrqo3PezodqcwTFPDagDepYw`, `READY`, aliases oficiais ativos.
 - CLI `sentry-cli`: ausente; validação real do Sentry ainda não comprovada.
 
 ### Próximo passo
 
-Revisar diff, commitar e fazer push na `main`; aguardar CI/Vercel; validar a rota corrigida e `/home`; fechar o relatório final com o status real.
+Manter o relatório final como fonte de verdade: a correção está liberada e as pendências de Sentry, CodeRabbit, CI GitHub completo e rotação de credenciais permanecem explícitas.
