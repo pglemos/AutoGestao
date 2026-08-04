@@ -14,6 +14,7 @@ import type { Store } from '@/types/database'
 import type { StoreUpdateFields } from '@/hooks/useTeam'
 import type { TabContext } from '@/features/configuracoes/types'
 import { requestToastConfirmation } from '@/lib/ui/confirmAction'
+import { normalizeStoreManagementForm } from '@/lib/store-management-form'
 
 export function LojasRedeTab({ isReadOnly }: TabContext) {
     const { role } = useAuth()
@@ -24,19 +25,27 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
     const [showCreate, setShowCreate] = useState(false)
     // O modal canônico deixa o rascunho com o chamador — a versão que esta aba
     // usava guardava o estado por dentro, e era a única das três a fazer isso.
-    const [newStore, setNewStore] = useState<NewStoreDraft>({ name: '', manager_email: '' })
+    const [newStore, setNewStore] = useState<NewStoreDraft>({ name: '', manager_email: '', management_mode: 'owner_managed' })
     const [creatingStore, setCreatingStore] = useState(false)
 
     const closeCreate = () => {
         setShowCreate(false)
-        setNewStore({ name: '', manager_email: '' })
+        setNewStore({ name: '', manager_email: '', management_mode: 'owner_managed' })
     }
 
     const handleCreateStore = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault()
         if (creatingStore) return
+        const management = normalizeStoreManagementForm({
+            mode: newStore.management_mode,
+            managerEmail: newStore.manager_email,
+        })
+        if (!management.ok) {
+            toast.error(management.error)
+            return
+        }
         setCreatingStore(true)
-        const { error } = await createStore(newStore.name, newStore.manager_email || undefined)
+        const { error } = await createStore(newStore.name, management.managerEmail || undefined)
         setCreatingStore(false)
         if (error) {
             toast.error(error)

@@ -10,7 +10,7 @@ type RouteRule = {
 
 const INTERNAL_ROLES = ['administrador_geral', 'administrador_mx', 'consultor_mx'] as const satisfies readonly UserRole[]
 const MANAGEMENT_ROLES = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente'] as const satisfies readonly UserRole[]
-const MANAGER_AND_INTERNAL_ROLES = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente'] as const satisfies readonly UserRole[]
+const MANAGER_AND_INTERNAL_ROLES = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente', 'dono'] as const satisfies readonly UserRole[]
 const INTERNAL_AND_OWNER = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono'] as const satisfies readonly UserRole[]
 const INTERNAL_AND_LEADERS = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'dono', 'gerente'] as const satisfies readonly UserRole[]
 const INTERNAL_AND_MANAGER = ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente'] as const satisfies readonly UserRole[]

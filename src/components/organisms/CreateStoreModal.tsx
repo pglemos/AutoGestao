@@ -5,10 +5,12 @@ import { Typography } from '@/components/atoms/Typography'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { Card } from '@/components/molecules/Card'
+import type { StoreManagementFormMode } from '@/lib/store-management-form'
 
 export interface NewStoreDraft {
   name: string
   manager_email: string
+  management_mode: StoreManagementFormMode
 }
 
 export interface CreateStoreModalProps {
@@ -112,6 +114,38 @@ export function CreateStoreModal({
                       className="!h-14 !px-6 font-bold uppercase tracking-widest"
                     />
                   </div>
+                  <fieldset className="space-y-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
+                    <Typography as="legend" variant="caption">Estrutura da gestão comercial</Typography>
+                    <label className="flex cursor-pointer items-start gap-mx-sm rounded-xl bg-white p-mx-sm">
+                      <input
+                        type="radio"
+                        name="store-management-mode"
+                        value="owner_managed"
+                        checked={newStore.management_mode === 'owner_managed'}
+                        onChange={() => setNewStore(previous => ({ ...previous, management_mode: 'owner_managed', manager_email: '' }))}
+                        className="mt-1 accent-brand-primary"
+                      />
+                      <span>
+                        <span className="block text-sm font-bold text-gray-800">Dono acumula a gestão</span>
+                        <span className="mt-1 block text-xs font-semibold text-gray-500">O dono terá acesso às rotinas gerenciais enquanto não existir gerente ativo.</span>
+                      </span>
+                    </label>
+                    <label className="flex cursor-pointer items-start gap-mx-sm rounded-xl bg-white p-mx-sm">
+                      <input
+                        type="radio"
+                        name="store-management-mode"
+                        value="manager_pending"
+                        checked={newStore.management_mode === 'manager_pending'}
+                        onChange={() => setNewStore(previous => ({ ...previous, management_mode: 'manager_pending' }))}
+                        className="mt-1 accent-brand-primary"
+                      />
+                      <span>
+                        <span className="block text-sm font-bold text-gray-800">Gerente será cadastrado</span>
+                        <span className="mt-1 block text-xs font-semibold text-gray-500">Até o vínculo do gerente ser ativado, o dono continua responsável.</span>
+                      </span>
+                    </label>
+                  </fieldset>
+
                   <div className="space-y-mx-xs">
                     <div className="flex justify-between items-center ml-2">
                       <Typography
@@ -123,7 +157,7 @@ export function CreateStoreModal({
                         E-mail do Gestor
                       </Typography>
                       <Badge variant="outline" className="text-mx-micro">
-                        Opcional
+                        {newStore.management_mode === 'manager_pending' ? 'Obrigatório' : 'Não utilizado'}
                       </Badge>
                     </div>
                     <div className="relative group">
@@ -138,6 +172,7 @@ export function CreateStoreModal({
                         type="email"
                         placeholder="gestor@unidade.com.br"
                         value={newStore.manager_email}
+                        disabled={newStore.management_mode === 'owner_managed'}
                         onChange={e =>
                           setNewStore(p => ({ ...p, manager_email: e.target.value }))
                         }

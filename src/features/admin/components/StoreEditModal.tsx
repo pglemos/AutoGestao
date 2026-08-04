@@ -10,6 +10,8 @@ import type { StoreUpdateFields } from '@/hooks/useTeam'
 import { getPreRegistrationLink } from '@/lib/utils'
 import { requestToastConfirmation } from '@/lib/ui/confirmAction'
 import { toast } from '@/lib/toast'
+import { useStoreManagementContext } from '@/hooks/useStoreManagementContext'
+import { normalizeStoreManagementForm, type StoreManagementFormMode } from '@/lib/store-management-form'
 
 interface StoreEditModalProps {
   open: boolean
@@ -20,6 +22,7 @@ interface StoreEditModalProps {
 }
 
 export function StoreEditModal({ open, store, saving = false, onClose, onSubmit }: StoreEditModalProps) {
+  const [managementMode, setManagementMode] = useState<StoreManagementFormMode>('owner_managed')
   const [form, setForm] = useState<StoreUpdateFields>({
     name: '',
     manager_email: null,
@@ -33,6 +36,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
 
   useEffect(() => {
     if (!store) return
+    setManagementMode(store.manager_email ? 'manager_pending' : 'owner_managed')
     setForm({
       name: store.name,
       manager_email: store.manager_email || '',
@@ -46,13 +50,26 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
   }, [store])
 
   const registrationLink = store ? getPreRegistrationLink(store.name) : ''
+  const management = useStoreManagementContext({
+    storeId: store?.id,
+    declaredManagerEmail: store?.manager_email,
+    enabled: open && Boolean(store),
+  })
 
   const submitStoreUpdate = async () => {
     if (!store) return
+    const normalizedManagement = normalizeStoreManagementForm({
+      mode: managementMode,
+      managerEmail: form.manager_email,
+    })
+    if (!normalizedManagement.ok) {
+      toast.error(normalizedManagement.error)
+      return
+    }
 
     await onSubmit(store.id, {
       name: form.name,
-      manager_email: form.manager_email || null,
+      manager_email: normalizedManagement.managerEmail,
       legal_name: form.legal_name || null,
       cnpj: form.cnpj || null,
       address: form.address || null,
@@ -211,12 +228,50 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
           </div>
         </div>
 
+        <fieldset className="space-y-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
+          <div className="flex items-center justify-between gap-mx-sm">
+            <Typography as="legend" variant="caption">Estrutura da gestão comercial</Typography>
+            {management.hasActiveManager && <Badge variant="success">Gerente ativo detectado</Badge>}
+          </div>
+          <label className="flex cursor-pointer items-start gap-mx-sm rounded-xl bg-white p-mx-sm">
+            <input
+              type="radio"
+              name="edit-store-management-mode"
+              value="owner_managed"
+              checked={managementMode === 'owner_managed'}
+              onChange={() => {
+                setManagementMode('owner_managed')
+                setForm(previous => ({ ...previous, manager_email: null }))
+              }}
+              className="mt-1 accent-brand-primary"
+            />
+            <span>
+              <span className="block text-sm font-bold text-gray-800">Dono acumula a gestão</span>
+              <span className="mt-1 block text-xs font-semibold text-gray-500">A ausência de vínculo ativo libera ao dono as rotinas gerenciais.</span>
+            </span>
+          </label>
+          <label className="flex cursor-pointer items-start gap-mx-sm rounded-xl bg-white p-mx-sm">
+            <input
+              type="radio"
+              name="edit-store-management-mode"
+              value="manager_pending"
+              checked={managementMode === 'manager_pending'}
+              onChange={() => setManagementMode('manager_pending')}
+              className="mt-1 accent-brand-primary"
+            />
+            <span>
+              <span className="block text-sm font-bold text-gray-800">Gerente será cadastrado</span>
+              <span className="mt-1 block text-xs font-semibold text-gray-500">O e-mail registra a pendência; somente o vínculo ativo confirma o gerente.</span>
+            </span>
+          </label>
+        </fieldset>
+
         <div className="space-y-mx-xs">
           <div className="flex items-center justify-between">
             <Typography as="label" htmlFor="edit-store-manager-email" variant="caption" className="">
               E-mail do Gestor
             </Typography>
-            <Badge variant="outline" className="text-mx-micro">Opcional</Badge>
+            <Badge variant="outline" className="text-mx-micro">{managementMode === 'manager_pending' ? 'Obrigatório' : 'Não utilizado'}</Badge>
           </div>
           <div className="relative">
             <Mail size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
@@ -224,6 +279,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               id="edit-store-manager-email"
               type="email"
               value={form.manager_email || ''}
+              disabled={managementMode === 'owner_managed'}
               onChange={(event) => setForm((prev) => ({ ...prev, manager_email: event.target.value }))}
               placeholder="gestor@unidade.com.br"
               className="!pl-14 !h-14 font-bold"

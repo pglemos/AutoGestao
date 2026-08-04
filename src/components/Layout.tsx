@@ -3,6 +3,7 @@ import { Outlet, useLocation, useNavigate } from 'react-router-dom'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useNotifications } from '@/hooks/useData'
 import { useFeedbacks } from '@/hooks/useFeedbacks'
+import { useStoreManagementContext } from '@/hooks/useStoreManagementContext'
 import {
   Home, CheckSquare, Trophy, GraduationCap, MessageSquare,
   Bell, Settings, Users, Target, Grid, LayoutDashboard, User,
@@ -27,6 +28,7 @@ import {
   ownerNavigationCanonicalPath,
 } from '@/features/dashboard-loja/sections/owner-cockpit/ownerBase44Config'
 import { OwnerProvider } from '@/components/owner/OwnerContext'
+import { buildOwnerCommercialNavigation } from '@/features/owner/ownerCommercialNavigation'
 import ConsultantRequestModal from '@/components/owner/ConsultantRequestModal'
 import { Toaster as OwnerToaster } from '@/components/ui/toaster'
 
@@ -95,6 +97,18 @@ const ownerItemIcons: Record<string, React.ReactNode> = {
   Mercado: <TrendingUp size={16} />,
   'Universidade MX': <GraduationCap size={16} />,
   'Falar com Consultor': <MessageSquare size={16} />,
+}
+
+const ownerCommercialItemIcons: Record<string, React.ReactNode> = {
+  'Visão Comercial': <TrendingUp size={16} />,
+  'Rotina da Equipe': <CalendarCheck size={16} />,
+  'Fechamento Diário': <CheckSquare size={16} />,
+  'Meta da Loja': <Target size={16} />,
+  Vendas: <BarChart3 size={16} />,
+  'Mentor Gerencial': <BrainCircuit size={16} />,
+  Desenvolvimento: <BookOpen size={16} />,
+  Ranking: <Trophy size={16} />,
+  'Universidade MX': <GraduationCap size={16} />,
 }
 
 const mapOwnerNavigationItem = (
@@ -193,6 +207,7 @@ function LayoutContent() {
     role,
     signOut,
     membership,
+    storeId,
     isSimulating,
     simulationRole,
     stopSimulation,
@@ -206,6 +221,11 @@ function LayoutContent() {
   const navigate = useNavigate()
   const location = useLocation()
   const [ownerLastUpdated, setOwnerLastUpdated] = React.useState(() => new Date())
+  const ownerManagement = useStoreManagementContext({
+    storeId,
+    declaredManagerEmail: membership?.store?.manager_email,
+    enabled: role === 'dono',
+  })
 
   const storeDashboardPath = membership?.store?.name
     ? `/lojas/${slugify(membership.store.name)}`
@@ -219,7 +239,22 @@ function LayoutContent() {
     ? `${storeDashboardPath}/consultor-ia`
     : '/lojas'
   const categories = React.useMemo(() => {
-    const baseCategories = role ? (navConfig[role] || []) : []
+    const baseCategories = role ? [...(navConfig[role] || [])] : []
+    if (role === 'dono') {
+      const commercial = buildOwnerCommercialNavigation(ownerManagement)
+      baseCategories.push({
+        category: commercial.label,
+        icon: <TrendingUp size={22} />,
+        items: commercial.items.map((item, index) => ({
+          label: item.label,
+          path: item.path,
+          icon: ownerCommercialItemIcons[item.label] ?? <Grid size={16} />,
+          badge: index === 0 ? commercial.badge : undefined,
+          badgeTone: index === 0 ? commercial.badgeTone : undefined,
+        })),
+      })
+    }
+
     return baseCategories
       .map((category) => {
         const items = category.items
@@ -236,7 +271,7 @@ function LayoutContent() {
         return { ...category, items }
       })
       .filter((category) => category.items.length > 0)
-  }, [role, storeConsultorIaPath, storeDashboardPath, storeTeamPath])
+  }, [ownerManagement, role, storeConsultorIaPath, storeDashboardPath, storeTeamPath])
 
   const perfilVisivel = role
     ? rotulosPerfil[role] || 'Perfil autorizado'

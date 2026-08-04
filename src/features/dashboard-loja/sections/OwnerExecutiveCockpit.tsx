@@ -26,6 +26,7 @@ import { ConsultorIaStoreSection } from '@/features/central-mx/sections/Consulto
 import { UniversidadeMx } from '@/features/universidade/sections/UniversidadeMx'
 
 import { OwnerHome } from './owner-cockpit/OwnerHome'
+import { OwnerManagementNotice } from '@/features/owner/OwnerManagementNotice'
 import { StrategicPlanningView } from './owner-cockpit/StrategicPlanningView'
 import { ResultsView } from './owner-cockpit/ResultsView'
 import { AlertsView } from './owner-cockpit/AlertsView'
@@ -150,6 +151,11 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
         title={greetingTitle}
         subtitle="Aqui está o panorama da sua loja hoje."
         actions={null}
+      />
+
+      <OwnerManagementNotice
+        storeId={data.operationalStore?.id}
+        managerEmail={data.operationalStore?.manager_email}
       />
 
       {section === 'home' && (

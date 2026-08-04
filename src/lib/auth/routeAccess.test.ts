@@ -94,7 +94,7 @@ describe('route access matrix', () => {
     ]
     for (const route of routes) {
       expect(canAccessPath(route, 'gerente')).toBe(true)
-      expect(canAccessPath(route, 'dono')).toBe(route !== '/gerente/rotina-equipe')
+      expect(canAccessPath(route, 'dono')).toBe(true)
       expect(canAccessPath(route, 'administrador_mx')).toBe(true)
       expect(canAccessPath(route, 'vendedor')).toBe(false)
     }

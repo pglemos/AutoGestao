@@ -54,7 +54,8 @@ export function DashboardLoja() {
     return tab === 'metas' || tab === 'equipe' || tab === 'vendas' ? tab : 'performance'
   }, [location.pathname, location.search])
   const isFocusedRolePerformance = (isOwner || role === 'gerente') && activeTab === 'performance'
-  const isManagerSection = role === 'gerente' && activeTab !== 'performance'
+  const isManagerOperationalView = (role === 'gerente' || role === 'dono') && location.pathname.startsWith('/gerente/')
+  const isManagerSection = isManagerOperationalView && activeTab !== 'performance'
 
   const handleTabChange = useCallback((tab: DashboardTab) => {
     const params = new URLSearchParams(location.search)
@@ -160,13 +161,13 @@ export function DashboardLoja() {
               </div>
             </>
       ) : activeTab === 'equipe' ? (
-        role === 'gerente'
+        isManagerOperationalView
           ? <ManagerTeamPerformance data={data} storeName={data.metrics.storeName} selectableStores={selectableStores} onStoreChange={setActiveStoreId} />
           : <StoreTeamPanel storeId={selectedStoreId} storeName={data.metrics.storeName} />
       ) : activeTab === 'vendas' ? (
         <VendasFechadasLoja
           storeId={selectedStoreId}
-          showManagerHeader={role === 'gerente'}
+          showManagerHeader={isManagerOperationalView}
           selectableStores={selectableStores}
           onStoreChange={setActiveStoreId}
         />

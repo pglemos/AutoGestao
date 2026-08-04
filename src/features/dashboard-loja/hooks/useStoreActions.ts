@@ -5,6 +5,7 @@ import { isPerfilInternoMx } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
 import { requestToastConfirmation } from '@/lib/ui/confirmAction'
 import { slugify } from '@/lib/utils'
+import { normalizeStoreManagementForm } from '@/lib/store-management-form'
 import type { Store, UserRole } from '@/types/database'
 
 type UseStoreActionsInput = {
@@ -40,7 +41,7 @@ export function useStoreActions({
   const [savingStore, setSavingStore] = useState(false)
   const [creatingStore, setCreatingStore] = useState(false)
   const [deletingStore, setDeletingStore] = useState(false)
-  const [newStore, setNewStore] = useState({ name: '', manager_email: '' })
+  const [newStore, setNewStore] = useState({ name: '', manager_email: '', management_mode: 'owner_managed' as const })
 
   const handleStoreUpdate = async (id: string, updates: Parameters<typeof updateStore>[1]) => {
     setSavingStore(true)
@@ -61,12 +62,17 @@ export function useStoreActions({
   const handleCreateStore = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
     if (!newStore.name.trim()) { toast.error('Informe o nome da loja.'); return }
+    const management = normalizeStoreManagementForm({
+      mode: newStore.management_mode,
+      managerEmail: newStore.manager_email,
+    })
+    if (!management.ok) { toast.error(management.error); return }
     setCreatingStore(true)
     try {
-      const { error } = await createStore(newStore.name, newStore.manager_email || undefined)
+      const { error } = await createStore(newStore.name, management.managerEmail || undefined)
       if (error) { toast.error(error); return }
       const createdName = newStore.name
-      setNewStore({ name: '', manager_email: '' })
+      setNewStore({ name: '', manager_email: '', management_mode: 'owner_managed' })
       setCreateStoreOpen(false)
       await refetchStores()
       toast.success('Loja criada com sucesso.')

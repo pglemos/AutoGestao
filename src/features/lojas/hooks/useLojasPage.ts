@@ -9,6 +9,7 @@ import { getPreRegistrationLink } from '@/lib/utils'
 import type { Store } from '@/types/database'
 import { requestToastConfirmation } from '@/lib/ui/confirmAction'
 import { DESTRUCTIVE_ACTION_LABELS } from '@/lib/ui/actionLabels'
+import { normalizeStoreManagementForm } from '@/lib/store-management-form'
 
 /**
  * Hook orquestrador da page Lojas.
@@ -36,7 +37,7 @@ export function useLojasPage() {
   const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null)
   const [copyError, setCopyError] = useState<string | null>(null)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [newStore, setNewStore] = useState({ name: '', manager_email: '' })
+  const [newStore, setNewStore] = useState({ name: '', manager_email: '', management_mode: 'owner_managed' as const })
   const [creating, setCreating] = useState(false)
   const [editingStore, setEditingStore] = useState<Store | null>(null)
   const [savingStore, setSavingStore] = useState(false)
@@ -134,19 +135,27 @@ export function useLojasPage() {
         toast.error('Nome da unidade é obrigatório')
         return
       }
+      const management = normalizeStoreManagementForm({
+        mode: newStore.management_mode,
+        managerEmail: newStore.manager_email,
+      })
+      if (!management.ok) {
+        toast.error(management.error)
+        return
+      }
       setCreating(true)
-      const { error } = await createStore(newStore.name, newStore.manager_email)
+      const { error } = await createStore(newStore.name, management.managerEmail || undefined)
       setCreating(false)
       if (error) {
         toast.error(error)
       } else {
         toast.success('Unidade operacional criada com sucesso!')
         setIsCreateModalOpen(false)
-        setNewStore({ name: '', manager_email: '' })
+        setNewStore({ name: '', manager_email: '', management_mode: 'owner_managed' })
         await handleRefresh()
       }
     },
-    [createStore, handleRefresh, newStore.manager_email, newStore.name],
+    [createStore, handleRefresh, newStore.management_mode, newStore.manager_email, newStore.name],
   )
 
   const handleStoreUpdate = useCallback(async (id: string, updates: Partial<StoreUpdateFields>) => {
