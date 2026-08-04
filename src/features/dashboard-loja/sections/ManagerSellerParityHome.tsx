@@ -79,7 +79,8 @@ export function ManagerSellerParityHome({
     )
   }
 
-  const activeSellers = data.sellers.filter(seller => seller.active && !seller.is_venda_loja)
+  // `is_venda_loja` não exclui vendedor da equipe — ver useRanking.
+  const activeSellers = data.sellers.filter(seller => seller.active)
   const activeSellerIds = new Set(activeSellers.map(seller => seller.id))
   const dailyCheckins = data.checkins.filter(checkin => activeSellerIds.has(checkin.seller_user_id))
   const monthlyCheckins = data.managerMonthlyCheckins.filter(checkin => activeSellerIds.has(checkin.seller_user_id))

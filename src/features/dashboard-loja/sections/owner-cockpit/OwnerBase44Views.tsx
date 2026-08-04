@@ -88,7 +88,8 @@ export function OwnerRoutineView({
       0,
     )
 
-  const activeSellers = (data.sellers || []).filter(s => s.active && !s.is_venda_loja)
+  // `is_venda_loja` não exclui vendedor da visão do dono — ver useRanking.
+  const activeSellers = (data.sellers || []).filter(s => s.active)
   const sellerStatus = useMemo(() => {
     const checkinsBySeller = (data.checkins || []).reduce((acc, c) => {
       if (!acc[c.seller_user_id]) acc[c.seller_user_id] = []

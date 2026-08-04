@@ -160,7 +160,6 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
         if (!members) return
 
         const storeGoal = rules?.monthly_goal || 0
-        const includeVendaLojaInGoal = rules?.include_venda_loja_in_individual_goal || false
 
         const routineBySeller = new Map<string, { completed: number; total: number }>()
         for (const action of routineRows) {
@@ -171,8 +170,13 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
         }
         
         const aggregated = new Map<string, { leads: number; agd: number; visitas: number; vnd: number; vnd_yesterday: number; name: string; avatarUrl: string | null; isVendaLoja: boolean }>()
-        const realSellersCount = members.filter((m) => !(m.users as User | undefined)?.is_venda_loja).length
-        const goalDivisor = realSellersCount + (includeVendaLojaInGoal ? members.filter((m) => (m.users as User | undefined)?.is_venda_loja).length : 0)
+        // Todo integrante vinculado à loja vende e entra no rateio da meta.
+        // `is_venda_loja` continua existindo como marcação de cadastro, mas não
+        // remove ninguém da contagem: em produção 148 dos 159 vendedores ativos
+        // estão marcados, e excluí-los zerava a meta e esvaziava o ranking de
+        // 28 lojas inteiras.
+        const realSellersCount = members.length
+        const goalDivisor = realSellersCount
 
         const daysInfo = getDiasInfo()
 
@@ -199,9 +203,7 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
 
         const entries: RankingEntry[] = Array.from(aggregated.entries())
             .map(([userId, data]) => {
-                const meta = data.isVendaLoja 
-                    ? (includeVendaLojaInGoal ? Math.round(storeGoal / Math.max(goalDivisor, 1)) : 0)
-                    : Math.round(storeGoal / Math.max(goalDivisor || realSellersCount, 1))
+                const meta = Math.round(storeGoal / Math.max(goalDivisor, 1))
                 const routine = routineBySeller.get(userId)
 
                 return {
@@ -223,9 +225,7 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
                 }
             })
             .sort((a, b) => {
-                // Venda Loja sempre pro final no critério de desempate técnico, se empatar em vendas
                 if (b.vnd_total !== a.vnd_total) return b.vnd_total - a.vnd_total
-                if (a.is_venda_loja !== b.is_venda_loja) return a.is_venda_loja ? 1 : -1
                 return b.visitas - a.visitas
             })
             .map((e, i) => {
@@ -235,9 +235,9 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
                 const efficiency = targetToday > 0 ? (e.vnd_total / targetToday) * 100 : 100
                 const status = getOperationalStatus(efficiency, 100) // Ranking presume check-in p/ quem aparece
 
-                const projecao = e.is_venda_loja ? e.vnd_total : Math.round((e.vnd_total / Math.max(diasInfo.decorridos, 1)) * diasInfo.total)
-                const ritmo = e.is_venda_loja ? 0 : Math.max(0, Math.ceil((e.meta - e.vnd_total) / Math.max(diasInfo.restantes, 1)))
-                const gap = e.is_venda_loja ? 0 : Math.max(0, e.meta - e.vnd_total)
+                const projecao = Math.round((e.vnd_total / Math.max(diasInfo.decorridos, 1)) * diasInfo.total)
+                const ritmo = Math.max(0, Math.ceil((e.meta - e.vnd_total) / Math.max(diasInfo.restantes, 1)))
+                const gap = Math.max(0, e.meta - e.vnd_total)
 
                 return { 
                     ...e, 

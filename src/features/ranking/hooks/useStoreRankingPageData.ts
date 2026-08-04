@@ -93,8 +93,9 @@ export function useStoreRankingPageData(options: { referenceMonth?: string } = {
   const metaPeriodo = (metaRules?.monthly_goal || 0) * MESES_POR_PERIODO[periodo]
 
   const todosVendedores = useMemo<RankedVendedor[]>(() => {
+    // Todo integrante da loja aparece no ranking. `is_venda_loja` é marcação de
+    // cadastro, não critério de exclusão — ver comentário em useRanking.
     return ranking
-      .filter(r => !r.is_venda_loja)
       .map(r => {
         const conversao = r.visitas > 0 ? Math.round((r.vnd_total / r.visitas) * 100) : 0
         const rotina = r.routine_execution ?? null

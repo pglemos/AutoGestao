@@ -101,7 +101,8 @@ export function useGlobalRankingPageData() {
         (!hideStoreNames && (r.store_name || '').toLocaleLowerCase('pt-BR').includes(term))
       )
     }
-    return list.filter(r => !r.is_venda_loja)
+    // `is_venda_loja` não exclui ninguém do ranking — ver useRanking.
+    return list
   }, [ranking, searchTerm, filterStore, hideStoreNames])
 
   const displayRanking = useMemo(() => {
@@ -178,15 +179,14 @@ export function useGlobalRankingPageData() {
   const top3 = useMemo(() => [...filtered].sort((a, b) => a.position - b.position).slice(0, 3), [filtered])
   const podiumOrder = useMemo(() => [top3[1], top3[0], top3[2]].filter(Boolean), [top3])
 
-  const totalVendedores = useMemo(() => filtered.filter(r => !r.is_venda_loja).length, [filtered])
+  const totalVendedores = useMemo(() => filtered.length, [filtered])
   const totalVendas = useMemo(() => filtered.reduce((acc, r) => acc + r.vnd_total, 0), [filtered])
   const totalLeads = useMemo(() => filtered.reduce((acc, r) => acc + r.leads, 0), [filtered])
   const totalAgd = useMemo(() => filtered.reduce((acc, r) => acc + r.agd_total, 0), [filtered])
   const totalVis = useMemo(() => filtered.reduce((acc, r) => acc + r.visitas, 0), [filtered])
   const checkinRate = useMemo(() => {
-    const actualSellers = filtered.filter(r => !r.is_venda_loja)
-    if (actualSellers.length === 0) return 0
-    return Math.round((actualSellers.filter(r => r.checked_in).length / actualSellers.length) * 100)
+    if (filtered.length === 0) return 0
+    return Math.round((filtered.filter(r => r.checked_in).length / filtered.length) * 100)
   }, [filtered])
 
   const handleRefresh = useCallback(async () => {
