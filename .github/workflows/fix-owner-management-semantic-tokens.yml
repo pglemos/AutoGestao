@@ -1,0 +1,36 @@
+name: Fix Owner Management Semantic Tokens
+
+on:
+  push:
+    branches:
+      - feature/owner-manager-context
+    paths:
+      - scripts/fix_owner_management_semantic_tokens.py
+      - .github/workflows/fix-owner-management-semantic-tokens.yml
+
+permissions:
+  contents: write
+
+jobs:
+  fix:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/owner-manager-context
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply semantic token fixes
+        run: python scripts/fix_owner_management_semantic_tokens.py
+      - name: Validate diff
+        run: git diff --check
+      - name: Commit fixes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src
+          git commit -m "fix: use semantic design tokens in store management"
+          git push origin HEAD:feature/owner-manager-context
