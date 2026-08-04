@@ -59,7 +59,7 @@ export function OwnerHome({
       <CommercialManagementNotice />
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         <OwnerKpiCard
-          title="Previsão de Vendas no Período"
+          title="Previsão de Vendas"
           value={`${forecastLabel} ${salesForecast === 1 ? 'venda' : 'vendas'}`}
           detail={`${formatInteger(confirmedAppointments)} agendamentos no período · necessidade ${dailyNeedLabel}`}
           trend={{

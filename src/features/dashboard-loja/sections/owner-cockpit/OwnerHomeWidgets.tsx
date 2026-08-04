@@ -100,8 +100,11 @@ export function PriorityIntervention({
     : { border: 'border-amber-200', bg: 'bg-amber-50', text: 'text-amber-600', dot: 'bg-amber-500', label: 'Atenção' }
   const details = [
     alert.department ? `Departamento: ${alert.department}` : null,
-    `Ação sugerida: ${alert.ctaLabel}`,
   ].filter((detail): detail is string => Boolean(detail))
+  // Alertas vindos da engine (`alertFromEngine`) preenchem `action` com o rótulo
+  // do botão de atalho, não com uma justificativa. Nesse caso o bloco "por que
+  // isso importa" ficaria repetindo o texto do CTA — melhor omitir.
+  const why = alert.action && alert.action !== alert.ctaLabel ? alert.action : null
 
   return (
     <section className={cn('rounded-2xl border-2 bg-white p-5 shadow-sm lg:p-6', style.border)}>
@@ -135,10 +138,12 @@ export function PriorityIntervention({
         </div>
       </div>
 
-      <div className="mt-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Por que isso importa</p>
-        <p className="mt-1 text-sm text-gray-800">{alert.action}</p>
-      </div>
+      {why && (
+        <div className="mt-4">
+          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Por que isso importa</p>
+          <p className="mt-1 text-sm text-gray-800">{why}</p>
+        </div>
+      )}
 
       <div className="mt-3 rounded-lg border border-emerald-600/20 bg-emerald-600/5 p-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">Direcionamento MX</p>
