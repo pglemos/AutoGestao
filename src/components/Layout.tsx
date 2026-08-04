@@ -129,14 +129,16 @@ const ownerNavConfig: NavCategory[] = OWNER_BASE44_NAVIGATION.map(section => ({
 const ownerCommercialCategory = (mode: 'gestao' | 'acompanhamento'): NavCategory => ({
   category: mode === 'gestao' ? 'GESTÃO COMERCIAL' : 'ACOMPANHAR OPERAÇÃO COMERCIAL',
   icon: <BriefcaseBusiness size={22} />,
+  // Mesma ordem canônica da seção 2.1 da Especificação Funcional do Módulo
+  // Gerencial v1.0, acrescida de Vendas e Funil Comercial.
   items: [
-    { label: 'Rotina da Equipe', path: '/gerente/rotina-equipe', icon: <CalendarCheck size={16} /> },
     { label: 'Fechamento Diário', path: '/fechamento-diario', icon: <CheckSquare size={16} /> },
+    { label: 'Rotina da Equipe', path: '/gerente/rotina-equipe', icon: <CalendarCheck size={16} /> },
+    { label: 'Minha Equipe', path: '/gerente/minha-equipe', icon: <Users size={16} /> },
     { label: 'Meta da Loja', path: '/gerente/meta-loja', icon: <Target size={16} /> },
+    { label: 'Mentor Gerencial', path: '/gerente/mentor', icon: <BrainCircuit size={16} /> },
     { label: 'Vendas', path: '/gerente/vendas', icon: <TrendingUp size={16} /> },
     { label: 'Funil Comercial', path: '/funil-vendas', icon: <Filter size={16} /> },
-    { label: 'Minha Equipe', path: '/gerente/minha-equipe', icon: <Users size={16} /> },
-    { label: 'Mentor Gerencial', path: '/gerente/mentor', icon: <BrainCircuit size={16} /> },
     { label: 'Feedbacks e PDI', path: '/gerente/feedbacks-pdis', icon: <BookOpen size={16} /> },
     { label: 'Ranking', path: '/gerente/ranking', icon: <Trophy size={16} /> },
   ],
@@ -155,20 +157,30 @@ const navConfig: Record<string, NavCategory[]> = {
       ],
     },
     {
-      category: 'ESTRATÉGIA',
-      icon: <Target size={22} />,
-      items: [
-        { label: 'Plano de Ação', path: '/plano-acao', icon: <ClipboardList size={16} /> },
-        { label: 'Meta da Loja', path: '/gerente/meta-loja', icon: <Target size={16} /> },
-        { label: 'Mentor Gerencial', path: '/gerente/mentor', icon: <BrainCircuit size={16} /> },
-      ],
-    },
-    {
+      // Ordem canônica da Especificação Funcional do Módulo Gerencial v1.0,
+      // seção 2.1: Rotina da Equipe e Minha Equipe vêm antes de Meta da Loja e
+      // Mentor Gerencial. Plano de Ação não consta na sidebar da especificação,
+      // mas a rota existe e continua acessível — mantido até decisão de produto.
       category: 'EQUIPE',
       icon: <Users size={22} />,
       items: [
         { label: 'Rotina da Equipe', path: '/gerente/rotina-equipe', icon: <CalendarCheck size={16} /> },
         { label: 'Minha Equipe', path: '/gerente/minha-equipe', icon: <Users size={16} /> },
+      ],
+    },
+    {
+      category: 'ESTRATÉGIA',
+      icon: <Target size={22} />,
+      items: [
+        { label: 'Meta da Loja', path: '/gerente/meta-loja', icon: <Target size={16} /> },
+        { label: 'Mentor Gerencial', path: '/gerente/mentor', icon: <BrainCircuit size={16} /> },
+        { label: 'Plano de Ação', path: '/plano-acao', icon: <ClipboardList size={16} /> },
+      ],
+    },
+    {
+      category: 'DESENVOLVIMENTO DA EQUIPE',
+      icon: <BookOpen size={22} />,
+      items: [
         { label: 'Desenvolvimento', path: '/gerente/feedbacks-pdis', icon: <BookOpen size={16} /> },
         { label: 'Ranking', path: '/gerente/ranking', icon: <Trophy size={16} /> },
       ],
