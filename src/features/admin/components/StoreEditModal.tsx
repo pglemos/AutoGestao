@@ -322,7 +322,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                     variant="ghost"
                     size="icon"
                     onClick={() => setForm((prev) => ({ ...prev, partners: (prev.partners || []).filter((_, itemIndex) => itemIndex !== index) }))}
-                    className="h-mx-10 w-mx-10 rounded-2xl text-status-error"
+                    className="h-mx-10 w-mx-10 rounded-2xl text-[hsl(var(--mx-color-danger))]"
                     aria-label={`Remover sócio ${index + 1}`}
                   >
                     <Trash2 size={15} />
@@ -390,7 +390,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
         </label>
 
         {!form.active && (
-          <div className="flex items-start gap-mx-sm rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-status-warning">
+          <div className="flex items-start gap-mx-sm rounded-2xl border border-[hsl(var(--mx-color-warning))]/30 bg-[hsl(var(--mx-color-warning-subtle))] p-mx-md text-[hsl(var(--mx-color-text-primary))]">
             <AlertTriangle size={18} className="shrink-0 mt-0.5" />
             <Typography variant="tiny" className="font-bold">
               A loja arquivada sai da lista de unidades ativas. Os registros historicos continuam preservados.

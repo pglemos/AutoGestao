@@ -203,7 +203,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                                                     size="icon"
                                                     onClick={() => handleDelete(store)}
                                                     aria-label="Excluir"
-                                                    className="h-mx-10 w-mx-10 rounded-2xl text-status-error hover:bg-status-error-surface"
+                                                    className="h-mx-10 w-mx-10 rounded-2xl text-[hsl(var(--mx-color-danger))] hover:bg-[hsl(var(--mx-color-danger-subtle))]"
                                                 >
                                                     <Trash2 size={16} />
                                                 </Button>
@@ -241,9 +241,9 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
 }
 
 function Mini({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone?: 'success' | 'brand' | 'error' }) {
-    const toneColor = tone === 'success' ? 'text-status-success' :
+    const toneColor = tone === 'success' ? 'text-[hsl(var(--mx-color-success))]' :
         tone === 'brand' ? 'text-emerald-600' :
-        tone === 'error' ? 'text-status-error' : 'text-gray-800'
+        tone === 'error' ? 'text-[hsl(var(--mx-color-danger))]' : 'text-gray-800'
     return (
         <Card className="p-mx-md border-none bg-white">
             <div className="flex items-center gap-mx-sm">
