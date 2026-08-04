@@ -22,6 +22,9 @@
 - Brief/report/review paths: `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA/.superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/task-1-brief.md`, `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA/.superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/task-1-report.md`.
 - Requirement: create and maintain the nine required `docs/execution/` files without secrets or placeholders.
 - Evidence update: round 1 revalidated Git, backup, branches, CLI access, and production; the public alias and latest READY deployment still show different releases and are documented in the report.
+- Task 1: fix round 1/5 (4 addressed, 0 open; minor freshness observation deferred; commits 9fdd484..cc0698f).
+- Task 1: minor (deferred): `docs/execution/2026-08-04-live-progress.md` retains its original baseline timestamp/SHA header alongside the later round-1 entry; triage in the whole-branch review.
+- Task 1: complete (commits 11a9465..cc0698f, review clean; 1 deferred minor).
 
 ## Task 2 — Gerente chart warning
 
