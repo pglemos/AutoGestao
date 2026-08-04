@@ -49,8 +49,8 @@ Checkout auditado anteriormente: `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451` (`20
 
 | Subitem | Estado | Observação |
 |---|---|---|
-| Alias público responde `/api/health` | `PASS` | serviço saudável |
-| READY recente consultado responde `/api/health` | `PASS` | serviço saudável |
+| Alias público responde `/api/health` | `TESTED_PRODUCTION` | serviço saudável — observação histórica no deployment pré-release (`1b99c0ab`) |
+| READY recente consultado responde `/api/health` | `TESTED_PRODUCTION` | serviço saudável — observação histórica no deployment pré-release (`7387fb32`) |
 | SHA local = SHA remoto | `PASS_WITH_FINDINGS` | divergência `0 9` |
 | SHA publicado = release runtime | `PASS_WITH_FINDINGS` | mismatch explícito |
 | Warning fix provado em produção | `IN_PROGRESS` | sem deployment do SHA `f7c36b98` |
