@@ -14,7 +14,7 @@ describe('Dono — contratos dos fluxos corrigidos', () => {
     expect(app).toContain("const OwnerPlanoDeAcao = lazy(() => import('@/pages/owner/PlanoDeAcao'))")
     expect(app).toContain('dono={<OwnerPlanoDeAcao />}')
     expect(app).toContain('dono={<OwnerPlanoEstrategico />}')
-    expect(app).toContain('dono={<OwnerHome />}')
+    expect(app).toContain('dono={<DashboardLoja />}')
     expect(app).toContain('<Route path="/dono/*" element={<OwnerLegacyPathRedirect />} />')
     expect(appShell).toContain('<Layout />')
     expect(appShell).not.toContain('OwnerShell')

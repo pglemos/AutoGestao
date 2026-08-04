@@ -47,7 +47,6 @@ const InternalActionPlanPage = lazy(() => import('@/features/internal-mx-plannin
 const InternalStrategicPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalStrategicPlanPage'))
 const InternalConsultingPage = lazy(() => import('@/features/internal-mx-planning/InternalConsultingPage'))
 const AppShell = lazy(() => import('@/components/AppShell'))
-const OwnerHome = lazy(() => import('@/pages/owner/OwnerHome'))
 const OwnerPlanoEstrategico = lazy(() => import('@/pages/owner/PlanoEstrategico'))
 const OwnerPlanoDeAcao = lazy(() => import('@/pages/owner/PlanoDeAcao'))
 const OwnerConsultoria = lazy(() => import('@/pages/owner/Consultoria'))
@@ -334,7 +333,7 @@ export default function App() {
 
                 <Route path="meu-dia" element={<RedirectWithSearch to="/home" />} />
                 <Route path="home" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<OwnerHome />} admin={<RoleRedirect />} />
+                  <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<RoleRedirect />} />
                 </Suspense>} />
                 <Route path="minha-remuneracao" element={<RedirectWithSearch to="/home" />} />
                 <Route path="lancamento-diario" element={<RedirectWithSearch to="/terminal-mx" />} />

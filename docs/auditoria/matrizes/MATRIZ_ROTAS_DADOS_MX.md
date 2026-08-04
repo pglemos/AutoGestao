@@ -38,7 +38,7 @@
 | `/team` | route | protegida | — | `/team` | — | `<TeamAliasRedirect />` |
 | `/equipe` | route | protegida | — | `/equipe` | — | `<TeamAliasRedirect />` |
 | `/meu-dia` | route | protegida | `/home` | `/meu-dia` | — | `<RedirectWithSearch to="/home" />` |
-| `/home` | route | protegida | — | `/home` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<OwnerHome />} admin={<RoleRedirect />} /> </Suspense>` |
+| `/home` | route | protegida | — | `/home` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<RoleRedirect />} /> </Suspense>` |
 | `/minha-remuneracao` | route | protegida | `/home` | `/minha-remuneracao` | — | `<RedirectWithSearch to="/home" />` |
 | `/lancamento-diario` | route | protegida | `/terminal-mx` | `/lancamento-diario` | — | `<RedirectWithSearch to="/terminal-mx" />` |
 | `/fechamento-diario` | route | protegida | — | `/fechamento-diario` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ManagerDailyClosing />} dono={<ManagerDailyClosing />} admin={<ManagerDailyClosing />} /> </Suspense>` |
