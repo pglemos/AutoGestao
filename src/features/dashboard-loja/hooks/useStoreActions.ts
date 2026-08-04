@@ -5,7 +5,7 @@ import { isPerfilInternoMx } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
 import { requestToastConfirmation } from '@/lib/ui/confirmAction'
 import { slugify } from '@/lib/utils'
-import { normalizeStoreManagementForm } from '@/lib/store-management-form'
+import { normalizeStoreManagementForm, type StoreManagementFormMode } from '@/lib/store-management-form'
 import type { Store, UserRole } from '@/types/database'
 
 type UseStoreActionsInput = {
@@ -41,7 +41,7 @@ export function useStoreActions({
   const [savingStore, setSavingStore] = useState(false)
   const [creatingStore, setCreatingStore] = useState(false)
   const [deletingStore, setDeletingStore] = useState(false)
-  const [newStore, setNewStore] = useState({ name: '', manager_email: '', management_mode: 'owner_managed' as const })
+  const [newStore, setNewStore] = useState<{ name: string; manager_email: string; management_mode: StoreManagementFormMode }>({ name: '', manager_email: '', management_mode: 'owner_managed' })
 
   const handleStoreUpdate = async (id: string, updates: Parameters<typeof updateStore>[1]) => {
     setSavingStore(true)
