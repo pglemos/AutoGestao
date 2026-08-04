@@ -1,5 +1,6 @@
 {
   "framework": "vite",
+  "ignoreCommand": "node scripts/vercel-ignore-build.mjs",
   "buildCommand": "npm run typecheck && node scripts/verify_carteira_base44_parity.mjs && npm run build",
   "outputDirectory": "dist",
   "github": {

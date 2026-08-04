@@ -149,6 +149,7 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 - Os testes do hook de consultoria do Dono e dos diálogos do Gerente foram isolados contra interferência assíncrona/DOM da suíte; a suíte completa passou novamente após `cleanup()` entre os testes do gate de simulação.
 - CodeRabbit `review --uncommitted --include-untracked --agent --light`: `findings: 0` após corrigir o gate de carregamento da simulação, a captura de contexto do payload e a proteção do baseline no workflow.
 - Nova tentativa CodeRabbit após o último ajuste de fixture em 2026-08-04 ficou **BLOCKED_EXTERNAL**: o serviço retornou `rate_limit` e informou indisponibilidade temporária para a conta/organização. O resultado `findings: 0` acima é a última revisão disponível antes desse ajuste, não uma revisão pós-ajuste.
+- Reexecução CodeRabbit após os ajustes desta continuação: `coderabbit review --uncommitted --base main` terminou com `No findings`.
 - CI remoto, Supabase remoto, Vercel, browser autenticado e publicação do SHA desta continuação ainda não foram declarados nesta atualização; dependem de validação externa posterior.
 
 ### File List
@@ -188,6 +189,14 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 - `supabase/tests/rls-matrix/setup.sql`
 - `supabase/tests/rls-matrix/runner.sql`
 - `package.json`
+- `package-lock.json`
+- `bun.lock`
+- `.aiox-core/package-lock.json`
+- `.aiox-core/scripts/diagnostics/health-dashboard/package-lock.json`
+- `whatsapp-service/package-lock.json`
+- `vercel.json`
+- `scripts/vercel-ignore-build.mjs`
+- `docs/reports/2026-08-04-main-total-autonomous-execution.md`
 - `.github/workflows/management-design-system-audit-v3.yml`
 - `docs/architecture/ADR-owner-shell-canonical.md`
 - `scripts/audit-management-design-system.mjs`
@@ -213,16 +222,49 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 
 ### Gate Decision
 
-**CONCERNS** — código e gates locais aprovados; release externo ainda não comprovado.
+**CONCERNS** — código e gates locais aprovados; o SHA atualmente publicado (`2f6eb499ab872cfdf4765047428743e4ae2b58af`) possui a evidência externa PASS abaixo, enquanto a publicação do commit desta continuação ainda é um gate pendente.
 
 | Área | Comando/evidência | Resultado |
 | --- | --- | --- |
-| CodeRabbit | revisão anterior + nova tentativa pós-ajuste | **CONCERNS** — última revisão disponível: `findings: 0`; tentativa atual `BLOCKED_EXTERNAL` por `rate_limit` |
+| CodeRabbit | `coderabbit review --uncommitted --base main` | **PASS** — `No findings`; tentativa anterior teve `rate_limit` e foi repetida |
 | Auditoria DS | `npm run audit:management-design-system` | PASS — 38 entradas, 328 arquivos auditados, 481 ocorrências históricas suprimidas por SHA, 0 violações atuais |
 | Testes | `npm test` | PASS — 1.723 testes, 14.031 assertions, 0 falhas |
 | Lint/typecheck/build | `npm run lint`; `npm run typecheck`; `npm run build` | PASS |
 | Carteira | `verify_carteira_base44_parity.mjs` + 11 testes de resiliência | PASS |
 | Bundle/migrations | `npm run check:bundle-size`; `check_migration_reversibility.mjs --changed-only` | PASS — 1.845,02/1.860 KB gzip; nenhuma migration alterada nesta continuação |
-| Release | GitHub Actions, Supabase remoto, Vercel `READY`, browser autenticado e `/carteira-clientes` no SHA final | **NOT RUN / BLOCKING EVIDENCE** |
+| Release | GitHub Actions, Supabase remoto, Vercel `READY`, browser autenticado e `/carteira-clientes` no SHA atualmente publicado | **PASS para `2f6eb499ab872cfdf4765047428743e4ae2b58af`; a continuação local ainda não foi publicada e os bloqueios externos mantêm `CONCERNS`** |
 
-QA não recomenda marcar a story como `Ready for Review`/concluída até a validação externa do SHA exato e do fluxo autenticado real.
+QA não recomenda marcar a story como concluída: a validação externa do SHA atualmente publicado e do fluxo autenticado real está registrada abaixo, mas a release desta continuação, o workflow Dependabot e os advisors históricos continuam pendentes.
+
+### Atualização de QA — 2026-08-04 — evidência autenticada pós-publicação
+
+**Gate permanece `CONCERNS`**: a validação de produção do SHA atualmente publicado foi executada e passou para os perfis fornecidos, mas a release desta continuação e os bloqueios externos de CodeRabbit/Dependabot e os avisos históricos do Supabase/GitHub continuam sem resolução nesta entrega.
+
+| Área | Evidência | Resultado |
+| --- | --- | --- |
+| SHA/deploy | `main`/produção em `2f6eb499ab872cfdf4765047428743e4ae2b58af`; Vercel `dpl_4RB5kgToE1p1y999jtXTzPRNZBEE` `READY`; HTTP 200 em `/carteira-clientes` | PASS |
+| Reload/network | Produção em `/carteira-clientes`; documento 200; Auth `/auth/v1/user` 200; consultas REST de usuário, vínculos, clientes, lojas e notificações 200; `Network.loadingFailed = 0` | PASS |
+| Console | Console de produção sem erros/avisos nos ciclos autenticados e após reload | PASS |
+| Responsividade | `390×844`, `768×1024`, `1024×768`, `1440×900`, `1920×1080`; `document.documentElement.scrollWidth === clientWidth` em todos os casos | PASS |
+| Scroll interno | Contêiner canônico `overflow-y-auto`: `scrollHeight=30374`, `clientHeight=684`; alcance do fim confirmado em `scrollTop=29689.5`, sem overflow horizontal do documento | PASS |
+| Perfis | Dono, Gerente, Vendedor e Administrador autenticaram, renderizaram seus shells/rotas autorizados, e encerraram sessão com retorno a `/login` | PASS |
+
+Resumo do smoke autenticado em `https://mxperformance.vercel.app`:
+
+- Dono: shell `Menu principal do Dono`, `Mentor Comercial`, `Carteira Ativa`, `Plano de Ataque`; `/carteira-clientes`; sem `Acesso restrito`.
+- Gerente: shell `Menu principal do Gerente`, `Mentor Comercial` e Carteira real em `/carteira-clientes`.
+- Vendedor: shell `Menu principal do Vendedor`, `Mentor Comercial` e dados reais em `/carteira-clientes`; no mobile a ação aparece corretamente com o rótulo compacto `Executar`.
+- Administrador: shell interno, acesso autorizado a `/painel`, sem `Acesso restrito`.
+
+Todos os quatro ciclos terminaram em `/login`, sem mutações destrutivas. Não foram armazenados ou incluídos nesta evidência e-mails, senhas, tokens, cookies ou cabeçalhos de autorização.
+
+Pendências que mantêm `CONCERNS`: workflow Dependabot dinâmico `30880352813` com falha na atualização de `undici`; advisories de dependência sem correção compatível/publicada; advisors históricos do Supabase ainda não tratados nesta story; e a publicação desta continuação.
+
+### Atualização de execução autônoma — 2026-08-04
+
+- [x] `whatsapp-service`: instalação limpa com `npm ci --ignore-scripts --legacy-peer-deps`, `node --check`, middleware auth e 3 testes Bun; `npm audit` retornou 0 vulnerabilidades.
+- [x] Dependências internas: `.aiox-core` resolve `brace-expansion@2.1.4` e `fast-uri@3.1.5`; health dashboard resolve `postcss@8.5.25` e `nanoid@3.3.17`; builds limpos passaram.
+- [x] Vercel: `ignoreCommand` adicionado ao `vercel.json`, com script seguro que ignora somente docs/QA e mantém build obrigatório para runtime/config/lock/migration/workflow; ranges documental e runtime testados com códigos 0/1.
+- [x] Supabase read-only: 332 migrations locais/remotas, 22 Edge Functions, 214 tabelas públicas, 218 advisors de segurança e 572 de performance catalogados; nenhuma alteração remota executada.
+- [x] Relatório final de execução criado em `docs/reports/2026-08-04-main-total-autonomous-execution.md`.
+- [ ] Release pós-commit desta continuação: commit/push, checks do SHA final, Vercel `READY` e smoke autenticado da rota no SHA publicado permanecem gates desta etapa.
