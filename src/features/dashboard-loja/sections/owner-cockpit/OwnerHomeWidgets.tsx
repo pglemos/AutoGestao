@@ -464,36 +464,76 @@ function EficaciaLegendRow({ color, label, value }: { color: string; label: stri
 export function OwnerDepartmentScoreGrid({ departments }: { departments: DepartmentScore[] }) {
   const navigate = useNavigate()
   return (
-    <Card className="border bg-white p-mx-md">
-      <div className="mb-mx-md flex items-center justify-between gap-mx-md">
-        <div className="flex items-center gap-mx-xs">
-          <Typography variant="h3" className="text-xl">Desempenho por Departamento</Typography>
-          <CircleHelp size={14} className="text-gray-500" />
+    // Espelha components/owner/home/DepartmentPerformance + DepartmentCard:
+    // anel compacto à esquerda, nome + chevron, pill de status e resumo em duas
+    // linhas — sem o semi-gauge grande que dobrava a altura da seção.
+    <section>
+      <div className="mb-3 flex items-end justify-between gap-4">
+        <div>
+          <h2 className="text-lg font-semibold text-gray-800">Desempenho por Departamento</h2>
+          <p className="mt-0.5 text-sm text-gray-500">Scores consolidados por área da loja.</p>
         </div>
         <Button type="button" variant="ghost" size="sm" onClick={() => navigate(ownerPath('departamentos'))}>Ver todas</Button>
       </div>
-      <div className="grid grid-cols-1 gap-mx-md sm:grid-cols-2 xl:grid-cols-3 2xl:grid-cols-6">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3">
         {departments.map((department) => {
           const classes = toneClasses[department.tone]
-          const hasData = department.score !== null
           return (
-            <button key={department.name} type="button" onClick={() => navigate(department.path)} className="rounded-xl border border-gray-100 bg-white p-mx-md text-left hover:shadow-sm transition-all focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/15 flex flex-col items-center">
-              <div className="flex w-full items-center gap-mx-sm">
-                <span className={cn('h-mx-9 w-mx-9 rounded-xl flex shrink-0 items-center justify-center', classes.bg)}>{department.icon}</span>
-                <Typography variant="p" className="text-sm truncate">{department.name}</Typography>
+            <button
+              key={department.name}
+              type="button"
+              onClick={() => navigate(department.path)}
+              className="w-full rounded-xl border border-gray-200 bg-white p-4 text-left shadow-sm transition-all hover:shadow-md focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/15"
+            >
+              <div className="flex items-center gap-3">
+                <div className="relative h-14 w-14 shrink-0">
+                  <DepartmentScoreRing score={department.score} tone={department.tone} />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <span className="text-base font-bold tracking-tight text-gray-800">{department.score ?? '--'}</span>
+                  </div>
+                </div>
+                <div className="min-w-0 flex-1">
+                  <div className="flex items-center justify-between gap-2">
+                    <p className="truncate text-sm font-semibold text-gray-800">{department.name}</p>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-gray-500" aria-hidden="true" />
+                  </div>
+                  <span className={cn('mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium', classes.soft)}>
+                    <span className={cn('h-1.5 w-1.5 rounded-full', classes.bar)} />
+                    {department.status}
+                  </span>
+                  <p className="mt-1.5 line-clamp-2 text-xs text-gray-500">{department.detail}</p>
+                </div>
               </div>
-              <div className="mt-mx-sm">
-                {hasData ? <OwnerSemiGauge value={department.score as number} /> : <OwnerSemiGauge value={0} muted />}
-              </div>
-              <div className="mt-mx-tiny flex flex-col items-center gap-mx-tiny">
-                <span className="text-3xl font-bold tabular-nums text-gray-800 leading-none">{department.score ?? '--'}</span>
-                <span className={cn('inline-flex items-center rounded-xl px-mx-sm py-mx-tiny text-mx-tiny font-bold uppercase tracking-tight', classes.soft)}>{department.status}</span>
-              </div>
-              <Typography variant="tiny" tone="muted" className="mt-mx-sm block min-h-mx-8 font-bold text-center w-full">{department.detail}</Typography>
             </button>
           )
         })}
       </div>
-    </Card>
+    </section>
+  )
+}
+
+function DepartmentScoreRing({ score, tone }: { score: number | null; tone: KpiTone }) {
+  const safe = Math.min(Math.max(Math.round(score ?? 0), 0), 100)
+  const radius = 24
+  const circumference = 2 * Math.PI * radius
+  return (
+    <svg viewBox="0 0 56 56" className="h-full w-full" aria-hidden="true">
+      <circle cx="28" cy="28" r={radius} fill="none" stroke="var(--color-border-subtle)" strokeWidth="5" />
+      {score !== null && (
+        <circle
+          cx="28"
+          cy="28"
+          r={radius}
+          fill="none"
+          stroke="currentColor"
+          className={toneClasses[tone].text}
+          strokeWidth="5"
+          strokeLinecap="round"
+          strokeDasharray={circumference}
+          strokeDashoffset={circumference * (1 - safe / 100)}
+          transform="rotate(-90 28 28)"
+        />
+      )}
+    </svg>
   )
 }
