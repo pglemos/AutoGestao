@@ -55,7 +55,7 @@ export function OwnerHome({
 
   return (
     <>
-      <div className="grid grid-cols-1 gap-mx-md sm:grid-cols-2 xl:grid-cols-[repeat(4,minmax(0,1fr))_220px]">
+      <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         <OwnerKpiCard
           title="Previsão de Vendas no Período"
           value={`${forecastLabel} ${salesForecast === 1 ? 'venda' : 'vendas'}`}

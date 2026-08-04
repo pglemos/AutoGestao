@@ -2,7 +2,7 @@ import React, { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
-  CalendarDays,
+  Home,
   LineChart as LineChartIcon,
   Package,
   ShieldCheck,
@@ -10,6 +10,8 @@ import {
   Users,
 } from 'lucide-react'
 import { useAuth } from '@/hooks/useAuth'
+import OwnerPageHeading from '@/components/owner/OwnerPageHeading'
+import { greeting } from './owner-cockpit/format'
 import type { useDashboardLojaData } from '../hooks/useDashboardLojaData'
 import { useCentralMxPlanosAcao } from '../hooks/useCentralMxPlanosAcao'
 import type { OwnerPerformanceAlert } from './PerformanceAlerts'
@@ -21,7 +23,7 @@ import { CentralMxBenchmarkInteractive } from './CentralMxBenchmarkInteractive'
 import { CentralMxPlanoSegmentadoPanel } from './CentralMxPlanoSegmentadoPanel'
 import { ConsultorIaStoreSection } from '@/features/central-mx/sections/ConsultorIaStoreSection'
 import { UniversidadeMx } from '@/features/universidade/sections/UniversidadeMx'
-import { OwnerCockpitHeader } from './owner-cockpit/primitives'
+
 import { OwnerHome } from './owner-cockpit/OwnerHome'
 import { StrategicPlanningView } from './owner-cockpit/StrategicPlanningView'
 import { ResultsView } from './owner-cockpit/ResultsView'
@@ -43,15 +45,15 @@ import {
   Mercado,
   UniversidadeMX,
 } from '@/pages/owner/Placeholders'
-  import {
-    alertFromEngine,
-    buildCentralMx,
-    buildPanoramaData,
-    currentPeriodLabel,
-    departmentFromEngine,
-    getOwnerDepartmentCode,
-    getOwnerSection,
-  } from './owner-cockpit/format'
+import {
+  alertFromEngine,
+  buildCentralMx,
+  buildPanoramaData,
+  currentPeriodLabel,
+  departmentFromEngine,
+  getOwnerDepartmentCode,
+  getOwnerSection,
+} from './owner-cockpit/format'
 
 type DashboardData = ReturnType<typeof useDashboardLojaData>
 
@@ -137,11 +139,14 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
     </>
   )
 
+  const firstName = (profile?.name || 'Dono').split(' ')[0]
+
   return (
     <section className="min-h-full space-y-mx-md bg-gray-50 p-mx-sm md:p-mx-lg">
-      <OwnerCockpitHeader
-        name={profile?.name || 'Nome não informado'}
-        periodLabel={periodLabel}
+      <OwnerPageHeading
+        icon={Home}
+        title={`${greeting()}, ${firstName}!`}
+        subtitle="Aqui está o panorama da sua loja hoje."
       />
 
       {section === 'home' && (

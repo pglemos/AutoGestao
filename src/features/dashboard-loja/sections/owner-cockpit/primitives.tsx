@@ -48,6 +48,26 @@ const statusDotClasses: Record<KpiTone, string> = {
   purple: 'bg-[var(--color-accent-purple)]',
 }
 
+const cardBorderClasses: Record<KpiTone, string> = {
+  success: 'border-status-success/30',
+  info: 'border-status-info/30',
+  warning: 'border-amber-200',
+  danger: 'border-red-200',
+  muted: 'border-gray-200',
+  brand: 'border-emerald-200',
+  purple: 'border-[var(--color-accent-purple)]/30',
+}
+
+const iconBgClasses: Record<KpiTone, string> = {
+  success: 'bg-status-success/10 text-status-success',
+  info: 'bg-status-info/10 text-status-info',
+  warning: 'bg-amber-50 text-amber-600',
+  danger: 'bg-red-50 text-red-600',
+  muted: 'bg-gray-50 text-gray-500',
+  brand: 'bg-emerald-50 text-emerald-600',
+  purple: 'bg-[var(--color-accent-purple-soft)] text-[var(--color-accent-purple)]',
+}
+
 export function OwnerKpiCard({
   title,
   value,
@@ -64,96 +84,117 @@ export function OwnerKpiCard({
   value: string
   detail: string
   icon: ReactNode
-  /** Cor decorativa do label/ícone/sparkline */
   tone: KpiTone
-  /** 'line' = sparkline curva com gradient | 'bars' = mini bar chart */
   chart?: 'line' | 'bars'
-  /** Seed para variar o shape do sparkline entre cards do mesmo tone */
   seed?: number
-  /** Dot de status no canto superior direito (verde/âmbar/vermelho) */
   showStatusDot?: boolean
-  /** Tone do dot de status, quando diferente do tone decorativo (ex.: card com acento roxo mas status verde) */
   statusTone?: KpiTone
-  /** Segunda linha colorida de tendência (ex.: "▲ 14% vs mês anterior"), quando houver comparativo real */
   trend?: { label: string; tone: KpiTone } | null
 }) {
-  const classes = toneClasses[tone]
-  const soft = toneClasses[tone].soft
+  const effectiveStatusTone = statusTone ?? tone
+  const borderClass = cardBorderClasses[effectiveStatusTone]
+  const iconClass = iconBgClasses[tone]
   return (
-    <Card className="relative min-h-[140px] border bg-white p-4">
-      {/* Header row: icon top-left + status dot top-right — matches Base44 MetricCard reference */}
+    <article
+      className={cn('rounded-xl border bg-white p-4 shadow-sm', borderClass)}
+      aria-label={title}
+    >
       <div className="flex items-center justify-between">
-        <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg', soft)} aria-hidden="true">
+        <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg', iconClass)} aria-hidden="true">
           {icon}
         </div>
         {showStatusDot && (
           <span
-            className={cn('h-2 w-2 rounded-full', statusDotClasses[statusTone ?? tone])}
+            className={cn('inline-flex h-2 w-2 rounded-full', statusDotClasses[effectiveStatusTone])}
             role="status"
             aria-hidden="true"
           />
         )}
       </div>
-      {/* Title (muted) + value + detail */}
       <p className="mt-2.5 text-sm font-medium text-gray-500">{title}</p>
       <p className="mt-0.5 text-2xl font-bold tracking-tight text-gray-800" aria-label={`${title}: ${value}`}>
         {value}
       </p>
       {detail && <p className="mt-0.5 text-xs text-gray-400">{detail}</p>}
-      {/* Trend label + sparkline side by side at bottom */}
       <div className="mt-2 flex items-end justify-between gap-2">
         {trend ? (
-          <p className={cn('text-xs font-medium', toneClasses[trend.tone].text)}>
+          <p
+            className={cn('text-xs font-medium', toneClasses[trend.tone].text)}
+            aria-label={`Tendência: ${trend.label}`}
+          >
             {trend.label}
           </p>
         ) : (
           <span />
         )}
         <div className="h-8 w-16 shrink-0" aria-hidden="true">
-          <Sparkline tone={tone} variant={chart} seed={seed} />
+          <SimpleSparkline tone={effectiveStatusTone} variant={chart} seed={seed} />
         </div>
       </div>
-    </Card>
+    </article>
   )
 }
 
-function Sparkline({ tone, variant = 'line', seed = 0 }: { tone: KpiTone; variant?: 'line' | 'bars'; seed?: number }) {
-  const color = toneHex[tone]()
-  const gradId = `mx-spark-${tone}-${seed}-${variant}`
+function SimpleSparkline({
+  tone,
+  variant = 'line',
+  seed = 0,
+}: {
+  tone: KpiTone
+  variant?: 'line' | 'bars'
+  seed?: number
+}) {
+  const colorClass = {
+    success: 'text-status-success',
+    info: 'text-status-info',
+    warning: 'text-amber-500',
+    danger: 'text-red-500',
+    muted: 'text-gray-400',
+    brand: 'text-emerald-600',
+    purple: 'text-[var(--color-accent-purple)]',
+  }[tone]
+
+  const raw = Array.from({ length: 8 }, (_, i) => {
+    const v = 12 + Math.sin((i + seed) * 1.1) * 5 + Math.cos((i + seed) * 0.7) * 4
+    return Math.max(4, Math.min(26, v + (seed % 3) * i * 0.4))
+  })
+
   if (variant === 'bars') {
-    const heights = [12, 18, 14, 22, 16, 24, 20, 28, 18, 30, 24, 32]
-    const max = Math.max(...heights)
+    const max = Math.max(...raw)
     return (
-      <svg viewBox="0 0 120 36" width="100%" height="42" preserveAspectRatio="none" aria-hidden="true" className="mt-mx-md">
-        {heights.map((h, i) => {
-          const x = i * (120 / heights.length)
-          const w = (120 / heights.length) - 2
-          const barH = (h / max) * 32
-          const y = 36 - barH
-          return <rect key={i} x={x} y={y} width={w} height={barH} fill={color} rx={1.5} opacity={0.85} />
+      <svg viewBox="0 0 100 30" className="h-8 w-full" preserveAspectRatio="none" aria-hidden="true">
+        {raw.map((h, i) => {
+          const barW = 10
+          const barH = (h / max) * 26
+          const x = i * 13 + 1
+          const y = 30 - barH
+          return <rect key={i} x={x} y={y} width={barW} height={barH} rx={1.5} className={colorClass} fill="currentColor" opacity={0.85} />
         })}
       </svg>
     )
   }
-  // Line sparkline with gradient fill below
-  // Simple pseudo-random varied curve seeded by `seed`
-  const points = Array.from({ length: 12 }, (_, i) => {
-    const base = 14 + Math.sin((i + seed) * 0.9) * 6 + Math.cos((i + seed) * 0.4) * 4
-    return Math.max(4, Math.min(28, base + (seed % 2 ? i * 0.7 : -i * 0.3)))
-  })
-  const path = points.map((y, i) => `${i === 0 ? 'M' : 'L'} ${(i / (points.length - 1)) * 120} ${32 - y}`).join(' ')
-  const area = `${path} L 120 36 L 0 36 Z`
+
+  const min = Math.min(...raw)
+  const dataRange = Math.max(Math.max(...raw) - min, 1)
+  const points = raw
+    .map((v, i) => {
+      const x = (i / (raw.length - 1)) * 100
+      const y = 28 - ((v - min) / dataRange) * 24 - 2
+      return `${x},${y}`
+    })
+    .join(' ')
+
   return (
-    <svg viewBox="0 0 120 36" width="100%" height="42" preserveAspectRatio="none" aria-hidden="true" className="mt-mx-md">
-      <defs>
-        <linearGradient id={gradId} x1="0%" y1="0%" x2="0%" y2="100%">
-          <stop offset="0%" stopColor={color} stopOpacity={0.35} />
-          <stop offset="100%" stopColor={color} stopOpacity={0} />
-        </linearGradient>
-      </defs>
-      <path d={area} fill={`url(#${gradId})`} />
-      <path d={path} fill="none" stroke={color} strokeWidth={2} strokeLinecap="round" strokeLinejoin="round" />
-      <circle cx={120} cy={32 - points[points.length - 1]} r={2.5} fill={color} />
+    <svg viewBox="0 0 100 30" className="h-8 w-full" preserveAspectRatio="none" aria-hidden="true">
+      <polyline
+        points={points}
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2"
+        className={colorClass}
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   )
 }
