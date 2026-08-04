@@ -596,7 +596,13 @@ function AppointmentsChart({
         </div>
       ) : (
         <div className="h-64 min-w-0">
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+            minWidth={0}
+            minHeight={256}
+            initialDimension={{ width: 320, height: 256 }}
+          >
             <BarChart data={data} layout="vertical" margin={{ top: 0, right: 28, left: 20, bottom: 0 }}>
               <XAxis
                 type="number"
