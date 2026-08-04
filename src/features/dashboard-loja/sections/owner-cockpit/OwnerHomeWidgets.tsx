@@ -94,48 +94,82 @@ export function PriorityIntervention({
   const navigate = useNavigate()
   if (!alert) return null
   const isCritical = alert.variant === 'danger'
-  const toneClass = isCritical ? 'text-status-error' : 'text-status-warning'
-  const badgeClass = isCritical ? 'bg-status-error-surface text-status-error' : 'bg-status-warning-surface text-status-warning'
+  // Espelha STATUS_STYLES.critical / .attention de components/owner/home/homeData.
+  const style = isCritical
+    ? { border: 'border-red-200', bg: 'bg-red-50', text: 'text-red-600', dot: 'bg-red-500', label: 'Crítico' }
+    : { border: 'border-amber-200', bg: 'bg-amber-50', text: 'text-amber-600', dot: 'bg-amber-500', label: 'Atenção' }
+  const details = [
+    alert.department ? `Departamento: ${alert.department}` : null,
+    `Ação sugerida: ${alert.ctaLabel}`,
+  ].filter((detail): detail is string => Boolean(detail))
+
   return (
-    <Card className={cn('rounded-xl border p-mx-md shadow-sm', isCritical ? 'border-status-error/30' : 'border-status-warning/30')}>
-      <div className="flex items-center gap-mx-sm">
-        <Zap size={20} className={toneClass} />
-        <Typography variant="h3" className="text-lg">Intervenção prioritária</Typography>
+    <section className={cn('rounded-2xl border-2 bg-white p-5 shadow-sm lg:p-6', style.border)}>
+      <div className="flex items-center gap-2">
+        <div className={cn('flex h-8 w-8 items-center justify-center rounded-lg', style.bg)}>
+          <Zap className={cn('h-4 w-4', style.text)} />
+        </div>
+        <h2 className="text-base font-semibold text-gray-800">Intervenção prioritária</h2>
       </div>
-      <div className="mt-mx-md rounded-xl border border-gray-100 bg-white p-mx-md">
-        <div className="flex items-start justify-between gap-mx-sm">
-          <div className="flex items-center gap-mx-sm">
-            <AlertTriangle size={18} className={toneClass} />
-            <Typography variant="p" className="">{alert.title}</Typography>
+
+      <div className={cn('mt-4 rounded-xl border p-4', style.border, style.bg)}>
+        <div className="flex items-start justify-between gap-3">
+          <div className="flex items-start gap-2">
+            <AlertTriangle className={cn('mt-0.5 h-5 w-5 shrink-0', style.text)} />
+            <div>
+              <p className="font-semibold text-gray-800">{alert.title}</p>
+              <p className="mt-0.5 text-sm text-gray-500">{alert.description}</p>
+            </div>
           </div>
-          <span className={cn('shrink-0 rounded-mx-full px-mx-sm py-mx-tiny text-mx-tiny font-bold uppercase', badgeClass)}>
-            {isCritical ? 'Crítico' : 'Atenção'}
+          <span className={cn('shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold', style.bg, style.text)}>
+            {style.label}
           </span>
         </div>
-        <div className="mt-mx-md">
-          <Typography variant="tiny" className="">Por que isso importa</Typography>
-          <Typography variant="p" className="mt-mx-xs text-sm font-bold">{alert.description}</Typography>
-        </div>
-        <div className="mt-mx-md rounded-xl bg-status-success-surface p-mx-sm">
-          <Typography variant="tiny" className="text-status-success">Direcionamento MX</Typography>
-          <Typography variant="p" className="mt-mx-xs text-sm font-bold">{alert.recommendation}</Typography>
-        </div>
-        <div className="mt-mx-md flex flex-wrap gap-mx-sm">
-          <Button type="button" variant="outline" onClick={() => navigate(alert.ctaTo)}>
-            <Search size={16} /> {alert.ctaLabel}
-          </Button>
-          <Button type="button" variant="outline" onClick={() => navigate(ownerPath('plano-acao'))}>
-            <ClipboardList size={16} /> Criar plano de ação
-          </Button>
-          <Button type="button" variant="outline" onClick={() => navigate(ownerPath('departamentos'))}>
-            <Users size={16} /> Delegar ao gerente
-          </Button>
-          <Button type="button" onClick={onOpenConsultant}>
-            <MessageCircle size={16} /> Falar com Consultor
-          </Button>
+        <div className="mt-3 space-y-1">
+          {details.map((detail) => (
+            <div key={detail} className="flex items-center gap-2 text-xs text-gray-500">
+              <span className={cn('h-1 w-1 rounded-full', style.dot)} />
+              {detail}
+            </div>
+          ))}
         </div>
       </div>
-    </Card>
+
+      <div className="mt-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Por que isso importa</p>
+        <p className="mt-1 text-sm text-gray-800">{alert.action}</p>
+      </div>
+
+      <div className="mt-3 rounded-lg border border-emerald-600/20 bg-emerald-600/5 p-3">
+        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">Direcionamento MX</p>
+        <p className="mt-1 text-sm text-gray-800">{alert.recommendation}</p>
+      </div>
+
+      <div className="mt-4">
+        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Impacto estimado</p>
+        <ul className="mt-1.5 space-y-1">
+          <li className="flex items-start gap-2 text-sm text-gray-800">
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+            Impacto {alert.impact.toLowerCase()} sobre o resultado do período.
+          </li>
+        </ul>
+      </div>
+
+      <div className="mt-5 grid grid-cols-2 gap-2 sm:grid-cols-4">
+        <Button type="button" variant="outline" onClick={() => navigate(alert.ctaTo)}>
+          <Search size={16} /> {alert.ctaLabel}
+        </Button>
+        <Button type="button" variant="outline" onClick={() => navigate(ownerPath('plano-acao'))}>
+          <ClipboardList size={16} /> Criar plano de ação
+        </Button>
+        <Button type="button" variant="outline" onClick={() => navigate(ownerPath('departamentos'))}>
+          <Users size={16} /> Delegar ao gerente
+        </Button>
+        <Button type="button" onClick={onOpenConsultant}>
+          <MessageCircle size={16} /> Falar com Consultor
+        </Button>
+      </div>
+    </section>
   )
 }
 

@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef, useCallback } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { useAuth } from '@/hooks/useAuth'
 import { motion } from 'motion/react'
-import { Lock, Mail, RefreshCw, ArrowRight, ShieldCheck, TrendingUp, Zap, Eye, EyeOff, KeyRound, CheckCircle2, ArrowLeft } from 'lucide-react'
+import { Lock, Mail, RefreshCw, ArrowRight, ShieldCheck, TrendingUp, Zap, Eye, EyeOff, KeyRound, CheckCircle2, ArrowLeft, AlertCircle } from 'lucide-react'
 import { Typography } from '@/components/atoms/Typography'
 import { FormField } from '@/components/molecules/FormField'
 import MxLogo from '@/assets/mx-logo.png'
@@ -112,8 +112,56 @@ export default function Login() {
     const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
     const [isHydrated, setIsHydrated] = useState(false)
 
-    const [loginAttempts, setLoginAttempts] = useState(0)
-    const [lockoutUntil, setLockoutUntil] = useState(0)
+    const LOCKOUT_STORAGE_KEY = 'mx_login_lockout'
+    const ATTEMPTS_STORAGE_KEY = 'mx_login_attempts'
+
+    const readLockout = useCallback(() => {
+        try {
+            const raw = localStorage.getItem(LOCKOUT_STORAGE_KEY)
+            if (!raw) return { until: 0, attempts: 0 }
+            const parsed = JSON.parse(raw) as { until: number; attempts: number }
+            if (parsed.until && Date.now() < parsed.until) return parsed
+            localStorage.removeItem(LOCKOUT_STORAGE_KEY)
+            return { until: 0, attempts: parsed.attempts || 0 }
+        } catch {
+            localStorage.removeItem(LOCKOUT_STORAGE_KEY)
+            return { until: 0, attempts: 0 }
+        }
+    }, [])
+
+    const [lockoutState, setLockoutState] = useState(readLockout)
+    const [countdown, setCountdown] = useState(0)
+    const timerRef = useRef<ReturnType<typeof setInterval> | null>(null)
+
+    const persistLockout = useCallback((until: number, attempts: number) => {
+        localStorage.setItem(LOCKOUT_STORAGE_KEY, JSON.stringify({ until, attempts }))
+    }, [])
+
+    const clearLockoutStorage = useCallback(() => {
+        localStorage.removeItem(LOCKOUT_STORAGE_KEY)
+        localStorage.removeItem(ATTEMPTS_STORAGE_KEY)
+    }, [])
+
+    useEffect(() => {
+        if (timerRef.current) clearInterval(timerRef.current)
+        if (lockoutState.until && Date.now() < lockoutState.until) {
+            const tick = () => {
+                const remaining = Math.ceil((lockoutState.until - Date.now()) / 1000)
+                if (remaining <= 0) {
+                    clearInterval(timerRef.current!)
+                    timerRef.current = null
+                    setCountdown(0)
+                    setLockoutState(prev => ({ ...prev, until: 0 }))
+                    localStorage.removeItem(LOCKOUT_STORAGE_KEY)
+                } else {
+                    setCountdown(remaining)
+                }
+            }
+            tick()
+            timerRef.current = setInterval(tick, 1000)
+        }
+        return () => { if (timerRef.current) clearInterval(timerRef.current) }
+    }, [lockoutState.until])
 
     useEffect(() => {
         localStorage.removeItem('mx_last_email')
@@ -197,9 +245,9 @@ export default function Login() {
 
         clearSignoutReason()
 
-        if (lockoutUntil && Date.now() < lockoutUntil) {
-            const secs = Math.ceil((lockoutUntil - Date.now()) / 1000)
-            setError(`Aguarde ${secs}s antes de tentar novamente.`)
+        if (lockoutState.until && Date.now() < lockoutState.until) {
+            const secs = Math.ceil((lockoutState.until - Date.now()) / 1000)
+            setError(`Muitas tentativas. Aguarde ${secs}s.`)
             return
         }
 
@@ -218,21 +266,24 @@ export default function Login() {
         try {
             const { error: err } = await signIn(email, password)
             if (err) {
-                const attempts = loginAttempts + 1
-                setLoginAttempts(attempts)
+                const current = readLockout()
+                const attempts = (current.attempts || 0) + 1
                 if (attempts >= 5) {
                     const lockDuration = Math.min(30 * Math.pow(2, Math.floor(attempts / 5) - 1), 300)
-                    setLockoutUntil(Date.now() + lockDuration * 1000)
-                    setLoginAttempts(0)
-                    setError(`Muitas tentativas. Tente novamente em ${lockDuration}s.`)
+                    const until = Date.now() + lockDuration * 1000
+                    setLockoutState({ until, attempts })
+                    persistLockout(until, attempts)
+                    setError(`Muitas tentativas. Aguarde ${lockDuration}s.`)
                 } else {
+                    persistLockout(0, attempts)
+                    setLockoutState(prev => ({ ...prev, attempts }))
                     setError(err)
                 }
                 setLoading(false)
                 return
             }
-            setLoginAttempts(0)
-            setLockoutUntil(0)
+            clearLockoutStorage()
+            setLockoutState({ until: 0, attempts: 0 })
         } catch {
             setError('Não foi possível concluir o login agora. Verifique sua conexão e tente novamente.')
             setLoading(false)
@@ -536,7 +587,9 @@ export default function Login() {
                             // formulário e não recebe resposta nenhuma.
                             <div role="alert" className="flex items-center px-4 py-3 bg-status-error-surface border border-status-error/20 rounded-xl" style={{ gap: '0.75rem' }}>
                                 <AlertCircle size={16} className="text-status-error shrink-0" />
-                                <span className="text-status-error text-sm font-medium">{error}</span>
+                                <span className="text-status-error text-sm font-medium">
+                                    {countdown > 0 ? `Muitas tentativas. Aguarde ${countdown}s.` : error}
+                                </span>
                             </div>
                         )}
 
@@ -597,9 +650,3 @@ export default function Login() {
         </main>
     )
 }
-
-const AlertCircle = ({ size, className }: { size?: number, className?: string }) => (
-    <svg width={size || 24} height={size || 24} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={className}>
-        <circle cx="12" cy="12" r="10" /><line x1="12" y1="8" x2="12" y2="12" /><line x1="12" y1="16" x2="12.01" y2="16" />
-    </svg>
-)
