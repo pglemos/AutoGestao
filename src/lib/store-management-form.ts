@@ -9,7 +9,18 @@ export type StoreManagementFormResult =
   | { ok: true; managerEmail: string | null }
   | { ok: false; error: string }
 
+export type StoreManagementEditInput = StoreManagementFormInput & {
+  contextConfirmed: boolean
+  hasActiveManager: boolean
+  currentManagerEmail?: string | null
+}
+
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+
+function normalizeOptionalEmail(value?: string | null) {
+  const email = value?.trim().toLowerCase() || ''
+  return email || null
+}
 
 export function normalizeStoreManagementForm({
   mode,
@@ -17,7 +28,7 @@ export function normalizeStoreManagementForm({
 }: StoreManagementFormInput): StoreManagementFormResult {
   if (mode === 'owner_managed') return { ok: true, managerEmail: null }
 
-  const email = managerEmail?.trim().toLowerCase() || ''
+  const email = normalizeOptionalEmail(managerEmail)
   if (!email) {
     return { ok: false, error: 'Informe o e-mail do gerente que será cadastrado.' }
   }
@@ -26,4 +37,18 @@ export function normalizeStoreManagementForm({
   }
 
   return { ok: true, managerEmail: email }
+}
+
+export function resolveStoreManagementEdit({
+  contextConfirmed,
+  hasActiveManager,
+  currentManagerEmail,
+  mode,
+  managerEmail,
+}: StoreManagementEditInput): StoreManagementFormResult {
+  if (!contextConfirmed || hasActiveManager) {
+    return { ok: true, managerEmail: normalizeOptionalEmail(currentManagerEmail) }
+  }
+
+  return normalizeStoreManagementForm({ mode, managerEmail })
 }
