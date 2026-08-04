@@ -139,13 +139,14 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
     </>
   )
 
-  const firstName = (profile?.name || 'Dono').split(' ')[0]
+  const firstName = profile?.name?.trim() ? profile.name.trim().split(' ')[0] : ''
+  const greetingTitle = firstName ? `${greeting()}, ${firstName}!` : `${greeting()}!`
 
   return (
     <section className="min-h-full space-y-mx-md bg-gray-50 p-mx-sm md:p-mx-lg">
       <OwnerPageHeading
         icon={Home}
-        title={`${greeting()}, ${firstName}!`}
+        title={greetingTitle}
         subtitle="Aqui está o panorama da sua loja hoje."
       />
 
