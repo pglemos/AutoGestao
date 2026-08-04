@@ -4,7 +4,7 @@
 
 - Repository: `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA`, `main` only.
 - Initial program SHA: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
-- Final implementation SHA tested in this wave: `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451`.
+- Final locally validated branch SHA in this wave: `fd86b81a5e9b4695c19bbc587f20549b539c54ba`.
 - User-owned untracked directory: `mx-v3-csv-VzMBNx/`; preserved and never staged.
 - No push, worktree, branch, clone, deployment, migration or credential rotation in this wave.
 - Global state: `IN_PROGRESS`; local gates are `TESTED_LOCAL_ONLY`; release is not authorized.
@@ -35,3 +35,10 @@
 - Local final report and evidence schema are complete for this wave.
 - Release gates absent: exact-SHA push, CI/artifacts, deployment/health parity, authenticated browser and monitoring.
 - Decision: `NÃO AUTORIZADA PARA RELEASE`.
+
+## Final review loop
+
+- Whole-branch review at `a7af180d`: 5 Important findings and 1 Minor; one fix wave dispatched.
+- Fix wave: commits `f7c36b98..fd86b81a`.
+- Scoped re-review: 7/7 findings addressed, 0 new Critical/Important breakage.
+- Release remains pending exact-SHA remote, deployment, authenticated browser and monitoring proof.
