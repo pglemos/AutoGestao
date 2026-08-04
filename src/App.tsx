@@ -51,6 +51,7 @@ const OwnerPlanoEstrategico = lazy(() => import('@/pages/owner/PlanoEstrategico'
 const OwnerPlanoDeAcao = lazy(() => import('@/pages/owner/PlanoDeAcao'))
 const OwnerConsultoria = lazy(() => import('@/pages/owner/Consultoria'))
 const OwnerRoutineSwitch = lazy(() => import('@/features/owner/OwnerRoutineSwitch'))
+const OwnerStoresNetworkPage = lazy(() => import('@/features/owner/OwnerStoresNetworkPage'))
 const OwnerCentralDeDecisoes = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.CentralDeDecisoes })))
 const OwnerDepartamentos = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentosVisaoGeral })))
 const OwnerDeptComercial = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentoComercial })))
@@ -452,6 +453,9 @@ export default function App() {
                   <RoleSwitch vendedor={<Navigate to="/desenvolvimento?tab=pdi" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />
                 </Suspense>} />
                 <Route path="pdi/:id/print" element={<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>} />
+                <Route path="minhas-lojas" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerStoresNetworkPage />} admin={<ForbiddenRoute />} />
+                </Suspense>} />
                 <Route path="rotina" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineSwitch />} admin={<RotinaGerente />} />
                 </Suspense>} />

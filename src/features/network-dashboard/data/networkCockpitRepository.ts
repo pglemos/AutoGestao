@@ -208,10 +208,22 @@ export function mapNetworkCockpitPayload(data: unknown, requestedRange: NetworkD
     .filter(item => Boolean(item.id))
 }
 
-export function createNetworkCockpitRepository(client: RpcClient) {
+/**
+ * `internal` devolve todas as lojas ativas e exige perfil interno MX.
+ * `owner` devolve só as lojas onde o chamador tem vínculo ativo de dono —
+ * é o consolidado de matriz e filiais dele.
+ */
+export type NetworkCockpitScope = 'internal' | 'owner'
+
+const RPC_BY_SCOPE: Record<NetworkCockpitScope, string> = {
+  internal: 'get_internal_mx_network_cockpit',
+  owner: 'get_owner_network_cockpit',
+}
+
+export function createNetworkCockpitRepository(client: RpcClient, scope: NetworkCockpitScope = 'internal') {
   return {
     async load(range: NetworkDateRange): Promise<NetworkCockpitStore[]> {
-      const { data, error } = await client.rpc('get_internal_mx_network_cockpit', {
+      const { data, error } = await client.rpc(RPC_BY_SCOPE[scope], {
         p_start_date: range.start,
         p_end_date: range.end,
       })
@@ -222,3 +234,4 @@ export function createNetworkCockpitRepository(client: RpcClient) {
 }
 
 export const networkCockpitRepository = createNetworkCockpitRepository(supabase as unknown as RpcClient)
+export const ownerNetworkCockpitRepository = createNetworkCockpitRepository(supabase as unknown as RpcClient, 'owner')

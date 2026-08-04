@@ -64,6 +64,8 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/relatorios/performance-vendedor', roles: MANAGEMENT_ROLES },
   { pattern: '/auditoria', roles: ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente'] },
   { pattern: '/home', roles: ['vendedor', 'gerente', 'dono'] },
+  // Consolidado das lojas do próprio dono (matriz + filiais).
+  { pattern: '/minhas-lojas', roles: ['dono'] },
   { pattern: '/meu-dia', roles: ['vendedor'] },
   { pattern: '/minha-remuneracao', roles: ['vendedor'] },
   { pattern: '/lancamento-diario', roles: ['vendedor'] },

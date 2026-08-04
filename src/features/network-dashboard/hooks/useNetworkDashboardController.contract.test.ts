@@ -9,7 +9,14 @@ describe('controller do cockpit de rede', () => {
     expect(source).toContain('REALTIME_MAX_WAIT_MS = 2_000')
     expect(source).toContain('snapshotInFlight')
     expect(source).toContain('reloadQueued')
-    expect(source).toContain('networkCockpitRepository.load(range)')
+    // O repositório passou a ser escolhido pelo escopo (interno x dono); o
+    // carregamento continua sendo único por snapshot.
+    expect(source).toContain('repository.load(range)')
+  })
+
+  test('resolve o repositório pelo escopo sem misturar rede interna e do dono', () => {
+    expect(source).toContain("scope: NetworkCockpitScope = 'internal'")
+    expect(source).toContain("scope === 'owner' ? ownerNetworkCockpitRepository : networkCockpitRepository")
   })
 
   test('escuta planejamento, ações e consultoria', () => {

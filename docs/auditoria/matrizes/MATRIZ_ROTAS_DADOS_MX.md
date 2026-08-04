@@ -1,12 +1,12 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **111**
-- Rotas protegidas: **103**
+- Rotas declaradas em `src/App.tsx`: **112**
+- Rotas protegidas: **104**
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **127**
-- RPCs referenciadas pelo runtime: **84**
+- RPCs referenciadas pelo runtime: **83**
 - Edge Functions invocadas pelo runtime: **14**
 - Pares tabela/operação encontrados: **249**
 
@@ -103,6 +103,7 @@
 | `/consultor-ia` | route | protegida | — | `/consultor-ia` | — | `<ConsultorIaAliasRedirect />` |
 | `/pdi` | route | protegida | `/desenvolvimento?tab=pdi` | `/pdi` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to="/desenvolvimento?tab=pdi" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />` |
 | `/pdi/:id/print` | route | protegida | — | `/pdi/:id/print` | — | `<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>` |
+| `/minhas-lojas` | route | protegida | — | `/minhas-lojas` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerStoresNetworkPage />} admin={<ForbiddenRoute />} /> </Suspense>` |
 | `/rotina` | route | protegida | — | `/rotina` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineSwitch />} admin={<RotinaGerente />} /> </Suspense>` |
 | `/painel` | route | protegida | — | `/painel` | — | `<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>` |
 | `/lojas` | route | protegida | — | `/lojas` | — | `<Suspense fallback={<Spinner />}><Lojas /></Suspense>` |
@@ -556,7 +557,6 @@
 | `gerar_recomendacoes_desenvolvimento_feedback` | 1 |
 | `gerar_recomendacoes_desenvolvimento_pdi` | 1 |
 | `get_benchmark` | 1 |
-| `get_internal_mx_network_cockpit` | 1 |
 | `get_lancamento_por_dia` | 2 |
 | `get_lancamentos_por_loja_periodo` | 7 |
 | `get_lancamentos_por_vendedor_periodo` | 3 |

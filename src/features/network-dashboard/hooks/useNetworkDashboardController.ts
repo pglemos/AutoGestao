@@ -2,7 +2,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { endOfMonth, format } from 'date-fns'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
-import { networkCockpitRepository } from '../data/networkCockpitRepository'
+import { networkCockpitRepository, ownerNetworkCockpitRepository, type NetworkCockpitScope } from '../data/networkCockpitRepository'
 import { resolveNetworkDateRange, validateNetworkDateRange } from '../lib/networkDashboardCalculations'
 import { filterAndSortStoreDiagnostics } from '../lib/networkDashboardFilters'
 import type { NetworkCockpitStore, NetworkDateRange, NetworkReportType, NetworkSort, NetworkStatusFilter, NetworkTimeframe } from '../types'
@@ -24,7 +24,8 @@ export const NETWORK_COCKPIT_REALTIME_TABLES = [
   'consultoria_participantes_encontro', 'consultoria_solicitacoes_antecipacao',
 ] as const
 
-export function useNetworkDashboardController() {
+export function useNetworkDashboardController(scope: NetworkCockpitScope = 'internal') {
+  const repository = scope === 'owner' ? ownerNetworkCockpitRepository : networkCockpitRepository
   const requestSequence = useRef(0)
   const realtimeTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
   const realtimeBurstStartedAt = useRef<number | null>(null)
@@ -66,7 +67,7 @@ export function useNetworkDashboardController() {
         setError(validation); setLoading(false); setRefreshing(false); return
       }
       try {
-        const nextRows = await networkCockpitRepository.load(range)
+        const nextRows = await repository.load(range)
         if (requestId !== requestSequence.current) return
         setRows(nextRows)
         setError(null)
@@ -84,7 +85,7 @@ export function useNetworkDashboardController() {
       if (reloadQueued.current) { reloadQueued.current = false; void fetchSnapshot(false) }
     })
     return operation
-  }, [customRange, timeframe])
+  }, [customRange, repository, timeframe])
 
   useEffect(() => { void fetchSnapshot(false) }, [fetchSnapshot])
 

@@ -120,6 +120,18 @@ const ownerNavConfig: NavCategory[] = OWNER_BASE44_NAVIGATION.map(section => ({
 }))
 
 /**
+ * Consolidado das lojas do dono. Só faz sentido no menu quando ele tem mais de
+ * uma unidade — com uma loja só, o cockpit executivo já é a visão total.
+ */
+const ownerNetworkCategory: NavCategory = {
+  category: 'REDE',
+  icon: <LayoutDashboard size={22} />,
+  items: [
+    { label: 'Minhas Lojas', path: '/minhas-lojas', icon: <Grid size={16} /> },
+  ],
+}
+
+/**
  * Seção "Gestão Comercial" do dono.
  *
  * Sem gerente ativo na loja, o dono acumula a gestão e recebe o módulo gerencial
@@ -233,6 +245,7 @@ function LayoutContent() {
     simulationRole,
     stopSimulation,
     baseProfile,
+    vinculos_loja,
   } = useAuth()
   const { unreadCount } = useNotifications()
   const { devolutivas } = useFeedbacks()
@@ -257,8 +270,13 @@ function LayoutContent() {
     : '/lojas'
   const categories = React.useMemo(() => {
     const baseCategories = role ? (navConfig[role] || []) : []
+    const ownerStoreCount = role === 'dono' ? vinculos_loja.length : 0
     const withCommercial = role === 'dono'
-      ? [...baseCategories, ownerCommercialCategory(commercialAccessMode)]
+      ? [
+          ...baseCategories,
+          ...(ownerStoreCount > 1 ? [ownerNetworkCategory] : []),
+          ownerCommercialCategory(commercialAccessMode),
+        ]
       : baseCategories
     return withCommercial
       .map((category) => {
@@ -276,7 +294,7 @@ function LayoutContent() {
         return { ...category, items }
       })
       .filter((category) => category.items.length > 0)
-  }, [commercialAccessMode, role, storeConsultorIaPath, storeDashboardPath, storeTeamPath])
+  }, [commercialAccessMode, role, storeConsultorIaPath, storeDashboardPath, storeTeamPath, vinculos_loja])
 
   const perfilVisivel = role
     ? rotulosPerfil[role] || 'Perfil autorizado'

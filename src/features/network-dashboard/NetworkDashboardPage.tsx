@@ -11,6 +11,7 @@ import { NetworkFiltersSection } from './sections/NetworkFiltersSection'
 import { NetworkPrioritiesSection } from './sections/NetworkPrioritiesSection'
 import { useNetworkDashboardController } from './hooks/useNetworkDashboardController'
 import { canTriggerNetworkReport } from './lib/networkDashboardPolicy'
+import type { NetworkCockpitScope } from './data/networkCockpitRepository'
 import type { NetworkCockpitStore, PersonEvolution } from './types'
 
 function withStore(path: string, storeId: string, extra?: Record<string, string>) {
@@ -18,8 +19,8 @@ function withStore(path: string, storeId: string, extra?: Record<string, string>
   return `${path}?${params.toString()}`
 }
 
-export function NetworkDashboardPage() {
-  const controller = useNetworkDashboardController()
+export function NetworkDashboardPage({ scope = 'internal' }: { scope?: NetworkCockpitScope } = {}) {
+  const controller = useNetworkDashboardController(scope)
   const navigate = useNavigate()
   const { role, setActiveStoreId } = useAuth()
   const [selectedStore, setSelectedStore] = useState<NetworkCockpitStore | null>(null)
