@@ -1,6 +1,6 @@
 # Matriz de rotas, perfis, viewports e estados — 2026-08-04
 
-Estado desta consolidação: `NOT_PROVEN`
+Estado desta consolidação: `PASS_WITH_FINDINGS` — público local `TESTED_LOCAL_ONLY`; matriz autenticada `BLOCKED_EXTERNAL`.
 
 ## Regra desta task
 
@@ -17,11 +17,17 @@ Sem browser live autenticado nesta task, nenhuma linha abaixo pode ser promovida
 | Administrador Geral | não fornecida | `BLOCKED_EXTERNAL` | ausência de acesso autorizado explícita |
 | Consultor MX | não fornecida | `BLOCKED_EXTERNAL` | ausência de acesso autorizado explícita |
 
+## Alternativa browser local executada
+
+| Perfil | Rotas | Projetos | Estado | Resultado |
+|---|---|---|---|---|
+| público/não autenticado | `/`, `/login`, `/forgot-password`, `/reset-password`, `/privacy`, `/terms` | Chromium desktop + Pixel 5 | `TESTED_LOCAL_ONLY` | `12/12` pass; axe serious/critical 0, reduced motion e sem overflow |
+
 ## Viewports obrigatórios
 
 `390×844`, `600×900`, `768×1024`, `840×1024`, `1024×768`, `1280×800`, `1440×900`, `1600×1000`, `1920×1080`
 
-Estado nesta task: `NOT_PROVEN`
+Estado da matriz obrigatória completa: `IN_PROGRESS`; somente os dois devices públicos acima foram exercitados.
 
 ## Gaps que precisam permanecer explícitos
 

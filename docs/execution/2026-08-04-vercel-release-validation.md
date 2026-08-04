@@ -1,7 +1,7 @@
 # Validação Vercel e paridade de release — 2026-08-04
 
 Estado: `PASS_WITH_FINDINGS`
-Checkout atual: `9abfc70a79da46c03ee156b49933310584f85a65`
+Checkout atual auditado: `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451` (`2026-08-04T07:12:57-03:00`).
 
 ## Proveniência preservada
 
@@ -12,9 +12,9 @@ Checkout atual: `9abfc70a79da46c03ee156b49933310584f85a65`
 
 | Item | Evidência | Resultado |
 |---|---|---|
-| SHA local | `git rev-parse HEAD` | `9abfc70a79da46c03ee156b49933310584f85a65` |
+| SHA local | `git rev-parse HEAD` | `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451` |
 | SHA remoto | `git ls-remote origin refs/heads/main` | `11a9465f253ce8f96052db70c9171b14425e9d4e` |
-| Divergência | `git rev-list --left-right --count origin/main...main` | `0 6` |
+| Divergência | `git rev-list --left-right --count origin/main...main` | `0 9` |
 | Alias público | `curl -sS https://mxperformance.vercel.app/api/health` | `healthy`, `release=1b99c0ab82618038fa0826557e7b8762e6247b2b` |
 | READY consultado | `curl -sS https://mxperformance-kjbp4sqkc-synvolt.vercel.app/api/health` | `healthy`, `release=7387fb325dd645aaa2f832895e341c541c1f1d60` |
 
@@ -22,7 +22,7 @@ Checkout atual: `9abfc70a79da46c03ee156b49933310584f85a65`
 
 - O alias público continua servindo uma release diferente do checkout atual.
 - O deployment READY consultado também não corresponde ao checkout atual.
-- Portanto continua sem prova de que o warning fix do Gerente esteja publicado no SHA `9abfc70a79da46c03ee156b49933310584f85a65`.
+- Portanto continua sem prova de que o warning fix do Gerente esteja publicado no SHA `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451`.
 
 ## Status por subitem
 
@@ -30,6 +30,6 @@ Checkout atual: `9abfc70a79da46c03ee156b49933310584f85a65`
 |---|---|---|
 | Alias público responde `/api/health` | `PASS` | serviço saudável |
 | READY recente consultado responde `/api/health` | `PASS` | serviço saudável |
-| SHA local = SHA remoto | `PASS_WITH_FINDINGS` | divergência `0 6` |
+| SHA local = SHA remoto | `PASS_WITH_FINDINGS` | divergência `0 9` |
 | SHA publicado = release runtime | `PASS_WITH_FINDINGS` | mismatch continua explícito |
-| Warning fix provado em produção | `NOT_PROVEN` | sem deployment comprovado do SHA atual |
+| Warning fix provado em produção | `IN_PROGRESS` | sem deployment comprovado do SHA atual |

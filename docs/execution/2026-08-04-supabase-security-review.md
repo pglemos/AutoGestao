@@ -1,7 +1,7 @@
 # Revisão de segurança Supabase — 2026-08-04
 
 Estado: `PASS_WITH_FINDINGS`
-Checkout atual: `9abfc70a79da46c03ee156b49933310584f85a65`
+Checkout atual auditado: `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451` (`2026-08-04T07:13:39-03:00`).
 
 ## Proveniência preservada
 
@@ -38,8 +38,8 @@ Checkout atual: `9abfc70a79da46c03ee156b49933310584f85a65`
 | Auth manual em Edge | `PASS_WITH_FINDINGS` | `_shared/auth.ts` ainda depende de `getUser()` com bearer |
 | `verify_jwt = false` em config | `PASS_WITH_FINDINGS` | entradas ainda presentes em `supabase/config.toml` |
 | Buckets / policies citados pelo relatório-base | `PASS_WITH_FINDINGS` | referências estáticas ainda existem |
-| Matriz completa por perfil/tenant | `NOT_PROVEN` | sem rodada live de acesso cruzado nesta task |
-| Restore/rollback seguro do banco | `NOT_PROVEN` | nenhuma prova de restore foi produzida nesta task |
+| Matriz completa por perfil/tenant | `IN_PROGRESS` | sem rodada live de acesso cruzado nesta task |
+| Restore/rollback seguro do banco | `IN_PROGRESS` | nenhuma prova de restore foi produzida nesta task |
 
 ## Conclusão permitida
 
