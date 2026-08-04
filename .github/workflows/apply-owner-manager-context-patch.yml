@@ -1,0 +1,40 @@
+name: Apply Owner Manager Context Patch
+
+on:
+  push:
+    branches:
+      - feature/owner-manager-context
+    paths:
+      - scripts/apply_owner_manager_context_patch.py
+      - .github/workflows/apply-owner-manager-context-patch.yml
+
+permissions:
+  contents: write
+
+jobs:
+  patch:
+    if: github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: feature/owner-manager-context
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply patch
+        run: python scripts/apply_owner_manager_context_patch.py
+      - name: Validate patch
+        run: git diff --check
+      - name: Commit patched files
+        run: |
+          if git diff --quiet; then
+            echo "No changes to commit"
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add src
+          git commit -m "feat: integrate owner commercial management context"
+          git push origin HEAD:feature/owner-manager-context
