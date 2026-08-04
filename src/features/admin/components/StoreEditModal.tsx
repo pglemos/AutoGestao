@@ -229,10 +229,12 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
         </div>
 
         <fieldset className="space-y-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
-          <div className="flex items-center justify-between gap-mx-sm">
-            <Typography as="legend" variant="caption">Estrutura da gestão comercial</Typography>
-            {management.hasActiveManager && <Badge variant="success">Gerente ativo detectado</Badge>}
-          </div>
+          <legend><Typography as="span" variant="caption">Estrutura da gestão comercial</Typography></legend>
+          {management.hasActiveManager && (
+            <div className="flex justify-end">
+              <Badge variant="success">Gerente ativo detectado</Badge>
+            </div>
+          )}
           <label className="flex cursor-pointer items-start gap-mx-sm rounded-xl bg-white p-mx-sm">
             <input
               type="radio"
