@@ -17,6 +17,7 @@ import MxSidebarShell, {
 } from './MxSidebarShell'
 import { ForcePasswordChange } from '@/features/auth/components/ForcePasswordChange'
 import { canAccessPath } from '@/lib/auth/routeAccess'
+import { useStoreManagementContext } from '@/hooks/useStoreManagementContext'
 import { MotionPage } from '@/design/motion'
 import { buildInternalMxNavigation } from '@/design-system/internal-mx/internalMxNavigation'
 import { MxRoleVisualScope } from '@/components/module/MxRoleVisualScope'
@@ -118,6 +119,29 @@ const ownerNavConfig: NavCategory[] = OWNER_BASE44_NAVIGATION.map(section => ({
   items: section.items.map(item => mapOwnerNavigationItem(section.label, item)),
 }))
 
+/**
+ * Seção "Gestão Comercial" do dono.
+ *
+ * Sem gerente ativo na loja, o dono acumula a gestão e recebe o módulo gerencial
+ * completo expandido. Com gerente ativo, a mesma seção permanece disponível como
+ * acompanhamento (recolhida).
+ */
+const ownerCommercialCategory = (mode: 'gestao' | 'acompanhamento'): NavCategory => ({
+  category: mode === 'gestao' ? 'GESTÃO COMERCIAL' : 'ACOMPANHAR OPERAÇÃO COMERCIAL',
+  icon: <BriefcaseBusiness size={22} />,
+  items: [
+    { label: 'Rotina da Equipe', path: '/gerente/rotina-equipe', icon: <CalendarCheck size={16} /> },
+    { label: 'Fechamento Diário', path: '/fechamento-diario', icon: <CheckSquare size={16} /> },
+    { label: 'Meta da Loja', path: '/gerente/meta-loja', icon: <Target size={16} /> },
+    { label: 'Vendas', path: '/gerente/vendas', icon: <TrendingUp size={16} /> },
+    { label: 'Funil Comercial', path: '/funil-vendas', icon: <Filter size={16} /> },
+    { label: 'Minha Equipe', path: '/gerente/minha-equipe', icon: <Users size={16} /> },
+    { label: 'Mentor Gerencial', path: '/gerente/mentor', icon: <BrainCircuit size={16} /> },
+    { label: 'Feedbacks e PDI', path: '/gerente/feedbacks-pdis', icon: <BookOpen size={16} /> },
+    { label: 'Ranking', path: '/gerente/ranking', icon: <Trophy size={16} /> },
+  ],
+})
+
 const navConfig: Record<string, NavCategory[]> = {
   dono: ownerNavConfig,
   gerente: [
@@ -206,6 +230,7 @@ function LayoutContent() {
   const navigate = useNavigate()
   const location = useLocation()
   const [ownerLastUpdated, setOwnerLastUpdated] = React.useState(() => new Date())
+  const { commercialAccessMode } = useStoreManagementContext()
 
   const storeDashboardPath = membership?.store?.name
     ? `/lojas/${slugify(membership.store.name)}`
@@ -220,7 +245,10 @@ function LayoutContent() {
     : '/lojas'
   const categories = React.useMemo(() => {
     const baseCategories = role ? (navConfig[role] || []) : []
-    return baseCategories
+    const withCommercial = role === 'dono'
+      ? [...baseCategories, ownerCommercialCategory(commercialAccessMode)]
+      : baseCategories
+    return withCommercial
       .map((category) => {
         const items = category.items
           .map((item) => {
@@ -236,7 +264,7 @@ function LayoutContent() {
         return { ...category, items }
       })
       .filter((category) => category.items.length > 0)
-  }, [role, storeConsultorIaPath, storeDashboardPath, storeTeamPath])
+  }, [commercialAccessMode, role, storeConsultorIaPath, storeDashboardPath, storeTeamPath])
 
   const perfilVisivel = role
     ? rotulosPerfil[role] || 'Perfil autorizado'

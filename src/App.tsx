@@ -50,7 +50,7 @@ const AppShell = lazy(() => import('@/components/AppShell'))
 const OwnerPlanoEstrategico = lazy(() => import('@/pages/owner/PlanoEstrategico'))
 const OwnerPlanoDeAcao = lazy(() => import('@/pages/owner/PlanoDeAcao'))
 const OwnerConsultoria = lazy(() => import('@/pages/owner/Consultoria'))
-const OwnerRotinaDoDia = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.RotinaDoDia })))
+const OwnerRoutineSwitch = lazy(() => import('@/features/owner/OwnerRoutineSwitch'))
 const OwnerCentralDeDecisoes = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.CentralDeDecisoes })))
 const OwnerDepartamentos = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentosVisaoGeral })))
 const OwnerDeptComercial = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentoComercial })))
@@ -430,7 +430,7 @@ export default function App() {
                 <Route path="vendedor/perfil" element={<RedirectWithSearch to="/perfil" />} />
 
                 <Route path="gerente/fechamento-diario" element={<RedirectWithSearch to="/fechamento-diario" />} />
-                <Route path="gerente/rotina-equipe" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ForbiddenRoute />} admin={<ManagerTeamRoutine />} /></Suspense>} />
+                <Route path="gerente/rotina-equipe" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspense>} />
                 <Route path="gerente/minha-equipe" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>} />
                 <Route path="gerente/meta-loja" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>} />
                 <Route path="gerente/vendas" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>} />
@@ -453,7 +453,7 @@ export default function App() {
                 </Suspense>} />
                 <Route path="pdi/:id/print" element={<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>} />
                 <Route path="rotina" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRotinaDoDia />} admin={<RotinaGerente />} />
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineSwitch />} admin={<RotinaGerente />} />
                 </Suspense>} />
 
                 <Route path="painel" element={<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>} />

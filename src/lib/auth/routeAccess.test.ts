@@ -94,7 +94,9 @@ describe('route access matrix', () => {
     ]
     for (const route of routes) {
       expect(canAccessPath(route, 'gerente')).toBe(true)
-      expect(canAccessPath(route, 'dono')).toBe(route !== '/gerente/rotina-equipe')
+      // O dono acumula a gestão comercial (ou acompanha), então enxerga todas as
+      // rotas gerenciais canônicas — inclusive a rotina da equipe.
+      expect(canAccessPath(route, 'dono')).toBe(true)
       expect(canAccessPath(route, 'administrador_mx')).toBe(true)
       expect(canAccessPath(route, 'vendedor')).toBe(false)
     }
