@@ -1,24 +1,26 @@
 # Revisão de performance e confiabilidade Supabase — 2026-08-04
 
-Estado: `IN_PROGRESS`
-SHA de código observado: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
+Estado: `PASS_WITH_FINDINGS`
+Checkout atual: `9abfc70a79da46c03ee156b49933310584f85a65`
 
-## Escopo
+## Proveniência preservada
 
-Medir queries críticas com EXPLAIN seguro/logs; classificar FKs sem índice; revisar `auth_rls_initplan`, policies permissivas, índices não usados/duplicados, PKs ausentes, crons, backups, retenção e restore; reexecutar advisors antes/depois.
+- Relatório-base read-only: `.superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/parallel-supabase-audit.md`
+- O relatório-base continua a fonte histórica para catálogo amplo de risco; esta task só consolidou e revalidou o mínimo read-only necessário.
 
-## Baseline
+## Revalidação atual relevante para confiabilidade
 
-Ainda não há resultado atual nesta rodada. Contagens históricas do prompt serão tratadas como hipótese até consulta remota atualizada.
+| Item | Estado | Evidência atual |
+|---|---|---|
+| Funções com falha de execução lógica | `PASS_WITH_FINDINGS` | `supabase db lint --linked` continua falhando em `gerar_alertas_loja`, `mx_score_recalcular_loja`, `mx_score_atualizar_atraso_plano`, `consolidar_dashboard_departamento` |
+| Warnings adicionais de PL/pgSQL | `PASS_WITH_FINDINGS` | `admin_create_store`, `admin_update_store`, `salvar_metas_indicador_planejamento` |
+| Catálogo completo de FKs/índices/PKs | `NOT_PROVEN` | não reextraído nesta task |
+| EXPLAIN/benchmarks de queries críticas | `NOT_PROVEN` | fora do escopo desta consolidação documental |
+| Backup/restore real | `NOT_PROVEN` | nenhuma prova de restore foi executada |
+| RPO/RTO operacionais | `NOT_PROVEN` | não houve drill read-only adicional além dos relatórios-base |
 
-## Findings e decisões
+## Leitura consolidada
 
-| ID | Objeto | Medição | Decisão | Risco residual | Estado |
-|---|---|---|---|---|---|
-| SP-001 | Queries críticas | pendente | medir antes de otimizar | desconhecido | `IN_PROGRESS` |
-| SP-002 | FKs sem índice | pendente | plano por FK, sem criação automática | desconhecido | `IN_PROGRESS` |
-| SP-003 | policies/`auth_rls_initplan` | pendente | benchmark e testes de acesso | desconhecido | `IN_PROGRESS` |
-| SP-004 | índices duplicados/não usados | pendente | só remover com equivalência/prova | desconhecido | `IN_PROGRESS` |
-| SP-005 | crons/backups/restore | pendente | documentar RPO/RTO reais e testar fora de produção | potencialmente alto | `IN_PROGRESS` |
-
-Nenhuma alteração de banco será considerada concluída apenas por advisor; a causa, consumidor, migration, teste e reread serão registrados.
+- Os erros `22P02` e `42803` continuam sendo defeitos atuais de confiabilidade, não apenas dívida histórica.
+- A ausência de nova bateria de catálogo, índices e EXPLAIN impede declarar performance segura.
+- A ausência de prova de restore continua um bloqueio explícito para qualquer claim forte de recuperação operacional.

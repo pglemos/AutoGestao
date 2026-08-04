@@ -1,28 +1,31 @@
 # Relatório final — execução autônoma MX — 2026-08-04
 
-Estado: `IN_PROGRESS`
-Declaração final permitida: ainda não determinada.
+Estado desta consolidação: `PASS_WITH_FINDINGS`
 
-## Resumo executivo
+## Escopo real concluído
 
-- SHA inicial: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
-- SHA final: pendente até a última mudança publicada.
-- Deployment final/release Sentry/migrations: pendentes de reconciliação.
-- Tasks: controle revalidado na rodada 1; correção do warning e auditorias ainda não concluídas.
-- Bloqueios externos: somente serão listados com evidência e alternativas tentadas.
+- Task 3 foi concluída como auditoria/evidência documental read-only + commit local dos artefatos.
+- Este arquivo não declara a release completa, nem a prova integral do prompt mestre.
 
-## Git
+## Snapshot atual
 
-Backup inicial validado; branches/PRs ainda serão inventariadas. A execução permanece na `main`, sem force-push, worktree ou branch auxiliar.
+- checkout atual: `9abfc70a79da46c03ee156b49933310584f85a65`
+- `origin/main`: `11a9465f253ce8f96052db70c9171b14425e9d4e`
+- alias público `/api/health`: `release=1b99c0ab82618038fa0826557e7b8762e6247b2b`
+- READY consultado `/api/health`: `release=7387fb325dd645aaa2f832895e341c541c1f1d60`
 
-## Frontend, funcional e visual
+## Findings que permanecem explícitos
 
-A auditoria Dono/Gerente do handoff fornece baseline parcial. O warning de dimensão do gráfico do Gerente precisa de teste RED/GREEN, revisão e prova publicada. A matriz completa será preenchida com screenshots e console/rede.
+- `PASS_WITH_FINDINGS` — divergência local x remoto em `main`
+- `PASS_WITH_FINDINGS` — runtime público e READY recente não batem com o checkout atual
+- `PASS_WITH_FINDINGS` — `6` alertas abertos de secret scanning
+- `PASS_WITH_FINDINGS` — `main` sem branch protection
+- `PASS_WITH_FINDINGS` — Supabase live lint ainda falha em funções críticas
+- `PASS_WITH_FINDINGS` — CORS wildcard / `verify_jwt = false` / auth manual continuam visíveis no checkout atual
+- `PASS_WITH_FINDINGS` — `npm audit` continua com `2` advisories high em `react-router` / `react-router-dom`
+- `BLOCKED_EXTERNAL` — Sentry, gitleaks e browser live autenticado
+- `NOT_PROVEN` — Consultor MX, Administrador Geral, matriz live atual de rotas/perfis/viewports e publicação do warning fix no SHA atual
 
-## Supabase, Vercel e Sentry
+## Regra de fechamento
 
-As revisões dedicadas registram o estado `IN_PROGRESS`; nenhum finding histórico será apresentado como atual sem query/CLI/evidência correspondente.
-
-## Testes e pendências
-
-Os comandos, contagens, checks remotos, artefatos e findings serão acrescentados ao fechar cada task. Enquanto houver task `IN_PROGRESS`, `FAILED`, `BLOCKED_EXTERNAL` sem independentes concluídas, ou evidência ausente, o relatório não poderá declarar conclusão integral.
+Nenhum texto deste relatório pode ser usado para afirmar que o prompt completo ou a release estão concluídos.

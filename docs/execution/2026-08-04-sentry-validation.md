@@ -1,27 +1,23 @@
 # Validação Sentry — 2026-08-04
 
-Estado: `IN_PROGRESS`
-SHA de código observado: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
+Estado: `BLOCKED_EXTERNAL`
+Checkout atual: `9abfc70a79da46c03ee156b49933310584f85a65`
 
-## Critérios
+## Proveniência preservada
 
-- organização/projeto descobertos sem imprimir token;
-- release e source maps correspondentes ao SHA publicado;
-- evento frontend e backend controlados com `synthetic_test=true`;
-- stack desminificado com arquivo/função/linha originais;
-- environment, rota, perfil, loja mascarada, breadcrumbs e correlation ID;
-- ausência de senha, token, CPF, telefone, conteúdo de cliente ou PII indevida;
-- performance, Replay e alertas revisados conforme habilitação real;
-- evento sintético removido/desabilitado se não for capacidade permanente útil.
+- O relatório-base de qualidade já havia marcado Sentry como gap externo por falta de credenciais e ferramenta.
+- Essa leitura foi revalidada; não foi promovida a sucesso sem nova evidência.
 
-## Ledger
+## Revalidação atual
 
-| ID | Evidência | Resultado | Estado |
-|---|---|---|---|
-| SE-001 | destino/configuração | ainda não revalidado | `IN_PROGRESS` |
-| SE-002 | release/source maps do SHA final | pendente | `NOT_STARTED` |
-| SE-003 | evento frontend | pendente | `NOT_STARTED` |
-| SE-004 | evento backend/Edge Function | pendente | `NOT_STARTED` |
-| SE-005 | alerta, privacy e Replay/performance | pendente | `NOT_STARTED` |
+| Comando / ação | Resultado observado | Estado |
+|---|---|---|
+| `command -v sentry-cli || true` | sem saída | `BLOCKED_EXTERNAL` |
+| `printenv | rg '^SENTRY_' || true` | sem saída | `BLOCKED_EXTERNAL` |
+| comparação de SHAs/runtime | alias público serve `1b99c0ab...`, checkout atual é `9abfc70a...` | `NOT_PROVEN` |
 
-Nenhum token ou link de evento será salvo neste arquivo.
+## Conclusão permitida
+
+- Não há credencial nem binário suficientes para validar org/projeto/release/issues/alerts nesta rodada.
+- Mesmo que houvesse acesso, o SHA atual local não coincide com a release servida pelo alias público.
+- Logo source maps, release binding e evento sintético do SHA atual permanecem não provados.

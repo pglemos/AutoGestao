@@ -1,37 +1,45 @@
 # Progresso — execução autônoma MX — 2026-08-04
 
-Última atualização: `2026-08-04T05:31:59-03:00`
-SHA observado: `11a9465f253ce8f96052db70c9171b14425e9d4e`
+Última atualização: `2026-08-04T06:22:35-03:00`
+SHA atual revalidado: `9abfc70a79da46c03ee156b49933310584f85a65`
 Branch: `main`
-Estado global: `IN_PROGRESS`
+Estado global deste controle: `PASS_WITH_FINDINGS`
 
-## Task 0 — Baseline e preservação
+## Proveniência preservada
 
-- Estado: `DONE_WITH_EVIDENCE`
-- SHA inicial/final: `11a9465f253ce8f96052db70c9171b14425e9d4e`
-- Evidência: `git status --short --branch`, `git fetch --all --prune`, `git pull --ff-only origin main`, `git ls-remote origin refs/heads/main`; os SHAs coincidiram.
-- Backup: tag `pre-main-autonomous-20260804-051820`; bundle verificado como contendo história completa.
-- Alterações do usuário: `mx-v3-csv-VzMBNx/checklist.csv`, `manifest.csv`, `records.json`; preservadas, não rastreadas e não alteradas.
-- Pendências: baseline de serviços/ambientes continua em execução.
+- Rodada anterior do mesmo dia registrou estados em `11a9465f253ce8f96052db70c9171b14425e9d4e` e `9fdd484f1eb0c79c11cba98bac91eca2502ee799`; esses pontos continuam válidos apenas para seus próprios timestamps.
+- Relatórios bounded reaproveitados sem relabel:
+  - `.superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/parallel-git-vercel-audit.md`
+  - `.superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/parallel-supabase-audit.md`
+  - `.superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/parallel-quality-audit.md`
 
-## Task 1 — Artefatos de controle
+## Snapshot atual
 
-- Estado: `DONE_WITH_EVIDENCE`
-- SHA inicial: `11a9465f253ce8f96052db70c9171b14425e9d4e`
-- Hipótese: os nove arquivos obrigatórios ainda não estavam versionados e precisam ser criados antes da auditoria.
-- Evidência inicial: `find docs/execution` não retornou arquivos.
-- Revalidação round 1: Git, backup, branches, CLI access e produção foram checados novamente; o alias público e o deployment READY mais recente ainda mostram releases diferentes.
-- Alterações: plano, progresso, ledger, matriz de rotas, revisões Supabase, Sentry, Vercel e relatório final serão mantidos neste diretório.
-- Próxima task: consolidar os arquivos e executar revisão da documentação.
+- `PASS_WITH_FINDINGS` — `main` local continua divergente de `origin/main`: `HEAD=9abfc70a79da46c03ee156b49933310584f85a65`, remoto `11a9465f253ce8f96052db70c9171b14425e9d4e`, `git rev-list --left-right --count origin/main...main => 0 6`.
+- `PASS_WITH_FINDINGS` — alias público `https://mxperformance.vercel.app/api/health` segue saudável, mas responde `release=1b99c0ab82618038fa0826557e7b8762e6247b2b`, diferente do checkout atual e também diferente do READY recente consultado (`https://mxperformance-kjbp4sqkc-synvolt.vercel.app/api/health => release=7387fb325dd645aaa2f832895e341c541c1f1d60`).
+- `PASS_WITH_FINDINGS` — GitHub ainda expõe `main` sem branch protection e `6` alertas abertos de secret scanning.
+- `PASS_WITH_FINDINGS` — `supabase db lint --linked` continua acusando defeitos live em `public.gerar_alertas_loja`, `public.mx_score_recalcular_loja`, `public.mx_score_atualizar_atraso_plano` e `public.consolidar_dashboard_departamento`.
+- `BLOCKED_EXTERNAL` — Sentry não pôde ser revalidado nesta rodada: sem `sentry-cli`, sem variáveis `SENTRY_*` e sem prova de source maps do SHA atual.
+- `BLOCKED_EXTERNAL` — browser live autenticado não foi executado nesta task; cobertura atual de perfis/rotas/viewports permaneceu parcial.
 
-## Task 2 — Warning de dimensões do gráfico do Gerente
+## Tasks de interesse para esta consolidação
 
-- Estado: `NOT_STARTED`
-- Hipótese inicial: `AppointmentsChart`/`ResponsiveContainer` mede dimensão inválida durante o primeiro layout.
-- Evidência anterior a revalidar: dois warnings de produção no console do Gerente, `The width(-1) and height(-1) of chart should be greater than 0`.
-- Próxima ação: teste RED focado, patch mínimo e re-review.
+### Task 2 — Warning de dimensões do gráfico do Gerente
 
-## Bloqueios externos conhecidos
+Estado: `NOT_PROVEN`
 
-- Nenhum bloqueio novo foi declarado neste registro.
-- Perfis sem credenciais fornecidas e qualquer limitação de plano/CLI serão classificados somente após tentativa autorizada e evidência atual.
+- Fix deve permanecer registrado apenas como revisão local anterior.
+- Não existe deployment provado para o SHA atual `9abfc70a79da46c03ee156b49933310584f85a65`.
+- Portanto o warning não pode ser marcado como provado em produção nesta consolidação.
+
+### Task 3 — Auditorias independentes
+
+Estado: `PASS_WITH_FINDINGS`
+
+- Escopo desta task foi concluído como consolidação/auditoria documental.
+- Os findings e gaps permanecem explícitos nos artefatos dedicados; a task não autoriza push, deploy, migração, rotação de segredo, deleção de branch ou alteração de dados.
+
+## Preservação confirmada
+
+- `mx-v3-csv-VzMBNx/` segue apenas como diretório não rastreado; não foi modificado.
+- Nenhum segredo, token, link temporário ou PII foi copiado para os artefatos.

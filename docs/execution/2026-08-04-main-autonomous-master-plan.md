@@ -2,61 +2,36 @@
 
 ## Fonte de requisitos
 
-- Prompt: `/Users/pedroguilherme/Downloads/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX.md`
-- Story associada à correção visual: `docs/stories/story-UX-20260718-paridade-visual-gerente-admin-v2.md`
-- Branch autorizada: `main`; nenhum worktree ou branch auxiliar será criado.
-- SHA inicial revalidado: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
-- Backup revalidado: tag `pre-main-autonomous-20260804-051820` e bundle `/Users/pedroguilherme/PROJETOS/MXGESTAOPREDITIVA-pre-main-autonomous-20260804-051820.bundle`.
-- Round 1 update: Git, branches, CLI access e produção foram revalidados no SHA `9fdd484f1eb0c79c11cba98bac91eca2502ee799`; alias público e deployment READY mais recente seguem com releases diferentes.
+- Brief obrigatório: `.superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/task-3-brief.md`
+- Branch autorizada: `main`
+- Checkout atual revalidado nesta consolidação: `9abfc70a79da46c03ee156b49933310584f85a65`
+- Alteração fora de escopo preservada: `mx-v3-csv-VzMBNx/`
 
-## Restrições globais
+## Restrições que permanecem ativas
 
-1. Preservar `mx-v3-csv-VzMBNx/` e qualquer alteração não identificada do usuário.
-2. Não registrar, commitar ou imprimir credenciais, tokens, links temporários ou PII.
-3. Não rotacionar, revogar, regenerar ou substituir credenciais existentes.
-4. Cada correção de código deve ter teste RED antes, GREEN depois, revisão de task e revisão ampla.
-5. Push remoto só depois de lint, typecheck, testes relacionados, build, secret scan e revisão QA.
-6. Toda evidência deve indicar ambiente, SHA, timestamp, perfil/rota/viewport quando aplicável e resultado observado.
-7. Bloqueios externos devem permanecer explícitos; nenhuma cobertura parcial será declarada como integral.
+1. Não empurrar, não aplicar migrações, não alterar dados de produção, não rotacionar credenciais.
+2. Não tocar `mx-v3-csv-VzMBNx/`.
+3. Não relabelar evidência antiga como atual.
+4. Nenhum claim de release completa sem SHA publicado, runtime compatível e browser live correspondente.
 
-## Tasks executáveis
+## Estado das tasks no corte desta consolidação
 
-### Task 1 — Controle e baseline
+| Task | Estado | Nota |
+|---|---|---|
+| Task 1 — controles/base | `PASS_WITH_FINDINGS` | artefatos agora reconciliados, mas divergência e runtime mismatch seguem explícitos |
+| Task 2 — warning do gráfico do Gerente | `NOT_PROVEN` | revisão local anterior existe, mas sem prova publicada do SHA atual |
+| Task 3 — auditorias independentes | `PASS_WITH_FINDINGS` | consolidação documental concluída com findings e blockers explícitos |
+| Task 4 — matriz funcional/visual live | `NOT_PROVEN` | sem browser live autenticado nesta task |
+| Task 5 — gates amplos / secret scan / revisão final | `BLOCKED_EXTERNAL` | gitleaks e Sentry indisponíveis; demais gates fora do escopo desta task |
+| Task 6 — release e prova publicada | `NOT_PROVEN` | sem push/deploy nesta task por restrição explícita |
 
-- Estado: `DONE_WITH_EVIDENCE`
-- Criar e manter os nove arquivos obrigatórios, o ledger SDD e o registro de baseline.
-- Revalidar Git, backup, acessos sem segredos, produção, branches e alterações do usuário.
+## Achados que não podem sumir do plano
 
-### Task 2 — Warning de dimensões no gráfico do Gerente
-
-- Estado: `NOT_STARTED`
-- Rota/perfil: superfície inicial do Gerente, produção e local autenticado.
-- Causa candidata: `ResponsiveContainer` em `AppointmentsChart` dentro de `.h-64` calcula largura/altura negativa ou zero durante o primeiro layout.
-- Aceite: teste falha antes da correção; depois passa sem warning `width(-1)`/`height(-1)`, preserva dados reais, responsividade e acessibilidade; sem regressão em outras superfícies.
-
-### Task 3 — Auditorias independentes
-
-- Estado: `NOT_STARTED`
-- Git/PRs/branches, Vercel/SHAs, rotas/perfis/viewports/estados, Supabase segurança/performance, APIs, Sentry, dependências, acessibilidade, performance e CI.
-- Cada domínio deve produzir evidência ou `BLOCKED_EXTERNAL` com causa e alternativas tentadas.
-
-### Task 4 — Matriz funcional e visual
-
-- Estado: `NOT_STARTED`
-- Exercitar os seis perfis previstos pelo prompt quando houver credencial/sessão real; registrar ausência de acesso para Consultor MX e Administrador Geral se não houver alternativa autorizada.
-- Exercitar `390×844`, `600×900`, `768×1024`, `840×1024`, `1024×768`, `1280×800`, `1440×900`, `1600×1000`, `1920×1080`, sem overflow, erros de console ou rede não explicados.
-
-### Task 5 — Gates locais e revisão
-
-- Estado: `NOT_STARTED`
-- Rodar `npm run lint`, `npm run typecheck`, `npm test`, `npm run build`, `npm run check:bundle-size`, secret scan e CodeRabbit disponível.
-- Executar revisão por task e uma revisão whole-branch; corrigir findings críticos/importantes dentro do limite SDD.
-
-### Task 6 — Release e prova publicada
-
-- Estado: `NOT_STARTED`
-- Commit atômico em `main`, push sem force, checks do SHA exato, Vercel `READY`, `/api/health`, release/runtime SHA, smoke público e autenticado, monitoramento e rollback não destrutivo.
-
-## Definition of Done aplicada
-
-Uma task só será `DONE_WITH_EVIDENCE` com causa raiz, teste RED/GREEN, gates locais, revisão, commit/push, checks remotos, deployment correspondente, prova no ambiente publicado, console/rede limpos e artefato de evidência. O relatório final só poderá usar `CONCLUÍDO COM EVIDÊNCIA INTEGRAL` se nenhum gate ou perfil aplicável permanecer aberto.
+- divergência entre `main` local e `origin/main`
+- mismatch entre alias público, READY recente e checkout atual
+- `6` alertas abertos de secret scanning
+- branch `main` sem protection
+- defeitos live de Supabase lint em funções críticas
+- riscos estáticos de wildcard CORS / auth Edge / `verify_jwt = false`
+- advisories high de `react-router` / `react-router-dom`
+- blockers externos de Sentry, gitleaks e browser live autenticado

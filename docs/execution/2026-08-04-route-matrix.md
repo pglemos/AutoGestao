@@ -1,29 +1,30 @@
 # Matriz de rotas, perfis, viewports e estados — 2026-08-04
 
+Estado desta consolidação: `NOT_PROVEN`
+
+## Regra desta task
+
+Sem browser live autenticado nesta task, nenhuma linha abaixo pode ser promovida para cobertura integral apenas por herança documental.
+
 ## Perfis
 
-| Perfil | Credencial/sessão disponível nesta execução | Estado inicial | Evidência necessária |
+| Perfil | Sessão/credencial nesta task | Estado | Observação |
 |---|---|---|---|
-| Vendedor | Sim | `NOT_STARTED` | login, rotas autorizadas/proibidas, ações e 9 viewports |
-| Gerente | Sim | `IN_PROGRESS` | warning do gráfico, rotas, ações e 9 viewports |
-| Dono | Sim | `TESTED_PRODUCTION` herdado, revalidação final pendente | matriz completa e screenshots |
-| Administrador Geral | Não fornecida | `BLOCKED_EXTERNAL` se nenhuma sessão autorizada existir | tentativa de acesso e alternativa documentada |
-| Administrador MX | Sim | `NOT_STARTED` | painel, lojas, simulação e permissões |
-| Consultor MX | Não fornecida | `BLOCKED_EXTERNAL` se nenhuma sessão autorizada existir | tentativa de acesso e alternativa documentada |
+| Vendedor | não exercitado nesta task | `NOT_PROVEN` | evidência antiga não foi relabelada |
+| Gerente | não exercitado nesta task | `NOT_PROVEN` | warning fix segue sem prova publicada do SHA atual |
+| Dono | não exercitado nesta task | `NOT_PROVEN` | auditorias anteriores continuam apenas históricas |
+| Administrador MX | não exercitado nesta task | `NOT_PROVEN` | sem rodada live atual |
+| Administrador Geral | não fornecida | `BLOCKED_EXTERNAL` | ausência de acesso autorizado explícita |
+| Consultor MX | não fornecida | `BLOCKED_EXTERNAL` | ausência de acesso autorizado explícita |
 
 ## Viewports obrigatórios
 
-`390×844`, `600×900`, `768×1024`, `840×1024`, `1024×768`, `1280×800`, `1440×900`, `1600×1000`, `1920×1080`.
+`390×844`, `600×900`, `768×1024`, `840×1024`, `1024×768`, `1280×800`, `1440×900`, `1600×1000`, `1920×1080`
 
-## Estados e ações
+Estado nesta task: `NOT_PROVEN`
 
-Loading, dados reais, vazio, erro de rede/API, acesso negado, sessão expirada, formulário válido/inválido, salvamento, sucesso/erro, modal, drawer, dropdown, tooltip, conteúdo longo/nulo/extremo, navegação, login/logout, troca de loja, simulação, CRUD, busca/filtro/ordenação/paginação, upload/download/exportação, calendário, notificações, feedback/PDI, fechamento, permissões e equipe.
+## Gaps que precisam permanecer explícitos
 
-## Registro de execução
-
-| Perfil | Rota | Viewport | Estado | Ação | Console/rede | Screenshot | Estado |
-|---|---|---|---|---|---|---|---|
-| Gerente | superfície inicial | 9 obrigatórios | carregamento + gráfico | abrir dashboard | 2 warnings conhecidos a revalidar | `output/playwright/` existente | `IN_PROGRESS` |
-| Dono | rotas Dono já auditadas | 9 obrigatórios | carregado | navegação/overflow | sem overflow na auditoria anterior | `output/playwright/` | `TESTED_PRODUCTION` |
-
-Nenhuma linha será marcada como `DONE_WITH_EVIDENCE` sem a evidência correspondente nesta execução.
+- sem verificação live de overflow, console e rede na combinação rota/perfil/viewport do checkout atual;
+- sem reexecução atual dos estados loading, vazio, erro, acesso negado, sessão expirada, salvamento, modal/drawer, CRUD, upload/download/exportação;
+- sem cobertura autorizada de Consultor MX e Administrador Geral.

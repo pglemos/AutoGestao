@@ -1,113 +1,155 @@
 # Evidence ledger — MX autônomo — 2026-08-04
 
-## EV-BASE-001
+Estado deste ledger: `PASS_WITH_FINDINGS`
 
-- Requisito: trabalhar diretamente na `main` com backup antes de editar.
-- Ambiente: checkout local `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA`.
-- Perfil: não aplicável.
-- Rota/objeto: Git repository.
-- Viewport: não aplicável.
-- Estado exercitado: branch, upstream, working tree e refs remotas.
-- Ação: `git fetch --all --prune`, `git checkout main`, `git pull --ff-only origin main`, `git ls-remote origin refs/heads/main`.
-- Resultado esperado: `main` atualizada sem perda de arquivos.
-- Resultado observado: local e remoto em `11a9465f253ce8f96052db70c9171b14425e9d4e`; apenas `mx-v3-csv-VzMBNx/` não rastreado.
-- SHA: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
-- Deployment: não aplicável.
-- Timestamp: `2026-08-04T05:31:59-03:00`.
-- Artefato: saída do terminal e diretório preservado.
-- Conclusão permitida: baseline Git comprovada; não prova release ou produção.
+## Proveniência preservada
 
-## EV-BASE-002
+- Evidência histórica do mesmo dia, mas não relabelada como atual:
+  - `parallel-git-vercel-audit.md` (`2026-08-04T08:52:53Z` a `2026-08-04T08:56:13Z`, SHAs `9fdd484f...` e `11a9465f...`)
+  - `parallel-supabase-audit.md` (`2026-08-04T08:58:30Z`, SHA `9fdd484f...`)
+  - `parallel-quality-audit.md` (`2026-08-04T05:54:42-03:00`, SHA `9fdd484f...`)
 
-- Requisito: backup Git anotado e bundle completo verificável.
-- Ambiente: checkout local.
-- Perfil/rota/viewport: não aplicável.
-- Estado exercitado: tag e bundle.
-- Ação: `git show pre-main-autonomous-20260804-051820` e `git bundle verify /Users/pedroguilherme/PROJETOS/MXGESTAOPREDITIVA-pre-main-autonomous-20260804-051820.bundle`.
-- Resultado esperado: tag aponta para o SHA inicial e bundle contém história completa.
-- Resultado observado: tag anotada aponta para `11a9465f...`; bundle validado como história completa.
-- SHA: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
-- Deployment: não aplicável.
-- Timestamp: `2026-08-04T05:31:59-03:00`.
-- Artefato: tag e bundle locais.
-- Conclusão permitida: backup comprovado; não prova restauração de Supabase.
+## EV-T3-001 — checkout atual e worktree
 
-## EV-CTRL-001
+- Status: `PASS_WITH_FINDINGS`
+- Ambiente: checkout local `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA`
+- Perfil / rota / viewport: não aplicável
+- Timestamp: `2026-08-04T06:28:15-03:00`
+- Comando / ação:
+  - `git rev-parse HEAD`
+  - `git branch --show-current`
+  - `git status --short --branch`
+  - `git worktree list --porcelain`
+- Resultado esperado: confirmar SHA atual, branch `main`, worktree corrente e sujeira fora de escopo.
+- Resultado observado:
+  - `HEAD=9abfc70a79da46c03ee156b49933310584f85a65`
+  - branch `main`
+  - `## main...origin/main [ahead 6]`
+  - `?? mx-v3-csv-VzMBNx/`
+  - worktree atual em `main`; worktrees prunable antigos permanecem fora de escopo.
+- Conclusão permitida: checkout atual confirmado; divergência local/remota segue aberta; `mx-v3-csv-VzMBNx/` preservado.
 
-- Requisito: nove arquivos de controle versionados sem placeholders secretos.
-- Ambiente: checkout local.
-- Perfil/rota/viewport: não aplicável.
-- Estado exercitado: criação inicial dos artefatos.
-- Ação: patch dos arquivos em `docs/execution/`.
-- Resultado esperado: todos os arquivos existem com estados explícitos.
-- Resultado observado: a criação está em andamento; o commit e a revisão ainda não foram executados.
-- SHA: `11a9465f253ce8f96052db70c9171b14425e9d4e` antes do commit.
-- Deployment: pendente.
-- Timestamp: `2026-08-04T05:31:59-03:00`.
-- Artefato: este ledger e os nove documentos relacionados.
-- Conclusão permitida: controle local em andamento; não permite declarar task concluída.
+## EV-T3-002 — divergência local x remoto
 
-## EV-GERENTE-001
+- Status: `PASS_WITH_FINDINGS`
+- Ambiente: Git remoto read-only
+- Perfil / rota / viewport: não aplicável
+- Timestamp: `2026-08-04T06:28:15-03:00`
+- Comando / ação:
+  - `git ls-remote origin refs/heads/main`
+  - `git rev-list --left-right --count origin/main...main`
+- Resultado esperado: confirmar o SHA remoto real e a contagem de divergência.
+- Resultado observado:
+  - `origin/main = 11a9465f253ce8f96052db70c9171b14425e9d4e`
+  - divergência `0 6`
+- Conclusão permitida: continua verdadeiro que `main` local difere da `main` remota; nenhuma parte desta task pode tratar isso como release provado.
 
-- Requisito: zero warnings de dimensão no gráfico do Gerente.
-- Ambiente: produção e local, a revalidar.
-- Perfil: Gerente.
-- Rota/objeto: `ManagerSellerParityHomeCanonical.tsx` / `AppointmentsChart`.
-- Viewport: matriz completa a revalidar.
-- Estado exercitado: carregamento inicial e gráfico com dados reais.
-- Ação: pendente — reproduzir warning, executar teste RED, corrigir e validar.
-- Resultado esperado/observado: ainda não executado nesta rodada.
-- SHA/deployment/timestamp: pendentes.
-- Artefato: screenshot, console e teste focado serão anexados quando produzidos.
-- Conclusão permitida: nenhuma até prova GREEN e produção.
+## EV-T3-003 — governança GitHub
 
-## EV-BASE-003
+- Status: `PASS_WITH_FINDINGS`
+- Ambiente: GitHub API read-only
+- Perfil / rota / viewport: não aplicável
+- Timestamp: `2026-08-04T06:28:15-03:00`
+- Comando / ação:
+  - `gh api repos/pglemos/MXGESTAOPREDITIVA/branches/main --jq '{protected: .protected, protection: .protection.enabled}'`
+  - `gh api repos/pglemos/MXGESTAOPREDITIVA/secret-scanning/alerts --paginate --jq 'map(select(.state == "open")) | length'`
+- Resultado esperado: confirmar proteção de branch e alertas abertos sem imprimir segredos.
+- Resultado observado:
+  - `{"protected":false,"protection":false}`
+  - `6`
+- Conclusão permitida: permanece explícito que não há branch protection e que existem alertas abertos de secret scanning.
 
-- Requisito: revalidar Git/branches sem deletar nem reescrever histórico.
-- Ambiente: checkout local `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA`.
-- Perfil: não aplicável.
-- Rota/objeto: Git repository.
-- Viewport: não aplicável.
-- Estado exercitado: HEAD atual, remote refs e inventário de branches.
-- Ação: `git fetch --all --prune`, `git rev-parse HEAD`, `git branch -r | wc -l`, `git branch -a --verbose --no-abbrev`.
-- Resultado esperado: `main` alinhada e branches inventariadas sem deleção.
-- Resultado observado: `HEAD=9fdd484f1eb0c79c11cba98bac91eca2502ee799`; `branches-remote-count=24`; nenhuma deleção executada.
-- SHA: `9fdd484f1eb0c79c11cba98bac91eca2502ee799`.
-- Deployment: não aplicável.
-- Timestamp: `2026-08-04T05:51:39-03:00`.
-- Artefato: saída do terminal e inventário de branches.
-- Conclusão permitida: branches revalidadas; não há branch deletion nesta rodada.
+## EV-T3-004 — Vercel alias x READY
 
-## EV-BASE-004
+- Status: `PASS_WITH_FINDINGS`
+- Ambiente: Vercel CLI + HTTP público
+- Perfil / rota / viewport: rota pública `/api/health`
+- Timestamp: `2026-08-04T06:22:17-03:00` a `2026-08-04T06:22:35-03:00`
+- Comando / ação:
+  - `vercel list mxperformance --yes`
+  - `curl -sS https://mxperformance.vercel.app/api/health`
+  - `curl -sS https://mxperformance-kjbp4sqkc-synvolt.vercel.app/api/health`
+- Resultado esperado: identificar alias público, deployment READY recente e release servida por cada um.
+- Resultado observado:
+  - alias público `mxperformance.vercel.app` saudável, `release=1b99c0ab82618038fa0826557e7b8762e6247b2b`
+  - deployment READY consultado `mxperformance-kjbp4sqkc-synvolt.vercel.app` saudável, `release=7387fb325dd645aaa2f832895e341c541c1f1d60`
+  - nenhum dos dois corresponde ao checkout atual `9abfc70a79da46c03ee156b49933310584f85a65`
+- Conclusão permitida: continua verdadeiro que há mismatch entre código local, deployment READY observado e runtime público.
 
-- Requisito: revalidar acessos sem imprimir segredos.
-- Ambiente: CLI local.
-- Perfil: não aplicável.
-- Rota/objeto: Vercel CLI e Supabase CLI.
-- Viewport: não aplicável.
-- Estado exercitado: autenticação de CLI e listagem de projetos.
-- Ação: `vercel whoami`; `supabase projects list`.
-- Resultado esperado: acesso disponível sem exposição de credenciais.
-- Resultado observado: `vercel whoami` retornou `synvolt`; `supabase projects list` retornou a lista de projetos e indicou apenas a ausência de link local do projeto.
-- SHA: `9fdd484f1eb0c79c11cba98bac91eca2502ee799`.
-- Deployment: não aplicável.
-- Timestamp: `2026-08-04T05:51:39-03:00`.
-- Artefato: saída de CLI.
-- Conclusão permitida: acesso revalidado onde disponível; comandos escopados do Supabase seguem fora deste diretório.
+## EV-T3-005 — Supabase lint live
 
-## EV-BASE-005
+- Status: `PASS_WITH_FINDINGS`
+- Ambiente: Supabase CLI linked
+- Perfil / rota / viewport: não aplicável
+- Timestamp: `2026-08-04T06:28:15-03:00`
+- Comando / ação: `supabase db lint --linked`
+- Resultado esperado: revalidar se os defeitos live citados nos relatórios anteriores ainda existem.
+- Resultado observado:
+  - `public.gerar_alertas_loja` → `22P02 invalid input value for enum score_scope_type: "loja"`
+  - `public.mx_score_recalcular_loja` → `22P02 invalid input value for enum score_scope_type: "loja"`
+  - `public.mx_score_atualizar_atraso_plano` → `22P02 invalid input value for enum score_scope_type: "loja"`
+  - `public.consolidar_dashboard_departamento` → `42803 column "departamento_kpi_snapshot.period" must appear in the GROUP BY clause`
+  - warnings ainda presentes em `public.admin_create_store`, `public.admin_update_store`, `public.salvar_metas_indicador_planejamento`
+- Conclusão permitida: continua verdadeiro que o linked project possui defeitos live relevantes em funções críticas.
 
-- Requisito: revalidar produção e marcar a diferença entre alias público e deployment READY.
-- Ambiente: produção Vercel.
-- Perfil: não aplicável.
-- Rota/objeto: `mxperformance.vercel.app/api/health` e `mxperformance-fd1gtgmfg-synvolt.vercel.app/api/health`.
-- Viewport: não aplicável.
-- Estado exercitado: health checks HTTP 200 e inspeção do deployment READY.
-- Ação: `vercel list --non-interactive --status READY --format json`; `vercel inspect mxperformance.vercel.app --format json`; `vercel inspect mxperformance-fd1gtgmfg-synvolt.vercel.app --format json`; `curl -sS` aos dois endpoints `/api/health`.
-- Resultado esperado: produção atual revalidada com status claro.
-- Resultado observado: deployment READY mais recente `mxperformance-fd1gtgmfg-synvolt.vercel.app`; alias público ainda serviu `release":"1b99c0ab82618038fa0826557e7b8762e6247b2b"`; deployment READY mais recente serviu `release":"11a9465f253ce8f96052db70c9171b14425e9d4e"`; ambos responderam 200.
-- SHA: `1b99c0ab82618038fa0826557e7b8762e6247b2b` e `11a9465f253ce8f96052db70c9171b14425e9d4e`.
-- Deployment: `mxperformance.vercel.app`, `mxperformance-fd1gtgmfg-synvolt.vercel.app`.
-- Timestamp: `2026-08-04T05:51:39-03:00`.
-- Artefato: JSON do Vercel CLI e corpo HTTP de `/api/health`.
-- Conclusão permitida: produção revalidada; mismatch de alias documentado, não corrigido nesta rodada.
+## EV-T3-006 — riscos estáticos de Edge / auth / storage
+
+- Status: `PASS_WITH_FINDINGS`
+- Ambiente: código versionado do repositório
+- Perfil / rota / viewport: não aplicável
+- Timestamp: `2026-08-04T06:28:15-03:00`
+- Comando / ação: `rg -n "Access-Control-Allow-Origin|verify_jwt\\s*=\\s*false|Authorization: Bearer|auth\\.getUser\\(|pre-cadastro-avatares|evidencias-consultoria" supabase`
+- Resultado esperado: verificar se os riscos citados pelos relatórios anteriores ainda existem no checkout atual.
+- Resultado observado:
+  - `supabase/functions/_shared/cors.ts:2` → `Access-Control-Allow-Origin: "*"`
+  - `supabase/functions/_shared/auth.ts:51` → `sessionClient.auth.getUser()`
+  - `supabase/config.toml:372,375,378,381,390` → `verify_jwt = false`
+  - `supabase/migrations/20260729100000_fix_storage_bucket_policies.sql` ainda referencia `pre-cadastro-avatares` e `evidencias-consultoria`
+- Conclusão permitida: riscos estáticos de CORS wildcard, auth manual em Edge e exposição de buckets continuam presentes no checkout atual.
+
+## EV-T3-007 — advisories de runtime
+
+- Status: `PASS_WITH_FINDINGS`
+- Ambiente: NPM registry read-only
+- Perfil / rota / viewport: não aplicável
+- Timestamp: `2026-08-04T06:28:15-03:00`
+- Comando / ação: `npm audit --omit=dev --json | jq ...`
+- Resultado esperado: confirmar advisories atuais de produção sem despejar árvore completa.
+- Resultado observado:
+  - `2` vulnerabilidades `high`
+  - `react-router` (`GHSA-qwww-vcr4-c8h2`, faixa `>=7.12.0 <8.3.0`)
+  - `react-router-dom` afetado por dependência do `react-router`
+  - correção sugerida implica mudança semver-major / downgrade de pacote para `react-router-dom@7.11.0`
+- Conclusão permitida: advisories high de runtime continuam explícitos e não podem ser omitidos.
+
+## EV-T3-008 — blockers de Sentry / gitleaks
+
+- Status: `BLOCKED_EXTERNAL`
+- Ambiente: shell local
+- Perfil / rota / viewport: não aplicável
+- Timestamp: `2026-08-04T06:28:15-03:00`
+- Comando / ação:
+  - `command -v sentry-cli || true`
+  - `command -v gitleaks || true`
+  - `printenv | rg '^SENTRY_' || true`
+- Resultado esperado: confirmar se a rodada tinha ferramentas/credenciais para validação live.
+- Resultado observado:
+  - nenhum caminho retornado para `sentry-cli`
+  - nenhum caminho retornado para `gitleaks`
+  - nenhuma variável `SENTRY_*` no ambiente
+- Conclusão permitida: Sentry e gitleaks permanecem bloqueadores externos nesta consolidação.
+
+## EV-T3-009 — matriz de rotas / perfis / viewports
+
+- Status: `NOT_PROVEN`
+- Ambiente: consolidação documental
+- Perfil / rota / viewport:
+  - Consultor MX e Administrador Geral sem sessão autorizada nesta task
+  - viewports obrigatórios não reexecutados nesta task
+- Timestamp: `2026-08-04T06:22:xx-03:00`
+- Ação: reconciliação com `parallel-quality-audit.md` e `docs/execution/2026-08-04-route-matrix.md`
+- Resultado esperado: não simular cobertura ausente.
+- Resultado observado:
+  - sem browser live autenticado nesta task
+  - gaps permanecem explícitos para Consultor MX, Administrador Geral e revalidação viewport-perfil atual
+- Conclusão permitida: cobertura funcional/visual atual segue parcial e não pode ser marcada como completa.
