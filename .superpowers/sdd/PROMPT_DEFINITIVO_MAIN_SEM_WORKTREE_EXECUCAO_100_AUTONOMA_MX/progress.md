@@ -17,10 +17,11 @@
 
 ## Task 1 — Control artifacts
 
-- State: `IN_PROGRESS`.
+- State: `DONE_WITH_EVIDENCE`.
 - Base: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
 - Brief/report/review paths: `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA/.superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/task-1-brief.md`, `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA/.superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/task-1-report.md`.
 - Requirement: create and maintain the nine required `docs/execution/` files without secrets or placeholders.
+- Evidence update: round 1 revalidated Git, backup, branches, CLI access, and production; the public alias and latest READY deployment still show different releases and are documented in the report.
 
 ## Task 2 — Gerente chart warning
 

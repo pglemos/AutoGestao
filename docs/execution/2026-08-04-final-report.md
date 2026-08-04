@@ -8,7 +8,7 @@ Declaração final permitida: ainda não determinada.
 - SHA inicial: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
 - SHA final: pendente até a última mudança publicada.
 - Deployment final/release Sentry/migrations: pendentes de reconciliação.
-- Tasks: controle em andamento; correção do warning e auditorias ainda não concluídas.
+- Tasks: controle revalidado na rodada 1; correção do warning e auditorias ainda não concluídas.
 - Bloqueios externos: somente serão listados com evidência e alternativas tentadas.
 
 ## Git

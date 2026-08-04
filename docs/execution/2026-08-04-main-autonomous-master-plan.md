@@ -7,6 +7,7 @@
 - Branch autorizada: `main`; nenhum worktree ou branch auxiliar será criado.
 - SHA inicial revalidado: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
 - Backup revalidado: tag `pre-main-autonomous-20260804-051820` e bundle `/Users/pedroguilherme/PROJETOS/MXGESTAOPREDITIVA-pre-main-autonomous-20260804-051820.bundle`.
+- Round 1 update: Git, branches, CLI access e produção foram revalidados no SHA `9fdd484f1eb0c79c11cba98bac91eca2502ee799`; alias público e deployment READY mais recente seguem com releases diferentes.
 
 ## Restrições globais
 
@@ -22,7 +23,7 @@
 
 ### Task 1 — Controle e baseline
 
-- Estado: `IN_PROGRESS`
+- Estado: `DONE_WITH_EVIDENCE`
 - Criar e manter os nove arquivos obrigatórios, o ledger SDD e o registro de baseline.
 - Revalidar Git, backup, acessos sem segredos, produção, branches e alterações do usuário.
 

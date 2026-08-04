@@ -16,10 +16,11 @@ Estado global: `IN_PROGRESS`
 
 ## Task 1 — Artefatos de controle
 
-- Estado: `IN_PROGRESS`
+- Estado: `DONE_WITH_EVIDENCE`
 - SHA inicial: `11a9465f253ce8f96052db70c9171b14425e9d4e`
 - Hipótese: os nove arquivos obrigatórios ainda não estavam versionados e precisam ser criados antes da auditoria.
 - Evidência inicial: `find docs/execution` não retornou arquivos.
+- Revalidação round 1: Git, backup, branches, CLI access e produção foram checados novamente; o alias público e o deployment READY mais recente ainda mostram releases diferentes.
 - Alterações: plano, progresso, ledger, matriz de rotas, revisões Supabase, Sentry, Vercel e relatório final serão mantidos neste diretório.
 - Próxima task: consolidar os arquivos e executar revisão da documentação.
 
