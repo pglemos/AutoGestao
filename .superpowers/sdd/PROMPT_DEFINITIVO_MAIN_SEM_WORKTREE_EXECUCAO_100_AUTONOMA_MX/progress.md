@@ -28,9 +28,11 @@
 
 ## Task 2 — Gerente chart warning
 
-- State: `TODO`.
-- Base: to record before implementation dispatch.
+- State: `DONE_WITH_EVIDENCE`.
+- Base: `222371d90529193c2c44e25df8711992bfd109b3`.
 - Requirement: RED test first; fix `AppointmentsChart` invalid initial dimensions; focused review and re-review if needed.
+- Task 2: fix round 1/5 (5 addressed, 0 open; commits 7f148124..acd75a1).
+- Task 2: complete (commits 222371d..acd75a1, review clean).
 
 ## Task 3 — Independent audits
 
