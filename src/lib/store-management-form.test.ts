@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'bun:test'
-import { normalizeStoreManagementForm } from './store-management-form'
+import { normalizeStoreManagementForm, resolveStoreManagementEdit } from './store-management-form'
 
 describe('normalizeStoreManagementForm', () => {
   it('limpa o e-mail quando o dono acumula a gestão', () => {
@@ -34,5 +34,37 @@ describe('normalizeStoreManagementForm', () => {
       ok: false,
       error: 'Informe um e-mail válido para o gerente.',
     })
+  })
+})
+
+describe('resolveStoreManagementEdit', () => {
+  it('preserva o cadastro atual quando existe gerente ativo', () => {
+    expect(resolveStoreManagementEdit({
+      contextConfirmed: true,
+      hasActiveManager: true,
+      currentManagerEmail: ' ATUAL@LOJA.COM.BR ',
+      mode: 'owner_managed',
+      managerEmail: null,
+    })).toEqual({ ok: true, managerEmail: 'atual@loja.com.br' })
+  })
+
+  it('preserva o cadastro atual quando a estrutura não pôde ser confirmada', () => {
+    expect(resolveStoreManagementEdit({
+      contextConfirmed: false,
+      hasActiveManager: false,
+      currentManagerEmail: 'gestor@loja.com.br',
+      mode: 'owner_managed',
+      managerEmail: null,
+    })).toEqual({ ok: true, managerEmail: 'gestor@loja.com.br' })
+  })
+
+  it('aplica a escolha manual somente quando não existe gerente ativo', () => {
+    expect(resolveStoreManagementEdit({
+      contextConfirmed: true,
+      hasActiveManager: false,
+      currentManagerEmail: 'antigo@loja.com.br',
+      mode: 'owner_managed',
+      managerEmail: 'novo@loja.com.br',
+    })).toEqual({ ok: true, managerEmail: null })
   })
 })
