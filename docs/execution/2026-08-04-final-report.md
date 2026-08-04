@@ -4,7 +4,7 @@ Estado desta consolidação: `PASS_WITH_FINDINGS`
 
 ## Escopo real concluído
 
-- Task 3 foi concluída como auditoria/evidência documental read-only + commit local dos artefatos.
+- Task 3 foi concluída como consolidação documental com coleta de evidência read-only e edição/commit local apenas dos artefatos de documentação.
 - Este arquivo não declara a release completa, nem a prova integral do prompt mestre.
 
 ## Snapshot atual

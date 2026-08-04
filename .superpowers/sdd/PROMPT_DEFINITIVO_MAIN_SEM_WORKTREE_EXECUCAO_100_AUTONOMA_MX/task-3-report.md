@@ -135,7 +135,135 @@ Branch: `main`
 7. `npm audit` continua acusando `2` advisories high em runtime.
 8. Sentry, gitleaks, Consultor MX, Administrador Geral e browser live autenticado seguem sem prova nesta task.
 
-## Validation planned after editing
+## Fix round 1 — 2026-08-04
 
-- `git diff --check`
-- busca secret-safe nos artefatos alterados para não vazar tokens, bearer, DSN ou PII
+Base SHA desta rodada: `d3ab89e175492c52832dc763cf1169bbc30f121c`
+
+### Objetivo
+
+- completar metadados obrigatórios ausentes em `docs/execution/2026-08-04-evidence-ledger.md`;
+- restaurar a evidência explícita `EV-BASE-002`;
+- trocar validação “planned” por validação executada;
+- clarificar a redação sobre coleta read-only versus edição/commit local de documentação.
+
+### Arquivos alterados nesta rodada
+
+- `docs/execution/2026-08-04-evidence-ledger.md`
+- `docs/execution/2026-08-04-final-report.md`
+- `.superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/task-3-report.md`
+
+### Evidências rerodadas para corrigir o ledger
+
+#### A) Governança GitHub — EV-T3-003
+
+- Timestamp: `2026-08-04T06:38:47-03:00`
+- SHA: `d3ab89e175492c52832dc763cf1169bbc30f121c`
+- Command:
+  - `gh api repos/pglemos/MXGESTAOPREDITIVA/branches/main --jq '{protected: .protected, protection: .protection.enabled}'`
+  - `gh api repos/pglemos/MXGESTAOPREDITIVA/secret-scanning/alerts --paginate --jq 'map(select(.state == "open")) | length'`
+- Output:
+  - `{"protected":false,"protection":false}`
+  - `6`
+- Status derived: `PASS_WITH_FINDINGS`
+
+#### B) Runtime advisories — EV-T3-007
+
+- Timestamp: `2026-08-04T06:38:47-03:00`
+- SHA: `d3ab89e175492c52832dc763cf1169bbc30f121c`
+- Command:
+  - `npm audit --omit=dev --json | jq -c '{metadata: .metadata.vulnerabilities, advisories: (.vulnerabilities | with_entries(.value |= {name: .name, severity: .severity, range: .range, via: .via, fixAvailable: .fixAvailable}))}'`
+- Output excerpt:
+  - `high=2`
+  - `react-router`
+  - `react-router-dom`
+  - `fixAvailable={"name":"react-router-dom","version":"7.11.0","isSemVerMajor":true}`
+- Status derived: `PASS_WITH_FINDINGS`
+
+#### C) Blockers externos de Sentry / gitleaks — EV-T3-008
+
+- Timestamp: `2026-08-04T06:38:47-03:00`
+- SHA: `d3ab89e175492c52832dc763cf1169bbc30f121c`
+- Command:
+  - `command -v sentry-cli || true`
+  - `command -v gitleaks || true`
+  - `printenv | rg '^SENTRY_' || true`
+- Output:
+  - `sentry_cli=<absent>`
+  - `gitleaks=<absent>`
+  - `sentry_env=<absent>`
+- Status derived: `BLOCKED_EXTERNAL`
+
+#### D) Lacuna documental da matriz de rotas — EV-T3-009
+
+- Timestamp: `2026-08-04T06:38:47-03:00`
+- SHA: `d3ab89e175492c52832dc763cf1169bbc30f121c`
+- Command:
+  - reconciliação documental com `parallel-quality-audit.md` e `docs/execution/2026-08-04-route-matrix.md`
+- Output:
+  - `Consultor MX and Administrador Geral remain without authorized session; required viewports were not reexecuted in this task.`
+- Status derived: `NOT_PROVEN`
+
+#### E) Backup explícito restaurado — EV-BASE-002
+
+- Timestamp histórico preservado: `2026-08-04T05:31:59-03:00`
+- Timestamp de revalidação: `2026-08-04T06:39:31-03:00`
+- SHA do backup: `11a9465f253ce8f96052db70c9171b14425e9d4e`
+- SHA do checkout revalidador: `d3ab89e175492c52832dc763cf1169bbc30f121c`
+- Command:
+  - `git show --no-patch --format=fuller pre-main-autonomous-20260804-051820 | sed -n '1,20p'`
+  - `shasum -a 256 /Users/pedroguilherme/PROJETOS/MXGESTAOPREDITIVA-pre-main-autonomous-20260804-051820.bundle`
+  - `git bundle verify /Users/pedroguilherme/PROJETOS/MXGESTAOPREDITIVA-pre-main-autonomous-20260804-051820.bundle`
+- Output excerpt:
+  - `TaggerDate: Tue Aug 4 05:18:20 2026 -0300`
+  - target/tag commit `11a9465f253ce8f96052db70c9171b14425e9d4e`
+  - bundle SHA-256 `f345471aef95bf0256b2407c22764cb7dbfd6daed2f1dc5447568451fc12a0a8`
+  - `...bundle is okay`
+- Status derived: `PASS_WITH_FINDINGS`
+
+#### F) Redação menor clarificada
+
+- Arquivo: `docs/execution/2026-08-04-final-report.md`
+- Mudança: texto agora distingue coleta read-only de evidência e edição/commit local apenas de documentação.
+- Status derived: `DONE`
+
+### Validação executada nesta rodada
+
+Rerun final abaixo substitui a captura intermediária e representa o estado editado final desta rodada imediatamente antes do commit local.
+
+#### 1) Integridade do diff
+
+- Timestamp: `2026-08-04T06:44:12-03:00`
+- Environment: `Darwin 25.4.0 arm64`
+- SHA base do worktree validado: `d3ab89e175492c52832dc763cf1169bbc30f121c`
+- Command:
+  - `git diff --check -- docs/execution/2026-08-04-evidence-ledger.md docs/execution/2026-08-04-final-report.md .superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/task-3-report.md`
+- Output:
+  - sem saída
+  - `result=git diff --check clean`
+- Status derived: `PASS`
+
+#### 2) Busca secret-safe
+
+- Timestamp: `2026-08-04T06:44:12-03:00`
+- Environment: `Darwin 25.4.0 arm64 | git version 2.50.1 (Apple Git-155) | v24.13.0`
+- SHA base do worktree validado: `d3ab89e175492c52832dc763cf1169bbc30f121c`
+- Command:
+  - `python3 - <<'PY' > /private/tmp/mx-task3-secret-safe-pattern.txt ...`
+  - `rg -n -f /private/tmp/mx-task3-secret-safe-pattern.txt docs/execution/2026-08-04-evidence-ledger.md docs/execution/2026-08-04-final-report.md .superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/task-3-report.md`
+- Output:
+  - `pattern_file=/private/tmp/mx-task3-secret-safe-pattern.txt`
+  - `rg_exit=1`
+  - sem matches
+- Status derived: `PASS`
+
+#### 3) Escopo alterado visível
+
+- Timestamp: `2026-08-04T06:44:12-03:00`
+- SHA base do worktree validado: `d3ab89e175492c52832dc763cf1169bbc30f121c`
+- Command:
+  - `git status --short -- docs/execution/2026-08-04-evidence-ledger.md docs/execution/2026-08-04-final-report.md .superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/task-3-report.md`
+- Output:
+  - `M .superpowers/sdd/PROMPT_DEFINITIVO_MAIN_SEM_WORKTREE_EXECUCAO_100_AUTONOMA_MX/task-3-report.md`
+  - `M docs/execution/2026-08-04-evidence-ledger.md`
+  - `M docs/execution/2026-08-04-final-report.md`
+- Status derived: `PASS`

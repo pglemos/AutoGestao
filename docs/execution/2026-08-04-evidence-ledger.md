@@ -9,12 +9,37 @@ Estado deste ledger: `PASS_WITH_FINDINGS`
   - `parallel-supabase-audit.md` (`2026-08-04T08:58:30Z`, SHA `9fdd484f...`)
   - `parallel-quality-audit.md` (`2026-08-04T05:54:42-03:00`, SHA `9fdd484f...`)
 
+## EV-BASE-002 — backup Git anotado e bundle verificável
+
+- Status: `PASS_WITH_FINDINGS`
+- Ambiente: checkout local `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA`
+- Perfil / rota / viewport: não aplicável
+- Timestamp histórico preservado: `2026-08-04T05:31:59-03:00`
+- Timestamp de revalidação desta rodada: `2026-08-04T06:39:31-03:00`
+- SHA do artefato de backup: `11a9465f253ce8f96052db70c9171b14425e9d4e`
+- SHA do checkout que revalidou a prova: `d3ab89e175492c52832dc763cf1169bbc30f121c`
+- Comando / ação:
+  - `git show --no-patch --format=fuller pre-main-autonomous-20260804-051820 | sed -n '1,20p'`
+  - `shasum -a 256 /Users/pedroguilherme/PROJETOS/MXGESTAOPREDITIVA-pre-main-autonomous-20260804-051820.bundle`
+  - `git bundle verify /Users/pedroguilherme/PROJETOS/MXGESTAOPREDITIVA-pre-main-autonomous-20260804-051820.bundle`
+- Resultado esperado: tag anotada ainda aponta para o SHA baseline e o bundle continua íntegro/verificável.
+- Resultado observado:
+  - tag `pre-main-autonomous-20260804-051820`
+  - `TaggerDate: Tue Aug 4 05:18:20 2026 -0300`
+  - mensagem `Backup autonomous main execution`
+  - tag/commit alvo `11a9465f253ce8f96052db70c9171b14425e9d4e`
+  - bundle path `/Users/pedroguilherme/PROJETOS/MXGESTAOPREDITIVA-pre-main-autonomous-20260804-051820.bundle`
+  - bundle SHA-256 `f345471aef95bf0256b2407c22764cb7dbfd6daed2f1dc5447568451fc12a0a8`
+  - `git bundle verify` retornou `is okay`
+- Conclusão permitida: a prova explícita de backup Git/bundle foi restaurada com proveniência histórica e revalidação atual; isso não prova restore de Supabase.
+
 ## EV-T3-001 — checkout atual e worktree
 
 - Status: `PASS_WITH_FINDINGS`
 - Ambiente: checkout local `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA`
 - Perfil / rota / viewport: não aplicável
 - Timestamp: `2026-08-04T06:28:15-03:00`
+- SHA do checkout observado: `9abfc70a79da46c03ee156b49933310584f85a65`
 - Comando / ação:
   - `git rev-parse HEAD`
   - `git branch --show-current`
@@ -35,6 +60,7 @@ Estado deste ledger: `PASS_WITH_FINDINGS`
 - Ambiente: Git remoto read-only
 - Perfil / rota / viewport: não aplicável
 - Timestamp: `2026-08-04T06:28:15-03:00`
+- SHA do checkout que coletou a evidência: `9abfc70a79da46c03ee156b49933310584f85a65`
 - Comando / ação:
   - `git ls-remote origin refs/heads/main`
   - `git rev-list --left-right --count origin/main...main`
@@ -49,7 +75,8 @@ Estado deste ledger: `PASS_WITH_FINDINGS`
 - Status: `PASS_WITH_FINDINGS`
 - Ambiente: GitHub API read-only
 - Perfil / rota / viewport: não aplicável
-- Timestamp: `2026-08-04T06:28:15-03:00`
+- Timestamp: `2026-08-04T06:38:47-03:00`
+- SHA do checkout que coletou a evidência: `d3ab89e175492c52832dc763cf1169bbc30f121c`
 - Comando / ação:
   - `gh api repos/pglemos/MXGESTAOPREDITIVA/branches/main --jq '{protected: .protected, protection: .protection.enabled}'`
   - `gh api repos/pglemos/MXGESTAOPREDITIVA/secret-scanning/alerts --paginate --jq 'map(select(.state == "open")) | length'`
@@ -65,6 +92,7 @@ Estado deste ledger: `PASS_WITH_FINDINGS`
 - Ambiente: Vercel CLI + HTTP público
 - Perfil / rota / viewport: rota pública `/api/health`
 - Timestamp: `2026-08-04T06:22:17-03:00` a `2026-08-04T06:22:35-03:00`
+- SHA do checkout observado durante a evidência: `9abfc70a79da46c03ee156b49933310584f85a65`
 - Comando / ação:
   - `vercel list mxperformance --yes`
   - `curl -sS https://mxperformance.vercel.app/api/health`
@@ -82,6 +110,7 @@ Estado deste ledger: `PASS_WITH_FINDINGS`
 - Ambiente: Supabase CLI linked
 - Perfil / rota / viewport: não aplicável
 - Timestamp: `2026-08-04T06:28:15-03:00`
+- SHA do checkout que coletou a evidência: `9abfc70a79da46c03ee156b49933310584f85a65`
 - Comando / ação: `supabase db lint --linked`
 - Resultado esperado: revalidar se os defeitos live citados nos relatórios anteriores ainda existem.
 - Resultado observado:
@@ -98,6 +127,7 @@ Estado deste ledger: `PASS_WITH_FINDINGS`
 - Ambiente: código versionado do repositório
 - Perfil / rota / viewport: não aplicável
 - Timestamp: `2026-08-04T06:28:15-03:00`
+- SHA do checkout que coletou a evidência: `9abfc70a79da46c03ee156b49933310584f85a65`
 - Comando / ação: `rg -n "Access-Control-Allow-Origin|verify_jwt\\s*=\\s*false|Authorization: Bearer|auth\\.getUser\\(|pre-cadastro-avatares|evidencias-consultoria" supabase`
 - Resultado esperado: verificar se os riscos citados pelos relatórios anteriores ainda existem no checkout atual.
 - Resultado observado:
@@ -112,7 +142,8 @@ Estado deste ledger: `PASS_WITH_FINDINGS`
 - Status: `PASS_WITH_FINDINGS`
 - Ambiente: NPM registry read-only
 - Perfil / rota / viewport: não aplicável
-- Timestamp: `2026-08-04T06:28:15-03:00`
+- Timestamp: `2026-08-04T06:38:47-03:00`
+- SHA do checkout que coletou a evidência: `d3ab89e175492c52832dc763cf1169bbc30f121c`
 - Comando / ação: `npm audit --omit=dev --json | jq ...`
 - Resultado esperado: confirmar advisories atuais de produção sem despejar árvore completa.
 - Resultado observado:
@@ -127,7 +158,8 @@ Estado deste ledger: `PASS_WITH_FINDINGS`
 - Status: `BLOCKED_EXTERNAL`
 - Ambiente: shell local
 - Perfil / rota / viewport: não aplicável
-- Timestamp: `2026-08-04T06:28:15-03:00`
+- Timestamp: `2026-08-04T06:38:47-03:00`
+- SHA do checkout que coletou a evidência: `d3ab89e175492c52832dc763cf1169bbc30f121c`
 - Comando / ação:
   - `command -v sentry-cli || true`
   - `command -v gitleaks || true`
@@ -146,7 +178,8 @@ Estado deste ledger: `PASS_WITH_FINDINGS`
 - Perfil / rota / viewport:
   - Consultor MX e Administrador Geral sem sessão autorizada nesta task
   - viewports obrigatórios não reexecutados nesta task
-- Timestamp: `2026-08-04T06:22:xx-03:00`
+- Timestamp: `2026-08-04T06:38:47-03:00`
+- SHA do checkout que registrou a lacuna: `d3ab89e175492c52832dc763cf1169bbc30f121c`
 - Ação: reconciliação com `parallel-quality-audit.md` e `docs/execution/2026-08-04-route-matrix.md`
 - Resultado esperado: não simular cobertura ausente.
 - Resultado observado:
