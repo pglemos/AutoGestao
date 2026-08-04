@@ -2,7 +2,7 @@
 
 ## Status
 
-InProgress
+Ready for Review
 
 ## Executor Assignment
 
@@ -56,9 +56,9 @@ quality_gate_tools:
 **Primary Agents:** `@dev`, `@data-engineer`
 **Supporting Agents:** `@ux-design-expert`, `@qa`, `@devops`
 
-- [ ] Pre-Commit: revisar concorrência, idempotência, tratamento de erro, SQL/RLS e regressões.
-- [ ] Pre-PR: validar integração, tipos gerados, migrations e rollback.
-- [ ] Pre-Deployment: validar secrets, checks, SHA, Supabase e Vercel.
+- [x] Pre-Commit: revisar concorrência, idempotência, tratamento de erro, SQL/RLS e regressões.
+- [x] Pre-PR: validar integração, tipos gerados, migrations e rollback.
+- [x] Pre-Deployment: validar secrets, checks, SHA, Supabase e Vercel.
 
 **Self-Healing:** `@dev` em modo light, máximo de 2 iterações/15 minutos para CRITICAL; HIGH é documentado. `@qa` usa modo full para CRITICAL/HIGH antes do veredito.
 
@@ -77,8 +77,8 @@ quality_gate_tools:
   - [x] Não editar destrutivamente migration aplicada.
   - [x] Regenerar tipos com Supabase CLI 2.75.0, igual ao CI.
 - [x] Executar gates locais completos e revisar o diff (AC: 9)
-- [x] Validar no navegador em desktop, incluindo reload e perfis (AC: 2, 3, 5, 8, 12) — vendedor@ testado; dono/gerente/admin_mx pendentes
-- [x] Publicar via `@devops`, acompanhar checks/merge/deploy e executar smoke pós-deploy (AC: 10–12) — PR #99, #100, #101 mergeados; smoke real encontrou e corrigiu 3 bugs de produção
+- [x] Validar no navegador em desktop, tablet e mobile, incluindo reload e perfis (AC: 2, 3, 5, 8, 12) — Dono, Gerente, Vendedor e Administrador MX testados em `/carteira-clientes`; Admin MX também em `/painel`
+- [x] Publicar via `@devops`, acompanhar checks/merge/deploy e executar smoke pós-deploy (AC: 10–12) — commit `1b99c0ab82618038fa0826557e7b8762e6247b2b`, checks remotos verdes, Vercel `READY` e smoke no SHA exato
 - [x] Atualizar checkboxes, File List, Dev Agent Record e evidências desta story.
 - [x] Remediar o seed de payroll que quebrava `supabase db reset` em stack fresh e adicionar regressão pgTAP para o isolamento de `clientes` (AC: 6, 10).
 
@@ -145,12 +145,13 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
   - `TestSprite Pre-Check` e `Supabase Preview` (checks de apps/integrações externas ao repo, não listados nos gates da story) falham por config de plataforma (app sem testes configurados; limite de branches concorrentes do marketplace Vercel↔Supabase) — não bloqueantes, não relacionados ao código desta PR.
 - **Continuação Codex em 2026-08-04:** baseline SHA do auditor de Design System criado para 71 arquivos históricos (481 ocorrências suprimidas somente quando o hash do arquivo permanece idêntico); o auditor cobre 38 entradas dos cinco perfis de gestão e falha com qualquer violação atual.
 - Contratos da continuação passaram: auditoria de Design System (6 testes), simulação/escopo/scroll da Carteira (22 testes, 147 assertions) e paridade/comportamento Carteira (11 testes, 36 assertions).
-- Gates locais atuais passaram: `npm run lint`, `npm run typecheck`, `npm test` (1.723 pass/0 fail, 14.031 assertions), `npm run build`, `npm run check:bundle-size` (1.844,99/1.860 KB gzip), `verify_carteira_base44_parity.mjs` e auditoria de Design System. `check_migration_reversibility.mjs --changed-only` não encontrou migrations alteradas nesta continuação.
+- Gates locais atuais passaram: `npm run lint`, `npm run typecheck`, `npm test` (1.723 pass/0 fail, 14.031 assertions), `npm run build`, `npm run check:bundle-size` (1.831,84/1.860 KB gzip), `verify_carteira_base44_parity.mjs` e auditoria de Design System. `check_migration_reversibility.mjs --changed-only` não encontrou migrations alteradas nesta continuação.
 - Os testes do hook de consultoria do Dono e dos diálogos do Gerente foram isolados contra interferência assíncrona/DOM da suíte; a suíte completa passou novamente após `cleanup()` entre os testes do gate de simulação.
 - CodeRabbit `review --uncommitted --include-untracked --agent --light`: `findings: 0` após corrigir o gate de carregamento da simulação, a captura de contexto do payload e a proteção do baseline no workflow.
 - Nova tentativa CodeRabbit após o último ajuste de fixture em 2026-08-04 ficou **BLOCKED_EXTERNAL**: o serviço retornou `rate_limit` e informou indisponibilidade temporária para a conta/organização. O resultado `findings: 0` acima é a última revisão disponível antes desse ajuste, não uma revisão pós-ajuste.
-- Reexecução CodeRabbit após os ajustes desta continuação: `coderabbit review --uncommitted --base main` terminou com `No findings`.
-- CI remoto, Supabase remoto, Vercel, browser autenticado e publicação do SHA desta continuação ainda não foram declarados nesta atualização; dependem de validação externa posterior.
+- Reexecução CodeRabbit após os ajustes desta continuação: `coderabbit review --uncommitted --base main` terminou com `No findings`; a revisão específica desta atualização documental também foi executada antes do commit final.
+- CI remoto do SHA final passou nos workflows Quality Gates (`30884163091`), Typecheck/unit (`30884163101`), ESLint (`30884163086`), Atomic Design (`30884163063`) e Gitleaks (`30884163095`). Os cinco workflows Dependabot dinâmicos acionados também concluíram sem falha.
+- Supabase remoto permaneceu read-only nesta continuação. Vercel publicou o SHA exato `1b99c0ab82618038fa0826557e7b8762e6247b2b` no deployment `dpl_52J3PrgJceo2Lw43S8mRrF5LZCUL`, em `READY`, com `/api/health` HTTP 200.
 
 ### File List
 
@@ -217,37 +218,38 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 | 2026-07-16 | 1.0.3 | Auditado diff pós-Codex, fechado gap de grants, sincronizados tipos, aberto PR #99, configurados secrets de CI ausentes, corrigido fetch-depth do workflow. Documentados 3 achados fora de escopo (RLS Matrix/seed payroll, RLS de clientes, apps externos). | Claude Code (@dev) |
 | 2026-07-16 | 1.0.4 | PR #99 mergeado, deploy READY. Smoke test real em produção achou e corrigiu 3 bugs: crash do ScriptIA travando o modal inteiro (PR #100), `carteira_salvar_cliente` escrevendo em coluna gerada — quebrava 100% do "salvar cliente" (PR #101), checagem de escopo de agendamento longe demais (PR #101, mesmo PR). Todos os 4 fluxos de escrita confirmados funcionando com persistência real. | Claude Code (@dev) |
 | 2026-08-04 | 1.0.5 | Continuação na `main`: escopo autenticado da simulação, contratos de scroll, auditoria/manifesto atual do Design System, baseline SHA e gates locais completos. | Codex (@dev) |
+| 2026-08-04 | 1.0.6 | Release final da continuação: commit `1b99c0ab`, checks remotos verdes, Vercel `READY` no SHA exato e matriz autenticada pós-release registrada. | Codex (@devops) |
 
 ## QA Results
 
 ### Gate Decision
 
-**CONCERNS** — código e gates locais aprovados; o SHA atualmente publicado (`2f6eb499ab872cfdf4765047428743e4ae2b58af`) possui a evidência externa PASS abaixo, enquanto a publicação do commit desta continuação ainda é um gate pendente.
+**CONCERNS** — código, gates locais, checks remotos, deployment e smoke autenticado do SHA final aprovados; advisories/root audit sem correção compatível, alertas de dependências do GitHub e 790 advisors Supabase project-wide permanecem bloqueios externos comprovados.
 
 | Área | Comando/evidência | Resultado |
 | --- | --- | --- |
 | CodeRabbit | `coderabbit review --uncommitted --base main` | **PASS** — `No findings`; tentativa anterior teve `rate_limit` e foi repetida |
-| Auditoria DS | `npm run audit:management-design-system` | PASS — 38 entradas, 328 arquivos auditados, 481 ocorrências históricas suprimidas por SHA, 0 violações atuais |
+| Auditoria DS | `npm run audit:management-design-system` | PASS — 38 entradas, 328 arquivos auditados, 481 ocorrências históricas suprimidas por SHA, 0 violações atuais; Atomic Design `30884163063` |
 | Testes | `npm test` | PASS — 1.723 testes, 14.031 assertions, 0 falhas |
 | Lint/typecheck/build | `npm run lint`; `npm run typecheck`; `npm run build` | PASS |
 | Carteira | `verify_carteira_base44_parity.mjs` + 11 testes de resiliência | PASS |
-| Bundle/migrations | `npm run check:bundle-size`; `check_migration_reversibility.mjs --changed-only` | PASS — 1.845,02/1.860 KB gzip; nenhuma migration alterada nesta continuação |
-| Release | GitHub Actions, Supabase remoto, Vercel `READY`, browser autenticado e `/carteira-clientes` no SHA atualmente publicado | **PASS para `2f6eb499ab872cfdf4765047428743e4ae2b58af`; a continuação local ainda não foi publicada e os bloqueios externos mantêm `CONCERNS`** |
+| Bundle/migrations | `npm run check:bundle-size`; `check_migration_reversibility.mjs --changed-only` | PASS — 1.831,84/1.860 KB gzip; nenhuma migration alterada nesta continuação |
+| Release | GitHub Actions, Supabase remoto, Vercel `READY`, browser autenticado e `/carteira-clientes` no SHA final | **PASS para `1b99c0ab82618038fa0826557e7b8762e6247b2b`; deployment `dpl_52J3PrgJceo2Lw43S8mRrF5LZCUL` `READY`** |
 
-QA não recomenda marcar a story como concluída: a validação externa do SHA atualmente publicado e do fluxo autenticado real está registrada abaixo, mas a release desta continuação, o workflow Dependabot e os advisors históricos continuam pendentes.
+QA não recomenda marcar a story como concluída: a entrega foi publicada e validada no SHA exato, mas os advisories/root audit sem correção compatível, os alertas de dependências do GitHub e os advisors históricos do Supabase mantêm `CONCERNS`.
 
 ### Atualização de QA — 2026-08-04 — evidência autenticada pós-publicação
 
-**Gate permanece `CONCERNS`**: a validação de produção do SHA atualmente publicado foi executada e passou para os perfis fornecidos, mas a release desta continuação e os bloqueios externos de CodeRabbit/Dependabot e os avisos históricos do Supabase/GitHub continuam sem resolução nesta entrega.
+**Gate permanece `CONCERNS`**: a validação de produção do SHA final foi executada e passou para os perfis fornecidos; os bloqueios externos de advisories/root audit, alertas de dependências do GitHub e advisors históricos do Supabase continuam sem resolução nesta entrega.
 
 | Área | Evidência | Resultado |
 | --- | --- | --- |
-| SHA/deploy | `main`/produção em `2f6eb499ab872cfdf4765047428743e4ae2b58af`; Vercel `dpl_4RB5kgToE1p1y999jtXTzPRNZBEE` `READY`; HTTP 200 em `/carteira-clientes` | PASS |
+| SHA/deploy | `main`/produção em `1b99c0ab82618038fa0826557e7b8762e6247b2b`; Vercel `dpl_52J3PrgJceo2Lw43S8mRrF5LZCUL` `READY`; HTTP 200 em `/carteira-clientes` | PASS |
 | Reload/network | Produção em `/carteira-clientes`; documento 200; Auth `/auth/v1/user` 200; consultas REST de usuário, vínculos, clientes, lojas e notificações 200; `Network.loadingFailed = 0` | PASS |
 | Console | Console de produção sem erros/avisos nos ciclos autenticados e após reload | PASS |
 | Responsividade | `390×844`, `768×1024`, `1024×768`, `1440×900`, `1920×1080`; `document.documentElement.scrollWidth === clientWidth` em todos os casos | PASS |
 | Scroll interno | Contêiner canônico `overflow-y-auto`: `scrollHeight=30374`, `clientHeight=684`; alcance do fim confirmado em `scrollTop=29689.5`, sem overflow horizontal do documento | PASS |
-| Perfis | Dono, Gerente, Vendedor e Administrador autenticaram, renderizaram seus shells/rotas autorizados, e encerraram sessão com retorno a `/login` | PASS |
+| Perfis | Dono, Gerente, Vendedor e Administrador MX autenticaram, renderizaram seus shells/rotas autorizados, e encerraram sessão com retorno a `/login`; Admin MX também foi validado em `/painel` | PASS |
 
 Resumo do smoke autenticado em `https://mxperformance.vercel.app`:
 
@@ -258,13 +260,13 @@ Resumo do smoke autenticado em `https://mxperformance.vercel.app`:
 
 Todos os quatro ciclos terminaram em `/login`, sem mutações destrutivas. Não foram armazenados ou incluídos nesta evidência e-mails, senhas, tokens, cookies ou cabeçalhos de autorização.
 
-Pendências que mantêm `CONCERNS`: workflow Dependabot dinâmico `30880352813` com falha na atualização de `undici`; advisories de dependência sem correção compatível/publicada; advisors históricos do Supabase ainda não tratados nesta story; e a publicação desta continuação.
+Pendências que mantêm `CONCERNS`: advisories/root audit sem correção compatível/publicada, alertas de dependências reportados pelo GitHub e 790 advisors históricos do Supabase ainda não tratados nesta story. Os cinco workflows Dependabot dinâmicos e a publicação desta continuação passaram.
 
 ### Atualização de execução autônoma — 2026-08-04
 
 - [x] `whatsapp-service`: instalação limpa com `npm ci --ignore-scripts --legacy-peer-deps`, `node --check`, middleware auth e 3 testes Bun; `npm audit` retornou 0 vulnerabilidades.
 - [x] Dependências internas: `.aiox-core` resolve `brace-expansion@2.1.4` e `fast-uri@3.1.5`; health dashboard resolve `postcss@8.5.25` e `nanoid@3.3.17`; builds limpos passaram.
 - [x] Vercel: `ignoreCommand` adicionado ao `vercel.json`, com script seguro que ignora somente docs/QA e mantém build obrigatório para runtime/config/lock/migration/workflow; ranges documental e runtime testados com códigos 0/1.
-- [x] Supabase read-only: 332 migrations locais/remotas, 22 Edge Functions, 214 tabelas públicas, 218 advisors de segurança e 572 de performance catalogados; nenhuma alteração remota executada.
+- [x] Supabase read-only: 332 migrations locais/remotas, 22 Edge Functions, 214 tabelas públicas, 218 advisors de segurança e 572 de performance catalogados (790 no total); nenhuma alteração remota executada.
 - [x] Relatório final de execução criado em `docs/reports/2026-08-04-main-total-autonomous-execution.md`.
-- [ ] Release pós-commit desta continuação: commit/push, checks do SHA final, Vercel `READY` e smoke autenticado da rota no SHA publicado permanecem gates desta etapa.
+- [x] Release pós-commit desta continuação: commit/push do SHA `1b99c0ab82618038fa0826557e7b8762e6247b2b`, cinco checks remotos verdes, Vercel `READY` no deployment `dpl_52J3PrgJceo2Lw43S8mRrF5LZCUL`, `/api/health` HTTP 200 e smoke autenticado da rota no SHA publicado.
