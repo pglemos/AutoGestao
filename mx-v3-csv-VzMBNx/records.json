@@ -1,0 +1,54 @@
+[
+  {
+    "id": "1",
+    "perfil": "VENDEDOR",
+    "breakpoint": "Desktop",
+    "rota": "/rota",
+    "estado": "PADRAO",
+    "arquivo": "Desktop_VENDEDOR_01.png",
+    "hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "statusScript": "CAPTURADO",
+    "mensagem": "texto, com vírgula",
+    "statusFinal": "FALHA_ARQUIVO_NAO_ENCONTRADO",
+    "hashReal": "N/A"
+  },
+  {
+    "id": "2",
+    "perfil": "GERENTE",
+    "breakpoint": "Mobile",
+    "rota": "/ação",
+    "estado": "PADRAO",
+    "arquivo": "Mobile_GERENTE_01.png",
+    "hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "statusScript": "CAPTURADO",
+    "mensagem": "linha um\nlinha \"dois\"",
+    "statusFinal": "FALHA_ARQUIVO_NAO_ENCONTRADO",
+    "hashReal": "N/A"
+  },
+  {
+    "id": "3",
+    "perfil": "DONO",
+    "breakpoint": "Tablet",
+    "rota": "/vazio",
+    "estado": "PADRAO",
+    "arquivo": "Tablet_DONO_01.png",
+    "hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "statusScript": "CAPTURADO",
+    "mensagem": "",
+    "statusFinal": "FALHA_ARQUIVO_NAO_ENCONTRADO",
+    "hashReal": "N/A"
+  },
+  {
+    "id": "4",
+    "perfil": "ADMIN",
+    "breakpoint": "Notebook",
+    "rota": "/café",
+    "estado": "PADRAO",
+    "arquivo": "Notebook_ADMIN_01.png",
+    "hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+    "statusScript": "CAPTURADO",
+    "mensagem": "ação ✓",
+    "statusFinal": "FALHA_ARQUIVO_NAO_ENCONTRADO",
+    "hashReal": "N/A"
+  }
+]

@@ -1,0 +1,6 @@
+"id","perfil","breakpoint","rota","estado","arquivo","hash","status","mensagem"
+"1","VENDEDOR","Desktop","/rota","PADRAO","Desktop_VENDEDOR_01.png","aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa","CAPTURADO","texto, com vírgula"
+"2","GERENTE","Mobile","/ação","PADRAO","Mobile_GERENTE_01.png","bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb","CAPTURADO","linha um
+linha ""dois"""
+"3","DONO","Tablet","/vazio","PADRAO","Tablet_DONO_01.png","cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc","CAPTURADO",""
+"4","ADMIN","Notebook","/café","PADRAO","Notebook_ADMIN_01.png","dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd","CAPTURADO","ação ✓"

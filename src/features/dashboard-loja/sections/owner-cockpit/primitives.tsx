@@ -21,14 +21,18 @@ export function OwnerCockpitHeader({
   periodLabel: string
 }) {
   return (
-    <header className="border-b border-gray-200 pb-mx-md sm:pb-mx-lg">
-      <h1 className="text-2xl font-bold leading-tight text-gray-800 sm:text-3xl md:text-[2rem]">
-        {greeting()}, <span className="text-emerald-600">{name.split(' ')[0]}</span>! 👋
-      </h1>
-      <p className="mt-mx-tiny text-sm font-medium text-gray-500">Aqui está o panorama da sua loja no período selecionado.</p>
-      <div className="mt-mx-md inline-flex h-mx-11 items-center gap-mx-xs rounded-mx-full border border-gray-100 bg-white px-mx-md shadow-sm">
-        <CalendarDays size={16} className="text-gray-500" />
-        <Typography variant="tiny" className="">{periodLabel}</Typography>
+    <header className="flex items-start justify-between gap-4 border-b border-gray-200 pb-mx-md sm:pb-mx-lg">
+      <div>
+        <h1 className="text-2xl font-bold leading-tight text-gray-800 sm:text-3xl md:text-[2rem]">
+          {greeting()}, <span className="text-emerald-600">{name.split(' ')[0]}</span>!
+        </h1>
+        <p className="mt-mx-tiny text-sm font-medium text-gray-500">Aqui está o panorama da sua loja hoje.</p>
+      </div>
+      <div className="flex shrink-0 items-center gap-mx-sm">
+        <div className="inline-flex h-mx-11 items-center gap-mx-xs rounded-mx-full border border-gray-100 bg-white px-mx-md shadow-sm">
+          <CalendarDays size={16} className="text-gray-500" />
+          <Typography variant="tiny" className="">{periodLabel}</Typography>
+        </div>
       </div>
     </header>
   )
@@ -74,37 +78,41 @@ export function OwnerKpiCard({
   trend?: { label: string; tone: KpiTone } | null
 }) {
   const classes = toneClasses[tone]
-  const vivid = vividIconClasses[tone]
+  const soft = toneClasses[tone].soft
   return (
-    <Card className="relative min-h-[140px] border bg-white p-mx-md">
-      {showStatusDot && (
-        <span
-          className={cn('absolute right-mx-sm top-mx-sm h-mx-6 w-mx-6 rounded-mx-full', statusDotClasses[statusTone ?? tone])}
-          aria-hidden="true"
-        />
-      )}
-      <div className="flex items-start justify-between gap-mx-sm">
-        <div className="min-w-0 flex-1">
-          <Typography variant="p" className={cn('block text-sm font-bold', classes.text)}>
-            {title}
-          </Typography>
-          <Typography variant="h2" className="mt-mx-xs text-3xl md:text-4xl tabular-nums leading-none">
-            {value}
-          </Typography>
-          <Typography variant="tiny" tone="muted" className="mt-mx-xs block">
-            {detail}
-          </Typography>
-          {trend && (
-            <Typography variant="tiny" className={cn('mt-mx-tiny block font-bold', toneClasses[trend.tone].text)}>
-              {trend.label}
-            </Typography>
-          )}
-        </div>
-        <div className={cn('h-mx-10 w-mx-10 rounded-xl flex shrink-0 items-center justify-center shadow-sm', vivid)}>
+    <Card className="relative min-h-[140px] border bg-white p-4">
+      {/* Header row: icon top-left + status dot top-right — matches Base44 MetricCard reference */}
+      <div className="flex items-center justify-between">
+        <div className={cn('flex h-9 w-9 items-center justify-center rounded-lg', soft)} aria-hidden="true">
           {icon}
         </div>
+        {showStatusDot && (
+          <span
+            className={cn('h-2 w-2 rounded-full', statusDotClasses[statusTone ?? tone])}
+            role="status"
+            aria-hidden="true"
+          />
+        )}
       </div>
-      <Sparkline tone={tone} variant={chart} seed={seed} />
+      {/* Title (muted) + value + detail */}
+      <p className="mt-2.5 text-sm font-medium text-gray-500">{title}</p>
+      <p className="mt-0.5 text-2xl font-bold tracking-tight text-gray-800" aria-label={`${title}: ${value}`}>
+        {value}
+      </p>
+      {detail && <p className="mt-0.5 text-xs text-gray-400">{detail}</p>}
+      {/* Trend label + sparkline side by side at bottom */}
+      <div className="mt-2 flex items-end justify-between gap-2">
+        {trend ? (
+          <p className={cn('text-xs font-medium', toneClasses[trend.tone].text)}>
+            {trend.label}
+          </p>
+        ) : (
+          <span />
+        )}
+        <div className="h-8 w-16 shrink-0" aria-hidden="true">
+          <Sparkline tone={tone} variant={chart} seed={seed} />
+        </div>
+      </div>
     </Card>
   )
 }
