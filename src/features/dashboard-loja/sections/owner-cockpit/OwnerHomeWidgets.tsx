@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getDaysInMonth, parseISO } from 'date-fns'
-import { AlertTriangle, ArrowUpRight, Bell, CheckCircle2, Clock3, CircleHelp, ClipboardList, LineChart as LineChartIcon, MessageCircle, Search, Target, TrendingDown, Users, Zap } from 'lucide-react'
+import { AlertTriangle, ArrowUpRight, Bell, CalendarDays, CheckCircle2, ChevronRight, Clock3, CircleHelp, ClipboardList, LineChart as LineChartIcon, MessageCircle, Search, Target, TrendingDown, Users, Zap } from 'lucide-react'
 import {
   CartesianGrid,
   Line,
@@ -270,29 +270,43 @@ export function OwnerAlertList({ alerts }: { alerts: OwnerPerformanceAlert[] }) 
 export function NextActionsCard({ actions }: { actions: ActionRow[] }) {
   const navigate = useNavigate()
   return (
-    <Card className="border bg-white p-mx-md">
-      <div className="flex items-center gap-mx-sm">
-        <CheckCircle2 size={24} className="text-emerald-600" />
-        <Typography variant="h3" className="text-xl">Próximas ações do Dono</Typography>
-      </div>
-      <div className="mt-mx-md divide-y divide-border-subtle">
+    // Espelha components/owner/home/OwnerActionsBlock.
+    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+      <h2 className="text-base font-semibold text-gray-800">Próximas ações do Dono</h2>
+      <div className="mt-4 space-y-2">
         {actions.slice(0, 5).map((action, index) => (
-          <div key={`${action.problem}-${index}`} className="flex items-center gap-mx-sm py-mx-sm">
-            <span className="w-mx-20 shrink-0 rounded-xl bg-mx-indigo-50 px-mx-sm py-mx-xs text-center text-xs font-bold text-emerald-600 truncate">
-              {action.due || 'Pendente'}
-            </span>
-            <Typography variant="p" className="min-w-0 flex-1 truncate text-sm font-bold">
-              {action.action}
-            </Typography>
-            <CheckCircle2 size={16} className="shrink-0 text-status-success" aria-hidden="true" />
-            <Users size={16} className="shrink-0 text-gray-500" aria-hidden="true" />
+          <div
+            key={`${action.problem}-${index}`}
+            className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-3"
+          >
+            <div className="flex w-12 shrink-0 flex-col items-center">
+              <Clock3 className="h-3.5 w-3.5 text-gray-500" aria-hidden="true" />
+              <span className="mt-0.5 text-center text-[10px] font-semibold leading-tight text-gray-800">
+                {action.due || 'Pendente'}
+              </span>
+            </div>
+            <div className="min-w-0 flex-1">
+              <p className="text-sm text-gray-800">{action.action}</p>
+              <span className="text-xs font-medium text-gray-500">{action.department}</span>
+            </div>
+            <ChevronRight className="h-4 w-4 shrink-0 text-gray-500" aria-hidden="true" />
           </div>
         ))}
+        {actions.length === 0 && (
+          <p className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-500">
+            Nenhuma ação registrada para esta unidade.
+          </p>
+        )}
       </div>
-      <Button type="button" variant="ghost" className="mt-mx-sm w-full" onClick={() => navigate(ownerPath('agenda'))}>
+      <button
+        type="button"
+        onClick={() => navigate(ownerPath('agenda'))}
+        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50"
+      >
+        <CalendarDays className="h-3.5 w-3.5" />
         Ver agenda completa
-      </Button>
-    </Card>
+      </button>
+    </section>
   )
 }
 
