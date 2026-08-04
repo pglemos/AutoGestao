@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { getDaysInMonth, parseISO } from 'date-fns'
-import { AlertTriangle, Bell, CheckCircle2, Clock3, CircleHelp, ClipboardList, LineChart as LineChartIcon, MessageCircle, Search, Target, Users, Zap } from 'lucide-react'
+import { AlertTriangle, ArrowUpRight, Bell, CheckCircle2, Clock3, CircleHelp, ClipboardList, LineChart as LineChartIcon, MessageCircle, Search, Target, TrendingDown, Users, Zap } from 'lucide-react'
 import {
   CartesianGrid,
   Line,
@@ -40,47 +40,76 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
         ? { label: 'Dentro da meta', arrow: '►', tone: 'warning' as const }
         : { label: 'Abaixo da meta', arrow: '▼', tone: 'danger' as const }
 
+  const shortfall = goal > 0 ? Math.max(goal - projected, 0) : 0
+
+  // Espelha components/owner/home/SalesGoalBlock.
   return (
-    <Card className="border bg-white p-mx-md">
-      <div className="flex items-center justify-between">
-        <div className="flex items-center gap-mx-sm">
-          <Target size={24} className="text-emerald-600" />
-          <Typography variant="h3" className="text-xl">Meta de Venda do Mês</Typography>
+    <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
+      <div className="flex items-center gap-2">
+        <Target className="h-5 w-5 text-emerald-600" />
+        <h2 className="text-base font-semibold text-gray-800">Meta de Venda do Mês</h2>
+      </div>
+      <div className="mt-4 space-y-4">
+        <div>
+          <div className="flex items-baseline justify-between">
+            <span className="text-sm text-gray-500">Atingimento</span>
+            <span className="text-sm font-semibold text-gray-800">{goal > 0 ? `${progress}%` : '--'}</span>
+          </div>
+          <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
+            <div className="h-full rounded-full bg-emerald-600" style={{ width: `${progress}%` }} />
+          </div>
         </div>
-        <Typography variant="p" className="tabular-nums">{goal > 0 ? `${progress}%` : '--'}</Typography>
-      </div>
-      <div className="mt-mx-md flex items-center justify-between">
-        <Typography variant="p" tone="muted" className="">Meta: {goal > 0 ? `${formatInteger(goal)} veículos` : 'Pendente'}</Typography>
-      </div>
-      <div className="mt-mx-sm h-mx-3 rounded-mx-full bg-gray-50 overflow-hidden">
-        <div className="h-full rounded-mx-full bg-status-success" style={{ width: `${progress}%` }} />
-      </div>
-      <div className="mt-mx-lg grid grid-cols-3 gap-mx-sm">
-        <MetricPill label="Vendidos" value={formatInteger(sold)} tone="success" />
-        <MetricPill label="Faltam" value={goal > 0 ? formatInteger(missing) : '--'} tone="danger" />
-        <MetricPill label="Ritmo ideal" value={idealPace > 0 ? `${idealPace.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}/d` : '--'} tone="info" />
-      </div>
-      <div className="mt-mx-md flex flex-wrap items-center justify-between gap-mx-sm rounded-xl border border-gray-100 bg-gray-50 px-mx-md py-mx-sm">
-        <Typography variant="p" className="">Projeção atual</Typography>
-        <div className="flex items-center gap-mx-xs">
-          <Typography variant="p" className="">{goal > 0 ? `${formatInteger(projected)} veículos` : 'Pendente'}</Typography>
+        <div className="grid grid-cols-3 gap-2">
+          <div className="rounded-lg bg-emerald-600/5 p-2.5 text-center">
+            <p className="text-xs text-gray-500">Vendidos</p>
+            <p className="mt-0.5 text-xl font-bold text-emerald-600">{formatInteger(sold)}</p>
+          </div>
+          <div className="rounded-lg bg-red-50 p-2.5 text-center">
+            <p className="text-xs text-gray-500">Faltam</p>
+            <p className="mt-0.5 text-xl font-bold text-red-600">{goal > 0 ? formatInteger(missing) : '--'}</p>
+          </div>
+          <div className="rounded-lg bg-gray-100/60 p-2.5 text-center">
+            <p className="text-xs text-gray-500">Ritmo ideal</p>
+            <p className="mt-0.5 text-sm font-bold text-gray-800">
+              {idealPace > 0 ? `${idealPace.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}/dia` : '--'}
+            </p>
+          </div>
+        </div>
+        <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-3">
+          <div>
+            <p className="text-xs text-gray-500">Projeção atual</p>
+            <p className="text-sm font-semibold text-gray-800">
+              {goal > 0 ? `${formatInteger(projected)} veículos` : 'Pendente'}
+            </p>
+          </div>
           {projectionStatus && (
-            <span className={cn('shrink-0 whitespace-nowrap text-xs font-bold', toneClasses[projectionStatus.tone].text)}>
-              {projectionStatus.arrow} {projectionStatus.label}
-            </span>
+            <div className={cn('flex items-center gap-1.5 rounded-full px-2.5 py-1', projectionStatus.tone === 'success' ? 'bg-emerald-50' : 'bg-amber-50')}>
+              <TrendingDown className={cn('h-3.5 w-3.5', projectionStatus.tone === 'success' ? 'text-emerald-600' : 'text-amber-600')} />
+              <span className={cn('text-xs font-medium', projectionStatus.tone === 'success' ? 'text-emerald-700' : 'text-amber-700')}>
+                {projectionStatus.label}
+              </span>
+            </div>
           )}
         </div>
+        {shortfall > 0 && (
+          <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
+            <TrendingDown className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+            <p className="text-xs text-amber-700">
+              Mantido o ritmo atual, a loja encerrará o mês {formatInteger(shortfall)}{' '}
+              {shortfall === 1 ? 'veículo' : 'veículos'} abaixo da meta.
+            </p>
+          </div>
+        )}
+        <button
+          type="button"
+          onClick={() => navigate(ownerPath('departamentos-comercial'))}
+          className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50"
+        >
+          Ver diagnóstico comercial
+          <ArrowUpRight className="h-3.5 w-3.5" />
+        </button>
       </div>
-      <Button
-        type="button"
-        variant="ghost"
-        size="sm"
-        className="mt-mx-sm w-full justify-center"
-        onClick={() => navigate(ownerPath('departamentos-comercial'))}
-      >
-        Ver diagnóstico comercial
-      </Button>
-    </Card>
+    </section>
   )
 }
 
