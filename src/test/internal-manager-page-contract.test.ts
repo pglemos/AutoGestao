@@ -74,6 +74,25 @@ describe('contrato canônico do módulo interno MX', () => {
     expect(modulePageRule).not.toMatch(/padding:\s*1\.5rem/)
   })
 
+  test('o corpo canônico mantém rolagem vertical para qualquer wrapper de página', () => {
+    const slotsCss = read('src/styles/internal-mx-template-slots.css')
+    const bodyRules = [...slotsCss.matchAll(/\.mx-canonical-template \[data-mx-template-body\] \{([^}]*)\}/g)]
+    const bodyRule = bodyRules.at(-1)?.[1] ?? ''
+
+    expect(bodyRules.length).toBeGreaterThanOrEqual(2)
+    expect(bodyRule).toContain('overflow-x: hidden')
+    expect(bodyRule).toContain('overflow-y: auto')
+    expect(bodyRule).not.toMatch(/overflow:\s*hidden/)
+  })
+
+  test('a simulação reserva altura para o conteúdo rolável', () => {
+    const slotsCss = read('src/styles/internal-mx-template-slots.css')
+    expect(slotsCss).toContain("#main-content:has(> section[aria-label='Simulação ativa'])")
+    expect(slotsCss).toContain('display: flex')
+    expect(slotsCss).toContain('flex-direction: column')
+    expect(slotsCss).toContain('flex: 1 1 0%')
+  })
+
   test('o escopo visual importa a camada explícita de slots', () => {
     const scope = read('src/components/module/InternalMxVisualScope.tsx')
     expect(scope).toContain("@/styles/internal-mx-template-slots.css")

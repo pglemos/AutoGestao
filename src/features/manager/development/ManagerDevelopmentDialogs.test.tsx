@@ -4,11 +4,13 @@ import type { FeedbackListItem } from '@/features/gerente-feedback/lib/helpers'
 import { Modal } from '@/components/organisms/Modal'
 import { DevelopmentTeamCompetencyMap } from './DevelopmentTeamCompetencyMap'
 
-beforeEach(() => {
+const resetDom = () => {
   cleanup()
-})
+  document.body.replaceChildren()
+}
 
-afterEach(() => cleanup())
+beforeEach(resetDom)
+afterEach(resetDom)
 
 const feedback: FeedbackListItem = {
   id: '00000000-0000-0000-0000-000000000001',

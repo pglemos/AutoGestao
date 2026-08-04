@@ -1,0 +1,98 @@
+name: Management Design System Audit V3
+
+on:
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'scripts/audit-management-design-system.mjs'
+      - 'scripts/audit-management-design-system.test.mjs'
+      - 'scripts/management-route-manifest.test.mjs'
+      - 'scripts/management-design-system-baseline.json'
+      - '.github/workflows/management-design-system-audit-v3.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'scripts/audit-management-design-system.mjs'
+      - 'scripts/audit-management-design-system.test.mjs'
+      - 'scripts/management-route-manifest.test.mjs'
+      - 'scripts/management-design-system-baseline.json'
+      - '.github/workflows/management-design-system-audit-v3.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  audit:
+    name: Full management visual audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Resolve trusted design-system baseline
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha || github.event.before }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          baseline_path='scripts/management-design-system-baseline.json'
+          trusted_baseline="$RUNNER_TEMP/management-design-system-baseline.json"
+
+          if [[ -n "${BASE_SHA}" ]] && git cat-file -e "${BASE_SHA}:${baseline_path}" 2>/dev/null; then
+            if ! git diff --quiet "${BASE_SHA}" -- "$baseline_path"; then
+              echo 'The committed design-system baseline is immutable after bootstrap.' >&2
+              echo 'Review the historical violations before changing source or baseline together.' >&2
+              exit 1
+            fi
+            git show "${BASE_SHA}:${baseline_path}" > "$trusted_baseline"
+          else
+            echo 'No baseline exists in the base commit; using the checked-in bootstrap baseline.'
+            cp "$baseline_path" "$trusted_baseline"
+          fi
+
+          echo "MANAGEMENT_DESIGN_SYSTEM_BASELINE_FILE=$trusted_baseline" >> "$GITHUB_ENV"
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '24'
+
+      - name: Run management design-system contracts
+        run: node --test scripts/management-route-manifest.test.mjs scripts/audit-management-design-system.test.mjs
+
+      - name: Write complete violation ledger
+        if: always()
+        run: node scripts/audit-management-design-system.mjs > management-design-system-ledger.json || true
+
+      - name: Assert empty violation ledger
+        run: |
+          node -e "const r=require('./management-design-system-ledger.json'); if(r.violations.length){console.error(JSON.stringify(r.violations.slice(0,50),null,2)); process.exit(1)}; console.log(JSON.stringify({entries:r.entries,auditedFiles:r.auditedFiles,violations:r.violations.length}))"
+
+      - name: Build source snapshot
+        if: always()
+        shell: bash
+        run: |
+          set -euo pipefail
+          snapshot_paths=(src package.json package-lock.json vite.config.ts playwright.config.ts tsconfig.json)
+          for optional in \
+            tailwind.config.js \
+            scripts/audit-management-design-system.mjs \
+            scripts/audit-management-design-system.test.mjs \
+            scripts/management-route-manifest.test.mjs \
+            scripts/management-design-system-baseline.json; do
+            [[ -e "$optional" ]] && snapshot_paths+=("$optional")
+          done
+          tar -czf management-source-snapshot.tar.gz "${snapshot_paths[@]}"
+
+      - name: Upload audit evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: management-design-system-source-v3
+          path: |
+            management-source-snapshot.tar.gz
+            management-design-system-ledger.json
+          retention-days: 7

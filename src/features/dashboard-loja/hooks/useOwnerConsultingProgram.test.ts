@@ -17,7 +17,10 @@ describe('useOwnerConsultingProgram — escopo exclusivo do Dono', () => {
       const { result } = renderHook(() => useOwnerConsultingProgram('store-manager', false))
       await act(async () => { await Promise.resolve() })
 
-      expect(rpcSpy).not.toHaveBeenCalled()
+      const ownerSummaryCalls = rpcSpy.mock.calls.filter(
+        ([rpcName]) => rpcName === 'get_owner_consulting_program_summary',
+      )
+      expect(ownerSummaryCalls).toHaveLength(0)
       expect(result.current).toMatchObject({
         program: null,
         loading: false,

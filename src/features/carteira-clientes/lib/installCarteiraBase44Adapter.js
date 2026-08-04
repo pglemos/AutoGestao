@@ -21,9 +21,13 @@ const missionCache = new Map()
 // componentes React (instalado uma vez no import), então cacheamos aqui.
 let cachedUserIdPromise = null
 
+export function resetCarteiraAuthCache() {
+  cachedUserIdPromise = null
+}
+
 supabase.auth.onAuthStateChange((event) => {
   if (event === 'SIGNED_OUT' || event === 'SIGNED_IN' || event === 'USER_UPDATED') {
-    cachedUserIdPromise = null
+    resetCarteiraAuthCache()
   }
 })
 
@@ -32,6 +36,35 @@ function getCurrentUserId() {
     cachedUserIdPromise = supabase.auth.getUser().then(({ data }) => data.user?.id ?? null)
   }
   return cachedUserIdPromise
+}
+
+export async function resolveCarteiraExecutionContext() {
+  const authenticatedUserId = await getCurrentUserId()
+  if (!authenticatedUserId) {
+    return {
+      authenticatedUserId: null,
+      sellerUserId: null,
+      storeId: null,
+      isSimulation: false,
+    }
+  }
+
+  const simulation = readSimulationContext()
+  if (simulation) {
+    return {
+      authenticatedUserId,
+      sellerUserId: simulation.sellerUserId,
+      storeId: simulation.storeId,
+      isSimulation: true,
+    }
+  }
+
+  return {
+    authenticatedUserId,
+    sellerUserId: authenticatedUserId,
+    storeId: null,
+    isSimulation: false,
+  }
 }
 
 function yieldSupabaseClient() {
@@ -91,7 +124,7 @@ function put(target, key, value) {
   if (value !== undefined) target[key] = value
 }
 
-export function buildRpcPayload(data, clientId) {
+export function buildRpcPayload(data, clientId, executionContext) {
   const payload = {}
   const history = data.historico || null
   const nextAction = data.proximo_passo ?? data.proxima_acao
@@ -143,7 +176,11 @@ export function buildRpcPayload(data, clientId) {
 
   if (data.proposta_enviada === true && !terminal) payload.etapa = 'apresentacao'
 
-  const simulation = readSimulationContext()
+  const simulation = executionContext === undefined
+    ? readSimulationContext()
+    : executionContext?.isSimulation
+      ? executionContext
+      : null
   if (simulation) {
     payload.acting_seller_user_id = simulation.sellerUserId
     payload.acting_store_id = simulation.storeId
@@ -183,10 +220,10 @@ export function buildRpcPayload(data, clientId) {
   return payload
 }
 
-async function listVisualClients(query, order, limit) {
+async function listVisualClients(query, order, limit, executionContext) {
   try {
-    const simulation = readSimulationContext()
-    const userId = simulation?.sellerUserId || await getCurrentUserId()
+    const context = executionContext || await resolveCarteiraExecutionContext()
+    const userId = context.sellerUserId
     if (!userId) return []
 
     const { data: userProfile } = await supabase
@@ -201,9 +238,11 @@ async function listVisualClients(query, order, limit) {
       .from('clientes')
       .select('*, oportunidades(*), agendamentos(*)')
 
+    let scopedStoreId = context.isSimulation ? context.storeId : null
+
     if (role === 'vendedor') {
       dbQuery = dbQuery.eq('seller_user_id', userId)
-    } else if (role === 'gerente') {
+    } else if (role === 'gerente' && !scopedStoreId) {
       const { data: storeLink } = await supabase
         .from('vinculos_loja')
         .select('store_id')
@@ -211,9 +250,11 @@ async function listVisualClients(query, order, limit) {
         .eq('is_active', true)
         .limit(1)
         .maybeSingle()
-      if (storeLink?.store_id) {
-        dbQuery = dbQuery.eq('loja_id', storeLink.store_id)
-      }
+      scopedStoreId = storeLink?.store_id || null
+    }
+
+    if (scopedStoreId) {
+      dbQuery = dbQuery.eq('loja_id', scopedStoreId)
     }
 
     const { data, error } = await dbQuery
@@ -232,14 +273,16 @@ async function listVisualClients(query, order, limit) {
   }
 }
 
-async function getVisualClient(id) {
-  const list = await listVisualClients({ id }, '-updated_date', 1)
+async function getVisualClient(id, executionContext) {
+  const list = await listVisualClients({ id }, '-updated_date', 1, executionContext)
   return list[0] ?? null
 }
 
 async function saveClient(data, clientId) {
+  const context = await resolveCarteiraExecutionContext()
+  if (!context.sellerUserId) throw new Error('Usuário não autenticado.')
   const scope = clientId ? `carteira:update:${clientId}` : 'carteira:create'
-  const payload = buildRpcPayload(data, clientId)
+  const payload = buildRpcPayload(data, clientId, context)
   return carteiraMutationCoordinator.run(scope, payload, async key => {
     const { data: result, error } = await supabase.rpc('carteira_salvar_cliente_v2', {
       p_payload: payload,
@@ -253,7 +296,7 @@ async function saveClient(data, clientId) {
     // a leitura de hidratação executada imediatamente depois.
     await yieldSupabaseClient()
 
-    const hydrated = await getVisualClient(result.cliente_id)
+    const hydrated = await getVisualClient(result.cliente_id, context)
     if (!hydrated) throw new Error('Cliente salvo, mas não foi possível recarregar a ficha.')
     return hydrated
   })
@@ -295,6 +338,7 @@ function mapHistory(row) {
 async function createHistory(data) {
   // Compatibilidade para históricos independentes. Mutações de cliente que
   // também registram histórico usam `historico` no mesmo RPC transacional.
+  const context = await resolveCarteiraExecutionContext()
   return carteiraMutationCoordinator.run(`carteira:history:${data.cliente_id}`, data, async key => {
     await yieldSupabaseClient()
 
@@ -307,7 +351,7 @@ async function createHistory(data) {
       missao_id: data.missao_id || null,
     }
 
-    const client = await getVisualClient(data.cliente_id)
+    const client = await getVisualClient(data.cliente_id, context)
     if (!client) throw new Error('Cliente não encontrado para registrar o histórico.')
 
     const eventPayload = {
@@ -346,15 +390,16 @@ async function createHistory(data) {
 }
 
 async function getSellerStoreContext() {
-  const simulation = readSimulationContext()
-  if (simulation) return { userId: simulation.sellerUserId, storeId: simulation.storeId }
-  const userId = await getCurrentUserId()
-  if (!userId) return null
+  const context = await resolveCarteiraExecutionContext()
+  if (!context.sellerUserId) return null
+  if (context.isSimulation) {
+    return { userId: context.sellerUserId, storeId: context.storeId }
+  }
 
   const { data, error } = await supabase
     .from('vinculos_loja')
     .select('store_id')
-    .eq('user_id', userId)
+    .eq('user_id', context.sellerUserId)
     .eq('is_active', true)
     .in('role', ['vendedor', 'seller'])
     .order('created_at', { ascending: false })
@@ -362,7 +407,7 @@ async function getSellerStoreContext() {
     .maybeSingle()
 
   if (error) throw error
-  return data?.store_id ? { userId, storeId: data.store_id } : null
+  return data?.store_id ? { userId: context.sellerUserId, storeId: data.store_id } : null
 }
 
 async function listArrivedVehicles(query, order, limit) {
@@ -419,28 +464,28 @@ async function createArrivedVehicle(data) {
   })
 }
 
-async function listCampaigns() {
-  const simulation = readSimulationContext()
+async function listCampaigns(executionContext) {
+  const context = executionContext || await resolveCarteiraExecutionContext()
   const { data, error } = await supabase.rpc('carteira_listar_campanhas', {
-    p_acting_seller_user_id: simulation?.sellerUserId ?? null,
-    p_acting_store_id: simulation?.storeId ?? null,
+    p_acting_seller_user_id: context.isSimulation ? context.sellerUserId : null,
+    p_acting_store_id: context.isSimulation ? context.storeId : null,
   })
   if (error) throw error
   return data || []
 }
 
 async function createCampaign(data) {
+  const context = await resolveCarteiraExecutionContext()
   return carteiraMutationCoordinator.run('carteira:campaign:create', data, async key => {
-    const simulation = readSimulationContext()
     const { data: result, error } = await supabase.rpc('carteira_salvar_campanha', {
       p_payload: data,
       p_idempotency_key: key,
-      p_acting_seller_user_id: simulation?.sellerUserId ?? null,
-      p_acting_store_id: simulation?.storeId ?? null,
+      p_acting_seller_user_id: context.isSimulation ? context.sellerUserId : null,
+      p_acting_store_id: context.isSimulation ? context.storeId : null,
     })
     if (error) throw error
     if (!result?.ok) throw new Error(result?.error || 'Não foi possível salvar a campanha.')
-    const campaigns = await listCampaigns()
+    const campaigns = await listCampaigns(context)
     return campaigns.find(campaign => campaign.id === result.campanha_id) || result
   })
 }
@@ -485,8 +530,8 @@ export function installCarteiraBase44Adapter(base44) {
 
   base44.entities.CarteiraHistorico = {
     filter: async (query, order, limit) => {
-      const simulation = readSimulationContext()
-      const userId = simulation?.sellerUserId || await getCurrentUserId()
+      const context = await resolveCarteiraExecutionContext()
+      const userId = context.sellerUserId
       if (!userId) return []
 
       let request = supabase
@@ -495,6 +540,7 @@ export function installCarteiraBase44Adapter(base44) {
         .eq('seller_user_id', userId)
 
       if (query?.cliente_id) request = request.eq('cliente_id', query.cliente_id)
+      if (context.storeId) request = request.eq('loja_id', context.storeId)
       const { data, error } = await request.order('data_evento', { ascending: false }).limit(limit || 100)
       if (error) throw error
       return sortRows((data || []).map(mapHistory).filter(row => matchesQuery(row, query)), order)
@@ -504,14 +550,15 @@ export function installCarteiraBase44Adapter(base44) {
 
   base44.entities.CarteiraMissao = {
     filter: async (query, order, limit) => {
-      const simulation = readSimulationContext()
-      const userId = simulation?.sellerUserId || await getCurrentUserId()
+      const context = await resolveCarteiraExecutionContext()
+      const userId = context.sellerUserId
       if (!userId) return []
-      const { data, error } = await supabase
+      let request = supabase
         .from('carteira_missoes')
         .select('*')
         .eq('seller_user_id', userId)
-        .order('iniciada_em', { ascending: false })
+      if (context.storeId) request = request.eq('loja_id', context.storeId)
+      const { data, error } = await request.order('iniciada_em', { ascending: false })
       if (error) throw error
       for (const mission of data || []) missionCache.set(mission.id, mission)
       const filtered = (data || []).filter(row => matchesQuery(row, query))

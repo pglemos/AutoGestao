@@ -143,6 +143,13 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
   - `pgTAP RLS Matrix` falhava em 100% dos runs recentes por FK violation em `remuneracao_planos`; corrigido com guard idempotente para stack fresh na migration `20260707142000_seed_remuneracao_brothers_car_mx_consultoria.sql`.
   - RLS de `clientes` permitia leitura indefinida de ficha de outro vendedor após oportunidade `ganho/perdido`; corrigido em `20260716240000_clientes_shared_read_expires_on_terminal_stage.sql`, mantendo leitura compartilhada apenas durante oportunidade aberta.
   - `TestSprite Pre-Check` e `Supabase Preview` (checks de apps/integrações externas ao repo, não listados nos gates da story) falham por config de plataforma (app sem testes configurados; limite de branches concorrentes do marketplace Vercel↔Supabase) — não bloqueantes, não relacionados ao código desta PR.
+- **Continuação Codex em 2026-08-04:** baseline SHA do auditor de Design System criado para 71 arquivos históricos (481 ocorrências suprimidas somente quando o hash do arquivo permanece idêntico); o auditor cobre 38 entradas dos cinco perfis de gestão e falha com qualquer violação atual.
+- Contratos da continuação passaram: auditoria de Design System (6 testes), simulação/escopo/scroll da Carteira (22 testes, 147 assertions) e paridade/comportamento Carteira (11 testes, 36 assertions).
+- Gates locais atuais passaram: `npm run lint`, `npm run typecheck`, `npm test` (1.723 pass/0 fail, 14.031 assertions), `npm run build`, `npm run check:bundle-size` (1.844,99/1.860 KB gzip), `verify_carteira_base44_parity.mjs` e auditoria de Design System. `check_migration_reversibility.mjs --changed-only` não encontrou migrations alteradas nesta continuação.
+- Os testes do hook de consultoria do Dono e dos diálogos do Gerente foram isolados contra interferência assíncrona/DOM da suíte; a suíte completa passou novamente após `cleanup()` entre os testes do gate de simulação.
+- CodeRabbit `review --uncommitted --include-untracked --agent --light`: `findings: 0` após corrigir o gate de carregamento da simulação, a captura de contexto do payload e a proteção do baseline no workflow.
+- Nova tentativa CodeRabbit após o último ajuste de fixture em 2026-08-04 ficou **BLOCKED_EXTERNAL**: o serviço retornou `rate_limit` e informou indisponibilidade temporária para a conta/organização. O resultado `findings: 0` acima é a última revisão disponível antes desse ajuste, não uma revisão pós-ajuste.
+- CI remoto, Supabase remoto, Vercel, browser autenticado e publicação do SHA desta continuação ainda não foram declarados nesta atualização; dependem de validação externa posterior.
 
 ### File List
 
@@ -160,6 +167,9 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 - `src/features/carteira-clientes/components/carteira-rendered-parity.test.tsx`
 - `src/features/carteira-clientes/components/carteira-resilience.test.tsx`
 - `src/features/carteira-clientes/lib/installCarteiraBase44Adapter.js`
+- `src/features/carteira-clientes/pages/CarteiraClientesBase44Page.tsx`
+- `src/features/carteira-clientes/lib/carteira-adapter-simulation-scope.test.ts`
+- `src/features/carteira-clientes/pages/CarteiraClientesBase44Page.simulation-gate.test.tsx`
 - `src/features/carteira-clientes/lib/carteira-mutation-coordinator.ts`
 - `src/features/carteira-clientes/lib/carteira-mutation-coordinator.test.ts`
 - `src/features/carteira-clientes/lib/carteira-adapter-contract.test.ts`
@@ -177,6 +187,16 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 - `supabase/tests/rls-matrix/clientes.test.sql`
 - `supabase/tests/rls-matrix/setup.sql`
 - `supabase/tests/rls-matrix/runner.sql`
+- `package.json`
+- `.github/workflows/management-design-system-audit-v3.yml`
+- `docs/architecture/ADR-owner-shell-canonical.md`
+- `scripts/audit-management-design-system.mjs`
+- `scripts/audit-management-design-system.test.mjs`
+- `scripts/management-design-system-baseline.json`
+- `scripts/management-route-manifest.test.mjs`
+- `src/design-system/management/managementRouteManifest.js`
+- `src/test/internal-manager-page-contract.test.ts`
+- `src/features/dashboard-loja/hooks/useOwnerConsultingProgram.test.ts`
 
 ## Change Log
 
@@ -187,7 +207,22 @@ Claude Code (Sonnet 5), continuando trabalho iniciado em sessão anterior via Co
 | 2026-07-16 | 1.0.2 | Development started (yolo mode) — Status: Ready → InProgress. | Dex (@dev) |
 | 2026-07-16 | 1.0.3 | Auditado diff pós-Codex, fechado gap de grants, sincronizados tipos, aberto PR #99, configurados secrets de CI ausentes, corrigido fetch-depth do workflow. Documentados 3 achados fora de escopo (RLS Matrix/seed payroll, RLS de clientes, apps externos). | Claude Code (@dev) |
 | 2026-07-16 | 1.0.4 | PR #99 mergeado, deploy READY. Smoke test real em produção achou e corrigiu 3 bugs: crash do ScriptIA travando o modal inteiro (PR #100), `carteira_salvar_cliente` escrevendo em coluna gerada — quebrava 100% do "salvar cliente" (PR #101), checagem de escopo de agendamento longe demais (PR #101, mesmo PR). Todos os 4 fluxos de escrita confirmados funcionando com persistência real. | Claude Code (@dev) |
+| 2026-08-04 | 1.0.5 | Continuação na `main`: escopo autenticado da simulação, contratos de scroll, auditoria/manifesto atual do Design System, baseline SHA e gates locais completos. | Codex (@dev) |
 
 ## QA Results
 
-_A preencher por @qa._
+### Gate Decision
+
+**CONCERNS** — código e gates locais aprovados; release externo ainda não comprovado.
+
+| Área | Comando/evidência | Resultado |
+| --- | --- | --- |
+| CodeRabbit | revisão anterior + nova tentativa pós-ajuste | **CONCERNS** — última revisão disponível: `findings: 0`; tentativa atual `BLOCKED_EXTERNAL` por `rate_limit` |
+| Auditoria DS | `npm run audit:management-design-system` | PASS — 38 entradas, 328 arquivos auditados, 481 ocorrências históricas suprimidas por SHA, 0 violações atuais |
+| Testes | `npm test` | PASS — 1.723 testes, 14.031 assertions, 0 falhas |
+| Lint/typecheck/build | `npm run lint`; `npm run typecheck`; `npm run build` | PASS |
+| Carteira | `verify_carteira_base44_parity.mjs` + 11 testes de resiliência | PASS |
+| Bundle/migrations | `npm run check:bundle-size`; `check_migration_reversibility.mjs --changed-only` | PASS — 1.845,02/1.860 KB gzip; nenhuma migration alterada nesta continuação |
+| Release | GitHub Actions, Supabase remoto, Vercel `READY`, browser autenticado e `/carteira-clientes` no SHA final | **NOT RUN / BLOCKING EVIDENCE** |
+
+QA não recomenda marcar a story como `Ready for Review`/concluída até a validação externa do SHA exato e do fluxo autenticado real.
