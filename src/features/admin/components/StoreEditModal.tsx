@@ -10,6 +10,7 @@ import type { StoreUpdateFields } from '@/hooks/useTeam'
 import { getPreRegistrationLink } from '@/lib/utils'
 import { requestToastConfirmation } from '@/lib/ui/confirmAction'
 import { toast } from '@/lib/toast'
+import { useStoreManagementContext } from '@/hooks/useStoreManagementContext'
 
 interface StoreEditModalProps {
   open: boolean
@@ -44,6 +45,12 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
       active: store.active,
     })
   }, [store])
+
+  const {
+    hasActiveManager,
+    activeManagers,
+    loading: managementLoading,
+  } = useStoreManagementContext(store?.id)
 
   const registrationLink = store ? getPreRegistrationLink(store.name) : ''
 
@@ -228,6 +235,41 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               placeholder="gestor@unidade.com.br"
               className="!pl-14 !h-14 font-bold"
             />
+          </div>
+        </div>
+
+        <div className="space-y-mx-xs">
+          <Typography variant="caption" className="">
+            Estrutura da gestão comercial
+          </Typography>
+          <div className="rounded-mx-md border border-gray-200 p-mx-md">
+            {managementLoading ? (
+              <Typography variant="tiny" tone="muted" className="font-bold">
+                Verificando vínculos da loja…
+              </Typography>
+            ) : hasActiveManager ? (
+              <>
+                <Typography variant="tiny" className="font-bold block">
+                  Gerente cadastrado
+                </Typography>
+                <Typography variant="tiny" tone="muted" className="mt-1 block font-bold">
+                  {activeManagers.map((manager) => manager.name || manager.email).join(', ')} — acesso ativo.
+                  O dono mantém acesso de acompanhamento da operação comercial.
+                </Typography>
+              </>
+            ) : (
+              <>
+                <Typography variant="tiny" className="font-bold block">
+                  Dono acumula a gestão
+                </Typography>
+                <Typography variant="tiny" tone="muted" className="mt-1 block font-bold">
+                  Enquanto não houver gerente com vínculo ativo, o dono tem acesso completo
+                  às funções gerenciais e à operação comercial da equipe. Ao cadastrar um
+                  gerente, o status muda automaticamente — o dono não perde acesso, apenas
+                  deixa de ser o responsável gerencial principal.
+                </Typography>
+              </>
+            )}
           </div>
         </div>
 

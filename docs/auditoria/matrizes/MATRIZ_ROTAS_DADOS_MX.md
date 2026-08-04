@@ -89,7 +89,7 @@
 | `/meu-perfil-vendedor` | route | protegida | `/perfil` | `/meu-perfil-vendedor` | — | `<RedirectWithSearch to="/perfil" />` |
 | `/vendedor/perfil` | route | protegida | `/perfil` | `/vendedor/perfil` | — | `<RedirectWithSearch to="/perfil" />` |
 | `/gerente/fechamento-diario` | route | protegida | `/fechamento-diario` | `/gerente/*` | — | `<RedirectWithSearch to="/fechamento-diario" />` |
-| `/gerente/rotina-equipe` | route | protegida | — | `/gerente/rotina-equipe` | vendedor, dono | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ForbiddenRoute />} admin={<ManagerTeamRoutine />} /></Suspense>` |
+| `/gerente/rotina-equipe` | route | protegida | — | `/gerente/rotina-equipe` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspens` |
 | `/gerente/minha-equipe` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
 | `/gerente/meta-loja` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
 | `/gerente/vendas` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
@@ -103,7 +103,7 @@
 | `/consultor-ia` | route | protegida | — | `/consultor-ia` | — | `<ConsultorIaAliasRedirect />` |
 | `/pdi` | route | protegida | `/desenvolvimento?tab=pdi` | `/pdi` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to="/desenvolvimento?tab=pdi" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />` |
 | `/pdi/:id/print` | route | protegida | — | `/pdi/:id/print` | — | `<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>` |
-| `/rotina` | route | protegida | — | `/rotina` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRotinaDoDia />} admin={<RotinaGerente />} /> </Suspense>` |
+| `/rotina` | route | protegida | — | `/rotina` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineSwitch />} admin={<RotinaGerente />} /> </Suspense>` |
 | `/painel` | route | protegida | — | `/painel` | — | `<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>` |
 | `/lojas` | route | protegida | — | `/lojas` | — | `<Suspense fallback={<Spinner />}><Lojas /></Suspense>` |
 | `/simulacao` | route | protegida | — | `/simulacao` | — | `<Suspense fallback={<Spinner />}><Simulacao /></Suspense>` |
@@ -255,7 +255,7 @@
 | `vendedor_nivel_carreira` | 1 |
 | `vendedor_perfil` | 4 |
 | `vendedores_loja` | 8 |
-| `vinculos_loja` | 16 |
+| `vinculos_loja` | 17 |
 | `visitas_consultoria` | 8 |
 
 ## Operações por tabela
@@ -505,7 +505,7 @@
 | `vendedores_loja:update` | 1 |
 | `vinculos_loja:delete` | 1 |
 | `vinculos_loja:insert` | 1 |
-| `vinculos_loja:select` | 15 |
+| `vinculos_loja:select` | 16 |
 | `vinculos_loja:update` | 1 |
 | `visitas_consultoria:delete` | 2 |
 | `visitas_consultoria:insert` | 5 |

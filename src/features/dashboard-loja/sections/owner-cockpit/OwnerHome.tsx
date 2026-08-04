@@ -3,6 +3,7 @@ import type { OwnerPerformanceAlert } from '../PerformanceAlerts'
 import type { ActionRow, DashboardData, DepartmentScore } from './types'
 import { formatCurrency, formatInteger, formatPercent } from './format'
 import { MXScoreCompact, OwnerKpiCard } from './primitives'
+import { CommercialManagementNotice } from '@/features/owner/CommercialManagementNotice'
 import {
   ConsultantMxCard,
   NextActionsCard,
@@ -55,6 +56,7 @@ export function OwnerHome({
 
   return (
     <>
+      <CommercialManagementNotice />
       <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-5">
         <OwnerKpiCard
           title="Previsão de Vendas no Período"

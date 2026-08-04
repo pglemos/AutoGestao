@@ -144,6 +144,13 @@ export function CreateStoreModal({
                         className="!h-14 !pl-14 !px-6 font-bold"
                       />
                     </div>
+                    <p className="mt-mx-sm text-mx-micro text-gray-500">
+                      Este e-mail recebe os relatórios da unidade. Ele não define a
+                      gestão comercial: enquanto não houver um gerente com vínculo
+                      ativo nesta loja, o dono acumula a gestão e recebe as funções
+                      gerenciais completas. Ao cadastrar um gerente, o dono passa a
+                      ter acesso de acompanhamento.
+                    </p>
                   </div>
                 </div>
 
