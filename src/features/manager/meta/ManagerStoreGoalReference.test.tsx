@@ -3,20 +3,6 @@ import { afterEach, describe, expect, it, vi } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
 import { ManagerStoreGoalReference } from './ManagerStoreGoalReference'
 
-vi.mock('recharts', () => {
-  const Container = ({ children }: { children?: unknown }) => children
-  return {
-    CartesianGrid: Container,
-    Legend: Container,
-    Line: Container,
-    LineChart: Container,
-    ResponsiveContainer: Container,
-    Tooltip: Container,
-    XAxis: Container,
-    YAxis: Container,
-  }
-})
-
 afterEach(cleanup)
 
 function dashboardData() {
@@ -36,7 +22,9 @@ function dashboardData() {
       agd_cart_today: 0, agd_net_today: 0, visit_prev_day: 0,
     }],
     metrics: {
-      goalValue: 20,
+      // These cases cover period loading, tables and contextual actions. Keep
+      // the unrelated chart out of this fixture without globally mocking Recharts.
+      goalValue: 0,
       totalSales: 1,
       ranking: [{
         user_id: 'ana', user_name: 'Ana', vnd_total: 1, meta: 20,
