@@ -2,6 +2,7 @@ import React, { useMemo } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import {
   BookOpen,
+  CalendarDays,
   Home,
   LineChart as LineChartIcon,
   Package,
@@ -148,6 +149,7 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
         icon={Home}
         title={greetingTitle}
         subtitle="Aqui está o panorama da sua loja hoje."
+        actions={null}
       />
 
       {section === 'home' && (
