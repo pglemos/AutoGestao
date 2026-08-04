@@ -9,7 +9,7 @@ import { getPreRegistrationLink } from '@/lib/utils'
 import type { Store } from '@/types/database'
 import { requestToastConfirmation } from '@/lib/ui/confirmAction'
 import { DESTRUCTIVE_ACTION_LABELS } from '@/lib/ui/actionLabels'
-import { normalizeStoreManagementForm } from '@/lib/store-management-form'
+import { normalizeStoreManagementForm, type StoreManagementFormMode } from '@/lib/store-management-form'
 
 /**
  * Hook orquestrador da page Lojas.
@@ -37,7 +37,7 @@ export function useLojasPage() {
   const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null)
   const [copyError, setCopyError] = useState<string | null>(null)
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
-  const [newStore, setNewStore] = useState({ name: '', manager_email: '', management_mode: 'owner_managed' as const })
+  const [newStore, setNewStore] = useState<{ name: string; manager_email: string; management_mode: StoreManagementFormMode }>({ name: '', manager_email: '', management_mode: 'owner_managed' })
   const [creating, setCreating] = useState(false)
   const [editingStore, setEditingStore] = useState<Store | null>(null)
   const [savingStore, setSavingStore] = useState(false)
