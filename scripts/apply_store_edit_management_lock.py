@@ -1,5 +1,6 @@
 from pathlib import Path
 
+# One-shot patch. A second commit triggers the workflow after the workflow file exists.
 path = Path('src/features/admin/components/StoreEditModal.tsx')
 text = path.read_text(encoding='utf-8')
 
