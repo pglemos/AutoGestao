@@ -1,6 +1,8 @@
 # Matriz de rotas, perfis, viewports e estados — 2026-08-04
 
-Estado desta consolidação: `PASS_WITH_FINDINGS` — público local `TESTED_LOCAL_ONLY`; matriz autenticada `BLOCKED_EXTERNAL`.
+Estado desta consolidação: `IN_PROGRESS` — público local `TESTED_LOCAL_ONLY`; /api/health de produção `TESTED_PRODUCTION`; matriz autenticada (6 perfis, 9 viewports) `BLOCKED_EXTERNAL`.
+
+> **Reconciliação pós-release 2026-08-04:** SHA `45889a0baabda8511859be6c18205b5b4aefea1e` publicado em `https://mxperformance.vercel.app` (deployment `dpl_FGLfc8essmaub3BSLv4rGNGcV2pt` READY). Rotas públicas agora servidas do SHA de produção. A matriz autenticada de 6 perfis e os viewports obrigatórios continuam sem prova live nesta reconciliação — estado `BLOCKED_EXTERNAL`/`BLOCKED_EXTERNAL` permanece válido para as linhas abaixo.
 
 ## Regra desta task
 
@@ -10,10 +12,10 @@ Sem browser live autenticado nesta task, nenhuma linha abaixo pode ser promovida
 
 | Perfil | Sessão/credencial nesta task | Estado | Observação |
 |---|---|---|---|
-| Vendedor | não exercitado nesta task | `NOT_PROVEN` | evidência antiga não foi relabelada |
-| Gerente | não exercitado nesta task | `NOT_PROVEN` | warning fix segue sem prova publicada do SHA atual |
-| Dono | não exercitado nesta task | `NOT_PROVEN` | auditorias anteriores continuam apenas históricas |
-| Administrador MX | não exercitado nesta task | `NOT_PROVEN` | sem rodada live atual |
+| Vendedor | não exercitado nesta task | `BLOCKED_EXTERNAL` | evidência antiga não foi relabelada |
+| Gerente | não exercitado nesta task | `BLOCKED_EXTERNAL` | warning fix segue sem prova publicada do SHA atual |
+| Dono | não exercitado nesta task | `BLOCKED_EXTERNAL` | auditorias anteriores continuam apenas históricas |
+| Administrador MX | não exercitado nesta task | `BLOCKED_EXTERNAL` | sem rodada live atual |
 | Administrador Geral | não fornecida | `BLOCKED_EXTERNAL` | ausência de acesso autorizado explícita |
 | Consultor MX | não fornecida | `BLOCKED_EXTERNAL` | ausência de acesso autorizado explícita |
 

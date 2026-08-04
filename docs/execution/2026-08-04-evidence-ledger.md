@@ -1,13 +1,70 @@
 # Evidence ledger — MX autônomo — 2026-08-04
 
-Estado: `PASS_WITH_FINDINGS`. Release: `IN_PROGRESS`, não autorizada.
+Estado: `TESTED_PRODUCTION`. Frontend publicado — SHA `45889a0baabda8511859be6c18205b5b4aefea1e` live; deployment `dpl_FGLfc8essmaub3BSLv4rGNGcV2pt` READY; pós-push direto de `main` para produção. Gaps remanescentes: browser autenticado, CI artifacts, monitoramento pós-release.
+
+> Estado anterior `PASS_WITH_FINDINGS` / release `IN_PROGRESS` supersedido pela release direta. Evidência histórica pré-release preservada abaixo sem relabeling.
 
 Todos os registros `EV-T3-*` abaixo usam o schema obrigatório. `n/a` sempre traz a justificativa.
 
-## Proveniência histórica
+## Proveniência pós-release
+
+### EV-RELEASE-001 — estado git e local pós-release
+
+- Requisito: confirmar que HEAD local corresponde ao SHA publicado e que working tree está limpa.
+- Ambiente: shell local em `/Users/pedroguilherme/PROJETOS/MX GESTAO PREDITIVA`.
+- Perfil: n/a — inspeção Git.
+- Rota/objeto: repositório `main`, working tree e `mx-v3-csv-VzMBNx/`.
+- Viewport: n/a.
+- Estado exercitado: pós-push direto de `main`.
+- Ação: ler HEAD, status e confirmar diretório não rastreado preservado.
+- Resultado esperado: HEAD = SHA publicado; apenas `mx-v3-csv-VzMBNx/` não rastreado.
+- Resultado observado: `HEAD=45889a0baabda8511859be6c18205b5b4aefea1e`; `?? mx-v3-csv-VzMBNx/`; nenhuma outra modificação ou arquivo staged.
+- SHA: `45889a0baabda8511859be6c18205b5b4aefea1e`.
+- Deployment: n/a — inspeção local.
+- Timestamp: 2026-08-04 (reconciliação pós-release).
+- Artefato: saída terminal.
+- Conclusão permitida: checkout alinhado ao SHA publicado; diretório do usuário preservado.
+
+### EV-RELEASE-002 — Vercel deployment e health de produção
+
+- Requisito: confirmar deployment READY com SHA exato no alias de produção.
+- Ambiente: Vercel deployment e endpoint HTTPS público.
+- Perfil: público/não autenticado — `/api/health`.
+- Rota/objeto: `https://mxperformance.vercel.app/api/health`.
+- Viewport: n/a — chamada HTTP sem renderização.
+- Estado exercitado: deployment após push direto de `main`.
+- Ação: verificar deployment ID, estado e response do health endpoint.
+- Resultado esperado: READY com `release` = SHA publicado e `environment=production`.
+- Resultado observado: deployment `dpl_FGLfc8essmaub3BSLv4rGNGcV2pt` READY; alias `/api/health` retornou `healthy`, `release=45889a0baabda8511859be6c18205b5b4aefea1e`, `environment=production`.
+- SHA: `45889a0baabda8511859be6c18205b5b4aefea1e`.
+- Deployment: `dpl_FGLfc8essmaub3BSLv4rGNGcV2pt`.
+- Timestamp: 2026-08-04 (reconciliação pós-release).
+- Artefato: response HTTP.
+- Conclusão permitida: produção live com SHA exato confirmado; env parity completa (variáveis, logs, ignore-command) não revalidada nesta reconciliação.
+
+### EV-RELEASE-003 — Sentry source maps e evento sintético
+
+- Requisito: provar que source maps foram recebidos pelo Sentry para o SHA publicado.
+- Ambiente: Sentry cloud (organização `synvolt`, projeto `mx-performance-frontend`).
+- Perfil: n/a — ferramenta técnica; nenhum perfil de usuário do produto.
+- Rota/objeto: release `45889a0baabda8511859be6c18205b5b4aefea1e`; evento `e62e61e0b9524078b192e0b9ec63c646`.
+- Viewport: n/a — evento sintético.
+- Estado exercitado: build autenticado com sentry-vite-plugin; upload aceito; `.map` removidos do dist.
+- Ação: verificar evento de prova e resolução de source maps.
+- Resultado esperado: evento aponta para arquivos de fonte (`src/`) não para bundle minificado.
+- Resultado observado: evento `e62e61e0b9524078b192e0b9ec63c646` resolveu para `src/lib/observability/sentry.ts` e `src/lib/observability/sanitize.ts`; envelope continha `environment=production`, `release` exact, `synthetic_test=true`, branch e deployment metadata.
+- SHA: `45889a0baabda8511859be6c18205b5b4aefea1e`.
+- Deployment: `dpl_FGLfc8essmaub3BSLv4rGNGcV2pt`.
+- Timestamp: 2026-08-04 (reconciliação pós-release).
+- Artefato: evento Sentry; n/a para arquivo separado porque a evidência é o próprio evento.
+- Conclusão permitida: source maps confirmados para o SHA publicado; alertas, Replay e performance Sentry não verificados nesta reconciliação.
+
+## Proveniência histórica (pré-release)
+
+> Registros abaixo documentam a onda de execução antes da release. SHA de referência era `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451`. Mantidos sem relabeling.
 
 - `9abfc70a79da46c03ee156b49933310584f85a65` e os timestamps entre `06:22` e `06:38 -03:00` permanecem snapshots históricos da primeira consolidação.
-- Evidência atual desta onda usa `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451`, salvo quando o próprio registro identifica outra origem.
+- Evidência da onda pré-release usa `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451`, salvo quando o próprio registro identifica outra origem.
 
 ### EV-BASE-002 — backup Git
 

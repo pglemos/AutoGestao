@@ -2,31 +2,34 @@
 
 ## 1. Resumo executivo
 
-- Estado real: `IN_PROGRESS` com implementação e gates `TESTED_LOCAL_ONLY`.
-- Decisão: `NÃO AUTORIZADA PARA RELEASE`.
+> **Reconciliação pós-release 2026-08-04.** Estado anterior `IN_PROGRESS` / `NÃO AUTORIZADA` supersedido pela release direta de `main`. Evidência histórica da onda preservada abaixo.
+
+- Estado atual: `TESTED_PRODUCTION` (frontend live com SHA exato; gaps remanescentes: browser autenticado, CI artifacts, monitoramento).
+- SHA publicado em produção: `45889a0baabda8511859be6c18205b5b4aefea1e`.
 - SHA inicial do programa: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
 - SHA inicial desta onda final: `a7af180d05ce54038108327eaea49529713d3b19`.
-- SHA final da implementação testada: `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451`.
-- Deployment final: n/a — nenhum deploy foi autorizado ou executado nesta onda.
-- Alias público observado: `release=1b99c0ab82618038fa0826557e7b8762e6247b2b`.
-- READY específico observado: `release=7387fb325dd645aaa2f832895e341c541c1f1d60`.
-- Release Sentry: `BLOCKED_EXTERNAL` — CLI `2.58.5` disponível, mas sem autenticação.
+- SHA final da implementação testada (onda): `f7c36b98dee1f133a7bd4d4c0e5e7db9189bb451`.
+- Deployment de produção: `dpl_FGLfc8essmaub3BSLv4rGNGcV2pt` — READY.
+- Alias de produção: `https://mxperformance.vercel.app` — healthy, `release=45889a0baabda8511859be6c18205b5b4aefea1e`, `environment=production`.
+- Sentry source maps: `DONE_WITH_EVIDENCE` — evento `e62e61e0b9524078b192e0b9ec63c646` confirmou source maps para `sentry.ts` e `sanitize.ts`; org `synvolt`; projeto `mx-performance-frontend`.
 - Migrations aplicadas nesta onda: `0`.
 - Migrations locais/remotas: lista linked alinhada no recorte exibido até `20260803134000`; nenhuma migration entre `11a9465f...` e `f7c36b98...`.
-- Tasks contabilizadas: `6`; `0 DONE_WITH_EVIDENCE`, `2 TESTED_LOCAL_ONLY`, `2 PASS_WITH_FINDINGS`, `2 IN_PROGRESS`.
-- Bloqueios externos reais: autenticação Sentry e sessão/credenciais para browser live autenticado.
-- Gates de release ausentes por limite explícito desta onda: push, CI do SHA exato, deployment correspondente e monitoramento pós-release.
+- Tasks contabilizadas (onda): `6`; reconciliadas pós-release: `2 DONE_WITH_EVIDENCE` (Tasks 4, 6), `3 TESTED_LOCAL_ONLY` (Tasks 2, 3, 5), `1 TESTED_PRODUCTION` (Task 1).
+- Bloqueios remanescentes: browser live autenticado (matriz de 6 perfis), CI/artifacts do SHA publicado, monitoramento pós-release, alertas Sentry, advisories high.
+
+*(Estado histórico anterior ao push — nomenclatura do assessment pré-release: `0 DONE_WITH_EVIDENCE`, `2 TESTED_LOCAL_ONLY`, `2` com findings locais, `2 IN_PROGRESS`; alias servia `1b99c0ab...`; Sentry sem autenticação.)*
 
 ## 2. Git e disposição
 
 - Branch: `main`; nenhuma branch/worktree/clone criado ou trocado.
-- Commit de implementação: `f7c36b98 test(manager): isolate recharts module state`.
-- `origin/main`: `11a9465f253ce8f96052db70c9171b14425e9d4e`.
-- Divergência no último refresh: `0 9` (`main` local nove commits à frente).
-- Push: não executado por proibição explícita desta onda.
-- Branches removidas: `0`; branches mantidas: todas, pois limpeza remota não foi autorizada.
+- Commit de implementação (onda): `f7c36b98 test(manager): isolate recharts module state`.
+- SHA publicado em produção: `45889a0baabda8511859be6c18205b5b4aefea1e` (`fix(owner): route home to live cockpit`).
+- `origin/main` pós-release: alinhada ao SHA publicado `45889a0b...`.
+- Divergência pré-release (histórico): `0 9` (`main` local à frente de `origin/main` em `11a9465f...`).
+- Push: executado externamente (push direto de `main`).
+- Branches removidas: `0`; branches mantidas: todas.
 - PRs fechadas/criadas: `0`.
-- Working tree preservada: `.superpowers/.../progress.md` foi a única alteração inicial do usuário; foi corrigida por pedido explícito. `mx-v3-csv-VzMBNx/` não foi tocado nem stageado.
+- Working tree pós-release: limpa; único não rastreado `mx-v3-csv-VzMBNx/`.
 - Backup Git: tag anotada `pre-main-autonomous-20260804-051820` aponta para `11a9465f...`; bundle `/Users/pedroguilherme/PROJETOS/MXGESTAOPREDITIVA-pre-main-autonomous-20260804-051820.bundle` revalidado como íntegro em `2026-08-04T07:13:39-03:00`.
 - Restore Git: o bundle foi verificado, mas não restaurado nesta onda porque checkout/clone temporário foi proibido.
 
@@ -108,19 +111,26 @@ O Lighthouse local é diagnóstico de máquina/preview, não Core Web Vitals de 
 
 ## 9. Vercel e deployment
 
-- `vercel list mxperformance --yes` confirmou deployments READY existentes, mas nenhum do SHA candidato.
-- Alias `/api/health`: saudável, `release=1b99c0ab...`.
-- READY consultado `/api/health`: saudável, `release=7387fb32...`.
-- Paridade com `f7c36b98...`: falha/ausente.
-- Env parity, logs do candidato e ignore-command real: n/a — sem deployment candidato.
-- Rollback frontend: deployments anteriores existem, mas promoção/rollback não foi exercitada nesta onda.
+- Deployment de produção pós-release: `dpl_FGLfc8essmaub3BSLv4rGNGcV2pt` — READY.
+- Alias `/api/health` pós-release: `healthy`, `release=45889a0baabda8511859be6c18205b5b4aefea1e`, `environment=production`.
+- Paridade SHA publicado/runtime: confirmada (`TESTED_PRODUCTION`).
+- Env parity completa (variáveis de ambiente do deployment), logs e ignore-command: não revalidados nesta reconciliação; gap explícito.
+- Rollback frontend: deployments anteriores existem; promoção/rollback não exercitada.
+
+*(Histórico pré-release: alias servia `1b99c0ab...`; READY consultado `7387fb32...`; candidato `f7c36b98...` sem deployment.)*
 
 ## 10. Sentry
 
-- Alternativa tentada: instalação/execução local de `sentry-cli 2.58.5` via `npx`.
-- Resultado: `SENTRY_AUTH_TOKEN_ABSENT`; `sentry-cli info` retornou `Auth token is required`.
-- Release, source maps, evento sintético frontend/backend, alertas, Replay e performance do SHA atual: `BLOCKED_EXTERNAL`.
+- Estado pós-release: `DONE_WITH_EVIDENCE` para source maps e evento sintético.
+- Organização: `synvolt`; projeto: `mx-performance-frontend`.
+- Release: `45889a0baabda8511859be6c18205b5b4aefea1e`.
+- Evento de prova: `e62e61e0b9524078b192e0b9ec63c646` — resolveu para `src/lib/observability/sentry.ts` e `src/lib/observability/sanitize.ts`.
+- Envelope: `environment=production`, `release` exact, `synthetic_test=true`, branch e deployment metadata presentes.
+- sentry-vite-plugin: build autenticado; upload aceito; `.map` removidos do dist.
+- Alertas, Replay e performance Sentry: não verificados nesta reconciliação; gap remanescente.
 - Nenhuma credencial foi exibida, persistida ou rotacionada.
+
+*(Histórico pré-release: `BLOCKED_EXTERNAL`; CLI `2.58.5` disponível mas `SENTRY_AUTH_TOKEN_ABSENT`.)*
 
 ## 11. Backup, rollback e recuperação
 
@@ -148,6 +158,10 @@ O Lighthouse local é diagnóstico de máquina/preview, não Core Web Vitals de 
 
 ## 14. Declaração final
 
-`PARCIALMENTE CONCLUÍDO, COM BLOQUEIOS EXTERNOS COMPROVADOS E RELEASE NÃO AUTORIZADA.`
+PARCIALMENTE CONCLUÍDO, COM BLOQUEIOS EXTERNOS COMPROVADOS
 
-Esta declaração não significa publicação. A transição para release exige, no mínimo: push autorizado do SHA final, CI do mesmo SHA, deployment READY com health/release correspondente, browser live autenticado nas superfícies alteradas e monitoramento sem regressão.
+> Declaração histórica pré-release: `PARCIALMENTE CONCLUÍDO, COM BLOQUEIOS EXTERNOS COMPROVADOS E RELEASE NÃO AUTORIZADA` — a release foi executada externamente após essa onda. Evidência histórica pré-release preservada nos registros anteriores.
+
+O frontend está live: SHA `45889a0baabda8511859be6c18205b5b4aefea1e` publicado em `https://mxperformance.vercel.app` (deployment `dpl_FGLfc8essmaub3BSLv4rGNGcV2pt` READY, `/api/health` healthy, `environment=production`). Source maps Sentry confirmados via evento `e62e61e0b9524078b192e0b9ec63c646` (controller handoff; timestamp exato indisponível).
+
+Gaps remanescentes que esta reconciliação não cobre: browser live autenticado (matriz de 6 perfis/9 viewports obrigatórios), CI artifacts do SHA publicado, monitoramento pós-release sem regressão, alertas Sentry, advisories high (`react-router` 2 high, `xlsx` 1 high), actionlint (7 SC2086), Supabase lint (4 erros em funções críticas) e branch protection ausente.
