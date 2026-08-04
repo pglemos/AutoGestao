@@ -92,8 +92,8 @@ export function OwnerHome({
           seed={3}
         />
         <OwnerKpiCard
-          title="Estoque (Unid.)"
-          value={formatInteger(data.inventory?.total ?? 0)}
+          title="Estoque"
+          value={`${formatInteger(data.inventory?.total ?? 0)} ${(data.inventory?.total ?? 0) === 1 ? 'veículo' : 'veículos'}`}
           detail={`${formatInteger(data.inventory?.agingOver90 ?? 0)} acima de 90 dias`}
           icon={<Box size={20} />}
           tone={(data.inventory?.agingOver90 ?? 0) > 0 ? 'warning' : 'success'}
@@ -106,7 +106,7 @@ export function OwnerHome({
 
       <PriorityIntervention alert={priorityAlert} onOpenConsultant={onOpenConsultant} />
 
-      <div className="grid grid-cols-1 gap-mx-md xl:grid-cols-3">
+      <div className="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <SalesGoalCard data={data} />
         <OwnerAlertList alerts={alerts} />
         <NextActionsCard actions={actions} />

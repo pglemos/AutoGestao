@@ -115,7 +115,7 @@ export function OwnerKpiCard({
       <p className="mt-0.5 text-2xl font-bold tracking-tight text-gray-800" aria-label={`${title}: ${value}`}>
         {value}
       </p>
-      {detail && <p className="mt-0.5 text-xs text-gray-400">{detail}</p>}
+      {detail && <p className="mt-0.5 text-xs text-gray-500">{detail}</p>}
       <div className="mt-2 flex items-end justify-between gap-2">
         {trend ? (
           <p
@@ -199,7 +199,12 @@ function SimpleSparkline({
   )
 }
 
-export function MXScoreCompact({ score }: { score: number | null }) {
+/**
+ * Card do MX Score. Espelha `components/owner/home/MxScoreCard` do Base44:
+ * moldura de 100px, número em text-2xl, classificação em case normal e linha
+ * de tendência abaixo do medidor.
+ */
+export function MXScoreCompact({ score, trend }: { score: number | null; trend?: string | null }) {
   const safeScore = Math.min(Math.max(Math.round(score ?? 0), 0), 100)
   const status = scoreStatus(score)
   const tone = scoreTone(score)
@@ -211,37 +216,34 @@ export function MXScoreCompact({ score }: { score: number | null }) {
   const circumference = 2 * Math.PI * radius
   const dashOffset = circumference * (1 - safeScore / 100)
   return (
-    <Card className="min-h-[140px] border bg-white p-mx-md">
+    <div className={cn('rounded-xl border bg-white p-4 shadow-sm', cardBorderClasses[tone])}>
       <div className="flex items-center justify-between">
-        <Typography variant="tiny" tone="muted" className="">
-          MX Score da Loja
-        </Typography>
-        <CircleHelp size={14} className="text-gray-500" />
+        <p className="text-sm font-medium text-gray-500">MX Score da Loja</p>
+        <CircleHelp size={16} className="text-gray-500" aria-hidden="true" />
       </div>
-      <div className="mt-mx-sm flex flex-col items-center">
-        <div className="relative" style={{ width: 120, height: 120 }}>
-          <svg viewBox="0 0 120 120" width="120" height="120" role="img" aria-label={`MX Score ${safeScore}: ${status}`}>
-            <circle cx={cx} cy={cy} r={radius} fill="none" stroke="var(--color-border-subtle)" strokeWidth={strokeWidth} />
-            <circle
-              cx={cx}
-              cy={cy}
-              r={radius}
-              fill="none"
-              stroke={score === null ? 'var(--color-border-subtle)' : toneHex[tone]()}
-              strokeWidth={strokeWidth}
-              strokeLinecap="round"
-              strokeDasharray={circumference}
-              strokeDashoffset={dashOffset}
-              transform={`rotate(-90 ${cx} ${cy})`}
-            />
-          </svg>
-          <div className="absolute inset-0 flex flex-col items-center justify-center">
-            <div className="text-3xl font-bold font-mono-numbers leading-none text-gray-800">{score ?? '--'}</div>
-            <Typography variant="tiny" className={cn('mt-mx-tiny block font-bold uppercase tracking-widest', statusColor)}>{status}</Typography>
-          </div>
+      <div className="relative mx-auto mt-2 h-[100px] w-[100px]">
+        <svg viewBox="0 0 120 120" className="h-full w-full" role="img" aria-label={`MX Score ${safeScore}: ${status}`}>
+          <circle cx={cx} cy={cy} r={radius} fill="none" stroke="var(--color-border-subtle)" strokeWidth={strokeWidth} />
+          <circle
+            cx={cx}
+            cy={cy}
+            r={radius}
+            fill="none"
+            stroke={score === null ? 'var(--color-border-subtle)' : toneHex[tone]()}
+            strokeWidth={strokeWidth}
+            strokeLinecap="round"
+            strokeDasharray={circumference}
+            strokeDashoffset={dashOffset}
+            transform={`rotate(-90 ${cx} ${cy})`}
+          />
+        </svg>
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-2xl font-bold tracking-tight text-gray-800">{score ?? '--'}</span>
+          <span className={cn('text-xs font-medium', statusColor)}>{status}</span>
         </div>
       </div>
-    </Card>
+      {trend && <p className="mt-2 text-center text-xs font-medium text-emerald-600">{trend}</p>}
+    </div>
   )
 }
 
