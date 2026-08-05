@@ -38,7 +38,8 @@ const MANAGER_ROUTES = [
   // que as telas do gerente perderam o prefixo `/gerente/`.
   '/rotina-equipe', '/minha-equipe',
   '/meta-loja', '/mentor', '/feedbacks-pdis',
-  '/funil-vendas', '/metas', '/falar-consultor', '/auditoria',
+  // `/metas` saiu: virou redirecionamento para `/meta-loja`, já coberta acima.
+  '/funil-vendas', '/falar-consultor', '/auditoria',
 ] as const
 
 const OWNER_ROUTES = [
@@ -49,7 +50,7 @@ const OWNER_ROUTES = [
   '/departamentos/financeiro', '/departamentos/operacoes', '/mercado',
   '/home',
   '/minha-equipe', '/meta-loja', '/mentor', '/feedbacks-pdis',
-  '/funil-vendas', '/metas', '/falar-consultor',
+  '/funil-vendas', '/falar-consultor',
   '/organograma', '/banco-talentos',
 ] as const
 

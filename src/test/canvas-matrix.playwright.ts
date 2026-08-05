@@ -38,7 +38,7 @@ const CREDENTIALS: Record<RoleKey, string> = {
 /** Rotas adotadas pelo PageCanvas, por perfil que as alcança. */
 const ADOPTED_ROUTES: Record<RoleKey, string[]> = {
   vendedor: ['/ajuda', '/configuracoes', '/meu-funil', '/terminal-mx'],
-  gerente: ['/pdi', '/metas', '/funil-vendas', '/falar-consultor'],
+  gerente: ['/pdi', '/funil-vendas', '/falar-consultor'],
   dono: ['/treinamentos', '/organograma', '/banco-talentos'],
 }
 
@@ -95,7 +95,6 @@ const A11Y_BUDGET: Record<string, Record<string, number>> = {
   '/treinamentos': {},
   '/funil-vendas': {},
   '/meu-funil': {},
-  '/metas': {},
   '/pdi': {},
   '/organograma': {},
   '/banco-talentos': {},

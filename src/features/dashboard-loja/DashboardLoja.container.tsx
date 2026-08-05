@@ -7,7 +7,6 @@ import { slugify } from '@/lib/utils'
 import { openInNewTab } from '@/lib/ui/openInNewTab'
 import { StoreEditModal } from '@/features/admin/components/StoreEditModal'
 import { StoreGoalsPanel } from '@/features/lojas/components/StoreGoalsPanel'
-import { SellerGoalsEditor } from '@/features/lojas/components/SellerGoalsEditor'
 import { StoreTeamPanel } from '@/features/lojas/components/StoreTeamPanel'
 import { ManagerTeamPerformance } from '@/features/manager/team/ManagerTeamPerformance'
 import { ManagerStoreGoalReference } from '@/features/manager/meta/ManagerStoreGoalReference'
@@ -61,8 +60,15 @@ export function DashboardLoja() {
    * (`StoreTeamPanel`), que é a ferramenta operacional de vínculo de integrantes.
    */
   const isTeamKanban = activeTab === 'equipe' && (role === 'gerente' || isOwner)
-  /** A Meta da Loja tem cabeçalho próprio (período, unidade, atualizar, metas). */
-  const isStoreGoalScreen = activeTab === 'metas' && (role === 'gerente' || isOwner)
+  /**
+   * A Meta da Loja tem cabeçalho próprio (período, unidade, atualizar, metas).
+   *
+   * A tela canônica é a mesma para todo perfil de gestão — gerente, dono e
+   * perfis internos MX. O interno ganha, abaixo dela, o painel de regras da
+   * loja (meta mensal e benchmarks), que é ferramenta de cadastro e não existe
+   * na referência.
+   */
+  const isStoreGoalScreen = activeTab === 'metas'
   const isManagerSection = (role === 'gerente' && activeTab !== 'performance') || isTeamKanban || isStoreGoalScreen
 
   /**
@@ -170,14 +176,20 @@ export function DashboardLoja() {
       )}
 
       {activeTab === 'metas' ? (
-        role === 'gerente' || role === 'dono'
-          ? <ManagerStoreGoalReference data={data} selectableStores={selectableStores} onStoreChange={setActiveStoreId} />
-          : <>
+        <>
+          <ManagerStoreGoalReference data={data} selectableStores={selectableStores} onStoreChange={setActiveStoreId} />
+          {isPerfilInternoMx(role) && (
+            /**
+             * Regras da loja (meta mensal e benchmarks lead→agendamento→visita
+             * →venda) só aparecem para o perfil interno MX: é cadastro, não
+             * acompanhamento. As metas individuais já vivem dentro da tela
+             * canônica, no botão "Editar Metas".
+             */
+            <div className="mx-auto max-w-7xl px-4 pb-24">
               <StoreGoalsPanel storeId={selectedStoreId} storeName={data.metrics.storeName} />
-              <div className="mt-6">
-                <SellerGoalsEditor storeId={selectedStoreId} storeName={data.metrics.storeName} />
-              </div>
-            </>
+            </div>
+          )}
+        </>
       ) : activeTab === 'equipe' ? (
         isTeamKanban
           ? <ManagerTeamPerformance data={data} storeName={data.metrics.storeName} selectableStores={selectableStores} onStoreChange={setActiveStoreId} />

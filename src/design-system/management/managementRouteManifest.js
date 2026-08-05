@@ -45,7 +45,6 @@ export const managementRouteManifest = [
   { key: 'fechamento-diario', path: '/fechamento-diario', source: 'features/manager/daily-closing/ManagerDailyClosing.container.tsx', roles: allManagementRoles, surface: 'daily-closing' },
   { key: 'rotina-equipe', path: '/rotina-equipe', source: 'features/manager/team-routine/ManagerTeamRoutine.container.tsx', roles: allManagementRoles, surface: 'team-routine' },
   { key: 'funil-vendas', path: '/funil-vendas', source: 'features/gerente/FunilVendasGerente.tsx', roles: ['dono', 'gerente'], surface: 'sales-funnel' },
-  { key: 'metas', path: '/metas', source: 'features/gerente/MetasGerente.tsx', roles: ['dono', 'gerente'], surface: 'goals' },
   { key: 'falar-consultor', path: '/falar-consultor', source: 'features/dono/FalarConsultorDono.tsx', roles: ['dono', 'gerente'], surface: 'consultant-contact' },
   { key: 'organograma', path: '/organograma', source: 'features/organograma/OrganogramaPage.tsx', roles: allManagementRoles, surface: 'org-chart' },
   { key: 'banco-talentos', path: '/banco-talentos', source: 'features/comportamental/ComportamentalPage.tsx', roles: allManagementRoles, surface: 'talent-bank' },

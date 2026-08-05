@@ -33,7 +33,6 @@ const CentralExecucao = lazy(() => import('@/pages/CentralExecucao'))
 const MeuPerfilVendedor = lazy(() => import('@/pages/MeuPerfilVendedor'))
 const RelatoriosVendedor = lazy(() => import('@/pages/RelatoriosVendedor'))
 const FunilVendasGerente = lazy(() => import('@/features/gerente/FunilVendasGerente'))
-const MetasGerente = lazy(() => import('@/features/gerente/MetasGerente'))
 const FalarConsultorDono = lazy(() => import('@/features/dono/FalarConsultorDono'))
 const Organograma = lazy(() => import('@/features/organograma/OrganogramaPage'))
 const Comportamental = lazy(() => import('@/features/comportamental/ComportamentalPage'))
@@ -392,9 +391,12 @@ export default function App() {
                 <Route path="funil-vendas" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FunilVendasGerente />} dono={<FunilVendasGerente />} admin={<ForbiddenRoute />} />
                 </Suspense>} />
-                <Route path="metas" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<MetasGerente />} dono={<MetasGerente />} admin={<ForbiddenRoute />} />
-                </Suspense>} />
+                {/*
+                  Meta tem uma tela só. `/metas` era uma segunda leitura de meta,
+                  divergente da referência Base44 `/meta-loja` e indisponível para
+                  os perfis internos MX — agora redireciona para a canônica.
+                */}
+                <Route path="metas" element={<Navigate to="/meta-loja" replace />} />
                 <Route path="falar-consultor" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FalarConsultorDono />} dono={<FalarConsultorDono />} admin={<ForbiddenRoute />} />
                 </Suspense>} />

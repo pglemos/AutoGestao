@@ -98,7 +98,9 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/feedbacks', roles: ['vendedor'] },
   { pattern: '/consultor-ia', roles: ['vendedor'] },
   { pattern: '/funil-vendas', roles: ['gerente', 'dono'] },
-  { pattern: '/metas', roles: ['gerente', 'dono'] },
+  // `/metas` só redireciona para `/meta-loja`; libera para todo perfil de
+  // gestão para o interno MX não tomar Forbidden antes do redirecionamento.
+  { pattern: '/metas', roles: MANAGEMENT_ROLES },
   { pattern: '/falar-consultor', roles: ['gerente', 'dono'] },
   { pattern: '/organograma', roles: INTERNAL_AND_OWNER },
   { pattern: '/banco-talentos', roles: INTERNAL_AND_OWNER },

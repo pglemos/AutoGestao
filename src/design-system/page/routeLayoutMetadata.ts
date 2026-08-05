@@ -137,8 +137,6 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'meu-perfil-vendedor': { width: 'form' },
   'vendedor/perfil': { width: 'form' },
   'minha-remuneracao': { width: 'focused' },
-  // MetasGerente para gerente e dono; vendedor e admin caem em ForbiddenRoute.
-  metas: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'minha-meta': { width: 'focused' },
   'vendedor/minha-meta': { width: 'focused' },
   'meta-loja': { width: 'focused' },
