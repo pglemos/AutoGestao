@@ -1,11 +1,23 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { execSync } from 'node:child_process'
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(currentDir, '..')
 
-const CURRENT_SHA = '3cce15c1'
+// CRÍTICO: SHA deve ser obtido do git HEAD real, NUNCA hardcoded.
+// Este script consolida artefatos existentes — não inventa resultados de testes.
+let CURRENT_SHA = 'SHA_UNAVAILABLE'
+try {
+  CURRENT_SHA = execSync('git rev-parse HEAD', { cwd: projectRoot }).toString().trim()
+} catch (e) {
+  console.error('WARN: Não foi possível obter o SHA do git HEAD:', e.message)
+}
+
+console.log(`[generate-master-169-tasks-matrix] SHA real: ${CURRENT_SHA}`)
+console.log('[generate-master-169-tasks-matrix] AVISO: Este script consolida estado documental.')
+console.log('[generate-master-169-tasks-matrix] Não marca tarefas como DONE_WITH_EVIDENCE sem evidência real.')
 
 const tasks = [
   // Phase C0 (10 tasks)

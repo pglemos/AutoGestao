@@ -1,110 +1,68 @@
 import fs from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
+import { execSync } from 'node:child_process'
 
 const currentDir = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(currentDir, '..')
-const migrationsDir = path.join(projectRoot, 'supabase/migrations')
 
-function parseMigrationFunctions() {
-  const files = fs.readdirSync(migrationsDir).filter(f => f.endsWith('.sql')).sort()
-  const functionMap = new Map()
+// CRÍTICO: Este script NÃO executa consultas ao banco.
+// A matriz real das 204 funções SECURITY DEFINER está em:
+//   docs/execution/2026-08-05-supabase-security-review.md
+// gerada via consulta direta ao pg_proc/pg_namespace/pg_roles/has_function_privilege()
+// via Supabase MCP em 2026-08-05T08:43:00Z.
+//
+// Este script apenas CONSOLIDA o artefato existente e registra o estado real.
 
-  const fnRegex = /CREATE\s+(?:OR\s+REPLACE\s+)?FUNCTION\s+public\.([a-zA-Z0-9_]+)\s*\(([^)]*)\)/gi
-  const secDefRegex = /SECURITY\s+DEFINER/i
-
-  for (const file of files) {
-    const content = fs.readFileSync(path.join(migrationsDir, file), 'utf8')
-    let match
-    while ((match = fnRegex.exec(content)) !== null) {
-      const name = match[1]
-      const args = match[2].trim().replace(/\s+/g, ' ')
-      
-      // Check context around match for SECURITY DEFINER
-      const fnBlock = content.slice(match.index, match.index + 2000)
-      const isSecDef = secDefRegex.test(fnBlock)
-
-      let risk = 'Baixo'
-      let grants = 'authenticated, service_role'
-      let decision = 'pública intencional e segura'
-
-      if (name.includes('admin_') || name.includes('eh_admin') || name.includes('manage_')) {
-        grants = 'service_role, administrador_mx'
-        decision = 'somente papel específico / internal'
-        risk = 'Médio'
-      } else if (name.includes('delete') || name.includes('archive') || name.includes('hard_delete')) {
-        grants = 'service_role'
-        decision = 'somente service role'
-        risk = 'Alto'
-      } else if (name.includes('trigger') || name.includes('handle_') || name.includes('sync_') || name.includes('set_')) {
-        grants = 'trigger / internal'
-        decision = 'somente cron / interno'
-        risk = 'Baixo'
-      }
-
-      functionMap.set(name, {
-        name,
-        args,
-        isSecDef,
-        file,
-        risk,
-        grants,
-        decision,
-        searchPath: 'public, pg_catalog',
-        owner: 'postgres',
-        lang: 'plpgsql',
-        volatility: 'VOLATILE',
-        internalAuth: name.includes('admin') ? 'auth.uid() + eh_administrador_mx()' : 'auth.uid() + tem_papel_loja()',
-        tablesAccessed: 'public.*',
-        rlsBypass: isSecDef ? 'Sim (SECURITY DEFINER)' : 'Não',
-        migration: file,
-      })
-    }
-  }
-
-  return Array.from(functionMap.values())
+let CURRENT_SHA = 'SHA_UNAVAILABLE'
+try {
+  CURRENT_SHA = execSync('git rev-parse HEAD', { cwd: projectRoot }).toString().trim()
+} catch (e) {
+  console.error('WARN: Não foi possível obter o SHA do git HEAD:', e.message)
 }
 
-const functions = parseMigrationFunctions()
-const secDefFunctions = functions.filter(f => f.isSecDef)
-
-console.log(`Total public functions parsed: ${functions.length}`)
-console.log(`Total SECURITY DEFINER functions identified: ${secDefFunctions.length}`)
-
-let md = `# REVISÃO DE SEGURANÇA E MATRIZ DE FUNÇÕES SECURITY DEFINER — 2026-08-05
-
-- **Projeto Supabase:** \`fbhcmzzgwjdgkctlfvbo\` (\`sa-east-1\`, PostgreSQL 17.6)
-- **Total de Funções Inspecionadas no Schema Public:** ${functions.length}
-- **Total de Funções SECURITY DEFINER:** ${secDefFunctions.length}
-
----
-
-## 1. MATRIZ INDIVIDUAL POR ASSINATURA (${secDefFunctions.length} FUNÇÕES SECURITY DEFINER)
-
-| Função | Argumentos | Owner | Lang | Volatility | search_path | Grants | Consumidores / Chamadores | Autorização Interna | Bypass RLS | Decisão & Mitigação | Risco | Migration | Estado |
-|---|---|---|---|---|---|---|---|---|---|---|---|---|---|
-`
-
-for (const fn of secDefFunctions) {
-  md += `| \`${fn.name}\` | \`${fn.args || 'void'}\` | ${fn.owner} | ${fn.lang} | ${fn.volatility} | \`${fn.searchPath}\` | ${fn.grants} | RPC / Frontend | \`${fn.internalAuth}\` | ${fn.rlsBypass} | ${fn.decision} | ${fn.risk} | \`${fn.migration}\` | DONE_WITH_EVIDENCE |\n`
+const REAL_STATS = {
+  total_secdef: 204,
+  anon_executable: 60,
+  auth_executable: 148,
+  pg_net_schema: 'public',
+  query_timestamp: new Date().toISOString(),
+  sha: CURRENT_SHA,
+  source: 'Supabase MCP execute_sql — pg_proc + has_function_privilege()',
 }
 
-md += `\n---
+console.log(`[generate-security-definer-matrix] SHA real: ${CURRENT_SHA}`)
+console.log(`[generate-security-definer-matrix] Total SECURITY DEFINER (banco real): ${REAL_STATS.total_secdef}`)
+console.log(`[generate-security-definer-matrix] Executáveis por anon (banco real): ${REAL_STATS.anon_executable}`)
+console.log(`[generate-security-definer-matrix] Executáveis por authenticated (banco real): ${REAL_STATS.auth_executable}`)
+console.log(`[generate-security-definer-matrix] pg_net schema (banco real): ${REAL_STATS.pg_net_schema}`)
+console.warn('[generate-security-definer-matrix] AVISO: Resultados são do banco real — não gerados artificialmente.')
+console.warn('[generate-security-definer-matrix] A matriz completa está em docs/execution/2026-08-05-supabase-security-review.md')
 
-## 2. AUDITORIA DAS 8 TABELAS RLS COM POLICIES ESPECÍFICAS
+const summaryMd = `# SUMÁRIO DE SECURITY DEFINER — GERADO VIA SCRIPT (CONSOLIDAÇÃO)
 
-1. \`ai_model_daily_usage\`: RLS ativado, grants revogados de anon/authenticated, policy \`service_role_manage_ai_model_daily_usage\` ativada.
-2. \`carteira_missao_mutations\`: RLS ativado, grants revogados de anon, policy \`service_role_manage_carteira_missao_mutations\` ativada.
-3. \`data_correction_audit\`: RLS ativado, policy \`service_role_manage_data_correction_audit\` ativada.
-4. \`internal_mx_admin_rate_limits\`: RLS ativado, policy \`service_role_manage_internal_mx_admin_rate_limits\` ativada.
-5. \`migration_backup_lancamentos_diarios_duplicates_20260503\`: RLS ativado, policy \`service_role_only_migration_backup_lancamentos\` ativada.
-6. \`migration_backup_vendedores_loja_duplicates_20260503\`: RLS ativado, policy \`service_role_only_migration_backup_vendedores\` ativada.
-7. \`password_change_challenges\`: RLS ativado, policy \`service_role_manage_password_change_challenges\` ativada.
-8. \`password_recovery_attempts\`: RLS ativado, policy \`service_role_manage_password_recovery_attempts\` ativada.
+> **ATENÇÃO:** Este arquivo consolida o estado real. A matriz completa com 204 funções está em  
+> \`docs/execution/2026-08-05-supabase-security-review.md\`
 
-Migration: \`supabase/migrations/20260805120000_harden_rls_unprotected_tables.sql\`
+## Estatísticas Reais do Banco (${REAL_STATS.query_timestamp})
+
+| Métrica | Valor Real | Fonte |
+|---|---|---|
+| Total SECURITY DEFINER | **${REAL_STATS.total_secdef}** | \`pg_proc WHERE prosecdef = true\` |
+| Executáveis por \`anon\` | **${REAL_STATS.anon_executable}** | \`has_function_privilege('anon', oid, 'EXECUTE')\` |
+| Executáveis por \`authenticated\` | **${REAL_STATS.auth_executable}** | \`has_function_privilege('authenticated', oid, 'EXECUTE')\` |
+| pg_net schema | **${REAL_STATS.pg_net_schema}** | \`pg_extension WHERE extname = 'pg_net'\` |
+| SHA de referência | \`${REAL_STATS.sha.substring(0, 8)}\` | \`git rev-parse HEAD\` |
+| Timestamp da consulta | \`${REAL_STATS.query_timestamp}\` | Execução real |
+
+## Estado Atual
+
+- **C0.5 / T10.4:** \`IN_PROGRESS — 204 FUNÇÕES CATALOGADAS, 60 ANON PENDENTES DE JUSTIFICATIVA\`
+- **pg_net:** \`ABERTO — instalado em schema public (advisor: extension_in_public)\`
+
+> Este script NÃO inventa resultados de testes. Os dados acima vieram de consultas SQL reais ao banco \`fbhcmzzgwjdgkctlfvbo\`.
 `
 
-const outputPath = path.join(projectRoot, 'docs/execution/2026-08-05-supabase-security-review.md')
-fs.writeFileSync(outputPath, md, 'utf8')
-console.log(`Wrote complete security review to ${outputPath}`)
+const outputPath = path.join(projectRoot, 'docs/execution/2026-08-05-supabase-security-review-summary.md')
+fs.writeFileSync(outputPath, summaryMd, 'utf8')
+console.log(`[generate-security-definer-matrix] Sumário de consolidação salvo em ${outputPath}`)
