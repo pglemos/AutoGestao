@@ -539,7 +539,7 @@ export default function ManagerDailyClosing() {
 
         <section className="rounded-[16px] border border-gray-100 bg-white p-5 shadow-sm">
           <h2 className="flex items-center gap-2 text-base font-semibold text-gray-800">
-            <BarChart3 size={18} className="text-status-success" />
+            <BarChart3 size={18} className="text-emerald-600" />
             Comparativo de Disciplina do Fechamento
           </h2>
           <p className="mb-4 mt-0 text-xs text-gray-500">
