@@ -33,19 +33,11 @@ import { BenchmarkingView } from './owner-cockpit/BenchmarkingView'
 import { AgendaView } from './owner-cockpit/AgendaView'
 import { OwnerModuleGrid } from './owner-cockpit/OwnerModuleGrid'
 import { OwnerConsultingView } from './owner-cockpit/OwnerBase44Views'
-import {
-  RotinaDoDia,
-  CentralDeDecisoes,
-  DepartamentosVisaoGeral,
-  DepartamentoComercial,
-  DepartamentoMarketing,
-  DepartamentoProdutoEstoque,
-  DepartamentoPessoasRH,
-  DepartamentoFinanceiro,
-  DepartamentoOperacoes,
-  Mercado,
-  UniversidadeMX,
-} from '@/pages/owner/Placeholders'
+// Mercado é a única seção do dono que ainda não tem view real.
+import { Mercado } from '@/pages/owner/Placeholders'
+import OwnerRoutineSwitch from '@/features/owner/OwnerRoutineSwitch'
+import { OwnerDecisionCards } from './OwnerDecisionCards'
+import { DepartmentsView } from './owner-cockpit/DepartmentsView'
 import {
   alertFromEngine,
   buildCentralMx,
@@ -106,21 +98,16 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
   const section = getOwnerSection(location.pathname, location.search)
   const selectedDepartmentCode = getOwnerDepartmentCode(location.pathname, location.search)
 
-  if (section === 'rotina') return <RotinaDoDia />
-  if (section === 'decisoes') return <CentralDeDecisoes />
+  if (section === 'rotina') return <OwnerRoutineSwitch />
+  // Central de Decisões e Departamentos têm views reais alimentadas pela engine
+  // Central MX; antes caíam em placeholders vazios do módulo do dono.
+  if (section === 'decisoes') {
+    return <OwnerDecisionCards alerts={ownerAlerts} hasDRE={Boolean(data.latestDRE)} />
+  }
   if (section === 'departamentos') {
-    const deptMap: Record<string, React.ReactNode> = {
-      comercial: <DepartamentoComercial />,
-      marketing: <DepartamentoMarketing />,
-      produto: <DepartamentoProdutoEstoque />,
-      rh: <DepartamentoPessoasRH />,
-      financeiro: <DepartamentoFinanceiro />,
-      operacional: <DepartamentoOperacoes />,
-    }
-    return deptMap[selectedDepartmentCode ?? ''] ?? <DepartamentosVisaoGeral />
+    return <DepartmentsView departments={departments} selectedDepartmentCode={selectedDepartmentCode} />
   }
   if (section === 'mercado') return <Mercado />
-  if (section === 'universidade') return <UniversidadeMX />
 
   const universityContent = (
     <>
@@ -182,7 +169,9 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
 
       {section === 'benchmarking' && <BenchmarkingView data={data} mxScore={mxScore} marginPercent={marginPercent} />}
 
-      {section === 'biblioteca' && universityContent}
+      {/* Universidade MX do dono usa o mesmo conteúdo real da biblioteca; antes
+          a entrada de menu caía num placeholder vazio. */}
+      {(section === 'biblioteca' || section === 'universidade') && universityContent}
 
       {section === 'consultor' && (
         <ConsultorIaStoreSection storeId={data.operationalStore?.id || null} />
