@@ -144,6 +144,28 @@ serve((req) => withSentry('manage-store-team', req, async () => {
     : before.email
   const emailChanged = nextEmail !== before.email
 
+  if (emailChanged) {
+    const { data: emailOwner, error: emailOwnerError } = await adminClient
+      .from('usuarios')
+      .select('id, active')
+      .eq('email', nextEmail)
+      .neq('id', payload.user_id)
+      .maybeSingle()
+
+    if (emailOwnerError) {
+      console.error('manage-store-team email lookup failure', { email: nextEmail, emailOwnerError })
+      return genericFailure()
+    }
+    if (emailOwner) {
+      return jsonResponse({
+        success: false,
+        error: emailOwner.active
+          ? 'Este e-mail já está em uso por outro integrante ativo.'
+          : 'Este e-mail já pertence a um cadastro desativado. Reative aquele cadastro ou use outro e-mail.',
+      }, 409)
+    }
+  }
+
   try {
     if (emailChanged) {
       const { error: authEmailError } = await adminClient.auth.admin.updateUserById(payload.user_id, {
@@ -192,6 +214,17 @@ serve((req) => withSentry('manage-store-team', req, async () => {
 
     const rpcMessage = (error as { message?: string } | null)?.message || ''
     const rpcCode = (error as { code?: string } | null)?.code || ''
+    const authStatus = (error as { status?: number } | null)?.status
+
+    // O GoTrue rejeita e-mail já cadastrado em auth.users mesmo quando a tabela
+    // `usuarios` não conhece o dono (conta órfã). Sem este mapeamento o conflito
+    // vira um 500 genérico e o gestor não descobre o motivo.
+    if (rpcMessage === 'Error updating user' || authStatus === 422 || authStatus === 409) {
+      return jsonResponse({
+        success: false,
+        error: 'Não foi possível alterar o e-mail: ele já está vinculado a outra conta de acesso.',
+      }, 409)
+    }
 
     if (rpcMessage === 'forbidden' || rpcMessage === 'self_mutation_forbidden' || rpcMessage === 'cross_store_move_forbidden') {
       return jsonResponse({
