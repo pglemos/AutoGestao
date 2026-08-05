@@ -69,7 +69,6 @@ client.on('qr', async (qr) => {
 });
 
 client.on('ready', () => {
-    console.log('WhatsApp Client is ready!');
     isConnected = true;
     qrCodeData = '';
 });
