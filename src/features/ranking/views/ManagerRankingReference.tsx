@@ -1,6 +1,8 @@
 import { useMemo, useState } from 'react'
 import { Award, RefreshCw, Star, TrendingUp, Trophy } from 'lucide-react'
 import { RANKING_PERIODOS, useStoreRankingPageData, type RankedVendedor } from '@/features/ranking/hooks/useStoreRankingPageData'
+import { ManagerRankingComparison } from '@/features/ranking/manager/ManagerRankingComparison'
+import { ManagerRankingPodium } from '@/features/ranking/manager/ManagerRankingPodium'
 
 type Criterion = 'geral' | 'vendas' | 'conversao' | 'rotina'
 
@@ -45,10 +47,16 @@ export function ManagerRankingReference() {
 
         <section className="grid grid-cols-2 gap-4 xl:grid-cols-4" aria-label="Destaques do ranking">{highlights.map(({ label, seller, value, icon: Icon, tone }) => <Highlight key={label} label={label} name={seller?.nome || '—'} value={value} icon={Icon} tone={tone} />)}</section>
 
+        {!data.loading && <ManagerRankingPodium ranking={ranking} />}
+
         <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm" aria-labelledby="ranking-table-title">
           <div className="border-b border-gray-100 px-5 py-4"><h2 id="ranking-table-title" className="font-semibold capitalize text-gray-800">Classificação — {data.periodo} · {month}</h2><p className="mt-1 text-xs text-gray-500">Fórmula provisória aguardando decisão do Dono: 50% resultado, 25% conversão e 25% execução da rotina. Sem execução verificável, a pontuação não é estimada.</p></div>
           {data.loading ? <div className="flex justify-center py-12"><div className="h-6 w-6 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" /></div> : ranking.length === 0 ? <div className="flex flex-col items-center justify-center py-16 text-center"><Trophy className="mb-3 text-gray-300" size={48} /><p className="font-medium text-gray-500">Ainda não há dados suficientes para montar o ranking.</p></div> : <div className="overflow-x-auto"><table className="w-full min-w-[820px] text-sm"><thead className="border-b border-gray-100 bg-gray-50"><tr>{['#', 'Vendedor', 'Vendas', 'Meta', '% Meta', 'Conversão', 'Rotina', 'Pontuação'].map(label => <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</th>)}</tr></thead><tbody className="divide-y divide-gray-50">{ranking.map((seller, index) => <RankingRow key={seller.id} seller={seller} index={index} />)}</tbody></table></div>}
         </section>
+
+        {!data.loading && data.vendedores.length > 1 && (
+          <ManagerRankingComparison sellers={data.vendedores} periodLabel={`${data.periodo} · ${month}`} />
+        )}
       </div>
     </div>
   )
