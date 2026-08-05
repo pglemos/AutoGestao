@@ -54,7 +54,14 @@ export function DashboardLoja() {
     return tab === 'metas' || tab === 'equipe' || tab === 'vendas' ? tab : 'performance'
   }, [location.pathname, location.search])
   const isFocusedRolePerformance = (isOwner || role === 'gerente') && activeTab === 'performance'
-  const isManagerSection = role === 'gerente' && activeTab !== 'performance'
+  /**
+   * O kanban de equipe é a visão canônica de "Minha Equipe" e não pertence só ao
+   * gerente: o dono acompanha a mesma tela 1:1, com seletor de unidade quando tem
+   * mais de uma loja no escopo. Perfis internos MX seguem no painel de cadastro
+   * (`StoreTeamPanel`), que é a ferramenta operacional de vínculo de integrantes.
+   */
+  const isTeamKanban = activeTab === 'equipe' && (role === 'gerente' || isOwner)
+  const isManagerSection = (role === 'gerente' && activeTab !== 'performance') || isTeamKanban
 
   const handleTabChange = useCallback((tab: DashboardTab) => {
     const params = new URLSearchParams(location.search)
@@ -160,7 +167,7 @@ export function DashboardLoja() {
               </div>
             </>
       ) : activeTab === 'equipe' ? (
-        role === 'gerente'
+        isTeamKanban
           ? <ManagerTeamPerformance data={data} storeName={data.metrics.storeName} selectableStores={selectableStores} onStoreChange={setActiveStoreId} />
           : <StoreTeamPanel storeId={selectedStoreId} storeName={data.metrics.storeName} />
       ) : activeTab === 'vendas' ? (
