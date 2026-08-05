@@ -190,7 +190,7 @@ export function SellerGoalsEditor({ storeId, storeName }: SellerGoalsEditorProps
   }
 
   return (
-    <section className="pb-24 md:pb-32" aria-label="Metas individuais dos vendedores">
+    <section className="pb-24 md:pb-32" data-tour="metas-individuais" aria-label="Metas individuais dos vendedores">
       <div className="space-y-5">
         {/* Cabeçalho */}
         <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">

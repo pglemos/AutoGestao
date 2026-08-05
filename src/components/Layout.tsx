@@ -30,6 +30,7 @@ import {
 import { OwnerProvider } from '@/components/owner/OwnerContext'
 import ConsultantRequestModal from '@/components/owner/ConsultantRequestModal'
 import { Toaster as OwnerToaster } from '@/components/ui/toaster'
+import { ManagerTourLauncher } from '@/features/manager/onboarding/ManagerTourLauncher'
 
 type SubItem = {
   key?: string
@@ -401,6 +402,8 @@ function LayoutContent() {
         : undefined}
     >
       {pageContent}
+      {/* Tour do Gerente: só monta nas rotas gerenciais que têm roteiro. */}
+      {(role === 'gerente' || role === 'dono') && <ManagerTourLauncher />}
     </MxSidebarShell>
   )
 }

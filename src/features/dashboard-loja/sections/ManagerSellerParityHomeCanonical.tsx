@@ -207,6 +207,7 @@ export function ManagerSellerParityHomeCanonical({
 
         <section
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4"
+          data-tour="previsibilidade-dia"
           aria-label="Previsibilidade do dia"
         >
           <MetricCard icon={TrendingUp} label="Previsão de Vendas Hoje" tone="emerald">

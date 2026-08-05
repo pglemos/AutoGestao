@@ -107,7 +107,7 @@ export function ManagerTeamKanban({ cards, view, storeName, onViewChange, onOpen
     : STATUS_ORDER.find(status => groups[status].length > 0) ?? 'critical'
 
   return <div className="space-y-4">
-    <section className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm" aria-label="Visão do Kanban">
+    <section className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm" data-tour="kanban-equipe" aria-label="Visão do Kanban">
       <div className="mb-1.5 flex items-center gap-1.5"><Eye size={14} className="text-gray-400"/><p className="text-xs font-medium text-gray-500">Visão do Kanban</p></div>
       <div className="inline-flex max-w-full gap-1 overflow-x-auto rounded-xl border border-gray-200 bg-gray-50 p-1" role="tablist" aria-label="Classificação da equipe">
         {VIEW_OPTIONS.map(option => <button key={option.value} type="button" role="tab" aria-selected={view === option.value} onClick={() => onViewChange(option.value)} className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${view === option.value ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-500 hover:bg-white hover:text-gray-700'}`}>{option.label}</button>)}

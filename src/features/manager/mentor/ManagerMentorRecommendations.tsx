@@ -22,7 +22,7 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
   const filtered = filter === 'todos' ? recommendations : recommendations.filter(item => item.level === filter)
 
   return (
-    <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm" aria-labelledby="mentor-rules-title">
+    <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm" data-tour="mentor-recomendacoes" aria-labelledby="mentor-rules-title">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 id="mentor-rules-title" className="flex items-center gap-1.5 font-semibold text-gray-800">
           <ListChecks size={18} className="text-emerald-600" />

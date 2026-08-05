@@ -132,7 +132,7 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
 
   return (
     <div className="space-y-4">
-      <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm" aria-labelledby="ranking-comparison-title">
+      <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm" data-tour="ranking-comparativo" aria-labelledby="ranking-comparison-title">
         <div className="mb-4 flex items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50">
             <GitCompareArrows size={18} className="text-emerald-600" />
