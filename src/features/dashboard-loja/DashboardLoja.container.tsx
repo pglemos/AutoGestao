@@ -4,6 +4,7 @@ import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { isAdministradorMx, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
 import { slugify } from '@/lib/utils'
+import { openInNewTab } from '@/lib/ui/openInNewTab'
 import { StoreEditModal } from '@/features/admin/components/StoreEditModal'
 import { StoreGoalsPanel } from '@/features/lojas/components/StoreGoalsPanel'
 import { SellerGoalsEditor } from '@/features/lojas/components/SellerGoalsEditor'
@@ -71,11 +72,8 @@ export function DashboardLoja() {
    */
   const handleManageBranches = useCallback(() => {
     if (!selectedStore) return
-    const path = `/lojas/${slugify(selectedStore.name)}/filiais`
-    const opened = window.open(path, '_blank', 'noopener,noreferrer')
-    // Bloqueador de pop-up: sem aba nova, a navegação normal ainda leva à tela.
-    if (!opened) navigate(path)
-  }, [navigate, selectedStore])
+    openInNewTab(`/lojas/${slugify(selectedStore.name)}/filiais`)
+  }, [selectedStore])
 
   const handleTabChange = useCallback((tab: DashboardTab) => {
     const params = new URLSearchParams(location.search)
