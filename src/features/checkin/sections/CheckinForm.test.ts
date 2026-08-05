@@ -8,20 +8,44 @@ const submitCheckinRpcSource = readFileSync(
     'utf8',
 )
 const headerSource = readFileSync(new URL('./CheckinHeader.tsx', import.meta.url), 'utf8')
+const statusSource = readFileSync(new URL('../autosave/CheckinAutosaveStatus.tsx', import.meta.url), 'utf8')
 
 describe('CheckinForm draft save contract', () => {
     test('wires Salvar rascunho to a draft-only save flow', () => {
         expect(formSource).toContain('handleSaveDraft')
-        expect(formSource).toContain('onClick={() => void handleSaveDraft()}')
+        // A ação vive na barra de status do autosave (CheckinAutosaveStatus),
+        // não mais num botão solto no rodapé.
+        expect(formSource).toContain('onSaveNow={() => void handleSaveDraft()}')
         expect(pageHookSource).toContain('const handleSaveDraft = async () =>')
         expect(pageHookSource).toContain("toast.success('Rascunho salvo.')")
         expect(pageHookSource).not.toContain('const handleSaveDraft = async () => {\n        await submitCheckin()')
+    })
+
+    // O botão existia mas estava escondido em 1 px "para manter contrato de
+    // teste": na prática o recurso não existia para o vendedor.
+    test('o acionador de rascunho não pode estar escondido', () => {
+        expect(formSource).not.toContain('clip: \'rect(0,0,0,0)\'')
+        expect(formSource).not.toContain('Hidden Salvar rascunho')
+        expect(statusSource).toContain('Salvar rascunho')
+        expect(statusSource).toContain('aria-live="polite"')
+    })
+
+    test('mostra cada estado do salvamento com texto próprio', () => {
+        expect(statusSource).toContain('Alterações não salvas')
+        expect(statusSource).toContain('Salvando rascunho...')
+        expect(statusSource).toContain('Rascunho salvo às')
+        expect(statusSource).toContain('Sem conexão. Salvaremos ao reconectar.')
+        expect(statusSource).toContain('Atualizado em outra sessão. Revise os dados.')
+        expect(statusSource).toContain('Fechamento concluído às')
     })
 
     // MX-22.2 (FEV-DATA-05): rascunho grava de verdade (submission_status
     // 'draft'), não mais localStorage — sobrevive a refresh/troca de aba.
     test('persists the draft via saveCheckin(isDraft=true), not localStorage', () => {
         expect(pageHookSource).toMatch(/saveCheckin\(\s*\n?\s*draftPayload,\s*\n?\s*metricScope,\s*\n?\s*selectedDate,\s*\n?\s*activeClosingContext\.mainDate,\s*\n?\s*true,?\s*\n?\s*\)/)
+        // Caminho principal do rascunho: o autosave persiste com isDraft=true
+        // via coordenador serial.
+        expect(pageHookSource).toContain('await autosave.saveNow(draftPayload)')
         expect(pageHookSource).not.toContain('window.localStorage.setItem')
         expect(pageHookSource).not.toContain('CHECKIN_DRAFT_STORAGE_PREFIX')
     })

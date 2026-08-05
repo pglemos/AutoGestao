@@ -180,9 +180,15 @@ interface FluxoFechamentoProps {
   agdCartAtivos: number
   agdNetAtivos: number
   temClientesCadastrados: boolean
+  /**
+   * Confirmar uma etapa é o momento em que o vendedor considera aquele bloco
+   * pronto. Antes, o clique só navegava; agora força a gravação do rascunho
+   * para que o dado exista no servidor mesmo se a sessão morrer em seguida.
+   */
+  onStepConfirmed?: (step: StepId) => void
 }
 
-export function FluxoFechamento({ readValue, updateField, disabled, finalized = false, agdCartAtivos, agdNetAtivos, temClientesCadastrados }: FluxoFechamentoProps) {
+export function FluxoFechamento({ readValue, updateField, disabled, finalized = false, agdCartAtivos, agdNetAtivos, temClientesCadastrados, onStepConfirmed }: FluxoFechamentoProps) {
   const [currentStep, setCurrentStep] = useState<StepId>('showroom')
 
   const visitasPorta = readValue('visitas_porta')
@@ -204,6 +210,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
   }, [finalized, visitasPorta, leadsCart, visitasCart, agdCart, leadsNet, visitasNet, agdNet, temClientesCadastrados])
 
   const handleConfirm = (stepId: StepId) => {
+    onStepConfirmed?.(stepId)
     const nextMap: Record<StepId, StepId> = { showroom: 'carteira', carteira: 'internet', internet: 'vendas', vendas: 'vendas' }
     setCurrentStep(nextMap[stepId])
   }

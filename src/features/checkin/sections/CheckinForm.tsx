@@ -33,6 +33,7 @@ import { CheckinValidationBanner } from './CheckinValidationBanner'
 import { CheckinSuccessSection } from './CheckinSuccessSection'
 import { CheckinCrmSection } from './CheckinCrmSection'
 import { FluxoFechamento } from './FluxoFechamento'
+import { CheckinAutosaveStatus } from '../autosave/CheckinAutosaveStatus'
 import type { CheckinPageContext, NumericCheckinField } from '../hooks/useCheckinPage'
 import { shouldConfirmBeforeFinalizar } from '../lib/confirm-finalize'
 import { addDaysDateOnly } from '../lib/crm-derived-totals'
@@ -161,6 +162,9 @@ export function CheckinForm({ ctx, totalsAgd, totalsVnd, onOpenHistory }: Checki
         declaredForm,
         declaredProgressTotals,
         activeClosingContext,
+        autosaveState,
+        autosaveEnabled,
+        retryAutosave,
     } = ctx
 
     const selectedDate = ctx.selectedDate || customReferenceDate || ctx.referenceDate
@@ -188,17 +192,6 @@ numberDrafts,
     commitNumberField,
     readValue,
 disabled: fechamentoConcluido,
-}
-
-const mobileInternetRows: Array<{ label: string; field: NumericCheckinField }> = [
-{ label: 'Leads recebidos', field: 'leads_net' },
-{ label: 'Atendimentos realizados', field: 'visitas_net' },
-{ label: 'Agendamentos D+1', field: 'agd_net' },
-]
-
-const setMobileCounter = (field: NumericCheckinField, next: number) => {
-if (fechamentoConcluido) return
-updateField(field, Math.max(0, Math.min(CHECKIN_MAX_INPUT_VALUE, next)))
 }
 
   // Visual messages for discipline card
@@ -231,6 +224,13 @@ updateField(field, Math.max(0, Math.min(CHECKIN_MAX_INPUT_VALUE, next)))
         e.preventDefault()
         if (fechamentoConcluido || saving) return
         setConfirmFinalizeModalOpen(true)
+    }
+
+    // Confirmar etapa deixa de ser só navegação: os inputs pendentes são
+    // commitados e o rascunho vai para o servidor na hora.
+    const handleStepConfirmed = () => {
+        Object.keys(numberDrafts).forEach(field => commitNumberField(field as NumericCheckinField))
+        void handleSaveDraft()
     }
 
 const handleFinalizarMesmoAssim = () => {
@@ -281,83 +281,24 @@ return (
         </div>
       )}
 
-<section className="scroll-mt-6 md:hidden">
-<div className="rounded-[16px] border border-[#00A89D]/45 bg-white p-3 shadow-[0_12px_32px_rgba(0,168,157,0.12)]">
-<header className="flex items-start justify-between gap-3 border-b border-[#DFE0E1] pb-3">
-<div className="flex items-center gap-3">
-<span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-[#00A89D] text-white shadow-[0_12px_28px_rgba(0,168,157,0.24)]">
-<Globe size={24} aria-hidden="true" />
-</span>
-<div>
-<h2 className="text-[18px] font-bold tracking-tight text-[#071822]">Internet</h2>
-<p className="mt-0.5 text-[13px] font-semibold text-[#526B7A]">Leads digitais</p>
-</div>
-</div>
-<div className="hidden max-w-[220px] rounded-[14px] bg-[#E8F3F2] p-3 text-[12px] font-bold leading-relaxed text-[#334155] min-[420px]:block">
-<span className="mb-1 inline-flex items-center gap-1 text-[#00A89D]">
-<Info size={15} aria-hidden="true" />
-Info
-</span>
-<p>Informe os leads digitais recebidos e o andamento dos atendimentos.</p>
-</div>
-</header>
+      {/* Estado do rascunho sempre visível. Sticky para acompanhar o scroll de
+          uma tela longa — sem isto, o vendedor rola para preencher e perde de
+          vista se o que digitou já chegou ao servidor. */}
+      <div className="sticky top-2 z-20 -mx-1 px-1">
+        <CheckinAutosaveStatus
+          state={autosaveState}
+          finalizado={fechamentoConcluido}
+          saving={saving}
+          disabled={!autosaveEnabled && fechamentoConcluido}
+          onSaveNow={() => void handleSaveDraft()}
+          onRetry={() => void retryAutosave()}
+        />
+      </div>
 
-<div className="space-y-2.5 py-3">
-{mobileInternetRows.map(({ label, field }) => {
-const value = readValue(field)
-const draftValue = numberDrafts[field] ?? String(value)
-const disabled = fechamentoConcluido
-return (
-<div key={field} className="grid grid-cols-[minmax(0,1fr)_auto] items-center gap-3">
-<label htmlFor={`mobile-${field}`} className="min-w-0 text-[14px] font-bold leading-tight text-[#071822]">
-{label}
-</label>
-<div className="grid w-[152px] grid-cols-[38px_minmax(0,1fr)_38px] gap-1.5">
-{/* O ícone é aria-hidden, então sem rótulo o botão é anunciado apenas como
-    "botão". Nomear com o campo diferencia os seis contadores da tela. */}
-<button type="button" disabled={disabled} aria-label={`Diminuir ${label}`} onClick={() => setMobileCounter(field, value - 1)} className="grid h-10 place-items-center rounded-[10px] border border-[#DFE0E1] bg-white text-[18px] font-bold text-[#071822] shadow-sm disabled:opacity-45">
-<Minus size={16} aria-hidden="true" />
-</button>
-<input
-id={`mobile-${field}`}
-type="text"
-inputMode="numeric"
-pattern="[0-9]*"
-value={draftValue}
-onChange={(event) => updateNumberField(field, event.target.value.replace(/\D/g, '').slice(0, 3))}
-onBlur={() => commitNumberField(field)}
-disabled={disabled}
-aria-invalid={Boolean(fieldErrors[field])}
-className="h-10 min-w-0 rounded-[10px] border border-[#DFE0E1] bg-white text-center text-[18px] font-bold tabular-nums text-[#071822] shadow-sm outline-none focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10 disabled:bg-[#F7F8F8] disabled:text-[#526B7A]"
-/>
-<button type="button" disabled={disabled} aria-label={`Aumentar ${label}`} onClick={() => setMobileCounter(field, value + 1)} className="grid h-10 place-items-center rounded-[10px] border border-[#DFE0E1] bg-white text-[18px] font-bold text-[#071822] shadow-sm disabled:opacity-45">
-<Plus size={16} aria-hidden="true" />
-</button>
-</div>
-</div>
-)
-})}
-</div>
-
-<div className="flex items-center gap-2 pb-3 text-[13px] font-bold text-[#526B7A]">
-<span className={cn('grid h-6 w-6 place-items-center rounded-full text-[12px] font-bold text-white', detalhesD1Concluidos ? 'bg-[#34c759]' : 'bg-[#F59F0A]')}>
-{detalhesD1Concluidos ? '✓' : '!'}
-</span>
-{totalAgendamentosD1 > 0 ? `Detalhados: ${creditosValidos} de ${totalAgendamentosD1}` : 'Sem D+1 pendente'}
-</div>
-
-<button
-type="button"
-onClick={() => mobileInternetRows.forEach(({ field }) => commitNumberField(field))}
- disabled={fechamentoConcluido}
-className="h-11 w-full rounded-[12px] bg-[#00A89D] text-[14px] font-bold text-white shadow-[0_12px_30px_rgba(0,168,157,0.25)] transition-colors hover:bg-[#00A89D] disabled:cursor-not-allowed disabled:bg-[#526B7A]"
->
-Confirmar Internet
-</button>
-</div>
-</section>
-
-<section className="hidden w-full max-w-full min-w-0 md:block">
+      {/* Fluxo único em todos os breakpoints: Showroom → Carteira → Internet →
+          Vendas. Antes existia um bloco exclusivo de mobile que começava por
+          Internet — mesma tela, ordem e regra diferentes por dispositivo. */}
+      <section className="w-full max-w-full min-w-0 scroll-mt-6">
         <FluxoFechamento
           readValue={readValue}
           updateField={updateField}
@@ -366,6 +307,7 @@ Confirmar Internet
           agdCartAtivos={creditosCarteira}
           agdNetAtivos={creditosInternet}
           temClientesCadastrados={clientesList.length > 0}
+          onStepConfirmed={handleStepConfirmed}
         />
       </section>
 
@@ -805,15 +747,6 @@ saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoCon
             )}
           </p>
         </div>
-        {/* Hidden Salvar rascunho — mantém contrato de teste (CheckinForm.test.ts) */}
-        <button
-          type="button"
-          disabled={saving || fechamentoConcluido}
-          onClick={() => void handleSaveDraft()}
-          style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}
-        >
-          Salvar rascunho
-        </button>
       </div>
 
       {/* Desktop: botão vive dentro do header (SellerPageHeader actions). Mobile: sem header de topo, mantém aqui. */}
