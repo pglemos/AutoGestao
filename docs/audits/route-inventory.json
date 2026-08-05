@@ -780,20 +780,11 @@
       "element": "<RedirectWithSearch to=\"/perfil\" />"
     },
     {
-      "path": "/gerente/fechamento-diario",
-      "kind": "route",
-      "surface": "protegida",
-      "redirect": "/fechamento-diario",
-      "canonicalRule": "/gerente/*",
-      "forbiddenRoles": [],
-      "element": "<RedirectWithSearch to=\"/fechamento-diario\" />"
-    },
-    {
-      "path": "/gerente/rotina-equipe",
+      "path": "/rotina-equipe",
       "kind": "route",
       "surface": "protegida",
       "redirect": null,
-      "canonicalRule": "/gerente/rotina-equipe",
+      "canonicalRule": "/rotina-equipe",
       "forbiddenRoles": [
         "vendedor",
         "dono"
@@ -801,75 +792,75 @@
       "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ForbiddenRoute />} admin={<ManagerTeamRoutine />} /></Suspense>"
     },
     {
-      "path": "/gerente/minha-equipe",
+      "path": "/minha-equipe",
       "kind": "route",
       "surface": "protegida",
       "redirect": null,
-      "canonicalRule": "/gerente/*",
+      "canonicalRule": "/minha-equipe",
       "forbiddenRoles": [
         "vendedor"
       ],
       "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
     },
     {
-      "path": "/gerente/meta-loja",
+      "path": "/meta-loja",
       "kind": "route",
       "surface": "protegida",
       "redirect": null,
-      "canonicalRule": "/gerente/*",
+      "canonicalRule": "/meta-loja",
       "forbiddenRoles": [
         "vendedor"
       ],
       "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
     },
     {
-      "path": "/gerente/vendas",
+      "path": "/vendas",
       "kind": "route",
       "surface": "protegida",
       "redirect": null,
-      "canonicalRule": "/gerente/*",
+      "canonicalRule": "/vendas",
       "forbiddenRoles": [
         "vendedor"
       ],
       "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
     },
     {
-      "path": "/gerente/mentor",
+      "path": "/mentor",
       "kind": "route",
       "surface": "protegida",
       "redirect": null,
-      "canonicalRule": "/gerente/*",
+      "canonicalRule": "/mentor",
       "forbiddenRoles": [
         "vendedor"
       ],
       "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>"
     },
     {
-      "path": "/gerente/feedbacks-pdis",
+      "path": "/feedbacks-pdis",
       "kind": "route",
       "surface": "protegida",
       "redirect": null,
-      "canonicalRule": "/gerente/*",
+      "canonicalRule": "/feedbacks-pdis",
       "forbiddenRoles": [
         "vendedor"
       ],
       "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens"
     },
     {
-      "path": "/gerente/ranking",
+      "path": "/ranking",
       "kind": "route",
       "surface": "protegida",
       "redirect": null,
-      "canonicalRule": "/gerente/*",
+      "canonicalRule": "/ranking",
       "forbiddenRoles": [],
       "element": "<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
     },
     {
-      "path": "/gerente/universidade-mx",
+      "path": "/universidade-mx",
       "kind": "route",
       "surface": "protegida",
       "redirect": null,
-      "canonicalRule": "/gerente/*",
+      "canonicalRule": "/universidade-mx",
       "forbiddenRoles": [
         "vendedor"
       ],

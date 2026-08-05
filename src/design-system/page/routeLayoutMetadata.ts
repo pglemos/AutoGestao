@@ -56,7 +56,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'vendedor/terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'relatorio-matinal': { width: 'dashboard' },
   'minha-equipe': { width: 'dashboard' },
-  'gerente/vendas': { width: 'dashboard' },
+  'vendas': { width: 'dashboard' },
   ranking: { width: 'dashboard' },
   classificacao: { width: 'dashboard' },
   mercado: { width: 'dashboard' },
@@ -109,7 +109,6 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // Barra de ações fixa: a reserva impede que o botão salvar cubra o último
   // campo (§15).
   'fechamento-diario': { width: 'focused', bottomClearance: 'actions' },
-  'gerente/fechamento-diario': { width: 'focused', bottomClearance: 'actions' },
   'lancamento-diario': { width: 'focused', bottomClearance: 'actions' },
   rotina: { width: 'focused', bottomClearance: 'actions' },
   'rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },

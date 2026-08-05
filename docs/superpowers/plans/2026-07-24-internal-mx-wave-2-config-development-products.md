@@ -103,7 +103,7 @@
 - [x] Usar `MxModulePage` e `MxModuleHeader`.
 - [x] Usar `MxPageTabs` para Feedback e PDI.
 - [x] Preservar query string `tab`.
-- [x] Preservar rota real `/gerente/feedbacks-pdis`.
+- [x] Preservar rota real `/feedbacks-pdis`.
 
 ## Task 7 — Domínio de Produtos Digitais
 
@@ -156,7 +156,7 @@
 - [x] Declarar Administrador Geral, Administrador MX e Consultor MX.
 - [x] Declarar desktop, tablet e mobile.
 - [x] Cobrir Configurações, Desenvolvimento e Produtos Digitais.
-- [x] Usar rota real `/gerente/feedbacks-pdis`.
+- [x] Usar rota real `/feedbacks-pdis`.
 - [x] Verificar overflow, console, slots e ações de gerenciamento.
 - [ ] Executar matriz autenticada completa quando as três credenciais E2E estiverem disponíveis.
 

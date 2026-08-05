@@ -6,7 +6,7 @@ Em auditoria
 
 ## Escopo e fontes
 
-Reproduzir Base44 `/mentor-gerencial` em `/gerente/mentor` com `src/pages/MentorGerencial.jsx`, `ManagerMentor.tsx` e biblioteca MX. Tela PRELIMINAR: somente regras determinísticas, biblioteca e navegação filtrada.
+Reproduzir Base44 `/mentor-gerencial` em `/mentor` com `src/pages/MentorGerencial.jsx`, `ManagerMentor.tsx` e biblioteca MX. Tela PRELIMINAR: somente regras determinísticas, biblioteca e navegação filtrada.
 
 ## Regras e limites
 

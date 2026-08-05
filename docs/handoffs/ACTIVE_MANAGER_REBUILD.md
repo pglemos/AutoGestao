@@ -1,7 +1,7 @@
 # Handoff ativo — Reconstrução do Módulo Gerencial
 
 ## Objetivo
-Reconstruir o Módulo Gerencial do MX com Base44 como referência visual/funcional e arquitetura MX (React 19, Supabase, RLS, capabilities, tokens) como fonte de verdade. Árvore única `/gerente/*` dentro de `Layout`/`SellerLayoutShell`.
+Reconstruir o Módulo Gerencial do MX com Base44 como referência visual/funcional e arquitetura MX (React 19, Supabase, RLS, capabilities, tokens) como fonte de verdade. Árvore única do módulo gerencial (rotas raiz) dentro de `Layout`/`SellerLayoutShell`.
 
 ## Prompt mestre
 `/Users/pedroguilherme/AIOX-FLEET/MX_GERENTE_REBUILD_AIOX/PROMPT_EXECUCAO_REBUILD_MODULO_GERENTE.md` (1730 linhas). Referências em `/Users/pedroguilherme/AIOX-FLEET/MX_GERENTE_REBUILD_AIOX/reference/`.
@@ -22,7 +22,7 @@ Nenhum commit do rebuild gerencial ainda. Todo o trabalho do Codex está **uncom
 - Arquitetura e mapeamento de dados documentados (`docs/architecture/MODULO_GERENCIAL_BASE44_MIGRATION.md`, `MODULO_GERENCIAL_DATA_MAPPING.md`).
 - Matriz de paridade Base44↔MX (`docs/qa/MODULO_GERENCIAL_PARITY_MATRIX.md`).
 - Sidebar gerente com exatamente 9 menus na ordem contratada (`src/components/Layout.tsx`).
-- Rotas canônicas `/gerente/*` registradas e protegidas por papel (`src/App.tsx`, `src/lib/auth/routeAccess.ts` + teste em `routeAccess.test.ts`).
+- Rotas canônicas do módulo (raiz, sem prefixo) registradas e protegidas por papel (`src/App.tsx`, `src/lib/auth/routeAccess.ts` + teste em `routeAccess.test.ts`).
 - Mobile titles para rotas gerente (`src/components/SellerSidebar.tsx`).
 - `ManagerDailyClosing.container.tsx` — versão básica: header com data, 4 cards (Agendamentos, Pendentes Hoje, Regularizações, Disciplina Média), tabela de movimento, aprovar/recusar regularização server-side via `useCheckinAuditor` (RPCs canônicas).
 - `ManagerTeamRoutine.container.tsx` — consome `execution_actions` + `agendamentos` (Central de Execução, NÃO deriva do fechamento), cards, tabela, ação Cobrar via notificação.
@@ -55,10 +55,10 @@ Nenhum commit do rebuild gerencial ainda. Todo o trabalho do Codex está **uncom
 - CONCERN: snapshots de comparação de rede para rotina indisponíveis (UI evita valores fabricados — correto).
 
 ## Arquivos modificados pelo trabalho gerencial (uncommitted, origem: Codex)
-- `src/App.tsx` — lazy imports + 8 rotas `/gerente/*` com RoleSwitch
+- `src/App.tsx` — lazy imports + 8 rotas raiz do módulo gerencial com RoleSwitch
 - `src/components/Layout.tsx` — sidebar gerente 9 menus
 - `src/components/SellerSidebar.tsx` — mobile titles gerente
-- `src/lib/auth/routeAccess.ts` + `.test.ts` — pattern `/gerente/*` MANAGEMENT_ROLES
+- `src/lib/auth/routeAccess.ts` + `.test.ts` — patterns raiz do módulo com MANAGEMENT_ROLES
 - `src/features/dashboard-loja/DashboardLoja.container.tsx` — tab por pathname gerente
 - `src/features/dashboard-loja/hooks/useDashboardLojaData.ts` — ajustes
 - `src/features/dashboard-loja/sections/ManagerOperationalCockpit.tsx` — remove fallbacks inventados
@@ -73,13 +73,13 @@ Nenhuma alteração de terceiro detectada no diff atual — todas as mudanças s
 Nenhuma até agora.
 
 ## Rotas criadas ou alteradas
-`/gerente/fechamento-diario`, `/gerente/rotina-equipe`, `/gerente/minha-equipe`, `/gerente/meta-loja`, `/gerente/mentor`, `/gerente/feedbacks-pdis`, `/gerente/ranking`, `/gerente/universidade-mx` (+ `/home` reutilizado). Vendedor bloqueado em todas via RoleSwitch + routeAccess.
+`/fechamento-diario`, `/rotina-equipe`, `/minha-equipe`, `/meta-loja`, `/mentor`, `/feedbacks-pdis`, `/ranking`, `/universidade-mx` (+ `/home` reutilizado). Vendedor bloqueado em todas via RoleSwitch + routeAccess.
 
 ## Componentes criados ou alterados
 Ver seção "Arquivos modificados". Principais novos: `ManagerDailyClosing.container.tsx`, `ManagerTeamRoutine.container.tsx`, `manager-metrics.ts`, `ManagerDevelopment.tsx`, `ManagerMentor.tsx`.
 
 ## Testes executados / aprovados / falhando
-- Aprovados: 791 unit/component/integration; E2E manager 2/2; lint (0 erros, 22 warnings preexistentes); typecheck; build; sync:ide:check; validate:structure/agents/parity; matriz de rotas nega vendedor em `/gerente/*`.
+- Aprovados: 791 unit/component/integration; E2E manager 2/2; lint (0 erros, 22 warnings preexistentes); typecheck; build; sync:ide:check; validate:structure/agents/parity; matriz de rotas nega vendedor nas rotas exclusivas do módulo.
 - Falhando: E2E Chromium global (Agenda Admin, assertions preexistentes de UI removida); gate de bundle (1949 KB > 1800 KB).
 
 ## Erros conhecidos

@@ -36,7 +36,7 @@ const MANAGER_ROUTES = [
   ...SHARED_LEADERSHIP_ROUTES, ...STORE_LEADERSHIP_ROUTES, '/team', '/equipe', '/home', '/rotina',
   // `/ranking` e `/universidade-mx` já vêm de SHARED_LEADERSHIP_ROUTES desde
   // que as telas do gerente perderam o prefixo `/gerente/`.
-  '/gerente/fechamento-diario', '/rotina-equipe', '/minha-equipe',
+  '/rotina-equipe', '/minha-equipe',
   '/meta-loja', '/mentor', '/feedbacks-pdis',
   '/funil-vendas', '/metas', '/falar-consultor', '/auditoria',
 ] as const
@@ -47,7 +47,7 @@ const OWNER_ROUTES = [
   '/departamentos/comercial', '/departamentos/marketing',
   '/departamentos/produto-e-estoque', '/departamentos/pessoas-rh',
   '/departamentos/financeiro', '/departamentos/operacoes', '/mercado',
-  '/home', '/gerente/fechamento-diario',
+  '/home',
   '/minha-equipe', '/meta-loja', '/mentor', '/feedbacks-pdis',
   '/funil-vendas', '/metas', '/falar-consultor',
   '/organograma', '/banco-talentos',
@@ -57,7 +57,7 @@ const INTERNAL_SHARED_ROUTES = [
   ...SHARED_LEADERSHIP_ROUTES, ...STORE_LEADERSHIP_ROUTES, '/plano-acao', '/painel', '/simulacao', '/simulacao/vendedor',
   '/simulacao/gerente', '/simulacao/dono', '/lojas', '/agenda', '/consultoria',
   '/consultoria/clientes', '/configuracoes/operacional', '/configuracoes/consultoria-pmr',
-  '/configuracoes/reprocessamento', '/rotina', '/gerente/fechamento-diario',
+  '/configuracoes/reprocessamento', '/rotina',
   '/rotina-equipe', '/minha-equipe', '/meta-loja', '/mentor',
   '/feedbacks-pdis', '/auditoria',
   '/organograma', '/banco-talentos',

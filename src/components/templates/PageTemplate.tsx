@@ -17,7 +17,7 @@ export interface PageTemplateProps extends Omit<PageCanvasProps, 'as'> {
  * um `<div>` que rola (`h-full w-full overflow-y-auto no-scrollbar bg-gray-50`)
  * envolvendo o canvas. O padrão apareceu em dezesseis lugares, e cada cópia é
  * uma chance de alguém esquecer o `no-scrollbar`, trocar o fundo ou deixar a
- * rolagem no elemento errado — que foi como `/gerente/vendas` acabou com o
+ * rolagem no elemento errado — que foi como `/vendas` acabou com o
  * conteúdo colado na borda.
  *
  * A separação entre os dois elementos é deliberada e não deve ser removida: quem

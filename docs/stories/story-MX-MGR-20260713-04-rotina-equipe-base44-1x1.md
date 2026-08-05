@@ -19,7 +19,7 @@ quality_gate_tools:
 ## Story
 
 **Como** gerente autenticado do MX Performance,
-**quero** que `/gerente/rotina-equipe` reproduza integralmente a Rotina da Equipe do Base44,
+**quero** que `/rotina-equipe` reproduza integralmente a Rotina da Equipe do Base44,
 **para que** eu acompanhe execução, follow-ups, atualizações, agendamentos e ações de cada vendedor usando dados oficiais da Central de Execução.
 
 ## Contexto e precedência
@@ -32,7 +32,7 @@ quality_gate_tools:
 
 ## Acceptance Criteria
 
-1. `/gerente/rotina-equipe` mantém o shell e sidebar atuais e reproduz cabeçalho, subtítulo, data civil, busca por `Vendedor...` e `Atualizar`.
+1. `/rotina-equipe` mantém o shell e sidebar atuais e reproduz cabeçalho, subtítulo, data civil, busca por `Vendedor...` e `Atualizar`.
 2. Os cards `Execução Média`, `Em Dia`, `Em Atenção` e `Críticos` reproduzem labels, valores, cores, estados e fórmulas Base44, sem usar fechamento diário como fonte substituta.
 3. A tabela `Rotina — DD/MM/AAAA` reproduz as colunas `Vendedor`, `Unidade`, `Execução`, `Follow-ups`, `Atualização`, `Agendamentos`, `Status` e `Ações`, com valores oficiais e estado vazio/carregando/erro distintos.
 4. Busca filtra vendedores sem perder o escopo da loja, a data altera o período da Central de Execução e `Atualizar` refaz as consultas sem recarregar a página.
@@ -109,7 +109,7 @@ Codex com `aiox-master`/Orion coordenando implementação e QA local.
 - `Cobrar` abre formulário com vendedor, data e mensagem editável; o envio só ocorre após confirmação e falhas exibem erro.
 - Evidência Chrome local: `output/playwright/manager-parity/local/14-rotina-equipe-mobile-after-vertical.png` e `output/playwright/manager-parity/local/15-rotina-equipe-desktop-after-vertical.png`.
 - Gates locais: `npm test` (883 pass), `npm run lint` (0 erros, 22 warnings preexistentes), `npm run typecheck`, `npm run build` e `git diff --check`.
-- Produção publicada no commit `225f7b139a8e4f5e54d420eaef82d9c3f1b272cf`, deployment `dpl_AsrVJp9UDcvnEvS9etjmceKbZ8hU`, alias `https://mxperformance.vercel.app`; a entrada `/gerente/rotina-equipe` respondeu `HTTP 200` e entregou `MX PERFORMANCE`/`#root`.
+- Produção publicada no commit `225f7b139a8e4f5e54d420eaef82d9c3f1b272cf`, deployment `dpl_AsrVJp9UDcvnEvS9etjmceKbZ8hU`, alias `https://mxperformance.vercel.app`; a entrada `/rotina-equipe` respondeu `HTTP 200` e entregou `MX PERFORMANCE`/`#root`.
 - Homologação visual autenticada de produção, snapshot preenchido e idempotência/auditoria da cobrança permanecem como gate de QA; nesta retomada o Chrome real estava instalado e rodando, mas o canal de controle não conseguiu anexar ao perfil.
 - 2026-07-14: score oficial ligado às seis fontes canônicas por vendedor/data; série histórica passou a reutilizar o mesmo score; detalhe passou a exibir os seis componentes e denominador. Unit/component `8 pass`, suíte completa `909 pass`, typecheck/lint/build/diff-check verdes. E2E autenticado Chromium `5/5` e mobile-chrome `5/5`; story permanece em auditoria por fixture de mutação, paridade Base44 carregada e homologação final.
 

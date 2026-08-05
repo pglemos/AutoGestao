@@ -6,7 +6,7 @@ Em auditoria
 
 ## Escopo e fontes
 
-Reproduzir Base44 `/universidade-mx` em `/gerente/universidade-mx` com `src/pages/UniversidadeMX.jsx`, `ManagerUniversityReference.tsx`, `GerenteTreinamentos.tsx`, `useUniversidadeMx` e `universidade-service.ts`.
+Reproduzir Base44 `/universidade-mx` em `/universidade-mx` com `src/pages/UniversidadeMX.jsx`, `ManagerUniversityReference.tsx`, `GerenteTreinamentos.tsx`, `useUniversidadeMx` e `universidade-service.ts`.
 
 ## Regras e limites
 

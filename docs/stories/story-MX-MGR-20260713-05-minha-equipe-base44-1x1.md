@@ -6,7 +6,7 @@ Em auditoria
 
 ## Escopo
 
-Reproduzir a tela Base44 `/minha-equipe` em `/gerente/minha-equipe`, preservando o sidebar MX, escopo por loja/gerente e os contratos reais do MX.
+Reproduzir a tela Base44 `/minha-equipe` em `/minha-equipe`, preservando o sidebar MX, escopo por loja/gerente e os contratos reais do MX.
 
 ## Fontes
 
@@ -48,7 +48,7 @@ Capturas Base44/MX e diff em `output/playwright/manager-parity/master-20260713/`
 - Implementado `ManagerSellerProfileModal` com cabeçalho, status, diagnóstico, métricas, composição da consistência, informações gerenciais, ações contextuais e as cinco abas `Visão Geral`, `Performance`, `Rotina`, `Feedbacks` e `Treinamentos`, sem fabricar dados ausentes.
 - O modal usa `role="dialog"`, overlay escopado e navegação contextual já existente; o `DialogContent` recebeu suporte opcional a `overlayClassName`.
 - O setup compartilhado de testes passou a expor `getComputedStyle` e `MutationObserver` do happy-dom para os efeitos reais do Radix Dialog.
-- Corrigido o falso vazio inicial: `/gerente/minha-equipe` agora exibe skeleton com `aria-busy="true"` enquanto vendedores, vínculos e métricas carregam; só depois distingue vazio real de vendedores não aplicáveis.
+- Corrigido o falso vazio inicial: `/minha-equipe` agora exibe skeleton com `aria-busy="true"` enquanto vendedores, vínculos e métricas carregam; só depois distingue vazio real de vendedores não aplicáveis.
 - Component test do perfil: 2 pass, 0 fail.
 - Teste focado do loading/estado vazio: `6 pass`, `0 fail`.
 - Suíte completa: `904 pass`, `0 fail`, `2980 expect() calls`.

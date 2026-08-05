@@ -13,7 +13,7 @@ Quando houver conflito, registrar na matriz, aplicar a especificação textual e
 
 ## Rotas canônicas
 
-`/home`, `/rotina`, `/fechamento-diario`, `/gerente/rotina-equipe`, `/gerente/minha-equipe`, `/gerente/meta-loja`, `/gerente/mentor`, `/gerente/feedbacks-pdis`, `/gerente/ranking` e `/gerente/universidade-mx`.
+`/home`, `/rotina`, `/fechamento-diario`, `/rotina-equipe`, `/minha-equipe`, `/meta-loja`, `/mentor`, `/feedbacks-pdis`, `/ranking` e `/universidade-mx`.
 
 Aliases legados podem continuar existindo, mas navegação, links internos, restauração de contexto e E2E devem usar as rotas canônicas acima.
 

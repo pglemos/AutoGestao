@@ -34,7 +34,7 @@ Implementado e verificado nesta branch:
 - fórmula pura de Rotina da Equipe com pesos oficiais de 100 pontos e denominador recalculado para não aplicáveis;
 - estados `—` para ausência de fonte em métricas de fechamento e `NaN` de Meta da Loja;
 - Início consumindo o Plano de Sustentação oficial, com fechamentos mensais e calendário configurado;
-- browser local pós-patch: rota `/gerente/rotina-equipe` em `1440×900` e `390×844`, estado vazio estável, console/network limpos e sem overflow;
+- browser local pós-patch: rota `/rotina-equipe` em `1440×900` e `390×844`, estado vazio estável, console/network limpos e sem overflow;
 - E2E autenticado histórico desta retomada: `npm run test:e2e -- src/test/manager-module.playwright.ts`, Chromium `5/5` e mobile-chrome `5/5`, com credencial somente em runtime; a reexecução final depende de `E2E_ROLE_PASSWORD` ou `E2E_AUTH_PASSWORD` disponível no ambiente;
 - E2E produção somente leitura: menu/rotas `1/1`, conteúdo nos três viewports `1/1`, console/network `1/1`;
 - segurança de rota em Chrome real: vendedor bloqueado; dono/admin autenticados acessaram seus escopos;
@@ -45,7 +45,7 @@ Implementado e verificado nesta branch:
 - capturas local/produção versionadas nos três viewports mínimos;
 - Base44 autenticado recapturado com conteúdo carregado nas dez rotas e nos três viewports mínimos; capturas `06-*` e diffs Base44×MX versionados.
 - deploy automático Vercel concluído para o commit publicado; as dez rotas canônicas responderam HTTP 200 em produção;
-- `/gerente/rotina-equipe` validada no Chrome real pós-deploy, com conteúdo autenticado, sem erros JS/4xx/5xx e requests Supabase HTTP 200 escopadas por `store_id`; dois warnings runtime permanecem registrados abaixo.
+- `/rotina-equipe` validada no Chrome real pós-deploy, com conteúdo autenticado, sem erros JS/4xx/5xx e requests Supabase HTTP 200 escopadas por `store_id`; dois warnings runtime permanecem registrados abaixo.
 - modal de perfil da Minha Equipe protegido contra clipping pelo sidebar, com overlay/conteúdo em camadas superiores, altura responsiva e um único botão de fechar; teste unitário `2/2` e guarda E2E adicionados.
 - Minha Equipe fechou o ciclo de paridade visual em Chrome: Base44/MX local medidos em 1440×900 e 390×844; busca `176×38px`, select `147×36,5px`, fonte `ui-sans-serif`, raios `12px`/`16px`, resumo sem pill legado e `Todos` como aba inicial. Produção pós-deploy confirmou a mesma composição em `dpl_9Szz5MiSuLv4La2zmp8fEY7dMnVn`; evidências versionadas em `docs/qa/evidence/manager-parity/2026-07-14/`.
 
@@ -94,7 +94,7 @@ O sidebar escuro MX foi preservado; `CalendarClock` e `BrainCircuit` permanecem 
 
 ## Segurança e RLS
 
-RLS não foi desabilitado. Uma migration foi criada e aplicada em produção nesta rodada (`20260714120000_fix_notificacoes_target_role_dono.sql`, aditiva, reversível — ver seção de correções) para destravar a regularização de fechamento; nenhuma outra alteração de schema foi feita. Mutações de produção foram executadas via fixture autorizada com as contas de homologação (dono/gerente/vendedor@mxgestaopreditiva.com.br), conforme decisão do usuário nesta sessão — ver `## Fixtures de mutação` abaixo. No Chrome local, o vendedor recebeu `Acesso não autorizado` em `/gerente/minha-equipe`; dono e admin autenticados carregaram seus escopos.
+RLS não foi desabilitado. Uma migration foi criada e aplicada em produção nesta rodada (`20260714120000_fix_notificacoes_target_role_dono.sql`, aditiva, reversível — ver seção de correções) para destravar a regularização de fechamento; nenhuma outra alteração de schema foi feita. Mutações de produção foram executadas via fixture autorizada com as contas de homologação (dono/gerente/vendedor@mxgestaopreditiva.com.br), conforme decisão do usuário nesta sessão — ver `## Fixtures de mutação` abaixo. No Chrome local, o vendedor recebeu `Acesso não autorizado` em `/minha-equipe`; dono e admin autenticados carregaram seus escopos.
 
 **Auditoria RLS cross-store/papel — concluída em 2026-07-14** (script autenticado, sem senha em UI, resultados só com contagens/booleanos, nenhum dado de cliente logado):
 
@@ -159,7 +159,7 @@ suíte completa e build também passaram.
 
 Deploy automático Vercel concluído com status `success` para o commit
 `b6d9179b` (`Deployment has completed`). Produção validada em modo somente
-leitura: dez rotas canônicas HTTP 200; rota `/gerente/rotina-equipe` autenticada
+leitura: dez rotas canônicas HTTP 200; rota `/rotina-equipe` autenticada
 no Chrome real, sem erros JS/4xx/5xx e requests de dados HTTP 200; os dois
 warnings runtime descritos em Console e network permanecem pendentes. Evidência:
 `https://vercel.com/synvolt/mxperformance/5a5fHSGT1q1uyJZivucj5xnPdyKt`.

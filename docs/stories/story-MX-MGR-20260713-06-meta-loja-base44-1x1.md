@@ -6,7 +6,7 @@ Em auditoria
 
 ## Escopo e fontes
 
-Reproduzir Base44 `/meta-loja` em `/gerente/meta-loja`, usando `src/pages/MetaLoja.jsx`, `src/components/meta-loja/*`, `ManagerStoreGoalReference.tsx` e os contratos reais do dashboard MX. O sidebar não entra no escopo visual.
+Reproduzir Base44 `/meta-loja` em `/meta-loja`, usando `src/pages/MetaLoja.jsx`, `src/components/meta-loja/*`, `ManagerStoreGoalReference.tsx` e os contratos reais do dashboard MX. O sidebar não entra no escopo visual.
 
 ## Regras normativas
 

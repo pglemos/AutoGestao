@@ -6,7 +6,7 @@ Em auditoria
 
 ## Escopo e fontes
 
-Reproduzir Base44 `/ranking` em `/gerente/ranking` com `src/pages/Ranking.jsx`, `src/components/ranking/*`, `ManagerRankingReference.tsx`, `StoreRankingView.tsx` e contratos do MX.
+Reproduzir Base44 `/ranking` em `/ranking` com `src/pages/Ranking.jsx`, `src/components/ranking/*`, `ManagerRankingReference.tsx`, `StoreRankingView.tsx` e contratos do MX.
 
 ## Regras e limites
 

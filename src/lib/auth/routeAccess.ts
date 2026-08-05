@@ -57,14 +57,14 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/rotina', roles: ['administrador_geral', 'administrador_mx', 'consultor_mx', 'gerente', 'dono'] },
   // Dono acumula a gestão comercial quando a loja não tem gerente ativo — e
   // mesmo com gerente mantém acesso de acompanhamento à rotina da equipe.
-  // Telas do módulo gerencial: rotas raiz desde 2026-08-05 (sem prefixo
-  // `/gerente/`). O curinga cobre o que ainda vive sob o prefixo antigo.
+  // Telas do módulo gerencial: rotas raiz desde 2026-08-05. O prefixo
+  // `/gerente/` foi removido do produto — não há regra curinga para ele.
   { pattern: '/rotina-equipe', roles: MANAGEMENT_ROLES },
   { pattern: '/minha-equipe', roles: MANAGEMENT_ROLES },
   { pattern: '/meta-loja', roles: MANAGEMENT_ROLES },
   { pattern: '/mentor', roles: MANAGEMENT_ROLES },
   { pattern: '/feedbacks-pdis', roles: MANAGEMENT_ROLES },
-  { pattern: '/gerente/*', roles: MANAGEMENT_ROLES },
+  { pattern: '/vendas', roles: MANAGEMENT_ROLES },
   { pattern: '/configuracoes/operacional', roles: INTERNAL_ROLES },
   { pattern: '/relatorio-matinal', roles: INTERNAL_AND_LEADERS },
   { pattern: '/relatorios/performance-vendas', roles: INTERNAL_AND_LEADERS },

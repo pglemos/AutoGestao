@@ -84,7 +84,6 @@ describe('route access matrix', () => {
   it('protects every canonical manager route from sellers', () => {
     // Rotas exclusivas da gestão: o vendedor cai em ForbiddenRoute.
     const managerOnly = [
-      '/gerente/fechamento-diario',
       '/rotina-equipe',
       '/minha-equipe',
       '/meta-loja',

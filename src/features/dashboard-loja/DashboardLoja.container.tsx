@@ -49,7 +49,7 @@ export function DashboardLoja() {
   const activeTab = useMemo<DashboardTab>(() => {
     if (location.pathname === '/minha-equipe') return 'equipe'
     if (location.pathname === '/meta-loja') return 'metas'
-    if (location.pathname === '/gerente/vendas') return 'vendas'
+    if (location.pathname === '/vendas') return 'vendas'
     const tab = new URLSearchParams(location.search).get('tab')
     return tab === 'metas' || tab === 'equipe' || tab === 'vendas' ? tab : 'performance'
   }, [location.pathname, location.search])
@@ -123,7 +123,7 @@ export function DashboardLoja() {
    * A margem lateral vinha de um ternário na raiz: `p-mx-lg` só no caso
    * default, nada para `isManagerSection` nem para `isFocusedRolePerformance`,
    * na expectativa de que as seções internas fornecessem a sua. Em
-   * /gerente/vendas nenhuma fornecia, e o título encostava na borda da área de
+   * /vendas nenhuma fornecia, e o título encostava na borda da área de
    * conteúdo — medido em 0px de respiro por scripts/audit-page-gutters.mjs.
    *
    * `isFocusedRolePerformance` segue sem canvas de propósito: aquele ramo

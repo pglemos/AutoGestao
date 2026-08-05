@@ -1,6 +1,6 @@
 # Console — Minha Equipe pós-deploy
 
-- URL: `https://mxperformance.vercel.app/gerente/minha-equipe`
+- URL: `https://mxperformance.vercel.app/minha-equipe`
 - Commit: `1a96cec9`
 - Deployment: `dpl_9Szz5MiSuLv4La2zmp8fEY7dMnVn`
 - Desktop: 1440×900

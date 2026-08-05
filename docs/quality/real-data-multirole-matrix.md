@@ -37,12 +37,12 @@ Esta matriz inventaria as rotas protegidas ativas de `src/App.tsx` e `src/lib/au
 
 | Rotas ativas e aliases | Módulo | Leitura oficial | Escrita oficial | Evidência |
 | --- | --- | --- | --- | --- |
-| `/home`, `/lojas/:storeSlug/*`, `/gerente/minha-equipe`, `/gerente/meta-loja` | Cockpit/Loja MX | `lojas`, `vinculos_loja`, `vendedores_loja`, `lancamentos_diarios`, metas, CRM, DRE e performance oficial | configurações/metas apenas por contratos autorizados | `useDashboardLojaData`, testes do cockpit e browser por loja |
-| `/rotina`, `/gerente/rotina-equipe` | Rotina gerencial | fechamento, equipe, ranking e `manager_routine_logs` | log/ações de rotina com `store_id` | testes `manager-day-routine` e `manager-team-routine` |
-| `/fechamento-diario`, `/gerente/fechamento-diario`, `/liberacao-fechamento` | Fechamento da equipe | lançamentos, regularizações, liberações e agenda D+1 | aprovar/recusar/regularizar por RPCs e tabelas canônicas | testes `manager/daily-closing/**` |
-| `/gerente/mentor`, `/gerente/feedbacks-pdis`, `/devolutivas`, `/pdi` | Mentor e desenvolvimento | equipe, `pdis`, `devolutivas`, planos de ação | contratos de feedback/PDI com escopo de loja | testes de PDI/devolutivas |
-| `/funil-vendas`, `/metas`, `/ranking`, `/classificacao`, `/gerente/ranking` | Funil, metas e ranking | CRM, metas e lançamentos oficiais | metas somente por contratos autorizados | testes de funil/ranking |
-| `/treinamentos`, `/gerente/universidade-mx` | Universidade da equipe | treinamentos, trilhas, progresso da equipe | gestão/progresso conforme capability | testes de treinamento |
+| `/home`, `/lojas/:storeSlug/*`, `/minha-equipe`, `/meta-loja` | Cockpit/Loja MX | `lojas`, `vinculos_loja`, `vendedores_loja`, `lancamentos_diarios`, metas, CRM, DRE e performance oficial | configurações/metas apenas por contratos autorizados | `useDashboardLojaData`, testes do cockpit e browser por loja |
+| `/rotina`, `/rotina-equipe` | Rotina gerencial | fechamento, equipe, ranking e `manager_routine_logs` | log/ações de rotina com `store_id` | testes `manager-day-routine` e `manager-team-routine` |
+| `/fechamento-diario`, `/fechamento-diario`, `/liberacao-fechamento` | Fechamento da equipe | lançamentos, regularizações, liberações e agenda D+1 | aprovar/recusar/regularizar por RPCs e tabelas canônicas | testes `manager/daily-closing/**` |
+| `/mentor`, `/feedbacks-pdis`, `/devolutivas`, `/pdi` | Mentor e desenvolvimento | equipe, `pdis`, `devolutivas`, planos de ação | contratos de feedback/PDI com escopo de loja | testes de PDI/devolutivas |
+| `/funil-vendas`, `/metas`, `/ranking`, `/classificacao`, `/ranking` | Funil, metas e ranking | CRM, metas e lançamentos oficiais | metas somente por contratos autorizados | testes de funil/ranking |
+| `/treinamentos`, `/universidade-mx` | Universidade da equipe | treinamentos, trilhas, progresso da equipe | gestão/progresso conforme capability | testes de treinamento |
 | `/falar-consultor`, `/lojas/:storeSlug/consultor-ia` | Consultoria/Central MX | loja selecionada, solicitações e contexto oficial | solicitação persistida e ações autorizadas | contratos Central MX |
 | `/plano-acao` | Plano de Ação compartilhado | `public.planos_acao` filtrado por unidade/escopo pela RLS | RPC `criar_plano_acao_v2` e `atualizar_plano_acao` conforme papel | smoke multi-role, migration de escopo de departamento |
 | `/configuracoes`, `/configuracoes/remuneracao` | Configuração da loja | configurações operacionais e remuneração da loja | RPCs/tabelas canônicas, sem adapter local | testes de remuneração/configuração |
@@ -52,7 +52,7 @@ Esta matriz inventaria as rotas protegidas ativas de `src/App.tsx` e `src/lib/au
 | Rotas ativas e aliases | Módulo | Leitura oficial | Escrita oficial | Evidência |
 | --- | --- | --- | --- | --- |
 | `/dono` e `/dono/{rotina,decisoes,plano-estrategico,plano-acao,consultoria,departamentos/**,mercado,universidade}` | Cockpit executivo canônico | `useDashboardLojaData`: lojas vinculadas, equipe, lançamentos, metas, CRM, DRE, planos/ações e alertas derivados apenas desses fatos | refresh, configuração autorizada e solicitação real ao consultor | `owner-base44-exact-parity-contract`, `real-data-runtime-contract` |
-| `/home`, `/funil-vendas`, `/metas`, `/fechamento-diario`, `/gerente/minha-equipe`, `/gerente/meta-loja` | Visões gerenciais do dono | mesmas fontes reais por loja selecionada | mesmas regras de gerente/dono | testes de cockpit/manager |
+| `/home`, `/funil-vendas`, `/metas`, `/fechamento-diario`, `/minha-equipe`, `/meta-loja` | Visões gerenciais do dono | mesmas fontes reais por loja selecionada | mesmas regras de gerente/dono | testes de cockpit/manager |
 | `/organograma`, `/banco-talentos`, `/pdi`, `/devolutivas` | Pessoas e desenvolvimento | `usuarios`, vínculos/equipe, PDI e devolutivas | contratos específicos por recurso | testes de autorização e módulos |
 | `/ranking`, `/classificacao`, `/treinamentos`, `/configuracoes/remuneracao` | Ranking, universidade e remuneração | tabelas oficiais dos respectivos domínios | somente mutations canônicas | gates globais |
 | `/lojas`, `/lojas/:storeSlug/*` | Loja MX | loja real vinculada e seus fatos operacionais | nenhuma ampliação de escopo por rota | `routeAccess` e browser por vínculo |

@@ -25,7 +25,7 @@ O usuário aprovou que o contrato Base44 vença em design, fórmulas, estados, a
 - [ ] Ícones de Rotina do Dia e Mentor Gerencial correspondem aos ícones `CalendarClock` e `BrainCircuit` usados pela referência Base44; os demais elementos do sidebar permanecem no padrão atual.
 - [ ] Início reproduz o cockpit de previsibilidade comercial atual da referência, incluindo data, atalhos, previsão, necessidade, meta/gap de agendamentos, leitura do dia, ação sugerida, equipe em foco, radar financeiro e gráfico de agendamentos.
 - [ ] Rotina do Dia usa a rota `/rotina` e reproduz as abas Hoje/Minha Rotina, filtros, ordenação, acompanhamento e criação manual de atividade da referência.
-- [x] Rotas canônicas `/gerente/*` protegidas por papel.
+- [x] Rotas canônicas as rotas raiz do módulo gerencial protegidas por papel.
 - [ ] Fechamento Diário, Rotina da Equipe, Minha Equipe, Meta da Loja, Mentor Gerencial, Desenvolvimento, Ranking e Universidade MX são alinhados à referência atual, incluindo abas, modais, filtros e estados vazios/carregados.
 - [ ] Desenvolvimento reúne apenas Feedback e PDI na navegação principal da referência e usa dados reais persistidos no Supabase.
 - [ ] Universidade MX reproduz o catálogo gerencial e a aba de acompanhamento da equipe sem remover integrações reais já existentes.
@@ -130,13 +130,13 @@ Execution evidence — 2026-07-12:
 - PASS: lint with zero errors and unchanged 22 preexisting warnings.
 - PASS: typecheck, build, `sync:ide:check`, structure, agents and parity validations.
 - PASS: bundle total 1671.59 KB gzip against the 1800 KB gate after consolidating PDF rendering on `jsPDF` + `html2canvas`.
-- PASS: seller denied on every canonical `/gerente/*` route in route matrix tests.
+- PASS: seller denied on every canonical as rotas raiz do módulo gerencial route in route matrix tests.
 - PASS: regularization decisions, reminders and lead correction remain server-side/auditable through canonical services.
 - PASS: Agenda D+1 uses CRM/Carteira as canonical source and exposes filters and communication actions without mutating seller data.
 - PASS: Rotina uses Central de Execução and avoids fabricated network comparisons when snapshots do not exist.
 - PASS: commit funcional `07d3dd39` publicado em `origin/main` e deployment Vercel de produção `dpl_46UfPmzj6x84vnjADRtYsKKBRDzL` promovido ao alias `mxperformance.vercel.app`.
 - PASS: homologação pós-deploy executada no alias público com login real de gerente: 4/4 E2E, nove rotas, desktop/mobile e fluxos críticos.
-- PASS: respostas HTTP 200 para `/`, `/home` e `/gerente/fechamento-diario`; nenhuma exceção JavaScript nas nove rotas.
+- PASS: respostas HTTP 200 para `/`, `/home` e `/fechamento-diario`; nenhuma exceção JavaScript nas nove rotas.
 - INFO: produção emite o aviso preexistente de observabilidade `VITE_SENTRY_DSN ausente`; não bloqueia o módulo, mas deve ser tratado pela configuração de infraestrutura do Sentry.
 
 ### Review Date: 2026-07-12 — Re-review do Kanban de Minha Equipe
@@ -189,9 +189,9 @@ Gate: CONCERNS → `docs/qa/gates/epic-modulo-gerencial-base44-rebuild.yml`
 
 ### Chrome Re-validation: 2026-07-12 — chrome-devtools MCP
 
-- PASS: login real de gerente e rota `/gerente/minha-equipe` autenticada.
+- PASS: login real de gerente e rota `/minha-equipe` autenticada.
 - PASS: visões Todos, Resultado e Consistência clicadas; vendedores sem dados de Consistência migraram para “Não aplicáveis” e exibiram `—`.
-- PASS: menu com quatro ações visível; “Ver rotina de hoje” abriu `/gerente/rotina-equipe`.
+- PASS: menu com quatro ações visível; “Ver rotina de hoje” abriu `/rotina-equipe`.
 - PASS: perfil detalhado abriu com cinco abas; aba Performance exibiu Leads, Agendamentos, Visitas e Vendas.
 - PASS: sidebar recolheu e expandiu com medidas reais `260 → 72 → 260 px`.
 - PASS: viewports `1440×900`, `768×1024` e `390×844`, sem overflow horizontal do documento.

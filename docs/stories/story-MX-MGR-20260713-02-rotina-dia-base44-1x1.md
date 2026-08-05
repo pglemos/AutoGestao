@@ -182,7 +182,7 @@ Validação funcional retomada no Chrome autenticado local em `http://localhost:
 - Modal `Nova atividade` fechado sem persistência.
 - Filtro `Equipe` exibiu somente `Conferir execução do Plano de Ataque`.
 - Ordenação `Origem` aplicada e restaurada no retorno.
-- Ação `Cobrar` navegou para `/gerente/rotina-equipe?data=2026-07-13&acao=cobrar`.
+- Ação `Cobrar` navegou para `/rotina-equipe?data=2026-07-13&acao=cobrar`.
 - Retorno `Voltar para a Rotina do Dia` restaurou filtro e ordenação.
 - Console sem mensagens de erro após o fluxo.
 

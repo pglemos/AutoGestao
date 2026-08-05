@@ -403,7 +403,7 @@ git commit -m "refactor: migrar superfícies do dono para fundação gerencial"
 
 ```ts
 const roles = [
-  { name: 'gerente', email: process.env.E2E_MANAGER_EMAIL, password: process.env.E2E_MANAGER_PASSWORD, routes: ['/home', '/fechamento-diario', '/gerente/rotina-equipe'] },
+  { name: 'gerente', email: process.env.E2E_MANAGER_EMAIL, password: process.env.E2E_MANAGER_PASSWORD, routes: ['/home', '/fechamento-diario', '/rotina-equipe'] },
   { name: 'dono', email: process.env.E2E_OWNER_EMAIL, password: process.env.E2E_OWNER_PASSWORD, routes: ['/lojas', '/configuracoes', '/falar-consultor'] },
   { name: 'admin', email: process.env.E2E_ADMIN_EMAIL, password: process.env.E2E_ADMIN_PASSWORD, routes: ['/painel', '/lojas', '/agenda', '/consultoria/clientes', '/configuracoes'] },
 ]

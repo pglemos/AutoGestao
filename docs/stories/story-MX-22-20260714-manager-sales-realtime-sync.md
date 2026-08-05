@@ -73,7 +73,7 @@ Ready for Review
 - `git diff --check`: PASS.
 - Supabase advisors: sem finding novo relacionado à migration; o projeto mantém alertas gerais preexistentes de Auth/RLS/performance.
 - CodeRabbit CLI: revisão não executada por rate limit do plano (`waitTime=25 minutes`), sem findings disponíveis.
-- Chrome real: PASS em `https://mxperformance.vercel.app` usando link temporário administrativo do Supabase para `vgs.victor@icloud.com`; `/gerente/minha-equipe` e `/fechamento-diario` carregaram com o nome de Vitor, unidade LIAL e os vendedores João, Dielle e Bruno.
+- Chrome real: PASS em `https://mxperformance.vercel.app` usando link temporário administrativo do Supabase para `vgs.victor@icloud.com`; `/minha-equipe` e `/fechamento-diario` carregaram com o nome de Vitor, unidade LIAL e os vendedores João, Dielle e Bruno.
 - Realtime em produção: PASS; o WebSocket Supabase abriu e o canal `manager-closing-sync-855a788c-eb07-4f37-a1ec-090de14e570f` retornou `phx_reply status=ok` e `Subscribed to PostgreSQL` para `lancamentos_diarios` com filtro `store_id=eq.855a788c-eb07-4f37-a1ec-090de14e570f`.
 - Dados remotos: PASS; LIAL está ativa, os cinco usuários informados possuem vínculo ativo correto, e o fechamento oficial de 14/07/2026 foi carregado sem erro de autorização. A única venda oficial registrada no dia consultado possui valor 0; a tela não inventa vendas.
 - Console e rede: PASS; zero erros de console/page errors, requisições REST de `lancamentos_diarios` observadas e nenhum fallback de Realtime exibido. Um evento de escrita não foi injetado para não alterar dados reais; o comportamento de evento/debounce permanece coberto pelos testes automatizados.

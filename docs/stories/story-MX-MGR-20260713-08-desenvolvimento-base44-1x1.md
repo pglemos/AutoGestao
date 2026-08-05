@@ -6,7 +6,7 @@ Em auditoria
 
 ## Escopo e fontes
 
-Reproduzir Base44 `/desenvolvimento` em `/gerente/feedbacks-pdis` com menu principal único e abas Feedback, PDI, Meu PDI e PDI da Equipe. Referências: `src/pages/Desenvolvimento.jsx`, `src/components/desenvolvimento/*`, `ManagerDevelopment.tsx`, `ManagerFeedbackReference.tsx` e `ManagerPDIReference.tsx`.
+Reproduzir Base44 `/desenvolvimento` em `/feedbacks-pdis` com menu principal único e abas Feedback, PDI, Meu PDI e PDI da Equipe. Referências: `src/pages/Desenvolvimento.jsx`, `src/components/desenvolvimento/*`, `ManagerDevelopment.tsx`, `ManagerFeedbackReference.tsx` e `ManagerPDIReference.tsx`.
 
 ## Regras e dados
 

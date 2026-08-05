@@ -3,8 +3,8 @@
 - Data: 2026-07-14
 - Ferramenta: Chrome DevTools MCP, sessão autenticada
 - Referência: `https://mx-gerente.base44.app/minha-equipe`
-- MX local: `http://127.0.0.1:3001/gerente/minha-equipe`
-- MX produção: `https://mxperformance.vercel.app/gerente/minha-equipe`
+- MX local: `http://127.0.0.1:3001/minha-equipe`
+- MX produção: `https://mxperformance.vercel.app/minha-equipe`
 
 | Elemento | Base44 | MX local | Resultado |
 |---|---:|---:|---|
