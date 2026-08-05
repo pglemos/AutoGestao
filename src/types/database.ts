@@ -26,7 +26,10 @@ export type PDIStatus = 'aberto' | 'em_andamento' | 'concluido'
 export type TrainingType = 'prospeccao' | 'agendamento' | 'atendimento' | 'apresentacao' | 'financiamento' | 'carro_de_troca' | 'fechamento' | 'funil' | 'rotina_diaria' | 'crm' | 'institucional' | 'gestao' | 'pre-vendas'
 export type TargetAudience = 'vendedor' | 'gerente' | 'dono' | 'todos'
 export type CheckinScope = 'daily' | 'adjustment' | 'historical'
-export type CheckinSubmissionStatus = 'on_time' | 'late'
+// `draft` é aceito pelo banco desde a migration 20260708124500
+// (daily_checkins_submission_status_check). O tipo omitia o valor e obrigava
+// cast em toda comparação de rascunho.
+export type CheckinSubmissionStatus = 'draft' | 'on_time' | 'late'
 export type StoreSourceMode = 'legacy_forms' | 'native_app' | 'hybrid'
 export type ProjectionMode = 'calendar' | 'business'
 export type CorrectionStatus = 'pending' | 'approved' | 'rejected' | 'cancelled'
