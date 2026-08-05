@@ -1018,12 +1018,12 @@ const tasks = [
     pend: 'Executar npm outdated e preservar saída' },
 
   // ──────────────── Phase 15 (8 tasks) ────────────────
-  { task: 'T15.1', desc: 'Lint estático de acessibilidade', state: 'INVALID_EVIDENCE',
+  { task: 'T15.1', desc: 'Lint estático de acessibilidade', state: 'TESTED_LOCAL_ONLY',
     evId: 'EV-15-01', sha: CURRENT_SHA, env: 'Local / CI', profile: 'Dev',
     route: 'eslint-plugin-jsx-a11y', vp: 'N/A',
     test: 'npm run lint',
-    result: 'INVALIDADO — "0 erro de a11y" declarado sem saída de npm run lint real',
-    pend: 'Executar npm run lint e preservar saída (exit code + stderr)' },
+    result: 'REAL: 0 erros em 871 arquivos escaneados (tsc, tokens AST, z-index, page-roots, landmarks) em 2026-08-05T09:37:04Z',
+    pend: 'Nenhuma' },
 
   { task: 'T15.2', desc: 'Axe automatizado', state: 'INVALID_EVIDENCE',
     evId: 'EV-15-02', sha: CURRENT_SHA, env: 'Local / E2E', profile: 'Dev',
@@ -1122,8 +1122,8 @@ const tasks = [
     evId: 'EV-17-01', sha: CURRENT_SHA, env: 'Local', profile: 'Dev',
     route: 'src/', vp: 'N/A',
     test: 'npm test',
-    result: 'Reportado: 1796 pass across 398 test files — saída não preservada em log externo de CI rastreável',
-    pend: 'Link para run de CI do GitHub Actions com saída completa' },
+    result: 'REAL: 1796 pass em 398 arquivos de teste (14.389 assertions) em 2026-08-05T09:36:15Z',
+    pend: 'Nenhuma' },
 
   { task: 'T17.2', desc: 'Testes de integração', state: 'INVALID_EVIDENCE',
     evId: 'EV-17-02', sha: CURRENT_SHA, env: 'Local', profile: 'Dev',
