@@ -50,9 +50,10 @@ describe('buildTeamRanking', () => {
     expect(buildTeamRanking(rows, period, names)[0].total).toBe(1)
   })
 
-  it('conta venda sem canal apenas no total', () => {
-    const ranking = buildTeamRanking([sale('s1', null, 'o1')], period, names)
-    expect(ranking[0]).toMatchObject({ total: 1, showroom: 0, internet: 0, carteira: 0 })
+  it('separa venda sem canal em coluna própria, fechando com o total', () => {
+    const ranking = buildTeamRanking([sale('s1', null, 'o1'), sale('s1', 'internet', 'o2')], period, names)
+    expect(ranking[0]).toMatchObject({ total: 2, showroom: 0, internet: 1, carteira: 0, semCanal: 1 })
+    expect(ranking[0].showroom + ranking[0].internet + ranking[0].carteira + ranking[0].semCanal).toBe(ranking[0].total)
   })
 
   it('nomeia vendedor desconhecido sem inventar dado', () => {

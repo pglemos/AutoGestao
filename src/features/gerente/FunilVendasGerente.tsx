@@ -25,9 +25,14 @@ const TONE: Record<ChannelTone, { icon: string; pill: string; column: string }> 
 
 const CHANNEL_ORDER: FunnelChannel[] = ['Showroom', 'Internet', 'Carteira']
 
+/**
+ * Conversão só é exibida quando faz sentido estatístico: sem base (0) ou com
+ * saída maior que a entrada — típico de venda registrada sem o atendimento
+ * correspondente — devolve null e a tela mostra "—" em vez de fingir 100%.
+ */
 function percent(from: number, to: number) {
-  if (from <= 0) return null
-  return Math.min(100, Math.round((to / from) * 100))
+  if (from <= 0 || to > from) return null
+  return Math.round((to / from) * 100)
 }
 
 /** Maior perda relativa entre etapas consecutivas, considerando só etapas com base. */
@@ -185,7 +190,7 @@ export default function FunilVendasGerente() {
                     <table className="w-full text-sm">
                       <thead className="bg-gray-50">
                         <tr>
-                          {['Vendedor', 'Showroom', 'Internet', 'Carteira', 'Total'].map(header => (
+                          {['Vendedor', 'Showroom', 'Internet', 'Carteira', 'Sem canal', 'Total'].map(header => (
                             <th key={header} className="px-3 py-3 text-left text-xs font-bold uppercase tracking-widest text-gray-500">
                               {header}
                             </th>
@@ -240,7 +245,7 @@ function ChannelRow({ channel }: { channel: ChannelFunnel }) {
   const ui = CHANNEL_UI[channel.channel]
   const tone = TONE[ui.tone]
   const Icon = ui.icon
-  const conversion = channel.generalConversion === null ? null : Math.round(channel.generalConversion)
+  const conversion = percent(channel.steps[0]?.value ?? 0, channel.steps[channel.steps.length - 1]?.value ?? 0)
 
   return (
     <div className="rounded-xl border border-gray-100 p-mx-sm">
@@ -308,6 +313,7 @@ function RankingRow({ row, position }: { row: TeamRankingRow; position: number }
       <td className={cn('px-3 py-3 text-center font-bold tabular-nums', TONE.emerald.column)}>{row.showroom}</td>
       <td className={cn('px-3 py-3 text-center font-bold tabular-nums', TONE.sky.column)}>{row.internet}</td>
       <td className={cn('px-3 py-3 text-center font-bold tabular-nums', TONE.amber.column)}>{row.carteira}</td>
+      <td className="px-3 py-3 text-center font-bold tabular-nums text-gray-500">{row.semCanal}</td>
       <td className="px-3 py-3 text-center font-bold tabular-nums text-gray-800">{row.total}</td>
     </tr>
   )

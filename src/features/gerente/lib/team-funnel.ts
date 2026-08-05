@@ -23,6 +23,8 @@ export type TeamRankingRow = {
   showroom: number
   internet: number
   carteira: number
+  /** Vendas registradas sem canal de origem — sem elas a soma das colunas não fecha com o total. */
+  semCanal: number
   total: number
 }
 
@@ -83,8 +85,9 @@ const CHANNEL_FIELD: Record<FunnelChannel, keyof Pick<TeamRankingRow, 'showroom'
 }
 
 /**
- * Vendas por vendedor e por canal no período. Vendas sem canal registrado
- * entram apenas no total — inventar um canal distorceria a leitura por origem.
+ * Vendas por vendedor e por canal no período. Vendas sem canal registrado vão
+ * para a coluna "Sem canal" — inventar uma origem distorceria a leitura, e
+ * omitir faria a soma das colunas não fechar com o total.
  */
 export function buildTeamRanking(
   rows: FunnelRow[],
@@ -103,10 +106,12 @@ export function buildTeamRanking(
       showroom: 0,
       internet: 0,
       carteira: 0,
+      semCanal: 0,
       total: 0,
     }
     const channel = normalizeChannel(row)
     if (channel) entry[CHANNEL_FIELD[channel]] += 1
+    else entry.semCanal += 1
     entry.total += 1
     bySeller.set(sellerId, entry)
   }
