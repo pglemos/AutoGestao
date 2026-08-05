@@ -1,12 +1,49 @@
 import { useCallback, useMemo, useState } from 'react'
 import { format, parseISO, endOfMonth } from 'date-fns'
-import { RefreshCw, Save, Target, Trash2, TrendingUp, Users, ShoppingCart } from 'lucide-react'
+import { AlertTriangle, ArrowDown, Minus, RefreshCw, Save, Sparkles, Target, Trash2, TrendingUp, Users, ShoppingCart } from 'lucide-react'
 import { toast } from '@/lib/toast'
 import { useAuth, isPerfilInternoMx } from '@/hooks/useAuth'
 import { useSellersByStore } from '@/hooks/useStores'
 import { useStoreMetaRules } from '@/hooks/useGoals'
 import { useOfficialSellerPerformance } from '@/hooks/useOfficialSellerPerformance'
 import { useSellerGoals } from '@/hooks/useSellerGoals'
+import {
+  attainmentOf,
+  buildSellerGoalRecommendation,
+  classifySellerGoal,
+  countSellerGoalStatuses,
+  sumSellerGoals,
+  type SellerGoalRow,
+} from './seller-goal-insights'
+
+const STATUS_CARDS = [
+  { key: 'acima', label: 'Acima da meta', icon: TrendingUp, surface: 'border-emerald-100 bg-emerald-50', text: 'text-emerald-600', value: 'text-emerald-700' },
+  { key: 'no_ritmo', label: 'No ritmo', icon: Minus, surface: 'border-sky-100 bg-sky-50', text: 'text-sky-600', value: 'text-sky-700' },
+  { key: 'risco', label: 'Risco', icon: AlertTriangle, surface: 'border-amber-100 bg-amber-50', text: 'text-amber-600', value: 'text-amber-700' },
+  { key: 'critico', label: 'Crítico', icon: ArrowDown, surface: 'border-red-100 bg-red-50', text: 'text-red-600', value: 'text-red-700' },
+] as const
+
+const RECOMMENDATION_TONE = {
+  atencao: 'border-amber-200 bg-amber-50 text-amber-700',
+  risco: 'border-red-200 bg-red-50 text-red-700',
+  positivo: 'border-emerald-200 bg-emerald-50 text-emerald-700',
+} as const
+
+const PROGRESS_TONE = {
+  acima: 'bg-emerald-500',
+  no_ritmo: 'bg-sky-500',
+  risco: 'bg-amber-500',
+  critico: 'bg-red-500',
+  sem_meta: 'bg-gray-300',
+} as const
+
+const ATTAINMENT_TONE = {
+  acima: 'text-emerald-600',
+  no_ritmo: 'text-sky-600',
+  risco: 'text-amber-600',
+  critico: 'text-red-600',
+  sem_meta: 'text-gray-400',
+} as const
 
 interface SellerGoalsEditorProps {
   storeId: string | null
@@ -101,6 +138,36 @@ export function SellerGoalsEditor({ storeId, storeName }: SellerGoalsEditorProps
     setHasChanges(true)
   }, [])
 
+  /** "Aplicar a todos" do Base44: preenche o campo de todos sem salvar sozinho. */
+  const handleApplyToAll = useCallback((value: string) => {
+    const parsed = Number(value.replace(/\D/g, ''))
+    if (!Number.isFinite(parsed) || parsed < 0) return
+    const next: Record<string, string> = {}
+    for (const seller of sellers) next[seller.id] = String(parsed)
+    setEdits(next)
+    setHasChanges(true)
+  }, [sellers])
+
+  /**
+   * As linhas dos insights usam a meta que está no campo (edição em andamento),
+   * não a salva — é o que o gerente enxerga enquanto simula o rateio.
+   */
+  const insightRows: SellerGoalRow[] = useMemo(() => sellers.map(seller => {
+    const currentGoal = goals[seller.id] ?? evenShare
+    const editValue = edits[seller.id]
+    const parsed = editValue === undefined ? currentGoal : Number(editValue.replace(/\D/g, ''))
+    return {
+      id: seller.id,
+      name: seller.name || 'Vendedor',
+      realized: sellerPerformances[seller.id]?.realized ?? 0,
+      goal: Number.isFinite(parsed) ? parsed : 0,
+    }
+  }), [sellers, goals, evenShare, edits, sellerPerformances])
+
+  const statusCounts = useMemo(() => countSellerGoalStatuses(insightRows), [insightRows])
+  const recommendation = useMemo(() => buildSellerGoalRecommendation(insightRows), [insightRows])
+  const totals = useMemo(() => sumSellerGoals(insightRows), [insightRows])
+
   const isLoading = sellersLoading || rulesLoading || goalsLoading || perfLoading
 
   if (!storeId) {
@@ -181,6 +248,54 @@ export function SellerGoalsEditor({ storeId, storeName }: SellerGoalsEditorProps
           </div>
         </div>
 
+        {sellers.length > 0 && (
+          <>
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4" aria-label="Situação das metas individuais">
+              {STATUS_CARDS.map(card => {
+                const Icon = card.icon
+                return (
+                  <div key={card.key} className={`rounded-xl border px-3 py-3 ${card.surface}`}>
+                    <div className="flex items-center gap-1.5">
+                      <Icon size={14} className={card.text} />
+                      <span className={`text-xs font-medium ${card.text}`}>{card.label}</span>
+                    </div>
+                    <p className={`mt-1 text-2xl font-bold ${card.value}`}>{statusCounts[card.key]}</p>
+                  </div>
+                )
+              })}
+            </div>
+
+            {recommendation && (
+              <div className={`flex items-start gap-2.5 rounded-xl border px-4 py-3 ${RECOMMENDATION_TONE[recommendation.tone]}`}>
+                <Sparkles size={16} className="mt-0.5 shrink-0" />
+                <div>
+                  <p className="text-sm font-semibold">{recommendation.title}</p>
+                  <p className="mt-0.5 text-xs opacity-90">{recommendation.text}</p>
+                </div>
+              </div>
+            )}
+
+            {canEdit && (
+              <div className="flex flex-wrap items-center gap-2 rounded-xl border border-emerald-100 bg-emerald-50 px-4 py-2.5">
+                <label htmlFor="seller-goals-apply-all" className="text-xs font-medium text-emerald-700">Aplicar a todos:</label>
+                <input
+                  id="seller-goals-apply-all"
+                  type="number"
+                  min={0}
+                  placeholder="Ex: 8"
+                  onKeyDown={event => {
+                    if (event.key !== 'Enter') return
+                    event.preventDefault()
+                    handleApplyToAll((event.target as HTMLInputElement).value)
+                  }}
+                  className="w-24 rounded-lg border border-emerald-200 px-2 py-1 text-xs outline-none focus:ring-2 focus:ring-emerald-500"
+                />
+                <span className="text-xs text-emerald-600">vendas/mês e pressione Enter</span>
+              </div>
+            )}
+          </>
+        )}
+
         {/* Tabela de metas */}
         <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
           <div className="overflow-x-auto">
@@ -204,11 +319,13 @@ export function SellerGoalsEditor({ storeId, storeName }: SellerGoalsEditorProps
                     </td>
                   </tr>
                 ) : (
-                  sellers.map((seller) => {
+                  sellers.map((seller, index) => {
                     const perf = sellerPerformances[seller.id]
                     const realized = perf?.realized ?? 0
                     const currentGoal = goals[seller.id] ?? evenShare
-                    const attainment = currentGoal > 0 ? Math.round((realized / currentGoal) * 100) : 0
+                    const insightRow = insightRows[index]
+                    const attainment = attainmentOf(insightRow)
+                    const status = classifySellerGoal(insightRow)
                     const editValue = edits[seller.id] !== undefined ? edits[seller.id] : String(currentGoal)
 
                     return (
@@ -223,13 +340,16 @@ export function SellerGoalsEditor({ storeId, storeName }: SellerGoalsEditorProps
                           {currentGoal}
                         </td>
                         <td className="whitespace-nowrap px-4 py-3 text-right">
-                          <span className={`inline-block rounded-lg px-2 py-1 text-xs font-medium ${
-                            attainment >= 100 ? 'bg-emerald-100 text-emerald-700'
-                            : attainment >= 50 ? 'bg-amber-100 text-amber-700'
-                            : 'bg-red-100 text-red-700'
-                          }`}>
-                            {attainment}%
-                          </span>
+                          {attainment === null ? (
+                            <span className="text-xs text-slate-400">—</span>
+                          ) : (
+                            <div className="flex flex-col items-end gap-1">
+                              <span className={`text-xs font-semibold ${ATTAINMENT_TONE[status]}`}>{attainment}%</span>
+                              <div className="h-1.5 w-20 overflow-hidden rounded-full bg-slate-100">
+                                <div className={`h-full rounded-full ${PROGRESS_TONE[status]}`} style={{ width: `${Math.min(100, attainment)}%` }} />
+                              </div>
+                            </div>
+                          )}
                         </td>
                         {canEdit && (
                           <td className="whitespace-nowrap px-4 py-3 text-right">
@@ -248,6 +368,26 @@ export function SellerGoalsEditor({ storeId, storeName }: SellerGoalsEditorProps
                   })
                 )}
               </tbody>
+              {sellers.length > 0 && (
+                <tfoot>
+                  <tr className="border-t-2 border-slate-100 bg-slate-50 font-semibold text-slate-700">
+                    <td className="px-4 py-3">Total da equipe</td>
+                    <td className="px-4 py-3 text-right">{totals.realized}</td>
+                    <td className="px-4 py-3 text-right">{totals.goal}</td>
+                    <td className="px-4 py-3 text-right">
+                      <span className={
+                        totals.attainment === null ? 'text-slate-400'
+                          : totals.attainment >= 100 ? 'text-emerald-600'
+                            : totals.attainment >= 80 ? 'text-amber-600'
+                              : 'text-red-600'
+                      }>
+                        {totals.attainment === null ? '—' : `${totals.attainment}%`}
+                      </span>
+                    </td>
+                    {canEdit && <td />}
+                  </tr>
+                </tfoot>
+              )}
             </table>
           </div>
         </div>
