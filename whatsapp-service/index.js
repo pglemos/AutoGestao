@@ -59,7 +59,6 @@ const client = new Client({
 });
 
 client.on('qr', async (qr) => {
-    console.log('QR RECEIVED - Displaying in frontend');
     qrCodeData = qr;
     try {
         qrImage = await qrcode.toDataURL(qr);
