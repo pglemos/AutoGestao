@@ -1,89 +1,64 @@
-import { useMemo } from 'react'
-import { ChevronRight, Filter, Users, Phone, MapPin, Trophy, TrendingUp, TrendingDown } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import { useMemo, useState } from 'react'
+import { ChevronRight, Filter, Globe2, TrendingDown, Trophy, Users, Warehouse } from 'lucide-react'
+import { Typography } from '@/components/atoms/Typography'
+import { Card } from '@/components/molecules/Card'
+import { PageHeading } from '@/components/molecules/PageHeading'
 import { PageCanvas } from '@/design-system/page'
+import { cn } from '@/lib/utils'
+import type { ChannelFunnel, FunnelChannel } from '@/features/crm/lib/funil-vendas-diagnostico'
+import { TEAM_PERIOD_LABELS, useTeamFunnel, type TeamPeriodKey } from '@/features/gerente/hooks/useTeamFunnel'
+import type { TeamRankingRow } from '@/features/gerente/lib/team-funnel'
 
-type Tone = 'info' | 'success' | 'warning' | 'purple'
+type ChannelTone = 'emerald' | 'sky' | 'amber'
 
-type FunnelStage = {
-  label: string
-  value: number
-  rate?: number
+const CHANNEL_UI: Record<FunnelChannel, { description: string; icon: typeof Users; tone: ChannelTone }> = {
+  Showroom: { description: 'Tráfego espontâneo na loja', icon: Warehouse, tone: 'emerald' },
+  Internet: { description: 'Leads digitais, parcerias e marketing', icon: Globe2, tone: 'sky' },
+  Carteira: { description: 'Clientes ativos e reativação', icon: Users, tone: 'amber' },
 }
 
-type FunnelRow = {
-  id: string
-  title: string
-  description: string
-  icon: React.ReactNode
-  tone: Tone
-  stages: FunnelStage[]
+const TONE: Record<ChannelTone, { icon: string; pill: string; column: string }> = {
+  emerald: { icon: 'bg-emerald-50 text-emerald-700', pill: 'bg-emerald-50 text-emerald-700', column: 'text-emerald-700' },
+  sky: { icon: 'bg-sky-50 text-sky-700', pill: 'bg-sky-50 text-sky-700', column: 'text-sky-700' },
+  amber: { icon: 'bg-amber-50 text-amber-700', pill: 'bg-amber-50 text-amber-700', column: 'text-amber-700' },
 }
 
-/**
- * O `pill` usa o tom `-text`, mais escuro, porque é texto pequeno sobre a
- * superfície do próprio estado — com o tom de preenchimento ficava no limite de
- * 4.5:1 e reprovava AA. Ícone e barra seguem no tom cheio, que é a cor do estado.
- */
-const tonePalette: Record<Tone, { iconBg: string; iconText: string; barBg: string; pill: string }> = {
-  info: { iconBg: 'bg-status-info-surface', iconText: 'text-status-info-text', barBg: 'bg-status-info', pill: 'bg-status-info-surface text-status-info-text' },
-  success: { iconBg: 'bg-status-success-surface', iconText: 'text-status-success-text', barBg: 'bg-status-success', pill: 'bg-status-success-surface text-status-success-text' },
-  warning: { iconBg: 'bg-status-warning-surface', iconText: 'text-status-warning-text', barBg: 'bg-status-warning', pill: 'bg-status-warning-surface text-status-warning-text' },
-  purple: { iconBg: 'bg-purple-100', iconText: 'text-purple-800', barBg: 'bg-purple-600', pill: 'bg-purple-100 text-purple-800' },
+const CHANNEL_ORDER: FunnelChannel[] = ['Showroom', 'Internet', 'Carteira']
+
+function percent(from: number, to: number) {
+  if (from <= 0) return null
+  return Math.min(100, Math.round((to / from) * 100))
 }
 
-const funnelData: FunnelRow[] = [
-  {
-    id: 'leads',
-    title: 'LEADS',
-    description: 'Origem digital, parcerias e marketing',
-    icon: <Users size={18} />,
-    tone: 'info',
-    stages: [
-      { label: 'Leads Recebidos', value: 320 },
-      { label: 'Agendamentos', value: 96, rate: 30 },
-      { label: 'Visitas', value: 58, rate: 18 },
-      { label: 'Vendas', value: 19, rate: 6 },
-    ],
-  },
-  {
-    id: 'carteira',
-    title: 'CARTEIRA',
-    description: 'Clientes ativos e reativação',
-    icon: <Phone size={18} />,
-    tone: 'success',
-    stages: [
-      { label: 'Contatos', value: 280 },
-      { label: 'Agendamentos', value: 84, rate: 30 },
-      { label: 'Visitas', value: 42, rate: 15 },
-      { label: 'Vendas', value: 12, rate: 4 },
-    ],
-  },
-  {
-    id: 'porta',
-    title: 'PORTA',
-    description: 'Tráfego espontâneo no showroom',
-    icon: <MapPin size={18} />,
-    tone: 'purple',
-    stages: [
-      { label: 'Atendimentos', value: 210 },
-      { label: 'Vendas', value: 7, rate: 3 },
-    ],
-  },
-]
-
-const teamRanking = [
-  { id: '1', name: 'João Silva', leads: 5, carteira: 2, porta: 1, total: 8 },
-  { id: '2', name: 'Marcos Lima', leads: 3, carteira: 1, porta: 1, total: 5 },
-  { id: '3', name: 'Ana Costa', leads: 3, carteira: 0, porta: 0, total: 3 },
-  { id: '4', name: 'Carlos Souza', leads: 2, carteira: 0, porta: 0, total: 2 },
-  { id: '5', name: 'Pedro Santos', leads: 0, carteira: 0, porta: 0, total: 0 },
-]
+/** Maior perda relativa entre etapas consecutivas, considerando só etapas com base. */
+function findBottleneck(channels: ChannelFunnel[]) {
+  let worst: { label: string; channel: FunnelChannel; conversion: number } | null = null
+  for (const channel of channels) {
+    channel.steps.forEach((step, index) => {
+      const next = channel.steps[index + 1]
+      if (!next || step.value < 3) return
+      const conversion = percent(step.value, next.value)
+      if (conversion === null) return
+      if (!worst || conversion < worst.conversion) {
+        worst = { label: `${step.label} → ${next.label}`, channel: channel.channel, conversion }
+      }
+    })
+  }
+  return worst as { label: string; channel: FunnelChannel; conversion: number } | null
+}
 
 export default function FunilVendasGerente() {
-  const totalSales = useMemo(() => funnelData.reduce((acc, r) => acc + (r.stages[r.stages.length - 1]?.value ?? 0), 0), [])
-  const totalLeads = useMemo(() => funnelData.reduce((acc, r) => acc + (r.stages[0]?.value ?? 0), 0), [])
-  const conversaoGeral = totalLeads > 0 ? Math.round((totalSales / totalLeads) * 100) : 0
+  const [periodKey, setPeriodKey] = useState<TeamPeriodKey>('current_month')
+  const { dashboard, ranking, loading, error, hasEvents } = useTeamFunnel(periodKey)
+
+  const totals = useMemo(() => {
+    const entrada = dashboard.channels.reduce((acc, channel) => acc + (channel.steps[0]?.value ?? 0), 0)
+    const vendas = dashboard.kpis.realizado
+    return { entrada, vendas, conversao: percent(entrada, vendas) }
+  }, [dashboard])
+
+  const bottleneck = useMemo(() => findBottleneck(dashboard.channels), [dashboard.channels])
+  const vendedoresComVenda = ranking.filter(row => row.total > 0).length
 
   return (
     <PageCanvas
@@ -91,153 +66,249 @@ export default function FunilVendasGerente() {
       width="dashboard"
       bottomClearance="navigation"
       id="funil-vendas"
-      className="flex min-h-0 flex-1 flex-col gap-6"
-      aria-label="Funil de Vendas"
+      className="flex min-h-0 flex-1 flex-col gap-mx-md"
+      aria-label="Funil Comercial"
     >
-      <header className="flex flex-col gap-1 sm:flex-row sm:items-center sm:justify-between">
-        <div className="min-w-0">
-          <h1 className="text-3xl font-bold tracking-tight md:text-4xl">Funil de Vendas</h1>
-          <p className="text-sm text-muted-foreground">Desempenho completo da equipe por canal de origem.</p>
-        </div>
-        <div className="flex flex-wrap gap-3">
-          <button type="button" className="flex h-11 items-center gap-2 rounded-lg border border-border bg-card px-4 text-sm font-bold text-muted-foreground shadow-sm hover:bg-muted/50 transition-all">
-            <Filter size={16} /> Filtros
-          </button>
-        </div>
-      </header>
+      <PageHeading
+        icon={Filter}
+        title="Funil Comercial"
+        subtitle="Desempenho da equipe por canal de origem, com dados registrados em eventos comerciais."
+        actions={(
+          <label className="inline-flex h-11 items-center gap-mx-sm rounded-xl border border-gray-100 bg-white px-mx-md text-sm font-semibold text-gray-800 shadow-sm">
+            <Filter size={16} aria-hidden="true" />
+            <select
+              className="bg-transparent font-semibold outline-none"
+              value={periodKey}
+              onChange={(event) => setPeriodKey(event.target.value as TeamPeriodKey)}
+              aria-label="Período do funil"
+            >
+              {Object.entries(TEAM_PERIOD_LABELS).map(([value, label]) => (
+                <option key={value} value={value}>{label}</option>
+              ))}
+            </select>
+          </label>
+        )}
+      />
 
-      <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-status-info text-white shadow-sm" aria-hidden="true">
-              <Users size={18} />
-            </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Total Leads</span>
-          </div>
-          <p className="mt-4 text-3xl font-bold tabular-nums">{totalLeads}</p>
-          <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">de todos os canais</p>
-        </div>
+      {error && (
+        <Card className="border border-amber-200 bg-amber-50 p-mx-md" role="status">
+          <Typography variant="p" className="text-sm font-semibold text-amber-800">
+            Não foi possível carregar os eventos comerciais: {error}
+          </Typography>
+        </Card>
+      )}
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-status-success text-white shadow-sm" aria-hidden="true">
-              <Trophy size={18} />
-            </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Vendas Realizadas</span>
-          </div>
-          <p className="mt-4 text-3xl font-bold tabular-nums">{totalSales}</p>
-          <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">fechadas no período</p>
-        </div>
+      {loading ? (
+        <Card className="border bg-white p-mx-lg">
+          <Typography variant="p" className="text-sm font-semibold text-gray-500">Carregando dados do funil…</Typography>
+        </Card>
+      ) : (
+        <>
+          <section className="grid grid-cols-1 gap-mx-sm sm:grid-cols-2 xl:grid-cols-4" aria-label="Indicadores do funil">
+            <MetricCard
+              icon={Users}
+              label="Entradas no funil"
+              value={String(totals.entrada)}
+              hint="atendimentos, oportunidades e qualificados"
+            />
+            <MetricCard
+              icon={Trophy}
+              label="Vendas realizadas"
+              value={String(totals.vendas)}
+              hint={dashboard.kpis.meta !== null ? `meta da loja: ${dashboard.kpis.meta}` : 'meta da loja não configurada'}
+              tone="emerald"
+            />
+            <MetricCard
+              icon={TrendingDown}
+              label="Conversão geral"
+              value={totals.conversao === null ? '—' : `${totals.conversao}%`}
+              hint="entrada → venda"
+            />
+            <MetricCard
+              icon={Trophy}
+              label="Vendedores com venda"
+              value={String(vendedoresComVenda)}
+              hint={`de ${ranking.length} com registro no período`}
+            />
+          </section>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-status-warning text-white shadow-sm" aria-hidden="true">
-              <TrendingUp size={18} />
-            </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Conversão Geral</span>
-          </div>
-          <p className="mt-4 text-3xl font-bold tabular-nums">{conversaoGeral}<span className="text-2xl">%</span></p>
-          <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">lead → venda</p>
-        </div>
+          {!hasEvents ? (
+            <Card className="border bg-white p-mx-lg text-center">
+              <Typography variant="h3" className="text-gray-800">Sem eventos comerciais no período</Typography>
+              <Typography variant="p" className="mt-1 text-sm font-semibold text-gray-500">
+                O funil é alimentado pelo Fechamento Diário e pela Carteira. Assim que a equipe registrar atendimentos,
+                agendamentos e vendas, os números aparecem aqui.
+              </Typography>
+            </Card>
+          ) : (
+            <section className="grid grid-cols-1 gap-mx-sm xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]" aria-label="Funil e ranking">
+              <Card className="border bg-white p-mx-md">
+                <Typography variant="h2" className="text-xl text-gray-800">Funil por canal</Typography>
+                <Typography variant="p" className="mt-1 text-sm font-semibold text-gray-500">
+                  Cada linha mostra o ciclo até a venda na origem correspondente.
+                </Typography>
 
-        <div className="rounded-xl border border-border bg-card p-4 shadow-sm">
-          <div className="flex items-center gap-3">
-            <span className="flex h-10 w-10 items-center justify-center rounded-full bg-purple-600 text-white shadow-sm" aria-hidden="true">
-              <TrendingDown size={18} />
-            </span>
-            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Gargalo Principal</span>
-          </div>
-          <p className="mt-4 text-3xl font-bold tabular-nums">Visita → Venda</p>
-          <p className="mt-2 text-xs font-bold text-muted-foreground normal-case">Conversão abaixo da meta</p>
-        </div>
-      </section>
-
-      <section className="grid grid-cols-1 gap-4 xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="text-xl font-bold">Funil por Canal</h2>
-          <p className="mt-1 text-xs font-bold text-muted-foreground normal-case">Cada linha representa o ciclo lead → venda por origem.</p>
-
-          <div className="mt-6 flex flex-col gap-4">
-            {funnelData.map((row) => {
-              const palette = tonePalette[row.tone]
-              return (
-                <div key={row.id} className="rounded-lg border border-border p-4">
-                  <div className="flex items-center justify-between gap-4">
-                    <div className="flex items-center gap-3">
-                      <span className={cn('flex h-10 w-10 items-center justify-center rounded-lg', palette.iconBg, palette.iconText)} aria-hidden="true">
-                        {row.icon}
-                      </span>
-                      <div>
-                        <span className={cn('text-xs font-bold uppercase tracking-widest', palette.iconText)}>{row.title}</span>
-                        <p className="text-xs font-bold text-muted-foreground normal-case">{row.description}</p>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className={cn('mt-4 grid gap-3', row.stages.length === 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-2')}>
-                    {row.stages.map((stage, i) => (
-                      <div key={stage.label} className="relative">
-                        {i > 0 && (
-                          <span className="absolute -left-0.5 top-1/2 hidden -translate-y-1/2 text-muted-foreground md:block" aria-hidden="true">
-                            <ChevronRight size={14} />
-                          </span>
-                        )}
-                        <div className="rounded-md bg-muted px-3 py-3">
-                          <span className="block truncate text-xs font-bold uppercase tracking-tight text-muted-foreground">{stage.label}</span>
-                          <div className="mt-0.5 flex items-baseline gap-2">
-                            <span className="font-mono text-lg font-bold text-foreground">{stage.value}</span>
-                            {typeof stage.rate === 'number' && (
-                              <span className={cn('inline-flex rounded-md px-1.5 py-0.5 text-xs font-bold tabular-nums', palette.pill)}>
-                                {stage.rate}%
-                              </span>
-                            )}
-                          </div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
+                <div className="mt-mx-md flex flex-col gap-mx-sm">
+                  {CHANNEL_ORDER.map((name) => {
+                    const channel = dashboard.channels.find(item => item.channel === name)
+                    return channel ? <ChannelRow key={name} channel={channel} /> : null
+                  })}
                 </div>
-              )
-            })}
-          </div>
-        </div>
 
-        <div className="rounded-xl border border-border bg-card p-6 shadow-sm">
-          <h2 className="text-xl font-bold">Ranking por Origem</h2>
-          <p className="mt-1 text-xs font-bold text-muted-foreground normal-case">Vendas da equipe por canal (mês).</p>
+                <div className="mt-mx-sm rounded-xl border border-gray-100 bg-gray-50 p-mx-sm">
+                  <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">
+                    Principal gargalo
+                  </Typography>
+                  <Typography variant="p" className="mt-1 text-sm font-semibold text-gray-800">
+                    {bottleneck
+                      ? `${bottleneck.channel}: ${bottleneck.label} converte ${bottleneck.conversion}%.`
+                      : 'Ainda não há volume suficiente para apontar um gargalo estatístico.'}
+                  </Typography>
+                </div>
+              </Card>
 
-          {/* tabIndex e role: uma região que rola precisa ser alcançável e
-              operável por teclado — sem isso quem não usa mouse não consegue
-              ver as colunas fora da viewport (§21). */}
-          <div className="mt-6 overflow-x-auto" tabIndex={0} role="region" aria-label="Vendas da equipe por canal">
-            <table className="w-full text-sm">
-              <thead className="bg-muted/60">
-                <tr>
-                  {['Vendedor', 'Leads', 'Carteira', 'Porta', 'Total'].map(h => (
-                    <th key={h} className="px-3 py-3 text-left text-xs font-bold uppercase tracking-widest text-muted-foreground">{h}</th>
-                  ))}
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-border">
-                {teamRanking.map((member, idx) => (
-                  <tr key={member.id}>
-                    <td className="px-3 py-3">
-                      <div className="flex items-center gap-2">
-                        <span className={cn('flex h-7 w-7 items-center justify-center rounded-full font-bold tabular-nums text-xs', idx === 0 ? 'bg-status-warning-surface text-status-warning' : 'bg-muted text-muted-foreground')}>{idx + 1}</span>
-                        <p className="truncate font-bold text-foreground">{member.name}</p>
-                      </div>
-                    </td>
-                    <td className="px-3 py-3 text-center font-mono tabular-nums text-status-info">{member.leads}</td>
-                    <td className="px-3 py-3 text-center font-mono tabular-nums text-status-success">{member.carteira}</td>
-                    <td className="px-3 py-3 text-center font-mono tabular-nums text-purple-700">{member.porta}</td>
-                    <td className="px-3 py-3 text-center font-mono tabular-nums font-bold">{member.total}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
+              <Card className="border bg-white p-mx-md">
+                <Typography variant="h2" className="text-xl text-gray-800">Ranking por origem</Typography>
+                <Typography variant="p" className="mt-1 text-sm font-semibold text-gray-500">
+                  Vendas da equipe por canal no período selecionado.
+                </Typography>
+
+                {/* tabIndex e role: região com rolagem horizontal precisa ser
+                    alcançável por teclado, senão as colunas fora da viewport
+                    ficam inacessíveis sem mouse. */}
+                <div className="mt-mx-md overflow-x-auto" tabIndex={0} role="region" aria-label="Vendas da equipe por canal">
+                  {ranking.length === 0 ? (
+                    <Typography variant="p" className="text-sm font-semibold text-gray-500">
+                      Nenhuma venda registrada no período.
+                    </Typography>
+                  ) : (
+                    <table className="w-full text-sm">
+                      <thead className="bg-gray-50">
+                        <tr>
+                          {['Vendedor', 'Showroom', 'Internet', 'Carteira', 'Total'].map(header => (
+                            <th key={header} className="px-3 py-3 text-left text-xs font-bold uppercase tracking-widest text-gray-500">
+                              {header}
+                            </th>
+                          ))}
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-gray-100">
+                        {ranking.map((row, index) => <RankingRow key={row.id} row={row} position={index + 1} />)}
+                      </tbody>
+                    </table>
+                  )}
+                </div>
+              </Card>
+            </section>
+          )}
+        </>
+      )}
     </PageCanvas>
+  )
+}
+
+function MetricCard({
+  icon: Icon,
+  label,
+  value,
+  hint,
+  tone = 'gray',
+}: {
+  icon: typeof Users
+  label: string
+  value: string
+  hint: string
+  tone?: 'gray' | 'emerald'
+}) {
+  return (
+    <Card className="border bg-white p-mx-md">
+      <div className="flex items-center gap-mx-sm">
+        <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600" aria-hidden="true">
+          <Icon size={18} strokeWidth={1.8} />
+        </span>
+        <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
+      </div>
+      <Typography variant="h2" className={cn('mt-mx-sm text-2xl tabular-nums', tone === 'emerald' ? 'text-emerald-700' : 'text-gray-800')}>
+        {value}
+      </Typography>
+      <Typography variant="p" className="mt-1 text-xs font-semibold text-gray-500">{hint}</Typography>
+    </Card>
+  )
+}
+
+function ChannelRow({ channel }: { channel: ChannelFunnel }) {
+  const ui = CHANNEL_UI[channel.channel]
+  const tone = TONE[ui.tone]
+  const Icon = ui.icon
+  const conversion = channel.generalConversion === null ? null : Math.round(channel.generalConversion)
+
+  return (
+    <div className="rounded-xl border border-gray-100 p-mx-sm">
+      <div className="flex items-center justify-between gap-mx-sm">
+        <div className="flex items-center gap-mx-sm">
+          <span className={cn('grid h-10 w-10 shrink-0 place-items-center rounded-xl', tone.icon)} aria-hidden="true">
+            <Icon size={18} strokeWidth={1.8} />
+          </span>
+          <div className="min-w-0">
+            <Typography variant="h3" className="text-base text-gray-800">{channel.channel}</Typography>
+            <Typography variant="p" className="text-xs font-semibold text-gray-500">{ui.description}</Typography>
+          </div>
+        </div>
+        <span className={cn('rounded-xl px-mx-sm py-1 text-xs font-bold tabular-nums', tone.pill)}>
+          {conversion === null ? 'sem base' : `${conversion}% conv.`}
+        </span>
+      </div>
+
+      <div className={cn('mt-mx-sm grid gap-mx-xs', channel.steps.length >= 4 ? 'grid-cols-2 md:grid-cols-4' : 'grid-cols-2')}>
+        {channel.steps.map((step, index) => {
+          const previous = channel.steps[index - 1]
+          const rate = previous ? percent(previous.value, step.value) : null
+          return (
+            <div key={step.key} className="relative">
+              {index > 0 && (
+                <span className="absolute -left-0.5 top-1/2 hidden -translate-y-1/2 text-gray-500 md:block" aria-hidden="true">
+                  <ChevronRight size={14} />
+                </span>
+              )}
+              <div className="rounded-xl bg-gray-50 px-3 py-3">
+                <span className="block truncate text-xs font-bold uppercase tracking-tight text-gray-500">{step.label}</span>
+                <div className="mt-0.5 flex items-baseline gap-2">
+                  <span className="text-lg font-bold tabular-nums text-gray-800">{step.value}</span>
+                  {rate !== null && (
+                    <span className={cn('inline-flex rounded-md px-1.5 py-0.5 text-xs font-bold tabular-nums', tone.pill)}>
+                      {rate}%
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function RankingRow({ row, position }: { row: TeamRankingRow; position: number }) {
+  return (
+    <tr>
+      <td className="px-3 py-3">
+        <div className="flex items-center gap-2">
+          <span
+            className={cn(
+              'grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold tabular-nums',
+              position === 1 ? 'bg-amber-50 text-amber-700' : 'bg-gray-50 text-gray-500',
+            )}
+          >
+            {position}
+          </span>
+          <p className="truncate font-bold text-gray-800">{row.name}</p>
+        </div>
+      </td>
+      <td className={cn('px-3 py-3 text-center font-bold tabular-nums', TONE.emerald.column)}>{row.showroom}</td>
+      <td className={cn('px-3 py-3 text-center font-bold tabular-nums', TONE.sky.column)}>{row.internet}</td>
+      <td className={cn('px-3 py-3 text-center font-bold tabular-nums', TONE.amber.column)}>{row.carteira}</td>
+      <td className="px-3 py-3 text-center font-bold tabular-nums text-gray-800">{row.total}</td>
+    </tr>
   )
 }
