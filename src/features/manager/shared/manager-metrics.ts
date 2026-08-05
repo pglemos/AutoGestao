@@ -1,12 +1,21 @@
 import type { CheckinWithTotals } from '@/types/database'
+import { isDraftClosing } from '@/features/checkin/lib/closing-operational-state'
 
-export type ManagerClosingStatus = 'Finalizado' | 'Pendente' | 'Fora do horário' | 'Aguardando aprovação'
+export type ManagerClosingStatus =
+  | 'Finalizado'
+  | 'Em andamento'
+  | 'Pendente'
+  | 'Fora do horário'
+  | 'Aguardando aprovação'
 
 export type AppointmentCoverageLabel = 'Ruim' | 'Regular' | 'Bom' | 'Excelente'
 
 export function getClosingStatus(checkin: CheckinWithTotals | undefined, pendingRegularization = false): ManagerClosingStatus {
   if (pendingRegularization) return 'Aguardando aprovação'
   if (!checkin) return 'Pendente'
+  // Com autosave, existir linha deixou de significar fechamento entregue: o
+  // rascunho é uma linha real com submission_status='draft'.
+  if (isDraftClosing(checkin)) return 'Em andamento'
   if (checkin.submitted_late || checkin.finalizado_apos_prazo || checkin.submission_status === 'late') return 'Fora do horário'
   return 'Finalizado'
 }

@@ -68,6 +68,10 @@ import {
   type HistoryRowState,
 } from "@/features/checkin/lib/checkin-history-state";
 import {
+  isDraftClosing,
+  resolveClosingOperationalState,
+} from "@/features/checkin/lib/closing-operational-state";
+import {
   CartesianGrid,
   Line,
   LineChart,
@@ -183,15 +187,29 @@ export default function ManagerDailyClosing() {
     () => getClosingRows(sellers, checkins, requests, storeRequests, date, isViewingToday),
     [sellers, checkins, requests, storeRequests, date, isViewingToday],
   );
-  const submitted = rows.filter((row) => row.checkin).length;
+  // Três coleções explícitas. Antes havia só "tem linha / não tem linha", e o
+  // rascunho do autosave entrava como fechamento entregue.
+  const officialRows = rows.filter((row) => row.closingState.countsAsSubmitted);
+  const draftRows = rows.filter((row) => row.closingState.state === "draft");
+  const notStartedRows = rows.filter((row) => row.closingState.state === "not_started");
+  const submitted = officialRows.length;
   const pending = rows.length - submitted;
-  const pendingRows = rows.filter((row) => !row.checkin);
+  // Rascunho continua sendo cobrança pendente: começou, mas não entregou.
+  const pendingRows = rows.filter((row) => !row.closingState.countsAsSubmitted);
   const reminderRows = reminderTarget
     ? pendingRows.filter(({ seller }) => seller.id === reminderTarget.id)
     : pendingRows;
   const movementState = getMovementState(rows.length, submitted);
-  const appointments = checkins.length
-    ? checkins.reduce((sum, item) => sum + sumNumericMetrics(item.agd_cart_today, item.agd_net_today), 0)
+
+  // Indicadores oficiais leem apenas fechamentos oficiais.
+  const officialCheckins = useMemo(
+    () => officialRows
+      .map((row) => row.checkin)
+      .filter((checkin): checkin is CheckinWithTotals => Boolean(checkin)),
+    [officialRows],
+  );
+  const appointments = officialCheckins.length
+    ? officialCheckins.reduce((sum, item) => sum + sumNumericMetrics(item.agd_cart_today, item.agd_net_today), 0)
     : null;
   const appointmentNeed = useMemo(() => {
     const goal = Number(metaRules?.monthly_goal || 0);
@@ -212,7 +230,7 @@ export default function ManagerDailyClosing() {
     return Math.ceil((goal / days.total) * appointmentsPerSale);
   }, [date, metaRules, metricHistoryCheckins]);
   const appointmentStatus = classifyAppointmentCoverage(appointments, appointmentNeed);
-  const disciplineValues = checkins
+  const disciplineValues = officialCheckins
     .map((item) => item.pontuacao_disciplina_final)
     .filter((value): value is number => typeof value === "number");
   const discipline = disciplineValues.length
@@ -229,7 +247,7 @@ export default function ManagerDailyClosing() {
       .map((point) => point.value)
       .filter((value): value is number => value !== null),
   );
-  const summary = useMemo(() => buildClosingSummary(checkins), [checkins]);
+  const summary = useMemo(() => buildClosingSummary(officialCheckins), [officialCheckins]);
 
   const refreshAll = useCallback(async () => {
     await Promise.all([
@@ -456,7 +474,11 @@ export default function ManagerDailyClosing() {
           <SummaryCard
             title="Pendentes Hoje"
             value={pending}
-            detail="fechamentos pendentes do dia"
+            detail={
+              draftRows.length
+                ? `${draftRows.length} em andamento · ${notStartedRows.length} não iniciados`
+                : "fechamentos pendentes do dia"
+            }
             icon={Clock3}
             tone="warning"
             status="—"
@@ -713,6 +735,10 @@ export function getClosingRows(
         checkin ?? undefined,
         requestsBySeller.has(seller.id),
       ),
+      // Estado canônico do fechamento. É `closingState.countsAsSubmitted` que
+      // decide o que entra nos indicadores oficiais — nunca `Boolean(checkin)`,
+      // que passou a incluir rascunho depois do autosave.
+      closingState: resolveClosingOperationalState({ checkin, latestRequest }),
       historyState,
       historyActions: historyState ? actionsForHistoryRowState(historyState) : [],
     };
@@ -1212,6 +1238,7 @@ function ClosingRow({
   onRemind: () => void;
   onCorrectLeads?: () => void;
 }) {
+  const isDraft = isDraftClosing(checkin);
   const appointments = checkin
     ? sumNumericMetrics(checkin.agd_cart_today, checkin.agd_net_today)
     : null;
@@ -1226,14 +1253,25 @@ function ClosingRow({
         <span className="flex items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">{initials(name)}</span><span className="font-medium text-gray-800">{name}</span></span>
       </td>
       <td className="px-4 py-3">
-        <span className={`inline-flex w-fit whitespace-nowrap rounded-[8px] px-2 py-1 text-xs font-medium ${status === "Finalizado" ? "bg-emerald-100 text-emerald-700" : status === "Pendente" ? "bg-amber-100 text-amber-700" : status === "Fora do horário" ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700"}`}>
+        <span className={`inline-flex w-fit whitespace-nowrap rounded-[8px] px-2 py-1 text-xs font-medium ${status === "Finalizado" ? "bg-emerald-100 text-emerald-700" : status === "Em andamento" ? "bg-gray-100 text-gray-700" :status === "Pendente" ? "bg-amber-100 text-amber-700" : status === "Fora do horário" ? "bg-red-100 text-red-700" : "bg-blue-100 text-blue-700"}`}>
           {status}
         </span>
+        {isDraft && (
+          // Rascunho continua visível para o gerente — não oficial não é o
+          // mesmo que invisível —, mas dito explicitamente.
+          <span className="mt-1 block text-[11px] font-medium text-gray-500">
+            Ainda não contabilizado nos indicadores oficiais
+          </span>
+        )}
       </td>
       <td className="px-4 py-3 text-gray-600">
-        {checkin?.submitted_at
-          ? format(parseISO(checkin.submitted_at), "HH:mm")
-          : "—"}
+        {isDraft
+          ? checkin?.last_draft_saved_at
+            ? `Último salvamento ${format(parseISO(checkin.last_draft_saved_at), "HH:mm")}`
+            : "Em preenchimento"
+          : checkin?.submitted_at
+            ? format(parseISO(checkin.submitted_at), "HH:mm")
+            : "—"}
       </td>
       <NumberCell
         value={

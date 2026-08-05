@@ -1,5 +1,16 @@
 import { eachDayOfInterval, format, parseISO } from 'date-fns'
 import type { CheckinWithTotals } from '@/types/database'
+import { isDraftClosing } from '@/features/checkin/lib/closing-operational-state'
+
+/**
+ * Rascunho não entra em métrica oficial. O filtro fica aqui, e não só em quem
+ * chama, porque estas funções são o ponto onde o número vira indicador de
+ * liderança — deixar a responsabilidade no chamador foi exatamente o que
+ * permitiu o rascunho vazar para a Central de Fechamento.
+ */
+export function onlyOfficialClosings(checkins: CheckinWithTotals[]): CheckinWithTotals[] {
+  return checkins.filter(checkin => !isDraftClosing(checkin))
+}
 
 export function averageDiscipline(values: number[]) {
   return values.length ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length) : null
@@ -19,9 +30,10 @@ export function sumNumericMetrics(...values: unknown[]): number {
 }
 
 export function buildDisciplineTrend(checkins: CheckinWithTotals[], start: string, end: string) {
+  const official = onlyOfficialClosings(checkins)
   return eachDayOfInterval({ start: parseISO(start), end: parseISO(end) }).map(day => {
     const key = format(day, 'yyyy-MM-dd')
-    const values = checkins
+    const values = official
       .filter(checkin => checkin.reference_date === key)
       .map(checkin => checkin.pontuacao_disciplina_final)
       .filter((value): value is number => typeof value === 'number')
@@ -30,8 +42,9 @@ export function buildDisciplineTrend(checkins: CheckinWithTotals[], start: strin
 }
 
 export function buildClosingSummary(checkins: CheckinWithTotals[]) {
+  const official = onlyOfficialClosings(checkins)
   const sumField = (field: keyof CheckinWithTotals) => {
-    const values = checkins
+    const values = official
       .map((checkin) => checkin[field])
       .filter((value): value is number => typeof value === 'number' && Number.isFinite(value))
     return values.length ? values.reduce((sum, value) => sum + value, 0) : null
