@@ -2,7 +2,7 @@
 
 > **Status:** `IN_PROGRESS — REVISÃO GRANULAR REAL, NÃO GERADA`  
 > **Fonte:** Consulta direta ao banco `fbhcmzzgwjdgkctlfvbo` via Supabase MCP  
-> **SHA de Referência:** `0e285d7fc6356830ff759632e28d0d2f229dcd28`  
+> **SHA de Referência:** `5a6090b0ba3d6ea86c2f6cd86f8366544452b5d3`  
 > **Timestamp da Consulta:** `2026-08-05T08:43:00Z`  
 > **Queries executadas:** `pg_proc`, `pg_namespace`, `pg_roles`, `pg_language`, `has_function_privilege()`
 

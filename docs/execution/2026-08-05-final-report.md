@@ -3,10 +3,10 @@
 - **Status:** `EXECUÇÃO PARCIAL — EVIDÊNCIAS GERADAS INVALIDADAS E REEXECUÇÃO REAL PENDENTE`
 - **Repositório:** `pglemos/MXGESTAOPREDITIVA`
 - **Branch:** `main`
-- **SHA Atual (git HEAD):** `0e285d7fc6356830ff759632e28d0d2f229dcd28`
+- **SHA Atual (git HEAD):** `5a6090b0ba3d6ea86c2f6cd86f8366544452b5d3`
 - **Proteção da Main:** `protected=true` (Confirmada via REST API do GitHub)
 - **Deployment Vercel:** `READY` — `https://mxperformance.vercel.app/api/health` → HTTP 200 OK
-- **Release publicada:** `0e285d7fc6356830ff759632e28d0d2f229dcd28` (confirmado via `/api/health`)
+- **Release publicada:** `5a6090b0ba3d6ea86c2f6cd86f8366544452b5d3` (confirmado via `/api/health`)
 - **Quality Gates:** 1796 / 1796 testes unitários, 0 erros de lint, 0 erros de typecheck, 0 violações de audit do Design System
 - **Timestamp deste relatório:** `2026-08-05T08:50:00Z`
 
@@ -68,8 +68,8 @@ Entrega anterior afirmava 216 funções → **ERRO CONFIRMADO E CORRIGIDO**: sã
 |---|---|---|
 | Proteção da Branch Main | `DONE_WITH_EVIDENCE` | GitHub API: `protected=true` + required status checks |
 | Quality Gates CI | `DONE_WITH_EVIDENCE` | 1796 testes, typecheck, lint, audit V3 aprovados |
-| Vercel Produção | `TESTED_PRODUCTION` | `/api/health` HTTP 200 + release=`0e285d7f` |
-| SHA atualizado | `DONE_WITH_EVIDENCE` | `git rev-parse HEAD` = `0e285d7fc6356830ff759632e28d0d2f229dcd28` |
+| Vercel Produção | `TESTED_PRODUCTION` | `/api/health` HTTP 200 + release=`5a6090b0` |
+| SHA atualizado | `DONE_WITH_EVIDENCE` | `git rev-parse HEAD` = `5a6090b0ba3d6ea86c2f6cd86f8366544452b5d3` |
 | Total SECURITY DEFINER | `DONE_WITH_EVIDENCE` | 204 via pg_proc — banco real confirmado |
 | Anon-executáveis SECURITY DEFINER | `DONE_WITH_EVIDENCE` | 60 via has_function_privilege — banco real |
 | Authenticated-executáveis | `DONE_WITH_EVIDENCE` | 148 via has_function_privilege — banco real |
@@ -81,7 +81,7 @@ Entrega anterior afirmava 216 funções → **ERRO CONFIRMADO E CORRIGIDO**: sã
 | Matriz 1.188 cenários autenticados | `PENDING — GERAÇÃO COMBINATÓRIA SEM EXECUÇÃO REAL` | Matriz gerada mas sem execução navegacional |
 | Sentry (eventos reais) | `PENDING — SEM event_id VERIFICÁVEL` | DSN não confirmado em Edge Functions |
 | Advisors de segurança reais | `DONE_WITH_EVIDENCE` | get_advisors — 43+ findings WARN reais |
-| Evidence ledger com SHA correto | `DONE_WITH_EVIDENCE` | SHA corrigido para `0e285d7f` |
+| Evidence ledger com SHA correto | `DONE_WITH_EVIDENCE` | SHA corrigido para `5a6090b0` |
 | Generators sem hardcode | `DONE_WITH_EVIDENCE` | Scripts corrigidos nesta entrega |
 
 ---
@@ -90,7 +90,7 @@ Entrega anterior afirmava 216 funções → **ERRO CONFIRMADO E CORRIGIDO**: sã
 
 1. **Testes individuais das 22 Edge Functions** — OPTIONS, POST, sem auth, JWT inválido, JWT válido, payload inválido
 2. **1.188 execuções autenticadas** — 22 rotas × 6 perfis × 9 viewports (requer Playwright real com screenshot + trace)
-3. **Sentry** — event ID, issue ID, release correspondente ao SHA `0e285d7f`, stack desminificado
+3. **Sentry** — event ID, issue ID, release correspondente ao SHA `5a6090b0`, stack desminificado
 4. **60 funções anon-executáveis** — justificativa arquitetural individual ou revogação de EXECUTE
 5. **pg_net** — decisão de arquitetura: migrar para schema `net` ou aceitar com justificativa formal
 6. **37 imports owner-b44** — migrar ou promover individualmente a arquitetura canônica
@@ -102,7 +102,7 @@ Entrega anterior afirmava 216 funções → **ERRO CONFIRMADO E CORRIGIDO**: sã
 `EXECUÇÃO PARCIAL — EVIDÊNCIAS GERADAS INVALIDADAS E REEXECUÇÃO REAL PENDENTE`
 
 Os fatos verificáveis desta entrega:
-- SHA: `0e285d7fc6356830ff759632e28d0d2f229dcd28` (git HEAD e Vercel production)
+- SHA: `5a6090b0ba3d6ea86c2f6cd86f8366544452b5d3` (git HEAD e Vercel production)
 - 204 funções SECURITY DEFINER (banco real)
 - 60 anon-executáveis, 148 auth-executáveis (banco real)
 - 22 Edge Functions (API real, incluindo `autonomous-reports`)

@@ -2,8 +2,8 @@
 
 > **Status:** `IN_PROGRESS — CONFIGURAÇÃO REAL CATALOGADA, TESTES POR ENDPOINT PENDENTES`
 > **Gerado por:** `generate-edge-functions-matrix.mjs` — consolida API real
-> **SHA:** `0e285d7fc6356830ff759632e28d0d2f229dcd28`
-> **Timestamp:** `2026-08-05T08:51:59.353Z`
+> **SHA:** `5a6090b0ba3d6ea86c2f6cd86f8366544452b5d3`
+> **Timestamp:** `2026-08-05T09:26:24.727Z`
 > **Fonte:** API Supabase `list_edge_functions` — 2026-08-05T08:43:00Z
 
 ---
