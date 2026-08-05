@@ -9,6 +9,14 @@ import {
   type PeriodRange,
 } from '@/features/crm/lib/funil-vendas-diagnostico'
 import { buildTeamFunnel, buildTeamRanking, collectSellerIds } from '@/features/gerente/lib/team-funnel'
+import {
+  isRealtimeFallbackStatus,
+  subscribeToTeamFunnelRealtime,
+  type TeamFunnelRealtimeStatus,
+} from './team-funnel-realtime'
+
+/** Sem Realtime, o funil recarrega a cada 30s enquanto a aba está visível. */
+const REALTIME_FALLBACK_POLL_MS = 30_000
 
 export type TeamPeriodKey = 'current_month' | 'last_month' | 'last_3_months'
 
@@ -109,6 +117,39 @@ export function useTeamFunnel(periodKey: TeamPeriodKey) {
     void load()
   }, [load])
 
+  // Realtime: o funil ficava congelado até um F5. A venda que o vendedor
+  // acabou de registrar precisa aparecer para a gestão sem recarregar a tela.
+  const [realtimeStatus, setRealtimeStatus] = useState<TeamFunnelRealtimeStatus>('CLOSED')
+  const [lastSyncedAt, setLastSyncedAt] = useState<Date | null>(null)
+
+  const reload = useCallback(async () => {
+    await load()
+    setLastSyncedAt(new Date())
+  }, [load])
+
+  useEffect(() => {
+    if (!initialized) return
+    return subscribeToTeamFunnelRealtime({
+      client: supabase as unknown as Parameters<typeof subscribeToTeamFunnelRealtime>[0]['client'],
+      storeId: effectiveStoreId,
+      tables: ['eventos_comerciais', 'agendamentos'],
+      onChange: () => { void reload() },
+      onStatus: setRealtimeStatus,
+    })
+  }, [effectiveStoreId, initialized, reload])
+
+  // Fallback: só entra quando o canal falha de verdade. Polling permanente
+  // custaria uma consulta a cada 30s para toda a gestão sem necessidade.
+  const realtimeDegraded = isRealtimeFallbackStatus(realtimeStatus)
+  useEffect(() => {
+    if (!realtimeDegraded || !initialized) return
+    const interval = setInterval(() => {
+      if (typeof document !== 'undefined' && document.visibilityState === 'hidden') return
+      void reload()
+    }, REALTIME_FALLBACK_POLL_MS)
+    return () => clearInterval(interval)
+  }, [realtimeDegraded, initialized, reload])
+
   // Meta da equipe = meta mensal da loja (regras_metas_loja.monthly_goal). Sem
   // regra configurada a meta fica nula e a tela mostra "não configurada" em vez
   // de arbitrar um número.
@@ -125,5 +166,16 @@ export function useTeamFunnel(periodKey: TeamPeriodKey) {
 
   const ranking = useMemo(() => buildTeamRanking(events, period, names), [events, names, period])
 
-  return { dashboard, ranking, period, loading, error, refetch: load, hasEvents: events.length > 0 }
+  return {
+    dashboard,
+    ranking,
+    period,
+    loading,
+    error,
+    refetch: reload,
+    hasEvents: events.length > 0,
+    realtimeStatus,
+    realtimeDegraded,
+    lastSyncedAt,
+  }
 }

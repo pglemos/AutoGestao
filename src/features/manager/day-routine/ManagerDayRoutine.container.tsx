@@ -6,6 +6,7 @@ import { ManagerHomeReturnLink } from '@/features/manager/home/ManagerHomeReturn
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
+import { subscribeToTeamFunnelRealtime } from '@/features/gerente/hooks/team-funnel-realtime'
 import {
   buildManagerRoutineNavigationPath,
   buildManagerRoutineTasks,
@@ -251,6 +252,19 @@ export function ManagerDayRoutine() {
   useEffect(() => {
     void fetchSources()
   }, [fetchSources])
+
+  // A Rotina do Dia é a tela que o gerente deixa aberta durante o expediente.
+  // Sem Realtime, um agendamento ou uma venda registrados agora só apareciam
+  // no próximo F5. Assinatura restrita à loja, com o mesmo debounce do funil.
+  useEffect(() => {
+    if (!storeId) return
+    return subscribeToTeamFunnelRealtime({
+      client: supabase as unknown as Parameters<typeof subscribeToTeamFunnelRealtime>[0]['client'],
+      storeId,
+      tables: ['agendamentos', 'eventos_comerciais'],
+      onChange: () => { void fetchSources() },
+    })
+  }, [storeId, fetchSources])
 
   const sourceData = useMemo(() => composeManagerRoutineSourceData({
     now,
