@@ -814,17 +814,6 @@
       "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
     },
     {
-      "path": "/vendas",
-      "kind": "route",
-      "surface": "protegida",
-      "redirect": null,
-      "canonicalRule": "/vendas",
-      "forbiddenRoles": [
-        "vendedor"
-      ],
-      "element": "<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
-    },
-    {
       "path": "/mentor",
       "kind": "route",
       "surface": "protegida",

@@ -56,7 +56,6 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'vendedor/terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'relatorio-matinal': { width: 'dashboard' },
   'minha-equipe': { width: 'dashboard' },
-  'vendas': { width: 'dashboard' },
   ranking: { width: 'dashboard' },
   classificacao: { width: 'dashboard' },
   mercado: { width: 'dashboard' },

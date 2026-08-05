@@ -64,7 +64,6 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/meta-loja', roles: MANAGEMENT_ROLES },
   { pattern: '/mentor', roles: MANAGEMENT_ROLES },
   { pattern: '/feedbacks-pdis', roles: MANAGEMENT_ROLES },
-  { pattern: '/vendas', roles: MANAGEMENT_ROLES },
   { pattern: '/configuracoes/operacional', roles: INTERNAL_ROLES },
   { pattern: '/relatorio-matinal', roles: INTERNAL_AND_LEADERS },
   { pattern: '/relatorios/performance-vendas', roles: INTERNAL_AND_LEADERS },

@@ -20,7 +20,7 @@ import type { Store, UserRole } from '@/types/database'
 import { format, parseISO } from 'date-fns'
 import type { ViewMode } from '../hooks/useDashboardLojaData'
 
-export type DashboardTab = 'performance' | 'metas' | 'equipe' | 'vendas'
+export type DashboardTab = 'performance' | 'metas' | 'equipe'
 
 type DashboardHeaderProps = {
   role: UserRole | null
@@ -49,7 +49,6 @@ const LOJA_TABS = [
   { key: 'performance' as const, label: 'Performance', mobileLabel: 'Perf.', icon: Globe },
   { key: 'metas' as const, label: 'Metas', mobileLabel: 'Metas', icon: Target },
   { key: 'equipe' as const, label: 'Equipe', mobileLabel: 'Equipe', icon: Users },
-  { key: 'vendas' as const, label: 'Vendas', mobileLabel: 'Vendas', icon: Receipt },
 ]
 
 const PERIODO_TABS = [

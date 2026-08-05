@@ -150,7 +150,6 @@ const ownerCommercialCategory = (mode: 'gestao' | 'acompanhamento'): NavCategory
     { label: 'Minha Equipe', path: '/minha-equipe', icon: <Users size={16} /> },
     { label: 'Meta da Loja', path: '/meta-loja', icon: <Target size={16} /> },
     { label: 'Mentor Gerencial', path: '/mentor', icon: <BrainCircuit size={16} /> },
-    { label: 'Vendas', path: '/vendas', icon: <TrendingUp size={16} /> },
     { label: 'Funil Comercial', path: '/funil-vendas', icon: <Filter size={16} /> },
     { label: 'Feedbacks e PDI', path: '/feedbacks-pdis', icon: <BookOpen size={16} /> },
     { label: 'Ranking', path: '/ranking', icon: <Trophy size={16} /> },

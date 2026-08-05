@@ -1,4 +1,4 @@
-import { act, cleanup, fireEvent, render, screen } from '@testing-library/react'
+import { act, cleanup, fireEvent, render, screen, within } from '@testing-library/react'
 import { afterEach, describe, expect, it, vi } from 'vitest'
 import { MemoryRouter } from 'react-router-dom'
 import { ManagerStoreGoalReference } from './ManagerStoreGoalReference'
@@ -46,12 +46,23 @@ describe('ManagerStoreGoalReference Base44 parity', () => {
   it('renders Base44 contribution and channel tables instead of generic summary cards', () => {
     render(<MemoryRouter><ManagerStoreGoalReference data={dashboardData()} /></MemoryRouter>)
 
+    // Escopado por tabela: a seção de Vendas Fechadas, que passou a viver nesta
+    // tela, também tem colunas "Vendedor" e "Vendas".
+    const [contribution, channels] = screen.getAllByRole('table')
+
     for (const header of ['Vendedor', 'Realizado', 'Meta prop.', 'Resultado', 'Faltam', 'Projeção', 'Consistência', 'Ação']) {
-      expect(screen.getByRole('columnheader', { name: header })).toBeTruthy()
+      expect(within(contribution).getByRole('columnheader', { name: header })).toBeTruthy()
     }
     for (const header of ['Canal', 'Oportunidades', 'Vendas', 'Conversão', 'Participação', 'Para 1 venda', 'Situação']) {
-      expect(screen.getByRole('columnheader', { name: header })).toBeTruthy()
+      expect(within(channels).getByRole('columnheader', { name: header })).toBeTruthy()
     }
+  })
+
+  it('traz as vendas fechadas da loja para dentro da Meta da Loja', () => {
+    render(<MemoryRouter><ManagerStoreGoalReference data={dashboardData()} /></MemoryRouter>)
+
+    expect(screen.getByRole('heading', { name: 'Vendas Fechadas' })).toBeTruthy()
+    expect(screen.getByPlaceholderText(/Buscar por cliente, vendedor ou veículo/)).toBeTruthy()
   })
 
   it('opens the three Base44 contextual actions for a seller', async () => {

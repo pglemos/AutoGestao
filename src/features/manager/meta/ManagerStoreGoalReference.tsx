@@ -16,6 +16,7 @@ import { getDiasInfo } from '@/lib/calculations'
 import type { Store } from '@/types/database'
 import { HelpTooltip } from '@/components/ui/HelpTooltip'
 import { SellerGoalsEditor } from '@/features/lojas/components/SellerGoalsEditor'
+import { VendasFechadasLoja } from '@/features/vendas-loja/VendasFechadasLoja'
 import { chartTokens } from '@/lib/charts/tokens'
 import { supabase } from '@/lib/supabase'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -337,6 +338,18 @@ export function ManagerStoreGoalReference({
         </article>
 
         <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"><div className="border-b border-gray-100 px-5 py-4"><h2 className="font-semibold text-gray-800">Resultado por Canal</h2><p className="mt-0.5 text-xs text-gray-400">Conciliação: {sales} vendas totais da loja.</p></div><div className="overflow-x-auto"><table className="w-full min-w-[780px] text-sm"><thead className="border-b border-gray-100 bg-gray-50"><tr>{['Canal', 'Oportunidades', 'Vendas', 'Conversão', 'Participação', 'Para 1 venda', 'Situação'].map((label) => <th key={label} className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</th>)}</tr></thead><tbody className="divide-y divide-gray-50">{channelRows.length === 0 ? <tr><td colSpan={7} className="px-4 py-8 text-center text-gray-400">Sem dados de canal no período.</td></tr> : channelRows.map((channel) => <tr key={channel.name} className="hover:bg-gray-50"><td className="px-4 py-3 font-medium text-gray-800">{channel.name}</td><td className="px-4 py-3 text-gray-700">{channel.opportunities ?? '—'}</td><td className="px-4 py-3 font-medium text-emerald-600">{channel.sales}</td><td className="px-4 py-3 text-gray-700">{channel.conversion === null ? '—' : `${channel.conversion}%`}</td><td className="px-4 py-3 text-gray-700">{channel.participation}%</td><td className="px-4 py-3 text-gray-700">{channel.perSale ?? '—'}</td><td className={`px-4 py-3 font-medium ${channel.situation === 'Bom' ? 'text-emerald-600' : channel.situation === 'Regular' ? 'text-amber-600' : channel.situation === 'Ruim' ? 'text-red-600' : 'text-gray-400'}`}>{channel.situation ?? '—'}</td></tr>)}</tbody></table></div></article>
+        {/*
+          Vendas fechadas moraram numa rota própria (`/vendas`) até 2026-08-05.
+          O lugar delas é aqui: são a evidência granular do realizado que os
+          cards acima resumem, e cancelar uma venda muda a meta na mesma tela.
+        */}
+        <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+          <div className="border-b border-gray-100 px-5 py-4">
+            <h2 className="font-semibold text-gray-800">Vendas Fechadas</h2>
+            <p className="mt-0.5 text-xs text-gray-400">Vendas registradas pela equipe, com opção de cancelamento.</p>
+          </div>
+          <VendasFechadasLoja storeId={data.selectedStoreId} />
+        </article>
       </div>
 
       {goalsOpen && (

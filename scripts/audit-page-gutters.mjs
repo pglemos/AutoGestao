@@ -36,7 +36,7 @@ const PERFIS = [
   {
     nome: 'gerente',
     email: process.env.E2E_MANAGER_EMAIL || 'gerente@mxgestaopreditiva.com.br',
-    rotas: ['/home', '/minha-equipe', '/rotina-equipe', '/vendas', '/plano-acao', '/feedbacks', '/ranking', '/relatorios', '/mentor-comercial', '/notificacoes'],
+    rotas: ['/home', '/minha-equipe', '/rotina-equipe', '/plano-acao', '/feedbacks', '/ranking', '/relatorios', '/mentor-comercial', '/notificacoes'],
   },
   {
     nome: 'dono',
