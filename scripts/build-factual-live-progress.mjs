@@ -1,0 +1,37 @@
+import fs from 'node:fs'
+import path from 'node:path'
+import { execSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
+
+const currentDir = path.dirname(fileURLToPath(import.meta.url))
+const projectRoot = path.resolve(currentDir, '..')
+
+const CURRENT_SHA = execSync('git rev-parse HEAD', { cwd: projectRoot }).toString().trim().slice(0, 8)
+
+let md = `# LIVE PROGRESS LOG (RETIFICADO) — 2026-08-05
+
+- **Status Geral:** \`EXECUÇÃO PARCIAL — EVIDÊNCIAS GERADAS INVALIDADAS E REEXECUÇÃO REAL PENDENTE\`
+- **Branch:** \`main\`
+- **SHA Atual:** \`${CURRENT_SHA}\`
+- **Proteção Main:** \`protected=true\`
+
+---
+
+## 1. RESUMO DOS PONTOS DE ATENÇÃO
+
+| ID Task | Descrição | Estado Atual | Observações / Ação Necessária |
+|---|---|---|---|
+| C0.1 | Audit Design System V3 | \`TESTED_LOCAL_ONLY\` | 0 violações em 339 arquivos |
+| C0.2 | Reconciliação Dono / PR 175 | \`TESTED_LOCAL_ONLY\` | Portado para main, PR 175 fechada, ADR-MX-005 publicado |
+| C0.3 | Eliminar Legado owner-b44 | \`IN_PROGRESS — 37 IMPORTS DE LEGADO ATIVO\` | 37 imports mapeados no grafo |
+| C0.4 | RLS 8 Tabelas | \`TESTED_LOCAL_ONLY\` | Migration 20260805120000 criada e RLS habilitado |
+| C0.5 | 204 SECURITY DEFINER | \`IN_PROGRESS — REVISÃO GRANULAR PENDENTE\` | search_path fixado, revisão por assinatura em andamento |
+| C0.6 | 22 Edge Functions | \`IN_PROGRESS — REEXECUÇÃO REAL PENDENTE\` | 22 funções listadas (incluindo autonomous-reports) |
+| C0.7 | Proteção Branch Main | \`DONE_WITH_EVIDENCE\` | protected=true via API GitHub |
+| C0.8 | Limpeza Branches Remotas | \`DONE_WITH_EVIDENCE\` | 23 branches deletadas remotamente |
+| C0.9 | Revalidação Deployment | \`TESTED_PRODUCTION\` | HTTP 200 OK no /api/health |
+| C0.10 | Catalogação Evidências | \`IN_PROGRESS\` | Ledger retificado e evidências artificiais invalidadas |
+`
+
+fs.writeFileSync(path.join(projectRoot, 'docs/execution/2026-08-05-live-progress.md'), md, 'utf8')
+console.log('Live progress retified.')
