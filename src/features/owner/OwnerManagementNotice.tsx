@@ -1,0 +1,54 @@
+import { AlertTriangle, BriefcaseBusiness, ShieldCheck } from 'lucide-react'
+import { useStoreManagementContext } from '@/hooks/useStoreManagementContext'
+
+type OwnerManagementNoticeProps = {
+  storeId?: string | null
+  managerEmail?: string | null
+}
+
+export function OwnerManagementNotice({ storeId, managerEmail }: OwnerManagementNoticeProps) {
+  const management = useStoreManagementContext({
+    storeId,
+    declaredManagerEmail: managerEmail,
+  })
+
+  if (management.loading) return null
+
+  if (management.queryFailed) {
+    return (
+      <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-amber-200 bg-amber-50 p-mx-md text-amber-900">
+        <AlertTriangle size={20} className="mt-0.5 shrink-0" aria-hidden="true" />
+        <div>
+          <p className="text-sm font-bold">Estrutura gerencial não confirmada</p>
+          <p className="mt-1 text-sm">O sistema manteve o acesso em acompanhamento para não ampliar permissões sem validação.</p>
+        </div>
+      </section>
+    )
+  }
+
+  if (management.hasActiveManager) {
+    return (
+      <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-emerald-200 bg-emerald-50 p-mx-md text-emerald-900">
+        <ShieldCheck size={20} className="mt-0.5 shrink-0" aria-hidden="true" />
+        <div>
+          <p className="text-sm font-bold">Gerente ativo identificado</p>
+          <p className="mt-1 text-sm">Você acompanha a gestão comercial como dono e pode intervir quando necessário.</p>
+        </div>
+      </section>
+    )
+  }
+
+  return (
+    <section role="status" className="flex items-start gap-mx-sm rounded-2xl border border-amber-200 bg-amber-50 p-mx-md text-amber-950">
+      <BriefcaseBusiness size={20} className="mt-0.5 shrink-0" aria-hidden="true" />
+      <div>
+        <p className="text-sm font-bold">Você responde pela gestão comercial desta loja</p>
+        <p className="mt-1 text-sm">
+          {management.managerRegistrationPending
+            ? 'O cadastro do gerente está pendente. Até o vínculo ser ativado, as rotinas gerenciais continuam sob sua responsabilidade.'
+            : 'Não existe gerente ativo cadastrado. As rotinas gerenciais e o acompanhamento da equipe ficam disponíveis no seu menu.'}
+        </p>
+      </div>
+    </section>
+  )
+}

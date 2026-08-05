@@ -46,11 +46,13 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
     })
   }, [store])
 
-  const {
-    hasActiveManager,
-    activeManagers,
-    loading: managementLoading,
-  } = useStoreManagementContext(store?.id)
+  const management = useStoreManagementContext({
+    storeId: store?.id,
+    declaredManagerEmail: store?.manager_email,
+    enabled: open && Boolean(store),
+  })
+  const hasActiveManager = management.hasActiveManager
+  const managementLoading = management.loading
 
   const registrationLink = store ? getPreRegistrationLink(store.name) : ''
 
@@ -253,7 +255,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
                   Gerente cadastrado
                 </Typography>
                 <Typography variant="tiny" tone="muted" className="mt-1 block font-bold">
-                  {activeManagers.map((manager) => manager.name || manager.email).join(', ')} — acesso ativo.
+                  {form.manager_email || store?.manager_email || 'Gestor'} — acesso ativo.
                   O dono mantém acesso de acompanhamento da operação comercial.
                 </Typography>
               </>

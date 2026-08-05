@@ -100,7 +100,7 @@
 | `/pdi` | route | protegida | `/desenvolvimento?tab=pdi` | `/pdi` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to="/desenvolvimento?tab=pdi" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />` |
 | `/pdi/:id/print` | route | protegida | — | `/pdi/:id/print` | — | `<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>` |
 | `/minhas-lojas` | route | protegida | — | `/minhas-lojas` | vendedor, gerente, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerStoresNetworkPage />} admin={<ForbiddenRoute />} /> </Suspense>` |
-| `/rotina` | route | protegida | — | `/rotina` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineSwitch />} admin={<RotinaGerente />} /> </Suspense>` |
+| `/rotina` | route | protegida | — | `/rotina` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} /> </Suspense>` |
 | `/painel` | route | protegida | — | `/painel` | — | `<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>` |
 | `/lojas` | route | protegida | — | `/lojas` | — | `<Suspense fallback={<Spinner />}><Lojas /></Suspense>` |
 | `/simulacao` | route | protegida | — | `/simulacao` | — | `<Suspense fallback={<Spinner />}><Simulacao /></Suspense>` |

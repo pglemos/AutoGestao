@@ -1,73 +1,96 @@
-import { useQuery } from '@tanstack/react-query'
+import { useEffect, useMemo, useState } from 'react'
 import { supabase } from '@/lib/supabase'
-import { useAuth } from '@/hooks/useAuth'
 import {
-  resolveStoreManagementContext,
-  type StoreLink,
-  type StoreManager,
-} from '@/lib/store-management-context'
+  resolveOwnerManagementContext,
+  type OwnerManagementContext,
+} from '@/lib/owner-management-context'
 
-/**
- * Contexto de gestão comercial da loja ativa.
- *
- * A decisão fica em `resolveStoreManagementContext` (pura, testada). Aqui só
- * buscamos os vínculos da loja e o flag de venda do próprio usuário.
- */
-
-export type { StoreManager }
-
-const EMPTY_LINKS: StoreLink[] = []
-
-type ManagerRow = {
-  user_id: string
-  role: string
-  is_active: boolean
-  ended_at: string | null
-  usuarios: { name?: string | null; email?: string | null } | Array<{ name?: string | null; email?: string | null }> | null
+type UseStoreManagementContextInput = {
+  storeId?: string | null
+  declaredManagerEmail?: string | null
+  enabled?: boolean
 }
 
-export function useStoreManagementContext(storeIdOverride?: string) {
-  const { storeId: authStoreId, profile } = useAuth()
-  const storeId = storeIdOverride ?? authStoreId ?? null
+type StoreManagementState = {
+  activeManagerCount: number | null
+  loading: boolean
+  error: string | null
+  queryFailed: boolean
+}
 
-  const { data, isLoading } = useQuery({
-    queryKey: ['store-management-context', storeId],
-    queryFn: async (): Promise<ManagerRow[]> => {
-      if (!storeId) return []
-      const { data, error } = await supabase
-        .from('vinculos_loja')
-        .select('user_id, role, is_active, ended_at, usuarios:user_id ( name, email )')
-        .eq('store_id', storeId)
-        .eq('role', 'gerente')
-      if (error || !data) return []
-      return data as unknown as ManagerRow[]
-    },
-    enabled: Boolean(storeId),
-    staleTime: 5 * 60 * 1000,
+export function useStoreManagementContext({
+  storeId,
+  declaredManagerEmail,
+  enabled = true,
+}: UseStoreManagementContextInput): OwnerManagementContext & {
+  loading: boolean
+  error: string | null
+} {
+  const [state, setState] = useState<StoreManagementState>({
+    activeManagerCount: null,
+    loading: Boolean(enabled && storeId),
+    error: null,
+    queryFailed: Boolean(enabled && !storeId),
   })
 
-  const rows = data ?? []
-  const links: StoreLink[] = rows.length
-    ? rows.map((row) => ({
-        userId: row.user_id,
-        role: row.role,
-        isActive: row.is_active,
-        endedAt: row.ended_at,
-      }))
-    : EMPTY_LINKS
+  useEffect(() => {
+    let cancelled = false
 
-  const context = resolveStoreManagementContext(storeId, links, Boolean(profile?.is_venda_loja))
+    if (!enabled) {
+      setState({ activeManagerCount: 0, loading: false, error: null, queryFailed: false })
+      return () => { cancelled = true }
+    }
 
-  const activeManagers: StoreManager[] = rows
-    .filter((row) => context.activeManagerIds.includes(row.user_id))
-    .map((row) => {
-      const user = Array.isArray(row.usuarios) ? row.usuarios[0] : row.usuarios
-      return {
-        userId: row.user_id,
-        name: user?.name ?? null,
-        email: user?.email ?? null,
-      }
-    })
+    if (!storeId) {
+      setState({
+        activeManagerCount: null,
+        loading: false,
+        error: 'Loja não identificada para verificar a gestão comercial.',
+        queryFailed: true,
+      })
+      return () => { cancelled = true }
+    }
 
-  return { ...context, activeManagers, loading: isLoading }
+    setState(current => ({ ...current, loading: true, error: null, queryFailed: false }))
+
+    void supabase
+      .from('vinculos_loja')
+      .select('id', { count: 'exact', head: true })
+      .eq('store_id', storeId)
+      .eq('role', 'gerente')
+      .eq('is_active', true)
+      .is('ended_at', null)
+      .then(({ count, error }) => {
+        if (cancelled) return
+        if (error) {
+          setState({
+            activeManagerCount: null,
+            loading: false,
+            error: 'Não foi possível confirmar se a loja possui gerente ativo.',
+            queryFailed: true,
+          })
+          return
+        }
+
+        setState({
+          activeManagerCount: count || 0,
+          loading: false,
+          error: null,
+          queryFailed: false,
+        })
+      })
+
+    return () => { cancelled = true }
+  }, [enabled, storeId])
+
+  const context = useMemo(
+    () => resolveOwnerManagementContext({
+      activeManagerCount: state.activeManagerCount,
+      declaredManagerEmail,
+      queryFailed: state.queryFailed,
+    }),
+    [declaredManagerEmail, state.activeManagerCount, state.queryFailed],
+  )
+
+  return { ...context, loading: state.loading, error: state.error }
 }

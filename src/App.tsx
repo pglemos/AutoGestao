@@ -49,7 +49,7 @@ const AppShell = lazy(() => import('@/components/AppShell'))
 const OwnerPlanoEstrategico = lazy(() => import('@/pages/owner/PlanoEstrategico'))
 const OwnerPlanoDeAcao = lazy(() => import('@/pages/owner/PlanoDeAcao'))
 const OwnerConsultoria = lazy(() => import('@/pages/owner/Consultoria'))
-const OwnerRoutineSwitch = lazy(() => import('@/features/owner/OwnerRoutineSwitch'))
+const OwnerRoutineRoute = lazy(() => import('@/features/owner/OwnerRoutineRoute'))
 const OwnerStoresNetworkPage = lazy(() => import('@/features/owner/OwnerStoresNetworkPage'))
 const OwnerCentralDeDecisoes = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.CentralDeDecisoes })))
 const OwnerDepartamentos = lazy(() => import('@/pages/owner/Placeholders').then(m => ({ default: m.DepartamentosVisaoGeral })))
@@ -457,7 +457,7 @@ export default function App() {
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerStoresNetworkPage />} admin={<ForbiddenRoute />} />
                 </Suspense>} />
                 <Route path="rotina" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineSwitch />} admin={<RotinaGerente />} />
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} />
                 </Suspense>} />
 
                 <Route path="painel" element={<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>} />

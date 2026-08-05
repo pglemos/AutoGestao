@@ -254,7 +254,8 @@ function LayoutContent() {
   const navigate = useNavigate()
   const location = useLocation()
   const [ownerLastUpdated, setOwnerLastUpdated] = React.useState(() => new Date())
-  const { commercialAccessMode } = useStoreManagementContext()
+  const storeManagement = useStoreManagementContext({ storeId: membership?.store_id })
+  const commercialAccessMode: 'gestao' | 'acompanhamento' = storeManagement.ownerAssumesManagement ? 'gestao' : 'acompanhamento'
 
   const storeDashboardPath = membership?.store?.name
     ? `/lojas/${slugify(membership.store.name)}`
