@@ -1,3 +1,4 @@
+-- DOWN
 -- Rollback for 20260805120000_harden_rls_unprotected_tables.sql
 -- Goal: Revert RLS hardening for internal/audit/backup tables.
 
