@@ -1,5 +1,5 @@
 import { serve } from 'https://deno.land/std@0.224.0/http/server.ts'
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
+import { createClient, type SupabaseClient } from 'https://esm.sh/@supabase/supabase-js@2.45.0'
 import { z } from 'https://esm.sh/zod@3.23.8'
 import { findSupabasePublishableKey, findSupabaseSecretKey } from '../_shared/api-keys.ts'
 import { corsHeaders } from '../_shared/cors.ts'
@@ -50,6 +50,122 @@ function jsonResponse(body: Record<string, unknown>, status = 200) {
 
 function genericFailure(status = 500) {
   return jsonResponse({ success: false, error: 'Não foi possível concluir a alteração da equipe.' }, status)
+}
+
+type EmailReleaseStatus = 'free' | 'released' | 'blocked' | 'error'
+
+function archivedEmailFor(userId: string) {
+  return `arquivado+${userId}@mx-arquivo.invalid`
+}
+
+/**
+ * Contas antigas (pilotos de abril, cadastros abandonados) não podem impedir que
+ * o mesmo e-mail volte a ser usado por um integrante novo. Quando o dono atual do
+ * e-mail não tem nenhum vínculo ativo de loja, o cadastro é arquivado: o e-mail é
+ * trocado por um tombstone em `auth.users` e em `usuarios`, e a conta fica
+ * marcada como absorvida pelo novo usuário — preservando auditoria sem bloquear.
+ * Só integrante realmente ativo em alguma loja bloqueia a operação.
+ */
+async function releaseEmailFromStaleAccount(
+  adminClient: SupabaseClient,
+  email: string,
+  targetUserId: string,
+  actorId: string,
+): Promise<{ status: EmailReleaseStatus }> {
+  const { data: owner, error: ownerError } = await adminClient
+    .from('usuarios')
+    .select('id, active, role')
+    .eq('email', email)
+    .neq('id', targetUserId)
+    .maybeSingle<{ id: string; active: boolean | null; role: string | null }>()
+
+  if (ownerError) {
+    console.error('manage-store-team email lookup failure', { email, ownerError })
+    return { status: 'error' }
+  }
+
+  let staleAuthUserId: string | null = null
+
+  if (owner) {
+    // Perfis internos MX não têm vínculo de loja: sem esta guarda, um e-mail de
+    // admin/consultor seria arquivado por qualquer gestor de loja.
+    if (internalRoles.includes(String(owner.role || '').toLowerCase() as typeof internalRoles[number])) {
+      return { status: 'blocked' }
+    }
+
+    const { count, error: linkError } = await adminClient
+      .from('vinculos_loja')
+      .select('id', { count: 'exact', head: true })
+      .eq('user_id', owner.id)
+      .eq('is_active', true)
+
+    if (linkError) {
+      console.error('manage-store-team email owner link lookup failure', { email, linkError })
+      return { status: 'error' }
+    }
+    if ((count ?? 0) > 0) return { status: 'blocked' }
+
+    const { error: archiveError } = await adminClient
+      .from('usuarios')
+      .update({
+        email: archivedEmailFor(owner.id),
+        active: false,
+        deactivated_at: new Date().toISOString(),
+        merged_into_id: targetUserId,
+        merged_at: new Date().toISOString(),
+        merge_reason: `E-mail ${email} liberado para o cadastro ${targetUserId} por ${actorId}.`,
+        updated_at: new Date().toISOString(),
+      })
+      .eq('id', owner.id)
+
+    if (archiveError) {
+      console.error('manage-store-team email archive failure', { email, ownerId: owner.id, archiveError })
+      return { status: 'error' }
+    }
+
+    staleAuthUserId = owner.id
+  } else {
+    // Conta órfã: existe em auth.users mas não em `usuarios`. O GoTrue rejeitaria
+    // o e-mail duplicado mesmo sem nenhum cadastro visível no painel.
+    const orphan = await findAuthUserByEmail(adminClient, email)
+    if (orphan === 'error') return { status: 'error' }
+    if (orphan && orphan !== targetUserId) staleAuthUserId = orphan
+  }
+
+  if (!staleAuthUserId) return { status: owner ? 'released' : 'free' }
+
+  const { error: authArchiveError } = await adminClient.auth.admin.updateUserById(staleAuthUserId, {
+    email: archivedEmailFor(staleAuthUserId),
+    email_confirm: true,
+  })
+
+  if (authArchiveError) {
+    const status = (authArchiveError as { status?: number }).status
+    // Sem conta de acesso correspondente não há o que liberar no GoTrue.
+    if (status !== 404) {
+      console.error('manage-store-team auth archive failure', { email, staleAuthUserId, authArchiveError })
+      return { status: 'error' }
+    }
+  }
+
+  return { status: 'released' }
+}
+
+async function findAuthUserByEmail(
+  adminClient: SupabaseClient,
+  email: string,
+): Promise<string | null | 'error'> {
+  for (let page = 1; page <= 20; page++) {
+    const { data, error } = await adminClient.auth.admin.listUsers({ page, perPage: 200 })
+    if (error) {
+      console.error('manage-store-team auth page lookup failure', { email, page, error })
+      return 'error'
+    }
+    const match = data.users.find((user) => (user.email || '').toLowerCase() === email)
+    if (match) return match.id
+    if (data.users.length < 200) return null
+  }
+  return null
 }
 
 initSentryForEdge()
@@ -145,23 +261,12 @@ serve((req) => withSentry('manage-store-team', req, async () => {
   const emailChanged = nextEmail !== before.email
 
   if (emailChanged) {
-    const { data: emailOwner, error: emailOwnerError } = await adminClient
-      .from('usuarios')
-      .select('id, active')
-      .eq('email', nextEmail)
-      .neq('id', payload.user_id)
-      .maybeSingle()
-
-    if (emailOwnerError) {
-      console.error('manage-store-team email lookup failure', { email: nextEmail, emailOwnerError })
-      return genericFailure()
-    }
-    if (emailOwner) {
+    const release = await releaseEmailFromStaleAccount(adminClient, nextEmail, payload.user_id, caller.user.id)
+    if (release.status === 'error') return genericFailure()
+    if (release.status === 'blocked') {
       return jsonResponse({
         success: false,
-        error: emailOwner.active
-          ? 'Este e-mail já está em uso por outro integrante ativo.'
-          : 'Este e-mail já pertence a um cadastro desativado. Reative aquele cadastro ou use outro e-mail.',
+        error: 'Este e-mail já está em uso por um integrante ativo em alguma loja.',
       }, 409)
     }
   }
