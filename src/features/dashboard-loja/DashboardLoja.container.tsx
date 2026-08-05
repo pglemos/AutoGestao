@@ -61,7 +61,9 @@ export function DashboardLoja() {
    * (`StoreTeamPanel`), que é a ferramenta operacional de vínculo de integrantes.
    */
   const isTeamKanban = activeTab === 'equipe' && (role === 'gerente' || isOwner)
-  const isManagerSection = (role === 'gerente' && activeTab !== 'performance') || isTeamKanban
+  /** A Meta da Loja tem cabeçalho próprio (período, unidade, atualizar, metas). */
+  const isStoreGoalScreen = activeTab === 'metas' && (role === 'gerente' || isOwner)
+  const isManagerSection = (role === 'gerente' && activeTab !== 'performance') || isTeamKanban || isStoreGoalScreen
 
   const handleTabChange = useCallback((tab: DashboardTab) => {
     const params = new URLSearchParams(location.search)
@@ -159,7 +161,7 @@ export function DashboardLoja() {
 
       {activeTab === 'metas' ? (
         role === 'gerente' || role === 'dono'
-          ? <SellerGoalsEditor storeId={selectedStoreId} storeName={data.metrics.storeName} />
+          ? <ManagerStoreGoalReference data={data} selectableStores={selectableStores} onStoreChange={setActiveStoreId} />
           : <>
               <StoreGoalsPanel storeId={selectedStoreId} storeName={data.metrics.storeName} />
               <div className="mt-6">

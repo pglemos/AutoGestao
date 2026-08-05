@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useState, type ComponentType, type ReactNode } from 'react'
 import { eachDayOfInterval, endOfMonth, format, isWeekend, parseISO } from 'date-fns'
 import { useNavigate } from 'react-router-dom'
-import { Activity, CalendarClock, CalendarDays, CheckCircle2, MessageSquarePlus, MoreVertical, RefreshCw, ShoppingCart, Target, TrendingUp, UserCircle, Wrench, Zap } from 'lucide-react'
+import { Activity, Building2, CalendarClock, CheckCircle2, Gauge, MessageSquarePlus, MoreVertical, RefreshCw, ShoppingCart, Target, TrendingUp, UserCircle, Wrench, X, Zap } from 'lucide-react'
 import {
   CartesianGrid,
   Legend,
@@ -13,6 +13,9 @@ import {
   YAxis,
 } from 'recharts'
 import { getDiasInfo } from '@/lib/calculations'
+import type { Store } from '@/types/database'
+import { HelpTooltip } from '@/components/ui/HelpTooltip'
+import { SellerGoalsEditor } from '@/features/lojas/components/SellerGoalsEditor'
 import { chartTokens } from '@/lib/charts/tokens'
 import { supabase } from '@/lib/supabase'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -54,11 +57,20 @@ const persistedHorizonByView: Record<Horizon, PersistedHorizon> = {
   mes: 'este_mes',
 }
 
-export function ManagerStoreGoalReference({ data }: { data: DashboardData }) {
+export function ManagerStoreGoalReference({
+  data,
+  selectableStores = [],
+  onStoreChange,
+}: {
+  data: DashboardData
+  selectableStores?: Store[]
+  onStoreChange?: (storeId: string) => void
+}) {
   const navigate = useNavigate()
   const { baseRole } = useAuth()
   const [month, setMonth] = useState(data.referenceDate.slice(0, 7))
   const [horizon, setHorizon] = useState<Horizon>('semana')
+  const [goalsOpen, setGoalsOpen] = useState(false)
   const [persistedPlans, setPersistedPlans] = useState<Partial<Record<PersistedHorizon, PersistedTargetPlan>>>({})
   const [targetPlanRefreshing, setTargetPlanRefreshing] = useState(false)
 
@@ -131,7 +143,12 @@ export function ManagerStoreGoalReference({ data }: { data: DashboardData }) {
   const sales = numberOrFallback(persistedMonth?.realized, fallbackSales)
   const proportionalGoal = numberOrFallback(persistedMonth?.proportional_goal, fallbackMetrics.proportionalGoal)
   const gap = numberOrFallback(persistedMonth?.monthly_gap, fallbackMetrics.gap)
-  const paceGap = Math.max(proportionalGoal - sales, 0)
+  /**
+   * Delta assinado contra a meta proporcional, como no Base44: positivo mostra
+   * quanto a loja está adiantada, negativo quanto está atrás. `paceGap` (só a
+   * parte negativa) segue alimentando o Plano de Sustentação.
+   */
+  const paceDelta = sales - Math.round(proportionalGoal)
   const projection = numberOrFallback(persistedMonth?.projected_sales, fallbackMetrics.projection)
   const dailyPace = numberOrFallback(persistedMonth?.required_pace, fallbackMetrics.dailyPace)
   const attainment = goal > 0 ? Math.round((sales / goal) * 100) : 0
@@ -257,18 +274,34 @@ export function ManagerStoreGoalReference({ data }: { data: DashboardData }) {
               <label className="text-xs text-gray-500">Período
                 <input type="month" value={month} onChange={(event) => changeMonth(event.target.value)} className="mt-1 block rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-emerald-500" />
               </label>
-              <button type="button" onClick={() => void handleRefresh()} disabled={data.isRefetching || targetPlanRefreshing} className="inline-flex h-[38px] items-center gap-1 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60">
+              {selectableStores.length > 1 && onStoreChange ? (
+                <label className="text-xs text-gray-500">
+                  <span className="flex items-center gap-1"><Building2 size={12} /> Unidade</span>
+                  <select
+                    aria-label="Unidade da meta"
+                    value={data.selectedStoreId || ''}
+                    onChange={(event) => onStoreChange(event.target.value)}
+                    className="mt-1 block min-w-[140px] rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500"
+                  >
+                    {selectableStores.map((store) => <option key={store.id} value={store.id}>{store.name}</option>)}
+                  </select>
+                </label>
+              ) : null}
+              <button type="button" onClick={() => void handleRefresh()} disabled={data.isRefetching || targetPlanRefreshing} className="inline-flex h-[38px] items-center gap-1 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-600 hover:bg-gray-50 disabled:opacity-60">
                 <RefreshCw size={15} className={data.isRefetching || targetPlanRefreshing ? 'animate-spin' : ''} /> Atualizar
+              </button>
+              <button type="button" data-tour="metas-individuais" onClick={() => setGoalsOpen(true)} className="inline-flex h-[38px] items-center gap-1 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700">
+                <Target size={15} /> Editar Metas
               </button>
             </div>
           </div>
         </header>
 
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-          <GoalCard icon={Target} label="Progresso da meta" tone="emerald">{goal > 0 ? <><strong className="text-2xl text-gray-800">{sales} <span className="text-base font-medium text-gray-400">de {goal}</span></strong><Progress value={attainment} /><CardFooter left={`${attainment}%`} right="atingido" tone={attainment >= 100 ? 'emerald' : attainment >= 50 ? 'amber' : 'red'} /></> : <EmptyGoalState />}</GoalCard>
-          <GoalCard icon={CalendarDays} label="Meta proporcional até hoje" tone="blue">{goal > 0 ? <><p className="text-sm text-gray-500">Meta proporcional: <b className="text-gray-700">{formatStoreGoalMetric(proportionalGoal)} vendas</b></p><p className="mt-1 text-sm text-gray-500">Realizado: <b className="text-gray-700">{sales}</b></p><p className={`mt-2 text-lg font-bold ${paceGap > 0 ? 'text-red-600' : 'text-emerald-600'}`}>{paceGap > 0 ? `−${formatStoreGoalMetric(paceGap)} abaixo do ritmo` : 'Dentro do ritmo'}</p></> : <EmptyGoalState />}</GoalCard>
-          <GoalCard icon={ShoppingCart} label="Faltam vender" tone="orange">{goal > 0 ? <><strong className="text-3xl text-gray-800">{formatStoreGoalMetric(gap)}</strong><p className="mt-1 text-sm text-gray-400">{gap === 1 ? 'venda' : 'vendas'}</p><p className="mt-2 text-xs text-gray-400">Para atingir a meta mensal</p></> : <EmptyGoalState />}</GoalCard>
-          <GoalCard icon={TrendingUp} label="Projeção e ritmo necessário" tone="violet">{goal > 0 ? <><strong className="text-2xl text-gray-800">{formatStoreGoalMetric(projection)} <span className="text-sm font-medium text-gray-400">vendas</span></strong><p className="text-sm font-medium text-violet-600">{projectedPct}% da meta</p><div className="mt-2 border-t border-gray-50 pt-2"><p className="mb-0.5 text-xs text-gray-400">Ritmo necessário:</p><p className="text-sm font-semibold text-gray-700">{persistedMonth?.pace_label || `${formatStoreGoalMetric(dailyPace)} ${dailyPace === 1 ? 'venda' : 'vendas'} por dia útil`}</p></div></> : <EmptyGoalState />}</GoalCard>
+          <GoalCard icon={Target} label="Progresso da meta" tone="emerald" help="Vendas realizadas no mês divididas pela meta mensal. Verde ≥ 100%, amarelo ≥ 50%, vermelho abaixo.">{goal > 0 ? <><strong className="text-2xl text-gray-800">{sales} <span className="text-base font-medium text-gray-400">de {goal}</span></strong><Progress value={attainment} /><CardFooter left={`${attainment}%`} right="atingido" tone={attainment >= 100 ? 'emerald' : attainment >= 50 ? 'amber' : 'red'} /></> : <EmptyGoalState />}</GoalCard>
+          <GoalCard icon={Gauge} label="Meta proporcional até hoje" tone="blue" help="Quanto a loja deveria ter vendido até hoje, considerando a meta mensal dividida pelos dias úteis. Comparado ao realizado mostra se o ritmo está acima ou abaixo.">{goal > 0 ? <><p className="text-sm text-gray-500">Meta proporcional: <b className="text-gray-700">{formatStoreGoalMetric(proportionalGoal)} vendas</b></p><p className="mt-1 text-sm text-gray-500">Realizado: <b className="text-gray-700">{sales}</b></p><p className={`mt-2 text-lg font-bold ${paceDelta >= 0 ? 'text-emerald-600' : 'text-red-600'}`}>{paceDelta >= 0 ? `+${paceDelta} acima do ritmo` : `${paceDelta} abaixo do ritmo`}</p></> : <EmptyGoalState />}</GoalCard>
+          <GoalCard icon={ShoppingCart} label="Faltam vender" tone="orange" help="Quantidade de vendas que ainda faltam para alcançar a meta mensal da loja.">{goal > 0 ? <><strong className="text-3xl text-gray-800">{formatStoreGoalMetric(gap)}</strong><p className="mt-1 text-sm text-gray-400">{gap === 1 ? 'venda' : 'vendas'}</p><p className="mt-2 text-xs text-gray-400">Para atingir a meta mensal</p></> : <EmptyGoalState />}</GoalCard>
+          <GoalCard icon={TrendingUp} label="Projeção e ritmo necessário" tone="violet" help="Projeção de fechamento do mês com base na média diária atual. O ritmo necessário indica quantas vendas/dia faltam para bater a meta.">{goal > 0 ? <><strong className="text-2xl text-gray-800">{formatStoreGoalMetric(projection)} <span className="text-sm font-medium text-gray-400">vendas</span></strong><p className="text-sm font-medium text-violet-600">{projectedPct}% da meta</p><div className="mt-2 border-t border-gray-50 pt-2"><p className="mb-0.5 text-xs text-gray-400">Ritmo necessário:</p><p className="text-sm font-semibold text-gray-700">{persistedMonth?.pace_label || `${formatStoreGoalMetric(dailyPace)} ${dailyPace === 1 ? 'venda' : 'vendas'} por dia útil`}</p></div></> : <EmptyGoalState />}</GoalCard>
         </div>
 
         <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
@@ -305,6 +338,36 @@ export function ManagerStoreGoalReference({ data }: { data: DashboardData }) {
 
         <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"><div className="border-b border-gray-100 px-5 py-4"><h2 className="font-semibold text-gray-800">Resultado por Canal</h2><p className="mt-0.5 text-xs text-gray-400">Conciliação: {sales} vendas totais da loja.</p></div><div className="overflow-x-auto"><table className="w-full min-w-[780px] text-sm"><thead className="border-b border-gray-100 bg-gray-50"><tr>{['Canal', 'Oportunidades', 'Vendas', 'Conversão', 'Participação', 'Para 1 venda', 'Situação'].map((label) => <th key={label} className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</th>)}</tr></thead><tbody className="divide-y divide-gray-50">{channelRows.length === 0 ? <tr><td colSpan={7} className="px-4 py-8 text-center text-gray-400">Sem dados de canal no período.</td></tr> : channelRows.map((channel) => <tr key={channel.name} className="hover:bg-gray-50"><td className="px-4 py-3 font-medium text-gray-800">{channel.name}</td><td className="px-4 py-3 text-gray-700">{channel.opportunities ?? '—'}</td><td className="px-4 py-3 font-medium text-emerald-600">{channel.sales}</td><td className="px-4 py-3 text-gray-700">{channel.conversion === null ? '—' : `${channel.conversion}%`}</td><td className="px-4 py-3 text-gray-700">{channel.participation}%</td><td className="px-4 py-3 text-gray-700">{channel.perSale ?? '—'}</td><td className={`px-4 py-3 font-medium ${channel.situation === 'Bom' ? 'text-emerald-600' : channel.situation === 'Regular' ? 'text-amber-600' : channel.situation === 'Ruim' ? 'text-red-600' : 'text-gray-400'}`}>{channel.situation ?? '—'}</td></tr>)}</tbody></table></div></article>
       </div>
+
+      {goalsOpen && (
+        <div
+          className="fixed inset-0 z-[140] flex items-start justify-center overflow-y-auto bg-black/40 p-4"
+          role="presentation"
+          onMouseDown={() => setGoalsOpen(false)}
+        >
+          <div
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="store-goal-seller-goals-title"
+            className="my-8 w-full max-w-4xl rounded-2xl bg-white p-6 shadow-xl"
+            onMouseDown={(event) => event.stopPropagation()}
+          >
+            <div className="mb-4 flex items-start justify-between gap-4">
+              <div className="flex items-center gap-2">
+                <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-100"><UserCircle size={18} className="text-emerald-600" /></span>
+                <div>
+                  <h2 id="store-goal-seller-goals-title" className="font-semibold text-gray-800">Metas Individuais dos Vendedores</h2>
+                  <p className="text-sm text-gray-500">Ajuste a meta de cada vendedor para o ciclo mensal atual e acompanhe o percentual atingido em tempo real.</p>
+                </div>
+              </div>
+              <button type="button" aria-label="Fechar metas individuais" onClick={() => setGoalsOpen(false)} className="p-1 text-gray-400 hover:text-gray-600">
+                <X size={18} />
+              </button>
+            </div>
+            <SellerGoalsEditor storeId={data.selectedStoreId} storeName={data.metrics.storeName} embedded />
+          </div>
+        </div>
+      )}
     </section>
   )
 }
@@ -321,9 +384,9 @@ function nullableNumber(value: number | string | null | undefined): number | nul
   return Number.isFinite(parsed) ? parsed : null
 }
 
-function GoalCard({ icon: Icon, label, tone, children }: { icon: typeof Target; label: string; tone: 'emerald' | 'blue' | 'orange' | 'violet'; children: ReactNode }) {
-  const tones = { emerald: 'bg-emerald-50 text-emerald-600', blue: 'bg-blue-50 text-blue-600', orange: 'bg-orange-50 text-orange-600', violet: 'bg-violet-50 text-violet-600' }
-  return <article className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"><div className="mb-4 flex items-center gap-2"><span className={`grid h-8 w-8 place-items-center rounded-lg ${tones[tone]}`}><Icon size={16} /></span><p className="text-xs font-medium uppercase tracking-wide text-gray-500">{label}</p></div>{children}</article>
+function GoalCard({ icon: Icon, label, tone, help, children }: { icon: typeof Target; label: string; tone: 'emerald' | 'blue' | 'orange' | 'violet'; help?: string; children: ReactNode }) {
+  const tones = { emerald: 'bg-emerald-100 text-emerald-600', blue: 'bg-blue-100 text-blue-600', orange: 'bg-orange-100 text-orange-600', violet: 'bg-purple-100 text-purple-600' }
+  return <article className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"><div className="mb-4 flex items-center gap-2"><span className={`grid h-8 w-8 place-items-center rounded-lg ${tones[tone]}`}><Icon size={16} /></span><p className="flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-gray-500">{label}<HelpTooltip text={help} /></p></div>{children}</article>
 }
 function Progress({ value }: { value: number }) { return <div className="mt-3 h-2 overflow-hidden rounded-full bg-gray-100"><div className={`h-full rounded-full ${value >= 80 ? 'bg-emerald-500' : value >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${Math.min(100, Math.max(0, value))}%` }} /></div> }
 function CardFooter({ left, right, tone }: { left: string; right: string; tone: 'emerald' | 'amber' | 'red' }) { const colors = { emerald: 'text-emerald-600', amber: 'text-amber-600', red: 'text-red-600' }; return <div className="mt-2 flex justify-between text-xs text-gray-400"><span>{right}</span><b className={colors[tone]}>{left}</b></div> }

@@ -48,9 +48,11 @@ const ATTAINMENT_TONE = {
 interface SellerGoalsEditorProps {
   storeId: string | null
   storeName?: string
+  /** Dentro do modal da Meta da Loja o título já vem do diálogo — evita repetir. */
+  embedded?: boolean
 }
 
-export function SellerGoalsEditor({ storeId, storeName }: SellerGoalsEditorProps) {
+export function SellerGoalsEditor({ storeId, storeName, embedded = false }: SellerGoalsEditorProps) {
   const { role, profile } = useAuth()
   const now = new Date()
   const [monthStr, setMonthStr] = useState(format(now, 'yyyy-MM'))
@@ -190,18 +192,25 @@ export function SellerGoalsEditor({ storeId, storeName }: SellerGoalsEditorProps
   }
 
   return (
-    <section className="pb-24 md:pb-32" data-tour="metas-individuais" aria-label="Metas individuais dos vendedores">
+    <section className={embedded ? '' : 'pb-24 md:pb-32'} aria-label="Metas individuais dos vendedores">
       <div className="space-y-5">
         {/* Cabeçalho */}
-        <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+        <div className={embedded ? '' : 'rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'}>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-            <div>
-              <h1 className="text-lg font-bold text-slate-800">Metas Individuais</h1>
-              <p className="mt-0.5 text-sm text-slate-500">
+            {embedded ? (
+              <p className="text-sm text-slate-500">
                 {storeName || 'Unidade MX'} · Meta da loja: <strong>{storeGoal} vendas</strong>
                 {sellerCount > 0 && ` · ${sellerCount} vendedor${sellerCount !== 1 ? 'es' : ''} ativos`}
               </p>
-            </div>
+            ) : (
+              <div>
+                <h1 className="text-lg font-bold text-slate-800">Metas Individuais</h1>
+                <p className="mt-0.5 text-sm text-slate-500">
+                  {storeName || 'Unidade MX'} · Meta da loja: <strong>{storeGoal} vendas</strong>
+                  {sellerCount > 0 && ` · ${sellerCount} vendedor${sellerCount !== 1 ? 'es' : ''} ativos`}
+                </p>
+              </div>
+            )}
             <div className="flex flex-wrap items-center gap-2">
               <label className="text-xs text-slate-500">
                 Mês
