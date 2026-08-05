@@ -22,6 +22,8 @@ import { useOportunidades } from '@/features/crm/hooks/useOportunidades'
 import { useAgendamentos } from '@/features/crm/hooks/useAgendamentos'
 import { getActiveClosingContext } from '../lib/active-closing-context'
 import { reconstructCheckinFormFromHistorical } from '../lib/reconstruct-checkin-form'
+import { useCheckinAutosave } from '../autosave/useCheckinAutosave'
+import { autosaveResultFromSave } from '../autosave/classify-autosave-failure'
 
 export interface CheckinForm {
     leads: number
@@ -553,6 +555,63 @@ const fechamentoConcluido = metricScope === 'daily'
         [feedbackActions, metricScope],
     )
 
+    // --- Autosave do rascunho -------------------------------------------------
+    // O payload do rascunho é o mesmo da finalização: só muda o
+    // submission_status decidido pelo servidor a partir da flag isDraft.
+    const draftPayload = useMemo(() => ({
+        ...declaredForm,
+        pontuacao_disciplina_base: rawDiscipline,
+        fechamento_liberado: fechamentoLiberado,
+    }), [declaredForm, rawDiscipline, fechamentoLiberado])
+
+    // Autosave é exclusivo do fechamento diário em aberto. Ajuste técnico e
+    // lançamento histórico continuam sendo atos explícitos da gestão.
+    const autosaveEnabled = metricScope === 'daily'
+        && !fechamentoConcluido
+        && selectedDate === activeClosingContext.mainDate
+        && !loadingHistory
+        && !hookLoading
+
+    const persistDraft = useCallback(
+        async (snapshot: typeof draftPayload, expectedRevision: number) => {
+            const result = await saveCheckin(
+                snapshot,
+                'daily',
+                selectedDate,
+                activeClosingContext.mainDate,
+                true,
+                expectedRevision,
+            )
+            return autosaveResultFromSave({ ...result, expectedRevision })
+        },
+        [saveCheckin, selectedDate, activeClosingContext.mainDate],
+    )
+
+    const autosave = useCheckinAutosave({ save: persistDraft, enabled: autosaveEnabled })
+
+    // A revisão conhecida vem do banco: sem isto, a primeira gravação depois de
+    // um refresh mandaria revisão 0 contra uma linha já avançada e cairia em
+    // conflito falso.
+    const hydrateAutosave = autosave.hydrate
+    useEffect(() => {
+        hydrateAutosave({
+            revision: Number(historicalCheckin?.draft_revision ?? 0),
+            lastSavedAt: historicalCheckin?.last_draft_saved_at ?? null,
+        })
+    }, [historicalCheckin?.id, historicalCheckin?.draft_revision, historicalCheckin?.last_draft_saved_at, hydrateAutosave])
+
+    // Só o que o usuário mexeu dispara autosave. Hidratação e limpeza de
+    // formulário mantêm changedFields vazio e não geram rascunho fantasma.
+    const lastMarkedSnapshotRef = useRef<string | null>(null)
+    const markDirty = autosave.markDirty
+    useEffect(() => {
+        if (!autosaveEnabled || changedFields.size === 0) return
+        const serialized = JSON.stringify(draftPayload)
+        if (lastMarkedSnapshotRef.current === serialized) return
+        lastMarkedSnapshotRef.current = serialized
+        markDirty(draftPayload)
+    }, [autosaveEnabled, changedFields, draftPayload, markDirty])
+
     const setFieldError = (field: NumericCheckinField | 'note' | 'zero_reason', message: string | null) => {
         setFieldErrors(prev => {
             const next = { ...prev }
@@ -684,6 +743,16 @@ const fechamentoConcluido = metricScope === 'daily'
 
  setSaving(true)
  try {
+        // Antes de finalizar, o rascunho pendente precisa chegar ao servidor.
+        // Sem isto, a finalização poderia carimbar como oficial um snapshot
+        // anterior à última digitação, ou competir com o autosave em voo.
+        const flushed = await autosave.flush()
+        if (flushed.status === 'conflict') {
+            const message = 'Este fechamento foi atualizado em outra sessão. Recarregue e revise os dados antes de finalizar.'
+            setInputError(message)
+            toast.error(message)
+            return
+        }
 
         // Save the checkin to Supabase — disciplina base (antes da penalidade) e o
         // flag de liberação vão no payload; o servidor deriva a penalidade e o
@@ -693,7 +762,20 @@ const fechamentoConcluido = metricScope === 'daily'
                 pontuacao_disciplina_base: rawDiscipline,
                 fechamento_liberado: fechamentoLiberado,
             }
- const { error } = await saveCheckin(checkinPayload, metricScope, selectedDate, activeClosingContext.mainDate)
+ const { error, code } = await saveCheckin(
+     checkinPayload,
+     metricScope,
+     selectedDate,
+     activeClosingContext.mainDate,
+     false,
+     metricScope === 'daily' ? flushed.revision : null,
+ )
+ if (code === 'DRAFT_VERSION_CONFLICT') {
+     const message = 'Este fechamento foi atualizado em outra sessão. Recarregue e revise os dados antes de finalizar.'
+     setInputError(message)
+     toast.error(message)
+     return
+ }
  if (error) { toast.error(error); return }
 
         // MX-22.2 (AC-1/GAP-1): previousCheckin só é buscado uma vez na
@@ -758,22 +840,38 @@ const fechamentoConcluido = metricScope === 'daily'
             // localStorage — sobrevive a refresh/troca de aba/dispositivo.
             // isSubmittedClosing já trata 'draft' como não finalizado, então
             // isso não aciona fechamentoConcluido nem a detecção de atraso.
-            const draftPayload = {
-                ...declaredForm,
-                pontuacao_disciplina_base: rawDiscipline,
-                fechamento_liberado: fechamentoLiberado,
-            }
-            const { error } = await saveCheckin(
-                draftPayload,
-                metricScope,
-                selectedDate,
-                activeClosingContext.mainDate,
-                true,
-            )
-            if (error) {
-                toast.error(error)
-                setInputError(error)
-                return
+            //
+            // "Salvar agora" passa pelo mesmo coordenador do autosave: duas
+            // gravações concorrentes da mesma linha poderiam terminar fora de
+            // ordem e o clique manual venceria com dado mais velho.
+            if (autosaveEnabled) {
+                await autosave.saveNow(draftPayload)
+                const state = autosave.getStateSnapshot()
+                if (state.status === 'conflict') {
+                    const message = 'Este fechamento foi atualizado em outra sessão. Recarregue e revise os dados.'
+                    toast.error(message)
+                    setInputError(message)
+                    return
+                }
+                if (state.status === 'error') {
+                    const message = state.error || 'Não foi possível salvar o rascunho.'
+                    toast.error(message)
+                    setInputError(message)
+                    return
+                }
+            } else {
+                const { error } = await saveCheckin(
+                    draftPayload,
+                    metricScope,
+                    selectedDate,
+                    activeClosingContext.mainDate,
+                    true,
+                )
+                if (error) {
+                    toast.error(error)
+                    setInputError(error)
+                    return
+                }
             }
 
             setChangedFields(new Set())
@@ -859,6 +957,9 @@ const fechamentoConcluido = metricScope === 'daily'
         handleSubmit,
         submitCheckin,
         handleSaveDraft,
+        autosaveState: autosave.state,
+        autosaveEnabled,
+        retryAutosave: autosave.retry,
         saveTechnicalAdjustment,
         // Added properties
 selectedDate,

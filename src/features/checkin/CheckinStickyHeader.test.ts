@@ -35,7 +35,9 @@ describe('Checkin sticky header layout contract', () => {
     expect(checkinHookSource).toContain('effectiveTotals')
     expect(checkinHookSource).toContain('...declaredForm')
     expect(checkinHookSource).toContain('hasCrmActivity')
-    expect(checkinHookSource).toContain('saveCheckin(checkinPayload')
+    // A chamada ganhou argumentos (revisão do rascunho) e quebrou em linhas —
+    // o que importa é continuar persistindo o payload declarado.
+    expect(checkinHookSource).toMatch(/saveCheckin\(\s*\n?\s*checkinPayload,/)
     expect(checkinFormSource).not.toContain('Observações Operacionais')
   })
 

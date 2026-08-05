@@ -16,6 +16,32 @@ day: '2-digit',
 }).format(baseDate)
 }
 
+/** Retorno normalizado da RPC `submit_checkin`. */
+interface SubmitCheckinRpcResult {
+    ok?: boolean
+    error?: string
+    code?: string
+    data?: {
+        id?: string
+        draft_revision?: number
+        updated_at?: string
+        submission_status?: string
+        server_revision?: number
+    }
+}
+
+export interface SaveCheckinResult {
+    error: string | null
+    id?: string
+    /** Revisão do rascunho após a gravação (null em servidor sem a migration). */
+    revision?: number | null
+    savedAt?: string | null
+    submissionStatus?: string | null
+    /** `DRAFT_VERSION_CONFLICT` quando outra sessão avançou a revisão. */
+    code?: string | null
+    serverRevision?: number | null
+}
+
 export interface UseCheckinsSubmitArgs {
     profile: { id: string } | null
     storeId: string | null
@@ -49,6 +75,10 @@ export function buildSubmitCheckinPayload(
     // idempotência (ON CONFLICT ... WHERE), então o rascunho sobrevive ao
     // refresh sem marcar a data como concluída nem penalizar por atraso.
     isDraft = false,
+    // Controle otimista do rascunho (migration 20260805220000): revisão que o
+    // cliente conhece. `null` mantém o comportamento legado — o servidor grava
+    // sem comparar versão.
+    expectedDraftRevision: number | null = null,
 ) {
     // Rascunho nunca é "tardio" e nunca trava edição — ele existe justamente
     // para o vendedor continuar preenchendo. A detecção de atraso só vale para
@@ -94,6 +124,7 @@ export function buildSubmitCheckinPayload(
         note: normalizeText(formData.note),
         pontuacao_disciplina_base: formData.pontuacao_disciplina_base ?? null,
         fechamento_liberado: formData.fechamento_liberado ?? false,
+        ...(expectedDraftRevision === null ? {} : { expected_draft_revision: expectedDraftRevision }),
     }
 }
 
@@ -112,7 +143,8 @@ export function useCheckinsSubmit(args: UseCheckinsSubmitArgs) {
         // MX-22.2 (FEV-DATA-05): grava rascunho real (submission_status='draft')
         // em vez de só localStorage, pra sobreviver a refresh/troca de aba.
         isDraft = false,
-    ): Promise<{ error: string | null; id?: string }> => {
+        expectedDraftRevision: number | null = null,
+    ): Promise<SaveCheckinResult> => {
         if (!profile || !storeId) return { error: 'Usuário não autenticado' }
         if (scope === 'adjustment' && !canCreateAdjustment(role)) {
             return { error: 'Ajuste técnico é restrito a gestores e perfis internos MX.' }
@@ -125,21 +157,43 @@ export function useCheckinsSubmit(args: UseCheckinsSubmitArgs) {
 
  const isDaily = scope === 'daily' && finalDate <= getSaoPauloDateOnly()
         const submittedAt = new Date()
-        const payload = buildSubmitCheckinPayload(formData, scope, profile.id, storeId, finalDate, submittedAt, isDaily, isDraft)
+        const payload = buildSubmitCheckinPayload(
+            formData,
+            scope,
+            profile.id,
+            storeId,
+            finalDate,
+            submittedAt,
+            isDaily,
+            isDraft,
+            expectedDraftRevision,
+        )
 
         try {
             const { data, error } = await supabase.rpc('submit_checkin', { p_payload: payload })
 
             if (error) return { error: error.message }
-            const result = data as { ok?: boolean; error?: string; data?: { id?: string } } | null
-            if (!result?.ok) return { error: result?.error || 'Não foi possível salvar o check-in.' }
+            const result = data as SubmitCheckinRpcResult | null
+            if (!result?.ok) {
+                return {
+                    error: result?.error || 'Não foi possível salvar o check-in.',
+                    code: result?.code ?? null,
+                    serverRevision: result?.data?.server_revision ?? null,
+                }
+            }
 
             try {
                 if (afterSubmit) await afterSubmit()
             } catch {
                 console.warn('[useCheckinsSubmit] afterSubmit failed but check-in was saved successfully')
             }
-            return { error: null, id: result.data?.id }
+            return {
+                error: null,
+                id: result.data?.id,
+                revision: result.data?.draft_revision ?? null,
+                savedAt: result.data?.updated_at ?? null,
+                submissionStatus: result.data?.submission_status ?? null,
+            }
         } catch (err) {
             return { error: err instanceof Error ? err.message : 'Erro de conexão. Tente novamente.' }
         }

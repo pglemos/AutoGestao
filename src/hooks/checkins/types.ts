@@ -12,7 +12,7 @@ export const MX_TIMEZONE = 'America/Sao_Paulo'
 export const CHECKIN_ZERO_REASONS = ['Folga', 'Treinamento', 'Feriado', 'Dia administrativo', 'Outro'] as const
 export const CHECKIN_MAX_INPUT_VALUE = 999
 
-export const CHECKIN_SELECT = 'id, seller_user_id, store_id, reference_date, submitted_at, metric_scope, submission_status, leads_prev_day, leads_net_prev_day, agd_cart_prev_day, agd_net_prev_day, agd_cart_today, agd_net_today, vnd_porta_prev_day, vnd_cart_prev_day, vnd_net_prev_day, visit_prev_day, visitas_porta_prev_day, visitas_cart_prev_day, visitas_net_prev_day, zero_reason, note, submitted_late, edit_locked_at, created_by, updated_at, pontuacao_disciplina_base, pontuacao_disciplina_final, finalizado_apos_prazo, penalizacao_atraso_aplicada, percentual_penalizacao_atraso, fechamento_liberado, liberado_por_id, liberado_por_nome, data_hora_liberacao'
+export const CHECKIN_SELECT = 'id, seller_user_id, store_id, reference_date, submitted_at, metric_scope, submission_status, leads_prev_day, leads_net_prev_day, agd_cart_prev_day, agd_net_prev_day, agd_cart_today, agd_net_today, vnd_porta_prev_day, vnd_cart_prev_day, vnd_net_prev_day, visit_prev_day, visitas_porta_prev_day, visitas_cart_prev_day, visitas_net_prev_day, zero_reason, note, submitted_late, edit_locked_at, created_by, updated_at, pontuacao_disciplina_base, pontuacao_disciplina_final, finalizado_apos_prazo, penalizacao_atraso_aplicada, percentual_penalizacao_atraso, fechamento_liberado, liberado_por_id, liberado_por_nome, data_hora_liberacao, draft_revision, last_draft_saved_at'
 
 export function withCheckinTotals(checkin: DailyCheckin): CheckinWithTotals {
     const normalized = { ...checkin, is_venda_loja: checkin.is_venda_loja ?? false }

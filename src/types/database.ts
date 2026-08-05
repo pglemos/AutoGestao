@@ -207,6 +207,11 @@ export interface DailyCheckin {
     liberado_por_id?: string | null
     liberado_por_nome?: string | null
     data_hora_liberacao?: string | null
+
+    // Controle otimista do rascunho (migration 20260805220000). Server-owned:
+    // o cliente só informa a revisão que conhece, nunca a escolhe.
+    draft_revision?: number | null
+    last_draft_saved_at?: string | null
 }
 
 /** Feedback Estruturado Semanal */
