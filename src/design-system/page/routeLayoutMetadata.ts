@@ -55,9 +55,8 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'vendedor/terminal-mx': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'relatorio-matinal': { width: 'dashboard' },
-  'gerente/minha-equipe': { width: 'dashboard' },
+  'minha-equipe': { width: 'dashboard' },
   'gerente/vendas': { width: 'dashboard' },
-  'gerente/ranking': { width: 'dashboard' },
   ranking: { width: 'dashboard' },
   classificacao: { width: 'dashboard' },
   mercado: { width: 'dashboard' },
@@ -115,7 +114,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   rotina: { width: 'focused', bottomClearance: 'actions' },
   'rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },
   'vendedor/rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },
-  'gerente/rotina-equipe': { width: 'focused', bottomClearance: 'actions' },
+  'rotina-equipe': { width: 'focused', bottomClearance: 'actions' },
   'plano-acao': { width: 'focused', bottomClearance: 'actions' },
   simulacao: { width: 'focused' },
   'simulacao/:simulationRole': { width: 'focused' },
@@ -144,7 +143,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   metas: { width: 'dashboard', bottomClearance: 'navigation', adopted: true },
   'minha-meta': { width: 'focused' },
   'vendedor/minha-meta': { width: 'focused' },
-  'gerente/meta-loja': { width: 'focused' },
+  'meta-loja': { width: 'focused' },
 
   // ------------------------------------------- desenvolvimento e conversação
   // `focused` e `reading`: conteúdo textual longo, onde largura excessiva
@@ -155,16 +154,17 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // (não migrada) para admin — por isso não adotada ainda.
   treinamentos: { width: 'dashboard' },
   'vendedor/treinamentos': { width: 'focused' },
-  'universidade-mx': { width: 'focused' },
+  // Rota única para todos os perfis desde que o gerente perdeu o prefixo
+  // `/gerente/`: largura de dashboard atende gerente, dono e admin, e o
+  // vendedor tem a própria entrada em `vendedor/universidade-mx`.
+  'universidade-mx': { width: 'dashboard' },
   'vendedor/universidade-mx': { width: 'focused' },
-  // Mesma divisão de `treinamentos`: admin cai em ConsultorTreinamentos.
-  'gerente/universidade-mx': { width: 'dashboard' },
   feedback: { width: 'focused' },
   feedbacks: { width: 'focused' },
   devolutivas: { width: 'focused' },
   'vendedor/devolutivas': { width: 'focused' },
   'vendedor/feedback': { width: 'focused' },
-  'gerente/feedbacks-pdis': { width: 'focused' },
+  'feedbacks-pdis': { width: 'focused' },
   // GerentePDI para gerente, dono e admin; vendedor é redirect. `dashboard` e
   // não `focused`: grid de até três colunas de cards.
   pdi: { width: 'dashboard', adopted: true },
@@ -178,7 +178,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   'consultor-ia': { width: 'reading', bottomClearance: 'actions' },
   'mentor-comercial': { width: 'reading', bottomClearance: 'actions' },
   'vendedor/mentor-comercial': { width: 'reading', bottomClearance: 'actions' },
-  'gerente/mentor': { width: 'reading', bottomClearance: 'actions' },
+  'mentor': { width: 'reading', bottomClearance: 'actions' },
   // Não é conversa em coluna estreita como o consultor IA: é um painel de
   // solicitações com cards e histórico. Medido em /falar-consultor.
   'falar-consultor': { width: 'dashboard', bottomClearance: 'navigation', adopted: true },

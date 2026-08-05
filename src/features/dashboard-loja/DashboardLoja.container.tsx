@@ -47,8 +47,8 @@ export function DashboardLoja() {
   const [showAdminSettings, setShowAdminSettings] = useState(false)
 
   const activeTab = useMemo<DashboardTab>(() => {
-    if (location.pathname === '/gerente/minha-equipe') return 'equipe'
-    if (location.pathname === '/gerente/meta-loja') return 'metas'
+    if (location.pathname === '/minha-equipe') return 'equipe'
+    if (location.pathname === '/meta-loja') return 'metas'
     if (location.pathname === '/gerente/vendas') return 'vendas'
     const tab = new URLSearchParams(location.search).get('tab')
     return tab === 'metas' || tab === 'equipe' || tab === 'vendas' ? tab : 'performance'

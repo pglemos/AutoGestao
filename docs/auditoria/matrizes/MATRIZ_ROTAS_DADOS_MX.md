@@ -1,7 +1,7 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **112**
-- Rotas protegidas: **104**
+- Rotas declaradas em `src/App.tsx`: **110**
+- Rotas protegidas: **102**
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
@@ -79,7 +79,7 @@
 | `/ajuda` | route | protegida | — | `/ajuda` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorAjuda />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>` |
 | `/ranking` | route | protegida | — | `/ranking` | — | `<Suspense fallback={<Spinner />}><Ranking /></Suspense>` |
 | `/classificacao` | route | protegida | — | `/classificacao` | — | `<Suspense fallback={<Spinner />}><Ranking /></Suspense>` |
-| `/universidade-mx` | route | protegida | `/treinamentos` | `/universidade-mx` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorTreinamentos />} gerente={<RedirectWithSearch to="/treinamentos" />} dono={<OwnerUniversidade />} admin={<RedirectW` |
+| `/universidade-mx` | route | protegida | — | `/universidade-mx` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorTreinamentos />} gerente={<GerenteTreinamentos />} dono={<OwnerUniversidade />} admin={<ConsultorTreinamentos />} /` |
 | `/treinamentos` | route | protegida | `/universidade-mx` | `/treinamentos` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to="/universidade-mx" />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<Consu` |
 | `/desenvolvimento` | route | protegida | — | `/desenvolvimento` | gerente, dono, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense` |
 | `/devolutivas` | route | protegida | — | `/devolutivas` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<GerenteFeedback />} dono={<GerenteFeedback />} admin={<GerenteFeedback />} /> </Suspe` |
@@ -89,14 +89,12 @@
 | `/meu-perfil-vendedor` | route | protegida | `/perfil` | `/meu-perfil-vendedor` | — | `<RedirectWithSearch to="/perfil" />` |
 | `/vendedor/perfil` | route | protegida | `/perfil` | `/vendedor/perfil` | — | `<RedirectWithSearch to="/perfil" />` |
 | `/gerente/fechamento-diario` | route | protegida | `/fechamento-diario` | `/gerente/*` | — | `<RedirectWithSearch to="/fechamento-diario" />` |
-| `/gerente/rotina-equipe` | route | protegida | — | `/gerente/rotina-equipe` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspens` |
-| `/gerente/minha-equipe` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
-| `/gerente/meta-loja` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
+| `/rotina-equipe` | route | protegida | — | `/rotina-equipe` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspens` |
+| `/minha-equipe` | route | protegida | — | `/minha-equipe` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
+| `/meta-loja` | route | protegida | — | `/meta-loja` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
 | `/gerente/vendas` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>` |
-| `/gerente/mentor` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>` |
-| `/gerente/feedbacks-pdis` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens` |
-| `/gerente/ranking` | route | protegida | — | `/gerente/*` | — | `<Suspense fallback={<Spinner />}><Ranking /></Suspense>` |
-| `/gerente/universidade-mx` | route | protegida | — | `/gerente/*` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<ConsultorTreinamentos />} /></Su` |
+| `/mentor` | route | protegida | — | `/mentor` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>` |
+| `/feedbacks-pdis` | route | protegida | — | `/feedbacks-pdis` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens` |
 | `/lojas/:storeSlug/consultor-ia` | route | protegida | — | `/lojas/:storeSlug/consultor-ia` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} /> </Suspense>` |
 | `/lojas/:storeSlug` | route | protegida | — | `/lojas/:storeSlug` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>` |
 | `/lojas/:storeSlug/equipe` | route | protegida | — | `/lojas/:storeSlug/*` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>` |

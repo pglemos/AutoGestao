@@ -246,8 +246,8 @@ export function buildManagerRoutineTasks(input: ManagerRoutineSourceData): Manag
       dueTime: '11:00',
       icon: 'ListChecks',
       actions: [
-        { label: 'Ver rotina', path: '/gerente/rotina-equipe', params: { data: date, filtro: 'plano_ataque' }, kind: 'consulta' },
-        { label: 'Cobrar', path: '/gerente/rotina-equipe', params: { data: date, acao: 'cobrar' }, kind: 'acao' },
+        { label: 'Ver rotina', path: '/rotina-equipe', params: { data: date, filtro: 'plano_ataque' }, kind: 'consulta' },
+        { label: 'Cobrar', path: '/rotina-equipe', params: { data: date, acao: 'cobrar' }, kind: 'acao' },
       ],
     }))
   }
@@ -273,8 +273,8 @@ export function buildManagerRoutineTasks(input: ManagerRoutineSourceData): Manag
       dueTime: '12:00',
       icon: 'UserPlus',
       actions: [
-        { label: 'Ver prospecção', path: '/gerente/rotina-equipe', params: { data: date, filtro: 'prospeccao' }, kind: 'consulta' },
-        { label: 'Acompanhar', path: '/gerente/rotina-equipe', params: { data: date, acao: 'acompanhar' }, kind: 'acao' },
+        { label: 'Ver prospecção', path: '/rotina-equipe', params: { data: date, filtro: 'prospeccao' }, kind: 'consulta' },
+        { label: 'Acompanhar', path: '/rotina-equipe', params: { data: date, acao: 'acompanhar' }, kind: 'acao' },
       ],
     }))
   }
@@ -296,8 +296,8 @@ export function buildManagerRoutineTasks(input: ManagerRoutineSourceData): Manag
       dueTime: '16:00',
       icon: 'RefreshCw',
       actions: [
-        { label: 'Ver plano', path: '/gerente/rotina-equipe', params: { data: date, filtro: 'atualizacao' }, kind: 'consulta' },
-        { label: 'Cobrar', path: '/gerente/rotina-equipe', params: { data: date, acao: 'cobrar_atualizacao' }, kind: 'acao' },
+        { label: 'Ver plano', path: '/rotina-equipe', params: { data: date, filtro: 'atualizacao' }, kind: 'consulta' },
+        { label: 'Cobrar', path: '/rotina-equipe', params: { data: date, acao: 'cobrar_atualizacao' }, kind: 'acao' },
       ],
     }))
   }
@@ -317,8 +317,8 @@ export function buildManagerRoutineTasks(input: ManagerRoutineSourceData): Manag
         dueTime: '18:00',
         icon: 'Target',
         actions: [
-          { label: 'Ver Meta da Loja', path: '/gerente/meta-loja', kind: 'consulta' },
-          { label: 'Acompanhar', path: '/gerente/meta-loja', params: { acao: 'acompanhar' }, kind: 'acao' },
+          { label: 'Ver Meta da Loja', path: '/meta-loja', kind: 'consulta' },
+          { label: 'Acompanhar', path: '/meta-loja', params: { acao: 'acompanhar' }, kind: 'acao' },
         ],
       }))
     }
@@ -342,8 +342,8 @@ export function buildManagerRoutineTasks(input: ManagerRoutineSourceData): Manag
       dueTime: '17:00',
       icon: 'MessageSquare',
       actions: [
-        { label: 'Abrir feedback', path: '/gerente/feedbacks-pdis', kind: 'consulta' },
-        { label: 'Atualizar', path: '/gerente/feedbacks-pdis', params: { acao: 'atualizar' }, kind: 'acao' },
+        { label: 'Abrir feedback', path: '/feedbacks-pdis', kind: 'consulta' },
+        { label: 'Atualizar', path: '/feedbacks-pdis', params: { acao: 'atualizar' }, kind: 'acao' },
       ],
     }))
   }
@@ -366,8 +366,8 @@ export function buildManagerRoutineTasks(input: ManagerRoutineSourceData): Manag
       dueTime: '17:00',
       icon: 'FileText',
       actions: [
-        { label: 'Abrir PDI', path: '/gerente/feedbacks-pdis', params: { tab: 'pdi' }, kind: 'consulta' },
-        { label: 'Acompanhar', path: '/gerente/feedbacks-pdis', params: { tab: 'pdi', acao: 'acompanhar' }, kind: 'acao' },
+        { label: 'Abrir PDI', path: '/feedbacks-pdis', params: { tab: 'pdi' }, kind: 'consulta' },
+        { label: 'Acompanhar', path: '/feedbacks-pdis', params: { tab: 'pdi', acao: 'acompanhar' }, kind: 'acao' },
       ],
     }))
   }
@@ -385,7 +385,7 @@ export function buildManagerRoutineTasks(input: ManagerRoutineSourceData): Manag
       dueTime: meeting.time || '10:00',
       icon: 'Users',
       actions: [
-        { label: 'Abrir PDI', path: '/gerente/feedbacks-pdis', params: { tab: 'pdi' }, kind: 'consulta' },
+        { label: 'Abrir PDI', path: '/feedbacks-pdis', params: { tab: 'pdi' }, kind: 'consulta' },
       ],
     }))
   })

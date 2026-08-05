@@ -411,7 +411,7 @@ export function deriveDeterministicActions(input: DeterministicActionInput): Det
         priority: 'critical',
         dueAt: refDate,
         actionType: 'REVIEW_TEAM_PIPELINE',
-        actionUrl: '/gerente/rotina-equipe',
+        actionUrl: '/rotina-equipe',
         evidence: { targetSales, realizedSales, expectedPace, dayOfMonth, daysInMonth },
         resolutionKey: 'CLOSING_PIPELINE_REVIEWED',
         ruleVersion: DETERMINISTIC_RULE_VERSION,

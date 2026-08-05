@@ -199,7 +199,7 @@ export function ManagerSellerParityHomeCanonical({
           selectedStoreId={data.selectedStoreId}
           planVersion={plan?.version ?? null}
           onStoreChange={onStoreChange}
-          onViewGoal={() => navigateFromDashboard('/gerente/meta-loja')}
+          onViewGoal={() => navigateFromDashboard('/meta-loja')}
           onViewRoutine={() => navigateFromDashboard('/rotina')}
           onRefresh={() => void refresh()}
           refreshing={data.isRefetching || officialSources.loading}
@@ -302,15 +302,15 @@ export function ManagerSellerParityHomeCanonical({
 
         <TeamFocus
           team={team.slice(0, 5)}
-          onViewAll={() => navigateFromDashboard('/gerente/minha-equipe')}
-          onSellerClick={() => navigateFromDashboard('/gerente/minha-equipe')}
+          onViewAll={() => navigateFromDashboard('/minha-equipe')}
+          onSellerClick={() => navigateFromDashboard('/minha-equipe')}
         />
 
         <section className="grid gap-4 lg:grid-cols-[9fr_11fr]">
           <FinancialRadar team={team} />
           <AppointmentsChart
             data={chartData}
-            onBarClick={item => navigateFromDashboard(`/gerente/rotina-equipe?busca=${encodeURIComponent(item.fullName)}`)}
+            onBarClick={item => navigateFromDashboard(`/rotina-equipe?busca=${encodeURIComponent(item.fullName)}`)}
           />
         </section>
 

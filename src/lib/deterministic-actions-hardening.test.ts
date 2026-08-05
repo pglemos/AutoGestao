@@ -59,7 +59,7 @@ describe('deterministic action hardening', () => {
     // `proxima_acao_em` é estado do CLIENTE, mas a varredura percorre
     // oportunidades. Um cliente com duas oportunidades abertas produzia duas
     // ações com o mesmo id — React então reclamava de chave duplicada em
-    // /gerente/mentor e podia omitir ou duplicar o item renderizado.
+    // /mentor e podia omitir ou duplicar o item renderizado.
     const actions = deriveDeterministicActions({
       ...base,
       opportunities: [

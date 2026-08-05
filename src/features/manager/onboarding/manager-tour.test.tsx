@@ -28,11 +28,12 @@ function openTour() {
 }
 
 describe('getManagerTour', () => {
-  test('mapeia as rotas do módulo gerencial do MX, não as do Base44', () => {
-    expect(getManagerTour('/gerente/minha-equipe')).not.toBeNull()
-    expect(getManagerTour('/gerente/mentor')).not.toBeNull()
+  test('mapeia as rotas canônicas do módulo gerencial do MX', () => {
+    expect(getManagerTour('/minha-equipe')).not.toBeNull()
+    expect(getManagerTour('/mentor')).not.toBeNull()
     expect(getManagerTour('/home')).not.toBeNull()
-    expect(getManagerTour('/minha-equipe')).toBeNull()
+    // O prefixo `/gerente/` saiu das telas do módulo (2026-08-05).
+    expect(getManagerTour('/gerente/minha-equipe')).toBeNull()
     expect(getManagerTour('/configuracoes')).toBeNull()
   })
 
@@ -57,7 +58,7 @@ describe('ManagerTourLauncher', () => {
   })
 
   test('abre sozinho na primeira visita e navega entre os passos', () => {
-    renderAt('/gerente/minha-equipe')
+    renderAt('/minha-equipe')
     openTour()
 
     expect(screen.getByRole('dialog', { name: 'Tour do Gerente' })).toBeInTheDocument()
@@ -71,27 +72,27 @@ describe('ManagerTourLauncher', () => {
   })
 
   test('para de abrir sozinho depois da terceira visita', () => {
-    window.localStorage.setItem(TOUR_VISITS_KEY, JSON.stringify({ '/gerente/mentor': 3 }))
+    window.localStorage.setItem(TOUR_VISITS_KEY, JSON.stringify({ '/mentor': 3 }))
 
-    renderAt('/gerente/mentor')
+    renderAt('/mentor')
     openTour()
 
     expect(screen.queryByRole('dialog', { name: 'Tour do Gerente' })).not.toBeInTheDocument()
   })
 
   test('"Pular tour" grava a preferência da rota', () => {
-    renderAt('/gerente/ranking')
+    renderAt('/ranking')
     openTour()
 
     fireEvent.click(screen.getByRole('button', { name: 'Pular tour' }))
 
     expect(screen.queryByRole('dialog', { name: 'Tour do Gerente' })).not.toBeInTheDocument()
-    expect(JSON.parse(window.localStorage.getItem(TOUR_SKIPPED_KEY) || '{}')).toEqual({ '/gerente/ranking': true })
+    expect(JSON.parse(window.localStorage.getItem(TOUR_SKIPPED_KEY) || '{}')).toEqual({ '/ranking': true })
   })
 
   test('a central de ajuda reabre o tour já pulado', () => {
-    window.localStorage.setItem(TOUR_SKIPPED_KEY, JSON.stringify({ '/gerente/ranking': true }))
-    renderAt('/gerente/ranking')
+    window.localStorage.setItem(TOUR_SKIPPED_KEY, JSON.stringify({ '/ranking': true }))
+    renderAt('/ranking')
     openTour()
     expect(screen.queryByRole('dialog', { name: 'Tour do Gerente' })).not.toBeInTheDocument()
 

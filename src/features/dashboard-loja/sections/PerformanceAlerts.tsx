@@ -81,7 +81,7 @@ export function usePerformanceAlerts({
         variant: metrics.attainment < 60 ? 'danger' : 'warning',
         impact: metrics.attainment < 60 ? 'Alto' : 'Médio',
         ctaLabel: 'Abrir metas',
-        ctaTo: role === 'gerente' ? '/gerente/meta-loja' : `${location.pathname}?id=${selectedStoreId || ''}&tab=metas`,
+        ctaTo: role === 'gerente' ? '/meta-loja' : `${location.pathname}?id=${selectedStoreId || ''}&tab=metas`,
         department: 'Comercial',
       })
     }
@@ -99,7 +99,7 @@ export function usePerformanceAlerts({
         variant: 'warning',
         impact: 'Médio',
         ctaLabel: role === 'gerente' ? 'Abrir rotina' : 'Ver equipe',
-        ctaTo: role === 'gerente' ? '/gerente/rotina-equipe' : `${location.pathname}?id=${selectedStoreId || ''}&tab=equipe`,
+        ctaTo: role === 'gerente' ? '/rotina-equipe' : `${location.pathname}?id=${selectedStoreId || ''}&tab=equipe`,
         department: 'Pessoas',
       })
     }
@@ -117,7 +117,7 @@ export function usePerformanceAlerts({
         variant: 'danger',
         impact: 'Alto',
         ctaLabel: role === 'gerente' ? 'Criar devolutiva' : 'Ver ranking',
-        ctaTo: role === 'gerente' ? '/gerente/feedbacks-pdis?tab=feedbacks' : '/classificacao',
+        ctaTo: role === 'gerente' ? '/feedbacks-pdis?tab=feedbacks' : '/classificacao',
         department: 'Comercial',
       })
     }
@@ -135,7 +135,7 @@ export function usePerformanceAlerts({
         variant: 'danger',
         impact: 'Alto',
         ctaLabel: 'Ver ranking',
-        ctaTo: role === 'gerente' ? '/gerente/ranking' : '/classificacao',
+        ctaTo: role === 'gerente' ? '/ranking' : '/classificacao',
         department: 'Comercial',
       })
     }
@@ -153,7 +153,7 @@ export function usePerformanceAlerts({
         variant: 'outline',
         impact: 'Médio',
         ctaLabel: role === 'gerente' ? 'Abrir rotina' : 'Ver equipe',
-        ctaTo: role === 'gerente' ? '/gerente/rotina-equipe' : `${location.pathname}?id=${selectedStoreId || ''}&tab=equipe`,
+        ctaTo: role === 'gerente' ? '/rotina-equipe' : `${location.pathname}?id=${selectedStoreId || ''}&tab=equipe`,
         department: 'Operações',
       })
     } else if (out.length === 0) {
@@ -169,7 +169,7 @@ export function usePerformanceAlerts({
         variant: 'success',
         impact: 'Baixo',
         ctaLabel: 'Ver ranking',
-        ctaTo: role === 'gerente' ? '/gerente/ranking' : '/classificacao',
+        ctaTo: role === 'gerente' ? '/ranking' : '/classificacao',
         department: 'Operações',
       })
     }

@@ -43,7 +43,7 @@ const PERFIS = [
   {
     nome: 'gerente',
     email: 'gerente@mxgestaopreditiva.com.br',
-    rotas: ['/gerente/minha-equipe', '/gerente/rotina-equipe', '/plano-acao', '/feedbacks', '/relatorios', '/mentor-comercial'],
+    rotas: ['/minha-equipe', '/rotina-equipe', '/plano-acao', '/feedbacks', '/relatorios', '/mentor-comercial'],
   },
   {
     nome: 'dono',

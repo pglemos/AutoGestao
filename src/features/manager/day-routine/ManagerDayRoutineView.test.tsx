@@ -213,7 +213,7 @@ function task(
     automatic,
     icon: automatic ? 'Target' : 'Plus',
     actions: automatic
-      ? [{ label: 'Acompanhar', kind: 'acao', path: '/gerente/meta-loja', params: { acao: 'acompanhar' } }]
+      ? [{ label: 'Acompanhar', kind: 'acao', path: '/meta-loja', params: { acao: 'acompanhar' } }]
       : [{ label: 'Concluir', kind: 'acao', action: 'concluir_manual' }],
     priority,
     daysLate: 0,

@@ -107,7 +107,7 @@ describe('ManagerSellerParityHome Base44 parity', () => {
 
     fireEvent.click(screen.getByRole('button', { name: /ver meta da loja/i }))
 
-    expect(screen.getByTestId('current-location').textContent).toBe('/gerente/meta-loja')
+    expect(screen.getByTestId('current-location').textContent).toBe('/meta-loja')
     expect(JSON.parse(sessionStorage.getItem('mx_contexto_navegacao') || '{}')).toMatchObject({
       origemNavegacao: 'DASHBOARD_GERENCIAL',
       data: '2026-07-13',

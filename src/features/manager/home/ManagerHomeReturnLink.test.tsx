@@ -32,7 +32,7 @@ describe('ManagerHomeReturnLink', () => {
     if (!ManagerHomeReturnLink) return
 
     const { rerender } = render(
-      <MemoryRouter initialEntries={['/gerente/meta-loja']}>
+      <MemoryRouter initialEntries={['/meta-loja']}>
         <ManagerHomeReturnLink />
       </MemoryRouter>,
     )
@@ -40,7 +40,7 @@ describe('ManagerHomeReturnLink', () => {
 
     sessionStorage.setItem('mx_contexto_navegacao', '{contexto-invalido')
     rerender(
-      <MemoryRouter initialEntries={['/gerente/meta-loja']}>
+      <MemoryRouter initialEntries={['/meta-loja']}>
         <ManagerHomeReturnLink />
       </MemoryRouter>,
     )
@@ -50,7 +50,7 @@ describe('ManagerHomeReturnLink', () => {
       origemNavegacao: 'MINHA_EQUIPE',
     }))
     rerender(
-      <MemoryRouter initialEntries={['/gerente/meta-loja']}>
+      <MemoryRouter initialEntries={['/meta-loja']}>
         <ManagerHomeReturnLink />
       </MemoryRouter>,
     )
@@ -73,7 +73,7 @@ describe('ManagerHomeReturnLink', () => {
     }))
 
     render(
-      <MemoryRouter initialEntries={['/gerente/meta-loja']}>
+      <MemoryRouter initialEntries={['/meta-loja']}>
         <ManagerHomeReturnLink />
         <LocationProbe />
       </MemoryRouter>,
@@ -101,7 +101,7 @@ describe('ManagerHomeReturnLink', () => {
     sessionStorage.setItem('mx_contexto_navegacao', context)
 
     render(
-      <MemoryRouter initialEntries={['/gerente/rotina-equipe']}>
+      <MemoryRouter initialEntries={['/rotina-equipe']}>
         <ManagerHomeReturnLink />
         <LocationProbe />
       </MemoryRouter>,

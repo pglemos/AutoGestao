@@ -340,15 +340,15 @@ function actionsForOrigin(origin: ManagerRoutineOrigin): ManagerRoutineAction[] 
   }
   if (origin === 'rotina_equipe') {
     return [
-      { label: 'Ver rotina', path: '/gerente/rotina-equipe', kind: 'consulta' },
-      { label: 'Cobrar', path: '/gerente/rotina-equipe', kind: 'acao' },
+      { label: 'Ver rotina', path: '/rotina-equipe', kind: 'consulta' },
+      { label: 'Cobrar', path: '/rotina-equipe', kind: 'acao' },
     ]
   }
   if (origin === 'desenvolvimento') {
-    return [{ label: 'Abrir desenvolvimento', path: '/gerente/feedbacks-pdis', kind: 'acao' }]
+    return [{ label: 'Abrir desenvolvimento', path: '/feedbacks-pdis', kind: 'acao' }]
   }
   if (origin === 'meta_loja') {
-    return [{ label: 'Ver Meta da Loja', path: '/gerente/meta-loja', kind: 'consulta' }]
+    return [{ label: 'Ver Meta da Loja', path: '/meta-loja', kind: 'consulta' }]
   }
   return [{ label: 'Concluir', kind: 'acao', action: 'concluir_manual' }]
 }

@@ -32,7 +32,7 @@ export const MANAGER_TOURS: Record<string, ManagerTourStep[]> = {
     },
   ],
 
-  '/gerente/meta-loja': [
+  '/meta-loja': [
     {
       title: 'Meta da Loja',
       subtitle: 'Acompanhamento mensal',
@@ -62,7 +62,7 @@ export const MANAGER_TOURS: Record<string, ManagerTourStep[]> = {
     },
   ],
 
-  '/gerente/rotina-equipe': [
+  '/rotina-equipe': [
     {
       title: 'Rotina da Equipe',
       subtitle: 'Execução',
@@ -70,7 +70,7 @@ export const MANAGER_TOURS: Record<string, ManagerTourStep[]> = {
     },
   ],
 
-  '/gerente/minha-equipe': [
+  '/minha-equipe': [
     {
       title: 'Minha Equipe',
       subtitle: 'Gestão de pessoas',
@@ -84,7 +84,7 @@ export const MANAGER_TOURS: Record<string, ManagerTourStep[]> = {
     },
   ],
 
-  '/gerente/mentor': [
+  '/mentor': [
     {
       title: 'Mentor Gerencial',
       subtitle: 'Assistente',
@@ -98,7 +98,7 @@ export const MANAGER_TOURS: Record<string, ManagerTourStep[]> = {
     },
   ],
 
-  '/gerente/feedbacks-pdis': [
+  '/feedbacks-pdis': [
     {
       title: 'Desenvolvimento',
       subtitle: 'PDI e Feedback',
@@ -106,7 +106,7 @@ export const MANAGER_TOURS: Record<string, ManagerTourStep[]> = {
     },
   ],
 
-  '/gerente/ranking': [
+  '/ranking': [
     {
       title: 'Ranking',
       subtitle: 'Comparativo',
@@ -120,7 +120,7 @@ export const MANAGER_TOURS: Record<string, ManagerTourStep[]> = {
     },
   ],
 
-  '/gerente/universidade-mx': [
+  '/universidade-mx': [
     {
       title: 'Universidade MX',
       subtitle: 'Treinamentos',

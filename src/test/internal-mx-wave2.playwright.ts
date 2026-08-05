@@ -18,8 +18,8 @@ const routes = [
   { path: '/configuracoes?aba=lojas-rede', page: 'configuracoes', consultantAccess: 'read-only' },
   { path: '/configuracoes?aba=operacional-loja', page: 'configuracoes', consultantAccess: 'read-only' },
   { path: '/configuracoes?aba=sistema-mx', page: 'configuracoes', consultantAccess: 'read-only' },
-  { path: '/gerente/feedbacks-pdis?tab=feedbacks', page: 'desenvolvimento' },
-  { path: '/gerente/feedbacks-pdis?tab=pdis', page: 'desenvolvimento' },
+  { path: '/feedbacks-pdis?tab=feedbacks', page: 'desenvolvimento' },
+  { path: '/feedbacks-pdis?tab=pdis', page: 'desenvolvimento' },
   { path: '/produtos', page: 'produtos-digitais', consultantAccess: 'read-only' },
 ] as const
 

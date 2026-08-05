@@ -255,9 +255,9 @@ export function ManagerStoreGoalReference({
       origemNavegacao: 'META_LOJA', vendedorIdOrigem: sellerId, vendedorNomeOrigem: sellerName,
       mesOrigem: month, dataHora: new Date().toISOString(),
     }))
-    if (action === 'perfil') navigate('/gerente/minha-equipe')
-    if (action === 'rotina') navigate(`/gerente/rotina-equipe?busca=${encodeURIComponent(sellerName)}`)
-    if (action === 'orientacao') navigate(`/gerente/feedbacks-pdis?novoFeedback=${encodeURIComponent(sellerName)}`)
+    if (action === 'perfil') navigate('/minha-equipe')
+    if (action === 'rotina') navigate(`/rotina-equipe?busca=${encodeURIComponent(sellerName)}`)
+    if (action === 'orientacao') navigate(`/feedbacks-pdis?novoFeedback=${encodeURIComponent(sellerName)}`)
   }
 
   return (

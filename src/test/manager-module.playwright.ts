@@ -11,15 +11,15 @@ const routes = [
   { path: '/rotina', slug: 'rotina-dia', heading: 'Rotina do Dia', uniqueText: /Alertas e ações essenciais para conduzir o dia/i },
   { path: '/fechamento-diario', slug: 'fechamento', heading: 'Fechamento Diário', uniqueText: /Movimento da Equipe/i },
   { path: '/plano-acao', slug: 'plano-acao', heading: 'Plano de Ação', uniqueText: /Transforme as prioridades estratégicas em execução/i },
-  { path: '/gerente/rotina-equipe', slug: 'rotina', heading: 'Rotina da Equipe', uniqueText: /Acompanhe a execução oficial das atividades comerciais da equipe/i },
-  { path: '/gerente/minha-equipe', slug: 'equipe', heading: 'Minha Equipe', uniqueText: /Visão do Kanban/i },
+  { path: '/rotina-equipe', slug: 'rotina', heading: 'Rotina da Equipe', uniqueText: /Acompanhe a execução oficial das atividades comerciais da equipe/i },
+  { path: '/minha-equipe', slug: 'equipe', heading: 'Minha Equipe', uniqueText: /Visão do Kanban/i },
   // A rota serve o dashboard canônico desde 5962d573; o título da tela é
   // "Metas Individuais" e a meta da loja aparece na linha de contexto.
-  { path: '/gerente/meta-loja', slug: 'meta', heading: 'Metas Individuais', uniqueText: /Meta da loja: .* vendas/i },
-  { path: '/gerente/mentor', slug: 'mentor', heading: 'Mentor Gerencial', uniqueText: /Biblioteca de orientações/i },
-  { path: '/gerente/feedbacks-pdis', slug: 'desenvolvimento', heading: 'Desenvolvimento', uniqueText: /Reconheça, oriente e desenvolva sua equipe com Feedback e PDI/i },
-  { path: '/gerente/ranking', slug: 'ranking', heading: 'Ranking', uniqueText: /Acompanhe a classificação da equipe por resultado, conversão e execução/i },
-  { path: '/gerente/universidade-mx', slug: 'universidade', heading: /Universidade|Desenvolvimento/i, uniqueText: /Desenvolvimento do gerente/i },
+  { path: '/meta-loja', slug: 'meta', heading: 'Metas Individuais', uniqueText: /Meta da loja: .* vendas/i },
+  { path: '/mentor', slug: 'mentor', heading: 'Mentor Gerencial', uniqueText: /Biblioteca de orientações/i },
+  { path: '/feedbacks-pdis', slug: 'desenvolvimento', heading: 'Desenvolvimento', uniqueText: /Reconheça, oriente e desenvolva sua equipe com Feedback e PDI/i },
+  { path: '/ranking', slug: 'ranking', heading: 'Ranking', uniqueText: /Acompanhe a classificação da equipe por resultado, conversão e execução/i },
+  { path: '/universidade-mx', slug: 'universidade', heading: /Universidade|Desenvolvimento/i, uniqueText: /Desenvolvimento do gerente/i },
 ] as const
 
 async function expectDialogAboveSidebar(dialog: Locator) {
@@ -93,7 +93,7 @@ test.describe('Módulo Gerencial canônico', () => {
       await page.setViewportSize({ width: viewport.width, height: viewport.height })
       for (const route of [
         { path: '/fechamento-diario', heading: 'Fechamento Diário' },
-        { path: '/gerente/rotina-equipe', heading: 'Rotina da Equipe' },
+        { path: '/rotina-equipe', heading: 'Rotina da Equipe' },
       ]) {
         await page.goto(route.path)
         await expect(page.locator('main#main-content').first()).toBeVisible({ timeout: 20000 })
@@ -115,7 +115,7 @@ test.describe('Módulo Gerencial canônico', () => {
         await page.goto(route.path)
         await page.reload()
         await expect(page.getByText(route.uniqueText).first()).toBeVisible({ timeout: 20000 })
-        if (route.path === '/gerente/minha-equipe') {
+        if (route.path === '/minha-equipe') {
           const profileCount = await page.getByRole('button', { name: 'Ver perfil completo', exact: true }).count()
           if (profileCount === 0) {
             await expectNoEligibleTeam(page)
@@ -164,7 +164,7 @@ test.describe('Módulo Gerencial canônico', () => {
     await expect(page.getByRole('heading', { name: 'Agenda D+1' })).toBeVisible({ timeout: 20000 })
     await page.keyboard.press('Escape')
 
-    await page.goto('/gerente/rotina-equipe')
+    await page.goto('/rotina-equipe')
     const routineDetail = page.getByRole('button', { name: 'Ver rotina' }).first()
     if (await routineDetail.isVisible()) {
       await routineDetail.click()
@@ -172,7 +172,7 @@ test.describe('Módulo Gerencial canônico', () => {
       await page.keyboard.press('Escape')
     }
 
-    await page.goto('/gerente/minha-equipe')
+    await page.goto('/minha-equipe')
     for (const view of ['Todos', 'Resultado', 'Consistência']) {
       const viewTab = page.getByRole('tab', { name: view, exact: true })
       await expect(viewTab).toBeVisible({ timeout: 20000 })
@@ -205,7 +205,7 @@ test.describe('Módulo Gerencial canônico', () => {
       await expectNoEligibleTeam(page)
     }
 
-    await page.goto('/gerente/feedbacks-pdis')
+    await page.goto('/feedbacks-pdis')
     await page.getByRole('tab', { name: 'PDI', exact: true }).click()
     await expect(page.getByText(/Desenvolva competências por meio de avaliações/i).first()).toBeVisible({ timeout: 20000 })
     await page.getByRole('button', { name: 'Iniciar novo PDI', exact: true }).click()
@@ -262,18 +262,18 @@ test.describe('Módulo Gerencial canônico', () => {
     // individuais rateáveis, com a meta da loja na linha de contexto. Os
     // seletores de horizonte e o "Plano de Sustentação" pertenciam à tela
     // anterior e saíram do produto junto com ela.
-    await page.goto('/gerente/meta-loja')
+    await page.goto('/meta-loja')
     await expect(page.getByRole('heading', { name: 'Metas Individuais' })).toBeVisible()
     await expect(page.getByText(/Meta da loja: .* vendas/i).first()).toBeVisible()
     await expect(page.getByRole('button', { name: 'Ratear igual', exact: true })).toBeVisible()
 
-    await page.goto('/gerente/mentor')
+    await page.goto('/mentor')
     await page.getByRole('button').filter({ hasText: 'Reunião matinal' }).click()
     await expect(page.getByRole('dialog', { name: 'Reunião matinal' })).toBeVisible()
     await page.keyboard.press('Escape')
     await expect(page.getByRole('dialog', { name: 'Reunião matinal' })).toHaveCount(0)
 
-    await page.goto('/gerente/universidade-mx')
+    await page.goto('/universidade-mx')
     await expect(page.locator('main')).not.toContainText('NaN')
     for (const tab of ['Desenvolvimento do Gerente', 'Acompanhamento da Equipe']) {
       await expect(page.getByRole('tab', { name: tab, exact: true })).toBeVisible()

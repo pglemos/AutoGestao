@@ -250,7 +250,7 @@ function TeamAliasRedirect() {
   if (isPerfilInternoMx(role)) return <Navigate to="/lojas" replace />
   if (role === 'dono') return <Navigate to="/home" replace />
   if (role === 'gerente' && membership?.store?.name) {
-    return <RedirectWithSearch to="/gerente/minha-equipe" />
+    return <RedirectWithSearch to="/minha-equipe" />
   }
   return <ForbiddenRoute />
 }
@@ -408,8 +408,13 @@ export default function App() {
                 </Suspense>} />
                 <Route path="ranking" element={<Suspense fallback={<Spinner />}><Ranking /></Suspense>} />
                 <Route path="classificacao" element={<Suspense fallback={<Spinner />}><Ranking /></Suspense>} />
+                {/*
+                  Rota canônica da Universidade MX para todos os perfis. O
+                  gerente perdeu o prefixo `/gerente/` e passa a ser atendido
+                  aqui, direto, sem o salto por `/treinamentos`.
+                */}
                 <Route path="universidade-mx" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<VendedorTreinamentos />} gerente={<RedirectWithSearch to="/treinamentos" />} dono={<OwnerUniversidade />} admin={<RedirectWithSearch to="/treinamentos" />} />
+                  <RoleSwitch vendedor={<VendedorTreinamentos />} gerente={<GerenteTreinamentos />} dono={<OwnerUniversidade />} admin={<ConsultorTreinamentos />} />
                 </Suspense>} />
                 <Route path="treinamentos" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<RedirectWithSearch to="/universidade-mx" />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<ConsultorTreinamentos />} />
@@ -431,14 +436,12 @@ export default function App() {
                 <Route path="vendedor/perfil" element={<RedirectWithSearch to="/perfil" />} />
 
                 <Route path="gerente/fechamento-diario" element={<RedirectWithSearch to="/fechamento-diario" />} />
-                <Route path="gerente/rotina-equipe" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspense>} />
-                <Route path="gerente/minha-equipe" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>} />
-                <Route path="gerente/meta-loja" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>} />
+                <Route path="rotina-equipe" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspense>} />
+                <Route path="minha-equipe" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>} />
+                <Route path="meta-loja" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>} />
                 <Route path="gerente/vendas" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>} />
-                <Route path="gerente/mentor" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>} />
-                <Route path="gerente/feedbacks-pdis" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspense>} />
-                <Route path="gerente/ranking" element={<Suspense fallback={<Spinner />}><Ranking /></Suspense>} />
-                <Route path="gerente/universidade-mx" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<ConsultorTreinamentos />} /></Suspense>} />
+                <Route path="mentor" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>} />
+                <Route path="feedbacks-pdis" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspense>} />
                 <Route path="lojas/:storeSlug/consultor-ia" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} />
                 </Suspense>} />

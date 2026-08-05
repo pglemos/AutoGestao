@@ -61,7 +61,7 @@ export function useStoreResolution({ activeStores, storesLoading }: UseStoreReso
 
   const urlStoreId = queryStoreId || (storeSlug ? resolvedStoreId : null)
   // Perfis internos sem slug/query usam a página de seleção de lojas; dono e
-  // gerente resolvem para o vínculo do auth context (/gerente/minha-equipe).
+  // gerente resolvem para o vínculo do auth context (/minha-equipe).
   const shouldUseStoreList = !storeSlug && !queryStoreId && isPerfilInternoMx(role)
   const requestedStoreId = useMemo(() => {
     return urlStoreId || (!storeSlug && !shouldUseStoreList ? authStoreId || (isPerfilInternoMx(role) ? activeStores[0]?.id : null) : null) || null

@@ -8,13 +8,13 @@ const routes = [
   { path: '/home', slug: 'inicio', heading: 'Início' },
   { path: '/rotina', slug: 'rotina-dia', heading: 'Rotina do Dia' },
   { path: '/fechamento-diario', slug: 'fechamento-diario', heading: 'Fechamento Diário' },
-  { path: '/gerente/rotina-equipe', slug: 'rotina-equipe', heading: 'Rotina da Equipe' },
-  { path: '/gerente/minha-equipe', slug: 'minha-equipe', heading: 'Minha Equipe' },
-  { path: '/gerente/meta-loja', slug: 'meta-loja', heading: 'Meta da Loja' },
-  { path: '/gerente/mentor', slug: 'mentor', heading: 'Mentor Gerencial' },
-  { path: '/gerente/feedbacks-pdis', slug: 'desenvolvimento', heading: 'Desenvolvimento' },
-  { path: '/gerente/ranking', slug: 'ranking', heading: 'Ranking' },
-  { path: '/gerente/universidade-mx', slug: 'universidade-mx', heading: /Universidade|Desenvolvimento/ },
+  { path: '/rotina-equipe', slug: 'rotina-equipe', heading: 'Rotina da Equipe' },
+  { path: '/minha-equipe', slug: 'minha-equipe', heading: 'Minha Equipe' },
+  { path: '/meta-loja', slug: 'meta-loja', heading: 'Meta da Loja' },
+  { path: '/mentor', slug: 'mentor', heading: 'Mentor Gerencial' },
+  { path: '/feedbacks-pdis', slug: 'desenvolvimento', heading: 'Desenvolvimento' },
+  { path: '/ranking', slug: 'ranking', heading: 'Ranking' },
+  { path: '/universidade-mx', slug: 'universidade-mx', heading: /Universidade|Desenvolvimento/ },
 ] as const
 
 test.describe('Módulo Gerencial — regressão visual MX', () => {

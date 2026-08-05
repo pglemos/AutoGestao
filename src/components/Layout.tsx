@@ -146,14 +146,14 @@ const ownerCommercialCategory = (mode: 'gestao' | 'acompanhamento'): NavCategory
   // Gerencial v1.0, acrescida de Vendas e Funil Comercial.
   items: [
     { label: 'Fechamento Diário', path: '/fechamento-diario', icon: <CheckSquare size={16} /> },
-    { label: 'Rotina da Equipe', path: '/gerente/rotina-equipe', icon: <CalendarCheck size={16} /> },
-    { label: 'Minha Equipe', path: '/gerente/minha-equipe', icon: <Users size={16} /> },
-    { label: 'Meta da Loja', path: '/gerente/meta-loja', icon: <Target size={16} /> },
-    { label: 'Mentor Gerencial', path: '/gerente/mentor', icon: <BrainCircuit size={16} /> },
+    { label: 'Rotina da Equipe', path: '/rotina-equipe', icon: <CalendarCheck size={16} /> },
+    { label: 'Minha Equipe', path: '/minha-equipe', icon: <Users size={16} /> },
+    { label: 'Meta da Loja', path: '/meta-loja', icon: <Target size={16} /> },
+    { label: 'Mentor Gerencial', path: '/mentor', icon: <BrainCircuit size={16} /> },
     { label: 'Vendas', path: '/gerente/vendas', icon: <TrendingUp size={16} /> },
     { label: 'Funil Comercial', path: '/funil-vendas', icon: <Filter size={16} /> },
-    { label: 'Feedbacks e PDI', path: '/gerente/feedbacks-pdis', icon: <BookOpen size={16} /> },
-    { label: 'Ranking', path: '/gerente/ranking', icon: <Trophy size={16} /> },
+    { label: 'Feedbacks e PDI', path: '/feedbacks-pdis', icon: <BookOpen size={16} /> },
+    { label: 'Ranking', path: '/ranking', icon: <Trophy size={16} /> },
   ],
 })
 
@@ -177,31 +177,31 @@ const navConfig: Record<string, NavCategory[]> = {
       category: 'EQUIPE',
       icon: <Users size={22} />,
       items: [
-        { label: 'Rotina da Equipe', path: '/gerente/rotina-equipe', icon: <CalendarCheck size={16} /> },
-        { label: 'Minha Equipe', path: '/gerente/minha-equipe', icon: <Users size={16} /> },
+        { label: 'Rotina da Equipe', path: '/rotina-equipe', icon: <CalendarCheck size={16} /> },
+        { label: 'Minha Equipe', path: '/minha-equipe', icon: <Users size={16} /> },
       ],
     },
     {
       category: 'ESTRATÉGIA',
       icon: <Target size={22} />,
       items: [
-        { label: 'Meta da Loja', path: '/gerente/meta-loja', icon: <Target size={16} /> },
-        { label: 'Mentor Gerencial', path: '/gerente/mentor', icon: <BrainCircuit size={16} /> },
+        { label: 'Meta da Loja', path: '/meta-loja', icon: <Target size={16} /> },
+        { label: 'Mentor Gerencial', path: '/mentor', icon: <BrainCircuit size={16} /> },
       ],
     },
     {
       category: 'DESENVOLVIMENTO DA EQUIPE',
       icon: <BookOpen size={22} />,
       items: [
-        { label: 'Desenvolvimento', path: '/gerente/feedbacks-pdis', icon: <BookOpen size={16} /> },
-        { label: 'Ranking', path: '/gerente/ranking', icon: <Trophy size={16} /> },
+        { label: 'Desenvolvimento', path: '/feedbacks-pdis', icon: <BookOpen size={16} /> },
+        { label: 'Ranking', path: '/ranking', icon: <Trophy size={16} /> },
       ],
     },
     {
       category: 'DESENVOLVIMENTO',
       icon: <GraduationCap size={22} />,
       items: [
-        { label: 'Universidade MX', path: '/gerente/universidade-mx', icon: <GraduationCap size={16} /> },
+        { label: 'Universidade MX', path: '/universidade-mx', icon: <GraduationCap size={16} /> },
       ],
     },
   ],

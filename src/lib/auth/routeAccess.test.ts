@@ -82,23 +82,31 @@ describe('route access matrix', () => {
   })
 
   it('protects every canonical manager route from sellers', () => {
-    const routes = [
+    // Rotas exclusivas da gestão: o vendedor cai em ForbiddenRoute.
+    const managerOnly = [
       '/gerente/fechamento-diario',
-      '/gerente/rotina-equipe',
-      '/gerente/minha-equipe',
-      '/gerente/meta-loja',
-      '/gerente/mentor',
-      '/gerente/feedbacks-pdis',
-      '/gerente/ranking',
-      '/gerente/universidade-mx',
+      '/rotina-equipe',
+      '/minha-equipe',
+      '/meta-loja',
+      '/mentor',
+      '/feedbacks-pdis',
     ]
-    for (const route of routes) {
+    for (const route of managerOnly) {
       expect(canAccessPath(route, 'gerente')).toBe(true)
       // O dono acumula a gestão comercial (ou acompanha), então enxerga todas as
       // rotas gerenciais canônicas — inclusive a rotina da equipe.
       expect(canAccessPath(route, 'dono')).toBe(true)
       expect(canAccessPath(route, 'administrador_mx')).toBe(true)
       expect(canAccessPath(route, 'vendedor')).toBe(false)
+    }
+
+    // Ranking e Universidade MX são rotas compartilhadas: o gerente perdeu o
+    // prefixo `/gerente/` e passou a dividi-las com o vendedor, que vê a
+    // própria versão da tela pelo RoleSwitch.
+    for (const route of ['/ranking', '/universidade-mx']) {
+      for (const role of ['gerente', 'dono', 'administrador_mx', 'vendedor'] as const) {
+        expect(canAccessPath(route, role)).toBe(true)
+      }
     }
   })
 

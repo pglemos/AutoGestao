@@ -147,7 +147,7 @@ describe('ManagerSellerParityHomeCanonical', () => {
 
     await waitFor(() => {
       expect(screen.getByTestId('current-location').textContent).toBe(
-        '/gerente/rotina-equipe?busca=MaximilianoExtenso%20da%20Silva',
+        '/rotina-equipe?busca=MaximilianoExtenso%20da%20Silva',
       )
     })
 

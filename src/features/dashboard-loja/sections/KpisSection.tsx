@@ -141,7 +141,7 @@ export function KpisSection({
         {role === 'gerente' && pendingDisciplineSellers.length > 0 && (
           <button
             type="button"
-            onClick={() => navigate('/gerente/rotina-equipe')}
+            onClick={() => navigate('/rotina-equipe')}
             className="inline-flex h-9 items-center gap-2 rounded-xl border border-amber-200 bg-white px-3 text-sm font-semibold text-amber-700 hover:bg-amber-50"
           >
             <Zap size={15} />

@@ -170,16 +170,16 @@ describe('manager day routine Base44 parity', () => {
 
     expect(buildManagerRoutineNavigationPath({
       label: 'Acompanhar',
-      path: '/gerente/meta-loja',
+      path: '/meta-loja',
       params: { acao: 'acompanhar' },
       kind: 'acao',
-    })).toBe('/gerente/meta-loja?acao=acompanhar')
+    })).toBe('/meta-loja?acao=acompanhar')
     expect(buildManagerRoutineNavigationPath({
       label: 'Ver rotina',
-      path: '/gerente/rotina-equipe',
+      path: '/rotina-equipe',
       params: { data: '2026-07-13', filtro: 'plano_ataque' },
       kind: 'consulta',
-    })).toBe('/gerente/rotina-equipe?data=2026-07-13&filtro=plano_ataque')
+    })).toBe('/rotina-equipe?data=2026-07-13&filtro=plano_ataque')
   })
 })
 
