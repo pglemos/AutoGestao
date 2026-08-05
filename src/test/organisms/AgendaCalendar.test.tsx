@@ -35,6 +35,17 @@ function makeCalendarDays(): CalendarDay[] {
 const today = new Date();
 const todayKey = format(today, "yyyy-MM-dd");
 
+/**
+ * Dia auxiliar para o segundo grupo de eventos, garantidamente diferente de hoje.
+ *
+ * Era fixo no dia 5. Quando "hoje" caía no dia 5, a chave calculada era idêntica
+ * a `todayKey` e a segunda propriedade do objeto literal sobrescrevia a primeira
+ * — os eventos de hoje sumiam e o teste do chip falhava. Mesma armadilha de
+ * calendário que o comentário de `makeCalendarDays` descreve.
+ */
+const otherDay = today.getDate() === 5 ? 6 : 5;
+const otherDayKey = format(new Date(today.getFullYear(), today.getMonth(), otherDay), "yyyy-MM-dd");
+
 const mockCalendarDays = makeCalendarDays();
 
 const mockVisitsByDate = {
@@ -57,12 +68,12 @@ const mockVisitsByDate = {
       kind: "visit" as const,
     },
   ],
-  [format(new Date(today.getFullYear(), today.getMonth(), 5), "yyyy-MM-dd")]: [
+  [otherDayKey]: [
     {
       id: "visit-five",
       status: "cancelada",
-      title: "Cliente dia 5",
-      startsAt: new Date(today.getFullYear(), today.getMonth(), 5, 10).toISOString(),
+      title: `Cliente dia ${otherDay}`,
+      startsAt: new Date(today.getFullYear(), today.getMonth(), otherDay, 10).toISOString(),
       durationHours: 1,
       kind: "visit" as const,
     },
