@@ -2,7 +2,7 @@
 
 - **Status Geral:** `EXECUÇÃO PARCIAL — EVIDÊNCIAS GERADAS INVALIDADAS E REEXECUÇÃO REAL PENDENTE`
 - **Branch:** `main`
-- **SHA Atual:** `77e69b34`
+- **SHA Atual:** `fa3ab02e`
 - **Proteção Main:** `protected=true`
 
 ---
