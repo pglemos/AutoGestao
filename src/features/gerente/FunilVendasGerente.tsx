@@ -146,7 +146,9 @@ export default function FunilVendasGerente() {
               </Typography>
             </Card>
           ) : (
-            <section className="grid grid-cols-1 gap-mx-sm xl:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]" aria-label="Funil e ranking">
+            // Ranking em linha própria: com 5 colunas numéricas ele ficava
+            // cortado quando dividia a largura com o funil por canal.
+            <section className="flex flex-col gap-mx-sm" aria-label="Funil e ranking">
               <Card className="border bg-white p-mx-md">
                 <Typography variant="h2" className="text-xl text-gray-800">Funil por canal</Typography>
                 <Typography variant="p" className="mt-1 text-sm font-semibold text-gray-500">
