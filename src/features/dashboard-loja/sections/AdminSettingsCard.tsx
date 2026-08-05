@@ -24,7 +24,7 @@ type AdminSettingsCardProps = {
   showAdminSettings: boolean
   onToggleAdminSettings: () => void
   onOpenEdit: () => void
-  onNavigateLojas: () => void
+  onManageBranches: () => void
   onDelete: () => void
   deletingStore: boolean
   onRefetchAll: () => Promise<void>
@@ -38,7 +38,7 @@ export function AdminSettingsCard({
   showAdminSettings,
   onToggleAdminSettings,
   onOpenEdit,
-  onNavigateLojas,
+  onManageBranches,
   onDelete,
   deletingStore,
   onRefetchAll,
@@ -193,11 +193,12 @@ export function AdminSettingsCard({
             </button>
             <button
               type="button"
-              onClick={onNavigateLojas}
+              onClick={onManageBranches}
               className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+              title="Abre em nova aba"
             >
               <Building2 size={15} />
-              Gerenciar lojas
+              Gerenciar filiais
             </button>
             <button
               type="button"

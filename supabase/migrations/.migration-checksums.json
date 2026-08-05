@@ -1,8 +1,8 @@
 {
   "_comment": "Congelamento forward-only das migrations aplicadas. NÃO editar à mão. Regenerar apenas ao adicionar migrations novas: node scripts/gen_migration_checksums.mjs",
-  "generated_at": "2026-08-03",
+  "generated_at": "2026-08-05",
   "algorithm": "sha256",
-  "count": 332,
+  "count": 337,
   "checksums": {
     "00000000000000_baseline_legacy_schema.sql": "3a519e3804095af5e9f7d8a7cb70dcc388b04530b6a7911ee1e3cb76af10b0fc",
     "00000000000001_mark_existing_migrations_applied.sql": "a8183b5cc5bd56b549ce8d8d302eb0c5d4f7b20381438586e02dd7353d6f2a45",
@@ -335,6 +335,11 @@
     "20260731210000_fix_consultant_client_scope.sql": "afcc5497946a2ccecfd872e3876d87e2ca5bc2de0b3af057aadd474a0ccee3da",
     "20260803120000_veiculos_estoque_internal_mx_write.sql": "a81b9a02d05ce2dc70f059b4fcd857d2ac807c71d18e1a82ac8ccd8d71fc740d",
     "20260803133000_harden_veiculos_estoque_creator_scope.sql": "4f9349e7843af912b0778b43e087bda7d711fa5ef1bfbab7618292615b2027de",
-    "20260803134000_cleanup_pre_registration_on_team_deactivation.sql": "3e627d4c83daa0d3405a5afecaae3bfc87799e46571203c759fb14483fd99459"
+    "20260803134000_cleanup_pre_registration_on_team_deactivation.sql": "3e627d4c83daa0d3405a5afecaae3bfc87799e46571203c759fb14483fd99459",
+    "20260804120000_store_management_context.sql": "0926a1743073b67a6fb351afffdc1983f666ae49083992edefa10c53c288d462",
+    "20260804190000_store_management_context_owner_can_sell.sql": "ef198de3745b4693dcfd70b930b377010663bfe556ee6bc7e0205f2530483302",
+    "20260804200000_owner_network_cockpit.sql": "478475ca5b1deeca1222f6fc4993e596bc4cbf5aaffc12005de543907024e163",
+    "20260805120000_harden_rls_unprotected_tables.sql": "2208bc7a6e7ff3e2d34921be4c31b2fa8621d0b260ad18c7226612b0d31aff9b",
+    "20260805140000_lojas_hierarquia_matriz_filial.sql": "c260388228089692960b390a43128c64871d6e175ca1fbdbe1610fd548341eaf"
   }
 }

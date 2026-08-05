@@ -6827,6 +6827,7 @@ export type Database = {
           legal_name: string | null
           manager_email: string | null
           name: string
+          parent_loja_id: string | null
           partners: Json
           source_mode: string | null
           updated_at: string | null
@@ -6841,6 +6842,7 @@ export type Database = {
           legal_name?: string | null
           manager_email?: string | null
           name: string
+          parent_loja_id?: string | null
           partners?: Json
           source_mode?: string | null
           updated_at?: string | null
@@ -6855,11 +6857,20 @@ export type Database = {
           legal_name?: string | null
           manager_email?: string | null
           name?: string
+          parent_loja_id?: string | null
           partners?: Json
           source_mode?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "lojas_parent_loja_id_fkey"
+            columns: ["parent_loja_id"]
+            isOneToOne: false
+            referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       lotes_importacao_consultoria: {
         Row: {
@@ -15005,6 +15016,10 @@ export type Database = {
           visits_completed: number
         }[]
       }
+      get_owner_network_cockpit: {
+        Args: { p_end_date: string; p_start_date: string }
+        Returns: Json
+      }
       get_pdi_form_template: { Args: { p_cargo_id: string }; Returns: Json }
       get_pdi_print_bundle: { Args: { p_sessao_id: string }; Returns: Json }
       get_prova_aula: { Args: { p_aula_id: string }; Returns: Json }
@@ -15676,6 +15691,18 @@ export type Database = {
           p_requested_values: Json
         }
         Returns: Json
+      }
+      store_management_context: {
+        Args: { p_owner_user_id?: string; p_store_id: string }
+        Returns: {
+          active_manager_count: number
+          active_manager_ids: string[]
+          commercial_access_mode: string
+          has_active_manager: boolean
+          owner_assumes_management: boolean
+          owner_can_sell: boolean
+          store_id: string
+        }[]
       }
       submeter_prova_aula: {
         Args: { p_aula_id: string; p_respostas: number[] }

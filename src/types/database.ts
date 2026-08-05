@@ -83,6 +83,8 @@ export interface Store {
     address: string | null
     administrative_phone: string | null
     partners: StorePartner[]
+    /** Matriz desta unidade. `null` = a própria loja é matriz (hierarquia de um nível). */
+    parent_loja_id: string | null
     active: boolean
     source_mode: StoreSourceMode
     created_at: string

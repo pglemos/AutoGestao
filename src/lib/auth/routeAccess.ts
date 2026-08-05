@@ -51,6 +51,8 @@ export const ROUTE_ACCESS_RULES = [
   { pattern: '/configuracoes/consultoria-pmr', roles: INTERNAL_ROLES },
   { pattern: '/configuracoes/reprocessamento', roles: INTERNAL_ROLES },
   { pattern: '/lojas/:storeSlug/consultor-ia', roles: STORE_CONSULTOR_ROLES },
+  // Gestão de filiais da matriz: cadastro de rede é da área interna MX, igual a `/lojas`.
+  { pattern: '/lojas/:storeSlug/filiais', roles: INTERNAL_ROLES },
   { pattern: '/lojas/:storeSlug', roles: INTERNAL_MANAGER_AND_OWNER },
   { pattern: '/lojas/:storeSlug/*', roles: INTERNAL_MANAGER_AND_OWNER },
   { pattern: '/lojas', roles: ['administrador_geral', 'administrador_mx', 'consultor_mx'] },

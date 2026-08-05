@@ -75,6 +75,7 @@ const ManagerTeamRoutine = lazy(() => import('@/features/manager/team-routine/Ma
 // Admin
 const PainelConsultor = lazy(() => import('@/pages/PainelConsultor'))
 const Lojas = lazy(() => import('@/pages/Lojas'))
+const StoreBranches = lazy(() => import('@/pages/StoreBranches'))
 const ConsultorTreinamentos = lazy(() => import('@/pages/ConsultorTreinamentos'))
 const ProdutosDigitais = lazy(() => import('@/pages/ProdutosDigitais'))
 const ConsultorNotificacoes = lazy(() => import('@/pages/ConsultorNotificacoes'))
@@ -441,6 +442,9 @@ export default function App() {
                 <Route path="feedbacks-pdis" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspense>} />
                 <Route path="lojas/:storeSlug/consultor-ia" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} />
+                </Suspense>} />
+                <Route path="lojas/:storeSlug/filiais" element={<Suspense fallback={<Spinner />}>
+                  <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<StoreBranches />} />
                 </Suspense>} />
                 <Route path="lojas/:storeSlug" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} />

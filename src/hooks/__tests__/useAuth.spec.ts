@@ -21,6 +21,7 @@ import type { Store } from '@/types/database'
 const baseStore: Store = {
   id: 'store-1',
   name: 'Loja A',
+  parent_loja_id: null,
   manager_email: null,
   legal_name: null,
   cnpj: null,

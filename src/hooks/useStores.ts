@@ -10,12 +10,19 @@ import type { User, Store, StorePartner } from '@/types/database'
 import { isStoreTeamRole } from './team/types'
 
 const STORES_SELECT =
-  'id, name, manager_email, legal_name, cnpj, address, administrative_phone, partners, active, source_mode, created_at, updated_at'
+  'id, name, manager_email, legal_name, cnpj, address, administrative_phone, partners, parent_loja_id, active, source_mode, created_at, updated_at'
 
 export type StoreUpdateFields = Pick<
   Store,
   'name' | 'manager_email' | 'legal_name' | 'cnpj' | 'address' | 'administrative_phone' | 'partners' | 'active'
 >
+
+/**
+ * Campos aceitos na escrita de loja. Vínculo matriz↔filial fica fora de
+ * `StoreUpdateFields` porque o formulário de cadastro não o edita — quem mexe
+ * nele é a tela de filiais, que envia só esse campo.
+ */
+export type StoreWriteFields = StoreUpdateFields & Pick<Store, 'parent_loja_id'>
 
 const normalizeStoreName = (name: string) => name.trim().toLocaleUpperCase('pt-BR')
 
@@ -60,6 +67,9 @@ const storeUpdateSchema = z
       .max(12, 'Limite de 12 sócios por loja.')
       .optional(),
     active: z.boolean().optional(),
+    parent_loja_id: z
+      .union([z.string().uuid('Matriz inválida.'), z.literal(''), z.null()])
+      .optional(),
   })
   .strict()
 
@@ -145,7 +155,10 @@ export function useStores() {
     name: string,
     managerEmail?: string,
     details?: Partial<
-      Pick<StoreUpdateFields, 'legal_name' | 'cnpj' | 'address' | 'administrative_phone' | 'partners'>
+      Pick<
+        StoreWriteFields,
+        'legal_name' | 'cnpj' | 'address' | 'administrative_phone' | 'partners' | 'parent_loja_id'
+      >
     >,
   ) => {
     if (!isAdministradorMx(role)) return { error: 'Apenas administradores MX podem criar lojas.' }
@@ -158,6 +171,7 @@ export function useStores() {
         address: true,
         administrative_phone: true,
         partners: true,
+        parent_loja_id: true,
       })
       .safeParse({
         name,
@@ -178,6 +192,7 @@ export function useStores() {
       address: normalizeOptionalText(details?.address),
       administrative_phone: normalizeOptionalText(details?.administrative_phone),
       partners: normalizePartners(details?.partners),
+      parent_loja_id: details?.parent_loja_id || null,
       monthly_goal: DEFAULT_INITIAL_MONTHLY_GOAL,
     }
 
@@ -213,7 +228,7 @@ export function useStores() {
     return { error: null }
   }
 
-  const updateStore = async (id: string, updates: Partial<StoreUpdateFields>) => {
+  const updateStore = async (id: string, updates: Partial<StoreWriteFields>) => {
     if (!isAdministradorMx(role)) return { error: 'Apenas administradores MX podem editar lojas.' }
 
     const validation = storeUpdateSchema.safeParse(updates)
@@ -223,7 +238,7 @@ export function useStores() {
       return { error: message }
     }
 
-    const payload: Partial<StoreUpdateFields> = {}
+    const payload: Partial<StoreWriteFields> = {}
     if (typeof validation.data.name !== 'undefined')
       payload.name = normalizeStoreName(validation.data.name)
     if (typeof validation.data.manager_email !== 'undefined') {
@@ -240,6 +255,8 @@ export function useStores() {
     if (typeof validation.data.partners !== 'undefined')
       payload.partners = normalizePartners(validation.data.partners)
     if (typeof validation.data.active !== 'undefined') payload.active = validation.data.active
+    if (typeof validation.data.parent_loja_id !== 'undefined')
+      payload.parent_loja_id = validation.data.parent_loja_id || null
 
     const isJwtError = (err: unknown) => {
       const msg = (err instanceof Error ? err.message : String(err)).toLowerCase()
