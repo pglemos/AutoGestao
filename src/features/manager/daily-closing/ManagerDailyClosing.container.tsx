@@ -43,6 +43,7 @@ import { ClosingDetailsModal } from "@/features/manager/daily-closing/ClosingDet
 import { CorrigirLeadsModal } from "@/features/manager/daily-closing/CorrigirLeadsModal";
 import type { buildLeadCorrectionPayload } from "@/features/manager/daily-closing/corrigir-leads";
 import { ManagerHomeReturnLink } from "@/features/manager/home/ManagerHomeReturnLink";
+import { HelpTooltip } from "@/components/ui/HelpTooltip";
 import {
   RegularizationsListModal,
   type RegularizationRequest,
@@ -108,7 +109,11 @@ export default function ManagerDailyClosing() {
   } | null>(null);
   const [reminding, setReminding] = useState(false);
   const [reminderOpen, setReminderOpen] = useState(false);
+  /** Cobrança disparada da linha: restringe o modal àquele vendedor. */
+  const [reminderTarget, setReminderTarget] = useState<{ id: string; name: string } | null>(null);
   const [correctingLeads, setCorrectingLeads] = useState(false);
+  /** Correção de leads aberta pela linha, sem passar pelo modal de detalhes. */
+  const [leadTarget, setLeadTarget] = useState<{ seller: { id: string; name: string }; checkin: CheckinWithTotals } | null>(null);
   const [syncWarning, setSyncWarning] = useState<string | null>(null);
   const realtimeTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const historyStart = format(
@@ -181,6 +186,9 @@ export default function ManagerDailyClosing() {
   const submitted = rows.filter((row) => row.checkin).length;
   const pending = rows.length - submitted;
   const pendingRows = rows.filter((row) => !row.checkin);
+  const reminderRows = reminderTarget
+    ? pendingRows.filter(({ seller }) => seller.id === reminderTarget.id)
+    : pendingRows;
   const movementState = getMovementState(rows.length, submitted);
   const appointments = checkins.length
     ? checkins.reduce((sum, item) => sum + sumNumericMetrics(item.agd_cart_today, item.agd_net_today), 0)
@@ -278,10 +286,10 @@ export default function ManagerDailyClosing() {
   }, [loadRequests, refetch, refetchHistory, refetchMetricHistory, refetchSellers, storeId]);
 
   const remindPending = async () => {
-    if (!pendingRows.length) return;
+    if (!reminderRows.length) return;
     setReminding(true);
     const results = await Promise.all(
-      pendingRows.map(({ seller }) =>
+      reminderRows.map(({ seller }) =>
         sendNotification({
           recipient_id: seller.id,
           store_id: storeId || undefined,
@@ -298,10 +306,11 @@ export default function ManagerDailyClosing() {
       toast.error(`${failures} cobrança(s) não puderam ser registradas.`);
     else
       toast.success(
-        `Cobrança enviada para ${pendingRows.length} vendedor(es).`,
+        `Cobrança enviada para ${reminderRows.length} vendedor(es).`,
       );
     setReminding(false);
     setReminderOpen(false);
+    setReminderTarget(null);
   };
 
   const decide = async (
@@ -440,6 +449,7 @@ export default function ManagerDailyClosing() {
                     : "neutral"
             }
             status={appointmentStatus || "—"}
+            help="Total de agendamentos confirmados gerados pela equipe hoje. A classificação (ruim/regular/bom) compara com a necessidade de vendas do dia."
             action="Ver Agenda D+1"
             onAction={() => setAgenda({ open: true })}
           />
@@ -450,9 +460,10 @@ export default function ManagerDailyClosing() {
             icon={Clock3}
             tone="warning"
             status="—"
+            help="Vendedores que ainda não enviaram o fechamento do dia. Após o prazo limite, viram pendências com prioridade de cobrança."
             action="Cobrar Pendentes"
             actionDisabled={!pendingRows.length || reminding}
-            onAction={() => setReminderOpen(true)}
+            onAction={() => { setReminderTarget(null); setReminderOpen(true); }}
           />
           <SummaryCard
             title="Regularizações"
@@ -463,6 +474,7 @@ export default function ManagerDailyClosing() {
             icon={ShieldCheck}
             tone="info"
             status="—"
+            help="Fechamentos enviados fora do prazo que aguardam sua aprovação. Aprovados contam como regularizados; recusados viram pendência."
             action="Ver Regularizações"
             actionDisabled={!requests.length}
             onAction={() =>
@@ -507,6 +519,14 @@ export default function ManagerDailyClosing() {
               }}
               onOpenAgenda={(sellerId) => setAgenda({ open: true, sellerId })}
               onOpenDetails={(detail) => setClosingDetail(detail)}
+              onRemind={(seller) => {
+                setReminderTarget(seller);
+                setReminderOpen(true);
+              }}
+              onCorrectLeads={(detail) => {
+                setLeadTarget(detail);
+                setCorrectingLeads(true);
+              }}
             />
           )}
         </section>
@@ -541,8 +561,9 @@ export default function ManagerDailyClosing() {
         </section>
 
         <section className="rounded-[16px] border border-gray-100 bg-white p-5 shadow-sm">
-          <h2 className="mb-4 text-base font-semibold text-gray-800">
+          <h2 className="mb-4 flex items-center gap-1.5 text-base font-semibold text-gray-800">
             Resumo do Fechamento
+            <HelpTooltip text="Consolidação dos fechamentos do dia: atendimentos, leads e vendas por canal (showroom, carteira, internet). Os leads podem ser corrigidos pelo gerente com registro em auditoria." />
           </h2>
           <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
             <SummaryGroup
@@ -606,9 +627,9 @@ export default function ManagerDailyClosing() {
         />
         <PendingReminderModal
           open={reminderOpen}
-          pendingRows={pendingRows}
+          pendingRows={reminderRows}
           reminding={reminding}
-          onClose={() => setReminderOpen(false)}
+          onClose={() => { setReminderOpen(false); setReminderTarget(null); }}
           onConfirm={() => void remindPending()}
         />
         <LeadConferenceModal
@@ -652,9 +673,9 @@ export default function ManagerDailyClosing() {
         />
         <CorrigirLeadsModal
           open={correctingLeads}
-          onClose={() => setCorrectingLeads(false)}
-          sellerName={closingDetail?.seller.name || ""}
-          checkin={closingDetail?.checkin || null}
+          onClose={() => { setCorrectingLeads(false); setLeadTarget(null); }}
+          sellerName={leadTarget?.seller.name || closingDetail?.seller.name || ""}
+          checkin={leadTarget?.checkin || closingDetail?.checkin || null}
           onSubmit={handleCorrectLeads}
         />
       </div>
@@ -791,6 +812,7 @@ function SummaryCard({
   icon: Icon,
   tone,
   status,
+  help,
   action,
   actionDisabled,
   onAction,
@@ -801,6 +823,7 @@ function SummaryCard({
   icon: typeof CalendarDays;
   tone: "warning" | "danger" | "success" | "info" | "neutral";
   status: string;
+  help?: string;
   action: string;
   actionDisabled?: boolean;
   onAction: () => void;
@@ -830,9 +853,10 @@ function SummaryCard({
   return (
     <div className={`min-h-[164px] rounded-[16px] border shadow-sm p-3 ${colors}`}>
       <div className="mb-2 flex items-center justify-between gap-2">
-        <h2 className="flex items-center gap-2 text-xs font-medium text-gray-600">
+        <h2 className="flex items-center gap-1.5 text-xs font-medium text-gray-600">
           <Icon size={16} className="shrink-0" />
           {title}
+          <HelpTooltip text={help} />
         </h2>
         {status !== "—" ? (
           <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
@@ -869,19 +893,31 @@ function DisciplineCard({ value }: { value: number | null }) {
     .split(" ")
     .map((word) => word.charAt(0).toLocaleUpperCase("pt-BR") + word.slice(1))
     .join(" ");
+  // O Base44 pinta o card inteiro conforme a faixa da disciplina, em vez de
+  // deixar tudo azul. As faixas seguem as do MX (classifyDiscipline).
+  const palette = value === null
+    ? { surface: "bg-gray-50", badge: "bg-gray-100 text-gray-500", glow: "from-gray-300 to-gray-400", ring: "rgb(148 163 184)", track: "rgb(241 245 249)", inner: "bg-gray-50", text: "text-gray-400" }
+    : label === "Excelente"
+      ? { surface: "bg-emerald-50", badge: "bg-emerald-600 text-white", glow: "from-emerald-400 to-emerald-500", ring: "rgb(16 185 129)", track: "rgb(209 250 229)", inner: "bg-emerald-50", text: "text-emerald-600" }
+      : label === "Boa"
+        ? { surface: "bg-blue-50", badge: "bg-blue-100 text-blue-700", glow: "from-blue-400 to-blue-500", ring: "rgb(59 130 246)", track: "rgb(219 234 254)", inner: "bg-blue-50", text: "text-blue-500" }
+        : label === "Baixa"
+          ? { surface: "bg-amber-50", badge: "bg-amber-100 text-amber-700", glow: "from-amber-400 to-amber-500", ring: "rgb(245 158 11)", track: "rgb(254 243 199)", inner: "bg-amber-50", text: "text-amber-600" }
+          : { surface: "bg-red-50", badge: "bg-red-100 text-red-700", glow: "from-red-400 to-red-500", ring: "rgb(239 68 68)", track: "rgb(254 226 226)", inner: "bg-red-50", text: "text-red-600" };
   return (
-    <div className="flex h-full min-h-[164px] flex-col rounded-[16px] border border-gray-100 bg-blue-50 p-3 shadow-sm">
+    <div className={`flex h-full min-h-[164px] flex-col rounded-[16px] border border-gray-100 p-3 shadow-sm ${palette.surface}`}>
       <div className="mb-1 flex items-center justify-between gap-2">
-        <h2 className="text-xs font-medium text-gray-600">
+        <h2 className="flex items-center gap-1.5 text-xs font-medium text-gray-600">
           Disciplina Média
+          <HelpTooltip text="Média da pontuação de disciplina da equipe, que combina acesso à rotina, execução dos blocos e fechamento dentro do prazo. Acima de 85% é saudável." />
         </h2>
-        <span className="whitespace-nowrap rounded-full bg-blue-100 px-2.5 py-1 text-xs font-semibold text-blue-700">
+        <span className={`whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${palette.badge}`}>
           {label}
         </span>
       </div>
       <div className="flex flex-1 items-center justify-center">
         <div className="relative">
-          <div className="absolute inset-0 scale-110 rounded-full bg-gradient-to-br from-blue-400 to-blue-500 opacity-20 blur-lg" />
+          <div className={`absolute inset-0 scale-110 rounded-full bg-gradient-to-br opacity-20 blur-lg ${palette.glow}`} />
         <div
           role="progressbar"
           aria-label="Disciplina média da equipe"
@@ -889,10 +925,10 @@ function DisciplineCard({ value }: { value: number | null }) {
           aria-valuemax={100}
           aria-valuenow={normalized}
           className="relative grid h-[104px] w-[104px] place-items-center rounded-full p-2"
-          style={{ background: `conic-gradient(rgb(59 130 246) ${normalized * 3.6}deg, rgb(219 234 254) 0deg)` }}
+          style={{ background: `conic-gradient(${palette.ring} ${normalized * 3.6}deg, ${palette.track} 0deg)` }}
         >
-          <div className="grid h-full w-full place-items-center rounded-full bg-blue-50">
-            <strong className="text-2xl font-bold text-blue-500">{value === null ? "—" : `${normalized}%`}</strong>
+          <div className={`grid h-full w-full place-items-center rounded-full ${palette.inner}`}>
+            <strong className={`text-2xl font-bold ${palette.text}`}>{value === null ? "—" : `${normalized}%`}</strong>
           </div>
         </div>
         </div>
@@ -901,12 +937,14 @@ function DisciplineCard({ value }: { value: number | null }) {
   );
 }
 
-function ClosingTable({
+export function ClosingTable({
   rows,
   requests,
   onReview,
   onOpenAgenda,
   onOpenDetails,
+  onRemind,
+  onCorrectLeads,
 }: {
   rows: ReturnType<typeof getClosingRows>;
   requests: PendingRequest[];
@@ -916,6 +954,8 @@ function ClosingTable({
   ) => void;
   onOpenAgenda: (sellerId: string) => void;
   onOpenDetails: (detail: { seller: { id: string; name: string }; checkin?: CheckinWithTotals; status: string }) => void;
+  onRemind: (seller: { id: string; name: string }) => void;
+  onCorrectLeads: (detail: { seller: { id: string; name: string }; checkin: CheckinWithTotals }) => void;
 }) {
   return (
     <div className="overflow-x-auto">
@@ -956,6 +996,8 @@ function ClosingTable({
               onReview={onReview}
               onOpenAgenda={() => onOpenAgenda(seller.id)}
               onOpenDetails={() => onOpenDetails({ seller, checkin, status })}
+              onRemind={() => onRemind(seller)}
+              onCorrectLeads={checkin ? () => onCorrectLeads({ seller, checkin }) : undefined}
             />
           ))}
         </tbody>
@@ -1154,6 +1196,8 @@ function ClosingRow({
   onReview,
   onOpenAgenda,
   onOpenDetails,
+  onRemind,
+  onCorrectLeads,
 }: {
   name: string;
   checkin?: CheckinWithTotals;
@@ -1165,6 +1209,8 @@ function ClosingRow({
   ) => void;
   onOpenAgenda: () => void;
   onOpenDetails: () => void;
+  onRemind: () => void;
+  onCorrectLeads?: () => void;
 }) {
   const appointments = checkin
     ? sumNumericMetrics(checkin.agd_cart_today, checkin.agd_net_today)
@@ -1220,11 +1266,20 @@ function ClosingRow({
           >
             <Eye size={13} /> Detalhes
           </button>
+          {/*
+            Atalhos por linha do Base44: cobrar quem não entregou, corrigir os
+            leads de quem já entregou e decidir a regularização pendente. Sem
+            eles, o gerente tinha de sair da linha para agir.
+          */}
           {request ? (
             <>
             <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-emerald-700 hover:bg-emerald-50" onClick={() => onReview(request, "approve")}><Check size={13} /> Aprovar</button>
             <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-red-700 hover:bg-red-50" onClick={() => onReview(request, "reject")}><X size={13} /> Recusar</button>
             </>
+          ) : status === "Pendente" ? (
+            <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-amber-700 hover:bg-amber-50" aria-label={`Cobrar fechamento de ${name}`} onClick={onRemind}><Megaphone size={13} /> Cobrar</button>
+          ) : onCorrectLeads ? (
+            <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-purple-700 hover:bg-purple-50" aria-label={`Corrigir leads de ${name}`} onClick={onCorrectLeads}><Wrench size={13} /> Leads</button>
           ) : <span className="text-xs text-gray-500">Somente consulta</span>}
         </div>
       </td>
