@@ -62,3 +62,4 @@ core-js-banners
 node-compile-cache/
 output/lighthouse-*/
 visual-evidence/
+mx-v3-csv-*/

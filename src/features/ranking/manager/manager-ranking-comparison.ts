@@ -10,8 +10,10 @@ import type { RankedVendedor } from '@/features/ranking/hooks/useStoreRankingPag
  * não foram portadas — não há número real para colocar nelas.
  */
 
-export const COMPARISON_SIDE_A = '#10b981'
-export const COMPARISON_SIDE_B = '#6366f1'
+import { chartTokens } from '@/lib/charts/tokens'
+
+export const COMPARISON_SIDE_A = chartTokens.success()
+export const COMPARISON_SIDE_B = chartTokens.series.s6()
 
 export type ComparisonRadarPoint = { metric: string; a: number; b: number }
 

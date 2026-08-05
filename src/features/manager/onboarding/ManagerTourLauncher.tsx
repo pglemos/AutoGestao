@@ -23,7 +23,7 @@ export function ManagerTourLauncher() {
     <>
       {active && <ManagerTourOverlay steps={steps} onClose={dismiss} onSkip={skipPermanently} />}
 
-      <div className="fixed bottom-5 right-5 z-[160]">
+      <div className="fixed bottom-5 right-5 z-50">
         {helpOpen && (
           <div className="absolute bottom-14 right-0 w-64 overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl">
             <div className="flex items-center justify-between bg-emerald-600 px-4 py-3">

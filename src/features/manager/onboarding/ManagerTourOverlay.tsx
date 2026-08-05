@@ -96,7 +96,7 @@ export function ManagerTourOverlay({
   }, [next, previous, onSkip])
 
   return (
-    <div className="fixed inset-0 z-[165]" role="dialog" aria-modal="true" aria-label="Tour do Gerente">
+    <div className="fixed inset-0 z-50" role="dialog" aria-modal="true" aria-label="Tour do Gerente">
       {!spotlight && (
         <div className="absolute inset-0 bg-slate-900/55 backdrop-blur-[1px]" role="presentation" onClick={onSkip} />
       )}

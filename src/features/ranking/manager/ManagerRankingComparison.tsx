@@ -3,6 +3,7 @@ import { PolarAngleAxis, PolarGrid, PolarRadiusAxis, Radar, RadarChart, Responsi
 import { Award, Calendar, Check, ChevronDown, GitCompareArrows, MessageSquare, Percent, Phone, RefreshCw, Sparkles, Star, Target, Users } from 'lucide-react'
 import { HelpTooltip } from '@/components/ui/HelpTooltip'
 import type { RankedVendedor } from '@/features/ranking/hooks/useStoreRankingPageData'
+import { chartTokens } from '@/lib/charts/tokens'
 import {
   COMPARISON_SIDE_A,
   COMPARISON_SIDE_B,
@@ -166,7 +167,7 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
               borderColor: winnerColor ? `${winnerColor}40` : '#f3f4f6',
             }}
           >
-            <Award size={22} style={{ color: winnerColor || '#9ca3af' }} />
+            <Award size={22} style={{ color: winnerColor || chartTokens.axisTickMuted() }} />
             <p className="text-sm text-gray-700">
               {winner
                 ? <>Em pontuação geral, <strong className="text-gray-900">{winner.nome}</strong> está à frente neste período.</>
@@ -186,7 +187,7 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
               <ResponsiveContainer width="100%" height={280}>
                 <RadarChart data={radar} outerRadius="75%">
                   <PolarGrid stroke="#f0f0f0" />
-                  <PolarAngleAxis dataKey="metric" tick={{ fontSize: 11, fill: '#6b7280' }} />
+                  <PolarAngleAxis dataKey="metric" tick={{ fontSize: 11, fill: chartTokens.axisTick() }} />
                   <PolarRadiusAxis domain={[0, 100]} tick={false} axisLine={false} />
                   <Radar name={sellerA.nome} dataKey="a" stroke={COMPARISON_SIDE_A} fill={COMPARISON_SIDE_A} fillOpacity={0.25} />
                   <Radar name={sellerB.nome} dataKey="b" stroke={COMPARISON_SIDE_B} fill={COMPARISON_SIDE_B} fillOpacity={0.25} />
