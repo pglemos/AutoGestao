@@ -1,7 +1,7 @@
 # Matriz reproduzível de rotas, autorização e dados
 
-- Rotas declaradas em `src/App.tsx`: **108**
-- Rotas protegidas: **100**
+- Rotas declaradas em `src/App.tsx`: **109**
+- Rotas protegidas: **101**
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
@@ -94,6 +94,7 @@
 | `/mentor` | route | protegida | — | `/mentor` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>` |
 | `/feedbacks-pdis` | route | protegida | — | `/feedbacks-pdis` | vendedor | `<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens` |
 | `/lojas/:storeSlug/consultor-ia` | route | protegida | — | `/lojas/:storeSlug/consultor-ia` | — | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} /> </Suspense>` |
+| `/lojas/:storeSlug/filiais` | route | protegida | — | `/lojas/:storeSlug/filiais` | vendedor, gerente, dono | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<StoreBranches />} /> </Suspense>` |
 | `/lojas/:storeSlug` | route | protegida | — | `/lojas/:storeSlug` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>` |
 | `/lojas/:storeSlug/equipe` | route | protegida | — | `/lojas/:storeSlug/*` | vendedor | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>` |
 | `/consultor-ia` | route | protegida | — | `/consultor-ia` | — | `<ConsultorIaAliasRedirect />` |
@@ -167,7 +168,7 @@
 | `etapas_modelo_visita_consultoria` | 1 |
 | `eventos_agenda_consultoria` | 3 |
 | `eventos_agenda_executiva` | 2 |
-| `eventos_comerciais` | 6 |
+| `eventos_comerciais` | 7 |
 | `evidencias_planos_acao` | 1 |
 | `evidencias_visita` | 2 |
 | `evidencias-consultoria` | 2 |
@@ -215,7 +216,7 @@
 | `push_subscriptions` | 1 |
 | `recomendacoes_desenvolvimento` | 1 |
 | `regras_entrega_loja` | 2 |
-| `regras_metas_loja` | 6 |
+| `regras_metas_loja` | 7 |
 | `regularizacao_fechamento` | 2 |
 | `relatorios_devolutivas_semanais` | 1 |
 | `remuneracao_benchmark` | 1 |
@@ -245,7 +246,7 @@
 | `universidade_aulas` | 1 |
 | `universidade_certificacoes` | 1 |
 | `universidade_trilhas` | 1 |
-| `usuarios` | 14 |
+| `usuarios` | 15 |
 | `valores_indicadores_planejamento` | 1 |
 | `valores_parametros_consultoria` | 1 |
 | `veiculos_estoque` | 4 |
@@ -335,7 +336,7 @@
 | `eventos_agenda_consultoria:update` | 1 |
 | `eventos_agenda_executiva:select` | 2 |
 | `eventos_comerciais:insert` | 2 |
-| `eventos_comerciais:select` | 6 |
+| `eventos_comerciais:select` | 7 |
 | `eventos_comerciais:update` | 1 |
 | `eventos_comerciais:upsert` | 1 |
 | `evidencias_planos_acao:delete` | 1 |
@@ -436,7 +437,7 @@
 | `regras_entrega_loja:select` | 2 |
 | `regras_entrega_loja:upsert` | 2 |
 | `regras_metas_loja:delete` | 1 |
-| `regras_metas_loja:select` | 6 |
+| `regras_metas_loja:select` | 7 |
 | `regras_metas_loja:upsert` | 3 |
 | `regularizacao_fechamento:insert` | 1 |
 | `regularizacao_fechamento:select` | 2 |
@@ -484,7 +485,7 @@
 | `universidade_certificacoes:select` | 1 |
 | `universidade_trilhas:select` | 1 |
 | `usuarios:delete` | 1 |
-| `usuarios:select` | 12 |
+| `usuarios:select` | 13 |
 | `usuarios:update` | 4 |
 | `usuarios:upsert` | 1 |
 | `valores_indicadores_planejamento:select` | 1 |
@@ -516,7 +517,7 @@
 | `ack_alert` | 1 |
 | `admin_archive_store` | 1 |
 | `admin_create_store` | 1 |
-| `admin_hard_delete_store` | 1 |
+| `admin_hard_delete_store` | 2 |
 | `admin_restore_store` | 1 |
 | `admin_store_live_overview` | 1 |
 | `admin_update_store` | 1 |

@@ -25,7 +25,7 @@ type PerformanceTabProps = {
   showAdminSettings: boolean
   onToggleAdminSettings: () => void
   onOpenStoreEdit: () => void
-  onNavigateLojas: () => void
+  onManageBranches: () => void
   onDeleteStore: () => void
   deletingStore: boolean
   onRefetchAll: () => Promise<void>
@@ -43,7 +43,7 @@ export function PerformanceTab({
   showAdminSettings,
   onToggleAdminSettings,
   onOpenStoreEdit,
-  onNavigateLojas,
+  onManageBranches,
   onDeleteStore,
   deletingStore,
   onRefetchAll,
@@ -100,7 +100,7 @@ export function PerformanceTab({
             showAdminSettings={showAdminSettings}
             onToggleAdminSettings={onToggleAdminSettings}
             onOpenEdit={onOpenStoreEdit}
-            onNavigateLojas={onNavigateLojas}
+            onManageBranches={onManageBranches}
             onDelete={onDeleteStore}
             deletingStore={deletingStore}
             onRefetchAll={onRefetchAll}

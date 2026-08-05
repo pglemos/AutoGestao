@@ -3,6 +3,7 @@ import { ConditionalPageCanvas } from '@/design-system/page'
 import { Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { isAdministradorMx, isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { useStores } from '@/hooks/useStores'
+import { slugify } from '@/lib/utils'
 import { StoreEditModal } from '@/features/admin/components/StoreEditModal'
 import { StoreGoalsPanel } from '@/features/lojas/components/StoreGoalsPanel'
 import { SellerGoalsEditor } from '@/features/lojas/components/SellerGoalsEditor'
@@ -62,6 +63,19 @@ export function DashboardLoja() {
   /** A Meta da Loja tem cabeçalho próprio (período, unidade, atualizar, metas). */
   const isStoreGoalScreen = activeTab === 'metas' && (role === 'gerente' || isOwner)
   const isManagerSection = (role === 'gerente' && activeTab !== 'performance') || isTeamKanban || isStoreGoalScreen
+
+  /**
+   * Gestão de filiais abre em aba nova: o admin costuma comparar o cadastro do
+   * grupo com o dashboard da matriz, e perder o dashboard no meio da conferência
+   * era o comportamento anterior (navegação no mesmo histórico para `/lojas`).
+   */
+  const handleManageBranches = useCallback(() => {
+    if (!selectedStore) return
+    const path = `/lojas/${slugify(selectedStore.name)}/filiais`
+    const opened = window.open(path, '_blank', 'noopener,noreferrer')
+    // Bloqueador de pop-up: sem aba nova, a navegação normal ainda leva à tela.
+    if (!opened) navigate(path)
+  }, [navigate, selectedStore])
 
   const handleTabChange = useCallback((tab: DashboardTab) => {
     const params = new URLSearchParams(location.search)
@@ -183,7 +197,7 @@ export function DashboardLoja() {
           showAdminSettings={showAdminSettings}
           onToggleAdminSettings={() => setShowAdminSettings(v => !v)}
           onOpenStoreEdit={() => actions.setStoreEditOpen(true)}
-          onNavigateLojas={() => navigate('/lojas')}
+          onManageBranches={handleManageBranches}
           onDeleteStore={actions.handleDeleteStore}
           deletingStore={actions.deletingStore}
           onRefetchAll={onRefetchAll}
