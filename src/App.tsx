@@ -42,7 +42,6 @@ const Perfil = lazy(() => import('@/pages/Perfil'))
 
 // Gerente e Dono
 const DashboardLoja = lazy(() => import('@/pages/DashboardLoja'))
-const ScopedActionPlanPage = lazy(() => import('@/features/action-plan/ScopedActionPlanPage'))
 const InternalActionPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalActionPlanPage'))
 const InternalStrategicPlanPage = lazy(() => import('@/features/internal-mx-planning/InternalStrategicPlanPage'))
 const InternalConsultingPage = lazy(() => import('@/features/internal-mx-planning/InternalConsultingPage'))
@@ -319,7 +318,8 @@ export default function App() {
               <Route path="/" element={<ProtectedRoute><Suspense fallback={<Spinner />}><AppShell /></Suspense></ProtectedRoute>}>
                 <Route path="settings" element={<Navigate to="/configuracoes" replace />} />
                 <Route path="plano-estrategico" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></Suspense>} />
-                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ScopedActionPlanPage />} dono={<OwnerPlanoDeAcao />} admin={<InternalActionPlanPage />} /></Suspense>} />
+                {/* Plano de Ação não faz parte do módulo do gerente (decisão de produto, 2026-08-05). */}
+                <Route path="plano-acao" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoDeAcao />} admin={<InternalActionPlanPage />} /></Suspense>} />
                 <Route path="decisoes" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerCentralDeDecisoes />} admin={<ForbiddenRoute />} /></Suspense>} />
                 <Route path="departamentos" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDepartamentos />} admin={<ForbiddenRoute />} /></Suspense>} />
                 <Route path="departamentos/comercial" element={<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerDeptComercial />} admin={<ForbiddenRoute />} /></Suspense>} />

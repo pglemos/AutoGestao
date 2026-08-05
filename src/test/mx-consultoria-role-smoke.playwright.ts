@@ -151,10 +151,9 @@ async function auditAuthenticatedRole(browser: Browser, roleCase: RoleCase) {
         // que procuravam esse rótulo passavam por vacuidade no lado restritivo
         // e falhavam no lado permissivo.
         //
-        // DIVERGÊNCIA ABERTA: hoje o gerente também vê "Nova Ação", porque
-        // ScopedActionPlanPage trata dono|gerente|vendedor como atores de
-        // planejamento. O contrato deste teste presumia o contrário. Enquanto a
-        // regra não é decidida, não afirmamos permissão para esses dois perfis.
+        // Divergência resolvida em 2026-08-05: o Plano de Ação saiu do módulo do
+        // gerente. A rota atende dono e perfis internos MX; gerente e vendedor
+        // nem chegam aqui, porque não a listam mais em REAL_DATA_ROUTES_BY_ROLE.
         // Ver docs/audits/2026-07-31-permissao-plano-acao.md
         if (roleCase.role !== 'gerente' && roleCase.role !== 'vendedor') {
           expect(

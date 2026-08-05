@@ -17,8 +17,9 @@ const SELLER_ROUTES = [
   `/lojas/${MX_STORE_SLUG}/consultor-ia`,
 ] as const
 
+// `/plano-acao` saiu daqui: é do dono e dos perfis internos, não do gerente.
 const SHARED_LEADERSHIP_ROUTES = [
-  '/settings', '/plano-acao', '/fechamento-diario', '/relatorio-matinal',
+  '/settings', '/fechamento-diario', '/relatorio-matinal',
   '/relatorios/performance-vendas', '/relatorios/performance-vendedor', '/ranking', '/classificacao',
   '/feedback', '/vendedor/treinamentos', '/vendedor/universidade-mx', '/treinamentos',
   '/universidade-mx', '/devolutivas', '/notificacoes', '/perfil', '/meu-perfil', '/pdi',
@@ -39,7 +40,7 @@ const MANAGER_ROUTES = [
 ] as const
 
 const OWNER_ROUTES = [
-  ...SHARED_LEADERSHIP_ROUTES, '/rotina', '/decisoes',
+  ...SHARED_LEADERSHIP_ROUTES, '/plano-acao', '/rotina', '/decisoes',
   '/plano-estrategico', '/consultoria', '/departamentos',
   '/departamentos/comercial', '/departamentos/marketing',
   '/departamentos/produto-e-estoque', '/departamentos/pessoas-rh',
@@ -51,7 +52,7 @@ const OWNER_ROUTES = [
 ] as const
 
 const INTERNAL_SHARED_ROUTES = [
-  ...SHARED_LEADERSHIP_ROUTES, ...STORE_LEADERSHIP_ROUTES, '/painel', '/simulacao', '/simulacao/vendedor',
+  ...SHARED_LEADERSHIP_ROUTES, ...STORE_LEADERSHIP_ROUTES, '/plano-acao', '/painel', '/simulacao', '/simulacao/vendedor',
   '/simulacao/gerente', '/simulacao/dono', '/lojas', '/agenda', '/consultoria',
   '/consultoria/clientes', '/configuracoes/operacional', '/configuracoes/consultoria-pmr',
   '/configuracoes/reprocessamento', '/rotina', '/gerente/fechamento-diario',

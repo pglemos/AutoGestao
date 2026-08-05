@@ -32,7 +32,8 @@ export const ROUTE_ACCESS_RULES = [
   // para as rotas raiz, mas o shell precisa autorizá-los antes de renderizar
   // seus itens de menu.
   { pattern: '/dono/*', roles: ['dono'] },
-  { pattern: '/plano-acao', roles: INTERNAL_AND_LEADERS },
+  // Gerente fora: Plano de Ação é do dono e dos perfis internos MX.
+  { pattern: '/plano-acao', roles: INTERNAL_AND_OWNER },
   { pattern: '/plano-estrategico', roles: [...INTERNAL_ROLES, 'dono'] },
   { pattern: '/decisoes', roles: ['dono'] },
   { pattern: '/departamentos', roles: ['dono'] },

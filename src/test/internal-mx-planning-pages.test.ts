@@ -42,12 +42,19 @@ describe('páginas de planejamento do módulo interno MX', () => {
     expect(realtime).toContain('consulting:')
   })
 
-  test('monta gerente e vendedor dentro do provider compartilhado', () => {
+  // Decisão de produto (2026-08-05): o Plano de Ação saiu do módulo do gerente.
+  // A rota atende apenas dono e perfis internos MX; gerente e vendedor caem em
+  // ForbiddenRoute, e `ScopedActionPlanPage` foi removido por ficar sem uso.
+  test('bloqueia gerente e vendedor na rota de plano de ação', () => {
     const app = read('src/App.tsx')
-    const scopedPage = read('src/features/action-plan/ScopedActionPlanPage.tsx')
-    expect(app).toContain('gerente={<ScopedActionPlanPage />}')
-    expect(app).toContain('vendedor={<ForbiddenRoute />}')
-    expect(scopedPage).toContain('PlanningWorkspaceProvider')
-    expect(scopedPage).toContain('<ActionPlanWorkspace />')
+    const planRoute = app
+      .split('\n')
+      .find((line) => line.includes('path="plano-acao"')) || ''
+
+    expect(planRoute).toContain('gerente={<ForbiddenRoute />}')
+    expect(planRoute).toContain('vendedor={<ForbiddenRoute />}')
+    expect(planRoute).toContain('dono={<OwnerPlanoDeAcao />}')
+    expect(planRoute).toContain('admin={<InternalActionPlanPage />}')
+    expect(app).not.toContain('ScopedActionPlanPage')
   })
 })

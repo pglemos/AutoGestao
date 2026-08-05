@@ -187,7 +187,6 @@ const navConfig: Record<string, NavCategory[]> = {
       items: [
         { label: 'Meta da Loja', path: '/gerente/meta-loja', icon: <Target size={16} /> },
         { label: 'Mentor Gerencial', path: '/gerente/mentor', icon: <BrainCircuit size={16} /> },
-        { label: 'Plano de Ação', path: '/plano-acao', icon: <ClipboardList size={16} /> },
       ],
     },
     {
