@@ -53,9 +53,42 @@ BEGIN
           AND v.ended_at IS NULL
       )
   ),
+  -- Mesma agregação de get_resumo_rede_periodo, porém restrita a active_stores.
+  -- Aquela função é guardada por eh_area_interna_mx porque devolve a rede
+  -- inteira; chamá-la aqui abortaria com forbidden_global_read. Afrouxar a
+  -- guarda dela deixaria qualquer autenticado ler todas as lojas — por isso a
+  -- consulta é replicada com escopo, e não a permissão relaxada.
+  owner_sales AS (
+    SELECT ec.loja_id AS store_id, count(*)::bigint AS sales
+    FROM public.eventos_comerciais ec
+    LEFT JOIN public.oportunidades o ON o.id = ec.oportunidade_id
+    WHERE ec.tipo_evento = 'venda_realizada'
+      AND o.etapa IS DISTINCT FROM 'cancelada'
+      AND coalesce(ec.data_competencia, (ec.data_evento AT TIME ZONE 'America/Sao_Paulo')::date)
+          BETWEEN p_start_date AND p_end_date
+      AND ec.loja_id IN (SELECT id FROM active_stores)
+    GROUP BY ec.loja_id
+  ),
+  owner_activity AS (
+    SELECT l.store_id,
+           coalesce(sum(coalesce(l.leads_prev_day, 0)), 0)::bigint AS leads,
+           coalesce(sum(coalesce(l.agd_net_today, 0) + coalesce(l.agd_cart_today, 0)), 0)::bigint AS agd,
+           coalesce(sum(coalesce(l.visit_prev_day, 0)), 0)::bigint AS vis
+    FROM public.lancamentos_diarios l
+    WHERE l.metric_scope = 'daily'::public.checkin_scope
+      AND l.reference_date BETWEEN p_start_date AND p_end_date
+      AND l.store_id IN (SELECT id FROM active_stores)
+    GROUP BY l.store_id
+  ),
   operational_summary AS (
-    SELECT r.store_id, r.sales, r.leads, r.agd, r.vis
-    FROM public.get_resumo_rede_periodo(p_start_date, p_end_date, 'daily') r
+    SELECT
+      coalesce(s.store_id, a.store_id) AS store_id,
+      coalesce(s.sales, 0) AS sales,
+      coalesce(a.leads, 0) AS leads,
+      coalesce(a.agd, 0) AS agd,
+      coalesce(a.vis, 0) AS vis
+    FROM owner_sales s
+    FULL OUTER JOIN owner_activity a ON a.store_id = s.store_id
   ),
   seller_performance AS (
     SELECT *
