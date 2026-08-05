@@ -1,10 +1,24 @@
 import { useMemo, useState } from 'react'
-import { Award, RefreshCw, Star, TrendingUp, Trophy } from 'lucide-react'
+import { Award, BarChart3, ListOrdered, RefreshCw, Star, TrendingUp, Trophy } from 'lucide-react'
+import { HelpTooltip } from '@/components/ui/HelpTooltip'
 import { RANKING_PERIODOS, useStoreRankingPageData, type RankedVendedor } from '@/features/ranking/hooks/useStoreRankingPageData'
 import { ManagerRankingComparison } from '@/features/ranking/manager/ManagerRankingComparison'
 import { ManagerRankingPodium } from '@/features/ranking/manager/ManagerRankingPodium'
 
 type Criterion = 'geral' | 'vendas' | 'conversao' | 'rotina'
+
+/** Colunas e textos de ajuda da classificação, na ordem do Base44. */
+const RANKING_COLUMNS: Array<{ label: string; help?: string }> = [
+  { label: '#' },
+  { label: 'Vendedor' },
+  { label: 'Vendas', help: 'Total de vendas oficiais no período selecionado.' },
+  { label: 'Meta', help: 'Meta individual do vendedor no período.' },
+  { label: '% Meta', help: 'Vendas realizadas divididas pela meta individual. Verde ≥ 80%, amarelo ≥ 50%, vermelho abaixo.' },
+  { label: 'Agend.', help: 'Total de agendamentos confirmados no período.' },
+  { label: 'Conversão', help: 'Vendas divididas pelos atendimentos e leads de internet. Mede a eficiência comercial.' },
+  { label: 'Rotina', help: 'Média da execução da rotina diária no período. Sem snapshot oficial, fica sem valor.' },
+  { label: 'Pontuação', help: 'Soma ponderada: 50% resultado da meta + 25% conversão + 25% rotina. Define a classificação geral.' },
+]
 
 export function ManagerRankingReference() {
   const [selectedMonth, setSelectedMonth] = useState(() => {
@@ -13,6 +27,7 @@ export function ManagerRankingReference() {
   })
   const data = useStoreRankingPageData({ referenceMonth: selectedMonth })
   const [criterion, setCriterion] = useState<Criterion>('geral')
+  const [view, setView] = useState<'classificacao' | 'comparativo'>('classificacao')
   const month = new Intl.DateTimeFormat('pt-BR', { month: 'long', year: 'numeric' }).format(new Date(`${selectedMonth}-01T12:00:00`))
 
   const ranking = useMemo(() => [...data.vendedores].sort((left, right) => {
@@ -27,10 +42,10 @@ export function ManagerRankingReference() {
   const routineLeader = data.vendedores.filter(item => item.rotina !== null).sort((left, right) => (right.rotina || 0) - (left.rotina || 0))[0]
   const scoreLeader = data.vendedores.filter(item => item.pontuacao !== null).sort((left, right) => (right.pontuacao || 0) - (left.pontuacao || 0))[0]
   const highlights = [
-    { label: 'Líder em Vendas', seller: salesLeader, value: salesLeader ? `${salesLeader.vendas} vendas` : 'Sem dados oficiais', icon: Trophy, tone: 'yellow' as const },
-    { label: 'Maior Conversão', seller: conversionLeader, value: conversionLeader ? `${conversionLeader.conversao}%` : 'Sem dados oficiais', icon: TrendingUp, tone: 'emerald' as const },
-    { label: 'Melhor Rotina', seller: routineLeader, value: routineLeader?.rotina === null || !routineLeader ? 'Sem snapshot oficial' : `${routineLeader.rotina}%`, icon: Star, tone: 'blue' as const },
-    { label: 'Maior Pontuação', seller: scoreLeader, value: scoreLeader?.pontuacao === null || !scoreLeader ? 'Sem dados oficiais' : `${scoreLeader.pontuacao} pts`, icon: Award, tone: 'violet' as const },
+    { label: 'Líder em Vendas', seller: salesLeader, value: salesLeader ? `${salesLeader.vendas} vendas` : 'Sem dados oficiais', icon: Trophy, tone: 'yellow' as const, help: 'Vendedor com o maior número de vendas no mês selecionado.' },
+    { label: 'Maior Conversão', seller: conversionLeader, value: conversionLeader ? `${conversionLeader.conversao}%` : 'Sem dados oficiais', icon: TrendingUp, tone: 'emerald' as const, help: 'Vendedor com a melhor taxa de conversão (vendas ÷ atendimentos + leads de internet) no período.' },
+    { label: 'Melhor Rotina', seller: routineLeader, value: routineLeader?.rotina === null || !routineLeader ? 'Sem snapshot oficial' : `${routineLeader.rotina}%`, icon: Star, tone: 'blue' as const, help: 'Vendedor com a maior média de execução da rotina diária no período.' },
+    { label: 'Maior Pontuação', seller: scoreLeader, value: scoreLeader?.pontuacao === null || !scoreLeader ? 'Sem dados oficiais' : `${scoreLeader.pontuacao} pts`, icon: Award, tone: 'violet' as const, help: 'Soma ponderada: 50% resultado da meta, 25% conversão e 25% execução da rotina.' },
   ]
 
   return (
@@ -45,33 +60,56 @@ export function ManagerRankingReference() {
 
         {data.error && <div role="alert" className="rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm font-medium text-red-700">{data.error}</div>}
 
-        <section className="grid grid-cols-2 gap-4 xl:grid-cols-4" aria-label="Destaques do ranking">{highlights.map(({ label, seller, value, icon: Icon, tone }) => <Highlight key={label} label={label} name={seller?.nome || '—'} value={value} icon={Icon} tone={tone} />)}</section>
+        {/* Toggle de visão do Base44: classificação e comparativo não convivem na mesma tela. */}
+        <nav className="rounded-2xl border border-gray-100 bg-white p-3 shadow-sm" aria-label="Visão do ranking">
+          <div className="flex gap-1">
+            {([['classificacao', 'Classificação', ListOrdered], ['comparativo', 'Comparar vendedores', BarChart3]] as const).map(([key, label, Icon]) => (
+              <button
+                key={key}
+                type="button"
+                aria-pressed={view === key}
+                onClick={() => setView(key)}
+                className={`flex items-center gap-1.5 rounded-xl px-4 py-2 text-sm font-medium transition-all ${view === key ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-500 hover:bg-gray-50'}`}
+              >
+                <Icon size={15} /> {label}
+              </button>
+            ))}
+          </div>
+        </nav>
 
-        {!data.loading && <ManagerRankingPodium ranking={ranking} />}
+        {view === 'comparativo' ? (
+          data.vendedores.length > 1
+            ? <ManagerRankingComparison sellers={data.vendedores} periodLabel={`${data.periodo} · ${month}`} />
+            : <div className="rounded-2xl border border-gray-100 bg-white p-10 text-center shadow-sm"><BarChart3 className="mx-auto mb-3 text-gray-300" size={40} /><p className="text-sm font-medium text-gray-500">São necessários pelo menos dois vendedores no período para comparar.</p></div>
+        ) : (
+        <>
+        <section className="grid grid-cols-2 gap-4 xl:grid-cols-4" aria-label="Destaques do ranking">{highlights.map(({ label, seller, value, icon: Icon, tone, help }) => <Highlight key={label} label={label} name={seller?.nome || '—'} value={value} icon={Icon} tone={tone} help={help} />)}</section>
+
+        {!data.loading && ranking.length >= 3 && <ManagerRankingPodium ranking={ranking} />}
 
         <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm" aria-labelledby="ranking-table-title">
           <div className="border-b border-gray-100 px-5 py-4"><h2 id="ranking-table-title" className="font-semibold capitalize text-gray-800">Classificação — {data.periodo} · {month}</h2><p className="mt-1 text-xs text-gray-500">Fórmula provisória aguardando decisão do Dono: 50% resultado, 25% conversão e 25% execução da rotina. Sem execução verificável, a pontuação não é estimada.</p></div>
-          {data.loading ? <div className="flex justify-center py-12"><div className="h-6 w-6 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" /></div> : ranking.length === 0 ? <div className="flex flex-col items-center justify-center py-16 text-center"><Trophy className="mb-3 text-gray-300" size={48} /><p className="font-medium text-gray-500">Ainda não há dados suficientes para montar o ranking.</p></div> : <div className="overflow-x-auto"><table className="w-full min-w-[820px] text-sm"><thead className="border-b border-gray-100 bg-gray-50"><tr>{['#', 'Vendedor', 'Vendas', 'Meta', '% Meta', 'Conversão', 'Rotina', 'Pontuação'].map(label => <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</th>)}</tr></thead><tbody className="divide-y divide-gray-50">{ranking.map((seller, index) => <RankingRow key={seller.id} seller={seller} index={index} />)}</tbody></table></div>}
+          {data.loading ? <div className="flex justify-center py-12"><div className="h-6 w-6 animate-spin rounded-full border-4 border-emerald-200 border-t-emerald-600" /></div> : ranking.length === 0 ? <div className="flex flex-col items-center justify-center py-16 text-center"><Trophy className="mb-3 text-gray-300" size={48} /><p className="font-medium text-gray-500">Ainda não há dados suficientes para montar o ranking.</p></div> : <div className="overflow-x-auto"><table className="w-full min-w-[900px] text-sm"><thead className="border-b border-gray-100 bg-gray-50"><tr>{RANKING_COLUMNS.map(({ label, help }) => <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"><span className="inline-flex items-center gap-1">{label}<HelpTooltip text={help} /></span></th>)}</tr></thead><tbody className="divide-y divide-gray-50">{ranking.map((seller, index) => <RankingRow key={seller.id} seller={seller} index={index} />)}</tbody></table></div>}
         </section>
-
-        {!data.loading && data.vendedores.length > 1 && (
-          <ManagerRankingComparison sellers={data.vendedores} periodLabel={`${data.periodo} · ${month}`} />
+        </>
         )}
       </div>
     </div>
   )
 }
 
-function Highlight({ label, name, value, icon: Icon, tone }: { label: string; name: string; value: string; icon: typeof Trophy; tone: 'yellow' | 'emerald' | 'blue' | 'violet' }) {
-  const tones = { yellow: 'border-yellow-100 bg-yellow-50 text-yellow-600', emerald: 'border-emerald-100 bg-emerald-50 text-emerald-600', blue: 'border-blue-100 bg-blue-50 text-blue-600', violet: 'border-violet-100 bg-violet-50 text-violet-600' }
-  return <article className={`rounded-2xl border bg-white p-4 shadow-sm ${tones[tone].split(' ')[0]}`}><div className="mb-2 flex items-center gap-2"><span className={`grid h-8 w-8 place-items-center rounded-lg ${tones[tone].split(' ').slice(1).join(' ')}`}><Icon size={16} /></span><p className="text-xs text-gray-500">{label}</p></div><p className="font-bold text-gray-800">{name}</p><p className="text-sm text-gray-500">{value}</p></article>
+function Highlight({ label, name, value, icon: Icon, tone, help }: { label: string; name: string; value: string; icon: typeof Trophy; tone: 'yellow' | 'emerald' | 'blue' | 'violet'; help?: string }) {
+  const tones = { yellow: 'border-yellow-100 bg-yellow-50 text-yellow-600', emerald: 'border-emerald-100 bg-emerald-50 text-emerald-600', blue: 'border-blue-100 bg-blue-50 text-blue-600', violet: 'border-purple-100 bg-purple-50 text-purple-600' }
+  return <article className={`rounded-2xl border bg-white p-4 shadow-sm ${tones[tone].split(' ')[0]}`}><div className="mb-2 flex items-center gap-2"><span className={`grid h-8 w-8 place-items-center rounded-lg ${tones[tone].split(' ').slice(1).join(' ')}`}><Icon size={16} /></span><p className="flex items-center gap-1 text-xs text-gray-500">{label}<HelpTooltip text={help} /></p></div><p className="font-bold text-gray-800">{name}</p><p className="text-sm text-gray-500">{value}</p></article>
 }
 
 function RankingRow({ seller, index }: { seller: RankedVendedor; index: number }) {
   const attainment = seller.meta > 0 ? Math.round((seller.vendas / seller.meta) * 100) : null
   const rowTone = index === 0 ? 'border-l-4 border-yellow-400 bg-yellow-50' : index === 1 ? 'border-l-4 border-gray-300 bg-gray-50' : index === 2 ? 'border-l-4 border-amber-500 bg-orange-50' : ''
   const positionTone = index === 0 ? 'bg-yellow-400 text-white' : index === 1 ? 'bg-gray-400 text-white' : index === 2 ? 'bg-amber-600 text-white' : 'bg-gray-100 text-gray-600'
-  return <tr className={rowTone}><td className="px-4 py-3"><span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${positionTone}`}>{index + 1}</span></td><td className="px-4 py-3 font-semibold text-gray-800">{seller.nome}</td><td className="px-4 py-3 text-gray-700">{seller.vendas}</td><td className="px-4 py-3 text-gray-700">{seller.meta || '—'}</td><td className="px-4 py-3"><span className={`rounded-lg px-2 py-1 text-xs font-medium ${attainment === null ? 'bg-gray-100 text-gray-500' : attainment >= 80 ? 'bg-emerald-100 text-emerald-700' : attainment >= 50 ? 'bg-amber-100 text-amber-700' : 'bg-red-100 text-red-700'}`}>{attainment === null ? '—' : `${attainment}%`}</span></td><td className="px-4 py-3 text-gray-700">{seller.conversao}%</td><td className="px-4 py-3 text-gray-700">{seller.rotina === null ? '—' : `${seller.rotina}%`}</td><td className="px-4 py-3 font-bold text-emerald-700">{seller.pontuacao ?? '—'}</td></tr>
+  const barTone = attainment === null ? 'bg-gray-300' : attainment >= 80 ? 'bg-emerald-500' : attainment >= 50 ? 'bg-amber-500' : 'bg-red-500'
+  const textTone = attainment === null ? 'text-gray-400' : attainment >= 80 ? 'text-emerald-700' : attainment >= 50 ? 'text-amber-700' : 'text-red-700'
+  return <tr className={rowTone}><td className="px-4 py-3"><span className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${positionTone}`}>{index + 1}</span></td><td className="px-4 py-3 font-semibold text-gray-800">{seller.nome}</td><td className="px-4 py-3 text-gray-700">{seller.vendas}</td><td className="px-4 py-3 text-gray-700">{seller.meta || '—'}</td><td className="px-4 py-3"><div className="flex min-w-[90px] items-center gap-2"><div className="h-1.5 flex-1 overflow-hidden rounded-full bg-gray-100"><div className={`h-full rounded-full ${barTone}`} style={{ width: `${Math.min(attainment ?? 0, 100)}%` }} /></div><span className={`text-xs font-medium ${textTone}`}>{attainment === null ? '—' : `${attainment}%`}</span></div></td><td className="px-4 py-3 text-gray-700">{seller.agendamentos}</td><td className="px-4 py-3 text-gray-700">{seller.conversao}%</td><td className="px-4 py-3 text-gray-700">{seller.rotina === null ? '—' : `${seller.rotina}%`}</td><td className="px-4 py-3 font-bold text-emerald-700">{seller.pontuacao ?? '—'}</td></tr>
 }
 
 export default ManagerRankingReference
