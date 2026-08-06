@@ -262,7 +262,7 @@ export function CentralExecucaoPage() {
         <div
           role="status"
           aria-live="polite"
-          className={`fixed bottom-5 right-5 z-[150] flex max-w-sm items-center gap-2 rounded-2xl border bg-white px-4 py-3 text-[13px] font-semibold shadow-xl ${flash.kind === 'success' ? 'border-green-200 text-green-700' : 'border-red-200 text-red-700'}`}
+          className={`fixed bottom-5 right-5 z-[var(--mx-z-toast)] flex max-w-sm items-center gap-2 rounded-2xl border bg-white px-4 py-3 text-[13px] font-semibold shadow-xl ${flash.kind === 'success' ? 'border-green-200 text-green-700' : 'border-red-200 text-red-700'}`}
         >
           {flash.kind === 'success' ? <CheckCircle2 className="h-4 w-4 shrink-0" /> : <XCircle className="h-4 w-4 shrink-0" />}
           {flash.text}

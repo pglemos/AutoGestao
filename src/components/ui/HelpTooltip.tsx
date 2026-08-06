@@ -14,7 +14,7 @@ const Content = TooltipContent as unknown as ComponentType<{
 /**
  * Ícone de ajuda contextual ao lado de títulos e métricas (porte do
  * `HelpTooltip` do Base44). Suporta hover em desktop, foco por teclado
- * e toque/clique direto no ícone (com z-index z-[99999] acima de modais).
+ * e toque/clique direto no ícone (sempre no topo da escala, `--mx-z-tooltip`).
  */
 export function HelpTooltip({
   text,
@@ -58,7 +58,7 @@ export function HelpTooltip({
         <Content
           side={side}
           sideOffset={6}
-          className="z-[99999] max-w-[280px] rounded-lg border border-slate-700/50 bg-slate-800 px-3 py-2 text-xs font-normal leading-relaxed text-slate-50 shadow-xl pointer-events-none"
+          className="z-[var(--mx-z-tooltip)] max-w-[280px] rounded-lg border border-slate-700/50 bg-slate-800 px-3 py-2 text-xs font-normal leading-relaxed text-slate-50 shadow-xl pointer-events-none"
         >
           {text}
         </Content>
