@@ -15,6 +15,10 @@ const revokeMigration = readFileSync(
   new URL('../../../../supabase/migrations/20260805230000_revoke_anon_from_crm_rpcs.sql', import.meta.url),
   'utf8',
 )
+const castFixMigration = readFileSync(
+  new URL('../../../../supabase/migrations/20260806140000_fix_criar_oportunidade_crm_casts.sql', import.meta.url),
+  'utf8',
+)
 
 describe('fluxos críticos deixam de gravar evento em best-effort', () => {
   test('criar oportunidade passa por RPC transacional', () => {
@@ -106,6 +110,40 @@ const backfillExecutavel = backfillMigration
   .split('\n')
   .filter(line => !line.trimStart().startsWith('--'))
   .join('\n')
+
+// Defeito visto em produção (2026-08-06): "column \"sinal\" is of type numeric
+// but expression is of type boolean". A RPC tratava `sinal` e `financiamento`
+// como boolean e derrubava todo cadastro de agendamento no Fechamento Diário.
+describe('criar_oportunidade_crm respeita os tipos reais das colunas', () => {
+  test('sinal é numeric e financiamento é enum, não boolean', () => {
+    expect(castFixMigration).toContain("coalesce((p_payload->>'sinal')::numeric, 0)")
+    expect(castFixMigration).toContain("coalesce(nullif(p_payload->>'financiamento', ''), 'nao_aplica')::public.crm_financiamento")
+    expect(castFixMigration).not.toMatch(/'sinal'\)::boolean/)
+    expect(castFixMigration).not.toMatch(/'financiamento'\)::boolean/)
+  })
+
+  test('carro_avaliado segue boolean — o único dos três que é', () => {
+    expect(castFixMigration).toContain("coalesce((p_payload->>'carro_avaliado')::boolean, false)")
+  })
+
+  test('colunas de enum recebem cast explícito para o próprio tipo', () => {
+    expect(castFixMigration).toContain("::public.crm_tipo_veiculo")
+    expect(castFixMigration).toContain("::public.crm_categoria_veiculo")
+    expect(castFixMigration).toContain("::public.crm_etapa_funil")
+    expect(castFixMigration).toContain("::public.crm_canal")
+  })
+
+  test('campos que o insert direto gravava não são descartados', () => {
+    for (const campo of ['motivo_perda', 'closed_at', 'fechamento_id']) {
+      expect(castFixMigration).toContain(campo)
+    }
+  })
+
+  test('oportunidade nascida ganha registra a venda no mesmo commit', () => {
+    expect(castFixMigration).toContain("IF v_etapa = 'ganho' THEN")
+    expect(castFixMigration).toContain("'crm:venda_realizada:' || v_oportunidade_id::text")
+  })
+})
 
 describe('backfill de órfãos', () => {
   test('é aditivo: nunca apaga nem atualiza dado real', () => {
