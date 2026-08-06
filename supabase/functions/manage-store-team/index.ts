@@ -184,7 +184,6 @@ async function releaseEmailFromStaleAccount(
   }
 
   return { status: 'released' }
-}{ status: 'released' }
 }
 
 async function findAuthUserByEmail(
