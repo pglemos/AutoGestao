@@ -2,7 +2,7 @@
 
 ## Status
 
-In Progress
+InReview — implementação completa e banco aplicado; validação em produção bloqueada pela restrição de cota do projeto Supabase (HTTP 402 em `rest` e `auth`).
 
 ## Executor Assignment
 
@@ -48,17 +48,36 @@ Precedência: o rascunho real já existe no banco (`submission_status='draft'`, 
 
 - [x] T0 Preflight, baseline, tag de checkpoint, ledger
 - [x] T1 Story, spec e plano
-- [ ] T2 Testes RED dos 8 defeitos
-- [ ] T3 Modelo canônico `ClosingOperationalState`
-- [ ] T4 Migration `draft_revision` + `submit_checkin` com controle otimista
-- [ ] T5/T6 Coordenador de autosave e integração em `useCheckinPage`
-- [ ] T7/T8/T9 Rascunho visível, fluxo unificado, finalização segura
-- [ ] T10/T11 Central do gerente e contratos dos read models
-- [ ] T12/T13 Realtime de funil e agendamentos
-- [ ] T14/T15 RPCs comerciais transacionais e backfill de órfãos
-- [ ] T16–T19 Observabilidade, segurança, a11y, unit tests
-- [ ] T20–T23 Integração, E2E, quality gate, revisão adversarial
-- [ ] T24–T30 Migration em produção, push, deploy, smoke e relatório final
+- [x] T2 Testes RED dos 8 defeitos
+- [x] T3 Modelo canônico `ClosingOperationalState`
+- [x] T4 Migration `draft_revision` + `submit_checkin` com controle otimista
+- [x] T5/T6 Coordenador de autosave e integração em `useCheckinPage`
+- [x] T7/T8/T9 Rascunho visível, fluxo unificado, finalização segura
+- [x] T10/T11 Central do gerente e contratos dos read models
+- [x] T12/T13 Realtime de funil e agendamentos
+- [x] T14/T15 RPCs comerciais transacionais e backfill de órfãos
+- [x] T16–T19 Observabilidade, segurança, a11y, unit tests
+- [x] T20/T22 Quality gate local completo (1922 testes, build, lint, auditorias)
+- [ ] T21/T28 E2E multiusuário e smoke em produção — **bloqueado**: `rest` e `auth` do projeto Supabase em HTTP 402 (`exceed_cached_egress_quota`), sem login possível
+- [x] T24 Migrations aplicadas em produção (6)
+- [ ] T25–T27 Push, CI e deploy — **retidos** até a produção voltar
+- [x] T29/T30 Rollback documentado e relatório final
+
+### File List
+
+- `src/features/checkin/lib/closing-operational-state.ts` (+ teste)
+- `src/features/checkin/autosave/` — coordenador, hook, status, telemetria, classificação (+ testes)
+- `src/features/checkin/hooks/useCheckinPage.ts`
+- `src/features/checkin/sections/CheckinForm.tsx`, `FluxoFechamento.tsx` (+ testes)
+- `src/hooks/checkins/useCheckinsSubmit.ts`, `src/hooks/checkins/types.ts`
+- `src/features/manager/daily-closing/ManagerDailyClosing.container.tsx`, `manager-closing-metrics.ts` (+ teste)
+- `src/features/manager/shared/manager-metrics.ts`
+- `src/features/manager/day-routine/ManagerDayRoutine.container.tsx`
+- `src/features/gerente/hooks/useTeamFunnel.ts`, `team-funnel-realtime.ts` (+ teste)
+- `src/features/crm/hooks/useOportunidades.ts`, `useAgendamentos.ts` (+ teste de integridade)
+- `src/types/database.ts`, `src/types/database.generated.ts`
+- `supabase/migrations/20260805220000` … `20260805231000` (6 migrations)
+- `docs/stories/`, `docs/superpowers/`, `docs/reports/`, `.superpowers/sdd/`
 
 ## Dev Notes
 
