@@ -50,6 +50,7 @@ describe('carteira Base44 adapter contract', () => {
       veiculo_troca: 'Polo 2018',
       valor_troca: '30000',
       etapa: 'ganho',
+      cliente_status: 'pos_venda',
       proxima_acao: null,
       proxima_acao_em: null,
     })

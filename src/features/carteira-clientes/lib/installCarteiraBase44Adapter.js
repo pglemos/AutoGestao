@@ -105,8 +105,8 @@ function sortRows(rows, order) {
 function mapClientStatus(data) {
   const situation = String(data.situacao_atual || data.momento || '')
   const status = String(data.status_comercial || '')
-  if (data.ativo === false || data.do_not_contact === true || status === 'Perdido' || situation === 'Cadência encerrada') return 'inativo'
   if (status === 'Vendido' || situation === 'Venda realizada') return 'pos_venda'
+  if (data.ativo === false || data.do_not_contact === true || status === 'Perdido' || situation === 'Cadência encerrada') return 'inativo'
   if (data.ativo === true || data.nome || data.telefone || data.whatsapp) return 'oportunidade'
   return undefined
 }
