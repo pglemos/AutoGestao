@@ -192,6 +192,7 @@ export default function Login() {
                     setError(RECOVERY_EXPIRED_MESSAGE)
                     return
                 }
+                if (mounted) setError('')
                 clearSignoutReason()
                 clearRecoveryTokensFromUrl()
                 return
@@ -204,6 +205,7 @@ export default function Login() {
                     setError(RECOVERY_EXPIRED_MESSAGE)
                     return
                 }
+                if (mounted) setError('')
                 clearSignoutReason()
                 clearRecoveryTokensFromUrl()
                 return
@@ -212,7 +214,8 @@ export default function Login() {
             const { data } = await supabase.auth.getSession()
             if (mounted && !data.session) {
                 setError(consumeSignoutReasonMessage() || RECOVERY_EXPIRED_MESSAGE)
-            } else if (data.session) {
+            } else if (mounted && data.session) {
+                setError('')
                 clearSignoutReason()
             }
         }

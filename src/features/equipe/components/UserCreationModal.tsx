@@ -177,13 +177,13 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
             className="w-full max-w-6xl relative z-10"
           >
             <div className="relative w-full bg-white/90 backdrop-blur-2xl border border-gray-200 rounded-mx-4xl shadow-sm overflow-hidden">
-              <div className="absolute top-mx-0 left-mx-0 w-full h-mx-xs bg-gradient-to-r from-brand-primary/50 via-brand-primary to-brand-primary/50" />
+              <div className="absolute top-mx-0 left-mx-0 w-full h-mx-xs bg-gradient-to-r from-emerald-600/50 via-emerald-600 to-emerald-600/50" />
             
               <form onSubmit={handleSubmit} autoComplete="off" className="flex flex-col lg:flex-row max-h-[85vh] w-full overflow-hidden">
                 {/* Sidebar Context */}
                 <div className="w-full lg:w-mx-sidebar-expanded shrink-0 bg-gray-50/50 border-b lg:border-b-0 lg:border-r border-gray-200 p-mx-lg flex flex-col justify-between relative overflow-y-auto lg:overflow-hidden">
                     <div className="space-y-mx-lg relative z-10">
-                        <div className="w-mx-20 h-mx-20 rounded-2xl bg-emerald-600/10 border border-brand-primary/20 flex items-center justify-center text-emerald-600 shadow-sm">
+                        <div className="w-mx-20 h-mx-20 rounded-2xl bg-emerald-600/10 border border-emerald-600/20 flex items-center justify-center text-emerald-600 shadow-sm">
                             <UserPlus size={40} strokeWidth={1.5} />
                         </div>
                         <div className="space-y-mx-xs">
@@ -201,7 +201,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                                 <Typography variant="tiny" tone="muted" className="text-mx-nano">Vínculo com a loja</Typography>
                             </div>
                             <div className="flex items-center gap-mx-sm">
-                                <div className="w-mx-10 h-mx-10 rounded-2xl bg-white border border-gray-200 flex items-center justify-center text-status-warning shadow-sm"><Zap size={20} /></div>
+                                <div className="w-mx-10 h-mx-10 rounded-2xl bg-white border border-gray-200 flex items-center justify-center text-amber-600 shadow-sm"><Zap size={20} /></div>
                                 <Typography variant="tiny" tone="muted" className="text-mx-nano">Senha provisória obrigatória</Typography>
                             </div>
                         </div>
@@ -229,7 +229,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                               autoComplete="off"
                               required placeholder="NOME COMPLETO" 
                               value={formData.name} onChange={e => setFormData({...formData, name: e.target.value.toUpperCase()})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-mx-widest text-xs focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-gray-500/50"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-mx-widest text-xs focus:outline-none focus:border-emerald-600/50 focus:bg-white transition-all placeholder:text-gray-500/50"
                             />
                           </div>
                         </div>
@@ -245,7 +245,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                               autoComplete="off"
                               required placeholder="(00) 00000-0000" 
                               value={formData.phone} onChange={e => setFormData({...formData, phone: e.target.value})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-gray-500/50"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600/50 focus:bg-white transition-all placeholder:text-gray-500/50"
                             />
                           </div>
                         </div>
@@ -261,7 +261,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                               autoComplete="off"
                               required type="email" placeholder="USUARIO@MX PERFORMANCE.COM" 
                               value={formData.email} onChange={e => setFormData({...formData, email: e.target.value})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-gray-500/50"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600/50 focus:bg-white transition-all placeholder:text-gray-500/50"
                             />
                           </div>
                         </div>
@@ -280,7 +280,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                               pattern=".{6,}"
                               type="password" placeholder="MÍN. 6 CARACTERES"
                               value={formData.password} onChange={e => setFormData({...formData, password: e.target.value})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all placeholder:text-gray-500/50"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600/50 focus:bg-white transition-all placeholder:text-gray-500/50"
                             />
                           </div>
                         </div>
@@ -296,7 +296,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                               name="role"
                               value={formData.role} 
                               onChange={e => setFormData({...formData, role: e.target.value as UserRole})}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-mx-widest text-mx-nano focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all appearance-none cursor-pointer"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-mx-widest text-mx-nano focus:outline-none focus:border-emerald-600/50 focus:bg-white transition-all appearance-none cursor-pointer"
                             >
                               {allowedRoles.map(role => (
                                 <option key={role} value={role} className="bg-white text-gray-800">
@@ -319,7 +319,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                               value={formData.store_id} 
                               onChange={e => setFormData({...formData, store_id: e.target.value})}
                               disabled={(!!initialStoreId && initialStoreId !== 'all') && !isAdministradorMx(currentUserRole)}
-                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-mx-widest text-mx-nano focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all appearance-none cursor-pointer disabled:opacity-40"
+                              className="w-full h-mx-14 pl-12 pr-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-mx-widest text-mx-nano focus:outline-none focus:border-emerald-600/50 focus:bg-white transition-all appearance-none cursor-pointer disabled:opacity-40"
                             >
                               <option value="" className="bg-white text-gray-500/40">
                                 {papelSelecionadoInterno ? 'SEM UNIDADE OBRIGATÓRIA' : 'SELECIONE A UNIDADE'}
@@ -341,7 +341,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                             value={formData.started_at}
                             onChange={e => setFormData({...formData, started_at: e.target.value})}
                             disabled={papelSelecionadoInterno || formData.role !== 'vendedor'}
-                            className="w-full h-mx-14 px-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all disabled:opacity-40"
+                            className="w-full h-mx-14 px-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600/50 focus:bg-white transition-all disabled:opacity-40"
                           />
                         </div>
 
@@ -354,7 +354,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                             value={formData.ended_at}
                             onChange={e => setFormData({...formData, ended_at: e.target.value})}
                             disabled={papelSelecionadoInterno || formData.role !== 'vendedor'}
-                            className="w-full h-mx-14 px-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary/50 focus:bg-white transition-all disabled:opacity-40"
+                            className="w-full h-mx-14 px-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600/50 focus:bg-white transition-all disabled:opacity-40"
                           />
                         </div>
                     </div>
@@ -380,7 +380,7 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                     <div className="pt-mx-md">
                         <button 
                             type="submit" disabled={loading} 
-                            className="w-full h-mx-20 bg-emerald-600 hover:bg-brand-primary-hover text-white rounded-2xl font-bold uppercase tracking-mx-widest text-sm shadow-sm active:scale-[0.98] transition-all flex items-center justify-center gap-mx-sm relative overflow-hidden group/btn"
+                            className="w-full h-mx-20 bg-emerald-600 hover:bg-emerald-700 text-white rounded-2xl font-bold uppercase tracking-mx-widest text-sm shadow-sm active:scale-[0.98] transition-all flex items-center justify-center gap-mx-sm relative overflow-hidden group/btn"
                         >
                             <div className="absolute inset-0 bg-white/20 -translate-x-full group-hover/btn:translate-x-full transition-transform duration-500 skew-x-12" />
                             {loading ? <RefreshCw className="animate-spin" /> : <Zap size={24} className="fill-white" />}

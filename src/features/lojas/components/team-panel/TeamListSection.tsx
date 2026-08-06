@@ -88,7 +88,7 @@ export function TeamListSection({
                         alt={`Avatar de ${member.name || 'integrante'}`}
                         fallback={member.name || '?'}
                         size="lg"
-                        className="rounded-2xl bg-emerald-600/10 text-emerald-600 border-brand-primary/10"
+                        className="rounded-2xl bg-emerald-600/10 text-emerald-600 border-emerald-600/10"
                       />
                       <div className="min-w-0 flex-1">
                         <Typography variant="caption" className="block max-w-full tracking-tight truncate">{member.name}</Typography>

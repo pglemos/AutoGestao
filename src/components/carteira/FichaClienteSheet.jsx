@@ -147,49 +147,111 @@ function Bloco({ title, icon, children, defaultOpen = true }) {
 
 // ─── FORMULÁRIO DE EDIÇÃO ─────────────────────────────────────────────────────
 function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
-  const campo = (k, l, span2 = false) => (
+  const campo = (k, l, span2 = false, type = "text", placeholder = "") => (
     <div key={k} className={span2 ? "col-span-2" : ""}>
       <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">{l}</label>
-      <Input value={form[k] || ""} onChange={e => setForm(p => ({ ...p, [k]: e.target.value }))} className="rounded-xl h-8 text-sm" />
+      <Input
+        type={type}
+        value={form[k] != null ? (type === "datetime-local" ? String(form[k]).slice(0, 16) : form[k]) : ""}
+        onChange={e => setForm(p => ({ ...p, [k]: e.target.value }))}
+        placeholder={placeholder}
+        className="rounded-xl h-8 text-sm"
+      />
     </div>
   );
+
+  const CANAIS_OPTS = Array.from(new Set([...CANAIS_COMERCIAIS, "Porta", "Showroom", "Internet", "Carteira"]));
+  const MODALIDADE_OPTS = ["Visita na loja", "Atendimento externo", "Videochamada", "Não informado"];
+  const URGENCIA_OPTS = ["Imediato", "30 dias", "60 dias", "90 dias", "Sem prazo", "Não informado"];
 
   return (
     <div className="space-y-4 bg-slate-50 rounded-2xl p-4">
       <p className="text-xs font-black text-slate-500 uppercase tracking-wider">Editar informações</p>
 
+      {/* Dados Principais */}
       <div className="grid grid-cols-2 gap-3">
-        {campo("nome", "Nome", true)}
-        {campo("whatsapp", "WhatsApp")}
-        {campo("telefone", "Telefone")}
-        {campo("email", "E-mail", true)}
-        {campo("veiculo_interesse", "Veículo de interesse", true)}
-        {campo("valor_negociado", "Orçamento")}
-        {campo("veiculo_troca", "Veículo na troca")}
-        {campo("valor_troca", "Valor da troca")}
+        {campo("nome", "Nome", true, "text", "Ex: JOÃO SANTOS")}
+        {campo("whatsapp", "WhatsApp", false, "text", "(11) 98765-4321")}
+        {campo("telefone", "Telefone", false, "text", "(11) 98765-4321")}
+        {campo("email", "E-mail", true, "text", "email@exemplo.com")}
       </div>
 
-      <div>
-        <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Origem (canal)</label>
-        <select value={form.canal_comercial || "Internet"} onChange={e => setForm(p => ({ ...p, canal_comercial: e.target.value }))} className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm">
-          {CANAIS_COMERCIAIS.map(c => <option key={c} value={c}>{c}</option>)}
-        </select>
+      {/* Origem e Atendimento */}
+      <div className="grid grid-cols-2 gap-3">
+        <div>
+          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Origem (canal)</label>
+          <select
+            value={form.canal_comercial || "Internet"}
+            onChange={e => setForm(p => ({ ...p, canal_comercial: e.target.value }))}
+            className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
+          >
+            {CANAIS_OPTS.map(c => <option key={c} value={c}>{c}</option>)}
+          </select>
+        </div>
+        {campo("origem_detalhada", "Origem Detalhada", false, "text", "Ex: Indicação, Tráfego Pago...")}
+        <div>
+          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Temperatura</label>
+          <select
+            value={form.temperatura || "Morno"}
+            onChange={e => setForm(p => ({ ...p, temperatura: e.target.value }))}
+            className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
+          >
+            {TEMPERATURAS.map(t => <option key={t} value={t}>{t}</option>)}
+          </select>
+        </div>
+        <div>
+          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Urgência da Compra</label>
+          <select
+            value={form.urgencia_compra || form.urgencia || "Não informado"}
+            onChange={e => setForm(p => ({ ...p, urgencia_compra: e.target.value, urgencia: e.target.value }))}
+            className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
+          >
+            {URGENCIA_OPTS.map(u => <option key={u} value={u}>{u}</option>)}
+          </select>
+        </div>
       </div>
-      <div>
-        <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Temperatura</label>
-        <select value={form.temperatura || "Morno"} onChange={e => setForm(p => ({ ...p, temperatura: e.target.value }))} className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm">
-          {TEMPERATURAS.map(t => <option key={t} value={t}>{t}</option>)}
-        </select>
+
+      {/* Veículo e Negociação */}
+      <div className="grid grid-cols-2 gap-3">
+        {campo("veiculo_interesse", "Veículo de interesse", true, "text", "Ex: HB20 1.0 COMFORT")}
+        {campo("valor_negociado", "Orçamento / Valor Negociado", false, "text", "R$ 68.900,00")}
+        <div>
+          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Financiamento</label>
+          <select
+            value={form.financiamento || "Não se aplica"}
+            onChange={e => setForm(p => ({ ...p, financiamento: e.target.value, interesse_financiamento: e.target.value !== "Não se aplica" }))}
+            className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
+          >
+            <option value="Não se aplica">Não se aplica</option>
+            <option value="Em análise">Em análise</option>
+            <option value="Aprovado">Aprovado</option>
+            <option value="Reprovado">Reprovado</option>
+          </select>
+        </div>
+        {campo("veiculo_troca", "Veículo na troca", false, "text", "Ex: GOL 1.0 2018")}
+        {campo("valor_troca", "Valor da troca", false, "text", "R$ 35.000,00")}
+        <div>
+          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Modalidade Preferida</label>
+          <select
+            value={form.preferencia_modalidade || form.modalidade || "Não informado"}
+            onChange={e => setForm(p => ({ ...p, preferencia_modalidade: e.target.value, modalidade: e.target.value }))}
+            className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm"
+          >
+            {MODALIDADE_OPTS.map(m => <option key={m} value={m}>{m}</option>)}
+          </select>
+        </div>
       </div>
-      <div>
-        <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Financiamento</label>
-        <select value={form.financiamento || "Não se aplica"} onChange={e => setForm(p => ({ ...p, financiamento: e.target.value, interesse_financiamento: e.target.value !== "Não se aplica" }))} className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm">
-          <option>Não se aplica</option>
-          <option>Em análise</option>
-          <option>Aprovado</option>
-          <option>Reprovado</option>
-        </select>
+
+      {/* Dados de Venda & Entrega */}
+      <div className="grid grid-cols-2 gap-3 border-t border-slate-200 pt-3">
+        {campo("placa_veiculo", "Placa do Veículo", false, "text", "Ex: ABC-1234")}
+        {campo("veiculo_comprado", "Veículo Comprado / Vendido", false, "text", "Ex: HB20 1.0 COMFORT 2024")}
+        {campo("data_venda", "Data da Venda", false, "date")}
+        {campo("valor_venda", "Valor da Venda", false, "text", "R$ 68.900,00")}
+        {campo("data_entrega_prevista", "Data e Hora Entrega Prevista", true, "datetime-local")}
       </div>
+
+      {/* Situação e Agenda */}
       <div>
         <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Situação atual</label>
         <select value={form.situacao_atual || ""} onChange={e => setForm(p => ({ ...p, situacao_atual: e.target.value }))} className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm">
@@ -206,16 +268,30 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
           <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Data do próximo passo</label>
           <Input type="datetime-local" value={form.proxima_acao_data ? form.proxima_acao_data.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, proxima_acao_data: e.target.value }))} className="rounded-xl h-8 text-sm" />
         </div>
+        <div className="col-span-2">
+          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Data e Hora da Visita / Agendamento</label>
+          <Input type="datetime-local" value={form.visita_agendada_em ? form.visita_agendada_em.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, visita_agendada_em: e.target.value }))} className="rounded-xl h-8 text-sm" />
+        </div>
       </div>
 
       <div className="space-y-2">
         <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Interesses</p>
         <label className="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" checked={!!form.interesse_troca} onChange={e => setForm(p => ({ ...p, interesse_troca: e.target.checked }))} className="rounded" />
+          <input
+            type="checkbox"
+            checked={!!(form.interesse_troca || form.possui_troca)}
+            onChange={e => setForm(p => ({ ...p, interesse_troca: e.target.checked, possui_troca: e.target.checked }))}
+            className="rounded"
+          />
           <span className="text-sm text-slate-600">Possui troca</span>
         </label>
         <label className="flex items-center gap-2 cursor-pointer">
-          <input type="checkbox" checked={!!form.interesse_financiamento} onChange={e => setForm(p => ({ ...p, interesse_financiamento: e.target.checked }))} className="rounded" />
+          <input
+            type="checkbox"
+            checked={!!form.interesse_financiamento}
+            onChange={e => setForm(p => ({ ...p, interesse_financiamento: e.target.checked }))}
+            className="rounded"
+          />
           <span className="text-sm text-slate-600">Interesse em financiamento</span>
         </label>
       </div>
@@ -224,13 +300,6 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Objeções / Motivo de perda</label>
         <Input value={form.motivo_perda || ""} onChange={e => setForm(p => ({ ...p, motivo_perda: e.target.value }))} className="rounded-xl h-8 text-sm" placeholder="Ex: preço, parcela, avaliação..." />
       </div>
-
-      {(form.situacao_atual === "Visita agendada" || form.situacao_atual === "Visita a confirmar" || form.situacao_atual === "Visita hoje") && (
-        <div>
-          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Data da visita</label>
-          <Input type="datetime-local" value={form.visita_agendada_em ? form.visita_agendada_em.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, visita_agendada_em: e.target.value }))} className="rounded-xl h-8 text-sm" />
-        </div>
-      )}
 
       <div>
         <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Observações</label>

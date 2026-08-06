@@ -173,6 +173,13 @@ export function buildRpcPayload(data, clientId, executionContext) {
   put(payload, 'veiculo_troca', data.veiculo_troca)
   put(payload, 'valor_troca', data.valor_troca)
   put(payload, 'motivo_perda', data.motivo_perda)
+  put(payload, 'origem_detalhada', data.origem_detalhada)
+  put(payload, 'placa_veiculo', data.placa_veiculo)
+  put(payload, 'veiculo_comprado', data.veiculo_comprado)
+  put(payload, 'data_venda', data.data_venda)
+  put(payload, 'valor_venda', data.valor_venda)
+  put(payload, 'preferencia_modalidade', data.preferencia_modalidade ?? data.modalidade)
+  put(payload, 'urgencia_compra', data.urgencia_compra ?? data.urgencia)
 
   if (data.proposta_enviada === true && !terminal) payload.etapa = 'apresentacao'
 

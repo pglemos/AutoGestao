@@ -10,7 +10,7 @@ import { createResendClient } from '../_shared/supabase-client.ts'
 const allowedRoles = ['dono', 'gerente', 'vendedor']
 const internalReviewerRoles = ['administrador_geral', 'administrador_mx', 'consultor_mx']
 const passwordChars = 'ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789!@#$%&*'
-const recoveryRedirectTo = 'https://mxperformance.vercel.app/login?recovery=1'
+const recoveryRedirectTo = 'https://www.mxperformance.com.br/login?recovery=1'
 const PRE_REGISTRATION_SELECT = [
   'id',
   'status',

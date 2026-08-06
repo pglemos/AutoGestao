@@ -13,7 +13,7 @@ export class PasswordRecoveryRequestError extends Error {
 }
 
 export async function requestPasswordRecovery(email: string, origin?: string) {
-  const redirectOrigin = origin || (typeof window !== 'undefined' ? window.location.origin : 'https://mxperformance.vercel.app')
+  const redirectOrigin = origin || (typeof window !== 'undefined' ? window.location.origin : 'https://www.mxperformance.com.br')
   const response = await fetch(getSupabaseFunctionUrl('request-password-recovery'), {
     method: 'POST',
     headers: getSupabaseFunctionHeaders({ 'Content-Type': 'application/json' }),

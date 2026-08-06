@@ -34,11 +34,16 @@ function escapeHtml(value: string) {
 }
 
 function normalizeRedirectTo(value: unknown) {
-  const fallback = 'https://mxperformance.vercel.app/login?recovery=1'
+  const fallback = 'https://www.mxperformance.com.br/login?recovery=1'
   try {
     const url = new URL(String(value || fallback))
     const localOrigin = ['localhost', '127.0.0.1', '::1'].includes(url.hostname)
-    if (!localOrigin && url.origin !== 'https://mxperformance.vercel.app') return fallback
+    const allowedOrigins = [
+      'https://www.mxperformance.com.br',
+      'https://mxperformance.com.br',
+      'https://mxperformance.vercel.app',
+    ]
+    if (!localOrigin && !allowedOrigins.includes(url.origin)) return fallback
     return `${url.origin}/login?recovery=1`
   } catch {
     return fallback

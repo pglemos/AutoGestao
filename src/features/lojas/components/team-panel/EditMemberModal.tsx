@@ -76,7 +76,7 @@ export function EditMemberModal({
                       required
                       value={editingMember.name || ''}
                       onChange={e => onChange({ ...editingMember, name: e.target.value.toUpperCase() })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-tight focus:outline-none focus:border-brand-primary transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-tight focus:outline-none focus:border-emerald-600 transition-all"
                     />
                   </div>
                 </div>
@@ -91,7 +91,7 @@ export function EditMemberModal({
                       type="email"
                       value={editingMember.email || ''}
                       onChange={e => onChange({ ...editingMember, email: e.target.value })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600 transition-all"
                     />
                   </div>
                 </div>
@@ -104,7 +104,7 @@ export function EditMemberModal({
                       name="phone"
                       value={editingMember.phone || ''}
                       onChange={e => onChange({ ...editingMember, phone: e.target.value })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600 transition-all"
                     />
                   </div>
                 </div>
@@ -115,7 +115,7 @@ export function EditMemberModal({
                     name="role"
                     value={editingMember.role || 'vendedor'}
                     onChange={e => onChange({ ...editingMember, role: e.target.value as MembershipRole })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase focus:outline-none focus:border-brand-primary transition-all"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
                   >
                     {editableStoreRoles.map(option => (
                       <option key={option} value={option}>{option}</option>
@@ -129,7 +129,7 @@ export function EditMemberModal({
                     name="store_id"
                     value={editingMember.store_id || storeId || ''}
                     onChange={e => onChange({ ...editingMember, store_id: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase focus:outline-none focus:border-brand-primary transition-all"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
                   >
                     <option value="">Selecione a loja</option>
                     {lojas.map(store => (
@@ -148,7 +148,7 @@ export function EditMemberModal({
                     type="date" required
                     value={editingMember.started_at || ''}
                     onChange={e => onChange({ ...editingMember, started_at: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary transition-all uppercase"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
                   />
                 </div>
                 <div className="space-y-mx-tiny">
@@ -159,20 +159,20 @@ export function EditMemberModal({
                     type="date"
                     value={editingMember.ended_at || ''}
                     onChange={e => onChange({ ...editingMember, ended_at: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-brand-primary transition-all uppercase"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
                   />
                 </div>
 
                 <div className="col-span-2 space-y-mx-sm pt-mx-md border-t border-gray-200">
                   <label className="flex items-center justify-between p-mx-md rounded-2xl bg-gray-50 border border-gray-200 hover:bg-white hover:shadow-sm transition-all cursor-pointer group">
                     <div className="flex items-center gap-mx-md">
-                      <div className="w-mx-10 h-mx-10 rounded-2xl bg-status-success-surface text-status-success flex items-center justify-center border border-status-success/10"><ShieldCheck size={20} /></div>
+                      <div className="w-mx-10 h-mx-10 rounded-2xl bg-emerald-100 text-emerald-600 flex items-center justify-center border border-emerald-200"><ShieldCheck size={20} /></div>
                       <div className="space-y-0.5">
                         <Typography variant="h3" className="text-sm tracking-tight">Usuário ativo</Typography>
                         <Typography variant="caption" tone="muted" className="text-mx-nano">Permite acesso ao sistema</Typography>
                       </div>
                     </div>
-                    <input type="checkbox" name="active" checked={editingMember.active ?? true} onChange={e => onChange({ ...editingMember, active: e.target.checked })} className="w-mx-sm h-mx-sm rounded-xl accent-status-success cursor-pointer" />
+                    <input type="checkbox" name="active" checked={editingMember.active ?? true} onChange={e => onChange({ ...editingMember, active: e.target.checked })} className="w-mx-sm h-mx-sm rounded-xl accent-emerald-600 cursor-pointer" />
                   </label>
                   <label className="flex items-center justify-between p-mx-md rounded-2xl bg-gray-50 border border-gray-200 hover:bg-white hover:shadow-sm transition-all cursor-pointer group">
                     <div className="flex items-center gap-mx-md">
@@ -201,13 +201,13 @@ export function EditMemberModal({
 
                   <label className="flex items-center justify-between p-mx-md rounded-2xl bg-gray-50 border border-gray-200 hover:bg-white hover:shadow-sm transition-all cursor-pointer group">
                     <div className="flex items-center gap-mx-md">
-                      <div className="w-mx-10 h-mx-10 rounded-2xl bg-status-warning-surface text-status-warning border border-status-warning/10"><ShieldAlert size={20} /></div>
+                      <div className="w-mx-10 h-mx-10 rounded-2xl bg-amber-100 text-amber-600 border border-amber-200"><ShieldAlert size={20} /></div>
                       <div className="space-y-0.5">
                         <Typography variant="h3" className="text-sm tracking-tight">Carência MX</Typography>
                         <Typography variant="caption" tone="muted" className="text-mx-nano">Ignorar metas do mês vigente</Typography>
                       </div>
                     </div>
-                    <input type="checkbox" name="closing_month_grace" checked={editingMember.closing_month_grace} onChange={e => onChange({ ...editingMember, closing_month_grace: e.target.checked })} className="w-mx-sm h-mx-sm rounded-xl accent-status-warning cursor-pointer" />
+                    <input type="checkbox" name="closing_month_grace" checked={editingMember.closing_month_grace} onChange={e => onChange({ ...editingMember, closing_month_grace: e.target.checked })} className="w-mx-sm h-mx-sm rounded-xl accent-amber-600 cursor-pointer" />
                   </label>
                 </div>
               </div>
