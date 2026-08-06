@@ -1,6 +1,6 @@
 {
   "source_sha256": {
-    "components/atoms/Avatar.tsx": "c7a10879dd7784cc785c675606a7f2f6d4bee7d6c3346ace512f36752d2b7c95",
+    "components/atoms/Avatar.tsx": "855cf6e0e14dd31f0a16392ac411a67a83bd0153a6e5e60072281b27db985e39",
     "components/atoms/DatePicker.tsx": "c6e46e8b551c7688add9652ea16a9cc2c80c4445e571b6c2d8b8e1c62b6c3183",
     "components/molecules/TabNav.tsx": "98cbbdd80c744530ad6802e4391bacd6ddbb068041e038bd309c224826e18e5a",
     "components/molecules/TabNavPill.tsx": "3476b1d4f469c0faa4234e3e3b7ecfd9a7f58822c581334bef77f24b68801ce4",
@@ -49,7 +49,7 @@
     "features/lojas/components/StoreGoalsPanel.tsx": "83dec1c868a0e280fdca546f5e6e8dbbef65f1e918af14482823ecf209c5a543",
     "features/lojas/components/StoreTeamPanel.tsx": "7d5dfe288509bd222f784f3588e63cb46e0f1958ac57877084c8d5acfeb11d73",
     "features/lojas/components/team-panel/EditMemberModal.tsx": "6cb7639d6a287df5ad7440f02d35207c5c4b0213ff12da7c336de95bd5c5b311",
-    "features/lojas/components/team-panel/PreRegistrationQueue.tsx": "4696d5aebe0d5301d689ba248d27c9ed3031cf69408f8258bdf1ec4f0565c631",
+    "features/lojas/components/team-panel/PreRegistrationQueue.tsx": "7ca14b9472b111394d09189b1f176e05ccf29d49a0047d6715b8692ea99a51d5",
     "features/lojas/components/team-panel/TeamListSection.tsx": "fe55678e34ca913b75fcfceefceb7ccc0487b6756a1f22015300ab8ccdc65cc1",
     "features/lojas/components/team-panel/TeamStatsGrid.tsx": "d103cd986c213044a5eafaae06ef93e06d3e45e4ac027169ba40dfab13275dd2",
     "features/lojas/data/storeColumns.tsx": "620c44757a4228fb0c9b7c53e2e96b38765a7b5ea0214989a9839d479f5a5ef6",

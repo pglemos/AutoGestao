@@ -10,7 +10,7 @@ import type { StorePreRegistration } from '@/types/database'
 function PreRegistrationAvatar({ url, name }: { url: string | null; name: string }) {
   const [erro, setErro] = useState(false)
   if (!url || erro) return <div className="h-full w-full flex items-center justify-center text-emerald-600"><User size={20} /></div>
-  return <img src={url} alt={name} className="h-full w-full object-cover" loading="lazy" decoding="async" onError={() => setErro(true)} />
+  return <img src={url} alt={name} className="h-full w-full object-cover" onError={() => setErro(true)} />
 }
 
 const getPreRegistrationConfirmationKey = (item: StorePreRegistration) => `pre-registration:${item.id}`
