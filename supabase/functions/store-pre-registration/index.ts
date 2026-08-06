@@ -382,7 +382,7 @@ serve((req) => withSentry('store-pre-registration', req, async () => {
     avatar_url: avatarUrl,
     active: false,
     must_change_password: true,
-    is_venda_loja: role === 'vendedor',
+    is_venda_loja: false,
   }, { onConflict: 'id' })
 
   if (profileError) {

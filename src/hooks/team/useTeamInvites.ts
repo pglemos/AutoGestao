@@ -1,4 +1,4 @@
-import { resolveFunctionInvokeError, supabase } from '@/lib/supabase'
+import { resolveFunctionInvokeDetail, supabase } from '@/lib/supabase'
 import { isAdministradorMx, useAuth } from '@/hooks/useAuth'
 import type { RegisterUserInput } from './types'
 
@@ -9,7 +9,18 @@ export type UseTeamInvitesInput = {
 export type UseTeamInvitesReturn = {
   registerUser: (
     userData: RegisterUserInput,
-  ) => Promise<{ success?: boolean; error?: string }>
+  ) => Promise<{
+    success?: boolean
+    error?: string
+    code?: string
+    existingUser?: {
+      id: string
+      name: string
+      email: string
+      current_store_id: string | null
+      current_store_name: string
+    }
+  }>
 }
 
 /**
@@ -28,7 +39,12 @@ export function useTeamInvites({ refetchMembers }: UseTeamInvitesInput): UseTeam
       await refetchMembers()
       return { success: true }
     }
-    return { error: await resolveFunctionInvokeError(error, data, 'Erro ao criar integrante.') }
+    const detail = await resolveFunctionInvokeDetail(error, data, 'Erro ao criar integrante.')
+    return {
+      error: detail.message,
+      code: detail.code,
+      existingUser: detail.existing_user,
+    }
   }
 
   return { registerUser }

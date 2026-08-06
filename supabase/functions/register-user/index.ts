@@ -28,6 +28,7 @@ const payloadSchema = z.object({
   is_active: z.boolean().optional(),
   closing_month_grace: z.boolean().optional(),
   is_venda_loja: z.boolean().optional(),
+  confirm_transfer: z.boolean().optional(),
 }).strict()
 
 type RegisterUserPayload = z.infer<typeof payloadSchema>
@@ -158,7 +159,7 @@ serve(async (req) => {
 
   const { data: existingProfile, error: profileLookupError } = await adminClient
     .from('usuarios')
-    .select('id')
+    .select('id, name, email')
     .ilike('email', normalizedEmail)
     .maybeSingle()
 
@@ -167,7 +168,62 @@ serve(async (req) => {
     return genericFailure()
   }
   if (existingProfile) {
-    return jsonResponse({ success: false, error: 'Este e-mail já possui cadastro no sistema.' }, 409)
+    const { data: activeLink } = await adminClient
+      .from('vinculos_loja')
+      .select('store_id, lojas(id, name)')
+      .eq('user_id', existingProfile.id)
+      .eq('is_active', true)
+      .maybeSingle()
+
+    if (!payload.confirm_transfer) {
+      const activeStoreName = (activeLink?.lojas as { name?: string } | null)?.name || 'outra unidade'
+      return jsonResponse({
+        success: false,
+        code: 'EXISTS_IN_OTHER_STORE',
+        error: `O e-mail ${normalizedEmail} já pertence ao integrante ${existingProfile.name}${activeLink ? ' na loja ' + activeStoreName : ''}.`,
+        existing_user: {
+          id: existingProfile.id,
+          name: existingProfile.name,
+          email: existingProfile.email,
+          current_store_id: activeLink?.store_id || null,
+          current_store_name: activeStoreName,
+        },
+      }, 409)
+    }
+
+    // Transferência confirmada: encerrar vínculo antigo e vincular à nova loja
+    const today = new Date().toISOString().slice(0, 10)
+    await adminClient.from('vinculos_loja').update({ is_active: false, ended_at: today }).eq('user_id', existingProfile.id).eq('is_active', true)
+    await adminClient.from('vendedores_loja').update({ is_active: false, ended_at: today }).eq('seller_user_id', existingProfile.id).eq('is_active', true)
+
+    const { data: finalized, error: finalizeError } = await adminClient.rpc(
+      'internal_mx_finalize_registered_user',
+      {
+        p_actor_id: caller.user.id,
+        p_user_id: existingProfile.id,
+        p_email: normalizedEmail,
+        p_name: normalizedName,
+        p_role: payload.role,
+        p_store_id: payload.store_id || null,
+        p_phone: payload.phone || null,
+        p_started_at: payload.started_at || null,
+        p_ended_at: payload.ended_at || null,
+        p_is_active: payload.is_active ?? true,
+        p_closing_month_grace: payload.closing_month_grace ?? false,
+        p_is_venda_loja: payload.is_venda_loja ?? false,
+      },
+    )
+
+    if (!finalizeError) {
+      return jsonResponse({
+        success: true,
+        user_id: existingProfile.id,
+        email: normalizedEmail,
+        role: payload.role,
+        transferred: true,
+        user: finalized,
+      })
+    }
   }
 
   let existingAuthUser: Awaited<ReturnType<typeof findAuthUserByEmail>> = null

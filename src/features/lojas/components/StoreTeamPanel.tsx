@@ -19,6 +19,7 @@ import { PreRegistrationQueue } from './team-panel/PreRegistrationQueue'
 import { TeamListSection } from './team-panel/TeamListSection'
 import { EditMemberModal, type EditableTeamMember } from './team-panel/EditMemberModal'
 import { ConfirmationDialog, type PendingConfirmation } from './team-panel/ConfirmationDialog'
+import { TransferConfirmationDialog, type TransferConfirmationData } from './team-panel/TransferConfirmationDialog'
 
 type StoreTeamPanelProps = {
   storeId: string | null
@@ -52,6 +53,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
   const [reviewingPreRegistrationId, setReviewingPreRegistrationId] = useState<string | null>(null)
   const [pendingConfirmations, setPendingConfirmations] = useState<Set<string>>(() => new Set())
   const [pendingConfirmation, setPendingConfirmation] = useState<PendingConfirmation | null>(null)
+  const [transferConfirmation, setTransferConfirmation] = useState<TransferConfirmationData | null>(null)
   const [expandedPreRegistrations, setExpandedPreRegistrations] = useState<Set<string>>(() => new Set())
   // Story 3.12 — Focus traps WCAG 2.1 AA
   const confirmDialogRef = useRef<HTMLDivElement>(null)
@@ -59,15 +61,16 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
   useFocusTrap(confirmDialogRef, !!pendingConfirmation)
   useFocusTrap(editMemberDialogRef, !!editingMember)
   useEffect(() => {
-    if (!pendingConfirmation && !editingMember) return
+    if (!pendingConfirmation && !editingMember && !transferConfirmation) return
     const onKey = (e: KeyboardEvent) => {
       if (e.key !== 'Escape') return
-      if (pendingConfirmation) setPendingConfirmation(null)
+      if (transferConfirmation) setTransferConfirmation(null)
+      else if (pendingConfirmation) setPendingConfirmation(null)
       else if (editingMember) setEditingMember(null)
     }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [pendingConfirmation, editingMember])
+  }, [pendingConfirmation, editingMember, transferConfirmation])
   const approvalFunctionUrl = useMemo(() => getSupabaseFunctionUrl('approve-store-registration'), [])
 
   const registrationLink = useMemo(() => {
@@ -189,8 +192,8 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
     ];
   }, [team])
 
-  const handleUpdateMember = async (e: React.FormEvent) => {
-    e.preventDefault()
+  const handleUpdateMember = async (e?: React.FormEvent, confirmTransfer = false) => {
+    if (e) e.preventDefault()
     if (!editingMember) return
     const memberStoreId = editingMember.store_id || storeId
     if (!memberStoreId && !isPerfilInternoMx(editingMember.role)) {
@@ -200,26 +203,40 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
 
     setSaving(true)
     try {
-      const { error } = await updateTeamMember(editingMember.id, {
-        name: editingMember.name,
-        email: editingMember.email,
-        phone: editingMember.phone,
-        role: editingMember.role,
-        active: editingMember.active,
-        store_id: memberStoreId,
-        previous_store_id: editingMember.previous_store_id || editingMember.store_id || storeId,
-        started_at: editingMember.started_at,
-        ended_at: editingMember.ended_at,
-        is_active: editingMember.active === false ? false : editingMember.is_active,
-        closing_month_grace: editingMember.closing_month_grace,
-        is_venda_loja: editingMember.is_venda_loja
-      })
-      if (error) {
-        toast.error(error)
+      const result = await updateTeamMember(
+        editingMember.id,
+        {
+          name: editingMember.name,
+          email: editingMember.email,
+          phone: editingMember.phone,
+          role: editingMember.role,
+          active: editingMember.active,
+          store_id: memberStoreId,
+          previous_store_id: editingMember.previous_store_id || editingMember.store_id || storeId,
+          started_at: editingMember.started_at,
+          ended_at: editingMember.ended_at,
+          is_active: editingMember.active === false ? false : editingMember.is_active,
+          closing_month_grace: editingMember.closing_month_grace,
+          is_venda_loja: editingMember.is_venda_loja,
+        },
+        confirmTransfer,
+      )
+      if (result.error) {
+        if (result.code === 'EXISTS_IN_OTHER_STORE' && result.existingUser) {
+          const targetStoreName = lojas.find((l) => l.id === memberStoreId)?.name || storeName
+          setTransferConfirmation({
+            existingUser: result.existingUser,
+            targetStoreName,
+            onConfirm: () => handleUpdateMember(undefined, true),
+          })
+          return
+        }
+        toast.error(result.error)
         return
       }
-      toast.success('Integrante atualizado.')
+      toast.success(confirmTransfer ? 'Integrante transferido e atualizado.' : 'Integrante atualizado.')
       setEditingMember(null)
+      setTransferConfirmation(null)
       await refetch()
     } finally {
       setSaving(false)
@@ -494,6 +511,13 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
                 lojas={lojas}
               />
             )}
+
+            <TransferConfirmationDialog
+              data={transferConfirmation}
+              isOpen={!!transferConfirmation}
+              onClose={() => setTransferConfirmation(null)}
+              loading={saving}
+            />
           </AnimatePresence>
         </>
     </section>

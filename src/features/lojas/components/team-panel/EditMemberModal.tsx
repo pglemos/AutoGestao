@@ -4,6 +4,7 @@ import { motion } from 'motion/react'
 import { Typography } from '@/components/atoms/Typography'
 import { Button } from '@/components/atoms/Button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/molecules/Card'
+import { HelpTooltip } from '@/components/ui/HelpTooltip'
 import type { TeamMember } from '@/hooks/useTeam'
 import type { MembershipRole, Store } from '@/types/database'
 
@@ -188,8 +189,11 @@ export function EditMemberModal({
                     <div className="flex items-center gap-mx-md">
                       <div className="w-mx-10 h-mx-10 rounded-2xl bg-emerald-600/10 flex items-center justify-center text-emerald-600"><TrendingUp size={20} /></div>
                       <div className="space-y-0.5">
-                        <Typography variant="h3" className="text-sm tracking-tight">Venda loja</Typography>
-                        <Typography variant="caption" tone="muted" className="text-mx-nano">Conta como indicador operacional da unidade</Typography>
+                        <div className="flex items-center gap-1.5">
+                          <Typography variant="h3" className="text-sm tracking-tight">Vendas da Gestão / Apoio (Sem Meta Individual)</Typography>
+                          <HelpTooltip text="Ative para Gerentes, Donos ou Apoio. As vendas efetuadas por este usuário entram no faturamento total e ranking da loja em tempo real, porém NÃO geram cobrança de meta individual nem afetam o comissionamento da equipe." side="right" />
+                        </div>
+                        <Typography variant="caption" tone="muted" className="text-mx-nano">Entra no faturamento e ranking em tempo real, sem meta individual ou comissão da equipe</Typography>
                       </div>
                     </div>
                     <input type="checkbox" name="is_venda_loja" checked={editingMember.is_venda_loja ?? false} onChange={e => onChange({ ...editingMember, is_venda_loja: e.target.checked })} className="w-mx-sm h-mx-sm rounded-xl accent-brand-primary cursor-pointer" />

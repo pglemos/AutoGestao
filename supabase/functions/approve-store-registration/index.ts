@@ -166,7 +166,7 @@ serve((req) => withSentry('approve-store-registration', req, async () => {
     avatar_url: preRegistration.avatar_url,
     active: true,
     must_change_password: true,
-    is_venda_loja: finalRole === 'vendedor',
+    is_venda_loja: false,
   }).eq('id', preRegistration.auth_user_id)
 
   if (userError) return jsonResponse({ success: false, error: userError.message }, 500)

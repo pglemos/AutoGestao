@@ -61,6 +61,7 @@ export interface RegisterUserInput {
   is_active?: boolean
   closing_month_grace?: boolean
   is_venda_loja?: boolean
+  confirm_transfer?: boolean
 }
 
 export const TEAM_USER_SELECT =

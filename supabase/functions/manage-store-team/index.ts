@@ -36,6 +36,7 @@ const payloadSchema = z.object({
   user_id: uuidSchema,
   store_id: uuidSchema,
   previous_store_id: uuidSchema.optional(),
+  confirm_transfer: z.boolean().optional(),
   updates: updatesSchema.optional(),
 }).strict()
 
@@ -54,6 +55,17 @@ function genericFailure(status = 500) {
 
 type EmailReleaseStatus = 'free' | 'released' | 'blocked' | 'error'
 
+type EmailReleaseResult = {
+  status: EmailReleaseStatus
+  existingUser?: {
+    id: string
+    name: string
+    email: string
+    current_store_id: string | null
+    current_store_name: string
+  }
+}
+
 function archivedEmailFor(userId: string) {
   return `arquivado+${userId}@mx-arquivo.invalid`
 }
@@ -64,20 +76,22 @@ function archivedEmailFor(userId: string) {
  * e-mail não tem nenhum vínculo ativo de loja, o cadastro é arquivado: o e-mail é
  * trocado por um tombstone em `auth.users` e em `usuarios`, e a conta fica
  * marcada como absorvida pelo novo usuário — preservando auditoria sem bloquear.
- * Só integrante realmente ativo em alguma loja bloqueia a operação.
+ * Só integrante realmente ativo em alguma loja bloqueia a operação, a menos que
+ * `confirmTransfer` seja autorizado pelo gestor.
  */
 async function releaseEmailFromStaleAccount(
   adminClient: SupabaseClient,
   email: string,
   targetUserId: string,
   actorId: string,
-): Promise<{ status: EmailReleaseStatus }> {
+  confirmTransfer = false,
+): Promise<EmailReleaseResult> {
   const { data: owner, error: ownerError } = await adminClient
     .from('usuarios')
-    .select('id, active, role')
+    .select('id, name, active, role')
     .eq('email', email)
     .neq('id', targetUserId)
-    .maybeSingle<{ id: string; active: boolean | null; role: string | null }>()
+    .maybeSingle<{ id: string; name: string | null; active: boolean | null; role: string | null }>()
 
   if (ownerError) {
     console.error('manage-store-team email lookup failure', { email, ownerError })
@@ -93,9 +107,9 @@ async function releaseEmailFromStaleAccount(
       return { status: 'blocked' }
     }
 
-    const { count, error: linkError } = await adminClient
+    const { data: activeLinks, error: linkError } = await adminClient
       .from('vinculos_loja')
-      .select('id', { count: 'exact', head: true })
+      .select('id, store_id, lojas(id, name)')
       .eq('user_id', owner.id)
       .eq('is_active', true)
 
@@ -103,7 +117,28 @@ async function releaseEmailFromStaleAccount(
       console.error('manage-store-team email owner link lookup failure', { email, linkError })
       return { status: 'error' }
     }
-    if ((count ?? 0) > 0) return { status: 'blocked' }
+
+    if (activeLinks && activeLinks.length > 0) {
+      if (!confirmTransfer) {
+        const firstLink = activeLinks[0]
+        const currentStoreName = (firstLink?.lojas as { name?: string } | null)?.name || 'outra unidade'
+        return {
+          status: 'blocked',
+          existingUser: {
+            id: owner.id,
+            name: owner.name || 'Integrante',
+            email,
+            current_store_id: firstLink?.store_id || null,
+            current_store_name: currentStoreName,
+          },
+        }
+      }
+
+      // Transferência confirmada pelo gestor: desativar vínculos anteriores
+      const today = new Date().toISOString().slice(0, 10)
+      await adminClient.from('vinculos_loja').update({ is_active: false, ended_at: today }).eq('user_id', owner.id).eq('is_active', true)
+      await adminClient.from('vendedores_loja').update({ is_active: false, ended_at: today }).eq('seller_user_id', owner.id).eq('is_active', true)
+    }
 
     const { error: archiveError } = await adminClient
       .from('usuarios')
@@ -149,6 +184,7 @@ async function releaseEmailFromStaleAccount(
   }
 
   return { status: 'released' }
+}{ status: 'released' }
 }
 
 async function findAuthUserByEmail(
@@ -261,12 +297,14 @@ serve((req) => withSentry('manage-store-team', req, async () => {
   const emailChanged = nextEmail !== before.email
 
   if (emailChanged) {
-    const release = await releaseEmailFromStaleAccount(adminClient, nextEmail, payload.user_id, caller.user.id)
+    const release = await releaseEmailFromStaleAccount(adminClient, nextEmail, payload.user_id, caller.user.id, payload.confirm_transfer ?? false)
     if (release.status === 'error') return genericFailure()
     if (release.status === 'blocked') {
       return jsonResponse({
         success: false,
-        error: 'Este e-mail já está em uso por um integrante ativo em alguma loja.',
+        code: 'EXISTS_IN_OTHER_STORE',
+        error: `Este e-mail pertence ao integrante ${release.existingUser?.name || ''} na loja ${release.existingUser?.current_store_name || 'outra unidade'}.`,
+        existing_user: release.existingUser || null,
       }, 409)
     }
   }

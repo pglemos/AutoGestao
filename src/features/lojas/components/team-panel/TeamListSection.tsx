@@ -104,7 +104,7 @@ export function TeamListSection({
                     <Badge variant={member.role === 'vendedor' ? 'outline' : 'warning'} className="">
                       {member.role || 'vendedor'}
                     </Badge>
-                    {member.is_venda_loja && <Badge variant="brand" className="">Venda loja</Badge>}
+                    {member.is_venda_loja && <Badge variant="brand" className="">Venda da Gestão (Sem Meta)</Badge>}
                   </div>
 
                   <div className="flex flex-wrap items-center gap-mx-xs">

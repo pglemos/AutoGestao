@@ -1,4 +1,4 @@
-import { resolveFunctionInvokeError, supabase } from '@/lib/supabase'
+import { resolveFunctionInvokeDetail, resolveFunctionInvokeError, supabase } from '@/lib/supabase'
 import { isAdministradorMx, useAuth } from '@/hooks/useAuth'
 import {
   isInternalRole,
@@ -22,7 +22,18 @@ export type UseTeamMembershipReturn = {
   updateTeamMember: (
     userId: string,
     updates: TeamMemberUpdateFields,
-  ) => Promise<{ error: string | null }>
+    confirmTransfer?: boolean,
+  ) => Promise<{
+    error: string | null
+    code?: string
+    existingUser?: {
+      id: string
+      name: string
+      email: string
+      current_store_id: string | null
+      current_store_name: string
+    }
+  }>
   deleteTeamMember: (
     userId: string,
     targetStoreId?: string | null,
@@ -73,7 +84,11 @@ export function useTeamMembership({
     return { error: await resolveFunctionInvokeError(error, response, 'Erro ao alterar vigência.') }
   }
 
-  const updateTeamMember = async (userId: string, updates: TeamMemberUpdateFields) => {
+  const updateTeamMember = async (
+    userId: string,
+    updates: TeamMemberUpdateFields,
+    confirmTransfer = false,
+  ) => {
     if (!isAdministradorMx(role) && role !== 'gerente' && role !== 'dono') {
       return { error: 'Apenas gestores da loja podem editar integrantes.' }
     }
@@ -93,6 +108,7 @@ export function useTeamMembership({
         store_id: targetStoreId,
         previous_store_id:
           updates.previous_store_id || (storeId && storeId !== 'all' ? storeId : targetStoreId),
+        confirm_transfer: confirmTransfer,
         updates,
       },
     })
@@ -100,7 +116,12 @@ export function useTeamMembership({
       await refetchMembers()
       return { error: null }
     }
-    return { error: await resolveFunctionInvokeError(error, data, 'Erro ao editar integrante.') }
+    const detail = await resolveFunctionInvokeDetail(error, data, 'Erro ao editar integrante.')
+    return {
+      error: detail.message,
+      code: detail.code,
+      existingUser: detail.existing_user,
+    }
   }
 
   const deleteTeamMember = async (userId: string, targetStoreId?: string | null) => {

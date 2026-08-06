@@ -7,6 +7,7 @@ import { Input } from '@/components/atoms/Input'
 import type { ProjectionMode, StoreSourceMode } from '@/types/database'
 import type { StoreSettingsPayload } from '@/hooks/useOperationalSettings'
 import { SOURCE_MODE_DESCRIPTIONS } from '../data/store-settings'
+import { HelpTooltip } from '@/components/ui/HelpTooltip'
 import { RecipientPreview } from '../components/RecipientPreview'
 
 export type SettingsFormState = {
@@ -98,13 +99,19 @@ export function AdminSettingsForm({
             <input type="checkbox" checked={form.active} onChange={e => setForm(prev => ({ ...prev, active: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
             <span className="text-mx-tiny font-bold uppercase tracking-widest">Loja ativa</span>
           </label>
-          <label className="flex items-center gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
-            <input type="checkbox" checked={form.include_venda_loja_in_store_total} onChange={e => setForm(prev => ({ ...prev, include_venda_loja_in_store_total: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
-            <span className="text-mx-tiny font-bold uppercase tracking-widest">Venda loja no total</span>
+          <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
+            <div className="flex items-center gap-mx-sm">
+              <input type="checkbox" checked={form.include_venda_loja_in_store_total} onChange={e => setForm(prev => ({ ...prev, include_venda_loja_in_store_total: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
+              <span className="text-mx-tiny font-bold uppercase tracking-widest">Vendas da Gestão/Apoio no Total da Loja</span>
+            </div>
+            <HelpTooltip text="Ative para incluir as vendas efetuadas por Gerentes, Donos e Apoio no faturamento total da loja em tempo real." />
           </label>
-          <label className="flex items-center gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
-            <input type="checkbox" checked={form.include_venda_loja_in_individual_goal} onChange={e => setForm(prev => ({ ...prev, include_venda_loja_in_individual_goal: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
-            <span className="text-mx-tiny font-bold uppercase tracking-widest">Venda loja na meta individual</span>
+          <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
+            <div className="flex items-center gap-mx-sm">
+              <input type="checkbox" checked={form.include_venda_loja_in_individual_goal} onChange={e => setForm(prev => ({ ...prev, include_venda_loja_in_individual_goal: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
+              <span className="text-mx-tiny font-bold uppercase tracking-widest">Vendas da Gestão/Apoio na Meta da Equipe</span>
+            </div>
+            <HelpTooltip text="Se ativado, as vendas da gestão abatem a meta proporcional dos vendedores (mantido desativado por padrão)." />
           </label>
         </div>
       </section>

@@ -67,29 +67,62 @@ export function checkSupabaseCredentials(url?: string, anonKey?: string): boolea
  * non-2xx status code") — o corpo JSON real (com o motivo de negócio) fica em
  * `error.context`, uma Response ainda não lida.
  */
-export async function resolveFunctionInvokeError(
+export type FunctionInvokeErrorDetail = {
+    message: string
+    code?: string
+    existing_user?: {
+        id: string
+        name: string
+        email: string
+        current_store_id: string | null
+        current_store_name: string
+    }
+}
+
+export async function resolveFunctionInvokeDetail(
     error: unknown,
     data: unknown,
     fallback = 'Erro desconhecido',
-): Promise<string> {
-    const dataError = (data as { error?: string } | null)?.error
-    if (dataError) return dataError
+): Promise<FunctionInvokeErrorDetail> {
+    const dataObj = data as { error?: string; code?: string; existing_user?: any } | null
+    if (dataObj?.error) {
+        return {
+            message: dataObj.error,
+            code: dataObj.code,
+            existing_user: dataObj.existing_user,
+        }
+    }
 
     if (error && typeof error === 'object') {
         const context = (error as { context?: unknown }).context
         if (context instanceof Response) {
             try {
                 const body = await context.clone().json()
-                if (body?.error) return body.error
+                if (body?.error) {
+                    return {
+                        message: body.error,
+                        code: body.code,
+                        existing_user: body.existing_user,
+                    }
+                }
             } catch {
                 // corpo não é JSON ou já foi consumido — segue pro fallback
             }
         }
         const message = (error as { message?: string }).message
-        if (message) return message
+        if (message) return { message }
     }
 
-    return fallback
+    return { message: fallback }
+}
+
+export async function resolveFunctionInvokeError(
+    error: unknown,
+    data: unknown,
+    fallback = 'Erro desconhecido',
+): Promise<string> {
+    const detail = await resolveFunctionInvokeDetail(error, data, fallback)
+    return detail.message
 }
 
 // Bloqueio inicial para evitar falhas silenciosas difíceis de diagnosticar

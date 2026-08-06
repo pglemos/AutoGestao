@@ -12,6 +12,9 @@ import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from '@/lib/auth/passwordPo
 import type { RegisterUserInput } from '@/hooks/useTeam'
 import type { Store, UserRole } from '@/types/database'
 
+import { HelpTooltip } from '@/components/ui/HelpTooltip'
+import { TransferConfirmationDialog, type TransferConfirmationData } from '@/features/lojas/components/team-panel/TransferConfirmationDialog'
+
 const papeisInternosMx = ['administrador_geral', 'administrador_mx', 'consultor_mx']
 const todayISO = () => new Date().toISOString().slice(0, 10)
 
@@ -27,7 +30,18 @@ interface UserCreationModalProps {
   isOpen: boolean
   onClose: () => void
   onSuccess: () => void
-  registerUser: (data: RegisterUserInput) => Promise<{ success?: boolean; error?: string }>
+  registerUser: (data: RegisterUserInput) => Promise<{
+    success?: boolean
+    error?: string
+    code?: string
+    existingUser?: {
+      id: string
+      name: string
+      email: string
+      current_store_id: string | null
+      current_store_name: string
+    }
+  }>
   storeId?: string
   lojas?: Store[]
 }
@@ -49,16 +63,23 @@ type UserCreationForm = {
 export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, storeId: initialStoreId, lojas }: UserCreationModalProps) {
   const { role: currentUserRole } = useAuth()
   const [loading, setLoading] = useState(false)
+  const [transferData, setTransferData] = useState<TransferConfirmationData | null>(null)
   const dialogRef = useRef<HTMLDivElement>(null)
   useFocusTrap(dialogRef, isOpen)
 
   // Escape fecha modal (Story 3.12 — WCAG 2.1 AA §2.1.2)
   useEffect(() => {
     if (!isOpen) return
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        if (transferData) setTransferData(null)
+        else onClose()
+      }
+    }
     document.addEventListener('keydown', onKey)
     return () => document.removeEventListener('keydown', onKey)
-  }, [isOpen, onClose])
+  }, [isOpen, onClose, transferData])
+
   const [formData, setFormData] = useState<UserCreationForm>({
     name: '',
     email: '',
@@ -75,6 +96,27 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
 
   const papelSelecionadoInterno = papeisInternosMx.includes(formData.role)
 
+  const handleConfirmTransfer = async () => {
+    setLoading(true)
+    const payload = papelSelecionadoInterno
+      ? { ...formData, store_id: undefined, ended_at: formData.ended_at || null, confirm_transfer: true }
+      : { ...formData, ended_at: formData.ended_at || null, confirm_transfer: true }
+
+    const result = await registerUser(payload)
+    if (result.success) {
+      toast.success('Integrante transferido e vinculado com sucesso.')
+      setTimeout(() => {
+        setLoading(false)
+        setTransferData(null)
+        onSuccess()
+        onClose()
+      }, 1000)
+    } else {
+      setLoading(false)
+      toast.error(result.error || 'Não foi possível concluir a transferência.')
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!papelSelecionadoInterno && !formData.store_id) return toast.error('Selecione uma unidade operacional')
@@ -84,19 +126,27 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
     const payload = papelSelecionadoInterno
       ? { ...formData, store_id: undefined, ended_at: formData.ended_at || null }
       : { ...formData, ended_at: formData.ended_at || null }
-    const { success, error } = await registerUser(payload)
-    setLoading(true) // Keep it for a smooth transition if success
+
+    const result = await registerUser(payload)
     
-    if (success) {
+    if (result.success) {
       toast.success('Integrante criado com sucesso.')
       setTimeout(() => {
         setLoading(false)
         onSuccess()
         onClose()
       }, 1000)
+    } else if (result.code === 'EXISTS_IN_OTHER_STORE' && result.existingUser) {
+      setLoading(false)
+      const targetStore = lojas?.find(l => l.id === formData.store_id)?.name
+      setTransferData({
+        existingUser: result.existingUser,
+        targetStoreName: targetStore,
+        onConfirm: handleConfirmTransfer,
+      })
     } else {
       setLoading(false)
-      toast.error(error || 'Falha ao criar integrante.')
+      toast.error(result.error || 'Falha ao criar integrante.')
     }
   }
 
@@ -315,8 +365,11 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                         <input type="checkbox" checked={formData.is_active} onChange={e => setFormData({...formData, is_active: e.target.checked})} disabled={papelSelecionadoInterno || formData.role !== 'vendedor'} className="h-mx-sm w-mx-sm accent-brand-primary disabled:opacity-40" />
                       </label>
                       <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
-                        <span className="text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">Venda loja</span>
-                        <input type="checkbox" checked={formData.is_venda_loja} onChange={e => setFormData({...formData, is_venda_loja: e.target.checked})} disabled={papelSelecionadoInterno || formData.role !== 'vendedor'} className="h-mx-sm w-mx-sm accent-brand-primary disabled:opacity-40" />
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">Vendas da Gestão / Apoio (Sem Meta)</span>
+                          <HelpTooltip text="Ative para Gerentes, Donos ou integrantes de apoio que fazem vendas. As vendas entram no faturamento total e ranking em tempo real, sem gerar cobrança de meta individual ou alterar comissões da equipe." side="top" />
+                        </div>
+                        <input type="checkbox" checked={formData.is_venda_loja} onChange={e => setFormData({...formData, is_venda_loja: e.target.checked})} disabled={papelSelecionadoInterno} className="h-mx-sm w-mx-sm accent-brand-primary disabled:opacity-40" />
                       </label>
                       <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
                         <span className="text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">Carência no mês</span>
@@ -343,6 +396,13 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
           </motion.div>
         </div>
       )}
+
+      <TransferConfirmationDialog
+        data={transferData}
+        isOpen={!!transferData}
+        onClose={() => setTransferData(null)}
+        loading={loading}
+      />
     </AnimatePresence>
   )
 }
