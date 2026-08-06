@@ -147,3 +147,33 @@
 - Commit: e74aea63 (+ b87da0ef z-index, 5906bff3 password policy test)
 - Timestamp: 2026-08-06T21:20:00Z
 - Conclusão: DONE_WITH_EVIDENCE
+
+### EV-C07-001 - Branch protection completa em main
+- Requisito: C0.7
+- Ambiente: GitHub API (gh) / repo pglemos/MXGESTAOPREDITIVA
+- Resultado observado: GET protection → `{"protected":true,"pr_reviews":1,"checks":["Typecheck and unit tests","Quality Gates","Gitleaks (Secret Scanning)","Management Design System Audit V3"],"strict":true,"force_push_blocked":true,"deletion_blocked":true,"conversation_resolution":true}`
+- Configuração: required_pull_request_reviews (1 aprovação, dismiss_stale), required_status_checks strict (5 check-runs reais — `typecheck`, `unit-tests`, `verify`, `Detect Secrets`, `review`; corrigido após descoberta de que o GitHub compara check-run names e não workflow names, ver EV-C07-002), allow_force_pushes=false, allow_deletions=false, required_conversation_resolution=true, enforce_admins=false (break-glass intencional — admins podem desbloquear em emergência; decisão deliberada registrada, ver resposta ao CodeRabbit no PR)
+- Impacto workflow: execução autônoma passa a usar PR + merge (push direto rejeitado)
+- Timestamp: 2026-08-06T23:15:00Z
+- Conclusão: DONE_WITH_EVIDENCE
+
+### EV-C08-001 - Branches locais e remotas eliminadas (repositório limpo)
+- Requisito: C0.8
+- Ambiente: repo local + GitHub API (gh)
+- Resultado observado:
+  - 29 branches locais eliminadas: 18 merged com `git branch -d`; 5 não-merged com `-D` após verificação de conteúdo já presente na main (`codex/carteira-base44-1to1` yield = `3e51b8f8`; `feat/observability-full` = `31d18b94`/`7fc5a6a2`/`7f6c6203`; `owner-base44-parity` = fixes de EV-C02-001; `codex/resume-pr153` e `feat/functional-package-v2` = regressões conhecidas por EV-C02-001); 6 presas em worktrees órfãos (scratchpads /tmp/claude-501 e .claude/worktrees inexistentes) liberadas via `git worktree prune` + `git worktree remove --force` e deletadas
+  - 2 branches remotas do Jules bot deletadas (`main-2221599864479952096`, `main-8869415744512905224`) e PRs #176/#177 fechados como superseded: migration `20260805120000_harden_rls_unprotected_tables.sql` do #176 é versão antiga (44 linhas) superada pela main (66 linhas); restante era remoção trivial de console.log
+  - Total: 31 branches (29 locais + 2 remotas); dependabot #178/#179 excluídas da contagem (deps)
+  - Estado final: `git branch` = apenas `main`; `git branch -r` = apenas `origin/HEAD`, `origin/main` + 2 branches dependabot (PRs #178/#179)
+- Decisão: nenhuma branch de trabalho remanescente; NENHUMA porta de conteúdo pendente (consistente com EV-C02-001)
+- Timestamp: 2026-08-07T01:00:00Z
+- Conclusão: DONE_WITH_EVIDENCE
+
+### EV-C07-002 - Correção dos contexts de status check na proteção
+- Requisito: C0.7 (follow-up do PR #180)
+- Ambiente: GitHub API (gh)
+- Resultado observado: primeiro PR pós-proteção ficou `mergeStateStatus: BLOCKED` com todos os checks verdes — a proteção havia sido aplicada com nomes de WORKFLOW ("Typecheck and unit tests", "Quality Gates", "Gitleaks (Secret Scanning)", "Management Design System Audit V3"), mas o GitHub compara `check_runs[].name` (nomes de JOB). Check-runs reais do commit: `typecheck`, `unit-tests`, `verify`, `Detect Secrets`, `review`.
+- Ação: reaplicado payload de proteção com `contexts: ["typecheck","unit-tests","verify","Detect Secrets","review"]`, strict=true, 1 aprovação, force-push/deletes bloqueados, conversation resolution.
+- GET pós-correção: `{"checks":["typecheck","unit-tests","verify","Detect Secrets","review"],"strict":true,"pr_reviews":1,"force_push_blocked":true,"deletion_blocked":true,"conversation_resolution":true}`
+- Timestamp: 2026-08-07T01:30:00Z
+- Conclusão: DONE_WITH_EVIDENCE

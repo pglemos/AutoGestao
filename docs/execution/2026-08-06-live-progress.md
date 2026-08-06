@@ -87,7 +87,7 @@
 ---
 
 ## C0.6 — Edge Functions
-- Estado: IN_PROGRESS (auditoria fonte concluída; 6 sem JWT com proteção interna comprovada)
+- Estado: DONE_WITH_EVIDENCE (EV-C06-001)
 - 22 funções; 16 com verify_jwt=True; 6 sem JWT auditados:
   - `request-password-recovery`: rate limit RPC + CORS allowlist
   - `store-pre-registration`: rate limit + senha temporária + CORS allowlist
@@ -98,5 +98,26 @@
 
 ---
 
+## C0.7 — Proteger main
+- Estado: DONE_WITH_EVIDENCE (EV-C07-001 + EV-C07-002)
+- Proteção completa aplicada via `gh api -X PUT repos/pglemos/MXGESTAOPREDITIVA/branches/main/protection`:
+  - PR obrigatório com 1 aprovação + dismiss stale reviews
+  - Status checks obrigatórios (strict), 5 check-runs reais: `typecheck`, `unit-tests`, `verify`, `Detect Secrets`, `review` (EV-C07-002: GitHub compara check-run names, não workflow names — corrigido no PR #180)
+  - Force-push bloqueado, deletes bloqueados, conversation resolution obrigatória
+  - `enforce_admins: false` (break-glass intencional, decisão deliberada — ver resposta CodeRabbit PR #180)
+- Atenção: script legado `scripts/setup-branch-protection.sh` referencia 7 checks antigos inexistentes — não executar; usar o payload acima
+- Workflow da execução autônoma: push direto bloqueado → commits via PR + merge
+
+---
+
 ## Fases 1-18
 - Estado: NOT_STARTED (aguardando baseline)
+---
+
+## C0.8 — Limpar branches
+- Estado: DONE_WITH_EVIDENCE (EV-C08-001)
+- 29 branches locais eliminadas: 18 merged (`git branch -d`) + 5 não-merged verificadas contra main (`-D`: conteúdo já presente na main ou regressão conhecida EV-C02-001) + 6 em worktrees órfãos liberadas (`git worktree prune` + `remove --force`)
+- 2 branches remotas do bot Jules deletadas (`main-2221599864479952096`/`main-8869415744512905224`); PRs #176/#177 fechados como superseded
+- Total: 31 branches (29 locais + 2 remotas); dependabot #178/#179 ficam fora da contagem (deps, não trabalho)
+- Estado final: `git branch` → só `main`; remoto → só `origin/main` (+ dependabot #178/#179)
+- Obs: GitHub reportou 83 vulnerabilidades dependabot (3 critical, 44 high) — item já mapeado para Fase 14 (Segurança e Dependências)
