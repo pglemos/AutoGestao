@@ -361,7 +361,10 @@ function ChipsFiltrosAtivos({ filtros, onRemover }) {
 }
 
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
-export default function CarteiraAtivaTab({ clientes = [], onNovoCliente, onWhatsApp, onFicha }) {
+// `onNovoCliente` continua na assinatura porque a página Base44 ainda a passa,
+// mas a carteira não abre mais o cadastro: a entrada de cliente novo é
+// exclusiva do fechamento diário.
+export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovoCliente, onWhatsApp, onFicha }) {
   const safeClientes = useMemo(() => Array.isArray(clientes) ? clientes : [], [clientes]);
 
   const CARDS = useMemo(() => [
@@ -460,9 +463,6 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente, onWhats
           >
             <SlidersHorizontal className="w-4 h-4" /> Filtros
           </button>
-          <Button onClick={onNovoCliente} className="rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-sm gap-2 whitespace-nowrap">
-            + Novo cliente
-          </Button>
         </div>
       </div>
 
