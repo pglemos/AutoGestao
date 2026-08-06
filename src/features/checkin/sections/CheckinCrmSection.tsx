@@ -11,6 +11,7 @@ import { Typography } from '@/components/atoms/Typography'
 import { useClientes, type ClienteInput } from '@/features/crm/hooks/useClientes'
 import { useOportunidades } from '@/features/crm/hooks/useOportunidades'
 import { useAgendamentos } from '@/features/crm/hooks/useAgendamentos'
+import { formatCurrencyInput, parseCurrencyInput } from '@/lib/currency-mask'
 import {
   CRM_CANAL_LABEL,
   CRM_FINANCIAMENTO,
@@ -168,24 +169,10 @@ const toDateTimeLocalInput = (value?: string | null) => {
   return `${byType.get('year')}-${byType.get('month')}-${byType.get('day')}T${byType.get('hour')}:${byType.get('minute')}`
 }
 
-const parseCurrencyToNumber = (val: string): number => {
-  if (!val) return 0
-  if (/^\d+(\.\d+)?$/.test(val)) {
-    return Number(val)
-  }
-  const clean = val.replace(/R\$\s?/g, '').replace(/\./g, '').replace(',', '.')
-  return Number(clean) || 0
-}
-
-// Real-time BRL mask: user types only digits, last 2 are cents
-const formatCurrencyLive = (raw: string): string => {
-  const digits = raw.replace(/\D/g, '')
-  if (!digits) return ''
-  return (Number(digits) / 100).toLocaleString('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  })
-}
+// Máscara compartilhada: o dígito digitado é real, não centavo
+// (`69900` → `R$ 69.900,00`). Ver src/lib/currency-mask.ts.
+const parseCurrencyToNumber = parseCurrencyInput
+const formatCurrencyLive = formatCurrencyInput
 
 export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinCrmSectionProps) {
   const navigate = useNavigate()

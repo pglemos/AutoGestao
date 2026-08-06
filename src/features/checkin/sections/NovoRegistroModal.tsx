@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { ArrowLeft, CalendarCheck, HelpCircle, ShieldCheck, ShoppingCart, UserCheck, X } from 'lucide-react'
 import { toast } from '@/lib/toast'
+import { formatCurrencyInput, parseCurrencyInput } from '@/lib/currency-mask'
 import { Button } from '@/components/atoms/Button'
 import { Select } from '@/components/atoms/Select'
 import { FormField } from '@/components/molecules/FormField'
@@ -71,17 +72,10 @@ function formatPhone(raw: string): string {
   return d.replace(/(\d{2})(\d{5})(\d{0,4})/, '($1) $2-$3').replace(/-$/, '')
 }
 
-function formatCurrency(raw: string): string {
-  const num = (raw || '').replace(/\D/g, '')
-  if (!num) return ''
-  const val = (parseInt(num, 10) / 100).toFixed(2)
-  return 'R$ ' + parseFloat(val).toLocaleString('pt-BR', { minimumFractionDigits: 2 })
-}
-
-function currencyToNumber(raw: string): number {
-  const num = (raw || '').replace(/\D/g, '')
-  return num ? parseInt(num, 10) / 100 : 0
-}
+// Máscara compartilhada: o dígito digitado é real, não centavo
+// (`69900` → `R$ 69.900,00`). Ver src/lib/currency-mask.ts.
+const formatCurrency = formatCurrencyInput
+const currencyToNumber = parseCurrencyInput
 
 function getSaoPauloDateOnly(baseDate = new Date()): string {
   return new Intl.DateTimeFormat('en-CA', {
