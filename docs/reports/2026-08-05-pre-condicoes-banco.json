@@ -1,0 +1,67 @@
+{
+  "momento": "2026-08-05T22:32:20.032Z",
+  "lancamentos_por_status": [
+    {
+      "submission_status": "late",
+      "n": 1350
+    },
+    {
+      "submission_status": "on_time",
+      "n": 556
+    },
+    {
+      "submission_status": "draft",
+      "n": 1
+    }
+  ],
+  "total_eventos": [
+    {
+      "n": 1022
+    }
+  ],
+  "total_oportunidades": [
+    {
+      "n": 522
+    }
+  ],
+  "total_agendamentos": [
+    {
+      "n": 261
+    }
+  ],
+  "orfaos_ganho_sem_venda": [
+    {
+      "n": 1
+    }
+  ],
+  "agendamentos_compareceu_sem_evento": [
+    {
+      "n": 76
+    }
+  ],
+  "agendamentos_sem_evento_criacao": [
+    {
+      "n": 70
+    }
+  ],
+  "eventos_sem_entidade_pai": [
+    {
+      "n": 38
+    }
+  ],
+  "eventos_duplicados_por_oportunidade": [
+    {
+      "n": 51
+    }
+  ],
+  "eventos_duplicados_por_agendamento": [
+    {
+      "n": 12
+    }
+  ],
+  "eventos_loja_divergente": [
+    {
+      "n": 0
+    }
+  ]
+}

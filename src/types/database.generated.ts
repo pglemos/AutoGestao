@@ -1073,6 +1073,21 @@ export type Database = {
         }
         Relationships: []
       }
+      backup_is_venda_loja_20260805: {
+        Row: {
+          reverted_at: string
+          user_id: string
+        }
+        Insert: {
+          reverted_at?: string
+          user_id: string
+        }
+        Update: {
+          reverted_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
       banco_talentos: {
         Row: {
           amostra_n: number
@@ -6279,10 +6294,12 @@ export type Database = {
           created_by: string | null
           data_hora_liberacao: string | null
           date: string
+          draft_revision: number
           edit_locked_at: string | null
           fechamento_liberado: boolean
           finalizado_apos_prazo: boolean
           id: string
+          last_draft_saved_at: string | null
           leads: number
           leads_net: number
           leads_net_prev_day: number
@@ -6327,10 +6344,12 @@ export type Database = {
           created_by?: string | null
           data_hora_liberacao?: string | null
           date?: string
+          draft_revision?: number
           edit_locked_at?: string | null
           fechamento_liberado?: boolean
           finalizado_apos_prazo?: boolean
           id?: string
+          last_draft_saved_at?: string | null
           leads?: number
           leads_net?: number
           leads_net_prev_day?: number
@@ -6375,10 +6394,12 @@ export type Database = {
           created_by?: string | null
           data_hora_liberacao?: string | null
           date?: string
+          draft_revision?: number
           edit_locked_at?: string | null
           fechamento_liberado?: boolean
           finalizado_apos_prazo?: boolean
           id?: string
+          last_draft_saved_at?: string | null
           leads?: number
           leads_net?: number
           leads_net_prev_day?: number
@@ -13593,6 +13614,10 @@ export type Database = {
         Args: { p_seller_id?: string }
         Returns: string
       }
+      atualizar_etapa_oportunidade_crm: {
+        Args: { p_oportunidade_id: string; p_payload: Json }
+        Returns: Json
+      }
       atualizar_item_entrega_consultoria: {
         Args: { p_item_id: string; p_note?: string; p_status: string }
         Returns: {
@@ -13789,6 +13814,10 @@ export type Database = {
           isOneToOne: true
           isSetofReturn: false
         }
+      }
+      atualizar_status_agendamento_crm: {
+        Args: { p_agendamento_id: string; p_payload: Json }
+        Returns: Json
       }
       begin_password_change: { Args: never; Returns: Json }
       buscar_cliente_loja_por_telefone: {
@@ -14321,6 +14350,8 @@ export type Database = {
         Returns: number
       }
       create_pdi_session_bundle: { Args: { p_payload: Json }; Returns: string }
+      criar_agendamento_crm: { Args: { p_payload: Json }; Returns: Json }
+      criar_oportunidade_crm: { Args: { p_payload: Json }; Returns: Json }
       criar_plano_acao: {
         Args: {
           p_acao: string
@@ -14585,6 +14616,14 @@ export type Database = {
           isSetofReturn: false
         }
       }
+      crm_assert_store_access: {
+        Args: { p_store_id: string }
+        Returns: boolean
+      }
+      crm_evento_de_agendamento: {
+        Args: { p_tipo: Database["public"]["Enums"]["crm_agendamento_tipo"] }
+        Returns: Database["public"]["Enums"]["crm_evento_tipo"]
+      }
       current_user_role_code: { Args: { uid?: string }; Returns: string }
       current_user_role_codes: { Args: { uid?: string }; Returns: string[] }
       dismiss_alert: {
@@ -14704,10 +14743,12 @@ export type Database = {
           created_by: string | null
           data_hora_liberacao: string | null
           date: string
+          draft_revision: number
           edit_locked_at: string | null
           fechamento_liberado: boolean
           finalizado_apos_prazo: boolean
           id: string
+          last_draft_saved_at: string | null
           leads: number
           leads_net: number
           leads_net_prev_day: number
@@ -14766,10 +14807,12 @@ export type Database = {
           created_by: string | null
           data_hora_liberacao: string | null
           date: string
+          draft_revision: number
           edit_locked_at: string | null
           fechamento_liberado: boolean
           finalizado_apos_prazo: boolean
           id: string
+          last_draft_saved_at: string | null
           leads: number
           leads_net: number
           leads_net_prev_day: number
@@ -14829,10 +14872,12 @@ export type Database = {
           created_by: string | null
           data_hora_liberacao: string | null
           date: string
+          draft_revision: number
           edit_locked_at: string | null
           fechamento_liberado: boolean
           finalizado_apos_prazo: boolean
           id: string
+          last_draft_saved_at: string | null
           leads: number
           leads_net: number
           leads_net_prev_day: number
@@ -14886,10 +14931,12 @@ export type Database = {
           created_by: string | null
           data_hora_liberacao: string | null
           date: string
+          draft_revision: number
           edit_locked_at: string | null
           fechamento_liberado: boolean
           finalizado_apos_prazo: boolean
           id: string
+          last_draft_saved_at: string | null
           leads: number
           leads_net: number
           leads_net_prev_day: number
@@ -14943,10 +14990,12 @@ export type Database = {
           created_by: string | null
           data_hora_liberacao: string | null
           date: string
+          draft_revision: number
           edit_locked_at: string | null
           fechamento_liberado: boolean
           finalizado_apos_prazo: boolean
           id: string
+          last_draft_saved_at: string | null
           leads: number
           leads_net: number
           leads_net_prev_day: number

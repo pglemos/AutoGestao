@@ -1,0 +1,118 @@
+{
+  "momento": "2026-08-05T22:34:21.169Z",
+  "colunas_novas": [
+    {
+      "column_name": "draft_revision",
+      "data_type": "bigint",
+      "column_default": "0"
+    },
+    {
+      "column_name": "last_draft_saved_at",
+      "data_type": "timestamp with time zone",
+      "column_default": null
+    }
+  ],
+  "rpcs_novas": [
+    {
+      "proname": "atualizar_etapa_oportunidade_crm"
+    },
+    {
+      "proname": "atualizar_status_agendamento_crm"
+    },
+    {
+      "proname": "criar_agendamento_crm"
+    },
+    {
+      "proname": "criar_oportunidade_crm"
+    },
+    {
+      "proname": "crm_assert_store_access"
+    },
+    {
+      "proname": "crm_evento_de_agendamento"
+    }
+  ],
+  "submit_checkin_tem_conflito": [
+    {
+      "tem": true
+    }
+  ],
+  "grants_anon": [
+    {
+      "proname": "atualizar_etapa_oportunidade_crm",
+      "anon_pode": true
+    },
+    {
+      "proname": "atualizar_status_agendamento_crm",
+      "anon_pode": true
+    },
+    {
+      "proname": "criar_agendamento_crm",
+      "anon_pode": true
+    },
+    {
+      "proname": "criar_oportunidade_crm",
+      "anon_pode": true
+    },
+    {
+      "proname": "submit_checkin",
+      "anon_pode": false
+    }
+  ],
+  "grants_authenticated": [
+    {
+      "proname": "atualizar_etapa_oportunidade_crm",
+      "auth_pode": true
+    },
+    {
+      "proname": "atualizar_status_agendamento_crm",
+      "auth_pode": true
+    },
+    {
+      "proname": "criar_agendamento_crm",
+      "auth_pode": true
+    },
+    {
+      "proname": "criar_oportunidade_crm",
+      "auth_pode": true
+    },
+    {
+      "proname": "submit_checkin",
+      "auth_pode": true
+    }
+  ],
+  "orfaos_ganho_sem_venda": [
+    {
+      "n": 0
+    }
+  ],
+  "agendamentos_compareceu_sem_evento": [
+    {
+      "n": 0
+    }
+  ],
+  "total_eventos": [
+    {
+      "n": 1221
+    }
+  ],
+  "reconciliados": [
+    {
+      "n": 199
+    }
+  ],
+  "views_com_guard": [
+    {
+      "table_name": "view_daily_team_status",
+      "tem_guard": true
+    },
+    {
+      "table_name": "view_sem_registro",
+      "tem_guard": true
+    },
+    {
+      "table_name": "view_store_daily_production",
+      "tem_guard": true
+    }
+  ]
+}

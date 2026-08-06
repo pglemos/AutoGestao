@@ -8,10 +8,25 @@ import {
   type CrmAgendamentoTipo,
   type CrmAgendamentoStatus,
 } from '@/lib/schemas/crm.schema'
-import { eventoJaExiste, registrarEventoComercial } from '@/features/crm/lib/eventosComerciais'
 import type { CrmEventoTipo } from '@/lib/schemas/crm.schema'
+import type { Json } from '@/types/database.generated'
 
-/** Garantia e pós-venda não são "compromisso futuro" no sentido do funil — já nascem como o fato realizado. */
+/** Retorno normalizado das RPCs transacionais do CRM. */
+type CrmRpcResult = {
+  ok?: boolean
+  error?: string
+  code?: string
+  data?: { id?: string; status?: string }
+}
+
+/**
+ * Garantia e pós-venda não são "compromisso futuro" no sentido do funil — já
+ * nascem como o fato realizado.
+ *
+ * O mesmo mapa existe no servidor (`public.crm_evento_de_agendamento`), que é
+ * quem grava o evento. Esta cópia serve às telas que precisam antecipar o tipo
+ * antes de salvar; as duas precisam mudar juntas.
+ */
 export function eventoDeCriacaoParaTipo(tipo: CrmAgendamentoTipo): CrmEventoTipo {
   if (tipo === 'garantia') return 'garantia_registrada'
   if (tipo === 'pos_venda') return 'pos_venda_realizado'
@@ -95,19 +110,14 @@ export function useAgendamentos() {
       proxima_acao: input.proxima_acao?.trim() || null,
       observacoes: input.observacoes?.trim() || null,
     }
-    const { data, error: insertError } = await supabase.from('agendamentos').insert(payload).select('id').single()
-    if (insertError) return { error: insertError.message }
-
-    if (data?.id && payload.cliente_id) {
-      await registrarEventoComercial({
-        clienteId: payload.cliente_id,
-        oportunidadeId: payload.oportunidade_id,
-        agendamentoId: data.id,
-        tipoEvento: eventoDeCriacaoParaTipo(payload.tipo),
-        canal: payload.canal,
-        observacao: payload.observacoes,
-      }, { lojaId: effectiveStoreId, sellerUserId: supabaseUser.id })
-    }
+    // Agendamento e evento de criação no mesmo commit — o evento deixa de ser
+    // best-effort e não há mais agendamento invisível para o funil.
+    const { data, error: rpcError } = await supabase.rpc('criar_agendamento_crm', {
+      p_payload: payload as unknown as Json,
+    })
+    if (rpcError) return { error: rpcError.message }
+    const result = data as CrmRpcResult | null
+    if (!result?.ok) return { error: result?.error || 'Não foi possível registrar o agendamento.' }
 
     await fetchAgendamentos()
     return { error: null }
@@ -138,28 +148,20 @@ export function useAgendamentos() {
 
   const updateStatus = useCallback(async (id: string, status: CrmAgendamentoStatus): Promise<{ error: string | null }> => {
     if (!supabaseUser) return { error: 'Sessão inválida.' }
-    const { error: updErr } = await supabase.from('agendamentos').update({ status }).eq('id', id)
-    if (updErr) return { error: updErr.message }
-
-    if (status === 'compareceu' && effectiveStoreId) {
-      const jaRegistrado = await eventoJaExiste(id, 'atendimento_comercial_realizado', 'agendamento_id')
-      if (!jaRegistrado) {
-        const agendamento = agendamentos.find(a => a.id === id)
-        if (agendamento?.cliente_id) {
-          await registrarEventoComercial({
-            clienteId: agendamento.cliente_id,
-            oportunidadeId: agendamento.oportunidade_id,
-            agendamentoId: id,
-            tipoEvento: 'atendimento_comercial_realizado',
-            canal: agendamento.canal,
-          }, { lojaId: effectiveStoreId, sellerUserId: supabaseUser.id })
-        }
-      }
-    }
+    // Comparecimento e o evento de atendimento no mesmo commit. A checagem de
+    // duplicidade saiu do cliente (duas abas podiam marcar ao mesmo tempo e
+    // gerar dois eventos) e virou idempotência no servidor.
+    const { data, error: rpcError } = await supabase.rpc('atualizar_status_agendamento_crm', {
+      p_agendamento_id: id,
+      p_payload: { status } as unknown as Json,
+    })
+    if (rpcError) return { error: rpcError.message }
+    const result = data as CrmRpcResult | null
+    if (!result?.ok) return { error: result?.error || 'Não foi possível atualizar o agendamento.' }
 
     await fetchAgendamentos()
     return { error: null }
-  }, [supabaseUser, effectiveStoreId, fetchAgendamentos, agendamentos])
+  }, [supabaseUser, fetchAgendamentos])
 
   const deleteAgendamento = useCallback(async (id: string): Promise<{ error: string | null }> => {
     if (!supabaseUser) return { error: 'Sessão inválida.' }

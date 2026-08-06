@@ -13,8 +13,16 @@ import {
   type CrmTipoVeiculo,
 } from '@/lib/schemas/crm.schema'
 import { z } from 'zod'
-import { eventoJaExiste, registrarEventoComercial } from '@/features/crm/lib/eventosComerciais'
 import { cancelarVendaRpc } from '@/features/crm/lib/cancelarVenda'
+import type { Json } from '@/types/database.generated'
+
+/** Retorno normalizado das RPCs transacionais do CRM. */
+type CrmRpcResult = {
+  ok?: boolean
+  error?: string
+  code?: string
+  data?: { id?: string; etapa?: string; status?: string }
+}
 
 const OportunidadeComClienteSchema = OportunidadeSchema.extend({
   cliente: z.object({ nome: z.string(), telefone: z.string().nullable() }).nullable().optional(),
@@ -170,31 +178,18 @@ export function useOportunidades() {
     if (!effectiveStoreId) return { error: 'Loja não identificada para o vendedor.' }
     if (!input.cliente_id) return { error: 'Selecione o cliente da oportunidade.' }
     const payload = buildOportunidadePayload(input, { loja_id: effectiveStoreId, seller_user_id: supabaseUser.id })
-    const { data, error: insertError } = await supabase.from('oportunidades').insert(payload).select('id').single()
-    if (insertError) return { error: insertError.message }
-
-    if (data?.id) {
-      const eventoContext = { lojaId: effectiveStoreId, sellerUserId: supabaseUser.id }
-      // Qualificado nasce sempre que o cliente vira oportunidade trabalhável.
-      await registrarEventoComercial({
-        clienteId: input.cliente_id,
-        oportunidadeId: data.id,
-        tipoEvento: 'cliente_qualificado',
-        canal: payload.canal,
-      }, eventoContext)
-      // Internet também soma como "Oportunidade" (etapa adicional do funil).
-      if (payload.canal === 'internet') {
-        await registrarEventoComercial({
-          clienteId: input.cliente_id,
-          oportunidadeId: data.id,
-          tipoEvento: 'oportunidade_registrada',
-          canal: payload.canal,
-        }, eventoContext)
-      }
-    }
+    // Oportunidade e os eventos de funil no mesmo commit. Antes o INSERT ia
+    // primeiro e o evento era best-effort: falhou o evento, sobrava
+    // oportunidade sem fato comercial e o funil não fechava com a operação.
+    const { data, error: rpcError } = await supabase.rpc('criar_oportunidade_crm', {
+      p_payload: payload as unknown as Json,
+    })
+    if (rpcError) return { error: rpcError.message }
+    const result = data as CrmRpcResult | null
+    if (!result?.ok) return { error: result?.error || 'Não foi possível registrar a oportunidade.' }
 
     await fetchOportunidades()
-    return { error: null, id: data?.id }
+    return { error: null, id: result.data?.id }
   }, [supabaseUser, effectiveStoreId, fetchOportunidades])
 
   const registrarVendaDireta = useCallback(async (input: VendaDiretaInput): Promise<{ error: string | null; id?: string }> => {
@@ -230,37 +225,23 @@ export function useOportunidades() {
 
   const updateEtapa = useCallback(async (id: string, etapa: CrmEtapaFunil, motivoPerda?: string): Promise<{ error: string | null }> => {
     if (!supabaseUser) return { error: 'Sessão inválida.' }
-    const isTerminal = isEtapaTerminal(etapa)
-    const patch: Record<string, unknown> = {
-      etapa,
-      closed_at: isTerminal ? new Date().toISOString() : null,
-      motivo_perda: etapa === 'perdido' ? (motivoPerda?.trim() || null) : null,
-    }
-    const { error: updateError } = await supabase.from('oportunidades').update(patch).eq('id', id)
-    if (updateError) return { error: updateError.message }
-
-    if (etapa === 'ganho' && effectiveStoreId) {
-      const jaRegistrada = await eventoJaExiste(id, 'venda_realizada')
-      if (!jaRegistrada) {
-        const oportunidade = oportunidades.find(o => o.id === id)
-        if (oportunidade) {
-          // Coerência venda/atendimento: não bloqueia — apenas anota quando
-          // não houve atendimento comercial registrado antes da venda.
-          const teveAtendimento = await eventoJaExiste(id, 'atendimento_comercial_realizado')
-          await registrarEventoComercial({
-            clienteId: oportunidade.cliente_id,
-            oportunidadeId: id,
-            tipoEvento: 'venda_realizada',
-            canal: oportunidade.canal,
-            observacao: teveAtendimento ? null : 'Venda sem atendimento comercial registrado previamente.',
-          }, { lojaId: effectiveStoreId, sellerUserId: supabaseUser.id })
-        }
-      }
-    }
+    // Mudança de etapa e o evento de venda no mesmo commit. A anotação de
+    // "venda sem atendimento prévio" e a idempotência vivem no servidor: eram
+    // duas consultas de leitura no cliente, sujeitas a corrida entre abas.
+    const { data, error: rpcError } = await supabase.rpc('atualizar_etapa_oportunidade_crm', {
+      p_oportunidade_id: id,
+      p_payload: {
+        etapa,
+        motivo_perda: etapa === 'perdido' ? (motivoPerda?.trim() || null) : null,
+      } as unknown as Json,
+    })
+    if (rpcError) return { error: rpcError.message }
+    const result = data as CrmRpcResult | null
+    if (!result?.ok) return { error: result?.error || 'Não foi possível atualizar a etapa.' }
 
     await fetchOportunidades()
     return { error: null }
-  }, [supabaseUser, effectiveStoreId, fetchOportunidades, oportunidades])
+  }, [supabaseUser, fetchOportunidades])
 
   const cancelarVenda = useCallback(async (id: string, motivo: string): Promise<{ error: string | null }> => {
     if (!supabaseUser) return { error: 'Sessão inválida.' }
