@@ -32,9 +32,15 @@ export function HelpTooltip({
     <TooltipProvider delayDuration={50}>
       <Tooltip open={open} onOpenChange={setOpen}>
         <TooltipTrigger asChild>
-          <button
-            type="button"
+          <span
+            role="button"
+            tabIndex={0}
             aria-label="Ajuda"
+            onPointerDown={event => event.stopPropagation()}
+            onMouseDown={event => {
+              event.preventDefault()
+              event.stopPropagation()
+            }}
             onClick={event => {
               event.preventDefault()
               event.stopPropagation()
@@ -47,7 +53,7 @@ export function HelpTooltip({
             className={`inline-flex cursor-help items-center justify-center align-middle text-gray-400 transition-colors hover:text-emerald-600 focus:outline-none ${className}`}
           >
             <HelpCircle size={14} strokeWidth={2.25} />
-          </button>
+          </span>
         </TooltipTrigger>
         <Content
           side={side}
