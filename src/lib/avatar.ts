@@ -1,7 +1,9 @@
 import { supabase } from '@/lib/supabase'
 import { getAvatarUrl } from '@/lib/utils'
+import { downscaleImageFile } from '@/lib/image-downscale'
 
 export const USER_AVATAR_BUCKET = 'perfis_usuario'
+/** Limite do arquivo que o usuário escolhe — a foto é reduzida antes de subir. */
 export const USER_AVATAR_MAX_SIZE_BYTES = 5 * 1024 * 1024
 export const USER_AVATAR_ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp'] as const
 
@@ -35,18 +37,28 @@ export async function uploadUserAvatar(userId: string, file: File) {
     const validationError = validateUserAvatarFile(file)
     if (validationError) throw new Error(validationError)
 
-    const extension = AVATAR_EXTENSIONS[file.type] || 'jpg'
+    // O bucket é público: o que sobe aqui é servido pelo CDN e conta como
+    // cached egress. Reduzir para 256 px antes do upload troca ~1,2 MB por
+    // ~25 KB sem diferença visível num avatar.
+    const optimized = await downscaleImageFile(file)
+
+    const extension = AVATAR_EXTENSIONS[optimized.type] || 'jpg'
     const path = `${userId}/avatar-${Date.now()}.${extension}`
 
     const { error: uploadError } = await supabase.storage
         .from(USER_AVATAR_BUCKET)
-        .upload(path, file, {
-            contentType: file.type,
+        .upload(path, optimized, {
+            contentType: optimized.type,
             upsert: true,
+            // Um ano de cache: o caminho já carrega o timestamp, então trocar
+            // de foto gera URL nova. Sem isto, cada visita revalidava no CDN.
+            cacheControl: '31536000',
         })
 
     if (uploadError) throw uploadError
 
     const { data: { publicUrl } } = supabase.storage.from(USER_AVATAR_BUCKET).getPublicUrl(path)
-    return `${publicUrl}?t=${Date.now()}`
+    // Sem `?t=`: o caminho já é único por upload, e o query param só servia
+    // para furar o cache do CDN a cada leitura.
+    return publicUrl
 }

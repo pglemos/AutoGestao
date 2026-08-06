@@ -87,6 +87,11 @@ const Avatar = React.forwardRef<HTMLDivElement, AvatarProps>(
           src={src}
           alt={accessibleName}
           className="h-full w-full object-cover"
+          // Listas de ranking e equipe renderizam dezenas de avatares de uma
+          // vez. Sem lazy, o navegador baixa todos — inclusive os que estão
+          // fora da tela — e cada byte conta na cota de egress do projeto.
+          loading="lazy"
+          decoding="async"
           onError={() => setImgError(true)}
         />
         )}

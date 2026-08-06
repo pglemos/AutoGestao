@@ -158,6 +158,37 @@ describe('subscribeToTeamFunnelRealtime', () => {
     expect(fake.subscriptions[1].filter).toBe('loja_id=eq.loja-2')
   })
 
+  // Cada refetch relê 6 meses de eventos_comerciais. Reagir a cada INSERT numa
+  // loja movimentada multiplicaria esse payload e queima cota de egress.
+  test('respeita um piso entre refetches durante rajada longa', () => {
+    const fake = createFakeClient()
+    const { timers, advance } = createFakeTimers()
+    let relogio = 0
+    let refetches = 0
+    subscribeToTeamFunnelRealtime({
+      client: fake.client,
+      storeId: 'loja-1',
+      onChange: () => { refetches += 1 },
+      timers,
+      now: () => relogio,
+    })
+
+    fake.emit()
+    relogio += 400
+    advance(400)
+    expect(refetches).toBe(1)
+
+    // Novo evento logo em seguida: espera o piso, não o debounce.
+    fake.emit()
+    relogio += 400
+    advance(400)
+    expect(refetches).toBe(1)
+
+    relogio += 15000
+    advance(15000)
+    expect(refetches).toBe(2)
+  })
+
   test('status classifica corretamente quando cair para polling', () => {
     expect(isRealtimeFallbackStatus('SUBSCRIBED')).toBe(false)
     expect(isRealtimeFallbackStatus('TIMED_OUT')).toBe(true)

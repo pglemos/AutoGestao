@@ -6,6 +6,7 @@ import { ArrowLeft, ArrowRight, Building2, Camera, Check, CheckCircle2, FileText
 import { getSupabaseFunctionHeaders, getSupabaseFunctionUrl } from '@/lib/supabase'
 import { cn } from '@/lib/utils'
 import { requestPasswordRecovery } from '@/lib/auth/passwordRecovery'
+import { downscaleImageFile } from '@/lib/image-downscale'
 
 type PublicStore = {
   id: string
@@ -249,18 +250,23 @@ export default function StorePreRegistration() {
       return
     }
 
+    // A foto vai para um bucket público e é servida pelo CDN em toda tela de
+    // equipe/ranking. Sem reduzir aqui, o celular manda 2–3 MB por vendedor e
+    // a leitura dessas listas consome a cota de egress do projeto.
+    const optimized = await downscaleImageFile(file)
+
     const preview = await new Promise<string>((resolve, reject) => {
       const reader = new FileReader()
       reader.onload = () => resolve(String(reader.result || ''))
       reader.onerror = () => reject(new Error('Não foi possível ler a foto.'))
-      reader.readAsDataURL(file)
+      reader.readAsDataURL(optimized)
     })
 
     setPhoto({
       preview,
       base64: preview.split(',')[1] || '',
-      mimeType: file.type,
-      fileName: file.name,
+      mimeType: optimized.type,
+      fileName: optimized.name,
     })
     setFormErrors(prev => ({ ...prev, photo: undefined }))
   }

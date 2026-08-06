@@ -24,7 +24,7 @@ export function RankingAvatar({ nome, foto, size = 64, border, gradient = 'linea
         fontSize: size * 0.32,
       }}
     >
-      {showFallback ? initials : <img src={foto} alt={nome} className="w-full h-full rounded-full object-cover" onError={() => setImgError(true)} />}
+      {showFallback ? initials : <img src={foto} alt={nome} className="w-full h-full rounded-full object-cover" loading="lazy" decoding="async" onError={() => setImgError(true)} />}
     </div>
   )
 }

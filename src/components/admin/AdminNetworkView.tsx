@@ -110,7 +110,7 @@ export function AdminNetworkView() {
                       <div key={member.id} className="bg-white p-mx-sm rounded-xl border border-gray-200 flex flex-col gap-mx-sm shadow-sm relative overflow-hidden group">
                         <div className="flex items-center gap-mx-sm relative z-10">
                           <div className="w-mx-10 h-mx-10 rounded-xl bg-gray-50 flex items-center justify-center border border-gray-200 overflow-hidden shrink-0">
-                            {member.avatar_url ? <img src={member.avatar_url} alt="" className="w-full h-full object-cover" /> : <Users size={16} className="text-gray-500" />}
+                            {member.avatar_url ? <img src={member.avatar_url} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" /> : <Users size={16} className="text-gray-500" />}
                           </div>
                           <div className="flex-1 min-w-0">
                             <Typography className="text-xs sm:text-sm tracking-tight leading-tight whitespace-normal break-words">{member.name}</Typography>

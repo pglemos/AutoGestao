@@ -40,10 +40,17 @@ export interface SubscribeToTeamFunnelArgs {
   onStatus?: (status: TeamFunnelRealtimeStatus) => void
   /** Janela de agrupamento: uma venda gera vários eventos em sequência. */
   debounceMs?: number
+  /**
+   * Piso entre dois refetches. Cada refetch do funil relê a janela de 6 meses
+   * de `eventos_comerciais`; numa loja movimentada, reagir a cada evento
+   * multiplicaria esse payload e consumiria a cota de egress do projeto.
+   */
+  minIntervalMs?: number
   timers?: {
     setTimeout: (handler: () => void, ms: number) => unknown
     clearTimeout: (handle: unknown) => void
   }
+  now?: () => number
 }
 
 const defaultTimers = {
@@ -52,6 +59,8 @@ const defaultTimers = {
 }
 
 export const TEAM_FUNNEL_REALTIME_DEBOUNCE_MS = 400
+/** No máximo um refetch a cada 15s por canal. */
+export const TEAM_FUNNEL_REALTIME_MIN_INTERVAL_MS = 15_000
 
 /**
  * Assina as tabelas que alimentam o funil gerencial.
@@ -68,18 +77,31 @@ export function subscribeToTeamFunnelRealtime({
   onChange,
   onStatus,
   debounceMs = TEAM_FUNNEL_REALTIME_DEBOUNCE_MS,
+  minIntervalMs = TEAM_FUNNEL_REALTIME_MIN_INTERVAL_MS,
   timers = defaultTimers,
+  now = () => Date.now(),
 }: SubscribeToTeamFunnelArgs) {
   let handle: unknown = null
   let disposed = false
+  let lastRunAt = 0
+
+  const run = () => {
+    handle = null
+    if (disposed) return
+    lastRunAt = now()
+    onChange()
+  }
 
   const scheduleChange = () => {
     if (disposed) return
     if (handle !== null) timers.clearTimeout(handle)
-    handle = timers.setTimeout(() => {
-      handle = null
-      if (!disposed) onChange()
-    }, debounceMs)
+    // Espera o maior entre o debounce e o que falta para o piso: numa rajada
+    // longa, o refetch acontece uma vez por janela, não uma vez por evento.
+    const desdeUltimo = now() - lastRunAt
+    const espera = lastRunAt === 0
+      ? debounceMs
+      : Math.max(debounceMs, minIntervalMs - desdeUltimo)
+    handle = timers.setTimeout(run, espera)
   }
 
   const scope = storeId ?? 'rls-scope'

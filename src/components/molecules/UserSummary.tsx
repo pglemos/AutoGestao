@@ -55,6 +55,8 @@ const UserSummary = React.forwardRef<HTMLDivElement, UserSummaryProps>(
               src={avatarUrl}
               alt=""
               className="h-full w-full object-cover"
+              loading="lazy"
+              decoding="async"
               onError={() => setFailed(true)}
             />
           ) : (
