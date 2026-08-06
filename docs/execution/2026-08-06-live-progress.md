@@ -46,13 +46,13 @@
 ---
 
 ## C0.2 — Reconciliar módulo do Dono e PR #175
-- Estado: IN_PROGRESS (inventário concluído; portas pendentes de decisão)
+- Estado: DONE_WITH_EVIDENCE (decisão: NADA a portar — todas as branches supersedidas pela main)
 - PR #175: MERGED (correções já na main)
 - 9 branches locais 100% mergeadas (0 commits delta): agent/central-execucao-gap-fixes, auto-claude/OWNER-20260721-base44-exact, carteira-clean, feat/filiais-matriz, fix/manage-store-team-email-conflict, fix/manager-module-full-parity-20260714, fix/map-legacy-identity, fix/strip-legacy-overrides, integracao-34
-- Com conteúdo não mergeado:
-  - `owner-base44-parity` (1 commit `2cd224f4` fix race conditions gerente; diff poluído com lixo base44-export → cherry-pick seletivo)
-  - `feat/functional-package-v2` (6 commits: cockpit, consulting journey, action-plan, strategic planning, functional workspace)
-  - `codex/resume-pr153` (59 commits: Option B admin global, RLS, snapshot backfill; REMOVE workflows de CI → NÃO portar inteiro)
+- `owner-b44`, `mx-manager-scope`, `mx-internal-scope`: já deletadas localmente (não existem mais)
+- `owner-base44-parity` (`2cd224f4`): NÃO portar. Fixes de race JÁ na main — `requestIdRef` ×6 em `useManagerHomeOfficialSources.ts`; dedup in-flight `consolidationRequests` + retry 23505 em `ManagerTeamRoutineCanonical.container.tsx` (linhas 31-35); `subscribeToTeamFunnelRealtime` só existe na main (branch é mais antiga)
+- `codex/resume-pr153` (59 commits): NÃO portar. Todos os arquivos src existem na main (`InternalMxUsersTab.tsx`, `EquipeUsuariosTabRouter.tsx`, `capabilities.ts`, `roles.ts`, headers de network-dashboard/ranking); deltas são regressões (branch REMOVE `dono` de `canManageTeam`); branch remove 9 workflows de CI; migrations de Option B/backfill/snapshot já na main
+- `feat/functional-package-v2` (6 commits): NÃO portar. Features já na main sob nomes atuais (`network-dashboard`, `action-plan`, `consulting-journey`, `strategic-plan`, `planning-workspace`); branch é snapshot antigo (−27.361 linhas vs main, remove workflows de CI)
 - PRs abertas: #176, #177 (code health)
 
 ---

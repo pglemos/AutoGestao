@@ -118,3 +118,16 @@
 - Resultado observado: 22 funções ativas; 16 verify_jwt=True; 6 sem JWT com proteção interna: rate limit RPC (request-password-recovery, store-pre-registration), state OAuth completo (google-oauth-handler), Bearer (google-calendar-sync), cron secret (google-meet-ata); plano previa 13 sem JWT → 7 já corrigidas antes
 - Timestamp: 2026-08-06T19:35:00Z
 - Conclusão: DONE_WITH_EVIDENCE
+
+### EV-C02-001 - Branches candidatas supersedidas pela main (nada a portar)
+- Requisito: C0.2
+- Ambiente: git local (main @ 255ea20c)
+- Resultado observado:
+  - `owner-b44`, `mx-manager-scope`, `mx-internal-scope`: branches já deletadas localmente (git: unknown revision)
+  - `owner-base44-parity` (2cd224f4): fixes de race JÁ na main — `requestIdRef` ×6 em `useManagerHomeOfficialSources.ts`; dedup in-flight `consolidationRequests` + retry 23505 em `ManagerTeamRoutineCanonical.container.tsx` (linhas 31-35); `subscribeToTeamFunnelRealtime` presente só na main
+  - `codex/resume-pr153` (59 commits): todos os src existem na main; delta é regressão (remove `dono` de `canManageTeam` em capabilities.ts); remove 9 workflows de CI; migrations (option_b_global_admin, backfill, snapshot) já na main
+  - `feat/functional-package-v2` (6 commits): features já na main (`network-dashboard`, `action-plan`, `consulting-journey`, `strategic-plan`, `planning-workspace`); diff mostra snapshot antigo (−27.361 linhas vs main)
+- Decisão: NENHUMA porta necessária; eliminar branches locais restantes no C0.8
+- Commit: 255ea20c (docs)
+- Timestamp: 2026-08-06T20:05:00Z
+- Conclusão: DONE_WITH_EVIDENCE
