@@ -6,7 +6,7 @@
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
 - Tabelas referenciadas pelo runtime: **127**
-- RPCs referenciadas pelo runtime: **83**
+- RPCs referenciadas pelo runtime: **87**
 - Edge Functions invocadas pelo runtime: **14**
 - Pares tabela/operação encontrados: **249**
 
@@ -72,7 +72,7 @@
 | `/vendedor/universidade-mx` | route | protegida | `/universidade-mx` | `/vendedor/universidade-mx` | — | `<RedirectWithSearch to="/universidade-mx" />` |
 | `/vendedor/configuracoes` | route | protegida | `/configuracoes` | `/vendedor/configuracoes` | — | `<RedirectWithSearch to="/configuracoes" />` |
 | `/funil-vendas` | route | protegida | — | `/funil-vendas` | vendedor, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FunilVendasGerente />} dono={<FunilVendasGerente />} admin={<ForbiddenRoute />} /> </Suspense>` |
-| `/metas` | route | protegida | — | `/metas` | vendedor, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<MetasGerente />} dono={<MetasGerente />} admin={<ForbiddenRoute />} /> </Suspense>` |
+| `/metas` | route | protegida | `/meta-loja` | `/metas` | — | `<Navigate to="/meta-loja" replace />` |
 | `/falar-consultor` | route | protegida | — | `/falar-consultor` | vendedor, admin | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FalarConsultorDono />} dono={<FalarConsultorDono />} admin={<ForbiddenRoute />} /> </Suspense>` |
 | `/organograma` | route | protegida | — | `/organograma` | vendedor, gerente | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Organograma />} admin={<Organograma />} /> </Suspense>` |
 | `/banco-talentos` | route | protegida | — | `/banco-talentos` | vendedor, gerente | `<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Comportamental />} admin={<Comportamental />} /> </Suspense>` |
@@ -262,7 +262,7 @@
 |---|---:|
 | `agenda_estrategica_marketing:select` | 1 |
 | `agendamentos:delete` | 1 |
-| `agendamentos:insert` | 2 |
+| `agendamentos:insert` | 1 |
 | `agendamentos:select` | 10 |
 | `agendamentos:update` | 2 |
 | `agendamentos:upsert` | 1 |
@@ -398,7 +398,7 @@
 | `opcoes_agenda_consultoria:select` | 1 |
 | `opcoes_agenda_consultoria:update` | 1 |
 | `oportunidades:delete` | 1 |
-| `oportunidades:insert` | 2 |
+| `oportunidades:insert` | 1 |
 | `oportunidades:select` | 7 |
 | `oportunidades:update` | 2 |
 | `organograma_nos:delete` | 1 |
@@ -523,8 +523,10 @@
 | `admin_update_store` | 1 |
 | `aplicar_regularizacao_fechamento` | 1 |
 | `atribuir_trilha_maturidade_vendedor` | 1 |
+| `atualizar_etapa_oportunidade_crm` | 1 |
 | `atualizar_plano_acao` | 2 |
 | `atualizar_plano_acao_patch` | 1 |
+| `atualizar_status_agendamento_crm` | 1 |
 | `begin_password_change` | 2 |
 | `cancelar_regularizacao_fechamento` | 1 |
 | `cancelar_venda` | 1 |
@@ -545,6 +547,8 @@
 | `consultor_ia_sugerir_acao` | 1 |
 | `contar_vendedores_ativos_loja` | 1 |
 | `create_pdi_session_bundle` | 1 |
+| `criar_agendamento_crm` | 1 |
+| `criar_oportunidade_crm` | 1 |
 | `criar_plano_acao_planejamento_unico` | 1 |
 | `criar_plano_acao_v2` | 2 |
 | `dismiss_alert` | 1 |

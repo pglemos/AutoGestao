@@ -43,7 +43,8 @@ test('continua detectando legado fora do ramo vendedor delimitado', () => {
 
 test('audita as dependências reais das rotas de gestão', () => {
   const report = auditManagementDesignSystem()
-  assert.equal(report.entries, 38)
+  // 37 desde f4311438 (tela de meta unificada, /metas virou redirect).
+  assert.equal(report.entries, 37)
   assert.ok(report.reachableFiles > 0)
   assert.ok(report.auditedFiles > 0)
   assert.ok(report.baselineFiles > 0)
