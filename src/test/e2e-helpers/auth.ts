@@ -32,7 +32,32 @@ export function getE2EInternalCredentials() {
   }
 }
 
+/**
+ * O Tour do Gerente abre sozinho nas três primeiras visitas de cada rota e
+ * cobre a tela com um overlay `role="dialog"`. Como o Playwright começa com
+ * perfil limpo a cada execução, ele abriria em todo teste autenticado e
+ * interceptaria os cliques. Marcar as rotas como "tour já pulado" antes da
+ * navegação reproduz o estado de um usuário que já conhece a tela.
+ */
+export async function skipManagerTour(page: Page) {
+  await page.addInitScript(() => {
+    try {
+      // Chaves = `location.pathname`, iguais às de MANAGER_TOURS.
+      const rotas = [
+        '/home', '/meta-loja', '/rotina', '/fechamento-diario', '/rotina-equipe',
+        '/minha-equipe', '/mentor', '/feedbacks-pdis', '/ranking', '/universidade-mx',
+      ]
+      const pulados: Record<string, boolean> = {}
+      for (const rota of rotas) pulados[rota] = true
+      window.localStorage.setItem('mx_tour_skipped', JSON.stringify(pulados))
+    } catch {
+      // Sem storage o tour não memoriza nada; o teste segue e trata o overlay.
+    }
+  })
+}
+
 export async function loginWithCredentials(page: Page, email: string, password: string) {
+  await skipManagerTour(page)
   await page.goto('/login')
   await page.fill('input[type="email"]', email)
   await page.fill('input[type="password"]', password)
