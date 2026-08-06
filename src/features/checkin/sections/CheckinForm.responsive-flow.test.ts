@@ -22,6 +22,23 @@ describe('fluxo de fechamento unificado entre breakpoints', () => {
     expect(flowSource).toContain("useState<StepId>('showroom')")
   })
 
+  // Confirmar passou a gravar; a gravação dispara refetch; o container troca o
+  // formulário por skeleton enquanto carrega. Com a etapa em estado local do
+  // FluxoFechamento, isso remontava o componente e devolvia o vendedor ao
+  // Showroom — ele clicava em Confirmar e a tela não andava.
+  test('a etapa atual vive fora do componente que remonta', () => {
+    expect(hookSource).toContain("useState<ClosingStepId>('showroom')")
+    expect(hookSource).toContain('closingStep,')
+    expect(hookSource).toContain('setClosingStep,')
+    expect(formSource).toContain('currentStep={closingStep}')
+    expect(formSource).toContain('onStepChange={setClosingStep}')
+  })
+
+  test('FluxoFechamento aceita etapa controlada sem perder o modo autônomo', () => {
+    expect(flowSource).toContain('currentStep: controlledStep')
+    expect(flowSource).toContain('const currentStep = controlledStep ?? internalStep')
+  })
+
   test('confirmar etapa comita inputs pendentes e persiste o rascunho', () => {
     expect(formSource).toContain('const handleStepConfirmed = ()')
     expect(formSource).toContain('commitNumberField(field as NumericCheckinField)')

@@ -11,7 +11,7 @@ import type { NumericCheckinField } from '../hooks/useCheckinPage'
  * atendimentos_internet→visitas_net, agendamentos_internet→agd_net.
  */
 
-type StepId = 'showroom' | 'carteira' | 'internet' | 'vendas'
+export type StepId = 'showroom' | 'carteira' | 'internet' | 'vendas'
 
 const STEPS: Array<{ id: StepId; label: string; pct: number; icon: typeof Store; color: 'orange' | 'green' | 'blue' | 'purple' }> = [
   { id: 'showroom', label: 'Showroom', pct: 20, icon: Store, color: 'orange' },
@@ -197,10 +197,26 @@ interface FluxoFechamentoProps {
    * para que o dado exista no servidor mesmo se a sessão morrer em seguida.
    */
   onStepConfirmed?: (step: StepId) => void
+  /**
+   * Etapa atual controlada pelo pai.
+   *
+   * Precisa viver fora deste componente porque a gravação do rascunho dispara
+   * refetch, e o container troca o formulário por um skeleton enquanto carrega
+   * — o que remonta este componente. Com a etapa em estado local, confirmar
+   * Showroom salvava e voltava para Showroom: o vendedor clicava e a tela não
+   * andava. Sem as props, o componente segue funcionando sozinho.
+   */
+  currentStep?: StepId
+  onStepChange?: (step: StepId) => void
 }
 
-export function FluxoFechamento({ readValue, updateField, disabled, finalized = false, agdCartAtivos, agdNetAtivos, temClientesCadastrados, onStepConfirmed }: FluxoFechamentoProps) {
-  const [currentStep, setCurrentStep] = useState<StepId>('showroom')
+export function FluxoFechamento({ readValue, updateField, disabled, finalized = false, agdCartAtivos, agdNetAtivos, temClientesCadastrados, onStepConfirmed, currentStep: controlledStep, onStepChange }: FluxoFechamentoProps) {
+  const [internalStep, setInternalStep] = useState<StepId>('showroom')
+  const currentStep = controlledStep ?? internalStep
+  const setCurrentStep = (step: StepId) => {
+    setInternalStep(step)
+    onStepChange?.(step)
+  }
 
   const visitasPorta = readValue('visitas_porta')
   const leadsCart = readValue('leads_cart')

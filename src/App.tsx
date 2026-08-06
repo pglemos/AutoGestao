@@ -22,7 +22,6 @@ const Checkin = lazy(() => import('@/features/checkin/Checkin.container'))
 const LiberacaoFechamento = lazy(() => import('@/pages/LiberacaoFechamento'))
 const Ranking = lazy(() => import('@/pages/Ranking'))
 const VendedorDesenvolvimento = lazy(() => import('@/pages/VendedorDesenvolvimento'))
-const VendedorTreinamentos = lazy(() => import('@/pages/VendedorTreinamentos'))
 const VendedorAjuda = lazy(() => import('@/pages/VendedorAjuda'))
 const VendedorConfiguracoes = lazy(() => import('@/pages/VendedorConfiguracoes'))
 const MinhaRemuneracao = lazy(() => import('@/pages/MinhaRemuneracao'))
@@ -417,7 +416,7 @@ export default function App() {
                   aqui, direto, sem o salto por `/treinamentos`.
                 */}
                 <Route path="universidade-mx" element={<Suspense fallback={<Spinner />}>
-                  <RoleSwitch vendedor={<VendedorTreinamentos />} gerente={<GerenteTreinamentos />} dono={<OwnerUniversidade />} admin={<ConsultorTreinamentos />} />
+                  <RoleSwitch vendedor={<OwnerUniversidade />} gerente={<GerenteTreinamentos />} dono={<OwnerUniversidade />} admin={<ConsultorTreinamentos />} />
                 </Suspense>} />
                 <Route path="treinamentos" element={<Suspense fallback={<Spinner />}>
                   <RoleSwitch vendedor={<RedirectWithSearch to="/universidade-mx" />} gerente={<GerenteTreinamentos />} dono={<GerenteTreinamentos />} admin={<ConsultorTreinamentos />} />

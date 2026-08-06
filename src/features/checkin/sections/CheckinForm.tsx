@@ -165,6 +165,8 @@ export function CheckinForm({ ctx, totalsAgd, totalsVnd, onOpenHistory }: Checki
         autosaveState,
         autosaveEnabled,
         retryAutosave,
+        closingStep,
+        setClosingStep,
     } = ctx
 
     const selectedDate = ctx.selectedDate || customReferenceDate || ctx.referenceDate
@@ -308,6 +310,8 @@ return (
           agdNetAtivos={creditosInternet}
           temClientesCadastrados={clientesList.length > 0}
           onStepConfirmed={handleStepConfirmed}
+          currentStep={closingStep}
+          onStepChange={setClosingStep}
         />
       </section>
 

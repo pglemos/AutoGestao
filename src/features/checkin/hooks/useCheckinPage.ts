@@ -22,6 +22,7 @@ import { useOportunidades } from '@/features/crm/hooks/useOportunidades'
 import { useAgendamentos } from '@/features/crm/hooks/useAgendamentos'
 import { getActiveClosingContext } from '../lib/active-closing-context'
 import { reconstructCheckinFormFromHistorical } from '../lib/reconstruct-checkin-form'
+import type { StepId as ClosingStepId } from '../sections/FluxoFechamento'
 import { useCheckinAutosave } from '../autosave/useCheckinAutosave'
 import { autosaveResultFromSave } from '../autosave/classify-autosave-failure'
 
@@ -180,6 +181,10 @@ export function useCheckinPage() {
     const [saveNotice, setSaveNotice] = useState<{ title: string; detail: string } | null>(null)
 
     const [form, setForm] = useState<CheckinForm>(() => createEmptyCheckinForm())
+    // Etapa do fluxo mora aqui, não dentro de FluxoFechamento: o container
+    // troca o formulário por um skeleton enquanto o refetch do autosave roda,
+    // e isso remontava o componente jogando o vendedor de volta ao Showroom.
+    const [closingStep, setClosingStep] = useState<ClosingStepId>('showroom')
 
     const { checkins, todayCheckin, saveCheckin, loading: hookLoading, referenceDate, fetchCheckinByDate, error: checkinLoadError } = useCheckins()
     const {
@@ -970,6 +975,8 @@ const fechamentoConcluido = metricScope === 'daily'
         autosaveState: autosave.state,
         autosaveEnabled,
         retryAutosave: autosave.retry,
+        closingStep,
+        setClosingStep,
         saveTechnicalAdjustment,
         // Added properties
 selectedDate,
