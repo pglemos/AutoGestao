@@ -587,7 +587,11 @@ const fechamentoConcluido = metricScope === 'daily'
         [saveCheckin, selectedDate, activeClosingContext.mainDate],
     )
 
-    const autosave = useCheckinAutosave({ save: persistDraft, enabled: autosaveEnabled })
+    const autosave = useCheckinAutosave({
+        save: persistDraft,
+        enabled: autosaveEnabled,
+        telemetry: { referenceDate: selectedDate, checkinId: historicalCheckin?.id ?? null },
+    })
 
     // A revisão conhecida vem do banco: sem isto, a primeira gravação depois de
     // um refresh mandaria revisão 0 contra uma linha já avançada e cairia em

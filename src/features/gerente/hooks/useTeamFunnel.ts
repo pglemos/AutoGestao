@@ -14,6 +14,7 @@ import {
   subscribeToTeamFunnelRealtime,
   type TeamFunnelRealtimeStatus,
 } from './team-funnel-realtime'
+import { emitRealtimeTelemetry } from '@/features/checkin/autosave/autosave-telemetry'
 
 /** Sem Realtime, o funil recarrega a cada 30s enquanto a aba está visível. */
 const REALTIME_FALLBACK_POLL_MS = 30_000
@@ -134,7 +135,10 @@ export function useTeamFunnel(periodKey: TeamPeriodKey) {
       storeId: effectiveStoreId,
       tables: ['eventos_comerciais', 'agendamentos'],
       onChange: () => { void reload() },
-      onStatus: setRealtimeStatus,
+      onStatus: status => {
+        setRealtimeStatus(status)
+        emitRealtimeTelemetry(status, 'eventos_comerciais')
+      },
     })
   }, [effectiveStoreId, initialized, reload])
 

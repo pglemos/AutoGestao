@@ -4,6 +4,7 @@ import {
   createCheckinAutosaveCoordinator,
   type CheckinAutosaveCoordinator,
 } from './checkin-autosave-coordinator'
+import { emitAutosaveTelemetry, type AutosaveTelemetryContext } from './autosave-telemetry'
 
 const INITIAL_STATE: AutosaveState = {
   status: 'idle',
@@ -22,6 +23,8 @@ export interface UseCheckinAutosaveArgs<TSnapshot> {
    * ajuste técnico, escopo histórico ou tela ainda hidratando.
    */
   enabled?: boolean
+  /** Contexto dos sinais de observabilidade (sem PII). */
+  telemetry?: AutosaveTelemetryContext
 }
 
 export interface UseCheckinAutosaveResult<TSnapshot> {
@@ -48,18 +51,27 @@ export interface UseCheckinAutosaveResult<TSnapshot> {
 export function useCheckinAutosave<TSnapshot>({
   save,
   enabled = true,
+  telemetry,
 }: UseCheckinAutosaveArgs<TSnapshot>): UseCheckinAutosaveResult<TSnapshot> {
   const [state, setState] = useState<AutosaveState>(INITIAL_STATE)
   const saveRef = useRef(save)
   saveRef.current = save
   const enabledRef = useRef(enabled)
   enabledRef.current = enabled
+  const telemetryRef = useRef(telemetry)
+  telemetryRef.current = telemetry
+  const previousStateRef = useRef<AutosaveState | null>(null)
 
   const coordinatorRef = useRef<CheckinAutosaveCoordinator<TSnapshot> | null>(null)
   if (coordinatorRef.current === null) {
     coordinatorRef.current = createCheckinAutosaveCoordinator<TSnapshot>({
       save: (snapshot, expectedRevision) => saveRef.current(snapshot, expectedRevision),
-      onStateChange: setState,
+      onStateChange: next => {
+        const context = telemetryRef.current
+        if (context) emitAutosaveTelemetry(previousStateRef.current, next, context)
+        previousStateRef.current = next
+        setState(next)
+      },
     })
   }
   const coordinator = coordinatorRef.current

@@ -18,6 +18,10 @@ const viewsMigration = readFileSync(
   new URL('../../supabase/migrations/20260805223000_official_read_models_exclude_drafts.sql', import.meta.url),
   'utf8',
 )
+const invokerFixMigration = readFileSync(
+  new URL('../../supabase/migrations/20260805231000_restore_security_invoker_on_closing_views.sql', import.meta.url),
+  'utf8',
+)
 
 const row = (status: string): DailyCheckin => ({
   submission_status: status,
@@ -91,5 +95,16 @@ describe('read models existentes seguem excluindo rascunho', () => {
     expect(viewsMigration).toContain('CREATE OR REPLACE VIEW public.view_store_daily_production')
     expect(viewsMigration).toContain('CREATE OR REPLACE VIEW public.view_daily_team_status')
     expect(viewsMigration).toContain('CREATE OR REPLACE VIEW public.view_sem_registro')
+  })
+
+  // CREATE OR REPLACE VIEW não preserva reloptions: recriar uma view apagou o
+  // security_invoker e ela voltou a rodar com privilégio do dono, ignorando a
+  // RLS. Toda recriação precisa reafirmar a opção.
+  test('recriar view exige reafirmar security_invoker', () => {
+    const recriadas = [...viewsMigration.matchAll(/CREATE OR REPLACE VIEW public\.(\w+)/g)].map(m => m[1])
+    expect(recriadas.length).toBeGreaterThan(0)
+    for (const view of recriadas) {
+      expect(invokerFixMigration).toContain(`ALTER VIEW public.${view} SET (security_invoker = true)`)
+    }
   })
 })

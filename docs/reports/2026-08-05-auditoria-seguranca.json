@@ -1,0 +1,59 @@
+{
+  "definer_sem_search_path": [],
+  "anon_executa": [],
+  "views_security_definer": [
+    {
+      "relname": "view_daily_team_status",
+      "reloptions": null
+    },
+    {
+      "relname": "view_sem_registro",
+      "reloptions": null
+    },
+    {
+      "relname": "view_store_daily_production",
+      "reloptions": null
+    }
+  ],
+  "views_anon_select": [
+    {
+      "table_name": "view_daily_team_status",
+      "anon_le": false
+    },
+    {
+      "table_name": "view_sem_registro",
+      "anon_le": false
+    },
+    {
+      "table_name": "view_store_daily_production",
+      "anon_le": false
+    }
+  ],
+  "rls_tabelas_tocadas": [
+    {
+      "relname": "agendamentos",
+      "rls_on": true,
+      "policies": 2
+    },
+    {
+      "relname": "eventos_comerciais",
+      "rls_on": true,
+      "policies": 2
+    },
+    {
+      "relname": "lancamentos_diarios",
+      "rls_on": true,
+      "policies": 3
+    },
+    {
+      "relname": "oportunidades",
+      "rls_on": true,
+      "policies": 2
+    }
+  ],
+  "indices_novos_necessarios": [
+    {
+      "eventos_sem_indice_idempotency": 2
+    }
+  ]
+}
