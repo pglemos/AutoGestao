@@ -19,10 +19,14 @@
  *
  * Seguro por construção:
  *   - --dry-run é o padrão; nada é escrito sem --apply.
+ *   - Com --apply, o original é gravado antes em --backup-dir (obrigatório):
+ *     a regravação é in-place e sem backup seria irreversível.
  *   - Objeto que não encolher é mantido como está.
  *   - Falha em um arquivo não interrompe os demais; o resumo lista os erros.
  */
 
+import { mkdirSync, writeFileSync } from 'node:fs'
+import { dirname, join } from 'node:path'
 import { createClient } from '@supabase/supabase-js'
 
 const BUCKETS = ['pre-cadastro-avatares', 'perfis_usuario']
@@ -31,11 +35,17 @@ const JPEG_QUALITY = 82
 const CACHE_CONTROL = '31536000'
 
 const apply = process.argv.includes('--apply')
+const backupDir = (process.argv.find(a => a.startsWith('--backup-dir=')) || '').split('=')[1]
 const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
 const serviceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
 if (!url || !serviceKey) {
   console.error('Defina SUPABASE_URL e SUPABASE_SERVICE_ROLE_KEY no ambiente.')
+  process.exit(1)
+}
+
+if (apply && !backupDir) {
+  console.error('--apply exige --backup-dir=/caminho: a regravação é in-place e o original se perde sem backup.')
   process.exit(1)
 }
 
@@ -95,6 +105,12 @@ for (const bucket of BUCKETS) {
       console.log(`   ${apply ? 'regravado' : 'reduziria'} ${objeto.path} — ${(original.length / 1024).toFixed(0)} kB → ${(otimizado.length / 1024).toFixed(0)} kB (-${ganho}%)`)
 
       if (apply) {
+        // Backup antes de sobrescrever: a foto original do vendedor não existe
+        // em nenhum outro lugar.
+        const destino = join(backupDir, bucket, objeto.path)
+        mkdirSync(dirname(destino), { recursive: true })
+        writeFileSync(destino, original)
+
         const { error: upErr } = await client.storage.from(bucket).upload(objeto.path, otimizado, {
           contentType: 'image/jpeg',
           upsert: true,
