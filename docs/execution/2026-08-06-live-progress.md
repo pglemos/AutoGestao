@@ -87,7 +87,7 @@
 ---
 
 ## C0.6 — Edge Functions
-- Estado: IN_PROGRESS (auditoria fonte concluída; 6 sem JWT com proteção interna comprovada)
+- Estado: DONE_WITH_EVIDENCE (EV-C06-001)
 - 22 funções; 16 com verify_jwt=True; 6 sem JWT auditados:
   - `request-password-recovery`: rate limit RPC + CORS allowlist
   - `store-pre-registration`: rate limit + senha temporária + CORS allowlist
@@ -95,6 +95,33 @@
   - `google-calendar-sync`: exige Bearer token
   - `google-meet-ata`: `x-mx-cron-secret` (MX_CRON_SECRET)
   - Plano original dizia 13 sem JWT → 7 já haviam sido corrigidas em sessões anteriores
+
+---
+
+## C0.7 — Proteger main
+- Estado: DONE_WITH_EVIDENCE (EV-C07-001)
+- Proteção completa aplicada via `gh api -X PUT repos/pglemos/MXGESTAOPREDITIVA/branches/main/protection`:
+  - PR obrigatório com 1 aprovação + dismiss stale reviews
+  - Status checks obrigatórios (strict): Typecheck and unit tests, Quality Gates, Gitleaks (Secret Scanning), Management Design System Audit V3
+  - Force-push bloqueado, deletes bloqueados, conversation resolution obrigatória
+  - `enforce_admins: false` (break-glass documentado — push direto passa a exigir override de admin)
+- Atenção: script legado `scripts/setup-branch-protection.sh` referencia 7 checks antigos inexistentes — não executar; usar o payload acima
+- Workflow da execução autônoma: push direto bloqueado → commits via PR + merge
+
+---
+
+## Fases 1-18
+- Estado: NOT_STARTED (aguardando baseline)
+---
+
+## C0.8 — Limpar branches
+- Estado: DONE_WITH_EVIDENCE (EV-C08-001)
+- 18 branches merged deletadas (`git branch -d`)
+- 5 não-merged verificadas contra main e deletadas (`-D`): conteúdo já presente na main ou regressão conhecida (EV-C02-001)
+- 6 branches em worktrees órfãos liberadas (`git worktree prune` + `remove --force`) e deletadas
+- PRs #176/#177 (Jules bot) fechados como superseded; branches remotas `main-2221599864479952096`/`main-8869415744512905224` deletadas
+- Estado final: `git branch` → só `main`; remoto → só `origin/main` (+ dependabot #178/#179)
+- Obs: GitHub reportou 83 vulnerabilidades dependabot (3 critical, 44 high) — item já mapeado para Fase 14 (Segurança e Dependências)
 
 ---
 
