@@ -1,18 +1,20 @@
-[data-mx-internal-scope='true'] {
-  color-scheme: light;
-  --mx-page-bg: #f9fafb;
-  --mx-surface: #ffffff;
-  --mx-surface-muted: #f9fafb;
-  --mx-border: #f3f4f6;
-  --mx-border-strong: #e5e7eb;
-  --mx-text: #1f2937;
-  --mx-text-muted: #6b7280;
-  /* Marca referenciada, não literal — §5 e §6. Este escopo declarava o mesmo
-     #059669 divergente que o escopo de gestão declarava, terceira cópia de um
-     verde que não é o do produto (#198653). */
-  --mx-accent: hsl(var(--mx-color-primary));
-  --mx-accent-soft: hsl(var(--mx-color-primary-subtle));
-}
+/*
+ * Escopo legado de aparência dos perfis internos eliminado (C0.3):
+ *
+ * - As variáveis de superfície (`--mx-page-bg`, `--mx-surface`, …) foram
+ *   promovidas para `:root` em `src/design-system/tokens/semantic.css`.
+ * - As regras de normalização de campos (altura, raio, borda, foco) eram
+ *   redundantes: os componentes e o `.mx-canonical-template` abaixo já
+ *   declaram os mesmos valores (Base44), inclusive nas páginas internas ainda
+ *   não registradas no template (ex.: fechamento-diário usa classes próprias
+ *   com os mesmos valores).
+ * - O atributo de escopo saiu de `InternalMxVisualScope.tsx`; reintrodução é
+ *   bloqueada por `scripts/audit-legacy-scopes.mjs` (CI).
+ *
+ * O restante deste arquivo é o sistema canônico do template — classe
+ * `.mx-canonical-template` e variantes — consumido via
+ * `InternalMxCanonicalTemplate` e `InternalMxTemplateSlots`.
+ */
 
 /* As três regras de normalização tipográfica que ficavam aqui foram removidas
    por serem redundantes — não por mudarem o resultado.
@@ -42,31 +44,6 @@
    Com a escala do Base44 promovida para a raiz, mantê-las passaria a criar a
    divergência que elas nasceram para evitar — perfis internos com um raio, o
    resto do produto com outro. */
-
-[data-mx-internal-scope='true'] :is(input, select, textarea):not([type='checkbox']):not([type='radio']):not([type='file']) {
-  border-color: var(--mx-border-strong);
-  border-radius: 0.75rem;
-  background-color: var(--mx-surface);
-  color: var(--mx-text);
-  font-size: 0.875rem;
-  font-weight: 400;
-  letter-spacing: normal;
-  text-transform: none;
-}
-
-[data-mx-internal-scope='true'] :is(input, select):not([type='checkbox']):not([type='radio']):not([type='file']) {
-  min-height: 2.5rem;
-}
-
-[data-mx-internal-scope='true'] textarea {
-  min-height: 7rem;
-}
-
-[data-mx-internal-scope='true'] :is(input, select, textarea):focus-visible {
-  border-color: var(--mx-accent);
-  outline: none;
-  box-shadow: 0 0 0 3px rgb(5 150 105 / 0.15);
-}
 
 .mx-manager-canonical-page,
 .mx-canonical-template {

@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState, type ComponentType, type PropsWithChildre
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet'
 import { useToast } from '@/components/ui/use-toast'
-import { useIsMobile } from '@/lib/owner-b44/use-mobile'
+import { useIsMobile } from '@/hooks/useIsMobile'
 import ActionPlanHeader from '@/components/owner/actionplan/ActionPlanHeader'
 import ActionPlanTabs from '@/components/owner/actionplan/ActionPlanTabs'
 import ActionsToolbar from '@/components/owner/actionplan/ActionsToolbar'

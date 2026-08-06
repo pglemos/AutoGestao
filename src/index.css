@@ -62,8 +62,8 @@
 --color-whatsapp: #25D366;
 
 /* Sidebar canônica — docs/design-system/sidebar-dono.md
-   Mesmos valores dos tokens .owner-b44, porém resolvidos fora daquele escopo
-   para que todos os módulos rendam a sidebar do Dono pixel a pixel. */
+   Mesmos valores dos tokens do módulo do Dono, porém resolvidos fora daquele
+   escopo para que todos os módulos rendam a sidebar do Dono pixel a pixel. */
 --color-mxsb-surface: #FAFAFA;
 --color-mxsb-ink: #3F3F46;
 --color-mxsb-ink-strong: #18181B;

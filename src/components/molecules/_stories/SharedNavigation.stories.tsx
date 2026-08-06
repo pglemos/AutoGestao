@@ -102,9 +102,9 @@ export const PillsDeFiltro: Story = {
         </p>
         <PillDemo />
       </div>
-      <div data-mx-internal-scope="true" className="mx-canonical-template">
+      <div className="mx-canonical-template">
         <p className="mb-[var(--mx-space-2)] text-xs text-[hsl(var(--mx-color-text-secondary))]">
-          sob o escopo interno MX — caixa normal
+          no template canônico MX — caixa normal
         </p>
         <PillDemo />
       </div>

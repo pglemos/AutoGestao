@@ -44,6 +44,18 @@
   --mx-neutral-900: 0 0% 9%;
   --mx-neutral-950: 0 0% 4%;
 
+  /* Escala cinza legada do template canônico (C0.3) — tons azul-acinzentados
+     do Tailwind gray, medidos no export do escopo interno removido. A escala
+     neutra do produto é `0 0% …`; estes tons são distintos por design e foram
+     preservados byte a byte para que a promoção das superfícies do template
+     fosse imperceptível. Consumidos apenas pelas superfícies canônicas em
+     semantic.css. */
+  --mx-gray-50: 210 20% 98%;
+  --mx-gray-100: 220 14% 96%;
+  --mx-gray-200: 220 13% 91%;
+  --mx-gray-500: 220 9% 46%;
+  --mx-gray-800: 215 28% 17%;
+
   /* Estados semânticos — bases fixadas em §7.2 do documento normativo */
   --mx-emerald-500: 152 76% 40%;
   --mx-emerald-100: 152 76% 92%;

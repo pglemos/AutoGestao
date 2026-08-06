@@ -206,13 +206,41 @@
  * Consequência verificada: em `/terms`, que renderiza fora do AppShell e
  * portanto fora de `.mx-ds`, `--mx-page-margin` resolve para 32px. Sob o escopo
  * resolveria vazio, e qualquer container que dependesse dele cairia para
- * padding zero.
- *
- * Ressalva honesta: nenhuma rota pública usa o PageCanvas hoje — login, termos,
- * privacidade, 404 e pré-cadastro são cards centrados em viewport cheio, sem
- * margem de página a padronizar. Esta promoção é correção de princípio e
- * remoção de uma armadilha futura, não a solução de um bug ativo.
+  * padding zero.
+  *
+  * Ressalva honesta: nenhuma rota pública usa o PageCanvas hoje — login, termos,
+  * privacidade, 404 e pré-cadastro são cards centrados em viewport cheio, sem
+  * margem de página a padronizar. Esta promoção é correção de princípio e
+  * remoção de uma armadilha futura, não a solução de um bug ativo.
+  */
+
+/*
+ * SUPERFÍCIES DO TEMPLATE CANÔNICO — promoção do escopo legado (C0.3)
+ * --------------------------------------------------------------------
+ * Estas variáveis viviam sob o atributo de escopo dos perfis internos em
+ * `internal-mx-manager-scope.css`, consumidas por `.mx-canonical-template` e
+ * pelos slots do template. O escopo por perfil foi eliminado: os valores são
+ * os mesmos para todos os perfis e agora vivem na raiz, onde o template os
+ * resolve independentemente do atributo. Os tons usam a escala cinza legada
+ * (`--mx-gray-*` em primitives.css, gray-50..gray-800 do Tailwind), distintos
+ * da escala neutra do produto — mantidos byte a byte para que a promoção
+ * seja imperceptível.
  */
+:root {
+  --mx-page-bg: hsl(var(--mx-gray-50));
+  --mx-surface: hsl(var(--mx-neutral-0));
+  --mx-surface-muted: hsl(var(--mx-gray-50));
+  --mx-border: hsl(var(--mx-gray-100));
+  --mx-border-strong: hsl(var(--mx-gray-200));
+  --mx-text: hsl(var(--mx-gray-800));
+  --mx-text-muted: hsl(var(--mx-gray-500));
+  /* Marca referenciada, não literal — §5 e §6. O escopo declarava o mesmo
+     verde divergente (uma terceira cópia que não é a cor do produto) que o
+     escopo de gestão declarava; aqui a marca resolve do primitivo único. */
+  --mx-accent: hsl(var(--mx-color-primary));
+  --mx-accent-soft: hsl(var(--mx-color-primary-subtle));
+}
+
 :root {
   /* Espaçamento entre blocos, nomeado pela relação semântica que expressa,
      não pela medida. Trocar o valor aqui muda o ritmo do produto inteiro. */

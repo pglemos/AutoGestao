@@ -7,6 +7,8 @@ on:
       - 'src/**'
       - 'scripts/audit-management-design-system.mjs'
       - 'scripts/audit-management-design-system.test.mjs'
+      - 'scripts/audit-legacy-scopes.mjs'
+      - 'scripts/audit-legacy-scopes.test.mjs'
       - 'scripts/management-route-manifest.test.mjs'
       - 'scripts/management-design-system-baseline.json'
       - '.github/workflows/management-design-system-audit-v3.yml'
@@ -16,6 +18,8 @@ on:
       - 'src/**'
       - 'scripts/audit-management-design-system.mjs'
       - 'scripts/audit-management-design-system.test.mjs'
+      - 'scripts/audit-legacy-scopes.mjs'
+      - 'scripts/audit-legacy-scopes.test.mjs'
       - 'scripts/management-route-manifest.test.mjs'
       - 'scripts/management-design-system-baseline.json'
       - '.github/workflows/management-design-system-audit-v3.yml'
@@ -62,6 +66,12 @@ jobs:
 
       - name: Run management design-system contracts
         run: node --test scripts/management-route-manifest.test.mjs scripts/audit-management-design-system.test.mjs
+
+      - name: Run legacy scope audit (C0.3)
+        run: |
+          node --test scripts/audit-legacy-scopes.test.mjs
+          node scripts/audit-legacy-scopes.mjs > legacy-scopes-ledger.json
+          node -e "const r=require('./legacy-scopes-ledger.json'); if(r.violations.length){console.error(JSON.stringify(r.violations.slice(0,50),null,2)); process.exit(1)}; console.log(JSON.stringify({scannedFiles:r.scannedFiles,violations:r.violations.length}))"
 
       - name: Write complete violation ledger
         if: always()
