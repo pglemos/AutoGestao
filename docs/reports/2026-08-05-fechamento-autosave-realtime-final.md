@@ -1,14 +1,39 @@
 # Fechamento diário — autosave, estados gerenciais, realtime e integridade comercial
 
-**Status:** BLOCKED na validação em produção — implementação completa, banco aplicado, push retido.
+**Status:** entregue em produção e validado com os quatro perfis.
 **Branch:** `main` (sem worktree, sem branch de feature, sem PR).
 **SHA inicial:** `ed52e0adf7f341ec35a3c537d7453d261524184b`
-**SHA final (local, não enviado):** `a06c46b7`
+**SHA final:** `7013d5ed`
 **Tag de checkpoint:** `pre-fechamento-autosave-20260805T215639Z`
 
 ---
 
-## 1. Bloqueio (impede concluir)
+## 0. O que a validação em produção pegou (2026-08-06)
+
+Com login real, o autosave **não gravava sozinho**: o rascunho só ia ao servidor
+no clique manual. A suíte de unidade passava com o defeito presente — foram
+três causas empilhadas, todas introduzidas por esta entrega:
+
+1. **Coordenador descartado sem revival.** O efeito de limpeza chamava
+   `dispose()` e nada o reativava. O duplo mount do StrictMode, e qualquer
+   remontagem da tela, matava o autosave pelo resto da sessão — sem sinal
+   nenhum na interface. Corrigido com `resume()`/`isDisposed()`.
+2. **`autosaveEnabled` dependia de flags de carregamento.** `loadingHistory` e
+   `hookLoading` ficam `true` em janela normal de uso (a data operacional D-1 é
+   sempre buscada por `fetchCheckinByDate`), desligando o autosave justamente
+   enquanto o vendedor digitava. A proteção contra gravar durante a hidratação
+   é o guard de `changedFields`, que já existia.
+3. **O contador do fluxo só propagava no blur.** `StepperInput` mantinha o valor
+   digitado em estado local: quem digitava e fechava a aba perdia o número,
+   porque não havia alteração no formulário para o autosave enxergar.
+
+Lição registrada: só teste com digitação real pega esta classe de defeito.
+`src/test/checkin-autosave.playwright.ts` cobre o ciclo
+dirty → salvando → salvo às HH:mm → sobrevive ao refresh.
+
+---
+
+## 1. Bloqueio superado durante a execução
 
 Durante o gate final, a API do projeto Supabase passou a responder **HTTP 402**:
 
@@ -36,9 +61,13 @@ O banco está de pé (migrations aplicadas e consultadas com sucesso pela Manage
 - `npm run verify:db-types`: o comando regenera os tipos pela API restrita e falha por 402, não por drift. Os tipos no repositório **estão atualizados** (gerados com sucesso antes da restrição, commit `fafd9e47`).
 - Push/deploy: retido por decisão — subir código que não pode ser validado em produção, com a produção fora do ar por cota, aumenta o risco sem nenhum ganho.
 
-### Menor passo externo necessário
+### Resolução
 
-Ação do proprietário no painel Supabase (organização `MX GESTAO PREDITIVA`, projeto `fbhcmzzgwjdgkctlfvbo`): **subir o plano ou remover o spend cap** para restaurar o serviço. Não é ação que eu possa ou deva executar — envolve cobrança.
+O proprietário subiu o plano (`free` → `pro`) e os cinco serviços voltaram a
+`healthy`. A partir daí a execução seguiu: recompressão dos avatares, push,
+CI, deploy e smoke em produção.
+
+Causa do estouro e correção completa: `docs/reports/2026-08-06-cota-egress-plano-gratuito.md`.
 
 Nenhuma credencial foi rotacionada, revogada, substituída ou exposta.
 
@@ -103,7 +132,39 @@ O bloco exclusivo de mobile que começava por Internet foi removido. Os dois bre
 
 ---
 
-## 4. Verificações (execução fresca, SHA `a06c46b7`)
+## 3-A. Validação em produção (2026-08-06, domínio `mxperformance.com.br`)
+
+Playwright com login real das quatro contas contra o deployment de produção.
+
+| Verificação | Resultado |
+|---|---|
+| Vendedor — barra de rascunho visível com ação real | passou |
+| Vendedor — fluxo abre em Showroom, sem "Confirmar Internet" na entrada | passou |
+| Vendedor — digitar campo dispara `Alterações não salvas` → `Salvando rascunho...` → `Rascunho salvo às HH:mm` | passou |
+| Vendedor — valor digitado sobrevive ao refresh | passou |
+| Gerente — Central de Fechamento abre e discrimina `1 em andamento · 3 não iniciados` | passou |
+| Gerente — rascunho fora de "fechamentos enviados"; Disciplina Média `Sem dados oficiais` | passou |
+| Gerente — funil de vendas carrega sem erro | passou |
+| Dono — `/minhas-lojas` acessível | passou |
+| Admin MX — painel interno acessível | passou |
+
+Estado do banco após a validação:
+
+```text
+lancamentos_diarios (vendedor de teste, 2026-08-05)
+  submission_status=draft  draft_revision=5  visitas_porta_prev_day=6
+  last_draft_saved_at=2026-08-06 05:21:11Z      ← gravado sem clique manual
+
+oportunidades 'ganho' sem venda_realizada ............ 0
+agendamentos 'compareceu' sem atendimento ............ 0
+buckets públicos de avatar .......................... 742 kB em 91 objetos
+```
+
+O rascunho do vendedor de teste ficou em produção de propósito: é dado de conta
+de teste, não oficial, e serve de evidência viva do estado `Em andamento` na
+tela do gerente.
+
+## 4. Verificações (execução fresca)
 
 | Gate | Comando | Resultado |
 |---|---|---|
@@ -117,8 +178,11 @@ O bloco exclusivo de mobile que começava por Internet foi removido. Os dois bre
 | Agentes | `npm run validate:agents` | exit 0 |
 | Paridade | `npm run validate:parity` | exit 0 |
 | Build | `npm run build` | exit 0 |
-| Tipos do banco | `npm run verify:db-types` | **falha por 402 da API**, não por drift |
-| E2E | `npm run test:e2e` | **não executado** — depende de login |
+| Tipos do banco | `npm run verify:db-types` | exit 0 |
+| E2E (chromium, suíte completa) | `npx playwright test --project=chromium` | 90 passaram, 91 puladas por falta de credencial de perfil |
+| E2E do autosave (local e produção) | `checkin-autosave.playwright.ts` | 3/3 nos dois ambientes |
+| Smoke de produção (4 perfis) | `producao-smoke-fechamento.playwright.ts` | 5/5 |
+| CI no push | GitHub Actions | 7 workflows, 0 falhas |
 
 ### Falhas preexistentes corrigidas nesta execução
 
