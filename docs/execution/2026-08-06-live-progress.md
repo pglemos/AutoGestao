@@ -121,3 +121,33 @@
 - Total: 31 branches (29 locais + 2 remotas); dependabot #178/#179 ficam fora da contagem (deps, não trabalho)
 - Estado final: `git branch` → só `main`; remoto → só `origin/main` (+ dependabot #178/#179)
 - Obs: GitHub reportou 83 vulnerabilidades dependabot (3 critical, 44 high) — item já mapeado para Fase 14 (Segurança e Dependências)
+
+---
+
+## C0.9 — Revalidar deployment
+- Estado: DONE_WITH_EVIDENCE (EV-C09-001)
+- Último deployment Production (id 5785625399) = `5a8c4b0f` = main pós-C0.3, status success, HTTP 200
+- PR #180 (docs-only) não gerou novo build de produção — `git diff 5a8c4b0f..4a3784f5` = só docs/execution/
+- Código em produção idêntico ao baseline validado nos prints C0.3
+
+---
+
+## T0.3 — Inventariar acessos
+- Estado: DONE_WITH_EVIDENCE (EV-T03-001)
+- GitHub: 1 collaborator (pglemos, admin), 0 teams, 0 deploy keys, 6 secrets repo-level, Actions `allowed_actions: all`, protection sem exemptions
+- Vercel: team synvolt 1 membro; projeto mxperformance sem members diretos; git github/pglemos
+- Supabase: org MX GESTAO PREDITIVA 1 membro (Owner, **MFA desabilitado**); API keys anon/service_role legacy + default publishable/secret
+- Gaps → Fase 14: MFA Supabase, MFA GitHub não verificável, allowlist de Actions
+
+---
+
+## C0.10 — Fechar lacunas de comprovação
+- Estado: DONE_WITH_EVIDENCE
+- Lacunas fechadas:
+  - **T0.3 (Inventariar acessos)** — estava IN_PROGRESS sem conteúdo; executado e documentado em EV-T03-001 (GitHub/Vercel/Supabase)
+  - **EV-BASELINE-003 gap de SHA** — deployment de produção revalidado em EV-C09-001: produção = `5a8c4b0f` = main pós-C0.3 (SHA do gap `8c5cfbf7` era deploy intermediário já supersedido)
+  - **Contexts de proteção** — EV-C07-002 corrigiu nomes de check-run; primeira PR pós-proteção (#180) validou o fluxo completo: PR → checks (5/5 requeridos) → CodeRabbit → merge
+  - **Branches sem dono** — worktrees órfãos em /tmp e .claude/worktrees removidos; nenhum branch de trabalho remanescente
+- Total de evidências no ledger: 21 (EV-BASELINE-001..005, EV-C01-001..009, EV-T03-001)
+- Estados do plano: T0.1-T0.5 = DONE; C0.1-C0.10 = DONE_WITH_EVIDENCE
+- Baseline C0 encerrado — Fases 1-18 prontas para iniciar (Fase 14 absorve gaps de MFA/allowlist de Actions)

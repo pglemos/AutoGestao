@@ -177,3 +177,28 @@
 - GET pós-correção: `{"checks":["typecheck","unit-tests","verify","Detect Secrets","review"],"strict":true,"pr_reviews":1,"force_push_blocked":true,"deletion_blocked":true,"conversation_resolution":true}`
 - Timestamp: 2026-08-07T01:30:00Z
 - Conclusão: DONE_WITH_EVIDENCE
+
+### EV-C09-001 - Deployment de produção revalidado pós-C0
+- Requisito: C0.9
+- Ambiente: GitHub Deployments API + curl
+- Resultado observado:
+  - Último deployment Production: id 5785625399, SHA `5a8c4b0f` (= main pós-C0.3), status `success`, desc "Deployment has completed", URL `https://mxperformance-4i8xupwgn-synvolt.vercel.app`
+  - Site responde HTTP 200 (HEAD) — healthy
+  - Merge do PR #180 (→ `4a3784f5`) é docs-only (`git diff 5a8c4b0f..4a3784f5` = 2 arquivos em docs/execution/, 53 inserções) → não disparou novo build de produção nem alterou código em produção
+  - Confirma paridade: código em produção = `5a8c4b0f`, mesmo SHA validado nos prints C0.3 (ANTES×DEPOIS)
+- Decisão: nenhum re-deploy necessário; produção íntegra e correspondente ao baseline documentado
+- Timestamp: 2026-08-07T02:05:00Z
+- Conclusão: DONE_WITH_EVIDENCE
+
+### EV-T03-001 - Inventário de acessos (T0.3 concluído)
+- Requisito: T0.3
+- Ambiente: GitHub API (gh), Vercel API (token CLI), Supabase Management API (keychain sbp_*)
+- Resultado observado:
+  - **GitHub repo** `pglemos/MXGESTAOPREDITIVA`: 1 collaborator (`pglemos`, perms admin/maintain/pull/push/triage); 0 teams; branch protection sem exemptions (restrictions null); Actions enabled com `allowed_actions: all`; 0 deploy keys; 6 repo secrets (E2E_AUTH_PASSWORD, E2E_ROLE_PASSWORD, SUPABASE_ACCESS_TOKEN, SUPABASE_PROJECT_ID, SUPABASE_STAGING_ANON_KEY, SUPABASE_STAGING_URL); environments Preview/Production sem secrets próprios; PR authors: pglemos (64) + app/dependabot (36); check-run apps: github-actions, supabase, vercel (CodeRabbit roda via workflow github-actions)
+  - **Vercel**: team `synvolt` com 1 membro (synvollt@gmail.com); projeto `mxperformance` com 0 members diretos (acesso via team), git connection github/pglemos, framework vite, owner `team_9kUTSaoIkwnAVxy9nXMcAnej`
+  - **Supabase**: org "MX GESTAO PREDITIVA" (`vercel_icfg_cfbM73bXpmlSmtA5dT0EZOVG`) com 1 membro — synvollt@gmail.com, role Owner, **`mfa_enabled: false`**; projeto `fbhcmzzgwjdgkctlfvbo` região São Paulo; API keys: `anon` (legacy), `service_role` (legacy), `default` publishable + secret
+  - Contas secundárias no mesmo Supabase account: GOLF FOX, ARCO IRIS, RBA TRANSPORTES, CONTAS SUPABASE (orgs de outros clientes)
+- Gaps identificados: MFA desabilitado no Owner Supabase; GitHub MFA não verificável via API (campo `two_factor_authentication` null); `allowed_actions: all` (sem allowlist)
+- Decisão: documentar; MFA Supabase + allowlist Actions mapeados para Fase 14 (Segurança e Dependências)
+- Timestamp: 2026-08-07T02:30:00Z
+- Conclusão: DONE_WITH_EVIDENCE
