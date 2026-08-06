@@ -69,7 +69,7 @@ serve(async (req) => {
         <p><strong>Status:</strong> ${visit.status.toUpperCase()}</p>
         <p><strong>Data:</strong> ${new Date(visit.effective_visit_date || visit.scheduled_at).toLocaleDateString('pt-BR')}</p>
         <br />
-        <a href="https://mxperformance.vercel.app/consultoria/clientes/${visit.client.slug}/visitas/${visit.visit_number}" 
+        <a href="${Deno.env.get('APP_URL') || 'https://www.mxperformance.com.br'}/consultoria/clientes/${visit.client.slug}/visitas/${visit.visit_number}" 
            style="background-color: #0D3B2E; color: white; padding: 12px 24px; text-decoration: none; border-radius: 8px; font-weight: bold;">
           VER RELATÓRIO COMPLETO NO CRM
         </a>

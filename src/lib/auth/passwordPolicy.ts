@@ -1,5 +1,5 @@
 export const PASSWORD_POLICY_MESSAGE =
-  'Senha deve ter no mínimo 6 caracteres.'
+  'A senha deve ter no mínimo 8 caracteres, contendo pelo menos uma letra maiúscula, uma minúscula e um número.'
 
 const UPPERCASE_CHARS = 'ABCDEFGHJKLMNPQRSTUVWXYZ'
 const LOWERCASE_CHARS = 'abcdefghijkmnopqrstuvwxyz'
@@ -8,7 +8,12 @@ const SYMBOL_CHARS = '!@#$%&*'
 const PASSWORD_CHARS = `${UPPERCASE_CHARS}${LOWERCASE_CHARS}${DIGIT_CHARS}${SYMBOL_CHARS}`
 
 export function isStrongPassword(password: string) {
-  return password.length >= 6
+  return (
+    password.length >= 8 &&
+    /[A-Z]/.test(password) &&
+    /[a-z]/.test(password) &&
+    /[0-9]/.test(password)
+  )
 }
 
 function randomIndex(max: number) {

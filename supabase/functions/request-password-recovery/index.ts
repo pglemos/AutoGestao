@@ -41,7 +41,7 @@ function normalizeRedirectTo(value: unknown) {
     const allowedOrigins = [
       'https://www.mxperformance.com.br',
       'https://mxperformance.com.br',
-      'https://mxperformance.vercel.app',
+
     ]
     if (!localOrigin && !allowedOrigins.includes(url.origin)) return fallback
     return `${url.origin}/login?recovery=1`

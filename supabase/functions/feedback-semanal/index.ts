@@ -12,7 +12,7 @@ import { uploadDocumentToStore } from "../_shared/drive-upload.ts";
 
 const supabase = createServiceClient();
 const resend = createResendClient();
-const appUrl = "https://mxperformance.vercel.app";
+const appUrl = Deno.env.get("APP_URL") || "https://www.mxperformance.com.br";
 const CHECKIN_REPORT_SELECT = "seller_user_id, reference_date, leads_prev_day, agd_cart_today, agd_net_today, agd_cart_prev_day, agd_net_prev_day, visit_prev_day, vnd_porta_prev_day, vnd_cart_prev_day, vnd_net_prev_day";
 
 type SellerRow = {
