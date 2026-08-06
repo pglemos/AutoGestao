@@ -1,0 +1,94 @@
+{
+  "rls_tabelas": [
+    {
+      "relname": "agendamentos",
+      "rls": true,
+      "policies": 2
+    },
+    {
+      "relname": "clientes",
+      "rls": true,
+      "policies": 3
+    },
+    {
+      "relname": "eventos_comerciais",
+      "rls": true,
+      "policies": 2
+    },
+    {
+      "relname": "lancamentos_diarios",
+      "rls": true,
+      "policies": 3
+    },
+    {
+      "relname": "oportunidades",
+      "rls": true,
+      "policies": 2
+    }
+  ],
+  "anon_nas_rpcs": [
+    {
+      "proname": "atualizar_etapa_oportunidade_crm",
+      "anon": false
+    },
+    {
+      "proname": "atualizar_status_agendamento_crm",
+      "anon": false
+    },
+    {
+      "proname": "criar_agendamento_crm",
+      "anon": false
+    },
+    {
+      "proname": "criar_oportunidade_crm",
+      "anon": false
+    },
+    {
+      "proname": "registrar_venda_direta",
+      "anon": false
+    },
+    {
+      "proname": "submit_checkin",
+      "anon": false
+    }
+  ],
+  "draft_fora_do_oficial": [
+    {
+      "drafts": 7,
+      "draft_em_view_producao": 6
+    }
+  ],
+  "orfaos": [
+    {
+      "ganho_sem_venda": 0,
+      "compareceu_sem_evento": 0,
+      "agendamento_sem_evento": 2
+    }
+  ],
+  "colunas_revisao": [
+    {
+      "n": 2
+    }
+  ],
+  "submit_checkin_conflito": [
+    {
+      "tem": true
+    }
+  ],
+  "views_invoker": [
+    {
+      "sem_invoker": 0
+    }
+  ],
+  "definer_sem_search_path": [
+    {
+      "n": 0
+    }
+  ],
+  "storage_publico": [
+    {
+      "total": "752 kB",
+      "objetos": 92
+    }
+  ]
+}
