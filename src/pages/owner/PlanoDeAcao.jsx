@@ -4,7 +4,7 @@ import { useSearchParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { useAuth } from "@/lib/owner-b44/AuthContext";
 import { useOwner } from "@/components/owner/OwnerContext";
-import { useIsMobile } from "@/lib/owner-b44/use-mobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import { actionPlanLiveRepository } from "@/components/owner/actionplan/actionPlanLiveRepository";
 import { filterActions } from "@/components/owner/actionplan/actionPlanUtils";
 import { exportActionsCSV } from "@/components/owner/actionplan/exportActions";

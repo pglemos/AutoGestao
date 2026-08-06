@@ -1,7 +1,7 @@
 // Container principal da aba Calendário — orquestra visualizações, sidebar e modais.
 import { useState, useEffect, useMemo } from "react";
 import { useToast } from "@/components/ui/use-toast";
-import { useIsMobile } from "@/lib/owner-b44/use-mobile";
+import { useIsMobile } from "@/hooks/useIsMobile";
 import {
   Sheet,
   SheetContent,
