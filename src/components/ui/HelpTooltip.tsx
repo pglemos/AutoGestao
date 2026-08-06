@@ -1,4 +1,4 @@
-import type { ComponentType, ReactNode } from 'react'
+import { useState, type ComponentType, type ReactNode } from 'react'
 import { HelpCircle } from 'lucide-react'
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 
@@ -13,8 +13,8 @@ const Content = TooltipContent as unknown as ComponentType<{
 
 /**
  * Ícone de ajuda contextual ao lado de títulos e métricas (porte do
- * `HelpTooltip` do Base44). Difere do `InfoTooltip` legado: usa o tooltip do
- * Radix já presente no projeto, superfície escura e é acionado por hover/foco.
+ * `HelpTooltip` do Base44). Suporta hover em desktop, foco por teclado
+ * e toque/clique direto no ícone (com z-index z-[99999] acima de modais).
  */
 export function HelpTooltip({
   text,
@@ -25,18 +25,26 @@ export function HelpTooltip({
   side?: 'top' | 'right' | 'bottom' | 'left'
   className?: string
 }) {
+  const [open, setOpen] = useState(false)
   if (!text) return null
 
   return (
-    <TooltipProvider delayDuration={120}>
-      <Tooltip>
+    <TooltipProvider delayDuration={50}>
+      <Tooltip open={open} onOpenChange={setOpen}>
         <TooltipTrigger asChild>
           <button
             type="button"
             aria-label="Ajuda"
-            onClick={event => event.stopPropagation()}
-            onMouseDown={event => event.preventDefault()}
-            className={`inline-flex cursor-help items-center justify-center align-middle text-gray-400 transition-colors hover:text-emerald-600 ${className}`}
+            onClick={event => {
+              event.preventDefault()
+              event.stopPropagation()
+              setOpen(prev => !prev)
+            }}
+            onMouseEnter={() => setOpen(true)}
+            onMouseLeave={() => setOpen(false)}
+            onFocus={() => setOpen(true)}
+            onBlur={() => setOpen(false)}
+            className={`inline-flex cursor-help items-center justify-center align-middle text-gray-400 transition-colors hover:text-emerald-600 focus:outline-none ${className}`}
           >
             <HelpCircle size={14} strokeWidth={2.25} />
           </button>
@@ -44,7 +52,7 @@ export function HelpTooltip({
         <Content
           side={side}
           sideOffset={6}
-          className="max-w-[280px] rounded-lg border border-slate-700/50 bg-slate-800 px-3 py-2 text-xs font-normal leading-relaxed text-slate-50 shadow-xl"
+          className="z-[99999] max-w-[280px] rounded-lg border border-slate-700/50 bg-slate-800 px-3 py-2 text-xs font-normal leading-relaxed text-slate-50 shadow-xl pointer-events-none"
         >
           {text}
         </Content>
