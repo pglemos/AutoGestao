@@ -76,7 +76,13 @@ export function useCheckinAutosave<TSnapshot>({
   }
   const coordinator = coordinatorRef.current
 
-  useEffect(() => () => coordinator.dispose(), [coordinator])
+  // `resume` na entrada é obrigatório: o duplo mount do StrictMode (e qualquer
+  // remontagem da tela) roda a limpeza uma vez, e sem reativar o coordenador o
+  // autosave ficaria morto pelo resto da sessão sem nenhum sinal na interface.
+  useEffect(() => {
+    coordinator.resume()
+    return () => coordinator.dispose()
+  }, [coordinator])
 
   useEffect(() => {
     // Voltar a ter rede, ou voltar para a aba, são os dois momentos em que o

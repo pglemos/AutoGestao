@@ -30,6 +30,42 @@ describe('fluxo de fechamento unificado entre breakpoints', () => {
   })
 })
 
+// Regressão observada em produção (2026-08-06): o autosave não disparava ao
+// digitar porque `autosaveEnabled` incluía flags de carregamento que ficam
+// `true` em janelas normais de uso. O rascunho só ia ao servidor no clique
+// manual — exatamente o defeito que esta entrega existe para corrigir.
+describe('autosave não pode ser desligado por estado de carregamento', () => {
+  test('autosaveEnabled não depende de loadingHistory nem de hookLoading', () => {
+    const trecho = hookSource.slice(
+      hookSource.indexOf('const autosaveEnabled'),
+      hookSource.indexOf('const persistDraft'),
+    )
+    expect(trecho).toContain("metricScope === 'daily'")
+    expect(trecho).toContain('!fechamentoConcluido')
+    expect(trecho).toContain('selectedDate === activeClosingContext.mainDate')
+    expect(trecho).not.toContain('loadingHistory')
+    expect(trecho).not.toContain('hookLoading')
+  })
+
+  test('a proteção contra gravar durante a hidratação continua sendo changedFields', () => {
+    expect(hookSource).toContain('if (!autosaveEnabled || changedFields.size === 0) return')
+  })
+
+  // O contador do fluxo guardava o valor digitado em estado local e só
+  // propagava no blur. Quem digitava e fechava a aba perdia o número: não
+  // havia alteração no formulário para o autosave enxergar.
+  test('o contador propaga o valor durante a digitação, não só no blur', () => {
+    const trecho = flowSource.slice(flowSource.indexOf('function StepperInput'), flowSource.indexOf('function BackButton'))
+    expect(trecho).toMatch(/onChange=\{event => \{[\s\S]*?onSet\(/)
+    expect(trecho).toContain('onBlur={commit}')
+  })
+
+  test('campo esvaziado continua local até o blur (backspace não vira 0)', () => {
+    const trecho = flowSource.slice(flowSource.indexOf('function StepperInput'), flowSource.indexOf('function BackButton'))
+    expect(trecho).toContain("if (digits !== '' && !disabled)")
+  })
+})
+
 describe('finalização segura', () => {
   test('finalizar aguarda o flush do autosave antes de gravar', () => {
     expect(hookSource).toContain('const flushed = await autosave.flush()')

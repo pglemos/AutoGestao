@@ -566,11 +566,17 @@ const fechamentoConcluido = metricScope === 'daily'
 
     // Autosave é exclusivo do fechamento diário em aberto. Ajuste técnico e
     // lançamento histórico continuam sendo atos explícitos da gestão.
+    //
+    // Não entram aqui os flags de carregamento (`loadingHistory`/`hookLoading`).
+    // Eles ficam `true` em janelas normais de uso — a data operacional D-1 é
+    // sempre buscada por `fetchCheckinByDate`, e cada refetch reabre a janela —
+    // e desligavam o autosave justo enquanto o vendedor digitava: em produção o
+    // rascunho só era gravado no clique manual. A proteção contra gravar
+    // durante a hidratação é o guard de `changedFields`, que só fica preenchido
+    // quando o usuário mexe em algum campo.
     const autosaveEnabled = metricScope === 'daily'
         && !fechamentoConcluido
         && selectedDate === activeClosingContext.mainDate
-        && !loadingHistory
-        && !hookLoading
 
     const persistDraft = useCallback(
         async (snapshot: typeof draftPayload, expectedRevision: number) => {

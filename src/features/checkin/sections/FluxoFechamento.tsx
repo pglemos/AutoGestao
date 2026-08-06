@@ -81,7 +81,18 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
         pattern="[0-9]*"
         value={inputVal !== null ? inputVal : String(value)}
         onFocus={event => { setInputVal(String(value)); setTimeout(() => event.target.select(), 0) }}
-        onChange={event => setInputVal(event.target.value.replace(/\D/g, ''))}
+        onChange={event => {
+          const digits = event.target.value.replace(/\D/g, '')
+          setInputVal(digits)
+          // Propaga já durante a digitação: o autosave só enxerga o que chega
+          // ao formulário, e esperar o blur significava perder o número de
+          // quem digita e fecha a aba. O campo vazio continua sendo estado
+          // local até o blur, para não virar 0 a cada backspace.
+          if (digits !== '' && !disabled) {
+            const parsed = parseInt(digits, 10)
+            if (!Number.isNaN(parsed)) onSet(Math.min(999, Math.max(0, parsed)))
+          }
+        }}
         onBlur={commit}
         onKeyDown={event => { if (event.key === 'Enter' || event.key === 'Tab') commit() }}
         // O rótulo existe visualmente no <span> do FieldRow, mas nada o

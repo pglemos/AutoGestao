@@ -35,6 +35,15 @@ export interface CheckinAutosaveCoordinator<TSnapshot> {
   retry: () => Promise<void>
   /** Interrompe timers pendentes (unmount). */
   dispose: () => void
+  /**
+   * Reativa o coordenador depois de um `dispose`.
+   *
+   * Sem isto, o autosave morre em silêncio na primeira remontagem da tela —
+   * inclusive no duplo mount do StrictMode em desenvolvimento: o efeito de
+   * limpeza descartava o coordenador e nada o trazia de volta.
+   */
+  resume: () => void
+  isDisposed: () => boolean
 }
 
 const defaultTimers: AutosaveTimers = {
@@ -272,5 +281,11 @@ export function createCheckinAutosaveCoordinator<TSnapshot>(
       clearRetry()
       while (waiters.length > 0) waiters.shift()?.()
     },
+
+    resume() {
+      disposed = false
+    },
+
+    isDisposed: () => disposed,
   }
 }

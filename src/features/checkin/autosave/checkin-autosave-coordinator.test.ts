@@ -339,6 +339,34 @@ describe('createCheckinAutosaveCoordinator', () => {
     expect(calls).toBe(0)
   })
 
+  // O React roda o efeito de limpeza no duplo mount do StrictMode e em toda
+  // remontagem da tela. Sem `resume`, o coordenador ficava descartado para
+  // sempre e o autosave morria em silêncio — foi assim que ele chegou a
+  // produção sem gravar nada automaticamente.
+  test('resume revive o coordenador depois de um dispose', async () => {
+    const { timers, advance } = createFakeTimers()
+    let calls = 0
+    const coordinator = createCheckinAutosaveCoordinator<string>({
+      save: async () => { calls += 1; return ok(1) },
+      timers,
+    })
+
+    coordinator.dispose()
+    expect(coordinator.isDisposed()).toBe(true)
+
+    coordinator.markDirty('v1')
+    await advance(5000)
+    expect(calls).toBe(0)
+
+    coordinator.resume()
+    expect(coordinator.isDisposed()).toBe(false)
+
+    coordinator.markDirty('v2')
+    await advance(800)
+    expect(calls).toBe(1)
+    expect(coordinator.getState().status).toBe('saved')
+  })
+
   test('exceção da camada de rede é tratada como transitória', async () => {
     const { timers, advance } = createFakeTimers()
     let calls = 0
