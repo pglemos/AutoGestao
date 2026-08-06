@@ -33,32 +33,39 @@ Descartados como causa principal (medidos): banco inteiro tem 64 MB; maior tabel
 | Teto de 512 KB e allowlist de MIME nos buckets públicos | migration `20260806120000` (**aplicada**) | upload gordo é recusado pelo servidor |
 | Piso de 15 s entre refetches do funil | `team-funnel-realtime.ts` | o realtime novo deixa de reler 6 meses de eventos a cada INSERT |
 
-### Projeção do passivo
+## 3. Passivo recomprimido — executado em 2026-08-06
 
-| | Hoje | Depois da recompressão |
+Depois de o proprietário subir o plano (org saiu de `free` para `pro`) e os cinco
+serviços voltarem a `healthy`, o script rodou com backup obrigatório dos originais.
+
+| Bucket | Antes | Depois |
 |---|---|---|
-| 91 objetos nos buckets públicos | 107 MB | **~2,3 MB** (−98%) |
+| `pre-cadastro-avatares` (90 objetos) | 107 MB | **735 kB** |
+| `perfis_usuario` (1 objeto) | 419 kB | **8 kB** |
+| **Total** | **107,5 MB** | **743 kB** — −99,3% |
 
-## 3. Pendente — precisa do serviço restaurado
+Maior objeto: de 3,2 MB para 13 kB. Leitura pública conferida: `HTTP 200`,
+10 kB, `content-type: image/jpeg`, `cache-control: public, max-age=31536000`.
 
-O passivo dos 90 arquivos já enviados **ainda não foi recomprimido**: a Storage API está sob a mesma restrição 402.
+Um arquivo não pôde ser processado (`libpng read error` — PNG corrompido na
+origem) e foi mantido intacto, como o script prevê.
 
-Script pronto: `scripts/recompress-storage-avatars.mjs`
+Originais preservados fora do repositório antes da regravação (108 MB, 90
+arquivos). A regravação é in-place e o script agora **exige** `--backup-dir`
+junto de `--apply`.
 
 ```bash
 npm i -D sharp
-SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/recompress-storage-avatars.mjs           # simulação
-SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/recompress-storage-avatars.mjs --apply   # grava
+SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/recompress-storage-avatars.mjs
+SUPABASE_URL=... SUPABASE_SERVICE_ROLE_KEY=... node scripts/recompress-storage-avatars.mjs --apply --backup-dir=/caminho
 ```
 
-Simulação é o padrão; arquivo que não encolher é mantido; erro em um objeto não interrompe os demais.
+## 4. Voltar ao plano gratuito
 
-## 4. Ordem de execução recomendada
-
-1. **Restaurar o serviço** — subir plano ou remover o spend cap no painel. É o único passo que exige o proprietário e é o que destrava tudo.
-2. Rodar o script de recompressão (`--apply`).
-3. Confirmar o total dos buckets (esperado ~2,3 MB) e a queda no painel de uso.
-4. Se quiser voltar ao plano gratuito de forma sustentável, a conta de egress passa a ser dominada por tráfego de API, não por imagem.
+Com o passivo em 743 kB e o teto de 512 KB por arquivo, a conta de egress
+deixa de ser dominada por imagem. Antes de rebaixar o plano, confira no painel
+o consumo do ciclo corrente: o valor já gasto neste ciclo não é devolvido pela
+correção — o efeito aparece no ciclo seguinte.
 
 ## 5. Observação sobre reincidência
 
