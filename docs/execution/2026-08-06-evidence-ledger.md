@@ -131,3 +131,19 @@
 - Commit: 255ea20c (docs)
 - Timestamp: 2026-08-06T20:05:00Z
 - Conclusão: DONE_WITH_EVIDENCE
+
+### EV-C03-001 - Escopos legados eliminados com gate de CI
+- Requisito: C0.3
+- Ambiente: repo local (main @ 255ea20c) + src
+- Resultado observado:
+  - Superfícies do template canônico promovidas a `:root` em semantic.css referenciando `--mx-gray-*` (novos primitivos gray-50 `210 20% 98%` .. gray-800 `215 28% 17%`, byte a byte do export do escopo) — `--mx-accent`/`--mx-accent-soft` resolvem do primitivo único do produto
+  - `tokens-contract.test.ts` (58 testes design-system): verde — semântica sem hex cru, sem órfãos, identidade Base44 preservada
+  - Regras `[data-mx-internal-scope='true']` removidas de `internal-mx-manager-scope.css` (só `.mx-canonical-template` permanece, lido pelo contrato de páginas); atributo removido de `InternalMxVisualScope.tsx` e `SharedNavigation.stories.tsx`
+  - `audit-legacy-scopes.mjs` varre 1848 arquivos: 0 violações (`data-mx-internal-scope`, `.mx-manager-scope`, `.owner-b44`, `.mx-manager-page-1to1`); 4/4 testes node:test pass
+  - Gate plugado em `management-design-system-audit-v3.yml` (step "Run legacy scope audit (C0.3)" + paths trigger)
+  - `use-mobile.jsx` (re-export de `@/hooks/useIsMobile`) removido; ActionPlanWorkspace migrado
+  - Gates: npm test 1962/1962 pass; lint 0 erros; typecheck pass; audit 0 violações
+- Decisão: nenhum arquivo de escopo legado permanece; reintrodução bloqueada por CI
+- Commit: e74aea63 (+ b87da0ef z-index, 5906bff3 password policy test)
+- Timestamp: 2026-08-06T21:20:00Z
+- Conclusão: DONE_WITH_EVIDENCE

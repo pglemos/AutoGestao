@@ -58,7 +58,11 @@
 ---
 
 ## C0.3 — Eliminar scopes legados (owner-b44, mx-manager-scope, mx-internal-scope)
-- Estado: NOT_STARTED (pendente após C0.2)
+- Estado: DONE_WITH_EVIDENCE (commit `e74aea63`, push OK)
+- Promoção: 9 vars de superfície do template canônico (`--mx-page-bg`, `--mx-surface`, `--mx-surface-muted`, `--mx-border`, `--mx-border-strong`, `--mx-text`, `--mx-text-muted`, `--mx-accent`, `--mx-accent-soft`) movidas de `[data-mx-internal-scope='true']` para `:root`, via nova escala primitiva `--mx-gray-*` (gray-50..800 byte a byte) — camada semântica segue sem valores crus (contrato de tokens verificado)
+- Remoção: regras legadas em `internal-mx-manager-scope.css`, atributo `data-mx-internal-scope="true"` em `InternalMxVisualScope.tsx` e `SharedNavigation.stories.tsx`, shim `owner-b44/use-mobile.jsx` (import migrado para `@/hooks/useIsMobile`)
+- CI gate: `scripts/audit-legacy-scopes.mjs` + 4 testes (node:test); audit de 1848 arquivos = 0 violações; step adicionado a `management-design-system-audit-v3.yml`
+- Correções pré-existentes no caminho: z-index arbitrários migrados para `--mx-z-*` (`b87da0ef`); teste de password policy alinhado à política de 8+ caracteres (`5906bff3`) — todos os 1962 testes verdes
 
 ---
 
