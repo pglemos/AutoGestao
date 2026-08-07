@@ -42,7 +42,7 @@ export function OptionCard({
 
   return (
     <div
-      role="button"
+      role="checkbox"
       tabIndex={disabled ? -1 : 0}
       aria-checked={checked}
       onClick={handleClick}
