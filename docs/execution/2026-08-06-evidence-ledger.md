@@ -284,3 +284,13 @@
 - Deploy runtime 93eccfc6 → deploy `mhi8fw6ua` status **Ready** (build); log: `runtime-impacting change (1 file(s))`
 - Nenhum deploy em produção desde 93eccfc6; commit docs-only não gerou artefato de produção
 - Conclusão: T3.5 DONE_WITH_EVIDENCE — ignoreCommand funcional em clone raso com fallback git (--depth=3) + API (owner+slug)
+
+### EV-F3-006 - Fase 3: paridade de SHA completa (T3.6 DONE)
+- Requisito: T3.6
+- Verificado em produção (www.mxperformance.com.br, deploy mhi8fw6ua = commit 93eccfc6):
+  1. Vercel deployment ↔ commit: status do commit aponta para deploy do SHA 93eccfc6 (Ready)
+  2. Release runtime: /api/health → "release":"93eccfc6e343237165053b54f88cd5c6b3704e14" (SHA completo)
+  3. Sentry release: SHA completo presente 2x no bundle index-CEkWSTjW.js
+  4. Checks GitHub: Supabase Preview/Detect Secrets/verify/eslint-a11y/unit-tests/typecheck/lint-tokens — todos success no commit 93eccfc6
+- 2º deploy docs-only (2a566b34) → gn2m8z1gq Canceled (sem build)
+- Conclusão: T3.6 DONE_WITH_EVIDENCE
