@@ -202,3 +202,12 @@
 - Decisão: documentar; MFA Supabase + allowlist Actions mapeados para Fase 14 (Segurança e Dependências)
 - Timestamp: 2026-08-07T02:30:00Z
 - Conclusão: DONE_WITH_EVIDENCE
+
+### EV-C07-003 - Review requirement removido por decisão do owner
+- Requisito: C0.7 (decisão de configuração)
+- Ambiente: GitHub API
+- Resultado observado: após PR #181 ficar bloqueado por `REVIEW_REQUIRED` (único humano do repo é o autor, que o GitHub impede de aprovar o próprio PR; CodeRabbit só emite review formal quando há comentários), o owner determinou remoção do requisito de aprovação.
+- Configuração aplicada (PUT protection): `required_pull_request_reviews: null`, `required_conversation_resolution: false`; MANTIDOS: 5 status checks strict (`typecheck`, `unit-tests`, `verify`, `Detect Secrets`, `review`), `allow_force_pushes: false`, `allow_deletions: false`, `enforce_admins: false`.
+- Nota: o token colado pelo usuário (ghp_...) retornou Bad credentials — aplicação feita via gh autenticado (keyring).
+- Timestamp: 2026-08-07T03:10:00Z
+- Conclusão: DONE_WITH_EVIDENCE
