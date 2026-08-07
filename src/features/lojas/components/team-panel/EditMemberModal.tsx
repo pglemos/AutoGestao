@@ -43,7 +43,7 @@ export function EditMemberModal({
   return (
     <div
       ref={editMemberDialogRef}
-      className="fixed inset-0 z-[100] flex items-center justify-center p-mx-sm sm:p-mx-md overflow-y-auto"
+      className="fixed inset-0 z-[100] overflow-y-auto p-2 sm:p-4 flex flex-col items-center justify-start sm:justify-center"
       role="dialog"
       aria-modal="true"
       aria-labelledby="edit-team-member-title"
@@ -53,17 +53,17 @@ export function EditMemberModal({
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
         onClick={onClose}
-        className="absolute inset-0 bg-gray-900/60 backdrop-blur-md"
+        className="fixed inset-0 bg-gray-900/60 backdrop-blur-md"
       />
 
       <motion.div
         initial={{ opacity: 0, scale: 0.95, y: 10 }}
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 10 }}
-        className="w-full max-w-2xl relative z-10 my-auto max-h-[92dvh] flex flex-col"
+        className="w-full max-w-2xl relative z-10 my-auto max-h-[calc(100dvh-1rem)] sm:max-h-[88dvh] flex flex-col"
       >
-        <Card className="border-none overflow-hidden flex flex-col max-h-[92dvh] shadow-2xl">
-          <CardHeader className="bg-gray-900 border-none text-white p-mx-lg sm:p-mx-xl relative shrink-0">
+        <Card className="border-none overflow-hidden flex flex-col max-h-[calc(100dvh-1rem)] sm:max-h-[88dvh] shadow-2xl">
+          <CardHeader className="bg-gray-900 border-none text-white p-mx-md sm:p-mx-xl relative shrink-0">
             <div className="absolute top-mx-0 left-mx-0 w-full h-mx-px bg-emerald-600 shadow-mx-glow-brand" />
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-mx-md">
@@ -71,7 +71,7 @@ export function EditMemberModal({
                   <ShieldCheck size={28} className="text-white" />
                 </IconBadge>
                 <div>
-                  <CardTitle id="edit-team-member-title" className="text-white text-xl sm:text-2xl">
+                  <CardTitle id="edit-team-member-title" className="text-white text-lg sm:text-2xl">
                     Editar integrante
                   </CardTitle>
                   <Typography variant="caption" tone="white" className="opacity-60 block text-mx-nano">
@@ -254,25 +254,25 @@ export function EditMemberModal({
             </CardContent>
 
             <div
-              className="p-mx-md sm:p-mx-lg bg-gray-50 border-t border-gray-200 flex flex-col-reverse sm:flex-row gap-mx-sm shrink-0"
-              style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 1rem)' }}
+              className="p-3 sm:p-mx-lg bg-gray-50 border-t border-gray-200 flex items-center justify-between gap-2 shrink-0"
+              style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 0.75rem)' }}
             >
               <Button
                 type="button"
                 variant="danger"
                 disabled={saving || pendingConfirmations.has(getDeleteMemberConfirmationKey(editingMember))}
                 onClick={() => onDeleteMember(editingMember)}
-                className="h-mx-14 sm:w-mx-40 rounded-2xl font-bold uppercase tracking-mx-wide text-xs shadow-sm"
+                className="h-11 sm:h-12 px-3 sm:px-6 rounded-xl font-bold uppercase text-xs shrink-0"
               >
-                <Trash2 size={18} className="mr-2" />
-                ENCERRAR
+                <Trash2 size={16} className="sm:mr-2" />
+                <span className="hidden sm:inline">ENCERRAR</span>
               </Button>
               <Button
                 type="submit"
                 disabled={saving}
-                className="h-mx-14 flex-1 text-xs"
+                className="h-11 sm:h-12 px-4 flex-1 text-xs font-bold uppercase rounded-xl"
               >
-                {saving ? <RefreshCw className="animate-spin mr-2" /> : <Save size={20} className="mr-2" />}
+                {saving ? <RefreshCw className="animate-spin mr-2" /> : <Save size={18} className="mr-2" />}
                 SALVAR INTEGRANTE
               </Button>
             </div>

@@ -146,6 +146,21 @@
 
 }
 
+/* Correção para inputs ocultos do Radix UI no Safari/WebKit: evita renderização de ovelas/pills vazias */
+[data-radix-checkbox-input],
+input[type="checkbox"][aria-hidden="true"],
+form input[aria-hidden="true"] {
+  display: none !important;
+  opacity: 0 !important;
+  width: 0 !important;
+  height: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  pointer-events: none !important;
+  -webkit-appearance: none !important;
+  appearance: none !important;
+}
+
 /*
  * Base tipográfica do produto — §6. Era exclusiva do Dono.
  *

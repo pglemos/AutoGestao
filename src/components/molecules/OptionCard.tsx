@@ -30,10 +30,30 @@ export function OptionCard({
   name,
   className,
 }: OptionCardProps) {
+  const handleClick = (e: React.MouseEvent) => {
+    // If click originated from the Checkbox button or HelpTooltip, let it handle directly
+    if ((e.target as HTMLElement).closest('button[role="checkbox"]') || (e.target as HTMLElement).closest('[aria-label="Ajuda"]')) {
+      return
+    }
+    if (!disabled) {
+      onChange(!checked)
+    }
+  }
+
   return (
-    <label
+    <div
+      role="button"
+      tabIndex={disabled ? -1 : 0}
+      aria-checked={checked}
+      onClick={handleClick}
+      onKeyDown={(e) => {
+        if ((e.key === ' ' || e.key === 'Enter') && !disabled) {
+          e.preventDefault()
+          onChange(!checked)
+        }
+      }}
       className={cn(
-        'flex items-center justify-between p-mx-md rounded-2xl bg-gray-50 border border-gray-200',
+        'flex items-center justify-between p-mx-md rounded-2xl bg-gray-50 border border-gray-200 select-none',
         'hover:bg-white hover:shadow-sm transition-all cursor-pointer group',
         disabled && 'opacity-50 cursor-not-allowed hover:bg-gray-50 hover:shadow-none',
         className,
@@ -68,6 +88,6 @@ export function OptionCard({
         disabled={disabled}
         className="w-5 h-5 rounded-lg shrink-0 accent-emerald-600 cursor-pointer"
       />
-    </label>
+    </div>
   )
 }
