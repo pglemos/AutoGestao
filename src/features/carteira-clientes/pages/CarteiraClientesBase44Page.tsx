@@ -14,6 +14,7 @@ installCarteiraBase44Adapter(base44)
  * flow must remain available after the route replacement.
  */
 export const CARTEIRA_BASE44_PARITY_SURFACE = [
+  'CarteiraClientesReference',
   'CarteiraAtivaTab',
   'PlanoAtaqueTab',
   'ExecucaoMissao',
