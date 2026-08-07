@@ -51,17 +51,17 @@ export function fetchCommitObject(sha) {
   return hasCommitLocally(sha)
 }
 
-export function unshallowBranch() {
+export function unshallowBranch(previousSha) {
   try {
     execFileSync(
       'git',
-      ['fetch', '--quiet', 'origin', 'main'],
+      ['fetch', '--quiet', '--depth=3', 'origin', 'main'],
       { stdio: ['ignore', 'pipe', 'pipe'], timeout: 20000 },
     )
-    return true
   } catch {
     return false
   }
+  return hasCommitLocally(previousSha)
 }
 
 export function diffFilesLocally(previousSha, currentSha) {
@@ -143,7 +143,7 @@ export async function resolveChangedFiles(previousSha, currentSha) {
     const afterFetch = diffFilesLocally(previousSha, currentSha)
     if (afterFetch) return afterFetch
   }
-  if (unshallowBranch() && hasCommitLocally(previousSha)) {
+  if (unshallowBranch(previousSha)) {
     const afterUnshallow = diffFilesLocally(previousSha, currentSha)
     if (afterUnshallow) return afterUnshallow
   }
