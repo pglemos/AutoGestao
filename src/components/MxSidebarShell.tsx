@@ -503,18 +503,16 @@ export default function MxSidebarShell({
           type="button"
           aria-label="Abrir menu principal"
           onClick={() => setMobileOpen(true)}
-          className="flex shrink-0 items-center gap-1.5 rounded-xl border border-emerald-200/80 bg-emerald-50/80 px-2.5 py-1.5 text-left text-emerald-950 shadow-xs outline-none transition-colors hover:bg-emerald-100/80 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+          className="flex min-w-0 items-center gap-2 text-left text-gray-700 outline-none transition-opacity hover:opacity-80 active:opacity-60 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
         >
-          <Menu className="h-4.5 w-4.5 shrink-0 text-emerald-700" aria-hidden="true" />
-          <img src={SIDEBAR_LOGO} alt="MX" className="h-5 w-5 shrink-0 object-contain" />
-          <span className="min-w-0 leading-tight">
-            <span className="block truncate text-[12px] font-bold tracking-tight text-gray-900">
-              Abas
-            </span>
-            <span className="hidden min-w-0 leading-tight min-[500px]:block">
-              <span className="block truncate text-[8px] font-bold uppercase tracking-[0.12em] text-emerald-700">
-                {moduleLabel}
-              </span>
+          <Menu className="h-5.5 w-5.5 shrink-0 text-gray-700" aria-hidden="true" />
+          <img src={SIDEBAR_LOGO} alt="MX" className="h-6 w-6 shrink-0 object-contain" />
+          <span className="text-[13px] font-semibold tracking-tight text-gray-800">
+            Menu
+          </span>
+          <span className="hidden min-w-0 leading-tight min-[500px]:block">
+            <span className="block truncate text-[8px] font-bold uppercase tracking-[0.12em] text-emerald-700">
+              {moduleLabel}
             </span>
           </span>
         </button>
