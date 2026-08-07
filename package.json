@@ -36,8 +36,6 @@
     "validate:agents": "node .aiox-core/infrastructure/scripts/validate-agents.js",
     "validate:parity": "node .aiox-core/infrastructure/scripts/validate-parity.js",
     "deploy": "node scripts/verify_vercel_project_link.mjs && vercel --prod",
-    "fix:admin-access": "tsx scripts/fix_admin_access.ts",
-    "seed:sandbox:live": "tsx scripts/seed_live_sandbox.ts",
     "validate:e2e:live": "tsx scripts/validate_live_end_to_end.ts",
     "validate:admin-master:e2e:live": "node scripts/validate_admin_master_full_e2e.mjs",
     "export:team-contacts": "tsx scripts/export_team_contacts.ts",
