@@ -1088,6 +1088,36 @@ export type Database = {
         }
         Relationships: []
       }
+      backup_vendas_datas_20260805: {
+        Row: {
+          backup_em: string | null
+          closed_at_antigo: string | null
+          competencia_antiga: string | null
+          data_evento_antiga: string | null
+          evento_id: string | null
+          oport_competencia_antiga: string | null
+          oportunidade_id: string | null
+        }
+        Insert: {
+          backup_em?: string | null
+          closed_at_antigo?: string | null
+          competencia_antiga?: string | null
+          data_evento_antiga?: string | null
+          evento_id?: string | null
+          oport_competencia_antiga?: string | null
+          oportunidade_id?: string | null
+        }
+        Update: {
+          backup_em?: string | null
+          closed_at_antigo?: string | null
+          competencia_antiga?: string | null
+          data_evento_antiga?: string | null
+          evento_id?: string | null
+          oport_competencia_antiga?: string | null
+          oportunidade_id?: string | null
+        }
+        Relationships: []
+      }
       banco_talentos: {
         Row: {
           amostra_n: number
@@ -1277,6 +1307,7 @@ export type Database = {
           id: string
           last_result: string | null
           loja_id: string
+          oportunidade_id: string | null
           passo_atual_key: string
           proxima_acao: string
           proxima_acao_em: string
@@ -1298,6 +1329,7 @@ export type Database = {
           id?: string
           last_result?: string | null
           loja_id: string
+          oportunidade_id?: string | null
           passo_atual_key: string
           proxima_acao: string
           proxima_acao_em: string
@@ -1319,6 +1351,7 @@ export type Database = {
           id?: string
           last_result?: string | null
           loja_id?: string
+          oportunidade_id?: string | null
           passo_atual_key?: string
           proxima_acao?: string
           proxima_acao_em?: string
@@ -1350,6 +1383,20 @@ export type Database = {
             columns: ["loja_id"]
             isOneToOne: false
             referencedRelation: "lojas"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cadencia_estado_cliente_oportunidade_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_oportunidades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cadencia_estado_cliente_oportunidade_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "oportunidades"
             referencedColumns: ["id"]
           },
           {
@@ -1596,6 +1643,7 @@ export type Database = {
           mensagem_enviada_em: string | null
           metadata: Json
           missao_id: string
+          oportunidade_id: string | null
           ordem: number
           respondido_em: string | null
           resultado: string | null
@@ -1610,6 +1658,7 @@ export type Database = {
           mensagem_enviada_em?: string | null
           metadata?: Json
           missao_id: string
+          oportunidade_id?: string | null
           ordem?: number
           respondido_em?: string | null
           resultado?: string | null
@@ -1624,6 +1673,7 @@ export type Database = {
           mensagem_enviada_em?: string | null
           metadata?: Json
           missao_id?: string
+          oportunidade_id?: string | null
           ordem?: number
           respondido_em?: string | null
           resultado?: string | null
@@ -1643,6 +1693,20 @@ export type Database = {
             columns: ["missao_id"]
             isOneToOne: false
             referencedRelation: "carteira_missoes"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carteira_missao_itens_oportunidade_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_oportunidades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "carteira_missao_itens_oportunidade_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "oportunidades"
             referencedColumns: ["id"]
           },
         ]
@@ -7312,6 +7376,399 @@ export type Database = {
           },
         ]
       }
+      mentor_cadence_steps: {
+        Row: {
+          active: boolean
+          attempt_label: string
+          cadence_code: string
+          created_at: string
+          id: string
+          notes: string | null
+          objective: string | null
+          offset_label: string
+          rule_version: string
+          source_sha256: string | null
+          step_order: number
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          attempt_label: string
+          cadence_code: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          objective?: string | null
+          offset_label: string
+          rule_version?: string
+          source_sha256?: string | null
+          step_order: number
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          attempt_label?: string
+          cadence_code?: string
+          created_at?: string
+          id?: string
+          notes?: string | null
+          objective?: string | null
+          offset_label?: string
+          rule_version?: string
+          source_sha256?: string | null
+          step_order?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mentor_cadences: {
+        Row: {
+          active: boolean
+          application: string | null
+          attempts_label: string | null
+          cadence_code: string
+          created_at: string
+          day_pattern: string | null
+          final_condition: string | null
+          id: string
+          interruption_condition: string | null
+          name: string
+          objective: string | null
+          rule_version: string
+          source_sha256: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          application?: string | null
+          attempts_label?: string | null
+          cadence_code: string
+          created_at?: string
+          day_pattern?: string | null
+          final_condition?: string | null
+          id?: string
+          interruption_condition?: string | null
+          name: string
+          objective?: string | null
+          rule_version?: string
+          source_sha256?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          application?: string | null
+          attempts_label?: string | null
+          cadence_code?: string
+          created_at?: string
+          day_pattern?: string | null
+          final_condition?: string | null
+          id?: string
+          interruption_condition?: string | null
+          name?: string
+          objective?: string | null
+          rule_version?: string
+          source_sha256?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mentor_pending_flags: {
+        Row: {
+          blocking: boolean
+          created_at: string
+          created_by: string | null
+          flag_code: string
+          id: string
+          loja_id: string
+          metadata: Json
+          opened_at: string
+          oportunidade_id: string
+          resolved_at: string | null
+          resolved_by: string | null
+          seller_user_id: string
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          blocking?: boolean
+          created_at?: string
+          created_by?: string | null
+          flag_code: string
+          id?: string
+          loja_id: string
+          metadata?: Json
+          opened_at?: string
+          oportunidade_id: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          seller_user_id: string
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          blocking?: boolean
+          created_at?: string
+          created_by?: string | null
+          flag_code?: string
+          id?: string
+          loja_id?: string
+          metadata?: Json
+          opened_at?: string
+          oportunidade_id?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          seller_user_id?: string
+          status?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentor_pending_flags_oportunidade_id_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_oportunidades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mentor_pending_flags_oportunidade_id_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "oportunidades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentor_score_snapshots: {
+        Row: {
+          breakdown: Json
+          created_at: string
+          id: string
+          idempotency_key: string | null
+          loja_id: string
+          oportunidade_id: string
+          priority_class: string | null
+          priority_index: number | null
+          reason: string | null
+          rule_version: string
+          score: number
+          score_class: string
+          seller_user_id: string
+        }
+        Insert: {
+          breakdown: Json
+          created_at?: string
+          id?: string
+          idempotency_key?: string | null
+          loja_id: string
+          oportunidade_id: string
+          priority_class?: string | null
+          priority_index?: number | null
+          reason?: string | null
+          rule_version?: string
+          score: number
+          score_class: string
+          seller_user_id: string
+        }
+        Update: {
+          breakdown?: Json
+          created_at?: string
+          id?: string
+          idempotency_key?: string | null
+          loja_id?: string
+          oportunidade_id?: string
+          priority_class?: string | null
+          priority_index?: number | null
+          reason?: string | null
+          rule_version?: string
+          score?: number
+          score_class?: string
+          seller_user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "mentor_score_snapshots_oportunidade_id_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "clientes_oportunidades"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "mentor_score_snapshots_oportunidade_id_fkey"
+            columns: ["oportunidade_id"]
+            isOneToOne: false
+            referencedRelation: "oportunidades"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      mentor_scripts: {
+        Row: {
+          active: boolean
+          area: string | null
+          attempt_label: string | null
+          body: string
+          created_at: string
+          id: string
+          objective: string | null
+          rule_version: string
+          script_code: string
+          source_sha256: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          area?: string | null
+          attempt_label?: string | null
+          body: string
+          created_at?: string
+          id?: string
+          objective?: string | null
+          rule_version?: string
+          script_code: string
+          source_sha256?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          area?: string | null
+          attempt_label?: string | null
+          body?: string
+          created_at?: string
+          id?: string
+          objective?: string | null
+          rule_version?: string
+          script_code?: string
+          source_sha256?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mentor_status_definitions: {
+        Row: {
+          active: boolean
+          active_in_portfolio: string | null
+          cadence_ref: string | null
+          central_rule: string | null
+          channel: string
+          created_at: string
+          definition: string | null
+          family: string
+          id: string
+          label: string
+          main_results: string | null
+          mentor_guidance: string | null
+          next_step: string
+          notes: string | null
+          objective: string
+          origin: string | null
+          potential: string | null
+          responsible: string
+          rule_version: string
+          script_ref: string | null
+          source_sha256: string | null
+          status_code: string
+          temperature: string | null
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          active_in_portfolio?: string | null
+          cadence_ref?: string | null
+          central_rule?: string | null
+          channel: string
+          created_at?: string
+          definition?: string | null
+          family: string
+          id?: string
+          label: string
+          main_results?: string | null
+          mentor_guidance?: string | null
+          next_step: string
+          notes?: string | null
+          objective: string
+          origin?: string | null
+          potential?: string | null
+          responsible: string
+          rule_version?: string
+          script_ref?: string | null
+          source_sha256?: string | null
+          status_code: string
+          temperature?: string | null
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          active_in_portfolio?: string | null
+          cadence_ref?: string | null
+          central_rule?: string | null
+          channel?: string
+          created_at?: string
+          definition?: string | null
+          family?: string
+          id?: string
+          label?: string
+          main_results?: string | null
+          mentor_guidance?: string | null
+          next_step?: string
+          notes?: string | null
+          objective?: string
+          origin?: string | null
+          potential?: string | null
+          responsible?: string
+          rule_version?: string
+          script_ref?: string | null
+          source_sha256?: string | null
+          status_code?: string
+          temperature?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      mentor_transitions: {
+        Row: {
+          active: boolean
+          created_at: string
+          decision_notes: string | null
+          family: string
+          from_status_or_context: string
+          id: string
+          is_wildcard: boolean
+          result: string
+          rule_version: string
+          source_sha256: string | null
+          to_status: string
+          updated_at: string
+        }
+        Insert: {
+          active?: boolean
+          created_at?: string
+          decision_notes?: string | null
+          family: string
+          from_status_or_context: string
+          id?: string
+          is_wildcard?: boolean
+          result: string
+          rule_version?: string
+          source_sha256?: string | null
+          to_status: string
+          updated_at?: string
+        }
+        Update: {
+          active?: boolean
+          created_at?: string
+          decision_notes?: string | null
+          family?: string
+          from_status_or_context?: string
+          id?: string
+          is_wildcard?: boolean
+          result?: string
+          rule_version?: string
+          source_sha256?: string | null
+          to_status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       metas: {
         Row: {
           id: string
@@ -7911,6 +8368,8 @@ export type Database = {
       }
       oportunidades: {
         Row: {
+          appointment_at: string | null
+          cadence_code: string | null
           canal: Database["public"]["Enums"]["crm_canal"] | null
           cancelada_em: string | null
           cancelada_por: string | null
@@ -7918,25 +8377,53 @@ export type Database = {
           categoria_veiculo:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
             | null
+          channel_entry: string | null
+          channel_sale: string | null
           cliente_id: string
           closed_at: string | null
           created_at: string
           created_by: string | null
+          current_cadence_step: number | null
+          current_next_step: string | null
+          current_objective: string | null
+          current_responsible: string | null
+          current_script_code: string | null
+          current_status_code: string | null
           data_competencia: string | null
           data_entrega_prevista: string | null
+          detailed_origin: string | null
           etapa: Database["public"]["Enums"]["crm_etapa_funil"]
           fechamento_id: string | null
           financiamento: Database["public"]["Enums"]["crm_financiamento"]
+          financing_interest: boolean | null
           id: string
           idempotency_key: string | null
+          last_interaction_at: string | null
           loja_id: string
+          mentor_rule_version: string | null
+          mentor_score: number | null
+          mentor_score_breakdown: Json | null
+          mentor_score_class: string | null
+          mentor_updated_at: string | null
           motivo_cancelamento: string | null
           motivo_perda: string | null
+          needs_mentor_classification: boolean
+          next_action_at: string | null
+          opportunity_type: string | null
           origem_modulo: string
           placa_veiculo: string | null
+          potential: string | null
+          previous_status_code: string | null
+          priority_class: string | null
+          priority_index: number | null
+          return_status_code: string | null
+          sale_date: string | null
           seller_user_id: string
           sinal: number
+          status_family: string | null
+          temperature: string | null
           tipo_veiculo: Database["public"]["Enums"]["crm_tipo_veiculo"] | null
+          trade_interest: boolean | null
           updated_at: string
           updated_by: string | null
           valor_negociado: number
@@ -7945,6 +8432,8 @@ export type Database = {
           veiculo_troca: string | null
         }
         Insert: {
+          appointment_at?: string | null
+          cadence_code?: string | null
           canal?: Database["public"]["Enums"]["crm_canal"] | null
           cancelada_em?: string | null
           cancelada_por?: string | null
@@ -7952,25 +8441,53 @@ export type Database = {
           categoria_veiculo?:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
             | null
+          channel_entry?: string | null
+          channel_sale?: string | null
           cliente_id: string
           closed_at?: string | null
           created_at?: string
           created_by?: string | null
+          current_cadence_step?: number | null
+          current_next_step?: string | null
+          current_objective?: string | null
+          current_responsible?: string | null
+          current_script_code?: string | null
+          current_status_code?: string | null
           data_competencia?: string | null
           data_entrega_prevista?: string | null
+          detailed_origin?: string | null
           etapa?: Database["public"]["Enums"]["crm_etapa_funil"]
           fechamento_id?: string | null
           financiamento?: Database["public"]["Enums"]["crm_financiamento"]
+          financing_interest?: boolean | null
           id?: string
           idempotency_key?: string | null
+          last_interaction_at?: string | null
           loja_id: string
+          mentor_rule_version?: string | null
+          mentor_score?: number | null
+          mentor_score_breakdown?: Json | null
+          mentor_score_class?: string | null
+          mentor_updated_at?: string | null
           motivo_cancelamento?: string | null
           motivo_perda?: string | null
+          needs_mentor_classification?: boolean
+          next_action_at?: string | null
+          opportunity_type?: string | null
           origem_modulo?: string
           placa_veiculo?: string | null
+          potential?: string | null
+          previous_status_code?: string | null
+          priority_class?: string | null
+          priority_index?: number | null
+          return_status_code?: string | null
+          sale_date?: string | null
           seller_user_id: string
           sinal?: number
+          status_family?: string | null
+          temperature?: string | null
           tipo_veiculo?: Database["public"]["Enums"]["crm_tipo_veiculo"] | null
+          trade_interest?: boolean | null
           updated_at?: string
           updated_by?: string | null
           valor_negociado?: number
@@ -7979,6 +8496,8 @@ export type Database = {
           veiculo_troca?: string | null
         }
         Update: {
+          appointment_at?: string | null
+          cadence_code?: string | null
           canal?: Database["public"]["Enums"]["crm_canal"] | null
           cancelada_em?: string | null
           cancelada_por?: string | null
@@ -7986,25 +8505,53 @@ export type Database = {
           categoria_veiculo?:
             | Database["public"]["Enums"]["crm_categoria_veiculo"]
             | null
+          channel_entry?: string | null
+          channel_sale?: string | null
           cliente_id?: string
           closed_at?: string | null
           created_at?: string
           created_by?: string | null
+          current_cadence_step?: number | null
+          current_next_step?: string | null
+          current_objective?: string | null
+          current_responsible?: string | null
+          current_script_code?: string | null
+          current_status_code?: string | null
           data_competencia?: string | null
           data_entrega_prevista?: string | null
+          detailed_origin?: string | null
           etapa?: Database["public"]["Enums"]["crm_etapa_funil"]
           fechamento_id?: string | null
           financiamento?: Database["public"]["Enums"]["crm_financiamento"]
+          financing_interest?: boolean | null
           id?: string
           idempotency_key?: string | null
+          last_interaction_at?: string | null
           loja_id?: string
+          mentor_rule_version?: string | null
+          mentor_score?: number | null
+          mentor_score_breakdown?: Json | null
+          mentor_score_class?: string | null
+          mentor_updated_at?: string | null
           motivo_cancelamento?: string | null
           motivo_perda?: string | null
+          needs_mentor_classification?: boolean
+          next_action_at?: string | null
+          opportunity_type?: string | null
           origem_modulo?: string
           placa_veiculo?: string | null
+          potential?: string | null
+          previous_status_code?: string | null
+          priority_class?: string | null
+          priority_index?: number | null
+          return_status_code?: string | null
+          sale_date?: string | null
           seller_user_id?: string
           sinal?: number
+          status_family?: string | null
+          temperature?: string | null
           tipo_veiculo?: Database["public"]["Enums"]["crm_tipo_veiculo"] | null
+          trade_interest?: boolean | null
           updated_at?: string
           updated_by?: string | null
           valor_negociado?: number
@@ -11507,6 +12054,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      store_commercial_settings: {
+        Row: {
+          business_days: number[]
+          created_at: string
+          exchange_12_months_enabled: boolean
+          exchange_18_months_enabled: boolean
+          exchange_24_months_enabled: boolean
+          internal_verification_business_days: number | null
+          loja_id: string
+          post_sale_d180_enabled: boolean
+          post_sale_d30_enabled: boolean
+          post_sale_d7_enabled: boolean
+          post_sale_enabled: boolean
+          seller_handles_delivery: boolean
+          seller_response_sla_minutes: number | null
+          timezone: string
+          updated_at: string
+          warranty_followup_enabled: boolean
+        }
+        Insert: {
+          business_days?: number[]
+          created_at?: string
+          exchange_12_months_enabled?: boolean
+          exchange_18_months_enabled?: boolean
+          exchange_24_months_enabled?: boolean
+          internal_verification_business_days?: number | null
+          loja_id: string
+          post_sale_d180_enabled?: boolean
+          post_sale_d30_enabled?: boolean
+          post_sale_d7_enabled?: boolean
+          post_sale_enabled?: boolean
+          seller_handles_delivery?: boolean
+          seller_response_sla_minutes?: number | null
+          timezone?: string
+          updated_at?: string
+          warranty_followup_enabled?: boolean
+        }
+        Update: {
+          business_days?: number[]
+          created_at?: string
+          exchange_12_months_enabled?: boolean
+          exchange_18_months_enabled?: boolean
+          exchange_24_months_enabled?: boolean
+          internal_verification_business_days?: number | null
+          loja_id?: string
+          post_sale_d180_enabled?: boolean
+          post_sale_d30_enabled?: boolean
+          post_sale_d7_enabled?: boolean
+          post_sale_enabled?: boolean
+          seller_handles_delivery?: boolean
+          seller_response_sla_minutes?: number | null
+          timezone?: string
+          updated_at?: string
+          warranty_followup_enabled?: boolean
+        }
+        Relationships: []
       }
       store_target_plans: {
         Row: {

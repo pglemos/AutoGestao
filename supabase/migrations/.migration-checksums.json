@@ -1,8 +1,8 @@
 {
   "_comment": "Congelamento forward-only das migrations aplicadas. NÃO editar à mão. Regenerar apenas ao adicionar migrations novas: node scripts/gen_migration_checksums.mjs",
-  "generated_at": "2026-08-05",
+  "generated_at": "2026-08-07",
   "algorithm": "sha256",
-  "count": 337,
+  "count": 348,
   "checksums": {
     "00000000000000_baseline_legacy_schema.sql": "3a519e3804095af5e9f7d8a7cb70dcc388b04530b6a7911ee1e3cb76af10b0fc",
     "00000000000001_mark_existing_migrations_applied.sql": "a8183b5cc5bd56b549ce8d8d302eb0c5d4f7b20381438586e02dd7353d6f2a45",
@@ -340,6 +340,17 @@
     "20260804190000_store_management_context_owner_can_sell.sql": "ef198de3745b4693dcfd70b930b377010663bfe556ee6bc7e0205f2530483302",
     "20260804200000_owner_network_cockpit.sql": "478475ca5b1deeca1222f6fc4993e596bc4cbf5aaffc12005de543907024e163",
     "20260805120000_harden_rls_unprotected_tables.sql": "2208bc7a6e7ff3e2d34921be4c31b2fa8621d0b260ad18c7226612b0d31aff9b",
-    "20260805140000_lojas_hierarquia_matriz_filial.sql": "c260388228089692960b390a43128c64871d6e175ca1fbdbe1610fd548341eaf"
+    "20260805140000_lojas_hierarquia_matriz_filial.sql": "c260388228089692960b390a43128c64871d6e175ca1fbdbe1610fd548341eaf",
+    "20260805220000_checkin_draft_revision_optimistic_lock.sql": "860aea4212916a0d8b4d0545a3aa941bdb08e8806b1ec5545e3450b959355ce5",
+    "20260805223000_official_read_models_exclude_drafts.sql": "c7ace9c9cc69060edba83c87b250541956b326420de06568f4abe89d59832804",
+    "20260805224000_crm_transactional_commercial_events.sql": "63eafb4be47fb9f5eb0bc27ff17ef59d1c0638c504c1f66b3a278b48be770e20",
+    "20260805225000_backfill_eventos_comerciais_orfaos.sql": "e58b2fe2c045e5c260d4de2c31f8ce56f1cb7e472772ffe042c3d1c56bbd928d",
+    "20260805230000_revoke_anon_from_crm_rpcs.sql": "8ff02dd9a9a3d8a23c55eb6b3e1dfc8805339b5566183c42fcb0efe302e3642e",
+    "20260805231000_restore_security_invoker_on_closing_views.sql": "526349b221b3a70ef2fcea16bb5b9ae02e362c0999a7b5f27f1a96fce459537a",
+    "20260806120000_limit_public_avatar_buckets.sql": "3fa5eab7d1687d16032f779dcd0b3cf4ef7ef966d6598a4cc9e532af8935c604",
+    "20260806140000_fix_criar_oportunidade_crm_casts.sql": "3b2a206f97c80bafa276abb0ebfd09b0ceefcb38f805e1c3c8f80f0510f7ce5c",
+    "20260806150000_revoke_anon_public_execute_functions.sql": "b259630952010137f6e55f560da1d21bae3f93b5f3beb0c87d98149be12fc324",
+    "20260807000000_restore_anon_execute_mx_database_health.sql": "3f46dba5c4e4b6d49e71cf89f6113259e71e6123cc500f356e39d91142a0b62e",
+    "20260807120000_mentor_comercial_motor_v1.sql": "af0bf1723a7c35a1f089db741eaf4231e130d52f5f684596dd4f337667710ffe"
   }
 }
