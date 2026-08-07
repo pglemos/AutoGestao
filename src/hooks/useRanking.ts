@@ -270,32 +270,38 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
     }
 }
 
-export function useGlobalRanking() {
+export function useGlobalRanking(filters?: { startDate?: string; endDate?: string }) {
     const [ranking, setRanking] = useState<RankingEntry[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
 
+    const startDateFilter = filters?.startDate
+    const endDateFilter = filters?.endDate
+
     const fetchGlobal = useCallback(async () => {
         const reference = calculateReferenceDate()
-        const startOfMonth = `${reference.slice(0, 7)}-01`
         const dias = getDiasInfo()
+        const today = dias.referencia
+        const startOfMonth = startDateFilter || `${reference.slice(0, 7)}-01`
+        const endOfRange = endDateFilter || today
         setLoading(true)
         setError(null)
 
         // Story 1.2: flag ON usa RPCs admin-only (rede + referência dia); flag OFF mantém SELECT direto
-        const today = dias.referencia
-        const endOfRange = today // até a data de referência
         const useRpc = isLancamentosViaRpcEnabled()
+        const directCheckinsQuery = supabase.from('lancamentos_diarios')
+            .select('seller_user_id, store_id, reference_date, leads_prev_day, agd_cart_today, agd_net_today, vnd_porta_prev_day, vnd_cart_prev_day, vnd_net_prev_day, visit_prev_day, submission_status')
+            .eq('metric_scope', 'daily')
+            .gte('reference_date', startOfMonth)
+            .lte('reference_date', endOfRange)
+
         const checkinsPromise = useRpc
             ? traced(async () => supabase.rpc('get_lancamentos_rede_periodo', {
                 p_start_date: startOfMonth,
                 p_end_date: endOfRange,
                 p_scope: 'daily',
             })).then(({ result }) => result)
-            : supabase.from('lancamentos_diarios')
-                .select('seller_user_id, store_id, reference_date, leads_prev_day, agd_cart_today, agd_net_today, vnd_porta_prev_day, vnd_cart_prev_day, vnd_net_prev_day, visit_prev_day, submission_status')
-                .eq('metric_scope', 'daily')
-                .gte('reference_date', startOfMonth)
+            : directCheckinsQuery
         const todayCheckinsPromise = useRpc
             ? traced(async () => supabase.rpc('get_lancamentos_referencia_dia', {
                 p_reference_date: dias.referencia,
@@ -414,7 +420,7 @@ export function useGlobalRanking() {
 
         setRanking(entries)
         setLoading(false)
-    }, [])
+    }, [startDateFilter, endDateFilter])
 
     useEffect(() => { fetchGlobal() }, [fetchGlobal])
 

@@ -2,6 +2,8 @@ import type { RankingEntry } from '@/types/database'
 
 export type SellerPerformanceSelection = { sellerId: string; storeId: string }
 export type SellerPerformanceLoadState = 'idle' | 'loading' | 'refreshing' | 'error'
+export type PeriodPreset = 'hoje' | 'mes_atual' | 'mes_anterior' | 'ultimos_30_dias' | 'custom'
+export type SellerSortOption = 'sales_desc' | 'sales_asc' | 'name_asc' | 'name_desc' | 'attainment_desc' | 'leads_desc'
 
 export type SellerPerformanceViewModel = {
   id: string
@@ -51,6 +53,66 @@ export function filterSellerRanking(entries: RankingEntry[], search: string): Ra
   const term = search.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR').trim()
   if (!term) return entries
   return entries.filter(entry => entry.user_name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLocaleLowerCase('pt-BR').includes(term))
+}
+
+export function calculatePeriodDates(
+  preset: PeriodPreset,
+  customStart?: string,
+  customEnd?: string,
+  referenceDate?: string
+): { startDate: string; endDate: string; label: string } {
+  const ref = referenceDate ? new Date(`${referenceDate}T12:00:00Z`) : new Date()
+  const year = ref.getUTCFullYear()
+  const month = ref.getUTCMonth()
+  const todayStr = referenceDate || ref.toISOString().slice(0, 10)
+
+  if (preset === 'hoje') {
+    return { startDate: todayStr, endDate: todayStr, label: 'Hoje' }
+  }
+
+  if (preset === 'mes_anterior') {
+    const prevMonthDate = new Date(Date.UTC(year, month - 1, 1))
+    const prevYear = prevMonthDate.getUTCFullYear()
+    const prevMonth = prevMonthDate.getUTCMonth()
+    const lastDayPrevMonth = new Date(Date.UTC(prevYear, prevMonth + 1, 0)).getUTCDate()
+    const pStart = `${prevYear}-${String(prevMonth + 1).padStart(2, '0')}-01`
+    const pEnd = `${prevYear}-${String(prevMonth + 1).padStart(2, '0')}-${String(lastDayPrevMonth).padStart(2, '0')}`
+    return { startDate: pStart, endDate: pEnd, label: 'Mês anterior' }
+  }
+
+  if (preset === 'ultimos_30_dias') {
+    const d30 = new Date(ref.getTime() - 29 * 24 * 60 * 60 * 1000)
+    const d30Str = d30.toISOString().slice(0, 10)
+    return { startDate: d30Str, endDate: todayStr, label: 'Últimos 30 dias' }
+  }
+
+  if (preset === 'custom') {
+    const s = customStart || todayStr
+    const e = customEnd || todayStr
+    return { startDate: s, endDate: e, label: 'Personalizado' }
+  }
+
+  const startOfMonthStr = `${todayStr.slice(0, 7)}-01`
+  return { startDate: startOfMonthStr, endDate: todayStr, label: 'Mês atual' }
+}
+
+export function sortSellerRanking(entries: RankingEntry[], sortBy: SellerSortOption): RankingEntry[] {
+  const list = [...entries]
+  switch (sortBy) {
+    case 'sales_asc':
+      return list.sort((a, b) => (a.vnd_total || 0) - (b.vnd_total || 0))
+    case 'name_asc':
+      return list.sort((a, b) => a.user_name.localeCompare(b.user_name, 'pt-BR'))
+    case 'name_desc':
+      return list.sort((a, b) => b.user_name.localeCompare(a.user_name, 'pt-BR'))
+    case 'attainment_desc':
+      return list.sort((a, b) => (b.atingimento || 0) - (a.atingimento || 0))
+    case 'leads_desc':
+      return list.sort((a, b) => (b.leads || 0) - (a.leads || 0))
+    case 'sales_desc':
+    default:
+      return list.sort((a, b) => (b.vnd_total || 0) - (a.vnd_total || 0))
+  }
 }
 
 export function createLatestRequestGuard() {
