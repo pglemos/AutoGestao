@@ -38,6 +38,19 @@ function hasCommitLocally(sha) {
   }
 }
 
+export function fetchCommitObject(sha) {
+  try {
+    execFileSync(
+      'git',
+      ['fetch', '--quiet', '--depth=1', 'origin', sha],
+      { stdio: ['ignore', 'pipe', 'pipe'], timeout: 15000 },
+    )
+    return hasCommitLocally(sha)
+  } catch {
+    return false
+  }
+}
+
 export function diffFilesLocally(previousSha, currentSha) {
   if (!hasCommitLocally(previousSha) || !hasCommitLocally(currentSha)) return null
   try {
@@ -73,10 +86,16 @@ export async function diffFilesViaApi(previousSha, currentSha, repoSlug) {
         signal: controller.signal,
       },
     )
-    if (!response.ok) return null
+    if (!response.ok) {
+      console.log(`Vercel ignore: API compare failed with HTTP ${response.status}`)
+      return null
+    }
     const data = await response.json()
     return (data.files || []).map((file) => file.filename).filter(Boolean)
-  } catch {
+  } catch (error) {
+    console.log(
+      `Vercel ignore: API compare threw: ${error?.name || 'unknown'} — ${error?.message || ''}`.trim(),
+    )
     return null
   } finally {
     clearTimeout(timer)
@@ -107,7 +126,13 @@ export function detectRepoSlug() {
 export async function resolveChangedFiles(previousSha, currentSha) {
   const local = diffFilesLocally(previousSha, currentSha)
   if (local) return local
-  return diffFilesViaApi(previousSha, currentSha, detectRepoSlug())
+  if (fetchCommitObject(previousSha)) {
+    const afterFetch = diffFilesLocally(previousSha, currentSha)
+    if (afterFetch) return afterFetch
+  }
+  const slug = detectRepoSlug()
+  if (!slug) console.log('Vercel ignore: no repo slug detected; skipping API fallback')
+  return diffFilesViaApi(previousSha, currentSha, slug)
 }
 
 export async function main(argv = process.argv, env = process.env) {

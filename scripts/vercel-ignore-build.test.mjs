@@ -5,6 +5,7 @@ import {
   classifyChangedFiles,
   shouldSkipBuild,
   diffFilesLocally,
+  fetchCommitObject,
   resolveChangedFiles,
   main,
 } from './vercel-ignore-build.mjs'
@@ -67,6 +68,13 @@ test('diffFilesLocally: objetos presentes → lista de arquivos', () => {
   const changed = diffFilesLocally('HEAD~1', 'HEAD')
   assert.ok(Array.isArray(changed))
   assert.ok(changed.length >= 0)
+})
+
+test('fetchCommitObject: SHA inválido → false (sem rede dependente)', async () => {
+  assert.equal(
+    fetchCommitObject('0000000000000000000000000000000000000000'),
+    false,
+  )
 })
 
 test('resolveChangedFiles: sem prev local, com API falhando → null (nunca supõe skip)', async () => {
