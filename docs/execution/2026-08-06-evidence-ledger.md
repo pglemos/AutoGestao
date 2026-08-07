@@ -225,3 +225,17 @@
 - Artefatos: docs/auditoria/fase-1/T1.1 a T1.6 (6 docs, commit b6784e9e, PR #183)
 - Timestamp: 2026-08-07T04:05:00Z
 - Conclusão: DONE_WITH_EVIDENCE
+
+### EV-F2-001 - Fase 2 Git, PRs e Branches: T2.1–T2.6
+- Requisito: Fase 2 do master plan autônomo
+- Ambiente: GitHub API + git local (prune/rev-list)
+- Resultado observado:
+  - **T2.1**: 3 branches remotas (main ativa; 2 dependabot com PR #178/#179 abertas); ambas 1 commit ahead / 5 behind main
+  - **T2.2**: classificação — 1 ativa, 2 automáticas; nenhuma abandonada/desconhecida
+  - **T2.3**: 0 perdas de correção — #175 (ownerCommercialNavigation.ts) e #132 (carteira-mappers.ts:305 esteira) já em main; lote 04-13 (#43–#68) superseded por calculations.test.ts + 75 testes; #126 temporária por design; #124 superseded; #176/#177 melhorias triviais opcionais (backlog)
+  - **T2.4**: `git fetch --prune` removeu 4 refs stale (c0-cleanup-evidence, c0-closeout, review-policy, feat/auditoria-fase1-docs); remoto já limpo — 0 exclusões remotas
+  - **T2.5**: matriz de 179 PRs → 2 abertas mantidas (8/10 checks verdes; Vercel preview fail sem impacto prod), 59 fechadas sem perda, 118 mergeadas
+  - **T2.6**: proteção validada — push direto `6e098192` exit 0; 5 checks strict preservados (evidência PR #184: typecheck, unit-tests, verify, Detect Secrets, review todos pass)
+- Artefatos: docs/auditoria/fase-2/T2.1–T2.6 (6 docs, commit 3af6412f, PR #184)
+- Timestamp: 2026-08-07T04:55:00Z
+- Conclusão: DONE_WITH_EVIDENCE
