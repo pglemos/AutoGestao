@@ -303,3 +303,10 @@
 - Correção: migration 20260807000000 restaura EXECUTE para anon (revoga PUBLIC explícito; função é SECURITY DEFINER e não expõe dados — exceção legítima única de execução anônima)
 - Resultado: RPC anon → 200 true; /api/health prod → 200 healthy (vercel/supabase_api/database ok)
 - Conclusão: T3.7 health DONE_WITH_EVIDENCE
+
+### EV-F3-008 - Fase 3: T3.7 concluído (rollback/prev==cur validado)
+- Requisito: T3.7 (rollback validation)
+- Contexto: deploy do commit runtime 571f547f (migration fix) gerou 2 deploys: kyofkbu9j (clone 571f547f → "runtime-impacting change (1 file(s))" → build → Ready) e fv1qqjiu9 (redeploy manual do mesmo SHA 93eccfc6 → prev==cur → diff vazio → Canceled, comportamento esperado)
+- Aprendizado: redeploy manual de um SHA já deployado (prev==cur) cancela corretamente com "0 file(s)" — não é falsa regressão; deploys de push runtime sempre buildam
+- Produção: alias www.mxperformance.com.br servindo release 571f547f, /api/health = healthy (vercel/supabase_api/database ok)
+- Conclusão: T3.7 DONE_WITH_EVIDENCE — domínios, aliases, headers, redirects, preview, envs, health, skip/build, rollback (prev==cur) validados em produção
