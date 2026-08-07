@@ -28,7 +28,16 @@ import {
   type ScoreInput,
   type StatusQuality,
 } from '../engine/score'
-import { statusPorId } from '../catalog/statusCatalog.generated'
+import {
+  SCRIPT_IDS,
+  scriptPorId,
+  statusPorId,
+} from '../catalog/statusCatalog.generated'
+import {
+  renderScript,
+  resolveScriptRef,
+  type ScriptVariables,
+} from '../engine/script'
 import { statusOficialDaSituacao } from './situacaoLegadaMap'
 import {
   computePriority,
@@ -327,4 +336,125 @@ export function objetivoEProximoPassoOficial(
 /** Orientação oficial ("por que está aqui"), ou `null` sem mapeamento provado. */
 export function orientacaoOficial(situacao: string | null | undefined): string | null {
   return objetivoEProximoPassoOficial(situacao)?.orientacao ?? null
+}
+
+// ---------------------------------------------------------------------------
+// Script oficial, com renderização estrita
+// ---------------------------------------------------------------------------
+
+export type ScriptOficial = {
+  scriptId: string
+  /** Texto pronto, ou `null` quando falta variável obrigatória. */
+  texto: string | null
+  scriptReady: boolean
+  missingVariables: string[]
+  allowWhatsApp: boolean
+  isInternal: boolean
+  /** Motivo quando não foi possível resolver. */
+  motivo: 'RESOLVED' | 'SEM_MAPEAMENTO' | 'SOURCE_BLOCKER' | 'NOT_FOUND' | 'ATTEMPT_OUT_OF_RANGE'
+}
+
+/**
+ * Variáveis do script a partir do cliente da Carteira.
+ *
+ * Só entra o que o registro realmente tem. Nada é preenchido com valor plausível:
+ * a heurística anterior chegava a mandar `{opcao1}` como "10h" e `{opcao2}` como
+ * "14h", oferecendo ao cliente horários que ninguém combinou. Faltando variável, o
+ * renderer bloqueia o envio (§30).
+ */
+export function variaveisDoCliente(
+  cliente: (ClienteCarteira & Record<string, unknown>) | null | undefined,
+): ScriptVariables {
+  if (!cliente) return {}
+  const str = (v: unknown): string | null => (typeof v === 'string' && v.trim() ? v : null)
+  return {
+    nome: str(cliente.nome) ?? str(cliente.cliente_nome),
+    veiculo: str(cliente.veiculo_interesse) ?? str(cliente.veiculo),
+    vendedor: str(cliente.vendedor_nome) ?? str(cliente.responsavel),
+    loja: str(cliente.loja_nome),
+    data: str(cliente.visita_data) ?? str(cliente.data_visita),
+    hora: str(cliente.visita_hora) ?? str(cliente.hora_visita),
+    valorAvaliacao: str(cliente.valor_avaliacao),
+    nomeIndicador: str(cliente.nome_indicador),
+    motivoRealDoContato: str(cliente.motivo_contato),
+    resumoNecessidade: str(cliente.resumo_necessidade),
+    opcao1: str(cliente.opcao_horario_1),
+    opcao2: str(cliente.opcao_horario_2),
+    listaPendencias: str(cliente.lista_pendencias),
+    tipoDecisor: str(cliente.tipo_decisor),
+    dataRetorno: str(cliente.data_retorno),
+  }
+}
+
+/**
+ * Resolve e renderiza o script oficial da situação do cliente.
+ *
+ * Sem mapeamento provado da situação legada, devolve `SEM_MAPEAMENTO` — o chamador
+ * decide o que fazer. O que NUNCA acontece é devolver o script de outro momento:
+ * a heurística anterior caía para "Enviar primeira abordagem" sempre que não achava,
+ * mandando abordagem inicial para cliente em negociação.
+ */
+export function scriptOficialParaCliente(
+  cliente: (ClienteCarteira & Record<string, unknown>) | null | undefined,
+  tentativa = 1,
+): ScriptOficial | null {
+  const situacao = cliente?.situacao_atual || cliente?.momento || null
+  const statusId = statusOficialDaSituacao(situacao)
+  if (!statusId) {
+    return {
+      scriptId: '',
+      texto: null,
+      scriptReady: false,
+      missingVariables: [],
+      allowWhatsApp: false,
+      isInternal: false,
+      motivo: 'SEM_MAPEAMENTO',
+    }
+  }
+
+  const status = statusPorId(statusId)
+  const resolucao = resolveScriptRef(status?.scriptId, {
+    catalog: SCRIPT_IDS,
+    attempt: tentativa,
+    statusId,
+  })
+
+  if (!resolucao.resolved || !resolucao.scriptId) {
+    return {
+      scriptId: '',
+      texto: null,
+      scriptReady: false,
+      missingVariables: [],
+      allowWhatsApp: false,
+      isInternal: false,
+      motivo: resolucao.reason as ScriptOficial['motivo'],
+    }
+  }
+
+  const script = scriptPorId(resolucao.scriptId)
+  if (!script) {
+    return {
+      scriptId: resolucao.scriptId,
+      texto: null,
+      scriptReady: false,
+      missingVariables: [],
+      allowWhatsApp: false,
+      isInternal: false,
+      motivo: 'NOT_FOUND',
+    }
+  }
+
+  const render = renderScript(script.body, variaveisDoCliente(cliente), {
+    scriptId: resolucao.scriptId,
+  })
+
+  return {
+    scriptId: resolucao.scriptId,
+    texto: render.text,
+    scriptReady: render.scriptReady,
+    missingVariables: render.missingVariables,
+    allowWhatsApp: render.allowWhatsApp,
+    isInternal: render.isInternal,
+    motivo: 'RESOLVED',
+  }
 }

@@ -58,7 +58,16 @@ function build() {
     .map((s) => `  ${JSON.stringify(s)},`)
     .join('\n')
 
-  return `/* eslint-disable */
+  // Os 77 scripts oficiais entram porque o renderer estrito precisa do texto para
+  // decidir se a mensagem está pronta. Sem eles a tela teria de adivinhar.
+  const scripts = JSON.parse(readFileSync(path.join(RULES_DIR, 'scripts.json'), 'utf8')).records
+  const scriptBody = scripts
+    .map((s) =>
+      `  ${JSON.stringify({ scriptId: s.scriptId, area: s.area, attempt: s.attempt, objective: s.objective, body: s.text })},`,
+    )
+    .join('\n')
+
+  return `
 /**
  * GERADO AUTOMATICAMENTE — NÃO EDITE À MÃO.
  *
@@ -87,6 +96,27 @@ export function statusPorId(statusId: string | null | undefined): StatusCatalogE
   if (!statusId) return null
   return PORT_INDEX.get(statusId) ?? null
 }
+
+export type ScriptCatalogEntry = {
+  scriptId: string
+  area: string | null
+  attempt: string | null
+  objective: string | null
+  body: string
+}
+
+export const SCRIPT_CATALOG: readonly ScriptCatalogEntry[] = [
+${scriptBody}
+] as const
+
+const SCRIPT_INDEX = new Map(SCRIPT_CATALOG.map((s) => [s.scriptId, s]))
+
+export function scriptPorId(scriptId: string | null | undefined): ScriptCatalogEntry | null {
+  if (!scriptId) return null
+  return SCRIPT_INDEX.get(scriptId) ?? null
+}
+
+export const SCRIPT_IDS: ReadonlySet<string> = new Set(SCRIPT_CATALOG.map((s) => s.scriptId))
 `
 }
 

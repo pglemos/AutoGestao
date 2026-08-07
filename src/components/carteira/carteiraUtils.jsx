@@ -4,6 +4,7 @@ import {
   calcularPrioridadeOficial,
   classificacaoScoreOficial,
   objetivoEProximoPassoOficial,
+  scriptOficialParaCliente,
 } from '@/features/mentor-comercial/bridge/carteiraMentorBridge';
 
 // ─── SITUAÇÕES ATUAIS ────────────────────────────────────────────────────────
@@ -605,7 +606,22 @@ export const SCRIPTS_BIBLIOTECA = {
 };
 
 export function getScriptParaProximoPasso(proximoPasso) {
-  return SCRIPTS_BIBLIOTECA[proximoPasso]?.texto || SCRIPTS_BIBLIOTECA["Enviar primeira abordagem"].texto;
+  // O fallback antigo devolvia "Enviar primeira abordagem" sempre que não achava a
+  // chave — mandando abordagem inicial para cliente em negociação, sem avisar
+  // ninguém. Script errado é pior que script ausente: devolve null e quem chama
+  // decide, em vez de enviar a mensagem de outro momento comercial.
+  return SCRIPTS_BIBLIOTECA[proximoPasso]?.texto ?? null;
+}
+
+/**
+ * Script OFICIAL da matriz v1 para o cliente, com renderização estrita.
+ *
+ * Devolve `{ scriptId, texto, scriptReady, missingVariables, allowWhatsApp, motivo }`.
+ * `scriptReady === false` significa que falta variável obrigatória e o envio deve
+ * ficar bloqueado. Nada é preenchido por conta própria.
+ */
+export function getScriptOficial(cliente, tentativa = 1) {
+  return scriptOficialParaCliente(cliente, tentativa);
 }
 
 // Scripts fora do catálogo de missões (gatilhos avulsos, não uma missão do Plano de Ataque)
@@ -635,14 +651,21 @@ export function preencherScript(script, cliente) {
   // Proteção contra nulos
   if (!cliente) return script || "";
 
+  // NÃO INVENTAR VALOR. A versão anterior mandava {opcao1} como "10h" e {opcao2}
+  // como "14h", oferecendo ao cliente horários que ninguém combinou, e trocava
+  // {veiculo} ausente por "veículo". Variável sem dado real permanece como
+  // placeholder visível, para que a ausência apareça em vez de virar mentira.
+  // O caminho correto e completo é getScriptOficial(), que bloqueia o envio.
   const visita = cliente.visita_agendada_em || cliente.proxima_acao_data;
-  return script
-    .replace(/{nome}/g, cliente.nome || "")
-    .replace(/{veiculo}/g, cliente.veiculo_interesse || "veículo")
-    .replace(/{data}/g, visita ? moment(visita).format("DD/MM") : "{data}")
-    .replace(/{hora}/g, visita ? moment(visita).format("HH:mm") : "{hora}")
-    .replace(/{opcao1}/g, "10h")
-    .replace(/{opcao2}/g, "14h");
+  let out = script;
+  if (cliente.nome) out = out.replace(/{nome}/g, cliente.nome);
+  if (cliente.veiculo_interesse) out = out.replace(/{veiculo}/g, cliente.veiculo_interesse);
+  if (visita) {
+    out = out
+      .replace(/{data}/g, moment(visita).format("DD/MM"))
+      .replace(/{hora}/g, moment(visita).format("HH:mm"));
+  }
+  return out;
 }
 
 // ─── MISSÕES DO PLANO DE ATAQUE ───────────────────────────────────────────────

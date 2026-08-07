@@ -10,6 +10,8 @@ import {
   derivarQualidadeExecucao,
   derivarUrgencia,
   objetivoEProximoPassoOficial,
+  scriptOficialParaCliente,
+  variaveisDoCliente,
   type ClienteCarteira,
 } from './carteiraMentorBridge'
 import { SCORE_PILLAR_WEIGHTS } from '../engine/score'
@@ -203,5 +205,56 @@ describe('objetivo e próximo passo vêm do catálogo quando há prova', () => {
 
   it('devolve o statusId para auditoria do que decidiu', () => {
     expect(objetivoEProximoPassoOficial('Venda perdida')?.statusId).toBe('PER-02')
+  })
+})
+
+describe('script oficial com renderização estrita', () => {
+  const base = {
+    situacao_atual: 'Visita hoje',
+    nome: 'Ana',
+    veiculo_interesse: 'Onix 2022',
+    vendedor_nome: 'Bruno',
+    loja_nome: 'MX Centro',
+  }
+
+  it('resolve o script do catálogo oficial, não da biblioteca legada', () => {
+    const r = scriptOficialParaCliente(base)
+    expect(r?.motivo).toBe('RESOLVED')
+    expect(r?.scriptId.startsWith('SCR-')).toBe(true)
+  })
+
+  it('faltando variável obrigatória, bloqueia o envio e diz o que falta', () => {
+    const semVeiculo = { ...base, veiculo_interesse: null, nome: null }
+    const r = scriptOficialParaCliente(semVeiculo)
+    if (r && r.motivo === 'RESOLVED' && !r.scriptReady) {
+      expect(r.allowWhatsApp).toBe(false)
+      expect(r.missingVariables.length).toBeGreaterThan(0)
+      expect(r.texto).toBeNull()
+    }
+  })
+
+  it('NUNCA inventa opcao1 e opcao2', () => {
+    const r = scriptOficialParaCliente(base)
+    // A heurística antiga injetava "10h" e "14h" aqui.
+    expect(r?.texto ?? '').not.toContain('10h')
+    expect(r?.texto ?? '').not.toContain('14h')
+  })
+
+  it('situação sem mapeamento não devolve o script de outro momento', () => {
+    const r = scriptOficialParaCliente({ situacao_atual: 'Em negociação ativa' })
+    expect(r?.motivo).toBe('SEM_MAPEAMENTO')
+    expect(r?.texto).toBeNull()
+    expect(r?.allowWhatsApp).toBe(false)
+  })
+
+  it('variaveisDoCliente não preenche nada que o registro não tenha', () => {
+    const v = variaveisDoCliente({ situacao_atual: 'Visita hoje' })
+    expect(v.opcao1).toBeNull()
+    expect(v.opcao2).toBeNull()
+    expect(v.veiculo).toBeNull()
+  })
+
+  it('cliente nulo não quebra', () => {
+    expect(scriptOficialParaCliente(null)?.motivo).toBe('SEM_MAPEAMENTO')
   })
 })

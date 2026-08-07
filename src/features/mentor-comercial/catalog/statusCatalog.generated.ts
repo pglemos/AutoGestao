@@ -1,4 +1,4 @@
-/* eslint-disable */
+
 /**
  * GERADO AUTOMATICAMENTE — NÃO EDITE À MÃO.
  *
@@ -124,3 +124,100 @@ export function statusPorId(statusId: string | null | undefined): StatusCatalogE
   if (!statusId) return null
   return PORT_INDEX.get(statusId) ?? null
 }
+
+export type ScriptCatalogEntry = {
+  scriptId: string
+  area: string | null
+  attempt: string | null
+  objective: string | null
+  body: string
+}
+
+export const SCRIPT_CATALOG: readonly ScriptCatalogEntry[] = [
+  {"scriptId":"SCR-INT-CAD01-T1","area":"Internet","attempt":"Tentativa 1","objective":"Iniciar conversa","body":"Oi, {nome}! Tudo bem?\r\n\r\nAqui é {vendedor}, da {loja}. Vi seu interesse no {veiculo} e quero te ajudar com as informações certas.\r\n\r\nVocê pensa em comprar agora ou ainda está pesquisando opções?"},
+  {"scriptId":"SCR-INT-CAD01-T2","area":"Internet","attempt":"Tentativa 2","objective":"Confirmar interesse","body":"Oi, {nome}! Só confirmando se recebeu minha mensagem sobre o {veiculo}.\r\n\r\nQual informação te ajuda mais neste momento: valor, condições, troca ou financiamento?"},
+  {"scriptId":"SCR-INT-CAD01-T3","area":"Internet","attempt":"Tentativa 3","objective":"Facilitar resposta","body":"{nome}, para eu ser mais objetivo: você já definiu o veículo ou ainda está comparando algumas opções?\r\n\r\nPosso te ajudar a filtrar o que faz mais sentido."},
+  {"scriptId":"SCR-INT-CAD01-T4","area":"Internet","attempt":"Tentativa 4","objective":"Abrir alternativa","body":"Posso te explicar tudo por aqui ou separar um horário para você conhecer melhor o {veiculo}.\r\n\r\nQual formato fica mais fácil para você?"},
+  {"scriptId":"SCR-INT-CAD01-T5","area":"Internet","attempt":"Tentativa 5","objective":"Pedir permissão para seguir","body":"Oi, {nome}! Ainda faz sentido eu acompanhar sua busca pelo {veiculo}?\r\n\r\nSe o momento mudou, posso deixar registrado para falar com você mais adiante."},
+  {"scriptId":"SCR-INT-CAD01-T6","area":"Internet","attempt":"Tentativa 6","objective":"Encerrar cadência respeitosamente","body":"Vou encerrar este acompanhamento por agora para não insistir.\r\n\r\nQuando quiser retomar a busca pelo {veiculo}, pode me chamar por aqui. Ficarei à disposição."},
+  {"scriptId":"SCR-CAR-INDICACAO-01","area":"Carteira","attempt":"Inicial","objective":"Iniciar conversa por indicação","body":"Oi, {nome}! Tudo bem?\r\n\r\nSou {vendedor}, da {loja}. O {nomeIndicador} comentou que você está avaliando a compra ou troca de um veículo.\r\n\r\nPosso entender melhor o que você procura e te ajudar?"},
+  {"scriptId":"SCR-CAR-PROSPECCAO-01","area":"Carteira","attempt":"Inicial","objective":"Prospecção direta","body":"Oi, {nome}! Tudo bem?\r\n\r\nAqui é {vendedor}. Estou entrando em contato porque {motivoRealDoContato}.\r\n\r\nVocê pensa em comprar ou trocar de veículo agora ou está se planejando para mais adiante?"},
+  {"scriptId":"SCR-CAR-REATIVACAO-T1","area":"Carteira","attempt":"Tentativa 1","objective":"Reativar relacionamento","body":"Oi, {nome}! Tudo bem?\r\n\r\nEstou atualizando meus acompanhamentos e queria saber se a ideia de comprar ou trocar de veículo ainda está nos seus planos.\r\n\r\nSe fizer sentido, posso retomar sua busca e te ajudar com as opções atuais."},
+  {"scriptId":"SCR-CAR-REATIVACAO-T2","area":"Carteira","attempt":"Tentativa 2","objective":"Atualizar necessidade","body":"{nome}, seu interesse continua relacionado ao {veiculo} ou sua necessidade mudou?\r\n\r\nCom essa informação consigo te orientar melhor."},
+  {"scriptId":"SCR-CAR-REATIVACAO-T3","area":"Carteira","attempt":"Tentativa 3","objective":"Descobrir barreira","body":"Hoje, o que seria mais importante para você retomar essa compra: veículo, valor, entrada, parcela ou troca?"},
+  {"scriptId":"SCR-CAR-REATIVACAO-T4","area":"Carteira","attempt":"Tentativa 4","objective":"Oferecer opções","body":"Posso separar algumas opções alinhadas ao que você procura e te mostrar sem compromisso.\r\n\r\nAinda faz sentido?"},
+  {"scriptId":"SCR-CAR-REATIVACAO-T5","area":"Carteira","attempt":"Tentativa 5","objective":"Programar futuro","body":"A compra ficou para outro momento?\r\n\r\nPosso deixar uma data registrada para te procurar quando fizer mais sentido."},
+  {"scriptId":"SCR-CAR-REATIVACAO-T6","area":"Carteira","attempt":"Tentativa 6","objective":"Pausar acompanhamento","body":"Vou pausar este acompanhamento por agora.\r\n\r\nQuando decidir retomar a compra ou troca, me chame por aqui e continuamos de onde paramos."},
+  {"scriptId":"SCR-QUAL-01","area":"Qualificação","attempt":"Uso e necessidade","objective":"Entender necessidade","body":"Para eu te orientar melhor, {nome}: você procura esse veículo para uso pessoal, família ou trabalho?"},
+  {"scriptId":"SCR-QUAL-02","area":"Qualificação","attempt":"Prazo","objective":"Entender timing","body":"Você pensa em comprar agora, nos próximos dias ou está se planejando para mais adiante?"},
+  {"scriptId":"SCR-QUAL-03","area":"Qualificação","attempt":"Troca e financiamento","objective":"Entender viabilidade","body":"Você pretende colocar algum veículo na troca?\r\n\r\nE pensa em pagamento à vista ou financiamento?"},
+  {"scriptId":"SCR-QUAL-04","area":"Qualificação","attempt":"Confirmação","objective":"Consolidar qualificação","body":"Entendi. Então você procura {resumoNecessidade}.\r\n\r\nO próximo passo que mais faz sentido é você conhecer as opções pessoalmente. Posso organizar um horário?"},
+  {"scriptId":"SCR-VISITA-CAD02-T1","area":"Visita","attempt":"Tentativa 1","objective":"Convidar para visita","body":"{nome}, para decidir com mais segurança, o ideal é conhecer o {veiculo} pessoalmente.\r\n\r\nTenho disponibilidade para te atender {opcao1} ou {opcao2}. Qual fica melhor?"},
+  {"scriptId":"SCR-VISITA-CAD02-T2","area":"Visita","attempt":"Tentativa 2","objective":"Reforçar benefício","body":"Na visita você consegue analisar o carro com calma e esclarecer os pontos da negociação.\r\n\r\nQual dia ou período costuma ser mais fácil para você?"},
+  {"scriptId":"SCR-VISITA-CAD02-T3","area":"Visita","attempt":"Tentativa 3","objective":"Facilitar agenda","body":"Você prefere vir durante a semana ou no sábado?\r\n\r\nCom isso consigo sugerir um horário mais confortável."},
+  {"scriptId":"SCR-VISITA-CAD02-T4","area":"Visita","attempt":"Tentativa 4","objective":"Entender barreira","body":"O que está dificultando sua visita neste momento: horário, distância ou ainda está decidindo sobre o veículo?"},
+  {"scriptId":"SCR-VISITA-CAD02-T5","area":"Visita","attempt":"Tentativa 5","objective":"Atendimento objetivo","body":"Posso organizar um atendimento objetivo, focado exatamente no que você precisa avaliar.\r\n\r\nAinda faz sentido marcarmos?"},
+  {"scriptId":"SCR-VISITA-CAD02-T6","area":"Visita","attempt":"Tentativa 6","objective":"Deixar em aberto","body":"Vou deixar a visita em aberto por agora.\r\n\r\nQuando tiver um melhor momento, me avise e organizo o atendimento para você."},
+  {"scriptId":"SCR-VISITA-DATA-T1","area":"Visita","attempt":"Definir data","objective":"Converter aceite em data/hora","body":"{nome}, consigo te atender {opcao1} ou {opcao2} para você conhecer o {veiculo}. Qual desses horários fica melhor?"},
+  {"scriptId":"SCR-CONFIRMAR-D2","area":"Confirmação","attempt":"D-2","objective":"Preparar confirmação","body":"Oi, {nome}! Sua visita para conhecer o {veiculo} está prevista para {data}, às {hora}.\r\n\r\nPosso manter esse horário? Se precisar ajustar, me avise."},
+  {"scriptId":"SCR-CONFIRMAR-D1","area":"Confirmação","attempt":"D-1","objective":"Confirmar presença","body":"Oi, {nome}! Confirmando nosso encontro amanhã, às {hora}, para você conhecer o {veiculo}.\r\n\r\nEstá tudo certo para você?"},
+  {"scriptId":"SCR-CONFIRMAR-D0","area":"Confirmação","attempt":"D0","objective":"Lembrete final","body":"Bom dia, {nome}! Te aguardo hoje às {hora}.\r\n\r\nQuando estiver a caminho, pode me avisar por aqui."},
+  {"scriptId":"SCR-VISITA-HOJE","area":"Visita","attempt":"D0","objective":"Recepcionar","body":"Bom dia, {nome}! Tudo certo para sua visita hoje às {hora}?\r\n\r\nVou deixar o {veiculo} separado para te atender bem."},
+  {"scriptId":"SCR-NAO-COMPARECEU-T1","area":"Não compareceu","attempt":"Tentativa 1","objective":"Recuperar visita","body":"Oi, {nome}! Vi que hoje não conseguimos nos encontrar.\r\n\r\nSem problema. Ainda faz sentido você conhecer o {veiculo}?"},
+  {"scriptId":"SCR-NAO-COMPARECEU-T2","area":"Não compareceu","attempt":"Tentativa 2","objective":"Reagendar","body":"Posso reorganizar sua visita para outro horário.\r\n\r\nVocê prefere durante a semana ou no sábado?"},
+  {"scriptId":"SCR-NAO-COMPARECEU-T3","area":"Não compareceu","attempt":"Tentativa 3","objective":"Descobrir motivo","body":"Seu plano de compra mudou ou foi apenas uma dificuldade de horário?"},
+  {"scriptId":"SCR-NAO-COMPARECEU-T4","area":"Não compareceu","attempt":"Tentativa 4","objective":"Oferecer atendimento objetivo","body":"Tenho como organizar um atendimento mais rápido e objetivo.\r\n\r\nQual período seria mais fácil para você?"},
+  {"scriptId":"SCR-NAO-COMPARECEU-T5","area":"Não compareceu","attempt":"Tentativa 5","objective":"Deixar em aberto","body":"Vou deixar o reagendamento em aberto.\r\n\r\nQuando puder retomar, me avise e organizo para você."},
+  {"scriptId":"SCR-POS-VISITA-01","area":"Porta/Pós-visita","attempt":"Inicial","objective":"Retomar pós-visita","body":"Oi, {nome}! Foi um prazer te atender hoje.\r\n\r\nQuero continuar te ajudando em relação ao {veiculo}. Qual ponto ficou mais importante para sua decisão: valor, troca, entrada, parcela ou ainda comparar outras opções?"},
+  {"scriptId":"SCR-PROPOSTA-ENVIAR","area":"Proposta","attempt":"Envio","objective":"Enviar proposta","body":"{nome}, conforme conversamos, vou te enviar as condições registradas para o {veiculo}.\r\n\r\nDepois me diga qual ponto fica mais importante para avançarmos."},
+  {"scriptId":"SCR-PROPOSTA-CAD03-T1","area":"Proposta","attempt":"Tentativa 1","objective":"Retomar proposta","body":"Oi, {nome}! Conseguiu analisar a proposta do {veiculo}?\r\n\r\nQuero entender se existe algum ponto que ainda precisa ser ajustado ou esclarecido."},
+  {"scriptId":"SCR-PROPOSTA-CAD03-T2","area":"Proposta","attempt":"Tentativa 2","objective":"Identificar objeção","body":"O que mais pesou na sua análise: valor final, entrada, parcela, troca ou outro ponto?"},
+  {"scriptId":"SCR-PROPOSTA-CAD03-T3","area":"Proposta","attempt":"Tentativa 3","objective":"Revisar negociação","body":"Posso revisar a negociação com você usando apenas as condições realmente disponíveis.\r\n\r\nQual seria o cenário mais viável para avançarmos?"},
+  {"scriptId":"SCR-PROPOSTA-CAD03-T4","area":"Proposta","attempt":"Tentativa 4","objective":"Confirmar continuidade","body":"Ainda faz sentido continuar trabalhando essa negociação ou seu momento de compra mudou?"},
+  {"scriptId":"SCR-PROPOSTA-CAD03-T5","area":"Proposta","attempt":"Tentativa 5","objective":"Programar retorno","body":"Posso programar um retorno para uma data mais adequada, sem ficar insistindo agora.\r\n\r\nQuando seria melhor?"},
+  {"scriptId":"SCR-PROPOSTA-CAD03-T6","area":"Proposta","attempt":"Tentativa 6","objective":"Pausar negociação","body":"Vou pausar esta negociação por agora.\r\n\r\nSe quiser retomar as condições do {veiculo}, me chame e seguimos de onde paramos."},
+  {"scriptId":"SCR-OBJECAO-PRECO","area":"Objeção","attempt":"Preço","objective":"Entender diferença","body":"Entendi, {nome}. Quando falamos de valor, qual diferença ficou impedindo o avanço?\r\n\r\nAssim consigo entender se existe algum caminho real para trabalharmos."},
+  {"scriptId":"SCR-OBJECAO-ENTRADA","area":"Objeção","attempt":"Entrada","objective":"Entender entrada possível","body":"Para eu te orientar melhor: qual entrada ficaria mais confortável para você neste momento?"},
+  {"scriptId":"SCR-OBJECAO-PARCELA","area":"Objeção","attempt":"Parcela","objective":"Entender parcela alvo","body":"Qual parcela ficaria mais confortável para você analisar com segurança? Com isso consigo verificar se existe algum caminho possível."},
+  {"scriptId":"SCR-COMPARACAO-01","area":"Comparação","attempt":"Concorrente/outro veículo","objective":"Diferenciar solução","body":"Entendo que você esteja comparando opções. O que está pesando mais na comparação: preço, condição, estado do veículo, garantia ou confiança na loja?"},
+  {"scriptId":"SCR-DECISAO-CAD03-T1","area":"Decisão","attempt":"Follow-up","objective":"Descobrir objeção real","body":"Entendo, {nome}.\r\n\r\nSó para eu te ajudar melhor: o que ficou pesando mais na sua decisão?\r\n\r\nValor, entrada, parcela, troca ou ainda está comparando outras opções?"},
+  {"scriptId":"SCR-TERCEIRO-01","area":"Decisão de terceiro","attempt":"Envolver decisor","objective":"Facilitar participação","body":"Entendi, {nome}. Para a decisão ficar mais segura, podemos envolver {tipoDecisor} na conversa ou organizar uma visita juntos.\r\n\r\nQual opção seria mais fácil?"},
+  {"scriptId":"SCR-TROCA-DADOS-T1","area":"Troca","attempt":"Dados pendentes","objective":"Solicitar dados da troca","body":"Para avançarmos na avaliação do seu veículo, preciso destas informações:\r\n\r\n- placa;\r\n- modelo e versão;\r\n- ano;\r\n- quilometragem;\r\n- fotos externas e internas.\r\n\r\nConsegue me enviar?"},
+  {"scriptId":"SCR-TROCA-DADOS-T2","area":"Troca","attempt":"Reforço","objective":"Relembrar pendência","body":"Oi, {nome}! Ficaram pendentes os dados do seu veículo para conseguirmos avançar na avaliação.\r\n\r\nPode me enviar quando tiver um momento?"},
+  {"scriptId":"SCR-TROCA-DADOS-T3","area":"Troca","attempt":"Importância","objective":"Explicar necessidade","body":"Essas informações são importantes para evitar uma estimativa sem base.\r\n\r\nAssim que receber, encaminho para a avaliação."},
+  {"scriptId":"SCR-TROCA-DADOS-T4","area":"Troca","attempt":"Alternativa","objective":"Avaliação presencial","body":"Ainda pretende utilizar seu veículo na troca?\r\n\r\nSe preferir, também podemos organizar uma avaliação presencial."},
+  {"scriptId":"SCR-TROCA-VALOR-01","area":"Troca","attempt":"Valor apresentado","objective":"Retomar decisão da troca","body":"{nome}, a avaliação do seu veículo ficou em {valorAvaliacao}.\r\n\r\nQuero entender se essa condição ficou próxima do que você esperava ou se existe uma diferença que precisamos analisar."},
+  {"scriptId":"SCR-TROCA-OBJECAO-01","area":"Troca","attempt":"Objeção valor","objective":"Entender expectativa","body":"Entendo, {nome}. Qual valor você esperava no seu veículo?\r\n\r\nCom essa diferença clara, consigo entender melhor se existe algum caminho para continuar a negociação."},
+  {"scriptId":"SCR-TROCA-INVIAVEL-01","area":"Troca","attempt":"Inviável","objective":"Apresentar alternativa","body":"{nome}, neste formato não conseguimos seguir com seu veículo na troca.\r\n\r\nPosso te explicar o motivo e verificar uma alternativa para mantermos a negociação?"},
+  {"scriptId":"SCR-FIN-SIMULAR-01","area":"Financiamento","attempt":"Simulação","objective":"Coletar dados para simular","body":"Para eu montar uma simulação mais próxima do seu cenário, você pensa em qual valor de entrada e prazo?"},
+  {"scriptId":"SCR-FIN-SIMULACAO-CAD03-T1","area":"Financiamento","attempt":"Simulação enviada","objective":"Validar condição","body":"{nome}, conseguiu avaliar a simulação enviada?\r\n\r\nO que ficou mais importante para ajustar: entrada, parcela ou prazo?"},
+  {"scriptId":"SCR-FIN-DOCUMENTOS-T1","area":"Financiamento","attempt":"Documentos","objective":"Solicitar pendências","body":"Para avançarmos com a análise, ficaram pendentes os seguintes dados ou documentos:\r\n\r\n{listaPendencias}\r\n\r\nQuando conseguir enviar, dou continuidade à ficha."},
+  {"scriptId":"SCR-FIN-APROVADO-T1","area":"Financiamento","attempt":"Aprovado","objective":"Converter aprovação","body":"Boa notícia, {nome}: seu financiamento foi aprovado nas condições registradas.\r\n\r\nAgora precisamos revisar os detalhes e confirmar se podemos seguir com o fechamento."},
+  {"scriptId":"SCR-FIN-APROVADO-T2","area":"Financiamento","attempt":"Aprovado 2","objective":"Revisar condição","body":"Conseguiu analisar a condição aprovada?\r\n\r\nQual ponto precisa ser esclarecido para avançarmos?"},
+  {"scriptId":"SCR-FIN-APROVADO-T3","area":"Financiamento","attempt":"Aprovado 3","objective":"Alinhar estrutura","body":"A aprovação resolveu a parte do crédito. Falta entendermos se entrada, parcela e veículo ficaram alinhados.\r\n\r\nPodemos revisar juntos?"},
+  {"scriptId":"SCR-FIN-APROVADO-T4","area":"Financiamento","attempt":"Aprovado 4","objective":"Confirmar continuidade","body":"A condição aprovada ainda faz sentido ou seu cenário mudou?\r\n\r\nPreciso dessa confirmação para definir o próximo passo."},
+  {"scriptId":"SCR-FIN-CONDICAO-DIFERENTE-01","area":"Financiamento","attempt":"Condição diferente","objective":"Apresentar condição real","body":"{nome}, a financeira retornou com uma condição diferente da simulação inicial.\r\n\r\nPosso te explicar com clareza o que mudou e avaliar se ainda faz sentido para você?"},
+  {"scriptId":"SCR-FIN-RECUSADO-01","area":"Financiamento","attempt":"Recusado","objective":"Avaliar alternativa","body":"{nome}, a análise não voltou aprovada neste formato.\r\n\r\nPosso verificar se existe alguma alternativa autorizada para continuarmos ou se é melhor programarmos outro momento."},
+  {"scriptId":"SCR-FECHAMENTO-01","area":"Fechamento","attempt":"Formalização","objective":"Formalizar venda","body":"{nome}, estamos alinhados para avançar com o {veiculo}.\r\n\r\nVou te orientar nos próximos dados para formalizarmos a venda."},
+  {"scriptId":"SCR-SINAL-01","area":"Sinal","attempt":"Pagamento","objective":"Orientar sinal","body":"{nome}, para garantir o andamento da venda, falta apenas o sinal conforme combinado.\r\n\r\nPosso te orientar com o próximo passo?"},
+  {"scriptId":"SCR-ENTREGA-01","area":"Entrega","attempt":"Entrega","objective":"Confirmar entrega","body":"Oi, {nome}! Confirmando a entrega do {veiculo} para {data} às {hora}.\r\n\r\nEstá tudo certo para você?"},
+  {"scriptId":"SCR-FUTURO-01","area":"Futuro","attempt":"Programado","objective":"Preservar oportunidade","body":"Perfeito, {nome}. Vou deixar registrado para te procurar em {dataRetorno}.\r\n\r\nAssim retomamos no momento mais adequado para você."},
+  {"scriptId":"SCR-POSVENDA-D7","area":"Pós-venda","attempt":"D+7","objective":"Satisfação e indicação","body":"Oi, {nome}! Tudo bem com o {veiculo}?\r\n\r\nQuero saber se está tudo certo e como foram esses primeiros dias.\r\n\r\nSe lembrar de alguém que também esteja procurando carro, pode me indicar. Vou atender com o mesmo cuidado."},
+  {"scriptId":"SCR-POSVENDA-D30","area":"Pós-venda","attempt":"D+30","objective":"Adaptação","body":"Oi, {nome}! Como está sua adaptação ao {veiculo}?\r\n\r\nPassando para confirmar se está tudo bem e me colocar à disposição."},
+  {"scriptId":"SCR-POSVENDA-D180","area":"Pós-venda","attempt":"D+180","objective":"Relacionamento","body":"Oi, {nome}! Tudo bem?\r\n\r\nPassando para manter contato e saber como está sua experiência com o {veiculo}."},
+  {"scriptId":"SCR-TROCA-12M","area":"Pós-venda","attempt":"12 meses","objective":"Investigar intenção de troca","body":"Oi, {nome}! Já passou aproximadamente um ano desde a compra do {veiculo}.\r\n\r\nVocê pretende permanecer com ele por mais tempo ou já começa a considerar uma futura troca?"},
+  {"scriptId":"SCR-TROCA-18M","area":"Pós-venda","attempt":"18 meses","objective":"Oferta de troca","body":"Oi, {nome}! Tudo bem?\r\n\r\nQuero entender se já faz sentido avaliarmos uma possibilidade de troca ou upgrade do seu {veiculo}."},
+  {"scriptId":"SCR-TROCA-24M","area":"Pós-venda","attempt":"24 meses","objective":"Recompra ou troca","body":"Oi, {nome}! Seu ciclo com o {veiculo} já permite avaliarmos uma possível recompra ou troca.\r\n\r\nQuer que eu faça uma análise inicial?"},
+  {"scriptId":"SCR-GARANTIA-01","area":"Garantia","attempt":"Acompanhamento","objective":"Proteger relacionamento","body":"Oi, {nome}! Estou acompanhando a situação do seu veículo.\r\n\r\nQuero confirmar se houve alguma atualização e garantir que você continue informado até a resolução."},
+  {"scriptId":"SCR-GARANTIA-RESOLVIDA","area":"Garantia","attempt":"Resolvida","objective":"Confirmar satisfação","body":"Oi, {nome}! A situação do seu veículo foi resolvida.\r\n\r\nQuero confirmar se ficou tudo certo e se posso ajudar em mais alguma coisa."},
+  {"scriptId":"SCR-INTERNO","area":"Interno","attempt":"Não enviar ao cliente","objective":"Registro interno","body":"Ação interna. Não enviar mensagem ao cliente sem informação confirmada."},
+] as const
+
+const SCRIPT_INDEX = new Map(SCRIPT_CATALOG.map((s) => [s.scriptId, s]))
+
+export function scriptPorId(scriptId: string | null | undefined): ScriptCatalogEntry | null {
+  if (!scriptId) return null
+  return SCRIPT_INDEX.get(scriptId) ?? null
+}
+
+export const SCRIPT_IDS: ReadonlySet<string> = new Set(SCRIPT_CATALOG.map((s) => s.scriptId))
