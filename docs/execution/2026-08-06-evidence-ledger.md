@@ -294,3 +294,12 @@
   4. Checks GitHub: Supabase Preview/Detect Secrets/verify/eslint-a11y/unit-tests/typecheck/lint-tokens — todos success no commit 93eccfc6
 - 2º deploy docs-only (2a566b34) → gn2m8z1gq Canceled (sem build)
 - Conclusão: T3.6 DONE_WITH_EVIDENCE
+
+### EV-F3-007 - Fase 3: regressão C0.5 no health corrigida (database ok)
+- Requisito: T3.7 (health validation)
+- Sintoma: /api/health em produção retornava 503 unhealthy com `database: fail`
+- Causa raiz: migration 20260806150000 (C0.5) revogou EXECUTE de mx_database_health() do anon; api/health.ts:97 chama a RPC com apikey ANON (sonda pública de liveness por design) → permission denied
+- Confirmação: RPC com anon → 42501 permission denied (service_role → 200 true)
+- Correção: migration 20260807000000 restaura EXECUTE para anon (revoga PUBLIC explícito; função é SECURITY DEFINER e não expõe dados — exceção legítima única de execução anônima)
+- Resultado: RPC anon → 200 true; /api/health prod → 200 healthy (vercel/supabase_api/database ok)
+- Conclusão: T3.7 health DONE_WITH_EVIDENCE
