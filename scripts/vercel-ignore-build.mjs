@@ -45,7 +45,20 @@ export function fetchCommitObject(sha) {
       ['fetch', '--quiet', '--depth=1', 'origin', sha],
       { stdio: ['ignore', 'pipe', 'pipe'], timeout: 15000 },
     )
-    return hasCommitLocally(sha)
+  } catch {
+    return false
+  }
+  return hasCommitLocally(sha)
+}
+
+export function unshallowBranch() {
+  try {
+    execFileSync(
+      'git',
+      ['fetch', '--quiet', 'origin', 'main'],
+      { stdio: ['ignore', 'pipe', 'pipe'], timeout: 20000 },
+    )
+    return true
   } catch {
     return false
   }
@@ -116,11 +129,11 @@ function repoSlugFromRemote() {
 }
 
 export function detectRepoSlug() {
-  return (
-    process.env.VERCEL_GIT_REPO_SLUG ||
-    process.env.MX_VERCEL_REPO_SLUG ||
-    repoSlugFromRemote()
-  )
+  const owner = process.env.VERCEL_GIT_REPO_OWNER || process.env.MX_VERCEL_REPO_OWNER
+  const slug = process.env.VERCEL_GIT_REPO_SLUG || process.env.MX_VERCEL_REPO_SLUG
+  if (owner && slug) return `${owner}/${slug}`
+  if (slug && slug.includes('/')) return slug
+  return repoSlugFromRemote()
 }
 
 export async function resolveChangedFiles(previousSha, currentSha) {
@@ -129,6 +142,10 @@ export async function resolveChangedFiles(previousSha, currentSha) {
   if (fetchCommitObject(previousSha)) {
     const afterFetch = diffFilesLocally(previousSha, currentSha)
     if (afterFetch) return afterFetch
+  }
+  if (unshallowBranch() && hasCommitLocally(previousSha)) {
+    const afterUnshallow = diffFilesLocally(previousSha, currentSha)
+    if (afterUnshallow) return afterUnshallow
   }
   const slug = detectRepoSlug()
   if (!slug) console.log('Vercel ignore: no repo slug detected; skipping API fallback')

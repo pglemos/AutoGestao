@@ -7,6 +7,7 @@ import {
   diffFilesLocally,
   fetchCommitObject,
   resolveChangedFiles,
+  detectRepoSlug,
   main,
 } from './vercel-ignore-build.mjs'
 
@@ -68,6 +69,21 @@ test('diffFilesLocally: objetos presentes → lista de arquivos', () => {
   const changed = diffFilesLocally('HEAD~1', 'HEAD')
   assert.ok(Array.isArray(changed))
   assert.ok(changed.length >= 0)
+})
+
+test('detectRepoSlug: owner + slug do Vercel → slug completo para API', () => {
+  const previous = process.env.VERCEL_GIT_REPO_OWNER
+  const previousSlug = process.env.VERCEL_GIT_REPO_SLUG
+  process.env.VERCEL_GIT_REPO_OWNER = 'pglemos'
+  process.env.VERCEL_GIT_REPO_SLUG = 'MXGESTAOPREDITIVA'
+  try {
+    assert.equal(detectRepoSlug(), 'pglemos/MXGESTAOPREDITIVA')
+  } finally {
+    if (previous === undefined) delete process.env.VERCEL_GIT_REPO_OWNER
+    else process.env.VERCEL_GIT_REPO_OWNER = previous
+    if (previousSlug === undefined) delete process.env.VERCEL_GIT_REPO_SLUG
+    else process.env.VERCEL_GIT_REPO_SLUG = previousSlug
+  }
 })
 
 test('fetchCommitObject: SHA inválido → false (sem rede dependente)', async () => {
