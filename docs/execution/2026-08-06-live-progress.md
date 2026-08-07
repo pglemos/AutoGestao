@@ -151,3 +151,9 @@
 - Total de evidências no ledger: 21 (EV-BASELINE-001..005, EV-C01-001..009, EV-T03-001)
 - Estados do plano: T0.1-T0.5 = DONE; C0.1-C0.10 = DONE_WITH_EVIDENCE
 - Baseline C0 encerrado — Fases 1-18 prontas para iniciar (Fase 14 absorve gaps de MFA/allowlist de Actions)
+
+---
+
+## C0.7 — Configuração de review (decisão do owner)
+- EV-C07-003: requisito de aprovação removido a pedido do usuário (autor não pode aprovar PR próprio; repo tem 1 humano)
+- Proteção mantém: 5 checks strict, force-push bloqueado, deletes bloqueados
