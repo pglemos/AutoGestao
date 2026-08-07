@@ -239,3 +239,14 @@
 - Artefatos: docs/auditoria/fase-2/T2.1–T2.6 (6 docs, commit 3af6412f, PR #184)
 - Timestamp: 2026-08-07T04:55:00Z
 - Conclusão: DONE_WITH_EVIDENCE
+
+### EV-F3-001 - Fase 3 Pipeline Vercel: fix vercel-ignore-build em clone raso
+- Requisito: Fase 3 (T3.1–T3.4) do master plan autônomo
+- Ambiente: clone raso reproduzido (depth=1) + GitHub API compare + Vercel prod
+- Resultado observado:
+  - **T3.1**: reproduzido em clone raso real — `git diff prev..cur` falhava (bad object) e o catch forçava BUILD em deploy docs-only (exit 1)
+  - **T3.2**: solução em camadas — diff local via `git cat-file -e`; fallback GitHub API `compare` (repo público, timeout 6s); falha nunca suprime deploy (build conservador)
+  - **T3.3/T3.4**: 13 testes node --test (todos pass) + workflow `vercel-ignore-build.yml` (check `test` verde no CI); verificação executável em clone raso: docs-only → exit 0 (SKIP), runtime → exit 1 (BUILD)
+- Artefatos: scripts/vercel-ignore-build.mjs (refatorado), scripts/vercel-ignore-build.test.mjs, .github/workflows/vercel-ignore-build.yml (PR #185, commit ec2885c2)
+- Timestamp: 2026-08-07T05:35:00Z
+- Conclusão: DONE_WITH_EVIDENCE
