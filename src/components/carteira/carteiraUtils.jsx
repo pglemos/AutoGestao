@@ -3,6 +3,7 @@ import {
   calcularScoreOficial,
   calcularPrioridadeOficial,
   classificacaoScoreOficial,
+  objetivoEProximoPassoOficial,
 } from '@/features/mentor-comercial/bridge/carteiraMentorBridge';
 
 // ─── SITUAÇÕES ATUAIS ────────────────────────────────────────────────────────
@@ -200,6 +201,19 @@ export function resultadoParaMomento(resultado) {
 
 // ─── LÓGICA AUTOMÁTICA: SITUAÇÃO → OBJETIVO + PRÓXIMO PASSO ─────────────────
 export function calcularObjetivoEProximoPasso(cliente) {
+  // MOTOR SUBSTITUÍDO (parcial). Para as situações legadas com mapeamento PROVADO
+  // contra a matriz v1, objetivo e próximo passo vêm do catálogo oficial.
+  //
+  // Para as demais NÃO se inventa correspondência: a cadeia legada abaixo continua
+  // valendo até o proprietário da metodologia dizer a qual dos 86 status cada uma
+  // dessas situações corresponde. Ver SITUACOES_LEGADAS_SEM_MAPEAMENTO.
+  const oficial = objetivoEProximoPassoOficial(
+    cliente?.situacao_atual || cliente?.momento || null,
+  );
+  if (oficial) {
+    return { objetivo: oficial.objetivo, proximoPasso: oficial.proximoPasso };
+  }
+
   // Proteção contra nulos
   if (!cliente) {
     return { objetivo: "Iniciar conversa", proximoPasso: "Enviar primeira abordagem" };

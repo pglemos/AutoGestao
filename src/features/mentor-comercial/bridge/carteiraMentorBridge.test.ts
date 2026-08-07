@@ -9,6 +9,7 @@ import {
   derivarQualidadeCadencia,
   derivarQualidadeExecucao,
   derivarUrgencia,
+  objetivoEProximoPassoOficial,
   type ClienteCarteira,
 } from './carteiraMentorBridge'
 import { SCORE_PILLAR_WEIGHTS } from '../engine/score'
@@ -172,5 +173,35 @@ describe('determinismo', () => {
     const c = cliente()
     expect(calcularScoreOficial(c, AGORA)).toEqual(calcularScoreOficial(c, AGORA))
     expect(calcularPrioridadeOficial(c, AGORA)).toBe(calcularPrioridadeOficial(c, AGORA))
+  })
+})
+
+describe('objetivo e próximo passo vêm do catálogo quando há prova', () => {
+  it('"Visita hoje" usa o objetivo oficial, não o legado', () => {
+    const r = objetivoEProximoPassoOficial('Visita hoje')
+    expect(r?.statusId).toBe('INT-V05')
+    expect(r?.objetivo).toBe('Realizar atendimento')
+    expect(r?.proximoPasso).toBe('Recepcionar cliente')
+  })
+
+  it('"Cadência encerrada" manda retirar da Carteira Ativa', () => {
+    expect(objetivoEProximoPassoOficial('Cadência encerrada')?.proximoPasso).toBe(
+      'Retirar da Carteira Ativa',
+    )
+  })
+
+  it('situação sem mapeamento provado devolve null — a tela mantém o texto legado', () => {
+    for (const semProva of ['Em negociação ativa', 'Pós-venda ativo', 'Vai pensar']) {
+      expect(objetivoEProximoPassoOficial(semProva)).toBeNull()
+    }
+  })
+
+  it('entrada vazia não resolve', () => {
+    expect(objetivoEProximoPassoOficial(null)).toBeNull()
+    expect(objetivoEProximoPassoOficial('')).toBeNull()
+  })
+
+  it('devolve o statusId para auditoria do que decidiu', () => {
+    expect(objetivoEProximoPassoOficial('Venda perdida')?.statusId).toBe('PER-02')
   })
 })

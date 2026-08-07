@@ -53,7 +53,9 @@
     "mentor:rules:validate": "node scripts/mentor-rules-validate.mjs",
     "mentor:rules:seed": "node scripts/mentor-rules-seed.mjs",
     "mentor:assert:status-codes": "node scripts/mentor-assert-status-codes.mjs",
-    "mentor:reconcile": "node scripts/mentor-reconcile-report.mjs"
+    "mentor:reconcile": "node scripts/mentor-reconcile-report.mjs",
+    "mentor:rules:bundle": "node scripts/mentor-rules-bundle.mjs",
+    "mentor:rules:bundle:check": "node scripts/mentor-rules-bundle.mjs --check"
   },
   "dependencies": {
     "@hello-pangea/dnd": "^17.0.0",

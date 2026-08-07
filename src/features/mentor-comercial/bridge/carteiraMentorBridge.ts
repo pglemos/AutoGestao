@@ -28,6 +28,8 @@ import {
   type ScoreInput,
   type StatusQuality,
 } from '../engine/score'
+import { statusPorId } from '../catalog/statusCatalog.generated'
+import { statusOficialDaSituacao } from './situacaoLegadaMap'
 import {
   computePriority,
   type PotentialLevel,
@@ -283,4 +285,46 @@ export function calcularPrioridadeOficial(
     // e, por definição, não penaliza ninguém (§33).
     slaMinutes: null,
   }).classification
+}
+
+// ---------------------------------------------------------------------------
+// Objetivo, próximo passo e orientação vindos do catálogo oficial
+// ---------------------------------------------------------------------------
+
+
+export type ObjetivoEProximoPasso = {
+  objetivo: string
+  proximoPasso: string
+  /** Orientação do Mentor, quando o catálogo a define. */
+  orientacao: string | null
+  /** Status oficial que originou a decisão, para auditoria. */
+  statusId: string
+}
+
+/**
+ * Objetivo e próximo passo do catálogo, para as situações com mapeamento provado.
+ *
+ * Devolve `null` quando a situação legada não tem correspondência provada na matriz.
+ * Nesse caso o chamador mantém o texto legado — nada é inventado e nada é presumido.
+ */
+export function objetivoEProximoPassoOficial(
+  situacao: string | null | undefined,
+): ObjetivoEProximoPasso | null {
+  const statusId = statusOficialDaSituacao(situacao)
+  if (!statusId) return null
+
+  const status = statusPorId(statusId)
+  if (!status || !status.objective || !status.nextStep) return null
+
+  return {
+    objetivo: status.objective,
+    proximoPasso: status.nextStep,
+    orientacao: status.mentorGuidance,
+    statusId,
+  }
+}
+
+/** Orientação oficial ("por que está aqui"), ou `null` sem mapeamento provado. */
+export function orientacaoOficial(situacao: string | null | undefined): string | null {
+  return objetivoEProximoPassoOficial(situacao)?.orientacao ?? null
 }
