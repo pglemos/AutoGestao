@@ -5,10 +5,10 @@
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **127**
+- Tabelas referenciadas pelo runtime: **135**
 - RPCs referenciadas pelo runtime: **87**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **249**
+- Pares tabela/operação encontrados: **262**
 
 ## Rotas
 
@@ -140,7 +140,7 @@
 | `banco_talentos` | 1 |
 | `benchmark_snapshots` | 1 |
 | `benchmarks_loja` | 2 |
-| `cadencia_estado_cliente` | 1 |
+| `cadencia_estado_cliente` | 2 |
 | `cadencia_fluxos` | 1 |
 | `carreira_niveis` | 1 |
 | `carteira_empresa` | 1 |
@@ -168,11 +168,11 @@
 | `etapas_modelo_visita_consultoria` | 1 |
 | `eventos_agenda_consultoria` | 3 |
 | `eventos_agenda_executiva` | 2 |
-| `eventos_comerciais` | 7 |
+| `eventos_comerciais` | 8 |
 | `evidencias_planos_acao` | 1 |
 | `evidencias_visita` | 2 |
 | `evidencias-consultoria` | 2 |
-| `execution_actions` | 7 |
+| `execution_actions` | 8 |
 | `fechamento_liberacoes` | 2 |
 | `financeiro_consultoria` | 4 |
 | `funnel_metrics` | 1 |
@@ -189,13 +189,20 @@
 | `manager_daily_tasks` | 1 |
 | `manager_lead_conferences` | 1 |
 | `marketing_mensal_consultoria` | 1 |
+| `mentor_cadence_steps` | 1 |
+| `mentor_cadences` | 1 |
+| `mentor_pending_flags` | 1 |
+| `mentor_score_snapshots` | 1 |
+| `mentor_scripts` | 1 |
+| `mentor_status_definitions` | 1 |
+| `mentor_transitions` | 1 |
 | `metas` | 2 |
 | `metas_metricas_cliente` | 1 |
 | `modelos_formulario_pmr` | 1 |
 | `modulos_cliente_consultoria` | 3 |
 | `notificacoes` | 4 |
 | `opcoes_agenda_consultoria` | 1 |
-| `oportunidades` | 7 |
+| `oportunidades` | 8 |
 | `organograma_nos` | 1 |
 | `pdi_avaliacoes_competencia` | 1 |
 | `pdi_metas` | 1 |
@@ -231,6 +238,7 @@
 | `snapshots_estoque_consultoria` | 2 |
 | `solicitacoes_consultoria` | 2 |
 | `solicitacoes_correcao_lancamento` | 2 |
+| `store_commercial_settings` | 1 |
 | `store_target_plans` | 2 |
 | `story_ideas` | 2 |
 | `sugestoes_conteudo` | 1 |
@@ -285,7 +293,9 @@
 | `benchmark_snapshots:select` | 1 |
 | `benchmarks_loja:select` | 2 |
 | `benchmarks_loja:upsert` | 2 |
-| `cadencia_estado_cliente:select` | 1 |
+| `cadencia_estado_cliente:insert` | 1 |
+| `cadencia_estado_cliente:select` | 2 |
+| `cadencia_estado_cliente:update` | 1 |
 | `cadencia_fluxos:select` | 1 |
 | `carreira_niveis:select` | 1 |
 | `carreira_niveis:upsert` | 1 |
@@ -338,7 +348,7 @@
 | `eventos_comerciais:insert` | 2 |
 | `eventos_comerciais:select` | 7 |
 | `eventos_comerciais:update` | 1 |
-| `eventos_comerciais:upsert` | 1 |
+| `eventos_comerciais:upsert` | 2 |
 | `evidencias_planos_acao:delete` | 1 |
 | `evidencias_planos_acao:insert` | 1 |
 | `evidencias_planos_acao:select` | 1 |
@@ -347,7 +357,8 @@
 | `evidencias_visita:select` | 2 |
 | `execution_actions:insert` | 2 |
 | `execution_actions:select` | 7 |
-| `execution_actions:update` | 2 |
+| `execution_actions:update` | 3 |
+| `execution_actions:upsert` | 1 |
 | `fechamento_liberacoes:insert` | 1 |
 | `fechamento_liberacoes:select` | 2 |
 | `financeiro_consultoria:delete` | 3 |
@@ -379,6 +390,15 @@
 | `manager_daily_tasks:update` | 1 |
 | `manager_lead_conferences:select` | 1 |
 | `marketing_mensal_consultoria:select` | 1 |
+| `mentor_cadence_steps:select` | 1 |
+| `mentor_cadences:select` | 1 |
+| `mentor_pending_flags:insert` | 1 |
+| `mentor_pending_flags:select` | 1 |
+| `mentor_pending_flags:update` | 1 |
+| `mentor_score_snapshots:upsert` | 1 |
+| `mentor_scripts:select` | 1 |
+| `mentor_status_definitions:select` | 1 |
+| `mentor_transitions:select` | 1 |
 | `metas_metricas_cliente:select` | 1 |
 | `metas_metricas_cliente:upsert` | 1 |
 | `metas:delete` | 1 |
@@ -399,8 +419,8 @@
 | `opcoes_agenda_consultoria:update` | 1 |
 | `oportunidades:delete` | 1 |
 | `oportunidades:insert` | 1 |
-| `oportunidades:select` | 7 |
-| `oportunidades:update` | 2 |
+| `oportunidades:select` | 8 |
+| `oportunidades:update` | 3 |
 | `organograma_nos:delete` | 1 |
 | `organograma_nos:insert` | 1 |
 | `organograma_nos:select` | 1 |
@@ -463,6 +483,7 @@
 | `solicitacoes_consultoria:insert` | 2 |
 | `solicitacoes_consultoria:select` | 2 |
 | `solicitacoes_correcao_lancamento:select` | 2 |
+| `store_commercial_settings:select` | 1 |
 | `store_target_plans:select` | 2 |
 | `story_ideas:select` | 2 |
 | `sugestoes_conteudo:insert` | 1 |
