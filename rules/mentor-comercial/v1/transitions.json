@@ -1,0 +1,371 @@
+{
+  "version": "v1",
+  "sheet": "06 Transições",
+  "count": 52,
+  "records": [
+    {
+      "family": "Contato",
+      "fromStatusOrContext": "Primeiro contato pendente",
+      "result": "Mensagem enviada",
+      "toStatus": "Sem resposta — cadência ativa",
+      "decisionNotes": "Avança para CAD-01 e agenda próxima tentativa"
+    },
+    {
+      "family": "Contato",
+      "fromStatusOrContext": "Sem resposta — cadência ativa",
+      "result": "Cliente respondeu",
+      "toStatus": "Resposta recebida — atendimento pendente",
+      "decisionNotes": "Interrompe cadência e coloca responsabilidade no vendedor"
+    },
+    {
+      "family": "Contato",
+      "fromStatusOrContext": "Sem resposta — cadência ativa",
+      "result": "Não respondeu à última tentativa",
+      "toStatus": "Cadência concluída sem resposta",
+      "decisionNotes": "Sai da Carteira Ativa e fica elegível para Plano de Ataque"
+    },
+    {
+      "family": "Contato",
+      "fromStatusOrContext": "Qualquer",
+      "result": "Número inválido",
+      "toStatus": "Contato inválido",
+      "decisionNotes": "Tentar corrigir contato antes de encerrar"
+    },
+    {
+      "family": "Contato",
+      "fromStatusOrContext": "Qualquer",
+      "result": "Não deseja contato",
+      "toStatus": "Cliente não deseja contato",
+      "decisionNotes": "Encerrar sem insistência"
+    },
+    {
+      "family": "Qualificação",
+      "fromStatusOrContext": "Qualificação inicial pendente",
+      "result": "Não definiu o carro",
+      "toStatus": "Veículo ainda não definido",
+      "decisionNotes": "Próximo passo: identificar modelo/categoria/faixa"
+    },
+    {
+      "family": "Qualificação",
+      "fromStatusOrContext": "Qualificação",
+      "result": "Definiu veículo",
+      "toStatus": "Veículo definido — condição não qualificada",
+      "decisionNotes": "Próximo passo: entender prazo, troca e financiamento"
+    },
+    {
+      "family": "Qualificação",
+      "fromStatusOrContext": "Veículo definido",
+      "result": "Compra agora e está qualificado",
+      "toStatus": "Cliente qualificado sem visita",
+      "decisionNotes": "Próximo passo: convidar para visita"
+    },
+    {
+      "family": "Qualificação",
+      "fromStatusOrContext": "Qualquer",
+      "result": "Compra futura",
+      "toStatus": "Compra planejada para o futuro",
+      "decisionNotes": "Programar data de retomada"
+    },
+    {
+      "family": "Qualificação",
+      "fromStatusOrContext": "Qualquer",
+      "result": "Não existe veículo adequado",
+      "toStatus": "Aguardando veículo compatível",
+      "decisionNotes": "Registrar critérios e criar alerta"
+    },
+    {
+      "family": "Visita",
+      "fromStatusOrContext": "Data da visita em definição",
+      "result": "Escolheu data e hora",
+      "toStatus": "Visita agendada",
+      "decisionNotes": "Aplicar regra de confirmação conforme data"
+    },
+    {
+      "family": "Visita",
+      "fromStatusOrContext": "Visita agendada",
+      "result": "Entrou em D-2/D-1",
+      "toStatus": "Visita a confirmar",
+      "decisionNotes": "Enviar para Central se a confirmação vence hoje"
+    },
+    {
+      "family": "Visita",
+      "fromStatusOrContext": "Visita a confirmar",
+      "result": "Confirmou",
+      "toStatus": "Visita confirmada",
+      "decisionNotes": "Aguardar data"
+    },
+    {
+      "family": "Visita",
+      "fromStatusOrContext": "Visita hoje",
+      "result": "Compareceu",
+      "toStatus": "Visita realizada — desfecho pendente",
+      "decisionNotes": "Registrar resultado do atendimento"
+    },
+    {
+      "family": "Visita",
+      "fromStatusOrContext": "Visita hoje",
+      "result": "Não compareceu",
+      "toStatus": "Cliente não compareceu",
+      "decisionNotes": "Iniciar CAD-07"
+    },
+    {
+      "family": "Visita",
+      "fromStatusOrContext": "Qualquer visita",
+      "result": "Reagendou",
+      "toStatus": "Visita agendada",
+      "decisionNotes": "Atualizar data oficial, sem duplicar cliente"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Visita realizada",
+      "result": "Pediu proposta",
+      "toStatus": "Proposta pendente de envio",
+      "decisionNotes": "Enviar proposta hoje"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Proposta pendente",
+      "result": "Proposta enviada",
+      "toStatus": "Proposta enviada — prazo ativo",
+      "decisionNotes": "Programar retorno CAD-03"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Proposta enviada",
+      "result": "Não respondeu",
+      "toStatus": "Proposta sem retorno",
+      "decisionNotes": "Retomar proposta"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Negociação ativa",
+      "result": "Questionou preço",
+      "toStatus": "Objeção de preço",
+      "decisionNotes": "Trabalhar percepção de valor"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Negociação ativa",
+      "result": "Questionou entrada",
+      "toStatus": "Objeção de entrada",
+      "decisionNotes": "Entender entrada possível"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Negociação ativa",
+      "result": "Questionou parcela",
+      "toStatus": "Objeção de parcela",
+      "decisionNotes": "Entender parcela/prazo viáveis"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Negociação ativa",
+      "result": "Está comparando",
+      "toStatus": "Comparando veículos ou concorrentes",
+      "decisionNotes": "Entender critérios da comparação"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Negociação ativa",
+      "result": "Pediu tempo",
+      "toStatus": "Aguardando decisão do cliente",
+      "decisionNotes": "Follow-up consultivo"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Negociação ativa",
+      "result": "Depende de outra pessoa",
+      "toStatus": "Aguardando decisão de terceiro",
+      "decisionNotes": "Envolver decisor"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Negociação ativa",
+      "result": "Depende da loja",
+      "toStatus": "Aguardando condição da loja",
+      "decisionNotes": "Verificação interna"
+    },
+    {
+      "family": "Negociação",
+      "fromStatusOrContext": "Negociação ativa",
+      "result": "Aceitou condições",
+      "toStatus": "Pronto para fechamento",
+      "decisionNotes": "Formalizar venda"
+    },
+    {
+      "family": "Troca",
+      "fromStatusOrContext": "Qualquer",
+      "result": "Informou que possui troca",
+      "toStatus": "Aguardando dados do carro da troca",
+      "decisionNotes": "Solicitar dados e fotos"
+    },
+    {
+      "family": "Troca",
+      "fromStatusOrContext": "Aguardando dados",
+      "result": "Enviou dados",
+      "toStatus": "Dados recebidos — avaliação pendente",
+      "decisionNotes": "Encaminhar para avaliação"
+    },
+    {
+      "family": "Troca",
+      "fromStatusOrContext": "Dados recebidos",
+      "result": "Precisa levar o carro",
+      "toStatus": "Avaliação presencial necessária",
+      "decisionNotes": "Agendar avaliação presencial"
+    },
+    {
+      "family": "Troca",
+      "fromStatusOrContext": "Avaliação em andamento",
+      "result": "Valor definido",
+      "toStatus": "Avaliação concluída — valor não apresentado",
+      "decisionNotes": "Apresentar valor"
+    },
+    {
+      "family": "Troca",
+      "fromStatusOrContext": "Valor apresentado",
+      "result": "Aceitou",
+      "toStatus": "Troca aprovada",
+      "decisionNotes": "Retornar status anterior ou próxima pendência"
+    },
+    {
+      "family": "Troca",
+      "fromStatusOrContext": "Valor apresentado",
+      "result": "Rejeitou valor",
+      "toStatus": "Cliente não aceitou a avaliação",
+      "decisionNotes": "Tratar objeção da troca"
+    },
+    {
+      "family": "Troca",
+      "fromStatusOrContext": "Qualquer",
+      "result": "Loja não aceita",
+      "toStatus": "Troca inviável",
+      "decisionNotes": "Apresentar alternativa"
+    },
+    {
+      "family": "Financiamento",
+      "fromStatusOrContext": "Qualquer",
+      "result": "Pediu simulação",
+      "toStatus": "Simulação pendente",
+      "decisionNotes": "Preparar simulação"
+    },
+    {
+      "family": "Financiamento",
+      "fromStatusOrContext": "Simulação pendente",
+      "result": "Simulação enviada",
+      "toStatus": "Simulação enviada — aguardando cliente",
+      "decisionNotes": "Retomar CAD-03"
+    },
+    {
+      "family": "Financiamento",
+      "fromStatusOrContext": "Simulação enviada",
+      "result": "Aceitou enviar ficha",
+      "toStatus": "Documentos para ficha pendentes",
+      "decisionNotes": "Solicitar documentos"
+    },
+    {
+      "family": "Financiamento",
+      "fromStatusOrContext": "Documentos pendentes",
+      "result": "Documentos enviados",
+      "toStatus": "Ficha em análise",
+      "decisionNotes": "Verificação interna/financeira"
+    },
+    {
+      "family": "Financiamento",
+      "fromStatusOrContext": "Ficha em análise",
+      "result": "Financeira pediu complemento",
+      "toStatus": "Pendência solicitada pela financeira",
+      "decisionNotes": "Solicitar pendência"
+    },
+    {
+      "family": "Financiamento",
+      "fromStatusOrContext": "Ficha em análise",
+      "result": "Aprovado",
+      "toStatus": "Financiamento aprovado sem fechamento",
+      "decisionNotes": "Converter aprovação"
+    },
+    {
+      "family": "Financiamento",
+      "fromStatusOrContext": "Ficha em análise",
+      "result": "Aprovado diferente",
+      "toStatus": "Aprovado com condição diferente",
+      "decisionNotes": "Apresentar condição real"
+    },
+    {
+      "family": "Financiamento",
+      "fromStatusOrContext": "Ficha em análise",
+      "result": "Recusado",
+      "toStatus": "Financiamento recusado",
+      "decisionNotes": "Avaliar alternativa"
+    },
+    {
+      "family": "Venda",
+      "fromStatusOrContext": "Negociação",
+      "result": "Deu aceite",
+      "toStatus": "Venda acordada — formalização pendente",
+      "decisionNotes": "Formalizar negócio"
+    },
+    {
+      "family": "Venda",
+      "fromStatusOrContext": "Venda acordada",
+      "result": "Aguarda sinal",
+      "toStatus": "Sinal pendente",
+      "decisionNotes": "Orientar pagamento do sinal"
+    },
+    {
+      "family": "Venda",
+      "fromStatusOrContext": "Sinal pendente",
+      "result": "Sinal pago",
+      "toStatus": "Sinal recebido — fechamento pendente",
+      "decisionNotes": "Concluir venda"
+    },
+    {
+      "family": "Venda",
+      "fromStatusOrContext": "Formalização",
+      "result": "Venda confirmada",
+      "toStatus": "Venda realizada",
+      "decisionNotes": "Alimentar funil/faturamento/comissão/histórico"
+    },
+    {
+      "family": "Perda",
+      "fromStatusOrContext": "Qualquer ativa",
+      "result": "Não comprou",
+      "toStatus": "Motivo da perda pendente",
+      "decisionNotes": "Registrar motivo"
+    },
+    {
+      "family": "Perda",
+      "fromStatusOrContext": "Motivo pendente",
+      "result": "Motivo registrado",
+      "toStatus": "Venda perdida",
+      "decisionNotes": "Encerrar ou programar futuro"
+    },
+    {
+      "family": "Futuro",
+      "fromStatusOrContext": "Qualquer",
+      "result": "Cliente pediu contato futuro",
+      "toStatus": "Contato futuro programado",
+      "decisionNotes": "Aguardar data"
+    },
+    {
+      "family": "Relacionamento",
+      "fromStatusOrContext": "Venda realizada",
+      "result": "Pós-venda configurado",
+      "toStatus": "Pós-venda D+7",
+      "decisionNotes": "Ativar marco configurado por loja"
+    },
+    {
+      "family": "Garantia",
+      "fromStatusOrContext": "Cliente reportou problema",
+      "result": "Garantia aberta",
+      "toStatus": "Garantia aberta",
+      "decisionNotes": "Proteger relacionamento"
+    },
+    {
+      "family": "Garantia",
+      "fromStatusOrContext": "Garantia resolvida",
+      "result": "Confirmou satisfação",
+      "toStatus": "Garantia resolvida",
+      "decisionNotes": "Encerrar ciclo ou gerar relacionamento"
+    }
+  ]
+}

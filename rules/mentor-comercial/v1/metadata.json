@@ -1,0 +1,36 @@
+{
+  "version": "v1",
+  "sourceFile": "Mentor_Comercial_Motor_Regras_v1.xlsx",
+  "sourceSha256": "3268de238076e64f0f0189e96033ea3c423c6afe93d276b700fe750915d7be8e",
+  "generatedAt": "2026-08-07T04:48:56.219Z",
+  "generator": "scripts/mentor-rules-extract.mjs",
+  "sheets": [
+    "01 Canais",
+    "02 Status",
+    "03 Cadências",
+    "04 Passos_Cadência",
+    "05 Scripts",
+    "06 Transições",
+    "07 Score_Prioridade",
+    "08 Plano_Ataque",
+    "Listas",
+    "09 Teste_Clientes",
+    "10 Integrações",
+    "11 Testes_Cenários",
+    "00 Guia"
+  ],
+  "counts": {
+    "channels": 3,
+    "statuses": 86,
+    "cadences": 13,
+    "cadence-steps": 57,
+    "scripts": 77,
+    "transitions": 52,
+    "score-priority": 31,
+    "attack-missions": 15,
+    "lists": 86,
+    "test-clients": 100,
+    "integrations": 18,
+    "acceptance-scenarios": 15
+  }
+}

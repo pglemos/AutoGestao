@@ -1,0 +1,133 @@
+{
+  "version": "v1",
+  "sheet": "10 Integrações",
+  "count": 18,
+  "records": [
+    {
+      "sourceModule": "Fechamento Diário",
+      "event": "Venda Realizada = Sim",
+      "mentorAction": "Status VEN-04 Venda realizada",
+      "rule": "Alimentar Funil, Faturamento, Comissão futura e histórico",
+      "destination": "Mentor + Funil"
+    },
+    {
+      "sourceModule": "Fechamento Diário",
+      "event": "Venda Realizada = Não",
+      "mentorAction": "Status PER-01 Motivo da perda pendente",
+      "rule": "Preservar motivo, observações, veículo, canal e histórico",
+      "destination": "Mentor"
+    },
+    {
+      "sourceModule": "Fechamento Diário",
+      "event": "Venda Realizada = Em Negociação com agendamento",
+      "mentorAction": "Status INT-V02 Visita agendada ou equivalente",
+      "rule": "Temperatura Quente; aplicar regra de data",
+      "destination": "Mentor"
+    },
+    {
+      "sourceModule": "Fechamento Diário",
+      "event": "Em negociação sem agendamento",
+      "mentorAction": "Status Cliente qualificado sem visita ou status informado",
+      "rule": "Próximo passo: gerar visita",
+      "destination": "Mentor"
+    },
+    {
+      "sourceModule": "Fechamento Diário",
+      "event": "Agendamento D+1",
+      "mentorAction": "Cadastrar na Carteira e contar na Disciplina",
+      "rule": "D+1 = data competência + 1 dia",
+      "destination": "Mentor + Disciplina"
+    },
+    {
+      "sourceModule": "Fechamento Diário",
+      "event": "Agendamento futuro maior que D+1",
+      "mentorAction": "Cadastrar na Carteira e não contar na Disciplina",
+      "rule": "Valoriza Qualidade da Carteira",
+      "destination": "Mentor"
+    },
+    {
+      "sourceModule": "Fechamento Diário",
+      "event": "Reagendamento",
+      "mentorAction": "Atualizar a mesma oportunidade",
+      "rule": "Não duplicar cliente nem apagar histórico",
+      "destination": "Mentor"
+    },
+    {
+      "sourceModule": "Fechamento Diário",
+      "event": "Exclusão de agendamento na janela de ajuste",
+      "mentorAction": "Remover/atualizar evento e preservar cliente",
+      "rule": "Se for reagendamento, cliente permanece",
+      "destination": "Mentor"
+    },
+    {
+      "sourceModule": "Central de Execução",
+      "event": "Próxima ação = hoje",
+      "mentorAction": "Criar item na aba Hoje",
+      "rule": "Central não armazena cliente; só puxa do Mentor",
+      "destination": "Central"
+    },
+    {
+      "sourceModule": "Central de Execução",
+      "event": "Visita = hoje",
+      "mentorAction": "Criar Atendimento agendado",
+      "rule": "Carregar clienteId, oportunidadeId e atividadeId",
+      "destination": "Central"
+    },
+    {
+      "sourceModule": "Central de Execução",
+      "event": "Cliente respondeu e aguarda vendedor",
+      "mentorAction": "Criar Retorno pendente",
+      "rule": "Responsável = Vendedor; prioridade alta/máxima",
+      "destination": "Central"
+    },
+    {
+      "sourceModule": "Central de Execução",
+      "event": "Pós-venda ou garantia vence hoje",
+      "mentorAction": "Criar oportunidade de relacionamento",
+      "rule": "Somente se configurado/ativo",
+      "destination": "Central"
+    },
+    {
+      "sourceModule": "Central de Execução",
+      "event": "Item resolvido na Central",
+      "mentorAction": "Atualizar Mentor, histórico, score e prioridade",
+      "rule": "Nada é excluído da Carteira",
+      "destination": "Mentor"
+    },
+    {
+      "sourceModule": "Plano de Ataque",
+      "event": "Missão executada",
+      "mentorAction": "Atualizar mesma oportunidade",
+      "rule": "Não criar duplicidade",
+      "destination": "Mentor"
+    },
+    {
+      "sourceModule": "Plano de Ataque",
+      "event": "Aguardando resposta do cliente",
+      "mentorAction": "Permitir nova missão",
+      "rule": "Vendedor já fez sua parte",
+      "destination": "Plano"
+    },
+    {
+      "sourceModule": "Plano de Ataque",
+      "event": "Cliente respondeu e aguarda vendedor",
+      "mentorAction": "Bloquear nova missão",
+      "rule": "Resolver retornos antes de abrir outra frente",
+      "destination": "Plano/Central"
+    },
+    {
+      "sourceModule": "Assistente futuro WhatsApp",
+      "event": "Print/encaminhamento/conversa validada",
+      "mentorAction": "Criar rascunho e pedir confirmação",
+      "rule": "IA não deve salvar sem validação",
+      "destination": "Mentor"
+    },
+    {
+      "sourceModule": "Assistente futuro WhatsApp",
+      "event": "Dados incompletos",
+      "mentorAction": "Perguntar apenas o que falta",
+      "rule": "Cadastro mínimo inteligente",
+      "destination": "Mentor"
+    }
+  ]
+}

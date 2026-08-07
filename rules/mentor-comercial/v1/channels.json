@@ -1,0 +1,31 @@
+{
+  "version": "v1",
+  "sheet": "01 Canais",
+  "count": 3,
+  "records": [
+    {
+      "channel": "Porta",
+      "officialConcept": "Cliente que entra espontaneamente na loja, sem agendamento produzido pela equipe.",
+      "measures": "Força de atração da loja e capacidade de conversão no atendimento presencial.",
+      "detailedOrigins": "Entrada espontânea, passagem em frente, viu anúncio/site/rede social mas foi direto à loja.",
+      "rules": "Se não houve ação direta de agendamento do vendedor, a venda é Porta. Se não comprou na hora e depois fechou por follow-up do vendedor, o canal de venda pode ser Carteira.",
+      "examples": "Cliente viu anúncio, não chamou no WhatsApp, foi direto à loja e comprou."
+    },
+    {
+      "channel": "Internet",
+      "officialConcept": "Lead produzido pela empresa em que o vendedor atuou para transformar contato em agendamento e visita.",
+      "measures": "Geração de leads da empresa + capacidade do vendedor de transformar lead em visita.",
+      "detailedOrigins": "Lead do Instagram da loja, Google Ads da loja, site, portal/campanha da empresa.",
+      "rules": "A venda é Internet quando existe lead da empresa + ação do vendedor que precede agendamento e visita.",
+      "examples": "Lead do site recebe contato do vendedor, agenda visita e compra."
+    },
+    {
+      "channel": "Carteira",
+      "officialConcept": "Venda ou oportunidade gerada por ação direta do vendedor.",
+      "measures": "Capacidade do vendedor de gerar negócios por relacionamento, prospecção e iniciativa própria.",
+      "detailedOrigins": "Indicação, prospecção, cliente antigo, pós-venda, garantia, lead com mais de 90 dias, anúncio próprio, marketplace próprio, OLX própria, tráfego próprio, feirão trabalhado pelo vendedor.",
+      "rules": "Origens diversas entram como Carteira. Preservar canal de entrada e canal de venda separados.",
+      "examples": "Lead antigo de Internet é reativado após 90 dias e compra: canalEntrada=Internet, canalVenda=Carteira."
+    }
+  ]
+}

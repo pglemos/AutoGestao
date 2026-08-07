@@ -1,0 +1,224 @@
+{
+  "version": "v1",
+  "sheet": "07 Score_Prioridade",
+  "count": 31,
+  "records": [
+    {
+      "pillar": "Status definido e coerente",
+      "weight": 15,
+      "fullRule": "Status válido e campos obrigatórios completos",
+      "partialRule": "Status válido com informação pendente = 8",
+      "zeroRule": "Status genérico, incoerente ou ausente = 0"
+    },
+    {
+      "pillar": "Próximo passo, responsável e data",
+      "weight": 20,
+      "fullRule": "Próximo passo, responsável e data definidos",
+      "partialRule": "Próximo passo sem data/responsável = 10",
+      "zeroRule": "Sem próximo passo = 0"
+    },
+    {
+      "pillar": "Execução dentro do prazo",
+      "weight": 30,
+      "fullRule": "Nada vencido",
+      "partialRule": "Ação vence hoje = 25; atraso <24h = 10",
+      "zeroRule": "Atraso >24h ou cliente respondeu sem retorno = 0"
+    },
+    {
+      "pillar": "Cadência respeitada",
+      "weight": 20,
+      "fullRule": "Tentativas devidas executadas",
+      "partialRule": "Uma tentativa fora do prazo = 10",
+      "zeroRule": "Tentativa ignorada/interrompida sem justificativa = 0"
+    },
+    {
+      "pillar": "Histórico atualizado",
+      "weight": 15,
+      "fullRule": "Último contato e resultado registrados",
+      "partialRule": "Contato registrado sem resultado suficiente = 8",
+      "zeroRule": "Histórico não representa atendimento atual = 0"
+    },
+    {
+      "pillar": "Tipo",
+      "weight": "Evento",
+      "fullRule": "Impacto sugerido",
+      "partialRule": "Observação",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Perda de score",
+      "weight": "Sem próxima ação definida",
+      "fullRule": "-20",
+      "partialRule": "Usar como alerta além da fórmula dos pilares",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Perda de score",
+      "weight": "Próxima ação vencida",
+      "fullRule": "-25",
+      "partialRule": "Se ultrapassar prazo configurado",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Perda de score",
+      "weight": "Cliente respondeu e vendedor não tratou",
+      "fullRule": "-30",
+      "partialRule": "Principal risco operacional",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Perda de score",
+      "weight": "Cliente quente parado há 5 dias",
+      "fullRule": "-20",
+      "partialRule": "Cliente de alto potencial sem evolução",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Perda de score",
+      "weight": "Proposta sem retorno e sem ação",
+      "fullRule": "-20",
+      "partialRule": "Ação deveria estar programada",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Perda de score",
+      "weight": "Histórico desatualizado",
+      "fullRule": "-10",
+      "partialRule": "Não representa atendimento atual",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Perda de score",
+      "weight": "Cadência interrompida sem justificativa",
+      "fullRule": "-15",
+      "partialRule": "Não punir falta de resposta do cliente",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Recuperação",
+      "weight": "Próxima ação criada",
+      "fullRule": "+10",
+      "partialRule": "Até limite de 100",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Recuperação",
+      "weight": "Próximo passo executado no prazo",
+      "fullRule": "+10",
+      "partialRule": "Ação real do vendedor",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Recuperação",
+      "weight": "Histórico atualizado",
+      "fullRule": "+5",
+      "partialRule": "Evidência de condução",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Recuperação",
+      "weight": "Cliente evoluiu de situação",
+      "fullRule": "+10",
+      "partialRule": "Mudança positiva no acompanhamento",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Recuperação",
+      "weight": "Visita agendada",
+      "fullRule": "+15",
+      "partialRule": "Aumento de compromisso",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Recuperação",
+      "weight": "Visita realizada",
+      "fullRule": "+15",
+      "partialRule": "Oportunidade avançou",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Recuperação",
+      "weight": "Venda realizada",
+      "fullRule": "+20",
+      "partialRule": "Desfecho positivo",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Recuperação",
+      "weight": "Pós-venda realizado",
+      "fullRule": "+10",
+      "partialRule": "Relacionamento continuado",
+      "zeroRule": null
+    },
+    {
+      "pillar": "Potencial",
+      "weight": "Pontuação usada no simulador",
+      "fullRule": "Exemplos de status",
+      "partialRule": null,
+      "zeroRule": null
+    },
+    {
+      "pillar": "Muito alto",
+      "weight": 100,
+      "fullRule": "Visita hoje; Pronto para fechamento; Financiamento aprovado; Negociação ativa",
+      "partialRule": null,
+      "zeroRule": null
+    },
+    {
+      "pillar": "Alto",
+      "weight": 75,
+      "fullRule": "Proposta enviada; Visita confirmada; Objeção ativa; Cliente qualificado sem visita",
+      "partialRule": null,
+      "zeroRule": null
+    },
+    {
+      "pillar": "Médio",
+      "weight": 50,
+      "fullRule": "Cliente respondeu; Em qualificação; Pós-venda com potencial",
+      "partialRule": null,
+      "zeroRule": null
+    },
+    {
+      "pillar": "Baixo",
+      "weight": 25,
+      "fullRule": "Primeiro contato sem resposta; Compra futura; Cadência encerrada",
+      "partialRule": null,
+      "zeroRule": null
+    },
+    {
+      "pillar": "Índice calculado",
+      "weight": "Prioridade",
+      "fullRule": null,
+      "partialRule": null,
+      "zeroRule": null
+    },
+    {
+      "pillar": "85 a 100",
+      "weight": "Máxima",
+      "fullRule": null,
+      "partialRule": null,
+      "zeroRule": null
+    },
+    {
+      "pillar": "70 a 84",
+      "weight": "Alta",
+      "fullRule": null,
+      "partialRule": null,
+      "zeroRule": null
+    },
+    {
+      "pillar": "50 a 69",
+      "weight": "Média",
+      "fullRule": null,
+      "partialRule": null,
+      "zeroRule": null
+    },
+    {
+      "pillar": "0 a 49",
+      "weight": "Baixa",
+      "fullRule": null,
+      "partialRule": null,
+      "zeroRule": null
+    }
+  ]
+}

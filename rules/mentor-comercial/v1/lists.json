@@ -1,0 +1,523 @@
+{
+  "version": "v1",
+  "sheet": "Listas",
+  "count": 86,
+  "records": [
+    {
+      "statusId": "INT-C01",
+      "channel": "Porta",
+      "urgency": "Cliente respondeu e aguarda vendedor",
+      "points": 15
+    },
+    {
+      "statusId": "INT-C02",
+      "channel": "Internet",
+      "urgency": "Ação vencida",
+      "points": 8
+    },
+    {
+      "statusId": "INT-C03",
+      "channel": "Carteira",
+      "urgency": "Ação hoje",
+      "points": 0
+    },
+    {
+      "statusId": "INT-C04",
+      "channel": null,
+      "urgency": "Ação amanhã",
+      "points": 20
+    },
+    {
+      "statusId": "INT-C05",
+      "channel": null,
+      "urgency": "Até 3 dias",
+      "points": 10
+    },
+    {
+      "statusId": "INT-C06",
+      "channel": null,
+      "urgency": "Ação futura",
+      "points": 30
+    },
+    {
+      "statusId": "INT-Q01",
+      "channel": null,
+      "urgency": null,
+      "points": 25
+    },
+    {
+      "statusId": "INT-Q02",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-Q03",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-Q04",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-Q05",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-Q06",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-Q07",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-Q08",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-V01",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-V02",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-V03",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-V04",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-V05",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-V06",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-V07",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-V08",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N01",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N02",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N03",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N04",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N05",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N06",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N07",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N08",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N09",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N10",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N11",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "INT-N12",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "POR-A01",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "POR-A02",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "POR-A03",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "POR-A04",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "CAR-C01",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "CAR-C02",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "CAR-C03",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "CAR-C04",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "CAR-C05",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "CAR-C06",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "CAR-C07",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "CAR-C08",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "TR-01",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "TR-02",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "TR-03",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "TR-04",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "TR-05",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "TR-06",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "TR-07",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "TR-08",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "TR-09",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "FIN-01",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "FIN-02",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "FIN-03",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "FIN-04",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "FIN-05",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "FIN-06",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "FIN-07",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "FIN-08",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "FIN-09",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "VEN-01",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "VEN-02",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "VEN-03",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "VEN-04",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "VEN-05",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "VEN-06",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "VEN-07",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "PER-01",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "PER-02",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "PER-03",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "PER-04",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "PER-05",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "PER-06",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "REL-01",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "REL-02",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "REL-03",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "REL-04",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "REL-05",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "REL-06",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "REL-07",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "REL-08",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    },
+    {
+      "statusId": "REL-09",
+      "channel": null,
+      "urgency": null,
+      "points": null
+    }
+  ]
+}

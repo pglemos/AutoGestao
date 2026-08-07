@@ -1,0 +1,139 @@
+{
+  "version": "v1",
+  "sheet": "00 Guia",
+  "rows": [
+    [
+      "Mentor Comercial — Motor de Follow-up v1.0",
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      "Dicionário de regras, cadências, scripts, score e simulador para validação.",
+      null,
+      null,
+      null,
+      null
+    ],
+    [
+      "Seção",
+      "Conteúdo",
+      null,
+      null,
+      null
+    ],
+    [
+      "Objetivo",
+      "Planilha para testar a lógica do Motor de Follow-up do Mentor Comercial antes de implementar no sistema.",
+      null,
+      "Indicador",
+      "Quantidade"
+    ],
+    [
+      "Conceito",
+      "O vendedor informa a situação atual. O Mentor calcula objetivo, próximo passo, cadência, script, score, prioridade e integração com Central de Execução.",
+      null,
+      "Status mapeados",
+      "86"
+    ],
+    [
+      "Canais oficiais",
+      "Porta, Internet e Carteira. Origens como indicação, marketplace, feirão, pós-venda e lead antigo entram como origem detalhada dentro de Carteira.",
+      null,
+      "Scripts cadastrados",
+      "77"
+    ],
+    [
+      "Como testar",
+      "Use a aba '08 Teste_Clientes'. Escolha um Status ID e ajuste os campos de score/urgência para ver recomendação, prioridade e central.",
+      null,
+      "Cadências",
+      "13"
+    ],
+    [
+      "Fonte interna",
+      "Regras definidas na conversa do projeto MX Performance + referência do arquivo FLUXO DE ACOMPANHAMENTO DE CLIENTES.pdf.",
+      null,
+      "Regras de transição",
+      "52"
+    ],
+    [
+      "Observação",
+      "Esta é uma matriz operacional v1.0. Não é prompt final de sistema; serve para validação da lógica.",
+      null,
+      "Cenários de teste",
+      "15"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Família",
+      "Qtd"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Contato",
+      "11"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Financiamento",
+      "9"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Negociação",
+      "14"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Perda e Futuro",
+      "6"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Qualificação",
+      "9"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Relacionamento",
+      "11"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Troca",
+      "9"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Venda e Entrega",
+      "7"
+    ],
+    [
+      null,
+      null,
+      null,
+      "Visita",
+      "10"
+    ]
+  ]
+}

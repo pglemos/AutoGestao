@@ -1,0 +1,112 @@
+{
+  "version": "v1",
+  "sheet": "08 Plano_Ataque",
+  "count": 15,
+  "records": [
+    {
+      "condition": "Cadência encerrada sem resposta",
+      "mission": "Retomar leads",
+      "objective": "Tentar nova abordagem em grupo",
+      "whenItAppears": "Após tentativas concluídas sem resposta",
+      "notes": "Não é perda automática"
+    },
+    {
+      "condition": "Visitou e não comprou",
+      "mission": "Recuperar visitas",
+      "objective": "Retomar clientes com alta intenção",
+      "whenItAppears": "Status POR-A03/POR-A04 ou visita realizada sem venda",
+      "notes": "Prioridade relevante para aumento de conversão"
+    },
+    {
+      "condition": "Proposta sem retorno",
+      "mission": "Recuperar propostas",
+      "objective": "Recuperar decisão",
+      "whenItAppears": "Status INT-N03 ou equivalente",
+      "notes": "Pode gerar vendas rápidas"
+    },
+    {
+      "condition": "Não compareceu",
+      "mission": "Reagendar visitas",
+      "objective": "Transformar ausência em nova agenda",
+      "whenItAppears": "Status INT-V07",
+      "notes": "Usar mensagem sem julgamento"
+    },
+    {
+      "condition": "Financiamento aprovado sem fechamento",
+      "mission": "Converter aprovações",
+      "objective": "Fechar clientes com barreira de crédito superada",
+      "whenItAppears": "Status FIN-06",
+      "notes": "Alta prioridade"
+    },
+    {
+      "condition": "Cliente qualificado sem visita",
+      "mission": "Gerar visitas",
+      "objective": "Criar compromisso presencial",
+      "whenItAppears": "INT-Q04/INT-Q08",
+      "notes": "Principal rotina de aquecimento"
+    },
+    {
+      "condition": "Cliente antigo",
+      "mission": "Reativar carteira",
+      "objective": "Retomar relacionamento",
+      "whenItAppears": "CAR-C03/CAR-C04",
+      "notes": "Canal de venda Carteira"
+    },
+    {
+      "condition": "Pós-venda positivo",
+      "mission": "Pedir indicações",
+      "objective": "Gerar novas oportunidades",
+      "whenItAppears": "REL-01/REL-02 com satisfação",
+      "notes": "Não automatizar sem cuidado"
+    },
+    {
+      "condition": "Troca futura ativada",
+      "mission": "Campanha de troca",
+      "objective": "Criar nova compra",
+      "whenItAppears": "REL-04/REL-05/REL-06",
+      "notes": "Canal Carteira"
+    },
+    {
+      "condition": "Garantia ativa",
+      "mission": "Acompanhar garantias",
+      "objective": "Proteger relacionamento",
+      "whenItAppears": "REL-07/REL-08",
+      "notes": "Não é campanha de venda; é retenção"
+    },
+    {
+      "condition": "Status da missão anterior",
+      "mission": "Pode iniciar nova missão?",
+      "objective": "Mensagem ao vendedor",
+      "whenItAppears": null,
+      "notes": null
+    },
+    {
+      "condition": "Envio de mensagens incompleto",
+      "mission": "Não",
+      "objective": "Finalize o envio das mensagens da missão atual antes de iniciar uma nova.",
+      "whenItAppears": null,
+      "notes": null
+    },
+    {
+      "condition": "Aguardando resposta do cliente",
+      "mission": "Sim",
+      "objective": "Você já fez sua parte nesta missão. Pode iniciar outra.",
+      "whenItAppears": null,
+      "notes": null
+    },
+    {
+      "condition": "Clientes aguardando ação do vendedor",
+      "mission": "Não",
+      "objective": "Você possui clientes que responderam e aguardam sua ação. Resolva esses retornos antes de iniciar uma nova missão.",
+      "whenItAppears": null,
+      "notes": null
+    },
+    {
+      "condition": "Status pendente há mais de 24h",
+      "mission": "Não",
+      "objective": "Antes de iniciar uma nova missão, registre o resultado dos contatos pendentes.",
+      "whenItAppears": null,
+      "notes": null
+    }
+  ]
+}

@@ -1,0 +1,406 @@
+{
+  "version": "v1",
+  "sheet": "04 Passos_Cadência",
+  "count": 57,
+  "records": [
+    {
+      "cadenceId": "CAD-01",
+      "attempt": "1",
+      "offset": "D0",
+      "objective": "Primeira abordagem consultiva",
+      "notes": "Iniciar conversa com contexto do veículo"
+    },
+    {
+      "cadenceId": "CAD-01",
+      "attempt": "2",
+      "offset": "D+1",
+      "objective": "Confirmação curta de interesse",
+      "notes": "Facilitar resposta"
+    },
+    {
+      "cadenceId": "CAD-01",
+      "attempt": "3",
+      "offset": "D+2",
+      "objective": "Pergunta simples",
+      "notes": "Reduzir atrito"
+    },
+    {
+      "cadenceId": "CAD-01",
+      "attempt": "4",
+      "offset": "D+3",
+      "objective": "Nova abordagem de valor",
+      "notes": "Abrir alternativa de visita ou informação"
+    },
+    {
+      "cadenceId": "CAD-01",
+      "attempt": "5",
+      "offset": "D+7",
+      "objective": "Permissão para acompanhamento futuro",
+      "notes": "Evitar insistência sem contexto"
+    },
+    {
+      "cadenceId": "CAD-01",
+      "attempt": "6",
+      "offset": "D+13",
+      "objective": "Encerramento respeitoso",
+      "notes": "Preservar relacionamento"
+    },
+    {
+      "cadenceId": "CAD-02",
+      "attempt": "1",
+      "offset": "D0",
+      "objective": "Convite com duas opções",
+      "notes": "Gerar compromisso"
+    },
+    {
+      "cadenceId": "CAD-02",
+      "attempt": "2",
+      "offset": "D+2",
+      "objective": "Reforçar benefício da visita",
+      "notes": "Mostrar valor da presença"
+    },
+    {
+      "cadenceId": "CAD-02",
+      "attempt": "3",
+      "offset": "D+8",
+      "objective": "Perguntar melhor período",
+      "notes": "Facilitar agenda"
+    },
+    {
+      "cadenceId": "CAD-02",
+      "attempt": "4",
+      "offset": "D+11",
+      "objective": "Nova disponibilidade",
+      "notes": "Abrir alternativa"
+    },
+    {
+      "cadenceId": "CAD-02",
+      "attempt": "5",
+      "offset": "D+16",
+      "objective": "Entender barreira de visita",
+      "notes": "Descobrir impedimento"
+    },
+    {
+      "cadenceId": "CAD-02",
+      "attempt": "6",
+      "offset": "D+20",
+      "objective": "Manter visita em aberto",
+      "notes": "Preservar futuro"
+    },
+    {
+      "cadenceId": "CAD-03",
+      "attempt": "1",
+      "offset": "D0",
+      "objective": "Retomar decisão",
+      "notes": "Entender ponto de trava"
+    },
+    {
+      "cadenceId": "CAD-03",
+      "attempt": "2",
+      "offset": "D+3",
+      "objective": "Identificar objeção principal",
+      "notes": "Preço, entrada, parcela, troca ou comparação"
+    },
+    {
+      "cadenceId": "CAD-03",
+      "attempt": "3",
+      "offset": "D+9",
+      "objective": "Revisar negociação real",
+      "notes": "Usar condições registradas"
+    },
+    {
+      "cadenceId": "CAD-03",
+      "attempt": "4",
+      "offset": "D+19",
+      "objective": "Confirmar se ainda faz sentido",
+      "notes": "Separar decisão de momento"
+    },
+    {
+      "cadenceId": "CAD-03",
+      "attempt": "5",
+      "offset": "D+29",
+      "objective": "Programar retorno futuro",
+      "notes": "Evitar insistência"
+    },
+    {
+      "cadenceId": "CAD-03",
+      "attempt": "6",
+      "offset": "D+59",
+      "objective": "Pausar negociação",
+      "notes": "Preservar histórico"
+    },
+    {
+      "cadenceId": "CAD-04",
+      "attempt": "1",
+      "offset": "D0",
+      "objective": "Perguntar necessidade",
+      "notes": "Uso, família, trabalho"
+    },
+    {
+      "cadenceId": "CAD-04",
+      "attempt": "2",
+      "offset": "D+1",
+      "objective": "Definir prazo",
+      "notes": "Compra agora ou futura"
+    },
+    {
+      "cadenceId": "CAD-04",
+      "attempt": "3",
+      "offset": "D+3",
+      "objective": "Entender viabilidade",
+      "notes": "Troca, financiamento, orçamento"
+    },
+    {
+      "cadenceId": "CAD-04",
+      "attempt": "4",
+      "offset": "D+7",
+      "objective": "Consolidar qualificação",
+      "notes": "Definir próximo objetivo"
+    },
+    {
+      "cadenceId": "CAD-05",
+      "attempt": "1",
+      "offset": "D0",
+      "objective": "Oferecer duas opções de horário",
+      "notes": "Converter aceite em agenda"
+    },
+    {
+      "cadenceId": "CAD-05",
+      "attempt": "2",
+      "offset": "D+1",
+      "objective": "Perguntar melhor dia/período",
+      "notes": "Facilitar escolha"
+    },
+    {
+      "cadenceId": "CAD-05",
+      "attempt": "3",
+      "offset": "D+3",
+      "objective": "Reforçar objetividade da visita",
+      "notes": "Reduzir fricção"
+    },
+    {
+      "cadenceId": "CAD-05",
+      "attempt": "4",
+      "offset": "D+7",
+      "objective": "Reclassificar interesse",
+      "notes": "Se não marcar, volta para cadência de visita/futuro"
+    },
+    {
+      "cadenceId": "CAD-06",
+      "attempt": "D-2",
+      "offset": "D-2",
+      "objective": "Preparar confirmação",
+      "notes": "Checar se horário segue válido"
+    },
+    {
+      "cadenceId": "CAD-06",
+      "attempt": "D-1",
+      "offset": "D-1",
+      "objective": "Confirmar presença",
+      "notes": "Garantir comparecimento"
+    },
+    {
+      "cadenceId": "CAD-06",
+      "attempt": "D0",
+      "offset": "D0",
+      "objective": "Lembrete final",
+      "notes": "Aguardar cliente"
+    },
+    {
+      "cadenceId": "CAD-07",
+      "attempt": "1",
+      "offset": "D0",
+      "objective": "Abordar falta sem julgamento",
+      "notes": "Recuperar compromisso"
+    },
+    {
+      "cadenceId": "CAD-07",
+      "attempt": "2",
+      "offset": "D+1",
+      "objective": "Oferecer novo horário",
+      "notes": "Reagendar"
+    },
+    {
+      "cadenceId": "CAD-07",
+      "attempt": "3",
+      "offset": "D+3",
+      "objective": "Descobrir motivo",
+      "notes": "Horário, distância, mudança de plano"
+    },
+    {
+      "cadenceId": "CAD-07",
+      "attempt": "4",
+      "offset": "D+7",
+      "objective": "Atendimento objetivo",
+      "notes": "Tentar reativar"
+    },
+    {
+      "cadenceId": "CAD-07",
+      "attempt": "5",
+      "offset": "D+14",
+      "objective": "Deixar em aberto",
+      "notes": "Preservar futuro"
+    },
+    {
+      "cadenceId": "CAD-08",
+      "attempt": "1",
+      "offset": "D0",
+      "objective": "Solicitar pendência",
+      "notes": "Dados/documentos específicos"
+    },
+    {
+      "cadenceId": "CAD-08",
+      "attempt": "2",
+      "offset": "D+1",
+      "objective": "Relembrar pendência",
+      "notes": "Objetivo curto"
+    },
+    {
+      "cadenceId": "CAD-08",
+      "attempt": "3",
+      "offset": "D+3",
+      "objective": "Explicar importância da informação",
+      "notes": "Evitar estimativa sem base"
+    },
+    {
+      "cadenceId": "CAD-08",
+      "attempt": "4",
+      "offset": "D+7",
+      "objective": "Confirmar se ainda faz sentido",
+      "notes": "Fechar ou reclassificar"
+    },
+    {
+      "cadenceId": "CAD-09",
+      "attempt": "1",
+      "offset": "D0",
+      "objective": "Informar aprovação e próximos passos",
+      "notes": "Converter em fechamento"
+    },
+    {
+      "cadenceId": "CAD-09",
+      "attempt": "2",
+      "offset": "D+1",
+      "objective": "Revisar condição aprovada",
+      "notes": "Eliminar dúvida"
+    },
+    {
+      "cadenceId": "CAD-09",
+      "attempt": "3",
+      "offset": "D+3",
+      "objective": "Alinhar entrada/parcela/veículo",
+      "notes": "Transformar aprovação em decisão"
+    },
+    {
+      "cadenceId": "CAD-09",
+      "attempt": "4",
+      "offset": "D+7",
+      "objective": "Confirmar se ainda faz sentido",
+      "notes": "Evitar perder janela"
+    },
+    {
+      "cadenceId": "CAD-10",
+      "attempt": "1",
+      "offset": "D0",
+      "objective": "Envolver terceiro",
+      "notes": "Cônjuge, sócio ou familiar"
+    },
+    {
+      "cadenceId": "CAD-10",
+      "attempt": "2",
+      "offset": "D+2",
+      "objective": "Facilitar participação",
+      "notes": "Conversa, visita ou chamada"
+    },
+    {
+      "cadenceId": "CAD-10",
+      "attempt": "3",
+      "offset": "D+5",
+      "objective": "Reforçar decisão segura",
+      "notes": "Remover barreiras"
+    },
+    {
+      "cadenceId": "CAD-10",
+      "attempt": "4",
+      "offset": "D+10",
+      "objective": "Confirmar avanço",
+      "notes": "Evitar indefinição"
+    },
+    {
+      "cadenceId": "CAD-10",
+      "attempt": "5",
+      "offset": "D+14",
+      "objective": "Programar futuro ou encerrar",
+      "notes": "Preservar relacionamento"
+    },
+    {
+      "cadenceId": "CAD-11",
+      "attempt": "1",
+      "offset": "Dia útil",
+      "objective": "Verificar internamente",
+      "notes": "Loja, financeira, garantia"
+    },
+    {
+      "cadenceId": "CAD-11",
+      "attempt": "2",
+      "offset": "Próximo dia útil",
+      "objective": "Reforçar retorno interno",
+      "notes": "Não pressionar cliente sem informação"
+    },
+    {
+      "cadenceId": "CAD-11",
+      "attempt": "Escalação",
+      "offset": "Configuração",
+      "objective": "Acionar gestor se atrasado",
+      "notes": "Conforme regra da loja"
+    },
+    {
+      "cadenceId": "CAD-12",
+      "attempt": "Ativação",
+      "offset": "Data programada",
+      "objective": "Retomar relacionamento",
+      "notes": "Volta para Carteira Ativa"
+    },
+    {
+      "cadenceId": "CAD-13",
+      "attempt": "D+7",
+      "offset": "D+7",
+      "objective": "Satisfação e indicação",
+      "notes": "Configurável"
+    },
+    {
+      "cadenceId": "CAD-13",
+      "attempt": "D+30",
+      "offset": "D+30",
+      "objective": "Adaptação ao veículo",
+      "notes": "Configurável"
+    },
+    {
+      "cadenceId": "CAD-13",
+      "attempt": "D+180",
+      "offset": "D+180",
+      "objective": "Manter relacionamento",
+      "notes": "Configurável"
+    },
+    {
+      "cadenceId": "CAD-13",
+      "attempt": "12 meses",
+      "offset": "12m",
+      "objective": "Investigar troca",
+      "notes": "Configurável"
+    },
+    {
+      "cadenceId": "CAD-13",
+      "attempt": "18 meses",
+      "offset": "18m",
+      "objective": "Oferta de troca/upgrade",
+      "notes": "Configurável"
+    },
+    {
+      "cadenceId": "CAD-13",
+      "attempt": "24 meses",
+      "offset": "24m",
+      "objective": "Recompra ou troca",
+      "notes": "Configurável"
+    }
+  ]
+}

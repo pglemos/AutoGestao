@@ -1,0 +1,137 @@
+{
+  "version": "v1",
+  "sheet": "03 Cadências",
+  "count": 13,
+  "records": [
+    {
+      "cadenceId": "CAD-01",
+      "name": "Iniciar conversa em 14 dias",
+      "objective": "Conseguir resposta inicial",
+      "attempts": 6,
+      "dayPattern": "D0, D+1, D+2, D+3, D+7, D+13",
+      "application": "Lead sem resposta, indicação sem resposta, contato inicial, prospecção inicial",
+      "interruptionCondition": "Cliente respondeu",
+      "finalCondition": "Cadência concluída sem resposta"
+    },
+    {
+      "cadenceId": "CAD-02",
+      "name": "Gerar visita em 21 dias",
+      "objective": "Transformar interesse em compromisso presencial",
+      "attempts": 6,
+      "dayPattern": "D0, D+2, D+8, D+11, D+16, D+20",
+      "application": "Cliente qualificado sem visita, cliente quente sem visita, avaliação presencial necessária",
+      "interruptionCondition": "Cliente agendou visita",
+      "finalCondition": "Elegível para Plano de Ataque ou futuro"
+    },
+    {
+      "cadenceId": "CAD-03",
+      "name": "Recuperar negociação em 60 dias",
+      "objective": "Retomar proposta, decisão ou negociação parada",
+      "attempts": 6,
+      "dayPattern": "D0, D+3, D+9, D+19, D+29, D+59",
+      "application": "Proposta, pós-visita, decisão, objeções, negociação paralisada, reativação relevante",
+      "interruptionCondition": "Cliente respondeu ou decidiu",
+      "finalCondition": "Elegível para Plano de Ataque"
+    },
+    {
+      "cadenceId": "CAD-04",
+      "name": "Completar qualificação em 7 dias",
+      "objective": "Entender necessidade, veículo, prazo, troca e financiamento",
+      "attempts": 4,
+      "dayPattern": "D0, D+1, D+3, D+7",
+      "application": "Qualificação inicial, definir veículo, entender viabilidade",
+      "interruptionCondition": "Cliente qualificado ou compra futura",
+      "finalCondition": "Retomar depois ou encerrar"
+    },
+    {
+      "cadenceId": "CAD-05",
+      "name": "Definir data da visita em 7 dias",
+      "objective": "Converter aceite de visita em data/hora",
+      "attempts": 4,
+      "dayPattern": "D0, D+1, D+3, D+7",
+      "application": "Cliente aceitou visitar, mas ainda não definiu data e hora",
+      "interruptionCondition": "Data/hora definidas",
+      "finalCondition": "Reclassificar como cliente sem visita ou futuro"
+    },
+    {
+      "cadenceId": "CAD-06",
+      "name": "Confirmar visita",
+      "objective": "Proteger comparecimento à loja",
+      "attempts": 3,
+      "dayPattern": "D-2, D-1, D0",
+      "application": "Visitas agendadas",
+      "interruptionCondition": "Cliente confirmou ou reagendou",
+      "finalCondition": "Se não compareceu, iniciar CAD-07"
+    },
+    {
+      "cadenceId": "CAD-07",
+      "name": "Recuperar não comparecimento",
+      "objective": "Reagendar visita perdida",
+      "attempts": 5,
+      "dayPattern": "D0, D+1, D+3, D+7, D+14",
+      "application": "Cliente agendou e não compareceu",
+      "interruptionCondition": "Reagendou ou explicou motivo",
+      "finalCondition": "Contato futuro, perda ou Plano de Ataque"
+    },
+    {
+      "cadenceId": "CAD-08",
+      "name": "Pendência comercial em 7 dias",
+      "objective": "Coletar dados, documentos ou informação pendente",
+      "attempts": 4,
+      "dayPattern": "D0, D+1, D+3, D+7",
+      "application": "Dados da troca, documentos, dados para simulação, pendências do cliente",
+      "interruptionCondition": "Pendência resolvida",
+      "finalCondition": "Status de bloqueio ou perda/futuro"
+    },
+    {
+      "cadenceId": "CAD-09",
+      "name": "Converter financiamento aprovado",
+      "objective": "Transformar aprovação em fechamento",
+      "attempts": 4,
+      "dayPattern": "D0, D+1, D+3, D+7",
+      "application": "Financiamento aprovado sem compra",
+      "interruptionCondition": "Cliente aceita avançar ou objeção definida",
+      "finalCondition": "Retomar negociação ou perda"
+    },
+    {
+      "cadenceId": "CAD-10",
+      "name": "Aguardar decisão de terceiro",
+      "objective": "Envolver decisor ou trazer clareza",
+      "attempts": 5,
+      "dayPattern": "D0, D+2, D+5, D+10, D+14",
+      "application": "Decisão depende de cônjuge, sócio ou familiar",
+      "interruptionCondition": "Decisor envolvido ou decisão tomada",
+      "finalCondition": "Follow-up de decisão ou futuro"
+    },
+    {
+      "cadenceId": "CAD-11",
+      "name": "Verificação interna",
+      "objective": "Cobrar retorno interno sem pressionar cliente",
+      "attempts": "Variável",
+      "dayPattern": "Todo dia útil ou a cada 2 dias úteis",
+      "application": "Aguardando loja, financeira ou garantia",
+      "interruptionCondition": "Pendência interna resolvida",
+      "finalCondition": "Escalar para gestor se atrasado"
+    },
+    {
+      "cadenceId": "CAD-12",
+      "name": "Contato futuro",
+      "objective": "Retomar na data correta",
+      "attempts": 1,
+      "dayPattern": "Data programada",
+      "application": "Compra futura, contato futuro, oportunidade futura",
+      "interruptionCondition": "Data chega e oportunidade reativa",
+      "finalCondition": "Retorna à Carteira Ativa"
+    },
+    {
+      "cadenceId": "CAD-13",
+      "name": "Pós-venda",
+      "objective": "Relacionamento e novas oportunidades",
+      "attempts": "Marcos",
+      "dayPattern": "D+7, D+30, D+180, 12m, 18m, 24m",
+      "application": "Pós-venda configurável por loja",
+      "interruptionCondition": "Cada marco executado",
+      "finalCondition": "Novo ciclo de troca/recompra ou encerramento"
+    }
+  ]
+}

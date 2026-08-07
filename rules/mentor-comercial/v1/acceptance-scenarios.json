@@ -1,0 +1,142 @@
+{
+  "version": "v1",
+  "sheet": "11 Testes_Cenários",
+  "count": 15,
+  "records": [
+    {
+      "scenario": "1. Lead sem resposta",
+      "input": "Canal Internet; status INT-C01; primeira mensagem enviada",
+      "expectedStatus": "INT-C02 Sem resposta — cadência ativa",
+      "expectedNextStep": "Executar próxima tentativa CAD-01",
+      "expectedCentral": "Quando tentativa vence hoje",
+      "expectedScorePriority": "Score permanece alto se executado no prazo",
+      "notes": "Não punir falta de resposta do cliente"
+    },
+    {
+      "scenario": "2. Lead responde",
+      "input": "INT-C02; resultado Cliente respondeu",
+      "expectedStatus": "INT-C03 Resposta recebida — atendimento pendente",
+      "expectedNextStep": "Responder e atualizar status",
+      "expectedCentral": "Sim, retorno pendente",
+      "expectedScorePriority": "Prioridade alta/máxima se aguardando vendedor",
+      "notes": "Interrompe cadência anterior"
+    },
+    {
+      "scenario": "3. Visita D+5",
+      "input": "Status INT-V02 com data futura",
+      "expectedStatus": "Visita agendada",
+      "expectedNextStep": "Aguardar janela de confirmação",
+      "expectedCentral": "Não",
+      "expectedScorePriority": "Score alto se próxima data definida",
+      "notes": "Valoriza Qualidade da Carteira"
+    },
+    {
+      "scenario": "4. Visita D-1",
+      "input": "INT-V02 entra em D-1",
+      "expectedStatus": "INT-V03 Visita a confirmar",
+      "expectedNextStep": "Confirmar visita",
+      "expectedCentral": "Sim",
+      "expectedScorePriority": "Prioridade alta",
+      "notes": "Proteger comparecimento"
+    },
+    {
+      "scenario": "5. Visita hoje",
+      "input": "Data do agendamento é hoje",
+      "expectedStatus": "INT-V05 Visita hoje",
+      "expectedNextStep": "Recepcionar cliente",
+      "expectedCentral": "Sim",
+      "expectedScorePriority": "Potencial muito alto",
+      "notes": "Central tipo Atendimento agendado"
+    },
+    {
+      "scenario": "6. Não compareceu",
+      "input": "INT-V05; resultado Não compareceu",
+      "expectedStatus": "INT-V07 Cliente não compareceu",
+      "expectedNextStep": "Abordar e reagendar",
+      "expectedCentral": "Sim",
+      "expectedScorePriority": "Prioridade alta",
+      "notes": "Iniciar CAD-07"
+    },
+    {
+      "scenario": "7. Dados da troca pendentes",
+      "input": "Status TR-01",
+      "expectedStatus": "TR-01",
+      "expectedNextStep": "Solicitar placa, versão, ano, km e fotos",
+      "expectedCentral": "Quando ação vence",
+      "expectedScorePriority": "Prioridade alta se negociação quente",
+      "notes": "Não recomendar visita antes de dados, exceto avaliação presencial"
+    },
+    {
+      "scenario": "8. Avaliação presencial",
+      "input": "Status TR-03",
+      "expectedStatus": "TR-03",
+      "expectedNextStep": "Agendar avaliação presencial",
+      "expectedCentral": "Quando ação vence",
+      "expectedScorePriority": "Alto",
+      "notes": "Aqui o próximo passo é visita"
+    },
+    {
+      "scenario": "9. Financiamento aprovado",
+      "input": "Status FIN-06",
+      "expectedStatus": "FIN-06",
+      "expectedNextStep": "Conduzir para fechamento",
+      "expectedCentral": "Sim",
+      "expectedScorePriority": "Potencial muito alto; prioridade alta/máxima",
+      "notes": "Não prometer condições não registradas"
+    },
+    {
+      "scenario": "10. Cliente Porta não comprou",
+      "input": "Canal Porta; POR-A03",
+      "expectedStatus": "POR-A03",
+      "expectedNextStep": "Enviar resumo e retomar conversa",
+      "expectedCentral": "Sim",
+      "expectedScorePriority": "Alto",
+      "notes": "Se vender depois por follow-up, canalVenda pode ser Carteira"
+    },
+    {
+      "scenario": "11. Lead antigo >90 dias",
+      "input": "CanalEntrada Internet; transferido para Carteira",
+      "expectedStatus": "PER-06 / CAR-C04",
+      "expectedNextStep": "Reativar com novo contexto",
+      "expectedCentral": "Quando ação vence",
+      "expectedScorePriority": "Médio",
+      "notes": "Preserva origem original e mede canalVenda Carteira"
+    },
+    {
+      "scenario": "12. Cadência completa sem resposta",
+      "input": "Todas tentativas executadas; sem retorno",
+      "expectedStatus": "PER-03 Cadência encerrada sem resposta",
+      "expectedNextStep": "Retirar da Carteira Ativa",
+      "expectedCentral": "Não",
+      "expectedScorePriority": "Score pode continuar bom se tudo feito no prazo",
+      "notes": "Elegível para Plano de Ataque futuro"
+    },
+    {
+      "scenario": "13. Cliente respondeu e vendedor não tratou",
+      "input": "Responsável Vendedor; ação vencida",
+      "expectedStatus": "Status atual permanece, mas alerta sobe",
+      "expectedNextStep": "Responder/atualizar imediatamente",
+      "expectedCentral": "Sim",
+      "expectedScorePriority": "Score crítico; prioridade máxima",
+      "notes": "Bloqueia nova missão se pendente"
+    },
+    {
+      "scenario": "14. Compra futura",
+      "input": "Cliente declarou prazo futuro",
+      "expectedStatus": "INT-Q05 / PER-05",
+      "expectedNextStep": "Programar data de retomada",
+      "expectedCentral": "Não até data",
+      "expectedScorePriority": "Não deve poluir Carteira Ativa",
+      "notes": "Na data, reativa oportunidade"
+    },
+    {
+      "scenario": "15. Garantia aberta",
+      "input": "REL-07",
+      "expectedStatus": "Garantia aberta",
+      "expectedNextStep": "Confirmar recebimento e orientar",
+      "expectedCentral": "Quando acompanhamento vence",
+      "expectedScorePriority": "Médio",
+      "notes": "Foco em relacionamento e proteção de receita"
+    }
+  ]
+}
