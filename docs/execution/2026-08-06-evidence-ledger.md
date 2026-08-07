@@ -211,3 +211,17 @@
 - Nota: o token colado pelo usuário (ghp_...) retornou Bad credentials — aplicação feita via gh autenticado (keyring).
 - Timestamp: 2026-08-07T03:10:00Z
 - Conclusão: DONE_WITH_EVIDENCE
+
+### EV-F1-001 - Fase 1 Auditoria Integral: T1.1–T1.6
+- Requisito: Fase 1 (T1.1 a T1.6) do master plan autônomo
+- Ambiente: análise estática (grep/glob/contagem) + manifestos executáveis + GitHub
+- Resultado observado:
+  - **T1.1** Arquitetura: entry index.html → main.tsx (React 19, R7, RQ5, SB2, Sentry); provider chain; 54 pages, 843 features, 113 components, 90 hooks, 202 lib, 22 design-system, 75 test, 10 e2e, 2 api Vercel, 40 supabase; 22 edge functions; 99 scripts standalone
+  - **T1.2** Scripts/workflows: 21 workflows; 5 checks obrigatórios (typecheck, unit-tests, verify, Detect Secrets, review); 2 scripts npm órfãos (`fix:admin-access`, `seed:sandbox:live`); sem hooks git locais
+  - **T1.3** Rotas: `npm run audit:routes-data -- --check` exit 0 + contrato 2 pass; 109 rotas (101 protegidas, 8 públicas), 127 tabelas, 87 RPCs, 9 parametrizadas, catch-all App.tsx:495
+  - **T1.4** Componentes: 36 JSX órfãos (0 imports), 36 duplicações jsx↔tsx, top DS (Typography 196, Button 188, Label 109, Badge 107)
+  - **T1.5** Integrações: Supabase/Sentry/Vercel/Google/OpenRouter/WebPush/Resend/WhatsApp; 12 crons pg_cron; secrets listados por nome sem valores
+  - **T1.6** Dívida: 0 TODO/FIXME/HACK/@ts-ignore/console.log em produção; 89 catches silenciosos; baseline migration monolítica 3.334 linhas; 23 scripts legacy; 42 migrations arquivadas
+- Artefatos: docs/auditoria/fase-1/T1.1 a T1.6 (6 docs, commit b6784e9e, PR #183)
+- Timestamp: 2026-08-07T04:05:00Z
+- Conclusão: DONE_WITH_EVIDENCE
