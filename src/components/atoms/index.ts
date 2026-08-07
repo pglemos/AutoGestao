@@ -46,3 +46,7 @@ export { Typography, typographyVariants } from './Typography'
 export type { TypographyProps } from './Typography'
 export { VisuallyHidden } from './VisuallyHidden'
 export type { VisuallyHiddenProps } from './VisuallyHidden'
+export { IconBadge } from './IconBadge'
+export type { IconBadgeProps } from './IconBadge'
+
+

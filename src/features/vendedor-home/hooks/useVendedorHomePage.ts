@@ -1,5 +1,6 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { toast } from '@/lib/toast'
+import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import { useCheckins } from '@/hooks/useCheckins'
 import { useGoals, useStoreMetaRules } from '@/hooks/useGoals'
@@ -11,6 +12,7 @@ import { useSellerMetrics } from '@/hooks/useSellerMetrics'
 import { useOfficialSellerPerformance } from '@/hooks/useOfficialSellerPerformance'
 import { formatWhatsAppMorningReport } from '@/lib/calculations'
 import { calculateDailyRoutineDiscipline } from '@/lib/daily-routine'
+import { resolveIndividualGoal } from '@/lib/storeSalesRules'
 import { useOportunidades } from '@/features/crm/hooks/useOportunidades'
 import { useVendedorPerfil } from '@/features/crm/hooks/useVendedorPerfil'
 import {
@@ -51,6 +53,8 @@ export function useVendedorHomePage() {
   const { perfil: vendedorPerfil, vinculoTipo, loading: perfilVendedorLoading } = useVendedorPerfil()
   const [isRefetching, setIsRefetching] = useState(false)
   const [lastUpdatedAt, setLastUpdatedAt] = useState<Date | null>(null)
+  const [activeSellersCount, setActiveSellersCount] = useState<number | null>(null)
+  const [customGoal, setCustomGoal] = useState<number | null>(null)
 
   const officialPeriod = useMemo(() => {
     const today = new Intl.DateTimeFormat('en-CA', { timeZone: 'America/Sao_Paulo', year: 'numeric', month: '2-digit', day: '2-digit' }).format(new Date())
@@ -61,6 +65,76 @@ export function useVendedorHomePage() {
     loading: officialPerformanceLoading,
     refetch: refetchOfficialPerformance,
   } = useOfficialSellerPerformance(officialPeriod.start, officialPeriod.end, profile?.id, storeId)
+
+  // Contagem de vendedores ativos na loja para rateio em modo 'even'
+  useEffect(() => {
+    if (!storeId) { setActiveSellersCount(null); return }
+    let cancelled = false
+    supabase.rpc('contar_vendedores_ativos_loja', { p_store_id: storeId }).then(({ data, error }) => {
+      if (!cancelled) setActiveSellersCount(error ? null : (typeof data === 'number' ? data : null))
+    })
+    return () => { cancelled = true }
+  }, [storeId])
+
+  // Meta individual custom (modo 'custom' na tabela metas)
+  useEffect(() => {
+    const sellerId = profile?.id
+    if (!storeId || !sellerId) { setCustomGoal(null); return }
+    let cancelled = false
+    const now = new Date()
+    supabase
+      .from('metas')
+      .select('target')
+      .eq('store_id', storeId)
+      .eq('user_id', sellerId)
+      .eq('month', now.getMonth() + 1)
+      .eq('year', now.getFullYear())
+      .maybeSingle()
+      .then(({ data, error }) => {
+        if (cancelled) return
+        const target = !error && data ? Number((data as { target?: number }).target) : null
+        setCustomGoal(Number.isFinite(target) && (target as number) > 0 ? (target as number) : null)
+      })
+    return () => { cancelled = true }
+  }, [storeId, profile?.id])
+
+  // Assinatura Realtime para atualizar vendas e performance em tempo real
+  useEffect(() => {
+    if (!storeId) return
+    const channel = supabase
+      .channel(`vendedor-home-realtime-${storeId}-${profile?.id || 'all'}`)
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'eventos_comerciais', filter: `loja_id=eq.${storeId}` },
+        () => {
+          void refetchOfficialPerformance()
+          void refetchOportunidades()
+        },
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', filter: `loja_id=eq.${storeId}`, table: 'oportunidades' },
+        () => {
+          void refetchOfficialPerformance()
+          void refetchOportunidades()
+        },
+      )
+      .subscribe()
+
+    return () => {
+      void supabase.removeChannel(channel)
+    }
+  }, [storeId, profile?.id, refetchOfficialPerformance, refetchOportunidades])
+
+  const resolvedMeta = useMemo(() => {
+    const storeTarget = storeGoal?.target ?? metaRules?.monthly_goal ?? null
+    return resolveIndividualGoal({
+      mode: metaRules?.individual_goal_mode,
+      storeMonthlyGoal: storeTarget,
+      activeSellersCount: activeSellersCount ?? (ranking.length > 0 ? ranking.length : null),
+      customGoal,
+    })
+  }, [storeGoal?.target, metaRules?.monthly_goal, metaRules?.individual_goal_mode, activeSellersCount, ranking.length, customGoal])
 
   const tacticalPrescription = useTacticalPrescription({
     checkins,
@@ -77,17 +151,24 @@ export function useVendedorHomePage() {
     projectionMode: storeGoal?.projection_mode,
   })
   const metrics = useMemo(() => {
-    if (!legacyMetrics || !officialPerformance) return legacyMetrics
+    if (!legacyMetrics) return null
+    const vendasMes = officialPerformance?.vendas_realizadas ?? legacyMetrics.vendasMes
+    const meta = resolvedMeta ?? (officialPerformance?.meta && officialPerformance.meta > 0 ? officialPerformance.meta : legacyMetrics.meta)
+    const atingimento = meta > 0 ? Math.round((vendasMes / meta) * 100 * 100) / 100 : 0
+    const faltaX = Math.max(meta - vendasMes, 0)
+    const projecao = officialPerformance?.vendas_projetadas ?? legacyMetrics.projecao
+    const vendasOntem = officialPerformance?.vendas_ultimo_dia ?? legacyMetrics.vendasOntem
+
     return {
       ...legacyMetrics,
-      vendasMes: officialPerformance.vendas_realizadas,
-      projecao: officialPerformance.vendas_projetadas,
-      meta: officialPerformance.meta,
-      atingimento: officialPerformance.atingimento,
-      faltaX: Math.max(officialPerformance.meta - officialPerformance.vendas_realizadas, 0),
-      vendasOntem: officialPerformance.vendas_ultimo_dia,
+      vendasMes,
+      projecao,
+      meta,
+      atingimento,
+      faltaX,
+      vendasOntem,
     }
-  }, [legacyMetrics, officialPerformance])
+  }, [legacyMetrics, officialPerformance, resolvedMeta])
   const vendasDetalhadasRemuneracao = useMemo<RemuneracaoVenda[]>(() => {
     const now = new Date()
     const monthStart = new Date(now.getFullYear(), now.getMonth(), 1).getTime()

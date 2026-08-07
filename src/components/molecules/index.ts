@@ -39,3 +39,6 @@ export { UserSummary, initialsFrom } from './UserSummary'
 export type { UserSummaryProps } from './UserSummary'
 export { ViewModeSelector } from './ViewModeSelector'
 export type { ViewModeSelectorProps, ViewModeOption } from './ViewModeSelector'
+export { OptionCard } from './OptionCard'
+export type { OptionCardProps } from './OptionCard'
+

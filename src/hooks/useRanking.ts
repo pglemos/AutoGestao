@@ -6,6 +6,7 @@ import { calcularAtingimento, getDiasInfo, getOperationalStatus } from '@/lib/ca
 import { calculateReferenceDate } from '@/hooks/useCheckins'
 import { isLancamentosViaRpcEnabled } from '@/lib/feature-flags'
 import { traced } from '@/lib/observability'
+import { resolveIndividualGoal } from '@/lib/storeSalesRules'
 
 type LancamentoRow = {
     seller_user_id: string
@@ -83,7 +84,11 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
         setError(null)
 
         try {
-        const [officialResult, routineResult] = await Promise.all([
+        const queryDate = new Date(`${startDate}T12:00:00`)
+        const monthNum = queryDate.getMonth() + 1
+        const yearNum = queryDate.getFullYear()
+
+        const [officialResult, routineResult, rulesRes, metasRes] = await Promise.all([
             supabase.rpc('vendedor_performance_oficial', {
                 p_start_date: startDate,
                 p_end_date: endDate,
@@ -96,10 +101,23 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
                 .eq('store_id', storeId)
                 .gte('due_at', `${startDate}T00:00:00-03:00`)
                 .lte('due_at', `${endDate}T23:59:59-03:00`),
+            supabase
+                .from('regras_metas_loja')
+                .select('monthly_goal, individual_goal_mode, include_venda_loja_in_individual_goal')
+                .eq('store_id', storeId)
+                .maybeSingle(),
+            supabase
+                .from('metas')
+                .select('user_id, target')
+                .eq('store_id', storeId)
+                .eq('month', monthNum)
+                .eq('year', yearNum),
         ])
         const officialRows = (officialResult.data as OfficialPerformanceRow[] | null) || []
         const checkinsError = officialResult.error
         const routineRows = (routineResult.data as RoutineActionRow[] | null) || []
+        const rules = rulesRes.data
+        const customMetas = metasRes.data
 
         if (routineResult.error) {
             console.error('Audit Error [useRanking]: routine actions fail ->', routineResult.error.message)
@@ -140,14 +158,8 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
             return
         }
 
-        // Get metas for the store
-        const { data: rules, error: rulesError } = await supabase
-            .from('regras_metas_loja')
-            .select('monthly_goal, include_venda_loja_in_individual_goal')
-            .eq('store_id', storeId)
-            .maybeSingle()
-        if (rulesError) {
-            console.error('Audit Error [useRanking]: rules fail ->', rulesError.message)
+        if (rulesRes.error) {
+            console.error('Audit Error [useRanking]: rules fail ->', rulesRes.error.message)
             setError('Não foi possível carregar as metas do ranking.')
             setRanking([])
             return
@@ -161,6 +173,15 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
 
         const storeGoal = rules?.monthly_goal || 0
 
+        const customGoalMap = new Map<string, number>()
+        if (customMetas) {
+            for (const cm of customMetas) {
+                if (cm.target && Number(cm.target) > 0) {
+                    customGoalMap.set(cm.user_id, Number(cm.target))
+                }
+            }
+        }
+
         const routineBySeller = new Map<string, { completed: number; total: number }>()
         for (const action of routineRows) {
             const current = routineBySeller.get(action.seller_id) || { completed: 0, total: 0 }
@@ -170,15 +191,8 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
         }
         
         const aggregated = new Map<string, { leads: number; agd: number; visitas: number; vnd: number; vnd_yesterday: number; name: string; avatarUrl: string | null; isVendaLoja: boolean }>()
-        // Todo integrante vinculado à loja vende e entra no rateio da meta.
-        // `is_venda_loja` continua existindo como marcação de cadastro, mas não
-        // remove ninguém da contagem: em produção 148 dos 159 vendedores ativos
-        // estão marcados, e excluí-los zerava a meta e esvaziava o ranking de
-        // 28 lojas inteiras.
         const realSellersCount = members.length
         const goalDivisor = realSellersCount
-
-        const daysInfo = getDiasInfo()
 
         for (const m of members) {
             const user = (m as { users?: User }).users
@@ -203,7 +217,14 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
 
         const entries: RankingEntry[] = Array.from(aggregated.entries())
             .map(([userId, data]) => {
-                const meta = Math.round(storeGoal / Math.max(goalDivisor, 1))
+                const customGoal = customGoalMap.get(userId) || null
+                const meta = resolveIndividualGoal({
+                    mode: rules?.individual_goal_mode,
+                    storeMonthlyGoal: storeGoal,
+                    activeSellersCount: goalDivisor,
+                    customGoal,
+                }) ?? Math.round(storeGoal / Math.max(goalDivisor, 1))
+
                 const routine = routineBySeller.get(userId)
 
                 return {
@@ -233,7 +254,7 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
                 const diasInfo = getDiasInfo()
                 const targetToday = (e.meta / diasInfo.total) * diasInfo.decorridos
                 const efficiency = targetToday > 0 ? (e.vnd_total / targetToday) * 100 : 100
-                const status = getOperationalStatus(efficiency, 100) // Ranking presume check-in p/ quem aparece
+                const status = getOperationalStatus(efficiency, 100)
 
                 const projecao = Math.round((e.vnd_total / Math.max(diasInfo.decorridos, 1)) * diasInfo.total)
                 const ritmo = Math.max(0, Math.ceil((e.meta - e.vnd_total) / Math.max(diasInfo.restantes, 1)))
@@ -261,7 +282,34 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
         }
     }, [storeId, startDate, endDate])
 
-    useEffect(() => { fetchRanking() }, [fetchRanking])
+    useEffect(() => {
+        void fetchRanking()
+        if (!storeId) return
+
+        const channel = supabase
+            .channel(`ranking-store-realtime-${storeId}`)
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'eventos_comerciais', filter: `loja_id=eq.${storeId}` },
+                () => { void fetchRanking() }
+            )
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'oportunidades', filter: `loja_id=eq.${storeId}` },
+                () => { void fetchRanking() }
+            )
+            .on(
+                'postgres_changes',
+                { event: '*', schema: 'public', table: 'lancamentos_diarios', filter: `store_id=eq.${storeId}` },
+                () => { void fetchRanking() }
+            )
+            .subscribe()
+
+        return () => {
+            void supabase.removeChannel(channel)
+        }
+    }, [fetchRanking, storeId])
+
     return {
         ranking,
         loading,

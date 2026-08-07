@@ -196,7 +196,7 @@
 | `mentor_scripts` | 1 |
 | `mentor_status_definitions` | 1 |
 | `mentor_transitions` | 1 |
-| `metas` | 2 |
+| `metas` | 4 |
 | `metas_metricas_cliente` | 1 |
 | `modelos_formulario_pmr` | 1 |
 | `modulos_cliente_consultoria` | 3 |
@@ -403,7 +403,7 @@
 | `metas_metricas_cliente:upsert` | 1 |
 | `metas:delete` | 1 |
 | `metas:insert` | 1 |
-| `metas:select` | 2 |
+| `metas:select` | 4 |
 | `metas:update` | 1 |
 | `modelos_formulario_pmr:select` | 1 |
 | `modulos_cliente_consultoria:insert` | 1 |
@@ -566,7 +566,7 @@
 | `consolidate_store_target_plan` | 2 |
 | `consultar_liberacao_por_token` | 1 |
 | `consultor_ia_sugerir_acao` | 1 |
-| `contar_vendedores_ativos_loja` | 1 |
+| `contar_vendedores_ativos_loja` | 2 |
 | `create_pdi_session_bundle` | 1 |
 | `criar_agendamento_crm` | 1 |
 | `criar_oportunidade_crm` | 1 |

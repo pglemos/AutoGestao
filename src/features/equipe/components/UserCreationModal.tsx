@@ -13,6 +13,7 @@ import type { RegisterUserInput } from '@/hooks/useTeam'
 import type { Store, UserRole } from '@/types/database'
 
 import { HelpTooltip } from '@/components/ui/HelpTooltip'
+import { OptionCard } from '@/components/molecules/OptionCard'
 import { TransferConfirmationDialog, type TransferConfirmationData } from '@/features/lojas/components/team-panel/TransferConfirmationDialog'
 
 const papeisInternosMx = ['administrador_geral', 'administrador_mx', 'consultor_mx']
@@ -360,21 +361,25 @@ export function UserCreationModal({ isOpen, onClose, onSuccess, registerUser, st
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-mx-md">
-                      <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
-                        <span className="text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">Operacional ativo</span>
-                        <input type="checkbox" checked={formData.is_active} onChange={e => setFormData({...formData, is_active: e.target.checked})} disabled={papelSelecionadoInterno || formData.role !== 'vendedor'} className="h-mx-sm w-mx-sm accent-brand-primary disabled:opacity-40" />
-                      </label>
-                      <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
-                        <div className="flex items-center gap-1.5">
-                          <span className="text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">Vendas da Gestão / Apoio (Sem Meta)</span>
-                          <HelpTooltip text="Ative para Gerentes, Donos ou integrantes de apoio que fazem vendas. As vendas entram no faturamento total e ranking em tempo real, sem gerar cobrança de meta individual ou alterar comissões da equipe." side="top" />
-                        </div>
-                        <input type="checkbox" checked={formData.is_venda_loja} onChange={e => setFormData({...formData, is_venda_loja: e.target.checked})} disabled={papelSelecionadoInterno} className="h-mx-sm w-mx-sm accent-brand-primary disabled:opacity-40" />
-                      </label>
-                      <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
-                        <span className="text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">Carência no mês</span>
-                        <input type="checkbox" checked={formData.closing_month_grace} onChange={e => setFormData({...formData, closing_month_grace: e.target.checked})} disabled={papelSelecionadoInterno || formData.role !== 'vendedor'} className="h-mx-sm w-mx-sm accent-brand-primary disabled:opacity-40" />
-                      </label>
+                      <OptionCard
+                        title="Operacional ativo"
+                        checked={formData.is_active}
+                        onChange={checked => setFormData({ ...formData, is_active: checked })}
+                        disabled={papelSelecionadoInterno || formData.role !== 'vendedor'}
+                      />
+                      <OptionCard
+                        title="Vendas da Gestão / Apoio (Sem Meta)"
+                        tooltip="Ative para Gerentes, Donos ou integrantes de apoio que fazem vendas. As vendas entram no faturamento total e ranking em tempo real, sem gerar cobrança de meta individual ou alterar comissões da equipe."
+                        checked={formData.is_venda_loja}
+                        onChange={checked => setFormData({ ...formData, is_venda_loja: checked })}
+                        disabled={papelSelecionadoInterno}
+                      />
+                      <OptionCard
+                        title="Carência no mês"
+                        checked={formData.closing_month_grace}
+                        onChange={checked => setFormData({ ...formData, closing_month_grace: checked })}
+                        disabled={papelSelecionadoInterno || formData.role !== 'vendedor'}
+                      />
                     </div>
 
                     <div className="pt-mx-md">
