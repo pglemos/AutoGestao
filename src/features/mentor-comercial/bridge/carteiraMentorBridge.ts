@@ -38,7 +38,12 @@ import {
   resolveScriptRef,
   type ScriptVariables,
 } from '../engine/script'
-import { statusOficialDaSituacao } from './situacaoLegadaMap'
+import {
+  ehTerminalTecnico,
+  resolverSituacaoLegada,
+  statusOficialDaSituacao,
+  type FatosLegados,
+} from './situacaoLegadaMap'
 import {
   computePriority,
   type PotentialLevel,
@@ -301,6 +306,38 @@ export function calcularPrioridadeOficial(
 // ---------------------------------------------------------------------------
 
 
+
+/**
+ * Extrai do registro legado apenas os FATOS que existem de verdade.
+ *
+ * As situações genéricas aposentadas ("Lead sem resposta", "Financiamento em análise",
+ * "Aguardando resposta do cliente", "Aguardando ação do vendedor", "Pós-venda ativo",
+ * "Oportunidade futura") só resolvem para um status oficial se o fato correspondente
+ * estiver registrado. Nada é preenchido para forçar uma resolução.
+ */
+export function fatosDoCliente(
+  cliente: (ClienteCarteira & Record<string, unknown>) | null | undefined,
+): FatosLegados {
+  if (!cliente) return {}
+  const num = (v: unknown): number | null => (typeof v === 'number' ? v : null)
+  const str = (v: unknown): string | null => (typeof v === 'string' && v.trim() ? v : null)
+  const bool = (v: unknown): boolean | null => (typeof v === 'boolean' ? v : null)
+
+  return {
+    tentativasExecutadas: num(cliente.cadencia_tentativa) ?? num(cliente.tentativas_executadas),
+    cadenciaStatus: cliente.cadencia_status ?? null,
+    clienteRespondeu: bool(cliente.cliente_respondeu),
+    bloqueadorNegociacao: str(cliente.bloqueador) ?? str(cliente.bloqueador_negociacao),
+    financiamentoEstagio: cliente.financiamento_status ?? str(cliente.financiamento_estagio),
+    propostaEnviada: bool(cliente.proposta_enviada),
+    simulacaoEnviada: bool(cliente.simulacao_enviada),
+    responsavel: cliente.responsavel ?? null,
+    dataRetomada: str(cliente.data_retomada) ?? str(cliente.contato_futuro_em),
+    marcoPosVenda: str(cliente.marco_pos_venda),
+    etapa: str(cliente.etapa),
+  }
+}
+
 export type ObjetivoEProximoPasso = {
   objetivo: string
   proximoPasso: string
@@ -318,8 +355,9 @@ export type ObjetivoEProximoPasso = {
  */
 export function objetivoEProximoPassoOficial(
   situacao: string | null | undefined,
+  fatos: FatosLegados = {},
 ): ObjetivoEProximoPasso | null {
-  const statusId = statusOficialDaSituacao(situacao)
+  const statusId = statusOficialDaSituacao(situacao, fatos)
   if (!statusId) return null
 
   const status = statusPorId(statusId)
@@ -351,7 +389,13 @@ export type ScriptOficial = {
   allowWhatsApp: boolean
   isInternal: boolean
   /** Motivo quando não foi possível resolver. */
-  motivo: 'RESOLVED' | 'SEM_MAPEAMENTO' | 'SOURCE_BLOCKER' | 'NOT_FOUND' | 'ATTEMPT_OUT_OF_RANGE'
+  motivo:
+    | 'RESOLVED'
+    | 'SEM_MAPEAMENTO'
+    | 'SOURCE_BLOCKER'
+    | 'NOT_FOUND'
+    | 'ATTEMPT_OUT_OF_RANGE'
+    | 'TERMINAL_TECNICO'
 }
 
 /**
@@ -399,7 +443,19 @@ export function scriptOficialParaCliente(
   tentativa = 1,
 ): ScriptOficial | null {
   const situacao = cliente?.situacao_atual || cliente?.momento || null
-  const statusId = statusOficialDaSituacao(situacao)
+  // Terminal técnico não tem script comercial nenhum, por definição.
+  if (ehTerminalTecnico(situacao)) {
+    return {
+      scriptId: '',
+      texto: null,
+      scriptReady: false,
+      missingVariables: [],
+      allowWhatsApp: false,
+      isInternal: false,
+      motivo: 'TERMINAL_TECNICO',
+    }
+  }
+  const statusId = statusOficialDaSituacao(situacao, fatosDoCliente(cliente))
   if (!statusId) {
     return {
       scriptId: '',

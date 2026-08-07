@@ -16,6 +16,13 @@ const cliente = {
   canal_comercial: 'Internet',
   canal_origem: 'Internet',
   veiculo_interesse: 'Onix',
+  // O script agora vem da matriz oficial e o renderer é estrito: sem vendedor,
+  // loja e o fato da cadência, INT-C01 não renderiza e o bloco de script some.
+  // A fixture precisa representar um cliente com dados suficientes para que o
+  // teste continue comparando LAYOUT, e não a ausência do script.
+  vendedor_nome: 'Vendedor Paridade',
+  loja_nome: 'Loja Paridade',
+  cadencia_tentativa: 0,
 }
 
 mock.module('@/lib/supabase', () => ({

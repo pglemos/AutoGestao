@@ -1,8 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { Sparkles, Copy, Check, MessageCircle, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { gerarScriptLocal } from "./scriptTemplatesLocal";
-import { normalizarTelefoneWhatsApp } from "./carteiraUtils";
+import { getScriptOficial, normalizarTelefoneWhatsApp } from "./carteiraUtils";
 
 const TONS = [
   { id: "consultivo", label: "Consultivo", desc: "Perguntativo, orientado a entender a necessidade" },
@@ -12,20 +11,56 @@ const TONS = [
   { id: "audio",      label: "Áudio curto", desc: "Breve, natural, como uma mensagem de voz" },
 ];
 
+
+/** Explica, em português claro, por que não há script oficial disponível. */
+function descreverBloqueio(oficial) {
+  if (!oficial) return "Script oficial indisponível para esta situação.";
+  if (oficial.motivo === "SOURCE_BLOCKER") {
+    return "Este status referencia um script que ainda não existe na matriz oficial. O envio fica bloqueado até a planilha ser corrigida; as demais ações continuam disponíveis.";
+  }
+  if (oficial.motivo === "SEM_MAPEAMENTO") {
+    return "A situação atual ainda precisa ser classificada para que o script oficial seja definido. Use \"Atualizar situação\".";
+  }
+  if (oficial.motivo === "TERMINAL_TECNICO") {
+    return "Oportunidade cancelada não possui script comercial.";
+  }
+  if (oficial.missingVariables?.length) {
+    return `Faltam dados para montar a mensagem: ${oficial.missingVariables.join(", ")}.`;
+  }
+  return "Script oficial indisponível para esta situação.";
+}
+
 export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
   const [tomSelecionado, setTomSelecionado] = useState("consultivo");
   const [script, setScript] = useState("");
+  const [bloqueio, setBloqueio] = useState(null);
   const [copiado, setCopiado] = useState(false);
 
-  const gerarScript = useCallback((tom) => {
+  // FONTE ÚNICA: os 77 scripts oficiais da matriz v1.
+  //
+  // Antes o texto vinha de scriptTemplatesLocal, um banco paralelo que SORTEAVA uma
+  // variação a cada clique. Script comercial sorteado não é determinístico e não é
+  // rastreável à metodologia: dois vendedores no mesmo estado mandavam mensagens
+  // diferentes, e nenhuma delas constava da matriz.
+  //
+  // Quando o script oficial não está disponível — variável obrigatória faltando,
+  // SOURCE_BLOCKER da planilha, ou situação que ainda depende de classificação — a
+  // mensagem NÃO é substituída por outra: o motivo é exibido e o envio fica bloqueado.
+  const gerarScript = useCallback(() => {
     if (!cliente) return;
-    const texto = gerarScriptLocal({ cliente, proximoPasso, tom });
-    setScript(texto);
-  }, [cliente, proximoPasso]);
+    const oficial = getScriptOficial(cliente);
+    if (oficial && oficial.scriptReady && oficial.texto) {
+      setScript(oficial.texto);
+      setBloqueio(null);
+      return;
+    }
+    setScript("");
+    setBloqueio(descreverBloqueio(oficial));
+  }, [cliente]);
 
   useEffect(() => {
     if (!cliente) return;
-    gerarScript("consultivo");
+    gerarScript();
   }, [cliente?.id, gerarScript]);
 
   const copiar = useCallback(async () => {
@@ -66,7 +101,7 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
           {TONS.map(t => (
             <button
               key={t.id}
-              onClick={() => { setTomSelecionado(t.id); gerarScript(t.id); }}
+              onClick={() => { setTomSelecionado(t.id); gerarScript(); }}
               title={t.desc}
               className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg border transition-all ${
                 tomSelecionado === t.id
@@ -80,7 +115,17 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
         </div>
       </div>
 
-      {/* Script gerado */}
+      {/* Motivo do bloqueio — o vendedor precisa saber por que não há mensagem */}
+      {!script && bloqueio && (
+        <p
+          role="status"
+          className="text-xs leading-relaxed text-slate-700 bg-white border border-slate-200 rounded-xl p-3"
+        >
+          {bloqueio}
+        </p>
+      )}
+
+      {/* Script oficial */}
       {script && (
         <>
           <div>
@@ -108,7 +153,7 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
 
           <Button
             variant="ghost"
-            onClick={() => gerarScript(tomSelecionado)}
+            onClick={() => gerarScript()}
             className="w-full rounded-xl text-violet-600 hover:bg-violet-100 gap-2 text-xs"
           >
             <RefreshCw className="w-3.5 h-3.5" /> Gerar outra versão

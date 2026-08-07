@@ -5,6 +5,7 @@ import {
   classificacaoScoreOficial,
   objetivoEProximoPassoOficial,
   scriptOficialParaCliente,
+  fatosDoCliente,
 } from '@/features/mentor-comercial/bridge/carteiraMentorBridge';
 
 // ─── SITUAÇÕES ATUAIS ────────────────────────────────────────────────────────
@@ -210,6 +211,7 @@ export function calcularObjetivoEProximoPasso(cliente) {
   // dessas situações corresponde. Ver SITUACOES_LEGADAS_SEM_MAPEAMENTO.
   const oficial = objetivoEProximoPassoOficial(
     cliente?.situacao_atual || cliente?.momento || null,
+    fatosDoCliente(cliente),
   );
   if (oficial) {
     return { objetivo: oficial.objetivo, proximoPasso: oficial.proximoPasso };
@@ -606,11 +608,14 @@ export const SCRIPTS_BIBLIOTECA = {
 };
 
 export function getScriptParaProximoPasso(proximoPasso) {
-  // O fallback antigo devolvia "Enviar primeira abordagem" sempre que não achava a
-  // chave — mandando abordagem inicial para cliente em negociação, sem avisar
-  // ninguém. Script errado é pior que script ausente: devolve null e quem chama
-  // decide, em vez de enviar a mensagem de outro momento comercial.
-  return SCRIPTS_BIBLIOTECA[proximoPasso]?.texto ?? null;
+  // DESATIVADO. A biblioteca paralela de 34 scripts inventados não é mais fonte de
+  // texto comercial: a regra é "77 scripts oficiais + SOURCE_BLOCKER explícito",
+  // nunca "oficiais com fallback para o legado".
+  //
+  // Mantida a assinatura porque as telas ainda a chamam; devolve null para que o
+  // chamador use getScriptOficial(cliente) e trate o bloqueio explicitamente.
+  void proximoPasso;
+  return null;
 }
 
 /**
@@ -633,9 +638,11 @@ const SCRIPT_TEMPLATES_EXTRAS = {
 // "Recuperar propostas") ou uma chave avulsa de SCRIPT_TEMPLATES_EXTRAS — nunca
 // o uuid da linha em CarteiraMissao, que não tem como casar com nenhum script.
 export function getScriptParaMissao(missaoId) {
-  const scriptIdDoCatalogo = MISSOES.find(m => m.nome === missaoId)?.scriptId;
-  const scriptId = scriptIdDoCatalogo || SCRIPT_TEMPLATES_EXTRAS[missaoId];
-  return SCRIPTS_BIBLIOTECA[scriptId]?.texto || SCRIPTS_BIBLIOTECA["Enviar primeira abordagem"].texto;
+  // DESATIVADO pelo mesmo motivo de getScriptParaProximoPasso. O fallback anterior
+  // era ainda pior aqui: devolvia "Enviar primeira abordagem" para QUALQUER missão
+  // sem script, disparando abordagem inicial numa campanha de recuperação.
+  void missaoId;
+  return null;
 }
 
 // DDD 55 é real (Santa Maria/RS), então não dá pra decidir só pelo prefixo se o
@@ -648,8 +655,10 @@ export function normalizarTelefoneWhatsApp(raw) {
 }
 
 export function preencherScript(script, cliente) {
-  // Proteção contra nulos
-  if (!cliente) return script || "";
+  // Proteção contra nulos — `script` pode vir nulo agora que os getters legados
+  // deixaram de devolver texto inventado.
+  if (!script) return "";
+  if (!cliente) return script;
 
   // NÃO INVENTAR VALOR. A versão anterior mandava {opcao1} como "10h" e {opcao2}
   // como "14h", oferecendo ao cliente horários que ninguém combinou, e trocava

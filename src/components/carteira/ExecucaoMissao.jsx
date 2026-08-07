@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, MessageCircle, Copy, Check, ChevronRight, SkipForward } from "lucide-react";
 import { base44 } from "@/api/base44Client";
-import { getScriptParaMissao, preencherScript, resultadoParaMomento, calcularProximaAcao, RESULTADOS, normalizarTelefoneWhatsApp } from "./carteiraUtils";
+import { getScriptOficial, preencherScript, resultadoParaMomento, calcularProximaAcao, RESULTADOS, normalizarTelefoneWhatsApp } from "./carteiraUtils";
 
 export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida }) {
   const [indice, setIndice] = useState(missao?.indice_atual || 0);
@@ -25,8 +25,11 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
   const clienteAtual = clientes[indice];
   const progresso = total > 0 ? Math.round(((enviados + pulados) / total) * 100) : 0;
 
-  const scriptBase = getScriptParaMissao(missao.tipo_missao);
-  const scriptPreenchido = clienteAtual ? preencherScript(scriptBase, clienteAtual) : scriptBase;
+  // FONTE ÚNICA: script oficial do cliente da vez. O fallback antigo devolvia
+  // "Enviar primeira abordagem" para qualquer missão sem script, disparando
+  // abordagem inicial dentro de uma campanha de recuperação.
+  const scriptOficial = clienteAtual ? getScriptOficial(clienteAtual) : null;
+  const scriptPreenchido = scriptOficial?.scriptReady ? scriptOficial.texto : "";
   const script = scriptEditado || scriptPreenchido;
   const tel = normalizarTelefoneWhatsApp(clienteAtual?.whatsapp || "");
   const waUrl = tel ? `https://wa.me/${tel}?text=${encodeURIComponent(script)}` : null;

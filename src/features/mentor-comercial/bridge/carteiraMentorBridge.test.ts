@@ -192,10 +192,19 @@ describe('objetivo e próximo passo vêm do catálogo quando há prova', () => {
     )
   })
 
-  it('situação sem mapeamento provado devolve null — a tela mantém o texto legado', () => {
-    for (const semProva of ['Em negociação ativa', 'Pós-venda ativo', 'Vai pensar']) {
-      expect(objetivoEProximoPassoOficial(semProva)).toBeNull()
+  it('situação contextual sem fatos não resolve — a tela mantém o texto legado', () => {
+    // Estas dependem de fato que o registro legado não tem; sem ele não se adivinha.
+    for (const semFato of ['Pós-venda ativo', 'Aguardando ação do vendedor']) {
+      expect(objetivoEProximoPassoOficial(semFato)).toBeNull()
     }
+  })
+
+  it('"Venda cancelada" é terminal técnico e nunca vira objetivo comercial', () => {
+    expect(objetivoEProximoPassoOficial('Venda cancelada')).toBeNull()
+  })
+
+  it('"Em negociação ativa" resolve para o fallback oficial INT-N04', () => {
+    expect(objetivoEProximoPassoOficial('Em negociação ativa')?.statusId).toBe('INT-N04')
   })
 
   it('entrada vazia não resolve', () => {
@@ -240,11 +249,20 @@ describe('script oficial com renderização estrita', () => {
     expect(r?.texto ?? '').not.toContain('14h')
   })
 
-  it('situação sem mapeamento não devolve o script de outro momento', () => {
-    const r = scriptOficialParaCliente({ situacao_atual: 'Em negociação ativa' })
+  it('situação sem fato suficiente não devolve o script de outro momento', () => {
+    const r = scriptOficialParaCliente({ situacao_atual: 'Pós-venda ativo' })
     expect(r?.motivo).toBe('SEM_MAPEAMENTO')
     expect(r?.texto).toBeNull()
     expect(r?.allowWhatsApp).toBe(false)
+  })
+
+  it('INT-N04 usa o status normalmente, mas o script fica bloqueado pela fonte', () => {
+    // Decisão do proprietário, item 7: o SOURCE_BLOCKER bloqueia só a ação que
+    // depende do script; o status continua válido e utilizável.
+    const r = scriptOficialParaCliente({ situacao_atual: 'Em negociação ativa' })
+    expect(r?.motivo).toBe('SOURCE_BLOCKER')
+    expect(r?.allowWhatsApp).toBe(false)
+    expect(r?.texto).toBeNull()
   })
 
   it('variaveisDoCliente não preenche nada que o registro não tenha', () => {
