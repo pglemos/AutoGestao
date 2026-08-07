@@ -250,3 +250,13 @@
 - Artefatos: scripts/vercel-ignore-build.mjs (refatorado), scripts/vercel-ignore-build.test.mjs, .github/workflows/vercel-ignore-build.yml (PR #185, commit ec2885c2)
 - Timestamp: 2026-08-07T05:35:00Z
 - Conclusão: DONE_WITH_EVIDENCE
+
+### EV-F3-002 - Fase 3: camada git fetch no vercel-ignore-build (causa raiz em prod)
+- Requisito: T3.5 (testar na Vercel real)
+- Observação de produção: primeiro teste docs-only real (commit 5955879c) NÃO pulou — build aconteceu. Log do deploy: `Vercel ignore: unable to inspect commit range; build required`
+- Causa raiz: clone raso depth=1 na Vercel (prev SHA ausente) + fallback GitHub API falhou em produção (sem token; rate limit do IP compartilhado), caindo no build conservador
+- Correção: nova camada `fetchCommitObject(sha)` — `git fetch --quiet --depth=1 origin <prevSha>` (15s timeout) antes do fallback de API; API agora loga status HTTP para diagnóstico
+- Verificação: simulação exata em clone raso depth=1 (só o commit atual) → docs-only exit 0 (SKIP); 14/14 testes pass
+- Artefatos: commit 2f5fe506
+- Timestamp: 2026-08-07T05:50:00Z
+- Conclusão: DONE_WITH_EVIDENCE (revalidar SKIP real no próximo push docs-only)
