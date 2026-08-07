@@ -4,7 +4,10 @@ import path from 'node:path'
 import { describe, expect, it } from 'bun:test'
 
 import { classifyPriority, computePriority, POTENTIAL_POINTS } from './priority'
+import { advanceCadence, parseOffset, planCadence } from './cadence'
 import { classifyScore, SCORE_PILLAR_WEIGHTS } from './score'
+import { OFFICIAL_PLACEHOLDERS, renderScript, resolveScriptRef } from './script'
+import { buildTransitionIndex, resolveTransition } from './transition'
 
 /**
  * Conformidade do motor contra a PRÓPRIA FONTE.
@@ -158,6 +161,96 @@ describe('conformidade com a aba 09 Teste_Clientes', () => {
         divergences.push(
           `${c.client}: classe calc=${result.classification} fonte=${c.priorityClass}`,
         )
+      }
+    }
+    expect(divergences).toEqual([])
+  })
+})
+
+// ---------------------------------------------------------------------------
+// Conformidade dos motores contra o CATÁLOGO REAL (não fixtures).
+// ---------------------------------------------------------------------------
+
+
+const readCatalog = (name: string) =>
+  JSON.parse(readFileSync(path.join(RULES_DIR, name), 'utf8')).records as Array<Record<string, unknown>>
+
+describe('motores contra o catálogo real v1', () => {
+  const statuses = readCatalog('statuses.json')
+  const transitions = readCatalog('transitions.json')
+  const cadences = readCatalog('cadences.json')
+  const steps = readCatalog('cadence-steps.json')
+  const scripts = readCatalog('scripts.json')
+  const scriptCatalog = new Set<string>(scripts.map((s) => s.scriptId))
+
+  it('as 52 transições reais resolvem para o destino declarado na fonte', () => {
+    const index = buildTransitionIndex(transitions)
+    const divergences: string[] = []
+    for (const t of transitions) {
+      const isWildcard = /^qualquer\b/i.test(t.fromStatusOrContext ?? '')
+      const outcome = resolveTransition(index, {
+        statusLabel: isWildcard ? '<<status arbitrário>>' : t.fromStatusOrContext,
+        family: t.family,
+        result: t.result,
+        contexts: [t.fromStatusOrContext],
+      })
+      if (!outcome.matched || outcome.toStatus !== t.toStatus) {
+        divergences.push(`${t.family}/${t.result}: got=${outcome.toStatus} want=${t.toStatus}`)
+      }
+    }
+    expect(divergences).toEqual([])
+  })
+
+  it('as 13 cadências reais percorrem até o fim sem virar perda', () => {
+    const divergences: string[] = []
+    for (const c of cadences) {
+      const cadenceSteps = steps
+        .filter((s) => s.cadenceId === c.cadenceId)
+        .map((s) => ({ attempt: String(s.attempt), offset: String(s.offset) }))
+
+      const unknown = cadenceSteps.filter((s) => parseOffset(s.offset).kind === 'unknown')
+      if (unknown.length > 0) {
+        divergences.push(`${c.cadenceId}: offset desconhecido ${unknown.map((u) => u.offset)}`)
+        continue
+      }
+
+      let state = planCadence({
+        cadenceId: c.cadenceId,
+        steps: cadenceSteps,
+        startedAt: new Date('2026-08-10T09:00:00.000Z'),
+      })
+      for (let i = 0; i < cadenceSteps.length; i += 1) {
+        state = advanceCadence(state, { executed: true })
+      }
+      if (state.status !== 'completedWithoutResponse' || !state.attackEligible) {
+        divergences.push(`${c.cadenceId}: status=${state.status} attack=${state.attackEligible}`)
+      }
+    }
+    expect(divergences).toEqual([])
+  })
+
+  it('os 86 status resolvem script ou reportam SOURCE_BLOCKER — nunca falham em silêncio', () => {
+    const tally: Record<string, number> = {}
+    for (const s of statuses) {
+      const r = resolveScriptRef(s.scriptId, {
+        catalog: scriptCatalog,
+        attempt: 1,
+        statusId: s.statusId,
+      })
+      tally[r.reason] = (tally[r.reason] ?? 0) + 1
+    }
+    expect(tally).toEqual({ RESOLVED: 81, SOURCE_BLOCKER: 5 })
+  })
+
+  it('os 77 scripts renderizam com as 15 variáveis oficiais', () => {
+    const variables = Object.fromEntries(
+      [...OFFICIAL_PLACEHOLDERS].map((p) => [p.slice(1, -1), 'X']),
+    )
+    const divergences: string[] = []
+    for (const s of scripts) {
+      const r = renderScript(s.text ?? '', variables, { scriptId: s.scriptId })
+      if (!r.scriptReady || r.unknownPlaceholders.length > 0) {
+        divergences.push(`${s.scriptId}: missing=${r.missingVariables} unknown=${r.unknownPlaceholders}`)
       }
     }
     expect(divergences).toEqual([])
