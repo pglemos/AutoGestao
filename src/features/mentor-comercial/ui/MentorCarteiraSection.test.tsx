@@ -1,72 +1,82 @@
-import { describe, expect, test, afterEach } from 'bun:test'
-import React from 'react'
-import { render, screen, cleanup } from '@testing-library/react'
-import {
-  MentorCarteiraSection,
-  mapCarteiraOportunidadeToOpportunityData,
-  buildDecisionAndFactsFromCarteiraOportunidade,
-} from './MentorCarteiraSection'
+import { describe, expect, it } from 'bun:test'
+
+import { mapCarteiraOportunidadeToOpportunityData } from './MentorCarteiraSection'
 import type { CarteiraOportunidade } from './OportunidadeCard'
 
-describe('MentorCarteiraSection', () => {
-  afterEach(cleanup)
-  const sampleOp: CarteiraOportunidade = {
-    id: 'op-123',
-    cliente_id: 'cli-456',
-    cliente_nome: 'Carlos Eduardo',
-    cliente_telefone: '11999998888',
-    cliente_whatsapp: '11999998888',
-    canal: 'Carteira',
-    channel_entry: 'Carteira',
-    detailed_origin: 'Reativação de Carteira',
-    veiculo_interesse: 'Corolla 2.0 Flex',
-    placa_veiculo: 'ABC1D23',
-    current_status_code: 'CAR-C01',
-    status_label: 'Cadência Inicial',
-    current_responsible: 'Vendedor João',
-    temperature: 'Quente',
-    current_objective: 'Confirmar horário da visita',
-    current_next_step: 'Ligar para confirmar presença',
-    next_action_at: '2026-08-07T14:00:00Z',
-    current_cadence_step: 1,
-    mentor_score: 95,
-    mentor_score_class: 'Excelente',
-    priority_index: 85,
-    priority_class: 'Alta',
-    potential: 'Alto',
-    needs_mentor_classification: false,
-    etapa: 'qualificacao',
-  }
+/**
+ * Esta seção é uma camada de APRESENTAÇÃO. Ela exibe o que o motor já decidiu e
+ * persistiu. Estes testes existem para impedir que ela volte a decidir por conta
+ * própria — que foi exatamente o defeito encontrado na primeira versão, onde a UI
+ * montava uma MentorDecision inteira, com script inventado e score 100 por padrão.
+ */
 
-  test('mapCarteiraOportunidadeToOpportunityData mapeia os campos corretamente', () => {
-    const data = mapCarteiraOportunidadeToOpportunityData(sampleOp)
-    expect(data.opportunityId).toBe('op-123')
-    expect(data.clientId).toBe('cli-456')
-    expect(data.clientName).toBe('Carlos Eduardo')
-    expect(data.statusCode).toBe('CAR-C01')
-    expect(data.statusLabel).toBe('Cadência Inicial')
-    expect(data.responsible).toBe('Vendedor João')
-    expect(data.potential).toBe('Alto')
+const base: CarteiraOportunidade = {
+  id: 'op-123',
+  cliente_id: 'cli-456',
+  cliente_nome: 'Carlos Eduardo',
+  cliente_telefone: '11999998888',
+  current_status_code: 'CAR-C01',
+  status_label: 'Cliente sem contato recente',
+  current_responsible: 'Vendedor',
+  current_objective: 'Reabrir conversa',
+  current_next_step: 'Enviar mensagem de reativação',
+  potential: 'Alto',
+  mentor_score: 95,
+  mentor_score_class: 'Excelente',
+  priority_index: 85,
+  priority_class: 'Alta',
+}
+
+describe('mapeamento da oportunidade persistida', () => {
+  it('repassa os campos persistidos sem recalcular nada', () => {
+    const data = mapCarteiraOportunidadeToOpportunityData(base, 'loja-1', 'vend-1')
+    expect(data).not.toBeNull()
+    expect(data?.opportunityId).toBe('op-123')
+    expect(data?.clientId).toBe('cli-456')
+    expect(data?.clientName).toBe('Carlos Eduardo')
+    expect(data?.statusCode).toBe('CAR-C01')
+    expect(data?.statusLabel).toBe('Cliente sem contato recente')
+    expect(data?.potential).toBe('Alto')
+    expect(data?.priorityIndex).toBe(85)
+    expect(data?.priorityClass).toBe('Alta')
   })
 
-  test('buildDecisionAndFactsFromCarteiraOportunidade mapeia decisão e fatos determinísticos', () => {
-    const { decision, facts } = buildDecisionAndFactsFromCarteiraOportunidade(sampleOp)
-    expect(decision.statusCode).toBe('CAR-C01')
-    expect(decision.score.total).toBe(95)
-    expect(decision.score.classification).toBe('Excelente')
-    expect(decision.priority.index).toBe(85)
-    expect(decision.priority.classification).toBe('Alta')
-    expect(facts.statusCode).toBe('CAR-C01')
+  it('sem status persistido não há o que executar', () => {
+    const semStatus = { ...base, current_status_code: null }
+    expect(mapCarteiraOportunidadeToOpportunityData(semStatus, 'loja-1', 'vend-1')).toBeNull()
   })
 
-  test('renderiza componente com estado de carregamento', () => {
-    render(<MentorCarteiraSection loading={true} />)
-    expect(screen.getByText('Carregando oportunidades da carteira ativa...')).not.toBeNull()
+  it('campo ausente não vira valor de domínio inventado', () => {
+    const incompleta: CarteiraOportunidade = {
+      id: 'op-1',
+      cliente_id: 'cli-1',
+      cliente_nome: 'Sem Dados',
+      current_status_code: 'CAR-C01',
+    }
+    const data = mapCarteiraOportunidadeToOpportunityData(incompleta, 'loja-1', 'vend-1')
+    expect(data?.objective).toBe('Não informado')
+    expect(data?.responsible).toBe('Não informado')
+    // Campos de decisão ausentes permanecem ausentes — nunca um número otimista.
+    expect(data?.priorityIndex).toBeNull()
+    expect(data?.priorityClass).toBeNull()
+    expect(data?.potential).toBeNull()
   })
 
-  test('renderiza componente com oportunidades ativas', () => {
-    render(<MentorCarteiraSection oportunidades={[sampleOp]} />)
-    expect(screen.getByText('Carlos Eduardo')).not.toBeNull()
-    expect(screen.getByText('Carteira Ativa')).not.toBeNull()
+  it('não produz script nem template de script', () => {
+    const data = mapCarteiraOportunidadeToOpportunityData(base, 'loja-1', 'vend-1')
+    // A UI não conhece texto comercial. O script vem do catálogo, via motor.
+    expect(data?.scriptTemplate).toBeUndefined()
+    expect(data?.scriptRef).toBeUndefined()
+  })
+
+  it('não carrega decisão pré-montada', () => {
+    const data = mapCarteiraOportunidadeToOpportunityData(base, 'loja-1', 'vend-1')
+    expect(data?.decision).toBeUndefined()
+  })
+
+  it('prefere WhatsApp ao telefone quando ambos existem', () => {
+    const comWhatsapp = { ...base, cliente_whatsapp: '11911112222' }
+    const data = mapCarteiraOportunidadeToOpportunityData(comWhatsapp, 'loja-1', 'vend-1')
+    expect(data?.clientPhone).toBe('11911112222')
   })
 })

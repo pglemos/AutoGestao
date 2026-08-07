@@ -1,314 +1,257 @@
-/**
- * Componente MentorCarteiraSection — Mentor Comercial (TAREFA B01).
- *
- * Ponto de composição da rota /carteira-clientes:
- *  - Recebe a lista de oportunidades (`CarteiraOportunidade[]`)
- *  - Exibe a lista determinística em UMA COLUNA no desktop (cards horizontais amplos) via `CarteiraAtivaList`
- *  - Orquestra a abertura/fechamento das superfícies interativas:
- *      * Drawer "Executar Próximo Passo" (`ExecuteNextStepPanel`)
- *      * Modal "Atualização Guiada de Situação" (`GuidedStatusUpdate`)
- *      * Visão "Ficha da Oportunidade" (`FichaOportunidade`)
- *
- * Identidade visual: Cabeçalho/Sidebar azul-marinho, azul principal, cards brancos,
- * tipografia Inter e fundo claro.
- */
+import { useCallback, useMemo, useState } from 'react'
 
-import React, { useCallback, useMemo, useState } from 'react'
+import { resolveMentorDecision, type MentorDecision, type OpportunityFacts } from '../engine/engine'
+import type { MentorRepository, OpportunityRef } from '../application/mentorApplicationService'
 import { CarteiraAtivaList } from './CarteiraAtivaList'
 import { ExecuteNextStepPanel } from './ExecuteNextStepPanel'
-import { GuidedStatusUpdate } from './GuidedStatusUpdate'
 import { FichaOportunidade } from './FichaOportunidade'
+import { GuidedStatusUpdate } from './GuidedStatusUpdate'
 import type { CarteiraOportunidade } from './OportunidadeCard'
 import type { OpportunityData } from './useExecuteNextStep'
-import type { MentorDecision, OpportunityFacts, StatusDefinition } from '../engine/engine'
-import type { PotentialLevel } from '../engine/priority'
-import type { ScoreClassification } from '../engine/score'
-import type { PriorityClassification } from '../engine/priority'
-import type { MentorRepository } from '../application/mentorApplicationService'
+
+/**
+ * Ponto de composição do Mentor Comercial dentro da Carteira existente.
+ *
+ * REGRA CENTRAL: esta camada NÃO decide nada. Ela exibe o que o motor já decidiu e
+ * persistiu nas colunas `mentor_*` da oportunidade, e delega qualquer nova decisão
+ * ao motor através do repositório.
+ *
+ * Em particular, esta camada nunca:
+ * - calcula score, prioridade, cadência ou próximo passo;
+ * - inventa texto de script, código de status ou família;
+ * - preenche valor ausente com um padrão "otimista".
+ *
+ * Um Mentor que mostra score 100 porque o dado não veio é pior do que um Mentor que
+ * diz que não sabe: o vendedor age sobre um número que nunca existiu.
+ */
 
 export type MentorCarteiraSectionProps = {
   oportunidades?: CarteiraOportunidade[]
   loading?: boolean
+  /**
+   * Repositório do Mentor. Sem ele a seção continua LISTANDO o que está persistido,
+   * mas execução e ficha ficam indisponíveis — não são simuladas.
+   */
   repository?: MentorRepository | null
+  storeId?: string | null
+  sellerId?: string | null
+  ruleVersion?: string
+  now?: Date
   onOpportunityUpdated?: () => void
 }
 
-function parseScoreClass(str?: string | null): ScoreClassification {
-  if (str === 'Excelente' || str === 'Boa' || str === 'Atenção' || str === 'Crítica') {
-    return str
-  }
-  return 'Boa'
+type FichaState =
+  | { phase: 'idle' }
+  | { phase: 'loading'; opportunityId: string }
+  | { phase: 'ready'; opportunityId: string; decision: MentorDecision; facts: OpportunityFacts }
+  | { phase: 'unavailable'; opportunityId: string; reason: string }
+
+const toDate = (value: string | Date | null | undefined): Date | null => {
+  if (value === null || value === undefined) return null
+  const date = value instanceof Date ? value : new Date(value)
+  return Number.isNaN(date.getTime()) ? null : date
 }
 
-function parsePriorityClass(str?: string | null): PriorityClassification {
-  if (str === 'Máxima' || str === 'Alta' || str === 'Média' || str === 'Baixa') {
-    return str
-  }
-  return 'Média'
-}
+/**
+ * Converte a linha persistida em `OpportunityData`.
+ *
+ * Só campos obrigatórios do painel recebem fallback, e o fallback é textual e
+ * honesto ("Não informado"), nunca um valor de domínio inventado. Campos de
+ * decisão (score, prioridade, script) são repassados como estão: ausente é ausente.
+ */
+export function mapCarteiraOportunidadeToOpportunityData(
+  op: CarteiraOportunidade,
+  storeId: string,
+  sellerId: string,
+): OpportunityData | null {
+  // Sem status persistido não há decisão do Mentor para executar. A oportunidade
+  // aparece na lista com "Definir situação atual", que é o caminho correto.
+  if (!op.current_status_code) return null
 
-function parsePotentialLevel(str?: string | null): PotentialLevel | null {
-  if (str === 'Muito alto' || str === 'Alto' || str === 'Médio' || str === 'Baixo') {
-    return str
-  }
-  return null
-}
-
-export function mapCarteiraOportunidadeToOpportunityData(op: CarteiraOportunidade): OpportunityData {
   return {
     opportunityId: op.id,
-    clientId: op.cliente_id || op.id,
-    clientName: op.cliente_nome || 'Cliente sem nome',
-    clientPhone: op.cliente_whatsapp || op.cliente_telefone || null,
-    storeId: '', // TODO: obter storeId do contexto da loja quando disponível
-    sellerId: op.current_responsible || 'Vendedor',
-    channel: op.channel_entry || op.canal || 'Carteira',
-    detailedOrigin: op.detailed_origin || op.origem_modulo || null,
-    statusCode: op.current_status_code || 'CAR-C01',
-    statusLabel: op.status_label || op.current_status_code || 'Cadência Inicial',
-    family: 'Sem Contato Comprador', // TODO: resolver família a partir da definição do catálogo
-    responsible: op.current_responsible || 'Vendedor',
-    temperature: op.temperature || null,
-    potential: op.potential || null,
-    objective: op.current_objective || 'Desenvolver oportunidade na carteira',
-    nextStep: op.current_next_step || 'Executar próxima ação programada',
-    cadenceCode: null, // TODO: vincular cadence_code do catálogo quando disponível
+    clientId: op.cliente_id,
+    clientName: op.cliente_nome,
+    clientPhone: op.cliente_whatsapp ?? op.cliente_telefone ?? null,
+    storeId,
+    sellerId,
+    channel: op.channel_entry ?? op.canal ?? 'Não informado',
+    detailedOrigin: op.detailed_origin ?? op.origem_modulo ?? null,
+    statusCode: op.current_status_code,
+    statusLabel: op.status_label ?? op.current_status_code,
+    family: op.etapa ?? 'Não informado',
+    responsible: op.current_responsible ?? 'Não informado',
+    temperature: op.temperature ?? null,
+    potential: op.potential ?? null,
+    objective: op.current_objective ?? 'Não informado',
+    nextStep: op.current_next_step ?? 'Não informado',
     cadenceStep: op.current_cadence_step ?? null,
-    totalCadenceAttempts: null,
-    nextActionAt: op.next_action_at ? new Date(op.next_action_at) : null,
-    scriptRef: null,
-    scriptTemplate: null,
-    pendingFlags: [], // TODO: conectar flags pendentes a partir da tabela mentor_pending_flags
-    mentorGuidance: op.mentor_guidance || null,
-    centralRule: null,
+    nextActionAt: toDate(op.next_action_at),
+    mentorGuidance: op.mentor_guidance ?? null,
     priorityIndex: op.priority_index ?? null,
     priorityClass: op.priority_class ?? null,
-    decision: null,
-  }
-}
-
-export function buildDecisionAndFactsFromCarteiraOportunidade(op: CarteiraOportunidade): {
-  decision: MentorDecision
-  facts: OpportunityFacts
-} {
-  const nextActionDate = op.next_action_at ? new Date(op.next_action_at) : null
-  const appointmentDate = op.appointment_at ? new Date(op.appointment_at) : null
-
-  const facts: OpportunityFacts = {
-    statusCode: op.current_status_code || 'CAR-C01',
-    nextActionAt: nextActionDate,
-    clientRespondedAt: null, // TODO: obter histórico de resposta do cliente via eventos comerciais
-    clientNeverResponded: false,
-    appointmentAt: appointmentDate,
-    cadenceAttempt: op.current_cadence_step ?? 1,
-    cadenceState: null,
-    quality: {
-      status: 'complete',
-      nextStep: 'complete',
-      execution: 'onTime',
-      cadence: 'respected',
-      history: 'complete',
-    },
-    pendingFlags: [], // TODO: carregar mentor_pending_flags da oportunidade
-    returnStatusCode: null,
-  }
-
-  const explanationsList: string[] = Array.isArray(op.explanation)
-    ? op.explanation
-    : op.explanation
-      ? [op.explanation]
-      : ['Oportunidade em acompanhamento ativo no Mentor Comercial.']
-
-  const decision: MentorDecision = {
-    statusCode: op.current_status_code || 'CAR-C01',
-    previousStatusCode: null,
-    returnStatusCode: null,
-    statusLabel: op.status_label || op.current_status_code || 'Cadência Inicial',
-    family: 'Sem Contato Comprador',
-    channel: op.channel_entry || op.canal || 'Carteira',
-    responsible: op.current_responsible || 'Vendedor',
-    temperature: op.temperature || null,
-    objective: op.current_objective || 'Desenvolver a oportunidade comercial',
-    nextStep: op.current_next_step || 'Executar próximo passo da cadência',
-    potential: parsePotentialLevel(op.potential),
-    cadenceCode: null,
-    cadenceMode: null,
-    cadenceStep: op.current_cadence_step ?? null,
-    cadenceState: null,
-    script: {
-      resolved: true,
-      scriptId: 'script_padrao',
-      reason: 'RESOLVED',
-    },
-    scriptRef: null,
-    nextActionAt: nextActionDate,
     pendingFlags: [],
-    score: {
-      total: op.mentor_score ?? 100,
-      classification: parseScoreClass(op.mentor_score_class),
-      breakdown: {
-        status: 15,
-        nextStep: 20,
-        execution: 30,
-        cadence: 20,
-        history: 15,
-      },
-      alerts: [],
-      clientNeverResponded: false,
-    },
-    priority: {
-      index: op.priority_index ?? 50,
-      classification: parsePriorityClass(op.priority_class),
-      urgencyPoints: 90,
-      potentialPoints: 50,
-      risk: 0,
-      appliedOverrides: [],
-      slaConfigured: false,
-      baseClassification: parsePriorityClass(op.priority_class),
-    },
-    urgency: 'actionToday',
-    centralAction: false,
-    centralRule: null,
-    attackEligible: false,
-    transition: null,
-    requiresManualUpdate: Boolean(op.needs_mentor_classification),
-    explanations: explanationsList,
-    ruleVersion: 'v1',
   }
-
-  return { decision, facts }
 }
 
-const dummyOpportunityData: OpportunityData = {
-  opportunityId: '',
-  clientId: '',
-  clientName: '',
-  clientPhone: null,
-  storeId: '',
-  sellerId: '',
-  channel: 'Carteira',
-  detailedOrigin: null,
-  statusCode: 'CAR-C01',
-  statusLabel: '',
-  family: '',
-  responsible: '',
-  temperature: null,
-  potential: null,
-  objective: '',
-  nextStep: '',
-  cadenceCode: null,
-  cadenceStep: null,
-  totalCadenceAttempts: null,
-  nextActionAt: null,
-  scriptRef: null,
-  scriptTemplate: null,
-  pendingFlags: [],
-  mentorGuidance: null,
-  centralRule: null,
-  priorityIndex: null,
-  priorityClass: null,
-  decision: null,
-}
-
-export const MentorCarteiraSection: React.FC<MentorCarteiraSectionProps> = ({
+export function MentorCarteiraSection({
   oportunidades = [],
   loading = false,
-  repository,
+  repository = null,
+  storeId = null,
+  sellerId = null,
+  ruleVersion = 'v1',
+  now,
   onOpportunityUpdated,
-}) => {
-  const [executeOp, setExecuteOp] = useState<CarteiraOportunidade | null>(null)
-  const [statusUpdateOp, setStatusUpdateOp] = useState<CarteiraOportunidade | null>(null)
-  const [fichaOp, setFichaOp] = useState<CarteiraOportunidade | null>(null)
+}: MentorCarteiraSectionProps) {
+  const [executing, setExecuting] = useState<CarteiraOportunidade | null>(null)
+  const [updatingStatus, setUpdatingStatus] = useState<CarteiraOportunidade | null>(null)
+  const [ficha, setFicha] = useState<FichaState>({ phase: 'idle' })
 
-  const executeOpportunityData: OpportunityData = useMemo(() => {
-    if (!executeOp) return dummyOpportunityData
-    return mapCarteiraOportunidadeToOpportunityData(executeOp)
-  }, [executeOp])
+  const resolvedNow = useMemo(() => now ?? new Date(), [now])
 
-  const fichaContext = useMemo(() => {
-    if (!fichaOp) return null
-    return buildDecisionAndFactsFromCarteiraOportunidade(fichaOp)
-  }, [fichaOp])
+  const executingData = useMemo(() => {
+    if (!executing || !storeId || !sellerId) return null
+    return mapCarteiraOportunidadeToOpportunityData(executing, storeId, sellerId)
+  }, [executing, storeId, sellerId])
 
-  const handleConfirmStatusUpdate = useCallback(
-    async (_selectedStatus: StatusDefinition, _extraData?: { notes?: string }) => {
-      setStatusUpdateOp(null)
-      onOpportunityUpdated?.()
+  const handleExecutar = useCallback((op: CarteiraOportunidade) => {
+    setExecuting(op)
+  }, [])
+
+  const handleAtualizarSituacao = useCallback((op: CarteiraOportunidade) => {
+    setUpdatingStatus(op)
+  }, [])
+
+  /**
+   * A ficha exige uma decisão REAL. Ela é resolvida pelo motor a partir dos fatos
+   * carregados do repositório — nunca montada aqui.
+   */
+  const handleAbrirFicha = useCallback(
+    async (op: CarteiraOportunidade) => {
+      if (!repository || !storeId || !sellerId) {
+        setFicha({
+          phase: 'unavailable',
+          opportunityId: op.id,
+          reason:
+            'A ficha depende do motor do Mentor, que não está disponível nesta tela. Nenhum dado foi estimado.',
+        })
+        return
+      }
+
+      setFicha({ phase: 'loading', opportunityId: op.id })
+      const ref: OpportunityRef = {
+        opportunityId: op.id,
+        clientId: op.cliente_id,
+        storeId,
+        sellerId,
+      }
+
+      try {
+        const [facts, storeSettings, catalog] = await Promise.all([
+          repository.loadFacts(ref),
+          repository.loadStoreSettings(storeId),
+          repository.loadCatalog(ruleVersion),
+        ])
+        const decision = resolveMentorDecision({
+          facts,
+          storeSettings,
+          catalog,
+          now: resolvedNow,
+        })
+        setFicha({ phase: 'ready', opportunityId: op.id, decision, facts })
+      } catch (error) {
+        setFicha({
+          phase: 'unavailable',
+          opportunityId: op.id,
+          reason:
+            error instanceof Error
+              ? `Não foi possível carregar a ficha: ${error.message}`
+              : 'Não foi possível carregar a ficha.',
+        })
+      }
     },
-    [onOpportunityUpdated]
+    [repository, storeId, sellerId, ruleVersion, resolvedNow],
   )
 
-  const handleExecuteSuccess = useCallback(() => {
-    onOpportunityUpdated?.()
-  }, [onOpportunityUpdated])
+  const closeFicha = useCallback(() => setFicha({ phase: 'idle' }), [])
 
   return (
-    <section className="w-full bg-slate-50 py-4">
-      {/* Componente principal de listagem em UMA coluna */}
+    <section aria-label="Mentor Comercial — Carteira Ativa">
       <CarteiraAtivaList
         oportunidades={oportunidades}
         loading={loading}
-        onExecutar={(op) => setExecuteOp(op)}
-        onAtualizarSituacao={(op) => setStatusUpdateOp(op)}
-        onAbrirFicha={(op) => setFichaOp(op)}
+        onExecutar={handleExecutar}
+        onAtualizarSituacao={handleAtualizarSituacao}
+        onAbrirFicha={(op) => {
+          void handleAbrirFicha(op)
+        }}
       />
 
-      {/* Drawer: Executar Próximo Passo */}
-      {executeOp && (
+      {executingData ? (
         <ExecuteNextStepPanel
-          isOpen={Boolean(executeOp)}
-          onClose={() => setExecuteOp(null)}
-          opportunity={executeOpportunityData}
+          isOpen
+          onClose={() => setExecuting(null)}
+          opportunity={executingData}
           repository={repository}
-          onSuccess={handleExecuteSuccess}
+          now={resolvedNow}
+          ruleVersion={ruleVersion}
+          onSuccess={() => {
+            setExecuting(null)
+            onOpportunityUpdated?.()
+          }}
           onUpdateStatus={() => {
-            const op = executeOp
-            setExecuteOp(null)
-            setStatusUpdateOp(op)
+            if (executing) setUpdatingStatus(executing)
+            setExecuting(null)
           }}
           onOpenDetails={() => {
-            const op = executeOp
-            setExecuteOp(null)
-            setFichaOp(op)
+            if (executing) void handleAbrirFicha(executing)
           }}
         />
-      )}
+      ) : null}
 
-      {/* Modal: Atualização Guiada de Situação */}
-      {statusUpdateOp && (
+      {updatingStatus ? (
         <GuidedStatusUpdate
-          isOpen={Boolean(statusUpdateOp)}
-          onClose={() => setStatusUpdateOp(null)}
-          channel={statusUpdateOp.channel_entry || statusUpdateOp.canal || 'Carteira'}
-          currentStatusCode={statusUpdateOp.current_status_code || null}
-          pendingFlags={null} // TODO: repassar pendingFlags quando a fonte de dados disponibilizar
-          opportunityId={statusUpdateOp.id}
-          onConfirm={handleConfirmStatusUpdate}
+          isOpen
+          onClose={() => setUpdatingStatus(null)}
+          channel={updatingStatus.channel_entry ?? updatingStatus.canal ?? null}
+          currentStatusCode={updatingStatus.current_status_code ?? null}
+          opportunityId={updatingStatus.id}
+          onConfirm={() => {
+            setUpdatingStatus(null)
+            onOpportunityUpdated?.()
+          }}
         />
-      )}
+      ) : null}
 
-      {/* Visão de Consulta: Ficha da Oportunidade */}
-      {fichaOp && fichaContext && (
-        <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 p-4 overflow-y-auto"
-          role="dialog"
-          aria-modal="true"
-          aria-label="Ficha da Oportunidade"
-        >
-          <div className="w-full max-w-5xl max-h-[90vh] overflow-y-auto rounded-2xl">
-            <FichaOportunidade
-              decision={fichaContext.decision}
-              facts={fichaContext.facts}
-              onClose={() => setFichaOp(null)}
-              onExecuteNextStep={() => {
-                const op = fichaOp
-                setFichaOp(null)
-                setExecuteOp(op)
-              }}
-            />
-          </div>
-        </div>
-      )}
+      {ficha.phase === 'loading' ? (
+        <p role="status" className="p-4 text-sm text-slate-600">
+          Carregando ficha da oportunidade…
+        </p>
+      ) : null}
+
+      {ficha.phase === 'unavailable' ? (
+        <p role="alert" className="p-4 text-sm text-slate-700">
+          {ficha.reason}
+        </p>
+      ) : null}
+
+      {ficha.phase === 'ready' ? (
+        <FichaOportunidade
+          decision={ficha.decision}
+          facts={ficha.facts}
+          onClose={closeFicha}
+          onExecuteNextStep={() => {
+            const op = oportunidades.find((o) => o.id === ficha.opportunityId)
+            if (op) {
+              closeFicha()
+              setExecuting(op)
+            }
+          }}
+        />
+      ) : null}
     </section>
   )
 }
+
+export default MentorCarteiraSection
