@@ -34,6 +34,7 @@ export function isOfficialLancamento(row: { submission_status?: string | null })
 
 type OfficialPerformanceRow = {
     seller_user_id: string
+    seller_name?: string
     vendas_realizadas: number | string
     vendas_ultimo_dia: number | string
     leads: number | string
@@ -191,8 +192,6 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
         }
         
         const aggregated = new Map<string, { leads: number; agd: number; visitas: number; vnd: number; vnd_yesterday: number; name: string; avatarUrl: string | null; isVendaLoja: boolean }>()
-        const realSellersCount = members.length
-        const goalDivisor = realSellersCount
 
         for (const m of members) {
             const user = (m as { users?: User }).users
@@ -212,8 +211,24 @@ export function useRanking(storeIdOverride?: string, filters?: { startDate?: str
                 current.visitas = Number(row.atendimentos || 0)
                 current.vnd = Number(row.vendas_realizadas || 0)
                 current.vnd_yesterday = Number(row.vendas_ultimo_dia || 0)
+                if (row.seller_name && current.name === 'Nome não informado') {
+                    current.name = row.seller_name
+                }
+            } else if (row.seller_user_id) {
+                aggregated.set(row.seller_user_id, {
+                    leads: Number(row.leads || 0),
+                    agd: Number(row.agendamentos || 0),
+                    visitas: Number(row.atendimentos || 0),
+                    vnd: Number(row.vendas_realizadas || 0),
+                    vnd_yesterday: Number(row.vendas_ultimo_dia || 0),
+                    name: row.seller_name || 'Nome não informado',
+                    avatarUrl: null,
+                    isVendaLoja: false
+                })
             }
         }
+
+        const goalDivisor = Math.max(aggregated.size, 1)
 
         const entries: RankingEntry[] = Array.from(aggregated.entries())
             .map(([userId, data]) => {
