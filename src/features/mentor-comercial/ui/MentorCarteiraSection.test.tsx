@@ -1,6 +1,6 @@
-import { describe, expect, test } from 'bun:test'
+import { describe, expect, test, afterEach } from 'bun:test'
 import React from 'react'
-import { render, screen } from '@testing-library/react'
+import { render, screen, cleanup } from '@testing-library/react'
 import {
   MentorCarteiraSection,
   mapCarteiraOportunidadeToOpportunityData,
@@ -9,6 +9,7 @@ import {
 import type { CarteiraOportunidade } from './OportunidadeCard'
 
 describe('MentorCarteiraSection', () => {
+  afterEach(cleanup)
   const sampleOp: CarteiraOportunidade = {
     id: 'op-123',
     cliente_id: 'cli-456',
