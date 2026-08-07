@@ -344,10 +344,12 @@ function main() {
       for (const f of list) console.log(`  [${f.code}] ${f.message}`)
       console.log('')
     }
-    console.log(
-      `Resumo: ${errors.length} erro(s), ${blockers.length} bloqueio(s) de fonte, ` +
-        `${warns.length} aviso(s).`,
-    )
+    // A DoD precisa separar duas coisas que são frequentemente confundidas:
+    // defeito introduzido pela implementação vs. defeito herdado da planilha.
+    // Nenhum software transforma a fonte em algo que ela não é sem inventar regra.
+    console.log(`Referências órfãs introduzidas pela implementação: ${errors.length}`)
+    console.log(`Bloqueios de fonte herdados da matriz ${metadata.version}: ${blockers.length}`)
+    console.log(`Avisos: ${warns.length}`)
     if (blockers.length > 0) {
       console.log('')
       console.log('Bloqueios de fonte NÃO podem ser resolvidos pelo software: exigem correção')
