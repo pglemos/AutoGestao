@@ -1,4 +1,9 @@
 import moment from "moment";
+import {
+  calcularScoreOficial,
+  calcularPrioridadeOficial,
+  classificacaoScoreOficial,
+} from '@/features/mentor-comercial/bridge/carteiraMentorBridge';
 
 // ─── SITUAÇÕES ATUAIS ────────────────────────────────────────────────────────
 export const SITUACOES_ATUAIS = [
@@ -314,91 +319,37 @@ export function explicacaoCliente(cliente) {
 
 // ─── SCORE DO CLIENTE ────────────────────────────────────────────────────────
 export function calcularScore(cliente) {
-  // Proteção contra nulos
-  if (!cliente) {
-    return { score: 100, motivos: [] };
-  }
-
-  const s = cliente.situacao_atual || cliente.momento || "";
-
-  // Estados terminais encerrados (perdida, cancelada, cadência encerrada):
-  // não há o que pontuar — a oportunidade acabou. Score 100 evita que essas
-  // oportunidades apareçam como "precisam de atenção" em rankings ou dashboards.
-  if (SITUACOES_ENCERRADAS_SEM_VENDA.includes(s) || s === "Venda realizada") {
-    return { score: 100, motivos: ["Oportunidade encerrada."] };
-  }
-
-  let score = 100;
-  const motivos = [];
-  const agora = moment();
-
-  // Sem próximo passo definido - corrigido para usar proxima_acao_data
-  const temProximoPasso = !!cliente.proxima_acao_data;
-  if (!temProximoPasso) { score -= 20; motivos.push("Sem próxima ação definida."); }
-
-  // Próxima ação vencida
-  const proximaData = cliente.proxima_acao_data;
-  if (proximaData && moment(proximaData).isBefore(agora, "day")) {
-    score -= 25; motivos.push("Próxima ação vencida.");
-  }
-
-  // Cliente respondeu e vendedor não tratou
-  if (s === "Aguardando ação do vendedor" || s === "Cliente respondeu") {
-    const diasSemAcao = cliente.ultimo_contato
-      ? agora.diff(moment(cliente.ultimo_contato), "days") : 0;
-    if (diasSemAcao >= 1) { score -= 30; motivos.push(`Cliente respondeu há ${diasSemAcao} dia(s) sem retorno.`); }
-  }
-
-  // Cliente quente parado há 5+ dias
-  if (cliente.temperatura === "Quente" && cliente.ultimo_contato) {
-    const diasParado = agora.diff(moment(cliente.ultimo_contato), "days");
-    if (diasParado >= 5) { score -= 20; motivos.push(`Cliente quente sem contato há ${diasParado} dias.`); }
-  }
-
-  // Proposta sem retorno e sem ação
-  if ((s === "Proposta enviada" || s === "Proposta sem retorno") && cliente.ultimo_contato) {
-    const diasSemAcao = agora.diff(moment(cliente.ultimo_contato), "days");
-    if (diasSemAcao >= 3) { score -= 20; motivos.push(`Proposta enviada há ${diasSemAcao} dias sem retorno.`); }
-  }
-
-  // Histórico desatualizado (sem contato há 7+ dias)
-  if (cliente.ultimo_contato) {
-    const diasSemContato = agora.diff(moment(cliente.ultimo_contato), "days");
-    if (diasSemContato >= 7) { score -= 10; motivos.push(`Sem contato há ${diasSemContato} dias.`); }
-  } else {
-    score -= 10; motivos.push("Histórico sem registro de contato.");
-  }
-
-  score = Math.max(0, Math.min(100, score));
-  return { score, motivos };
+  // MOTOR SUBSTITUÍDO. A heurística de deduções a partir de 100 saiu; o score
+  // agora são os cinco pilares oficiais da aba `07 Score_Prioridade`
+  // (Status 15, Próximo passo 20, Execução 30, Cadência 20, Histórico 15).
+  //
+  // A assinatura e o formato de retorno { score, motivos } são os mesmos de antes,
+  // de propósito: nenhuma das oito telas da Carteira precisa mudar.
+  return calcularScoreOficial(cliente);
 }
 
 export function classificacaoScore(score) {
-  if (score >= 90) return { label: "Excelente", color: "text-green-600 bg-green-50" };
-  if (score >= 75) return { label: "Boa", color: "text-blue-600 bg-blue-50" };
-  if (score >= 50) return { label: "Atenção", color: "text-amber-600 bg-amber-50" };
-  return { label: "Crítica", color: "text-red-600 bg-red-50" };
+  // Faixas vêm do motor oficial; as cores continuam sendo decisão da tela.
+  const label = classificacaoScoreOficial(score);
+  const CORES = {
+    "Excelente": "text-green-600 bg-green-50",
+    "Boa": "text-blue-600 bg-blue-50",
+    "Atenção": "text-amber-600 bg-amber-50",
+    "Crítica": "text-red-600 bg-red-50",
+  };
+  return { label, color: CORES[label] };
 }
 
 // ─── PRIORIDADE COMERCIAL ────────────────────────────────────────────────────
 export function calcularPrioridade(cliente) {
-  // Proteção contra nulos
-  if (!cliente) {
-    return "Baixa";
-  }
-
-  const s = cliente.situacao_atual || cliente.momento || "";
-  const { score } = calcularScore(cliente);
-
-  let potencial = "Baixo";
-  if (["Visita hoje", "Financiamento aprovado sem compra"].includes(s)) potencial = "Muito alto";
-  else if (["Proposta enviada", "Proposta sem retorno", "Em negociação ativa", "Cliente quente sem visita", "Visita agendada", "Visita a confirmar"].includes(s)) potencial = "Alto";
-  else if (["Cliente respondeu", "Visita realizada", "Vai pensar", "Financiamento em análise", "Aguardando ação do vendedor"].includes(s)) potencial = "Médio";
-
-  if (potencial === "Muito alto") return score < 50 ? "Máxima" : "Alta";
-  if (potencial === "Alto") return score < 75 ? "Alta" : "Média";
-  if (potencial === "Médio") return score >= 75 ? "Baixa" : "Média";
-  return "Baixa";
+  // MOTOR SUBSTITUÍDO. O mapa improvisado de potencial e os limiares próprios
+  // saíram. Agora é a fórmula oficial do §32:
+  //   índice = urgência*0.45 + potencial*0.35 + risco*0.20
+  // com os overrides de piso (cliente respondeu, ação vencida >24h, visita hoje,
+  // financiamento aprovado, pronto para fechamento).
+  //
+  // Continua devolvendo o rótulo em português que as telas já consomem.
+  return calcularPrioridadeOficial(cliente);
 }
 
 // ─── CORES ───────────────────────────────────────────────────────────────────

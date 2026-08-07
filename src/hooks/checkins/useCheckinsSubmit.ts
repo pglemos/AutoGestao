@@ -183,7 +183,7 @@ export function useCheckinsSubmit(args: UseCheckinsSubmitArgs) {
             }
 
             try {
-                if (afterSubmit) await afterSubmit()
+                if (afterSubmit && !isDraft) await afterSubmit()
             } catch {
                 console.warn('[useCheckinsSubmit] afterSubmit failed but check-in was saved successfully')
             }

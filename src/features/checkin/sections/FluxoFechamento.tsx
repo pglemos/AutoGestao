@@ -74,7 +74,16 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
 
   return (
     <div className="flex h-11 items-center rounded-xl border border-slate-200 bg-white shadow-sm transition-all focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
-      <button type="button" onClick={onDecrement} className="flex h-full w-11 shrink-0 items-center justify-center rounded-l-xl border-r border-slate-200 text-[20px] font-light text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700 active:bg-slate-100">−</button>
+      <button
+        type="button"
+        onClick={() => {
+          setInputVal(null)
+          onDecrement()
+        }}
+        className="flex h-full w-11 shrink-0 items-center justify-center rounded-l-xl border-r border-slate-200 text-[20px] font-light text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700 active:bg-slate-100"
+      >
+        −
+      </button>
       <input
         type="text"
         inputMode="numeric"
@@ -100,7 +109,16 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
         aria-label={label}
         className="h-full min-w-0 flex-1 border-none bg-transparent text-center text-[16px] font-bold tabular-nums text-slate-700 outline-none"
       />
-      <button type="button" onClick={onIncrement} className="flex h-full w-11 shrink-0 items-center justify-center rounded-r-xl border-l border-slate-200 text-[20px] font-light text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700 active:bg-slate-100">+</button>
+      <button
+        type="button"
+        onClick={() => {
+          setInputVal(null)
+          onIncrement()
+        }}
+        className="flex h-full w-11 shrink-0 items-center justify-center rounded-r-xl border-l border-slate-200 text-[20px] font-light text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700 active:bg-slate-100"
+      >
+        +
+      </button>
     </div>
   )
 }

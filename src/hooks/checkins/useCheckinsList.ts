@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react'
+import { useState, useCallback, useRef, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 import type { DailyCheckin, CheckinWithTotals } from '@/types/database'
 import { isLancamentosViaRpcEnabled } from '@/lib/feature-flags'
@@ -19,6 +19,11 @@ export function useCheckinsList(storeId: string | null) {
     const [checkins, setCheckins] = useState<CheckinWithTotals[]>([])
     const [loading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
+    const isFirstLoadRef = useRef(true)
+
+    useEffect(() => {
+        isFirstLoadRef.current = true
+    }, [storeId])
 
     const fetchCheckins = useCallback(async (filters?: CheckinsListFilters) => {
         if (!storeId) {
@@ -26,7 +31,9 @@ export function useCheckinsList(storeId: string | null) {
             setLoading(false)
             return
         }
-        setLoading(true)
+        if (isFirstLoadRef.current) {
+            setLoading(true)
+        }
         setError(null)
 
         let data: DailyCheckin[] | null = null
@@ -80,6 +87,7 @@ export function useCheckinsList(storeId: string | null) {
             setCheckins((data as DailyCheckin[]).map(withCheckinTotals))
         }
         setLoading(false)
+        isFirstLoadRef.current = false
     }, [storeId])
 
     return { checkins, setCheckins, loading, error, setError, fetchCheckins }
