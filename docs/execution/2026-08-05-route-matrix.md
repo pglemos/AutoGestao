@@ -1,17 +1,24 @@
-# Route Matrix — MX Gestão Preditiva
+# Matriz de Rotas por Perfil — MX Gestão Preditiva (2026-08-05)
 
-A extrair do router e preencher durante as fases 1 e 7.
+## Mapeamento de Rotas e Permissões
+| Rota | Vendedor | Gerente | Dono | Admin Geral | Admin MX | Consultor MX |
+|---|---|---|---|---|---|---|
+| `/login` | Público | Público | Público | Público | Público | Público |
+| `/dashboard` | Sim | Sim | Sim | Sim | Sim | Sim |
+| `/carteira-clientes` | Sim | Sim | Sim | Sim | Sim | Sim |
+| `/fechamento-diario` | Sim | Sim | Sim | Sim | Sim | Sim |
+| `/metas-comissoes` | Restrito | Sim | Sim | Sim | Sim | Sim |
+| `/gestao-loja` | Não | Sim | Sim | Sim | Sim | Sim |
+| `/admin-mx` | Não | Não | Não | Não | Sim | Não |
+| `/consultoria` | Não | Não | Sim | Não | Sim | Sim |
 
-## Perfis
-1. Vendedor
-2. Gerente
-3. Dono
-4. Administrador Geral
-5. Administrador MX
-6. Consultor MX
-
-## Viewports
-390x844, 600x900, 768x1024, 840x1024, 1024x768, 1280x800, 1440x900, 1600x1000, 1920x1080
-
-## Template
-| Rota | Público | Vendedor | Gerente | Dono | Admin Geral | Admin MX | Consultor MX | Viewports testados | Estados | Screenshot |
+## Viewports Obrigatórios
+- `390 × 844` (Mobile Portrait)
+- `600 × 900` (Mobile Large)
+- `768 × 1024` (Tablet Portrait)
+- `840 × 1024` (Tablet Large)
+- `1024 × 768` (Tablet Landscape)
+- `1280 × 800` (Laptop Small)
+- `1440 × 900` (Laptop Standard)
+- `1600 × 1000` (Desktop Large)
+- `1920 × 1080` (FHD Desktop)

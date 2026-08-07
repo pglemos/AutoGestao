@@ -1,20 +1,8 @@
-# VERCEL RELEASE VALIDATION — 2026-08-05
+# Vercel Release Validation — MX Gestão Preditiva (2026-08-05)
 
-- **Project ID:** `prj_fpYjxc851kMs55GzR6tgQEr7uWUj`
+## Validação de Deploy Vercel
+- **Projeto Vercel:** `mxperformance` (`prj_fpYjxc851kMs55GzR6tgQEr7uWUj`)
 - **Team ID:** `team_9kUTSaoIkwnAVxy9nXMcAnej`
-- **Branch:** `main`
-- **Deployment Status:** READY
-- **Production Endpoint Health Check (`/api/health`):**
-  - `status`: `healthy`
-  - `checks.vercel`: `ok`
-  - `checks.supabase_api`: `ok`
-  - `checks.database`: `ok`
-  - `checks.critical_crons`: `ok`
-  - `environment`: `production`
-
-## SHA Parity
-- Git HEAD: `0bd0bc1b`
-- Published Production Release: `0bd0bc1b`
-- Sentry Release: `0bd0bc1b`
-
-Status: DONE_WITH_EVIDENCE
+- **Produção Atual:** Deployment READY para SHA `3abbce759d8ddab6dc6f543b22cd75b57e86889e`
+- **Ignore Build Command:** Script `vercel-ignore-build.mjs` testado para clonagem rasa (shallow clone) garantindo que commits puramente de documentação evitem compilações desnecessárias.
+- **Health Check Endpoint:** `/api/health` respondendo HTTP 200 com status `vercel=ok`, `supabase_api=ok`, `database=ok`, `critical_crons=ok`.

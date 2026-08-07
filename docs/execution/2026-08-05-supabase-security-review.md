@@ -1,22 +1,23 @@
-# Supabase Security Review — MX Gestão Preditiva
+# Supabase Security Review — MX Gestão Preditiva (2026-08-05)
 
-A preencher durante fases C0.4-C0.6 e fase 10.
+## Inventário Inicial de Segurança (Project ID: `fbhcmzzgwjdgkctlfvbo`)
 
-## 8 Tabelas RLS sem policy
-1. ai_model_daily_usage
-2. carteira_missao_mutations
-3. data_correction_audit
-4. internal_mx_admin_rate_limits
-5. migration_backup_lancamentos_diarios_duplicates_20260503
-6. migration_backup_vendedores_loja_duplicates_20260503
-7. password_change_challenges
-8. password_recovery_attempts
+### Tabelas RLS sem Policy
+1. `ai_model_daily_usage`
+2. `carteira_missao_mutations`
+3. `data_correction_audit`
+4. `internal_mx_admin_rate_limits`
+5. `migration_backup_lancamentos_diarios_duplicates_20260503`
+6. `migration_backup_vendedores_loja_duplicates_20260503`
+7. `password_change_challenges`
+8. `password_recovery_attempts`
 
-## Funções SECURITY DEFINER (~204)
-A classificar por owner, search_path, grants, chamadores, risco.
+### Revisão de Funções SECURITY DEFINER
+- Total de funções públicas: 237
+- Total `SECURITY DEFINER`: 204
+- Acessíveis por `anon`: 60
+- Acessíveis por `authenticated`: 148
 
-## Edge Functions (22)
-A revisar verify_jwt, CORS, auth interna.
-
-### 13 sem JWT obrigatório
-A listar e proteger.
+### Edge Functions
+- Total ativas: 22
+- `verify_jwt=false`: 13 (Requer auditoria de auth interna HMAC / secret token)

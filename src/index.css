@@ -19,14 +19,13 @@
  * consumido em dezenas de arquivos; renomear é uma troca mecânica separada, e
  * misturá-la aqui esconderia a mudança de cor no meio de um diff enorme.
  */
---color-mx-black: #071822;
---color-pure-black: #000000;
+--color-mx-black: hsl(var(--mx-brand-ink));
+--color-pure-black: hsl(var(--mx-black));
 --color-brand-primary: hsl(var(--mx-color-primary));
 --color-brand-primary-hover: hsl(var(--mx-color-primary-hover));
---color-brand-secondary: #071822;
---color-mx-navy: #051923;
---color-mx-dark: #031B3D;
---color-mx-dark-2: #0F172A;
+--color-brand-secondary: hsl(var(--mx-brand-ink));
+--color-mx-dark: hsl(var(--mx-dark));
+--color-mx-dark-2: hsl(var(--mx-dark-2));
 /* `emerald-600` é o verde que 192 arquivos usam para a marca — o botão primário
    inclusive. Vinha da paleta padrão do Tailwind (#009966), que não é o #198653
    do produto: medido com axe, os dois apareciam lado a lado em seis rotas.
@@ -41,38 +40,38 @@
 --color-mx-action: hsl(var(--mx-color-primary));
 --color-mx-action-hover: hsl(var(--mx-color-primary-hover));
 --color-mx-action-light: hsl(var(--mx-color-primary-subtle));
---color-mx-success: #22C55E;
---color-mx-success-light: #D1FADD;
---color-mx-warning: #F59E0B;
---color-mx-warning-light: #FEF3C7;
---color-mx-danger: #EF4444;
---color-mx-danger-light: #FEE2E2;
+--color-mx-success: hsl(var(--mx-success));
+--color-mx-success-light: hsl(var(--mx-success-light));
+--color-mx-warning: hsl(var(--mx-warning));
+--color-mx-warning-light: hsl(var(--mx-warning-light));
+--color-mx-danger: hsl(var(--mx-red-500));
+--color-mx-danger-light: hsl(var(--mx-danger-light));
 /* Neutros derivados do design system em vez de cinzas azulados próprios.
    Eram a última divergência de manager-visual-scope.css: o escopo usava cinza
    puro (#1f2937, #6b7280) e o :root, azulado (#0F172A, #64748B), então a mesma
    superfície mudava de tom conforme o perfil. Os tokens `--mx-neutral-*` são
    cinza puro e já passaram pela verificação de contraste. */
---color-mx-bg: hsl(var(--mx-color-surface-muted));
+--color-mx-bg: hsl(var(--mx-tpl-bg));
 --color-mx-surface: hsl(var(--mx-color-surface));
 --color-mx-border: hsl(var(--mx-color-border));
 --color-mx-divider: hsl(var(--mx-neutral-100));
 --color-mx-text: hsl(var(--mx-color-text-primary));
 --color-mx-muted: hsl(var(--mx-color-text-secondary));
 --color-mx-subtle: hsl(var(--mx-neutral-400));
---color-whatsapp: #25D366;
+--color-whatsapp: hsl(var(--mx-whatsapp));
 
 /* Sidebar canônica — docs/design-system/sidebar-dono.md
    Mesmos valores dos tokens do módulo do Dono, porém resolvidos fora daquele
    escopo para que todos os módulos rendam a sidebar do Dono pixel a pixel. */
---color-mxsb-surface: #FAFAFA;
---color-mxsb-ink: #3F3F46;
---color-mxsb-ink-strong: #18181B;
---color-mxsb-hover: #F4F4F5;
---color-mxsb-line: #E5E7EB;
---color-mxsb-muted: #737373;
---color-mxsb-active: #198653;
---color-mxsb-active-surface: rgba(25, 134, 83, 0.1);
---color-mxsb-base: #0A0A0A;
+--color-mxsb-surface: hsl(var(--mx-neutral-50));
+--color-mxsb-ink: hsl(var(--mx-sidebar-ink));
+--color-mxsb-ink-strong: hsl(var(--mx-sidebar-ink-strong));
+--color-mxsb-hover: hsl(var(--mx-sidebar-hover));
+--color-mxsb-line: hsl(var(--mx-gray-200));
+--color-mxsb-muted: hsl(var(--mx-sidebar-muted));
+--color-mxsb-active: hsl(var(--mx-green-600));
+--color-mxsb-active-surface: hsl(var(--mx-green-600) / 0.1);
+--color-mxsb-base: hsl(var(--mx-neutral-950));
 
 /* shadcn/Base44 semantic tokens */
 --color-background: hsl(var(--background));
@@ -100,7 +99,6 @@
 --color-sidebar-primary-foreground: hsl(var(--sidebar-primary-foreground));
 --color-sidebar-accent: hsl(var(--sidebar-accent));
 --color-sidebar-accent-foreground: hsl(var(--sidebar-accent-foreground));
---color-sidebar-border: hsl(var(--sidebar-border));
 --color-sidebar-ring: hsl(var(--sidebar-ring));
 /* Escala de raio do §13.2: controle 6px, card 12px. Estes valores viviam só
    sob `[data-mx-visual-system='manager']`; o :root tinha uma escala maior
@@ -136,41 +134,41 @@ to { height: 0; }
    * `success` também deixa de ser o teal #00A89D, herdado da identidade antiga,
    * e passa a derivar do verde da marca.
    */
-  --color-status-success: #198653;
-  --color-status-success-text: #0F6B41;
-  --color-status-success-surface: rgba(25, 134, 83, 0.08);
-  --color-status-warning: #F59F0A;
-  --color-status-warning-text: #A65F00;
-  --color-status-warning-surface: rgba(245, 158, 11, 0.05);
-  --color-status-error: #EF4343;
-  --color-status-error-strong: #EF4343;
-  --color-status-error-text: #C42121;
-  --color-status-error-surface: rgba(239, 67, 67, 0.08);
-  --color-status-info: #005BFF;
-  --color-status-info-text: #0047CC;
-  --color-status-info-surface: rgba(0, 91, 255, 0.08);
+  --color-status-success: hsl(var(--mx-status-success));
+  --color-status-success-text: hsl(var(--mx-status-success-text));
+  --color-status-success-surface: hsl(var(--mx-status-success) / 0.08);
+  --color-status-warning: hsl(var(--mx-status-warning));
+  --color-status-warning-text: hsl(var(--mx-status-warning-text));
+  --color-status-warning-surface: hsl(var(--mx-status-warning) / 0.05);
+  --color-status-error: hsl(var(--mx-status-error));
+  --color-status-error-strong: hsl(var(--mx-status-error-strong));
+  --color-status-error-text: hsl(var(--mx-status-error-text));
+  --color-status-error-surface: hsl(var(--mx-status-error) / 0.08);
+  --color-status-info: hsl(var(--mx-status-info));
+  --color-status-info-text: hsl(var(--mx-status-info-text));
+  --color-status-info-surface: hsl(var(--mx-status-info) / 0.08);
 
   /* Chart Series (Story 3.7 / UX-005) — paleta canônica para recharts.
      NUNCA usar hex em chart components: importar de src/lib/charts/tokens.ts */
-  --color-chart-1: #00A89D;
-  --color-chart-2: #005BFF;
-  --color-chart-3: #071822;
-  --color-chart-4: #F59F0A;
-  --color-chart-5: #EF4343;
-  --color-chart-6: #005BFF;
-  --color-chart-7: #F59F0A;
-  --color-chart-8: #00E5FF;
+  --color-chart-1: hsl(var(--mx-chart-1));
+  --color-chart-2: hsl(var(--mx-chart-2));
+  --color-chart-3: hsl(var(--mx-chart-3));
+  --color-chart-4: hsl(var(--mx-chart-4));
+  --color-chart-5: hsl(var(--mx-chart-5));
+  --color-chart-6: hsl(var(--mx-chart-6));
+  --color-chart-7: hsl(var(--mx-chart-7));
+  --color-chart-8: hsl(var(--mx-chart-8));
 
   /* Chart Axis / Grid tokens */
-  --color-chart-axis-tick: #6B7280;
-  --color-chart-axis-tick-muted: #526B7A;
-  --color-chart-axis-tick-strong: #526B7A;
-  --color-chart-manager-axis-tick: #4B5563;
-  --color-chart-manager-positive: #10B981;
-  --color-chart-grid: #DFE0E1;
-  --color-chart-grid-strong: #DFE0E1;
-  --color-chart-grid-dark: #334155;
-  --color-chart-dot-stroke: #FFFFFF;
+  --color-chart-axis-tick: hsl(var(--mx-chart-axis-tick));
+  --color-chart-axis-tick-muted: hsl(var(--mx-chart-axis-tick-muted));
+  --color-chart-axis-tick-strong: hsl(var(--mx-chart-axis-tick-strong));
+  --color-chart-manager-axis-tick: hsl(var(--mx-chart-manager-axis-tick));
+  --color-chart-manager-positive: hsl(var(--mx-chart-manager-positive));
+  --color-chart-grid: hsl(var(--mx-chart-grid));
+  --color-chart-grid-strong: hsl(var(--mx-chart-grid-strong));
+  --color-chart-grid-dark: hsl(var(--mx-chart-grid-dark));
+  --color-chart-dot-stroke: hsl(var(--mx-chart-dot-stroke));
 
   /* Surface & Borders — ver nota sobre neutros na paleta core. */
   --color-surface-default: hsl(var(--mx-color-surface));
@@ -185,39 +183,39 @@ to { height: 0; }
   --color-text-tertiary: hsl(var(--mx-color-text-secondary));
   --color-text-label: hsl(var(--mx-color-text-secondary));
 
-  --color-surface-overlay: #1A1A1D;
-  --color-surface-elevated: #121214;
+  --color-surface-overlay: hsl(var(--mx-tpl-surface-overlay));
+  --color-surface-elevated: hsl(var(--mx-tpl-surface-elevated));
 
   /* Sidebar (Dark Navy theme — Story UI-redesign 20260529) */
-  --color-sidebar-bg: #102C37;
-  --color-sidebar-bg-strong: #102C37;
-  --color-sidebar-text: #E0EBEA;
-  --color-sidebar-text-muted: #E0EBEA;
-  --color-sidebar-section-label: #E0EBEA;
-  --color-sidebar-item-hover: rgba(255, 255, 255, 0.06);
-  --color-sidebar-item-active-bg: #1A3E4D;
-  --color-sidebar-item-active-text: #FFFFFF;
-  --color-sidebar-border: #1A3E4D;
+  --color-sidebar-bg: hsl(var(--mx-tpl-sidebar-bg));
+  --color-sidebar-bg-strong: hsl(var(--mx-tpl-sidebar-bg));
+  --color-sidebar-text: hsl(var(--mx-tpl-sidebar-text));
+  --color-sidebar-text-muted: hsl(var(--mx-tpl-sidebar-text));
+  --color-sidebar-section-label: hsl(var(--mx-tpl-sidebar-text));
+  --color-sidebar-item-hover: hsl(var(--mx-neutral-0) / 0.06);
+  --color-sidebar-item-active-bg: hsl(var(--mx-tpl-sidebar-active));
+  --color-sidebar-item-active-text: hsl(var(--mx-neutral-0));
+  --color-sidebar-border: hsl(var(--mx-tpl-sidebar-active));
 
   /* Aliases legados de accent: descontinuados; use os tokens mx-action. */
-  --color-accent-purple: #005BFF;
-  --color-accent-purple-strong: #004BE0;
-  --color-accent-purple-soft: #EAF1FF;
+  --color-accent-purple: hsl(var(--mx-status-info));
+  --color-accent-purple-strong: hsl(var(--mx-tpl-accent-strong));
+  --color-accent-purple-soft: hsl(var(--mx-tpl-accent-soft));
 
   /* Accent blue (renamed to globally eliminate purple) */
-  --color-accent-blue: #00A89D;
-  --color-accent-blue-strong: #00A89D;
-  --color-accent-blue-soft: rgba(0, 168, 157, 0.12);
+  --color-accent-blue: hsl(var(--mx-chart-1));
+  --color-accent-blue-strong: hsl(var(--mx-chart-1));
+  --color-accent-blue-soft: hsl(var(--mx-chart-1) / 0.12);
 
   /* KPI footer status strips */
-  --color-kpi-footer-success-bg: #ECFDF5;
-  --color-kpi-footer-success-text: #00A89D;
-  --color-kpi-footer-warning-bg: #FEF3C7;
-  --color-kpi-footer-warning-text: #B45309;
-  --color-kpi-footer-error-bg: #FEE2E2;
-  --color-kpi-footer-error-text: #EF4343;
-  --color-kpi-footer-info-bg: #E8F3F2;
-  --color-kpi-footer-info-text: #00A89D;
+  --color-kpi-footer-success-bg: hsl(var(--mx-tpl-kpi-success-bg));
+  --color-kpi-footer-success-text: hsl(var(--mx-chart-1));
+  --color-kpi-footer-warning-bg: hsl(var(--mx-warning-light));
+  --color-kpi-footer-warning-text: hsl(var(--mx-tpl-kpi-warning-text));
+  --color-kpi-footer-error-bg: hsl(var(--mx-danger-light));
+  --color-kpi-footer-error-text: hsl(var(--mx-status-error));
+  --color-kpi-footer-info-bg: hsl(var(--mx-tpl-kpi-info-bg));
+  --color-kpi-footer-info-text: hsl(var(--mx-chart-1));
 
   /* Radius Matrix */
   --radius-mx-sm: 0.5rem;
@@ -287,13 +285,13 @@ to { height: 0; }
   /* Shadow Matrix */
   /* Sombras discretas — §13.3. A escala anterior crescia até 24px de blur;
      estes valores vinham do escopo de gestão e são os do Base44. */
-  --shadow-mx-sm: 0 1px 2px rgb(0 0 0 / 0.05);
-  --shadow-mx-md: 0 1px 3px rgb(0 0 0 / 0.10), 0 1px 2px -1px rgb(0 0 0 / 0.10);
-  --shadow-mx-lg: 0 1px 3px rgb(0 0 0 / 0.10), 0 1px 2px -1px rgb(0 0 0 / 0.10);
-  --shadow-mx-xl: 0 1px 3px rgb(0 0 0 / 0.10), 0 1px 2px -1px rgb(0 0 0 / 0.10);
-  --shadow-mx-2xl: 0 18px 36px -22px rgba(15, 23, 42, 0.24);
-  --shadow-mx-elite: 0 18px 38px -24px rgba(15, 23, 42, 0.28);
-  --shadow-glass: 0 8px 32px rgba(15, 23, 42, 0.08);
+  --shadow-mx-sm: 0 1px 2px hsl(var(--mx-black) / 0.05);
+  --shadow-mx-md: 0 1px 3px hsl(var(--mx-black) / 0.10), 0 1px 2px -1px hsl(var(--mx-black) / 0.10);
+  --shadow-mx-lg: 0 1px 3px hsl(var(--mx-black) / 0.10), 0 1px 2px -1px hsl(var(--mx-black) / 0.10);
+  --shadow-mx-xl: 0 1px 3px hsl(var(--mx-black) / 0.10), 0 1px 2px -1px hsl(var(--mx-black) / 0.10);
+  --shadow-mx-2xl: 0 18px 36px -22px hsl(var(--mx-dark-2) / 0.24);
+  --shadow-mx-elite: 0 18px 38px -24px hsl(var(--mx-dark-2) / 0.28);
+  --shadow-glass: 0 8px 32px hsl(var(--mx-dark-2) / 0.08);
 
   /* Custom Utilities */
   /* Typography Scale Expansion */
@@ -321,30 +319,30 @@ to { height: 0; }
   --height-mx-header: 64px;
 
   /* Semantic Glows */
-  --shadow-mx-glow-brand: 0 0 20px rgba(0, 168, 157, 0.3);
-  --shadow-mx-glow-brand-sm: 0 0 12px rgba(0, 168, 157, 0.25);
-  --shadow-mx-glow-white: 0 0 20px rgba(255, 255, 255, 0.5);
-  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04);
-  --shadow-card-hover: 0 8px 24px rgba(15, 23, 42, 0.08);
-  --shadow-popover: 0 16px 40px rgba(15, 23, 42, 0.14);
-  --shadow-modal: 0 24px 60px rgba(15, 23, 42, 0.22);
-  --shadow-action: 0 8px 20px rgba(0, 168, 157, 0.20);
+  --shadow-mx-glow-brand: 0 0 20px hsl(var(--mx-chart-1) / 0.3);
+  --shadow-mx-glow-brand-sm: 0 0 12px hsl(var(--mx-chart-1) / 0.25);
+  --shadow-mx-glow-white: 0 0 20px hsl(var(--mx-neutral-0) / 0.5);
+  --shadow-card: 0 1px 2px hsl(var(--mx-dark-2) / 0.04);
+  --shadow-card-hover: 0 8px 24px hsl(var(--mx-dark-2) / 0.08);
+  --shadow-popover: 0 16px 40px hsl(var(--mx-dark-2) / 0.14);
+  --shadow-modal: 0 24px 60px hsl(var(--mx-dark-2) / 0.22);
+  --shadow-action: 0 8px 20px hsl(var(--mx-chart-1) / 0.20);
 
   /* Effects */
   --blur-mx-huge: 80px;
 
   /* Green Tokens for Design System (MX Brand) */
-  --color-mx-green-50: #f0fdf4;
-  --color-mx-green-100: #dcfce7;
-  --color-mx-green-200: #bbf7d0;
-  --color-mx-green-300: #86efac;
-  --color-mx-green-400: #00A89D;
-  --color-mx-green-500: #00A89D;
-  --color-mx-green-600: #00A89D;
-  --color-mx-green-700: #00A89D;
-  --color-mx-green-800: #166534;
-  --color-mx-green-900: #14532d;
-  --color-mx-green-950: #052e16; --color-mx-blue: #00A89D; --color-mx-blue-light: #E0EBEA; --color-mx-navy: #061f3f; --color-mx-bg: #f7f9fc; --color-mx-green: #00A89D; --color-mx-green-light: #dcfce7; --color-mx-amber: #F59F0A; --color-mx-amber-light: #FFF7E6; --color-mx-red: #EF4343; --color-mx-red-light: #fee2e2;
+  --color-mx-green-50: hsl(var(--mx-tpl-green-50));
+  --color-mx-green-100: hsl(var(--mx-tpl-green-100));
+  --color-mx-green-200: hsl(var(--mx-tpl-green-200));
+  --color-mx-green-300: hsl(var(--mx-tpl-green-300));
+  --color-mx-green-400: hsl(var(--mx-chart-1));
+  --color-mx-green-500: hsl(var(--mx-chart-1));
+  --color-mx-green-600: hsl(var(--mx-chart-1));
+  --color-mx-green-700: hsl(var(--mx-chart-1));
+  --color-mx-green-800: hsl(var(--mx-tpl-green-800));
+  --color-mx-green-900: hsl(var(--mx-tpl-green-900));
+  --color-mx-green-950: hsl(var(--mx-tpl-green-950)); --color-mx-blue: hsl(var(--mx-chart-1)); --color-mx-blue-light: hsl(var(--mx-tpl-sidebar-text)); --color-mx-navy: hsl(var(--mx-tpl-navy)); --color-mx-green: hsl(var(--mx-chart-1)); --color-mx-green-light: hsl(var(--mx-tpl-green-100)); --color-mx-amber: hsl(var(--mx-amber-500)); --color-mx-amber-light: hsl(var(--mx-tpl-amber-light)); --color-mx-red: hsl(var(--mx-status-error)); --color-mx-red-light: hsl(var(--mx-danger-light));
 
   /* Legacy aliases (indigo → green) */
   --color-mx-indigo-50: var(--color-mx-green-50);
@@ -370,29 +368,29 @@ to { height: 0; }
   --spacing-mx-elite-wide: 1400px;
   --spacing-mx-label-lg: 120px;
 
-  --color-print-highlight: #facc15;
-  --color-print-gold: #FFF7E6;
+  --color-print-highlight: hsl(var(--mx-tpl-print-highlight));
+  --color-print-gold: hsl(var(--mx-tpl-amber-light));
 
   /* Orange Tokens (Objectives & Pending) */
-  --color-mx-orange-50: #fff7ed;
-  --color-mx-orange-100: #ffedd5;
-  --color-mx-orange-200: #fed7aa;
-  --color-mx-orange-300: #fdba74;
-  --color-mx-orange-400: #fb923c;
-  --color-mx-orange-500: #f97316;
-  --color-mx-orange-600: #ea580c;
-  --color-mx-orange-700: #c2410c;
-  --color-mx-orange-800: #9a3412;
-  --color-mx-orange-900: #7c2d12;
-  --color-mx-orange-950: #431407;
+  --color-mx-orange-50: hsl(var(--mx-tpl-orange-50));
+  --color-mx-orange-100: hsl(var(--mx-tpl-orange-100));
+  --color-mx-orange-200: hsl(var(--mx-tpl-orange-200));
+  --color-mx-orange-300: hsl(var(--mx-tpl-orange-300));
+  --color-mx-orange-400: hsl(var(--mx-tpl-orange-400));
+  --color-mx-orange-500: hsl(var(--mx-tpl-orange-500));
+  --color-mx-orange-600: hsl(var(--mx-tpl-orange-600));
+  --color-mx-orange-700: hsl(var(--mx-tpl-orange-700));
+  --color-mx-orange-800: hsl(var(--mx-tpl-orange-800));
+  --color-mx-orange-900: hsl(var(--mx-tpl-orange-900));
+  --color-mx-orange-950: hsl(var(--mx-tpl-orange-950));
 
-  --color-mx-amber-100: #FFF7E6;
-  --color-mx-amber-300: #fcd34d;
-  --color-mx-amber-400: #fbbf24;
-  --color-mx-emerald-100: #d1fae5;
-  --color-mx-red-100: #fecaca;
-  --color-electric-blue: #00A89D;
-  --color-mars-orange: #f97316;
+  --color-mx-amber-100: hsl(var(--mx-tpl-amber-light));
+  --color-mx-amber-300: hsl(var(--mx-tpl-amber-300));
+  --color-mx-amber-400: hsl(var(--mx-tpl-amber-400));
+  --color-mx-emerald-100: hsl(var(--mx-tpl-emerald-100));
+  --color-mx-red-100: hsl(var(--mx-tpl-red-100));
+  --color-electric-blue: hsl(var(--mx-chart-1));
+  --color-mars-orange: hsl(var(--mx-tpl-orange-500));
 
   --font-display: 'Inter', sans-serif;
   --animate-slide-up: slide-up 0.32s ease-out both;
@@ -405,15 +403,15 @@ to { height: 0; }
      ========================================================================== */
 
   /* Alert Consultive — 4o tipo de alerta (FR-ALERT-1 / .docx §225–§228) */
-  --color-alert-consultive: #005BFF;
-  --color-alert-consultive-surface: rgba(0, 91, 255, 0.08);
+  --color-alert-consultive: hsl(var(--mx-status-info));
+  --color-alert-consultive-surface: hsl(var(--mx-status-info) / 0.08);
 
   /* MX Score Bands — 5 faixas (FR-SCORE-2 / .docx §244–§249) */
-  --color-score-elite: #00A89D;     /* 90–100 — verde marca (consolidacao) */
-  --color-score-excellent: #00A89D; /* 80–89  — verde claro */
-  --color-score-good: #00A89D;      /* 70–79  — azul info */
-  --color-score-attention: #F59F0A; /* 60–69  — ambar warning */
-  --color-score-critical: #EF4343;  /* <60    — vermelho error */
+  --color-score-elite: hsl(var(--mx-chart-1));     /* 90–100 — verde marca (consolidacao) */
+  --color-score-excellent: hsl(var(--mx-chart-1)); /* 80–89  — verde claro */
+  --color-score-good: hsl(var(--mx-chart-1));      /* 70–79  — azul info */
+  --color-score-attention: hsl(var(--mx-amber-500)); /* 60–69  — ambar warning */
+  --color-score-critical: hsl(var(--mx-status-error)); /* <60    — vermelho error */
 }
 
 /* Mobile / PWA hardening — safe-area, tap highlight, scroll behavior */

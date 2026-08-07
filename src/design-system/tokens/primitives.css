@@ -61,10 +61,122 @@
   --mx-emerald-100: 152 76% 92%;
   --mx-amber-500: 38 92% 50%;
   --mx-amber-100: 38 92% 92%;
-  --mx-red-500: 0 84% 60%;
+  --mx-red-500: 0 84% 60.1%;
   --mx-red-100: 0 84% 95%;
   --mx-blue-500: 217 91% 60%;
   --mx-blue-100: 217 91% 94%;
+
+  /* Sinais de estado legados do template canônico (C0.3) — medidos no export
+     Base44. Sucess/aviso/erro diferem dos primitivos acima (ex.: success é
+     verde Tailwind #22C55E, não o emerald do DS), então convivem como famílias
+     distintas preservadas byte a byte. `--mx-amber-500`/`--mx-red-500` cobrem
+     warning e danger. */
+  --mx-success: 142 70.9% 45.3%;
+  --mx-success-light: 138 80% 90%;
+  --mx-warning: 37.8 92% 50.1%;
+  --mx-warning-light: 48 98% 89%;
+  --mx-danger-light: 0 92% 94%;
+  --mx-whatsapp: 142.1 69.9% 48.8%;
+
+  /* Sinais de estado fortes (superfícies/contorno) — `--color-status-*` do
+     :root legado. `*-text` mantém contraste AA sobre a própria superfície. */
+  --mx-status-success: 152 69% 31%;
+  --mx-status-success-text: 152.8 75% 24%;
+  --mx-status-warning: 38 92% 50%;
+  --mx-status-warning-text: 34.2 100% 32.6%;
+  --mx-status-error: 0 84% 60%;
+  --mx-status-error-strong: 0 84% 60%;
+  --mx-status-error-text: 0 71% 45%;
+  --mx-status-info: 218.7 100% 50%;
+  --mx-status-info-text: 219 100% 40%;
+
+  /* Paleta de séries de charts (Story 3.7 / UX-005) — `--color-chart-*`.
+     Consumida via src/lib/charts/tokens.ts (getComputedStyle + fallback). */
+  --mx-chart-1: 176 100% 33%;
+  --mx-chart-2: 218.7 100% 50%;
+  --mx-chart-3: 202 66% 8%;
+  --mx-chart-4: 38 92% 50%;
+  --mx-chart-5: 0 84% 60%;
+  --mx-chart-6: 218.7 100% 50%;
+  --mx-chart-7: 38 92% 50%;
+  --mx-chart-8: 186 99.9% 50%;
+
+  /* Eixos/grid de charts — `--color-chart-axis-*`, `--color-chart-grid-*`,
+     `--color-chart-dot-*`, `--color-chart-manager-*`. */
+  --mx-chart-axis-tick: 220 9% 46%;
+  --mx-chart-axis-tick-muted: 203 20% 40%;
+  --mx-chart-axis-tick-strong: 203 20% 40%;
+  --mx-chart-manager-axis-tick: 215 14% 34%;
+  --mx-chart-manager-positive: 160 84% 39.4%;
+  --mx-chart-grid: 210 3% 88%;
+  --mx-chart-grid-strong: 210 3% 88%;
+  --mx-chart-grid-dark: 215 25% 26.8%;
+  --mx-chart-dot-stroke: 0 0% 100%;
+
+  /* Família navy/dark do template canônico (C0.3) — azuis profundos usados em
+     superfícies de destaque (sidebar, headers). Consumidos via @theme como
+     `mx-navy`, `mx-dark`, `mx-dark-2`, `mx-black`, `pure-black`. */
+  --mx-black: 0 0% 0%;
+  --mx-brand-ink: 202 66% 8%;
+  --mx-navy: 200 75% 8%;
+  --mx-dark: 215 91% 12.6%;
+  --mx-dark-2: 222 48% 11%;
+
+  /* Sidebar canônica — docs/design-system/sidebar-dono.md. Mesmos valores dos
+     tokens do módulo do Dono, promovidos a primitivo para que o @theme os
+     referencie sem hex. */
+  --mx-sidebar-ink: 240 5% 26%;
+  --mx-sidebar-ink-strong: 240 6% 10%;
+  --mx-sidebar-hover: 240 5% 96%;
+  --mx-sidebar-muted: 0 0% 45%;
+
+  /* Família template canônico (C0.3) — valores medidos no @theme legado do
+     index.css e preservados byte a byte (hsl equivalente ao hex original).
+     O @theme referencia estes primitivos; a consolidação dos VALORES (ex.:
+     green do template vs green da marca) é decisão do T4.3. */
+  --mx-tpl-surface-overlay: 240 5% 10.9%;
+  --mx-tpl-surface-elevated: 240 5% 7.3%;
+  --mx-tpl-sidebar-bg: 197 55% 14%;
+  --mx-tpl-sidebar-text: 175 22% 90%;
+  --mx-tpl-sidebar-active: 197 50% 20%;
+  --mx-tpl-accent-strong: 220 100% 44%;
+  --mx-tpl-accent-soft: 220 100% 95.9%;
+  --mx-tpl-kpi-success-bg: 152 82% 96%;
+  --mx-tpl-kpi-warning-text: 26 90% 37.1%;
+  --mx-tpl-kpi-info-bg: 175 31% 93%;
+  --mx-tpl-amber-light: 41 99% 95%;
+  --mx-tpl-print-highlight: 48 96% 53.1%;
+  --mx-tpl-navy: 214 83% 13.6%;
+  --mx-tpl-bg: 216 48% 98%;
+
+  /* Escala verde do template (Tailwind green do export Base44). NOTA: difere
+     da escala da marca (--mx-green-* acima); convivem até o T4.3 decidir. */
+  --mx-tpl-green-50: 138 76% 96.7%;
+  --mx-tpl-green-100: 141 84% 92.6%;
+  --mx-tpl-green-200: 141 79% 85%;
+  --mx-tpl-green-300: 142 77% 73.1%;
+  --mx-tpl-green-800: 143 64% 24.1%;
+  --mx-tpl-green-900: 144 61% 20.1%;
+  --mx-tpl-green-950: 145 80% 10%;
+
+  /* Escala laranja do template (Tailwind orange do export Base44). */
+  --mx-tpl-orange-50: 33 100% 96.4%;
+  --mx-tpl-orange-100: 34 100% 91.8%;
+  --mx-tpl-orange-200: 32 98% 83.1%;
+  --mx-tpl-orange-300: 30.9 97% 72.3%;
+  --mx-tpl-orange-400: 27 96% 61%;
+  --mx-tpl-orange-500: 24.7 95% 53.1%;
+  --mx-tpl-orange-600: 20.6 90% 48.2%;
+  --mx-tpl-orange-700: 17.3 88% 40.4%;
+  --mx-tpl-orange-800: 15 79% 33.8%;
+  --mx-tpl-orange-900: 15 74.9% 27.9%;
+  --mx-tpl-orange-950: 13 81% 14.6%;
+
+  /* Degraus avulsos do template (amber/emerald/red fora das escalas acima). */
+  --mx-tpl-amber-300: 46 97% 64.6%;
+  --mx-tpl-amber-400: 43.3 96% 56.1%;
+  --mx-tpl-emerald-100: 149 80% 90%;
+  --mx-tpl-red-100: 0 96% 89.3%;
 
   /* ------------------------------------------------------------ espaçamento */
   /* Escala de 4 — §7.6 */
