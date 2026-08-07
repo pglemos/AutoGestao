@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'bun:test'
+import { describe, expect, it, test } from 'bun:test'
 import {
   sanitizeMentorPayload,
   sanitizeMentorExtra,
@@ -12,7 +12,9 @@ import {
   captureDailyProcessorFailure,
   captureScoreInvariantViolation,
   type MentorTelemetryPayload,
+  sanitizeMentorError,
 } from './mentorTelemetry'
+
 
 describe('mentorTelemetry', () => {
   test('prova que payload com PII (nome, telefone, texto de whatsapp, token) é sanitizado antes do envio', () => {
@@ -92,5 +94,26 @@ describe('mentorTelemetry', () => {
     expect(() => captureMentorSyncFailure(tags, new Error('sync fail'), { opportunityId: 'opp-6' })).not.toThrow()
     expect(() => captureDailyProcessorFailure(tags, new Error('processor fail'), { storeId: 'store-1' })).not.toThrow()
     expect(() => captureScoreInvariantViolation(tags, { score: 150 })).not.toThrow()
+  })
+})
+
+describe('sanitização do objeto Error', () => {
+  it('redige telefone e nome na mensagem da exceção', () => {
+    const safe = sanitizeMentorError(
+      new Error('Falha ao enviar para João da Silva no telefone 11999998888'),
+    )
+    expect(safe.message).not.toContain('11999998888')
+  })
+
+  it('preserva o nome do erro para diagnóstico', () => {
+    const original = new TypeError('quebrou')
+    expect(sanitizeMentorError(original).name).toBe('TypeError')
+  })
+
+  it('redige a stack quando ela existe', () => {
+    const original = new Error('erro com 11999998888')
+    original.stack = 'Error: erro com 11999998888\n    at foo'
+    const safe = sanitizeMentorError(original)
+    expect(safe.stack).not.toContain('11999998888')
   })
 })

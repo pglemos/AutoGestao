@@ -91,6 +91,20 @@ export function sanitizeMentorPayload(payload: MentorTelemetryPayload): MentorTe
 /**
  * Envia um evento de telemetria do Mentor Comercial ao Sentry com escopo e tags apropriados.
  */
+/**
+ * Redige PII de um Error antes de enviá-lo ao Sentry.
+ *
+ * O objeto Error escapava da sanitização do payload: `message` e `stack` podem
+ * conter nome de cliente ou o texto de um WhatsApp capturado numa falha de envio.
+ * Preserva `name` e a estrutura da stack para não perder poder de diagnóstico.
+ */
+export function sanitizeMentorError(error: Error): Error {
+  const safe = new Error(redactPiiString(error.message))
+  safe.name = error.name
+  safe.stack = error.stack ? redactPiiString(error.stack) : undefined
+  return safe
+}
+
 export function captureMentorTelemetry(payload: MentorTelemetryPayload): void {
   const sanitized = sanitizeMentorPayload(payload)
   const tags = sanitized.tags ?? {}
@@ -112,7 +126,11 @@ export function captureMentorTelemetry(payload: MentorTelemetryPayload): void {
     const eventName = `[MentorTelemetry] ${sanitized.eventType}${sanitized.message ? `: ${sanitized.message}` : ''}`
 
     if (sanitized.error instanceof Error) {
-      Sentry.captureException(sanitized.error)
+      // O objeto Error escapava da sanitização: `message` e `stack` podem conter
+      // nome de cliente ou texto de WhatsApp capturado numa falha de envio. Enviar
+      // a exceção crua vazaria PII para o Sentry. Reconstruímos um Error com a
+      // mensagem redigida, preservando `name` e `stack` para o diagnóstico.
+      Sentry.captureException(sanitizeMentorError(sanitized.error))
     } else {
       Sentry.captureMessage(eventName, 'error')
     }

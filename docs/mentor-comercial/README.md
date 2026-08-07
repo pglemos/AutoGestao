@@ -26,7 +26,7 @@ Os catálogos JSON estão localizados em `rules/mentor-comercial/v1/` e contêm 
 6. **`scenarios.json`** (15 cenários): Matriz de cenários de teste sintéticos para validação determinística.
 7. **Outras Entidades**: 3 canais de comunicação, 18 integrações ativas e 100 clientes de teste catalogados.
 
-> **Nota sobre SOURCE_BLOCKERs**:  
+> **Nota sobre SOURCE_BLOCKERs**:
 > Os scripts `INT-Q07`, `INT-N04`, `POR-A04`, `CAR-C07` e `CAR-C08` são declarados na planilha fonte como referências, mas não possuem conteúdo textual definido na origem. O motor trata essas ocorrências de forma defensiva via fallback seguro (`SOURCE_BLOCKED_STATUSES`), garantindo estabilidade e integridade sem constituir erro de software.
 
 ---

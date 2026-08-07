@@ -210,8 +210,17 @@ export function computeCarteiraQuality(
       continue
     }
 
+    // Score ausente NÃO é score zero. Uma oportunidade elegível que nunca teve o
+    // score calculado não pode puxar a média da carteira para baixo — ela sai do
+    // cálculo, exatamente como uma não classificada (§34).
+    const rawScore = item.mentorScore ?? item.mentor_score ?? item.score
+    if (rawScore === null || rawScore === undefined || Number.isNaN(Number(rawScore))) {
+      excludedCount++
+      continue
+    }
+
     eligibleCount++
-    const score = item.mentorScore ?? item.mentor_score ?? item.score ?? 0
+    const score = Number(rawScore)
     scoreSum += score
 
     const classification = classifyScore(score)

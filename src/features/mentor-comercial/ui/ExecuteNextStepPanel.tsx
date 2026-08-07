@@ -119,7 +119,10 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
     }
   }
 
-  const priorityClass = opportunity.priorityClass ?? opportunity.decision?.priority?.classification ?? 'P2'
+  // Sem classe persistida a UI diz que não sabe. 'P2' não existe no domínio —
+  // as classes oficiais são Máxima, Alta, Média e Baixa.
+  const priorityClass =
+    opportunity.priorityClass ?? opportunity.decision?.priority?.classification ?? null
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
@@ -133,7 +136,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                   {opportunity.statusCode}
                 </Badge>
                 <Badge variant="outline" className="border-slate-600 text-slate-300 bg-slate-800 text-xs">
-                  Prioridade {priorityClass}
+                  {priorityClass ? `Prioridade ${priorityClass}` : 'Prioridade não calculada'}
                 </Badge>
                 {isInternal && (
                   <Badge variant="secondary" className="bg-amber-900/80 text-amber-200 border border-amber-700 text-xs">

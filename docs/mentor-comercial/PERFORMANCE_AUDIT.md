@@ -1,6 +1,6 @@
 # Auditoria de Performance — Mentor Comercial
 
-**Data:** 2026-08-07  
+**Data:** 2026-08-07
 **Escopo da Análise:** `supabaseMentorRepository.ts`, `dailyProcessor.ts`, `centralIntegration.ts`, `CarteiraAtivaList.tsx` e Migration `20260807120000_mentor_comercial_motor_v1.sql`.
 
 ---

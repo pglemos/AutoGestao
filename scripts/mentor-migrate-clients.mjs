@@ -1,23 +1,20 @@
 #!/usr/bin/env node
 /**
- * Script de migração dos clientes reais para o Mentor Comercial (TASK 21).
+ * Script de migração dos clientes reais para o Mentor Comercial (TASK 21 / TAREFA C04).
  *
  * REQUISITOS DULOS:
- * - Executa em DRY-RUN por padrão. Só escreve com `--apply` explícito.
- * - Captura contagem e IDs ANTES e DEPOIS. Aborta se qualquer contagem diminuir
- *   ou se qualquer ID existente for removido.
- * - Preserva clientId, canal, telefone, veículo, agendamento, observações,
- *   histórico, venda e próxima ação. PROIBIDO apagar ou recriar clientes/oportunidades.
- * - Reutiliza oportunidade ativa existente (closed_at IS NULL AND cancelada_em IS NULL).
- *   Só cria nova oportunidade se o cliente não possuir oportunidade ativa.
- * - Mapeamento de canal legado: `showroom` -> `Porta` APENAS no campo metodológico
- *   `channel_entry`. A coluna legada `canal` NÃO é alterada.
- * - Mantém `needs_mentor_classification = true` quando não houver evidência suficiente.
- * - NÃO preenche score artificialmente (mentor_score permanece null).
- * - Lê .env usando VITE_SUPABASE_URL ou SUPABASE_URL (mesmo padrão de reconcile report).
+ * 1. DRY-RUN é o padrão. `--apply` é obrigatório para escrever. Sem exceção.
+ * 2. Aborta se qualquer contagem diminuir entre antes e depois ou se ID for perdido.
+ * 3. NUNCA apaga, recria ou trunca cliente, oportunidade, agendamento ou histórico.
+ * 4. Reutiliza oportunidade ativa existente antes de criar qualquer nova.
+ * 5. Só classifica status Mentor com evidência suficiente; sem evidência mantém
+ *    needs_mentor_classification=true e NÃO inventa score.
+ * 6. showroom -> Porta apenas em `channel_entry`. A coluna legada `canal` fica intocada.
+ * 7. "sem canal" (18 casos) é tratado explicitamente, não presumido.
+ * 8. Idempotente: rodar duas vezes com --apply não muda nada na segunda.
  *
  * Uso:
- *   node scripts/mentor-migrate-clients.mjs          # DRY-RUN
+ *   node scripts/mentor-migrate-clients.mjs          # DRY-RUN (Padrão)
  *   node scripts/mentor-migrate-clients.mjs --apply  # Aplica no Supabase
  */
 
@@ -26,9 +23,8 @@ import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
 const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
-const APPLY_MODE = process.argv.includes('--apply')
 
-function loadEnv() {
+export function loadEnv() {
   const envPath = path.join(projectRoot, '.env')
   if (!existsSync(envPath)) throw new Error('.env não encontrado')
   const env = {}
@@ -44,7 +40,7 @@ function loadEnv() {
   return { url, key }
 }
 
-async function fetchAll({ url, key }, table, select) {
+export async function fetchAll({ url, key }, table, select) {
   const rows = []
   const pageSize = 1000
   for (let from = 0; ; from += pageSize) {
@@ -65,7 +61,7 @@ async function fetchAll({ url, key }, table, select) {
   return rows
 }
 
-async function patchRow({ url, key }, table, id, payload) {
+export async function patchRow({ url, key }, table, id, payload) {
   const response = await fetch(`${url}/rest/v1/${table}?id=eq.${encodeURIComponent(id)}`, {
     method: 'PATCH',
     headers: {
@@ -81,7 +77,7 @@ async function patchRow({ url, key }, table, id, payload) {
   }
 }
 
-async function insertRows({ url, key }, table, rows) {
+export async function insertRows({ url, key }, table, rows) {
   if (!rows || rows.length === 0) return
   const response = await fetch(`${url}/rest/v1/${table}`, {
     method: 'POST',
@@ -99,26 +95,149 @@ async function insertRows({ url, key }, table, rows) {
 }
 
 /**
- * Mapeamento do canal legado para o canal metodológico oficial:
+ * Mapeamento do canal legado para o canal metodológico oficial (Porta, Internet, Carteira):
  *   - 'showroom' / 'porta' -> 'Porta'
  *   - 'internet' -> 'Internet'
  *   - 'carteira' -> 'Carteira'
+ *   - 'sem canal' / '(sem canal)' / 'sem_canal' / null / '' -> 'Carteira' (tratamento explícito das 18 ocorrências)
  * NOTA: A coluna legada `canal` em `oportunidades` NÃO é alterada.
  */
-function mapChannelEntry(legacyCanal) {
+export function mapChannelEntry(legacyCanal) {
   if (!legacyCanal) return 'Carteira'
   const norm = String(legacyCanal).trim().toLowerCase()
+  if (norm === 'sem canal' || norm === '(sem canal)' || norm === 'sem_canal' || norm === '') {
+    return 'Carteira'
+  }
   if (norm === 'showroom' || norm === 'porta') return 'Porta'
   if (norm === 'internet') return 'Internet'
   if (norm === 'carteira') return 'Carteira'
   return 'Carteira'
 }
 
-async function main() {
+export function isOppActive(opp) {
+  return opp.closed_at === null && (opp.cancelada_em === null || opp.cancelada_em === undefined)
+}
+
+/**
+ * Elabora o plano de migração determinístico a partir dos clientes e oportunidades.
+ */
+export function planMigration(clientes, oportunidades, nowIso = new Date().toISOString()) {
+  const oppsByClient = new Map()
+  for (const opp of oportunidades) {
+    const list = oppsByClient.get(opp.cliente_id) ?? []
+    list.push(opp)
+    oppsByClient.set(opp.cliente_id, list)
+  }
+
+  const oppUpdates = []
+  const newOpps = []
+  let clientesComAtivaExistente = 0
+  let clientesSemAtivaNovaCriada = 0
+
+  for (const cliente of clientes) {
+    const opps = oppsByClient.get(cliente.id) ?? []
+    const activeOpps = opps.filter(isOppActive)
+
+    if (activeOpps.length > 0) {
+      clientesComAtivaExistente += 1
+      activeOpps.sort((a, b) => new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime())
+      const targetOpp = activeOpps[0]
+
+      const rawCanal = targetOpp.canal || cliente.canal_origem
+      const targetChannelEntry = mapChannelEntry(rawCanal)
+
+      // Idempotência: só agenda atualização se channel_entry ou needs_mentor_classification precisarem mudar
+      const needsUpdate =
+        targetOpp.channel_entry !== targetChannelEntry ||
+        targetOpp.needs_mentor_classification !== true
+
+      if (needsUpdate) {
+        oppUpdates.push({
+          id: targetOpp.id,
+          payload: {
+            channel_entry: targetChannelEntry,
+            needs_mentor_classification: true,
+            mentor_updated_at: nowIso,
+          },
+        })
+      }
+    } else {
+      clientesSemAtivaNovaCriada += 1
+      const targetChannelEntry = mapChannelEntry(cliente.canal_origem)
+
+      newOpps.push({
+        cliente_id: cliente.id,
+        loja_id: cliente.loja_id ?? null,
+        seller_user_id: cliente.seller_user_id ?? null,
+        etapa: 'prospeccao',
+        canal: cliente.canal_origem || 'carteira',
+        channel_entry: targetChannelEntry,
+        needs_mentor_classification: true,
+        created_at: nowIso,
+        updated_at: nowIso,
+        mentor_updated_at: nowIso,
+      })
+    }
+  }
+
+  return {
+    clientesComAtivaExistente,
+    clientesSemAtivaNovaCriada,
+    oppUpdates,
+    newOpps,
+  }
+}
+
+/**
+ * Validação estrita de integridade ANTES vs DEPOIS.
+ * Aborta se qualquer contagem diminuir ou se qualquer ID for perdido.
+ */
+export function verifyMigrationIntegrity(clientesBefore, oportunidadesBefore, clientesAfter, oportunidadesAfter) {
+  const beforeClientesCount = clientesBefore.length
+  const beforeOppsCount = oportunidadesBefore.length
+  const afterClientesCount = clientesAfter.length
+  const afterOppsCount = oportunidadesAfter.length
+
+  const beforeClientesIds = new Set(clientesBefore.map((c) => c.id))
+  const beforeOppsIds = new Set(oportunidadesBefore.map((o) => o.id))
+
+  const afterClientesIds = new Set(clientesAfter.map((c) => c.id))
+  const afterOppsIds = new Set(oportunidadesAfter.map((o) => o.id))
+
+  const errors = []
+
+  if (afterClientesCount < beforeClientesCount) {
+    errors.push(`Contagem de clientes diminuiu! (Antes: ${beforeClientesCount}, Depois: ${afterClientesCount})`)
+  }
+
+  if (afterOppsCount < beforeOppsCount) {
+    errors.push(`Contagem de oportunidades diminuiu! (Antes: ${beforeOppsCount}, Depois: ${afterOppsCount})`)
+  }
+
+  for (const id of beforeClientesIds) {
+    if (!afterClientesIds.has(id)) {
+      errors.push(`Cliente existente foi removido! ID: ${id}`)
+    }
+  }
+
+  for (const id of beforeOppsIds) {
+    if (!afterOppsIds.has(id)) {
+      errors.push(`Oportunidade existente foi removida! ID: ${id}`)
+    }
+  }
+
+  return {
+    ok: errors.length === 0,
+    errors,
+  }
+}
+
+export async function main() {
+  const APPLY_MODE = process.argv.includes('--apply')
   const env = loadEnv()
   const nowIso = new Date().toISOString()
 
-  console.log('Mentor Comercial — Script de Migração de Clientes Reais (TASK 21)')
+  console.log('Mentor Comercial — Script de Migração de Clientes Reais (TASK 21 / C04)')
   console.log(`Modo: ${APPLY_MODE ? 'APPLY (Escrita no Supabase)' : 'DRY-RUN (Simulação)'}\n`)
 
   // 1. ANTES: Captura contagem e IDs
@@ -132,100 +251,51 @@ async function main() {
     ),
   ])
 
-  const beforeClientesCount = clientesBefore.length
-  const beforeOppsCount = oportunidadesBefore.length
-  const beforeClientesIds = new Set(clientesBefore.map((c) => c.id))
-  const beforeOppsIds = new Set(oportunidadesBefore.map((o) => o.id))
+  console.log(`  Clientes ANTES: ${clientesBefore.length}`)
+  console.log(`  Oportunidades ANTES: ${oportunidadesBefore.length}`)
 
-  console.log(`  Clientes ANTES: ${beforeClientesCount}`)
-  console.log(`  Oportunidades ANTES: ${beforeOppsCount}`)
-
-  // Mapeia oportunidades por cliente
-  const oppsByClient = new Map()
-  for (const opp of oportunidadesBefore) {
-    const list = oppsByClient.get(opp.cliente_id) ?? []
-    list.push(opp)
-    oppsByClient.set(opp.cliente_id, list)
-  }
-
-  const isOppActive = (opp) => opp.closed_at === null && opp.cancelada_em === null
-
-  const oppUpdates = []
-  const newOpps = []
-  let clientesComAtivaExistente = 0
-  let clientesSemAtivaNovaCriada = 0
-
-  for (const cliente of clientesBefore) {
-    const opps = oppsByClient.get(cliente.id) ?? []
-    const activeOpps = opps.filter(isOppActive)
-
-    if (activeOpps.length > 0) {
-      // Reutiliza a oportunidade ativa existente (a mais recente se houver múltiplas)
-      clientesComAtivaExistente += 1
-      activeOpps.sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
-      const targetOpp = activeOpps[0]
-
-      const targetChannelEntry = mapChannelEntry(targetOpp.canal || cliente.canal_origem)
-
-      oppUpdates.push({
-        id: targetOpp.id,
-        payload: {
-          channel_entry: targetChannelEntry,
-          needs_mentor_classification: true,
-          mentor_updated_at: nowIso,
-        },
-      })
-    } else {
-      // Cliente não possui oportunidade ativa: cria uma nova oportunidade ativa
-      clientesSemAtivaNovaCriada += 1
-      const targetChannelEntry = mapChannelEntry(cliente.canal_origem)
-
-      newOpps.push({
-        cliente_id: cliente.id,
-        loja_id: cliente.loja_id,
-        seller_user_id: cliente.seller_user_id,
-        etapa: 'prospeccao',
-        canal: cliente.canal_origem || 'carteira',
-        channel_entry: targetChannelEntry,
-        needs_mentor_classification: true,
-        created_at: nowIso,
-        updated_at: nowIso,
-        mentor_updated_at: nowIso,
-      })
-    }
-  }
+  const plan = planMigration(clientesBefore, oportunidadesBefore, nowIso)
 
   console.log('\nPlano de migração elaborado:')
-  console.log(`  Clientes com oportunidade ativa reutilizada: ${clientesComAtivaExistente}`)
-  console.log(`  Clientes sem oportunidade ativa (novas ativas a criar): ${clientesSemAtivaNovaCriada}`)
-  console.log(`  Atualizações em oportunidades existentes: ${oppUpdates.length}`)
-  console.log(`  Novas oportunidades a inserir: ${newOpps.length}`)
+  console.log(`  Clientes com oportunidade ativa reutilizada: ${plan.clientesComAtivaExistente}`)
+  console.log(`  Clientes sem oportunidade ativa (novas ativas a criar): ${plan.clientesSemAtivaNovaCriada}`)
+  console.log(`  Atualizações em oportunidades existentes: ${plan.oppUpdates.length}`)
+  console.log(`  Novas oportunidades a inserir: ${plan.newOpps.length}`)
 
   if (!APPLY_MODE) {
     console.log('\n[DRY-RUN] Nenhuma alteração foi realizada no banco de dados.')
     console.log('Execute com --apply para efetivar as alterações no Supabase.')
 
-    const simAfterClientesCount = beforeClientesCount
-    const simAfterOppsCount = beforeOppsCount + newOpps.length
+    const simAfterClientesCount = clientesBefore.length
+    const simAfterOppsCount = oportunidadesBefore.length + plan.newOpps.length
     console.log('\n--- Simulação ANTES vs DEPOIS ---')
-    console.log(`Clientes:      ${beforeClientesCount} -> ${simAfterClientesCount} (delta: 0)`)
-    console.log(`Oportunidades: ${beforeOppsCount} -> ${simAfterOppsCount} (delta: +${newOpps.length})`)
+    console.log(`Clientes:      ${clientesBefore.length} -> ${simAfterClientesCount} (delta: 0)`)
+    console.log(`Oportunidades: ${oportunidadesBefore.length} -> ${simAfterOppsCount} (delta: +${plan.newOpps.length})`)
+
+    const simOppsAfter = [
+      ...oportunidadesBefore,
+      ...plan.newOpps.map((o, idx) => ({ ...o, id: `sim-new-${idx}` })),
+    ]
+    const integrity = verifyMigrationIntegrity(clientesBefore, oportunidadesBefore, clientesBefore, simOppsAfter)
+    if (!integrity.ok) {
+      console.error('\nFALHA NA SIMULAÇÃO DE INTEGRIDADE:')
+      for (const err of integrity.errors) console.error(`  - ${err}`)
+      process.exit(1)
+    }
     return
   }
 
   // 2. EXECUÇÃO DE ESCRITA (--apply)
   console.log('\nAplicando alterações no Supabase...')
 
-  // Atualizações em lotes pequenos
   const BATCH_SIZE = 50
-  for (let i = 0; i < oppUpdates.length; i += BATCH_SIZE) {
-    const batch = oppUpdates.slice(i, i + BATCH_SIZE)
+  for (let i = 0; i < plan.oppUpdates.length; i += BATCH_SIZE) {
+    const batch = plan.oppUpdates.slice(i, i + BATCH_SIZE)
     await Promise.all(batch.map((item) => patchRow(env, 'oportunidades', item.id, item.payload)))
   }
 
-  // Inserções em lote
-  if (newOpps.length > 0) {
-    await insertRows(env, 'oportunidades', newOpps)
+  if (plan.newOpps.length > 0) {
+    await insertRows(env, 'oportunidades', plan.newOpps)
   }
 
   // 3. DEPOIS: Captura novamente e compara
@@ -235,52 +305,25 @@ async function main() {
     fetchAll(env, 'oportunidades', 'id'),
   ])
 
-  const afterClientesCount = clientesAfter.length
-  const afterOppsCount = oportunidadesAfter.length
-  const afterClientesIds = new Set(clientesAfter.map((c) => c.id))
-  const afterOppsIds = new Set(oportunidadesAfter.map((o) => o.id))
+  console.log(`  Clientes DEPOIS: ${clientesAfter.length}`)
+  console.log(`  Oportunidades DEPOIS: ${oportunidadesAfter.length}`)
 
-  console.log(`  Clientes DEPOIS: ${afterClientesCount}`)
-  console.log(`  Oportunidades DEPOIS: ${afterOppsCount}`)
+  const integrity = verifyMigrationIntegrity(clientesBefore, oportunidadesBefore, clientesAfter, oportunidadesAfter)
 
-  // Validações de integridade
-  let abort = false
-
-  if (afterClientesCount < beforeClientesCount) {
-    console.error(`ERRO: Contagem de clientes diminuiu! (Antes: ${beforeClientesCount}, Depois: ${afterClientesCount})`)
-    abort = true
-  }
-
-  if (afterOppsCount < beforeOppsCount) {
-    console.error(`ERRO: Contagem de oportunidades diminuiu! (Antes: ${beforeOppsCount}, Depois: ${afterOppsCount})`)
-    abort = true
-  }
-
-  for (const id of beforeClientesIds) {
-    if (!afterClientesIds.has(id)) {
-      console.error(`ERRO: Cliente existente foi removido! ID: ${id}`)
-      abort = true
-    }
-  }
-
-  for (const id of beforeOppsIds) {
-    if (!afterOppsIds.has(id)) {
-      console.error(`ERRO: Oportunidade existente foi removida! ID: ${id}`)
-      abort = true
-    }
-  }
-
-  if (abort) {
+  if (!integrity.ok) {
     console.error('\nFALHA NA MIGRAÇÃO: Invariante de preservação violada!')
+    for (const err of integrity.errors) console.error(`  - ${err}`)
     process.exit(1)
   }
 
   console.log('\nSUCESSO: Migração concluída e verificada!')
-  console.log(`  Clientes: ${beforeClientesCount} -> ${afterClientesCount}`)
-  console.log(`  Oportunidades: ${beforeOppsCount} -> ${afterOppsCount} (+${newOpps.length} novas ativas)`)
+  console.log(`  Clientes: ${clientesBefore.length} -> ${clientesAfter.length}`)
+  console.log(`  Oportunidades: ${oportunidadesBefore.length} -> ${oportunidadesAfter.length} (+${plan.newOpps.length} novas ativas)`)
 }
 
-main().catch((error) => {
-  console.error(`\nFALHA CRÍTICA: ${error.message}`)
-  process.exit(1)
-})
+if (process.argv[1] && fileURLToPath(import.meta.url) === path.resolve(process.argv[1])) {
+  main().catch((error) => {
+    console.error(`\nFALHA CRÍTICA: ${error.message}`)
+    process.exit(1)
+  })
+}
