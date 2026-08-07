@@ -277,3 +277,10 @@
 - Validado em clone raso depth=1 fresco: docs-only → exit 0 MESMO com API indisponível (slug inválido); runtime → exit 1
 - Em produção (deploy mhi8fw6ua, commit 93eccfc6): `runtime-impacting change (1 file(s))` — classificação correta
 - Próximo: push docs-only puro deve gerar deploy CANCELADO (sem build)
+
+### EV-F3-005 - Fase 3: SKIP docs-only confirmado em produção (T3.5 DONE)
+- Requisito: T3.5
+- Deploy docs-only 28c697bb → deploy `8fffhv0wg` status **Canceled** (sem build); log: `Vercel ignore: documentation/QA-only change (1 file(s))`
+- Deploy runtime 93eccfc6 → deploy `mhi8fw6ua` status **Ready** (build); log: `runtime-impacting change (1 file(s))`
+- Nenhum deploy em produção desde 93eccfc6; commit docs-only não gerou artefato de produção
+- Conclusão: T3.5 DONE_WITH_EVIDENCE — ignoreCommand funcional em clone raso com fallback git (--depth=3) + API (owner+slug)
