@@ -1,23 +1,18 @@
 # Supabase Security Review — MX Gestão Preditiva (2026-08-05)
 
-## Inventário Inicial de Segurança (Project ID: `fbhcmzzgwjdgkctlfvbo`)
+## Inventário Auditado de Segurança (Project ID: `fbhcmzzgwjdgkctlfvbo`)
 
-### Tabelas RLS sem Policy
-1. `ai_model_daily_usage`
-2. `carteira_missao_mutations`
-3. `data_correction_audit`
-4. `internal_mx_admin_rate_limits`
-5. `migration_backup_lancamentos_diarios_duplicates_20260503`
-6. `migration_backup_vendedores_loja_duplicates_20260503`
-7. `password_change_challenges`
-8. `password_recovery_attempts`
+### Tabelas e Row Level Security (RLS)
+- **Total de tabelas no schema `public`:** 158 tabelas
+- **Status RLS:** 100% com Row Level Security ativo (`rowsecurity = true`)
+- **Tabelas de backup isoladas:** `backup_is_venda_loja_20260805` sem grants públicos, acessível exclusivamente via service_role/psql por design.
 
-### Revisão de Funções SECURITY DEFINER
-- Total de funções públicas: 237
-- Total `SECURITY DEFINER`: 204
-- Acessíveis por `anon`: 60
-- Acessíveis por `authenticated`: 148
+### Revisão de Funções e RPCs
+- **Grants Públicos Removidos:** 0 funções executáveis pela role `anon` via PostgREST RPC
+- **Distribuição de Privilégios:** 179 acessíveis por `{authenticated, service_role}`, 34 exclusivas de `{service_role}`, 17 restritas ao `{postgres}`
+- **Defaults de Privilégios:** `DEFAULT PRIVILEGES` configurados para não conceder permissão pública/anônima a novas funções no schema `public`.
 
 ### Edge Functions
-- Total ativas: 22
-- `verify_jwt=false`: 13 (Requer auditoria de auth interna HMAC / secret token)
+- **Total ativas:** 22 Edge Functions
+- **Com `verify_jwt = true`:** 16 funções
+- **Com autenticação customizada / rate limiting (sem JWT direto):** 6 funções auditadas (`request-password-recovery`, `store-pre-registration`, `google-oauth-handler`, `google-calendar-sync`, `google-meet-ata`).
