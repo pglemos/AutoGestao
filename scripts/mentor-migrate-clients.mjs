@@ -132,7 +132,8 @@ export function planMigration(clientes, oportunidades, nowIso = new Date().toISO
   const oppUpdates = []
   const newOpps = []
   let clientesComAtivaExistente = 0
-  let clientesSemAtivaNovaCriada = 0
+  let clientesSomenteEncerradas = 0
+  let clientesSemNenhumaOportunidade = 0
 
   for (const cliente of clientes) {
     const opps = oppsByClient.get(cliente.id) ?? []
@@ -162,27 +163,31 @@ export function planMigration(clientes, oportunidades, nowIso = new Date().toISO
         })
       }
     } else {
-      clientesSemAtivaNovaCriada += 1
-      const targetChannelEntry = mapChannelEntry(cliente.canal_origem)
-
-      newOpps.push({
-        cliente_id: cliente.id,
-        loja_id: cliente.loja_id ?? null,
-        seller_user_id: cliente.seller_user_id ?? null,
-        etapa: 'prospeccao',
-        canal: cliente.canal_origem || 'carteira',
-        channel_entry: targetChannelEntry,
-        needs_mentor_classification: true,
-        created_at: nowIso,
-        updated_at: nowIso,
-        mentor_updated_at: nowIso,
-      })
+      // NUNCA criar oportunidade automaticamente.
+      //
+      // Um cliente sem oportunidade ATIVA quase sempre é um cliente cujo ciclo já
+      // se encerrou (venda ou perda). Criar uma oportunidade nova para ele
+      // ressuscitaria negócios fechados dentro da Carteira Ativa — exatamente o
+      // que §35 e §83 proíbem ("criar uma apenas se realmente necessário",
+      // "nova oportunidade a cada mudança" é proibido).
+      //
+      // A migração CLASSIFICA o que existe. Abrir um novo ciclo comercial é
+      // decisão do vendedor, na tela, não de um script em lote.
+      const temAlgumaOportunidade = opps.length > 0
+      if (temAlgumaOportunidade) {
+        clientesSomenteEncerradas += 1
+      } else {
+        clientesSemNenhumaOportunidade += 1
+      }
     }
   }
 
   return {
     clientesComAtivaExistente,
-    clientesSemAtivaNovaCriada,
+    clientesSomenteEncerradas,
+    clientesSemNenhumaOportunidade,
+    clientesSomenteEncerradas,
+    clientesSemNenhumaOportunidade,
     oppUpdates,
     newOpps,
   }
@@ -258,7 +263,8 @@ export async function main() {
 
   console.log('\nPlano de migração elaborado:')
   console.log(`  Clientes com oportunidade ativa reutilizada: ${plan.clientesComAtivaExistente}`)
-  console.log(`  Clientes sem oportunidade ativa (novas ativas a criar): ${plan.clientesSemAtivaNovaCriada}`)
+  console.log(`  Clientes só com oportunidades encerradas (NENHUMA criada): ${plan.clientesSomenteEncerradas}`)
+  console.log(`  Clientes sem nenhuma oportunidade (NENHUMA criada, exige decisão humana): ${plan.clientesSemNenhumaOportunidade}`)
   console.log(`  Atualizações em oportunidades existentes: ${plan.oppUpdates.length}`)
   console.log(`  Novas oportunidades a inserir: ${plan.newOpps.length}`)
 
