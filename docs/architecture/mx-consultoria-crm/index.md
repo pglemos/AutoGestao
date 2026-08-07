@@ -6,7 +6,7 @@ Fonte completa: `../mx-consultoria-crm-architecture.md`
 
 Criar um bounded context novo de `consultoria`, com tabelas `consulting_*`, rotas `/consultoria/*` e features em `src/features/consultoria`.
 
-Nao implementar esse modulo dentro de `/legacy/financeiro`, `/legacy/inventory` ou substituindo `stores`.
+Nao implementar esse modulo dentro de modulos financeiro/estoque legados ou substituindo `stores`.
 
 ## Leitura obrigatoria
 

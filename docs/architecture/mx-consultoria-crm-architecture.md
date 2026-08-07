@@ -38,7 +38,7 @@ Documentacao disponivel:
 Restricoes:
 
 - Nao quebrar rotas e tabelas do core de performance.
-- Nao reaproveitar `/legacy/financeiro` ou `/legacy/inventory` como base canonica.
+- Nao reaproveitar modulos financeiro/estoque legados como base canonica.
 - RLS precisa existir antes de expor dados financeiros, documentos e clientes.
 - Importacoes devem passar por validacao.
 - Integracao Google Calendar/Meet nao deve expor segredos no frontend.

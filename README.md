@@ -74,24 +74,6 @@ Rotas protegidas principais:
 - `/relatorio-matinal`: relatório matinal
 - `/auditoria`: diagnóstico/auditoria
 
-Rotas legadas isoladas sob `/legacy`:
-
-- `/legacy/agenda`
-- `/legacy/configuracoes/comissoes`
-- `/legacy/communication`
-- `/legacy/relatorios/vendas-cruzados`
-- `/legacy/financeiro`
-- `/legacy/inventory`
-- `/legacy/leadops`
-- `/legacy/leads`
-- `/legacy/reports`
-- `/legacy/reports/stock`
-- `/legacy/relatorios/performance-vendas`
-- `/legacy/relatorios/performance-vendedores`
-- `/legacy/tarefas`
-- `/legacy/gamification`
-- `/legacy/activities`
-
 ## Arquitetura
 
 - `src/App.tsx`: roteamento, lazy loading e seleção de telas por papel.

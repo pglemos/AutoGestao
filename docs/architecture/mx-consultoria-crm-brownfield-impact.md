@@ -103,7 +103,7 @@ Necessario criar:
 
 ### Financeiro/DRE
 
-Nao foi identificado modulo DRE canonico. Ha rotas legadas em `/legacy/financeiro`, mas o README orienta que legacy nao deve ser confundido com o fluxo principal.
+Nao foi identificado modulo DRE canonico no fluxo principal.
 
 Necessario criar:
 
@@ -115,7 +115,7 @@ Necessario criar:
 
 ### Estoque
 
-Nao ha estoque canonico do fluxo principal. O README cita `/legacy/inventory` apenas como compatibilidade legada.
+Nao ha estoque canonico do fluxo principal.
 
 Necessario criar:
 
