@@ -269,3 +269,11 @@
 - Correção (commit 470e66ef): detectRepoSlug combina VERCEL_GIT_REPO_OWNER + VERCEL_GIT_REPO_SLUG; novo fallback unshallowBranch() = `git fetch origin main` (20s) antes da API
 - Observado em produção (deploy pe6oku6fj, commit 470e66ef): `Vercel ignore: runtime-impacting change (2 file(s)); build required` — classificação correta
 - Conclusão: T3.5 em validação final — commit docs-only seguinte deve gerar deploy CANCELADO (sem build)
+
+### EV-F3-004 - Fase 3: unshallow --depth=3 validado; teste docs-only final
+- Requisito: T3.5 (testar na Vercel real)
+- Observado: deploy 715cba31 (docs-only) buildou de forma CORRETA — VERCEL_GIT_PREVIOUS_SHA era 17e3034c (deploy prod anterior sem o fix runtime 470e66ef), então o diff incluía mudanças runtime reais
+- Correção adicional (commit 93eccfc6): unshallow usa `git fetch --depth=3 origin main` — `--shallow-exclude` excluía o objeto do prev SHA e dependia da API
+- Validado em clone raso depth=1 fresco: docs-only → exit 0 MESMO com API indisponível (slug inválido); runtime → exit 1
+- Em produção (deploy mhi8fw6ua, commit 93eccfc6): `runtime-impacting change (1 file(s))` — classificação correta
+- Próximo: push docs-only puro deve gerar deploy CANCELADO (sem build)
