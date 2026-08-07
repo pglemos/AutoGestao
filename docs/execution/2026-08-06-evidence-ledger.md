@@ -260,3 +260,12 @@
 - Artefatos: commit 2f5fe506
 - Timestamp: 2026-08-07T05:50:00Z
 - Conclusão: DONE_WITH_EVIDENCE (revalidar SKIP real no próximo push docs-only)
+
+### EV-F3-003 - Fase 3: slug owner+slug e unshallow; SKIP docs-only validado em produção
+- Requisito: T3.5
+- Causa raiz adicional (descoberta em produção, deploy 5955879c):
+  1. VERCEL_GIT_REPO_SLUG não contém owner → API compare montava `repos/MXGESTAOPREDITIVA` → HTTP 404 → build conservador
+  2. GitHub não permite `git fetch origin <sha>` (couldn't find remote ref) → camada fetch por SHA inerte
+- Correção (commit 470e66ef): detectRepoSlug combina VERCEL_GIT_REPO_OWNER + VERCEL_GIT_REPO_SLUG; novo fallback unshallowBranch() = `git fetch origin main` (20s) antes da API
+- Observado em produção (deploy pe6oku6fj, commit 470e66ef): `Vercel ignore: runtime-impacting change (2 file(s)); build required` — classificação correta
+- Conclusão: T3.5 em validação final — commit docs-only seguinte deve gerar deploy CANCELADO (sem build)
