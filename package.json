@@ -15,7 +15,7 @@
     "clean": "rm -rf dist",
     "check:bundle-size": "node scripts/check_bundle_size.mjs",
     "audit:routes-data": "node scripts/audit_route_data_inventory.mjs --check",
-    "lint": "tsc --noEmit && node scripts/lint-css-tokens.mjs && node scripts/lint-tokens-ast.mjs && node scripts/lint-z-index.mjs && node scripts/lint-page-roots.mjs && node scripts/lint-landmarks.mjs && eslint 'src/**/*.{ts,tsx}'",
+    "lint": "tsc --noEmit && node scripts/lint-css-tokens.mjs && node scripts/lint-tokens-ast.mjs && node scripts/lint-z-index.mjs && node scripts/lint-page-roots.mjs && node scripts/lint-landmarks.mjs && node scripts/audit-wcag-contrast.mjs && eslint 'src/**/*.{ts,tsx}'",
     "lint:tokens": "node scripts/lint-tokens-ast.mjs",
     "lint:z-index": "node scripts/lint-z-index.mjs",
     "lint:page-roots": "node scripts/lint-page-roots.mjs",

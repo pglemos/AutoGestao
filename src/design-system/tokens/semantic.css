@@ -38,7 +38,7 @@
 
   --mx-color-text-primary: var(--mx-neutral-950);
   --mx-color-text-secondary: var(--mx-neutral-500);
-  --mx-color-text-disabled: var(--mx-neutral-400);
+  --mx-color-text-disabled: var(--mx-neutral-500);
 
   --mx-color-border: var(--mx-neutral-200);
   --mx-color-border-strong: var(--mx-neutral-300);
@@ -51,13 +51,21 @@
   --mx-color-primary-subtle: var(--mx-green-50);
 
   /* --------------------------------------------------- estados semânticos */
-  --mx-color-success: var(--mx-emerald-500);
+  --mx-color-success: var(--mx-emerald-600);
+  --mx-color-success-foreground: var(--mx-neutral-0);
+  --mx-color-success-text: var(--mx-status-success-text);
   --mx-color-success-subtle: var(--mx-emerald-100);
   --mx-color-warning: var(--mx-amber-500);
+  --mx-color-warning-foreground: var(--mx-neutral-950);
+  --mx-color-warning-text: var(--mx-status-warning-text);
   --mx-color-warning-subtle: var(--mx-amber-100);
   --mx-color-danger: var(--mx-red-500);
+  --mx-color-danger-foreground: var(--mx-neutral-0);
+  --mx-color-danger-text: var(--mx-status-error-text);
   --mx-color-danger-subtle: var(--mx-red-100);
   --mx-color-info: var(--mx-blue-500);
+  --mx-color-info-foreground: var(--mx-neutral-0);
+  --mx-color-info-text: var(--mx-status-info-text);
   --mx-color-info-subtle: var(--mx-blue-100);
 
   --mx-color-focus-ring: var(--mx-green-600);
