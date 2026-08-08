@@ -128,9 +128,10 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     expect(rootTokens).toContain('--color-mx-action: hsl(var(--mx-color-primary))')
     expect(rootTokens).not.toMatch(/--color-brand-primary:\s*#00A89D/i)
     expect(rootTokens).not.toMatch(/--color-mx-action:\s*#00A89D/i)
-    // Escala do §13.2 — controle 6px, card 12px.
-    expect(rootTokens).toContain('--radius-md: 0.375rem')
-    expect(rootTokens).toContain('--radius-xl: 0.75rem')
+    // Escala do §13.2 — controle 6px, card 12px. T4.6: derivada dos
+    // primitivos --mx-radius-* (valores preservados, tokens únicos).
+    expect(rootTokens).toContain('--radius-md: var(--mx-radius-sm)')
+    expect(rootTokens).toContain('--radius-xl: var(--mx-radius-xl)')
   })
 
   test('aplica a variante aprovada a todos os perfis, sem par legado', () => {

@@ -603,7 +603,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvar }: { onClose: () => void; onS
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Registrar veículo que chegou">
-      <div className="w-full max-w-[440px] space-y-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-[0_24px_80px_rgba(15,23,42,0.24)]">
+      <div className="w-full max-w-[440px] space-y-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-mx-2xl">
         <div className="flex items-center justify-between">
           <p className="text-lg font-bold text-slate-900">Registrar veículo que chegou</p>
           <button type="button" onClick={onClose} aria-label="Fechar"><X size={18} className="text-slate-400" /></button>

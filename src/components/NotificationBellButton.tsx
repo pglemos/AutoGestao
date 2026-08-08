@@ -74,7 +74,7 @@ export function NotificationBellButton({ variant = 'light', className }: Notific
       {open && (
         <div
           role="menu"
-          className="absolute right-0 top-[calc(100%+10px)] z-[var(--mx-z-popover)] w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white text-left shadow-[0_20px_44px_rgba(15,23,42,0.18)]"
+          className="absolute right-0 top-[calc(100%+10px)] z-[var(--mx-z-popover)] w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white text-left shadow-mx-xl"
         >
           <div className="flex items-center justify-between border-b border-[#DFE0E1] px-4 py-3">
             <p className="text-[13px] font-extrabold text-[#071822]">Notificações</p>

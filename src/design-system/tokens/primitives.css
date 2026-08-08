@@ -235,10 +235,14 @@
   --mx-tracking-widest: 0.1em;
 
   /* ------------------------------------------------------------------ raios */
+  --mx-radius-xs: 4px;
   --mx-radius-sm: 6px;
   --mx-radius-md: 8px;
   --mx-radius-lg: 10px;
   --mx-radius-xl: 12px;
+  --mx-radius-2xl: 16px;
+  --mx-radius-3xl: 20px;
+  --mx-radius-4xl: 24px;
   --mx-radius-full: 9999px;
 
   /* ---------------------------------------------------------------- sombras */
@@ -246,6 +250,8 @@
   --mx-shadow-md: 0 4px 8px -2px hsl(var(--mx-neutral-950) / 0.08);
   --mx-shadow-lg: 0 12px 24px -6px hsl(var(--mx-neutral-950) / 0.12);
   --mx-shadow-xl: 0 24px 48px -12px hsl(var(--mx-neutral-950) / 0.18);
+  /* Elevação modal — sombra compacta de alta definição (T4.6). */
+  --mx-shadow-2xl: 0 18px 36px -22px hsl(var(--mx-neutral-950) / 0.24);
 
   /* --------------------------------------------------------------- duração */
   --mx-duration-instant: 0ms;

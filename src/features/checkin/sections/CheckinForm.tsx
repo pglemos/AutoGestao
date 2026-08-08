@@ -344,7 +344,7 @@ return (
       {/* Symmetric dashboard blocks: Resumo + Disciplina */}
 <section className="grid w-full max-w-full min-w-0 scroll-mt-6 gap-5 md:scroll-mt-48 xl:grid-cols-2">
         {/* ── RESUMO DO DIA ANTERIOR ── */}
-        <div className="rounded-[18px] border border-[#dfe7f0] bg-white px-4 py-5 shadow-[0_10px_30px_rgba(15,23,42,0.06)] flex flex-col justify-between gap-4 sm:px-6">
+        <div className="rounded-2xl border border-[#dfe7f0] bg-white px-4 py-5 shadow-mx-lg flex flex-col justify-between gap-4 sm:px-6">
 <p className="text-[12px] font-extrabold uppercase tracking-widest text-[#334155]">{resumoTitle}</p>
 
           {/* 4 metrics: 2x2 grid on mobile, single row with dividers from sm+ */}
@@ -386,7 +386,7 @@ return (
           const trackColor = '#F7F8F8'
           const arcDeg = Math.round(disciplinePercent * 3.6)
           return (
-            <div className="rounded-[18px] border border-[#dfe7f0] bg-white px-6 py-5 shadow-[0_10px_30px_rgba(15,23,42,0.06)] flex items-center gap-5">
+            <div className="rounded-2xl border border-[#dfe7f0] bg-white px-6 py-5 shadow-mx-lg flex items-center gap-5">
               {/* Thick donut ring — matches reference proportions */}
               <div
                 className="relative shrink-0 rounded-full"
@@ -439,7 +439,7 @@ return (
 
       {disciplineModalOpen && (
 <div className="fixed inset-0 z-[140] grid place-items-center bg-black/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
-<div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(620px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[18px] border border-[#DFE0E1] bg-white shadow-[0_24px_80px_rgba(15,23,42,0.24)] transition-all animate-in fade-in zoom-in-95 duration-200">
+<div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(620px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
             {/* Fixed Header */}
             <header className="px-6 py-5 border-b border-[#DFE0E1] flex items-center justify-between bg-[#F7F8F8]">
               <div>
@@ -652,7 +652,7 @@ return (
 
 {confirmFinalizeModalOpen && (
 <div className="fixed inset-0 z-[140] grid place-items-center bg-black/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
-<div role="dialog" aria-modal="true" aria-labelledby="checkin-finalize-title" aria-describedby="checkin-finalize-description" className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-[18px] border border-[#DFE0E1] bg-white shadow-[0_24px_80px_rgba(15,23,42,0.24)] transition-all animate-in fade-in zoom-in-95 duration-200">
+<div role="dialog" aria-modal="true" aria-labelledby="checkin-finalize-title" aria-describedby="checkin-finalize-description" className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
 <header className="border-b border-[#DFE0E1] bg-white px-6 py-5">
 <h2 id="checkin-finalize-title" className="text-[17px] font-bold leading-snug tracking-tight text-[#0F172A]">
 Confirma que não haverá mais registros {activeClosingContext.mainLabel}?
@@ -705,7 +705,7 @@ className="rounded-xl bg-[#22C55E] px-6 py-2.5 text-[13px] font-bold text-white 
       )}
 
       {/* Finalizar Fechamento */}
-      <div className="min-w-0 rounded-[18px] border border-[#dfe7f0] bg-white px-6 py-5 shadow-[0_10px_30px_rgba(15,23,42,0.06)] mt-5 space-y-4">
+      <div className="min-w-0 rounded-2xl border border-[#dfe7f0] bg-white px-6 py-5 shadow-mx-lg mt-5 space-y-4">
         {isPastDeadline && !fechamentoConcluido && (
           <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 shadow-sm">
             <div className="flex items-start gap-2">
@@ -791,7 +791,7 @@ function MetricGroupCard({
         : 'bg-[#005BFF]'
 
   return (
-    <Card className="min-w-0 overflow-hidden rounded-[16px] border border-[#dfe7f0] bg-white p-0 shadow-[0_10px_30px_rgba(15,23,42,0.06)]">
+    <Card className="min-w-0 overflow-hidden rounded-[16px] border border-[#dfe7f0] bg-white p-0 shadow-mx-lg">
       <header className="flex min-h-12 items-start gap-2 border-b border-[#DFE0E1] px-4 py-3 sm:items-center sm:px-5">
         <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-[11px] font-bold text-white ${stepTone}`}>
           {step}

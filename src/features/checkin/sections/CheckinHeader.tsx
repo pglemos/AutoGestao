@@ -425,7 +425,7 @@ return (
           title="Fechamento"
           actions={
             <>
-              <div className="flex min-w-0 items-center gap-2 rounded-[14px] border border-slate-200 bg-white px-3 py-1.5 shadow-sm">
+              <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 shadow-sm">
                 <CalendarDays size={18} className="shrink-0 text-[#005BFF]" aria-hidden="true" />
                 <div className="min-w-0">
                   <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
@@ -453,7 +453,7 @@ return (
       </div>
 
 {previousCard && (
-<section className={`rounded-[14px] border bg-white px-3 py-2 shadow-[0_8px_22px_rgba(15,23,42,0.05)] ${
+<section className={`rounded-xl border bg-white px-3 py-2 shadow-mx-lg ${
 previousCard.type === 'previous_done' ? 'border-emerald-200' : 'border-amber-200'
 }`}>
 <div className="flex flex-col gap-2 md:flex-row md:items-center md:justify-between">
@@ -491,7 +491,7 @@ previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-amber-700'
 )}
 
 {/* Desktop: data operacional vive dentro do header (SellerPageHeader actions). Mobile: sem header de topo, mantém aqui. */}
-<section aria-labelledby="checkin-operational-date" className="rounded-[14px] border border-slate-200 bg-white px-4 py-3 shadow-[0_8px_22px_rgba(15,23,42,0.04)] md:hidden">
+<section aria-labelledby="checkin-operational-date" className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-mx-lg md:hidden">
 <div className="flex flex-wrap items-center justify-between gap-3">
 <div className="flex min-w-0 items-center gap-2">
 <CalendarDays size={18} className="shrink-0 text-[#005BFF]" aria-hidden="true" />
@@ -512,7 +512,7 @@ Ver data atual
 
 <div className="space-y-3 md:hidden">
 
-<section className="rounded-[16px] border border-[#DFE0E1] bg-white p-4 shadow-[0_10px_30px_rgba(15,23,42,0.06)]">
+<section className="rounded-[16px] border border-[#DFE0E1] bg-white p-4 shadow-mx-lg">
 <div className="flex items-start justify-between gap-4">
 <div>
 <div className="flex items-center gap-1.5">
@@ -533,7 +533,7 @@ Etapa {activeStep} de 4 <span className="text-[#526B7A]">•</span> <span classN
 </div>
 </section>
 
-<section className="grid grid-cols-4 overflow-hidden rounded-[16px] border border-[#DFE0E1] bg-white shadow-[0_10px_30px_rgba(15,23,42,0.04)]">
+<section className="grid grid-cols-4 overflow-hidden rounded-[16px] border border-[#DFE0E1] bg-white shadow-mx-lg">
 {stepItems.map((item) => {
 const active = item.step === activeStep
 return (
@@ -556,7 +556,7 @@ return (
 {/* Histórico de Fechamentos Modal */}
 {historyOpen && activeView === 'list' && (
 <div className="fixed inset-0 z-[140] grid place-items-center bg-black/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Histórico de Fechamentos">
-<div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(42rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-[0_24px_80px_rgba(15,23,42,0.24)] transition-all animate-in fade-in zoom-in-95 duration-200">
+<div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(42rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
 
             {/* Modal Header */}
             <header className="px-6 py-5 border-b border-[#DFE0E1] flex items-center justify-between bg-[#F7F8F8]">
@@ -739,7 +739,7 @@ return (
             aria-modal="true"
             aria-labelledby="production-zero-title"
             aria-describedby="production-zero-description"
-            className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#FCD34D] bg-white shadow-[0_24px_80px_rgba(15,23,42,0.24)] animate-in fade-in zoom-in-95 duration-200"
+            className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#FCD34D] bg-white shadow-mx-2xl animate-in fade-in zoom-in-95 duration-200"
             onMouseDown={event => event.stopPropagation()}
           >
             <header className="flex items-center gap-3 border-b border-[#FDE68A] bg-[#FFF7E6] px-5 py-4">
@@ -836,7 +836,7 @@ return (
           aria-modal="true"
           aria-label="Detalhe da regularização"
         >
-          <div className="flex max-h-[80vh] w-full max-w-[min(32rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-[0_24px_80px_rgba(15,23,42,0.24)]">
+          <div className="flex max-h-[80vh] w-full max-w-[min(32rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl">
             <header className="flex items-center justify-between border-b border-[#DFE0E1] bg-[#F7F8F8] px-6 py-5">
               <h2 className="text-lg font-extrabold uppercase tracking-tight text-[#071822]">Regularização</h2>
               <button

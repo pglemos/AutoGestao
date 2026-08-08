@@ -102,13 +102,14 @@
 --color-sidebar-ring: hsl(var(--sidebar-ring));
 /* Escala de raio do §13.2: controle 6px, card 12px. Estes valores viviam só
    sob `[data-mx-visual-system='manager']`; o :root tinha uma escala maior
-   (base 1rem), então o mesmo card tinha canto diferente conforme o perfil. */
---radius-sm: 0.25rem;
---radius-md: 0.375rem;
---radius-lg: 0.5rem;
---radius-xl: 0.75rem;
---radius-2xl: 1rem;
---radius-3xl: 1.5rem;
+   (base 1rem), então o mesmo card tinha canto diferente conforme o perfil.
+   T4.6: derivam dos primitivos --mx-radius-* (paridade de valor preservada). */
+--radius-sm: var(--mx-radius-xs);
+--radius-md: var(--mx-radius-sm);
+--radius-lg: var(--mx-radius-md);
+--radius-xl: var(--mx-radius-xl);
+--radius-2xl: var(--mx-radius-2xl);
+--radius-3xl: var(--mx-radius-4xl);
 --animate-accordion-down: accordion-down 0.2s ease-out;
 --animate-accordion-up: accordion-up 0.2s ease-out;
 
@@ -217,14 +218,17 @@ to { height: 0; }
   --color-kpi-footer-info-bg: hsl(var(--mx-tpl-kpi-info-bg));
   --color-kpi-footer-info-text: hsl(var(--mx-chart-1));
 
-  /* Radius Matrix */
-  --radius-mx-sm: 0.5rem;
-  --radius-mx-md: 0.75rem;
-  --radius-mx-lg: 0.75rem;
-  --radius-mx-xl: 1rem;
-  --radius-mx-2xl: 1rem;
-  --radius-mx-3xl: 1.25rem;
-  --radius-mx-full: 9999px;
+  /* Radius Matrix — derivado dos primitivos --mx-radius-* (T4.6).
+     `xs` ressuscita a classe órfã rounded-mx-xs; md/xl mudam de valor
+     (12→8, 16→12) para alinhar à escala canônica (mudança documentada). */
+  --radius-mx-xs: var(--mx-radius-xs);
+  --radius-mx-sm: var(--mx-radius-sm);
+  --radius-mx-md: var(--mx-radius-md);
+  --radius-mx-lg: var(--mx-radius-lg);
+  --radius-mx-xl: var(--mx-radius-xl);
+  --radius-mx-2xl: var(--mx-radius-2xl);
+  --radius-mx-3xl: var(--mx-radius-3xl);
+  --radius-mx-full: var(--mx-radius-full);
 
   /* Spacing Matrix */
   --spacing-mx-0: 0;
@@ -282,16 +286,14 @@ to { height: 0; }
   --container-mx-sidebar-expanded: 280px;
   --container-mx-elite-canvas: 96rem;
 
-  /* Shadow Matrix */
-  /* Sombras discretas — §13.3. A escala anterior crescia até 24px de blur;
-     estes valores vinham do escopo de gestão e são os do Base44. */
-  --shadow-mx-sm: 0 1px 2px hsl(var(--mx-black) / 0.05);
-  --shadow-mx-md: 0 1px 3px hsl(var(--mx-black) / 0.10), 0 1px 2px -1px hsl(var(--mx-black) / 0.10);
-  --shadow-mx-lg: 0 1px 3px hsl(var(--mx-black) / 0.10), 0 1px 2px -1px hsl(var(--mx-black) / 0.10);
-  --shadow-mx-xl: 0 1px 3px hsl(var(--mx-black) / 0.10), 0 1px 2px -1px hsl(var(--mx-black) / 0.10);
-  --shadow-mx-2xl: 0 18px 36px -22px hsl(var(--mx-dark-2) / 0.24);
-  --shadow-mx-elite: 0 18px 38px -24px hsl(var(--mx-dark-2) / 0.28);
-  --shadow-glass: 0 8px 32px hsl(var(--mx-dark-2) / 0.08);
+  /* Shadow Matrix — derivado dos primitivos --mx-shadow-* (T4.6).
+     Corrige o bug de cópia (md/lg/xl eram idênticos a sm) e unifica a
+     elevação modal em --shadow-mx-2xl. */
+  --shadow-mx-sm: var(--mx-shadow-sm);
+  --shadow-mx-md: var(--mx-shadow-md);
+  --shadow-mx-lg: var(--mx-shadow-lg);
+  --shadow-mx-xl: var(--mx-shadow-xl);
+  --shadow-mx-2xl: var(--mx-shadow-2xl);
 
   /* Custom Utilities */
   /* Tipografia canônica (T4.4) — `font-sans`/`font-mono` mapeados para
@@ -318,7 +320,7 @@ to { height: 0; }
   --tracking-widest: var(--mx-tracking-widest);
 
   /* Layout Matrix Expansion */
-  --radius-mx-4xl: 1.5rem;
+  --radius-mx-4xl: var(--mx-radius-4xl);
 
   /* Layout Matrix Expansion (Centralized) */
   --spacing-mx-layout-offset-top: 80px;
@@ -331,15 +333,19 @@ to { height: 0; }
   --width-mx-header: 100%;
   --height-mx-header: 64px;
 
-  /* Semantic Glows */
+  /* Semantic Glows — exceção documentada (T4.6): efeito de cor, não elevação.
+     Usam cores semânticas derivadas de primitivos; por isso não viram
+     --mx-shadow-*. `--shadow-action` foi removido (0 usos; use glow-brand). */
   --shadow-mx-glow-brand: 0 0 20px hsl(var(--mx-chart-1) / 0.3);
   --shadow-mx-glow-brand-sm: 0 0 12px hsl(var(--mx-chart-1) / 0.25);
   --shadow-mx-glow-white: 0 0 20px hsl(var(--mx-neutral-0) / 0.5);
-  --shadow-card: 0 1px 2px hsl(var(--mx-dark-2) / 0.04);
-  --shadow-card-hover: 0 8px 24px hsl(var(--mx-dark-2) / 0.08);
-  --shadow-popover: 0 16px 40px hsl(var(--mx-dark-2) / 0.14);
-  --shadow-modal: 0 24px 60px hsl(var(--mx-dark-2) / 0.22);
-  --shadow-action: 0 8px 20px hsl(var(--mx-chart-1) / 0.20);
+  /* Legado do template (T4.1): mantidos por compatibilidade, derivados dos
+     primitivos. `--shadow-glass`/`--shadow-elite`/`--shadow-action` foram
+     removidos (0 usos). */
+  --shadow-card: var(--mx-shadow-sm);
+  --shadow-card-hover: var(--mx-shadow-md);
+  --shadow-popover: var(--mx-shadow-lg);
+  --shadow-modal: var(--mx-shadow-2xl);
 
   /* Effects */
   --blur-mx-huge: 80px;
@@ -453,7 +459,6 @@ overscroll-behavior-y: none;
   --border: 220 3% 88%;
   --input: 220 3% 88%;
   --ring: 176 100% 33%;
-  --radius: 0.5rem;
   --sidebar-background: 197 55% 14%;
   --sidebar-foreground: 176 20% 90%;
   --sidebar-primary: 176 100% 33%;
@@ -598,7 +603,7 @@ body {
 }
 
 @utility shadow-mx-inner {
-  box-shadow: inset 0 2px 4px 0 rgba(0, 0, 0, 0.06);
+  box-shadow: inset 0 2px 4px 0 hsl(var(--mx-neutral-950) / 0.06);
 }
 
 @utility font-mono-numbers {
