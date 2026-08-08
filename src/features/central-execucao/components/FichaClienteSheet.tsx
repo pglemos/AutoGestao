@@ -112,7 +112,7 @@ export function FichaClienteSheet({
                     <ol className="space-y-0">
                       {timeline.map((item, index) => (
                         <li key={item.id} className="relative flex gap-3 pb-5 last:pb-0">
-                          {index < timeline.length - 1 && <span className="absolute left-[5px] top-3 h-full w-px bg-slate-200" />}
+                          {index < timeline.length - 1 && <span className="absolute left-[4px] top-3 h-full w-px bg-slate-200" />}
                           <span className="relative mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full border-2 border-white bg-status-info ring-1 ring-blue-200" />
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center justify-between gap-2">

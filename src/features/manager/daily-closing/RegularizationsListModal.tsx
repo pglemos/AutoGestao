@@ -109,7 +109,7 @@ export function RegularizationsListModal({
                     </div>
                   </div>
                   <div
-                    className="grid h-8 w-8 place-items-center rounded-full p-[3px] text-[10px] font-bold text-blue-700"
+                    className="grid h-8 w-8 place-items-center rounded-full p-[4px] text-[10px] font-bold text-blue-700"
                     style={{ background: `conic-gradient(rgb(59 130 246) ${metrics.discipline * 3.6}deg, rgb(219 234 254) 0deg)` }}
                     aria-label={`Disciplina ${metrics.discipline}%`}
                   >

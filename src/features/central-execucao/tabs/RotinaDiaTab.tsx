@@ -177,7 +177,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
           <ol className="space-y-0">
             {playbook.slots.map((slot, index) => (
               <li key={`timeline-${slot.key}`} className="relative flex gap-3 pb-5 last:pb-0">
-                {index < playbook.slots.length - 1 && <span className="absolute left-[6px] top-3 h-full w-px bg-slate-200" />}
+                {index < playbook.slots.length - 1 && <span className="absolute left-[4px] top-3 h-full w-px bg-slate-200" />}
                 <span className={`relative mt-1 h-3 w-3 shrink-0 rounded-full border-2 border-white ring-1 ${slot.isCurrent ? 'bg-status-info ring-blue-300' : isPast(slot.time) ? 'bg-green-500 ring-green-200' : 'bg-slate-200 ring-slate-200'}`} />
                 <div><p className="text-[11px] font-bold text-slate-400">{slot.time}</p><p className={`text-[12px] font-bold ${slot.isCurrent ? 'text-status-info' : 'text-slate-600'}`}>{slot.template?.nome || STEP_LABELS[slot.key] || slot.key}</p></div>
               </li>
