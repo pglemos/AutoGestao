@@ -204,6 +204,36 @@
   --mx-breakpoint-large: 1200px;
   --mx-breakpoint-extra-large: 1600px;
 
+  /* --------------------------------------------------------------- tipografia */
+  /* Família única (§T4.4). As classes `font-sans`/`font-mono` Tailwind v4
+     consomem estes tokens via mapeamento em `src/index.css` @theme. */
+  --mx-font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
+  --mx-font-mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    'Liberation Mono', monospace;
+
+  /* Pesos canônicos (escala única §T4.4). */
+  --mx-font-weight-normal: 400;
+  --mx-font-weight-medium: 500;
+  --mx-font-weight-semibold: 600;
+  --mx-font-weight-bold: 700;
+  --mx-font-weight-extrabold: 800;
+
+  /* Line-heights canônicos (escala única §T4.4). */
+  --mx-line-height-tight: 1.25;
+  --mx-line-height-snug: 1.375;
+  --mx-line-height-normal: 1.5;
+  --mx-line-height-relaxed: 1.625;
+  --mx-line-height-loose: 2;
+
+  /* Letter-spacing canônico (escala única §T4.4). */
+  --mx-tracking-tighter: -0.05em;
+  --mx-tracking-tight: -0.025em;
+  --mx-tracking-normal: 0;
+  --mx-tracking-wide: 0.025em;
+  --mx-tracking-wider: 0.05em;
+  --mx-tracking-widest: 0.1em;
+
   /* ------------------------------------------------------------------ raios */
   --mx-radius-sm: 6px;
   --mx-radius-md: 8px;

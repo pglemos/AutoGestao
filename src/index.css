@@ -294,15 +294,28 @@ to { height: 0; }
   --shadow-glass: 0 8px 32px hsl(var(--mx-dark-2) / 0.08);
 
   /* Custom Utilities */
-  /* Typography Scale Expansion */
-  --font-size-mx-nano: 8px;
-  --font-size-mx-micro: 9px;
-  --font-size-mx-tiny: 10px;
-  --font-size-mx-huge: 12rem;
-  --letter-spacing-mx-tight: -0.05em;
-  --letter-spacing-mx-wide: 0.2em;
-  --letter-spacing-mx-wider: 0.3em;
-  --letter-spacing-mx-widest: 0.4em;
+  /* Tipografia canônica (T4.4) — `font-sans`/`font-mono` mapeados para
+     `--mx-font-sans`/`--mx-font-mono` em primitives.css. As classes Tailwind
+     `font-{weight}` / `leading-{size}` / `tracking-{size}` consomem os
+     primitivos `--mx-font-weight-*` / `--mx-line-height-*` / `--mx-tracking-*`. */
+  --font-sans: var(--mx-font-sans);
+  --font-mono: var(--mx-font-mono);
+  --font-weight-normal: var(--mx-font-weight-normal);
+  --font-weight-medium: var(--mx-font-weight-medium);
+  --font-weight-semibold: var(--mx-font-weight-semibold);
+  --font-weight-bold: var(--mx-font-weight-bold);
+  --font-weight-extrabold: var(--mx-font-weight-extrabold);
+  --leading-tight: var(--mx-line-height-tight);
+  --leading-snug: var(--mx-line-height-snug);
+  --leading-normal: var(--mx-line-height-normal);
+  --leading-relaxed: var(--mx-line-height-relaxed);
+  --leading-loose: var(--mx-line-height-loose);
+  --tracking-tighter: var(--mx-tracking-tighter);
+  --tracking-tight: var(--mx-tracking-tight);
+  --tracking-normal: var(--mx-tracking-normal);
+  --tracking-wide: var(--mx-tracking-wide);
+  --tracking-wider: var(--mx-tracking-wider);
+  --tracking-widest: var(--mx-tracking-widest);
 
   /* Layout Matrix Expansion */
   --radius-mx-4xl: 1.5rem;
@@ -392,7 +405,6 @@ to { height: 0; }
   --color-electric-blue: hsl(var(--mx-chart-1));
   --color-mars-orange: hsl(var(--mx-tpl-orange-500));
 
-  --font-display: 'Inter', sans-serif;
   --animate-slide-up: slide-up 0.32s ease-out both;
 
   /* ==========================================================================
@@ -590,7 +602,7 @@ body {
 }
 
 @utility font-mono-numbers {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   font-variant-numeric: tabular-nums;
 }
 
@@ -815,7 +827,7 @@ body {
   font-weight: 800;
   outline: none;
   transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease, transform 180ms ease;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--mx-font-sans);
 }
 
 .mx-public-input:focus {
@@ -838,7 +850,7 @@ body {
 
 .mx-pre-shell {
   background: #070a08;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--mx-font-sans);
 }
 
 .mx-pre-noise {
@@ -945,7 +957,7 @@ body {
 
 .mx-pre-brand-copy p {
   margin: 0;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--mx-font-sans);
   font-size: 15px;
   font-weight: 700;
   letter-spacing: .04em;
@@ -960,7 +972,7 @@ body {
 .mx-pre-brand-copy small {
   display: block;
   margin-top: 5px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   font-size: 10px;
   letter-spacing: .2em;
   color: #5c6a60;
@@ -972,7 +984,7 @@ body {
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   font-size: 10.5px;
   text-transform: uppercase;
   letter-spacing: .16em;
@@ -1014,7 +1026,7 @@ body {
   align-items: center;
   gap: 14px;
   margin-bottom: 28px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   font-size: 11px;
   letter-spacing: .18em;
   text-transform: uppercase;
@@ -1033,7 +1045,7 @@ body {
 }
 
 .mx-pre-intro h1 {
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--mx-font-sans);
   font-size: clamp(58px, 8vw, 116px);
   line-height: .88;
   letter-spacing: -0.04em;
@@ -1044,7 +1056,7 @@ body {
 .mx-pre-intro h1 em {
   display: inline-block;
   color: #1fcb6e;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--mx-font-sans);
   font-weight: 400;
   font-style: italic;
   letter-spacing: -0.01em;
@@ -1082,7 +1094,7 @@ body {
 }
 
 .mx-pre-proof-row span {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   color: #5c6a60;
   text-transform: uppercase;
   letter-spacing: .16em;
@@ -1112,7 +1124,7 @@ body {
 }
 
 .mx-pre-mobile-progress span {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   color: #5c6a60;
   text-transform: uppercase;
   letter-spacing: .16em;
@@ -1120,7 +1132,7 @@ body {
 }
 
 .mx-pre-mobile-progress b {
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--mx-font-sans);
   font-size: 28px;
   line-height: 1;
 }
@@ -1170,7 +1182,7 @@ body {
   padding: 13px 18px;
   border-bottom: 1px solid #172019;
   background: #070c09;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   font-size: 10.5px;
   letter-spacing: .14em;
   text-transform: uppercase;
@@ -1213,7 +1225,7 @@ body {
 
 .mx-pre-wizard-head p {
   margin: 0 0 6px;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   color: #5c6a60;
   text-transform: uppercase;
   letter-spacing: .18em;
@@ -1222,7 +1234,7 @@ body {
 
 .mx-pre-wizard-head h2 {
   margin: 0;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--mx-font-sans);
   font-size: 34px;
   line-height: 1;
   letter-spacing: -0.03em;
@@ -1237,7 +1249,7 @@ body {
   display: block;
   text-align: right;
   color: #1fcb6e;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   font-size: 10px;
   margin-bottom: 9px;
 }
@@ -1274,7 +1286,7 @@ body {
   display: grid;
   place-items: center;
   color: #5c6a60;
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   font-size: 10px;
 }
 
@@ -1351,7 +1363,7 @@ body {
 .mx-pre-owner-head b {
   display: block;
   color: #e8f0ea;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--mx-font-sans);
   font-size: 14px;
   font-weight: 800;
   text-transform: uppercase;
@@ -1493,7 +1505,7 @@ body {
 }
 
 .mx-photo-stage span {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   color: #5c6a60;
   font-size: 10px;
   letter-spacing: .16em;
@@ -1567,7 +1579,7 @@ body {
 
 .mx-pre-review h3 {
   margin: 0;
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--mx-font-sans);
   font-size: 18px;
   letter-spacing: -0.01em;
   text-transform: uppercase;
@@ -1589,7 +1601,7 @@ body {
 }
 
 .mx-pre-review dt {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   color: #5c6a60;
   font-size: 9px;
   letter-spacing: .14em;
@@ -1679,7 +1691,7 @@ body {
 
 .mx-pre-state h2,
 .mx-pre-success h2 {
-  font-family: Inter, system-ui, sans-serif;
+  font-family: var(--mx-font-sans);
   margin: 0;
   font-size: 30px;
   letter-spacing: -0.03em;
@@ -1726,7 +1738,7 @@ body {
 }
 
 .mx-pre-login-box small {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family: var(--mx-font-mono);
   color: #5c6a60;
   text-transform: uppercase;
   letter-spacing: .16em;
