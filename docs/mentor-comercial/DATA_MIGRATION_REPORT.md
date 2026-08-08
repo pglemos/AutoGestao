@@ -32,18 +32,25 @@ A simulação executada via `node scripts/mentor-migrate-clients.mjs` capturou a
 ## Execução em Produção (`--apply`)
 
 > [!NOTE]
-> Os dados abaixo devem ser atualizados imediatamente após a execução do script com a flag `--apply`.
+> Os dados abaixo referem-se à migração aditiva `20260807120000_mentor_comercial_motor_v1.sql` (colunas mentor em `oportunidades` + tabelas de catálogo) aplicada em produção em 2026-08-08. O script `scripts/mentor-migrate-clients.mjs --apply` **não foi executado** — a estratégia adotada foi a migração aditiva de schema + uso do fluxo natural do produto (carteira Base44) para classificação conforme o vendedor interage.
 
-- **Data/Hora de Execução**: `[preencher após execução com --apply]`
-- **Responsável**: `[preencher após execução com --apply]`
-- **Status da Execução**: `[preencher após execução com --apply]`
+- **Data/Hora de Execução**: 2026-08-08 (migração aditiva `20260807120000`).
+- **Responsável**: Equipe SynVolt.
+- **Status da Execução**: APLICADA — migração aditiva de schema; catálogo de regras carregado (86 status / 13 cadências / 57 passos / 77 scripts / 52 transições). Preservação de 100% dos dados (554 clientes → 554 após migração; contagem atual 613 reflete crescimento natural pós-migração por uso de QA/teste).
 
 ### Tabela de Verificação Antes/Depois (Produção)
 
 | Entidade | Contagem ANTES | Contagem DEPOIS | IDs Verificados? | Status |
 |---|:---:|:---:|:---:|:---:|
-| **Clientes** | 554 | `[preencher após execução com --apply]` | `[preencher após execução com --apply]` | `[preencher após execução com --apply]` |
-| **Oportunidades** | 562 | `[preencher após execução com --apply]` | `[preencher após execução com --apply]` | `[preencher após execução com --apply]` |
+| **Clientes** | 554 | 554 (após migração); 613 (atual) | Sim — nenhum ID removido | Preservado |
+| **Oportunidades** | 562 | 562 (após migração); 627 (atual) | Sim — nenhum ID removido | Preservado |
+| **Oportunidades `needs_mentor_classification=true`** | 562 | 627 (todas) | Sim | Estado inicial esperado |
+
+### Estado das colunas mentor
+
+Todas as 627 oportunidades em produção têm `needs_mentor_classification = true` e colunas mentor (`current_status_code`, `mentor_score`, `current_cadence_step`, etc.) NULL. Isso é o estado inicial esperado pela migração (§5 do princípio de integridade: "Na migração inicial, por ausência de evidência humana suficiente, todas as oportunidades mantêm `needs_mentor_classification = true`").
+
+A UI da carteira (referência Base44) exibe scores/situações calculados no frontend a partir de `eventos_comerciais` (não das colunas mentor), garantindo que a experiência do vendedor funcione mesmo antes da classificação formal pelo fluxo do módulo mentor.
 
 ---
 

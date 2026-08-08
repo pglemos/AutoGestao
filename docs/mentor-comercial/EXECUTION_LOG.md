@@ -188,10 +188,32 @@ Os dados são fixtures; nenhum cliente de teste é inserido em produção (§66)
 |---|---|---|
 | `10532d15` | catálogos de regra versionados + extrator + validator | verde |
 | `20935551` | score de 5 pilares + prioridade 45/35/20 | 7/7 verde |
+| `33292e98` | Mentor Comercial v1 — deploy produção | 5/5 verde |
 
 **Observação sobre branch protection:** a `main` possui 5 status checks obrigatórios. O push foi
 aceito com `Bypassed rule violations` por privilégio administrativo. Os checks foram verificados
 depois, diretamente no SHA `20935551`: 7 de 7 verdes. O bypass não escondeu falha.
+
+---
+
+## Validação Pós-Deploy (2026-08-08)
+
+| Item | Descrição | Status |
+|---|---|---|
+| Deploy | `dpl_EcVqTSvN5K` READY no SHA `33292e98cddc`, 2026-08-08T02:25:03Z | VERIFICADO |
+| CI | 5/5 checks verdes no SHA `33292e98cddc` | VERIFICADO |
+| Migração | `20260807120000_mentor_comercial_motor_v1.sql` aplicada, catálogo 86/13/57/77/52 | VERIFICADO |
+| Sentry | Release `33292e98cddc` registrado em 02:26:38Z; 11 issues unresolved **preexistentes** ao deploy; Edge e Health zerados | VERIFICADO |
+| Vercel | Aliases HTTP 200 (`mxperformance.com.br`, `www.mxperformance.com.br`, etc.) | VERIFICADO |
+| Smoke E2E | 12/17 PASS via Playwright MCP (login vendedor@mxgestaopreditiva.com.br), 4 N/A (GuidedStatusUpdate não montado), 1 PASS-com-divergência (Score 0-100, não 0-1000) | EXECUTADO |
+
+### Descobertas técnicas pós-deploy
+
+1. **Carteira ativa = Base44**: A produção usa a referência Base44 (`CarteiraClientesBase44Page`), não o `MentorCarteiraSection`. O `GuidedStatusUpdate` do módulo mentor não está montado em produção; o fluxo de execução acontece pelo painel Base44 "Executar próximo passo → Registrar resultado".
+2. **Persistência visual 1:1**: O adapter Base44 persiste mutações em `eventos_comerciais` (origem `base44_1to1_adapter`, idempotency_key). As colunas mentor em `oportunidades` permanecem NULL — o estado visual é derivado dos eventos, não das colunas mentor do schema.
+3. **Score 0-100**: O plano especifica [0, 1000] com Ouro/Prata/Bronze; a implementação exibe 0-100 com classes de prioridade (Crítica/Máxima/Alta). A ficha não expõe breakdown numérico dos 4 pilares.
+4. **Deep Link**: A Central real gera `?clienteId=` (`deterministic-actions.ts:152`), que a página Base44 consome (linha 71-72). O `centralDeepLink.ts` (`clientId`/`opportunityId`) é ferramenta de teste — não é o gerador real.
+5. **Domínio**: `app.mxgestaopreditiva.com.br` (citado no plano) NÃO resolve. Domínio ativo: `mxperformance.com.br`.
 
 ---
 

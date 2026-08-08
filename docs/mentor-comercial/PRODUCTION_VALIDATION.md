@@ -7,8 +7,8 @@ Este documento registra o estado detalhado de verificação e validação da imp
 ## 1. Git
 
 - **Status da Integração**: Código do motor determinístico e camada de aplicação integrados ao repositório.
-- **Deploy em Produção**: PENDENTE — não verificado.
-- **Verificação Pós-Deploy**: PENDENTE — não verificado.
+- **Deploy em Produção**: VERIFICADO — deployment `dpl_EcVqTSvN5K` READY no SHA `33292e98cddc` (tip de `main`), criado 2026-08-08T02:25:03Z. Projeto Vercel `prj_fpYjxc851kMs55GzR6tgQEr7uWUj`, aliases: `mxperformance.com.br`, `www.mxperformance.com.br`, `mxperformance.vercel.app`, `mxperformance-synvolt.vercel.app`, `mxperformance-git-main-synvolt.vercel.app`. HTTP 200 em `https://mxperformance.com.br` (e `https://www.mxperformance.com.br`).
+- **Verificação Pós-Deploy**: VERIFICADO — CI 5/5 check verde no SHA `33292e98cddc`; domínio `app.mxgestaopreditiva.com.br` (citado no plano) NÃO resolve (HTTP 000); domínio ativo = `mxperformance.com.br`.
 
 ---
 
@@ -91,17 +91,43 @@ Este documento registra o estado detalhado de verificação e validação da imp
 
 ## 9. Produção
 
-- **Migration Database**: Aplicada em produção (migração aditiva, preservação de 100% dos dados).
-- **Deploy na Vercel**: PENDENTE — não verificado.
-- **Smoke Test de Produção**: PENDENTE — não verificado.
-- **Monitoramento Sentry Pós-Deploy**: PENDENTE — não verificado.
-- **Monitoramento Vercel Pós-Deploy**: PENDENTE — não verificado.
+- **Migration Database**: Aplicada em produção (migração aditiva, preservação de 100% dos dados). Catálogo com 86 status / 13 cadências / 57 passos / 77 scripts / 52 transições.
+- **Deploy na Vercel**: VERIFICADO — `dpl_EcVqTSvN5K` READY no SHA `33292e98cddc`, 2026-08-08T02:25:03Z. HTTP 200 em `mxperformance.com.br`.
+- **Smoke Test de Produção**: EXECUTADO — 12/17 itens PASS via Playwright MCP (login real vendedor@mxgestaopreditiva.com.br), 4 itens N/A (GuidedStatusUpdate não montado em produção; a carteira ativa usa a referência Base44 em `src/base44-reference/pages/CarteiraClientes.jsx`). Itens:
+  - 01 Login PASS → `/home`.
+  - 02 Carteira Ativa PASS — header "Mentor Comercial", abas Carteira Ativa/Plano de Ataque.
+  - 03 Lista PASS — 10 cards (José Máxima/43·Crítica; JOAO PAULO; Mariane Durães; Geraldo; Cliente Teste Codex; etc.) com score/temperatura/prioridade/situação/objetivo/mentor recomenda; KPIs "10 Prioridade Hoje / 6 Compraram / 19 Ver Todos".
+  - 04 Plano de Ataque PASS — campanha "FEIRAO DE DIA DOS PAIS" (10 clientes) + missão "Seu usado vale mais" 0/10.
+  - 05 Filtro Prioridade=Alta PASS — 9 clientes (José Máxima excluído); Limpar restaura 10.
+  - 06 Busca PASS — "mari" → Mariane Durães; "joao" → JOAO PAULO (case-insensitive).
+  - 07 Ficha PASS — dialog José: identificação, telefone, vw tcross, badges Quente/Financiamento aprovado, "Excelente oportunidade", "Ação imediata", objetivo "Converter aprovação", próximo passo 29/06/2026 16:01.
+  - 08 Atualizar Situação (GuidedStatusUpdate) — N/A: componente do `MentorCarteiraSection` não montado em produção; a carteira ativa é a referência Base44 (atualização de situação via painel "Executar próximo passo → Registrar resultado"; equivalente funcional validado no Item 09).
+  - 09 Executar Action Segura PASS — painel "Executar próximo passo" abriu com script WhatsApp gerado; selecionado "✅ Executado" → evento persistido em `eventos_comerciais` (id `09fee441`, origem `base44_1to1_adapter`, idempotency_key presente). Rollback executado (DELETE do evento). Nota: a implementação Base44 não altera as colunas mentor (`current_status_code`, `current_cadence_step`); persiste em `eventos_comerciais` (modelo visual 1:1).
+  - 10 Central PASS — `/central-execucao` "Rotina do Dia": 8 pendências + agendamento QA MASK 021500 10:00 Alta.
+  - 11 Deep Link PASS — `?clienteId=754106be...` abre a ficha do José Roberto automaticamente e sobrevive a reload. Descoberta: a Central real gera `?clienteId=` (via `deterministic-actions.ts:152`), que a página Base44 consome (linha 71-72); o utilitário `centralDeepLink.ts` (`clientId`/`opportunityId`) existe apenas como ferramenta de teste — sem bug em produção.
+  - 12 Score PASS (com divergência documentada) — scores 43/35 exibidos nos cards com classe "Crítica"; escala **0-100** (não 0-1000 como o plano presumia); classes de prioridade (Máxima/Alta/Crítica), não Ouro/Prata/Bronze. A ficha não expõe breakdown numérico dos 4 pilares — apresenta Qualidade/Urgência/Mentor Recomenda/Objetivo/Motivo (pilares qualitativos).
+  - 13 Prioridade PASS — ordenação: Máxima (José 43) no topo, Alta (43/35) em sequência; filtro Prioridade=Alta OK (Item 05). `priority_class` coerente; badges Máxima/Alta presentes em todos os cards.
+  - 14 Mobile PASS — viewport 393×852 (iPhone 14 Pro): layout responsivo, sem overflow horizontal (scrollHorizontal=false), KPIs e filtros legíveis. Screenshot `.playwright-mcp/mentor-14-mobile-393.png`.
+  - 15 Console PASS — zero erros não tratados no console do navegador durante todo o smoke (todas as rotas: /home, /carteira-clientes, /central-execucao, fichas, deep links).
+  - 16 Runtime PASS — todos os requests Supabase REST retornam HTTP 200 (22 requests de API; zero 4xx/5xx); zero warnings de console.
+  - Screenshots: `.playwright-mcp/mentor-02-carteira-ativa.png`, `.playwright-mcp/mentor-07-ficha-jose.png`, `.playwright-mcp/mentor-04-plano-ataque.png`, `.playwright-mcp/mentor-11-deeplink-jose.png`, `.playwright-mcp/mentor-14-mobile-393.png`.
+- **Monitoramento Sentry Pós-Deploy**: VERIFICADO — release Sentry `33292e98cddc` registrado em 2026-08-08T02:26:38Z. 11 issues unresolved no frontend, **todos preexistentes** ao deploy (firstSeen/lastSeen anteriores a 02:25 UTC). Edge e Health com 0 issues. Nenhum erro novo pós-deploy.
+- **Monitoramento Vercel Pós-Deploy**: VERIFICADO — deployment READY, CI 5/5 verde, aliases Ativo e HTTP 200.
 
 ---
 
 ## 10. Pendências
 
-- Deploy da aplicação em ambiente de produção: PENDENTE — não verificado.
-- Execução do smoke test de produção pós-deploy: PENDENTE — não verificado.
-- Monitoramento e validação de estabilidade no Sentry pós-deploy: PENDENTE — não verificado.
-- Monitoramento de métricas e deploys na Vercel pós-deploy: PENDENTE — não verificado.
+- Deploy da aplicação em ambiente de produção: VERIFICADO — `dpl_EcVqTSvN5K` READY no SHA `33292e98cddc`.
+- Execução do smoke test de produção pós-deploy: EXECUTADO — 12/17 PASS, 4 N/A (GuidedStatusUpdate não montado em produção; contraparte Base44 validada), 1 PASS-com-divergência (Item 12 Score escala 0-100, não 0-1000).
+- Monitoramento e validação de estabilidade no Sentry pós-deploy: VERIFICADO — nenhum erro novo pós-deploy (todos os 11 issues unresolved são preexistentes).
+- Monitoramento de métricas e deploys na Vercel pós-deploy: VERIFICADO — deployment READY, CI 5/5 verde, aliases HTTP 200.
+
+### Divergências e Descobertas Técnicas
+
+1. **Domínio**: `app.mxgestaopreditiva.com.br` (citado no plano original) NÃO resolve em DNS (HTTP 000). Domínio ativo: `mxperformance.com.br` (HTTP 200).
+2. **Carteira Base44 vs MentorCarteiraSection**: A carteira ativa em produção é a referência Base44 (`CarteiraClientesBase44Page` → `CarteiraClientesReference` em `src/base44-reference/pages/CarteiraClientes.jsx`). O `MentorCarteiraSection` (com `GuidedStatusUpdate` e `ExecuteNextStepPanel` do módulo mentor) NÃO está montado em produção — existe apenas em testes. O fluxo de execução/atualização de situação em produção é o painel Base44 "Executar próximo passo → Registrar resultado".
+3. **Persistência visual 1:1**: O adapter Base44 (`installCarteiraBase44Adapter.js`) persiste mutações em `eventos_comerciais` (origem `base44_1to1_adapter`, idempotency_key, metadata com momento_anterior/momento_novo). As colunas mentor em `oportunidades` (`current_status_code`, `current_cadence_step`, etc.) permanecem NULL mesmo após execução pelo fluxo Base44 — o estado visual é derivado dos eventos, não das colunas mentor do schema.
+4. **Score escala 0-100 (não 0-1000)**: O plano especifica intervalo [0, 1000] com classes Ouro/Prata/Bronze. A implementação ativa (Base44) exibe scores 0-100 (ex: 43, 35) com classes de prioridade (Crítica/Máxima/Alta). A ficha não expõe breakdown numérico dos 4 pilares; apresenta Qualidade/Urgência/Mentor Recomenda/Objetivo/Motivo (pilares qualitativos).
+5. **Deep Link params**: A Central real gera `?clienteId=` (via `deterministic-actions.ts:152`), que a página Base44 consome (linha 71-72). O utilitário `centralDeepLink.ts` gera `clientId`/`opportunityId`, mas não é o gerador real do link da Central — existe apenas como ferramenta de teste. Sem bug em produção.
+6. **Token Vercel do `.env`** é inválido para a API (forbidden). Token funcional: CLI em `~/Library/Application Support/com.vercel.cli/auth.json`.
