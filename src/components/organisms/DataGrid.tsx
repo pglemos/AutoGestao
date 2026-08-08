@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { Skeleton } from '@/components/atoms/Skeleton'
-import { MotionList, MotionRow, rowVariants } from '@/design/motion'
+import { MotionList, MotionRow, duration, rowVariants } from '@/design/motion'
 
 export interface Column<T> {
   key: string
@@ -117,7 +117,7 @@ function DataGridInner<T extends { id: string | number }>({
                   key={item.id}
                   layout
                   variants={rowVariants}
-                  exit={{ opacity: 0, transition: { duration: 0.12 } }}
+                  exit={{ opacity: 0, transition: { duration: duration.fast } }}
                   onClick={() => onRowClick?.(item)}
                   className={cn(
                     'group h-16 transition-colors hover:bg-gray-50',
@@ -150,7 +150,7 @@ function DataGridInner<T extends { id: string | number }>({
               key={item.id}
               layout
               variants={rowVariants}
-              exit={{ opacity: 0, y: 6, transition: { duration: 0.12 } }}
+              exit={{ opacity: 0, y: 6, transition: { duration: duration.fast } }}
               onClick={() => onRowClick?.(item)}
             >
               <Card className={cn(

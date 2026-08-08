@@ -78,7 +78,7 @@ export function FunnelSection({ funilData, funnelBenchmarks }: FunnelSectionProp
                 <motion.div
                   initial={reduceMotion ? false : { width: 0 }}
                   animate={{ width: `${Math.min(Math.max(step.value, 0), 100)}%` }}
-                  transition={{ duration: reduceMotion ? 0 : duration.slow, ease: easing.standard as [number, number, number, number] }}
+                  transition={{ duration: reduceMotion ? 0 : duration.slow, ease: easing.standard }}
                   className={`h-full rounded-full ${healthy ? 'bg-emerald-500' : 'bg-amber-500'}`}
                 />
               </div>

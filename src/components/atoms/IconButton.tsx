@@ -7,7 +7,7 @@ import { VisuallyHidden } from '@/components/atoms/VisuallyHidden'
 const iconButtonVariants = cva(
   cn(
     'inline-flex shrink-0 items-center justify-center rounded-[var(--mx-button-radius)]',
-    'transition-colors duration-[var(--mx-duration-fast)] ease-[var(--mx-easing-standard)]',
+    'transition-colors duration-[var(--mx-duration-fast)] ease-standard',
     'focus-visible:outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-2',
     'disabled:pointer-events-none disabled:opacity-50',
   ),

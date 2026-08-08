@@ -12,7 +12,7 @@ export const fieldBaseClasses = cn(
   'h-[var(--mx-input-height)] px-[var(--mx-space-3)]',
   'border-[length:var(--mx-input-border-width)] border-solid border-[hsl(var(--mx-color-border))]',
   'text-[length:var(--mx-font-size-base)] text-[hsl(var(--mx-color-text-primary))]',
-  'transition-colors duration-[var(--mx-duration-fast)] ease-[var(--mx-easing-standard)]',
+  'transition-colors duration-[var(--mx-duration-fast)] ease-standard',
   'placeholder:text-[hsl(var(--mx-color-text-disabled))]',
   'focus-within:border-[hsl(var(--mx-color-primary))]',
   'focus-within:ring-[length:var(--mx-input-focus-ring-width)] focus-within:ring-[hsl(var(--mx-color-focus-ring))]/25',

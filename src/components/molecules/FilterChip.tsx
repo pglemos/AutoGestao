@@ -25,7 +25,7 @@ const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
     <span
       className={cn(
         'inline-flex items-center gap-[var(--mx-space-1)] rounded-full',
-        'border transition-colors duration-[var(--mx-duration-fast)] ease-[var(--mx-easing-standard)]',
+        'border transition-colors duration-[var(--mx-duration-fast)] ease-standard',
         selected
           ? 'border-[hsl(var(--mx-color-primary))] bg-[hsl(var(--mx-color-primary-subtle))] text-[hsl(var(--mx-color-primary-active))]'
           : 'border-[hsl(var(--mx-color-border))] bg-[hsl(var(--mx-color-surface))] text-[hsl(var(--mx-color-text-secondary))]',

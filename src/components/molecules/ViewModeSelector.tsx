@@ -74,7 +74,7 @@ function ViewModeSelector<T extends string>({
             className={cn(
               'inline-flex h-8 items-center gap-1.5 rounded-[var(--mx-tabs-item-radius)] px-[var(--mx-space-3)]',
               'text-[length:var(--mx-font-size-xs)] font-medium',
-              'transition-colors duration-[var(--mx-duration-fast)] ease-[var(--mx-easing-standard)]',
+              'transition-colors duration-[var(--mx-duration-fast)] ease-standard',
               'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-1',
               '[&_svg]:h-4 [&_svg]:w-4',
               selected

@@ -43,7 +43,7 @@ export default function DisciplineRing({ score, size = "md" }) {
           strokeWidth={strokeWidth}
           strokeDasharray={`${fill} ${circ}`}
           strokeLinecap="round"
-          style={{ transition: "stroke-dasharray 0.4s ease, stroke 0.4s ease" }}
+          style={{ transition: "stroke-dasharray var(--mx-duration-slow) ease, stroke var(--mx-duration-slow) ease" }}
         />
       </svg>
       <div className="absolute inset-0 flex items-center justify-center">

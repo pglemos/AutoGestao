@@ -6,7 +6,7 @@ import { VisuallyHidden } from '@/components/atoms/VisuallyHidden'
 
 const baseClasses = cn(
   'inline-flex items-center gap-1 rounded-[var(--mx-radius-sm)] font-medium text-[hsl(var(--mx-color-primary))] underline-offset-4',
-  'transition-colors duration-[var(--mx-duration-fast)] ease-[var(--mx-easing-standard)]',
+  'transition-colors duration-[var(--mx-duration-fast)] ease-standard',
   'hover:text-[hsl(var(--mx-color-primary-hover))] hover:underline',
   'focus-visible:outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-2',
 )

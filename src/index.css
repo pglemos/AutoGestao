@@ -110,8 +110,20 @@
 --radius-xl: var(--mx-radius-xl);
 --radius-2xl: var(--mx-radius-2xl);
 --radius-3xl: var(--mx-radius-4xl);
---animate-accordion-down: accordion-down 0.2s ease-out;
---animate-accordion-up: accordion-up 0.2s ease-out;
+/* Motion canônico (T4.7) — duração/easing derivados dos primitivos
+   `--mx-duration-*` / `--mx-easing-*` (MD3). Classes Tailwind
+   `duration-{name}` / `ease-{name}` consomem a escala canônica. */
+--duration-instant: var(--mx-duration-instant);
+--duration-fast: var(--mx-duration-fast);
+--duration-normal: var(--mx-duration-normal);
+--duration-slow: var(--mx-duration-slow);
+--duration-deliberate: var(--mx-duration-deliberate);
+--ease-standard: var(--mx-easing-standard);
+--ease-enter: var(--mx-easing-enter);
+--ease-exit: var(--mx-easing-exit);
+--ease-emphasized: var(--mx-easing-emphasized);
+--animate-accordion-down: accordion-down var(--mx-duration-normal) var(--mx-easing-standard);
+--animate-accordion-up: accordion-up var(--mx-duration-normal) var(--mx-easing-standard);
 
 @keyframes accordion-down {
 from { height: 0; }
@@ -411,7 +423,7 @@ to { height: 0; }
   --color-electric-blue: hsl(var(--mx-chart-1));
   --color-mars-orange: hsl(var(--mx-tpl-orange-500));
 
-  --animate-slide-up: slide-up 0.32s ease-out both;
+  --animate-slide-up: slide-up var(--mx-duration-slow) var(--mx-easing-standard) both;
 
   /* ==========================================================================
      MX-1.1 — Tokens semanticos adicionados em 2026-05-27
@@ -716,7 +728,7 @@ body {
 }
 
 .animate-accordion-down {
-  animation: accordion-down 0.2s ease-out;
+  animation: accordion-down var(--mx-duration-normal) var(--mx-easing-standard);
 }
 
 @media print {
@@ -831,7 +843,7 @@ body {
   font-size: 14px;
   font-weight: 800;
   outline: none;
-  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease, transform 180ms ease;
+  transition: border-color var(--mx-duration-fast) var(--mx-easing-standard), box-shadow var(--mx-duration-fast) var(--mx-easing-standard), background var(--mx-duration-fast) var(--mx-easing-standard), transform var(--mx-duration-fast) var(--mx-easing-standard);
   font-family: var(--mx-font-sans);
 }
 
@@ -1005,7 +1017,7 @@ body {
   height: 6px;
   border-radius: 999px;
   background: #1fcb6e;
-  animation: mxp-pulse 2.2s infinite;
+  animation: mxp-pulse 2.2s ease-in-out infinite;
 }
 
 .mx-pre-stage {
@@ -1087,7 +1099,7 @@ body {
   gap: 12px;
   padding: 16px 0;
   border-bottom: 1px solid #172019;
-  transition: color .25s;
+  transition: color var(--mx-duration-normal) var(--mx-easing-standard);
 }
 
 .mx-pre-proof-row:last-child {
@@ -1280,7 +1292,7 @@ body {
   gap: 4px 10px;
   align-items: center;
   color: #9ba89f;
-  transition: background .25s, color .25s;
+  transition: background var(--mx-duration-normal) var(--mx-easing-standard), color var(--mx-duration-normal) var(--mx-easing-standard);
 }
 
 .mx-pre-step-tab span {
@@ -1424,7 +1436,7 @@ body {
 .mx-pre-info-card {
   background: rgba(255, 255, 255, 0.035);
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.04);
-  transition: border-color 180ms ease, transform 180ms ease, background 180ms ease;
+  transition: border-color var(--mx-duration-fast) var(--mx-easing-standard), transform var(--mx-duration-fast) var(--mx-easing-standard), background var(--mx-duration-fast) var(--mx-easing-standard);
 }
 
 .mx-pre-info-card:hover {
@@ -1449,7 +1461,7 @@ body {
   color: #e8f0ea;
   padding: 12px;
   text-align: left;
-  transition: border-color 180ms ease, box-shadow 180ms ease, background 180ms ease;
+  transition: border-color var(--mx-duration-fast) var(--mx-easing-standard), box-shadow var(--mx-duration-fast) var(--mx-easing-standard), background var(--mx-duration-fast) var(--mx-easing-standard);
 }
 
 .mx-role-option span {
@@ -1484,7 +1496,7 @@ body {
     radial-gradient(180px 120px at 70% 0%, rgba(31, 203, 110, .14), transparent),
     #0a100c;
   overflow: hidden;
-  transition: border-color 180ms ease, box-shadow 180ms ease, transform 180ms ease;
+  transition: border-color var(--mx-duration-fast) var(--mx-easing-standard), box-shadow var(--mx-duration-fast) var(--mx-easing-standard), transform var(--mx-duration-fast) var(--mx-easing-standard);
   margin-bottom: 8px;
 }
 
@@ -1544,7 +1556,7 @@ body {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   cursor: pointer;
-  transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease, color 160ms ease;
+  transition: transform var(--mx-duration-fast) var(--mx-easing-standard), border-color var(--mx-duration-fast) var(--mx-easing-standard), box-shadow var(--mx-duration-fast) var(--mx-easing-standard), color var(--mx-duration-fast) var(--mx-easing-standard);
 }
 
 .mx-photo-action:hover {
@@ -1643,7 +1655,7 @@ body {
   letter-spacing: .08em;
   text-transform: uppercase;
   border: 1px solid transparent;
-  transition: transform .2s ease, color .25s, background .25s, border-color .25s, opacity .25s;
+  transition: transform var(--mx-duration-normal) var(--mx-easing-standard), color var(--mx-duration-normal) var(--mx-easing-standard), background var(--mx-duration-normal) var(--mx-easing-standard), border-color var(--mx-duration-normal) var(--mx-easing-standard), opacity var(--mx-duration-normal) var(--mx-easing-standard);
 }
 
 .mx-pre-btn:disabled {

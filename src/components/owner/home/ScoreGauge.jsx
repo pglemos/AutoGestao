@@ -21,7 +21,7 @@ export default function ScoreGauge({ value, max = 100, colorClass = "text-primar
           strokeDashoffset={offset}
           strokeLinecap="round"
           transform="rotate(-90 50 50)"
-          style={{ transition: "stroke-dashoffset 0.6s ease" }}
+          style={{ transition: "stroke-dashoffset var(--mx-duration-deliberate) ease" }}
         />
       </svg>
     );
@@ -50,7 +50,7 @@ export default function ScoreGauge({ value, max = 100, colorClass = "text-primar
         strokeDasharray={circumference}
         strokeDashoffset={offset}
         strokeLinecap="round"
-        style={{ transition: "stroke-dashoffset 0.6s ease" }}
+        style={{ transition: "stroke-dashoffset var(--mx-duration-deliberate) ease" }}
       />
     </svg>
   );

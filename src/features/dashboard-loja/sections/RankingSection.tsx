@@ -152,7 +152,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
                   <motion.div
                     initial={reduceMotion ? false : { width: 0 }}
                     animate={{ width: `${Math.min(Math.max(channel.pct, 0), 100)}%` }}
-                    transition={{ duration: reduceMotion ? 0 : duration.slow, ease: easing.standard as [number, number, number, number] }}
+                    transition={{ duration: reduceMotion ? 0 : duration.slow, ease: easing.standard }}
                     className={`h-full rounded-full ${channel.color}`}
                   />
                 </div>
