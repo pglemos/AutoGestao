@@ -33,16 +33,15 @@ const IMPORT_PATTERN = /(?:import|export)\s+(?:[^'\"]*?\s+from\s+)?['\"]([^'\"]+
 const SELLER_ONLY_BLOCK = /\/\* management-audit:seller-only-start \*\/[\s\S]*?\/\* management-audit:seller-only-end \*\//g
 
 export const forbiddenManagementPatterns = [
-  // A escala `*-mx-*` e as variáveis `--mx-*` são canônicas no checkout
-  // atual. O auditor não pode classificá-las como legado por nome.
-  { id: 'legacy-text-token', expression: /\btext-text-(?:primary|secondary|tertiary|label)\b/g },
-  { id: 'legacy-surface-token', expression: /\bbg-surface-(?:default|alt|elevated|overlay)\b/g },
-  { id: 'legacy-border-token', expression: /\bborder-border-(?:default|subtle|strong)\b/g },
-  { id: 'legacy-brand-action', expression: /\b(?:bg|text|border|ring|from|to|via)-(?:brand-primary|mx-action|mx-teal)(?:-[\w]+)?(?:\/[0-9]+)?\b/g },
+  // Fase 4 (T4.3–T4.9) canonizou no @theme os aliases semânticos usados em
+  // todo o app: `--color-text-*`, `--color-surface-*`, `--color-border-*`,
+  // `--color-brand-primary*`, `--color-brand-secondary`, `--color-pure-black`,
+  // `--color-status-*`, `--color-mx-action`/`--color-mx-teal` e o `@utility
+  // font-mono-numbers`. As regras que os flagravam como "legado" foram
+  // removidas — eram falsos positivos contra a convenção vigente, ratificada
+  // pelos gates lint-colors (T4.9) e lint-tokens-ast. O auditor agora só
+  // pega padrões genuinamente obsoletos:
   { id: 'legacy-wrapper', expression: /\b(?:mxds-[\w-]+|mx-internal-[\w-]+)\b/g },
-  { id: 'legacy-status-token', expression: /\b(?:bg|text|border|ring|from|to|via)-status-(?:success|warning|error|info)(?:-[\w]+)?(?:\/[0-9]+)?\b/g },
-  { id: 'legacy-secondary-brand', expression: /\b(?:bg|text|border|ring|from|to|via)-(?:brand-secondary|pure-black)(?:\/[0-9]+)?\b/g },
-  { id: 'legacy-mono-token', expression: /\bfont-mono-numbers\b/g },
   { id: 'legacy-action-shadow', expression: /\bshadow-action\b/g },
 ]
 
