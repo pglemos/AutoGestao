@@ -1,5 +1,28 @@
 # Evidence ledger — snapshot factual atual
 
+## Evidências finais do SHA publicado — 2026-08-09T18:20:33Z
+
+- **EV-REL-01 — Git/CI:** SHA `46c236dbb4f16c942b9d0c912ca91298fa400001` em `main`, `origin/main` confirmado e 7 workflows do SHA em `success`; estado `DONE_WITH_EVIDENCE`.
+- **EV-REL-02 — Vercel/health:** deployment `dpl_TTLku8NUz63Ac474Y9Z4HcZacHwi` em `READY`, produção e aliases oficiais confirmados; `/api/health` HTTP 200 com `release=46c236dbb4f16c942b9d0c912ca91298fa400001`, `critical_crons=ok`; estado `TESTED_PRODUCTION`.
+- **EV-REL-03 — Supabase Realtime:** migration `20260809172708_add_notificacoes_realtime_publication` aplicada e `public.notificacoes` publicada em `supabase_realtime`; estado `TESTED_PRODUCTION`.
+- **EV-REL-04 — Realtime browser:** WebSocket autenticado abriu em `wss://fbhcmzzgwjdgkctlfvbo.supabase.co/realtime/v1/websocket`; joins sanitizados continham `postgres_changes` e `notificacoes`; respostas `phx_reply` foram recebidas; estado `TESTED_PRODUCTION`.
+- **EV-REL-05 — Browser roles:** Vendedor (`/home`, `/notificacoes`, `/perfil`), Gerente (`/home`, `/meta-loja`, `/notificacoes`), Dono (`/meta-loja`, `/notificacoes`) e `synvollt@gmail.com` (`administrador_geral`, `/lojas`, painel da unidade, `/notificacoes`) renderizaram dados reais sem overflow e sem erros de console após reload; estado `TESTED_PRODUCTION_PARTIAL` para a matriz de seis perfis.
+- **EV-REL-06 — Browser artefacts:** screenshots em `output/playwright/2026-08-09-vendedor-perfil.png`, `output/playwright/2026-08-09-gerente-meta-loja.png` e `output/playwright/2026-08-09-admin-store-panel.png`; diretório ignorado por `output/`; estado `DONE_WITH_EVIDENCE`.
+- **EV-REL-07 — Sentry:** a CLI continua autenticada somente para consultas limitadas; evento sintético/source-map/alerta do SHA novo não foi comprovado; estado `BLOCKED_EXTERNAL`.
+
+O acesso informado como “Administrador MX” não prova esse papel: o perfil efetivo retornado pela aplicação é `administrador_geral`. Não há credencial comprovada para `administrador_mx` ou `consultor_mx` nesta execução.
+
+## Atualização pós-push — 2026-08-09T18:07:42Z
+
+- **EV-REL-01 — Release Git:** `46c236dbb4f16c942b9d0c912ca91298fa400001`, branch `main`, push `origin/main` confirmado; estado `TESTED_LOCAL_ONLY` até CI/deployment final.
+- **EV-REL-02 — Local quality gate:** `npm test` 2.590/18.135/0, typecheck, lint, build, sourcemap, bundle, Design System audit e diff-check passaram; estado `TESTED_LOCAL_ONLY`.
+- **EV-REL-03 — Realtime:** migration `20260809172708_add_notificacoes_realtime_publication` listada no Supabase; query de produção confirmou `realtime_publication=true` e `notificacoes_published=true`; estado `TESTED_PRODUCTION` para o schema.
+- **EV-REL-04 — Code review:** CodeRabbit terminou sem novos findings após a correção de caminho absoluto do teste; estado `DONE_WITH_EVIDENCE` local.
+- **EV-REL-05 — Secret scan:** commit e arquivos novos sem leaks; scan histórico completo encontrou 116 achados antigos e não pode ser promovido a PASS global; estado `BLOCKED_EXTERNAL`/histórico.
+- **EV-REL-06 — Sentry:** CLI autenticada confirmou release `fa1b491…` sem eventos novos; SHA `46c236db…` ainda precisa aparecer após o deploy; estado `IN_PROGRESS`.
+
+O SHA final desta atualização é `46c236dbb4f16c942b9d0c912ca91298fa400001`. O adendo abaixo permanece como histórico do checkpoint anterior.
+
 ## Atualização de execução — 2026-08-09T17:04:10Z
 
 Este adendo supersede o checkpoint abaixo para os itens reexecutados nesta sessão.

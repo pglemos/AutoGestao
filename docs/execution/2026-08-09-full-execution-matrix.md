@@ -1,5 +1,36 @@
 # Ledger integral derivado do prompt mestre
 
+## Fechamento de release e QA — 2026-08-09T18:20:33Z
+
+| Grupo | Resultado atual | Evidência |
+|---|---|---|
+| C0.1 Design System | `DONE_WITH_EVIDENCE` | workflows remotos do SHA `46c236db…` em `success` |
+| C0.9 Deployment | `DONE_WITH_EVIDENCE` | `dpl_TTLku8NUz63Ac474Y9Z4HcZacHwi` `READY`, aliases e `/api/health` com release exata |
+| C0.10 Evidências | `TESTED_PRODUCTION_PARTIAL` | browser real em quatro papéis efetivos, screenshots e ledger atualizado; dois papéis sem credencial |
+| T10.11 Realtime | `TESTED_PRODUCTION` | migration aplicada, publicação confirmada e WebSocket autenticado com joins `notificacoes` |
+| T13.1/T13.2 Sentry | `BLOCKED_EXTERNAL` | reautenticação pendente para evento sintético/source-map/alerta do SHA novo |
+| T17.3/T17.4 E2E/matriz de rotas | `TESTED_PRODUCTION_PARTIAL` | quatro papéis efetivos, rotas e ações registradas; `administrador_mx`/`consultor_mx` não comprovados |
+| T18.4/T18.5 Produção/SHA | `DONE_WITH_EVIDENCE` | push, CI, Vercel `READY`, aliases e health exatos confirmados |
+| T18.7 Smoke autenticado | `TESTED_PRODUCTION_PARTIAL` | login, dados reais, notificações, menu/saída, overflow e console exercitados |
+| T18.9 Rollback/DR | `BLOCKED_EXTERNAL` | restore/PITR/rollback real não executados em ambiente seguro |
+
+Nota: `synvollt@gmail.com`, fornecido como Administrador MX, foi resolvido pela aplicação como `administrador_geral`. O campo deve permanecer assim na matriz; não é válido convertê-lo em prova de `administrador_mx`.
+
+## Atualização pós-push — 2026-08-09T18:07:42Z
+
+| Grupo | Resultado atual | Evidência |
+|---|---|---|
+| C0.1 Design System | `TESTED_LOCAL_ONLY` | audit local sem violações; CodeRabbit sem novos findings no diff da migration |
+| C0.9 Deployment | `NOT_REEVALUATED` | push `46c236dbb4f16c942b9d0c912ca91298fa400001` concluído; CI/Vercel/health ainda pendentes |
+| T10.11 Realtime | `TESTED_PRODUCTION` | migration listada e query confirma `public.notificacoes` em `supabase_realtime` |
+| T13.1/T13.2 Sentry | `IN_PROGRESS` | CLI confirmou projeto/release anterior sem eventos; release nova aguarda deploy |
+| T14.1/T14.3 Auditoria | `BLOCKED_EXTERNAL` parcial | `xlsx@0.18.5` high sem fix upstream; histórico gitleaks tem 116 achados antigos |
+| T17.1/T17.7 Testes | `TESTED_LOCAL_ONLY` | 2.590 testes, 18.135 expectativas, 0 falhas; contrato Realtime passou |
+| T18.1/T18.3 Pré-release/migration | `TESTED_PRODUCTION` parcial | backup/bundle verificados; migration aplicada e publicação confirmada |
+| T18.4/T18.5 Produção/SHA | `IN_PROGRESS` | push concluído; deployment e health do SHA novo ainda não revalidados |
+
+**SHA de referência desta atualização:** `46c236dbb4f16c942b9d0c912ca91298fa400001`.
+
 ## Atualização de gates locais — 2026-08-09T17:04:10Z
 
 Os itens abaixo foram reexecutados com artefatos atuais no checkout `ea7dcec591467db2e844fe42e3e3622cecdf1b3f`:
