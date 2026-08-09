@@ -64,7 +64,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo }) {
             { k: "ano", label: "Ano", placeholder: "2024" },
           ].map(({ k, label, placeholder }) => (
             <div key={k}>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">{label}</p>
+              <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1">{label}</p>
               <input
                 value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder}
                 className="w-full h-9 rounded-xl border border-slate-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
@@ -75,14 +75,14 @@ function ModalRegistrarVeiculo({ onClose, onSalvo }) {
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">Preço (opcional)</p>
+            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1">Preço (opcional)</p>
             <input
               type="number" value={form.preco} onChange={e => set("preco", e.target.value)} placeholder="Ex: 120000"
               className="w-full h-9 rounded-xl border border-slate-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
             />
           </div>
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">Data de entrada</p>
+            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1">Data de entrada</p>
             <input
               type="date" value={form.data_entrada} onChange={e => set("data_entrada", e.target.value)}
               className="w-full h-9 rounded-xl border border-slate-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
@@ -91,7 +91,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo }) {
         </div>
 
         <div>
-          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">Observação (opcional)</p>
+          <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1">Observação (opcional)</p>
           <textarea
             value={form.observacao} onChange={e => set("observacao", e.target.value)} rows={2}
             placeholder="Ex: baixo km, único dono..."
@@ -125,7 +125,7 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
         <div className="flex-1 min-w-0">
           <p className="text-sm font-black text-[#031B3D] truncate">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
           <p className="text-xs text-slate-400">{veiculo.ano}{veiculo.preco ? ` · R$ ${veiculo.preco.toLocaleString("pt-BR")}` : ""}</p>
-          <p className="text-[11px] text-[#005BFF] font-semibold mt-0.5">{entradaLabel}</p>
+          <p className="text-caption text-[#005BFF] font-semibold mt-0.5">{entradaLabel}</p>
         </div>
       </div>
 
@@ -160,7 +160,7 @@ function AtaqueVeiculo({ veiculo, clientes, onVoltar, onExecutar, onFicha }) {
       </button>
 
       <div className="bg-gradient-to-r from-[#005BFF] to-blue-600 rounded-2xl p-5 text-white">
-        <p className="text-[10px] font-bold text-blue-300 uppercase tracking-wider">Veículo que chegou</p>
+        <p className="text-caption font-bold text-blue-300 uppercase tracking-wider">Veículo que chegou</p>
         <p className="text-xl font-black mt-1">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
         <p className="text-sm text-blue-200">{veiculo.ano}{veiculo.preco ? ` · R$ ${veiculo.preco.toLocaleString("pt-BR")}` : ""}</p>
         <p className="text-xs text-blue-300 mt-2">Próximo passo sugerido: <strong className="text-white">Apresentar veículo recém-chegado</strong></p>
@@ -187,11 +187,11 @@ function AtaqueVeiculo({ veiculo, clientes, onVoltar, onExecutar, onFicha }) {
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="text-sm font-semibold text-[#031B3D] truncate">{c.nome}</p>
                     {temUrgente && (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 shrink-0">
+                      <span className="text-caption font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-700 border border-amber-200 shrink-0">
                         Próximo passo urgente
                       </span>
                     )}
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200 shrink-0">
+                    <span className="text-caption font-bold px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200 shrink-0">
                       Veículo compatível chegou
                     </span>
                   </div>
@@ -199,11 +199,11 @@ function AtaqueVeiculo({ veiculo, clientes, onVoltar, onExecutar, onFicha }) {
                 </div>
                 <div className="flex gap-1.5 shrink-0">
                   <button onClick={() => onExecutar(c, veiculo)}
-                    className="flex items-center gap-1 text-[11px] font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-2.5 py-1.5 rounded-lg transition-colors">
+                    className="flex items-center gap-1 text-caption font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-2.5 py-1.5 rounded-lg transition-colors">
                     <Zap className="w-3 h-3" /> Executar
                   </button>
                   <button onClick={() => onFicha(c.id)}
-                    className="text-[11px] font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
+                    className="text-caption font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
                     Ficha
                   </button>
                 </div>
@@ -307,7 +307,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
       {/* Categorização por Faixa de Preço */}
       {veiculos.length > 0 && (
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-          <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide mr-1 shrink-0">Faixa de preço:</span>
+          <span className="text-caption font-bold text-slate-400 uppercase tracking-wide mr-1 shrink-0">Faixa de preço:</span>
           {FAIXAS_PRECO.map(f => {
             const count = countsFaixa[f.id] ?? 0;
             const ativo = faixaPrecoAtiva === f.id;

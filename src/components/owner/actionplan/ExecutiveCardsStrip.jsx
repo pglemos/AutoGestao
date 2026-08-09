@@ -85,7 +85,7 @@ export default function ExecutiveCardsStrip({ actions, activeCard, onCardClick }
             <div className="flex items-start justify-between gap-2 pl-1.5">
               <div className="min-w-0 flex-1">
                 <div className={`mb-2 inline-flex h-9 w-9 items-center justify-center rounded-lg ${card.iconBg}`} aria-hidden="true">
-                  <Icon className="h-[18px] w-[18px]" />
+                  <Icon className="h-[16px] w-[16px]" />
                 </div>
                 <p className="text-3xl font-bold leading-none text-foreground">{value}</p>
                 <p className="mt-1.5 text-sm font-semibold text-foreground">{card.title}</p>
@@ -93,7 +93,7 @@ export default function ExecutiveCardsStrip({ actions, activeCard, onCardClick }
               </div>
             </div>
             {selected && (
-              <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-foreground/10 px-2 py-0.5 text-[10px] font-medium text-foreground">
+              <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-foreground/10 px-2 py-0.5 text-caption font-medium text-foreground">
                 Filtro ativo
               </span>
             )}

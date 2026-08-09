@@ -62,7 +62,7 @@ const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
           {icon ? (
             <span
               aria-hidden
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--mx-radius-md)] bg-[hsl(var(--mx-color-primary-subtle))] text-[hsl(var(--mx-color-primary))] [&_svg]:h-[18px] [&_svg]:w-[18px]"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--mx-radius-md)] bg-[hsl(var(--mx-color-primary-subtle))] text-[hsl(var(--mx-color-primary))] [&_svg]:h-[16px] [&_svg]:w-[16px]"
             >
               {icon}
             </span>
@@ -70,7 +70,7 @@ const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
         </div>
 
         {loading ? (
-          <div className="flex h-[30px] items-center">
+          <div className="flex h-[28px] items-center">
             <Spinner size="sm" tone="muted" label={`Carregando ${label}`} />
           </div>
         ) : (

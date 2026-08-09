@@ -93,14 +93,14 @@ export default function AgendaView({ actions, selectedDate, onSelectDate, onOpen
                           <div className="min-w-0 flex-1">
                             <div className="flex items-center gap-2">
                               <span className="text-sm font-medium text-foreground">{action.code}</span>
-                              <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${statusStyle.badge || ""}`}>
+                              <span className={`rounded-full px-2 py-0.5 text-caption font-medium ${statusStyle.badge || ""}`}>
                                 {statusStyle.label}
                               </span>
-                              <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${prioStyle.badge || ""}`}>
+                              <span className={`rounded-full px-2 py-0.5 text-caption font-medium ${prioStyle.badge || ""}`}>
                                 {prioStyle.label}
                               </span>
                               {late && (
-                                <span className="inline-flex items-center gap-0.5 text-[10px] font-medium text-red-600">
+                                <span className="inline-flex items-center gap-0.5 text-caption font-medium text-red-600">
                                   <AlertTriangle className="h-3 w-3" />
                                   Atrasada há {daysLate(action)}d
                                 </span>

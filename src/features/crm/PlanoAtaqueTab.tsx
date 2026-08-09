@@ -338,7 +338,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                       <p className="text-sm font-semibold text-slate-900 truncate">{ctx.cliente.nome}</p>
                       <p className="text-xs text-slate-400 truncate">{ctx.situacao}</p>
                     </div>
-                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full shrink-0 ${temperaturaBadgeClass(ctx.temperatura)}`}>
+                    <span className={`text-caption font-bold px-2 py-0.5 rounded-full shrink-0 ${temperaturaBadgeClass(ctx.temperatura)}`}>
                       {TEMPERATURA_LABEL[ctx.temperatura]}
                     </span>
                     {waUrl && (
@@ -429,7 +429,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         {/* Categorização por Faixa de Preço */}
         {veiculos.length > 0 && (
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wide mr-1 shrink-0">Faixa de preço:</span>
+            <span className="text-caption font-bold text-slate-400 uppercase tracking-wide mr-1 shrink-0">Faixa de preço:</span>
             {FAIXAS_PRECO.map(f => {
               const count = countsFaixa[f.id] ?? 0
               const ativo = faixaPrecoAtiva === f.id
@@ -539,11 +539,11 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
               >
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <span className="text-2xl">{missao.icone}</span>
-                  <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${prioridadeBadgeClass(missao.prioridade)}`}>{missao.prioridade}</span>
+                  <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${prioridadeBadgeClass(missao.prioridade)}`}>{missao.prioridade}</span>
                 </div>
                 <p className="text-sm font-bold text-slate-900 leading-tight">{missao.nome}</p>
                 <p className="text-xs text-slate-400 mt-1 leading-snug">{missao.objetivo}</p>
-                <p className="text-[10px] text-slate-300 mt-1 leading-snug italic">{missao.porqueAgora}</p>
+                <p className="text-caption text-slate-300 mt-1 leading-snug italic">{missao.porqueAgora}</p>
                 <div className="flex items-center mt-3 pt-2 border-t border-slate-50">
                   <div className="flex items-center gap-1.5">
                     <Users className="w-3.5 h-3.5 text-slate-400" />

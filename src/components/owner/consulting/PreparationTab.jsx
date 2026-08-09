@@ -142,27 +142,27 @@ export default function PreparationTab({ meeting, onChanged }) {
                       {item.title}
                     </p>
                     {item.required && (
-                      <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">Obrigatório</span>
+                      <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-caption font-medium text-amber-700">Obrigatório</span>
                     )}
                   </div>
                   {item.description && (
                     <p className="mt-0.5 text-xs text-muted-foreground">{item.description}</p>
                   )}
                   <div className="mt-1 flex items-center gap-2">
-                    <span className={`text-[11px] font-medium ${STATUS_TONE[item.status]}`}>
+                    <span className={`text-caption font-medium ${STATUS_TONE[item.status]}`}>
                       {STATUS_LABEL[item.status]}
                     </span>
                     {item.type === "participant" && (
                       <button
                         onClick={() => setShowParticipants(true)}
-                        className="text-[11px] text-primary hover:underline"
+                        className="text-caption text-primary hover:underline"
                       >
                         Confirmar participantes
                       </button>
                     )}
                     <button
                       onClick={() => setExpandedItem(isExpanded ? null : item.id)}
-                      className="text-[11px] text-muted-foreground hover:text-foreground"
+                      className="text-caption text-muted-foreground hover:text-foreground"
                     >
                       {isExpanded ? "Recolher" : "Observação"}
                     </button>
@@ -187,7 +187,7 @@ export default function PreparationTab({ meeting, onChanged }) {
                         Anexar arquivo
                       </Button>
                       {attachedFiles.length > 0 && (
-                        <span className="text-[11px] text-muted-foreground">
+                        <span className="text-caption text-muted-foreground">
                           {attachedFiles.length} arquivo(s)
                         </span>
                       )}

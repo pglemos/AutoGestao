@@ -107,15 +107,15 @@ const TIPOS: TipoDef[] = [
 function TipoSelector({ onSelect }: { onSelect: (t: RegistroTipo) => void }) {
   return (
     <div>
-      <p className="mb-4 text-[13px] text-slate-500">Qual tipo de registro você quer adicionar?</p>
+      <p className="mb-4 text-body-sm text-slate-500">Qual tipo de registro você quer adicionar?</p>
       <div className="grid grid-cols-2 gap-3">
         {TIPOS.map(t => {
           const Icon = t.icon
           return (
             <button key={t.id} type="button" onClick={() => onSelect(t.id)} className={`flex flex-col items-center gap-2 rounded-xl border-2 p-4 text-center transition-all ${t.cor}`}>
               <Icon className={`h-7 w-7 ${t.iconCor}`} />
-              <span className="text-[13px] font-bold">{t.label}</span>
-              <span className="text-[11px] opacity-70">{t.desc}</span>
+              <span className="text-body-sm font-bold">{t.label}</span>
+              <span className="text-caption opacity-70">{t.desc}</span>
             </button>
           )
         })}
@@ -125,7 +125,7 @@ function TipoSelector({ onSelect }: { onSelect: (t: RegistroTipo) => void }) {
 }
 
 function ClienteEncontradoBadge({ jaVendido }: { jaVendido?: boolean }) {
-  return <p className="mt-0.5 text-[10px] font-semibold text-green-600">✓ Cliente encontrado na Carteira{jaVendido ? ' (já vendido)' : ''}.</p>
+  return <p className="mt-0.5 text-caption font-semibold text-green-600">✓ Cliente encontrado na Carteira{jaVendido ? ' (já vendido)' : ''}.</p>
 }
 
 function formatAppointmentDate(value: string): string {
@@ -137,8 +137,8 @@ function formatAppointmentDate(value: string): string {
 function ClienteFichaResumo({ form, ultimoAgendamento }: { form: FormState; ultimoAgendamento: ExistingAppointmentRecord | null }) {
   return (
     <section aria-label="Ficha do cliente carregada" className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50/60 p-3">
-      <p className="text-[11px] font-bold uppercase tracking-wide text-emerald-800">Ficha carregada da Carteira</p>
-      <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 text-[11px] text-slate-600">
+      <p className="text-caption font-bold uppercase tracking-wide text-emerald-800">Ficha carregada da Carteira</p>
+      <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 text-caption text-slate-600">
         <p><strong className="text-slate-700">Veículo:</strong> {form.veiculo_texto || 'Não informado'}</p>
         <p><strong className="text-slate-700">Negociação:</strong> {CRM_ETAPA_LABEL[form.negociacao as CrmEtapaFunil] || 'Não informada'}</p>
         <p><strong className="text-slate-700">Financiamento:</strong> {form.financiamento || 'Não informado'}</p>
@@ -177,8 +177,8 @@ export function QualificadoStatusHelp() {
         >
           {SITUACOES_OPORTUNIDADE.map(s => (
             <div key={s} className="mb-2 last:mb-0">
-              <p className="text-[11px] font-bold text-slate-700">{s}</p>
-              <p className="text-[11px] text-slate-500">{SITUACOES_OPORTUNIDADE_AJUDA[s]}</p>
+              <p className="text-caption font-bold text-slate-700">{s}</p>
+              <p className="text-caption text-slate-500">{SITUACOES_OPORTUNIDADE_AJUDA[s]}</p>
             </div>
           ))}
         </div>
@@ -356,7 +356,7 @@ function FormQualificado({ form, setF, clienteEncontrado, clienteJaVendido, onPh
       </Select>
       <div className="space-y-1">
         <div className="ml-2 flex items-center gap-1">
-          <span className="text-[10px] font-bold uppercase tracking-widest text-slate-600">Passo Atual da Oportunidade *</span>
+          <span className="text-caption font-bold uppercase tracking-widest text-slate-600">Passo Atual da Oportunidade *</span>
           <QualificadoStatusHelp />
         </div>
         <Select value={form.passo_atual || ''} onChange={e => setF('passo_atual', e.target.value)}>
@@ -648,7 +648,7 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
                 <ArrowLeft className="h-4 w-4 text-slate-600" />
               </button>
             )}
-            <Typography variant="h3" className="text-[17px] text-[#0F172A]">{tipo ? TITULO[tipo] : 'Novo Registro'}</Typography>
+            <Typography variant="h3" className="text-h5 text-[#0F172A]">{tipo ? TITULO[tipo] : 'Novo Registro'}</Typography>
           </div>
           <button type="button" onClick={handleClose} aria-label="Fechar" className="rounded-lg p-1 hover:bg-slate-100">
             <X className="h-4 w-4 text-slate-600" />
@@ -666,14 +666,14 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
 
         {clienteFicha && <ClienteFichaResumo form={form} ultimoAgendamento={ultimoAgendamento} />}
 
-        {buscando && <p className="mt-1 text-[11px] text-slate-600">Buscando cliente…</p>}
+        {buscando && <p className="mt-1 text-caption text-slate-600">Buscando cliente…</p>}
 
         {tipo && (
           <div className="mt-5 flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
-            <button type="button" onClick={handleClose} disabled={saving} className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-[13px] font-semibold text-[#64748B] transition-colors hover:bg-slate-50">
+            <button type="button" onClick={handleClose} disabled={saving} className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-body-sm font-semibold text-[#64748B] transition-colors hover:bg-slate-50">
               Cancelar
             </button>
-            <Button type="button" onClick={handleSave} disabled={!ok || saving} className="rounded-xl bg-[#6D28D9] px-6 py-2.5 text-[13px] font-bold text-white hover:bg-purple-700 disabled:opacity-50">
+            <Button type="button" onClick={handleSave} disabled={!ok || saving} className="rounded-xl bg-[#6D28D9] px-6 py-2.5 text-body-sm font-bold text-white hover:bg-purple-700 disabled:opacity-50">
               {saving ? 'Salvando…' : `Salvar ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`}
             </Button>
           </div>

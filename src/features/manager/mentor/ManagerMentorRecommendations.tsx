@@ -76,8 +76,8 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex flex-wrap items-center gap-2">
-                      <span className="text-[10px] font-semibold uppercase tracking-wide text-gray-500">{config.label}</span>
-                      <span className={`rounded-md px-1.5 py-0.5 text-[10px] font-semibold ${isCritical ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
+                      <span className="text-caption font-semibold uppercase tracking-wide text-gray-500">{config.label}</span>
+                      <span className={`rounded-md px-1.5 py-0.5 text-caption font-semibold ${isCritical ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
                         {isCritical ? 'CRÍTICO' : 'ATENÇÃO'}
                       </span>
                     </div>

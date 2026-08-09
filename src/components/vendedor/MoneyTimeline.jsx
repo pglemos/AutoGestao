@@ -41,7 +41,7 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
               {ponto.novaFaixa && !isAtual && (
                 <div className="flex items-center justify-center gap-1 mb-2">
                   <Star className="w-3 h-3 text-emerald-500" fill="currentColor" />
-                  <span className="text-[10px] font-bold text-emerald-600 uppercase tracking-wider">Nova faixa</span>
+                  <span className="text-caption font-bold text-emerald-600 uppercase tracking-wider">Nova faixa</span>
                 </div>
               )}
               <p className={`text-xs font-medium mb-1 ${isAtual ? "text-slate-300" : "text-slate-400"}`}>
@@ -54,10 +54,10 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
                 {formatBRL(ponto.comissao)}
               </p>
               {!isAtual && ganho > 0 && (
-                <p className="text-[11px] font-bold text-emerald-600 mt-1">+ {formatBRL(ganho)}</p>
+                <p className="text-caption font-bold text-emerald-600 mt-1">+ {formatBRL(ganho)}</p>
               )}
               {ponto.faixa && (
-                <p className={`text-[10px] mt-1.5 ${isAtual ? "text-slate-400" : "text-slate-400"}`}>
+                <p className={`text-caption mt-1.5 ${isAtual ? "text-slate-400" : "text-slate-400"}`}>
                   {ponto.faixa.tipo === "Valor fixo por veículo"
                     ? `${formatBRL(ponto.faixa.valor)}/vend.`
                     : `${ponto.faixa.valor}% s/ valor`}

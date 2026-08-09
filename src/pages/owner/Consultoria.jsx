@@ -31,7 +31,7 @@ function Metric({ icon: Icon, label, value, total, description }) {
         <span className="ml-auto text-xs font-medium text-muted-foreground">{percent}%</span>
       </div>
       <Progress value={percent} className="mt-1.5 h-1.5" />
-      {description && <p className="mt-2 text-[11px] text-muted-foreground">{description}</p>}
+      {description && <p className="mt-2 text-caption text-muted-foreground">{description}</p>}
     </div>
   );
 }

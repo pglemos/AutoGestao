@@ -371,7 +371,7 @@ export default function FalarConsultorDono() {
             </div>
 
             <div className="flex justify-end">
-              <Button type="submit" className="min-w-[190px]" disabled={submitting || !storeId}>
+              <Button type="submit" className="min-w-[188px]" disabled={submitting || !storeId}>
                 {submitting ? <><RefreshCw size={17} className="animate-spin" /> Enviando...</> : <><Send size={17} /> Enviar solicitação</>}
               </Button>
             </div>

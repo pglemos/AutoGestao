@@ -96,14 +96,14 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
 
       {/* Seletor de tom */}
       <div>
-        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1.5">Tom da mensagem</p>
+        <p className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1.5">Tom da mensagem</p>
         <div className="flex flex-wrap gap-1.5">
           {TONS.map(t => (
             <button
               key={t.id}
               onClick={() => { setTomSelecionado(t.id); gerarScript(); }}
               title={t.desc}
-              className={`text-[11px] font-semibold px-2.5 py-1 rounded-lg border transition-all ${
+              className={`text-caption font-semibold px-2.5 py-1 rounded-lg border transition-all ${
                 tomSelecionado === t.id
                   ? "bg-violet-600 text-white border-violet-600"
                   : "bg-white text-slate-600 border-slate-200 hover:border-violet-300 hover:text-violet-600"
@@ -135,7 +135,7 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
               rows={7}
               className="w-full rounded-xl border border-violet-200 bg-white px-3 py-2.5 text-sm text-slate-700 resize-none focus:outline-none focus:ring-1 focus:ring-violet-400 focus:border-violet-400"
             />
-            <p className="text-[11px] text-slate-400 mt-0.5">Edite antes de enviar se necessário.</p>
+            <p className="text-caption text-slate-400 mt-0.5">Edite antes de enviar se necessário.</p>
           </div>
 
           <div className="flex gap-2">

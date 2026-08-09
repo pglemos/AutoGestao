@@ -45,11 +45,11 @@ export default function FocusNeedsYou({ actions, onAnalyze, onApprove, onDelegat
                   <div className="flex items-start justify-between gap-2">
                     <div className="flex items-center gap-2">
                       <span className="text-xs font-bold text-muted-foreground">{action.code}</span>
-                      <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${priority.badge}`}>{priority.label}</span>
-                      <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${dept.badge}`}>{dept.label}</span>
+                      <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${priority.badge}`}>{priority.label}</span>
+                      <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${dept.badge}`}>{dept.label}</span>
                     </div>
                     {late && (
-                      <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-[10px] font-medium text-red-700">
+                      <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-1.5 py-0.5 text-caption font-medium text-red-700">
                         <AlertTriangle className="h-2.5 w-2.5" /> Atrasada há {lateDays}d
                       </span>
                     )}

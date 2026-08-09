@@ -60,7 +60,7 @@ export default function NovaPoliticaModal({ open, onClose, onSaved, me }) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[17px] font-bold text-[#0F172A]">Nova Política de Remuneração</DialogTitle>
+          <DialogTitle className="text-h5 font-bold text-[#0F172A]">Nova Política de Remuneração</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>
@@ -128,12 +128,12 @@ export default function NovaPoliticaModal({ open, onClose, onSaved, me }) {
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4">
               <div className="flex items-center justify-between mb-2">
                 <div>
-                  <p className="text-[13px] font-bold text-[#0F172A]">Aplicar faixa sobre todos os veículos</p>
+                  <p className="text-body-sm font-bold text-[#0F172A]">Aplicar faixa sobre todos os veículos</p>
                   <p className="text-[12px] text-slate-500 mt-0.5">Ao atingir nova faixa, todos os veículos do período são recalculados</p>
                 </div>
                 <Switch checked={form.aplicar_faixa_sobre_todos_veiculos} onCheckedChange={v => set("aplicar_faixa_sobre_todos_veiculos", v)} />
               </div>
-              <p className="text-[11px] text-blue-600 bg-blue-100 rounded-lg p-2 leading-relaxed">
+              <p className="text-caption text-blue-600 bg-blue-100 rounded-lg p-2 leading-relaxed">
                 Exemplo: política define R$450 por veículo entre 5–6 vendas e R$550 entre 7–8. Ao atingir 7 vendas, todos os 7 veículos passam a pagar R$550 cada.
               </p>
             </div>

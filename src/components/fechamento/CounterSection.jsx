@@ -28,18 +28,18 @@ const CounterItem = ({ label, bgColor, textColor, icon: Icon, value, onDecrement
   return (
     <div className={`flex flex-col items-center gap-1.5 flex-1 min-w-0 ${compact ? "px-1" : "px-3"}`}>
       {/* Icon circle */}
-      <div className={`${compact ? "w-[34px] h-[34px]" : "w-[52px] h-[52px]"} rounded-full flex items-center justify-center shadow-md ${bgColor}`}>
-        <Icon className={`${compact ? "w-[14px] h-[14px]" : "w-[22px] h-[22px]"} text-white`} />
+      <div className={`${compact ? "w-[32px] h-[32px]" : "w-[52px] h-[52px]"} rounded-full flex items-center justify-center shadow-md ${bgColor}`}>
+        <Icon className={`${compact ? "w-[12px] h-[12px]" : "w-[20px] h-[20px]"} text-white`} />
       </div>
       {/* Label */}
-      <span className={`${compact ? "text-[9px]" : "text-[10px]"} font-semibold text-slate-400 text-center leading-tight tracking-widest uppercase`}>{label}</span>
+      <span className={`${compact ? "text-caption" : "text-caption"} font-semibold text-slate-400 text-center leading-tight tracking-widest uppercase`}>{label}</span>
       {/* Big number */}
-      <span className={`${compact ? "text-[30px]" : "text-[52px]"} font-bold leading-none tracking-tight tabular-nums ${textColor}`}>{value}</span>
+      <span className={`${compact ? "text-[30px]" : "text-display"} font-bold leading-none tracking-tight tabular-nums ${textColor}`}>{value}</span>
       {/* Stepper */}
       <div className={`flex items-center border border-slate-200 rounded-xl shadow-sm w-full focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.15)] transition-all ${compact ? "h-7" : "h-9"}`}>
         <button
           onClick={onDecrement}
-          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-slate-500 font-light border-r border-slate-200 rounded-l-xl h-full ${compact ? "w-7 text-[15px]" : "w-9 text-[18px]"}`}
+          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-slate-500 font-light border-r border-slate-200 rounded-l-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}
         >−</button>
         <input
           type="text"
@@ -56,7 +56,7 @@ const CounterItem = ({ label, bgColor, textColor, icon: Icon, value, onDecrement
         />
         <button
           onClick={onIncrement}
-          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-slate-500 font-light border-l border-slate-200 rounded-r-xl h-full ${compact ? "w-7 text-[15px]" : "w-9 text-[18px]"}`}
+          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-slate-500 font-light border-l border-slate-200 rounded-r-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}
         >+</button>
       </div>
     </div>
@@ -72,8 +72,8 @@ const Divider = () => (
 const SectionCard = ({ number, title, accent, tooltip, children }) => (
   <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col">
     <div className={`flex items-center gap-2.5 px-5 py-3.5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white`}>
-      <span className={`w-5 h-5 rounded-full ${accent} text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0`}>{number}</span>
-      <span className="text-[12px] font-bold text-slate-600 uppercase tracking-[0.1em]">{title}</span>
+      <span className={`w-5 h-5 rounded-full ${accent} text-white text-caption font-bold flex items-center justify-center flex-shrink-0`}>{number}</span>
+      <span className="text-[12px] font-bold text-slate-600 uppercase tracking-widest">{title}</span>
       <div className="ml-auto"><InfoTooltip text={tooltip} /></div>
     </div>
     <div className="flex-1 flex items-center px-3 py-6 gap-0">{children}</div>

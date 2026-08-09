@@ -24,10 +24,10 @@ function Avatar({ nome, foto, size = 32 }) {
 }
 
 function StatusBadge({ pct }) {
-  if (pct >= 100) return <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-green-100 text-green-700">Acima da meta</span>;
-  if (pct >= 80)  return <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700">Próximo da meta</span>;
-  if (pct >= 50)  return <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-100 text-blue-700">Em evolução</span>;
-  return <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-red-100 text-red-600">Abaixo do esperado</span>;
+  if (pct >= 100) return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-green-100 text-green-700">Acima da meta</span>;
+  if (pct >= 80)  return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-amber-100 text-amber-700">Próximo da meta</span>;
+  if (pct >= 50)  return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-blue-100 text-blue-700">Em evolução</span>;
+  return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-red-100 text-red-600">Abaixo do esperado</span>;
 }
 
 function formatBRL(v) {
@@ -42,7 +42,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
               {["Posição", "Vendedor", "Unidade", isVolume ? "Vendas" : "Faturamento", "Meta", "Atingimento", "Status"].map(h => (
-                <th key={h} className="text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider px-4 py-3">{h}</th>
+                <th key={h} className="text-left text-caption font-semibold text-slate-500 uppercase tracking-wider px-4 py-3">{h}</th>
               ))}
             </tr>
           </thead>
@@ -74,14 +74,14 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                       <Avatar nome={v.nome} foto={v.foto} />
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-[13px] font-semibold text-slate-800">{v.nome}</span>
-                          {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-[9px] font-bold rounded-full">Você</span>}
+                          <span className="text-body-sm font-semibold text-slate-800">{v.nome}</span>
+                          {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-caption font-bold rounded-full">Você</span>}
                         </div>
                       </div>
                     </div>
                   </td>
                   {/* Unidade */}
-                  <td className="px-4 py-3 text-[13px] text-slate-500">{v.unidade || "—"}</td>
+                  <td className="px-4 py-3 text-body-sm text-slate-500">{v.unidade || "—"}</td>
                   {/* Vendas / Faturamento */}
                   <td className="px-4 py-3">
                     <span className={`text-[14px] font-bold ${isMe ? "text-blue-600" : "text-green-600"}`}>
@@ -89,7 +89,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                     </span>
                   </td>
                   {/* Meta */}
-                  <td className="px-4 py-3 text-[13px] text-slate-500">{isVolume ? meta : formatBRL(meta)}</td>
+                  <td className="px-4 py-3 text-body-sm text-slate-500">{isVolume ? meta : formatBRL(meta)}</td>
                   {/* Atingimento */}
                   <td className="px-4 py-3">
                     <span className={`text-[14px] font-bold ${pct >= 100 ? "text-green-600" : pct >= 80 ? "text-amber-600" : pct >= 50 ? "text-blue-500" : "text-red-500"}`}>
@@ -104,7 +104,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
           </tbody>
         </table>
         {vendedores.length === 0 && (
-          <div className="text-center py-12 text-slate-400 text-[13px]">
+          <div className="text-center py-12 text-slate-400 text-body-sm">
             Nenhum dado encontrado para os filtros selecionados.
           </div>
         )}

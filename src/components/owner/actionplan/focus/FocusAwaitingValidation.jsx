@@ -35,7 +35,7 @@ export default function FocusAwaitingValidation({ actions, onValidate }) {
                 <div className="pl-2">
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold text-muted-foreground">{action.code}</span>
-                    <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${dept.badge}`}>{dept.label}</span>
+                    <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${dept.badge}`}>{dept.label}</span>
                   </div>
 
                   <h3 className="mt-1 text-sm font-semibold leading-snug text-foreground">{action.title}</h3>

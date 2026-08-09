@@ -179,18 +179,18 @@ export function AgendaEventDrawer({
                   {/* Tags */}
                   <div className="flex flex-wrap gap-1 mb-3">
                     {visit.modality && (
-                      <Badge variant="outline" className="text-[10px] font-semibold">
+                      <Badge variant="outline" className="text-caption font-semibold">
                         {isOnline ? <Video size={10} className="mr-1 text-emerald-600" /> : <MapPin size={10} className="mr-1 text-gray-500" />}
                         {visit.modality}
                       </Badge>
                     )}
                     {visit.visit_reason && (
-                      <Badge variant="secondary" className="text-[10px]">
+                      <Badge variant="secondary" className="text-caption">
                         {visit.visit_reason}
                       </Badge>
                     )}
                     {visit.product_name && (
-                      <Badge variant="brand" className="text-[10px]">
+                      <Badge variant="brand" className="text-caption">
                         {visit.product_name}
                       </Badge>
                     )}
@@ -248,7 +248,7 @@ export function AgendaEventDrawer({
                       <span className="font-mono font-bold text-sm text-gray-800">
                         {format(startsAt, 'HH:mm')}
                       </span>
-                      <Badge variant="outline" className="text-[10px]">
+                      <Badge variant="outline" className="text-caption">
                         {getEventTypeLabel(event.event_type)}
                       </Badge>
                     </div>
@@ -290,12 +290,12 @@ export function AgendaEventDrawer({
 
                   <div className="flex flex-wrap gap-1">
                     {event.product_name && (
-                      <Badge variant="brand" className="text-[10px]">
+                      <Badge variant="brand" className="text-caption">
                         {event.product_name}
                       </Badge>
                     )}
                     {event.target_audience && (
-                      <Badge variant="ghost" className="text-[10px]">
+                      <Badge variant="ghost" className="text-caption">
                         {event.target_audience}
                       </Badge>
                     )}

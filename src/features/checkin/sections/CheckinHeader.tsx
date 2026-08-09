@@ -428,8 +428,8 @@ return (
               <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 shadow-sm">
                 <CalendarDays size={18} className="shrink-0 text-[#005BFF]" aria-hidden="true" />
                 <div className="min-w-0">
-                  <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
-                  <p className="truncate text-[13px] font-bold text-[#071822]">{dateStr}</p>
+                  <p className="text-caption font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
+                  <p className="truncate text-body-sm font-bold text-[#071822]">{dateStr}</p>
                 </div>
                 <button
                   type="button"
@@ -442,7 +442,7 @@ return (
               <button
                 type="button"
                 onClick={handleViewPreviousHistory}
-                className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-[13px] font-semibold text-slate-600 shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
+                className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-body-sm font-semibold text-slate-600 shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
               >
                 <History size={15} aria-hidden="true" />
                 Histórico de Fechamentos
@@ -464,7 +464,7 @@ previousCard.type === 'previous_done' ? 'bg-emerald-50 text-emerald-700' : 'bg-a
 {previousCard.type === 'previous_done' ? <CheckCircle2 size={16} /> : <AlertTriangle size={16} />}
 </span>
 <div className="min-w-0">
-<p className={`text-[11px] font-bold uppercase tracking-[0.08em] ${
+<p className={`text-caption font-bold uppercase tracking-[0.08em] ${
 previousCard.type === 'previous_done' ? 'text-emerald-700' : 'text-amber-800'
 }`}>
 {previousCard.type === 'previous_done' ? 'FECHAMENTO ANTERIOR CONCLUÍDO' : 'FECHAMENTO ANTERIOR PENDENTE'}
@@ -477,10 +477,10 @@ previousCard.type === 'previous_done' ? 'text-emerald-700' : 'text-amber-800'
 </div>
 </div>
 <div className="flex shrink-0 gap-2">
-<button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-[11px] font-bold text-slate-600 shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]">
+<button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-caption font-bold text-slate-600 shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]">
 Ver histórico
 </button>
-<button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-[11px] font-bold text-white shadow-sm ${
+<button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-caption font-bold text-white shadow-sm ${
 previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-amber-700'
 }`}>
 {previousCard.type === 'previous_done' ? 'Ajustar fechamento' : `Regularizar ${previousCard.date.slice(8, 10)}/${previousCard.date.slice(5, 7)}`}
@@ -496,8 +496,8 @@ previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-amber-700'
 <div className="flex min-w-0 items-center gap-2">
 <CalendarDays size={18} className="shrink-0 text-[#005BFF]" aria-hidden="true" />
 <div className="min-w-0">
-<p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
-<h2 id="checkin-operational-date" className="truncate text-[15px] font-bold text-[#071822] sm:text-[17px]">{dateStr}</h2>
+<p className="text-caption font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
+<h2 id="checkin-operational-date" className="truncate text-body font-bold text-[#071822] sm:text-h5">{dateStr}</h2>
 </div>
 </div>
 <button
@@ -519,12 +519,12 @@ Ver data atual
 <p className="text-[16px] font-bold tracking-tight text-[#071822]">Progresso do Fechamento</p>
 <span className="grid h-5 w-5 place-items-center rounded-full border border-[#526B7A] text-[12px] font-bold text-[#526B7A]">i</span>
 </div>
-<p className="mt-3 text-[13px] font-bold text-[#334155]">
+<p className="mt-3 text-body-sm font-bold text-[#334155]">
 Etapa {activeStep} de 4 <span className="text-[#526B7A]">•</span> <span className="text-[#00A89D]">{activeStepLabel}</span>
 </p>
 </div>
 <div className="text-right">
-<p className="text-[31px] font-bold leading-none text-[#00A89D]">{progressPercent}%</p>
+<p className="text-h2 font-bold leading-none text-[#00A89D]">{progressPercent}%</p>
 <p className="mt-1 text-[12px] font-semibold text-[#526B7A]">preenchido</p>
 </div>
 </div>
@@ -538,13 +538,13 @@ Etapa {activeStep} de 4 <span className="text-[#526B7A]">•</span> <span classN
 const active = item.step === activeStep
 return (
 <div key={item.step} className="flex min-w-0 flex-col items-center gap-1 border-r border-[#DFE0E1] px-2 py-3 text-center last:border-r-0">
-<span className={item.done ? 'grid h-8 w-8 place-items-center rounded-full bg-[#34c759] text-[15px] font-bold text-white' : active ? 'grid h-8 w-8 place-items-center rounded-full bg-[#00A89D] text-[14px] font-bold text-white' : 'grid h-8 w-8 place-items-center rounded-full border border-[#526B7A] text-[14px] font-bold text-[#526B7A]'}>
+<span className={item.done ? 'grid h-8 w-8 place-items-center rounded-full bg-[#34c759] text-body font-bold text-white' : active ? 'grid h-8 w-8 place-items-center rounded-full bg-[#00A89D] text-[14px] font-bold text-white' : 'grid h-8 w-8 place-items-center rounded-full border border-[#526B7A] text-[14px] font-bold text-[#526B7A]'}>
 {item.done ? '✓' : item.step}
 </span>
-<span className={active ? 'max-w-full text-[11px] font-bold leading-tight text-[#00A89D]' : 'max-w-full text-[11px] font-bold leading-tight text-[#071822]'}>
+<span className={active ? 'max-w-full text-caption font-bold leading-tight text-[#00A89D]' : 'max-w-full text-caption font-bold leading-tight text-[#071822]'}>
 {item.step}. {item.label}
 </span>
-<span className={active ? 'text-[11px] font-bold text-[#00A89D]' : 'text-[11px] font-semibold text-[#526B7A]'}>
+<span className={active ? 'text-caption font-bold text-[#00A89D]' : 'text-caption font-semibold text-[#526B7A]'}>
 {item.percent}%
 </span>
 </div>
@@ -644,7 +644,7 @@ return (
                             </div>
                           )}
                           {!row.finalized && row.state !== 'em_andamento' && (
-                            <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-[10px] font-extrabold ${
+                            <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-caption font-extrabold ${
                               row.state === 'aguardando_aprovacao'
                                 ? 'border-[#FCD34D] bg-[#FFF7E6] text-[#92400E]'
                                 : 'border-[#fecaca] bg-[#fef2f2] text-[#EF4343]'
@@ -653,12 +653,12 @@ return (
                             </span>
                           )}
                           {row.state === 'em_andamento' && (
-                            <span className="inline-flex items-center rounded-full border border-[#DFE0E1] bg-[#F7F8F8] px-2.5 py-0.5 text-[10px] font-extrabold text-[#526B7A]">
+                            <span className="inline-flex items-center rounded-full border border-[#DFE0E1] bg-[#F7F8F8] px-2.5 py-0.5 text-caption font-extrabold text-[#526B7A]">
                               Em andamento
                             </span>
                           )}
                           {row.state === 'aprovado' && (
-                            <span className="inline-flex items-center rounded-full border border-[#00A89D] bg-[#E8F3F2] px-2.5 py-0.5 text-[10px] font-extrabold text-[#00A89D]">
+                            <span className="inline-flex items-center rounded-full border border-[#00A89D] bg-[#E8F3F2] px-2.5 py-0.5 text-caption font-extrabold text-[#00A89D]">
                               Regularizado Aprovado
                             </span>
                           )}
@@ -686,7 +686,7 @@ return (
                                   setDetailRequest(row.latestRequest)
                                   setActiveView('detail')
                                 }}
-                                className="inline-flex h-7 items-center justify-center rounded-lg border border-[#DFE0E1] bg-white px-3 text-[10px] font-bold text-[#00A89D] hover:bg-[#E8F3F2] transition-colors shadow-sm cursor-pointer"
+                                className="inline-flex h-7 items-center justify-center rounded-lg border border-[#DFE0E1] bg-white px-3 text-caption font-bold text-[#00A89D] hover:bg-[#E8F3F2] transition-colors shadow-sm cursor-pointer"
                               >
                                 {label[action]}
                               </button>

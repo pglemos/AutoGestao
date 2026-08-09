@@ -94,7 +94,7 @@ export function MxStatusGauge({ value, label, ariaLabel, showLabel = true }: { v
     <div role="progressbar" aria-label={ariaLabel} aria-valuemin={0} aria-valuemax={100} aria-valuenow={normalized} className="grid h-20 w-20 shrink-0 place-items-center rounded-full bg-gray-100" style={{ background: `conic-gradient(var(--color-brand-primary) ${normalized * 3.6}deg, var(--color-surface-alt) 0deg)` }}>
       <div className="grid h-14 w-14 place-items-center rounded-full bg-white text-center">
         <strong className="text-base leading-none text-gray-800">{normalized}%</strong>
-        {showLabel ? <span className="max-w-12 text-[9px] font-medium leading-tight text-gray-500">{label}</span> : null}
+        {showLabel ? <span className="max-w-12 text-caption font-medium leading-tight text-gray-500">{label}</span> : null}
       </div>
     </div>
   )

@@ -424,7 +424,7 @@ export default function ManagerDailyClosing() {
               </Field>
               <button
                 type="button"
-                className="inline-flex h-[38px] items-center gap-1 rounded-[12px] bg-emerald-600 px-3 text-xs font-medium text-white shadow-sm transition-colors hover:bg-emerald-700"
+                className="inline-flex h-[36px] items-center gap-1 rounded-[12px] bg-emerald-600 px-3 text-xs font-medium text-white shadow-sm transition-colors hover:bg-emerald-700"
                 onClick={refreshAll}
               >
                 <RefreshCw size={16} />
@@ -902,7 +902,7 @@ function SummaryCard({
         type="button"
         disabled={actionDisabled}
         onClick={onAction}
-        className={`mt-3 flex h-[30px] w-full items-center justify-center gap-1.5 rounded-[8px] border bg-white px-2 py-1.5 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40 ${actionColor}`}
+        className={`mt-3 flex h-[28px] w-full items-center justify-center gap-1.5 rounded-[8px] border bg-white px-2 py-1.5 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40 ${actionColor}`}
       >
         {action === "Ver Agenda D+1" && <CalendarClock size={13} />}
         {action === "Cobrar Pendentes" && <Megaphone size={13} />}
@@ -1211,7 +1211,7 @@ function DisciplineRing({ value }: { value: number | null | undefined }) {
   if (typeof value !== "number") return <span className="text-gray-400">—</span>;
   const normalized = Math.max(0, Math.min(100, Math.round(value)));
   const color = normalized < 70 ? "rgb(249 115 22)" : normalized < 90 ? "rgb(59 130 246)" : "rgb(16 185 129)";
-  return <span className="grid h-11 w-11 place-items-center rounded-full p-1 text-[11px] font-bold" style={{ background: `conic-gradient(${color} ${normalized * 3.6}deg, rgb(241 245 249) 0deg)`, color }}><span className="grid h-full w-full place-items-center rounded-full bg-white">{normalized}%</span></span>;
+  return <span className="grid h-11 w-11 place-items-center rounded-full p-1 text-caption font-bold" style={{ background: `conic-gradient(${color} ${normalized * 3.6}deg, rgb(241 245 249) 0deg)`, color }}><span className="grid h-full w-full place-items-center rounded-full bg-white">{normalized}%</span></span>;
 }
 
 function ClosingRow({
@@ -1248,7 +1248,7 @@ function ClosingRow({
   const visits = checkin ? sumNumericMetrics(checkin.visit_prev_day) : null;
   const discipline = checkin?.pontuacao_disciplina_final;
   return (
-    <tr className="h-[66px] bg-white">
+    <tr className="h-[64px] bg-white">
       <td className="px-4 py-3">
         <span className="flex items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">{initials(name)}</span><span className="font-medium text-gray-800">{name}</span></span>
       </td>
@@ -1259,7 +1259,7 @@ function ClosingRow({
         {isDraft && (
           // Rascunho continua visível para o gerente — não oficial não é o
           // mesmo que invisível —, mas dito explicitamente.
-          <span className="mt-1 block text-[11px] font-medium text-gray-500">
+          <span className="mt-1 block text-caption font-medium text-gray-500">
             Ainda não contabilizado nos indicadores oficiais
           </span>
         )}

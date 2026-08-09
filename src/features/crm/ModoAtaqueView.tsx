@@ -144,11 +144,11 @@ function OportunidadeCard({
       <div className="space-y-5 p-6">
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-slate-50 p-4">
-            <p className="mb-1 text-[9px] font-bold uppercase tracking-wide text-slate-400">Objetivo</p>
+            <p className="mb-1 text-caption font-bold uppercase tracking-wide text-slate-400">Objetivo</p>
             <p className="text-sm font-bold text-slate-700">{objetivo}</p>
           </div>
           <div className="rounded-2xl bg-blue-50 p-4">
-            <p className="mb-1 text-[9px] font-bold uppercase tracking-wide text-[#005BFF]">Próximo passo</p>
+            <p className="mb-1 text-caption font-bold uppercase tracking-wide text-[#005BFF]">Próximo passo</p>
             <p className="text-sm font-bold text-slate-900">{proximoPasso}</p>
           </div>
         </div>
@@ -162,18 +162,18 @@ function OportunidadeCard({
           {tel && (
             <a href={`tel:+55${tel}`} onClick={onLigar} className="flex flex-col items-center gap-1.5 rounded-2xl border border-slate-200 bg-white py-3 transition-colors hover:bg-slate-50">
               <Phone className="h-4 w-4 text-slate-500" />
-              <span className="text-[11px] font-semibold text-slate-600">Ligar</span>
+              <span className="text-caption font-semibold text-slate-600">Ligar</span>
             </a>
           )}
           {tel && (
             <button type="button" onClick={onWhatsApp} className="flex flex-col items-center gap-1.5 rounded-2xl border border-green-200 bg-green-50 py-3 transition-colors hover:bg-green-100">
               <MessageCircle className="h-4 w-4 text-green-600" />
-              <span className="text-[11px] font-semibold text-green-700">WhatsApp</span>
+              <span className="text-caption font-semibold text-green-700">WhatsApp</span>
             </button>
           )}
           <button type="button" onClick={onFicha} className="flex flex-col items-center gap-1.5 rounded-2xl border border-slate-200 bg-white py-3 transition-colors hover:bg-slate-50">
             <FileText className="h-4 w-4 text-slate-500" />
-            <span className="text-[11px] font-semibold text-slate-600">Ficha</span>
+            <span className="text-caption font-semibold text-slate-600">Ficha</span>
           </button>
         </div>
 
@@ -303,7 +303,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
               ].map(s => (
                 <div key={s.label} className={`rounded-2xl p-mx-md ${s.tone}`}>
                   <p className="text-2xl font-bold">{s.value}</p>
-                  <p className="mt-1 text-[11px] font-semibold leading-snug">{s.label}</p>
+                  <p className="mt-1 text-caption font-semibold leading-snug">{s.label}</p>
                 </div>
               ))}
             </div>
@@ -329,7 +329,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
             MODO ATAQUE
           </span>
           <div className="order-3 w-full min-w-0 sm:order-none sm:flex-1">
-            <div className="mb-1 flex items-center justify-between text-[11px] text-slate-300">
+            <div className="mb-1 flex items-center justify-between text-caption text-slate-300">
               <span>{concluidos} de {fila.length} oportunidades concluídas</span>
               <span className="font-mono text-slate-400">{tempo}</span>
             </div>
@@ -384,7 +384,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                       type="button"
                       title={t.desc}
                       onClick={() => { setTom(t.id); setScriptEditado(null) }}
-                      className={`rounded-xl border px-2.5 py-1 text-[11px] font-semibold transition-all ${
+                      className={`rounded-xl border px-2.5 py-1 text-caption font-semibold transition-all ${
                         tom === t.id
                           ? 'border-[#005BFF] bg-[#005BFF] text-white'
                           : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:text-[#005BFF]'
@@ -442,7 +442,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                       className={`flex flex-col items-center gap-1 rounded-xl border-2 px-2 py-3 transition-all disabled:opacity-50 ${COR_MAP[card.cor]}`}
                     >
                       <span className="text-2xl leading-none">{card.emoji}</span>
-                      <span className="text-center text-[10px] font-semibold leading-tight">{card.label}</span>
+                      <span className="text-center text-caption font-semibold leading-tight">{card.label}</span>
                     </button>
                   ))}
                 </div>

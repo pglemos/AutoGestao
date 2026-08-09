@@ -204,7 +204,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
               <Car className="w-4 h-4 text-blue-900" />
               <span>{veiculo_interesse}</span>
               {placa_veiculo && (
-                <span className="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-[10px] font-mono">
+                <span className="bg-slate-100 text-slate-600 px-1.5 py-0.5 rounded text-caption font-mono">
                   {placa_veiculo}
                 </span>
               )}
@@ -222,7 +222,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
       {/* Corpo Intermediário: Status, Objetivo, Próximo Passo, Data, Tentativa */}
       <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs bg-slate-50/70 p-3.5 rounded-lg border border-slate-100">
         <div>
-          <span className="text-slate-400 font-medium uppercase text-[10px] tracking-wider block mb-1">
+          <span className="text-slate-400 font-medium uppercase text-caption tracking-wider block mb-1">
             Status Atual
           </span>
           <div className="flex items-center gap-1.5 font-semibold text-slate-800 text-sm">
@@ -230,18 +230,18 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
             <span>{statusDisplay}</span>
           </div>
           {current_objective && (
-            <p className="text-slate-600 mt-1 text-[11px] line-clamp-2">
+            <p className="text-slate-600 mt-1 text-caption line-clamp-2">
               <strong className="text-slate-700">Obj:</strong> {current_objective}
             </p>
           )}
         </div>
 
         <div>
-          <span className="text-slate-400 font-medium uppercase text-[10px] tracking-wider block mb-1">
+          <span className="text-slate-400 font-medium uppercase text-caption tracking-wider block mb-1">
             Próximo Passo
           </span>
           <p className="font-semibold text-slate-800 text-sm">{current_next_step || 'A definir pelo mentor'}</p>
-          <div className="flex items-center gap-3 mt-1.5 text-[11px] text-slate-500">
+          <div className="flex items-center gap-3 mt-1.5 text-caption text-slate-500">
             <span className="flex items-center gap-1">
               <Calendar className="w-3.5 h-3.5 text-blue-900" />
               {nextActionDisplay}
@@ -259,7 +259,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
         <div className="flex flex-col justify-center gap-2">
           {/* Prioridade */}
           <div className="flex items-center justify-between">
-            <span className="text-slate-500 font-medium text-[11px] flex items-center gap-1">
+            <span className="text-slate-500 font-medium text-caption flex items-center gap-1">
               <Zap className="w-3.5 h-3.5 text-amber-600" />
               Prioridade:
             </span>
@@ -268,7 +268,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
                 <span className="font-bold text-slate-900 text-sm">{priority_index} pt</span>
               )}
               {priority_class && (
-                <span className={`px-2 py-0.5 text-[11px] font-bold rounded-full border ${getPriorityBadgeClass(priority_class)}`}>
+                <span className={`px-2 py-0.5 text-caption font-bold rounded-full border ${getPriorityBadgeClass(priority_class)}`}>
                   {priority_class}
                 </span>
               )}
@@ -277,9 +277,9 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
 
           {/* Score — Trata Regra Dura: needs_mentor_classification */}
           <div className="flex items-center justify-between">
-            <span className="text-slate-500 font-medium text-[11px]">Score de Condução:</span>
+            <span className="text-slate-500 font-medium text-caption">Score de Condução:</span>
             {needs_mentor_classification ? (
-              <span className="px-2.5 py-0.5 text-[11px] font-bold rounded-full bg-amber-50 text-amber-800 border border-amber-300 flex items-center gap-1">
+              <span className="px-2.5 py-0.5 text-caption font-bold rounded-full bg-amber-50 text-amber-800 border border-amber-300 flex items-center gap-1">
                 <ShieldAlert className="w-3 h-3 text-amber-600" />
                 Definir situação atual
               </span>
@@ -289,7 +289,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
                   <span className="font-bold text-slate-900 text-sm">{mentor_score}/100</span>
                 )}
                 {mentor_score_class && (
-                  <span className={`px-2 py-0.5 text-[11px] font-bold rounded-full border ${getScoreBadgeClass(mentor_score_class)}`}>
+                  <span className={`px-2 py-0.5 text-caption font-bold rounded-full border ${getScoreBadgeClass(mentor_score_class)}`}>
                     {mentor_score_class}
                   </span>
                 )}
@@ -298,7 +298,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
           </div>
 
           {potential && (
-            <div className="text-[10px] text-slate-500 text-right">
+            <div className="text-caption text-slate-500 text-right">
               Potencial: <strong className="text-slate-700">{potential}</strong>
             </div>
           )}

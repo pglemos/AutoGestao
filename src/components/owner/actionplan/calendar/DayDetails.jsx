@@ -83,26 +83,26 @@ function ActionDetail({ action, onOpenAction, onUpdateDeadline, onTalkToConsulta
       <div className={`rounded-lg border-l-2 p-3 ${deptStyle.border || "border-slate-200"} ${deptStyle.bg || "bg-slate-50"}`}>
         <div className="flex items-center justify-between">
           <span className="text-sm font-semibold text-foreground">{action.code}</span>
-          <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${statusStyle.badge || ""}`}>
+          <span className={`rounded-full px-2 py-0.5 text-caption font-medium ${statusStyle.badge || ""}`}>
             {statusStyle.label}
           </span>
         </div>
         <p className="mt-1 text-sm text-foreground">{action.title}</p>
         <div className="mt-2 flex flex-wrap gap-1.5">
-          <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${deptStyle.badge || ""}`}>
+          <span className={`rounded-full px-2 py-0.5 text-caption font-medium ${deptStyle.badge || ""}`}>
             {deptStyle.label}
           </span>
-          <span className={`rounded-full px-2 py-0.5 text-[10px] font-medium ${prioStyle.badge || ""}`}>
+          <span className={`rounded-full px-2 py-0.5 text-caption font-medium ${prioStyle.badge || ""}`}>
             {prioStyle.label}
           </span>
           {late && (
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-medium text-red-700">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-caption font-medium text-red-700">
               <AlertTriangle className="h-3 w-3" />
               Atrasada há {daysLate(action)}d
             </span>
           )}
           {action.status === "blocked" && (
-            <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-[10px] font-medium text-red-700">
+            <span className="inline-flex items-center gap-0.5 rounded-full bg-red-100 px-2 py-0.5 text-caption font-medium text-red-700">
               <Lock className="h-3 w-3" />
               {action.blockedReason || "Bloqueada"}
             </span>

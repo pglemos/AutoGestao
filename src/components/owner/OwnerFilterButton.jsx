@@ -98,7 +98,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
           aria-label="Filtros do módulo Dono"
           className="absolute left-0 top-12 z-40 w-[min(320px,calc(100vw-2rem))] rounded-2xl border border-gray-100 bg-white p-3 shadow-xl sm:left-auto sm:right-0"
         >
-          <p className="px-2.5 pb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-500">
+          <p className="px-2.5 pb-1 text-caption font-semibold uppercase tracking-[0.08em] text-gray-500">
             Loja
           </p>
           <div className="max-h-52 overflow-y-auto">
@@ -114,7 +114,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
 
           <div className="my-2 h-px bg-gray-100" />
 
-          <p className="px-2.5 pb-1 text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-500">
+          <p className="px-2.5 pb-1 text-caption font-semibold uppercase tracking-[0.08em] text-gray-500">
             Período
           </p>
           {PERIODS.map((entry) => (
@@ -129,7 +129,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
 
           {period === "custom" ? (
             <div className="mt-2 grid grid-cols-2 gap-2 px-2.5">
-              <label className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-500">
+              <label className="text-caption font-semibold uppercase tracking-[0.08em] text-gray-500">
                 De
                 <input
                   type="date"
@@ -139,7 +139,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
                   className="mt-1 h-9 w-full rounded-lg border border-gray-200 px-2 text-sm font-medium normal-case tracking-normal text-gray-800 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
                 />
               </label>
-              <label className="text-[11px] font-semibold uppercase tracking-[0.08em] text-gray-500">
+              <label className="text-caption font-semibold uppercase tracking-[0.08em] text-gray-500">
                 Até
                 <input
                   type="date"
@@ -153,7 +153,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
           ) : null}
 
           <div className="mt-3 flex items-center justify-between gap-2 border-t border-gray-100 pt-3">
-            <p className="min-w-0 truncate text-[11px] text-gray-500">
+            <p className="min-w-0 truncate text-caption text-gray-500">
               {lastUpdated ? `Atualizado em ${formatDateTime(lastUpdated)}` : "Sem atualização"}
             </p>
             <button

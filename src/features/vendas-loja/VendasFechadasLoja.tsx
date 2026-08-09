@@ -12,12 +12,12 @@ const formatData = (iso: string | null) => iso ? new Date(iso).toLocaleDateStrin
 function StatusBadge({ venda }: { venda: VendaLoja }) {
   if (venda.etapa === 'cancelada') {
     return (
-      <span title={venda.motivo_cancelamento || undefined} className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-[11px] font-semibold text-slate-500">
+      <span title={venda.motivo_cancelamento || undefined} className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-caption font-semibold text-slate-500">
         Cancelada
       </span>
     )
   }
-  return <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-1 text-[11px] font-semibold text-green-700">Vendida</span>
+  return <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-1 text-caption font-semibold text-green-700">Vendida</span>
 }
 
 export function VendasFechadasLoja({
@@ -106,18 +106,18 @@ export function VendasFechadasLoja({
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50">
                 {['Cliente', 'Vendedor', 'Veículo', 'Valor', 'Fechamento', 'Status', 'Ações'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wider text-slate-500">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wider text-slate-500">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {filtradas.map(venda => (
                 <tr key={venda.id} className="border-b border-slate-50 hover:bg-slate-50/50">
-                  <td className="px-4 py-3 text-[13px] font-semibold text-slate-800">{venda.cliente_nome}</td>
-                  <td className="px-4 py-3 text-[13px] text-slate-600">{venda.seller_nome}</td>
-                  <td className="px-4 py-3 text-[13px] text-slate-500">{venda.veiculo_interesse || '—'}</td>
-                  <td className="px-4 py-3 text-[13px] font-bold text-slate-800">{BRL(venda.valor_negociado)}</td>
-                  <td className="px-4 py-3 text-[13px] text-slate-500">{formatData(venda.closed_at)}</td>
+                  <td className="px-4 py-3 text-body-sm font-semibold text-slate-800">{venda.cliente_nome}</td>
+                  <td className="px-4 py-3 text-body-sm text-slate-600">{venda.seller_nome}</td>
+                  <td className="px-4 py-3 text-body-sm text-slate-500">{venda.veiculo_interesse || '—'}</td>
+                  <td className="px-4 py-3 text-body-sm font-bold text-slate-800">{BRL(venda.valor_negociado)}</td>
+                  <td className="px-4 py-3 text-body-sm text-slate-500">{formatData(venda.closed_at)}</td>
                   <td className="px-4 py-3"><StatusBadge venda={venda} /></td>
                   <td className="px-4 py-3">
                     {venda.etapa === 'ganho' && (
@@ -135,11 +135,11 @@ export function VendasFechadasLoja({
             </tbody>
           </table>
           {!loading && filtradas.length === 0 && (
-            <div className="py-12 text-center text-[13px] text-slate-400">
+            <div className="py-12 text-center text-body-sm text-slate-400">
               {vendas.length === 0 ? 'Nenhuma venda fechada encontrada para esta unidade.' : 'Nenhuma venda encontrada para esta busca.'}
             </div>
           )}
-          {loading && <div className="py-12 text-center text-[13px] text-slate-400">Carregando vendas...</div>}
+          {loading && <div className="py-12 text-center text-body-sm text-slate-400">Carregando vendas...</div>}
         </div>
       </div>
 

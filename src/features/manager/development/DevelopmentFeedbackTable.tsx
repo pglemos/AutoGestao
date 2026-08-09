@@ -11,7 +11,7 @@ export function DevelopmentFeedbackTable({ feedbacks, onOpen, onShareWhatsApp }:
 
   return (
     <MxTableSurface>
-      <table className="w-full min-w-[1050px] text-sm">
+      <table className="w-full min-w-[1048px] text-sm">
         <thead className="border-b border-gray-100 bg-gray-50">
           <tr>
             {['Data', 'Vendedor', 'Tipo', 'Competência', 'Situação', 'Compromisso', 'Semana', 'Status', 'Ações'].map((label) => (

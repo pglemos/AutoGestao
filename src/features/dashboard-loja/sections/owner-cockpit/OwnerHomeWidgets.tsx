@@ -281,7 +281,7 @@ export function NextActionsCard({ actions }: { actions: ActionRow[] }) {
           >
             <div className="flex w-12 shrink-0 flex-col items-center">
               <Clock3 className="h-3.5 w-3.5 text-gray-500" aria-hidden="true" />
-              <span className="mt-0.5 text-center text-[10px] font-semibold leading-tight text-gray-800">
+              <span className="mt-0.5 text-center text-caption font-semibold leading-tight text-gray-800">
                 {action.due || 'Pendente'}
               </span>
             </div>
@@ -350,7 +350,7 @@ export function OwnerPanoramaChart({
       </div>
 
       {data.length >= 2 && goalValue > 0 ? (
-        <div className="mt-mx-md h-[250px]">
+        <div className="mt-mx-md h-[248px]">
           {chartReady ? <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={250} initialDimension={{ width: 320, height: 250 }}>
             <LineChart data={data} margin={{ top: 8, right: 16, bottom: 0, left: 0 }}>
               <CartesianGrid strokeDasharray="3 3" stroke={chartTokens.gridStrong()} />
@@ -363,7 +363,7 @@ export function OwnerPanoramaChart({
           </ResponsiveContainer> : null}
         </div>
       ) : (
-        <div className="mt-mx-md min-h-[250px] rounded-xl border border-dashed border-gray-100 bg-gray-50 flex flex-col items-center justify-center text-center p-mx-lg">
+        <div className="mt-mx-md min-h-[248px] rounded-xl border border-dashed border-gray-100 bg-gray-50 flex flex-col items-center justify-center text-center p-mx-lg">
           <LineChartIcon size={40} className="text-gray-500" />
           <Typography variant="h3" className="mt-mx-md text-lg">Dados pendentes</Typography>
           <Typography variant="p" tone="muted" className="mt-mx-xs max-w-sm">A evolução aparece quando a rotina diária tiver histórico no período.</Typography>

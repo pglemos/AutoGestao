@@ -35,7 +35,7 @@ export function MonthGrid({
       <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50/40 select-none">
         {WEEKDAY_LABELS.map((label) => (
           <div key={label} className="border-r border-gray-200 py-1.5 text-center last:border-r-0">
-            <Typography variant="tiny" tone="muted" className="text-[10px] font-bold tracking-wider">{label}</Typography>
+            <Typography variant="tiny" tone="muted" className="text-caption font-bold tracking-wider">{label}</Typography>
           </div>
         ))}
       </div>
@@ -67,7 +67,7 @@ export function MonthGrid({
                 if (dayInfo.isCurrentMonth) onDateClick?.(dayInfo.date)
               }}
               className={cn(
-                'relative flex min-h-[90px] md:min-h-[105px] flex-col items-start gap-1 border-b border-r border-gray-100 p-1.5 text-left transition-colors',
+                'relative flex min-h-[88px] md:min-h-[104px] flex-col items-start gap-1 border-b border-r border-gray-100 p-1.5 text-left transition-colors',
                 !dayInfo.isCurrentMonth && 'bg-gray-50/40 text-gray-500/40',
                 dayInfo.isCurrentMonth && 'hover:bg-gray-50/50',
                 isSelected && 'bg-emerald-600/10 ring-1 ring-brand-primary ring-inset',
@@ -96,7 +96,7 @@ export function MonthGrid({
                     />
                   ))}
                   {dayVisits.length > 3 && (
-                    <Typography variant="tiny" className="px-1 text-[10px] font-bold leading-none hover:underline">
+                    <Typography variant="tiny" className="px-1 text-caption font-bold leading-none hover:underline">
                       +{dayVisits.length - 3} mais
                     </Typography>
                   )}

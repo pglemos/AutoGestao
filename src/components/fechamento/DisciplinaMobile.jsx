@@ -83,7 +83,7 @@ export default function DisciplinaMobile({
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
-      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">Disciplina — Fechamento Diário</p>
+      <p className="text-caption font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">Disciplina — Fechamento Diário</p>
 
       <div className="flex items-start gap-4">
         <div title="Você cadastrou todos os seus agendamentos. Para a Disciplina do Fechamento, apenas os D+1 são considerados." className="cursor-help">
@@ -121,7 +121,7 @@ export default function DisciplinaMobile({
           )}
 
           {!penalizado && (
-            <p className="text-[10px] text-slate-400">
+            <p className="text-caption text-slate-400">
               70% base + {Math.max(0, score - 70)}% detalhamento
               {totalD1 > 0 && ` (${score >= 100 ? 30 : Math.max(0, score - 70)}/30 pontos extras)`}
             </p>

@@ -88,8 +88,8 @@ function TrainingCard({ training, completed, onOpen, large = false }: { training
             </div>
             <div className="p-4">
                 <div className="mb-2 flex items-center gap-2">
-                    <span className={`rounded-full px-2 py-0.5 text-[10px] font-semibold ${LEVEL_COLORS[training.level] || 'bg-slate-100 text-slate-500'}`}>{training.level}</span>
-                    <span className="text-[10px] text-slate-400">{training.duration_minutes} min</span>
+                    <span className={`rounded-full px-2 py-0.5 text-caption font-semibold ${LEVEL_COLORS[training.level] || 'bg-slate-100 text-slate-500'}`}>{training.level}</span>
+                    <span className="text-caption text-slate-400">{training.duration_minutes} min</span>
                 </div>
                 <h4 className="line-clamp-2 text-sm font-semibold text-mx-navy">{training.title}</h4>
                 <p className="mt-1 text-xs text-slate-400">{training.category}</p>

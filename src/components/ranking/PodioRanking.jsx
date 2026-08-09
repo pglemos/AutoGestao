@@ -34,7 +34,7 @@ function formatValue(v, isVolume) {
 export default function PodioRanking({ top3, isVolume }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex-1">
-      <h2 className="text-[15px] font-bold text-slate-800 mb-4">Pódio do Período</h2>
+      <h2 className="text-body font-bold text-slate-800 mb-4">Pódio do Período</h2>
       <div className="flex items-end justify-center gap-3 sm:gap-6 mt-2 pb-2">
         {PEDESTAL.map(({ pos, label, color, bg, height, order }) => {
           const v = top3[pos - 1];
@@ -53,8 +53,8 @@ export default function PodioRanking({ top3, isVolume }) {
               )}
               <Avatar nome={v.nome} foto={v.foto} size={pos === 1 ? 68 : 56} border={pos === 1 ? "4px solid #F59E0B" : "3px solid #e2e8f0"} />
               <div className="text-center mt-1">
-                <p className="text-[13px] font-bold text-slate-800 leading-tight">{v.nome?.split(" ")[0]}</p>
-                <p className="text-[11px] font-semibold" style={{ color: "#00A896" }}>{formatValue(isVolume ? v.vendas : v.faturamento, isVolume)}</p>
+                <p className="text-body-sm font-bold text-slate-800 leading-tight">{v.nome?.split(" ")[0]}</p>
+                <p className="text-caption font-semibold" style={{ color: "#00A896" }}>{formatValue(isVolume ? v.vendas : v.faturamento, isVolume)}</p>
               </div>
               <div className="relative rounded-t-md flex items-center justify-center w-16 sm:w-20" style={{ height, background: bg }}>
                 <span className="text-white font-bold text-xl drop-shadow">{label}</span>

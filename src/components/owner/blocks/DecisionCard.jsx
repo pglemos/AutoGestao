@@ -23,7 +23,7 @@ export default function DecisionCard({ decision, onAction }) {
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
             {decision.category && (
-              <span className="inline-flex items-center gap-1 text-[11px] font-medium text-muted-foreground">
+              <span className="inline-flex items-center gap-1 text-caption font-medium text-muted-foreground">
                 <Tag className="h-3 w-3" />
                 {decision.category}
               </span>
@@ -88,7 +88,7 @@ function Meta({ icon: Icon, label, value }) {
     <div className="flex items-start gap-1.5">
       <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground/80" />
       <span className="min-w-0">
-        <span className="block text-[11px] text-muted-foreground/80">{label}</span>
+        <span className="block text-caption text-muted-foreground/80">{label}</span>
         <span className="block truncate text-muted-foreground">{display}</span>
       </span>
     </div>

@@ -94,7 +94,7 @@ export function SellerPerformancePage() {
           </div>
         </MxField>
 
-        <MxField label="Período" className="min-w-[170px]">
+        <MxField label="Período" className="min-w-[168px]">
           <div className="relative">
             <Calendar
               size={16}
@@ -116,14 +116,14 @@ export function SellerPerformancePage() {
 
         {state.period === 'custom' ? (
           <>
-            <MxField label="Data inicial" className="w-[150px]">
+            <MxField label="Data inicial" className="w-[148px]">
               <Input
                 type="date"
                 value={state.customStartDate}
                 onChange={event => state.setCustomStartDate(event.target.value)}
               />
             </MxField>
-            <MxField label="Data final" className="w-[150px]">
+            <MxField label="Data final" className="w-[148px]">
               <Input
                 type="date"
                 value={state.customEndDate}
@@ -133,7 +133,7 @@ export function SellerPerformancePage() {
           </>
         ) : null}
 
-        <MxField label="Classificar por" className="min-w-[210px]">
+        <MxField label="Classificar por" className="min-w-[208px]">
           <div className="relative">
             <SlidersHorizontal
               size={16}

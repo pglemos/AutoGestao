@@ -24,7 +24,7 @@ export function CentralTabs({ value, onChange }: {
             id={`central-tab-${tab.id}`}
             onClick={() => onChange(tab.id)}
             className={cn(
-              'border-b-2 px-5 py-3.5 text-[13px] font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/30',
+              'border-b-2 px-5 py-3.5 text-body-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/30',
               value === tab.id
                 ? 'border-status-info bg-white text-status-info'
                 : 'border-transparent text-slate-400 hover:text-slate-600',

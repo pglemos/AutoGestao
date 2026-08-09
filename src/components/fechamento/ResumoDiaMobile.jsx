@@ -2,8 +2,8 @@ import React from "react";
 
 const Item = ({ value, label, color }) => (
   <div className="flex flex-col items-center bg-white rounded-2xl border border-slate-200 p-4 gap-1 flex-1 min-w-0">
-    <span className={`text-[28px] font-bold tabular-nums leading-none ${color}`}>{value}</span>
-    <span className="text-[11px] text-slate-500 text-center leading-tight font-medium">{label}</span>
+    <span className={`text-h2 font-bold tabular-nums leading-none ${color}`}>{value}</span>
+    <span className="text-caption text-slate-500 text-center leading-tight font-medium">{label}</span>
   </div>
 );
 
@@ -16,7 +16,7 @@ export default function ResumoDiaMobile({
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-4">
-      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em]">Resumo do Dia</p>
+      <p className="text-caption font-bold text-slate-400 uppercase tracking-[0.15em]">Resumo do Dia</p>
 
       <div className="grid grid-cols-2 gap-3">
         <Item value={totalLeads} label="Leads Recebidos" color="text-[#005BFF]" />
@@ -27,7 +27,7 @@ export default function ResumoDiaMobile({
 
       <div className="flex items-center justify-between px-4 py-3 bg-green-50 rounded-xl border border-green-100">
         <span className="text-[12px] font-bold text-slate-500 uppercase tracking-wider">Faturamento</span>
-        <span className="text-[22px] font-bold tabular-nums text-[#22C55E]">{faturamentoStr}</span>
+        <span className="text-h3 font-bold tabular-nums text-[#22C55E]">{faturamentoStr}</span>
       </div>
     </div>
   );

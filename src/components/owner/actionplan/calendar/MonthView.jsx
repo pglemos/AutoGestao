@@ -66,7 +66,7 @@ function DayCell({ date, actions, isCurrentMonth, isSelected, isToday, inCycle, 
           {date.getDate()}
         </span>
         {!inCycle && isCurrentMonth && (
-          <span className="text-[9px] text-muted-foreground/60">fora</span>
+          <span className="text-caption text-muted-foreground/60">fora</span>
         )}
       </div>
       <div ref={provided?.innerRef} {...provided?.droppableProps}>
@@ -157,7 +157,7 @@ function MonthViewMobile({ refDate, selectedDate, actionsByDate, onSelectDate, o
     <div className="overflow-hidden rounded-xl border border-border bg-card shadow-sm">
       <div className="grid grid-cols-7 border-b border-border bg-muted/30">
         {WEEKDAY_HEADERS.map((d) => (
-          <div key={d} className="px-1 py-1.5 text-center text-[10px] font-semibold text-muted-foreground">{d}</div>
+          <div key={d} className="px-1 py-1.5 text-center text-caption font-semibold text-muted-foreground">{d}</div>
         ))}
       </div>
       <div className="grid grid-cols-7">
@@ -183,7 +183,7 @@ function MonthViewMobile({ refDate, selectedDate, actionsByDate, onSelectDate, o
                   {actions.slice(0, 3).map((a) => (
                     <span key={a.id} className={`h-1.5 w-1.5 rounded-full ${DEPT_STYLES[a.department]?.dot || "bg-slate-400"}`} />
                   ))}
-                  {actions.length > 3 && <span className="text-[8px] text-muted-foreground">+{actions.length - 3}</span>}
+                  {actions.length > 3 && <span className="text-caption text-muted-foreground">+{actions.length - 3}</span>}
                 </div>
               )}
             </button>

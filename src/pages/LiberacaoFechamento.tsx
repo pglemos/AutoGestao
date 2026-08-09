@@ -159,7 +159,7 @@ export function LiberacaoFechamento() {
             <div className="flex items-center gap-2">
               <CheckCircle2 size={15} className="text-emerald-600" />
               <span className="font-bold text-gray-800">Status:</span>
-              <span className={`inline-block px-2 py-0.5 rounded-xl text-[10px] font-extrabold ${
+              <span className={`inline-block px-2 py-0.5 rounded-xl text-caption font-extrabold ${
                 solicitacao.status === 'liberado'
                   ? 'bg-status-success-surface text-status-success border border-status-success/20'
                   : 'bg-status-warning-surface text-status-warning border border-status-warning/20 animate-pulse'

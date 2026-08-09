@@ -37,7 +37,7 @@ export const SIDEBAR_LOGO = '/landing/logo-mx.png'
 
 export const SIDEBAR = {
   /** Coluna fixa no desktop. */
-  aside: 'hidden shrink-0 border-r border-mxsb-line font-sans text-[14px] leading-[21px] text-mxsb-base antialiased transition-[width] duration-300 xl:block',
+  aside: 'hidden shrink-0 border-r border-mxsb-line font-sans text-[14px] leading-normal text-mxsb-base antialiased transition-[width] duration-300 xl:block',
   asideWidth: 'w-64',
   asideWidthCollapsed: 'w-16',
   /**
@@ -51,12 +51,12 @@ export const SIDEBAR = {
   root: 'flex h-full flex-col bg-mxsb-surface font-sans text-sm antialiased text-mxsb-ink',
 
   /** Cabeçalho de marca. */
-  header: 'flex h-[54px] shrink-0 items-center gap-2 border-b border-mxsb-line',
+  header: 'flex h-[52px] shrink-0 items-center gap-2 border-b border-mxsb-line',
   headerExpanded: 'justify-between px-4',
   headerCollapsed: 'justify-center px-2',
   brandLogo: 'h-7 w-7 shrink-0 object-contain',
-  brandTitle: 'truncate text-[13px] font-black tracking-tight text-slate-900',
-  brandModule: 'mt-0.5 truncate text-[8px] font-bold uppercase tracking-[0.14em] text-emerald-700',
+  brandTitle: 'truncate text-body-sm font-black tracking-tight text-slate-900',
+  brandModule: 'mt-0.5 truncate text-caption font-bold uppercase tracking-[0.14em] text-emerald-700',
   toggle:
     'flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] border border-mxsb-line bg-white text-slate-500 outline-none transition-colors hover:bg-slate-50 hover:text-slate-800 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
 
@@ -66,7 +66,7 @@ export const SIDEBAR = {
   navCollapsed: 'px-2',
   section: 'mb-5',
   sectionLabel:
-    'truncate px-3 pb-1.5 text-[10px] font-semibold uppercase tracking-wider text-mxsb-muted/70',
+    'truncate px-3 pb-1.5 text-caption font-semibold uppercase tracking-wider text-mxsb-muted/70',
   sectionItems: 'space-y-0.5',
 
   /** Item de navegação. */
@@ -84,12 +84,12 @@ export const SIDEBAR = {
   groupChevron: 'h-3.5 w-3.5 shrink-0',
   subnav: 'ml-3 mt-0.5 space-y-0.5 border-l border-mxsb-line pl-3',
   nestedItem:
-    'flex w-full items-center gap-1.5 rounded-[6px] px-2.5 py-1 text-[13px] outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+    'flex w-full items-center gap-1.5 rounded-[6px] px-2.5 py-1 text-body-sm outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
   nestedItemActive: 'bg-mxsb-active-surface font-medium text-mxsb-active',
   nestedItemIdle: 'text-mxsb-muted hover:bg-mxsb-hover hover:text-mxsb-ink-strong',
 
   /** Badges. */
-  badge: 'shrink-0 rounded-full px-1.5 py-0.5 text-[9px] font-medium',
+  badge: 'shrink-0 rounded-full px-1.5 py-0.5 text-caption font-medium',
   badgeWarning: 'bg-amber-50 text-amber-700',
   badgeDefault: 'bg-emerald-50 text-emerald-700',
 

@@ -49,7 +49,7 @@ export default function NovaPremiacaoModal({ open, onClose, onSaved, politicas, 
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-[17px] font-bold text-[#0F172A]">Nova Premiação</DialogTitle>
+          <DialogTitle className="text-h5 font-bold text-[#0F172A]">Nova Premiação</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>
@@ -81,7 +81,7 @@ export default function NovaPremiacaoModal({ open, onClose, onSaved, politicas, 
                 <SelectItem value="Substitutiva">Substitutiva</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-[11px] text-slate-400 mt-1">
+            <p className="text-caption text-slate-400 mt-1">
               {form.tipo_premiacao === "Acumulativa"
                 ? "Mantém prêmios anteriores e soma o novo."
                 : "O novo prêmio substitui o anterior."}

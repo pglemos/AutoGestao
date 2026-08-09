@@ -119,8 +119,8 @@ function isD1WindowOpen(closingDate) {
 
 const StatItem = ({ value, label, color }) => (
   <div className="flex flex-col items-center gap-1.5 flex-1">
-    <span className={`font-bold leading-none tabular-nums text-[28px] ${color}`}>{value}</span>
-    <span className="text-[10px] text-[#64748B] text-center leading-tight font-medium">{label}</span>
+    <span className={`font-bold leading-none tabular-nums text-h2 ${color}`}>{value}</span>
+    <span className="text-caption text-[#64748B] text-center leading-tight font-medium">{label}</span>
   </div>
 );
 
@@ -301,24 +301,24 @@ export default function BottomSection({
       <div className="grid grid-cols-2 gap-5">
         {/* Resumo do Dia Anterior */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">Resumo do Dia Anterior</p>
+          <p className="text-caption font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">Resumo do Dia Anterior</p>
           <div className="flex items-start gap-2 divide-x divide-slate-100">
             <StatItem value={totalLeads} label="Leads Recebidos" color="text-[#005BFF]" />
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">
-              <span className="text-[28px] font-bold leading-none tabular-nums text-[#6D28D9]">{totalAtend}</span>
-              <span className="text-[10px] text-[#64748B] text-center leading-tight font-medium">Atendimentos</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-[#6D28D9]">{totalAtend}</span>
+              <span className="text-caption text-[#64748B] text-center leading-tight font-medium">Atendimentos</span>
             </div>
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">
-              <span className="text-[28px] font-bold leading-none tabular-nums text-[#F59E0B]">{totalAgend}</span>
-              <span className="text-[10px] text-[#64748B] text-center leading-tight font-medium">Agendamentos D+1</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-[#F59E0B]">{totalAgend}</span>
+              <span className="text-caption text-[#64748B] text-center leading-tight font-medium">Agendamentos D+1</span>
             </div>
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">
-              <span className="text-[28px] font-bold leading-none tabular-nums text-[#EF4444]">{totalVendas}</span>
-              <span className="text-[10px] text-[#64748B] text-center leading-tight font-medium">Vendas Realizadas</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-[#EF4444]">{totalVendas}</span>
+              <span className="text-caption text-[#64748B] text-center leading-tight font-medium">Vendas Realizadas</span>
             </div>
           </div>
           <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.12em]">Faturamento</span>
+            <span className="text-caption font-bold text-slate-400 uppercase tracking-[0.12em]">Faturamento</span>
             <span className="text-[20px] font-bold tabular-nums text-[#22C55E]">{faturamentoStr}</span>
           </div>
         </div>
@@ -329,16 +329,16 @@ export default function BottomSection({
             <DisciplineRing score={disciplineScore} size="lg" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-2">Disciplina – Fechamento Diário</p>
+            <p className="text-caption font-bold text-slate-400 uppercase tracking-[0.15em] mb-2">Disciplina – Fechamento Diário</p>
 
             {totalD1 > 0 && (
-              <p className="text-[11px] text-slate-400 mb-1.5">
+              <p className="text-caption text-slate-400 mb-1.5">
                 Agendamentos D+1 detalhados: <strong className="text-[#0F172A]">{creditos}</strong> de <strong className="text-[#0F172A]">{totalD1}</strong>
                 {d1WindowOpen && <span className="text-[#F59E0B] ml-1">(provisório)</span>}
               </p>
             )}
             {agendamentosFuturos > 0 && (
-              <p className="text-[11px] text-slate-400 mb-1.5">
+              <p className="text-caption text-slate-400 mb-1.5">
                 Agendamentos futuros: <strong className="text-[#0F172A]">{agendamentosFuturos}</strong>{" "}
                 <span className="text-green-600">✓ Já contabilizado na Qualidade da Carteira</span>
               </p>
@@ -362,7 +362,7 @@ export default function BottomSection({
             )}
 
             {!penalizado && (
-              <div className="text-[10px] text-slate-400 mb-2">
+              <div className="text-caption text-slate-400 mb-2">
                 70% base + {disciplineScore - 70 < 0 ? 0 : disciplineScore - 70}% detalhamento
                 {totalD1 > 0 && ` (${disciplineScore >= 100 ? 30 : disciplineScore - 70}/30 pontos extras)`}
               </div>
@@ -387,7 +387,7 @@ export default function BottomSection({
           <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4">
             <AlertTriangle className="w-4 h-4 text-[#EF4444] flex-shrink-0 mt-0.5" />
             <div className="flex-1">
-              <p className="text-[13px] font-semibold text-[#EF4444] leading-snug">
+              <p className="text-body-sm font-semibold text-[#EF4444] leading-snug">
                 Prazo encerrado às 09h30. Solicite liberação ao seu gerente para finalizar este fechamento.
               </p>
               {solicitacaoEnviada ? (
@@ -442,7 +442,7 @@ export default function BottomSection({
               <button
                 onClick={handleFinalizarClick}
                 disabled={isBlocked}
-                className={`flex items-center gap-3 transition-all text-white font-bold tracking-widest text-[13px] px-10 h-[52px] rounded-xl shadow-md flex-shrink-0 uppercase active:scale-[0.98] disabled:cursor-not-allowed
+                className={`flex items-center gap-3 transition-all text-white font-bold tracking-widest text-body-sm px-10 h-[52px] rounded-xl shadow-md flex-shrink-0 uppercase active:scale-[0.98] disabled:cursor-not-allowed
                   ${isBlocked
                     ? "bg-[#EF4444] shadow-red-200 opacity-70 cursor-not-allowed"
                     : "bg-[#22C55E] hover:bg-green-600 shadow-green-200"
@@ -459,7 +459,7 @@ export default function BottomSection({
               )}
             </>
           ) : (
-            <div className="flex items-center gap-2 text-[13px] font-semibold text-[#22C55E]">
+            <div className="flex items-center gap-2 text-body-sm font-semibold text-[#22C55E]">
               <CheckCircle className="w-5 h-5" />
               Fechamento de {dataExibicao} finalizado às {moment(dailyClose?.data_hora_finalizacao).format("HH:mm")}.
             </div>
@@ -479,29 +479,29 @@ export default function BottomSection({
       <Dialog open={confirmModalOpen} onOpenChange={setConfirmModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold text-[17px] leading-snug">
+            <DialogTitle className="text-[#0F172A] font-bold text-h5 leading-snug">
               Confirma que não haverá mais registros Hoje?
             </DialogTitle>
           </DialogHeader>
-          <p className="text-[13px] text-[#64748B] leading-relaxed mt-1">
+          <p className="text-body-sm text-[#64748B] leading-relaxed mt-1">
             Ao concluir, leads, atendimentos, vendas e demais informações referentes ao dia{" "}
             <strong className="text-[#0F172A]">{dataExibicao}</strong> serão encerrados e não poderão mais ser alterados.
           </p>
-          <p className="text-[13px] text-[#64748B] leading-relaxed mt-2">
+          <p className="text-body-sm text-[#64748B] leading-relaxed mt-2">
             Até 09h30 de {d1DateExibicao}, você poderá corrigir somente as informações de{" "}
             <strong className="text-[#0F172A]">Agendamentos D+1</strong>.
           </p>
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
             <button
               onClick={() => setConfirmModalOpen(false)}
-              className="px-5 py-2.5 text-[13px] font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors"
+              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors"
             >
               Não, voltar
             </button>
             <button
               onClick={handleConfirmarFechamento}
               disabled={finalizando}
-              className="px-6 py-2.5 text-[13px] font-bold text-white bg-[#22C55E] hover:bg-green-600 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-green-100"
+              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#22C55E] hover:bg-green-600 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-green-100"
             >
               {finalizando ? "Finalizando..." : "Sim, concluir"}
             </button>

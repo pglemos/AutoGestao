@@ -650,7 +650,7 @@ export function AgendaD1Panel({
                                       className="fixed inset-0 z-40 cursor-default"
                                       onClick={() => setConfirmMenuRowId(null)}
                                     />
-                                    <div className="absolute right-0 top-full z-50 mt-1 min-w-[210px] rounded-[12px] border border-gray-200 bg-white py-1 shadow-lg">
+                                    <div className="absolute right-0 top-full z-50 mt-1 min-w-[208px] rounded-[12px] border border-gray-200 bg-white py-1 shadow-lg">
                                       {CONFIRMATION_OUTCOMES.map((outcome) => (
                                         <button
                                           key={outcome}

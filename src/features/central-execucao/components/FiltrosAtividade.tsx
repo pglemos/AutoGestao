@@ -62,7 +62,7 @@ export function FiltrosAtividade({
           >
             {filter.label}
             <span className={cn(
-              'rounded-full px-1.5 py-0.5 text-[10px] font-bold',
+              'rounded-full px-1.5 py-0.5 text-caption font-bold',
               active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500',
             )}>
               {count}

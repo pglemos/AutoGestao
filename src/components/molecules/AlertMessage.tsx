@@ -68,7 +68,7 @@ const AlertMessage = React.forwardRef<HTMLDivElement, AlertMessageProps>(
         )}
         {...props}
       >
-        <Icon aria-hidden className={cn('mt-0.5 h-[18px] w-[18px] shrink-0', config.iconColor)} />
+        <Icon aria-hidden className={cn('mt-0.5 h-[16px] w-[16px] shrink-0', config.iconColor)} />
 
         <div className="min-w-0 flex-1">
           <VisuallyHidden>{`${config.prefix}: `}</VisuallyHidden>

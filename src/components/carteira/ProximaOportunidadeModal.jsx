@@ -49,7 +49,7 @@ export default function ProximaOportunidadeModal({
             </div>
             <hr className="border-slate-100" />
             <div>
-              <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-3">Próxima oportunidade</p>
+              <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-3">Próxima oportunidade</p>
               <div className="bg-blue-50 rounded-xl p-4 space-y-3">
                 <div>
                   <p className="text-base font-black text-[#031B3D]">{proximaOportunidade.nome}</p>
@@ -58,9 +58,9 @@ export default function ProximaOportunidadeModal({
                   )}
                 </div>
                 <div>
-                  <p className="text-[9px] text-[#005BFF] font-bold uppercase tracking-wide">Próximo passo</p>
+                  <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Próximo passo</p>
                   <p className="text-sm font-bold text-[#031B3D]">{proximoPasso}</p>
-                  {objetivo && <p className="text-[11px] text-slate-400 mt-0.5">{objetivo}</p>}
+                  {objetivo && <p className="text-caption text-slate-400 mt-0.5">{objetivo}</p>}
                 </div>
               </div>
             </div>
@@ -99,7 +99,7 @@ export default function ProximaOportunidadeModal({
             <p className="text-sm text-blue-100 leading-snug">
               No Modo Ataque o sistema entrega automaticamente a próxima oportunidade. Você apenas executa e registra o resultado.
             </p>
-            <p className="text-[11px] text-blue-300">
+            <p className="text-caption text-blue-300">
               Próxima: <span className="font-bold text-white">{proximaOportunidade.nome}</span>
             </p>
           </div>

@@ -91,7 +91,7 @@ function FieldRow({ label, value, onChange, disabled }: { label: string; value: 
   return (
     <div className="flex items-center justify-between gap-2">
       <span className={`min-w-0 flex-1 text-[12px] font-semibold leading-tight ${disabled ? 'text-slate-300' : 'text-slate-600'}`}>{label}</span>
-      <div className="w-[110px] shrink-0">
+      <div className="w-[108px] shrink-0">
         <NumStepper value={value} onChange={onChange} disabled={disabled} />
       </div>
     </div>
@@ -190,9 +190,9 @@ export function RegularizarFechamentoDrawer({
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>
-                <span className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-[11px] font-bold text-red-600">Fechamento atrasado</span>
+                <span className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-caption font-bold text-red-600">Fechamento atrasado</span>
               </div>
-              <p className="mt-0.5 text-[13px] text-slate-500">
+              <p className="mt-0.5 text-body-sm text-slate-500">
                 {dataFormatada} — <span className="capitalize">{weekday}</span>
               </p>
             </div>
@@ -206,7 +206,7 @@ export function RegularizarFechamentoDrawer({
             {!finalized && (
               <div className="flex items-start gap-3 rounded-xl border border-amber-200 bg-amber-50 p-4">
                 <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-500" />
-                <p className="text-[13px] font-bold text-amber-800">
+                <p className="text-body-sm font-bold text-amber-800">
                   Preencha os dados e solicite a aprovação do gerente. Nenhum lançamento será aplicado antes da aprovação.
                 </p>
               </div>
@@ -222,7 +222,7 @@ export function RegularizarFechamentoDrawer({
                 <div className="space-y-3 rounded-xl border border-orange-200 bg-orange-50 p-4">
                   <div className="flex items-center gap-2">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-orange-500"><Store className="h-4 w-4 text-white" /></div>
-                    <span className="text-[13px] font-bold uppercase tracking-wide text-orange-700">Showroom</span>
+                    <span className="text-body-sm font-bold uppercase tracking-wide text-orange-700">Showroom</span>
                   </div>
                   <FieldRow label="Atendimentos" value={formValues.visitas_porta} onChange={(v) => onFieldChange('visitas_porta', v)} disabled={false} />
                 </div>
@@ -230,7 +230,7 @@ export function RegularizarFechamentoDrawer({
                 <div className="space-y-3 rounded-xl border border-green-200 bg-green-50 p-4">
                   <div className="flex items-center gap-2">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-500"><Users className="h-4 w-4 text-white" /></div>
-                    <span className="text-[13px] font-bold uppercase tracking-wide text-green-700">Carteira</span>
+                    <span className="text-body-sm font-bold uppercase tracking-wide text-green-700">Carteira</span>
                   </div>
                   <FieldRow label="Leads recebidos" value={formValues.leads_cart} onChange={(v) => onFieldChange('leads_cart', v)} disabled={false} />
                   <FieldRow label="Atendimentos" value={formValues.visitas_cart} onChange={(v) => onFieldChange('visitas_cart', v)} disabled={false} />
@@ -240,7 +240,7 @@ export function RegularizarFechamentoDrawer({
                 <div className="space-y-3 rounded-xl border border-blue-200 bg-blue-50 p-4">
                   <div className="flex items-center gap-2">
                     <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-blue-600"><Globe className="h-4 w-4 text-white" /></div>
-                    <span className="text-[13px] font-bold uppercase tracking-wide text-blue-700">Internet</span>
+                    <span className="text-body-sm font-bold uppercase tracking-wide text-blue-700">Internet</span>
                   </div>
                   <FieldRow label="Leads recebidos" value={formValues.leads_net} onChange={(v) => onFieldChange('leads_net', v)} disabled={false} />
                   <FieldRow label="Atendimentos" value={formValues.visitas_net} onChange={(v) => onFieldChange('visitas_net', v)} disabled={false} />
@@ -269,7 +269,7 @@ export function RegularizarFechamentoDrawer({
                 ].map((s) => (
                   <div key={s.label} className="p-4 text-center">
                     <p className={`text-[20px] font-bold tabular-nums ${s.color}`}>{s.value}</p>
-                    <p className="mt-0.5 text-[11px] font-medium text-slate-600">{s.label}</p>
+                    <p className="mt-0.5 text-caption font-medium text-slate-600">{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -296,17 +296,17 @@ export function RegularizarFechamentoDrawer({
                   </span>
                 </div>
                 <div className="flex-1 space-y-2">
-                  <div className="flex justify-between text-[13px]">
+                  <div className="flex justify-between text-body-sm">
                     <span className="text-slate-500">Pontuação base</span>
                     <span className="font-bold text-[#0F172A]">{disciplina.pontuacaoDisciplinaBase}%</span>
                   </div>
-                  <div className="flex justify-between text-[13px]">
+                  <div className="flex justify-between text-body-sm">
                     <span className="font-medium text-red-500">Penalização por atraso</span>
                     <span className="font-bold text-red-500">-10%</span>
                   </div>
-                  <div className="flex justify-between border-t border-slate-100 pt-2 text-[13px]">
+                  <div className="flex justify-between border-t border-slate-100 pt-2 text-body-sm">
                     <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
-                    <span className={`text-[15px] font-bold ${ringColorClass}`}>{disciplina.pontuacaoDisciplinaFinal}%</span>
+                    <span className={`text-body font-bold ${ringColorClass}`}>{disciplina.pontuacaoDisciplinaFinal}%</span>
                   </div>
                   <div className="flex justify-between text-[12px]">
                     <span className="text-slate-600">Agendamentos D+1</span>
@@ -320,7 +320,7 @@ export function RegularizarFechamentoDrawer({
 
           {/* Footer */}
           <div className="flex flex-shrink-0 items-center justify-end gap-3 border-t border-slate-200 bg-white px-5 py-4">
-            <button type="button" onClick={onVoltar} className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-[13px] font-bold text-slate-600 transition-colors hover:bg-slate-50">
+            <button type="button" onClick={onVoltar} className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-body-sm font-bold text-slate-600 transition-colors hover:bg-slate-50">
               <ArrowLeft className="h-3.5 w-3.5" /> Voltar
             </button>
             <button
@@ -333,7 +333,7 @@ export function RegularizarFechamentoDrawer({
                 vnd_cart: effectiveSales.carteira,
                 vnd_net: effectiveSales.internet,
               })}
- className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#005BFF] px-5 py-2.5 text-center text-[13px] font-bold leading-snug text-white shadow-sm transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
+ className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#005BFF] px-5 py-2.5 text-center text-body-sm font-bold leading-snug text-white shadow-sm transition-colors hover:bg-blue-700 disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
             >
               <Send className="h-4 w-4" /> {saving ? 'Enviando...' : 'Solicitar aprovação do gerente'}
             </button>

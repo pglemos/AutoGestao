@@ -31,12 +31,12 @@ function WeekEvent({ action, provided, isDragging, onOpenAction }) {
     >
       <div className="flex items-center justify-between">
         <span className="font-medium text-foreground">{action.code}</span>
-        <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${statusStyle.badge || ""}`}>
+        <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${statusStyle.badge || ""}`}>
           {statusStyle.label}
         </span>
       </div>
       <p className="mt-0.5 truncate text-muted-foreground">{action.title}</p>
-      <div className="mt-1 flex items-center gap-2 text-[10px] text-muted-foreground">
+      <div className="mt-1 flex items-center gap-2 text-caption text-muted-foreground">
         <span className={`h-1.5 w-1.5 rounded-full ${deptStyle.dot || "bg-slate-400"}`} />
         <span className="truncate">{action.responsible}</span>
         {action.status === "blocked" && <Lock className="h-3 w-3 text-red-500" />}
@@ -92,8 +92,8 @@ export default function WeekView({ refDate, selectedDate, actionsByDate, onSelec
                 <div className={`mt-0.5 text-lg font-bold ${isToday ? "text-emerald-700" : "text-foreground"}`}>
                   {date.getDate()}
                 </div>
-                <div className="text-[10px] text-muted-foreground">{getRelativeDayLabel(date)}</div>
-                {!inCycle && <div className="text-[9px] text-muted-foreground/60">Fora do ciclo</div>}
+                <div className="text-caption text-muted-foreground">{getRelativeDayLabel(date)}</div>
+                {!inCycle && <div className="text-caption text-muted-foreground/60">Fora do ciclo</div>}
               </button>
               <Droppable droppableId={key} type="action">
                 {(provided) => (
@@ -105,7 +105,7 @@ export default function WeekView({ refDate, selectedDate, actionsByDate, onSelec
                     ))}
                     {provided.placeholder}
                     {actions.length === 0 && (
-                      <p className="mt-4 text-center text-[10px] text-muted-foreground/50">Sem ações</p>
+                      <p className="mt-4 text-center text-caption text-muted-foreground/50">Sem ações</p>
                     )}
                   </div>
                 )}

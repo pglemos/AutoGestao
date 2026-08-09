@@ -360,7 +360,7 @@ export function AdminFeedbackModal({
                     />
                     <span>
                       <span className="font-semibold text-gray-800">Enviar este feedback ao vendedor</span>
-                      <span className="block text-[11px] text-gray-500">Desmarque para manter a observação somente com a liderança.</span>
+                      <span className="block text-caption text-gray-500">Desmarque para manter a observação somente com a liderança.</span>
                     </span>
                   </label>
                 </motion.div>

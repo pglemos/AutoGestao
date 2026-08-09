@@ -33,7 +33,7 @@ export default function CorridaPeriodo({ vendedores, meta, isVolume, meuId }) {
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex-1">
       <div className="flex items-center gap-2 mb-1">
         <Flag className="w-5 h-5 text-slate-700" />
-        <h2 className="text-[15px] font-bold text-slate-800">Corrida do Período</h2>
+        <h2 className="text-body font-bold text-slate-800">Corrida do Período</h2>
       </div>
       <p className="text-[12px] text-slate-400 mb-4">
         Meta de {isVolume ? "volume" : "faturamento"}:{" "}
@@ -66,14 +66,14 @@ export default function CorridaPeriodo({ vendedores, meta, isVolume, meuId }) {
                 className="absolute flex flex-col items-center"
                 style={{ left: `calc(${pct}% - 20px)`, top: "-28px" }}
               >
-                <p className={`text-[10px] font-bold mb-0.5 text-center whitespace-nowrap ${isMe ? "text-blue-600" : "text-slate-600"}`}>
+                <p className={`text-caption font-bold mb-0.5 text-center whitespace-nowrap ${isMe ? "text-blue-600" : "text-slate-600"}`}>
                   {v.nome?.split(" ")[0]}
                   <br />
                   <span className={isMe ? "text-blue-500" : "text-slate-400"}>{formatValue(val, isVolume)}</span>
                 </p>
                 <Avatar nome={v.nome} foto={v.foto} isMe={isMe} size={36} />
                 {isMe && (
-                  <span className="mt-0.5 text-[9px] font-bold text-white bg-blue-500 px-1.5 py-0.5 rounded-full">VOCÊ</span>
+                  <span className="mt-0.5 text-caption font-bold text-white bg-blue-500 px-1.5 py-0.5 rounded-full">VOCÊ</span>
                 )}
               </div>
             );
@@ -82,8 +82,8 @@ export default function CorridaPeriodo({ vendedores, meta, isVolume, meuId }) {
 
         {/* Labels 0% e 100% */}
         <div className="flex justify-between mt-1 px-0">
-          <span className="text-[10px] text-slate-400">0%</span>
-          <span className="text-[10px] text-slate-400">100%</span>
+          <span className="text-caption text-slate-400">0%</span>
+          <span className="text-caption text-slate-400">100%</span>
         </div>
       </div>
     </div>

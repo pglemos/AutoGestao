@@ -295,7 +295,7 @@ function ManagerHomeHeader({
               onClick={onRefresh}
               disabled={refreshing}
               aria-label="Atualizar início"
-              className="grid h-[38px] w-10 place-items-center rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+              className="grid h-[36px] w-10 place-items-center rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-50"
             >
               <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
             </button>
@@ -316,7 +316,7 @@ function HeaderAction({ icon: Icon, label, onClick, tone }: {
     <button
       type="button"
       onClick={onClick}
-      className={`flex h-[38px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${tone === 'emerald' ? 'border-emerald-600 text-emerald-700 hover:bg-emerald-50' : 'border-gray-800 text-gray-800 hover:bg-gray-100'}`}
+      className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${tone === 'emerald' ? 'border-emerald-600 text-emerald-700 hover:bg-emerald-50' : 'border-gray-800 text-gray-800 hover:bg-gray-100'}`}
     >
       <Icon size={14} /> {label}
     </button>

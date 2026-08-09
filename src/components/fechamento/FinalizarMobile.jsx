@@ -164,7 +164,7 @@ export default function FinalizarMobile({
         <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
           <AlertTriangle className="w-4 h-4 text-[#EF4444] flex-shrink-0 mt-0.5" />
           <div className="flex-1">
-            <p className="text-[13px] font-semibold text-[#EF4444] leading-snug">
+            <p className="text-body-sm font-semibold text-[#EF4444] leading-snug">
               Prazo encerrado às 09h30. Solicite liberação ao seu gerente.
             </p>
             {solicitacaoEnviada ? (
@@ -173,7 +173,7 @@ export default function FinalizarMobile({
               <button
                 onClick={handleAvisarGerente}
                 disabled={enviando}
-                className="mt-2 flex items-center gap-1.5 text-[13px] font-bold text-white bg-[#25D366] hover:bg-green-600 disabled:opacity-60 px-4 py-2 rounded-xl transition-colors"
+                className="mt-2 flex items-center gap-1.5 text-body-sm font-bold text-white bg-[#25D366] hover:bg-green-600 disabled:opacity-60 px-4 py-2 rounded-xl transition-colors"
               >
                 <MessageCircle className="w-4 h-4" />
                 {enviando ? "Enviando..." : "Avisar gerente no WhatsApp"}
@@ -216,7 +216,7 @@ export default function FinalizarMobile({
           <button
             onClick={() => setConfirmModalOpen(true)}
             disabled={isBlocked}
-            className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-white font-bold text-[15px] tracking-widest uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed shadow-md
+            className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-white font-bold text-body tracking-widest uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed shadow-md
               ${isBlocked
                 ? "bg-[#EF4444] shadow-red-200 opacity-70"
                 : "bg-[#22C55E] hover:bg-green-600 shadow-green-200"
@@ -243,29 +243,29 @@ export default function FinalizarMobile({
       <Dialog open={confirmModalOpen} onOpenChange={setConfirmModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold text-[17px] leading-snug">
+            <DialogTitle className="text-[#0F172A] font-bold text-h5 leading-snug">
               Confirma que não haverá mais registros Hoje?
             </DialogTitle>
           </DialogHeader>
-          <p className="text-[13px] text-[#64748B] leading-relaxed mt-1">
+          <p className="text-body-sm text-[#64748B] leading-relaxed mt-1">
             Ao concluir, leads, atendimentos, vendas e demais informações referentes ao dia{" "}
             <strong className="text-[#0F172A]">{dataExibicao}</strong> serão encerrados e não poderão mais ser alterados.
           </p>
-          <p className="text-[13px] text-[#64748B] leading-relaxed mt-2">
+          <p className="text-body-sm text-[#64748B] leading-relaxed mt-2">
             Até 09h30 de {d1DateExibicao}, você poderá corrigir somente as informações de{" "}
             <strong className="text-[#0F172A]">Agendamentos D+1</strong>.
           </p>
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
             <button
               onClick={() => setConfirmModalOpen(false)}
-              className="px-5 py-2.5 text-[13px] font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors"
+              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors"
             >
               Não, voltar
             </button>
             <button
               onClick={handleConfirmarFechamento}
               disabled={finalizando}
-              className="px-6 py-2.5 text-[13px] font-bold text-white bg-[#22C55E] hover:bg-green-600 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-green-100"
+              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#22C55E] hover:bg-green-600 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-green-100"
             >
               {finalizando ? "Finalizando..." : "Sim, concluir"}
             </button>

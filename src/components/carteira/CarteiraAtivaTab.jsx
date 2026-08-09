@@ -83,7 +83,7 @@ function ordenarGeral(lista) {
 function ScoreBadge({ score, motivos }) {
   const cls = classificacaoScore(score);
   return (
-    <div className={`flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full ${cls.color}`} title={motivos.join("\n")}>
+    <div className={`flex items-center gap-1 text-caption font-bold px-2 py-0.5 rounded-full ${cls.color}`} title={motivos.join("\n")}>
       <Star className="w-2.5 h-2.5" />
       {score} · {cls.label}
     </div>
@@ -122,25 +122,25 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
             <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center text-xs font-black text-[#005BFF] shrink-0">{iniciais}</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-[#031B3D] truncate">{cliente.nome}</p>
-              <p className="text-[11px] text-slate-400 truncate">{canal} · {cliente.veiculo_interesse || "Sem veículo"}</p>
+              <p className="text-caption text-slate-400 truncate">{canal} · {cliente.veiculo_interesse || "Sem veículo"}</p>
             </div>
           </div>
           <div className="flex items-center gap-1 flex-shrink-0 flex-wrap justify-end">
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura}</span>
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${prioridadeColor(prioridade)}`}>{prioridade}</span>
+            <span className={`text-caption font-bold px-1.5 py-0.5 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura}</span>
+            <span className={`text-caption font-bold px-1.5 py-0.5 rounded-full ${prioridadeColor(prioridade)}`}>{prioridade}</span>
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2">
           <div className="bg-slate-50 rounded-xl px-2.5 py-2">
-            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Situação</p>
-            <p className="text-[11px] font-semibold text-slate-700 mt-0.5 leading-snug">{situacao}</p>
+            <p className="text-caption text-slate-400 font-bold uppercase tracking-wide">Situação</p>
+            <p className="text-caption font-semibold text-slate-700 mt-0.5 leading-snug">{situacao}</p>
           </div>
           <div className="bg-blue-50 rounded-xl px-2.5 py-2">
-            <p className="text-[9px] text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
-            <p className="text-[11px] font-semibold text-[#031B3D] mt-0.5 leading-snug">{proximoPasso}</p>
+            <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
+            <p className="text-caption font-semibold text-[#031B3D] mt-0.5 leading-snug">{proximoPasso}</p>
           </div>
         </div>
-        <p className="text-[11px] text-slate-400 leading-snug italic">{explicacao}</p>
+        <p className="text-caption text-slate-400 leading-snug italic">{explicacao}</p>
         <ScoreBadge score={score} motivos={motivos} />
         <div className="flex gap-2">
           {!encerradoSemVenda && (
@@ -162,31 +162,31 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-sm font-black text-[#005BFF] shrink-0">{iniciais}</div>
           <div className="min-w-0">
             <p className="text-sm font-bold text-[#031B3D] truncate">{cliente.nome}</p>
-            <p className="text-[11px] text-slate-400 truncate">{canal}</p>
-            <p className="text-[11px] text-slate-400 truncate">{cliente.veiculo_interesse || "Sem veículo"}</p>
+            <p className="text-caption text-slate-400 truncate">{canal}</p>
+            <p className="text-caption text-slate-400 truncate">{cliente.veiculo_interesse || "Sem veículo"}</p>
           </div>
         </div>
         <div className="px-4 py-3.5 w-52 shrink-0 space-y-1.5">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura}</span>
-            <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ${prioridadeColor(prioridade)}`}>{prioridade}</span>
+            <span className={`text-caption font-bold px-1.5 py-0.5 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura}</span>
+            <span className={`text-caption font-bold px-1.5 py-0.5 rounded-full ${prioridadeColor(prioridade)}`}>{prioridade}</span>
           </div>
           <div>
-            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Situação</p>
-            <p className="text-[11px] font-semibold text-slate-700 leading-snug mt-0.5">{situacao}</p>
+            <p className="text-caption text-slate-400 font-bold uppercase tracking-wide">Situação</p>
+            <p className="text-caption font-semibold text-slate-700 leading-snug mt-0.5">{situacao}</p>
           </div>
           <ScoreBadge score={score} motivos={motivos} />
         </div>
         <div className="min-w-0 flex-1 px-4 py-3.5 bg-blue-50/30 space-y-1.5">
           <div>
-            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Objetivo</p>
-            <p className="text-[11px] font-semibold text-slate-600 leading-snug mt-0.5">{objetivo}</p>
+            <p className="text-caption text-slate-400 font-bold uppercase tracking-wide">Objetivo</p>
+            <p className="text-caption font-semibold text-slate-600 leading-snug mt-0.5">{objetivo}</p>
           </div>
           <div>
-            <p className="text-[9px] text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
-            <p className="text-[11px] font-bold text-[#031B3D] leading-snug mt-0.5">{proximoPasso}</p>
+            <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
+            <p className="text-caption font-bold text-[#031B3D] leading-snug mt-0.5">{proximoPasso}</p>
           </div>
-          <p className="text-[10px] text-slate-400 italic leading-snug">{explicacao}</p>
+          <p className="text-caption text-slate-400 italic leading-snug">{explicacao}</p>
         </div>
         <div className="flex flex-col gap-1.5 px-4 py-3.5 shrink-0 w-40 justify-center">
           {!encerradoSemVenda && (
@@ -229,7 +229,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
   }
 
   function chipClass(ativo) {
-    return `text-[11px] font-semibold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
+    return `text-caption font-semibold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
       ativo ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white text-slate-600 border-slate-200 hover:border-blue-300"
     }`;
   }
@@ -245,7 +245,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
 
         <div className="flex-1 px-5 py-4 space-y-5">
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-2">Veículo de interesse</p>
+            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">Veículo de interesse</p>
             <input
               value={local.veiculo || ""}
               onChange={e => set("veiculo", e.target.value)}
@@ -255,7 +255,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
           </div>
 
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-2">Origem</p>
+            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">Origem</p>
             <div className="flex flex-wrap gap-1.5">
               {ORIGENS_FILTRO.map(o => (
                 <button key={o} onClick={() => toggle("origens", o)} className={chipClass((local.origens || []).includes(o))}>{o}</button>
@@ -264,7 +264,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
           </div>
 
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-2">Situação</p>
+            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">Situação</p>
             <div className="flex flex-wrap gap-1.5">
               {SITUACOES_FILTRO.map(s => (
                 <button key={s} onClick={() => toggle("situacoes", s)} className={chipClass((local.situacoes || []).includes(s))}>{s}</button>
@@ -273,7 +273,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
           </div>
 
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-2">Período</p>
+            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">Período</p>
             <div className="flex flex-wrap gap-1.5">
               {PERIODOS_FILTRO.map(p => (
                 <button key={p} onClick={() => toggle("periodos", p)} className={chipClass((local.periodos || []).includes(p))}>{p}</button>
@@ -282,7 +282,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
           </div>
 
           <div>
-            <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-2">Prioridade</p>
+            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">Prioridade</p>
             <div className="flex flex-wrap gap-1.5">
               {PRIORIDADES_FILTRO.map(p => (
                 <button key={p} onClick={() => toggle("prioridades", p)} className={chipClass((local.prioridades || []).includes(p))}>{p}</button>
@@ -351,7 +351,7 @@ function ChipsFiltrosAtivos({ filtros, onRemover }) {
   return (
     <div className="flex flex-wrap gap-1.5">
       {chips.map(chip => (
-        <span key={chip.key} className="flex items-center gap-1 text-[11px] font-semibold px-2.5 py-1 rounded-lg bg-blue-50 text-[#005BFF] border border-blue-200">
+        <span key={chip.key} className="flex items-center gap-1 text-caption font-semibold px-2.5 py-1 rounded-lg bg-blue-50 text-[#005BFF] border border-blue-200">
           {chip.label}
           <button onClick={() => onRemover(chip.key)}><X className="w-3 h-3" /></button>
         </span>
@@ -476,7 +476,7 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
               className={`text-left p-3.5 rounded-2xl border transition-all ${ativo ? "border-[#005BFF] bg-blue-50 shadow-sm" : "border-slate-100 bg-white hover:border-blue-100 hover:bg-blue-50/30"}`}>
               <p className={`text-2xl font-black mb-0.5 ${ativo ? "text-[#005BFF]" : "text-[#031B3D]"}`}>{count}</p>
               <p className={`text-xs font-bold leading-snug ${ativo ? "text-[#005BFF]" : "text-slate-600"}`}>{card.label}</p>
-              <p className="text-[10px] text-slate-400 mt-0.5">{card.sublabel}</p>
+              <p className="text-caption text-slate-400 mt-0.5">{card.sublabel}</p>
             </button>
           );
         })}

@@ -27,14 +27,14 @@ function EtapaRow({ label, value, modalidades, isLast, onClickEtapa }) {
         className={`rounded-xl border px-4 py-3 text-center ${onClickEtapa ? "cursor-pointer hover:border-blue-400 hover:bg-blue-50/40 transition-colors" : ""} bg-white border-slate-200`}
         onClick={onClickEtapa}
       >
-        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-0.5">{label}</p>
-        <p className="text-[28px] font-bold text-[#0F172A] tabular-nums leading-none">{value}</p>
-        {value === 0 && <p className="text-[10px] text-slate-300 mt-0.5">Sem registros</p>}
+        <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-0.5">{label}</p>
+        <p className="text-h2 font-bold text-[#0F172A] tabular-nums leading-none">{value}</p>
+        {value === 0 && <p className="text-caption text-slate-300 mt-0.5">Sem registros</p>}
       </div>
       {modalidades && modalidades.length > 0 && (
         <div className="mt-1.5 px-1 space-y-0.5">
           {modalidades.map(m => (
-            <div key={m.label} className="flex justify-between text-[11px]">
+            <div key={m.label} className="flex justify-between text-caption">
               <span className="text-slate-400">{m.label}</span>
               <span className="font-semibold text-slate-600">{m.value}</span>
             </div>
@@ -71,10 +71,10 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
         </div>
         <div className="flex-1 min-w-0">
           <p className={`text-[14px] font-bold uppercase tracking-wider ${c.title}`}>{titulo}</p>
-          {descricao && <p className="text-[11px] text-slate-400 mt-0.5">{descricao}</p>}
+          {descricao && <p className="text-caption text-slate-400 mt-0.5">{descricao}</p>}
         </div>
         {conversaoGeral !== null && !semDados && (
-          <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full flex-shrink-0 ${c.badge}`}>
+          <span className={`text-caption font-bold px-2.5 py-1 rounded-full flex-shrink-0 ${c.badge}`}>
             {conversaoGeral}% geral
           </span>
         )}
@@ -83,8 +83,8 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
       {/* Funil */}
       {semDados ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center py-8 gap-2">
-          <p className="text-[13px] text-slate-400 font-medium">Sem dados no período</p>
-          <p className="text-[11px] text-slate-300">Registre atendimentos no Fechamento Diário</p>
+          <p className="text-body-sm text-slate-400 font-medium">Sem dados no período</p>
+          <p className="text-caption text-slate-300">Registre atendimentos no Fechamento Diário</p>
           <Link to="/fechamento" className="mt-2 text-[12px] font-bold text-[#005BFF] hover:underline">Abrir Fechamento Diário</Link>
         </div>
       ) : (

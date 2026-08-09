@@ -82,7 +82,7 @@ function MetricCell({
   return (
     <td className={`px-4 py-3 ${differs ? 'bg-amber-50/60' : ''}`}>
       <p className="text-base font-bold text-gray-800">{real}</p>
-      <p className={`mt-0.5 text-[11px] ${differs ? 'font-semibold text-amber-700' : 'text-gray-400'}`}>
+      <p className={`mt-0.5 text-caption ${differs ? 'font-semibold text-amber-700' : 'text-gray-400'}`}>
         {declaredAvailable ? `Declarado: ${declared}` : `${label}: aguardando fechamento`}
       </p>
     </td>
@@ -322,7 +322,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
                   <tr key={row.seller_user_id} className="transition-colors hover:bg-gray-50">
                     <td className="px-4 py-3">
                       <p className="font-medium text-gray-800">{row.seller_name}</p>
-                      <p className="mt-0.5 text-[11px] text-gray-400">
+                      <p className="mt-0.5 text-caption text-gray-400">
                         Disciplina: {row.discipline_score ?? 'sem pontuação'}
                       </p>
                     </td>
@@ -330,7 +330,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
                       <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-medium ${statusClass(row.closing_status)}`}>
                         {presentation.label}
                       </span>
-                      <p className="mt-1.5 text-[11px] text-gray-400">
+                      <p className="mt-1.5 text-caption text-gray-400">
                         {formatDateTime(row.submitted_at, 'Ainda não enviado')}
                       </p>
                     </td>
@@ -390,7 +390,7 @@ function SummaryCard({
       <div className="min-w-0">
         <p className="text-2xl font-bold text-gray-800">{value}</p>
         <p className="text-xs font-medium text-gray-600">{label}</p>
-        <p className="mt-1 text-[11px] leading-4 text-gray-400">{helper}</p>
+        <p className="mt-1 text-caption leading-4 text-gray-400">{helper}</p>
       </div>
     </article>
   )

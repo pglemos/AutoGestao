@@ -280,7 +280,7 @@ function AlertCard({
     <article className={`flex min-h-64 flex-col rounded-2xl border p-4 ${styles.surface}`}>
       <div className="flex items-start justify-between gap-3">
         <Icon size={19} className={styles.icon} />
-        <span className={`rounded-lg px-2 py-1 text-[11px] font-semibold ${styles.badge}`}>{styles.label}</span>
+        <span className={`rounded-lg px-2 py-1 text-caption font-semibold ${styles.badge}`}>{styles.label}</span>
       </div>
       <h3 className="mt-4 text-base font-bold text-gray-800">{alert.title}</h3>
       <p className="mt-2 text-sm leading-5 text-gray-600">{alert.description}</p>

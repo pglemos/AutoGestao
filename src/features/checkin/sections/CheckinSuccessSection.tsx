@@ -20,7 +20,7 @@ export function CheckinSuccessSection({ saveNotice, onHome }: CheckinSuccessSect
                 <p className="text-[12px] font-semibold text-[#1e3a5f]">{saveNotice.detail}</p>
             </div>
             <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-                <div className="flex items-center gap-2 text-[13px] font-semibold text-[#22C55E]">
+                <div className="flex items-center gap-2 text-body-sm font-semibold text-[#22C55E]">
                     <CheckCircle2 size={20} aria-hidden="true" />
                     {saveNotice.title}
                 </div>

@@ -86,7 +86,7 @@ export function RegularizeLateModal({
             placeholder="Justificativa ou contexto da regularização..."
             className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <span className="mt-1 block text-[11px] text-gray-400">
+          <span className="mt-1 block text-caption text-gray-400">
             Informe ao menos 8 caracteres para manter a justificativa auditável.
           </span>
         </label>

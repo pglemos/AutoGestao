@@ -12,7 +12,7 @@ function InfoRow({ icon: Icon, label, value }) {
     <div className="flex items-start gap-2 py-1.5">
       <Icon className="mt-0.5 h-3.5 w-3.5 shrink-0 text-muted-foreground" />
       <div className="min-w-0 flex-1">
-        <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
+        <p className="text-caption font-medium uppercase tracking-wide text-muted-foreground">{label}</p>
         <p className="text-sm text-foreground">{value || "—"}</p>
       </div>
     </div>
@@ -181,22 +181,22 @@ export default function ContentTab({ meeting, program, userRole, userId = "demo"
             <div className="flex items-center gap-2">
               <h3 className="text-sm font-semibold text-foreground">{activeLesson.title}</h3>
               {activeLesson.required ? (
-                <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">Obrigatória</span>
+                <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-caption font-medium text-amber-700">Obrigatória</span>
               ) : (
-                <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">Opcional</span>
+                <span className="rounded-full bg-muted px-1.5 py-0.5 text-caption font-medium text-muted-foreground">Opcional</span>
               )}
               {activeLesson.type === "onboarding" && (
-                <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-[10px] font-medium text-blue-700">Onboarding</span>
+                <span className="rounded-full bg-blue-50 px-1.5 py-0.5 text-caption font-medium text-blue-700">Onboarding</span>
               )}
             </div>
             <p className="mt-0.5 text-xs text-muted-foreground">{activeLesson.code}</p>
           </div>
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Descrição</p>
+            <p className="text-caption font-medium uppercase tracking-wide text-muted-foreground">Descrição</p>
             <p className="mt-0.5 text-sm text-foreground">{activeLesson.description}</p>
           </div>
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Objetivo</p>
+            <p className="text-caption font-medium uppercase tracking-wide text-muted-foreground">Objetivo</p>
             <p className="mt-0.5 text-sm text-foreground">{activeLesson.objective}</p>
           </div>
         </div>
@@ -218,21 +218,21 @@ export default function ContentTab({ meeting, program, userRole, userId = "demo"
 
         <div className="space-y-3">
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Objetivo</p>
+            <p className="text-caption font-medium uppercase tracking-wide text-muted-foreground">Objetivo</p>
             <p className="mt-0.5 text-sm text-foreground">{meeting.objective}</p>
           </div>
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Por que este encontro existe</p>
+            <p className="text-caption font-medium uppercase tracking-wide text-muted-foreground">Por que este encontro existe</p>
             <p className="mt-0.5 text-sm text-foreground">{meeting.reason}</p>
           </div>
           <div>
-            <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Resultado esperado</p>
+            <p className="text-caption font-medium uppercase tracking-wide text-muted-foreground">Resultado esperado</p>
             <p className="mt-0.5 text-sm text-foreground">{meeting.expectedResult}</p>
           </div>
         </div>
 
         <div>
-          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Participantes</p>
+          <p className="text-caption font-medium uppercase tracking-wide text-muted-foreground">Participantes</p>
           <div className="mt-1 space-y-1">
             {meeting.participants.map((p, i) => (
               <div key={i} className="flex items-center justify-between rounded-md border border-border bg-card px-2.5 py-1.5">
@@ -243,9 +243,9 @@ export default function ContentTab({ meeting, program, userRole, userId = "demo"
                 <div className="flex items-center gap-1.5">
                   <span className="text-xs text-muted-foreground">{p.role}</span>
                   {p.required ? (
-                    <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">Obrigatório</span>
+                    <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-caption font-medium text-amber-700">Obrigatório</span>
                   ) : (
-                    <span className="rounded-full bg-muted px-1.5 py-0.5 text-[10px] font-medium text-muted-foreground">Opcional</span>
+                    <span className="rounded-full bg-muted px-1.5 py-0.5 text-caption font-medium text-muted-foreground">Opcional</span>
                   )}
                 </div>
               </div>

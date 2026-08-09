@@ -52,7 +52,7 @@ export function ManagerRoutineDetailModal({ open, sellerName, date, actions, app
             <div className="grid gap-2 sm:grid-cols-2">
               {officialScore.components.map(component => <div key={component.key} className="rounded-lg border border-gray-100 bg-gray-50 p-3">
                 <div className="flex items-start justify-between gap-3"><span className="text-xs font-medium text-gray-700">{COMPONENT_LABELS[component.key]}</span><span className="text-xs font-semibold text-gray-800">{formatComponentValue(component)}</span></div>
-                <p className="mt-1 text-[11px] text-gray-500">Peso {component.weight} pontos · {component.applicable ? component.evidence || component.source : component.reason || 'Não aplicável'}</p>
+                <p className="mt-1 text-caption text-gray-500">Peso {component.weight} pontos · {component.applicable ? component.evidence || component.source : component.reason || 'Não aplicável'}</p>
               </div>)}
             </div>
             <p className="mt-3 text-xs text-gray-500">Denominador aplicado: {officialScore.denominator} pontos.</p>

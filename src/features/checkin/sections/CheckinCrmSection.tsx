@@ -51,7 +51,7 @@ function DiasBadge({ dataAgendamento, selectedDate, vendaRealizada }: { dataAgen
   const dias = diasAgendamento(dataAgendamento, selectedDate)
   if (dias === null || dias < 1) return null
   return (
-    <span className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-[10px] font-bold ${dias === 1 ? 'bg-[#EFF6FF] text-[#2563EB]' : 'bg-[#F0F9FF] text-[#0284C7]'}`}>
+    <span className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-caption font-bold ${dias === 1 ? 'bg-[#EFF6FF] text-[#2563EB]' : 'bg-[#F0F9FF] text-[#0284C7]'}`}>
       D+{dias}
     </span>
   )
@@ -61,7 +61,7 @@ function DiasBadge({ dataAgendamento, selectedDate, vendaRealizada }: { dataAgen
 function VendaTipoBadge({ vendaRealizada }: { vendaRealizada: string }) {
   if (vendaRealizada !== 'Sim' && (vendaRealizada as string) !== 'ganho') return null
   return (
-    <span className="inline-flex shrink-0 items-center rounded-full bg-[#F0FDF4] px-1.5 py-0.5 text-[10px] font-bold text-[#16A34A]">
+    <span className="inline-flex shrink-0 items-center rounded-full bg-[#F0FDF4] px-1.5 py-0.5 text-caption font-bold text-[#16A34A]">
       $
     </span>
   )
@@ -598,7 +598,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               4
             </span>
  <div className="min-w-0">
- <Typography variant="h2" className="!text-[16px] !leading-tight font-extrabold tracking-tight text-[#071822] sm:!text-[17px]">
+ <Typography variant="h2" className="!text-[16px] !leading-tight font-extrabold tracking-tight text-[#071822] sm:!text-h5">
                 CADASTRAR VENDA/AGENDAMENTOS
               </Typography>
  <Typography variant="p" className="mt-1 text-sm font-medium leading-snug text-[#526B7A]">
@@ -624,7 +624,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 <span className="grid h-10 w-10 place-items-center rounded-full bg-[#F7F8F8] text-[#526B7A]">
 <Users size={17} />
 </span>
-<p className="text-[13px] font-bold text-[#526B7A]">Nenhum cliente cadastrado ainda</p>
+<p className="text-body-sm font-bold text-[#526B7A]">Nenhum cliente cadastrado ainda</p>
 <p className="text-[12px] font-medium text-[#526B7A]">Toque em "+ Novo Cliente" para registrar venda ou agendamento.</p>
 </div>
 ) : (
@@ -633,7 +633,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 <article key={row.id} className="space-y-3 bg-white px-4 py-4">
 <div className="flex items-start justify-between gap-3">
 <div className="min-w-0">
-<p className="flex items-center gap-1.5 truncate text-[15px] font-extrabold text-[#00A89D]">
+<p className="flex items-center gap-1.5 truncate text-body font-extrabold text-[#00A89D]">
 {row.nomeCliente}
 <DiasBadge dataAgendamento={row.dataAgendamento} selectedDate={selectedDate} vendaRealizada={row.vendaRealizada} />
 <VendaTipoBadge vendaRealizada={row.vendaRealizada} />
@@ -651,15 +651,15 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 </div>
 <div className="grid grid-cols-2 gap-2 text-[12px]">
 <div className="rounded-xl bg-[#F7F8F8] p-3">
-<span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#526B7A]">Valor</span>
+<span className="block text-caption font-extrabold uppercase tracking-wider text-[#526B7A]">Valor</span>
 <strong className="mt-1 block text-[#071822]">{formatMoney(row.valorNegociado)}</strong>
 </div>
 <div className="rounded-xl bg-[#F7F8F8] p-3">
-<span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#526B7A]">Sinal</span>
+<span className="block text-caption font-extrabold uppercase tracking-wider text-[#526B7A]">Sinal</span>
 <strong className="mt-1 block text-[#526B7A]">{formatMoney(row.sinal)}</strong>
 </div>
 <div className="col-span-2 rounded-xl bg-[#F7F8F8] p-3">
-<span className="block text-[10px] font-extrabold uppercase tracking-wider text-[#526B7A]">Agendamento</span>
+<span className="block text-caption font-extrabold uppercase tracking-wider text-[#526B7A]">Agendamento</span>
 <strong className="mt-1 block truncate text-[#526B7A]">{formatAgendamentoDateTime(row.dataAgendamento)}</strong>
 </div>
 </div>
@@ -679,7 +679,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 {/* Rolagem horizontal alcançável por teclado: sem tabIndex, as colunas
           fora da viewport ficam inacessíveis a quem não usa mouse (§21). */}
       <div className="hidden max-w-full overflow-x-auto md:block" tabIndex={0} role="region" aria-label="Clientes e agendamentos">
-  <table className="w-full min-w-[1180px] table-fixed text-left text-[13px]">
+  <table className="w-full min-w-[1180px] table-fixed text-left text-body-sm">
             <colgroup>
               <col className="w-[14%]" />
               <col className="w-[11%]" />
@@ -692,7 +692,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <col className="w-[9%]" />
               <col className="w-[7%]" />
             </colgroup>
-            <thead className="bg-[#F7F8F8] text-[11px] uppercase tracking-normal text-[#526B7A] border-b border-[#DFE0E1]">
+            <thead className="bg-[#F7F8F8] text-caption uppercase tracking-normal text-[#526B7A] border-b border-[#DFE0E1]">
               <tr>
                 {[
                   'Nome do Cliente',
@@ -731,7 +731,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                       <span className="grid h-9 w-9 place-items-center rounded-full bg-[#F7F8F8] text-[#526B7A]">
                         <Users size={16} />
                       </span>
-                      <p className="text-[13px] font-bold text-[#526B7A]">Nenhum cliente cadastrado ainda</p>
+                      <p className="text-body-sm font-bold text-[#526B7A]">Nenhum cliente cadastrado ainda</p>
                       <p className="text-[12px] font-medium text-[#526B7A]">Clique em "+ Novo Cliente" para registrar a primeira venda ou agendamento.</p>
                     </div>
                   </td>
@@ -827,7 +827,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                                 <div className="flex flex-col gap-1.5 min-w-[200px]">
                                   <label
                                     htmlFor={`inline-data-${row.id}`}
-                                    className="text-[10px] font-extrabold uppercase tracking-wider text-[#526B7A]"
+                                    className="text-caption font-extrabold uppercase tracking-wider text-[#526B7A]"
                                   >
                                     Data do novo agendamento
                                   </label>
@@ -836,13 +836,13 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                                     type="datetime-local"
                                     value={draft.dataNovoAgendamento}
                                     onChange={event => updateInlineDraft(row, { dataNovoAgendamento: event.target.value })}
-                                    className="h-10 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[13px] font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                                    className="h-10 rounded-lg border border-[#DFE0E1] bg-white px-3 text-body-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
                                   />
                                 </div>
                                 <div className="flex flex-col gap-1.5 min-w-[200px]">
                                   <label
                                     htmlFor={`inline-motivo-${row.id}`}
-                                    className="text-[10px] font-extrabold uppercase tracking-wider text-[#526B7A]"
+                                    className="text-caption font-extrabold uppercase tracking-wider text-[#526B7A]"
                                   >
  Status da negociação
                                   </label>
@@ -851,7 +851,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                                       id={`inline-motivo-${row.id}`}
                                       value={draft.motivoPerda}
                                       onChange={event => updateInlineDraft(row, { motivoPerda: event.target.value })}
-                                      className="h-10 w-full appearance-none rounded-lg border border-[#DFE0E1] bg-white px-3 pr-9 text-[13px] font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                                      className="h-10 w-full appearance-none rounded-lg border border-[#DFE0E1] bg-white px-3 pr-9 text-body-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
                                     >
  <option value="">Não selecionado</option>
  {STATUS_NEGOCIACAO_OPTIONS.map(status => (
@@ -864,7 +864,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                                 <div className="flex flex-1 flex-col gap-1.5 min-w-[220px]">
                                   <label
                                     htmlFor={`inline-obs-${row.id}`}
-                                    className="text-[10px] font-extrabold uppercase tracking-wider text-[#526B7A]"
+                                    className="text-caption font-extrabold uppercase tracking-wider text-[#526B7A]"
                                   >
                                     Observações
                                   </label>
@@ -874,7 +874,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                                     value={draft.observacoes}
                                     onChange={event => updateInlineDraft(row, { observacoes: event.target.value })}
                                     placeholder="Ex: Cliente ficou de avaliar o usado e retornar."
-                                    className="h-10 w-full rounded-lg border border-[#DFE0E1] bg-white px-3 text-[13px] font-semibold text-[#071822] outline-none transition placeholder:text-[#526B7A] focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                                    className="h-10 w-full rounded-lg border border-[#DFE0E1] bg-white px-3 text-body-sm font-semibold text-[#071822] outline-none transition placeholder:text-[#526B7A] focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
                                   />
                                 </div>
                                 <Button type="button" onClick={() => handleSaveInline(row)} className="h-10 shrink-0 bg-[#00A89D] hover:bg-[#00A89D] text-white shadow-none">
@@ -917,7 +917,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <h2 className="text-[20px] font-extrabold text-[#071822]">
                 {editingClientId ? 'Editar Cadastro do Cliente' : 'Cadastrar Novo Cliente'}
               </h2>
-              <p className="mt-1.5 text-[13px] font-medium text-[#526B7A] leading-relaxed">
+              <p className="mt-1.5 text-body-sm font-medium text-[#526B7A] leading-relaxed">
                 Preencha os dados do cliente para enriquecer seu histórico comercial e atualizar o fechamento do dia.
               </p>
               <button
@@ -1039,7 +1039,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <div className="grid grid-cols-2 gap-x-6 gap-y-4">
                 {/* 1. Nome do cliente */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modal-nome" className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <label htmlFor="modal-nome" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Nome do cliente <span className="text-[#EF4343]">*</span>
                   </label>
                   <input
@@ -1055,7 +1055,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 2. Telefone */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modal-telefone" className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <label htmlFor="modal-telefone" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Telefone <span className="text-[#EF4343]">*</span>
                   </label>
                   <input
@@ -1071,7 +1071,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 3. Veículo de interesse */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modal-veiculo" className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <label htmlFor="modal-veiculo" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Veículo de interesse <span className="text-[#EF4343]">*</span>
                   </label>
                   <input
@@ -1087,7 +1087,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 4. Valor Negociado — visual only, hidden input handles test */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Valor negociado {vendaRealizada === 'Sim' && <span className="text-[#EF4343]">*</span>}
                   </span>
                   <input
@@ -1104,7 +1104,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 5. Data do agendamento */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modal-data" className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <label htmlFor="modal-data" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Data do agendamento <span className="text-[#EF4343]">*</span>
                   </label>
                   <input
@@ -1119,7 +1119,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 6. Canal — visual select synced to hidden test select */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Canal <span className="text-[#EF4343]">*</span>
                   </span>
                   <div className="relative">
@@ -1141,7 +1141,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 7. Compareceu */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Compareceu
                   </span>
                   <div className="relative">
@@ -1160,7 +1160,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 8. Carro Avaliado */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Carro avaliado
                   </span>
                   <div className="relative">
@@ -1179,7 +1179,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 9. Sinal — visual only, hidden input handles test */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Sinal (R$)
                   </span>
                   <input
@@ -1195,7 +1195,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 10. Financiamento — visual select synced to hidden */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Financiamento
                   </span>
                   <div className="relative">
@@ -1215,7 +1215,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 11. Venda Realizada — visual select synced to hidden */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Venda realizada <span className="text-[#EF4343]">*</span>
                   </span>
                   <div className="relative">
@@ -1239,7 +1239,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#526B7A] pointer-events-none" />
                   </div>
                   {vendaRealizada === 'Em Negociação' && (
-                    <span className="text-[11px] text-[#F59F0A] font-semibold mt-1">
+                    <span className="text-caption text-[#F59F0A] font-semibold mt-1">
                       Agendamento para amanhã sugerido para a data acima.
                     </span>
                   )}
@@ -1247,7 +1247,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 12. Observações */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modal-obs" className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <label htmlFor="modal-obs" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
                     Observações
                   </label>
                   <input
@@ -1263,7 +1263,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
               {/* Status da negociação */}
  <div className="flex flex-col gap-1.5 mt-3">
-                  <label htmlFor="modal-motivo-perda" className="text-[11px] font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <label htmlFor="modal-motivo-perda" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
  Status da negociação {(vendaRealizada === 'Não' || (vendaRealizada as string) === 'perdido') && <span className="text-[#EF4343]">*</span>}
                   </label>
                   <div className="relative">
@@ -1289,7 +1289,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="h-[42px] px-6 rounded-full border border-[#DFE0E1] bg-white text-sm font-bold text-[#526B7A] hover:bg-[#F7F8F8] transition-colors"
+                className="h-[40px] px-6 rounded-full border border-[#DFE0E1] bg-white text-sm font-bold text-[#526B7A] hover:bg-[#F7F8F8] transition-colors"
               >
                 Cancelar
               </button>
@@ -1298,7 +1298,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                 type="button"
                 onClick={() => handleCadastrar()}
                 disabled={saving}
-                className="h-[42px] px-8 rounded-full bg-[#00A89D] text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,168,157,0.2)] hover:bg-[#00A89D] disabled:bg-[#526B7A] transition-colors"
+                className="h-[40px] px-8 rounded-full bg-[#00A89D] text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,168,157,0.2)] hover:bg-[#00A89D] disabled:bg-[#526B7A] transition-colors"
               >
                 {saving ? 'Salvando...' : 'Salvar Cliente'}
               </button>
@@ -1322,7 +1322,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                 <AlertCircle size={18} className="text-[#F59E0B]" />
                 Venda sem atendimento registrado hoje
               </h2>
-              <p className="mt-2 text-[13px] font-medium leading-relaxed text-[#526B7A]">
+              <p className="mt-2 text-body-sm font-medium leading-relaxed text-[#526B7A]">
                 Não encontramos atendimento hoje para o canal <strong className="text-[#071822]">{CRM_CANAL_LABEL[coerenciaCanalPendente as CrmCanal] || coerenciaCanalPendente}</strong>. Esta venda veio de um atendimento anterior?
               </p>
               <p className="mt-2 text-[12px] font-medium text-[#526B7A]">
@@ -1362,7 +1362,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 function ChannelBadge({ canal }: { canal: ClienteRow['canal'] }) {
   const variant = canal === 'Internet' ? 'info' : canal === 'Showroom' ? 'warning' : 'success'
   return (
-    <Badge variant={variant} className="px-2 py-0 text-[10px]">
+    <Badge variant={variant} className="px-2 py-0 text-caption">
       {canal}
     </Badge>
   )
@@ -1371,14 +1371,14 @@ function ChannelBadge({ canal }: { canal: ClienteRow['canal'] }) {
 function CompareceuBadge({ value }: { value: ClienteRow['compareceu'] }) {
   if (value === null) {
     return (
-      <Badge variant="outline" className="px-2 py-0 text-[10px]">
+      <Badge variant="outline" className="px-2 py-0 text-caption">
         —
       </Badge>
     )
   }
 
   return (
-    <Badge variant={value === 'Sim' ? 'success' : 'danger'} className="px-2 py-0 text-[10px]">
+    <Badge variant={value === 'Sim' ? 'success' : 'danger'} className="px-2 py-0 text-caption">
       {value}
     </Badge>
   )
@@ -1386,7 +1386,7 @@ function CompareceuBadge({ value }: { value: ClienteRow['compareceu'] }) {
 
 function BooleanBadge({ value }: { value: 'Sim' | 'Não' }) {
   return (
-    <Badge variant={value === 'Sim' ? 'success' : 'danger'} className="px-2 py-0 text-[10px]">
+    <Badge variant={value === 'Sim' ? 'success' : 'danger'} className="px-2 py-0 text-caption">
       {value}
     </Badge>
   )
@@ -1395,7 +1395,7 @@ function BooleanBadge({ value }: { value: 'Sim' | 'Não' }) {
 function FinanciamentoBadge({ value }: { value: ClienteRow['financiamento'] }) {
   const variant = value === 'Aprovado' ? 'success' : value === 'Recusado' ? 'danger' : 'outline'
   return (
-    <Badge variant={variant} className="px-2 py-0 text-[10px]">
+    <Badge variant={variant} className="px-2 py-0 text-caption">
       {value}
     </Badge>
   )
@@ -1406,7 +1406,7 @@ function VendaBadge({ value }: { value: ClienteRow['vendaRealizada'] }) {
     return (
       <Badge
         variant="outline"
-        className="border-[#FFF7E6] bg-[#FFF7E6] text-[#F59F0A] px-2 py-0 text-[10px] font-semibold"
+        className="border-[#FFF7E6] bg-[#FFF7E6] text-[#F59F0A] px-2 py-0 text-caption font-semibold"
       >
         Em Negociação
       </Badge>
@@ -1414,7 +1414,7 @@ function VendaBadge({ value }: { value: ClienteRow['vendaRealizada'] }) {
   }
   const isVenda = value === 'Sim' || (value as string) === 'ganho'
   return (
-    <Badge variant={isVenda ? 'success' : 'danger'} className="px-2 py-0 text-[10px]">
+    <Badge variant={isVenda ? 'success' : 'danger'} className="px-2 py-0 text-caption">
       {isVenda ? 'Venda Realizada' : value}
     </Badge>
   )

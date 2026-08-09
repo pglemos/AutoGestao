@@ -56,12 +56,12 @@ export function AgendaEventCard({
     >
       <div className="flex min-w-0 items-center gap-mx-xs">
         <span className={cn('h-mx-tiny w-mx-tiny shrink-0 rounded-mx-full', dotColor)} aria-hidden="true" />
-        <span className={cn('min-w-0 truncate font-semibold leading-tight', compact ? 'text-[11px]' : 'text-xs')}>
+        <span className={cn('min-w-0 truncate font-semibold leading-tight', compact ? 'text-caption' : 'text-xs')}>
           {item.title}
         </span>
       </div>
       {!compact && (
-        <div className="mt-0.5 flex min-w-0 items-center gap-1 text-[10px] leading-none opacity-75">
+        <div className="mt-0.5 flex min-w-0 items-center gap-1 text-caption leading-none opacity-75">
           <Clock size={10} aria-hidden="true" />
           <span className="truncate">
             {format(start, 'HH:mm')}
@@ -114,10 +114,10 @@ export function AgendaEventCompactChip({
       className="flex min-w-0 items-center gap-1 rounded-lg px-1 py-0.5 text-left transition-colors hover:bg-gray-50"
     >
       <span className={cn('h-mx-tiny w-mx-tiny shrink-0 rounded-mx-full', dotColor)} aria-hidden="true" />
-      <Typography variant="tiny" className="shrink-0 text-[10px] font-semibold tabular-nums">
+      <Typography variant="tiny" className="shrink-0 text-caption font-semibold tabular-nums">
         {format(start, 'HH:mm')}
       </Typography>
-      <Typography variant="tiny" className="min-w-0 flex-1 truncate text-[11px] font-medium">
+      <Typography variant="tiny" className="min-w-0 flex-1 truncate text-caption font-medium">
         {item.title}
       </Typography>
     </div>

@@ -29,12 +29,12 @@ export function CentralHeader({ date = new Date() }: { date?: Date }) {
         </div>
         <div className="min-w-0">
           <h1 className="truncate text-[20px] font-bold leading-none tracking-tight text-gray-800">Rotina do Dia</h1>
-          <p className="mt-0.5 truncate text-[11px] font-medium text-slate-400">Organize e execute seu dia com foco</p>
+          <p className="mt-0.5 truncate text-caption font-medium text-slate-400">Organize e execute seu dia com foco</p>
         </div>
       </div>
 
       <div className="hidden text-right sm:block">
-        <p className="text-[13px] font-bold text-gray-800">{formatted.weekday}</p>
+        <p className="text-body-sm font-bold text-gray-800">{formatted.weekday}</p>
         <p className="text-[12px] text-slate-400">{formatted.fullDate}</p>
       </div>
     </header>

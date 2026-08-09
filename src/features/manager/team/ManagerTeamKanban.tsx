@@ -112,7 +112,7 @@ export function ManagerTeamKanban({ cards, view, storeName, onViewChange, onOpen
       <div className="inline-flex max-w-full gap-1 overflow-x-auto rounded-xl border border-gray-200 bg-gray-50 p-1" role="tablist" aria-label="Classificação da equipe">
         {VIEW_OPTIONS.map(option => <button key={option.value} type="button" role="tab" aria-selected={view === option.value} onClick={() => onViewChange(option.value)} className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${view === option.value ? 'bg-emerald-600 text-white shadow-sm' : 'text-gray-500 hover:bg-white hover:text-gray-700'}`}>{option.label}</button>)}
       </div>
-      <p className="mt-1.5 text-[11px] text-gray-400">A posição no Kanban muda conforme a visão selecionada.</p>
+      <p className="mt-1.5 text-caption text-gray-400">A posição no Kanban muda conforme a visão selecionada.</p>
     </section>
 
     <div className="sticky top-0 z-30 bg-gray-50 py-1">
@@ -166,14 +166,14 @@ function KanbanColumn({ status, cards, view, storeName, onOpenProfile, onAction 
   return <section className={`flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border ${config.body}`} aria-label={`${config.label}: ${cards.length}`}>
     <header className={`flex min-h-[52px] items-center justify-between border-b px-4 py-3 ${config.header}`}><div className="flex items-center gap-2"><Icon size={18}/><h2 className="text-sm font-bold">{config.label}</h2></div><span className="rounded-full bg-white/80 px-2.5 py-0.5 text-xs font-bold">{cards.length}</span></header>
     <div className="flex min-h-[100px] flex-1 flex-col gap-3 p-3">{cards.length ? cards.map(card => <ManagerSellerCard key={card.row.user_id} card={card} view={view} status={status} storeName={storeName} onOpenProfile={onOpenProfile} onAction={onAction}/>) : <div className="flex h-20 items-center justify-center text-xs text-gray-400">Nenhum vendedor nesta coluna</div>}</div>
-    <footer className={`border-t px-3 py-2.5 ${config.footer}`}><p className="text-xs font-semibold">{guidance.title}</p><p className="mt-0.5 text-[11px] leading-snug opacity-75">{guidance.detail}</p></footer>
+    <footer className={`border-t px-3 py-2.5 ${config.footer}`}><p className="text-xs font-semibold">{guidance.title}</p><p className="mt-0.5 text-caption leading-snug opacity-75">{guidance.detail}</p></footer>
   </section>
 }
 
 function KanbanMobileList(props: ColumnProps) {
   const guidance = MANAGER_TEAM_COLUMN_GUIDANCE[props.view][props.status]
   const config = COLUMN_CONFIG[props.status]
-  return <>{props.cards.length ? <div className="space-y-3">{props.cards.map(card => <ManagerSellerCard key={card.row.user_id} card={card} view={props.view} status={props.status} storeName={props.storeName} onOpenProfile={props.onOpenProfile} onAction={props.onAction}/>)}</div> : <div className="rounded-2xl border border-gray-100 bg-white py-12 text-center text-sm text-gray-400">Nenhum vendedor nesta coluna</div>}<div className={`mt-3 rounded-2xl border p-3 ${config.footer}`}><p className="text-xs font-semibold">{guidance.title}</p><p className="mt-0.5 text-[11px] leading-snug opacity-75">{guidance.detail}</p></div></>
+  return <>{props.cards.length ? <div className="space-y-3">{props.cards.map(card => <ManagerSellerCard key={card.row.user_id} card={card} view={props.view} status={props.status} storeName={props.storeName} onOpenProfile={props.onOpenProfile} onAction={props.onAction}/>)}</div> : <div className="rounded-2xl border border-gray-100 bg-white py-12 text-center text-sm text-gray-400">Nenhum vendedor nesta coluna</div>}<div className={`mt-3 rounded-2xl border p-3 ${config.footer}`}><p className="text-xs font-semibold">{guidance.title}</p><p className="mt-0.5 text-caption leading-snug opacity-75">{guidance.detail}</p></div></>
 }
 
 function ManagerSellerCard({ card, view, status, storeName, onOpenProfile, onAction }: Omit<ColumnProps, 'cards'> & { card: ManagerTeamCard }) {
@@ -198,7 +198,7 @@ function ActionItem({ icon: Icon, label, onClick }: { icon: typeof CalendarClock
 
 function NotApplicableSellers({ cards, storeName }: { cards: ManagerTeamCard[]; storeName: string }) {
   if (cards.length === 0) return null
-  return <details className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"><summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 hover:bg-gray-50 [&::-webkit-details-marker]:hidden"><span className="flex items-center gap-2 text-sm font-semibold text-gray-700"><UserX size={16} className="text-gray-400"/>Não aplicáveis no período — {cards.length}</span><ChevronDown size={16} className="text-gray-400"/></summary><div className="space-y-2 px-4 pb-4">{cards.map(card => <div key={card.row.user_id} className="flex items-center justify-between gap-3 rounded-xl bg-gray-50 p-3"><div className="flex min-w-0 items-center gap-2.5"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gray-100 text-xs font-bold text-gray-500">{initials(card.row.user_name)}</span><div className="min-w-0"><p className="truncate text-sm font-medium text-gray-700">{card.row.user_name}</p><p className="truncate text-xs text-gray-400">{storeName}</p></div></div><p className="max-w-[220px] text-right text-[11px] text-gray-400">{card.reason}</p></div>)}</div></details>
+  return <details className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"><summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 hover:bg-gray-50 [&::-webkit-details-marker]:hidden"><span className="flex items-center gap-2 text-sm font-semibold text-gray-700"><UserX size={16} className="text-gray-400"/>Não aplicáveis no período — {cards.length}</span><ChevronDown size={16} className="text-gray-400"/></summary><div className="space-y-2 px-4 pb-4">{cards.map(card => <div key={card.row.user_id} className="flex items-center justify-between gap-3 rounded-xl bg-gray-50 p-3"><div className="flex min-w-0 items-center gap-2.5"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gray-100 text-xs font-bold text-gray-500">{initials(card.row.user_name)}</span><div className="min-w-0"><p className="truncate text-sm font-medium text-gray-700">{card.row.user_name}</p><p className="truncate text-xs text-gray-400">{storeName}</p></div></div><p className="max-w-[220px] text-right text-caption text-gray-400">{card.reason}</p></div>)}</div></details>
 }
 
 function initials(name: string) {

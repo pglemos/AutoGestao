@@ -17,7 +17,7 @@ import { AlertTriangle, Info, Check } from "lucide-react";
 // ── Botão reutilizável ────────────────────────────────────────────────────────
 
 function Btn({ onClick, variant = "ghost", disabled, children }) {
-  const base = "px-4 py-2.5 text-[13px] font-semibold rounded-xl transition-colors disabled:opacity-50";
+  const base = "px-4 py-2.5 text-body-sm font-semibold rounded-xl transition-colors disabled:opacity-50";
   const styles = {
     ghost:    "text-[#64748B] border border-[#E5E7EB] hover:bg-slate-50",
     primary:  "text-white bg-[#6D28D9] hover:bg-purple-700 shadow-sm",
@@ -46,13 +46,13 @@ export function ModalSemCanal({ open, canalSugerido, onConfirmarSugestao, onEsco
           <DialogHeader>
             <DialogTitle className="text-[#0F172A] font-bold">Escolha o canal da venda</DialogTitle>
           </DialogHeader>
-          <p className="text-[13px] text-[#64748B] mt-1">Selecione o canal de origem desta negociação:</p>
+          <p className="text-body-sm text-[#64748B] mt-1">Selecione o canal de origem desta negociação:</p>
           <div className="flex flex-col gap-2 mt-3">
             {CANAIS.map(c => (
               <button
                 key={c}
                 onClick={() => setCanalEscolhido(c)}
-                className={`text-left px-4 py-2.5 rounded-xl border text-[13px] font-semibold transition-colors ${
+                className={`text-left px-4 py-2.5 rounded-xl border text-body-sm font-semibold transition-colors ${
                   canalEscolhido === c
                     ? "bg-purple-50 border-purple-400 text-[#6D28D9]"
                     : "border-slate-200 hover:bg-slate-50 text-[#0F172A]"
@@ -82,11 +82,11 @@ export function ModalSemCanal({ open, canalSugerido, onConfirmarSugestao, onEsco
             Informe o canal da venda
           </DialogTitle>
         </DialogHeader>
-        <p className="text-[13px] text-[#64748B] mt-1 leading-relaxed">
+        <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
           Para manter o fechamento correto, informe de qual canal esta venda se originou.
         </p>
         {canalSugerido && (
-          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-xl text-[13px] text-[#1e3a5f]">
+          <div className="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-xl text-body-sm text-[#1e3a5f]">
             Você informou atendimento apenas no <strong>{canalSugerido}</strong>. Deseja classificar esta venda como <strong>{canalSugerido}</strong>?
           </div>
         )}
@@ -120,7 +120,7 @@ export function ModalSemAtendimento({ open, canal, onAtendimentoAnterior, onVinc
             Venda sem atendimento registrado hoje
           </DialogTitle>
         </DialogHeader>
-        <p className="text-[13px] text-[#64748B] mt-1 leading-relaxed">
+        <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
           Não encontramos atendimento hoje para o canal <strong className="text-[#0F172A]">{canal}</strong>. Esta venda veio de um atendimento anterior?
         </p>
         <p className="text-[12px] text-slate-400 mt-1">
@@ -171,13 +171,13 @@ export function ModalMaisVendasQueAtendimentos({ open, divergencias, onRevisar, 
             Atenção antes de finalizar
           </DialogTitle>
         </DialogHeader>
-        <p className="text-[13px] text-[#64748B] mt-1 leading-relaxed">
+        <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
           Encontramos vendas que não possuem atendimento registrado no mesmo canal hoje. Isso pode acontecer quando a venda veio de um atendimento anterior.
         </p>
         {divergencias?.length > 0 && (
           <ul className="mt-3 space-y-1.5">
             {divergencias.map((d, i) => (
-              <li key={i} className="flex items-center gap-2 text-[13px] text-[#0F172A] bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
+              <li key={i} className="flex items-center gap-2 text-body-sm text-[#0F172A] bg-amber-50 border border-amber-100 rounded-lg px-3 py-2">
                 <AlertTriangle className="w-3.5 h-3.5 text-[#F59E0B] flex-shrink-0" />
                 {d}
               </li>

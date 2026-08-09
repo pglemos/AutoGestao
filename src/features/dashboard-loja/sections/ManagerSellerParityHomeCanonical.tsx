@@ -215,7 +215,7 @@ export function ManagerSellerParityHomeCanonical({
             <p className="mt-2 text-xs text-emerald-700">
               {appointmentsToday} agendamento{appointmentsToday === 1 ? '' : 's'} confirmado{appointmentsToday === 1 ? '' : 's'} válido{appointmentsToday === 1 ? '' : 's'}
             </p>
-            <p className="mt-1 text-[11px] text-emerald-600">
+            <p className="mt-1 text-caption text-emerald-600">
               Razão oficial: 1 venda a cada {formatSales(appointmentsPerSale)} agendamentos
             </p>
           </MetricCard>
@@ -314,7 +314,7 @@ export function ManagerSellerParityHomeCanonical({
           />
         </section>
 
-        <p className="text-center text-[11px] text-gray-400">
+        <p className="text-center text-caption text-gray-400">
           Fontes oficiais: Plano de Sustentação v{plan?.version ?? '—'} e agenda confirmada da unidade.
         </p>
       </div>
@@ -350,7 +350,7 @@ function ManagerHeader({
           <div className="flex flex-wrap items-center gap-2">
             <h1 className="text-xl font-bold">Início</h1>
             {planVersion ? (
-              <span className="rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-700">
+              <span className="rounded-full bg-emerald-50 px-2 py-1 text-caption font-semibold uppercase tracking-wide text-emerald-700">
                 Plano oficial v{planVersion}
               </span>
             ) : null}
@@ -491,7 +491,7 @@ function TeamFocus({
       </div>
 
       <div className="overflow-x-auto">
-        <table className="w-full min-w-[850px] text-sm">
+        <table className="w-full min-w-[848px] text-sm">
           <thead className="bg-gray-50">
             <tr>
               {['Vendedor', 'Agend. hoje', 'Projeção de vendas', 'Realizado no mês', 'Próxima faixa', 'Faltam carros', 'Situação'].map(label => (
@@ -565,7 +565,7 @@ function RadarItem({ value, label }: { value: string | number; label: string }) 
   return (
     <div className="text-center">
       <p className="text-xl font-bold text-emerald-700">{value}</p>
-      <p className="mt-1 text-[11px] leading-4 text-gray-400">{label}</p>
+      <p className="mt-1 text-caption leading-4 text-gray-400">{label}</p>
     </div>
   )
 }

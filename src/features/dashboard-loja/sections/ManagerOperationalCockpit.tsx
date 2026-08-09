@@ -146,7 +146,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
           icon={<CalendarDays size={22} />}
           tone={data.metrics.totalAgd > 0 ? 'success' : 'warning'}
         />
-        <Card className="min-h-[190px] border bg-white p-mx-md">
+        <Card className="min-h-[188px] border bg-white p-mx-md">
           <div className="flex items-center justify-between gap-mx-sm">
             <Typography variant="tiny" tone="muted" className="">MX Score Loja</Typography>
             <Gauge size={18} className="text-gray-500" />
@@ -314,7 +314,7 @@ function ManagerKpiCard({
 }) {
   const arrow = tone === 'success' ? '↑' : tone === 'danger' ? '↓' : ''
   return (
-    <Card className="min-h-[190px] border bg-white p-mx-md flex flex-col">
+    <Card className="min-h-[188px] border bg-white p-mx-md flex flex-col">
       <div className="flex items-center gap-mx-sm">
         <MetricIcon tone={tone}>{icon}</MetricIcon>
         <Typography variant="tiny" tone="muted" className="">{title}</Typography>
@@ -571,7 +571,7 @@ function AgendaItem({ time, title, detail }: { time: string; title: string; deta
 function MiniStat({ label, value, detail }: { label: string; value: string | number; detail?: string }) {
   return (
     <div className="min-w-0 px-mx-xs">
-      <Typography variant="tiny" tone="muted" className="block text-[10px] leading-tight tracking-normal sm:text-xs">{label}</Typography>
+      <Typography variant="tiny" tone="muted" className="block text-caption leading-tight tracking-normal sm:text-xs">{label}</Typography>
       <Typography variant="h3" className="mt-mx-xs truncate font-mono-numbers">{value}</Typography>
       {detail && <Typography variant="tiny" tone="muted" className="block font-bold normal-case tracking-normal">{detail}</Typography>}
     </div>

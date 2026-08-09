@@ -39,7 +39,7 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
                 Como terminou esse contato?
               </DialogTitle>
               {cliente && (
-                <p className="text-[11px] text-slate-400">{cliente.nome}</p>
+                <p className="text-caption text-slate-400">{cliente.nome}</p>
               )}
             </div>
           </div>
@@ -58,7 +58,7 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
                 }`}
               >
                 <span className="text-2xl leading-none">{r.emoji}</span>
-                <span className="text-[10px] font-semibold text-center leading-tight">{r.label}</span>
+                <span className="text-caption font-semibold text-center leading-tight">{r.label}</span>
               </button>
             );
           })}

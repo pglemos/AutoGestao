@@ -64,7 +64,7 @@ export default function ExecutiveCard({ title, status, rows = [], progress, devi
       )}
 
       <div className="mt-3 flex items-center justify-between border-t border-border pt-2.5">
-        <span className="text-[11px] text-muted-foreground/80">
+        <span className="text-caption text-muted-foreground/80">
           {updatedAt ? `Atualizado em ${formatDateTime(updatedAt)}` : "—"}
         </span>
         <span className="inline-flex items-center gap-0.5 text-xs font-medium text-muted-foreground/80 transition-colors group-hover:text-foreground">

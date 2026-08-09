@@ -35,7 +35,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
           </DialogHeader>
 
           {pendencias.length === 0 ? (
-            <p className="text-[13px] text-slate-400 text-center py-8">Nenhuma pendência anterior.</p>
+            <p className="text-body-sm text-slate-400 text-center py-8">Nenhuma pendência anterior.</p>
           ) : (
             <div className="space-y-3 mt-2">
               {pendencias.map(op => {
@@ -46,15 +46,15 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                       <div className={`w-1.5 self-stretch rounded-full flex-shrink-0 ${TIPO_COLOR[op.tipo] || "bg-slate-400"}`} />
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wider">{op.tipo}</span>
-                          <span className="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">
+                          <span className="text-caption font-bold text-slate-400 uppercase tracking-wider">{op.tipo}</span>
+                          <span className="text-caption font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">
                             {atraso === 0 ? "Hoje" : `${atraso}d atraso`}
                           </span>
                         </div>
-                        <p className="font-bold text-[13px] text-[#0F172A] truncate">{op.nome_cliente_snapshot || "—"}</p>
+                        <p className="font-bold text-body-sm text-[#0F172A] truncate">{op.nome_cliente_snapshot || "—"}</p>
                         {op.veiculo_snapshot && <p className="text-[12px] text-slate-500 truncate">{op.veiculo_snapshot}</p>}
                         <p className="text-[12px] text-slate-400 mt-0.5">{op.descricao}</p>
-                        <p className="text-[11px] text-slate-300 mt-0.5">{moment(op.data_hora_execucao).format("DD/MM/YYYY HH:mm")}</p>
+                        <p className="text-caption text-slate-300 mt-0.5">{moment(op.data_hora_execucao).format("DD/MM/YYYY HH:mm")}</p>
                       </div>
                     </div>
 
@@ -64,13 +64,13 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                           <a
                             href={`https://wa.me/55${(op.telefone_snapshot || "").replace(/\D/g, "")}`}
                             target="_blank" rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-[11px] font-bold text-white bg-green-500 hover:bg-green-600 px-2.5 py-1.5 rounded-lg transition-colors"
+                            className="flex items-center gap-1 text-caption font-bold text-white bg-green-500 hover:bg-green-600 px-2.5 py-1.5 rounded-lg transition-colors"
                           >
                             <MessageCircle className="w-3 h-3" /> WhatsApp
                           </a>
                           <a
                             href={`tel:${(op.telefone_snapshot || "").replace(/\D/g, "")}`}
-                            className="flex items-center gap-1 text-[11px] font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors"
+                            className="flex items-center gap-1 text-caption font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors"
                           >
                             <Phone className="w-3 h-3" /> Ligar
                           </a>
@@ -78,18 +78,18 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                       )}
                       {op.cliente_id && (
                         <Link to="/carteira"
-                          className="flex items-center gap-1 text-[11px] font-bold text-[#005BFF] border border-blue-200 hover:bg-blue-50 px-2.5 py-1.5 rounded-lg transition-colors"
+                          className="flex items-center gap-1 text-caption font-bold text-[#005BFF] border border-blue-200 hover:bg-blue-50 px-2.5 py-1.5 rounded-lg transition-colors"
                           onClick={onClose}
                         >
                           <ExternalLink className="w-3 h-3" /> Abrir cliente
                         </Link>
                       )}
                       <button onClick={() => setReagendarTarget(op)}
-                        className="flex items-center gap-1 text-[11px] font-bold text-slate-500 border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
+                        className="flex items-center gap-1 text-caption font-bold text-slate-500 border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
                         <Calendar className="w-3 h-3" /> Reagendar
                       </button>
                       <button onClick={() => setResolverTarget(op)}
-                        className="flex items-center gap-1 text-[11px] font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-2.5 py-1.5 rounded-lg transition-colors ml-auto">
+                        className="flex items-center gap-1 text-caption font-bold text-white bg-[#005BFF] hover:bg-blue-700 px-2.5 py-1.5 rounded-lg transition-colors ml-auto">
                         Resolver
                       </button>
                     </div>

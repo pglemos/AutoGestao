@@ -88,24 +88,24 @@ export default function OndeAgirAgora({ funis }) {
   if (acoes.length === 0) {
     return (
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
-        <h2 className="text-[13px] font-bold text-[#0F172A] uppercase tracking-wide mb-1">Onde agir agora</h2>
-        <p className="text-[13px] text-slate-400">Nenhuma ação prioritária identificada. Continue no ritmo atual.</p>
+        <h2 className="text-body-sm font-bold text-[#0F172A] uppercase tracking-wide mb-1">Onde agir agora</h2>
+        <p className="text-body-sm text-slate-400">Nenhuma ação prioritária identificada. Continue no ritmo atual.</p>
       </div>
     );
   }
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-      <h2 className="text-[13px] font-bold text-[#0F172A] uppercase tracking-wide mb-4">Onde agir agora</h2>
+      <h2 className="text-body-sm font-bold text-[#0F172A] uppercase tracking-wide mb-4">Onde agir agora</h2>
       <div className="space-y-3">
         {acoes.map((acao, idx) => (
           <div key={idx} className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-xl bg-slate-50 border border-slate-100">
             <div className="flex-shrink-0 flex items-center gap-2">
-              <span className={`text-[13px] font-bold tabular-nums ${PRIORIDADE_COR[idx] || "text-slate-400"}`}>{idx + 1}</span>
-              <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full ${COR_BADGE[acao.cor] || "bg-slate-100 text-slate-600"}`}>{acao.canal}</span>
+              <span className={`text-body-sm font-bold tabular-nums ${PRIORIDADE_COR[idx] || "text-slate-400"}`}>{idx + 1}</span>
+              <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${COR_BADGE[acao.cor] || "bg-slate-100 text-slate-600"}`}>{acao.canal}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-bold text-[#0F172A]">{acao.titulo}</p>
+              <p className="text-body-sm font-bold text-[#0F172A]">{acao.titulo}</p>
               <p className="text-[12px] text-slate-500 mt-0.5">{acao.texto}</p>
             </div>
             <Link

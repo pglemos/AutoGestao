@@ -115,7 +115,7 @@ export function TimeGrid({
                 isSelected && 'bg-mx-green-50',
               )}
             >
-              <Typography variant="tiny" tone="muted" className="block text-[10px] font-semibold tracking-normal">
+              <Typography variant="tiny" tone="muted" className="block text-caption font-semibold tracking-normal">
                 {format(dayInfo.date, 'EEE', { locale: ptBR })}
               </Typography>
               <span className={cn(
@@ -133,7 +133,7 @@ export function TimeGrid({
         <div className="border-r border-gray-200 bg-white">
           {TIME_SLOTS.map((slot) => (
             <div key={slot} className="border-b border-gray-100 pr-mx-xs pt-mx-xs text-right" style={{ height: HOUR_HEIGHT }}>
-              <Typography variant="tiny" tone="muted" className="text-[10px] font-medium">{`${String(slot).padStart(2, '0')}:00`}</Typography>
+              <Typography variant="tiny" tone="muted" className="text-caption font-medium">{`${String(slot).padStart(2, '0')}:00`}</Typography>
             </div>
           ))}
         </div>

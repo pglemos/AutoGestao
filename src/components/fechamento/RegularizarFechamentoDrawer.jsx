@@ -48,13 +48,13 @@ const CHANNEL_STYLE = {
 };
 
 function Badge({ label, className }) {
-  return <span className={`inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${className}`}>{label}</span>;
+  return <span className={`inline-block text-caption font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${className}`}>{label}</span>;
 }
 
 function Field({ label, required, children }) {
   return (
     <div>
-      <Label className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider">
+      <Label className="text-caption font-bold text-[#64748B] uppercase tracking-wider">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </Label>
       <div className="mt-1.5">{children}</div>
@@ -92,7 +92,7 @@ function NumStepper({ value, onChange }) {
 function FieldRow({ label, value, onChange }) {
   return (
  <div className="grid grid-cols-[minmax(0,1fr)_144px] items-center gap-3">
- <span className="text-[13px] font-semibold leading-tight text-slate-600 min-w-0">{label}</span>
+ <span className="text-body-sm font-semibold leading-tight text-slate-600 min-w-0">{label}</span>
  <div className="w-36 min-w-36">
         <NumStepper value={value} onChange={onChange} />
       </div>
@@ -115,7 +115,7 @@ function MovimentoDia({ form, onChange }) {
         <div className="bg-orange-50 rounded-xl border border-orange-200 p-4 space-y-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-orange-500 flex items-center justify-center flex-shrink-0"><Store className="w-4 h-4 text-white" /></div>
-            <span className="text-[13px] font-bold text-orange-700 uppercase tracking-wide">Showroom</span>
+            <span className="text-body-sm font-bold text-orange-700 uppercase tracking-wide">Showroom</span>
           </div>
           <FieldRow label="Atendimentos" value={form.atendimentos_showroom} onChange={v => set("atendimentos_showroom", v)} />
         </div>
@@ -123,7 +123,7 @@ function MovimentoDia({ form, onChange }) {
         <div className="bg-green-50 rounded-xl border border-green-200 p-4 space-y-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0"><Users className="w-4 h-4 text-white" /></div>
-            <span className="text-[13px] font-bold text-green-700 uppercase tracking-wide">Carteira</span>
+            <span className="text-body-sm font-bold text-green-700 uppercase tracking-wide">Carteira</span>
           </div>
           <FieldRow label="Leads recebidos" value={form.leads_carteira} onChange={v => set("leads_carteira", v)} />
           <FieldRow label="Atendimentos" value={form.atendimentos_carteira} onChange={v => set("atendimentos_carteira", v)} />
@@ -133,7 +133,7 @@ function MovimentoDia({ form, onChange }) {
         <div className="bg-blue-50 rounded-xl border border-blue-200 p-4 space-y-3">
           <div className="flex items-center gap-2">
             <div className="w-8 h-8 rounded-full bg-blue-600 flex items-center justify-center flex-shrink-0"><Globe className="w-4 h-4 text-white" /></div>
-            <span className="text-[13px] font-bold text-blue-700 uppercase tracking-wide">Internet</span>
+            <span className="text-body-sm font-bold text-blue-700 uppercase tracking-wide">Internet</span>
           </div>
           <FieldRow label="Leads recebidos" value={form.leads_internet} onChange={v => set("leads_internet", v)} />
           <FieldRow label="Atendimentos" value={form.atendimentos_internet} onChange={v => set("atendimentos_internet", v)} />
@@ -244,12 +244,12 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
           <div>
             <div className="flex items-center gap-2">
-              <div className="w-5 h-5 rounded-full bg-purple-600 text-white text-[10px] font-bold flex items-center justify-center"><ShoppingCart className="w-3 h-3" /></div>
+              <div className="w-5 h-5 rounded-full bg-purple-600 text-white text-caption font-bold flex items-center justify-center"><ShoppingCart className="w-3 h-3" /></div>
               <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Cadastrar Venda / Agendamentos</h3>
             </div>
             <p className="text-[12px] text-slate-400 mt-0.5">Clientes são salvos na Carteira de Clientes (base única).</p>
           </div>
-          <button onClick={openCreate} className="flex items-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white text-[13px] font-bold px-4 py-2 rounded-xl shadow-sm transition-colors">
+          <button onClick={openCreate} className="flex items-center gap-1.5 bg-purple-600 hover:bg-purple-700 text-white text-body-sm font-bold px-4 py-2 rounded-xl shadow-sm transition-colors">
             <Plus className="w-4 h-4" /> Novo Cliente
           </button>
         </div>
@@ -258,7 +258,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
           {clientes.length === 0 ? (
             <div className="flex flex-col items-center gap-2 py-10 text-center">
               <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center"><Plus className="w-5 h-5 text-purple-300" /></div>
-              <p className="text-[13px] text-slate-400 font-medium">Nenhum cliente neste fechamento.</p>
+              <p className="text-body-sm text-slate-400 font-medium">Nenhum cliente neste fechamento.</p>
             </div>
           ) : (
             <div className="space-y-2">
@@ -268,8 +268,8 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
                   <div key={c.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 gap-3 flex-wrap">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div className="min-w-0">
-                        <p className="text-[13px] font-bold text-[#0F172A] truncate">{c.nome}</p>
-                        <p className="text-[11px] text-slate-400 truncate">{c.whatsapp} · {c.veiculo_interesse || "—"}</p>
+                        <p className="text-body-sm font-bold text-[#0F172A] truncate">{c.nome}</p>
+                        <p className="text-caption text-slate-400 truncate">{c.whatsapp} · {c.veiculo_interesse || "—"}</p>
                       </div>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
@@ -293,10 +293,10 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
       <Dialog open={dialogOpen} onOpenChange={v => { if (!saving) setDialogOpen(v); }}>
         <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold text-[17px]">
+            <DialogTitle className="text-[#0F172A] font-bold text-h5">
               {editingCliente ? "Editar Cliente" : "Cadastrar Novo Cliente"}
             </DialogTitle>
-            <p className="text-[13px] text-slate-500 font-normal">Dados salvos diretamente na Carteira de Clientes.</p>
+            <p className="text-body-sm text-slate-500 font-normal">Dados salvos diretamente na Carteira de Clientes.</p>
           </DialogHeader>
           <div className="grid grid-cols-2 gap-4 mt-2">
             <Field label="Nome do Cliente" required>
@@ -360,8 +360,8 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
             </Field>
           </div>
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
-            <button onClick={() => setDialogOpen(false)} disabled={saving} className="px-5 py-2.5 text-[13px] font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
-            <button onClick={handleSave} disabled={!canSave || saving} className="px-6 py-2.5 text-[13px] font-bold text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors">
+            <button onClick={() => setDialogOpen(false)} disabled={saving} className="px-5 py-2.5 text-body-sm font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
+            <button onClick={handleSave} disabled={!canSave || saving} className="px-6 py-2.5 text-body-sm font-bold text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors">
               {saving ? "Salvando..." : "Salvar na Carteira"}
             </button>
           </div>
@@ -372,10 +372,10 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
       <Dialog open={!!deleteConfirm} onOpenChange={v => { if (!v) setDeleteConfirm(null); }}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader><DialogTitle className="font-bold">Remover do fechamento?</DialogTitle></DialogHeader>
-          <p className="text-[13px] text-slate-500 mt-1">O registro de <strong>{deleteConfirm?.name}</strong> será removido deste fechamento. O cliente permanece na Carteira.</p>
+          <p className="text-body-sm text-slate-500 mt-1">O registro de <strong>{deleteConfirm?.name}</strong> será removido deste fechamento. O cliente permanece na Carteira.</p>
           <div className="flex items-center justify-end gap-3 mt-4">
-            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-[13px] font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
-            <button onClick={confirmDelete} className="px-5 py-2 text-[13px] font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors">Remover</button>
+            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
+            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors">Remover</button>
           </div>
         </DialogContent>
       </Dialog>
@@ -414,8 +414,8 @@ function ResumoDia({ form, clientes }) {
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-0 divide-x divide-y sm:divide-y-0 divide-slate-100">
         {stats.map(s => (
           <div key={s.label} className="p-4 text-center">
-            <p className={`text-[22px] font-bold tabular-nums ${s.color}`}>{s.value}</p>
-            <p className="text-[11px] text-slate-400 font-medium mt-0.5">{s.label}</p>
+            <p className={`text-h3 font-bold tabular-nums ${s.color}`}>{s.value}</p>
+            <p className="text-caption text-slate-400 font-medium mt-0.5">{s.label}</p>
           </div>
         ))}
       </div>
@@ -463,17 +463,17 @@ function DisciplinaBloco({ form, clientes }) {
           <span className={`absolute inset-0 flex items-center justify-center text-[18px] font-bold tabular-nums ${scoreColor}`}>{scoreFinal}%</span>
         </div>
         <div className="space-y-2 flex-1">
-          <div className="flex justify-between text-[13px]">
+          <div className="flex justify-between text-body-sm">
             <span className="text-slate-500">Pontuação base</span>
             <span className="font-bold text-[#0F172A]">{scoreCalc}%</span>
           </div>
-          <div className="flex justify-between text-[13px]">
+          <div className="flex justify-between text-body-sm">
             <span className="text-red-500 font-medium">Penalização por atraso</span>
             <span className="font-bold text-red-500">-10%</span>
           </div>
-          <div className="flex justify-between text-[13px] border-t border-slate-100 pt-2">
+          <div className="flex justify-between text-body-sm border-t border-slate-100 pt-2">
             <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
-            <span className={`font-bold text-[15px] ${scoreColor}`}>{scoreFinal}%</span>
+            <span className={`font-bold text-body ${scoreColor}`}>{scoreFinal}%</span>
           </div>
           <div className="flex justify-between text-[12px]">
             <span className="text-slate-400">Agendamentos D+1</span>
@@ -616,9 +616,9 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>
-                <span className="text-[11px] font-bold text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">Fechamento atrasado</span>
+                <span className="text-caption font-bold text-red-600 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full">Fechamento atrasado</span>
               </div>
-              <p className="text-[13px] text-slate-500 mt-0.5">
+              <p className="text-body-sm text-slate-500 mt-0.5">
                 {moment(date).format("DD/MM/YYYY")} — <span className="capitalize">{moment(date).format("dddd")}</span>
               </p>
             </div>
@@ -640,7 +640,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
                 </div>
                 <div>
                   <p className="text-[18px] font-bold text-[#0F172A]">Regularização enviada!</p>
-                  <p className="text-[13px] text-slate-500 mt-1 max-w-sm">O fechamento foi salvo e está aguardando aprovação do responsável. Ele só contará nos indicadores após a aprovação.</p>
+                  <p className="text-body-sm text-slate-500 mt-1 max-w-sm">O fechamento foi salvo e está aguardando aprovação do responsável. Ele só contará nos indicadores após a aprovação.</p>
                 </div>
                 <button onClick={onClose} className="px-8 py-3 rounded-xl bg-[#005BFF] text-white text-[14px] font-bold hover:bg-blue-700 transition-colors mt-2">
                   Fechar
@@ -653,7 +653,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
                   <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3">
                     <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
                     <div>
-                      <p className="text-[13px] font-bold text-amber-800">Aguardando Aprovação</p>
+                      <p className="text-body-sm font-bold text-amber-800">Aguardando Aprovação</p>
                       <p className="text-[12px] text-amber-700 mt-0.5">Você já enviou a regularização deste dia. Você pode atualizar os dados e reenviar se necessário.</p>
                     </div>
                   </div>
@@ -661,12 +661,12 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
                 {aprovado && (
                   <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
                     <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-                    <p className="text-[13px] font-bold text-green-800">Esta regularização já foi aprovada.</p>
+                    <p className="text-body-sm font-bold text-green-800">Esta regularização já foi aprovada.</p>
                   </div>
                 )}
                 {recusado && (
                   <div className="bg-red-50 border border-red-200 rounded-xl p-4">
-                    <p className="text-[13px] font-bold text-red-700">Regularização recusada.</p>
+                    <p className="text-body-sm font-bold text-red-700">Regularização recusada.</p>
                     {regularizacaoExistente?.motivo_recusa && (
                       <p className="text-[12px] text-red-600 mt-1">Motivo: {regularizacaoExistente.motivo_recusa}</p>
                     )}
@@ -686,10 +686,10 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
           {/* Footer */}
           {!sucesso && !aprovado && !carregando && (
             <div className="bg-white border-t border-slate-200 px-5 py-4 flex items-center justify-end gap-3 flex-shrink-0">
-              <button onClick={onClose} className="px-5 py-2.5 text-[13px] font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+              <button onClick={onClose} className="px-5 py-2.5 text-body-sm font-semibold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
                 Cancelar
               </button>
-              <button onClick={() => setConfirmOpen(true)} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-[13px] font-bold transition-colors shadow-sm">
+              <button onClick={() => setConfirmOpen(true)} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors shadow-sm">
                 <Send className="w-4 h-4" /> Enviar Regularização
               </button>
             </div>
@@ -704,15 +704,15 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
             <DialogTitle className="font-bold text-[#0F172A]">Enviar regularização para aprovação?</DialogTitle>
           </DialogHeader>
           <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 mt-2">
-            <p className="text-[13px] text-amber-800 leading-relaxed">
+            <p className="text-body-sm text-amber-800 leading-relaxed">
               Este fechamento foi realizado fora do prazo. Ele será salvo, mas só contará nos indicadores após aprovação do responsável.
             </p>
           </div>
           <div className="flex gap-3 mt-4">
-            <button onClick={() => setConfirmOpen(false)} disabled={enviando} className="flex-1 py-2.5 rounded-xl border border-slate-200 text-[13px] font-bold text-slate-600 hover:bg-slate-50 transition-colors">
+            <button onClick={() => setConfirmOpen(false)} disabled={enviando} className="flex-1 py-2.5 rounded-xl border border-slate-200 text-body-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors">
               Não, voltar
             </button>
-            <button onClick={handleEnviar} disabled={enviando} className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-[13px] font-bold transition-colors">
+            <button onClick={handleEnviar} disabled={enviando} className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors">
               {enviando ? "Enviando..." : "Sim, enviar"}
             </button>
           </div>

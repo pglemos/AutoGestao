@@ -126,7 +126,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
 function FieldRow({ label, value, onDecrement, onIncrement, onSet, disabled }: { label: string; value: number; onDecrement: () => void; onIncrement: () => void; onSet: (v: number) => void; disabled?: boolean }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className={`min-w-0 flex-1 text-[13px] font-semibold leading-tight ${disabled ? 'text-slate-300' : 'text-slate-600'}`}>{label}</span>
+      <span className={`min-w-0 flex-1 text-body-sm font-semibold leading-tight ${disabled ? 'text-slate-300' : 'text-slate-600'}`}>{label}</span>
       <div className="w-[140px] shrink-0">
         <StepperInput label={label} value={value} onDecrement={onDecrement} onIncrement={onIncrement} onSet={onSet} disabled={disabled} />
       </div>
@@ -158,11 +158,11 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }: { currentSt
               <div className={`flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-all ${done ? c.stepDone : active ? c.stepActive : 'bg-slate-100 text-slate-600'}`}>
                 {done ? <CheckCircle2 className="h-4 w-4 text-white" /> : <Icon className="h-4 w-4" />}
               </div>
-              <span className={`text-center text-[9px] font-bold leading-tight ${done || active ? c.title : 'text-slate-600'}`}>{step.label}</span>
+              <span className={`text-center text-caption font-bold leading-tight ${done || active ? c.title : 'text-slate-600'}`}>{step.label}</span>
               {/* 10px e slate-500: em 8px com slate-300 o percentual ficava
                   abaixo do contraste AA e perto do limite legível (§12 pede
                   evitar texto excessivamente pequeno). */}
-              <span className={`text-[10px] font-semibold ${done || active ? c.note : 'text-slate-500'}`}>{step.pct}%</span>
+              <span className={`text-caption font-semibold ${done || active ? c.note : 'text-slate-500'}`}>{step.pct}%</span>
             </button>
             {idx < STEPS.length - 1 && (
               <div className={`h-0.5 max-w-[24px] flex-1 rounded-full transition-all ${completedSteps.has(step.id) ? COLOR_MAP[STEPS[idx + 1].color].progress : 'bg-slate-100'}`} />
@@ -190,7 +190,7 @@ function ProgressBarMobile({ completedSteps }: { completedSteps: Set<StepId> }) 
               {done && (
                 <>
                   <CheckCircle2 className="h-2.5 w-2.5 shrink-0" style={{ color: SEGMENT_COLORS[step.id] }} />
-                  <span className="truncate text-[9px] font-bold" style={{ color: SEGMENT_COLORS[step.id] }}>{step.label}</span>
+                  <span className="truncate text-caption font-bold" style={{ color: SEGMENT_COLORS[step.id] }}>{step.label}</span>
                 </>
               )}
             </div>
@@ -295,10 +295,10 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
       <div className="hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:block sm:p-5">
         <div className="mb-1 flex items-center justify-between">
           <div className="min-w-0 flex-1 pr-3">
-            <h2 className="text-[13px] font-bold uppercase tracking-wide text-[#0F172A] sm:text-[14px]">Progresso do Fechamento</h2>
-            <p className="mt-0.5 text-[10px] leading-tight text-slate-600 sm:text-[11px]">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
+            <h2 className="text-body-sm font-bold uppercase tracking-wide text-[#0F172A] sm:text-[14px]">Progresso do Fechamento</h2>
+            <p className="mt-0.5 text-caption leading-tight text-slate-600 sm:text-caption">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
           </div>
-          <span className={`shrink-0 text-[26px] font-bold tabular-nums sm:text-[28px] ${totalPct === 100 ? 'text-green-600' : 'text-[#0F172A]'}`}>{totalPct}%</span>
+          <span className={`shrink-0 text-h3 font-bold tabular-nums sm:text-h2 ${totalPct === 100 ? 'text-green-600' : 'text-[#0F172A]'}`}>{totalPct}%</span>
         </div>
         <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-slate-100">
           <div className={`h-full rounded-full transition-all duration-500 ${progressColor}`} style={{ width: `${totalPct}%` }} />
@@ -317,7 +317,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             </div>
             <div>
               <p className={`text-[14px] font-bold uppercase leading-none tracking-wider ${co.title}`}>1. Showroom</p>
-              <p className={`mt-0.5 text-[11px] font-medium ${co.sub}`}>Atendimento presencial</p>
+              <p className={`mt-0.5 text-caption font-medium ${co.sub}`}>Atendimento presencial</p>
             </div>
           </div>
           <p className="text-[12px] text-slate-600">Informe os atendimentos presenciais realizados no dia.</p>
@@ -336,7 +336,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               Confirmar Showroom ✓
             </button>
           )}
-          <p className={`text-[10px] ${co.note}`}>Vendas devem ser registradas em Cadastrar Venda/Agendamentos.</p>
+          <p className={`text-caption ${co.note}`}>Vendas devem ser registradas em Cadastrar Venda/Agendamentos.</p>
         </div>
       )}
 
@@ -349,7 +349,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             </div>
             <div>
               <p className={`text-[14px] font-bold uppercase leading-none tracking-wider ${cg.title}`}>2. Carteira</p>
-              <p className={`mt-0.5 text-[11px] font-medium ${cg.sub}`}>Relacionamento e prospecção</p>
+              <p className={`mt-0.5 text-caption font-medium ${cg.sub}`}>Relacionamento e prospecção</p>
             </div>
           </div>
           <p className="text-[12px] text-slate-600">Informe os contatos, atendimentos e agendamentos gerados pela sua carteira.</p>
@@ -360,12 +360,12 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <FieldRow label="Agendamentos D+1" value={agdCart} onDecrement={() => updateField('agd_cart', clampCounter(agdCart - 1))} onIncrement={() => updateField('agd_cart', clampCounter(agdCart + 1))} onSet={v => updateField('agd_cart', clampCounter(v))} disabled={false} />
             ) : (
               <div className="flex items-center justify-between gap-3">
-                <span className="flex-1 text-[13px] font-semibold text-slate-500">Agendamentos D+1 ativos</span>
-                <span className={`text-[22px] font-bold tabular-nums ${cg.title}`}>{agdCartAtivos}</span>
+                <span className="flex-1 text-body-sm font-semibold text-slate-500">Agendamentos D+1 ativos</span>
+                <span className={`text-h3 font-bold tabular-nums ${cg.title}`}>{agdCartAtivos}</span>
               </div>
             )}
             {disabled && (
-              <p className={`text-[10px] ${cg.note}`}>Planejados: <strong>{agdCart}</strong> · Detalhados: <strong>{agdCartAtivos}</strong></p>
+              <p className={`text-caption ${cg.note}`}>Planejados: <strong>{agdCart}</strong> · Detalhados: <strong>{agdCartAtivos}</strong></p>
             )}
           </div>
           {!disabled && (
@@ -385,7 +385,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             </div>
             <div>
               <p className={`text-[14px] font-bold uppercase leading-none tracking-wider ${cb.title}`}>3. Internet</p>
-              <p className={`mt-0.5 text-[11px] font-medium ${cb.sub}`}>Leads digitais</p>
+              <p className={`mt-0.5 text-caption font-medium ${cb.sub}`}>Leads digitais</p>
             </div>
           </div>
           <p className="text-[12px] text-slate-600">Informe os leads digitais recebidos e o andamento dos atendimentos.</p>
@@ -396,12 +396,12 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <FieldRow label="Agendamentos D+1" value={agdNet} onDecrement={() => updateField('agd_net', clampCounter(agdNet - 1))} onIncrement={() => updateField('agd_net', clampCounter(agdNet + 1))} onSet={v => updateField('agd_net', clampCounter(v))} disabled={false} />
             ) : (
               <div className="flex items-center justify-between gap-3">
-                <span className="flex-1 text-[13px] font-semibold text-slate-500">Agendamentos D+1 ativos</span>
-                <span className={`text-[22px] font-bold tabular-nums ${cb.title}`}>{agdNetAtivos}</span>
+                <span className="flex-1 text-body-sm font-semibold text-slate-500">Agendamentos D+1 ativos</span>
+                <span className={`text-h3 font-bold tabular-nums ${cb.title}`}>{agdNetAtivos}</span>
               </div>
             )}
             {disabled && (
-              <p className={`text-[10px] ${cb.note}`}>Planejados: <strong>{agdNet}</strong> · Detalhados: <strong>{agdNetAtivos}</strong></p>
+              <p className={`text-caption ${cb.note}`}>Planejados: <strong>{agdNet}</strong> · Detalhados: <strong>{agdNetAtivos}</strong></p>
             )}
           </div>
           {!disabled && (
@@ -421,7 +421,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             </div>
             <div className="flex-1">
               <p className={`text-[14px] font-bold uppercase leading-none tracking-wider ${cp.title}`}>4. Vendas e Agendamentos</p>
-              <p className={`mt-0.5 text-[11px] font-medium ${cp.sub}`}>Registros de vendas e agendamentos D+1</p>
+              <p className={`mt-0.5 text-caption font-medium ${cp.sub}`}>Registros de vendas e agendamentos D+1</p>
             </div>
           </div>
           <p className="text-[12px] text-slate-600">{vendasMsg}</p>

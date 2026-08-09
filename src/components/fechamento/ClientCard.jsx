@@ -28,7 +28,7 @@ const SALE_STYLE = {
 };
 
 function Badge({ label, className }) {
-  return <span className={`inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${className}`}>{label}</span>;
+  return <span className={`inline-block text-caption font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${className}`}>{label}</span>;
 }
 
 function formatCurrency(raw) {
@@ -146,7 +146,7 @@ const EMPTY_FORM_D1 = {
 function Field({ label, required, children }) {
   return (
     <div>
-      <Label className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider">
+      <Label className="text-caption font-bold text-[#64748B] uppercase tracking-wider">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </Label>
       <div className="mt-1.5">{children}</div>
@@ -648,7 +648,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
               }
               {c.nome}
               {tipoBadge && (
-                <span className={`text-[10px] font-bold px-1.5 py-0.5 rounded-full ml-1 ${tipoBadge.cls}`}>
+                <span className={`text-caption font-bold px-1.5 py-0.5 rounded-full ml-1 ${tipoBadge.cls}`}>
                   {tipoBadge.label}
                 </span>
               )}
@@ -661,13 +661,13 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             {c._dataDisplay ? moment(c._dataDisplay).format("DD/MM/YYYY") : "—"}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-[13px]">—</span> : <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-slate-100 text-slate-600"} />}
+            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-slate-100 text-slate-600"} />}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-[13px]">—</span> : <Badge label={c.interesse_troca ? "Sim" : "Não"} className={c.interesse_troca ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"} />}
+            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_troca ? "Sim" : "Não"} className={c.interesse_troca ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"} />}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-[13px]">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-500"} />}
+            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-500"} />}
           </td>
           <td className="px-4 py-3"><Badge label={saleDisplay} className={SALE_STYLE[saleDisplay] || "bg-slate-100 text-slate-500"} /></td>
           <td className="px-4 py-3">
@@ -697,7 +697,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
         <div className="flex items-start justify-between px-6 py-4 border-b border-[#E5E7EB]">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="w-5 h-5 rounded-full bg-[#6D28D9] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span className="w-5 h-5 rounded-full bg-[#6D28D9] text-white text-caption font-bold flex items-center justify-center flex-shrink-0">4</span>
               <h2 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Cadastrar Venda/Agendamentos</h2>
               <InfoTooltip text="Registros criados aqui são salvos diretamente na Carteira de Clientes — base única do sistema. Nenhum dado é duplicado." />
             </div>
@@ -705,7 +705,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           </div>
           {!bloqueado && (
             <button onClick={openCreate}
-              className="flex items-center gap-1.5 bg-[#6D28D9] hover:bg-purple-700 active:scale-95 transition-all text-white text-[13px] font-bold px-4 py-2 rounded-xl shadow-sm shadow-purple-100 ml-4 flex-shrink-0">
+              className="flex items-center gap-1.5 bg-[#6D28D9] hover:bg-purple-700 active:scale-95 transition-all text-white text-body-sm font-bold px-4 py-2 rounded-xl shadow-sm shadow-purple-100 ml-4 flex-shrink-0">
               <Plus className="w-4 h-4" />
               {d1Editavel ? "Novo Agendamento D+1" : "Novo Cliente"}
             </button>
@@ -722,11 +722,11 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
         )}
 
         <div className="overflow-x-auto">
-          <table className="w-full text-[13px]">
+          <table className="w-full text-body-sm">
             <thead>
               <tr className="bg-[#F8FAFC] border-b border-[#E5E7EB]">
                 {TABLE_HEADERS.map(h => (
-                  <th key={h} className="text-left text-[11px] font-bold text-[#64748B] uppercase tracking-wider px-4 py-3 whitespace-nowrap">{h}</th>
+                  <th key={h} className="text-left text-caption font-bold text-[#64748B] uppercase tracking-wider px-4 py-3 whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -741,7 +741,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
                     <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center">
                       <Plus className="w-5 h-5 text-purple-300" />
                     </div>
-                    <p className="text-[13px] text-[#64748B] font-medium">Nenhum cliente neste fechamento.</p>
+                    <p className="text-body-sm text-[#64748B] font-medium">Nenhum cliente neste fechamento.</p>
                     <p className="text-[12px] text-slate-300">Clique em "Novo Cliente" para adicionar.</p>
                   </div>
                 </td></tr>
@@ -762,7 +762,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
       <Dialog open={dialogOpen} onOpenChange={v => { if (!saving) { setDialogOpen(v); setSaveError(null); } }}>
         <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold text-[17px]">
+            <DialogTitle className="text-[#0F172A] font-bold text-h5">
               {editingCliente
                 ? (modoD1 ? "Editar Agendamento D+1" : "Editar Cliente")
                 : (modoD1 ? "Novo Agendamento D+1" : "Cadastrar Novo Cliente")}
@@ -775,7 +775,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
                 </p>
               </div>
             ) : (
-              <p className="text-[13px] text-[#64748B] mt-0.5 font-normal">
+              <p className="text-body-sm text-[#64748B] mt-0.5 font-normal">
                 Dados salvos diretamente na Carteira de Clientes (base única do sistema).
               </p>
             )}
@@ -827,7 +827,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             </Field>
             <Field label="Situação Comercial">
               {modoD1 ? (
-                <div className="h-10 flex items-center px-3 bg-slate-50 border border-slate-200 rounded-lg text-[13px] text-slate-500 font-semibold cursor-not-allowed">
+                <div className="h-10 flex items-center px-3 bg-slate-50 border border-slate-200 rounded-lg text-body-sm text-slate-500 font-semibold cursor-not-allowed">
                   Em negociação ativa
                 </div>
               ) : (
@@ -863,11 +863,11 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
 
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
             <button onClick={() => { setDialogOpen(false); setSaveError(null); }} disabled={saving}
-              className="px-5 py-2.5 text-[13px] font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
+              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
               Cancelar
             </button>
             <button onClick={handleSave} disabled={!canSave || saving}
-              className="px-6 py-2.5 text-[13px] font-bold text-white bg-[#6D28D9] hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-purple-100">
+              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#6D28D9] hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-purple-100">
               {saving ? "Salvando..." : modoD1 ? "Salvar Agendamento" : "Salvar na Carteira"}
             </button>
           </div>
@@ -880,17 +880,17 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           <DialogHeader>
             <DialogTitle className="text-[#0F172A] font-bold">Confirmar reagendamento?</DialogTitle>
           </DialogHeader>
-          <p className="text-[13px] text-[#64748B] mt-1 leading-relaxed">
+          <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
             <strong className="text-[#0F172A]">{reagendConfirm?.clientName}</strong> deixará de fazer parte dos Agendamentos D+1 desta data e continuará disponível na Carteira de Clientes.
           </p>
           {saveError && <p className="text-[12px] text-[#EF4444] font-semibold mt-2">{saveError}</p>}
           <div className="flex items-center justify-end gap-3 mt-4">
             <button onClick={() => setReagendConfirm(null)} disabled={saving}
-              className="px-5 py-2 text-[13px] font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
+              className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
               Cancelar
             </button>
             <button onClick={confirmarReagendamento} disabled={saving}
-              className="px-5 py-2 text-[13px] font-bold text-white bg-[#005BFF] hover:bg-blue-700 disabled:opacity-50 rounded-xl transition-colors">
+              className="px-5 py-2 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-blue-700 disabled:opacity-50 rounded-xl transition-colors">
               {saving ? "Salvando..." : "Confirmar Reagendamento"}
             </button>
           </div>
@@ -903,16 +903,16 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           <DialogHeader>
             <DialogTitle className="text-[#0F172A] font-bold">Remover do fechamento?</DialogTitle>
           </DialogHeader>
-          <p className="text-[13px] text-[#64748B] mt-1 leading-relaxed">
+          <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
             O registro de <strong className="text-[#0F172A]">{deleteConfirm?.name}</strong> será removido deste fechamento. O cliente e seu histórico permanecem na Carteira.
           </p>
           <div className="flex items-center justify-end gap-3 mt-4">
             <button onClick={() => setDeleteConfirm(null)}
-              className="px-5 py-2 text-[13px] font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
+              className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
               Cancelar
             </button>
             <button onClick={confirmDelete}
-              className="px-5 py-2 text-[13px] font-bold text-white bg-[#EF4444] hover:bg-red-600 rounded-xl transition-colors">
+              className="px-5 py-2 text-body-sm font-bold text-white bg-[#EF4444] hover:bg-red-600 rounded-xl transition-colors">
               Remover
             </button>
           </div>

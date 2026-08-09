@@ -116,15 +116,15 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
     <Dialog open={open} onOpenChange={v => { if (!saving) handleClose(); }}>
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[#0F172A] font-bold text-[17px]">Nova atividade</DialogTitle>
+          <DialogTitle className="text-[#0F172A] font-bold text-h5">Nova atividade</DialogTitle>
         </DialogHeader>
 
         {step === "tipo" && (
           <div className="mt-3 space-y-2">
-            <p className="text-[13px] text-slate-500 mb-3">Selecione o tipo de atividade comercial:</p>
+            <p className="text-body-sm text-slate-500 mb-3">Selecione o tipo de atividade comercial:</p>
             {TIPOS.map(t => (
               <button key={t} onClick={() => handleEscolherTipo(t)}
-                className="w-full text-left px-4 py-3 rounded-xl border border-slate-200 hover:border-[#005BFF] hover:bg-blue-50 text-[13px] font-semibold text-[#0F172A] transition-colors">
+                className="w-full text-left px-4 py-3 rounded-xl border border-slate-200 hover:border-[#005BFF] hover:bg-blue-50 text-body-sm font-semibold text-[#0F172A] transition-colors">
                 {t}
               </button>
             ))}
@@ -141,7 +141,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
 
             {/* Busca de cliente por telefone */}
             <div>
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Cliente ou Telefone</label>
+              <label className="text-caption font-bold text-slate-500 uppercase tracking-wider">Cliente ou Telefone</label>
               <div className="flex gap-2 mt-1.5">
                 <Input
                   value={telefone}
@@ -159,7 +159,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
                   <UserCheck className="w-4 h-4 text-green-600 flex-shrink-0" />
                   <div className="min-w-0">
                     <p className="text-[12px] font-bold text-green-800 truncate">{clienteEncontrado.name}</p>
-                    <p className="text-[11px] text-green-600 truncate">{clienteEncontrado.vehicle_sought || "—"}</p>
+                    <p className="text-caption text-green-600 truncate">{clienteEncontrado.vehicle_sought || "—"}</p>
                   </div>
                 </div>
               )}
@@ -169,13 +169,13 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
                     <UserX className="w-4 h-4 text-amber-600 flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <p className="text-[12px] font-semibold text-amber-800">Cliente não encontrado.</p>
-                      <Link to="/carteira" onClick={handleClose} className="text-[11px] text-[#005BFF] underline">
+                      <Link to="/carteira" onClick={handleClose} className="text-caption text-[#005BFF] underline">
                         Abrir Carteira de Clientes para cadastrar depois
                       </Link>
                     </div>
                   </div>
                   <div>
-                    <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Nome do cliente</label>
+                    <label className="text-caption font-bold text-slate-500 uppercase tracking-wider">Nome do cliente</label>
                     <Input
                       value={nomeManual}
                       onChange={e => setNomeManual(e.target.value)}
@@ -190,24 +190,24 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
             {/* Data / Hora */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Data</label>
+                <label className="text-caption font-bold text-slate-500 uppercase tracking-wider">Data</label>
                 <Input type="date" value={form.data} onChange={e => setF("data", e.target.value)} className="mt-1.5" />
               </div>
               <div>
-                <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Hora</label>
+                <label className="text-caption font-bold text-slate-500 uppercase tracking-wider">Hora</label>
                 <Input type="time" value={form.hora} onChange={e => setF("hora", e.target.value)} className="mt-1.5" />
               </div>
             </div>
 
             {/* Veículo */}
             <div>
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Veículo (opcional)</label>
+              <label className="text-caption font-bold text-slate-500 uppercase tracking-wider">Veículo (opcional)</label>
               <Input value={form.veiculo} onChange={e => setF("veiculo", e.target.value)} className="mt-1.5" placeholder="Ex: HB20 1.0 Comfort" />
             </div>
 
             {/* Prioridade */}
             <div>
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Prioridade</label>
+              <label className="text-caption font-bold text-slate-500 uppercase tracking-wider">Prioridade</label>
               <Select value={String(form.prioridade)} onValueChange={v => setF("prioridade", Number(v))}>
                 <SelectTrigger className="mt-1.5"><SelectValue /></SelectTrigger>
                 <SelectContent>
@@ -218,17 +218,17 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
 
             {/* Observação */}
             <div>
-              <label className="text-[11px] font-bold text-slate-500 uppercase tracking-wider">Observação</label>
+              <label className="text-caption font-bold text-slate-500 uppercase tracking-wider">Observação</label>
               <Input value={form.descricao} onChange={e => setF("descricao", e.target.value)} className="mt-1.5" placeholder="Descreva o objetivo desta atividade..." />
             </div>
 
             <div className="flex justify-end gap-3 pt-2 border-t border-slate-100">
               <button onClick={handleClose} disabled={saving}
-                className="px-5 py-2.5 text-[13px] font-semibold text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                className="px-5 py-2.5 text-body-sm font-semibold text-slate-500 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
                 Cancelar
               </button>
               <button onClick={handleSalvar} disabled={!podesSalvar || saving}
-                className="px-6 py-2.5 text-[13px] font-bold text-white bg-[#005BFF] hover:bg-blue-700 disabled:opacity-50 rounded-xl transition-colors">
+                className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-blue-700 disabled:opacity-50 rounded-xl transition-colors">
                 {saving ? "Salvando..." : "Salvar atividade"}
               </button>
             </div>

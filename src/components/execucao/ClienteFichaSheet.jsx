@@ -22,8 +22,8 @@ function InfoRow({ label, value }) {
   if (!value) return null;
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wide">{label}</span>
-      <span className="text-[13px] text-[#0F172A] font-medium">{value}</span>
+      <span className="text-caption text-slate-400 font-semibold uppercase tracking-wide">{label}</span>
+      <span className="text-body-sm text-[#0F172A] font-medium">{value}</span>
     </div>
   );
 }
@@ -84,11 +84,11 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
                 {(cliente.name || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase()}
               </div>
               <div>
-                <h3 className="text-[17px] font-bold text-[#0F172A]">{cliente.name}</h3>
+                <h3 className="text-h5 font-bold text-[#0F172A]">{cliente.name}</h3>
                 <p className="text-[12px] text-slate-400">{cliente.channel} · {cliente.status}</p>
               </div>
               {cliente.status && (
-                <span className={`ml-auto text-[11px] font-bold px-2.5 py-1 rounded-full ${statusColors[cliente.status] || "bg-slate-100 text-slate-500"}`}>
+                <span className={`ml-auto text-caption font-bold px-2.5 py-1 rounded-full ${statusColors[cliente.status] || "bg-slate-100 text-slate-500"}`}>
                   {cliente.status}
                 </span>
               )}
@@ -112,7 +112,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
 
             {/* Dados do cliente */}
             <div className="bg-slate-50 rounded-2xl p-4 space-y-4">
-              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Informações</p>
+              <p className="text-caption font-bold text-slate-400 uppercase tracking-wider">Informações</p>
               <div className="grid grid-cols-2 gap-4">
                 <InfoRow label="Telefone" value={cliente.phone} />
                 <InfoRow label="Canal" value={cliente.channel} />
@@ -131,8 +131,8 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
               )}
               {cliente.notes && (
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-[11px] text-slate-400 font-semibold uppercase tracking-wide">Observações</span>
-                  <p className="text-[13px] text-[#0F172A]">{cliente.notes}</p>
+                  <span className="text-caption text-slate-400 font-semibold uppercase tracking-wide">Observações</span>
+                  <p className="text-body-sm text-[#0F172A]">{cliente.notes}</p>
                 </div>
               )}
               {cliente.loss_reason && (
@@ -141,7 +141,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
             </div>
 
             {/* Datas */}
-            <div className="text-[11px] text-slate-400 space-y-1">
+            <div className="text-caption text-slate-400 space-y-1">
               {cliente.created_date && (
                 <p>Cadastrado em {moment(cliente.created_date).format("DD/MM/YYYY")}</p>
               )}

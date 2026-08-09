@@ -116,9 +116,9 @@ function motivoRecomendacao(cliente) {
 function FieldRow({ label, value, vazio = "Não informado" }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">{label}</span>
+      <span className="text-caption font-bold text-slate-400 uppercase tracking-wide">{label}</span>
       {value
-        ? <span className="text-[13px] text-slate-700 font-medium">{value}</span>
+        ? <span className="text-body-sm text-slate-700 font-medium">{value}</span>
         : <span className="text-[12px] text-slate-300 italic">{vazio}</span>
       }
     </div>
@@ -149,7 +149,7 @@ function Bloco({ title, icon, children, defaultOpen = true }) {
 function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
   const campo = (k, l, span2 = false, type = "text", placeholder = "") => (
     <div key={k} className={span2 ? "col-span-2" : ""}>
-      <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">{l}</label>
+      <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">{l}</label>
       <Input
         type={type}
         value={form[k] != null ? (type === "datetime-local" ? String(form[k]).slice(0, 16) : form[k]) : ""}
@@ -179,7 +179,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
       {/* Origem e Atendimento */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Origem (canal)</label>
+          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Origem (canal)</label>
           <select
             value={form.canal_comercial || "Internet"}
             onChange={e => setForm(p => ({ ...p, canal_comercial: e.target.value }))}
@@ -190,7 +190,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         </div>
         {campo("origem_detalhada", "Origem Detalhada", false, "text", "Ex: Indicação, Tráfego Pago...")}
         <div>
-          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Temperatura</label>
+          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Temperatura</label>
           <select
             value={form.temperatura || "Morno"}
             onChange={e => setForm(p => ({ ...p, temperatura: e.target.value }))}
@@ -200,7 +200,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
           </select>
         </div>
         <div>
-          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Urgência da Compra</label>
+          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Urgência da Compra</label>
           <select
             value={form.urgencia_compra || form.urgencia || "Não informado"}
             onChange={e => setForm(p => ({ ...p, urgencia_compra: e.target.value, urgencia: e.target.value }))}
@@ -216,7 +216,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         {campo("veiculo_interesse", "Veículo de interesse", true, "text", "Ex: HB20 1.0 COMFORT")}
         {campo("valor_negociado", "Orçamento / Valor Negociado", false, "text", "R$ 68.900,00")}
         <div>
-          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Financiamento</label>
+          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Financiamento</label>
           <select
             value={form.financiamento || "Não se aplica"}
             onChange={e => setForm(p => ({ ...p, financiamento: e.target.value, interesse_financiamento: e.target.value !== "Não se aplica" }))}
@@ -231,7 +231,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         {campo("veiculo_troca", "Veículo na troca", false, "text", "Ex: GOL 1.0 2018")}
         {campo("valor_troca", "Valor da troca", false, "text", "R$ 35.000,00")}
         <div>
-          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Modalidade Preferida</label>
+          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Modalidade Preferida</label>
           <select
             value={form.preferencia_modalidade || form.modalidade || "Não informado"}
             onChange={e => setForm(p => ({ ...p, preferencia_modalidade: e.target.value, modalidade: e.target.value }))}
@@ -253,7 +253,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
 
       {/* Situação e Agenda */}
       <div>
-        <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Situação atual</label>
+        <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Situação atual</label>
         <select value={form.situacao_atual || ""} onChange={e => setForm(p => ({ ...p, situacao_atual: e.target.value }))} className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm">
           {SITUACOES_ATUAIS.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
@@ -261,21 +261,21 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
 
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2">
-          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Próximo passo</label>
+          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Próximo passo</label>
           <Input value={form.proximo_passo || ""} onChange={e => setForm(p => ({ ...p, proximo_passo: e.target.value }))} className="rounded-xl h-8 text-sm" />
         </div>
         <div className="col-span-2">
-          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Data do próximo passo</label>
+          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Data do próximo passo</label>
           <Input type="datetime-local" value={form.proxima_acao_data ? form.proxima_acao_data.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, proxima_acao_data: e.target.value }))} className="rounded-xl h-8 text-sm" />
         </div>
         <div className="col-span-2">
-          <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Data e Hora da Visita / Agendamento</label>
+          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Data e Hora da Visita / Agendamento</label>
           <Input type="datetime-local" value={form.visita_agendada_em ? form.visita_agendada_em.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, visita_agendada_em: e.target.value }))} className="rounded-xl h-8 text-sm" />
         </div>
       </div>
 
       <div className="space-y-2">
-        <p className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide">Interesses</p>
+        <p className="text-caption font-semibold text-slate-400 uppercase tracking-wide">Interesses</p>
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -297,12 +297,12 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
       </div>
 
       <div>
-        <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Objeções / Motivo de perda</label>
+        <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Objeções / Motivo de perda</label>
         <Input value={form.motivo_perda || ""} onChange={e => setForm(p => ({ ...p, motivo_perda: e.target.value }))} className="rounded-xl h-8 text-sm" placeholder="Ex: preço, parcela, avaliação..." />
       </div>
 
       <div>
-        <label className="text-[10px] font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Observações</label>
+        <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Observações</label>
         <textarea value={form.observacoes || ""} onChange={e => setForm(p => ({ ...p, observacoes: e.target.value }))} rows={2} className="w-full rounded-xl border border-input bg-white px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-ring" />
       </div>
 
@@ -467,7 +467,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                   {iniciais}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-[17px] font-black text-[#0F172A] leading-tight">{cliente.nome}</h3>
+                  <h3 className="text-h5 font-black text-[#0F172A] leading-tight">{cliente.nome}</h3>
                   <p className="text-xs text-slate-400 mt-0.5">
                     {canal}{cliente.origem_detalhada ? ` · ${cliente.origem_detalhada}` : ""} · Cadastrado {moment(cliente.created_date).format("DD/MM/YYYY")}
                   </p>
@@ -482,8 +482,8 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
               {/* Situação + Temperatura */}
               <div className="flex flex-wrap gap-1.5">
-                <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura || "Morno"}</span>
-                <span className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200">{situacao}</span>
+                <span className={`text-caption font-bold px-2.5 py-1 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura || "Morno"}</span>
+                <span className="text-caption font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200">{situacao}</span>
               </div>
 
               {/* Venda cancelada — motivo, data e responsável ficam visíveis
@@ -494,14 +494,14 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                   <div className="flex items-start gap-2">
                     <AlertCircle className="w-3.5 h-3.5 text-amber-600 mt-0.5 shrink-0" />
                     <div className="min-w-0">
-                      <p className="text-[11px] font-bold text-amber-800">
+                      <p className="text-caption font-bold text-amber-800">
                         Venda cancelada
                         {cliente.cancelada_em ? ` em ${moment(cliente.cancelada_em).format("DD/MM/YYYY [às] HH:mm")}` : ""}
                       </p>
-                      <p className="text-[11px] text-amber-700 mt-0.5">
+                      <p className="text-caption text-amber-700 mt-0.5">
                         Motivo: {cliente.motivo_cancelamento || "Não informado"}
                       </p>
-                      <p className="text-[10px] text-amber-600 mt-0.5">
+                      <p className="text-caption text-amber-600 mt-0.5">
                         Oportunidade encerrada. O histórico da venda foi preservado.
                       </p>
                     </div>
@@ -512,11 +512,11 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
               {/* Qualidade x Urgência */}
               <div className="grid grid-cols-2 gap-2">
                 <div className={`rounded-xl border px-3 py-2 ${qualidade.color}`}>
-                  <p className="text-[9px] font-bold uppercase tracking-wide opacity-60 mb-0.5">Qualidade</p>
+                  <p className="text-caption font-bold uppercase tracking-wide opacity-60 mb-0.5">Qualidade</p>
                   <p className="text-xs font-bold">{qualidade.label}</p>
                 </div>
                 <div className={`rounded-xl border px-3 py-2 ${urgencia.color}`}>
-                  <p className="text-[9px] font-bold uppercase tracking-wide opacity-60 mb-0.5">Urgência</p>
+                  <p className="text-caption font-bold uppercase tracking-wide opacity-60 mb-0.5">Urgência</p>
                   <p className="text-xs font-bold">{urgencia.label}</p>
                 </div>
               </div>
@@ -546,16 +546,16 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
                   <div className="space-y-2">
                     <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Mentor recomenda</p>
+                      <p className="text-caption font-bold text-slate-400 uppercase tracking-wide">Mentor recomenda</p>
                       <p className="text-sm font-bold text-[#031B3D] mt-0.5">{cliente.proximo_passo || proximoPasso}</p>
                     </div>
                     <div>
-                      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Objetivo</p>
+                      <p className="text-caption font-bold text-slate-400 uppercase tracking-wide">Objetivo</p>
                       <p className="text-sm font-semibold text-slate-600 mt-0.5">{cliente.objetivo_atual || objetivo}</p>
                     </div>
                     {motivo && (
                       <div>
-                        <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Motivo</p>
+                        <p className="text-caption font-bold text-slate-400 uppercase tracking-wide">Motivo</p>
                         <p className="text-xs text-slate-500 mt-0.5 italic">{motivo}</p>
                       </div>
                     )}
@@ -609,7 +609,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                         </div>
                         <button
                           onClick={() => abrirAlterarPasso(p)}
-                          className="text-[11px] font-semibold text-[#005BFF] hover:underline whitespace-nowrap shrink-0"
+                          className="text-caption font-semibold text-[#005BFF] hover:underline whitespace-nowrap shrink-0"
                         >
                           Definir →
                         </button>
@@ -637,14 +637,14 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
                     {/* Interesse */}
                     <div>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-wide mb-2">Interesse</p>
+                      <p className="text-caption font-black text-slate-400 uppercase tracking-wide mb-2">Interesse</p>
                       <div className="grid grid-cols-2 gap-3">
                         <FieldRow label="Veículo" value={cliente.veiculo_interesse} />
                         <FieldRow label="Orçamento" value={cliente.valor_negociado} />
                       </div>
                       {cliente.observacoes && (
                         <div className="mt-2 p-2.5 bg-slate-50 rounded-xl">
-                          <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-0.5">Observações</p>
+                          <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-0.5">Observações</p>
                           <p className="text-xs text-slate-600">{cliente.observacoes}</p>
                         </div>
                       )}
@@ -652,26 +652,26 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
                     {/* Compra */}
                     <div>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-wide mb-2">Compra</p>
+                      <p className="text-caption font-black text-slate-400 uppercase tracking-wide mb-2">Compra</p>
                       <div className="grid grid-cols-2 gap-3">
                         <FieldRow label="Orçamento" value={cliente.valor_negociado} />
                         <div className="flex flex-col gap-0.5">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Possui troca</span>
+                          <span className="text-caption font-bold text-slate-400 uppercase tracking-wide">Possui troca</span>
                           {cliente.interesse_troca != null
-                            ? <span className="text-[13px] text-slate-700 font-medium">{cliente.interesse_troca ? "Sim" : "Não"}</span>
+                            ? <span className="text-body-sm text-slate-700 font-medium">{cliente.interesse_troca ? "Sim" : "Não"}</span>
                             : <span className="text-[12px] text-slate-300 italic">Não informado</span>
                           }
                         </div>
                         <div className="flex flex-col gap-0.5">
-                          <span className="text-[10px] font-bold text-slate-400 uppercase tracking-wide">Financiamento</span>
+                          <span className="text-caption font-bold text-slate-400 uppercase tracking-wide">Financiamento</span>
                           {cliente.interesse_financiamento != null
-                            ? <span className="text-[13px] text-slate-700 font-medium">{cliente.interesse_financiamento ? "Sim" : "Não"}</span>
+                            ? <span className="text-body-sm text-slate-700 font-medium">{cliente.interesse_financiamento ? "Sim" : "Não"}</span>
                             : <span className="text-[12px] text-slate-300 italic">Não informado</span>
                           }
                         </div>
                         {cliente.proposta_enviada && (
                           <div className="col-span-2">
-                            <span className="text-[11px] bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full font-semibold border border-blue-100">✓ Proposta enviada</span>
+                            <span className="text-caption bg-blue-50 text-blue-600 px-2.5 py-1 rounded-full font-semibold border border-blue-100">✓ Proposta enviada</span>
                           </div>
                         )}
                       </div>
@@ -679,7 +679,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
                     {/* Dados de contato */}
                     <div>
-                      <p className="text-[10px] font-black text-slate-400 uppercase tracking-wide mb-2">Contato</p>
+                      <p className="text-caption font-black text-slate-400 uppercase tracking-wide mb-2">Contato</p>
                       <div className="grid grid-cols-2 gap-3">
                         <FieldRow label="WhatsApp" value={cliente.whatsapp} />
                         <FieldRow label="Telefone" value={cliente.telefone} />
@@ -691,7 +691,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                     {/* Objeções */}
                     {cliente.motivo_perda && (
                       <div>
-                        <p className="text-[10px] font-black text-slate-400 uppercase tracking-wide mb-2">Objeções</p>
+                        <p className="text-caption font-black text-slate-400 uppercase tracking-wide mb-2">Objeções</p>
                         <div className="bg-red-50 border border-red-100 rounded-xl px-3 py-2">
                           <p className="text-sm text-red-700">{cliente.motivo_perda}</p>
                         </div>
@@ -718,16 +718,16 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <p className="text-xs font-bold text-slate-700">{h.tipo}</p>
-                              <span className="text-[11px] text-slate-300 shrink-0">{moment(h.created_date).format("DD/MM HH:mm")}</span>
+                              <span className="text-caption text-slate-300 shrink-0">{moment(h.created_date).format("DD/MM HH:mm")}</span>
                             </div>
                             {h.descricao && <p className="text-xs text-slate-500 mt-0.5">{h.descricao}</p>}
                             {h.resultado && (
-                              <span className="inline-block mt-1 text-[11px] font-semibold text-[#005BFF] bg-blue-50 px-2 py-0.5 rounded-full">
+                              <span className="inline-block mt-1 text-caption font-semibold text-[#005BFF] bg-blue-50 px-2 py-0.5 rounded-full">
                                 → {h.resultado}
                               </span>
                             )}
                             {h.momento_novo && h.momento_novo !== h.momento_anterior && (
-                              <p className="text-[11px] text-slate-400 mt-0.5 italic">{h.momento_anterior} → {h.momento_novo}</p>
+                              <p className="text-caption text-slate-400 mt-0.5 italic">{h.momento_anterior} → {h.momento_novo}</p>
                             )}
                           </div>
                         </div>

@@ -17,7 +17,7 @@ export default function MoreActionsPopover({ actions, onSelectAction, onOpenActi
       <PopoverTrigger asChild>
         <button
           onClick={(e) => e.stopPropagation()}
-          className="mt-0.5 w-full rounded bg-muted/50 px-1.5 py-0.5 text-left text-[10px] font-medium text-muted-foreground hover:bg-muted"
+          className="mt-0.5 w-full rounded bg-muted/50 px-1.5 py-0.5 text-left text-caption font-medium text-muted-foreground hover:bg-muted"
         >
           + {remaining} mais
         </button>
@@ -44,7 +44,7 @@ export default function MoreActionsPopover({ actions, onSelectAction, onOpenActi
                 </div>
                 <p className="truncate text-muted-foreground">{action.title}</p>
                 <div className="mt-0.5 flex items-center gap-1">
-                  <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-medium ${statusStyle.badge || ""}`}>
+                  <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${statusStyle.badge || ""}`}>
                     {statusStyle.label}
                   </span>
                 </div>

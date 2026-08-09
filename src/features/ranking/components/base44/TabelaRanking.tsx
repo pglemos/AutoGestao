@@ -9,10 +9,10 @@ const MEDAL = [
 ]
 
 function StatusBadge({ pct }: { pct: number }) {
-  if (pct >= 100) return <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-green-100 text-green-700">Acima da meta</span>
-  if (pct >= 80) return <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-amber-100 text-amber-700">Próximo da meta</span>
-  if (pct >= 50) return <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-blue-100 text-blue-700">Em evolução</span>
-  return <span className="px-2.5 py-1 rounded-full text-[11px] font-semibold bg-red-100 text-red-600">Abaixo do esperado</span>
+  if (pct >= 100) return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-green-100 text-green-700">Acima da meta</span>
+  if (pct >= 80) return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-amber-100 text-amber-700">Próximo da meta</span>
+  if (pct >= 50) return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-blue-100 text-blue-700">Em evolução</span>
+  return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-red-100 text-red-600">Abaixo do esperado</span>
 }
 
 type Props = {
@@ -29,7 +29,7 @@ export function TabelaRanking({ vendedores, meta, meuId }: Props) {
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
               {['Posição', 'Vendedor', 'Unidade', 'Vendas', 'Meta', 'Atingimento', 'Status'].map(h => (
-                <th key={h} className="text-left text-[11px] font-semibold text-slate-500 uppercase tracking-wider px-4 py-3">{h}</th>
+                <th key={h} className="text-left text-caption font-semibold text-slate-500 uppercase tracking-wider px-4 py-3">{h}</th>
               ))}
             </tr>
           </thead>
@@ -58,16 +58,16 @@ const pct = vendedorMeta > 0 ? Math.round((v.vendas / vendedorMeta) * 100) : 0
                     <div className="flex items-center gap-2">
                       <RankingAvatar nome={v.nome} foto={v.foto} size={32} />
                       <div className="flex items-center gap-1.5">
-                        <span className="text-[13px] font-semibold text-slate-800">{v.nome}</span>
-                        {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-[9px] font-bold rounded-full">Você</span>}
+                        <span className="text-body-sm font-semibold text-slate-800">{v.nome}</span>
+                        {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-caption font-bold rounded-full">Você</span>}
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-[13px] text-slate-500">{v.unidade || '—'}</td>
+                  <td className="px-4 py-3 text-body-sm text-slate-500">{v.unidade || '—'}</td>
                   <td className="px-4 py-3">
                     <span className={`text-[14px] font-bold ${isMe ? 'text-blue-600' : 'text-green-600'}`}>{v.vendas}</span>
                   </td>
-<td className="px-4 py-3 text-[13px] text-slate-500">{vendedorMeta}</td>
+<td className="px-4 py-3 text-body-sm text-slate-500">{vendedorMeta}</td>
                   <td className="px-4 py-3">
                     <span className={`text-[14px] font-bold ${pct >= 100 ? 'text-green-600' : pct >= 80 ? 'text-amber-600' : pct >= 50 ? 'text-blue-500' : 'text-red-500'}`}>
                       {pct}%
@@ -80,7 +80,7 @@ const pct = vendedorMeta > 0 ? Math.round((v.vendas / vendedorMeta) * 100) : 0
           </tbody>
         </table>
         {vendedores.length === 0 && (
-          <div className="text-center py-12 text-slate-400 text-[13px]">
+          <div className="text-center py-12 text-slate-400 text-body-sm">
             Nenhum dado encontrado para os filtros selecionados.
           </div>
         )}

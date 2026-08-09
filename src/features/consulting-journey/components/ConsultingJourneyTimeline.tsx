@@ -31,7 +31,7 @@ export function ConsultingJourneyTimeline({ visits, nextVisitNumber, onOpen }: {
               <span className="min-w-0 flex-1">
                 <span className="flex flex-wrap items-center gap-2">
                   <strong className="text-sm text-foreground">Encontro {visit.visitNumber}</strong>
-                  {isNext ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-[11px] font-medium text-primary">Próximo passo</span> : null}
+                  {isNext ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-caption font-medium text-primary">Próximo passo</span> : null}
                 </span>
                 <span className="mt-0.5 block truncate text-sm text-muted-foreground">{visit.objective || 'Objetivo disponível ao abrir o encontro'}</span>
               </span>

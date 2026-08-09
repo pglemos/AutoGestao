@@ -255,7 +255,7 @@ return (
       {showDiscreetPendingBanner && (
         <div className="hidden items-center gap-3 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 sm:flex">
           <AlertTriangle size={16} className="shrink-0 text-[#F59E0B]" />
-          <p className="text-[13px] font-medium text-[#92400E]">
+          <p className="text-body-sm font-medium text-[#92400E]">
             Existe um fechamento anterior pendente.{' '}
             <button type="button" onClick={onOpenHistory} className="font-semibold underline transition-colors hover:text-amber-900">
               Acesse o Histórico de Fechamentos
@@ -277,7 +277,7 @@ return (
       {hasCrmActivity && (
         <div className="flex items-start gap-3 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3" role="status">
           <Info size={16} className="mt-0.5 shrink-0 text-sky-600" aria-hidden="true" />
-          <p className="text-[13px] font-semibold text-sky-900">
+          <p className="text-body-sm font-semibold text-sky-900">
             O CRM registra atividade acima do declarado. O fechamento salvará exatamente os números informados por você; a divergência ficará disponível para conferência da liderança.
           </p>
         </div>
@@ -350,27 +350,27 @@ return (
           {/* 4 metrics: 2x2 grid on mobile, single row with dividers from sm+ */}
           <div className="grid grid-cols-2 gap-y-4 sm:flex sm:items-stretch sm:gap-y-0 sm:divide-x sm:divide-[#DFE0E1]">
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4 sm:first:pl-0">
-              <span className="text-[28px] font-bold leading-none tabular-nums text-[#005BFF]">{display.leads}</span>
-              <span className="mt-1 text-[11px] font-semibold text-[#526B7A] text-center leading-tight">Leads Recebidos</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-[#005BFF]">{display.leads}</span>
+              <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Leads Recebidos</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4">
-              <span className="text-[28px] font-bold leading-none tabular-nums text-[#6D28D9]">{display.visitas}</span>
-              <span className="mt-1 text-[11px] font-semibold text-[#526B7A] text-center leading-tight">Atendimentos</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-[#6D28D9]">{display.visitas}</span>
+              <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Atendimentos</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4">
-              <span className="text-[28px] font-bold leading-none tabular-nums text-[#F59E0B]">{display.agd}</span>
-              <span className="mt-1 text-[11px] font-semibold text-[#526B7A] text-center leading-tight">Agendamentos D+1</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-[#F59E0B]">{display.agd}</span>
+              <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Agendamentos D+1</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4 sm:last:pr-0">
-              <span className="text-[28px] font-bold leading-none tabular-nums text-[#EF4343]">{realSalesCount}</span>
-              <span className="mt-1 text-[11px] font-semibold text-[#526B7A] text-center leading-tight">Vendas Realizadas</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-[#EF4343]">{realSalesCount}</span>
+              <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Vendas Realizadas</span>
             </div>
           </div>
 
           {/* Faturamento bar */}
           <div className="flex items-center justify-between border-t border-[#DFE0E1] pt-3">
-            <span className="text-[11px] font-extrabold uppercase tracking-widest text-[#526B7A]">FATURAMENTO</span>
-            <span className="text-[22px] font-bold tabular-nums text-[#22C55E]">{BRL(realFaturamento)}</span>
+            <span className="text-caption font-extrabold uppercase tracking-widest text-[#526B7A]">FATURAMENTO</span>
+            <span className="text-h3 font-bold tabular-nums text-[#22C55E]">{BRL(realFaturamento)}</span>
           </div>
         </div>
 
@@ -401,7 +401,7 @@ return (
                   className="absolute rounded-full bg-white flex flex-col items-center justify-center"
                   style={{ inset: 11 }}
                 >
-                  <span className="text-[23px] font-bold leading-none tabular-nums text-[#071822]">
+                  <span className="text-h3 font-bold leading-none tabular-nums text-[#071822]">
                     {disciplinePercent}%
                   </span>
                 </div>
@@ -409,7 +409,7 @@ return (
 
               {/* Text column */}
               <div className="flex flex-1 min-w-0 flex-col gap-2">
-                <p className="text-[11px] font-extrabold uppercase tracking-widest text-[#526B7A]">
+                <p className="text-caption font-extrabold uppercase tracking-widest text-[#526B7A]">
                   DISCIPLINA – FECHAMENTO DIÁRIO
                 </p>
 
@@ -419,7 +419,7 @@ return (
                   </p>
                 )}
 
-                <p className="text-[11px] font-medium text-[#526B7A]">
+                <p className="text-caption font-medium text-[#526B7A]">
                   70% base + {pontosExtras}% detalhamento
                 </p>
 
@@ -465,7 +465,7 @@ return (
               
               {/* SECTION 1: Fechamento básico — 70% */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#005BFF] flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                <h3 className="font-extrabold text-[#005BFF] flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <Check size={14} className="stroke-[3]" /> 1. Fechamento básico — 70%
                 </h3>
                 <p>
@@ -488,7 +488,7 @@ return (
 
               {/* SECTION 2: Cadastro dos agendamentos — até +30% */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#22C55E] flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                <h3 className="font-extrabold text-[#22C55E] flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <Award size={14} className="stroke-[2.5]" /> 2. Cadastro dos agendamentos — até +30%
                 </h3>
                 <p>
@@ -522,7 +522,7 @@ return (
 
               {/* SECTION 3: Quando um cadastro conta como agendamento? */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#6D28D9] flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                <h3 className="font-extrabold text-[#6D28D9] flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <HelpCircle size={14} /> 3. Quando um cadastro conta como agendamento?
                 </h3>
                 <p>
@@ -547,7 +547,7 @@ return (
 
               {/* SECTION 4: Atenção à data do agendamento */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#F59E0B] flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                <h3 className="font-extrabold text-[#F59E0B] flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <Clock size={14} /> 4. Atenção à data do agendamento
                 </h3>
                 <p>
@@ -577,7 +577,7 @@ return (
 
               {/* SECTION 5: Venda não é agendamento */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#22C55E] flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                <h3 className="font-extrabold text-[#22C55E] flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <DollarSign size={14} /> 5. Venda não é agendamento
                 </h3>
                 <p>
@@ -602,7 +602,7 @@ return (
 
               {/* SECTION 6: Data operacional */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#64748B] flex items-center gap-1.5 uppercase tracking-wider text-[11px]">
+                <h3 className="font-extrabold text-[#64748B] flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <Clock size={14} /> 6. Data operacional
                 </h3>
                 <p>
@@ -619,7 +619,7 @@ return (
 
               {/* SECTION 7: Resumo rápido */}
               <div className="space-y-2 bg-[#F7F8F8] p-4 rounded-xl border border-[#DFE0E1]">
-                <h3 className="font-extrabold text-[#005BFF] uppercase tracking-wider text-[10px]">
+                <h3 className="font-extrabold text-[#005BFF] uppercase tracking-wider text-caption">
                   7. Resumo rápido
                 </h3>
                 <ul className="space-y-1.5 font-semibold text-[#071822]">
@@ -654,11 +654,11 @@ return (
 <div className="fixed inset-0 z-[140] grid place-items-center bg-black/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
 <div role="dialog" aria-modal="true" aria-labelledby="checkin-finalize-title" aria-describedby="checkin-finalize-description" className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
 <header className="border-b border-[#DFE0E1] bg-white px-6 py-5">
-<h2 id="checkin-finalize-title" className="text-[17px] font-bold leading-snug tracking-tight text-[#0F172A]">
+<h2 id="checkin-finalize-title" className="text-h5 font-bold leading-snug tracking-tight text-[#0F172A]">
 Confirma que não haverá mais registros {activeClosingContext.mainLabel}?
 </h2>
 </header>
-<div id="checkin-finalize-description" className="space-y-3 px-6 py-5 text-[13px] leading-relaxed text-[#64748B]">
+<div id="checkin-finalize-description" className="space-y-3 px-6 py-5 text-body-sm leading-relaxed text-[#64748B]">
 <p>
 Ao concluir, leads, atendimentos, vendas e demais informações referentes ao dia{' '}
 <strong className="text-[#0F172A]">{mainDateLabel}</strong> serão encerrados e não poderão mais ser alterados.
@@ -687,7 +687,7 @@ Você informou {totalAgendamentosD1} Agendamentos D+1 e detalhou {creditosValido
               <button
                 type="button"
  onClick={() => setConfirmFinalizeModalOpen(false)}
- className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-[13px] font-semibold text-[#64748B] transition-colors hover:bg-slate-50"
+ className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-body-sm font-semibold text-[#64748B] transition-colors hover:bg-slate-50"
               >
  Não, voltar
               </button>
@@ -695,7 +695,7 @@ Você informou {totalAgendamentosD1} Agendamentos D+1 e detalhou {creditosValido
                 type="button"
  onClick={handleFinalizarMesmoAssim}
 disabled={saving}
-className="rounded-xl bg-[#22C55E] px-6 py-2.5 text-[13px] font-bold text-white shadow-sm shadow-green-100 transition-colors hover:bg-green-600 disabled:opacity-50"
+className="rounded-xl bg-[#22C55E] px-6 py-2.5 text-body-sm font-bold text-white shadow-sm shadow-green-100 transition-colors hover:bg-green-600 disabled:opacity-50"
               >
  Sim, concluir
               </button>
@@ -725,7 +725,7 @@ className="rounded-xl bg-[#22C55E] px-6 py-2.5 text-[13px] font-bold text-white 
             type="submit"
  disabled={saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoConcluido}
           className={cn(
-            "inline-flex w-full shrink-0 items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-center text-[12px] font-extrabold uppercase tracking-[0.06em] text-white shadow-[0_8px_20px_rgba(22,163,74,0.28)] transition-all sm:w-auto sm:px-8 sm:text-[13px] sm:tracking-[0.08em]",
+            "inline-flex w-full shrink-0 items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-center text-[12px] font-extrabold uppercase tracking-[0.06em] text-white shadow-[0_8px_20px_rgba(22,163,74,0.28)] transition-all sm:w-auto sm:px-8 sm:text-body-sm sm:tracking-[0.08em]",
 saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoConcluido
               ? "bg-[#526B7A] cursor-not-allowed shadow-none"
               : "bg-[#00A89D] hover:bg-[#00A89D] active:scale-[0.98]"
@@ -740,7 +740,7 @@ saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoCon
           </button>
 
           {/* Warning text */}
-          <p className="text-[13px] font-semibold text-[#526B7A] leading-snug">
+          <p className="text-body-sm font-semibold text-[#526B7A] leading-snug">
             {fechamentoConcluido ? (
               'Este fechamento já foi enviado. Para ajustes, use o histórico e solicite correção.'
             ) : (
@@ -759,7 +759,7 @@ saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoCon
           <button
             type="button"
             onClick={onOpenHistory}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-[13px] font-semibold text-slate-600 shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-body-sm font-semibold text-slate-600 shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
           >
             <History size={15} aria-hidden="true" />
             Histórico de Fechamentos
@@ -793,10 +793,10 @@ function MetricGroupCard({
   return (
     <Card className="min-w-0 overflow-hidden rounded-[16px] border border-[#dfe7f0] bg-white p-0 shadow-mx-lg">
       <header className="flex min-h-12 items-start gap-2 border-b border-[#DFE0E1] px-4 py-3 sm:items-center sm:px-5">
-        <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-[11px] font-bold text-white ${stepTone}`}>
+        <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-caption font-bold text-white ${stepTone}`}>
           {step}
         </span>
-        <h2 className="min-w-0 text-[12px] font-extrabold uppercase leading-snug tracking-[0.06em] text-[#334155] sm:text-[13px] sm:tracking-[0.08em]">
+        <h2 className="min-w-0 text-[12px] font-extrabold uppercase leading-snug tracking-[0.06em] text-[#334155] sm:text-body-sm sm:tracking-[0.08em]">
           {label}
         </h2>
         {tooltipText && <InfoTooltip text={tooltipText} />}
@@ -888,11 +888,11 @@ function MetricCounterCard({
       )}
     >
       <div className="flex items-center gap-1">
-        <span className="text-[13px] font-bold text-[#526B7A]">
+        <span className="text-body-sm font-bold text-[#526B7A]">
           {label}
         </span>
         {crmBadge && (
-          <span className="inline-flex items-center justify-center rounded-full bg-[#00A89D]/10 px-1.5 py-0.5 text-[9px] font-bold text-[#00A89D] border border-[#00A89D]/20">
+          <span className="inline-flex items-center justify-center rounded-full bg-[#00A89D]/10 px-1.5 py-0.5 text-caption font-bold text-[#00A89D] border border-[#00A89D]/20">
             CRM
           </span>
         )}
@@ -916,7 +916,7 @@ function MetricCounterCard({
         onWheel={handleWheel}
         className="
           h-11 w-20 rounded-xl border border-[#DFE0E1] bg-[#F7F8F8] text-center
-          text-[26px] font-extrabold leading-none text-[#071822]
+          text-h3 font-extrabold leading-none text-[#071822]
           outline-none tabular-nums cursor-text transition-all
           [appearance:textfield]
           [&::-webkit-inner-spin-button]:appearance-none
@@ -981,10 +981,10 @@ function ResumoItem({
 
   return (
     <div className="grid min-h-[88px] place-items-center rounded-xl border border-[#DFE0E1] bg-white p-3 text-center shadow-sm">
-      <span className="text-[10px] font-bold text-[#526B7A] uppercase tracking-wider">
+      <span className="text-caption font-bold text-[#526B7A] uppercase tracking-wider">
         {label}
       </span>
-      <span className={`max-w-full font-extrabold text-[#071822] tabular-nums ${value.length > 7 ? 'text-xs' : 'text-[17px]'}`}>
+      <span className={`max-w-full font-extrabold text-[#071822] tabular-nums ${value.length > 7 ? 'text-xs' : 'text-h5'}`}>
         {value}
       </span>
       <span className={cn("grid h-7 w-7 place-items-center rounded-full", iconClass)}>

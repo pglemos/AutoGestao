@@ -48,7 +48,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
           />
           <div className="min-w-0">
             <p className="break-words text-sm font-semibold text-gray-800">{row.user_name}</p>
-            {row.is_venda_loja && <span className="mt-1 inline-flex rounded-md bg-emerald-100 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-700">Vendas da Gestão (Apoio)</span>}
+            {row.is_venda_loja && <span className="mt-1 inline-flex rounded-md bg-emerald-100 px-1.5 py-0.5 text-caption font-semibold text-emerald-700">Vendas da Gestão (Apoio)</span>}
           </div>
         </div>
       ),

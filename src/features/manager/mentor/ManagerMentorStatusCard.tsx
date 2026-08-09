@@ -56,7 +56,7 @@ export function ManagerMentorStatusCard({
             <div className="flex items-center gap-2">
               <p className={`font-semibold ${config.titleColor}`}>{config.title}</p>
               {total === 0 && (
-                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-[10px] font-semibold text-emerald-700">
+                <span className="inline-flex items-center gap-1 rounded-full bg-emerald-100 px-2 py-0.5 text-caption font-semibold text-emerald-700">
                   <Sparkles size={10} /> Sem alertas
                 </span>
               )}
@@ -67,11 +67,11 @@ export function ManagerMentorStatusCard({
         <div className="flex gap-2.5">
           <div className="min-w-[84px] rounded-xl border border-white/60 bg-white/70 px-4 py-2.5 text-center backdrop-blur">
             <p className="text-2xl font-bold leading-none text-red-600">{critical}</p>
-            <p className="mt-1 text-[11px] uppercase tracking-wide text-gray-500">Críticos</p>
+            <p className="mt-1 text-caption uppercase tracking-wide text-gray-500">Críticos</p>
           </div>
           <div className="min-w-[84px] rounded-xl border border-white/60 bg-white/70 px-4 py-2.5 text-center backdrop-blur">
             <p className="text-2xl font-bold leading-none text-amber-600">{attention}</p>
-            <p className="mt-1 text-[11px] uppercase tracking-wide text-gray-500">Atenção</p>
+            <p className="mt-1 text-caption uppercase tracking-wide text-gray-500">Atenção</p>
           </div>
         </div>
       </div>

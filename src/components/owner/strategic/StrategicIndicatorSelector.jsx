@@ -80,7 +80,7 @@ export default function StrategicIndicatorSelector({ value, onChange, areaFilter
       </Popover>
 
       <Select value={areaFilter || "all"} onValueChange={onAreaFilterChange}>
-        <SelectTrigger className="h-9 w-[150px] shrink-0 bg-card">
+        <SelectTrigger className="h-9 w-[148px] shrink-0 bg-card">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

@@ -19,7 +19,7 @@ const FIELDS = [
 function Counter({ label, value, onChange }) {
   return (
     <div className="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0">
-      <span className="text-[13px] font-semibold text-[#0F172A]">{label}</span>
+      <span className="text-body-sm font-semibold text-[#0F172A]">{label}</span>
       <div className="flex items-center gap-2">
         <button
           onClick={() => onChange(Math.max(0, value - 1))}
@@ -145,11 +145,11 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
 
         <div className="mt-1">
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-[13px] font-semibold text-[#0F172A]">
+            <span className="text-body-sm font-semibold text-[#0F172A]">
               {moment(date).format("DD/MM/YYYY")}
             </span>
             <span className="text-[12px] text-slate-400 capitalize">{moment(date).format("dddd")}</span>
-            <span className="ml-auto text-[11px] font-bold text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full">
+            <span className="ml-auto text-caption font-bold text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full">
               Fechamento atrasado
             </span>
           </div>
@@ -159,7 +159,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
             <div className="bg-amber-50 border border-amber-200 rounded-xl p-4 flex items-start gap-3 mb-4">
               <AlertTriangle className="w-4 h-4 text-amber-500 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-[13px] font-bold text-amber-800">Aguardando Aprovação</p>
+                <p className="text-body-sm font-bold text-amber-800">Aguardando Aprovação</p>
                 <p className="text-[12px] text-amber-700 mt-0.5">
                   Você já enviou a regularização deste dia. Ela está aguardando aprovação do responsável.
                 </p>
@@ -170,13 +170,13 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
           {aprovado && step !== "success" && (
             <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3 mb-4">
               <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
-              <p className="text-[13px] font-bold text-green-800">Regularização já aprovada.</p>
+              <p className="text-body-sm font-bold text-green-800">Regularização já aprovada.</p>
             </div>
           )}
 
           {recusado && step !== "success" && (
             <div className="bg-red-50 border border-red-200 rounded-xl p-4 mb-4">
-              <p className="text-[13px] font-bold text-red-700">Regularização recusada.</p>
+              <p className="text-body-sm font-bold text-red-700">Regularização recusada.</p>
               {regularizacaoExistente?.motivo_recusa && (
                 <p className="text-[12px] text-red-600 mt-1">Motivo: {regularizacaoExistente.motivo_recusa}</p>
               )}
@@ -200,13 +200,13 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
               <div className="flex gap-2">
                 <button
                   onClick={onClose}
-                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-[13px] font-bold text-slate-600 hover:bg-slate-50 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-body-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors"
                 >
                   Cancelar
                 </button>
                 <button
                   onClick={() => setStep("confirm")}
-                  className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-[13px] font-bold transition-colors"
+                  className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors"
                 >
                   Enviar Regularização
                 </button>
@@ -219,21 +219,21 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
             <div className="space-y-4">
               <div className="bg-amber-50 border border-amber-200 rounded-xl p-4">
                 <p className="text-[14px] font-bold text-amber-900 mb-1">Enviar regularização para aprovação?</p>
-                <p className="text-[13px] text-amber-800">
+                <p className="text-body-sm text-amber-800">
                   Este fechamento foi realizado fora do prazo. Ele será salvo, mas só contará nos indicadores após aprovação do responsável.
                 </p>
               </div>
               <div className="flex gap-2">
                 <button
                   onClick={() => setStep("form")}
-                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-[13px] font-bold text-slate-600 hover:bg-slate-50 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-body-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors"
                   disabled={salvando}
                 >
                   Não, voltar
                 </button>
                 <button
                   onClick={handleEnviar}
-                  className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-[13px] font-bold transition-colors"
+                  className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors"
                   disabled={salvando}
                 >
                   {salvando ? "Enviando..." : "Sim, enviar"}
@@ -248,13 +248,13 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
               <div className="w-12 h-12 rounded-full bg-amber-50 flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6 text-amber-500" />
               </div>
-              <p className="text-[15px] font-bold text-[#0F172A]">Regularização enviada!</p>
-              <p className="text-[13px] text-slate-500 max-w-xs mx-auto">
+              <p className="text-body font-bold text-[#0F172A]">Regularização enviada!</p>
+              <p className="text-body-sm text-slate-500 max-w-xs mx-auto">
                 O fechamento foi salvo e está aguardando aprovação do responsável. Ele só contará nos indicadores após a aprovação.
               </p>
               <button
                 onClick={onClose}
-                className="mt-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-[13px] font-bold transition-colors"
+                className="mt-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors"
               >
                 Fechar
               </button>

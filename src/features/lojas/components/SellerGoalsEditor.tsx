@@ -228,7 +228,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                       type="button"
                       onClick={handleConfirmSave}
                       disabled={saving}
-                      className="inline-flex h-[38px] items-center gap-1.5 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
+                      className="inline-flex h-[36px] items-center gap-1.5 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700 disabled:opacity-60"
                     >
                       {saving ? <RefreshCw size={15} className="animate-spin" /> : <Save size={15} />}
                       Salvar
@@ -238,7 +238,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                     type="button"
                     onClick={handleResetToEven}
                     disabled={saving}
-                    className="inline-flex h-[38px] items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-60"
+                    className="inline-flex h-[36px] items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-60"
                   >
                     <Trash2 size={15} />
                     Ratear igual
@@ -248,7 +248,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
               <button
                 type="button"
                 onClick={() => { fetchGoals(); refetchPerformance(); resetEdits() }}
-                className="inline-flex h-[38px] w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-50"
+                className="inline-flex h-[36px] w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-50"
                 aria-label="Atualizar"
               >
                 <RefreshCw size={15} />

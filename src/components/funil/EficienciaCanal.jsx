@@ -24,7 +24,7 @@ function EtapaLinha({ label, valor, conv }) {
       <div className="flex flex-col">
         <span className="text-[12px] text-slate-600">{label}</span>
         {conv !== null && conv !== undefined && (
-          <span className="text-[10px] text-slate-400">→ {conv}</span>
+          <span className="text-caption text-slate-400">→ {conv}</span>
         )}
       </div>
       <span className="text-[14px] font-bold tabular-nums text-[#0F172A]">{valor}</span>
@@ -48,9 +48,9 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
       <div className={`px-4 py-2.5 border-b flex items-center justify-between ${c.header}`}>
         <p className="text-[12px] font-bold text-[#0F172A] uppercase tracking-wide">{titulo}</p>
         {conversaoGeral !== null && !semDados ? (
-          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${c.badge}`}>{conversaoGeral}% conv.</span>
+          <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${c.badge}`}>{conversaoGeral}% conv.</span>
         ) : (
-          <span className="text-[10px] text-slate-300">Sem dados</span>
+          <span className="text-caption text-slate-300">Sem dados</span>
         )}
       </div>
 
@@ -61,15 +61,15 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
         ) : (
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-[10px] text-slate-400">{volumeLabel}</p>
+              <p className="text-caption text-slate-400">{volumeLabel}</p>
               <p className="text-[20px] font-bold tabular-nums text-[#0F172A]">{volume}</p>
             </div>
             <div className="text-center">
-              <p className="text-[10px] text-slate-400">Vendas</p>
+              <p className="text-caption text-slate-400">Vendas</p>
               <p className="text-[20px] font-bold tabular-nums text-green-600">{vendas}</p>
             </div>
             <div className="text-center">
-              <p className="text-[10px] text-slate-400">Conversão</p>
+              <p className="text-caption text-slate-400">Conversão</p>
               <p className="text-[20px] font-bold tabular-nums text-[#0F172A]">{conversaoGeral !== null ? `${conversaoGeral}%` : "—"}</p>
             </div>
           </div>
@@ -79,7 +79,7 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
         {!semDados && etapas.length > 0 && (
           <button
             onClick={() => setExpandido(v => !v)}
-            className={`flex items-center gap-1 text-[11px] font-semibold mt-2.5 ${c.btn} transition-colors`}
+            className={`flex items-center gap-1 text-caption font-semibold mt-2.5 ${c.btn} transition-colors`}
           >
             {expandido ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
             {expandido ? "Ocultar etapas" : "Ver etapas"}
@@ -149,7 +149,7 @@ export default function EficienciaCanal({ funis }) {
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Eficiência por canal</p>
+      <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-1">Eficiência por canal</p>
       {limitador && (
         <p className="text-[12px] text-slate-500 mb-4">
           <span className="font-semibold">Principal limitador:</span> {limitador}

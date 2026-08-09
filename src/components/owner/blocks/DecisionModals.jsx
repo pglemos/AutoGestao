@@ -82,7 +82,7 @@ export function DecisionAnalyzeDrawer({ decision, open, onOpenChange, onConsulta
           </Block>
         )}
 
-        <div className="rounded-md bg-muted/60 px-3 py-2 text-[11px] text-muted-foreground/80">
+        <div className="rounded-md bg-muted/60 px-3 py-2 text-caption text-muted-foreground/80">
           Origem do dado: {sourceLabel(decision.source_type)} • Atualizado: {formatDateTime(decision.updated_date)}
         </div>
       </div>
@@ -332,7 +332,7 @@ export function ConvertToActionModal({ decision, open, onOpenChange, onDone }) {
 function Block({ title, children }) {
   return (
     <div>
-      <p className="mb-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground/80">{title}</p>
+      <p className="mb-1 text-caption font-medium uppercase tracking-wide text-muted-foreground/80">{title}</p>
       {children}
     </div>
   );

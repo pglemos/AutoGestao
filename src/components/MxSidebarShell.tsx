@@ -436,9 +436,9 @@ export default function MxSidebarShell({
             className={SIDEBAR.toggle}
           >
             {isCollapsed ? (
-              <PanelLeftOpen className="h-[18px] w-[18px]" aria-hidden="true" />
+              <PanelLeftOpen className="h-[16px] w-[16px]" aria-hidden="true" />
             ) : (
-              <PanelLeftClose className="h-[18px] w-[18px]" aria-hidden="true" />
+              <PanelLeftClose className="h-[16px] w-[16px]" aria-hidden="true" />
             )}
           </button>
         ) : null}
@@ -507,11 +507,11 @@ export default function MxSidebarShell({
         >
           <Menu className="h-5.5 w-5.5 shrink-0 text-gray-700" aria-hidden="true" />
           <img src={SIDEBAR_LOGO} alt="MX" className="h-6 w-6 shrink-0 object-contain" />
-          <span className="text-[13px] font-semibold tracking-tight text-gray-800">
+          <span className="text-body-sm font-semibold tracking-tight text-gray-800">
             Menu
           </span>
           <span className="hidden min-w-0 leading-tight min-[500px]:block">
-            <span className="block truncate text-[8px] font-bold uppercase tracking-[0.12em] text-emerald-700">
+            <span className="block truncate text-caption font-bold uppercase tracking-[0.12em] text-emerald-700">
               {moduleLabel}
             </span>
           </span>
@@ -525,7 +525,7 @@ export default function MxSidebarShell({
             type="button"
             aria-label={`Abrir perfil de ${displayName}`}
             onClick={() => goTo(profilePath)}
-            className="grid h-9 w-9 place-items-center rounded-full bg-emerald-50 text-[11px] font-bold uppercase text-emerald-700 ring-1 ring-emerald-100 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+            className="grid h-9 w-9 place-items-center rounded-full bg-emerald-50 text-caption font-bold uppercase text-emerald-700 ring-1 ring-emerald-100 outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
           >
             {initials}
           </button>

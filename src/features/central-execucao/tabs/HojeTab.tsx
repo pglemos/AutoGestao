@@ -79,7 +79,7 @@ export function HojeTab({
             aria-label="Ordenar atividades"
             value={order}
             onChange={event => setOrder(event.target.value as CentralOrder)}
-            className="h-8 w-[150px] rounded-xl border border-slate-200 bg-white px-3 text-[12px] font-semibold text-slate-600 outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15"
+            className="h-8 w-[148px] rounded-xl border border-slate-200 bg-white px-3 text-[12px] font-semibold text-slate-600 outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15"
           >
             <option value="prioridade">Prioridade</option>
             <option value="horario">Horário</option>
@@ -96,10 +96,10 @@ export function HojeTab({
 
       {loading ? (
         <div className="space-y-3" aria-label="Carregando atividades">
-          {[0, 1, 2].map(item => <div key={item} className="h-[82px] animate-pulse rounded-2xl bg-slate-200" />)}
+          {[0, 1, 2].map(item => <div key={item} className="h-[80px] animate-pulse rounded-2xl bg-slate-200" />)}
         </div>
       ) : error ? (
-        <p role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-4 text-[13px] font-semibold text-red-700">{error}</p>
+        <p role="alert" className="rounded-2xl border border-red-200 bg-red-50 p-4 text-body-sm font-semibold text-red-700">{error}</p>
       ) : filtered.length === 0 ? (
         <EstadoVazio
           filtered={actions.length > 0 && filter !== 'todos'}

@@ -35,13 +35,13 @@ function calcMetrics(dailyCloses, clients) {
 function MetaCard({ label, valor, sugestao, cor, detalhe }) {
   return (
     <div className={`rounded-xl border p-4 ${cor}`}>
-      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">{label}</p>
+      <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-1">{label}</p>
       <div className="flex items-end gap-2">
-        <span className="text-[28px] font-bold tabular-nums text-slate-800 leading-none">{sugestao}</span>
-        <span className="text-[11px] text-slate-400 mb-1">sugerido</span>
+        <span className="text-h2 font-bold tabular-nums text-slate-800 leading-none">{sugestao}</span>
+        <span className="text-caption text-slate-400 mb-1">sugerido</span>
       </div>
-      {detalhe && <p className="text-[11px] text-slate-400 mt-1">{detalhe}</p>}
-      <p className="text-[10px] text-slate-300 mt-0.5">Média atual: {valor}</p>
+      {detalhe && <p className="text-caption text-slate-400 mt-1">{detalhe}</p>}
+      <p className="text-caption text-slate-300 mt-0.5">Média atual: {valor}</p>
     </div>
   );
 }

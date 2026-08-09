@@ -137,13 +137,13 @@ export function MxSidebarProfileCard({
           <>
             <span className="min-w-0 flex-1 overflow-hidden">
               <span
-                className="block truncate text-[13px] font-bold leading-tight text-gray-800"
+                className="block truncate text-body-sm font-bold leading-tight text-gray-800"
                 title={displayName}
               >
                 {displayName}
               </span>
               <span
-                className="mt-1 block truncate text-[11px] font-medium leading-tight text-gray-500"
+                className="mt-1 block truncate text-caption font-medium leading-tight text-gray-500"
                 title={roleLabel}
               >
                 {roleLabel}

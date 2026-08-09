@@ -12,7 +12,7 @@ const typographyVariants = cva('transition-colors', {
       h4: 'text-base font-semibold normal-case leading-tight tracking-normal',
       p: 'text-sm font-normal normal-case leading-relaxed tracking-normal',
       caption: 'text-xs font-medium normal-case tracking-normal',
-      tiny: 'text-[11px] font-medium normal-case tracking-normal',
+      tiny: 'text-caption font-medium normal-case tracking-normal',
       mono: 'font-mono-numbers text-sm font-semibold normal-case tracking-normal',
     },
     tone: {

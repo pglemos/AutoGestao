@@ -110,7 +110,7 @@ export function AgendaHeader({
           </div>
 
           <div className="min-w-0">
-            <p className="text-[11px] font-semibold uppercase tracking-wide text-emerald-700">Consultoria</p>
+            <p className="text-caption font-semibold uppercase tracking-wide text-emerald-700">Consultoria</p>
             <h1 className="text-lg font-bold text-gray-800">Agenda MX</h1>
             <h2 className={cn('text-sm text-gray-600 capitalize', 'font-semibold')}>
               {monthLabel}
@@ -156,7 +156,7 @@ export function AgendaHeader({
                 <Filter size={14} />
                 <span className="hidden sm:inline">Filtros</span>
                 {activeFilters > 0 && (
-                  <Badge variant="brand" className="h-4 min-w-4 rounded-full p-0 text-[10px] items-center justify-center">
+                  <Badge variant="brand" className="h-4 min-w-4 rounded-full p-0 text-caption items-center justify-center">
                     {activeFilters}
                   </Badge>
                 )}

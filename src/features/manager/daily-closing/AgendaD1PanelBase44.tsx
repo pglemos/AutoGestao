@@ -549,7 +549,7 @@ export function AgendaD1Panel({
                     ].map((label) => (
                       <th
                         key={label}
-                        className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-500"
+                        className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-500"
                       >
                         {label}
                       </th>

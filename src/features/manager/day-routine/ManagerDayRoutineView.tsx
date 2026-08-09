@@ -200,7 +200,7 @@ export function ManagerDayRoutineView({
                 type="button"
                 onClick={() => void onRefresh()}
                 disabled={refreshing}
-                className="flex h-[38px] items-center gap-1 rounded-xl border border-gray-200 bg-white px-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-wait disabled:opacity-60"
+                className="flex h-[36px] items-center gap-1 rounded-xl border border-gray-200 bg-white px-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-wait disabled:opacity-60"
               >
                 <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
                 Atualizar
@@ -225,7 +225,7 @@ export function ManagerDayRoutineView({
               <CalendarClock size={16} />
               Hoje
               {pendingToday > 0 && activeTab !== 'today' && (
-                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] text-gray-500">
+                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-caption text-gray-500">
                   {pendingToday}
                 </span>
               )}
@@ -395,7 +395,7 @@ function TodayRoutine({
                 >
                   {item.label}
                   {item.key === 'todas' && pendingToday > 0 && (
-                    <span className={`ml-1.5 rounded px-1.5 py-0.5 text-[10px] ${
+                    <span className={`ml-1.5 rounded px-1.5 py-0.5 text-caption ${
                       filter === item.key ? 'bg-white/20' : 'bg-gray-100'
                     }`}
                     >
@@ -479,7 +479,7 @@ function RoutineTaskCard({
           <Clock size={12} className="text-gray-400 lg:hidden" />
           <span className={`text-sm font-bold ${priority.color}`}>{task.dueTime || '—'}</span>
           {task.daysLate > 0 && (
-            <span className="text-[10px] font-medium text-red-600">{task.daysLate}d atraso</span>
+            <span className="text-caption font-medium text-red-600">{task.daysLate}d atraso</span>
           )}
         </div>
         <div className={`hidden h-12 w-1 shrink-0 rounded-full lg:block ${priority.marker}`} />
@@ -491,28 +491,28 @@ function RoutineTaskCard({
             <div className="flex items-center gap-2">
               <h3 className="truncate text-sm font-semibold text-gray-800">{task.title}</h3>
               {!task.automatic && (
-                <span className="hidden rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 lg:inline">
+                <span className="hidden rounded bg-gray-100 px-1.5 py-0.5 text-caption font-medium text-gray-500 lg:inline">
                   Manual
                 </span>
               )}
             </div>
             <p className="mt-0.5 text-xs text-gray-500 lg:line-clamp-1">{task.description}</p>
             <div className="mt-1.5 flex flex-wrap items-center gap-2 lg:mt-1">
-              <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${category.background} ${category.color}`}>
+              <span className={`rounded px-1.5 py-0.5 text-caption font-medium ${category.background} ${category.color}`}>
                 {MANAGER_ROUTINE_CATEGORY_LABELS[task.category]}
               </span>
               {!task.automatic && (
-                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-[10px] font-medium text-gray-500 lg:hidden">
+                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-caption font-medium text-gray-500 lg:hidden">
                   Manual
                 </span>
               )}
-              <span className="hidden text-[10px] text-gray-400 lg:inline">
+              <span className="hidden text-caption text-gray-400 lg:inline">
                 {MANAGER_ROUTINE_ORIGIN_LABELS[task.origin]}
               </span>
             </div>
           </div>
         </div>
-        <span className={`order-2 ml-auto shrink-0 rounded-lg px-2 py-1 text-[10px] font-semibold lg:order-none lg:ml-0 ${priority.background} ${priority.color}`}>
+        <span className={`order-2 ml-auto shrink-0 rounded-lg px-2 py-1 text-caption font-semibold lg:order-none lg:ml-0 ${priority.background} ${priority.color}`}>
           {priority.label}
         </span>
         {task.actions.length > 0 && (
@@ -660,15 +660,15 @@ function HistoryTaskRow({ task }: { task: ManagerRoutineTask }) {
         <p className="text-sm font-medium text-gray-800">{task.title}</p>
         {task.description && <p className="mt-0.5 text-xs text-gray-500">{task.description}</p>}
         <div className="mt-1.5 flex flex-wrap items-center gap-2">
-          <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${category.background} ${category.color}`}>
+          <span className={`rounded px-1.5 py-0.5 text-caption font-medium ${category.background} ${category.color}`}>
             {MANAGER_ROUTINE_CATEGORY_LABELS[task.category]}
           </span>
-          <span className={`rounded px-1.5 py-0.5 text-[10px] font-medium ${status.background} ${status.color}`}>
+          <span className={`rounded px-1.5 py-0.5 text-caption font-medium ${status.background} ${status.color}`}>
             {label}
           </span>
-          {task.dueTime && <span className="text-[10px] text-gray-400">{task.dueTime}</span>}
+          {task.dueTime && <span className="text-caption text-gray-400">{task.dueTime}</span>}
           {task.observation && (
-            <span className="truncate text-[10px] italic text-gray-400">&quot;{task.observation}&quot;</span>
+            <span className="truncate text-caption italic text-gray-400">&quot;{task.observation}&quot;</span>
           )}
         </div>
       </div>

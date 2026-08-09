@@ -171,9 +171,9 @@ export function NovaAtividadeModal({
     <Modal open={open} onClose={() => { if (!saving) onClose() }} title="Nova atividade" size="sm" referenceStyle closeOnEscape={!saving}>
       {step === 'type' ? (
         <div className="space-y-2">
-          <p className="mb-3 text-[13px] text-slate-500">Selecione o tipo de atividade comercial:</p>
+          <p className="mb-3 text-body-sm text-slate-500">Selecione o tipo de atividade comercial:</p>
           {TYPES.map(type => (
-            <button key={type.value} type="button" onClick={() => { setActivityType(type.value); setStep('form') }} className="w-full rounded-xl border border-slate-200 px-4 py-3 text-left text-[13px] font-semibold text-gray-800 transition-colors hover:border-status-info hover:bg-blue-50">
+            <button key={type.value} type="button" onClick={() => { setActivityType(type.value); setStep('form') }} className="w-full rounded-xl border border-slate-200 px-4 py-3 text-left text-body-sm font-semibold text-gray-800 transition-colors hover:border-status-info hover:bg-blue-50">
               {type.label}
             </button>
           ))}
@@ -186,49 +186,49 @@ export function NovaAtividadeModal({
           </div>
 
           <div>
-            <label htmlFor="central-client-search" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Cliente ou telefone</label>
+            <label htmlFor="central-client-search" className="text-caption font-bold uppercase tracking-wider text-slate-500">Cliente ou telefone</label>
             <div className="mt-1.5 flex gap-2">
-              <input id="central-client-search" value={search} onChange={event => { setSearch(event.target.value); setClient(null); setNotFound(false); setAmbiguous(false) }} placeholder="Nome ou (11) 98765-4321" className="h-10 min-w-0 flex-1 rounded-md border border-slate-200 px-3 text-[13px] outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
+              <input id="central-client-search" value={search} onChange={event => { setSearch(event.target.value); setClient(null); setNotFound(false); setAmbiguous(false) }} placeholder="Nome ou (11) 98765-4321" className="h-10 min-w-0 flex-1 rounded-md border border-slate-200 px-3 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
               <button type="button" onClick={handleSearch} aria-label="Buscar cliente" className="rounded-xl bg-status-info px-3 py-2 text-white transition-colors hover:bg-blue-700"><Search className="h-4 w-4" aria-hidden="true" /></button>
             </div>
 
             {client && (
               <div className="mt-2 flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-2">
                 <UserCheck className="h-4 w-4 shrink-0 text-green-600" aria-hidden="true" />
-                <div className="min-w-0"><p className="truncate text-[12px] font-bold text-green-800">{client.name}</p><p className="truncate text-[11px] text-green-600">{client.vehicle || '—'}</p></div>
+                <div className="min-w-0"><p className="truncate text-[12px] font-bold text-green-800">{client.name}</p><p className="truncate text-caption text-green-600">{client.vehicle || '—'}</p></div>
               </div>
             )}
 
             {(notFound || ambiguous) && (
               <div className="mt-2 rounded-xl border border-amber-200 bg-amber-50 px-3 py-2">
                 <div className="flex items-center gap-2"><UserX className="h-4 w-4 shrink-0 text-amber-600" aria-hidden="true" /><p className="text-[12px] font-semibold text-amber-800">{ambiguous ? 'Mais de um cliente encontrado. Refine a busca.' : 'Cliente não encontrado.'}</p></div>
-                {!ambiguous && <Link to="/carteira-clientes" onClick={onClose} className="ml-6 text-[11px] text-status-info underline">Abrir Carteira de Clientes para cadastrar</Link>}
+                {!ambiguous && <Link to="/carteira-clientes" onClick={onClose} className="ml-6 text-caption text-status-info underline">Abrir Carteira de Clientes para cadastrar</Link>}
               </div>
             )}
           </div>
 
           {!client && search.trim() && !ambiguous && (
-            <div><label htmlFor="central-client-name" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Nome do cliente</label><input id="central-client-name" value={name} onChange={event => setName(event.target.value)} placeholder="Nome completo" className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-[13px] outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" /></div>
+            <div><label htmlFor="central-client-name" className="text-caption font-bold uppercase tracking-wider text-slate-500">Nome do cliente</label><input id="central-client-name" value={name} onChange={event => setName(event.target.value)} placeholder="Nome completo" className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" /></div>
           )}
 
           <div className="grid grid-cols-2 gap-3">
-            <div><label htmlFor="central-activity-date" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Data</label><input id="central-activity-date" type="date" value={date} onChange={event => setDate(event.target.value)} className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-[13px] outline-none focus:border-status-info" /></div>
-            <div><label htmlFor="central-activity-time" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Hora</label><input id="central-activity-time" type="time" value={time} onChange={event => setTime(event.target.value)} className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-[13px] outline-none focus:border-status-info" /></div>
+            <div><label htmlFor="central-activity-date" className="text-caption font-bold uppercase tracking-wider text-slate-500">Data</label><input id="central-activity-date" type="date" value={date} onChange={event => setDate(event.target.value)} className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-body-sm outline-none focus:border-status-info" /></div>
+            <div><label htmlFor="central-activity-time" className="text-caption font-bold uppercase tracking-wider text-slate-500">Hora</label><input id="central-activity-time" type="time" value={time} onChange={event => setTime(event.target.value)} className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-body-sm outline-none focus:border-status-info" /></div>
           </div>
 
-          <div><label htmlFor="central-activity-vehicle" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Veículo (opcional)</label><input id="central-activity-vehicle" value={vehicle} onChange={event => setVehicle(event.target.value)} placeholder="Ex: HB20 1.0 Comfort" className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-[13px] outline-none focus:border-status-info" /></div>
+          <div><label htmlFor="central-activity-vehicle" className="text-caption font-bold uppercase tracking-wider text-slate-500">Veículo (opcional)</label><input id="central-activity-vehicle" value={vehicle} onChange={event => setVehicle(event.target.value)} placeholder="Ex: HB20 1.0 Comfort" className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-body-sm outline-none focus:border-status-info" /></div>
 
-          <div><label htmlFor="central-activity-priority" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Prioridade</label><select id="central-activity-priority" value={priorityRank} onChange={event => setPriorityRank(Number(event.target.value))} className="mt-1.5 h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-[13px] outline-none focus:border-status-info">{PRIORITIES.map(priority => <option key={priority.rank} value={priority.rank}>{priority.label}</option>)}</select></div>
+          <div><label htmlFor="central-activity-priority" className="text-caption font-bold uppercase tracking-wider text-slate-500">Prioridade</label><select id="central-activity-priority" value={priorityRank} onChange={event => setPriorityRank(Number(event.target.value))} className="mt-1.5 h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-body-sm outline-none focus:border-status-info">{PRIORITIES.map(priority => <option key={priority.rank} value={priority.rank}>{priority.label}</option>)}</select></div>
 
-          <div><label htmlFor="central-activity-objective" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Objetivo</label><input id="central-activity-objective" value={objective} onChange={event => setObjective(event.target.value)} placeholder="O que você quer alcançar com esta atividade?" className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-[13px] outline-none focus:border-status-info" /></div>
+          <div><label htmlFor="central-activity-objective" className="text-caption font-bold uppercase tracking-wider text-slate-500">Objetivo</label><input id="central-activity-objective" value={objective} onChange={event => setObjective(event.target.value)} placeholder="O que você quer alcançar com esta atividade?" className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-body-sm outline-none focus:border-status-info" /></div>
 
-          <div><label htmlFor="central-activity-description" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Observação (opcional)</label><input id="central-activity-description" value={description} onChange={event => setDescription(event.target.value)} placeholder="Detalhes adicionais..." className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-[13px] outline-none focus:border-status-info" /></div>
+          <div><label htmlFor="central-activity-description" className="text-caption font-bold uppercase tracking-wider text-slate-500">Observação (opcional)</label><input id="central-activity-description" value={description} onChange={event => setDescription(event.target.value)} placeholder="Detalhes adicionais..." className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-body-sm outline-none focus:border-status-info" /></div>
 
           {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[12px] font-semibold text-red-700">{error}</p>}
 
           <div className="flex justify-end gap-3 border-t border-slate-100 pt-4">
-            <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-slate-200 px-5 py-2.5 text-[13px] font-semibold text-slate-500 hover:bg-slate-50 disabled:opacity-50">Cancelar</button>
-            <button type="button" onClick={() => void handleSave()} disabled={!activityType || !date || !time || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-[13px] font-bold text-white hover:bg-blue-700 disabled:opacity-50">{saving ? 'Salvando...' : 'Salvar atividade'}</button>
+            <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-slate-200 px-5 py-2.5 text-body-sm font-semibold text-slate-500 hover:bg-slate-50 disabled:opacity-50">Cancelar</button>
+            <button type="button" onClick={() => void handleSave()} disabled={!activityType || !date || !time || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50">{saving ? 'Salvando...' : 'Salvar atividade'}</button>
           </div>
         </div>
       )}

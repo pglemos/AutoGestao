@@ -573,7 +573,7 @@ export default function ManagerDailyClosing() {
                   type="date"
                   value={date}
                   onChange={(event) => setDate(event.target.value)}
-                  className="h-[38px] rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-[36px] rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </label>
               <label className="block text-xs text-gray-500">
@@ -584,7 +584,7 @@ export default function ManagerDailyClosing() {
                   aria-label="Unidade"
                   value={storeId || ""}
                   disabled
-                  className="h-[38px] min-w-[140px] rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-800 opacity-100"
+                  className="h-[36px] min-w-[140px] rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-800 opacity-100"
                 >
                   <option value={storeId || ""}>
                     {membership?.store?.name || "Unidade atual"}
@@ -594,7 +594,7 @@ export default function ManagerDailyClosing() {
               <button
                 type="button"
                 onClick={() => void refreshAll()}
-                className="inline-flex h-[38px] items-center gap-1 rounded-xl bg-emerald-600 px-3 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700"
+                className="inline-flex h-[36px] items-center gap-1 rounded-xl bg-emerald-600 px-3 text-xs font-semibold text-white shadow-sm hover:bg-emerald-700"
               >
                 <RefreshCw size={14} /> Atualizar
               </button>
@@ -953,7 +953,7 @@ function SummaryCard({
       </div>
       <strong className="mt-2 text-3xl text-gray-800">{value}</strong>
       <p className="mt-1 text-xs text-gray-500">{detail}</p>
-      <button type="button" disabled={actionDisabled} onClick={onAction} className={`mt-auto inline-flex h-[30px] items-center justify-center gap-1.5 rounded-lg border bg-white px-2 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40 ${actionTone}`}>
+      <button type="button" disabled={actionDisabled} onClick={onAction} className={`mt-auto inline-flex h-[28px] items-center justify-center gap-1.5 rounded-lg border bg-white px-2 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40 ${actionTone}`}>
         {action === "Ver Agenda D+1" && <CalendarClock size={14} />}
         {action === "Cobrar Pendentes" && <Megaphone size={14} />}
         {action === "Ver Regularizações" && <Eye size={14} />}
@@ -995,7 +995,7 @@ function ClosingTable({ rows, onOpenAgenda, onOpenDetails, onRemind, onRegulariz
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[1100px] text-sm">
-        <thead className="border-b border-gray-100 bg-gray-50"><tr>{["Vendedor", "Status", "Entrega", "Leads", "Qualif.", "Agend.", "Atendi.", "Venda", "Disc.", "Ações"].map((label) => <th key={label} className="px-4 py-3 text-left text-[11px] font-semibold uppercase tracking-wide text-gray-500">{label}</th>)}</tr></thead>
+        <thead className="border-b border-gray-100 bg-gray-50"><tr>{["Vendedor", "Status", "Entrega", "Leads", "Qualif.", "Agend.", "Atendi.", "Venda", "Disc.", "Ações"].map((label) => <th key={label} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-500">{label}</th>)}</tr></thead>
         <tbody className="divide-y divide-gray-100 bg-white">
           {rows.map((row) => <ClosingRow key={row.seller.id} row={row} onOpenAgenda={() => onOpenAgenda(row.seller.id)} onOpenDetails={() => onOpenDetails(row)} onRemind={() => onRemind(row)} onRegularize={() => onRegularize(row)} onDecide={(action) => onDecide(row, action)} onCorrectLeads={() => onCorrectLeads(row)} />)}
         </tbody>
@@ -1048,7 +1048,7 @@ function StatusBadge({ status }: { status: ClosingStatus }) {
 function MiniDiscipline({ value }: { value: number | null }) {
   const normalized = value === null ? 0 : Math.max(0, Math.min(100, Math.round(value)));
   const color = normalized >= 90 ? "#10b981" : normalized >= 70 ? "#3b82f6" : normalized >= 40 ? "#f97316" : "#ef4444";
-  return <div className="grid h-10 w-10 place-items-center rounded-full p-1" style={{ background: `conic-gradient(${color} ${normalized * 3.6}deg, #f3f4f6 0deg)` }}><div className="grid h-full w-full place-items-center rounded-full bg-white"><span className="text-[10px] font-bold" style={{ color }}>{value === null ? "—" : `${normalized}%`}</span></div></div>;
+  return <div className="grid h-10 w-10 place-items-center rounded-full p-1" style={{ background: `conic-gradient(${color} ${normalized * 3.6}deg, #f3f4f6 0deg)` }}><div className="grid h-full w-full place-items-center rounded-full bg-white"><span className="text-caption font-bold" style={{ color }}>{value === null ? "—" : `${normalized}%`}</span></div></div>;
 }
 
 function MetricCell({ value, muted = false }: { value: number | string | null; muted?: boolean }) {
@@ -1071,7 +1071,7 @@ function SummaryGroup({ label, icon: Icon, tone, items }: { label: string; icon:
 }
 
 function Empty({ text }: { text: string }) {
-  return <div className="grid min-h-[150px] place-items-center p-8 text-center"><p className="text-sm font-medium text-gray-500">{text}</p></div>;
+  return <div className="grid min-h-[148px] place-items-center p-8 text-center"><p className="text-sm font-medium text-gray-500">{text}</p></div>;
 }
 
 function ManagerClosingSkeleton() {

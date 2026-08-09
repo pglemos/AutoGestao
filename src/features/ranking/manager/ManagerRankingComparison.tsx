@@ -40,7 +40,7 @@ function MetricRow({
         <span className={`text-base font-bold ${aWins ? 'text-emerald-600' : 'text-gray-700'}`}>{a === null ? '—' : format(a)}</span>
         {aWins && <Check size={12} className="ml-1 inline text-emerald-500" />}
       </div>
-      <div className="flex min-w-[110px] items-center justify-center gap-1 text-center text-gray-500">
+      <div className="flex min-w-[108px] items-center justify-center gap-1 text-center text-gray-500">
         <Icon size={13} className="text-gray-400" />
         <span className="text-xs font-medium">{label}</span>
         <HelpTooltip text={help} />
@@ -85,7 +85,7 @@ function SellerSelect({
           </span>
           <div className="min-w-0 flex-1">
             <p className="truncate text-sm font-semibold text-gray-800">{selected?.nome || `Selecionar lado ${side}`}</p>
-            {selected && <p className="text-[11px] font-medium" style={{ color }}>Selecionado</p>}
+            {selected && <p className="text-caption font-medium" style={{ color }}>Selecionado</p>}
           </div>
           <ChevronDown size={16} className="shrink-0 text-gray-300" />
         </div>
@@ -99,7 +99,7 @@ function SellerSelect({
               onClick={() => { onSelect(seller.id); setOpen(false) }}
               className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-gray-50 ${seller.id === selectedId ? 'bg-gray-50' : ''}`}
             >
-              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gray-100 text-[10px] font-bold text-gray-600">{initials(seller.nome)}</span>
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gray-100 text-caption font-bold text-gray-600">{initials(seller.nome)}</span>
               <span className="truncate text-gray-700">{seller.nome}</span>
             </button>
           ))}

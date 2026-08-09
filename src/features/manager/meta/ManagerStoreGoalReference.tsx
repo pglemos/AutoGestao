@@ -288,10 +288,10 @@ export function ManagerStoreGoalReference({
                   </select>
                 </label>
               ) : null}
-              <button type="button" onClick={() => void handleRefresh()} disabled={data.isRefetching || targetPlanRefreshing} className="inline-flex h-[38px] items-center gap-1 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-600 hover:bg-gray-50 disabled:opacity-60">
+              <button type="button" onClick={() => void handleRefresh()} disabled={data.isRefetching || targetPlanRefreshing} className="inline-flex h-[36px] items-center gap-1 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-600 hover:bg-gray-50 disabled:opacity-60">
                 <RefreshCw size={15} className={data.isRefetching || targetPlanRefreshing ? 'animate-spin' : ''} /> Atualizar
               </button>
-              <button type="button" data-tour="metas-individuais" onClick={() => setGoalsOpen(true)} className="inline-flex h-[38px] items-center gap-1 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700">
+              <button type="button" data-tour="metas-individuais" onClick={() => setGoalsOpen(true)} className="inline-flex h-[36px] items-center gap-1 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700">
                 <Target size={15} /> Editar Metas
               </button>
             </div>
@@ -313,7 +313,7 @@ export function ManagerStoreGoalReference({
         </article>
 
         <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-          <div className="mb-4 flex flex-wrap items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-100"><Activity size={16} className="text-emerald-600" /></span><h2 className="font-semibold text-gray-800">Plano de Sustentação</h2>{selectedPersistedPlan ? <span className="rounded-full bg-emerald-50 px-2 py-1 text-[10px] font-semibold uppercase tracking-wide text-emerald-700">Oficial v{selectedPersistedPlan.version}</span> : null}</div>
+          <div className="mb-4 flex flex-wrap items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-100"><Activity size={16} className="text-emerald-600" /></span><h2 className="font-semibold text-gray-800">Plano de Sustentação</h2>{selectedPersistedPlan ? <span className="rounded-full bg-emerald-50 px-2 py-1 text-caption font-semibold uppercase tracking-wide text-emerald-700">Oficial v{selectedPersistedPlan.version}</span> : null}</div>
           <div className="mb-5 flex gap-1.5 overflow-x-auto pb-1">{([['hoje', 'Hoje'], ['semana', 'Esta semana'], ['dezena', 'Esta dezena'], ['mes', 'Este mês']] as const).map(([key, label]) => <button key={key} type="button" onClick={() => setHorizon(key)} className={`whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium transition-all ${horizon === key ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-gray-600 hover:bg-gray-100'}`}>{label}</button>)}</div>
           {goal <= 0 ? <p className="rounded-xl border border-gray-100 bg-gray-50 p-4 text-sm text-gray-500">Meta ainda não cadastrada.</p> : <>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">

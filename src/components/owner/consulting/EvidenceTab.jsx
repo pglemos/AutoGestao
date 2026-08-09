@@ -96,7 +96,7 @@ export default function EvidenceTab({ meeting, user }) {
       {/* Checklist de evidências esperadas */}
       {templates.length > 0 && (
         <div>
-          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Evidências esperadas</p>
+          <p className="text-caption font-medium uppercase tracking-wide text-muted-foreground">Evidências esperadas</p>
           <div className="mt-2 space-y-2">
             {templates.map((t) => {
               const evidence = getEvidenceForTemplate(t.id);
@@ -115,7 +115,7 @@ export default function EvidenceTab({ meeting, user }) {
                         <FileText className="h-3.5 w-3.5 shrink-0 text-muted-foreground" />
                         <p className="text-sm font-medium text-foreground">{t.title}</p>
                         {t.required && (
-                          <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">Obrigatória</span>
+                          <span className="rounded-full bg-amber-50 px-1.5 py-0.5 text-caption font-medium text-amber-700">Obrigatória</span>
                         )}
                       </div>
                       {t.description && (
@@ -123,11 +123,11 @@ export default function EvidenceTab({ meeting, user }) {
                       )}
                       {status && (
                         <div className="mt-1 flex items-center gap-2">
-                          <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${status.tone}`}>
+                          <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${status.tone}`}>
                             {status.label}
                           </span>
                           {evidence.consultantNote && (
-                            <span className="text-[11px] text-muted-foreground">Com devolutiva do consultor</span>
+                            <span className="text-caption text-muted-foreground">Com devolutiva do consultor</span>
                           )}
                         </div>
                       )}
@@ -180,7 +180,7 @@ export default function EvidenceTab({ meeting, user }) {
       {/* Evidências extras (sem template) */}
       {customEvidences.length > 0 && (
         <div>
-          <p className="text-[11px] font-medium uppercase tracking-wide text-muted-foreground">Evidências adicionais</p>
+          <p className="text-caption font-medium uppercase tracking-wide text-muted-foreground">Evidências adicionais</p>
           <div className="mt-2 space-y-2">
             {customEvidences.map((ev) => {
               const status = EVIDENCE_STATUS[ev.status] || EVIDENCE_STATUS.pending;
@@ -191,7 +191,7 @@ export default function EvidenceTab({ meeting, user }) {
                     <div className="min-w-0 flex-1">
                       <div className="flex items-center gap-2">
                         <p className="text-sm font-medium text-foreground">{ev.name}</p>
-                        <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-medium ${status.tone}`}>
+                        <span className={`shrink-0 rounded-full px-1.5 py-0.5 text-caption font-medium ${status.tone}`}>
                           {status.label}
                         </span>
                       </div>

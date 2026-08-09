@@ -278,7 +278,7 @@ function KpiDetail({ kpi }) {
           <span className="font-medium text-foreground">Motivo do status:</span> {kpi.status_reason}
         </p>
       )}
-      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-0.5 text-[11px] text-muted-foreground/80">
+      <div className="mt-2 flex flex-wrap gap-x-4 gap-y-0.5 text-caption text-muted-foreground/80">
         <span>Fonte: {kpi.source || "—"}</span>
         <span>Regra: {kpi.status_rule_used || kpi.target_direction === "lower_better" ? kpi.status_rule_used || "Valores menores são melhores" : "Valores maiores são melhores"}</span>
         <span>Atualizado: {formatDateTime(kpi.last_data_at || kpi.updated_date)}</span>

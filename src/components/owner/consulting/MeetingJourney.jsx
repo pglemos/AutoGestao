@@ -105,21 +105,21 @@ export default function MeetingJourney({ meetings, onSelectMeeting, selectedMeet
 
                 <div className="mt-1.5 w-24 text-center">
                   <p
-                    className={`line-clamp-2 break-words text-[11px] font-medium leading-tight ${
+                    className={`line-clamp-2 break-words text-caption font-medium leading-tight ${
                       isLocked ? "text-muted-foreground/60" : "text-foreground"
                     }`}
                   >
                     {meeting.title}
                   </p>
                   {meeting.pillar && (
-                    <p className="mt-0.5 text-[10px] text-muted-foreground">{meeting.pillar}</p>
+                    <p className="mt-0.5 text-caption text-muted-foreground">{meeting.pillar}</p>
                   )}
 
                   <div className="mt-1.5 space-y-0.5">
                     {indicators.map((ind, i) => (
                       <div key={i} className="flex items-center justify-center gap-1">
                         <span className={`h-1.5 w-1.5 rounded-full ${TONE_DOT[ind.tone] || TONE_DOT.slate}`} />
-                        <span className="text-[10px] text-muted-foreground">{ind.label}</span>
+                        <span className="text-caption text-muted-foreground">{ind.label}</span>
                       </div>
                     ))}
                   </div>
@@ -127,7 +127,7 @@ export default function MeetingJourney({ meetings, onSelectMeeting, selectedMeet
                   {isRestricted && (
                     <div className="mt-1 flex items-center justify-center gap-0.5">
                       <Lock className="h-2.5 w-2.5 text-muted-foreground" />
-                      <span className="text-[10px] text-muted-foreground">Restrito</span>
+                      <span className="text-caption text-muted-foreground">Restrito</span>
                     </div>
                   )}
                 </div>

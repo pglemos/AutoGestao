@@ -60,7 +60,7 @@ function calcCarteira(cart, faltam) {
 function AlavancaItem({ label, valor }) {
   return (
     <div className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
-      <span className="text-[13px] text-slate-600">{label}</span>
+      <span className="text-body-sm text-slate-600">{label}</span>
       <span className="text-[18px] font-bold text-[#0F172A] tabular-nums">{valor}</span>
     </div>
   );
@@ -69,7 +69,7 @@ function AlavancaItem({ label, valor }) {
 function CanalSecundario({ titulo, semBase, children }) {
   return (
     <div className="border border-slate-100 rounded-xl p-3">
-      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wide mb-2">{titulo}</p>
+      <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">{titulo}</p>
       {semBase
         ? <p className="text-[12px] text-slate-300 italic">Sem base suficiente para projeção.</p>
         : children
@@ -82,7 +82,7 @@ export default function EsforcoNecessario({ funis, faltam, funisBase90, usou90 }
   if (faltam <= 0) {
     return (
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">O que preciso produzir para bater a meta?</p>
+        <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-2">O que preciso produzir para bater a meta?</p>
         <p className="text-[14px] font-bold text-green-600">Meta batida. Continue mantendo o ritmo! 🎯</p>
       </div>
     );
@@ -108,21 +108,21 @@ export default function EsforcoNecessario({ funis, faltam, funisBase90, usou90 }
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-      <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">O que preciso produzir para bater a meta?</p>
+      <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-1">O que preciso produzir para bater a meta?</p>
       <p className="text-[12px] text-slate-400 mb-4">
         Com base na sua conversão registrada, esta é a produção estimada para buscar as {faltam} venda{faltam !== 1 ? "s" : ""} que faltam.
       </p>
 
       {!canalPrincipal ? (
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-center">
-          <p className="text-[13px] text-slate-500">Sem base suficiente para projeção confiável.</p>
+          <p className="text-body-sm text-slate-500">Sem base suficiente para projeção confiável.</p>
           <p className="text-[12px] text-slate-400 mt-1">Registre atendimentos e vendas para habilitar esta análise.</p>
         </div>
       ) : (
         <>
           {/* Canal principal — destaque */}
           <div className={`rounded-xl border p-4 mb-4 ${corPrincipal}`}>
-            <p className="text-[11px] font-bold text-slate-500 uppercase tracking-wide mb-1">
+            <p className="text-caption font-bold text-slate-500 uppercase tracking-wide mb-1">
               Sua melhor base hoje é <span className="font-bold text-[#0F172A]">{canalPrincipal}</span>
             </p>
             <p className="text-[12px] text-slate-500 mb-3">

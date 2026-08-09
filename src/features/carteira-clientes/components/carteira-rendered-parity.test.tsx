@@ -82,11 +82,52 @@ function normalizeLocalScriptAdapter(root: HTMLElement) {
   whatsappLinks[0].setAttribute('href', 'https://wa.me/normalized')
 }
 
+// T4.8 canonicalizou text-[Npx] para @utility text-* (semantic.css). A
+// referência congelada mantém text-[Npx]; o runtime usa text-caption etc.
+// Normaliza ambas para o mesmo lexema antes de comparar o DOM.
+const TYPO_MAP: Record<string, string> = {
+  'text-caption': 'text-[12px]',
+  'text-body-sm': 'text-[14px]',
+  'text-body': 'text-[16px]',
+  'text-h5': 'text-[18px]',
+  'text-h4': 'text-[20px]',
+  'text-h3': 'text-[24px]',
+  'text-h2': 'text-[30px]',
+  'text-h1': 'text-[36px]',
+  'text-display': 'text-[48px]',
+}
+
+// Off-canonic arbitrary values that were migrated to the nearest canonical.
+// Map them to the same canonical literal so both DOMs converge.
+const OFF_CANONIC: Record<string, string> = {
+  'text-[8px]': 'text-[12px]',
+  'text-[9px]': 'text-[12px]',
+  'text-[10px]': 'text-[12px]',
+  'text-[11px]': 'text-[12px]',
+  'text-[13px]': 'text-[14px]',
+  'text-[15px]': 'text-[16px]',
+  'text-[17px]': 'text-[18px]',
+  'text-[22px]': 'text-[24px]',
+  'text-[23px]': 'text-[24px]',
+  'text-[26px]': 'text-[24px]',
+  'text-[28px]': 'text-[30px]',
+  'text-[31px]': 'text-[30px]',
+  'text-[32px]': 'text-[30px]',
+  'text-[52px]': 'text-[48px]',
+}
+
 function normalizeDom(html: string) {
-  return html
+  let out = html
     .replace(/radix-[^"\s]+/g, 'radix-id')
     .replace(/[«»]r\d+[«»]/g, 'react-id')
     .replace(/data-reactroot=""/g, '')
+  for (const [alias, literal] of Object.entries(TYPO_MAP)) {
+    out = out.replaceAll(alias, literal)
+  }
+  for (const [off, canon] of Object.entries(OFF_CANONIC)) {
+    out = out.replaceAll(off, canon)
+  }
+  return out
 }
 
 async function capture(component: React.ReactElement, readyText?: string, localScriptAdapter = false) {

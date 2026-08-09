@@ -253,7 +253,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                         {opt.optionText}
                       </span>
                       {opt.isRecommended && (
-                        <Badge variant="secondary" className="bg-amber-100 text-amber-800 text-[10px] ml-1">
+                        <Badge variant="secondary" className="bg-amber-100 text-amber-800 text-caption ml-1">
                           Recomendado
                         </Badge>
                       )}
@@ -330,7 +330,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                         >
                           {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
                         </div>
-                        <Badge className="bg-slate-900 text-white font-mono text-[11px]">
+                        <Badge className="bg-slate-900 text-white font-mono text-caption">
                           {st.statusId}
                         </Badge>
                         <span className="text-sm font-semibold text-slate-900">
@@ -339,14 +339,14 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                       </div>
                       <div className="flex items-center space-x-1.5">
                         {isCurrent && (
-                          <Badge variant="outline" className="bg-slate-100 text-slate-600 text-[10px]">
+                          <Badge variant="outline" className="bg-slate-100 text-slate-600 text-caption">
                             Atual
                           </Badge>
                         )}
                         {st.temperature && (
                           <Badge
                             variant="secondary"
-                            className={`text-[10px] ${
+                            className={`text-caption ${
                               st.temperature.toLowerCase().includes('quente')
                                 ? 'bg-red-100 text-red-800'
                                 : st.temperature.toLowerCase().includes('morno')

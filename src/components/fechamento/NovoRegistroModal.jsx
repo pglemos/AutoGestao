@@ -30,10 +30,10 @@ function formatCurrency(raw) {
 function Field({ label, required, children, hint }) {
   return (
     <div>
-      <Label className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider">
+      <Label className="text-caption font-bold text-[#64748B] uppercase tracking-wider">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </Label>
-      {hint && <p className="text-[10px] text-slate-400 mb-0.5">{hint}</p>}
+      {hint && <p className="text-caption text-slate-400 mb-0.5">{hint}</p>}
       <div className="mt-1">{children}</div>
     </div>
   );
@@ -370,7 +370,7 @@ const TIPOS = [
 function TipoSelector({ onSelect }) {
   return (
     <div>
-      <p className="text-[13px] text-slate-500 mb-4">Qual tipo de registro você quer adicionar?</p>
+      <p className="text-body-sm text-slate-500 mb-4">Qual tipo de registro você quer adicionar?</p>
       <div className="grid grid-cols-2 gap-3">
         {TIPOS.map(t => {
           const Icon = t.icon;
@@ -378,8 +378,8 @@ function TipoSelector({ onSelect }) {
             <button key={t.id} onClick={() => onSelect(t.id)}
               className={`flex flex-col items-center gap-2 p-4 rounded-xl border-2 transition-all text-center ${t.cor}`}>
               <Icon className={`w-7 h-7 ${t.iconCor}`} />
-              <span className="text-[13px] font-bold">{t.label}</span>
-              <span className="text-[11px] opacity-70">{t.desc}</span>
+              <span className="text-body-sm font-bold">{t.label}</span>
+              <span className="text-caption opacity-70">{t.desc}</span>
             </button>
           );
         })}
@@ -391,7 +391,7 @@ function TipoSelector({ onSelect }) {
 function ClienteEncontradoBadge({ cliente }) {
   if (!cliente) return null;
   return (
-    <p className="text-[10px] text-green-600 mt-0.5 font-semibold">
+    <p className="text-caption text-green-600 mt-0.5 font-semibold">
       ✓ Cliente encontrado na Carteira{cliente.status_oportunidade === "Vendida" ? " (já vendido)" : ""}.
     </p>
   );
@@ -739,7 +739,7 @@ export default function NovoRegistroModal({ open, onClose, closingDate, dailyClo
     <Dialog open={open} onOpenChange={v => { if (!v && !saving) handleClose(); }}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[#0F172A] font-bold text-[17px] flex items-center gap-2">
+          <DialogTitle className="text-[#0F172A] font-bold text-h5 flex items-center gap-2">
             {tipo && (
               <button type="button" onClick={handleVoltar} className="p-1 rounded-lg hover:bg-slate-100 transition-colors mr-1">
                 <ArrowLeft className="w-4 h-4 text-slate-400" />
@@ -772,17 +772,17 @@ export default function NovoRegistroModal({ open, onClose, closingDate, dailyClo
           )}
         </div>
 
-        {buscando && <p className="text-[11px] text-slate-400 mt-1">Buscando cliente…</p>}
+        {buscando && <p className="text-caption text-slate-400 mt-1">Buscando cliente…</p>}
         {saveError && <p className="text-[12px] text-[#EF4444] font-semibold mt-3">{saveError}</p>}
 
         {tipo && (
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
             <button type="button" onClick={handleClose} disabled={saving}
-              className="px-5 py-2.5 text-[13px] font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
+              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
               Cancelar
             </button>
             <button type="button" onClick={handleSave} disabled={!ok || saving}
-              className="px-6 py-2.5 text-[13px] font-bold text-white bg-[#6D28D9] hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors">
+              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#6D28D9] hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors">
               {saving ? "Salvando…" : `Salvar ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`}
             </button>
           </div>

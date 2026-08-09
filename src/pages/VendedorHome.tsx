@@ -128,14 +128,14 @@ export default function VendedorHomePage() {
                 <button
                   type="button"
                   onClick={() => navigate('/central-execucao')}
-                  className="flex h-[38px] items-center gap-1 rounded-xl border border-gray-800 px-3 text-sm font-semibold text-gray-800 shadow-sm transition-colors hover:bg-gray-100"
+                  className="flex h-[36px] items-center gap-1 rounded-xl border border-gray-800 px-3 text-sm font-semibold text-gray-800 shadow-sm transition-colors hover:bg-gray-100"
                 >
                   <CalendarClock size={14} /> Rotina do Dia
                 </button>
                 <button
                   type="button"
                   onClick={() => navigate('/fechamento-diario')}
-                  className={`flex h-[38px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${
+                  className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${
                     home.todayCheckin
                       ? 'border-emerald-600 text-emerald-700 hover:bg-emerald-50'
                       : 'border-amber-500 text-amber-700 hover:bg-amber-50'
@@ -152,7 +152,7 @@ export default function VendedorHomePage() {
                   }}
                   disabled={home.isRefetching || deterministic.loading}
                   aria-label="Atualizar"
-                  className="grid h-[38px] w-10 place-items-center rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                  className="grid h-[36px] w-10 place-items-center rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-50"
                 >
                   <RefreshCw size={16} className={home.isRefetching || deterministic.loading ? 'animate-spin' : ''} />
                 </button>

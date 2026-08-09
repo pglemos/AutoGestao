@@ -51,7 +51,7 @@ function formatPhone(raw) {
 function Field({ label, required, children }) {
   return (
     <div>
-      <Label className="text-[11px] font-bold text-[#64748B] uppercase tracking-wider">
+      <Label className="text-caption font-bold text-[#64748B] uppercase tracking-wider">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </Label>
       <div className="mt-1.5">{children}</div>
@@ -278,7 +278,7 @@ export default function ClientCardMobile({
       <Dialog open={dialogOpen} onOpenChange={v => { if (!saving) { setDialogOpen(v); setSaveError(null); } }}>
         <DialogContent className="max-w-lg max-h-[92vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold text-[17px]">
+            <DialogTitle className="text-[#0F172A] font-bold text-h5">
               {editingClient
                 ? (modoD1 ? "Editar Agendamento D+1" : "Editar Cliente")
                 : (modoD1 ? "Novo Agendamento D+1" : "Cadastrar Novo Cliente")}
@@ -352,7 +352,7 @@ export default function ClientCardMobile({
             </Field>
             <Field label="Venda Realizada">
               {modoD1 ? (
-                <div className="h-10 flex items-center px-3 bg-slate-50 border border-slate-200 rounded-lg text-[13px] text-slate-500 font-semibold cursor-not-allowed">
+                <div className="h-10 flex items-center px-3 bg-slate-50 border border-slate-200 rounded-lg text-body-sm text-slate-500 font-semibold cursor-not-allowed">
                   Em Negociação
                 </div>
               ) : (
@@ -387,14 +387,14 @@ export default function ClientCardMobile({
             <button
               onClick={() => { setDialogOpen(false); setSaveError(null); }}
               disabled={saving}
-              className="px-5 py-2.5 text-[13px] font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors"
+              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors"
             >
               Cancelar
             </button>
             <button
               onClick={handleSave}
               disabled={!canSave || saving}
-              className="px-6 py-2.5 text-[13px] font-bold text-white bg-[#6D28D9] hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-purple-100"
+              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#6D28D9] hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-purple-100"
             >
               {saving ? "Salvando..." : modoD1 ? "Salvar Agendamento" : "Salvar Cliente"}
             </button>
@@ -421,14 +421,14 @@ export default function ClientCardMobile({
           <DialogHeader>
             <DialogTitle className="text-[#0F172A] font-bold">Excluir cliente?</DialogTitle>
           </DialogHeader>
-          <p className="text-[13px] text-[#64748B] mt-1 leading-relaxed">
+          <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
             Tem certeza que deseja excluir <strong className="text-[#0F172A]">{deleteConfirm?.name}</strong>?
           </p>
           <div className="flex items-center justify-end gap-3 mt-4">
-            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-[13px] font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
+            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
               Cancelar
             </button>
-            <button onClick={confirmDelete} className="px-5 py-2 text-[13px] font-bold text-white bg-[#EF4444] hover:bg-red-600 rounded-xl transition-colors">
+            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-[#EF4444] hover:bg-red-600 rounded-xl transition-colors">
               Excluir
             </button>
           </div>

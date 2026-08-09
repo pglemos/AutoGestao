@@ -658,7 +658,7 @@ export default function ConsultoriaVisitaExecucao() {
           <div className="relative min-w-0">
             <Button
               variant="primary"
-              className={cn("w-full md:w-auto h-mx-11 text-[10px] sm:text-xs font-bold shadow-sm transition-all uppercase tracking-mx-widest px-mx-sm md:px-mx-lg hover:translate-y-[-2px] active:translate-y-0", !hasRequiredEvidence ? "bg-status-error/20 text-status-error border-status-error/30" : "bg-gradient-to-r from-brand-primary to-brand-primary/80 border-none")}
+              className={cn("w-full md:w-auto h-mx-11 text-caption sm:text-xs font-bold shadow-sm transition-all uppercase tracking-mx-widest px-mx-sm md:px-mx-lg hover:translate-y-[-2px] active:translate-y-0", !hasRequiredEvidence ? "bg-status-error/20 text-status-error border-status-error/30" : "bg-gradient-to-r from-brand-primary to-brand-primary/80 border-none")}
               onClick={() => handleSave(true)}
               loading={isSaving}
               icon={!hasRequiredEvidence ? <AlertCircle className="w-mx-4 h-mx-4" /> : <CheckCircle2 className="w-mx-4 h-mx-4" />}

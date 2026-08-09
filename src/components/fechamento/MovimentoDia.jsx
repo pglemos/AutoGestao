@@ -35,7 +35,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
     return (
       <div className="flex items-center border border-slate-100 rounded-xl h-9 bg-slate-50 opacity-60 cursor-not-allowed">
         <div className="w-9 h-full flex items-center justify-center text-slate-300 border-r border-slate-100 text-[18px] font-light">−</div>
-        <span className="flex-1 text-center font-bold text-[15px] text-slate-400 tabular-nums">{value}</span>
+        <span className="flex-1 text-center font-bold text-body text-slate-400 tabular-nums">{value}</span>
         <div className="w-9 h-full flex items-center justify-center text-slate-300 border-l border-slate-100 text-[18px] font-light">+</div>
       </div>
     );
@@ -57,7 +57,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
         onBlur={commit}
         onKeyDown={handleKeyDown}
         onWheel={e => e.target.blur()}
-        className="flex-1 min-w-0 text-center font-bold text-[15px] text-slate-700 bg-transparent border-none outline-none h-full tabular-nums"
+        className="flex-1 min-w-0 text-center font-bold text-body text-slate-700 bg-transparent border-none outline-none h-full tabular-nums"
         style={{ boxShadow: "none" }}
       />
       <button
@@ -91,8 +91,8 @@ function ShowroomCard({ dc, updateCounter, setCounter, bloqueado }) {
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Store className="w-5 h-5 text-white" />}
         </div>
         <div>
-          <p className={`text-[13px] font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-orange-700"}`}>Showroom</p>
-          <p className={`text-[11px] mt-0.5 font-medium ${bloqueado ? "text-slate-300" : "text-orange-400"}`}>Atendimento presencial</p>
+          <p className={`text-body-sm font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-orange-700"}`}>Showroom</p>
+          <p className={`text-caption mt-0.5 font-medium ${bloqueado ? "text-slate-300" : "text-orange-400"}`}>Atendimento presencial</p>
         </div>
       </div>
       <div className="space-y-3">
@@ -105,7 +105,7 @@ function ShowroomCard({ dc, updateCounter, setCounter, bloqueado }) {
           disabled={bloqueado}
         />
       </div>
-      <p className={`text-[10px] leading-relaxed mt-auto pt-1 border-t ${bloqueado ? "text-slate-300 border-slate-100" : "text-orange-400 border-orange-100"}`}>
+      <p className={`text-caption leading-relaxed mt-auto pt-1 border-t ${bloqueado ? "text-slate-300 border-slate-100" : "text-orange-400 border-orange-100"}`}>
         Vendas devem ser registradas em Cadastrar Venda/Agendamentos.
       </p>
     </div>
@@ -139,8 +139,8 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Users className="w-5 h-5 text-white" />}
         </div>
         <div>
-          <p className={`text-[13px] font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-green-700"}`}>Carteira</p>
-          <p className={`text-[11px] mt-0.5 font-medium ${bloqueado ? "text-slate-300" : "text-green-400"}`}>Relacionamento e prospecção</p>
+          <p className={`text-body-sm font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-green-700"}`}>Carteira</p>
+          <p className={`text-caption mt-0.5 font-medium ${bloqueado ? "text-slate-300" : "text-green-400"}`}>Relacionamento e prospecção</p>
         </div>
       </div>
       <div className="space-y-3">
@@ -176,7 +176,7 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
               Agendamentos D+1 ativos
             </span>
             <div className="w-[120px] flex-shrink-0 flex items-center justify-center">
-              <span className={`text-[22px] font-bold tabular-nums ${bloqueado ? "text-slate-400" : "text-green-700"}`}>{ativos}</span>
+              <span className={`text-h3 font-bold tabular-nums ${bloqueado ? "text-slate-400" : "text-green-700"}`}>{ativos}</span>
             </div>
           </div>
         )}
@@ -184,11 +184,11 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
       {/* Planejados originais (sempre discreto após finalização) */}
       {showPostFinalizado && (
         <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-slate-100" : "border-green-100"}`}>
-          <p className={`text-[10px] font-medium ${bloqueado ? "text-slate-300" : "text-green-500"}`}>
+          <p className={`text-caption font-medium ${bloqueado ? "text-slate-300" : "text-green-500"}`}>
             Planejados no fechamento: <strong className={bloqueado ? "text-slate-400" : "text-green-700"}>{planejados}</strong>
           </p>
           {!bloqueado && (
-            <p className="text-[10px] font-semibold text-green-500">
+            <p className="text-caption font-semibold text-green-500">
               Detalhados: <strong className="text-green-700">{ativos}</strong> de <strong className="text-green-700">{planejados}</strong>
             </p>
           )}
@@ -197,7 +197,7 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
       {/* Antes da finalização: detalhados vs planejados */}
       {!showPostFinalizado && planejados > 0 && (
         <div className="flex items-center gap-1.5 mt-auto pt-3 border-t border-green-100">
-          <span className="text-[11px] font-semibold text-green-500">
+          <span className="text-caption font-semibold text-green-500">
             Detalhados: <strong className="text-green-700">{ativos}</strong> de <strong className="text-green-700">{planejados}</strong>
           </span>
         </div>
@@ -229,8 +229,8 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Globe className="w-5 h-5 text-white" />}
         </div>
         <div>
-          <p className={`text-[13px] font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-blue-700"}`}>Internet</p>
-          <p className={`text-[11px] mt-0.5 font-medium ${bloqueado ? "text-slate-300" : "text-blue-400"}`}>Leads digitais</p>
+          <p className={`text-body-sm font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-slate-400" : "text-blue-700"}`}>Internet</p>
+          <p className={`text-caption mt-0.5 font-medium ${bloqueado ? "text-slate-300" : "text-blue-400"}`}>Leads digitais</p>
         </div>
       </div>
       <div className="space-y-3">
@@ -265,18 +265,18 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
               Agendamentos D+1 ativos
             </span>
             <div className="w-[120px] flex-shrink-0 flex items-center justify-center">
-              <span className={`text-[22px] font-bold tabular-nums ${bloqueado ? "text-slate-400" : "text-blue-700"}`}>{ativos}</span>
+              <span className={`text-h3 font-bold tabular-nums ${bloqueado ? "text-slate-400" : "text-blue-700"}`}>{ativos}</span>
             </div>
           </div>
         )}
       </div>
       {showPostFinalizado && (
         <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-slate-100" : "border-blue-100"}`}>
-          <p className={`text-[10px] font-medium ${bloqueado ? "text-slate-300" : "text-blue-500"}`}>
+          <p className={`text-caption font-medium ${bloqueado ? "text-slate-300" : "text-blue-500"}`}>
             Planejados no fechamento: <strong className={bloqueado ? "text-slate-400" : "text-blue-700"}>{planejados}</strong>
           </p>
           {!bloqueado && (
-            <p className="text-[10px] font-semibold text-blue-500">
+            <p className="text-caption font-semibold text-blue-500">
               Detalhados: <strong className="text-blue-700">{ativos}</strong> de <strong className="text-blue-700">{planejados}</strong>
             </p>
           )}
@@ -284,7 +284,7 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
       )}
       {!showPostFinalizado && planejados > 0 && (
         <div className="flex items-center gap-1.5 mt-auto pt-3 border-t border-blue-100">
-          <span className="text-[11px] font-semibold text-blue-500">
+          <span className="text-caption font-semibold text-blue-500">
             Detalhados: <strong className="text-blue-700">{ativos}</strong> de <strong className="text-blue-700">{planejados}</strong>
           </span>
         </div>
@@ -300,7 +300,7 @@ export default function MovimentoDia({ dc, updateCounter, setCounter, clients = 
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
-          <span className="w-6 h-6 rounded-full bg-[#005BFF] text-white text-[11px] font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span className="w-6 h-6 rounded-full bg-[#005BFF] text-white text-caption font-bold flex items-center justify-center flex-shrink-0">1</span>
           <div>
             <h2 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide leading-none">Movimento do Dia</h2>
             <p className="text-[12px] text-slate-400 mt-0.5 font-medium">Informe rapidamente o que aconteceu hoje em cada canal.</p>
@@ -308,7 +308,7 @@ export default function MovimentoDia({ dc, updateCounter, setCounter, clients = 
         </div>
         <div className="relative group flex-shrink-0">
           <Info className="w-4 h-4 text-slate-300 hover:text-slate-500 cursor-pointer transition-colors" />
-          <div className="absolute right-0 top-6 w-72 bg-slate-800 text-white text-[11px] rounded-xl p-3 shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 leading-relaxed">
+          <div className="absolute right-0 top-6 w-72 bg-slate-800 text-white text-caption rounded-xl p-3 shadow-xl opacity-0 group-hover:opacity-100 pointer-events-none transition-opacity z-50 leading-relaxed">
             Preencha os dados de cada canal. Os totais são somados automaticamente no Resumo do Dia. Após a finalização, os Agendamentos D+1 ativos são calculados automaticamente pelos registros cadastrados.
           </div>
         </div>

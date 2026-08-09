@@ -95,15 +95,15 @@ export default function DiagnosticoPrincipal({ funis, indicadores }) {
       </div>
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-2 mb-1">
-          <span className={`text-[10px] font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${c.label}`}>{c.labelText}</span>
-          <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wide">Diagnóstico do mês</p>
+          <span className={`text-caption font-bold uppercase tracking-wider px-2 py-0.5 rounded-full ${c.label}`}>{c.labelText}</span>
+          <p className="text-caption font-bold text-slate-400 uppercase tracking-wide">Diagnóstico do mês</p>
         </div>
         <p className={`text-[14px] font-bold leading-snug ${c.titulo}`}>{diag.titulo}</p>
         <p className={`text-[12px] mt-0.5 ${c.sub}`}>{diag.subtexto}</p>
       </div>
       <Link
         to={diag.href}
-        className={`flex-shrink-0 px-5 py-2.5 rounded-xl text-[13px] font-bold transition-colors ${c.btn}`}
+        className={`flex-shrink-0 px-5 py-2.5 rounded-xl text-body-sm font-bold transition-colors ${c.btn}`}
       >
         {diag.botao}
       </Link>

@@ -130,7 +130,7 @@ export function ManagerMentorLibrary() {
                 }`}
               >
                 <div className="mb-2 flex items-start justify-between gap-2">
-                  <span className={`rounded-md border px-2 py-0.5 text-[10px] font-semibold ${categoryConfig.className}`}>
+                  <span className={`rounded-md border px-2 py-0.5 text-caption font-semibold ${categoryConfig.className}`}>
                     {categoryConfig.label}
                   </span>
                   <div className="flex items-center gap-1">
@@ -147,7 +147,7 @@ export function ManagerMentorLibrary() {
                   </div>
                 </div>
                 <p className="mb-1.5 text-sm font-medium leading-snug text-gray-800">{item.title}</p>
-                <p className="mb-2 flex items-center gap-1 text-[11px] text-gray-400"><Clock size={11} />{item.duration}</p>
+                <p className="mb-2 flex items-center gap-1 text-caption text-gray-400"><Clock size={11} />{item.duration}</p>
                 <button
                   type="button"
                   onClick={() => setSelected(item)}
@@ -194,7 +194,7 @@ export function ManagerMentorLibrary() {
                 <X size={18} />
               </button>
             </div>
-            <span className={`mb-3 inline-block rounded-md border px-2 py-0.5 text-[10px] font-semibold ${MENTOR_GUIDANCE_CATEGORY[selected.category].className}`}>
+            <span className={`mb-3 inline-block rounded-md border px-2 py-0.5 text-caption font-semibold ${MENTOR_GUIDANCE_CATEGORY[selected.category].className}`}>
               {MENTOR_GUIDANCE_CATEGORY[selected.category].label}
             </span>
             <h2 id="mentor-guidance-title" className="pr-10 font-semibold text-gray-800">{selected.title}</h2>

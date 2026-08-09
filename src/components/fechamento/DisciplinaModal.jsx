@@ -26,7 +26,7 @@ const Section = ({ icon: Icon, iconColor, number, title, children }) => (
         <Icon className="w-4 h-4 text-white" />
       </div>
       <div>
-        <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Item {number}</span>
+        <span className="text-caption font-bold text-slate-400 uppercase tracking-widest">Item {number}</span>
         <h3 className="text-[14px] font-bold text-[#0F172A] leading-tight">{title}</h3>
       </div>
     </div>
@@ -37,11 +37,11 @@ const Section = ({ icon: Icon, iconColor, number, title, children }) => (
 );
 
 const P = ({ children }) => (
-  <p className="text-[13px] text-[#475569] leading-relaxed">{children}</p>
+  <p className="text-body-sm text-[#475569] leading-relaxed">{children}</p>
 );
 
 const Bullet = ({ children }) => (
-  <li className="text-[13px] text-[#475569] leading-relaxed">{children}</li>
+  <li className="text-body-sm text-[#475569] leading-relaxed">{children}</li>
 );
 
 const CheckItem = ({ label, value, green }) => (
@@ -49,7 +49,7 @@ const CheckItem = ({ label, value, green }) => (
     <div className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${green ? "bg-green-100" : "bg-slate-100"}`}>
       <div className={`w-2 h-2 rounded-sm ${green ? "bg-[#22C55E]" : "bg-slate-400"}`} />
     </div>
-    <span className="text-[13px] text-[#475569] leading-relaxed flex-1">{label}</span>
+    <span className="text-body-sm text-[#475569] leading-relaxed flex-1">{label}</span>
     {value && <span className="text-[12px] font-bold text-[#0F172A] flex-shrink-0">{value}</span>}
   </div>
 );
@@ -68,7 +68,7 @@ export default function DisciplinaModal({ open, onClose }) {
               <h2 className="text-[18px] font-bold text-[#0F172A] leading-tight">
                 Entenda sua pontuação de Disciplina
               </h2>
-              <p className="text-[13px] text-[#64748B] mt-1 leading-relaxed">
+              <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
                 A pontuação do Fechamento Diário mede o quanto você manteve sua rotina comercial organizada no dia.
               </p>
             </div>
@@ -113,11 +113,11 @@ export default function DisciplinaModal({ open, onClose }) {
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <div className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-center">
                   <span className="text-[18px] font-bold text-[#22C55E]">100%</span>
-                  <p className="text-[10px] text-slate-500 mt-0.5">Cadastrou os 2 clientes</p>
+                  <p className="text-caption text-slate-500 mt-0.5">Cadastrou os 2 clientes</p>
                 </div>
                 <div className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-center">
                   <span className="text-[18px] font-bold text-[#F59E0B]">85%</span>
-                  <p className="text-[10px] text-slate-500 mt-0.5">Cadastrou apenas 1 dos 2</p>
+                  <p className="text-caption text-slate-500 mt-0.5">Cadastrou apenas 1 dos 2</p>
                 </div>
               </div>
             </div>
@@ -197,7 +197,7 @@ export default function DisciplinaModal({ open, onClose }) {
               <CheckItem label="Fechamento do dia anterior fica liberado até 09h30 do dia seguinte" />
             </div>
             <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mt-2">
-              <p className="text-[13px] text-[#475569] leading-relaxed italic">
+              <p className="text-body-sm text-[#475569] leading-relaxed italic">
                 "Essa regra existe para manter seu funil atualizado e ajudar você, sua liderança e a loja a acompanharem melhor as oportunidades reais de venda."
               </p>
             </div>
@@ -209,7 +209,7 @@ export default function DisciplinaModal({ open, onClose }) {
         <div className="flex-shrink-0 px-7 py-4 border-t border-slate-100 bg-white flex items-center justify-end">
           <button
             onClick={onClose}
-            className="bg-[#005BFF] hover:bg-blue-700 active:scale-[0.98] transition-all text-white font-bold text-[13px] px-8 h-[42px] rounded-xl shadow-sm shadow-blue-200"
+            className="bg-[#005BFF] hover:bg-blue-700 active:scale-[0.98] transition-all text-white font-bold text-body-sm px-8 h-[40px] rounded-xl shadow-sm shadow-blue-200"
           >
             Entendi
           </button>

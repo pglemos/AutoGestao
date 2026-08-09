@@ -304,11 +304,11 @@ function ProspeccaoCard({ acao, onVerComoFazer }) {
             <Icon className="w-4 h-4 text-[#005BFF]" />
           </div>
           <div>
-            <p className="font-bold text-[13px] text-[#0F172A]">{acao.tipo}</p>
-            <p className="text-[11px] text-slate-400">{acao.publico}</p>
+            <p className="font-bold text-body-sm text-[#0F172A]">{acao.tipo}</p>
+            <p className="text-caption text-slate-400">{acao.publico}</p>
           </div>
         </div>
-        <span className="text-[11px] font-bold text-[#005BFF] bg-blue-50 px-2.5 py-1 rounded-full flex-shrink-0">{acao.meta}</span>
+        <span className="text-caption font-bold text-[#005BFF] bg-blue-50 px-2.5 py-1 rounded-full flex-shrink-0">{acao.meta}</span>
       </div>
       {acao.exemplo && <p className="text-[12px] text-slate-500 italic">"{acao.exemplo}"</p>}
       <button
@@ -337,22 +337,22 @@ function ComoFazerDrawer({ acao, onClose }) {
             <span className="text-[12px] font-semibold text-[#005BFF]">Meta: {acao.meta}</span>
             <span className="text-[12px] text-slate-500">• Público: {acao.publico}</span>
           </div>
-          {acao.objetivo && <p className="text-[13px] text-slate-600">{acao.objetivo}</p>}
+          {acao.objetivo && <p className="text-body-sm text-slate-600">{acao.objetivo}</p>}
           <div>
-            <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2">Como fazer</p>
+            <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-2">Como fazer</p>
             <ol className="space-y-2">
               {acao.instrucoes.map((inst, i) => (
                 <li key={i} className="flex items-start gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-[#005BFF] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
-                  <span className="text-[13px] text-slate-700">{inst}</span>
+                  <span className="w-5 h-5 rounded-full bg-[#005BFF] text-white text-caption font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                  <span className="text-body-sm text-slate-700">{inst}</span>
                 </li>
               ))}
             </ol>
           </div>
           {acao.exemplo && (
             <div className="bg-slate-50 rounded-xl p-3">
-              <p className="text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-1">Exemplo</p>
-              <p className="text-[13px] text-slate-600 italic">"{acao.exemplo}"</p>
+              <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-1">Exemplo</p>
+              <p className="text-body-sm text-slate-600 italic">"{acao.exemplo}"</p>
             </div>
           )}
         </div>
@@ -533,7 +533,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
         {conflito && (
           <div className="flex items-start gap-3 bg-amber-50 border border-amber-200 rounded-xl px-4 py-3">
             <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0 mt-0.5" />
-            <p className="text-[13px] text-amber-800 font-medium">
+            <p className="text-body-sm text-amber-800 font-medium">
               Você possui um cliente agendado neste horário. Priorize o atendimento e retome sua rotina depois.
             </p>
           </div>
@@ -559,9 +559,9 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-[11px] font-bold px-2 py-0.5 rounded-lg ${isCurrent ? "bg-[#005BFF] text-white" : "bg-slate-100 text-slate-500"}`}>{time}</span>
+                    <span className={`text-caption font-bold px-2 py-0.5 rounded-lg ${isCurrent ? "bg-[#005BFF] text-white" : "bg-slate-100 text-slate-500"}`}>{time}</span>
                     <span className={`text-[14px] font-bold ${isCurrent ? "text-[#0F172A]" : "text-slate-600"}`}>{step.label}</span>
-                    {isCurrent && <span className="text-[10px] font-bold text-[#005BFF] bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Agora</span>}
+                    {isCurrent && <span className="text-caption font-bold text-[#005BFF] bg-blue-50 px-2 py-0.5 rounded-full uppercase tracking-wider">Agora</span>}
                   </div>
                   {/* Frase contextual no card recolhido */}
                   {!isExpanded && (
@@ -581,14 +581,14 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                       {motivacaoConteudo(ctx).titulo}
                     </p>
                   )}
-                  <p className="text-[13px] text-slate-500 mt-3 mb-4">{step.objetivo}</p>
+                  <p className="text-body-sm text-slate-500 mt-3 mb-4">{step.objetivo}</p>
 
                   {/* Prospecção */}
                   {step.id === "prospeccao" ? (
                     <div>
                       <p className="text-[12px] font-bold text-slate-400 uppercase tracking-wider mb-3">Ações de hoje — {moment().format("dddd")}</p>
                       {acoesDia.length === 0 ? (
-                        <p className="text-[13px] text-slate-400">Sem ações programadas para hoje. Aproveite para avançar na carteira.</p>
+                        <p className="text-body-sm text-slate-400">Sem ações programadas para hoje. Aproveite para avançar na carteira.</p>
                       ) : (
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {acoesDia.map((a, i) => <ProspeccaoCard key={i} acao={a} onVerComoFazer={setComoFazerAcao} />)}
@@ -604,8 +604,8 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                           <ol className="space-y-2">
                             {instrucoesDinamicas.map((inst, i) => (
                               <li key={i} className="flex items-start gap-2.5">
-                                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
-                                <span className="text-[13px] text-slate-700">{inst}</span>
+                                <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 text-caption font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                                <span className="text-body-sm text-slate-700">{inst}</span>
                               </li>
                             ))}
                           </ol>
@@ -625,7 +625,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                           <p className="text-[12px] font-bold text-[#005BFF] mb-2">{objecaoAberta}</p>
                           <ul className="space-y-1.5">
                             {OBJECOES.find(o => o.label === objecaoAberta)?.dicas.map((d, i) => (
-                              <li key={i} className="flex items-start gap-2 text-[13px] text-slate-700">
+                              <li key={i} className="flex items-start gap-2 text-body-sm text-slate-700">
                                 <span className="text-[#005BFF] font-bold mt-0.5">→</span>{d}
                               </li>
                             ))}
@@ -640,8 +640,8 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                         <ol className="space-y-2">
                           {instrucoesDinamicas.map((inst, i) => (
                             <li key={i} className="flex items-start gap-2.5">
-                              <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
-                              <span className="text-[13px] text-slate-700">{inst}</span>
+                              <span className="w-5 h-5 rounded-full bg-slate-100 text-slate-500 text-caption font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                              <span className="text-body-sm text-slate-700">{inst}</span>
                             </li>
                           ))}
                         </ol>
@@ -670,7 +670,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
 
       {/* Timeline sidebar */}
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sticky top-6">
-        <p className="text-[11px] font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">Linha do Tempo</p>
+        <p className="text-caption font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">Linha do Tempo</p>
         <div className="space-y-0.5">
           {[...routineSteps].sort((a, b) => stepTime(a) - stepTime(b)).map((step, idx, arr) => {
             const isCurrent = step.id === currentStepId;
@@ -685,7 +685,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                   {idx < arr.length - 1 && <div className={`w-px h-5 ${isPast ? "bg-green-200" : "bg-slate-100"}`} />}
                 </div>
                 <div className="pb-3 pt-0.5">
-                  <p className={`text-[11px] font-bold ${isCurrent ? "text-[#005BFF]" : "text-slate-400"}`}>{formatMin(stepTime(step))}</p>
+                  <p className={`text-caption font-bold ${isCurrent ? "text-[#005BFF]" : "text-slate-400"}`}>{formatMin(stepTime(step))}</p>
                   <p className={`text-[12px] font-semibold leading-tight ${isCurrent ? "text-[#0F172A]" : "text-slate-500"}`}>{step.label}</p>
                 </div>
               </div>

@@ -62,7 +62,7 @@ export function PendenciasDrawer({
       referenceStyle
     >
       {actions.length === 0 ? (
-        <p className="py-8 text-center text-[13px] text-slate-400">Nenhuma pendência anterior.</p>
+        <p className="py-8 text-center text-body-sm text-slate-400">Nenhuma pendência anterior.</p>
       ) : (
         <div className="space-y-3">
           {actions.map(action => {
@@ -78,39 +78,39 @@ export function PendenciasDrawer({
                   <div className={cn('w-1.5 self-stretch rounded-full', barColor(action.activityType))} />
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex flex-wrap items-center gap-2">
-                      <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400">{action.title}</span>
-                      <span className="rounded-full bg-red-50 px-2 py-0.5 text-[10px] font-bold text-red-500">{late === 0 ? 'Hoje' : `${late}d atraso`}</span>
+                      <span className="text-caption font-bold uppercase tracking-wider text-slate-400">{action.title}</span>
+                      <span className="rounded-full bg-red-50 px-2 py-0.5 text-caption font-bold text-red-500">{late === 0 ? 'Hoje' : `${late}d atraso`}</span>
                     </div>
-                    <p className="truncate text-[13px] font-bold text-gray-800">{clientName}</p>
+                    <p className="truncate text-body-sm font-bold text-gray-800">{clientName}</p>
                     {vehicle && <p className="truncate text-[12px] text-slate-500">{vehicle}</p>}
                     {action.description && <p className="mt-0.5 text-[12px] text-slate-400">{action.description}</p>}
-                    <p className="mt-0.5 text-[11px] text-slate-300">{formatDate(action.dueAt)}</p>
+                    <p className="mt-0.5 text-caption text-slate-300">{formatDate(action.dueAt)}</p>
                   </div>
                 </div>
 
                 <div className="mt-3 flex flex-wrap items-center gap-1.5">
                   {phoneDigits && (
-                    <button type="button" onClick={() => onWhatsapp(action)} className="flex items-center gap-1 rounded-lg bg-green-500 px-2.5 py-1.5 text-[11px] font-bold text-white hover:bg-green-600">
+                    <button type="button" onClick={() => onWhatsapp(action)} className="flex items-center gap-1 rounded-lg bg-green-500 px-2.5 py-1.5 text-caption font-bold text-white hover:bg-green-600">
                       <MessageCircle className="h-3 w-3" aria-hidden="true" /> WhatsApp
                     </button>
                   )}
                   {phoneDigits && (
-                    <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-[11px] font-bold text-slate-600 hover:bg-slate-50">
+                    <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-caption font-bold text-slate-600 hover:bg-slate-50">
                       <Phone className="h-3 w-3" aria-hidden="true" /> Ligar
                     </a>
                   )}
                   {action.clientId && (
-                    <button type="button" onClick={() => onOpenClient(action)} className="flex items-center gap-1 rounded-lg border border-blue-200 px-2.5 py-1.5 text-[11px] font-bold text-status-info hover:bg-blue-50">
+                    <button type="button" onClick={() => onOpenClient(action)} className="flex items-center gap-1 rounded-lg border border-blue-200 px-2.5 py-1.5 text-caption font-bold text-status-info hover:bg-blue-50">
                       <UserRound className="h-3 w-3" aria-hidden="true" /> Abrir cliente
                     </button>
                   )}
-                  <button type="button" onClick={() => onReschedule(action)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-[11px] font-bold text-slate-500 hover:bg-slate-50">
+                  <button type="button" onClick={() => onReschedule(action)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-caption font-bold text-slate-500 hover:bg-slate-50">
                     <Calendar className="h-3 w-3" aria-hidden="true" /> Reagendar
                   </button>
-                  <button type="button" onClick={() => onEscalate(action)} className="flex items-center gap-1 rounded-lg border border-amber-200 px-2.5 py-1.5 text-[11px] font-bold text-amber-700 hover:bg-amber-50">
+                  <button type="button" onClick={() => onEscalate(action)} className="flex items-center gap-1 rounded-lg border border-amber-200 px-2.5 py-1.5 text-caption font-bold text-amber-700 hover:bg-amber-50">
                     <AlertTriangle className="h-3 w-3" aria-hidden="true" /> Pedir apoio
                   </button>
-                  <button type="button" onClick={() => onResolve(action)} className="ml-auto rounded-lg bg-status-info px-2.5 py-1.5 text-[11px] font-bold text-white hover:bg-blue-700">Resolver</button>
+                  <button type="button" onClick={() => onResolve(action)} className="ml-auto rounded-lg bg-status-info px-2.5 py-1.5 text-caption font-bold text-white hover:bg-blue-700">Resolver</button>
                 </div>
               </article>
             )

@@ -139,11 +139,11 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
               )}
               <div className="flex gap-4 pt-1">
                 <div>
-                  <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wide">Objetivo</p>
+                  <p className="text-caption text-slate-400 font-bold uppercase tracking-wide">Objetivo</p>
                   <p className="text-xs font-semibold text-slate-700">{objetivoAtual}</p>
                 </div>
                 <div>
-                  <p className="text-[9px] text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
+                  <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
                   <p className="text-xs font-bold text-[#031B3D]">
                     {codigoPasso ? `${codigoPasso} · ` : ""}{passoAtual}
                   </p>
@@ -188,7 +188,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
           {mostrarRegistro && (
             <div className="space-y-4 animate-in slide-in-from-top-2 duration-200">
               <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-2">
+                <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">
                   Registrar resultado — {codigoPasso ? `${codigoPasso}: ${passoAtual}` : passoAtual}
                 </p>
                 <div className="grid grid-cols-3 gap-2">
@@ -204,7 +204,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                         }`}
                       >
                         <span className="text-2xl leading-none">{r.emoji}</span>
-                        <span className="text-[10px] font-semibold text-center leading-tight">{r.label}</span>
+                        <span className="text-caption font-semibold text-center leading-tight">{r.label}</span>
                       </button>
                     );
                   })}
@@ -236,7 +236,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
               )}
 
               <div>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wide mb-1">Observação (opcional)</p>
+                <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1">Observação (opcional)</p>
                 <textarea
                   value={observacao}
                   onChange={e => setObservacao(e.target.value)}

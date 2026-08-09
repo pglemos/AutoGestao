@@ -24,7 +24,7 @@ export function DeliveryTab({ visit, controller }: { visit: ConsultingJourneyVis
                 className="mt-1 h-4 w-4"
               />
               <span className="min-w-0 flex-1"><strong className="block text-sm text-foreground">{item.title}</strong>{item.description ? <span className="mt-1 block text-sm text-muted-foreground">{item.description}</span> : null}</span>
-              {item.required ? <span className="text-[11px] font-medium text-amber-700">Obrigatório</span> : null}
+              {item.required ? <span className="text-caption font-medium text-amber-700">Obrigatório</span> : null}
             </label>
           ))}
           {!visit.deliveryItems.length ? <p className="text-sm text-muted-foreground">Nenhum item de Entrega configurado.</p> : null}
@@ -38,7 +38,7 @@ export function DeliveryTab({ visit, controller }: { visit: ConsultingJourneyVis
             <label key={participant.id} className="flex cursor-pointer items-center gap-3 rounded-lg border border-border p-3">
               <input type="checkbox" checked={participant.confirmed} disabled={controller.mutating} onChange={(event: ChangeEvent<HTMLInputElement>) => void controller.confirmParticipant(participant.id, event.target.checked)} className="h-4 w-4" />
               <span className="flex-1"><strong className="block text-sm text-foreground">{participant.name}</strong><span className="text-xs text-muted-foreground">{participant.roleLabel || 'Participante'}</span></span>
-              {participant.required ? <span className="text-[11px] font-medium text-amber-700">Obrigatório</span> : null}
+              {participant.required ? <span className="text-caption font-medium text-amber-700">Obrigatório</span> : null}
             </label>
           ))}
           {!visit.participants.length ? <p className="text-sm text-muted-foreground">Nenhum participante obrigatório configurado.</p> : null}

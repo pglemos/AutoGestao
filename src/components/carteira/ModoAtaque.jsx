@@ -34,10 +34,10 @@ function BarraModoAtaque({ total, concluidos, tempoInicio, onPausar }) {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-[11px] text-slate-300">
+            <span className="text-caption text-slate-300">
               {concluidos} de {total} oportunidades concluídas
             </span>
-            <span className="text-[11px] text-slate-400 font-mono">{tempoStr}</span>
+            <span className="text-caption text-slate-400 font-mono">{tempoStr}</span>
           </div>
           <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
             <div
@@ -88,11 +88,11 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
         {/* Objetivo + Próximo passo */}
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-slate-50 rounded-2xl p-4">
-            <p className="text-[9px] text-slate-400 font-bold uppercase tracking-wide mb-1">Objetivo</p>
+            <p className="text-caption text-slate-400 font-bold uppercase tracking-wide mb-1">Objetivo</p>
             <p className="text-sm font-bold text-slate-700">{objetivo}</p>
           </div>
           <div className="bg-blue-50 rounded-2xl p-4">
-            <p className="text-[9px] text-[#005BFF] font-bold uppercase tracking-wide mb-1">Próximo passo</p>
+            <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide mb-1">Próximo passo</p>
             <p className="text-sm font-bold text-[#031B3D]">{proximoPasso}</p>
           </div>
         </div>
@@ -108,7 +108,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
           {tel && (
             <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors">
               <Phone className="w-4 h-4 text-slate-500" />
-              <span className="text-[11px] font-semibold text-slate-600">Ligar</span>
+              <span className="text-caption font-semibold text-slate-600">Ligar</span>
             </a>
           )}
           {tel && (
@@ -117,7 +117,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
               className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-green-200 bg-green-50 hover:bg-green-100 transition-colors"
             >
               <MessageCircle className="w-4 h-4 text-green-600" />
-              <span className="text-[11px] font-semibold text-green-700">WhatsApp</span>
+              <span className="text-caption font-semibold text-green-700">WhatsApp</span>
             </button>
           )}
           <button
@@ -125,7 +125,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
             className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors"
           >
             <FileText className="w-4 h-4 text-slate-500" />
-            <span className="text-[11px] font-semibold text-slate-600">Ficha</span>
+            <span className="text-caption font-semibold text-slate-600">Ficha</span>
           </button>
         </div>
 
@@ -162,7 +162,7 @@ function TelaConclusao({ stats, onPlanoAtaque, onCarteira, onEncerrar }) {
         ].map(s => (
           <div key={s.label} className={`rounded-2xl p-4 ${s.color}`}>
             <p className="text-2xl font-black">{s.value}</p>
-            <p className="text-[11px] font-semibold mt-1 leading-snug">{s.label}</p>
+            <p className="text-caption font-semibold mt-1 leading-snug">{s.label}</p>
           </div>
         ))}
       </div>

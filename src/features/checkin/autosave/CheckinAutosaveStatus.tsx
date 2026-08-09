@@ -87,7 +87,7 @@ export function CheckinAutosaveStatus({
       className={`flex flex-wrap items-center justify-between gap-3 rounded-xl border px-4 py-3 shadow-sm ${tone}`}
       data-testid="checkin-autosave-status"
     >
-      <p className="flex min-w-0 items-center gap-2 text-[13px] font-semibold" role="status" aria-live="polite">
+      <p className="flex min-w-0 items-center gap-2 text-body-sm font-semibold" role="status" aria-live="polite">
         <Icon
           size={16}
           aria-hidden="true"
@@ -102,7 +102,7 @@ export function CheckinAutosaveStatus({
             <button
               type="button"
               onClick={onRetry}
-              className="inline-flex h-11 min-w-[44px] items-center gap-1.5 rounded-lg border border-red-300 bg-white px-3 text-[13px] font-bold text-red-700 transition-colors hover:bg-red-100"
+              className="inline-flex h-11 min-w-[44px] items-center gap-1.5 rounded-lg border border-red-300 bg-white px-3 text-body-sm font-bold text-red-700 transition-colors hover:bg-red-100"
             >
               <RefreshCw size={14} aria-hidden="true" />
               Tentar novamente
@@ -112,7 +112,7 @@ export function CheckinAutosaveStatus({
             type="button"
             onClick={onSaveNow}
             disabled={disabled || saving}
-            className="inline-flex h-11 min-w-[44px] items-center rounded-lg border border-slate-300 bg-white px-3 text-[13px] font-bold text-slate-700 transition-colors hover:border-[#005BFF] hover:text-[#005BFF] disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-11 min-w-[44px] items-center rounded-lg border border-slate-300 bg-white px-3 text-body-sm font-bold text-slate-700 transition-colors hover:border-[#005BFF] hover:text-[#005BFF] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Salvar rascunho
           </button>

@@ -22,7 +22,7 @@ export default function MobileBottomNav() {
             ) : (
               <Icon className={`h-5 w-5 ${item.active ? "text-primary" : "text-muted-foreground"}`} />
             )}
-            <span className={`text-[10px] ${item.active ? "font-medium text-primary" : "text-muted-foreground"}`}>
+            <span className={`text-caption ${item.active ? "font-medium text-primary" : "text-muted-foreground"}`}>
               {item.label}
             </span>
           </button>

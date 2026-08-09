@@ -142,7 +142,7 @@ export default function MeetingDrawer({ meetingId, onClose, user, onDataChange, 
                 <Clock className="h-4 w-4 shrink-0 text-amber-600" />
                 <div className="flex-1">
                   <p className="text-xs font-medium text-amber-800">Antecipação em análise</p>
-                  <p className="text-[11px] text-amber-700">
+                  <p className="text-caption text-amber-700">
                     Solicitada em {new Date(anticipation.createdAt).toLocaleDateString("pt-BR")}
                   </p>
                 </div>

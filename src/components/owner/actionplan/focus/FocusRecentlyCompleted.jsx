@@ -35,7 +35,7 @@ export default function FocusRecentlyCompleted({ actions, onOpen }) {
                   <div className="flex items-center gap-2">
                     <span className="text-xs font-bold text-muted-foreground">{action.code}</span>
                     {impact && (
-                      <span className={`rounded-full px-1.5 py-0.5 text-[10px] font-medium ${impact.badge}`}>{impact.label}</span>
+                      <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${impact.badge}`}>{impact.label}</span>
                     )}
                   </div>
 

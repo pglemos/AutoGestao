@@ -53,7 +53,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
         <table className="w-full min-w-[820px] border-collapse text-sm">
           <thead className="sticky top-0 z-20">
             <tr className="border-b border-border bg-slate-50">
-              <th className="sticky left-0 z-30 min-w-[170px] border-r border-border bg-slate-50 px-3 py-2 text-left text-xs font-semibold text-slate-700">Comparativo</th>
+              <th className="sticky left-0 z-30 min-w-[168px] border-r border-border bg-slate-50 px-3 py-2 text-left text-xs font-semibold text-slate-700">Comparativo</th>
               {MONTHS.map((m, i) => (
                 <th
                   key={m}
@@ -69,7 +69,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
           <tbody>
             {rows.map((row, ri) => (
               <tr key={ri} className="border-b border-border/40 bg-card hover:bg-slate-50/50">
-                <td className="sticky left-0 z-10 min-w-[170px] border-r border-border bg-card px-3 py-1.5 text-left text-xs font-medium text-slate-700">
+                <td className="sticky left-0 z-10 min-w-[168px] border-r border-border bg-card px-3 py-1.5 text-left text-xs font-medium text-slate-700">
                   {row.label === "Meta" && <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-blue-500 align-middle" />}
                   {row.label === "Resultado Atual" && <span className={`mr-1.5 inline-block h-2 w-2 rounded-full ${areaStyle.dot} align-middle`} />}
                   {row.label}

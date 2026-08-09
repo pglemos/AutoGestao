@@ -41,15 +41,15 @@ export default function UpcomingDeadlines({ actions, onSelectDate, onViewAll }) 
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center gap-1">
                     <span className="text-xs font-medium text-foreground">{action.code}</span>
-                    <span className={`rounded-full px-1.5 py-0.5 text-[9px] font-medium ${statusStyle.badge || ""}`}>
+                    <span className={`rounded-full px-1.5 py-0.5 text-caption font-medium ${statusStyle.badge || ""}`}>
                       {statusStyle.label}
                     </span>
-                    {late && <span className="text-[9px] font-medium text-red-600">Atrasada</span>}
+                    {late && <span className="text-caption font-medium text-red-600">Atrasada</span>}
                   </div>
                   <p className="truncate text-xs text-muted-foreground">{action.title}</p>
-                  <p className="truncate text-[10px] text-muted-foreground">{action.responsible}</p>
+                  <p className="truncate text-caption text-muted-foreground">{action.responsible}</p>
                 </div>
-                <span className="shrink-0 text-[10px] font-medium text-muted-foreground">
+                <span className="shrink-0 text-caption font-medium text-muted-foreground">
                   {date ? getRelativeDayLabel(date) : action.dueDate}
                 </span>
               </button>

@@ -18,7 +18,7 @@ export function PersonEvolutionList({ title, people, onOpen }: {
               <div className="min-w-0">
                 <div className="flex flex-wrap items-center gap-2">
                   <p className="truncate text-sm font-semibold text-foreground">{person.name}</p>
-                  <span className="rounded-full bg-muted px-2 py-0.5 text-[11px] font-medium text-muted-foreground">{statusLabel[person.status]}</span>
+                  <span className="rounded-full bg-muted px-2 py-0.5 text-caption font-medium text-muted-foreground">{statusLabel[person.status]}</span>
                 </div>
                 {person.reasons.length ? <p className="mt-1 text-xs text-muted-foreground">{person.reasons.join(' · ')}</p> : null}
               </div>

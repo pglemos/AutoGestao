@@ -371,7 +371,7 @@ export function OwnerDecisionCenter({
                     </div>
                   )}
                 </div>
-                <div className="flex flex-wrap gap-mx-sm xl:max-w-[390px] xl:justify-end">
+                <div className="flex flex-wrap gap-mx-sm xl:max-w-[388px] xl:justify-end">
                   <Button type="button" variant="outline" className="bg-white" onClick={() => setExpandedId(expanded ? null : item.id)}>
                     {expanded ? 'Fechar análise' : 'Analisar'}
                   </Button>
@@ -509,7 +509,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
                 const number = index + 1
                 const completed = number <= completedVisits
                 const current = number === nextVisit
-                return <div key={number} className="flex min-w-[76px] flex-1 flex-col items-center text-center"><div className={cn('flex h-8 w-8 items-center justify-center rounded-full border-2 text-mx-tiny font-bold', completed ? 'border-brand-primary bg-emerald-600 text-white' : current ? 'border-brand-primary bg-emerald-600/10 text-emerald-600' : 'border-gray-200 bg-gray-50 text-gray-500')}>{completed ? '✓' : number}</div><span className={cn('mt-mx-xs text-mx-tiny', current ? 'font-bold text-gray-800' : 'text-gray-500')}>{current ? program.nextVisitObjective || 'Próximo encontro' : `Encontro ${number}`}</span><span className="mt-0.5 text-[10px] text-gray-500">{completed ? 'Concluído' : current ? 'Agendado' : 'Pendente'}</span></div>
+                return <div key={number} className="flex min-w-[76px] flex-1 flex-col items-center text-center"><div className={cn('flex h-8 w-8 items-center justify-center rounded-full border-2 text-mx-tiny font-bold', completed ? 'border-brand-primary bg-emerald-600 text-white' : current ? 'border-brand-primary bg-emerald-600/10 text-emerald-600' : 'border-gray-200 bg-gray-50 text-gray-500')}>{completed ? '✓' : number}</div><span className={cn('mt-mx-xs text-mx-tiny', current ? 'font-bold text-gray-800' : 'text-gray-500')}>{current ? program.nextVisitObjective || 'Próximo encontro' : `Encontro ${number}`}</span><span className="mt-0.5 text-caption text-gray-500">{completed ? 'Concluído' : current ? 'Agendado' : 'Pendente'}</span></div>
               })}
             </div>
           </Card>

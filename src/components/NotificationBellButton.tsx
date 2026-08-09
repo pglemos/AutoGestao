@@ -65,7 +65,7 @@ export function NotificationBellButton({ variant = 'light', className }: Notific
       >
         <Bell size={20} />
         {unreadCount > 0 && (
-          <span className="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#EF4444] px-1 text-[9px] font-bold leading-none text-white">
+          <span className="absolute -right-1 -top-1 grid h-4 min-w-4 place-items-center rounded-full bg-[#EF4444] px-1 text-caption font-bold leading-none text-white">
             {unreadCount > 9 ? '9+' : unreadCount}
           </span>
         )}
@@ -77,12 +77,12 @@ export function NotificationBellButton({ variant = 'light', className }: Notific
           className="absolute right-0 top-[calc(100%+10px)] z-[var(--mx-z-popover)] w-[360px] max-w-[92vw] overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white text-left shadow-mx-xl"
         >
           <div className="flex items-center justify-between border-b border-[#DFE0E1] px-4 py-3">
-            <p className="text-[13px] font-extrabold text-[#071822]">Notificações</p>
+            <p className="text-body-sm font-extrabold text-[#071822]">Notificações</p>
             {unreadCount > 0 && (
               <button
                 type="button"
                 onClick={() => markAllAsRead()}
-                className="text-[11px] font-bold text-[#005BFF] transition-colors hover:underline"
+                className="text-caption font-bold text-[#005BFF] transition-colors hover:underline"
               >
                 Marcar tudo como lida
               </button>

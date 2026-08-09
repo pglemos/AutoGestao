@@ -75,19 +75,19 @@ export function ReagendarAtividadeModal({
       closeOnEscape={!saving}
       footer={(
         <>
-          <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-slate-200 px-5 py-2.5 text-[13px] font-semibold text-slate-500 hover:bg-slate-50 disabled:opacity-50">Cancelar</button>
-          <button type="button" onClick={() => void handleSubmit()} disabled={!dueAt || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-[13px] font-bold text-white hover:bg-blue-700 disabled:opacity-50">{saving ? 'Salvando...' : 'Reagendar'}</button>
+          <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-slate-200 px-5 py-2.5 text-body-sm font-semibold text-slate-500 hover:bg-slate-50 disabled:opacity-50">Cancelar</button>
+          <button type="button" onClick={() => void handleSubmit()} disabled={!dueAt || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white hover:bg-blue-700 disabled:opacity-50">{saving ? 'Salvando...' : 'Reagendar'}</button>
         </>
       )}
     >
       <div className="space-y-4">
         <div>
-          <label htmlFor="central-reschedule-date" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Nova data e horário</label>
-          <input id="central-reschedule-date" type="datetime-local" value={dueAt} onChange={event => setDueAt(event.target.value)} className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-[13px] outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
+          <label htmlFor="central-reschedule-date" className="text-caption font-bold uppercase tracking-wider text-slate-500">Nova data e horário</label>
+          <input id="central-reschedule-date" type="datetime-local" value={dueAt} onChange={event => setDueAt(event.target.value)} className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
         </div>
         <div>
-          <label htmlFor="central-reschedule-note" className="text-[11px] font-bold uppercase tracking-wider text-slate-500">Observação (opcional)</label>
-          <textarea id="central-reschedule-note" rows={3} value={note} onChange={event => setNote(event.target.value)} className="mt-1.5 w-full resize-none rounded-md border border-slate-200 px-3 py-2 text-[13px] outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
+          <label htmlFor="central-reschedule-note" className="text-caption font-bold uppercase tracking-wider text-slate-500">Observação (opcional)</label>
+          <textarea id="central-reschedule-note" rows={3} value={note} onChange={event => setNote(event.target.value)} className="mt-1.5 w-full resize-none rounded-md border border-slate-200 px-3 py-2 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
         </div>
         {error && <p role="alert" className="rounded-xl border border-red-200 bg-red-50 px-3 py-2 text-[12px] font-semibold text-red-700">{error}</p>}
       </div>

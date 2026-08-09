@@ -133,7 +133,7 @@ export default function DeterministicActionsPanel({
                 <article key={action.id} className={`rounded-xl border p-4 ${priority.border} bg-white`}>
                   <div className="flex flex-wrap items-start justify-between gap-2">
                     <h3 className="min-w-0 flex-1 text-sm font-semibold text-gray-800">{action.title}</h3>
-                    <span className={`rounded-full px-2 py-1 text-[10px] font-bold uppercase tracking-wide ${priority.badge}`}>
+                    <span className={`rounded-full px-2 py-1 text-caption font-bold uppercase tracking-wide ${priority.badge}`}>
                       {priority.label}
                     </span>
                   </div>

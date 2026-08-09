@@ -57,7 +57,7 @@ export default function DepartmentPulse({ snapshots, loading, onTalkToConsultant
             <p className="mt-3 text-xs leading-relaxed text-muted-foreground">{s.summary}</p>
 
             <div className="mt-3 flex items-center justify-between border-t border-border pt-2.5">
-              <span className="text-[11px] text-muted-foreground/80">
+              <span className="text-caption text-muted-foreground/80">
                 {s.last_data_at ? `Atualizado em ${formatDateTime(s.last_data_at)}` : "—"}
               </span>
               <span className="inline-flex items-center gap-0.5 text-xs font-medium text-muted-foreground/80 transition-colors group-hover:text-foreground">
@@ -107,7 +107,7 @@ export default function DepartmentPulse({ snapshots, loading, onTalkToConsultant
               <p className="text-sm text-muted-foreground">{selected.summary}</p>
             </Block>
 
-            <div className="rounded-md bg-muted/60 px-3 py-2 text-[11px] text-muted-foreground/80">
+            <div className="rounded-md bg-muted/60 px-3 py-2 text-caption text-muted-foreground/80">
               Fonte: {selected.source || "—"} • Atualizado: {formatDateTime(selected.last_data_at || selected.updated_date)}
             </div>
 
@@ -124,7 +124,7 @@ export default function DepartmentPulse({ snapshots, loading, onTalkToConsultant
 function Metric({ label, value }) {
   return (
     <div>
-      <p className="text-[11px] text-muted-foreground/80">{label}</p>
+      <p className="text-caption text-muted-foreground/80">{label}</p>
       <p className="text-sm font-semibold tabular-nums text-foreground">{value || "—"}</p>
     </div>
   );
@@ -133,7 +133,7 @@ function Metric({ label, value }) {
 function Block({ title, children }) {
   return (
     <div>
-      <p className="mb-1 text-[11px] font-medium uppercase tracking-wide text-muted-foreground/80">{title}</p>
+      <p className="mb-1 text-caption font-medium uppercase tracking-wide text-muted-foreground/80">{title}</p>
       {children}
     </div>
   );

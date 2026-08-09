@@ -21,7 +21,7 @@ const MOTIVO = {
 export default function BaseEstatistica({ filtro, usou90, confianca, periodoCalculo }) {
   return (
     <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-      <p className="text-[10px] font-bold text-slate-400 uppercase tracking-wider mb-3">Base do cálculo</p>
+      <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-3">Base do cálculo</p>
       <div className="flex flex-wrap gap-x-8 gap-y-2 text-[12px]">
         <div>
           <span className="text-slate-400">Período exibido:</span>{" "}
@@ -33,9 +33,9 @@ export default function BaseEstatistica({ filtro, usou90, confianca, periodoCalc
         </div>
         <div className="flex items-center gap-2">
           <span className="text-slate-400">Confiança:</span>
-          <span className={`text-[11px] font-bold px-2 py-0.5 rounded-full border ${COR[confianca] || COR.Baixa}`}>{confianca}</span>
+          <span className={`text-caption font-bold px-2 py-0.5 rounded-full border ${COR[confianca] || COR.Baixa}`}>{confianca}</span>
         </div>
-        <div className="w-full text-slate-400 text-[11px]">{MOTIVO[confianca]}</div>
+        <div className="w-full text-slate-400 text-caption">{MOTIVO[confianca]}</div>
       </div>
     </div>
   );

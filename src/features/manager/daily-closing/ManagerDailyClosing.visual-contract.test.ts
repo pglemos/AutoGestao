@@ -15,7 +15,7 @@ describe("ManagerDailyClosing visual contract", () => {
     expect(source).toContain('"bg-white rounded-[16px] border border-gray-100 shadow-sm overflow-hidden"');
     expect(source).toContain('"bg-gray-50"');
     expect(source).toContain('"divide-y divide-gray-100"');
-    expect(source).toContain('"inline-flex h-[38px] items-center gap-1 rounded-[12px] bg-emerald-600');
+    expect(source).toContain('"inline-flex h-[36px] items-center gap-1 rounded-[12px] bg-emerald-600');
     expect(source).toContain('className="px-2.5 py-1 rounded-full text-xs font-semibold opacity-0"');
     expect(source).not.toContain("border-slate-100");
     expect(source).not.toContain("text-slate-");

@@ -181,10 +181,10 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
         <div className="p-4">
           <div className="flex items-start justify-between mb-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100 text-slate-500"}`}>{op.tipo}</span>
-              {isVencido && <span className="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Vencido</span>}
+              <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100 text-slate-500"}`}>{op.tipo}</span>
+              {isVencido && <span className="text-caption font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Vencido</span>}
             </div>
-            <div className="flex items-center gap-1 text-[11px] font-bold text-slate-400">
+            <div className="flex items-center gap-1 text-caption font-bold text-slate-400">
               <Clock className="w-3 h-3" />{hora}
             </div>
           </div>
@@ -205,19 +205,19 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
               <a href={msgAniversario ? `${waUrl}?text=${encodeURIComponent(msgAniversario)}` : waUrl}
                 target="_blank" rel="noopener noreferrer"
                 onClick={handleWaClick}
-                className="flex items-center gap-1 text-[11px] font-bold text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 rounded-lg transition-colors">
+                className="flex items-center gap-1 text-caption font-bold text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 rounded-lg transition-colors">
                 <MessageCircle className="w-3 h-3" /> WhatsApp
               </a>
             )}
             {tel && (
               <a href={`tel:${tel}`}
-                className="flex items-center gap-1 text-[11px] font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-lg transition-colors">
+                className="flex items-center gap-1 text-caption font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-lg transition-colors">
                 <Phone className="w-3 h-3" /> Ligar
               </a>
             )}
             {op.cliente_id && (
               <button onClick={() => onAbrirCliente(op)}
-                className="flex items-center gap-1 text-[11px] font-bold text-[#005BFF] border border-blue-200 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors">
+                className="flex items-center gap-1 text-caption font-bold text-[#005BFF] border border-blue-200 hover:bg-blue-50 px-3 py-1.5 rounded-lg transition-colors">
                 <UserRound className="w-3 h-3" /> Cliente
               </button>
             )}
@@ -241,7 +241,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           <div className={`w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1 ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100"}`}>
             <Icon className="w-4 h-4" />
           </div>
-          <p className={`text-[10px] font-bold ${isVencido ? "text-red-500" : "text-slate-400"}`}>{hora}</p>
+          <p className={`text-caption font-bold ${isVencido ? "text-red-500" : "text-slate-400"}`}>{hora}</p>
         </div>
 
         {/* Avatar + nome + info */}
@@ -252,8 +252,8 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <p className="font-bold text-[14px] text-[#0F172A] truncate">{op.nome_cliente_snapshot || "—"}</p>
-              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100 text-slate-500"}`}>{op.tipo}</span>
-              {isVencido && <span className="text-[10px] font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Vencido</span>}
+              <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100 text-slate-500"}`}>{op.tipo}</span>
+              {isVencido && <span className="text-caption font-bold text-red-500 bg-red-50 px-2 py-0.5 rounded-full">Vencido</span>}
             </div>
             {op.veiculo_snapshot && <p className="text-[12px] text-slate-400 truncate">{op.veiculo_snapshot}</p>}
             {op.descricao && <p className="text-[12px] text-slate-500 truncate">{op.descricao}</p>}
@@ -511,7 +511,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
       {pendenciasAnteriores.length > 0 && (
         <div className="flex items-center gap-3 bg-amber-50 border border-amber-200 rounded-2xl px-4 py-3">
           <AlertTriangle className="w-4 h-4 text-amber-500 flex-shrink-0" />
-          <p className="text-[13px] font-semibold text-amber-800 flex-1">
+          <p className="text-body-sm font-semibold text-amber-800 flex-1">
             Você possui {pendenciasAnteriores.length} pendência{pendenciasAnteriores.length > 1 ? "s" : ""} de dias anteriores.
           </p>
           <button onClick={() => setPendenciasOpen(true)}
@@ -537,7 +537,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                     : "bg-white text-slate-600 border-slate-200 hover:border-[#005BFF] hover:text-[#005BFF]"
                 }`}>
                 {f.label}
-                <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-bold ${ativo ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"}`}>
+                <span className={`text-caption px-1.5 py-0.5 rounded-full font-bold ${ativo ? "bg-white/20 text-white" : "bg-slate-100 text-slate-500"}`}>
                   {count}
                 </span>
               </button>
@@ -555,7 +555,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
           </div>
           <div className="flex items-center gap-2">
             <Select value={ordenar} onValueChange={setOrdenar}>
-              <SelectTrigger className="h-8 text-[12px] font-semibold border-slate-200 rounded-xl w-[150px]">
+              <SelectTrigger className="h-8 text-[12px] font-semibold border-slate-200 rounded-xl w-[148px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -576,7 +576,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
         {loadingOps ? (
           <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-12 text-center">
             <div className="w-6 h-6 border-4 border-slate-200 border-t-[#005BFF] rounded-full animate-spin mx-auto mb-3" />
-            <p className="text-[13px] text-slate-400">Carregando oportunidades...</p>
+            <p className="text-body-sm text-slate-400">Carregando oportunidades...</p>
           </div>
         ) : listaFiltrada.length === 0 ? (
           totalHoje === 0 ? (
@@ -586,22 +586,22 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                 <CheckCircle2 className="w-7 h-7 text-[#005BFF]" />
               </div>
               <p className="text-[16px] font-bold text-[#0F172A] mb-1">Tela limpa por hoje.</p>
-              <p className="text-[13px] text-slate-400 mb-5 max-w-sm mx-auto">
+              <p className="text-body-sm text-slate-400 mb-5 max-w-sm mx-auto">
                 Você não possui oportunidades pendentes para executar agora.
               </p>
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 {onGoToRotina && (
                   <button onClick={onGoToRotina}
-                    className="flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold text-[#005BFF] border border-[#005BFF] rounded-xl hover:bg-blue-50 transition-colors">
+                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-[#005BFF] border border-[#005BFF] rounded-xl hover:bg-blue-50 transition-colors">
                     <Sparkles className="w-4 h-4" /> Ver Rotina do Dia
                   </button>
                 )}
                 <Link to="/carteira"
-                  className="flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                  className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
                   <Users className="w-4 h-4" /> Abrir Carteira
                 </Link>
                 <button onClick={() => setNovaAtividade(true)}
-                  className="flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold text-white bg-[#005BFF] rounded-xl hover:bg-blue-700 transition-colors">
+                  className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-white bg-[#005BFF] rounded-xl hover:bg-blue-700 transition-colors">
                   <Plus className="w-4 h-4" /> Nova atividade
                 </button>
               </div>
@@ -610,7 +610,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
             // Filtro sem resultados
             <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-10 text-center">
               <Inbox className="w-10 h-10 text-slate-200 mx-auto mb-3" />
-              <p className="text-[13px] text-slate-400">Nenhuma oportunidade do tipo <strong>{filtroTipo}</strong> para hoje.</p>
+              <p className="text-body-sm text-slate-400">Nenhuma oportunidade do tipo <strong>{filtroTipo}</strong> para hoje.</p>
               <button onClick={() => setFiltroTipo("todos")} className="text-[12px] text-[#005BFF] font-bold mt-2 hover:underline">Ver todas</button>
             </div>
           )
@@ -624,19 +624,19 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
             {listaHoje.length > 0 && listaFiltrada.length === 0 && filtroTipo === "todos" && (
               <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-10 text-center">
                 <CheckCircle2 className="w-10 h-10 text-[#005BFF] mx-auto mb-3" />
-                <p className="text-[15px] font-bold text-[#0F172A] mb-1">Todas as oportunidades de hoje foram resolvidas.</p>
+                <p className="text-body font-bold text-[#0F172A] mb-1">Todas as oportunidades de hoje foram resolvidas.</p>
                 <p className="text-[12px] text-slate-400 mb-5 max-w-sm mx-auto">
                   Novas oportunidades aparecerão aqui conforme sua agenda, carteira e processos comerciais forem atualizados.
                 </p>
                 <div className="flex items-center justify-center gap-3 flex-wrap">
                   {onGoToRotina && (
                     <button onClick={onGoToRotina}
-                      className="flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold text-[#005BFF] border border-[#005BFF] rounded-xl hover:bg-blue-50 transition-colors">
+                      className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-[#005BFF] border border-[#005BFF] rounded-xl hover:bg-blue-50 transition-colors">
                       <Sparkles className="w-4 h-4" /> Ver Rotina do Dia
                     </button>
                   )}
                   <Link to="/carteira"
-                    className="flex items-center gap-1.5 px-4 py-2 text-[13px] font-bold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-slate-600 border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
                     <Users className="w-4 h-4" /> Abrir Carteira
                   </Link>
                 </div>

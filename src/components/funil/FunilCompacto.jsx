@@ -14,15 +14,15 @@ export default function FunilCompacto({ titulo, subtitulo, cor, etapas, conversa
       {/* Header */}
       <div className={`px-4 py-3 border-b flex items-center justify-between ${c.header}`}>
         <div>
-          <p className="text-[13px] font-bold text-[#0F172A] uppercase tracking-wide">{titulo}</p>
-          <p className="text-[11px] text-slate-500">{subtitulo}</p>
+          <p className="text-body-sm font-bold text-[#0F172A] uppercase tracking-wide">{titulo}</p>
+          <p className="text-caption text-slate-500">{subtitulo}</p>
         </div>
         {conversaoGeral !== null && conversaoGeral !== undefined ? (
-          <span className={`text-[11px] font-bold px-2.5 py-1 rounded-full ${c.badge}`}>
+          <span className={`text-caption font-bold px-2.5 py-1 rounded-full ${c.badge}`}>
             {conversaoGeral}% conv.
           </span>
         ) : (
-          <span className="text-[11px] text-slate-300 font-medium">—</span>
+          <span className="text-caption text-slate-300 font-medium">—</span>
         )}
       </div>
 
@@ -37,14 +37,14 @@ export default function FunilCompacto({ titulo, subtitulo, cor, etapas, conversa
               <div className="flex items-center justify-between py-2">
                 <div className="flex items-center gap-2">
                   <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${c.dot}`} />
-                  <span className="text-[13px] text-[#0F172A] font-medium">{etapa.label}</span>
+                  <span className="text-body-sm text-[#0F172A] font-medium">{etapa.label}</span>
                 </div>
-                <span className="text-[15px] font-bold tabular-nums text-[#0F172A]">{etapa.value}</span>
+                <span className="text-body font-bold tabular-nums text-[#0F172A]">{etapa.value}</span>
               </div>
               {/* Conversão para próxima etapa */}
               {next && (
                 <div className="flex items-center justify-between pl-3.5 pb-1">
-                  <span className={`text-[11px] font-semibold ${c.pct}`}>
+                  <span className={`text-caption font-semibold ${c.pct}`}>
                     {pct !== null ? `→ ${pct}%` : "→"}
                   </span>
                 </div>

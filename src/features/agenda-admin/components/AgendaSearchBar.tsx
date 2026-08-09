@@ -49,7 +49,7 @@ export function AgendaSearchBar({ searchQuery, onSearchChange, placeholder = 'Bu
           <X size={14} />
         </button>
       ) : (
-        <kbd className="absolute right-2.5 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-[10px] font-mono font-medium text-gray-500 bg-white border border-gray-200 rounded shadow-2xs pointer-events-none">
+        <kbd className="absolute right-2.5 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-caption font-mono font-medium text-gray-500 bg-white border border-gray-200 rounded shadow-2xs pointer-events-none">
           /
         </kbd>
       )}

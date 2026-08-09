@@ -31,7 +31,7 @@ export function ManagerRankingPodium({ ranking }: { ranking: RankedVendedor[] })
                 </span>
               </div>
               <p className="max-w-full truncate text-center text-xs font-semibold text-gray-800 md:text-sm">{seller.nome.split(' ')[0]}</p>
-              <p className="mb-2 text-[11px] text-gray-400">{seller.pontuacao === null ? 'sem pontuação' : `${seller.pontuacao} pts`}</p>
+              <p className="mb-2 text-caption text-gray-400">{seller.pontuacao === null ? 'sem pontuação' : `${seller.pontuacao} pts`}</p>
               <div className={`flex w-full items-start justify-center pt-1.5 ${step.height} ${step.bar} rounded-t-xl`}>
                 <span className="text-sm font-bold text-white">{step.position}º</span>
               </div>

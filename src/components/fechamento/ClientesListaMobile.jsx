@@ -26,7 +26,7 @@ const SALE_STYLE = {
 const BOOL_STYLE = (v) => v === "Sim" ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600";
 
 function Badge({ label, className }) {
-  return <span className={`inline-block text-[11px] font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${className}`}>{label}</span>;
+  return <span className={`inline-block text-caption font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${className}`}>{label}</span>;
 }
 
 function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete }) {
@@ -66,13 +66,13 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <p className="text-[15px] font-bold text-[#0F172A] leading-tight">{nomeCliente}</p>
-            {eD1 && <span className="text-[10px] font-bold text-blue-500 bg-blue-100 px-1.5 py-0.5 rounded-full">D+1</span>}
+            <p className="text-body font-bold text-[#0F172A] leading-tight">{nomeCliente}</p>
+            {eD1 && <span className="text-caption font-bold text-blue-500 bg-blue-100 px-1.5 py-0.5 rounded-full">D+1</span>}
           </div>
           {telefone && (
             <div className="flex items-center gap-1 mt-1">
               <Phone className="w-3 h-3 text-slate-400" />
-              <span className="text-[13px] text-slate-500">{telefone}</span>
+              <span className="text-body-sm text-slate-500">{telefone}</span>
             </div>
           )}
         </div>
@@ -98,18 +98,18 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
         {veiculo && (
           <div className="flex items-center gap-2">
             <Car className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-            <span className="text-[13px] text-slate-600">{veiculo}</span>
+            <span className="text-body-sm text-slate-600">{veiculo}</span>
           </div>
         )}
         {dataDisplay && (
           <div className="flex items-center gap-2">
             <CalendarDays className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-            <span className="text-[13px] text-slate-600">{moment(dataDisplay).format("DD/MM/YYYY")}</span>
+            <span className="text-body-sm text-slate-600">{moment(dataDisplay).format("DD/MM/YYYY")}</span>
           </div>
         )}
         {valorDisplay && (
           <div className="flex items-center gap-4">
-            <span className="text-[13px] font-semibold text-[#0F172A]">{valorDisplay}</span>
+            <span className="text-body-sm font-semibold text-[#0F172A]">{valorDisplay}</span>
           </div>
         )}
       </div>
@@ -142,7 +142,7 @@ export default function ClientesListaMobile({ clients = [], closingDate, bloquea
         <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">
           <ShoppingCart className="w-6 h-6 text-purple-300" />
         </div>
-        <p className="text-[13px] text-[#64748B] font-medium">Nenhum cliente cadastrado hoje.</p>
+        <p className="text-body-sm text-[#64748B] font-medium">Nenhum cliente cadastrado hoje.</p>
         <p className="text-[12px] text-slate-300">Adicione um cliente na etapa 4 acima.</p>
       </div>
     );

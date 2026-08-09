@@ -57,7 +57,7 @@ export default function ConsultingMeetingBlock({ meeting }) {
 
         {meeting.agenda?.length > 0 && (
           <div className="mt-4 border-t border-border pt-3">
-            <p className="mb-1.5 text-[11px] font-medium uppercase tracking-wide text-muted-foreground/80">Pauta</p>
+            <p className="mb-1.5 text-caption font-medium uppercase tracking-wide text-muted-foreground/80">Pauta</p>
             <ul className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
               {meeting.agenda.map((a, i) => (
                 <li key={i} className="inline-flex items-center gap-1.5">
@@ -100,7 +100,7 @@ export default function ConsultingMeetingBlock({ meeting }) {
       >
         <div className="space-y-4">
           <div>
-            <p className="mb-2 text-[11px] font-medium uppercase tracking-wide text-muted-foreground/80">Pauta</p>
+            <p className="mb-2 text-caption font-medium uppercase tracking-wide text-muted-foreground/80">Pauta</p>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
               {meeting.agenda?.map((a, i) => (
                 <li key={i} className="flex items-start gap-2">
@@ -112,7 +112,7 @@ export default function ConsultingMeetingBlock({ meeting }) {
           </div>
 
           <div>
-            <p className="mb-2 text-[11px] font-medium uppercase tracking-wide text-muted-foreground/80">Preparação necessária</p>
+            <p className="mb-2 text-caption font-medium uppercase tracking-wide text-muted-foreground/80">Preparação necessária</p>
             <ul className="space-y-1.5 text-sm text-muted-foreground">
               {meeting.preparation?.map((a, i) => (
                 <li key={i} className="flex items-start gap-2">

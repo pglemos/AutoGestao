@@ -27,7 +27,7 @@ export default function CalendarSummary({ actions }) {
         {ITEMS.map((item) => (
           <div key={item.key} className={`rounded-lg p-2.5 ${item.bg}`}>
             <div className={`text-xl font-bold ${item.color}`}>{stats[item.key]}</div>
-            <div className="text-[11px] text-muted-foreground">{item.label}</div>
+            <div className="text-caption text-muted-foreground">{item.label}</div>
           </div>
         ))}
       </div>
