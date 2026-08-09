@@ -245,3 +245,12 @@ Referência: `docs/mentor-comercial/PRODUCT_DELTA_2026-08-07_PLANO_ATAQUE.md` (c
 
 1. Smoke E2E do Plano de Ataque e da classificação de veículos em produção (Playwright).
 2. Verificação Sentry pós-release do novo build.
+
+### Smoke E2E do Plano de Ataque (2026-08-09) — produção real (Chrome DevTools MCP)
+
+- Login vendedor@mxgestaopreditiva.com.br OK; aba "Plano de Ataque" carrega.
+- Seletor "Público-alvo da campanha" (Carteira ativa / Financiamento / Interesse em troca) presente; select condicional "Etapa de financiamento" aparece para Financiamento. Wiring §22 persistido: `carteira_campanhas.targeting_kind`/`targeting_config` gravados (`financing`+`{segment:'all'}`, `financing`+`{segment:'approved'}`, `carteira` — verificado via REST service-role).
+- Campanha "Carteira ativa" → "Iniciar para 10 cliente(s)" OK (contagem determinística conforme §22.2).
+- **BUG ENCONTRADO E CORRIGIDO**: campanha "Financiamento → Todas as etapas" mostrava "Iniciar para 0 cliente(s)" mesmo com 2 clientes ativos elegíveis (José + João Paulo, `oportunidades.financiamento='aprovado'`, `carro_avaliado=true`, não-terminais). Raiz: `carteira-mappers.ts:277-278` convertia `opportunity?.financing_interest === true` → `null→false` (booleano, não null). O motor `campaignEligibility.ts:205` (`input.financingInterest !== null && !== undefined`) interpretava `false` como "sinal novo explicitamente falso" e retornava `eligible:false` — nunca chegando ao fallback legado (`legacyFinancingInterest`, linha 213). Mesmo efeito em `trade_interest`. **Hotfix**: preservar null (`opportunity?.financing_interest ?? null`). Validação: replicação JS do motor com o fix → José+João elegíveis (count=2); engine test "sinal novo trade_interest=false NÃO cai para legado" permanece verde (false explícito continua travando o fallback, corretamente). Gates 2579/0, lint 0, tsc 0.
+- Script §36 já executado em produção (48 classificações com `classification_source='migration'`; idempotente na 2ª rodada) — `VEHICLE_DATA_COVERAGE_REPORT.md`.
+- Pendências remanescentes: smoke do modal "Registrar veículo" (autocomplete do catálogo, hint, salvar com `classification_source='catalog'`); verificação Sentry pós-deploy do hotfix.

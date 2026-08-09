@@ -270,12 +270,16 @@ export function mapMxClientToCarteiraVisual(client: ClientRow, now = new Date())
     interesse_troca: Boolean(opportunity?.carro_avaliado),
     carro_avaliado: opportunity?.carro_avaliado ? 'Sim' : 'Não',
     // PRODUCT DELTA 2026-08-07 — sinais do motor mentor, sem derivar do legado.
+    // §7.1: sinais novos têm prioridade sobre legado *somente quando definidos*.
+    // Preservar null quando a coluna é NULL — `=== true` converteria null→false,
+    // e o motor interpretaria false como "sinal novo explicitamente falso",
+    // bloqueando o fallback legado (carro_avaliado / financiamento).
     current_status_code: opportunity?.current_status_code || null,
     categoria_veiculo: opportunity?.categoria_veiculo || null,
     preco_interesse_min: opportunity?.preco_interesse_min == null ? null : Number(opportunity.preco_interesse_min),
     preco_interesse_max: opportunity?.preco_interesse_max == null ? null : Number(opportunity.preco_interesse_max),
-    trade_interest: opportunity?.trade_interest === true,
-    financing_interest: opportunity?.financing_interest === true,
+    trade_interest: opportunity?.trade_interest ?? null,
+    financing_interest: opportunity?.financing_interest ?? null,
     catalog_model_id: opportunity?.catalog_model_id || null,
     sale_date: opportunity?.sale_date || null,
     veiculo_troca: opportunity?.veiculo_troca || '',
