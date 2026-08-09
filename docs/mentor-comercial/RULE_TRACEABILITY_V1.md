@@ -177,3 +177,17 @@ Contagem real: 15 cenarios.
 | `11 Testes_Cenários` | Cenario 13 — Cliente respondeu e vendedor não tratou | `mentor_status_definitions`, `store_commercial_settings`, `mentor_score_snapshots` | `src/features/mentor-comercial/engine/engine.ts` | `src/features/mentor-comercial/engine/acceptance-scenarios.test.ts` (describe('Cenario 13 — Cliente respondeu e vendedor nao tratou')) | Score Critica, prioridade Maxima, override clientRespondedSlaBreached |
 | `11 Testes_Cenários` | Cenario 14 — Compra futura | `mentor_status_definitions` | `src/features/mentor-comercial/engine/engine.ts` | `src/features/mentor-comercial/engine/acceptance-scenarios.test.ts` (describe('Cenario 14 — Compra futura')) | INT-Q05 com data futura, centralAction = false |
 | `11 Testes_Cenários` | Cenario 15 — Garantia aberta | `mentor_status_definitions` | `src/features/mentor-comercial/engine/engine.ts` | `src/features/mentor-comercial/engine/acceptance-scenarios.test.ts` (describe('Cenario 15 — Garantia aberta')) | REL-07 entra na Central quando acompanhamento vence |
+
+---
+
+## 7. Product Delta — Plano de Ataque, Campanhas e Veículos (2026-08-07)
+
+Fonte: `docs/mentor-comercial/PRODUCT_DELTA_2026-08-07_PLANO_ATAQUE.md`.
+Regras de negócio novas vivem exclusivamente nos motores puros; o schema é aditivo.
+
+| Seção delta | Entidade | Tabela | Serviço/Módulo | Teste | Observabilidade |
+| --- | --- | --- | --- | --- | --- |
+| §4/§7 | Elegibilidade por campanha (targeting) | `carteira_campanhas` (`targeting_kind`, `targeting_config`), `carteira_missao_itens` | `src/features/mentor-comercial/engine/campaignEligibility.ts` | `src/features/mentor-comercial/engine/campaignEligibility.test.ts` | `campaign_eligibility`, `mission_created` |
+| §9/§19/§24 | Catálogo de modelos e match veículo×oportunidade | `vehicle_model_catalog`, `veiculos_estoque`, `oportunidades` | `src/features/mentor-comercial/catalog/vehicleCatalog.ts`, `src/features/mentor-comercial/engine/vehicleMatch.ts` | `src/features/mentor-comercial/catalog/vehicleCatalog.test.ts`, `src/features/mentor-comercial/engine/vehicleMatch.test.ts` | `vehicle_match`, `catalog_unresolved`, `catalog_ambiguous` |
+| §13/§15/§17 | Origem da classificação e faixa de preço | `veiculos_estoque` (`catalog_model_id`, `classification_source`), `oportunidades` (`preco_interesse_min`, `preco_interesse_max`, `catalog_model_id`, `classification_source`) | `scripts/mentor-classify-vehicle-data.mjs` | — | relatório §36 em `docs/mentor-comercial/DATA_MIGRATION_REPORT` |
+| §27 | Dedupe de missão por oportunidade | `carteira_missao_itens` (índice único parcial `(missao_id, opportunity_id)`) | `PlanoAtaqueTab` (runtime) | `campaignEligibility.test.ts` (dedupe) | `mission_created` |

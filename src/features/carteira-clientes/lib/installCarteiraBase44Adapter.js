@@ -457,6 +457,10 @@ async function createArrivedVehicle(data) {
     data_entrada: data.data_entrada || new Date().toISOString().slice(0, 10),
     observacao: data.observacao || null,
     status: 'disponivel',
+    // PRODUCT DELTA 2026-08-07 §13 — classificação via catálogo mentor.
+    categoria: data.categoria || null,
+    catalog_model_id: data.catalog_model_id || null,
+    classification_source: data.classification_source || null,
   }
 
   return carteiraMutationCoordinator.run('carteira:vehicle:create', payload, async key => {
@@ -495,6 +499,18 @@ async function createCampaign(data) {
     const campaigns = await listCampaigns(context)
     return campaigns.find(campaign => campaign.id === result.campanha_id) || result
   })
+}
+
+async function listVehicleCatalog() {
+  // Catálogo mentor (PRODUCT DELTA 2026-08-07 §9): global, leitura via RLS
+  // para autenticados vinculados a loja. Não é dado por loja — sem filtro.
+  const { data, error } = await supabase
+    .from('vehicle_model_catalog')
+    .select('*')
+    .order('normalized_brand', { ascending: true })
+    .order('normalized_model', { ascending: true })
+  if (error) throw error
+  return data || []
 }
 
 async function cancelarVenda(oportunidadeId, motivo) {
@@ -611,6 +627,10 @@ export function installCarteiraBase44Adapter(base44) {
     filter: listCampaigns,
     list: listCampaigns,
     create: createCampaign,
+  }
+
+  base44.entities.CatalogoModelos = {
+    list: listVehicleCatalog,
   }
 
   base44[INSTALLED_KEY] = true

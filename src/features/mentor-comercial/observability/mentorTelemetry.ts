@@ -19,6 +19,12 @@ export type MentorTelemetryEventType =
   | 'mentor_sync_failure'
   | 'daily_processor_failure'
   | 'score_invariant_violation'
+  // PRODUCT DELTA 2026-08-07 §34 — Plano de Ataque, campanhas e veículos.
+  | 'campaign_eligibility'
+  | 'vehicle_match'
+  | 'catalog_unresolved'
+  | 'catalog_ambiguous'
+  | 'mission_created'
 
 /** Contexto técnico padronizado a anexar nas tags do Sentry (sem PII). */
 export interface MentorTelemetryTags {
@@ -234,6 +240,68 @@ export function captureScoreInvariantViolation(
   captureMentorTelemetry({
     eventType: 'score_invariant_violation',
     message: 'Violação de invariante na computação do Mentor Score',
+    tags,
+    extra,
+  })
+}
+
+// ─── PRODUCT DELTA 2026-08-07 §34 — campanhas, veículos e catálogo ───────────
+
+export function captureCampaignEligibility(
+  tags: MentorTelemetryTags,
+  extra?: Record<string, unknown>,
+): void {
+  captureMentorTelemetry({
+    eventType: 'campaign_eligibility',
+    message: 'Avaliação de elegibilidade de campanha executada',
+    tags,
+    extra,
+  })
+}
+
+export function captureVehicleMatch(
+  tags: MentorTelemetryTags,
+  extra?: Record<string, unknown>,
+): void {
+  captureMentorTelemetry({
+    eventType: 'vehicle_match',
+    message: 'Match de veículo × oportunidades executado',
+    tags,
+    extra,
+  })
+}
+
+export function captureCatalogUnresolved(
+  tags: MentorTelemetryTags,
+  extra?: Record<string, unknown>,
+): void {
+  captureMentorTelemetry({
+    eventType: 'catalog_unresolved',
+    message: 'Texto de veículo sem correspondência no catálogo de modelos',
+    tags,
+    extra,
+  })
+}
+
+export function captureCatalogAmbiguous(
+  tags: MentorTelemetryTags,
+  extra?: Record<string, unknown>,
+): void {
+  captureMentorTelemetry({
+    eventType: 'catalog_ambiguous',
+    message: 'Texto de veículo com múltiplas correspondências no catálogo',
+    tags,
+    extra,
+  })
+}
+
+export function captureMissionCreated(
+  tags: MentorTelemetryTags,
+  extra?: Record<string, unknown>,
+): void {
+  captureMentorTelemetry({
+    eventType: 'mission_created',
+    message: 'Missão de campanha criada',
     tags,
     extra,
   })

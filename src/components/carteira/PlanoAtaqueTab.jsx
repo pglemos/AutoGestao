@@ -3,10 +3,61 @@ import { AlertTriangle, ArrowLeft, Plus, Users, Zap } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { Button } from "@/components/ui/button";
 import { MISSOES, SITUACOES_TERMINAIS, prioridadeColor } from "@/components/carteira/carteiraUtils";
+import { countEligible, evaluateCampaignEligibility } from "@/features/mentor-comercial/engine/campaignEligibility";
+import { captureCampaignEligibility } from "@/features/mentor-comercial/observability/mentorTelemetry";
 import VeiculosChegaram from "@/components/carteira/VeiculosChegaram";
 
 const RESUMABLE_STATUSES = ["Preparando", "Enviando mensagens", "Respondendo clientes", "Pausada"];
 const BLOCKING_STATUSES = [...RESUMABLE_STATUSES, "Aguardando respostas"];
+
+const TARGETING_OPCOES = [
+  { value: "carteira", label: "Carteira ativa" },
+  { value: "financing", label: "Financiamento" },
+  { value: "trade_interest", label: "Interesse em troca" },
+];
+
+const FINANCING_SEGMENTOS = [
+  { value: "all", label: "Todas as etapas" },
+  { value: "approved", label: "Aprovado" },
+  { value: "approved_with_conditions", label: "Aprovado com condições" },
+  { value: "rejected", label: "Rejeitado" },
+  { value: "pending", label: "Pendente" },
+  { value: "new_simulation", label: "Nova simulação" },
+];
+
+function targetingDeCampanha(campanha) {
+  const kind = campanha.targeting_kind || "carteira";
+  if (kind === "financing") {
+    return { kind, segment: campanha.targeting_config?.segment || "all" };
+  }
+  return { kind };
+}
+
+function toEligibilityInput(client, campanha, targeting) {
+  return {
+    targeting,
+    statusCode: client.current_status_code || null,
+    situacaoAtual: client.situacao_atual || client.momento || null,
+    tradeInterest: client.trade_interest,
+    financingInterest: client.financing_interest,
+    legacyTradeInterest: client.interesse_troca,
+    legacyFinancingInterest: client.interesse_financiamento,
+    doNotContact: Boolean(client.do_not_contact),
+    saleDate: client.sale_date || null,
+    closedAt: client.closed_at || null,
+    hasVehicleInterest: Boolean(client.veiculo_interesse),
+    extraTerminalSituations: SITUACOES_TERMINAIS,
+    sourceOpportunityId: client.oportunidade_id || null,
+  };
+}
+
+function candidatosElegiveis(clientes, campanha) {
+  const targeting = targetingDeCampanha(campanha);
+  const candidates = clientes
+    .filter(client => client.ativo !== false)
+    .map(client => ({ ...toEligibilityInput(client, campanha, targeting), id: client.id }));
+  return { targeting, candidates, resultado: countEligible(candidates, targeting) };
+}
 
 function getMissionBlock(activeMission) {
   if (!activeMission || !BLOCKING_STATUSES.includes(activeMission.status)) return null;
@@ -27,7 +78,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
   const [iniciando, setIniciando] = useState(false);
   const [error, setError] = useState("");
   const [campanhas, setCampanhas] = useState([]);
-  const [campanhaForm, setCampanhaForm] = useState({ tipo: "campanha", titulo: "", descricao: "", valor_desconto: "", bonus_troca: "", fim_em: "" });
+  const [campanhaForm, setCampanhaForm] = useState({ tipo: "campanha", titulo: "", descricao: "", valor_desconto: "", bonus_troca: "", fim_em: "", targeting_kind: "carteira", targeting_segment: "all" });
   const [campanhaSaving, setCampanhaSaving] = useState(false);
   const [campanhaError, setCampanhaError] = useState("");
   const recuperacaoExecutadaRef = useRef(false);
@@ -110,15 +161,20 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
     setCampanhaSaving(true);
     setCampanhaError("");
     try {
+      const targeting_config = campanhaForm.targeting_kind === "financing"
+        ? { segment: campanhaForm.targeting_segment }
+        : {};
       const created = await base44.entities.CarteiraCampanha.create({
         ...campanhaForm,
         titulo: campanhaForm.titulo.trim(),
         valor_desconto: campanhaForm.valor_desconto || null,
         bonus_troca: campanhaForm.bonus_troca || null,
         fim_em: campanhaForm.fim_em || null,
+        targeting_kind: campanhaForm.targeting_kind,
+        targeting_config,
       });
       setCampanhas(prev => [created, ...prev.filter(campaign => campaign.id !== created.id)]);
-      setCampanhaForm({ tipo: "campanha", titulo: "", descricao: "", valor_desconto: "", bonus_troca: "", fim_em: "" });
+      setCampanhaForm({ tipo: "campanha", titulo: "", descricao: "", valor_desconto: "", bonus_troca: "", fim_em: "", targeting_kind: "carteira", targeting_segment: "all" });
     } catch (cause) {
       setCampanhaError(cause instanceof Error ? cause.message : "Não foi possível salvar a campanha.");
     } finally {
@@ -127,8 +183,11 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
   }
 
   async function iniciarCampanha(campanha) {
-    const elegiveis = clientes.filter(client => client.ativo !== false && !SITUACOES_TERMINAIS.includes(client.situacao_atual || client.momento));
-    if (elegiveis.length === 0 || missionBlock) return;
+    const { targeting, candidates, resultado } = candidatosElegiveis(clientes, campanha);
+    if (resultado.eligible === 0 || missionBlock) return;
+    const elegiveis = candidates
+      .map(candidate => ({ ...candidate, ...evaluateCampaignEligibility(candidate) }))
+      .filter(candidate => candidate.eligible);
     setIniciando(true);
     setError("");
     try {
@@ -140,8 +199,35 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
         total_clientes: elegiveis.length,
         clientes_ids: elegiveis.map(client => client.id),
         iniciada_em: new Date().toISOString(),
-        metadata: { campanha_id: campanha.id, campanha_tipo: campanha.tipo, campanha_titulo: campanha.titulo },
+        itens: elegiveis.map(client => ({
+          cliente_id: client.id,
+          oportunidade_id: client.sourceOpportunityId || null,
+          eligibility_reason: {
+            targeting_kind: targeting.kind,
+            targeting_segment: targeting.segment || null,
+            reasons: client.reasons,
+            source: client.source,
+          },
+        })),
+        metadata: {
+          campanha_id: campanha.id,
+          campanha_tipo: campanha.tipo,
+          campanha_titulo: campanha.titulo,
+          targeting_kind: targeting.kind,
+          targeting_segment: targeting.segment || null,
+        },
       });
+      captureCampaignEligibility(
+        { kind: "campaign", campaignId: campanha.id },
+        {
+          campaignId: campanha.id,
+          campaignTitle: campanha.titulo,
+          targetingKind: targeting.kind,
+          targetingSegment: targeting.segment || null,
+          total: candidates.length,
+          eligible: elegiveis.length,
+        },
+      );
       onIniciarMissao(mission, elegiveis);
     } catch (cause) {
       setError(cause instanceof Error ? cause.message : "Não foi possível iniciar a campanha para a carteira.");
@@ -200,12 +286,21 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           <input aria-label="Valor do desconto" type="number" min="0" value={campanhaForm.valor_desconto} onChange={event => setCampanhaForm(prev => ({ ...prev, valor_desconto: event.target.value }))} placeholder="Desconto em R$ (se aplicável)" className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm" />
           <input aria-label="Valor do bônus na troca" type="number" min="0" value={campanhaForm.bonus_troca} onChange={event => setCampanhaForm(prev => ({ ...prev, bonus_troca: event.target.value }))} placeholder="Bônus na troca em R$ (se aplicável)" className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm" />
           <input aria-label="Fim da campanha" type="date" value={campanhaForm.fim_em} onChange={event => setCampanhaForm(prev => ({ ...prev, fim_em: event.target.value }))} className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm" />
+          <select aria-label="Público-alvo da campanha" value={campanhaForm.targeting_kind} onChange={event => setCampanhaForm(prev => ({ ...prev, targeting_kind: event.target.value }))} className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm">
+            {TARGETING_OPCOES.map(opcao => <option key={opcao.value} value={opcao.value}>{opcao.label}</option>)}
+          </select>
+          {campanhaForm.targeting_kind === "financing" && (
+            <select aria-label="Etapa de financiamento" value={campanhaForm.targeting_segment} onChange={event => setCampanhaForm(prev => ({ ...prev, targeting_segment: event.target.value }))} className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm">
+              {FINANCING_SEGMENTOS.map(segmento => <option key={segmento.value} value={segmento.value}>{segmento.label}</option>)}
+            </select>
+          )}
           <button type="submit" disabled={campanhaSaving} className="flex h-10 items-center justify-center gap-2 rounded-xl bg-[#005BFF] px-4 text-sm font-bold text-white disabled:opacity-50"><Plus className="h-4 w-4" />{campanhaSaving ? "Salvando..." : "Cadastrar campanha"}</button>
         </form>
         {campanhaError && <Warning message={campanhaError} />}
         <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
           {campanhas.map(campanha => {
-            const elegiveis = clientes.filter(client => client.ativo !== false && !SITUACOES_TERMINAIS.includes(client.situacao_atual || client.momento)).length;
+            const { resultado } = candidatosElegiveis(clientes, campanha);
+            const elegiveis = resultado.eligible;
             return <div key={campanha.id} className="rounded-xl border border-slate-100 p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-[#031B3D]">{campanha.titulo}</p><p className="mt-1 text-xs text-slate-400">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-slate-100 px-2 py-1 text-caption font-bold text-slate-500">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#005BFF] px-3 py-2 text-xs font-bold text-[#005BFF] disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} cliente(s)</button></div>;
           })}
         </div>

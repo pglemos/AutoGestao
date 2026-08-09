@@ -5,10 +5,10 @@
 - Rotas públicas: **8**
 - Rotas protegidas sem regra canônica e sem redirect: **0**
 - Caminhos declarados mais de uma vez: **0**
-- Tabelas referenciadas pelo runtime: **135**
+- Tabelas referenciadas pelo runtime: **136**
 - RPCs referenciadas pelo runtime: **87**
 - Edge Functions invocadas pelo runtime: **14**
-- Pares tabela/operação encontrados: **262**
+- Pares tabela/operação encontrados: **263**
 
 ## Rotas
 
@@ -257,6 +257,7 @@
 | `usuarios` | 15 |
 | `valores_indicadores_planejamento` | 1 |
 | `valores_parametros_consultoria` | 1 |
+| `vehicle_model_catalog` | 1 |
 | `veiculos_estoque` | 4 |
 | `vendedor_nivel_carreira` | 1 |
 | `vendedor_perfil` | 4 |
@@ -512,6 +513,7 @@
 | `valores_indicadores_planejamento:select` | 1 |
 | `valores_parametros_consultoria:select` | 1 |
 | `valores_parametros_consultoria:upsert` | 1 |
+| `vehicle_model_catalog:select` | 1 |
 | `veiculos_estoque:insert` | 1 |
 | `veiculos_estoque:select` | 4 |
 | `veiculos_estoque:upsert` | 1 |

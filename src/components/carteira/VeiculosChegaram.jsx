@@ -1,31 +1,42 @@
 import React, { useState, useEffect, useMemo } from "react";
 import { Button } from "@/components/ui/button";
-import { Plus, Zap, Users, X, ArrowLeft, Car } from "lucide-react";
+import { Plus, Zap, Users, X, ArrowLeft, Car, CheckCircle2, AlertTriangle } from "lucide-react";
 import { base44 } from "@/api/base44Client";
 import { calcularPrioridade } from "./carteiraUtils";
+import { resolveCatalogModel, normalizeBrand, catalogSearchTokens } from "@/features/mentor-comercial/catalog/vehicleCatalog";
+import { matchVehicleAgainstOpportunities } from "@/features/mentor-comercial/engine/vehicleMatch";
+import { captureVehicleMatch, captureCatalogUnresolved, captureCatalogAmbiguous } from "@/features/mentor-comercial/observability/mentorTelemetry";
 
-// ─── COMPATIBILIDADE ──────────────────────────────────────────────────────────
-function normalizar(str) {
-  return (str || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9 ]/g, " ").trim();
+// ─── MATCH VIA MOTOR MENTOR (PRODUCT DELTA 2026-08-07 §19) ───────────────────
+function perfisOportunidades(clientes) {
+  return clientes.map(client => ({
+    id: client.id,
+    veiculoInteresse: client.veiculo_interesse || null,
+    catalogModelId: client.catalog_model_id || null,
+    categoriaVeiculo: client.categoria_veiculo || null,
+    precoInteresseMin: client.preco_interesse_min ?? null,
+    precoInteresseMax: client.preco_interesse_max ?? null,
+  }));
 }
 
-function clientesCompativeis(clientes, veiculo) {
-  const termos = [veiculo.marca, veiculo.modelo, veiculo.versao, veiculo.ano]
+function clientesCompativeis(clientes, veiculo, catalog) {
+  const criteria = {
+    brand: veiculo.marca || null,
+    model: veiculo.modelo || null,
+    price: veiculo.preco == null || veiculo.preco === "" ? null : Number(veiculo.preco),
+    category: veiculo.categoria || null,
+  };
+  const { matches } = matchVehicleAgainstOpportunities(criteria, perfisOportunidades(clientes), catalog);
+  const byId = new Map(clientes.map(client => [client.id, client]));
+  const ordP = { Máxima: 0, Alta: 1, Média: 2, Baixa: 3 };
+  return matches
+    .map(match => byId.get(match.opportunityId))
     .filter(Boolean)
-    .map(normalizar);
-
-  return clientes.filter(c => {
-    const interesse = normalizar(c.veiculo_interesse || "");
-    if (!interesse) return false;
-    return termos.some(t => t && interesse.includes(t));
-  }).sort((a, b) => {
-    const ordP = { Máxima: 0, Alta: 1, Média: 2, Baixa: 3 };
-    return (ordP[calcularPrioridade(a)] ?? 3) - (ordP[calcularPrioridade(b)] ?? 3);
-  });
+    .sort((a, b) => (ordP[calcularPrioridade(a)] ?? 3) - (ordP[calcularPrioridade(b)] ?? 3));
 }
 
 // ─── MODAL REGISTRAR VEÍCULO ─────────────────────────────────────────────────
-function ModalRegistrarVeiculo({ onClose, onSalvo }) {
+function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
   const [form, setForm] = useState({
     marca: "", modelo: "", versao: "", ano: new Date().getFullYear().toString(),
     preco: "", data_entrada: new Date().toISOString().split("T")[0], observacao: "",
@@ -34,18 +45,52 @@ function ModalRegistrarVeiculo({ onClose, onSalvo }) {
 
   function set(k, v) { setForm(prev => ({ ...prev, [k]: v })); }
 
+  // Classificação via catálogo mentor (delta §9.3, §13): resolvida quando há
+  // correspondência única; ambígua/não encontrada deixa o cadastro livre.
+  const resolucao = useMemo(() => {
+    if (!form.marca || !form.modelo || catalog.length === 0) return null;
+    return resolveCatalogModel(form.marca, form.modelo, catalog);
+  }, [form.marca, form.modelo, catalog]);
+
+  const classificacao = resolucao?.kind === "resolved" ? resolucao.entry : null;
+  const ambigua = resolucao?.kind === "ambiguous";
+  const naoEncontrado = resolucao?.kind === "not_found";
+
+  const ambiguas = useMemo(() => {
+    if (!ambigua || !form.marca || !form.modelo) return [];
+    const marca = normalizeBrand(form.marca);
+    const modelo = normalizeBrand(form.modelo);
+    return catalog.filter(entry => {
+      if (normalizeBrand(entry.brand) !== marca) return false;
+      return catalogSearchTokens(entry).some(token => token.includes(modelo) || modelo.includes(token));
+    });
+  }, [ambigua, form.marca, form.modelo, catalog]);
+
   async function salvar() {
     if (!form.marca || !form.modelo) return;
     setSalvando(true);
-    const me = await base44.auth.me().catch(() => null);
-    const novo = await base44.entities.VeiculoChegado.create({
-      ...form,
-      preco: form.preco ? parseFloat(form.preco) : undefined,
-      vendedor_id: me?.id,
-    });
-    setSalvando(false);
-    onSalvo(novo);
-    onClose();
+    try {
+      const me = await base44.auth.me();
+      const novo = await base44.entities.VeiculoChegado.create({
+        ...form,
+        preco: form.preco ? parseFloat(form.preco) : undefined,
+        vendedor_id: me?.id,
+        categoria: classificacao?.category || null,
+        catalog_model_id: classificacao?.id || null,
+        classification_source: classificacao ? "catalog" : null,
+      });
+      if (ambigua) {
+        captureCatalogAmbiguous({ kind: "arrived_vehicle" }, { brand: form.marca, model: form.modelo });
+      } else if (naoEncontrado) {
+        captureCatalogUnresolved({ kind: "arrived_vehicle" }, { brand: form.marca, model: form.modelo });
+      }
+      setSalvando(false);
+      onSalvo(novo);
+      onClose();
+    } catch (cause) {
+      setSalvando(false);
+      console.error("[VeiculosChegaram] Falha ao registrar veículo:", cause);
+    }
   }
 
   return (
@@ -72,6 +117,27 @@ function ModalRegistrarVeiculo({ onClose, onSalvo }) {
             </div>
           ))}
         </div>
+
+        {resolucao && (
+          <div className={`flex items-start gap-2 rounded-xl border px-3 py-2 text-xs ${
+            classificacao
+              ? "border-green-200 bg-green-50 text-green-800"
+              : ambigua
+                ? "border-amber-200 bg-amber-50 text-amber-800"
+                : "border-slate-200 bg-slate-50 text-slate-500"
+          }`}>
+          {classificacao ? (
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
+          ) : (
+            <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
+          )}
+            <div>
+              {classificacao && <p>Classificado no catálogo mentor: <strong>{classificacao.brand} {classificacao.model}</strong> · categoria <strong>{classificacao.category}</strong>.</p>}
+              {ambigua && <p>Modelo ambíguo no catálogo — opções: {ambiguas.map(entry => `${entry.brand} ${entry.model}`).join(", ")}. O veículo será salvo sem classificação automática.</p>}
+              {naoEncontrado && <p>Modelo fora do catálogo mentor. O veículo será salvo sem classificação automática (match por texto livre).</p>}
+            </div>
+          </div>
+        )}
 
         <div className="grid grid-cols-2 gap-3">
           <div>
@@ -150,8 +216,28 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
 }
 
 // ─── TELA DE ATAQUE DO VEÍCULO ────────────────────────────────────────────────
-function AtaqueVeiculo({ veiculo, clientes, onVoltar, onExecutar, onFicha }) {
-  const lista = useMemo(() => clientesCompativeis(clientes, veiculo), [clientes, veiculo]);
+function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFicha }) {
+  const lista = useMemo(() => clientesCompativeis(clientes, veiculo, catalog), [clientes, veiculo, catalog]);
+
+  useEffect(() => {
+    const criteria = {
+      brand: veiculo.marca || null,
+      model: veiculo.modelo || null,
+      price: veiculo.preco == null ? null : Number(veiculo.preco),
+      category: veiculo.categoria || null,
+    };
+    const { matches, unresolved } = matchVehicleAgainstOpportunities(criteria, perfisOportunidades(clientes), catalog);
+    captureVehicleMatch(
+      { kind: "arrived_vehicle", vehicleId: veiculo.id },
+      {
+        vehicleId: veiculo.id,
+        vehicleLabel: `${veiculo.marca || ""} ${veiculo.modelo || ""}`.trim(),
+        totalOpportunities: perfisOportunidades(clientes).length,
+        matched: matches.length,
+        unresolved: unresolved.length,
+      },
+    );
+  }, [veiculo, clientes, catalog]);
 
   return (
     <div className="space-y-5">
@@ -229,10 +315,19 @@ const FAIXAS_PRECO = [
 // ─── MAIN ─────────────────────────────────────────────────────────────────────
 export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
   const [veiculos, setVeiculos] = useState([]);
+  const [catalog, setCatalog] = useState([]);
   const [loading, setLoading] = useState(true);
   const [modalOpen, setModalOpen] = useState(false);
   const [veiculoAtaque, setVeiculoAtaque] = useState(null);
   const [faixaPrecoAtiva, setFaixaPrecoAtiva] = useState("todas");
+
+  useEffect(() => {
+    // Catálogo mentor (delta §9): alimenta autocomplete e match por modelo.
+    base44.entities.CatalogoModelos
+      .list()
+      .then(rows => setCatalog(rows || []))
+      .catch(() => setCatalog([]));
+  }, []);
 
   useEffect(() => {
     // Carregar veículos dos últimos 7 dias
@@ -285,6 +380,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
       <AtaqueVeiculo
         veiculo={veiculoAtaque}
         clientes={clientes}
+        catalog={catalog}
         onVoltar={() => setVeiculoAtaque(null)}
         onExecutar={handleExecutarCompativel}
         onFicha={onFicha}
@@ -360,14 +456,14 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
             <CardVeiculo
               key={v.id}
               veiculo={v}
-              compatíveis={clientesCompativeis(clientes, v).length}
+              compatíveis={clientesCompativeis(clientes, v, catalog).length}
               onClick={setVeiculoAtaque}
             />
           ))}
         </div>
       )}
 
-      {modalOpen && <ModalRegistrarVeiculo onClose={() => setModalOpen(false)} onSalvo={handleSalvo} />}
+      {modalOpen && <ModalRegistrarVeiculo catalog={catalog} onClose={() => setModalOpen(false)} onSalvo={handleSalvo} />}
     </div>
   );
 }

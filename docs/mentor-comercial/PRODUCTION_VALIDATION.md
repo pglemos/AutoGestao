@@ -210,3 +210,30 @@ Releitura integral do prompt mestre + conferência IMPLEMENTAÇÃO + TESTE + EVI
 ### Pendência única (honestidade §91)
 
 Push dos 2 commits de docs para `origin/main` — registrado na seção 10. Após o push, nenhuma pendência permanece.
+
+---
+
+## 12. Delta Plano de Ataque (2026-08-08) — Estado de Validação
+
+Referência: `docs/mentor-comercial/PRODUCT_DELTA_2026-08-07_PLANO_ATAQUE.md` (canônico).
+
+### Implementado e verificado (código)
+
+| Item | Status |
+|---|---|
+| Motor puro `campaignEligibility` + `vehicleMatch` (sem IA em runtime) | VERIFICADO — 607 testes de feature, 0 fail |
+| Migration delta `20260808120000_mentor_plano_ataque_delta.sql` (catálogo + seed + colunas + RPCs amendadas) | ESCRITA — não aplicada ainda (ver §10 Pendências) |
+| Adapter Base44: `createArrivedVehicle` com classificação, `listVehicleCatalog` (`base44.entities.CatalogoModelos`) | VERIFICADO — contrato de inventário atualizado |
+| Drift fix: `listVisualClients` + mapper com `sale_date` e sinais novos | VERIFICADO |
+| Wiring `PlanoAtaqueTab` (targeting carteira/financiamento/interesse-troca, `iniciarCampanha` via RPC com `itens`) | VERIFICADO (componente, gates verdes) |
+| Wiring `VeiculosChegaram` (catálogo, autocomplete com classificação, match via motor) | VERIFICADO (componente, gates verdes) |
+| Script §36 `scripts/mentor-classify-vehicle-data.mjs` (DRY-RUN padrão, `--apply` obrigatório) | VERIFICADO — 4 testes próprios, semântica espelhada no motor |
+| Gates finais: 2583 pass/0 fail (455 arquivos), tsc limpo, lint 0 errors, build ✓ | VERIFICADO |
+
+### Pendente (depende de acesso ao banco de produção)
+
+1. Aplicar a migration delta `20260808120000_mentor_plano_ataque_delta.sql` (supabase CLI).
+2. Executar o script §36 em modo `--apply` e registrar o relatório
+   `docs/mentor-comercial/VEHICLE_DATA_COVERAGE_REPORT.md` (gerado em DRY-RUN pelo operador).
+3. Smoke E2E do Plano de Ataque e da classificação de veículos em produção (Playwright).
+4. Verificação Sentry pós-release do novo build.

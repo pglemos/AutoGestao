@@ -16,6 +16,15 @@ type OpportunityRow = {
   cancelada_em?: string | null
   cancelada_por?: string | null
   motivo_cancelamento?: string | null
+  // PRODUCT DELTA 2026-08-07 — sinais do motor mentor (colunas reais).
+  current_status_code?: string | null
+  categoria_veiculo?: string | null
+  preco_interesse_min?: number | string | null
+  preco_interesse_max?: number | string | null
+  trade_interest?: boolean | null
+  financing_interest?: boolean | null
+  catalog_model_id?: string | null
+  sale_date?: string | null
 }
 
 type AppointmentRow = {
@@ -260,6 +269,15 @@ export function mapMxClientToCarteiraVisual(client: ClientRow, now = new Date())
     interesse_financiamento: Boolean(opportunity?.financiamento && opportunity.financiamento !== 'nao_aplica'),
     interesse_troca: Boolean(opportunity?.carro_avaliado),
     carro_avaliado: opportunity?.carro_avaliado ? 'Sim' : 'Não',
+    // PRODUCT DELTA 2026-08-07 — sinais do motor mentor, sem derivar do legado.
+    current_status_code: opportunity?.current_status_code || null,
+    categoria_veiculo: opportunity?.categoria_veiculo || null,
+    preco_interesse_min: opportunity?.preco_interesse_min == null ? null : Number(opportunity.preco_interesse_min),
+    preco_interesse_max: opportunity?.preco_interesse_max == null ? null : Number(opportunity.preco_interesse_max),
+    trade_interest: opportunity?.trade_interest === true,
+    financing_interest: opportunity?.financing_interest === true,
+    catalog_model_id: opportunity?.catalog_model_id || null,
+    sale_date: opportunity?.sale_date || null,
     veiculo_troca: opportunity?.veiculo_troca || '',
     valor_troca: Number(opportunity?.valor_troca || 0),
     proposta_enviada: opportunity?.etapa === 'apresentacao',

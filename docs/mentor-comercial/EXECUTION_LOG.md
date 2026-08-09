@@ -245,3 +245,45 @@ Releitura integral do prompt mestre e verificação requisito-por-requisito (IMP
 |---|---|---|
 | `de330796` | docs(mentor-comercial): validação pós-deploy produção (TASK 64/65/67) | - |
 | (próximo) | docs(mentor-comercial): auditoria final §93 + plano obrigatório §13 | push main |
+
+---
+
+## Delta Plano de Ataque (2026-08-08)
+
+Implementação do `docs/mentor-comercial/PRODUCT_DELTA_2026-08-07_PLANO_ATAQUE.md`
+(canônico; texto original perdido, documento reconstruído).
+
+### Decisões com evidência
+
+1. **Motor puro, sem IA em runtime**: `campaignEligibility.ts` e `vehicleMatch.ts` em
+   `src/features/mentor-comercial/` (puro TS, zero import de framework) — respeita §83.
+2. **Escrita em lote delegada ao Postgres**: `carteira_iniciar_missao_v2` (idempotency key
+   `carteira_missao_itens(idempotency_key)`, valida clientes e oportunidades de `itens` na loja)
+   e `carteira_iniciar_missao` amendada com `ON CONFLICT DO NOTHING` + modo `itens` (falha total
+   da missão quando cliente inelegível é rejeitado, conforme delta).
+3. **Camada visual 1:1** (Base44 ativa em produção): a classificação de veículos chegou ao
+   adapter `installCarteiraBase44Adapter.js` via `createArrivedVehicle` (persiste
+   `categoria`, `catalog_model_id`, `classification_source`) e novo `listVehicleCatalog`
+   exposto como `base44.entities.CatalogoModelos`. Drift fix completo: `listVisualClients`
+   lê `clientes` com `oportunidades(*)` direto, e o mapper expõe `sale_date`/sinais novos.
+4. **Contrato de inventário**: a nova fonte runtime `vehicle_model_catalog:select` entrou na
+   matriz (`MATRIZ_ROTAS_DADOS_MX.md` regenerada por `scripts/audit_route_data_inventory.mjs`).
+5. **§36 sem acesso a banco**: `scripts/mentor-classify-vehicle-data.mjs` escrito e testado
+   (DRY-RUN padrão; `--apply` obrigatório; escrita só com `classification_source='migration'`;
+   relatório `VEHICLE_DATA_COVERAGE_REPORT.md`). Não executado contra dados reais — banco
+   inacessível no ambiente (MCP/network indisponível); aplicação via supabase CLI pelo
+   operador. Semântica de resolução espelha o motor (match exato de token, nunca substring).
+
+### Gates
+
+| Gate | Resultado |
+|---|---|
+| `bun test` suite completa | 2583 pass / 0 fail (455 arquivos) |
+| `npx tsc --noEmit` | limpo |
+| `npm run lint` | 0 errors (1 warning pré-existente em `HelpTooltip.tsx:35:11`) |
+| `npx vite build` | ✓ 13.65s |
+
+### Pendências
+
+- Aplicar `20260808120000_mentor_plano_ataque_delta.sql` (schema + RPCs) e rodar o script §36
+  contra produção; registrar contagens e relatório em `PRODUCTION_VALIDATION.md`.
