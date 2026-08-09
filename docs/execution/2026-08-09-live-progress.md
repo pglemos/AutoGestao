@@ -2,7 +2,7 @@
 
 ## Auditoria pós-commit documental — 2026-08-09T18:23:27Z
 
-- **Tip documental:** `b77c459e` (`docs(mx): record final release and browser evidence`) está em `main`/`origin/main`.
+- **Tip documental anterior:** `b77c459e` (`docs(mx): record final release and browser evidence`) foi sucedido pelo tip atual `0148cf1a` (`docs(mx): record post-push deployment audit`) em `main`/`origin/main`.
 - **Vercel documental:** o check `FD5S5QdjvPeDvzdRhv8SEgUmRztf` terminou `success` com `Canceled by Ignored Build Step`; não houve novo runtime, e o deployment de produção continua `dpl_TTLku8NUz63Ac474Y9Z4HcZacHwi` no SHA `46c236db…`.
 - **Health pós-push:** o alias canônico `https://www.mxperformance.com.br/api/health` respondeu HTTP 200, `healthy`, `critical_crons=ok`, release `46c236dbb4f16c942b9d0c912ca91298fa400001`.
 - **Dependabot:** a API do GitHub confirmou 81 alertas abertos no default branch: 3 críticos, 42 altos, 28 médios e 8 baixos. Esse bloqueio remoto é mais amplo que o `npm audit` local, que identificou o high corrigível ausente em `xlsx@0.18.5`.
