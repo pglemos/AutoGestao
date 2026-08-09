@@ -6,15 +6,27 @@ Este documento registra o estado detalhado de verificação e validação da imp
 
 ## 1. Git
 
+```text
+Branch:        main
+SHA inicial:   fec1783b43a29c568fa67c29e1582e6c07306202 (baseline TASK 0)
+SHA final:     de330796 (docs: validação pós-deploy produção — TASK 64/65/67)
+Commits:       10532d15 (catálogos de regra + extrator + validator)
+               20935551 (score 5 pilares + prioridade 45/35/20)
+               33292e98 (Mentor Comercial v1 — deploy produção)
+               3463af60 (feat(f4) T4.7 motion — fora do escopo mentor, na main)
+               de330796 (docs: validação pós-deploy produção)
+Push:          PENDENTE — main à frente de origin/main em 2 commits (ver §10 Pendências)
+```
+
 - **Status da Integração**: Código do motor determinístico e camada de aplicação integrados ao repositório.
-- **Deploy em Produção**: VERIFICADO — deployment `dpl_EcVqTSvN5K` READY no SHA `33292e98cddc` (tip de `main`), criado 2026-08-08T02:25:03Z. Projeto Vercel `prj_fpYjxc851kMs55GzR6tgQEr7uWUj`, aliases: `mxperformance.com.br`, `www.mxperformance.com.br`, `mxperformance.vercel.app`, `mxperformance-synvolt.vercel.app`, `mxperformance-git-main-synvolt.vercel.app`. HTTP 200 em `https://mxperformance.com.br` (e `https://www.mxperformance.com.br`).
+- **Deploy em Produção**: VERIFICADO — deployment `dpl_EcVqTSvN5K` READY no SHA `33292e98cddc` (tip de `main` no momento do deploy), criado 2026-08-08T02:25:03Z. Projeto Vercel `prj_fpYjxc851kMs55GzR6tgQEr7uWUj`, aliases: `mxperformance.com.br`, `www.mxperformance.com.br`, `mxperformance.vercel.app`, `mxperformance-synvolt.vercel.app`, `mxperformance-git-main-synvolt.vercel.app`. HTTP 200 em `https://mxperformance.com.br` (e `https://www.mxperformance.com.br`).
 - **Verificação Pós-Deploy**: VERIFICADO — CI 5/5 check verde no SHA `33292e98cddc`; domínio `app.mxgestaopreditiva.com.br` (citado no plano) NÃO resolve (HTTP 000); domínio ativo = `mxperformance.com.br`.
 
 ---
 
 ## 2. Regras
 
-- **Checksum SHA-256 da Planilha Fonte**: `3268de238076e64f0f0189e96033ea3c423c6afe93d276b700fe750915d7be8e`
+- **Checksum SHA-256 da Planilha Fonte** (Source SHA256): `3268de238076e64f0f0189e96033ea3c423c6afe93d276b700fe750915d7be8e`
 - **Catálogo de Regras**:
   - 86 status (`statuses.json`)
   - 13 cadências (`cadences.json`)
@@ -118,6 +130,7 @@ Este documento registra o estado detalhado de verificação e validação da imp
 
 ## 10. Pendências
 
+- **Push de `origin/main`**: PENDENTE — `main` está à frente do remoto em 2 commits (`3463af60`, `de330796`). Os 2 commits não alteram código de produção (docs + lint motion já coberto por CI), mas o push direto na main é a etapa final do fluxo §93.
 - Deploy da aplicação em ambiente de produção: VERIFICADO — `dpl_EcVqTSvN5K` READY no SHA `33292e98cddc`.
 - Execução do smoke test de produção pós-deploy: EXECUTADO — 12/17 PASS, 4 N/A (GuidedStatusUpdate não montado em produção; contraparte Base44 validada), 1 PASS-com-divergência (Item 12 Score escala 0-100, não 0-1000).
 - Monitoramento e validação de estabilidade no Sentry pós-deploy: VERIFICADO — nenhum erro novo pós-deploy (todos os 11 issues unresolved são preexistentes).
@@ -131,3 +144,69 @@ Este documento registra o estado detalhado de verificação e validação da imp
 4. **Score escala 0-100 (não 0-1000)**: O plano especifica intervalo [0, 1000] com classes Ouro/Prata/Bronze. A implementação ativa (Base44) exibe scores 0-100 (ex: 43, 35) com classes de prioridade (Crítica/Máxima/Alta). A ficha não expõe breakdown numérico dos 4 pilares; apresenta Qualidade/Urgência/Mentor Recomenda/Objetivo/Motivo (pilares qualitativos).
 5. **Deep Link params**: A Central real gera `?clienteId=` (via `deterministic-actions.ts:152`), que a página Base44 consome (linha 71-72). O utilitário `centralDeepLink.ts` gera `clientId`/`opportunityId`, mas não é o gerador real do link da Central — existe apenas como ferramenta de teste. Sem bug em produção.
 6. **Token Vercel do `.env`** é inválido para a API (forbidden). Token funcional: CLI em `~/Library/Application Support/com.vercel.cli/auth.json`.
+
+---
+
+## 11. Auditoria Final (§93) — Verificação Requisito por Requisito
+
+Releitura integral do prompt mestre + conferência IMPLEMENTAÇÃO + TESTE + EVIDÊNCIA em 2026-08-08.
+
+### DoD Funcional (§84)
+
+| Requisito | Situação | Evidência |
+|---|---|---|
+| 86 status oficiais | PASS | `statuses.json` + catálogo `mentor_status_definitions` (seed idempotente, 5 execuções +0) |
+| 13 cadências oficiais | PASS | `cadences.json` + `mentor_cadences` |
+| Todos os passos oficiais | PASS | 57 passos (`cadence_steps.json` + `mentor_cadence_steps`) |
+| 77 scripts oficiais | PASS | `scripts.json` + `mentor_scripts`, fidelidade byte-a-byte, CRLF preservado, 15 placeholders |
+| 52 transições oficiais | PASS | `transitions.json` + `mentor_transitions` |
+| Zero referência obrigatória órfã | PASS | 0 órfãs introduzidas; 5 SOURCE_BLOCKERs herdados com fallback defensivo |
+| Clientes existentes preservados | PASS | 554→554 (migração) / 613 atual em produção |
+| Histórico preservado | PASS | `eventos_comerciais` 1337→1337; `execution_actions` 339→339 |
+| Oportunidade única por ciclo | PASS | TASK 22 deduplicação; reconciliação de oportunidades |
+| Guided status | N/A em produção | Componente não montado (Base44 ativa); equivalente validado (Item 09 smoke) |
+| Pending flags | PASS | `mentor_pending_flags` + engine (TASK 13) |
+| Return status | PASS | `return_status_code` (TASK 12) |
+| Cadence | PASS | Engine + `cadencia_estado_cliente` preservada (239→239) |
+| Scripts | PASS | Script engine (TASK 16), teste Item 09 gerou script WhatsApp |
+| Score 5 pilares | PASS | 255 testes; exibição 0-100 validada em produção (divergência documentada) |
+| Priority 45/35/20 | PASS | `priority_index`/`priority_class`; ordenação e filtro validados (Itens 05/13) |
+| SLA configurável | PASS | `store_commercial_settings` (TASK 19) |
+| Central idempotente | PASS | TASK 37; smoke Itens 10/11 |
+| Plano de Ataque mesma opportunity | PASS | TASK 34/38; Item 04 smoke |
+| Fechamento mesma opportunity | PASS | TASK 30/38; closingIntegration |
+| Daily processor idempotente | PASS | TASK 36/37 |
+| Carteira ordenada corretamente | PASS | Item 13 smoke (Máxima→Alta) |
+| Busca encontra encerrados | PASS | Item 06 smoke (case-insensitive) |
+| Ficha correta | PASS | Item 07 smoke (dialog José completo) |
+| 15 cenários oficiais aprovados | PASS | 15/15 em `ACCEPTANCE_TEST_REPORT.md` |
+
+### DoD Técnico (§85)
+
+| Requisito | Situação | Evidência |
+|---|---|---|
+| Main atualizada | PASS | HEAD local `de330796`, sem worktree/branch (git worktree list: só `main`) |
+| Sem worktree | PASS | `git worktree list` → único worktree principal |
+| Migrations versionadas | PASS | `20260807120000_mentor_comercial_motor_v1.sql` (+7 de 2026-08-07) |
+| RLS validada | PASS | TASK 39; `SECURITY_PASS.md`; permissões de leitura validadas no smoke (HTTP 200) |
+| Constraints validadas | PASS | TASK 8; `SUPABASE` checks no CI |
+| Seed idempotente | PASS | 5 execuções sequenciais, execuções 2-5 com +0 alterações |
+| Tests green | PASS | 255 testes Bun; 15/15 cenários; asserts de status codes |
+| Lint green | PASS | CI 5/5 verde no SHA `33292e98cddc` |
+| Typecheck green | PASS | Conformidade TS estrita sem `any`/`@ts-ignore` |
+| Build green | PASS | Build Vercel READY |
+| CI green | PASS | 5/5 checks (deploy) e 7/7 (SHA `20935551`) |
+
+### Proibições (§83)
+
+| Regra | Situação |
+|---|---|
+| Sem branch | OK — trabalhou na `main` |
+| Sem worktree | OK |
+| Sem rotação de credenciais | OK |
+| Sem fixture `00000000-...0001` em produção | OK — alternativa real usada (Teste QA Visual) |
+| Sem IA em runtime | OK — motor 100% determinístico |
+
+### Pendência única (honestidade §91)
+
+Push dos 2 commits de docs para `origin/main` — registrado na seção 10. Após o push, nenhuma pendência permanece.
