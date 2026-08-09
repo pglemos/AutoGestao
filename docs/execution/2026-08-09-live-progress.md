@@ -1,5 +1,14 @@
 # Live progress — estado factual atual
 
+## Auditoria pós-commit documental — 2026-08-09T18:23:27Z
+
+- **Tip documental:** `b77c459e` (`docs(mx): record final release and browser evidence`) está em `main`/`origin/main`.
+- **Vercel documental:** o check `FD5S5QdjvPeDvzdRhv8SEgUmRztf` terminou `success` com `Canceled by Ignored Build Step`; não houve novo runtime, e o deployment de produção continua `dpl_TTLku8NUz63Ac474Y9Z4HcZacHwi` no SHA `46c236db…`.
+- **Health pós-push:** o alias canônico `https://www.mxperformance.com.br/api/health` respondeu HTTP 200, `healthy`, `critical_crons=ok`, release `46c236dbb4f16c942b9d0c912ca91298fa400001`.
+- **Dependabot:** a API do GitHub confirmou 81 alertas abertos no default branch: 3 críticos, 42 altos, 28 médios e 8 baixos. Esse bloqueio remoto é mais amplo que o `npm audit` local, que identificou o high corrigível ausente em `xlsx@0.18.5`.
+
+O commit documental não altera o artefato runtime. O estado geral permanece `PARCIALMENTE CONCLUÍDO, COM BLOQUEIOS EXTERNOS COMPROVADOS`.
+
 ## Validação final do SHA publicado — 2026-08-09T18:20:33Z
 
 O release `46c236dbb4f16c942b9d0c912ca91298fa400001` está confirmado no remoto e em produção:

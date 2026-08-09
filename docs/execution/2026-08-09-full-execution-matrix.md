@@ -1,5 +1,12 @@
 # Ledger integral derivado do prompt mestre
 
+## Auditoria pós-commit documental — 2026-08-09T18:23:27Z
+
+| Grupo | Resultado atual | Evidência |
+|---|---|---|
+| T14.1/T14.3 Auditoria de dependências | `BLOCKED_EXTERNAL` | 81 alertas Dependabot abertos: 3 críticos, 42 altos, 28 médios, 8 baixos; `xlsx@0.18.5` sem correção upstream local |
+| T18.4/T18.5 Produção/SHA | `DONE_WITH_EVIDENCE` | tip documental `b77c459e`; check Vercel `FD5S5QdjvPeDvzdRhv8SEgUmRztf` ignorado com sucesso; health continua no SHA runtime `46c236db…` |
+
 ## Fechamento de release e QA — 2026-08-09T18:20:33Z
 
 | Grupo | Resultado atual | Evidência |

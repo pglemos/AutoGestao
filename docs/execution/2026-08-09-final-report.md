@@ -1,5 +1,11 @@
 # Relatório de status — execução autónoma MX
 
+## Auditoria pós-commit documental — 2026-08-09T18:23:27Z
+
+- O tip atual é `b77c459e`, somente documental; a Vercel marcou o check `FD5S5QdjvPeDvzdRhv8SEgUmRztf` como `success / Canceled by Ignored Build Step`.
+- O runtime publicado não mudou: o health canônico segue `healthy`, `critical_crons=ok`, release `46c236dbb4f16c942b9d0c912ca91298fa400001`.
+- O GitHub confirma 81 alertas Dependabot abertos no default branch: 3 críticos, 42 altos, 28 médios e 8 baixos. Eles permanecem bloqueio de segurança/dependências separado dos gates locais.
+
 ## Fechamento factual do SHA publicado — 2026-08-09T18:20:33Z
 
 - **Release confirmada:** `46c236dbb4f16c942b9d0c912ca91298fa400001` em `main`; os 7 workflows remotos do SHA terminaram `success`.
