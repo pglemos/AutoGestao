@@ -43,6 +43,21 @@ describe('ManagerStoreGoalReference Base44 parity', () => {
     expect(data.setEndDate).toHaveBeenCalledWith('2026-07-31')
   })
 
+  it('starts the goal chart with a positive dimension before the browser measures its container', () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => undefined)
+    const data = dashboardData()
+    data.metrics.goalValue = 20
+
+    try {
+      render(<MemoryRouter><ManagerStoreGoalReference data={data} /></MemoryRouter>)
+
+      expect(document.querySelector('.recharts-responsive-container')).toBeTruthy()
+      expect(warn.mock.calls.some(([message]) => String(message).includes('width(-1)'))).toBe(false)
+    } finally {
+      warn.mockRestore()
+    }
+  })
+
   it('renders Base44 contribution and channel tables instead of generic summary cards', () => {
     render(<MemoryRouter><ManagerStoreGoalReference data={dashboardData()} /></MemoryRouter>)
 
