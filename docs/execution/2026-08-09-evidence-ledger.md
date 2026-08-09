@@ -5,7 +5,7 @@
 - **EV-REL-08 — Documentação/release:** commit `b77c459e` em `main`; Vercel check `FD5S5QdjvPeDvzdRhv8SEgUmRztf` terminou `success` como `Canceled by Ignored Build Step`; produção permaneceu no deployment runtime `dpl_TTLku8NUz63Ac474Y9Z4HcZacHwi`; estado `DONE_WITH_EVIDENCE` para a regra de deployment documental.
 - **EV-REL-09 — Health pós-push:** `https://www.mxperformance.com.br/api/health` respondeu 200 com release `46c236dbb4f16c942b9d0c912ca91298fa400001` e `critical_crons=ok`; estado `TESTED_PRODUCTION`.
 - **EV-REL-10 — Dependabot:** API GitHub com `state=open` confirmou 81 alertas: 3 critical, 42 high, 28 medium, 8 low; estado `BLOCKED_EXTERNAL` até triagem/atualização segura.
-- **EV-REL-11 — Tip final:** o checkout atual é `0148cf1a` em `main`/`origin/main`; permanece documental e não altera o runtime `46c236db…`; estado `DONE_WITH_EVIDENCE`.
+- **EV-REL-11 — Checkpoint documental:** `0148cf1a` em `main`/`origin/main` foi o checkpoint documental auditado; não altera o runtime `46c236db…`; estado `DONE_WITH_EVIDENCE`.
 
 ## Evidências finais do SHA publicado — 2026-08-09T18:20:33Z
 

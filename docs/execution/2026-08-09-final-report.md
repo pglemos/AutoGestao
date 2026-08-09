@@ -2,7 +2,7 @@
 
 ## Auditoria pós-commit documental — 2026-08-09T18:23:27Z
 
-- O commit documental anterior é `b77c459e`; o tip atual é `0148cf1a`, também somente documental. A Vercel marcou o check `3QZddJ8fb3u96KUmWyMua4kZFkVE` como `success / Canceled by Ignored Build Step`.
+- O checkpoint documental avaliado neste bloco é `0148cf1a`, precedido por `b77c459e`; ambos são somente documentais. A Vercel marcou o check `3QZddJ8fb3u96KUmWyMua4kZFkVE` como `success / Canceled by Ignored Build Step`.
 - O runtime publicado não mudou: o health canônico segue `healthy`, `critical_crons=ok`, release `46c236dbb4f16c942b9d0c912ca91298fa400001`.
 - O GitHub confirma 81 alertas Dependabot abertos no default branch: 3 críticos, 42 altos, 28 médios e 8 baixos. Eles permanecem bloqueio de segurança/dependências separado dos gates locais.
 

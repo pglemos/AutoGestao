@@ -5,7 +5,7 @@
 | Grupo | Resultado atual | Evidência |
 |---|---|---|
 | T14.1/T14.3 Auditoria de dependências | `BLOCKED_EXTERNAL` | 81 alertas Dependabot abertos: 3 críticos, 42 altos, 28 médios, 8 baixos; `xlsx@0.18.5` sem correção upstream local |
-| T18.4/T18.5 Produção/SHA | `DONE_WITH_EVIDENCE` | tip documental atual `0148cf1a` (precedido por `b77c459e`); check Vercel `3QZddJ8fb3u96KUmWyMua4kZFkVE` ignorado com sucesso; health continua no SHA runtime `46c236db…` |
+| T18.4/T18.5 Produção/SHA | `DONE_WITH_EVIDENCE` | checkpoint documental `0148cf1a` (precedido por `b77c459e`); check Vercel `3QZddJ8fb3u96KUmWyMua4kZFkVE` ignorado com sucesso; health continua no SHA runtime `46c236db…` |
 
 ## Fechamento de release e QA — 2026-08-09T18:20:33Z
 
