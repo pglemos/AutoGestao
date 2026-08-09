@@ -2,9 +2,9 @@ import { test, expect } from 'bun:test'
 import { normalizeVehicleText, resolveCatalogModel, resolveInterestText, planVehicleCoverage } from './mentor-classify-vehicle-data.mjs'
 
 const CATALOG = [
-  { id: 'c1', brand: 'Honda', model: 'HR-V', normalized_brand: 'honda', normalized_model: 'hr-v', aliases: ['hrv', 'hr v'], category: 'suv', status: 'ativo' },
-  { id: 'c2', brand: 'Toyota', model: 'Corolla', normalized_brand: 'toyota', normalized_model: 'corolla', aliases: [], category: 'sedan', status: 'ativo' },
-  { id: 'c3', brand: 'Honda', model: 'Civic', normalized_brand: 'honda', normalized_model: 'civic', aliases: ['civic'], category: 'sedan', status: 'ativo' },
+  { id: 'c1', brand: 'Honda', model: 'HR-V', normalized_brand: 'honda', normalized_model: 'hr-v', aliases: ['hrv', 'hr v'], category: 'suv', active: true },
+  { id: 'c2', brand: 'Toyota', model: 'Corolla', normalized_brand: 'toyota', normalized_model: 'corolla', aliases: [], category: 'sedan', active: true },
+  { id: 'c3', brand: 'Honda', model: 'Civic', normalized_brand: 'honda', normalized_model: 'civic', aliases: ['civic'], category: 'sedan', active: true },
 ]
 
 test('normalizeVehicleText: NFD, lowercase, hífen -> espaço', () => {

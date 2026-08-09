@@ -222,7 +222,7 @@ Referência: `docs/mentor-comercial/PRODUCT_DELTA_2026-08-07_PLANO_ATAQUE.md` (c
 | Item | Status |
 |---|---|
 | Motor puro `campaignEligibility` + `vehicleMatch` (sem IA em runtime) | VERIFICADO — 607 testes de feature, 0 fail |
-| Migration delta `20260808120000_mentor_plano_ataque_delta.sql` (catálogo + seed + colunas + RPCs amendadas) | ESCRITA — não aplicada ainda (ver §10 Pendências) |
+| Migration delta `20260808120000_mentor_plano_ataque_delta.sql` (catálogo + seed + colunas + RPCs amendadas) | VERIFICADO EM PRODUÇÃO — schema do catálogo (`active` bool, `vehicle_type`, `year_from/to`, `source_version`), `carteira_campanhas.targeting_kind/targeting_config` e `carteira_iniciar_missao_v2` presentes (probe RPC com payload → erro de negócio "Usuário não autenticado", confirmando existência); seed `curated-2026-08-08-01` com 40 modelos |
 | Adapter Base44: `createArrivedVehicle` com classificação, `listVehicleCatalog` (`base44.entities.CatalogoModelos`) | VERIFICADO — contrato de inventário atualizado |
 | Drift fix: `listVisualClients` + mapper com `sale_date` e sinais novos | VERIFICADO |
 | Wiring `PlanoAtaqueTab` (targeting carteira/financiamento/interesse-troca, `iniciarCampanha` via RPC com `itens`) | VERIFICADO (componente, gates verdes) |
@@ -230,10 +230,18 @@ Referência: `docs/mentor-comercial/PRODUCT_DELTA_2026-08-07_PLANO_ATAQUE.md` (c
 | Script §36 `scripts/mentor-classify-vehicle-data.mjs` (DRY-RUN padrão, `--apply` obrigatório) | VERIFICADO — 4 testes próprios, semântica espelhada no motor |
 | Gates finais: 2583 pass/0 fail (455 arquivos), tsc limpo, lint 0 errors, build ✓ | VERIFICADO |
 
-### Pendente (depende de acesso ao banco de produção)
+### Execução do script §36 em produção (2026-08-08)
 
-1. Aplicar a migration delta `20260808120000_mentor_plano_ataque_delta.sql` (supabase CLI).
-2. Executar o script §36 em modo `--apply` e registrar o relatório
-   `docs/mentor-comercial/VEHICLE_DATA_COVERAGE_REPORT.md` (gerado em DRY-RUN pelo operador).
-3. Smoke E2E do Plano de Ataque e da classificação de veículos em produção (Playwright).
-4. Verificação Sentry pós-release do novo build.
+| Item | Status |
+|---|---|
+| `supabase db push --dry-run` | "Remote database is up to date" — migration delta já registrada em `supabase_migrations` |
+| DRY-RUN do script (sem `--apply`) | Oportunidades: 606 itens → 42 resolvidas, 1 ambígua (HB20S), 563 sem marca+modelo. Estoque: 11 itens → 6 resolvidos, 5 fora do catálogo. Nenhuma escrita |
+| Execução com `--apply` | **48 classificações gravadas** com `classification_source='migration'` (42 oportunidades + 6 veículos) |
+| Idempotência | 2ª execução com `--apply` → 0 escritas |
+| Verificação direta (REST) | `veiculos_estoque` e `oportunidades` com `catalog_model_id` + `classification_source='migration'` (+ `categoria` no estoque) |
+| Relatório | `docs/mentor-comercial/VEHICLE_DATA_COVERAGE_REPORT.md` gerado (estado pós-aplicação) |
+
+### Pendentes (sem bloqueio de banco)
+
+1. Smoke E2E do Plano de Ataque e da classificação de veículos em produção (Playwright).
+2. Verificação Sentry pós-release do novo build.

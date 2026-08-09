@@ -165,8 +165,8 @@ function buildReport(coverage, dryRun) {
       lines.push('| Item | Resolução | Categoria |')
       lines.push('| --- | --- | --- |')
       for (const { item, entry } of plan.resolvidos) {
-        const label = label === 'Oportunidades' ? `Oportunidade ${item.id}` : `Veículo ${item.marca} ${item.modelo}`
-        lines.push(`| ${label} | ${entry.brand} ${entry.model} | ${entry.category} |`)
+        const itemLabel = label === 'Oportunidades' ? `Oportunidade ${item.id}` : `Veículo ${item.marca} ${item.modelo}`
+        lines.push(`| ${itemLabel} | ${entry.brand} ${entry.model} | ${entry.category} |`)
       }
       lines.push('')
     }
@@ -176,8 +176,8 @@ function buildReport(coverage, dryRun) {
       lines.push('| Item | Entradas casadas |')
       lines.push('| --- | --- |')
       for (const { item, matches } of plan.ambiguos) {
-        const label = label === 'Oportunidades' ? item.veiculo_interesse : `${item.marca} ${item.modelo}`
-        lines.push(`| ${label} | ${matches} |`)
+        const itemLabel = label === 'Oportunidades' ? item.veiculo_interesse : `${item.marca} ${item.modelo}`
+        lines.push(`| ${itemLabel} | ${matches} |`)
       }
       lines.push('')
     }
@@ -188,8 +188,8 @@ function buildReport(coverage, dryRun) {
 async function main() {
   const apply = process.argv.includes('--apply')
   const env = loadEnv()
-  const catalog = await fetchAll(env, 'vehicle_model_catalog', 'id,brand,model,normalized_brand,normalized_model,aliases,category,status')
-  const activeCatalog = catalog.filter(entry => entry.status !== 'inativo')
+  const catalog = await fetchAll(env, 'vehicle_model_catalog', 'id,brand,model,normalized_brand,normalized_model,aliases,category,active')
+  const activeCatalog = catalog.filter(entry => entry.active !== false)
   const oportunidades = await fetchAll(env, 'oportunidades', 'id,veiculo_interesse,catalog_model_id,categoria_veiculo')
   const veiculos = await fetchAll(env, 'veiculos_estoque', 'id,marca,modelo,catalog_model_id,categoria')
 

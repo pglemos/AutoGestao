@@ -268,11 +268,13 @@ Implementação do `docs/mentor-comercial/PRODUCT_DELTA_2026-08-07_PLANO_ATAQUE.
    lê `clientes` com `oportunidades(*)` direto, e o mapper expõe `sale_date`/sinais novos.
 4. **Contrato de inventário**: a nova fonte runtime `vehicle_model_catalog:select` entrou na
    matriz (`MATRIZ_ROTAS_DADOS_MX.md` regenerada por `scripts/audit_route_data_inventory.mjs`).
-5. **§36 sem acesso a banco**: `scripts/mentor-classify-vehicle-data.mjs` escrito e testado
-   (DRY-RUN padrão; `--apply` obrigatório; escrita só com `classification_source='migration'`;
-   relatório `VEHICLE_DATA_COVERAGE_REPORT.md`). Não executado contra dados reais — banco
-   inacessível no ambiente (MCP/network indisponível); aplicação via supabase CLI pelo
-   operador. Semântica de resolução espelha o motor (match exato de token, nunca substring).
+5. **§36 executado em produção (2026-08-08)**: `supabase db push --dry-run` → "Remote database
+   is up to date" (migration delta já registrada; RPCs e colunas confirmadas por probe). Script
+   corrigido durante execução: selecionava `status` (coluna inexistente) — schema usa `active`
+   boolean, igual ao motor; bug de shadowing de `label` no relatório também corrigido.
+   DRY-RUN: 606 oportunidades (42 resolvidas, 1 ambígua, 563 sem marca+modelo no texto) e
+   11 veículos (6 resolvidos). `--apply`: **48 classificações** com `classification_source='migration'`;
+   2ª rodada idempotente (0 escritas); verificação direta via REST confirmou os dados.
 
 ### Gates
 
@@ -282,8 +284,9 @@ Implementação do `docs/mentor-comercial/PRODUCT_DELTA_2026-08-07_PLANO_ATAQUE.
 | `npx tsc --noEmit` | limpo |
 | `npm run lint` | 0 errors (1 warning pré-existente em `HelpTooltip.tsx:35:11`) |
 | `npx vite build` | ✓ 13.65s |
+| Script §36 (4 testes próprios + DRY-RUN + `--apply` em produção) | ✓ 48 classificações, idempotente |
 
 ### Pendências
 
-- Aplicar `20260808120000_mentor_plano_ataque_delta.sql` (schema + RPCs) e rodar o script §36
-  contra produção; registrar contagens e relatório em `PRODUCTION_VALIDATION.md`.
+- Smoke E2E do Plano de Ataque e da classificação de veículos em produção (Playwright) e
+  verificação Sentry pós-release — registrados em `PRODUCTION_VALIDATION.md` §12.
