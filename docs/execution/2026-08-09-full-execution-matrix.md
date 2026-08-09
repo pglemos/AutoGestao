@@ -1,5 +1,21 @@
 # Ledger integral derivado do prompt mestre
 
+## Adendo vigente — release `287a4965` — 2026-08-09T20:17:08Z
+
+Este bloco supersede os estados anteriores para as tasks exercitadas nesta rodada; as tabelas históricas permanecem preservadas.
+
+| Task/grupo | Estado vigente | Evidência atual | Risco residual |
+|---|---|---|---|
+| C0.9 / T18.4 / T18.5 — deployment e paridade de SHA | `DONE_WITH_EVIDENCE` | `main`/`origin/main` em `287a496571499d04e8c8dd8ebb352756a87d5f45`; 7 workflows success; Vercel `dpl_8T8v8Hxg1aiAAbajeaiaU1tAi8wp` `READY`; health exato | nenhum para este release; monitoramento geral permanece parcial |
+| T8.5 / T9.5 — warning `/meta-loja` | `DONE_WITH_EVIDENCE` | Reprodução pré-fix com warning Recharts; teste RED/GREEN; produção gerente/dono sem warning após deploy | matriz visual completa ainda não executada |
+| T17.1 / T17.2 — testes e build | `TESTED_LOCAL_ONLY` | 2.593 testes, 18.148 expectativas, typecheck/lint/build/bundle PASS; lint com 1 warning a11y preexistente | gates não provam toda a UX autenticada |
+| T17.3 / T17.4 / T18.7 — smoke autenticado | `TESTED_PRODUCTION_PARTIAL` | três papéis efetivos, viewport `1440x900`, `/notificacoes`, `/perfil`, `/meta-loja` (gerente/dono), dados/renderização/console/rede/overflow registrados | `administrador_mx` e `consultor_mx` sem credenciais comprovadas; demais rotas/estados/viewports pendentes |
+| T14.4 — secret scan | `TESTED_PRODUCTION_PARTIAL` | Gitleaks do SHA no GitHub success; `gitleaks protect --staged` sem leaks | histórico completo contém 116 achados antigos |
+| T13.1–T13.10 — Sentry | `BLOCKED_EXTERNAL` | reautenticação ainda exigida para evento sintético, source map, contexto, Replay e alertas | observabilidade ponta a ponta não comprovada |
+| T11.9 / T11.10 / T18.9 — recuperação | `BLOCKED_EXTERNAL` | restore/PITR/rollback real não executados em ambiente seguro | DR/rollback não comprovados |
+
+Declaração vigente: `PARCIALMENTE CONCLUÍDO, COM BLOQUEIOS EXTERNOS COMPROVADOS`.
+
 ## Auditoria Storage — 2026-08-09T19:35:23Z
 
 | Grupo | Resultado atual | Evidência |

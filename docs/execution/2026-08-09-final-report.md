@@ -1,5 +1,18 @@
 # Relatório de status — execução autónoma MX
 
+## Adendo final do runtime — SHA `287a4965` — 2026-08-09T20:17:08Z
+
+- **Correção entregue:** o warning Recharts `width(-1)/height(-1)` em `/meta-loja` foi reproduzido, coberto por teste RED/GREEN e corrigido com dimensão inicial positiva no gráfico de meta.
+- **Release:** `287a496571499d04e8c8dd8ebb352756a87d5f45` em `main`/`origin/main`; 7 workflows do SHA em `success` (Quality Gates `31333622545`, Gitleaks `31333622543`).
+- **Deploy:** `dpl_8T8v8Hxg1aiAAbajeaiaU1tAi8wp`, produção, `READY`; aliases `mxperformance.vercel.app`, `www.mxperformance.com.br` e `mxperformance.com.br` confirmados.
+- **Health:** HTTP 200, `healthy`, `critical_crons=ok` e release exata do SHA em `mxperformance.vercel.app` e `www.mxperformance.com.br`; o domínio sem `www` redireciona 308 para `www`.
+- **QA autenticado:** viewport `1440x900`; vendedor, gerente e dono passaram `/notificacoes` e `/perfil`; gerente e dono passaram `/meta-loja`; todas as rotas responderam 200, com `main` visível, sem overflow, redirects de login, erros de console, page errors ou requests falhos; `/meta-loja` terminou sem warning Recharts.
+- **Gates locais:** 2.593 testes/18.148 expectativas/0 falhas; typecheck, lint, build, sourcemap e bundle `1.806,96/1.860 KB` passaram. Lint mantém um warning a11y pré-existente em `HelpTooltip.tsx`.
+
+**Declaração vigente:** `PARCIALMENTE CONCLUÍDO, COM BLOQUEIOS EXTERNOS COMPROVADOS`.
+
+**Bloqueios ainda genuínos:** Sentry requer reautenticação para evento sintético/source-map/alerta; não há credencial comprovada para `administrador_mx` e `consultor_mx`; restore/PITR/rollback real não foi executado em ambiente seguro; testes positivos completos das 22 Edge Functions, classificação comportamental integral das 211 funções `SECURITY DEFINER`, matrizes completas de rotas/viewports/acessibilidade/performance e o high de `xlsx@0.18.5` sem correção upstream permanecem em estado explícito.
+
 ## Correção de Storage — 2026-08-09T19:35:23Z
 
 - Migration `20260809205000_fix_consulting_evidence_storage_rls_definer.sql` aplicada ao Supabase `fbhcmzzgwjdgkctlfvbo`.

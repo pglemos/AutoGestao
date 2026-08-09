@@ -1,5 +1,21 @@
 # Evidence ledger — snapshot factual atual
 
+## Adendo vigente — correção Recharts e release do SHA `287a4965` — 2026-08-09T20:17:08Z
+
+| ID | Task/grupo | Ambiente | Evidência atual | Estado |
+|---|---|---|---|---|
+| EV-UI-09 | Warning Recharts em `/meta-loja` | Produção antes/depois | Causa reproduzida em `ManagerStoreGoalReference`: `ResponsiveContainer` iniciava com a dimensão padrão `(-1,-1)`; teste RED falhou com a mensagem exata; `initialDimension={{ width: 320, height: 288 }}` corrigiu a origem | `DONE_WITH_EVIDENCE` |
+| EV-UI-10 | Regressão automatizada | Local | `ManagerStoreGoalReference.test.tsx`: 5/5 testes, incluindo ausência de `width(-1)` e presença do container real | `TESTED_LOCAL_ONLY` |
+| EV-REL-12 | GitHub/CI | `main` | SHA `287a496571499d04e8c8dd8ebb352756a87d5f45`; os 7 workflows do SHA terminaram `success` (Quality Gates `31333622545`, Gitleaks `31333622543`) | `DONE_WITH_EVIDENCE` |
+| EV-REL-13 | Vercel | Produção | Deployment `dpl_8T8v8Hxg1aiAAbajeaiaU1tAi8wp`, `READY`; aliases `mxperformance.vercel.app`, `www.mxperformance.com.br` e `mxperformance.com.br` confirmados | `DONE_WITH_EVIDENCE` |
+| EV-REL-14 | Health/SHA | Produção | `/api/health` HTTP 200 em `mxperformance.vercel.app` e `www.mxperformance.com.br`, `status=healthy`, `critical_crons=ok`, `release=287a496571499d04e8c8dd8ebb352756a87d5f45`; domínio sem `www` redireciona 308 para `www` e, seguindo o redirect, responde 200 | `TESTED_PRODUCTION` |
+| EV-UI-11 | Smoke autenticado final | Produção, viewport `1440x900` | Vendedor, Gerente e Dono: `/notificacoes` e `/perfil` HTTP 200, `main` visível, sem overflow, redirect de login, erro de console, page error ou request falho; Gerente e Dono: `/meta-loja` HTTP 200, mesma prova e zero warnings Recharts | `TESTED_PRODUCTION_PARTIAL` |
+| EV-REL-15 | Gates locais | Local | `npm test`: 2.593 pass, 0 fail, 18.148 expectativas; `npm run typecheck` exit 0; `npm run lint` exit 0 (1 warning a11y preexistente); `npm run build` e sourcemaps PASS; bundle 1.806,96/1.860 KB; `gitleaks protect --staged` sem leaks | `TESTED_LOCAL_ONLY` |
+
+Os screenshots do smoke final permanecem em `output/playwright/` (diretório ignorado). O scan histórico do Gitleaks continua separado: 116 achados antigos em 1.916 commits; o workflow Gitleaks do SHA atual passou.
+
+O release runtime deste adendo é `287a4965…`; commits documentais posteriores não alteram esse runtime.
+
 ## Storage — correção de RLS e validação remota — 2026-08-09T19:35:23Z
 
 - **EV-ST-01 — causa raiz:** a policy anterior fazia `JOIN` direto em `evidencias_visita`, `visitas_consultoria` e `clientes_consultoria`; essas tabelas são internas e suas próprias policies RLS ocultavam o vínculo durante a avaliação de `storage.objects`, produzindo `Object not found` mesmo para um dono da loja correta.

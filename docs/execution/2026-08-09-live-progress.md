@@ -1,5 +1,17 @@
 # Live progress — estado factual atual
 
+## Adendo vigente — correção e release `287a4965` — 2026-08-09T20:17:08Z
+
+- **Causa raiz reproduzida:** o gráfico `Evolução da Meta` em `src/features/manager/meta/ManagerStoreGoalReference.tsx` era montado com a dimensão inicial padrão `(-1,-1)` do Recharts 3.8.1, antes da medição do container.
+- **Correção:** `initialDimension={{ width: 320, height: 288 }}` no `ResponsiveContainer`, acompanhada de teste que falha com `width(-1)` antes da correção e passa depois.
+- **Gates locais:** 2.593 testes/18.148 expectativas/0 falhas; typecheck, lint, build, sourcemap, bundle e diff staged pass; lint mantém somente o warning a11y pré-existente de `HelpTooltip.tsx`.
+- **GitHub:** `287a496571499d04e8c8dd8ebb352756a87d5f45` em `main`/`origin/main`; 7 workflows success, Quality Gates `31333622545`, Gitleaks `31333622543`.
+- **Vercel:** `dpl_8T8v8Hxg1aiAAbajeaiaU1tAi8wp`, produção, `READY`; aliases oficiais confirmados.
+- **Health:** `mxperformance.vercel.app` e `www.mxperformance.com.br` responderam 200, `healthy`, `critical_crons=ok` e release exata do SHA; o domínio sem `www` redireciona 308 para `www`.
+- **Smoke autenticado final:** no viewport `1440x900`, vendedor/gerente/dono passaram `/notificacoes` e `/perfil`; gerente/dono passaram `/meta-loja`; não houve overflow, redirect de login, erro de console, page error, request falho ou warning Recharts.
+
+O runtime está validado. Permanecem os bloqueios externos já registrados para Sentry, perfis sem credencial, restore/PITR/rollback e cobertura integral das matrizes.
+
 ## Storage — correção de RLS e validação remota — 2026-08-09T19:35:23Z
 
 - A policy de leitura de `evidencias-consultoria` foi corrigida em `20260809205000_fix_consulting_evidence_storage_rls_definer.sql` e aplicada no projeto `fbhcmzzgwjdgkctlfvbo`.
