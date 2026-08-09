@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import { base44 } from "@/features/owner-base44/b44adapter";
+import { base44 } from "@/features/owner/ownerRepository";
 import { useOwner } from "@/components/owner/OwnerContext";
-import { useAuth } from "@/lib/owner-b44/AuthContext";
+import { useAuth } from "@/features/owner/lib/ownerAuth";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
@@ -15,7 +15,7 @@ import {
   DialogFooter,
 } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { REQUEST_TYPE_LABELS, PRIORITY_LABELS } from "@/lib/owner-b44/status";
+import { REQUEST_TYPE_LABELS, PRIORITY_LABELS } from "@/features/owner/lib/ownerStatus";
 import { CheckCircle2, Paperclip } from "lucide-react";
 
 const requestTypeOptions = Object.entries(REQUEST_TYPE_LABELS).map(([value, label]) => ({ value, label }));

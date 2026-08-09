@@ -1,6 +1,6 @@
 import { useOwner } from "@/components/owner/OwnerContext";
-import { PHASE_LABELS } from "@/lib/owner-b44/status";
-import { greetingByHour, formatDate, formatDateTime } from "@/lib/owner-b44/format";
+import { PHASE_LABELS } from "@/features/owner/lib/ownerStatus";
+import { greetingByHour, formatDate, formatDateTime } from "@/features/owner/lib/ownerFormatters";
 import { Badge } from "@/components/ui/badge";
 import { Sparkles, UserCircle, CalendarClock, RefreshCcw } from "lucide-react";
 

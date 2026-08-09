@@ -3,8 +3,8 @@ import DetailDrawer from "@/components/owner/DetailDrawer";
 import StatusBadge from "@/components/owner/StatusBadge";
 import { CardSkeleton } from "@/components/owner/Skeleton";
 import { useOwner } from "@/components/owner/OwnerContext";
-import { DEPARTMENT_LABELS } from "@/lib/owner-b44/status";
-import { formatDateTime } from "@/lib/owner-b44/format";
+import { DEPARTMENT_LABELS } from "@/features/owner/lib/ownerStatus";
+import { formatDateTime } from "@/features/owner/lib/ownerFormatters";
 import { ArrowUpRight } from "lucide-react";
 
 const ORDER = ["commercial", "marketing", "product_stock", "people_hr", "financial", "operations"];

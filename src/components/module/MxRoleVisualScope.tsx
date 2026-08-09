@@ -1,7 +1,7 @@
 import type { ReactNode } from 'react'
 import { isPerfilInternoMx, useAuth } from '@/hooks/useAuth'
 import { cn } from '@/lib/utils'
-import { InternalMxVisualScope } from './InternalMxVisualScope'
+import { InternalMxCanonicalSurface } from './InternalMxCanonicalSurface'
 
 export function MxRoleVisualScope({
   children,
@@ -16,9 +16,9 @@ export function MxRoleVisualScope({
 
   if (isPerfilInternoMx(role)) {
     return (
-      <InternalMxVisualScope role={role}>
+      <InternalMxCanonicalSurface role={role}>
         <div className={cn('h-full min-h-0 w-full', className)}>{children}</div>
-      </InternalMxVisualScope>
+      </InternalMxCanonicalSurface>
     )
   }
 

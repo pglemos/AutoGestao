@@ -43,6 +43,7 @@ async function call(init?: RequestInit) {
 beforeEach(() => {
     process.env.VITE_SUPABASE_URL = SUPABASE_URL
     process.env.VITE_SUPABASE_ANON_KEY = 'anon-key-de-teste'
+    process.env.SUPABASE_SERVICE_ROLE_KEY = 'service-role-key-de-teste'
 })
 
 afterEach(() => {
@@ -108,6 +109,22 @@ describe('/api/health — sonda de banco', () => {
 })
 
 describe('/api/health — saúde de cron', () => {
+    it('usa a chave server-side para a RPC protegida de cron', async () => {
+        const cronAuthorization: string[] = []
+        globalThis.fetch = (async (input: RequestInfo | URL, init?: RequestInit) => {
+            const url = String(input instanceof Request ? input.url : input)
+            if (url.includes('/rpc/mx_critical_cron_status')) {
+                cronAuthorization.push(new Headers(init?.headers).get('Authorization') ?? '')
+            }
+            const key = Object.keys(HEALTHY).find((route) => url.includes(route))!
+            return new Response(JSON.stringify(HEALTHY[key].body), { status: 200 })
+        }) as typeof fetch
+
+        await call()
+
+        expect(cronAuthorization).toEqual(['Bearer service-role-key-de-teste'])
+    })
+
     it('reporta ok quando nenhum job está atrasado', async () => {
         mockRoutes(HEALTHY)
 

@@ -2,7 +2,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSearchParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { useAuth } from "@/lib/owner-b44/AuthContext";
+import { useAuth } from "@/features/owner/lib/ownerAuth";
 import { useOwner } from "@/components/owner/OwnerContext";
 import { useIsMobile } from "@/hooks/useIsMobile";
 import { actionPlanLiveRepository } from "@/components/owner/actionplan/actionPlanLiveRepository";

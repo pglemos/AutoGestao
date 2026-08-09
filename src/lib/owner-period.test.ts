@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'bun:test'
-import { resolveOwnerPeriodRange } from './owner-period'
+import { computePeriodRange, resolveOwnerPeriodRange } from './owner-period'
 
 describe('Dono — intervalos do seletor de período', () => {
   const now = new Date(2026, 6, 22, 12, 0, 0)
@@ -25,5 +25,16 @@ describe('Dono — intervalos do seletor de período', () => {
       start: '2026-07-01',
       end: '2026-07-22',
     })
+  })
+
+  test('mantém a API de intervalo Date para o hook de dados legado', () => {
+    const range = computePeriodRange('quarter', now)
+    expect(range.start).toEqual(new Date(2026, 6, 1, 0, 0, 0))
+    expect(range.end).toEqual(now)
+  })
+
+  test('normaliza o dia antes de recuar o mês no trimestre', () => {
+    const range = computePeriodRange('quarter', new Date(2026, 4, 31, 12, 0, 0))
+    expect(range.start).toEqual(new Date(2026, 3, 1, 0, 0, 0))
   })
 })

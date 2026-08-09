@@ -2,9 +2,9 @@ import { Fragment, useEffect, useState } from 'react'
 import { ChevronDown, ChevronRight, History, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { MONTHS } from './strategicUtils'
-import { formatDateTime } from '@/lib/owner-b44/format'
+import { formatDateTime } from '@/features/owner/lib/ownerFormatters'
 import { useToast } from '@/components/ui/use-toast'
-import { useAuth } from '@/lib/owner-b44/AuthContext'
+import { useAuth } from '@/features/owner/lib/ownerAuth'
 import {
   AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent,
   AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle,

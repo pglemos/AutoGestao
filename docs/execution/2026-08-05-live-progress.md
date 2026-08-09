@@ -1,5 +1,9 @@
 # Registro de Progresso Ao Vivo — MX Gestão Preditiva (2026-08-05)
 
+> SUPERSEDED — histórico preservado; não é evidência da release atual.
+> Consulte os snapshots e o relatório atuais em `docs/execution/2026-08-09-*.md`.
+
+
 ## Status Geral da Execução
 - **Branch:** `main`
 - **Modo:** Autônomo 100% na `main`, sem worktree e sem rotação de credenciais

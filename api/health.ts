@@ -25,7 +25,7 @@ interface HealthChecks {
     critical_crons: CheckState
 }
 
-function getSupabaseConfig(): { url: string; anonKey: string } {
+function getSupabaseConfig(): { url: string; anonKey: string; serverKey: string } {
     const url =
         process.env.SUPABASE_URL ||
         process.env.VITE_SUPABASE_URL ||
@@ -36,7 +36,8 @@ function getSupabaseConfig(): { url: string; anonKey: string } {
         process.env.VITE_SUPABASE_ANON_KEY ||
         process.env.VITE_PUBLIC_SUPABASE_ANON_KEY ||
         ''
-    return { url: url.replace(/\/$/, ''), anonKey }
+    const serverKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+    return { url: url.replace(/\/$/, ''), anonKey, serverKey }
 }
 
 function getRelease(): string {
@@ -128,14 +129,17 @@ async function checkDatabase(url: string, anonKey: string): Promise<CheckState> 
  * assim que `mx-google-meet-ata` falhou com 401 em toda execução sem nunca aparecer
  * como degradado.
  */
-async function checkCriticalCrons(url: string, anonKey: string): Promise<CheckState> {
-    if (!url || !anonKey) return 'unknown'
+async function checkCriticalCrons(url: string, serverKey: string): Promise<CheckState> {
+    // This RPC reads pg_cron metadata and is intentionally not executable by
+    // anon. Keep the service key inside the serverless function; the browser
+    // still uses the publishable key for the public liveness checks above.
+    if (!url || !serverKey) return 'unknown'
     try {
         const response = await fetchWithTimeout(`${url}/rest/v1/rpc/mx_critical_cron_status`, {
             method: 'POST',
             headers: {
-                apikey: anonKey,
-                Authorization: `Bearer ${anonKey}`,
+                apikey: serverKey,
+                Authorization: `Bearer ${serverKey}`,
                 'Content-Type': 'application/json',
             },
             body: '{}',
@@ -178,12 +182,12 @@ async function health(request: Request): Promise<Response> {
     }
 
     const startedAt = Date.now()
-    const { url, anonKey } = getSupabaseConfig()
+    const { url, anonKey, serverKey } = getSupabaseConfig()
 
     const [supabaseApi, database, criticalCrons] = await Promise.all([
         checkSupabaseApi(url, anonKey),
         checkDatabase(url, anonKey),
-        checkCriticalCrons(url, anonKey),
+        checkCriticalCrons(url, serverKey),
     ])
 
     const checks: HealthChecks = {

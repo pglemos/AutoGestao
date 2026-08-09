@@ -37,7 +37,7 @@ function report(file, line, desc) {
 // 1 + 2. CSS — transições/animações com duração literal
 const cssFiles = [
   'src/index.css',
-  'src/styles/internal-mx-manager-scope.css',
+  'src/styles/internal-mx-canonical-template.css',
   'src/design-system/tokens/semantic.css',
   'src/design-system/tokens/components.css',
 ];

@@ -42,4 +42,21 @@ describe("ManagerDailyClosing visual contract", () => {
     expect(source).toContain('label === "Excelente"');
     expect(source).toContain('label === "Baixa"');
   });
+
+  test("inicializa o gráfico de disciplina com dimensões positivas", () => {
+    const start = source.indexOf("function DisciplineTrendCard");
+    const end = source.indexOf("function ComparisonRow", start);
+    const trendCard = source.slice(start, end);
+    const normalizedTrendCard = trendCard.replace(/\s+/g, " ");
+
+    expect(trendCard).toContain(
+      'className="mt-4 h-[280px] w-full min-w-0"',
+    );
+    expect(normalizedTrendCard).toContain(
+      '<ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={280}',
+    );
+    expect(normalizedTrendCard).toContain(
+      'initialDimension={{ width: 320, height: 280 }}',
+    );
+  });
 });

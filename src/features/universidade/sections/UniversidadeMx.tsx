@@ -3,6 +3,7 @@ import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
+import { PageCanvas } from '@/design-system/page'
 import { cn } from '@/lib/utils'
 import { useVendedorPerfil } from '@/features/crm/hooks/useVendedorPerfil'
 import {
@@ -74,7 +75,7 @@ export function UniversidadeMx({ userId }: Props) {
   const recomendadaId = trilhaRecomendadaId(trilhas, nivelTrilha)
 
   return (
-    <section className="space-y-mx-lg" aria-label="Universidade MX">
+    <PageCanvas as="section" width="dashboard" className="flex flex-col gap-mx-lg" aria-label="Universidade MX">
       <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-mx-sm">
           <div className="rounded-2xl bg-emerald-600 p-mx-sm text-pure-white shadow-sm">
@@ -296,6 +297,6 @@ export function UniversidadeMx({ userId }: Props) {
       )}
 
       <AulasAoVivoSection />
-    </section>
+    </PageCanvas>
   )
 }

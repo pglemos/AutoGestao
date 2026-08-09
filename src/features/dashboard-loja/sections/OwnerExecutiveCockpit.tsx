@@ -32,20 +32,12 @@ import { AlertsView } from './owner-cockpit/AlertsView'
 import { BenchmarkingView } from './owner-cockpit/BenchmarkingView'
 import { AgendaView } from './owner-cockpit/AgendaView'
 import { OwnerModuleGrid } from './owner-cockpit/OwnerModuleGrid'
-import { OwnerConsultingView } from './owner-cockpit/OwnerBase44Views'
 import {
-  RotinaDoDia,
-  CentralDeDecisoes,
-  DepartamentosVisaoGeral,
-  DepartamentoComercial,
-  DepartamentoMarketing,
-  DepartamentoProdutoEstoque,
-  DepartamentoPessoasRH,
-  DepartamentoFinanceiro,
-  DepartamentoOperacoes,
-  Mercado,
-  UniversidadeMX,
-} from '@/pages/owner/Placeholders'
+  OwnerConsultingView,
+  OwnerDecisionCenter,
+  OwnerRoutineView,
+} from './owner-cockpit/OwnerBase44Views'
+import { DepartmentsView } from './owner-cockpit/DepartmentsView'
 import {
   alertFromEngine,
   buildCentralMx,
@@ -106,21 +98,12 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
   const section = getOwnerSection(location.pathname, location.search)
   const selectedDepartmentCode = getOwnerDepartmentCode(location.pathname, location.search)
 
-  if (section === 'rotina') return <RotinaDoDia />
-  if (section === 'decisoes') return <CentralDeDecisoes />
+  if (section === 'rotina') return <OwnerRoutineView data={data} alerts={ownerAlerts} actions={actions} />
+  if (section === 'decisoes') return <OwnerDecisionCenter alerts={ownerAlerts} actions={actions} storeId={data.operationalStore?.id} />
   if (section === 'departamentos') {
-    const deptMap: Record<string, React.ReactNode> = {
-      comercial: <DepartamentoComercial />,
-      marketing: <DepartamentoMarketing />,
-      produto: <DepartamentoProdutoEstoque />,
-      rh: <DepartamentoPessoasRH />,
-      financeiro: <DepartamentoFinanceiro />,
-      operacional: <DepartamentoOperacoes />,
-    }
-    return deptMap[selectedDepartmentCode ?? ''] ?? <DepartamentosVisaoGeral />
+    return <DepartmentsView departments={departments} selectedDepartmentCode={selectedDepartmentCode} />
   }
-  if (section === 'mercado') return <Mercado />
-  if (section === 'universidade') return <UniversidadeMX />
+  if (section === 'mercado') return <BenchmarkingView data={data} mxScore={mxScore} marginPercent={marginPercent} />
 
   const universityContent = (
     <>
@@ -182,7 +165,7 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
 
       {section === 'benchmarking' && <BenchmarkingView data={data} mxScore={mxScore} marginPercent={marginPercent} />}
 
-      {section === 'biblioteca' && universityContent}
+      {(section === 'universidade' || section === 'biblioteca') && universityContent}
 
       {section === 'consultor' && (
         <ConsultorIaStoreSection storeId={data.operationalStore?.id || null} />

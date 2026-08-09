@@ -180,8 +180,8 @@ export default function PDIPage({ hideHeader = false }) {
         {/* Technical */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
           <h3 className="text-base font-semibold text-mx-navy mb-6">Competências Técnicas</h3>
-          <div className="h-64 mb-6">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-64 mb-6 w-full min-w-0">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={256} initialDimension={{ width: 320, height: 256 }}>
               <RadarChart data={techData}>
                 <PolarGrid stroke="#e2e8f0" />
                 <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: '#64748b' }} />
@@ -212,8 +212,8 @@ export default function PDIPage({ hideHeader = false }) {
         {/* Behavioral */}
         <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
           <h3 className="text-base font-semibold text-mx-navy mb-6">Competências Comportamentais</h3>
-          <div className="h-64 mb-6">
-            <ResponsiveContainer width="100%" height="100%">
+          <div className="h-64 mb-6 w-full min-w-0">
+            <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={256} initialDimension={{ width: 320, height: 256 }}>
               <RadarChart data={behavData}>
                 <PolarGrid stroke="#e2e8f0" />
                 <PolarAngleAxis dataKey="subject" tick={{ fontSize: 10, fill: '#64748b' }} />

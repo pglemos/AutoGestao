@@ -5,6 +5,7 @@ import { fileURLToPath } from 'node:url'
 const currentDir = path.dirname(fileURLToPath(import.meta.url))
 const projectRoot = path.resolve(currentDir, '..')
 const sourceRoot = path.join(projectRoot, 'src')
+const checkOnly = process.argv.includes('--check')
 
 function listFiles(dir) {
   const files = []
@@ -37,7 +38,7 @@ for (const file of allFiles) {
   }
 }
 
-console.log(`Found ${findings.length} imports referencing owner-b44 / owner-base44:`)
+console.log(`Found ${findings.length} runtime imports referencing the retired Dono namespaces:`)
 console.log(JSON.stringify(findings, null, 2))
 
 // Classification
@@ -50,13 +51,18 @@ const classification = findings.map(f => {
   return { ...f, status }
 })
 
-const reportPath = path.join(projectRoot, 'docs/execution/2026-08-05-owner-b44-graph.md')
-let md = `# GRAFO DE IMPORTS E CLASSIFICAÇÃO DE DEPENDÊNCIAS OWNER-B44 — 2026-08-05\n\n`
-md += `| Arquivo Consumidor | Import Specifier | Classificação | Ação |\n`
-md += `|---|---|---|---|\n`
-for (const item of classification) {
-  md += `| \`${item.file}\` | \`${item.specifier}\` | ${item.status} | Migrar helpers para \`src/lib/\` ou \`src/design-system/\` |\n`
+if (!checkOnly) {
+  const reportPath = path.join(projectRoot, 'docs/execution/2026-08-05-owner-b44-graph.md')
+  let md = `# GRAFO DE IMPORTS E CLASSIFICAÇÃO DE DEPENDÊNCIAS RETIRADAS DO DONO — 2026-08-05\n\n`
+  md += `O guard cobre apenas imports runtime em \`src/\`; menções documentais não são dependências.\n\n`
+  md += `| Arquivo Consumidor | Import Specifier | Classificação | Ação |\n`
+  md += `|---|---|---|---|\n`
+  for (const item of classification) {
+    md += `| \`${item.file}\` | \`${item.specifier}\` | ${item.status} | Migrar para os módulos canônicos do Dono |\n`
+  }
+  if (classification.length === 0) md += '| — | — | nenhuma dependência runtime | guard CI ativo |\n'
+  fs.writeFileSync(reportPath, md, 'utf8')
+  console.log(`Wrote graph report to ${reportPath}`)
 }
 
-fs.writeFileSync(reportPath, md, 'utf8')
-console.log(`Wrote graph report to ${reportPath}`)
+if (findings.length > 0) process.exitCode = 1

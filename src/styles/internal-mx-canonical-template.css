@@ -1,5 +1,5 @@
 /*
- * Escopo legado de aparência dos perfis internos eliminado (C0.3):
+ * Template canônico compartilhado dos perfis internos MX (C0.3):
  *
  * - As variáveis de superfície (`--mx-page-bg`, `--mx-surface`, …) foram
  *   promovidas para `:root` em `src/design-system/tokens/semantic.css`.
@@ -8,8 +8,8 @@
  *   declaram os mesmos valores (Base44), inclusive nas páginas internas ainda
  *   não registradas no template (ex.: fechamento-diário usa classes próprias
  *   com os mesmos valores).
- * - O atributo de escopo saiu de `InternalMxVisualScope.tsx`; reintrodução é
- *   bloqueada por `scripts/audit-legacy-scopes.mjs` (CI).
+ * - O template é carregado por `InternalMxCanonicalSurface.tsx`; atributos de
+ *   escopo por perfil são bloqueados por `scripts/audit-legacy-scopes.mjs`.
  *
  * O restante deste arquivo é o sistema canônico do template — classe
  * `.mx-canonical-template` e variantes — consumido via
@@ -411,8 +411,7 @@
 }
 
 @media (max-width: 767px) {
-  .mx-canonical-template main:not([data-mx-module-page]),
-  .mx-canonical-template [data-mx-module-page] > div {
+  .mx-canonical-template main:not([data-mx-module-page]) {
     gap: 1rem;
     padding: 1rem 0.75rem 5rem;
   }

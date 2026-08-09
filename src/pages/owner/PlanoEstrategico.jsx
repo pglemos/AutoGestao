@@ -1,7 +1,7 @@
 import { useCallback } from 'react'
 import { useOutletContext } from 'react-router-dom'
 import { useOwner } from '@/components/owner/OwnerContext'
-import { useAuth } from '@/lib/owner-b44/AuthContext'
+import { useAuth } from '@/features/owner/lib/ownerAuth'
 import { PlanningWorkspaceProvider } from '@/features/planning-workspace'
 import { resolveOwnerPlanningStoreId, toOwnerPlanningActor } from '@/components/owner/ownerPlanningAdapter'
 import { StrategicPlanWorkspace } from '@/features/strategic-plan/StrategicPlanWorkspace'

@@ -10,6 +10,7 @@ describe('OwnerRoutineRoute contract', () => {
   })
 
   it('entrega a rotina gerencial apenas quando o dono assume a gestão', () => {
-    expect(source).toContain('management.ownerAssumesManagement ? <RotinaGerente /> : <RotinaDoDia />')
+    expect(source).toContain('management.ownerAssumesManagement ? <RotinaGerente /> : <DashboardLoja />')
+    expect(source).not.toContain('RotinaDoDia')
   })
 })

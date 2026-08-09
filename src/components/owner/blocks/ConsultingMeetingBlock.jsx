@@ -2,7 +2,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import DetailDrawer from "@/components/owner/DetailDrawer";
 import { useOwner } from "@/components/owner/OwnerContext";
-import { formatDate, formatTime } from "@/lib/owner-b44/format";
+import { formatDate, formatTime } from "@/features/owner/lib/ownerFormatters";
 import { CalendarClock, Clock, UserCircle, CheckSquare, Gavel, ListChecks } from "lucide-react";
 
 export default function ConsultingMeetingBlock({ meeting }) {

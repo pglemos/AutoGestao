@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { base44 } from "@/features/owner-base44/b44adapter";
+import { base44 } from "@/features/owner/ownerRepository";
 import { useOwner } from "@/components/owner/OwnerContext";
-import { useAuth } from "@/lib/owner-b44/AuthContext";
-import { logAudit } from "@/lib/owner-b44/audit";
+import { useAuth } from "@/features/owner/lib/ownerAuth";
+import { logAudit } from "@/features/owner/lib/ownerAudit";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -17,8 +17,8 @@ import {
 } from "@/components/ui/dialog";
 import DetailDrawer from "@/components/owner/DetailDrawer";
 import StatusBadge from "@/components/owner/StatusBadge";
-import { formatBRL, formatDate, relativeDayLabel, formatDateTime } from "@/lib/owner-b44/format";
-import { IMPACT_LABELS, DEPARTMENT_LABELS } from "@/lib/owner-b44/status";
+import { formatBRL, formatDate, relativeDayLabel, formatDateTime } from "@/features/owner/lib/ownerFormatters";
+import { IMPACT_LABELS, DEPARTMENT_LABELS } from "@/features/owner/lib/ownerStatus";
 
 const deptLabel = (d) => DEPARTMENT_LABELS[d] || d || "—";
 

@@ -1,4 +1,4 @@
-import { getStatusMeta, TONE_CLASSES, DOT_CLASSES } from "@/lib/owner-b44/status";
+import { getStatusMeta, TONE_CLASSES, DOT_CLASSES } from "@/features/owner/lib/ownerStatus";
 import { cn } from "@/lib/utils";
 
 export default function StatusBadge({ status, className }) {

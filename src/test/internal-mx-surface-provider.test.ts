@@ -11,10 +11,10 @@ const read = (path: string) => readFileSync(path, 'utf8')
 describe('superfície unificada do MX', () => {
   test('mantém o escopo dos perfis internos MX', () => {
     const roleScope = read('src/components/module/MxRoleVisualScope.tsx')
-    const internalScope = read('src/components/module/InternalMxVisualScope.tsx')
+    const internalScope = read('src/components/module/InternalMxCanonicalSurface.tsx')
 
     expect(roleScope).toContain('isPerfilInternoMx(role)')
-    expect(roleScope).toContain('<InternalMxVisualScope role={role}>')
+    expect(roleScope).toContain('<InternalMxCanonicalSurface role={role}>')
     expect(internalScope).toContain('data-mx-visual-system="manager"')
   })
 

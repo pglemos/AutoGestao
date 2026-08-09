@@ -56,9 +56,9 @@ describe('contrato canônico do módulo interno MX', () => {
   })
 
   test('a composição não adiciona seletores específicos por rota', () => {
-    const legacyCss = read('src/styles/internal-mx-manager-scope.css')
+    const canonicalCss = read('src/styles/internal-mx-canonical-template.css')
     const slotsCss = read('src/styles/internal-mx-template-slots.css')
-    const css = `${legacyCss}\n${slotsCss}`
+    const css = `${canonicalCss}\n${slotsCss}`
     expect(css).toContain('.mx-canonical-template')
     expect(css).toContain('[data-mx-template-shell]')
     expect(css).toContain('[data-mx-template-page]')
@@ -68,8 +68,8 @@ describe('contrato canônico do módulo interno MX', () => {
   })
 
   test('o escopo não duplica o padding do MxModulePage', () => {
-    const legacyCss = read('src/styles/internal-mx-manager-scope.css')
-    const modulePageRule = legacyCss.split('.mx-canonical-template [data-mx-module-page] > div')[1]?.split('}')[0] ?? ''
+    const canonicalCss = read('src/styles/internal-mx-canonical-template.css')
+    const modulePageRule = canonicalCss.split('.mx-canonical-template [data-mx-module-page] > div')[1]?.split('}')[0] ?? ''
     expect(modulePageRule).toContain('padding: 0')
     expect(modulePageRule).not.toMatch(/padding:\s*1\.5rem/)
   })
@@ -94,8 +94,8 @@ describe('contrato canônico do módulo interno MX', () => {
   })
 
   test('o escopo visual importa a camada explícita de slots', () => {
-    const scope = read('src/components/module/InternalMxVisualScope.tsx')
-    expect(scope).toContain("@/styles/internal-mx-template-slots.css")
+    const surface = read('src/components/module/InternalMxCanonicalSurface.tsx')
+    expect(surface).toContain("@/styles/internal-mx-template-slots.css")
   })
 
   test('PageHeading permanece apenas como ponte compacta para páginas ainda não migradas', () => {

@@ -19,7 +19,7 @@ test('auditText ignora menções documentais e imports', () => {
   const mentions = [
     "expect(scope).not.toContain('mx-manager-scope')",
     "import { useIsMobile } from '@/lib/owner-b44/use-mobile'",
-    "import '@/styles/internal-mx-manager-scope.css'",
+    "import '@/styles/internal-mx-canonical-template.css'",
     'documentado em docs/adr/ADR-MX-002 (`.owner-b44`)',
   ]
   for (const source of mentions) {

@@ -3,35 +3,59 @@ import path from 'node:path'
 import { execSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
-const currentDir = path.dirname(fileURLToPath(import.meta.url))
-const projectRoot = path.resolve(currentDir, '..')
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const tick = String.fromCharCode(96)
+const snapshot = JSON.parse(fs.readFileSync(path.join(projectRoot, 'docs/execution/2026-08-09-supabase-security-snapshot.json'), 'utf8'))
+const sha = execSync('git rev-parse HEAD', { cwd: projectRoot }).toString().trim()
+const branch = execSync('git branch --show-current', { cwd: projectRoot }).toString().trim()
+const remoteBranches = execSync("git for-each-ref --format='%(refname:short)' refs/remotes/origin", { cwd: projectRoot })
+  .toString().split('\n').filter(Boolean).filter(name => !name.endsWith('/HEAD') && !name.endsWith('/main'))
+const dependabotBranches = remoteBranches.filter(name => name.includes('/dependabot/'))
+const edgeMatrix = fs.readFileSync(path.join(projectRoot, 'docs/execution/2026-08-09-edge-functions-matrix.md'), 'utf8')
+const edgeFunctionCount = edgeMatrix.match(/^\| EF-\d+/gm)?.length ?? 0
+const edgeNoJwtCount = edgeMatrix.split('\n').filter(line => /^\| EF-\d+/.test(line) && line.includes('| não |')).length
+let ownerGraph = 'not captured'
+try {
+  const guardOutput = execSync('node scripts/audit-owner-b44-graph.mjs --check', {
+    cwd: projectRoot,
+    encoding: 'utf8',
+  })
+  ownerGraph = guardOutput.match(/Found (\d+) runtime imports/)?.[1] ?? ownerGraph
+} catch {
+  ownerGraph = 'guard falhou; ver saída de audit-owner-b44-graph'
+}
 
-const CURRENT_SHA = execSync('git rev-parse HEAD', { cwd: projectRoot }).toString().trim().slice(0, 8)
+const md = [
+  '# Live progress — estado factual atual',
+  '',
+  '- **Gerado em:** ' + new Date().toISOString(),
+  '- **Branch:** ' + tick + branch + tick,
+  '- **SHA do checkout:** ' + tick + sha + tick,
+  '- **Status geral:** ' + tick + 'PARCIALMENTE IMPLEMENTADO — PRODUÇÃO OPERACIONAL, GARANTIAS COMPLETAS AINDA PENDENTES' + tick,
+  '- **Snapshot Supabase:** ' + tick + snapshot.generated_at + tick + ' (fonte SHA ' + tick + snapshot.sha + tick + ')',
+  '',
+  '| Task | Estado atual | Evidência atual | Próximo fechamento |',
+  '|---|---|---|---|',
+  '| C0.1 Design System | ' + tick + 'NOT_REEVALUATED' + tick + ' | Este gerador não executa os gates do workflow | Consultar CI no SHA final |',
+  '| C0.2 Dono / PR #175 | ' + tick + 'NOT_REEVALUATED' + tick + ' | Estado de PR/produção não é consultado por este gerador | Browser autenticado e dados reais |',
+  '| C0.3 Scopes legados | ' + tick + 'DONE_WITH_EVIDENCE' + tick + ' local | Guard encontrou ' + ownerGraph + ' imports runtime | Revalidar no CI/produção |',
+  '| C0.4 RLS | ' + tick + 'TESTED_LOCAL_ONLY' + tick + ' | ' + snapshot.rls_counts.public_tables + ' tabelas públicas com RLS e ' + snapshot.rls_counts.rls_without_policy + ' sem policy no snapshot | Testes por perfil/tenant |',
+  '| C0.5 SECURITY DEFINER | ' + tick + 'IN_PROGRESS' + tick + ' | ' + snapshot.function_counts.security_definer + ' catalogadas; anon=' + snapshot.function_counts.anon_executable + '; auth=' + snapshot.function_counts.authenticated_executable + '; service_role=' + snapshot.function_counts.service_role_executable + ' | Classificação e testes por assinatura |',
+  '| C0.6 Edge Functions | ' + tick + 'IN_PROGRESS' + tick + ' | ' + edgeFunctionCount + ' funções catalogadas no artefato local; ' + edgeNoJwtCount + ' com verify_jwt=false; deployment não consultado | OPTIONS/sem auth/JWT/tenant por endpoint |',
+  '| C0.7 Proteção main | ' + tick + 'NOT_REEVALUATED' + tick + ' | GitHub protection/checks não são consultados por este gerador | Revalidar via GitHub no SHA final |',
+  '| C0.8 Branches | ' + tick + 'NOT_REEVALUATED' + tick + ' | ' + remoteBranches.length + ' refs fora de main no mirror local; ' + dependabotBranches.length + ' nomes contêm dependabot; PR/estado remoto não consultado | Confirmar via GitHub e registrar retenção/remoção |',
+  '| C0.9 Deployment | ' + tick + 'NOT_REEVALUATED' + tick + ' | Health/deployment do checkpoint anterior | Revalidar após SHA final |',
+  '| C0.10 Evidências | ' + tick + 'IN_PROGRESS' + tick + ' | Snapshot e matriz atuais criados | Browser, Sentry, restore e rollback |',
+  '',
+  '## Bloqueios explícitos',
+  '',
+  '- QA browser autenticado completo ainda não capturado.',
+  '- Sentry exige reautenticação para evento sintético/source map/alerta.',
+  '- Restore/PITR e rollback real ainda não comprovados.',
+  '- Admin Geral e Consultor MX não possuem credencial comprovada nesta execução.',
+  '',
+].join('\n')
 
-let md = `# LIVE PROGRESS LOG (RETIFICADO) — 2026-08-05
-
-- **Status Geral:** \`EXECUÇÃO PARCIAL — EVIDÊNCIAS GERADAS INVALIDADAS E REEXECUÇÃO REAL PENDENTE\`
-- **Branch:** \`main\`
-- **SHA Atual:** \`${CURRENT_SHA}\`
-- **Proteção Main:** \`protected=true\`
-
----
-
-## 1. RESUMO DOS PONTOS DE ATENÇÃO
-
-| ID Task | Descrição | Estado Atual | Observações / Ação Necessária |
-|---|---|---|---|
-| C0.1 | Audit Design System V3 | \`TESTED_LOCAL_ONLY\` | 0 violações em 339 arquivos |
-| C0.2 | Reconciliação Dono / PR 175 | \`TESTED_LOCAL_ONLY\` | Portado para main, PR 175 fechada, ADR-MX-005 publicado |
-| C0.3 | Eliminar Legado owner-b44 | \`IN_PROGRESS — 37 IMPORTS DE LEGADO ATIVO\` | 37 imports mapeados no grafo |
-| C0.4 | RLS 8 Tabelas | \`TESTED_LOCAL_ONLY\` | Migration 20260805120000 criada e RLS habilitado |
-| C0.5 | 204 SECURITY DEFINER | \`IN_PROGRESS — REVISÃO GRANULAR PENDENTE\` | search_path fixado, revisão por assinatura em andamento |
-| C0.6 | 22 Edge Functions | \`IN_PROGRESS — REEXECUÇÃO REAL PENDENTE\` | 22 funções listadas (incluindo autonomous-reports) |
-| C0.7 | Proteção Branch Main | \`DONE_WITH_EVIDENCE\` | protected=true via API GitHub |
-| C0.8 | Limpeza Branches Remotas | \`DONE_WITH_EVIDENCE\` | 23 branches deletadas remotamente |
-| C0.9 | Revalidação Deployment | \`TESTED_PRODUCTION\` | HTTP 200 OK no /api/health |
-| C0.10 | Catalogação Evidências | \`IN_PROGRESS\` | Ledger retificado e evidências artificiais invalidadas |
-`
-
-fs.writeFileSync(path.join(projectRoot, 'docs/execution/2026-08-05-live-progress.md'), md, 'utf8')
-console.log('Live progress retified.')
+const outputPath = path.join(projectRoot, 'docs/execution/2026-08-09-live-progress.md')
+fs.writeFileSync(outputPath, md, 'utf8')
+console.log(outputPath)

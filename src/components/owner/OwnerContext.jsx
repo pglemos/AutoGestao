@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useEffect, useMemo, useState, useCallback } from "react";
-import { useAuth } from "@/lib/owner-b44/AuthContext";
+import { useAuth } from "@/features/owner/lib/ownerAuth";
 import { useStores } from "@/hooks/useStores";
 import { resolveOwnerPeriodRange } from "@/lib/owner-period";
 

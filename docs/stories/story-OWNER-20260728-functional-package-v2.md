@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready for Review
+Ready for Review — release final e smoke autenticado completo ainda pendentes
 
 ## Origem
 
@@ -68,3 +68,27 @@ Arquivos de governança adicionados:
 - `npm run build`: verde.
 - `verify_package_contracts.mjs`: verde.
 - Contratos Dono/dados reais/tabela: 22/22 verdes.
+
+## Atualização de execução — 2026-08-09
+
+- `/universidade-mx`, `/rotina` e `/decisoes` do Dono deixaram de encaminhar para placeholders e usam as superfícies canônicas de dados.
+- Período trimestral, PDI responsivo, health check server-side e ponte de métricas do Sentry receberam contratos focados.
+- Scopes/namespace legados foram removidos do runtime; `audit-owner-b44-graph.mjs --check` encontrou 0 imports retirados.
+- Gates locais finais: `npm run lint`, `npm run typecheck`, `npm test` (2.589 testes / 18.131 expectativas), `npm run build`, `npm run check:bundle-size`, `npm run audit:routes-data`, `git diff --check` e `gitleaks` passaram.
+- Migrations remotas aplicadas: `20260809143559_revoke_anon_mentor_trigger_execute.sql` e `20260809152358_harden_backup_is_venda_loja_policy.sql`.
+- Publicação do SHA final, smoke autenticado completo e provas externas de Sentry/restore/rollback permanecem pendentes; ver `docs/execution/2026-08-09-final-report.md`.
+
+### File List — atualização 2026-08-09
+
+- `src/App.tsx`
+- `src/features/dashboard-loja/sections/OwnerExecutiveCockpit.tsx`
+- `src/features/owner/OwnerRoutineRoute.tsx`
+- `src/features/owner/ownerRepository.js`
+- `src/features/owner/lib/ownerAudit.ts`
+- `src/features/owner/lib/ownerAuth.ts`
+- `src/features/universidade/sections/UniversidadeMx.tsx`
+- `src/lib/owner-period.ts`
+- `src/lib/observability/sentry.ts`
+- `supabase/migrations/20260809143559_revoke_anon_mentor_trigger_execute.sql`
+- `supabase/migrations/20260809152358_harden_backup_is_venda_loja_policy.sql`
+- `docs/execution/2026-08-09-final-report.md`

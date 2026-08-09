@@ -1,5 +1,9 @@
 # Matriz de Rotas por Perfil — MX Gestão Preditiva (2026-08-05)
 
+> SUPERSEDED — histórico preservado; não é evidência da release atual.
+> Consulte os snapshots e o relatório atuais em `docs/execution/2026-08-09-*.md`.
+
+
 ## Mapeamento de Rotas e Permissões
 | Rota | Vendedor | Gerente | Dono | Admin Geral | Admin MX | Consultor MX |
 |---|---|---|---|---|---|---|

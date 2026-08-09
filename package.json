@@ -15,7 +15,7 @@
     "clean": "rm -rf dist",
     "check:bundle-size": "node scripts/check_bundle_size.mjs",
     "audit:routes-data": "node scripts/audit_route_data_inventory.mjs --check",
-    "lint": "tsc --noEmit && node scripts/lint-css-tokens.mjs && node scripts/lint-tokens-ast.mjs && node scripts/lint-z-index.mjs && node scripts/lint-page-roots.mjs && node scripts/lint-landmarks.mjs && node scripts/audit-wcag-contrast.mjs && node scripts/audit-typography.mjs && node scripts/lint-spacing.mjs && node scripts/lint-radius-shadow.mjs && node scripts/lint-motion.mjs && node scripts/lint-typography.mjs && node scripts/lint-dimensions.mjs && node scripts/lint-colors.mjs && eslint 'src/**/*.{ts,tsx}'",
+    "lint": "tsc --noEmit && node scripts/lint-css-tokens.mjs && node scripts/lint-tokens-ast.mjs && node scripts/lint-z-index.mjs && node scripts/lint-page-roots.mjs && node scripts/lint-landmarks.mjs && node scripts/audit-wcag-contrast.mjs && node scripts/audit-typography.mjs && node scripts/lint-spacing.mjs && node scripts/lint-radius-shadow.mjs && node scripts/lint-motion.mjs && node scripts/lint-typography.mjs && node scripts/lint-dimensions.mjs && node scripts/lint-colors.mjs && node scripts/audit-owner-b44-graph.mjs --check && node scripts/audit-legacy-scopes.mjs && eslint 'src/**/*.{ts,tsx}'",
     "lint:tokens": "node scripts/lint-tokens-ast.mjs",
     "lint:z-index": "node scripts/lint-z-index.mjs",
     "lint:page-roots": "node scripts/lint-page-roots.mjs",
@@ -206,7 +206,7 @@
       "ajv": "8.20.0"
     },
     "esbuild": "0.25.12",
-    "js-yaml": "4.3.0",
+    "js-yaml": "4.3.1",
     "smol-toml": "1.7.1",
     "tar": "7.5.22",
     "undici": "6.28.0"

@@ -1068,9 +1068,15 @@ function DisciplineTrendCard({
           ))}
         </div>
       </div>
-      <div className="mt-4 h-[280px]">
+      <div className="mt-4 h-[280px] w-full min-w-0">
         {hasData ? (
-          <ResponsiveContainer width="100%" height="100%">
+          <ResponsiveContainer
+            width="100%"
+            height="100%"
+            minWidth={0}
+            minHeight={280}
+            initialDimension={{ width: 320, height: 280 }}
+          >
             <LineChart
               data={trend}
               margin={{ top: 18, right: 12, bottom: 0, left: 0 }}

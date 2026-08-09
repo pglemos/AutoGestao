@@ -7,7 +7,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { MONTHS, MONTHS_FULL, SELECTED_MONTH_INDEX, formatCellValue, consolidateValues, getConsolidatedLabel, AREA_STYLES } from './strategicUtils'
 import { DIRECTION_LABELS, AGGREGATION_LABELS, FORMAT_LABELS } from './strategicIndicatorCatalog'
 import { useToast } from '@/components/ui/use-toast'
-import { useAuth } from '@/lib/owner-b44/AuthContext'
+import { useAuth } from '@/features/owner/lib/ownerAuth'
 import { ShoppingCart, Megaphone, Package, Wallet, Settings } from 'lucide-react'
 
 const AREA_ICONS = { Vendas: ShoppingCart, Marketing: Megaphone, Estoque: Package, Financeiro: Wallet, Operacional: Settings }

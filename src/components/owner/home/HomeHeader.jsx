@@ -1,5 +1,5 @@
 import { Home } from "lucide-react";
-import { greetingByHour } from "@/lib/owner-b44/format";
+import { greetingByHour } from "@/features/owner/lib/ownerFormatters";
 import { useOwner } from "@/components/owner/OwnerContext";
 import OwnerPageHeading from "@/components/owner/OwnerPageHeading";
 

@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import StatusBadge from "@/components/owner/StatusBadge";
-import { formatBRL, formatPercent, formatNumber, formatDateTime } from "@/lib/owner-b44/format";
+import { formatBRL, formatPercent, formatNumber, formatDateTime } from "@/features/owner/lib/ownerFormatters";
 import { ArrowUpRight } from "lucide-react";
 
 // Barra de progresso compacta com cor de status

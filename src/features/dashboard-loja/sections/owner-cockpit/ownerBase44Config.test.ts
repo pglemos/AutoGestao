@@ -150,6 +150,19 @@ describe('contrato do módulo Dono inspirado no Base44', () => {
     expect(resolveOwnerDepartmentFromPath('/dono/departamentos')).toBeNull()
   })
 
+  test('resolve os aliases legados da raiz para o mesmo cockpit de dados reais', () => {
+    expect(resolveOwnerLocation('/home', '')).toBe('home')
+    expect(resolveOwnerLocation('/rotina', '')).toBe('rotina')
+    expect(resolveOwnerLocation('/decisoes', '')).toBe('decisoes')
+    expect(resolveOwnerLocation('/plano-estrategico', '')).toBe('planejamento')
+    expect(resolveOwnerLocation('/plano-acao', '')).toBe('plano-acao')
+    expect(resolveOwnerLocation('/consultoria', '')).toBe('consultoria')
+    expect(resolveOwnerLocation('/departamentos/financeiro', '')).toBe('departamentos')
+    expect(resolveOwnerLocation('/mercado', '')).toBe('mercado')
+    expect(resolveOwnerLocation('/universidade-mx', '')).toBe('universidade')
+    expect(resolveOwnerDepartmentFromPath('/departamentos/financeiro')).toBe('financeiro')
+  })
+
   test('mantém apenas departamentos canônicos no contexto executivo', () => {
     expect(resolveOwnerSection('?ownerSection=departamentos-visao-geral')).toBe('departamentos')
     expect(resolveOwnerSection('?ownerSection=departamentos-comercial')).toBe('departamentos')

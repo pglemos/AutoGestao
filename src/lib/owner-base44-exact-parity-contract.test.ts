@@ -64,7 +64,7 @@ describe('contrato do módulo Dono Base44 aprovado', () => {
   })
 
   it('mantém o vínculo de consultoria à sessão autenticada', () => {
-    const adapter = read('src/features/owner-base44/b44adapter.js')
+    const adapter = read('src/features/owner/ownerRepository.js')
     expect(adapter).toContain('const { data: auth, error: authError } = await supabase.auth.getUser()')
     expect(adapter).toContain("if (authError || !userId) throw new Error('Usuário não identificado')")
     expect(adapter).not.toContain('payload.created_by')

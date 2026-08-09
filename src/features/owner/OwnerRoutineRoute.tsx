@@ -1,5 +1,5 @@
 import RotinaGerente from '@/pages/RotinaGerente'
-import { RotinaDoDia } from '@/pages/owner/Placeholders'
+import DashboardLoja from '@/features/dashboard-loja/DashboardLoja.container'
 import { useAuth } from '@/hooks/useAuth'
 import { useStoreManagementContext } from '@/hooks/useStoreManagementContext'
 
@@ -18,5 +18,5 @@ export default function OwnerRoutineRoute() {
     )
   }
 
-  return management.ownerAssumesManagement ? <RotinaGerente /> : <RotinaDoDia />
+  return management.ownerAssumesManagement ? <RotinaGerente /> : <DashboardLoja />
 }

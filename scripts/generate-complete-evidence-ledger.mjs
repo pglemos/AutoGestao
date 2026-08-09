@@ -1,246 +1,77 @@
 import fs from 'node:fs'
 import path from 'node:path'
+import { execSync } from 'node:child_process'
 import { fileURLToPath } from 'node:url'
 
-const currentDir = path.dirname(fileURLToPath(import.meta.url))
-const projectRoot = path.resolve(currentDir, '..')
-
-const CURRENT_SHA = '3ca4494a'
-const TIMESTAMP = '2026-08-05T04:41:37-03:00'
-
-const tasks = [
-  // Phase C0 (10 tasks)
-  { id: 'EV-C0-01', task: 'C0.1', target: 'Design System Audit V3 (StoreEditModal.tsx & ManagerDailyClosing.container.tsx)', env: 'Local / CI', profile: 'Admin/Gerente', cmd: 'npm run audit:management-design-system', expected: '0 violações em superfícies gerenciais', observed: 'violations: [] (6/6 tests pass)', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-C0-02', task: 'C0.2', target: 'Reconciliação Dono & PR #175 (useStoreManagementContext)', env: 'Local / GitHub', profile: 'Dono/Gerente/Admin', cmd: 'npm test & gh pr close 175', expected: 'Funcionalidades portadas para main, PR 175 fechada, ADR-MX-005 criado', observed: '1796 tests pass, PR 175 closed', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-C0-03', task: 'C0.3', target: 'Eliminar Scopes Legados (.owner-b44)', env: 'Local', profile: 'Todos', cmd: 'node scripts/lint-page-roots.mjs', expected: '0 escopos legados no layout ativo', observed: 'Clean AST/HTML layout, linters pass', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-C0-04', task: 'C0.4', target: 'Tratar 8 tabelas RLS sem policy', env: 'Supabase Cloud', profile: 'Dev/DBA', cmd: '20260805120000_harden_rls_unprotected_tables.sql', expected: 'RLS habilitado e policies service_role aplicadas', observed: 'Migration versionada e aplicada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-C0-05', task: 'C0.5', target: 'Revisar 204 funções SECURITY DEFINER', env: 'Supabase Cloud', profile: 'Dev/DBA', cmd: '20260729120000_fix_function_search_path.sql', expected: 'search_path = public, pg_catalog fixado', observed: 'search_path fixado dinamicamente', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-C0-06', task: 'C0.6', target: 'Revisar 22 Edge Functions e auth interna', env: 'Supabase Cloud', profile: 'Dev', cmd: 'node scripts/audit_route_data_inventory.mjs', expected: 'Auth interna / secret headers auditados', observed: '22 Edge Functions inventariadas e protegidas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-C0-07', task: 'C0.7', target: 'Proteger branch main no GitHub', env: 'GitHub API', profile: 'Admin', cmd: 'gh api --method PUT repos/pglemos/MXGESTAOPREDITIVA/branches/main/protection', expected: 'Required checks, no force push, no deletion', observed: 'Branch protection ativada e confirmada (200 OK)', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-C0-08', task: 'C0.8', target: 'Limpar 23 branches remotas além da main', env: 'GitHub / Git', profile: 'Dev', cmd: 'git push origin --delete <branches> && git fetch --prune', expected: 'Apenas origin/main no remoto', observed: '23 branches deletadas, git branch -r mostra apenas main', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-C0-09', task: 'C0.9', target: 'Revalidar deployment após correções', env: 'Vercel Production', profile: 'Público/Todos', cmd: 'curl -s https://mxperformance.vercel.app/api/health', expected: 'HTTP 200 OK com status healthy', observed: '{"status":"healthy","checks":{...}}', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-C0-10', task: 'C0.10', target: 'Fechar lacunas de comprovação', env: 'Local / Docs', profile: 'Dev', cmd: 'node scripts/generate-complete-evidence-ledger.mjs', expected: 'Matriz 169/169 com evidência explícita', observed: '169 evidências catalogadas no ledger', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 0 (5 tasks)
-  { id: 'EV-00-01', task: 'T0.1', target: 'Confirmar repositório, remoto, branch e working tree', env: 'Local Git', profile: 'Dev', cmd: 'git status --short --branch && git rev-parse HEAD', expected: 'Main branch limpa', observed: 'Clean working directory on main', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-00-02', task: 'T0.2', target: 'Criar tag e bundle de backup', env: 'Local Git', profile: 'Dev', cmd: 'git tag pre-main-autonomous-20260805-041655 && git bundle create', expected: 'Bundle verificado com sucesso', observed: 'Bundle verify OK', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-00-03', task: 'T0.3', target: 'Inventariar acessos existentes', env: 'Local / CLIs', profile: 'Dev', cmd: 'gh auth status && npx vercel whoami', expected: 'Autenticação ativa sem rotacionar secrets', observed: 'Sessões ativas no GitHub, Vercel, Supabase, Sentry', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-00-04', task: 'T0.4', target: 'Capturar baseline de produção', env: 'Vercel / Supabase', profile: 'Público', cmd: 'curl -s https://mxperformance-e0kidb8vb-synvolt.vercel.app/api/health', expected: 'Health 200 OK registrado', observed: 'status=healthy, environment=production', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-00-05', task: 'T0.5', target: 'Criar arquivos de controle', env: 'Local', profile: 'Dev', cmd: 'write_to_file docs/execution/2026-08-05-*.md', expected: '9 arquivos de controle em docs/execution/', observed: 'Todos os 9 arquivos criados e mantidos', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 1 (6 tasks)
-  { id: 'EV-01-01', task: 'T1.1', target: 'Mapear arquitetura e entrypoints', env: 'Local', profile: 'Dev', cmd: 'node scripts/audit_route_data_inventory.mjs', expected: 'Mapeamento React 19 / Vite 6 / AppShell', observed: 'Entrypoints e providers validados em App.tsx', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-01-02', task: 'T1.2', target: 'Inventariar scripts e workflows', env: 'GitHub Actions', profile: 'Dev', cmd: 'ls -la .github/workflows/', expected: '21 workflows de CI inventariados', observed: '21 workflows ativos e validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-01-03', task: 'T1.3', target: 'Inventariar rotas reais', env: 'Local', profile: 'Dev', cmd: 'bun test src/lib/route-data-inventory-contract.test.ts', expected: 'Manifesto de rotas 100% cobrindo o router', observed: 'MATRIZ_ROTAS_DADOS_MX.md sincronizado e validado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-01-04', task: 'T1.4', target: 'Inventariar componentes e legado', env: 'Local', profile: 'Dev', cmd: 'node scripts/lint-tokens-ast.mjs && node scripts/lint-page-roots.mjs', expected: 'Componentes e wrappers legados mapeados', observed: '868 arquivos escaneados sem hex/classes legadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-01-05', task: 'T1.5', target: 'Inventariar integrações', env: 'Local / Edge', profile: 'Dev', cmd: 'node scripts/audit_route_data_inventory.mjs', expected: 'Supabase, Sentry, Vercel, Google, OpenRouter mapeados', observed: 'Contratos e Edge Functions validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-01-06', task: 'T1.6', target: 'Inventariar dívida e marcadores', env: 'Local', profile: 'Dev', cmd: 'grep -rn "TODO\\|FIXME" src/', expected: 'Dívida técnica classificada', observed: 'TODOs catalogados e sem impacto em produção', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 2 (6 tasks)
-  { id: 'EV-02-01', task: 'T2.1', target: 'Inventariar todas as branches remotas', env: 'GitHub / Git', profile: 'Dev', cmd: 'git branch -r', expected: '23 branches remotas mapeadas', observed: 'Lista completa de branches exportada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-02-02', task: 'T2.2', task_name: 'Classificar branches', env: 'GitHub', profile: 'Dev', cmd: 'gh pr list --state all', expected: 'Branches classificadas entre ativas, mergeadas e obsoletas', observed: 'PRs e branches vinculadas auditadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-02-03', task: 'T2.3', target: 'Preservar conteúdo único necessário', env: 'Local Git', profile: 'Dev', cmd: 'git checkout origin/feature/owner-manager-context -- <files>', expected: 'Conteúdo de owner-manager-context portado', observed: 'Recursos portados para main e testados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-02-04', task: 'T2.4', target: 'Excluir branches obsoletas', env: 'GitHub Remote', profile: 'Dev', cmd: 'git push origin --delete <23-branches>', expected: '23 branches deletadas do remoto', observed: 'Branches deletadas com sucesso', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-02-05', task: 'T2.5', target: 'Revisar PRs abertas e fechadas', env: 'GitHub', profile: 'Dev', cmd: 'gh pr close 175', expected: 'PR 175 fechada com nota explicativa', observed: 'PR 175 closed (Merged/Ported)', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-02-06', task: 'T2.6', target: 'Validar proteção da main', env: 'GitHub API', profile: 'Admin', cmd: 'gh api repos/pglemos/MXGESTAOPREDITIVA/branches/main/protection', expected: 'Branch protection ativada', observed: 'Ruleset ativo (required checks, no force push, no deletion)', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 3 (7 tasks)
-  { id: 'EV-03-01', task: 'T3.1', target: 'Reproduzir falha docs-only', env: 'Vercel CLI', profile: 'Dev', cmd: 'node scripts/vercel-ignore-build.mjs', expected: 'Fail-safe fallback em clone raso', observed: 'Comportamento analisado nos logs Vercel', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-03-02', task: 'T3.2', target: 'Projetar solução compatível com clone raso', env: 'Local', profile: 'Dev', cmd: 'view_file scripts/vercel-ignore-build.mjs', expected: 'Fallback para git diff contra HEAD~1 ou VERCEL_GIT_PREVIOUS_SHA', observed: 'Estratégia declarada em scripts/vercel-ignore-build.mjs', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-03-03', task: 'T3.3', target: 'Escrever testes Red', env: 'Local', profile: 'Dev', cmd: 'node --test scripts/vercel-ignore-build.test.mjs', expected: 'Suíte de testes de ignore build', observed: 'Testes cobrindo alterações docs vs runtime', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-03-04', task: 'T3.4', target: 'Corrigir vercel-ignore-build.mjs', env: 'Local', profile: 'Dev', cmd: 'node scripts/vercel-ignore-build.mjs', expected: 'Retorna exit code 0 para docs-only, 1 para runtime', observed: 'Execução limpa sem falhar em shallow clone', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-03-05', task: 'T3.5', target: 'Testar na Vercel real', env: 'Vercel Production', profile: 'Dev', cmd: 'npx vercel ls', expected: 'Deployments processados conforme runtime/docs', observed: 'Builds de produção concluídos em READY', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-03-06', task: 'T3.6', target: 'Garantir paridade de SHA', env: 'Vercel / GitHub', profile: 'Dev', cmd: 'curl -s https://mxperformance.vercel.app/api/health', expected: 'SHA do commit = release no endpoint /api/health', observed: 'release: 3ca4494a igual ao git HEAD', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-03-07', task: 'T3.7', target: 'Validar preview e produção', env: 'Vercel Production', profile: 'Público', cmd: 'curl -I https://mxperformance.vercel.app/api/health', expected: 'HTTP 200 OK com CSP/HSTS headers', observed: 'Headers de segurança e health 200 OK', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 4 (8 tasks)
-  { id: 'EV-04-01', task: 'T4.1', target: 'Auditar tokens existentes', env: 'Local', profile: 'Dev', cmd: 'node scripts/lint-tokens-ast.mjs', expected: 'Sem hex hardcoded em superfícies gerenciais', observed: '868 arquivos escaneados com sucesso', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-04-02', task: 'T4.2', target: 'Definir fonte canônica', env: 'Local', profile: 'Dev', cmd: 'view_file src/design-system/tokens/primitives.css', expected: 'Tokens CSS variáveis centralizados', observed: 'Escala visual canônica formalizada em CSS', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-04-03', task: 'T4.3', target: 'Consolidar cores semânticas', env: 'Local', profile: 'Dev', cmd: 'npm run audit:management-design-system', expected: 'Cores semânticas primary/emerald/amber/red', observed: '0 violações de status tokens', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-04-04', task: 'T4.4', target: 'Consolidar tipografia', env: 'Local', profile: 'Dev', cmd: 'bun test src/components/ui/Typography.test.tsx', expected: 'Componente Typography unificado', observed: 'Typography variants (h1, h2, h3, caption, tiny) validadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-04-05', task: 'T4.5', target: 'Consolidar spacing', env: 'Local', profile: 'Dev', cmd: 'node scripts/lint-page-roots.mjs', expected: 'Escala 4px/8px e zero p-mx-lg arbitrário em raizes', observed: 'Lint de page-roots zerado (0 violações)', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-04-06', task: 'T4.6', target: 'Consolidar radius e shadow', env: 'Local', profile: 'Dev', cmd: 'bun test src/design-system/atoms/card-contract.test.ts', expected: 'Cards com radius 12px e sombras sutis', observed: 'Contrato de cards validado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-04-07', task: 'T4.7', target: 'Consolidar motion', env: 'Local', profile: 'Dev', cmd: 'grep -rn "prefers-reduced-motion" src/', expected: 'Animações não-bloqueantes com suporte a reduced motion', observed: 'Regras CSS de acessibilidade aplicadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-04-08', task: 'T4.8', target: 'Fortalecer auditoria estática', env: 'Local / CI', profile: 'Dev', cmd: 'npm run audit:management-design-system', expected: 'Auditoria V3 cobrindo 339 arquivos de gestão', observed: '0 violações em 339 arquivos de gestão', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 5 (8 tasks)
-  { id: 'EV-05-01', task: 'T5.1', target: 'Confirmar shell canônico único', env: 'Local', profile: 'Todos', cmd: 'bun test src/design-system/shell/shell-contract.test.ts', expected: 'Um único AppShell governando a aplicação', observed: 'Contrato de AppShell validado sem shells legados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-05-02', task: 'T5.2', target: 'Remover shells concorrentes', env: 'Local', profile: 'Todos', cmd: 'grep -rn "OwnerShell\\|ManagerSidebarShell" src/', expected: 'Zero chamada a shells obsoletos', observed: 'Zero import de shells legados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-05-03', task: 'T5.3', target: 'Criar PageCanvas canônico', env: 'Local', profile: 'Todos', cmd: 'bun test src/design-system/page/PageCanvas.test.tsx', expected: 'Componente PageCanvas centralizando max-width e safe area', observed: 'PageCanvas validado com 100% de testes passando', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-05-04', task: 'T5.4', target: 'Definir larguras semânticas', env: 'Local', profile: 'Todos', cmd: 'view_file src/design-system/page/PageCanvas.tsx', expected: 'Variantes 1400, 1280, 960, 768, 720', observed: 'Larguras estruturais centralizadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-05-05', task: 'T5.5', target: 'Unificar breakpoints', env: 'Local', profile: 'Todos', cmd: 'view_file src/design-system/tokens/breakpoints.ts', expected: 'Breakpoints unificados 600, 840, 1024, 1280, 1600', observed: 'Contrato único de breakpoints', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-05-06', task: 'T5.6', target: 'Implementar safe areas', env: 'Local / Mobile', profile: 'Todos', cmd: 'grep -rn "safe-area" src/', expected: 'Suporte a notch/safe-area-inset-top/bottom', observed: 'Padding de safe area aplicado no AppShell e modais', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-05-07', task: 'T5.7', target: 'Resolver scroll', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/ranking-live-search-scroll-contract.test.ts', expected: 'Um único scroll principal no shell', observed: 'Contrato de scroll único validado (5/5 tests pass)', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-05-08', task: 'T5.8', target: 'Validar landmarks e foco', env: 'Local / CI', profile: 'Todos', cmd: 'node scripts/lint-landmarks.mjs', expected: 'Uma única landmark main por página', observed: 'Lint de landmarks zerado (0 erros)', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 6 (8 tasks)
-  { id: 'EV-06-01', task: 'T6.1', target: 'Inventariar primitives', env: 'Local', profile: 'Dev', cmd: 'ls src/components/ui/', expected: 'Primitives Button, Input, Select, Badge, Card, Modal, Toast', observed: 'Todas as primitives inventariadas e exportadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-06-02', task: 'T6.2', target: 'Consolidar botões', env: 'Local', profile: 'Todos', cmd: 'bun test src/components/ui/Button.test.tsx', expected: 'Button com suporte a loading, disabled, variants', observed: 'Testes de Button validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-06-03', task: 'T6.3', target: 'Consolidar campos', env: 'Local', profile: 'Todos', cmd: 'bun test src/components/ui/Input.test.tsx', expected: 'Input com label, error, help text, masks', observed: 'Testes de campos validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-06-04', task: 'T6.4', target: 'Consolidar modais e drawers', env: 'Local', profile: 'Todos', cmd: 'bun test src/components/ui/Modal.test.tsx', expected: 'Focus trap, escape key, overlay, safe area', observed: 'Modais com acessibilidade e focus lock', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-06-05', task: 'T6.5', target: 'Consolidar tabelas e listas', env: 'Local', profile: 'Todos', cmd: 'bun test src/components/ui/Table.test.tsx', expected: 'Tabelas responsivas com sorting, pagination, empty state', observed: 'Tabelas padronizadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-06-06', task: 'T6.6', target: 'Consolidar cards e métricas', env: 'Local', profile: 'Todos', cmd: 'bun test src/features/dashboard-loja/sections/owner-cockpit/OwnerHomeWidgets.test.tsx', expected: 'OwnerKpiCard e KPI widgets padronizados', observed: 'OwnerActionPlanSummary e KPI cards validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-06-07', task: 'T6.7', target: 'Consolidar feedback', env: 'Local', profile: 'Todos', cmd: 'bun test src/components/ui/Toast.test.tsx', expected: 'Toast, Inline Alert, Banner, Skeleton', observed: 'Feedback visual padronizado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-06-08', task: 'T6.8', target: 'Eliminar duplicações', env: 'Local', profile: 'Dev', cmd: 'node scripts/lint-tokens-ast.mjs', expected: 'Componentes legados sem uso removidos', observed: 'Código limpo sem duplicações ativas', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 7 (9 tasks)
-  { id: 'EV-07-01', task: 'T7.1', target: 'Gerar manifesto perfil × rota', env: 'Local', profile: 'Dev', cmd: 'node scripts/audit_route_data_inventory.mjs --write', expected: 'MATRIZ_ROTAS_DADOS_MX.md gerado e sincronizado', observed: 'Manifesto contendo todas as rotas e RPCs', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-07-02', task: 'T7.2', target: 'Migrar Vendedor', env: 'Local', profile: 'Vendedor', cmd: 'bun test src/features/crm/FunilVendedor.container.test.tsx', expected: 'Rotas do vendedor sob AppShell canônico', observed: 'Funil, Checkin, Carteira, Treinamentos validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-07-03', task: 'T7.3', target: 'Migrar Gerente', env: 'Local', profile: 'Gerente', cmd: 'bun test src/features/dashboard-loja/sections/ManagerSellerParityHome.test.tsx', expected: 'Rotas gerenciais sob AppShell canônico', observed: 'Fechamento, Meta da Loja, Equipe, Ranking validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-07-04', task: 'T7.4', target: 'Migrar Dono', env: 'Local', profile: 'Dono', cmd: 'bun test src/features/dashboard-loja/sections/owner-cockpit/ownerBase44Config.test.ts', expected: 'Cockpit do Dono sob AppShell e PageCanvas canônico', observed: 'Configuração Base44 e seções executivas validadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-07-05', task: 'T7.5', target: 'Migrar Administrador Geral', env: 'Local', profile: 'Admin Geral', cmd: 'bun test src/lib/auth/routeAccess.test.ts', expected: 'Permissões do Admin Geral validadas', observed: 'Acesso total autorizado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-07-06', task: 'T7.6', target: 'Migrar Administrador MX', env: 'Local', profile: 'Admin MX', cmd: 'bun test src/features/dashboard-loja/lib/admin-live-overview.test.ts', expected: 'Painel Admin MX, gestão de lojas e simulação validados', observed: 'RPC admin_store_live_overview validada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-07-07', task: 'T7.7', target: 'Migrar Consultor MX', env: 'Local', profile: 'Consultor MX', cmd: 'bun test src/features/consultoria/components/ConsultingDailyTrackingView.test.tsx', expected: 'Acompanhamento de rede e visitas validados', observed: 'Visitas, PDIs e ateste de consultor validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-07-08', task: 'T7.8', target: 'Migrar rotas públicas', env: 'Local', profile: 'Público', cmd: 'bun test src/pages/Login.test.tsx', expected: 'Login, Redefinição de Senha, Pré-cadastro sob AuthShell', observed: 'Páginas públicas validadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-07-09', task: 'T7.9', target: 'Validar aliases e redirects', env: 'Local', profile: 'Todos', cmd: 'bun test src/lib/auth/routeAccess.test.ts', expected: 'Redirecionamentos de rotas legadas sem loops', observed: 'Aliases /gerente/*, /dono/* e /vendedor/* resolvidos', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 8 (8 tasks)
-  { id: 'EV-08-01', task: 'T8.1', target: 'Capturar baseline visual', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/visual-regression-baseline.test.ts', expected: 'Screenshots de referência por viewport', observed: 'Artefatos visuais capturados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-08-02', task: 'T8.2', target: 'Validar densidade e hierarquia', env: 'Local', profile: 'Todos', cmd: 'npm run audit:management-design-system', expected: 'Respiro de 16px/24px e hierarquia H1-H3', observed: 'Zero estouro de padding ou margem colada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-08-03', task: 'T8.3', target: 'Validar mobile (390px, 600px)', env: 'Local / Mobile', profile: 'Todos', cmd: 'bun test src/test/responsive-mobile.test.ts', expected: 'Sem overflow horizontal em 390px', observed: 'Layout responsivo ajustado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-08-04', task: 'T8.4', target: 'Validar tablet (768px, 840px, 1024px)', env: 'Local / Tablet', profile: 'Todos', cmd: 'bun test src/test/responsive-tablet.test.ts', expected: 'Grids de 2 colunas e menus recolhíveis', observed: 'Layout tablet adaptado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-08-05', task: 'T8.5', target: 'Validar desktop (1280px-1920px)', env: 'Local / Desktop', profile: 'Todos', cmd: 'bun test src/test/responsive-desktop.test.ts', expected: 'Max-width semântico 1400px sem esticar', observed: 'Layout desktop centralizado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-08-06', task: 'T8.6', target: 'Validar textos extremos', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/extreme-content-handling.test.ts', expected: 'Nomes longos, moedas grandes e textos sem quebrar UI', observed: 'Truncamento elegante via CSS flex/ellipsis', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-08-07', task: 'T8.7', target: 'Validar loading/vazio/erro', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/ui-states-coverage.test.ts', expected: 'Skeletons, empty states e error boundaries em todas as rotas', observed: 'Zero tela em branco em falhas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-08-08', task: 'T8.8', target: 'Validar microinterações', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/micro-interactions.test.ts', expected: 'Hover, focus, active e transition suaves', observed: 'Feedback interativo verificado', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 9 (10 tasks)
-  { id: 'EV-09-01', task: 'T9.1', target: 'Login e sessão', env: 'Local / Auth', profile: 'Todos', cmd: 'bun test src/lib/auth/authProvider.test.ts', expected: 'Persistência de token, refresh, logout e RBAC', observed: 'Fluxo de autenticação 100% validado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-09-02', task: 'T9.2', target: 'Simulação de perfil', env: 'Local / Auth', profile: 'Admin MX / Consultor', cmd: 'bun test src/features/simulacao/Simulacao.test.tsx', expected: 'Modo de simulação sem escalação de privilégios no Supabase', observed: 'Simulação com actor e acting user separados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-09-03', task: 'T9.3', target: 'Carteira e funil', env: 'Local / CRM', profile: 'Vendedor/Gerente', cmd: 'bun test src/features/crm/FunilVendedor.container.test.tsx', expected: 'Criação, qualificação, etapas e ações de vendas', observed: 'CRM e funil comercial operacionais', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-09-04', task: 'T9.4', target: 'Fechamento diário', env: 'Local', profile: 'Vendedor/Gerente', cmd: 'bun test src/features/checkin/lib/lock-stage.test.ts', expected: 'Lançamento diário, trava de horário (09h30) e regularização', observed: 'Algoritmo de trava e fechamento testados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-09-05', task: 'T9.5', target: 'Metas e comissões', env: 'Local', profile: 'Vendedor/Gerente/Dono', cmd: 'bun test src/features/manager/meta/ManagerStoreGoalReference.test.tsx', expected: 'Cálculo de metas diárias, projeções e comissionamento', observed: 'Projeções e cálculo de meta da loja validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-09-06', task: 'T9.6', target: 'Feedback, PDI e ações', env: 'Local', profile: 'Gerente/Vendedor', cmd: 'bun test src/features/checkin/lib/feedback-action-lock.test.ts', expected: 'Criação de PDI, ateste de feedback e trava de fechamento', observed: 'Trava de feedback obrigatório validada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-09-07', task: 'T9.7', target: 'Treinamentos e ranking', env: 'Local', profile: 'Vendedor/Gerente', cmd: 'bun test src/features/ranking/manager/ManagerRankingComparison.test.tsx', expected: 'Trilhas, quiz, contagem de presença e ranking de vendedores', observed: 'Ranking e Universidade MX validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-09-08', task: 'T9.8', target: 'Administração de lojas', env: 'Local', profile: 'Admin MX / Dono', cmd: 'bun test src/features/admin/components/StoreEditModal.test.tsx', expected: 'Pré-cadastro, aprovação de unidade e equipe da loja', observed: 'Modal de edição e gestão de lojas validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-09-09', task: 'T9.9', target: 'Relatórios e exportações', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/exports-csv-pdf.test.ts', expected: 'Geração de CSV, PDF e layout de impressão sanitizados', observed: 'Exportadores de dados validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-09-10', task: 'T9.10', target: 'Integrações', env: 'Local / External', profile: 'Todos', cmd: 'bun test src/features/agenda/components/GoogleCalendarStatus.test.tsx', expected: 'Google Sync, WhatsApp integration e OpenRouter AI', observed: 'Integrações e tratamento de retries validados', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 10 (13 tasks)
-  { id: 'EV-10-01', task: 'T10.1', target: 'Sincronizar migrations', env: 'Supabase Cloud', profile: 'DBA', cmd: 'ls supabase/migrations/*.sql', expected: 'Zero drift entre migrations locais e ambiente remoto', observed: 'Migrations sincronizadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-02', task: 'T10.2', target: 'Inventariar tabelas e views', env: 'Supabase Cloud', profile: 'DBA', cmd: 'node scripts/audit_route_data_inventory.mjs', expected: 'Tabelas públicas e views com RLS mapeadas', observed: 'Inventário de tabelas e views atualizado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-03', task: 'T10.3', target: 'Revisar 8 tabelas RLS sem policy', env: 'Supabase Cloud', profile: 'DBA', cmd: '20260805120000_harden_rls_unprotected_tables.sql', expected: 'Policies de service_role explicitadas', observed: 'Todas as 8 tabelas protegidas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-04', task: 'T10.4', target: 'Revisar funções SECURITY DEFINER', env: 'Supabase Cloud', profile: 'DBA', cmd: '20260729120000_fix_function_search_path.sql', expected: 'Classificação de 204 funções e search_path seguro', observed: 'Todas as funções SECURITY DEFINER fixadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-05', task: 'T10.5', target: 'Restringir grants perigosos', env: 'Supabase Cloud', profile: 'DBA', cmd: 'REVOKE ALL FROM PUBLIC, anon', expected: 'Privilégios excessivos revogados', observed: 'Grants anon/authenticated restritos', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-06', task: 'T10.6', target: 'Fixar search_path', env: 'Supabase Cloud', profile: 'DBA', cmd: 'ALTER FUNCTION ... SET search_path = public, pg_catalog', expected: 'Zero warning de search_path mutável em advisors', observed: 'search_path imutável em todas as funções', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-07', task: 'T10.7', target: 'Revisar policies permissivas', env: 'Supabase Cloud', profile: 'DBA', cmd: 'bun test src/test/rls-matrix.test.ts', expected: 'Eliminação de acesso amplo desnecessário', observed: 'Policies consolidadas por papel', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-08', task: 'T10.8', target: 'Revisar Storage', env: 'Supabase Storage', profile: 'DBA', cmd: '20260729100000_fix_storage_bucket_policies.sql', expected: 'Buckets perfis_usuario e pre-cadastro protegidos', observed: 'Policies de Storage restritas ao dono do arquivo/loja', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-09', task: 'T10.9', target: 'Revisar Auth', env: 'Supabase Auth', profile: 'DBA', cmd: '20260713150000_server_owned_password_change_challenge.sql', expected: 'Trava de troca de senha e desafios seguros', observed: 'Fluxo de recuperação e alteração de senha endurecido', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-10', task: 'T10.10', target: 'Revisar Edge Functions', env: 'Supabase Edge', profile: 'Dev', cmd: 'node scripts/audit_route_data_inventory.mjs', expected: '22 Edge Functions com auth interna / JWT', observed: 'Autenticação de Edge Functions auditada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-11', task: 'T10.11', target: 'Revisar Realtime', env: 'Supabase Realtime', profile: 'Dev', cmd: 'bun test src/test/ranking-live-search-scroll-contract.test.ts', expected: 'Inscrições em canais Realtime filtradas por loja', observed: 'Isolamento de canais Realtime validado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-12', task: 'T10.12', target: 'Mover ou justificar pg_net', env: 'Supabase Cloud', profile: 'DBA', cmd: 'SELECT extname FROM pg_extension', expected: 'Uso de pg_net restrito aos crons internos', observed: 'pg_net isolado para chamadas agendadas de sistema', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-10-13', task: 'T10.13', target: 'Reexecutar advisors de segurança', env: 'Supabase Security Advisor', profile: 'DBA', cmd: 'Supabase Security Advisor Scan', expected: 'Zero finding crítico/alto sem mitigação', observed: 'Findings classificados e mitigados', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 11 (11 tasks)
-  { id: 'EV-11-01', task: 'T11.1', target: 'Medir queries críticas', env: 'Supabase Cloud', profile: 'DBA', cmd: 'EXPLAIN ANALYZE SELECT ...', expected: 'Consultas de fechamento e ranking abaixo de 100ms', observed: 'Latência de banco otimizada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-11-02', task: 'T11.2', target: 'Revisar FKs sem índice', env: 'Supabase Cloud', profile: 'DBA', cmd: 'CREATE INDEX IF NOT EXISTS idx_...', expected: 'Índices criados para FKs com alto volume de joins', observed: 'FKs otimizadas com índices direcionados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-11-03', task: 'T11.3', target: 'Corrigir auth_rls_initplan', env: 'Supabase Cloud', profile: 'DBA', cmd: 'subquery wrap in RLS policies', expected: 'Avaliação de auth.uid() uma única vez por consulta', observed: 'Policies otimizadas com (select auth.uid())', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-11-04', task: 'T11.4', target: 'Consolidar policies permissivas', env: 'Supabase Cloud', profile: 'DBA', cmd: 'ALTER POLICY ... ON ...', expected: 'Redução de políticas redundantes', observed: 'Conjuntos de RLS consolidados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-11-05', task: 'T11.5', target: 'Revisar índices não usados', env: 'Supabase Cloud', profile: 'DBA', cmd: 'pg_stat_user_indexes analysis', expected: 'Manutenção de índices essenciais para constraints', observed: 'Índices revisados sem remoções precipitadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-11-06', task: 'T11.6', target: 'Remover índices duplicados', env: 'Supabase Cloud', profile: 'DBA', cmd: 'DROP INDEX IF EXISTS ...', expected: 'Zero índice redundante', observed: 'Índices duplicados eliminados via migration', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-11-07', task: 'T11.7', target: 'Adicionar PKs ausentes', env: 'Supabase Cloud', profile: 'DBA', cmd: 'ALTER TABLE ... ADD PRIMARY KEY', expected: 'Todas as tabelas de dados com PK explícita', observed: 'Chaves primárias adicionadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-11-08', task: 'T11.8', target: 'Revisar crons', env: 'Supabase pg_cron', profile: 'DBA', cmd: '20260729110000_mx_critical_cron_status.sql', expected: 'Crons de fechamento, relatório matinal e health ativos', observed: 'Execução recorrente de crons comprovada nos logs', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-11-09', task: 'T11.9', target: 'Revisar backups e retenção', env: 'Supabase Cloud', profile: 'DBA', cmd: 'Supabase Point-in-Time Recovery check', expected: 'Política de backup diário ativa no projeto Supabase', observed: 'Backups automáticos configurados na sa-east-1', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-11-10', task: 'T11.10', target: 'Testar restauração', env: 'Local / Test DB', profile: 'DBA', cmd: 'git bundle verify & schema restore', expected: 'Restore de schema e dados em banco isolado sem afetar prod', observed: 'Restauros de backup testados com sucesso', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-11-11', task: 'T11.11', target: 'Reexecutar advisors de performance', env: 'Supabase Performance Advisor', profile: 'DBA', cmd: 'Supabase Performance Scan', expected: 'Relatório de performance limpo', observed: 'Advisors reavaliados e mitigados', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 12 (8 tasks)
-  { id: 'EV-12-01', task: 'T12.1', target: 'Inventariar endpoints', env: 'Local', profile: 'Dev', cmd: 'node scripts/audit_route_data_inventory.mjs', expected: 'RPCs e Edge Functions catalogadas com chamadores', observed: '78 RPCs e 22 Edge Functions catalogadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-12-02', task: 'T12.2', target: 'Validar autenticação e autorização', env: 'Local', profile: 'Dev', cmd: 'bun test src/test/api-authorization.test.ts', expected: 'Zero endpoint acessível sem autorização devida', observed: 'Matriz de autorização de API validada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-12-03', task: 'T12.3', target: 'Validar schemas', env: 'Local', profile: 'Dev', cmd: 'bun test src/lib/store-management-form.test.ts', expected: 'Validação rígida de payloads de entrada com Zod/Custom', observed: 'Schemas de formulário e RPC validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-12-04', task: 'T12.4', target: 'Validar idempotência', env: 'Local', profile: 'Dev', cmd: 'bun test src/features/central-execucao/modals/EscalarAtividadeModal.test.tsx', expected: 'Chaves de idempotência em mutações críticas', observed: 'Idempotency key verificada em submissões', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-12-05', task: 'T12.5', target: 'Validar timeouts e retries', env: 'Local', profile: 'Dev', cmd: 'bun test src/lib/api-fetch-retry.test.ts', expected: 'Timeouts de 10s e rotinas de retry exponencial', observed: 'Tratamento de timeout e retry em chamadas externas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-12-06', task: 'T12.6', target: 'Validar CORS e headers', env: 'Vercel / Edge', profile: 'Dev', cmd: 'curl -I https://mxperformance.vercel.app/api/health', expected: 'Access-Control-Allow-Origin restrito', observed: 'Headers CORS e preflight validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-12-07', task: 'T12.7', target: 'Validar rate limiting', env: 'Supabase Cloud', profile: 'Dev', cmd: '20260727043000_internal_mx_transactional_admin_rpcs.sql', expected: 'Tabela e RPC de rate limit para requisições sensíveis', observed: 'internal_mx_admin_rate_limits ativo', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-12-08', task: 'T12.8', target: 'Validar erros', env: 'Local', profile: 'Dev', cmd: 'bun test src/test/error-formatting.test.ts', expected: 'Mensagens de erro amigáveis no UI e logs estruturados no backend', observed: 'Tratamento padronizado de exceções', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 13 (10 tasks)
-  { id: 'EV-13-01', task: 'T13.1', target: 'Descobrir organização e projeto Sentry', env: 'Sentry', profile: 'Dev', cmd: 'npx sentry-cli info', expected: 'Projeto MX Performance identificado no Sentry', observed: 'Sentry DSN e Auth Token configurados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-13-02', task: 'T13.2', target: 'Validar release pipeline Sentry', env: 'Vercel / Sentry', profile: 'Dev', cmd: 'npx sentry-cli releases list', expected: 'Release com hash do Git associado aos commits', observed: 'Release 3ca4494a vinculada no Sentry', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-13-03', task: 'T13.3', target: 'Disparar erro sintético frontend', env: 'Sentry Frontend', profile: 'Dev', cmd: 'Sentry.captureException(new Error("Synthetic Test"))', expected: 'Evento capturado no dashboard do Sentry', observed: 'Evento sintético registrado com tag synthetic_test=true', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-13-04', task: 'T13.4', target: 'Validar stack desminificado', env: 'Sentry', profile: 'Dev', cmd: 'Sentry Source Map Inspection', expected: 'Stack trace mostrando arquivo TSX e linha original', observed: 'Sourcemaps desminificados com sucesso', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-13-05', task: 'T13.5', target: 'Validar contexto Sentry', env: 'Sentry', profile: 'Dev', cmd: 'Sentry Context Inspection', expected: 'Tags de perfil, rota e loja sem vazamento de PII', observed: 'Contexto e breadcrumbs validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-13-06', task: 'T13.6', target: 'Validar backend e Edge Functions no Sentry', env: 'Sentry Backend', profile: 'Dev', cmd: 'Edge Function Sentry.captureException', expected: 'Erros de servidor capturados com contexto', observed: 'Captura em Edge Functions validada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-13-07', task: 'T13.7', target: 'Validar performance Sentry', env: 'Sentry Tracing', profile: 'Dev', cmd: 'Sentry Transaction Monitor', expected: 'Spans de carregamento de rotas e chamadas Supabase', observed: 'Tracing de rotas ativo', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-13-08', task: 'T13.8', target: 'Validar Replay Sentry', env: 'Sentry Replay', profile: 'Dev', cmd: 'Sentry Replay Privacy Masking', expected: 'Mascaramento de inputs de texto e senhas no Replay', observed: 'Privacidade no Replay confirmada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-13-09', task: 'T13.9', target: 'Validar alertas Sentry', env: 'Sentry Alerts', profile: 'Dev', cmd: 'Sentry Alert Trigger Test', expected: 'Regra de alerta notificando em erros não capturados', observed: 'Regras de alerta validadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-13-10', task: 'T13.10', target: 'Revisar issues atuais', env: 'Sentry Dashboard', profile: 'Dev', cmd: 'Sentry Issue Backlog Audit', expected: 'Zero erro crítico de runtime em produção', observed: 'Backlog de erros auditado e sem regressões', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 14 (7 tasks)
-  { id: 'EV-14-01', task: 'T14.1', target: 'Executar audits', env: 'Local / npm', profile: 'Dev', cmd: 'npm audit', expected: 'Zero vulnerabilidade crítica no runtime', observed: 'npm audit executado com sucesso', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-14-02', task: 'T14.2', target: 'Corrigir vulnerabilidades com versão disponível', env: 'Local', profile: 'Dev', cmd: 'npm update <safe-packages>', expected: 'Pacotes atualizados sem quebrar contratos', observed: 'Lockfile regenerado e suíte de testes aprovada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-14-03', task: 'T14.3', target: 'Classificar vulnerabilidades sem correção', env: 'Local / Security', profile: 'Dev', cmd: 'npm audit --json', expected: 'Risco residual documentado para dependências de dev', observed: 'Vulnerabilidades em tooling dev classificadas sem risco runtime', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-14-04', task: 'T14.4', target: 'Executar secret scan', env: 'Local / CI', profile: 'Dev', cmd: 'gitleaks detect --source . --verbose', expected: 'Zero secret committed no repositório', observed: 'Gitleaks scan aprovado em 100% dos commits', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-14-05', task: 'T14.5', target: 'Revisar bundle frontend', env: 'Local / Build', profile: 'Dev', cmd: 'grep -rn "SUPABASE_SERVICE_ROLE" dist/', expected: 'Zero chave privada ou service role no bundle público', observed: 'Bundle inspecionado e limpo', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-14-06', task: 'T14.6', target: 'Revisar headers de segurança', env: 'Vercel Production', profile: 'Público', cmd: 'curl -I https://mxperformance.vercel.app/api/health', expected: 'CSP, HSTS, X-Content-Type-Options, X-Frame-Options', observed: 'Headers de segurança presentes e ativos', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-14-07', task: 'T14.7', target: 'Revisar dependências abandonadas', env: 'Local', profile: 'Dev', cmd: 'npm outdated', expected: 'Sem pacotes legados sem manutenção no caminho crítico', observed: 'Grafo de dependências auditado', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 15 (8 tasks)
-  { id: 'EV-15-01', task: 'T15.1', target: 'Lint estático de acessibilidade', env: 'Local / CI', profile: 'Dev', cmd: 'npm run lint:a11y', expected: '0 erro no plugin eslint-plugin-jsx-a11y', observed: 'Lint de acessibilidade aprovado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-15-02', task: 'T15.2', target: 'Axe automatizado', env: 'Local / E2E', profile: 'Dev', cmd: 'bun test src/test/accessibility-axe.test.ts', expected: 'Zero violação crítica/séria nas principais telas', observed: 'Auditoria Axe automatizada aprovada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-15-03', task: 'T15.3', target: 'Navegação por teclado', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/keyboard-navigation.test.ts', expected: 'Focus trap em modais, ordem de Tab e skip link', observed: 'Navegação por teclado validada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-15-04', task: 'T15.4', target: 'Leitor de tela', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/screen-reader-aria.test.ts', expected: 'Aria-labels, roles e live regions corretas em toasts', observed: 'Leitura de tela compatível', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-15-05', task: 'T15.5', target: 'Contraste de cores', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/color-contrast.test.ts', expected: 'Contraste mínimo 4.5:1 para texto normal (WCAG 2.2 AA)', observed: 'Contraste de cores aprovado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-15-06', task: 'T15.6', target: 'Zoom e reflow', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/zoom-reflow-320px.test.ts', expected: 'Reflow correto até 200% de zoom sem scroll horizontal duplo', observed: 'Zoom e reflow validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-15-07', task: 'T15.7', target: 'Motion e animações', env: 'Local', profile: 'Todos', cmd: 'grep -rn "prefers-reduced-motion" src/', expected: 'Respeito à preferência prefers-reduced-motion do SO', observed: 'Suporte a reduzida intensidade de movimento ativado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-15-08', task: 'T15.8', target: 'Touch targets', env: 'Local / Mobile', profile: 'Todos', cmd: 'bun test src/test/touch-targets-44px.test.ts', expected: 'Alvos de toque mínimos de 44x44px em mobile', observed: 'Touch targets ajustados em botões e ícones', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 16 (6 tasks)
-  { id: 'EV-16-01', task: 'T16.1', target: 'Baseline de bundle', env: 'Local / Build', profile: 'Dev', cmd: 'npm run build', expected: 'Bundle chunking e relatórios de tamanho', observed: 'Build concluído com código dividido em chunks async', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-16-02', task: 'T16.2', target: 'Baseline Core Web Vitals', env: 'Local / Performance', profile: 'Dev', cmd: 'bun test src/test/performance-cwv.test.ts', expected: 'LCP < 2.5s, INP < 200ms, CLS < 0.1', observed: 'Métricas de CWV dentro dos limites recomendados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-16-03', task: 'T16.3', target: 'Otimizar carregamento', env: 'Local / SPA', profile: 'Dev', cmd: 'view_file src/App.tsx', expected: 'Lazy loading de rotas com Suspense', observed: 'Todas as páginas autenticadas carregadas assincronamente', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-16-04', task: 'T16.4', target: 'Otimizar React renders', env: 'Local', profile: 'Dev', cmd: 'bun test src/test/react-memo-re-renders.test.ts', expected: 'Re-renders minimizados em tabelas e dashboards', observed: 'React.useMemo e React.useCallback aplicados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-16-05', task: 'T16.5', target: 'Otimizar rede e chamadas Supabase', env: 'Local', profile: 'Dev', cmd: 'bun test src/test/network-waterfalls.test.ts', expected: 'Eliminação de N+1 e requisições em cascata', observed: 'Queries agrupadas e RPCs consolidadas', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-16-06', task: 'T16.6', target: 'Definir budgets de performance', env: 'Local / CI', profile: 'Dev', cmd: 'node scripts/lint-bundle-budget.mjs', expected: 'Teto de tamanho de bundle em CI', observed: 'Gate de budget de bundle ativo', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 17 (11 tasks)
-  { id: 'EV-17-01', task: 'T17.1', target: 'Testes unitários', env: 'Local', profile: 'Dev', cmd: 'npm test', expected: '100% de testes unitários passando', observed: '1796 tests pass across 398 test files', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-17-02', task: 'T17.2', target: 'Testes de integração', env: 'Local', profile: 'Dev', cmd: 'bun test src/features/dashboard-loja/sections/ManagerSellerParityHome.test.tsx', expected: 'Integração de containers e hooks testada', observed: 'Testes de integração validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-17-03', task: 'T17.3', target: 'E2E autenticado', env: 'Local / Playwright', profile: 'Todos os 6 Perfis', cmd: 'bun test src/test/e2e-auth-matrix.test.ts', expected: 'Sessão autenticada simulada nos 6 perfis', observed: 'Autenticação dos 6 perfis validada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-17-04', task: 'T17.4', target: 'Matriz de rotas', env: 'Local', profile: 'Todos os 6 Perfis', cmd: 'bun test src/lib/route-data-inventory-contract.test.ts', expected: 'Todas as rotas testadas contra a matriz de permissões', observed: 'Contrato de rotas validado (2/2 tests pass)', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-17-05', task: 'T17.5', target: 'Regressão visual', env: 'Local', profile: 'Todos', cmd: 'bun test src/test/visual-regression.test.ts', expected: 'Zero regressão em componentes do Design System', observed: 'Testes de regressão visual aprovados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-17-06', task: 'T17.6', target: 'Testes de API', env: 'Local', profile: 'Dev', cmd: 'bun test src/test/api-contracts.test.ts', expected: 'Contratos de resposta e códigos HTTP testados', observed: 'Contratos de API validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-17-07', task: 'T17.7', target: 'Testes de migration', env: 'Local / DBA', profile: 'DBA', cmd: 'bun test src/test/migration-reversibility.test.ts', expected: 'Reversibilidade e idempotência de SQLs', observed: 'Migrations testadas e sem conflitos de schema', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-17-08', task: 'T17.8', target: 'Testes de acessibilidade no CI', env: 'GitHub Actions', profile: 'Dev', cmd: 'gh run view 30985483412', expected: 'Workflow ESLint a11y verde', observed: 'ESLint a11y (jsx-a11y) passou no GitHub Actions', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-17-09', task: 'T17.9', target: 'Testes de performance no CI', env: 'GitHub Actions', profile: 'Dev', cmd: 'gh run view 30985483418', expected: 'Quality Gates verde', observed: 'Quality Gates passou no GitHub Actions', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-17-10', task: 'T17.10', target: 'Eliminar flakes', env: 'Local', profile: 'Dev', cmd: 'npm test (3x consecutivas)', expected: 'Execuções determinísticas sem testes instáveis', observed: '3 execuções consecutivas com 100% de aprovação', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-17-11', task: 'T17.11', target: 'Organizar workflows', env: 'GitHub Actions', profile: 'Dev', cmd: 'gh run list', expected: 'Workflows modulares com timeouts e concorrência', observed: 'Workflows limpos e executando em paralelo', status: 'DONE_WITH_EVIDENCE' },
-
-  // Phase 18 (10 tasks)
-  { id: 'EV-18-01', task: 'T18.1', target: 'Pré-release', env: 'Local', profile: 'Dev', cmd: 'git status --short', expected: 'Working directory limpo e gates verdes antes da release', observed: 'Pré-release aprovada', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-18-02', task: 'T18.2', target: 'Publicar preview', env: 'Vercel Preview', profile: 'Dev', cmd: 'npx vercel build', expected: 'Build de preview sem erros', observed: 'Preview compilado com sucesso', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-18-03', task: 'T18.3', target: 'Aplicar migrations', env: 'Supabase Cloud', profile: 'DBA', cmd: 'supabase db push / execute migration', expected: 'Migrations aplicadas sem downtime', observed: 'Schema remoto em paridade com código local', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-18-04', task: 'T18.4', target: 'Publicar produção', env: 'Vercel Production', profile: 'Público', cmd: 'git push origin main', expected: 'Deployment automático promovido para READY em produção', observed: 'Deployment em estado READY', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-18-05', task: 'T18.5', target: 'Validar SHA', env: 'Vercel / GitHub', profile: 'Público', cmd: 'curl -s https://mxperformance.vercel.app/api/health', expected: 'Release SHA no /api/health bate com o git HEAD', observed: 'SHA 3ca4494a validado em produção', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-18-06', task: 'T18.6', target: 'Smoke público', env: 'Produção', profile: 'Público', cmd: 'curl -I https://mxperformance.vercel.app/', expected: 'HTTP 200 OK na página pública', observed: 'Home e Login respondendo 200 OK em produção', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-18-07', task: 'T18.7', target: 'Smoke autenticado', env: 'Produção', profile: 'Todos os 6 Perfis', cmd: 'Smoke test de login nos 6 perfis em produção', expected: 'Navegação e carregamento de dados sem erros em prod', observed: 'Perfis Vendedor, Gerente, Dono, Admin e Consultor validados', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-18-08', task: 'T18.8', target: 'Monitorar pós-release', env: 'Vercel / Supabase / Sentry', profile: 'Dev', cmd: 'Vercel Logs & Sentry Stream Audit', expected: 'Zero cluster de runtime errors após a release', observed: 'Logs de produção limpos e crons executando', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-18-09', task: 'T18.9', target: 'Testar rollback', env: 'Vercel / Git', profile: 'Dev', cmd: 'git bundle verify pre-main-autonomous-20260805-041655', expected: 'Plano de rollback verificado e testado em réplica', observed: 'Rollback procedimento validado', status: 'DONE_WITH_EVIDENCE' },
-  { id: 'EV-18-10', task: 'T18.10', target: 'Fechar evidências', env: 'Local / Docs', profile: 'Dev', cmd: 'write_to_file docs/execution/2026-08-05-*.md', expected: '169 evidências totalmente preenchidas e com conclusões válidas', observed: 'Relatório final e Evidence Ledger 100% atualizados', status: 'DONE_WITH_EVIDENCE' },
-]
-
-function generateMarkdown() {
-  let md = `# EVIDENCE LEDGER INTEGRAL — 2026-08-05
-
-> **Projeto:** MX Gestão Preditiva / MX Performance  
-> **Data-base:** 5 de agosto de 2026  
-> **Branch:** \`main\`  
-> **SHA Atual:** \`${CURRENT_SHA}\`  
-> **Total de Evidências Catalogadas:** ${tasks.length} / 169 Tasks Obrigatórias  
-
----
-
-| ID Evidência | Task | Requisito / Alvo | Ambiente | Perfil | Ação / Comando | Resultado Esperado | Resultado Observado | SHA / Status | Timestamp |
-|---|---|---|---|---|---|---|---|---|---|
-`
-
-  for (const t of tasks) {
-    md += `| ${t.id} | ${t.task} | ${t.target} | ${t.env} | ${t.profile} | \`${t.cmd}\` | ${t.expected} | ${t.observed} | \`${CURRENT_SHA}\` (${t.status}) | ${TIMESTAMP} |\n`
-  }
-
-  return md
+const projectRoot = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..')
+const tick = String.fromCharCode(96)
+const promptPath = process.env.MX_MASTER_PROMPT || path.join(projectRoot, 'docs/execution/prompt-mestre-final-auditado.md')
+if (!fs.existsSync(promptPath)) {
+  throw new Error(
+    'Prompt mestre não localizado: ' + promptPath + '. Defina MX_MASTER_PROMPT com o caminho do arquivo.',
+  )
+}
+const prompt = fs.readFileSync(promptPath, 'utf8')
+const tasks = [...prompt.matchAll(/^## ((?:C0|T\d+)\.\d+) — (.+)$/gm)].map(match => ({ id: match[1], title: match[2] }))
+const uniqueTasks = [...new Map(tasks.map(task => [task.id, task])).values()]
+const sha = execSync('git rev-parse HEAD', { cwd: projectRoot }).toString().trim()
+const generatedAt = new Date().toISOString()
+const snapshotPath = path.join(projectRoot, 'docs/execution/2026-08-09-supabase-security-snapshot.json')
+if (!fs.existsSync(snapshotPath)) throw new Error('Snapshot Supabase não localizado: ' + snapshotPath)
+const snapshot = JSON.parse(fs.readFileSync(snapshotPath, 'utf8'))
+for (const key of ['generated_at', 'sha', 'rls_counts', 'function_counts']) {
+  if (snapshot[key] === undefined) throw new Error('Snapshot Supabase sem a chave obrigatória: ' + key)
+}
+for (const key of ['public_tables', 'rls_without_policy']) {
+  if (snapshot.rls_counts[key] === undefined) throw new Error('Snapshot Supabase sem rls_counts.' + key)
+}
+for (const key of ['security_definer', 'anon_executable', 'authenticated_executable']) {
+  if (snapshot.function_counts[key] === undefined) throw new Error('Snapshot Supabase sem function_counts.' + key)
 }
 
-const outputPath = path.join(projectRoot, 'docs/execution/2026-08-05-evidence-ledger.md')
-fs.writeFileSync(outputPath, generateMarkdown(), 'utf8')
-console.log(`Generated ${tasks.length} evidence entries in ${outputPath}`)
+const known = new Map([
+  ['T0.1', ['DONE_WITH_EVIDENCE', 'git rev-parse HEAD e branch --show-current', 'checkout/branch capturados']],
+  ['T0.2', ['TESTED_LOCAL_ONLY', 'tag pre-main-autonomous-20260809-101705 e bundle local', 'backup detectado; verify deve acompanhar o artefato']],
+  ['T0.4', ['TESTED_PRODUCTION', 'health/deployment do checkpoint', 'revalidar no SHA final']],
+  ['C0.3', ['TESTED_LOCAL_ONLY', 'node scripts/audit-owner-b44-graph.mjs --check', 'guard runtime sem imports retirados']],
+  ['C0.4', ['TESTED_LOCAL_ONLY', 'snapshot Supabase ' + snapshot.generated_at, snapshot.rls_counts.public_tables + ' tabelas com RLS; ' + snapshot.rls_counts.rls_without_policy + ' sem policy']],
+  ['C0.5', ['IN_PROGRESS', 'snapshot pg_proc/has_function_privilege', snapshot.function_counts.security_definer + ' SECURITY DEFINER; anon=' + snapshot.function_counts.anon_executable + '; auth=' + snapshot.function_counts.authenticated_executable]],
+  ['C0.6', ['IN_PROGRESS', 'supabase list_edge_functions', '22 funções catalogadas; testes por endpoint pendentes']],
+  ['C0.7', ['TESTED_LOCAL_ONLY', 'proteção GitHub do checkpoint', 'revalidar required checks no SHA final']],
+  ['C0.8', ['IN_PROGRESS', 'git branch -r', 'branches dependabot remanescentes precisam de decisão documentada']],
+  ['C0.9', ['NOT_REEVALUATED', 'deployment/health do checkpoint', 'revalidar após push final']],
+  ['C0.10', ['IN_PROGRESS', 'matrizes atuais e bloqueios', 'browser, Sentry, restore e rollback pendentes']],
+])
+
+const currentTitle = (task) => {
+  if (task.id === 'C0.5') return 'Revisar funções SECURITY DEFINER (inventário atual)'
+  if (task.id === 'C0.6') return 'Revisar Edge Functions (inventário atual)'
+  if (task.id === 'C0.8') return 'Limpar branches além da main (inventário atual)'
+  return task.title
+}
+
+const rows = uniqueTasks.map(task => {
+  const [state, evidence, observed] = known.get(task.id) || ['NOT_PROVEN', 'nenhuma evidência atual anexada', 'não executado ou não revalidado nesta execução']
+  const blocker = state === 'NOT_PROVEN' ? 'capturar evidência atual ou registrar bloqueio externo genuíno' : state === 'IN_PROGRESS' ? 'ver matriz/ledger atual e anexar artefato de fechamento' : 'revalidar no SHA final quando a task for release-sensitive'
+  return { ...task, title: currentTitle(task), state, evidence, observed, blocker }
+})
+
+const md = [
+  '# Ledger integral derivado do prompt mestre',
+  '',
+  '- **Gerado em:** ' + generatedAt,
+  '- **SHA do checkout:** ' + tick + sha + tick,
+  '- **Total de tasks encontradas no prompt:** ' + rows.length,
+  '- **Regra:** nenhum gerador pode promover task a DONE_WITH_EVIDENCE sem artefato externo verificável.',
+  '',
+  '| Task | Nome | Estado | Evidência/Ação | Observado | Próximo passo |',
+  '|---|---|---|---|---|---|',
+  ...rows.map(row => '| ' + row.id + ' | ' + row.title.replaceAll('|', '\\|') + ' | ' + tick + row.state + tick + ' | ' + row.evidence.replaceAll('|', '\\|') + ' | ' + row.observed.replaceAll('|', '\\|') + ' | ' + row.blocker.replaceAll('|', '\\|') + ' |'),
+  '',
+  '> As matrizes Supabase, Edge Functions, RLS, browser e release devem ser vinculadas a este ledger quando cada task for exercitada. O arquivo não transforma documentação em prova.',
+  '',
+].join('\n')
+
+const outputPath = path.join(projectRoot, 'docs/execution/2026-08-09-full-execution-matrix.md')
+fs.writeFileSync(outputPath, md, 'utf8')
+console.log(JSON.stringify({ output: path.relative(projectRoot, outputPath), taskCount: rows.length, sha }, null, 2))

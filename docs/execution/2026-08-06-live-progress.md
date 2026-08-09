@@ -1,5 +1,9 @@
 # Live Progress - 2026-08-06
 
+> SUPERSEDED — histórico preservado; não é evidência da release atual.
+> Consulte os snapshots e o relatório atuais em `docs/execution/2026-08-09-*.md`.
+
+
 ## SHA Inicial: 9b7b5374aa8c7e915017be385f088ccee1c8a0a4
 ## SHA Health Produção: 8c5cfbf7ff0a7af55f6c8eeff349e5a7fa400901
 ## Branch: main (PROIBIDO worktree/branches auxiliares)

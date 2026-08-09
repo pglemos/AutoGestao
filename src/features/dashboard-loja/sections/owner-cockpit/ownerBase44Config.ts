@@ -126,6 +126,15 @@ const OWNER_PATH_SECTIONS: Array<[RegExp, OwnerResolvedSection]> = [
   [/^\/dono\/resultados\/?$/, 'resultados'],
   [/^\/dono\/visitas\/?$/, 'visitas'],
   [/^\/dono\/universidade\/?$/, 'universidade'],
+  [/^\/home\/?$/, 'home'],
+  [/^\/rotina\/?$/, 'rotina'],
+  [/^\/decisoes\/?$/, 'decisoes'],
+  [/^\/plano-estrategico\/?$/, 'planejamento'],
+  [/^\/plano-acao\/?$/, 'plano-acao'],
+  [/^\/consultoria\/?$/, 'consultoria'],
+  [/^\/departamentos(?:\/.*)?$/, 'departamentos'],
+  [/^\/mercado\/?$/, 'mercado'],
+  [/^\/universidade-mx\/?$/, 'universidade'],
 ]
 
 export function resolveOwnerLocation(pathname: string, search: string): OwnerResolvedSection {
@@ -134,7 +143,7 @@ export function resolveOwnerLocation(pathname: string, search: string): OwnerRes
 }
 
 export function resolveOwnerDepartmentFromPath(pathname: string): OwnerDepartmentNavigationCode | null {
-  const segment = pathname.match(/^\/dono\/departamentos\/([^/?#]+)/)?.[1]
+  const segment = pathname.match(/^\/(?:dono\/)?departamentos\/([^/?#]+)/)?.[1]
   const aliases: Record<string, OwnerDepartmentNavigationCode> = {
     comercial: 'comercial',
     marketing: 'marketing',

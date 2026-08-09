@@ -1,5 +1,9 @@
 # Supabase Security Review — MX Gestão Preditiva (2026-08-05)
 
+> SUPERSEDED — histórico preservado; não é evidência da release atual.
+> Consulte os snapshots e o relatório atuais em `docs/execution/2026-08-09-*.md`.
+
+
 ## Inventário Auditado de Segurança (Project ID: `fbhcmzzgwjdgkctlfvbo`)
 
 ### Tabelas e Row Level Security (RLS)
@@ -14,5 +18,5 @@
 
 ### Edge Functions
 - **Total ativas:** 22 Edge Functions
-- **Com `verify_jwt = true`:** 16 funções
-- **Com autenticação customizada / rate limiting (sem JWT direto):** 6 funções auditadas (`request-password-recovery`, `store-pre-registration`, `google-oauth-handler`, `google-calendar-sync`, `google-meet-ata`).
+- **Com `verify_jwt = true`:** 17 funções
+- **Com autenticação customizada / rate limiting (sem JWT direto):** 5 funções auditadas (`request-password-recovery`, `store-pre-registration`, `google-oauth-handler`, `google-calendar-sync`, `google-meet-ata`).

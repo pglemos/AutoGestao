@@ -1,5 +1,9 @@
 # SUMÁRIO DE SECURITY DEFINER — GERADO VIA SCRIPT (CONSOLIDAÇÃO)
 
+> SUPERSEDED — histórico preservado; não é evidência da release atual.
+> Consulte os snapshots e o relatório atuais em `docs/execution/2026-08-09-*.md`.
+
+
 > **ATENÇÃO:** Este arquivo consolida o estado real. A matriz completa com 204 funções está em  
 > `docs/execution/2026-08-05-supabase-security-review.md`
 

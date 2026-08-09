@@ -1,7 +1,7 @@
 import { useEffect, useState, useCallback } from "react";
-import { base44 } from "@/features/owner-base44/b44adapter";
+import { base44 } from "@/features/owner/ownerRepository";
 import { useOwner } from "@/components/owner/OwnerContext";
-import { computePeriodRange } from "@/lib/owner-b44/period";
+import { computePeriodRange } from "@/lib/owner-period";
 
 // Carrega todos os dados da tela Início do Dono para empresa/unidade/período selecionados.
 // Escopo "all": usa registros em nível de empresa (unit_id vazio/null).

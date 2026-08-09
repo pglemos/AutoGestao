@@ -1,4 +1,8 @@
 # Master Plan - Execução Autônoma MX Gestão Preditiva
+
+> SUPERSEDED — histórico preservado; não é evidência da release atual.
+> Consulte os snapshots e o relatório atuais em `docs/execution/2026-08-09-*.md`.
+
 ## Data: 2026-08-06 | SHA Inicial: 9b7b5374 | SHA Health Production: 8c5cfbf7
 
 ## Estado Real vs Documentado

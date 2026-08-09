@@ -48,7 +48,7 @@ function checkRem(file, prop, value, line) {
 // 1. CSS
 const cssFiles = [
   'src/index.css',
-  'src/styles/internal-mx-manager-scope.css',
+  'src/styles/internal-mx-canonical-template.css',
   'src/design-system/tokens/semantic.css',
   'src/design-system/tokens/components.css',
 ];

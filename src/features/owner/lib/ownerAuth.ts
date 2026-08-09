@@ -1,5 +1,6 @@
-// Shim do AuthContext do export Base44 sobre o useAuth real do MX.
-// Mantém o shape { user, logout } esperado pelos componentes portados.
+// Contexto de compatibilidade do módulo Dono sobre a sessão canônica do MX.
+// O shape estável evita que componentes portados conheçam o contrato interno
+// de autenticação e mantém a migração de dados separada da UI.
 import { useMemo } from 'react'
 import { useAuth as useMxAuth } from '@/hooks/useAuth'
 
@@ -12,7 +13,7 @@ export function useAuth() {
       id: profile.id,
       email: profile.email || '',
       full_name: profile.name || 'Nome não informado',
-      role: role === 'admin' ? 'admin' : role,
+      role: role === 'administrador_geral' || role === 'administrador_mx' ? 'admin' : role,
     }
   }, [profile, role])
 

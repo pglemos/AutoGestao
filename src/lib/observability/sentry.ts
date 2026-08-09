@@ -11,9 +11,68 @@
  * Se VITE_SENTRY_DSN não estiver definido, init vira no-op (dev local).
  */
 
-import * as Sentry from '@sentry/react'
+import {
+    addBreadcrumb,
+    browserTracingIntegration,
+    captureException,
+    captureMessage,
+    init,
+    logger as sentryLogger,
+    metrics as sentryMetrics,
+    replayIntegration,
+    setMeasurement,
+    setTag,
+    setTags,
+    withScope,
+} from '@sentry/react'
 import { getEnvironment, getRelease, getBranch, getDeploymentId } from './release'
 import { sanitizeSentryEvent, sanitizeUrl } from './sanitize'
+
+type LegacyMetricOptions = {
+    unit?: string
+    tags?: Record<string, string>
+}
+
+// @sentry/react 10.53.1 exposes the current metrics namespace as count,
+// distribution and gauge. The application observability facade historically
+// consumed increment plus tag-based options, so adapt that contract here while
+// keeping the global bridge intentionally small and tree-shakeable.
+const sentryMetricBridge = {
+    increment(name: string, value = 1, options?: LegacyMetricOptions) {
+        sentryMetrics.count(name, value, {
+            unit: options?.unit,
+            attributes: options?.tags,
+        })
+    },
+    distribution(name: string, value: number, options?: LegacyMetricOptions) {
+        sentryMetrics.distribution(name, value, {
+            unit: options?.unit,
+            attributes: options?.tags,
+        })
+    },
+    gauge(name: string, value: number, options?: LegacyMetricOptions) {
+        sentryMetrics.gauge(name, value, {
+            unit: options?.unit,
+            attributes: options?.tags,
+        })
+    },
+}
+
+// These are the only SDK capabilities consumed by the application bridge.
+const Sentry = {
+    addBreadcrumb,
+    browserTracingIntegration,
+    captureException,
+    captureMessage,
+    init,
+    logger: sentryLogger,
+    metrics: sentryMetricBridge,
+    replayIntegration,
+    setMeasurement,
+    setTag,
+    setTags,
+    withScope,
+}
 
 export interface SentryConfig {
     dsn?: string

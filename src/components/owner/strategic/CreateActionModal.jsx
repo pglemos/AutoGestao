@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
 import { formatCellValue, calculatePercentageOfTarget, getStatusFromPercentage, STATUS_STYLES, SELECTED_MONTH_INDEX } from './strategicUtils'
 import { useToast } from '@/components/ui/use-toast'
-import { useAuth } from '@/lib/owner-b44/AuthContext'
+import { useAuth } from '@/features/owner/lib/ownerAuth'
 
 export default function CreateActionModal({ repository, open, onOpenChange, indicator, year, onCreated }) {
   const { toast } = useToast()

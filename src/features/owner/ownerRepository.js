@@ -1,8 +1,9 @@
 // Adapter mínimo que substitui o SDK @base44/sdk nos componentes portados do export.
-// Entidades com efeito real são mapeadas para o Supabase do MX; o restante vira no-op
-// seguro (retorna listas vazias) para código legado do export que não é exercitado na UI.
+// Entidades com efeito real são mapeadas para o Supabase do MX; leituras de entidades
+// legadas não mapeadas retornam listas vazias, mas escritas falham explicitamente para
+// nunca confirmar ao usuário uma mutação que não foi persistida.
 import { supabase } from '@/lib/supabase'
-import { normalizeOwnerConsultantRequestPayload } from '@/lib/owner-b44/consultantRequest'
+import { normalizeOwnerConsultantRequestPayload } from '@/features/owner/lib/consultantRequest'
 
 const ConsultantRequest = {
   async create(payload) {
@@ -34,6 +35,10 @@ const ConsultantRequest = {
   },
 }
 
+const unsupportedMutation = (entityName, operation) => {
+  throw new Error(`Entidade Base44 não mapeada: ${entityName}.${operation}`)
+}
+
 const noopEntity = {
   async filter() {
     return []
@@ -44,14 +49,14 @@ const noopEntity = {
   async get() {
     return null
   },
-  async create(payload) {
-    return { id: `local-${Date.now()}`, ...payload }
+  async create() {
+    return unsupportedMutation('desconhecida', 'create')
   },
-  async update(id, payload) {
-    return { id, ...payload }
+  async update() {
+    return unsupportedMutation('desconhecida', 'update')
   },
   async delete() {
-    return null
+    return unsupportedMutation('desconhecida', 'delete')
   },
 }
 
@@ -59,7 +64,14 @@ const entities = new Proxy(
   { ConsultantRequest },
   {
     get(target, prop) {
-      return target[prop] || noopEntity
+      if (target[prop]) return target[prop]
+      const entityName = String(prop)
+      return {
+        ...noopEntity,
+        create: async () => unsupportedMutation(entityName, 'create'),
+        update: async () => unsupportedMutation(entityName, 'update'),
+        delete: async () => unsupportedMutation(entityName, 'delete'),
+      }
     },
   },
 )

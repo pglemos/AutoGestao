@@ -4,8 +4,8 @@ import DetailDrawer from "@/components/owner/DetailDrawer";
 import StatusBadge from "@/components/owner/StatusBadge";
 import EmptyState from "@/components/owner/EmptyState";
 import { useOwner } from "@/components/owner/OwnerContext";
-import { formatBRL, formatNumber, formatPercent, formatDateTime } from "@/lib/owner-b44/format";
-import { DEPARTMENT_LABELS } from "@/lib/owner-b44/status";
+import { formatBRL, formatNumber, formatPercent, formatDateTime } from "@/features/owner/lib/ownerFormatters";
+import { DEPARTMENT_LABELS } from "@/features/owner/lib/ownerStatus";
 import { CardSkeleton } from "@/components/owner/Skeleton";
 
 const kpiByName = (kpis, name) => kpis.find((k) => k.name === name);

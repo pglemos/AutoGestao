@@ -1,6 +1,6 @@
 import StatusBadge from "@/components/owner/StatusBadge";
-import { DEPARTMENT_LABELS } from "@/lib/owner-b44/status";
-import { formatDate } from "@/lib/owner-b44/format";
+import { DEPARTMENT_LABELS } from "@/features/owner/lib/ownerStatus";
+import { formatDate } from "@/features/owner/lib/ownerFormatters";
 import { Target, UserCircle, Flag, CalendarClock } from "lucide-react";
 
 // Deriva até 4 prioridades a partir dos objetivos estratégicos do ciclo.

@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useOwnerOptional } from "@/components/owner/OwnerContext";
-import { formatDateTime } from "@/lib/owner-b44/format";
+import { formatDateTime } from "@/features/owner/lib/ownerFormatters";
 import { cn } from "@/lib/utils";
 import { Check, ChevronDown, RefreshCw, SlidersHorizontal } from "lucide-react";
 

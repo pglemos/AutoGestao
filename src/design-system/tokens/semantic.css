@@ -240,7 +240,7 @@ form input[aria-hidden="true"] {
  * SUPERFÍCIES DO TEMPLATE CANÔNICO — promoção do escopo legado (C0.3)
  * --------------------------------------------------------------------
  * Estas variáveis viviam sob o atributo de escopo dos perfis internos em
- * `internal-mx-manager-scope.css`, consumidas por `.mx-canonical-template` e
+ * `internal-mx-canonical-template.css`, consumidas por `.mx-canonical-template` e
  * pelos slots do template. O escopo por perfil foi eliminado: os valores são
  * os mesmos para todos os perfis e agora vivem na raiz, onde o template os
  * resolve independentemente do atributo. Os tons usam a escala cinza legada

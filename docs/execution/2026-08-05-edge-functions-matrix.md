@@ -1,5 +1,9 @@
 # MATRIZ DE AUDITORIA DAS 22 EDGE FUNCTIONS — 2026-08-05
 
+> SUPERSEDED — histórico preservado; não é evidência da release atual.
+> Consulte os snapshots e o relatório atuais em `docs/execution/2026-08-09-*.md`.
+
+
 > **Status:** `IN_PROGRESS — CONFIGURAÇÃO REAL CATALOGADA, TESTES POR ENDPOINT PENDENTES`
 > **Gerado por:** `generate-edge-functions-matrix.mjs` — consolida API real
 > **SHA:** `5a6090b0ba3d6ea86c2f6cd86f8366544452b5d3`

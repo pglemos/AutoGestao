@@ -31,7 +31,7 @@ function report(file, line, desc) {
 // 1. CSS — tokens do @theme derivam de primitives
 const cssFiles = [
   'src/index.css',
-  'src/styles/internal-mx-manager-scope.css',
+  'src/styles/internal-mx-canonical-template.css',
   'src/design-system/tokens/semantic.css',
   'src/design-system/tokens/components.css',
 ];
