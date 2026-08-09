@@ -55,7 +55,7 @@ const SearchField = React.forwardRef<HTMLInputElement, SearchFieldProps>(
         {showLabel ? (
           <label
             htmlFor={inputId}
-            className="text-[length:var(--mx-font-size-base)] font-medium text-[hsl(var(--mx-color-text-primary))]"
+            className="text-[length:var(--mx-font-size-base)] font-medium text-text-primary"
           >
             {label}
           </label>
@@ -69,12 +69,12 @@ const SearchField = React.forwardRef<HTMLInputElement, SearchFieldProps>(
           className={cn(
             fieldBaseClasses,
             'gap-[var(--mx-space-2)]',
-            disabled && 'bg-[hsl(var(--mx-color-surface-muted))]',
+            disabled && 'bg-surface-alt',
           )}
         >
           <Search
             aria-hidden
-            className="h-4 w-4 shrink-0 text-[hsl(var(--mx-color-text-secondary))]"
+            className="h-4 w-4 shrink-0 text-text-secondary"
           />
           <input
             ref={innerRef}
@@ -93,10 +93,10 @@ const SearchField = React.forwardRef<HTMLInputElement, SearchFieldProps>(
               type="button"
               onClick={handleClear}
               className={cn(
-                'shrink-0 rounded-full p-0.5 text-[hsl(var(--mx-color-text-secondary))]',
+                'shrink-0 rounded-full p-0.5 text-text-secondary',
                 'transition-colors duration-[var(--mx-duration-fast)]',
-                'hover:bg-[hsl(var(--mx-color-surface-muted))] hover:text-[hsl(var(--mx-color-text-primary))]',
-                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--mx-color-focus-ring))]',
+                'hover:bg-surface-alt hover:text-text-primary',
+                'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring',
               )}
             >
               <X aria-hidden className="h-4 w-4" />

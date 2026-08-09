@@ -44,7 +44,7 @@ function ViewModeSelector<T extends string>({
       aria-label={label}
       className={cn(
         'inline-flex items-center gap-0.5 rounded-[var(--mx-tabs-container-radius)] p-0.5',
-        'bg-[hsl(var(--mx-color-surface-muted))]',
+        'bg-surface-alt',
         className,
       )}
     >
@@ -75,11 +75,11 @@ function ViewModeSelector<T extends string>({
               'inline-flex h-8 items-center gap-1.5 rounded-[var(--mx-tabs-item-radius)] px-[var(--mx-space-3)]',
               'text-[length:var(--mx-font-size-xs)] font-medium',
               'transition-colors duration-[var(--mx-duration-fast)] ease-standard',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-1',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-1',
               '[&_svg]:h-4 [&_svg]:w-4',
               selected
-                ? 'bg-[hsl(var(--mx-color-surface))] text-[hsl(var(--mx-color-text-primary))] shadow-[var(--mx-shadow-sm)]'
-                : 'text-[hsl(var(--mx-color-text-secondary))] hover:text-[hsl(var(--mx-color-text-primary))]',
+                ? 'bg-surface-default text-text-primary shadow-[var(--mx-shadow-sm)]'
+                : 'text-text-secondary hover:text-text-primary',
             )}
           >
             {option.icon ? <span aria-hidden>{option.icon}</span> : null}

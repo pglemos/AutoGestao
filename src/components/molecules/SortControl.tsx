@@ -42,10 +42,10 @@ const SortControl = React.forwardRef<HTMLButtonElement, SortControlProps>(
           'inline-flex items-center gap-1 rounded-[var(--mx-radius-sm)] px-1 py-0.5',
           'text-[length:var(--mx-font-size-xs)] font-semibold uppercase tracking-wide',
           direction
-            ? 'text-[hsl(var(--mx-color-text-primary))]'
-            : 'text-[hsl(var(--mx-color-text-secondary))]',
-          'transition-colors duration-[var(--mx-duration-fast)] hover:text-[hsl(var(--mx-color-text-primary))]',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--mx-color-focus-ring))]',
+            ? 'text-text-primary'
+            : 'text-text-secondary',
+          'transition-colors duration-[var(--mx-duration-fast)] hover:text-text-primary',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring',
           alignEnd && 'flex-row-reverse',
           className,
         )}

@@ -27,8 +27,8 @@ const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
         'inline-flex items-center gap-[var(--mx-space-1)] rounded-full',
         'border transition-colors duration-[var(--mx-duration-fast)] ease-standard',
         selected
-          ? 'border-[hsl(var(--mx-color-primary))] bg-[hsl(var(--mx-color-primary-subtle))] text-[hsl(var(--mx-color-primary-active))]'
-          : 'border-[hsl(var(--mx-color-border))] bg-[hsl(var(--mx-color-surface))] text-[hsl(var(--mx-color-text-secondary))]',
+          ? 'border-primary bg-brand-primary-subtle text-brand-primary-active'
+          : 'border-border bg-surface-default text-text-secondary',
         className,
       )}
     >
@@ -39,7 +39,7 @@ const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
         className={cn(
           'inline-flex items-center gap-1 rounded-full py-1 pl-3 text-[length:var(--mx-font-size-xs)] font-medium',
           onRemove ? 'pr-1' : 'pr-3',
-          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-1',
+          'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-1',
         )}
         {...props}
       >
@@ -56,8 +56,8 @@ const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
             className={cn(
               'ml-0.5 rounded-full px-1.5 text-[length:var(--mx-font-size-micro)] font-semibold',
               selected
-                ? 'bg-[hsl(var(--mx-color-primary))] text-[hsl(var(--mx-color-primary-foreground))]'
-                : 'bg-[hsl(var(--mx-color-surface-muted))] text-[hsl(var(--mx-color-text-secondary))]',
+                ? 'bg-primary text-primary-foreground'
+                : 'bg-surface-alt text-text-secondary',
             )}
           >
             {count}
@@ -72,8 +72,8 @@ const FilterChip = React.forwardRef<HTMLButtonElement, FilterChipProps>(
           className={cn(
             'mr-1 shrink-0 rounded-full p-0.5',
             'transition-colors duration-[var(--mx-duration-fast)]',
-            'hover:bg-[hsl(var(--mx-color-surface-muted))]',
-            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--mx-color-focus-ring))]',
+            'hover:bg-surface-alt',
+            'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring',
           )}
         >
           <X aria-hidden className="h-3 w-3" />

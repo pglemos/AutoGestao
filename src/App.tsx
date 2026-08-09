@@ -190,8 +190,8 @@ function ForbiddenRoute() {
   // Usa o estado de erro do Design System em vez de um layout próprio (§9.5).
   // Em um 403 repetir não resolve, então a saída oferecida é voltar.
   return (
-      <main className="flex min-h-screen items-center justify-center bg-[hsl(var(--mx-color-surface-muted))] p-[var(--mx-space-6)]">
-        <section className="w-full max-w-lg rounded-[var(--mx-card-radius)] border border-[hsl(var(--mx-color-border))] bg-[hsl(var(--mx-color-surface))] shadow-[var(--mx-shadow-lg)]">
+      <main className="flex min-h-screen items-center justify-center bg-surface-alt p-[var(--mx-space-6)]">
+        <section className="w-full max-w-lg rounded-[var(--mx-card-radius)] border border-border bg-surface-default shadow-[var(--mx-shadow-lg)]">
           <ErrorState
             kind="permission"
             description={`O perfil ${role || 'indefinido'} não tem permissão para acessar ${location.pathname}. Se esse acesso faz parte da sua rotina, solicite liberação ao Admin MX ou ao gestor responsável pela unidade.`}
@@ -199,7 +199,7 @@ function ForbiddenRoute() {
               <button
                 type="button"
                 onClick={() => navigate('/', { replace: true })}
-                className="inline-flex h-[var(--mx-button-height-md)] items-center rounded-[var(--mx-button-radius)] bg-[hsl(var(--mx-color-primary))] px-[var(--mx-button-padding-inline-md)] text-[length:var(--mx-font-size-base)] font-semibold text-[hsl(var(--mx-color-primary-foreground))] transition-colors hover:bg-[hsl(var(--mx-color-primary-hover))] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-2"
+                className="inline-flex h-[var(--mx-button-height-md)] items-center rounded-[var(--mx-button-radius)] bg-primary px-[var(--mx-button-padding-inline-md)] text-[length:var(--mx-font-size-base)] font-semibold text-primary-foreground transition-colors hover:bg-brand-primary-hover focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2"
               >
                 Voltar para minha área
               </button>

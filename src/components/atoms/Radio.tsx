@@ -25,11 +25,11 @@ const Radio = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Item>
     <RadioGroupPrimitive.Item
       ref={ref}
       className={cn(
-        'aspect-square h-4 w-4 rounded-full border border-[hsl(var(--mx-color-border-strong))]',
+        'aspect-square h-4 w-4 rounded-full border border-border-strong',
         'transition-colors duration-[var(--mx-duration-fast)] ease-standard',
-        'focus-visible:outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-2',
+        'focus-visible:outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring focus-visible:ring-offset-2',
         'disabled:cursor-not-allowed disabled:opacity-50',
-        'data-[state=checked]:border-[hsl(var(--mx-color-primary))]',
+        'data-[state=checked]:border-primary',
         className,
       )}
       {...props}
@@ -37,7 +37,7 @@ const Radio = React.forwardRef<React.ElementRef<typeof RadioGroupPrimitive.Item>
       <RadioGroupPrimitive.Indicator className="flex items-center justify-center">
         <span
           aria-hidden
-          className="block h-2 w-2 rounded-full bg-[hsl(var(--mx-color-primary))]"
+          className="block h-2 w-2 rounded-full bg-primary"
         />
       </RadioGroupPrimitive.Indicator>
     </RadioGroupPrimitive.Item>

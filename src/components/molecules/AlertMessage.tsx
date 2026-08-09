@@ -8,29 +8,29 @@ const tones = {
     icon: Info,
     prefix: 'Informação',
     wrapper:
-      'border-[hsl(var(--mx-color-info))]/30 bg-[hsl(var(--mx-color-info-subtle))] text-[hsl(var(--mx-color-text-primary))]',
-    iconColor: 'text-[hsl(var(--mx-color-info))]',
+      'border-info/30 bg-info-subtle text-text-primary',
+    iconColor: 'text-info',
   },
   success: {
     icon: CheckCircle2,
     prefix: 'Sucesso',
     wrapper:
-      'border-[hsl(var(--mx-color-success))]/30 bg-[hsl(var(--mx-color-success-subtle))] text-[hsl(var(--mx-color-text-primary))]',
-    iconColor: 'text-[hsl(var(--mx-color-success))]',
+      'border-success/30 bg-success-subtle text-text-primary',
+    iconColor: 'text-success',
   },
   warning: {
     icon: AlertTriangle,
     prefix: 'Atenção',
     wrapper:
-      'border-[hsl(var(--mx-color-warning))]/30 bg-[hsl(var(--mx-color-warning-subtle))] text-[hsl(var(--mx-color-text-primary))]',
-    iconColor: 'text-[hsl(var(--mx-color-warning))]',
+      'border-warning/30 bg-warning-subtle text-text-primary',
+    iconColor: 'text-warning',
   },
   danger: {
     icon: XCircle,
     prefix: 'Erro',
     wrapper:
-      'border-[hsl(var(--mx-color-danger))]/30 bg-[hsl(var(--mx-color-danger-subtle))] text-[hsl(var(--mx-color-text-primary))]',
-    iconColor: 'text-[hsl(var(--mx-color-danger))]',
+      'border-danger/30 bg-danger-subtle text-text-primary',
+    iconColor: 'text-danger',
   },
 } as const
 
@@ -74,7 +74,7 @@ const AlertMessage = React.forwardRef<HTMLDivElement, AlertMessageProps>(
           <VisuallyHidden>{`${config.prefix}: `}</VisuallyHidden>
           {title ? <p className="font-semibold">{title}</p> : null}
           {children ? (
-            <div className={cn('text-[hsl(var(--mx-color-text-secondary))]', title && 'mt-1')}>
+            <div className={cn('text-text-secondary', title && 'mt-1')}>
               {children}
             </div>
           ) : null}
@@ -87,8 +87,8 @@ const AlertMessage = React.forwardRef<HTMLDivElement, AlertMessageProps>(
             onClick={onDismiss}
             className={cn(
               'shrink-0 self-start rounded-[var(--mx-radius-sm)] p-1',
-              'transition-colors duration-[var(--mx-duration-fast)] hover:bg-[hsl(var(--mx-color-text-primary))]/5',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--mx-color-focus-ring))]',
+              'transition-colors duration-[var(--mx-duration-fast)] hover:bg-text-primary/5',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring',
             )}
           >
             <X aria-hidden className="h-4 w-4" />

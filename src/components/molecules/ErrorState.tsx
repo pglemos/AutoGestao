@@ -79,15 +79,15 @@ const ErrorState = React.forwardRef<HTMLDivElement, ErrorStateProps>(
       >
         <span
           aria-hidden
-          className="flex h-12 w-12 items-center justify-center rounded-[var(--mx-radius-xl)] bg-[hsl(var(--mx-color-danger-subtle))]"
+          className="flex h-12 w-12 items-center justify-center rounded-[var(--mx-radius-xl)] bg-danger-subtle"
         >
-          <Icon className="h-6 w-6 text-[hsl(var(--mx-color-danger))]" />
+          <Icon className="h-6 w-6 text-danger" />
         </span>
 
-        <h3 className="text-[length:var(--mx-font-size-h3)] font-semibold text-[hsl(var(--mx-color-text-primary))]">
+        <h3 className="text-[length:var(--mx-font-size-h3)] font-semibold text-text-primary">
           {title ?? config.title}
         </h3>
-        <p className="max-w-prose text-[length:var(--mx-font-size-base)] text-[hsl(var(--mx-color-text-secondary))]">
+        <p className="max-w-prose text-[length:var(--mx-font-size-base)] text-text-secondary">
           {description ?? config.hint}
         </p>
 
@@ -100,9 +100,9 @@ const ErrorState = React.forwardRef<HTMLDivElement, ErrorStateProps>(
             className={cn(
               'mt-[var(--mx-space-2)] inline-flex items-center gap-2 rounded-[var(--mx-button-radius)]',
               'h-[var(--mx-button-height-md)] px-[var(--mx-button-padding-inline-md)]',
-              'bg-[hsl(var(--mx-color-primary))] text-[length:var(--mx-font-size-base)] font-semibold text-[hsl(var(--mx-color-primary-foreground))]',
-              'transition-colors duration-[var(--mx-duration-fast)] hover:bg-[hsl(var(--mx-color-primary-hover))]',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-2',
+              'bg-primary text-[length:var(--mx-font-size-base)] font-semibold text-primary-foreground',
+              'transition-colors duration-[var(--mx-duration-fast)] hover:bg-brand-primary-hover',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-focus-ring focus-visible:ring-offset-2',
               'disabled:pointer-events-none disabled:opacity-50',
             )}
           >
@@ -117,7 +117,7 @@ const ErrorState = React.forwardRef<HTMLDivElement, ErrorStateProps>(
         {action ? <div className="mt-[var(--mx-space-2)]">{action}</div> : null}
 
         {reference ? (
-          <p className="text-[length:var(--mx-font-size-micro)] text-[hsl(var(--mx-color-text-disabled))]">
+          <p className="text-[length:var(--mx-font-size-micro)] text-text-disabled">
             Código de referência: {reference}
           </p>
         ) : null}

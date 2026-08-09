@@ -17,7 +17,7 @@ const Label = React.forwardRef<React.ElementRef<typeof LabelPrimitive.Root>, Lab
     <LabelPrimitive.Root
       ref={ref}
       className={cn(
-        'text-[length:var(--mx-font-size-base)] font-medium leading-none text-[hsl(var(--mx-color-text-primary))]',
+        'text-[length:var(--mx-font-size-base)] font-medium leading-none text-text-primary',
         'peer-disabled:cursor-not-allowed peer-disabled:opacity-70',
         className,
       )}
@@ -25,7 +25,7 @@ const Label = React.forwardRef<React.ElementRef<typeof LabelPrimitive.Root>, Lab
     >
       {children}
       {required ? (
-        <span aria-hidden className="ml-0.5 text-[hsl(var(--mx-color-danger))]">
+        <span aria-hidden className="ml-0.5 text-danger">
           *
         </span>
       ) : null}

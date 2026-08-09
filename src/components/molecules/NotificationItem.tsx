@@ -35,7 +35,7 @@ const NotificationItem = React.forwardRef<HTMLLIElement, NotificationItemProps>(
         <span className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span
             className={cn(
-              'truncate text-[length:var(--mx-font-size-base)] text-[hsl(var(--mx-color-text-primary))]',
+              'truncate text-[length:var(--mx-font-size-base)] text-text-primary',
               unread ? 'font-semibold' : 'font-normal',
             )}
           >
@@ -43,11 +43,11 @@ const NotificationItem = React.forwardRef<HTMLLIElement, NotificationItemProps>(
             {unread ? <VisuallyHidden> (não lida)</VisuallyHidden> : null}
           </span>
           {description ? (
-            <span className="line-clamp-2 text-[length:var(--mx-font-size-xs)] text-[hsl(var(--mx-color-text-secondary))]">
+            <span className="line-clamp-2 text-[length:var(--mx-font-size-xs)] text-text-secondary">
               {description}
             </span>
           ) : null}
-          <span className="text-[length:var(--mx-font-size-micro)] text-[hsl(var(--mx-color-text-disabled))]">
+          <span className="text-[length:var(--mx-font-size-micro)] text-text-disabled">
             {timestamp}
           </span>
         </span>
@@ -56,8 +56,8 @@ const NotificationItem = React.forwardRef<HTMLLIElement, NotificationItemProps>(
 
     const shared = cn(
       'flex w-full gap-[var(--mx-space-3)] px-[var(--mx-space-4)] py-[var(--mx-space-3)] text-left',
-      'border-b border-[hsl(var(--mx-color-border))] last:border-b-0',
-      unread && 'bg-[hsl(var(--mx-color-primary-subtle))]/40',
+      'border-b border-border last:border-b-0',
+      unread && 'bg-brand-primary-subtle/40',
     )
 
     return (
@@ -68,8 +68,8 @@ const NotificationItem = React.forwardRef<HTMLLIElement, NotificationItemProps>(
             onClick={onSelect}
             className={cn(
               shared,
-              'transition-colors duration-[var(--mx-duration-fast)] hover:bg-[hsl(var(--mx-color-surface-muted))]',
-              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[hsl(var(--mx-color-focus-ring))]',
+              'transition-colors duration-[var(--mx-duration-fast)] hover:bg-surface-alt',
+              'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-focus-ring',
             )}
           >
             {content}

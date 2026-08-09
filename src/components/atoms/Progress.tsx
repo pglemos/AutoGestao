@@ -15,10 +15,10 @@ const progressVariants = cva('relative w-full overflow-hidden rounded-full', {
 })
 
 const indicatorTones = {
-  primary: 'bg-[hsl(var(--mx-color-primary))]',
-  success: 'bg-[hsl(var(--mx-color-success))]',
-  warning: 'bg-[hsl(var(--mx-color-warning))]',
-  danger: 'bg-[hsl(var(--mx-color-danger))]',
+  primary: 'bg-primary',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  danger: 'bg-danger',
 } as const
 
 export interface ProgressProps
@@ -44,7 +44,7 @@ const Progress = React.forwardRef<
       value={clamped}
       className={cn(
         progressVariants({ size }),
-        'bg-[hsl(var(--mx-color-surface-muted))]',
+        'bg-surface-alt',
         className,
       )}
       {...props}

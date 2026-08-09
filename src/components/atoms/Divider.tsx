@@ -20,16 +20,16 @@ const Divider = React.forwardRef<
           ref={ref}
           decorative
           orientation="horizontal"
-          className="h-px flex-1 bg-[hsl(var(--mx-color-border))]"
+          className="h-px flex-1 bg-border"
           {...props}
         />
-        <span className="text-[length:var(--mx-font-size-xs)] text-[hsl(var(--mx-color-text-secondary))]">
+        <span className="text-[length:var(--mx-font-size-xs)] text-text-secondary">
           {label}
         </span>
         <SeparatorPrimitive.Root
           decorative
           orientation="horizontal"
-          className="h-px flex-1 bg-[hsl(var(--mx-color-border))]"
+          className="h-px flex-1 bg-border"
         />
       </div>
     )
@@ -41,7 +41,7 @@ const Divider = React.forwardRef<
       decorative={decorative}
       orientation={orientation}
       className={cn(
-        'shrink-0 bg-[hsl(var(--mx-color-border))]',
+        'shrink-0 bg-border',
         orientation === 'horizontal' ? 'h-px w-full' : 'h-full w-px',
         className,
       )}

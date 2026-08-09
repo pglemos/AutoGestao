@@ -3,11 +3,11 @@ import { cn } from '@/lib/utils'
 import { VisuallyHidden } from '@/components/atoms/VisuallyHidden'
 
 const toneClasses = {
-  success: 'bg-[hsl(var(--mx-color-success))]',
-  warning: 'bg-[hsl(var(--mx-color-warning))]',
-  danger: 'bg-[hsl(var(--mx-color-danger))]',
-  info: 'bg-[hsl(var(--mx-color-info))]',
-  neutral: 'bg-[hsl(var(--mx-color-text-disabled))]',
+  success: 'bg-success',
+  warning: 'bg-warning',
+  danger: 'bg-danger',
+  info: 'bg-info',
+  neutral: 'bg-text-disabled',
 } as const
 
 export type StatusTone = keyof typeof toneClasses
@@ -48,7 +48,7 @@ const StatusDot = React.forwardRef<HTMLSpanElement, StatusDotProps>(
         />
       </span>
       {showLabel ? (
-        <span className="text-[length:var(--mx-font-size-xs)] text-[hsl(var(--mx-color-text-secondary))]">
+        <span className="text-[length:var(--mx-font-size-xs)] text-text-secondary">
           {label}
         </span>
       ) : (

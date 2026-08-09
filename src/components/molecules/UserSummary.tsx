@@ -46,7 +46,7 @@ const UserSummary = React.forwardRef<HTMLDivElement, UserSummaryProps>(
           aria-hidden
           className={cn(
             'flex shrink-0 items-center justify-center overflow-hidden rounded-full',
-            'bg-[hsl(var(--mx-color-primary-subtle))] text-[length:var(--mx-font-size-xs)] font-semibold text-[hsl(var(--mx-color-primary-active))]',
+            'bg-brand-primary-subtle text-[length:var(--mx-font-size-xs)] font-semibold text-brand-primary-active',
             config.box,
           )}
         >
@@ -67,14 +67,14 @@ const UserSummary = React.forwardRef<HTMLDivElement, UserSummaryProps>(
         <span className="flex min-w-0 flex-col">
           <span
             className={cn(
-              'truncate font-semibold text-[hsl(var(--mx-color-text-primary))]',
+              'truncate font-semibold text-text-primary',
               config.name,
             )}
           >
             {name}
           </span>
           {caption ? (
-            <span className="truncate text-[length:var(--mx-font-size-xs)] text-[hsl(var(--mx-color-text-secondary))]">
+            <span className="truncate text-[length:var(--mx-font-size-xs)] text-text-secondary">
               {caption}
             </span>
           ) : null}

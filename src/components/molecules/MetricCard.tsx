@@ -48,7 +48,7 @@ const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
         ref={ref}
         className={cn(
           'flex flex-col gap-[var(--mx-space-2)] rounded-[var(--mx-card-radius)] p-[var(--mx-card-padding)]',
-          'border border-[hsl(var(--mx-color-border))] bg-[hsl(var(--mx-color-surface))]',
+          'border border-border bg-surface-default',
           'shadow-[var(--mx-card-shadow)] transition-shadow duration-[var(--mx-duration-fast)]',
           'hover:shadow-[var(--mx-card-hover-shadow)]',
           className,
@@ -56,13 +56,13 @@ const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
         {...props}
       >
         <div className="flex items-start justify-between gap-[var(--mx-space-2)]">
-          <p className="text-[length:var(--mx-font-size-xs)] font-medium uppercase tracking-wide text-[hsl(var(--mx-color-text-secondary))]">
+          <p className="text-[length:var(--mx-font-size-xs)] font-medium uppercase tracking-wide text-text-secondary">
             {label}
           </p>
           {icon ? (
             <span
               aria-hidden
-              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--mx-radius-md)] bg-[hsl(var(--mx-color-primary-subtle))] text-[hsl(var(--mx-color-primary))] [&_svg]:h-[16px] [&_svg]:w-[16px]"
+              className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--mx-radius-md)] bg-brand-primary-subtle text-primary [&_svg]:h-[16px] [&_svg]:w-[16px]"
             >
               {icon}
             </span>
@@ -74,7 +74,7 @@ const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
             <Spinner size="sm" tone="muted" label={`Carregando ${label}`} />
           </div>
         ) : (
-          <p className="text-[length:var(--mx-font-size-metric-lg)] font-bold leading-tight text-[hsl(var(--mx-color-text-primary))]">
+          <p className="text-[length:var(--mx-font-size-metric-lg)] font-bold leading-tight text-text-primary">
             {value}
           </p>
         )}
@@ -84,8 +84,8 @@ const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
             className={cn(
               'inline-flex items-center gap-1 text-[length:var(--mx-font-size-xs)] font-semibold',
               positive
-                ? 'text-[hsl(var(--mx-color-success))]'
-                : 'text-[hsl(var(--mx-color-danger))]',
+                ? 'text-success'
+                : 'text-danger',
             )}
           >
             {TrendIcon ? <TrendIcon aria-hidden className="h-3.5 w-3.5" /> : null}
@@ -97,7 +97,7 @@ const MetricCard = React.forwardRef<HTMLDivElement, MetricCardProps>(
         ) : null}
 
         {hint ? (
-          <p className="text-[length:var(--mx-font-size-xs)] text-[hsl(var(--mx-color-text-secondary))]">
+          <p className="text-[length:var(--mx-font-size-xs)] text-text-secondary">
             {hint}
           </p>
         ) : null}

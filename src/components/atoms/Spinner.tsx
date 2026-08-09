@@ -14,8 +14,8 @@ const spinnerVariants = cva(
       },
       tone: {
         current: 'text-current',
-        primary: 'text-[hsl(var(--mx-color-primary))]',
-        muted: 'text-[hsl(var(--mx-color-text-secondary))]',
+        primary: 'text-primary',
+        muted: 'text-text-secondary',
       },
     },
     defaultVariants: { size: 'md', tone: 'current' },

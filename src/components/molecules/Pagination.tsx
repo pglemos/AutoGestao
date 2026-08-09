@@ -43,7 +43,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
       >
         <p
           aria-live="polite"
-          className="text-[length:var(--mx-font-size-xs)] text-[hsl(var(--mx-color-text-secondary))]"
+          className="text-[length:var(--mx-font-size-xs)] text-text-secondary"
         >
           {summary}
         </p>
@@ -57,7 +57,7 @@ const Pagination = React.forwardRef<HTMLElement, PaginationProps>(
             disabled={disabled || current <= 1}
             onClick={() => onPageChange(current - 1)}
           />
-          <span className="text-[length:var(--mx-font-size-xs)] font-medium text-[hsl(var(--mx-color-text-primary))]">
+          <span className="text-[length:var(--mx-font-size-xs)] font-medium text-text-primary">
             {`Página ${numberFormatter.format(current)} de ${numberFormatter.format(totalPages)}`}
           </span>
           <IconButton

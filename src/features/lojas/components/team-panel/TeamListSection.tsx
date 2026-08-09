@@ -39,8 +39,8 @@ export function TeamListSection({
   return (
     <section className="order-1 min-w-0 pb-24">
       {teamError ? (
-        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center justify-center min-h-[40vh] space-y-mx-lg text-center border-2 border-dashed border-[hsl(var(--mx-color-danger))]/20 rounded-mx-4xl bg-[hsl(var(--mx-color-danger-subtle))]/40 p-mx-xl">
-          <div className="w-mx-20 h-mx-20 rounded-2xl bg-white flex items-center justify-center text-[hsl(var(--mx-color-danger))] shadow-sm border border-[hsl(var(--mx-color-danger))]/10">
+        <motion.div initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} className="flex flex-col items-center justify-center min-h-[40vh] space-y-mx-lg text-center border-2 border-dashed border-danger/20 rounded-mx-4xl bg-danger-subtle/40 p-mx-xl">
+          <div className="w-mx-20 h-mx-20 rounded-2xl bg-white flex items-center justify-center text-danger shadow-sm border border-danger/10">
             <ShieldAlert size={34} />
           </div>
           <div className="space-y-mx-sm max-w-lg">
@@ -137,7 +137,7 @@ export function TeamListSection({
                         size="icon"
                         onClick={() => onDeleteMember(member)}
                         disabled={pendingConfirmations.has(getDeleteMemberConfirmationKey(member))}
-                        className="h-mx-10 w-mx-10 rounded-2xl text-[hsl(var(--mx-color-danger))] hover:bg-[hsl(var(--mx-color-danger-subtle))]"
+                        className="h-mx-10 w-mx-10 rounded-2xl text-danger hover:bg-danger-subtle"
                         aria-label={`Encerrar vínculo de ${member.name}`}
                       >
                         <Trash2 size={16} />

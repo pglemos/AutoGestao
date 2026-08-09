@@ -35,10 +35,10 @@ export function SkipLink({ targetId, children = 'Pular para o conteúdo', classN
         'focus:not-sr-only focus:fixed focus:left-[var(--mx-space-4)] focus:top-[var(--mx-space-4)]',
         'focus:z-[var(--mx-z-tooltip)] focus:inline-flex focus:items-center',
         'focus:h-[var(--mx-button-height-md)] focus:rounded-[var(--mx-button-radius)] focus:px-[var(--mx-button-padding-inline-md)]',
-        'focus:bg-[hsl(var(--mx-color-primary))] focus:text-[hsl(var(--mx-color-primary-foreground))]',
+        'focus:bg-primary focus:text-primary-foreground',
         'focus:text-[length:var(--mx-font-size-base)] focus:font-semibold focus:no-underline',
         'focus:shadow-[var(--mx-shadow-lg)] focus:outline-none',
-        'focus:ring-2 focus:ring-[hsl(var(--mx-color-focus-ring))] focus:ring-offset-2',
+        'focus:ring-2 focus:ring-focus-ring focus:ring-offset-2',
         className,
       )}
     >

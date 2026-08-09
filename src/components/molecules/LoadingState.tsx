@@ -32,7 +32,7 @@ const LoadingState = React.forwardRef<HTMLDivElement, LoadingStateProps>(
               key={index}
               aria-hidden
               className={cn(
-                'h-4 rounded-[var(--mx-radius-sm)] bg-[hsl(var(--mx-color-surface-muted))]',
+                'h-4 rounded-[var(--mx-radius-sm)] bg-surface-alt',
                 'motion-safe:animate-pulse',
                 index === rows - 1 ? 'w-2/3' : 'w-full',
               )}
@@ -54,7 +54,7 @@ const LoadingState = React.forwardRef<HTMLDivElement, LoadingStateProps>(
         {...props}
       >
         <Spinner size="lg" tone="primary" label="" />
-        <p className="text-[length:var(--mx-font-size-base)] text-[hsl(var(--mx-color-text-secondary))]">
+        <p className="text-[length:var(--mx-font-size-base)] text-text-secondary">
           {label}
         </p>
       </div>

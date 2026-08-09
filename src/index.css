@@ -199,6 +199,22 @@ to { height: 0; }
   --color-surface-overlay: hsl(var(--mx-tpl-surface-overlay));
   --color-surface-elevated: hsl(var(--mx-tpl-surface-elevated));
 
+  /* Brand action states — deriva da família semântica canônica (T4.9). */
+  --color-brand-primary-active: hsl(var(--mx-color-primary-active));
+  --color-brand-primary-subtle: hsl(var(--mx-color-primary-subtle));
+
+  /* Semantic status — aliases canônicos para bg/text/border/ring (T4.9). */
+  --color-text-disabled: hsl(var(--mx-color-text-disabled));
+  --color-danger: hsl(var(--mx-color-danger));
+  --color-danger-subtle: hsl(var(--mx-color-danger-subtle));
+  --color-success: hsl(var(--mx-color-success));
+  --color-success-subtle: hsl(var(--mx-color-success-subtle));
+  --color-warning: hsl(var(--mx-color-warning));
+  --color-warning-subtle: hsl(var(--mx-color-warning-subtle));
+  --color-info: hsl(var(--mx-color-info));
+  --color-info-subtle: hsl(var(--mx-color-info-subtle));
+  --color-focus-ring: hsl(var(--mx-color-focus-ring));
+
   /* Sidebar (Dark Navy theme — Story UI-redesign 20260529) */
   --color-sidebar-bg: hsl(var(--mx-tpl-sidebar-bg));
   --color-sidebar-bg-strong: hsl(var(--mx-tpl-sidebar-bg));

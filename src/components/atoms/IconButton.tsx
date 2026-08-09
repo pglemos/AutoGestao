@@ -8,20 +8,20 @@ const iconButtonVariants = cva(
   cn(
     'inline-flex shrink-0 items-center justify-center rounded-[var(--mx-button-radius)]',
     'transition-colors duration-[var(--mx-duration-fast)] ease-standard',
-    'focus-visible:outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-[hsl(var(--mx-color-focus-ring))] focus-visible:ring-offset-2',
+    'focus-visible:outline-none focus-visible:ring-[length:var(--mx-input-focus-ring-width)] focus-visible:ring-focus-ring focus-visible:ring-offset-2',
     'disabled:pointer-events-none disabled:opacity-50',
   ),
   {
     variants: {
       variant: {
         primary:
-          'bg-[hsl(var(--mx-color-primary))] text-[hsl(var(--mx-color-primary-foreground))] hover:bg-[hsl(var(--mx-color-primary-hover))] active:bg-[hsl(var(--mx-color-primary-active))]',
+          'bg-primary text-primary-foreground hover:bg-brand-primary-hover active:bg-brand-primary-active',
         outline:
-          'border border-[hsl(var(--mx-color-border))] bg-[hsl(var(--mx-color-surface))] text-[hsl(var(--mx-color-text-primary))] hover:bg-[hsl(var(--mx-color-surface-muted))]',
+          'border border-border bg-surface-default text-text-primary hover:bg-surface-alt',
         ghost:
-          'text-[hsl(var(--mx-color-text-secondary))] hover:bg-[hsl(var(--mx-color-surface-muted))] hover:text-[hsl(var(--mx-color-text-primary))]',
+          'text-text-secondary hover:bg-surface-alt hover:text-text-primary',
         danger:
-          'bg-[hsl(var(--mx-color-danger))] text-[hsl(var(--mx-neutral-0))] hover:opacity-90',
+          'bg-danger text-[hsl(var(--mx-neutral-0))] hover:opacity-90',
       },
       size: {
         // Alvos de toque: `sm` só é aceitável em barras densas de desktop.
