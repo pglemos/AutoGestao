@@ -1,5 +1,21 @@
 # Live progress — estado factual atual
 
+## Storage — correção de RLS e validação remota — 2026-08-09T19:35:23Z
+
+- A policy de leitura de `evidencias-consultoria` foi corrigida em `20260809205000_fix_consulting_evidence_storage_rls_definer.sql` e aplicada no projeto `fbhcmzzgwjdgkctlfvbo`.
+- A resolução do caminho agora acontece em `public.pode_ler_evidencia_consultoria(text, uuid)`, com `SECURITY DEFINER`, `SET search_path = public`, `REVOKE` de `PUBLIC` e `GRANT` exclusivo para `authenticated`; isso evita que RLS das tabelas internas suprima evidências válidas durante a policy de Storage.
+- Teste remoto sob `authenticated`: dono da loja vinculada à evidência permitida; dono de outra loja e vendedor de outra loja negados; equipe interna permitida. Nenhum dado de produção foi criado ou removido.
+- A negativa observada antes para o login fornecido como dono era esperada para o objeto escolhido: a loja desse usuário não possui evidências armazenadas; não era um teste de mesma loja.
+- Estado: `TESTED_PRODUCTION_PARTIAL`; upload/delete, outros buckets e a matriz completa de Storage permanecem pendentes.
+
+## Auditoria remota das Edge Functions — 2026-08-09T19:17:57Z
+
+- As 22 Edge Functions ativas foram exercitadas por `OPTIONS` com os cabeçalhos reais do navegador/Sentry e por `POST {}` com Authorization inválido.
+- Resultado: `22/22 OPTIONS=200`; `22/22` anunciaram `baggage`, `sentry-trace` e `traceparent`; `19/22` retornaram `401` no teste negativo e os três endpoints públicos/OAuth retornaram `400` por validação de entrada.
+- As versões remotas que ainda carregavam o CORS antigo foram atualizadas preservando o código remoto e substituindo somente o contrato de headers. `send-visit-report` está na versão `57` e tem correção correspondente no checkout.
+- Os cinco endpoints com `verify_jwt=false` permanecem classificados individualmente: OAuth exige Bearer + `state` persistido/TTL/consumo único; sync exige JWT ou secret interno; Meet exige JWT administrativo ou secret de cron; pré-cadastro e recovery são públicos por desenho, com validação, anti-enumeração e rate limit.
+- Estado: `TESTED_PRODUCTION_PARTIAL`. Ainda faltam rodadas positivas por tenant/perfil, idempotência/replay/rate-limit de cada endpoint e a reconciliação funcional do legado remoto `autonomous-reports`, que não existe no checkout.
+
 ## Auditoria pós-commit documental — 2026-08-09T18:23:27Z
 
 - **Checkpoint documental auditado:** `b77c459e` (`docs(mx): record final release and browser evidence`) foi sucedido, no checkpoint seguinte, por `0148cf1a` (`docs(mx): record post-push deployment audit`) em `main`/`origin/main`; ambos são somente documentais.
@@ -53,9 +69,9 @@ Gate local reexecutado no SHA `ea7dcec591467db2e844fe42e3e3622cecdf1b3f`: lint, 
 | C0.1 Design System | `TESTED_LOCAL_ONLY` | Gates locais do checkout | Confirmar workflow no SHA final |
 | C0.2 Dono / PR #175 | `TESTED_LOCAL_ONLY` | Conteúdo necessário já está na main; PR fechada | Browser autenticado e dados reais |
 | C0.3 Scopes legados | `DONE_WITH_EVIDENCE` local | Guard encontrou 0 imports runtime | Revalidar no CI/produção |
-| C0.4 RLS | `TESTED_LOCAL_ONLY` | 225 tabelas públicas com RLS e 0 sem policy no snapshot | Testes por perfil/tenant |
+| C0.4 RLS | `TESTED_PRODUCTION_PARTIAL` | 225 tabelas públicas com RLS; policy Storage de evidências testada por mesma/outra loja e área interna | completar as oito decisões RLS e demais tabelas |
 | C0.5 SECURITY DEFINER | `IN_PROGRESS` | 211 catalogadas; anon=0; auth=155; service_role=194 | Classificação e testes por assinatura |
-| C0.6 Edge Functions | `IN_PROGRESS` | 22 funções catalogadas; matriz atual registra verify_jwt | OPTIONS/sem auth/JWT/tenant por endpoint |
+| C0.6 Edge Functions | `TESTED_PRODUCTION_PARTIAL` | 22/22 OPTIONS=200, CORS tracing completo, 19/22 negativos=401; matriz remota atualizada | positivos por tenant/perfil, idempotência, replay, rate limit e legado `autonomous-reports` |
 | C0.7 Proteção main | `DONE_WITH_EVIDENCE` | Configuração GitHub já validada no checkpoint | Revalidar após push final |
 | C0.8 Branches | `DONE_WITH_EVIDENCE` inventário | 3 branches remotas totais: `main` + 2 Dependabot com PRs abertas | Preservar as duas branches ativas; não há obsoletas adicionais |
 | C0.9 Deployment | `NOT_REEVALUATED` | Health/deployment do checkpoint anterior | Revalidar após SHA final |

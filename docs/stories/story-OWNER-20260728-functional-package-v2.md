@@ -2,7 +2,7 @@
 
 ## Status
 
-Ready for Review — release final e smoke autenticado completo ainda pendentes
+Ready for Review — release operacional publicada; garantias externas e cobertura autenticada total ainda pendentes
 
 ## Origem
 
@@ -20,7 +20,10 @@ ordem e os gates definidos em `ROLLOUT.md` e nos manifestos `PHASES/`.
 - [x] Tipos Supabase regenerados após as migrations.
 - [x] `npm run lint`, `npm run typecheck`, `npm test` e `npm run build` verdes.
 - [x] Contratos focados do pacote e regressões do Dono verdes.
-- [ ] Previews Vercel `READY` e smoke autenticado dos perfis aplicáveis.
+- [x] Produção Vercel `READY`, health saudável e smoke autenticado parcial com dados reais.
+- [x] CORS de Edge Functions compatível com headers de observabilidade e rejeição negativa remota exercitada.
+- [ ] Smoke autenticado completo de todos os perfis aplicáveis e todos os viewports.
+- [ ] Provas externas de Sentry, restore/PITR/rollback e classificação comportamental integral do Supabase.
 - [x] Nenhum segredo privilegiado novo versionado.
 
 ## Restrições
@@ -92,3 +95,11 @@ Arquivos de governança adicionados:
 - `supabase/migrations/20260809143559_revoke_anon_mentor_trigger_execute.sql`
 - `supabase/migrations/20260809152358_harden_backup_is_venda_loja_policy.sql`
 - `docs/execution/2026-08-09-final-report.md`
+- `supabase/functions/send-visit-report/index.ts`
+- `src/lib/edge-functions-cors-contract.test.ts`
+- `src/lib/consulting-evidence-storage-policy.test.ts`
+- `supabase/migrations/20260809192547_scope_consulting_evidence_storage_select.sql`
+- `supabase/migrations/20260809205000_fix_consulting_evidence_storage_rls_definer.sql`
+- `docs/execution/2026-08-09-edge-functions-matrix.md`
+- `docs/execution/2026-08-09-live-progress.md`
+- `docs/execution/2026-08-09-evidence-ledger.md`

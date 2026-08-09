@@ -1,5 +1,14 @@
 # Ledger integral derivado do prompt mestre
 
+## Auditoria Storage — 2026-08-09T19:35:23Z
+
+| Grupo | Resultado atual | Evidência |
+|---|---|---|
+| C0.4 RLS / Storage | `TESTED_PRODUCTION_PARTIAL` | migration `20260809205000_fix_consulting_evidence_storage_rls_definer.sql`; mesmo tenant permitido, outro tenant/papel proibido negado e área interna permitida sob `authenticated` |
+| T10.8 Storage | `TESTED_PRODUCTION_PARTIAL` | bucket `evidencias-consultoria` revisado; helper `SECURITY DEFINER` com `search_path` fixo e grants restritos; demais buckets/upload/delete ainda pendentes |
+
+O teste negativo anterior do login de dono usou a loja `467a19d1-af51-4b4f-9b05-d67187a2a759`, sem objetos de evidência; o caso foi corrigido para uma loja com evidência real.
+
 ## Auditoria pós-commit documental — 2026-08-09T18:23:27Z
 
 | Grupo | Resultado atual | Evidência |
@@ -66,7 +75,7 @@ As linhas históricas abaixo permanecem como trilha de auditoria; este adendo é
 | C0.3 | Eliminar scopes legados com prova de runtime | `TESTED_LOCAL_ONLY` | node scripts/audit-owner-b44-graph.mjs --check | guard runtime sem imports retirados | revalidar no SHA final quando a task for release-sensitive |
 | C0.4 | Tratar as oito tabelas RLS sem policy | `TESTED_LOCAL_ONLY` | snapshot Supabase 2026-08-09T15:47:14.419Z | 225 tabelas com RLS; 0 sem policy | revalidar no SHA final quando a task for release-sensitive |
 | C0.5 | Revisar 204 funções `SECURITY DEFINER` | `IN_PROGRESS` | snapshot pg_proc/has_function_privilege | 211 SECURITY DEFINER; anon=0; auth=155 | ver matriz/ledger atual e anexar artefato de fechamento |
-| C0.6 | Revisar as 22 Edge Functions e as 13 sem JWT obrigatório | `IN_PROGRESS` | supabase list_edge_functions | 22 funções catalogadas; testes por endpoint pendentes | ver matriz/ledger atual e anexar artefato de fechamento |
+| C0.6 | Revisar as 22 Edge Functions e as 5 sem JWT obrigatório atuais | `TESTED_PRODUCTION_PARTIAL` | list_edge_functions + probe remoto 2026-08-09T19:17:57Z | 22/22 OPTIONS=200, CORS tracing completo, 19/22 negativos=401; públicos/OAuth=400 de validação | concluir positivos por tenant/perfil, idempotência, replay, rate limit e legado |
 | C0.7 | Proteger a `main` depois dos checkpoints diretos | `TESTED_LOCAL_ONLY` | proteção GitHub do checkpoint | revalidar required checks no SHA final | revalidar no SHA final quando a task for release-sensitive |
 | C0.8 | Limpar as 22 branches além da `main` | `IN_PROGRESS` | git branch -r | branches dependabot remanescentes precisam de decisão documentada | ver matriz/ledger atual e anexar artefato de fechamento |
 | C0.9 | Revalidar o deployment saudável após cada correção | `NOT_REEVALUATED` | deployment/health do checkpoint | revalidar após push final | revalidar no SHA final quando a task for release-sensitive |
@@ -153,7 +162,7 @@ As linhas históricas abaixo permanecem como trilha de auditoria; este adendo é
 | T10.5 | Restringir grants perigosos | `NOT_PROVEN` | nenhuma evidência atual anexada | não executado ou não revalidado nesta execução | capturar evidência atual ou registrar bloqueio externo genuíno |
 | T10.6 | Fixar search_path | `NOT_PROVEN` | nenhuma evidência atual anexada | não executado ou não revalidado nesta execução | capturar evidência atual ou registrar bloqueio externo genuíno |
 | T10.7 | Revisar policies permissivas | `NOT_PROVEN` | nenhuma evidência atual anexada | não executado ou não revalidado nesta execução | capturar evidência atual ou registrar bloqueio externo genuíno |
-| T10.8 | Revisar Storage | `NOT_PROVEN` | nenhuma evidência atual anexada | não executado ou não revalidado nesta execução | capturar evidência atual ou registrar bloqueio externo genuíno |
+| T10.8 | Revisar Storage | `TESTED_PRODUCTION_PARTIAL` | migration `20260809205000_fix_consulting_evidence_storage_rls_definer.sql` + matriz de claims `authenticated` | `evidencias-consultoria` isolado por loja/papel e área interna | revisar outros buckets e upload/delete |
 | T10.9 | Revisar Auth | `NOT_PROVEN` | nenhuma evidência atual anexada | não executado ou não revalidado nesta execução | capturar evidência atual ou registrar bloqueio externo genuíno |
 | T10.10 | Revisar Edge Functions | `NOT_PROVEN` | nenhuma evidência atual anexada | não executado ou não revalidado nesta execução | capturar evidência atual ou registrar bloqueio externo genuíno |
 | T10.11 | Revisar Realtime | `NOT_PROVEN` | nenhuma evidência atual anexada | não executado ou não revalidado nesta execução | capturar evidência atual ou registrar bloqueio externo genuíno |

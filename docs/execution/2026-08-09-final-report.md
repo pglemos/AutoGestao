@@ -1,5 +1,13 @@
 # Relatório de status — execução autónoma MX
 
+## Correção de Storage — 2026-08-09T19:35:23Z
+
+- Migration `20260809205000_fix_consulting_evidence_storage_rls_definer.sql` aplicada ao Supabase `fbhcmzzgwjdgkctlfvbo`.
+- A policy `evidencias_consultoria_select` não consulta mais tabelas protegidas diretamente; usa `public.pode_ler_evidencia_consultoria(text, uuid)` com `SECURITY DEFINER`, `search_path` fixo e execução restrita a `authenticated`.
+- Validação remota sob `authenticated`: mesmo tenant/dono permitido, outro tenant/dono negado, vendedor de outra loja negado e área interna permitida.
+- O caso anterior do login de dono foi reclassificado: sua loja não possui objetos de evidência, portanto não constituía teste positivo de mesma loja. A correção foi validada com uma evidência real vinculada a uma loja com dono ativo.
+- Estado: Storage de evidências `TESTED_PRODUCTION_PARTIAL`; outros buckets, upload/delete, Sentry, restore/PITR/rollback e matriz comportamental completa continuam pendentes.
+
 ## Auditoria pós-commit documental — 2026-08-09T18:23:27Z
 
 - O checkpoint documental avaliado neste bloco é `0148cf1a`, precedido por `b77c459e`; ambos são somente documentais. A Vercel marcou o check `3QZddJ8fb3u96KUmWyMua4kZFkVE` como `success / Canceled by Ignored Build Step`.
@@ -23,7 +31,7 @@
 
 **Declaração final permitida:** `PARCIALMENTE CONCLUÍDO, COM BLOQUEIOS EXTERNOS COMPROVADOS`.
 
-Permanecem fora da prova completa: `administrador_mx` e `consultor_mx` sem credencial correspondente; Sentry sem evento sintético/source-map/alerta do SHA novo por reautenticação pendente; restore/PITR/rollback real; classificação/teste integral das 211 funções `SECURITY DEFINER` e 22 Edge Functions; e o high de `xlsx@0.18.5` sem correção upstream. Os artefatos de screenshot estão em `output/playwright/` e não entram no commit.
+Permanecem fora da prova completa: `administrador_mx` e `consultor_mx` sem credencial correspondente; Sentry sem evento sintético/source-map/alerta do SHA novo por reautenticação pendente; restore/PITR/rollback real; classificação/teste comportamental integral das 211 funções `SECURITY DEFINER` e testes positivos completos das 22 Edge Functions; e o high de `xlsx@0.18.5` sem correção upstream. A matriz de Edge Functions já tem prova remota de CORS e rejeição negativa em `docs/execution/2026-08-09-edge-functions-matrix.md`. Os artefatos de screenshot estão em `output/playwright/` e não entram no commit.
 
 ## Atualização pós-push — 2026-08-09T18:07:42Z
 
@@ -60,7 +68,7 @@ O health e a implantação da release deste checkout ainda precisam ser reconsul
 
 - 211 funções SECURITY DEFINER catalogadas; anon=0, authenticated=155, service_role=194.
 - 225 tabelas públicas com RLS; 0 sem policy na consulta atual.
-- 22 Edge Functions ativas; 5 com `verify_jwt=false`, todas ainda exigindo revisão/teste de proteção interna.
+- 22 Edge Functions ativas; 5 com `verify_jwt=false`; `OPTIONS` e rejeição negativa foram testados em produção, mas positivos por tenant/perfil e propriedades comportamentais completas ainda não foram promovidos a concluídos.
 - O guard local de scopes legados e os gates locais registrados pelo handoff permanecem evidências de checkout, não equivalem a QA autenticado completo.
 
 ## Health observado pelo gerador

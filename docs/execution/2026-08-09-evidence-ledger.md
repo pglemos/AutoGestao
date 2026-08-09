@@ -1,5 +1,19 @@
 # Evidence ledger — snapshot factual atual
 
+## Storage — correção de RLS e validação remota — 2026-08-09T19:35:23Z
+
+- **EV-ST-01 — causa raiz:** a policy anterior fazia `JOIN` direto em `evidencias_visita`, `visitas_consultoria` e `clientes_consultoria`; essas tabelas são internas e suas próprias policies RLS ocultavam o vínculo durante a avaliação de `storage.objects`, produzindo `Object not found` mesmo para um dono da loja correta.
+- **EV-ST-02 — migration aplicada:** `20260809205000_fix_consulting_evidence_storage_rls_definer.sql` aplicada por `supabase db push --linked --yes`; a migration está presente em `supabase_migrations.schema_migrations`. A função `public.pode_ler_evidencia_consultoria(text, uuid)` está `SECURITY DEFINER`, `search_path=public`, sem `PUBLIC EXECUTE` e com `EXECUTE` para `authenticated`; a policy usa somente essa função ou `eh_area_interna_mx()`.
+- **EV-ST-03 — matriz RLS no banco:** sob `ROLE authenticated` e claims `auth.uid()` reais, o dono de uma loja que possui a evidência viu o objeto; dono de outra loja e vendedor de outra loja não viram; administrador interno viu. Resultado: `PASS` para isolamento da policy e acesso de mesma loja, sem inserir ou apagar dados de produção.
+- **EV-ST-04 — correção do teste anterior:** o login fornecido como dono está vinculado à loja `467a19d1-af51-4b4f-9b05-d67187a2a759`, que não possui objetos em `evidencias-consultoria`; a negativa anterior para esse login não era um caso de mesma loja. O caso positivo foi exercitado com um vínculo de dono ativo em uma loja que possui evidência. Estado global de Storage: `TESTED_PRODUCTION_PARTIAL` — outros buckets e fluxos de upload/delete continuam fora desta rodada.
+
+## Auditoria remota das Edge Functions — 2026-08-09T19:17:57Z
+
+- **EV-EF-01 — CORS/auth negativa:** `OPTIONS` contra as 22 funções ativas retornou `200` em todas; cada resposta anunciou `authorization`, `apikey`, `content-type`, `baggage`, `sentry-trace` e `traceparent`. O `POST {}` com `Authorization: Bearer invalid-token` retornou `401` em 19 funções; `google-oauth-handler`, `store-pre-registration` e `request-password-recovery` retornaram `400` por validação de entrada pública/OAuth. Estado: `TESTED_PRODUCTION_PARTIAL`.
+- **EV-EF-02 — Publicação remota:** versões novas confirmadas como `ACTIVE` para as funções que carregavam CORS antigo: `autonomous-reports=55`, `relatorio-matinal=69`, `relatorio-mensal=63`, `google-calendar-events=57`, `send-individual-feedback=57`, `google-drive-files=70`, `executive-agenda-google-sync=22`, `send-push-notification=21`, `manage-global-user=9`, `mx-critical-jobs-health=10` e `send-visit-report=57`. Estado: `TESTED_PRODUCTION` para o contrato de headers.
+- **EV-EF-03 — Sem JWT obrigatório:** o código local e o probe classificam `google-oauth-handler` como Bearer + OAuth state/TTL/consumo único; `google-calendar-sync` como JWT ou secret interno; `google-meet-ata` como JWT administrativo ou secret de cron; `store-pre-registration` e `request-password-recovery` como endpoints públicos por desenho, com validação, anti-enumeração e rate limit. Estado: `NOT_APPLICABLE_WITH_PROOF` para o requisito de JWT nesses dois endpoints e `TESTED_PRODUCTION_PARTIAL` nos demais.
+- **EV-EF-04 — Limitação preservada:** não houve teste positivo por tenant/perfil nem teste individual completo de replay, idempotência, rate limit e Sentry/logs. A função remota legada `autonomous-reports` não existe no checkout local e permanece em classificação separada. Estado global: `IN_PROGRESS` para o aceite funcional integral.
+
 ## Auditoria pós-commit documental — 2026-08-09T18:23:27Z
 
 - **EV-REL-08 — Documentação/release:** commit `b77c459e` em `main`; Vercel check `FD5S5QdjvPeDvzdRhv8SEgUmRztf` terminou `success` como `Canceled by Ignored Build Step`; produção permaneceu no deployment runtime `dpl_TTLku8NUz63Ac474Y9Z4HcZacHwi`; estado `DONE_WITH_EVIDENCE` para a regra de deployment documental.
