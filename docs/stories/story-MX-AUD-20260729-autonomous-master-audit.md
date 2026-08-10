@@ -212,6 +212,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-07-29 | 0.3.0 | Inventário reproduzível de rotas, autorização, dados e mutations | Dex (Dev) |
 | 2026-08-10 | 0.3.1 | Regressão do PageCanvas do Dono corrigida e validada localmente em dois breakpoints | Dex (Dev) |
 | 2026-08-10 | 0.3.2 | Gates finais: PageCanvas gerencial, landmark Checkin e overflow Sonner mobile corrigidos; produção reconciliada no merge #186 | Dex (Dev) |
+| 2026-08-10 | 0.3.3 | Marcador de histórico deixou de pré-registrar 39 stubs ativos após falha reproduzida no pgTAP RLS; aguardando CI novo | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -420,6 +421,13 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   arquivos rastreados e não rastreados do diff não encontrou arquivos com
   segredos. A validação Gitleaks do conteúdo staged será registrada antes do
   commit.
+- 2026-08-10: o CI do SHA `df0955b05cf3295cd85e20c382a0ea17489d22c9` reproduziu
+  falha no `pgTAP RLS Matrix` durante `supabase db reset`, porque o marcador
+  histórico pré-registrava `20260407000000` e o runner tentava inseri-la de
+  novo. O marcador foi ajustado para deixar os 39 stubs no-op registrarem a
+  própria história; checksums (`398`) e reversibilidade (`42`) passaram
+  localmente. O drift excepcional está hash-pinned em allowlist e o gate remoto
+  permanece pendente.
 
 ### Completion Notes List
 
@@ -455,6 +463,9 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - O gate final local desta retomada está aprovado, mas o diff ainda não foi
   commitado/publicado; produção saudável no merge anterior não é prova do novo
   Sonner/PageCanvas.
+- O replay de migrations corrigido localmente não é considerado RLS aprovado
+  até um novo CI comparar o histórico antes/depois do reset e executar a matriz
+  pgTAP sem falhas.
 
 ### File List
 
@@ -579,6 +590,51 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/features/manager/daily-closing/ManagerDailyClosing.container.tsx`
 - `src/features/manager/daily-closing/ManagerDailyClosing.visual-contract.test.ts`
 - `src/test/sonner-layout.contract.test.ts`
+- `supabase/migrations/.migration-checksums.json`
+- `supabase/migrations/.migration-checksum-allowlist.json`
+- `supabase/migrations/00000000000001_mark_existing_migrations_applied.sql`
+- `supabase/migrations/20260407000000_role_matrix_dono_admin.sql`
+- `supabase/migrations/20260407001000_canonical_domain_alignment.sql`
+- `supabase/migrations/20260407002000_checkin_temporal_status.sql`
+- `supabase/migrations/20260407003000_manager_daily_routine.sql`
+- `supabase/migrations/20260407004000_morning_report_cron_1030.sql`
+- `supabase/migrations/20260407005000_whatsapp_share_logs.sql`
+- `supabase/migrations/20260407006000_weekly_feedback_official.sql`
+- `supabase/migrations/20260407006100_feedback_seller_ack_guard.sql`
+- `supabase/migrations/20260407160000_reconcile_epic09_12_end_to_end.sql`
+- `supabase/migrations/20260407161000_pdi_legacy_compatibility.sql`
+- `supabase/migrations/20260407162000_training_progress_rls.sql`
+- `supabase/migrations/20260407170000_fix_auth_rls.sql`
+- `supabase/migrations/20260407180000_fix_meta_rules_rls.sql`
+- `supabase/migrations/20260407190000_optimize_rls_performance.sql`
+- `supabase/migrations/20260407200000_kill_rls_recursion.sql`
+- `supabase/migrations/20260407210000_permissive_select_rls.sql`
+- `supabase/migrations/20260408000000_automate_reports.sql`
+- `supabase/migrations/20260408000001_fix_dates.sql`
+- `supabase/migrations/20260408000002_migration_data_full.sql`
+- `supabase/migrations/20260409000000_register_all_official_recipients.sql`
+- `supabase/migrations/20260409000001_register_official_recipients.sql`
+- `supabase/migrations/20260409135401_pdi_mx_360_foundation.sql`
+- `supabase/migrations/20260409135731_pdi_mx_360_rpcs.sql`
+- `supabase/migrations/20260409140000_secure_rls_frontend_access.sql`
+- `supabase/migrations/20260410000000_sec01_rls_hardening.sql`
+- `supabase/migrations/20260411000000_add_projection_mode.sql`
+- `supabase/migrations/20260411001000_checkin_audit_system.sql`
+- `supabase/migrations/20260411002000_add_audit_indexes.sql`
+- `supabase/migrations/20260411003000_native_enums_migration.sql`
+- `supabase/migrations/20260411004000_membership_orphan_cleanup.sql`
+- `supabase/migrations/20260413000000_perf_add_composite_index.sql`
+- `supabase/migrations/20260413001000_drop_legacy_tables.sql`
+- `supabase/migrations/20260413002000_secure_pdi_constraints.sql`
+- `supabase/migrations/20260413110000_consulting_core_foundation.sql`
+- `supabase/migrations/20260413120000_consulting_crm_extended.sql`
+- `supabase/migrations/20260413120100_consulting_crm_extended.sql`
+- `supabase/migrations/20260413134746_consulting_seed_temp.sql`
+- `supabase/migrations/20260414103000_consulting_google_calendar_hardening.sql`
+- `supabase/migrations/20260415001000_db02_audit_composite_indexes.sql`
+- `scripts/check_migration_checksum_drift.mjs`
+- `.github/workflows/migration-checksums.yml`
+- `.github/workflows/rls-matrix.yml`
 - `docs/superpowers/plans/2026-07-30-mx-unificacao-total.md`
 - `docs/reports/2026-07-30-mx-unificacao-total-progress.md`
 - `docs/reports/2026-07-30-mx-unificacao-total-final.md`

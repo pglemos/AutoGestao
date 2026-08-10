@@ -139,7 +139,11 @@ limitada ao bypass de desenvolvimento e não comprova conteúdo carregado por co
 | Base remota | **reconciliada** | `origin/main` e produção no merge `82191012260208c6dc82e240cd78fdf4658fb6ba`; PR #186 merged; Vercel `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc` READY; `/api/health` 200/healthy |
 | Publicação do diff final | **pendente** | worktree `fix/mx-final-gates-20260810` ainda possui alterações não commitadas; próximo fluxo é commit → PR → preview → smoke → promoção |
 
-O novo PR deve manter rollback por deployment anterior (`dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`) e não tocar no banco: esta etapa não possui migration.
+O novo PR deve manter rollback por deployment anterior
+(`dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`). A etapa altera somente o comportamento
+do marcador local/preview que pré-registrava stubs ativos, sem apagar histórico
+remoto e sem `supabase db push`; o job de RLS compara as versões antes/depois do
+reset e precisa passar no SHA novo antes de qualquer operação remota.
 
 ## 3. Decisões que precisam do solicitante
 

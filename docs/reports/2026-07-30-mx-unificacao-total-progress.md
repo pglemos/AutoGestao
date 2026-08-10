@@ -8,7 +8,8 @@ históricas continuam preservadas, mas não são evidência atual deste checkout
 > **Estado vigente:** correções finais locais implementadas e testadas; a
 > produção atual é o merge `82191012` e ainda não contém o diff local desta
 > retomada. Backup restaurável/PITR, prova independente de source maps/Sentry e
-> matriz integral de perfis/rotas permanecem pendentes.
+> matriz integral de perfis/rotas permanecem pendentes. O worktree também
+> contém a correção de replay do histórico de migrations, ainda sem CI novo.
 
 ## Revalidação atual — 2026-08-10
 
@@ -128,6 +129,50 @@ Fechar as regressões descobertas no smoke real de `/fechamento-diario`,
 Gates locais e a geometria do toaster passaram. Próximo passo: atualizar a
 story/relatório final, revisar o diff, commitar, abrir PR e validar preview
 antes de qualquer promoção; produção só será revalidada depois desse fluxo.
+
+## Revalidação de histórico Supabase — 2026-08-10
+
+### Tarefa
+
+Desbloquear o job `pgTAP RLS Matrix` sem alterar o schema ou os dados de
+aplicação reais e sem modificar o histórico remoto.
+
+### Diagnóstico e causa raiz
+
+O CI reproduziu `duplicate key value violates unique constraint
+"schema_migrations_pkey"` ao aplicar `20260407000000_role_matrix_dono_admin.sql`.
+O marcador `00000000000001_mark_existing_migrations_applied.sql` registrava as
+39 versões históricas, mas o runner local do Supabase aplica também os stubs e
+tenta registrar a primeira versão novamente.
+
+### Alterações
+
+- O marcador deixou de inserir as 39 versões; os stubs permanecem no-op,
+  imutáveis e aptos a reconciliar a história remota pelo fluxo normal do
+  Supabase.
+- `.migration-checksums.json` foi regenerado com `398` checksums; a alteração
+  da migration já aplicada está documentada e hash-pinned em
+  `.migration-checksum-allowlist.json`.
+- Nenhuma migration foi aplicada remotamente; nenhum DDL, dado de aplicação ou
+  proteção RLS foi alterado.
+
+### Testes e evidências
+
+- `node scripts/gen_migration_checksums.mjs --check`: `398` checksums íntegras.
+- `node scripts/check_migration_checksum_drift.mjs --base origin/main`: allowlist
+  de um rewrite esperado e `50` migrations novas reconhecidas.
+- `node scripts/check_migration_reversibility.mjs --changed-only`: `42`
+  migrations com rollback documentado.
+- `git diff --check`: exit `0`.
+- Falha reproduzida no CI anterior: run `31363182145`, job `93376028520`, SHA
+  `df0955b05cf3295cd85e20c382a0ea17489d22c9`; o novo SHA ainda precisa passar
+  pelo mesmo job.
+
+### Resultado e próximo passo
+
+Correção local pronta para commit. O gate RLS permanece `PENDENTE` até o GitHub
+Actions executar `supabase db reset`, comparar a lista de versões antes/depois e
+rodar os 40 cenários pgTAP no novo SHA.
 
 ## Tarefa
 

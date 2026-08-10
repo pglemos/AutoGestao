@@ -14,12 +14,20 @@
   está `MERGED` e `origin/main` aponta para esse SHA.
 - Correções locais: `ManagerDailyClosing`/skeleton no `PageCanvas` canônico,
   `Checkin` sem landmark `main` aninhado e toaster Sonner contido no mobile.
+- Correção de banco pendente no worktree: o marcador
+  `00000000000001_mark_existing_migrations_applied.sql` deixou de pré-registrar
+  os 39 stubs históricos ativos. O runner passa a executar cada no-op e
+  registrar a versão normalmente, tratando a falha reproduzida no reset
+  local/CI (`duplicate key ... 20260407000000`) sem modificar schema ou dados
+  remotos.
 - RED/GREEN: contratos de PageCanvas/landmark passaram e o contrato novo do
   Sonner falhou antes da implementação e passou isoladamente depois.
 - Gates locais vigentes: lint exit `0` (warning histórico em `HelpTooltip.tsx`),
   typecheck exit `0`, `npm test` `2.597 pass / 0 fail / 18.161 asserts`, build
   exit `0` sem sourcemaps públicos, bundle `1.563,57/1.860 KB gzip` e
-  `git diff --check` exit `0`.
+  `git diff --check` exit `0`; checksums recalculadas e reversibilidade das
+  migrations pendentes também passaram (`398` checksums válidas, `42`
+  migrations validadas).
 - Auditorias complementares: `validate:structure`, `validate:parity`,
   `validate:agents`, `sync:ide:check`, `audit:routes-data`,
   `audit:management-design-system` e `lint:a11y` passaram; warnings AIOX e
@@ -30,8 +38,8 @@
 - Produção vigente: Vercel `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`, `READY`, aliases
   oficiais; `/api/health` HTTP `200`, `healthy`, release exatamente igual ao
   merge acima. Esse deployment ainda não contém o diff local desta retomada.
-- Estado: **local aprovado; produção atual saudável, mas o diff final ainda não
-  foi commitado, revisado em PR/preview nem promovido**.
+- Estado: **correções locais aprovadas, mas a correção de replay das migrations
+  ainda aguarda commit/CI; produção atual saudável e sem alteração de banco**.
 
 ## 39.1 Resumo executivo — estado vigente da retomada
 
@@ -80,6 +88,13 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 - Gates locais do diff final: lint/typecheck/build/diff-check exit `0`,
   `npm test` `2597 pass / 0 fail / 18161 asserts`, bundle `1563,57/1860 KB`
   gzip e auditorias estruturais/paridade/rotas sem erros.
+- O CI do SHA anterior `df0955b05cf3295cd85e20c382a0ea17489d22c9`
+  falhou antes da correção no job `pgTAP RLS Matrix` durante `supabase db reset`
+  com `duplicate key ... Key (version)=(20260407000000)`. A nova execução
+  remota é obrigatória antes de tratar RLS como aprovado.
+- A correção altera apenas o marcador de histórico, com allowlist hash-pinned
+  em `.migration-checksum-allowlist.json`; não remove nem reescreve os 39
+  stubs. O CI também compara o histórico antes/depois do reset.
 - Worktree está deliberadamente não commitado nesta medição; o SHA do novo
   commit será acrescentado após a revisão do diff e antes do push.
 - Produção vigente: Vercel deployment
@@ -101,8 +116,12 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 ## 39.5 Supabase
 
 - Projeto confirmado: `fbhcmzzgwjdgkctlfvbo`.
-- Schema alinhado até migration `20260803134000`.
-- Auditoria funcional e de RLS anteriores registradas no histórico do projeto; nenhuma alteração de banco é necessária para a correção visual atual.
+- Schema e dados de aplicação em produção não foram alterados nesta etapa; a
+  alteração pendente só impede o pré-registro de versões que o runner executa.
+  No replay local, a tabela `supabase_migrations.schema_migrations` é recriada
+  pelo reset; o CI compara as versões antes/depois e não executa `db push` remoto.
+- A auditoria funcional e de RLS anterior permanece histórica até o novo job
+  `pgTAP RLS Matrix` passar no SHA desta correção.
 
 ## 39.6 Vercel — estado vigente da retomada
 
@@ -152,3 +171,4 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 | Info | `/home` para Administrador Geral | Rota bloqueada pela matriz de autorização | Produção exibiu mensagem de acesso negado sem erro/overflow | Não alterar sem requisito explícito; validar com perfil autorizado se necessário |
 | P1 | Backup restaurável não comprovado | Sem ponto de restauração testável para rollback de banco | Supabase `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
 | P1 | Diff final ainda não publicado | As correções de PageCanvas, landmark e Sonner estão somente no worktree final | `git status` local em `fix/mx-final-gates-20260810`; produção continua no merge `82191012` | Commitar, abrir PR, validar preview e promover somente após smoke/CI |
+| P1 | Replay local de migrations falha no SHA anterior | O marcador histórico pré-registra 39 versões e o runner tenta inseri-las novamente | CI run `31363182145`, job `93376028520`, erro `duplicate key ... 20260407000000`; correção local no marcador + allowlist + manifest `398` | Commitar, executar CI novo e exigir `pgTAP RLS Matrix` verde antes do smoke/produção |

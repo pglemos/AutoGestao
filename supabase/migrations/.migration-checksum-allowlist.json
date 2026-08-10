@@ -1,0 +1,11 @@
+{
+  "_comment": "Exceção explícita e hash-pinned para corrigir o marcador que pré-registrava stubs ativos e quebrava supabase db reset. Remover quando o histórico for consolidado em uma baseline nova.",
+  "allowed": {
+    "00000000000001_mark_existing_migrations_applied.sql": {
+      "from": "a8183b5cc5bd56b549ce8d8d302eb0c5d4f7b20381438586e02dd7353d6f2a45",
+      "to": "8402ff2ff9a9c626b6985a0c18ec58f1e92c32c889365af44d0299ce8c99a83c",
+      "reason": "O marcador pré-registrava 39 stubs que o runner local aplica e registra novamente; deixar os stubs executarem no-op mantém o replay local e a reconciliação do histórico sem modificar schema ou dados da aplicação.",
+      "expires_on": "2026-09-30"
+    }
+  }
+}

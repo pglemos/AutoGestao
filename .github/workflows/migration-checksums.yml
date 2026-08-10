@@ -6,6 +6,7 @@ on:
     paths:
       - 'supabase/migrations/**'
       - 'scripts/gen_migration_checksums.mjs'
+      - 'scripts/check_migration_checksum_drift.mjs'
       - '.github/workflows/migration-checksums.yml'
   workflow_dispatch:
 
@@ -14,17 +15,24 @@ permissions:
 
 jobs:
   checksums:
-    name: Migrations congeladas são imutáveis
+    name: Migration checksum drift
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      - name: Verificar integridade das migrations congeladas
+      - name: Verificar integridade do manifest de migrations
         run: node scripts/gen_migration_checksums.mjs --check
+
+      - name: Verificar drift contra a base do PR
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+        run: node scripts/check_migration_checksum_drift.mjs --base "$BASE_SHA"

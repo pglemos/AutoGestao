@@ -5,7 +5,7 @@
   "count": 398,
   "checksums": {
     "00000000000000_baseline_legacy_schema.sql": "3a519e3804095af5e9f7d8a7cb70dcc388b04530b6a7911ee1e3cb76af10b0fc",
-    "00000000000001_mark_existing_migrations_applied.sql": "a8183b5cc5bd56b549ce8d8d302eb0c5d4f7b20381438586e02dd7353d6f2a45",
+    "00000000000001_mark_existing_migrations_applied.sql": "8402ff2ff9a9c626b6985a0c18ec58f1e92c32c889365af44d0299ce8c99a83c",
     "20260407000000_role_matrix_dono_admin.sql": "dbfffcbf66924d28664fa6fd5c777848703bff5d755eb5de6f66e57f758dfecd",
     "20260407001000_canonical_domain_alignment.sql": "dbfffcbf66924d28664fa6fd5c777848703bff5d755eb5de6f66e57f758dfecd",
     "20260407002000_checkin_temporal_status.sql": "dbfffcbf66924d28664fa6fd5c777848703bff5d755eb5de6f66e57f758dfecd",

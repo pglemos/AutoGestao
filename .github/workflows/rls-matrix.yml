@@ -47,8 +47,35 @@ jobs:
           if-no-files-found: error
           retention-days: 2
 
+      - name: Capture migration history after startup
+        env:
+          PGPASSWORD: postgres
+        run: |
+          expected=$(find supabase/migrations -maxdepth 1 -type f -name '*.sql' | wc -l | tr -d ' ')
+          actual=$(psql -h 127.0.0.1 -p 54322 -U postgres -d postgres -Atc \
+            "SELECT count(*) FROM supabase_migrations.schema_migrations")
+          echo "Migration history after startup: $actual/$expected"
+          test "$actual" = "$expected"
+          psql -h 127.0.0.1 -p 54322 -U postgres -d postgres -Atc \
+            "SELECT version FROM supabase_migrations.schema_migrations ORDER BY version" \
+            > /tmp/migration-history-before.txt
+
       - name: Apply migrations
         run: supabase db reset --no-seed
+
+      - name: Verify migration history after reset
+        env:
+          PGPASSWORD: postgres
+        run: |
+          expected=$(find supabase/migrations -maxdepth 1 -type f -name '*.sql' | wc -l | tr -d ' ')
+          actual=$(psql -h 127.0.0.1 -p 54322 -U postgres -d postgres -Atc \
+            "SELECT count(*) FROM supabase_migrations.schema_migrations")
+          echo "Migration history after reset: $actual/$expected"
+          test "$actual" = "$expected"
+          psql -h 127.0.0.1 -p 54322 -U postgres -d postgres -Atc \
+            "SELECT version FROM supabase_migrations.schema_migrations ORDER BY version" \
+            > /tmp/migration-history-after.txt
+          diff -u /tmp/migration-history-before.txt /tmp/migration-history-after.txt
 
       - name: Install pgTAP extension
         env:
