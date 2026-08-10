@@ -171,8 +171,8 @@ const navConfig: Record<string, NavCategory[]> = {
     {
       // Ordem canônica da Especificação Funcional do Módulo Gerencial v1.0,
       // seção 2.1: Rotina da Equipe e Minha Equipe vêm antes de Meta da Loja e
-      // Mentor Gerencial. Plano de Ação não consta na sidebar da especificação,
-      // mas a rota existe e continua acessível — mantido até decisão de produto.
+      // Mentor Gerencial. Plano de Ação não consta na sidebar da especificação
+      // e permanece restrito a Dono/Admin MX pela decisão de produto vigente.
       category: 'EQUIPE',
       icon: <Users size={22} />,
       items: [

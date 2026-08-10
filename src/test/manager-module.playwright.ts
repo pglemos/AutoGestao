@@ -10,12 +10,9 @@ const routes = [
   { path: '/home', slug: 'inicio', heading: 'Início', uniqueText: /Previsibilidade comercial para conduzir o resultado do dia/i },
   { path: '/rotina', slug: 'rotina-dia', heading: 'Rotina do Dia', uniqueText: /Alertas e ações essenciais para conduzir o dia/i },
   { path: '/fechamento-diario', slug: 'fechamento', heading: 'Fechamento Diário', uniqueText: /Movimento da Equipe/i },
-  { path: '/plano-acao', slug: 'plano-acao', heading: 'Plano de Ação', uniqueText: /Transforme as prioridades estratégicas em execução/i },
   { path: '/rotina-equipe', slug: 'rotina', heading: 'Rotina da Equipe', uniqueText: /Acompanhe a execução oficial das atividades comerciais da equipe/i },
   { path: '/minha-equipe', slug: 'equipe', heading: 'Minha Equipe', uniqueText: /Visão do Kanban/i },
-  // A rota serve o dashboard canônico desde 5962d573; o título da tela é
-  // "Metas Individuais" e a meta da loja aparece na linha de contexto.
-  { path: '/meta-loja', slug: 'meta', heading: 'Metas Individuais', uniqueText: /Meta da loja: .* vendas/i },
+  { path: '/meta-loja', slug: 'meta', heading: 'Meta da Loja', uniqueText: /Acompanhe o resultado da loja e saiba o que fazer para alcançar a meta/i },
   { path: '/mentor', slug: 'mentor', heading: 'Mentor Gerencial', uniqueText: /Biblioteca de orientações/i },
   { path: '/feedbacks-pdis', slug: 'desenvolvimento', heading: 'Desenvolvimento', uniqueText: /Reconheça, oriente e desenvolva sua equipe com Feedback e PDI/i },
   { path: '/ranking', slug: 'ranking', heading: 'Ranking', uniqueText: /Acompanhe a classificação da equipe por resultado, conversão e execução/i },
@@ -61,11 +58,11 @@ async function expectNoEligibleTeam(page: import('@playwright/test').Page) {
 test.describe('Módulo Gerencial canônico', () => {
   test.beforeEach(async ({ page }) => loginWithCredentials(page, credentials.email, credentials.password))
 
-  test('exibe exatamente os onze menus na ordem contratada e abre todas as rotas', async ({ page }) => {
+  test('exibe exatamente os dez menus na ordem contratada e abre todas as rotas', async ({ page }) => {
     // A ordem é a das seções da sidebar (GESTÃO, ESTRATÉGIA, EQUIPE), não a
-    // ordem plana anterior. "Plano de Ação" entrou com o workspace multiperfil
-    // e é item deliberado do menu do Gerente, não resíduo.
-    const expectedLabels = ['Início', 'Rotina do Dia', 'Fechamento Diário', 'Plano de Ação', 'Meta da Loja', 'Mentor Gerencial', 'Rotina da Equipe', 'Minha Equipe', 'Desenvolvimento', 'Ranking', 'Universidade MX']
+    // ordem plana anterior. Plano de Ação é uma área de Dono/Admin MX e não
+    // faz parte do módulo do Gerente (decisão de produto registrada no App).
+    const expectedLabels = ['Início', 'Rotina do Dia', 'Fechamento Diário', 'Rotina da Equipe', 'Minha Equipe', 'Meta da Loja', 'Mentor Gerencial', 'Desenvolvimento', 'Ranking', 'Universidade MX']
     const mobileMenu = page.getByRole('button', { name: 'Abrir menu principal' })
     if (await mobileMenu.isVisible().catch(() => false)) await mobileMenu.click()
     const menu = page.getByRole('navigation', { name: 'Menu principal do Gerente' })
@@ -80,6 +77,17 @@ test.describe('Módulo Gerencial canônico', () => {
       await expect(page.locator('main#main-content').first()).toBeVisible({ timeout: 20000 })
       await expect(page.getByRole('heading', { name: route.heading }).first()).toBeVisible({ timeout: 20000 })
     }
+  })
+
+  test('não anuncia nem libera o Plano de Ação para o Gerente', async ({ page }) => {
+    const mobileMenu = page.getByRole('button', { name: 'Abrir menu principal' })
+    if (await mobileMenu.isVisible().catch(() => false)) await mobileMenu.click()
+    const menu = page.getByRole('navigation', { name: 'Menu principal do Gerente' })
+    await expect(menu.getByRole('link', { name: 'Plano de Ação', exact: true })).toHaveCount(0)
+
+    await page.goto('/plano-acao')
+    await expect(page.getByRole('heading', { name: 'Você não tem acesso a este conteúdo' })).toBeVisible({ timeout: 20000 })
+    await expect(page.getByText(/O perfil gerente não tem permissão para acessar \/plano-acao/i)).toBeVisible()
   })
 
   test('renderiza fechamento e rotina sem clipping nos viewports obrigatórios', async ({ page }) => {
@@ -103,7 +111,7 @@ test.describe('Módulo Gerencial canônico', () => {
     }
   })
 
-  test('carrega conteúdo exclusivo das onze telas em desktop, tablet e mobile', async ({ page }) => {
+  test('carrega conteúdo exclusivo das dez telas em desktop, tablet e mobile', async ({ page }) => {
     test.setTimeout(120_000)
     for (const viewport of [
       { name: 'desktop-1440', width: 1440, height: 900 },
@@ -127,12 +135,16 @@ test.describe('Módulo Gerencial canônico', () => {
     }
   })
 
-  test('mantém console e network limpos nas onze rotas', async ({ page }) => {
+  test('mantém console e network limpos nas dez rotas', async ({ page }) => {
     test.setTimeout(120_000)
     const consoleErrors: string[] = []
     const failedRequests: string[] = []
+    // O preview Vercel injeta o toolbar de feedback fora da aplicação. A CSP
+    // do produto bloqueia esse script externo e o Chromium registra o bloqueio
+    // no console; não é erro da rota nem request de negócio.
+    const isVercelPreviewToolingError = (message: string) => message.includes('https://vercel.live/_next-live/')
     page.on('console', message => {
-      if (message.type() === 'error') consoleErrors.push(message.text())
+      if (message.type() === 'error' && !isVercelPreviewToolingError(message.text())) consoleErrors.push(message.text())
     })
     page.on('response', response => {
       if (response.status() < 400) return
@@ -141,6 +153,7 @@ test.describe('Módulo Gerencial canônico', () => {
     })
     page.on('requestfailed', request => {
       if (request.failure()?.errorText === 'net::ERR_ABORTED') return
+      if (isVercelPreviewToolingError(request.url())) return
       failedRequests.push(`FAILED ${request.url()} ${request.failure()?.errorText || ''}`.trim())
     })
 
