@@ -30,6 +30,7 @@ import {
   X,
 } from "lucide-react";
 import { HelpTooltip } from "@/components/ui/HelpTooltip";
+import { PageCanvas } from "@/design-system/page";
 import {
   CartesianGrid,
   Line,
@@ -550,8 +551,7 @@ export default function ManagerDailyClosing() {
   if (sellersLoading || checkinsLoading) return <ManagerClosingSkeleton />;
 
   return (
-    <div className="min-h-full bg-gray-50 px-4 py-6">
-      <div className="mx-auto flex w-full max-w-7xl flex-col gap-5 pb-20">
+    <PageCanvas as="div" width="focused" bottomClearance="actions" aria-busy={false} className="flex flex-col gap-5">
         <ManagerHomeReturnLink />
 
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
@@ -825,8 +825,7 @@ export default function ManagerDailyClosing() {
           checkin={closingDetail?.checkin || null}
           onSubmit={handleCorrectLeads}
         />
-      </div>
-    </div>
+    </PageCanvas>
   );
 }
 

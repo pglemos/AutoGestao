@@ -177,8 +177,7 @@ export function ManagerDayRoutineView({
   const dateLabel = managerRoutineDateLabel(referenceDate)
 
   return (
-    <div className="min-h-full bg-gray-50">
-      <div className="mx-auto max-w-7xl space-y-5 px-4 py-6">
+    <div className="flex flex-col gap-5">
         {returnLink}
         <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -277,7 +276,6 @@ export function ManagerDayRoutineView({
             tasks={historyTasks}
           />
         )}
-      </div>
 
       {createOpen && (
         <CreateActivityModal

@@ -79,8 +79,7 @@ export function ManagerTeamPerformance({ data, storeName, selectableStores = [],
 }
 
 function ManagerTeamLoadingState() {
-  return <section className="font-reference-sans min-h-full bg-gray-50" aria-label="Performance da equipe" aria-busy="true">
-    <div className="mx-auto max-w-7xl space-y-5 px-4 py-6 pb-24">
+  return <section className="font-reference-sans flex flex-col gap-5" aria-label="Performance da equipe" aria-busy="true">
       <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-2">
@@ -104,7 +103,6 @@ function ManagerTeamLoadingState() {
             <div className="h-56 animate-pulse rounded-2xl bg-gray-50" />
           </div>
         </section>)}
-      </div>
     </div>
   </section>
 }

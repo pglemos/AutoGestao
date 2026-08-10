@@ -6,6 +6,7 @@ import { ManagerHomeReturnLink } from '@/features/manager/home/ManagerHomeReturn
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
+import { PageCanvas } from '@/design-system/page'
 import {
   buildManagerRoutineNavigationPath,
   calculateManagerRoutineDaysLate,
@@ -266,7 +267,7 @@ export function ManagerDayRoutineCanonical() {
     : null
 
   return (
-    <div className="min-h-full bg-gray-50">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5">
       <ManagerDayRoutineView
         returnLink={<ManagerHomeReturnLink />}
         referenceDate={referenceDate}
@@ -284,7 +285,7 @@ export function ManagerDayRoutineCanonical() {
         onCreate={createTask}
         onComplete={completeTask}
       />
-    </div>
+    </PageCanvas>
   )
 }
 
