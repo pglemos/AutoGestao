@@ -101,7 +101,10 @@ export function PageCanvas({
     // A largura vem do token da variante; nunca de um literal aqui.
     maxWidth: `var(--mx-page-width-${width})`,
     marginInline: 'auto',
-    paddingInline: 'var(--mx-page-margin)',
+    paddingInlineStart:
+      'max(var(--mx-page-margin), env(safe-area-inset-left, 0px))',
+    paddingInlineEnd:
+      'max(var(--mx-page-margin), env(safe-area-inset-right, 0px))',
     paddingTop: 'var(--mx-page-padding-top)',
     // Soma a reserva de navegação à safe area do dispositivo — §8.4.
     paddingBottom:

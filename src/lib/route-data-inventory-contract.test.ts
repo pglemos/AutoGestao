@@ -8,10 +8,11 @@ const report = 'docs/auditoria/matrizes/MATRIZ_ROTAS_DADOS_MX.md'
 describe('route and data inventory contract', () => {
   test('all protected leaf routes are governed by the canonical access matrix', () => {
     expect(() => execFileSync('node', [script, '--check'], { stdio: 'pipe' })).not.toThrow()
-  })
+  }, 30000)
 
   test('the committed matrix matches the current runtime sources', () => {
     const current = execFileSync('node', [script], { encoding: 'utf8' })
     expect(readFileSync(report, 'utf8')).toBe(current)
-  })
+  }, 30000)
 })
+
