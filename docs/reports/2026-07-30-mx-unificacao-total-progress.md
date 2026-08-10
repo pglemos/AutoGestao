@@ -1,19 +1,34 @@
 # MX Unificação Total — Progresso
 
 Atualizado em 2026-08-10 no worktree isolado
-branch `fix/mx-final-gates-20260810`, HEAD documental
-`e609bb7251a62b834d67b8bbd8a9ec74491d0f44` (runtime
-`4c7b906d653a9af00969d75313ea6c9756f5bbc0`); a produção permanece no merge
+branch `fix/mx-final-gates-20260810`, checkpoint de código/runtime
+`d7356687105e6f048d974c5a25dd96d7f31eaf11`; os commits documentais anteriores
+`e609bb72` e `fb8ba8ee` não alteram runtime. A produção permanece no merge
 `82191012260208c6dc82e240cd78fdf4658fb6ba`. As observações abaixo das seções
-históricas continuam preservadas, mas não são evidência atual deste checkout.
+históricas continuam preservadas e não são evidência do checkpoint `d7356687`.
 
-> **Estado vigente:** o patch final está publicado no PR #187 e possui Preview
-> manual `READY` do runtime `4c7b906d`; o HEAD documental possui CI completo
-> verde, incluindo pgTAP, visual universal e Owner Base44 route matrix. A
-> produção atual é o merge `82191012` e não contém o diff desta retomada. O
-> check Vercel oficial e o redeploy com escopo da equipe falharam por
-> provisionamento; backup temporal/PITR, mutations Owner e promoção permanecem
-> pendentes.
+> **Estado vigente:** o checkpoint de código/runtime `d7356687` contém o
+> hardening adicional de audit/backup, ACL de sequences, policies restritivas e
+> release Sentry sem fallback de branch. As evidências remotas abaixo ainda
+> pertencem aos checkpoints históricos `e609bb72`/`4c7b906d` e não aprovam este
+> novo código; produção continua no merge `82191012`, sem DDL ou promoção.
+
+## Checkpoint vigente — hardening de segurança — `d7356687`
+
+- O código/runtime deste checkpoint remove o fallback de branch no release do
+  Sentry, protege as relações auxiliares na criação, revoga ACLs de tabela e
+  sequence para roles da API, concede somente `service_role` e usa policy
+  `AS RESTRICTIVE` para o backup.
+- Contratos focados: `7 pass / 0 fail / 26 expect() calls`.
+- Gates locais: lint, typecheck, `npm test` (`2603 pass / 0 fail / 18184
+  asserts`) e build passaram; o lint mantém apenas o warning histórico de
+  `HelpTooltip.tsx`, e o build não gerou sourcemaps públicos.
+- Checks de migrations: `400` checksums íntegras, drift autorizado para as
+  migrations novas e `44` migrations com rollback documentado; npm audit e
+  Gitleaks staged passaram.
+- Docker/Postgres não está disponível neste computador; pgTAP/reset e Preview
+  ainda precisam ser executados no novo SHA remoto. Produção permanece sem DDL
+  ou promoção, no merge `82191012`.
 
 ## Revalidação atual — 2026-08-10
 
@@ -226,7 +241,10 @@ documental confirmou depois o `pgTAP RLS Matrix` verde no run `31377957069`;
 Preview manual, Vercel integrado, restore/PITR, matriz Owner e promoção ainda
 exigem gates próprios. A story continua `InProgress`.
 
-## Revalidação CodeRabbit e hardening auxiliar — 2026-08-10
+## Revalidação histórica — CodeRabbit e hardening auxiliar — antes do checkpoint `d7356687`
+
+> Esta seção registra o estado anterior e não é evidência vigente do checkpoint
+> `d7356687105e6f048d974c5a25dd96d7f31eaf11`.
 
 ### Tarefa
 
@@ -264,7 +282,12 @@ Findings locais tratados sem aplicar migration remota. Próximo passo: staging
 seletivo, Gitleaks staged, commit, push pela autoridade AIOX DevOps e observar o
 novo CI/Preview. A story continua `InProgress`.
 
-## Tarefa
+## Revalidação histórica — Performance de Vendas — antes da retomada final
+
+> Esta seção registra evidências anteriores e não é evidência vigente do
+> checkpoint `d7356687105e6f048d974c5a25dd96d7f31eaf11`.
+
+### Tarefa
 
 Fechar a validação da reconstrução visual e funcional do MX, publicar o SHA atual e validar a rota crítica de Performance de Vendas em produção.
 
@@ -345,7 +368,7 @@ Correção local aplicada, publicada e validada em produção. O warning Rechart
 
 Manter o relatório final como fonte de verdade: a correção está liberada e a atualização transitiva de `brace-expansion` está no lockfile; rotação imediata de credenciais, findings CodeRabbit concorrentes, stack trace desminificado de frame do bundle e backup restaurável permanecem explícitos. O finding histórico do React Router não foi reproduzido pelo audit do grafo de produção atual; a árvore de runtime permanece em `7.18.2`.
 
-## Revalidação autônoma — 2026-08-03
+## Revalidação histórica — execução autônoma — 2026-08-03
 
 - O smoke real do perfil `consultor_mx` foi executado contra `https://mxperformance.com.br` com fixture temporário de Auth/perfil, dados Supabase reais, isolamento de consultoria e limpeza automática: `1 passed` em `2,1 min`.
 - Durante reexecuções, o runner revelou consultas secundárias do shell mantidas abertas após a rota concluir e `ERR_QUIC_PROTOCOL_ERROR` em um avatar público; a query equivalente de `devolutivas` respondeu em `131–223 ms`, e o avatar respondeu `HTTP/1.1 200` com curl. O teste agora rastreia pendências por navegação, não bloqueia por consulta secundária após uma leitura de negócio bem-sucedida e mantém falhas HTTP/console reais como bloqueadores.
@@ -354,7 +377,7 @@ Manter o relatório final como fonte de verdade: a correção está liberada e a
 - Nenhuma conta permanente foi reativada; fixtures temporários foram removidos pelo `afterAll` do teste.
 - Reexecução local final: `npm test` 1712 pass / 0 fail / 14.004 asserts; `npm run typecheck` exit 0; `npm run lint` exit 0; `npm run build` exit 0; `npm run check:bundle-size` 1844,83/1860 KB; `git diff --check` exit 0.
 
-## Revalidação de produção — 2026-08-03 (sessão final)
+## Revalidação histórica — produção — 2026-08-03 (sessão final)
 
 - Navegador autenticado como Administrador Geral abriu `https://www.mxperformance.com.br/relatorios/performance-vendas`: dados reais visíveis (`204` sell-outs e `476` meta), `main` presente, zero logs de erro e `scrollWidth === clientWidth` em viewport padrão de 1721 px.
 - A mesma rota foi recarregada em `390×844`: `scrollWidth === clientWidth === 390`, títulos `BI Executivo da Rede`, `204` e `476` presentes, zero elementos fixos fora da viewport e zero logs de erro.
@@ -364,7 +387,9 @@ Manter o relatório final como fonte de verdade: a correção está liberada e a
 - Após o follow-up documental `6d5eebe2`, a Vercel publicou `dpl_2nEL2EZ6yhxXz3E3TGeMzh6VBFmh` como `READY`; `/api/health` e o bundle servido convergiram para `6d5eebe206c89481336f3f1584c14ee67d6ee842`, e o smoke pós-deploy do `consultor_mx` passou `1 passed (2.4m)`.
 - A checagem de `index-C5PCw3sv.js.map` respondeu `200` por rewrite, mas com `Content-Type: text/html` e `content-disposition: index.html`; não havia source map público servido.
 
-## Revalidação remota do PR #187 — 2026-08-10
+## Revalidação histórica do PR #187 — checkpoint `e609bb72` — 2026-08-10
+
+> Esta seção registra o último checkpoint remoto anterior ao código `d7356687`.
 
 ### Tarefa
 

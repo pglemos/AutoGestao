@@ -3,16 +3,36 @@
 > Relatório vivo de fechamento. Atualizado em 2026-08-10 durante a revalidação
 > final do PR; evidências históricas permanecem identificadas abaixo.
 >
-> **Revalidação vigente (2026-08-10):** a evidência de runtime foi coletada
-> no branch `fix/mx-final-gates-20260810`, no checkpoint de código
-> `4c7b906d653a9af00969d75313ea6c9756f5bbc0`; os commits `379c4a14`,
-> `2754e4ab` e `e609bb72` são documentais. O CI mais recente foi rerunado no
-> HEAD documental `e609bb7251a62b834d67b8bbd8a9ec74491d0f44`.
+> **Checkpoint de código vigente (2026-08-10):** o branch
+> `fix/mx-final-gates-20260810` contém o runtime `d7356687105e6f048d974c5a25dd96d7f31eaf11`;
+> `379c4a14`, `2754e4ab`, `e609bb72` e `fb8ba8ee` são checkpoints anteriores,
+> documentais ou de runtime já superseded. O CI/deploy remoto de `d7356687`
+> ainda precisa ser executado; as evidências remotas abaixo estão marcadas como
+> históricas até essa revalidação.
 > A produção continua
 > deliberadamente no merge saudável anterior
 > `82191012260208c6dc82e240cd78fdf4658fb6ba`.
 
-## Revalidação vigente — 2026-08-10 — PR #187
+## Checkpoint vigente — código `d7356687` — validação local
+
+- O release Sentry agora aceita somente identificadores imutáveis (`VITE_RELEASE`,
+  `SENTRY_RELEASE`, SHA do Vercel ou `GITHUB_SHA`); branch não é fallback.
+- As migrations de auditoria/backup aplicam RLS no momento da criação, revogam
+  ACLs de tabela e sequence para `PUBLIC`/`anon`/`authenticated`, concedem o
+  mínimo a `service_role`, e a policy de backup é `AS RESTRICTIVE`.
+- A migration de 22 helpers RLS usa `to_regprocedure(...)` antes de cada
+  revoke/grant, permanecendo idempotente em históricos parciais.
+- Validação local: lint, typecheck, `2603` testes/`18184` asserts, build sem
+  sourcemaps públicos, `400` checksums, `44` rollbacks, npm audit sem
+  vulnerabilidades e Gitleaks staged passaram. O warning de `HelpTooltip.tsx`
+  e os seis warnings CSS do otimizador são históricos/não bloqueantes.
+- CI efêmero pgTAP, Preview, Vercel integrado e smoke remoto deste checkpoint
+  ainda não foram executados; produção continua deliberadamente no merge
+  `82191012260208c6dc82e240cd78fdf4658fb6ba`, sem DDL ou promoção.
+
+## Revalidação histórica — 2026-08-10 — PR #187 no checkpoint `e609bb72`
+
+> Não usar esta seção como prova do runtime `d7356687105e6f048d974c5a25dd96d7f31eaf11`.
 
 - Worktree e branch: `fix/mx-final-gates-20260810`; HEAD remoto
   `e609bb7251a62b834d67b8bbd8a9ec74491d0f44`; PR #187 está `OPEN` contra

@@ -4,16 +4,13 @@
 
 **InProgress**
 
-> **Revalidação vigente — 2026-08-10:** a implementação final está publicada
-> no PR #187, branch `fix/mx-final-gates-20260810`; o checkpoint de CI é
-> o HEAD documental `e609bb7251a62b834d67b8bbd8a9ec74491d0f44` (runtime
-> `4c7b906d653a9af00969d75313ea6c9756f5bbc0`). O Preview manual do runtime
-> SHA
-> está `READY` e passou health/smoke autenticado parcial; a produção permanece
-> no merge saudável `82191012260208c6dc82e240cd78fdf4658fb6ba`. O check Vercel
-> oficial e o redeploy com o escopo da equipe falharam por `Resource
-> provisioning failed`. A matriz Owner Base44 autenticada passou no CI; a
-> etapa mutável continua protegida/desabilitada. A story permanece `InProgress`.
+> **Revalidação vigente — 2026-08-10:** o checkpoint de código/runtime local é
+> `d7356687105e6f048d974c5a25dd96d7f31eaf11`, no branch
+> `fix/mx-final-gates-20260810`. Ele ainda precisa de CI/Preview remoto próprios;
+> os checks históricos de `e609bb72`/`4c7b906d` não são prova deste checkpoint.
+> A produção permanece no merge saudável
+> `82191012260208c6dc82e240cd78fdf4658fb6ba`; não houve DDL remoto, promoção,
+> mutations Owner ou alteração de credenciais. A story permanece `InProgress`.
 
 ## Executor Assignment
 
@@ -243,6 +240,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-08-10 | 0.3.5 | Findings acionáveis do CodeRabbit corrigidos; hardening forward-only idempotente para auditoria/backup e guard pgTAP ampliado para 19 invariantes | Dex (Dev) |
 | 2026-08-10 | 0.3.6 | PR #187 publicado no SHA `4c7b906d`; Preview manual `READY`, health/smoke autenticado parcial e bloqueios externos reconciliados; story permanece InProgress | Gage (DevOps) |
 | 2026-08-10 | 0.3.7 | HEAD documental `379c4a14` publicado; workflows GitHub, pgTAP 40/40 e visual universal verdes; Owner skip, Vercel integrado, TestSprite, restore/PITR e produção permanecem abertos | Gage (DevOps) |
+| 2026-08-10 | 0.3.8 | CodeRabbit corrigido com hardening de RLS/ACL de sequences, policies restritivas e release Sentry sem fallback de branch; gates locais verdes, CI remoto pendente | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -576,6 +574,8 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `package-lock.json`
 - `supabase/migrations/20260810100000_restore_authenticated_rls_helper_execute.sql`
 - `supabase/migrations/20260810110000_harden_auxiliary_audit_backup_rls.sql`
+- `supabase/migrations/20260805115900_create_data_correction_audit_if_missing.sql`
+- `supabase/migrations/20260806145900_create_backup_is_venda_loja_if_missing.sql`
 - `supabase/migrations/.migration-checksums.json`
 - `supabase/tests/rls-matrix/grants_guard.test.sql`
 - `scripts/audit_route_data_inventory.mjs`
@@ -633,6 +633,8 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/lib/store-pre-registration-auth-hardening.test.ts`
 - `src/lib/sentry-release.ts`
 - `src/lib/sentry-release.test.ts`
+- `src/lib/backup-table-rls-hardening-migration.test.ts`
+- `src/lib/rls-helper-grants-migration.test.ts`
 - `src/pages/Privacy.tsx`
 - `src/pages/Login.tsx`
 - `src/pages/Terms.tsx`
