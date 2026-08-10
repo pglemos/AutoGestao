@@ -5,9 +5,9 @@ Atualizado em 2026-08-10 durante a retomada isolada no branch
 `origin/main` `71d9286a`. As observações abaixo da seção histórica de 03/08
 continuam preservadas, mas não são evidência atual deste checkout.
 
-> **Estado vigente:** correção do PageCanvas do Dono implementada, testada e
-> validada localmente em browser autenticado. Preview, CI remoto, produção,
-> Sentry e backup restaurável ainda não foram aprovados nesta retomada.
+> **Estado vigente:** correção do PageCanvas do Dono implementada, testada,
+> validada localmente e comprovada no preview/CI remoto. Produção, Sentry e
+> backup restaurável ainda não foram aprovados nesta retomada.
 
 ## Revalidação atual — 2026-08-10
 
@@ -37,13 +37,14 @@ também usava `p-mx-sm md:p-mx-lg`, duplicando a responsabilidade de margem.
 - GREEN: contrato isolado `2 pass / 0 fail`.
 - `npm run lint`: exit 0; warning a11y preexistente em `HelpTooltip.tsx`.
 - `npm run typecheck`: exit 0.
-- `npm test`: `2.594 pass / 0 fail / 18.151 asserts`.
+- `npm test`: `2.594 pass / 0 fail / 18.152 asserts`.
 - `npm run build`: exit 0; sem sourcemaps públicos.
-- `npm run check:bundle-size`: `1.563,51/1.860 KB gzip`, chunks dentro do
+- `npm run check:bundle-size`: `1.567,08/1.860 KB gzip`, chunks dentro do
   orçamento; `vendor-ui` em warning não bloqueante.
 - `npm run audit:routes-data`: exit 0; 109 rotas declaradas, 101 protegidas,
   8 públicas, 136 tabelas, 87 RPCs e 14 Edge Functions.
-- CodeRabbit: revisão final sem novos achados.
+- CodeRabbit: a revisão solicitou duas correções documentais e uma asserção
+  independente; todas foram aplicadas neste commit e aguardam nova revisão.
 - Browser local autenticado como Dono, `1440×900`: um
   `[data-mx-page-canvas]`, tag `DIV`, padding `32px`, cockpit `0px`, um
   `main`, zero overflow e zero erros de console.
@@ -54,10 +55,10 @@ também usava `p-mx-sm md:p-mx-lg`, duplicando a responsabilidade de margem.
 
 ### Resultado e próximo passo
 
-Correção local comprovada. A revisão Agy foi tentada em modo sandbox, mas o
-launcher atingiu a cota externa antes de produzir parecer; não é contada como
-aprovação. Fazer push/PR somente após registrar estes documentos, acompanhar
-CI, publicar preview e repetir a matriz autenticada no ambiente publicado.
+Correção local comprovada. A revisão Agy foi tentada em modo plano, mas a quota
+externa foi atingida antes de produzir parecer; não é contada como aprovação.
+O PR/preview/CI protegido já foram publicados e passaram; repetir a matriz
+autenticada em produção após o merge.
 
 ## Tarefa
 

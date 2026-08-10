@@ -2,8 +2,8 @@
 
 **Data de início:** 2026-07-29
 **Estado atual:** PARCIALMENTE CONCLUÍDO
-**Branch atual:** `main` (execução direta conforme decisão explícita do solicitante)
-**HEAD verificado antes desta retomada:** `129301d71a8d566f78bfa94064e80ebb0cac143f`
+**Branch da retomada:** `feat/mx-unificacao-total-20260809` (worktree isolado)
+**HEAD vigente da retomada:** `79928725b4ce49ba48f94a418ad59623bcd9d65c`
 **Base histórica de rollback:** `41ec4d39e165cab013988fab9aef54649b616095`
 
 > Este documento é atualizado durante a execução. “Parcialmente concluído” é
@@ -11,10 +11,9 @@
 
 ## Revalidação vigente — 2026-08-10
 
-As referências anteriores a execução direta na `main`, ao HEAD `129301d71` e
+As referências anteriores à execução direta na `main`, ao HEAD `129301d71` e
 às validações/deploys de 03/08 são históricas e estão superseded como prova do
-estado atual. A retomada atual usa o worktree isolado
-`/Users/pedroguilherme/PROJETOS/mx-unificacao-total-20260809`, branch
+estado atual. A retomada usa o worktree isolado da story, branch
 `feat/mx-unificacao-total-20260809`, com base `origin/main`
 `71d9286a6f1f4feafce67662ec48ea36a496fb07`.
 
@@ -23,11 +22,12 @@ estado atual. A retomada atual usa o worktree isolado
 - Causa raiz: o fluxo de performance do Dono desabilitava o
   `ConditionalPageCanvas`, enquanto `OwnerExecutiveCockpit` aplicava padding
   lateral de página próprio.
-- Commit local: `a3ede247ed3db02a4aa0cbb1a97cd6f79670f75d`.
+- Commit da correção: `a3ede247ed3db02a4aa0cbb1a97cd6f79670f75d`; documentação
+  vigente: `79928725b4ce49ba48f94a418ad59623bcd9d65c`.
 - Alterações: canvas habilitado para Dono com `as="div"`; padding próprio
   removido; contrato RED/GREEN atualizado para provar a tag de abertura JSX.
-- Gates locais: lint, typecheck, `npm test` (`2.594 pass`, `18.151 asserts`),
-  build, bundle (`1.563,51/1.860 KB gzip`), auditoria de rotas e diff-check
+- Gates locais: lint, typecheck, `npm test` (`2.594 pass`, `18.152 asserts`),
+  build, bundle (`1.567,08/1.860 KB gzip`), auditoria de rotas e diff-check
   passaram. O warning de lint em `HelpTooltip.tsx` é preexistente.
 - Browser local autenticado como Dono em `1440×900` e `390×844`: um canvas
   `DIV`, padding canônico de `32px`/`16px`, cockpit sem padding próprio, um
@@ -35,17 +35,21 @@ estado atual. A retomada atual usa o worktree isolado
 
 ### Estado de publicação
 
-O commit ainda não foi enviado ao GitHub nem publicado em preview/produção.
-Portanto, não há evidência atual de CI remoto, deployment Vercel, `/api/health`
-ou Sentry para esta correção. Backup restaurável/PITR, matriz integral de
-perfis/rotas e rotação dos segredos continuam pendentes; o relatório permanece
-**PARCIALMENTE CONCLUÍDO**.
+O PR #186 foi enviado ao GitHub e o preview está `READY` em
+`https://mxperformance-git-feat-mx-unificacao-total-20260809-synvolt.vercel.app`.
+O `/api/health` do preview retornou HTTP 200, `healthy`, ambiente `preview` e
+release `79928725b4ce49ba48f94a418ad59623bcd9d65c`; o workflow remoto
+`31353510899` passou nos gates protegidos, enquanto o TestSprite informativo
+falhou por “No tests detected”. Produção, backup restaurável/PITR, matriz
+integral de perfis/rotas, Sentry independente e rotação dos segredos continuam
+pendentes; o relatório permanece **PARCIALMENTE CONCLUÍDO**.
 
 ## 1. Resumo executivo
 
-A auditoria foi retomada diretamente na `main`, conforme autorização explícita
-do solicitante. O worktree contém alterações concorrentes já existentes, que
-foram preservadas; `mx-v3-csv-VzMBNx/` permanece não rastreado e não foi incluído.
+O diagnóstico inicial foi executado diretamente na `main`, conforme autorização
+explícita do solicitante; esse trecho é histórico. A retomada vigente usa o
+worktree isolado da story e preserva alterações concorrentes; os artefatos não
+rastreados da checkout principal não foram incluídos.
 
 No baseline de 2026-07-29, a alegação anterior de “App Shell único” não foi
 aceita: o runtime ainda selecionava `OwnerShell` para Dono e `Layout` para os

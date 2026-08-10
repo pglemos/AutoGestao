@@ -21,6 +21,7 @@ describe('OwnerExecutiveCockpit data-backed sections', () => {
     const canvasTag = dashboardSource.match(/<ConditionalPageCanvas\b[^>]*>/)?.[0] ?? ''
     expect(canvasTag).toContain('enabled={!isFocusedRolePerformance || isOwner}')
     expect(canvasTag).toContain('as="div"')
-    expect(source).not.toContain('p-mx-sm md:p-mx-lg')
+    expect(source).not.toContain('p-mx-sm')
+    expect(source).not.toContain('md:p-mx-lg')
   })
 })
