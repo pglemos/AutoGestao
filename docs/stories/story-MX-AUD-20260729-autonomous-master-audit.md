@@ -7,7 +7,7 @@
 > **Revalidação vigente — 2026-08-10:** o checkpoint de código/runtime é
 > `d7356687105e6f048d974c5a25dd96d7f31eaf11`; o HEAD remoto documental do
 > branch `fix/mx-final-gates-20260810` é
-> `693ef1394ed646a09b232253b266618f8bdc175e`. CI, pgTAP e a matriz visual de
+> `574083013870be4a51989d9c361db68000600222`. CI, pgTAP e a matriz visual de
 > leitura passaram nesse HEAD; o deployment Vercel integrado falhou e não há
 > Preview atual aprovado.
 > A produção permanece no merge saudável
@@ -146,8 +146,8 @@ anteriores de conclusão não contam como evidência nova.
     Preview manual funcional era do runtime `4c7b906d653a9af00969d75313ea6c9756f5bbc0`.
     Essa evidência não aprova o checkpoint vigente.
   - [x] Publicar o checkpoint vigente e observar CI/pgTAP/visual próprios no
-    HEAD remoto `693ef1394ed646a09b232253b266618f8bdc175e`; Quality Gates
-    `31404300260`, pgTAP `31404300238` (`40/40`) e visual `31404300048`
+    HEAD remoto `574083013870be4a51989d9c361db68000600222`; Quality Gates
+    `31405983397`, pgTAP `31405983427` (`40/40`) e visual `31405983439`
     (`9 passed` universal, `1 passed` Owner Base44) terminaram `SUCCESS`.
   - [ ] Obter Preview Vercel atual aprovado e promover somente após todos os
     gates externos passarem.
@@ -169,7 +169,7 @@ anteriores de conclusão não contam como evidência nova.
   `anon` revogado; o CI histórico confirmou os 40 cenários no run
   `31377957069`.
 - [x] Reexecutar o `pgTAP RLS Matrix` no HEAD remoto documental
-  `693ef1394ed646a09b232253b266618f8bdc175e`; o run `31404300238` confirmou
+  `574083013870be4a51989d9c361db68000600222`; o run `31405983427` confirmou
   `40/40` cenários. Nenhum DDL foi aplicado à produção.
 
 ## Dev Notes
