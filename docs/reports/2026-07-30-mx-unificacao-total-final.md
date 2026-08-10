@@ -26,13 +26,21 @@
   eh_area_interna_mx` durante a consulta autenticada da matriz RLS. A correção
   local adiciona grants explícitos para `authenticated` em 22 helpers, mantendo
   `PUBLIC`/`anon` revogados, e amplia o `grants_guard` pgTAP para 7 assertions.
+- A revisão CodeRabbit vigente deixou quatro findings acionáveis; todos foram
+  tratados neste worktree: checkout sem credencial persistida, redação de
+  segurança, File List sem duplicação e migration forward-only para as relações
+  auxiliares. A migration `20260810110000_harden_auxiliary_audit_backup_rls.sql`
+  garante criação idempotente, RLS, revogações, acesso de `service_role` e
+  policies explícitas; o guard pgTAP agora tem 19 assertions, incluindo
+  privilégios efetivos, expressões de policy e probes negativos com linha
+  semeada.
 - RED/GREEN: contratos de PageCanvas/landmark passaram e o contrato novo do
   Sonner falhou antes da implementação e passou isoladamente depois.
 - Gates locais vigentes: lint exit `0` (warning histórico em `HelpTooltip.tsx`),
   typecheck exit `0`, `npm test` `2.597 pass / 0 fail / 18.162 asserts`, build
   exit `0` sem sourcemaps públicos, bundle `1.563,57/1.860 KB gzip` e
   `git diff --check` exit `0`; checksums recalculadas e reversibilidade das
-  migrations pendentes também passaram (`399` checksums válidas, `43`
+  migrations pendentes também passaram (`400` checksums válidas, `44`
   migrations validadas).
 - Auditorias complementares: `validate:structure`, `validate:parity`,
   `validate:agents`, `sync:ide:check`, `audit:routes-data`,
@@ -45,7 +53,9 @@
   oficiais; `/api/health` HTTP `200`, `healthy`, release exatamente igual ao
   merge acima. Esse deployment ainda não contém o diff local desta retomada.
 - Estado: **correções locais aprovadas, mas replay/grants RLS ainda aguardam
-  commit/CI; produção atual saudável e sem alteração de banco**.
+  commit/CI; produção atual saudável e sem alteração de banco**. O hardening
+  forward-only das relações auxiliares está no checkout e ainda precisa do novo
+  CI efêmero.
 
 ## 39.1 Resumo executivo — estado vigente da retomada
 
@@ -92,7 +102,7 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
   `82191012260208c6dc82e240cd78fdf4658fb6ba`; sete workflows desse SHA
   concluíram com sucesso.
 - Gates locais do diff final: lint/typecheck/build/diff-check exit `0`,
-  `npm test` `2597 pass / 0 fail / 18161 asserts`, bundle `1563,57/1860 KB`
+  `npm test` `2597 pass / 0 fail / 18162 asserts`, bundle `1563,57/1860 KB`
   gzip e auditorias estruturais/paridade/rotas sem erros.
 - O CI do SHA anterior `df0955b05cf3295cd85e20c382a0ea17489d22c9`
   falhou antes da correção no job `pgTAP RLS Matrix` durante `supabase db reset`
@@ -102,6 +112,8 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
   falhou no job `93385034779` com `permission denied for function
   eh_area_interna_mx`; a migration nova e o guard pgTAP corrigem a ACL no
   próximo SHA.
+- A migration auxiliar e seus 19 invariantes são somente locais nesta medição;
+  não houve `db push` nem aplicação de migration no Supabase remoto.
 - A correção altera apenas o marcador de histórico, com allowlist hash-pinned
   em `.migration-checksum-allowlist.json`; não remove nem reescreve os 39
   stubs. O CI também compara o histórico antes/depois do reset.
@@ -135,6 +147,9 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
   pelo reset; o CI compara as versões antes/depois e não executa `db push` remoto.
 - A auditoria funcional e de RLS anterior permanece histórica até o novo job
   `pgTAP RLS Matrix` passar no SHA desta correção.
+- A migration `20260810110000_harden_auxiliary_audit_backup_rls.sql` também é
+  somente local; nenhuma migration foi aplicada ao projeto Supabase remoto
+  nesta retomada.
 
 ## 39.6 Vercel — estado vigente da retomada
 

@@ -2,7 +2,7 @@
   "_comment": "Congelamento forward-only das migrations aplicadas. NÃO editar à mão. Regenerar apenas ao adicionar migrations novas: node scripts/gen_migration_checksums.mjs",
   "generated_at": "2026-08-10",
   "algorithm": "sha256",
-  "count": 399,
+  "count": 400,
   "checksums": {
     "00000000000000_baseline_legacy_schema.sql": "3a519e3804095af5e9f7d8a7cb70dcc388b04530b6a7911ee1e3cb76af10b0fc",
     "00000000000001_mark_existing_migrations_applied.sql": "8402ff2ff9a9c626b6985a0c18ec58f1e92c32c889365af44d0299ce8c99a83c",
@@ -402,6 +402,7 @@
     "20260809172708_add_notificacoes_realtime_publication.sql": "9b70ba291e4d784ff58de0c1e2664cd5995fd88eecd11f988146efc24edd2f4f",
     "20260809192547_scope_consulting_evidence_storage_select.sql": "f3df1e3413bf4ceb311ed2f280ef715f688ce8a975c7a087b151f6b8c52e051c",
     "20260809205000_fix_consulting_evidence_storage_rls_definer.sql": "71ce08bf94f52c3e5fa387d0ae387e72137ec9d5bb926dd3cc73cec4fc44f5fb",
-    "20260810100000_restore_authenticated_rls_helper_execute.sql": "30eacec4d8543fb2d99788d0d920076df9f187e14405e54c2451ed95f2edff24"
+    "20260810100000_restore_authenticated_rls_helper_execute.sql": "30eacec4d8543fb2d99788d0d920076df9f187e14405e54c2451ed95f2edff24",
+    "20260810110000_harden_auxiliary_audit_backup_rls.sql": "8215313a91e08ff809e6a1030a60b1143bb748c56baf51886a53728d7d8edeff"
   }
 }

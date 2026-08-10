@@ -218,6 +218,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-08-10 | 0.3.2 | Gates finais: PageCanvas gerencial, landmark Checkin e overflow Sonner mobile corrigidos; produção reconciliada no merge #186 | Dex (Dev) |
 | 2026-08-10 | 0.3.3 | Marcador de histórico deixou de pré-registrar 39 stubs ativos após falha reproduzida no pgTAP RLS; aguardando CI novo | Dex (Dev) |
 | 2026-08-10 | 0.3.4 | ACL dos 22 helpers RLS restaurada para `authenticated`, `grants_guard` ampliado e PR #187 documentado; aguardando CI | Dex (Dev) |
+| 2026-08-10 | 0.3.5 | Findings acionáveis do CodeRabbit corrigidos; hardening forward-only idempotente para auditoria/backup e guard pgTAP ampliado para 19 invariantes | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -442,6 +443,16 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - 2026-08-10: Docker/Postgres local permaneceu indisponível em
   `127.0.0.1:54322`; a matriz pgTAP desta correção depende do próximo CI com
   banco efêmero. Nenhuma migration foi aplicada remotamente.
+- 2026-08-10: os quatro findings acionáveis da revisão CodeRabbit vigente foram
+  tratados no worktree: `persist-credentials: false`, redação factual do
+  relatório, remoção de duplicação no File List e hardening forward-only das
+  relações auxiliares. A migration
+  `20260810110000_harden_auxiliary_audit_backup_rls.sql` garante criação
+  idempotente, RLS, grants controlados e policies explícitas; o guard pgTAP foi
+  ampliado para 19 assertions, incluindo privilégios efetivos e probes
+  negativos semeados. A suíte completa reexecutada passou `2597/2597`
+  com `18162` asserts; o primeiro run teve uma falha flakey de foco e passou
+  isoladamente em três repetições e na reexecução completa.
 
 ### Completion Notes List
 
@@ -504,6 +515,7 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `package.json`
 - `package-lock.json`
 - `supabase/migrations/20260810100000_restore_authenticated_rls_helper_execute.sql`
+- `supabase/migrations/20260810110000_harden_auxiliary_audit_backup_rls.sql`
 - `supabase/migrations/.migration-checksums.json`
 - `supabase/tests/rls-matrix/grants_guard.test.sql`
 - `scripts/audit_route_data_inventory.mjs`
@@ -608,7 +620,6 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/features/manager/daily-closing/ManagerDailyClosing.container.tsx`
 - `src/features/manager/daily-closing/ManagerDailyClosing.visual-contract.test.ts`
 - `src/test/sonner-layout.contract.test.ts`
-- `supabase/migrations/.migration-checksums.json`
 - `supabase/migrations/.migration-checksum-allowlist.json`
 - `supabase/migrations/00000000000001_mark_existing_migrations_applied.sql`
 - `supabase/migrations/20260407000000_role_matrix_dono_admin.sql`

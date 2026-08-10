@@ -9,7 +9,7 @@
 -- o que a matriz de RLS não consegue asseverar.
 -- ============================================================================
 BEGIN;
-SELECT plan(7);
+SELECT plan(19);
 
 -- 1) anon: zero privilégio em QUALQUER tabela/view de public
 SELECT is(
@@ -113,6 +113,146 @@ SELECT ok(
   AND (SELECT bool_and(NOT has_function_privilege('anon', signature, 'EXECUTE')) FROM required),
   'RLS helpers: authenticated executa e anon não executa'
 );
+
+-- 8) Forward-only hardening must leave both auxiliary relations present with
+-- RLS enabled even when their historical create migrations were skipped.
+SELECT ok(
+  to_regclass('public.data_correction_audit') IS NOT NULL
+  AND to_regclass('public.backup_is_venda_loja_20260805') IS NOT NULL
+  AND (SELECT relrowsecurity FROM pg_class WHERE oid = to_regclass('public.data_correction_audit'))
+  AND (SELECT relrowsecurity FROM pg_class WHERE oid = to_regclass('public.backup_is_venda_loja_20260805')),
+  'auxiliary audit/backup relations exist with RLS enabled'
+);
+
+-- 9) The API roles remain unable to reach the auxiliary relations through any
+-- effective table privilege, including privileges inherited from PUBLIC.
+SELECT ok(
+  NOT EXISTS (
+    SELECT 1
+      FROM (VALUES
+        ('anon'::text),
+        ('authenticated'::text)
+      ) AS roles(role_name)
+      CROSS JOIN (VALUES
+        ('public.data_correction_audit'::text),
+        ('public.backup_is_venda_loja_20260805'::text)
+      ) AS relations(relation_name)
+      CROSS JOIN (VALUES
+        ('SELECT'::text),
+        ('INSERT'::text),
+        ('UPDATE'::text),
+        ('DELETE'::text),
+        ('TRUNCATE'::text),
+        ('REFERENCES'::text),
+        ('TRIGGER'::text)
+      ) AS privileges(privilege_name)
+     WHERE has_table_privilege(
+       roles.role_name,
+       relations.relation_name,
+       privileges.privilege_name
+     )
+  ),
+  'auxiliary audit/backup relations: anon/authenticated sem grants'
+);
+
+-- 10) The operational service role retains the access needed for audit writes
+-- and controlled recovery, without reopening the API surface.
+SELECT ok(
+  has_table_privilege('service_role', 'public.data_correction_audit', 'SELECT')
+  AND has_table_privilege('service_role', 'public.data_correction_audit', 'INSERT')
+  AND has_table_privilege('service_role', 'public.backup_is_venda_loja_20260805', 'SELECT'),
+  'service_role: audit/backup access preserved'
+);
+
+-- 11) Policies are explicit, restrictive in effect, and idempotently
+-- recreated by the forward-only hardening migration.  Check the catalog
+-- expressions because a policy name alone does not prove a deny policy.
+SELECT ok(
+  EXISTS (
+    SELECT 1 FROM pg_policies
+     WHERE schemaname = 'public'
+       AND tablename = 'data_correction_audit'
+       AND policyname = 'service_role_manage_data_correction_audit'
+       AND roles = ARRAY['service_role']::name[]
+       AND permissive = 'PERMISSIVE'
+       AND cmd = 'ALL'
+       AND qual = 'true'
+       AND with_check = 'true'
+  )
+  AND EXISTS (
+    SELECT 1 FROM pg_policies
+     WHERE schemaname = 'public'
+       AND tablename = 'backup_is_venda_loja_20260805'
+       AND policyname = 'deny_api_backup_is_venda_loja_20260805'
+       AND roles = ARRAY['anon', 'authenticated']::name[]
+       AND permissive = 'PERMISSIVE'
+       AND cmd = 'ALL'
+       AND qual = 'false'
+       AND with_check = 'false'
+  ),
+  'auxiliary audit/backup policies are explicit'
+);
+
+-- 12-19) Policy-layer probes: temporarily grant DML only inside savepoints so
+-- the test can exercise the deny policy itself.  The grants roll back before
+-- the next role and cannot change the migration-owned ACL state.
+SAVEPOINT auxiliary_api_policy_probe_anon;
+GRANT SELECT, INSERT, UPDATE, DELETE
+  ON TABLE public.backup_is_venda_loja_20260805
+  TO anon, authenticated;
+INSERT INTO public.backup_is_venda_loja_20260805 DEFAULT VALUES;
+SELECT rls_matrix.assume_anon();
+SELECT is(
+  (SELECT count(*)::int FROM public.backup_is_venda_loja_20260805),
+  0,
+  'anon: backup deny policy blocks SELECT'
+);
+SELECT is(
+  rls_matrix.dml_count($$INSERT INTO public.backup_is_venda_loja_20260805 DEFAULT VALUES$$),
+  0::bigint,
+  'anon: backup deny policy blocks INSERT'
+);
+SELECT is(
+  rls_matrix.dml_count($$UPDATE public.backup_is_venda_loja_20260805 SET id = id$$),
+  0::bigint,
+  'anon: backup deny policy blocks UPDATE'
+);
+SELECT is(
+  rls_matrix.dml_count($$DELETE FROM public.backup_is_venda_loja_20260805$$),
+  0::bigint,
+  'anon: backup deny policy blocks DELETE'
+);
+ROLLBACK TO SAVEPOINT auxiliary_api_policy_probe_anon;
+RESET ROLE;
+
+SAVEPOINT auxiliary_api_policy_probe_authenticated;
+GRANT SELECT, INSERT, UPDATE, DELETE
+  ON TABLE public.backup_is_venda_loja_20260805
+  TO anon, authenticated;
+INSERT INTO public.backup_is_venda_loja_20260805 DEFAULT VALUES;
+SELECT rls_matrix.assume('aaaaaaaa-0000-0000-0000-000000000004'::uuid);
+SELECT is(
+  (SELECT count(*)::int FROM public.backup_is_venda_loja_20260805),
+  0,
+  'authenticated: backup deny policy blocks SELECT'
+);
+SELECT is(
+  rls_matrix.dml_count($$INSERT INTO public.backup_is_venda_loja_20260805 DEFAULT VALUES$$),
+  0::bigint,
+  'authenticated: backup deny policy blocks INSERT'
+);
+SELECT is(
+  rls_matrix.dml_count($$UPDATE public.backup_is_venda_loja_20260805 SET id = id$$),
+  0::bigint,
+  'authenticated: backup deny policy blocks UPDATE'
+);
+SELECT is(
+  rls_matrix.dml_count($$DELETE FROM public.backup_is_venda_loja_20260805$$),
+  0::bigint,
+  'authenticated: backup deny policy blocks DELETE'
+);
+ROLLBACK TO SAVEPOINT auxiliary_api_policy_probe_authenticated;
+RESET ROLE;
 
 SELECT * FROM finish();
 ROLLBACK;

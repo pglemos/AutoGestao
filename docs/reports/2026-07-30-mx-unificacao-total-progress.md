@@ -154,7 +154,8 @@ tenta registrar a primeira versão novamente.
   da migration já aplicada está documentada e hash-pinned em
   `.migration-checksum-allowlist.json`.
 - Nenhuma migration foi aplicada remotamente; nenhum DDL, dado de aplicação ou
-  proteção RLS foi alterado.
+  proteção RLS foi alterado no projeto remoto. O checkout contém a migration de
+  grants RLS pendente `20260810100000_restore_authenticated_rls_helper_execute.sql`.
 
 ### Testes e evidências
 
@@ -204,8 +205,8 @@ nominal para seus helpers.
 - `npm run lint`, `npm run typecheck`, `npm test` (`2.597 pass / 0 fail /
   18.162 asserts`), `npm run build`, bundle, auditorias locais e
   `git diff --check`: exit `0` na revalidação desta retomada.
-- `node scripts/gen_migration_checksums.mjs --check`: `399` checksums íntegras.
-- `node scripts/check_migration_reversibility.mjs --changed-only`: `43`
+- `node scripts/gen_migration_checksums.mjs --check`: `400` checksums íntegras.
+- `node scripts/check_migration_reversibility.mjs --changed-only`: `44`
   migrations com rollback documentado.
 - Docker/Postgres local continua indisponível em `127.0.0.1:54322`; o worktree
   não está vinculado a um project ref. O pgTAP só pode ser confirmado pelo CI
@@ -219,6 +220,44 @@ O patch está pronto para revisão CodeRabbit/Gitleaks, staging seletivo, commit
 push pela autoridade AIOX DevOps. O PR #187 deve ser acompanhado até o job
 `pgTAP RLS Matrix` ficar verde; somente então cabe criar/validar o Preview e
 considerar promoção. A story continua `InProgress`.
+
+## Revalidação CodeRabbit e hardening auxiliar — 2026-08-10
+
+### Tarefa
+
+Tratar os quatro findings acionáveis da revisão vigente antes do commit: não
+persistir credenciais do checkout, delimitar a redação de segurança, remover a
+duplicação do File List e fechar a lacuna de ordem das migrations auxiliares.
+
+### Alterações
+
+- `.github/workflows/migration-checksums.yml` agora usa
+  `persist-credentials: false` no checkout.
+- O relatório distingue explicitamente alterações aplicadas ao projeto remoto
+  da migration de grants presente apenas no checkout.
+- A story não repete `.migration-checksums.json` no manifesto.
+- `20260810110000_harden_auxiliary_audit_backup_rls.sql` cria as relações de
+  auditoria/backup se ausentes e reaplica, de forma idempotente, RLS, revogações,
+  acesso de `service_role` e policies explícitas.
+- `grants_guard.test.sql` passou a 19 invariantes, cobrindo existência, RLS,
+  privilégios efetivos (inclusive `PUBLIC`), acesso operacional, expressões de
+  policy e probes negativos semeados para `anon`/`authenticated`.
+
+### Testes e evidências
+
+- Suíte completa reexecutada: `2597 pass / 0 fail / 18162 asserts`.
+- `npm run lint`, `npm run typecheck`, `npm run build`, bundle, auditorias AIOX,
+  checksums (`400`) e reversibilidade (`44`) passaram.
+- `gitleaks dir` encontrou somente findings históricos/fora do diff atual; a
+  verificação do conteúdo staged será executada antes do commit.
+- Docker/Postgres local continua indisponível; a execução pgTAP da migration
+  nova depende do CI efêmero após o push.
+
+### Resultado e próximo passo
+
+Findings locais tratados sem aplicar migration remota. Próximo passo: staging
+seletivo, Gitleaks staged, commit, push pela autoridade AIOX DevOps e observar o
+novo CI/Preview. A story continua `InProgress`.
 
 ## Tarefa
 
