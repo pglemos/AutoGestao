@@ -433,6 +433,14 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   completo mantém um high em `xlsx`. `npx secretlint` não executa sem
   `.secretlintrc`; isso permanece bloqueio de governança, enquanto Gitleaks
   passou sem leak no diff da branch.
+- 2026-08-10: a repetição final da suíte `src/test/manager-module.playwright.ts`
+  passou `10/10` em `2,6m` nos projetos `chromium` e `mobile-chrome`; o caso
+  mobile que havia falhado por `TypeError: Failed to fetch` também passou
+  isoladamente em `12,6s`.
+- 2026-08-10: CodeRabbit concluiu a revisão contra `main` com 19 arquivos
+  revisados e um único achado `major` documental. A divergência entre
+  `origin/main`, HEAD, contagens e bundle foi corrigida nos relatórios correntes;
+  nenhum achado crítico foi reportado.
 
 ### Completion Notes List
 

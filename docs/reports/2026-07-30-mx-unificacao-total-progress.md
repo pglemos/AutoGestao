@@ -3,8 +3,8 @@
 Atualizado em 2026-08-10 durante a retomada em worktree local isolado,
 branch
 `fix/mx-full-execution-20260810`, sobre `origin/main`
-`d9c061edef9960e41216b046cc71b7856a58c0df`. A implementação desta retomada está
-no commit `f333da4d48bae84af547fce0ce0924c8857839b6`; esta entrada registra o
+`3ee29d72a9ff6729b3097faa0363c17cb3611ea1`. A implementação desta retomada está
+no commit `9f01b0c17dedf2f445f0bee7e3a01068e20e9ccd`; esta entrada registra o
 estado documental corrente. As observações históricas abaixo
 continuam preservadas, mas não são evidência atual deste checkout.
 
@@ -41,29 +41,30 @@ tipográficos arbitrários.
 ### Testes executados
 
 - Direcionados: `38 pass / 0 fail / 8222 expect()`.
-- Suíte completa: `2604 pass / 0 fail / 18182 expect()` em 462 arquivos.
+- Suíte completa: `2606 pass / 0 fail / 18195 expect()` em 462 arquivos.
 - `npm run lint`, `npm run typecheck`, `npm run build`,
   `npm run check:bundle-size`, `npm run audit:layout-contract`,
   `npm run audit:routes-data`, `validate:structure`, `validate:parity`,
   `sync:ide:check`, `validate:agents`, `audit:management-design-system`,
   `lint:a11y` e `git diff --check`: exit 0.
-- Bundle: `1563,79/1860 KB gzip`; build sem sourcemaps públicos.
+- Bundle: `1564,03/1860 KB gzip`; build sem sourcemaps públicos.
 - `gitleaks protect --staged`: exit 0. O histórico contém 116 achados
   redigidos; o scan de `src/` encontrou três falsos positivos genéricos em
   fixtures/diagnósticos não alterados.
 
 ### Resultado
 
-Gates funcionais locais aprovados para esta unidade, com implementação no
-commit `f333da4d`. Agy/Antigravity não produziu
+Gates funcionais locais aprovados para esta unidade, com implementação até o
+commit `9f01b0c1`. Agy/Antigravity não produziu
 parecer técnico; não é contado como gate. A revisão CodeRabbit encontrou os
 pontos documentais que foram corrigidos, mas o rerun final retornou
-`Review limit reached` por seat/API key ausente; PR/CI/preview/produção,
+`Review limit reached` em tentativa anterior; a revisão final atual encontrou
+um único achado documental major, corrigido no relatório corrente. PR/CI/preview/produção,
 matriz browser integral, backup/PITR, Sentry/source maps e rollback continuam
 pendentes.
-- Pre-push AIOX/DevOps não liberado: worktree limpo, mas story `InProgress`,
+- Pre-push AIOX/DevOps ainda não executado: worktree limpo, story `Ready for Review`,
   `npm audit` com 1 high em `xlsx` sem fix, Secretlint sem configuração e
-  CodeRabbit limitado por `Review limit reached`. Não houve push ou PR.
+  revisão CodeRabbit final sem crítico; não houve push ou PR.
 
 ## Registro histórico — revalidação do commit `a3ede247` — 2026-08-10
 

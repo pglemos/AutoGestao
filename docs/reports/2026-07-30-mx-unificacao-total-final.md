@@ -8,21 +8,21 @@
 > são históricos e não são prova do estado atual. A execução corrente ocorre no
 > worktree isolado `<worktree local isolado>`,
 > branch `fix/mx-full-execution-20260810`, sobre `origin/main`
-> `d9c061edef9960e41216b046cc71b7856a58c0df`.
+> `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`.
 
 ## Revalidação vigente — 2026-08-10
 
 - Worktree corrente: branch `fix/mx-full-execution-20260810`, base remota
-  `origin/main` em `d9c061edef9960e41216b046cc71b7856a58c0df`; implementação
-  commitada em `f333da4d48bae84af547fce0ce0924c8857839b6` e estado documental
+  `origin/main` em `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`; implementação
+  commitada até `9f01b0c17dedf2f445f0bee7e3a01068e20e9ccd` e estado documental
   corrente registrado nesta revalidação.
 - Alterações locais: `PageCanvas` canônico em fechamento diário e rotina do
   gerente, loading da performance da equipe sem container próprio, `HelpTooltip`
   como botão nativo, tipografia canônica no Check-in e contratos de regressão.
-- Gates locais atuais: `npm test` `2604 pass / 0 fail / 18182 expect()`;
+- Gates locais atuais: `npm test` `2606 pass / 0 fail / 18195 expect()`;
   `npm run lint`, `npm run typecheck`, `npm run build`,
   `npm run check:bundle-size`, auditoria de layout/rotas, estrutura, paridade,
-  IDE sync, a11y e `git diff --check` passaram. Bundle: `1563,79/1860 KB gzip`;
+  IDE sync, a11y e `git diff --check` passaram. Bundle: `1564,03/1860 KB gzip`;
   build sem sourcemaps públicos.
 - Contratos direcionados: `38 pass / 0 fail / 8222 expect()`; layout contract:
   zero violações; inventário runtime: 109 rotas, 101 protegidas, 8 públicas,
@@ -31,23 +31,21 @@
   percorreu 1.950 commits e encontrou 116 achados redigidos; o scan corrente de
   `src/` apontou três falsos positivos genéricos em fixtures/diagnósticos não
   alterados. Rotação/expurgo histórico permanece pendente.
-- A revisão Agy/Antigravity foi tentada em modo somente leitura, mas o CLI
-  respondeu com mensagens meta sobre agentes/modelo e não produziu achados; não
-  é contada como gate. O modelo “GPT 5.6 Luna” não está disponível na listagem
-  local do CLI.
-- CodeRabbit: a revisão da implementação e documentação encontrou três issues
-  documentais no total, todos tratados neste worktree; a última tentativa de
-  rerun retornou `Review limit reached` por ausência de seat/API key da
-  organização. Não há veredito final novo de zero issues.
+- A revisão Agy/Antigravity foi tentada, mas a quota externa impediu um parecer
+  técnico reproduzível; não é contada como gate. Nenhuma delegação Agy foi
+  fabricada.
+- CodeRabbit concluiu a revisão contra `main` em 2026-08-10, revisando 19
+  arquivos. O único achado foi `major` e documental: divergência de SHA,
+  contagens e bundle entre relatórios correntes. O conjunto foi unificado nesta
+  revalidação; não há achado crítico reportado.
 - Não há nesta revalidação push, PR, CI remoto, preview, promoção de produção,
   prova de backup/PITR, evento Sentry/source map da branch ou smoke
- autenticado novo. Esses gates permanecem bloqueantes.
-- Pre-push AIOX/DevOps: não liberado para publicação. O worktree está limpo e
-  os gates funcionais passam, mas a story continua `InProgress`; `npm audit
+  autenticado novo. Esses gates permanecem bloqueantes.
+- Pre-push AIOX/DevOps: aguardando execução final. O worktree está limpo e
+  os gates funcionais passam; `npm audit
   --audit-level=moderate --json` retornou exit 1 com 0 critical e 1 high em
   `xlsx` sem correção disponível; `npx secretlint "**/*"` retornou exit 2 por
-  ausência de `.secretlintrc`; e o rerun CodeRabbit retornou `Review limit
-  reached`. Nenhum push/PR/deploy foi executado.
+  ausência de `.secretlintrc`. Push/PR/deploy ainda não foram executados.
 
 ## 39.1 Resumo executivo — estado vigente
 
@@ -55,7 +53,7 @@ O worktree corrente preserva a fundação visual, tokens, PageCanvas, shell
 canônico, auditorias estáticas e validações de múltiplos perfis. Nesta etapa,
 as rotas gerenciais restantes foram alinhadas ao `PageCanvas`, sem alterar o
 banco ou promover código remoto. A implementação está no commit
-`f333da4d48bae84af547fce0ce0924c8857839b6`; a documentação desta revalidação
+`9f01b0c17dedf2f445f0bee7e3a01068e20e9ccd`; a documentação desta revalidação
 acompanha o estado local, ainda sem PR, preview e CI remoto.
 
 Status atual: **gates funcionais locais aprovados e implementação commitada; os
@@ -83,12 +81,15 @@ independente de source maps/Sentry, matriz integral e rotação de segredos**.
 ## 39.3 Evidências técnicas — estado vigente da retomada
 
 - Branch: `fix/mx-full-execution-20260810`, base `origin/main`
-  `d9c061edef9960e41216b046cc71b7856a58c0df`; implementação
-  `f333da4d48bae84af547fce0ce0924c8857839b6`.
+  `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`; HEAD
+  `9f01b0c17dedf2f445f0bee7e3a01068e20e9ccd`.
 - PR/CI remoto: ainda não executados para este diff.
-- Gates locais atuais: `npm test` 2604 pass / 0 fail / 18182 asserts; lint,
+- Gates locais atuais: `npm test` 2606 pass / 0 fail / 18195 asserts; lint,
   typecheck, build, bundle, auditorias de layout/rotas, AIOX structure/parity/
   IDE sync, a11y e diff-check sem falhas.
+- Suíte gerencial corrente: Playwright `10 passed (2.6m)` nos projetos
+  `chromium` e `mobile-chrome`; reprodução isolada do contrato de console/rede
+  mobile também passou `1 passed (12.6s)`.
 - Preview/produção/Vercel/GitHub: nenhuma prova nova nesta retomada corrente.
 
 ## 39.4 Evidências visuais
@@ -149,4 +150,4 @@ independente de source maps/Sentry, matriz integral e rotação de segredos**.
 | P2 | Vulnerabilidade de desenvolvimento sem correção disponível | `xlsx@0.18.5` permanece somente em `devDependencies`; o audit completo bloqueia o pre-push, mas o audit de produção não encontra vulnerabilidades | `npm audit --audit-level=moderate`: 1 high em `xlsx`, sem fix; `npm audit --omit=dev`: 0 vulnerabilidades | Substituir/atualizar `xlsx` com alternativa compatível e repetir os gates de segurança |
 | Info | `/home` para Administrador Geral | Rota bloqueada pela matriz de autorização | Produção exibiu mensagem de acesso negado sem erro/overflow | Não alterar sem requisito explícito; validar com perfil autorizado se necessário |
 | P1 | Backup restaurável não comprovado | Sem ponto de restauração testável para rollback de banco | Supabase `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
-| P1 | Pre-push bloqueado por segurança/governança | A publicação do commit local não tem gate formal completo | `npm audit` 1 high em `xlsx` sem fix; Secretlint sem `.secretlintrc`; story `InProgress`; CodeRabbit limitado por seat/API key | Corrigir/substituir a dependência vulnerável, configurar secretlint, concluir a story e repetir o pre-push |
+| P1 | Pre-push bloqueado por segurança/governança | A publicação do commit local não tem gate formal completo | `npm audit` 1 high em `xlsx` sem fix; Secretlint sem `.secretlintrc`; CodeRabbit final sem crítico | Corrigir/substituir a dependência vulnerável, configurar secretlint e repetir o pre-push |
