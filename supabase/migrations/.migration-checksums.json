@@ -378,7 +378,7 @@
     "20260804120000_store_management_context.sql": "0926a1743073b67a6fb351afffdc1983f666ae49083992edefa10c53c288d462",
     "20260804190000_store_management_context_owner_can_sell.sql": "ef198de3745b4693dcfd70b930b377010663bfe556ee6bc7e0205f2530483302",
     "20260804200000_owner_network_cockpit.sql": "478475ca5b1deeca1222f6fc4993e596bc4cbf5aaffc12005de543907024e163",
-    "20260805115900_create_data_correction_audit_if_missing.sql": "6e2055af4b94db4f5b542285eca33d68ec670a9051ad96e0e02fb44c7e368bf8",
+    "20260805115900_create_data_correction_audit_if_missing.sql": "de2dacd7a275a680cd5bb6f0354698eab487f6907956de60a30632dcea212c39",
     "20260805120000_harden_rls_unprotected_tables.sql": "2208bc7a6e7ff3e2d34921be4c31b2fa8621d0b260ad18c7226612b0d31aff9b",
     "20260805140000_lojas_hierarquia_matriz_filial.sql": "c260388228089692960b390a43128c64871d6e175ca1fbdbe1610fd548341eaf",
     "20260805220000_checkin_draft_revision_optimistic_lock.sql": "860aea4212916a0d8b4d0545a3aa941bdb08e8806b1ec5545e3450b959355ce5",
@@ -389,7 +389,7 @@
     "20260805231000_restore_security_invoker_on_closing_views.sql": "526349b221b3a70ef2fcea16bb5b9ae02e362c0999a7b5f27f1a96fce459537a",
     "20260806120000_limit_public_avatar_buckets.sql": "3fa5eab7d1687d16032f779dcd0b3cf4ef7ef966d6598a4cc9e532af8935c604",
     "20260806140000_fix_criar_oportunidade_crm_casts.sql": "3b2a206f97c80bafa276abb0ebfd09b0ceefcb38f805e1c3c8f80f0510f7ce5c",
-    "20260806145900_create_backup_is_venda_loja_if_missing.sql": "b01dcdc45c5766fbcbf3af8ff2e0503dda1f920f3f7b6d1bb066f925b716e9d2",
+    "20260806145900_create_backup_is_venda_loja_if_missing.sql": "81772199cf2af9b315580eea455e2e7c5c83a433fc4651078cb0d5fdf609c91b",
     "20260806150000_revoke_anon_public_execute_functions.sql": "b259630952010137f6e55f560da1d21bae3f93b5f3beb0c87d98149be12fc324",
     "20260807000000_restore_anon_execute_mx_database_health.sql": "3f46dba5c4e4b6d49e71cf89f6113259e71e6123cc500f356e39d91142a0b62e",
     "20260807120000_mentor_comercial_motor_v1.sql": "af0bf1723a7c35a1f089db741eaf4231e130d52f5f684596dd4f337667710ffe",
@@ -403,6 +403,6 @@
     "20260809192547_scope_consulting_evidence_storage_select.sql": "f3df1e3413bf4ceb311ed2f280ef715f688ce8a975c7a087b151f6b8c52e051c",
     "20260809205000_fix_consulting_evidence_storage_rls_definer.sql": "71ce08bf94f52c3e5fa387d0ae387e72137ec9d5bb926dd3cc73cec4fc44f5fb",
     "20260810100000_restore_authenticated_rls_helper_execute.sql": "04111ac7248559664c90b718d0d6a3c0cc58f15313a88003c0521944b2ec5002",
-    "20260810110000_harden_auxiliary_audit_backup_rls.sql": "98acc190f1e82b8c84dfc24dfc4c996329b29187fd02d0436b317782356b7b06"
+    "20260810110000_harden_auxiliary_audit_backup_rls.sql": "fe23195a204ffeab962629c0c7a0bd766718e5f7bc82636330ee711985e581b7"
   }
 }

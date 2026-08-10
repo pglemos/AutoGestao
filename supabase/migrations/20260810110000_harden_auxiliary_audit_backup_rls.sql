@@ -28,6 +28,7 @@ GRANT ALL ON TABLE public.data_correction_audit TO service_role;
 DO $$
 BEGIN
   IF to_regclass('public.data_correction_audit_id_seq') IS NOT NULL THEN
+    EXECUTE 'REVOKE ALL ON SEQUENCE public.data_correction_audit_id_seq FROM PUBLIC, anon, authenticated';
     EXECUTE 'GRANT USAGE, SELECT ON SEQUENCE public.data_correction_audit_id_seq TO service_role';
   END IF;
 END;
@@ -46,6 +47,7 @@ GRANT ALL ON TABLE public.backup_is_venda_loja_20260805 TO service_role;
 DO $$
 BEGIN
   IF to_regclass('public.backup_is_venda_loja_20260805_id_seq') IS NOT NULL THEN
+    EXECUTE 'REVOKE ALL ON SEQUENCE public.backup_is_venda_loja_20260805_id_seq FROM PUBLIC, anon, authenticated';
     EXECUTE 'GRANT USAGE, SELECT ON SEQUENCE public.backup_is_venda_loja_20260805_id_seq TO service_role';
   END IF;
 END;
@@ -54,6 +56,7 @@ DROP POLICY IF EXISTS "deny_api_backup_is_venda_loja_20260805"
   ON public.backup_is_venda_loja_20260805;
 CREATE POLICY "deny_api_backup_is_venda_loja_20260805"
   ON public.backup_is_venda_loja_20260805
+  AS RESTRICTIVE
   FOR ALL TO anon, authenticated
   USING (false)
   WITH CHECK (false);

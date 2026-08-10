@@ -8,12 +8,15 @@ CREATE TABLE IF NOT EXISTS public.backup_is_venda_loja_20260805 (
 
 ALTER TABLE public.backup_is_venda_loja_20260805 ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON TABLE public.backup_is_venda_loja_20260805 FROM PUBLIC, anon, authenticated;
+REVOKE ALL ON SEQUENCE public.backup_is_venda_loja_20260805_id_seq
+  FROM PUBLIC, anon, authenticated;
 GRANT ALL ON TABLE public.backup_is_venda_loja_20260805 TO service_role;
 GRANT USAGE, SELECT ON SEQUENCE public.backup_is_venda_loja_20260805_id_seq TO service_role;
 DROP POLICY IF EXISTS "deny_api_backup_is_venda_loja_20260805"
   ON public.backup_is_venda_loja_20260805;
 CREATE POLICY "deny_api_backup_is_venda_loja_20260805"
   ON public.backup_is_venda_loja_20260805
+  AS RESTRICTIVE
   FOR ALL TO anon, authenticated
   USING (false)
   WITH CHECK (false);

@@ -30,10 +30,16 @@ describe('backup table RLS hardening migration', () => {
 
   it('protects both relations and their identity sequences at creation time', () => {
     expect(auditCreationMigration).toContain('ALTER TABLE public.data_correction_audit ENABLE ROW LEVEL SECURITY')
+    expect(auditCreationMigration).toContain('REVOKE ALL ON SEQUENCE public.data_correction_audit_id_seq')
     expect(auditCreationMigration).toContain('GRANT USAGE, SELECT ON SEQUENCE public.data_correction_audit_id_seq TO service_role')
     expect(backupCreationMigration).toContain('ALTER TABLE public.backup_is_venda_loja_20260805 ENABLE ROW LEVEL SECURITY')
+    expect(backupCreationMigration).toContain('REVOKE ALL ON SEQUENCE public.backup_is_venda_loja_20260805_id_seq')
     expect(backupCreationMigration).toContain('GRANT USAGE, SELECT ON SEQUENCE public.backup_is_venda_loja_20260805_id_seq TO service_role')
+    expect(backupCreationMigration).toContain('AS RESTRICTIVE')
     expect(auxiliaryHardeningMigration).toContain("to_regclass('public.data_correction_audit_id_seq')")
     expect(auxiliaryHardeningMigration).toContain("to_regclass('public.backup_is_venda_loja_20260805_id_seq')")
+    expect(auxiliaryHardeningMigration).toContain('REVOKE ALL ON SEQUENCE public.data_correction_audit_id_seq')
+    expect(auxiliaryHardeningMigration).toContain('REVOKE ALL ON SEQUENCE public.backup_is_venda_loja_20260805_id_seq')
+    expect(auxiliaryHardeningMigration).toContain('AS RESTRICTIVE')
   })
 })
