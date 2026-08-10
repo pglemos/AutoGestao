@@ -353,10 +353,12 @@ SUPABASE_PROJECT_NAME={project_name}
 # Database URLs
 # Connection pooler (port 6543) for serverless/edge functions
 DB_SCHEME=postgresql
-SUPABASE_DB_URL_POOLER="${DB_SCHEME}://postgres:${DB_PASSWORD}@db.${PROJECT_REF}.supabase.co:6543/postgres"
+# URL-encode the password before placing it in a PostgreSQL URI.
+DB_PASSWORD_URLENCODED={db_password_urlencoded}
+SUPABASE_DB_URL_POOLER="${DB_SCHEME}://postgres:${DB_PASSWORD_URLENCODED}@db.${PROJECT_REF}.supabase.co:6543/postgres"
 
 # Direct connection (port 5432) for migrations
-SUPABASE_DB_URL="${DB_SCHEME}://postgres:${DB_PASSWORD}@db.${PROJECT_REF}.supabase.co:5432/postgres"
+SUPABASE_DB_URL="${DB_SCHEME}://postgres:${DB_PASSWORD_URLENCODED}@db.${PROJECT_REF}.supabase.co:5432/postgres"
 
 # API Keys
 SUPABASE_URL=https://[PROJECT_REF].supabase.co
@@ -689,7 +691,7 @@ supabase secrets list               # List secrets
 **Fix:**
 Add `?sslmode=require` to connection string:
 ```bash
-postgresql://postgres:password@db.ref.supabase.co:5432/postgres?sslmode=require
+postgresql://postgres:${DB_PASSWORD_URLENCODED}@db.ref.supabase.co:5432/postgres?sslmode=require
 ```
 
 ### Issue 3: Permission Denied

@@ -3,8 +3,8 @@
 > Relatório vivo de fechamento. Os registros históricos abaixo são preservados,
 > mas não substituem a revalidação corrente do worktree. **Estado corrente
 > (2026-08-10):** os parágrafos históricos abaixo não são
-> prova do estado atual. A execução corrente ocorre no worktree isolado
-> `/Users/pedroguilherme/PROJETOS/mx-full-execution-20260810`, branch
+> prova do estado atual. A execução corrente ocorre em worktree isolado,
+> na branch
 > `fix/mx-full-execution-20260810`, checkpoint remoto verificado antes desta
 > atualização documental
 > `d2c491578438491e5d6b4e878caa48dd51141a95`, sobre `origin/main`
@@ -133,7 +133,11 @@ conclusão do prompt mestre.
   `.secretlintrc.json` e `.secretlintignore`, concluiu o scan corrente sem
   achados. Push/PR/deploy ainda não foram executados.
 
-## 39.1 Resumo executivo — estado vigente
+## 39.1 Resumo executivo — checkpoint histórico superseded
+
+> Este bloco registra um checkpoint anterior à publicação do PR #188 e está
+> superseded pela revalidação corrente e pela seção de pós-publicação acima.
+> Suas contagens e afirmações de ausência de PR/CI não descrevem o estado atual.
 
 O worktree corrente preserva a fundação visual, tokens, PageCanvas, shell
 canônico, auditorias estáticas e validações de múltiplos perfis. Nesta etapa,

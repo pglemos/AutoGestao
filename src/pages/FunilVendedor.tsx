@@ -16,6 +16,7 @@ import {
   type FunnelRow,
   type PeriodRange,
 } from '@/features/crm/lib/funil-vendas-diagnostico'
+import { resolveOfficialSellerKpis } from '@/features/crm/funil-vendedor/official-kpis'
 import {
   BaseEstatisticaCard,
   EficienciaCanalCard,
@@ -166,18 +167,7 @@ export default function FunilVendedor() {
     [effectiveStoreId, rollingPeriod, rows, sellerIds, activeSellersCount, customGoal],
   )
   const officialKpis = useMemo<FunnelKpis>(() => {
-    if (!officialPerformance) return dashboard.kpis
-    const clientMeta = dashboard.kpis.meta
-    const meta = clientMeta !== null && clientMeta > 0 ? clientMeta : officialPerformance.meta
-    const realizado = officialPerformance.vendas_realizadas
-    return {
-      ...dashboard.kpis,
-      meta,
-      realizado,
-      faltam: Math.max(meta - realizado, 0),
-      metaBatida: meta > 0 && realizado >= meta,
-      probabilidade: meta > 0 ? Math.min(100, (officialPerformance.vendas_projetadas / meta) * 100) : null,
-    }
+    return resolveOfficialSellerKpis(dashboard.kpis, officialPerformance)
   }, [dashboard.kpis, officialPerformance])
 
   if (loading) {
@@ -235,7 +225,7 @@ export default function FunilVendedor() {
 
         {hasAnyData && (
           <>
-            <EsforcoNecessarioCard channels={calculationDashboard.channels} faltam={dashboard.kpis.faltam ?? 0} />
+            <EsforcoNecessarioCard channels={calculationDashboard.channels} faltam={officialKpis.faltam ?? 0} />
             <EficienciaCanalCard channels={dashboard.channels} />
             <BaseEstatisticaCard displayedPeriod={periodLabels[periodKey]} calculationPeriod={calculationPeriodLabel} confidence={confidence} />
             <EvolucaoCollapsible data={dashboard.evolution} chartAberto={chartAberto} onToggle={() => setChartAberto(value => !value)} />

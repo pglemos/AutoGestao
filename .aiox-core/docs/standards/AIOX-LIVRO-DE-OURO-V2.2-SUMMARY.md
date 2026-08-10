@@ -1327,7 +1327,7 @@ services:
     depends_on:
       - postgres
     environment:
-      - DATABASE_URL=${DB_SCHEME}://aiox:${DB_PASSWORD}@postgres:5432/aiox_memory
+      - DATABASE_URL=${DB_SCHEME}://aiox:${DB_PASSWORD_URLENCODED}@postgres:5432/aiox_memory
       
 volumes:
   weaviate_data:

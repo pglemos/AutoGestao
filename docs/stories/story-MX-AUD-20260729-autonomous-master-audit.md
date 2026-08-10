@@ -526,6 +526,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   `npm run build` também passaram. Esta é a contagem corrente do worktree, mas
   o status da story permanece parcial até publicação, Preview, produção,
   Sentry, backup/PITR, rollback e matriz integral.
+- 2026-08-10: CodeRabbit apontou divergência entre o KPI local e a performance
+  oficial no card de esforço do Funil. A prop passou a usar `officialKpis.faltam`
+  e o teste `official-kpis.test.ts` cobre a divergência; exemplos de URLs de
+  banco agora exigem `DB_PASSWORD_URLENCODED` e o relatório marcou o checkpoint
+  sem PR como superseded.
 
 ### File List
 
@@ -580,6 +585,8 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/features/crm/funil-vendedor/types.ts`
 - `src/features/dashboard-loja/sections/owner-cockpit/OwnerHomeWidgets.tsx`
 - `src/pages/FunilVendedor.tsx`
+- `src/features/crm/funil-vendedor/official-kpis.ts`
+- `src/features/crm/funil-vendedor/official-kpis.test.ts`
 - `src/test/semantic-status-contrast-contract.test.ts`
 - `src/features/manager/daily-closing/ManagerDailyClosingBase44.tsx`
 - `src/features/manager/daily-closing/manager-daily-closing-layout-contract.test.ts`
