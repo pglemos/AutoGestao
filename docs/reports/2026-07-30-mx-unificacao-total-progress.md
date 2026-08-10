@@ -20,7 +20,7 @@ históricas continuam preservadas e não são evidência do checkpoint `d7356687
   sequence para roles da API, concede somente `service_role` e usa policy
   `AS RESTRICTIVE` para o backup.
 - Contratos focados: `7 pass / 0 fail / 26 expect() calls`.
-- Gates locais: lint, typecheck, `npm test` (`2603 pass / 0 fail / 18184
+- Gates locais: lint, typecheck, `npm test` (`2603 pass / 0 fail / 18190
   asserts`) e build passaram; o lint mantém apenas o warning histórico de
   `HelpTooltip.tsx`, e o build não gerou sourcemaps públicos.
 - Checks de migrations: `400` checksums íntegras, drift autorizado para as

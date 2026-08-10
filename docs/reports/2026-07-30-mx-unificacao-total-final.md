@@ -22,7 +22,7 @@
   mínimo a `service_role`, e a policy de backup é `AS RESTRICTIVE`.
 - A migration de 22 helpers RLS usa `to_regprocedure(...)` antes de cada
   revoke/grant, permanecendo idempotente em históricos parciais.
-- Validação local: lint, typecheck, `2603` testes/`18184` asserts, build sem
+- Validação local: lint, typecheck, `2603` testes/`18190` asserts, build sem
   sourcemaps públicos, `400` checksums, `44` rollbacks, npm audit sem
   vulnerabilidades e Gitleaks staged passaram. O warning de `HelpTooltip.tsx`
   e os seis warnings CSS do otimizador são históricos/não bloqueantes.
