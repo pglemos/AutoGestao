@@ -1,19 +1,19 @@
 # MX Unificação Total — Progresso
 
 Atualizado em 2026-08-10 no worktree isolado
-branch `fix/mx-final-gates-20260810`, evidência de CI no checkpoint
-`379c4a148dc200472daf49719af520025fb01c55` (documental; runtime
-`4c7b906d653a9af00969d75313ea6c9756f5bbc0`); commits posteriores são apenas
-documentais e a produção permanece no merge
+branch `fix/mx-final-gates-20260810`, HEAD documental
+`e609bb7251a62b834d67b8bbd8a9ec74491d0f44` (runtime
+`4c7b906d653a9af00969d75313ea6c9756f5bbc0`); a produção permanece no merge
 `82191012260208c6dc82e240cd78fdf4658fb6ba`. As observações abaixo das seções
 históricas continuam preservadas, mas não são evidência atual deste checkout.
 
 > **Estado vigente:** o patch final está publicado no PR #187 e possui Preview
 > manual `READY` do runtime `4c7b906d`; o HEAD documental possui CI completo
-> verde, incluindo pgTAP e visual universal. A produção atual é o
-> merge `82191012` e não contém o diff desta retomada. O check Vercel oficial
-> falhou por provisionamento e não pôde ser redeployado pelo contexto atual;
-> backup temporal/PITR, matriz integral e promoção permanecem pendentes.
+> verde, incluindo pgTAP, visual universal e Owner Base44 route matrix. A
+> produção atual é o merge `82191012` e não contém o diff desta retomada. O
+> check Vercel oficial e o redeploy com escopo da equipe falharam por
+> provisionamento; backup temporal/PITR, mutations Owner e promoção permanecem
+> pendentes.
 
 ## Revalidação atual — 2026-08-10
 

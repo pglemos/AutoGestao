@@ -3,19 +3,19 @@
 > Relatório vivo de fechamento. Atualizado em 2026-08-10 durante a revalidação
 > final do PR; evidências históricas permanecem identificadas abaixo.
 >
-> **Revalidação vigente (2026-08-10):** a evidência de runtime/CI foi coletada
-> no branch `fix/mx-final-gates-20260810`, no checkpoint remoto
-> `379c4a148dc200472daf49719af520025fb01c55`. Commits posteriores são apenas
-> documentais; o runtime validado permanece no SHA
-> `4c7b906d653a9af00969d75313ea6c9756f5bbc0`.
+> **Revalidação vigente (2026-08-10):** a evidência de runtime foi coletada
+> no branch `fix/mx-final-gates-20260810`, no checkpoint de código
+> `4c7b906d653a9af00969d75313ea6c9756f5bbc0`; os commits `379c4a14`,
+> `2754e4ab` e `e609bb72` são documentais. O CI mais recente foi rerunado no
+> HEAD documental `e609bb7251a62b834d67b8bbd8a9ec74491d0f44`.
 > A produção continua
 > deliberadamente no merge saudável anterior
 > `82191012260208c6dc82e240cd78fdf4658fb6ba`.
 
 ## Revalidação vigente — 2026-08-10 — PR #187
 
-- Worktree e branch: `fix/mx-final-gates-20260810`; último checkpoint remoto de
-  CI `379c4a148dc200472daf49719af520025fb01c55`; PR #187 está `OPEN` contra
+- Worktree e branch: `fix/mx-final-gates-20260810`; HEAD remoto
+  `e609bb7251a62b834d67b8bbd8a9ec74491d0f44`; PR #187 está `OPEN` contra
   `main`, com 67 arquivos alterados. O commit de código/runtime validado é
   `4c7b906d653a9af00969d75313ea6c9756f5bbc0`; o HEAD atual só reconcilia
   documentação.
@@ -41,6 +41,13 @@
   `TestSprite Pre-Check` falhou externamente com `No tests detected`; os
   findings efetivos do CodeRabbit foram corrigidos e a nova execução após o
   último ajuste foi bloqueada por limite de uso.
+- Rerun do CI no HEAD documental `e609bb72`: Quality Gates `31378937267`,
+  pgTAP `31378937224`, Manager Parity `31378937243`, Central Execução
+  `31378937289` e os demais gates de qualidade terminaram `SUCCESS`. O visual
+  autenticado `31378937240`, attempt 2, terminou `SUCCESS` em 13m13s: a
+  auditoria universal passou `9` testes e a matriz Owner Base44 passou `1`
+  teste. A etapa de Owner mutável ficou `SKIPPED` por proteção explícita
+  (`E2E_ALLOW_MUTATIONS` desabilitado), portanto não é prova de mutations.
 - Preview manual do runtime SHA `4c7b906d` (o HEAD `379c4a14` é documental): deployment
   `dpl_2u51UvwJcSGBB1igRsuC4V3hXVY4`, URL
   `https://mxperformance-dfk3mk6sf-synvolt.vercel.app`, estado `READY`. O
@@ -53,11 +60,12 @@
   `vercel.live/feedback.js` bloqueando a instrumentação externa do Preview;
   isso é separado do runtime funcional do app e impede declarar console
   totalmente limpo.
-- Check Vercel oficial do PR no HEAD `379c4a14`: deployment
-  `dpl_GW9AX58PcAyJGZT6C7NEwRLT4bis` terminou `ERROR`; a inspeção Vercel
+- Check Vercel oficial do PR no HEAD `e609bb72`: deployment
+  `dpl_FUwhNm5vJmVSWdrmJAxeVjAYsCKc` terminou `ERROR`; a inspeção Vercel
   retornou `readyState: ERROR` e o check reportou `Resource provisioning failed`.
-  A tentativa de redeploy permanece bloqueada pelo contexto/equipe disponível;
-  esse check não foi convertido em verde por intervenção manual.
+  Com o escopo correto da equipe, o redeploy gerou `dpl_7n4wGCbtAUKNuFpyiVGDZAdETob8`
+  mas também terminou `ERROR`; a URL serviu a página `Deployment has failed`.
+  Não houve promoção nem alteração de produção.
 - Sentry: a release `4c7b906d653a9af00969d75313ea6c9756f5bbc0` existe em
   `synvolt/mx-performance-frontend`, com um deployment associado ao Preview;
   eventos reais de `/login`, `/home` e `/dono` e um evento controlado em
@@ -79,8 +87,8 @@
   e crons críticos `ok`. O diff do PR #187 não foi promovido.
 - Estado: **PARCIALMENTE CONCLUÍDO / BLOCKED_EXTERNAL** para a publicação final.
   A produção saudável foi preservada; não houve DDL remoto nem promoção enquanto
-  o check oficial do Vercel, PITR/restore, matriz Owner integral, TestSprite e
-  demais gates do prompt permanecerem abertos.
+  o check oficial do Vercel, PITR/restore, mutations Owner, TestSprite e demais
+  gates do prompt permanecerem abertos.
 
 ## Revalidação histórica — antes da reconciliação do PR #187
 
@@ -272,8 +280,8 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 | Resolvido (histórico) | Vulnerabilidades high no runtime principal | O checkpoint de 2026-08-03 registrou `react-router`/`react-router-dom`; a revalidação atual não reproduz o finding | `npm audit --omit=dev` em 2026-08-10: 0 vulnerabilidades no grafo de produção auditado (`critical=0`, `high=0`, `moderate=0`, `low=0`); runtime `7.18.2` | Manter o audit no gate de cada release |
 | Info | `/home` para Administrador Geral | Rota bloqueada pela matriz de autorização | Produção exibiu mensagem de acesso negado sem erro/overflow | Não alterar sem requisito explícito; validar com perfil autorizado se necessário |
 | P1 | Backup restaurável não comprovado | Snapshots físicos concluídos não equivalem a ponto de restauração testado | API de backups físicos: 8 `COMPLETED`; API de restore/PITR: `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
-| P1 | Check oficial Vercel do PR falhou | O deployment integrado do HEAD documental terminou `ERROR / Resource provisioning failed`; o Preview manual do runtime anterior está `READY` | `dpl_GW9AX58PcAyJGZT6C7NEwRLT4bis`; inspeção `readyState: ERROR`; CLI não consegue redeployar no contexto atual | Reconciliar equipe/integração Vercel e obter check oficial verde antes do merge |
+| P1 | Check oficial Vercel do PR falhou | O deployment integrado e o redeploy com escopo correto terminaram `ERROR / Resource provisioning failed`; o Preview manual do runtime anterior está `READY` | `dpl_FUwhNm5vJmVSWdrmJAxeVjAYsCKc` e `dpl_7n4wGCbtAUKNuFpyiVGDZAdETob8`; ambos `readyState: ERROR` | Reconciliar provisionamento da equipe/integração Vercel e obter check oficial verde antes do merge |
 | Resolvido neste SHA | Replay/grants RLS | O primeiro SHA falhou no histórico duplicado e o seguinte falhou na ACL; o novo CI passou os 40 cenários | `pgTAP RLS Matrix` `31377957069`: `SUCCESS`; checksums/reversibilidade também verdes | Manter a matriz no gate de futuras migrations; nenhum DDL foi aplicado à produção |
-| P1 | Patch final ainda não promovido | O patch está publicado no PR e validado no Preview manual do runtime, mas produção continua no merge `82191012` | PR #187 HEAD `379c4a14`; Preview `dpl_2u51UvwJcSGBB1igRsuC4V3hXVY4` do runtime `4c7b906d`; produção `/api/health` `200/healthy` | Promover somente após check Vercel oficial, matriz Owner completa e smoke final |
-| P1 | Matriz integral de perfis/rotas/estados/viewports | Universal route audit autenticado passou; Owner matrix foi pulado por credencial ausente | CI `31377957000`; `E2E_OWNER_EMAIL` ausente; browser real parcial do Preview | Provisionar credencial Owner e completar a matriz do prompt sem contar skips como aprovação |
+| P1 | Patch final ainda não promovido | O patch está publicado no PR e validado no Preview manual do runtime, mas produção continua no merge `82191012` | PR #187 HEAD `e609bb72`; Preview `dpl_2u51UvwJcSGBB1igRsuC4V3hXVY4` do runtime `4c7b906d`; produção `/api/health` `200/healthy` | Promover somente após check Vercel oficial, mutations Owner seguras e smoke final |
+| P1 | Matriz integral de perfis/rotas/estados/viewports | Universal route audit autenticado e Owner Base44 route matrix passaram; mutations Owner continuam protegidas e demais perfis/rotas/viewports não são prova integral | CI `31378937240` attempt 2: universal `9 passed`, Owner Base44 `1 passed`; artefato visual `9066464612` | Completar apenas mutations em sandbox autorizado e ampliar as matrizes restantes sem contar skips como aprovação |
 | P2 | Console do Preview contém bloqueio externo | `vercel.live/feedback.js` é bloqueado pela CSP, sem falha funcional do app | console do Preview manual | Documentar/corrigir conscientemente a instrumentação antes de exigir console totalmente limpo |

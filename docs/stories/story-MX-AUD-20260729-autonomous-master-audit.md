@@ -6,13 +6,14 @@
 
 > **Revalidação vigente — 2026-08-10:** a implementação final está publicada
 > no PR #187, branch `fix/mx-final-gates-20260810`; o checkpoint de CI é
-> `379c4a148dc200472daf49719af520025fb01c55` (documental; runtime
+> o HEAD documental `e609bb7251a62b834d67b8bbd8a9ec74491d0f44` (runtime
 > `4c7b906d653a9af00969d75313ea6c9756f5bbc0`). O Preview manual do runtime
 > SHA
 > está `READY` e passou health/smoke autenticado parcial; a produção permanece
 > no merge saudável `82191012260208c6dc82e240cd78fdf4658fb6ba`. O check Vercel
-> oficial falhou por `Resource provisioning failed` e o redeploy não pôde ser
-> executado no contexto disponível. A story permanece `InProgress`.
+> oficial e o redeploy com o escopo da equipe falharam por `Resource
+> provisioning failed`. A matriz Owner Base44 autenticada passou no CI; a
+> etapa mutável continua protegida/desabilitada. A story permanece `InProgress`.
 
 ## Executor Assignment
 
