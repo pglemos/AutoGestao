@@ -4,10 +4,12 @@
 
 **InProgress**
 
-> **Revalidação vigente — 2026-08-10:** o checkpoint de código/runtime local é
-> `d7356687105e6f048d974c5a25dd96d7f31eaf11`, no branch
-> `fix/mx-final-gates-20260810`. Ele ainda precisa de CI/Preview remoto próprios;
-> os checks históricos de `e609bb72`/`4c7b906d` não são prova deste checkpoint.
+> **Revalidação vigente — 2026-08-10:** o checkpoint de código/runtime é
+> `d7356687105e6f048d974c5a25dd96d7f31eaf11`; o HEAD remoto documental do
+> branch `fix/mx-final-gates-20260810` é
+> `a05106b15bcc69fbe045ef445b8c72ba0a227f54`. CI, pgTAP e a matriz visual de
+> leitura passaram nesse HEAD; o deployment Vercel integrado falhou e não há
+> Preview atual aprovado.
 > A produção permanece no merge saudável
 > `82191012260208c6dc82e240cd78fdf4658fb6ba`; não houve DDL remoto, promoção,
 > mutations Owner ou alteração de credenciais. A story permanece `InProgress`.
@@ -128,8 +130,9 @@ anteriores de conclusão não contam como evidência nova.
   - [ ] Validar Preview, health e Sentry próprios do checkpoint vigente
     `d7356687105e6f048d974c5a25dd96d7f31eaf11`.
   - [ ] Validar valores não secretos esperados, projeto/equipe/ambiente e
-    endpoints do deployment; o check Vercel integrado e o stack trace completo
-    ainda estão pendentes para o checkpoint vigente.
+    endpoints do deployment; o check Vercel integrado falhou no deployment
+    `dpl_7c6b79PpdAWctNMJViiXPKoyMbUw` e o stack trace completo ainda está
+    pendente para o checkpoint vigente.
   - [ ] Publicar produção apenas quando os gates bloqueantes passarem.
 - [ ] Fases 9–12 — qualidade, segurança e operação (AC: 10, 11)
   - [ ] Executar matriz de testes e segurança.
@@ -142,8 +145,11 @@ anteriores de conclusão não contam como evidência nova.
     anterior do PR #187 no HEAD `379c4a148dc200472daf49719af520025fb01c55`; o
     Preview manual funcional era do runtime `4c7b906d653a9af00969d75313ea6c9756f5bbc0`.
     Essa evidência não aprova o checkpoint vigente.
-  - [ ] Publicar o checkpoint vigente após a revisão documental, observar CI,
-    pgTAP e Preview próprios de `d7356687` e promover somente após todos os
+  - [x] Publicar o checkpoint vigente e observar CI/pgTAP/visual próprios no
+    HEAD remoto `a05106b15bcc69fbe045ef445b8c72ba0a227f54`; Quality Gates
+    `31402534263`, pgTAP `31402534099` (`40/40`) e visual `31402534010`
+    (`9 passed` universal, `1 passed` Owner Base44) terminaram `SUCCESS`.
+  - [ ] Obter Preview Vercel atual aprovado e promover somente após todos os
     gates externos passarem.
   - [ ] Entregar relatório final baseado nas evidências atuais.
 - [x] Gate final local — regressões PageCanvas, landmark e Sonner reproduzidas,
@@ -154,16 +160,17 @@ anteriores de conclusão não contam como evidência nova.
 - [x] Reconciliar a base publicada — PR #186 merged em
   `82191012260208c6dc82e240cd78fdf4658fb6ba`; Vercel `READY` e health de
   produção `200/healthy` no mesmo SHA.
-- [ ] Publicar o diff final em produção — o patch já tem commit, PR, Preview
-  manual, health e smoke autenticado parcial; check Vercel oficial,
-  backup/PITR, matriz integral e promoção continuam abertos.
+- [ ] Publicar o diff final em produção — o patch está no PR e os gates GitHub
+  de leitura passaram; o deployment Vercel atual falhou, Preview/health/Sentry
+  do checkpoint vigente, backup/PITR, mutations Owner e promoção continuam
+  abertos.
 - [x] Histórico — diagnosticar a falha de ACL do `pgTAP RLS Matrix` e preparar
   migration forward-only com grants explícitos para `authenticated`, mantendo
   `anon` revogado; o CI histórico confirmou os 40 cenários no run
   `31377957069`.
-- [ ] Reexecutar o `pgTAP RLS Matrix` no checkpoint vigente
-  `d7356687105e6f048d974c5a25dd96d7f31eaf11`; o resultado histórico não é prova
-  deste código.
+- [x] Reexecutar o `pgTAP RLS Matrix` no HEAD remoto documental
+  `a05106b15bcc69fbe045ef445b8c72ba0a227f54`; o run `31402534099` confirmou
+  `40/40` cenários. Nenhum DDL foi aplicado à produção.
 
 ## Dev Notes
 
