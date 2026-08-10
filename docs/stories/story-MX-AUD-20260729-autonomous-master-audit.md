@@ -431,8 +431,8 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   draft; o estado operacional vigente permanece `InProgress` e parcial.
 - O P0 do pré-cadastro foi corrigido no hotfix publicado da função
   `store-pre-registration` (versão remota 72) e validado no GET/browser da
-  rota ACERTT. O hardening adicional desta retomada está somente no checkout
-  local até passar por commit, CI, preview e deploy. A story ampla continua
+  rota ACERTT. O hardening adicional desta retomada está commitado em
+  `f333da4d`; push, CI, preview e deploy permanecem pendentes. A story ampla continua
   `InProgress` por seus gates independentes de revisão, observabilidade, backup
   e rollback.
 - Segredos removidos do estado corrente permanecem no histórico. A rotação da
@@ -456,7 +456,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - O scan histórico de Gitleaks atualizado permanece uma evidência de dívida,
   não de falha introduzida por este diff: `gitleaks protect --staged` passou,
   enquanto os três achados do scan de `src/` pertencem a fixtures/diagnósticos
-  fora dos arquivos desta tarefa.
+ fora dos arquivos desta tarefa.
+- 2026-08-10: o pre-push AIOX/DevOps não foi liberado. `npm audit` reportou
+  uma vulnerabilidade high em `xlsx` sem correção disponível, Secretlint
+  falhou por ausência de `.secretlintrc`, a story permaneceu `InProgress` e
+  o rerun CodeRabbit retornou `Review limit reached`; nenhum push/PR foi feito.
 
 ### File List
 

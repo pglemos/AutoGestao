@@ -61,6 +61,9 @@ pontos documentais que foram corrigidos, mas o rerun final retornou
 `Review limit reached` por seat/API key ausente; PR/CI/preview/produção,
 matriz browser integral, backup/PITR, Sentry/source maps e rollback continuam
 pendentes.
+- Pre-push AIOX/DevOps não liberado: worktree limpo, mas story `InProgress`,
+  `npm audit` com 1 high em `xlsx` sem fix, Secretlint sem configuração e
+  CodeRabbit limitado por `Review limit reached`. Não houve push ou PR.
 
 ## Registro histórico — revalidação do commit `a3ede247` — 2026-08-10
 

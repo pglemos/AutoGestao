@@ -41,7 +41,13 @@
   organização. Não há veredito final novo de zero issues.
 - Não há nesta revalidação push, PR, CI remoto, preview, promoção de produção,
   prova de backup/PITR, evento Sentry/source map da branch ou smoke
-  autenticado novo. Esses gates permanecem bloqueantes.
+ autenticado novo. Esses gates permanecem bloqueantes.
+- Pre-push AIOX/DevOps: não liberado para publicação. O worktree está limpo e
+  os gates funcionais passam, mas a story continua `InProgress`; `npm audit
+  --audit-level=moderate --json` retornou exit 1 com 0 critical e 1 high em
+  `xlsx` sem correção disponível; `npx secretlint "**/*"` retornou exit 2 por
+  ausência de `.secretlintrc`; e o rerun CodeRabbit retornou `Review limit
+  reached`. Nenhum push/PR/deploy foi executado.
 
 ## 39.1 Resumo executivo — estado vigente
 
@@ -140,6 +146,7 @@ independente de source maps/Sentry, matriz integral e rotação de segredos**.
 | P1 | Issues CodeRabbit em arquivos concorrentes | 1 crítica, 1 major e 2 menores permanecem fora deste escopo | Revisão CLI `0.7.1`, base `1480ea42`; arquivos `supabase/functions/store-pre-registration/index.ts` e teste associado | O proprietário do trabalho concorrente deve corrigir e revalidar sem sobrescrita |
 | P2 | Rotação das credenciais e tokens fornecidos na conversa | Redução de risco de exposição | Segredos foram compartilhados em texto | Rotacionar após o encerramento operacional |
 | P2 | 133 alertas Dependabot abertos | Risco de dependências no default branch | API paginada atual: 3 críticas, 70 altas, 47 moderadas, 13 baixas; alertas distribuídos em `.aiox-core`, `whatsapp-service` e backends auxiliares | Triar e atualizar por pacote e subprojeto; responsável: manutenção do repositório |
-| P2 | 2 vulnerabilidades high no runtime principal | `react-router`/`react-router-dom` permanecem no range reportado pelo advisory; `brace-expansion` já foi atualizado no lockfile | `npm audit --omit=dev`: 2 high após a atualização | Avaliar correção compatível do React Router e validar a árvore `whatsapp-service` separadamente |
+| P2 | Vulnerabilidade de desenvolvimento sem correção disponível | `xlsx@0.18.5` permanece somente em `devDependencies`; o audit completo bloqueia o pre-push, mas o audit de produção não encontra vulnerabilidades | `npm audit --audit-level=moderate`: 1 high em `xlsx`, sem fix; `npm audit --omit=dev`: 0 vulnerabilidades | Substituir/atualizar `xlsx` com alternativa compatível e repetir os gates de segurança |
 | Info | `/home` para Administrador Geral | Rota bloqueada pela matriz de autorização | Produção exibiu mensagem de acesso negado sem erro/overflow | Não alterar sem requisito explícito; validar com perfil autorizado se necessário |
 | P1 | Backup restaurável não comprovado | Sem ponto de restauração testável para rollback de banco | Supabase `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
+| P1 | Pre-push bloqueado por segurança/governança | A publicação do commit local não tem gate formal completo | `npm audit` 1 high em `xlsx` sem fix; Secretlint sem `.secretlintrc`; story `InProgress`; CodeRabbit limitado por seat/API key | Corrigir/substituir a dependência vulnerável, configurar secretlint, concluir a story e repetir o pre-push |
