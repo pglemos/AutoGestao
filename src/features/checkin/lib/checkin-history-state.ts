@@ -109,3 +109,22 @@ export function latestRequestForCheckin(
     new Date(r.created_at).getTime() > new Date(latest.created_at).getTime() ? r : latest,
   )
 }
+
+/**
+ * Solicitação mais recente (por created_at) para uma data de referência.
+ * Usado como fallback quando não existe checkin 'daily' para a data (ex: produção
+ * zero retroativa que criou apenas um placeholder 'historical').
+ */
+export function latestRequestForDate(
+  requests: CheckinCorrectionRequest[],
+  referenceDate: string,
+): CheckinCorrectionRequest | null {
+  const forDate = requests.filter(r => {
+    const reqDate = (r.requested_values as Record<string, unknown>)?.reference_date
+    return reqDate === referenceDate
+  })
+  if (forDate.length === 0) return null
+  return forDate.reduce((latest, r) =>
+    new Date(r.created_at).getTime() > new Date(latest.created_at).getTime() ? r : latest,
+  )
+}

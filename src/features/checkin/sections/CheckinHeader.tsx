@@ -12,6 +12,7 @@ import {
   actionsForHistoryRowState,
   HISTORY_ROW_STATE_LABEL,
   latestRequestForCheckin,
+  latestRequestForDate,
   resolveHistoryRowState,
   type HistoryRowAction,
 } from '../lib/checkin-history-state'
@@ -111,7 +112,10 @@ const { requestCorrection, fetchOwnRequests, loading: auditorLoading } = useChec
       const date = addDaysDateOnly(todaySP, -i)
       const isToday = i === 0
       const checkin = checkins.find(c => c.reference_date === date && c.metric_scope === 'daily')
+      // Fallback: buscar solicitação por data quando não existe checkin 'daily'
+      // (ex: produção zero retroativa que criou placeholder 'historical')
       const latestRequest = latestRequestForCheckin(ownRequests, checkin?.id)
+        ?? latestRequestForDate(ownRequests, date)
       const state = resolveHistoryRowState({ date, checkin: checkin ?? null, latestRequest, now: new Date(), isToday })
 
       if (checkin) {
