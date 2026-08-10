@@ -142,12 +142,16 @@ export function DashboardLoja() {
    * /vendas nenhuma fornecia, e o título encostava na borda da área de
    * conteúdo — medido em 0px de respiro por scripts/audit-page-gutters.mjs.
    *
-   * `isFocusedRolePerformance` segue sem canvas de propósito: aquele ramo
-   * renderiza componentes de performance que já trazem o próprio recuo, e
-   * envolvê-los somaria as duas margens.
+   * O ramo de performance do gerente segue sem canvas porque o componente
+   * canônico dele já traz o próprio recuo. O cockpit do Dono, porém, é a rota
+   * executiva que deve consumir o canvas: `as="div"` evita aninhar outro
+   * landmark `main` dentro do shell.
    */
   <div className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
-    <ConditionalPageCanvas enabled={!isFocusedRolePerformance}>
+    <ConditionalPageCanvas
+      enabled={!isFocusedRolePerformance || isOwner}
+      as="div"
+    >
       {!isFocusedRolePerformance && !isManagerSection && (
         <DashboardErrorBoundary sectionName="Header">
           <DashboardHeader

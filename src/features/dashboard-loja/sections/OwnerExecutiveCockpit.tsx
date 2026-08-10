@@ -127,7 +127,7 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
   const greetingTitle = firstName ? `${greeting()}, ${firstName}!` : `${greeting()}!`
 
   return (
-    <section className="min-h-full space-y-mx-md bg-gray-50 p-mx-sm md:p-mx-lg">
+    <section className="min-h-full space-y-mx-md bg-gray-50">
       <OwnerPageHeading
         icon={Home}
         title={greetingTitle}

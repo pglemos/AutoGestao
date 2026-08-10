@@ -200,6 +200,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-07-29 | 0.2.0 | Validated GO (9/10) — Status: Draft → Ready | Pax (PO) |
 | 2026-07-29 | 0.2.1 | Development started (yolo mode) — Status: Ready → InProgress | Dex (Dev) |
 | 2026-07-29 | 0.3.0 | Inventário reproduzível de rotas, autorização, dados e mutations | Dex (Dev) |
+| 2026-08-10 | 0.3.1 | Regressão do PageCanvas do Dono corrigida e validada localmente em dois breakpoints | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -378,6 +379,21 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   `MX_CRON_SECRET`; a migration usa o nome correspondente já confirmado no
   Vault e não transporta service-role. `mx-critical-jobs-health` permanece
   legado porque não há token dedicado correspondente no Vault do Postgres.
+- 2026-08-10: retomada no worktree isolado `feat/mx-unificacao-total-20260809`
+  reproduziu `/home` do Dono sem `[data-mx-page-canvas]`. A causa era a
+  condição `enabled={!isFocusedRolePerformance}` no `DashboardLoja` combinada
+  com padding próprio em `OwnerExecutiveCockpit`.
+- 2026-08-10: o contrato foi executado em RED, a correção foi aplicada no
+  commit local `a3ede247ed3db02a4aa0cbb1a97cd6f79670f75d` e o GREEN passou. A
+  suíte completa retornou `2.594 pass / 0 fail / 18.151 asserts`; lint,
+  typecheck, build, bundle, auditoria de rotas e diff-check também passaram.
+- 2026-08-10: browser autenticado como Dono confirmou em `1440×900` e
+  `390×844` um único canvas `DIV`, margens canônicas `32px`/`16px`, cockpit
+  sem padding próprio, um landmark `main`, zero overflow e console sem erros.
+- 2026-08-10: CodeRabbit não encontrou novos achados após o ajuste do contrato.
+  A revisão Agy em sandbox foi tentada, mas atingiu cota externa antes de
+  produzir parecer e não foi contada como gate.
+
 ### Completion Notes List
 
 - AppShell ativo convergiu para uma única implementação `Layout` /
@@ -405,6 +421,9 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - A migração moderna das Edge Functions está implementada e validada somente
   localmente; fallback legado, revisão integral, deploy e smoke permanecem
   pendentes.
+- A correção atual é local e commitada; preview, CI remoto, produção, Sentry,
+  backup restaurável e a matriz integral de perfis continuam pendentes. A
+  story permanece `InProgress` e parcialmente concluída.
 
 ### File List
 
@@ -508,6 +527,10 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `supabase/functions/register-user/index.ts`
 - `supabase/functions/send-push-notification/index.ts`
 - `supabase/functions/store-pre-registration/index.ts`
+- `src/features/dashboard-loja/DashboardLoja.container.tsx`
+- `src/features/dashboard-loja/sections/OwnerExecutiveCockpit.tsx`
+- `src/features/dashboard-loja/sections/OwnerExecutiveCockpit.contract.test.ts`
+- `output/playwright/dono-pagecanvas-fix-1440x900.png` (artefato ignorado pelo Git)
 - `src/lib/export.ts`
 - `src/lib/export.test.ts`
 - `src/lib/pdf/downloadHtmlAsPdf.ts`
