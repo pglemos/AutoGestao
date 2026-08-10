@@ -1,9 +1,10 @@
 # MX Unificação Total — Progresso
 
 Atualizado em 2026-08-10 no worktree isolado
-branch `fix/mx-final-gates-20260810`, implementação no SHA
-`379c4a148dc200472daf49719af520025fb01c55` (checkpoint documental; runtime
-`4c7b906d653a9af00969d75313ea6c9756f5bbc0`); a produção permanece no merge
+branch `fix/mx-final-gates-20260810`, evidência de CI no checkpoint
+`379c4a148dc200472daf49719af520025fb01c55` (documental; runtime
+`4c7b906d653a9af00969d75313ea6c9756f5bbc0`); commits posteriores são apenas
+documentais e a produção permanece no merge
 `82191012260208c6dc82e240cd78fdf4658fb6ba`. As observações abaixo das seções
 históricas continuam preservadas, mas não são evidência atual deste checkout.
 

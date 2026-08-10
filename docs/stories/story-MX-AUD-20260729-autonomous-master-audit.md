@@ -5,8 +5,8 @@
 **InProgress**
 
 > **Revalidação vigente — 2026-08-10:** a implementação final está publicada
-> no PR #187, branch `fix/mx-final-gates-20260810`, SHA
-> `379c4a148dc200472daf49719af520025fb01c55` (checkpoint documental; runtime
+> no PR #187, branch `fix/mx-final-gates-20260810`; o checkpoint de CI é
+> `379c4a148dc200472daf49719af520025fb01c55` (documental; runtime
 > `4c7b906d653a9af00969d75313ea6c9756f5bbc0`). O Preview manual do runtime
 > SHA
 > está `READY` e passou health/smoke autenticado parcial; a produção permanece

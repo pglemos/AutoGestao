@@ -3,18 +3,19 @@
 > Relatório vivo de fechamento. Atualizado em 2026-08-10 durante a revalidação
 > final do PR; evidências históricas permanecem identificadas abaixo.
 >
-> **Revalidação vigente (2026-08-10):** a implementação está no branch
-> `fix/mx-final-gates-20260810`, com SHA remoto
-> `379c4a148dc200472daf49719af520025fb01c55`. O último commit é documental;
-> o runtime validado permanece no SHA `4c7b906d653a9af00969d75313ea6c9756f5bbc0`.
+> **Revalidação vigente (2026-08-10):** a evidência de runtime/CI foi coletada
+> no branch `fix/mx-final-gates-20260810`, no checkpoint remoto
+> `379c4a148dc200472daf49719af520025fb01c55`. Commits posteriores são apenas
+> documentais; o runtime validado permanece no SHA
+> `4c7b906d653a9af00969d75313ea6c9756f5bbc0`.
 > A produção continua
 > deliberadamente no merge saudável anterior
 > `82191012260208c6dc82e240cd78fdf4658fb6ba`.
 
 ## Revalidação vigente — 2026-08-10 — PR #187
 
-- Worktree e branch: `fix/mx-final-gates-20260810`; HEAD remoto
-  `379c4a148dc200472daf49719af520025fb01c55`; PR #187 está `OPEN` contra
+- Worktree e branch: `fix/mx-final-gates-20260810`; último checkpoint remoto de
+  CI `379c4a148dc200472daf49719af520025fb01c55`; PR #187 está `OPEN` contra
   `main`, com 67 arquivos alterados. O commit de código/runtime validado é
   `4c7b906d653a9af00969d75313ea6c9756f5bbc0`; o HEAD atual só reconcilia
   documentação.
