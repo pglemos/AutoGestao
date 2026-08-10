@@ -2,7 +2,7 @@
   "_comment": "Congelamento forward-only das migrations aplicadas. NÃO editar à mão. Regenerar apenas ao adicionar migrations novas: node scripts/gen_migration_checksums.mjs",
   "generated_at": "2026-08-10",
   "algorithm": "sha256",
-  "count": 396,
+  "count": 397,
   "checksums": {
     "00000000000000_baseline_legacy_schema.sql": "3a519e3804095af5e9f7d8a7cb70dcc388b04530b6a7911ee1e3cb76af10b0fc",
     "00000000000001_mark_existing_migrations_applied.sql": "a8183b5cc5bd56b549ce8d8d302eb0c5d4f7b20381438586e02dd7353d6f2a45",
@@ -378,6 +378,7 @@
     "20260804120000_store_management_context.sql": "0926a1743073b67a6fb351afffdc1983f666ae49083992edefa10c53c288d462",
     "20260804190000_store_management_context_owner_can_sell.sql": "ef198de3745b4693dcfd70b930b377010663bfe556ee6bc7e0205f2530483302",
     "20260804200000_owner_network_cockpit.sql": "478475ca5b1deeca1222f6fc4993e596bc4cbf5aaffc12005de543907024e163",
+    "20260805115900_create_data_correction_audit_if_missing.sql": "307e06a818b774fef7d93be3a59c150a5d73a43b09cea0655121ecba43157749",
     "20260805120000_harden_rls_unprotected_tables.sql": "2208bc7a6e7ff3e2d34921be4c31b2fa8621d0b260ad18c7226612b0d31aff9b",
     "20260805140000_lojas_hierarquia_matriz_filial.sql": "c260388228089692960b390a43128c64871d6e175ca1fbdbe1610fd548341eaf",
     "20260805220000_checkin_draft_revision_optimistic_lock.sql": "860aea4212916a0d8b4d0545a3aa941bdb08e8806b1ec5545e3450b959355ce5",
