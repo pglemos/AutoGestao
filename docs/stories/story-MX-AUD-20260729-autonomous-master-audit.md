@@ -6,7 +6,9 @@
 
 > **Revalidação vigente — 2026-08-10:** a implementação final está publicada
 > no PR #187, branch `fix/mx-final-gates-20260810`, SHA
-> `4c7b906d653a9af00969d75313ea6c9756f5bbc0`. O Preview manual do mesmo SHA
+> `379c4a148dc200472daf49719af520025fb01c55` (checkpoint documental; runtime
+> `4c7b906d653a9af00969d75313ea6c9756f5bbc0`). O Preview manual do runtime
+> SHA
 > está `READY` e passou health/smoke autenticado parcial; a produção permanece
 > no merge saudável `82191012260208c6dc82e240cd78fdf4658fb6ba`. O check Vercel
 > oficial falhou por `Resource provisioning failed` e o redeploy não pôde ser
@@ -135,8 +137,9 @@ anteriores de conclusão não contam como evidência nova.
 - [ ] Fases 13–14 — entrega (AC: 12, 13)
   - [x] Atualizar checkboxes, Dev Agent Record e File List.
   - [x] Revisar diff, executar quality gate e secret scan.
-  - [x] Commitar/publicar a implementação do PR #187 no SHA
-    `4c7b906d653a9af00969d75313ea6c9756f5bbc0` e criar o Preview manual pelo
+  - [x] Commitar/publicar a implementação e o checkpoint documental do PR #187
+    no HEAD `379c4a148dc200472daf49719af520025fb01c55`; o Preview manual
+    funcional é do runtime `4c7b906d653a9af00969d75313ea6c9756f5bbc0` pelo
     fluxo AIOX DevOps.
   - [ ] Reconciliar o check Vercel oficial, observar novo CI e promover somente
     após todos os gates externos passarem.
@@ -152,9 +155,9 @@ anteriores de conclusão não contam como evidência nova.
 - [ ] Publicar o diff final em produção — o patch já tem commit, PR, Preview
   manual, health e smoke autenticado parcial; check Vercel oficial,
   backup/PITR, matriz integral e promoção continuam abertos.
-- [x] Diagnosticar a falha de ACL do `pgTAP RLS Matrix` e preparar migration
+- [x] Diagnosticar a falha de ACL do `pgTAP RLS Matrix`, preparar migration
   forward-only com grants explícitos para `authenticated`, mantendo `anon`
-  revogado; a confirmação remota permanece pendente.
+  revogado; o novo CI confirmou os 40 cenários no run `31377957069`.
 
 ## Dev Notes
 
@@ -238,6 +241,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-08-10 | 0.3.4 | ACL dos 22 helpers RLS restaurada para `authenticated`, `grants_guard` ampliado e PR #187 documentado; aguardando CI | Dex (Dev) |
 | 2026-08-10 | 0.3.5 | Findings acionáveis do CodeRabbit corrigidos; hardening forward-only idempotente para auditoria/backup e guard pgTAP ampliado para 19 invariantes | Dex (Dev) |
 | 2026-08-10 | 0.3.6 | PR #187 publicado no SHA `4c7b906d`; Preview manual `READY`, health/smoke autenticado parcial e bloqueios externos reconciliados; story permanece InProgress | Gage (DevOps) |
+| 2026-08-10 | 0.3.7 | HEAD documental `379c4a14` publicado; workflows GitHub, pgTAP 40/40 e visual universal verdes; Owner skip, Vercel integrado, TestSprite, restore/PITR e produção permanecem abertos | Gage (DevOps) |
 
 ## Dev Agent Record
 
@@ -472,9 +476,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   negativos semeados. A suíte completa reexecutada passou `2597/2597`
   com `18162` asserts; o primeiro run teve uma falha flakey de foco e passou
   isoladamente em três repetições e na reexecução completa.
-- 2026-08-10: o PR #187 foi reconciliado no SHA remoto
-  `4c7b906d653a9af00969d75313ea6c9756f5bbc0`. O CI visual autenticado
-  `31373014149` passou, com a matriz do Dono pulada por ausência de
+- 2026-08-10: o HEAD documental do PR #187 foi reconciliado no SHA remoto
+  `379c4a148dc200472daf49719af520025fb01c55`. Quality Gates, pgTAP RLS
+  (`31377957069`, 40/40), visual autenticado (`31377957000`), Manager/Central
+  Parity, a11y, bundle, checksums, reversibilidade, Gitleaks, typecheck/unit e
+  auditorias visuais passaram. A matriz do Dono foi pulada por ausência de
   `E2E_OWNER_EMAIL`; o `TestSprite Pre-Check` falhou com `No tests detected`.
   Os findings efetivos do CodeRabbit foram corrigidos; a nova execução após o
   último ajuste foi bloqueada por limite de uso.
@@ -484,10 +490,10 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   crons `ok`. Dono, Gerente e Vendedor autenticaram no browser real em
   `1440×900` e `390×844`, com um `main` e zero overflow; o menu mobile abriu
   para Gerente e Vendedor.
-- 2026-08-10: o deployment Vercel oficial do PR
-  `dpl_3q1DcfxehHJqUoqn1s73xUZ7K7sT` terminou `BUILD_FAILED / Resource
-  provisioning failed`. A API de redeploy retornou `404` e a CLI retornou
-  `Deployment belongs to a different team`; o bloqueio permanece externo.
+- 2026-08-10: o deployment Vercel oficial do HEAD
+  `dpl_GW9AX58PcAyJGZT6C7NEwRLT4bis` terminou `ERROR / Resource provisioning
+  failed`; a inspeção retornou `readyState: ERROR` e o redeploy permaneceu
+  bloqueado pelo contexto/equipe disponível.
 - 2026-08-10: Sentry confirmou release `4c7b906d` no projeto
   `mx-performance-frontend`, eventos de `/login`, `/home`, `/dono` e evento
   controlado de Preview com tags e debug metadata de source map. Supabase
@@ -533,17 +539,18 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   pendentes.
 - A correção histórica do cockpit do Dono foi local e commitada; preview, CI
   remoto e produção desse PR foram posteriormente reconciliados, enquanto
-  Sentry, backup restaurável e a matriz integral de perfis continuam pendentes.
+  Sentry, backup restaurável, matriz Owner integral e produção continuam pendentes;
+  o pgTAP/RLS remoto do novo SHA está verde.
   A story permanece `InProgress` e parcialmente concluída.
 - O gate final local desta retomada está aprovado e o diff foi publicado no PR
   #187; o Preview manual comprova o novo Sonner/PageCanvas, mas produção
   saudável no merge anterior não é prova de promoção do patch.
-- O check Vercel oficial do PR permanece `BUILD_FAILED / Resource provisioning
-  failed`; o Preview manual `READY` não substitui esse check integrado.
-- O replay de migrations corrigido localmente não é considerado RLS aprovado
-  até um novo CI comparar o histórico antes/depois do reset e executar a matriz
-  pgTAP sem falhas. A nova ACL de helpers também permanece sem prova remota até
-  esse job passar.
+- O check Vercel oficial do PR permanece `ERROR / Resource provisioning failed`
+  no deployment `dpl_GW9AX58PcAyJGZT6C7NEwRLT4bis`; o Preview manual `READY`
+  do runtime anterior não substitui esse check integrado.
+- O replay de migrations e a nova ACL de helpers foram aprovados no CI
+  `pgTAP RLS Matrix` `31377957069` com 40/40 cenários; isso não autoriza DDL na
+  produção nem substitui o restore/PITR ou a matriz Owner ausente.
 
 ### File List
 

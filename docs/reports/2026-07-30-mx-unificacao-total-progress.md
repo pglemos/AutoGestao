@@ -2,12 +2,14 @@
 
 Atualizado em 2026-08-10 no worktree isolado
 branch `fix/mx-final-gates-20260810`, implementação no SHA
-`4c7b906d653a9af00969d75313ea6c9756f5bbc0`; a produção permanece no merge
+`379c4a148dc200472daf49719af520025fb01c55` (checkpoint documental; runtime
+`4c7b906d653a9af00969d75313ea6c9756f5bbc0`); a produção permanece no merge
 `82191012260208c6dc82e240cd78fdf4658fb6ba`. As observações abaixo das seções
 históricas continuam preservadas, mas não são evidência atual deste checkout.
 
 > **Estado vigente:** o patch final está publicado no PR #187 e possui Preview
-> manual `READY` com health e smoke autenticado parciais. A produção atual é o
+> manual `READY` do runtime `4c7b906d`; o HEAD documental possui CI completo
+> verde, incluindo pgTAP e visual universal. A produção atual é o
 > merge `82191012` e não contém o diff desta retomada. O check Vercel oficial
 > falhou por provisionamento e não pôde ser redeployado pelo contexto atual;
 > backup temporal/PITR, matriz integral e promoção permanecem pendentes.
@@ -131,7 +133,7 @@ Gates locais e a geometria do toaster passaram. Próximo passo: atualizar a
 story/relatório final, revisar o diff, commitar, abrir PR e validar preview
 antes de qualquer promoção; produção só será revalidada depois desse fluxo.
 
-## Revalidação de histórico Supabase — 2026-08-10
+## Revalidação de histórico Supabase — 2026-08-10 — checkpoint anterior ao CI final
 
 ### Tarefa
 
@@ -176,7 +178,7 @@ Correção local pronta para commit. O gate RLS permanece `PENDENTE` até o GitH
 Actions executar `supabase db reset`, comparar a lista de versões antes/depois e
 rodar os 40 cenários pgTAP no novo SHA.
 
-## Revalidação adicional — 2026-08-10 — grants dos helpers RLS
+## Revalidação adicional — 2026-08-10 — grants dos helpers RLS — checkpoint anterior ao CI final
 
 ### Tarefa
 
@@ -217,10 +219,11 @@ nominal para seus helpers.
 
 ### Resultado e próximo passo
 
-O patch está pronto para revisão CodeRabbit/Gitleaks, staging seletivo, commit e
-push pela autoridade AIOX DevOps. O PR #187 deve ser acompanhado até o job
-`pgTAP RLS Matrix` ficar verde; somente então cabe criar/validar o Preview e
-considerar promoção. A story continua `InProgress`.
+Naquele checkpoint o patch estava pronto para revisão CodeRabbit/Gitleaks,
+staging seletivo, commit e push pela autoridade AIOX DevOps. O CI final do HEAD
+documental confirmou depois o `pgTAP RLS Matrix` verde no run `31377957069`;
+Preview manual, Vercel integrado, restore/PITR, matriz Owner e promoção ainda
+exigem gates próprios. A story continua `InProgress`.
 
 ## Revalidação CodeRabbit e hardening auxiliar — 2026-08-10
 
@@ -371,11 +374,16 @@ permanecer sem prova.
 ### Evidências
 
 - GitHub: PR #187 continua `OPEN`, base `main`, HEAD remoto
-  `4c7b906d653a9af00969d75313ea6c9756f5bbc0`; os findings efetivos do
+  `379c4a148dc200472daf49719af520025fb01c55`; Quality Gates, pgTAP RLS,
+  visual autenticado, Manager/Central Parity, a11y, bundle, checksums,
+  reversibilidade, Gitleaks, typecheck/unit e auditorias visuais terminaram
+  `SUCCESS`. Os findings efetivos do
   CodeRabbit foram corrigidos e a nova execução após o último ajuste foi
   bloqueada por limite de uso; `TestSprite Pre-Check` falhou com `No tests detected`.
-- CI autenticado visual `31373014149`: passou; a matriz do Dono foi pulada por
+- CI autenticado visual `31377957000`: passou; a matriz do Dono foi pulada por
   ausência de `E2E_OWNER_EMAIL`.
+- `pgTAP RLS Matrix` `31377957069`: `SUCCESS` nos 40 cenários; não há mais
+  bloqueio remoto de RLS neste SHA.
 - A reexecução local passou `npm test` (`2600 pass / 0 fail / 18173 asserts`),
   bundle `1563,53/1860 KB gzip`, auditoria de runtime sem vulnerabilidades e
   `git diff --check`; o build emitiu seis warnings CSS não bloqueantes e não
@@ -384,9 +392,9 @@ permanecer sem prova.
   `https://mxperformance-dfk3mk6sf-synvolt.vercel.app`, `READY`, health HTTP 200
   `healthy`, release exata do SHA e checks de Vercel/Supabase/database/crons
   `ok`. `/login` respondeu HTTP 200.
-- Vercel integrado ao PR: `dpl_3q1DcfxehHJqUoqn1s73xUZ7K7sT` é o SHA correto,
-  mas terminou `BUILD_FAILED / Resource provisioning failed`. Redeploy pela
-  API retornou `404`; CLI retornou `Deployment belongs to a different team`.
+- Vercel integrado ao HEAD: `dpl_GW9AX58PcAyJGZT6C7NEwRLT4bis` terminou
+  `ERROR / Resource provisioning failed`; a inspeção retornou `readyState: ERROR`
+  e o redeploy não pôde ser executado no contexto/equipe disponível.
 - Browser real no Preview: Dono, Gerente e Vendedor autenticaram; `1440×900` e
   `390×844` tiveram um `main` e zero overflow; o menu mobile abriu para Gerente
   e Vendedor. O bloqueio de `vercel.live/feedback.js` pela CSP é externo à
@@ -408,12 +416,12 @@ permanecer sem prova.
 ### Resultado
 
 Preview manual funcional e produção preservada. O estado global continua
-`PARCIALMENTE CONCLUÍDO / BLOCKED_EXTERNAL`: o check Vercel oficial, pgTAP
-remoto do novo conjunto de migrations, restore/PITR, matriz integral e promoção
-continuam sem prova.
+`PARCIALMENTE CONCLUÍDO / BLOCKED_EXTERNAL`: o check Vercel oficial,
+restore/PITR, matriz Owner integral, TestSprite e promoção continuam sem prova;
+o pgTAP/RLS e os demais workflows GitHub do SHA estão verdes.
 
 ### Próximo passo
 
-Publicar este checkpoint documental pelo AIOX DevOps, observar o novo SHA e
-reavaliar CI/Preview. Não fazer merge ou promoção com o check Vercel oficial
-falhando.
+Publicar este checkpoint documental pelo AIOX DevOps, manter o PR aberto e
+reconciliar a integração Vercel/credencial Owner. Não fazer merge ou promoção
+com o check Vercel oficial falhando.

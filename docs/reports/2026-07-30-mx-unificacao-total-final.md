@@ -5,15 +5,19 @@
 >
 > **Revalidação vigente (2026-08-10):** a implementação está no branch
 > `fix/mx-final-gates-20260810`, com SHA remoto
-> `4c7b906d653a9af00969d75313ea6c9756f5bbc0`. A produção continua
+> `379c4a148dc200472daf49719af520025fb01c55`. O último commit é documental;
+> o runtime validado permanece no SHA `4c7b906d653a9af00969d75313ea6c9756f5bbc0`.
+> A produção continua
 > deliberadamente no merge saudável anterior
 > `82191012260208c6dc82e240cd78fdf4658fb6ba`.
 
 ## Revalidação vigente — 2026-08-10 — PR #187
 
-- Worktree e branch: `fix/mx-final-gates-20260810`; implementação publicada no
-  SHA `4c7b906d653a9af00969d75313ea6c9756f5bbc0`; PR #187 está `OPEN` contra
-  `main`, com 67 arquivos alterados.
+- Worktree e branch: `fix/mx-final-gates-20260810`; HEAD remoto
+  `379c4a148dc200472daf49719af520025fb01c55`; PR #187 está `OPEN` contra
+  `main`, com 67 arquivos alterados. O commit de código/runtime validado é
+  `4c7b906d653a9af00969d75313ea6c9756f5bbc0`; o HEAD atual só reconcilia
+  documentação.
 - Correções entregues: `ManagerDailyClosing`/skeleton no `PageCanvas` canônico,
   `Checkin` sem landmark `main` aninhado, toaster Sonner contido e release
   Sentry normalizada no build.
@@ -27,12 +31,16 @@
 - O build emitiu seis warnings não bloqueantes do otimizador CSS para classes
   arbitrárias já existentes; o comando terminou com exit `0` e a checagem de
   sourcemaps públicos passou.
-- CI autenticado visual `31373014149`: passou. A matriz do Dono foi pulada por
-  ausência de `E2E_OWNER_EMAIL`; isso não é contado como aprovação dessa matriz.
+- CI do HEAD `379c4a14`: Quality Gates `31377957038`, pgTAP RLS Matrix
+  `31377957069`, visual autenticado `31377957000`, Manager Parity
+  `31377956939`, Central Execução Parity `31377956959`, checksums,
+  reversibilidade, Gitleaks, bundle, typecheck/unit, a11y e auditorias visuais
+  terminaram `SUCCESS`. A matriz do Dono foi pulada por ausência de
+  `E2E_OWNER_EMAIL`; isso não é contado como aprovação dessa matriz.
   `TestSprite Pre-Check` falhou externamente com `No tests detected`; os
   findings efetivos do CodeRabbit foram corrigidos e a nova execução após o
   último ajuste foi bloqueada por limite de uso.
-- Preview manual do mesmo SHA: deployment
+- Preview manual do runtime SHA `4c7b906d` (o HEAD `379c4a14` é documental): deployment
   `dpl_2u51UvwJcSGBB1igRsuC4V3hXVY4`, URL
   `https://mxperformance-dfk3mk6sf-synvolt.vercel.app`, estado `READY`. O
   `/api/health` retornou HTTP `200`, `healthy`, ambiente `preview`, release
@@ -44,11 +52,11 @@
   `vercel.live/feedback.js` bloqueando a instrumentação externa do Preview;
   isso é separado do runtime funcional do app e impede declarar console
   totalmente limpo.
-- Check Vercel oficial do PR: deployment
-  `dpl_3q1DcfxehHJqUoqn1s73xUZ7K7sT`, exatamente no SHA acima, terminou
-  `BUILD_FAILED / Resource provisioning failed`. A API de redeploy retornou
-  `404`; a CLI autenticada retornou `Deployment belongs to a different team`.
-  Esse check não foi convertido em verde por intervenção manual.
+- Check Vercel oficial do PR no HEAD `379c4a14`: deployment
+  `dpl_GW9AX58PcAyJGZT6C7NEwRLT4bis` terminou `ERROR`; a inspeção Vercel
+  retornou `readyState: ERROR` e o check reportou `Resource provisioning failed`.
+  A tentativa de redeploy permanece bloqueada pelo contexto/equipe disponível;
+  esse check não foi convertido em verde por intervenção manual.
 - Sentry: a release `4c7b906d653a9af00969d75313ea6c9756f5bbc0` existe em
   `synvolt/mx-performance-frontend`, com um deployment associado ao Preview;
   eventos reais de `/login`, `/home` e `/dono` e um evento controlado em
@@ -70,8 +78,8 @@
   e crons críticos `ok`. O diff do PR #187 não foi promovido.
 - Estado: **PARCIALMENTE CONCLUÍDO / BLOCKED_EXTERNAL** para a publicação final.
   A produção saudável foi preservada; não houve DDL remoto nem promoção enquanto
-  o check oficial do Vercel, PITR/restore, matriz integral e demais gates do
-  prompt permanecerem abertos.
+  o check oficial do Vercel, PITR/restore, matriz Owner integral, TestSprite e
+  demais gates do prompt permanecerem abertos.
 
 ## Revalidação histórica — antes da reconciliação do PR #187
 
@@ -263,8 +271,8 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 | Resolvido (histórico) | Vulnerabilidades high no runtime principal | O checkpoint de 2026-08-03 registrou `react-router`/`react-router-dom`; a revalidação atual não reproduz o finding | `npm audit --omit=dev` em 2026-08-10: 0 vulnerabilidades no grafo de produção auditado (`critical=0`, `high=0`, `moderate=0`, `low=0`); runtime `7.18.2` | Manter o audit no gate de cada release |
 | Info | `/home` para Administrador Geral | Rota bloqueada pela matriz de autorização | Produção exibiu mensagem de acesso negado sem erro/overflow | Não alterar sem requisito explícito; validar com perfil autorizado se necessário |
 | P1 | Backup restaurável não comprovado | Snapshots físicos concluídos não equivalem a ponto de restauração testado | API de backups físicos: 8 `COMPLETED`; API de restore/PITR: `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
-| P1 | Check oficial Vercel do PR falhou | O deployment integrado terminou `BUILD_FAILED / Resource provisioning failed`, embora o Preview manual do mesmo SHA esteja `READY` | `dpl_3q1DcfxehHJqUoqn1s73xUZ7K7sT`; redeploy MCP `404`; CLI `Deployment belongs to a different team` | Reconciliar equipe/integração Vercel e obter check oficial verde antes do merge |
-| P1 | Replay/grants RLS ainda sem prova remota | O primeiro SHA falhou no histórico duplicado; o SHA seguinte falhou na ACL de `eh_area_interna_mx` | CI runs `31363182145` e `31366214127`; migrations/guards locais no SHA `4c7b906d` | Exigir `pgTAP RLS Matrix` verde no próximo SHA antes de merge/promoção |
-| P1 | Patch final ainda não promovido | O patch está publicado no PR e validado no Preview manual, mas produção continua no merge `82191012` | PR #187, SHA `4c7b906d`; Preview `dpl_2u51UvwJcSGBB1igRsuC4V3hXVY4`; produção `/api/health` `200/healthy` | Promover somente após check Vercel oficial, CI completo e smoke final |
-| P1 | Matriz integral de perfis/rotas/estados/viewports | Dono/Gerente/Vendedor foram validados no Preview em dois breakpoints; Owner matrix do CI foi pulado por credencial ausente | CI `31373014149`; browser real do Preview; `E2E_OWNER_EMAIL` ausente | Provisionar credenciais de teste e completar a matriz do prompt sem contar skips como aprovação |
+| P1 | Check oficial Vercel do PR falhou | O deployment integrado do HEAD documental terminou `ERROR / Resource provisioning failed`; o Preview manual do runtime anterior está `READY` | `dpl_GW9AX58PcAyJGZT6C7NEwRLT4bis`; inspeção `readyState: ERROR`; CLI não consegue redeployar no contexto atual | Reconciliar equipe/integração Vercel e obter check oficial verde antes do merge |
+| Resolvido neste SHA | Replay/grants RLS | O primeiro SHA falhou no histórico duplicado e o seguinte falhou na ACL; o novo CI passou os 40 cenários | `pgTAP RLS Matrix` `31377957069`: `SUCCESS`; checksums/reversibilidade também verdes | Manter a matriz no gate de futuras migrations; nenhum DDL foi aplicado à produção |
+| P1 | Patch final ainda não promovido | O patch está publicado no PR e validado no Preview manual do runtime, mas produção continua no merge `82191012` | PR #187 HEAD `379c4a14`; Preview `dpl_2u51UvwJcSGBB1igRsuC4V3hXVY4` do runtime `4c7b906d`; produção `/api/health` `200/healthy` | Promover somente após check Vercel oficial, matriz Owner completa e smoke final |
+| P1 | Matriz integral de perfis/rotas/estados/viewports | Universal route audit autenticado passou; Owner matrix foi pulado por credencial ausente | CI `31377957000`; `E2E_OWNER_EMAIL` ausente; browser real parcial do Preview | Provisionar credencial Owner e completar a matriz do prompt sem contar skips como aprovação |
 | P2 | Console do Preview contém bloqueio externo | `vercel.live/feedback.js` é bloqueado pela CSP, sem falha funcional do app | console do Preview manual | Documentar/corrigir conscientemente a instrumentação antes de exigir console totalmente limpo |
