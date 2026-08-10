@@ -3,16 +3,17 @@
 Atualizado em 2026-08-10 durante a retomada em worktree local isolado,
 branch
 `fix/mx-full-execution-20260810`, sobre `origin/main`
-`3ee29d72a9ff6729b3097faa0363c17cb3611ea1`. A implementação desta retomada está
-no commit `9f01b0c17dedf2f445f0bee7e3a01068e20e9ccd`; esta entrada registra o
-estado documental corrente. As observações históricas abaixo
+`3ee29d72a9ff6729b3097faa0363c17cb3611ea1`. A correção de build está no commit
+`0e4a72750eea3d6c50928d6fee972dea158d0451`, publicado no PR #188; esta entrada
+registra o estado documental corrente. As observações históricas abaixo
 continuam preservadas, mas não são evidência atual deste checkout.
 
-> **Estado vigente:** correções gerenciais do `PageCanvas` implementadas,
-> commitadas e validadas localmente. CI remoto, preview, produção, Sentry e
-> backup restaurável ainda não foram aprovados para este diff.
+> **Estado vigente:** correção de release Sentry implementada, commitada e
+> publicada; CI remoto completo passou no SHA final. O Preview Git-driven,
+> TestSprite e Supabase Preview permanecem bloqueados/sem execução, e produção
+> continua no SHA anterior.
 
-## Revalidação corrente — 2026-08-10 — worktree `fix/mx-full-execution-20260810`
+## Revalidação de implementação anterior — 2026-08-10 — worktree `fix/mx-full-execution-20260810`
 
 ### Tarefa
 
@@ -62,9 +63,89 @@ pontos documentais que foram corrigidos, mas o rerun final retornou
 um único achado documental major, corrigido no relatório corrente. PR/CI/preview/produção,
 matriz browser integral, backup/PITR, Sentry/source maps e rollback continuam
 pendentes.
-- Pre-push AIOX/DevOps ainda não executado: worktree limpo, story `Ready for Review`,
-  `npm audit` com 1 high em `xlsx` sem fix, Secretlint 13.0.4 sem achados e
-  revisão CodeRabbit final sem crítico; não houve push ou PR.
+- Registro anterior à publicação: o pre-push AIOX/DevOps ainda não havia sido
+  executado; `npm audit` mantinha 1 high em `xlsx` sem fix e Secretlint não
+  tinha achados. A publicação posterior está registrada na tarefa abaixo.
+
+## Tarefa — normalização da release Sentry e publicação do PR #188
+
+### Objetivo
+
+Impedir que o build Git-driven invoque `sentry-cli --release ''` quando uma
+variável de release estiver presente, porém vazia, e publicar a correção com
+prova de CI e do deployment associado ao SHA final.
+
+### Diagnóstico
+
+O Preview manual anterior passou, mas o Preview Git-driven falhava antes de
+entregar um artefato utilizável. A inspeção do build apontou
+`sentry-cli ... --release ''`; `process.env.VITE_RELEASE ?? ...` preservava a
+string vazia em vez de cair para o SHA do commit.
+
+### Causa raiz
+
+Variáveis de ambiente vazias não são `null`/`undefined`, portanto o operador
+`??` não acionava o fallback. Nome de branch não é fallback seguro porque pode
+conter `/`, rejeitado como identificador de release pelo Sentry.
+
+### Alterações
+
+- Criado `resolveSentryRelease`, que ignora valores vazios e resolve
+  `VITE_RELEASE` → `SENTRY_RELEASE` → `VERCEL_GIT_COMMIT_SHA` → `GITHUB_SHA` →
+  `dev`.
+- `vite.config.ts` passou a usar o resolver.
+- Adicionado teste unitário com quatro casos, incluindo variável vazia e branch
+  sem SHA.
+- Commit `0e4a72750eea3d6c50928d6fee972dea158d0451` publicado em
+  `fix/mx-full-execution-20260810`; PR #188 aberto.
+
+### Arquivos
+
+- `vite.config.ts`
+- `src/lib/sentry-release.ts`
+- `src/lib/sentry-release.test.ts`
+
+### Testes executados
+
+- `npm run lint`: exit 0.
+- `npm run typecheck`: exit 0.
+- `npm test`: 2610 pass / 0 fail / 18207 expect() calls.
+- `npm run build`: exit 0; nenhum `.map` em `dist/`.
+- `npm run check:bundle-size`: 1564,22/1860 KB gzip; chunks dentro do budget.
+- `git diff --check`: exit 0.
+- Secretlint direcionado: exit 0; Gitleaks staged: exit 0, no leaks.
+- `npm audit --omit=dev`: 0 vulnerabilidades; audit completo: 1 high em
+  `xlsx@0.18.5`, sem correção disponível.
+- CI no SHA final: Quality Gates, Typecheck/unit, ESLint a11y, bundle-budget,
+  db-types-diff, Gitleaks, Atomic Design, Management Audit, Manager Parity,
+  Central Execução Parity, Module Parity e Authenticated Visual passaram.
+
+### Resultado
+
+Código corrigido, commitado e publicado; produção não foi alterada. O
+deployment Git-driven `dpl_4h1zRzKkVUcppUuGbPuXUGuMcYje` apontou para o SHA
+final, porém terminou `BUILD_FAILED` com `Resource provisioning failed` e
+`integrations.status=error`. TestSprite falhou com `No tests detected` e
+Supabase Preview ficou `skipping`. O bloqueio de provisionamento não foi
+alterado desconectando a integração Supabase.
+
+### Evidências
+
+- SHA remoto: `0e4a72750eea3d6c50928d6fee972dea158d0451`.
+- PR: `https://github.com/pglemos/MXGESTAOPREDITIVA/pull/188`.
+- Produção não promovida: `origin/main`
+  `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`.
+- `/api/health` em `https://www.mxperformance.com.br`: HTTP 200, `healthy`,
+  Vercel/Supabase API/database/crons `ok`, release da produção anterior.
+- Agy/Antigravity: quota externa esgotada; nenhum parecer foi fabricado.
+
+### Próximo passo
+
+Resolver o provisionamento da integração Vercel/Supabase com a manutenção do
+projeto, reexecutar o Preview Git-driven e só então validar release/source maps,
+smoke autenticado e eventual promoção. Permanecem pendentes backup/PITR,
+rollback restaurável, prova Sentry independente, rotação de credenciais e
+substituição de `xlsx`.
 
 ## Registro histórico — revalidação do commit `a3ede247` — 2026-08-10
 

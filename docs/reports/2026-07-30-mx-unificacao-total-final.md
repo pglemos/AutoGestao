@@ -3,14 +3,74 @@
 > Relatório vivo de fechamento. Os registros históricos abaixo são preservados,
 > mas não substituem a revalidação corrente do worktree.
 
-> **Estado corrente (2026-08-10):** os parágrafos que citam o SHA `7387fb32`,
-> PR #186, deployments de 03/08 e a branch `feat/mx-unificacao-total-20260809`
-> são históricos e não são prova do estado atual. A execução corrente ocorre no
-> worktree isolado `<worktree local isolado>`,
-> branch `fix/mx-full-execution-20260810`, sobre `origin/main`
-> `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`.
+> **Estado corrente (2026-08-10):** os parágrafos históricos abaixo não são
+> prova do estado atual. A execução corrente ocorre no worktree isolado
+> `/Users/pedroguilherme/PROJETOS/mx-full-execution-20260810`, branch
+> `fix/mx-full-execution-20260810`, commit remoto
+> `0e4a72750eea3d6c50928d6fee972dea158d0451`, sobre `origin/main`
+> `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`. O PR #188 está aberto; produção
+> não foi promovida.
 
-## Revalidação vigente — 2026-08-10
+## Revalidação pós-publicação — 2026-08-10 — SHA `0e4a7275`
+
+### Resumo executivo
+
+O build foi corrigido para não repassar uma release Sentry vazia ao
+`sentry-cli`. O commit foi publicado no PR #188 e todos os workflows de CI
+associados ao SHA passaram, incluindo a matriz visual autenticada. O Preview
+Git-driven, porém, terminou com `BUILD_FAILED / Resource provisioning failed`
+porque a integração Marketplace reportou `integrations.status=error`. A
+produção permanece no SHA anterior; não há aprovação de merge, promoção ou
+conclusão do prompt mestre.
+
+### Alterações e evidências
+
+- `vite.config.ts` usa `resolveSentryRelease`.
+- `src/lib/sentry-release.ts` ignora valores vazios e resolve
+  `VITE_RELEASE` → `SENTRY_RELEASE` → `VERCEL_GIT_COMMIT_SHA` → `GITHUB_SHA` →
+  `dev`.
+- `src/lib/sentry-release.test.ts`: 4 casos direcionados passaram.
+- Gates locais: lint, typecheck, build, `npm test` (2610 pass / 0 fail /
+  18207 expect()), bundle (1564,22/1860 KB), diff-check, Secretlint e Gitleaks
+  staged passaram. `npm audit --omit=dev` encontrou 0 vulnerabilidades; o audit
+  completo mantém 1 high em `xlsx@0.18.5`, sem correção upstream.
+- CI remoto do SHA passou em Quality Gates, Typecheck/unit, ESLint a11y,
+  bundle-budget, db-types-diff, Gitleaks, Atomic Design, Management Audit,
+  Manager Parity, Central Execução Parity, Module Parity e Authenticated Visual
+  (12m58s, incluindo a matriz Owner Base44).
+- CodeRabbit reportou `pass` com `Review rate limited`; não foi contado como
+  revisão técnica completa.
+
+### Publicação e serviços
+
+- SHA remoto: `0e4a72750eea3d6c50928d6fee972dea158d0451`.
+- PR: [#188](https://github.com/pglemos/MXGESTAOPREDITIVA/pull/188).
+- Preview Git-driven: `dpl_4h1zRzKkVUcppUuGbPuXUGuMcYje`, associado ao SHA
+  final, `BUILD_FAILED`, `Resource provisioning failed`,
+  `integrations.status=error`.
+- TestSprite: falha `No tests detected`.
+- Supabase Preview: `skipping`; nenhuma alteração DDL foi feita nesta etapa.
+- Produção: `origin/main`
+  `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`; `/api/health` em
+  `https://www.mxperformance.com.br` respondeu HTTP 200, `healthy`, com
+  Vercel, Supabase API/database e crons críticos `ok`, mas isso é prova da
+  produção anterior, não do SHA novo.
+- Sentry: nenhuma release/source-map/evento da branch final foi comprovada;
+  a correção de release só foi validada localmente e no CI build.
+
+### Pendências bloqueantes
+
+- Resolver o provisionamento da integração Vercel/Supabase sem desconectá-la
+  nem remover variáveis; reexecutar Preview Git-driven.
+- Validar Preview completo, release/source maps/evento Sentry e smoke
+  autenticado no SHA final antes de qualquer merge/promoção.
+- TestSprite continua incompatível com a suíte real (`No tests detected`).
+- Backup/PITR restaurável, rollback real, matriz integral de perfis/estados,
+  rotação de credenciais expostas e substituição de `xlsx` continuam pendentes.
+- Agy/Antigravity não produziu parecer reproduzível por quota externa; nenhum
+  resultado foi inventado.
+
+## Histórico da retomada de layout — 2026-08-10
 
 - Worktree corrente: branch `fix/mx-full-execution-20260810`, base remota
   `origin/main` em `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`; implementação

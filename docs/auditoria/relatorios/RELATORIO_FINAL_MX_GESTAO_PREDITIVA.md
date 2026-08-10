@@ -4,38 +4,42 @@
 **Estado atual:** PARCIALMENTE CONCLUÍDO
 **Branch da retomada:** `fix/mx-full-execution-20260810` (worktree isolado)
 **Base atual:** `origin/main` em `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`
-**Commits da implementação nesta retomada:** `f5c813ce` (layout), `52a761ed`
-(contraste) e `ae3da0b8` (contrato E2E do Gerente); a documentação registra a
-revalidação commitada nesta branch
+**Commit remoto mais recente:** `0e4a72750eea3d6c50928d6fee972dea158d0451`
+(normalização da release Sentry); os commits de implementação visual anteriores
+permanecem no histórico desta branch
 **Base histórica de rollback:** `41ec4d39e165cab013988fab9aef54649b616095`
 
 > Este documento é atualizado durante a execução. “Parcialmente concluído” é
 > obrigatório enquanto qualquer gate do prompt mestre permanecer sem prova.
 
-## Revalidação corrente — 2026-08-10
+## Revalidação corrente pós-publicação — 2026-08-10
 
-O worktree corrente está rebaseado sobre `origin/main` e contém os commits de
-layout, contraste e contrato E2E listados acima. Os gates locais passaram:
-`npm test` `2606 pass / 0 fail / 18195 expect()`, `npm run lint`,
-`npm run typecheck`, `npm run build`, `npm run check:bundle-size`
-(`1564,22/1860 KB gzip`), auditorias de rotas/layout/management design system,
-IDE sync, estrutura, agentes, paridade e `git diff --check`. A suíte do
-Gerente passou `2/2` no fluxo funcional direcionado e `1/1` no contrato de
-console/rede após uma falha transitória de `Failed to fetch` no primeiro run.
-Gitleaks passou no range `origin/main..HEAD` e no índice staged, sem leak.
+O worktree corrente está no commit remoto `0e4a72750eea3d6c50928d6fee972dea158d0451`,
+publicado no PR #188. A correção evita `sentry-cli --release ''` quando a
+variável existe vazia. Os gates locais passaram: `npm test` `2610 pass / 0 fail /
+18207 expect()`, `npm run lint`, `npm run typecheck`, `npm run build`,
+`npm run check:bundle-size` (`1564,22/1860 KB gzip`), `git diff --check`,
+Secretlint e Gitleaks staged.
 
-O estado continua **PARCIALMENTE CONCLUÍDO**. O branch ainda precisa do
-pre-push/CodeRabbit, push, PR, CI e preview desta retomada. Produção atual
-permanece separada: deployment `READY` servindo `3ee29d72`, `/api/health`
-HTTP 200 com Vercel, Supabase, database e crons `ok`. Backup restaurável/PITR,
-Sentry autenticado/source maps da nova release, matriz integral de perfis e
-rollback executado continuam sem prova. `npm audit` mantém um high em
-`xlsx`; Secretlint 13.0.4 foi configurado com o preset recomendado e concluiu
-o scan corrente sem achados.
+CI remoto também passou em Quality Gates, Typecheck/unit, ESLint a11y,
+bundle-budget, db-types-diff, Gitleaks, Atomic Design, Management Audit,
+Manager Parity, Central Execução Parity, Module Parity e Authenticated Visual
+(12m58s, incluindo a matriz Owner Base44).
+
+O estado continua **PARCIALMENTE CONCLUÍDO**. O Preview Git-driven
+`dpl_4h1zRzKkVUcppUuGbPuXUGuMcYje`, associado ao SHA final, falhou com
+`BUILD_FAILED / Resource provisioning failed` e `integrations.status=error`.
+TestSprite falhou com `No tests detected`; Supabase Preview ficou `skipping`.
+Produção permanece separada no deployment anterior, servindo `3ee29d72`;
+`/api/health` respondeu HTTP 200 com Vercel, Supabase, database e crons `ok`.
+Backup restaurável/PITR, Sentry/source maps da nova release, smoke no SHA final,
+rollback executado e matriz integral de estados continuam sem prova. `npm audit`
+mantém um high em `xlsx` sem correção; o audit de produção não tem findings.
 
 As tentativas de revisão Agy/Antigravity foram limitadas por quota externa; não
 há disponibilidade comprovada de um modelo “GPT 5.6 Luna”, portanto nenhuma
-delegação ou resultado foi fabricado.
+delegação ou resultado foi fabricado. CodeRabbit ficou `pass` por rate limit,
+sem veredicto técnico completo.
 
 > As seções históricas abaixo preservam evidências anteriores. Quando houver
 > conflito de contagem, SHA, deployment ou status, esta revalidação corrente e

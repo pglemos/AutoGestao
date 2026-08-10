@@ -29,7 +29,7 @@ quality_gate_tools:
   - tool: Vercel CLI
     command: npx vercel --version
     expected_version: 50.44.0
-    success: versão confirmada; preview READY desta story ainda pendente
+    success: versão confirmada; Preview Git-driven do SHA final falhou por `Resource provisioning failed` na integração Vercel/Supabase
   - tool: Sentry CLI
     command: npx sentry-cli --version
     expected_version: 2.58.5
@@ -123,8 +123,8 @@ anteriores de conclusão não contam como evidência nova.
   - [x] Revisar diff e executar os gates locais listados.
   - [x] Executar Gitleaks no estado staged.
   - [x] Configurar e executar Secretlint.
-  - [ ] Preparar commits/PR/deploy via autoridade AIOX DevOps.
-  - [ ] Entregar relatório final baseado nas evidências atuais.
+  - [x] Preparar commit, PR #188 e push via autoridade AIOX DevOps; deployment Git-driven permaneceu bloqueado externamente.
+  - [x] Atualizar relatório final baseado nas evidências atuais, mantendo a story parcial.
 
 ## Dev Notes
 
@@ -206,6 +206,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-08-10 | 0.3.2 | Rotas gerenciais restantes migradas para PageCanvas; gates locais, layout contract e Gitleaks revalidados; Secretlint pendente | Dex (Dev) |
 | 2026-08-10 | 0.3.3 | Branch rebaseada sobre `origin/main` atual; contrato E2E do Gerente alinhado ao runtime e gates locais repetidos | Dex (Dev) |
 | 2026-08-10 | 0.3.4 | Secretlint 13.0.4 configurado com preset recomendado e scan corrente concluído sem achados; bundle documental reconciliado | Dex (Dev) |
+| 2026-08-10 | 0.3.5 | Resolver de release Sentry normalizado; commit `0e4a7275` publicado no PR #188; CI verde e bloqueios Vercel/TestSprite registrados | Gage (DevOps) |
 
 ## Dev Agent Record
 
@@ -444,6 +445,24 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   revisados e um único achado `major` documental. A divergência entre
   `origin/main`, HEAD, contagens e bundle foi corrigida nos relatórios correntes;
   nenhum achado crítico foi reportado.
+- 2026-08-10: a causa raiz do Preview Git-driven foi reproduzida: o plugin do
+  Sentry recebia `--release ''` quando a variável existia vazia. O resolver
+  `resolveSentryRelease` agora ignora strings vazias e usa, nesta ordem,
+  `VITE_RELEASE`, `SENTRY_RELEASE`, `VERCEL_GIT_COMMIT_SHA`, `GITHUB_SHA` e
+  `dev`; o nome da branch não é usado como release. Teste direcionado: 4 pass.
+- 2026-08-10: commit `0e4a72750eea3d6c50928d6fee972dea158d0451` foi publicado em
+  `fix/mx-full-execution-20260810` e no PR #188. Os workflows Quality Gates,
+  Typecheck/unit, ESLint a11y, Bundle, DB types, Gitleaks, Atomic Design,
+  Management Audit, Manager Parity, Central Execução Parity, Module Parity e
+  Authenticated Visual passaram; o último percorreu a matriz Owner Base44 em
+  12m58s. CodeRabbit ficou `pass` com `Review rate limited`.
+- 2026-08-10: o Preview Git-driven `dpl_4h1zRzKkVUcppUuGbPuXUGuMcYje`
+  associou-se ao SHA final, mas terminou `BUILD_FAILED` com
+  `Resource provisioning failed` e `integrations.status=error`; não houve
+  promoção. TestSprite retornou `No tests detected` e Supabase Preview ficou
+  `skipping`. Produção permanece no SHA `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`;
+  `/api/health` respondeu HTTP 200 `healthy` com Vercel, API/banco Supabase e
+  crons críticos `ok`.
 
 ### Completion Notes List
 
@@ -473,28 +492,28 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - A migração moderna das Edge Functions está implementada e validada somente
   localmente; fallback legado, revisão integral, deploy e smoke permanecem
   pendentes.
-- A correção atual está commitada nesta branch; preview, CI remoto, produção,
-  Sentry, backup restaurável e a
-  matriz integral de perfis continuam pendentes. A story permanece
+- A implementação anterior está commitada nesta branch; a correção de build
+  também está publicada no SHA `0e4a7275`. CI remoto passou, mas Preview
+  Git-driven, produção do novo SHA, Sentry da branch, backup restaurável e a
+  matriz integral de perfis/estados continuam pendentes. A story permanece
   `Ready for Review` e parcialmente concluída.
 - As rotas gerenciais auditadas agora não deixam `max-w-7xl`, gutters ou safe
   area na raiz fora de `PageCanvas`; o canvas do `DashboardLoja` continua sendo
   a autoridade quando `ManagerTeamPerformance` é renderizado como seção filha.
-- A validação desta retomada permanece local: não há evidência nova de
-  preview, CI remoto, produção, backup restaurável, Sentry ou matriz integral
-  de perfis/estados/ações. Esses gates continuam bloqueando qualquer alegação
-  de conclusão ou publicação.
+- A validação corrente tem CI remoto verde no SHA final e health somente da
+  produção anterior; o Preview Git-driven falhou por provisionamento, e não há
+  prova de produção/Sentry para `0e4a7275`, backup restaurável ou matriz
+  integral de perfis/estados/ações. Esses gates continuam bloqueando qualquer
+  alegação de conclusão ou promoção.
 - O scan histórico de Gitleaks atualizado permanece uma evidência de dívida,
   não de falha introduzida por este diff: `gitleaks protect --staged` passou,
   enquanto os três achados do scan de `src/` pertencem a fixtures/diagnósticos
  fora dos arquivos desta tarefa.
-- 2026-08-10: o pre-push AIOX/DevOps ainda não foi executado na branch
-  rebaseada. A evidência corrente registra `npm audit` com uma vulnerabilidade
-  high em `xlsx` sem correção disponível, enquanto Secretlint 13.0.4 concluiu
-  sem achados após a configuração local. CodeRabbit final concluiu sem achado
-  crítico, e Agy permaneceu limitado por quota externa. O status foi atualizado
-  para `Ready for Review` sem transformar os gates externos pendentes em
-  aprovação.
+- 2026-08-10: a publicação AIOX/DevOps foi executada. Os gates locais e CI
+  remoto passaram, mas o audit completo mantém `xlsx` high sem correção,
+  TestSprite falha por `No tests detected`, Vercel falha por provisionamento e
+  CodeRabbit passa com rate limit. Agy/Antigravity permaneceu limitado por
+  quota externa. O status continua `Ready for Review`, sem promoção.
 
 ### File List
 
@@ -627,3 +646,6 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/styles/manager-visual-scope.css`
 - `src/styles/owner-base44-exact.css`
 - `supabase/functions/store-pre-registration/index.ts`
+- `vite.config.ts`
+- `src/lib/sentry-release.ts`
+- `src/lib/sentry-release.test.ts`
