@@ -7,9 +7,9 @@ históricas continuam preservadas, mas não são evidência atual deste checkout
 
 > **Estado vigente:** correções finais locais implementadas e testadas; a
 > produção atual é o merge `82191012` e ainda não contém o diff local desta
-> retomada. Backup restaurável/PITR, prova independente de source maps/Sentry e
-> matriz integral de perfis/rotas permanecem pendentes. O worktree também
-> contém a correção de replay do histórico de migrations, ainda sem CI novo.
+> retomada. O PR #187 já existe sobre esta branch, mas o patch de grants RLS
+> abaixo ainda não foi commitado. Backup restaurável/PITR, prova independente
+> de source maps/Sentry e matriz integral de perfis/rotas permanecem pendentes.
 
 ## Revalidação atual — 2026-08-10
 
@@ -173,6 +173,52 @@ tenta registrar a primeira versão novamente.
 Correção local pronta para commit. O gate RLS permanece `PENDENTE` até o GitHub
 Actions executar `supabase db reset`, comparar a lista de versões antes/depois e
 rodar os 40 cenários pgTAP no novo SHA.
+
+## Revalidação adicional — 2026-08-10 — grants dos helpers RLS
+
+### Tarefa
+
+Eliminar a segunda causa raiz do `pgTAP RLS Matrix` sem reabrir execução para
+`anon`/`PUBLIC` e sem aplicar DDL ou alterar dados no projeto remoto.
+
+### Diagnóstico e causa raiz
+
+O CI do PR #187 no SHA `1eee68444d8e807128b4175e6f417f86b16cc2c5` falhou no
+run `31366214127`, job `93385034779`, com `permission denied for function
+eh_area_interna_mx` ao consultar `lancamentos_diarios`. A migration
+`20260806150000_revoke_anon_public_execute_functions.sql` removeu corretamente
+`PUBLIC`/`anon`, mas policies RLS autenticadas também precisam de `EXECUTE`
+nominal para seus helpers.
+
+### Alterações
+
+- Adicionada `20260810100000_restore_authenticated_rls_helper_execute.sql`.
+- Revogado `PUBLIC`/`anon` e concedido `authenticated` para os 22 helpers
+  usados por predicates RLS.
+- `grants_guard.test.sql` passou a verificar esse contrato em um sétimo
+  assertion pgTAP, mantendo o teste explícito contra regressão.
+- `.migration-checksums.json` foi regenerado para `399` migrations.
+
+### Testes e evidências
+
+- `npm run lint`, `npm run typecheck`, `npm test` (`2.597 pass / 0 fail /
+  18.162 asserts`), `npm run build`, bundle, auditorias locais e
+  `git diff --check`: exit `0` na revalidação desta retomada.
+- `node scripts/gen_migration_checksums.mjs --check`: `399` checksums íntegras.
+- `node scripts/check_migration_reversibility.mjs --changed-only`: `43`
+  migrations com rollback documentado.
+- Docker/Postgres local continua indisponível em `127.0.0.1:54322`; o worktree
+  não está vinculado a um project ref. O pgTAP só pode ser confirmado pelo CI
+  com banco efêmero.
+- Nenhuma alteração remota foi aplicada; produção permanece no deployment
+  saudável do merge `82191012`.
+
+### Resultado e próximo passo
+
+O patch está pronto para revisão CodeRabbit/Gitleaks, staging seletivo, commit e
+push pela autoridade AIOX DevOps. O PR #187 deve ser acompanhado até o job
+`pgTAP RLS Matrix` ficar verde; somente então cabe criar/validar o Preview e
+considerar promoção. A story continua `InProgress`.
 
 ## Tarefa
 

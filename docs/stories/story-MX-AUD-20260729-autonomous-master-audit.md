@@ -121,7 +121,8 @@ anteriores de conclusão não contam como evidência nova.
 - [ ] Fases 13–14 — entrega (AC: 12, 13)
   - [x] Atualizar checkboxes, Dev Agent Record e File List.
   - [x] Revisar diff, executar quality gate e secret scan.
-  - [ ] Preparar commits/PR/deploy via autoridade AIOX DevOps.
+  - [ ] Commitar/publicar o patch do PR #187 e executar deploy via autoridade
+    AIOX DevOps.
   - [ ] Entregar relatório final baseado nas evidências atuais.
 - [x] Gate final local — regressões PageCanvas, landmark e Sonner reproduzidas,
   corrigidas com contratos RED/GREEN e validadas no browser em `390×844` e
@@ -133,6 +134,9 @@ anteriores de conclusão não contam como evidência nova.
   produção `200/healthy` no mesmo SHA.
 - [ ] Publicar o diff final — ainda requer commit, PR, preview, smoke e nova
   promoção; backup/PITR, Sentry independente e matriz integral continuam abertos.
+- [x] Diagnosticar a falha de ACL do `pgTAP RLS Matrix` e preparar migration
+  forward-only com grants explícitos para `authenticated`, mantendo `anon`
+  revogado; a confirmação remota permanece pendente.
 
 ## Dev Notes
 
@@ -213,6 +217,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-08-10 | 0.3.1 | Regressão do PageCanvas do Dono corrigida e validada localmente em dois breakpoints | Dex (Dev) |
 | 2026-08-10 | 0.3.2 | Gates finais: PageCanvas gerencial, landmark Checkin e overflow Sonner mobile corrigidos; produção reconciliada no merge #186 | Dex (Dev) |
 | 2026-08-10 | 0.3.3 | Marcador de histórico deixou de pré-registrar 39 stubs ativos após falha reproduzida no pgTAP RLS; aguardando CI novo | Dex (Dev) |
+| 2026-08-10 | 0.3.4 | ACL dos 22 helpers RLS restaurada para `authenticated`, `grants_guard` ampliado e PR #187 documentado; aguardando CI | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -428,6 +433,15 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   própria história; checksums (`398`) e reversibilidade (`42`) passaram
   localmente. O drift excepcional está hash-pinned em allowlist e o gate remoto
   permanece pendente.
+- 2026-08-10: o PR #187 no SHA `1eee68444d8e807128b4175e6f417f86b16cc2c5`
+  reproduziu a segunda causa raiz do `pgTAP RLS Matrix`: `permission denied for
+  function eh_area_interna_mx` no job `93385034779`. Foi adicionada a migration
+  `20260810100000_restore_authenticated_rls_helper_execute.sql` com grants
+  explícitos para 22 helpers RLS e o `grants_guard` passou a 7 assertions;
+  checksums atuais `399` e reversibilidade alterada `43` foram validadas localmente.
+- 2026-08-10: Docker/Postgres local permaneceu indisponível em
+  `127.0.0.1:54322`; a matriz pgTAP desta correção depende do próximo CI com
+  banco efêmero. Nenhuma migration foi aplicada remotamente.
 
 ### Completion Notes List
 
@@ -465,7 +479,8 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   Sonner/PageCanvas.
 - O replay de migrations corrigido localmente não é considerado RLS aprovado
   até um novo CI comparar o histórico antes/depois do reset e executar a matriz
-  pgTAP sem falhas.
+  pgTAP sem falhas. A nova ACL de helpers também permanece sem prova remota até
+  esse job passar.
 
 ### File List
 
@@ -488,6 +503,9 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `output/playwright/admin-geral-drawer-320x568.png`
 - `package.json`
 - `package-lock.json`
+- `supabase/migrations/20260810100000_restore_authenticated_rls_helper_execute.sql`
+- `supabase/migrations/.migration-checksums.json`
+- `supabase/tests/rls-matrix/grants_guard.test.sql`
 - `scripts/audit_route_data_inventory.mjs`
 - `check_db.mjs` (removido)
 - `check_db2.mjs` (removido)

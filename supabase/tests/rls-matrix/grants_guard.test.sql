@@ -9,7 +9,7 @@
 -- o que a matriz de RLS não consegue asseverar.
 -- ============================================================================
 BEGIN;
-SELECT plan(6);
+SELECT plan(7);
 
 -- 1) anon: zero privilégio em QUALQUER tabela/view de public
 SELECT is(
@@ -78,6 +78,40 @@ SELECT is(
       AND acl.item::text LIKE 'anon=%'),
   0,
   'default privileges (postgres): anon não reconcedido em tabelas futuras'
+);
+
+-- 7) RLS predicate helpers are callable by authenticated policies, but not
+-- directly by anon.  Keep this explicit list in sync with the migration that
+-- owns the post-hardening helper ACLs.
+WITH required(signature) AS (
+  VALUES
+    ('public.can_access_consulting_client(uuid)'),
+    ('public.can_access_mx_scope(public.score_scope_type,uuid,uuid)'),
+    ('public.check_user_role_in_store(uuid,text[])'),
+    ('public.consulting_client_module_enabled(uuid,text)'),
+    ('public.current_user_role_code(uuid)'),
+    ('public.eh_area_interna_mx(uuid)'),
+    ('public.eh_administrador_mx(uuid)'),
+    ('public.is_admin()'),
+    ('public.is_admin(uuid)'),
+    ('public.is_manager_of(uuid)'),
+    ('public.is_member_of(uuid)'),
+    ('public.is_owner_of(uuid)'),
+    ('public.mx_can_read_funnel_metrics(uuid,uuid)'),
+    ('public.mx_can_read_score_calculation(uuid)'),
+    ('public.mx_can_read_score_scope(public.score_scope_type,uuid)'),
+    ('public.normalize_mx_role(text)'),
+    ('public.pode_lancar_checkin(uuid,uuid,date,uuid)'),
+    ('public.pode_ler_cliente_por_oportunidade(uuid)'),
+    ('public.pode_ver_usuario(uuid,uuid)'),
+    ('public.tem_papel_loja(uuid,text[],uuid)'),
+    ('public.user_has_role(text[],uuid)'),
+    ('public.user_is_master_loja(uuid,uuid)')
+)
+SELECT ok(
+  (SELECT bool_and(has_function_privilege('authenticated', signature, 'EXECUTE')) FROM required)
+  AND (SELECT bool_and(NOT has_function_privilege('anon', signature, 'EXECUTE')) FROM required),
+  'RLS helpers: authenticated executa e anon não executa'
 );
 
 SELECT * FROM finish();

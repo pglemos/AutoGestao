@@ -20,13 +20,19 @@
   registrar a versão normalmente, tratando a falha reproduzida no reset
   local/CI (`duplicate key ... 20260407000000`) sem modificar schema ou dados
   remotos.
+- PR #187 está aberto para esta branch; o patch adicional ainda não foi
+  commitado e, portanto, não existe SHA remoto para esta revalidação.
+- A falha seguinte do CI no mesmo PR foi `permission denied for function
+  eh_area_interna_mx` durante a consulta autenticada da matriz RLS. A correção
+  local adiciona grants explícitos para `authenticated` em 22 helpers, mantendo
+  `PUBLIC`/`anon` revogados, e amplia o `grants_guard` pgTAP para 7 assertions.
 - RED/GREEN: contratos de PageCanvas/landmark passaram e o contrato novo do
   Sonner falhou antes da implementação e passou isoladamente depois.
 - Gates locais vigentes: lint exit `0` (warning histórico em `HelpTooltip.tsx`),
-  typecheck exit `0`, `npm test` `2.597 pass / 0 fail / 18.161 asserts`, build
+  typecheck exit `0`, `npm test` `2.597 pass / 0 fail / 18.162 asserts`, build
   exit `0` sem sourcemaps públicos, bundle `1.563,57/1.860 KB gzip` e
   `git diff --check` exit `0`; checksums recalculadas e reversibilidade das
-  migrations pendentes também passaram (`398` checksums válidas, `42`
+  migrations pendentes também passaram (`399` checksums válidas, `43`
   migrations validadas).
 - Auditorias complementares: `validate:structure`, `validate:parity`,
   `validate:agents`, `sync:ide:check`, `audit:routes-data`,
@@ -38,8 +44,8 @@
 - Produção vigente: Vercel `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`, `READY`, aliases
   oficiais; `/api/health` HTTP `200`, `healthy`, release exatamente igual ao
   merge acima. Esse deployment ainda não contém o diff local desta retomada.
-- Estado: **correções locais aprovadas, mas a correção de replay das migrations
-  ainda aguarda commit/CI; produção atual saudável e sem alteração de banco**.
+- Estado: **correções locais aprovadas, mas replay/grants RLS ainda aguardam
+  commit/CI; produção atual saudável e sem alteração de banco**.
 
 ## 39.1 Resumo executivo — estado vigente da retomada
 
@@ -50,7 +56,7 @@ duas regressões estruturais e o overflow mobile do toaster, com testes e prova
 de navegador local.
 
 Status atual: **gates locais aprovados; produção saudável no merge anterior;
-diff final aguardando commit, PR/preview e nova promoção**. O prompt mestre
+patch final aguardando commit, CI/Preview e nova promoção**. O prompt mestre
 permanece parcial por backup restaurável/PITR, prova independente de
 source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 
@@ -81,7 +87,7 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 
 ## 39.3 Evidências técnicas — estado vigente da retomada
 
-- Branch/PR: `fix/mx-final-gates-20260810` / PR novo ainda não aberto, base `main`.
+- Branch/PR: `fix/mx-final-gates-20260810` / PR #187 aberto, base `main`.
 - Base remota verificada: PR #186 `MERGED`, merge
   `82191012260208c6dc82e240cd78fdf4658fb6ba`; sete workflows desse SHA
   concluíram com sucesso.
@@ -92,16 +98,20 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
   falhou antes da correção no job `pgTAP RLS Matrix` durante `supabase db reset`
   com `duplicate key ... Key (version)=(20260407000000)`. A nova execução
   remota é obrigatória antes de tratar RLS como aprovado.
+- O SHA atual do PR #187 (`1eee68444d8e807128b4175e6f417f86b16cc2c5`) também
+  falhou no job `93385034779` com `permission denied for function
+  eh_area_interna_mx`; a migration nova e o guard pgTAP corrigem a ACL no
+  próximo SHA.
 - A correção altera apenas o marcador de histórico, com allowlist hash-pinned
   em `.migration-checksum-allowlist.json`; não remove nem reescreve os 39
   stubs. O CI também compara o histórico antes/depois do reset.
-- Worktree está deliberadamente não commitado nesta medição; o SHA do novo
+- Worktree está deliberadamente não commitado nesta medição; o SHA do próximo
   commit será acrescentado após a revisão do diff e antes do push.
 - Produção vigente: Vercel deployment
   `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`, `READY`, aliases oficiais; `/api/health`
   HTTP `200`, `healthy`, release igual ao merge `82191012`.
 - Preview do diff final: ainda não criado; não confundir a produção/preview do
-  PR #186 com a validação desta nova alteração.
+  PR #186 com a validação do próximo SHA do PR #187.
 
 ## 39.4 Evidências visuais
 
@@ -116,6 +126,9 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 ## 39.5 Supabase
 
 - Projeto confirmado: `fbhcmzzgwjdgkctlfvbo`.
+- A nova migration de ACL é somente local nesta medição. O CI efêmero deve
+  provar que `authenticated` executa os 22 helpers de predicates RLS e que
+  `anon` não executa nenhum deles; não houve `db push` remoto.
 - Schema e dados de aplicação em produção não foram alterados nesta etapa; a
   alteração pendente só impede o pré-registro de versões que o runner executa.
   No replay local, a tabela `supabase_migrations.schema_migrations` é recriada
@@ -170,5 +183,5 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 | P2 | 2 vulnerabilidades high no runtime principal | `react-router`/`react-router-dom` permanecem no range reportado pelo advisory; `brace-expansion` já foi atualizado no lockfile | `npm audit --omit=dev`: 2 high após a atualização | Avaliar correção compatível do React Router e validar a árvore `whatsapp-service` separadamente |
 | Info | `/home` para Administrador Geral | Rota bloqueada pela matriz de autorização | Produção exibiu mensagem de acesso negado sem erro/overflow | Não alterar sem requisito explícito; validar com perfil autorizado se necessário |
 | P1 | Backup restaurável não comprovado | Sem ponto de restauração testável para rollback de banco | Supabase `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
-| P1 | Diff final ainda não publicado | As correções de PageCanvas, landmark e Sonner estão somente no worktree final | `git status` local em `fix/mx-final-gates-20260810`; produção continua no merge `82191012` | Commitar, abrir PR, validar preview e promover somente após smoke/CI |
-| P1 | Replay local de migrations falha no SHA anterior | O marcador histórico pré-registra 39 versões e o runner tenta inseri-las novamente | CI run `31363182145`, job `93376028520`, erro `duplicate key ... 20260407000000`; correção local no marcador + allowlist + manifest `398` | Commitar, executar CI novo e exigir `pgTAP RLS Matrix` verde antes do smoke/produção |
+| P1 | Patch final ainda não publicado | As correções de PageCanvas, landmark, Sonner e grants RLS estão somente no worktree final | PR #187 aberto; `git status` local em `fix/mx-final-gates-20260810`; produção continua no merge `82191012` | Revisar, commitar, pushar, validar `pgTAP`/Preview e promover somente após smoke/CI |
+| P1 | Replay/grants RLS ainda sem prova remota | O primeiro SHA falhou no histórico duplicado; o SHA seguinte falhou na ACL de `eh_area_interna_mx` | CI runs `31363182145` e `31366214127`; migration nova, guard e manifest `399` locais | Executar CI novo e exigir `pgTAP RLS Matrix` verde antes do smoke/produção |
