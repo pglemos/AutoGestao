@@ -119,10 +119,20 @@ anteriores de conclusão não contam como evidência nova.
   - [x] Corrigir causas raiz e repetir a matriz local completa.
   - [ ] Provar rollback e monitorar o pós-deploy.
 - [ ] Fases 13–14 — entrega (AC: 12, 13)
-  - [ ] Atualizar checkboxes, Dev Agent Record e File List.
-  - [ ] Revisar diff, executar quality gate e secret scan.
+  - [x] Atualizar checkboxes, Dev Agent Record e File List.
+  - [x] Revisar diff, executar quality gate e secret scan.
   - [ ] Preparar commits/PR/deploy via autoridade AIOX DevOps.
   - [ ] Entregar relatório final baseado nas evidências atuais.
+- [x] Gate final local — regressões PageCanvas, landmark e Sonner reproduzidas,
+  corrigidas com contratos RED/GREEN e validadas no browser em `390×844` e
+  `1440×900`.
+- [x] Gate final local — lint, typecheck, suíte, build sem sourcemaps, bundle,
+  diff-check, auditorias estruturais/paridade/rotas e AIOX passaram.
+- [x] Reconciliar a base publicada — PR #186 merged em
+  `82191012260208c6dc82e240cd78fdf4658fb6ba`; Vercel `READY` e health de
+  produção `200/healthy` no mesmo SHA.
+- [ ] Publicar o diff final — ainda requer commit, PR, preview, smoke e nova
+  promoção; backup/PITR, Sentry independente e matriz integral continuam abertos.
 
 ## Dev Notes
 
@@ -201,6 +211,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-07-29 | 0.2.1 | Development started (yolo mode) — Status: Ready → InProgress | Dex (Dev) |
 | 2026-07-29 | 0.3.0 | Inventário reproduzível de rotas, autorização, dados e mutations | Dex (Dev) |
 | 2026-08-10 | 0.3.1 | Regressão do PageCanvas do Dono corrigida e validada localmente em dois breakpoints | Dex (Dev) |
+| 2026-08-10 | 0.3.2 | Gates finais: PageCanvas gerencial, landmark Checkin e overflow Sonner mobile corrigidos; produção reconciliada no merge #186 | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -393,6 +404,22 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - 2026-08-10: CodeRabbit não encontrou novos achados após o ajuste do contrato.
   A revisão Agy em sandbox foi tentada, mas atingiu cota externa antes de
   produzir parecer e não foi contada como gate.
+- 2026-08-10: no worktree isolado `fix/mx-final-gates-20260810`, o teste RED do
+  Sonner falhou com ausência do contrato; após a correção, o contrato isolado
+  passou `1/1`.
+- 2026-08-10: a suíte vigente passou `2597/2597` com `18161` asserts; lint,
+  typecheck, build sem sourcemaps, bundle `1563,57/1860 KB`, diff-check e
+  auditorias complementares retornaram exit `0`.
+- 2026-08-10: browser real confirmou o toaster em `390×844` dentro do viewport
+  (`x=16,width=356,right=372,scrollWidth=390`) e em `1440×900` sem overflow.
+- 2026-08-10: `origin/main`, PR #186, Vercel `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`
+  e `/api/health` foram reconciliados no merge
+  `82191012260208c6dc82e240cd78fdf4658fb6ba`; o diff final ainda é local.
+- 2026-08-10: revisão CodeRabbit do diff final retornou `0 issues`; `npm audit
+  --omit=dev` retornou zero vulnerabilidades; a busca de padrões de tokens nos
+  arquivos rastreados e não rastreados do diff não encontrou arquivos com
+  segredos. A validação Gitleaks do conteúdo staged será registrada antes do
+  commit.
 
 ### Completion Notes List
 
@@ -421,9 +448,13 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - A migração moderna das Edge Functions está implementada e validada somente
   localmente; fallback legado, revisão integral, deploy e smoke permanecem
   pendentes.
-- A correção atual é local e commitada; preview, CI remoto, produção, Sentry,
-  backup restaurável e a matriz integral de perfis continuam pendentes. A
-  story permanece `InProgress` e parcialmente concluída.
+- A correção histórica do cockpit do Dono foi local e commitada; preview, CI
+  remoto e produção desse PR foram posteriormente reconciliados, enquanto
+  Sentry, backup restaurável e a matriz integral de perfis continuam pendentes.
+  A story permanece `InProgress` e parcialmente concluída.
+- O gate final local desta retomada está aprovado, mas o diff ainda não foi
+  commitado/publicado; produção saudável no merge anterior não é prova do novo
+  Sonner/PageCanvas.
 
 ### File List
 
@@ -541,3 +572,13 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/styles/manager-visual-scope.css`
 - `src/styles/owner-base44-exact.css`
 - `supabase/functions/store-pre-registration/index.ts`
+- `src/App.tsx`
+- `src/index.css`
+- `src/features/checkin/Checkin.container.tsx`
+- `src/features/checkin/CheckinStickyHeader.test.ts`
+- `src/features/manager/daily-closing/ManagerDailyClosing.container.tsx`
+- `src/features/manager/daily-closing/ManagerDailyClosing.visual-contract.test.ts`
+- `src/test/sonner-layout.contract.test.ts`
+- `docs/superpowers/plans/2026-07-30-mx-unificacao-total.md`
+- `docs/reports/2026-07-30-mx-unificacao-total-progress.md`
+- `docs/reports/2026-07-30-mx-unificacao-total-final.md`

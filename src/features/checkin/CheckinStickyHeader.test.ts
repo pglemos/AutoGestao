@@ -29,6 +29,11 @@ describe('Checkin sticky header layout contract', () => {
     expect(sidebarShellSource).toContain('useFocusTrap(drawerRef, mobileOpen)')
   })
 
+  test('não cria um segundo landmark main dentro do shell universal', () => {
+    expect(checkinContainerSource).toContain('<PageCanvas as="div"')
+    expect(checkinContainerSource).not.toContain('<PageCanvas as="main"')
+  })
+
   test('keeps CRM totals as comparison while persisting only declared values', () => {
     expect(checkinHookSource).toContain('crmDailyCounters')
     expect(checkinHookSource).toContain('effectiveForm')

@@ -59,4 +59,14 @@ describe("ManagerDailyClosing visual contract", () => {
       'initialDimension={{ width: 320, height: 280 }}',
     );
   });
+
+  test("usa o PageCanvas canônico sem recuo local na rota gerencial", () => {
+    expect(source).toContain('from "@/design-system/page"');
+    expect(source).toContain(
+      '<PageCanvas as="div" width="dashboard" bottomClearance="navigation"',
+    );
+    expect(source).not.toContain(
+      'className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 pb-20"',
+    );
+  });
 });

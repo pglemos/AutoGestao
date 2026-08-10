@@ -487,7 +487,16 @@ export default function App() {
               </Route>
             </Routes>
           </Router>
-          <Toaster richColors closeButton expand visibleToasts={5} position="top-right" toastOptions={{ duration: 4000 }} />
+          <Toaster
+            richColors
+            closeButton
+            expand
+            visibleToasts={5}
+            position="top-right"
+            className="mx-sonner-toaster"
+            mobileOffset={{ top: 16, right: 16, bottom: 16, left: 16 }}
+            toastOptions={{ duration: 4000 }}
+          />
         </MotionConfig>
       </ErrorBoundary>
     </AuthProvider>

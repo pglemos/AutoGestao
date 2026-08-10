@@ -1,49 +1,50 @@
 # MX Unificação Total — Relatório Final
 
-> Relatório vivo de fechamento. Atualizado em 2026-08-03 após a publicação de `7387fb32` e a revalidação real do consultor.
+> Relatório vivo de fechamento. Atualizado em 2026-08-10 durante os gates finais
+> do worktree isolado; evidências históricas permanecem identificadas abaixo.
 
-> **Revalidação mais recente (2026-08-10):** os parágrafos que citam o SHA
-> `7387fb32`, deployments de 03/08 e a execução direta na `main` são históricos
-> e estão superseded como prova do estado atual. A retomada ocorreu no worktree
-> isolado da story, branch `feat/mx-unificacao-total-20260809`, sobre
-> `origin/main` `71d9286a`.
+> **Revalidação mais recente (2026-08-10):** os parágrafos que citam SHAs e
+> deployments anteriores são históricos. A prova vigente foi coletada no
+> branch `fix/mx-final-gates-20260810`, sobre o merge
+> `82191012260208c6dc82e240cd78fdf4658fb6ba`.
 
 ## Revalidação vigente — 2026-08-10
 
-- Correção local commitada em `a3ede247ed3db02a4aa0cbb1a97cd6f79670f75d`.
-- Causa raiz: a aba de performance do Dono desligava o `ConditionalPageCanvas`
-  e o `OwnerExecutiveCockpit` mantinha padding lateral próprio.
-- Correção: canvas habilitado para Dono com `as="div"`; padding próprio removido;
-  contrato RED/GREEN adicionado e restrito à abertura JSX real.
-- Gates locais: lint, typecheck, suíte (`2.594 pass`, `18.152 asserts`), build,
-  bundle (`1.567,08/1.860 KB gzip`), auditoria de rotas e `git diff --check`
-  passaram. O lint mantém somente o warning a11y histórico de `HelpTooltip.tsx`.
-- Browser local autenticado como Dono: `1440×900` e `390×844` passaram com um
-  canvas `DIV`, margens canônicas `32px`/`16px`, cockpit sem padding próprio,
-  um landmark `main`, zero overflow e console sem erros.
-- O PR #186 está aberto no GitHub; o preview está `READY` em
-  `https://mxperformance-git-feat-mx-unificacao-total-20260809-synvolt.vercel.app`.
-  O `/api/health` do preview retornou HTTP 200, `healthy`, ambiente `preview` e
-  release `79928725b4ce49ba48f94a418ad59623bcd9d65c`.
-- O workflow remoto `31353510899` passou nos gates protegidos, incluindo o
-  `authenticated-visual`; o TestSprite informativo falhou por “No tests
-  detected”. Produção ainda não foi promovida nesta retomada.
-- Pendências bloqueantes continuam: backup restaurável/PITR, prova independente
-  de source maps/Sentry, validação integral de perfis/rotas e rotação dos
-  segredos fornecidos na sessão.
+- Base do worktree: merge `82191012260208c6dc82e240cd78fdf4658fb6ba`; PR #186
+  está `MERGED` e `origin/main` aponta para esse SHA.
+- Correções locais: `ManagerDailyClosing`/skeleton no `PageCanvas` canônico,
+  `Checkin` sem landmark `main` aninhado e toaster Sonner contido no mobile.
+- RED/GREEN: contratos de PageCanvas/landmark passaram e o contrato novo do
+  Sonner falhou antes da implementação e passou isoladamente depois.
+- Gates locais vigentes: lint exit `0` (warning histórico em `HelpTooltip.tsx`),
+  typecheck exit `0`, `npm test` `2.597 pass / 0 fail / 18.161 asserts`, build
+  exit `0` sem sourcemaps públicos, bundle `1.563,57/1.860 KB gzip` e
+  `git diff --check` exit `0`.
+- Auditorias complementares: `validate:structure`, `validate:parity`,
+  `validate:agents`, `sync:ide:check`, `audit:routes-data`,
+  `audit:management-design-system` e `lint:a11y` passaram; warnings AIOX e
+  `HelpTooltip` permanecem históricos e não são tratados como falhas.
+- Browser local: toaster real em `390×844` ficou `x=16,width=356,right=372`,
+  com `scrollWidth=390`; em `1440×900`, `x=1060,width=356,right=1416`,
+  `scrollWidth=1440`. A captura mobile foi exibida na sessão.
+- Produção vigente: Vercel `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`, `READY`, aliases
+  oficiais; `/api/health` HTTP `200`, `healthy`, release exatamente igual ao
+  merge acima. Esse deployment ainda não contém o diff local desta retomada.
+- Estado: **local aprovado; produção atual saudável, mas o diff final ainda não
+  foi commitado, revisado em PR/preview nem promovido**.
 
 ## 39.1 Resumo executivo — estado vigente da retomada
 
-O repositório está no branch `feat/mx-unificacao-total-20260809`, com a fundação
+O repositório está no branch `fix/mx-final-gates-20260810`, sobre a fundação
 visual, tokens, PageCanvas, shell canônico, auditorias estáticas e validações
-de múltiplos perfis preservados. A correção desta retomada trata o cockpit do
-Dono: o `ConditionalPageCanvas` agora é habilitado com `as="div"` e o padding
-lateral duplicado foi removido. O PR #186 tem preview e CI protegido aprovados,
-mas ainda não foi promovido à produção.
+de múltiplos perfis já incorporadas ao merge `82191012`. Esta retomada fechou
+duas regressões estruturais e o overflow mobile do toaster, com testes e prova
+de navegador local.
 
-Status atual: **preview aprovado; prompt mestre permanece parcialmente
-concluído por produção ainda não promovida, backup restaurável/PITR, prova
-independente de source maps/Sentry, matriz integral e rotação de segredos**.
+Status atual: **gates locais aprovados; produção saudável no merge anterior;
+diff final aguardando commit, PR/preview e nova promoção**. O prompt mestre
+permanece parcial por backup restaurável/PITR, prova independente de
+source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 
 ## 39.2 Inventário
 
@@ -51,27 +52,41 @@ independente de source maps/Sentry, matriz integral e rotação de segredos**.
 - Tabelas: 127.
 - RPCs: 84.
 - Edge Functions: 14.
-- Componentes alterados nesta etapa: 5 componentes — `AdminHeader.tsx` e os 4 gráficos de Performance de Vendas.
+- Auditoria atual (`npm run audit:routes-data`): 109 rotas (101 protegidas, 8
+  públicas), 136 tabelas, 87 RPCs e 14 Edge Functions; os números acima são
+  inventário histórico do fechamento anterior e não devem ser usados como
+  contagem corrente.
+- Componentes alterados no fechamento anterior: `AdminHeader.tsx` e os 4
+  gráficos de Performance de Vendas (evidência histórica; não fazem parte do
+  gate final atual).
 - Inventário estruturado: `docs/audits/route-inventory.md` e `docs/audits/route-inventory.json`.
 - Biblioteca Atomic Design: inventário em `docs/audits/component-library-inventory.md` (24 atoms, 27 molecules, 6 organisms, 53 componentes `ui`, 8 stories; templates ainda não povoados).
 - Evidência visual: `visual-evidence/internal-mx/`, com route matrices, screenshots e métricas para os perfis/rotas cobertos; não representa captura integral de todas as combinações do prompt.
 - Shells, scopes e tokens: inventariados pelos scripts AIOX e auditorias anteriores; nenhuma alteração concorrente foi incorporada neste fechamento.
 - Total de páginas migradas e testes adicionados no histórico: não reestimado nesta etapa para evitar transformar inventário histórico em fato novo.
+- Arquivos do gate final local: `src/App.tsx`, `src/index.css`,
+  `src/features/checkin/Checkin.container.tsx`,
+  `src/features/checkin/CheckinStickyHeader.test.ts`,
+  `src/features/manager/daily-closing/ManagerDailyClosing.container.tsx`,
+  `src/features/manager/daily-closing/ManagerDailyClosing.visual-contract.test.ts`
+  e `src/test/sonner-layout.contract.test.ts`.
 
 ## 39.3 Evidências técnicas — estado vigente da retomada
 
-- Branch/PR: `feat/mx-unificacao-total-20260809` / #186, base `main`.
-- Commits da retomada: `a3ede247ed3db02a4aa0cbb1a97cd6f79670f75d` (correção) e
-  `79928725b4ce49ba48f94a418ad59623bcd9d65c` (documentação/contratos).
-- Gates locais registrados: `npm test` 2.594 pass / 0 fail / 18.152 asserts;
-  lint, typecheck, build, bundle, auditoria de rotas e `git diff --check` sem
-  falhas.
-- GitHub Actions run `31353510899`: gates protegidos, incluindo
-  `authenticated-visual`, `success`; o status informativo TestSprite falhou por
-  “No tests detected” e o Supabase Preview foi skipped por configuração.
-- Preview Vercel: `READY`, URL imutável
-  `https://mxperformance-git-feat-mx-unificacao-total-20260809-synvolt.vercel.app`;
-  `/api/health` converge para `79928725b4ce49ba48f94a418ad59623bcd9d65c`.
+- Branch/PR: `fix/mx-final-gates-20260810` / PR novo ainda não aberto, base `main`.
+- Base remota verificada: PR #186 `MERGED`, merge
+  `82191012260208c6dc82e240cd78fdf4658fb6ba`; sete workflows desse SHA
+  concluíram com sucesso.
+- Gates locais do diff final: lint/typecheck/build/diff-check exit `0`,
+  `npm test` `2597 pass / 0 fail / 18161 asserts`, bundle `1563,57/1860 KB`
+  gzip e auditorias estruturais/paridade/rotas sem erros.
+- Worktree está deliberadamente não commitado nesta medição; o SHA do novo
+  commit será acrescentado após a revisão do diff e antes do push.
+- Produção vigente: Vercel deployment
+  `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`, `READY`, aliases oficiais; `/api/health`
+  HTTP `200`, `healthy`, release igual ao merge `82191012`.
+- Preview do diff final: ainda não criado; não confundir a produção/preview do
+  PR #186 com a validação desta nova alteração.
 
 ## 39.4 Evidências visuais
 
@@ -81,6 +96,7 @@ independente de source maps/Sentry, matriz integral e rotação de segredos**.
 - Screenshot final pós-deploy revisado: `visual-evidence/internal-mx/administrador_geral-desktop-performance-vendas-final-f51ad48e.png`.
 - Viewport da captura: desktop Chrome, 1721x1233; rota `/relatorios/performance-vendas`; estado autenticado Administrador Geral, dados reais.
 - Smoke final: cabeçalho canônico presente, raio 16px, fundo branco, quatro gráficos com dimensões positivas, zero overflow e console vazio para warn/error.
+- Regressão Sonner: browser real em `390×844` mediu toaster `x=16,width=356,right=372` e `scrollWidth=390`; em `1440×900`, `x=1060,width=356,right=1416` e `scrollWidth=1440`.
 
 ## 39.5 Supabase
 
@@ -92,20 +108,24 @@ independente de source maps/Sentry, matriz integral e rotação de segredos**.
 
 - Projeto: `mxperformance` / equipe `synvolt`.
 - Node configurado: `24.x`.
-- Deployment de preview do PR #186: `READY`, URL imutável
-  `https://mxperformance-git-feat-mx-unificacao-total-20260809-synvolt.vercel.app`.
-- `/api/health` do preview retornou HTTP 200, `healthy`, com Vercel, Supabase
-  API, database e crons críticos `ok`; release reportada pelo health:
-  `79928725b4ce49ba48f94a418ad59623bcd9d65c`.
-- A produção `https://www.mxperformance.com.br` permanece a referência
-  operacional anterior e ainda precisa ser revalidada após o merge; READY do
-  preview não é prova de produção.
+- Produção `https://www.mxperformance.com.br`: deployment
+  `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`, `READY`, aliases oficiais ativos.
+- `/api/health` em 2026-08-10 retornou HTTP `200`, `healthy`, ambiente
+  `production`, release `82191012260208c6dc82e240cd78fdf4658fb6ba`, com Vercel,
+  Supabase API/database e crons críticos `ok`.
+- O diff final local ainda não foi promovido; rollback documentado para esta
+  etapa é manter/promover o deployment anterior enquanto o novo PR/preview não
+  passar.
 
 ## 39.7 Sentry
 
 - Organização/projeto confirmados por API: `synvolt` / `mx-performance-frontend`.
 - A evidência histórica confirma releases anteriores, mas não é usada como prova da release atual.
-- A inspeção do bundle servido e `/api/health` no deployment atual converge para a release Sentry `7387fb325dd645aaa2f832895e341c541c1f1d60`.
+- `/api/health` do deployment atual converge para o release de aplicação
+  `82191012260208c6dc82e240cd78fdf4658fb6ba`; isso não comprova por si só que
+  a release/source map correspondente foi aceita pelo Sentry.
+- A inspeção Sentry da release atual permanece pendente; as releases `7387fb32`
+  e `6d5eebe2` citadas abaixo são evidências históricas, não prova vigente.
 - Evento controlado histórico: `08093d7cae174d23824a5273fa42bb91`, `MxControlledSourceMapValidation`; não é usado como prova de alinhamento da release atual.
 - O build log do deployment registra `Upload type: artifact bundle` e o debug ID público `ff71a893-c507-4440-9653-17416b1f2be4` com seu `.js`/`.js.map` no `Source Map Upload Report`. A API legada de arquivos da release retornou `0`; o evento controlado foi gerado via DevTools e seu stack não é um frame do bundle, portanto a prova de stack trace desminificado permanece aberta.
 - `sentry-cli` global não está instalado; `npx @sentry/cli` `2.58.5` foi usado sem persistir credenciais.
@@ -131,3 +151,4 @@ independente de source maps/Sentry, matriz integral e rotação de segredos**.
 | P2 | 2 vulnerabilidades high no runtime principal | `react-router`/`react-router-dom` permanecem no range reportado pelo advisory; `brace-expansion` já foi atualizado no lockfile | `npm audit --omit=dev`: 2 high após a atualização | Avaliar correção compatível do React Router e validar a árvore `whatsapp-service` separadamente |
 | Info | `/home` para Administrador Geral | Rota bloqueada pela matriz de autorização | Produção exibiu mensagem de acesso negado sem erro/overflow | Não alterar sem requisito explícito; validar com perfil autorizado se necessário |
 | P1 | Backup restaurável não comprovado | Sem ponto de restauração testável para rollback de banco | Supabase `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
+| P1 | Diff final ainda não publicado | As correções de PageCanvas, landmark e Sonner estão somente no worktree final | `git status` local em `fix/mx-final-gates-20260810`; produção continua no merge `82191012` | Commitar, abrir PR, validar preview e promover somente após smoke/CI |

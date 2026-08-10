@@ -127,6 +127,20 @@ Reativar a conta de teste é decisão do solicitante — ver §3.3.
 viewports. `consultor_mx` permanece sem conta E2E ativa: a auditoria desse papel continua
 limitada ao bypass de desenvolvimento e não comprova conteúdo carregado por consultas reais.
 
+## 2.3 Estado medido em 2026-08-10 — gates finais
+
+| Item | Estado | Evidência |
+|---|---|---|
+| Regressão do fechamento gerencial | **corrigida localmente** | `ManagerDailyClosing` e skeleton usam `PageCanvas as="div" width="dashboard" bottomClearance="navigation"`; contrato visual GREEN |
+| Landmark duplicado do Checkin | **corrigido localmente** | `Checkin` usa `PageCanvas as="div"`; contrato impede `<PageCanvas as="main">` dentro do shell |
+| Overflow do toaster mobile | **corrigido localmente** | contrato RED/GREEN; browser real em `390×844` mediu `x=16,width=356,right=372`, `scrollWidth=390` |
+| Gates locais | **verdes** | lint, typecheck, `npm test` (`2597/0`, `18161` asserts), build sem sourcemaps, bundle `1563,57/1860 KB`, diff-check |
+| Auditorias AIOX/rotas | **verdes** | `validate:structure`, `validate:parity`, `validate:agents`, `sync:ide:check`, `audit:routes-data`, `audit:management-design-system`, `lint:a11y` |
+| Base remota | **reconciliada** | `origin/main` e produção no merge `82191012260208c6dc82e240cd78fdf4658fb6ba`; PR #186 merged; Vercel `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc` READY; `/api/health` 200/healthy |
+| Publicação do diff final | **pendente** | worktree `fix/mx-final-gates-20260810` ainda possui alterações não commitadas; próximo fluxo é commit → PR → preview → smoke → promoção |
+
+O novo PR deve manter rollback por deployment anterior (`dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`) e não tocar no banco: esta etapa não possui migration.
+
 ## 3. Decisões que precisam do solicitante
 
 1. **Gap 3:** manter a paridade visual Base44 (e portanto os scopes CSS e seus contratos de teste) ou removê-los, quebrando deliberadamente contratos de paridade que já foram aprovados? O briefing pede remoção; a memória do projeto registra "paridade Base44↔MX é visual, não só funcional" como requisito firme. Não resolvo isso por conta própria.

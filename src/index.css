@@ -1930,3 +1930,17 @@ body {
 .font-reference-sans .rounded-md {
   border-radius: 6px;
 }
+
+/* Sonner applies `width: 100%` to its mobile viewport and also offsets it
+ * from both sides. Keep the viewport itself inside the screen, then let each
+ * toast occupy that bounded surface instead of inheriting Sonner's narrower
+ * child width calculation. */
+@media (max-width: 600px) {
+  [data-sonner-toaster].mx-sonner-toaster {
+    width: min(var(--width), calc(100% - (var(--mx-space-4) * 2)));
+  }
+
+  [data-sonner-toaster].mx-sonner-toaster [data-sonner-toast] {
+    width: 100%;
+  }
+}

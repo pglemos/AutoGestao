@@ -1,13 +1,14 @@
 # MX Unificação Total — Progresso
 
-Atualizado em 2026-08-10 durante a retomada isolada no branch
-`feat/mx-unificacao-total-20260809`, commit local `a3ede247` sobre
-`origin/main` `71d9286a`. As observações abaixo da seção histórica de 03/08
-continuam preservadas, mas não são evidência atual deste checkout.
+Atualizado em 2026-08-10 no worktree isolado
+branch `fix/mx-final-gates-20260810`, sobre o merge de produção
+`82191012260208c6dc82e240cd78fdf4658fb6ba`. As observações abaixo das seções
+históricas continuam preservadas, mas não são evidência atual deste checkout.
 
-> **Estado vigente:** correção do PageCanvas do Dono implementada, testada,
-> validada localmente e comprovada no preview/CI remoto. Produção, Sentry e
-> backup restaurável ainda não foram aprovados nesta retomada.
+> **Estado vigente:** correções finais locais implementadas e testadas; a
+> produção atual é o merge `82191012` e ainda não contém o diff local desta
+> retomada. Backup restaurável/PITR, prova independente de source maps/Sentry e
+> matriz integral de perfis/rotas permanecem pendentes.
 
 ## Revalidação atual — 2026-08-10
 
@@ -57,8 +58,76 @@ também usava `p-mx-sm md:p-mx-lg`, duplicando a responsabilidade de margem.
 
 Correção local comprovada. A revisão Agy foi tentada em modo plano, mas a quota
 externa foi atingida antes de produzir parecer; não é contada como aprovação.
-O PR/preview/CI protegido já foram publicados e passaram; repetir a matriz
-autenticada em produção após o merge.
+O PR/preview/CI protegido foram publicados e passaram; o PR #186 foi depois
+mesclado no SHA `82191012260208c6dc82e240cd78fdf4658fb6ba`. Essa evidência é
+do diff anterior ao gate final abaixo.
+
+## Revalidação final — 2026-08-10 — gates do worktree isolado
+
+### Tarefa
+
+Fechar as regressões descobertas no smoke real de `/fechamento-diario`,
+`/vendedor/terminal-mx` e no toaster global mobile antes de abrir um novo PR.
+
+### Diagnóstico e causa raiz
+
+- `ManagerDailyClosing` ainda aplicava `max-w-7xl px-4` fora do `PageCanvas`
+  canônico.
+- `Checkin` renderizava `PageCanvas as="main"` dentro do `<main>` do shell,
+  criando dois landmarks.
+- Sonner aplicava `width: 100%` ao viewport mobile e offsets laterais ao
+  mesmo tempo; em `390px` o elemento terminava em `right=406px`.
+
+### Alterações e arquivos
+
+- `ManagerDailyClosing` e o skeleton agora usam `PageCanvas as="div"` com
+  `width="dashboard"` e clearance de navegação.
+- `Checkin` usa `PageCanvas as="div"`; o teste impede um segundo `main`.
+- O toaster global recebeu classe/offset mobile canônicos e uma regra CSS que
+  limita o viewport a `min(var(--width), 100% - 32px)`.
+- Teste novo: `src/test/sonner-layout.contract.test.ts`.
+- RED: o contrato do Sonner falhou antes da alteração; GREEN isolado: `1 pass`.
+
+### Testes executados
+
+- `npm run lint`: exit `0`; um warning a11y histórico em `HelpTooltip.tsx`.
+- `npm run typecheck`: exit `0`.
+- `npm test`: `2.597 pass / 0 fail / 18.161 asserts`.
+- `npm run build`: exit `0`; `assert_no_public_sourcemaps` passou.
+- `npm run check:bundle-size`: `1.563,57/1.860 KB gzip`; todos os chunks no
+  orçamento; `vendor-ui` em warning não bloqueante.
+- `git diff --check`: exit `0`.
+- `npm run validate:structure`, `validate:parity`, `validate:agents`,
+  `sync:ide:check`, `audit:routes-data`, `audit:management-design-system` e
+  `lint:a11y`: exit `0`; os avisos históricos de AIOX e `HelpTooltip` foram
+  preservados, sem erros.
+
+### Evidências de navegador
+
+- Vite do worktree foi executado com o `.env` do checkout principal apenas em
+  memória; nenhum `.env` foi copiado ou versionado.
+- Toast real em viewport `390×844`: `x=16`, `width=356`, `right=372`,
+  `document.documentElement.scrollWidth=390`.
+- Toast real em viewport `1440×900`: `x=1060`, `width=356`, `right=1416`,
+  `scrollWidth=1440`.
+- Captura visual mobile exibida na sessão mostra o toast dentro do viewport;
+  o servidor do Chrome recusou persistir o PNG fora das raízes configuradas.
+
+### Estado remoto reconciliado
+
+- `origin/main`: `82191012260208c6dc82e240cd78fdf4658fb6ba`.
+- PR #186: `MERGED`; workflows do SHA passaram.
+- Vercel produção: deployment `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`, `READY`,
+  aliases oficiais ativos.
+- `/api/health`: HTTP `200`, `healthy`, release exatamente igual ao SHA acima;
+  Vercel, Supabase API/database e crons críticos `ok`.
+- O diff deste worktree ainda não foi publicado nem validado em preview.
+
+### Resultado e próximo passo
+
+Gates locais e a geometria do toaster passaram. Próximo passo: atualizar a
+story/relatório final, revisar o diff, commitar, abrir PR e validar preview
+antes de qualquer promoção; produção só será revalidada depois desse fluxo.
 
 ## Tarefa
 
