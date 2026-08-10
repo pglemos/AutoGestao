@@ -9,6 +9,10 @@ const routeSource = readFileSync(
   new URL('../../../pages/RotinaGerente.tsx', import.meta.url),
   'utf8',
 )
+const viewSource = readFileSync(
+  new URL('./ManagerDayRoutineView.tsx', import.meta.url),
+  'utf8',
+)
 
 describe('ManagerDayRoutine canonical sources', () => {
   test('routes the manager page through the canonical container', () => {
@@ -32,5 +36,17 @@ describe('ManagerDayRoutine canonical sources', () => {
     expect(containerSource).toContain(".from('execution_actions')")
     expect(containerSource).toContain(".eq('source_type', 'manual')")
     expect(containerSource).toContain('countsForScore: row.counts_for_score')
+  })
+
+  test('uses the canonical PageCanvas and leaves page spacing to the shared layout', () => {
+    expect(containerSource).toContain("import { PageCanvas } from '@/design-system/page'")
+    expect(containerSource).toContain(
+      '<PageCanvas as="div" width="dashboard" bottomClearance="navigation"',
+    )
+    expect(containerSource).not.toContain('min-h-full bg-gray-50')
+    const viewComponentSource = viewSource.slice(viewSource.indexOf('export function ManagerDayRoutineView'))
+    const viewRoot = viewComponentSource.match(/return\s*\(\s*(<div className="[^"]+">)/)?.[1]
+    expect(viewRoot).toBe('<div className="flex flex-col gap-5">')
+    expect(viewRoot).not.toMatch(/(?:mx-auto|max-w-7xl|px-4|py-6)/)
   })
 })

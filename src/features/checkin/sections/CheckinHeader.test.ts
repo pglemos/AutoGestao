@@ -111,9 +111,11 @@ describe('CheckinHeader — Produção Zero com seletor de data', () => {
     })
 
     test('data retroativa usa escopo historical; data ativa usa daily', () => {
-        expect(headerSource).toContain("isActiveDate ? 'daily' : 'historical'")
+        expect(headerSource).toContain('if (isActiveDate)')
+        expect(headerSource).toContain("saveCheckin(placeholderPayload, isActiveDate ? 'daily' : 'historical', productionZeroDate)")
+        expect(headerSource).toContain("          'daily',\n          productionZeroDate,")
         expect(headerSource).toContain('isActiveDate = productionZeroDate === activeClosingDate')
-        expect(headerSource).not.toContain("'daily',\n        activeClosingDate,\n        activeClosingDate")
+        expect(headerSource).not.toContain("saveCheckin(placeholderPayload, 'daily', productionZeroDate)")
     })
 
     test('fechamentos concluídos ficam indisponíveis no seletor (regularização é o caminho)', () => {
@@ -127,5 +129,15 @@ describe('CheckinHeader — Produção Zero com seletor de data', () => {
 
     test('descrição do modal acompanha a data selecionada', () => {
         expect(headerSource).toContain('Escolha o motivo para {productionZeroDate.split')
+    })
+
+    test('seletor de data usa a escala tipográfica canônica', () => {
+        const selectorSource = headerSource.slice(
+            headerSource.indexOf('<div className="grid grid-cols-4 gap-2"'),
+            headerSource.indexOf('<div className="space-y-3" role="radiogroup" aria-label="Motivo da Produção Zero">'),
+        )
+        expect(selectorSource).not.toMatch(/text-\[(?:10|11)px\]/)
+        expect(selectorSource).toContain('text-caption font-extrabold uppercase leading-none">{weekdayFormatted}')
+        expect(selectorSource).toContain('text-caption font-bold leading-none">{formattedDate}')
     })
 })

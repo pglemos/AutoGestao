@@ -32,9 +32,8 @@ export function HelpTooltip({
     <TooltipProvider delayDuration={50}>
       <Tooltip open={open} onOpenChange={setOpen}>
         <TooltipTrigger asChild>
-          <span
-            role="button"
-            tabIndex={0}
+          <button
+            type="button"
             aria-label="Ajuda"
             onPointerDown={event => event.stopPropagation()}
             onMouseDown={event => {
@@ -50,10 +49,10 @@ export function HelpTooltip({
             onMouseLeave={() => setOpen(false)}
             onFocus={() => setOpen(true)}
             onBlur={() => setOpen(false)}
-            className={`inline-flex cursor-help items-center justify-center align-middle text-gray-400 transition-colors hover:text-emerald-600 focus:outline-none ${className}`}
+            className={`inline-flex cursor-help items-center justify-center border-0 bg-transparent p-0 align-middle text-gray-400 transition-colors hover:text-emerald-600 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30 ${className}`}
           >
             <HelpCircle size={14} strokeWidth={2.25} />
-          </span>
+          </button>
         </TooltipTrigger>
         <Content
           side={side}
