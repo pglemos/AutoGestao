@@ -1,14 +1,79 @@
 # MX Unificação Total — Relatório Final
 
-> Relatório vivo de fechamento. Atualizado em 2026-08-10 durante os gates finais
-> do worktree isolado; evidências históricas permanecem identificadas abaixo.
+> Relatório vivo de fechamento. Atualizado em 2026-08-10 durante a revalidação
+> final do PR; evidências históricas permanecem identificadas abaixo.
 >
-> **Revalidação mais recente (2026-08-10):** os parágrafos que citam SHAs e
-> deployments anteriores são históricos. A prova vigente foi coletada no
-> branch `fix/mx-final-gates-20260810`, sobre o merge
+> **Revalidação vigente (2026-08-10):** a implementação está no branch
+> `fix/mx-final-gates-20260810`, com SHA remoto
+> `4c7b906d653a9af00969d75313ea6c9756f5bbc0`. A produção continua
+> deliberadamente no merge saudável anterior
 > `82191012260208c6dc82e240cd78fdf4658fb6ba`.
 
-## Revalidação vigente — 2026-08-10
+## Revalidação vigente — 2026-08-10 — PR #187
+
+- Worktree e branch: `fix/mx-final-gates-20260810`; implementação publicada no
+  SHA `4c7b906d653a9af00969d75313ea6c9756f5bbc0`; PR #187 está `OPEN` contra
+  `main`, com 67 arquivos alterados.
+- Correções entregues: `ManagerDailyClosing`/skeleton no `PageCanvas` canônico,
+  `Checkin` sem landmark `main` aninhado, toaster Sonner contido e release
+  Sentry normalizada no build.
+- Migrations e guards locais: replay dos 39 stubs históricos, grants de
+  `authenticated` em 22 helpers RLS e hardening idempotente de auditoria/backup;
+  nenhuma dessas migrations foi aplicada ao projeto Supabase remoto.
+- Gates locais vigentes: lint, typecheck, `npm test` (`2.600 pass / 0 fail /
+  18.173 asserts`), build sem sourcemaps públicos, bundle `1.563,53/1.860 KB
+  gzip`, checksums (`400` válidas), reversibilidade (`44`) e auditorias
+  complementares passaram. O warning de `HelpTooltip.tsx` é histórico.
+- O build emitiu seis warnings não bloqueantes do otimizador CSS para classes
+  arbitrárias já existentes; o comando terminou com exit `0` e a checagem de
+  sourcemaps públicos passou.
+- CI autenticado visual `31373014149`: passou. A matriz do Dono foi pulada por
+  ausência de `E2E_OWNER_EMAIL`; isso não é contado como aprovação dessa matriz.
+  `TestSprite Pre-Check` falhou externamente com `No tests detected`; os
+  findings efetivos do CodeRabbit foram corrigidos e a nova execução após o
+  último ajuste foi bloqueada por limite de uso.
+- Preview manual do mesmo SHA: deployment
+  `dpl_2u51UvwJcSGBB1igRsuC4V3hXVY4`, URL
+  `https://mxperformance-dfk3mk6sf-synvolt.vercel.app`, estado `READY`. O
+  `/api/health` retornou HTTP `200`, `healthy`, ambiente `preview`, release
+  exata `4c7b906d653a9af00969d75313ea6c9756f5bbc0`, e checks Vercel, Supabase
+  API, database e crons críticos `ok`; `/login` retornou HTTP `200`.
+- Browser real no Preview: Dono, Gerente e Vendedor autenticaram com HTTP 200;
+  em `1440×900` e `390×844` houve um único `main` e zero overflow. O menu
+  mobile abriu para Gerente e Vendedor. O console ainda registra a CSP do
+  `vercel.live/feedback.js` bloqueando a instrumentação externa do Preview;
+  isso é separado do runtime funcional do app e impede declarar console
+  totalmente limpo.
+- Check Vercel oficial do PR: deployment
+  `dpl_3q1DcfxehHJqUoqn1s73xUZ7K7sT`, exatamente no SHA acima, terminou
+  `BUILD_FAILED / Resource provisioning failed`. A API de redeploy retornou
+  `404`; a CLI autenticada retornou `Deployment belongs to a different team`.
+  Esse check não foi convertido em verde por intervenção manual.
+- Sentry: a release `4c7b906d653a9af00969d75313ea6c9756f5bbc0` existe em
+  `synvolt/mx-performance-frontend`, com um deployment associado ao Preview;
+  eventos reais de `/login`, `/home` e `/dono` e um evento controlado em
+  `preview` foram recebidos com tags de rota, papel, deployment e release. O
+  evento controlado carregou debug metadata com debug ID e source map
+  associado; a confirmação de frame/stack TypeScript desminificado permanece
+  pendente. O conector MCP exige reautenticação nesta sessão; a prova foi
+  coletada por API autenticada em runtime e não inclui credenciais no relatório.
+- Supabase: projeto `fbhcmzzgwjdgkctlfvbo`, `ACTIVE_HEALTHY`, região `sa-east-1`,
+  PostgreSQL 17; 357 migrations remotas. Advisors read-only: 159 avisos de
+  segurança e 598 de performance. A API de backups físicos lista 8 itens
+  `COMPLETED`, incluindo `2026-08-10`; a consulta separada de restore/PITR
+  retornou `backups: []` e `pitr_enabled=false`. São superfícies distintas:
+  a primeira comprova retenção de snapshots, não um restore testado; portanto
+  restauração temporal e rollback de banco continuam sem prova.
+- Produção: `https://www.mxperformance.com.br/api/health` retornou HTTP `200`,
+  `healthy`, `production`, release
+  `82191012260208c6dc82e240cd78fdf4658fb6ba`, com Vercel, Supabase API/database
+  e crons críticos `ok`. O diff do PR #187 não foi promovido.
+- Estado: **PARCIALMENTE CONCLUÍDO / BLOCKED_EXTERNAL** para a publicação final.
+  A produção saudável foi preservada; não houve DDL remoto nem promoção enquanto
+  o check oficial do Vercel, PITR/restore, matriz integral e demais gates do
+  prompt permanecerem abertos.
+
+## Revalidação histórica — antes da reconciliação do PR #187
 
 - Base do worktree: merge `82191012260208c6dc82e240cd78fdf4658fb6ba`; PR #186
   está `MERGED` e `origin/main` aponta para esse SHA.
@@ -57,7 +122,7 @@
   forward-only das relações auxiliares está no checkout e ainda precisa do novo
   CI efêmero.
 
-## 39.1 Resumo executivo — estado vigente da retomada
+## 39.1 Resumo executivo — registro histórico da retomada
 
 O repositório está no branch `fix/mx-final-gates-20260810`, sobre a fundação
 visual, tokens, PageCanvas, shell canônico, auditorias estáticas e validações
@@ -70,7 +135,7 @@ patch final aguardando commit, CI/Preview e nova promoção**. O prompt mestre
 permanece parcial por backup restaurável/PITR, prova independente de
 source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 
-## 39.2 Inventário
+## 39.2 Inventário — registro histórico
 
 - Rotas: 111 (103 protegidas, 8 públicas).
 - Tabelas: 127.
@@ -95,7 +160,7 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
   `src/features/manager/daily-closing/ManagerDailyClosing.visual-contract.test.ts`
   e `src/test/sonner-layout.contract.test.ts`.
 
-## 39.3 Evidências técnicas — estado vigente da retomada
+## 39.3 Evidências técnicas — registro histórico anterior ao SHA `4c7b906d`
 
 - Branch/PR: `fix/mx-final-gates-20260810` / PR #187 aberto, base `main`.
 - Base remota verificada: PR #186 `MERGED`, merge
@@ -125,7 +190,7 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 - Preview do diff final: ainda não criado; não confundir a produção/preview do
   PR #186 com a validação do próximo SHA do PR #187.
 
-## 39.4 Evidências visuais
+## 39.4 Evidências visuais — registro histórico
 
 - Evidências existentes: `visual-evidence/internal-mx/`.
 - Falha reproduzida: rota `performance-vendas`, em desktop/tablet/mobile, por ausência do cabeçalho canônico.
@@ -135,7 +200,7 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 - Smoke final: cabeçalho canônico presente, raio 16px, fundo branco, quatro gráficos com dimensões positivas, zero overflow e console vazio para warn/error.
 - Regressão Sonner: browser real em `390×844` mediu toaster `x=16,width=356,right=372` e `scrollWidth=390`; em `1440×900`, `x=1060,width=356,right=1416` e `scrollWidth=1440`.
 
-## 39.5 Supabase
+## 39.5 Supabase — registro histórico anterior à consulta de 2026-08-10
 
 - Projeto confirmado: `fbhcmzzgwjdgkctlfvbo`.
 - A nova migration de ACL é somente local nesta medição. O CI efêmero deve
@@ -151,7 +216,7 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
   somente local; nenhuma migration foi aplicada ao projeto Supabase remoto
   nesta retomada.
 
-## 39.6 Vercel — estado vigente da retomada
+## 39.6 Vercel — registro histórico anterior ao SHA `4c7b906d`
 
 - Projeto: `mxperformance` / equipe `synvolt`.
 - Node configurado: `24.x`.
@@ -164,7 +229,7 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
   etapa é manter/promover o deployment anterior enquanto o novo PR/preview não
   passar.
 
-## 39.7 Sentry
+## 39.7 Sentry — registro histórico anterior ao SHA `4c7b906d`
 
 - Organização/projeto confirmados por API: `synvolt` / `mx-performance-frontend`.
 - A evidência histórica confirma releases anteriores, mas não é usada como prova da release atual.
@@ -186,17 +251,20 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 - O caminho `.js.map` do bundle atual retornou o `index.html` da rewrite (`text/html`), não um source map público.
 - CodeRabbit CLI `0.7.1` autenticado executou revisão contra `1480ea42` e reportou 6 issues. As duas issues documentais foram corrigidas; 1 crítica, 1 major e 2 menores permanecem em arquivos concorrentes de pré-cadastro/teste, não alterados para preservar o trabalho externo.
 
-## 39.8 Pendências
+## 39.8 Pendências — consolidação após a revalidação de 2026-08-10
 
 | Prioridade | Pendência | Impacto | Evidência | Ação |
 |---|---|---|---|---|
 | P1 | Auditoria histórica de segredos | 77 achados antigos, incluindo sessão do WhatsApp e scripts com chaves; não introduzidos pelo release | Gitleaks manual run `30847366721`; Gitleaks push run `30847358188` passou no último commit | Rotacionar credenciais afetadas e planejar limpeza de histórico com backup/recuperação antes de reescrever `main` |
 | P1 | Comprovar stack trace desminificado da release atual | Bundle e health estão alinhados, mas a listagem legada histórica retornou 0 e o evento controlado não veio de um frame do bundle | Bundle `index-DCQ64CaR.js`; `/api/health` em 2026-08-03; evento histórico `08093d7cae174d23824a5273fa42bb91` | Provocar uma exceção a partir de um módulo do bundle em preview e confirmar frame TypeScript, source map, alertas e performance |
 | P1 | Issues CodeRabbit em arquivos concorrentes | 1 crítica, 1 major e 2 menores permanecem fora deste escopo | Revisão CLI `0.7.1`, base `1480ea42`; arquivos `supabase/functions/store-pre-registration/index.ts` e teste associado | O proprietário do trabalho concorrente deve corrigir e revalidar sem sobrescrita |
-| P2 | Rotação das credenciais e tokens fornecidos na conversa | Redução de risco de exposição | Segredos foram compartilhados em texto | Rotacionar após o encerramento operacional |
+| P1 | Rotação das credenciais e tokens fornecidos na conversa | Exposição de credenciais continua sendo incidente imediato | Segredos foram compartilhados em texto; não há evidência de rotação nesta revalidação | Rotacionar imediatamente, atualizar consumidores e invalidar os valores anteriores antes de qualquer promoção |
 | P2 | 133 alertas Dependabot abertos | Risco de dependências no default branch | API paginada atual: 3 críticas, 70 altas, 47 moderadas, 13 baixas; alertas distribuídos em `.aiox-core`, `whatsapp-service` e backends auxiliares | Triar e atualizar por pacote e subprojeto; responsável: manutenção do repositório |
-| P2 | 2 vulnerabilidades high no runtime principal | `react-router`/`react-router-dom` permanecem no range reportado pelo advisory; `brace-expansion` já foi atualizado no lockfile | `npm audit --omit=dev`: 2 high após a atualização | Avaliar correção compatível do React Router e validar a árvore `whatsapp-service` separadamente |
+| Resolvido (histórico) | Vulnerabilidades high no runtime principal | O checkpoint de 2026-08-03 registrou `react-router`/`react-router-dom`; a revalidação atual não reproduz o finding | `npm audit --omit=dev` em 2026-08-10: 0 vulnerabilidades no grafo de produção auditado (`critical=0`, `high=0`, `moderate=0`, `low=0`); runtime `7.18.2` | Manter o audit no gate de cada release |
 | Info | `/home` para Administrador Geral | Rota bloqueada pela matriz de autorização | Produção exibiu mensagem de acesso negado sem erro/overflow | Não alterar sem requisito explícito; validar com perfil autorizado se necessário |
-| P1 | Backup restaurável não comprovado | Sem ponto de restauração testável para rollback de banco | Supabase `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
-| P1 | Patch final ainda não publicado | As correções de PageCanvas, landmark, Sonner e grants RLS estão somente no worktree final | PR #187 aberto; `git status` local em `fix/mx-final-gates-20260810`; produção continua no merge `82191012` | Revisar, commitar, pushar, validar `pgTAP`/Preview e promover somente após smoke/CI |
-| P1 | Replay/grants RLS ainda sem prova remota | O primeiro SHA falhou no histórico duplicado; o SHA seguinte falhou na ACL de `eh_area_interna_mx` | CI runs `31363182145` e `31366214127`; migration nova, guard e manifest `399` locais | Executar CI novo e exigir `pgTAP RLS Matrix` verde antes do smoke/produção |
+| P1 | Backup restaurável não comprovado | Snapshots físicos concluídos não equivalem a ponto de restauração testado | API de backups físicos: 8 `COMPLETED`; API de restore/PITR: `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
+| P1 | Check oficial Vercel do PR falhou | O deployment integrado terminou `BUILD_FAILED / Resource provisioning failed`, embora o Preview manual do mesmo SHA esteja `READY` | `dpl_3q1DcfxehHJqUoqn1s73xUZ7K7sT`; redeploy MCP `404`; CLI `Deployment belongs to a different team` | Reconciliar equipe/integração Vercel e obter check oficial verde antes do merge |
+| P1 | Replay/grants RLS ainda sem prova remota | O primeiro SHA falhou no histórico duplicado; o SHA seguinte falhou na ACL de `eh_area_interna_mx` | CI runs `31363182145` e `31366214127`; migrations/guards locais no SHA `4c7b906d` | Exigir `pgTAP RLS Matrix` verde no próximo SHA antes de merge/promoção |
+| P1 | Patch final ainda não promovido | O patch está publicado no PR e validado no Preview manual, mas produção continua no merge `82191012` | PR #187, SHA `4c7b906d`; Preview `dpl_2u51UvwJcSGBB1igRsuC4V3hXVY4`; produção `/api/health` `200/healthy` | Promover somente após check Vercel oficial, CI completo e smoke final |
+| P1 | Matriz integral de perfis/rotas/estados/viewports | Dono/Gerente/Vendedor foram validados no Preview em dois breakpoints; Owner matrix do CI foi pulado por credencial ausente | CI `31373014149`; browser real do Preview; `E2E_OWNER_EMAIL` ausente | Provisionar credenciais de teste e completar a matriz do prompt sem contar skips como aprovação |
+| P2 | Console do Preview contém bloqueio externo | `vercel.live/feedback.js` é bloqueado pela CSP, sem falha funcional do app | console do Preview manual | Documentar/corrigir conscientemente a instrumentação antes de exigir console totalmente limpo |

@@ -4,6 +4,14 @@
 
 **InProgress**
 
+> **Revalidação vigente — 2026-08-10:** a implementação final está publicada
+> no PR #187, branch `fix/mx-final-gates-20260810`, SHA
+> `4c7b906d653a9af00969d75313ea6c9756f5bbc0`. O Preview manual do mesmo SHA
+> está `READY` e passou health/smoke autenticado parcial; a produção permanece
+> no merge saudável `82191012260208c6dc82e240cd78fdf4658fb6ba`. O check Vercel
+> oficial falhou por `Resource provisioning failed` e o redeploy não pôde ser
+> executado no contexto disponível. A story permanece `InProgress`.
+
 ## Executor Assignment
 
 ```yaml
@@ -77,9 +85,11 @@ anteriores de conclusão não contam como evidência nova.
 7. Supabase possui migrations alinhadas e reversíveis, backup confirmado,
    RLS/RPC/Auth/Storage/Realtime/advisors revisados e matriz por papel
    executada sem desabilitar proteções.
-8. GitHub, Vercel e Sentry são inventariados e configurados no projeto correto.
-   Variáveis são comparadas apenas por nome/presença; nenhum segredo aparece em
-   código, Git, logs, screenshots ou relatório.
+8. GitHub, Vercel e Sentry são inventariados, e projeto/equipe/ambiente,
+   releases e endpoints são reconciliados por identificadores não secretos.
+   Variáveis podem ser comparadas por nome/presença, mas presença sozinha não
+   prova configuração efetiva; nenhum segredo aparece em código, Git, logs,
+   screenshots ou relatório.
 9. Preview aprovado precede produção. O preview e a produção são validados com
    autenticação real, console/network, `/api/health`, logs, Sentry, release,
    source maps, smoke e rollback disponível.
@@ -112,7 +122,11 @@ anteriores de conclusão não contam como evidência nova.
   - [ ] Validar perfis e páginas na ordem do prompt.
 - [ ] Fases 6–8 — dados, deploy e observabilidade (AC: 7, 8, 9)
   - [ ] Validar backup, migrations, RLS, RPC, Auth, Storage e Realtime.
-  - [ ] Validar matriz de variáveis, preview, health e Sentry.
+  - [x] Validar Preview manual, health e Sentry da release do PR; a presença
+    nominal das variáveis foi apenas inventariada.
+  - [ ] Validar valores não secretos esperados, projeto/equipe/ambiente e
+    endpoints do deployment; o check Vercel integrado e o stack trace completo
+    ainda estão pendentes.
   - [ ] Publicar produção apenas quando os gates bloqueantes passarem.
 - [ ] Fases 9–12 — qualidade, segurança e operação (AC: 10, 11)
   - [ ] Executar matriz de testes e segurança.
@@ -121,8 +135,11 @@ anteriores de conclusão não contam como evidência nova.
 - [ ] Fases 13–14 — entrega (AC: 12, 13)
   - [x] Atualizar checkboxes, Dev Agent Record e File List.
   - [x] Revisar diff, executar quality gate e secret scan.
-  - [ ] Commitar/publicar o patch do PR #187 e executar deploy via autoridade
-    AIOX DevOps.
+  - [x] Commitar/publicar a implementação do PR #187 no SHA
+    `4c7b906d653a9af00969d75313ea6c9756f5bbc0` e criar o Preview manual pelo
+    fluxo AIOX DevOps.
+  - [ ] Reconciliar o check Vercel oficial, observar novo CI e promover somente
+    após todos os gates externos passarem.
   - [ ] Entregar relatório final baseado nas evidências atuais.
 - [x] Gate final local — regressões PageCanvas, landmark e Sonner reproduzidas,
   corrigidas com contratos RED/GREEN e validadas no browser em `390×844` e
@@ -132,8 +149,9 @@ anteriores de conclusão não contam como evidência nova.
 - [x] Reconciliar a base publicada — PR #186 merged em
   `82191012260208c6dc82e240cd78fdf4658fb6ba`; Vercel `READY` e health de
   produção `200/healthy` no mesmo SHA.
-- [ ] Publicar o diff final — ainda requer commit, PR, preview, smoke e nova
-  promoção; backup/PITR, Sentry independente e matriz integral continuam abertos.
+- [ ] Publicar o diff final em produção — o patch já tem commit, PR, Preview
+  manual, health e smoke autenticado parcial; check Vercel oficial,
+  backup/PITR, matriz integral e promoção continuam abertos.
 - [x] Diagnosticar a falha de ACL do `pgTAP RLS Matrix` e preparar migration
   forward-only com grants explícitos para `authenticated`, mantendo `anon`
   revogado; a confirmação remota permanece pendente.
@@ -219,6 +237,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-08-10 | 0.3.3 | Marcador de histórico deixou de pré-registrar 39 stubs ativos após falha reproduzida no pgTAP RLS; aguardando CI novo | Dex (Dev) |
 | 2026-08-10 | 0.3.4 | ACL dos 22 helpers RLS restaurada para `authenticated`, `grants_guard` ampliado e PR #187 documentado; aguardando CI | Dex (Dev) |
 | 2026-08-10 | 0.3.5 | Findings acionáveis do CodeRabbit corrigidos; hardening forward-only idempotente para auditoria/backup e guard pgTAP ampliado para 19 invariantes | Dex (Dev) |
+| 2026-08-10 | 0.3.6 | PR #187 publicado no SHA `4c7b906d`; Preview manual `READY`, health/smoke autenticado parcial e bloqueios externos reconciliados; story permanece InProgress | Gage (DevOps) |
 
 ## Dev Agent Record
 
@@ -288,7 +307,7 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - 2026-07-29: CodeRabbit apontou um conflito de rotulagem da contagem
   intermediária; corrigido. A repetição do review foi limitada por cota por 38
   minutos, sem novo parecer final.
-- 2026-07-29: `npm audit --omit=dev` isolou 2 pacotes high de runtime por um
+- Histórico de 2026-07-29: `npm audit --omit=dev` isolou 2 pacotes high de runtime por um
   advisory RSC sem superfície nesta SPA. O teste de downgrade para React Router
   7.11.0 foi revertido por introduzir open redirect/XSS e DoS aplicáveis; a
   árvore voltou integralmente a 7.18.2.
@@ -314,9 +333,9 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   preview/backup: o inventário por nome confirmou legado e chave moderna na
   Vercel nos três ambientes, nenhuma `service_role` no GitHub Actions, 17
   fontes de Edge Functions e 34 scripts com dependência do nome legado. A
-  exceção de cutover expira em 2026-07-30 18:00 BRT; depois disso os consumidores
-  devem estar migrados e o legado desabilitado, ou os workloads afetados devem
-  ser bloqueados com nova exceção nominal mais curta.
+  exceção de cutover expirava em 2026-07-30 18:00 BRT; depois disso os
+  consumidores deveriam estar migrados e o legado desabilitado, ou os workloads
+  afetados deveriam estar bloqueados com nova exceção nominal mais curta.
 - 2026-07-29: a repetição do CodeRabbit apontou dois majors válidos. Foi criada
   uma matriz consumidor por consumidor com owner, evidência, substituição,
   teste e desativação, além de gate de expurgo para Git completo, logs,
@@ -423,7 +442,7 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   e `/api/health` foram reconciliados no merge
   `82191012260208c6dc82e240cd78fdf4658fb6ba`; o diff final ainda é local.
 - 2026-08-10: revisão CodeRabbit do diff final retornou `0 issues`; `npm audit
-  --omit=dev` retornou zero vulnerabilidades; a busca de padrões de tokens nos
+  --omit=dev` retornou zero vulnerabilidades no grafo de produção auditado; a busca de padrões de tokens nos
   arquivos rastreados e não rastreados do diff não encontrou arquivos com
   segredos. A validação Gitleaks do conteúdo staged será registrada antes do
   commit.
@@ -453,6 +472,37 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   negativos semeados. A suíte completa reexecutada passou `2597/2597`
   com `18162` asserts; o primeiro run teve uma falha flakey de foco e passou
   isoladamente em três repetições e na reexecução completa.
+- 2026-08-10: o PR #187 foi reconciliado no SHA remoto
+  `4c7b906d653a9af00969d75313ea6c9756f5bbc0`. O CI visual autenticado
+  `31373014149` passou, com a matriz do Dono pulada por ausência de
+  `E2E_OWNER_EMAIL`; o `TestSprite Pre-Check` falhou com `No tests detected`.
+  Os findings efetivos do CodeRabbit foram corrigidos; a nova execução após o
+  último ajuste foi bloqueada por limite de uso.
+- 2026-08-10: o Preview manual `dpl_2u51UvwJcSGBB1igRsuC4V3hXVY4`, em
+  `https://mxperformance-dfk3mk6sf-synvolt.vercel.app`, ficou `READY`; health
+  retornou `200/healthy` com release exata e checks de Vercel/Supabase/database/
+  crons `ok`. Dono, Gerente e Vendedor autenticaram no browser real em
+  `1440×900` e `390×844`, com um `main` e zero overflow; o menu mobile abriu
+  para Gerente e Vendedor.
+- 2026-08-10: o deployment Vercel oficial do PR
+  `dpl_3q1DcfxehHJqUoqn1s73xUZ7K7sT` terminou `BUILD_FAILED / Resource
+  provisioning failed`. A API de redeploy retornou `404` e a CLI retornou
+  `Deployment belongs to a different team`; o bloqueio permanece externo.
+- 2026-08-10: Sentry confirmou release `4c7b906d` no projeto
+  `mx-performance-frontend`, eventos de `/login`, `/home`, `/dono` e evento
+  controlado de Preview com tags e debug metadata de source map. Supabase
+  confirmou projeto `ACTIVE_HEALTHY`, 357 migrations, advisors read-only de
+  segurança/performance (`159`/`598`) e 8 backups físicos `COMPLETED`; a
+  consulta separada de restore/PITR retornou `backups: []` e
+  `pitr_enabled=false`; nenhum restore ou DDL remoto foi executado.
+- 2026-08-10: a reexecução constitucional após a atualização documental passou
+  `npm run lint`, `npm run typecheck`, `npm test` (`2600 pass / 0 fail /
+  18173 asserts`), `npm run build`, `npm run check:bundle-size` (`1563,53/1860
+  KB gzip`), `npm audit --omit=dev` (0 vulnerabilidades no grafo de produção
+  auditado; runtime `react-router`/`react-router-dom` `7.18.2`) e
+  `git diff --check`.
+  O build emitiu seis warnings não bloqueantes do otimizador CSS para classes
+  arbitrárias já existentes; não houve sourcemap público.
 
 ### Completion Notes List
 
@@ -475,9 +525,9 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   `InProgress` por seus gates independentes de revisão, observabilidade, backup
   e rollback.
 - Segredos removidos do estado corrente permanecem no histórico. A rotação da
-  `service_role` e das demais credenciais expostas é um incidente imediato, não
-  um gate posterior ao preview; a substituição coordenada dos consumidores tem
-  exceção operacional somente até 2026-07-30 18:00 BRT.
+  `service_role` e das demais credenciais expostas permanece incidente imediato
+  e bloqueador; a exceção operacional de cutover de 2026-07-30 18:00 BRT está
+  expirada, e esta revalidação não contém evidência de rotação concluída.
 - A migração moderna das Edge Functions está implementada e validada somente
   localmente; fallback legado, revisão integral, deploy e smoke permanecem
   pendentes.
@@ -485,9 +535,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   remoto e produção desse PR foram posteriormente reconciliados, enquanto
   Sentry, backup restaurável e a matriz integral de perfis continuam pendentes.
   A story permanece `InProgress` e parcialmente concluída.
-- O gate final local desta retomada está aprovado, mas o diff ainda não foi
-  commitado/publicado; produção saudável no merge anterior não é prova do novo
-  Sonner/PageCanvas.
+- O gate final local desta retomada está aprovado e o diff foi publicado no PR
+  #187; o Preview manual comprova o novo Sonner/PageCanvas, mas produção
+  saudável no merge anterior não é prova de promoção do patch.
+- O check Vercel oficial do PR permanece `BUILD_FAILED / Resource provisioning
+  failed`; o Preview manual `READY` não substitui esse check integrado.
 - O replay de migrations corrigido localmente não é considerado RLS aprovado
   até um novo CI comparar o histórico antes/depois do reset e executar a matriz
   pgTAP sem falhas. A nova ACL de helpers também permanece sem prova remota até
@@ -571,6 +623,8 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/lib/real-data-runtime-contract.test.ts`
 - `src/lib/route-data-inventory-contract.test.ts`
 - `src/lib/store-pre-registration-auth-hardening.test.ts`
+- `src/lib/sentry-release.ts`
+- `src/lib/sentry-release.test.ts`
 - `src/pages/Privacy.tsx`
 - `src/pages/Login.tsx`
 - `src/pages/Terms.tsx`
@@ -620,6 +674,9 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/features/manager/daily-closing/ManagerDailyClosing.container.tsx`
 - `src/features/manager/daily-closing/ManagerDailyClosing.visual-contract.test.ts`
 - `src/test/sonner-layout.contract.test.ts`
+- `src/test/manager-module.playwright.ts`
+- `src/types/database.generated.ts`
+- `vite.config.ts`
 - `supabase/migrations/.migration-checksum-allowlist.json`
 - `supabase/migrations/00000000000001_mark_existing_migrations_applied.sql`
 - `supabase/migrations/20260407000000_role_matrix_dono_admin.sql`

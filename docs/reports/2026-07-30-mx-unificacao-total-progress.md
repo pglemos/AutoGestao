@@ -1,15 +1,16 @@
 # MX Unificação Total — Progresso
 
 Atualizado em 2026-08-10 no worktree isolado
-branch `fix/mx-final-gates-20260810`, sobre o merge de produção
+branch `fix/mx-final-gates-20260810`, implementação no SHA
+`4c7b906d653a9af00969d75313ea6c9756f5bbc0`; a produção permanece no merge
 `82191012260208c6dc82e240cd78fdf4658fb6ba`. As observações abaixo das seções
 históricas continuam preservadas, mas não são evidência atual deste checkout.
 
-> **Estado vigente:** correções finais locais implementadas e testadas; a
-> produção atual é o merge `82191012` e ainda não contém o diff local desta
-> retomada. O PR #187 já existe sobre esta branch, mas o patch de grants RLS
-> abaixo ainda não foi commitado. Backup restaurável/PITR, prova independente
-> de source maps/Sentry e matriz integral de perfis/rotas permanecem pendentes.
+> **Estado vigente:** o patch final está publicado no PR #187 e possui Preview
+> manual `READY` com health e smoke autenticado parciais. A produção atual é o
+> merge `82191012` e não contém o diff desta retomada. O check Vercel oficial
+> falhou por provisionamento e não pôde ser redeployado pelo contexto atual;
+> backup temporal/PITR, matriz integral e promoção permanecem pendentes.
 
 ## Revalidação atual — 2026-08-10
 
@@ -93,7 +94,7 @@ Fechar as regressões descobertas no smoke real de `/fechamento-diario`,
 
 - `npm run lint`: exit `0`; um warning a11y histórico em `HelpTooltip.tsx`.
 - `npm run typecheck`: exit `0`.
-- `npm test`: `2.597 pass / 0 fail / 18.161 asserts`.
+- `npm test`: `2.600 pass / 0 fail / 18.173 asserts`.
 - `npm run build`: exit `0`; `assert_no_public_sourcemaps` passou.
 - `npm run check:bundle-size`: `1.563,57/1.860 KB gzip`; todos os chunks no
   orçamento; `vendor-ui` em warning não bloqueante.
@@ -202,8 +203,8 @@ nominal para seus helpers.
 
 ### Testes e evidências
 
-- `npm run lint`, `npm run typecheck`, `npm test` (`2.597 pass / 0 fail /
-  18.162 asserts`), `npm run build`, bundle, auditorias locais e
+- `npm run lint`, `npm run typecheck`, `npm test` (`2.600 pass / 0 fail /
+  18.173 asserts`), `npm run build`, bundle, auditorias locais e
   `git diff --check`: exit `0` na revalidação desta retomada.
 - `node scripts/gen_migration_checksums.mjs --check`: `400` checksums íntegras.
 - `node scripts/check_migration_reversibility.mjs --changed-only`: `44`
@@ -245,7 +246,7 @@ duplicação do File List e fechar a lacuna de ordem das migrations auxiliares.
 
 ### Testes e evidências
 
-- Suíte completa reexecutada: `2597 pass / 0 fail / 18162 asserts`.
+- Suíte completa reexecutada: `2600 pass / 0 fail / 18173 asserts`.
 - `npm run lint`, `npm run typecheck`, `npm run build`, bundle, auditorias AIOX,
   checksums (`400`) e reversibilidade (`44`) passaram.
 - `gitleaks dir` encontrou somente findings históricos/fora do diff atual; a
@@ -284,7 +285,7 @@ Os gates locais anteriores estavam verdes, mas a matriz E2E longa encontrou a ro
 - Gerado o inventário estruturado atual em `docs/audits/route-inventory.md` e `docs/audits/route-inventory.json`: 111 rotas, 103 protegidas, 8 públicas, 127 tabelas, 84 RPCs e 14 Edge Functions.
 - CI do SHA `a81c3f86`: Quality Gates, Typecheck/unit, ESLint a11y, bundle-budget, Module Design System Parity e MX Atomic Design Enforcement passaram.
 - Gitleaks no evento `push` passou (run `30847358188`); a execução manual histórica (run `30847366721`) encontrou 77 achados em commits antigos e permanece registrada como dívida de rotação/limpeza, sem allowlist.
-- `npm update brace-expansion --package-lock-only --ignore-scripts` atualizou os pacotes compatíveis para `brace-expansion` 5.0.9/2.1.4/1.1.18; `npm audit --omit=dev` caiu de 3 para 2 findings high, ambos em `react-router`/`react-router-dom`.
+- No checkpoint de 2026-08-03, `npm update brace-expansion --package-lock-only --ignore-scripts` atualizou os pacotes compatíveis para `brace-expansion` 5.0.9/2.1.4/1.1.18 e `npm audit --omit=dev` caiu de 3 para 2 findings high, ambos em `react-router`/`react-router-dom`; a revalidação de 2026-08-10 retornou 0 vulnerabilidades no grafo de dependências de produção auditado, com `react-router`/`react-router-dom` em `7.18.2`.
 - Dependabot revalidado pela API paginada: 133 alertas abertos (3 critical, 70 high, 47 medium, 13 low). Os alertas distribuídos em `.aiox-core`, `whatsapp-service` e backends auxiliares permanecem fora do escopo seguro desta correção.
 
 ### Arquivos
@@ -338,7 +339,7 @@ Correção local aplicada, publicada e validada em produção. O warning Rechart
 
 ### Próximo passo
 
-Manter o relatório final como fonte de verdade: a correção está liberada e a atualização transitiva de `brace-expansion` está no lockfile; dívida histórica de segredos, rotação de credenciais, React Router vulnerável, findings CodeRabbit concorrentes, stack trace desminificado de frame do bundle e backup restaurável permanecem explícitos.
+Manter o relatório final como fonte de verdade: a correção está liberada e a atualização transitiva de `brace-expansion` está no lockfile; rotação imediata de credenciais, findings CodeRabbit concorrentes, stack trace desminificado de frame do bundle e backup restaurável permanecem explícitos. O finding histórico do React Router não foi reproduzido pelo audit do grafo de produção atual; a árvore de runtime permanece em `7.18.2`.
 
 ## Revalidação autônoma — 2026-08-03
 
@@ -358,3 +359,61 @@ Manter o relatório final como fonte de verdade: a correção está liberada e a
 - O `npx @sentry/cli` local está disponível (`2.58.6`), porém o token operacional fornecido para esta sessão retornou `401 Invalid token`; source maps e stack trace desminificado da release atual continuam sem prova independente da API.
 - Após o follow-up documental `6d5eebe2`, a Vercel publicou `dpl_2nEL2EZ6yhxXz3E3TGeMzh6VBFmh` como `READY`; `/api/health` e o bundle servido convergiram para `6d5eebe206c89481336f3f1584c14ee67d6ee842`, e o smoke pós-deploy do `consultor_mx` passou `1 passed (2.4m)`.
 - A checagem de `index-C5PCw3sv.js.map` respondeu `200` por rewrite, mas com `Content-Type: text/html` e `content-disposition: index.html`; não havia source map público servido.
+
+## Revalidação remota do PR #187 — 2026-08-10
+
+### Tarefa
+
+Reconciliar a publicação do SHA final, o Preview, o CI, os serviços externos e o
+estado real da produção sem promover o patch enquanto algum gate obrigatório
+permanecer sem prova.
+
+### Evidências
+
+- GitHub: PR #187 continua `OPEN`, base `main`, HEAD remoto
+  `4c7b906d653a9af00969d75313ea6c9756f5bbc0`; os findings efetivos do
+  CodeRabbit foram corrigidos e a nova execução após o último ajuste foi
+  bloqueada por limite de uso; `TestSprite Pre-Check` falhou com `No tests detected`.
+- CI autenticado visual `31373014149`: passou; a matriz do Dono foi pulada por
+  ausência de `E2E_OWNER_EMAIL`.
+- A reexecução local passou `npm test` (`2600 pass / 0 fail / 18173 asserts`),
+  bundle `1563,53/1860 KB gzip`, auditoria de runtime sem vulnerabilidades e
+  `git diff --check`; o build emitiu seis warnings CSS não bloqueantes e não
+  gerou sourcemaps públicos.
+- Vercel Preview manual: `dpl_2u51UvwJcSGBB1igRsuC4V3hXVY4`, URL
+  `https://mxperformance-dfk3mk6sf-synvolt.vercel.app`, `READY`, health HTTP 200
+  `healthy`, release exata do SHA e checks de Vercel/Supabase/database/crons
+  `ok`. `/login` respondeu HTTP 200.
+- Vercel integrado ao PR: `dpl_3q1DcfxehHJqUoqn1s73xUZ7K7sT` é o SHA correto,
+  mas terminou `BUILD_FAILED / Resource provisioning failed`. Redeploy pela
+  API retornou `404`; CLI retornou `Deployment belongs to a different team`.
+- Browser real no Preview: Dono, Gerente e Vendedor autenticaram; `1440×900` e
+  `390×844` tiveram um `main` e zero overflow; o menu mobile abriu para Gerente
+  e Vendedor. O bloqueio de `vercel.live/feedback.js` pela CSP é externo à
+  aplicação e permanece documentado.
+- Sentry: release `4c7b906d653a9af00969d75313ea6c9756f5bbc0` presente em
+  `synvolt/mx-performance-frontend`; eventos de `/login`, `/home`, `/dono` e
+  evento controlado de Preview chegaram com tags de rota/papel/deployment/SHA e
+  debug metadata de source map. O conector MCP pediu reautenticação; a consulta
+  válida foi feita por API autenticada de runtime.
+- Supabase: projeto `fbhcmzzgwjdgkctlfvbo` `ACTIVE_HEALTHY`, 357 migrations
+  remotas, 159 avisos de segurança e 598 de performance. A API de backups
+  físicos lista 8 itens `COMPLETED`, incluindo `2026-08-10`; a consulta separada
+  de restore/PITR retornou `backups: []`, `pitr_enabled=false` e
+  `walg_enabled=true`. Nenhum restore foi executado com sucesso.
+- Produção: `/api/health` retornou `200`, `healthy`, release
+  `82191012260208c6dc82e240cd78fdf4658fb6ba`; nenhum DDL remoto ou promoção do
+  PR #187 foi executado.
+
+### Resultado
+
+Preview manual funcional e produção preservada. O estado global continua
+`PARCIALMENTE CONCLUÍDO / BLOCKED_EXTERNAL`: o check Vercel oficial, pgTAP
+remoto do novo conjunto de migrations, restore/PITR, matriz integral e promoção
+continuam sem prova.
+
+### Próximo passo
+
+Publicar este checkpoint documental pelo AIOX DevOps, observar o novo SHA e
+reavaliar CI/Preview. Não fazer merge ou promoção com o check Vercel oficial
+falhando.
