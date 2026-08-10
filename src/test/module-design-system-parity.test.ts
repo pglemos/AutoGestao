@@ -90,10 +90,14 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
   })
 
   test('a fundação compartilhada usa a mesma matriz concreta do Gerente', () => {
+    // A matriz visual do gerente (superfícies, bordas, sombras, tipografia) é
+    // compartilhada com os primitivos universais. Os wrappers de largura
+    // (`max-w-7xl`, `space-y-5`) saíram do conteúdo do módulo e passaram para
+    // a camada de canvas (ConditionalPageCanvas) — não devem mais estar no
+    // canonical porque vêm do canvas pai. A raiz do canonical usa
+    // `flex flex-col gap-5` como convenção de fluxo vertical.
     for (const marker of [
       'bg-gray-50',
-      'max-w-7xl',
-      'space-y-5',
       'rounded-2xl',
       'border-gray-100',
       'bg-white',
@@ -104,6 +108,7 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
       expect(managerCanonical).toContain(marker)
       expect(universalPrimitives).toContain(marker)
     }
+    expect(managerCanonical).toContain('flex flex-col gap-5')
 
     expect(managerPrimitives).toContain("from '@/components/module/MxModuleVisualPrimitives'")
     expect(universalPrimitives).not.toContain('bg-surface-alt')
