@@ -8,51 +8,43 @@
 
 BEGIN;
 
-REVOKE ALL ON FUNCTION public.can_access_consulting_client(uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.can_access_mx_scope(public.score_scope_type, uuid, uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.check_user_role_in_store(uuid, text[]) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.consulting_client_module_enabled(uuid, text) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.current_user_role_code(uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.eh_area_interna_mx(uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.eh_administrador_mx(uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.is_admin() FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.is_admin(uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.is_manager_of(uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.is_member_of(uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.is_owner_of(uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.mx_can_read_funnel_metrics(uuid, uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.mx_can_read_score_calculation(uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.mx_can_read_score_scope(public.score_scope_type, uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.normalize_mx_role(text) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.pode_lancar_checkin(uuid, uuid, date, uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.pode_ler_cliente_por_oportunidade(uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.pode_ver_usuario(uuid, uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.tem_papel_loja(uuid, text[], uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.user_has_role(text[], uuid) FROM PUBLIC, anon;
-REVOKE ALL ON FUNCTION public.user_is_master_loja(uuid, uuid) FROM PUBLIC, anon;
-
-GRANT EXECUTE ON FUNCTION public.can_access_consulting_client(uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.can_access_mx_scope(public.score_scope_type, uuid, uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.check_user_role_in_store(uuid, text[]) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.consulting_client_module_enabled(uuid, text) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.current_user_role_code(uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.eh_area_interna_mx(uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.eh_administrador_mx(uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.is_admin() TO authenticated;
-GRANT EXECUTE ON FUNCTION public.is_admin(uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.is_manager_of(uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.is_member_of(uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.is_owner_of(uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.mx_can_read_funnel_metrics(uuid, uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.mx_can_read_score_calculation(uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.mx_can_read_score_scope(public.score_scope_type, uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.normalize_mx_role(text) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.pode_lancar_checkin(uuid, uuid, date, uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.pode_ler_cliente_por_oportunidade(uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.pode_ver_usuario(uuid, uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.tem_papel_loja(uuid, text[], uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.user_has_role(text[], uuid) TO authenticated;
-GRANT EXECUTE ON FUNCTION public.user_is_master_loja(uuid, uuid) TO authenticated;
+DO $grant_authenticated_rls_helpers$
+DECLARE
+  signature text;
+BEGIN
+  FOR signature IN
+    SELECT unnest(ARRAY[
+      'public.can_access_consulting_client(uuid)',
+      'public.can_access_mx_scope(public.score_scope_type, uuid, uuid)',
+      'public.check_user_role_in_store(uuid, text[])',
+      'public.consulting_client_module_enabled(uuid, text)',
+      'public.current_user_role_code(uuid)',
+      'public.eh_area_interna_mx(uuid)',
+      'public.eh_administrador_mx(uuid)',
+      'public.is_admin()',
+      'public.is_admin(uuid)',
+      'public.is_manager_of(uuid)',
+      'public.is_member_of(uuid)',
+      'public.is_owner_of(uuid)',
+      'public.mx_can_read_funnel_metrics(uuid, uuid)',
+      'public.mx_can_read_score_calculation(uuid)',
+      'public.mx_can_read_score_scope(public.score_scope_type, uuid)',
+      'public.normalize_mx_role(text)',
+      'public.pode_lancar_checkin(uuid, uuid, date, uuid)',
+      'public.pode_ler_cliente_por_oportunidade(uuid)',
+      'public.pode_ver_usuario(uuid, uuid)',
+      'public.tem_papel_loja(uuid, text[], uuid)',
+      'public.user_has_role(text[], uuid)',
+      'public.user_is_master_loja(uuid, uuid)'
+    ])
+  LOOP
+    IF to_regprocedure(signature) IS NOT NULL THEN
+      EXECUTE format('REVOKE ALL ON FUNCTION %s FROM PUBLIC, anon', signature);
+      EXECUTE format('GRANT EXECUTE ON FUNCTION %s TO authenticated', signature);
+    END IF;
+  END LOOP;
+END;
+$grant_authenticated_rls_helpers$;
 
 COMMIT;
 

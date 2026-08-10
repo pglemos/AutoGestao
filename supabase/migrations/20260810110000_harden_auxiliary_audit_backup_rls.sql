@@ -25,6 +25,13 @@ CREATE TABLE IF NOT EXISTS public.backup_is_venda_loja_20260805 (
 ALTER TABLE public.data_correction_audit ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON TABLE public.data_correction_audit FROM PUBLIC, anon, authenticated;
 GRANT ALL ON TABLE public.data_correction_audit TO service_role;
+DO $$
+BEGIN
+  IF to_regclass('public.data_correction_audit_id_seq') IS NOT NULL THEN
+    EXECUTE 'GRANT USAGE, SELECT ON SEQUENCE public.data_correction_audit_id_seq TO service_role';
+  END IF;
+END;
+$$;
 DROP POLICY IF EXISTS "service_role_manage_data_correction_audit"
   ON public.data_correction_audit;
 CREATE POLICY "service_role_manage_data_correction_audit"
@@ -36,6 +43,13 @@ CREATE POLICY "service_role_manage_data_correction_audit"
 ALTER TABLE public.backup_is_venda_loja_20260805 ENABLE ROW LEVEL SECURITY;
 REVOKE ALL ON TABLE public.backup_is_venda_loja_20260805 FROM PUBLIC, anon, authenticated;
 GRANT ALL ON TABLE public.backup_is_venda_loja_20260805 TO service_role;
+DO $$
+BEGIN
+  IF to_regclass('public.backup_is_venda_loja_20260805_id_seq') IS NOT NULL THEN
+    EXECUTE 'GRANT USAGE, SELECT ON SEQUENCE public.backup_is_venda_loja_20260805_id_seq TO service_role';
+  END IF;
+END;
+$$;
 DROP POLICY IF EXISTS "deny_api_backup_is_venda_loja_20260805"
   ON public.backup_is_venda_loja_20260805;
 CREATE POLICY "deny_api_backup_is_venda_loja_20260805"

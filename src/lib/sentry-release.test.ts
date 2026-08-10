@@ -25,4 +25,8 @@ describe('resolveSentryRelease', () => {
   it('usa dev quando nenhum identificador está configurado', () => {
     expect(resolveSentryRelease({})).toBe('dev')
   })
+
+  it('não usa a branch do Vercel como release quando o SHA está ausente', () => {
+    expect(resolveSentryRelease({ VERCEL_GIT_COMMIT_REF: 'main' })).toBe('dev')
+  })
 })

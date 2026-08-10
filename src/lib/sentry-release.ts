@@ -11,7 +11,6 @@ export function resolveSentryRelease(env: ReleaseEnvironment): string {
     env.SENTRY_RELEASE,
     env.VERCEL_GIT_COMMIT_SHA,
     env.GITHUB_SHA,
-    env.VERCEL_GIT_COMMIT_REF,
   ]
 
   return candidates.map((value) => value?.trim()).find(Boolean) ?? 'dev'
