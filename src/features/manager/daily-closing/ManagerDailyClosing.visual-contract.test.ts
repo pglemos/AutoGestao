@@ -65,6 +65,9 @@ describe("ManagerDailyClosing visual contract", () => {
     expect(source).toContain(
       '<PageCanvas as="div" width="dashboard" bottomClearance="navigation"',
     );
+    expect(source).toMatch(
+      /function ManagerClosingSkeleton[\s\S]*?<PageCanvas as="div" width="dashboard" bottomClearance="navigation"/,
+    );
     expect(source).not.toContain(
       'className="mx-auto flex w-full max-w-7xl flex-col gap-4 px-4 py-6 pb-20"',
     );

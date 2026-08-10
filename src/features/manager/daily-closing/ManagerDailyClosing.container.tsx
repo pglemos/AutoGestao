@@ -1358,8 +1358,8 @@ function Empty({ text }: { text: string }) {
 }
 function ManagerClosingSkeleton() {
   return (
-    <div className="min-h-full" aria-busy="true" aria-label="Carregando fechamento diário">
-      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-0 flex-1 flex-col space-y-6">
+    <div className="min-h-full">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" aria-busy="true" aria-label="Carregando fechamento diário" className="flex min-h-0 flex-1 flex-col space-y-6">
         <Skeleton className="h-20" />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {Array.from({ length: 4 }).map((_, index) => (

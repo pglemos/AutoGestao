@@ -2,7 +2,7 @@
 
 > Relatório vivo de fechamento. Atualizado em 2026-08-10 durante os gates finais
 > do worktree isolado; evidências históricas permanecem identificadas abaixo.
-
+>
 > **Revalidação mais recente (2026-08-10):** os parágrafos que citam SHAs e
 > deployments anteriores são históricos. A prova vigente foi coletada no
 > branch `fix/mx-final-gates-20260810`, sobre o merge
