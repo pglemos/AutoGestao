@@ -82,8 +82,8 @@ const EFICIENCIA_COR: Record<FunnelChannel, { header: string; badge: string; btn
 const EFICIENCIA_ORDER: FunnelChannel[] = ['Showroom', 'Carteira', 'Internet']
 
 const BASE_CONFIANCA_COR: Record<Confidence, string> = {
-  Alta: 'text-green-600 bg-green-50 border-green-200',
-  Média: 'text-amber-600 bg-amber-50 border-amber-200',
+  Alta: 'text-status-success-text bg-green-50 border-green-200',
+  Média: 'text-status-warning-text bg-amber-50 border-amber-200',
   Baixa: 'text-slate-500 bg-slate-50 border-slate-200',
 }
 
@@ -316,7 +316,7 @@ function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: Peri
   const metaBatida = faltam === 0 && meta !== null && meta > 0
   const pct = meta !== null && meta > 0 ? Math.min(100, Math.round((realizado / meta) * 100)) : 0
   const probPct = probabilidade === null ? null : Math.round(probabilidade)
-  const probCor = probPct === null ? 'text-slate-600' : probPct >= 80 ? 'text-green-600' : probPct >= 50 ? 'text-amber-600' : 'text-red-500'
+  const probCor = probPct === null ? 'text-slate-600' : probPct >= 80 ? 'text-status-success-text' : probPct >= 50 ? 'text-status-warning-text' : 'text-status-error-text'
   const isCurrentMonth = periodKey === 'current_month'
 
   return (
@@ -367,7 +367,7 @@ function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: Peri
           <div className="grid flex-1 grid-cols-2 gap-3">
             <div className="rounded-xl bg-slate-50 p-3">
               <p className="mb-0.5 text-caption uppercase tracking-wide text-slate-600">Faltam</p>
-              <p className="text-h3 font-bold leading-none tabular-nums text-red-500">{faltam}</p>
+              <p className="text-h3 font-bold leading-none tabular-nums text-status-error-text">{faltam}</p>
               <p className="text-caption text-slate-600">vendas</p>
             </div>
             <div className="rounded-xl bg-slate-50 p-3">
@@ -379,22 +379,22 @@ function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: Peri
               <p className="mb-0.5 text-caption uppercase tracking-wide text-slate-600">Ritmo necessário</p>
               {!isCurrentMonth || necessarioPorDia === null ? (
                 <>
-                  <p className="text-h3 font-bold leading-none tabular-nums text-amber-600">—</p>
+                  <p className="text-h3 font-bold leading-none tabular-nums text-status-warning-text">—</p>
                   <p className="text-caption text-slate-600">sem dados</p>
                 </>
               ) : faltam !== null && faltam <= 0 ? (
                 <>
-                  <p className="text-[18px] font-bold leading-tight text-green-600">Meta batida</p>
+                  <p className="text-[18px] font-bold leading-tight text-status-success-text">Meta batida</p>
                   <p className="text-caption text-slate-600">Continue o ritmo.</p>
                 </>
               ) : diasUteisRestantes <= 0 ? (
                 <>
-                  <p className="text-[18px] font-bold leading-tight text-red-500">Prazo encerrado</p>
+                  <p className="text-[18px] font-bold leading-tight text-status-error-text">Prazo encerrado</p>
                   <p className="text-caption text-slate-600">Revise o fechamento.</p>
                 </>
               ) : necessarioPorDia >= 1 ? (
                 <>
-                  <p className="text-h3 font-bold leading-none tabular-nums text-amber-600">
+                  <p className="text-h3 font-bold leading-none tabular-nums text-status-warning-text">
                     {necessarioPorDia % 1 === 0 ? necessarioPorDia : necessarioPorDia.toFixed(2)}
                   </p>
                   <p className="text-caption text-slate-600">vendas por dia útil</p>
@@ -406,7 +406,7 @@ function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: Peri
                       grande e passa a exigir 4.5:1. Medido em /meu-funil, o
                       amber-600 sobre slate-50 dá 3.05:1. */}
                   <p className="text-[14px] font-bold leading-tight text-amber-700">1 venda a cada</p>
-                  <p className="text-h3 font-bold leading-none tabular-nums text-amber-600">
+                  <p className="text-h3 font-bold leading-none tabular-nums text-status-warning-text">
                     {faltam && faltam > 0 ? (diasUteisRestantes / faltam).toFixed(1) : '—'} dias
                   </p>
                   <p className="mt-1 text-caption text-slate-600">≈ {Math.floor(necessarioPorDia * 6)}–{Math.ceil(necessarioPorDia * 6)} por semana</p>
