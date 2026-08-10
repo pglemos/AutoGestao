@@ -3,9 +3,10 @@
 **Data de início:** 2026-07-29
 **Estado atual:** PARCIALMENTE CONCLUÍDO
 **Branch da retomada:** `fix/mx-full-execution-20260810` (worktree isolado)
-**HEAD da implementação:** `f333da4d48bae84af547fce0ce0924c8857839b6`; base
-`origin/main` em `d9c061edef9960e41216b046cc71b7856a58c0df`; esta revalidação
-documenta o estado commitado localmente
+**Base atual:** `origin/main` em `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`
+**Commits da implementação nesta retomada:** `f5c813ce` (layout), `52a761ed`
+(contraste) e `ae3da0b8` (contrato E2E do Gerente); a documentação registra a
+revalidação commitada nesta branch
 **Base histórica de rollback:** `41ec4d39e165cab013988fab9aef54649b616095`
 
 > Este documento é atualizado durante a execução. “Parcialmente concluído” é
@@ -13,18 +14,32 @@ documenta o estado commitado localmente
 
 ## Revalidação corrente — 2026-08-10
 
-O worktree corrente contém a unidade gerencial no commit de implementação
-`f333da4d`. Os gates locais passaram: `npm test` `2604 pass / 0 fail / 18182
-expect()`, lint, typecheck, build, bundle `1563,79/1860 KB gzip`, auditorias de
-layout/rotas, estrutura/paridade/IDE sync AIOX, a11y, management design system
-e diff-check. O contrato direcionado passou `38/38` testes. Ainda não há push,
-PR, CI remoto, preview, produção, backup/PITR, Sentry/source maps ou smoke
-autenticado novo para este diff; a documentação desta revalidação aguarda
-commit e o estado permanece **PARCIALMENTE CONCLUÍDO**.
+O worktree corrente está rebaseado sobre `origin/main` e contém os commits de
+layout, contraste e contrato E2E listados acima. Os gates locais passaram:
+`npm test` `2606 pass / 0 fail / 18195 expect()`, `npm run lint`,
+`npm run typecheck`, `npm run build`, `npm run check:bundle-size`
+(`1564,03/1860 KB gzip`), auditorias de rotas/layout/management design system,
+IDE sync, estrutura, agentes, paridade e `git diff --check`. A suíte do
+Gerente passou `2/2` no fluxo funcional direcionado e `1/1` no contrato de
+console/rede após uma falha transitória de `Failed to fetch` no primeiro run.
+Gitleaks passou no range `origin/main..HEAD` e no índice staged, sem leak.
 
-O Gitleaks staged passou sem leaks. O histórico foi revarrido em 1.950 commits
-com 116 achados redigidos; o scan corrente de `src/` apontou três falsos
-positivos genéricos em fixtures/diagnósticos não alterados.
+O estado continua **PARCIALMENTE CONCLUÍDO**. O branch ainda precisa do
+pre-push/CodeRabbit, push, PR, CI e preview desta retomada. Produção atual
+permanece separada: deployment `READY` servindo `3ee29d72`, `/api/health`
+HTTP 200 com Vercel, Supabase, database e crons `ok`. Backup restaurável/PITR,
+Sentry autenticado/source maps da nova release, matriz integral de perfis e
+rollback executado continuam sem prova. `npm audit` mantém um high em
+`xlsx`, e Secretlint não pode executar porque o repositório não possui
+`.secretlintrc`.
+
+As tentativas de revisão Agy/Antigravity foram limitadas por quota externa; não
+há disponibilidade comprovada de um modelo “GPT 5.6 Luna”, portanto nenhuma
+delegação ou resultado foi fabricado.
+
+> As seções históricas abaixo preservam evidências anteriores. Quando houver
+> conflito de contagem, SHA, deployment ou status, esta revalidação corrente e
+> as evidências remotas mais recentes têm precedência.
 
 ## Registro histórico superseded — retomada anterior de 2026-08-10
 
@@ -329,7 +344,7 @@ cota por 38 minutos, portanto este bloco permanece em `InProgress`.
 - CI completo, PR, produção, smoke e monitoramento.
 - Recuperação da conta Consultor MX existente; não criar identidade duplicada.
 
-## 13. Evidência adicional de CI e bundle
+## 13. Registro histórico de CI e bundle (superseded pela revalidação corrente)
 
 O gate `npm run check:bundle-size` foi reproduzido localmente com Node 24 e
 falhou com código 1:

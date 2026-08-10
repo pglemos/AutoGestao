@@ -2,7 +2,7 @@
 
 ## Status
 
-**InProgress**
+**Ready for Review**
 
 ## Executor Assignment
 
@@ -202,6 +202,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-07-29 | 0.3.0 | Inventário reproduzível de rotas, autorização, dados e mutations | Dex (Dev) |
 | 2026-08-10 | 0.3.1 | Regressão do PageCanvas do Dono corrigida e validada localmente em dois breakpoints | Dex (Dev) |
 | 2026-08-10 | 0.3.2 | Rotas gerenciais restantes migradas para PageCanvas; gates locais, layout contract e secret scan revalidados | Dex (Dev) |
+| 2026-08-10 | 0.3.3 | Branch rebaseada sobre `origin/main` atual; contrato E2E do Gerente alinhado ao runtime e gates locais repetidos | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -414,6 +415,24 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   falsos positivos genéricos em fixtures/diagnósticos não alterados nesta
   tarefa, sem credencial operacional identificada. A dívida histórica continua
   aberta e exige rotação/expurgo coordenados.
+- 2026-08-10: a branch `fix/mx-full-execution-20260810` foi rebaseada sem
+  conflitos sobre `origin/main` em `3ee29d72`; o novo contrato
+  `src/test/manager-module.playwright.ts` passou `2/2` no fluxo funcional e
+  `1/1` na prova de console/rede após uma queda transitória de fetch no primeiro
+  run completo.
+- 2026-08-10: a repetição local reconciliada passou `npm test` com `2606/2606`
+  testes e `18195 expect()`, lint, typecheck, build (`5143` módulos), bundle
+  (`1564,03/1860 KB gzip`), auditorias de rotas/layout/management design system,
+  IDE sync, estrutura, agentes, paridade e Gitleaks no range da branch.
+- 2026-08-10: leitura remota confirmou GitHub autenticado, projeto Supabase
+  `fbhcmzzgwjdgkctlfvbo` listado e produção Vercel `READY`; `/api/health`
+  retornou HTTP 200 com Vercel, Supabase API, database e crons `ok`, servindo
+  o SHA `3ee29d72`. O branch desta retomada ainda não tinha push/PR no momento
+  deste registro.
+- 2026-08-10: `npm audit --omit=dev` retornou zero vulnerabilidades; o audit
+  completo mantém um high em `xlsx`. `npx secretlint` não executa sem
+  `.secretlintrc`; isso permanece bloqueio de governança, enquanto Gitleaks
+  passou sem leak no diff da branch.
 
 ### Completion Notes List
 
@@ -428,13 +447,14 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - O bundle passou sem elevar orçamento: `xlsx` saiu do runtime e `jsPDF` foi
   removido, preservando downloads `.xlsx` e `.pdf` reais.
 - O “READY para validação do PO” acima pertence ao checklist histórico de
-  draft; o estado operacional vigente permanece `InProgress` e parcial.
+  draft; o status operacional atual `Ready for Review` indica revisão da
+  implementação, não conclusão da story ampla, que permanece parcial.
 - O P0 do pré-cadastro foi corrigido no hotfix publicado da função
   `store-pre-registration` (versão remota 72) e validado no GET/browser da
-  rota ACERTT. O hardening adicional desta retomada está commitado em
-  `f333da4d`; push, CI, preview e deploy permanecem pendentes. A story ampla continua
-  `InProgress` por seus gates independentes de revisão, observabilidade, backup
-  e rollback.
+  rota ACERTT. O hardening adicional desta retomada está nos commits
+  `f5c813ce`, `52a761ed` e `ae3da0b8`; push, CI, preview e deploy permanecem
+  pendentes. A story ampla está `Ready for Review`, mas continua parcial por
+  seus gates independentes de revisão, observabilidade, backup e rollback.
 - Segredos removidos do estado corrente permanecem no histórico. A rotação da
   `service_role` e das demais credenciais expostas é um incidente imediato, não
   um gate posterior ao preview; a substituição coordenada dos consumidores tem
@@ -442,10 +462,10 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - A migração moderna das Edge Functions está implementada e validada somente
   localmente; fallback legado, revisão integral, deploy e smoke permanecem
   pendentes.
-- A correção atual está commitada em `f333da4d`; preview, CI remoto, produção,
+- A correção atual está commitada nesta branch; preview, CI remoto, produção,
   Sentry, backup restaurável e a
   matriz integral de perfis continuam pendentes. A story permanece
-  `InProgress` e parcialmente concluída.
+  `Ready for Review` e parcialmente concluída.
 - As rotas gerenciais auditadas agora não deixam `max-w-7xl`, gutters ou safe
   area na raiz fora de `PageCanvas`; o canvas do `DashboardLoja` continua sendo
   a autoridade quando `ManagerTeamPerformance` é renderizado como seção filha.
@@ -457,10 +477,12 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   não de falha introduzida por este diff: `gitleaks protect --staged` passou,
   enquanto os três achados do scan de `src/` pertencem a fixtures/diagnósticos
  fora dos arquivos desta tarefa.
-- 2026-08-10: o pre-push AIOX/DevOps não foi liberado. `npm audit` reportou
-  uma vulnerabilidade high em `xlsx` sem correção disponível, Secretlint
-  falhou por ausência de `.secretlintrc`, a story permaneceu `InProgress` e
-  o rerun CodeRabbit retornou `Review limit reached`; nenhum push/PR foi feito.
+- 2026-08-10: o pre-push AIOX/DevOps ainda não foi executado na branch
+  rebaseada. A última evidência local registra `npm audit` com uma
+  vulnerabilidade high em `xlsx` sem correção disponível, Secretlint falhando
+  por ausência de `.secretlintrc`, e CodeRabbit/Agy sujeitos a quota externa.
+  O status foi atualizado para `Ready for Review` sem transformar os gates
+  externos pendentes em aprovação.
 
 ### File List
 
@@ -519,6 +541,7 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/features/manager/team/ManagerTeamPerformance.test.tsx`
 - `src/features/manager/team/ManagerTeamPerformance.tsx`
 - `src/test/module-design-system-parity.test.ts`
+- `src/test/manager-module.playwright.ts`
 - `scripts/legacy/test-queries-error-handling2.mjs` (removido)
 - `scripts/legacy/test-queries-final.mjs` (removido)
 - `scripts/provision_mx_consultoria_sandbox.ts`
