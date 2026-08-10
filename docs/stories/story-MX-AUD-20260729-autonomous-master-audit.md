@@ -405,7 +405,8 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   canvas aninhado no `DashboardLoja`; a repetição retornou zero violações.
 - 2026-08-10: o contrato novo de layout e os testes de `ManagerTeamPerformance`
   passaram direcionados com 38/38 testes e 8.222 asserts; a suíte completa
-  isolada passou 2.604/2.604 testes, 18.182 asserts e 0 falhas. A repetição
+  isolada passou 2.604/2.604 testes, 18.182 asserts e 0 falhas (execução
+  intermediária). A repetição
   concorrente apresentou uma falha transitória de foco após 13,3s, reproduzida
   isoladamente como 2/2 pass.
 - 2026-08-10: `npm run lint`, `npm run typecheck`, `npm run build` e
@@ -441,10 +442,10 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   passou `10/10` em `2,6m` nos projetos `chromium` e `mobile-chrome`; o caso
   mobile que havia falhado por `TypeError: Failed to fetch` também passou
   isoladamente em `12,6s`.
-- 2026-08-10: CodeRabbit concluiu a revisão contra `main` com 19 arquivos
-  revisados e um único achado `major` documental. A divergência entre
-  `origin/main`, HEAD, contagens e bundle foi corrigida nos relatórios correntes;
-  nenhum achado crítico foi reportado.
+- 2026-08-10: a execução histórica do CodeRabbit revisou 19 arquivos apenas,
+  conforme o conjunto delimitado no próprio relatório; isso não representa uma
+  revisão integral dos arquivos concorrentes. O status atual do PR aparece
+  `pass` com `Review rate limited`, sem veredicto técnico completo.
 - 2026-08-10: a causa raiz do Preview Git-driven foi reproduzida: o plugin do
   Sentry recebia `--release ''` quando a variável existia vazia. O resolver
   `resolveSentryRelease` agora ignora strings vazias e usa, nesta ordem,
@@ -514,6 +515,17 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   TestSprite falha por `No tests detected`, Vercel falha por provisionamento e
   CodeRabbit passa com rate limit. Agy/Antigravity permaneceu limitado por
   quota externa. O status continua `Ready for Review`, sem promoção.
+- 2026-08-10: os comentários acionáveis foram corrigidos no checkout corrente:
+  o estado `danger` do cockpit agora preserva superfície e texto de erro,
+  `FunilVendedor` foi reduzido a 279 linhas sem CSS inline com cards extraídos
+  para feature modules, o progresso usa o átomo `Progress`, e os testes de
+  produção zero agora executam o fluxo renderizado para confirmar `daily` e
+  `historical`.
+- 2026-08-10: a repetição corrente passou `npm test` com 2.612/2.612 testes e
+  18.234 asserts em 464 arquivos; `npm run lint`, `npx tsc --noEmit` e
+  `npm run build` também passaram. Esta é a contagem corrente do worktree, mas
+  o status da story permanece parcial até publicação, Preview, produção,
+  Sentry, backup/PITR, rollback e matriz integral.
 
 ### File List
 
@@ -564,6 +576,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/components/ui/HelpTooltip.tsx`
 - `src/features/checkin/sections/CheckinHeader.test.ts`
 - `src/features/checkin/sections/CheckinHeader.tsx`
+- `src/features/crm/funil-vendedor/FunilVendedorCards.tsx`
+- `src/features/crm/funil-vendedor/types.ts`
+- `src/features/dashboard-loja/sections/owner-cockpit/OwnerHomeWidgets.tsx`
+- `src/pages/FunilVendedor.tsx`
+- `src/test/semantic-status-contrast-contract.test.ts`
 - `src/features/manager/daily-closing/ManagerDailyClosingBase44.tsx`
 - `src/features/manager/daily-closing/manager-daily-closing-layout-contract.test.ts`
 - `src/features/manager/day-routine/ManagerDayRoutineCanonical.container.tsx`

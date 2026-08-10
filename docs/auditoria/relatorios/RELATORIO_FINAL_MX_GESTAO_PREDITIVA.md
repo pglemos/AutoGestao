@@ -3,34 +3,34 @@
 **Data de início:** 2026-07-29
 **Estado atual:** PARCIALMENTE CONCLUÍDO
 **Branch da retomada:** `fix/mx-full-execution-20260810` (worktree isolado)
-**Base atual:** `origin/main` em `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`
-**Commit remoto mais recente:** `0e4a72750eea3d6c50928d6fee972dea158d0451`
-(normalização da release Sentry); os commits de implementação visual anteriores
+**Base atual:** `origin/main` em `cd03df2a8ee472664c07dae881074d911c6775d5`
+**Checkpoint remoto verificado antes desta atualização:**
+`d2c491578438491e5d6b4e878caa48dd51141a95`; o diff local desta retomada ainda
+precisa de commit/push. Os commits de implementação visual anteriores
 permanecem no histórico desta branch
 **Base histórica de rollback:** `41ec4d39e165cab013988fab9aef54649b616095`
 
 > Este documento é atualizado durante a execução. “Parcialmente concluído” é
 > obrigatório enquanto qualquer gate do prompt mestre permanecer sem prova.
 
-## Revalidação corrente pós-publicação — 2026-08-10
+## Revalidação corrente local — 2026-08-10
 
-O worktree corrente está no commit remoto `0e4a72750eea3d6c50928d6fee972dea158d0451`,
-publicado no PR #188. A correção evita `sentry-cli --release ''` quando a
-variável existe vazia. Os gates locais passaram: `npm test` `2610 pass / 0 fail /
-18207 expect()`, `npm run lint`, `npm run typecheck`, `npm run build`,
-`npm run check:bundle-size` (`1564,22/1860 KB gzip`), `git diff --check`,
-Secretlint e Gitleaks staged.
+O checkpoint remoto `d2c49157` está publicado no PR #188; a correção evita
+`sentry-cli --release ''` quando a variável existe vazia. No diff local corrente,
+`npm test` passou `2612/2612` com `18234 expect()`, e `npm run lint`,
+`npx tsc --noEmit` e `npm run build` passaram. Secretlint, Gitleaks, bundle e
+auditorias adicionais serão registrados após a revisão do diff.
 
 CI remoto também passou em Quality Gates, Typecheck/unit, ESLint a11y,
 bundle-budget, db-types-diff, Gitleaks, Atomic Design, Management Audit,
 Manager Parity, Central Execução Parity, Module Parity e Authenticated Visual
 (12m58s, incluindo a matriz Owner Base44).
 
-O estado continua **PARCIALMENTE CONCLUÍDO**. O Preview Git-driven
-`dpl_4h1zRzKkVUcppUuGbPuXUGuMcYje`, associado ao SHA final, falhou com
+O estado continua **PARCIALMENTE CONCLUÍDO**. O Preview Git-driven atual
+`dpl_HkdF7keUj6cKxyozQiFbfyoh4BH6`, associado ao checkpoint remoto, falhou com
 `BUILD_FAILED / Resource provisioning failed` e `integrations.status=error`.
 TestSprite falhou com `No tests detected`; Supabase Preview ficou `skipping`.
-Produção permanece separada no deployment anterior, servindo `3ee29d72`;
+Produção permanece separada no deployment anterior, servindo `cd03df2a`;
 `/api/health` respondeu HTTP 200 com Vercel, Supabase, database e crons `ok`.
 Backup restaurável/PITR, Sentry/source maps da nova release, smoke no SHA final,
 rollback executado e matriz integral de estados continuam sem prova. `npm audit`

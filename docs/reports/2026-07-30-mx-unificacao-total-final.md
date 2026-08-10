@@ -1,17 +1,41 @@
 # MX Unificação Total — Relatório Final
 
 > Relatório vivo de fechamento. Os registros históricos abaixo são preservados,
-> mas não substituem a revalidação corrente do worktree.
-
-> **Estado corrente (2026-08-10):** os parágrafos históricos abaixo não são
+> mas não substituem a revalidação corrente do worktree. **Estado corrente
+> (2026-08-10):** os parágrafos históricos abaixo não são
 > prova do estado atual. A execução corrente ocorre no worktree isolado
 > `/Users/pedroguilherme/PROJETOS/mx-full-execution-20260810`, branch
-> `fix/mx-full-execution-20260810`, commit remoto
-> `0e4a72750eea3d6c50928d6fee972dea158d0451`, sobre `origin/main`
-> `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`. O PR #188 está aberto; produção
-> não foi promovida.
+> `fix/mx-full-execution-20260810`, checkpoint remoto verificado antes desta
+> atualização documental
+> `d2c491578438491e5d6b4e878caa48dd51141a95`, sobre `origin/main`
+> `cd03df2a8ee472664c07dae881074d911c6775d5`. O PR #188 está aberto; as
+> alterações desta retomada ainda não foram promovidas.
 
-## Revalidação pós-publicação — 2026-08-10 — SHA `0e4a7275`
+## Revalidação corrente do diff local — 2026-08-10 — checkpoint `d2c49157`
+
+### Resumo executivo
+
+O diff corrente preserva os estados semânticos do cockpit, adiciona prova
+renderizada ao fluxo de Produção Zero e decompõe o Funil do Vendedor em módulos
+de feature. Os gates locais passaram; nenhum claim de preview/produção é feito
+para este diff antes do commit e da publicação.
+
+### Evidências locais
+
+- `npm test`: `2612 pass / 0 fail / 18234 expect()` em 464 arquivos.
+- `npm run lint`, `npx tsc --noEmit` e `npm run build`: exit 0.
+- Build sem source maps públicos; o checkpoint remoto anterior continua com
+  CI verde, mas o Preview `dpl_HkdF7keUj6cKxyozQiFbfyoh4BH6` está `BUILD_FAILED`
+  por provisionamento.
+- Agy/Antigravity retornou `Individual quota reached`; não há parecer externo.
+
+### Estado
+
+**PARCIALMENTE CONCLUÍDO.** O diff precisa ser commitado e publicado; Preview,
+browser autenticado, Sentry independente, backup/PITR, rollback e matriz
+integral continuam pendentes.
+
+## Revalidação pós-publicação — 2026-08-10 — snapshot histórico `0e4a7275`
 
 ### Resumo executivo
 
@@ -38,8 +62,10 @@ conclusão do prompt mestre.
   bundle-budget, db-types-diff, Gitleaks, Atomic Design, Management Audit,
   Manager Parity, Central Execução Parity, Module Parity e Authenticated Visual
   (12m58s, incluindo a matriz Owner Base44).
-- CodeRabbit reportou `pass` com `Review rate limited`; não foi contado como
-  revisão técnica completa.
+- O histórico citado pelo CodeRabbit processou somente o conjunto delimitado no
+  próprio relatório (19 arquivos naquela execução), não o repositório inteiro.
+  A verificação atual do PR aparece como `pass` com `Review rate limited`; isso
+  não é uma revisão técnica integral nem aprovação dos arquivos concorrentes.
 
 ### Publicação e serviços
 
@@ -141,16 +167,19 @@ independente de source maps/Sentry, matriz integral e rotação de segredos**.
 ## 39.3 Evidências técnicas — estado vigente da retomada
 
 - Branch: `fix/mx-full-execution-20260810`, base `origin/main`
-  `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`; HEAD
-  `9f01b0c17dedf2f445f0bee7e3a01068e20e9ccd`.
-- PR/CI remoto: ainda não executados para este diff.
+  `cd03df2a8ee472664c07dae881074d911c6775d5`; HEAD verificado antes desta
+  atualização documental: `d2c491578438491e5d6b4e878caa48dd51141a95`.
+- PR #188/CI remoto: workflows do SHA `d2c49157` passaram, incluindo
+  authenticated visual; o status do CodeRabbit é limitado por quota.
 - Gates locais atuais: `npm test` 2606 pass / 0 fail / 18195 asserts; lint,
   typecheck, build, bundle, auditorias de layout/rotas, AIOX structure/parity/
   IDE sync, a11y e diff-check sem falhas.
 - Suíte gerencial corrente: Playwright `10 passed (2.6m)` nos projetos
   `chromium` e `mobile-chrome`; reprodução isolada do contrato de console/rede
   mobile também passou `1 passed (12.6s)`.
-- Preview/produção/Vercel/GitHub: nenhuma prova nova nesta retomada corrente.
+- Preview Git-driven `dpl_HkdF7keUj6cKxyozQiFbfyoh4BH6`: `BUILD_FAILED`,
+  `Resource provisioning failed`, `integrations.status=error`; produção
+  continua no SHA `cd03df2a` até haver preview aprovado.
 
 ## 39.4 Evidências visuais
 

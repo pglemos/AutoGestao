@@ -16,6 +16,10 @@ describe('contrato de contraste dos estados semânticos', () => {
     expect(types).not.toContain('text-status-warning\'')
     expect(types).not.toContain('text-status-error\'')
 
+    expect(widgets).toContain('text-status-success-text')
+    expect(widgets).toContain('text-status-warning-text')
+    expect(widgets).toContain('text-status-error-text')
+    expect(widgets).toContain('text-text-secondary')
     expect(primitives).not.toMatch(/bg-amber-50 text-amber-600/)
     expect(primitives).not.toMatch(/bg-red-50 text-red-600/)
     expect(primitives).not.toMatch(/bg-emerald-50 text-emerald-600/)
@@ -26,9 +30,12 @@ describe('contrato de contraste dos estados semânticos', () => {
 
   test('o funil do Vendedor usa tokens semânticos nos indicadores sobre slate-50', () => {
     const funnel = readSource('src/pages/FunilVendedor.tsx')
+    const funnelCards = readSource('src/features/crm/funil-vendedor/FunilVendedorCards.tsx')
+    const funnelVisualSource = `${funnel}\n${funnelCards}`
 
-    expect(funnel).toContain('text-status-warning-text')
-    expect(funnel).toContain('text-status-error-text')
-    expect(funnel).not.toMatch(/text-(red-500|amber-600)/)
+    expect(funnelVisualSource).toContain('text-status-success-text')
+    expect(funnelVisualSource).toContain('text-status-warning-text')
+    expect(funnelVisualSource).toContain('text-status-error-text')
+    expect(funnelVisualSource).not.toMatch(/text-(red-500|amber-600)/)
   })
 })

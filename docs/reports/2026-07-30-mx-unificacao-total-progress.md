@@ -1,17 +1,65 @@
 # MX Unificação Total — Progresso
 
 Atualizado em 2026-08-10 durante a retomada em worktree local isolado,
-branch
-`fix/mx-full-execution-20260810`, sobre `origin/main`
-`3ee29d72a9ff6729b3097faa0363c17cb3611ea1`. A correção de build está no commit
-`0e4a72750eea3d6c50928d6fee972dea158d0451`, publicado no PR #188; esta entrada
-registra o estado documental corrente. As observações históricas abaixo
-continuam preservadas, mas não são evidência atual deste checkout.
+branch `fix/mx-full-execution-20260810`, sobre `origin/main`
+`cd03df2a8ee472664c07dae881074d911c6775d5`. O checkpoint de código remoto
+verificado antes desta atualização documental é
+`d2c491578438491e5d6b4e878caa48dd51141a95`, publicado no PR #188; as
+alterações desta retomada ainda precisam de commit e push. As observações
+históricas abaixo continuam preservadas, mas não são evidência atual deste
+checkout.
 
-> **Estado vigente:** correção de release Sentry implementada, commitada e
-> publicada; CI remoto completo passou no SHA final. O Preview Git-driven,
-> TestSprite e Supabase Preview permanecem bloqueados/sem execução, e produção
-> continua no SHA anterior.
+> **Estado vigente:** os gates locais do diff corrente passaram; CI remoto verde
+> existe para o checkpoint `d2c49157`. O Preview Git-driven falhou por
+> `Resource provisioning failed`, TestSprite retornou `No tests detected`,
+> Supabase Preview ficou `skipping`, e produção continua separada do diff.
+
+## Tarefa — correções de regressão e documentação corrente — 2026-08-10
+
+### Objetivo
+
+Fechar os comentários acionáveis da revisão anterior sem ampliar o escopo:
+preservar os três tons do cockpit do Dono, provar em comportamento o escopo de
+Produção Zero, decompor o Funil do Vendedor e alinhar a evidência documental ao
+checkpoint remoto real.
+
+### Diagnóstico e causa raiz
+
+O cockpit tratava qualquer projeção abaixo da meta como aviso; o teste de
+Produção Zero verificava apenas o texto fonte; e `FunilVendedor.tsx` concentrava
+os cards, a barra de progresso inline e a lógica auxiliar em 812 linhas. Os
+relatórios também mantinham contagens e bases antigas como se fossem o estado
+corrente.
+
+### Alterações e arquivos
+
+- `OwnerHomeWidgets.tsx` preserva superfície e texto para `success`, `warning`
+  e `danger`.
+- `CheckinHeader.test.ts` renderiza o modal e confirma `daily` para a data ativa
+  e `historical` para data retroativa.
+- `FunilVendedor.tsx` ficou abaixo de 500 linhas; cards e tipos foram extraídos
+  para `src/features/crm/funil-vendedor/`, e o progresso usa o átomo `Progress`.
+- Relatórios, plano e story agora identificam o checkpoint `d2c49157`, a base
+  `cd03df2a` e a contagem corrente sem apagar snapshots históricos.
+
+### Testes executados
+
+- Direcionados: `24 pass / 0 fail / 81 expect()`.
+- Suíte completa: `2612 pass / 0 fail / 18234 expect()` em 464 arquivos.
+- `npm run lint`, `npx tsc --noEmit` e `npm run build`: exit 0; nenhum `.map`
+  público em `dist/`.
+
+### Resultado
+
+Implementação local validada. O estado segue parcial até commit/push do diff,
+CI do novo SHA, Preview aprovado, browser autenticado no deployment, Sentry,
+backup/PITR, rollback e matriz integral.
+
+### Próximo passo
+
+Executar bundle/auditorias/Secretlint/Gitleaks, revisar o diff, integrar a
+`origin/main` sem reescrever histórico, commit/push pelo fluxo DevOps e
+revalidar o SHA novo.
 
 ## Revalidação de implementação anterior — 2026-08-10 — worktree `fix/mx-full-execution-20260810`
 
@@ -41,8 +89,9 @@ tipográficos arbitrários.
 
 ### Testes executados
 
-- Direcionados: `38 pass / 0 fail / 8222 expect()`.
-- Suíte completa: `2606 pass / 0 fail / 18195 expect()` em 462 arquivos.
+- Direcionados: `38 pass / 0 fail / 8222 expect()` (snapshot intermediário).
+- Suíte completa: `2606 pass / 0 fail / 18195 expect()` em 462 arquivos
+  (snapshot intermediário).
 - `npm run lint`, `npm run typecheck`, `npm run build`,
   `npm run check:bundle-size`, `npm run audit:layout-contract`,
   `npm run audit:routes-data`, `validate:structure`, `validate:parity`,

@@ -1,8 +1,73 @@
-import { describe, expect, test } from 'bun:test'
+import { afterEach, describe, expect, mock, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
+import { createElement, type ReactNode } from 'react'
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+
+const saveCheckinMock = mock(async () => ({ error: null, id: 'checkin-id' }))
+const requestCorrectionMock = mock(async () => ({ error: null }))
+const fetchOwnRequestsMock = mock(async () => [])
+
+mock.module('@/components/seller/SellerPageHeader', () => ({
+    SellerPageHeader: ({ title, actions }: { title: ReactNode; actions?: ReactNode }) =>
+        createElement('header', null, title, actions),
+}))
+mock.module('./RegularizarFechamentoDrawer', () => ({
+    RegularizarFechamentoDrawer: () => null,
+}))
+mock.module('@/hooks/useCheckinAuditor', () => ({
+    useCheckinAuditor: () => ({
+        requestCorrection: requestCorrectionMock,
+        fetchOwnRequests: fetchOwnRequestsMock,
+        loading: false,
+    }),
+}))
+mock.module('@/hooks/useCheckins', () => ({
+    CHECKIN_ZERO_REASONS: ['Folga', 'Treinamento', 'Feriado', 'Dia administrativo', 'Outro'],
+}))
+mock.module('@/lib/toast', () => ({
+    toast: { error: mock(), success: mock() },
+}))
+
+const { CheckinHeader } = await import('./CheckinHeader')
 
 const headerSource = readFileSync(new URL('./CheckinHeader.tsx', import.meta.url), 'utf8')
 const formSource = readFileSync(new URL('./CheckinForm.tsx', import.meta.url), 'utf8')
+
+function dateInSaoPaulo(offsetDays = 0) {
+    const today = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Sao_Paulo',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    }).format(new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })))
+    const date = new Date(`${today}T12:00:00`)
+    date.setDate(date.getDate() + offsetDays)
+    return date.toISOString().slice(0, 10)
+}
+
+function renderProductionZeroHeader(activeClosingDate = dateInSaoPaulo()) {
+    return render(
+        createElement(CheckinHeader, {
+            dateStr: activeClosingDate.split('-').reverse().join('/'),
+            pillars: [],
+            setCustomReferenceDate: mock(),
+            handleExit: mock(),
+            historyOpen: true,
+            setHistoryOpen: mock(),
+            checkins: [],
+            previousCard: null,
+            activeClosingDate,
+            saveCheckin: saveCheckinMock,
+        }),
+    )
+}
+
+afterEach(() => {
+    cleanup()
+    saveCheckinMock.mockClear()
+    requestCorrectionMock.mockClear()
+    fetchOwnRequestsMock.mockClear()
+})
 
 // P0-02/P0-06 (auditoria 2026-07-10): a solicitação de regularização enviava
 // agd_cart_prev_day/agd_net_prev_day fixos em 0 — zerando os agendamentos D-1
@@ -110,12 +175,40 @@ describe('CheckinHeader — Produção Zero com seletor de data', () => {
         expect(headerSource).toContain("existing?.zero_reason || ''")
     })
 
-    test('data retroativa usa escopo historical; data ativa usa daily', () => {
+    test('mantém o contrato textual de escopo como cobertura auxiliar', () => {
         expect(headerSource).toContain('if (isActiveDate)')
         expect(headerSource).toContain("saveCheckin(placeholderPayload, isActiveDate ? 'daily' : 'historical', productionZeroDate)")
         expect(headerSource).toContain("          'daily',\n          productionZeroDate,")
         expect(headerSource).toContain('isActiveDate = productionZeroDate === activeClosingDate')
         expect(headerSource).not.toContain("saveCheckin(placeholderPayload, 'daily', productionZeroDate)")
+    })
+
+    test('data operacional ativa chama saveCheckin com escopo daily', async () => {
+        const activeClosingDate = dateInSaoPaulo()
+        renderProductionZeroHeader(activeClosingDate)
+
+        fireEvent.click(screen.getByRole('button', { name: 'Marcar Produção Zero' }))
+        fireEvent.click(within(screen.getByRole('radiogroup', { name: 'Motivo da Produção Zero' })).getByRole('radio', { name: 'Folga' }))
+        fireEvent.click(screen.getByRole('button', { name: 'Confirmar Produção Zero' }))
+
+        await waitFor(() => expect(saveCheckinMock).toHaveBeenCalledTimes(1))
+        expect(saveCheckinMock.mock.calls[0]?.[1]).toBe('daily')
+        expect(requestCorrectionMock).not.toHaveBeenCalled()
+    })
+
+    test('data retroativa chama saveCheckin com escopo historical', async () => {
+        const activeClosingDate = dateInSaoPaulo()
+        renderProductionZeroHeader(activeClosingDate)
+
+        fireEvent.click(screen.getByRole('button', { name: 'Marcar Produção Zero' }))
+        const dateOptions = within(screen.getByRole('radiogroup', { name: 'Data do fechamento' })).getAllByRole('radio')
+        fireEvent.click(dateOptions[1]!)
+        fireEvent.click(within(screen.getByRole('radiogroup', { name: 'Motivo da Produção Zero' })).getByRole('radio', { name: 'Folga' }))
+        fireEvent.click(screen.getByRole('button', { name: 'Confirmar Produção Zero' }))
+
+        await waitFor(() => expect(saveCheckinMock).toHaveBeenCalledTimes(1))
+        expect(saveCheckinMock.mock.calls[0]?.[1]).toBe('historical')
+        expect(requestCorrectionMock).toHaveBeenCalledTimes(1)
     })
 
     test('fechamentos concluídos ficam indisponíveis no seletor (regularização é o caminho)', () => {

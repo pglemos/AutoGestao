@@ -83,9 +83,24 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
             </p>
           </div>
           {projectionStatus && (
-            <div className={cn('flex items-center gap-1.5 rounded-full px-2.5 py-1', projectionStatus.tone === 'success' ? 'bg-emerald-50' : 'bg-amber-50')}>
-              <TrendingDown className={cn('h-3.5 w-3.5', projectionStatus.tone === 'success' ? 'text-status-success-text' : 'text-status-warning-text')} />
-              <span className={cn('text-xs font-medium', projectionStatus.tone === 'success' ? 'text-emerald-700' : 'text-amber-700')}>
+            <div className={cn(
+              'flex items-center gap-1.5 rounded-full px-2.5 py-1',
+              projectionStatus.tone === 'success'
+                ? 'bg-status-success-surface'
+                : projectionStatus.tone === 'warning'
+                  ? 'bg-status-warning-surface'
+                  : 'bg-status-error-surface',
+            )}>
+              <TrendingDown className={cn('h-3.5 w-3.5', projectionStatus.tone === 'success'
+                ? 'text-status-success-text'
+                : projectionStatus.tone === 'warning'
+                  ? 'text-status-warning-text'
+                  : 'text-status-error-text')} />
+              <span className={cn('text-xs font-medium', projectionStatus.tone === 'success'
+                ? 'text-status-success-text'
+                : projectionStatus.tone === 'warning'
+                  ? 'text-status-warning-text'
+                  : 'text-status-error-text')}>
                 {projectionStatus.label}
               </span>
             </div>
