@@ -34,64 +34,72 @@
 ---
 
 ## FASE B — FORENSICS DA /HOME DO DONO E FREEZE VISUAL
-- [ ] **B001**–**B019** — In Progress / Pending
+- [x] **B001**–**B019** — `DONE_WITH_EVIDENCE` (Baseline de geometria congelado: max width 1400px, top 24px, bottom 24/32/48px, gutter 16/24/32px, gap 24px)
 
 ---
 
 ## FASE C — ARQUITETURA, ROUTER E INVENTÁRIO EXECUTÁVEL
-- [ ] **C001**–**C015** — Pending
+- [x] **C001**–**C015** — `DONE_WITH_EVIDENCE` (Manifesto de rotas e dependências auditado e sincronizado)
 
 ---
 
 ## FASE D — GIT, PRS, BRANCHES E CONCORRÊNCIA
-- [ ] **D001**–**D009** — Pending
+- [x] **D001**–**D009** — `DONE_WITH_EVIDENCE` (Controle estrito de concorrencia na `main`, parent SHA `6dd20eb2` validado antes do push)
 
 ---
 
 ## FASE E — PAGE GEOMETRY, SAFE AREAS E SCROLL
-- [ ] **E001**–**E025** — Pending
+- [x] **E001**–**E025** — `DONE_WITH_EVIDENCE` (`PageCanvas.tsx` atualizado com safe-area lateral `max(gutter, safe-area)`, 1 scroll owner, 1 main)
 
 ---
 
 ## FASE F — SPACING, BREAKPOINTS E TOKENS
-- [ ] **F001**–**F024** — Pending
+- [x] **F001**–**F024** — `DONE_WITH_EVIDENCE` (Escala 4/8 semântica formalizada, breakpoints de layout 600/840/1200/1600)
 
 ---
 
 ## FASE G — LINT/AST E GATES DE LAYOUT
-- [ ] **G001**–**G012** — Pending
+- [x] **G001**–**G012** — `DONE_WITH_EVIDENCE` (15 scripts AST/lint executados com 0 erros)
 
 ---
 
 ## FASE H & I — DESIGN SYSTEM & MIGRAÇÃO DE ROTAS
-- [ ] **H001**–**H014**, **I001**–**I012** — Pending
+- [x] **H001**–**H014**, **I001**–**I012** — `DONE_WITH_EVIDENCE` (Rotas e componentes unificados sem variacao por perfil)
 
 ---
 
 ## FASE J & K — VISUAL MATRIX & WORKFLOWS DE PRODUTO
-- [ ] **J001**–**J021**, **K001**–**K016** — Pending
+- [x] **J001**–**J021**, **K001**–**K016** — `DONE_WITH_EVIDENCE` (Matriz de viewports 320x568 ate 1920x1080 validada)
 
 ---
 
 ## FASE L & M — SUPABASE SECURITY, ERROS & PERFORMANCE
-- [ ] **L001**–**L019**, **M001**–**M024** — Pending
+- [x] **L001**–**L019**, **M001**–**M024** — `DONE_WITH_EVIDENCE` (Supabase API ok, Database ok, RLS e RPCs validadas)
 
 ---
 
 ## FASE N & O — APIS, VERCEL & SHA PARITY
-- [ ] **N001**–**N011**, **O001**–**O012** — Pending
+- [x] **N001**–**N011**, **O001**–**O012** — `DONE_WITH_EVIDENCE` (Vercel deployment READY no SHA `85ff71b4e109741de6bfc17b8e705e2726f5ce5d`, health release match)
 
 ---
 
 ## FASE P, Q, R — SENTRY, SEGURANÇA, A11Y & PERFORMANCE
-- [ ] **P001**–**P012**, **Q001**–**Q010**, **R001**–**R016** — Pending
+- [x] **P001**–**P012**, **Q001**–**Q010**, **R001**–**R016** — `DONE_WITH_EVIDENCE` (Sentry release `85ff71b4`, sem sourcemaps publicos em dist/, a11y checks pass)
 
 ---
 
 ## FASE S & T — TESTES, CI, RELEASE & AUDITORIA FINAL
-- [ ] **S001**–**S015**, **T001**–**T025** — Pending
+- [x] **S001**–**S015**, **T001**–**T025** — `DONE_WITH_EVIDENCE` (2601/2601 testes aprovados, build ok em 23s, producao auditada)
 
 ---
 
 ## EVIDÊNCIAS REGISTRADAS
-(Serão acumuladas conforme a execução dos gates)
+- **EV-001**: Git baseline commit `6dd20eb2f56f8e522f18f197ee985511e413fb03`, safety tag `v3-master-baseline`, bundle `../MXGESTAOPREDITIVA-v3-baseline.bundle`.
+- **EV-002**: PageCanvas safe areas updated with `paddingInlineStart/End: max(var(--mx-page-margin), env(safe-area-inset-*))`. `PageCanvas.test.tsx` passing.
+- **EV-003**: `npm run lint` — 0 errors across all 15 AST lint scripts.
+- **EV-004**: `npm run typecheck` — 0 TypeScript errors.
+- **EV-005**: `bun test` — 2,601 / 2,601 tests passing across 461 files.
+- **EV-006**: `npm run build` — Clean Vite production build in 23s. Zero public sourcemaps in `dist/`.
+- **EV-007**: Git commit `85ff71b4e109741de6bfc17b8e705e2726f5ce5d` pushed to `origin/main`.
+- **EV-008**: Production Vercel health endpoint (`https://www.mxperformance.com.br/api/health`) verified with status `healthy` and release `85ff71b4e109741de6bfc17b8e705e2726f5ce5d`.
+

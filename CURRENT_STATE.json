@@ -1,10 +1,11 @@
 {
-  "timestamp": "2026-08-10T16:35:00-03:00",
+  "timestamp": "2026-08-10T16:44:10-03:00",
   "project": "MX Gestao Preditiva / MX Performance",
   "environment": "production",
   "git": {
     "branch": "main",
     "initial_sha": "6dd20eb2f56f8e522f18f197ee985511e413fb03",
+    "final_sha": "85ff71b4e109741de6bfc17b8e705e2726f5ce5d",
     "baseline_tag": "v3-master-baseline",
     "bundle_backup": "../MXGESTAOPREDITIVA-v3-baseline.bundle",
     "working_tree": "clean"
@@ -12,7 +13,7 @@
   "vercel": {
     "url": "https://www.mxperformance.com.br",
     "health_status": "healthy",
-    "production_release": "d9c061edef9960e41216b046cc71b7856a58c0df"
+    "production_release": "85ff71b4e109741de6bfc17b8e705e2726f5ce5d"
   },
   "supabase": {
     "project_id": "fbhcmzzgwjdgkctlfvbo",
@@ -21,6 +22,6 @@
   },
   "sentry": {
     "project": "mx-performance",
-    "release": "d9c061edef9960e41216b046cc71b7856a58c0df"
+    "release": "85ff71b4e109741de6bfc17b8e705e2726f5ce5d"
   }
 }
