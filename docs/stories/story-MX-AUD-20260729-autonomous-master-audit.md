@@ -120,7 +120,9 @@ anteriores de conclusão não contam como evidência nova.
   - [ ] Provar rollback e monitorar o pós-deploy.
 - [ ] Fases 13–14 — entrega (AC: 12, 13)
   - [x] Atualizar checkboxes, Dev Agent Record e File List.
-  - [x] Revisar diff, executar quality gate e secret scan.
+  - [x] Revisar diff e executar os gates locais listados.
+  - [x] Executar Gitleaks no estado staged.
+  - [ ] Configurar e executar Secretlint.
   - [ ] Preparar commits/PR/deploy via autoridade AIOX DevOps.
   - [ ] Entregar relatório final baseado nas evidências atuais.
 
@@ -201,7 +203,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-07-29 | 0.2.1 | Development started (yolo mode) — Status: Ready → InProgress | Dex (Dev) |
 | 2026-07-29 | 0.3.0 | Inventário reproduzível de rotas, autorização, dados e mutations | Dex (Dev) |
 | 2026-08-10 | 0.3.1 | Regressão do PageCanvas do Dono corrigida e validada localmente em dois breakpoints | Dex (Dev) |
-| 2026-08-10 | 0.3.2 | Rotas gerenciais restantes migradas para PageCanvas; gates locais, layout contract e secret scan revalidados | Dex (Dev) |
+| 2026-08-10 | 0.3.2 | Rotas gerenciais restantes migradas para PageCanvas; gates locais, layout contract e Gitleaks revalidados; Secretlint pendente | Dex (Dev) |
 | 2026-08-10 | 0.3.3 | Branch rebaseada sobre `origin/main` atual; contrato E2E do Gerente alinhado ao runtime e gates locais repetidos | Dex (Dev) |
 
 ## Dev Agent Record
@@ -487,10 +489,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
  fora dos arquivos desta tarefa.
 - 2026-08-10: o pre-push AIOX/DevOps ainda não foi executado na branch
   rebaseada. A última evidência local registra `npm audit` com uma
-  vulnerabilidade high em `xlsx` sem correção disponível, Secretlint falhando
-  por ausência de `.secretlintrc`, e CodeRabbit/Agy sujeitos a quota externa.
-  O status foi atualizado para `Ready for Review` sem transformar os gates
-  externos pendentes em aprovação.
+  vulnerabilidade high em `xlsx` sem correção disponível e Secretlint pendente
+  por ausência de `.secretlintrc`; CodeRabbit final concluiu sem achado crítico,
+  enquanto Agy permaneceu limitado por quota externa. O status foi atualizado
+  para `Ready for Review` sem transformar os gates externos pendentes em
+  aprovação.
 
 ### File List
 
