@@ -22,7 +22,7 @@
 - Gates locais atuais: `npm test` `2606 pass / 0 fail / 18195 expect()`;
   `npm run lint`, `npm run typecheck`, `npm run build`,
   `npm run check:bundle-size`, auditoria de layout/rotas, estrutura, paridade,
-  IDE sync, a11y e `git diff --check` passaram. Bundle: `1564,03/1860 KB gzip`;
+  IDE sync, a11y e `git diff --check` passaram. Bundle: `1564,22/1860 KB gzip`;
   build sem sourcemaps públicos.
 - Contratos direcionados: `38 pass / 0 fail / 8222 expect()`; layout contract:
   zero violações; inventário runtime: 109 rotas, 101 protegidas, 8 públicas,
@@ -41,11 +41,11 @@
 - Não há nesta revalidação push, PR, CI remoto, preview, promoção de produção,
   prova de backup/PITR, evento Sentry/source map da branch ou smoke
   autenticado novo. Esses gates permanecem bloqueantes.
-- Pre-push AIOX/DevOps: aguardando execução final. O worktree está limpo e
-  os gates funcionais passam; `npm audit
-  --audit-level=moderate --json` retornou exit 1 com 0 critical e 1 high em
-  `xlsx` sem correção disponível; `npx secretlint "**/*"` retornou exit 2 por
-  ausência de `.secretlintrc`. Push/PR/deploy ainda não foram executados.
+- Pre-push AIOX/DevOps: aguardando execução final. Os gates funcionais passam;
+  `npm audit --audit-level=moderate --json` retornou exit 1 com 0 critical e 1
+  high em `xlsx` sem correção disponível. Secretlint 13.0.4, com
+  `.secretlintrc.json` e `.secretlintignore`, concluiu o scan corrente sem
+  achados. Push/PR/deploy ainda não foram executados.
 
 ## 39.1 Resumo executivo — estado vigente
 
@@ -150,4 +150,4 @@ independente de source maps/Sentry, matriz integral e rotação de segredos**.
 | P2 | Vulnerabilidade de desenvolvimento sem correção disponível | `xlsx@0.18.5` permanece somente em `devDependencies`; o audit completo bloqueia o pre-push, mas o audit de produção não encontra vulnerabilidades | `npm audit --audit-level=moderate`: 1 high em `xlsx`, sem fix; `npm audit --omit=dev`: 0 vulnerabilidades | Substituir/atualizar `xlsx` com alternativa compatível e repetir os gates de segurança |
 | Info | `/home` para Administrador Geral | Rota bloqueada pela matriz de autorização | Produção exibiu mensagem de acesso negado sem erro/overflow | Não alterar sem requisito explícito; validar com perfil autorizado se necessário |
 | P1 | Backup restaurável não comprovado | Sem ponto de restauração testável para rollback de banco | Supabase `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
-| P1 | Pre-push bloqueado por segurança/governança | A publicação do commit local não tem gate formal completo | `npm audit` 1 high em `xlsx` sem fix; Secretlint sem `.secretlintrc`; CodeRabbit final sem crítico | Corrigir/substituir a dependência vulnerável, configurar secretlint e repetir o pre-push |
+| P1 | Pre-push bloqueado por segurança/governança | A publicação do commit local não tem gate formal completo | `npm audit` 1 high em `xlsx` sem fix; Secretlint corrente sem achados; CodeRabbit final sem crítico | Corrigir/substituir a dependência vulnerável e repetir o pre-push |

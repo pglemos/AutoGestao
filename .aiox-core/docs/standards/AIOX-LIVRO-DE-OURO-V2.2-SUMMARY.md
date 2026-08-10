@@ -1327,6 +1327,7 @@ services:
     depends_on:
       - postgres
     environment:
+      # secretlint-disable-next-line -- local development example; use a secret manager in deployments
       - DATABASE_URL=postgresql://aiox:aiox_dev@postgres:5432/aiox_memory
       
 volumes:
@@ -1336,4 +1337,3 @@ volumes:
 ```
 
 ---
-

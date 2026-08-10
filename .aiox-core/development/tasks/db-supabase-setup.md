@@ -352,9 +352,11 @@ SUPABASE_PROJECT_NAME={project_name}
 
 # Database URLs
 # Connection pooler (port 6543) for serverless/edge functions
+# secretlint-disable-next-line -- template example; load the real URL from a secret manager
 SUPABASE_DB_URL_POOLER=postgresql://postgres:[PASSWORD]@db.[PROJECT_REF].supabase.co:6543/postgres
 
 # Direct connection (port 5432) for migrations
+# secretlint-disable-next-line -- template example; load the real URL from a secret manager
 SUPABASE_DB_URL=postgresql://postgres:[PASSWORD]@db.[PROJECT_REF].supabase.co:5432/postgres
 
 # API Keys

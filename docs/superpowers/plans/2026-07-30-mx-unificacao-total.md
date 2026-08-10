@@ -5,9 +5,15 @@
 > **Revalidação corrente (2026-08-10):** a execução atual ocorre em worktree
 > local isolado, branch
 > `fix/mx-full-execution-20260810`, sobre `origin/main`
-> `d9c061edef9960e41216b046cc71b7856a58c0df`. O plano e os estados históricos
-> abaixo são preservados; a unidade gerencial corrente está no commit
-> `f333da4d48bae84af547fce0ce0924c8857839b6`, sem PR/preview/produção.
+> `3ee29d72a9ff6729b3097faa0363c17cb3611ea1`. O checkout corrente está em
+> `64dd91cd8db22c49bd9b64adbf838b4918a8b67c`; a unidade gerencial foi
+> implementada nos commits `f5c813ce`, `52a761ed` e `ae3da0b8`, com a
+> documentação/security scan reconciliada nos commits posteriores. O plano e
+> os estados históricos abaixo são preservados, sem PR/preview/produção para
+> este checkout.
+
+> Os números `2604/18182`, `1563,79` e os SHAs anteriores citados nas seções
+> datadas abaixo são snapshots históricos, não evidência do checkout corrente.
 
 ## Revalidação corrente da unidade gerencial — 2026-08-10
 
@@ -17,8 +23,8 @@
   `HelpTooltip` é botão nativo e `CheckinHeader` usa escala tipográfica
   canônica nos trechos ajustados.
 - Contratos direcionados: `38 pass / 0 fail / 8222 expect()`; suíte total:
-  `2604 pass / 0 fail / 18182 expect()`.
-- Lint, typecheck, build, bundle (`1563,79/1860 KB gzip`), layout/route
+  `2606 pass / 0 fail / 18195 expect()`.
+- Lint, typecheck, build, bundle (`1564,22/1860 KB gzip`), layout/route
   audits, AIOX structure/parity/IDE sync, a11y, management design system e
   diff-check passaram.
 - Commit, PR, CI remoto, preview, produção, backup/PITR, Sentry/source maps,

@@ -18,7 +18,7 @@ O worktree corrente está rebaseado sobre `origin/main` e contém os commits de
 layout, contraste e contrato E2E listados acima. Os gates locais passaram:
 `npm test` `2606 pass / 0 fail / 18195 expect()`, `npm run lint`,
 `npm run typecheck`, `npm run build`, `npm run check:bundle-size`
-(`1564,03/1860 KB gzip`), auditorias de rotas/layout/management design system,
+(`1564,22/1860 KB gzip`), auditorias de rotas/layout/management design system,
 IDE sync, estrutura, agentes, paridade e `git diff --check`. A suíte do
 Gerente passou `2/2` no fluxo funcional direcionado e `1/1` no contrato de
 console/rede após uma falha transitória de `Failed to fetch` no primeiro run.
@@ -30,8 +30,8 @@ permanece separada: deployment `READY` servindo `3ee29d72`, `/api/health`
 HTTP 200 com Vercel, Supabase, database e crons `ok`. Backup restaurável/PITR,
 Sentry autenticado/source maps da nova release, matriz integral de perfis e
 rollback executado continuam sem prova. `npm audit` mantém um high em
-`xlsx`, e Secretlint não pode executar porque o repositório não possui
-`.secretlintrc`.
+`xlsx`; Secretlint 13.0.4 foi configurado com o preset recomendado e concluiu
+o scan corrente sem achados.
 
 As tentativas de revisão Agy/Antigravity foram limitadas por quota externa; não
 há disponibilidade comprovada de um modelo “GPT 5.6 Luna”, portanto nenhuma

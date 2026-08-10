@@ -47,7 +47,7 @@ tipográficos arbitrários.
   `npm run audit:routes-data`, `validate:structure`, `validate:parity`,
   `sync:ide:check`, `validate:agents`, `audit:management-design-system`,
   `lint:a11y` e `git diff --check`: exit 0.
-- Bundle: `1564,03/1860 KB gzip`; build sem sourcemaps públicos.
+- Bundle: `1564,22/1860 KB gzip`; build sem sourcemaps públicos.
 - `gitleaks protect --staged`: exit 0. O histórico contém 116 achados
   redigidos; o scan de `src/` encontrou três falsos positivos genéricos em
   fixtures/diagnósticos não alterados.
@@ -63,7 +63,7 @@ um único achado documental major, corrigido no relatório corrente. PR/CI/previ
 matriz browser integral, backup/PITR, Sentry/source maps e rollback continuam
 pendentes.
 - Pre-push AIOX/DevOps ainda não executado: worktree limpo, story `Ready for Review`,
-  `npm audit` com 1 high em `xlsx` sem fix, Secretlint sem configuração e
+  `npm audit` com 1 high em `xlsx` sem fix, Secretlint 13.0.4 sem achados e
   revisão CodeRabbit final sem crítico; não houve push ou PR.
 
 ## Registro histórico — revalidação do commit `a3ede247` — 2026-08-10

@@ -122,7 +122,7 @@ anteriores de conclusão não contam como evidência nova.
   - [x] Atualizar checkboxes, Dev Agent Record e File List.
   - [x] Revisar diff e executar os gates locais listados.
   - [x] Executar Gitleaks no estado staged.
-  - [ ] Configurar e executar Secretlint.
+  - [x] Configurar e executar Secretlint.
   - [ ] Preparar commits/PR/deploy via autoridade AIOX DevOps.
   - [ ] Entregar relatório final baseado nas evidências atuais.
 
@@ -205,6 +205,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-08-10 | 0.3.1 | Regressão do PageCanvas do Dono corrigida e validada localmente em dois breakpoints | Dex (Dev) |
 | 2026-08-10 | 0.3.2 | Rotas gerenciais restantes migradas para PageCanvas; gates locais, layout contract e Gitleaks revalidados; Secretlint pendente | Dex (Dev) |
 | 2026-08-10 | 0.3.3 | Branch rebaseada sobre `origin/main` atual; contrato E2E do Gerente alinhado ao runtime e gates locais repetidos | Dex (Dev) |
+| 2026-08-10 | 0.3.4 | Secretlint 13.0.4 configurado com preset recomendado e scan corrente concluído sem achados; bundle documental reconciliado | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -424,7 +425,7 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   run completo.
 - 2026-08-10: a repetição local reconciliada passou `npm test` com `2606/2606`
   testes e `18195 expect()`, lint, typecheck, build (`5143` módulos), bundle
-  (`1564,03/1860 KB gzip`), auditorias de rotas/layout/management design system,
+  (`1564,22/1860 KB gzip`), auditorias de rotas/layout/management design system,
   IDE sync, estrutura, agentes, paridade e Gitleaks no range da branch.
 - 2026-08-10: leitura remota confirmou GitHub autenticado, projeto Supabase
   `fbhcmzzgwjdgkctlfvbo` listado e produção Vercel `READY`; `/api/health`
@@ -432,9 +433,9 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   o SHA `3ee29d72`. O branch desta retomada ainda não tinha push/PR no momento
   deste registro.
 - 2026-08-10: `npm audit --omit=dev` retornou zero vulnerabilidades; o audit
-  completo mantém um high em `xlsx`. `npx secretlint` não executa sem
-  `.secretlintrc`; isso permanece bloqueio de governança, enquanto Gitleaks
-  passou sem leak no diff da branch.
+  completo mantém um high em `xlsx`. Secretlint 13.0.4, com
+  `.secretlintrc.json` e `.secretlintignore` para artefatos locais, concluiu o
+  scan corrente sem achados; Gitleaks também passou sem leak no diff da branch.
 - 2026-08-10: a repetição final da suíte `src/test/manager-module.playwright.ts`
   passou `10/10` em `2,6m` nos projetos `chromium` e `mobile-chrome`; o caso
   mobile que havia falhado por `TypeError: Failed to fetch` também passou
@@ -488,10 +489,10 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   enquanto os três achados do scan de `src/` pertencem a fixtures/diagnósticos
  fora dos arquivos desta tarefa.
 - 2026-08-10: o pre-push AIOX/DevOps ainda não foi executado na branch
-  rebaseada. A última evidência local registra `npm audit` com uma
-  vulnerabilidade high em `xlsx` sem correção disponível e Secretlint pendente
-  por ausência de `.secretlintrc`; CodeRabbit final concluiu sem achado crítico,
-  enquanto Agy permaneceu limitado por quota externa. O status foi atualizado
+  rebaseada. A evidência corrente registra `npm audit` com uma vulnerabilidade
+  high em `xlsx` sem correção disponível, enquanto Secretlint 13.0.4 concluiu
+  sem achados após a configuração local. CodeRabbit final concluiu sem achado
+  crítico, e Agy permaneceu limitado por quota externa. O status foi atualizado
   para `Ready for Review` sem transformar os gates externos pendentes em
   aprovação.
 
