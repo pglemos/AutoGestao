@@ -25,11 +25,13 @@ export function VendasFechadasLoja({
   showManagerHeader = false,
   selectableStores = [],
   onStoreChange,
+  onVendaCancelada,
 }: {
   storeId: string | null
   showManagerHeader?: boolean
   selectableStores?: Store[]
   onStoreChange?: (storeId: string) => void
+  onVendaCancelada?: () => void
 }) {
   const { vendas, loading, error, cancelarVenda } = useVendasLoja(storeId)
   const [search, setSearch] = useState('')
@@ -57,6 +59,7 @@ export function VendasFechadasLoja({
     }
     toast.success('Venda cancelada.')
     setCancelarVendaAlvo(null)
+    if (onVendaCancelada) onVendaCancelada()
   }
 
   return (

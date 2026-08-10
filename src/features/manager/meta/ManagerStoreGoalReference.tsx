@@ -357,7 +357,13 @@ export function ManagerStoreGoalReference({
             <h2 className="font-semibold text-gray-800">Vendas Fechadas</h2>
             <p className="mt-0.5 text-xs text-gray-400">Vendas registradas pela equipe, com opção de cancelamento.</p>
           </div>
-          <VendasFechadasLoja storeId={data.selectedStoreId} />
+          <VendasFechadasLoja
+            storeId={data.selectedStoreId}
+            onVendaCancelada={() => {
+              void data.refreshDashboardData()
+              void refreshTargetPlans()
+            }}
+          />
         </article>
       {goalsOpen && (
         <div

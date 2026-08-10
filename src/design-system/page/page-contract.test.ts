@@ -66,6 +66,11 @@ describe('contrato de layout de página', () => {
     // mais de um lugar decidindo margem lateral.
     expect(pageCanvas).not.toMatch(/@media|min-width|matchMedia|useMediaQuery/)
   })
+
+  it('garante um único scroll owner na rota DashboardLoja sem overflow-y-auto interno', () => {
+    const dashboardLoja = read('src/features/dashboard-loja/DashboardLoja.container.tsx')
+    expect(dashboardLoja).not.toContain('overflow-y-auto')
+  })
 })
 
 describe('registro de layout por rota', () => {
