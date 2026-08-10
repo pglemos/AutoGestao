@@ -2,6 +2,31 @@
 
 > Relatório vivo de fechamento. Atualizado em 2026-08-03 após a publicação de `7387fb32` e a revalidação real do consultor.
 
+> **Revalidação mais recente (2026-08-10):** os parágrafos que citam o SHA
+> `7387fb32`, deployments de 03/08 e a execução direta na `main` são históricos
+> e estão superseded como prova do estado atual. A retomada ocorreu no
+> worktree `/Users/pedroguilherme/PROJETOS/mx-unificacao-total-20260809`, branch
+> `feat/mx-unificacao-total-20260809`, sobre `origin/main` `71d9286a`.
+
+## Revalidação vigente — 2026-08-10
+
+- Correção local commitada em `a3ede247ed3db02a4aa0cbb1a97cd6f79670f75d`.
+- Causa raiz: a aba de performance do Dono desligava o `ConditionalPageCanvas`
+  e o `OwnerExecutiveCockpit` mantinha padding lateral próprio.
+- Correção: canvas habilitado para Dono com `as="div"`; padding próprio removido;
+  contrato RED/GREEN adicionado e restrito à abertura JSX real.
+- Gates locais: lint, typecheck, suíte (`2.594 pass`, `18.151 asserts`), build,
+  bundle (`1.563,51/1.860 KB gzip`), auditoria de rotas e `git diff --check`
+  passaram. O lint mantém somente o warning a11y histórico de `HelpTooltip.tsx`.
+- Browser local autenticado como Dono: `1440×900` e `390×844` passaram com um
+  canvas `DIV`, margens canônicas `32px`/`16px`, cockpit sem padding próprio,
+  um landmark `main`, zero overflow e console sem erros.
+- A publicação externa ainda é pendente nesta retomada: não há SHA remoto,
+  preview, CI, produção ou Sentry aprovados para `a3ede247`.
+- Pendências bloqueantes continuam: backup restaurável/PITR, prova independente
+  de source maps/Sentry, validação integral de perfis/rotas e rotação dos
+  segredos fornecidos na sessão.
+
 ## 39.1 Resumo executivo
 
 O repositório está no branch `main`, com fundação visual, tokens, PageCanvas, shell canônico, auditorias estáticas e validações de múltiplos perfis já implementados. A última auditoria encontrou uma regressão isolada em `/relatorios/performance-vendas`: o cabeçalho não seguia o contrato visual canônico e os quatro gráficos emitiam warnings de dimensão inicial negativa. O cabeçalho e os quatro `ResponsiveContainer` foram corrigidos, publicados e validados em produção.

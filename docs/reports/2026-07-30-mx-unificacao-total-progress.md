@@ -1,6 +1,63 @@
 # MX Unificação Total — Progresso
 
-Atualizado em 2026-08-03 após o SHA `7387fb32`. Execução direta no branch `main`, sem criar branch ou worktree, conforme decisão explícita do solicitante.
+Atualizado em 2026-08-10 durante a retomada isolada no branch
+`feat/mx-unificacao-total-20260809`, commit local `a3ede247` sobre
+`origin/main` `71d9286a`. As observações abaixo da seção histórica de 03/08
+continuam preservadas, mas não são evidência atual deste checkout.
+
+> **Estado vigente:** correção do PageCanvas do Dono implementada, testada e
+> validada localmente em browser autenticado. Preview, CI remoto, produção,
+> Sentry e backup restaurável ainda não foram aprovados nesta retomada.
+
+## Revalidação atual — 2026-08-10
+
+### Tarefa
+
+Corrigir a regressão visual/estrutural encontrada em `/home` do Dono: o cockpit
+executivo escapava do `PageCanvas` e aplicava margem própria.
+
+### Diagnóstico e causa raiz
+
+`DashboardLoja.container.tsx` desligava `ConditionalPageCanvas` sempre que o
+papel era Dono ou gerente na aba `performance`. `OwnerExecutiveCockpit.tsx`
+também usava `p-mx-sm md:p-mx-lg`, duplicando a responsabilidade de margem.
+
+### Alterações e arquivos
+
+- `ConditionalPageCanvas` agora é habilitado para o Dono e usa `as="div"`,
+  evitando um landmark `main` aninhado no shell.
+- O padding lateral próprio foi removido do cockpit executivo.
+- O contrato `OwnerExecutiveCockpit.contract.test.ts` falha antes da mudança e
+  prova a abertura JSX real após a mudança.
+- Commit local: `a3ede247ed3db02a4aa0cbb1a97cd6f79670f75d`.
+
+### Testes e evidências
+
+- RED: contrato falhou porque o Dono não habilitava o canvas.
+- GREEN: contrato isolado `2 pass / 0 fail`.
+- `npm run lint`: exit 0; warning a11y preexistente em `HelpTooltip.tsx`.
+- `npm run typecheck`: exit 0.
+- `npm test`: `2.594 pass / 0 fail / 18.151 asserts`.
+- `npm run build`: exit 0; sem sourcemaps públicos.
+- `npm run check:bundle-size`: `1.563,51/1.860 KB gzip`, chunks dentro do
+  orçamento; `vendor-ui` em warning não bloqueante.
+- `npm run audit:routes-data`: exit 0; 109 rotas declaradas, 101 protegidas,
+  8 públicas, 136 tabelas, 87 RPCs e 14 Edge Functions.
+- CodeRabbit: revisão final sem novos achados.
+- Browser local autenticado como Dono, `1440×900`: um
+  `[data-mx-page-canvas]`, tag `DIV`, padding `32px`, cockpit `0px`, um
+  `main`, zero overflow e zero erros de console.
+- Browser local autenticado como Dono, `390×844`: canvas `DIV`, padding
+  `16px`, cockpit `0px`, um `main`, `scrollWidth === clientWidth === 390` e
+  zero erros de console.
+- Screenshot local: `output/playwright/dono-pagecanvas-fix-1440x900.png`.
+
+### Resultado e próximo passo
+
+Correção local comprovada. A revisão Agy foi tentada em modo sandbox, mas o
+launcher atingiu a cota externa antes de produzir parecer; não é contada como
+aprovação. Fazer push/PR somente após registrar estes documentos, acompanhar
+CI, publicar preview e repetir a matriz autenticada no ambiente publicado.
 
 ## Tarefa
 

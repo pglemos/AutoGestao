@@ -9,6 +9,38 @@
 > Este documento é atualizado durante a execução. “Parcialmente concluído” é
 > obrigatório enquanto qualquer gate do prompt mestre permanecer sem prova.
 
+## Revalidação vigente — 2026-08-10
+
+As referências anteriores a execução direta na `main`, ao HEAD `129301d71` e
+às validações/deploys de 03/08 são históricas e estão superseded como prova do
+estado atual. A retomada atual usa o worktree isolado
+`/Users/pedroguilherme/PROJETOS/mx-unificacao-total-20260809`, branch
+`feat/mx-unificacao-total-20260809`, com base `origin/main`
+`71d9286a6f1f4feafce67662ec48ea36a496fb07`.
+
+### Correção comprovada
+
+- Causa raiz: o fluxo de performance do Dono desabilitava o
+  `ConditionalPageCanvas`, enquanto `OwnerExecutiveCockpit` aplicava padding
+  lateral de página próprio.
+- Commit local: `a3ede247ed3db02a4aa0cbb1a97cd6f79670f75d`.
+- Alterações: canvas habilitado para Dono com `as="div"`; padding próprio
+  removido; contrato RED/GREEN atualizado para provar a tag de abertura JSX.
+- Gates locais: lint, typecheck, `npm test` (`2.594 pass`, `18.151 asserts`),
+  build, bundle (`1.563,51/1.860 KB gzip`), auditoria de rotas e diff-check
+  passaram. O warning de lint em `HelpTooltip.tsx` é preexistente.
+- Browser local autenticado como Dono em `1440×900` e `390×844`: um canvas
+  `DIV`, padding canônico de `32px`/`16px`, cockpit sem padding próprio, um
+  landmark `main`, sem overflow e sem erros de console.
+
+### Estado de publicação
+
+O commit ainda não foi enviado ao GitHub nem publicado em preview/produção.
+Portanto, não há evidência atual de CI remoto, deployment Vercel, `/api/health`
+ou Sentry para esta correção. Backup restaurável/PITR, matriz integral de
+perfis/rotas e rotação dos segredos continuam pendentes; o relatório permanece
+**PARCIALMENTE CONCLUÍDO**.
+
 ## 1. Resumo executivo
 
 A auditoria foi retomada diretamente na `main`, conforme autorização explícita
