@@ -89,3 +89,43 @@ describe('CheckinHeader — Histórico com 7 estados e ações por estado (MX-22
         expect(headerSource).toContain('checkins.find(c => c.reference_date === date && c.metric_scope')
     })
 })
+
+// Produção Zero (2026-08-10): o modal aceita escolher a data do fechamento
+// nos últimos 7 dias — não só a data operacional ativa. Datas retroativas
+// são gravadas com escopo 'historical' (único aceito pelo submit_checkin
+// fora da data operacional ativa); a ativa segue 'daily'.
+describe('CheckinHeader — Produção Zero com seletor de data', () => {
+    test('modal exibe seletor de data derivado do histórico (últimos 7 dias)', () => {
+        expect(headerSource).toContain('Data do fechamento')
+        expect(headerSource).toContain('historyRows.map(row')
+        expect(headerSource).toContain('productionZeroDate === row.date')
+    })
+
+    test('abre com a data operacional ativa pré-selecionada', () => {
+        expect(headerSource).toContain('setProductionZeroDate(activeClosingDate)')
+    })
+
+    test('trocar a data re-carrega o motivo já salvo daquele fechamento', () => {
+        expect(headerSource).toContain('handleSelectProductionZeroDate')
+        expect(headerSource).toContain("existing?.zero_reason || ''")
+    })
+
+    test('data retroativa usa escopo historical; data ativa usa daily', () => {
+        expect(headerSource).toContain("isActiveDate ? 'daily' : 'historical'")
+        expect(headerSource).toContain('isActiveDate = productionZeroDate === activeClosingDate')
+        expect(headerSource).not.toContain("'daily',\n        activeClosingDate,\n        activeClosingDate")
+    })
+
+    test('fechamentos concluídos ficam indisponíveis no seletor (regularização é o caminho)', () => {
+        expect(headerSource).toContain('disabled={row.finalized}')
+    })
+
+    test('confirmação exige motivo e data selecionados', () => {
+        expect(headerSource).toContain('Selecione a data da produção zero.')
+        expect(headerSource).toContain('disabled={!productionZeroReason || !productionZeroDate || productionZeroSaving}')
+    })
+
+    test('descrição do modal acompanha a data selecionada', () => {
+        expect(headerSource).toContain('Escolha o motivo para {productionZeroDate.split')
+    })
+})

@@ -79,6 +79,7 @@ const { requestCorrection, fetchOwnRequests, loading: auditorLoading } = useChec
   }, [historyOpen, fetchOwnRequests])
   const [productionZeroModalOpen, setProductionZeroModalOpen] = useState(false)
   const [productionZeroReason, setProductionZeroReason] = useState('')
+  const [productionZeroDate, setProductionZeroDate] = useState('')
   const [productionZeroSaving, setProductionZeroSaving] = useState(false)
   const [formValues, setFormValues] = useState({
     leads_cart: 0,
@@ -344,7 +345,16 @@ console.error(err)
       checkin => checkin.reference_date === activeClosingDate && checkin.metric_scope === 'daily',
     )
     setProductionZeroReason(activeCheckin?.zero_reason || '')
+    setProductionZeroDate(activeClosingDate)
     setProductionZeroModalOpen(true)
+  }
+
+  const handleSelectProductionZeroDate = (date: string) => {
+    setProductionZeroDate(date)
+    const existing = checkins.find(
+      checkin => checkin.reference_date === date && checkin.metric_scope === 'daily',
+    )
+    setProductionZeroReason(existing?.zero_reason || '')
   }
 
   const handleMarkProductionZero = async () => {
@@ -352,12 +362,18 @@ console.error(err)
       toast.error('Selecione o motivo da produção zero.')
       return
     }
+    if (!productionZeroDate) {
+      toast.error('Selecione a data da produção zero.')
+      return
+    }
+
+    const isActiveDate = productionZeroDate === activeClosingDate
 
     setProductionZeroSaving(true)
     try {
       const result = await saveCheckin(
         {
-          reference_date: activeClosingDate,
+          reference_date: productionZeroDate,
           leads: 0,
           leads_cart: 0,
           leads_net: 0,
@@ -375,8 +391,12 @@ console.error(err)
           note: null,
           zero_reason: productionZeroReason,
         },
-        'daily',
-        activeClosingDate,
+        // Data operacional ativa usa o escopo 'daily'; datas retroativas usam
+        // 'historical', o único aceito pelo servidor (submit_checkin) fora da
+        // data operacional, inclusive para produção zero de fechamentos
+        // pendentes/missed dos últimos 7 dias.
+        isActiveDate ? 'daily' : 'historical',
+        productionZeroDate,
         activeClosingDate,
       )
 
@@ -751,7 +771,7 @@ return (
                   Marcar Produção Zero
                 </h2>
                 <p id="production-zero-description" className="mt-0.5 text-xs font-semibold text-[#92400E]/70">
-                  Escolha o motivo para {activeClosingDate.split('-').reverse().join('/')}.
+                  Escolha o motivo para {productionZeroDate.split('-').reverse().join('/')}.
                 </p>
               </div>
               <button
@@ -765,7 +785,44 @@ return (
               </button>
             </header>
 
-            <div className="space-y-3 overflow-y-auto p-5" role="radiogroup" aria-label="Motivo da Produção Zero">
+            <div className="space-y-3 overflow-y-auto p-5">
+              <div className="space-y-1.5">
+                <p className="text-xs font-extrabold uppercase tracking-wide text-[#92400E]/70">Data do fechamento</p>
+                <div className="flex gap-2 overflow-x-auto pb-1" role="radiogroup" aria-label="Data do fechamento">
+                  {historyRows.map(row => {
+                    const dateObj = new Date(row.date + 'T12:00:00')
+                    const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+                    const weekday = dateObj.toLocaleDateString('pt-BR', { weekday: 'short' }).replace('.', '')
+                    const weekdayFormatted = weekday.charAt(0).toUpperCase() + weekday.slice(1, 3)
+                    const selected = productionZeroDate === row.date
+                    return (
+                      <button
+                        key={row.date}
+                        type="button"
+                        role="radio"
+                        aria-checked={selected}
+                        disabled={row.finalized}
+                        onClick={() => handleSelectProductionZeroDate(row.date)}
+                        className={`flex min-w-16 shrink-0 flex-col items-center rounded-xl border px-3 py-2 transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                          selected
+                            ? 'border-[#F59F0A] bg-[#FFF7E6] text-[#92400E] ring-4 ring-[#F59F0A]/15'
+                            : 'border-[#DFE0E1] bg-white text-[#526B7A] hover:border-[#F59F0A] hover:bg-[#FFFDF7]'
+                        }`}
+                      >
+                        <span className="text-caption font-extrabold uppercase">{weekdayFormatted}</span>
+                        <span className="text-xs font-bold">{formattedDate}</span>
+                      </button>
+                    )
+                  })}
+                </div>
+                {productionZeroDate && productionZeroDate !== activeClosingDate && (
+                  <p className="text-[11px] font-semibold leading-relaxed text-[#92400E]/70">
+                    Data retroativa — o registro será salvo como lançamento histórico.
+                  </p>
+                )}
+              </div>
+
+              <div className="space-y-3" role="radiogroup" aria-label="Motivo da Produção Zero">
               {CHECKIN_ZERO_REASONS.map(reason => {
                 const selected = productionZeroReason === reason
                 return (
@@ -788,6 +845,7 @@ return (
                   </button>
                 )
               })}
+              </div>
             </div>
 
             <footer className="flex justify-end gap-2 border-t border-[#DFE0E1] bg-[#F7F8F8] px-5 py-4">
@@ -802,7 +860,7 @@ return (
               <Button
                 type="button"
                 onClick={() => void handleMarkProductionZero()}
-                disabled={!productionZeroReason || productionZeroSaving}
+                disabled={!productionZeroReason || !productionZeroDate || productionZeroSaving}
                 className="h-10 rounded-xl bg-[#00A89D] px-4 text-xs font-bold text-white hover:bg-[#008F86] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {productionZeroSaving ? 'Salvando...' : 'Confirmar Produção Zero'}

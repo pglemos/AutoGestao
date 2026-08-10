@@ -1,0 +1,1892 @@
+{
+  "generatedAt": "2026-08-10T16:11:26.787Z",
+  "baselineSha": "82191012260208c6dc82e240cd78fdf4658fb6ba",
+  "routeCount": 107,
+  "routes": [
+    {
+      "path": "/",
+      "renderCount": 1,
+      "routes": [
+        "*:PublicHome"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/*",
+      "renderCount": 1,
+      "routes": [
+        "*:NotFound"
+      ],
+      "files": [
+        "src/pages/NotFound.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/agenda",
+      "renderCount": 1,
+      "routes": [
+        "*:AgendaAdmin"
+      ],
+      "files": [
+        "src/features/agenda-admin/AgendaAdmin.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 4,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/ajuda",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:VendedorAjuda",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/pages/VendedorAjuda.tsx"
+      ],
+      "canvas": 0,
+      "template": 4,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/auditoria",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:AiDiagnostics",
+        "dono:ForbiddenRoute",
+        "admin:AiDiagnostics"
+      ],
+      "files": [
+        "src/pages/AiDiagnostics.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/banco-talentos",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:Comportamental",
+        "admin:Comportamental"
+      ],
+      "files": [
+        "src/features/comportamental/ComportamentalPage.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/carteira",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/carteira-clientes",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:CarteiraClientes",
+        "gerente:CarteiraClientes",
+        "dono:CarteiraClientes",
+        "admin:CarteiraClientes"
+      ],
+      "files": [
+        "src/features/carteira-clientes/pages/CarteiraClientesBase44Page.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide"
+      }
+    },
+    {
+      "path": "/central-de-execucao",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:CentralExecucao",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/central-execucao/pages/CentralExecucaoPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard"
+      }
+    },
+    {
+      "path": "/central-execucao",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:CentralExecucao",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/central-execucao/pages/CentralExecucaoPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard"
+      }
+    },
+    {
+      "path": "/classificacao",
+      "renderCount": 1,
+      "routes": [
+        "*:Ranking"
+      ],
+      "files": [
+        "src/features/ranking/Ranking.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/configuracoes",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:VendedorConfiguracoes",
+        "gerente:Configuracoes",
+        "dono:Configuracoes",
+        "admin:Configuracoes"
+      ],
+      "files": [
+        "src/pages/VendedorConfiguracoes.tsx",
+        "src/pages/Configuracoes.tsx"
+      ],
+      "canvas": 0,
+      "template": 4,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/configuracoes/consultoria-pmr",
+      "renderCount": 1,
+      "routes": [
+        "*:ConsultoriaParametros"
+      ],
+      "files": [
+        "src/pages/ConsultoriaParametros.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/configuracoes/operacional",
+      "renderCount": 1,
+      "routes": [
+        "*:OperationalSettings"
+      ],
+      "files": [
+        "src/pages/OperationalSettings.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/configuracoes/remuneracao",
+      "renderCount": 1,
+      "routes": [
+        "*:Configuracoes"
+      ],
+      "files": [
+        "src/pages/Configuracoes.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/configuracoes/reprocessamento",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:Reprocessamento"
+      ],
+      "files": [
+        "src/features/reprocessing/ReprocessingGuardedPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "form"
+      }
+    },
+    {
+      "path": "/consultor-ia",
+      "renderCount": 1,
+      "routes": [
+        "*:ConsultorIaAliasRedirect"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "reading",
+        "bottomClearance": "actions"
+      }
+    },
+    {
+      "path": "/consultoria",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:OwnerConsultoria",
+        "admin:InternalConsultingPage"
+      ],
+      "files": [
+        "src/features/internal-mx-planning/InternalConsultingPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/consultoria/clientes",
+      "renderCount": 1,
+      "routes": [
+        "*:ConsultoriaClientes"
+      ],
+      "files": [
+        "src/pages/ConsultoriaClientes.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/consultoria/clientes/:clientSlug",
+      "renderCount": 1,
+      "routes": [
+        "*:ConsultoriaClienteDetalhe"
+      ],
+      "files": [
+        "src/pages/ConsultoriaClienteDetalhe.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/consultoria/clientes/:clientSlug/visitas/:visitNumber",
+      "renderCount": 1,
+      "routes": [
+        "*:ConsultoriaVisitaExecucao"
+      ],
+      "files": [
+        "src/pages/ConsultoriaVisitaExecucao.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/decisoes",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:DashboardLoja",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/departamentos",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:DashboardLoja",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/departamentos/comercial",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:DashboardLoja",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/departamentos/financeiro",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:DashboardLoja",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/departamentos/marketing",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:DashboardLoja",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/departamentos/operacoes",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:DashboardLoja",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/departamentos/pessoas-rh",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:DashboardLoja",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/departamentos/produto-e-estoque",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:DashboardLoja",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/desenvolvimento",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:VendedorDesenvolvimento",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/pages/VendedorDesenvolvimento.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/devolutivas",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:VendedorDesenvolvimento",
+        "gerente:GerenteFeedback",
+        "dono:GerenteFeedback",
+        "admin:GerenteFeedback"
+      ],
+      "files": [
+        "src/pages/VendedorDesenvolvimento.tsx",
+        "src/features/gerente-feedback/GerenteFeedback.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/dono/*",
+      "renderCount": 1,
+      "routes": [
+        "*:OwnerLegacyPathRedirect"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/equipe",
+      "renderCount": 1,
+      "routes": [
+        "*:TeamAliasRedirect"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/falar-consultor",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:FalarConsultorDono",
+        "dono:FalarConsultorDono",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/dono/FalarConsultorDono.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 1,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/fechamento-diario",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:Checkin",
+        "gerente:ManagerDailyClosing",
+        "dono:ManagerDailyClosing",
+        "admin:ManagerDailyClosing"
+      ],
+      "files": [
+        "src/features/checkin/Checkin.container.tsx",
+        "src/features/manager/daily-closing/ManagerDailyClosing.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "focused",
+        "bottomClearance": "actions"
+      }
+    },
+    {
+      "path": "/feedback",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/feedbacks",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/feedbacks-pdis",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ManagerDevelopment",
+        "dono:ManagerDevelopment",
+        "admin:ManagerDevelopment"
+      ],
+      "files": [
+        "src/pages/ManagerDevelopment.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/forgot-password",
+      "renderCount": 1,
+      "routes": [
+        "*:Login"
+      ],
+      "files": [
+        "src/pages/Login.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/funil",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/funil-comercial",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:FunilVendedor",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/pages/FunilVendedor.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 1,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/funil-vendas",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:FunilVendasGerente",
+        "dono:FunilVendasGerente",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/gerente/FunilVendasGerente.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/home",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:VendedorHome",
+        "gerente:DashboardLoja",
+        "dono:DashboardLoja",
+        "admin:RoleRedirect"
+      ],
+      "files": [
+        "src/pages/VendedorHome.tsx",
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 3,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/lancamento-diario",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused",
+        "bottomClearance": "actions"
+      }
+    },
+    {
+      "path": "/liberacao-fechamento",
+      "renderCount": 1,
+      "routes": [
+        "*:LiberacaoFechamento"
+      ],
+      "files": [
+        "src/pages/LiberacaoFechamento.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "wide"
+      }
+    },
+    {
+      "path": "/login",
+      "renderCount": 1,
+      "routes": [
+        "*:Login"
+      ],
+      "files": [
+        "src/pages/Login.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/lojas",
+      "renderCount": 1,
+      "routes": [
+        "*:Lojas"
+      ],
+      "files": [
+        "src/features/lojas/Lojas.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/lojas/:storeSlug",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:DashboardLoja",
+        "dono:DashboardLoja",
+        "admin:DashboardLoja"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "wide"
+      }
+    },
+    {
+      "path": "/lojas/:storeSlug/consultor-ia",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:StoreConsultorIa",
+        "gerente:StoreConsultorIa",
+        "dono:StoreConsultorIa",
+        "admin:StoreConsultorIa"
+      ],
+      "files": [
+        "src/features/central-mx/StoreConsultorIa.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 6,
+      "structural": 1,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/lojas/:storeSlug/equipe",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:DashboardLoja",
+        "dono:DashboardLoja",
+        "admin:DashboardLoja"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "wide"
+      }
+    },
+    {
+      "path": "/lojas/:storeSlug/filiais",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:StoreBranches"
+      ],
+      "files": [
+        "src/features/filiais/StoreBranches.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide"
+      }
+    },
+    {
+      "path": "/mentor",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ManagerMentor",
+        "dono:ManagerMentor",
+        "admin:ManagerMentor"
+      ],
+      "files": [
+        "src/pages/ManagerMentor.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "reading",
+        "bottomClearance": "actions"
+      }
+    },
+    {
+      "path": "/mentor-comercial",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "reading",
+        "bottomClearance": "actions"
+      }
+    },
+    {
+      "path": "/mercado",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:DashboardLoja",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/meta-loja",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:DashboardLoja",
+        "dono:DashboardLoja",
+        "admin:DashboardLoja"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/metas",
+      "renderCount": 1,
+      "routes": [
+        "*:Navigate"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/meu-dia",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation"
+      }
+    },
+    {
+      "path": "/meu-funil",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:FunilVendedor",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/pages/FunilVendedor.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 1,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/meu-perfil",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "form"
+      }
+    },
+    {
+      "path": "/meu-perfil-vendedor",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "form"
+      }
+    },
+    {
+      "path": "/minha-equipe",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:DashboardLoja",
+        "dono:DashboardLoja",
+        "admin:DashboardLoja"
+      ],
+      "files": [
+        "src/features/dashboard-loja/DashboardLoja.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard"
+      }
+    },
+    {
+      "path": "/minha-meta",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/minha-remuneracao",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/minhas-lojas",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:OwnerStoresNetworkPage",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/owner/OwnerStoresNetworkPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/notificacoes",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:Notificacoes",
+        "gerente:Notificacoes",
+        "dono:Notificacoes",
+        "admin:Notificacoes"
+      ],
+      "files": [
+        "src/features/notificacoes/Notificacoes.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 1,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/organograma",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:Organograma",
+        "admin:Organograma"
+      ],
+      "files": [
+        "src/features/organograma/OrganogramaPage.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/painel",
+      "renderCount": 1,
+      "routes": [
+        "*:PainelConsultor"
+      ],
+      "files": [
+        "src/features/network-dashboard/NetworkDashboardPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/pdi",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:Navigate",
+        "gerente:GerentePDI",
+        "dono:GerentePDI",
+        "admin:GerentePDI"
+      ],
+      "files": [
+        "src/pages/GerentePDI.tsx"
+      ],
+      "canvas": 0,
+      "template": 6,
+      "structural": 1,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/pdi/:id/print",
+      "renderCount": 1,
+      "routes": [
+        "*:PDIPrint"
+      ],
+      "files": [
+        "src/pages/PDIPrint.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 1,
+      "metadata": {
+        "width": "reading",
+        "bottomClearance": "none"
+      }
+    },
+    {
+      "path": "/perfil",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:MeuPerfilVendedor",
+        "gerente:Perfil",
+        "dono:Perfil",
+        "admin:Perfil"
+      ],
+      "files": [
+        "src/features/vendedor-perfil/MeuPerfilVendedor.container.tsx",
+        "src/pages/Perfil.tsx"
+      ],
+      "canvas": 0,
+      "template": 6,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/plano-acao",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:OwnerPlanoDeAcao",
+        "admin:InternalActionPlanPage"
+      ],
+      "files": [
+        "src/features/internal-mx-planning/InternalActionPlanPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused",
+        "bottomClearance": "actions"
+      }
+    },
+    {
+      "path": "/plano-estrategico",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ForbiddenRoute",
+        "dono:OwnerPlanoEstrategico",
+        "admin:InternalStrategicPlanPage"
+      ],
+      "files": [
+        "src/features/internal-mx-planning/InternalStrategicPlanPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard"
+      }
+    },
+    {
+      "path": "/pre-cadastro/:storeSlug",
+      "renderCount": 1,
+      "routes": [
+        "*:StorePreRegistration"
+      ],
+      "files": [
+        "src/pages/StorePreRegistration.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/privacy",
+      "renderCount": 1,
+      "routes": [
+        "*:Privacy"
+      ],
+      "files": [
+        "src/pages/Privacy.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/produtos",
+      "renderCount": 1,
+      "routes": [
+        "*:ProdutosDigitais"
+      ],
+      "files": [
+        "src/features/digital-products/DigitalProductsPage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/ranking",
+      "renderCount": 1,
+      "routes": [
+        "*:Ranking"
+      ],
+      "files": [
+        "src/features/ranking/Ranking.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/relatorio-matinal",
+      "renderCount": 1,
+      "routes": [
+        "*:MorningReport"
+      ],
+      "files": [
+        "src/pages/MorningReport.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard"
+      }
+    },
+    {
+      "path": "/relatorios",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:RelatoriosVendedor",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/crm/RelatoriosVendedor.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 6,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/relatorios-vendedor",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:RelatoriosVendedor",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/crm/RelatoriosVendedor.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 6,
+      "structural": 0,
+      "metadata": {
+        "width": "wide"
+      }
+    },
+    {
+      "path": "/relatorios/performance-vendas",
+      "renderCount": 1,
+      "routes": [
+        "*:SalesPerformance"
+      ],
+      "files": [
+        "src/features/sales-performance/SalesPerformance.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide"
+      }
+    },
+    {
+      "path": "/relatorios/performance-vendedor",
+      "renderCount": 1,
+      "routes": [
+        "*:SellerPerformance"
+      ],
+      "files": [
+        "src/features/seller-performance/SellerPerformancePage.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide"
+      }
+    },
+    {
+      "path": "/reset-password",
+      "renderCount": 1,
+      "routes": [
+        "*:Login"
+      ],
+      "files": [
+        "src/pages/Login.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/rotina",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:RotinaGerente",
+        "dono:OwnerRoutineRoute",
+        "admin:RotinaGerente"
+      ],
+      "files": [
+        "src/features/manager/day-routine/ManagerDayRoutineCanonical.container.tsx",
+        "src/features/owner/OwnerRoutineRoute.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/rotina-do-dia",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused",
+        "bottomClearance": "actions"
+      }
+    },
+    {
+      "path": "/rotina-equipe",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:ForbiddenRoute",
+        "gerente:ManagerTeamRoutine",
+        "dono:ManagerTeamRoutine",
+        "admin:ManagerTeamRoutine"
+      ],
+      "files": [
+        "src/features/manager/team-routine/ManagerTeamRoutine.container.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused",
+        "bottomClearance": "actions"
+      }
+    },
+    {
+      "path": "/settings",
+      "renderCount": 1,
+      "routes": [
+        "*:Navigate"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/simulacao",
+      "renderCount": 1,
+      "routes": [
+        "*:Simulacao"
+      ],
+      "files": [
+        "src/pages/Simulacao.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/simulacao/:simulationRole",
+      "renderCount": 1,
+      "routes": [
+        "*:Simulacao"
+      ],
+      "files": [
+        "src/pages/Simulacao.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/team",
+      "renderCount": 1,
+      "routes": [
+        "*:TeamAliasRedirect"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/terminal-mx",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:Checkin",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/checkin/Checkin.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 1,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/terms",
+      "renderCount": 1,
+      "routes": [
+        "*:Terms"
+      ],
+      "files": [
+        "src/pages/Terms.tsx"
+      ],
+      "canvas": 0,
+      "template": 0,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/treinamentos",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:RedirectWithSearch",
+        "gerente:GerenteTreinamentos",
+        "dono:DashboardLoja",
+        "admin:ConsultorTreinamentos"
+      ],
+      "files": [
+        "src/pages/GerenteTreinamentos.tsx",
+        "src/features/dashboard-loja/DashboardLoja.container.tsx",
+        "src/pages/ConsultorTreinamentos.tsx"
+      ],
+      "canvas": 3,
+      "template": 6,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard",
+        "source": "default"
+      }
+    },
+    {
+      "path": "/universidade-mx",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:UniversidadeMxRoute",
+        "gerente:GerenteTreinamentos",
+        "dono:DashboardLoja",
+        "admin:ConsultorTreinamentos"
+      ],
+      "files": [
+        "src/pages/GerenteTreinamentos.tsx",
+        "src/features/dashboard-loja/DashboardLoja.container.tsx",
+        "src/pages/ConsultorTreinamentos.tsx"
+      ],
+      "canvas": 3,
+      "template": 6,
+      "structural": 2,
+      "metadata": {
+        "width": "dashboard"
+      }
+    },
+    {
+      "path": "/vendedor/carteira",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "wide",
+        "bottomClearance": "navigation"
+      }
+    },
+    {
+      "path": "/vendedor/configuracoes",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation"
+      }
+    },
+    {
+      "path": "/vendedor/desenvolvimento",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/vendedor/devolutivas",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/vendedor/feedback",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/vendedor/funil",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation"
+      }
+    },
+    {
+      "path": "/vendedor/mentor-comercial",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "reading",
+        "bottomClearance": "actions"
+      }
+    },
+    {
+      "path": "/vendedor/meu-funil",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation"
+      }
+    },
+    {
+      "path": "/vendedor/minha-meta",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/vendedor/perfil",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "form"
+      }
+    },
+    {
+      "path": "/vendedor/rotina-do-dia",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused",
+        "bottomClearance": "actions"
+      }
+    },
+    {
+      "path": "/vendedor/terminal-mx",
+      "renderCount": 4,
+      "routes": [
+        "vendedor:Checkin",
+        "gerente:ForbiddenRoute",
+        "dono:ForbiddenRoute",
+        "admin:ForbiddenRoute"
+      ],
+      "files": [
+        "src/features/checkin/Checkin.container.tsx"
+      ],
+      "canvas": 3,
+      "template": 0,
+      "structural": 1,
+      "metadata": {
+        "width": "dashboard",
+        "bottomClearance": "navigation",
+        "adopted": true
+      }
+    },
+    {
+      "path": "/vendedor/treinamentos",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    },
+    {
+      "path": "/vendedor/universidade-mx",
+      "renderCount": 1,
+      "routes": [
+        "*:RedirectWithSearch"
+      ],
+      "files": [],
+      "canvas": 0,
+      "template": 0,
+      "structural": 0,
+      "metadata": {
+        "width": "focused"
+      }
+    }
+  ]
+}
