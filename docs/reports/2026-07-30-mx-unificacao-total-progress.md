@@ -3,7 +3,7 @@
 Atualizado em 2026-08-10 no worktree isolado
 branch `fix/mx-final-gates-20260810`, runtime
 `d7356687105e6f048d974c5a25dd96d7f31eaf11` e HEAD remoto
-`a05106b15bcc69fbe045ef445b8c72ba0a227f54`; os commits documentais posteriores
+`693ef1394ed646a09b232253b266618f8bdc175e`; os commits documentais posteriores
 não alteram runtime. A produção permanece no merge
 `82191012260208c6dc82e240cd78fdf4658fb6ba`. As observações abaixo das seções
 históricas continuam preservadas e não são evidência de outro runtime.
@@ -11,7 +11,7 @@ históricas continuam preservadas e não são evidência de outro runtime.
 > **Estado vigente:** o checkpoint de código/runtime `d7356687` contém o
 > hardening adicional de audit/backup, ACL de sequences, policies restritivas e
 > release Sentry sem fallback de branch. O HEAD remoto documental
-> `a05106b1` passou CI/pgTAP/visual de leitura, mas o deployment Vercel falhou;
+> `693ef139` passou CI/pgTAP/visual de leitura, mas o deployment Vercel falhou;
 > produção continua no merge `82191012`, sem DDL ou promoção.
 
 ## Checkpoint vigente — hardening de segurança — `d7356687`
@@ -28,14 +28,14 @@ históricas continuam preservadas e não são evidência de outro runtime.
   migrations novas e `44` migrations com rollback documentado; npm audit e
   Gitleaks staged passaram.
 - Docker/Postgres não está disponível neste computador; pgTAP/reset local não é
-  possível. O CI remoto do HEAD `a05106b1` passou pgTAP `40/40`, quality gates,
+  possível. O CI remoto do HEAD `693ef139` passou pgTAP `40/40`, quality gates,
   visual universal/Owner Base44, typecheck/unit, Gitleaks e auditorias. O
-  deployment Vercel integrado `dpl_7c6b79PpdAWctNMJViiXPKoyMbUw` falhou antes
-  do build; produção permanece sem DDL ou promoção, no merge `82191012`.
+  deployment Vercel integrado `dpl_6aFRqT5EPaUM4AK16XvDkUWQqP7h` terminou
+  `ERROR`; produção permanece sem DDL ou promoção, no merge `82191012`.
 - CodeRabbit foi tentado no commit documental local `8360e31b` em modo normal e
   `--agent`, mas não analisou o diff: `Review limit reached`/`Rate limit
   exceeded`, sem seat atribuído e espera externa informada de 24 minutos.
-  O check CodeRabbit do GitHub no HEAD `a05106b1` terminou `SUCCESS`; o limite
+  O check CodeRabbit do GitHub no HEAD `693ef139` terminou `SUCCESS`; o limite
   local não é tratado como aprovação.
 
 ## Revalidação atual — 2026-08-10
