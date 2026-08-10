@@ -119,7 +119,7 @@ export function DashboardLoja() {
   }
   if (!resolving && !storesLoading && role === 'gerente' && activeTab === 'performance' && !selectedStoreId) {
     return (
-      <div className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
+      <div className="w-full bg-gray-50">
         <ManagerSellerParityHomeCanonical data={data} alerts={[]} />
       </div>
     )
@@ -147,7 +147,7 @@ export function DashboardLoja() {
    * executiva que deve consumir o canvas: `as="div"` evita aninhar outro
    * landmark `main` dentro do shell.
    */
-  <div className="h-full w-full overflow-y-auto bg-gray-50 no-scrollbar">
+  <div className="w-full bg-gray-50">
     <ConditionalPageCanvas
       enabled={!isFocusedRolePerformance || isOwner}
       as="div"

@@ -112,7 +112,7 @@ export default function AiDiagnostics() {
 
   if (!internalProfile) {
     return (
-      <div className="w-full h-full flex flex-col gap-mx-lg p-mx-lg overflow-y-auto no-scrollbar bg-gray-50">
+      <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50">
         <PageHeading
           title={<span>Diagnóstico <span className="text-emerald-600">Operacional</span></span>}
           subtitle="Leitura de funil MX 20/60/33"

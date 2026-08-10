@@ -452,6 +452,7 @@ export function useDashboardLojaData({
     lastSyncAt,
     lastSyncLabel,
     handleRefresh,
+    refreshDashboardData: handleRefresh,
     // derivados
     effectiveMonthlyGoal,
     funnelBenchmarks,
