@@ -7,12 +7,13 @@
 > **Revalidação vigente — 2026-08-10:** o checkpoint de código/runtime é
 > `d7356687105e6f048d974c5a25dd96d7f31eaf11`; o HEAD remoto documental do
 > branch `fix/mx-final-gates-20260810` é
-> `574083013870be4a51989d9c361db68000600222`. CI, pgTAP e a matriz visual de
+> `6ab246c19ccc6fc7b4f9ecd4dcde7f770c741a6d`. CI, pgTAP e a matriz visual de
 > leitura passaram nesse HEAD; o deployment Vercel integrado falhou e não há
-> Preview atual aprovado.
-> A produção permanece no merge saudável
-> `82191012260208c6dc82e240cd78fdf4658fb6ba`; não houve DDL remoto, promoção,
-> mutations Owner ou alteração de credenciais. A story permanece `InProgress`.
+> Preview atual aprovado para o PR. A produção observada separadamente está no
+> `origin/main` `26dbe71b6aeb41961fb168a8f0c0c04928f2ecb2`, deployment
+> `dpl_BnyJD28hkZMD3yu6bjyyctDkZxtS`, `READY`, health `200/healthy`.
+> Não houve merge, DDL remoto, promoção do patch, mutations Owner ou alteração
+> de credenciais. A story permanece `InProgress`.
 
 ## Executor Assignment
 
@@ -55,7 +56,7 @@ quality_gate_tools:
 ## Contexto e fonte
 
 Esta story formaliza o trabalho autorizado pelo documento
-`PROMPT_MESTRE_AGENTE_AUTONOMO_MX_GESTAO_PREDITIVA.md`, fornecido pelo usuário
+`PROMPT_MESTRE_EXECUCAO_AUTONOMA_TOTAL_MX_GESTAO_PREDITIVA (2).md`, fornecido pelo usuário
 como documento externo à worktree.
 O prompt mestre é a fonte normativa dos critérios abaixo. A branch
 `feat/unified-mx-design-system` é o ponto de continuidade porque contém `main`
@@ -131,7 +132,7 @@ anteriores de conclusão não contam como evidência nova.
     `d7356687105e6f048d974c5a25dd96d7f31eaf11`.
   - [ ] Validar valores não secretos esperados, projeto/equipe/ambiente e
     endpoints do deployment; o check Vercel integrado falhou no deployment
-    `dpl_7c6b79PpdAWctNMJViiXPKoyMbUw` e o stack trace completo ainda está
+    `dpl_G2xuXPDJgB71dhfuMVMz6sLcXQFu` e o stack trace completo ainda está
     pendente para o checkpoint vigente.
   - [ ] Publicar produção apenas quando os gates bloqueantes passarem.
 - [ ] Fases 9–12 — qualidade, segurança e operação (AC: 10, 11)
@@ -146,9 +147,11 @@ anteriores de conclusão não contam como evidência nova.
     Preview manual funcional era do runtime `4c7b906d653a9af00969d75313ea6c9756f5bbc0`.
     Essa evidência não aprova o checkpoint vigente.
   - [x] Publicar o checkpoint vigente e observar CI/pgTAP/visual próprios no
-    HEAD remoto `574083013870be4a51989d9c361db68000600222`; Quality Gates
-    `31405983397`, pgTAP `31405983427` (`40/40`) e visual `31405983439`
+    HEAD remoto `6ab246c19ccc6fc7b4f9ecd4dcde7f770c741a6d`; Quality Gates
+    `31407286336`, pgTAP `31407286405` (`40/40`) e visual `31407286306`
     (`9 passed` universal, `1 passed` Owner Base44) terminaram `SUCCESS`.
+    O artifact `9070520654` contém 64 métricas de leitura sem overflow ou erros;
+    a visualização Owner mutável ficou `skipped`.
   - [ ] Obter Preview Vercel atual aprovado e promover somente após todos os
     gates externos passarem.
   - [ ] Entregar relatório final baseado nas evidências atuais.
@@ -159,7 +162,12 @@ anteriores de conclusão não contam como evidência nova.
   diff-check, auditorias estruturais/paridade/rotas e AIOX passaram.
 - [x] Reconciliar a base publicada — PR #186 merged em
   `82191012260208c6dc82e240cd78fdf4658fb6ba`; Vercel `READY` e health de
-  produção `200/healthy` no mesmo SHA.
+  produção `200/healthy` no mesmo SHA. Esta é evidência histórica da base
+  publicada, não prova de promoção do PR #187.
+- [x] Revalidar a produção atual separadamente — `dpl_BnyJD28hkZMD3yu6bjyyctDkZxtS`
+  `READY`, `/api/health` `200/healthy`, release
+  `26dbe71b6aeb41961fb168a8f0c0c04928f2ecb2`, alinhada ao `origin/main`; o PR
+  #187 não foi promovido.
 - [ ] Publicar o diff final em produção — o patch está no PR e os gates GitHub
   de leitura passaram; o deployment Vercel atual falhou, Preview/health/Sentry
   do checkpoint vigente, backup/PITR, mutations Owner e promoção continuam
@@ -256,6 +264,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-08-10 | 0.3.6 | PR #187 publicado no SHA `4c7b906d`; Preview manual `READY`, health/smoke autenticado parcial e bloqueios externos reconciliados; story permanece InProgress | Gage (DevOps) |
 | 2026-08-10 | 0.3.7 | HEAD documental `379c4a14` publicado; workflows GitHub, pgTAP 40/40 e visual universal verdes; Owner skip, Vercel integrado, TestSprite, restore/PITR e produção permanecem abertos | Gage (DevOps) |
 | 2026-08-10 | 0.3.8 | CodeRabbit corrigido com hardening de RLS/ACL de sequences, policies restritivas e release Sentry sem fallback de branch; gates locais verdes, CI remoto pendente | Dex (Dev) |
+| 2026-08-10 | 0.3.9 | HEAD `6ab246c1` revalidado: CI/pgTAP/visual de leitura verdes, artifact `9070520654`; Vercel integrado `ERROR`, TestSprite `No tests detected`, produção separada no `main` `READY`; story permanece InProgress | Gage (DevOps) |
 
 ## Dev Agent Record
 
@@ -529,6 +538,14 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   `git diff --check`.
   O build emitiu seis warnings não bloqueantes do otimizador CSS para classes
   arbitrárias já existentes; não houve sourcemap público.
+- 2026-08-10: o HEAD remoto `6ab246c19ccc6fc7b4f9ecd4dcde7f770c741a6d` foi
+  revalidado. Quality Gates `31407286336`, pgTAP `31407286405` (`40/40`) e
+  visual autenticado `31407286306` terminaram `SUCCESS`; o visual passou `9`
+  testes universais e `1` teste Owner Base44, com artifact `9070520654` e 64
+  métricas de leitura sem overflow/erros. O Vercel integrado
+  `dpl_G2xuXPDJgB71dhfuMVMz6sLcXQFu` terminou `ERROR`, TestSprite reportou
+  `No tests detected`, e a produção separada permaneceu em
+  `dpl_BnyJD28hkZMD3yu6bjyyctDkZxtS` `READY`.
 
 ### Completion Notes List
 
@@ -565,12 +582,14 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - O gate final local desta retomada está aprovado e o diff foi publicado no PR
   #187; o Preview manual comprova o novo Sonner/PageCanvas, mas produção
   saudável no merge anterior não é prova de promoção do patch.
-- O check Vercel oficial do PR permanece `ERROR / Resource provisioning failed`
-  no deployment `dpl_GW9AX58PcAyJGZT6C7NEwRLT4bis`; o Preview manual `READY`
-  do runtime anterior não substitui esse check integrado.
+- O check Vercel oficial do PR permanece `ERROR` no deployment
+  `dpl_G2xuXPDJgB71dhfuMVMz6sLcXQFu`; o Preview manual `READY` do runtime
+  anterior não substitui esse check integrado. A produção atual
+  `dpl_BnyJD28hkZMD3yu6bjyyctDkZxtS` pertence ao `origin/main` `26dbe71b`, não
+  ao PR #187.
 - O replay de migrations e a nova ACL de helpers foram aprovados no CI
-  `pgTAP RLS Matrix` `31377957069` com 40/40 cenários; isso não autoriza DDL na
-  produção nem substitui o restore/PITR ou a matriz Owner ausente.
+  `pgTAP RLS Matrix` `31407286405` com 40/40 cenários; isso não autoriza DDL na
+  produção nem substitui o restore/PITR ou a matriz Owner mutável ausente.
 
 ### File List
 

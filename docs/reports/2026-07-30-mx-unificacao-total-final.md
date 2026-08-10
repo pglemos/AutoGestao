@@ -4,15 +4,51 @@
 > final do PR; evidências históricas permanecem identificadas abaixo.
 >
 > **Checkpoint de código vigente (2026-08-10):** o branch
-> `fix/mx-final-gates-20260810` contém o runtime `d7356687105e6f048d974c5a25dd96d7f31eaf11`;
-> os commits documentais posteriores levaram o HEAD remoto a
-> `574083013870be4a51989d9c361db68000600222` sem alterar o runtime. Os commits
-> `379c4a14`, `2754e4ab`, `e609bb72` e `fb8ba8ee` são checkpoints anteriores,
-> documentais ou de runtime já superseded. O CI remoto do HEAD atual passou;
-> o deployment Vercel integrado falhou e não existe Preview atual aprovado.
-> A produção continua
-> deliberadamente no merge saudável anterior
-> `82191012260208c6dc82e240cd78fdf4658fb6ba`.
+> `fix/mx-final-gates-20260810` contém o runtime
+> `d7356687105e6f048d974c5a25dd96d7f31eaf11`; os commits documentais posteriores
+> levaram o HEAD remoto a `6ab246c19ccc6fc7b4f9ecd4dcde7f770c741a6d` sem
+> alterar esse runtime. O PR #187 segue aberto, com base registrada em
+> `82191012260208c6dc82e240cd78fdf4658fb6ba`; não houve merge, rebase, DDL,
+> promoção ou deploy manual nesta retomada.
+> Os Quality Gates, pgTAP e o visual de leitura do HEAD `6ab246c1` passaram, mas o deployment Vercel integrado
+> falhou e não há Preview atual aprovado para o PR. A produção observada
+> separadamente está no `origin/main` atual `26dbe71b6aeb41961fb168a8f0c0c04928f2ecb2`.
+
+## Revalidação remota atual — 2026-08-10 — HEAD `6ab246c1`
+
+- O PR #187 permanece `OPEN`; o HEAD remoto é
+  `6ab246c19ccc6fc7b4f9ecd4dcde7f770c741a6d` e a base registrada continua
+  `82191012260208c6dc82e240cd78fdf4658fb6ba`. O `origin/main` atual avançou
+  independentemente para `26dbe71b6aeb41961fb168a8f0c0c04928f2ecb2`.
+- GitHub terminou verdes Quality Gates (`31407286336`), pgTAP RLS Matrix
+  (`31407286405`, `40/40`), Manager Parity (`31407286406`), Central Parity
+  (`31407286473`), authenticated visual (`31407286306`), typecheck/unit
+  (`31407286326`), a11y, bundle, checksums, reversibilidade, Gitleaks, DB
+  types, smoke 403, paridade e CodeRabbit.
+- O visual autenticado executou `2 passed` no shell compartilhado, `9 passed`
+  no audit universal e `1 passed` na matriz Owner Base44. A etapa `Owner
+  visual matrix` ficou `skipped` e a etapa de mutations permanece protegida.
+  O artifact `module-design-system-authenticated-visual` (529 arquivos,
+  ID `9070520654`) contém 64 métricas de leitura para 16 rotas em quatro
+  viewports; todas registram `horizontalOverflow: false`, zero `pageErrors` e
+  zero `consoleErrors`. Evidência:
+  `https://github.com/pglemos/MXGESTAOPREDITIVA/actions/runs/31407286306/artifacts/9070520654`.
+- O check Vercel oficial falhou no deployment
+  `dpl_G2xuXPDJgB71dhfuMVMz6sLcXQFu`, URL
+  `https://mxperformance-nqv1b8e5q-synvolt.vercel.app`. A inspeção registrou
+  `readyState: ERROR`; o objeto `@vercel/vc-build` ficou `READY`, mas sem
+  output publicado, e `npx vercel inspect --logs` não retornou log acionável.
+  `TestSprite Pre-Check` continua falhando com `No tests detected`.
+- A produção não é o PR #187: `dpl_BnyJD28hkZMD3yu6bjyyctDkZxtS` está
+  `READY` no target `production`, com aliases `www.mxperformance.com.br`,
+  `mxperformance.com.br`, `mxperformance.vercel.app` e `mxperformance-git-main`.
+  `https://www.mxperformance.com.br/api/health` respondeu HTTP `200`,
+  `healthy`, release `26dbe71b6aeb41961fb168a8f0c0c04928f2ecb2`, ambiente
+  `production`, e Vercel/Supabase API/database/crons críticos `ok`.
+- Estado formal: **PARCIALMENTE CONCLUÍDO / BLOCKED_EXTERNAL**. Permanecem
+  bloqueantes o Preview/Vercel do PR, TestSprite, restore/PITR, confirmação de
+  stack TypeScript desminificado no Sentry, mutations Owner e promoção/rollback
+  do runtime `d7356687`.
 
 ## Checkpoint vigente — código `d7356687` — validação local
 
@@ -27,29 +63,30 @@
   sourcemaps públicos, `400` checksums, `44` rollbacks, npm audit sem
   vulnerabilidades e Gitleaks staged passaram. O warning de `HelpTooltip.tsx`
   e os seis warnings CSS do otimizador são históricos/não bloqueantes.
-- CI remoto associado ao HEAD `574083013870be4a51989d9c361db68000600222` passou
-  Quality Gates (`31405983397`), pgTAP RLS (`31405983427`, 40/40),
-  authenticated visual (`31405983439`), Manager/Central Parity, a11y, bundle,
+- CI remoto associado ao HEAD `6ab246c19ccc6fc7b4f9ecd4dcde7f770c741a6d` passou
+  Quality Gates (`31407286336`), pgTAP RLS (`31407286405`, 40/40),
+  authenticated visual (`31407286306`), Manager/Central Parity, a11y, bundle,
   checksums, reversibilidade, Gitleaks, typecheck/unit, DB types, smoke 403 e
   auditorias visuais. O visual registrou `9 passed` na auditoria universal e
   `1 passed` na matriz Owner Base44; o bloco mutável Owner não foi habilitado.
 - Supabase Preview terminou `SUCCESS` no check associado ao projeto de branch;
-  o Vercel integrado falhou no deployment `dpl_7c6b79PpdAWctNMJViiXPKoyMbUw`
-  (`status: Error`, URL `https://mxperformance-pr323wogf-synvolt.vercel.app`,
-  build sem execução). `TestSprite Pre-Check` falhou com `No tests detected`.
-- Produção continua deliberadamente no merge saudável anterior
-  `82191012260208c6dc82e240cd78fdf4658fb6ba`, sem DDL ou promoção.
+  o Vercel integrado falhou no deployment `dpl_G2xuXPDJgB71dhfuMVMz6sLcXQFu`
+  (`status: Error`, URL `https://mxperformance-nqv1b8e5q-synvolt.vercel.app`,
+  sem output publicado). `TestSprite Pre-Check` falhou com `No tests detected`.
+- Produção observada separadamente está no deployment
+  `dpl_BnyJD28hkZMD3yu6bjyyctDkZxtS`, `READY`, release
+  `26dbe71b6aeb41961fb168a8f0c0c04928f2ecb2`, sem DDL ou promoção do PR.
 - CodeRabbit foi tentado novamente no commit documental local `8360e31b` em
   modo normal e `--agent`; nenhuma análise foi executada porque o serviço
   retornou `Review limit reached`/`Rate limit exceeded`, conta sem seat para a
   organização e espera informada de 24 minutos. Isso permanece um bloqueio
   externo, não uma aprovação automática; o check CodeRabbit do GitHub no HEAD
-  `57408301` terminou `SUCCESS`.
+  `6ab246c1` terminou `SUCCESS`.
 
-## Revalidação remota atual — 2026-08-10 — HEAD `57408301`
+## Revalidação remota anterior — 2026-08-10 — HEAD `57408301`
 
-> Este é o último estado remoto observado. O runtime continua sendo o
-> checkpoint `d7356687`; os commits `8360e31b`, `f10b1265`, `a05106b1`,
+> Esta seção foi superseded pela revalidação do HEAD `6ab246c1` acima. O runtime
+> continua sendo o checkpoint `d7356687`; os commits `8360e31b`, `f10b1265`, `a05106b1`,
 > `693ef139` e `57408301` são
 > apenas reconciliações documentais.
 
@@ -347,8 +384,8 @@ source maps/Sentry, matriz integral de perfis/rotas e rotação dos segredos.
 | Resolvido (histórico) | Vulnerabilidades high no runtime principal | O checkpoint de 2026-08-03 registrou `react-router`/`react-router-dom`; a revalidação atual não reproduz o finding | `npm audit --omit=dev` em 2026-08-10: 0 vulnerabilidades no grafo de produção auditado (`critical=0`, `high=0`, `moderate=0`, `low=0`); runtime `7.18.2` | Manter o audit no gate de cada release |
 | Info | `/home` para Administrador Geral | Rota bloqueada pela matriz de autorização | Produção exibiu mensagem de acesso negado sem erro/overflow | Não alterar sem requisito explícito; validar com perfil autorizado se necessário |
 | P1 | Backup restaurável não comprovado | Snapshots físicos concluídos não equivalem a ponto de restauração testado | API de backups físicos: 8 `COMPLETED`; API de restore/PITR: `backups: []`, `pitr_enabled: false`, `walg_enabled: true` | Habilitar PITR/backup no projeto correto e executar restauração em ambiente controlado |
-| P1 | Check oficial Vercel do PR falhou | O deployment integrado do HEAD atual terminou `ERROR`; o objeto de build `@vercel/vc-build` está `READY`, mas sem output publicado e sem log acionável no CLI | `dpl_5LKZWk2wEY4LBLxya8Ehto2ihfai` (`readyState: ERROR`); o check atual continua falho | Reconciliar provisionamento da integração/equipe Vercel e obter Preview atual aprovado antes do merge |
-| Resolvido no checkpoint histórico `e609bb72` e revalidado no HEAD `57408301` | Replay/grants RLS | O primeiro SHA falhou no histórico duplicado e o seguinte falhou na ACL; o CI atual confirmou os 40 cenários no HEAD que contém o runtime `d7356687` | `pgTAP RLS Matrix` `31405983427`: `SUCCESS` (`40/40`); checksums/reversibilidade também verdes; nenhum DDL foi aplicado à produção | Manter a matriz no gate de futuras migrations |
-| P1 | Patch final ainda não promovido | O patch está publicado no PR e os gates GitHub do HEAD atual passaram, mas não há Preview Vercel atual e produção continua no merge `82191012` | PR #187 HEAD `57408301`; Vercel `dpl_5LKZWk2wEY4LBLxya8Ehto2ihfai` `ERROR`; produção `/api/health` `200/healthy` | Promover somente após Preview atual aprovado, mutations Owner seguras, Sentry/rollback e smoke final |
-| P1 | Matriz integral de perfis/rotas/estados/viewports | Auditoria universal e Owner Base44 de leitura passaram no HEAD atual; mutations Owner continuam protegidas e isso não prova todos os estados/ações do prompt | CI `31405983439`: universal `9 passed`, Owner Base44 `1 passed`; artefato `9070046234` | Completar apenas mutations em sandbox autorizado e ampliar estados/ações restantes sem contar skips como aprovação |
+| P1 | Check oficial Vercel do PR falhou | O deployment integrado do HEAD atual terminou `ERROR`; o objeto de build `@vercel/vc-build` está `READY`, mas sem output publicado e sem log acionável no CLI | `dpl_G2xuXPDJgB71dhfuMVMz6sLcXQFu` (`readyState: ERROR`); o check atual continua falho | Reconciliar provisionamento da integração/equipe Vercel e obter Preview atual aprovado antes do merge |
+| Resolvido no checkpoint histórico `e609bb72` e revalidado no HEAD `6ab246c1` | Replay/grants RLS | O primeiro SHA falhou no histórico duplicado e o seguinte falhou na ACL; o CI atual confirmou os 40 cenários no HEAD que contém o runtime `d7356687` | `pgTAP RLS Matrix` `31407286405`: `SUCCESS` (`40/40`); checksums/reversibilidade também verdes; nenhum DDL foi aplicado à produção | Manter a matriz no gate de futuras migrations |
+| P1 | Patch final ainda não promovido | O patch está publicado no PR e os gates GitHub do HEAD atual passaram, mas não há Preview Vercel atual; a produção saudável é o `origin/main` posterior, não o PR | PR #187 HEAD `6ab246c1`; Vercel `dpl_G2xuXPDJgB71dhfuMVMz6sLcXQFu` `ERROR`; produção `dpl_BnyJD28hkZMD3yu6bjyyctDkZxtS` `READY`, health `200/healthy`, release `26dbe71b` | Promover somente após Preview atual aprovado, mutations Owner seguras, Sentry/rollback e smoke final |
+| P1 | Matriz integral de perfis/rotas/estados/viewports | Auditoria universal e Owner Base44 de leitura passaram no HEAD atual; mutations Owner continuam protegidas e isso não prova todos os estados/ações do prompt | CI `31407286306`: universal `9 passed`, Owner Base44 `1 passed`; artifact `9070520654`, 64 métricas sem overflow/erros | Completar apenas mutations em sandbox autorizado e ampliar estados/ações restantes sem contar skips como aprovação |
 | P2 | Console do Preview contém bloqueio externo | `vercel.live/feedback.js` é bloqueado pela CSP, sem falha funcional do app | console do Preview manual | Documentar/corrigir conscientemente a instrumentação antes de exigir console totalmente limpo |

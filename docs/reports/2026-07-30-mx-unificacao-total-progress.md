@@ -3,16 +3,40 @@
 Atualizado em 2026-08-10 no worktree isolado
 branch `fix/mx-final-gates-20260810`, runtime
 `d7356687105e6f048d974c5a25dd96d7f31eaf11` e HEAD remoto
-`574083013870be4a51989d9c361db68000600222`; os commits documentais posteriores
-não alteram runtime. A produção permanece no merge
-`82191012260208c6dc82e240cd78fdf4658fb6ba`. As observações abaixo das seções
-históricas continuam preservadas e não são evidência de outro runtime.
+`6ab246c19ccc6fc7b4f9ecd4dcde7f770c741a6d`; os commits documentais posteriores
+não alteram runtime. O PR #187 mantém a base registrada
+`82191012260208c6dc82e240cd78fdf4658fb6ba`. A produção observada separadamente
+está no `origin/main` atual `26dbe71b6aeb41961fb168a8f0c0c04928f2ecb2`.
+As observações abaixo das seções históricas continuam preservadas e não são
+evidência de outro runtime.
 
 > **Estado vigente:** o checkpoint de código/runtime `d7356687` contém o
 > hardening adicional de audit/backup, ACL de sequences, policies restritivas e
 > release Sentry sem fallback de branch. O HEAD remoto documental
-> `57408301` passou CI/pgTAP/visual de leitura, mas o deployment Vercel falhou;
-> produção continua no merge `82191012`, sem DDL ou promoção.
+> `6ab246c1` passou CI/pgTAP/visual de leitura, mas o deployment Vercel falhou;
+> não houve merge, DDL ou promoção do patch.
+
+## Revalidação remota mais recente — 2026-08-10 — HEAD `6ab246c1`
+
+- Quality Gates `31407286336`, pgTAP `31407286405` (`40/40`), Manager/Central
+  Parity (`31407286406`/`31407286473`), typecheck/unit `31407286326`, a11y,
+  bundle, checksums, reversibilidade, Gitleaks, DB types, smoke 403, paridade e
+  CodeRabbit terminaram `SUCCESS`.
+- O visual autenticado `31407286306` passou `2` testes de shell, `9` testes
+  universais e `1` teste Owner Base44. A visualização Owner mutável ficou
+  `skipped`. O artifact `9070520654` tem 529 arquivos e 64 métricas de leitura
+  (16 rotas × 4 viewports), todas sem overflow, erro de página ou erro de
+  console.
+- O Vercel integrado falhou em `dpl_G2xuXPDJgB71dhfuMVMz6sLcXQFu`
+  (`https://mxperformance-nqv1b8e5q-synvolt.vercel.app`, `readyState: ERROR`,
+  sem output publicado). `TestSprite Pre-Check` falhou com `No tests detected`.
+- Produção continua separada do PR: deployment
+  `dpl_BnyJD28hkZMD3yu6bjyyctDkZxtS` `READY`, e `/api/health` HTTP `200`,
+  `healthy`, release `26dbe71b6aeb41961fb168a8f0c0c04928f2ecb2`, com checks
+  Vercel/Supabase API/database/crons críticos `ok`.
+- Estado: **PARCIALMENTE CONCLUÍDO / BLOCKED_EXTERNAL**; continuam sem prova
+  restore/PITR, stack TypeScript desminificado no Sentry, mutations Owner,
+  Preview do PR e promoção/rollback do runtime `d7356687`.
 
 ## Checkpoint vigente — hardening de segurança — `d7356687`
 
@@ -28,14 +52,14 @@ históricas continuam preservadas e não são evidência de outro runtime.
   migrations novas e `44` migrations com rollback documentado; npm audit e
   Gitleaks staged passaram.
 - Docker/Postgres não está disponível neste computador; pgTAP/reset local não é
-  possível. O CI remoto do HEAD `57408301` passou pgTAP `40/40`, quality gates,
+  possível. O CI remoto do HEAD `6ab246c1` passou pgTAP `40/40`, quality gates,
   visual universal/Owner Base44, typecheck/unit, Gitleaks e auditorias. O
-  deployment Vercel integrado `dpl_5LKZWk2wEY4LBLxya8Ehto2ihfai` terminou
-  `ERROR`; produção permanece sem DDL ou promoção, no merge `82191012`.
+  deployment Vercel integrado `dpl_G2xuXPDJgB71dhfuMVMz6sLcXQFu` terminou
+  `ERROR`; não houve DDL ou promoção do patch.
 - CodeRabbit foi tentado no commit documental local `8360e31b` em modo normal e
   `--agent`, mas não analisou o diff: `Review limit reached`/`Rate limit
   exceeded`, sem seat atribuído e espera externa informada de 24 minutos.
-  O check CodeRabbit do GitHub no HEAD `57408301` terminou `SUCCESS`; o limite
+  O check CodeRabbit do GitHub no HEAD `6ab246c1` terminou `SUCCESS`; o limite
   local não é tratado como aprovação.
 
 ## Revalidação atual — 2026-08-10
