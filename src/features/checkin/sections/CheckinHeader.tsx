@@ -437,7 +437,8 @@ console.error(err)
             note: null,
             zero_reason: 'Outro',
           }
-          const res = await saveCheckin(placeholderPayload, 'historical', productionZeroDate)
+          const isActiveDate = productionZeroDate === activeClosingDate
+          const res = await saveCheckin(placeholderPayload, isActiveDate ? 'daily' : 'historical', productionZeroDate)
           if (res.error) {
             toast.error(`Erro ao iniciar produção zero: ${res.error}`)
             return

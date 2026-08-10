@@ -1,6 +1,6 @@
 {
-  "generatedAt": "2026-08-10T16:11:26.787Z",
-  "baselineSha": "82191012260208c6dc82e240cd78fdf4658fb6ba",
+  "generatedAt": "2026-08-10T17:52:04.031Z",
+  "baselineSha": "fec6088710c49206e925c377d6c39ee32ae32482",
   "routeCount": 107,
   "routes": [
     {
@@ -389,7 +389,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -409,7 +409,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -429,7 +429,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -449,7 +449,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -469,7 +469,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -489,7 +489,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -509,7 +509,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -529,7 +529,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -640,9 +640,9 @@
         "src/features/checkin/Checkin.container.tsx",
         "src/features/manager/daily-closing/ManagerDailyClosing.container.tsx"
       ],
-      "canvas": 3,
+      "canvas": 5,
       "template": 0,
-      "structural": 2,
+      "structural": 1,
       "metadata": {
         "width": "focused",
         "bottomClearance": "actions"
@@ -786,7 +786,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 3,
+      "structural": 1,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -871,7 +871,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "wide"
       }
@@ -909,7 +909,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "wide"
       }
@@ -982,7 +982,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -1002,7 +1002,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "focused"
       }
@@ -1100,7 +1100,7 @@
       ],
       "canvas": 3,
       "template": 0,
-      "structural": 2,
+      "structural": 0,
       "metadata": {
         "width": "dashboard"
       }
@@ -1492,7 +1492,7 @@
         "src/features/manager/day-routine/ManagerDayRoutineCanonical.container.tsx",
         "src/features/owner/OwnerRoutineRoute.tsx"
       ],
-      "canvas": 0,
+      "canvas": 3,
       "template": 0,
       "structural": 0,
       "metadata": {
@@ -1652,7 +1652,7 @@
       ],
       "canvas": 3,
       "template": 6,
-      "structural": 2,
+      "structural": 1,
       "metadata": {
         "width": "dashboard",
         "source": "default"
@@ -1674,7 +1674,7 @@
       ],
       "canvas": 3,
       "template": 6,
-      "structural": 2,
+      "structural": 1,
       "metadata": {
         "width": "dashboard"
       }

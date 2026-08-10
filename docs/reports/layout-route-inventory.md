@@ -1,7 +1,7 @@
 # Inventário de Rotas — Layout
 
-- Gerado em: 2026-08-10T16:11:26.787Z
-- Baseline SHA: `82191012260208c6dc82e240cd78fdf4658fb6ba`
+- Gerado em: 2026-08-10T17:52:04.031Z
+- Baseline SHA: `fec6088710c49206e925c377d6c39ee32ae32482`
 - Total de rotas: 107
 
 | Path | Rota p/ perfil | Arquivo(s) | Canvas | Template | Estrutural | Width | Clearance | Adotada |
@@ -27,20 +27,20 @@
 | /consultoria/clientes | *:ConsultoriaClientes | `src/pages/ConsultoriaClientes.tsx` | 0 | 0 | 0 | dashboard | — | não |
 | /consultoria/clientes/:clientSlug | *:ConsultoriaClienteDetalhe | `src/pages/ConsultoriaClienteDetalhe.tsx` | 0 | 0 | 0 | dashboard | — | não |
 | /consultoria/clientes/:clientSlug/visitas/:visitNumber | *:ConsultoriaVisitaExecucao | `src/pages/ConsultoriaVisitaExecucao.tsx` | 0 | 0 | 0 | dashboard | — | não |
-| /decisoes | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | dashboard | — | não |
-| /departamentos | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | dashboard | — | não |
-| /departamentos/comercial | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | dashboard | — | não |
-| /departamentos/financeiro | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | dashboard | — | não |
-| /departamentos/marketing | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | dashboard | — | não |
-| /departamentos/operacoes | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | dashboard | — | não |
-| /departamentos/pessoas-rh | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | dashboard | — | não |
-| /departamentos/produto-e-estoque | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | dashboard | — | não |
+| /decisoes | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | dashboard | — | não |
+| /departamentos | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | dashboard | — | não |
+| /departamentos/comercial | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | dashboard | — | não |
+| /departamentos/financeiro | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | dashboard | — | não |
+| /departamentos/marketing | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | dashboard | — | não |
+| /departamentos/operacoes | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | dashboard | — | não |
+| /departamentos/pessoas-rh | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | dashboard | — | não |
+| /departamentos/produto-e-estoque | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | dashboard | — | não |
 | /desenvolvimento | vendedor:VendedorDesenvolvimento, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:ForbiddenRoute | `src/pages/VendedorDesenvolvimento.tsx` | 0 | 0 | 0 | dashboard | — | não |
 | /devolutivas | vendedor:VendedorDesenvolvimento, gerente:GerenteFeedback, dono:GerenteFeedback, admin:GerenteFeedback | `src/pages/VendedorDesenvolvimento.tsx`<br>`src/features/gerente-feedback/GerenteFeedback.container.tsx` | 0 | 0 | 0 | dashboard | — | não |
 | /dono/* | *:OwnerLegacyPathRedirect | — | 0 | 0 | 0 | dashboard | — | não |
 | /equipe | *:TeamAliasRedirect | — | 0 | 0 | 0 | dashboard | — | não |
 | /falar-consultor | vendedor:ForbiddenRoute, gerente:FalarConsultorDono, dono:FalarConsultorDono, admin:ForbiddenRoute | `src/features/dono/FalarConsultorDono.tsx` | 3 | 0 | 1 | dashboard | navigation | sim |
-| /fechamento-diario | vendedor:Checkin, gerente:ManagerDailyClosing, dono:ManagerDailyClosing, admin:ManagerDailyClosing | `src/features/checkin/Checkin.container.tsx`<br>`src/features/manager/daily-closing/ManagerDailyClosing.container.tsx` | 3 | 0 | 2 | focused | actions | não |
+| /fechamento-diario | vendedor:Checkin, gerente:ManagerDailyClosing, dono:ManagerDailyClosing, admin:ManagerDailyClosing | `src/features/checkin/Checkin.container.tsx`<br>`src/features/manager/daily-closing/ManagerDailyClosing.container.tsx` | 5 | 0 | 1 | focused | actions | não |
 | /feedback | *:RedirectWithSearch | — | 0 | 0 | 0 | dashboard | — | não |
 | /feedbacks | *:RedirectWithSearch | — | 0 | 0 | 0 | dashboard | — | não |
 | /feedbacks-pdis | vendedor:ForbiddenRoute, gerente:ManagerDevelopment, dono:ManagerDevelopment, admin:ManagerDevelopment | `src/pages/ManagerDevelopment.tsx` | 0 | 0 | 0 | focused | — | não |
@@ -48,25 +48,25 @@
 | /funil | *:RedirectWithSearch | — | 0 | 0 | 0 | dashboard | — | não |
 | /funil-comercial | vendedor:FunilVendedor, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:ForbiddenRoute | `src/pages/FunilVendedor.tsx` | 3 | 0 | 1 | dashboard | navigation | sim |
 | /funil-vendas | vendedor:ForbiddenRoute, gerente:FunilVendasGerente, dono:FunilVendasGerente, admin:ForbiddenRoute | `src/features/gerente/FunilVendasGerente.tsx` | 3 | 0 | 0 | dashboard | navigation | sim |
-| /home | vendedor:VendedorHome, gerente:DashboardLoja, dono:DashboardLoja, admin:RoleRedirect | `src/pages/VendedorHome.tsx`<br>`src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 3 | dashboard | — | não |
+| /home | vendedor:VendedorHome, gerente:DashboardLoja, dono:DashboardLoja, admin:RoleRedirect | `src/pages/VendedorHome.tsx`<br>`src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 1 | dashboard | — | não |
 | /lancamento-diario | *:RedirectWithSearch | — | 0 | 0 | 0 | focused | actions | não |
 | /liberacao-fechamento | *:LiberacaoFechamento | `src/pages/LiberacaoFechamento.tsx` | 0 | 0 | 2 | wide | — | não |
 | /login | *:Login | `src/pages/Login.tsx` | 0 | 0 | 2 | dashboard | — | não |
 | /lojas | *:Lojas | `src/features/lojas/Lojas.container.tsx` | 0 | 0 | 0 | dashboard | — | não |
-| /lojas/:storeSlug | vendedor:ForbiddenRoute, gerente:DashboardLoja, dono:DashboardLoja, admin:DashboardLoja | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | wide | — | não |
+| /lojas/:storeSlug | vendedor:ForbiddenRoute, gerente:DashboardLoja, dono:DashboardLoja, admin:DashboardLoja | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | wide | — | não |
 | /lojas/:storeSlug/consultor-ia | vendedor:StoreConsultorIa, gerente:StoreConsultorIa, dono:StoreConsultorIa, admin:StoreConsultorIa | `src/features/central-mx/StoreConsultorIa.container.tsx` | 0 | 6 | 1 | focused | — | não |
-| /lojas/:storeSlug/equipe | vendedor:ForbiddenRoute, gerente:DashboardLoja, dono:DashboardLoja, admin:DashboardLoja | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | wide | — | não |
+| /lojas/:storeSlug/equipe | vendedor:ForbiddenRoute, gerente:DashboardLoja, dono:DashboardLoja, admin:DashboardLoja | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | wide | — | não |
 | /lojas/:storeSlug/filiais | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:StoreBranches | `src/features/filiais/StoreBranches.container.tsx` | 0 | 0 | 0 | wide | — | não |
 | /mentor | vendedor:ForbiddenRoute, gerente:ManagerMentor, dono:ManagerMentor, admin:ManagerMentor | `src/pages/ManagerMentor.tsx` | 0 | 0 | 2 | reading | actions | não |
 | /mentor-comercial | *:RedirectWithSearch | — | 0 | 0 | 0 | reading | actions | não |
-| /mercado | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | dashboard | — | não |
-| /meta-loja | vendedor:ForbiddenRoute, gerente:DashboardLoja, dono:DashboardLoja, admin:DashboardLoja | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | focused | — | não |
+| /mercado | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:DashboardLoja, admin:ForbiddenRoute | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | dashboard | — | não |
+| /meta-loja | vendedor:ForbiddenRoute, gerente:DashboardLoja, dono:DashboardLoja, admin:DashboardLoja | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | focused | — | não |
 | /metas | *:Navigate | — | 0 | 0 | 0 | dashboard | — | não |
 | /meu-dia | *:RedirectWithSearch | — | 0 | 0 | 0 | dashboard | navigation | não |
 | /meu-funil | vendedor:FunilVendedor, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:ForbiddenRoute | `src/pages/FunilVendedor.tsx` | 3 | 0 | 1 | dashboard | navigation | sim |
 | /meu-perfil | *:RedirectWithSearch | — | 0 | 0 | 0 | form | — | não |
 | /meu-perfil-vendedor | *:RedirectWithSearch | — | 0 | 0 | 0 | form | — | não |
-| /minha-equipe | vendedor:ForbiddenRoute, gerente:DashboardLoja, dono:DashboardLoja, admin:DashboardLoja | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 2 | dashboard | — | não |
+| /minha-equipe | vendedor:ForbiddenRoute, gerente:DashboardLoja, dono:DashboardLoja, admin:DashboardLoja | `src/features/dashboard-loja/DashboardLoja.container.tsx` | 3 | 0 | 0 | dashboard | — | não |
 | /minha-meta | *:RedirectWithSearch | — | 0 | 0 | 0 | focused | — | não |
 | /minha-remuneracao | *:RedirectWithSearch | — | 0 | 0 | 0 | focused | — | não |
 | /minhas-lojas | vendedor:ForbiddenRoute, gerente:ForbiddenRoute, dono:OwnerStoresNetworkPage, admin:ForbiddenRoute | `src/features/owner/OwnerStoresNetworkPage.tsx` | 0 | 0 | 0 | dashboard | — | não |
@@ -88,7 +88,7 @@
 | /relatorios/performance-vendas | *:SalesPerformance | `src/features/sales-performance/SalesPerformance.container.tsx` | 0 | 0 | 0 | wide | — | não |
 | /relatorios/performance-vendedor | *:SellerPerformance | `src/features/seller-performance/SellerPerformancePage.tsx` | 0 | 0 | 0 | wide | — | não |
 | /reset-password | *:Login | `src/pages/Login.tsx` | 0 | 0 | 2 | dashboard | — | não |
-| /rotina | vendedor:ForbiddenRoute, gerente:RotinaGerente, dono:OwnerRoutineRoute, admin:RotinaGerente | `src/features/manager/day-routine/ManagerDayRoutineCanonical.container.tsx`<br>`src/features/owner/OwnerRoutineRoute.tsx` | 0 | 0 | 0 | dashboard | — | não |
+| /rotina | vendedor:ForbiddenRoute, gerente:RotinaGerente, dono:OwnerRoutineRoute, admin:RotinaGerente | `src/features/manager/day-routine/ManagerDayRoutineCanonical.container.tsx`<br>`src/features/owner/OwnerRoutineRoute.tsx` | 3 | 0 | 0 | dashboard | — | não |
 | /rotina-do-dia | *:RedirectWithSearch | — | 0 | 0 | 0 | focused | actions | não |
 | /rotina-equipe | vendedor:ForbiddenRoute, gerente:ManagerTeamRoutine, dono:ManagerTeamRoutine, admin:ManagerTeamRoutine | `src/features/manager/team-routine/ManagerTeamRoutine.container.tsx` | 0 | 0 | 0 | focused | actions | não |
 | /settings | *:Navigate | — | 0 | 0 | 0 | dashboard | — | não |
@@ -97,8 +97,8 @@
 | /team | *:TeamAliasRedirect | — | 0 | 0 | 0 | dashboard | — | não |
 | /terminal-mx | vendedor:Checkin, gerente:ForbiddenRoute, dono:ForbiddenRoute, admin:ForbiddenRoute | `src/features/checkin/Checkin.container.tsx` | 3 | 0 | 1 | dashboard | navigation | sim |
 | /terms | *:Terms | `src/pages/Terms.tsx` | 0 | 0 | 2 | dashboard | — | não |
-| /treinamentos | vendedor:RedirectWithSearch, gerente:GerenteTreinamentos, dono:DashboardLoja, admin:ConsultorTreinamentos | `src/pages/GerenteTreinamentos.tsx`<br>`src/features/dashboard-loja/DashboardLoja.container.tsx`<br>`src/pages/ConsultorTreinamentos.tsx` | 3 | 6 | 2 | dashboard | — | não |
-| /universidade-mx | vendedor:UniversidadeMxRoute, gerente:GerenteTreinamentos, dono:DashboardLoja, admin:ConsultorTreinamentos | `src/pages/GerenteTreinamentos.tsx`<br>`src/features/dashboard-loja/DashboardLoja.container.tsx`<br>`src/pages/ConsultorTreinamentos.tsx` | 3 | 6 | 2 | dashboard | — | não |
+| /treinamentos | vendedor:RedirectWithSearch, gerente:GerenteTreinamentos, dono:DashboardLoja, admin:ConsultorTreinamentos | `src/pages/GerenteTreinamentos.tsx`<br>`src/features/dashboard-loja/DashboardLoja.container.tsx`<br>`src/pages/ConsultorTreinamentos.tsx` | 3 | 6 | 1 | dashboard | — | não |
+| /universidade-mx | vendedor:UniversidadeMxRoute, gerente:GerenteTreinamentos, dono:DashboardLoja, admin:ConsultorTreinamentos | `src/pages/GerenteTreinamentos.tsx`<br>`src/features/dashboard-loja/DashboardLoja.container.tsx`<br>`src/pages/ConsultorTreinamentos.tsx` | 3 | 6 | 1 | dashboard | — | não |
 | /vendedor/carteira | *:RedirectWithSearch | — | 0 | 0 | 0 | wide | navigation | não |
 | /vendedor/configuracoes | *:RedirectWithSearch | — | 0 | 0 | 0 | dashboard | navigation | não |
 | /vendedor/desenvolvimento | *:RedirectWithSearch | — | 0 | 0 | 0 | focused | — | não |
