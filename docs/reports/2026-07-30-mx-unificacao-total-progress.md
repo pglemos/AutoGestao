@@ -145,9 +145,12 @@ Fechar as regressões descobertas no smoke real de `/fechamento-diario`,
 
 ### Resultado e próximo passo
 
-Gates locais e a geometria do toaster passaram. Próximo passo: atualizar a
-story/relatório final, revisar o diff, commitar, abrir PR e validar preview
-antes de qualquer promoção; produção só será revalidada depois desse fluxo.
+Gates locais e a geometria do toaster passaram; esta seção registra um
+checkpoint histórico anterior ao hardening final. Para o checkpoint vigente
+`d7356687`, o próximo passo é reconciliar os relatórios após a revisão CodeRabbit,
+executar o Gitleaks staged, commitar e publicar pela autoridade AIOX DevOps;
+depois devem ser observados CI, pgTAP e Preview próprios antes de qualquer
+promoção. O Preview e o CI históricos não aprovam este checkpoint.
 
 ## Revalidação de histórico Supabase — 2026-08-10 — checkpoint anterior ao CI final
 

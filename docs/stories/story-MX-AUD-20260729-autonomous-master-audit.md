@@ -122,11 +122,14 @@ anteriores de conclusão não contam como evidência nova.
   - [ ] Validar perfis e páginas na ordem do prompt.
 - [ ] Fases 6–8 — dados, deploy e observabilidade (AC: 7, 8, 9)
   - [ ] Validar backup, migrations, RLS, RPC, Auth, Storage e Realtime.
-  - [x] Validar Preview manual, health e Sentry da release do PR; a presença
-    nominal das variáveis foi apenas inventariada.
+  - [x] Histórico — validar Preview manual, health e Sentry da release anterior
+    do PR; essa evidência não aprova o checkpoint vigente e a presença nominal
+    das variáveis foi apenas inventariada.
+  - [ ] Validar Preview, health e Sentry próprios do checkpoint vigente
+    `d7356687105e6f048d974c5a25dd96d7f31eaf11`.
   - [ ] Validar valores não secretos esperados, projeto/equipe/ambiente e
     endpoints do deployment; o check Vercel integrado e o stack trace completo
-    ainda estão pendentes.
+    ainda estão pendentes para o checkpoint vigente.
   - [ ] Publicar produção apenas quando os gates bloqueantes passarem.
 - [ ] Fases 9–12 — qualidade, segurança e operação (AC: 10, 11)
   - [ ] Executar matriz de testes e segurança.
@@ -135,12 +138,13 @@ anteriores de conclusão não contam como evidência nova.
 - [ ] Fases 13–14 — entrega (AC: 12, 13)
   - [x] Atualizar checkboxes, Dev Agent Record e File List.
   - [x] Revisar diff, executar quality gate e secret scan.
-  - [x] Commitar/publicar a implementação e o checkpoint documental do PR #187
-    no HEAD `379c4a148dc200472daf49719af520025fb01c55`; o Preview manual
-    funcional é do runtime `4c7b906d653a9af00969d75313ea6c9756f5bbc0` pelo
-    fluxo AIOX DevOps.
-  - [ ] Reconciliar o check Vercel oficial, observar novo CI e promover somente
-    após todos os gates externos passarem.
+  - [x] Histórico — commitar/publicar a implementação e o checkpoint documental
+    anterior do PR #187 no HEAD `379c4a148dc200472daf49719af520025fb01c55`; o
+    Preview manual funcional era do runtime `4c7b906d653a9af00969d75313ea6c9756f5bbc0`.
+    Essa evidência não aprova o checkpoint vigente.
+  - [ ] Publicar o checkpoint vigente após a revisão documental, observar CI,
+    pgTAP e Preview próprios de `d7356687` e promover somente após todos os
+    gates externos passarem.
   - [ ] Entregar relatório final baseado nas evidências atuais.
 - [x] Gate final local — regressões PageCanvas, landmark e Sonner reproduzidas,
   corrigidas com contratos RED/GREEN e validadas no browser em `390×844` e
@@ -153,9 +157,13 @@ anteriores de conclusão não contam como evidência nova.
 - [ ] Publicar o diff final em produção — o patch já tem commit, PR, Preview
   manual, health e smoke autenticado parcial; check Vercel oficial,
   backup/PITR, matriz integral e promoção continuam abertos.
-- [x] Diagnosticar a falha de ACL do `pgTAP RLS Matrix`, preparar migration
-  forward-only com grants explícitos para `authenticated`, mantendo `anon`
-  revogado; o novo CI confirmou os 40 cenários no run `31377957069`.
+- [x] Histórico — diagnosticar a falha de ACL do `pgTAP RLS Matrix` e preparar
+  migration forward-only com grants explícitos para `authenticated`, mantendo
+  `anon` revogado; o CI histórico confirmou os 40 cenários no run
+  `31377957069`.
+- [ ] Reexecutar o `pgTAP RLS Matrix` no checkpoint vigente
+  `d7356687105e6f048d974c5a25dd96d7f31eaf11`; o resultado histórico não é prova
+  deste código.
 
 ## Dev Notes
 
@@ -430,7 +438,9 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - 2026-08-10: browser autenticado como Dono confirmou em `1440×900` e
   `390×844` um único canvas `DIV`, margens canônicas `32px`/`16px`, cockpit
   sem padding próprio, um landmark `main`, zero overflow e console sem erros.
-- 2026-08-10: CodeRabbit não encontrou novos achados após o ajuste do contrato.
+- 2026-08-10: na revisão histórica anterior, CodeRabbit não encontrou novos
+  achados após o ajuste do contrato; a revisão final posterior é registrada
+  separadamente e prevalece para o checkpoint vigente.
   A revisão Agy em sandbox foi tentada, mas atingiu cota externa antes de
   produzir parecer e não foi contada como gate.
 - 2026-08-10: no worktree isolado `fix/mx-final-gates-20260810`, o teste RED do
@@ -444,11 +454,11 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - 2026-08-10: `origin/main`, PR #186, Vercel `dpl_6GCb95AQzx3PnnphrdoCsMb2bGHc`
   e `/api/health` foram reconciliados no merge
   `82191012260208c6dc82e240cd78fdf4658fb6ba`; o diff final ainda é local.
-- 2026-08-10: revisão CodeRabbit do diff final retornou `0 issues`; `npm audit
+- 2026-08-10: revisão CodeRabbit histórica do diff anterior retornou `0 issues`; `npm audit
   --omit=dev` retornou zero vulnerabilidades no grafo de produção auditado; a busca de padrões de tokens nos
   arquivos rastreados e não rastreados do diff não encontrou arquivos com
-  segredos. A validação Gitleaks do conteúdo staged será registrada antes do
-  commit.
+  segredos. A validação Gitleaks do conteúdo staged do checkpoint vigente passou
+  com `gitleaks git --staged --redact --no-banner`, exit `0`, antes do commit.
 - 2026-08-10: o CI do SHA `df0955b05cf3295cd85e20c382a0ea17489d22c9` reproduziu
   falha no `pgTAP RLS Matrix` durante `supabase db reset`, porque o marcador
   histórico pré-registrava `20260407000000` e o runner tentava inseri-la de
