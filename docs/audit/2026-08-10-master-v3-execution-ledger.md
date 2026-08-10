@@ -100,6 +100,9 @@
 - **EV-004**: `npm run typecheck` — 0 TypeScript errors.
 - **EV-005**: `bun test` — 2,601 / 2,601 tests passing across 461 files.
 - **EV-006**: `npm run build` — Clean Vite production build in 23s. Zero public sourcemaps in `dist/`.
-- **EV-007**: Git commit `85ff71b4e109741de6bfc17b8e705e2726f5ce5d` pushed to `origin/main`.
-- **EV-008**: Production Vercel health endpoint (`https://www.mxperformance.com.br/api/health`) verified with status `healthy` and release `85ff71b4e109741de6bfc17b8e705e2726f5ce5d`.
+- **EV-007**: Git commit `89f493c9ef97499e4a276667725d712638a171c0` pushed to `origin/main`.
+- **EV-008**: Production Vercel health endpoint (`https://www.mxperformance.com.br/api/health`) verified live with status `healthy` and release `89f493c9ef97499e4a276667725d712638a171c0`.
+- **EV-009**: Nested vertical scroll containers eliminated in `DashboardLoja.container.tsx`, `ConsultoriaClienteDetalhe.container.tsx`, `ScopedConsultoriaClienteDetalhe.tsx`, `RotinaGerente.container.tsx`, `LegacyOperationalDiagnosticsPage.tsx`, and `LegacyMorningReportPage.tsx`. `MxSidebarShell` section is confirmed as the single vertical scroll owner. `page-contract.test.ts` passing.
+- **EV-010**: Supabase Postgres log audit published and categorized in `docs/audit/2026-08-10-supabase-log-triaging-and-classification.md`. Status: `TRIAGED_WITH_EVIDENCE`.
+- **EV-011**: Runtime viewport matrix artifact (108 verified combinations across 18 viewports and 6 roles) generated in `artifacts/layout-v3/runtime-layout-matrix.json`.
 
