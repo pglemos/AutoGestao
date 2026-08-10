@@ -7,6 +7,7 @@ import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
 import { toast } from '@/lib/toast'
 import { subscribeToTeamFunnelRealtime } from '@/features/gerente/hooks/team-funnel-realtime'
+import { PageCanvas } from '@/design-system/page'
 import {
   buildManagerRoutineNavigationPath,
   buildManagerRoutineTasks,
@@ -410,7 +411,7 @@ export function ManagerDayRoutine() {
     : null
 
   return (
-    <div className="min-h-full bg-gray-50">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5">
       <ManagerDayRoutineView
         returnLink={<ManagerHomeReturnLink />}
         referenceDate={referenceDate}
@@ -428,7 +429,7 @@ export function ManagerDayRoutine() {
         onCreate={createTask}
         onComplete={completeTask}
       />
-    </div>
+    </PageCanvas>
   )
 }
 

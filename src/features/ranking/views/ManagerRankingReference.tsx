@@ -93,7 +93,6 @@ export function ManagerRankingReference() {
         </section>
         </>
         )}
-      </div>
     </PageCanvas>
   )
 }
