@@ -459,6 +459,10 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   arquivos rastreados e não rastreados do diff não encontrou arquivos com
   segredos. A validação Gitleaks do conteúdo staged do checkpoint vigente passou
   com `gitleaks git --staged --redact --no-banner`, exit `0`, antes do commit.
+- 2026-08-10: a revisão CodeRabbit do commit documental local `8360e31b` foi
+  tentada em modo normal e `--agent`, mas não analisou o diff por
+  `Review limit reached`/`Rate limit exceeded`; o CLI informou conta sem seat
+  para a organização e espera de 24 minutos. Isso não é aprovação.
 - 2026-08-10: o CI do SHA `df0955b05cf3295cd85e20c382a0ea17489d22c9` reproduziu
   falha no `pgTAP RLS Matrix` durante `supabase db reset`, porque o marcador
   histórico pré-registrava `20260407000000` e o runner tentava inseri-la de

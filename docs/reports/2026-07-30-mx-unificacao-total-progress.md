@@ -29,6 +29,9 @@ históricas continuam preservadas e não são evidência do checkpoint `d7356687
 - Docker/Postgres não está disponível neste computador; pgTAP/reset e Preview
   ainda precisam ser executados no novo SHA remoto. Produção permanece sem DDL
   ou promoção, no merge `82191012`.
+- CodeRabbit foi tentado no commit documental local `8360e31b` em modo normal e
+  `--agent`, mas não analisou o diff: `Review limit reached`/`Rate limit
+  exceeded`, sem seat atribuído e espera externa informada de 24 minutos.
 
 ## Revalidação atual — 2026-08-10
 

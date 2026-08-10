@@ -29,6 +29,11 @@
 - CI efêmero pgTAP, Preview, Vercel integrado e smoke remoto deste checkpoint
   ainda não foram executados; produção continua deliberadamente no merge
   `82191012260208c6dc82e240cd78fdf4658fb6ba`, sem DDL ou promoção.
+- CodeRabbit foi tentado novamente no commit documental local `8360e31b` em
+  modo normal e `--agent`; nenhuma análise foi executada porque o serviço
+  retornou `Review limit reached`/`Rate limit exceeded`, conta sem seat para a
+  organização e espera informada de 24 minutos. Isso permanece um bloqueio
+  externo, não uma aprovação automática.
 
 ## Revalidação histórica — 2026-08-10 — PR #187 no checkpoint `e609bb72`
 
