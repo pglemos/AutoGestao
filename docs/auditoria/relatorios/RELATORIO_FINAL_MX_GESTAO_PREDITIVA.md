@@ -2,14 +2,31 @@
 
 **Data de início:** 2026-07-29
 **Estado atual:** PARCIALMENTE CONCLUÍDO
-**Branch da retomada:** `feat/mx-unificacao-total-20260809` (worktree isolado)
-**HEAD vigente da retomada:** `79928725b4ce49ba48f94a418ad59623bcd9d65c`
+**Branch da retomada:** `fix/mx-full-execution-20260810` (worktree isolado)
+**HEAD da implementação:** `f333da4d48bae84af547fce0ce0924c8857839b6`; base
+`origin/main` em `d9c061edef9960e41216b046cc71b7856a58c0df`; esta revalidação
+documenta o estado commitado localmente
 **Base histórica de rollback:** `41ec4d39e165cab013988fab9aef54649b616095`
 
 > Este documento é atualizado durante a execução. “Parcialmente concluído” é
 > obrigatório enquanto qualquer gate do prompt mestre permanecer sem prova.
 
-## Revalidação vigente — 2026-08-10
+## Revalidação corrente — 2026-08-10
+
+O worktree corrente contém a unidade gerencial no commit de implementação
+`f333da4d`. Os gates locais passaram: `npm test` `2604 pass / 0 fail / 18182
+expect()`, lint, typecheck, build, bundle `1563,79/1860 KB gzip`, auditorias de
+layout/rotas, estrutura/paridade/IDE sync AIOX, a11y, management design system
+e diff-check. O contrato direcionado passou `38/38` testes. Ainda não há push,
+PR, CI remoto, preview, produção, backup/PITR, Sentry/source maps ou smoke
+autenticado novo para este diff; a documentação desta revalidação aguarda
+commit e o estado permanece **PARCIALMENTE CONCLUÍDO**.
+
+O Gitleaks staged passou sem leaks. O histórico foi revarrido em 1.950 commits
+com 116 achados redigidos; o scan corrente de `src/` apontou três falsos
+positivos genéricos em fixtures/diagnósticos não alterados.
+
+## Registro histórico superseded — retomada anterior de 2026-08-10
 
 As referências anteriores à execução direta na `main`, ao HEAD `129301d71` e
 às validações/deploys de 03/08 são históricas e estão superseded como prova do

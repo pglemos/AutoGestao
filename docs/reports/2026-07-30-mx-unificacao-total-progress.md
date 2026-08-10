@@ -1,15 +1,68 @@
 # MX Unificação Total — Progresso
 
-Atualizado em 2026-08-10 durante a retomada isolada no branch
-`feat/mx-unificacao-total-20260809`, commit local `a3ede247` sobre
-`origin/main` `71d9286a`. As observações abaixo da seção histórica de 03/08
+Atualizado em 2026-08-10 durante a retomada em worktree local isolado,
+branch
+`fix/mx-full-execution-20260810`, sobre `origin/main`
+`d9c061edef9960e41216b046cc71b7856a58c0df`. A implementação desta retomada está
+no commit `f333da4d48bae84af547fce0ce0924c8857839b6`; esta entrada registra o
+estado documental corrente. As observações históricas abaixo
 continuam preservadas, mas não são evidência atual deste checkout.
 
-> **Estado vigente:** correção do PageCanvas do Dono implementada, testada,
-> validada localmente e comprovada no preview/CI remoto. Produção, Sentry e
-> backup restaurável ainda não foram aprovados nesta retomada.
+> **Estado vigente:** correções gerenciais do `PageCanvas` implementadas,
+> commitadas e validadas localmente. CI remoto, preview, produção, Sentry e
+> backup restaurável ainda não foram aprovados para este diff.
 
-## Revalidação atual — 2026-08-10
+## Revalidação corrente — 2026-08-10 — worktree `fix/mx-full-execution-20260810`
+
+### Tarefa
+
+Alinhar fechamento diário, rotina do dia e loading da performance da equipe ao
+`PageCanvas` canônico, remover duplicação de layout e fechar os contratos de
+tipografia/acessibilidade associados sem criar canvas aninhado.
+
+### Diagnóstico e causa raiz
+
+As raízes de `ManagerDailyClosingBase44` e `ManagerDayRoutineCanonical` mantinham
+gutters/`max-w-7xl`/safe area próprios, e o loading de
+`ManagerTeamPerformance` repetia container e padding do canvas pai. O
+`HelpTooltip` usava `span[role=button]`, e o Check-in tinha tamanhos
+tipográficos arbitrários.
+
+### Alterações e arquivos
+
+- `ManagerDailyClosingBase44` e `ManagerDayRoutineCanonical` agora usam o
+  `PageCanvas` compartilhado; suas views não definem mais largura/margem raiz.
+- `ManagerTeamPerformance` delega também o loading ao canvas pai.
+- `HelpTooltip` usa `<button type="button">` nativo.
+- `CheckinHeader` usa `text-caption` nos trechos ajustados.
+- Contratos de regressão e paridade foram atualizados; a story registra o
+  estado parcial e a lista de arquivos.
+
+### Testes executados
+
+- Direcionados: `38 pass / 0 fail / 8222 expect()`.
+- Suíte completa: `2604 pass / 0 fail / 18182 expect()` em 462 arquivos.
+- `npm run lint`, `npm run typecheck`, `npm run build`,
+  `npm run check:bundle-size`, `npm run audit:layout-contract`,
+  `npm run audit:routes-data`, `validate:structure`, `validate:parity`,
+  `sync:ide:check`, `validate:agents`, `audit:management-design-system`,
+  `lint:a11y` e `git diff --check`: exit 0.
+- Bundle: `1563,79/1860 KB gzip`; build sem sourcemaps públicos.
+- `gitleaks protect --staged`: exit 0. O histórico contém 116 achados
+  redigidos; o scan de `src/` encontrou três falsos positivos genéricos em
+  fixtures/diagnósticos não alterados.
+
+### Resultado
+
+Gates funcionais locais aprovados para esta unidade, com implementação no
+commit `f333da4d`. Agy/Antigravity não produziu
+parecer técnico; não é contado como gate. A revisão CodeRabbit encontrou os
+pontos documentais que foram corrigidos, mas o rerun final retornou
+`Review limit reached` por seat/API key ausente; PR/CI/preview/produção,
+matriz browser integral, backup/PITR, Sentry/source maps e rollback continuam
+pendentes.
+
+## Registro histórico — revalidação do commit `a3ede247` — 2026-08-10
 
 ### Tarefa
 
@@ -43,8 +96,8 @@ também usava `p-mx-sm md:p-mx-lg`, duplicando a responsabilidade de margem.
   orçamento; `vendor-ui` em warning não bloqueante.
 - `npm run audit:routes-data`: exit 0; 109 rotas declaradas, 101 protegidas,
   8 públicas, 136 tabelas, 87 RPCs e 14 Edge Functions.
-- CodeRabbit: a revisão solicitou duas correções documentais e uma asserção
-  independente; todas foram aplicadas neste commit e aguardam nova revisão.
+- CodeRabbit: aquela revisão solicitou duas correções documentais e uma
+  asserção independente; foram aplicadas no commit `a3ede247`.
 - Browser local autenticado como Dono, `1440×900`: um
   `[data-mx-page-canvas]`, tag `DIV`, padding `32px`, cockpit `0px`, um
   `main`, zero overflow e zero erros de console.
