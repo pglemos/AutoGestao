@@ -67,7 +67,6 @@ export default function FunilVendasGerente() {
 
   return (
     <PageCanvas
-      as="main"
       width="dashboard"
       bottomClearance="navigation"
       id="funil-vendas"

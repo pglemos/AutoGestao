@@ -92,7 +92,7 @@ const previousCard = ctx.activeClosingContext.previousCard
 
   return (
     <div className="relative min-h-full w-full min-w-0 bg-gray-50 no-scrollbar">
-      <PageCanvas as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-4">
+      <PageCanvas width="dashboard" bottomClearance="navigation" className="flex flex-col gap-4">
             {checkinLoadError && (
                 <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error">
                     {checkinLoadError}

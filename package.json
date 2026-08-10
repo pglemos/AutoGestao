@@ -28,6 +28,7 @@
     "audit:color-arbitrary": "node scripts/audit-color-arbitrary.mjs",
     "lint:tokens:legacy": "node scripts/lint-tokens.legacy.js",
     "audit:management-design-system": "node --test scripts/management-route-manifest.test.mjs scripts/audit-management-design-system.test.mjs && node scripts/audit-management-design-system.mjs",
+    "audit:layout-contract": "node scripts/audit-page-layout-contract.mjs",
     "lint:a11y": "eslint 'src/**/*.{ts,tsx}'",
     "typecheck": "bun test src/test/ranking-live-search-scroll-contract.test.ts && tsc --noEmit",
     "test": "bun test --isolate --max-concurrency=1 src/lib src/benchmarks src/hooks src/components src/features src/pages src/test src/api",

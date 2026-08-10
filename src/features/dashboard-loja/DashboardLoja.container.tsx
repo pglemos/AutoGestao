@@ -189,9 +189,7 @@ export function DashboardLoja() {
              * acompanhamento. As metas individuais já vivem dentro da tela
              * canônica, no botão "Editar Metas".
              */
-            <div className="mx-auto max-w-7xl px-4 pb-24">
-              <StoreGoalsPanel storeId={selectedStoreId} storeName={data.metrics.storeName} />
-            </div>
+            <StoreGoalsPanel storeId={selectedStoreId} storeName={data.metrics.storeName} />
           )}
         </>
       ) : activeTab === 'equipe' ? (

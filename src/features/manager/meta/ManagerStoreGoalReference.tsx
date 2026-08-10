@@ -17,6 +17,7 @@ import type { Store } from '@/types/database'
 import { HelpTooltip } from '@/components/ui/HelpTooltip'
 import { SellerGoalsEditor } from '@/features/lojas/components/SellerGoalsEditor'
 import { VendasFechadasLoja } from '@/features/vendas-loja/VendasFechadasLoja'
+import { PageCanvas } from '@/design-system/page'
 import { chartTokens } from '@/lib/charts/tokens'
 import { supabase } from '@/lib/supabase'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -262,8 +263,7 @@ export function ManagerStoreGoalReference({
   }
 
   return (
-    <section className="min-h-full bg-gray-50" aria-labelledby="manager-store-goal-title">
-      <div className="mx-auto max-w-7xl space-y-5 px-4 py-6 pb-24">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" aria-labelledby="manager-store-goal-title" className="flex flex-col gap-5">
         <ManagerHomeReturnLink />
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -390,7 +390,7 @@ export function ManagerStoreGoalReference({
           </div>
         </div>
       )}
-    </section>
+    </PageCanvas>
   )
 }
 

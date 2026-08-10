@@ -27,6 +27,7 @@ import {
 } from '@/hooks/useData'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { ContentSuggestionDialog } from '@/features/universidade/components/ContentSuggestionDialog'
+import { PageCanvas } from '@/design-system/page'
 
 type Trainings = ReturnType<typeof useTrainings>['treinamentos']
 type TeamProgress = ReturnType<typeof useTeamTrainings>['teamProgress']
@@ -156,8 +157,7 @@ export function ManagerUniversityReference({
   const attention = allTrainings.length > 0 ? allTeamRows.length - inDay : 0
 
   return (
-    <div className="min-h-full bg-gray-50">
-      <div className="mx-auto max-w-7xl space-y-5 px-4 py-6 pb-24">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5">
         <UniversityHeader />
 
         <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
@@ -214,8 +214,7 @@ export function ManagerUniversityReference({
           storeName={storeName}
           onClose={() => setSelectedTeamMember(null)}
         />
-      </div>
-    </div>
+    </PageCanvas>
   )
 }
 

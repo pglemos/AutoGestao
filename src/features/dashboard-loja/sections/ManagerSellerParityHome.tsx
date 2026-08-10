@@ -170,8 +170,7 @@ export function ManagerSellerParityHome({
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
-      <div className="mx-auto max-w-7xl space-y-5 px-4 py-6 pb-24">
+    <div className="flex flex-col gap-5 text-gray-800">
         <ManagerHomeHeader
           referenceDate={data.referenceDate}
           stores={selectableStores}
@@ -222,7 +221,6 @@ export function ManagerSellerParityHome({
             />
           </div>
         </section>
-      </div>
     </div>
   )
 }

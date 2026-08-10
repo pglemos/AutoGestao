@@ -4,6 +4,7 @@ import { HelpTooltip } from '@/components/ui/HelpTooltip'
 import { RANKING_PERIODOS, useStoreRankingPageData, type RankedVendedor } from '@/features/ranking/hooks/useStoreRankingPageData'
 import { ManagerRankingComparison } from '@/features/ranking/manager/ManagerRankingComparison'
 import { ManagerRankingPodium } from '@/features/ranking/manager/ManagerRankingPodium'
+import { PageCanvas } from '@/design-system/page'
 
 type Criterion = 'geral' | 'vendas' | 'conversao' | 'rotina'
 
@@ -49,8 +50,7 @@ export function ManagerRankingReference() {
   ]
 
   return (
-    <div className="min-h-full bg-gray-50">
-      <div className="mx-auto max-w-7xl space-y-5 px-4 py-6 pb-24">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5">
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
             <div><h1 className="text-xl font-bold text-gray-800">Ranking</h1><p className="mt-0.5 text-sm text-gray-500">Acompanhe a classificação da equipe por resultado, conversão e execução.</p></div>
@@ -94,7 +94,7 @@ export function ManagerRankingReference() {
         </>
         )}
       </div>
-    </div>
+    </PageCanvas>
   )
 }
 

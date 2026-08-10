@@ -371,42 +371,112 @@ console.error(err)
 
     setProductionZeroSaving(true)
     try {
-      const result = await saveCheckin(
-        {
+      if (isActiveDate) {
+        // Data operacional ativa: salva diretamente (escopo 'daily')
+        const result = await saveCheckin(
+          {
+            reference_date: productionZeroDate,
+            leads: 0,
+            leads_cart: 0,
+            leads_net: 0,
+            agd_cart_prev: 0,
+            agd_net_prev: 0,
+            agd_cart: 0,
+            agd_net: 0,
+            vnd_porta: 0,
+            vnd_cart: 0,
+            vnd_net: 0,
+            visitas: 0,
+            visitas_porta: 0,
+            visitas_cart: 0,
+            visitas_net: 0,
+            note: null,
+            zero_reason: productionZeroReason,
+          },
+          'daily',
+          productionZeroDate,
+          activeClosingDate,
+        )
+
+        if (result.error) {
+          toast.error(`Não foi possível marcar Produção Zero: ${result.error}`)
+          return
+        }
+      } else {
+        // Datas retroativas: cria checkin placeholder (se necessário) e envia
+        // solicitação de regularização para o gestor aprovar.
+        let checkinId = ''
+
+        const existing = checkins.find(
+          c => c.reference_date === productionZeroDate && c.metric_scope === 'daily',
+        )
+        if (existing) {
+          checkinId = existing.id
+        }
+
+        if (!checkinId) {
+          const placeholderPayload = {
+            leads: 0,
+            leads_cart: 0,
+            leads_net: 0,
+            agd_cart_prev: 0,
+            agd_net_prev: 0,
+            agd_cart: 0,
+            agd_net: 0,
+            vnd_porta: 0,
+            vnd_cart: 0,
+            vnd_net: 0,
+            visitas: 0,
+            visitas_porta: 0,
+            visitas_cart: 0,
+            visitas_net: 0,
+            note: null,
+            zero_reason: 'Outro',
+          }
+          const res = await saveCheckin(placeholderPayload, 'historical', productionZeroDate)
+          if (res.error) {
+            toast.error(`Erro ao iniciar produção zero: ${res.error}`)
+            return
+          }
+          if (!res.id) {
+            toast.error('Erro ao buscar identificador do fechamento.')
+            return
+          }
+          checkinId = res.id
+        }
+
+        // Envia solicitação de regularização com valores zero + motivo
+        const requestedValues = {
           reference_date: productionZeroDate,
-          leads: 0,
-          leads_cart: 0,
-          leads_net: 0,
-          agd_cart_prev: 0,
-          agd_net_prev: 0,
+          leads_prev_day: 0,
+          leads_net_prev_day: 0,
+          visitas_porta_prev_day: 0,
+          visitas_cart_prev_day: 0,
+          visitas_net_prev_day: 0,
           agd_cart: 0,
           agd_net: 0,
-          vnd_porta: 0,
-          vnd_cart: 0,
-          vnd_net: 0,
-          visitas: 0,
-          visitas_porta: 0,
-          visitas_cart: 0,
-          visitas_net: 0,
-          note: null,
+          agd_cart_today: 0,
+          agd_net_today: 0,
+          vnd_porta_prev_day: 0,
+          vnd_cart_prev_day: 0,
+          vnd_net_prev_day: 0,
+          visit_prev_day: 0,
           zero_reason: productionZeroReason,
-        },
-        // Data operacional ativa usa o escopo 'daily'; datas retroativas usam
-        // 'historical', o único aceito pelo servidor (submit_checkin) fora da
-        // data operacional, inclusive para produção zero de fechamentos
-        // pendentes/missed dos últimos 7 dias.
-        isActiveDate ? 'daily' : 'historical',
-        productionZeroDate,
-        activeClosingDate,
-      )
+        }
 
-      if (result.error) {
-        toast.error(`Não foi possível marcar Produção Zero: ${result.error}`)
-        return
+        const res = await requestCorrection(checkinId, requestedValues, `Produção Zero — ${productionZeroReason}`)
+        if (res.error) {
+          toast.error(`Erro ao enviar produção zero: ${res.error}`)
+          return
+        }
       }
 
-      toast.success('Produção Zero marcada com sucesso.')
+      toast.success(isActiveDate ? 'Produção Zero marcada com sucesso.' : 'Produção Zero enviada para aprovação do gestor.')
       setProductionZeroModalOpen(false)
+      // Atualiza a lista de solicitações próprias para refletir o novo estado
+      fetchOwnRequests()
+        .then(reqs => setOwnRequests(reqs))
+        .catch(() => {})
     } catch (error) {
       console.error(error)
       toast.error('Não foi possível marcar Produção Zero.')
@@ -788,7 +858,7 @@ return (
             <div className="space-y-3 overflow-y-auto p-5">
               <div className="space-y-1.5">
                 <p className="text-xs font-extrabold uppercase tracking-wide text-[#92400E]/70">Data do fechamento</p>
-                <div className="flex gap-2 overflow-x-auto pb-1" role="radiogroup" aria-label="Data do fechamento">
+                <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label="Data do fechamento">
                   {historyRows.map(row => {
                     const dateObj = new Date(row.date + 'T12:00:00')
                     const formattedDate = dateObj.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
@@ -803,14 +873,14 @@ return (
                         aria-checked={selected}
                         disabled={row.finalized}
                         onClick={() => handleSelectProductionZeroDate(row.date)}
-                        className={`flex min-w-16 shrink-0 flex-col items-center rounded-xl border px-3 py-2 transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
+                        className={`flex flex-col items-center rounded-xl border px-1 py-2 transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                           selected
                             ? 'border-[#F59F0A] bg-[#FFF7E6] text-[#92400E] ring-4 ring-[#F59F0A]/15'
                             : 'border-[#DFE0E1] bg-white text-[#526B7A] hover:border-[#F59F0A] hover:bg-[#FFFDF7]'
                         }`}
                       >
-                        <span className="text-caption font-extrabold uppercase">{weekdayFormatted}</span>
-                        <span className="text-xs font-bold">{formattedDate}</span>
+                        <span className="text-[10px] font-extrabold uppercase leading-none">{weekdayFormatted}</span>
+                        <span className="mt-0.5 text-[10px] font-bold leading-none">{formattedDate}</span>
                       </button>
                     )
                   })}

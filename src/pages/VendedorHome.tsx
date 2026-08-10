@@ -21,6 +21,7 @@ import { useVendedorHomePage } from '@/features/vendedor-home/hooks/useVendedorH
 import { useAgendamentos } from '@/features/crm/hooks/useAgendamentos'
 import DeterministicActionsPanel from '@/features/deterministic-actions/DeterministicActionsPanel'
 import { useDeterministicActions } from '@/features/deterministic-actions/useDeterministicActions'
+import { PageCanvas } from '@/design-system/page'
 
 function saudacao() {
   const h = new Date().getHours()
@@ -99,7 +100,7 @@ export default function VendedorHomePage() {
 
   if (home.isLoading) {
     return (
-      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+      <div className="h-full w-full flex items-center justify-center">
         <div className="text-center">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-600 border-t-transparent mx-auto mb-4" />
           <p className="text-sm text-gray-500">Carregando cockpit...</p>
@@ -109,8 +110,7 @@ export default function VendedorHomePage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 text-gray-800">
-      <div className="mx-auto max-w-7xl space-y-5 px-4 py-6 pb-24">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5 text-gray-800">
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
@@ -413,8 +413,7 @@ export default function VendedorHomePage() {
             </div>
           </div>
         </section>
-      </div>
-    </div>
+    </PageCanvas>
   )
 }
 

@@ -24,7 +24,6 @@ export function PerformanceLoadingSkeleton() {
   return (
     <div className="w-full h-full bg-gray-50 animate-in fade-in duration-500">
     <PageCanvas
-      as="main"
       width="dashboard"
       className="flex flex-col gap-mx-lg"
       aria-busy="true"
@@ -59,7 +58,7 @@ export function OwnerStoreUnavailable({ requestedStoreForbidden, storeResolution
   const navigate = useNavigate()
   return (
     <div className="w-full h-full bg-gray-50">
-      <PageCanvas as="main" width="focused">
+      <PageCanvas width="focused">
       <Card className="mx-auto max-w-2xl border-none bg-white">
         <EmptyState
           size="lg"

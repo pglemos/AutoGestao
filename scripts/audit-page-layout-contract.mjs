@@ -71,13 +71,10 @@ const ROUTE_FILES = [
   'src/features/organograma/OrganogramaPage.tsx',
   'src/features/comportamental/ComportamentalPage.tsx',
   // Seções que montam raiz de página por perfil
-  'src/features/manager/daily-closing/ManagerDailyClosingSkeleton.tsx',
-  'src/features/manager/daily-closing/ManagerDailyClosingViews.tsx',
   'src/features/manager/day-routine/ManagerDayRoutineView.tsx',
   'src/features/manager/development/ManagerUniversityReference.tsx',
   'src/features/manager/meta/ManagerStoreGoalReference.tsx',
   'src/features/manager/team/ManagerTeamPerformance.tsx',
-  'src/features/manager/team/routing/index.tsx',
   'src/features/ranking/views/ManagerRankingReference.tsx',
   'src/features/dashboard-loja/sections/DashboardEmptyStates.tsx',
   'src/features/dashboard-loja/sections/DashboardHeader.tsx',
