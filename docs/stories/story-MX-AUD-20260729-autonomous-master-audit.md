@@ -207,6 +207,8 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-08-10 | 0.3.3 | Branch rebaseada sobre `origin/main` atual; contrato E2E do Gerente alinhado ao runtime e gates locais repetidos | Dex (Dev) |
 | 2026-08-10 | 0.3.4 | Secretlint 13.0.4 configurado com preset recomendado e scan corrente concluído sem achados; bundle documental reconciliado | Dex (Dev) |
 | 2026-08-10 | 0.3.5 | Resolver de release Sentry normalizado; commit `0e4a7275` publicado no PR #188; CI verde e bloqueios Vercel/TestSprite registrados | Gage (DevOps) |
+| 2026-08-10 | 0.3.6 | KPIs oficiais, Check-in, contraste semântico e exemplos de configuração corrigidos; suíte `2621/2621`, `18275` asserts em 466 arquivos, verify:db-types e Secretlint verdes | Dex (Dev) |
+| 2026-08-10 | 0.3.7 | CodeRabbit corrigido: CA/`verify-full` nos exemplos Supabase e alavanca `Oportunidades` renderizada com teste; validação local em `651b34a1` registrada separadamente do diff ainda não commitado | Dex (Dev) |
 
 ## Dev Agent Record
 
@@ -531,6 +533,23 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
   e o teste `official-kpis.test.ts` cobre a divergência; exemplos de URLs de
   banco agora exigem `DB_PASSWORD_URLENCODED` e o relatório marcou o checkpoint
   sem PR como superseded.
+- 2026-08-10: a revalidação final do diff passou `npm test` com `2621/2621`
+  testes e `18275` asserts em 466 arquivos; `npm run verify:db-types` terminou
+  sem drift e Secretlint 13.0.4 terminou sem achados nos arquivos alterados.
+  O status segue parcial até concluir diff-check, Gitleaks staged, novo
+  commit/push, CI/Preview/browser/Sentry no SHA novo, backup/PITR, rollback e
+  matriz integral.
+- 2026-08-10: após a revisão CodeRabbit, os exemplos de conexão passaram a usar
+  `sslmode=verify-full` com CA explícita e `sslmode=require` ficou restrito a
+  fallback legado; o card secundário de Internet passou a renderizar
+  `Oportunidades` quando essa é a única alavanca positiva. A suíte passou
+  `2622/2622` testes e `18278` asserts em 466 arquivos.
+- 2026-08-10: a revisão local seguinte analisou os 15 arquivos e apontou dois
+  achados `minor` documentais, corrigidos no checkout; a repetição terminou em
+  `Review limit reached`, sem veredicto técnico final local. `git diff --cached
+  --check`, Gitleaks staged, lint, typecheck, testes, build, bundle, Secretlint,
+  db-types e auditorias auxiliares passaram; o audit completo mantém 1 high em
+  `xlsx@0.18.5` sem correção upstream.
 
 ### File List
 
@@ -582,12 +601,17 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `src/features/checkin/sections/CheckinHeader.test.ts`
 - `src/features/checkin/sections/CheckinHeader.tsx`
 - `src/features/crm/funil-vendedor/FunilVendedorCards.tsx`
+- `src/features/crm/funil-vendedor/FunilVendedorCards.test.ts`
 - `src/features/crm/funil-vendedor/types.ts`
 - `src/features/dashboard-loja/sections/owner-cockpit/OwnerHomeWidgets.tsx`
 - `src/pages/FunilVendedor.tsx`
 - `src/features/crm/funil-vendedor/official-kpis.ts`
 - `src/features/crm/funil-vendedor/official-kpis.test.ts`
 - `src/test/semantic-status-contrast-contract.test.ts`
+- `.aiox-core/development/tasks/db-supabase-setup.md`
+- `.aiox-core/docs/standards/AIOX-LIVRO-DE-OURO-V2.2-SUMMARY.md`
+- `src/lib/sentry-release.test.ts`
+- `artifacts/final/preview-vendedor/meu-funil/` (screenshots finais preservados)
 - `src/features/manager/daily-closing/ManagerDailyClosingBase44.tsx`
 - `src/features/manager/daily-closing/manager-daily-closing-layout-contract.test.ts`
 - `src/features/manager/day-routine/ManagerDayRoutineCanonical.container.tsx`
@@ -672,4 +696,3 @@ GPT-5 (Codex), com agentes locais AIOX Orion, Dex e Aria.
 - `supabase/functions/store-pre-registration/index.ts`
 - `vite.config.ts`
 - `src/lib/sentry-release.ts`
-- `src/lib/sentry-release.test.ts`

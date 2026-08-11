@@ -40,8 +40,7 @@ const BASE_CONFIANCA_COR: Record<Confidence, string> = {
 }
 
 export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: PeriodKey }) {
-  const { meta, realizado, faltam, diasUteisRestantes, necessarioPorDia, probabilidade } = kpis
-  const metaBatida = faltam === 0 && meta !== null && meta > 0
+  const { meta, realizado, faltam, diasUteisRestantes, necessarioPorDia, probabilidade, metaBatida } = kpis
   const pct = meta !== null && meta > 0 ? Math.min(100, Math.round((realizado / meta) * 100)) : 0
   const probPct = probabilidade === null ? null : Math.round(probabilidade)
   const probCor = probPct === null ? 'text-slate-600' : probPct >= 80 ? 'text-status-success-text' : probPct >= 50 ? 'text-status-warning-text' : 'text-status-error-text'
@@ -168,6 +167,10 @@ function CanalSecundario({ titulo, semBase, children }: { titulo: string; semBas
 
 type EsforcoValues = { atendimentos?: number; agendamentos?: number; qualificados?: number; oportunidades?: number }
 
+export function hasPositiveEffortLever(values: EsforcoValues | null | undefined): values is EsforcoValues {
+  return Boolean(values && Object.values(values).some(value => typeof value === 'number' && Number.isFinite(value) && value > 0))
+}
+
 export function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelFunnel[]; faltam: number }) {
   if (faltam <= 0) {
     return (
@@ -183,11 +186,15 @@ export function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelF
   const internet = byName('Internet')
   const carteira = byName('Carteira')
 
-  const canalPrincipal = escolherCanalPrincipal(channels)
   const showCalc = showroom ? calcEsforcoShowroom(showroom, faltam) : null
   const inetCalc = internet ? calcEsforcoInternet(internet, faltam) : null
   const cartCalc = carteira ? calcEsforcoCarteira(carteira, faltam) : null
+  const showEffort = hasPositiveEffortLever(showCalc) ? showCalc : null
+  const inetEffort = hasPositiveEffortLever(inetCalc) ? inetCalc : null
+  const cartEffort = hasPositiveEffortLever(cartCalc) ? cartCalc : null
+  const canalPrincipal = escolherCanalPrincipal({ Showroom: showEffort, Internet: inetEffort, Carteira: cartEffort })
   const calcPrincipal = canalPrincipal === 'Carteira' ? cartCalc : canalPrincipal === 'Internet' ? inetCalc : showCalc
+  const principalEffort = hasPositiveEffortLever(calcPrincipal) ? calcPrincipal : null
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
@@ -210,50 +217,51 @@ export function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelF
             <p className="mb-3 text-[12px] text-slate-500">
               Esses números mostram o esforço estimado em cada ponto do funil. Você pode acompanhar sua evolução por qualquer uma dessas alavancas.
             </p>
-            {canalPrincipal === 'Showroom' && calcPrincipal?.atendimentos && (
-              <AlavancaItem label="Atendimentos Comerciais" valor={calcPrincipal.atendimentos} />
+            {canalPrincipal === 'Showroom' && principalEffort?.atendimentos != null && principalEffort.atendimentos > 0 && (
+              <AlavancaItem label="Atendimentos Comerciais" valor={principalEffort.atendimentos} />
             )}
-            {canalPrincipal === 'Internet' && calcPrincipal && (
+            {canalPrincipal === 'Internet' && principalEffort && (
               <>
-                {calcPrincipal.atendimentos && <AlavancaItem label="Atendimentos Comerciais" valor={calcPrincipal.atendimentos} />}
-                {calcPrincipal.agendamentos && <AlavancaItem label="Agendamentos" valor={calcPrincipal.agendamentos} />}
-                {calcPrincipal.qualificados && <AlavancaItem label="Qualificados" valor={calcPrincipal.qualificados} />}
-                {calcPrincipal.oportunidades && <AlavancaItem label="Oportunidades" valor={calcPrincipal.oportunidades} />}
+                {principalEffort.atendimentos != null && principalEffort.atendimentos > 0 && <AlavancaItem label="Atendimentos Comerciais" valor={principalEffort.atendimentos} />}
+                {principalEffort.agendamentos != null && principalEffort.agendamentos > 0 && <AlavancaItem label="Agendamentos" valor={principalEffort.agendamentos} />}
+                {principalEffort.qualificados != null && principalEffort.qualificados > 0 && <AlavancaItem label="Qualificados" valor={principalEffort.qualificados} />}
+                {principalEffort.oportunidades != null && principalEffort.oportunidades > 0 && <AlavancaItem label="Oportunidades" valor={principalEffort.oportunidades} />}
               </>
             )}
-            {canalPrincipal === 'Carteira' && calcPrincipal && (
+            {canalPrincipal === 'Carteira' && principalEffort && (
               <>
-                {calcPrincipal.atendimentos && <AlavancaItem label="Atendimentos Comerciais" valor={calcPrincipal.atendimentos} />}
-                {calcPrincipal.agendamentos && <AlavancaItem label="Agendamentos" valor={calcPrincipal.agendamentos} />}
-                {calcPrincipal.qualificados && <AlavancaItem label="Qualificados" valor={calcPrincipal.qualificados} />}
+                {principalEffort.atendimentos != null && principalEffort.atendimentos > 0 && <AlavancaItem label="Atendimentos Comerciais" valor={principalEffort.atendimentos} />}
+                {principalEffort.agendamentos != null && principalEffort.agendamentos > 0 && <AlavancaItem label="Agendamentos" valor={principalEffort.agendamentos} />}
+                {principalEffort.qualificados != null && principalEffort.qualificados > 0 && <AlavancaItem label="Qualificados" valor={principalEffort.qualificados} />}
               </>
             )}
           </div>
 
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-2">
             {canalPrincipal !== 'Showroom' && (
-              <CanalSecundario titulo="Showroom" semBase={!showCalc}>
-                {showCalc?.atendimentos && <AlavancaItem label="Atendimentos Comerciais" valor={showCalc.atendimentos} />}
+              <CanalSecundario titulo="Showroom" semBase={!showEffort}>
+                {showEffort?.atendimentos != null && showEffort.atendimentos > 0 && <AlavancaItem label="Atendimentos Comerciais" valor={showEffort.atendimentos} />}
               </CanalSecundario>
             )}
             {canalPrincipal !== 'Internet' && (
-              <CanalSecundario titulo="Internet" semBase={!inetCalc}>
-                {inetCalc && (
+              <CanalSecundario titulo="Internet" semBase={!inetEffort}>
+                {inetEffort && (
                   <>
-                    {inetCalc.atendimentos && <AlavancaItem label="Atendimentos Comerciais" valor={inetCalc.atendimentos} />}
-                    {inetCalc.agendamentos && <AlavancaItem label="Agendamentos" valor={inetCalc.agendamentos} />}
-                    {inetCalc.qualificados && <AlavancaItem label="Qualificados" valor={inetCalc.qualificados} />}
+                    {inetEffort.atendimentos != null && inetEffort.atendimentos > 0 && <AlavancaItem label="Atendimentos Comerciais" valor={inetEffort.atendimentos} />}
+                    {inetEffort.agendamentos != null && inetEffort.agendamentos > 0 && <AlavancaItem label="Agendamentos" valor={inetEffort.agendamentos} />}
+                    {inetEffort.qualificados != null && inetEffort.qualificados > 0 && <AlavancaItem label="Qualificados" valor={inetEffort.qualificados} />}
+                    {inetEffort.oportunidades != null && inetEffort.oportunidades > 0 && <AlavancaItem label="Oportunidades" valor={inetEffort.oportunidades} />}
                   </>
                 )}
               </CanalSecundario>
             )}
             {canalPrincipal !== 'Carteira' && (
-              <CanalSecundario titulo="Carteira" semBase={!cartCalc}>
-                {cartCalc && (
+              <CanalSecundario titulo="Carteira" semBase={!cartEffort}>
+                {cartEffort && (
                   <>
-                    {cartCalc.atendimentos && <AlavancaItem label="Atendimentos Comerciais" valor={cartCalc.atendimentos} />}
-                    {cartCalc.agendamentos && <AlavancaItem label="Agendamentos" valor={cartCalc.agendamentos} />}
-                    {cartCalc.qualificados && <AlavancaItem label="Qualificados" valor={cartCalc.qualificados} />}
+                    {cartEffort.atendimentos != null && cartEffort.atendimentos > 0 && <AlavancaItem label="Atendimentos Comerciais" valor={cartEffort.atendimentos} />}
+                    {cartEffort.agendamentos != null && cartEffort.agendamentos > 0 && <AlavancaItem label="Agendamentos" valor={cartEffort.agendamentos} />}
+                    {cartEffort.qualificados != null && cartEffort.qualificados > 0 && <AlavancaItem label="Qualificados" valor={cartEffort.qualificados} />}
                   </>
                 )}
               </CanalSecundario>
@@ -405,14 +413,10 @@ export function EvolucaoCollapsible({ data, chartAberto, onToggle }: { data: Mon
   )
 }
 
-function escolherCanalPrincipal(channels: ChannelFunnel[]): FunnelChannel | null {
-  const byName = (name: FunnelChannel) => channels.find(c => c.channel === name)
-  const carteira = byName('Carteira')
-  const internet = byName('Internet')
-  const showroom = byName('Showroom')
-  if (carteira && temBaseParaEsforco(carteira)) return 'Carteira'
-  if (internet && temBaseParaEsforco(internet)) return 'Internet'
-  if (showroom && temBaseParaEsforco(showroom)) return 'Showroom'
+function escolherCanalPrincipal(calculations: Partial<Record<FunnelChannel, EsforcoValues | null>>): FunnelChannel | null {
+  if (hasPositiveEffortLever(calculations.Carteira)) return 'Carteira'
+  if (hasPositiveEffortLever(calculations.Internet)) return 'Internet'
+  if (hasPositiveEffortLever(calculations.Showroom)) return 'Showroom'
   return null
 }
 

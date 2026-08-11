@@ -34,14 +34,15 @@ const headerSource = readFileSync(new URL('./CheckinHeader.tsx', import.meta.url
 const formSource = readFileSync(new URL('./CheckinForm.tsx', import.meta.url), 'utf8')
 
 function dateInSaoPaulo(offsetDays = 0) {
-    const today = new Intl.DateTimeFormat('en-CA', {
+    const formatter = new Intl.DateTimeFormat('en-CA', {
         timeZone: 'America/Sao_Paulo',
         year: 'numeric',
         month: '2-digit',
         day: '2-digit',
-    }).format(new Date(new Date().toLocaleString('en-US', { timeZone: 'America/Sao_Paulo' })))
-    const date = new Date(`${today}T12:00:00`)
-    date.setDate(date.getDate() + offsetDays)
+    })
+    const today = formatter.format(new Date())
+    const date = new Date(`${today}T12:00:00Z`)
+    date.setUTCDate(date.getUTCDate() + offsetDays)
     return date.toISOString().slice(0, 10)
 }
 
@@ -193,6 +194,7 @@ describe('CheckinHeader — Produção Zero com seletor de data', () => {
 
         await waitFor(() => expect(saveCheckinMock).toHaveBeenCalledTimes(1))
         expect(saveCheckinMock.mock.calls[0]?.[1]).toBe('daily')
+        expect(saveCheckinMock.mock.calls[0]?.[2]).toBe(activeClosingDate)
         expect(requestCorrectionMock).not.toHaveBeenCalled()
     })
 
@@ -202,12 +204,14 @@ describe('CheckinHeader — Produção Zero com seletor de data', () => {
 
         fireEvent.click(screen.getByRole('button', { name: 'Marcar Produção Zero' }))
         const dateOptions = within(screen.getByRole('radiogroup', { name: 'Data do fechamento' })).getAllByRole('radio')
+        const selectedDate = dateInSaoPaulo(-1)
         fireEvent.click(dateOptions[1]!)
         fireEvent.click(within(screen.getByRole('radiogroup', { name: 'Motivo da Produção Zero' })).getByRole('radio', { name: 'Folga' }))
         fireEvent.click(screen.getByRole('button', { name: 'Confirmar Produção Zero' }))
 
         await waitFor(() => expect(saveCheckinMock).toHaveBeenCalledTimes(1))
         expect(saveCheckinMock.mock.calls[0]?.[1]).toBe('historical')
+        expect(saveCheckinMock.mock.calls[0]?.[2]).toBe(selectedDate)
         expect(requestCorrectionMock).toHaveBeenCalledTimes(1)
     })
 

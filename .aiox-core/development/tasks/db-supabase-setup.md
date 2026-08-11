@@ -351,17 +351,25 @@ SUPABASE_PROJECT_ID={project_ref}
 SUPABASE_PROJECT_NAME={project_name}
 
 # Database URLs
-# Connection pooler (port 6543) for serverless/edge functions
+# Shared transaction pooler (port 6543) for serverless/edge functions.
+# Use the regional endpoint from Dashboard > Connect; this works for projects
+# without a dedicated pooler. Dedicated pooler hosts are plan-specific, so use
+# the full URL shown by the dashboard when the project provides one.
 DB_SCHEME=postgresql
+SUPABASE_POOLER_REGION={region}
 # URL-encode the password before placing it in a PostgreSQL URI.
-DB_PASSWORD_URLENCODED={db_password_urlencoded}
-SUPABASE_DB_URL_POOLER="${DB_SCHEME}://postgres:${DB_PASSWORD_URLENCODED}@db.${PROJECT_REF}.supabase.co:6543/postgres"
+DB_PASSWORD_URLENCODED=[PASSWORD_URLENCODED]
+# Production migration clients must validate both the Supabase CA and hostname.
+# Keep the CA outside the repository and provide its absolute path.
+SUPABASE_DB_SSLROOTCERT=/secure/path/supabase-ca.crt
+SUPABASE_DB_SSLMODE=verify-full
+SUPABASE_DB_URL_POOLER="${DB_SCHEME}://postgres.${SUPABASE_PROJECT_ID}:${DB_PASSWORD_URLENCODED}@aws-0-${SUPABASE_POOLER_REGION}.pooler.supabase.com:6543/postgres?sslmode=${SUPABASE_DB_SSLMODE}&sslrootcert=${SUPABASE_DB_SSLROOTCERT}"
 
 # Direct connection (port 5432) for migrations
-SUPABASE_DB_URL="${DB_SCHEME}://postgres:${DB_PASSWORD_URLENCODED}@db.${PROJECT_REF}.supabase.co:5432/postgres"
+SUPABASE_DB_URL="${DB_SCHEME}://postgres:${DB_PASSWORD_URLENCODED}@db.${SUPABASE_PROJECT_ID}.supabase.co:5432/postgres?sslmode=${SUPABASE_DB_SSLMODE}&sslrootcert=${SUPABASE_DB_SSLROOTCERT}"
 
 # API Keys
-SUPABASE_URL=https://[PROJECT_REF].supabase.co
+SUPABASE_URL="https://${SUPABASE_PROJECT_ID}.supabase.co"
 SUPABASE_ANON_KEY=[ANON_KEY]
 SUPABASE_SERVICE_ROLE_KEY=[SERVICE_ROLE_KEY]
 EOF
@@ -689,10 +697,14 @@ supabase secrets list               # List secrets
 **Error:** `SSL connection has been closed unexpectedly`
 
 **Fix:**
-Add `?sslmode=require` to connection string:
+Use the Supabase CA with `sslmode=verify-full` for production migration clients:
 ```bash
-postgresql://postgres:${DB_PASSWORD_URLENCODED}@db.ref.supabase.co:5432/postgres?sslmode=require
+postgresql://postgres:${DB_PASSWORD_URLENCODED}@db.${SUPABASE_PROJECT_ID}.supabase.co:5432/postgres?sslmode=verify-full&sslrootcert=${SUPABASE_DB_SSLROOTCERT}
 ```
+
+If a legacy client cannot load a CA file, `sslmode=require` is an explicit
+compatibility fallback only; it requires TLS but does not guarantee CA or
+hostname validation and must not be the production default.
 
 ### Issue 3: Permission Denied
 

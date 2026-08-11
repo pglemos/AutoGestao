@@ -10,6 +10,15 @@ describe('contrato de contraste dos estados semânticos', () => {
     const types = readSource('src/features/dashboard-loja/sections/owner-cockpit/types.ts')
     const primitives = readSource('src/features/dashboard-loja/sections/owner-cockpit/primitives.tsx')
     const widgets = readSource('src/features/dashboard-loja/sections/owner-cockpit/OwnerHomeWidgets.tsx')
+    const semanticTokens = readSource('src/design-system/tokens/semantic.css')
+    const primitiveTokens = readSource('src/design-system/tokens/primitives.css')
+
+    expect(primitiveTokens).toMatch(/--mx-status-success-text:\s+/)
+    expect(primitiveTokens).toMatch(/--mx-status-warning-text:\s+/)
+    expect(primitiveTokens).toMatch(/--mx-status-error-text:\s+/)
+    expect(semanticTokens).toContain('--mx-color-success-text: var(--mx-status-success-text)')
+    expect(semanticTokens).toContain('--mx-color-warning-text: var(--mx-status-warning-text)')
+    expect(semanticTokens).toContain('--mx-color-danger-text: var(--mx-status-error-text)')
 
     expect(types).toContain("text: 'text-status-warning-text'")
     expect(types).toContain("text: 'text-status-error-text'")

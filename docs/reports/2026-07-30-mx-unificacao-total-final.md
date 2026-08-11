@@ -7,33 +7,47 @@
 > na branch
 > `fix/mx-full-execution-20260810`, checkpoint remoto verificado antes desta
 > atualização documental
-> `d2c491578438491e5d6b4e878caa48dd51141a95`, sobre `origin/main`
+> `651b34a1fcd675dbc5a2d9dee55b95fcc2c44a80`, sobre `origin/main`
 > `cd03df2a8ee472664c07dae881074d911c6775d5`. O PR #188 está aberto; as
 > alterações desta retomada ainda não foram promovidas.
 
-## Revalidação corrente do diff local — 2026-08-10 — checkpoint `d2c49157`
+## Revalidação corrente do diff local — 2026-08-10 — checkpoint `651b34a1`
 
 ### Resumo executivo
 
 O diff corrente preserva os estados semânticos do cockpit, adiciona prova
-renderizada ao fluxo de Produção Zero e decompõe o Funil do Vendedor em módulos
-de feature. Os gates locais passaram; nenhum claim de preview/produção é feito
-para este diff antes do commit e da publicação.
+renderizada ao fluxo de Produção Zero, alinha o Funil à performance oficial,
+fortalece o contrato do Check-in e cobre os tokens semânticos de contraste. Os
+gates locais passaram; nenhum claim de preview/produção é feito para este diff
+antes do commit e da publicação.
 
 ### Evidências locais
 
-- `npm test`: `2612 pass / 0 fail / 18234 expect()` em 464 arquivos.
-- `npm run lint`, `npx tsc --noEmit` e `npm run build`: exit 0.
-- Build sem source maps públicos; o checkpoint remoto anterior continua com
-  CI verde, mas o Preview `dpl_HkdF7keUj6cKxyozQiFbfyoh4BH6` está `BUILD_FAILED`
-  por provisionamento.
+- `npm test`: `2622 pass / 0 fail / 18278 expect()` em 466 arquivos.
+- `npm run lint`, `npm run typecheck`, `npm run build` e bundle local: exit 0;
+  `1564,43/1860 KB gzip`, sem source maps públicos.
+- `npm run verify:db-types`: exit 0, sem drift em
+  `src/types/database.generated.ts`.
+- Secretlint 13.0.4: exit 0, sem achados nos arquivos alterados.
+- `git diff --cached --check` e `gitleaks protect --staged --redact`: exit 0,
+  sem whitespace inválido ou leaks no stage.
+- `npm audit --omit=dev --audit-level=moderate`: exit 0, 0 vulnerabilidades;
+  o audit completo permanece exit 1 por 1 high em `xlsx@0.18.5`, sem correção
+  upstream.
+- O Preview `dpl_HkdF7keUj6cKxyozQiFbfyoh4BH6` anterior está `BUILD_FAILED` por
+  provisionamento; não é prova deste diff.
 - Agy/Antigravity retornou `Individual quota reached`; não há parecer externo.
+- A revisão local do CodeRabbit analisou os 15 arquivos e encontrou dois
+  achados `minor` documentais, ambos corrigidos; a repetição terminou com
+  `Review limit reached`, portanto não há veredicto técnico final local para o
+  diff corrente.
 
 ### Estado
 
-**PARCIALMENTE CONCLUÍDO.** O diff precisa ser commitado e publicado; Preview,
-browser autenticado, Sentry independente, backup/PITR, rollback e matriz
-integral continuam pendentes.
+**PARCIALMENTE CONCLUÍDO.** O diff-check staged e Gitleaks passaram. Ainda faltam
+commit/push, CI/Preview/browser autenticado no SHA novo, Sentry independente,
+backup/PITR, rollback e matriz integral; o audit completo e a revisão CodeRabbit
+final permanecem gates externos/indisponíveis documentados.
 
 ## Revalidação pós-publicação — 2026-08-10 — snapshot histórico `0e4a7275`
 

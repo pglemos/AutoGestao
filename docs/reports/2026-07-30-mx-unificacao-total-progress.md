@@ -4,13 +4,14 @@ Atualizado em 2026-08-10 durante a retomada em worktree local isolado,
 branch `fix/mx-full-execution-20260810`, sobre `origin/main`
 `cd03df2a8ee472664c07dae881074d911c6775d5`. O checkpoint de código remoto
 verificado antes desta atualização documental é
-`d2c491578438491e5d6b4e878caa48dd51141a95`, publicado no PR #188; as
+`651b34a1fcd675dbc5a2d9dee55b95fcc2c44a80`, publicado no PR #188; as
 alterações desta retomada ainda precisam de commit e push. As observações
 históricas abaixo continuam preservadas, mas não são evidência atual deste
 checkout.
 
 > **Estado vigente:** os gates locais do diff corrente passaram; CI remoto verde
-> existe para o checkpoint `d2c49157`. O Preview Git-driven falhou por
+> existe para o checkpoint `651b34a1` (checks do PR #188). O Preview Git-driven
+> permanece reprovado por
 > `Resource provisioning failed`, TestSprite retornou `No tests detected`,
 > Supabase Preview ficou `skipping`, e produção continua separada do diff.
 
@@ -39,13 +40,13 @@ corrente.
   e `historical` para data retroativa.
 - `FunilVendedor.tsx` ficou abaixo de 500 linhas; cards e tipos foram extraídos
   para `src/features/crm/funil-vendedor/`, e o progresso usa o átomo `Progress`.
-- Relatórios, plano e story agora identificam o checkpoint `d2c49157`, a base
+- Relatórios, plano e story agora identificam o checkpoint `651b34a1`, a base
   `cd03df2a` e a contagem corrente sem apagar snapshots históricos.
 
 ### Testes executados
 
 - Direcionados: `24 pass / 0 fail / 81 expect()`.
-- Suíte completa: `2612 pass / 0 fail / 18234 expect()` em 464 arquivos.
+- Suíte completa: `2622 pass / 0 fail / 18278 expect()` em 466 arquivos.
 - `npm run lint`, `npx tsc --noEmit` e `npm run build`: exit 0; nenhum `.map`
   público em `dist/`.
 
@@ -57,9 +58,49 @@ backup/PITR, rollback e matriz integral.
 
 ### Próximo passo
 
-Executar bundle/auditorias/Secretlint/Gitleaks, revisar o diff, integrar a
-`origin/main` sem reescrever histórico, commit/push pelo fluxo DevOps e
-revalidar o SHA novo.
+Executar `git diff --check`, stage apenas dos arquivos previstos e Gitleaks,
+integrar a `origin/main` sem reescrever histórico, commit/push pelo fluxo
+DevOps e revalidar o SHA novo.
+
+## Revalidação final do diff local — 2026-08-10 — HEAD `651b34a1`
+
+### Objetivo
+
+Fechar os comentários acionáveis do Funil, Check-in, contraste semântico,
+release Sentry e exemplos de configuração sem transformar ausência de dados em
+zero nem introduzir segredos em documentação.
+
+### Alterações
+
+- KPIs oficiais agora retornam valores dependentes de meta como `null` quando a
+  meta não existe; `FunilVendedor` oculta esforço sem meta e usa
+  `metaBatida`/valores positivos explicitamente.
+- Check-in testa a data enviada a `saveCheckin`; o seletor de período é
+  semanticamente agrupado e anuncia a opção selecionada.
+- O contrato de contraste cobre primitives e semantics; exemplos de Supabase e
+  AIOX exigem placeholders/variáveis locais e `sslmode=verify-full` com CA
+  explícita; `sslmode=require` fica documentado apenas como fallback legado.
+
+### Verificação
+
+- `npm test`: `2622 pass / 0 fail / 18278 expect()` em 466 arquivos.
+- `npm run typecheck`, `npm run lint`, `npm run build` e bundle local passaram;
+  bundle `1564,43/1860 KB gzip`, sem sourcemaps públicos.
+- `npm run verify:db-types`: exit 0, sem drift em
+  `src/types/database.generated.ts`.
+- Secretlint 13.0.4: exit 0, sem achados nos arquivos alterados.
+- `git diff --cached --check` e `gitleaks protect --staged --redact`: exit 0.
+- `npm audit --omit=dev`: exit 0; o audit completo permanece com 1 high em
+  `xlsx@0.18.5`, sem correção upstream.
+- CodeRabbit encontrou dois achados `minor` documentais no diff de 15 arquivos;
+  ambos foram corrigidos. A repetição foi bloqueada por `Review limit reached`,
+  sem veredicto técnico final local.
+
+### Resultado e próximo passo
+
+O código está validado localmente, com diff-check staged e Gitleaks aprovados,
+mas o estado permanece parcial até concluir commit/push, CI/Preview/browser/
+Sentry no SHA novo, backup/PITR e rollback. Produção não foi promovida.
 
 ## Revalidação de implementação anterior — 2026-08-10 — worktree `fix/mx-full-execution-20260810`
 

@@ -192,11 +192,12 @@ export default function FunilVendedor() {
           icon={TrendingUp}
           title="Minha Meta"
           actions={(
-            <div className="flex items-center gap-1 rounded-xl bg-slate-100 p-1">
+            <div role="group" aria-label="Período" className="flex items-center gap-1 rounded-xl bg-slate-100 p-1">
               {Object.entries(periodLabels).map(([value, label]) => (
                 <button
                   key={value}
                   type="button"
+                  aria-pressed={periodKey === value}
                   onClick={() => setPeriodKey(value as PeriodKey)}
                   className={`rounded-lg px-3 py-1.5 text-[12px] font-semibold transition-all ${periodKey === value ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-800'}`}
                 >
@@ -225,7 +226,9 @@ export default function FunilVendedor() {
 
         {hasAnyData && (
           <>
-            <EsforcoNecessarioCard channels={calculationDashboard.channels} faltam={officialKpis.faltam ?? 0} />
+            {officialKpis.meta !== null && officialKpis.meta > 0 && officialKpis.faltam !== null && (
+              <EsforcoNecessarioCard channels={calculationDashboard.channels} faltam={officialKpis.faltam} />
+            )}
             <EficienciaCanalCard channels={dashboard.channels} />
             <BaseEstatisticaCard displayedPeriod={periodLabels[periodKey]} calculationPeriod={calculationPeriodLabel} confidence={confidence} />
             <EvolucaoCollapsible data={dashboard.evolution} chartAberto={chartAberto} onToggle={() => setChartAberto(value => !value)} />

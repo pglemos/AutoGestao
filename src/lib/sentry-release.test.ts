@@ -22,6 +22,17 @@ describe('resolveSentryRelease', () => {
     ).toBe('release-explicita')
   })
 
+  it('prioriza SENTRY_RELEASE sobre o SHA do Vercel', () => {
+    expect(resolveSentryRelease({
+      SENTRY_RELEASE: 'release-sentry',
+      VERCEL_GIT_COMMIT_SHA: 'abc123',
+    })).toBe('release-sentry')
+  })
+
+  it('usa GITHUB_SHA como último fallback', () => {
+    expect(resolveSentryRelease({ GITHUB_SHA: 'def456' })).toBe('def456')
+  })
+
   it('usa dev quando nenhum identificador está configurado', () => {
     expect(resolveSentryRelease({})).toBe('dev')
   })

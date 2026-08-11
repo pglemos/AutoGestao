@@ -1,8 +1,30 @@
 # MX Unificação Total — Plano de Execução
 
 > Data: 2026-07-30 · Branch histórica: `main` · Stack real revalidada: Vite 6.4.3 + React 19 + TypeScript + Tailwind 4 + Radix/shadcn + Supabase + Vercel + Playwright + Storybook + bun test
-> **Revalidação corrente (2026-08-10):** a execução atual ocorre em worktree local isolado, branch `fix/mx-full-execution-20260810`, sobre `origin/main` `cd03df2a8ee472664c07dae881074d911c6775d5`. O checkpoint de código remoto verificado antes desta atualização documental é `d2c491578438491e5d6b4e878caa48dd51141a95`; a unidade gerencial foi implementada nos commits `f5c813ce`, `52a761ed` e `ae3da0b8`, com a documentação/security scan reconciliada nos commits posteriores. O PR #188 está aberto, mas Preview/produção continuam sem aprovação.
-> A suíte corrente passou `2612/2612` testes e `18234` asserts; números menores e SHAs anteriores citados nas seções datadas abaixo são snapshots históricos, não evidência do checkout corrente.
+> **Revalidação corrente (2026-08-10):** a execução atual ocorre em worktree local isolado, branch `fix/mx-full-execution-20260810`, sobre `origin/main` `cd03df2a8ee472664c07dae881074d911c6775d5`. O checkpoint de código remoto verificado antes desta atualização documental é `651b34a1fcd675dbc5a2d9dee55b95fcc2c44a80`; o PR #188 está aberto, e este diff local ainda precisa de commit/push.
+> A suíte corrente passou `2622/2622` testes e `18278` asserts em 466 arquivos; números menores e SHAs anteriores citados nas seções datadas abaixo são snapshots históricos, não evidência do checkout corrente.
+
+## Revalidação corrente do fechamento — 2026-08-10 — checkpoint `651b34a1`
+
+- KPIs oficiais do Funil agora preservam `null` quando não há meta, distinguem
+  meta atingida de esforço diário e usam a mesma fonte oficial no card de
+  esforço; o teste cobre ausência de meta, meta atingida e período encerrado.
+- O fluxo de Check-in valida o terceiro argumento de `saveCheckin` sem depender
+  do fuso horário do host; o seletor de período expõe `role="group"` e
+  `aria-pressed`.
+- O contrato de contraste verifica também os tokens definidos, e os exemplos
+  AIOX/Supabase não usam senha fixa nem placeholder de projeto ambíguo; conexões
+  de migração usam `sslmode=verify-full` com CA explícita.
+- `npm test`: `2622 pass / 0 fail / 18278 expect()` em 466 arquivos; lint,
+  typecheck, build, bundle (`1564,57/1860 KB gzip`) e auditorias locais
+  anteriores passaram; `npm run verify:db-types` e Secretlint 13.0.4 passaram
+  nesta retomada.
+- Ainda faltam `git diff --check`, stage/Gitleaks, commit/push, CI do SHA novo,
+  Preview Git-driven aprovado, browser autenticado no deployment novo,
+  Sentry/source maps, backup/PITR restaurável, rollback real e matriz integral.
+- A produção não foi promovida. TestSprite continua com `No tests detected` e
+  o Preview Git-driven anterior falhou com `Resource provisioning failed`;
+  esses bloqueios permanecem explícitos até nova evidência.
 
 ## Revalidação corrente da unidade gerencial — 2026-08-10
 
@@ -12,7 +34,8 @@
   `HelpTooltip` é botão nativo e `CheckinHeader` usa escala tipográfica
   canônica nos trechos ajustados.
 - Contratos direcionados: `38 pass / 0 fail / 8222 expect()` (snapshot da
-  unidade gerencial); suíte corrente: `2612 pass / 0 fail / 18234 expect()`.
+  unidade gerencial); suíte corrente deste snapshot intermediário:
+  `2612 pass / 0 fail / 18234 expect()`.
 - Lint, typecheck, build, bundle (`1564,22/1860 KB gzip`), layout/route
   audits, AIOX structure/parity/IDE sync, a11y, management design system e
   diff-check passaram.

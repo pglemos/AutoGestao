@@ -5,7 +5,7 @@
 **Branch da retomada:** `fix/mx-full-execution-20260810` (worktree isolado)
 **Base atual:** `origin/main` em `cd03df2a8ee472664c07dae881074d911c6775d5`
 **Checkpoint remoto verificado antes desta atualização:**
-`d2c491578438491e5d6b4e878caa48dd51141a95`; o diff local desta retomada ainda
+`651b34a1fcd675dbc5a2d9dee55b95fcc2c44a80`; o diff local desta retomada ainda
 precisa de commit/push. Os commits de implementação visual anteriores
 permanecem no histórico desta branch
 **Base histórica de rollback:** `41ec4d39e165cab013988fab9aef54649b616095`
@@ -15,18 +15,26 @@ permanecem no histórico desta branch
 
 ## Revalidação corrente local — 2026-08-10
 
-O checkpoint remoto `d2c49157` está publicado no PR #188; a correção evita
-`sentry-cli --release ''` quando a variável existe vazia. No diff local corrente,
-`npm test` passou `2612/2612` com `18234 expect()`, e `npm run lint`,
-`npx tsc --noEmit` e `npm run build` passaram. Secretlint, Gitleaks, bundle e
-auditorias adicionais serão registrados após a revisão do diff.
+O checkpoint remoto `651b34a1` está publicado no PR #188. O diff local corrente
+alinha o Funil à performance oficial, preserva `null` sem meta, prova a data
+enviada pelo Check-in, amplia o contrato de tokens semânticos e mantém a
+normalização de release Sentry. `npm test` passou `2622/2622` com `18278
+expect()` em 466 arquivos, e lint, typecheck, build e bundle passaram. `npm run verify:db-types`
+e Secretlint 13.0.4 também passaram; `git diff --cached --check` e Gitleaks
+staged passaram, e a publicação do novo SHA ainda será registrada após a
+documentação.
 
-CI remoto também passou em Quality Gates, Typecheck/unit, ESLint a11y,
-bundle-budget, db-types-diff, Gitleaks, Atomic Design, Management Audit,
-Manager Parity, Central Execução Parity, Module Parity e Authenticated Visual
-(12m58s, incluindo a matriz Owner Base44).
+Os gates remotos do checkpoint publicado `0e4a7275`, registrados na story, são
+históricos e não são prova do diff local corrente. Para o checkpoint remoto
+`651b34a1`, a execução de CI de 2026-08-10 passou em Quality Gates,
+Typecheck/unit, ESLint a11y, bundle-budget, db-types-diff, Gitleaks, Atomic
+Design, Management Audit, Manager Parity, Central Execução Parity, Module Parity,
+Authenticated Visual e demais checks do PR #188. Isso prova CI do checkpoint,
+mas não Preview funcional: o status Vercel está `FAILURE`, TestSprite está
+`FAILURE` com `No tests detected` e Supabase Preview está `SKIPPED`. O diff local
+corrente ainda precisa de commit/push e de nova validação no SHA que será criado.
 
-O estado continua **PARCIALMENTE CONCLUÍDO**. O Preview Git-driven atual
+O estado continua **PARCIALMENTE CONCLUÍDO**. O Preview Git-driven anterior
 `dpl_HkdF7keUj6cKxyozQiFbfyoh4BH6`, associado ao checkpoint remoto, falhou com
 `BUILD_FAILED / Resource provisioning failed` e `integrations.status=error`.
 TestSprite falhou com `No tests detected`; Supabase Preview ficou `skipping`.
@@ -38,8 +46,9 @@ mantém um high em `xlsx` sem correção; o audit de produção não tem finding
 
 As tentativas de revisão Agy/Antigravity foram limitadas por quota externa; não
 há disponibilidade comprovada de um modelo “GPT 5.6 Luna”, portanto nenhuma
-delegação ou resultado foi fabricado. CodeRabbit ficou `pass` por rate limit,
-sem veredicto técnico completo.
+delegação ou resultado foi fabricado. O CodeRabbit local encontrou dois achados
+`minor` documentais, corrigidos no diff; a repetição terminou em `Review limit
+reached`, sem veredicto técnico final para o conjunto corrente.
 
 > As seções históricas abaixo preservam evidências anteriores. Quando houver
 > conflito de contagem, SHA, deployment ou status, esta revalidação corrente e

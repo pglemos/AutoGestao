@@ -1288,6 +1288,12 @@ $ aiox clone deactivate brad-frost
 
 ### Docker Compose Services (v2.2)
 
+# Keep these values in a local, untracked `.env` file. The raw password is used
+# by PostgreSQL; the URL-encoded value is used only inside `DATABASE_URL`.
+# DB_SCHEME=postgresql
+# AIOX_POSTGRES_PASSWORD=[PASSWORD]
+# DB_PASSWORD_URLENCODED=[PASSWORD_URLENCODED]
+
 ```yaml
 services:
   weaviate:
@@ -1310,7 +1316,7 @@ services:
     environment:
       - POSTGRES_DB=aiox_memory
       - POSTGRES_USER=aiox
-      - POSTGRES_PASSWORD=aiox_dev
+      - POSTGRES_PASSWORD=${AIOX_POSTGRES_PASSWORD:?Set AIOX_POSTGRES_PASSWORD}
       
   redis:
     image: redis:7-alpine
@@ -1327,7 +1333,7 @@ services:
     depends_on:
       - postgres
     environment:
-      - DATABASE_URL=${DB_SCHEME}://aiox:${DB_PASSWORD_URLENCODED}@postgres:5432/aiox_memory
+      - DATABASE_URL=${DB_SCHEME:-postgresql}://aiox:${DB_PASSWORD_URLENCODED:?Set DB_PASSWORD_URLENCODED}@postgres:5432/aiox_memory
       
 volumes:
   weaviate_data:

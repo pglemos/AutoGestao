@@ -10,13 +10,15 @@ export function resolveOfficialSellerKpis(
   if (!officialPerformance) return dashboardKpis
 
   const clientMeta = dashboardKpis.meta
-  const meta = clientMeta !== null && clientMeta > 0 ? clientMeta : officialPerformance.meta
+  const officialMeta = officialPerformance.meta > 0 ? officialPerformance.meta : null
+  const meta = clientMeta !== null && clientMeta > 0 ? clientMeta : officialMeta
   const realizado = officialPerformance.vendas_realizadas
-  const faltam = Math.max(meta - realizado, 0)
-  const metaBatida = meta > 0 && realizado >= meta
-  const necessarioPorDia = metaBatida || dashboardKpis.diasUteisRestantes <= 0
+  const faltam = meta !== null ? Math.max(meta - realizado, 0) : null
+  const hasMeta = meta !== null && meta > 0
+  const metaBatida = hasMeta && realizado >= meta
+  const necessarioPorDia = faltam === null || metaBatida || dashboardKpis.diasUteisRestantes <= 0
     ? null
-    : Math.round((faltam / dashboardKpis.diasUteisRestantes) * 100) / 100
+    : Math.round(((faltam ?? 0) / dashboardKpis.diasUteisRestantes) * 100) / 100
 
   return {
     ...dashboardKpis,
@@ -25,6 +27,6 @@ export function resolveOfficialSellerKpis(
     faltam,
     necessarioPorDia,
     metaBatida,
-    probabilidade: meta > 0 ? Math.min(100, (officialPerformance.vendas_projetadas / meta) * 100) : null,
+    probabilidade: hasMeta ? Math.min(100, (officialPerformance.vendas_projetadas / meta) * 100) : null,
   }
 }
