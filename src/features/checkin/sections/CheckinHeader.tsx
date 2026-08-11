@@ -412,7 +412,7 @@ console.error(err)
         let checkinId = ''
 
         const existing = checkins.find(
-          c => c.reference_date === productionZeroDate && c.metric_scope === 'daily',
+          c => c.reference_date === productionZeroDate && isSubmittedClosing(c),
         )
         if (existing) {
           checkinId = existing.id
@@ -437,8 +437,7 @@ console.error(err)
             note: null,
             zero_reason: 'Outro',
           }
-          const isActiveDate = productionZeroDate === activeClosingDate
-          const res = await saveCheckin(placeholderPayload, isActiveDate ? 'daily' : 'historical', productionZeroDate)
+          const res = await saveCheckin(placeholderPayload, 'historical', productionZeroDate)
           if (res.error) {
             toast.error(`Erro ao iniciar produção zero: ${res.error}`)
             return

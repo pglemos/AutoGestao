@@ -111,9 +111,8 @@ describe('CheckinHeader — Produção Zero com seletor de data', () => {
     })
 
     test('data retroativa usa escopo historical; data ativa usa daily', () => {
-        expect(headerSource).toContain("isActiveDate ? 'daily' : 'historical'")
+        expect(headerSource).toContain("saveCheckin(placeholderPayload, 'historical', productionZeroDate)")
         expect(headerSource).toContain('isActiveDate = productionZeroDate === activeClosingDate')
-        expect(headerSource).not.toContain("'daily',\n        activeClosingDate,\n        activeClosingDate")
     })
 
     test('fechamentos concluídos ficam indisponíveis no seletor (regularização é o caminho)', () => {
@@ -128,4 +127,9 @@ describe('CheckinHeader — Produção Zero com seletor de data', () => {
     test('descrição do modal acompanha a data selecionada', () => {
         expect(headerSource).toContain('Escolha o motivo para {productionZeroDate.split')
     })
+
+    test('datas retroativas só reusam checkin se ele for concluído (isSubmittedClosing), criando placeholder caso contrário', () => {
+        expect(headerSource).toContain('c => c.reference_date === productionZeroDate && isSubmittedClosing(c)')
+    })
 })
+
