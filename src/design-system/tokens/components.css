@@ -51,7 +51,7 @@
   --mx-tabs-item-radius: var(--mx-radius-sm);
 
   /* -------------------------------------------------------------- layout */
-  --mx-content-max-width: 1400px;
+  --mx-content-max-width: var(--mx-page-width-dashboard);
   --mx-content-padding-inline: var(--mx-space-4);
   --mx-widget-gap: var(--mx-space-6);
 

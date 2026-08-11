@@ -72,9 +72,9 @@
 
   /* -------------------------------------------------------------- sidebar */
   --mx-color-sidebar-background: var(--mx-neutral-50);
-  --mx-color-sidebar-foreground: 240 5% 26%;
-  --mx-color-sidebar-accent: 240 5% 96%;
-  --mx-color-sidebar-border: 220 13% 91%;
+  --mx-color-sidebar-foreground: var(--mx-sidebar-ink);
+  --mx-color-sidebar-accent: var(--mx-sidebar-hover);
+  --mx-color-sidebar-border: var(--mx-gray-200);
 
   /* A ponte shadcn foi promovida para o bloco `:root` logo abaixo. Ver a
      justificativa lá: sob `.mx-ds` ela nunca chegava às utilities. */
@@ -126,10 +126,10 @@
   --radius: var(--mx-radius-lg);
   --sidebar-background: var(--mx-color-sidebar-background);
   --sidebar-foreground: var(--mx-color-sidebar-foreground);
-  --sidebar-primary: 240 6% 10%;
+  --sidebar-primary: var(--mx-sidebar-ink-strong);
   --sidebar-primary-foreground: var(--mx-neutral-50);
   --sidebar-accent: var(--mx-color-sidebar-accent);
-  --sidebar-accent-foreground: 240 6% 10%;
+  --sidebar-accent-foreground: var(--mx-sidebar-ink-strong);
   --sidebar-border: var(--mx-color-sidebar-border);
   --sidebar-ring: var(--mx-blue-500);
 
@@ -142,11 +142,6 @@
   --chart-3: 197 37% 24%;
   --chart-4: 43 74% 66%;
   --chart-5: 27 87% 67%;
-  --color-chart-1: hsl(var(--chart-1));
-  --color-chart-2: hsl(var(--chart-2));
-  --color-chart-3: hsl(var(--chart-3));
-  --color-chart-4: hsl(var(--chart-4));
-  --color-chart-5: hsl(var(--chart-5));
 
 }
 
