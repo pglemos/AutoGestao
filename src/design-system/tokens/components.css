@@ -26,6 +26,9 @@
   --mx-input-border-width: 1px;
   --mx-input-focus-ring-width: 2px;
 
+  /* ------------------------------------------------------- touch target */
+  --mx-touch-target-min: 44px;
+
   /* ---------------------------------------------------------------- card */
   --mx-card-radius: var(--mx-radius-xl);
   --mx-card-padding: var(--mx-space-4);
@@ -65,6 +68,12 @@
   --mx-font-size-metric: 24px;
   --mx-font-size-metric-lg: 30px;
 
+  /* ---------------------------------------------------------------- ícones */
+  --mx-icon-size-xs: 14px;
+  --mx-icon-size-sm: 16px;
+  --mx-icon-size-md: 20px;
+  --mx-icon-size-lg: 24px;
+
   /* ------------------------------------------------------------- z-index */
   /* Lista fechada — §34: nenhum z-index novo fora desta escala. */
   --mx-z-base: 0;
@@ -92,6 +101,12 @@
   --mx-card-padding: var(--mx-space-5);
   --mx-widget-gap: var(--mx-space-6);
   --mx-sidebar-item-height: 40px;
+}
+
+.mx-ds[data-mx-density='standard'] {
+  --mx-card-padding: var(--mx-space-4);
+  --mx-widget-gap: var(--mx-space-6);
+  --mx-sidebar-item-height: 36px;
 }
 
 .mx-ds[data-mx-density='compact'] {

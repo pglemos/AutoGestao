@@ -55,18 +55,26 @@
   --mx-color-success-foreground: var(--mx-neutral-0);
   --mx-color-success-text: var(--mx-status-success-text);
   --mx-color-success-subtle: var(--mx-emerald-100);
+  --mx-color-success-surface: var(--mx-emerald-100);
+  --mx-color-success-border: var(--mx-emerald-500);
   --mx-color-warning: var(--mx-amber-500);
   --mx-color-warning-foreground: var(--mx-neutral-950);
   --mx-color-warning-text: var(--mx-status-warning-text);
   --mx-color-warning-subtle: var(--mx-amber-100);
+  --mx-color-warning-surface: var(--mx-amber-100);
+  --mx-color-warning-border: var(--mx-amber-500);
   --mx-color-danger: var(--mx-red-500);
   --mx-color-danger-foreground: var(--mx-neutral-0);
   --mx-color-danger-text: var(--mx-status-error-text);
   --mx-color-danger-subtle: var(--mx-red-100);
+  --mx-color-danger-surface: var(--mx-red-100);
+  --mx-color-danger-border: var(--mx-red-500);
   --mx-color-info: var(--mx-blue-500);
   --mx-color-info-foreground: var(--mx-neutral-0);
   --mx-color-info-text: var(--mx-status-info-text);
   --mx-color-info-subtle: var(--mx-blue-100);
+  --mx-color-info-surface: var(--mx-blue-100);
+  --mx-color-info-border: var(--mx-blue-500);
 
   --mx-color-focus-ring: var(--mx-green-600);
 
@@ -261,6 +269,10 @@ form input[aria-hidden="true"] {
      escopo de gestão declarava; aqui a marca resolve do primitivo único. */
   --mx-accent: hsl(var(--mx-color-primary));
   --mx-accent-soft: hsl(var(--mx-color-primary-subtle));
+  /* Superfícies elevada e de sobreposição — valores herdados dos templates
+     byte a byte; o mapping do @theme passa a ler o semântico, não o tpl. */
+  --mx-surface-elevated: hsl(var(--mx-tpl-surface-elevated));
+  --mx-surface-overlay: hsl(var(--mx-tpl-surface-overlay));
 }
 
 :root {
