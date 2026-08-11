@@ -107,7 +107,7 @@ const ROUTE_LAYOUTS: Record<string, RouteLayoutMetadata> = {
   // --------------------------------------------------- fluxos e formulários
   // Barra de ações fixa: a reserva impede que o botão salvar cubra o último
   // campo (§15).
-  'fechamento-diario': { width: 'focused', bottomClearance: 'actions' },
+  'fechamento-diario': { width: 'dashboard', bottomClearance: 'actions' },
   'lancamento-diario': { width: 'focused', bottomClearance: 'actions' },
   rotina: { width: 'focused', bottomClearance: 'actions' },
   'rotina-do-dia': { width: 'focused', bottomClearance: 'actions' },

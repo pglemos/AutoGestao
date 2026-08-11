@@ -386,7 +386,7 @@ export default function ManagerDailyClosing() {
   if (sellersLoading || checkinsLoading) return <ManagerClosingSkeleton />;
 
   return (
-    <PageCanvas as="div" width="focused" bottomClearance="actions" id="page-fechamento-diario" aria-label="Fechamento Diário" className="flex flex-col gap-4">
+    <PageCanvas as="div" width="dashboard" bottomClearance="actions" id="page-fechamento-diario" aria-label="Fechamento Diário" className="flex flex-col gap-4">
         <ManagerHomeReturnLink />
         <section className="bg-white rounded-[16px] border border-gray-100 shadow-sm p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -1356,7 +1356,7 @@ function Empty({ text }: { text: string }) {
 }
 function ManagerClosingSkeleton() {
   return (
-    <PageCanvas as="div" width="focused" bottomClearance="actions" aria-busy="true" aria-label="Carregando fechamento diário" className="flex flex-col gap-4">
+    <PageCanvas as="div" width="dashboard" bottomClearance="actions" aria-busy="true" aria-label="Carregando fechamento diário" className="flex flex-col gap-4">
       <Skeleton className="h-20" />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: 4 }).map((_, index) => (

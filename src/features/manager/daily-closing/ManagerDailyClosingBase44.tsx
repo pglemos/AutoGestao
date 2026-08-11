@@ -551,7 +551,7 @@ export default function ManagerDailyClosing() {
   if (sellersLoading || checkinsLoading) return <ManagerClosingSkeleton />;
 
   return (
-    <PageCanvas as="div" width="focused" bottomClearance="actions" aria-busy={false} className="flex flex-col gap-5">
+    <PageCanvas as="div" width="dashboard" bottomClearance="actions" aria-busy={false} className="flex flex-col gap-5">
         <ManagerHomeReturnLink />
 
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
@@ -1074,7 +1074,7 @@ function Empty({ text }: { text: string }) {
 }
 
 function ManagerClosingSkeleton() {
-  return <PageCanvas as="div" width="focused" bottomClearance="actions" className="flex flex-col gap-5" aria-busy="true"><Skeleton className="h-36" /><div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">{Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="h-[164px]" />)}</div><Skeleton className="h-[420px]" /></PageCanvas>;
+  return <PageCanvas as="div" width="dashboard" bottomClearance="actions" className="flex flex-col gap-5" aria-busy="true"><Skeleton className="h-36" /><div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">{Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="h-[164px]" />)}</div><Skeleton className="h-[420px]" /></PageCanvas>;
 }
 
 function initials(name: string) {
