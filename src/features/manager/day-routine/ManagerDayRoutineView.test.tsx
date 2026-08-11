@@ -102,8 +102,7 @@ describe('ManagerDayRoutineView Base44 parity', () => {
       expect(createFooter?.classList.contains('justify-end')).toBeTrue()
       expect(createFooter?.classList.contains('flex-col-reverse')).toBeFalse()
       const closeButton = screen.getByRole('button', { name: 'Fechar modal' })
-      expect(closeButton.className).toContain('h-5 w-5')
-      expect(closeButton.classList.contains('!min-h-0')).toBeTrue()
+      expect(closeButton.className).toContain('mx-overlay-close')
       expect(screen.getByRole('heading', { name: 'Nova atividade' }).className).toContain('text-base leading-6')
       for (const label of ['Cancelar', 'Criar atividade']) {
         expect(screen.getByRole('button', { name: label }).classList.contains('h-8')).toBeTrue()

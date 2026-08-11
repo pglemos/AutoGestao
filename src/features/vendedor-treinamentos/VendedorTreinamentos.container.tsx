@@ -214,7 +214,7 @@ export default function VendedorTreinamentosContainer() {
     const progressoPercent = trainings.length > 0 ? Math.round((completedCount / trainings.length) * 100) : 0
 
     return (
-        <PageTemplate as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-8" scrollerClassName="font-body">
+        <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-8" scrollerClassName="font-body">
             <PageHeader title="Treinamentos" subtitle="Desenvolva suas habilidades de vendas">
                 <ContentSuggestionDialog />
             </PageHeader>

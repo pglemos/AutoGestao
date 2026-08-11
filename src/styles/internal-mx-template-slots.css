@@ -6,10 +6,7 @@
 }
 
 .mx-canonical-template [data-mx-template-body] {
-  overflow-x: hidden;
-  overflow-y: auto;
-  overscroll-behavior-y: contain;
-  -webkit-overflow-scrolling: touch;
+  min-height: 100%;
   background: var(--mx-page-bg);
 }
 
@@ -31,8 +28,6 @@
 .mx-canonical-template [data-mx-template-page] {
   min-height: 100%;
   width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
   background: var(--mx-page-bg);
   color: var(--mx-text);
 }

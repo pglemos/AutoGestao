@@ -121,6 +121,8 @@ interface CanvasGeometry {
   paddingRight: number
   paddingTop: number
   hasHorizontalScroll: boolean
+  pageScrollOwnerCount: number
+  pageViewportFound: boolean
   role: string | null
 }
 
@@ -136,10 +138,20 @@ async function readCanvas(page: Page): Promise<CanvasGeometry> {
         paddingRight: 0,
         paddingTop: 0,
         hasHorizontalScroll: document.documentElement.scrollWidth > window.innerWidth,
+        pageScrollOwnerCount: 0,
+        pageViewportFound: false,
         role: shell?.dataset.mxRole ?? null,
       }
     }
     const style = getComputedStyle(canvas)
+    const viewport = document.querySelector<HTMLElement>('#main-content > [data-mx-page-viewport]')
+    const pageLevelCandidates = viewport
+      ? [viewport, ...Array.from(viewport.children).filter((child): child is HTMLElement => child instanceof HTMLElement)]
+      : []
+    const pageScrollOwnerCount = pageLevelCandidates.filter((element) => {
+      const overflowY = getComputedStyle(element).overflowY
+      return overflowY === 'auto' || overflowY === 'scroll'
+    }).length
     return {
       found: true,
       width: canvas.dataset.mxPageWidth ?? null,
@@ -147,6 +159,8 @@ async function readCanvas(page: Page): Promise<CanvasGeometry> {
       paddingRight: Math.round(parseFloat(style.paddingRight)),
       paddingTop: Math.round(parseFloat(style.paddingTop)),
       hasHorizontalScroll: document.documentElement.scrollWidth > window.innerWidth,
+      pageScrollOwnerCount,
+      pageViewportFound: Boolean(viewport),
       role: shell?.dataset.mxRole ?? null,
     }
   })
@@ -206,6 +220,11 @@ test.describe('matriz canônica de layout', () => {
           }
           if (geometry.hasHorizontalScroll) {
             failures.push(`${route}: rolagem horizontal acidental em ${viewport?.width}px`)
+          }
+          if (!geometry.pageViewportFound || geometry.pageScrollOwnerCount !== 1) {
+            failures.push(
+              `${route}: ${geometry.pageScrollOwnerCount} page scroll owner(s), esperado 1 (${geometry.pageViewportFound ? 'PageViewport encontrado' : 'PageViewport ausente'})`,
+            )
           }
 
           // Acessibilidade entra como catraca, não como portão binário.

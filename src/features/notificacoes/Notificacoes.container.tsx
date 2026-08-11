@@ -10,7 +10,7 @@ export function Notificacoes() {
   const state = useNotificacoesPage()
   return (
     <NotificacoesErrorBoundary sectionName="Notificacoes">
-      <MxModulePage id="internal-notifications" maxWidth="full" contentClassName="max-w-[1500px]">
+      <MxModulePage id="internal-notifications" width="dashboard">
         <NotificacoesHeader isRefetching={state.isRefetching} handleRefresh={state.handleRefresh} markAllAsRead={state.markAllAsRead} />
         <NotificacoesRoleBanners isOwner={state.isOwner} />
         <div className="grid grid-cols-1 items-start gap-4 lg:grid-cols-12">

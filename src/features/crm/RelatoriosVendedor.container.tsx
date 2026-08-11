@@ -62,7 +62,7 @@ export function RelatoriosVendedor() {
 
   if (isLoading) {
     return (
-      <PageTemplate as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
+      <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
           <SellerPageHeader icon={BarChart3} title="Relatórios" subtitle="Visão consolidada da sua performance comercial, com dados reais." />
           <div className="flex items-center justify-center h-64">
             <div className="w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin" />
@@ -72,7 +72,7 @@ export function RelatoriosVendedor() {
   }
 
   return (
-    <PageTemplate as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
+    <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
 <SellerPageHeader icon={BarChart3} title="Relatórios" subtitle="Visão consolidada da sua performance comercial, com dados reais." />
 
         <section className="grid grid-cols-2 gap-mx-md md:grid-cols-3 xl:grid-cols-4" aria-label="KPIs">

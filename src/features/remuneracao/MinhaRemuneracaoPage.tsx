@@ -52,7 +52,7 @@ export default function MinhaRemuneracaoPage() {
   const userName = data.profile?.name?.split(' ')[0] || 'Nome não informado'
 
   return (
-    <PageTemplate as="main" width="dashboard" bottomClearance="navigation" className="flex min-w-0 flex-col gap-4" surface="plain" scrollerClassName="!bg-[#030B14] text-gray-800">
+    <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex min-w-0 flex-col gap-4" surface="plain" scrollerClassName="!bg-[#030B14] text-gray-800">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4">
           <div>
             <h1 className="text-2xl lg:text-3xl font-bold text-gray-800">{saudacaoPorHora()}, {userName}! 🚀</h1>

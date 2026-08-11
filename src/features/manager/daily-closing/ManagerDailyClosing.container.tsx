@@ -54,6 +54,7 @@ import type {
   CheckinWithTotals,
 } from "@/types/database";
 import { toast } from "@/lib/toast";
+import { chartTokens } from "@/lib/charts/tokens";
 import {
   averageDiscipline,
   buildClosingSummary,
@@ -1104,11 +1105,11 @@ function DisciplineTrendCard({
                 type="monotone"
                 dataKey="value"
                 connectNulls
-                stroke="#10B981"
+                stroke={chartTokens.success()}
                 strokeWidth={2.5}
                 dot={{
                   r: 3.5,
-                  fill: "#10B981",
+                  fill: chartTokens.success(),
                   strokeWidth: 0,
                 }}
                 label={{
@@ -1116,7 +1117,7 @@ function DisciplineTrendCard({
                   formatter: (value) =>
                     typeof value === 'number' ? `${value}%` : '',
                   fontSize: 10,
-                  fill: "#10B981",
+                  fill: chartTokens.success(),
                   fontWeight: 700,
                 }}
               />

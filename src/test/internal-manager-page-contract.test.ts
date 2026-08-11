@@ -74,15 +74,19 @@ describe('contrato canônico do módulo interno MX', () => {
     expect(modulePageRule).not.toMatch(/padding:\s*1\.5rem/)
   })
 
-  test('o corpo canônico mantém rolagem vertical para qualquer wrapper de página', () => {
+  test('o corpo canônico delega a rolagem vertical ao PageViewport', () => {
     const slotsCss = read('src/styles/internal-mx-template-slots.css')
     const bodyRules = [...slotsCss.matchAll(/\.mx-canonical-template \[data-mx-template-body\] \{([^}]*)\}/g)]
     const bodyRule = bodyRules.at(-1)?.[1] ?? ''
 
     expect(bodyRules.length).toBeGreaterThanOrEqual(2)
-    expect(bodyRule).toContain('overflow-x: hidden')
-    expect(bodyRule).toContain('overflow-y: auto')
+    expect(bodyRule).not.toContain('overflow-x: hidden')
+    expect(bodyRule).not.toContain('overflow-y: auto')
     expect(bodyRule).not.toMatch(/overflow:\s*hidden/)
+
+    const canonicalCss = read('src/styles/internal-mx-canonical-template.css')
+    expect(canonicalCss).not.toContain('overflow-y: auto')
+    expect(canonicalCss).not.toContain('overflow: hidden')
   })
 
   test('a simulação reserva altura para o conteúdo rolável', () => {

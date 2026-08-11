@@ -51,7 +51,11 @@ function collectRoutes(source) {
       const container = ts.isJsxElement(node) && node.children.some(child => isRoute(child))
       const fullPath = index ? (parentPath || '/') : joinRoute(parentPath, path)
       const protectedRoute = inheritedProtected || element.includes('<ProtectedRoute')
-      const redirect = element.match(/<(?:Navigate|RedirectWithSearch)\s+to="([^"]+)"/)?.[1] || null
+      // Only classify a route as a route-level redirect when the entire route
+      // element is the redirect. A Navigate nested in RoleSwitch is a
+      // role-specific outcome (for example /pdi for vendedor), not a reason
+      // to discard the page renderings of the other roles from the matrix.
+      const redirect = element.match(/^\s*<(?:Navigate|RedirectWithSearch)\s+to="([^"]+)"/)?.[1] || null
       const forbiddenRoles = [...element.matchAll(/(vendedor|gerente|dono|admin)=\{<ForbiddenRoute/g)]
         .map(match => match[1])
 
@@ -217,6 +221,43 @@ const duplicatePaths = [...new Set(
     .map(route => route.path)
     .filter((path, index, all) => all.indexOf(path) !== index),
 )]
+
+if (process.argv.includes('--json')) {
+  const serialiseIntegrations = kind => Object.fromEntries(
+    [...integrations[kind].entries()]
+      .sort(([left], [right]) => left.localeCompare(right))
+      .map(([name, files]) => [name, [...files].sort()]),
+  )
+
+  console.log(JSON.stringify({
+    generatedAt: new Date().toISOString(),
+    routes: inventory,
+    counts: {
+      total: inventory.length,
+      protected: inventory.filter(route => route.protected).length,
+      public: inventory.filter(route => !route.protected).length,
+      ungoverned: ungoverned.length,
+      duplicatePaths: duplicatePaths.length,
+      tables: integrations.table.size,
+      rpcs: integrations.rpc.size,
+      edgeFunctions: integrations.edge_function.size,
+      tableOperations: integrations.table_operation.size,
+    },
+    integrations: {
+      tables: serialiseIntegrations('table'),
+      tableOperations: serialiseIntegrations('table_operation'),
+      rpcs: serialiseIntegrations('rpc'),
+      edgeFunctions: serialiseIntegrations('edge_function'),
+    },
+    ungoverned: ungoverned.map(route => route.path),
+    duplicatePaths,
+  }, null, 2))
+
+  if (process.argv.includes('--check') && (ungoverned.length || duplicatePaths.length)) {
+    process.exitCode = 1
+  }
+  process.exit()
+}
 
 console.log('# Matriz reproduzível de rotas, autorização e dados')
 console.log('')

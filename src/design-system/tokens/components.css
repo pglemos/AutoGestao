@@ -8,6 +8,72 @@
  * família de componente ou linguagem de interação (§10.2 do normativo).
  */
 
+/*
+ * Radix portals are mounted directly in `document.body`, outside `.mx-ds`.
+ * Keep overlay component tokens at the root so every profile and route shares
+ * the same geometry while the visual migration remains scoped elsewhere.
+ */
+:root {
+  --mx-touch-target-min: 44px;
+  --mx-overlay-radius: var(--mx-radius-2xl);
+  --mx-overlay-padding: var(--mx-space-6);
+  --mx-overlay-gap: var(--mx-space-4);
+  --mx-overlay-compact-gutter: var(--mx-space-4);
+  --mx-overlay-max-height: calc(
+    100dvh - var(--mx-space-8) - env(safe-area-inset-top, 0px) -
+      env(safe-area-inset-bottom, 0px)
+  );
+  --mx-overlay-surface: var(--mx-color-surface-elevated);
+  --mx-overlay-border: var(--mx-color-border);
+  --mx-overlay-shadow: var(--mx-shadow-2xl);
+  --mx-overlay-backdrop-alpha: 0.48;
+  --mx-overlay-close-size: var(--mx-touch-target-min);
+}
+
+.mx-overlay-backdrop {
+  z-index: var(--mx-z-overlay);
+  background-color: hsl(var(--mx-black) / var(--mx-overlay-backdrop-alpha));
+}
+
+.mx-overlay-close {
+  display: inline-flex;
+  min-block-size: var(--mx-overlay-close-size);
+  min-inline-size: var(--mx-overlay-close-size);
+  align-items: center;
+  justify-content: center;
+}
+
+.mx-overlay-surface {
+  box-sizing: border-box;
+  z-index: var(--mx-z-modal);
+  max-height: var(--mx-overlay-max-height);
+  overflow: hidden;
+  border: 1px solid hsl(var(--mx-overlay-border));
+  border-radius: var(--mx-overlay-radius);
+  background-color: hsl(var(--mx-overlay-surface));
+  box-shadow: var(--mx-overlay-shadow);
+}
+
+.mx-overlay-surface[data-mx-overlay-layer='drawer'] {
+  --mx-overlay-radius: 0px;
+}
+
+.mx-overlay-body {
+  min-height: 0;
+  flex: 1 1 auto;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mx-overlay-surface,
+  .mx-overlay-backdrop {
+    animation-duration: 0ms !important;
+    transition-duration: 0ms !important;
+  }
+}
+
 .mx-ds {
   /* --------------------------------------------------------------- botão */
   --mx-button-height-sm: 32px;
@@ -25,9 +91,6 @@
   --mx-input-radius: var(--mx-radius-sm);
   --mx-input-border-width: 1px;
   --mx-input-focus-ring-width: 2px;
-
-  /* ------------------------------------------------------- touch target */
-  --mx-touch-target-min: 44px;
 
   /* ---------------------------------------------------------------- card */
   --mx-card-radius: var(--mx-radius-xl);

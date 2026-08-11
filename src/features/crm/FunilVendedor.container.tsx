@@ -4,6 +4,7 @@ import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
 import { PageHeading } from '@/components/molecules/PageHeading'
+import { PageCanvas } from '@/design-system/page'
 import { useAgendamentos } from '@/features/crm/hooks/useAgendamentos'
 import { useClientes } from '@/features/crm/hooks/useClientes'
 import { useOportunidades } from '@/features/crm/hooks/useOportunidades'
@@ -135,17 +136,16 @@ export function FunilVendedor() {
 
   if (oportunidadesError) {
     return (
-      <div className="flex flex-col items-center justify-center gap-4 py-20">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col items-center justify-center gap-4">
         <Typography variant="p" className="text-sm font-bold text-status-error">Erro ao carregar dados do funil.</Typography>
         <Button type="button" variant="secondary" size="sm" onClick={() => refetch()}>Tentar novamente</Button>
-      </div>
+      </PageCanvas>
     )
   }
 
   return (
-    <div className="h-full w-full overflow-y-auto bg-gray-50 px-mx-sm pb-mx-sm pt-0 no-scrollbar sm:px-mx-md sm:pb-mx-md 2xl:px-mx-lg 2xl:pb-mx-lg">
-      <div className="flex flex-col gap-mx-lg pb-mx-md">
-        <header className="relative z-40 -mx-mx-sm shrink-0 border-b border-gray-200/60 bg-gray-50 px-mx-sm pb-3 pt-2 shadow-mx-lg sm:-mx-mx-md sm:px-mx-md md:sticky md:top-0 md:pt-3 2xl:-mx-mx-lg 2xl:px-mx-lg">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col gap-mx-lg">
+        <header className="relative z-40 shrink-0 border-b border-gray-200/60 bg-gray-50 pb-3 pt-2 shadow-mx-lg md:sticky md:top-0 md:pt-3">
           <PageHeading
             title="Funil de Vendas"
             subtitle="Com sua conversão atual, veja o que precisa produzir para atingir a meta."
@@ -208,8 +208,7 @@ export function FunilVendedor() {
 
         <StatisticalBaseCard displayedPeriod={periodInfo.label} calculationPeriod={calculationPeriodLabel} confidence={confidence} reason={getConfidenceReason(confidence)} />
         <HistoryChart rows={history} />
-      </div>
-    </div>
+    </PageCanvas>
   )
 }
 

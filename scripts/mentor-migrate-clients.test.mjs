@@ -99,24 +99,28 @@ describe('Mentor Migrate Clients Script (TAREFA C04)', () => {
 
   test('1. DRY-RUN gera plano de migração sem escritas no banco ou rede', () => {
     const plan = planMigration(sampleClientes, sampleOportunidades)
+    // c1-c6 têm oportunidade ativa; c7 só tem op encerrada (op7_closed)
     expect(plan.clientesComAtivaExistente).toBe(6)
-    expect(plan.clientesSemAtivaNovaCriada).toBe(1)
+    expect(plan.clientesSomenteEncerradas).toBe(1)
+    expect(plan.clientesSemNenhumaOportunidade).toBe(0)
     expect(plan.oppUpdates.length).toBe(6)
-    expect(plan.newOpps.length).toBe(1)
+    // Script não cria novas oportunidades automaticamente (§35 / §83)
+    expect(plan.newOpps.length).toBe(0)
   })
 
-  test('4. Reutiliza oportunidade ativa existente e só cria nova se cliente não possuir ativa', () => {
+  test('4. Reutiliza oportunidade ativa existente; cliente sem ativa fica em clientesSomenteEncerradas', () => {
     const plan = planMigration(sampleClientes, sampleOportunidades)
 
     const updatedOppIds = plan.oppUpdates.map((u) => u.id)
     expect(updatedOppIds).toContain('op1')
     expect(updatedOppIds).toContain('op2')
     expect(updatedOppIds).toContain('op3')
+    // op7_closed está encerrada, não deve ser atualizada
     expect(updatedOppIds).not.toContain('op7_closed')
 
-    expect(plan.newOpps.length).toBe(1)
-    expect(plan.newOpps[0].cliente_id).toBe('c7')
-    expect(plan.newOpps[0].etapa).toBe('prospeccao')
+    // Script nunca cria oportunidades (§35 / §83): c7 vai para somenteEncerradas
+    expect(plan.newOpps.length).toBe(0)
+    expect(plan.clientesSomenteEncerradas).toBe(1)
   })
 
   test('5. Mantém needs_mentor_classification=true e NÃO inventa score', () => {
@@ -180,8 +184,9 @@ describe('Mentor Migrate Clients Script (TAREFA C04)', () => {
 
     const secondPlan = planMigration(sampleClientes, oppsStateAfterRun1, nowIso)
 
-    expect(secondPlan.clientesComAtivaExistente).toBe(7)
-    expect(secondPlan.clientesSemAtivaNovaCriada).toBe(0)
+    // c7 continua sem ativa na 2ª rodada (nenhuma foi criada); contagem não muda
+    expect(secondPlan.clientesComAtivaExistente).toBe(6)
+    expect(secondPlan.clientesSomenteEncerradas).toBe(1)
     expect(secondPlan.newOpps.length).toBe(0)
     expect(secondPlan.oppUpdates.length).toBe(0)
   })

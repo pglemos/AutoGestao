@@ -66,6 +66,7 @@ mx-v3-csv-*/
 
 # Foundation Zero ledger (git-ignored per mission rules)
 .superpowers/mx-foundation-zero/
+artifacts/foundation-zero/
 
 # Graphify runtime artifacts (AGENTS.md: never commit branch/worktree/cache)
 .graphify/

@@ -1,4 +1,4 @@
-import { useRef, type ReactNode } from "react";
+import { forwardRef, useRef, type HTMLAttributes, type ReactNode } from "react";
 import * as Dialog from "@radix-ui/react-dialog";
 import { cva, type VariantProps } from "class-variance-authority";
 import { cn } from "@/lib/utils";
@@ -46,6 +46,18 @@ export interface ModalProps extends VariantProps<typeof modalSizeVariants> {
   onOpenAutoFocus?: (event: Event) => void;
 }
 
+export const ModalBody = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
+  ({ className, ...props }, ref) => (
+    <div
+      ref={ref}
+      data-mx-overlay-body="true"
+      className={cn("mx-overlay-body", className)}
+      {...props}
+    />
+  ),
+);
+ModalBody.displayName = "ModalBody";
+
 export function Modal({
   open,
   onClose,
@@ -80,13 +92,16 @@ export function Modal({
     >
       <Dialog.Portal>
         <Dialog.Overlay
+          data-mx-overlay-backdrop="modal"
           data-reference-overlay={referenceStyle ? "true" : undefined}
           className={cn(
-            "fixed inset-0 z-[100]",
+            "mx-overlay-backdrop fixed inset-0",
             referenceStyle ? "bg-black/30" : "bg-gray-900/60 backdrop-blur-md",
           )}
         />
         <Dialog.Content
+          data-mx-overlay="modal"
+          data-mx-overlay-layer="modal"
           data-reference-modal={referenceStyle ? "true" : undefined}
           onEscapeKeyDown={(event) => {
             if (!closeOnEscape) event.preventDefault();
@@ -100,9 +115,10 @@ export function Modal({
             requestAnimationFrame(() => previouslyFocusedElement.focus());
           }}
           className={cn(
+            "mx-overlay-surface",
             referenceStyle
-              ? "fixed left-4 right-4 top-1/2 -translate-y-1/2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 z-[101] focus:outline-none"
-              : "fixed left-mx-md right-mx-md top-mx-md bottom-mx-md sm:left-1/2 sm:right-auto sm:top-1/2 sm:bottom-auto sm:-translate-x-1/2 sm:-translate-y-1/2 z-[101] focus:outline-none",
+              ? "fixed left-4 right-4 top-1/2 -translate-y-1/2 sm:left-1/2 sm:right-auto sm:-translate-x-1/2 focus:outline-none"
+              : "fixed left-mx-md right-mx-md top-mx-md bottom-mx-md sm:left-1/2 sm:right-auto sm:top-1/2 sm:bottom-auto sm:-translate-x-1/2 sm:-translate-y-1/2 focus:outline-none",
             referenceStyle
               // `w-auto` abaixo de sm, como no shell não-reference: com
               // `left-4 right-4` e `width:100%` o painel mede 100% da viewport
@@ -139,10 +155,10 @@ export function Modal({
                   type="button"
                   aria-label="Fechar modal"
                   className={cn(
-                    "flex items-center justify-center transition-colors shrink-0",
+                    "mx-overlay-close flex items-center justify-center transition-colors shrink-0",
                     referenceStyle
-                      ? "h-5 w-5 !min-h-0 rounded-none bg-transparent p-0 text-gray-400 hover:text-gray-600"
-                      : "h-mx-xl w-mx-xl rounded-2xl bg-gray-50",
+                      ? "rounded-none bg-transparent p-0 text-gray-400 hover:text-gray-600"
+                      : "rounded-2xl bg-gray-50",
                   )}
                 >
                   <X size={referenceStyle ? 18 : 20} />
@@ -151,14 +167,14 @@ export function Modal({
             )}
           </div>
 
-          <div className={cn(
+          <ModalBody className={cn(
             "min-h-0 flex-1 overflow-y-auto overscroll-contain",
             referenceStyle
               ? "p-5 [&_input]:!text-sm [&_select]:!text-sm [&_textarea]:!text-sm"
               : "p-mx-md sm:p-mx-lg",
           )}>
             {children}
-          </div>
+          </ModalBody>
 
           {footer && (
             <div

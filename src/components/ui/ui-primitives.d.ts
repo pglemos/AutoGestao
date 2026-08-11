@@ -78,6 +78,9 @@ declare module '@/components/ui/sheet' {
     Div & { side?: 'top' | 'bottom' | 'left' | 'right' } & React.RefAttributes<HTMLDivElement>
   >
   export const SheetHeader: React.FC<Div>
+  export const SheetBody: React.ForwardRefExoticComponent<
+    Div & React.RefAttributes<HTMLDivElement>
+  >
   export const SheetFooter: React.FC<Div>
   export const SheetTitle: React.ForwardRefExoticComponent<
     React.HTMLAttributes<HTMLHeadingElement> & React.RefAttributes<HTMLHeadingElement>
@@ -112,11 +115,53 @@ declare module '@/components/ui/dialog' {
     } & React.RefAttributes<HTMLDivElement>
   >
   export const DialogHeader: React.FC<Div>
+  export const DialogBody: React.ForwardRefExoticComponent<
+    Div & React.RefAttributes<HTMLDivElement>
+  >
   export const DialogFooter: React.FC<Div>
   export const DialogTitle: React.ForwardRefExoticComponent<
     React.HTMLAttributes<HTMLHeadingElement> & React.RefAttributes<HTMLHeadingElement>
   >
   export const DialogDescription: React.ForwardRefExoticComponent<
     React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>
+  >
+}
+
+declare module '@/components/ui/alert-dialog' {
+  import type * as React from 'react'
+
+  type Div = React.HTMLAttributes<HTMLDivElement>
+
+  export const AlertDialog: React.FC<{
+    open?: boolean
+    defaultOpen?: boolean
+    onOpenChange?: (open: boolean) => void
+    modal?: boolean
+    children?: React.ReactNode
+  }>
+  export const AlertDialogTrigger: React.FC<{ asChild?: boolean; children?: React.ReactNode }>
+  export const AlertDialogPortal: React.FC<{ children?: React.ReactNode }>
+  export const AlertDialogOverlay: React.ForwardRefExoticComponent<
+    Div & React.RefAttributes<HTMLDivElement>
+  >
+  export const AlertDialogContent: React.ForwardRefExoticComponent<
+    Div & React.RefAttributes<HTMLDivElement>
+  >
+  export const AlertDialogHeader: React.FC<Div>
+  export const AlertDialogBody: React.ForwardRefExoticComponent<
+    Div & React.RefAttributes<HTMLDivElement>
+  >
+  export const AlertDialogFooter: React.FC<Div>
+  export const AlertDialogTitle: React.ForwardRefExoticComponent<
+    React.HTMLAttributes<HTMLHeadingElement> & React.RefAttributes<HTMLHeadingElement>
+  >
+  export const AlertDialogDescription: React.ForwardRefExoticComponent<
+    React.HTMLAttributes<HTMLParagraphElement> & React.RefAttributes<HTMLParagraphElement>
+  >
+  export const AlertDialogAction: React.ForwardRefExoticComponent<
+    React.ButtonHTMLAttributes<HTMLButtonElement> & React.RefAttributes<HTMLButtonElement>
+  >
+  export const AlertDialogCancel: React.ForwardRefExoticComponent<
+    React.ButtonHTMLAttributes<HTMLButtonElement> & React.RefAttributes<HTMLButtonElement>
   >
 }

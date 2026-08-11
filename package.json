@@ -33,6 +33,7 @@
     "typecheck": "bun test src/test/ranking-live-search-scroll-contract.test.ts && tsc --noEmit",
     "test": "bun test --isolate --max-concurrency=1 src/lib src/benchmarks src/hooks src/components src/features src/pages src/test src/api",
     "test:e2e": "playwright test",
+    "test:foundation-zero:harness": "tsx scripts/foundation_zero_harness.ts",
     "test:e2e:ui": "playwright test --ui",
     "sync:ide": "node .aiox-core/infrastructure/scripts/ide-sync/index.js sync",
     "sync:ide:check": "node .aiox-core/infrastructure/scripts/ide-sync/index.js validate",

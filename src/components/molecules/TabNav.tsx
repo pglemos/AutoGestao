@@ -41,7 +41,7 @@ export function TabNav<T extends string = string>({
             aria-controls={panelId}
             onClick={() => onTabChange(key)}
             className={cn(
-              'px-mx-md py-mx-sm text-xs font-bold uppercase tracking-mx-widest transition-all border-b-2 whitespace-nowrap',
+              'px-mx-md py-mx-sm text-label font-medium transition-all border-b-2 whitespace-nowrap',
               activeTab === key
                 ? 'border-brand-primary text-status-success-text bg-emerald-600/5'
                 : 'border-transparent text-gray-500 hover:text-gray-800 hover:bg-gray-50'

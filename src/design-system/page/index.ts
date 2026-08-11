@@ -10,6 +10,7 @@ export {
   type PageBottomClearance,
 } from './PageCanvas'
 export { FullBleed, type FullBleedProps } from './FullBleed'
+export { PageViewport, type PageViewportProps } from './PageViewport'
 export {
   resolveRouteLayout,
   DEFAULT_ROUTE_LAYOUT,

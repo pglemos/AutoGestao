@@ -37,7 +37,7 @@ export function StoreConsultorIa() {
 
   if (!selectedStoreId) {
     return (
-      <PageTemplate as="main" width="focused">
+      <PageTemplate as="div" width="focused">
         <Card className="mx-auto max-w-2xl border-none bg-white">
           <EmptyState
             size="lg"
@@ -61,7 +61,7 @@ export function StoreConsultorIa() {
   }
 
   return (
-  <PageTemplate as="main" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-md">
+  <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-md">
         <header className="flex flex-col gap-mx-md border-b border-gray-100 pb-mx-lg lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
             <Typography variant="h1" className="text-3xl md:text-4xl">

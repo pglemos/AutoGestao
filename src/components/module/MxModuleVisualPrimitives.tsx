@@ -8,6 +8,7 @@ import { Skeleton, type SkeletonProps } from '@/components/atoms/Skeleton'
 import { Textarea, type TextareaProps } from '@/components/atoms/Textarea'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
+import { PageCanvas, type PageBottomClearance, type PageWidth } from '@/design-system/page'
 import { cn } from '@/lib/utils'
 import {
   InternalMxTemplateHeader,
@@ -31,21 +32,48 @@ const toneStyles: Record<MxTone, ToneStyle> = {
   neutral: { icon: 'bg-gray-50 text-gray-500', surface: 'border-gray-100', value: 'text-gray-800', banner: 'border-gray-200 bg-gray-50 text-gray-700', progress: 'bg-gray-400' },
 }
 
-export function MxModulePage({ children, className, contentClassName, maxWidth = '7xl', id, accessMode }: { children: ReactNode; className?: string; contentClassName?: string; maxWidth?: 'full' | '7xl'; id?: string; accessMode?: MxAccessMode }) {
+export interface MxModulePageProps {
+  children: ReactNode
+  className?: string
+  contentClassName?: string
+  /** Compatibilidade com consumidores antigos; novas páginas devem usar `width`. */
+  maxWidth?: 'full' | '7xl'
+  width?: PageWidth
+  bottomClearance?: PageBottomClearance
+  id?: string
+  accessMode?: MxAccessMode
+}
+
+export function MxModulePage({
+  children,
+  className,
+  contentClassName,
+  maxWidth = '7xl',
+  width,
+  bottomClearance = 'navigation',
+  id,
+  accessMode,
+}: MxModulePageProps) {
+  const pageWidth = width ?? (maxWidth === 'full' ? 'fluid' : 'dashboard')
+
   return (
-        <InternalMxTemplatePage
-          id={id}
-          data-mx-module-page=""
-          data-mx-visual-system="manager"
-          data-mx-access-mode={accessMode}
-          className={cn('min-h-full w-full overflow-y-auto text-gray-800', className)}
-        >
-          {/* Margem e ritmo vindos dos tokens de página, não de `px-4` fixo.
-              Com o valor cravado, estas 21 telas ficavam em 16px em qualquer
-              viewport — medido em /notificacoes, /painel, /produtos e
-              /auditoria contra os 32px que §7.3 pede em Expanded. */}
-          <div className={cn('mx-auto w-full space-y-5 px-[var(--mx-page-margin)] py-[var(--mx-page-padding-top)] pb-24', maxWidth === '7xl' ? 'max-w-7xl' : 'max-w-none', contentClassName)}>{children}</div>
-        </InternalMxTemplatePage>
+    <InternalMxTemplatePage
+      data-mx-visual-system="manager"
+      className={cn('min-h-full w-full text-gray-800', className)}
+    >
+      <PageCanvas
+        as="div"
+        id={id}
+        width={pageWidth}
+        bottomClearance={bottomClearance}
+        data-mx-module-page=""
+        data-mx-visual-system="manager"
+        data-mx-access-mode={accessMode}
+        className="min-h-full"
+      >
+        <div className={cn('w-full space-y-5', contentClassName)}>{children}</div>
+      </PageCanvas>
+    </InternalMxTemplatePage>
   )
 }
 

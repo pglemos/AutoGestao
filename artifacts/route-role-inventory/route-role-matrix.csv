@@ -1,106 +1,233 @@
-path,kind,layer,rulePattern,capability,redirect,switch,administrador_geral,administrador_mx,consultor_mx,dono,gerente,vendedor
-/,route,AUTH_LEGAL_PUBLIC,,,,no,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE
-/login,route,AUTH_LEGAL_PUBLIC,,,,no,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE
-/forgot-password,route,AUTH_LEGAL_PUBLIC,,,,no,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE
-/reset-password,route,AUTH_LEGAL_PUBLIC,,,,no,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE
-/pre-cadastro/:storeSlug,route,AUTH_LEGAL_PUBLIC,,,,no,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE
-/privacy,route,AUTH_LEGAL_PUBLIC,,,,no,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE
-/terms,route,AUTH_LEGAL_PUBLIC,,,,no,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE
-/dono/*,route,STANDARD_CANVAS,/dono/*,,OwnerLegacyPathRedirect,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/,route,AUTH_LEGAL_PUBLIC,,,,no,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE
-/settings,route,STANDARD_CANVAS,/settings,view_configurations,/configuracoes,no,DENY,DENY,DENY,DENY,DENY,DENY
-/plano-estrategico,route,STANDARD_CANVAS,/plano-estrategico,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/plano-acao,route,STANDARD_CANVAS,/plano-acao,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/decisoes,route,STANDARD_CANVAS,/decisoes,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/departamentos,route,STANDARD_CANVAS,/departamentos,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/departamentos/comercial,route,STANDARD_CANVAS,/departamentos/*,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/departamentos/marketing,route,STANDARD_CANVAS,/departamentos/*,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/departamentos/produto-e-estoque,route,STANDARD_CANVAS,/departamentos/*,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/departamentos/pessoas-rh,route,STANDARD_CANVAS,/departamentos/*,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/departamentos/financeiro,route,STANDARD_CANVAS,/departamentos/*,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/departamentos/operacoes,route,STANDARD_CANVAS,/departamentos/*,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/mercado,route,STANDARD_CANVAS,/mercado,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/team,route,STANDARD_CANVAS,/team,manage_team,TeamAliasRedirect,no,DENY,DENY,DENY,DENY,DENY,DENY
-/equipe,route,STANDARD_CANVAS,/equipe,manage_team,TeamAliasRedirect,no,DENY,DENY,DENY,DENY,DENY,DENY
-/meu-dia,route,REDIRECT,/meu-dia,,/home,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/home,route,STANDARD_CANVAS,/home,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/minha-remuneracao,route,REDIRECT,/minha-remuneracao,,/home,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/lancamento-diario,route,REDIRECT,/lancamento-diario,,/terminal-mx,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/fechamento-diario,route,STANDARD_CANVAS,/fechamento-diario,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/terminal-mx,route,STANDARD_CANVAS,/vendedor/terminal-mx,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/terminal-mx,route,STANDARD_CANVAS,/terminal-mx,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/liberacao-fechamento,route,STANDARD_CANVAS,/liberacao-fechamento,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/carteira-clientes,route,STANDARD_CANVAS,/carteira-clientes,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/carteira,route,REDIRECT,/carteira,,/carteira-clientes,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/carteira,route,REDIRECT,/vendedor/carteira,,/carteira-clientes,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/mentor-comercial,route,REDIRECT,/mentor-comercial,,/carteira-clientes,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/mentor-comercial,route,REDIRECT,/vendedor/mentor-comercial,,/carteira-clientes,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/funil,route,REDIRECT,/funil,,/meu-funil,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/minha-meta,route,REDIRECT,/minha-meta,,/meu-funil,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/minha-meta,route,REDIRECT,/vendedor/minha-meta,,/meu-funil,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/meu-funil,route,STANDARD_CANVAS,/meu-funil,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/funil-comercial,route,STANDARD_CANVAS,/funil-comercial,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/central-execucao,route,STANDARD_CANVAS,/central-execucao,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/rotina-do-dia,route,REDIRECT,/rotina-do-dia,,/central-execucao,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/rotina-do-dia,route,REDIRECT,/vendedor/rotina-do-dia,,/central-execucao,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/central-de-execucao,route,STANDARD_CANVAS,/central-de-execucao,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/relatorios-vendedor,route,STANDARD_CANVAS,/relatorios-vendedor,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/relatorios,route,STANDARD_CANVAS,/relatorios,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/feedback,route,REDIRECT,/feedback,,/devolutivas,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/feedbacks,route,REDIRECT,/feedbacks,,/desenvolvimento?tab=feedback,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/funil,route,REDIRECT,/vendedor/funil,,/meu-funil,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/meu-funil,route,REDIRECT,/vendedor/meu-funil,,/meu-funil,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/feedback,route,REDIRECT,/vendedor/feedback,,/desenvolvimento?tab=feedback,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/devolutivas,route,REDIRECT,/vendedor/devolutivas,,/desenvolvimento?tab=feedback,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/desenvolvimento,route,REDIRECT,/vendedor/desenvolvimento,,/desenvolvimento,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/treinamentos,route,REDIRECT,/vendedor/treinamentos,,/universidade-mx,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/universidade-mx,route,REDIRECT,/vendedor/universidade-mx,,/universidade-mx,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/configuracoes,route,REDIRECT,/vendedor/configuracoes,,/configuracoes,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/funil-vendas,route,STANDARD_CANVAS,/funil-vendas,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/metas,route,STANDARD_CANVAS,/metas,,/meta-loja,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/falar-consultor,route,STANDARD_CANVAS,/falar-consultor,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/organograma,route,STANDARD_CANVAS,/organograma,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/banco-talentos,route,STANDARD_CANVAS,/banco-talentos,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/ajuda,route,STANDARD_CANVAS,/ajuda,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/ranking,route,STANDARD_CANVAS,/ranking,view_ranking,,no,DENY,DENY,DENY,DENY,DENY,DENY
-/classificacao,route,STANDARD_CANVAS,/classificacao,view_ranking,,no,DENY,DENY,DENY,DENY,DENY,DENY
-/universidade-mx,route,STANDARD_CANVAS,/universidade-mx,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/treinamentos,route,STANDARD_CANVAS,/treinamentos,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/desenvolvimento,route,STANDARD_CANVAS,/desenvolvimento,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/devolutivas,route,STANDARD_CANVAS,/devolutivas,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/notificacoes,route,STANDARD_CANVAS,/notificacoes,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/perfil,route,STANDARD_CANVAS,/perfil,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/meu-perfil,route,REDIRECT,/meu-perfil,,/perfil,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/meu-perfil-vendedor,route,REDIRECT,/meu-perfil-vendedor,,/perfil,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/vendedor/perfil,route,REDIRECT,/vendedor/perfil,,/perfil,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/rotina-equipe,route,STANDARD_CANVAS,/rotina-equipe,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/minha-equipe,route,STANDARD_CANVAS,/minha-equipe,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/meta-loja,route,STANDARD_CANVAS,/meta-loja,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/mentor,route,STANDARD_CANVAS,/mentor,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/feedbacks-pdis,route,STANDARD_CANVAS,/feedbacks-pdis,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/lojas/:storeSlug/consultor-ia,route,STANDARD_CANVAS,/lojas/:storeSlug/consultor-ia,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/lojas/:storeSlug/filiais,route,STANDARD_CANVAS,/lojas/:storeSlug/filiais,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/lojas/:storeSlug,route,STANDARD_CANVAS,/lojas/:storeSlug,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/lojas/:storeSlug/equipe,route,STANDARD_CANVAS,/lojas/:storeSlug/*,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/consultor-ia,route,STANDARD_CANVAS,/consultor-ia,,ConsultorIaAliasRedirect,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/pdi,route,STANDARD_CANVAS,/pdi,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/pdi/:id/print,route,PRINT,/pdi/:id/print,print_pdi,,no,DENY,DENY,DENY,DENY,DENY,DENY
-/minhas-lojas,route,STANDARD_CANVAS,/minhas-lojas,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/rotina,route,STANDARD_CANVAS,/rotina,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/painel,route,STANDARD_CANVAS,/painel,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/lojas,route,STANDARD_CANVAS,/lojas,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/simulacao,route,STANDARD_CANVAS,/simulacao,simulate_role,,no,DENY,DENY,DENY,DENY,DENY,DENY
-/simulacao/:simulationRole,route,STANDARD_CANVAS,/simulacao/*,simulate_role,,no,DENY,DENY,DENY,DENY,DENY,DENY
-/agenda,route,STANDARD_CANVAS,/agenda,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/consultoria,route,STANDARD_CANVAS,/consultoria,,,yes,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/produtos,route,STANDARD_CANVAS,/produtos,view_products,,no,DENY,DENY,DENY,DENY,DENY,DENY
-/configuracoes,route,STANDARD_CANVAS,/configuracoes,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/configuracoes/remuneracao,route,STANDARD_CANVAS,/configuracoes/remuneracao,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/configuracoes/operacional,route,STANDARD_CANVAS,/configuracoes/operacional,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/configuracoes/consultoria-pmr,route,STANDARD_CANVAS,/configuracoes/consultoria-pmr,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/configuracoes/reprocessamento,route,STANDARD_CANVAS,/configuracoes/reprocessamento,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/relatorio-matinal,route,STANDARD_CANVAS,/relatorio-matinal,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/relatorios/performance-vendas,route,STANDARD_CANVAS,/relatorios/performance-vendas,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/relatorios/performance-vendedor,route,STANDARD_CANVAS,/relatorios/performance-vendedor,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/auditoria,route,STANDARD_CANVAS,/auditoria,,,no,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW,ALLOW
-/*,route,CATCHALL,,,,no,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE,NO_RULE
+"path","role","surface","kind","element"
+"/plano-estrategico","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S"
+"/plano-estrategico","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S"
+"/plano-estrategico","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S"
+"/plano-estrategico","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoEstrategico />} admin={<InternalStrategicPlanPage />} /></S"
+"/plano-acao","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoDeAcao />} admin={<InternalActionPlanPage />} /></Suspense>"
+"/plano-acao","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoDeAcao />} admin={<InternalActionPlanPage />} /></Suspense>"
+"/plano-acao","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoDeAcao />} admin={<InternalActionPlanPage />} /></Suspense>"
+"/plano-acao","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerPlanoDeAcao />} admin={<InternalActionPlanPage />} /></Suspense>"
+"/decisoes","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>"
+"/departamentos","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>"
+"/departamentos/comercial","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>"
+"/departamentos/marketing","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>"
+"/departamentos/produto-e-estoque","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>"
+"/departamentos/pessoas-rh","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>"
+"/departamentos/financeiro","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>"
+"/departamentos/operacoes","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>"
+"/mercado","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<DashboardLoja />} admin={<ForbiddenRoute />} /></Suspense>"
+"/home","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<RoleRedirect />} /> </Suspense>"
+"/home","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<RoleRedirect />} /> </Suspense>"
+"/home","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorHome />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<RoleRedirect />} /> </Suspense>"
+"/fechamento-diario","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ManagerDailyClosing />} dono={<ManagerDailyClosing />} admin={<ManagerDailyClosing />} /> </Suspense>"
+"/fechamento-diario","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ManagerDailyClosing />} dono={<ManagerDailyClosing />} admin={<ManagerDailyClosing />} /> </Suspense>"
+"/fechamento-diario","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ManagerDailyClosing />} dono={<ManagerDailyClosing />} admin={<ManagerDailyClosing />} /> </Suspense>"
+"/fechamento-diario","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ManagerDailyClosing />} dono={<ManagerDailyClosing />} admin={<ManagerDailyClosing />} /> </Suspense>"
+"/fechamento-diario","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ManagerDailyClosing />} dono={<ManagerDailyClosing />} admin={<ManagerDailyClosing />} /> </Suspense>"
+"/fechamento-diario","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ManagerDailyClosing />} dono={<ManagerDailyClosing />} admin={<ManagerDailyClosing />} /> </Suspense>"
+"/vendedor/terminal-mx","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/terminal-mx","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/liberacao-fechamento","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
+"/liberacao-fechamento","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
+"/liberacao-fechamento","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
+"/liberacao-fechamento","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
+"/liberacao-fechamento","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
+"/carteira-clientes","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense>"
+"/carteira-clientes","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense>"
+"/carteira-clientes","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense>"
+"/carteira-clientes","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense>"
+"/carteira-clientes","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense>"
+"/carteira-clientes","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense>"
+"/meu-funil","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<FunilVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/funil-comercial","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<FunilVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/central-execucao","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CentralExecucao />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/central-de-execucao","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CentralExecucao />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/relatorios-vendedor","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RelatoriosVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/relatorios","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RelatoriosVendedor />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/funil-vendas","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FunilVendasGerente />} dono={<FunilVendasGerente />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/funil-vendas","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FunilVendasGerente />} dono={<FunilVendasGerente />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/falar-consultor","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FalarConsultorDono />} dono={<FalarConsultorDono />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/falar-consultor","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<FalarConsultorDono />} dono={<FalarConsultorDono />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/organograma","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Organograma />} admin={<Organograma />} /> </Suspense>"
+"/organograma","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Organograma />} admin={<Organograma />} /> </Suspense>"
+"/organograma","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Organograma />} admin={<Organograma />} /> </Suspense>"
+"/organograma","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Organograma />} admin={<Organograma />} /> </Suspense>"
+"/banco-talentos","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Comportamental />} admin={<Comportamental />} /> </Suspense>"
+"/banco-talentos","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Comportamental />} admin={<Comportamental />} /> </Suspense>"
+"/banco-talentos","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Comportamental />} admin={<Comportamental />} /> </Suspense>"
+"/banco-talentos","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<Comportamental />} admin={<Comportamental />} /> </Suspense>"
+"/ajuda","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorAjuda />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/ranking","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/ranking","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/ranking","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/ranking","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/ranking","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/ranking","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/classificacao","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/classificacao","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/classificacao","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/classificacao","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/classificacao","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/classificacao","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Ranking /></Suspense>"
+"/universidade-mx","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<UniversidadeMxRoute />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTreinamentos />} /> </S"
+"/universidade-mx","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<UniversidadeMxRoute />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTreinamentos />} /> </S"
+"/universidade-mx","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<UniversidadeMxRoute />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTreinamentos />} /> </S"
+"/universidade-mx","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<UniversidadeMxRoute />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTreinamentos />} /> </S"
+"/universidade-mx","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<UniversidadeMxRoute />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTreinamentos />} /> </S"
+"/universidade-mx","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<UniversidadeMxRoute />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTreinamentos />} /> </S"
+"/treinamentos","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=""/universidade-mx"" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
+"/treinamentos","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=""/universidade-mx"" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
+"/treinamentos","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=""/universidade-mx"" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
+"/treinamentos","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=""/universidade-mx"" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
+"/treinamentos","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<RedirectWithSearch to=""/universidade-mx"" />} gerente={<GerenteTreinamentos />} dono={<DashboardLoja />} admin={<ConsultorTr"
+"/desenvolvimento","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense"
+"/devolutivas","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<GerenteFeedback />} dono={<GerenteFeedback />} admin={<GerenteFeedback />} /> </Suspe"
+"/devolutivas","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<GerenteFeedback />} dono={<GerenteFeedback />} admin={<GerenteFeedback />} /> </Suspe"
+"/devolutivas","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<GerenteFeedback />} dono={<GerenteFeedback />} admin={<GerenteFeedback />} /> </Suspe"
+"/devolutivas","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<GerenteFeedback />} dono={<GerenteFeedback />} admin={<GerenteFeedback />} /> </Suspe"
+"/devolutivas","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<GerenteFeedback />} dono={<GerenteFeedback />} admin={<GerenteFeedback />} /> </Suspe"
+"/devolutivas","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorDesenvolvimento />} gerente={<GerenteFeedback />} dono={<GerenteFeedback />} admin={<GerenteFeedback />} /> </Suspe"
+"/notificacoes","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Notificacoes />} gerente={<Notificacoes />} dono={<Notificacoes />} admin={<Notificacoes />} /> </Suspense>"
+"/notificacoes","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Notificacoes />} gerente={<Notificacoes />} dono={<Notificacoes />} admin={<Notificacoes />} /> </Suspense>"
+"/notificacoes","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Notificacoes />} gerente={<Notificacoes />} dono={<Notificacoes />} admin={<Notificacoes />} /> </Suspense>"
+"/notificacoes","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Notificacoes />} gerente={<Notificacoes />} dono={<Notificacoes />} admin={<Notificacoes />} /> </Suspense>"
+"/notificacoes","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Notificacoes />} gerente={<Notificacoes />} dono={<Notificacoes />} admin={<Notificacoes />} /> </Suspense>"
+"/notificacoes","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Notificacoes />} gerente={<Notificacoes />} dono={<Notificacoes />} admin={<Notificacoes />} /> </Suspense>"
+"/perfil","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<MeuPerfilVendedor />} gerente={<Perfil />} dono={<Perfil />} admin={<Perfil />} /> </Suspense>"
+"/perfil","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<MeuPerfilVendedor />} gerente={<Perfil />} dono={<Perfil />} admin={<Perfil />} /> </Suspense>"
+"/perfil","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<MeuPerfilVendedor />} gerente={<Perfil />} dono={<Perfil />} admin={<Perfil />} /> </Suspense>"
+"/perfil","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<MeuPerfilVendedor />} gerente={<Perfil />} dono={<Perfil />} admin={<Perfil />} /> </Suspense>"
+"/perfil","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<MeuPerfilVendedor />} gerente={<Perfil />} dono={<Perfil />} admin={<Perfil />} /> </Suspense>"
+"/perfil","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<MeuPerfilVendedor />} gerente={<Perfil />} dono={<Perfil />} admin={<Perfil />} /> </Suspense>"
+"/rotina-equipe","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspens"
+"/rotina-equipe","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspens"
+"/rotina-equipe","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspens"
+"/rotina-equipe","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspens"
+"/rotina-equipe","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerTeamRoutine />} dono={<ManagerTeamRoutine />} admin={<ManagerTeamRoutine />} /></Suspens"
+"/minha-equipe","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+"/minha-equipe","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+"/minha-equipe","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+"/minha-equipe","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+"/minha-equipe","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+"/meta-loja","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+"/meta-loja","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+"/meta-loja","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+"/meta-loja","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+"/meta-loja","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /></Suspense>"
+"/mentor","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>"
+"/mentor","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>"
+"/mentor","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>"
+"/mentor","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>"
+"/mentor","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerMentor />} dono={<ManagerMentor />} admin={<ManagerMentor />} /></Suspense>"
+"/feedbacks-pdis","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens"
+"/feedbacks-pdis","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens"
+"/feedbacks-pdis","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens"
+"/feedbacks-pdis","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens"
+"/feedbacks-pdis","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ManagerDevelopment />} dono={<ManagerDevelopment />} admin={<ManagerDevelopment />} /></Suspens"
+"/lojas/:storeSlug/consultor-ia","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} /> </Suspense>"
+"/lojas/:storeSlug/consultor-ia","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} /> </Suspense>"
+"/lojas/:storeSlug/consultor-ia","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} /> </Suspense>"
+"/lojas/:storeSlug/consultor-ia","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} /> </Suspense>"
+"/lojas/:storeSlug/consultor-ia","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} /> </Suspense>"
+"/lojas/:storeSlug/consultor-ia","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<StoreConsultorIa />} gerente={<StoreConsultorIa />} dono={<StoreConsultorIa />} admin={<StoreConsultorIa />} /> </Suspense>"
+"/lojas/:storeSlug/filiais","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<StoreBranches />} /> </Suspense>"
+"/lojas/:storeSlug/filiais","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<StoreBranches />} /> </Suspense>"
+"/lojas/:storeSlug/filiais","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<StoreBranches />} /> </Suspense>"
+"/lojas/:storeSlug","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+"/lojas/:storeSlug","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+"/lojas/:storeSlug","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+"/lojas/:storeSlug","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+"/lojas/:storeSlug","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+"/lojas/:storeSlug/equipe","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+"/lojas/:storeSlug/equipe","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+"/lojas/:storeSlug/equipe","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+"/lojas/:storeSlug/equipe","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+"/lojas/:storeSlug/equipe","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<DashboardLoja />} dono={<DashboardLoja />} admin={<DashboardLoja />} /> </Suspense>"
+"/pdi","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to=""/desenvolvimento?tab=pdi"" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />"
+"/pdi","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to=""/desenvolvimento?tab=pdi"" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />"
+"/pdi","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to=""/desenvolvimento?tab=pdi"" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />"
+"/pdi","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to=""/desenvolvimento?tab=pdi"" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />"
+"/pdi","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Navigate to=""/desenvolvimento?tab=pdi"" replace />} gerente={<GerentePDI />} dono={<GerentePDI />} admin={<GerentePDI />} />"
+"/pdi/:id/print","administrador_geral","PRINT","route","<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
+"/pdi/:id/print","administrador_mx","PRINT","route","<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
+"/pdi/:id/print","consultor_mx","PRINT","route","<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
+"/pdi/:id/print","dono","PRINT","route","<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
+"/pdi/:id/print","gerente","PRINT","route","<Suspense fallback={<Spinner />}><PDIPrint /></Suspense>"
+"/minhas-lojas","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerStoresNetworkPage />} admin={<ForbiddenRoute />} /> </Suspense>"
+"/rotina","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} /> </Suspense>"
+"/rotina","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} /> </Suspense>"
+"/rotina","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} /> </Suspense>"
+"/rotina","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} /> </Suspense>"
+"/rotina","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<RotinaGerente />} dono={<OwnerRoutineRoute />} admin={<RotinaGerente />} /> </Suspense>"
+"/painel","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>"
+"/painel","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>"
+"/painel","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><PainelConsultor /></Suspense>"
+"/lojas","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Lojas /></Suspense>"
+"/lojas","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Lojas /></Suspense>"
+"/lojas","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Lojas /></Suspense>"
+"/simulacao","administrador_geral","FULLSCREEN","route","<Suspense fallback={<Spinner />}><Simulacao /></Suspense>"
+"/simulacao","administrador_mx","FULLSCREEN","route","<Suspense fallback={<Spinner />}><Simulacao /></Suspense>"
+"/simulacao","consultor_mx","FULLSCREEN","route","<Suspense fallback={<Spinner />}><Simulacao /></Suspense>"
+"/simulacao/:simulationRole","administrador_geral","FULLSCREEN","route","<Suspense fallback={<Spinner />}><Simulacao /></Suspense>"
+"/simulacao/:simulationRole","administrador_mx","FULLSCREEN","route","<Suspense fallback={<Spinner />}><Simulacao /></Suspense>"
+"/simulacao/:simulationRole","consultor_mx","FULLSCREEN","route","<Suspense fallback={<Spinner />}><Simulacao /></Suspense>"
+"/agenda","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><AgendaAdmin /></Suspense>"
+"/agenda","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><AgendaAdmin /></Suspense>"
+"/agenda","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><AgendaAdmin /></Suspense>"
+"/consultoria","administrador_geral","STANDARD_CANVAS","index","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>"
+"/consultoria","administrador_mx","STANDARD_CANVAS","index","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>"
+"/consultoria","consultor_mx","STANDARD_CANVAS","index","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>"
+"/consultoria","dono","STANDARD_CANVAS","index","<Suspense fallback={<Spinner />}><RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<OwnerConsultoria />} admin={<InternalConsultingPage />} /></Suspense>"
+"/consultoria/clientes","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>"
+"/consultoria/clientes","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>"
+"/consultoria/clientes","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaClientes /></Suspense>"
+"/consultoria/clientes/:clientSlug","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>"
+"/consultoria/clientes/:clientSlug","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>"
+"/consultoria/clientes/:clientSlug","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaClienteDetalhe /></Suspense>"
+"/consultoria/clientes/:clientSlug/visitas/:visitNumber","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>"
+"/consultoria/clientes/:clientSlug/visitas/:visitNumber","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>"
+"/consultoria/clientes/:clientSlug/visitas/:visitNumber","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaVisitaExecucao /></Suspense>"
+"/produtos","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+"/produtos","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+"/produtos","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+"/produtos","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+"/produtos","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ProdutosDigitais /></Suspense>"
+"/configuracoes","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense>"
+"/configuracoes","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense>"
+"/configuracoes","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense>"
+"/configuracoes","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense>"
+"/configuracoes","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense>"
+"/configuracoes","vendedor","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<VendedorConfiguracoes />} gerente={<Configuracoes />} dono={<Configuracoes />} admin={<Configuracoes />} /> </Suspense>"
+"/configuracoes/remuneracao","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Configuracoes initialTab=""remuneracao"" /></Suspense>"
+"/configuracoes/remuneracao","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Configuracoes initialTab=""remuneracao"" /></Suspense>"
+"/configuracoes/remuneracao","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Configuracoes initialTab=""remuneracao"" /></Suspense>"
+"/configuracoes/remuneracao","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Configuracoes initialTab=""remuneracao"" /></Suspense>"
+"/configuracoes/remuneracao","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><Configuracoes initialTab=""remuneracao"" /></Suspense>"
+"/configuracoes/operacional","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><OperationalSettings /></Suspense>"
+"/configuracoes/operacional","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><OperationalSettings /></Suspense>"
+"/configuracoes/operacional","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><OperationalSettings /></Suspense>"
+"/configuracoes/consultoria-pmr","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaParametros /></Suspense>"
+"/configuracoes/consultoria-pmr","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaParametros /></Suspense>"
+"/configuracoes/consultoria-pmr","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><ConsultoriaParametros /></Suspense>"
+"/configuracoes/reprocessamento","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<Reprocessamento />} /> </Suspense>"
+"/configuracoes/reprocessamento","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<Reprocessamento />} /> </Suspense>"
+"/configuracoes/reprocessamento","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<Reprocessamento />} /> </Suspense>"
+"/relatorio-matinal","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><MorningReport /></Suspense>"
+"/relatorio-matinal","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><MorningReport /></Suspense>"
+"/relatorio-matinal","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><MorningReport /></Suspense>"
+"/relatorio-matinal","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><MorningReport /></Suspense>"
+"/relatorio-matinal","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><MorningReport /></Suspense>"
+"/relatorios/performance-vendas","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><SalesPerformance /></Suspense>"
+"/relatorios/performance-vendas","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><SalesPerformance /></Suspense>"
+"/relatorios/performance-vendas","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><SalesPerformance /></Suspense>"
+"/relatorios/performance-vendas","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><SalesPerformance /></Suspense>"
+"/relatorios/performance-vendas","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><SalesPerformance /></Suspense>"
+"/relatorios/performance-vendedor","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>"
+"/relatorios/performance-vendedor","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>"
+"/relatorios/performance-vendedor","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>"
+"/relatorios/performance-vendedor","dono","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>"
+"/relatorios/performance-vendedor","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}><SellerPerformance /></Suspense>"
+"/auditoria","administrador_geral","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<AiDiagnostics />} dono={<ForbiddenRoute />} admin={<AiDiagnostics />} /> </Suspense>"
+"/auditoria","administrador_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<AiDiagnostics />} dono={<ForbiddenRoute />} admin={<AiDiagnostics />} /> </Suspense>"
+"/auditoria","consultor_mx","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<AiDiagnostics />} dono={<ForbiddenRoute />} admin={<AiDiagnostics />} /> </Suspense>"
+"/auditoria","gerente","STANDARD_CANVAS","route","<Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<ForbiddenRoute />} gerente={<AiDiagnostics />} dono={<ForbiddenRoute />} admin={<AiDiagnostics />} /> </Suspense>"

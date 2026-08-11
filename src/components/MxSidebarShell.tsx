@@ -16,6 +16,7 @@ import { cn } from '@/lib/utils'
 import { useFocusTrap } from '@/hooks/useFocusTrap'
 import { MxSidebarProfileCard } from './MxSidebarProfileCard'
 import { SIDEBAR, SIDEBAR_LOGO } from '@/design-system/sidebar/tokens'
+import { PageViewport } from '@/design-system/page'
 import { NotificationBellButton } from './NotificationBellButton'
 
 export type MxSidebarNavItem = {
@@ -610,9 +611,9 @@ export default function MxSidebarShell({
             ) : null}
           </section>
         ) : null}
-        <section className="h-full min-h-0 w-full min-w-0 overflow-y-auto overflow-x-hidden bg-gray-50 text-gray-800">
+        <PageViewport>
           {children}
-        </section>
+        </PageViewport>
       </main>
     </div>
   )

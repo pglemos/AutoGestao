@@ -1,7 +1,7 @@
 # Inventário de Rotas — Layout
 
-- Gerado em: 2026-08-10T17:52:04.031Z
-- Baseline SHA: `fec6088710c49206e925c377d6c39ee32ae32482`
+- Gerado em: 2026-08-11T17:51:29.425Z
+- Baseline SHA: `3d8158ea7be78d794ad845b43fa90f77c24eb238`
 - Total de rotas: 107
 
 | Path | Rota p/ perfil | Arquivo(s) | Canvas | Template | Estrutural | Width | Clearance | Adotada |

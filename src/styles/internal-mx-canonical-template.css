@@ -47,10 +47,9 @@
 
 .mx-manager-canonical-page,
 .mx-canonical-template {
-  height: 100%;
-  min-height: 0;
+  min-height: 100%;
   width: 100%;
-  overflow: hidden;
+  overflow: visible;
   background: var(--mx-page-bg);
   color: var(--mx-text);
 }
@@ -59,15 +58,13 @@
   min-width: 0;
 }
 
-.mx-canonical-template main:not([data-mx-module-page]) {
+.mx-canonical-template main:not([data-mx-module-page]):not([data-mx-page-canvas]) {
   display: flex;
   min-height: 100%;
   width: 100%;
   margin-inline: auto;
   flex-direction: column;
   gap: 1.25rem;
-  overflow-x: hidden;
-  overflow-y: auto;
   background: var(--mx-page-bg);
   /* Margem lateral pelo token de página, não cravada: 1rem aqui e 1.5rem no
      media query abaixo mantinham as telas internas em 16/24px enquanto o resto
@@ -79,41 +76,34 @@
 .mx-canonical-template [data-mx-module-page] {
   min-height: 100%;
   width: 100%;
-  overflow-x: hidden;
-  overflow-y: auto;
   background: var(--mx-page-bg);
 }
 
 .mx-canonical-template [data-mx-module-page] > div {
   width: 100%;
-  margin-inline: auto;
+  margin-inline: 0;
   /* MxModulePage já é o container canônico e possui a margem, o ritmo vertical
      e a safe area. Este escopo só fornece o limite semântico; repetir padding
      aqui duplicava a margem e o espaço inferior nas páginas migradas. */
   padding: 0;
 }
 
-.mx-canonical-dashboard main:not([data-mx-module-page]),
-.mx-canonical-dashboard [data-mx-module-page] > div,
-.mx-canonical-list main:not([data-mx-module-page]),
-.mx-canonical-list [data-mx-module-page] > div,
-.mx-canonical-settings main:not([data-mx-module-page]),
-.mx-canonical-settings [data-mx-module-page] > div {
+.mx-canonical-dashboard main:not([data-mx-module-page]):not([data-mx-page-canvas]),
+.mx-canonical-list main:not([data-mx-module-page]):not([data-mx-page-canvas]),
+.mx-canonical-settings main:not([data-mx-module-page]):not([data-mx-page-canvas]) {
   max-width: 80rem;
 }
 
-.mx-canonical-detail main:not([data-mx-module-page]),
-.mx-canonical-detail [data-mx-module-page] > div {
+.mx-canonical-detail main:not([data-mx-module-page]):not([data-mx-page-canvas]) {
   max-width: 90rem;
 }
 
-.mx-canonical-workspace main:not([data-mx-module-page]),
-.mx-canonical-workspace [data-mx-module-page] > div {
+.mx-canonical-workspace main:not([data-mx-module-page]):not([data-mx-page-canvas]) {
   max-width: 96rem;
 }
 
 @media (min-width: 768px) {
-  .mx-canonical-template main:not([data-mx-module-page]) {
+  .mx-canonical-template main:not([data-mx-module-page]):not([data-mx-page-canvas]) {
     padding-inline: var(--mx-page-margin);
   }
 }
