@@ -5,8 +5,8 @@ BEGIN;
 --
 -- 1. Adds missing columns seller_id, store_id, and reason to checkin_audit_logs.
 -- 2. Adds missing column reviewed_by to solicitacoes_correcao_lancamento (alias for auditor_id).
--- 3. Updates public.aplicar_regularizacao_fechamento to set auditor_id = v_caller
---    and populate all audit columns safely.
+-- 3. Updates public.aplicar_regularizacao_fechamento to set auditor_id = v_caller,
+--    populate all audit columns safely, and include sender_id = v_caller in notificacoes insert.
 -- ============================================================================
 
 ALTER TABLE IF EXISTS public.checkin_audit_logs
@@ -176,10 +176,10 @@ BEGIN
    WHERE id = v_request.id;
 
   INSERT INTO public.notificacoes (
-    recipient_id, title, message, target_type, target_store_id, store_id,
+    sender_id, recipient_id, title, message, target_type, target_store_id, store_id,
     target_role, type, priority, link
   ) VALUES (
-    v_request.seller_id, 'Regularização de fechamento aprovada',
+    v_caller, v_request.seller_id, 'Regularização de fechamento aprovada',
     'Sua solicitação de regularização foi aprovada pela gestão.', 'user',
     v_request.store_id, v_request.store_id, 'vendedor', 'regularizacao', 'medium',
     '/vendedor'
