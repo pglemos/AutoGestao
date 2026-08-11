@@ -75,7 +75,7 @@ quality_gate_tools:
   - [ ] Alinhar cards, gráfico, resumo, comparativos, estados e demais modais ao ZIP.
   - [x] Validar teclado, foco, Escape e responsividade dos novos modais no Chrome real.
 - [ ] 5. Validar e publicar (AC: 13–16)
-  - [ ] Executar gates completos e QA AIOX.
+  - [x] Executar gates completos e QA AIOX.
   - [ ] Entregar a publicação via `@devops` e homologar produção autenticada.
 
 ## Dev Notes
@@ -127,6 +127,11 @@ Codex GPT-5 — implementação coordenada por `aiox-master`/Orion.
 - Chrome DevTools real local após a correção: com 5 vendedores pendentes e 2 regularizações, Movimento da Equipe mostra exatamente `Ainda não há fechamentos enviados para a data selecionada.`; Cobrança, Agenda D+1, Regularizações e Conferência de Leads abriram com dados reais; Agenda e Cobrança fecharam por Escape; console sem erros.
 - Comparação autenticada Base44 × localhost em `1710×800`: conteúdo `1248px`, cabeçalho `148px`, cards `164px`, botões `30px`, Agenda D+1 `1152px` e tabela iniciando em `y=442` foram alinhados às medidas observadas; Cobrança, Agenda, Regularizações, Conferência, Detalhes, Aprovar e Recusar abriram e fecharam por Escape sem mutação remota.
 - Gates desta rodada: `npm test` 955 testes/0 falhas/3.166 assertions, `npm run typecheck`, `npm run lint:tokens` e `git diff --check` aprovados.
+- Revalidação de 2026-08-11: `npx graphify hook-rebuild` terminou com 56.137 nós, 96.079 arestas e 7.451 comunidades; o rebuild reportou apenas seis scripts PowerShell sem `tree-sitter-powershell`.
+- Gates frescos da revalidação: `npm run lint`, `npm run typecheck`, `npm test` (2.626 testes, 0 falhas, 18.281 assertions), `npm run build`, `git diff --check`, `npm run check:bundle-size`, `npm run audit:routes-data`, `npm run sync:ide:check`, `npm run validate:structure`, `npm run validate:agents` (0 erros, 121 warnings preexistentes) e `npm run lint:tokens` aprovados.
+- Chrome externo contra `http://127.0.0.1:3107`: os cinco perfis autenticaram e chegaram às rotas esperadas (`/home` para Dono/Gerente/Vendedor; `/painel` para Administrador/Consultor). O Fechamento Diário foi revalidado em `1440×900`, `768×1024` e `390×844`, sem overflow; o tablet estabilizou após o carregamento de dados.
+- No Fechamento Diário, estado vazio, Cobrança, Agenda D+1, Regularizações e Conferência de Leads abriram com dados reais; Escape fechou os modais e restaurou o foco ao botão de origem. Não foram executadas cobranças, aprovações, recusas ou conferências; a navegação observada não produziu erro de console nem resposta HTTP `>=400`.
+- A produção não foi publicada neste ciclo: existe o commit local `f5097dca` para os contratos do design system, mas não houve push, deploy ou homologação autenticada em `mxperformance.vercel.app`; por isso o status permanece `In Progress`.
 
 ### Completion Notes List
 
@@ -136,6 +141,7 @@ Codex GPT-5 — implementação coordenada por `aiox-master`/Orion.
 - O heading de Movimento usa o mesmo nível semântico do Base44 e a validação mobile confirmou `390×844`, `scrollWidth=390` e ausência de overflow horizontal.
 - Persistência continua exclusivamente no auditor/RPC existente; nenhuma mutação remota foi executada durante a homologação.
 - O ajuste visual preserva o shell escuro protegido, RLS, RPCs e dados canônicos; apenas reduz as dimensões e a densidade visual do Fechamento Diário para o contrato Base44.
+- Erros estruturados do PostgREST/RPC no auditor agora chegam ao usuário como mensagem legível, sem o texto `[object Object]`; o helper e seus testes cobrem mensagens diretas, aninhadas e fallback.
 
 ### File List
 
@@ -147,9 +153,13 @@ Codex GPT-5 — implementação coordenada por `aiox-master`/Orion.
 - `src/features/manager/daily-closing/ManagerDailyClosing.container.tsx`
 - `src/features/manager/daily-closing/AgendaD1Panel.tsx`
 - `src/components/organisms/Modal.tsx`
+- `src/hooks/useCheckinAuditor.ts`
+- `src/lib/error-message.ts`
+- `src/lib/error-message.test.ts`
 
 ## QA Results
 
 - Gates locais após a correção: `npm test` 878 testes, `npm run lint` 0 erros/22 warnings pré-existentes, `npm run typecheck`, `npm run build` e `git diff --check` aprovados.
 - QA Chrome real local aprovado para estado vazio, Cobrança, Agenda D+1, Regularizações, Conferência de Leads, Escape, foco e viewport mobile.
 - Pendente: validar a tabela com fechamento enviado no ambiente final, executar mutações de cobrança/aprovação/recusa/conferência em dados de homologação, delegar commit/deploy a `@devops` e homologar produção nos três viewports.
+- Revalidação local de 2026-08-11 atualizada no Dev Agent Record; a homologação de produção e as mutações controladas continuam pendentes.

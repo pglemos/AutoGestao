@@ -144,7 +144,7 @@ export function chaveIdempotenciaVendaDireta(
   userId: string,
   input: Pick<VendaDiretaInput, 'data_competencia' | 'telefone' | 'placa'>,
 ): string {
-  return [userId, input.data_competencia, input.telefone.replace(/\D/g, ''), input.placa.trim().toUpperCase()].join(':')
+  return [userId, input.data_competencia, input.telefone.replace(/\D/g, ''), input.placa.replace(/[^A-Za-z0-9]/g, '').toUpperCase()].join(':')
 }
 
 export function useOportunidades() {

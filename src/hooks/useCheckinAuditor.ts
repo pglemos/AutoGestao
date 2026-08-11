@@ -2,6 +2,7 @@ import { useState, useCallback } from 'react'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from '@/hooks/useAuth'
 import type { CheckinCorrectionRequest, CheckinFormData, DailyCheckin } from '@/types/database'
+import { getErrorMessage } from '@/lib/error-message'
 
 export function useCheckinAuditor(storeIdOverride?: string) {
     const { profile, storeId: authStoreId } = useAuth()
@@ -20,8 +21,13 @@ export function useCheckinAuditor(storeIdOverride?: string) {
             p_idempotency_key: null,
         })
         setLoading(false)
-        const result = data as { ok?: boolean; error?: string; data?: { id?: string } } | null
-        return { error: error?.message || result?.error || null, id: result?.data?.id }
+        const result = data as { ok?: boolean; error?: unknown; data?: { id?: string } } | null
+        return {
+            error: error || result?.error
+                ? getErrorMessage(error || result?.error, 'Não foi possível solicitar a regularização.')
+                : null,
+            id: result?.data?.id,
+        }
     }
 
     /** Gerente busca solicitações pendentes da sua loja */
@@ -82,12 +88,14 @@ export function useCheckinAuditor(storeIdOverride?: string) {
             })
 
             if (error) throw error
-            const result = data as { ok?: boolean; error?: string } | null
-            if (!result?.ok) throw new Error(result?.error || 'Não foi possível aplicar a regularização.')
+            const result = data as { ok?: boolean; error?: unknown } | null
+            if (!result?.ok) {
+                return { error: getErrorMessage(result?.error, 'Não foi possível aplicar a regularização.') }
+            }
             return { error: null }
         } catch (err: unknown) {
             console.error('Audit Error [useCheckinAuditor]: approveRequest fail ->', err)
-            return { error: err instanceof Error ? err.message : String(err) }
+            return { error: getErrorMessage(err, 'Não foi possível aplicar a regularização.') }
         } finally {
             setLoading(false)
         }
@@ -103,12 +111,14 @@ export function useCheckinAuditor(storeIdOverride?: string) {
                 p_reason: reason || null,
             })
             if (error) throw error
-            const result = data as { ok?: boolean; error?: string } | null
-            if (!result?.ok) throw new Error(result?.error || 'Não foi possível rejeitar a regularização.')
+            const result = data as { ok?: boolean; error?: unknown } | null
+            if (!result?.ok) {
+                return { error: getErrorMessage(result?.error, 'Não foi possível rejeitar a regularização.') }
+            }
             return { error: null }
         } catch (err: unknown) {
             console.error('Audit Error [useCheckinAuditor]: rejectRequest fail ->', err)
-            return { error: err instanceof Error ? err.message : String(err) }
+            return { error: getErrorMessage(err, 'Não foi possível rejeitar a regularização.') }
         } finally {
             setLoading(false)
         }
@@ -116,8 +126,12 @@ export function useCheckinAuditor(storeIdOverride?: string) {
 
     const cancelRequest = async (requestId: string) => {
         const { data, error } = await supabase.rpc('cancelar_regularizacao_fechamento', { p_request_id: requestId })
-        const result = data as { ok?: boolean; error?: string } | null
-        return { error: error?.message || result?.error || null }
+        const result = data as { ok?: boolean; error?: unknown } | null
+        return {
+            error: error || result?.error
+                ? getErrorMessage(error || result?.error, 'Não foi possível cancelar a regularização.')
+                : null,
+        }
     }
 
     return { loading, requestCorrection, fetchPendingRequests, fetchStoreRequests, fetchOwnRequests, approveRequest, rejectRequest, cancelRequest }
