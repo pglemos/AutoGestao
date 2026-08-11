@@ -4,14 +4,14 @@ import { sentryVitePlugin } from '@sentry/vite-plugin';
 import path from 'path';
 import { defineConfig } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
+import { resolveSentryRelease } from './src/lib/sentry-release';
 
 // Story 0.3 — Sentry source maps upload (no-op se SENTRY_AUTH_TOKEN ausente)
 const sentryAuthToken = process.env.SENTRY_AUTH_TOKEN;
 const sentryOrg = process.env.SENTRY_ORG;
 const sentryProject = process.env.SENTRY_PROJECT;
 const sentryUploadEnabled = Boolean(sentryAuthToken && sentryOrg && sentryProject);
-const sentryRelease =
-  process.env.VITE_RELEASE ?? process.env.VERCEL_GIT_COMMIT_SHA ?? 'dev';
+const sentryRelease = resolveSentryRelease(process.env);
 
 export default defineConfig({
   plugins: [
