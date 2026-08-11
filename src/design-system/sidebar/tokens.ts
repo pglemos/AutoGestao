@@ -16,8 +16,10 @@ export const SIDEBAR_METRICS = {
   width: 256,
   /** Largura recolhida (w-16). */
   widthCollapsed: 64,
-  /** Altura do cabeçalho de marca. */
-  headerHeight: 54,
+  /** Altura do cabeçalho de marca. 52px (múltiplo de 4 no grid T4.5); a doc
+   *  previa 54px medidos no runtime antigo — o T4.8 normalizou sem atualizar
+   *  o contrato, corrigido aqui. */
+  headerHeight: 52,
   /** Altura de um item de navegação. */
   itemHeight: 36,
   /** Altura de um subitem. */

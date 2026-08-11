@@ -119,6 +119,11 @@
   --border: var(--mx-color-border);
   --input: var(--mx-color-border);
   --ring: var(--mx-neutral-950);
+  /* Raio base do shadcn — paridade Base44 (10px). Removido na T4.6 sem
+     atualizar o contrato; restaurado via primitivo canônico para manter a
+     ponte shadcn fiel à referência aprovada mesmo quando só `--radius` é
+     consumido. */
+  --radius: var(--mx-radius-lg);
   --sidebar-background: var(--mx-color-sidebar-background);
   --sidebar-foreground: var(--mx-color-sidebar-foreground);
   --sidebar-primary: 240 6% 10%;

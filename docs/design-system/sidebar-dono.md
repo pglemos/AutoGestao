@@ -93,7 +93,7 @@ Cores fora do escopo de token, escritas direto na classe:
 ```
 aside (256px, borda direita 1px)
 └── div.flex.h-full.flex-col  (bg-sidebar)
-    ├── header 54px            marca + botão recolher       [shrink-0, border-b]
+    ├── header 52px            marca + botão recolher       [shrink-0, border-b]
     ├── nav   flex-1           4 seções, rolagem vertical    [min-h-0, overflow-y-auto]
     ├── div                    CTA "Falar com Consultor"     [border-t, p-3]
     └── div                    cartão de perfil              [border-t, py-3 px-3]
@@ -119,7 +119,7 @@ Navegação (4 seções, 12 destinos):
 | Sidebar expandida | **256px** (`w-64`) |
 | Sidebar recolhida | **64px** (`w-16`) |
 | Drawer mobile/tablet | `w-72 max-w-[85vw]`, ≥640px `w-80 max-w-sm` → 320px medidos em 768px |
-| Cabeçalho | altura fixa **54px**, `px-4` (recolhido: `px-2`, conteúdo centralizado) |
+| Cabeçalho | altura fixa **52px**, `px-4` (recolhido: `px-2`, conteúdo centralizado) |
 | Nav | `py-4 px-3` (recolhido `px-2`); seções separadas por `mb-5` (20px) |
 | Rótulo de seção | `px-3 pb-1.5` |
 | Item | `px-3 py-2`, altura resultante **36px**, `gap-2.5` (10px) |

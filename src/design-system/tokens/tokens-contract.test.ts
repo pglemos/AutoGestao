@@ -21,7 +21,6 @@ const components = read('src/design-system/tokens/components.css')
  */
 const BASE44_MEASURED = {
   primary: '152 69% 31%',
-  radius: '0.625rem',
 } as const
 
 /** Extrai `--nome: valor;` de um bloco CSS. */
@@ -82,7 +81,11 @@ describe('arquitetura de tokens do MX Design System', () => {
     const sem = declarations(semantic)
     expect(sem.get('--primary')).toBe('var(--mx-color-primary)')
     expect(sem.get('--mx-color-primary')).toBe('var(--mx-green-600)')
-    expect(sem.get('--radius')).toBe(BASE44_MEASURED.radius)
+    // Raio base shadcn deriva do primitivo canônico (--mx-radius-lg: 10px),
+    // que reproduz o 0.625rem medido no Base44 sem valor cru na camada
+    // semântica.
+    expect(sem.get('--radius')).toBe('var(--mx-radius-lg)')
+    expect(prim.get('--mx-radius-lg')).toBe('10px')
   })
 
   it('mantém a escala de z-index fechada e sincronizada com o CSS', () => {
