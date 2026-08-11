@@ -390,7 +390,7 @@ export default function ManagerDailyClosing() {
         <ManagerHomeReturnLink />
         <section className="bg-white rounded-[16px] border border-gray-100 shadow-sm p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
-            <div>
+            <div className="max-w-xl">
               <h1 className="text-xl font-bold text-gray-800">
                 Fechamento Diário
               </h1>
@@ -400,14 +400,14 @@ export default function ManagerDailyClosing() {
                 oficiais de leads.
               </p>
             </div>
-            <div className="flex flex-wrap items-end gap-2">
+            <div className="flex flex-wrap sm:flex-nowrap items-end gap-2.5 shrink-0">
               <Field label="Data">
                 <input
                   id="manager-closing-date"
                   type="date"
                   value={date}
                   onChange={(event) => setDate(event.target.value)}
-                  className="h-10 border border-gray-200 bg-white rounded-[12px] px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-2xs transition-all"
+                  className="h-[36px] border border-gray-200 bg-white rounded-[12px] px-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-2xs transition-all"
                 />
               </Field>
               <Field label="Unidade">
@@ -415,7 +415,7 @@ export default function ManagerDailyClosing() {
                   aria-label="Unidade"
                   value={storeId || ""}
                   onChange={() => undefined}
-                  className="h-10 border border-gray-200 bg-white rounded-[12px] px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 min-w-[150px] shadow-2xs transition-all"
+                  className="h-[36px] border border-gray-200 bg-white rounded-[12px] px-3 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 min-w-[150px] shadow-2xs transition-all"
                 >
                   <option value={storeId || ""}>
                     {membership?.store?.name || "Unidade atual"}
@@ -823,8 +823,8 @@ export function getMovementState(
 
 function Field({ label, children }: { label: string; children: ReactNode }) {
   return (
-    <label className="block min-w-0 text-xs font-normal text-gray-500">
-      <span className="mb-1 block">{label}</span>
+    <label className="inline-flex flex-col gap-1 min-w-0 text-xs font-normal text-gray-500">
+      <span className="mb-0.5 block">{label}</span>
       {children}
     </label>
   );
@@ -877,14 +877,14 @@ function SummaryCard({
   }[tone];
   return (
     <div className={`min-h-[164px] rounded-[16px] border shadow-sm p-3 ${colors}`}>
-      <div className="mb-2 flex items-center justify-between gap-2">
-        <h2 className="flex items-center gap-1.5 text-xs font-medium text-gray-600">
+      <div className="mb-2 flex items-center justify-between gap-1.5 min-w-0">
+        <h2 className="flex items-center gap-1 text-xs font-medium text-gray-600">
           <Icon size={16} className="shrink-0" />
-          {title}
+          <span className="whitespace-nowrap">{title}</span>
           <HelpTooltip text={help} />
         </h2>
         {status !== "—" ? (
-          <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${
+          <span className={`shrink-0 whitespace-nowrap rounded-full px-2 py-0.5 text-xs font-semibold ${
             status === "Excelente" || status === "Bom"
               ? "bg-emerald-100 text-emerald-700"
               : status === "Regular"
@@ -931,12 +931,12 @@ function DisciplineCard({ value }: { value: number | null }) {
           : { surface: "bg-red-50", badge: "bg-red-100 text-red-700", glow: "from-red-400 to-red-500", ring: "rgb(239 68 68)", track: "rgb(254 226 226)", inner: "bg-red-50", text: "text-red-600" };
   return (
     <div className={`flex h-full min-h-[164px] flex-col rounded-[16px] border border-gray-100 p-3 shadow-sm ${palette.surface}`}>
-      <div className="mb-1 flex items-center justify-between gap-2">
-        <h2 className="flex items-center gap-1.5 text-xs font-medium text-gray-600">
-          Disciplina Média
+      <div className="mb-1 flex flex-wrap items-center justify-between gap-x-1 gap-y-0.5">
+        <h2 className="flex items-center gap-1 text-xs font-medium text-gray-600">
+          <span>Disciplina Média</span>
           <HelpTooltip text="Média da pontuação de disciplina da equipe, que combina acesso à rotina, execução dos blocos e fechamento dentro do prazo. Acima de 85% é saudável." />
         </h2>
-        <span className={`whitespace-nowrap rounded-full px-2.5 py-1 text-xs font-semibold ${palette.badge}`}>
+        <span className={`rounded-full px-2 py-0.5 text-caption font-semibold ${palette.badge}`}>
           {label}
         </span>
       </div>
