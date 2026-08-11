@@ -66,6 +66,35 @@ describe('arquitetura de tokens do MX Design System', () => {
     expect(orphans).toEqual([])
   })
 
+  it('nenhuma declaração semântica contém cor primitiva crua (HSL triplo/hex fora de var)', () => {
+    const rawTriple = /:\s*\d{1,3}\s+\d{1,3}%?\s+\d{1,3}%?\s*;/
+    for (const [name, value] of declarations(semantic)) {
+      if (name.startsWith('--mx-color-') || name.startsWith('--mx-surface') || name.startsWith('--mx-status-')) {
+        expect(value).toMatch(/var\(/) // valor sempre deriva de primitives via var()
+        expect(value).not.toMatch(rawTriple)
+      }
+    }
+    for (const [name, value] of declarations(components)) {
+      if (name.startsWith('--mx-color-') || name.startsWith('--mx-surface')) {
+        expect(value).toMatch(/var\(/)
+      }
+    }
+  })
+
+  it('runtime (index.css) só referencia tokens que existem nas camadas', () => {
+    const declared = new Set(declarations(primitives).keys())
+    const semanticDeclared = new Set([
+      ...declarations(semantic).keys(),
+      ...declarations(components).keys(),
+    ])
+    const all = new Set([...declared, ...semanticDeclared])
+
+    const index = read('src/index.css')
+    const referenced = [...index.matchAll(/var\((--mx-[\w-]+)\)/g)].map(([, name]) => name)
+    const orphans = [...new Set(referenced)].filter((name) => !all.has(name))
+    expect(orphans).toEqual([])
+  })
+
   it('reproduz a identidade aprovada do Base44 nas variáveis shadcn', () => {
     // O DS não pode divergir da referência visual aprovada — que agora é a
     // identidade de todos os perfis, não de um.
