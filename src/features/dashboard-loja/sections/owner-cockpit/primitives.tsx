@@ -24,7 +24,7 @@ export function OwnerCockpitHeader({
     <header className="flex items-start justify-between gap-4 border-b border-gray-200 pb-mx-md sm:pb-mx-lg">
       <div>
         <h1 className="text-2xl font-bold leading-tight text-gray-800 sm:text-3xl md:text-[2rem]">
-          {greeting()}, <span className="text-emerald-600">{name.split(' ')[0]}</span>!
+          {greeting()}, <span className="text-status-success-text">{name.split(' ')[0]}</span>!
         </h1>
         <p className="mt-mx-tiny text-sm font-medium text-gray-500">Aqui está o panorama da sua loja hoje.</p>
       </div>
@@ -61,10 +61,10 @@ const cardBorderClasses: Record<KpiTone, string> = {
 const iconBgClasses: Record<KpiTone, string> = {
   success: 'bg-status-success/10 text-status-success',
   info: 'bg-status-info/10 text-status-info',
-  warning: 'bg-amber-50 text-amber-600',
-  danger: 'bg-red-50 text-red-600',
-  muted: 'bg-gray-50 text-gray-500',
-  brand: 'bg-emerald-50 text-emerald-600',
+  warning: 'bg-amber-50 text-status-warning-text',
+  danger: 'bg-red-50 text-status-error-text',
+  muted: 'bg-gray-50 text-text-secondary',
+  brand: 'bg-emerald-50 text-status-success-text',
   purple: 'bg-[var(--color-accent-purple-soft)] text-[var(--color-accent-purple)]',
 }
 
@@ -150,7 +150,7 @@ function SimpleSparkline({
     warning: 'text-amber-500',
     danger: 'text-red-500',
     muted: 'text-gray-400',
-    brand: 'text-emerald-600',
+    brand: 'text-status-success-text',
     purple: 'text-[var(--color-accent-purple)]',
   }[tone]
 
@@ -242,7 +242,7 @@ export function MXScoreCompact({ score, trend }: { score: number | null; trend?:
           <span className={cn('text-xs font-medium', statusColor)}>{status}</span>
         </div>
       </div>
-      {trend && <p className="mt-2 text-center text-xs font-medium text-emerald-600">{trend}</p>}
+      {trend && <p className="mt-2 text-center text-xs font-medium text-status-success-text">{trend}</p>}
     </div>
   )
 }
@@ -309,7 +309,7 @@ export function SideList({ title, items, className }: { title: string; items: st
       <div className="mt-mx-md space-y-mx-sm">
         {items.map((item, index) => (
           <div key={`${item}-${index}`} className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-7 w-mx-7 shrink-0 items-center justify-center rounded-xl bg-mx-indigo-50 text-xs font-bold text-emerald-600">{index + 1}</span>
+            <span className="flex h-mx-7 w-mx-7 shrink-0 items-center justify-center rounded-xl bg-mx-indigo-50 text-xs font-bold text-brand-primary">{index + 1}</span>
             <Typography variant="p" className="text-sm font-bold">{item}</Typography>
           </div>
         ))}

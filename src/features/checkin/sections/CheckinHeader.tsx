@@ -883,14 +883,14 @@ return (
                             : 'border-[#DFE0E1] bg-white text-[#526B7A] hover:border-[#F59F0A] hover:bg-[#FFFDF7]'
                         }`}
                       >
-                        <span className="text-[10px] font-extrabold uppercase leading-none">{weekdayFormatted}</span>
-                        <span className="mt-0.5 text-[10px] font-bold leading-none">{formattedDate}</span>
+                        <span className="text-caption font-extrabold uppercase leading-none">{weekdayFormatted}</span>
+                        <span className="mt-0.5 text-caption font-bold leading-none">{formattedDate}</span>
                       </button>
                     )
                   })}
                 </div>
                 {productionZeroDate && productionZeroDate !== activeClosingDate && (
-                  <p className="text-[11px] font-semibold leading-relaxed text-[#92400E]/70">
+                  <p className="text-caption font-semibold leading-relaxed text-[#92400E]/70">
                     Data retroativa — o registro será salvo como lançamento histórico.
                   </p>
                 )}

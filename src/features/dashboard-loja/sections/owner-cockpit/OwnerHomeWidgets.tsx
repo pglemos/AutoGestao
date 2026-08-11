@@ -46,7 +46,7 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
   return (
     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
       <div className="flex items-center gap-2">
-        <Target className="h-5 w-5 text-emerald-600" />
+        <Target className="h-5 w-5 text-status-success-text" />
         <h2 className="text-base font-semibold text-gray-800">Meta de Venda do Mês</h2>
       </div>
       <div className="mt-4 space-y-4">
@@ -62,11 +62,11 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
         <div className="grid grid-cols-3 gap-2">
           <div className="rounded-lg bg-emerald-600/5 p-2.5 text-center">
             <p className="text-xs text-gray-500">Vendidos</p>
-            <p className="mt-0.5 text-xl font-bold text-emerald-600">{formatInteger(sold)}</p>
+            <p className="mt-0.5 text-xl font-bold text-status-success-text">{formatInteger(sold)}</p>
           </div>
           <div className="rounded-lg bg-red-50 p-2.5 text-center">
             <p className="text-xs text-gray-500">Faltam</p>
-            <p className="mt-0.5 text-xl font-bold text-red-600">{goal > 0 ? formatInteger(missing) : '--'}</p>
+            <p className="mt-0.5 text-xl font-bold text-status-error-text">{goal > 0 ? formatInteger(missing) : '--'}</p>
           </div>
           <div className="rounded-lg bg-gray-100/60 p-2.5 text-center">
             <p className="text-xs text-gray-500">Ritmo ideal</p>
@@ -83,9 +83,24 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
             </p>
           </div>
           {projectionStatus && (
-            <div className={cn('flex items-center gap-1.5 rounded-full px-2.5 py-1', projectionStatus.tone === 'success' ? 'bg-emerald-50' : 'bg-amber-50')}>
-              <TrendingDown className={cn('h-3.5 w-3.5', projectionStatus.tone === 'success' ? 'text-emerald-600' : 'text-amber-600')} />
-              <span className={cn('text-xs font-medium', projectionStatus.tone === 'success' ? 'text-emerald-700' : 'text-amber-700')}>
+            <div className={cn(
+              'flex items-center gap-1.5 rounded-full px-2.5 py-1',
+              projectionStatus.tone === 'success'
+                ? 'bg-status-success-surface'
+                : projectionStatus.tone === 'warning'
+                  ? 'bg-status-warning-surface'
+                  : 'bg-status-error-surface',
+            )}>
+              <TrendingDown className={cn('h-3.5 w-3.5', projectionStatus.tone === 'success'
+                ? 'text-status-success-text'
+                : projectionStatus.tone === 'warning'
+                  ? 'text-status-warning-text'
+                  : 'text-status-error-text')} />
+              <span className={cn('text-xs font-medium', projectionStatus.tone === 'success'
+                ? 'text-status-success-text'
+                : projectionStatus.tone === 'warning'
+                  ? 'text-status-warning-text'
+                  : 'text-status-error-text')}>
                 {projectionStatus.label}
               </span>
             </div>
@@ -93,7 +108,7 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
         </div>
         {shortfall > 0 && (
           <div className="flex items-start gap-2 rounded-lg border border-amber-200 bg-amber-50 p-3">
-            <TrendingDown className="mt-0.5 h-4 w-4 shrink-0 text-amber-600" />
+            <TrendingDown className="mt-0.5 h-4 w-4 shrink-0 text-status-warning-text" />
             <p className="text-xs text-amber-700">
               Mantido o ritmo atual, a loja encerrará o mês {formatInteger(shortfall)}{' '}
               {shortfall === 1 ? 'veículo' : 'veículos'} abaixo da meta.
@@ -125,8 +140,8 @@ export function PriorityIntervention({
   const isCritical = alert.variant === 'danger'
   // Espelha STATUS_STYLES.critical / .attention de components/owner/home/homeData.
   const style = isCritical
-    ? { border: 'border-red-200', bg: 'bg-red-50', text: 'text-red-600', dot: 'bg-red-500', label: 'Crítico' }
-    : { border: 'border-amber-200', bg: 'bg-amber-50', text: 'text-amber-600', dot: 'bg-amber-500', label: 'Atenção' }
+    ? { border: 'border-red-200', bg: 'bg-red-50', text: 'text-status-error-text', dot: 'bg-red-500', label: 'Crítico' }
+    : { border: 'border-amber-200', bg: 'bg-amber-50', text: 'text-status-warning-text', dot: 'bg-amber-500', label: 'Atenção' }
   const details = [
     alert.department ? `Departamento: ${alert.department}` : null,
   ].filter((detail): detail is string => Boolean(detail))
@@ -150,7 +165,7 @@ export function PriorityIntervention({
             <AlertTriangle className={cn('mt-0.5 h-5 w-5 shrink-0', style.text)} />
             <div>
               <p className="font-semibold text-gray-800">{alert.title}</p>
-              <p className="mt-0.5 text-sm text-gray-500">{alert.description}</p>
+              <p className="mt-0.5 text-sm text-text-secondary">{alert.description}</p>
             </div>
           </div>
           <span className={cn('shrink-0 rounded-full px-2.5 py-0.5 text-xs font-semibold', style.bg, style.text)}>
@@ -159,7 +174,7 @@ export function PriorityIntervention({
         </div>
         <div className="mt-3 space-y-1">
           {details.map((detail) => (
-            <div key={detail} className="flex items-center gap-2 text-xs text-gray-500">
+            <div key={detail} className="flex items-center gap-2 text-xs text-text-secondary">
               <span className={cn('h-1 w-1 rounded-full', style.dot)} />
               {detail}
             </div>
@@ -175,7 +190,7 @@ export function PriorityIntervention({
       )}
 
       <div className="mt-3 rounded-lg border border-emerald-600/20 bg-emerald-600/5 p-3">
-        <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">Direcionamento MX</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-status-success-text">Direcionamento MX</p>
         <p className="mt-1 text-sm text-gray-800">{alert.recommendation}</p>
       </div>
 
@@ -183,7 +198,7 @@ export function PriorityIntervention({
         <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Impacto estimado</p>
         <ul className="mt-1.5 space-y-1">
           <li className="flex items-start gap-2 text-sm text-gray-800">
-            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-emerald-600" />
+            <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-status-success-text" />
             Impacto {alert.impact.toLowerCase()} sobre o resultado do período.
           </li>
         </ul>
@@ -253,7 +268,7 @@ export function OwnerAlertList({ alerts }: { alerts: OwnerPerformanceAlert[] }) 
                   {alert.department ? `${alert.department} · ` : ''}{alert.description}
                 </Typography>
               </span>
-              <Typography variant="tiny" className={cn('font-bold', index === 0 ? 'text-status-error' : 'text-gray-500')}>
+              <Typography variant="tiny" className={cn('font-bold', index === 0 ? 'text-status-error-text' : 'text-text-secondary')}>
                 {index === 0 ? 'Hoje' : `${index + 1} dias`}
               </Typography>
             </button>

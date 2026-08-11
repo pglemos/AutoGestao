@@ -1,8 +1,74 @@
-import { describe, expect, test } from 'bun:test'
+import { afterEach, describe, expect, mock, test } from 'bun:test'
 import { readFileSync } from 'node:fs'
+import { createElement, type ReactNode } from 'react'
+import { cleanup, fireEvent, render, screen, waitFor, within } from '@testing-library/react'
+
+const saveCheckinMock = mock(async () => ({ error: null, id: 'checkin-id' }))
+const requestCorrectionMock = mock(async () => ({ error: null }))
+const fetchOwnRequestsMock = mock(async () => [])
+
+mock.module('@/components/seller/SellerPageHeader', () => ({
+    SellerPageHeader: ({ title, actions }: { title: ReactNode; actions?: ReactNode }) =>
+        createElement('header', null, title, actions),
+}))
+mock.module('./RegularizarFechamentoDrawer', () => ({
+    RegularizarFechamentoDrawer: () => null,
+}))
+mock.module('@/hooks/useCheckinAuditor', () => ({
+    useCheckinAuditor: () => ({
+        requestCorrection: requestCorrectionMock,
+        fetchOwnRequests: fetchOwnRequestsMock,
+        loading: false,
+    }),
+}))
+mock.module('@/hooks/useCheckins', () => ({
+    CHECKIN_ZERO_REASONS: ['Folga', 'Treinamento', 'Feriado', 'Dia administrativo', 'Outro'],
+}))
+mock.module('@/lib/toast', () => ({
+    toast: { error: mock(), success: mock() },
+}))
+
+const { CheckinHeader } = await import('./CheckinHeader')
 
 const headerSource = readFileSync(new URL('./CheckinHeader.tsx', import.meta.url), 'utf8')
 const formSource = readFileSync(new URL('./CheckinForm.tsx', import.meta.url), 'utf8')
+
+function dateInSaoPaulo(offsetDays = 0) {
+    const formatter = new Intl.DateTimeFormat('en-CA', {
+        timeZone: 'America/Sao_Paulo',
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+    })
+    const today = formatter.format(new Date())
+    const date = new Date(`${today}T12:00:00Z`)
+    date.setUTCDate(date.getUTCDate() + offsetDays)
+    return date.toISOString().slice(0, 10)
+}
+
+function renderProductionZeroHeader(activeClosingDate = dateInSaoPaulo()) {
+    return render(
+        createElement(CheckinHeader, {
+            dateStr: activeClosingDate.split('-').reverse().join('/'),
+            pillars: [],
+            setCustomReferenceDate: mock(),
+            handleExit: mock(),
+            historyOpen: true,
+            setHistoryOpen: mock(),
+            checkins: [],
+            previousCard: null,
+            activeClosingDate,
+            saveCheckin: saveCheckinMock,
+        }),
+    )
+}
+
+afterEach(() => {
+    cleanup()
+    saveCheckinMock.mockClear()
+    requestCorrectionMock.mockClear()
+    fetchOwnRequestsMock.mockClear()
+})
 
 // P0-02/P0-06 (auditoria 2026-07-10): a solicitação de regularização enviava
 // agd_cart_prev_day/agd_net_prev_day fixos em 0 — zerando os agendamentos D-1
@@ -126,6 +192,16 @@ describe('CheckinHeader — Produção Zero com seletor de data', () => {
 
     test('descrição do modal acompanha a data selecionada', () => {
         expect(headerSource).toContain('Escolha o motivo para {productionZeroDate.split')
+    })
+
+    test('seletor de data usa a escala tipográfica canônica', () => {
+        const selectorSource = headerSource.slice(
+            headerSource.indexOf('<div className="grid grid-cols-4 gap-2"'),
+            headerSource.indexOf('<div className="space-y-3" role="radiogroup" aria-label="Motivo da Produção Zero">'),
+        )
+        expect(selectorSource).not.toMatch(/text-\[(?:10|11)px\]/)
+        expect(selectorSource).toContain('text-caption font-extrabold uppercase leading-none">{weekdayFormatted}')
+        expect(selectorSource).toContain('text-caption font-bold leading-none">{formattedDate}')
     })
 
     test('datas retroativas só reusam checkin se ele for concluído (isSubmittedClosing), criando placeholder caso contrário', () => {
