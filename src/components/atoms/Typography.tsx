@@ -3,17 +3,17 @@ import { cva, type VariantProps } from 'class-variance-authority'
 import { cn } from '@/lib/utils'
 
 /** Aparência única — sem variação por perfil (§8.5). */
-const typographyVariants = cva('transition-colors', {
+const typographyVariants = cva('transition-colors normal-case', {
   variants: {
     variant: {
-      h1: 'text-3xl font-bold normal-case leading-tight tracking-tight md:text-4xl',
-      h2: 'text-xl font-bold normal-case leading-tight tracking-tight md:text-2xl',
-      h3: 'text-lg font-semibold normal-case leading-tight tracking-normal',
-      h4: 'text-base font-semibold normal-case leading-tight tracking-normal',
-      p: 'text-sm font-normal normal-case leading-relaxed tracking-normal',
-      caption: 'text-xs font-medium normal-case tracking-normal',
-      tiny: 'text-caption font-medium normal-case tracking-normal',
-      mono: 'font-mono-numbers text-sm font-semibold normal-case tracking-normal',
+      h1: 'text-h1',
+      h2: 'text-h2',
+      h3: 'text-h3',
+      h4: 'text-h4',
+      p: 'text-body-sm',
+      caption: 'text-caption',
+      tiny: 'text-caption',
+      mono: 'font-mono-numbers text-data font-semibold',
     },
     tone: {
       default: '',

@@ -6,7 +6,7 @@ test.describe('Golden Dono /home - Visual Regression', () => {
     await authenticate(page, { role: 'dono' })
     await page.goto('/home')
     await waitForStable(page)
-    await expect(page.getByRole('main')).toBeVisible({ timeout: 15_000 })
+    await expect(page.locator('main[data-mx-page-canvas]')).toBeVisible({ timeout: 15_000 })
     await expect(page).toHaveScreenshot('dono-home-golden.png')
   })
 })
