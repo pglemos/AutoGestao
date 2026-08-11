@@ -1074,7 +1074,7 @@ function Empty({ text }: { text: string }) {
 }
 
 function ManagerClosingSkeleton() {
-  return <div className="space-y-5 bg-gray-50 p-6" aria-busy="true"><Skeleton className="h-36" /><div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">{Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="h-[164px]" />)}</div><Skeleton className="h-[420px]" /></div>;
+  return <PageCanvas as="div" width="focused" bottomClearance="actions" className="flex flex-col gap-5" aria-busy="true"><Skeleton className="h-36" /><div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">{Array.from({ length: 4 }).map((_, index) => <Skeleton key={index} className="h-[164px]" />)}</div><Skeleton className="h-[420px]" /></PageCanvas>;
 }
 
 function initials(name: string) {

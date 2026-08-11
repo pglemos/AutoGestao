@@ -108,7 +108,10 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
       expect(managerCanonical).toContain(marker)
       expect(universalPrimitives).toContain(marker)
     }
-    expect(managerCanonical).toContain('flex flex-col gap-5')
+    // O conteúdo da rota não decide mais largura, margem ou padding: o
+    // PageCanvas do shell é a única autoridade dessas dimensões.
+    expect(managerCanonical).toMatch(/return \(\s*<div className="flex flex-col gap-5 text-gray-800">/)
+    expect(managerCanonical).not.toMatch(/return\s*\(\s*<div[^>]*\b(?:mx-auto|max-w-7xl|px-4|py-6)/)
 
     expect(managerPrimitives).toContain("from '@/components/module/MxModuleVisualPrimitives'")
     expect(universalPrimitives).not.toContain('bg-surface-alt')

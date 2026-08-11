@@ -28,12 +28,29 @@ function TestModal({ active }: { active: boolean }) {
 describe('useFocusTrap', () => {
   afterEach(() => cleanup())
 
+  it('foca o primeiro elemento imediatamente ao ativar', async () => {
+    const { findByText } = render(<TestModal active={true} />)
+    const first = await findByText('First') as HTMLButtonElement
+
+    expect(document.activeElement).toBe(first)
+  })
+
   it('foca o primeiro elemento focável quando ativo', async () => {
     const { findByText } = render(<TestModal active={true} />)
     const first = await findByText('First') as HTMLButtonElement
     // requestAnimationFrame agendado — aguarda 1 frame
     await new Promise(r => requestAnimationFrame(() => r(null)))
     expect(document.activeElement).toBe(first)
+  })
+
+  it('não sobrescreve um foco interno escolhido antes do segundo passe', async () => {
+    const { container } = render(<TestModal active={true} />)
+    const middle = container.querySelector<HTMLInputElement>('input[aria-label="middle"]')!
+
+    middle.focus()
+    await new Promise(r => requestAnimationFrame(() => r(null)))
+
+    expect(document.activeElement).toBe(middle)
   })
 
   it('não trapa foco quando inativo', () => {

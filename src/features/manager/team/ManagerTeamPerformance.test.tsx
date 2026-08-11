@@ -27,7 +27,11 @@ describe('ManagerTeamPerformance loading state', () => {
       </MemoryRouter>,
     )
 
-    expect(screen.getByRole('region', { name: 'Performance da equipe' })).toHaveAttribute('aria-busy', 'true')
+    const region = screen.getByRole('region', { name: 'Performance da equipe' })
+    expect(region).toHaveAttribute('aria-busy', 'true')
+    expect(region).toHaveClass('flex', 'flex-col', 'gap-5')
+    expect(region).not.toHaveClass('min-h-full')
+    expect(region).not.toHaveClass('bg-gray-50')
     expect(screen.getByRole('region', { name: 'Carregando coluna Críticos' })).toBeTruthy()
     expect(screen.queryByText('Nenhum vendedor vinculado a este gerente.')).toBeNull()
   })
