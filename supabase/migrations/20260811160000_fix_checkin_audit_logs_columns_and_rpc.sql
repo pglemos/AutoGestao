@@ -3,17 +3,19 @@ BEGIN;
 -- ============================================================================
 -- Fix Checkin Audit Logs Columns & Regularization Approval RPC
 --
--- 1. Adds missing columns seller_id, store_id, and reason to checkin_audit_logs
---    so that audit logs record full store, seller, and justification context.
--- 2. Updates public.aplicar_regularizacao_fechamento to safely populate all
---    audit columns (checkin_id, correction_request_id, seller_id, store_id,
---    changed_by, change_type, old_values, new_values, reason).
+-- 1. Adds missing columns seller_id, store_id, and reason to checkin_audit_logs.
+-- 2. Adds missing column reviewed_by to solicitacoes_correcao_lancamento (alias for auditor_id).
+-- 3. Updates public.aplicar_regularizacao_fechamento to set auditor_id = v_caller
+--    and populate all audit columns safely.
 -- ============================================================================
 
 ALTER TABLE IF EXISTS public.checkin_audit_logs
   ADD COLUMN IF NOT EXISTS seller_id uuid,
   ADD COLUMN IF NOT EXISTS store_id uuid,
   ADD COLUMN IF NOT EXISTS reason text;
+
+ALTER TABLE IF EXISTS public.solicitacoes_correcao_lancamento
+  ADD COLUMN IF NOT EXISTS reviewed_by uuid;
 
 CREATE OR REPLACE FUNCTION public.aplicar_regularizacao_fechamento(p_request_id uuid)
 RETURNS jsonb
@@ -166,6 +168,7 @@ BEGIN
 
   UPDATE public.solicitacoes_correcao_lancamento
      SET status = 'approved',
+         auditor_id = v_caller,
          reviewed_by = v_caller,
          reviewed_at = now(),
          applied_at = now(),
