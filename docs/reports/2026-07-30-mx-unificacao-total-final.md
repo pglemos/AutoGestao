@@ -5,21 +5,20 @@
 > (2026-08-10):** os parágrafos históricos abaixo não são
 > prova do estado atual. A execução corrente ocorre em worktree isolado,
 > na branch
-> `fix/mx-full-execution-20260810`, checkpoint remoto verificado antes desta
-> atualização documental
-> `651b34a1fcd675dbc5a2d9dee55b95fcc2c44a80`, sobre `origin/main`
-> `cd03df2a8ee472664c07dae881074d911c6775d5`. O PR #188 está aberto; as
-> alterações desta retomada ainda não foram promovidas.
+> `fix/mx-full-execution-20260810`, SHA remoto publicado
+> `b96d95ffbb63a7989854eda4d7886e90df37ce98`, sobre `origin/main`
+> `cd03df2a8ee472664c07dae881074d911c6775d5`. O PR #188 está aberto; a
+> produção permanece sem promoção.
 
-## Revalidação corrente do diff local — 2026-08-10 — checkpoint `651b34a1`
+## Revalidação corrente do SHA publicado — 2026-08-10 — `b96d95ff`
 
 ### Resumo executivo
 
-O diff corrente preserva os estados semânticos do cockpit, adiciona prova
+O commit publicado preserva os estados semânticos do cockpit, adiciona prova
 renderizada ao fluxo de Produção Zero, alinha o Funil à performance oficial,
 fortalece o contrato do Check-in e cobre os tokens semânticos de contraste. Os
-gates locais passaram; nenhum claim de preview/produção é feito para este diff
-antes do commit e da publicação.
+gates locais e CI GitHub passaram. Nenhum claim de preview/produção é feito para
+este commit enquanto os gates de serviço permanecerem bloqueados.
 
 ### Evidências locais
 
@@ -34,8 +33,17 @@ antes do commit e da publicação.
 - `npm audit --omit=dev --audit-level=moderate`: exit 0, 0 vulnerabilidades;
   o audit completo permanece exit 1 por 1 high em `xlsx@0.18.5`, sem correção
   upstream.
-- O Preview `dpl_HkdF7keUj6cKxyozQiFbfyoh4BH6` anterior está `BUILD_FAILED` por
-  provisionamento; não é prova deste diff.
+- CI remoto do SHA `b96d95ff`: Quality Gates, typecheck/unit, ESLint a11y,
+  bundle, db-types, Gitleaks, parity, Management Audit, Manager Parity,
+  Central Execução Parity, CodeRabbit e visual autenticado passaram.
+- Preview Git-driven do SHA: deployment
+  `dpl_HWc85g8AENFwb7sMzQrm5tNYoWqc`, `BUILD_FAILED / Resource provisioning
+  failed`, `integrations.status=error`; não chegou a `READY` e não há logs de
+  runtime disponíveis.
+- TestSprite: `FAILURE / No tests detected`; Supabase Preview: `SKIPPED`.
+- Produção: `/api/health` respondeu HTTP 200 `healthy`, mas convergiu para o
+  release anterior `cd03df2a8ee472664c07dae881074d911c6775d5`; não é prova do
+  SHA publicado.
 - Agy/Antigravity retornou `Individual quota reached`; não há parecer externo.
 - A revisão local do CodeRabbit analisou os 15 arquivos e encontrou dois
   achados `minor` documentais, ambos corrigidos; a repetição terminou com
@@ -44,10 +52,11 @@ antes do commit e da publicação.
 
 ### Estado
 
-**PARCIALMENTE CONCLUÍDO.** O diff-check staged e Gitleaks passaram. Ainda faltam
-commit/push, CI/Preview/browser autenticado no SHA novo, Sentry independente,
-backup/PITR, rollback e matriz integral; o audit completo e a revisão CodeRabbit
-final permanecem gates externos/indisponíveis documentados.
+**PARCIALMENTE CONCLUÍDO.** Commit/push, CI GitHub, CodeRabbit e browser
+autenticado passaram no SHA publicado. Permanecem bloqueantes o Preview
+funcional, smoke no deployment novo, Sentry/source maps da release, TestSprite,
+Supabase Preview, backup/PITR, rollback, matriz integral e o audit completo por
+`xlsx` sem correção upstream.
 
 ## Revalidação pós-publicação — 2026-08-10 — snapshot histórico `0e4a7275`
 

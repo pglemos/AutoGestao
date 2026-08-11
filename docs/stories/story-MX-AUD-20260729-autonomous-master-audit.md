@@ -209,6 +209,7 @@ anteriores de conclusão não contam como evidência nova.
 | 2026-08-10 | 0.3.5 | Resolver de release Sentry normalizado; commit `0e4a7275` publicado no PR #188; CI verde e bloqueios Vercel/TestSprite registrados | Gage (DevOps) |
 | 2026-08-10 | 0.3.6 | KPIs oficiais, Check-in, contraste semântico e exemplos de configuração corrigidos; suíte `2621/2621`, `18275` asserts em 466 arquivos, verify:db-types e Secretlint verdes | Dex (Dev) |
 | 2026-08-10 | 0.3.7 | CodeRabbit corrigido: CA/`verify-full` nos exemplos Supabase e alavanca `Oportunidades` renderizada com teste; validação local em `651b34a1` registrada separadamente do diff ainda não commitado | Dex (Dev) |
+| 2026-08-10 | 0.3.8 | Commit `b96d95ff` publicado no PR #188; CI/CodeRabbit, Gitleaks, paridade, Manager Parity e visual autenticado passaram; Preview Vercel falhou por `Resource provisioning failed`, TestSprite ficou `No tests detected` e Supabase Preview `SKIPPED` | Gage (DevOps) |
 
 ## Dev Agent Record
 

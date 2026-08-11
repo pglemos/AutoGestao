@@ -4,10 +4,10 @@
 **Estado atual:** PARCIALMENTE CONCLUÍDO
 **Branch da retomada:** `fix/mx-full-execution-20260810` (worktree isolado)
 **Base atual:** `origin/main` em `cd03df2a8ee472664c07dae881074d911c6775d5`
-**Checkpoint remoto verificado antes desta atualização:**
-`651b34a1fcd675dbc5a2d9dee55b95fcc2c44a80`; o diff local desta retomada ainda
-precisa de commit/push. Os commits de implementação visual anteriores
-permanecem no histórico desta branch
+**SHA remoto publicado nesta atualização:**
+`b96d95ffbb63a7989854eda4d7886e90df37ce98`; o PR #188 e o CI GitHub estão
+atualizados. A produção permanece no release anterior; os commits de
+implementação visual anteriores permanecem no histórico desta branch.
 **Base histórica de rollback:** `41ec4d39e165cab013988fab9aef54649b616095`
 
 > Este documento é atualizado durante a execução. “Parcialmente concluído” é
@@ -15,14 +15,14 @@ permanecem no histórico desta branch
 
 ## Revalidação corrente local — 2026-08-10
 
-O checkpoint remoto `651b34a1` está publicado no PR #188. O diff local corrente
+O SHA remoto `b96d95ff` está publicado no PR #188. O commit corrente
 alinha o Funil à performance oficial, preserva `null` sem meta, prova a data
 enviada pelo Check-in, amplia o contrato de tokens semânticos e mantém a
 normalização de release Sentry. `npm test` passou `2622/2622` com `18278
 expect()` em 466 arquivos, e lint, typecheck, build e bundle passaram. `npm run verify:db-types`
 e Secretlint 13.0.4 também passaram; `git diff --cached --check` e Gitleaks
-staged passaram, e a publicação do novo SHA ainda será registrada após a
-documentação.
+staged passaram. CI GitHub, CodeRabbit e visual autenticado também passaram no
+SHA publicado.
 
 Os gates remotos do checkpoint publicado `0e4a7275`, registrados na story, são
 históricos e não são prova do diff local corrente. Para o checkpoint remoto
@@ -32,7 +32,9 @@ Design, Management Audit, Manager Parity, Central Execução Parity, Module Pari
 Authenticated Visual e demais checks do PR #188. Isso prova CI do checkpoint,
 mas não Preview funcional: o status Vercel está `FAILURE`, TestSprite está
 `FAILURE` com `No tests detected` e Supabase Preview está `SKIPPED`. O diff local
-corrente ainda precisa de commit/push e de nova validação no SHA que será criado.
+corrente foi publicado e validado no SHA `b96d95ff`; Vercel Preview falhou antes
+de `READY` com `Resource provisioning failed`, TestSprite retornou `No tests
+detected` e Supabase Preview ficou `SKIPPED`.
 
 O estado continua **PARCIALMENTE CONCLUÍDO**. O Preview Git-driven anterior
 `dpl_HkdF7keUj6cKxyozQiFbfyoh4BH6`, associado ao checkpoint remoto, falhou com

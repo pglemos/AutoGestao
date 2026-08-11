@@ -62,13 +62,13 @@ Executar `git diff --check`, stage apenas dos arquivos previstos e Gitleaks,
 integrar a `origin/main` sem reescrever histórico, commit/push pelo fluxo
 DevOps e revalidar o SHA novo.
 
-## Revalidação final do diff local — 2026-08-10 — HEAD `651b34a1`
+## Revalidação final do SHA publicado — 2026-08-10 — HEAD `b96d95ff`
 
 ### Objetivo
 
 Fechar os comentários acionáveis do Funil, Check-in, contraste semântico,
 release Sentry e exemplos de configuração sem transformar ausência de dados em
-zero nem introduzir segredos em documentação.
+zero nem introduzir segredos em documentação; publicar e revalidar o SHA.
 
 ### Alterações
 
@@ -95,12 +95,17 @@ zero nem introduzir segredos em documentação.
 - CodeRabbit encontrou dois achados `minor` documentais no diff de 15 arquivos;
   ambos foram corrigidos. A repetição foi bloqueada por `Review limit reached`,
   sem veredicto técnico final local.
+- Commit `b96d95ffbb63a7989854eda4d7886e90df37ce98` foi publicado no PR #188.
+  CI GitHub, CodeRabbit, Gitleaks, parity, Manager Parity e visual autenticado
+  passaram. O deployment Vercel `dpl_HWc85g8AENFwb7sMzQrm5tNYoWqc` falhou com
+  `BUILD_FAILED / Resource provisioning failed`; TestSprite retornou
+  `No tests detected` e Supabase Preview ficou `SKIPPED`.
 
 ### Resultado e próximo passo
 
-O código está validado localmente, com diff-check staged e Gitleaks aprovados,
-mas o estado permanece parcial até concluir commit/push, CI/Preview/browser/
-Sentry no SHA novo, backup/PITR e rollback. Produção não foi promovida.
+O código está validado localmente e publicado com CI/browser autenticado verdes,
+mas o estado permanece parcial até concluir Preview funcional, Sentry no SHA
+novo, backup/PITR e rollback. Produção não foi promovida.
 
 ## Revalidação de implementação anterior — 2026-08-10 — worktree `fix/mx-full-execution-20260810`
 
