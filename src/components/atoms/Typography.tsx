@@ -13,6 +13,7 @@ const typographyVariants = cva('transition-colors normal-case', {
       p: 'text-body-sm',
       caption: 'text-caption',
       tiny: 'text-caption',
+      label: 'text-label',
       mono: 'font-mono-numbers text-data font-semibold',
     },
     tone: {
@@ -45,6 +46,7 @@ const DEFAULT_ELEMENT_MAP: Record<string, TypographyElementType> = {
   body: 'p',
   caption: 'span',
   tiny: 'span',
+  label: 'label',
   mono: 'span',
 }
 

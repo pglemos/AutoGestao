@@ -7,7 +7,7 @@ afterEach(() => {
 })
 
 describe('Typography Atom', () => {
-  test('uses weights aligned to the approved Base44 typography (h1/h2 font-bold, h3/h4 font-semibold)', () => {
+  test('uses the canonical semantic typography presets', () => {
     render(
       <div>
         <Typography variant="h1">Title</Typography>
@@ -20,14 +20,12 @@ describe('Typography Atom', () => {
       </div>,
     )
 
-    // h1 passou de font-black para font-bold: o peso 900 era do visual legado
-    // do MX; o aprovado (Base44/Dono) usa 700.
-    expect(screen.getByText('Title').className).toContain('font-bold')
-    expect(screen.getByText('Subtitle').className).toContain('font-bold')
-    expect(screen.getByText('Card title').className).toContain('font-semibold')
-    expect(screen.getByText('Small heading').className).toContain('font-semibold')
-    expect(screen.getByText('Body copy').className).toContain('font-normal')
-    expect(screen.getByText('Caption').className).toContain('font-medium')
-    expect(screen.getByText('Tiny').className).toContain('font-medium')
+    expect(screen.getByText('Title').className).toContain('text-h1')
+    expect(screen.getByText('Subtitle').className).toContain('text-h2')
+    expect(screen.getByText('Card title').className).toContain('text-h3')
+    expect(screen.getByText('Small heading').className).toContain('text-h4')
+    expect(screen.getByText('Body copy').className).toContain('text-body-sm')
+    expect(screen.getByText('Caption').className).toContain('text-caption')
+    expect(screen.getByText('Tiny').className).toContain('text-caption')
   })
 })

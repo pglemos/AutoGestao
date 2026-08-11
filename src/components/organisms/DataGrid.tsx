@@ -72,12 +72,12 @@ function DataGridInner<T extends { id: string | number }>({
         </span>
         <Typography
           variant={'h3'}
-          className={'text-base font-semibold text-gray-800'}
+          className={'text-gray-800'}
         >
           {emptyMessage}
         </Typography>
         {emptyDescription && (
-          <Typography variant="p" tone="muted" className="max-w-md text-sm">
+          <Typography variant="p" tone="muted" className="max-w-md">
             {emptyDescription}
           </Typography>
         )}
@@ -99,7 +99,7 @@ function DataGridInner<T extends { id: string | number }>({
                   key={col.key}
                   scope="col"
                   className={cn(
-                    'px-4 py-3 text-xs font-semibold tracking-normal text-gray-500',
+                    'px-4 py-3 text-caption font-semibold text-gray-500',
                     col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left',
                     col.width,
                   )}
@@ -129,7 +129,7 @@ function DataGridInner<T extends { id: string | number }>({
                     <td
                       key={`${item.id}-${col.key}`}
                       className={cn(
-                        'px-4 py-3 text-sm font-medium text-gray-700',
+                        'px-4 py-3 text-body-sm font-medium text-gray-700',
                         col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left',
                       )}
                     >
