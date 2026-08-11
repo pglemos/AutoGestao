@@ -192,7 +192,10 @@ function RegularizationDecisionModal({
 }) {
   const approve = decision?.action === "approve";
   const sellerName = decision?.request.seller?.name || decision?.request.seller_id || "Nome não informado";
-  const referenceDate = decision?.request.requested_values.reference_date;
+  const formattedDate = formatRequestDate(
+    decision?.request.created_at || "",
+    decision?.request.requested_values.reference_date
+  );
   const actionLabel = approve ? "Aprovar" : "Recusar";
   const confirmationLabel = approve
     ? "Confirmo a aprovação da regularização."
@@ -208,7 +211,7 @@ function RegularizationDecisionModal({
       size="md"
       referenceStyle
       title={`${actionLabel} regularização?`}
-      description={`${sellerName} — ${referenceDate ? formatRequestDate("", referenceDate) : "—"}`}
+      description={`${sellerName} — ${formattedDate}`}
       footer={
         <div className="grid w-full grid-cols-2 gap-4">
           <button

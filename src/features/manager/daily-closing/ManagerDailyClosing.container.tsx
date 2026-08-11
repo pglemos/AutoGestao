@@ -407,7 +407,7 @@ export default function ManagerDailyClosing() {
                   type="date"
                   value={date}
                   onChange={(event) => setDate(event.target.value)}
-                  className="h-10 border border-gray-200 rounded-[12px] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-10 border border-gray-200 bg-white rounded-[12px] px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-2xs transition-all"
                 />
               </Field>
               <Field label="Unidade">
@@ -415,7 +415,7 @@ export default function ManagerDailyClosing() {
                   aria-label="Unidade"
                   value={storeId || ""}
                   onChange={() => undefined}
-                  className="border border-gray-200 rounded-[12px] px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500 min-w-[140px]"
+                  className="h-10 border border-gray-200 bg-white rounded-[12px] px-3 py-2 text-sm text-gray-800 focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 min-w-[150px] shadow-2xs transition-all"
                 >
                   <option value={storeId || ""}>
                     {membership?.store?.name || "Unidade atual"}
@@ -1104,11 +1104,11 @@ function DisciplineTrendCard({
                 type="monotone"
                 dataKey="value"
                 connectNulls
-                  stroke="oklch(0.627 0.194 149.214)"
+                stroke="#10B981"
                 strokeWidth={2.5}
                 dot={{
                   r: 3.5,
-                    fill: "oklch(0.627 0.194 149.214)",
+                  fill: "#10B981",
                   strokeWidth: 0,
                 }}
                 label={{
@@ -1116,7 +1116,7 @@ function DisciplineTrendCard({
                   formatter: (value) =>
                     typeof value === 'number' ? `${value}%` : '',
                   fontSize: 10,
-                    fill: "oklch(0.627 0.194 149.214)",
+                  fill: "#10B981",
                   fontWeight: 700,
                 }}
               />
