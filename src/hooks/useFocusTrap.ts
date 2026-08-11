@@ -21,10 +21,17 @@ export function useFocusTrap(containerRef: React.RefObject<HTMLElement | null>, 
     const getFocusableElements = () =>
       Array.from(container.querySelectorAll<HTMLElement>(FOCUSABLE_SELECTORS))
 
-    const focusable = getFocusableElements()
-    if (focusable.length > 0) {
-      requestAnimationFrame(() => focusable[0].focus())
-    }
+    // Focus synchronously as soon as the drawer is mounted. A deferred-only
+    // focus can be lost in a real browser when the opening click completes
+    // after the effect (notably on mobile navigation drawers), leaving focus
+    // on <body> even though the dialog is visible. The second pass handles
+    // portals/late-mounted descendants without regressing the immediate case.
+    const focusFirst = () => getFocusableElements()[0]?.focus()
+    focusFirst()
+    const focusFrame = requestAnimationFrame(() => {
+      if (document.activeElement && container.contains(document.activeElement)) return
+      focusFirst()
+    })
 
     const handleKeyDown = (e: KeyboardEvent) => {
       if (e.key !== 'Tab') return
@@ -52,6 +59,7 @@ export function useFocusTrap(containerRef: React.RefObject<HTMLElement | null>, 
 
     return () => {
       container.removeEventListener('keydown', handleKeyDown)
+      if (typeof cancelAnimationFrame === 'function') cancelAnimationFrame(focusFrame)
       if (previousFocusRef.current && previousFocusRef.current.focus) {
         previousFocusRef.current.focus()
       }
