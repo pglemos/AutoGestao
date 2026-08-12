@@ -195,7 +195,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
                 <div className="flex items-center gap-3">
                   <div className={cn(
                     'flex h-9 w-9 shrink-0 items-center justify-center rounded-lg',
-                    benchmark.tone === 'brand' ? 'bg-mx-indigo-50 border-mx-indigo-100 text-status-success-text' :
+                    benchmark.tone === 'brand' ? 'bg-brand-primary-subtle border-brand-primary/20 text-status-success-text' :
                       benchmark.tone === 'success' ? 'bg-status-success-surface border-mx-emerald-100 text-status-success-text' :
                         'bg-status-warning-surface border-mx-amber-100 text-status-warning-text'
                   )}>

@@ -52,7 +52,7 @@ export function SegurancaTab() {
             {/* Alterar senha */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center border border-mx-indigo-100 shadow-none">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center border border-brand-primary/20 shadow-none">
                         <KeyRound size={26} />
                     </div>
                     <div>
@@ -171,7 +171,7 @@ export function SegurancaTab() {
             {/* 2FA placeholder */}
             <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center border border-mx-indigo-100 shadow-none">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center border border-brand-primary/20 shadow-none">
                         <ShieldCheck size={26} />
                     </div>
                     <div>

@@ -44,7 +44,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
     <div className="bg-white rounded-2xl shadow-sm border border-border p-mx-lg">
       <div className="flex items-center justify-between mb-mx-lg">
         <div className="flex items-center gap-mx-sm">
-          <div className="p-mx-xs bg-mx-indigo-50 text-status-success-text rounded-xl">
+          <div className="p-mx-xs bg-brand-primary-subtle text-status-success-text rounded-xl">
             <Calendar size={24} />
           </div>
           <div>

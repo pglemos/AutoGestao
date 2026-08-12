@@ -56,7 +56,7 @@ export function AdminKpiCards({ metrics }: Props) {
                 className={cn(
                   'w-mx-14 h-mx-14 rounded-2xl flex items-center justify-center border shadow-none transition-transform group-hover:scale-110',
                   stat.color === 'brand'
-                    ? 'bg-mx-indigo-50 border-mx-indigo-100 text-status-success-text'
+                    ? 'bg-brand-primary-subtle border-brand-primary/20 text-status-success-text'
                     : stat.color === 'info'
                       ? 'bg-status-info-surface border-status-info/20 text-status-info-text'
                       : stat.color === 'warning'

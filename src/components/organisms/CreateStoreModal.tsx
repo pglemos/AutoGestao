@@ -63,7 +63,7 @@ export function CreateStoreModal({
               <form onSubmit={onSubmit} className="space-y-mx-xl relative z-10">
                 <header className="flex items-center justify-between border-b border-border pb-8">
                   <div className="flex items-center gap-mx-sm">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 flex items-center justify-center text-status-success-text border border-mx-indigo-100 shadow-none shrink-0">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle flex items-center justify-center text-status-success-text border border-brand-primary/20 shadow-none shrink-0">
                       <Building2 size={28} />
                     </div>
                     <div>

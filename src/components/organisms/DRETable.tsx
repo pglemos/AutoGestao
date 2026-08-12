@@ -63,7 +63,7 @@ export function DRETable({
             {rows.map((row, idx) => {
               if (row.isHeader) {
                 return (
-                  <tr key={idx} className="bg-mx-green-900">
+                  <tr key={idx} className="bg-brand-primary">
                     <td className="p-mx-md text-white font-bold text-sm uppercase tracking-wider" colSpan={months.length + 1}>
                       {row.label}
                     </td>

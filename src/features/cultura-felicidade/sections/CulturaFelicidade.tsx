@@ -22,7 +22,7 @@ const TIPO_LABEL: Record<CulturaTipo, string> = {
 
 const TIPO_TONE: Record<CulturaTipo, string> = {
   repescagem: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
-  campanha: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
+  campanha: 'border-brand-primary/30 bg-brand-primary-subtle text-status-success-text',
   reconhecimento: 'border-status-success/30 bg-status-success-surface text-status-success-text',
   feed_cultural: 'border-border bg-gray-50 text-muted-foreground',
 }
@@ -78,7 +78,7 @@ export function CulturaFelicidade({ storeId }: Props) {
       )}
 
       <div className="grid grid-cols-1 gap-mx-md md:grid-cols-3">
-        <Card className="border border-brand-primary/40 bg-mx-indigo-50 p-mx-md">
+        <Card className="border border-brand-primary/40 bg-brand-primary-subtle p-mx-md">
           <Typography variant="caption" className="">
             Ciclo atual
           </Typography>
@@ -103,7 +103,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
-          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-status-success-text">
+          <div className="rounded-2xl bg-brand-primary-subtle p-mx-xs text-status-success-text">
             <TrendingUp size={18} aria-hidden="true" />
           </div>
           <div>
@@ -146,7 +146,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
-          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-status-success-text">
+          <div className="rounded-2xl bg-brand-primary-subtle p-mx-xs text-status-success-text">
             <Sparkles size={18} aria-hidden="true" />
           </div>
           <div>

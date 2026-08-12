@@ -41,7 +41,7 @@ const TIPO_LABEL: Record<UniversidadeAulaTipo, string> = {
 
 const TIPO_TONE: Record<UniversidadeAulaTipo, string> = {
   biblioteca: 'border-border bg-gray-50 text-muted-foreground',
-  aula_gravada: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
+  aula_gravada: 'border-brand-primary/30 bg-brand-primary-subtle text-status-success-text',
   aula_ao_vivo: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
   quiz: 'border-status-success/30 bg-status-success-surface text-status-success-text',
   desafio: 'border-status-error/30 bg-status-error-surface text-status-error-text',

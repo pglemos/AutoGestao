@@ -326,7 +326,7 @@ export default function FalarConsultorDono() {
           </div>
 
           {contextSummary.length > 0 && (
-            <div className="mt-mx-md rounded-2xl border border-brand-primary/15 bg-mx-indigo-50 p-mx-md">
+            <div className="mt-mx-md rounded-2xl border border-brand-primary/15 bg-brand-primary-subtle p-mx-md">
               <div className="flex items-center gap-mx-xs text-xs font-bold uppercase tracking-mx-wide text-status-success-text">
                 <Paperclip size={15} /> Contexto anexado automaticamente
               </div>

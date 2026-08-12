@@ -19,7 +19,7 @@ export default function OAuthHome() {
             </Link>
             <Link
               to="/login"
-              className="hidden sm:inline-flex items-center gap-mx-xs h-mx-10 px-mx-md rounded-xl bg-gray-900 text-white hover:bg-mx-green-950 transition-colors"
+              className="hidden sm:inline-flex items-center gap-mx-xs h-mx-10 px-mx-md rounded-xl bg-gray-900 text-white hover:bg-brand-primary transition-colors"
             >
               <LogIn size={14} />
               Entrar
@@ -51,7 +51,7 @@ export default function OAuthHome() {
               <div className="mt-mx-2xl flex flex-col sm:flex-row gap-mx-sm">
                 <Link
                   to="/login"
-                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl bg-gray-900 text-white text-sm font-bold hover:bg-mx-green-950 transition-colors"
+                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl bg-gray-900 text-white text-sm font-bold hover:bg-brand-primary transition-colors"
                 >
                   <LogIn size={18} />
                   Acessar Sistema

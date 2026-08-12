@@ -209,7 +209,7 @@ export default function GerentePDI() {
                                                             {formatSafeDate(p.due_date)}
                                                         </Typography>
                                                     </div>
-                                                    <Button type="button" variant="ghost" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-10 h-mx-10 rounded-xl text-muted-foreground hover:text-status-success-text hover:bg-mx-indigo-50 bg-white shadow-sm border border-border-subtle" aria-label={`Imprimir PDI de ${p.seller_name || 'nome não informado'}`}>
+                                                    <Button type="button" variant="ghost" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-10 h-mx-10 rounded-xl text-muted-foreground hover:text-status-success-text hover:bg-brand-primary-subtle bg-white shadow-sm border border-border-subtle" aria-label={`Imprimir PDI de ${p.seller_name || 'nome não informado'}`}>
                                                         <Printer size={18} />
                                                     </Button>
                                                 </div>

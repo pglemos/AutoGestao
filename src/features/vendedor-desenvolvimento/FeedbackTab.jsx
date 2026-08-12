@@ -37,7 +37,7 @@ export default function FeedbackPage({ hideHeader = false }) {
 
   const feedbackBadge = (f) => (f.hasAttentionPoints
     ? { label: "Desenvolvimento", className: "bg-status-warning-surface text-status-warning-text" }
-    : { label: "Positivo", className: "bg-mx-green-light text-mx-green" });
+    : { label: "Positivo", className: "bg-brand-primary-subtle text-brand-primary" });
 
   if (loading) {
     return <div className="flex items-center justify-center h-64"><div className="w-8 h-8 border-4 border-slate-200 border-t-mx-blue rounded-full animate-spin" /></div>;
@@ -126,7 +126,7 @@ export default function FeedbackPage({ hideHeader = false }) {
                     <td className="px-5 py-3.5 text-sm text-slate-600">{f.competency}</td>
                     <td className="px-5 py-3.5 text-sm text-slate-600">{f.responsible}</td>
                     <td className="px-5 py-3.5 text-sm text-slate-600 max-w-[200px] truncate">{f.user_comment || "—"}</td>
-                    <td className="px-5 py-3.5"><CheckCircle2 className="w-4 h-4 text-mx-green" /></td>
+                    <td className="px-5 py-3.5"><CheckCircle2 className="w-4 h-4 text-brand-primary" /></td>
                   </tr>
                 ))}
               </tbody>

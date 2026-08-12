@@ -43,7 +43,7 @@ export default function Terms() {
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
                                 <Card className="bg-gray-50 p-mx-10 border-none shadow-mx-inner group hover:bg-white hover:shadow-sm transition-all">
-                                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
+                                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <Lock size={24} strokeWidth={2} />
                                     </div>
                                     <Typography variant="h2" className="mb-4">Autoridade de Acesso</Typography>

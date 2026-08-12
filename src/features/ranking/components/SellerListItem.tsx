@@ -48,7 +48,7 @@ export function SellerListItem({
       <Card className={cn(
         "p-mx-lg md:p-mx-xl w-full max-w-full min-w-0 flex flex-col lg:flex-row lg:items-center gap-mx-md lg:gap-mx-10 border-none shadow-sm transition-all relative overflow-hidden",
         isTop1 ? "bg-gray-900 text-white shadow-sm ring-2 ring-mx-amber-400 ring-offset-4" :
-          isMe ? "bg-mx-indigo-50 border-2 border-brand-primary shadow-sm" : "bg-white"
+          isMe ? "bg-brand-primary-subtle border-2 border-brand-primary shadow-sm" : "bg-white"
       )}>
         <div className="flex items-start sm:items-center gap-mx-md sm:gap-mx-lg flex-1 min-w-0 max-w-full">
           <div className={cn(

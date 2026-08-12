@@ -406,7 +406,7 @@ export default function Login() {
                 {/* Gradient mesh */}
                 <div className="absolute inset-0" aria-hidden="true">
                     <div className="absolute bg-brand-primary/10 rounded-full" style={{ top: '-20%', left: '-10%', width: '70%', height: '70%', filter: 'blur(140px)' }} />
-                    <div className="absolute bg-mx-green-900/40 rounded-full" style={{ bottom: '-15%', right: '-10%', width: '60%', height: '60%', filter: 'blur(120px)' }} />
+                    <div className="absolute bg-brand-primary/40 rounded-full" style={{ bottom: '-15%', right: '-10%', width: '60%', height: '60%', filter: 'blur(120px)' }} />
                     <div className="absolute bg-brand-primary/6 rounded-full" style={{ top: '40%', right: '20%', width: '30%', height: '30%', filter: 'blur(80px)' }} />
                 </div>
                 {/* Grid pattern */}
@@ -468,7 +468,7 @@ export default function Login() {
                 <div className="lg:hidden mb-12 text-center">
                     <img src={MxLogo} alt="MX Performance" className="w-mx-20 h-mx-20 object-contain mx-auto mb-6" />
                     <h1 className="text-h3 font-bold text-foreground">
-                        MX <span className="text-mx-green-800">PERFORMANCE</span>
+                        MX <span className="text-brand-primary-active">PERFORMANCE</span>
                     </h1>
                 </div>
 
@@ -606,7 +606,7 @@ export default function Login() {
                         <button
                             type="submit"
                             disabled={loading}
-                            className="w-full bg-gray-900 hover:bg-mx-green-950 text-white rounded-xl font-bold text-sm flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand-primary/25 hover:shadow-brand-primary/40 active:scale-[0.98] mt-2"
+                            className="w-full bg-gray-900 hover:bg-brand-primary text-white rounded-xl font-bold text-sm flex items-center justify-center transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-lg shadow-brand-primary/25 hover:shadow-brand-primary/40 active:scale-[0.98] mt-2"
                             style={{ height: '3.25rem', gap: '0.5rem' }}
                         >
                             {loading ? (

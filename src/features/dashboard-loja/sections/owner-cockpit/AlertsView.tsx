@@ -87,7 +87,7 @@ export function AlertsView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
         </Card>
         <div className="space-y-mx-md">
           <SideList title="Indicadores mais críticos" items={alerts.slice(0, 5).map(alert => alert.title)} />
-          <Card className="bg-mx-indigo-50 p-mx-lg">
+          <Card className="bg-brand-primary-subtle p-mx-lg">
             <Typography variant="h3" className="">Dica do Consultor MX</Typography>
             <Typography variant="p" tone="muted" className="mt-mx-sm font-bold">Foque nas ações críticas para evitar impacto no resultado do mês.</Typography>
           </Card>

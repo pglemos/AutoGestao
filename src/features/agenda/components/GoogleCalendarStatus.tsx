@@ -59,7 +59,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
     <Card className="space-y-mx-md border bg-white p-mx-lg shadow-none">
       <header className="flex min-w-0 items-center justify-between gap-mx-sm">
         <div className="flex min-w-0 items-center gap-mx-sm">
-          <div className="flex h-mx-12 w-mx-12 shrink-0 items-center justify-center rounded-xl border border-mx-indigo-100 bg-mx-indigo-50 text-status-success-text">
+          <div className="flex h-mx-12 w-mx-12 shrink-0 items-center justify-center rounded-xl border border-brand-primary/20 bg-brand-primary-subtle text-status-success-text">
             <Calendar size={20} />
           </div>
           <div className="min-w-0">
@@ -109,7 +109,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className={`min-w-0 rounded-xl border p-mx-sm ${centralConnected && centralMeetCohostsAuthorized ? 'bg-mx-green-50 border-mx-green-200' : 'bg-gray-50 border-border'}`}
+            className={`min-w-0 rounded-xl border p-mx-sm ${centralConnected && centralMeetCohostsAuthorized ? 'bg-brand-primary-subtle border-brand-primary/20' : 'bg-gray-50 border-border'}`}
           >
             <div className="mb-1 flex min-w-0 items-center justify-between gap-mx-xs">
               <span className="flex min-w-0 items-center gap-mx-xs text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">
@@ -144,7 +144,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
       )}
 
       {!compact && canViewCentralAgenda && centralConnected && !personalConnected && (
-        <div className="p-mx-sm rounded-xl bg-mx-indigo-50 border border-mx-indigo-100 text-muted-foreground text-mx-tiny font-bold leading-relaxed">
+        <div className="p-mx-sm rounded-xl bg-brand-primary-subtle border border-brand-primary/20 text-muted-foreground text-mx-tiny font-bold leading-relaxed">
           A Agenda Central MX está conectada. Para receber os compromissos na própria conta Google, cada admin MX precisa entrar no sistema com seu usuário e conectar a agenda pessoal.
         </div>
       )}

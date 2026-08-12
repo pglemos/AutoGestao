@@ -82,7 +82,7 @@ export function AparenciaTab() {
             {/* Tema */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center border border-mx-indigo-100">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center border border-brand-primary/20">
                         <Palette size={26} />
                     </div>
                     <div>

@@ -135,7 +135,7 @@ export default function PDIPage({ hideHeader = false }) {
   const statusColors = {
     "Pendente": "bg-surface-muted text-muted-foreground",
     "Em Andamento": "bg-mx-blue-light text-mx-blue",
-    "Concluído": "bg-mx-green-light text-mx-green",
+    "Concluído": "bg-brand-primary-subtle text-brand-primary",
   };
 
   return (
@@ -151,7 +151,7 @@ export default function PDIPage({ hideHeader = false }) {
         </div>
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {[
-            { label: "Curto Prazo", sublabel: "1 Ano", key: "short_term_goal", color: "border-mx-green" },
+            { label: "Curto Prazo", sublabel: "1 Ano", key: "short_term_goal", color: "border-brand-primary" },
             { label: "Médio Prazo", sublabel: "2 Anos", key: "medium_term_goal", color: "border-mx-blue" },
             { label: "Longo Prazo", sublabel: "3 Anos", key: "long_term_goal", color: "border-mx-amber" },
           ].map(goal => (

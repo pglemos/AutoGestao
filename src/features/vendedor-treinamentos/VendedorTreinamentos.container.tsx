@@ -35,7 +35,7 @@ const CATEGORIES = ['Atendimento', 'Prospecção', 'WhatsApp', 'Negociação', '
 const LEVELS = ['N1 Iniciante', 'N2 Intermediário', 'N3 Performance', 'N4 Alta Performance']
 
 const LEVEL_COLORS: Record<string, string> = {
-    'N1 Iniciante': 'bg-mx-green-light text-mx-green',
+    'N1 Iniciante': 'bg-brand-primary-subtle text-brand-primary',
     'N2 Intermediário': 'bg-mx-blue-light text-mx-blue',
     'N3 Performance': 'bg-mx-amber-light text-mx-amber',
     'N4 Alta Performance': 'bg-status-info-surface text-status-info-text',
@@ -82,7 +82,7 @@ function TrainingCard({ training, completed, onOpen, large = false }: { training
                 </div>
                 {completed && (
                     <div className="absolute right-3 top-3 z-10">
-                        <CheckCircle2 className="h-6 w-6 fill-white text-mx-green" />
+                        <CheckCircle2 className="h-6 w-6 fill-white text-brand-primary" />
                     </div>
                 )}
             </div>
@@ -398,7 +398,7 @@ export default function VendedorTreinamentosContainer() {
                                     type="button"
                                     disabled={savingInteraction || (!completedIds.has(selectedTraining.id) && (quizQuestoes >= 5 || (Boolean(selectedTraining.video_url) && watchedPercent < 95)))}
                                     onClick={() => void handleMarkCompleted()}
-                                    className="inline-flex items-center gap-2 rounded-xl bg-mx-green px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
+                                    className="inline-flex items-center gap-2 rounded-xl bg-brand-primary-subtle px-4 py-2 text-sm font-semibold text-white disabled:opacity-50"
                                 >
                                     <CheckCircle2 size={16} />
                                     {completedIds.has(selectedTraining.id)

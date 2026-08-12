@@ -90,11 +90,11 @@ export const toneClasses: Record<KpiTone, { bg: string; text: string; soft: stri
     border: 'border-border-default',
   },
   brand: {
-    bg: 'bg-mx-indigo-50 text-brand-primary border border-mx-indigo-100',
+    bg: 'bg-brand-primary-subtle text-brand-primary border border-brand-primary/20',
     text: 'text-brand-primary',
-    soft: 'bg-mx-indigo-50 text-brand-primary border-mx-indigo-100',
+    soft: 'bg-brand-primary-subtle text-brand-primary border-brand-primary/20',
     bar: 'bg-brand-primary',
-    border: 'border-mx-indigo-100',
+    border: 'border-brand-primary/20',
   },
   purple: {
     bg: 'bg-status-info-surface text-status-info-text border border-status-info/20',

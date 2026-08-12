@@ -3,7 +3,7 @@ import React from "react";
 export default function StatCard({ label, value, sublabel, icon: Icon, color = "blue", children }) {
   const colorMap = {
     blue: "bg-mx-blue-light text-mx-blue",
-    green: "bg-mx-green-light text-mx-green",
+    green: "bg-brand-primary-subtle text-brand-primary",
     amber: "bg-mx-amber-light text-mx-amber",
     red: "bg-mx-red-light text-mx-red",
     navy: "bg-slate-100 text-mx-navy",

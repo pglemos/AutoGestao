@@ -112,7 +112,7 @@ export function TimeGrid({
               onClick={() => onDateSelect(dayInfo.date)}
               className={cn(
                 'min-w-0 border-r border-border px-mx-xs py-mx-sm text-center transition-colors last:border-r-0 hover:bg-gray-50',
-                isSelected && 'bg-mx-green-50',
+                isSelected && 'bg-brand-primary-subtle',
               )}
             >
               <Typography variant="tiny" tone="muted" className="block text-caption font-semibold tracking-normal">

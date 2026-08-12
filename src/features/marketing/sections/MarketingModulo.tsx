@@ -25,7 +25,7 @@ const FLUXO_LABEL: Record<CarteiraFluxoEstado, string> = {
 
 const FLUXO_TONE: Record<CarteiraFluxoEstado, string> = {
   novo: 'border-border bg-gray-50 text-muted-foreground',
-  contato_inicial: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
+  contato_inicial: 'border-brand-primary/30 bg-brand-primary-subtle text-status-success-text',
   aquecimento: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
   negociacao: 'border-status-warning/40 bg-status-warning-surface text-status-warning-text',
   convertido: 'border-status-success/30 bg-status-success-surface text-status-success-text',
@@ -79,7 +79,7 @@ export function MarketingModulo({ storeId }: Props) {
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
-          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-status-success-text">
+          <div className="rounded-2xl bg-brand-primary-subtle p-mx-xs text-status-success-text">
             <Briefcase size={18} aria-hidden="true" />
           </div>
           <div>
@@ -139,7 +139,7 @@ export function MarketingModulo({ storeId }: Props) {
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
           <div className="flex items-center gap-mx-xs">
-            <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-status-success-text">
+            <div className="rounded-2xl bg-brand-primary-subtle p-mx-xs text-status-success-text">
               <Users size={18} aria-hidden="true" />
             </div>
             <div>
@@ -225,7 +225,7 @@ export function MarketingModulo({ storeId }: Props) {
 
       <Card className="p-mx-md">
         <header className="mb-mx-sm flex items-center gap-mx-xs">
-          <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-status-success-text">
+          <div className="rounded-2xl bg-brand-primary-subtle p-mx-xs text-status-success-text">
             <Calendar size={18} aria-hidden="true" />
           </div>
           <div>

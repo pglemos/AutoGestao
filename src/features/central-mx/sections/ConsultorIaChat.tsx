@@ -31,7 +31,7 @@ import {
 const PRIORITY_TONE: Record<ConsultorIaPriority, string> = {
   critica: 'border-status-error/40 bg-status-error-surface text-status-error-text',
   alta: 'border-status-warning/40 bg-status-warning-surface text-status-warning-text',
-  media: 'border-brand-primary/40 bg-mx-indigo-50 text-status-success-text',
+  media: 'border-brand-primary/40 bg-brand-primary-subtle text-status-success-text',
   baixa: 'border-status-success/40 bg-status-success-surface text-status-success-text',
 }
 

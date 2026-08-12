@@ -63,7 +63,7 @@ export default function PDIPrint() {
         // lint-page-roots-ignore: documento para impressão. A largura é A4
         // (max-w-[210mm]) e o padding vertical existe só na visualização em
         // tela (print:py-0) — não é margem de página, é folha.
-        <div className="min-h-screen bg-mx-indigo-50 font-sans print:bg-background flex flex-col items-center py-10 print:py-0 overflow-x-hidden">
+        <div className="min-h-screen bg-brand-primary-subtle font-sans print:bg-background flex flex-col items-center py-10 print:py-0 overflow-x-hidden">
             
             {/* Action Bar (Not Printed) */}
             <div className="w-full max-w-[210mm] flex items-center justify-between mb-8 print:hidden px-4">

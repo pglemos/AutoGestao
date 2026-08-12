@@ -309,7 +309,7 @@ export function SideList({ title, items, className }: { title: string; items: st
       <div className="mt-mx-md space-y-mx-sm">
         {items.map((item, index) => (
           <div key={`${item}-${index}`} className="flex items-center gap-mx-sm">
-            <span className="flex h-mx-7 w-mx-7 shrink-0 items-center justify-center rounded-xl bg-mx-indigo-50 text-xs font-bold text-brand-primary">{index + 1}</span>
+            <span className="flex h-mx-7 w-mx-7 shrink-0 items-center justify-center rounded-xl bg-brand-primary-subtle text-xs font-bold text-brand-primary">{index + 1}</span>
             <Typography variant="p" className="text-sm font-bold">{item}</Typography>
           </div>
         ))}

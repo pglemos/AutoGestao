@@ -174,7 +174,7 @@ export function SistemaMxTab() {
             <Card className="border-none bg-white overflow-hidden">
                 <header className="flex items-center justify-between p-mx-md border-b border-border">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-12 h-mx-12 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center">
+                        <div className="w-mx-12 h-mx-12 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center">
                             <Activity size={20} />
                         </div>
                         <div>
@@ -279,7 +279,7 @@ function CriticalOpCard({ icon, label, desc, route, severity }: {
 }) {
     const sev = {
         warning: 'border-status-warning/20 bg-status-warning/5 text-status-warning',
-        info: 'border-mx-indigo-100 bg-mx-indigo-50 text-status-success-text',
+        info: 'border-brand-primary/20 bg-brand-primary-subtle text-status-success-text',
         error: 'border-status-error/20 bg-status-error/5 text-status-error',
     }
     return (

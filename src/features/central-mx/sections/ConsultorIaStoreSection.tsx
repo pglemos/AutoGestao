@@ -8,7 +8,7 @@ import { ConsultorIaChat } from './ConsultorIaChat'
 type ConsultorIaTone = 'brand' | 'info' | 'success'
 
 const toneClasses: Record<ConsultorIaTone, string> = {
-  brand: 'bg-mx-indigo-50 text-status-success-text border border-mx-indigo-100',
+  brand: 'bg-brand-primary-subtle text-status-success-text border border-brand-primary/20',
   info: 'bg-status-info-surface text-status-info-text border border-status-info/20',
   success: 'bg-status-success-surface text-status-success-text border border-status-success/20',
 }

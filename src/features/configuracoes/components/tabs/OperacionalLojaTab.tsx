@@ -293,7 +293,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                                 </div>
                             ))}
                         </div>
-                        <div className="mt-mx-md p-mx-md bg-mx-indigo-50 border border-mx-indigo-100 rounded-2xl flex items-start gap-mx-sm">
+                        <div className="mt-mx-md p-mx-md bg-brand-primary-subtle border border-brand-primary/20 rounded-2xl flex items-start gap-mx-sm">
                             <Info size={16} className="text-status-success-text shrink-0 mt-0.5" />
                             <Typography variant="tiny" tone="brand" className="leading-relaxed">
                                 Separe os e-mails por vírgula. Validação de sintaxe antes do disparo automático.

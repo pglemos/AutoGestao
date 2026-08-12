@@ -949,7 +949,7 @@ export default function ConsultoriaVisitaExecucao() {
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
                <Button className="h-mx-11 text-sm bg-white" variant="outline" onClick={() => window.print()} icon={<Printer className="w-mx-4 h-mx-4" />}>IMPRIMIR PDF</Button>
-               <Button className="h-mx-11 text-sm bg-mx-green-500 hover:bg-mx-green-600 text-white border-none" onClick={() => { const t = encodeURIComponent(generateReportText()); window.open(`https://wa.me/?text=${t}`) }} icon={<Share2 className="w-mx-4 h-mx-4" />}>Enviar WhatsApp</Button>
+               <Button className="h-mx-11 text-sm bg-brand-primary hover:bg-brand-primary text-white border-none" onClick={() => { const t = encodeURIComponent(generateReportText()); window.open(`https://wa.me/?text=${t}`) }} icon={<Share2 className="w-mx-4 h-mx-4" />}>Enviar WhatsApp</Button>
                <Button variant="secondary" className="h-mx-11 text-sm text-white border-none col-span-1 sm:col-span-2" onClick={handleDownloadPDF} icon={<Download className="w-mx-4 h-mx-4" />}>BAIXAR PDF OFICIAL (A4)</Button>
             </div>
          </div>

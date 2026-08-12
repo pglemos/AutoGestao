@@ -112,7 +112,7 @@ export function DREForm({
           <div key={sec.key} className="border border-border rounded-xl mb-mx-sm overflow-hidden">
             <button
               type="button"
-              className="w-full flex items-center justify-between px-mx-md py-mx-sm bg-mx-green-900 text-white hover:bg-mx-green-950 transition-colors"
+              className="w-full flex items-center justify-between px-mx-md py-mx-sm bg-brand-primary text-white hover:bg-brand-primary transition-colors"
               onClick={() => toggleSection(sec.key)}
             >
               <span className="font-bold text-sm uppercase tracking-wider">{sec.title}</span>

@@ -56,7 +56,7 @@ function ShortcutCard({ icon, label, desc, badge }: { icon: React.ReactNode; lab
     return (
         <Card className="p-mx-md border-none bg-white">
             <div className="flex items-start gap-mx-sm">
-                <div className="w-mx-12 h-mx-12 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center">
+                <div className="w-mx-12 h-mx-12 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center">
                     {icon}
                 </div>
                 <div className="flex-1 min-w-0">

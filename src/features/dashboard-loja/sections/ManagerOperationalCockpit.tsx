@@ -200,7 +200,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
               <FunnelSegmentRow key={row.label} label={row.label} tone={row.tone} stages={row.stages} />
             ))}
           </div>
-          <div className="mt-mx-lg flex items-center justify-between rounded-xl bg-mx-indigo-50 px-mx-md py-mx-sm">
+          <div className="mt-mx-lg flex items-center justify-between rounded-xl bg-brand-primary-subtle px-mx-md py-mx-sm">
             <Typography variant="tiny" tone="brand" className="">Total de Vendas: {formatInteger(data.funilData.vnd_total)}</Typography>
             <Typography variant="tiny" tone="brand" className="">Conversão geral</Typography>
             <Typography variant="h3" tone={data.funilData.tx_visita_vnd >= data.funnelBenchmarks.visitaVnd ? 'success' : 'error'}>{data.funilData.tx_visita_vnd}%</Typography>
@@ -596,7 +596,7 @@ function ProgressBar({ value, tone = 'brand', className }: { value: number; tone
 
 function toneBorder(tone: ManagerTone) {
   return {
-    brand: 'border-mx-indigo-100 bg-mx-indigo-50 text-status-success-text',
+    brand: 'border-brand-primary/20 bg-brand-primary-subtle text-status-success-text',
     success: 'border-status-success/20 bg-status-success-surface text-status-success-text',
     warning: 'border-status-warning/20 bg-status-warning-surface text-status-warning-text',
     danger: 'border-status-error/20 bg-status-error-surface text-status-error-text',
@@ -607,7 +607,7 @@ function toneBorder(tone: ManagerTone) {
 
 function toneSurface(tone: ManagerTone) {
   return {
-    brand: 'bg-mx-indigo-50 text-status-success-text',
+    brand: 'bg-brand-primary-subtle text-status-success-text',
     success: 'bg-status-success-surface text-status-success-text',
     warning: 'bg-status-warning-surface text-status-warning-text',
     danger: 'bg-status-error-surface text-status-error-text',

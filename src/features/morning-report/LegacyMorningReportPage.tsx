@@ -323,7 +323,7 @@ function AdminMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Target size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center shadow-none border border-brand-primary/20" aria-hidden="true"><Target size={24} /></div>
                             <Badge variant="brand" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">META REDE</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-5xl tabular-nums leading-none mb-3 tracking-tighter">{networkMetrics.totalGoal}</Typography>
@@ -363,7 +363,7 @@ function AdminMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-status-info-surface rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Users size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center shadow-none border border-brand-primary/20" aria-hidden="true"><Users size={24} /></div>
                             <Badge variant="outline" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">UNIDADES</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-5xl tabular-nums leading-none mb-3 tracking-tighter">{storeData.length}</Typography>
@@ -628,7 +628,7 @@ function StoreMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center shadow-none border border-mx-indigo-100" aria-hidden="true"><Target size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center shadow-none border border-brand-primary/20" aria-hidden="true"><Target size={24} /></div>
                             <Badge variant="brand" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">META MENSAL</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-6xl tabular-nums leading-none mb-3 tracking-tighter">{metrics.teamGoal}</Typography>
@@ -722,7 +722,7 @@ function StoreMorningReport() {
                     <Card className="p-mx-10 md:p-14 space-y-mx-10 border-none bg-white relative overflow-hidden group">
                         <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
                         <header className="flex items-center gap-mx-sm border-b border-border pb-8 relative z-10">
-                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-status-success-text flex items-center justify-center shadow-sm" aria-hidden="true"><Zap size={28} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center shadow-sm" aria-hidden="true"><Zap size={28} /></div>
                             <Typography variant="h3" className="tracking-tight">Foco do Dia</Typography>
                         </header>
                         <div className="space-y-mx-md relative z-10">

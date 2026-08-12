@@ -69,7 +69,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
   return (
     <Card className="p-mx-lg">
       <div className="flex items-start gap-mx-sm">
-        <div className="rounded-2xl bg-mx-indigo-50 p-mx-sm text-status-success-text">
+        <div className="rounded-2xl bg-brand-primary-subtle p-mx-sm text-status-success-text">
           <Gauge size={20} aria-hidden="true" />
         </div>
         <div className="flex-1 min-w-0">

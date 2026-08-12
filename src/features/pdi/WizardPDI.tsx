@@ -278,7 +278,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                         <Button variant="ghost" size="icon" onClick={onClose} className="rounded-mx-full w-mx-xl h-mx-xl bg-gray-50 hover:bg-border-default"><X size={24} /></Button>
                     </div>
                     {randomFrase && (
-                        <div className="bg-mx-indigo-50 border border-brand-primary/20 p-mx-sm rounded-2xl flex items-center gap-mx-sm">
+                        <div className="bg-brand-primary-subtle border border-brand-primary/20 p-mx-sm rounded-2xl flex items-center gap-mx-sm">
                             <Sparkles className="text-status-success-text shrink-0" size={20} />
                             <Typography variant="p" tone="brand" className="text-sm font-bold italic">{randomFrase}</Typography>
                         </div>
@@ -515,7 +515,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                         <select 
                                                             aria-label="Ação Recomendada"
                                                             onChange={e => { const np = [...form.plano_acao]; np[idx].descricao_acao = e.target.value; setForm({ ...form, plano_acao: np }) }}
-                                                            className="w-full p-mx-xs bg-mx-indigo-50 border border-brand-primary/20 rounded-xl text-xs font-bold text-status-success-text outline-none cursor-pointer"
+                                                            className="w-full p-mx-xs bg-brand-primary-subtle border border-brand-primary/20 rounded-xl text-xs font-bold text-status-success-text outline-none cursor-pointer"
                                                         >
                                                             <option value="">✨ Selecionar Ação Recomendada da MX...</option>
                                                             {suggestedActions[acao.competencia_id].map(sa => (

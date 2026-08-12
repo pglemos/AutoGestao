@@ -182,7 +182,7 @@ export function PerfilTab() {
                 </div>
             </Card>
 
-            <Card className="p-mx-lg border-none bg-mx-indigo-50 border border-mx-indigo-100">
+            <Card className="p-mx-lg border-none bg-brand-primary-subtle border border-brand-primary/20">
                 <div className="flex items-start gap-mx-md">
                     <Upload size={20} className="text-status-success-text shrink-0 mt-1" />
                     <div className="space-y-mx-xs">

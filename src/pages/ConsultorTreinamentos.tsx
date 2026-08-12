@@ -236,7 +236,7 @@ export default function ConsultorTreinamentos() {
                                             <Typography variant="caption" as="span">{String.fromCharCode(64 + j)}</Typography>
                                         </div>
                                     ))}
-                                    <div className="w-mx-lg h-mx-lg rounded-xl border border-border-subtle bg-mx-indigo-50 flex items-center justify-center text-status-success-text shadow-sm">
+                                    <div className="w-mx-lg h-mx-lg rounded-xl border border-border-subtle bg-brand-primary-subtle flex items-center justify-center text-status-success-text shadow-sm">
                                         <Typography variant="tiny" as="span">+12</Typography>
                                     </div>
                                 </div>

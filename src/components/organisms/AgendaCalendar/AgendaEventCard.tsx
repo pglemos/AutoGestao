@@ -47,7 +47,7 @@ export function AgendaEventCard({
         'group/event relative min-w-0 overflow-hidden rounded-xl border px-2 py-1 text-left shadow-sm transition-shadow outline-none',
         item.kind === 'event'
           ? 'border-status-info/20 bg-status-info-surface text-status-info-text'
-          : 'border-brand-primary/20 bg-mx-green-50 text-brand-secondary',
+          : 'border-brand-primary/20 bg-brand-primary-subtle text-brand-secondary',
         compact ? 'min-h-mx-6' : 'h-full min-h-mx-8',
         !compact && 'cursor-grab hover:z-10 hover:shadow-sm active:cursor-grabbing',
         ghost && 'opacity-60 shadow-sm ring-2 ring-brand-primary/40',

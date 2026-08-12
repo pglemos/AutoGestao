@@ -242,7 +242,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
 function ScoreCard({ tone, value }: { tone: string; value: string }) {
   const toneClass: Record<string, string> = {
     success: 'border-status-success/30 bg-status-success-surface text-status-success-text',
-    brand: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
+    brand: 'border-brand-primary/30 bg-brand-primary-subtle text-status-success-text',
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error-text',
     muted: 'border-border bg-gray-50 text-muted-foreground',
@@ -276,7 +276,7 @@ function KpiCard({ kpi }: { kpi: DepartamentoKpi }) {
             : 'danger'
   const toneClass: Record<string, string> = {
     success: 'border-status-success/30 bg-status-success-surface text-status-success-text',
-    brand: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
+    brand: 'border-brand-primary/30 bg-brand-primary-subtle text-status-success-text',
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error-text',
     muted: 'border-border bg-gray-50 text-muted-foreground',
@@ -313,7 +313,7 @@ function SectionBlock({
   return (
     <Card className="p-mx-md">
       <header className="mb-mx-sm flex items-center gap-mx-xs">
-        <div className="rounded-2xl bg-mx-indigo-50 p-mx-xs text-status-success-text">
+        <div className="rounded-2xl bg-brand-primary-subtle p-mx-xs text-status-success-text">
           <Icon size={18} aria-hidden="true" />
         </div>
         <Typography variant="h3" className="">

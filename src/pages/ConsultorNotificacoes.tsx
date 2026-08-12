@@ -122,7 +122,7 @@ export default function ConsultorNotificacoes() {
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Público Alvo (Segmentação)</Typography>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-sm">
-                                                <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'all' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'all' ? "bg-mx-indigo-50 border-brand-primary shadow-sm" : "bg-white border-border hover:border-brand-primary/20")}>
+                                                <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'all' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'all' ? "bg-brand-primary-subtle border-brand-primary shadow-sm" : "bg-white border-border hover:border-brand-primary/20")}>
                                                     <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'all' ? "bg-brand-primary text-white" : "bg-gray-50 text-muted-foreground group-hover:bg-white")}>
                                                         <Globe size={22} />
                                                     </div>
