@@ -30,7 +30,7 @@ function formatCurrency(raw) {
 function Field({ label, required, children, hint }) {
   return (
     <div>
-      <Label className="text-caption font-bold text-[#64748B] uppercase tracking-wider">
+      <Label className="text-caption font-bold text-muted-foreground uppercase tracking-wider">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </Label>
       {hint && <p className="text-caption text-muted-foreground mb-0.5">{hint}</p>}
@@ -739,7 +739,7 @@ export default function NovoRegistroModal({ open, onClose, closingDate, dailyClo
     <Dialog open={open} onOpenChange={v => { if (!v && !saving) handleClose(); }}>
       <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[#0F172A] font-bold text-h5 flex items-center gap-2">
+          <DialogTitle className="text-mx-navy font-bold text-h5 flex items-center gap-2">
             {tipo && (
               <button type="button" onClick={handleVoltar} className="p-1 rounded-lg hover:bg-muted transition-colors mr-1">
                 <ArrowLeft className="w-4 h-4 text-muted-foreground" />
@@ -773,12 +773,12 @@ export default function NovoRegistroModal({ open, onClose, closingDate, dailyClo
         </div>
 
         {buscando && <p className="text-caption text-muted-foreground mt-1">Buscando cliente…</p>}
-        {saveError && <p className="text-[12px] text-[#EF4444] font-semibold mt-3">{saveError}</p>}
+        {saveError && <p className="text-[12px] text-status-error font-semibold mt-3">{saveError}</p>}
 
         {tipo && (
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button type="button" onClick={handleClose} disabled={saving}
-              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors">
+              className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
             <button type="button" onClick={handleSave} disabled={!ok || saving}

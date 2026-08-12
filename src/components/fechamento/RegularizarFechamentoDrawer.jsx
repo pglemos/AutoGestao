@@ -54,7 +54,7 @@ function Badge({ label, className }) {
 function Field({ label, required, children }) {
   return (
     <div>
-      <Label className="text-caption font-bold text-[#64748B] uppercase tracking-wider">
+      <Label className="text-caption font-bold text-muted-foreground uppercase tracking-wider">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </Label>
       <div className="mt-1.5">{children}</div>
@@ -107,7 +107,7 @@ function MovimentoDia({ form, onChange }) {
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
       <div className="px-5 py-4 border-b border-border-subtle">
-        <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Movimento do Dia</h3>
+        <h3 className="text-[14px] font-bold text-mx-navy uppercase tracking-wide">Movimento do Dia</h3>
         <p className="text-[12px] text-muted-foreground mt-0.5">Informe os atendimentos realizados neste dia</p>
       </div>
       <div className="p-5 space-y-6">
@@ -245,7 +245,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
           <div>
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-status-info text-white text-caption font-bold flex items-center justify-center"><ShoppingCart className="w-3 h-3" /></div>
-              <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Cadastrar Venda / Agendamentos</h3>
+              <h3 className="text-[14px] font-bold text-mx-navy uppercase tracking-wide">Cadastrar Venda / Agendamentos</h3>
             </div>
             <p className="text-[12px] text-muted-foreground mt-0.5">Clientes são salvos na Carteira de Clientes (base única).</p>
           </div>
@@ -268,7 +268,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
                   <div key={c.id} className="flex items-center justify-between p-3 bg-surface-alt rounded-xl border border-border-subtle gap-3 flex-wrap">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div className="min-w-0">
-                        <p className="text-body-sm font-bold text-[#0F172A] truncate">{c.nome}</p>
+                        <p className="text-body-sm font-bold text-mx-navy truncate">{c.nome}</p>
                         <p className="text-caption text-muted-foreground truncate">{c.whatsapp} · {c.veiculo_interesse || "—"}</p>
                       </div>
                     </div>
@@ -293,7 +293,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
       <Dialog open={dialogOpen} onOpenChange={v => { if (!saving) setDialogOpen(v); }}>
         <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold text-h5">
+            <DialogTitle className="text-mx-navy font-bold text-h5">
               {editingCliente ? "Editar Cliente" : "Cadastrar Novo Cliente"}
             </DialogTitle>
             <p className="text-body-sm text-muted-foreground font-normal">Dados salvos diretamente na Carteira de Clientes.</p>
@@ -409,7 +409,7 @@ function ResumoDia({ form, clientes }) {
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
       <div className="px-5 py-4 border-b border-border-subtle">
-        <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Resumo do Dia</h3>
+        <h3 className="text-[14px] font-bold text-mx-navy uppercase tracking-wide">Resumo do Dia</h3>
       </div>
       <div className="grid grid-cols-2 sm:grid-cols-5 gap-0 divide-x divide-y sm:divide-y-0 divide-border-subtle">
         {stats.map(s => (
@@ -447,7 +447,7 @@ function DisciplinaBloco({ form, clientes }) {
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
       <div className="px-5 py-4 border-b border-border-subtle">
-        <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Disciplina — Fechamento Diário</h3>
+        <h3 className="text-[14px] font-bold text-mx-navy uppercase tracking-wide">Disciplina — Fechamento Diário</h3>
         <p className="text-[12px] text-muted-foreground mt-0.5">Estimativa com penalização de -10% por atraso</p>
       </div>
       <div className="p-5 flex items-center gap-6">
@@ -465,14 +465,14 @@ function DisciplinaBloco({ form, clientes }) {
         <div className="space-y-2 flex-1">
           <div className="flex justify-between text-body-sm">
             <span className="text-muted-foreground">Pontuação base</span>
-            <span className="font-bold text-[#0F172A]">{scoreCalc}%</span>
+            <span className="font-bold text-mx-navy">{scoreCalc}%</span>
           </div>
           <div className="flex justify-between text-body-sm">
             <span className="text-status-error-text font-medium">Penalização por atraso</span>
             <span className="font-bold text-status-error-text">-10%</span>
           </div>
           <div className="flex justify-between text-body-sm border-t border-border-subtle pt-2">
-            <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
+            <span className="font-bold text-mx-navy">Estimativa após aprovação</span>
             <span className={`font-bold text-body ${scoreColor}`}>{scoreFinal}%</span>
           </div>
           <div className="flex justify-between text-[12px]">
@@ -609,13 +609,13 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
 
       {/* Drawer */}
       <div className="fixed inset-0 z-50 flex items-stretch sm:items-start sm:justify-end pointer-events-none">
-        <div className="pointer-events-auto w-full sm:w-[720px] h-full bg-[#F8FAFC] flex flex-col shadow-2xl sm:rounded-l-2xl overflow-hidden">
+        <div className="pointer-events-auto w-full sm:w-[720px] h-full bg-surface-alt flex flex-col shadow-2xl sm:rounded-l-2xl overflow-hidden">
           {/* Header */}
           <div className="bg-white border-b border-border px-5 py-4 flex items-center gap-3 flex-shrink-0">
             <CalendarDays className="w-5 h-5 text-status-info-text flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>
+                <h2 className="text-[16px] font-bold text-mx-navy">Regularizar Fechamento</h2>
                 <span className="text-caption font-bold text-status-error-text bg-status-error-surface border border-status-error/30 px-2 py-0.5 rounded-full">Fechamento atrasado</span>
               </div>
               <p className="text-body-sm text-muted-foreground mt-0.5">
@@ -639,10 +639,10 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
                   <CheckCircle2 className="w-8 h-8 text-status-warning-text" />
                 </div>
                 <div>
-                  <p className="text-[18px] font-bold text-[#0F172A]">Regularização enviada!</p>
+                  <p className="text-[18px] font-bold text-mx-navy">Regularização enviada!</p>
                   <p className="text-body-sm text-muted-foreground mt-1 max-w-sm">O fechamento foi salvo e está aguardando aprovação do responsável. Ele só contará nos indicadores após a aprovação.</p>
                 </div>
-                <button onClick={onClose} className="px-8 py-3 rounded-xl bg-[#005BFF] text-white text-[14px] font-bold hover:bg-status-info transition-colors mt-2">
+                <button onClick={onClose} className="px-8 py-3 rounded-xl bg-status-info text-white text-[14px] font-bold hover:bg-status-info transition-colors mt-2">
                   Fechar
                 </button>
               </div>
@@ -689,7 +689,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
               <button onClick={onClose} className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
                 Cancelar
               </button>
-              <button onClick={() => setConfirmOpen(true)} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors shadow-sm">
+              <button onClick={() => setConfirmOpen(true)} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-status-info hover:bg-status-info text-white text-body-sm font-bold transition-colors shadow-sm">
                 <Send className="w-4 h-4" /> Enviar Regularização
               </button>
             </div>
@@ -701,7 +701,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
       <Dialog open={confirmOpen} onOpenChange={v => { if (!enviando) setConfirmOpen(v); }}>
         <DialogContent className="sm:max-w-sm z-[60]">
           <DialogHeader>
-            <DialogTitle className="font-bold text-[#0F172A]">Enviar regularização para aprovação?</DialogTitle>
+            <DialogTitle className="font-bold text-mx-navy">Enviar regularização para aprovação?</DialogTitle>
           </DialogHeader>
           <div className="bg-status-warning-surface border border-status-warning/30 rounded-xl p-4 mt-2">
             <p className="text-body-sm text-status-warning-text leading-relaxed">
@@ -712,7 +712,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
             <button onClick={() => setConfirmOpen(false)} disabled={enviando} className="flex-1 py-2.5 rounded-xl border border-border text-body-sm font-bold text-muted-foreground hover:bg-surface-alt transition-colors">
               Não, voltar
             </button>
-            <button onClick={handleEnviar} disabled={enviando} className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors">
+            <button onClick={handleEnviar} disabled={enviando} className="flex-1 py-2.5 rounded-xl bg-status-info hover:bg-status-info text-white text-body-sm font-bold transition-colors">
               {enviando ? "Enviando..." : "Sim, enviar"}
             </button>
           </div>

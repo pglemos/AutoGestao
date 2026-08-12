@@ -32,7 +32,7 @@ export default function PeriodFilter({ value, onChange, customStart, customEnd, 
       </button>
 
       {open && (
-        <div className={`absolute right-0 mt-2 w-56 rounded-xl border shadow-xl z-50 py-2 ${dark ? "bg-[#0B1D2E] border-white/10" : "bg-white border-border-subtle"}`}>
+        <div className={`absolute right-0 mt-2 w-56 rounded-xl border shadow-xl z-50 py-2 ${dark ? "bg-mx-navy border-white/10" : "bg-white border-border-subtle"}`}>
           {OPTIONS.map(opt => (
             <button
               key={opt.value}

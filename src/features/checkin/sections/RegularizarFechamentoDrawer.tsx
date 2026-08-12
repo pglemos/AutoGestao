@@ -147,7 +147,7 @@ export function RegularizarFechamentoDrawer({
   const weekday = dataObj.toLocaleDateString('pt-BR', { weekday: 'long' })
 
   const ringColor = disciplina.pontuacaoDisciplinaFinal >= 80 ? '#22C55E' : disciplina.pontuacaoDisciplinaFinal >= 50 ? '#F59E0B' : '#EF4444'
-  const ringColorClass = disciplina.pontuacaoDisciplinaFinal >= 80 ? 'text-[#22C55E]' : disciplina.pontuacaoDisciplinaFinal >= 50 ? 'text-[#F59E0B]' : 'text-[#EF4444]'
+  const ringColorClass = disciplina.pontuacaoDisciplinaFinal >= 80 ? 'text-status-success' : disciplina.pontuacaoDisciplinaFinal >= 50 ? 'text-status-warning-text' : 'text-status-error'
 
   const crmCtx = {
     clientesList,
@@ -183,13 +183,13 @@ export function RegularizarFechamentoDrawer({
         className="absolute inset-0 bg-surface-overlay/40 backdrop-blur-[2px]"
         onClick={onClose}
       />
-      <div className="relative z-10 flex w-full max-w-4xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-[#F8FAFC] shadow-2xl">
+      <div className="relative z-10 flex w-full max-w-4xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-surface-alt shadow-2xl">
           {/* Header */}
           <div className="flex flex-shrink-0 items-center gap-3 border-b border-border bg-white px-5 py-4">
             <CalendarDays className="h-5 w-5 shrink-0 text-status-info-text" />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>
+                <h2 className="text-[16px] font-bold text-mx-navy">Regularizar Fechamento</h2>
                 <span className="rounded-full border border-status-error/30 bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error-text">Fechamento atrasado</span>
               </div>
               <p className="mt-0.5 text-body-sm text-muted-foreground">
@@ -215,7 +215,7 @@ export function RegularizarFechamentoDrawer({
             {/* Movimento do Dia */}
  <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
               <div className="border-b border-border-subtle px-5 py-4">
-                <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Movimento do Dia</h3>
+                <h3 className="text-[14px] font-bold uppercase tracking-wide text-mx-navy">Movimento do Dia</h3>
                 <p className="mt-0.5 text-[12px] text-muted-foreground">Informe os atendimentos realizados neste dia</p>
               </div>
               <div className="space-y-4 p-5">
@@ -257,7 +257,7 @@ export function RegularizarFechamentoDrawer({
             {/* Resumo do Dia */}
  <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
               <div className="border-b border-border-subtle px-5 py-4">
-                <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Resumo do Dia</h3>
+                <h3 className="text-[14px] font-bold uppercase tracking-wide text-mx-navy">Resumo do Dia</h3>
               </div>
               <div className="grid grid-cols-2 divide-y divide-border-subtle sm:grid-cols-5 sm:divide-x sm:divide-y-0">
                 {[
@@ -278,7 +278,7 @@ export function RegularizarFechamentoDrawer({
             {/* Disciplina */}
  <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
               <div className="border-b border-border-subtle px-5 py-4">
-                <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Disciplina — Fechamento Diário</h3>
+                <h3 className="text-[14px] font-bold uppercase tracking-wide text-mx-navy">Disciplina — Fechamento Diário</h3>
                 <p className="mt-0.5 text-[12px] text-muted-foreground">Estimativa com penalização de -10% por atraso</p>
               </div>
               <div className="flex items-center gap-6 p-5">
@@ -298,14 +298,14 @@ export function RegularizarFechamentoDrawer({
                 <div className="flex-1 space-y-2">
                   <div className="flex justify-between text-body-sm">
                     <span className="text-muted-foreground">Pontuação base</span>
-                    <span className="font-bold text-[#0F172A]">{disciplina.pontuacaoDisciplinaBase}%</span>
+                    <span className="font-bold text-mx-navy">{disciplina.pontuacaoDisciplinaBase}%</span>
                   </div>
                   <div className="flex justify-between text-body-sm">
                     <span className="font-medium text-status-error-text">Penalização por atraso</span>
                     <span className="font-bold text-status-error-text">-10%</span>
                   </div>
                   <div className="flex justify-between border-t border-border-subtle pt-2 text-body-sm">
-                    <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
+                    <span className="font-bold text-mx-navy">Estimativa após aprovação</span>
                     <span className={`text-body font-bold ${ringColorClass}`}>{disciplina.pontuacaoDisciplinaFinal}%</span>
                   </div>
                   <div className="flex justify-between text-[12px]">
@@ -333,7 +333,7 @@ export function RegularizarFechamentoDrawer({
                 vnd_cart: effectiveSales.carteira,
                 vnd_net: effectiveSales.internet,
               })}
- className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-[#005BFF] px-5 py-2.5 text-center text-body-sm font-bold leading-snug text-white shadow-sm transition-colors hover:bg-status-info disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
+ className="inline-flex min-h-11 items-center justify-center gap-2 rounded-xl bg-status-info px-5 py-2.5 text-center text-body-sm font-bold leading-snug text-white shadow-sm transition-colors hover:bg-status-info disabled:cursor-not-allowed disabled:opacity-50 sm:px-6"
             >
               <Send className="h-4 w-4" /> {saving ? 'Enviando...' : 'Solicitar aprovação do gerente'}
             </button>

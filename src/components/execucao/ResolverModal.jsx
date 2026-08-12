@@ -130,11 +130,11 @@ export default function ResolverModal({ oportunidade, open, onClose, onResolvida
     <Dialog open={open} onOpenChange={v => { if (!saving) onClose(); }}>
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[#0F172A] font-bold text-h5">Registrar resultado</DialogTitle>
+          <DialogTitle className="text-mx-navy font-bold text-h5">Registrar resultado</DialogTitle>
         </DialogHeader>
 
         <div className="mt-1 space-y-1">
-          <p className="text-body-sm font-semibold text-[#0F172A]">{oportunidade.nome_cliente_snapshot || "—"}</p>
+          <p className="text-body-sm font-semibold text-mx-navy">{oportunidade.nome_cliente_snapshot || "—"}</p>
           <p className="text-[12px] text-muted-foreground">{oportunidade.tipo} · {oportunidade.descricao}</p>
           {oportunidade.veiculo_snapshot && <p className="text-[12px] text-muted-foreground">{oportunidade.veiculo_snapshot}</p>}
           <p className="text-caption text-muted-foreground">{moment(oportunidade.data_hora_execucao).format("DD/MM/YYYY HH:mm")}</p>
@@ -193,7 +193,7 @@ export default function ResolverModal({ oportunidade, open, onClose, onResolvida
             Cancelar
           </button>
           <button onClick={handleConfirmar} disabled={!podeConfirmar || saving}
-            className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors">
+            className="px-6 py-2.5 text-body-sm font-bold text-white bg-status-info hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors">
             {saving ? "Salvando..." : "Confirmar"}
           </button>
         </div>

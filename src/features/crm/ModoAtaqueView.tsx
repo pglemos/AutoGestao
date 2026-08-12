@@ -39,7 +39,7 @@ const COR_MAP: Record<ResultadoCard['cor'], string> = {
   slate: 'bg-white border-border hover:bg-surface-alt',
   blue: 'bg-white border-status-info/30 hover:bg-status-info-surface',
   orange: 'bg-white border-status-warning/30 hover:bg-status-warning-surface',
-  teal: 'bg-white border-[#005BFF]/20 hover:bg-status-info-surface',
+  teal: 'bg-white border-status-info/20 hover:bg-status-info-surface',
   yellow: 'bg-white border-status-warning/30 hover:bg-status-warning-surface',
 }
 
@@ -129,7 +129,7 @@ function OportunidadeCard({
 
   return (
     <div className="overflow-hidden rounded-3xl border border-border-subtle bg-white shadow-xl">
-      <div className="bg-gradient-to-br from-[#005BFF] to-status-info p-6 text-white">
+      <div className="bg-gradient-to-br from-status-info to-status-info p-6 text-white">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-xl font-bold">
             {iniciais}
@@ -177,7 +177,7 @@ function OportunidadeCard({
           </button>
         </div>
 
-        <Button onClick={onExecutar} className="h-14 w-full rounded-2xl bg-[#005BFF] text-base text-white shadow-lg shadow-blue-200 hover:bg-status-info">
+        <Button onClick={onExecutar} className="h-14 w-full rounded-2xl bg-status-info text-base text-white shadow-lg shadow-blue-200 hover:bg-status-info">
           <Zap className="h-5 w-5" /> Executar próximo passo
         </Button>
       </div>
@@ -280,7 +280,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
   if (concluido) {
     sessionStorage.removeItem(STORAGE_KEY)
     return (
-      <div className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC]">
+      <div className="fixed inset-0 z-[200] overflow-y-auto bg-surface-alt">
         <div className="mx-auto flex max-w-xl flex-col items-center gap-mx-md px-mx-md py-mx-xl text-center">
           <span className="grid h-16 w-16 place-items-center rounded-full bg-brand-primary-subtle text-status-success-text">
             <Trophy size={32} />
@@ -289,7 +289,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
             <Typography variant="h2">Nenhuma oportunidade ativa para atacar agora.</Typography>
           ) : (
             <div>
-              <p className="text-3xl font-bold text-[#031B3D]">🎉 Excelente!</p>
+              <p className="text-3xl font-bold text-mx-navy">🎉 Excelente!</p>
               <p className="mt-2 text-sm text-muted-foreground">Você concluiu todas as oportunidades prioritárias de hoje.</p>
             </div>
           )}
@@ -310,7 +310,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
           )}
           <div className="flex w-full max-w-sm flex-col gap-mx-xs">
             <Button variant="outline" className="w-full" onClick={onPlanoAtaque}>Ir para Plano de Ataque</Button>
-            <Button className="w-full bg-[#005BFF] text-white hover:bg-status-info" onClick={onSair}>Voltar para Carteira</Button>
+            <Button className="w-full bg-status-info text-white hover:bg-status-info" onClick={onSair}>Voltar para Carteira</Button>
             <button type="button" onClick={onSair} className="mt-1 text-xs text-muted-foreground hover:underline">Encerrar sessão</button>
           </div>
         </div>
@@ -319,11 +319,11 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
   }
 
   return (
-    <div className="fixed inset-0 z-[200] overflow-y-auto bg-[#F0F4FF]">
-      <div className="sticky top-0 z-10 bg-[#031B3D] px-mx-md py-mx-sm text-white shadow-lg">
+    <div className="fixed inset-0 z-[200] overflow-y-auto bg-status-info-surface">
+      <div className="sticky top-0 z-10 bg-mx-navy px-mx-md py-mx-sm text-white shadow-lg">
         <div className="mx-auto flex max-w-xl flex-wrap items-center gap-3 sm:flex-nowrap">
           <span className="flex shrink-0 items-center gap-2 text-sm font-bold tracking-wide">
-            <span className="grid h-7 w-7 place-items-center rounded-lg bg-[#005BFF]">
+            <span className="grid h-7 w-7 place-items-center rounded-lg bg-status-info">
               <Zap size={16} className="text-white" />
             </span>
             MODO ATAQUE
@@ -334,7 +334,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
               <span className="font-mono text-muted-foreground">{tempo}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-white/20">
-              <div className="h-full rounded-full bg-[#005BFF] transition-all duration-500" style={{ width: `${fila.length > 0 ? Math.round((concluidos / fila.length) * 100) : 0}%` }} />
+              <div className="h-full rounded-full bg-status-info transition-all duration-500" style={{ width: `${fila.length > 0 ? Math.round((concluidos / fila.length) * 100) : 0}%` }} />
             </div>
           </div>
           <Button variant="ghost" className="ml-auto shrink-0 text-white hover:bg-white/10" onClick={() => setPausarOpen(true)}>
@@ -357,7 +357,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
 
         {clienteAtual && executando && (
           <Card className="overflow-hidden p-0">
-            <div className="bg-gradient-to-br from-[#005BFF] to-status-info p-mx-lg text-white">
+            <div className="bg-gradient-to-br from-status-info to-status-info p-mx-lg text-white">
               <div className="flex items-center gap-mx-sm">
                 <span className="grid h-14 w-14 shrink-0 place-items-center rounded-2xl bg-white/20 text-xl font-bold">
                   {(clienteAtual.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
@@ -386,7 +386,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                       onClick={() => { setTom(t.id); setScriptEditado(null) }}
                       className={`rounded-xl border px-2.5 py-1 text-caption font-semibold transition-all ${
                         tom === t.id
-                          ? 'border-[#005BFF] bg-[#005BFF] text-white'
+                          ? 'border-status-info bg-status-info text-white'
                           : 'border-border bg-white text-muted-foreground hover:border-status-info/40 hover:text-status-info-text'
                       }`}
                     >
@@ -399,7 +399,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                   value={script}
                   onChange={event => setScriptEditado(event.target.value)}
                   rows={5}
-                  className="w-full resize-none rounded-xl border border-border bg-surface-alt p-mx-sm text-sm text-foreground outline-none focus:border-[#005BFF] focus:ring-4 focus:ring-blue-100"
+                  className="w-full resize-none rounded-xl border border-border bg-surface-alt p-mx-sm text-sm text-foreground outline-none focus:border-status-info focus:ring-4 focus:ring-blue-100"
                 />
               </div>
 
@@ -465,7 +465,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
             <Typography variant="h3">Pausar o Modo Ataque?</Typography>
             <Typography variant="p" tone="muted">Sua posição na fila é salva. Você continua de onde parou.</Typography>
             <div className="flex flex-col gap-mx-xs pt-mx-xs">
-              <Button className="bg-[#005BFF] text-white hover:bg-status-info" onClick={() => setPausarOpen(false)}>Continuar atacando</Button>
+              <Button className="bg-status-info text-white hover:bg-status-info" onClick={() => setPausarOpen(false)}>Continuar atacando</Button>
               <Button variant="outline" className="text-status-error-text border-status-error/30 hover:bg-status-error-surface" onClick={onSair}>Sair do Modo Ataque</Button>
             </div>
           </Card>

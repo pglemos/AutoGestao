@@ -300,9 +300,9 @@ export default function MovimentoDia({ dc, updateCounter, setCounter, clients = 
     <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
       <div className="px-6 py-4 border-b border-border-subtle flex items-center gap-3">
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
-          <span className="w-6 h-6 rounded-full bg-[#005BFF] text-white text-caption font-bold flex items-center justify-center flex-shrink-0">1</span>
+          <span className="w-6 h-6 rounded-full bg-status-info text-white text-caption font-bold flex items-center justify-center flex-shrink-0">1</span>
           <div>
-            <h2 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide leading-none">Movimento do Dia</h2>
+            <h2 className="text-[14px] font-bold text-mx-navy uppercase tracking-wide leading-none">Movimento do Dia</h2>
             <p className="text-[12px] text-muted-foreground mt-0.5 font-medium">Informe rapidamente o que aconteceu hoje em cada canal.</p>
           </div>
         </div>

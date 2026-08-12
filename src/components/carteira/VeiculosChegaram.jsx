@@ -97,7 +97,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay/50 px-4">
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4">
         <div className="flex items-center justify-between">
-          <p className="font-black text-[#031B3D]">Registrar veículo que chegou</p>
+          <p className="font-black text-mx-navy">Registrar veículo que chegou</p>
           <button onClick={onClose}><X className="w-5 h-5 text-muted-foreground" /></button>
         </div>
 
@@ -112,7 +112,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
               <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">{label}</p>
               <input
                 value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder}
-                className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+                className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
               />
             </div>
           ))}
@@ -144,14 +144,14 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
             <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Preço (opcional)</p>
             <input
               type="number" value={form.preco} onChange={e => set("preco", e.target.value)} placeholder="Ex: 120000"
-              className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+              className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
             />
           </div>
           <div>
             <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Data de entrada</p>
             <input
               type="date" value={form.data_entrada} onChange={e => set("data_entrada", e.target.value)}
-              className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+              className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
             />
           </div>
         </div>
@@ -161,14 +161,14 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
           <textarea
             value={form.observacao} onChange={e => set("observacao", e.target.value)} rows={2}
             placeholder="Ex: baixo km, único dono..."
-            className="w-full rounded-xl border border-border px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+            className="w-full rounded-xl border border-border px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-status-info"
           />
         </div>
 
         <div className="flex gap-2 pt-1">
           <Button variant="outline" onClick={onClose} className="flex-1 rounded-xl">Cancelar</Button>
           <Button onClick={salvar} disabled={!form.marca || !form.modelo || salvando}
-            className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white">
+            className="flex-1 rounded-xl bg-status-info hover:bg-status-info text-white">
             {salvando ? "Salvando..." : "Salvar veículo"}
           </Button>
         </div>
@@ -189,7 +189,7 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
           <Car className="w-5 h-5 text-status-info-text" />
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-sm font-black text-[#031B3D] truncate">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
+          <p className="text-sm font-black text-mx-navy truncate">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
           <p className="text-xs text-muted-foreground">{veiculo.ano}{veiculo.preco ? ` · R$ ${veiculo.preco.toLocaleString("pt-BR")}` : ""}</p>
           <p className="text-caption text-status-info-text font-semibold mt-0.5">{entradaLabel}</p>
         </div>
@@ -198,7 +198,7 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
           <Users className="w-3.5 h-3.5 text-muted-foreground" />
-          <span className={`text-xs font-bold ${compatíveis > 0 ? "text-[#031B3D]" : "text-muted-foreground"}`}>
+          <span className={`text-xs font-bold ${compatíveis > 0 ? "text-mx-navy" : "text-muted-foreground"}`}>
             {compatíveis} cliente{compatíveis !== 1 ? "s" : ""} compatível{compatíveis !== 1 ? "s" : ""}
           </span>
         </div>
@@ -207,7 +207,7 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
       <Button
         onClick={() => onClick(veiculo)}
         disabled={compatíveis === 0}
-        className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm gap-1.5 disabled:opacity-40"
+        className="w-full rounded-xl bg-status-info hover:bg-status-info text-white text-sm gap-1.5 disabled:opacity-40"
       >
         <Zap className="w-4 h-4" /> Iniciar ataque
       </Button>
@@ -245,7 +245,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
         <ArrowLeft className="w-4 h-4" /> Voltar aos veículos
       </button>
 
-      <div className="bg-gradient-to-r from-[#005BFF] to-status-info rounded-2xl p-5 text-white">
+      <div className="bg-gradient-to-r from-status-info to-status-info rounded-2xl p-5 text-white">
         <p className="text-caption font-bold text-blue-300 uppercase tracking-wider">Veículo que chegou</p>
         <p className="text-xl font-black mt-1">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
         <p className="text-sm text-blue-200">{veiculo.ano}{veiculo.preco ? ` · R$ ${veiculo.preco.toLocaleString("pt-BR")}` : ""}</p>
@@ -271,7 +271,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
                 <div className="w-9 h-9 rounded-full bg-status-info-surface flex items-center justify-center text-xs font-black text-status-info-text shrink-0">{iniciais}</div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <p className="text-sm font-semibold text-[#031B3D] truncate">{c.nome}</p>
+                    <p className="text-sm font-semibold text-mx-navy truncate">{c.nome}</p>
                     {temUrgente && (
                       <span className="text-caption font-bold px-2 py-0.5 rounded-full bg-status-warning-surface text-status-warning-text border border-status-warning/30 shrink-0">
                         Próximo passo urgente
@@ -285,7 +285,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
                 </div>
                 <div className="flex gap-1.5 shrink-0">
                   <button onClick={() => onExecutar(c, veiculo)}
-                    className="flex items-center gap-1 text-caption font-bold text-white bg-[#005BFF] hover:bg-status-info px-2.5 py-1.5 rounded-lg transition-colors">
+                    className="flex items-center gap-1 text-caption font-bold text-white bg-status-info hover:bg-status-info px-2.5 py-1.5 rounded-lg transition-colors">
                     <Zap className="w-3 h-3" /> Executar
                   </button>
                   <button onClick={() => onFicha(c.id)}
@@ -392,10 +392,10 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
     <div className="space-y-4">
       <div className="flex items-start justify-between gap-4">
         <div>
-          <h2 className="text-lg font-black text-[#031B3D]">Veículos que chegaram</h2>
+          <h2 className="text-lg font-black text-mx-navy">Veículos que chegaram</h2>
           <p className="text-sm text-muted-foreground mt-0.5">Encontre clientes da carteira interessados nos veículos recém-entrados.</p>
         </div>
-        <Button onClick={() => setModalOpen(true)} variant="outline" className="rounded-xl text-sm gap-1.5 border-[#005BFF] text-status-info-text hover:bg-status-info-surface whitespace-nowrap">
+        <Button onClick={() => setModalOpen(true)} variant="outline" className="rounded-xl text-sm gap-1.5 border-status-info text-status-info-text hover:bg-status-info-surface whitespace-nowrap">
           <Plus className="w-4 h-4" /> Registrar veículo
         </Button>
       </div>
@@ -414,7 +414,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
                 onClick={() => setFaixaPrecoAtiva(f.id)}
                 className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all ${
                   ativo
-                    ? "bg-[#005BFF] text-white shadow-sm"
+                    ? "bg-status-info text-white shadow-sm"
                     : "bg-surface-alt text-muted-foreground border border-border-subtle hover:bg-muted"
                 }`}
               >
@@ -427,7 +427,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
 
       {loading ? (
         <div className="flex justify-center py-8">
-          <div className="w-6 h-6 border-2 border-border border-t-[#005BFF] rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-border border-t-status-info rounded-full animate-spin" />
         </div>
       ) : veiculosFiltrados.length === 0 ? (
         <div className="bg-white border border-border-subtle rounded-2xl p-8 text-center">
@@ -445,7 +445,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
               Ver todas as faixas de preço
             </button>
           ) : (
-            <Button onClick={() => setModalOpen(true)} className="mt-4 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm gap-1.5">
+            <Button onClick={() => setModalOpen(true)} className="mt-4 rounded-xl bg-status-info hover:bg-status-info text-white text-sm gap-1.5">
               <Plus className="w-4 h-4" /> Registrar veículo que chegou
             </Button>
           )}

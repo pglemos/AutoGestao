@@ -60,7 +60,7 @@ export default function NovaFaixaModal({ open, onClose, onSaved, politicas, me }
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-h5 font-bold text-[#0F172A]">Nova Faixa de Comissão</DialogTitle>
+          <DialogTitle className="text-h5 font-bold text-mx-navy">Nova Faixa de Comissão</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>
@@ -102,7 +102,7 @@ export default function NovaFaixaModal({ open, onClose, onSaved, politicas, me }
           {erro && <p className="text-status-error-text text-[12px]">{erro}</p>}
           <div className="flex gap-2 pt-2">
             <Button variant="outline" className="flex-1" onClick={onClose} disabled={saving}>Cancelar</Button>
-            <Button className="flex-1 bg-[#00A896] hover:bg-[#008f7e] text-white" onClick={handleSave} disabled={saving}>
+            <Button className="flex-1 bg-status-success hover:bg-status-success text-white" onClick={handleSave} disabled={saving}>
               {saving ? "Salvando..." : "Salvar faixa"}
             </Button>
           </div>

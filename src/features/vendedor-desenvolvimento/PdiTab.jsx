@@ -301,7 +301,7 @@ export default function PDIPage({ hideHeader = false }) {
                     </td>
                     <td className="px-5 py-3.5 w-32">
                       <Progress value={a.progress || 0} className="h-2" />
-                      <p className="text-[10px] text-muted-foreground mt-1">{a.progress || 0}%</p>
+                      <p className="text-mx-micro text-muted-foreground mt-1">{a.progress || 0}%</p>
                     </td>
                   </tr>
                 ))}

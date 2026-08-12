@@ -28,7 +28,7 @@ function EtapaRow({ label, value, modalidades, isLast, onClickEtapa }) {
         onClick={onClickEtapa}
       >
         <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-0.5">{label}</p>
-        <p className="text-h2 font-bold text-[#0F172A] tabular-nums leading-none">{value}</p>
+        <p className="text-h2 font-bold text-mx-navy tabular-nums leading-none">{value}</p>
         {value === 0 && <p className="text-caption text-text-disabled mt-0.5">Sem registros</p>}
       </div>
       {modalidades && modalidades.length > 0 && (

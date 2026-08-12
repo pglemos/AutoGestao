@@ -48,7 +48,7 @@ export default function NovaBonificacaoModal({ open, onClose, onSaved, me }) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-h5 font-bold text-[#0F172A]">Nova Bonificação</DialogTitle>
+          <DialogTitle className="text-h5 font-bold text-mx-navy">Nova Bonificação</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>
@@ -125,7 +125,7 @@ export default function NovaBonificacaoModal({ open, onClose, onSaved, me }) {
           </div>
           <div className="flex gap-2 pt-2">
             <Button variant="outline" className="flex-1" onClick={onClose} disabled={saving}>Cancelar</Button>
-            <Button className="flex-1 bg-[#00A896] hover:bg-[#008f7e] text-white" onClick={handleSave} disabled={saving || !form.nome || !form.valor || !form.data_inicio}>
+            <Button className="flex-1 bg-status-success hover:bg-status-success text-white" onClick={handleSave} disabled={saving || !form.nome || !form.valor || !form.data_inicio}>
               {saving ? "Salvando..." : "Salvar bonificação"}
             </Button>
           </div>

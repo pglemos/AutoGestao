@@ -254,8 +254,8 @@ return (
 {/* Aviso discreto (após 12h01, sem liberação — Especificação Funcional §3.3) */}
       {showDiscreetPendingBanner && (
         <div className="hidden items-center gap-3 rounded-xl border border-status-warning/30 bg-status-warning-surface px-4 py-3 sm:flex">
-          <AlertTriangle size={16} className="shrink-0 text-[#F59E0B]" />
-          <p className="text-body-sm font-medium text-[#92400E]">
+          <AlertTriangle size={16} className="shrink-0 text-status-warning-text" />
+          <p className="text-body-sm font-medium text-status-warning-text">
             Existe um fechamento anterior pendente.{' '}
             <button type="button" onClick={onOpenHistory} className="font-semibold underline transition-colors hover:text-status-warning-text">
               Acesse o Histórico de Fechamentos
@@ -344,33 +344,33 @@ return (
       {/* Symmetric dashboard blocks: Resumo + Disciplina */}
 <section className="grid w-full max-w-full min-w-0 scroll-mt-6 gap-5 md:scroll-mt-48 xl:grid-cols-2">
         {/* ── RESUMO DO DIA ANTERIOR ── */}
-        <div className="rounded-2xl border border-[#dfe7f0] bg-white px-4 py-5 shadow-mx-lg flex flex-col justify-between gap-4 sm:px-6">
-<p className="text-[12px] font-extrabold uppercase tracking-widest text-[#334155]">{resumoTitle}</p>
+        <div className="rounded-2xl border border-border bg-white px-4 py-5 shadow-mx-lg flex flex-col justify-between gap-4 sm:px-6">
+<p className="text-[12px] font-extrabold uppercase tracking-widest text-muted-foreground">{resumoTitle}</p>
 
           {/* 4 metrics: 2x2 grid on mobile, single row with dividers from sm+ */}
-          <div className="grid grid-cols-2 gap-y-4 sm:flex sm:items-stretch sm:gap-y-0 sm:divide-x sm:divide-[#DFE0E1]">
+          <div className="grid grid-cols-2 gap-y-4 sm:flex sm:items-stretch sm:gap-y-0 sm:divide-x sm:divide-border">
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4 sm:first:pl-0">
               <span className="text-h2 font-bold leading-none tabular-nums text-status-info-text">{display.leads}</span>
-              <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Leads Recebidos</span>
+              <span className="mt-1 text-caption font-semibold text-muted-foreground text-center leading-tight">Leads Recebidos</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4">
               <span className="text-h2 font-bold leading-none tabular-nums text-status-info-text">{display.visitas}</span>
-              <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Atendimentos</span>
+              <span className="mt-1 text-caption font-semibold text-muted-foreground text-center leading-tight">Atendimentos</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4">
-              <span className="text-h2 font-bold leading-none tabular-nums text-[#F59E0B]">{display.agd}</span>
-              <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Agendamentos D+1</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-status-warning-text">{display.agd}</span>
+              <span className="mt-1 text-caption font-semibold text-muted-foreground text-center leading-tight">Agendamentos D+1</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4 sm:last:pr-0">
-              <span className="text-h2 font-bold leading-none tabular-nums text-[#EF4343]">{realSalesCount}</span>
-              <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Vendas Realizadas</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-status-error">{realSalesCount}</span>
+              <span className="mt-1 text-caption font-semibold text-muted-foreground text-center leading-tight">Vendas Realizadas</span>
             </div>
           </div>
 
           {/* Faturamento bar */}
-          <div className="flex items-center justify-between border-t border-[#DFE0E1] pt-3">
-            <span className="text-caption font-extrabold uppercase tracking-widest text-[#526B7A]">FATURAMENTO</span>
-            <span className="text-h3 font-bold tabular-nums text-[#22C55E]">{BRL(realFaturamento)}</span>
+          <div className="flex items-center justify-between border-t border-border pt-3">
+            <span className="text-caption font-extrabold uppercase tracking-widest text-muted-foreground">FATURAMENTO</span>
+            <span className="text-h3 font-bold tabular-nums text-status-success">{BRL(realFaturamento)}</span>
           </div>
         </div>
 
@@ -386,7 +386,7 @@ return (
           const trackColor = '#F7F8F8'
           const arcDeg = Math.round(disciplinePercent * 3.6)
           return (
-            <div className="rounded-2xl border border-[#dfe7f0] bg-white px-6 py-5 shadow-mx-lg flex items-center gap-5">
+            <div className="rounded-2xl border border-border bg-white px-6 py-5 shadow-mx-lg flex items-center gap-5">
               {/* Thick donut ring — matches reference proportions */}
               <div
                 className="relative shrink-0 rounded-full"
@@ -401,7 +401,7 @@ return (
                   className="absolute rounded-full bg-white flex flex-col items-center justify-center"
                   style={{ inset: 11 }}
                 >
-                  <span className="text-h3 font-bold leading-none tabular-nums text-[#071822]">
+                  <span className="text-h3 font-bold leading-none tabular-nums text-mx-navy">
                     {disciplinePercent}%
                   </span>
                 </div>
@@ -409,17 +409,17 @@ return (
 
               {/* Text column */}
               <div className="flex flex-1 min-w-0 flex-col gap-2">
-                <p className="text-caption font-extrabold uppercase tracking-widest text-[#526B7A]">
+                <p className="text-caption font-extrabold uppercase tracking-widest text-muted-foreground">
                   DISCIPLINA – FECHAMENTO DIÁRIO
                 </p>
 
                 {disciplineMessage && (
-                  <p className="text-[12px] font-medium text-[#526B7A] leading-snug">
+                  <p className="text-[12px] font-medium text-muted-foreground leading-snug">
                     {disciplineMessage}
                   </p>
                 )}
 
-                <p className="text-caption font-medium text-[#526B7A]">
+                <p className="text-caption font-medium text-muted-foreground">
                   70% base + {pontosExtras}% detalhamento
                 </p>
 
@@ -439,21 +439,21 @@ return (
 
       {disciplineModalOpen && (
 <div className="fixed inset-0 z-[140] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
-<div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(620px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
+<div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(620px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
             {/* Fixed Header */}
-            <header className="px-6 py-5 border-b border-[#DFE0E1] flex items-center justify-between bg-[#F7F8F8]">
+            <header className="px-6 py-5 border-b border-border flex items-center justify-between bg-surface-alt">
               <div>
-                <h2 className="text-lg font-extrabold text-[#071822] uppercase tracking-tight">
+                <h2 className="text-lg font-extrabold text-mx-navy uppercase tracking-tight">
                   ENTENDA SUA PONTUAÇÃO DE DISCIPLINA
                 </h2>
-                <p className="text-xs font-semibold text-[#526B7A] mt-1">
+                <p className="text-xs font-semibold text-muted-foreground mt-1">
                   A pontuação do Fechamento Diário mede o quanto você manteve sua rotina comercial organizada no dia.
                 </p>
               </div>
               <button
                 type="button"
                 onClick={() => setDisciplineModalOpen(false)}
-                className="grid h-8 w-8 place-items-center rounded-lg text-[#526B7A] hover:bg-[#F7F8F8] transition-colors"
+                className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:bg-surface-alt transition-colors"
                 aria-label="Fechar"
               >
                 <X size={18} />
@@ -461,7 +461,7 @@ return (
             </header>
 
             {/* Scrollable Content */}
-            <div className="p-6 overflow-y-auto space-y-6 text-xs leading-relaxed text-[#526B7A]">
+            <div className="p-6 overflow-y-auto space-y-6 text-xs leading-relaxed text-muted-foreground">
               
               {/* SECTION 1: Fechamento básico — 70% */}
               <div className="space-y-2">
@@ -488,13 +488,13 @@ return (
 
               {/* SECTION 2: Cadastro dos agendamentos — até +30% */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#22C55E] flex items-center gap-1.5 uppercase tracking-wider text-caption">
+                <h3 className="font-extrabold text-status-success flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <Award size={14} className="stroke-[2.5]" /> 2. Cadastro dos agendamentos — até +30%
                 </h3>
                 <p>
                   Os outros 30% são conquistados quando você detalha, no campo “Cadastrar Novo Cliente”, os agendamentos que informou no card “Agendamento para Amanhã”.
                 </p>
-                <p className="font-semibold text-[#071822]">
+                <p className="font-semibold text-mx-navy">
                   Exemplo:
                 </p>
                 <p>
@@ -515,7 +515,7 @@ return (
                   Se cadastrar corretamente os 2 clientes, sua pontuação será 100%. Se cadastrar apenas 1 dos 2 clientes, sua pontuação será 85%.
                 </p>
                 <div className="bg-brand-primary-subtle text-brand-primary-active font-bold p-2.5 rounded-lg border border-brand-primary/30 flex items-center gap-2">
-                  <CheckCircle2 size={14} className="text-[#22C55E]" />
+                  <CheckCircle2 size={14} className="text-status-success" />
                   <span>Detalhou todos os agendamentos para amanhã corretamente = 100%</span>
                 </div>
               </div>
@@ -533,21 +533,21 @@ return (
                   <li>O campo “Venda Realizada” deve estar como “Em Negociação”;</li>
                   <li>A data do agendamento deve ser para o dia seguinte ao fechamento, ou seja, para amanhã.</li>
                 </ul>
-                <p className="font-semibold text-[#071822]">
+                <p className="font-semibold text-mx-navy">
                   Exemplo:
                 </p>
                 <p>
                   Se o fechamento é do dia 22/05, o agendamento deve estar marcado para 23/05.
                 </p>
-                <div className="bg-[#FFF7E6] text-[#d97706] font-bold p-2.5 rounded-lg border border-[#fed7aa] flex items-center gap-2">
-                  <AlertCircle size={14} className="text-[#d97706]" />
+                <div className="bg-status-warning-surface text-status-warning-text font-bold p-2.5 rounded-lg border border-status-warning/30 flex items-center gap-2">
+                  <AlertCircle size={14} className="text-status-warning-text" />
                   <span>Para contar como agendamento, a venda deve estar como Em Negociação.</span>
                 </div>
               </div>
 
               {/* SECTION 4: Atenção à data do agendamento */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#F59E0B] flex items-center gap-1.5 uppercase tracking-wider text-caption">
+                <h3 className="font-extrabold text-status-warning-text flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <Clock size={14} /> 4. Atenção à data do agendamento
                 </h3>
                 <p>
@@ -556,7 +556,7 @@ return (
                 <p>
                   Se a data cadastrada for diferente de amanhã, o sistema considera apenas 50% daquele cadastro para a pontuação extra.
                 </p>
-                <p className="font-semibold text-[#071822]">
+                <p className="font-semibold text-mx-navy">
                   Exemplo:
                 </p>
                 <p>
@@ -577,11 +577,11 @@ return (
 
               {/* SECTION 5: Venda não é agendamento */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#22C55E] flex items-center gap-1.5 uppercase tracking-wider text-caption">
+                <h3 className="font-extrabold text-status-success flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <DollarSign size={14} /> 5. Venda não é agendamento
                 </h3>
                 <p>
-                  Se no cadastro do cliente você marcar: <strong className="text-[#071822]">“Venda Realizada = Sim”</strong>
+                  Se no cadastro do cliente você marcar: <strong className="text-mx-navy">“Venda Realizada = Sim”</strong>
                 </p>
                 <p>
                   O sistema entende que foi uma venda. Esse registro vai contar para:
@@ -592,7 +592,7 @@ return (
                   <li>Funil de vendas.</li>
                 </ul>
                 <p>
-                  Mas ele não conta como agendamento para amanhã. Para contar como agendamento, o campo deve estar como: <strong className="text-[#071822]">“Venda Realizada = Em Negociação”</strong>.
+                  Mas ele não conta como agendamento para amanhã. Para contar como agendamento, o campo deve estar como: <strong className="text-mx-navy">“Venda Realizada = Em Negociação”</strong>.
                 </p>
                 <div className="bg-status-info-surface text-status-info-text font-bold p-2.5 rounded-lg border border-status-info/30 flex items-center gap-2">
                   <Info size={14} />
@@ -602,7 +602,7 @@ return (
 
               {/* SECTION 6: Data operacional */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#64748B] flex items-center gap-1.5 uppercase tracking-wider text-caption">
+                <h3 className="font-extrabold text-muted-foreground flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <Clock size={14} /> 6. Data operacional
                 </h3>
                 <p>
@@ -611,37 +611,37 @@ return (
                 <p>
                   Depois de 12h, o dia atual fica disponível e qualquer pendência anterior segue para o Histórico. Nesta fase, o horário não bloqueia o envio.
                 </p>
-                <div className="bg-[#F7F8F8] text-[#526B7A] font-bold p-2.5 rounded-lg border border-[#DFE0E1] flex items-center gap-2">
+                <div className="bg-surface-alt text-muted-foreground font-bold p-2.5 rounded-lg border border-border flex items-center gap-2">
                   <LockKeyhole size={14} />
                   <span>Fechamento concluído é imutável; correções são solicitadas pelo Histórico.</span>
                 </div>
               </div>
 
               {/* SECTION 7: Resumo rápido */}
-              <div className="space-y-2 bg-[#F7F8F8] p-4 rounded-xl border border-[#DFE0E1]">
+              <div className="space-y-2 bg-surface-alt p-4 rounded-xl border border-border">
                 <h3 className="font-extrabold text-status-info-text uppercase tracking-wider text-caption">
                   7. Resumo rápido
                 </h3>
-                <ul className="space-y-1.5 font-semibold text-[#071822]">
-                  <li className="flex items-center gap-1.5"><Check size={12} className="text-[#22C55E] stroke-[3]" /> Preencheu os números do dia: 70%</li>
-                  <li className="flex items-center gap-1.5"><Check size={12} className="text-[#22C55E] stroke-[3]" /> Detalhou todos os agendamentos para amanhã corretamente: 100%</li>
-                  <li className="flex items-center gap-1.5"><Check size={12} className="text-[#22C55E] stroke-[3]" /> Detalhou apenas parte dos agendamentos: pontuação proporcional</li>
-                  <li className="flex items-center gap-1.5"><Check size={12} className="text-[#22C55E] stroke-[3]" /> Cadastrou com data diferente de amanhã: aquele cadastro vale apenas 50%</li>
-                  <li className="flex items-center gap-1.5"><Check size={12} className="text-[#22C55E] stroke-[3]" /> Cliente vendido conta como venda, não como agendamento</li>
-                  <li className="flex items-center gap-1.5"><Check size={12} className="text-[#22C55E] stroke-[3]" /> D-1 concluído libera D0 imediatamente; pendências antigas seguem para o Histórico</li>
+                <ul className="space-y-1.5 font-semibold text-mx-navy">
+                  <li className="flex items-center gap-1.5"><Check size={12} className="text-status-success stroke-[3]" /> Preencheu os números do dia: 70%</li>
+                  <li className="flex items-center gap-1.5"><Check size={12} className="text-status-success stroke-[3]" /> Detalhou todos os agendamentos para amanhã corretamente: 100%</li>
+                  <li className="flex items-center gap-1.5"><Check size={12} className="text-status-success stroke-[3]" /> Detalhou apenas parte dos agendamentos: pontuação proporcional</li>
+                  <li className="flex items-center gap-1.5"><Check size={12} className="text-status-success stroke-[3]" /> Cadastrou com data diferente de amanhã: aquele cadastro vale apenas 50%</li>
+                  <li className="flex items-center gap-1.5"><Check size={12} className="text-status-success stroke-[3]" /> Cliente vendido conta como venda, não como agendamento</li>
+                  <li className="flex items-center gap-1.5"><Check size={12} className="text-status-success stroke-[3]" /> D-1 concluído libera D0 imediatamente; pendências antigas seguem para o Histórico</li>
                 </ul>
-                <p className="italic text-[#475569] mt-3">
+                <p className="italic text-muted-foreground mt-3">
                   “Essa regra existe para manter seu funil atualizado e ajudar você, sua liderança e a loja a acompanharem melhor as oportunidades reais de venda.”
                 </p>
               </div>
             </div>
 
             {/* Fixed Footer */}
-            <footer className="px-6 py-4 border-t border-[#DFE0E1] flex justify-end bg-[#F7F8F8]">
+            <footer className="px-6 py-4 border-t border-border flex justify-end bg-surface-alt">
               <button
                 type="button"
                 onClick={() => setDisciplineModalOpen(false)}
-                className="h-10 px-6 font-bold bg-[#00A89D] hover:bg-[#00A89D] text-white rounded-xl shadow-sm transition-colors"
+                className="h-10 px-6 font-bold bg-status-success hover:bg-status-success text-white rounded-xl shadow-sm transition-colors"
               >
                 Entendi
               </button>
@@ -652,16 +652,16 @@ return (
 
 {confirmFinalizeModalOpen && (
 <div className="fixed inset-0 z-[140] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
-<div role="dialog" aria-modal="true" aria-labelledby="checkin-finalize-title" aria-describedby="checkin-finalize-description" className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
-<header className="border-b border-[#DFE0E1] bg-white px-6 py-5">
-<h2 id="checkin-finalize-title" className="text-h5 font-bold leading-snug tracking-tight text-[#0F172A]">
+<div role="dialog" aria-modal="true" aria-labelledby="checkin-finalize-title" aria-describedby="checkin-finalize-description" className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
+<header className="border-b border-border bg-white px-6 py-5">
+<h2 id="checkin-finalize-title" className="text-h5 font-bold leading-snug tracking-tight text-mx-navy">
 Confirma que não haverá mais registros {activeClosingContext.mainLabel}?
 </h2>
 </header>
-<div id="checkin-finalize-description" className="space-y-3 px-6 py-5 text-body-sm leading-relaxed text-[#64748B]">
+<div id="checkin-finalize-description" className="space-y-3 px-6 py-5 text-body-sm leading-relaxed text-muted-foreground">
 <p>
 Ao concluir, leads, atendimentos, vendas e demais informações referentes ao dia{' '}
-<strong className="text-[#0F172A]">{mainDateLabel}</strong> serão encerrados e não poderão mais ser alterados.
+<strong className="text-mx-navy">{mainDateLabel}</strong> serão encerrados e não poderão mais ser alterados.
 </p>
 <p>
 Novos registros comerciais continuam disponíveis 24 horas. Para corrigir números deste fechamento após a conclusão, use o Histórico.
@@ -675,9 +675,9 @@ Você informou {totalAgendamentosD1} Agendamentos D+1 e detalhou {creditosValido
 <div className="hidden">
               <p>
  Ao concluir, leads, atendimentos, vendas e demais informações referentes ao dia{' '}
-                <strong className="text-[#071822]">{creditosValidos}</strong>. O fechamento poderá ser finalizado normalmente, porém sua pontuação de disciplina será calculada apenas com os agendamentos detalhados.
+                <strong className="text-mx-navy">{creditosValidos}</strong>. O fechamento poderá ser finalizado normalmente, porém sua pontuação de disciplina será calculada apenas com os agendamentos detalhados.
               </p>
-              <ul className="space-y-1.5 font-semibold text-[#071822] bg-[#F7F8F8] rounded-xl border border-[#DFE0E1] p-4">
+              <ul className="space-y-1.5 font-semibold text-mx-navy bg-surface-alt rounded-xl border border-border p-4">
                 <li>Agendamentos D+1 informados: {totalAgendamentosD1}</li>
                 <li>Agendamentos D+1 detalhados: {creditosValidos}</li>
                 <li>Pontuação estimada de disciplina: {disciplinePercent}%</li>
@@ -687,7 +687,7 @@ Você informou {totalAgendamentosD1} Agendamentos D+1 e detalhou {creditosValido
               <button
                 type="button"
  onClick={() => setConfirmFinalizeModalOpen(false)}
- className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-body-sm font-semibold text-[#64748B] transition-colors hover:bg-surface-alt"
+ className="rounded-xl border border-border px-5 py-2.5 text-body-sm font-semibold text-muted-foreground transition-colors hover:bg-surface-alt"
               >
  Não, voltar
               </button>
@@ -695,7 +695,7 @@ Você informou {totalAgendamentosD1} Agendamentos D+1 e detalhou {creditosValido
                 type="button"
  onClick={handleFinalizarMesmoAssim}
 disabled={saving}
-className="rounded-xl bg-[#22C55E] px-6 py-2.5 text-body-sm font-bold text-white shadow-sm shadow-green-100 transition-colors hover:bg-brand-primary disabled:opacity-50"
+className="rounded-xl bg-status-success px-6 py-2.5 text-body-sm font-bold text-white shadow-sm shadow-green-100 transition-colors hover:bg-brand-primary disabled:opacity-50"
               >
  Sim, concluir
               </button>
@@ -705,7 +705,7 @@ className="rounded-xl bg-[#22C55E] px-6 py-2.5 text-body-sm font-bold text-white
       )}
 
       {/* Finalizar Fechamento */}
-      <div className="min-w-0 rounded-2xl border border-[#dfe7f0] bg-white px-6 py-5 shadow-mx-lg mt-5 space-y-4">
+      <div className="min-w-0 rounded-2xl border border-border bg-white px-6 py-5 shadow-mx-lg mt-5 space-y-4">
         {isPastDeadline && !fechamentoConcluido && (
           <div className="rounded-xl border border-status-warning/30 bg-status-warning-surface p-4 shadow-sm">
             <div className="flex items-start gap-2">
@@ -727,8 +727,8 @@ className="rounded-xl bg-[#22C55E] px-6 py-2.5 text-body-sm font-bold text-white
           className={cn(
             "inline-flex w-full shrink-0 items-center justify-center gap-2.5 rounded-full px-6 py-3.5 text-center text-[12px] font-extrabold uppercase tracking-[0.06em] text-white shadow-[0_8px_20px_rgba(22,163,74,0.28)] transition-all sm:w-auto sm:px-8 sm:text-body-sm sm:tracking-[0.08em]",
 saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoConcluido
-              ? "bg-[#526B7A] cursor-not-allowed shadow-none"
-              : "bg-[#00A89D] hover:bg-[#00A89D] active:scale-[0.98]"
+              ? "bg-muted-foreground cursor-not-allowed shadow-none"
+              : "bg-status-success hover:bg-status-success active:scale-[0.98]"
           )}
           >
             {saving ? (
@@ -740,13 +740,13 @@ saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoCon
           </button>
 
           {/* Warning text */}
-          <p className="text-body-sm font-semibold text-[#526B7A] leading-snug">
+          <p className="text-body-sm font-semibold text-muted-foreground leading-snug">
             {fechamentoConcluido ? (
               'Este fechamento já foi enviado. Para ajustes, use o histórico e solicite correção.'
             ) : (
               <>
                 Após finalizar, as informações serão enviadas para sua liderança e{' '}
-                <strong className="font-extrabold text-[#071822]">não poderão mais ser editadas.</strong>
+                <strong className="font-extrabold text-mx-navy">não poderão mais ser editadas.</strong>
               </>
             )}
           </p>
@@ -759,7 +759,7 @@ saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoCon
           <button
             type="button"
             onClick={onOpenHistory}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-status-info-text"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-status-info hover:text-status-info-text"
           >
             <History size={15} aria-hidden="true" />
             Histórico de Fechamentos
@@ -785,23 +785,23 @@ function MetricGroupCard({
   const label = labelParts.join('. ') || title
   const stepTone =
     step === '1'
-      ? 'bg-[#22C55E]'
+      ? 'bg-status-success'
       : step === '2'
-        ? 'bg-[#F59E0B]'
-        : 'bg-[#005BFF]'
+        ? 'bg-status-warning'
+        : 'bg-status-info'
 
   return (
-    <Card className="min-w-0 overflow-hidden rounded-mx-2xl border border-[#dfe7f0] bg-white p-0 shadow-mx-lg">
-      <header className="flex min-h-12 items-start gap-2 border-b border-[#DFE0E1] px-4 py-3 sm:items-center sm:px-5">
+    <Card className="min-w-0 overflow-hidden rounded-mx-2xl border border-border bg-white p-0 shadow-mx-lg">
+      <header className="flex min-h-12 items-start gap-2 border-b border-border px-4 py-3 sm:items-center sm:px-5">
         <span className={`grid h-5 w-5 shrink-0 place-items-center rounded-full text-caption font-bold text-white ${stepTone}`}>
           {step}
         </span>
-        <h2 className="min-w-0 text-[12px] font-extrabold uppercase leading-snug tracking-[0.06em] text-[#334155] sm:text-body-sm sm:tracking-[0.08em]">
+        <h2 className="min-w-0 text-[12px] font-extrabold uppercase leading-snug tracking-[0.06em] text-muted-foreground sm:text-body-sm sm:tracking-[0.08em]">
           {label}
         </h2>
         {tooltipText && <InfoTooltip text={tooltipText} />}
       </header>
-      <div className={`grid min-w-0 divide-y divide-[#DFE0E1] p-3 sm:divide-y-0 sm:divide-x sm:p-5 ${columns}`}>{children}</div>
+      <div className={`grid min-w-0 divide-y divide-border p-3 sm:divide-y-0 sm:divide-x sm:p-5 ${columns}`}>{children}</div>
     </Card>
   )
 }
@@ -841,10 +841,10 @@ function MetricCounterCard({
   const inputValue = numberDrafts[field] ?? String(displayValue)
   const iconToneClass =
     tone === 'success'
-      ? 'bg-[#22C55E] text-white'
+      ? 'bg-status-success text-white'
       : tone === 'info'
-        ? 'bg-[#005BFF] text-white'
-        : 'bg-[#F59E0B] text-white'
+        ? 'bg-status-info text-white'
+        : 'bg-status-warning text-white'
 
   const setNext = (next: number) => {
     if (disabled) return
@@ -884,15 +884,15 @@ function MetricCounterCard({
     <div
       className={cn(
     "relative flex min-h-[124px] min-w-0 flex-col items-center justify-center gap-2 bg-white px-2 py-4 text-center sm:px-3",
-        fieldErrors[field] && "ring-2 ring-[#EF4343]/20 rounded-xl"
+        fieldErrors[field] && "ring-2 ring-status-error/20 rounded-xl"
       )}
     >
       <div className="flex items-center gap-1">
-        <span className="text-body-sm font-bold text-[#526B7A]">
+        <span className="text-body-sm font-bold text-muted-foreground">
           {label}
         </span>
         {crmBadge && (
-          <span className="inline-flex items-center justify-center rounded-full bg-[#00A89D]/10 px-1.5 py-0.5 text-caption font-bold text-[#00A89D] border border-[#00A89D]/20">
+          <span className="inline-flex items-center justify-center rounded-full bg-status-success/10 px-1.5 py-0.5 text-caption font-bold text-status-success border border-status-success/20">
             CRM
           </span>
         )}
@@ -915,29 +915,29 @@ function MetricCounterCard({
         onBlur={handleBlur}
         onWheel={handleWheel}
         className="
-          h-11 w-20 rounded-xl border border-[#DFE0E1] bg-[#F7F8F8] text-center
-          text-h3 font-extrabold leading-none text-[#071822]
+          h-11 w-20 rounded-xl border border-border bg-surface-alt text-center
+          text-h3 font-extrabold leading-none text-mx-navy
           outline-none tabular-nums cursor-text transition-all
           [appearance:textfield]
           [&::-webkit-inner-spin-button]:appearance-none
           [&::-webkit-outer-spin-button]:appearance-none
-          hover:border-[#00A89D]/30 hover:bg-[#F7F8F8]
-          focus:border-[#00A89D] focus:bg-white focus:ring-4 focus:ring-[#00A89D]/10
+          hover:border-status-success/30 hover:bg-surface-alt
+          focus:border-status-success focus:bg-white focus:ring-4 focus:ring-status-success/10
         "
       />
 
-      <div className="mt-1 grid h-8 w-full max-w-[120px] grid-cols-[28px_minmax(0,1fr)_28px] overflow-hidden rounded-lg border border-[#DFE0E1] bg-white shadow-sm transition-all focus-within:border-[#00A89D]/40 focus-within:ring-2 focus-within:ring-[#00A89D]/20">
+      <div className="mt-1 grid h-8 w-full max-w-[120px] grid-cols-[28px_minmax(0,1fr)_28px] overflow-hidden rounded-lg border border-border bg-white shadow-sm transition-all focus-within:border-status-success/40 focus-within:ring-2 focus-within:ring-status-success/20">
         <button
           type="button"
           aria-label={`Diminuir ${label}`}
           disabled={disabled || (Number(form[field]) <= 0 && displayValue <= 0)}
           onClick={() => setNext(displayValue - 1)}
-          className="grid h-full w-full place-items-center bg-[#F7F8F8] text-[#526B7A] hover:bg-[#EF4343]/10 hover:text-[#EF4343] disabled:opacity-40 border-r border-[#DFE0E1] transition-colors"
+          className="grid h-full w-full place-items-center bg-surface-alt text-muted-foreground hover:bg-status-error/10 hover:text-status-error disabled:opacity-40 border-r border-border transition-colors"
         >
           <Minus size={13} />
         </button>
 
-        <span className="grid place-items-center text-[14px] font-extrabold tabular-nums text-[#071822] bg-[#F7F8F8]">
+        <span className="grid place-items-center text-[14px] font-extrabold tabular-nums text-mx-navy bg-surface-alt">
           {displayValue}
         </span>
 
@@ -946,7 +946,7 @@ function MetricCounterCard({
           aria-label={`Aumentar ${label}`}
           disabled={disabled || displayValue >= CHECKIN_MAX_INPUT_VALUE}
           onClick={() => setNext(displayValue + 1)}
-          className="grid h-full w-full place-items-center bg-[#F7F8F8] text-[#526B7A] hover:bg-[#00A89D]/10 hover:text-[#00A89D] disabled:opacity-40 border-l border-[#DFE0E1] transition-colors"
+          className="grid h-full w-full place-items-center bg-surface-alt text-muted-foreground hover:bg-status-success/10 hover:text-status-success disabled:opacity-40 border-l border-border transition-colors"
         >
           <Plus size={13} />
         </button>
@@ -974,17 +974,17 @@ function ResumoItem({
 }) {
   const iconClass =
     tone === 'success'
-      ? 'bg-[#ecfdf5] text-[#00A89D] border border-[#bbf7d0]'
+      ? 'bg-status-success-surface text-status-success border border-status-success/30'
       : tone === 'info'
-        ? 'bg-[#E8F3F2] text-[#00A89D] border border-[#bfdbfe]'
-        : 'bg-[#FFF7E6] text-[#F59F0A] border border-[#FFF7E6]'
+        ? 'bg-surface-alt text-status-success border border-status-info/30'
+        : 'bg-status-warning-surface text-status-warning-text border border-status-warning/20'
 
   return (
-    <div className="grid min-h-[88px] place-items-center rounded-xl border border-[#DFE0E1] bg-white p-3 text-center shadow-sm">
-      <span className="text-caption font-bold text-[#526B7A] uppercase tracking-wider">
+    <div className="grid min-h-[88px] place-items-center rounded-xl border border-border bg-white p-3 text-center shadow-sm">
+      <span className="text-caption font-bold text-muted-foreground uppercase tracking-wider">
         {label}
       </span>
-      <span className={`max-w-full font-extrabold text-[#071822] tabular-nums ${value.length > 7 ? 'text-xs' : 'text-h5'}`}>
+      <span className={`max-w-full font-extrabold text-mx-navy tabular-nums ${value.length > 7 ? 'text-xs' : 'text-h5'}`}>
         {value}
       </span>
       <span className={cn("grid h-7 w-7 place-items-center rounded-full", iconClass)}>

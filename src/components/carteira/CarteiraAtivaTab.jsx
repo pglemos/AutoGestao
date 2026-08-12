@@ -121,7 +121,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
             <div className="w-9 h-9 rounded-full bg-status-info-surface flex items-center justify-center text-xs font-black text-status-info-text shrink-0">{iniciais}</div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-bold text-[#031B3D] truncate">{cliente.nome}</p>
+              <p className="text-sm font-bold text-mx-navy truncate">{cliente.nome}</p>
               <p className="text-caption text-muted-foreground truncate">{canal} · {cliente.veiculo_interesse || "Sem veículo"}</p>
             </div>
           </div>
@@ -137,7 +137,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           </div>
           <div className="bg-status-info-surface rounded-xl px-2.5 py-2">
             <p className="text-caption text-status-info-text font-bold uppercase tracking-wide">Mentor recomenda</p>
-            <p className="text-caption font-semibold text-[#031B3D] mt-0.5 leading-snug">{proximoPasso}</p>
+            <p className="text-caption font-semibold text-mx-navy mt-0.5 leading-snug">{proximoPasso}</p>
           </div>
         </div>
         <p className="text-caption text-muted-foreground leading-snug italic">{explicacao}</p>
@@ -145,7 +145,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
         <div className="flex gap-2">
           {!encerradoSemVenda && (
           <button onClick={() => onExecutar(cliente)}
-            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#005BFF] hover:bg-status-info px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
+            className="flex items-center gap-1.5 text-xs font-bold text-white bg-status-info hover:bg-status-info px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
             <Zap className="w-3.5 h-3.5" /> Executar
           </button>
           )}
@@ -161,7 +161,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
         <div className="flex items-center gap-3 px-4 py-3.5 w-52 shrink-0">
           <div className="w-10 h-10 rounded-full bg-status-info-surface flex items-center justify-center text-sm font-black text-status-info-text shrink-0">{iniciais}</div>
           <div className="min-w-0">
-            <p className="text-sm font-bold text-[#031B3D] truncate">{cliente.nome}</p>
+            <p className="text-sm font-bold text-mx-navy truncate">{cliente.nome}</p>
             <p className="text-caption text-muted-foreground truncate">{canal}</p>
             <p className="text-caption text-muted-foreground truncate">{cliente.veiculo_interesse || "Sem veículo"}</p>
           </div>
@@ -184,14 +184,14 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           </div>
           <div>
             <p className="text-caption text-status-info-text font-bold uppercase tracking-wide">Mentor recomenda</p>
-            <p className="text-caption font-bold text-[#031B3D] leading-snug mt-0.5">{proximoPasso}</p>
+            <p className="text-caption font-bold text-mx-navy leading-snug mt-0.5">{proximoPasso}</p>
           </div>
           <p className="text-caption text-muted-foreground italic leading-snug">{explicacao}</p>
         </div>
         <div className="flex flex-col gap-1.5 px-4 py-3.5 shrink-0 w-40 justify-center">
           {!encerradoSemVenda && (
           <button onClick={() => onExecutar(cliente)}
-            className="flex items-center gap-1.5 text-xs font-bold text-white bg-[#005BFF] hover:bg-status-info px-3 py-2 rounded-xl transition-colors justify-center">
+            className="flex items-center gap-1.5 text-xs font-bold text-white bg-status-info hover:bg-status-info px-3 py-2 rounded-xl transition-colors justify-center">
             <Zap className="w-3.5 h-3.5" /> Executar próximo passo
           </button>
           )}
@@ -230,7 +230,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
 
   function chipClass(ativo) {
     return `text-caption font-semibold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
-      ativo ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white text-muted-foreground border-border hover:border-status-info/40"
+      ativo ? "bg-status-info text-white border-status-info" : "bg-white text-muted-foreground border-border hover:border-status-info/40"
     }`;
   }
 
@@ -239,7 +239,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
       <div className="flex-1 bg-surface-overlay/30" onClick={onFechar} />
       <div className="w-80 bg-white shadow-2xl overflow-y-auto flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-border-subtle">
-          <p className="font-black text-[#031B3D]">Filtros</p>
+          <p className="font-black text-mx-navy">Filtros</p>
           <button onClick={onFechar}><X className="w-5 h-5 text-muted-foreground" /></button>
         </div>
 
@@ -250,7 +250,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
               value={local.veiculo || ""}
               onChange={e => set("veiculo", e.target.value)}
               placeholder="Ex: HR-V, Corolla..."
-              className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+              className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
             />
           </div>
 
@@ -293,7 +293,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
 
         <div className="px-5 py-4 border-t border-border-subtle flex gap-2">
           <Button variant="outline" onClick={() => { setLocal({}); onAplicar({}); }} className="flex-1 rounded-xl text-sm">Limpar</Button>
-          <Button onClick={() => onAplicar(local)} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm">Aplicar filtros</Button>
+          <Button onClick={() => onAplicar(local)} className="flex-1 rounded-xl bg-status-info hover:bg-status-info text-white text-sm">Aplicar filtros</Button>
         </div>
       </div>
     </div>
@@ -446,19 +446,19 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
       {/* Header */}
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
-          <h1 className="text-2xl font-black text-[#031B3D]">Mentor Comercial</h1>
+          <h1 className="text-2xl font-black text-mx-navy">Mentor Comercial</h1>
           <p className="text-sm text-muted-foreground mt-1">Sua agenda comercial de hoje. Execute e registre resultados.</p>
         </div>
         <div className="flex gap-2 flex-wrap">
           <div className="relative">
             <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
             <input value={busca} onChange={e => setBusca(e.target.value)} placeholder="Buscar cliente..."
-              className="pl-9 pr-3 h-9 rounded-xl border border-border bg-white text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF] w-44" />
+              className="pl-9 pr-3 h-9 rounded-xl border border-border bg-white text-sm focus:outline-none focus:ring-1 focus:ring-status-info w-44" />
           </div>
           <button
             onClick={() => setFiltrosPanelOpen(true)}
             className={`flex items-center gap-1.5 h-9 px-3.5 rounded-xl border text-sm font-semibold transition-all ${
-              temFiltrosAtivos ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white border-border text-muted-foreground hover:border-status-info/40"
+              temFiltrosAtivos ? "bg-status-info text-white border-status-info" : "bg-white border-border text-muted-foreground hover:border-status-info/40"
             }`}
           >
             <SlidersHorizontal className="w-4 h-4" /> Filtros
@@ -473,8 +473,8 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
           const ativo = cardAtivo === card.id;
           return (
             <button key={card.id} onClick={() => setCardAtivo(card.id)}
-              className={`text-left p-3.5 rounded-2xl border transition-all ${ativo ? "border-[#005BFF] bg-status-info-surface shadow-sm" : "border-border-subtle bg-white hover:border-status-info/20 hover:bg-status-info-surface/30"}`}>
-              <p className={`text-2xl font-black mb-0.5 ${ativo ? "text-status-info-text" : "text-[#031B3D]"}`}>{count}</p>
+              className={`text-left p-3.5 rounded-2xl border transition-all ${ativo ? "border-status-info bg-status-info-surface shadow-sm" : "border-border-subtle bg-white hover:border-status-info/20 hover:bg-status-info-surface/30"}`}>
+              <p className={`text-2xl font-black mb-0.5 ${ativo ? "text-status-info-text" : "text-mx-navy"}`}>{count}</p>
               <p className={`text-xs font-bold leading-snug ${ativo ? "text-status-info-text" : "text-muted-foreground"}`}>{card.label}</p>
               <p className="text-caption text-muted-foreground mt-0.5">{card.sublabel}</p>
             </button>

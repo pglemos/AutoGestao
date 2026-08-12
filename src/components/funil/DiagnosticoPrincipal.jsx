@@ -60,7 +60,7 @@ const COR_MAP = {
   blue: {
     bg: "bg-status-info-surface border-status-info/30",
     icon: "bg-status-info-surface text-status-info-text",
-    btn: "bg-[#005BFF] hover:bg-status-info text-white",
+    btn: "bg-status-info hover:bg-status-info text-white",
     titulo: "text-status-info-text",
     sub: "text-status-info-text",
     label: "text-status-info-text bg-status-info-surface",

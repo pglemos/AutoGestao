@@ -49,7 +49,7 @@ export default function NovaPremiacaoModal({ open, onClose, onSaved, politicas, 
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-h5 font-bold text-[#0F172A]">Nova Premiação</DialogTitle>
+          <DialogTitle className="text-h5 font-bold text-mx-navy">Nova Premiação</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>
@@ -89,7 +89,7 @@ export default function NovaPremiacaoModal({ open, onClose, onSaved, politicas, 
           </div>
           <div className="flex gap-2 pt-2">
             <Button variant="outline" className="flex-1" onClick={onClose} disabled={saving}>Cancelar</Button>
-            <Button className="flex-1 bg-[#00A896] hover:bg-[#008f7e] text-white" onClick={handleSave} disabled={saving || !form.politica_id || !form.quantidade_vendas_necessarias || !form.valor_premio}>
+            <Button className="flex-1 bg-status-success hover:bg-status-success text-white" onClick={handleSave} disabled={saving || !form.politica_id || !form.quantidade_vendas_necessarias || !form.valor_premio}>
               {saving ? "Salvando..." : "Salvar premiação"}
             </Button>
           </div>

@@ -144,7 +144,7 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
             </Button>
             {waUrl && (
               <a href={waUrl} target="_blank" rel="noopener noreferrer" className="flex-1" onClick={onWhatsAppClick}>
-                <Button className="w-full rounded-xl bg-[#25D366] hover:bg-brand-primary text-white gap-2 text-xs">
+                <Button className="w-full rounded-xl bg-status-success hover:bg-brand-primary text-white gap-2 text-xs">
                   <MessageCircle className="w-3.5 h-3.5" /> WhatsApp
                 </Button>
               </a>

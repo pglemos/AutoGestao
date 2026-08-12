@@ -648,7 +648,7 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
                 <ArrowLeft className="h-4 w-4 text-muted-foreground" />
               </button>
             )}
-            <Typography variant="h3" className="text-h5 text-[#0F172A]">{tipo ? TITULO[tipo] : 'Novo Registro'}</Typography>
+            <Typography variant="h3" className="text-h5 text-mx-navy">{tipo ? TITULO[tipo] : 'Novo Registro'}</Typography>
           </div>
           <button type="button" onClick={handleClose} aria-label="Fechar" className="rounded-lg p-1 hover:bg-muted">
             <X className="h-4 w-4 text-muted-foreground" />
@@ -670,7 +670,7 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
 
         {tipo && (
           <div className="mt-5 flex items-center justify-end gap-3 border-t border-border-subtle pt-4">
-            <button type="button" onClick={handleClose} disabled={saving} className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-body-sm font-semibold text-[#64748B] transition-colors hover:bg-surface-alt">
+            <button type="button" onClick={handleClose} disabled={saving} className="rounded-xl border border-border px-5 py-2.5 text-body-sm font-semibold text-muted-foreground transition-colors hover:bg-surface-alt">
               Cancelar
             </button>
             <Button type="button" onClick={handleSave} disabled={!ok || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white hover:bg-status-info disabled:opacity-50 shadow-[var(--mx-button-shadow)]">

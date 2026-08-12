@@ -116,7 +116,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
     <Dialog open={open} onOpenChange={v => { if (!saving) handleClose(); }}>
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[#0F172A] font-bold text-h5">Nova atividade</DialogTitle>
+          <DialogTitle className="text-mx-navy font-bold text-h5">Nova atividade</DialogTitle>
         </DialogHeader>
 
         {step === "tipo" && (
@@ -124,7 +124,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
             <p className="text-body-sm text-muted-foreground mb-3">Selecione o tipo de atividade comercial:</p>
             {TIPOS.map(t => (
               <button key={t} onClick={() => handleEscolherTipo(t)}
-                className="w-full text-left px-4 py-3 rounded-xl border border-border hover:border-[#005BFF] hover:bg-status-info-surface text-body-sm font-semibold text-[#0F172A] transition-colors">
+                className="w-full text-left px-4 py-3 rounded-xl border border-border hover:border-status-info hover:bg-status-info-surface text-body-sm font-semibold text-mx-navy transition-colors">
                 {t}
               </button>
             ))}
@@ -150,7 +150,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
                   className="flex-1"
                 />
                 <button onClick={buscarCliente}
-                  className="px-3 py-2 rounded-xl bg-[#005BFF] text-white hover:bg-status-info transition-colors">
+                  className="px-3 py-2 rounded-xl bg-status-info text-white hover:bg-status-info transition-colors">
                   <Search className="w-4 h-4" />
                 </button>
               </div>
@@ -228,7 +228,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
                 Cancelar
               </button>
               <button onClick={handleSalvar} disabled={!podesSalvar || saving}
-                className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors">
+                className="px-6 py-2.5 text-body-sm font-bold text-white bg-status-info hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors">
                 {saving ? "Salvando..." : "Salvar atividade"}
               </button>
             </div>

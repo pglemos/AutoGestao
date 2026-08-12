@@ -140,13 +140,13 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
     <Dialog open={open} onOpenChange={v => { if (!v) onClose(); }}>
       <DialogContent className="max-w-md rounded-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-[#031B3D] font-black">Alterar próximo passo</DialogTitle>
+          <DialogTitle className="text-mx-navy font-black">Alterar próximo passo</DialogTitle>
           <p className="text-xs text-muted-foreground mt-1">Defina o que precisa acontecer para esta oportunidade evoluir.</p>
         </DialogHeader>
 
         {/* Info do cliente */}
         <div className="bg-surface-alt rounded-xl px-3 py-2.5 space-y-0.5">
-          <p className="text-sm font-bold text-[#031B3D]">{cliente.nome}</p>
+          <p className="text-sm font-bold text-mx-navy">{cliente.nome}</p>
           {cliente.veiculo_interesse && <p className="text-xs text-muted-foreground">{cliente.veiculo_interesse}</p>}
           <p className="text-xs text-muted-foreground">{situacao}</p>
           {cliente.proximo_passo && (
@@ -168,7 +168,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
                   onClick={() => setPasso(s)}
                   className={`text-xs font-semibold px-3 py-1.5 rounded-xl border transition-all ${
                     passo === s
-                      ? "bg-[#005BFF] text-white border-[#005BFF]"
+                      ? "bg-status-info text-white border-status-info"
                       : "bg-status-info-surface text-status-info-text border-status-info/30 hover:bg-status-info-surface"
                   }`}
                 >
@@ -189,7 +189,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
                 onClick={() => setPasso(p.label)}
                 className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl border transition-all flex items-start gap-2 ${
                   passo === p.label
-                    ? "bg-[#005BFF] text-white border-[#005BFF]"
+                    ? "bg-status-info text-white border-status-info"
                     : "bg-white text-muted-foreground border-border hover:border-status-info/40 hover:bg-status-info-surface/50"
                 }`}
               >
@@ -210,7 +210,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
               type="date"
               value={dataStr}
               onChange={e => setDataStr(e.target.value)}
-              className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+              className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
             />
             <p className="text-caption text-muted-foreground mt-1">Ou digite só o dia: ex. 30</p>
           </div>
@@ -220,7 +220,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
               type="time"
               value={horario}
               onChange={e => setHorario(e.target.value)}
-              className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+              className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
             />
           </div>
         </div>
@@ -232,7 +232,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
             value={objetivo}
             onChange={e => setObjetivo(e.target.value)}
             placeholder="Preenchido automaticamente..."
-            className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+            className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-status-info"
           />
         </div>
 
@@ -246,7 +246,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
             onChange={e => setObservacao(e.target.value)}
             rows={2}
             placeholder={passo === "Pedir sinal de negócio" ? "Ex: sinal de R$ 2.000..." : "Detalhes adicionais..."}
-            className="w-full rounded-xl border border-border bg-white px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+            className="w-full rounded-xl border border-border bg-white px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-status-info"
           />
         </div>
 
@@ -258,7 +258,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
           <Button
             onClick={salvar}
             disabled={!podeSalvar || salvando}
-            className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white"
+            className="flex-1 rounded-xl bg-status-info hover:bg-status-info text-white"
           >
             {salvando ? "Salvando..." : "Salvar próximo passo"}
           </Button>

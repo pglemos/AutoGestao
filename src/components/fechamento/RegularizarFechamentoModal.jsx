@@ -19,13 +19,13 @@ const FIELDS = [
 function Counter({ label, value, onChange }) {
   return (
     <div className="flex items-center justify-between py-2.5 border-b border-border-subtle last:border-0">
-      <span className="text-body-sm font-semibold text-[#0F172A]">{label}</span>
+      <span className="text-body-sm font-semibold text-mx-navy">{label}</span>
       <div className="flex items-center gap-2">
         <button
           onClick={() => onChange(Math.max(0, value - 1))}
           className="w-7 h-7 rounded-lg border border-border bg-surface-alt hover:bg-muted text-muted-foreground font-bold text-base flex items-center justify-center transition-colors"
         >−</button>
-        <span className="w-8 text-center font-bold text-[14px] text-[#0F172A]">{value}</span>
+        <span className="w-8 text-center font-bold text-[14px] text-mx-navy">{value}</span>
         <button
           onClick={() => onChange(Math.min(999, value + 1))}
           className="w-7 h-7 rounded-lg border border-border bg-surface-alt hover:bg-muted text-muted-foreground font-bold text-base flex items-center justify-center transition-colors"
@@ -137,7 +137,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
     <Dialog open={open} onOpenChange={v => !v && onClose()}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-[#0F172A] font-bold flex items-center gap-2">
+          <DialogTitle className="text-mx-navy font-bold flex items-center gap-2">
             <CalendarDays className="w-5 h-5 text-status-info-text" />
             Regularizar Fechamento
           </DialogTitle>
@@ -145,7 +145,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
 
         <div className="mt-1">
           <div className="flex items-center gap-2 mb-4">
-            <span className="text-body-sm font-semibold text-[#0F172A]">
+            <span className="text-body-sm font-semibold text-mx-navy">
               {moment(date).format("DD/MM/YYYY")}
             </span>
             <span className="text-[12px] text-muted-foreground capitalize">{moment(date).format("dddd")}</span>
@@ -206,7 +206,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
                 </button>
                 <button
                   onClick={() => setStep("confirm")}
-                  className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors"
+                  className="flex-1 py-2.5 rounded-xl bg-status-info hover:bg-status-info text-white text-body-sm font-bold transition-colors"
                 >
                   Enviar Regularização
                 </button>
@@ -233,7 +233,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
                 </button>
                 <button
                   onClick={handleEnviar}
-                  className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors"
+                  className="flex-1 py-2.5 rounded-xl bg-status-info hover:bg-status-info text-white text-body-sm font-bold transition-colors"
                   disabled={salvando}
                 >
                   {salvando ? "Enviando..." : "Sim, enviar"}
@@ -248,13 +248,13 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
               <div className="w-12 h-12 rounded-full bg-status-warning-surface flex items-center justify-center mx-auto">
                 <CheckCircle2 className="w-6 h-6 text-status-warning-text" />
               </div>
-              <p className="text-body font-bold text-[#0F172A]">Regularização enviada!</p>
+              <p className="text-body font-bold text-mx-navy">Regularização enviada!</p>
               <p className="text-body-sm text-muted-foreground max-w-xs mx-auto">
                 O fechamento foi salvo e está aguardando aprovação do responsável. Ele só contará nos indicadores após a aprovação.
               </p>
               <button
                 onClick={onClose}
-                className="mt-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors"
+                className="mt-2 px-6 py-2.5 rounded-xl bg-status-info hover:bg-status-info text-white text-body-sm font-bold transition-colors"
               >
                 Fechar
               </button>

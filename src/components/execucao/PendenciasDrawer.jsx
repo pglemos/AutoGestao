@@ -28,7 +28,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
       <Dialog open={open} onOpenChange={onClose}>
         <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold flex items-center gap-2">
+            <DialogTitle className="text-mx-navy font-bold flex items-center gap-2">
               <AlertTriangle className="w-5 h-5 text-status-warning-text" />
               Pendências anteriores ({pendencias.length})
             </DialogTitle>
@@ -51,7 +51,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                             {atraso === 0 ? "Hoje" : `${atraso}d atraso`}
                           </span>
                         </div>
-                        <p className="font-bold text-body-sm text-[#0F172A] truncate">{op.nome_cliente_snapshot || "—"}</p>
+                        <p className="font-bold text-body-sm text-mx-navy truncate">{op.nome_cliente_snapshot || "—"}</p>
                         {op.veiculo_snapshot && <p className="text-[12px] text-muted-foreground truncate">{op.veiculo_snapshot}</p>}
                         <p className="text-[12px] text-muted-foreground mt-0.5">{op.descricao}</p>
                         <p className="text-caption text-text-disabled mt-0.5">{moment(op.data_hora_execucao).format("DD/MM/YYYY HH:mm")}</p>
@@ -89,7 +89,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                         <Calendar className="w-3 h-3" /> Reagendar
                       </button>
                       <button onClick={() => setResolverTarget(op)}
-                        className="flex items-center gap-1 text-caption font-bold text-white bg-[#005BFF] hover:bg-status-info px-2.5 py-1.5 rounded-lg transition-colors ml-auto">
+                        className="flex items-center gap-1 text-caption font-bold text-white bg-status-info hover:bg-status-info px-2.5 py-1.5 rounded-lg transition-colors ml-auto">
                         Resolver
                       </button>
                     </div>

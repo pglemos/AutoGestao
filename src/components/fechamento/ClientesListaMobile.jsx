@@ -66,7 +66,7 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
-            <p className="text-body font-bold text-[#0F172A] leading-tight">{nomeCliente}</p>
+            <p className="text-body font-bold text-mx-navy leading-tight">{nomeCliente}</p>
             {eD1 && <span className="text-caption font-bold text-status-info-text bg-status-info-surface px-1.5 py-0.5 rounded-full">D+1</span>}
           </div>
           {telefone && (
@@ -87,7 +87,7 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
           <button
             onClick={() => canDelete && onDelete(c)}
             disabled={!canDelete}
-            className={`p-2 rounded-xl transition-colors ${canDelete ? "hover:bg-status-error-surface text-[#EF4444]" : "text-text-disabled cursor-not-allowed"}`}
+            className={`p-2 rounded-xl transition-colors ${canDelete ? "hover:bg-status-error-surface text-status-error" : "text-text-disabled cursor-not-allowed"}`}
           >
             <Trash2 className="w-4 h-4" />
           </button>
@@ -109,7 +109,7 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
         )}
         {valorDisplay && (
           <div className="flex items-center gap-4">
-            <span className="text-body-sm font-semibold text-[#0F172A]">{valorDisplay}</span>
+            <span className="text-body-sm font-semibold text-mx-navy">{valorDisplay}</span>
           </div>
         )}
       </div>
@@ -142,7 +142,7 @@ export default function ClientesListaMobile({ clients = [], closingDate, bloquea
         <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center">
           <ShoppingCart className="w-6 h-6 text-status-info-text" />
         </div>
-        <p className="text-body-sm text-[#64748B] font-medium">Nenhum cliente cadastrado hoje.</p>
+        <p className="text-body-sm text-muted-foreground font-medium">Nenhum cliente cadastrado hoje.</p>
         <p className="text-[12px] text-text-disabled">Adicione um cliente na etapa 4 acima.</p>
       </div>
     );

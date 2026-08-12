@@ -115,7 +115,7 @@ export default function RecuperarVendas({ funis }) {
   if (recomendacoes.length === 0) {
     return (
       <div className="bg-white rounded-2xl border border-border shadow-sm p-6">
-        <h2 className="text-[16px] font-bold text-[#0F172A] mb-1">Onde recuperar vendas?</h2>
+        <h2 className="text-[16px] font-bold text-mx-navy mb-1">Onde recuperar vendas?</h2>
         <p className="text-body-sm text-muted-foreground">
           {Object.values(funis).every(f => !f || Object.values(f).every(v => v === 0))
             ? "Registre atendimentos no Fechamento Diário para ver onde há oportunidades de melhoria."
@@ -127,7 +127,7 @@ export default function RecuperarVendas({ funis }) {
 
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm p-6">
-      <h2 className="text-[16px] font-bold text-[#0F172A] mb-1">Onde recuperar vendas?</h2>
+      <h2 className="text-[16px] font-bold text-mx-navy mb-1">Onde recuperar vendas?</h2>
       <p className="text-[12px] text-muted-foreground mb-5">Os maiores pontos de perda no seu funil.</p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {recomendacoes.map((rec, idx) => {
@@ -139,14 +139,14 @@ export default function RecuperarVendas({ funis }) {
               <div className="flex items-start gap-2">
                 <AlertTriangle className={`w-4 h-4 mt-0.5 flex-shrink-0 ${c.icon}`} />
                 <div className="flex-1">
-                  <p className="text-body-sm font-bold text-[#0F172A] leading-snug">{msg.titulo}</p>
+                  <p className="text-body-sm font-bold text-mx-navy leading-snug">{msg.titulo}</p>
                   <span className={`inline-block text-caption font-bold px-2 py-0.5 rounded-full mt-1 ${c.badge}`}>{rec.canal}</span>
                 </div>
               </div>
               <p className="text-[12px] text-muted-foreground leading-relaxed">{msg.texto}</p>
               <div className="flex items-center justify-between gap-2 pt-1 border-t border-border/60">
                 <div className="text-caption text-muted-foreground">
-                  <span className="font-bold text-[#0F172A]">{rec.de}</span> → <span className="font-bold text-[#0F172A]">{rec.para}</span>
+                  <span className="font-bold text-mx-navy">{rec.de}</span> → <span className="font-bold text-mx-navy">{rec.para}</span>
                   <span className="ml-1">({conv}% conversão)</span>
                 </div>
               </div>

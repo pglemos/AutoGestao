@@ -93,14 +93,14 @@ export default function DisciplinaMobile({
           {totalD1 > 0 && (
             <p className="text-[12px] text-muted-foreground">
               Agendamentos D+1 detalhados:{" "}
-              <strong className="text-[#0F172A]">{creditos}</strong> de{" "}
-              <strong className="text-[#0F172A]">{totalD1}</strong>
-              {d1WindowOpen && <span className="text-[#F59E0B] ml-1">(provisório)</span>}
+              <strong className="text-mx-navy">{creditos}</strong> de{" "}
+              <strong className="text-mx-navy">{totalD1}</strong>
+              {d1WindowOpen && <span className="text-status-warning-text ml-1">(provisório)</span>}
             </p>
           )}
           {agendamentosFuturos > 0 && (
             <p className="text-[12px] text-muted-foreground">
-              Agendamentos futuros: <strong className="text-[#0F172A]">{agendamentosFuturos}</strong>{" "}
+              Agendamentos futuros: <strong className="text-mx-navy">{agendamentosFuturos}</strong>{" "}
               <span className="text-status-success-text">✓ Já contabilizado na Qualidade da Carteira</span>
             </p>
           )}
@@ -108,12 +108,12 @@ export default function DisciplinaMobile({
           {message && (
             <div className="flex items-start gap-1.5">
               {penalizado ? (
-                <AlertTriangle className="w-3.5 h-3.5 text-[#EF4444] flex-shrink-0 mt-0.5" />
+                <AlertTriangle className="w-3.5 h-3.5 text-status-error flex-shrink-0 mt-0.5" />
               ) : score >= 100 ? (
-                <CheckCircle className="w-3.5 h-3.5 text-[#22C55E] flex-shrink-0 mt-0.5" />
+                <CheckCircle className="w-3.5 h-3.5 text-status-success flex-shrink-0 mt-0.5" />
               ) : null}
               <p className={`text-[12px] leading-relaxed font-medium ${
-                penalizado ? "text-[#EF4444]" : score >= 100 ? "text-[#22C55E]" : "text-[#64748B]"
+                penalizado ? "text-status-error" : score >= 100 ? "text-status-success" : "text-muted-foreground"
               }`}>
                 {message}
               </p>

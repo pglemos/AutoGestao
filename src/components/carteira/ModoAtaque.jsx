@@ -23,10 +23,10 @@ function BarraModoAtaque({ total, concluidos, tempoInicio, onPausar }) {
   const progresso = total > 0 ? Math.round((concluidos / total) * 100) : 0;
 
   return (
-    <div className="fixed top-0 left-0 right-0 z-50 bg-[#031B3D] text-white shadow-lg">
+    <div className="fixed top-0 left-0 right-0 z-50 bg-mx-navy text-white shadow-lg">
       <div className="max-w-2xl mx-auto px-4 py-3 flex items-center gap-4">
         <div className="flex items-center gap-2 shrink-0">
-          <div className="w-7 h-7 rounded-lg bg-[#005BFF] flex items-center justify-center">
+          <div className="w-7 h-7 rounded-lg bg-status-info flex items-center justify-center">
             <Zap className="w-4 h-4 text-white" />
           </div>
           <span className="text-sm font-black tracking-wide">MODO ATAQUE</span>
@@ -41,7 +41,7 @@ function BarraModoAtaque({ total, concluidos, tempoInicio, onPausar }) {
           </div>
           <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
             <div
-              className="h-full bg-[#005BFF] rounded-full transition-all duration-500"
+              className="h-full bg-status-info rounded-full transition-all duration-500"
               style={{ width: `${progresso}%` }}
             />
           </div>
@@ -71,7 +71,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
   return (
     <div className="bg-white rounded-3xl shadow-xl border border-border-subtle overflow-hidden">
       {/* Header do cliente */}
-      <div className="bg-gradient-to-br from-[#005BFF] to-status-info p-6 text-white">
+      <div className="bg-gradient-to-br from-status-info to-status-info p-6 text-white">
         <div className="flex items-center gap-4">
           <div className="w-14 h-14 rounded-2xl bg-white/20 flex items-center justify-center text-xl font-black">
             {iniciais}
@@ -93,7 +93,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
           </div>
           <div className="bg-status-info-surface rounded-2xl p-4">
             <p className="text-caption text-status-info-text font-bold uppercase tracking-wide mb-1">Próximo passo</p>
-            <p className="text-sm font-bold text-[#031B3D]">{proximoPasso}</p>
+            <p className="text-sm font-bold text-mx-navy">{proximoPasso}</p>
           </div>
         </div>
 
@@ -132,7 +132,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
         {/* Executar */}
         <Button
           onClick={() => onExecutar(cliente)}
-          className="w-full h-14 rounded-2xl bg-[#005BFF] hover:bg-status-info text-white text-base font-black gap-2 shadow-lg shadow-blue-200"
+          className="w-full h-14 rounded-2xl bg-status-info hover:bg-status-info text-white text-base font-black gap-2 shadow-lg shadow-blue-200"
         >
           <Zap className="w-5 h-5" /> Executar próximo passo
         </Button>
@@ -149,7 +149,7 @@ function TelaConclusao({ stats, onPlanoAtaque, onCarteira, onEncerrar }) {
         <Trophy className="w-10 h-10 text-status-success-text" />
       </div>
       <div>
-        <p className="text-3xl font-black text-[#031B3D]">🎉 Excelente!</p>
+        <p className="text-3xl font-black text-mx-navy">🎉 Excelente!</p>
         <p className="text-muted-foreground mt-2 text-sm">Você concluiu todas as oportunidades prioritárias de hoje.</p>
       </div>
 
@@ -169,7 +169,7 @@ function TelaConclusao({ stats, onPlanoAtaque, onCarteira, onEncerrar }) {
 
       <div className="flex flex-col gap-2 w-full max-w-sm">
         <Button onClick={onPlanoAtaque} variant="outline" className="w-full rounded-xl">Ir para Plano de Ataque</Button>
-        <Button onClick={onCarteira} className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white">Voltar para Carteira</Button>
+        <Button onClick={onCarteira} className="w-full rounded-xl bg-status-info hover:bg-status-info text-white">Voltar para Carteira</Button>
         <button onClick={onEncerrar} className="text-xs text-muted-foreground hover:underline mt-1">Encerrar sessão</button>
       </div>
     </div>
@@ -186,11 +186,11 @@ function ModalPausar({ open, onContinuar, onEncerrar }) {
             <Pause className="w-6 h-6 text-status-warning-text" />
           </div>
           <div>
-            <p className="text-base font-black text-[#031B3D]">Pausar o Modo Ataque?</p>
+            <p className="text-base font-black text-mx-navy">Pausar o Modo Ataque?</p>
             <p className="text-sm text-muted-foreground mt-1">Sua posição na fila será salva. Você continua de onde parou.</p>
           </div>
           <div className="flex flex-col gap-2 w-full">
-            <Button onClick={onContinuar} className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white">Continuar depois</Button>
+            <Button onClick={onContinuar} className="w-full rounded-xl bg-status-info hover:bg-status-info text-white">Continuar depois</Button>
             <Button onClick={onEncerrar} variant="outline" className="w-full rounded-xl text-status-error-text border-status-error/30 hover:bg-status-error-surface">Encerrar</Button>
           </div>
         </div>
@@ -279,7 +279,7 @@ export default function ModoAtaque({ clientes, onSair, onWhatsApp, onFicha, onPl
 
   if (concluido) {
     return (
-      <div className="min-h-screen bg-[#F8FAFC] pt-20">
+      <div className="min-h-screen bg-surface-alt pt-20">
         <TelaConclusao
           stats={stats}
           onPlanoAtaque={() => { sessionStorage.removeItem(STORAGE_KEY); onPlanoAtaque(); }}
@@ -299,7 +299,7 @@ export default function ModoAtaque({ clientes, onSair, onWhatsApp, onFicha, onPl
         onPausar={() => setPausarOpen(true)}
       />
 
-      <div className="min-h-screen bg-[#F0F4FF] pt-20 flex items-start justify-center px-4 py-8">
+      <div className="min-h-screen bg-status-info-surface pt-20 flex items-start justify-center px-4 py-8">
         <div className="w-full max-w-xl">
           {clienteAtual ? (
             <OportunidadeCard

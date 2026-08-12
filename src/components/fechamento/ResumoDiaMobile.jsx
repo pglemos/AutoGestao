@@ -21,13 +21,13 @@ export default function ResumoDiaMobile({
       <div className="grid grid-cols-2 gap-3">
         <Item value={totalLeads} label="Leads Recebidos" color="text-status-info-text" />
         <Item value={totalAtend} label="Atendimentos" color="text-status-info-text" />
-        <Item value={totalAgend} label="Agendamentos D+1" color="text-[#F59E0B]" />
-        <Item value={totalVendas} label="Vendas Realizadas" color="text-[#EF4444]" />
+        <Item value={totalAgend} label="Agendamentos D+1" color="text-status-warning-text" />
+        <Item value={totalVendas} label="Vendas Realizadas" color="text-status-error" />
       </div>
 
       <div className="flex items-center justify-between px-4 py-3 bg-brand-primary-subtle rounded-xl border border-brand-primary/20">
         <span className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider">Faturamento</span>
-        <span className="text-h3 font-bold tabular-nums text-[#22C55E]">{faturamentoStr}</span>
+        <span className="text-h3 font-bold tabular-nums text-status-success">{faturamentoStr}</span>
       </div>
     </div>
   );

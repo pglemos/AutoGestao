@@ -246,7 +246,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           <div className="flex items-start gap-4">
             <span className="text-3xl" aria-hidden="true">{missaoSelecionada.icone}</span>
             <div>
-              <h2 className="text-xl font-black text-[#031B3D]">{missaoSelecionada.nome}</h2>
+              <h2 className="text-xl font-black text-mx-navy">{missaoSelecionada.nome}</h2>
               <p className="mt-1 text-sm text-muted-foreground">{missaoSelecionada.objetivo}</p>
               <p className="mt-2 text-sm font-semibold text-status-info-text">{missaoSelecionada.clientes.length} cliente(s) identificado(s) pelos dados atuais.</p>
             </div>
@@ -257,12 +257,12 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
         <div className="space-y-2">
           {missaoSelecionada.clientes.map((client) => (
             <button key={client.id} type="button" onClick={() => onFicha?.(client.id)} className="flex w-full items-center justify-between rounded-xl border border-border-subtle bg-white px-4 py-3 text-left">
-              <span><strong className="block text-sm text-[#031B3D]">{client.nome || "Cliente sem nome"}</strong><span className="text-xs text-muted-foreground">{client.situacao_atual || client.momento || "Situação não informada"}</span></span>
+              <span><strong className="block text-sm text-mx-navy">{client.nome || "Cliente sem nome"}</strong><span className="text-xs text-muted-foreground">{client.situacao_atual || client.momento || "Situação não informada"}</span></span>
               <Users className="h-4 w-4 text-muted-foreground" />
             </button>
           ))}
         </div>
-        <Button type="button" onClick={() => startMission(missaoSelecionada)} disabled={iniciando || Boolean(missionBlock)} className="h-12 w-full rounded-xl bg-[#005BFF] text-white">
+        <Button type="button" onClick={() => startMission(missaoSelecionada)} disabled={iniciando || Boolean(missionBlock)} className="h-12 w-full rounded-xl bg-status-info text-white">
           <Zap className="mr-2 h-5 w-5" /> {iniciando ? "Salvando missão..." : "Iniciar missão"}
         </Button>
       </div>
@@ -271,10 +271,10 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
 
   return (
     <div className="space-y-6">
-      <div><h1 className="text-2xl font-black text-[#031B3D]">Plano de Ataque</h1><p className="mt-1 text-sm text-muted-foreground">Missões calculadas a partir das situações reais da sua carteira.</p></div>
+      <div><h1 className="text-2xl font-black text-mx-navy">Plano de Ataque</h1><p className="mt-1 text-sm text-muted-foreground">Missões calculadas a partir das situações reais da sua carteira.</p></div>
       <section className="rounded-2xl border border-border-subtle bg-white p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
-          <div><h2 className="text-lg font-black text-[#031B3D]">Campanhas e condições</h2><p className="mt-1 text-sm text-muted-foreground">Cadastre um feirão, desconto ou bônus de troca e inicie uma missão para os clientes ativos elegíveis.</p></div>
+          <div><h2 className="text-lg font-black text-mx-navy">Campanhas e condições</h2><p className="mt-1 text-sm text-muted-foreground">Cadastre um feirão, desconto ou bônus de troca e inicie uma missão para os clientes ativos elegíveis.</p></div>
           <span className="rounded-full bg-status-info-surface px-3 py-1 text-xs font-bold text-status-info-text">{campanhas.length} ativa(s)</span>
         </div>
         <form onSubmit={salvarCampanha} className="mt-4 grid grid-cols-1 gap-3 rounded-xl bg-surface-alt p-4 md:grid-cols-2">
@@ -294,21 +294,21 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
               {FINANCING_SEGMENTOS.map(segmento => <option key={segmento.value} value={segmento.value}>{segmento.label}</option>)}
             </select>
           )}
-          <button type="submit" disabled={campanhaSaving} className="flex h-10 items-center justify-center gap-2 rounded-xl bg-[#005BFF] px-4 text-sm font-bold text-white disabled:opacity-50"><Plus className="h-4 w-4" />{campanhaSaving ? "Salvando..." : "Cadastrar campanha"}</button>
+          <button type="submit" disabled={campanhaSaving} className="flex h-10 items-center justify-center gap-2 rounded-xl bg-status-info px-4 text-sm font-bold text-white disabled:opacity-50"><Plus className="h-4 w-4" />{campanhaSaving ? "Salvando..." : "Cadastrar campanha"}</button>
         </form>
         {campanhaError && <Warning message={campanhaError} />}
         <div className="mt-4 grid grid-cols-1 gap-3 md:grid-cols-2">
           {campanhas.map(campanha => {
             const { resultado } = candidatosElegiveis(clientes, campanha);
             const elegiveis = resultado.eligible;
-            return <div key={campanha.id} className="rounded-xl border border-border-subtle p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-[#031B3D]">{campanha.titulo}</p><p className="mt-1 text-xs text-muted-foreground">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-muted px-2 py-1 text-caption font-bold text-muted-foreground">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#005BFF] px-3 py-2 text-xs font-bold text-status-info-text disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} cliente(s)</button></div>;
+            return <div key={campanha.id} className="rounded-xl border border-border-subtle p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-mx-navy">{campanha.titulo}</p><p className="mt-1 text-xs text-muted-foreground">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-muted px-2 py-1 text-caption font-bold text-muted-foreground">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-status-info px-3 py-2 text-xs font-bold text-status-info-text disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} cliente(s)</button></div>;
           })}
         </div>
         {campanhas.length === 0 && <p className="mt-4 rounded-xl border border-dashed border-border p-5 text-center text-sm text-muted-foreground">Nenhuma campanha ativa cadastrada para esta loja.</p>}
       </section>
       <div className="rounded-2xl border border-border-subtle bg-white p-5"><VeiculosChegaram clientes={clientes} onExecutar={(client, missaoId) => onWhatsApp?.(client, missaoId || null)} onFicha={onFicha} /></div>
       {activeMission && (
-        <section className="rounded-2xl bg-[#005BFF] p-5 text-white">
+        <section className="rounded-2xl bg-status-info p-5 text-white">
           <p className="text-xs font-semibold uppercase text-blue-100">Missão em andamento</p>
           <p className="font-bold">{activeMission.tipo_missao}</p>
           <p className="mt-1 text-sm text-blue-100">{activeMission.mensagens_enviadas || 0}/{activeMission.total_clientes || 0} contatos registrados</p>
@@ -326,9 +326,9 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {missions.filter((mission) => mission.clientes.length > 0).map((mission) => (
-            <button key={mission.id} type="button" onClick={() => setMissaoSelecionada(mission)} className="rounded-2xl border border-border-subtle bg-white p-4 text-left transition hover:border-[#005BFF]">
+            <button key={mission.id} type="button" onClick={() => setMissaoSelecionada(mission)} className="rounded-2xl border border-border-subtle bg-white p-4 text-left transition hover:border-status-info">
               <div className="mb-3 flex items-start justify-between"><span className="text-2xl" aria-hidden="true">{mission.icone}</span><span className={`rounded-full px-2 py-0.5 text-caption font-bold ${prioridadeColor(mission.prioridade)}`}>{mission.prioridade}</span></div>
-              <p className="text-sm font-bold text-[#031B3D]">{mission.nome}</p><p className="mt-1 text-xs text-muted-foreground">{mission.objetivo}</p><p className="mt-3 border-t border-border-subtle pt-2 text-xs font-bold text-status-info-text">{mission.clientes.length} cliente(s)</p>
+              <p className="text-sm font-bold text-mx-navy">{mission.nome}</p><p className="mt-1 text-xs text-muted-foreground">{mission.objetivo}</p><p className="mt-3 border-t border-border-subtle pt-2 text-xs font-bold text-status-info-text">{mission.clientes.length} cliente(s)</p>
             </button>
           ))}
         </div>

@@ -146,7 +146,7 @@ const EMPTY_FORM_D1 = {
 function Field({ label, required, children }) {
   return (
     <div>
-      <Label className="text-caption font-bold text-[#64748B] uppercase tracking-wider">
+      <Label className="text-caption font-bold text-muted-foreground uppercase tracking-wider">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </Label>
       <div className="mt-1.5">{children}</div>
@@ -632,13 +632,13 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
       <React.Fragment key={c.id}>
         <tr
           onClick={() => canEdit && setExpandedId(isExpanded ? null : c.id)}
-          className={`border-b border-[#F1F5F9] transition-colors group ${
+          className={`border-b border-border-subtle transition-colors group ${
             rowDim ? "opacity-40 cursor-default"
             : isExpanded ? "bg-status-info-surface/30 cursor-pointer"
-            : "hover:bg-[#F8FAFC] cursor-pointer"
+            : "hover:bg-surface-alt cursor-pointer"
           }`}
         >
-          <td className="px-4 py-3 font-semibold text-[#0F172A] whitespace-nowrap">
+          <td className="px-4 py-3 font-semibold text-mx-navy whitespace-nowrap">
             <div className="flex items-center gap-1.5">
               {canEdit
                 ? isExpanded
@@ -654,20 +654,20 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
               )}
             </div>
           </td>
-          <td className="px-4 py-3 text-[#64748B] whitespace-nowrap">{displayVal(c.whatsapp || c.telefone)}</td>
-          <td className="px-4 py-3 text-[#64748B] whitespace-nowrap">{c._veiculoDisplay || "—"}</td>
-          <td className="px-4 py-3 text-[#0F172A] font-medium whitespace-nowrap">{c._valorDisplay || "—"}</td>
-          <td className="px-4 py-3 text-[#64748B] whitespace-nowrap">
+          <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{displayVal(c.whatsapp || c.telefone)}</td>
+          <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">{c._veiculoDisplay || "—"}</td>
+          <td className="px-4 py-3 text-mx-navy font-medium whitespace-nowrap">{c._valorDisplay || "—"}</td>
+          <td className="px-4 py-3 text-muted-foreground whitespace-nowrap">
             {c._dataDisplay ? moment(c._dataDisplay).format("DD/MM/YYYY") : "—"}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-muted text-muted-foreground"} />}
+            {isGarantia ? <span className="text-muted-foreground text-body-sm">—</span> : <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-muted text-muted-foreground"} />}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_troca ? "Sim" : "Não"} className={c.interesse_troca ? "bg-brand-primary-subtle text-brand-primary-hover" : "bg-status-error-surface text-status-error-text"} />}
+            {isGarantia ? <span className="text-muted-foreground text-body-sm">—</span> : <Badge label={c.interesse_troca ? "Sim" : "Não"} className={c.interesse_troca ? "bg-brand-primary-subtle text-brand-primary-hover" : "bg-status-error-surface text-status-error-text"} />}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-brand-primary-subtle text-brand-primary-hover" : "bg-muted text-muted-foreground"} />}
+            {isGarantia ? <span className="text-muted-foreground text-body-sm">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-brand-primary-subtle text-brand-primary-hover" : "bg-muted text-muted-foreground"} />}
           </td>
           <td className="px-4 py-3"><Badge label={saleDisplay} className={SALE_STYLE[saleDisplay] || "bg-muted text-muted-foreground"} /></td>
           <td className="px-4 py-3">
@@ -677,7 +677,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
                 <Pencil className="w-3.5 h-3.5" />
               </button>
               <button onClick={(e) => { e.stopPropagation(); canDelete && setDeleteConfirm({ id: c.id, name: c.nome }); }} disabled={!canDelete}
-                className={`p-1.5 rounded-lg transition-colors ${canDelete ? "hover:bg-status-error-surface text-[#EF4444]" : "text-text-disabled cursor-not-allowed"}`}>
+                className={`p-1.5 rounded-lg transition-colors ${canDelete ? "hover:bg-status-error-surface text-status-error" : "text-text-disabled cursor-not-allowed"}`}>
                 <Trash2 className="w-3.5 h-3.5" />
               </button>
             </div>
@@ -693,15 +693,15 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
 
   return (
     <>
-      <div className="bg-white rounded-2xl border border-[#E5E7EB] shadow-sm overflow-hidden">
-        <div className="flex items-start justify-between px-6 py-4 border-b border-[#E5E7EB]">
+      <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+        <div className="flex items-start justify-between px-6 py-4 border-b border-border">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
               <span className="w-5 h-5 rounded-full bg-status-info text-white text-caption font-bold flex items-center justify-center flex-shrink-0">4</span>
-              <h2 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Cadastrar Venda/Agendamentos</h2>
+              <h2 className="text-[14px] font-bold text-mx-navy uppercase tracking-wide">Cadastrar Venda/Agendamentos</h2>
               <InfoTooltip text="Registros criados aqui são salvos diretamente na Carteira de Clientes — base única do sistema. Nenhum dado é duplicado." />
             </div>
-            <p className="text-[12px] text-[#64748B] mt-0.5">Clientes são salvos na Carteira de Clientes (base única).</p>
+            <p className="text-[12px] text-muted-foreground mt-0.5">Clientes são salvos na Carteira de Clientes (base única).</p>
           </div>
           {!bloqueado && (
             <button onClick={openCreate}
@@ -715,7 +715,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
         {d1Editavel && (
           <div className="px-6 py-2.5 bg-status-info-surface border-b border-status-info/20 flex items-center gap-2">
             <Info className="w-4 h-4 text-status-info-text flex-shrink-0" />
-            <p className="text-[12px] font-semibold text-[#1e3a5f]">
+            <p className="text-[12px] font-semibold text-mx-navy">
               Fechamento concluído. Somente registros <span className="text-status-info-text">D+1</span> podem ser editados.
             </p>
           </div>
@@ -724,9 +724,9 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
         <div className="overflow-x-auto">
           <table className="w-full text-body-sm">
             <thead>
-              <tr className="bg-[#F8FAFC] border-b border-[#E5E7EB]">
+              <tr className="bg-surface-alt border-b border-border">
                 {TABLE_HEADERS.map(h => (
-                  <th key={h} className="text-left text-caption font-bold text-[#64748B] uppercase tracking-wider px-4 py-3 whitespace-nowrap">{h}</th>
+                  <th key={h} className="text-left text-caption font-bold text-muted-foreground uppercase tracking-wider px-4 py-3 whitespace-nowrap">{h}</th>
                 ))}
               </tr>
             </thead>
@@ -741,7 +741,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
                     <div className="w-10 h-10 rounded-full bg-status-info-surface flex items-center justify-center">
                       <Plus className="w-5 h-5 text-status-info-text" />
                     </div>
-                    <p className="text-body-sm text-[#64748B] font-medium">Nenhum cliente neste fechamento.</p>
+                    <p className="text-body-sm text-muted-foreground font-medium">Nenhum cliente neste fechamento.</p>
                     <p className="text-[12px] text-text-disabled">Clique em "Novo Cliente" para adicionar.</p>
                   </div>
                 </td></tr>
@@ -752,7 +752,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
 
         <div className="px-6 py-3 bg-status-info-surface/40 border-t border-status-info/60">
           <p className="text-[12px] text-status-info-text flex items-center gap-1.5 font-medium">
-            <Star className="w-3.5 h-3.5 text-[#F59E0B] fill-[#F59E0B]" />
+            <Star className="w-3.5 h-3.5 text-status-warning-text fill-status-warning" />
             Clientes cadastrados ajudam a aumentar sua pontuação em Disciplina (30% dos pontos).
           </p>
         </div>
@@ -762,7 +762,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
       <Dialog open={dialogOpen} onOpenChange={v => { if (!saving) { setDialogOpen(v); setSaveError(null); } }}>
         <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold text-h5">
+            <DialogTitle className="text-mx-navy font-bold text-h5">
               {editingCliente
                 ? (modoD1 ? "Editar Agendamento D+1" : "Editar Cliente")
                 : (modoD1 ? "Novo Agendamento D+1" : "Cadastrar Novo Cliente")}
@@ -770,12 +770,12 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             {modoD1 ? (
               <div className="mt-1.5 px-3 py-2 bg-status-info-surface border border-status-info/30 rounded-lg flex items-start gap-2">
                 <CalendarClock className="w-4 h-4 text-status-info-text mt-0.5 flex-shrink-0" />
-                <p className="text-[12px] font-semibold text-[#1e3a5f]">
+                <p className="text-[12px] font-semibold text-mx-navy">
                   Este cadastro será considerado um Agendamento D+1 e salvo na Carteira de Clientes.
                 </p>
               </div>
             ) : (
-              <p className="text-body-sm text-[#64748B] mt-0.5 font-normal">
+              <p className="text-body-sm text-muted-foreground mt-0.5 font-normal">
                 Dados salvos diretamente na Carteira de Clientes (base única do sistema).
               </p>
             )}
@@ -859,11 +859,11 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           </div>
           <AvisoClienteExistente nome={clienteExistenteNome} />
 
-          {saveError && <p className="text-[12px] text-[#EF4444] font-semibold mt-3 px-1">{saveError}</p>}
+          {saveError && <p className="text-[12px] text-status-error font-semibold mt-3 px-1">{saveError}</p>}
 
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button onClick={() => { setDialogOpen(false); setSaveError(null); }} disabled={saving}
-              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors">
+              className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
             <button onClick={handleSave} disabled={!canSave || saving}
@@ -878,19 +878,19 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
       <Dialog open={!!reagendConfirm} onOpenChange={v => { if (!v && !saving) setReagendConfirm(null); }}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold">Confirmar reagendamento?</DialogTitle>
+            <DialogTitle className="text-mx-navy font-bold">Confirmar reagendamento?</DialogTitle>
           </DialogHeader>
-          <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
-            <strong className="text-[#0F172A]">{reagendConfirm?.clientName}</strong> deixará de fazer parte dos Agendamentos D+1 desta data e continuará disponível na Carteira de Clientes.
+          <p className="text-body-sm text-muted-foreground mt-1 leading-relaxed">
+            <strong className="text-mx-navy">{reagendConfirm?.clientName}</strong> deixará de fazer parte dos Agendamentos D+1 desta data e continuará disponível na Carteira de Clientes.
           </p>
-          {saveError && <p className="text-[12px] text-[#EF4444] font-semibold mt-2">{saveError}</p>}
+          {saveError && <p className="text-[12px] text-status-error font-semibold mt-2">{saveError}</p>}
           <div className="flex items-center justify-end gap-3 mt-4">
             <button onClick={() => setReagendConfirm(null)} disabled={saving}
-              className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors">
+              className="px-5 py-2 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
             <button onClick={confirmarReagendamento} disabled={saving}
-              className="px-5 py-2 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors">
+              className="px-5 py-2 text-body-sm font-bold text-white bg-status-info hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors">
               {saving ? "Salvando..." : "Confirmar Reagendamento"}
             </button>
           </div>
@@ -901,18 +901,18 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
       <Dialog open={!!deleteConfirm} onOpenChange={v => { if (!v) setDeleteConfirm(null); }}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold">Remover do fechamento?</DialogTitle>
+            <DialogTitle className="text-mx-navy font-bold">Remover do fechamento?</DialogTitle>
           </DialogHeader>
-          <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
-            O registro de <strong className="text-[#0F172A]">{deleteConfirm?.name}</strong> será removido deste fechamento. O cliente e seu histórico permanecem na Carteira.
+          <p className="text-body-sm text-muted-foreground mt-1 leading-relaxed">
+            O registro de <strong className="text-mx-navy">{deleteConfirm?.name}</strong> será removido deste fechamento. O cliente e seu histórico permanecem na Carteira.
           </p>
           <div className="flex items-center justify-end gap-3 mt-4">
             <button onClick={() => setDeleteConfirm(null)}
-              className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors">
+              className="px-5 py-2 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
             <button onClick={confirmDelete}
-              className="px-5 py-2 text-body-sm font-bold text-white bg-[#EF4444] hover:bg-status-error rounded-xl transition-colors">
+              className="px-5 py-2 text-body-sm font-bold text-white bg-status-error hover:bg-status-error rounded-xl transition-colors">
               Remover
             </button>
           </div>

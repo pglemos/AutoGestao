@@ -23,7 +23,7 @@ function InfoRow({ label, value }) {
   return (
     <div className="flex flex-col gap-0.5">
       <span className="text-caption text-muted-foreground font-semibold uppercase tracking-wide">{label}</span>
-      <span className="text-body-sm text-[#0F172A] font-medium">{value}</span>
+      <span className="text-body-sm text-mx-navy font-medium">{value}</span>
     </div>
   );
 }
@@ -56,12 +56,12 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
     <Sheet open={open} onOpenChange={v => !v && onClose()}>
       <SheetContent className="w-full sm:max-w-md overflow-y-auto">
         <SheetHeader>
-          <SheetTitle className="text-[#0F172A]">Ficha do Cliente</SheetTitle>
+          <SheetTitle className="text-mx-navy">Ficha do Cliente</SheetTitle>
         </SheetHeader>
 
         {loading && (
           <div className="flex items-center justify-center h-48">
-            <div className="w-6 h-6 border-4 border-border border-t-[#005BFF] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-4 border-border border-t-status-info rounded-full animate-spin" />
           </div>
         )}
 
@@ -84,7 +84,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
                 {(cliente.name || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase()}
               </div>
               <div>
-                <h3 className="text-h5 font-bold text-[#0F172A]">{cliente.name}</h3>
+                <h3 className="text-h5 font-bold text-mx-navy">{cliente.name}</h3>
                 <p className="text-[12px] text-muted-foreground">{cliente.channel} · {cliente.status}</p>
               </div>
               {cliente.status && (
@@ -132,7 +132,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
               {cliente.notes && (
                 <div className="flex flex-col gap-0.5">
                   <span className="text-caption text-muted-foreground font-semibold uppercase tracking-wide">Observações</span>
-                  <p className="text-body-sm text-[#0F172A]">{cliente.notes}</p>
+                  <p className="text-body-sm text-mx-navy">{cliente.notes}</p>
                 </div>
               )}
               {cliente.loss_reason && (

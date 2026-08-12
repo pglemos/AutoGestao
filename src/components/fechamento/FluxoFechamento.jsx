@@ -497,10 +497,10 @@ export default function FluxoFechamento({ dc, updateCounter, setCounter, clients
       <div className="hidden sm:block bg-white rounded-2xl border border-border shadow-sm p-4 sm:p-5">
         <div className="flex items-center justify-between mb-1">
           <div className="flex-1 min-w-0 pr-3">
-            <h2 className="text-body-sm sm:text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Progresso do Fechamento</h2>
+            <h2 className="text-body-sm sm:text-[14px] font-bold text-mx-navy uppercase tracking-wide">Progresso do Fechamento</h2>
             <p className="text-caption sm:text-caption text-muted-foreground mt-0.5 leading-tight">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
           </div>
-          <span className={`text-h3 sm:text-h2 font-bold tabular-nums flex-shrink-0 ${totalPct === 100 ? "text-status-success-text" : "text-[#0F172A]"}`}>
+          <span className={`text-h3 sm:text-h2 font-bold tabular-nums flex-shrink-0 ${totalPct === 100 ? "text-status-success-text" : "text-mx-navy"}`}>
             {totalPct}%
           </span>
         </div>

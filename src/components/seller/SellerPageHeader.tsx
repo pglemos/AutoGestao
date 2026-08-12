@@ -13,7 +13,7 @@ type SellerPageHeaderProps = {
 }
 
 export function SellerPageHeader({ title, icon: Icon, actions, subtitle, className, variant }: SellerPageHeaderProps) {
-  const isDark = variant === 'dark' || className?.includes('bg-[#071723]')
+  const isDark = variant === 'dark' || className?.includes('bg-mx-navy')
 
   return (
     <header

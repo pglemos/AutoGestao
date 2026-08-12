@@ -51,7 +51,7 @@ function DiasBadge({ dataAgendamento, selectedDate, vendaRealizada }: { dataAgen
   const dias = diasAgendamento(dataAgendamento, selectedDate)
   if (dias === null || dias < 1) return null
   return (
-    <span className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-caption font-bold ${dias === 1 ? 'bg-[#EFF6FF] text-[#2563EB]' : 'bg-[#F0F9FF] text-[#0284C7]'}`}>
+    <span className={`inline-flex shrink-0 items-center rounded-full px-1.5 py-0.5 text-caption font-bold ${dias === 1 ? 'bg-status-info-surface text-status-info' : 'bg-status-info-surface text-status-info'}`}>
       D+{dias}
     </span>
   )
@@ -61,7 +61,7 @@ function DiasBadge({ dataAgendamento, selectedDate, vendaRealizada }: { dataAgen
 function VendaTipoBadge({ vendaRealizada }: { vendaRealizada: string }) {
   if (vendaRealizada !== 'Sim' && (vendaRealizada as string) !== 'ganho') return null
   return (
-    <span className="inline-flex shrink-0 items-center rounded-full bg-[#F0FDF4] px-1.5 py-0.5 text-caption font-bold text-[#16A34A]">
+    <span className="inline-flex shrink-0 items-center rounded-full bg-status-success-surface px-1.5 py-0.5 text-caption font-bold text-status-success-text">
       $
     </span>
   )
@@ -591,17 +591,17 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
         />
       </div>
 
-<Card id="cadastrar-venda-agendamentos" className="scroll-mt-6 min-w-0 overflow-hidden rounded-2xl border border-[#dfe7f0] bg-white shadow-mx-lg md:scroll-mt-48">
-<header className="flex min-w-0 flex-col items-stretch justify-between gap-3 border-b border-[#DFE0E1] px-4 py-4 sm:flex-row sm:items-center sm:px-5">
+<Card id="cadastrar-venda-agendamentos" className="scroll-mt-6 min-w-0 overflow-hidden rounded-2xl border border-border bg-white shadow-mx-lg md:scroll-mt-48">
+<header className="flex min-w-0 flex-col items-stretch justify-between gap-3 border-b border-border px-4 py-4 sm:flex-row sm:items-center sm:px-5">
  <div className="flex min-w-0 items-start gap-2 sm:items-center">
-            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs font-bold bg-[#102C37] text-white">
+            <span className="grid h-6 w-6 shrink-0 place-items-center rounded-full text-xs font-bold bg-mx-navy text-white">
               4
             </span>
  <div className="min-w-0">
- <Typography variant="h2" className="!text-[16px] !leading-tight font-extrabold tracking-tight text-[#071822] sm:!text-h5">
+ <Typography variant="h2" className="!text-[16px] !leading-tight font-extrabold tracking-tight text-mx-navy sm:!text-h5">
                 CADASTRAR VENDA/AGENDAMENTOS
               </Typography>
- <Typography variant="p" className="mt-1 text-sm font-medium leading-snug text-[#526B7A]">
+ <Typography variant="p" className="mt-1 text-sm font-medium leading-snug text-muted-foreground">
                 Preencha suas vendas e seus agendamentos para enriquecer suas informações.
               </Typography>
             </div>
@@ -621,46 +621,46 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 <div className="md:hidden">
 {clientesList.length === 0 ? (
 <div className="flex min-h-[140px] flex-col items-center justify-center gap-2 px-5 py-8 text-center">
-<span className="grid h-10 w-10 place-items-center rounded-full bg-[#F7F8F8] text-[#526B7A]">
+<span className="grid h-10 w-10 place-items-center rounded-full bg-surface-alt text-muted-foreground">
 <Users size={17} />
 </span>
-<p className="text-body-sm font-bold text-[#526B7A]">Nenhum cliente cadastrado ainda</p>
-<p className="text-[12px] font-medium text-[#526B7A]">Toque em "+ Novo Cliente" para registrar venda ou agendamento.</p>
+<p className="text-body-sm font-bold text-muted-foreground">Nenhum cliente cadastrado ainda</p>
+<p className="text-[12px] font-medium text-muted-foreground">Toque em "+ Novo Cliente" para registrar venda ou agendamento.</p>
 </div>
 ) : (
-<div className="divide-y divide-[#DFE0E1]">
+<div className="divide-y divide-border">
 {clientesList.map((row: ClienteRow) => (
 <article key={row.id} className="space-y-3 bg-white px-4 py-4">
 <div className="flex items-start justify-between gap-3">
 <div className="min-w-0">
-<p className="flex items-center gap-1.5 truncate text-body font-extrabold text-[#00A89D]">
+<p className="flex items-center gap-1.5 truncate text-body font-extrabold text-status-success">
 {row.nomeCliente}
 <DiasBadge dataAgendamento={row.dataAgendamento} selectedDate={selectedDate} vendaRealizada={row.vendaRealizada} />
 <VendaTipoBadge vendaRealizada={row.vendaRealizada} />
 </p>
-<p className="mt-0.5 truncate text-[12px] font-semibold text-[#526B7A]">{formatPhone(row.telefone)} · {row.veiculoInteresse}</p>
+<p className="mt-0.5 truncate text-[12px] font-semibold text-muted-foreground">{formatPhone(row.telefone)} · {row.veiculoInteresse}</p>
 </div>
 <div className="flex shrink-0 items-center gap-1.5">
-<button type="button" onClick={() => handleEdit(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-[#DFE0E1] text-[#071822] transition-colors hover:bg-[#E8F3F2] hover:text-[#00A89D]" aria-label={`Editar ${row.nomeCliente}`}>
+<button type="button" onClick={() => handleEdit(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-mx-navy transition-colors hover:bg-surface-alt hover:text-status-success" aria-label={`Editar ${row.nomeCliente}`}>
 <Edit size={14} />
 </button>
-<button type="button" onClick={() => handleDelete(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-[#DFE0E1] text-[#526B7A] transition-colors hover:bg-[#fef2f2] hover:text-[#EF4343]" aria-label={`Excluir ${row.nomeCliente}`}>
+<button type="button" onClick={() => handleDelete(row)} className="grid h-8 w-8 place-items-center rounded-lg bg-border text-muted-foreground transition-colors hover:bg-status-error-surface hover:text-status-error" aria-label={`Excluir ${row.nomeCliente}`}>
 <Trash2 size={14} />
 </button>
 </div>
 </div>
 <div className="grid grid-cols-2 gap-2 text-[12px]">
-<div className="rounded-xl bg-[#F7F8F8] p-3">
-<span className="block text-caption font-extrabold uppercase tracking-wider text-[#526B7A]">Valor</span>
-<strong className="mt-1 block text-[#071822]">{formatMoney(row.valorNegociado)}</strong>
+<div className="rounded-xl bg-surface-alt p-3">
+<span className="block text-caption font-extrabold uppercase tracking-wider text-muted-foreground">Valor</span>
+<strong className="mt-1 block text-mx-navy">{formatMoney(row.valorNegociado)}</strong>
 </div>
-<div className="rounded-xl bg-[#F7F8F8] p-3">
-<span className="block text-caption font-extrabold uppercase tracking-wider text-[#526B7A]">Sinal</span>
-<strong className="mt-1 block text-[#526B7A]">{formatMoney(row.sinal)}</strong>
+<div className="rounded-xl bg-surface-alt p-3">
+<span className="block text-caption font-extrabold uppercase tracking-wider text-muted-foreground">Sinal</span>
+<strong className="mt-1 block text-muted-foreground">{formatMoney(row.sinal)}</strong>
 </div>
-<div className="col-span-2 rounded-xl bg-[#F7F8F8] p-3">
-<span className="block text-caption font-extrabold uppercase tracking-wider text-[#526B7A]">Agendamento</span>
-<strong className="mt-1 block truncate text-[#526B7A]">{formatAgendamentoDateTime(row.dataAgendamento)}</strong>
+<div className="col-span-2 rounded-xl bg-surface-alt p-3">
+<span className="block text-caption font-extrabold uppercase tracking-wider text-muted-foreground">Agendamento</span>
+<strong className="mt-1 block truncate text-muted-foreground">{formatAgendamentoDateTime(row.dataAgendamento)}</strong>
 </div>
 </div>
 <div className="flex flex-wrap gap-2">
@@ -692,7 +692,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <col className="w-[9%]" />
               <col className="w-[7%]" />
             </colgroup>
-            <thead className="bg-[#F7F8F8] text-caption uppercase tracking-normal text-[#526B7A] border-b border-[#DFE0E1]">
+            <thead className="bg-surface-alt text-caption uppercase tracking-normal text-muted-foreground border-b border-border">
               <tr>
                 {[
                   'Nome do Cliente',
@@ -711,9 +711,9 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     key={column}
                     className={`px-4 py-3.5 font-extrabold whitespace-nowrap truncate ${
                       column === 'Nome do Cliente'
-                        ? 'sticky left-0 aggression-z z-10 bg-[#F7F8F8] shadow-mx-sticky-start'
+                        ? 'sticky left-0 aggression-z z-10 bg-surface-alt shadow-mx-sticky-start'
                         : column === 'Ações'
-                          ? 'sticky right-0 z-10 bg-[#F7F8F8] shadow-mx-sticky-end'
+                          ? 'sticky right-0 z-10 bg-surface-alt shadow-mx-sticky-end'
                           : ''
                     }`}
                     title={column}
@@ -728,11 +728,11 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                 <tr>
                   <td colSpan={10} className="bg-white px-5 py-0">
                     <div className="flex min-h-[96px] flex-col items-center justify-center gap-1.5 py-6">
-                      <span className="grid h-9 w-9 place-items-center rounded-full bg-[#F7F8F8] text-[#526B7A]">
+                      <span className="grid h-9 w-9 place-items-center rounded-full bg-surface-alt text-muted-foreground">
                         <Users size={16} />
                       </span>
-                      <p className="text-body-sm font-bold text-[#526B7A]">Nenhum cliente cadastrado ainda</p>
-                      <p className="text-[12px] font-medium text-[#526B7A]">Clique em "+ Novo Cliente" para registrar a primeira venda ou agendamento.</p>
+                      <p className="text-body-sm font-bold text-muted-foreground">Nenhum cliente cadastrado ainda</p>
+                      <p className="text-[12px] font-medium text-muted-foreground">Clique em "+ Novo Cliente" para registrar a primeira venda ou agendamento.</p>
                     </div>
                   </td>
                 </tr>
@@ -743,11 +743,11 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     <React.Fragment key={row.id}>
                       <tr
                         onClick={() => toggleRowExpanded(row.id)}
-                        className={`h-[52px] border-t border-[#DFE0E1] hover:bg-[#F7F8F8] transition-colors cursor-pointer ${
-                          isExpanded ? 'bg-[#F7F8F8]/50' : 'bg-white'
+                        className={`h-[52px] border-t border-border hover:bg-surface-alt transition-colors cursor-pointer ${
+                          isExpanded ? 'bg-surface-alt/50' : 'bg-white'
                         }`}
                       >
-                        <td className="sticky left-0 z-10 whitespace-nowrap bg-inherit px-4 py-3 font-bold text-[#00A89D] shadow-mx-sticky-start">
+                        <td className="sticky left-0 z-10 whitespace-nowrap bg-inherit px-4 py-3 font-bold text-status-success shadow-mx-sticky-start">
                           <div className="flex items-center gap-1.5">
                             {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                             <span className="truncate" title={row.nomeCliente}>{row.nomeCliente}</span>
@@ -755,12 +755,12 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                             <VendaTipoBadge vendaRealizada={row.vendaRealizada} />
                           </div>
                         </td>
-                        <td className="whitespace-nowrap px-4 py-3 text-[#526B7A] truncate" title={formatPhone(row.telefone)}>{formatPhone(row.telefone)}</td>
-                        <td className="whitespace-nowrap px-4 py-3 text-[#526B7A] truncate" title={row.veiculoInteresse}>{row.veiculoInteresse}</td>
-                        <td className="whitespace-nowrap px-4 py-3 font-bold text-[#071822] truncate" title={formatMoney(row.valorNegociado)}>
+                        <td className="whitespace-nowrap px-4 py-3 text-muted-foreground truncate" title={formatPhone(row.telefone)}>{formatPhone(row.telefone)}</td>
+                        <td className="whitespace-nowrap px-4 py-3 text-muted-foreground truncate" title={row.veiculoInteresse}>{row.veiculoInteresse}</td>
+                        <td className="whitespace-nowrap px-4 py-3 font-bold text-mx-navy truncate" title={formatMoney(row.valorNegociado)}>
                           {formatMoney(row.valorNegociado)}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-3 text-[#526B7A] truncate" title={formatAgendamentoDateTime(row.dataAgendamento)}>
+                        <td className="whitespace-nowrap px-4 py-3 text-muted-foreground truncate" title={formatAgendamentoDateTime(row.dataAgendamento)}>
                           {formatAgendamentoDateTime(row.dataAgendamento)}
                         </td>
                         <td className="px-4 py-3">
@@ -780,7 +780,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                             <button
                               type="button"
                               onClick={() => handleEdit(row)}
-                              className="grid h-8 w-8 place-items-center rounded-lg bg-[#DFE0E1] text-[#071822] hover:bg-[#E8F3F2] hover:text-[#00A89D] transition-colors"
+                              className="grid h-8 w-8 place-items-center rounded-lg bg-border text-mx-navy hover:bg-surface-alt hover:text-status-success transition-colors"
                               title="Editar cliente"
                             >
                               <Edit size={14} />
@@ -788,7 +788,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                             <button
                               type="button"
                               onClick={() => handleDelete(row)}
-                              className="grid h-8 w-8 place-items-center rounded-lg bg-[#DFE0E1] text-[#526B7A] hover:bg-[#fef2f2] hover:text-[#EF4343] transition-colors"
+                              className="grid h-8 w-8 place-items-center rounded-lg bg-border text-muted-foreground hover:bg-status-error-surface hover:text-status-error transition-colors"
                               title="Excluir cliente"
                             >
                               <Trash2 size={14} />
@@ -797,19 +797,19 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                         </td>
                       </tr>
                       {isExpanded && !allowInlineQuickEdit && (
-                        <tr className="bg-[#F7F8F8]/40 border-t border-[#DFE0E1]" onClick={e => e.stopPropagation()}>
-                          <td colSpan={10} className="px-6 py-4 text-xs leading-relaxed text-[#526B7A]">
-                            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-[#DFE0E1] bg-white/65 p-4 shadow-sm">
+                        <tr className="bg-surface-alt/40 border-t border-border" onClick={e => e.stopPropagation()}>
+                          <td colSpan={10} className="px-6 py-4 text-xs leading-relaxed text-muted-foreground">
+                            <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border bg-white/65 p-4 shadow-sm">
                               <p className="max-w-[520px] font-semibold">
                                 Reagendar, mudar o status da negociação ou registrar observação agora é feito pela{' '}
-                                <span className="font-extrabold text-[#071822]">Rotina do Dia</span>. Se o fechamento deste dia já foi enviado, solicite o ajuste pelo{' '}
-                                <span className="font-extrabold text-[#071822]">Histórico de Fechamentos</span>.
+                                <span className="font-extrabold text-mx-navy">Rotina do Dia</span>. Se o fechamento deste dia já foi enviado, solicite o ajuste pelo{' '}
+                                <span className="font-extrabold text-mx-navy">Histórico de Fechamentos</span>.
                               </p>
                               <div className="flex shrink-0 items-center gap-2">
-                                <Button type="button" onClick={() => handleEdit(row)} className="h-9 bg-white text-[#071822] shadow-none ring-1 ring-inset ring-[#DFE0E1] hover:bg-[#F7F8F8]">
+                                <Button type="button" onClick={() => handleEdit(row)} className="h-9 bg-white text-mx-navy shadow-none ring-1 ring-inset ring-border hover:bg-surface-alt">
                                   Ver cliente
                                 </Button>
-                                <Button type="button" onClick={() => navigate('/central-execucao')} className="h-9 bg-[#00A89D] text-white shadow-none hover:bg-[#00A89D]">
+                                <Button type="button" onClick={() => navigate('/central-execucao')} className="h-9 bg-status-success text-white shadow-none hover:bg-status-success">
                                   <CalendarClock size={14} className="mr-1.5" />
                                   Rotina do Dia
                                 </Button>
@@ -821,13 +821,13 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                       {isExpanded && allowInlineQuickEdit && (() => {
                         const draft = getInlineDraft(row)
                         return (
-                          <tr className="bg-[#F7F8F8]/40 border-t border-[#DFE0E1]" onClick={e => e.stopPropagation()}>
-                            <td colSpan={10} className="px-6 py-4 text-xs leading-relaxed text-[#526B7A]">
-                              <div className="flex flex-wrap items-end gap-4 bg-white/65 p-4 rounded-xl border border-[#DFE0E1] shadow-sm">
+                          <tr className="bg-surface-alt/40 border-t border-border" onClick={e => e.stopPropagation()}>
+                            <td colSpan={10} className="px-6 py-4 text-xs leading-relaxed text-muted-foreground">
+                              <div className="flex flex-wrap items-end gap-4 bg-white/65 p-4 rounded-xl border border-border shadow-sm">
                                 <div className="flex flex-col gap-1.5 min-w-[200px]">
                                   <label
                                     htmlFor={`inline-data-${row.id}`}
-                                    className="text-caption font-extrabold uppercase tracking-wider text-[#526B7A]"
+                                    className="text-caption font-extrabold uppercase tracking-wider text-muted-foreground"
                                   >
                                     Data do novo agendamento
                                   </label>
@@ -836,13 +836,13 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                                     type="datetime-local"
                                     value={draft.dataNovoAgendamento}
                                     onChange={event => updateInlineDraft(row, { dataNovoAgendamento: event.target.value })}
-                                    className="h-10 rounded-lg border border-[#DFE0E1] bg-white px-3 text-body-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                                    className="h-10 rounded-lg border border-border bg-white px-3 text-body-sm font-semibold text-mx-navy outline-none transition focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                                   />
                                 </div>
                                 <div className="flex flex-col gap-1.5 min-w-[200px]">
                                   <label
                                     htmlFor={`inline-motivo-${row.id}`}
-                                    className="text-caption font-extrabold uppercase tracking-wider text-[#526B7A]"
+                                    className="text-caption font-extrabold uppercase tracking-wider text-muted-foreground"
                                   >
  Status da negociação
                                   </label>
@@ -851,20 +851,20 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                                       id={`inline-motivo-${row.id}`}
                                       value={draft.motivoPerda}
                                       onChange={event => updateInlineDraft(row, { motivoPerda: event.target.value })}
-                                      className="h-10 w-full appearance-none rounded-lg border border-[#DFE0E1] bg-white px-3 pr-9 text-body-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                                      className="h-10 w-full appearance-none rounded-lg border border-border bg-white px-3 pr-9 text-body-sm font-semibold text-mx-navy outline-none transition focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                                     >
  <option value="">Não selecionado</option>
  {STATUS_NEGOCIACAO_OPTIONS.map(status => (
  <option key={status} value={status}>{status}</option>
  ))}
                                     </select>
-                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-[#526B7A] pointer-events-none" />
+                                    <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                                   </div>
                                 </div>
                                 <div className="flex flex-1 flex-col gap-1.5 min-w-[220px]">
                                   <label
                                     htmlFor={`inline-obs-${row.id}`}
-                                    className="text-caption font-extrabold uppercase tracking-wider text-[#526B7A]"
+                                    className="text-caption font-extrabold uppercase tracking-wider text-muted-foreground"
                                   >
                                     Observações
                                   </label>
@@ -874,10 +874,10 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                                     value={draft.observacoes}
                                     onChange={event => updateInlineDraft(row, { observacoes: event.target.value })}
                                     placeholder="Ex: Cliente ficou de avaliar o usado e retornar."
-                                    className="h-10 w-full rounded-lg border border-[#DFE0E1] bg-white px-3 text-body-sm font-semibold text-[#071822] outline-none transition placeholder:text-[#526B7A] focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                                    className="h-10 w-full rounded-lg border border-border bg-white px-3 text-body-sm font-semibold text-mx-navy outline-none transition placeholder:text-muted-foreground focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                                   />
                                 </div>
-                                <Button type="button" onClick={() => handleSaveInline(row)} className="h-10 shrink-0 bg-[#00A89D] hover:bg-[#00A89D] text-white shadow-none">
+                                <Button type="button" onClick={() => handleSaveInline(row)} className="h-10 shrink-0 bg-status-success hover:bg-status-success text-white shadow-none">
                                   Salvar
                                 </Button>
                               </div>
@@ -892,8 +892,8 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
             </tbody>
           </table>
         </div>
-        <div className="flex items-center gap-2 border-t border-[#DFE0E1] bg-[#E8F3F2] px-5 py-3 text-xs font-bold text-[#00A89D]">
-          <Star size={14} className="shrink-0 fill-[#F59F0A] text-[#F59F0A]" />
+        <div className="flex items-center gap-2 border-t border-border bg-surface-alt px-5 py-3 text-xs font-bold text-status-success">
+          <Star size={14} className="shrink-0 fill-status-warning text-status-warning-text" />
           Clientes cadastrados ajudam a aumentar sua pontuação em Disciplina (30% dos pontos).
         </div>
       </Card>
@@ -907,23 +907,23 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
         >
           <div className="
             relative w-full max-w-[680px] my-8
-            rounded-2xl border border-[#DFE0E1] bg-white
+            rounded-2xl border border-border bg-white
             shadow-mx-2xl
             flex flex-col overflow-hidden
             animate-in fade-in zoom-in-95 duration-200
           ">
             {/* Header */}
-            <header className="px-8 pt-6 pb-4 border-b border-[#DFE0E1] relative">
-              <h2 className="text-[20px] font-extrabold text-[#071822]">
+            <header className="px-8 pt-6 pb-4 border-b border-border relative">
+              <h2 className="text-[20px] font-extrabold text-mx-navy">
                 {editingClientId ? 'Editar Cadastro do Cliente' : 'Cadastrar Novo Cliente'}
               </h2>
-              <p className="mt-1.5 text-body-sm font-medium text-[#526B7A] leading-relaxed">
+              <p className="mt-1.5 text-body-sm font-medium text-muted-foreground leading-relaxed">
                 Preencha os dados do cliente para enriquecer seu histórico comercial e atualizar o fechamento do dia.
               </p>
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="absolute right-6 top-6 grid h-8 w-8 place-items-center rounded-lg text-[#526B7A] hover:text-[#526B7A] hover:bg-[#F7F8F8] transition-all text-xl font-bold"
+                className="absolute right-6 top-6 grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:text-muted-foreground hover:bg-surface-alt transition-all text-xl font-bold"
                 aria-label="Fechar cadastro"
               >
                 <X size={18} />
@@ -1039,8 +1039,8 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <div className="grid grid-cols-2 gap-x-6 gap-y-4">
                 {/* 1. Nome do cliente */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modal-nome" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
-                    Nome do cliente <span className="text-[#EF4343]">*</span>
+                  <label htmlFor="modal-nome" className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
+                    Nome do cliente <span className="text-status-error">*</span>
                   </label>
                   <input
                     id="modal-nome"
@@ -1049,14 +1049,14 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     onChange={event => setNome(event.target.value)}
                     placeholder="Ex: João Santos"
                     required
-                    className="h-11 w-full rounded-xl border border-[#DFE0E1] bg-white px-4 text-sm font-semibold text-[#071822] outline-none transition placeholder:text-[#526B7A] focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                    className="h-11 w-full rounded-xl border border-border bg-white px-4 text-sm font-semibold text-mx-navy outline-none transition placeholder:text-muted-foreground focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                   />
                 </div>
 
                 {/* 2. Telefone */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modal-telefone" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
-                    Telefone <span className="text-[#EF4343]">*</span>
+                  <label htmlFor="modal-telefone" className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
+                    Telefone <span className="text-status-error">*</span>
                   </label>
                   <input
                     id="modal-telefone"
@@ -1065,14 +1065,14 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     onChange={event => handlePhoneChange(event.target.value)}
                     placeholder="(11) 98765-4321"
                     required
-                    className="h-11 w-full rounded-xl border border-[#DFE0E1] bg-white px-4 text-sm font-semibold text-[#071822] outline-none transition placeholder:text-[#526B7A] focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                    className="h-11 w-full rounded-xl border border-border bg-white px-4 text-sm font-semibold text-mx-navy outline-none transition placeholder:text-muted-foreground focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                   />
                 </div>
 
                 {/* 3. Veículo de interesse */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modal-veiculo" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
-                    Veículo de interesse <span className="text-[#EF4343]">*</span>
+                  <label htmlFor="modal-veiculo" className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
+                    Veículo de interesse <span className="text-status-error">*</span>
                   </label>
                   <input
                     id="modal-veiculo"
@@ -1081,14 +1081,14 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     onChange={event => setVeiculo(event.target.value)}
                     placeholder="Ex: HB20 1.0 Comfort"
                     required
-                    className="h-11 w-full rounded-xl border border-[#DFE0E1] bg-white px-4 text-sm font-semibold text-[#071822] outline-none transition placeholder:text-[#526B7A] focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                    className="h-11 w-full rounded-xl border border-border bg-white px-4 text-sm font-semibold text-mx-navy outline-none transition placeholder:text-muted-foreground focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                   />
                 </div>
 
                 {/* 4. Valor Negociado — visual only, hidden input handles test */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
-                    Valor negociado {vendaRealizada === 'Sim' && <span className="text-[#EF4343]">*</span>}
+                  <span className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
+                    Valor negociado {vendaRealizada === 'Sim' && <span className="text-status-error">*</span>}
                   </span>
                   <input
                     type="text"
@@ -1098,14 +1098,14 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     placeholder="R$ 68.900,00"
                     required={vendaRealizada === 'Sim'}
                     aria-hidden="true"
-                    className="h-11 w-full rounded-xl border border-[#DFE0E1] bg-white px-4 text-sm font-semibold text-[#071822] outline-none transition placeholder:text-[#526B7A] focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                    className="h-11 w-full rounded-xl border border-border bg-white px-4 text-sm font-semibold text-mx-navy outline-none transition placeholder:text-muted-foreground focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                   />
                 </div>
 
                 {/* 5. Data do agendamento */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modal-data" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
-                    Data do agendamento <span className="text-[#EF4343]">*</span>
+                  <label htmlFor="modal-data" className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
+                    Data do agendamento <span className="text-status-error">*</span>
                   </label>
                   <input
                     id="modal-data"
@@ -1113,14 +1113,14 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     value={dataFechamento}
                     onChange={event => setDataFechamento(event.target.value)}
                     required
-                    className="h-11 w-full rounded-xl border border-[#DFE0E1] bg-white px-4 text-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                    className="h-11 w-full rounded-xl border border-border bg-white px-4 text-sm font-semibold text-mx-navy outline-none transition focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                   />
                 </div>
 
                 {/* 6. Canal — visual select synced to hidden test select */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
-                    Canal <span className="text-[#EF4343]">*</span>
+                  <span className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
+                    Canal <span className="text-status-error">*</span>
                   </span>
                   <div className="relative">
                     <select
@@ -1128,20 +1128,20 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                       onChange={event => setCanal(event.target.value as CrmCanal)}
                       required
                       aria-hidden="true"
-                      className="h-11 w-full appearance-none rounded-xl border border-[#DFE0E1] bg-white px-4 pr-10 text-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                      className="h-11 w-full appearance-none rounded-xl border border-border bg-white px-4 pr-10 text-sm font-semibold text-mx-navy outline-none transition focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                     >
                       <option value="">Selecione...</option>
                       <option value="carteira">Carteira</option>
                       <option value="internet">Internet</option>
                       <option value="showroom">Showroom</option>
                     </select>
-                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#526B7A] pointer-events-none" />
+                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   </div>
                 </div>
 
                 {/* 7. Compareceu */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
                     Compareceu
                   </span>
                   <div className="relative">
@@ -1149,18 +1149,18 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                       value={compareceu}
                       onChange={event => setCompareceu(event.target.value as any)}
                       aria-hidden="true"
-                      className="h-11 w-full appearance-none rounded-xl border border-[#DFE0E1] bg-white px-4 pr-10 text-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                      className="h-11 w-full appearance-none rounded-xl border border-border bg-white px-4 pr-10 text-sm font-semibold text-mx-navy outline-none transition focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                     >
                       <option value="Sim">Sim</option>
                       <option value="Não">Não</option>
                     </select>
-                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#526B7A] pointer-events-none" />
+                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   </div>
                 </div>
 
                 {/* 8. Carro Avaliado */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
                     Carro avaliado
                   </span>
                   <div className="relative">
@@ -1168,18 +1168,18 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                       value={carroAvaliado}
                       onChange={event => setCarroAvaliado(event.target.value as any)}
                       aria-hidden="true"
-                      className="h-11 w-full appearance-none rounded-xl border border-[#DFE0E1] bg-white px-4 pr-10 text-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                      className="h-11 w-full appearance-none rounded-xl border border-border bg-white px-4 pr-10 text-sm font-semibold text-mx-navy outline-none transition focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                     >
                       <option value="sim">Sim</option>
                       <option value="nao">Não</option>
                     </select>
-                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#526B7A] pointer-events-none" />
+                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   </div>
                 </div>
 
                 {/* 9. Sinal — visual only, hidden input handles test */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
                     Sinal (R$)
                   </span>
                   <input
@@ -1189,13 +1189,13 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     onChange={event => setSinal(formatCurrencyLive(event.target.value))}
                     placeholder="R$ 1.000,00"
                     aria-hidden="true"
-                    className="h-11 w-full rounded-xl border border-[#DFE0E1] bg-white px-4 text-sm font-semibold text-[#071822] outline-none transition placeholder:text-[#526B7A] focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                    className="h-11 w-full rounded-xl border border-border bg-white px-4 text-sm font-semibold text-mx-navy outline-none transition placeholder:text-muted-foreground focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                   />
                 </div>
 
                 {/* 10. Financiamento — visual select synced to hidden */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <span className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
                     Financiamento
                   </span>
                   <div className="relative">
@@ -1203,20 +1203,20 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                       value={financiamento}
                       onChange={event => setFinanciamento(event.target.value as any)}
                       aria-hidden="true"
-                      className="h-11 w-full appearance-none rounded-xl border border-[#DFE0E1] bg-white px-4 pr-10 text-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                      className="h-11 w-full appearance-none rounded-xl border border-border bg-white px-4 pr-10 text-sm font-semibold text-mx-navy outline-none transition focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                     >
                       <option value="aprovado">Aprovado</option>
                       <option value="reprovado">Recusado</option>
                       <option value="nao_aplica">Não se aplica</option>
                     </select>
-                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#526B7A] pointer-events-none" />
+                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   </div>
                 </div>
 
                 {/* 11. Venda Realizada — visual select synced to hidden */}
                 <div className="flex flex-col gap-1.5">
-                  <span className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
-                    Venda realizada <span className="text-[#EF4343]">*</span>
+                  <span className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
+                    Venda realizada <span className="text-status-error">*</span>
                   </span>
                   <div className="relative">
                     <select
@@ -1230,16 +1230,16 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                       }}
                       required
                       aria-hidden="true"
-                      className="h-11 w-full appearance-none rounded-xl border border-[#DFE0E1] bg-white px-4 pr-10 text-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                      className="h-11 w-full appearance-none rounded-xl border border-border bg-white px-4 pr-10 text-sm font-semibold text-mx-navy outline-none transition focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                     >
                       <option value="Em Negociação">Em Negociação</option>
                       <option value="Sim">Sim</option>
                       <option value="Não">Não</option>
                     </select>
-                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#526B7A] pointer-events-none" />
+                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   </div>
                   {vendaRealizada === 'Em Negociação' && (
-                    <span className="text-caption text-[#F59F0A] font-semibold mt-1">
+                    <span className="text-caption text-status-warning-text font-semibold mt-1">
                       Agendamento para amanhã sugerido para a data acima.
                     </span>
                   )}
@@ -1247,7 +1247,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
                 {/* 12. Observações */}
                 <div className="flex flex-col gap-1.5">
-                  <label htmlFor="modal-obs" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
+                  <label htmlFor="modal-obs" className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
                     Observações
                   </label>
                   <input
@@ -1256,15 +1256,15 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     value={observacoes}
                     onChange={event => setObservacoes(event.target.value)}
                     placeholder="Ex: Cliente ficou de avaliar o usado..."
-                    className="h-11 w-full rounded-xl border border-[#DFE0E1] bg-white px-4 text-sm font-semibold text-[#071822] outline-none transition placeholder:text-[#526B7A] focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                    className="h-11 w-full rounded-xl border border-border bg-white px-4 text-sm font-semibold text-mx-navy outline-none transition placeholder:text-muted-foreground focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                   />
                 </div>
               </div>
 
               {/* Status da negociação */}
  <div className="flex flex-col gap-1.5 mt-3">
-                  <label htmlFor="modal-motivo-perda" className="text-caption font-extrabold text-[#526B7A] uppercase tracking-wider">
- Status da negociação {(vendaRealizada === 'Não' || (vendaRealizada as string) === 'perdido') && <span className="text-[#EF4343]">*</span>}
+                  <label htmlFor="modal-motivo-perda" className="text-caption font-extrabold text-muted-foreground uppercase tracking-wider">
+ Status da negociação {(vendaRealizada === 'Não' || (vendaRealizada as string) === 'perdido') && <span className="text-status-error">*</span>}
                   </label>
                   <div className="relative">
                     <select
@@ -1272,24 +1272,24 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                       value={motivoPerda}
                       onChange={event => setMotivoPerda(event.target.value)}
  required={vendaRealizada === 'Não' || (vendaRealizada as string) === 'perdido'}
-                      className="h-11 w-full appearance-none rounded-xl border border-[#DFE0E1] bg-white px-4 pr-10 text-sm font-semibold text-[#071822] outline-none transition focus:border-[#00A89D] focus:ring-4 focus:ring-[#00A89D]/10"
+                      className="h-11 w-full appearance-none rounded-xl border border-border bg-white px-4 pr-10 text-sm font-semibold text-mx-navy outline-none transition focus:border-status-success focus:ring-4 focus:ring-status-success/10"
                     >
  <option value="">Selecione...</option>
  {STATUS_NEGOCIACAO_OPTIONS.map(status => (
  <option key={status} value={status}>{status}</option>
  ))}
                     </select>
-                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-[#526B7A] pointer-events-none" />
+                    <ChevronDown size={16} className="absolute right-4 top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                   </div>
                 </div>
             </div>
 
             {/* Footer */}
-            <footer className="px-8 py-5 border-t border-[#DFE0E1] flex justify-center gap-3 bg-[#F7F8F8]">
+            <footer className="px-8 py-5 border-t border-border flex justify-center gap-3 bg-surface-alt">
               <button
                 type="button"
                 onClick={() => setDrawerOpen(false)}
-                className="h-[40px] px-6 rounded-full border border-[#DFE0E1] bg-white text-sm font-bold text-[#526B7A] hover:bg-[#F7F8F8] transition-colors"
+                className="h-[40px] px-6 rounded-full border border-border bg-white text-sm font-bold text-muted-foreground hover:bg-surface-alt transition-colors"
               >
                 Cancelar
               </button>
@@ -1298,7 +1298,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                 type="button"
                 onClick={() => handleCadastrar()}
                 disabled={saving}
-                className="h-[40px] px-8 rounded-full bg-[#00A89D] text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,168,157,0.2)] hover:bg-[#00A89D] disabled:bg-[#526B7A] transition-colors"
+                className="h-[40px] px-8 rounded-full bg-status-success text-sm font-bold text-white shadow-[0_4px_12px_rgba(0,168,157,0.2)] hover:bg-status-success disabled:bg-muted-foreground transition-colors"
               >
                 {saving ? 'Salvando...' : 'Salvar Cliente'}
               </button>
@@ -1316,16 +1316,16 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
       {coerenciaModalOpen && (
         <div className="fixed inset-0 z-[150] grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Confirme a origem da venda">
-          <div className="w-full max-w-[440px] rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl">
-            <header className="px-6 py-5 border-b border-[#DFE0E1]">
-              <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-[#071822]">
-                <AlertCircle size={18} className="text-[#F59E0B]" />
+          <div className="w-full max-w-[440px] rounded-2xl border border-border bg-white shadow-mx-2xl">
+            <header className="px-6 py-5 border-b border-border">
+              <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-mx-navy">
+                <AlertCircle size={18} className="text-status-warning-text" />
                 Venda sem atendimento registrado hoje
               </h2>
-              <p className="mt-2 text-body-sm font-medium leading-relaxed text-[#526B7A]">
-                Não encontramos atendimento hoje para o canal <strong className="text-[#071822]">{CRM_CANAL_LABEL[coerenciaCanalPendente as CrmCanal] || coerenciaCanalPendente}</strong>. Esta venda veio de um atendimento anterior?
+              <p className="mt-2 text-body-sm font-medium leading-relaxed text-muted-foreground">
+                Não encontramos atendimento hoje para o canal <strong className="text-mx-navy">{CRM_CANAL_LABEL[coerenciaCanalPendente as CrmCanal] || coerenciaCanalPendente}</strong>. Esta venda veio de um atendimento anterior?
               </p>
-              <p className="mt-2 text-[12px] font-medium text-[#526B7A]">
+              <p className="mt-2 text-[12px] font-medium text-muted-foreground">
                 No mercado automotivo, é comum o cliente atender em um dia e confirmar a compra em outro — isso é válido. Você pode continuar normalmente.
               </p>
             </header>
@@ -1333,21 +1333,21 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <button
                 type="button"
                 onClick={() => handleCadastrar({ coerenciaObservacao: 'Venda de atendimento anterior (confirmado pelo vendedor).' })}
-                className="h-11 rounded-xl bg-[#22C55E] px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-primary"
+                className="h-11 rounded-xl bg-status-success px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-primary"
               >
                 Sim, atendimento anterior
               </button>
               <button
                 type="button"
                 onClick={() => setCoerenciaModalOpen(false)}
-                className="h-11 rounded-xl bg-[#F59E0B] px-4 text-sm font-bold text-status-warning-foreground shadow-sm transition-colors hover:bg-status-warning"
+                className="h-11 rounded-xl bg-status-warning px-4 text-sm font-bold text-status-warning-foreground shadow-sm transition-colors hover:bg-status-warning"
               >
                 Corrigir canal ou atendimento
               </button>
               <button
                 type="button"
                 onClick={() => handleCadastrar({ coerenciaObservacao: 'Venda sem atendimento do canal registrado — salva mesmo assim.' })}
-                className="h-11 rounded-xl border border-[#DFE0E1] bg-white px-4 text-sm font-bold text-[#526B7A] transition-colors hover:bg-[#F7F8F8]"
+                className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-bold text-muted-foreground transition-colors hover:bg-surface-alt"
               >
                 Salvar mesmo assim
               </button>
@@ -1406,7 +1406,7 @@ function VendaBadge({ value }: { value: ClienteRow['vendaRealizada'] }) {
     return (
       <Badge
         variant="outline"
-        className="border-[#FFF7E6] bg-[#FFF7E6] text-[#F59F0A] px-2 py-0 text-caption font-semibold"
+        className="border-status-warning/20 bg-status-warning-surface text-status-warning-text px-2 py-0 text-caption font-semibold"
       >
         Em Negociação
       </Badge>

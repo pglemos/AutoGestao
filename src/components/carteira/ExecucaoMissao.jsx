@@ -209,11 +209,11 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
         </button>
         <div className="bg-white border border-border-subtle rounded-2xl p-8 text-center space-y-4">
           <span className="text-5xl">🎯</span>
-          <h2 className="text-xl font-black text-[#031B3D]">Envio concluído!</h2>
+          <h2 className="text-xl font-black text-mx-navy">Envio concluído!</h2>
           <p className="text-sm text-muted-foreground">A missão <strong>{missao.tipo_missao}</strong> está aguardando respostas.</p>
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div className="bg-surface-alt rounded-xl p-3">
-              <p className="text-2xl font-black text-[#031B3D]">{total}</p>
+              <p className="text-2xl font-black text-mx-navy">{total}</p>
               <p className="text-xs text-muted-foreground">Total</p>
             </div>
             <div className="bg-status-info-surface rounded-xl p-3">
@@ -229,7 +229,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             <p className="text-xs font-bold text-status-warning-text uppercase tracking-wide">Status da Missão</p>
             <p className="text-sm font-semibold text-status-warning-text mt-0.5">Aguardando respostas</p>
           </div>
-          <Button onClick={handleVoltar} className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white mt-2">
+          <Button onClick={handleVoltar} className="w-full rounded-xl bg-status-info hover:bg-status-info text-white mt-2">
             Voltar ao Plano de Ataque
           </Button>
         </div>
@@ -249,20 +249,20 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
         <ChevronRight className="w-3 h-3" />
         <span>Plano de Ataque</span>
         <ChevronRight className="w-3 h-3" />
-        <span className="text-[#031B3D] font-semibold">{missao.tipo_missao}</span>
+        <span className="text-mx-navy font-semibold">{missao.tipo_missao}</span>
       </div>
 
       <div className="bg-white border border-border-subtle rounded-2xl p-5 space-y-3">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Missão</p>
-            <p className="text-base font-black text-[#031B3D]">{missao.tipo_missao}</p>
+            <p className="text-base font-black text-mx-navy">{missao.tipo_missao}</p>
           </div>
           <span className="text-xs bg-status-warning-surface text-status-warning-text font-bold px-2.5 py-1 rounded-full border border-status-warning/20">Em execução</span>
         </div>
         <div className="grid grid-cols-3 gap-3">
           <div className="text-center">
-            <p className="text-xl font-black text-[#031B3D]">{total}</p>
+            <p className="text-xl font-black text-mx-navy">{total}</p>
             <p className="text-xs text-muted-foreground">Total</p>
           </div>
           <div className="text-center">
@@ -280,7 +280,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             <span>{progresso}%</span>
           </div>
           <div className="bg-muted rounded-full h-2">
-            <div className="bg-[#005BFF] rounded-full h-2 transition-all" style={{ width: `${progresso}%` }} />
+            <div className="bg-status-info rounded-full h-2 transition-all" style={{ width: `${progresso}%` }} />
           </div>
         </div>
       </div>
@@ -295,7 +295,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
               {(clienteAtual.nome || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase()}
             </div>
             <div>
-              <p className="text-base font-black text-[#031B3D]">{clienteAtual.nome}</p>
+              <p className="text-base font-black text-mx-navy">{clienteAtual.nome}</p>
               <p className="text-sm text-muted-foreground">{clienteAtual.whatsapp} · {clienteAtual.veiculo_interesse || "Sem veículo"}</p>
               <p className="text-xs text-muted-foreground mt-0.5">{clienteAtual.momento}</p>
             </div>
@@ -304,7 +304,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           <div>
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Script sugerido</p>
             <textarea value={scriptEditado || scriptPreenchido} onChange={e => setScriptEditado(e.target.value)} rows={6}
-              className="w-full rounded-xl border border-border bg-surface-alt px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]" />
+              className="w-full rounded-xl border border-border bg-surface-alt px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-status-info" />
           </div>
 
           <div className="flex gap-2">
@@ -314,7 +314,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             </Button>
             {waUrl && (
               <a href={waUrl} target="_blank" rel="noopener noreferrer" className="flex-1">
-                <Button className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white gap-1.5 text-sm">
+                <Button className="w-full rounded-xl bg-status-info hover:bg-status-info text-white gap-1.5 text-sm">
                   <MessageCircle className="w-4 h-4" /> Abrir WhatsApp
                 </Button>
               </a>
@@ -336,13 +336,13 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
         <div className="bg-white border border-border-subtle rounded-2xl p-5 space-y-4">
           <div>
             <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Registrar resultado</p>
-            <p className="text-sm font-semibold text-[#031B3D] mt-0.5">{clienteAtual.nome}</p>
+            <p className="text-sm font-semibold text-mx-navy mt-0.5">{clienteAtual.nome}</p>
           </div>
           <p className="text-sm text-muted-foreground">O que aconteceu nesse contato?</p>
           <div className="grid grid-cols-1 gap-1.5">
             {RESULTADOS.map(r => (
               <button key={r} onClick={() => setResultado(r)}
-                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-status-info-surface text-status-info-text font-semibold" : "border-border-subtle text-muted-foreground hover:bg-surface-alt"}`}>
+                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-status-info bg-status-info-surface text-status-info-text font-semibold" : "border-border-subtle text-muted-foreground hover:bg-surface-alt"}`}>
                 {r}
               </button>
             ))}
@@ -350,7 +350,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           <div className="flex gap-2">
             <Button variant="outline" onClick={avancar} disabled={salvando || persistindo} className="flex-1 rounded-xl text-sm">Pular resultado</Button>
             <Button onClick={registrarResultado} disabled={!resultado || salvando || persistindo}
-              className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm">
+              className="flex-1 rounded-xl bg-status-info hover:bg-status-info text-white text-sm">
               {salvando ? "Salvando..." : "Confirmar e avançar"}
             </Button>
           </div>

@@ -304,7 +304,7 @@ function ProspeccaoCard({ acao, onVerComoFazer }) {
             <Icon className="w-4 h-4 text-status-info-text" />
           </div>
           <div>
-            <p className="font-bold text-body-sm text-[#0F172A]">{acao.tipo}</p>
+            <p className="font-bold text-body-sm text-mx-navy">{acao.tipo}</p>
             <p className="text-caption text-muted-foreground">{acao.publico}</p>
           </div>
         </div>
@@ -328,7 +328,7 @@ function ComoFazerDrawer({ acao, onClose }) {
     <Dialog open onOpenChange={onClose}>
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-[#0F172A]">
+          <DialogTitle className="flex items-center gap-2 text-mx-navy">
             <Icon className="w-5 h-5 text-status-info-text" /> {acao.tipo}
           </DialogTitle>
         </DialogHeader>
@@ -343,7 +343,7 @@ function ComoFazerDrawer({ acao, onClose }) {
             <ol className="space-y-2">
               {acao.instrucoes.map((inst, i) => (
                 <li key={i} className="flex items-start gap-2.5">
-                  <span className="w-5 h-5 rounded-full bg-[#005BFF] text-white text-caption font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
+                  <span className="w-5 h-5 rounded-full bg-status-info text-white text-caption font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{i + 1}</span>
                   <span className="text-body-sm text-foreground">{inst}</span>
                 </li>
               ))}
@@ -549,18 +549,18 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
           const instrucoesDinamicas = getInstrucoes(step);
 
           return (
-            <div key={step.id} className={`bg-white rounded-2xl border shadow-sm transition-all ${isCurrent ? "border-[#005BFF] shadow-blue-100" : "border-border"}`}>
+            <div key={step.id} className={`bg-white rounded-2xl border shadow-sm transition-all ${isCurrent ? "border-status-info shadow-blue-100" : "border-border"}`}>
               <button
                 className="w-full flex items-center gap-4 px-5 py-4 text-left"
                 onClick={() => handleToggleStep(step.id)}
               >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${isCurrent ? "bg-[#005BFF] text-white" : isPast ? "bg-brand-primary-subtle text-brand-primary" : "bg-muted text-muted-foreground"}`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${isCurrent ? "bg-status-info text-white" : isPast ? "bg-brand-primary-subtle text-brand-primary" : "bg-muted text-muted-foreground"}`}>
                   <Icon className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
-                    <span className={`text-caption font-bold px-2 py-0.5 rounded-lg ${isCurrent ? "bg-[#005BFF] text-white" : "bg-muted text-muted-foreground"}`}>{time}</span>
-                    <span className={`text-[14px] font-bold ${isCurrent ? "text-[#0F172A]" : "text-muted-foreground"}`}>{step.label}</span>
+                    <span className={`text-caption font-bold px-2 py-0.5 rounded-lg ${isCurrent ? "bg-status-info text-white" : "bg-muted text-muted-foreground"}`}>{time}</span>
+                    <span className={`text-[14px] font-bold ${isCurrent ? "text-mx-navy" : "text-muted-foreground"}`}>{step.label}</span>
                     {isCurrent && <span className="text-caption font-bold text-status-info-text bg-status-info-surface px-2 py-0.5 rounded-full uppercase tracking-wider">Agora</span>}
                   </div>
                   {/* Frase contextual no card recolhido */}
@@ -615,7 +615,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                       <div className="flex flex-wrap gap-2 mb-4">
                         {OBJECOES.map(o => (
                           <button key={o.label} onClick={() => setObjecaoAberta(objecaoAberta === o.label ? null : o.label)}
-                            className={`px-3 py-1.5 text-[12px] font-bold rounded-xl border transition-colors ${objecaoAberta === o.label ? "bg-[#005BFF] text-white border-[#005BFF]" : "border-border text-muted-foreground hover:bg-surface-alt"}`}>
+                            className={`px-3 py-1.5 text-[12px] font-bold rounded-xl border transition-colors ${objecaoAberta === o.label ? "bg-status-info text-white border-status-info" : "border-border text-muted-foreground hover:bg-surface-alt"}`}>
                             {o.label}
                           </button>
                         ))}
@@ -655,7 +655,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                       {step.atalhos.map(a => (
                         <Link key={a.label} to={a.to}
                           onClick={() => base44.analytics.track({ eventName: "rotina_clicou_atalho", properties: { atalho: a.label, etapa: step.id } })}
-                          className={`flex items-center gap-1.5 text-[12px] font-bold px-3.5 py-2 rounded-xl transition-colors ${a.primary ? "bg-[#005BFF] text-white hover:bg-status-info" : "border border-[#005BFF] text-[#005BFF] hover:bg-status-info-surface"}`}>
+                          className={`flex items-center gap-1.5 text-[12px] font-bold px-3.5 py-2 rounded-xl transition-colors ${a.primary ? "bg-status-info text-white hover:bg-status-info" : "border border-status-info text-status-info-text hover:bg-status-info-surface"}`}>
                           <ExternalLink className="w-3 h-3" />{a.label}
                         </Link>
                       ))}
@@ -679,14 +679,14 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
             return (
               <div key={step.id} className="flex items-start gap-3">
                 <div className="flex flex-col items-center">
-                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${isCurrent ? "bg-[#005BFF] text-white" : isPast ? "bg-brand-primary-subtle text-brand-primary" : "bg-muted text-muted-foreground"}`}>
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${isCurrent ? "bg-status-info text-white" : isPast ? "bg-brand-primary-subtle text-brand-primary" : "bg-muted text-muted-foreground"}`}>
                     <Icon className="w-3.5 h-3.5" />
                   </div>
                   {idx < arr.length - 1 && <div className={`w-px h-5 ${isPast ? "bg-brand-primary/30" : "bg-muted"}`} />}
                 </div>
                 <div className="pb-3 pt-0.5">
                   <p className={`text-caption font-bold ${isCurrent ? "text-status-info-text" : "text-muted-foreground"}`}>{formatMin(stepTime(step))}</p>
-                  <p className={`text-[12px] font-semibold leading-tight ${isCurrent ? "text-[#0F172A]" : "text-muted-foreground"}`}>{step.label}</p>
+                  <p className={`text-[12px] font-semibold leading-tight ${isCurrent ? "text-mx-navy" : "text-muted-foreground"}`}>{step.label}</p>
                 </div>
               </div>
             );

@@ -162,18 +162,18 @@ export default function FinalizarMobile({
       {/* Avisos */}
       {isBlocked && (
         <div className="flex items-start gap-3 bg-status-error-surface border border-status-error/30 rounded-xl px-4 py-3">
-          <AlertTriangle className="w-4 h-4 text-[#EF4444] flex-shrink-0 mt-0.5" />
+          <AlertTriangle className="w-4 h-4 text-status-error flex-shrink-0 mt-0.5" />
           <div className="flex-1">
-            <p className="text-body-sm font-semibold text-[#EF4444] leading-snug">
+            <p className="text-body-sm font-semibold text-status-error leading-snug">
               Prazo encerrado às 09h30. Solicite liberação ao seu gerente.
             </p>
             {solicitacaoEnviada ? (
-              <p className="text-[12px] text-[#22C55E] font-semibold mt-2">✓ Solicitação enviada ao gerente.</p>
+              <p className="text-[12px] text-status-success font-semibold mt-2">✓ Solicitação enviada ao gerente.</p>
             ) : (
               <button
                 onClick={handleAvisarGerente}
                 disabled={enviando}
-                className="mt-2 flex items-center gap-1.5 text-body-sm font-bold text-white bg-[#25D366] hover:bg-brand-primary disabled:opacity-60 px-4 py-2 rounded-xl transition-colors"
+                className="mt-2 flex items-center gap-1.5 text-body-sm font-bold text-white bg-status-success hover:bg-brand-primary disabled:opacity-60 px-4 py-2 rounded-xl transition-colors"
               >
                 <MessageCircle className="w-4 h-4" />
                 {enviando ? "Enviando..." : "Avisar gerente no WhatsApp"}
@@ -185,8 +185,8 @@ export default function FinalizarMobile({
 
       {liberado && !jaFinalizado && (
         <div className="flex items-center gap-2 bg-status-warning-surface border border-status-warning/30 rounded-xl px-4 py-3">
-          <AlertTriangle className="w-4 h-4 text-[#F59E0B] flex-shrink-0" />
-          <p className="text-[12px] font-semibold text-[#92400E]">
+          <AlertTriangle className="w-4 h-4 text-status-warning-text flex-shrink-0" />
+          <p className="text-[12px] font-semibold text-status-warning-text">
             Fechamento liberado pelo gerente. Ao finalizar, será aplicada penalização de 10% por atraso.
           </p>
         </div>
@@ -195,7 +195,7 @@ export default function FinalizarMobile({
       {jaFinalizado && d1WindowOpen && (
         <div className="flex items-center gap-2 bg-status-info-surface border border-status-info/30 rounded-xl px-4 py-3">
           <Clock className="w-4 h-4 text-status-info-text flex-shrink-0" />
-          <p className="text-[12px] font-semibold text-[#1e3a5f]">
+          <p className="text-[12px] font-semibold text-mx-navy">
             Fechamento concluído. Os Agendamentos D+1 podem ser ajustados até 09h30 de {d1DateExibicao}.
           </p>
         </div>
@@ -218,8 +218,8 @@ export default function FinalizarMobile({
             disabled={isBlocked}
             className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-white font-bold text-body tracking-widest uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed shadow-md
               ${isBlocked
-                ? "bg-[#EF4444] shadow-red-200 opacity-70"
-                : "bg-[#22C55E] hover:bg-brand-primary shadow-green-200"
+                ? "bg-status-error shadow-red-200 opacity-70"
+                : "bg-status-success hover:bg-brand-primary shadow-green-200"
               }`}
           >
             <Lock className="w-5 h-5" />
@@ -233,7 +233,7 @@ export default function FinalizarMobile({
           )}
         </div>
       ) : (
-        <div className="flex items-center justify-center gap-2 py-2 text-[14px] font-semibold text-[#22C55E]">
+        <div className="flex items-center justify-center gap-2 py-2 text-[14px] font-semibold text-status-success">
           <CheckCircle className="w-5 h-5" />
           Fechamento de {dataExibicao} finalizado às {moment(dailyClose?.data_hora_finalizacao).format("HH:mm")}.
         </div>
@@ -243,29 +243,29 @@ export default function FinalizarMobile({
       <Dialog open={confirmModalOpen} onOpenChange={setConfirmModalOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold text-h5 leading-snug">
+            <DialogTitle className="text-mx-navy font-bold text-h5 leading-snug">
               Confirma que não haverá mais registros Hoje?
             </DialogTitle>
           </DialogHeader>
-          <p className="text-body-sm text-[#64748B] leading-relaxed mt-1">
+          <p className="text-body-sm text-muted-foreground leading-relaxed mt-1">
             Ao concluir, leads, atendimentos, vendas e demais informações referentes ao dia{" "}
-            <strong className="text-[#0F172A]">{dataExibicao}</strong> serão encerrados e não poderão mais ser alterados.
+            <strong className="text-mx-navy">{dataExibicao}</strong> serão encerrados e não poderão mais ser alterados.
           </p>
-          <p className="text-body-sm text-[#64748B] leading-relaxed mt-2">
+          <p className="text-body-sm text-muted-foreground leading-relaxed mt-2">
             Até 09h30 de {d1DateExibicao}, você poderá corrigir somente as informações de{" "}
-            <strong className="text-[#0F172A]">Agendamentos D+1</strong>.
+            <strong className="text-mx-navy">Agendamentos D+1</strong>.
           </p>
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button
               onClick={() => setConfirmModalOpen(false)}
-              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors"
+              className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors"
             >
               Não, voltar
             </button>
             <button
               onClick={handleConfirmarFechamento}
               disabled={finalizando}
-              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#22C55E] hover:bg-brand-primary disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-green-100"
+              className="px-6 py-2.5 text-body-sm font-bold text-white bg-status-success hover:bg-brand-primary disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-green-100"
             >
               {finalizando ? "Finalizando..." : "Sim, concluir"}
             </button>

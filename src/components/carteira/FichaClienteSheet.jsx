@@ -308,7 +308,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
 
       <div className="flex gap-2 pt-1">
         <Button variant="outline" onClick={onCancelar} className="flex-1 rounded-xl" disabled={salvando}>Cancelar</Button>
-        <Button onClick={onSalvar} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white" disabled={salvando}>
+        <Button onClick={onSalvar} className="flex-1 rounded-xl bg-status-info hover:bg-status-info text-white" disabled={salvando}>
           {salvando ? "Salvando..." : "Salvar"}
         </Button>
       </div>
@@ -461,7 +461,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
       <DialogContent className="w-full sm:max-w-xl max-h-[90vh] overflow-y-auto p-0 flex flex-col">
         {loading ? (
           <div className="flex items-center justify-center h-48">
-            <div className="w-6 h-6 border-4 border-border border-t-[#005BFF] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-4 border-border border-t-status-info rounded-full animate-spin" />
           </div>
         ) : !cliente ? (
           <div className="flex items-center justify-center h-48 text-muted-foreground text-sm">Cliente não encontrado.</div>
@@ -475,7 +475,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                   {iniciais}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <h3 className="text-h5 font-black text-[#0F172A] leading-tight">{cliente.nome}</h3>
+                  <h3 className="text-h5 font-black text-mx-navy leading-tight">{cliente.nome}</h3>
                   <p className="text-xs text-muted-foreground mt-0.5">
                     {canal}{cliente.origem_detalhada ? ` · ${cliente.origem_detalhada}` : ""} · Cadastrado {moment(cliente.created_date).format("DD/MM/YYYY")}
                   </p>
@@ -483,7 +483,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                     <p className="text-xs text-muted-foreground mt-0.5">📱 {cliente.whatsapp}</p>
                   )}
                   {cliente.veiculo_interesse && (
-                    <p className="text-xs font-semibold text-[#031B3D] mt-1">🚗 {cliente.veiculo_interesse}</p>
+                    <p className="text-xs font-semibold text-mx-navy mt-1">🚗 {cliente.veiculo_interesse}</p>
                   )}
                 </div>
               </div>
@@ -555,7 +555,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                   <div className="space-y-2">
                     <div>
                       <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide">Mentor recomenda</p>
-                      <p className="text-sm font-bold text-[#031B3D] mt-0.5">{cliente.proximo_passo || proximoPasso}</p>
+                      <p className="text-sm font-bold text-mx-navy mt-0.5">{cliente.proximo_passo || proximoPasso}</p>
                     </div>
                     <div>
                       <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide">Objetivo</p>
@@ -588,7 +588,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                       {onExecutar && (
                         <Button
                           onClick={() => { onClose(); onExecutar(cliente); }}
-                          className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm gap-2"
+                          className="flex-1 rounded-xl bg-status-info hover:bg-status-info text-white text-sm gap-2"
                         >
                           <Zap className="w-3.5 h-3.5" /> Executar
                         </Button>
@@ -722,7 +722,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                           {idx < historico.length - 1 && (
                             <div className="absolute left-[7px] top-5 bottom-0 w-px bg-muted" />
                           )}
-                          <div className="w-3.5 h-3.5 rounded-full border-2 border-[#005BFF] bg-white shrink-0 mt-0.5 relative z-10" />
+                          <div className="w-3.5 h-3.5 rounded-full border-2 border-status-info bg-white shrink-0 mt-0.5 relative z-10" />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
                               <p className="text-xs font-bold text-foreground">{h.tipo}</p>
@@ -767,7 +767,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
               {onExecutar && !editando && !isVendaCancelada && (
                 <Button
                   onClick={() => { onClose(); onExecutar(cliente); }}
-                  className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-sm gap-2"
+                  className="flex-1 rounded-xl bg-status-info hover:bg-status-info text-white text-sm gap-2"
                 >
                   <Zap className="w-3.5 h-3.5" /> Executar próximo passo
                 </Button>

@@ -60,7 +60,7 @@ export default function NovaPoliticaModal({ open, onClose, onSaved, me }) {
     <Dialog open={open} onOpenChange={onClose}>
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="text-h5 font-bold text-[#0F172A]">Nova Política de Remuneração</DialogTitle>
+          <DialogTitle className="text-h5 font-bold text-mx-navy">Nova Política de Remuneração</DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div>
@@ -128,7 +128,7 @@ export default function NovaPoliticaModal({ open, onClose, onSaved, me }) {
             <div className="bg-status-info-surface border border-status-info/30 rounded-xl p-4">
               <div className="flex items-center justify-between mb-2">
                 <div>
-                  <p className="text-body-sm font-bold text-[#0F172A]">Aplicar faixa sobre todos os veículos</p>
+                  <p className="text-body-sm font-bold text-mx-navy">Aplicar faixa sobre todos os veículos</p>
                   <p className="text-[12px] text-muted-foreground mt-0.5">Ao atingir nova faixa, todos os veículos do período são recalculados</p>
                 </div>
                 <Switch checked={form.aplicar_faixa_sobre_todos_veiculos} onCheckedChange={v => set("aplicar_faixa_sobre_todos_veiculos", v)} />
@@ -140,7 +140,7 @@ export default function NovaPoliticaModal({ open, onClose, onSaved, me }) {
           )}
           <div className="flex gap-2 pt-2">
             <Button variant="outline" className="flex-1" onClick={onClose} disabled={saving}>Cancelar</Button>
-            <Button className="flex-1 bg-[#00A896] hover:bg-[#008f7e] text-white" onClick={handleSave} disabled={saving || !form.nome || !form.data_inicio}>
+            <Button className="flex-1 bg-status-success hover:bg-status-success text-white" onClick={handleSave} disabled={saving || !form.nome || !form.data_inicio}>
               {saving ? "Salvando..." : "Salvar política"}
             </Button>
           </div>

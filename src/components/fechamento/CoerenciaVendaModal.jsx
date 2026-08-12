@@ -19,11 +19,11 @@ import { AlertTriangle, Info, Check } from "lucide-react";
 function Btn({ onClick, variant = "ghost", disabled, children }) {
   const base = "px-4 py-2.5 text-body-sm font-semibold rounded-xl transition-colors disabled:opacity-50";
   const styles = {
-    ghost:    "text-[#64748B] border border-[#E5E7EB] hover:bg-surface-alt",
+    ghost:    "text-muted-foreground border border-border hover:bg-surface-alt",
     primary:  "text-white bg-status-info hover:bg-status-info shadow-[var(--mx-button-shadow)]",
-    green:    "text-white bg-[#22C55E] hover:bg-brand-primary shadow-sm",
-    blue:     "text-white bg-[#005BFF] hover:bg-status-info shadow-sm",
-    amber:    "text-status-warning-foreground bg-[#F59E0B] hover:bg-status-warning shadow-sm",
+    green:    "text-white bg-status-success hover:bg-brand-primary shadow-sm",
+    blue:     "text-white bg-status-info hover:bg-status-info shadow-sm",
+    amber:    "text-status-warning-foreground bg-status-warning hover:bg-status-warning shadow-sm",
   };
   return (
     <button onClick={onClick} disabled={disabled} className={`${base} ${styles[variant]}`}>
@@ -44,9 +44,9 @@ export function ModalSemCanal({ open, canalSugerido, onConfirmarSugestao, onEsco
       <Dialog open={open} onOpenChange={() => {}}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold">Escolha o canal da venda</DialogTitle>
+            <DialogTitle className="text-mx-navy font-bold">Escolha o canal da venda</DialogTitle>
           </DialogHeader>
-          <p className="text-body-sm text-[#64748B] mt-1">Selecione o canal de origem desta negociação:</p>
+          <p className="text-body-sm text-muted-foreground mt-1">Selecione o canal de origem desta negociação:</p>
           <div className="flex flex-col gap-2 mt-3">
             {CANAIS.map(c => (
               <button
@@ -55,7 +55,7 @@ export function ModalSemCanal({ open, canalSugerido, onConfirmarSugestao, onEsco
                 className={`text-left px-4 py-2.5 rounded-xl border text-body-sm font-semibold transition-colors ${
                   canalEscolhido === c
                     ? "bg-status-info-surface border-status-info/50 text-status-info-text"
-                    : "border-border hover:bg-surface-alt text-[#0F172A]"
+                    : "border-border hover:bg-surface-alt text-mx-navy"
                 }`}
               >
                 {c}
@@ -77,16 +77,16 @@ export function ModalSemCanal({ open, canalSugerido, onConfirmarSugestao, onEsco
     <Dialog open={open} onOpenChange={() => {}}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="text-[#0F172A] font-bold flex items-center gap-2">
+          <DialogTitle className="text-mx-navy font-bold flex items-center gap-2">
             <Info className="w-5 h-5 text-status-info-text" />
             Informe o canal da venda
           </DialogTitle>
         </DialogHeader>
-        <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
+        <p className="text-body-sm text-muted-foreground mt-1 leading-relaxed">
           Para manter o fechamento correto, informe de qual canal esta venda se originou.
         </p>
         {canalSugerido && (
-          <div className="mt-3 p-3 bg-status-info-surface border border-status-info/30 rounded-xl text-body-sm text-[#1e3a5f]">
+          <div className="mt-3 p-3 bg-status-info-surface border border-status-info/30 rounded-xl text-body-sm text-mx-navy">
             Você informou atendimento apenas no <strong>{canalSugerido}</strong>. Deseja classificar esta venda como <strong>{canalSugerido}</strong>?
           </div>
         )}
@@ -115,13 +115,13 @@ export function ModalSemAtendimento({ open, canal, onAtendimentoAnterior, onVinc
     <Dialog open={open} onOpenChange={() => {}}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-[#0F172A] font-bold flex items-center gap-2">
-            <AlertTriangle className="w-5 h-5 text-[#F59E0B]" />
+          <DialogTitle className="text-mx-navy font-bold flex items-center gap-2">
+            <AlertTriangle className="w-5 h-5 text-status-warning-text" />
             Venda sem atendimento registrado hoje
           </DialogTitle>
         </DialogHeader>
-        <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
-          Não encontramos atendimento hoje para o canal <strong className="text-[#0F172A]">{canal}</strong>. Esta venda veio de um atendimento anterior?
+        <p className="text-body-sm text-muted-foreground mt-1 leading-relaxed">
+          Não encontramos atendimento hoje para o canal <strong className="text-mx-navy">{canal}</strong>. Esta venda veio de um atendimento anterior?
         </p>
         <p className="text-[12px] text-muted-foreground mt-1">
           No mercado automotivo, é comum o cliente atender em um dia e confirmar a compra em outro — isso é totalmente válido.
@@ -150,7 +150,7 @@ export function ModalSemAtendimento({ open, canal, onAtendimentoAnterior, onVinc
 export function AvisoClienteExistente({ nome }) {
   if (!nome) return null;
   return (
-    <div className="flex items-start gap-2 px-3 py-2.5 bg-status-info-surface border border-status-info/30 rounded-xl text-[12px] text-[#1e3a5f] mt-2">
+    <div className="flex items-start gap-2 px-3 py-2.5 bg-status-info-surface border border-status-info/30 rounded-xl text-[12px] text-mx-navy mt-2">
       <Info className="w-4 h-4 text-status-info-text flex-shrink-0 mt-0.5" />
       <span>
         <strong>{nome}</strong> já existe na Carteira. A venda será vinculada ao histórico anterior.
@@ -166,19 +166,19 @@ export function ModalMaisVendasQueAtendimentos({ open, divergencias, onRevisar, 
     <Dialog open={open} onOpenChange={() => {}}>
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
-          <DialogTitle className="text-[#0F172A] font-bold flex items-center gap-2">
+          <DialogTitle className="text-mx-navy font-bold flex items-center gap-2">
             <Info className="w-5 h-5 text-status-info-text" />
             Atenção antes de finalizar
           </DialogTitle>
         </DialogHeader>
-        <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
+        <p className="text-body-sm text-muted-foreground mt-1 leading-relaxed">
           Encontramos vendas que não possuem atendimento registrado no mesmo canal hoje. Isso pode acontecer quando a venda veio de um atendimento anterior.
         </p>
         {divergencias?.length > 0 && (
           <ul className="mt-3 space-y-1.5">
             {divergencias.map((d, i) => (
-              <li key={i} className="flex items-center gap-2 text-body-sm text-[#0F172A] bg-status-warning-surface border border-status-warning/20 rounded-lg px-3 py-2">
-                <AlertTriangle className="w-3.5 h-3.5 text-[#F59E0B] flex-shrink-0" />
+              <li key={i} className="flex items-center gap-2 text-body-sm text-mx-navy bg-status-warning-surface border border-status-warning/20 rounded-lg px-3 py-2">
+                <AlertTriangle className="w-3.5 h-3.5 text-status-warning-text flex-shrink-0" />
                 {d}
               </li>
             ))}

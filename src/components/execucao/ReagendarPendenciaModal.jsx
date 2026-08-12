@@ -39,7 +39,7 @@ export default function ReagendarPendenciaModal({ oportunidade, open, onClose, o
     <Dialog open={open} onOpenChange={v => { if (!saving) onClose(); }}>
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
-          <DialogTitle className="text-[#0F172A] font-bold">Reagendar atividade</DialogTitle>
+          <DialogTitle className="text-mx-navy font-bold">Reagendar atividade</DialogTitle>
         </DialogHeader>
         <p className="text-body-sm text-muted-foreground mt-1">{oportunidade.nome_cliente_snapshot} — {oportunidade.tipo}</p>
         <div className="mt-3">
@@ -52,7 +52,7 @@ export default function ReagendarPendenciaModal({ oportunidade, open, onClose, o
             Cancelar
           </button>
           <button onClick={handleSalvar} disabled={!novaData || saving}
-            className="px-5 py-2 text-body-sm font-bold text-white bg-[#005BFF] hover:bg-status-info disabled:opacity-50 rounded-xl">
+            className="px-5 py-2 text-body-sm font-bold text-white bg-status-info hover:bg-status-info disabled:opacity-50 rounded-xl">
             {saving ? "Salvando..." : "Reagendar"}
           </button>
         </div>

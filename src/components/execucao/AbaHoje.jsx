@@ -194,7 +194,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
               {avatarIniciais(op.nome_cliente_snapshot)}
             </div>
             <div className="min-w-0">
-              <p className="font-bold text-[14px] text-[#0F172A] truncate">{op.nome_cliente_snapshot || "—"}</p>
+              <p className="font-bold text-[14px] text-mx-navy truncate">{op.nome_cliente_snapshot || "—"}</p>
               {op.veiculo_snapshot && <p className="text-[12px] text-muted-foreground truncate">{op.veiculo_snapshot}</p>}
             </div>
           </div>
@@ -222,7 +222,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
               </button>
             )}
             <button onClick={() => onResolver(op)}
-              className="ml-auto flex items-center gap-1 text-[12px] font-bold text-white bg-[#005BFF] hover:bg-status-info px-4 py-1.5 rounded-lg transition-colors">
+              className="ml-auto flex items-center gap-1 text-[12px] font-bold text-white bg-status-info hover:bg-status-info px-4 py-1.5 rounded-lg transition-colors">
               Resolver
             </button>
           </div>
@@ -251,7 +251,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
-              <p className="font-bold text-[14px] text-[#0F172A] truncate">{op.nome_cliente_snapshot || "—"}</p>
+              <p className="font-bold text-[14px] text-mx-navy truncate">{op.nome_cliente_snapshot || "—"}</p>
               <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-muted text-muted-foreground"}`}>{op.tipo}</span>
               {isVencido && <span className="text-caption font-bold text-status-error-text bg-status-error-surface px-2 py-0.5 rounded-full">Vencido</span>}
             </div>
@@ -284,7 +284,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
             </button>
           )}
           <button onClick={() => onResolver(op)}
-            className="flex items-center gap-1.5 text-[12px] font-bold text-white bg-[#005BFF] hover:bg-status-info px-4 py-2 rounded-xl transition-colors ml-1">
+            className="flex items-center gap-1.5 text-[12px] font-bold text-white bg-status-info hover:bg-status-info px-4 py-2 rounded-xl transition-colors ml-1">
             Resolver
           </button>
         </div>
@@ -533,8 +533,8 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
               <button key={f.id} onClick={() => setFiltroTipo(f.id)}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[12px] font-bold transition-colors ${
                   ativo
-                    ? "bg-[#005BFF] text-white border-[#005BFF]"
-                    : "bg-white text-muted-foreground border-border hover:border-[#005BFF] hover:text-status-info-text"
+                    ? "bg-status-info text-white border-status-info"
+                    : "bg-white text-muted-foreground border-border hover:border-status-info hover:text-status-info-text"
                 }`}>
                 {f.label}
                 <span className={`text-caption px-1.5 py-0.5 rounded-full font-bold ${ativo ? "bg-white/20 text-white" : "bg-muted text-muted-foreground"}`}>
@@ -550,7 +550,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
       <div>
         <div className="flex items-center justify-between mb-3 flex-wrap gap-2">
           <div>
-            <h3 className="text-[14px] font-bold text-[#0F172A]">O que você não pode deixar de fazer hoje</h3>
+            <h3 className="text-[14px] font-bold text-mx-navy">O que você não pode deixar de fazer hoje</h3>
             <p className="text-[12px] text-muted-foreground">Atividades vencidas ou previstas para hoje. Execute e registre o resultado.</p>
           </div>
           <div className="flex items-center gap-2">
@@ -566,7 +566,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
               </SelectContent>
             </Select>
             <button onClick={() => setNovaAtividade(true)}
-              className="flex items-center gap-1.5 bg-[#005BFF] hover:bg-status-info text-white text-[12px] font-bold px-4 py-2 rounded-xl transition-colors shadow-sm shadow-blue-100">
+              className="flex items-center gap-1.5 bg-status-info hover:bg-status-info text-white text-[12px] font-bold px-4 py-2 rounded-xl transition-colors shadow-sm shadow-blue-100">
               <Plus className="w-4 h-4" /> Nova atividade
             </button>
           </div>
@@ -575,7 +575,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
         {/* Lista */}
         {loadingOps ? (
           <div className="bg-white rounded-2xl border border-border shadow-sm p-12 text-center">
-            <div className="w-6 h-6 border-4 border-border border-t-[#005BFF] rounded-full animate-spin mx-auto mb-3" />
+            <div className="w-6 h-6 border-4 border-border border-t-status-info rounded-full animate-spin mx-auto mb-3" />
             <p className="text-body-sm text-muted-foreground">Carregando oportunidades...</p>
           </div>
         ) : listaFiltrada.length === 0 ? (
@@ -585,14 +585,14 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
               <div className="w-14 h-14 rounded-2xl bg-status-info-surface flex items-center justify-center mx-auto mb-4">
                 <CheckCircle2 className="w-7 h-7 text-status-info-text" />
               </div>
-              <p className="text-[16px] font-bold text-[#0F172A] mb-1">Tela limpa por hoje.</p>
+              <p className="text-[16px] font-bold text-mx-navy mb-1">Tela limpa por hoje.</p>
               <p className="text-body-sm text-muted-foreground mb-5 max-w-sm mx-auto">
                 Você não possui oportunidades pendentes para executar agora.
               </p>
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 {onGoToRotina && (
                   <button onClick={onGoToRotina}
-                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-status-info-text border border-[#005BFF] rounded-xl hover:bg-status-info-surface transition-colors">
+                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-status-info-text border border-status-info rounded-xl hover:bg-status-info-surface transition-colors">
                     <Sparkles className="w-4 h-4" /> Ver Rotina do Dia
                   </button>
                 )}
@@ -601,7 +601,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                   <Users className="w-4 h-4" /> Abrir Carteira
                 </Link>
                 <button onClick={() => setNovaAtividade(true)}
-                  className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-white bg-[#005BFF] rounded-xl hover:bg-status-info transition-colors">
+                  className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-white bg-status-info rounded-xl hover:bg-status-info transition-colors">
                   <Plus className="w-4 h-4" /> Nova atividade
                 </button>
               </div>
@@ -624,14 +624,14 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
             {listaHoje.length > 0 && listaFiltrada.length === 0 && filtroTipo === "todos" && (
               <div className="bg-white rounded-2xl border border-border shadow-sm p-10 text-center">
                 <CheckCircle2 className="w-10 h-10 text-status-info-text mx-auto mb-3" />
-                <p className="text-body font-bold text-[#0F172A] mb-1">Todas as oportunidades de hoje foram resolvidas.</p>
+                <p className="text-body font-bold text-mx-navy mb-1">Todas as oportunidades de hoje foram resolvidas.</p>
                 <p className="text-[12px] text-muted-foreground mb-5 max-w-sm mx-auto">
                   Novas oportunidades aparecerão aqui conforme sua agenda, carteira e processos comerciais forem atualizados.
                 </p>
                 <div className="flex items-center justify-center gap-3 flex-wrap">
                   {onGoToRotina && (
                     <button onClick={onGoToRotina}
-                      className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-status-info-text border border-[#005BFF] rounded-xl hover:bg-status-info-surface transition-colors">
+                      className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-status-info-text border border-status-info rounded-xl hover:bg-status-info-surface transition-colors">
                       <Sparkles className="w-4 h-4" /> Ver Rotina do Dia
                     </button>
                   )}

@@ -14,7 +14,7 @@ export default function FunilCompacto({ titulo, subtitulo, cor, etapas, conversa
       {/* Header */}
       <div className={`px-4 py-3 border-b flex items-center justify-between ${c.header}`}>
         <div>
-          <p className="text-body-sm font-bold text-[#0F172A] uppercase tracking-wide">{titulo}</p>
+          <p className="text-body-sm font-bold text-mx-navy uppercase tracking-wide">{titulo}</p>
           <p className="text-caption text-muted-foreground">{subtitulo}</p>
         </div>
         {conversaoGeral !== null && conversaoGeral !== undefined ? (
@@ -37,9 +37,9 @@ export default function FunilCompacto({ titulo, subtitulo, cor, etapas, conversa
               <div className="flex items-center justify-between py-2">
                 <div className="flex items-center gap-2">
                   <div className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${c.dot}`} />
-                  <span className="text-body-sm text-[#0F172A] font-medium">{etapa.label}</span>
+                  <span className="text-body-sm text-mx-navy font-medium">{etapa.label}</span>
                 </div>
-                <span className="text-body font-bold tabular-nums text-[#0F172A]">{etapa.value}</span>
+                <span className="text-body font-bold tabular-nums text-mx-navy">{etapa.value}</span>
               </div>
               {/* Conversão para próxima etapa */}
               {next && (

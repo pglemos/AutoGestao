@@ -112,7 +112,7 @@ export function CheckinAutosaveStatus({
             type="button"
             onClick={onSaveNow}
             disabled={disabled || saving}
-            className="inline-flex h-11 min-w-[44px] items-center rounded-lg border border-border-strong bg-white px-3 text-body-sm font-bold text-foreground transition-colors hover:border-[#005BFF] hover:text-status-info-text disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-11 min-w-[44px] items-center rounded-lg border border-border-strong bg-white px-3 text-body-sm font-bold text-foreground transition-colors hover:border-status-info hover:text-status-info-text disabled:cursor-not-allowed disabled:opacity-50"
           >
             Salvar rascunho
           </button>

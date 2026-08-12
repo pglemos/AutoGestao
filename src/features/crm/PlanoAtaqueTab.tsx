@@ -235,7 +235,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
           <ArrowLeft className="h-4 w-4" /> Voltar aos veículos
         </button>
 
-        <div className="bg-gradient-to-r from-[#005BFF] to-status-info rounded-2xl p-5 text-white">
+        <div className="bg-gradient-to-r from-status-info to-status-info rounded-2xl p-5 text-white">
           <p className="text-xs font-bold uppercase tracking-wide text-blue-200">Veículo que chegou</p>
           <p className="text-xl font-bold mt-1">{veiculoAtaque.marca} {veiculoAtaque.modelo} {veiculoAtaque.versao}</p>
           <p className="text-sm text-blue-100 mt-1">
@@ -440,7 +440,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                   onClick={() => setFaixaPrecoAtiva(f.id)}
                   className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all ${
                     ativo
-                      ? 'bg-[#005BFF] text-white shadow-sm'
+                      ? 'bg-status-info text-white shadow-sm'
                       : 'bg-surface-alt text-muted-foreground border border-border-subtle hover:bg-muted'
                   }`}
                 >
@@ -473,7 +473,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
               <button
                 type="button"
                 onClick={() => setModalOpen(true)}
-                className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-[#005BFF] px-4 py-2 text-sm font-bold text-white hover:bg-status-info"
+                className="mt-4 inline-flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-sm font-bold text-white hover:bg-status-info"
               >
                 <Plus size={16} /> Registrar veículo que chegou
               </button>
@@ -507,7 +507,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                     type="button"
                     disabled={compat === 0}
                     onClick={() => setVeiculoAtaque(veiculo)}
-                    className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white h-10 text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed"
+                    className="w-full flex items-center justify-center gap-1.5 rounded-xl bg-status-info hover:bg-status-info text-white h-10 text-sm font-bold disabled:opacity-40 disabled:cursor-not-allowed"
                   >
                     <Zap size={16} /> Iniciar ataque
                   </button>
@@ -518,7 +518,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         )}
       </div>
 
-      <div className="bg-gradient-to-r from-[#005BFF] to-status-info rounded-2xl p-5 text-white">
+      <div className="bg-gradient-to-r from-status-info to-status-info rounded-2xl p-5 text-white">
         <p className="text-base font-bold leading-snug">
           Olá, {vendedorNome}! Hoje existem <span className="text-blue-200 font-bold">{totalOportunidades} oportunidades</span> na sua carteira.
         </p>
@@ -535,7 +535,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                 key={missao.id}
                 type="button"
                 onClick={() => count > 0 && setMissaoSelecionada(missao)}
-                className={`text-left p-4 rounded-2xl border bg-white transition-all border-border-subtle ${count > 0 ? 'hover:border-[#005BFF] hover:shadow-sm cursor-pointer' : 'opacity-40 cursor-not-allowed'}`}
+                className={`text-left p-4 rounded-2xl border bg-white transition-all border-border-subtle ${count > 0 ? 'hover:border-status-info hover:shadow-sm cursor-pointer' : 'opacity-40 cursor-not-allowed'}`}
               >
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <span className="text-2xl">{missao.icone}</span>
@@ -625,7 +625,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvar }: { onClose: () => void; onS
             type="button"
             disabled={!marca.trim() || !modelo.trim() || saving}
             onClick={handleSalvar}
-            className="flex-1 rounded-xl bg-[#005BFF] px-4 py-2.5 text-sm font-bold text-white hover:bg-status-info disabled:opacity-50"
+            className="flex-1 rounded-xl bg-status-info px-4 py-2.5 text-sm font-bold text-white hover:bg-status-info disabled:opacity-50"
           >
             {saving ? 'Salvando...' : 'Salvar veículo'}
           </button>

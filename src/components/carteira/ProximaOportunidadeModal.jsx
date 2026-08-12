@@ -23,10 +23,10 @@ export default function ProximaOportunidadeModal({
               <Trophy className="w-7 h-7 text-status-success-text" />
             </div>
             <div>
-              <p className="text-lg font-black text-[#031B3D]">🎉 Excelente!</p>
+              <p className="text-lg font-black text-mx-navy">🎉 Excelente!</p>
               <p className="text-sm text-muted-foreground mt-1">Você concluiu todas as oportunidades prioritárias de hoje.</p>
             </div>
-            <Button onClick={onVoltarCarteira} className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white">
+            <Button onClick={onVoltarCarteira} className="w-full rounded-xl bg-status-info hover:bg-status-info text-white">
               Voltar para Carteira
             </Button>
           </div>
@@ -52,21 +52,21 @@ export default function ProximaOportunidadeModal({
               <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-3">Próxima oportunidade</p>
               <div className="bg-status-info-surface rounded-xl p-4 space-y-3">
                 <div>
-                  <p className="text-base font-black text-[#031B3D]">{proximaOportunidade.nome}</p>
+                  <p className="text-base font-black text-mx-navy">{proximaOportunidade.nome}</p>
                   {proximaOportunidade.veiculo_interesse && (
                     <p className="text-xs text-muted-foreground mt-0.5">{proximaOportunidade.veiculo_interesse}</p>
                   )}
                 </div>
                 <div>
                   <p className="text-caption text-status-info-text font-bold uppercase tracking-wide">Próximo passo</p>
-                  <p className="text-sm font-bold text-[#031B3D]">{proximoPasso}</p>
+                  <p className="text-sm font-bold text-mx-navy">{proximoPasso}</p>
                   {objetivo && <p className="text-caption text-muted-foreground mt-0.5">{objetivo}</p>}
                 </div>
               </div>
             </div>
             <div className="flex gap-2 mt-1">
               <Button variant="outline" onClick={onVoltarCarteira} className="flex-1 rounded-xl text-muted-foreground">Voltar</Button>
-              <Button onClick={() => onExecutar(proximaOportunidade)} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-status-info text-white gap-2">
+              <Button onClick={() => onExecutar(proximaOportunidade)} className="flex-1 rounded-xl bg-status-info hover:bg-status-info text-white gap-2">
                 <Zap className="w-4 h-4" /> Executar
               </Button>
             </div>
@@ -89,7 +89,7 @@ export default function ProximaOportunidadeModal({
           <hr className="border-border-subtle" />
 
           {/* Convite Modo Ataque */}
-          <div className="bg-gradient-to-br from-[#031B3D] to-[#005BFF] rounded-2xl p-5 text-white space-y-3">
+          <div className="bg-gradient-to-br from-mx-navy to-status-info rounded-2xl p-5 text-white space-y-3">
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 rounded-xl bg-white/20 flex items-center justify-center">
                 <Zap className="w-4 h-4 text-white" />
@@ -110,7 +110,7 @@ export default function ProximaOportunidadeModal({
                 sessionStorage.setItem(MODO_ATAQUE_ACEITO_KEY, "true");
                 onEntrarModoAtaque();
               }}
-              className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white gap-2 h-11 font-bold"
+              className="w-full rounded-xl bg-status-info hover:bg-status-info text-white gap-2 h-11 font-bold"
             >
               <Zap className="w-4 h-4" /> Entrar no Modo Ataque
             </Button>

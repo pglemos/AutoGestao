@@ -75,7 +75,7 @@ const COR_BADGE = {
   amber:  "bg-status-warning-surface text-status-warning-text",
 };
 const COR_BTN = {
-  blue:   "bg-[#005BFF] hover:bg-status-info text-white",
+  blue:   "bg-status-info hover:bg-status-info text-white",
   green:  "bg-brand-primary hover:bg-brand-primary-hover text-white",
   orange: "bg-status-warning hover:bg-status-warning text-status-warning-foreground",
   amber:  "bg-status-warning hover:bg-status-warning text-status-warning-foreground",
@@ -88,7 +88,7 @@ export default function OndeAgirAgora({ funis }) {
   if (acoes.length === 0) {
     return (
       <div className="bg-white rounded-2xl border border-border shadow-sm p-6">
-        <h2 className="text-body-sm font-bold text-[#0F172A] uppercase tracking-wide mb-1">Onde agir agora</h2>
+        <h2 className="text-body-sm font-bold text-mx-navy uppercase tracking-wide mb-1">Onde agir agora</h2>
         <p className="text-body-sm text-muted-foreground">Nenhuma ação prioritária identificada. Continue no ritmo atual.</p>
       </div>
     );
@@ -96,7 +96,7 @@ export default function OndeAgirAgora({ funis }) {
 
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
-      <h2 className="text-body-sm font-bold text-[#0F172A] uppercase tracking-wide mb-4">Onde agir agora</h2>
+      <h2 className="text-body-sm font-bold text-mx-navy uppercase tracking-wide mb-4">Onde agir agora</h2>
       <div className="space-y-3">
         {acoes.map((acao, idx) => (
           <div key={idx} className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-xl bg-surface-alt border border-border-subtle">
@@ -105,7 +105,7 @@ export default function OndeAgirAgora({ funis }) {
               <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${COR_BADGE[acao.cor] || "bg-muted text-muted-foreground"}`}>{acao.canal}</span>
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-body-sm font-bold text-[#0F172A]">{acao.titulo}</p>
+              <p className="text-body-sm font-bold text-mx-navy">{acao.titulo}</p>
               <p className="text-[12px] text-muted-foreground mt-0.5">{acao.texto}</p>
             </div>
             <Link

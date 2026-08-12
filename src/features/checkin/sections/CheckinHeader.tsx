@@ -522,13 +522,13 @@ return (
               <div className="flex min-w-0 items-center gap-2 rounded-xl border border-border bg-white px-3 py-1.5 shadow-sm">
                 <CalendarDays size={18} className="shrink-0 text-status-info-text" aria-hidden="true" />
                 <div className="min-w-0">
-                  <p className="text-caption font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
-                  <p className="truncate text-body-sm font-bold text-[#071822]">{dateStr}</p>
+                  <p className="text-caption font-bold uppercase tracking-[0.08em] text-muted-foreground">Data operacional principal</p>
+                  <p className="truncate text-body-sm font-bold text-mx-navy">{dateStr}</p>
                 </div>
                 <button
                   type="button"
                   onClick={() => setCustomReferenceDate('')}
-                  className="ml-1 inline-flex h-8 shrink-0 items-center gap-2 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[12px] font-bold text-[#071822] shadow-sm hover:border-[#005BFF] hover:text-status-info-text"
+                  className="ml-1 inline-flex h-8 shrink-0 items-center gap-2 rounded-lg border border-border bg-white px-3 text-[12px] font-bold text-mx-navy shadow-sm hover:border-status-info hover:text-status-info-text"
                 >
                   Ver data atual
                 </button>
@@ -536,7 +536,7 @@ return (
               <button
                 type="button"
                 onClick={handleViewPreviousHistory}
-                className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-status-info-text"
+                className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-status-info hover:text-status-info-text"
               >
                 <History size={15} aria-hidden="true" />
                 Histórico de Fechamentos
@@ -563,7 +563,7 @@ previousCard.type === 'previous_done' ? 'text-status-success-text' : 'text-statu
 }`}>
 {previousCard.type === 'previous_done' ? 'FECHAMENTO ANTERIOR CONCLUÍDO' : 'FECHAMENTO ANTERIOR PENDENTE'}
 </p>
-<p className="whitespace-normal break-words text-[12px] font-semibold leading-relaxed text-[#526B7A]">
+<p className="whitespace-normal break-words text-[12px] font-semibold leading-relaxed text-muted-foreground">
 {previousCard.type === 'previous_done'
 ? `Você enviou o fechamento do dia ${previousCard.date.split('-').reverse().join('/')} com sucesso. As informações foram encaminhadas para sua liderança. Caso precise corrigir algum dado, acesse o Histórico de Fechamentos, clique em Ajustar e envie a regularização para análise.`
 : `O fechamento do dia ${previousCard.date.split('-').reverse().join('/')} não foi enviado dentro do prazo. A tela atual já está liberada para o fechamento de hoje. Para corrigir a pendência, acesse o Histórico de Fechamentos e envie a regularização para análise da liderança.`}
@@ -571,7 +571,7 @@ previousCard.type === 'previous_done' ? 'text-status-success-text' : 'text-statu
 </div>
 </div>
 <div className="flex shrink-0 gap-2">
-<button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-white px-3 text-caption font-bold text-muted-foreground shadow-sm hover:border-[#005BFF] hover:text-status-info-text">
+<button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-white px-3 text-caption font-bold text-muted-foreground shadow-sm hover:border-status-info hover:text-status-info-text">
 Ver histórico
 </button>
 <button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-caption font-bold shadow-sm ${
@@ -590,14 +590,14 @@ previousCard.type === 'previous_done' ? 'bg-brand-primary text-white hover:bg-br
 <div className="flex min-w-0 items-center gap-2">
 <CalendarDays size={18} className="shrink-0 text-status-info-text" aria-hidden="true" />
 <div className="min-w-0">
-<p className="text-caption font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
-<h2 id="checkin-operational-date" className="truncate text-body font-bold text-[#071822] sm:text-h5">{dateStr}</h2>
+<p className="text-caption font-bold uppercase tracking-[0.08em] text-muted-foreground">Data operacional principal</p>
+<h2 id="checkin-operational-date" className="truncate text-body font-bold text-mx-navy sm:text-h5">{dateStr}</h2>
 </div>
 </div>
 <button
 type="button"
 onClick={() => setCustomReferenceDate('')}
-className="inline-flex h-9 items-center gap-2 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[12px] font-bold text-[#071822] shadow-sm hover:border-[#005BFF] hover:text-status-info-text"
+className="inline-flex h-9 items-center gap-2 rounded-lg border border-border bg-white px-3 text-[12px] font-bold text-mx-navy shadow-sm hover:border-status-info hover:text-status-info-text"
 >
 Ver data atual
 </button>
@@ -606,39 +606,39 @@ Ver data atual
 
 <div className="space-y-3 md:hidden">
 
-<section className="rounded-mx-2xl border border-[#DFE0E1] bg-white p-4 shadow-mx-lg">
+<section className="rounded-mx-2xl border border-border bg-white p-4 shadow-mx-lg">
 <div className="flex items-start justify-between gap-4">
 <div>
 <div className="flex items-center gap-1.5">
-<p className="text-[16px] font-bold tracking-tight text-[#071822]">Progresso do Fechamento</p>
-<span className="grid h-5 w-5 place-items-center rounded-full border border-[#526B7A] text-[12px] font-bold text-[#526B7A]">i</span>
+<p className="text-[16px] font-bold tracking-tight text-mx-navy">Progresso do Fechamento</p>
+<span className="grid h-5 w-5 place-items-center rounded-full border border-muted-foreground text-[12px] font-bold text-muted-foreground">i</span>
 </div>
-<p className="mt-3 text-body-sm font-bold text-[#334155]">
-Etapa {activeStep} de 4 <span className="text-[#526B7A]">•</span> <span className="text-status-success-text">{activeStepLabel}</span>
+<p className="mt-3 text-body-sm font-bold text-muted-foreground">
+Etapa {activeStep} de 4 <span className="text-muted-foreground">•</span> <span className="text-status-success-text">{activeStepLabel}</span>
 </p>
 </div>
 <div className="text-right">
 <p className="text-h2 font-bold leading-none text-status-success-text">{progressPercent}%</p>
-<p className="mt-1 text-[12px] font-semibold text-[#526B7A]">preenchido</p>
+<p className="mt-1 text-[12px] font-semibold text-muted-foreground">preenchido</p>
 </div>
 </div>
-<div className="mt-4 h-3 rounded-full bg-[#DFE0E1]">
-<div className="h-full rounded-full bg-[#00A89D]" style={{ width: `${progressPercent}%` }} />
+<div className="mt-4 h-3 rounded-full bg-border">
+<div className="h-full rounded-full bg-status-success" style={{ width: `${progressPercent}%` }} />
 </div>
 </section>
 
-<section className="grid grid-cols-4 overflow-hidden rounded-mx-2xl border border-[#DFE0E1] bg-white shadow-mx-lg">
+<section className="grid grid-cols-4 overflow-hidden rounded-mx-2xl border border-border bg-white shadow-mx-lg">
 {stepItems.map((item) => {
 const active = item.step === activeStep
 return (
-<div key={item.step} className="flex min-w-0 flex-col items-center gap-1 border-r border-[#DFE0E1] px-2 py-3 text-center last:border-r-0">
-<span className={item.done ? 'grid h-8 w-8 place-items-center rounded-full bg-[#34c759] text-body font-bold text-white' : active ? 'grid h-8 w-8 place-items-center rounded-full bg-[#00A89D] text-[14px] font-bold text-white' : 'grid h-8 w-8 place-items-center rounded-full border border-[#526B7A] text-[14px] font-bold text-[#526B7A]'}>
+<div key={item.step} className="flex min-w-0 flex-col items-center gap-1 border-r border-border px-2 py-3 text-center last:border-r-0">
+<span className={item.done ? 'grid h-8 w-8 place-items-center rounded-full bg-status-success text-body font-bold text-white' : active ? 'grid h-8 w-8 place-items-center rounded-full bg-status-success text-[14px] font-bold text-white' : 'grid h-8 w-8 place-items-center rounded-full border border-muted-foreground text-[14px] font-bold text-muted-foreground'}>
 {item.done ? '✓' : item.step}
 </span>
-<span className={active ? 'max-w-full text-caption font-bold leading-tight text-status-success-text' : 'max-w-full text-caption font-bold leading-tight text-[#071822]'}>
+<span className={active ? 'max-w-full text-caption font-bold leading-tight text-status-success-text' : 'max-w-full text-caption font-bold leading-tight text-mx-navy'}>
 {item.step}. {item.label}
 </span>
-<span className={active ? 'text-caption font-bold text-status-success-text' : 'text-caption font-semibold text-[#526B7A]'}>
+<span className={active ? 'text-caption font-bold text-status-success-text' : 'text-caption font-semibold text-muted-foreground'}>
 {item.percent}%
 </span>
 </div>
@@ -650,13 +650,13 @@ return (
 {/* Histórico de Fechamentos Modal */}
 {historyOpen && activeView === 'list' && (
 <div className="fixed inset-0 z-[140] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Histórico de Fechamentos">
-<div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(42rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
+<div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(42rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
 
             {/* Modal Header */}
-            <header className="px-6 py-5 border-b border-[#DFE0E1] flex items-center justify-between bg-[#F7F8F8]">
+            <header className="px-6 py-5 border-b border-border flex items-center justify-between bg-surface-alt">
               <div>
-                <h2 className="text-lg font-extrabold text-[#071822] uppercase tracking-tight">Histórico de Fechamentos</h2>
-                <p className="text-xs font-semibold text-[#526B7A] mt-1">Visualize ou regularize seus fechamentos operacionais dos últimos 7 dias.</p>
+                <h2 className="text-lg font-extrabold text-mx-navy uppercase tracking-tight">Histórico de Fechamentos</h2>
+                <p className="text-xs font-semibold text-muted-foreground mt-1">Visualize ou regularize seus fechamentos operacionais dos últimos 7 dias.</p>
               </div>
               <button
                 type="button"
@@ -664,7 +664,7 @@ return (
                   setHistoryOpen(false)
                   setActiveView('list')
                 }}
-                className="grid h-8 w-8 place-items-center rounded-lg text-[#526B7A] hover:bg-[#F7F8F8] transition-colors"
+                className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground hover:bg-surface-alt transition-colors"
                 aria-label="Fechar"
               >
                 <X size={18} />
@@ -688,22 +688,22 @@ return (
                         key={row.date}
                         className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 p-4 border rounded-2xl transition-all ${
                           row.finalized
-                            ? 'border-[#DFE0E1] bg-[#F7F8F8]/80'
-                            : 'border-[#fecaca] bg-[#fef2f2]/60'
+                            ? 'border-border bg-surface-alt/80'
+                            : 'border-status-error/30 bg-status-error-surface/60'
                         }`}
                       >
                         {/* Left Side: Date & Icon */}
                         <div className="flex items-center gap-3">
                           <div className={`grid h-9 w-9 place-items-center rounded-xl ${
-                            row.finalized ? 'bg-[#E8F3F2] text-status-success-text' : 'bg-[#fef2f2] text-[#EF4343]'
+                            row.finalized ? 'bg-surface-alt text-status-success-text' : 'bg-status-error-surface text-status-error'
                           }`}>
                             <CalendarClock size={18} />
                           </div>
                           <div>
-                            <span className="font-extrabold text-[#071822] text-sm">{formattedDate}</span>
-                            <span className="text-[#526B7A] text-xs font-bold ml-2 uppercase tracking-wide">{weekdayFormatted}</span>
+                            <span className="font-extrabold text-mx-navy text-sm">{formattedDate}</span>
+                            <span className="text-muted-foreground text-xs font-bold ml-2 uppercase tracking-wide">{weekdayFormatted}</span>
                             {row.finalized && row.time && row.time !== '—' && (
-                              <span className="text-[#526B7A] text-xs font-bold ml-2">
+                              <span className="text-muted-foreground text-xs font-bold ml-2">
                                 · {row.time}
                               </span>
                             )}
@@ -718,41 +718,41 @@ return (
                             <div className="flex items-center gap-3 text-xs flex-wrap">
                               <div>
                                 <span className="text-status-success-text font-bold">{row.leads}</span>{' '}
-                                <span className="text-[#526B7A] font-semibold">leads</span>
+                                <span className="text-muted-foreground font-semibold">leads</span>
                               </div>
-                              <div className="h-3 w-px bg-[#DFE0E1]" />
+                              <div className="h-3 w-px bg-border" />
                               <div>
                                 <span className="text-status-success-text font-bold">{row.atend}</span>{' '}
-                                <span className="text-[#526B7A] font-semibold">atend.</span>
+                                <span className="text-muted-foreground font-semibold">atend.</span>
                               </div>
-                              <div className="h-3 w-px bg-[#DFE0E1]" />
+                              <div className="h-3 w-px bg-border" />
                               <div>
-                                <span className="text-[#ea580c] font-bold">{row.agend}</span>{' '}
-                                <span className="text-[#526B7A] font-semibold">agend.</span>
+                                <span className="text-status-warning-text font-bold">{row.agend}</span>{' '}
+                                <span className="text-muted-foreground font-semibold">agend.</span>
                               </div>
-                              <div className="h-3 w-px bg-[#DFE0E1]" />
+                              <div className="h-3 w-px bg-border" />
                               <div>
                                 <span className="text-status-success-text font-bold">{row.vendas}</span>{' '}
-                                <span className="text-[#526B7A] font-semibold">vendas</span>
+                                <span className="text-muted-foreground font-semibold">vendas</span>
                               </div>
                             </div>
                           )}
                           {!row.finalized && row.state !== 'em_andamento' && (
                             <span className={`inline-flex items-center rounded-full border px-2.5 py-0.5 text-caption font-extrabold ${
                               row.state === 'aguardando_aprovacao'
-                                ? 'border-[#FCD34D] bg-[#FFF7E6] text-[#92400E]'
-                                : 'border-[#fecaca] bg-[#fef2f2] text-[#EF4343]'
+                                ? 'border-status-warning/40 bg-status-warning-surface text-status-warning-text'
+                                : 'border-status-error/30 bg-status-error-surface text-status-error'
                             }`}>
                               {row.status}
                             </span>
                           )}
                           {row.state === 'em_andamento' && (
-                            <span className="inline-flex items-center rounded-full border border-[#DFE0E1] bg-[#F7F8F8] px-2.5 py-0.5 text-caption font-extrabold text-[#526B7A]">
+                            <span className="inline-flex items-center rounded-full border border-border bg-surface-alt px-2.5 py-0.5 text-caption font-extrabold text-muted-foreground">
                               Em andamento
                             </span>
                           )}
                           {row.state === 'aprovado' && (
-                            <span className="inline-flex items-center rounded-full border border-[#00A89D] bg-[#E8F3F2] px-2.5 py-0.5 text-caption font-extrabold text-status-success-text">
+                            <span className="inline-flex items-center rounded-full border border-status-success bg-surface-alt px-2.5 py-0.5 text-caption font-extrabold text-status-success-text">
                               Regularizado Aprovado
                             </span>
                           )}
@@ -780,7 +780,7 @@ return (
                                   setDetailRequest(row.latestRequest)
                                   setActiveView('detail')
                                 }}
-                                className="inline-flex h-7 items-center justify-center rounded-lg border border-[#DFE0E1] bg-white px-3 text-caption font-bold text-status-success-text hover:bg-[#E8F3F2] transition-colors shadow-sm cursor-pointer"
+                                className="inline-flex h-7 items-center justify-center rounded-lg border border-border bg-white px-3 text-caption font-bold text-status-success-text hover:bg-surface-alt transition-colors shadow-sm cursor-pointer"
                               >
                                 {label[action]}
                               </button>
@@ -796,19 +796,19 @@ return (
             </div>
 
             {/* Modal Footer */}
-            <footer className="px-6 py-4 border-t border-[#DFE0E1] flex justify-between items-center bg-[#F7F8F8]">
+            <footer className="px-6 py-4 border-t border-border flex justify-between items-center bg-surface-alt">
               <Button
                 type="button"
                 onClick={handleOpenProductionZeroModal}
                 disabled={productionZeroSaving}
-                className="h-10 px-4 text-xs font-bold border border-[#FCD34D] bg-[#FFF7E6] text-[#92400E] hover:bg-[#FEF3C7] rounded-xl shadow-sm transition-colors"
+                className="h-10 px-4 text-xs font-bold border border-status-warning/40 bg-status-warning-surface text-status-warning-text hover:bg-status-warning-surface rounded-xl shadow-sm transition-colors"
               >
                 Marcar Produção Zero
               </Button>
               <Button
                 type="button"
                 onClick={() => setHistoryOpen(false)}
-                className="h-10 px-5 text-xs font-bold bg-[#00A89D] hover:bg-[#00A89D] text-white rounded-xl shadow-sm transition-colors"
+                className="h-10 px-5 text-xs font-bold bg-status-success hover:bg-status-success text-white rounded-xl shadow-sm transition-colors"
               >
                 Fechar
               </Button>
@@ -833,18 +833,18 @@ return (
             aria-modal="true"
             aria-labelledby="production-zero-title"
             aria-describedby="production-zero-description"
-            className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#FCD34D] bg-white shadow-mx-2xl animate-in fade-in zoom-in-95 duration-200"
+            className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-status-warning/40 bg-white shadow-mx-2xl animate-in fade-in zoom-in-95 duration-200"
             onMouseDown={event => event.stopPropagation()}
           >
-            <header className="flex items-center gap-3 border-b border-[#FDE68A] bg-[#FFF7E6] px-5 py-4">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-mx-lg bg-[#102C37] text-[#F59F0A]">
+            <header className="flex items-center gap-3 border-b border-status-warning/30 bg-status-warning-surface px-5 py-4">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-mx-lg bg-mx-navy text-status-warning-text">
                 <AlertTriangle size={19} strokeWidth={2} aria-hidden="true" />
               </div>
               <div>
-                <h2 id="production-zero-title" className="text-base font-extrabold text-[#92400E]">
+                <h2 id="production-zero-title" className="text-base font-extrabold text-status-warning-text">
                   Marcar Produção Zero
                 </h2>
-                <p id="production-zero-description" className="mt-0.5 text-xs font-semibold text-[#92400E]/70">
+                <p id="production-zero-description" className="mt-0.5 text-xs font-semibold text-status-warning-text/70">
                   Escolha o motivo para {productionZeroDate.split('-').reverse().join('/')}.
                 </p>
               </div>
@@ -852,7 +852,7 @@ return (
                 type="button"
                 onClick={() => setProductionZeroModalOpen(false)}
                 disabled={productionZeroSaving}
-                className="ml-auto grid h-8 w-8 place-items-center rounded-lg text-[#92400E] hover:bg-[#FDE68A] disabled:opacity-50"
+                className="ml-auto grid h-8 w-8 place-items-center rounded-lg text-status-warning-text hover:bg-status-warning-surface disabled:opacity-50"
                 aria-label="Fechar seleção de Produção Zero"
               >
                 <X size={18} aria-hidden="true" />
@@ -861,7 +861,7 @@ return (
 
             <div className="space-y-3 overflow-y-auto p-5">
               <div className="space-y-1.5">
-                <p className="text-xs font-extrabold uppercase tracking-wide text-[#92400E]/70">Data do fechamento</p>
+                <p className="text-xs font-extrabold uppercase tracking-wide text-status-warning-text/70">Data do fechamento</p>
                 <div className="grid grid-cols-4 gap-2" role="radiogroup" aria-label="Data do fechamento">
                   {historyRows.map(row => {
                     const dateObj = new Date(row.date + 'T12:00:00')
@@ -879,8 +879,8 @@ return (
                         onClick={() => handleSelectProductionZeroDate(row.date)}
                         className={`flex flex-col items-center rounded-xl border px-1 py-2 transition-colors disabled:cursor-not-allowed disabled:opacity-40 ${
                           selected
-                            ? 'border-[#F59F0A] bg-[#FFF7E6] text-[#92400E] ring-4 ring-[#F59F0A]/15'
-                            : 'border-[#DFE0E1] bg-white text-[#526B7A] hover:border-[#F59F0A] hover:bg-[#FFFDF7]'
+                            ? 'border-status-warning bg-status-warning-surface text-status-warning-text ring-4 ring-status-warning/15'
+                            : 'border-border bg-white text-muted-foreground hover:border-status-warning hover:bg-status-warning-surface'
                         }`}
                       >
                         <span className="text-caption font-extrabold uppercase leading-none">{weekdayFormatted}</span>
@@ -890,7 +890,7 @@ return (
                   })}
                 </div>
                 {productionZeroDate && productionZeroDate !== activeClosingDate && (
-                  <p className="text-caption font-semibold leading-relaxed text-[#92400E]/70">
+                  <p className="text-caption font-semibold leading-relaxed text-status-warning-text/70">
                     Data retroativa — o registro será salvo como lançamento histórico.
                   </p>
                 )}
@@ -908,13 +908,13 @@ return (
                     onClick={() => setProductionZeroReason(reason)}
                     className={`flex min-h-12 w-full items-center justify-between rounded-xl border px-4 text-left text-sm font-extrabold uppercase tracking-wide transition-colors ${
                       selected
-                        ? 'border-[#F59F0A] bg-[#FFF7E6] text-[#92400E] ring-4 ring-[#F59F0A]/15'
-                        : 'border-[#DFE0E1] bg-white text-[#526B7A] hover:border-[#F59F0A] hover:bg-[#FFFDF7]'
+                        ? 'border-status-warning bg-status-warning-surface text-status-warning-text ring-4 ring-status-warning/15'
+                        : 'border-border bg-white text-muted-foreground hover:border-status-warning hover:bg-status-warning-surface'
                     }`}
                   >
                     <span>{reason}</span>
-                    <span className={`grid h-5 w-5 place-items-center rounded-full border-2 ${selected ? 'border-[#F59F0A]' : 'border-[#DFE0E1]'}`}>
-                      {selected && <span className="h-2.5 w-2.5 rounded-full bg-[#F59F0A]" />}
+                    <span className={`grid h-5 w-5 place-items-center rounded-full border-2 ${selected ? 'border-status-warning' : 'border-border'}`}>
+                      {selected && <span className="h-2.5 w-2.5 rounded-full bg-status-warning" />}
                     </span>
                   </button>
                 )
@@ -922,12 +922,12 @@ return (
               </div>
             </div>
 
-            <footer className="flex justify-end gap-2 border-t border-[#DFE0E1] bg-[#F7F8F8] px-5 py-4">
+            <footer className="flex justify-end gap-2 border-t border-border bg-surface-alt px-5 py-4">
               <Button
                 type="button"
                 onClick={() => setProductionZeroModalOpen(false)}
                 disabled={productionZeroSaving}
-                className="h-10 rounded-xl border border-[#DFE0E1] bg-white px-4 text-xs font-bold text-[#526B7A] hover:bg-[#F7F8F8]"
+                className="h-10 rounded-xl border border-border bg-white px-4 text-xs font-bold text-muted-foreground hover:bg-surface-alt"
               >
                 Cancelar
               </Button>
@@ -935,7 +935,7 @@ return (
                 type="button"
                 onClick={() => void handleMarkProductionZero()}
                 disabled={!productionZeroReason || !productionZeroDate || productionZeroSaving}
-                className="h-10 rounded-xl bg-[#00A89D] px-4 text-xs font-bold text-white hover:bg-[#008F86] disabled:cursor-not-allowed disabled:opacity-50"
+                className="h-10 rounded-xl bg-status-success px-4 text-xs font-bold text-white hover:bg-status-success disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {productionZeroSaving ? 'Salvando...' : 'Confirmar Produção Zero'}
               </Button>
@@ -968,13 +968,13 @@ return (
           aria-modal="true"
           aria-label="Detalhe da regularização"
         >
-          <div className="flex max-h-[80vh] w-full max-w-[min(32rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl">
-            <header className="flex items-center justify-between border-b border-[#DFE0E1] bg-[#F7F8F8] px-6 py-5">
-              <h2 className="text-lg font-extrabold uppercase tracking-tight text-[#071822]">Regularização</h2>
+          <div className="flex max-h-[80vh] w-full max-w-[min(32rem,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-border bg-white shadow-mx-2xl">
+            <header className="flex items-center justify-between border-b border-border bg-surface-alt px-6 py-5">
+              <h2 className="text-lg font-extrabold uppercase tracking-tight text-mx-navy">Regularização</h2>
               <button
                 type="button"
                 onClick={() => { setActiveView('list'); setDetailRequest(null) }}
-                className="grid h-8 w-8 place-items-center rounded-lg text-[#526B7A] transition-colors hover:bg-[#F7F8F8]"
+                className="grid h-8 w-8 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-alt"
                 aria-label="Voltar"
               >
                 <X size={18} />
@@ -982,12 +982,12 @@ return (
             </header>
             <div className="overflow-y-auto p-6 text-sm">
               {!detailRequest ? (
-                <p className="text-[#526B7A]">Nenhuma solicitação encontrada para esta data.</p>
+                <p className="text-muted-foreground">Nenhuma solicitação encontrada para esta data.</p>
               ) : (
                 <div className="flex flex-col gap-4">
                   <div>
-                    <span className="text-xs font-bold uppercase text-[#526B7A]">Status</span>
-                    <p className="font-bold text-[#071822]">
+                    <span className="text-xs font-bold uppercase text-muted-foreground">Status</span>
+                    <p className="font-bold text-mx-navy">
                       {detailRequest.status === 'pending' && 'Em análise'}
                       {detailRequest.status === 'approved' && 'Aprovada'}
                       {detailRequest.status === 'rejected' && 'Recusada'}
@@ -995,23 +995,23 @@ return (
                     </p>
                   </div>
                   <div>
-                    <span className="text-xs font-bold uppercase text-[#526B7A]">Motivo</span>
-                    <p className="text-[#071822]">{detailRequest.reason}</p>
+                    <span className="text-xs font-bold uppercase text-muted-foreground">Motivo</span>
+                    <p className="text-mx-navy">{detailRequest.reason}</p>
                   </div>
                   {detailRequest.status === 'rejected' && detailRequest.rejection_reason && (
                     <div>
-                      <span className="text-xs font-bold uppercase text-[#526B7A]">Motivo da recusa</span>
-                      <p className="text-[#071822]">{detailRequest.rejection_reason}</p>
+                      <span className="text-xs font-bold uppercase text-muted-foreground">Motivo da recusa</span>
+                      <p className="text-mx-navy">{detailRequest.rejection_reason}</p>
                     </div>
                   )}
                   {detailRequest.delta && Object.keys(detailRequest.delta).length > 0 && (
                     <div>
-                      <span className="text-xs font-bold uppercase text-[#526B7A]">Versão original → solicitada (auditoria)</span>
+                      <span className="text-xs font-bold uppercase text-muted-foreground">Versão original → solicitada (auditoria)</span>
                       <ul className="mt-1 flex flex-col gap-1">
                         {Object.entries(detailRequest.delta).map(([field, diff]) => (
-                          <li key={field} className="flex justify-between rounded-lg bg-[#F7F8F8] px-3 py-1.5 text-xs">
-                            <span className="font-bold text-[#526B7A]">{field}</span>
-                            <span className="text-[#071822]">{String(diff.original)} → {String(diff.solicitado)}</span>
+                          <li key={field} className="flex justify-between rounded-lg bg-surface-alt px-3 py-1.5 text-xs">
+                            <span className="font-bold text-muted-foreground">{field}</span>
+                            <span className="text-mx-navy">{String(diff.original)} → {String(diff.solicitado)}</span>
                           </li>
                         ))}
                       </ul>
@@ -1025,7 +1025,7 @@ return (
                         const row = historyRows.find(r => r.date === selectedRow?.date)
                         if (row) handleSelectRow(row)
                       }}
-                      className="mt-2 inline-flex h-9 items-center justify-center rounded-lg bg-[#00A89D] px-4 text-xs font-bold text-white shadow-sm transition-colors hover:bg-[#00968c]"
+                      className="mt-2 inline-flex h-9 items-center justify-center rounded-lg bg-status-success px-4 text-xs font-bold text-white shadow-sm transition-colors hover:bg-status-success"
                     >
                       Criar nova versão de regularização
                     </button>

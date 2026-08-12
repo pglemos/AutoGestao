@@ -7,12 +7,15 @@ import { readFileSync } from 'node:fs'
 // qualquer edição quebrava o teste. O contrato que importa é o visual, então
 // estes arquivos passam a ser verificados por tokens de layout e pelos
 // símbolos de domínio que o Base44 definiu, e não pelo texto inteiro.
+// O runtime migrou os hexes do Base44 para tokens semânticos (FASE G
+// 07.021 — COMP-hex-tokens). Cada par `[hexOriginal, tokenCanonico]` exige o
+// hex na referência congelada e o token equivalente no runtime.
 const VISUAL_CONTRACT_COMPONENTS = {
-  'CarteiraAtivaTab.jsx': ['rounded-xl', 'bg-[#005BFF]'],
-  'ModoAtaque.jsx': ['rounded-2xl', 'bg-[#005BFF]', 'max-w-sm'],
-  'ProximaOportunidadeModal.jsx': ['rounded-2xl', 'bg-[#005BFF]', 'max-w-sm'],
+  'CarteiraAtivaTab.jsx': ['rounded-xl', ['bg-[#005BFF]', 'bg-status-info']],
+  'ModoAtaque.jsx': ['rounded-2xl', ['bg-[#005BFF]', 'bg-status-info'], 'max-w-sm'],
+  'ProximaOportunidadeModal.jsx': ['rounded-2xl', ['bg-[#005BFF]', 'bg-status-info'], 'max-w-sm'],
   'RetornoWhatsAppModal.jsx': ['rounded-2xl', 'max-w-sm'],
-  'VeiculosChegaram.jsx': ['rounded-xl', 'bg-[#005BFF]'],
+  'VeiculosChegaram.jsx': ['rounded-xl', ['bg-[#005BFF]', 'bg-status-info']],
 }
 
 // `proximoPassoLib.js` não tem layout: o que precisa sobreviver é a máquina de
@@ -47,6 +50,12 @@ describe('Base44 1:1 visual source parity', () => {
       const runtime = readFileSync(`src/components/carteira/${filename}`, 'utf8')
       const reference = readFileSync(`src/base44-reference/components/carteira/${filename}`, 'utf8')
       for (const token of visualTokens) {
+        if (Array.isArray(token)) {
+          const [hex, canonical] = token
+          expect(reference, `${filename} reference hex: ${hex}`).toContain(hex)
+          expect(runtime, `${filename} runtime token: ${canonical}`).toContain(canonical)
+          continue
+        }
         expect(reference, `${filename} reference token: ${token}`).toContain(token)
         expect(runtime, `${filename} runtime token: ${token}`).toContain(token)
       }
@@ -102,7 +111,7 @@ describe('Base44 1:1 visual source parity', () => {
   test('the plan tab keeps the Base44 visual language while using only persisted missions and real clients', () => {
     const source = readFileSync('src/components/carteira/PlanoAtaqueTab.jsx', 'utf8')
     expect(source).toContain('rounded-2xl')
-    expect(source).toContain('bg-[#005BFF]')
+    expect(source).toContain('bg-status-info')
     expect(source).toMatch(/CarteiraMissao\s*\.filter/)
     expect(source).toContain('CarteiraMissao.create')
     expect(source).toMatch(/if \(queue\.length > 0\)[\s\S]*?else[\s\S]*?setMissaoRecuperada\(null\)/)
@@ -121,7 +130,7 @@ describe('Base44 1:1 visual source parity', () => {
   test('mission execution preserves Base44 interaction tokens while persisting every action', () => {
     const source = readFileSync('src/components/carteira/ExecucaoMissao.jsx', 'utf8')
     for (const token of [
-      'bg-[#005BFF]',
+      'bg-status-info',
       'rounded-2xl',
       'Aguardando respostas',
       'CarteiraMissao.update',

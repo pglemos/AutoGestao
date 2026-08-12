@@ -51,7 +51,7 @@ function formatPhone(raw) {
 function Field({ label, required, children }) {
   return (
     <div>
-      <Label className="text-caption font-bold text-[#64748B] uppercase tracking-wider">
+      <Label className="text-caption font-bold text-muted-foreground uppercase tracking-wider">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </Label>
       <div className="mt-1.5">{children}</div>
@@ -262,7 +262,7 @@ export default function ClientCardMobile({
       {d1Editavel && (
         <div className="px-3 py-2.5 bg-status-info-surface border border-status-info/20 rounded-xl flex items-center gap-2">
           <Info className="w-4 h-4 text-status-info-text flex-shrink-0" />
-          <p className="text-[12px] font-semibold text-[#1e3a5f]">
+          <p className="text-[12px] font-semibold text-mx-navy">
             Somente registros de Agendamentos D+1 podem ser editados.
           </p>
         </div>
@@ -278,7 +278,7 @@ export default function ClientCardMobile({
       <Dialog open={dialogOpen} onOpenChange={v => { if (!saving) { setDialogOpen(v); setSaveError(null); } }}>
         <DialogContent className="max-w-lg max-h-[92vh] overflow-y-auto">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold text-h5">
+            <DialogTitle className="text-mx-navy font-bold text-h5">
               {editingClient
                 ? (modoD1 ? "Editar Agendamento D+1" : "Editar Cliente")
                 : (modoD1 ? "Novo Agendamento D+1" : "Cadastrar Novo Cliente")}
@@ -286,7 +286,7 @@ export default function ClientCardMobile({
             {modoD1 && (
               <div className="mt-1.5 px-3 py-2 bg-status-info-surface border border-status-info/30 rounded-lg flex items-start gap-2">
                 <CalendarClock className="w-4 h-4 text-status-info-text mt-0.5 flex-shrink-0" />
-                <p className="text-[12px] font-semibold text-[#1e3a5f]">
+                <p className="text-[12px] font-semibold text-mx-navy">
                   Este cadastro será considerado um Agendamento D+1.
                 </p>
               </div>
@@ -381,13 +381,13 @@ export default function ClientCardMobile({
             </Field>
           </div>
 
-          {saveError && <p className="text-[12px] text-[#EF4444] font-semibold mt-3">{saveError}</p>}
+          {saveError && <p className="text-[12px] text-status-error font-semibold mt-3">{saveError}</p>}
 
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button
               onClick={() => { setDialogOpen(false); setSaveError(null); }}
               disabled={saving}
-              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors"
+              className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors"
             >
               Cancelar
             </button>
@@ -419,16 +419,16 @@ export default function ClientCardMobile({
       <Dialog open={!!deleteConfirm} onOpenChange={v => { if (!v) setDeleteConfirm(null); }}>
         <DialogContent className="sm:max-w-sm">
           <DialogHeader>
-            <DialogTitle className="text-[#0F172A] font-bold">Excluir cliente?</DialogTitle>
+            <DialogTitle className="text-mx-navy font-bold">Excluir cliente?</DialogTitle>
           </DialogHeader>
-          <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
-            Tem certeza que deseja excluir <strong className="text-[#0F172A]">{deleteConfirm?.name}</strong>?
+          <p className="text-body-sm text-muted-foreground mt-1 leading-relaxed">
+            Tem certeza que deseja excluir <strong className="text-mx-navy">{deleteConfirm?.name}</strong>?
           </p>
           <div className="flex items-center justify-end gap-3 mt-4">
-            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors">
+            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
-            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-[#EF4444] hover:bg-status-error rounded-xl transition-colors">
+            <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-status-error hover:bg-status-error rounded-xl transition-colors">
               Excluir
             </button>
           </div>

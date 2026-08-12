@@ -38,7 +38,7 @@ export default function StatusMeta({ indicadores, filtro }) {
           <div className="flex-1 space-y-3">
             <div>
               <p className="text-[12px] text-muted-foreground mb-0.5">Realizado</p>
-              <p className="text-h2 font-bold text-[#0F172A] tabular-nums leading-none">
+              <p className="text-h2 font-bold text-mx-navy tabular-nums leading-none">
                 {realizado}
                 <span className="text-[16px] font-semibold text-text-disabled ml-1">/ {meta}</span>
               </p>
@@ -53,7 +53,7 @@ export default function StatusMeta({ indicadores, filtro }) {
               </div>
               <div className="h-2.5 bg-muted rounded-full overflow-hidden">
                 <div
-                  className="h-full bg-[#005BFF] rounded-full transition-all duration-500"
+                  className="h-full bg-status-info rounded-full transition-all duration-500"
                   style={{ width: `${pct}%` }}
                 />
               </div>
@@ -72,7 +72,7 @@ export default function StatusMeta({ indicadores, filtro }) {
             </div>
             <div className="bg-surface-alt rounded-xl p-3">
               <p className="text-caption text-muted-foreground uppercase tracking-wide mb-0.5">Dias úteis restantes</p>
-              <p className="text-h3 font-bold text-[#0F172A] tabular-nums leading-none">
+              <p className="text-h3 font-bold text-mx-navy tabular-nums leading-none">
                 {filtro === "mes_atual" ? (diasRestantes ?? "—") : "—"}
               </p>
               <p className="text-caption text-muted-foreground">seg–sab</p>

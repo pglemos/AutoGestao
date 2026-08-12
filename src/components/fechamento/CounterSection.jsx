@@ -83,48 +83,48 @@ const SectionCard = ({ number, title, accent, tooltip, children }) => (
 export default function CounterSection({ dc, updateCounter, setCounter }) {
   return (
     <div className="grid grid-cols-3 gap-5">
-      <SectionCard number="1" title="Leads Recebidos Hoje" accent="bg-[#22C55E]" tooltip="Informe quantos novos interessados chegaram hoje pelos canais Carteira e Internet. Não inclua clientes de showroom.">
-        <CounterItem label="Canal Carteira" bgColor="bg-[#22C55E]" textColor="text-[#22C55E]" icon={Users}
+      <SectionCard number="1" title="Leads Recebidos Hoje" accent="bg-status-success" tooltip="Informe quantos novos interessados chegaram hoje pelos canais Carteira e Internet. Não inclua clientes de showroom.">
+        <CounterItem label="Canal Carteira" bgColor="bg-status-success" textColor="text-status-success" icon={Users}
           value={dc.leads_carteira || 0}
           onDecrement={() => updateCounter("leads_carteira", -1)}
           onIncrement={() => updateCounter("leads_carteira", 1)}
           onSet={v => setCounter("leads_carteira", v)} />
         <Divider />
-        <CounterItem label="Canal Internet" bgColor="bg-[#005BFF]" textColor="text-[#005BFF]" icon={Globe}
+        <CounterItem label="Canal Internet" bgColor="bg-status-info" textColor="text-status-info-text" icon={Globe}
           value={dc.leads_internet || 0}
           onDecrement={() => updateCounter("leads_internet", -1)}
           onIncrement={() => updateCounter("leads_internet", 1)}
           onSet={v => setCounter("leads_internet", v)} />
       </SectionCard>
 
-      <SectionCard number="2" title="Atendimentos Hoje" accent="bg-[#F59E0B]" tooltip="Informe quantos clientes você atendeu hoje, separados por Showroom, Carteira e Internet.">
-        <CounterItem label="Showroom" bgColor="bg-[#F59E0B]" textColor="text-[#F59E0B]" icon={Store} compact
+      <SectionCard number="2" title="Atendimentos Hoje" accent="bg-status-warning" tooltip="Informe quantos clientes você atendeu hoje, separados por Showroom, Carteira e Internet.">
+        <CounterItem label="Showroom" bgColor="bg-status-warning" textColor="text-status-warning-text" icon={Store} compact
           value={dc.atendimentos_showroom || 0}
           onDecrement={() => updateCounter("atendimentos_showroom", -1)}
           onIncrement={() => updateCounter("atendimentos_showroom", 1)}
           onSet={v => setCounter("atendimentos_showroom", v)} />
         <Divider />
-        <CounterItem label="Carteira" bgColor="bg-[#22C55E]" textColor="text-[#22C55E]" icon={Users} compact
+        <CounterItem label="Carteira" bgColor="bg-status-success" textColor="text-status-success" icon={Users} compact
           value={dc.atendimentos_carteira || 0}
           onDecrement={() => updateCounter("atendimentos_carteira", -1)}
           onIncrement={() => updateCounter("atendimentos_carteira", 1)}
           onSet={v => setCounter("atendimentos_carteira", v)} />
         <Divider />
-        <CounterItem label="Internet" bgColor="bg-[#005BFF]" textColor="text-[#005BFF]" icon={Globe} compact
+        <CounterItem label="Internet" bgColor="bg-status-info" textColor="text-status-info-text" icon={Globe} compact
           value={dc.atendimentos_internet || 0}
           onDecrement={() => updateCounter("atendimentos_internet", -1)}
           onIncrement={() => updateCounter("atendimentos_internet", 1)}
           onSet={v => setCounter("atendimentos_internet", v)} />
       </SectionCard>
 
-      <SectionCard number="3" title="Agendamento D+1" accent="bg-[#005BFF]" tooltip="Informe quantos clientes ficaram com visitas/negociações agendadas para o dia seguinte, separados por Carteira e Internet.">
-        <CounterItem label="Carteira" bgColor="bg-[#22C55E]" textColor="text-[#22C55E]" icon={CalendarCheck}
+      <SectionCard number="3" title="Agendamento D+1" accent="bg-status-info" tooltip="Informe quantos clientes ficaram com visitas/negociações agendadas para o dia seguinte, separados por Carteira e Internet.">
+        <CounterItem label="Carteira" bgColor="bg-status-success" textColor="text-status-success" icon={CalendarCheck}
           value={dc.agendamentos_carteira || 0}
           onDecrement={() => updateCounter("agendamentos_carteira", -1)}
           onIncrement={() => updateCounter("agendamentos_carteira", 1)}
           onSet={v => setCounter("agendamentos_carteira", v)} />
         <Divider />
-        <CounterItem label="Internet" bgColor="bg-[#005BFF]" textColor="text-[#005BFF]" icon={CalendarCheck}
+        <CounterItem label="Internet" bgColor="bg-status-info" textColor="text-status-info-text" icon={CalendarCheck}
           value={dc.agendamentos_internet || 0}
           onDecrement={() => updateCounter("agendamentos_internet", -1)}
           onIncrement={() => updateCounter("agendamentos_internet", 1)}

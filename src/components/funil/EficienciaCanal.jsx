@@ -27,7 +27,7 @@ function EtapaLinha({ label, valor, conv }) {
           <span className="text-caption text-muted-foreground">→ {conv}</span>
         )}
       </div>
-      <span className="text-[14px] font-bold tabular-nums text-[#0F172A]">{valor}</span>
+      <span className="text-[14px] font-bold tabular-nums text-mx-navy">{valor}</span>
     </div>
   );
 }
@@ -46,7 +46,7 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
     <div className="bg-white rounded-xl border border-border overflow-hidden">
       {/* Header */}
       <div className={`px-4 py-2.5 border-b flex items-center justify-between ${c.header}`}>
-        <p className="text-[12px] font-bold text-[#0F172A] uppercase tracking-wide">{titulo}</p>
+        <p className="text-[12px] font-bold text-mx-navy uppercase tracking-wide">{titulo}</p>
         {conversaoGeral !== null && !semDados ? (
           <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${c.badge}`}>{conversaoGeral}% conv.</span>
         ) : (
@@ -62,7 +62,7 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="text-caption text-muted-foreground">{volumeLabel}</p>
-              <p className="text-[20px] font-bold tabular-nums text-[#0F172A]">{volume}</p>
+              <p className="text-[20px] font-bold tabular-nums text-mx-navy">{volume}</p>
             </div>
             <div className="text-center">
               <p className="text-caption text-muted-foreground">Vendas</p>
@@ -70,7 +70,7 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
             </div>
             <div className="text-center">
               <p className="text-caption text-muted-foreground">Conversão</p>
-              <p className="text-[20px] font-bold tabular-nums text-[#0F172A]">{conversaoGeral !== null ? `${conversaoGeral}%` : "—"}</p>
+              <p className="text-[20px] font-bold tabular-nums text-mx-navy">{conversaoGeral !== null ? `${conversaoGeral}%` : "—"}</p>
             </div>
           </div>
         )}
