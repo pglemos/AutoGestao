@@ -178,13 +178,13 @@ export function LeadConferenceModal({
 
   const footer = (
     <div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
-      <button type="button" className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-border bg-white px-3 text-sm font-medium text-foreground hover:bg-gray-50" onClick={() => void openHistory()}>
+      <button type="button" className="inline-flex h-9 items-center gap-1.5 rounded-mx-md border border-border bg-white px-3 text-sm font-medium text-foreground hover:bg-gray-50" onClick={() => void openHistory()}>
         <History size={16} />
         Ver Histórico
       </button>
       <button
         type="button"
-        className="inline-flex h-9 items-center gap-1.5 rounded-[8px] bg-status-info px-3 text-sm font-medium text-white hover:bg-status-info disabled:opacity-40"
+        className="inline-flex h-9 items-center gap-1.5 rounded-mx-md bg-status-info px-3 text-sm font-medium text-white hover:bg-status-info disabled:opacity-40"
         disabled={!summary.complete || saving || loading}
         onClick={() => void save()}
       >
@@ -207,7 +207,7 @@ export function LeadConferenceModal({
         footer={footer}
       >
         <div className="space-y-4">
-          <section className="rounded-[16px] bg-gray-50 p-4">
+          <section className="rounded-mx-2xl bg-gray-50 p-4">
             <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
               <CalendarDays size={17} />
               Período da Conferência
@@ -222,7 +222,7 @@ export function LeadConferenceModal({
                       event.target.value as LeadConferencePeriodType,
                     )
                   }
-                  className="h-10 min-w-[220px] rounded-[12px] border border-border bg-white px-3 text-sm text-foreground"
+                  className="h-10 min-w-[220px] rounded-mx-xl border border-border bg-white px-3 text-sm text-foreground"
                 >
                   {Object.entries(LEAD_CONFERENCE_PERIOD_LABELS).map(
                     ([value, label]) => (
@@ -251,7 +251,7 @@ export function LeadConferenceModal({
                   />
                 </div>
               )}
-              <div className="rounded-[12px] border border-border bg-white px-3 py-2 text-sm text-muted-foreground">
+              <div className="rounded-mx-xl border border-border bg-white px-3 py-2 text-sm text-muted-foreground">
                 Período:{" "}
                 <strong className="text-foreground">
                   {format(parseISO(period.start), "dd/MM/yyyy")} a{" "}
@@ -283,13 +283,13 @@ export function LeadConferenceModal({
             />
           </section>
 
-          <div className="rounded-[12px] border border-status-info/30 bg-status-info-surface px-3 py-2 text-center text-sm font-semibold text-status-info-text">
+          <div className="rounded-mx-xl border border-status-info/30 bg-status-info-surface px-3 py-2 text-center text-sm font-semibold text-status-info-text">
             Informe os volumes oficiais consultados no CRM externo.
           </div>
 
           {error && (
             <div
-              className="rounded-[12px] border border-status-error/30 bg-status-error-surface p-3 text-sm text-status-error-text"
+              className="rounded-mx-xl border border-status-error/30 bg-status-error-surface p-3 text-sm text-status-error-text"
               role="alert"
             >
               {error}
@@ -306,7 +306,7 @@ export function LeadConferenceModal({
               Nenhum vendedor ativo encontrado nesta unidade.
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-[16px] border border-border-subtle">
+            <div className="overflow-x-auto rounded-mx-2xl border border-border-subtle">
               <table className="w-full text-sm min-w-[1120px]">
                 <thead className="bg-gray-50 border-b border-border-subtle">
                   <tr>
@@ -373,7 +373,7 @@ export function LeadConferenceModal({
             {history.map((item) => (
               <article
                 key={item.id}
-                className="rounded-[12px] border border-border p-4"
+                className="rounded-mx-xl border border-border p-4"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
@@ -386,7 +386,7 @@ export function LeadConferenceModal({
                       {format(parseISO(item.created_at), "dd/MM/yyyy HH:mm")}
                     </p>
                   </div>
-                  <span className={`inline-flex rounded-[8px] px-2 py-1 text-xs font-medium ${item.divergent_sellers ? "bg-status-warning-surface text-status-warning-text" : "bg-status-success-surface text-status-success-text"}`}>
+                  <span className={`inline-flex rounded-mx-md px-2 py-1 text-xs font-medium ${item.divergent_sellers ? "bg-status-warning-surface text-status-warning-text" : "bg-status-success-surface text-status-success-text"}`}>
                     {item.divergent_sellers} divergência(s)
                   </span>
                 </div>
@@ -430,7 +430,7 @@ function PeriodInput({
         type="date"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 rounded-[12px] border border-border bg-white px-3 text-sm"
+        className="h-10 rounded-mx-xl border border-border bg-white px-3 text-sm"
       />
     </label>
   );
@@ -454,7 +454,7 @@ function ConferenceMetric({
         ? "border-status-warning/30 bg-status-warning-surface"
         : "border-border-subtle bg-white text-foreground";
   return (
-    <div className={`rounded-[16px] border p-4 ${colors}`}>
+    <div className={`rounded-mx-2xl border p-4 ${colors}`}>
       <p className="text-xs font-medium text-muted-foreground mb-1">{label}</p>
       <strong className="block text-2xl font-bold">
         {value === null ? "—" : value}
@@ -522,7 +522,7 @@ function ConferenceRow({
             Não conferido
           </span>
         ) : (
-          <span className={`inline-flex rounded-[8px] px-2 py-1 text-xs font-medium ${totalDiff === 0 ? "bg-status-success-surface text-status-success-text" : "bg-status-warning-surface text-status-warning-text"}`}>
+          <span className={`inline-flex rounded-mx-md px-2 py-1 text-xs font-medium ${totalDiff === 0 ? "bg-status-success-surface text-status-success-text" : "bg-status-warning-surface text-status-warning-text"}`}>
             {totalDiff === 0 ? "Conferido" : "Divergente"}
           </span>
         )}

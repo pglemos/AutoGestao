@@ -11,7 +11,7 @@ describe("RegularizationsListModal visual contract", () => {
     expect(source).toContain('className="mb-3 grid grid-cols-4 gap-2 text-xs"');
     expect(source).toContain('className="flex gap-2"');
     expect(source).toContain('className="inline-flex h-8 flex-1 items-center justify-center gap-1 rounded-xl bg-brand-primary');
-    expect(source).toContain('className="h-9 rounded-[12px] border border-status-error/30 bg-white px-4 text-sm font-medium text-status-error-text hover:bg-status-error-surface disabled:opacity-40"');
+    expect(source).toContain('className="h-9 rounded-mx-xl border border-status-error/30 bg-white px-4 text-sm font-medium text-status-error-text hover:bg-status-error-surface disabled:opacity-40"');
     expect(source).toContain('rows={2}');
     expect(source).not.toContain('min-h-[80px]');
   });

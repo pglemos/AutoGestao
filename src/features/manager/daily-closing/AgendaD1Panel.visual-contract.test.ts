@@ -17,7 +17,7 @@ describe("AgendaD1Panel visual contract", () => {
     expect(source).toContain('confirmationStatusClass(managerConfirmationStatus)');
     expect(source).toContain('"Últ. contato"');
     expect(source).toContain('"text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground"');
-    expect(source).toContain('"absolute right-0 top-full z-50 mt-1 min-w-[208px] rounded-[12px] border border-border bg-white py-1 shadow-lg"');
+    expect(source).toContain('"absolute right-0 top-full z-50 mt-1 min-w-[208px] rounded-mx-xl border border-border bg-white py-1 shadow-lg"');
     expect(source).toContain('<CheckCircle size={13} /> Confirmar <ChevronDown size={12} />');
     expect(source).not.toContain('aria-label="Copiar telefone"');
     expect(source).not.toContain('aria-label="Resultado do contato"');

@@ -60,7 +60,7 @@ export function CorrigirLeadsModal({ open, onClose, sellerName, checkin, onSubmi
   return (
     <Modal open={open} onClose={onClose} size="lg" title={`Corrigir leads — ${sellerName}`} description="Somente leads por canal podem ser alterados. Vendas, atendimentos, agendamentos, qualificados e garantia permanecem intocados."
       referenceStyle
-      footer={<div className="flex justify-end gap-2"><button type="button" className="h-9 rounded-[8px] px-3 text-sm font-medium text-muted-foreground hover:bg-gray-100" onClick={onClose}>Cancelar</button><button type="button" className="h-9 rounded-[8px] bg-brand-primary px-3 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-40" disabled={saving || !checkin} onClick={() => void submit()}>{saving ? 'Aplicando…' : 'Aplicar correção auditada'}</button></div>}>
+      footer={<div className="flex justify-end gap-2"><button type="button" className="h-9 rounded-mx-md px-3 text-sm font-medium text-muted-foreground hover:bg-gray-100" onClick={onClose}>Cancelar</button><button type="button" className="h-9 rounded-mx-md bg-brand-primary px-3 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-40" disabled={saving || !checkin} onClick={() => void submit()}>{saving ? 'Aplicando…' : 'Aplicar correção auditada'}</button></div>}>
       {!checkin ? (
         <p className="text-sm text-muted-foreground">Este vendedor ainda não enviou o fechamento do dia — não há leads para corrigir.</p>
       ) : (
@@ -69,13 +69,13 @@ export function CorrigirLeadsModal({ open, onClose, sellerName, checkin, onSubmi
             {LEAD_FIELDS.map(field => (
               <div key={field.key}>
                 <label className="mb-1 block text-xs font-medium text-muted-foreground" htmlFor={`corrigir-${field.key}`}>{field.label}</label>
-                <input className="h-10 w-full rounded-[12px] border border-border px-3 text-sm" id={`corrigir-${field.key}`} type="number" min={0} step={1} value={values[field.key]} onChange={event => setValues(prev => ({ ...prev, [field.key]: Number(event.target.value) }))} />
+                <input className="h-10 w-full rounded-mx-xl border border-border px-3 text-sm" id={`corrigir-${field.key}`} type="number" min={0} step={1} value={values[field.key]} onChange={event => setValues(prev => ({ ...prev, [field.key]: Number(event.target.value) }))} />
                 <p className="mt-1 text-xs text-muted-foreground">Valor anterior: {originals[field.key]}</p>
               </div>
             ))}
           </div>
           {diffs.length > 0 && (
-            <div className="rounded-[12px] border border-border bg-gray-50 p-3" role="status">
+            <div className="rounded-mx-xl border border-border bg-gray-50 p-3" role="status">
               {diffs.map(diff => (
                 <p key={diff.key} className="text-xs text-muted-foreground">{diff.label}: {diff.anterior} → {diff.novo} (diferença {diff.diferenca > 0 ? `+${diff.diferenca}` : diff.diferenca})</p>
               ))}
@@ -83,11 +83,11 @@ export function CorrigirLeadsModal({ open, onClose, sellerName, checkin, onSubmi
           )}
           <div>
             <label className="mb-1 block text-xs font-medium text-muted-foreground" htmlFor="corrigir-motivo">Motivo (obrigatório)</label>
-            <input className="h-10 w-full rounded-[12px] border border-border px-3 text-sm" id="corrigir-motivo" value={motivo} onChange={event => setMotivo(event.target.value)} placeholder="Ex.: lead contado em duplicidade no canal internet" />
+            <input className="h-10 w-full rounded-mx-xl border border-border px-3 text-sm" id="corrigir-motivo" value={motivo} onChange={event => setMotivo(event.target.value)} placeholder="Ex.: lead contado em duplicidade no canal internet" />
           </div>
           <div>
             <label className="mb-1 block text-xs font-medium text-muted-foreground" htmlFor="corrigir-observacao">Observação (opcional)</label>
-            <textarea className="w-full resize-none rounded-[12px] border border-border px-3 py-2 text-sm" id="corrigir-observacao" rows={2} value={observacao} onChange={event => setObservacao(event.target.value)} placeholder="Contexto adicional para a auditoria" />
+            <textarea className="w-full resize-none rounded-mx-xl border border-border px-3 py-2 text-sm" id="corrigir-observacao" rows={2} value={observacao} onChange={event => setObservacao(event.target.value)} placeholder="Contexto adicional para a auditoria" />
           </div>
           <p className="text-xs text-muted-foreground">A correção registra gerente, data/hora, valores anteriores e novos no log de auditoria do fechamento.</p>
           {error && <p className="text-sm text-status-error-text" role="alert">{error}</p>}

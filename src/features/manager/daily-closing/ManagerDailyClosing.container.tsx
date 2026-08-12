@@ -389,7 +389,7 @@ export default function ManagerDailyClosing() {
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="actions" id="page-fechamento-diario" aria-label="Fechamento Diário" className="flex flex-col gap-4">
         <ManagerHomeReturnLink />
-        <section className="bg-white rounded-[16px] border border-border-subtle shadow-sm p-5">
+        <section className="bg-white rounded-mx-2xl border border-border-subtle shadow-sm p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-xl">
               <h1 className="text-xl font-bold text-foreground">
@@ -408,7 +408,7 @@ export default function ManagerDailyClosing() {
                   type="date"
                   value={date}
                   onChange={(event) => setDate(event.target.value)}
-                  className="h-[36px] border border-border bg-white rounded-[12px] px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-status-success focus:border-status-success shadow-2xs transition-all"
+                  className="h-[36px] border border-border bg-white rounded-mx-xl px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-status-success focus:border-status-success shadow-2xs transition-all"
                 />
               </Field>
               <Field label="Unidade">
@@ -416,7 +416,7 @@ export default function ManagerDailyClosing() {
                   aria-label="Unidade"
                   value={storeId || ""}
                   onChange={() => undefined}
-                  className="h-[36px] border border-border bg-white rounded-[12px] px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-status-success focus:border-status-success min-w-36 shadow-2xs transition-all"
+                  className="h-[36px] border border-border bg-white rounded-mx-xl px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-status-success focus:border-status-success min-w-36 shadow-2xs transition-all"
                 >
                   <option value={storeId || ""}>
                     {membership?.store?.name || "Unidade atual"}
@@ -425,7 +425,7 @@ export default function ManagerDailyClosing() {
               </Field>
               <button
                 type="button"
-                className="inline-flex h-[36px] items-center gap-1 rounded-[12px] bg-brand-primary px-3 text-xs font-medium text-white shadow-sm transition-colors hover:bg-brand-primary-hover"
+                className="inline-flex h-[36px] items-center gap-1 rounded-mx-xl bg-brand-primary px-3 text-xs font-medium text-white shadow-sm transition-colors hover:bg-brand-primary-hover"
                 onClick={refreshAll}
               >
                 <RefreshCw size={16} />
@@ -436,7 +436,7 @@ export default function ManagerDailyClosing() {
         </section>
 
         {(error || requestError) && (
-          <div className="rounded-[12px] border border-status-error/30 bg-status-error-surface p-4 text-sm text-status-error-text">
+          <div className="rounded-mx-xl border border-status-error/30 bg-status-error-surface p-4 text-sm text-status-error-text">
               {error ||
                 `Não foi possível carregar as regularizações: ${requestError}`}{" "}
               Use Atualizar para tentar novamente.
@@ -507,7 +507,7 @@ export default function ManagerDailyClosing() {
           <DisciplineCard value={discipline} />
         </section>
 
-        <section className="bg-white rounded-[16px] border border-border-subtle shadow-sm overflow-hidden">
+        <section className="bg-white rounded-mx-2xl border border-border-subtle shadow-sm overflow-hidden">
           <div id="manager-closing-movement" />
           <div className="flex flex-col gap-3 border-b border-border-subtle p-4 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-base font-semibold text-foreground">
@@ -521,7 +521,7 @@ export default function ManagerDailyClosing() {
               <button
                 type="button"
                 onClick={() => setLeadConferenceOpen(true)}
-                className="inline-flex h-[32px] items-center gap-1.5 rounded-[12px] border border-status-info/30 bg-white px-3 text-xs font-medium text-status-info-text hover:bg-status-info-surface"
+                className="inline-flex h-[32px] items-center gap-1.5 rounded-mx-xl border border-status-info/30 bg-white px-3 text-xs font-medium text-status-info-text hover:bg-status-info-surface"
               >
                 <Wrench size={16} />
                 Corrigir Leads
@@ -560,7 +560,7 @@ export default function ManagerDailyClosing() {
           onRange={setHistoryRange}
         />
 
-        <section className="rounded-[16px] border border-border-subtle bg-white p-5 shadow-sm">
+        <section className="rounded-mx-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
             <BarChart3 size={18} className="text-status-success-text" />
             Comparativo de Disciplina do Fechamento
@@ -583,7 +583,7 @@ export default function ManagerDailyClosing() {
           </p>
         </section>
 
-        <section className="rounded-[16px] border border-border-subtle bg-white p-5 shadow-sm">
+        <section className="rounded-mx-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <h2 className="mb-4 flex items-center gap-1.5 text-base font-semibold text-foreground">
             Resumo do Fechamento
             <HelpTooltip text="Consolidação dos fechamentos do dia: atendimentos, leads e vendas por canal (showroom, carteira, internet). Os leads podem ser corrigidos pelo gerente com registro em auditoria." />
@@ -760,12 +760,12 @@ export function PendingReminderModal({
 }) {
   const footer = (
     <div className="flex w-full gap-2">
-      <button type="button" onClick={onClose} className="h-9 flex-1 rounded-[12px] border border-border bg-white px-4 text-sm font-medium text-foreground hover:bg-gray-50">
+      <button type="button" onClick={onClose} className="h-9 flex-1 rounded-mx-xl border border-border bg-white px-4 text-sm font-medium text-foreground hover:bg-gray-50">
         Cancelar
       </button>
       <button
         type="button"
-        className="h-9 flex-1 rounded-[12px] bg-status-warning px-4 text-sm font-medium text-white hover:bg-status-warning disabled:opacity-40"
+        className="h-9 flex-1 rounded-mx-xl bg-status-warning px-4 text-sm font-medium text-white hover:bg-status-warning disabled:opacity-40"
         disabled={reminding}
         onClick={onConfirm}
       >
@@ -784,7 +784,7 @@ export function PendingReminderModal({
       footer={footer}
     >
       <div className="space-y-4">
-        {pendingRows.length > 1 && <div className="rounded-[12px] bg-gray-50 p-3">
+        {pendingRows.length > 1 && <div className="rounded-mx-xl bg-gray-50 p-3">
           <p className="mb-2 text-xs text-muted-foreground">
             Vendedores que serão cobrados:
           </p>
@@ -800,7 +800,7 @@ export function PendingReminderModal({
             ))}
           </ul>
         </div>}
-        <div className="rounded-[12px] border border-status-warning/20 bg-status-warning-surface p-3">
+        <div className="rounded-mx-xl border border-status-warning/20 bg-status-warning-surface p-3">
           <p className="mb-1 text-xs font-medium text-status-warning-text">
             Mensagem padrão enviada:
           </p>
@@ -877,7 +877,7 @@ function SummaryCard({
     neutral: "text-foreground",
   }[tone];
   return (
-    <div className={`min-h-[164px] rounded-[16px] border shadow-sm p-3 ${colors}`}>
+    <div className={`min-h-[164px] rounded-mx-2xl border shadow-sm p-3 ${colors}`}>
       <div className="mb-2 flex items-center justify-between gap-1.5 min-w-0">
         <h2 className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
           <Icon size={16} className="shrink-0" />
@@ -902,7 +902,7 @@ function SummaryCard({
         type="button"
         disabled={actionDisabled}
         onClick={onAction}
-        className={`mt-3 flex h-[28px] w-full items-center justify-center gap-1.5 rounded-[8px] border bg-white px-2 py-1.5 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40 ${actionColor}`}
+        className={`mt-3 flex h-[28px] w-full items-center justify-center gap-1.5 rounded-mx-md border bg-white px-2 py-1.5 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40 ${actionColor}`}
       >
         {action === "Ver Agenda D+1" && <CalendarClock size={13} />}
         {action === "Cobrar Pendentes" && <Megaphone size={13} />}
@@ -931,7 +931,7 @@ function DisciplineCard({ value }: { value: number | null }) {
           ? { surface: "bg-status-warning-surface", badge: "bg-status-warning-surface text-status-warning-text", glow: "from-amber-400 to-status-warning", ring: "rgb(245 158 11)", track: "rgb(254 243 199)", inner: "bg-status-warning-surface", text: "text-status-warning-text" }
           : { surface: "bg-status-error-surface", badge: "bg-status-error-surface text-status-error-text", glow: "from-red-400 to-red-500", ring: "rgb(239 68 68)", track: "rgb(254 226 226)", inner: "bg-status-error-surface", text: "text-status-error-text" };
   return (
-    <div className={`flex h-full min-h-[164px] flex-col rounded-[16px] border border-border-subtle p-3 shadow-sm ${palette.surface}`}>
+    <div className={`flex h-full min-h-[164px] flex-col rounded-mx-2xl border border-border-subtle p-3 shadow-sm ${palette.surface}`}>
       <div className="mb-1 flex flex-wrap items-center justify-between gap-x-1 gap-y-0.5">
         <h2 className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
           <span>Disciplina Média</span>
@@ -1043,7 +1043,7 @@ function DisciplineTrendCard({
 }) {
   const hasData = trend.some((point) => point.value !== null);
   return (
-    <section className="rounded-[16px] border border-border-subtle bg-white p-5 shadow-sm">
+    <section className="rounded-mx-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
               <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
@@ -1259,7 +1259,7 @@ function ClosingRow({
         <span className="flex items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-status-success-surface text-xs font-bold text-status-success-text">{initials(name)}</span><span className="font-medium text-foreground">{name}</span></span>
       </td>
       <td className="px-4 py-3">
-        <span className={`inline-flex w-fit whitespace-nowrap rounded-[8px] px-2 py-1 text-xs font-medium ${status === "Finalizado" ? "bg-status-success-surface text-status-success-text" : status === "Em andamento" ? "bg-gray-100 text-foreground" :status === "Pendente" ? "bg-status-warning-surface text-status-warning-text" : status === "Fora do horário" ? "bg-status-error-surface text-status-error-text" : "bg-status-info-surface text-status-info-text"}`}>
+        <span className={`inline-flex w-fit whitespace-nowrap rounded-mx-md px-2 py-1 text-xs font-medium ${status === "Finalizado" ? "bg-status-success-surface text-status-success-text" : status === "Em andamento" ? "bg-gray-100 text-foreground" :status === "Pendente" ? "bg-status-warning-surface text-status-warning-text" : status === "Fora do horário" ? "bg-status-error-surface text-status-error-text" : "bg-status-info-surface text-status-info-text"}`}>
           {status}
         </span>
         {isDraft && (

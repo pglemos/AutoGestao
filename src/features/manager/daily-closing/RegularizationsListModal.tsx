@@ -218,7 +218,7 @@ function RegularizationDecisionModal({
             type="button"
             onClick={onSwitchAction}
             disabled={saving}
-            className="h-9 rounded-[12px] border border-status-error/30 bg-white px-4 text-sm font-medium text-status-error-text hover:bg-status-error-surface disabled:opacity-40"
+            className="h-9 rounded-mx-xl border border-status-error/30 bg-white px-4 text-sm font-medium text-status-error-text hover:bg-status-error-surface disabled:opacity-40"
           >
             {approve ? "Recusar" : "Aprovar"}
           </button>
@@ -226,7 +226,7 @@ function RegularizationDecisionModal({
             type="button"
             onClick={onSubmit}
             disabled={!confirmed || saving}
-            className={`h-9 rounded-[12px] px-4 text-sm font-medium text-white disabled:opacity-40 ${approve ? "bg-brand-primary hover:bg-brand-primary-hover" : "bg-status-error hover:bg-status-error"}`}
+            className={`h-9 rounded-mx-xl px-4 text-sm font-medium text-white disabled:opacity-40 ${approve ? "bg-brand-primary hover:bg-brand-primary-hover" : "bg-status-error hover:bg-status-error"}`}
           >
             {saving ? "Processando..." : actionLabel}
           </button>
@@ -243,7 +243,7 @@ function RegularizationDecisionModal({
             id="regularization-comment"
             rows={2}
             placeholder={`Adicione um comentário sobre a ${approve ? "aprovação" : "recusa"}...`}
-            className="w-full resize-none rounded-[12px] border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-status-success"
+            className="w-full resize-none rounded-mx-xl border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-status-success"
           />
         </div>
         <label className="flex cursor-pointer items-start gap-2 text-sm text-muted-foreground">

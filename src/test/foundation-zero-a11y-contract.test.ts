@@ -54,6 +54,15 @@ describe('Foundation Zero accessibility contracts', () => {
     expect(consulting).toContain('role="status"')
   })
 
+  test('keeps pending seller rows keyed by stable seller ids', () => {
+    const morning = read('src/features/morning-report/LegacyMorningReportPage.tsx')
+
+    expect(morning).toContain('const pendingSellerRows = (sellers || []).filter(s => !s.checkin_today)')
+    expect(morning).toMatch(/pendingSellerRows\.map\(seller\s*=>\s*\(/)
+    expect(morning).toContain('<div key={seller.id}')
+    expect(morning).not.toContain('<div key={name}')
+  })
+
   test('uses the readable info token for text on the info surface', () => {
     const pdi = read('src/pages/GerentePDI.tsx')
     expect(pdi).not.toMatch(/PDI como acompanhamento do Dono[\s\S]{0,260}text-status-info["']/)

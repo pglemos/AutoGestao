@@ -386,7 +386,7 @@ export function AgendaD1Panel({
         <div className="space-y-4">
           <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <span className="inline-block rounded-[8px] bg-status-warning-surface px-2.5 py-1 text-xs font-medium text-status-warning-text">
+              <span className="inline-block rounded-mx-md bg-status-warning-surface px-2.5 py-1 text-xs font-medium text-status-warning-text">
                 Agenda D+1 parcial
               </span>
               <p className="mt-1 text-xs text-muted-foreground">
@@ -507,13 +507,13 @@ export function AgendaD1Panel({
           </div>
 
           {error && (
-            <div className="rounded-[12px] border border-status-error/30 bg-status-error-surface p-4">
+            <div className="rounded-mx-xl border border-status-error/30 bg-status-error-surface p-4">
               <p className="text-sm text-status-error-text">
                 Não foi possível carregar a Agenda D+1: {error}
               </p>
               <button
                 type="button"
-                className="mt-3 rounded-[8px] border border-border bg-white px-3 py-1.5 text-xs font-medium text-foreground hover:bg-gray-50"
+                className="mt-3 rounded-mx-md border border-border bg-white px-3 py-1.5 text-xs font-medium text-foreground hover:bg-gray-50"
                 onClick={() => void fetchAgenda()}
               >
                 Tentar novamente
@@ -650,7 +650,7 @@ export function AgendaD1Panel({
                                       className="fixed inset-0 z-40 cursor-default"
                                       onClick={() => setConfirmMenuRowId(null)}
                                     />
-                                    <div className="absolute right-0 top-full z-50 mt-1 min-w-[208px] rounded-[12px] border border-border bg-white py-1 shadow-lg">
+                                    <div className="absolute right-0 top-full z-50 mt-1 min-w-[208px] rounded-mx-xl border border-border bg-white py-1 shadow-lg">
                                       {CONFIRMATION_OUTCOMES.map((outcome) => (
                                         <button
                                           key={outcome}
@@ -738,7 +738,7 @@ export function AgendaD1Panel({
                 id="agenda-other-status"
                 value="Outro"
                 disabled
-                className="w-full rounded-[12px] border border-border bg-white px-3 py-2 text-sm text-foreground"
+                className="w-full rounded-mx-xl border border-border bg-white px-3 py-2 text-sm text-foreground"
               >
                 <option>Outro</option>
               </select>
@@ -762,14 +762,14 @@ export function AgendaD1Panel({
                   )
                 }
                 placeholder="Descreva a situação observada..."
-                className="w-full resize-none rounded-[12px] border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-status-success"
+                className="w-full resize-none rounded-mx-xl border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-status-success"
               />
             </div>
             <div className="flex justify-end gap-2 pt-1">
               <button
                 type="button"
                 onClick={() => setConfirming(null)}
-                className="rounded-[12px] px-3 py-2 text-sm text-foreground hover:bg-gray-100"
+                className="rounded-mx-xl px-3 py-2 text-sm text-foreground hover:bg-gray-100"
               >
                 Cancelar
               </button>
@@ -783,7 +783,7 @@ export function AgendaD1Panel({
                     confirming.note,
                   )
                 }
-                className="rounded-[12px] bg-brand-primary px-3 py-2 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-40"
+                className="rounded-mx-xl bg-brand-primary px-3 py-2 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-40"
               >
                 {saving ? "Salvando..." : "Registrar"}
               </button>
@@ -801,7 +801,7 @@ function FragmentRow({ children }: { children: ReactNode }) {
 
 function ConfirmationInfo({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-[12px] bg-gray-50 p-3">
+    <div className="rounded-mx-xl bg-gray-50 p-3">
       <p className="mb-0.5 text-xs text-muted-foreground">{label}</p>
       <p className="font-medium text-foreground">{value}</p>
     </div>

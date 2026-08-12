@@ -46,12 +46,12 @@ export function ClosingDetailsModal({
       footer={onOpenAgenda || onCorrectLeads ? (
         <div className="flex flex-wrap justify-end gap-2">
           {onCorrectLeads && (
-            <button type="button" onClick={onCorrectLeads} className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-status-warning/30 bg-white px-3 text-sm font-medium text-status-warning-text hover:bg-status-warning-surface">
+            <button type="button" onClick={onCorrectLeads} className="inline-flex h-9 items-center gap-1.5 rounded-mx-md border border-status-warning/30 bg-white px-3 text-sm font-medium text-status-warning-text hover:bg-status-warning-surface">
               <Pencil size={15} /> Corrigir leads
             </button>
           )}
           {onOpenAgenda && (
-            <button type="button" onClick={onOpenAgenda} className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-status-success/30 bg-white px-3 text-sm font-medium text-status-success-text hover:bg-status-success-surface">
+            <button type="button" onClick={onOpenAgenda} className="inline-flex h-9 items-center gap-1.5 rounded-mx-md border border-status-success/30 bg-white px-3 text-sm font-medium text-status-success-text hover:bg-status-success-surface">
               <CalendarClock size={15} /> Ver Agenda D+1 deste vendedor
             </button>
           )}
@@ -96,11 +96,11 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function Field({ label, value }: { label: string; value: ReactNode }) {
-  return <div className="rounded-[12px] bg-gray-50 p-2.5"><p className="mb-0.5 text-xs text-muted-foreground">{label}</p><div className="text-sm font-medium text-foreground">{value}</div></div>;
+  return <div className="rounded-mx-xl bg-gray-50 p-2.5"><p className="mb-0.5 text-xs text-muted-foreground">{label}</p><div className="text-sm font-medium text-foreground">{value}</div></div>;
 }
 
 function Channel({ name, values }: { name: string; values: Array<[string, number | string]> }) {
-  return <div className="rounded-[12px] bg-gray-50 p-3"><p className="mb-2 text-xs font-semibold text-muted-foreground">{name}</p><div className="flex flex-wrap gap-4">{values.map(([label, value]) => <div key={label}><span className="text-xs text-muted-foreground">{label}: </span><span className="text-sm font-semibold text-foreground">{value}</span></div>)}</div></div>;
+  return <div className="rounded-mx-xl bg-gray-50 p-3"><p className="mb-2 text-xs font-semibold text-muted-foreground">{name}</p><div className="flex flex-wrap gap-4">{values.map(([label, value]) => <div key={label}><span className="text-xs text-muted-foreground">{label}: </span><span className="text-sm font-semibold text-foreground">{value}</span></div>)}</div></div>;
 }
 
 function Discipline({ value }: { value: string }) {

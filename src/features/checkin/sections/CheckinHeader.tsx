@@ -606,7 +606,7 @@ Ver data atual
 
 <div className="space-y-3 md:hidden">
 
-<section className="rounded-[16px] border border-[#DFE0E1] bg-white p-4 shadow-mx-lg">
+<section className="rounded-mx-2xl border border-[#DFE0E1] bg-white p-4 shadow-mx-lg">
 <div className="flex items-start justify-between gap-4">
 <div>
 <div className="flex items-center gap-1.5">
@@ -627,7 +627,7 @@ Etapa {activeStep} de 4 <span className="text-[#526B7A]">•</span> <span classN
 </div>
 </section>
 
-<section className="grid grid-cols-4 overflow-hidden rounded-[16px] border border-[#DFE0E1] bg-white shadow-mx-lg">
+<section className="grid grid-cols-4 overflow-hidden rounded-mx-2xl border border-[#DFE0E1] bg-white shadow-mx-lg">
 {stepItems.map((item) => {
 const active = item.step === activeStep
 return (
@@ -837,7 +837,7 @@ return (
             onMouseDown={event => event.stopPropagation()}
           >
             <header className="flex items-center gap-3 border-b border-[#FDE68A] bg-[#FFF7E6] px-5 py-4">
-              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-[10px] bg-[#102C37] text-[#F59F0A]">
+              <div className="grid h-10 w-10 shrink-0 place-items-center rounded-mx-lg bg-[#102C37] text-[#F59F0A]">
                 <AlertTriangle size={19} strokeWidth={2} aria-hidden="true" />
               </div>
               <div>

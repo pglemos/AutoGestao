@@ -179,7 +179,11 @@ test.describe('Módulo Gerencial canônico', () => {
       await expect(viewTab).toHaveAttribute('aria-selected', 'true')
     }
     await page.getByRole('tab', { name: 'Todos', exact: true }).click()
-    const moreActions = page.locator('summary[aria-label^="Mais ações para"]').first()
+    // O Kanban monta as variantes desktop, tablet e mobile no mesmo DOM para
+    // preservar a troca de composição por breakpoint. O primeiro summary é a
+    // variante desktop e fica hidden no mobile; interagir com ele mascara a
+    // ação que o usuário realmente consegue alcançar.
+    const moreActions = page.locator('summary[aria-label^="Mais ações para"]:visible').first()
     if (await moreActions.count()) {
       await expect(moreActions).toBeVisible()
       await moreActions.click()

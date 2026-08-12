@@ -504,8 +504,9 @@ function StoreMorningReport() {
         const reaching = calcularAtingimento(currentSales, teamGoal)
         const gap = Math.max(teamGoal - currentSales, 0)
         const checkedInCount = (sellers || []).filter(s => s.checkin_today).length
-        const pendingSellers = (sellers || []).filter(s => !s.checkin_today).map(s => s.name)
-        return { currentSales, teamGoal, projection, reaching, gap, checkedInCount, pendingSellers }
+        const pendingSellerRows = (sellers || []).filter(s => !s.checkin_today)
+        const pendingSellers = pendingSellerRows.map(seller => seller.name)
+        return { currentSales, teamGoal, projection, reaching, gap, checkedInCount, pendingSellers, pendingSellerRows }
     }, [checkins, metaRules, storeGoal, daysInfo, sellers])
 
     const activeStore = vinculos_loja.find(m => m.store_id === storeId)?.store
@@ -735,10 +736,10 @@ function StoreMorningReport() {
                                         <Badge variant="danger" className="animate-pulse shadow-sm border-none"><Typography variant="tiny" as="span" className="">CRÍTICO</Typography></Badge>
                                     </header>
                                     <div className="space-y-mx-xs">
-                                        {metrics.pendingSellers.map(name => (
-                                            <div key={name} className="flex items-center gap-mx-xs">
+                                        {metrics.pendingSellerRows.map(seller => (
+                                            <div key={seller.id} className="flex items-center gap-mx-xs">
                                                 <div className="w-1.5 h-1.5 rounded-mx-full bg-status-error" aria-hidden="true" />
-                                                <Typography variant="caption" tone="error" className="">{name}</Typography>
+                                                <Typography variant="caption" tone="error" className="">{seller.name}</Typography>
                                             </div>
                                         ))}
                                     </div>

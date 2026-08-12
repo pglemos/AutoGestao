@@ -8,7 +8,7 @@ const Kbd = React.forwardRef<HTMLElement, KbdProps>(({ className, ...props }, re
   <kbd
     ref={ref}
     className={cn(
-      'inline-flex h-5 min-w-5 items-center justify-center rounded-[4px] px-1.5',
+      'inline-flex h-5 min-w-5 items-center justify-center rounded-mx-xs px-1.5',
       'border border-border bg-surface-alt',
       'font-mono text-[length:var(--mx-font-size-micro)] font-medium text-text-secondary',
       className,
