@@ -383,6 +383,19 @@ async function collectA11y(page: Page): Promise<AxeResult> {
     if (!await page.evaluate(() => Boolean((window as unknown as { axe?: unknown }).axe))) {
       await page.addScriptTag({ content: AXE_SOURCE })
     }
+    // Espera as animações terminarem antes de medir contraste. Sem isto o axe
+    // amostra o elemento no meio do fade do framer-motion e reporta a cor
+    // interpolada: o mesmo elemento aparecia como #5ba985, #489f76 ou #52a47e
+    // em corridas diferentes. Cor que muda a cada execução é artefato de
+    // medição, não defeito do produto — e "corrigir" a cor teria mascarado isso.
+    await page.evaluate(async () => {
+      const animations = document.getAnimations?.() ?? []
+      if (animations.length === 0) return
+      await Promise.race([
+        Promise.allSettled(animations.map(animation => animation.finished)),
+        new Promise(resolve => setTimeout(resolve, 3_000)),
+      ])
+    })
     return await page.evaluate(async () => {
       const axe = (window as unknown as { axe: { run: (context: unknown, options: unknown) => Promise<{ violations: unknown[]; incomplete: unknown[]; passes: unknown[] }> } }).axe
       const result = await axe.run(
