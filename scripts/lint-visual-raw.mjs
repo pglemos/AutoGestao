@@ -20,6 +20,9 @@ import { execFileSync } from 'node:child_process'
 
 const EXCLUDED = [
   ':!src/base44-reference/**',
+  // Token definitions are the source of truth for raw fallback values. The
+  // guard targets consumers that should reference those tokens semantically.
+  ':!src/design-system/tokens/**',
   ':!src/**/*.test.*',
   ':!src/**/*.spec.*',
   ':!src/**/*.stories.*',
@@ -82,7 +85,9 @@ const rules = [
   {
     id: 'hex-cru-em-componentes',
     message: 'hex cru em primitivo/família de componente — use token semântico',
-    hits: gitGrep(String.raw`#[0-9a-fA-F]{3,8}\b`, COMPONENT_SCOPES),
+    // Use POSIX character classes instead of `\b`: Git's ERE word-boundary
+    // behavior differs between macOS and GNU/Linux runners.
+    hits: gitGrep(String.raw`(^|[^[:xdigit:]])#[[:xdigit:]]{3,8}([^[:xdigit:]]|$)`, COMPONENT_SCOPES),
   },
 ]
 
