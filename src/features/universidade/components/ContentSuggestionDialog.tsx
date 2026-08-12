@@ -77,7 +77,7 @@ export function ContentSuggestionDialog() {
                   A sugestão será enviada para a curadoria do Admin MX.
                 </Typography>
               </div>
-              <button type="button" onClick={close} aria-label="Fechar sugestão" className="rounded-lg p-2 text-muted-foreground hover:bg-slate-100 hover:text-foreground">
+              <button type="button" onClick={close} aria-label="Fechar sugestão" className="rounded-lg p-2 text-muted-foreground hover:bg-muted hover:text-foreground">
                 <X size={18} />
               </button>
             </header>

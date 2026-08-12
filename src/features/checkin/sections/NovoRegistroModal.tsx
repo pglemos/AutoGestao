@@ -644,13 +644,13 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
         <div className="mb-1 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {tipo && (
-              <button type="button" onClick={handleVoltar} className="rounded-lg p-1 transition-colors hover:bg-slate-100" aria-label="Voltar">
+              <button type="button" onClick={handleVoltar} className="rounded-lg p-1 transition-colors hover:bg-muted" aria-label="Voltar">
                 <ArrowLeft className="h-4 w-4 text-muted-foreground" />
               </button>
             )}
             <Typography variant="h3" className="text-h5 text-[#0F172A]">{tipo ? TITULO[tipo] : 'Novo Registro'}</Typography>
           </div>
-          <button type="button" onClick={handleClose} aria-label="Fechar" className="rounded-lg p-1 hover:bg-slate-100">
+          <button type="button" onClick={handleClose} aria-label="Fechar" className="rounded-lg p-1 hover:bg-muted">
             <X className="h-4 w-4 text-muted-foreground" />
           </button>
         </div>
@@ -670,7 +670,7 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
 
         {tipo && (
           <div className="mt-5 flex items-center justify-end gap-3 border-t border-border-subtle pt-4">
-            <button type="button" onClick={handleClose} disabled={saving} className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-body-sm font-semibold text-[#64748B] transition-colors hover:bg-slate-50">
+            <button type="button" onClick={handleClose} disabled={saving} className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-body-sm font-semibold text-[#64748B] transition-colors hover:bg-surface-alt">
               Cancelar
             </button>
             <Button type="button" onClick={handleSave} disabled={!ok || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white hover:bg-status-info disabled:opacity-50 shadow-[var(--mx-button-shadow)]">

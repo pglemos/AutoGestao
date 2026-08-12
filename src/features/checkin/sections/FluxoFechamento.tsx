@@ -64,7 +64,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
 
   if (disabled) {
     return (
-      <div className="flex h-11 cursor-not-allowed items-center rounded-xl border border-border-subtle bg-slate-50 opacity-60">
+      <div className="flex h-11 cursor-not-allowed items-center rounded-xl border border-border-subtle bg-surface-alt opacity-60">
         <div className="flex h-full w-11 items-center justify-center border-r border-border-subtle text-[20px] font-light text-text-disabled">−</div>
         <span className="flex-1 text-center text-[16px] font-bold tabular-nums text-muted-foreground">{value}</span>
         <div className="flex h-full w-11 items-center justify-center border-l border-border-subtle text-[20px] font-light text-text-disabled">+</div>
@@ -80,7 +80,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
           setInputVal(null)
           onDecrement()
         }}
-        className="flex h-full w-11 shrink-0 items-center justify-center rounded-l-xl border-r border-border text-[20px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground active:bg-slate-100"
+        className="flex h-full w-11 shrink-0 items-center justify-center rounded-l-xl border-r border-border text-[20px] font-light text-muted-foreground transition-colors hover:bg-surface-alt hover:text-foreground active:bg-muted"
       >
         −
       </button>
@@ -115,7 +115,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
           setInputVal(null)
           onIncrement()
         }}
-        className="flex h-full w-11 shrink-0 items-center justify-center rounded-r-xl border-l border-border text-[20px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground active:bg-slate-100"
+        className="flex h-full w-11 shrink-0 items-center justify-center rounded-r-xl border-l border-border text-[20px] font-light text-muted-foreground transition-colors hover:bg-surface-alt hover:text-foreground active:bg-muted"
       >
         +
       </button>
@@ -155,7 +155,7 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }: { currentSt
         return (
           <Fragment key={step.id}>
             <button type="button" onClick={() => onStepClick(step.id)} className="flex min-w-0 flex-1 flex-col items-center gap-1 transition-all">
-              <div className={`flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-all ${done ? c.stepDone : active ? c.stepActive : 'bg-slate-100 text-muted-foreground'}`}>
+              <div className={`flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-all ${done ? c.stepDone : active ? c.stepActive : 'bg-muted text-muted-foreground'}`}>
                 {done ? <CheckCircle2 className="h-4 w-4 text-white" /> : <Icon className="h-4 w-4" />}
               </div>
               <span className={`text-center text-caption font-bold leading-tight ${done || active ? c.title : 'text-muted-foreground'}`}>{step.label}</span>
@@ -165,7 +165,7 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }: { currentSt
               <span className={`text-caption font-semibold ${done || active ? c.note : 'text-muted-foreground'}`}>{step.pct}%</span>
             </button>
             {idx < STEPS.length - 1 && (
-              <div className={`h-0.5 max-w-[24px] flex-1 rounded-full transition-all ${completedSteps.has(step.id) ? COLOR_MAP[STEPS[idx + 1].color].progress : 'bg-slate-100'}`} />
+              <div className={`h-0.5 max-w-[24px] flex-1 rounded-full transition-all ${completedSteps.has(step.id) ? COLOR_MAP[STEPS[idx + 1].color].progress : 'bg-muted'}`} />
             )}
           </Fragment>
         )
@@ -177,7 +177,7 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }: { currentSt
 function ProgressBarMobile({ completedSteps }: { completedSteps: Set<StepId> }) {
   return (
     <div className="space-y-1.5">
-      <div className="flex h-2.5 gap-px overflow-hidden rounded-full bg-slate-100">
+      <div className="flex h-2.5 gap-px overflow-hidden rounded-full bg-muted">
         {STEPS.map(step => (
           <div key={step.id} className="rounded-full transition-all duration-500" style={{ flex: step.pct, background: completedSteps.has(step.id) ? SEGMENT_COLORS[step.id] : 'transparent' }} />
         ))}
@@ -300,7 +300,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
           </div>
           <span className={`shrink-0 text-h3 font-bold tabular-nums sm:text-h2 ${totalPct === 100 ? 'text-status-success-text' : 'text-[#0F172A]'}`}>{totalPct}%</span>
         </div>
-        <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-slate-100">
+        <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-muted">
           <div className={`h-full rounded-full transition-all duration-500 ${progressColor}`} style={{ width: `${totalPct}%` }} />
         </div>
         <div className="mt-4">

@@ -275,7 +275,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                 <Typography variant="tiny" tone="brand" className="font-bold">{steps[currentStep].label}</Typography>
                             </div>
                         </div>
-                        <Button variant="ghost" size="icon" onClick={onClose} className="rounded-mx-full w-mx-xl h-mx-xl bg-gray-50 hover:bg-border-default"><X size={24} /></Button>
+                        <Button variant="ghost" size="icon" onClick={onClose} className="rounded-mx-full w-mx-xl h-mx-xl bg-surface-alt hover:bg-border-default"><X size={24} /></Button>
                     </div>
                     {randomFrase && (
                         <div className="bg-brand-primary-subtle border border-brand-primary/20 p-mx-sm rounded-2xl flex items-center gap-mx-sm">
@@ -286,7 +286,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                     <div className="flex items-center justify-between gap-mx-sm">
                         {steps.map((step, idx) => (
                             <div key={step.id} className="flex-1 flex flex-col gap-mx-xs">
-                                <div className={cn("h-mx-xs rounded-mx-full transition-all duration-500", idx <= currentStep ? "bg-brand-primary" : "bg-gray-50")} />
+                                <div className={cn("h-mx-xs rounded-mx-full transition-all duration-500", idx <= currentStep ? "bg-brand-primary" : "bg-surface-alt")} />
                             </div>
                         ))}
                     </div>
@@ -304,7 +304,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                         <select 
                                             value={form.colaborador_id} onChange={e => setForm({ ...form, colaborador_id: e.target.value })}
                                             aria-label="Selecione o Especialista"
-                                            className="w-full h-mx-2xl px-6 bg-gray-50 rounded-2xl font-bold text-lg outline-none border focus:border-brand-primary"
+                                            className="w-full h-mx-2xl px-6 bg-surface-alt rounded-2xl font-bold text-lg outline-none border focus:border-brand-primary"
                                         >
                                             <option value="">Selecione o vendedor...</option>
                                             {sellers.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -315,13 +315,13 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                         <select 
                                             value={form.cargo_id} onChange={e => setForm({ ...form, cargo_id: e.target.value })}
                                             aria-label="Cargo do especialista"
-                                            className="w-full h-mx-2xl px-6 bg-gray-50 rounded-2xl font-bold text-lg outline-none border focus:border-brand-primary"
+                                            className="w-full h-mx-2xl px-6 bg-surface-alt rounded-2xl font-bold text-lg outline-none border focus:border-brand-primary"
                                         >
                                             <option value="">Selecione o nível do cargo...</option>
                                             {cargos.map(c => <option key={c.id} value={c.id}>Nível {c.nivel} - {c.nome} ({c.nota_min} a {c.nota_max})</option>)}
                                         </select>
                                     </div>
-                                    <Card className="p-mx-md bg-gray-50 border space-y-mx-sm">
+                                    <Card className="p-mx-md bg-surface-alt border space-y-mx-sm">
                                         <Typography variant="tiny" tone="brand" className="font-bold">Protocolo de Aplicação</Typography>
                                         <div className="grid gap-mx-xs">
                                             <label className="flex items-start gap-mx-sm text-sm font-bold text-muted-foreground">
@@ -350,7 +350,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                             {currentStep === 1 && (
                                 <div className="grid grid-cols-1 md:grid-cols-3 gap-mx-lg">
                                     {['6_meses', '12_meses', '24_meses'].map(prazo => (
-                                        <Card key={prazo} className="p-mx-md bg-gray-50 border-none shadow-sm space-y-mx-md">
+                                        <Card key={prazo} className="p-mx-md bg-surface-alt border-none shadow-sm space-y-mx-md">
                                             <Typography variant="h3" className="font-bold border-b /10 pb-4">Visão {prazo.replace('_', ' ')}</Typography>
                                             {form.metas.map((meta, idx) => meta.prazo === prazo && (
                                                 <div key={idx} className="space-y-mx-xs bg-white p-mx-sm rounded-2xl shadow-sm border border-border">
@@ -399,7 +399,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                     const nota = form.avaliacoes[c.id] || template.escala[0]?.nota
                                                     const descritor = template.escala.find(e => e.nota === nota)?.descritor || ''
                                                     return (
-                                                        <div key={c.id} className="bg-gray-50 p-mx-md rounded-2xl border border-border space-y-mx-sm hover:border-brand-primary/50 transition-colors">
+                                                        <div key={c.id} className="bg-surface-alt p-mx-md rounded-2xl border border-border space-y-mx-sm hover:border-brand-primary/50 transition-colors">
                                                             <div className="flex justify-between items-start gap-mx-sm">
                                                                 <div>
                                                                     <Typography variant="p" className="font-bold">{c.nome}</Typography>
@@ -434,7 +434,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                             {currentStep === 3 && template && (
                                 <div className="grid grid-cols-1 xl:grid-cols-12 gap-mx-10">
                                     <div className="xl:col-span-4 space-y-mx-md">
-                                        <Card className="p-mx-md bg-gray-50 border-none shadow-sm flex flex-col items-center justify-center h-mx-96">
+                                        <Card className="p-mx-md bg-surface-alt border-none shadow-sm flex flex-col items-center justify-center h-mx-96">
                                             <Typography variant="tiny" className="font-bold mb-4">Radar de Competências</Typography>
                                             
                                             {/* Tabela Acessível para Leitores de Tela */}
@@ -497,7 +497,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                         </div>
 
                                         {form.plano_acao.map((acao, idx) => (
-                                            <div key={idx} className="p-mx-md bg-gray-50 border border-border rounded-2xl space-y-mx-sm">
+                                            <div key={idx} className="p-mx-md bg-surface-alt border border-border rounded-2xl space-y-mx-sm">
                                                 <div className="flex items-center gap-mx-sm">
                                                     <div className="w-mx-lg h-mx-lg rounded-mx-full bg-brand-primary text-white flex items-center justify-center font-bold text-xs shrink-0">{idx + 1}</div>
                                                     <select 

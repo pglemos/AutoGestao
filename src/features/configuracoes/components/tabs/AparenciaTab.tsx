@@ -101,7 +101,7 @@ export function AparenciaTab() {
             {/* Densidade */}
             <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-border">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-surface-alt text-muted-foreground flex items-center justify-center border border-border">
                         <Sparkles size={26} />
                     </div>
                     <div>
@@ -154,11 +154,11 @@ function ThemeOption({ icon, label, desc, active, onClick, badge }: {
             className={`text-left p-mx-md rounded-2xl border-2 transition-all ${
                 active
                     ? 'border-brand-primary bg-brand-primary/5 shadow-sm'
-                    : 'border-border bg-white hover:border-brand-primary/30 hover:bg-gray-50'
+                    : 'border-border bg-white hover:border-brand-primary/30 hover:bg-surface-alt'
             }`}
         >
             <div className="flex items-center justify-between mb-mx-sm">
-                <div className={`w-mx-10 h-mx-10 rounded-2xl flex items-center justify-center ${active ? 'bg-brand-primary text-white' : 'bg-gray-50 text-status-success-text'}`}>
+                <div className={`w-mx-10 h-mx-10 rounded-2xl flex items-center justify-center ${active ? 'bg-brand-primary text-white' : 'bg-surface-alt text-status-success-text'}`}>
                     {icon}
                 </div>
                 {badge && <Badge variant="outline" className="text-mx-micro">{badge}</Badge>}

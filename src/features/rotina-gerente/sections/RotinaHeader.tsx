@@ -90,7 +90,7 @@ export function RotinaHeader({
               size="icon"
               onClick={onRefresh}
               aria-label="Atualizar"
-              className="w-mx-14 h-mx-14 bg-white hover:bg-gray-50"
+              className="w-mx-14 h-mx-14 bg-white hover:bg-surface-alt"
             >
               <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
             </Button>

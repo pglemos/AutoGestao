@@ -62,7 +62,7 @@ export function BroadcastsTab() {
                 ) : (
                     <div className="divide-y divide-border-default">
                         {broadcasts.slice(0, 10).map((b: BroadcastDisplay) => (
-                            <div key={b.broadcast_id || b.id} className="p-mx-md hover:bg-gray-50 transition-colors">
+                            <div key={b.broadcast_id || b.id} className="p-mx-md hover:bg-surface-alt transition-colors">
                                 <div className="flex items-start justify-between gap-mx-sm">
                                     <div className="flex-1 min-w-0">
                                         <Typography variant="caption" className="tracking-tight">

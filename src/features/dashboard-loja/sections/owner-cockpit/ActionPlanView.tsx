@@ -147,7 +147,7 @@ export function ActionPlanView({
                   <Typography variant="tiny" className="">
                     {column.label}
                   </Typography>
-                  <span className="rounded-mx-full bg-gray-50 px-mx-sm py-mx-tiny text-mx-tiny font-bold text-muted-foreground">
+                  <span className="rounded-mx-full bg-surface-alt px-mx-sm py-mx-tiny text-mx-tiny font-bold text-muted-foreground">
                     {columnActions.length}
                   </span>
                 </div>

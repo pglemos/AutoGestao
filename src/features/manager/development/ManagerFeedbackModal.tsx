@@ -60,7 +60,7 @@ export function ManagerFeedbackModal({ open, saving, sellers, initialDate, prese
     <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="manager-feedback-title" className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border-subtle bg-white px-6 py-4">
         <h2 id="manager-feedback-title" className="text-lg font-semibold text-foreground">Novo Feedback</h2>
-        <button type="button" onClick={onClose} aria-label="Fechar" className="rounded-lg p-1 text-muted-foreground hover:bg-gray-50 hover:text-foreground"><X size={18} /></button>
+        <button type="button" onClick={onClose} aria-label="Fechar" className="rounded-lg p-1 text-muted-foreground hover:bg-surface-alt hover:text-foreground"><X size={18} /></button>
       </header>
       <div className="overflow-y-auto px-6 py-5">
         <section className="space-y-3">

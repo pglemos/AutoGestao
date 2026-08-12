@@ -29,7 +29,7 @@ const toneStyles: Record<MxTone, ToneStyle> = {
   danger: { icon: 'bg-status-error-surface text-status-error-text', surface: 'border-status-error/30', value: 'text-status-error-text', banner: 'border-status-error/30 bg-status-error-surface text-status-error-text', progress: 'bg-status-error' },
   info: { icon: 'bg-status-info-surface text-status-info-text', surface: 'border-status-info/30', value: 'text-status-info-text', banner: 'border-status-info/30 bg-status-info-surface text-status-info-text', progress: 'bg-status-info' },
   violet: { icon: 'bg-status-info-surface text-status-info-text', surface: 'border-status-info/30', value: 'text-status-info-text', banner: 'border-status-info/30 bg-status-info-surface text-status-info-text', progress: 'bg-status-info' },
-  neutral: { icon: 'bg-gray-50 text-muted-foreground', surface: 'border-border-subtle', value: 'text-foreground', banner: 'border-border bg-gray-50 text-foreground', progress: 'bg-gray-400' },
+  neutral: { icon: 'bg-surface-alt text-muted-foreground', surface: 'border-border-subtle', value: 'text-foreground', banner: 'border-border bg-surface-alt text-foreground', progress: 'bg-gray-400' },
 }
 
 export interface MxModulePageProps {
@@ -119,7 +119,7 @@ export function MxMetricCard({ title, value, detail, icon: Icon, tone = 'brand',
 export function MxStatusGauge({ value, label, ariaLabel, showLabel = true }: { value: number; label: string; ariaLabel: string; showLabel?: boolean }) {
   const normalized = Math.max(0, Math.min(100, Math.round(value)))
   return (
-    <div role="progressbar" aria-label={ariaLabel} aria-valuemin={0} aria-valuemax={100} aria-valuenow={normalized} className="grid h-20 w-20 shrink-0 place-items-center rounded-full bg-gray-100" style={{ background: `conic-gradient(var(--color-brand-primary) ${normalized * 3.6}deg, var(--color-surface-alt) 0deg)` }}>
+    <div role="progressbar" aria-label={ariaLabel} aria-valuemin={0} aria-valuemax={100} aria-valuenow={normalized} className="grid h-20 w-20 shrink-0 place-items-center rounded-full bg-muted" style={{ background: `conic-gradient(var(--color-brand-primary) ${normalized * 3.6}deg, var(--color-surface-alt) 0deg)` }}>
       <div className="grid h-14 w-14 place-items-center rounded-full bg-white text-center">
         <strong className="text-base leading-none text-foreground">{normalized}%</strong>
         {showLabel ? <span className="max-w-12 text-caption font-medium leading-tight text-muted-foreground">{label}</span> : null}
@@ -166,7 +166,7 @@ export function MxTableSurface({ children, className, role, tabIndex, 'aria-labe
 export function MxEmptyState({ title, description, icon: Icon = Inbox, action, className }: { title: string; description?: string; icon?: LucideIcon; action?: ReactNode; className?: string }) {
   return (
     <div className={cn('flex min-h-48 flex-col items-center justify-center px-5 py-10 text-center', className)}>
-      <span className="grid h-14 w-14 place-items-center rounded-2xl bg-gray-50 text-muted-foreground"><Icon size={24} strokeWidth={1.8} aria-hidden="true" /></span>
+      <span className="grid h-14 w-14 place-items-center rounded-2xl bg-surface-alt text-muted-foreground"><Icon size={24} strokeWidth={1.8} aria-hidden="true" /></span>
       <Typography variant="h3" className="mt-4 text-base text-foreground">{title}</Typography>
       {description ? <Typography variant="p" className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">{description}</Typography> : null}
       {action ? <div className="mt-4">{action}</div> : null}
@@ -200,6 +200,6 @@ export function MxChartCard({ title, description, actions, children, className }
 export function MxSkeleton(props: SkeletonProps) { return <Skeleton {...props} /> }
 export function MxProgress({ value, tone = 'brand', label }: { value: number; tone?: MxTone; label?: string }) {
   const normalized = Math.max(0, Math.min(100, Math.round(value)))
-  return <div className="space-y-2">{label ? <div className="flex items-center justify-between text-xs text-muted-foreground"><span>{label}</span><span>{normalized}%</span></div> : null}<div className="h-2 overflow-hidden rounded-full bg-gray-100" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={normalized}><div className={cn('h-full rounded-full transition-[width] motion-reduce:transition-none', toneStyles[tone].progress)} style={{ width: `${normalized}%` }} /></div></div>
+  return <div className="space-y-2">{label ? <div className="flex items-center justify-between text-xs text-muted-foreground"><span>{label}</span><span>{normalized}%</span></div> : null}<div className="h-2 overflow-hidden rounded-full bg-muted" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={normalized}><div className={cn('h-full rounded-full transition-[width] motion-reduce:transition-none', toneStyles[tone].progress)} style={{ width: `${normalized}%` }} /></div></div>
 }
 export function MxActionGroup({ children, className }: { children: ReactNode; className?: string }) { return <div className={cn('flex flex-wrap items-center gap-2', className)}>{children}</div> }

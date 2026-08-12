@@ -99,10 +99,10 @@ export default function OndeAgirAgora({ funis }) {
       <h2 className="text-body-sm font-bold text-[#0F172A] uppercase tracking-wide mb-4">Onde agir agora</h2>
       <div className="space-y-3">
         {acoes.map((acao, idx) => (
-          <div key={idx} className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-xl bg-slate-50 border border-border-subtle">
+          <div key={idx} className="flex flex-col sm:flex-row sm:items-center gap-3 p-4 rounded-xl bg-surface-alt border border-border-subtle">
             <div className="flex-shrink-0 flex items-center gap-2">
               <span className={`text-body-sm font-bold tabular-nums ${PRIORIDADE_COR[idx] || "text-muted-foreground"}`}>{idx + 1}</span>
-              <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${COR_BADGE[acao.cor] || "bg-slate-100 text-muted-foreground"}`}>{acao.canal}</span>
+              <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${COR_BADGE[acao.cor] || "bg-muted text-muted-foreground"}`}>{acao.canal}</span>
             </div>
             <div className="flex-1 min-w-0">
               <p className="text-body-sm font-bold text-[#0F172A]">{acao.titulo}</p>

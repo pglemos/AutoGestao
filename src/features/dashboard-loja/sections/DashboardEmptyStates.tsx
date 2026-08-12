@@ -10,7 +10,7 @@ import { PageCanvas } from '@/design-system/page'
 /** Spinner "Identificando Unidade" — usado durante store resolution. */
 export function ResolvingStoreSpinner() {
   return (
-    <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50" role="status" aria-busy="true" aria-live="polite">
+    <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt" role="status" aria-busy="true" aria-live="polite">
       <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-6" aria-hidden="true" />
       <Typography variant="caption" tone="muted" className="animate-pulse">
         Identificando Unidade...
@@ -22,7 +22,7 @@ export function ResolvingStoreSpinner() {
 /** Skeleton de carregamento da aba performance. */
 export function PerformanceLoadingSkeleton() {
   return (
-    <div className="w-full h-full bg-gray-50 animate-in fade-in duration-500">
+    <div className="w-full h-full bg-surface-alt animate-in fade-in duration-500">
     <PageCanvas
       width="dashboard"
       className="flex flex-col gap-mx-lg"
@@ -57,7 +57,7 @@ type OwnerStoreUnavailableProps = {
 export function OwnerStoreUnavailable({ requestedStoreForbidden, storeResolutionIssue }: OwnerStoreUnavailableProps) {
   const navigate = useNavigate()
   return (
-    <div className="w-full h-full bg-gray-50">
+    <div className="w-full h-full bg-surface-alt">
       <PageCanvas width="focused">
       <Card className="mx-auto max-w-2xl border-none bg-white">
         <EmptyState

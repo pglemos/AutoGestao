@@ -31,7 +31,7 @@ function isActionDone(status?: string | null) {
 }
 
 function pdiStatus(pdi: PDISessionSummary | null, today: string): DevelopmentPdiRow['status'] {
-  if (!pdi) return { key: 'none', label: 'Sem PDI', rank: 4, className: 'bg-gray-100 text-muted-foreground' }
+  if (!pdi) return { key: 'none', label: 'Sem PDI', rank: 4, className: 'bg-muted text-muted-foreground' }
   if (isCompleted(pdi.status)) return { key: 'completed', label: 'Concluído', rank: 3, className: 'bg-status-success-surface text-status-success-text' }
   if (pdi.due_date && pdi.due_date < today) return { key: 'overdue', label: 'Em atraso', rank: 1, className: 'bg-status-error-surface text-status-error-text' }
   return { key: 'active', label: 'PDI ativo', rank: 2, className: 'bg-status-info-surface text-status-info-text' }

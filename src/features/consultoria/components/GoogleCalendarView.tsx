@@ -93,7 +93,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
       ) : (
         <div className="space-y-mx-sm">
           {!context.linkedToClient && (
-            <div className="p-mx-md bg-gray-50 text-muted-foreground rounded-xl border border-border">
+            <div className="p-mx-md bg-surface-alt text-muted-foreground rounded-xl border border-border">
               <Typography variant="caption">{context.description}</Typography>
             </div>
           )}

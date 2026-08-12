@@ -90,7 +90,7 @@ export function RotinaRitualMatinal({
               'rounded-xl border p-mx-md cursor-pointer group transition-all',
               step.done
                 ? 'bg-status-success-surface/30 border-status-success/20 text-status-success-text'
-                : 'bg-gray-50 border-border-subtle hover:bg-white hover:border-brand-primary/20 hover:shadow-sm',
+                : 'bg-surface-alt border-border-subtle hover:bg-white hover:border-brand-primary/20 hover:shadow-sm',
             )}
           >
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-mx-md">
@@ -134,7 +134,7 @@ export function RotinaRitualMatinal({
                 <Button
                   variant="outline"
                   size="sm"
-                  className="w-full sm:w-auto px-6 h-mx-10 text-tiny bg-white shadow-sm hover:bg-gray-50"
+                  className="w-full sm:w-auto px-6 h-mx-10 text-tiny bg-white shadow-sm hover:bg-surface-alt"
                 >
                   Concluir
                 </Button>
@@ -148,7 +148,7 @@ export function RotinaRitualMatinal({
             'rounded-xl border border-border-subtle p-mx-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-mx-lg',
             canTriggerMatinal
               ? 'bg-gray-900 text-white shadow-sm border-none'
-              : 'bg-gray-50 opacity-40',
+              : 'bg-surface-alt opacity-40',
           )}
         >
           <div className="flex items-center gap-mx-md">

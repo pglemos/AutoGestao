@@ -97,9 +97,9 @@ function SellerSelect({
               key={seller.id}
               type="button"
               onClick={() => { onSelect(seller.id); setOpen(false) }}
-              className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-gray-50 ${seller.id === selectedId ? 'bg-gray-50' : ''}`}
+              className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-surface-alt ${seller.id === selectedId ? 'bg-surface-alt' : ''}`}
             >
-              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gray-100 text-caption font-bold text-muted-foreground">{initials(seller.nome)}</span>
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-muted text-caption font-bold text-muted-foreground">{initials(seller.nome)}</span>
               <span className="truncate text-foreground">{seller.nome}</span>
             </button>
           ))}

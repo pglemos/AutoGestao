@@ -59,7 +59,7 @@ export function IntegracoesTab() {
             <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center justify-between pb-mx-md border-b border-border mb-mx-lg">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-border">
+                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-surface-alt text-muted-foreground flex items-center justify-center border border-border">
                             <Webhook size={26} />
                         </div>
                         <div>
@@ -99,7 +99,7 @@ export function IntegracoesTab() {
                         'google-calendar-merged',
                         'google-oauth-handler',
                     ].map(fn => (
-                        <div key={fn} className="flex items-center justify-between p-mx-sm bg-gray-50 rounded-2xl border border-border-subtle">
+                        <div key={fn} className="flex items-center justify-between p-mx-sm bg-surface-alt rounded-2xl border border-border-subtle">
                             <Typography variant="tiny" className="font-mono-numbers font-bold">{fn}</Typography>
                             <Badge variant="outline" className="text-mx-micro">Registrada</Badge>
                         </div>

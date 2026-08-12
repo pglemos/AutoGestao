@@ -63,7 +63,7 @@ export function TeamListSection({
               <Badge variant="outline" className="w-fit">{filteredTeam.length} registros</Badge>
             </div>
           </CardHeader>
-          <div className="hidden lg:grid store-team-grid gap-mx-md px-mx-lg py-mx-sm bg-gray-50 border-b border-border text-mx-nano font-bold uppercase tracking-mx-widest text-muted-foreground">
+          <div className="hidden lg:grid store-team-grid gap-mx-md px-mx-lg py-mx-sm bg-surface-alt border-b border-border text-mx-nano font-bold uppercase tracking-mx-widest text-muted-foreground">
             <span>Integrante</span>
             <span>Papel</span>
             <span>Status</span>
@@ -79,7 +79,7 @@ export function TeamListSection({
                   initial={{ opacity: 0, y: 8 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: i * 0.02 }}
-                  className="grid grid-cols-1 lg:store-team-grid gap-mx-md p-mx-lg items-center hover:bg-gray-50/60 transition-colors"
+                  className="grid grid-cols-1 lg:store-team-grid gap-mx-md p-mx-lg items-center hover:bg-surface-alt/60 transition-colors"
                 >
                   <div className="min-w-0">
                     <div className="flex items-center gap-mx-sm min-w-0">
@@ -172,7 +172,7 @@ export function TeamListSection({
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center justify-center space-y-mx-md text-center rounded-2xl border border-dashed border-border bg-gray-50 p-mx-lg"
+              className="flex flex-col items-center justify-center space-y-mx-md text-center rounded-2xl border border-dashed border-border bg-surface-alt p-mx-lg"
             >
               <div className="w-mx-16 h-mx-16 rounded-2xl bg-white flex items-center justify-center text-status-success-text shadow-sm border border-border">
                 <Users size={28} strokeWidth={1.8} />

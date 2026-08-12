@@ -134,7 +134,7 @@ export function NotificacoesTab() {
 
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-border shadow-none">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-surface-alt text-muted-foreground flex items-center justify-center border border-border shadow-none">
                         <BarChart3 size={26} />
                     </div>
                     <div>
@@ -181,7 +181,7 @@ function PrefRow({ icon, label, desc, checked, onToggle }: {
     onToggle: () => void
 }) {
     return (
-        <div className="flex flex-col gap-mx-md p-mx-md bg-gray-50 rounded-2xl border border-border-subtle hover:bg-white hover:border-brand-primary/20 transition-all sm:flex-row sm:items-center sm:justify-between">
+        <div className="flex flex-col gap-mx-md p-mx-md bg-surface-alt rounded-2xl border border-border-subtle hover:bg-white hover:border-brand-primary/20 transition-all sm:flex-row sm:items-center sm:justify-between">
             <div className="flex items-start gap-mx-sm flex-1 min-w-0">
                 <div className="w-mx-10 h-mx-10 rounded-2xl bg-white border border-border flex items-center justify-center text-status-success-text shrink-0">
                     {icon}

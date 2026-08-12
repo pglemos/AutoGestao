@@ -178,7 +178,7 @@ export function LeadConferenceModal({
 
   const footer = (
     <div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
-      <button type="button" className="inline-flex h-9 items-center gap-1.5 rounded-mx-md border border-border bg-white px-3 text-sm font-medium text-foreground hover:bg-gray-50" onClick={() => void openHistory()}>
+      <button type="button" className="inline-flex h-9 items-center gap-1.5 rounded-mx-md border border-border bg-white px-3 text-sm font-medium text-foreground hover:bg-surface-alt" onClick={() => void openHistory()}>
         <History size={16} />
         Ver Histórico
       </button>
@@ -207,7 +207,7 @@ export function LeadConferenceModal({
         footer={footer}
       >
         <div className="space-y-4">
-          <section className="rounded-mx-2xl bg-gray-50 p-4">
+          <section className="rounded-mx-2xl bg-surface-alt p-4">
             <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
               <CalendarDays size={17} />
               Período da Conferência
@@ -308,7 +308,7 @@ export function LeadConferenceModal({
           ) : (
             <div className="overflow-x-auto rounded-mx-2xl border border-border-subtle">
               <table className="w-full text-sm min-w-[1120px]">
-                <thead className="bg-gray-50 border-b border-border-subtle">
+                <thead className="bg-surface-alt border-b border-border-subtle">
                   <tr>
                     {[
                       "Vendedor",
@@ -518,7 +518,7 @@ function ConferenceRow({
       <DifferenceValue value={totalDiff} />
       <td className="px-3 py-3">
         {!complete ? (
-          <span className="inline-flex rounded-lg bg-gray-100 px-2 py-1 text-xs font-semibold text-muted-foreground">
+          <span className="inline-flex rounded-lg bg-muted px-2 py-1 text-xs font-semibold text-muted-foreground">
             Não conferido
           </span>
         ) : (
@@ -531,7 +531,7 @@ function ConferenceRow({
         <button
           type="button"
           onClick={() => onClear(row.sellerId)}
-          className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-gray-100 px-2 py-1 rounded-lg"
+          className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-muted px-2 py-1 rounded-lg"
         >
           <RotateCcw size={13} />
           Limpar

@@ -51,7 +51,7 @@ export default function AdminMorningReportPage() {
     >
       <MxTableSurface>
         <table className="min-w-full text-sm">
-          <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+          <thead className="bg-surface-alt text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             <tr><th className="px-4 py-3">Unidade</th><th className="px-4 py-3 text-right">Vendas</th><th className="px-4 py-3 text-right">Meta</th><th className="px-4 py-3 text-right">Fechamentos</th><th className="px-4 py-3 text-right">Leads</th><th className="px-4 py-3 text-right">Visitas</th></tr>
           </thead>
           <tbody className="divide-y divide-border-subtle">

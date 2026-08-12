@@ -32,7 +32,7 @@ export function MonthGrid({
   return (
     <div className="overflow-hidden rounded-xl border border-border bg-white shadow-2xs">
       {/* Weekday Labels Header */}
-      <div className="grid grid-cols-7 border-b border-border bg-gray-50/40 select-none">
+      <div className="grid grid-cols-7 border-b border-border bg-surface-alt/40 select-none">
         {WEEKDAY_LABELS.map((label) => (
           <div key={label} className="border-r border-border py-1.5 text-center last:border-r-0">
             <Typography variant="tiny" tone="muted" className="text-caption font-bold tracking-wider">{label}</Typography>
@@ -68,8 +68,8 @@ export function MonthGrid({
               }}
               className={cn(
                 'relative flex min-h-[88px] md:min-h-[104px] flex-col items-start gap-1 border-b border-r border-border-subtle p-1.5 text-left transition-colors',
-                !dayInfo.isCurrentMonth && 'bg-gray-50/40 text-muted-foreground',
-                dayInfo.isCurrentMonth && 'hover:bg-gray-50/50',
+                !dayInfo.isCurrentMonth && 'bg-surface-alt/40 text-muted-foreground',
+                dayInfo.isCurrentMonth && 'hover:bg-surface-alt/50',
                 isSelected && 'bg-brand-primary/10 ring-1 ring-brand-primary ring-inset',
                 isTodayDate && !isSelected && 'bg-brand-primary/5',
               )}

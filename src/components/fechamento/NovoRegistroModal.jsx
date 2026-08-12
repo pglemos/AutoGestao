@@ -741,7 +741,7 @@ export default function NovoRegistroModal({ open, onClose, closingDate, dailyClo
         <DialogHeader>
           <DialogTitle className="text-[#0F172A] font-bold text-h5 flex items-center gap-2">
             {tipo && (
-              <button type="button" onClick={handleVoltar} className="p-1 rounded-lg hover:bg-slate-100 transition-colors mr-1">
+              <button type="button" onClick={handleVoltar} className="p-1 rounded-lg hover:bg-muted transition-colors mr-1">
                 <ArrowLeft className="w-4 h-4 text-muted-foreground" />
               </button>
             )}
@@ -778,7 +778,7 @@ export default function NovoRegistroModal({ open, onClose, closingDate, dailyClo
         {tipo && (
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button type="button" onClick={handleClose} disabled={saving}
-              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
+              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
             <button type="button" onClick={handleSave} disabled={!ok || saving}

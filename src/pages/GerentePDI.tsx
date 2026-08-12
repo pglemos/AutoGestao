@@ -120,7 +120,7 @@ export default function GerentePDI() {
                                 className="!pl-11 !h-12 text-caption font-bold"
                             />
                         </div>
-                        <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar lista de PDIs" className="h-mx-xl w-mx-xl bg-white hover:bg-gray-50">
+                        <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar lista de PDIs" className="h-mx-xl w-mx-xl bg-white hover:bg-surface-alt">
                             <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
                         </Button>
                         {canManagePDI && (
@@ -225,7 +225,7 @@ export default function GerentePDI() {
                     </div>
                 ) : (
                     <div className="col-span-full py-40 rounded-xl text-center border border-dashed border-border-subtle bg-white shadow-sm flex flex-col items-center justify-center relative overflow-hidden group">
-                        <div className="w-mx-3xl h-mx-3xl rounded-xl bg-gray-50 shadow-sm flex items-center justify-center mb-8 border border-border-subtle group-hover:rotate-12 transition-transform duration-500">
+                        <div className="w-mx-3xl h-mx-3xl rounded-xl bg-surface-alt shadow-sm flex items-center justify-center mb-8 border border-border-subtle group-hover:rotate-12 transition-transform duration-500">
                             <TrendingUp size={48} className="text-muted-foreground opacity-20" />
                         </div>
                         <Typography variant="h2" className="mb-4er">Matriz de Evolução Limpa</Typography>

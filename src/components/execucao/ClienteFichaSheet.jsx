@@ -9,7 +9,7 @@ const statusColors = {
   "Aguardando Cliente": "bg-status-warning-surface text-status-warning-text",
   "Sem Resposta": "bg-status-error-surface text-status-error-text",
   "Vendido": "bg-brand-primary-subtle text-brand-primary-hover",
-  "Perdido": "bg-slate-100 text-muted-foreground",
+  "Perdido": "bg-muted text-muted-foreground",
 };
 
 const saleStatusColors = {
@@ -88,7 +88,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
                 <p className="text-[12px] text-muted-foreground">{cliente.channel} · {cliente.status}</p>
               </div>
               {cliente.status && (
-                <span className={`ml-auto text-caption font-bold px-2.5 py-1 rounded-full ${statusColors[cliente.status] || "bg-slate-100 text-muted-foreground"}`}>
+                <span className={`ml-auto text-caption font-bold px-2.5 py-1 rounded-full ${statusColors[cliente.status] || "bg-muted text-muted-foreground"}`}>
                   {cliente.status}
                 </span>
               )}
@@ -104,14 +104,14 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
               )}
               {tel && (
                 <a href={`tel:${tel}`}
-                  className="flex items-center gap-1.5 text-[12px] font-bold text-muted-foreground border border-border hover:bg-slate-50 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
+                  className="flex items-center gap-1.5 text-[12px] font-bold text-muted-foreground border border-border hover:bg-surface-alt px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
                   <Phone className="w-4 h-4" /> Ligar
                 </a>
               )}
             </div>
 
             {/* Dados do cliente */}
-            <div className="bg-slate-50 rounded-2xl p-4 space-y-4">
+            <div className="bg-surface-alt rounded-2xl p-4 space-y-4">
               <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider">Informações</p>
               <div className="grid grid-cols-2 gap-4">
                 <InfoRow label="Telefone" value={cliente.phone} />

@@ -35,7 +35,7 @@ function BarRow({ label, value, max, valueLabel }: { label: string; value: numbe
   return (
     <div className="flex items-center gap-mx-md">
       <div className="w-40 shrink-0"><Typography variant="p" className="font-medium">{label}</Typography></div>
-      <div className="h-3 flex-1 overflow-hidden rounded-full bg-gray-50">
+      <div className="h-3 flex-1 overflow-hidden rounded-full bg-surface-alt">
         <div className="h-full rounded-full bg-gray-900" style={{ width: `${Math.max(2, pct)}%` }} />
       </div>
       <div className="min-w-0 text-right sm:w-24 sm:shrink-0"><Typography variant="p" className="break-words font-semibold">{valueLabel ?? value}</Typography></div>
@@ -125,7 +125,7 @@ export function RelatoriosVendedor() {
                 Gargalos por etapa, demanda real e conversão por fluxo versionado.
               </Typography>
             </div>
-            <div className="rounded-xl bg-gray-50 px-mx-md py-mx-sm text-right">
+            <div className="rounded-xl bg-surface-alt px-mx-md py-mx-sm text-right">
               <Typography variant="caption" tone="muted" className="tracking-wide">Clientes em cadência</Typography>
               <Typography variant="h2" className="mt-mx-xs text-2xl">{cadenciaAnalytics.totalEstados}</Typography>
             </div>
@@ -198,7 +198,7 @@ export function RelatoriosVendedor() {
 
 function StatusPill({ label, value }: { label: string; value: number }) {
   return (
-    <div className="rounded-xl bg-gray-50 p-mx-sm text-center">
+    <div className="rounded-xl bg-surface-alt p-mx-sm text-center">
       <Typography variant="h3" className="text-lg">{value}</Typography>
       <Typography variant="caption" tone="muted">{label}</Typography>
     </div>

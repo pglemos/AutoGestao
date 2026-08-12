@@ -186,7 +186,7 @@ export function AdminSettingsCard({
             <button
               type="button"
               onClick={onOpenEdit}
-              className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-muted-foreground hover:bg-gray-50"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-muted-foreground hover:bg-surface-alt"
             >
               <Building2 size={15} />
               Editar cadastro
@@ -194,7 +194,7 @@ export function AdminSettingsCard({
             <button
               type="button"
               onClick={onManageBranches}
-              className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-muted-foreground hover:bg-gray-50"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-muted-foreground hover:bg-surface-alt"
               title="Abre em nova aba"
             >
               <Building2 size={15} />
@@ -203,7 +203,7 @@ export function AdminSettingsCard({
             <button
               type="button"
               onClick={onToggleAdminSettings}
-              className={`inline-flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition ${showAdminSettings ? 'bg-gray-100 text-foreground' : 'bg-brand-primary text-white hover:bg-brand-primary-hover'}`}
+              className={`inline-flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition ${showAdminSettings ? 'bg-muted text-foreground' : 'bg-brand-primary text-white hover:bg-brand-primary-hover'}`}
             >
               <SlidersHorizontal size={15} />
               {showAdminSettings ? 'Ocultar parâmetros' : 'Configurar parâmetros'}
@@ -214,7 +214,7 @@ export function AdminSettingsCard({
 
       {showAdminSettings && (
         <div className="border-t border-border-subtle p-5">
-          <div className="mb-5 rounded-xl bg-gray-50 p-4 text-sm leading-6 text-muted-foreground">
+          <div className="mb-5 rounded-xl bg-surface-alt p-4 text-sm leading-6 text-muted-foreground">
             Estes parâmetros controlam metas, fonte de dados, benchmarks e entregas de relatório. A leitura da equipe permanece separada para evitar que configuração e resultado sejam confundidos.
           </div>
           <AdminSettingsForm

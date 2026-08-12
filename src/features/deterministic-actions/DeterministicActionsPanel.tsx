@@ -18,7 +18,7 @@ const priorityCopy = {
   critical: { label: 'Crítica', badge: 'bg-status-error-surface text-status-error-text', border: 'border-status-error/30' },
   high: { label: 'Alta', badge: 'bg-status-warning-surface text-status-warning-text', border: 'border-status-warning/30' },
   medium: { label: 'Média', badge: 'bg-status-info-surface text-status-info-text', border: 'border-status-info/30' },
-  low: { label: 'Baixa', badge: 'bg-gray-100 text-muted-foreground', border: 'border-border' },
+  low: { label: 'Baixa', badge: 'bg-muted text-muted-foreground', border: 'border-border' },
 } as const
 
 function formatDueDate(value: string | null): string | null {
@@ -100,7 +100,7 @@ export default function DeterministicActionsPanel({
             onClick={() => void refresh()}
             disabled={loading}
             aria-label="Atualizar ações recomendadas"
-            className="grid h-9 w-9 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-gray-50 hover:text-muted-foreground disabled:opacity-50"
+            className="grid h-9 w-9 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-surface-alt hover:text-muted-foreground disabled:opacity-50"
           >
             <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
           </button>
@@ -163,7 +163,7 @@ export default function DeterministicActionsPanel({
                         type="button"
                         onClick={() => void handleResolve(action)}
                         disabled={resolving}
-                        className="inline-flex min-h-9 items-center rounded-lg border border-border px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-border-subtle disabled:opacity-50"
+                        className="inline-flex min-h-9 items-center rounded-lg border border-border px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-border-subtle disabled:opacity-50"
                       >
                         {resolving ? 'Registrando...' : 'Marcar como tratada'}
                       </button>

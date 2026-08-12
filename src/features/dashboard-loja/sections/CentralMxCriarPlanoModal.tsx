@@ -139,7 +139,7 @@ export function CentralMxCriarPlanoModal({
             type="button"
             onClick={onClose}
             aria-label="Fechar"
-            className="rounded-xl p-mx-tiny text-muted-foreground hover:bg-gray-50"
+            className="rounded-xl p-mx-tiny text-muted-foreground hover:bg-surface-alt"
           >
             <X size={18} />
           </button>

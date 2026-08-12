@@ -35,7 +35,7 @@ function ReadOnlyField({ label, value }: { label: string; value: string }) {
             <span className="ml-2 block">
                 <Typography variant="caption" tone="muted">{label}</Typography>
             </span>
-            <div className="flex min-h-[48px] items-center rounded-xl border border-border-subtle bg-gray-50 px-5 py-3 text-sm font-bold text-muted-foreground">
+            <div className="flex min-h-[48px] items-center rounded-xl border border-border-subtle bg-surface-alt px-5 py-3 text-sm font-bold text-muted-foreground">
                 {value}
             </div>
         </div>

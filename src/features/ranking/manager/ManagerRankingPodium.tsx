@@ -23,7 +23,7 @@ export function ManagerRankingPodium({ ranking }: { ranking: RankedVendedor[] })
           return (
             <div key={step.position} className={`${step.order} flex flex-col items-center`}>
               <div className="relative mb-2">
-                <span className={`grid h-14 w-14 place-items-center rounded-full bg-gray-100 text-sm font-bold text-foreground ring-4 md:h-16 md:w-16 md:text-base ${step.ring}`}>
+                <span className={`grid h-14 w-14 place-items-center rounded-full bg-muted text-sm font-bold text-foreground ring-4 md:h-16 md:w-16 md:text-base ${step.ring}`}>
                   {initials(seller.nome)}
                 </span>
                 <span className={`absolute -right-1 -top-1 grid h-6 w-6 place-items-center rounded-full text-white shadow ${step.badge}`}>

@@ -32,7 +32,7 @@ export function BattleView({ opponents, ranking }: BattleViewProps) {
                 </div>
                 <div className="h-mx-sm bg-gray-900 rounded-full overflow-hidden flex relative shadow-none">
                     <div className={`h-full transition-all duration-1000 ${winner === 'p1' ? 'bg-brand-primary shadow-mx-glow-brand' : 'bg-brand-primary/50'}`} style={{ width: `${p1Pct}%` }}></div>
-                    <div className="w-mx-tiny bg-gray-50 z-10 skew-x-[-20deg]"></div>
+                    <div className="w-mx-tiny bg-surface-alt z-10 skew-x-[-20deg]"></div>
                     <div className={`h-full transition-all duration-1000 flex-1 ${winner === 'p2' ? 'bg-status-info shadow-mx-glow-brand' : 'bg-status-info/50'}`}></div>
                 </div>
             </div>

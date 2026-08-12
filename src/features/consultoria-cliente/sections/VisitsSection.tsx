@@ -58,7 +58,7 @@ export function VisitsSection({
           <Card key={step.id} className="p-mx-lg bg-white border hover:border-brand-primary transition-all">
             <div className="flex flex-col gap-mx-md lg:flex-row lg:items-center lg:justify-between">
               <div className="flex items-center gap-mx-md">
-                <div className="w-mx-12 h-mx-12 rounded-mx-full bg-gray-50 flex items-center justify-center font-bold">V{step.visit_number}</div>
+                <div className="w-mx-12 h-mx-12 rounded-mx-full bg-surface-alt flex items-center justify-center font-bold">V{step.visit_number}</div>
                 <div>
                   <Typography variant="h3" className="text-sm">{step.objective}</Typography>
                   <Typography variant="tiny" tone="muted" className="font-bold">{step.target} • {step.duration}</Typography>

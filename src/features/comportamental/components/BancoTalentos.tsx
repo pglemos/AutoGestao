@@ -50,7 +50,7 @@ export function BancoTalentos() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="rounded-2xl border border-border bg-gray-50 p-mx-md">
+      <form onSubmit={handleSubmit} className="rounded-2xl border border-border bg-surface-alt p-mx-md">
         <Typography variant="caption" tone="muted" className="">Registrar perfil vencedor</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <Field label="Cargo (opcional)"><Input value={form.cargo} onChange={e => setForm(p => ({ ...p, cargo: e.target.value }))} placeholder="Ex.: Vendedor" /></Field>
@@ -96,7 +96,7 @@ export function BancoTalentos() {
                 {entries.length > 0 && (
                   <div className="mt-mx-sm flex flex-wrap gap-mx-xs">
                     {entries.map(([dim, val]) => (
-                      <span key={dim} className="rounded-mx-full bg-gray-50 px-mx-sm py-1 text-xs font-bold uppercase tracking-widest text-muted-foreground">{dim}: {val}</span>
+                      <span key={dim} className="rounded-mx-full bg-surface-alt px-mx-sm py-1 text-xs font-bold uppercase tracking-widest text-muted-foreground">{dim}: {val}</span>
                     ))}
                   </div>
                 )}

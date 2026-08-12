@@ -270,7 +270,7 @@ export default function Reprocessamento() {
         header: 'Unidade',
         render: (item) => (
           <div className="flex min-w-0 items-center gap-3">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gray-50 text-sm font-semibold text-muted-foreground">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-surface-alt text-sm font-semibold text-muted-foreground">
               {item.store_name?.charAt(0) || '—'}
             </span>
             <Typography variant="h4" className="truncate text-sm">
@@ -351,7 +351,7 @@ export default function Reprocessamento() {
                     'flex min-h-28 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-4 text-center transition',
                     file
                       ? 'border-status-success/30 bg-status-success-surface text-status-success-text'
-                      : 'border-border bg-gray-50 text-muted-foreground hover:border-status-success/30 hover:bg-status-success-surface/50',
+                      : 'border-border bg-surface-alt text-muted-foreground hover:border-status-success/30 hover:bg-status-success-surface/50',
                   )}
                 >
                   <Upload size={22} aria-hidden="true" />

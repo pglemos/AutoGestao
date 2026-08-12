@@ -224,7 +224,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
 
             <div className="flex justify-end gap-3 pt-2 border-t border-border-subtle">
               <button onClick={handleClose} disabled={saving}
-                className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">
+                className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
                 Cancelar
               </button>
               <button onClick={handleSalvar} disabled={!podesSalvar || saving}

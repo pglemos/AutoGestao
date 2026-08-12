@@ -39,7 +39,7 @@ const CounterItem = ({ label, bgColor, textColor, icon: Icon, value, onDecrement
       <div className={`flex items-center border border-border rounded-xl shadow-sm w-full focus-within:border-status-info/50 focus-within:shadow-mx-focus-info transition-all ${compact ? "h-7" : "h-9"}`}>
         <button
           onClick={onDecrement}
-          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-muted-foreground font-light border-r border-border rounded-l-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}
+          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-surface-alt active:bg-muted transition-colors text-muted-foreground font-light border-r border-border rounded-l-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}
         >−</button>
         <input
           type="text"
@@ -56,7 +56,7 @@ const CounterItem = ({ label, bgColor, textColor, icon: Icon, value, onDecrement
         />
         <button
           onClick={onIncrement}
-          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-muted-foreground font-light border-l border-border rounded-r-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}
+          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-surface-alt active:bg-muted transition-colors text-muted-foreground font-light border-l border-border rounded-r-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}
         >+</button>
       </div>
     </div>

@@ -114,7 +114,7 @@ export default function EsforcoNecessario({ funis, faltam, funisBase90, usou90 }
       </p>
 
       {!canalPrincipal ? (
-        <div className="rounded-xl border border-border bg-slate-50 p-4 text-center">
+        <div className="rounded-xl border border-border bg-surface-alt p-4 text-center">
           <p className="text-body-sm text-muted-foreground">Sem base suficiente para projeção confiável.</p>
           <p className="text-[12px] text-muted-foreground mt-1">Registre atendimentos e vendas para habilitar esta análise.</p>
         </div>

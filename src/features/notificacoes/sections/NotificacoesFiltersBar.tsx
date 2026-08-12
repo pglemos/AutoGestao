@@ -63,7 +63,7 @@ export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, 
               'flex w-full items-center justify-between rounded-2xl border p-mx-sm text-left transition-all group/f',
               filterType === f.type
                 ? 'bg-brand-primary border-brand-primary text-white shadow-sm'
-                : 'bg-gray-50 border-border hover:bg-white hover:border-brand-primary/20 shadow-none',
+                : 'bg-surface-alt border-border hover:bg-white hover:border-brand-primary/20 shadow-none',
             )}
           >
             <div className="flex items-center gap-mx-sm">

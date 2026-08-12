@@ -67,7 +67,7 @@ export default function PDIPrint() {
             
             {/* Action Bar (Not Printed) */}
             <div className="w-full max-w-[210mm] flex items-center justify-between mb-8 print:hidden px-4">
-                <button onClick={() => navigate(-1)} className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-gray-50">
+                <button onClick={() => navigate(-1)} className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-surface-alt">
                     <ChevronLeft size={16} /> Voltar
                 </button>
                 <button onClick={handlePrint} className="flex items-center gap-mx-xs px-8 py-3 bg-gray-900 text-white rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:scale-105 active:scale-95 transition-transform">
@@ -90,12 +90,12 @@ export default function PDIPrint() {
                             <Typography variant="h1" className="text-4xl tracking-tighter leading-none">Plano de Desenvolvimento<br/>Individual <span className="text-status-success-text">(PDI)</span></Typography>
                         </div>
                         <div className="text-right">
-                            <Typography variant="mono" className="text-xs bg-gray-50 px-4 py-2 rounded">Protocolo: {bundle.sessao.id.split('-')[0]}</Typography>
+                            <Typography variant="mono" className="text-xs bg-surface-alt px-4 py-2 rounded">Protocolo: {bundle.sessao.id.split('-')[0]}</Typography>
                         </div>
                     </header>
 
                     <div className="mb-14 flex gap-mx-md items-center">
-                        <div className="w-mx-2xl h-mx-2xl rounded-mx-full bg-gray-50 border border-border flex items-center justify-center">
+                        <div className="w-mx-2xl h-mx-2xl rounded-mx-full bg-surface-alt border border-border flex items-center justify-center">
                             <User size={24} className="text-muted-foreground" />
                         </div>
                         <div>
@@ -161,7 +161,7 @@ export default function PDIPrint() {
                             <Typography variant="tiny" className="">Mapeamento Técnico & Comportamental</Typography>
                             <table className="w-full text-xs font-bold border-collapse">
                                 <thead>
-                                    <tr className="bg-gray-50 border-b-2 border-mx-black">
+                                    <tr className="bg-surface-alt border-b-2 border-mx-black">
                                         <th className="py-2 px-3 text-left uppercase">Competência</th>
                                         <th className="py-2 px-3 text-center uppercase">Nota</th>
                                         <th className="py-2 px-3 text-center uppercase">Alvo</th>

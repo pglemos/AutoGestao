@@ -14,7 +14,7 @@ export function StorePerformanceView() {
 
   if (loading) {
     return (
-      <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50">
+      <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt">
         <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-6" />
         <Typography variant="caption" tone="muted" className="animate-pulse">
           Calculando Matriz BI...

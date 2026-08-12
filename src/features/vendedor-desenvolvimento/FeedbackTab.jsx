@@ -110,7 +110,7 @@ export default function FeedbackPage({ hideHeader = false }) {
           <ScrollableRegion label="Histórico de devolutivas">
             <table className="w-full">
               <thead>
-                <tr className="bg-slate-50">
+                <tr className="bg-surface-alt">
                   {["Data", "Tipo", "Competência", "Responsável", "Comentário", ""].map(h => (
                     <th key={h} className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wider px-5 py-3">{h}</th>
                   ))}
@@ -118,7 +118,7 @@ export default function FeedbackPage({ hideHeader = false }) {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {feedbacks.filter(f => f.acknowledged).map(f => (
-                  <tr key={f.id} className="hover:bg-slate-50/50">
+                  <tr key={f.id} className="hover:bg-surface-alt/50">
                     <td className="px-5 py-3.5 text-sm text-slate-600">{moment(f.created_date).format("DD/MM/YYYY")}</td>
                     <td className="px-5 py-3.5">
                       <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${feedbackBadge(f).className}`}>{feedbackBadge(f).label}</span>

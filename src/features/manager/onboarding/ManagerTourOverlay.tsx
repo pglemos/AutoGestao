@@ -148,14 +148,14 @@ export function ManagerTourOverlay({
           <p className="text-sm leading-relaxed text-muted-foreground">{step?.description}</p>
         </div>
 
-        <footer className="flex items-center justify-between border-t border-border-subtle bg-gray-50 px-5 py-3">
+        <footer className="flex items-center justify-between border-t border-border-subtle bg-surface-alt px-5 py-3">
           <span className="text-xs tabular-nums text-muted-foreground">Passo {index + 1} de {steps.length}</span>
           <div className="flex items-center gap-2">
             <button type="button" onClick={onSkip} className="h-8 rounded-lg px-2 text-xs text-muted-foreground hover:text-foreground">
               Pular tour
             </button>
             {index > 0 && (
-              <button type="button" onClick={previous} className="flex h-8 items-center gap-1 rounded-lg border border-border bg-white px-3 text-xs text-muted-foreground hover:bg-gray-50">
+              <button type="button" onClick={previous} className="flex h-8 items-center gap-1 rounded-lg border border-border bg-white px-3 text-xs text-muted-foreground hover:bg-surface-alt">
                 <ChevronLeft size={14} /> Voltar
               </button>
             )}

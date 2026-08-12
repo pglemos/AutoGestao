@@ -108,7 +108,7 @@ export function MxPageTabs<T extends string>({
                   {groupLabels[group]}
                 </Typography>
               ) : null}
-              <div role="tablist" aria-label={groupLabels?.[group] || ariaLabel} tabIndex={0} className="flex min-w-0 max-w-full gap-1 overflow-x-auto rounded-xl bg-gray-100 p-1 no-scrollbar focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/30">
+              <div role="tablist" aria-label={groupLabels?.[group] || ariaLabel} tabIndex={0} className="flex min-w-0 max-w-full gap-1 overflow-x-auto rounded-xl bg-muted p-1 no-scrollbar focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/30">
                 {groupItems.map((item: MxPageTabItem<T>) => {
                   flatIndex += 1
                   const index = flatIndex
@@ -143,7 +143,7 @@ export function MxPageTabs<T extends string>({
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-dashed border-border bg-gray-50 px-4 py-8 text-center">
+        <div className="rounded-xl border border-dashed border-border bg-surface-alt px-4 py-8 text-center">
           <Typography variant="p" className="text-sm text-muted-foreground">Nenhuma opção encontrada para a busca.</Typography>
         </div>
       )}

@@ -59,7 +59,7 @@ export function AgendaSidebar({
           type="button"
           onClick={onToggleCollapse}
           title="Expandir painel lateral"
-          className="flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-white text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors shadow-2xs"
+          className="flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-white text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors shadow-2xs"
         >
           <PanelLeftOpen size={16} />
         </button>
@@ -79,7 +79,7 @@ export function AgendaSidebar({
             type="button"
             onClick={onToggleCollapse}
             title="Recolher painel lateral"
-            className="flex h-6 w-6 items-center justify-center rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors"
+            className="flex h-6 w-6 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
           >
             <PanelLeftClose size={15} />
           </button>
@@ -112,7 +112,7 @@ export function AgendaSidebar({
                   'flex items-center gap-1.5 rounded-xl px-2 py-1 text-caption font-medium transition-colors',
                   isActive
                     ? 'bg-brand-primary text-white font-bold shadow-2xs'
-                    : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
+                    : 'text-muted-foreground hover:bg-surface-alt hover:text-foreground',
                 )}
               >
                 <Icon size={12} className={isActive ? 'text-white' : 'text-muted-foreground'} />
@@ -120,7 +120,7 @@ export function AgendaSidebar({
                 <span
                   className={cn(
                     'px-1 py-0.5 rounded-full text-caption font-mono font-semibold',
-                    isActive ? 'bg-surface-overlay/20 text-white' : 'bg-gray-50 text-muted-foreground',
+                    isActive ? 'bg-surface-overlay/20 text-white' : 'bg-surface-alt text-muted-foreground',
                   )}
                 >
                   {opt.count}
@@ -154,7 +154,7 @@ export function AgendaSidebar({
                   'flex w-full items-center px-2 py-1.5 rounded-xl text-caption font-medium transition-colors',
                   consultantFilter === 'todos'
                     ? 'bg-brand-primary/10 text-status-success-text font-bold border border-brand-primary/20'
-                    : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
+                    : 'text-muted-foreground hover:bg-surface-alt hover:text-foreground',
                 )}
               >
                 Todos
@@ -172,7 +172,7 @@ export function AgendaSidebar({
                       'flex w-full items-center gap-1.5 px-2 py-1.5 rounded-xl text-caption font-medium transition-colors text-left truncate',
                       isSelected
                         ? 'bg-brand-primary text-white font-bold shadow-2xs'
-                        : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
+                        : 'text-muted-foreground hover:bg-surface-alt hover:text-foreground',
                     )}
                   >
                     <span

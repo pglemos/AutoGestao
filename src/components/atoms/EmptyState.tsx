@@ -63,7 +63,7 @@ const EmptyState = React.forwardRef<HTMLDivElement, EmptyStateProps>(
           </Typography>
         )}
         {nextStep && (
-          <div className="mt-mx-xs max-w-md rounded-2xl border border-border bg-gray-50 px-mx-md py-mx-sm text-left">
+          <div className="mt-mx-xs max-w-md rounded-2xl border border-border bg-surface-alt px-mx-md py-mx-sm text-left">
             <Typography variant="caption" className="block">
               Próximo passo
             </Typography>

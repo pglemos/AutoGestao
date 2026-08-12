@@ -69,7 +69,7 @@ export function AdminNetworkView() {
               role="button"
               tabIndex={0}
               aria-expanded={isExpanded}
-              className="p-mx-sm sm:p-mx-md flex items-center justify-between cursor-pointer hover:bg-gray-50 transition-colors"
+              className="p-mx-sm sm:p-mx-md flex items-center justify-between cursor-pointer hover:bg-surface-alt transition-colors"
               onClick={() => setExpandedStoreId(isExpanded ? null : store.store_id)}
               onKeyDown={(event) => {
                 if (event.key === 'Enter' || event.key === ' ') {
@@ -103,13 +103,13 @@ export function AdminNetworkView() {
                   initial={{ height: 0, opacity: 0 }}
                   animate={{ height: 'auto', opacity: 1 }}
                   exit={{ height: 0, opacity: 0 }}
-                  className="border-t border-border bg-gray-50/30"
+                  className="border-t border-border bg-surface-alt/30"
                 >
                   <div className="p-mx-sm sm:p-mx-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-sm">
                     {members.map((member) => (
                       <div key={member.id} className="bg-white p-mx-sm rounded-xl border border-border flex flex-col gap-mx-sm shadow-sm relative overflow-hidden group">
                         <div className="flex items-center gap-mx-sm relative z-10">
-                          <div className="w-mx-10 h-mx-10 rounded-xl bg-gray-50 flex items-center justify-center border border-border overflow-hidden shrink-0">
+                          <div className="w-mx-10 h-mx-10 rounded-xl bg-surface-alt flex items-center justify-center border border-border overflow-hidden shrink-0">
                             {member.avatar_url ? <img src={member.avatar_url} alt="" className="w-full h-full object-cover" loading="lazy" decoding="async" /> : <Users size={16} className="text-muted-foreground" />}
                           </div>
                           <div className="flex-1 min-w-0">

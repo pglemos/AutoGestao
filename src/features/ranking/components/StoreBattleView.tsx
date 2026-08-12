@@ -81,7 +81,7 @@ function ComparisonRow({ label, v1, v2, format = v => Math.round(v).toString(), 
           animate={{ width: `${pct1}%` }}
           transition={{ duration: 0.9, ease: 'easeOut' }}
         />
-        <div className="w-mx-tiny bg-gray-50 z-10 skew-x-[-20deg]" />
+        <div className="w-mx-tiny bg-surface-alt z-10 skew-x-[-20deg]" />
         <motion.div
           className={cn('h-full flex-1', winner === 'p2' ? 'bg-status-info shadow-mx-glow-brand' : 'bg-status-info/40')}
           initial={{ width: 0 }}

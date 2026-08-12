@@ -55,7 +55,7 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
             <span className="text-sm text-muted-foreground">Atingimento</span>
             <span className="text-sm font-semibold text-foreground">{goal > 0 ? `${progress}%` : '--'}</span>
           </div>
-          <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
+          <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-muted">
             <div className="h-full rounded-full bg-brand-primary" style={{ width: `${progress}%` }} />
           </div>
         </div>
@@ -68,14 +68,14 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
             <p className="text-xs text-status-error-text">Faltam</p>
             <p className="mt-0.5 text-xl font-bold text-status-error-text">{goal > 0 ? formatInteger(missing) : '--'}</p>
           </div>
-          <div className="rounded-lg bg-gray-100/60 p-2.5 text-center">
+          <div className="rounded-lg bg-muted/60 p-2.5 text-center">
             <p className="text-xs text-muted-foreground">Ritmo ideal</p>
             <p className="mt-0.5 text-sm font-bold text-foreground">
               {idealPace > 0 ? `${idealPace.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}/dia` : '--'}
             </p>
           </div>
         </div>
-        <div className="flex items-center justify-between rounded-lg border border-border bg-gray-50 p-3">
+        <div className="flex items-center justify-between rounded-lg border border-border bg-surface-alt p-3">
           <div>
             <p className="text-xs text-muted-foreground">Projeção atual</p>
             <p className="text-sm font-semibold text-foreground">
@@ -118,7 +118,7 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
         <button
           type="button"
           onClick={() => navigate(ownerPath('departamentos-comercial'))}
-          className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-white px-3 py-2 text-sm font-medium text-foreground hover:bg-gray-50"
+          className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-white px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-alt"
         >
           Ver diagnóstico comercial
           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -308,7 +308,7 @@ export function NextActionsCard({ actions }: { actions: ActionRow[] }) {
           </div>
         ))}
         {actions.length === 0 && (
-          <p className="rounded-lg border border-border bg-gray-50 p-3 text-sm text-muted-foreground">
+          <p className="rounded-lg border border-border bg-surface-alt p-3 text-sm text-muted-foreground">
             Nenhuma ação registrada para esta unidade.
           </p>
         )}
@@ -316,7 +316,7 @@ export function NextActionsCard({ actions }: { actions: ActionRow[] }) {
       <button
         type="button"
         onClick={() => navigate(ownerPath('agenda'))}
-        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-white px-3 py-2 text-sm font-medium text-foreground hover:bg-gray-50"
+        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg border border-border bg-white px-3 py-2 text-sm font-medium text-foreground hover:bg-surface-alt"
       >
         <CalendarDays className="h-3.5 w-3.5" />
         Ver agenda completa
@@ -355,7 +355,7 @@ export function OwnerPanoramaChart({
           <Typography variant="h3" className="text-xl">Evolução planejado x realizado</Typography>
           <Typography variant="p" tone="muted" className="mt-1 block font-bold">Ritmo da loja no período selecionado.</Typography>
         </div>
-        <div className="rounded-xl border border-border-subtle bg-gray-50 px-mx-md py-mx-sm">
+        <div className="rounded-xl border border-border-subtle bg-surface-alt px-mx-md py-mx-sm">
           <Typography variant="tiny" tone="muted" className="block">Meta mensal</Typography>
           <Typography variant="p" className="tabular-nums">{goalValue > 0 ? formatInteger(goalValue) : 'Pendente'}</Typography>
           <Typography variant="tiny" tone={attainment >= 80 ? 'success' : 'warning'} className="block font-bold">
@@ -378,7 +378,7 @@ export function OwnerPanoramaChart({
           </ResponsiveContainer> : null}
         </div>
       ) : (
-        <div className="mt-mx-md min-h-[248px] rounded-xl border border-dashed border-border-subtle bg-gray-50 flex flex-col items-center justify-center text-center p-mx-lg">
+        <div className="mt-mx-md min-h-[248px] rounded-xl border border-dashed border-border-subtle bg-surface-alt flex flex-col items-center justify-center text-center p-mx-lg">
           <LineChartIcon size={40} className="text-muted-foreground" />
           <Typography variant="h3" className="mt-mx-md text-lg">Dados pendentes</Typography>
           <Typography variant="p" tone="muted" className="mt-mx-xs max-w-sm">A evolução aparece quando a rotina diária tiver histórico no período.</Typography>

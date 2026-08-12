@@ -53,7 +53,7 @@ export function OrganogramaVisual({ lojaId }: { lojaId: string }) {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleAdd} className="rounded-2xl border border-border bg-gray-50 p-mx-md">
+      <form onSubmit={handleAdd} className="rounded-2xl border border-border bg-surface-alt p-mx-md">
         <Typography variant="caption" tone="muted" className="">Adicionar cargo ao organograma</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <label className="block space-y-mx-xs md:col-span-1">
@@ -108,7 +108,7 @@ function OrgNodeRow({
   return (
     <div>
       <div
-        className="flex items-center gap-mx-sm rounded-xl px-mx-sm py-mx-xs hover:bg-gray-50"
+        className="flex items-center gap-mx-sm rounded-xl px-mx-sm py-mx-xs hover:bg-surface-alt"
         style={{ paddingLeft: `${depth * 20 + 8}px` }}
       >
         {hasChildren ? (

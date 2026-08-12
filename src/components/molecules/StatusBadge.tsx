@@ -12,7 +12,7 @@ const statusBadgeVariants = cva(
         warning: "border-status-warning/20 bg-status-warning-surface",
         error: "border-status-error/20 bg-status-error-surface",
         info: "border-status-info/20 bg-status-info-surface",
-        neutral: "border-border bg-gray-50",
+        neutral: "border-border bg-surface-alt",
         pending: "border-status-warning/20 bg-status-warning-surface border-dashed",
       },
     },

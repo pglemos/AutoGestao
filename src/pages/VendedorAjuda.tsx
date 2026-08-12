@@ -50,14 +50,14 @@ export default function VendedorAjuda() {
           <div className="space-y-mx-md">
             <Badge variant="brand" className="rounded-mx-full px-4 py-1">Escala de suporte</Badge>
             <div className="space-y-mx-sm">
-              <div className="flex items-start gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-md">
+              <div className="flex items-start gap-mx-sm rounded-2xl border border-border bg-surface-alt p-mx-md">
                 <UserRound size={18} className="mt-0.5 text-status-success-text" />
                 <div>
                   <Typography variant="caption" className="">1. Gerente da unidade</Typography>
                   <Typography variant="p" tone="muted" className="text-xs">Correção de lançamento, dúvida de meta ou devolutiva.</Typography>
                 </div>
               </div>
-              <div className="flex items-start gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-md">
+              <div className="flex items-start gap-mx-sm rounded-2xl border border-border bg-surface-alt p-mx-md">
                 <Phone size={18} className="mt-0.5 text-status-success-text" />
                 <div>
                   <Typography variant="caption" className="">2. Admin MX</Typography>

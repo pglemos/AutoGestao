@@ -44,7 +44,7 @@ export function TabNav<T extends string = string>({
               'px-mx-md py-mx-sm text-label font-medium transition-all border-b-2 whitespace-nowrap',
               activeTab === key
                 ? 'border-brand-primary text-status-success-text bg-brand-primary/5'
-                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-gray-50'
+                : 'border-transparent text-muted-foreground hover:text-foreground hover:bg-surface-alt'
             )}
           >
             {label}

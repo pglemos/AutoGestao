@@ -136,7 +136,7 @@ export default function VendedorHomePage() {
                 <button
                   type="button"
                   onClick={() => navigate('/central-execucao')}
-                  className="flex h-[36px] items-center gap-1 rounded-xl border border-gray-800 px-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-gray-100"
+                  className="flex h-[36px] items-center gap-1 rounded-xl border border-gray-800 px-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-muted"
                 >
                   <CalendarClock size={14} /> Rotina do Dia
                 </button>
@@ -160,7 +160,7 @@ export default function VendedorHomePage() {
                   }}
                   disabled={home.isRefetching || deterministic.loading}
                   aria-label="Atualizar"
-                  className="grid h-[36px] w-10 place-items-center rounded-xl text-muted-foreground hover:bg-gray-50 disabled:opacity-50"
+                  className="grid h-[36px] w-10 place-items-center rounded-xl text-muted-foreground hover:bg-surface-alt disabled:opacity-50"
                 >
                   <RefreshCw size={16} className={home.isRefetching || deterministic.loading ? 'animate-spin' : ''} />
                 </button>
@@ -188,7 +188,7 @@ export default function VendedorHomePage() {
           <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Faltam para a Meta</p>
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-muted">
                 <Target size={18} className="text-muted-foreground" />
               </span>
             </div>
@@ -213,7 +213,7 @@ export default function VendedorHomePage() {
           </article>
 
           <article
-            className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-border-subtle bg-white p-5 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors"
+            className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-border-subtle bg-white p-5 shadow-sm cursor-pointer hover:bg-surface-alt transition-colors"
             role="link"
             tabIndex={0}
             onClick={() => navigate('/central-execucao')}
@@ -226,7 +226,7 @@ export default function VendedorHomePage() {
           >
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Agenda Hoje</p>
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-muted">
                 <CalendarClock size={18} className="text-muted-foreground" />
               </span>
             </div>
@@ -241,7 +241,7 @@ export default function VendedorHomePage() {
           </article>
 
           <article
-            className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors ${
+            className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm cursor-pointer hover:bg-surface-alt transition-colors ${
               posicaoRanking === 1 ? 'border-status-warning/30' : 'border-border-subtle'
             }`}
             role="link"
@@ -256,7 +256,7 @@ export default function VendedorHomePage() {
           >
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Ranking</p>
-              <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
+              <span className="grid h-9 w-9 place-items-center rounded-xl bg-muted">
                 <Trophy size={18} className={posicaoRanking === 1 ? 'text-status-warning-text' : 'text-muted-foreground'} />
               </span>
             </div>
@@ -283,7 +283,7 @@ export default function VendedorHomePage() {
                   <p className="text-xl font-bold text-foreground">{oportunidadesAtivas.length}</p>
                 </div>
               </div>
-              <div className="relative h-3 overflow-hidden rounded-full bg-gray-100">
+              <div className="relative h-3 overflow-hidden rounded-full bg-muted">
                 <div
                   className="h-full rounded-full transition-all"
                   style={{
@@ -430,7 +430,7 @@ function ShortcutCard({ label, icon, onClick }: { label: string; icon: React.Rea
     <button
       type="button"
       onClick={onClick}
-      className="rounded-xl border border-border-subtle bg-gray-50 px-4 py-4 flex flex-col items-center gap-2 hover:bg-gray-100 transition-colors w-full"
+      className="rounded-xl border border-border-subtle bg-surface-alt px-4 py-4 flex flex-col items-center gap-2 hover:bg-muted transition-colors w-full"
     >
       {icon}
       <span className="text-xs font-medium text-muted-foreground text-center leading-tight">{label}</span>

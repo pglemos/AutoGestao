@@ -44,7 +44,7 @@ export function RegularizeLateModal({
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-gray-50 disabled:opacity-50"
+            className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-surface-alt disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -68,7 +68,7 @@ export function RegularizeLateModal({
           </p>
         </div>
 
-        <div className="space-y-2 rounded-xl bg-gray-50 p-4 text-sm">
+        <div className="space-y-2 rounded-xl bg-surface-alt p-4 text-sm">
           <DataRow label="Vendedor" value={sellerName} />
           <DataRow label="Data" value={formatDate(referenceDate)} />
           <DataRow label="Entrega" value={formatTime(submittedAt)} />

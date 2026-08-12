@@ -190,7 +190,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
           <ChevronRight className="h-4 w-4 text-muted-foreground" />
           <div
             className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
-              selectedOption ? 'bg-slate-900 text-white' : 'bg-slate-100 text-muted-foreground'
+              selectedOption ? 'bg-slate-900 text-white' : 'bg-muted text-muted-foreground'
             }`}
           >
             2
@@ -244,7 +244,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                       : 'border-border bg-white'
                   }`}
                 >
-                  <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-slate-100 text-foreground transition-colors group-hover:bg-status-info group-hover:text-white">
+                  <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-muted text-foreground transition-colors group-hover:bg-status-info group-hover:text-white">
                     <IconComp className="h-4 w-4" />
                   </div>
                   <div className="flex-1 min-w-0">
@@ -270,7 +270,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
       ) : (
         /* Passo 2: Seleção do status específico compatível */
         <div className="space-y-4">
-          <div className="rounded-md bg-slate-100 p-3 flex items-center justify-between">
+          <div className="rounded-md bg-muted p-3 flex items-center justify-between">
             <div>
               <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Opção selecionada
@@ -316,7 +316,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                     className={`cursor-pointer rounded-lg border p-3 transition-all ${
                       isSelected
                         ? 'border-status-info bg-status-info-surface/60 ring-1 ring-status-info shadow-sm'
-                        : 'border-border bg-white hover:border-border-strong hover:bg-slate-50'
+                        : 'border-border bg-white hover:border-border-strong hover:bg-surface-alt'
                     }`}
                   >
                     <div className="flex items-start justify-between">
@@ -339,7 +339,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                       </div>
                       <div className="flex items-center space-x-1.5">
                         {isCurrent && (
-                          <Badge variant="outline" className="bg-slate-100 text-muted-foreground text-caption">
+                          <Badge variant="outline" className="bg-muted text-muted-foreground text-caption">
                             Atual
                           </Badge>
                         )}
@@ -351,7 +351,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                                 ? 'bg-status-error-surface text-status-error-text'
                                 : st.temperature.toLowerCase().includes('morno')
                                 ? 'bg-status-warning-surface text-status-warning-text'
-                                : 'bg-slate-100 text-foreground'
+                                : 'bg-muted text-foreground'
                             }`}
                           >
                             {st.temperature}

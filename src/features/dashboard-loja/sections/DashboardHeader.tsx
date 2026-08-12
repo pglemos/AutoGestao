@@ -132,7 +132,7 @@ export function DashboardHeader({
                 <ChevronDown size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               </label>
 
-              <nav className="flex rounded-xl bg-gray-100 p-1" aria-label="Abas da loja">
+              <nav className="flex rounded-xl bg-muted p-1" aria-label="Abas da loja">
                 {LOJA_TABS.map(tab => {
                   const Icon = tab.icon
                   const active = activeTab === tab.key
@@ -191,7 +191,7 @@ export function DashboardHeader({
               </div>
 
               <div className="flex flex-col gap-2 sm:flex-row sm:items-end">
-                <div className="flex h-10 rounded-xl bg-gray-100 p-1">
+                <div className="flex h-10 rounded-xl bg-muted p-1">
                   {PERIODO_TABS.map(tab => (
                     <button
                       key={tab.key}
@@ -215,7 +215,7 @@ export function DashboardHeader({
                       setStartDate(event.target.value)
                       setViewMode('month')
                     }}
-                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success disabled:bg-gray-50 disabled:text-muted-foreground"
+                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success disabled:bg-surface-alt disabled:text-muted-foreground"
                   />
                 </label>
 
@@ -230,7 +230,7 @@ export function DashboardHeader({
                       setEndDate(event.target.value)
                       setViewMode('month')
                     }}
-                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success disabled:bg-gray-50 disabled:text-muted-foreground"
+                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-status-success disabled:bg-surface-alt disabled:text-muted-foreground"
                   />
                 </label>
               </div>
@@ -286,7 +286,7 @@ export function DashboardHeader({
           <TabNavPill tabs={LOJA_TABS} activeTab={activeTab} onTabChange={onTabChange} className="mx-store-dashboard-tabs max-w-full overflow-x-auto" buttonClassName="h-mx-8 sm:h-mx-10 px-2 sm:px-6 shrink-0" aria-label="Abas da loja" />
 
           {activeTab === 'performance' && (
-            <Button variant="outline" onClick={onRefresh} aria-label={`Atualizar performance. ${lastSyncLabel}`} title={lastSyncLabel} className="h-mx-10 sm:h-mx-14 bg-white px-mx-md hover:bg-gray-50">
+            <Button variant="outline" onClick={onRefresh} aria-label={`Atualizar performance. ${lastSyncLabel}`} title={lastSyncLabel} className="h-mx-10 sm:h-mx-14 bg-white px-mx-md hover:bg-surface-alt">
               <RefreshCw size={18} className={cn(isRefetching && 'animate-spin')} />
               Atualizar
             </Button>
@@ -313,7 +313,7 @@ export function DashboardHeader({
             <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center">
               <TabNavPill tabs={PERIODO_TABS} activeTab={viewMode} onTabChange={(mode) => setViewMode(mode as ViewMode)} buttonClassName="h-mx-11 px-5" aria-label="Período do dashboard" />
               <div className={cn(
-                'grid grid-cols-1 gap-mx-sm rounded-xl border border-border-subtle bg-gray-50 p-mx-sm sm:grid-cols-2',
+                'grid grid-cols-1 gap-mx-sm rounded-xl border border-border-subtle bg-surface-alt p-mx-sm sm:grid-cols-2',
                 viewMode === 'day' && 'opacity-50',
               )}>
                 <label className="space-y-mx-tiny">
@@ -326,7 +326,7 @@ export function DashboardHeader({
                 </label>
               </div>
             </div>
-            <Button type="button" variant="outline" onClick={() => onTabChange('metas')} className="h-mx-11 rounded-2xl bg-white border-border-subtle hover:bg-gray-50">
+            <Button type="button" variant="outline" onClick={() => onTabChange('metas')} className="h-mx-11 rounded-2xl bg-white border-border-subtle hover:bg-surface-alt">
               <Target size={16} className="mr-2" />
               Metas que alimentam a leitura
             </Button>

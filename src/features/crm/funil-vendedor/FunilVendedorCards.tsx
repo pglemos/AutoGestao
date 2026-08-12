@@ -36,7 +36,7 @@ const EFICIENCIA_ORDER: FunnelChannel[] = ['Showroom', 'Carteira', 'Internet']
 const BASE_CONFIANCA_COR: Record<Confidence, string> = {
   Alta: 'text-status-success-text bg-brand-primary-subtle border-brand-primary/30',
   Média: 'text-status-warning-text bg-status-warning-surface border-status-warning/30',
-  Baixa: 'text-muted-foreground bg-slate-50 border-border',
+  Baixa: 'text-muted-foreground bg-surface-alt border-border',
 }
 
 export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: PeriodKey }) {
@@ -83,24 +83,24 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
                 <span>{pct}% da meta</span>
                 <span>{realizado} / {meta}</span>
               </div>
-              <Progress value={pct} size="md" tone="primary" aria-label={`${pct}% da meta`} className="h-2.5 bg-slate-100" />
+              <Progress value={pct} size="md" tone="primary" aria-label={`${pct}% da meta`} className="h-2.5 bg-muted" />
             </div>
           </div>
 
-          <div className="hidden w-px self-stretch bg-slate-100 sm:block" />
+          <div className="hidden w-px self-stretch bg-muted sm:block" />
 
           <div className="grid flex-1 grid-cols-2 gap-3">
-            <div className="rounded-xl bg-slate-50 p-3">
+            <div className="rounded-xl bg-surface-alt p-3">
               <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Faltam</p>
               <p className="text-h3 font-bold leading-none tabular-nums text-status-error-text">{faltam}</p>
               <p className="text-caption text-muted-foreground">vendas</p>
             </div>
-            <div className="rounded-xl bg-slate-50 p-3">
+            <div className="rounded-xl bg-surface-alt p-3">
               <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Dias úteis restantes</p>
               <p className="text-h3 font-bold leading-none tabular-nums text-foreground">{isCurrentMonth ? diasUteisRestantes : '—'}</p>
               <p className="text-caption text-muted-foreground">seg–sáb</p>
             </div>
-            <div className="rounded-xl bg-slate-50 p-3">
+            <div className="rounded-xl bg-surface-alt p-3">
               <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Ritmo necessário</p>
               {!isCurrentMonth || necessarioPorDia === null ? (
                 <>
@@ -135,7 +135,7 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
                 </>
               )}
             </div>
-            <div className="rounded-xl bg-slate-50 p-3">
+            <div className="rounded-xl bg-surface-alt p-3">
               <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Probabilidade</p>
               <p className={`text-h3 font-bold leading-none tabular-nums ${probCor}`}>{probPct !== null ? `${probPct}%` : '—'}</p>
               <p className="text-caption text-muted-foreground">com ritmo atual</p>
@@ -204,7 +204,7 @@ export function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelF
       </p>
 
       {!canalPrincipal ? (
-        <div className="rounded-xl border border-border bg-slate-50 p-4 text-center">
+        <div className="rounded-xl border border-border bg-surface-alt p-4 text-center">
           <p className="text-body-sm text-muted-foreground">Sem base suficiente para projeção confiável.</p>
           <p className="mt-1 text-[12px] text-muted-foreground">Registre atendimentos e vendas para habilitar esta análise.</p>
         </div>
@@ -367,7 +367,7 @@ function EtapaLinha({ label, valor, conv }: { label: string; valor: number; conv
 
 export function BaseEstatisticaCard({ displayedPeriod, calculationPeriod, confidence }: { displayedPeriod: string; calculationPeriod: string; confidence: Confidence }) {
   return (
-    <div className="rounded-xl border border-border-subtle bg-slate-50 p-4">
+    <div className="rounded-xl border border-border-subtle bg-surface-alt p-4">
       <p className="mb-3 text-caption font-bold uppercase tracking-wider text-muted-foreground">Base do cálculo</p>
       <div className="flex flex-wrap gap-x-8 gap-y-2 text-[12px]">
         <div><span className="text-muted-foreground">Período exibido:</span>{' '}<span className="font-semibold text-muted-foreground">{displayedPeriod}</span></div>
@@ -386,7 +386,7 @@ export function EvolucaoCollapsible({ data, chartAberto, onToggle }: { data: Mon
   const semRegistros = data.every(item => item.oportunidades === 0 && item.atendimentos === 0 && item.vendas === 0)
   return (
     <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
-      <button type="button" onClick={onToggle} className="flex w-full items-center justify-between px-5 py-3.5 transition-colors hover:bg-slate-50">
+      <button type="button" onClick={onToggle} className="flex w-full items-center justify-between px-5 py-3.5 transition-colors hover:bg-surface-alt">
         <p className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Ver evolução dos últimos meses</p>
         {chartAberto ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
       </button>

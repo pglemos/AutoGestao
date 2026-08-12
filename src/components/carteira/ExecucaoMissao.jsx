@@ -212,7 +212,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           <h2 className="text-xl font-black text-[#031B3D]">Envio concluído!</h2>
           <p className="text-sm text-muted-foreground">A missão <strong>{missao.tipo_missao}</strong> está aguardando respostas.</p>
           <div className="grid grid-cols-3 gap-4 mt-4">
-            <div className="bg-slate-50 rounded-xl p-3">
+            <div className="bg-surface-alt rounded-xl p-3">
               <p className="text-2xl font-black text-[#031B3D]">{total}</p>
               <p className="text-xs text-muted-foreground">Total</p>
             </div>
@@ -220,7 +220,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
               <p className="text-2xl font-black text-status-info-text">{enviados}</p>
               <p className="text-xs text-muted-foreground">Enviadas</p>
             </div>
-            <div className="bg-slate-50 rounded-xl p-3">
+            <div className="bg-surface-alt rounded-xl p-3">
               <p className="text-2xl font-black text-muted-foreground">{pulados}</p>
               <p className="text-xs text-muted-foreground">Pulados</p>
             </div>
@@ -279,7 +279,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             <span>Progresso</span>
             <span>{progresso}%</span>
           </div>
-          <div className="bg-slate-100 rounded-full h-2">
+          <div className="bg-muted rounded-full h-2">
             <div className="bg-[#005BFF] rounded-full h-2 transition-all" style={{ width: `${progresso}%` }} />
           </div>
         </div>
@@ -304,7 +304,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           <div>
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Script sugerido</p>
             <textarea value={scriptEditado || scriptPreenchido} onChange={e => setScriptEditado(e.target.value)} rows={6}
-              className="w-full rounded-xl border border-border bg-slate-50 px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]" />
+              className="w-full rounded-xl border border-border bg-surface-alt px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]" />
           </div>
 
           <div className="flex gap-2">
@@ -342,7 +342,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           <div className="grid grid-cols-1 gap-1.5">
             {RESULTADOS.map(r => (
               <button key={r} onClick={() => setResultado(r)}
-                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-status-info-surface text-status-info-text font-semibold" : "border-border-subtle text-muted-foreground hover:bg-slate-50"}`}>
+                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-status-info-surface text-status-info-text font-semibold" : "border-border-subtle text-muted-foreground hover:bg-surface-alt"}`}>
                 {r}
               </button>
             ))}

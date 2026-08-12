@@ -153,7 +153,7 @@ export function buildStoreColumns({
               href={getRegistrationLink(store.name)}
               target="_blank"
               rel="noreferrer"
-              className="block max-w-mx-64 truncate bg-gray-50 px-mx-xs py-mx-tiny font-mono text-status-success-text underline-offset-2 hover:underline"
+              className="block max-w-mx-64 truncate bg-surface-alt px-mx-xs py-mx-tiny font-mono text-status-success-text underline-offset-2 hover:underline"
               title={`Abrir pré-cadastro de ${store.name}`}
             >
               {getRegistrationLink(store.name)}

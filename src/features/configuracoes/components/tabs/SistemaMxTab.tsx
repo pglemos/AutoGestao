@@ -197,7 +197,7 @@ export function SistemaMxTab() {
                 ) : (
                     <div className="divide-y divide-border-default">
                         {audit.map(entry => (
-                            <div key={entry.id} className="flex items-start gap-mx-md p-mx-md hover:bg-gray-50 transition-colors">
+                            <div key={entry.id} className="flex items-start gap-mx-md p-mx-md hover:bg-surface-alt transition-colors">
                                 <div className="w-mx-10 h-mx-10 rounded-2xl bg-status-warning/10 text-status-warning flex items-center justify-center shrink-0">
                                     <AlertTriangle size={16} />
                                 </div>
@@ -219,7 +219,7 @@ export function SistemaMxTab() {
             </Card>
 
             {/* Versão */}
-            <Card className="p-mx-md border-none bg-gray-50">
+            <Card className="p-mx-md border-none bg-surface-alt">
                 <div className="flex items-center justify-between">
                     <Typography variant="tiny" tone="muted" className="">Versão / Último check</Typography>
                     <Typography variant="tiny" className="font-mono-numbers">

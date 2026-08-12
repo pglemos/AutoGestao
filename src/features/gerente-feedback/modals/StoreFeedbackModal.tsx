@@ -128,7 +128,7 @@ export function StoreFeedbackModal({
                       name="seller_id"
                       value={formData.seller_id}
                       onChange={(e) => onSellerSelect(e.target.value)}
-                      className="w-full h-mx-14 px-6 bg-gray-50 border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
+                      className="w-full h-mx-14 px-6 bg-surface-alt border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
                     >
                       <option value="">Selecione...</option>
                       {sellers.map((s) => (
@@ -161,7 +161,7 @@ export function StoreFeedbackModal({
                       type="date"
                       value={formData.week_reference}
                       onChange={(e) => onWeekReferenceChange(e.target.value)}
-                      className="w-full h-mx-14 pl-12 pr-6 bg-gray-50 border border-border rounded-xl text-sm font-bold text-status-success-text shadow-none"
+                      className="w-full h-mx-14 pl-12 pr-6 bg-surface-alt border border-border rounded-xl text-sm font-bold text-status-success-text shadow-none"
                     />
                   </div>
                 </div>
@@ -172,7 +172,7 @@ export function StoreFeedbackModal({
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-mx-xl"
                 >
-                  <div className="p-mx-lg bg-gray-50 rounded-2xl border border-border space-y-mx-lg shadow-none">
+                  <div className="p-mx-lg bg-surface-alt rounded-2xl border border-border space-y-mx-lg shadow-none">
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-mx-md">
                       {[
                         { label: 'Leads', val: formData.leads_week },
@@ -273,7 +273,7 @@ export function StoreFeedbackModal({
                           id="feedback-store-action-template"
                           value=""
                           onChange={(e) => handleFeedbackActionSelect(e.target.value)}
-                          className="w-full h-mx-14 px-6 bg-gray-50 border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
+                          className="w-full h-mx-14 px-6 bg-surface-alt border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
                         >
                           <option value="">Selecionar ação...</option>
                           {FEEDBACK_ACTIONS_CATALOG.map((action) => (

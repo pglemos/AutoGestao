@@ -46,7 +46,7 @@ export function ConsultingModulesPanel({ modules, loading = false, canManage = f
 
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-mx-sm">
         {mergedModules.map((module) => (
-          <div key={module.module_key} className="p-mx-md rounded-xl bg-gray-50 border border-border space-y-mx-sm">
+          <div key={module.module_key} className="p-mx-md rounded-xl bg-surface-alt border border-border space-y-mx-sm">
             <div className="flex items-start justify-between gap-mx-sm">
               <div>
                 <Typography variant="p" className="">{module.label}</Typography>

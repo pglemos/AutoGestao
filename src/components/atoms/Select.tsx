@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 /** Aparência única — sem variação por perfil (§8.5). */
 const selectVariants = cva(
-  'h-10 w-full appearance-none rounded-[var(--mx-input-radius)] border bg-white py-2 pl-3 pr-10 text-sm font-normal text-foreground outline-none transition disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-muted-foreground',
+  'h-10 w-full appearance-none rounded-[var(--mx-input-radius)] border bg-white py-2 pl-3 pr-10 text-sm font-normal text-foreground outline-none transition disabled:cursor-not-allowed disabled:bg-surface-alt disabled:text-muted-foreground',
   {
     variants: {
       variant: {

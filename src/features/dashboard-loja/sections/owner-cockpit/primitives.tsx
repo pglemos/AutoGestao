@@ -63,7 +63,7 @@ const iconBgClasses: Record<KpiTone, string> = {
   info: 'bg-status-info/10 text-status-info',
   warning: 'bg-status-warning-surface text-status-warning-text',
   danger: 'bg-status-error-surface text-status-error-text',
-  muted: 'bg-gray-50 text-text-secondary',
+  muted: 'bg-surface-alt text-text-secondary',
   brand: 'bg-status-success-surface text-status-success-text',
   purple: 'bg-status-info-surface text-status-info-text',
 }

@@ -48,7 +48,7 @@ export function DRETable({
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="bg-gray-50/50 border-b border-border">
+            <tr className="bg-surface-alt/50 border-b border-border">
               <th className="p-mx-md w-1/4">
                 <Typography variant="tiny" tone="muted">DEMONSTRATIVO</Typography>
               </th>
@@ -71,7 +71,7 @@ export function DRETable({
                 )
               }
               return (
-                <tr key={idx} className="hover:bg-gray-50/30 transition-colors">
+                <tr key={idx} className="hover:bg-surface-alt/30 transition-colors">
                   <td className={cn('p-mx-md text-sm', row.bold ? 'font-bold' : 'font-bold')}>
                     {row.label}
                   </td>
@@ -95,7 +95,7 @@ export function DRETable({
               )
             })}
             {onEdit && (
-              <tr className="bg-gray-50/50 border-t-2 border-border">
+              <tr className="bg-surface-alt/50 border-t-2 border-border">
                 <td className="p-mx-md font-bold text-sm">AÇÕES</td>
                 {months.map((m) => {
                   const entry = data.get(m)

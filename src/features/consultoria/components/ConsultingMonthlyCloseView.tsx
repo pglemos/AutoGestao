@@ -168,14 +168,14 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
         <Card className="p-mx-lg border-none bg-white">
           <Typography variant="h3" className="mb-mx-md">INDICADORES DERIVADOS</Typography>
           <div className="space-y-mx-sm">
-            <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-gray-50">
+            <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-surface-alt">
               <div className="flex items-center gap-mx-xs">
                 <Users className="w-mx-4 h-mx-4 text-status-success-text" />
                 <Typography variant="p" className="font-bold">Vendedores ativos</Typography>
               </div>
               <Typography variant="p" className="">{summary.sellers}</Typography>
             </div>
-            <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-gray-50">
+            <div className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-surface-alt">
               <div className="flex items-center gap-mx-xs">
                 <BarChart3 className="w-mx-4 h-mx-4 text-status-success-text" />
                 <Typography variant="p" className="font-bold">Ticket médio</Typography>
@@ -183,7 +183,7 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
               <Typography variant="p" className="">{formatCurrency(summary.avgTicket)}</Typography>
             </div>
             {derived.map((item) => item && (
-              <div key={item.metric.metric_key} className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-gray-50">
+              <div key={item.metric.metric_key} className="flex items-center justify-between gap-mx-sm p-mx-sm rounded-xl bg-surface-alt">
                 <Typography variant="p" className="font-bold">{item.metric.label}</Typography>
                 <Typography variant="p" className="">
                   {item.metric.value_type === 'currency'

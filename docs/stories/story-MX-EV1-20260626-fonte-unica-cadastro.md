@@ -63,6 +63,8 @@ Claude Sonnet 4.6 (aiox-master orquestrando, hat @dev)
 - 2026-08-12: leitura autenticada somente leitura no Supabase para o vendedor: 27 oportunidades e 15 agendamentos; `2026-07-28` derivou 1 linha/1 venda (`Venda`) e `2026-08-12` derivou 0/0.
 - 2026-08-12: teste focado `clientes-list-from-crm.test.ts` (8 pass), `npm run typecheck`, `npm run lint`, `npm run build` e `git diff --check` passaram; lint mantém 1 warning preexistente em `PdiTab.jsx:304`.
 - 2026-08-12: validação renderizada local autenticada em `/fechamento-diario`, desktop e `474x850`, sem overlay, erro de console ou overflow horizontal. A suíte global do checkout limpo teve 2.768 pass/0 fail.
+- 2026-08-12: validação renderizada local autenticada em `/fechamento-diario`, desktop e `474x850`, sem overlay, erro de console ou overflow horizontal. A suíte global atual teve 2.819 pass/2 fail em contratos visuais de arquivos paralelamente modificados (`Modal.tsx` e `sidebar/tokens.ts`), fora deste ajuste.
+- 2026-08-12: após novas alterações paralelas no worktree, o `git diff --check` global passou a apontar apenas trailing whitespace em `ForcePasswordChange.tsx:74` e `UserCreationModal.tsx:171`; o escopo desta story permanece limpo.
 
 ### Completion Notes
 
@@ -71,6 +73,9 @@ Claude Sonnet 4.6 (aiox-master orquestrando, hat @dev)
 - **Bug pré-existente corrigido de carona:** `handleCadastrar` sempre chamava `createOportunidade` mesmo ao editar um registro existente (`editingClientId` setado) — isso criava uma oportunidade duplicada no banco a cada edição, mascarado porque a tabela exibida era só o `localStorage`. Como `ClienteRow.id` agora é o `oportunidades.id` real (não mais um id local aleatório), adicionei `updateOportunidade` e troquei a lógica para create-or-update conforme `editingClientId`.
 - `clientesList` é derivado por `data_competencia`, pelo evento terminal `closed_at` ou, para oportunidades legadas sem competência, por `created_at`, sempre casando com `selectedDate` na data operacional de São Paulo.
 - `handleDelete` agora também apaga o `agendamentos` vinculado antes de apagar a oportunidade — o FK é `ON DELETE SET NULL`, não cascade, então sem essa exclusão explícita o agendamento ficaria órfão.
+- 2026-08-12: vendas terminais passaram a usar também `closed_at` como data do Fechamento. Isso preserva `created_at` e `data_competencia` históricos, mas alinha uma oportunidade antiga convertida no dia à linha e ao contador de `Vendas Realizadas` daquele dia.
+- 2026-08-12: a regressão foi coberta com oportunidade criada em `2026-06-20`, competência antiga e fechamento em `2026-06-23`; nenhuma venda real foi criada, editada ou excluída durante a validação.
+- A publicação não foi executada: o `main` local está 15 commits à frente de `origin/main` e contém mudanças não relacionadas; o worktree também possui alterações paralelas não pertencentes a esta correção.
 
 ### Change Log
 
@@ -78,7 +83,7 @@ Claude Sonnet 4.6 (aiox-master orquestrando, hat @dev)
 - 2026-06-26: Validação @po — GO. Escopo bem isolado (troca de fonte de leitura, escrita já correta). Risco principal é regressão de UX (latência de refetch vs. resposta instantânea do localStorage) — cobrir com cache otimista conforme AC3. Status definido como Ready.
 - 2026-06-26: Implementação concluída por @dev. Premissa do AC4 corrigida durante a investigação (escrita do agendamento nunca existiu, não só a leitura) — resolvida via tabela `agendamentos` existente em vez de coluna nova. Bug pré-existente de duplicação de oportunidade ao editar corrigido de carona. Gates verdes. Status: Ready for Review.
 - 2026-06-26: QA (@qa, Quinn) — PASS. Confirmado em código: RLS `FOR ALL` de `oportunidades`/`agendamentos` cobre os fluxos de create/update/delete usados por `CheckinCrmSection.tsx`; `createOportunidade` agora retorna `id` via `.select('id').single()` (testado que a policy de SELECT pós-insert não bloqueia, já que é a mesma `FOR ALL` do seller). Ver relatório completo em `docs/reports/qa-gate-ev1-fechamento-stories-20260626.md`. Status: InReview.
-- 2026-08-12: Correção de vendas convertidas em oportunidade antiga usando `closed_at`, com validação real somente leitura e prova visual local. Status: Ready for Review para publicação isolada.
+ - 2026-08-12: Correção de vendas convertidas em oportunidade antiga usando `closed_at`, com validação real somente leitura e prova visual local. Status permanece InReview até a publicação isolada.
 
 ## QA Results
 

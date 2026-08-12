@@ -348,7 +348,7 @@ function CatalogTrackGrid({
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
               <BookOpen size={18} />
             </span>
-            <span className="rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-muted-foreground">
+            <span className="rounded-lg bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
               {track.comingSoon ? 'Em breve' : 'Iniciar'}
             </span>
           </div>
@@ -360,7 +360,7 @@ function CatalogTrackGrid({
                 <span>{track.lessons} aulas</span>
                 <span>0%</span>
               </div>
-              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-gray-100" />
+              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted" />
               <button
                 type="button"
                 onClick={() => onSelect(track)}
@@ -407,7 +407,7 @@ export function OfficialTrainingGrid({
                   <BookOpen size={18} />
                 </span>
                 <span className={`rounded-lg px-2 py-1 text-xs font-medium ${
-                  training.watched ? 'bg-status-success-surface text-status-success-text' : 'bg-gray-100 text-muted-foreground'
+                  training.watched ? 'bg-status-success-surface text-status-success-text' : 'bg-muted text-muted-foreground'
                 }`}>
                   {training.watched ? 'Concluído' : 'Iniciar'}
                 </span>
@@ -418,7 +418,7 @@ export function OfficialTrainingGrid({
                 <span>{training.duration_minutes || 0} min</span>
                 <span>{training.watched ? '100%' : '0%'}</span>
               </div>
-              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-gray-100">
+              <div className="mt-1.5 h-1.5 overflow-hidden rounded-full bg-muted">
                 <div className="h-full rounded-full bg-status-success" style={{ width: training.watched ? '100%' : '0%' }} />
               </div>
               {materialUrl ? (
@@ -437,7 +437,7 @@ export function OfficialTrainingGrid({
                   Abrir conteúdo
                 </a>
               ) : (
-                <span className="mt-3 rounded-xl bg-gray-50 py-2 text-center text-xs font-medium text-muted-foreground">
+                <span className="mt-3 rounded-xl bg-surface-alt py-2 text-center text-xs font-medium text-muted-foreground">
                   Material indisponível
                 </span>
               )}
@@ -452,7 +452,7 @@ export function OfficialTrainingGrid({
                     ? 'cursor-default bg-status-success-surface text-status-success-text'
                     : canComplete
                       ? 'bg-brand-primary text-white hover:bg-brand-primary-hover'
-                      : 'cursor-not-allowed bg-gray-100 text-muted-foreground'
+                      : 'cursor-not-allowed bg-muted text-muted-foreground'
                 }`}
               >
                 {completionLabel}
@@ -582,7 +582,7 @@ function UniversityStat({
     violet: 'bg-status-info-surface text-status-info-text',
   }
   return (
-    <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4">
+    <div className="flex items-center gap-3 rounded-xl bg-surface-alt p-4">
       <span className={`grid h-10 w-10 place-items-center rounded-xl ${styles[tone]}`}>
         <Icon size={20} />
       </span>
@@ -610,7 +610,7 @@ function TeamStat({
     violet: 'text-status-info-text',
   }
   return (
-    <div className="rounded-xl bg-gray-50 p-4">
+    <div className="rounded-xl bg-surface-alt p-4">
       <p className={`text-2xl font-bold ${styles[tone]}`}>{value}</p>
       <p className="mt-0.5 text-xs text-muted-foreground">{label}</p>
     </div>
@@ -650,7 +650,7 @@ function UniversityTeamTable({
   return (
     <div className="overflow-x-auto rounded-2xl border border-border-subtle bg-white shadow-sm">
       <table className="w-full min-w-[820px] text-sm">
-        <thead className="border-b border-border-subtle bg-gray-50">
+        <thead className="border-b border-border-subtle bg-surface-alt">
           <tr>
             {['Vendedor', 'Unidade', 'Trilha Atual', 'Progresso', 'Status', 'Ações'].map(label => (
               <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -664,7 +664,7 @@ function UniversityTeamTable({
             const pendingTraining = allTrainings.find(training => !member.watched.includes(training.id))
             const statusLabel = !hasOfficialContent ? 'Sem conteúdo' : member.progress >= 75 ? 'Em dia' : 'Atenção'
             const statusStyle = !hasOfficialContent
-              ? 'bg-gray-100 text-muted-foreground'
+              ? 'bg-muted text-muted-foreground'
               : member.progress >= 75
                 ? 'bg-status-success-surface text-status-success-text'
                 : 'bg-status-warning-surface text-status-warning-text'
@@ -681,7 +681,7 @@ function UniversityTeamTable({
                 </td>
                 <td className="px-4 py-3">
                   <div className="flex items-center gap-2">
-                    <div className="h-1.5 w-20 overflow-hidden rounded-full bg-gray-100">
+                    <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
                       <div className="h-full rounded-full bg-status-success" style={{ width: `${member.progress}%` }} />
                     </div>
                     <span className="text-xs text-muted-foreground">{member.progress}%</span>
@@ -814,7 +814,7 @@ export function CatalogTrackDialog({
         <span className="grid h-10 w-10 place-items-center rounded-xl bg-status-success-surface text-status-success-text">
           <BookOpen size={20} />
         </span>
-        <p className="rounded-xl bg-gray-50 p-3 text-xs leading-5 text-muted-foreground">
+        <p className="rounded-xl bg-surface-alt p-3 text-xs leading-5 text-muted-foreground">
           Catálogo gerencial com {track.lessons} aulas. O progresso só será registrado quando houver conteúdo oficial vinculado à trilha.
         </p>
         <button

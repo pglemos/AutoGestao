@@ -122,7 +122,7 @@ const PRIORITY_STYLE: Record<ManagerRoutinePriority, {
   futura: {
     label: 'Agendada',
     color: 'text-muted-foreground',
-    background: 'bg-gray-50',
+    background: 'bg-surface-alt',
     border: 'border-border',
     marker: 'bg-gray-400',
   },
@@ -199,7 +199,7 @@ export function ManagerDayRoutineView({
                 type="button"
                 onClick={() => void onRefresh()}
                 disabled={refreshing}
-                className="flex h-[36px] items-center gap-1 rounded-xl border border-border bg-white px-3 text-sm font-medium text-foreground transition hover:bg-gray-50 disabled:cursor-wait disabled:opacity-60"
+                className="flex h-[36px] items-center gap-1 rounded-xl border border-border bg-white px-3 text-sm font-medium text-foreground transition hover:bg-surface-alt disabled:cursor-wait disabled:opacity-60"
               >
                 <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
                 Atualizar
@@ -224,7 +224,7 @@ export function ManagerDayRoutineView({
               <CalendarClock size={16} />
               Hoje
               {pendingToday > 0 && activeTab !== 'today' && (
-                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-caption text-muted-foreground">
+                <span className="rounded bg-muted px-1.5 py-0.5 text-caption text-muted-foreground">
                   {pendingToday}
                 </span>
               )}
@@ -388,13 +388,13 @@ function TodayRoutine({
                   className={`whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                     filter === item.key
                       ? 'bg-brand-primary text-white shadow-sm'
-                      : 'border border-border bg-white text-muted-foreground hover:bg-gray-50'
+                      : 'border border-border bg-white text-muted-foreground hover:bg-surface-alt'
                   }`}
                 >
                   {item.label}
                   {item.key === 'todas' && pendingToday > 0 && (
                     <span className={`ml-1.5 rounded px-1.5 py-0.5 text-caption ${
-                      filter === item.key ? 'bg-white/20' : 'bg-gray-100'
+                      filter === item.key ? 'bg-white/20' : 'bg-muted'
                     }`}
                     >
                       {pendingToday}
@@ -489,7 +489,7 @@ function RoutineTaskCard({
             <div className="flex items-center gap-2">
               <h3 className="truncate text-sm font-semibold text-foreground">{task.title}</h3>
               {!task.automatic && (
-                <span className="hidden rounded bg-gray-100 px-1.5 py-0.5 text-caption font-medium text-muted-foreground lg:inline">
+                <span className="hidden rounded bg-muted px-1.5 py-0.5 text-caption font-medium text-muted-foreground lg:inline">
                   Manual
                 </span>
               )}
@@ -500,7 +500,7 @@ function RoutineTaskCard({
                 {MANAGER_ROUTINE_CATEGORY_LABELS[task.category]}
               </span>
               {!task.automatic && (
-                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-caption font-medium text-muted-foreground lg:hidden">
+                <span className="rounded bg-muted px-1.5 py-0.5 text-caption font-medium text-muted-foreground lg:hidden">
                   Manual
                 </span>
               )}
@@ -523,7 +523,7 @@ function RoutineTaskCard({
                 className={`h-9 flex-1 rounded-lg px-3 text-xs font-medium transition lg:h-8 lg:flex-none ${
                   action.kind === 'acao'
                     ? 'bg-brand-primary text-white hover:bg-brand-primary-hover'
-                    : 'border border-border bg-white text-foreground hover:bg-gray-50'
+                    : 'border border-border bg-white text-foreground hover:bg-surface-alt'
                 }`}
               >
                 {action.label}
@@ -576,7 +576,7 @@ function HistoryRoutine({
               className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                 period === value && !startDate
                   ? 'bg-brand-primary text-white'
-                  : 'bg-gray-50 text-muted-foreground hover:bg-gray-100'
+                  : 'bg-surface-alt text-muted-foreground hover:bg-muted'
               }`}
             >
               {value} dias
@@ -614,7 +614,7 @@ function HistoryRoutine({
         <div className="space-y-4">
           {groups.map(group => (
             <section key={group.date} className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
-              <header className="flex items-center justify-between border-b border-border-subtle bg-gray-50 px-4 py-3">
+              <header className="flex items-center justify-between border-b border-border-subtle bg-surface-alt px-4 py-3">
                 <h3 className="text-sm font-semibold text-foreground">
                   {formatShortDate(group.date)}
                   {group.isToday && <span className="ml-2 text-xs font-medium text-status-success-text">Hoje</span>}
@@ -721,7 +721,7 @@ function CreateActivityModal({
       }}
       footer={(
         <>
-          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-border px-3 text-sm text-foreground hover:bg-gray-50">
+          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-border px-3 text-sm text-foreground hover:bg-surface-alt">
             Cancelar
           </button>
           <button
@@ -849,7 +849,7 @@ function CompleteActivityModal({
       referenceStyle
       footer={(
         <>
-          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-border px-3 text-sm text-foreground hover:bg-gray-50">
+          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-border px-3 text-sm text-foreground hover:bg-surface-alt">
             Cancelar
           </button>
           <button
@@ -864,7 +864,7 @@ function CompleteActivityModal({
       )}
     >
       <div className="space-y-4">
-        <div className="rounded-xl bg-gray-50 p-3">
+        <div className="rounded-xl bg-surface-alt p-3">
           <p className="text-sm font-medium text-foreground">{task.title}</p>
           {task.description && <p className="mt-0.5 text-xs text-muted-foreground">{task.description}</p>}
         </div>
@@ -875,7 +875,7 @@ function CompleteActivityModal({
               ['concluida', 'Concluída', 'bg-brand-primary hover:bg-brand-primary-hover'],
               ['concluida_parcial', 'Concluída parcialmente', 'bg-status-warning hover:bg-status-warning'],
               ['reagendada', 'Reagendada', 'bg-status-info hover:bg-status-info'],
-              ['nao_realizada', 'Não realizada', 'bg-gray-400 hover:bg-gray-500'],
+              ['nao_realizada', 'Não realizada', 'bg-gray-400 hover:bg-surface-alt0'],
             ] as const).map(([value, label, activeClass]) => (
               <button
                 key={value}
@@ -885,7 +885,7 @@ function CompleteActivityModal({
                 className={`rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                   result === value
                     ? `${activeClass} text-white shadow-sm`
-                    : 'bg-gray-50 text-muted-foreground hover:bg-gray-100'
+                    : 'bg-surface-alt text-muted-foreground hover:bg-muted'
                 }`}
               >
                 {label}
@@ -973,8 +973,8 @@ function historyStatusStyle(status: string): { color: string; background: string
   if (status === 'concluida') return { color: 'text-status-success-text', background: 'bg-status-success-surface' }
   if (status === 'concluida_parcial') return { color: 'text-status-warning-text', background: 'bg-status-warning-surface' }
   if (status === 'reagendada') return { color: 'text-status-info-text', background: 'bg-status-info-surface' }
-  if (status === 'nao_realizada') return { color: 'text-muted-foreground', background: 'bg-gray-50' }
-  return { color: 'text-muted-foreground', background: 'bg-gray-50' }
+  if (status === 'nao_realizada') return { color: 'text-muted-foreground', background: 'bg-surface-alt' }
+  return { color: 'text-muted-foreground', background: 'bg-surface-alt' }
 }
 
 export default ManagerDayRoutineView

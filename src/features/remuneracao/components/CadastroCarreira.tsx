@@ -57,7 +57,7 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
       ) : (
         <ScrollableRegion className="rounded-2xl border border-border" label="Carreira dos vendedores">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-muted-foreground">
+            <thead className="bg-surface-alt text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Vendedor</th>
                 <th className="px-mx-md py-mx-sm">Nível</th>

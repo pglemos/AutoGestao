@@ -36,7 +36,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
                                         "flex-1 min-w-[140px] flex items-center justify-center gap-mx-sm h-mx-xl px-4 rounded-2xl font-bold uppercase text-xs tracking-widest transition-all",
                                         isActive
                                             ? "bg-brand-primary text-white shadow-sm"
-                                            : "bg-transparent text-muted-foreground hover:bg-gray-50"
+                                            : "bg-transparent text-muted-foreground hover:bg-surface-alt"
                                     )}
                                 >
                                     <TabIcon size={14} /> {tab.label}
@@ -66,7 +66,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
                                     "flex-1 min-w-[140px] flex items-center justify-center gap-mx-sm h-mx-xl px-4 rounded-2xl font-bold uppercase text-xs tracking-widest transition-all",
                                     isActive
                                         ? "bg-brand-primary text-white shadow-sm"
-                                        : "bg-transparent text-muted-foreground hover:bg-gray-50"
+                                        : "bg-transparent text-muted-foreground hover:bg-surface-alt"
                                 )}
                             >
                                 <TabIcon size={14} /> {tab.label}
@@ -103,7 +103,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
             </Card>
 
             {/* Atalhos secundários */}
-            <Card className="p-mx-md border-none bg-gray-50">
+            <Card className="p-mx-md border-none bg-surface-alt">
                 <div className="flex items-start gap-mx-sm">
                     <FolderTree size={18} className="text-status-success-text shrink-0 mt-1" />
                     <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">

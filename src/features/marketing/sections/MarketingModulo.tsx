@@ -24,7 +24,7 @@ const FLUXO_LABEL: Record<CarteiraFluxoEstado, string> = {
 }
 
 const FLUXO_TONE: Record<CarteiraFluxoEstado, string> = {
-  novo: 'border-border bg-gray-50 text-muted-foreground',
+  novo: 'border-border bg-surface-alt text-muted-foreground',
   contato_inicial: 'border-brand-primary/30 bg-brand-primary-subtle text-status-success-text',
   aquecimento: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
   negociacao: 'border-status-warning/40 bg-status-warning-surface text-status-warning-text',
@@ -174,7 +174,7 @@ export function MarketingModulo({ storeId }: Props) {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[640px] text-sm">
               <thead className="text-left">
-                <tr className="bg-gray-50">
+                <tr className="bg-surface-alt">
                   <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Cliente</th>
                   <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Canal</th>
                   <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Score</th>

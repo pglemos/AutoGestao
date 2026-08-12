@@ -257,9 +257,9 @@ export default function FalarConsultorDono() {
         <Card className="border bg-white p-mx-lg">
           {loading ? (
             <div className="space-y-mx-md animate-pulse">
-              <div className="h-mx-20 w-mx-20 rounded-mx-full bg-gray-50" />
-              <div className="h-mx-5 w-40 rounded bg-gray-50" />
-              <div className="h-mx-4 w-28 rounded bg-gray-50" />
+              <div className="h-mx-20 w-mx-20 rounded-mx-full bg-surface-alt" />
+              <div className="h-mx-5 w-40 rounded bg-surface-alt" />
+              <div className="h-mx-4 w-28 rounded bg-surface-alt" />
             </div>
           ) : (
             <>
@@ -282,7 +282,7 @@ export default function FalarConsultorDono() {
                   </a>
                 )}
                 {phoneDigits && (
-                  <a href={`tel:${phoneDigits}`} className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-2xl border border-border bg-white text-sm font-bold text-foreground transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/20">
+                  <a href={`tel:${phoneDigits}`} className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-2xl border border-border bg-white text-sm font-bold text-foreground transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/20">
                     <Phone size={18} /> Ligar
                   </a>
                 )}
@@ -305,7 +305,7 @@ export default function FalarConsultorDono() {
                   </div>
                 )}
                 {!contact?.consultant_user_id && (
-                  <p className="rounded-xl bg-gray-50 p-mx-sm text-xs font-bold text-muted-foreground">
+                  <p className="rounded-xl bg-surface-alt p-mx-sm text-xs font-bold text-muted-foreground">
                     Nenhum consultor individual está vinculado. A solicitação será registrada na fila da equipe MX.
                   </p>
                 )}
@@ -364,7 +364,7 @@ export default function FalarConsultorDono() {
                   {priorities.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
                 </select>
               </label>
-              <div className="rounded-2xl bg-gray-50 p-mx-md text-sm font-bold text-muted-foreground">
+              <div className="rounded-2xl bg-surface-alt p-mx-md text-sm font-bold text-muted-foreground">
                 <strong className="text-foreground">Empresa:</strong> {contact?.client_name || storeName}<br />
                 <strong className="text-foreground">Consultor:</strong> {contactName}
               </div>
@@ -390,7 +390,7 @@ export default function FalarConsultorDono() {
 
         <div className="mt-mx-md space-y-mx-sm">
           {loading ? (
-            <div className="h-24 animate-pulse rounded-2xl bg-gray-50" />
+            <div className="h-24 animate-pulse rounded-2xl bg-surface-alt" />
           ) : requests.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-border p-mx-lg text-center">
               <UserRoundCheck size={26} className="mx-auto text-muted-foreground" />
@@ -406,7 +406,7 @@ export default function FalarConsultorDono() {
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-mx-xs">
-                <span className="rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-xs font-bold text-muted-foreground">{request.priority}</span>
+                <span className="rounded-xl bg-surface-alt px-mx-sm py-mx-xs text-xs font-bold text-muted-foreground">{request.priority}</span>
                 <span className={request.status === 'respondida' || request.status === 'encerrada' ? 'rounded-xl bg-status-success-surface px-mx-sm py-mx-xs text-xs font-bold text-status-success-text' : 'rounded-xl bg-status-info-surface px-mx-sm py-mx-xs text-xs font-bold text-status-info-text'}>
                   {request.status === 'respondida' || request.status === 'encerrada' ? <CheckCircle2 size={13} className="mr-1 inline" /> : <Clock3 size={13} className="mr-1 inline" />}
                   {statusLabels[request.status] || request.status}

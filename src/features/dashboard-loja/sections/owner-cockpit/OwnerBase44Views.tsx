@@ -173,7 +173,7 @@ export function OwnerRoutineView({
 
         <div className="mt-mx-md overflow-x-auto" role="region" tabIndex={0} aria-label="Fechamento diário da equipe com rolagem horizontal">
           <table className="w-full min-w-[700px] text-sm">
-            <thead className="bg-gray-50">
+            <thead className="bg-surface-alt">
               <tr>
                 <th className="px-mx-md py-mx-sm text-left text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">Vendedor</th>
                 <th className="px-mx-md py-mx-sm text-left text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">Status</th>
@@ -190,7 +190,7 @@ export function OwnerRoutineView({
                   </td>
                 </tr>
               ) : sellerStatus.map(seller => (
-                <tr key={seller.id} className="transition-colors hover:bg-gray-50">
+                <tr key={seller.id} className="transition-colors hover:bg-surface-alt">
                   <td className="px-mx-md py-mx-sm font-bold text-foreground">{seller.name}</td>
                   <td className="px-mx-md py-mx-sm">
                     <span className={cn(
@@ -245,9 +245,9 @@ export function OwnerRoutineView({
                 type="button"
                 key={action.id}
                 onClick={() => navigate(ownerPath('plano-acao'))}
-                className="flex w-full items-start gap-mx-md py-mx-md text-left transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30"
+                className="flex w-full items-start gap-mx-md py-mx-md text-left transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30"
               >
-                <span className="mt-0.5 flex h-mx-8 w-mx-8 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-xs font-bold text-muted-foreground">{index + 1}</span>
+                <span className="mt-0.5 flex h-mx-8 w-mx-8 shrink-0 items-center justify-center rounded-xl bg-surface-alt text-xs font-bold text-muted-foreground">{index + 1}</span>
                 <span className="min-w-0 flex-1">
                   <span className="block font-bold text-foreground">{action.action}</span>
                   <span className="mt-1 block text-sm font-bold text-muted-foreground">{action.owner} · {action.due} · {action.department}</span>
@@ -262,13 +262,13 @@ export function OwnerRoutineView({
           <Typography variant="h3" className="text-xl">Riscos e intervenções</Typography>
           <div className="mt-mx-md space-y-mx-sm">
             {alertPreview.length === 0 ? (
-              <p className="rounded-2xl bg-gray-50 p-mx-md text-sm font-bold text-muted-foreground">Nenhum alerta prioritário no período.</p>
+              <p className="rounded-2xl bg-surface-alt p-mx-md text-sm font-bold text-muted-foreground">Nenhum alerta prioritário no período.</p>
             ) : alertPreview.map((alert, index) => (
               <button
                 type="button"
                 key={`${alert.title}-${alert.description}-${index}`}
                 onClick={() => navigate(ownerPath('decisoes'))}
-                className="w-full rounded-2xl border border-border-subtle p-mx-md text-left transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30"
+                className="w-full rounded-2xl border border-border-subtle p-mx-md text-left transition-colors hover:bg-surface-alt focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30"
               >
                 <div className="flex items-center gap-mx-sm">
                   <AlertTriangle size={17} className={alert.variant === 'danger' ? 'text-status-error-text' : 'text-status-warning-text'} />
@@ -355,7 +355,7 @@ export function OwnerDecisionCenter({
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-mx-sm">
                     <span className={cn('rounded-xl border px-mx-sm py-mx-xs text-mx-tiny font-bold', classes.soft)}>{item.status}</span>
-                    <span className="rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-mx-tiny font-bold text-muted-foreground">{item.department}</span>
+                    <span className="rounded-xl bg-surface-alt px-mx-sm py-mx-xs text-mx-tiny font-bold text-muted-foreground">{item.department}</span>
                     <span className="text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">{item.origin}</span>
                   </div>
                   <Typography variant="h3" className="mt-mx-sm text-xl">{item.title}</Typography>
@@ -365,7 +365,7 @@ export function OwnerDecisionCenter({
                     <span>Responsável: <strong>{item.owner}</strong></span>
                   </div>
                   {expanded && (
-                    <div className="mt-mx-md rounded-2xl bg-gray-50 p-mx-md">
+                    <div className="mt-mx-md rounded-2xl bg-surface-alt p-mx-md">
                       <p className="text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">Direcionamento MX</p>
                       <p className="mt-mx-xs text-sm font-bold leading-relaxed text-foreground">{item.recommendation}</p>
                     </div>
@@ -492,7 +492,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
               const isActive = card.key === activeProgram
               return (
                 <div key={card.key} className={cn('rounded-2xl border bg-white p-mx-md', isActive ? 'border-brand-primary bg-brand-primary/5' : 'border-border-subtle opacity-60')}>
-                  <div className="flex items-center justify-between"><span className={cn('rounded-mx-full px-mx-xs py-0.5 text-mx-tiny font-bold', isActive ? 'bg-brand-primary text-white' : 'bg-gray-50 text-muted-foreground')}>{isActive ? 'Ativo' : 'Bloqueado'}</span>{!isActive && <Lock size={15} className="text-muted-foreground" />}</div>
+                  <div className="flex items-center justify-between"><span className={cn('rounded-mx-full px-mx-xs py-0.5 text-mx-tiny font-bold', isActive ? 'bg-brand-primary text-white' : 'bg-surface-alt text-muted-foreground')}>{isActive ? 'Ativo' : 'Bloqueado'}</span>{!isActive && <Lock size={15} className="text-muted-foreground" />}</div>
                   <Typography variant="p" className="mt-mx-sm font-bold">{card.name}</Typography>
                   <Typography variant="tiny" tone="muted" className="mt-mx-xs block line-clamp-2">{card.detail}</Typography>
                   <Typography variant="tiny" tone="muted" className="mt-mx-sm block">{card.total ? `${card.total} encontros` : 'Detalhes não disponíveis'}</Typography>
@@ -509,7 +509,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
                 const number = index + 1
                 const completed = number <= completedVisits
                 const current = number === nextVisit
-                return <div key={number} className="flex min-w-[76px] flex-1 flex-col items-center text-center"><div className={cn('flex h-8 w-8 items-center justify-center rounded-full border-2 text-mx-tiny font-bold', completed ? 'border-brand-primary bg-brand-primary text-white' : current ? 'border-brand-primary bg-brand-primary/10 text-status-success-text' : 'border-border bg-gray-50 text-muted-foreground')}>{completed ? '✓' : number}</div><span className={cn('mt-mx-xs text-mx-tiny', current ? 'font-bold text-foreground' : 'text-muted-foreground')}>{current ? program.nextVisitObjective || 'Próximo encontro' : `Encontro ${number}`}</span><span className="mt-0.5 text-caption text-muted-foreground">{completed ? 'Concluído' : current ? 'Agendado' : 'Pendente'}</span></div>
+                return <div key={number} className="flex min-w-[76px] flex-1 flex-col items-center text-center"><div className={cn('flex h-8 w-8 items-center justify-center rounded-full border-2 text-mx-tiny font-bold', completed ? 'border-brand-primary bg-brand-primary text-white' : current ? 'border-brand-primary bg-brand-primary/10 text-status-success-text' : 'border-border bg-surface-alt text-muted-foreground')}>{completed ? '✓' : number}</div><span className={cn('mt-mx-xs text-mx-tiny', current ? 'font-bold text-foreground' : 'text-muted-foreground')}>{current ? program.nextVisitObjective || 'Próximo encontro' : `Encontro ${number}`}</span><span className="mt-0.5 text-caption text-muted-foreground">{completed ? 'Concluído' : current ? 'Agendado' : 'Pendente'}</span></div>
               })}
             </div>
           </Card>
@@ -517,7 +517,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
           <Card className="border bg-white p-mx-md">
             <Typography variant="h3" className="text-base font-bold">Focos atuais do ciclo</Typography>
             <div className="mt-mx-sm grid gap-mx-sm sm:grid-cols-2 xl:grid-cols-4">
-              {departmentFocus.map(focus => <div key={focus.label} className="rounded-xl border border-border-subtle bg-gray-50/50 p-mx-sm"><Typography variant="tiny" className="font-bold">{focus.label}</Typography><Typography variant="p" className="mt-mx-xs font-bold">{focus.value}</Typography><Typography variant="tiny" tone="muted" className="mt-mx-xs block">{focus.score == null ? 'Sem score registrado' : `${Math.max(0, Math.min(100, Math.round(focus.score)))}% no recorte atual`}</Typography></div>)}
+              {departmentFocus.map(focus => <div key={focus.label} className="rounded-xl border border-border-subtle bg-surface-alt/50 p-mx-sm"><Typography variant="tiny" className="font-bold">{focus.label}</Typography><Typography variant="p" className="mt-mx-xs font-bold">{focus.value}</Typography><Typography variant="tiny" tone="muted" className="mt-mx-xs block">{focus.score == null ? 'Sem score registrado' : `${Math.max(0, Math.min(100, Math.round(focus.score)))}% no recorte atual`}</Typography></div>)}
             </div>
           </Card>
 
@@ -529,5 +529,5 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
 }
 
 function ConsultingMetric({ label, completed, total, percent }: { label: string; completed: string | number; total: string | number; percent: number | null }) {
-  return <div className="rounded-lg border border-border-subtle bg-gray-50/60 p-mx-sm"><Typography variant="tiny" className="font-bold">{label}</Typography><div className="mt-mx-xs flex items-baseline gap-1"><span className="text-base font-bold text-foreground">{completed}</span>{total !== '' && <span className="text-mx-tiny text-muted-foreground">de {total}</span>}{percent != null && <span className="ml-auto text-mx-tiny text-muted-foreground">{percent}%</span>}</div>{percent != null && <div className="mt-mx-xs h-1.5 overflow-hidden rounded-full bg-border-subtle"><div className="h-full rounded-full bg-brand-primary" style={{ width: `${percent}%` }} /></div>}</div>
+  return <div className="rounded-lg border border-border-subtle bg-surface-alt/60 p-mx-sm"><Typography variant="tiny" className="font-bold">{label}</Typography><div className="mt-mx-xs flex items-baseline gap-1"><span className="text-base font-bold text-foreground">{completed}</span>{total !== '' && <span className="text-mx-tiny text-muted-foreground">de {total}</span>}{percent != null && <span className="ml-auto text-mx-tiny text-muted-foreground">{percent}%</span>}</div>{percent != null && <div className="mt-mx-xs h-1.5 overflow-hidden rounded-full bg-border-subtle"><div className="h-full rounded-full bg-brand-primary" style={{ width: `${percent}%` }} /></div>}</div>
 }

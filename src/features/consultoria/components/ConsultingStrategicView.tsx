@@ -317,7 +317,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
 
           <div className="mt-mx-md grid grid-cols-1 md:grid-cols-3 gap-mx-sm">
             {strategicRows.filter((row) => row.status === 'danger' || row.status === 'warning').slice(0, 3).map((row) => (
-              <div key={row.metric_key} className="rounded-xl border border-border bg-gray-50 p-mx-sm">
+              <div key={row.metric_key} className="rounded-xl border border-border bg-surface-alt p-mx-sm">
                 <Typography variant="tiny" tone="muted" className="">Alerta</Typography>
                 <Typography variant="p" className="text-sm">{row.label}</Typography>
                 <Typography variant="tiny" tone="muted">
@@ -331,7 +331,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
         <Card className="p-mx-lg border-none bg-white">
           <Typography variant="h3" className="mb-mx-md">PLANEJAMENTO</Typography>
           {strategic.latestPlan ? (
-            <div className="p-mx-md rounded-xl bg-gray-50 border border-border mb-mx-md">
+            <div className="p-mx-md rounded-xl bg-surface-alt border border-border mb-mx-md">
               <Typography variant="p" className="">{strategic.latestPlan.title}</Typography>
               <Typography variant="tiny" tone="muted">
                 Gerado em {new Date(strategic.latestPlan.generated_at).toLocaleDateString('pt-BR')}
@@ -348,7 +348,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
                 <Typography variant="tiny" tone="muted">Nenhum arquivo gerado via CLI ainda.</Typography>
             )}
             {strategic.artifacts.map(art => (
-                <div key={art.id} className="flex items-center justify-between p-mx-xs rounded-lg border border-border-subtle bg-gray-50/50">
+                <div key={art.id} className="flex items-center justify-between p-mx-xs rounded-lg border border-border-subtle bg-surface-alt/50">
                     <div className="min-w-0">
                         <Typography variant="p" className="text-xs font-bold truncate">{art.title}</Typography>
                         <Typography variant="tiny" tone="muted" className="block capitalize">{artifactTypeLabel(art.artifact_type)}</Typography>
@@ -389,7 +389,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
             className="min-h-mx-28 mb-mx-md"
           />
 
-          <div className="space-y-mx-sm mb-mx-md p-mx-md rounded-xl bg-gray-50 border border-border">
+          <div className="space-y-mx-sm mb-mx-md p-mx-md rounded-xl bg-surface-alt border border-border">
             <Typography variant="h3" className="text-xs">Prévia autônoma</Typography>
             <Typography variant="p" className="text-sm">{planDraft.diagnosisSummary}</Typography>
             <div className="flex flex-wrap gap-mx-xs">

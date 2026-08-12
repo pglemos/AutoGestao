@@ -75,7 +75,7 @@ function NumStepper({ value, onChange }) {
   };
   return (
  <div className="grid grid-cols-[44px_minmax(44px,1fr)_44px] items-center border border-border rounded-xl shadow-sm h-11 focus-within:border-status-info/50 transition-all bg-white overflow-hidden">
- <button type="button" onClick={() => onChange(Math.max(0, value - 1))} className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 border-r border-border transition-colors text-[20px] font-light">−</button>
+ <button type="button" onClick={() => onChange(Math.max(0, value - 1))} className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-surface-alt border-r border-border transition-colors text-[20px] font-light">−</button>
       <input
         type="text" inputMode="numeric" pattern="[0-9]*"
         value={inputVal !== null ? inputVal : String(value)}
@@ -84,7 +84,7 @@ function NumStepper({ value, onChange }) {
  className="w-full min-w-0 text-center font-bold text-[16px] text-foreground bg-transparent border-none outline-none h-full tabular-nums"
         style={{ boxShadow: "none" }}
       />
- <button type="button" onClick={() => onChange(Math.min(999, value + 1))} className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 border-l border-border transition-colors text-[20px] font-light">+</button>
+ <button type="button" onClick={() => onChange(Math.min(999, value + 1))} className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-surface-alt border-l border-border transition-colors text-[20px] font-light">+</button>
     </div>
   );
 }
@@ -265,7 +265,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
               {clientes.map(c => {
                 const saleLabel = getSaleLabel(c);
                 return (
-                  <div key={c.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-border-subtle gap-3 flex-wrap">
+                  <div key={c.id} className="flex items-center justify-between p-3 bg-surface-alt rounded-xl border border-border-subtle gap-3 flex-wrap">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div className="min-w-0">
                         <p className="text-body-sm font-bold text-[#0F172A] truncate">{c.nome}</p>
@@ -273,8 +273,8 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
                       </div>
                     </div>
                     <div className="flex items-center gap-2 flex-shrink-0">
-                      <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-slate-100 text-muted-foreground"} />
-                      <Badge label={saleLabel} className={SALE_STYLE[saleLabel] || "bg-slate-100 text-muted-foreground"} />
+                      <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-muted text-muted-foreground"} />
+                      <Badge label={saleLabel} className={SALE_STYLE[saleLabel] || "bg-muted text-muted-foreground"} />
                       <button onClick={() => openEdit(c)} className="p-1.5 rounded-lg hover:bg-status-info-surface text-status-info-text transition-colors"><Pencil className="w-3.5 h-3.5" /></button>
                       <button onClick={() => setDeleteConfirm({ id: c.id, name: c.nome })} className="p-1.5 rounded-lg hover:bg-status-error-surface text-red-400 transition-colors"><Trash2 className="w-3.5 h-3.5" /></button>
                     </div>
@@ -360,7 +360,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
             </Field>
           </div>
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
-            <button onClick={() => setDialogOpen(false)} disabled={saving} className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
+            <button onClick={() => setDialogOpen(false)} disabled={saving} className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">Cancelar</button>
             <button onClick={handleSave} disabled={!canSave || saving} className="px-6 py-2.5 text-body-sm font-bold text-white bg-status-info hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors">
               {saving ? "Salvando..." : "Salvar na Carteira"}
             </button>
@@ -374,7 +374,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
           <DialogHeader><DialogTitle className="font-bold">Remover do fechamento?</DialogTitle></DialogHeader>
           <p className="text-body-sm text-muted-foreground mt-1">O registro de <strong>{deleteConfirm?.name}</strong> será removido deste fechamento. O cliente permanece na Carteira.</p>
           <div className="flex items-center justify-end gap-3 mt-4">
-            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
+            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">Cancelar</button>
             <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-status-error hover:bg-status-error rounded-xl transition-colors">Remover</button>
           </div>
         </DialogContent>
@@ -622,7 +622,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
                 {moment(date).format("DD/MM/YYYY")} — <span className="capitalize">{moment(date).format("dddd")}</span>
               </p>
             </div>
-            <button onClick={onClose} className="p-2 rounded-xl hover:bg-slate-100 transition-colors text-muted-foreground">
+            <button onClick={onClose} className="p-2 rounded-xl hover:bg-muted transition-colors text-muted-foreground">
               <X className="w-5 h-5" />
             </button>
           </div>
@@ -686,7 +686,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
           {/* Footer */}
           {!sucesso && !aprovado && !carregando && (
             <div className="bg-white border-t border-border px-5 py-4 flex items-center justify-end gap-3 flex-shrink-0">
-              <button onClick={onClose} className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">
+              <button onClick={onClose} className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
                 Cancelar
               </button>
               <button onClick={() => setConfirmOpen(true)} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors shadow-sm">
@@ -709,7 +709,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
             </p>
           </div>
           <div className="flex gap-3 mt-4">
-            <button onClick={() => setConfirmOpen(false)} disabled={enviando} className="flex-1 py-2.5 rounded-xl border border-border text-body-sm font-bold text-muted-foreground hover:bg-slate-50 transition-colors">
+            <button onClick={() => setConfirmOpen(false)} disabled={enviando} className="flex-1 py-2.5 rounded-xl border border-border text-body-sm font-bold text-muted-foreground hover:bg-surface-alt transition-colors">
               Não, voltar
             </button>
             <button onClick={handleEnviar} disabled={enviando} className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-status-info text-white text-body-sm font-bold transition-colors">

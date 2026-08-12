@@ -22,10 +22,10 @@ export function DevelopmentPdiTable({ rows, onOpenOrStart }: { rows: Development
   return (
     <MxTableSurface>
       <table className="w-full min-w-[1080px] text-sm">
-        <thead className="border-b border-border-subtle bg-gray-50"><tr>{['Vendedor', 'Status', 'Última avaliação', 'Próxima revisão', 'Competências', 'Progresso', 'Ações vencidas', ''].map((label) => <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead>
+        <thead className="border-b border-border-subtle bg-surface-alt"><tr>{['Vendedor', 'Status', 'Última avaliação', 'Próxima revisão', 'Competências', 'Progresso', 'Ações vencidas', ''].map((label) => <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead>
         <tbody className="divide-y divide-border-subtle">
           {rows.map((row) => (
-            <tr key={row.seller.id} className="hover:bg-gray-50">
+            <tr key={row.seller.id} className="hover:bg-surface-alt">
               <td className="px-4 py-3 font-medium text-foreground">{row.seller.name}</td>
               <td className="px-4 py-3"><span className={`rounded-lg px-2 py-1 text-xs font-medium ${row.status.className}`}>{row.status.label}</span></td>
               <td className="px-4 py-3 text-muted-foreground">{formatDate(row.pdi?.data_realizacao || row.pdi?.created_at)}</td>

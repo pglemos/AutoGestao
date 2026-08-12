@@ -41,7 +41,7 @@ describe('MxModuleVisualPrimitives', () => {
       </MxModulePage>,
     )
 
-    expect(html).toContain('bg-gray-50')
+    expect(html).toContain('bg-surface-alt')
     expect(html).toContain('data-mx-page-canvas=""')
     expect(html).toContain('data-mx-page-width="dashboard"')
     expect(html).toContain('space-y-5')
@@ -62,14 +62,13 @@ describe('MxModuleVisualPrimitives', () => {
     expect(html).toContain('text-muted-foreground')
     expect(html).toContain('bg-brand-primary')
     expect(html).toContain('border-border')
-    expect(html).toContain('hover:bg-gray-50')
+    expect(html).toContain('hover:bg-surface-alt')
     expect(html).toContain('<h1')
     expect(html).toContain('<table')
     expect(html).toContain('aria-busy="true"')
     expect(html).toMatch(/role="status"[^>]*aria-busy="true"[^>]*aria-label="Carregando painel"/)
 
     expect(html).not.toContain('bg-mx-action')
-    expect(html).not.toContain('bg-surface-alt')
     expect(html).not.toContain('rounded-mx-xl')
     expect(html).not.toContain('mxds-')
     expect(html).not.toContain('!important')

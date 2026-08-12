@@ -166,7 +166,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
       </div>
 
       {benchmark.data && (
-        <div className="mt-mx-md flex flex-wrap items-center justify-between gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-sm">
+        <div className="mt-mx-md flex flex-wrap items-center justify-between gap-mx-sm rounded-2xl border border-border bg-surface-alt p-mx-sm">
           <div className="flex items-center gap-mx-xs">
             <Typography variant="tiny" tone="muted" className="">
               Ranking

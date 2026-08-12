@@ -5,18 +5,18 @@ import { cn } from '@/lib/utils'
 import { Typography } from '@/components/atoms/Typography'
 
 const buttonVariants = cva(
-  "group relative inline-flex items-center justify-center gap-mx-xs whitespace-nowrap rounded-[var(--mx-button-radius)] font-semibold tracking-normal transition-all duration-fast focus-visible:ring-4 focus-visible:ring-mx-action/20 outline-none disabled:pointer-events-none disabled:bg-gray-50 disabled:text-mx-muted disabled:opacity-100 data-[legacy-disabled=true]:disabled:opacity-50 active:scale-[0.98] active:duration-fast [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "group relative inline-flex items-center justify-center gap-mx-xs whitespace-nowrap rounded-[var(--mx-button-radius)] font-semibold tracking-normal transition-all duration-fast focus-visible:ring-4 focus-visible:ring-mx-action/20 outline-none disabled:pointer-events-none disabled:bg-surface-alt disabled:text-mx-muted disabled:opacity-100 data-[legacy-disabled=true]:disabled:opacity-50 active:scale-[0.98] active:duration-fast [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         // Aparência única — sem variação por perfil (§8.5). Estes são os
         // estilos aprovados do Base44/Dono, antes acessíveis só sob o modo
         // `manager`.
-        primary: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-gray-100 disabled:text-muted-foreground",
-        brand: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-gray-100 disabled:text-muted-foreground",
-        secondary: "border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
-        outline: "border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
-        ghost: "bg-transparent text-muted-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:bg-transparent disabled:text-text-disabled",
+        primary: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-muted disabled:text-muted-foreground",
+        brand: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-muted disabled:text-muted-foreground",
+        secondary: "border border-border bg-white text-foreground shadow-none hover:bg-surface-alt hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-surface-alt disabled:text-muted-foreground",
+        outline: "border border-border bg-white text-foreground shadow-none hover:bg-surface-alt hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-surface-alt disabled:text-muted-foreground",
+        ghost: "bg-transparent text-muted-foreground shadow-none hover:bg-surface-alt hover:text-foreground focus-visible:ring-status-success/20 disabled:bg-transparent disabled:text-text-disabled",
         success: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20",
         warning: "bg-status-warning text-status-warning-foreground shadow-[var(--mx-button-shadow)] hover:bg-status-warning focus-visible:ring-status-warning/20",
         info: "bg-status-info text-white shadow-[var(--mx-button-shadow)] hover:bg-status-info focus-visible:ring-status-info/20",

@@ -33,7 +33,7 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
           <button
             type="button"
             onClick={() => setCurrentMonth(subMonths(currentMonth, 1))}
-            className="flex h-6 w-6 items-center justify-center rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors"
+            className="flex h-6 w-6 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
             aria-label="Mês anterior"
           >
             <ChevronLeft size={14} />
@@ -41,7 +41,7 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
           <button
             type="button"
             onClick={() => setCurrentMonth(addMonths(currentMonth, 1))}
-            className="flex h-6 w-6 items-center justify-center rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors"
+            className="flex h-6 w-6 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
             aria-label="Próximo mês"
           >
             <ChevronRight size={14} />
@@ -74,7 +74,7 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
               className={cn(
                 'relative flex h-7 w-7 items-center justify-center mx-auto rounded-mx-full text-xs font-medium transition-all',
                 !isCurrentM && 'text-muted-foreground',
-                isCurrentM && !isSelected && !isCurrentDay && 'text-foreground hover:bg-gray-50',
+                isCurrentM && !isSelected && !isCurrentDay && 'text-foreground hover:bg-surface-alt',
                 isCurrentDay && !isSelected && 'border border-brand-primary text-status-success-text font-bold',
                 isSelected && 'bg-brand-primary text-white font-bold shadow-sm',
               )}

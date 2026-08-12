@@ -95,18 +95,18 @@ export function AdminSettingsForm({
           </label>
         </div>
         <div className="grid grid-cols-1 gap-mx-sm">
-          <label className="flex items-center gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-sm cursor-pointer">
+          <label className="flex items-center gap-mx-sm rounded-2xl border border-border bg-surface-alt p-mx-sm cursor-pointer">
             <input type="checkbox" checked={form.active} onChange={e => setForm(prev => ({ ...prev, active: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
             <span className="text-mx-tiny font-bold uppercase tracking-widest">Loja ativa</span>
           </label>
-          <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-sm cursor-pointer">
+          <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-border bg-surface-alt p-mx-sm cursor-pointer">
             <div className="flex items-center gap-mx-sm">
               <input type="checkbox" checked={form.include_venda_loja_in_store_total} onChange={e => setForm(prev => ({ ...prev, include_venda_loja_in_store_total: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
               <span className="text-mx-tiny font-bold uppercase tracking-widest">Vendas da Gestão/Apoio no Total da Loja</span>
             </div>
             <HelpTooltip text="Ative para incluir as vendas efetuadas por Gerentes, Donos e Apoio no faturamento total da loja em tempo real." />
           </label>
-          <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-sm cursor-pointer">
+          <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-border bg-surface-alt p-mx-sm cursor-pointer">
             <div className="flex items-center gap-mx-sm">
               <input type="checkbox" checked={form.include_venda_loja_in_individual_goal} onChange={e => setForm(prev => ({ ...prev, include_venda_loja_in_individual_goal: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
               <span className="text-mx-tiny font-bold uppercase tracking-widest">Vendas da Gestão/Apoio na Meta da Equipe</span>
@@ -175,7 +175,7 @@ export function AdminSettingsForm({
               <Input aria-label="Timezone" value={form.timezone} onChange={e => setForm(prev => ({ ...prev, timezone: e.target.value }))} />
             </label>
           </div>
-          <label className="flex items-center gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-sm cursor-pointer">
+          <label className="flex items-center gap-mx-sm rounded-2xl border border-border bg-surface-alt p-mx-sm cursor-pointer">
             <input type="checkbox" checked={form.delivery_active} onChange={e => setForm(prev => ({ ...prev, delivery_active: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
             <span className="text-mx-tiny font-bold uppercase tracking-widest">Envios ativos</span>
           </label>

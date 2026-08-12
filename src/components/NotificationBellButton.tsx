@@ -60,7 +60,7 @@ export function NotificationBellButton({ variant = 'light', className }: Notific
           'relative grid h-10 w-10 place-items-center rounded-xl transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00A896]/45',
           variant === 'dark'
             ? 'text-white/70 hover:bg-white/10 hover:text-white'
-            : 'text-[#64748B] hover:bg-slate-100 hover:text-status-info-text'
+            : 'text-[#64748B] hover:bg-muted hover:text-status-info-text'
         )}
       >
         <Bell size={20} />

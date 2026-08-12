@@ -222,7 +222,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
               </div>
               <div className="space-y-mx-xs">
                 <Typography variant="caption">Tipo</Typography>
-                <div className="h-mx-14 sm:h-12 rounded-xl border border-border bg-gray-50 px-5 flex items-center">
+                <div className="h-mx-14 sm:h-12 rounded-xl border border-border bg-surface-alt px-5 flex items-center">
                   <Typography variant="p" className="">
                     {formLabels[selectedTemplate.form_key] || selectedTemplate.title}
                   </Typography>
@@ -305,7 +305,7 @@ export function PmrDiagnosticsView({ clientId }: Props) {
           {templates.map((template) => {
             const responses = responsesByTemplate.get(template.id) || []
             return (
-              <div key={template.id} className="p-mx-md rounded-xl bg-gray-50 border border-border">
+              <div key={template.id} className="p-mx-md rounded-xl bg-surface-alt border border-border">
                 <div className="flex items-center justify-between gap-mx-sm">
                   <Typography variant="p" className="">{template.title}</Typography>
                   <Badge variant={responses.length ? 'success' : 'outline'} className="rounded-mx-full px-3 py-1">

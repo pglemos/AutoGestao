@@ -145,7 +145,7 @@ export function FunilVendedor() {
 
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col gap-mx-lg">
-        <header className="relative z-40 shrink-0 border-b border-border/60 bg-gray-50 pb-3 pt-2 shadow-mx-lg md:sticky md:top-0 md:pt-3">
+        <header className="relative z-40 shrink-0 border-b border-border/60 bg-surface-alt pb-3 pt-2 shadow-mx-lg md:sticky md:top-0 md:pt-3">
           <PageHeading
             title="Funil de Vendas"
             subtitle="Com sua conversão atual, veja o que precisa produzir para atingir a meta."
@@ -163,7 +163,7 @@ export function FunilVendedor() {
         <section aria-label="Filtro de período">
           <div className="inline-flex flex-wrap gap-mx-xs rounded-xl border border-border-subtle bg-white p-mx-xs shadow-sm">
             {PERIOD_OPTIONS.map(option => (
-              <button key={option.key} type="button" className={`h-9 rounded-xl px-mx-md text-sm font-semibold transition ${period === option.key ? 'bg-brand-primary text-white' : 'text-muted-foreground hover:bg-gray-50'}`} onClick={() => setPeriod(option.key)}>
+              <button key={option.key} type="button" className={`h-9 rounded-xl px-mx-md text-sm font-semibold transition ${period === option.key ? 'bg-brand-primary text-white' : 'text-muted-foreground hover:bg-surface-alt'}`} onClick={() => setPeriod(option.key)}>
                 {option.label}
               </button>
             ))}
@@ -327,7 +327,7 @@ function MetricCard({ label, value, hint, tone = 'dark' }: { label: string; valu
 function ProjectionStat({ label, value, hint, tone = 'dark' }: { label: string; value: string; hint?: string; tone?: 'dark' | 'green' | 'orange' }) {
   const color = tone === 'green' ? 'text-status-success-text' : tone === 'orange' ? 'text-status-warning-text' : 'text-foreground'
   return (
-    <div className="rounded-xl border border-border-subtle bg-gray-50 p-mx-sm">
+    <div className="rounded-xl border border-border-subtle bg-surface-alt p-mx-sm">
       <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
       <Typography variant="h3" className={`mt-1 ${color}`}>{value}</Typography>
       {hint && <Typography variant="p" className="mt-1 text-sm font-semibold">{hint}</Typography>}
@@ -336,15 +336,15 @@ function ProjectionStat({ label, value, hint, tone = 'dark' }: { label: string; 
 }
 
 function BaseStat({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-xl border border-border-subtle bg-gray-50 p-mx-sm"><Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography><Typography variant="p" className="mt-1 text-sm font-semibold">{value}</Typography></div>
+  return <div className="rounded-xl border border-border-subtle bg-surface-alt p-mx-sm"><Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography><Typography variant="p" className="mt-1 text-sm font-semibold">{value}</Typography></div>
 }
 
 function CompactRow({ label, value }: { label: string; value: string }) {
-  return <div className="flex min-h-8 items-center justify-between gap-mx-sm rounded-xl bg-gray-50 px-mx-sm py-1"><Typography variant="p" className="text-sm font-semibold">{label}</Typography><Typography variant="p" className="text-sm font-bold">{value}</Typography></div>
+  return <div className="flex min-h-8 items-center justify-between gap-mx-sm rounded-xl bg-surface-alt px-mx-sm py-1"><Typography variant="p" className="text-sm font-semibold">{label}</Typography><Typography variant="p" className="text-sm font-bold">{value}</Typography></div>
 }
 
 function MiniBar({ label, value, max, className }: { label: string; value: number; max: number; className: string }) {
-  return <div className="grid grid-cols-[128px_1fr_34px] items-center gap-mx-xs"><Typography variant="tiny" tone="muted" className="normal-case tracking-normal">{label}</Typography><div className="h-2 rounded-full bg-gray-50"><div className={`h-2 rounded-full ${className}`} style={{ width: `${Math.max(4, (value / max) * 100)}%` }} /></div><Typography variant="tiny" className="text-right font-semibold">{value}</Typography></div>
+  return <div className="grid grid-cols-[128px_1fr_34px] items-center gap-mx-xs"><Typography variant="tiny" tone="muted" className="normal-case tracking-normal">{label}</Typography><div className="h-2 rounded-full bg-surface-alt"><div className={`h-2 rounded-full ${className}`} style={{ width: `${Math.max(4, (value / max) * 100)}%` }} /></div><Typography variant="tiny" className="text-right font-semibold">{value}</Typography></div>
 }
 
 function SectionHeader({ icon, title, subtitle }: { icon: ReactNode; title: string; subtitle?: string }) {

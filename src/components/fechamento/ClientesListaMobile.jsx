@@ -12,7 +12,7 @@ const CHANNEL_STYLE = {
 const FINANCING_STYLE = {
   "Aprovado": "bg-brand-primary-subtle text-brand-primary-hover",
   "Recusado": "bg-status-error-surface text-status-error-text",
-  "Não se aplica": "bg-slate-100 text-muted-foreground",
+  "Não se aplica": "bg-muted text-muted-foreground",
 };
 const SALE_STYLE = {
   "Sim": "bg-brand-primary-subtle text-brand-primary-hover",
@@ -115,10 +115,10 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
       </div>
 
       <div className="flex flex-wrap gap-1.5 pt-1">
-        {(c.canal_comercial || c.channel) && <Badge label={c.canal_comercial || c.channel} className={CHANNEL_STYLE[c.canal_comercial || c.channel] || "bg-slate-100 text-muted-foreground"} />}
+        {(c.canal_comercial || c.channel) && <Badge label={c.canal_comercial || c.channel} className={CHANNEL_STYLE[c.canal_comercial || c.channel] || "bg-muted text-muted-foreground"} />}
         {c.attended && <Badge label={`Compareceu: ${c.attended}`} className={BOOL_STYLE(c.attended)} />}
-        {(c.financiamento || c.financing) && <Badge label={c.financiamento || c.financing} className={FINANCING_STYLE[c.financiamento || c.financing] || "bg-slate-100 text-muted-foreground"} />}
-        <Badge label={saleStatus} className={SALE_STYLE[saleStatus] || "bg-slate-100 text-muted-foreground"} />
+        {(c.financiamento || c.financing) && <Badge label={c.financiamento || c.financing} className={FINANCING_STYLE[c.financiamento || c.financing] || "bg-muted text-muted-foreground"} />}
+        <Badge label={saleStatus} className={SALE_STYLE[saleStatus] || "bg-muted text-muted-foreground"} />
       </div>
     </div>
   );

@@ -42,7 +42,7 @@ describe("StatusBadge", () => {
     const { container } = render(<StatusBadge label="Neutral" status="neutral" />);
     const badge = container.firstElementChild!;
     expect(badge.className).toContain("border-border");
-    expect(badge.className).toContain("bg-gray-50");
+    expect(badge.className).toContain("bg-surface-alt");
   });
 
   test("applies pending status variant", () => {

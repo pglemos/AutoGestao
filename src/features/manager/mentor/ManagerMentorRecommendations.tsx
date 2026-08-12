@@ -40,7 +40,7 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
               className={`rounded-lg border px-3 py-1 text-xs font-medium transition-all ${
                 filter === item.key
                   ? 'border-gray-800 bg-gray-800 text-white'
-                  : 'border-border-subtle bg-gray-50 text-muted-foreground hover:bg-gray-100'
+                  : 'border-border-subtle bg-surface-alt text-muted-foreground hover:bg-muted'
               }`}
             >
               {item.label}

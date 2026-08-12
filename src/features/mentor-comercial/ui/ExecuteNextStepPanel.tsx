@@ -100,9 +100,9 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
       case 'morno':
         return 'bg-status-warning-surface text-status-warning-text border-status-warning/30'
       case 'frio':
-        return 'bg-slate-100 text-foreground border-border'
+        return 'bg-muted text-foreground border-border'
       default:
-        return 'bg-slate-100 text-foreground border-border'
+        return 'bg-muted text-foreground border-border'
     }
   }
 
@@ -113,9 +113,9 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
         return 'bg-status-info-surface text-status-info-text border-status-info/30'
       case 'médio':
       case 'medio':
-        return 'bg-slate-100 text-foreground border-border'
+        return 'bg-muted text-foreground border-border'
       default:
-        return 'bg-gray-100 text-foreground border-border'
+        return 'bg-muted text-foreground border-border'
     }
   }
 
@@ -126,7 +126,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
 
   return (
     <Sheet open={isOpen} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl h-full p-0 flex flex-col bg-slate-50 overflow-hidden">
+      <SheetContent side="right" className="w-full sm:max-w-xl md:max-w-2xl lg:max-w-3xl h-full p-0 flex flex-col bg-surface-alt overflow-hidden">
         {/* Cabeçalho Fixo em Azul Marinho */}
         <div className="bg-slate-900 text-white p-5 sm:p-6 shrink-0 border-b border-slate-800">
           <div className="flex items-start justify-between gap-4">
@@ -208,7 +208,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
             <div className="space-y-3 text-sm">
               <div>
                 <span className="text-xs font-semibold text-muted-foreground block">Objetivo</span>
-                <p className="text-foreground font-medium bg-slate-50 p-2.5 rounded border border-border">
+                <p className="text-foreground font-medium bg-surface-alt p-2.5 rounded border border-border">
                   {opportunity.objective}
                 </p>
               </div>
@@ -223,7 +223,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
               {(opportunity.mentorGuidance || opportunity.decision?.explanations?.length) && (
                 <div>
                   <span className="text-xs font-semibold text-muted-foreground block">Orientação técnica</span>
-                  <p className="text-foreground text-xs bg-slate-50 p-2.5 rounded border border-border leading-relaxed">
+                  <p className="text-foreground text-xs bg-surface-alt p-2.5 rounded border border-border leading-relaxed">
                     {opportunity.mentorGuidance ?? opportunity.decision?.explanations?.join(' ')}
                   </p>
                 </div>
@@ -232,7 +232,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
               {(opportunity.centralRule || opportunity.decision?.centralRule) && (
                 <div>
                   <span className="text-xs font-semibold text-muted-foreground block">Por que está aqui (Regra Central)</span>
-                  <p className="text-foreground text-xs italic bg-slate-50 p-2 rounded border border-border">
+                  <p className="text-foreground text-xs italic bg-surface-alt p-2 rounded border border-border">
                     {opportunity.centralRule ?? opportunity.decision?.centralRule}
                   </p>
                 </div>
@@ -274,7 +274,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                 Script Comercial
               </h3>
               {opportunity.scriptRef && (
-                <span className="text-xs font-mono text-muted-foreground bg-slate-100 px-2 py-0.5 rounded">
+                <span className="text-xs font-mono text-muted-foreground bg-muted px-2 py-0.5 rounded">
                   {opportunity.scriptRef}
                 </span>
               )}
@@ -305,7 +305,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                     variant="outline"
                     size="sm"
                     onClick={handleCopyScript}
-                    className="text-xs border-border-strong text-foreground hover:bg-slate-100"
+                    className="text-xs border-border-strong text-foreground hover:bg-muted"
                   >
                     {copied ? 'Mensagem copiada!' : 'Copiar mensagem'}
                   </Button>

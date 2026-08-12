@@ -159,7 +159,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                     name="role-filter"
                     value={roleFilter}
                     onChange={e => setRoleFilter(e.target.value)}
-                    className="h-mx-12 px-mx-sm bg-gray-50 border border-border rounded-2xl font-bold uppercase text-xs cursor-pointer"
+                    className="h-mx-12 px-mx-sm bg-surface-alt border border-border rounded-2xl font-bold uppercase text-xs cursor-pointer"
                 >
                     <option value="">Todos os papéis</option>
                     {Object.entries(ROLE_LABEL).map(([k, v]) => <option key={k} value={k}>{v.toUpperCase()}</option>)}
@@ -209,7 +209,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                         {filtered.map(user => {
                             const isInactive = user.is_active === false || user.active === false
                             return (
-                                <div key={`${user.id}-${user.store_id || 'no-store'}`} className="flex items-center justify-between gap-mx-md p-mx-md hover:bg-gray-50 transition-colors">
+                                <div key={`${user.id}-${user.store_id || 'no-store'}`} className="flex items-center justify-between gap-mx-md p-mx-md hover:bg-surface-alt transition-colors">
                                     <div className="flex items-center gap-mx-sm flex-1 min-w-0">
                                         <Avatar
                                             src={user.avatar_url || undefined}
@@ -301,7 +301,7 @@ function StatCard({ icon, label, value, tone }: { icon: React.ReactNode; label: 
     return (
         <Card className="p-mx-md border-none bg-white">
             <div className="flex items-center gap-mx-sm">
-                <div className={`w-mx-10 h-mx-10 rounded-2xl bg-gray-50 flex items-center justify-center ${toneColor}`}>
+                <div className={`w-mx-10 h-mx-10 rounded-2xl bg-surface-alt flex items-center justify-center ${toneColor}`}>
                     {icon}
                 </div>
                 <div>

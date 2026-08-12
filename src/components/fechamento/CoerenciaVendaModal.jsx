@@ -19,7 +19,7 @@ import { AlertTriangle, Info, Check } from "lucide-react";
 function Btn({ onClick, variant = "ghost", disabled, children }) {
   const base = "px-4 py-2.5 text-body-sm font-semibold rounded-xl transition-colors disabled:opacity-50";
   const styles = {
-    ghost:    "text-[#64748B] border border-[#E5E7EB] hover:bg-slate-50",
+    ghost:    "text-[#64748B] border border-[#E5E7EB] hover:bg-surface-alt",
     primary:  "text-white bg-status-info hover:bg-status-info shadow-[var(--mx-button-shadow)]",
     green:    "text-white bg-[#22C55E] hover:bg-brand-primary shadow-sm",
     blue:     "text-white bg-[#005BFF] hover:bg-status-info shadow-sm",
@@ -55,7 +55,7 @@ export function ModalSemCanal({ open, canalSugerido, onConfirmarSugestao, onEsco
                 className={`text-left px-4 py-2.5 rounded-xl border text-body-sm font-semibold transition-colors ${
                   canalEscolhido === c
                     ? "bg-status-info-surface border-status-info/50 text-status-info-text"
-                    : "border-border hover:bg-slate-50 text-[#0F172A]"
+                    : "border-border hover:bg-surface-alt text-[#0F172A]"
                 }`}
               >
                 {c}

@@ -136,7 +136,7 @@ export function LiberacaoFechamento() {
 
         <div className="space-y-4 text-xs leading-relaxed text-muted-foreground">
           {/* Details */}
-          <div className="bg-gray-50 p-4 rounded-xl border border-border-subtle space-y-3 shadow-none">
+          <div className="bg-surface-alt p-4 rounded-xl border border-border-subtle space-y-3 shadow-none">
             <div className="flex items-center gap-2">
               <User size={15} className="text-status-success-text" />
               <span className="font-bold text-foreground">Vendedor:</span>

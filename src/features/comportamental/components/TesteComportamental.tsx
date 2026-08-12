@@ -40,7 +40,7 @@ export function TesteComportamental() {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleAddQuestao} className="rounded-2xl border border-border bg-gray-50 p-mx-md">
+      <form onSubmit={handleAddQuestao} className="rounded-2xl border border-border bg-surface-alt p-mx-md">
         <Typography variant="caption" tone="muted" className="">Adicionar questão ao teste</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-[1fr_200px_auto]">
           <Input aria-label="Enunciado da questão" value={novaQuestao} onChange={e => setNovaQuestao(e.target.value)} placeholder="Enunciado da questão" />
@@ -71,7 +71,7 @@ export function TesteComportamental() {
                         key={v}
                         type="button"
                         onClick={() => setRespostas(p => ({ ...p, [q.id]: v }))}
-                        className={`h-9 w-9 rounded-mx-full text-sm font-bold transition-colors ${respostas[q.id] === v ? 'bg-brand-primary text-white' : 'bg-gray-50 text-muted-foreground hover:bg-border-default'}`}
+                        className={`h-9 w-9 rounded-mx-full text-sm font-bold transition-colors ${respostas[q.id] === v ? 'bg-brand-primary text-white' : 'bg-surface-alt text-muted-foreground hover:bg-border-default'}`}
                       >
                         {v}
                       </button>

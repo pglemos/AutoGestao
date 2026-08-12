@@ -12,7 +12,7 @@ export function ClientHeaderSection({ client }: Props) {
       <div className="flex items-center gap-mx-md">
         <Link
           to="/consultoria/clientes"
-          className="p-mx-xs bg-white rounded-xl border border-border hover:bg-gray-50 transition-colors shadow-sm"
+          className="p-mx-xs bg-white rounded-xl border border-border hover:bg-surface-alt transition-colors shadow-sm"
         >
           <ArrowLeft className="w-mx-5 h-mx-5" />
         </Link>

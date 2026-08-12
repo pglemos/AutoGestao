@@ -39,7 +39,7 @@ export default function Privacy() {
                             </Typography>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
-                                <Card className="bg-gray-50 p-mx-10 border-none group hover:bg-white hover:shadow-sm transition-all">
+                                <Card className="bg-surface-alt p-mx-10 border-none group hover:bg-white hover:shadow-sm transition-all">
                                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-brand-primary-subtle text-status-success-text flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <FileText size={24} strokeWidth={2} />
                                     </div>
@@ -49,7 +49,7 @@ export default function Privacy() {
                                     </Typography>
                                 </Card>
 
-                                <Card className="bg-gray-50 p-mx-10 border-none group hover:bg-white hover:shadow-sm transition-all">
+                                <Card className="bg-surface-alt p-mx-10 border-none group hover:bg-white hover:shadow-sm transition-all">
                                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success-text flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <Shield size={24} strokeWidth={2} />
                                     </div>

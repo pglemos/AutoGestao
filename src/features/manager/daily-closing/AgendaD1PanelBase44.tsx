@@ -407,7 +407,7 @@ export function AgendaD1Panel({
           </div>
 
           <div
-            className="rounded-2xl bg-gray-50 p-4"
+            className="rounded-2xl bg-surface-alt p-4"
             role="group"
             aria-label="Filtros da Agenda D+1"
           >
@@ -533,7 +533,7 @@ export function AgendaD1Panel({
           ) : (
             <div className="overflow-x-auto rounded-2xl border border-border-subtle">
               <table className="w-full min-w-[1120px] text-sm">
-                <thead className="border-b border-border-subtle bg-gray-50">
+                <thead className="border-b border-border-subtle bg-surface-alt">
                   <tr>
                     {[
                       "Horário",
@@ -567,7 +567,7 @@ export function AgendaD1Panel({
                       lastStatusByCliente,
                     );
                     return (
-                      <tr key={row.id} className="hover:bg-gray-50/60">
+                      <tr key={row.id} className="hover:bg-surface-alt/60">
                         <td className="px-4 py-3 font-semibold text-foreground">
                           {format(parseISO(row.data_hora), "HH:mm")}
                         </td>
@@ -588,7 +588,7 @@ export function AgendaD1Panel({
                             "Vendedor da equipe"}
                         </td>
                         <td className="px-4 py-3">
-                          <span className="inline-flex rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-foreground">
+                          <span className="inline-flex rounded-lg bg-muted px-2 py-1 text-xs font-medium text-foreground">
                             {formatAppointmentType(AGENDA_TIPO_LABEL[row.tipo])}
                           </span>
                         </td>
@@ -618,7 +618,7 @@ export function AgendaD1Panel({
                               type="button"
                               aria-label={`Ligar para ${row.cliente?.nome || "cliente"}`}
                               onClick={() => void callPhone(row)}
-                              className="inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-medium text-muted-foreground hover:bg-gray-50"
+                              className="inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-medium text-muted-foreground hover:bg-surface-alt"
                             >
                               <Phone size={14} /> Telefone
                             </button>
@@ -787,7 +787,7 @@ function ConfirmationDialog({
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="h-10 rounded-xl px-4 text-sm font-medium text-muted-foreground hover:bg-gray-50 disabled:opacity-50"
+            className="h-10 rounded-xl px-4 text-sm font-medium text-muted-foreground hover:bg-surface-alt disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -807,7 +807,7 @@ function ConfirmationDialog({
 
 function Detail({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-xl bg-gray-50 p-3">
+    <div className="rounded-xl bg-surface-alt p-3">
       <p className="mb-0.5 text-xs text-muted-foreground">{label}</p>
       <p className="font-medium text-foreground">{value}</p>
     </div>
@@ -845,7 +845,7 @@ function statusBadgeClass(status: string) {
   if (status === "Sem resposta" || status === "Pendente") {
     return "bg-status-warning-surface text-status-warning-text";
   }
-  return "bg-gray-100 text-muted-foreground";
+  return "bg-muted text-muted-foreground";
 }
 
 function formatAppointmentType(label: string) {

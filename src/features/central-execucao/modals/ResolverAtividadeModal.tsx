@@ -134,7 +134,7 @@ export function ResolverAtividadeModal({
       closeOnEscape={!saving}
       footer={(
         <>
-          <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-border px-5 py-2.5 text-body-sm font-semibold text-muted-foreground transition-colors hover:bg-slate-50 disabled:opacity-50">
+          <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-border px-5 py-2.5 text-body-sm font-semibold text-muted-foreground transition-colors hover:bg-surface-alt disabled:opacity-50">
             Cancelar
           </button>
           <button type="button" onClick={() => void handleConfirm()} disabled={!canConfirm || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white transition-colors hover:bg-status-info disabled:opacity-50">

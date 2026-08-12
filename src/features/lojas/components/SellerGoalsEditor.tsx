@@ -238,7 +238,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                     type="button"
                     onClick={handleResetToEven}
                     disabled={saving}
-                    className="inline-flex h-[36px] items-center gap-1.5 rounded-xl border border-border-strong bg-white px-4 text-sm font-semibold text-muted-foreground hover:bg-slate-50 disabled:opacity-60"
+                    className="inline-flex h-[36px] items-center gap-1.5 rounded-xl border border-border-strong bg-white px-4 text-sm font-semibold text-muted-foreground hover:bg-surface-alt disabled:opacity-60"
                   >
                     <Trash2 size={15} />
                     Ratear igual
@@ -248,7 +248,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
               <button
                 type="button"
                 onClick={() => { fetchGoals(); refetchPerformance(); resetEdits() }}
-                className="inline-flex h-[36px] w-10 items-center justify-center rounded-xl text-muted-foreground hover:bg-slate-50"
+                className="inline-flex h-[36px] w-10 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt"
                 aria-label="Atualizar"
               >
                 <RefreshCw size={15} />
@@ -309,7 +309,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
         <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
           <div className="overflow-x-auto">
             <table className="w-full min-w-[700px] text-sm">
-              <thead className="border-b border-border-subtle bg-slate-50">
+              <thead className="border-b border-border-subtle bg-surface-alt">
                 <tr>
                   <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vendedor</th>
                   <th className="whitespace-nowrap px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">Realizado</th>
@@ -338,7 +338,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                     const editValue = edits[seller.id] !== undefined ? edits[seller.id] : String(currentGoal)
 
                     return (
-                      <tr key={seller.id} className="hover:bg-slate-50">
+                      <tr key={seller.id} className="hover:bg-surface-alt">
                         <td className="whitespace-nowrap px-4 py-3 font-medium text-foreground">
                           {seller.name || 'Vendedor'}
                         </td>
@@ -354,7 +354,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                           ) : (
                             <div className="flex flex-col items-end gap-1">
                               <span className={`text-xs font-semibold ${ATTAINMENT_TONE[status]}`}>{attainment}%</span>
-                              <div className="h-1.5 w-20 overflow-hidden rounded-full bg-slate-100">
+                              <div className="h-1.5 w-20 overflow-hidden rounded-full bg-muted">
                                 <div className={`h-full rounded-full ${PROGRESS_TONE[status]}`} style={{ width: `${Math.min(100, attainment)}%` }} />
                               </div>
                             </div>
@@ -379,7 +379,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
               </tbody>
               {sellers.length > 0 && (
                 <tfoot>
-                  <tr className="border-t-2 border-border-subtle bg-slate-50 font-semibold text-foreground">
+                  <tr className="border-t-2 border-border-subtle bg-surface-alt font-semibold text-foreground">
                     <td className="px-4 py-3">Total da equipe</td>
                     <td className="px-4 py-3 text-right">{totals.realized}</td>
                     <td className="px-4 py-3 text-right">{totals.goal}</td>
@@ -403,7 +403,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
 
         {/* Info: modo da meta */}
         {metaRules?.individual_goal_mode && (
-          <div className="rounded-xl border border-border-subtle bg-slate-50 p-4 text-xs text-muted-foreground">
+          <div className="rounded-xl border border-border-subtle bg-surface-alt p-4 text-xs text-muted-foreground">
             Modo de meta individual: <strong>{metaRules.individual_goal_mode === 'custom' ? 'Customizada' : metaRules.individual_goal_mode === 'even' ? 'Rateio igual' : 'Proporcional'}</strong>
             {metaRules.individual_goal_mode !== 'custom' && (
               <span className="ml-1"> — as metas salvas aqui só surtirão efeito quando o modo for alterado para "Customizada".</span>

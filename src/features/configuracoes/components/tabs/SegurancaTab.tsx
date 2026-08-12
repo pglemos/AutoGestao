@@ -135,7 +135,7 @@ export function SegurancaTab() {
             {/* Sessões ativas */}
             <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-border shadow-none">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-surface-alt text-muted-foreground flex items-center justify-center border border-border shadow-none">
                         <Smartphone size={26} />
                     </div>
                     <div>
@@ -145,7 +145,7 @@ export function SegurancaTab() {
                 </header>
 
                 <div className="space-y-mx-md">
-                    <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-border-subtle">
+                    <div className="flex items-center justify-between p-mx-md bg-surface-alt rounded-2xl border border-border-subtle">
                         <div className="flex items-center gap-mx-sm">
                             <div className="w-mx-10 h-mx-10 rounded-mx-full bg-status-success/10 text-status-success flex items-center justify-center">
                                 <ShieldCheck size={18} />

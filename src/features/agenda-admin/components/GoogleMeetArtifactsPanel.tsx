@@ -56,7 +56,7 @@ export function GoogleMeetArtifactsPanel({ artifact, hasMeetLink }: GoogleMeetAr
     : null
 
   return (
-    <div className="mt-mx-sm rounded-xl border border-border bg-gray-50/60 p-mx-sm">
+    <div className="mt-mx-sm rounded-xl border border-border bg-surface-alt/60 p-mx-sm">
       <div className="flex flex-wrap items-center justify-between gap-mx-xs">
         <div className="flex flex-wrap items-center gap-mx-xs">
           <Badge variant={status.variant} className="text-mx-nano">{status.label}</Badge>

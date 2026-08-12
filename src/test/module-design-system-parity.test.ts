@@ -97,7 +97,7 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     // canonical porque vêm do canvas pai. A raiz do canonical usa
     // `flex flex-col gap-5` como convenção de fluxo vertical.
     for (const marker of [
-      'bg-gray-50',
+      'bg-surface-alt',
       'rounded-2xl',
       'border-border-subtle',
       'bg-white',
@@ -114,7 +114,10 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     expect(managerCanonical).not.toMatch(/return\s*\(\s*<div[^>]*\b(?:mx-auto|max-w-7xl|px-4|py-6)/)
 
     expect(managerPrimitives).toContain("from '@/components/module/MxModuleVisualPrimitives'")
-    expect(universalPrimitives).not.toContain('bg-surface-alt')
+    // FASE G 07.019: bg-surface-alt é agora o token canônico da superfície
+    // neutra (bg-gray-50 migrado) — o que não pode vazar são os marcadores
+    // do design antigo (bg-mx-action, rounded-mx-xl).
+    expect(universalPrimitives).not.toContain('bg-mx-action')
     expect(universalPrimitives).not.toContain('rounded-mx-xl')
   })
 

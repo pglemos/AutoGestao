@@ -44,7 +44,7 @@ const STATUS_TONE: Record<CentralMxPlanoStatus, string> = {
   pendente: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
   em_andamento: 'border-brand-primary/40 bg-brand-primary-subtle text-status-success-text',
   atrasado: 'border-status-error/30 bg-status-error-surface text-status-error-text',
-  validando_eficacia: 'border-border bg-gray-50 text-muted-foreground',
+  validando_eficacia: 'border-border bg-surface-alt text-muted-foreground',
   concluido: 'border-status-success/30 bg-status-success-surface text-status-success-text',
 }
 
@@ -295,7 +295,7 @@ function CountTile({
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
     brand: 'border-brand-primary/30 bg-brand-primary-subtle text-status-success-text',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error-text',
-    muted: 'border-border bg-gray-50 text-muted-foreground',
+    muted: 'border-border bg-surface-alt text-muted-foreground',
   }
   return (
     <div className={cn('rounded-2xl border p-mx-sm text-center', toneClass[tone])}>

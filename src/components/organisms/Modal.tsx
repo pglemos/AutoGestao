@@ -158,7 +158,7 @@ export function Modal({
                     "mx-overlay-close flex items-center justify-center transition-colors shrink-0",
                     referenceStyle
                       ? "rounded-none bg-transparent p-0 text-muted-foreground hover:text-muted-foreground"
-                      : "rounded-2xl bg-gray-50",
+                      : "rounded-2xl bg-surface-alt",
                   )}
                 >
                   <X size={referenceStyle ? 18 : 20} />

@@ -161,7 +161,7 @@ export default function FunilVendasGerente() {
                   })}
                 </div>
 
-                <div className="mt-mx-sm rounded-xl border border-border-subtle bg-gray-50 p-mx-sm">
+                <div className="mt-mx-sm rounded-xl border border-border-subtle bg-surface-alt p-mx-sm">
                   <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">
                     Principal gargalo
                   </Typography>
@@ -189,7 +189,7 @@ export default function FunilVendasGerente() {
                     </Typography>
                   ) : (
                     <table className="w-full text-sm">
-                      <thead className="bg-gray-50">
+                      <thead className="bg-surface-alt">
                         <tr>
                           {['Vendedor', 'Showroom', 'Internet', 'Carteira', 'Sem canal', 'Total'].map(header => (
                             <th key={header} className="px-3 py-3 text-left text-xs font-bold uppercase tracking-widest text-muted-foreground">
@@ -276,7 +276,7 @@ function ChannelRow({ channel }: { channel: ChannelFunnel }) {
                   <ChevronRight size={14} />
                 </span>
               )}
-              <div className="rounded-xl bg-gray-50 px-3 py-3">
+              <div className="rounded-xl bg-surface-alt px-3 py-3">
                 <span className="block truncate text-xs font-bold uppercase tracking-tight text-muted-foreground">{step.label}</span>
                 <div className="mt-0.5 flex items-baseline gap-2">
                   <span className="text-lg font-bold tabular-nums text-foreground">{step.value}</span>
@@ -303,7 +303,7 @@ function RankingRow({ row, position }: { row: TeamRankingRow; position: number }
           <span
             className={cn(
               'grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold tabular-nums',
-              position === 1 ? 'bg-status-warning-surface text-status-warning-text' : 'bg-gray-50 text-muted-foreground',
+              position === 1 ? 'bg-status-warning-surface text-status-warning-text' : 'bg-surface-alt text-muted-foreground',
             )}
           >
             {position}

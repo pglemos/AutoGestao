@@ -276,7 +276,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
 
   const getVigenciaStatus = (m: TeamMember) => {
     const today = new Date().toISOString().slice(0, 10)
-    if (!m.is_active) return { label: 'INATIVO', variant: 'outline' as const, color: 'text-muted-foreground border-border bg-gray-50' }
+    if (!m.is_active) return { label: 'INATIVO', variant: 'outline' as const, color: 'text-muted-foreground border-border bg-surface-alt' }
     if (m.ended_at && m.ended_at.slice(0, 10) < today) return { label: 'ENCERRADO', variant: 'danger' as const, color: 'text-status-error-text border-status-error/30 bg-status-error-surface' }
     return { label: 'ATIVO', variant: 'success' as const, color: 'text-status-success-text border-status-success/30 bg-status-success-surface' }
   }

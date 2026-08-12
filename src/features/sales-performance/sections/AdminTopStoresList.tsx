@@ -26,7 +26,7 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
               key={store.storeId}
               type="button"
               onClick={() => onStoreClick(store.storeId, store.storeName)}
-              className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-mx-sm px-mx-lg py-mx-sm hover:bg-gray-50/60 transition-colors text-left"
+              className="w-full grid grid-cols-[auto_1fr_auto] items-center gap-mx-sm px-mx-lg py-mx-sm hover:bg-surface-alt/60 transition-colors text-left"
             >
               <span
                 className={cn(
@@ -37,7 +37,7 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
                       ? 'bg-brand-primary text-white'
                       : i === 2
                         ? 'bg-status-info text-white'
-                        : 'bg-gray-50 text-muted-foreground',
+                        : 'bg-surface-alt text-muted-foreground',
                 )}
               >
                 {i + 1}

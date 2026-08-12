@@ -19,7 +19,7 @@ export function AdminConsultingCard({ consultingData, metrics }: Props) {
       </CardHeader>
       <CardContent className="p-mx-lg flex flex-col gap-mx-md">
         <div className="grid grid-cols-2 gap-mx-md">
-          <div className="p-mx-md rounded-2xl bg-gray-50 border border-border-subtle">
+          <div className="p-mx-md rounded-2xl bg-surface-alt border border-border-subtle">
             <Typography variant="tiny" tone="muted" className="">
               Clientes
             </Typography>
@@ -27,7 +27,7 @@ export function AdminConsultingCard({ consultingData, metrics }: Props) {
               {metrics.consultingClients}
             </Typography>
           </div>
-          <div className="p-mx-md rounded-2xl bg-gray-50 border border-border-subtle">
+          <div className="p-mx-md rounded-2xl bg-surface-alt border border-border-subtle">
             <Typography variant="tiny" tone="muted" className="">
               Visitas
             </Typography>

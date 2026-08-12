@@ -268,7 +268,7 @@ export default function ClientCardMobile({
         </div>
       )}
       {bloqueado && (
-        <div className="flex items-center gap-2 py-3 px-3 bg-slate-50 rounded-xl border border-border-subtle">
+        <div className="flex items-center gap-2 py-3 px-3 bg-surface-alt rounded-xl border border-border-subtle">
           <Lock className="w-4 h-4 text-text-disabled flex-shrink-0" />
           <span className="text-[12px] text-muted-foreground font-medium">Fechamento finalizado.</span>
         </div>
@@ -352,7 +352,7 @@ export default function ClientCardMobile({
             </Field>
             <Field label="Venda Realizada">
               {modoD1 ? (
-                <div className="h-10 flex items-center px-3 bg-slate-50 border border-border rounded-lg text-body-sm text-muted-foreground font-semibold cursor-not-allowed">
+                <div className="h-10 flex items-center px-3 bg-surface-alt border border-border rounded-lg text-body-sm text-muted-foreground font-semibold cursor-not-allowed">
                   Em Negociação
                 </div>
               ) : (
@@ -387,7 +387,7 @@ export default function ClientCardMobile({
             <button
               onClick={() => { setDialogOpen(false); setSaveError(null); }}
               disabled={saving}
-              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors"
+              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors"
             >
               Cancelar
             </button>
@@ -425,7 +425,7 @@ export default function ClientCardMobile({
             Tem certeza que deseja excluir <strong className="text-[#0F172A]">{deleteConfirm?.name}</strong>?
           </p>
           <div className="flex items-center justify-end gap-3 mt-4">
-            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
+            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
             <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-[#EF4444] hover:bg-status-error rounded-xl transition-colors">

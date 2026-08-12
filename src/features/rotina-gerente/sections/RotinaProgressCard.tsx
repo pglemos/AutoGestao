@@ -22,7 +22,7 @@ export function RotinaProgressCard({ routineProgress }: Props) {
           </Typography>
         </div>
         <div className="flex min-w-mx-48 items-center gap-mx-sm">
-          <div className="h-mx-xs flex-1 overflow-hidden rounded-mx-full bg-gray-50">
+          <div className="h-mx-xs flex-1 overflow-hidden rounded-mx-full bg-surface-alt">
             <div
               className="h-full rounded-mx-full bg-brand-primary transition-all"
               style={{ width: `${routineProgress.percent}%` }}
@@ -41,7 +41,7 @@ export function RotinaProgressCard({ routineProgress }: Props) {
               'rounded-xl border px-mx-md py-mx-sm text-sm font-bold uppercase',
               step.done
                 ? 'border-status-success/20 bg-status-success-surface text-status-success-text'
-                : 'border-border-subtle bg-gray-50 text-muted-foreground',
+                : 'border-border-subtle bg-surface-alt text-muted-foreground',
             )}
           >
             {step.label}

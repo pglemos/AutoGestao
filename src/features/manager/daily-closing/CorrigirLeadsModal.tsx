@@ -60,7 +60,7 @@ export function CorrigirLeadsModal({ open, onClose, sellerName, checkin, onSubmi
   return (
     <Modal open={open} onClose={onClose} size="lg" title={`Corrigir leads — ${sellerName}`} description="Somente leads por canal podem ser alterados. Vendas, atendimentos, agendamentos, qualificados e garantia permanecem intocados."
       referenceStyle
-      footer={<div className="flex justify-end gap-2"><button type="button" className="h-9 rounded-mx-md px-3 text-sm font-medium text-muted-foreground hover:bg-gray-100" onClick={onClose}>Cancelar</button><button type="button" className="h-9 rounded-mx-md bg-brand-primary px-3 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-40" disabled={saving || !checkin} onClick={() => void submit()}>{saving ? 'Aplicando…' : 'Aplicar correção auditada'}</button></div>}>
+      footer={<div className="flex justify-end gap-2"><button type="button" className="h-9 rounded-mx-md px-3 text-sm font-medium text-muted-foreground hover:bg-muted" onClick={onClose}>Cancelar</button><button type="button" className="h-9 rounded-mx-md bg-brand-primary px-3 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-40" disabled={saving || !checkin} onClick={() => void submit()}>{saving ? 'Aplicando…' : 'Aplicar correção auditada'}</button></div>}>
       {!checkin ? (
         <p className="text-sm text-muted-foreground">Este vendedor ainda não enviou o fechamento do dia — não há leads para corrigir.</p>
       ) : (
@@ -75,7 +75,7 @@ export function CorrigirLeadsModal({ open, onClose, sellerName, checkin, onSubmi
             ))}
           </div>
           {diffs.length > 0 && (
-            <div className="rounded-mx-xl border border-border bg-gray-50 p-3" role="status">
+            <div className="rounded-mx-xl border border-border bg-surface-alt p-3" role="status">
               {diffs.map(diff => (
                 <p key={diff.key} className="text-xs text-muted-foreground">{diff.label}: {diff.anterior} → {diff.novo} (diferença {diff.diferenca > 0 ? `+${diff.diferenca}` : diff.diferenca})</p>
               ))}

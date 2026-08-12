@@ -113,7 +113,7 @@ export function BenchmarkingView({
           <Typography variant="h3" className="text-xl">Indicadores Comparados</Typography>
           <div className="mt-mx-md overflow-x-auto" role="region" tabIndex={0} aria-label="Tabela de benchmarking com rolagem horizontal">
             <table className="min-w-[760px] w-full text-sm">
-              <thead className="bg-gray-50 text-left text-mx-tiny font-bold uppercase text-muted-foreground">
+              <thead className="bg-surface-alt text-left text-mx-tiny font-bold uppercase text-muted-foreground">
                 <tr>
                   <th className="px-mx-sm py-mx-sm">Indicador</th>
                   <th className="px-mx-sm py-mx-sm">Sua Loja</th>

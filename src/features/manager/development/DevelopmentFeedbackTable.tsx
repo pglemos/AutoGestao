@@ -12,7 +12,7 @@ export function DevelopmentFeedbackTable({ feedbacks, onOpen, onShareWhatsApp }:
   return (
     <MxTableSurface>
       <table className="w-full min-w-[1048px] text-sm">
-        <thead className="border-b border-border-subtle bg-gray-50">
+        <thead className="border-b border-border-subtle bg-surface-alt">
           <tr>
             {['Data', 'Vendedor', 'Tipo', 'Competência', 'Situação', 'Compromisso', 'Semana', 'Status', 'Ações'].map((label) => (
               <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>
@@ -21,7 +21,7 @@ export function DevelopmentFeedbackTable({ feedbacks, onOpen, onShareWhatsApp }:
         </thead>
         <tbody className="divide-y divide-border-subtle">
           {feedbacks.map((item) => (
-            <tr key={item.id} className="hover:bg-gray-50">
+            <tr key={item.id} className="hover:bg-surface-alt">
               <td className="px-4 py-3 text-muted-foreground">{formatSafeDate(item.created_at)}</td>
               <td className="px-4 py-3 font-medium text-foreground">{getFeedbackSellerName(item)}</td>
               <td className="px-4 py-3"><span className={`rounded-lg px-2 py-1 text-xs font-medium ${item.attention_points?.trim() ? 'bg-status-warning-surface text-status-warning-text' : 'bg-status-success-surface text-status-success-text'}`}>{item.attention_points?.trim() ? 'Desenvolvimento' : 'Positivo'}</span></td>
@@ -29,7 +29,7 @@ export function DevelopmentFeedbackTable({ feedbacks, onOpen, onShareWhatsApp }:
               <td className="max-w-56 truncate px-4 py-3 text-muted-foreground">{item.attention_points || item.positives || '—'}</td>
               <td className="max-w-56 truncate px-4 py-3 text-muted-foreground">{item.action || '—'}</td>
               <td className="px-4 py-3 text-muted-foreground">{formatSafeDate(item.week_reference)}</td>
-              <td className="px-4 py-3"><span className={`rounded-lg px-2 py-1 text-xs font-medium ${!item.visible_to_seller ? 'bg-gray-100 text-muted-foreground' : item.acknowledged ? 'bg-status-success-surface text-status-success-text' : 'bg-status-info-surface text-status-info-text'}`}>{!item.visible_to_seller ? 'Somente liderança' : item.acknowledged ? 'Ciência registrada' : 'Aguardando ciência'}</span></td>
+              <td className="px-4 py-3"><span className={`rounded-lg px-2 py-1 text-xs font-medium ${!item.visible_to_seller ? 'bg-muted text-muted-foreground' : item.acknowledged ? 'bg-status-success-surface text-status-success-text' : 'bg-status-info-surface text-status-info-text'}`}>{!item.visible_to_seller ? 'Somente liderança' : item.acknowledged ? 'Ciência registrada' : 'Aguardando ciência'}</span></td>
               <td className="px-4 py-3"><div className="flex gap-2"><Button variant="ghost" size="sm" onClick={() => onOpen(item)}>Ver</Button><Button variant="ghost" size="sm" onClick={() => onShareWhatsApp(item)}>WhatsApp</Button></div></td>
             </tr>
           ))}

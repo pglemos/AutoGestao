@@ -74,7 +74,7 @@ function DataGridInner<T extends { id: string | number }>({
         'flex flex-col items-center justify-center text-center',
         'gap-3 px-5 py-16 text-muted-foreground',
       )}>
-        <span className={'grid h-14 w-14 place-items-center rounded-2xl bg-gray-50 text-muted-foreground'}>
+        <span className={'grid h-14 w-14 place-items-center rounded-2xl bg-surface-alt text-muted-foreground'}>
           <SearchX size={24} className={''} aria-hidden="true" />
         </span>
         <Typography
@@ -100,7 +100,7 @@ function DataGridInner<T extends { id: string | number }>({
         </Typography>
         <table className={cn('w-full border-collapse text-left', effectiveMinWidth)}>
           <thead className={cn(stickyHeader && 'sticky top-0 z-20')}>
-            <tr className={'border-b border-border-subtle bg-gray-50'}>
+            <tr className={'border-b border-border-subtle bg-surface-alt'}>
               {columns.filter((col) => !col.mobileOnly).map((col) => (
                 <th
                   key={col.key}
@@ -127,7 +127,7 @@ function DataGridInner<T extends { id: string | number }>({
                   exit={{ opacity: 0, transition: { duration: duration.fast } }}
                   onClick={() => onRowClick?.(item)}
                   className={cn(
-                    'group h-16 transition-colors hover:bg-gray-50',
+                    'group h-16 transition-colors hover:bg-surface-alt',
                     onRowClick && 'cursor-pointer',
                     rowClassName,
                   )}

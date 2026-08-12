@@ -89,14 +89,14 @@ export function AgendaHeader({
               type="button"
               onClick={onPrevMonth}
               aria-label="Anterior"
-              className="flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
             >
               <ChevronLeft size={18} />
             </button>
             <button
               type="button"
               onClick={onTodayClick}
-              className="rounded-xl border border-border bg-white px-3 py-1.5 text-xs font-bold text-foreground hover:bg-gray-50 transition-colors"
+              className="rounded-xl border border-border bg-white px-3 py-1.5 text-xs font-bold text-foreground hover:bg-surface-alt transition-colors"
             >
               Hoje
             </button>
@@ -104,7 +104,7 @@ export function AgendaHeader({
               type="button"
               onClick={onNextMonth}
               aria-label="Próximo"
-              className="flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors"
+              className="flex h-8 w-8 items-center justify-center rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
             >
               <ChevronRight size={18} />
             </button>
@@ -122,7 +122,7 @@ export function AgendaHeader({
         <div className="flex flex-wrap items-center gap-2">
           <AgendaSearchBar searchQuery={searchQuery} onSearchChange={onSearchChange} />
 
-          <div className="flex rounded-xl border border-border bg-gray-50/60 p-0.5 shrink-0">
+          <div className="flex rounded-xl border border-border bg-surface-alt/60 p-0.5 shrink-0">
             {VIEW_OPTIONS.map((option) => (
               <button
                 key={option.key}
@@ -133,7 +133,7 @@ export function AgendaHeader({
                   'flex items-center gap-1 rounded-xl px-2.5 py-1.5 text-xs font-bold transition-all',
                   calendarViewMode === option.key
                     ? 'bg-brand-primary text-white shadow-2xs'
-                    : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
+                    : 'text-muted-foreground hover:bg-surface-alt hover:text-foreground',
                 )}
               >
                 {option.key === 'list' && <List size={13} />}
@@ -151,7 +151,7 @@ export function AgendaHeader({
                   'relative flex h-8 items-center gap-1.5 rounded-xl border px-2.5 text-xs font-bold transition-colors',
                   activeFilters > 0
                     ? 'border-brand-primary bg-brand-primary/10 text-status-success-text'
-                    : 'border-border bg-white text-muted-foreground hover:bg-gray-50 hover:text-foreground',
+                    : 'border-border bg-white text-muted-foreground hover:bg-surface-alt hover:text-foreground',
                 )}
               >
                 <Filter size={14} />
@@ -215,7 +215,7 @@ export function AgendaHeader({
                             'rounded-xl px-2.5 py-1 text-xs font-medium transition-colors',
                             statusFilter === filter.key
                               ? 'bg-brand-primary text-white font-bold'
-                              : 'border border-border bg-white text-muted-foreground hover:bg-gray-50',
+                              : 'border border-border bg-white text-muted-foreground hover:bg-surface-alt',
                           )}
                         >
                           {filter.label}
@@ -254,20 +254,20 @@ export function AgendaHeader({
               >
                 <DropdownMenu.Item
                   onSelect={onCreateVisit}
-                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:bg-gray-50"
+                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:bg-surface-alt"
                 >
                   <CalendarDays size={15} className="text-status-success-text" /> Agendar Visita
                 </DropdownMenu.Item>
                 <DropdownMenu.Item
                   onSelect={onCreateEvent}
-                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:bg-gray-50"
+                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:bg-surface-alt"
                 >
                   <Users size={15} className="text-status-info-text" /> Evento / Aula
                 </DropdownMenu.Item>
                 <DropdownMenu.Separator className="my-1 h-px bg-border-default" />
                 <DropdownMenu.Item
                   onSelect={onCreateBlock}
-                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:bg-gray-50 text-status-error-text"
+                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:bg-surface-alt text-status-error-text"
                 >
                   <Ban size={15} /> Bloquear Agenda
                 </DropdownMenu.Item>

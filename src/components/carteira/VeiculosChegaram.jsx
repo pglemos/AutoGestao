@@ -124,7 +124,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
               ? "border-brand-primary/30 bg-brand-primary-subtle text-brand-primary-active"
               : ambigua
                 ? "border-status-warning/30 bg-status-warning-surface text-status-warning-text"
-                : "border-border bg-slate-50 text-muted-foreground"
+                : "border-border bg-surface-alt text-muted-foreground"
           }`}>
           {classificacao ? (
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
@@ -289,7 +289,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
                     <Zap className="w-3 h-3" /> Executar
                   </button>
                   <button onClick={() => onFicha(c.id)}
-                    className="text-caption font-bold text-muted-foreground border border-border hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
+                    className="text-caption font-bold text-muted-foreground border border-border hover:bg-surface-alt px-2.5 py-1.5 rounded-lg transition-colors">
                     Ficha
                   </button>
                 </div>
@@ -415,7 +415,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
                 className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all ${
                   ativo
                     ? "bg-[#005BFF] text-white shadow-sm"
-                    : "bg-slate-50 text-muted-foreground border border-border-subtle hover:bg-slate-100"
+                    : "bg-surface-alt text-muted-foreground border border-border-subtle hover:bg-muted"
                 }`}
               >
                 {f.label} ({count})

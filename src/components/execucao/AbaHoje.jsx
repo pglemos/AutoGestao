@@ -34,12 +34,12 @@ const TIPO_COLOR_BAR = {
 const TIPO_COLOR_BADGE = {
   "Atendimento": "bg-status-info-surface text-status-info-text",
   "Retorno": "bg-status-warning-surface text-status-warning-text",
-  "Documentação": "bg-slate-100 text-muted-foreground",
+  "Documentação": "bg-muted text-muted-foreground",
   "Entrega": "bg-status-info-surface text-status-info-text",
   "Pós-venda": "bg-brand-primary-subtle text-brand-primary",
   "Aniversário": "bg-status-info-surface text-status-info-text",
   "Garantia": "bg-status-warning-surface text-status-warning-text",
-  "Outra atividade comercial": "bg-slate-100 text-muted-foreground",
+  "Outra atividade comercial": "bg-muted text-muted-foreground",
 };
 
 const TIPO_ICON = {
@@ -181,7 +181,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
         <div className="p-4">
           <div className="flex items-start justify-between mb-2">
             <div className="flex items-center gap-2 flex-wrap">
-              <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100 text-muted-foreground"}`}>{op.tipo}</span>
+              <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-muted text-muted-foreground"}`}>{op.tipo}</span>
               {isVencido && <span className="text-caption font-bold text-status-error-text bg-status-error-surface px-2 py-0.5 rounded-full">Vencido</span>}
             </div>
             <div className="flex items-center gap-1 text-caption font-bold text-muted-foreground">
@@ -190,7 +190,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           </div>
 
           <div className="flex items-center gap-2.5 mb-2">
-            <div className="w-9 h-9 rounded-full bg-slate-100 flex items-center justify-center text-[12px] font-bold text-muted-foreground flex-shrink-0">
+            <div className="w-9 h-9 rounded-full bg-muted flex items-center justify-center text-[12px] font-bold text-muted-foreground flex-shrink-0">
               {avatarIniciais(op.nome_cliente_snapshot)}
             </div>
             <div className="min-w-0">
@@ -211,7 +211,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
             )}
             {tel && (
               <a href={`tel:${tel}`}
-                className="flex items-center gap-1 text-caption font-bold text-muted-foreground border border-border hover:bg-slate-50 px-3 py-1.5 rounded-lg transition-colors">
+                className="flex items-center gap-1 text-caption font-bold text-muted-foreground border border-border hover:bg-surface-alt px-3 py-1.5 rounded-lg transition-colors">
                 <Phone className="w-3 h-3" /> Ligar
               </a>
             )}
@@ -238,7 +238,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
       <div className="flex items-center gap-4 px-5 py-4 flex-1 min-w-0">
         {/* Ícone e horário */}
         <div className="flex-shrink-0 text-center w-12">
-          <div className={`w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1 ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100"}`}>
+          <div className={`w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1 ${TIPO_COLOR_BADGE[op.tipo] || "bg-muted"}`}>
             <Icon className="w-4 h-4" />
           </div>
           <p className={`text-caption font-bold ${isVencido ? "text-status-error-text" : "text-muted-foreground"}`}>{hora}</p>
@@ -246,13 +246,13 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
 
         {/* Avatar + nome + info */}
         <div className="flex items-center gap-3 flex-1 min-w-0">
-          <div className="w-10 h-10 rounded-full bg-slate-100 flex items-center justify-center text-[12px] font-bold text-muted-foreground flex-shrink-0">
+          <div className="w-10 h-10 rounded-full bg-muted flex items-center justify-center text-[12px] font-bold text-muted-foreground flex-shrink-0">
             {avatarIniciais(op.nome_cliente_snapshot)}
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2 flex-wrap">
               <p className="font-bold text-[14px] text-[#0F172A] truncate">{op.nome_cliente_snapshot || "—"}</p>
-              <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100 text-muted-foreground"}`}>{op.tipo}</span>
+              <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-muted text-muted-foreground"}`}>{op.tipo}</span>
               {isVencido && <span className="text-caption font-bold text-status-error-text bg-status-error-surface px-2 py-0.5 rounded-full">Vencido</span>}
             </div>
             {op.veiculo_snapshot && <p className="text-[12px] text-muted-foreground truncate">{op.veiculo_snapshot}</p>}
@@ -273,7 +273,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           )}
           {tel && (
             <a href={`tel:${tel}`} title="Ligar"
-              className="p-2 rounded-xl bg-slate-50 hover:bg-slate-100 text-muted-foreground transition-colors">
+              className="p-2 rounded-xl bg-surface-alt hover:bg-muted text-muted-foreground transition-colors">
               <Phone className="w-4 h-4" />
             </a>
           )}
@@ -537,7 +537,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                     : "bg-white text-muted-foreground border-border hover:border-[#005BFF] hover:text-status-info-text"
                 }`}>
                 {f.label}
-                <span className={`text-caption px-1.5 py-0.5 rounded-full font-bold ${ativo ? "bg-white/20 text-white" : "bg-slate-100 text-muted-foreground"}`}>
+                <span className={`text-caption px-1.5 py-0.5 rounded-full font-bold ${ativo ? "bg-white/20 text-white" : "bg-muted text-muted-foreground"}`}>
                   {count}
                 </span>
               </button>
@@ -597,7 +597,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                   </button>
                 )}
                 <Link to="/carteira"
-                  className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">
+                  className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
                   <Users className="w-4 h-4" /> Abrir Carteira
                 </Link>
                 <button onClick={() => setNovaAtividade(true)}
@@ -636,7 +636,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                     </button>
                   )}
                   <Link to="/carteira"
-                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">
+                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-muted-foreground border border-border rounded-xl hover:bg-surface-alt transition-colors">
                     <Users className="w-4 h-4" /> Abrir Carteira
                   </Link>
                 </div>

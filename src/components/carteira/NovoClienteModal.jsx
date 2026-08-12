@@ -148,7 +148,7 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
             <div className="grid grid-cols-1 gap-1.5">
               {MOMENTOS_CADASTRO.map(m => (
                 <button key={m.value} onClick={() => setForm(p => ({ ...p, momento: m.value, situacao_atual: situacaoDoMomento(m.value), proposta_enviada: m.value === "Proposta enviada" || p.proposta_enviada }))}
-                  className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${form.momento === m.value ? "border-[#005BFF] bg-status-info-surface text-status-info-text font-semibold" : "border-border-subtle text-muted-foreground hover:border-border hover:bg-slate-50"}`}>
+                  className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${form.momento === m.value ? "border-[#005BFF] bg-status-info-surface text-status-info-text font-semibold" : "border-border-subtle text-muted-foreground hover:border-border hover:bg-surface-alt"}`}>
                   {m.label}
                 </button>
               ))}

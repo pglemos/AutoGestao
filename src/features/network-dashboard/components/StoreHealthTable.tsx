@@ -18,7 +18,7 @@ export function StoreHealthTable({ rows, sort, onSort, onOpen }: {
   if (!rows.length) return <MxEmptyState title="Nenhuma loja encontrada" description="Ajuste os filtros ou atualize os dados da rede." />
   const changeSort = (key: keyof StoreDiagnostic) => onSort({ key, direction: sort.key === key && sort.direction === 'desc' ? 'asc' : 'desc' })
   return (
-    <MxTableSurface><table className="min-w-[980px] w-full border-collapse text-sm"><thead><tr className="border-b border-border-subtle bg-gray-50 text-left text-muted-foreground">
+    <MxTableSurface><table className="min-w-[980px] w-full border-collapse text-sm"><thead><tr className="border-b border-border-subtle bg-surface-alt text-left text-muted-foreground">
       {columns.map(column => <th key={column.key} className="px-4 py-3 font-semibold"><button type="button" className="inline-flex items-center gap-2" onClick={() => changeSort(column.key)}>{column.label}<ArrowUpDown size={14} /></button></th>)}
       <th className="px-4 py-3 font-semibold">Pendências</th><th className="px-4 py-3 text-right font-semibold">Ação</th>
     </tr></thead><tbody>{rows.map(row => {

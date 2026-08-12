@@ -602,7 +602,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
     venda: { label: "$", cls: "text-status-success-text bg-brand-primary-subtle" },
     qualificado: { label: "Q", cls: "text-status-info-text bg-status-info-surface" },
     garantia: { label: "!", cls: "text-status-warning-text bg-status-warning-surface" },
-    perdido: { label: "✕", cls: "text-muted-foreground bg-slate-100" },
+    perdido: { label: "✕", cls: "text-muted-foreground bg-muted" },
   };
 
   const getTipoBadge = (c) => {
@@ -661,15 +661,15 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             {c._dataDisplay ? moment(c._dataDisplay).format("DD/MM/YYYY") : "—"}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-slate-100 text-muted-foreground"} />}
+            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-muted text-muted-foreground"} />}
           </td>
           <td className="px-4 py-3">
             {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_troca ? "Sim" : "Não"} className={c.interesse_troca ? "bg-brand-primary-subtle text-brand-primary-hover" : "bg-status-error-surface text-status-error-text"} />}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-brand-primary-subtle text-brand-primary-hover" : "bg-slate-100 text-muted-foreground"} />}
+            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-brand-primary-subtle text-brand-primary-hover" : "bg-muted text-muted-foreground"} />}
           </td>
-          <td className="px-4 py-3"><Badge label={saleDisplay} className={SALE_STYLE[saleDisplay] || "bg-slate-100 text-muted-foreground"} /></td>
+          <td className="px-4 py-3"><Badge label={saleDisplay} className={SALE_STYLE[saleDisplay] || "bg-muted text-muted-foreground"} /></td>
           <td className="px-4 py-3">
             <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
               <button onClick={(e) => canEdit && openEdit(c, e)} disabled={!canEdit}
@@ -827,7 +827,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             </Field>
             <Field label="Situação Comercial">
               {modoD1 ? (
-                <div className="h-10 flex items-center px-3 bg-slate-50 border border-border rounded-lg text-body-sm text-muted-foreground font-semibold cursor-not-allowed">
+                <div className="h-10 flex items-center px-3 bg-surface-alt border border-border rounded-lg text-body-sm text-muted-foreground font-semibold cursor-not-allowed">
                   Em negociação ativa
                 </div>
               ) : (
@@ -863,7 +863,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
 
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button onClick={() => { setDialogOpen(false); setSaveError(null); }} disabled={saving}
-              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
+              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
             <button onClick={handleSave} disabled={!canSave || saving}
@@ -886,7 +886,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           {saveError && <p className="text-[12px] text-[#EF4444] font-semibold mt-2">{saveError}</p>}
           <div className="flex items-center justify-end gap-3 mt-4">
             <button onClick={() => setReagendConfirm(null)} disabled={saving}
-              className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
+              className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
             <button onClick={confirmarReagendamento} disabled={saving}
@@ -908,7 +908,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           </p>
           <div className="flex items-center justify-end gap-3 mt-4">
             <button onClick={() => setDeleteConfirm(null)}
-              className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
+              className="px-5 py-2 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors">
               Cancelar
             </button>
             <button onClick={confirmDelete}

@@ -64,7 +64,7 @@ export const SIDEBAR = {
   brandTitle: 'truncate text-body-sm font-black tracking-tight text-foreground',
   brandModule: 'mt-0.5 truncate text-caption font-bold uppercase tracking-[0.14em] text-status-success-text',
   toggle:
-    'flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--mx-sidebar-toggle-radius)] border border-mxsb-line bg-white text-muted-foreground outline-none transition-colors hover:bg-slate-50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-status-success/30',
+    'flex h-9 w-9 shrink-0 items-center justify-center rounded-[var(--mx-sidebar-toggle-radius)] border border-mxsb-line bg-white text-muted-foreground outline-none transition-colors hover:bg-surface-alt hover:text-foreground focus-visible:ring-2 focus-visible:ring-status-success/30',
 
   /** Área de navegação. */
   nav: 'flex-1 min-h-0 overflow-y-auto py-4',

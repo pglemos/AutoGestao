@@ -32,7 +32,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
 
   if (disabled) {
     return (
-      <div className="flex items-center border border-border-subtle rounded-xl h-11 bg-slate-50 opacity-60 cursor-not-allowed">
+      <div className="flex items-center border border-border-subtle rounded-xl h-11 bg-surface-alt opacity-60 cursor-not-allowed">
         <div className="w-11 h-full flex items-center justify-center text-text-disabled border-r border-border-subtle text-[20px] font-light">−</div>
         <span className="flex-1 text-center font-bold text-[16px] text-muted-foreground tabular-nums">{value}</span>
         <div className="w-11 h-full flex items-center justify-center text-text-disabled border-l border-border-subtle text-[20px] font-light">+</div>
@@ -44,7 +44,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
     <div className="flex items-center border border-border rounded-xl shadow-sm h-11 focus-within:border-status-info/50 focus-within:shadow-mx-focus-info transition-all bg-white">
       <button
         onClick={onDecrement}
-        className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 active:bg-slate-100 border-r border-border rounded-l-xl transition-colors text-[20px] font-light flex-shrink-0"
+        className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-surface-alt active:bg-muted border-r border-border rounded-l-xl transition-colors text-[20px] font-light flex-shrink-0"
       >−</button>
       <input
         type="text"
@@ -61,7 +61,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
       />
       <button
         onClick={onIncrement}
-        className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 active:bg-slate-100 border-l border-border rounded-r-xl transition-colors text-[20px] font-light flex-shrink-0"
+        className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-surface-alt active:bg-muted border-l border-border rounded-r-xl transition-colors text-[20px] font-light flex-shrink-0"
       >+</button>
     </div>
   );
@@ -168,7 +168,7 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }) {
               className="flex flex-col items-center gap-1 flex-1 min-w-0 cursor-pointer transition-all"
             >
               <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all shadow-sm
-                ${done ? c.stepDone : active ? c.stepActive : "bg-slate-100 text-muted-foreground"}
+                ${done ? c.stepDone : active ? c.stepActive : "bg-muted text-muted-foreground"}
               `}>
                 {done ? <CheckCircle2 className="w-4 h-4 text-white" /> : <Icon className="w-4 h-4" />}
               </div>
@@ -181,7 +181,7 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }) {
             </button>
             {idx < STEPS.length - 1 && (
               <div className={`h-0.5 flex-1 max-w-[24px] transition-all rounded-full
-                ${completedSteps.has(step.id) ? COLOR_MAP[STEPS[idx + 1].color].progress : "bg-slate-100"}
+                ${completedSteps.has(step.id) ? COLOR_MAP[STEPS[idx + 1].color].progress : "bg-muted"}
               `} />
             )}
           </React.Fragment>
@@ -204,7 +204,7 @@ function ProgressBar({ completedSteps }) {
   return (
     <div className="space-y-1.5">
       {/* Barra segmentada */}
-      <div className="flex h-2.5 rounded-full overflow-hidden bg-slate-100 gap-px">
+      <div className="flex h-2.5 rounded-full overflow-hidden bg-muted gap-px">
         {STEPS.map((step) => {
           const done = completedSteps.has(step.id);
           return (
@@ -504,7 +504,7 @@ export default function FluxoFechamento({ dc, updateCounter, setCounter, clients
             {totalPct}%
           </span>
         </div>
-        <div className="w-full h-3 bg-slate-100 rounded-full mt-3 overflow-hidden">
+        <div className="w-full h-3 bg-muted rounded-full mt-3 overflow-hidden">
           <div
             className={`h-full rounded-full transition-all duration-500 ${progressColor}`}
             style={{ width: `${totalPct}%` }}

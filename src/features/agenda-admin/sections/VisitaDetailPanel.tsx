@@ -37,7 +37,7 @@ export function VisitaDetailPanel({
           <button
             type="button"
             onClick={onClearSelection}
-            className="w-mx-lg h-mx-lg rounded-xl hover:bg-gray-50 flex items-center justify-center text-muted-foreground transition-all"
+            className="w-mx-lg h-mx-lg rounded-xl hover:bg-surface-alt flex items-center justify-center text-muted-foreground transition-all"
           >
             <X size={14} />
           </button>

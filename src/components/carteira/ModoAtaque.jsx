@@ -87,7 +87,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
       <div className="p-6 space-y-5">
         {/* Objetivo + Próximo passo */}
         <div className="grid grid-cols-2 gap-3">
-          <div className="bg-slate-50 rounded-2xl p-4">
+          <div className="bg-surface-alt rounded-2xl p-4">
             <p className="text-caption text-muted-foreground font-bold uppercase tracking-wide mb-1">Objetivo</p>
             <p className="text-sm font-bold text-foreground">{objetivo}</p>
           </div>
@@ -106,7 +106,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
         {/* Ações secundárias */}
         <div className="grid grid-cols-3 gap-2">
           {tel && (
-            <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-border bg-white hover:bg-slate-50 transition-colors">
+            <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-border bg-white hover:bg-surface-alt transition-colors">
               <Phone className="w-4 h-4 text-muted-foreground" />
               <span className="text-caption font-semibold text-muted-foreground">Ligar</span>
             </a>
@@ -122,7 +122,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
           )}
           <button
             onClick={() => onFicha(cliente.id)}
-            className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-border bg-white hover:bg-slate-50 transition-colors"
+            className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-border bg-white hover:bg-surface-alt transition-colors"
           >
             <FileText className="w-4 h-4 text-muted-foreground" />
             <span className="text-caption font-semibold text-muted-foreground">Ficha</span>

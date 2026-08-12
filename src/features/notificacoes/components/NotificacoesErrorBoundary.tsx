@@ -30,7 +30,7 @@ export class NotificacoesErrorBoundary extends Component<Props, State> {
       return (
         <div
           role="alert"
-          className="my-mx-xs rounded-xl border border-border bg-gray-50 p-mx-md text-mx-tiny font-bold uppercase tracking-widest text-status-warning-text"
+          className="my-mx-xs rounded-xl border border-border bg-surface-alt p-mx-md text-mx-tiny font-bold uppercase tracking-widest text-status-warning-text"
         >
           <strong>
             // Bloco indisponível{this.props.sectionName ? `: ${this.props.sectionName}` : ''}

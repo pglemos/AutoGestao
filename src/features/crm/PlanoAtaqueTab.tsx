@@ -173,13 +173,13 @@ function prioridadeBadgeClass(p: MissaoDef['prioridade']): string {
   if (p === 'Máxima') return 'bg-status-error-surface text-status-error-text'
   if (p === 'Alta') return 'bg-status-error-surface text-status-error-text'
   if (p === 'Média') return 'bg-status-warning-surface text-status-warning-text'
-  return 'bg-slate-100 text-muted-foreground'
+  return 'bg-muted text-muted-foreground'
 }
 
 function temperaturaBadgeClass(t: Temperatura): string {
   if (t === 'quente') return 'bg-status-error-surface text-status-error-text'
   if (t === 'morno') return 'bg-status-warning-surface text-status-warning-text'
-  return 'bg-slate-100 text-muted-foreground'
+  return 'bg-muted text-muted-foreground'
 }
 
 const TEMPERATURA_LABEL: Record<Temperatura, string> = { quente: 'Quente', morno: 'Morno', frio: 'Frio' }
@@ -420,7 +420,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
           <button
             type="button"
             onClick={() => setModalOpen(true)}
-            className="flex h-10 items-center gap-1.5 rounded-xl border border-border bg-white px-4 text-sm font-bold text-muted-foreground transition-colors hover:bg-slate-50 shrink-0"
+            className="flex h-10 items-center gap-1.5 rounded-xl border border-border bg-white px-4 text-sm font-bold text-muted-foreground transition-colors hover:bg-surface-alt shrink-0"
           >
             <Plus size={16} /> Registrar veículo
           </button>
@@ -441,7 +441,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                   className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all ${
                     ativo
                       ? 'bg-[#005BFF] text-white shadow-sm'
-                      : 'bg-slate-50 text-muted-foreground border border-border-subtle hover:bg-slate-100'
+                      : 'bg-surface-alt text-muted-foreground border border-border-subtle hover:bg-muted'
                   }`}
                 >
                   {f.label} ({count})
@@ -454,7 +454,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         {loading ? (
           <p className="text-sm text-muted-foreground">Carregando veículos...</p>
         ) : veiculosFiltrados.length === 0 ? (
-          <div className="bg-slate-50 border border-border-subtle rounded-2xl p-10 text-center">
+          <div className="bg-surface-alt border border-border-subtle rounded-2xl p-10 text-center">
             <Car className="mx-auto text-text-disabled" size={28} />
             <p className="mt-3 text-sm font-bold text-muted-foreground">
               {veiculos.length === 0
@@ -620,7 +620,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvar }: { onClose: () => void; onS
         </div>
         <FormField label="Observação (opcional)" value={observacao} onChange={e => setObservacao(e.target.value)} placeholder="Baixo km, único dono..." />
         <div className="flex gap-3 pt-2">
-          <button type="button" onClick={onClose} className="flex-1 rounded-xl border border-border px-4 py-2.5 text-sm font-bold text-muted-foreground hover:bg-slate-50">Cancelar</button>
+          <button type="button" onClick={onClose} className="flex-1 rounded-xl border border-border px-4 py-2.5 text-sm font-bold text-muted-foreground hover:bg-surface-alt">Cancelar</button>
           <button
             type="button"
             disabled={!marca.trim() || !modelo.trim() || saving}

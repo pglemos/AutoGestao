@@ -84,7 +84,7 @@ export function NotificacoesListSection({
 
   return (
     <Card className="flex min-h-[420px] flex-col overflow-hidden bg-white">
-      <CardHeader className="relative z-10 flex flex-col items-start justify-between gap-mx-md border-b border-border bg-gray-50/30 p-mx-md sm:flex-row sm:items-center sm:p-mx-lg">
+      <CardHeader className="relative z-10 flex flex-col items-start justify-between gap-mx-md border-b border-border bg-surface-alt/30 p-mx-md sm:flex-row sm:items-center sm:p-mx-lg">
         <div className="flex items-center gap-mx-md">
           <div className={cn(
             'flex h-mx-11 w-mx-11 shrink-0 items-center justify-center rounded-2xl',
@@ -143,14 +143,14 @@ export function NotificacoesListSection({
                       }}
                       className={cn(
                         'relative flex cursor-pointer flex-col gap-mx-md rounded-2xl border p-mx-md transition-all group/item sm:flex-row',
-                        n.read ? 'border-border bg-gray-50/30 opacity-80' : 'border-brand-primary/20 bg-white shadow-sm',
+                        n.read ? 'border-border bg-surface-alt/30 opacity-80' : 'border-brand-primary/20 bg-white shadow-sm',
                         !n.read && n.priority === 'high' && 'border-status-error/20 bg-status-error-surface/30',
                       )}
                     >
                       <div
                         className={cn(
                           'flex h-mx-11 w-mx-11 shrink-0 items-center justify-center rounded-2xl shadow-none transition-transform group-hover/item:scale-105',
-                          n.read ? 'bg-gray-50 text-muted-foreground' : 'bg-white border border-border',
+                          n.read ? 'bg-surface-alt text-muted-foreground' : 'bg-white border border-border',
                         )}
                       >
                         {getTypeIcon(n.type)}

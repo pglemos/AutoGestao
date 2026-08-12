@@ -428,7 +428,7 @@ export default function BottomSection({
 
         {/* Aviso: tudo bloqueado */}
         {jaFinalizado && d1Bloqueado && (
-          <div className="flex items-center gap-2 bg-slate-50 border border-border rounded-xl px-4 py-2.5 mb-4">
+          <div className="flex items-center gap-2 bg-surface-alt border border-border rounded-xl px-4 py-2.5 mb-4">
             <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
             <p className="text-[12px] font-semibold text-muted-foreground">
               Fechamento de {dataExibicao} encerrado e consolidado.
@@ -494,7 +494,7 @@ export default function BottomSection({
           <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button
               onClick={() => setConfirmModalOpen(false)}
-              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors"
+              className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-surface-alt transition-colors"
             >
               Não, voltar
             </button>

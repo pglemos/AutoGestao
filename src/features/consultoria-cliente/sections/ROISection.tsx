@@ -90,7 +90,7 @@ export function ROISection({ client }: Props) {
         </Button>
       </div>
 
-      <div id="roi-report-content" className="space-y-mx-lg bg-gray-50 p-mx-md rounded-2xl print:p-0 print:bg-white">
+      <div id="roi-report-content" className="space-y-mx-lg bg-surface-alt p-mx-md rounded-2xl print:p-0 print:bg-white">
         <Card className="p-mx-xl text-white border-none shadow-mx-2xl relative overflow-hidden">
           <div className="absolute top-mx-0 right-mx-0 p-mx-lg opacity-10"><TrendingUp size={200} strokeWidth={1} /></div>
           <div className="relative z-10">

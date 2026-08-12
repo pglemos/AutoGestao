@@ -183,6 +183,13 @@ const COLOR_MIGRATION_MAP: Record<string, string> = {
   'bg-yellow-50': 'bg-status-warning-surface',
   'text-yellow-700': 'text-status-warning-text',
   'border-yellow-400': 'border-status-warning/50',
+  // FASE G 07.019 — superfícies neutras (surface-alt/surface-muted).
+  'bg-gray-50': 'bg-surface-alt',
+  'bg-slate-50': 'bg-surface-alt',
+  'bg-gray-100': 'bg-muted',
+  'bg-slate-100': 'bg-muted',
+  'hover:bg-gray-50': 'hover:bg-surface-alt',
+  'hover:bg-slate-100': 'hover:bg-muted',
 }
 
 function normalizeDom(html: string) {

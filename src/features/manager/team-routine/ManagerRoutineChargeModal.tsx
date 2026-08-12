@@ -43,11 +43,11 @@ export function ManagerRoutineChargeModal({ open, sellerName, date, onClose, onS
         <div className="space-y-3">
         <div>
           <label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-routine-charge-seller">Vendedor</label>
-          <div id="manager-routine-charge-seller" className="rounded-xl border border-border bg-gray-50 px-3 py-2 text-sm text-foreground">{sellerName}</div>
+          <div id="manager-routine-charge-seller" className="rounded-xl border border-border bg-surface-alt px-3 py-2 text-sm text-foreground">{sellerName}</div>
         </div>
         <div>
           <label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-routine-charge-date">Data</label>
-          <div id="manager-routine-charge-date" className="rounded-xl border border-border bg-gray-50 px-3 py-2 text-sm text-foreground">{date}</div>
+          <div id="manager-routine-charge-date" className="rounded-xl border border-border bg-surface-alt px-3 py-2 text-sm text-foreground">{date}</div>
         </div>
         <div>
           <label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-routine-charge-message">Mensagem</label>
@@ -62,7 +62,7 @@ export function ManagerRoutineChargeModal({ open, sellerName, date, onClose, onS
         {sent && <div className="rounded-xl bg-status-success-surface px-3 py-2 text-sm font-medium text-status-success-text">Cobrança registrada.</div>}
         </div>
         <div className="mt-5 flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted">Cancelar</button>
+          <button type="button" onClick={onClose} className="rounded-xl bg-muted px-4 py-2 text-sm font-medium text-foreground hover:bg-muted">Cancelar</button>
           <button type="button" className="rounded-xl bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-50" onClick={() => void handleSend()} disabled={sending || sent}>{sending ? 'Enviando...' : 'Enviar cobrança'}</button>
         </div>
       </div>

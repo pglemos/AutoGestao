@@ -24,7 +24,7 @@ const TIPO_TONE: Record<CulturaTipo, string> = {
   repescagem: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
   campanha: 'border-brand-primary/30 bg-brand-primary-subtle text-status-success-text',
   reconhecimento: 'border-status-success/30 bg-status-success-surface text-status-success-text',
-  feed_cultural: 'border-border bg-gray-50 text-muted-foreground',
+  feed_cultural: 'border-border bg-surface-alt text-muted-foreground',
 }
 
 type Props = {
@@ -216,7 +216,7 @@ export function CulturaFelicidade({ storeId }: Props) {
           <div className="overflow-x-auto">
             <table className="w-full min-w-[560px] text-sm">
               <thead className="text-left">
-                <tr className="bg-gray-50">
+                <tr className="bg-surface-alt">
                   <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Ciclo</th>
                   <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Respostas</th>
                   <th className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">Clima</th>
@@ -254,7 +254,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 function MediaCard({ label, value }: { label: string; value: number | null }) {
   const tone =
     value == null
-      ? 'border-border bg-gray-50 text-muted-foreground'
+      ? 'border-border bg-surface-alt text-muted-foreground'
       : value >= 8
         ? 'border-status-success/30 bg-status-success-surface text-status-success-text'
         : value >= 6

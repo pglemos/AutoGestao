@@ -52,8 +52,8 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
       <div ref={scrollRef} className="flex-1 overflow-auto" role="region" tabIndex={0} aria-label="Comparativo de indicadores com rolagem">
         <table className="w-full min-w-[820px] border-collapse text-sm">
           <thead className="sticky top-0 z-20">
-            <tr className="border-b border-border bg-slate-50">
-              <th className="sticky left-0 z-30 min-w-[168px] border-r border-border bg-slate-50 px-3 py-2 text-left text-xs font-semibold text-foreground">Comparativo</th>
+            <tr className="border-b border-border bg-surface-alt">
+              <th className="sticky left-0 z-30 min-w-[168px] border-r border-border bg-surface-alt px-3 py-2 text-left text-xs font-semibold text-foreground">Comparativo</th>
               {MONTHS.map((m, i) => (
                 <th
                   key={m}
@@ -63,12 +63,12 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
                   {m}
                 </th>
               ))}
-              <th className="bg-slate-100 px-3 py-2 text-center text-xs font-semibold text-foreground">{consLabel}</th>
+              <th className="bg-muted px-3 py-2 text-center text-xs font-semibold text-foreground">{consLabel}</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row, ri) => (
-              <tr key={ri} className="border-b border-border/40 bg-card hover:bg-slate-50/50">
+              <tr key={ri} className="border-b border-border/40 bg-card hover:bg-surface-alt/50">
                 <td className="sticky left-0 z-10 min-w-[168px] border-r border-border bg-card px-3 py-1.5 text-left text-xs font-medium text-foreground">
                   {row.label === "Meta" && <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-status-info align-middle" />}
                   {row.label === "Resultado Atual" && <span className={`mr-1.5 inline-block h-2 w-2 rounded-full ${areaStyle.dot} align-middle`} />}
@@ -96,7 +96,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
                     </td>
                   );
                 })}
-                <td className="bg-slate-50/80 px-3 py-1.5 text-center text-xs font-semibold text-foreground">
+                <td className="bg-surface-alt/80 px-3 py-1.5 text-center text-xs font-semibold text-foreground">
                   {row.cons !== null && row.cons !== undefined ? row.fmt(row.cons) : "—"}
                 </td>
               </tr>

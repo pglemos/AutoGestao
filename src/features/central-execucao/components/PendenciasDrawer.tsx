@@ -95,7 +95,7 @@ export function PendenciasDrawer({
                     </button>
                   )}
                   {phoneDigits && (
-                    <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-slate-50">
+                    <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-surface-alt">
                       <Phone className="h-3 w-3" aria-hidden="true" /> Ligar
                     </a>
                   )}
@@ -104,7 +104,7 @@ export function PendenciasDrawer({
                       <UserRound className="h-3 w-3" aria-hidden="true" /> Abrir cliente
                     </button>
                   )}
-                  <button type="button" onClick={() => onReschedule(action)} className="flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-slate-50">
+                  <button type="button" onClick={() => onReschedule(action)} className="flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-surface-alt">
                     <Calendar className="h-3 w-3" aria-hidden="true" /> Reagendar
                   </button>
                   <button type="button" onClick={() => onEscalate(action)} className="flex items-center gap-1 rounded-lg border border-status-warning/30 px-2.5 py-1.5 text-caption font-bold text-status-warning-text hover:bg-status-warning-surface">

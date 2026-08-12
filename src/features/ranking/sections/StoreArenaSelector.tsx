@@ -75,7 +75,7 @@ export function StoreArenaSelector({ loading, opponents, stores, onToggle, onCle
             >
               <div className={cn(
                 'w-mx-14 h-mx-14 rounded-2xl flex items-center justify-center border-2 shrink-0',
-                selected ? 'bg-brand-primary/20 border-brand-primary text-status-success-text' : 'bg-gray-50 border-border text-muted-foreground'
+                selected ? 'bg-brand-primary/20 border-brand-primary text-status-success-text' : 'bg-surface-alt border-border text-muted-foreground'
               )}>
                 <Building2 size={22} />
               </div>

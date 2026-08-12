@@ -95,7 +95,7 @@ export function RegularizationsListModal({
             const name = request.seller?.name || request.seller_id;
             const metrics = getRequestedMetrics(request.requested_values);
             return (
-              <article key={request.id} className="rounded-xl bg-gray-50 p-4">
+              <article key={request.id} className="rounded-xl bg-surface-alt p-4">
                 <div className="mb-2 flex items-center justify-between gap-3">
                   <div className="flex min-w-0 items-center gap-2">
                     <div className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-status-info-surface text-xs font-bold text-status-info-text">
@@ -113,7 +113,7 @@ export function RegularizationsListModal({
                     style={{ background: `conic-gradient(rgb(59 130 246) ${metrics.discipline * 3.6}deg, rgb(219 234 254) 0deg)` }}
                     aria-label={`Disciplina ${metrics.discipline}%`}
                   >
-                    <span className="grid h-full w-full place-items-center rounded-full bg-gray-50">{metrics.discipline}%</span>
+                    <span className="grid h-full w-full place-items-center rounded-full bg-surface-alt">{metrics.discipline}%</span>
                   </div>
                 </div>
 

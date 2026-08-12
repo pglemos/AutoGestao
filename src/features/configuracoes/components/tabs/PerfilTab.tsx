@@ -67,7 +67,7 @@ export function PerfilTab() {
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
                 <header className="flex items-center gap-mx-lg pb-mx-md border-b border-border mb-mx-lg">
                     <div className="relative group">
-                        <div className="w-mx-28 h-mx-28 rounded-2xl bg-gray-50 border border-border flex items-center justify-center shadow-none overflow-hidden">
+                        <div className="w-mx-28 h-mx-28 rounded-2xl bg-surface-alt border border-border flex items-center justify-center shadow-none overflow-hidden">
                             <img
                                 src={getAvatarDisplayUrl(profile?.avatar_url, form.name, { background: '0D3B2E', color: '22C55E', size: 128 })}
                                 alt={form.name ? `Avatar de ${form.name}` : 'Avatar'}
@@ -133,7 +133,7 @@ export function PerfilTab() {
                             aria-label="E-mail corporativo"
                             value={profile?.email || ''}
                             disabled
-                            className="!h-mx-14 px-6 font-bold opacity-50 bg-gray-50"
+                            className="!h-mx-14 px-6 font-bold opacity-50 bg-surface-alt"
                         />
                     </div>
                     <div className="space-y-mx-sm">
@@ -159,7 +159,7 @@ export function PerfilTab() {
                             aria-label="Hierarquia / perfil de acesso"
                             value={role ? ROLE_LABELS[role] : ''}
                             disabled
-                            className="!h-mx-14 px-6 font-bold opacity-50 bg-gray-50"
+                            className="!h-mx-14 px-6 font-bold opacity-50 bg-surface-alt"
                         />
                     </div>
                 </div>

@@ -48,7 +48,7 @@ export default function NextAwardCard({ calcResult }) {
               <p className="text-muted-foreground text-sm mt-2">para desbloquear</p>
               <p className="text-3xl font-bold text-status-warning-text mt-1">+ {formatBRL(proximaPremiacao.valor_premio)}</p>
 
-              <div className="mt-4 bg-slate-50 rounded-xl p-3">
+              <div className="mt-4 bg-surface-alt rounded-xl p-3">
                 <p className="text-muted-foreground text-xs">
                   Prêmio ao atingir {proximaPremiacao.quantidade_vendas_necessarias} vendas no mês.
                 </p>

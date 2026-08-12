@@ -53,7 +53,7 @@ export function SellerListItem({
         <div className="flex items-start sm:items-center gap-mx-md sm:gap-mx-lg flex-1 min-w-0 max-w-full">
           <div className={cn(
             "w-mx-14 h-mx-14 sm:w-mx-20 sm:h-mx-header rounded-2xl border-4 flex items-center justify-center font-bold text-xl sm:text-3xl shadow-sm shrink-0",
-            isTop1 ? "bg-mx-amber-400 border-mx-amber-300 text-mx-black rotate-3 scale-110" : "bg-gray-50 border-white text-foreground"
+            isTop1 ? "bg-mx-amber-400 border-mx-amber-300 text-mx-black rotate-3 scale-110" : "bg-surface-alt border-white text-foreground"
           )}>
             {isTop1 ? <Crown size={32} fill="currentColor" /> : <span>#{seller.position}</span>}
           </div>
@@ -95,7 +95,7 @@ export function SellerListItem({
               <Typography variant="h1" tone={isTop1 ? 'white' : 'brand'} className="text-4xl sm:text-5xl font-mono-numbers tracking-tighter leading-none">{seller.atingimento}%</Typography>
               <div className={cn(
                 "w-mx-2xl h-mx-2xl rounded-2xl flex items-center justify-center border shadow-none shrink-0",
-                isTop1 ? "bg-white/10 border-white/20 text-white" : "bg-gray-50 border-border text-status-success-text"
+                isTop1 ? "bg-white/10 border-white/20 text-white" : "bg-surface-alt border-border text-status-success-text"
               )}>
                 <TrendingUp size={28} className={cn(seller.atingimento < 50 && "rotate-180 text-status-error-text")} />
               </div>
@@ -105,7 +105,7 @@ export function SellerListItem({
             type="button"
             onClick={(e) => { e.stopPropagation(); onToggleOpponent(seller.user_id) }}
             aria-label={`Comparar ${seller.user_name}`}
-            className={`ml-0 sm:ml-4 p-mx-sm rounded-xl transition-all border group/btn sm:hover:scale-110 active:scale-95 w-full sm:w-auto flex items-center justify-center ${isBattleSelected ? 'bg-brand-primary border-brand-primary text-mx-black shadow-mx-glow-brand' : 'bg-gray-50 border-border text-muted-foreground hover:border-brand-primary hover:text-status-success-text'}`}
+            className={`ml-0 sm:ml-4 p-mx-sm rounded-xl transition-all border group/btn sm:hover:scale-110 active:scale-95 w-full sm:w-auto flex items-center justify-center ${isBattleSelected ? 'bg-brand-primary border-brand-primary text-mx-black shadow-mx-glow-brand' : 'bg-surface-alt border-border text-muted-foreground hover:border-brand-primary hover:text-status-success-text'}`}
             title="Comparar vendedor"
           >
             <Swords className="w-mx-sm h-mx-sm" />

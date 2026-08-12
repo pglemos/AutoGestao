@@ -145,7 +145,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
         </DialogHeader>
 
         {/* Info do cliente */}
-        <div className="bg-slate-50 rounded-xl px-3 py-2.5 space-y-0.5">
+        <div className="bg-surface-alt rounded-xl px-3 py-2.5 space-y-0.5">
           <p className="text-sm font-bold text-[#031B3D]">{cliente.nome}</p>
           {cliente.veiculo_interesse && <p className="text-xs text-muted-foreground">{cliente.veiculo_interesse}</p>}
           <p className="text-xs text-muted-foreground">{situacao}</p>

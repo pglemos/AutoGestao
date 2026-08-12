@@ -13,8 +13,8 @@ const iconBadgeVariants = cva(
         amber: 'bg-status-warning-surface text-status-warning-text border border-status-warning/30',
         red: 'bg-status-error-surface text-status-error-text border border-status-error/30',
         blue: 'bg-status-info-surface text-status-info-text border border-status-info/30',
-        gray: 'bg-gray-100 text-muted-foreground border border-border',
-        ghost: 'bg-gray-50 text-muted-foreground border border-border-subtle',
+        gray: 'bg-muted text-muted-foreground border border-border',
+        ghost: 'bg-surface-alt text-muted-foreground border border-border-subtle',
       },
       size: {
         sm: 'w-8 h-8 rounded-xl',

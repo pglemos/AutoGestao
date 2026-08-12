@@ -41,7 +41,7 @@ export function NotificacaoApprovalCard({
     >
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-mx-sm">
         <div className="flex items-start gap-mx-sm min-w-0">
-          <div className="h-mx-14 w-mx-14 overflow-hidden rounded-2xl border border-border bg-gray-50 shrink-0">
+          <div className="h-mx-14 w-mx-14 overflow-hidden rounded-2xl border border-border bg-surface-alt shrink-0">
             <ApprovalAvatar url={approval.avatar_url} name={approval.full_name} />
           </div>
           <div className="min-w-0">
@@ -76,7 +76,7 @@ export function NotificacaoApprovalCard({
         </div>
       </div>
       {approval.role === 'dono' && (
-        <div className="mt-mx-sm rounded-2xl border border-brand-primary/15 bg-gray-50 p-mx-sm">
+        <div className="mt-mx-sm rounded-2xl border border-brand-primary/15 bg-surface-alt p-mx-sm">
           <Typography variant="tiny" tone="brand" className="mb-mx-xs block">
             Dados administrativos
           </Typography>

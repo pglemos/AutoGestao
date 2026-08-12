@@ -165,7 +165,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
           <PanelHeader title="Desempenho da Equipe" action="Ver equipe" onAction={() => navigate('?tab=equipe')} />
           <div className="overflow-x-auto">
             <table className="w-full min-w-[620px]">
-              <thead className="bg-gray-50/60">
+              <thead className="bg-surface-alt/60">
                 <tr>
                   {['Vendedor', 'Vendas', 'Meta', 'Agenda', 'Disciplina', 'Status'].map(header => (
                     <th key={header} className="px-mx-md py-mx-sm text-left text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">{header}</th>
@@ -242,7 +242,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
           </div>
           <div className="mt-mx-lg space-y-mx-sm">
             {visibleRanking.slice(0, 3).map((row, index) => (
-              <div key={row.user_id} className="flex items-center justify-between gap-mx-sm rounded-xl bg-gray-50 px-mx-md py-mx-sm">
+              <div key={row.user_id} className="flex items-center justify-between gap-mx-sm rounded-xl bg-surface-alt px-mx-md py-mx-sm">
                 <div className="flex min-w-0 items-center gap-mx-sm">
                   <span className={cn('flex h-mx-9 w-mx-9 shrink-0 items-center justify-center rounded-xl border bg-white', medalTone(index))}>
                     {index === 0 ? <Trophy size={16} /> : <Medal size={16} />}
@@ -269,7 +269,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
                 <AgendaItem time="Agora" title="Cobrar pendências de rotina" detail={pendingNames.length ? pendingNames.slice(0, 3).join(', ') : 'Equipe com rotina sincronizada.'} />
               </>
             ) : (
-              <div className="rounded-xl border border-dashed border-border-subtle bg-gray-50 p-mx-md">
+              <div className="rounded-xl border border-dashed border-border-subtle bg-surface-alt p-mx-md">
                 <Typography variant="p" tone="muted">Agenda operacional pendente de integração ou lançamentos do dia.</Typography>
               </div>
             )}
@@ -288,7 +288,7 @@ function ManagerHeader({ storeName, periodLabel }: { storeName: string; periodLa
       actions={(
         <div className="flex flex-wrap gap-mx-sm">
           <Badge variant="outline" className="h-mx-11 px-mx-md bg-white">Período: {periodLabel}</Badge>
-          <Button type="button" variant="outline" size="sm" className="h-mx-11 bg-white hover:bg-gray-50">
+          <Button type="button" variant="outline" size="sm" className="h-mx-11 bg-white hover:bg-surface-alt">
             Filtros
           </Button>
         </div>
@@ -413,7 +413,7 @@ function PanelHeader({
 function AlertItem({ alert }: { alert: OwnerPerformanceAlert }) {
   const tone = alert.variant === 'danger' ? 'danger' : alert.variant === 'warning' ? 'warning' : alert.variant === 'success' ? 'success' : 'info'
   return (
-    <div className="flex gap-mx-sm rounded-xl border border-border-subtle bg-gray-50 p-mx-sm">
+    <div className="flex gap-mx-sm rounded-xl border border-border-subtle bg-surface-alt p-mx-sm">
       <MetricIcon tone={tone} className="h-mx-9 w-mx-9"><AlertTriangle size={16} /></MetricIcon>
       <div className="min-w-0">
         <Typography variant="p" className="leading-tight">{alert.title}</Typography>
@@ -444,7 +444,7 @@ function FunnelSegmentRow({
       </div>
       <div className={cn('mt-mx-md grid gap-mx-sm', stages.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-4')}>
         {stages.map((stage, index) => (
-          <div key={stage.label} className="relative min-w-0 rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-center">
+          <div key={stage.label} className="relative min-w-0 rounded-xl bg-surface-alt px-mx-sm py-mx-xs text-center">
             {index > 0 && <span className="absolute -left-mx-sm top-1/2 hidden -translate-y-1/2 text-muted-foreground md:block">&gt;</span>}
             <Typography variant="tiny" tone="muted" className="block truncate tracking-tight">{stage.label}</Typography>
             <div className="mt-mx-xs flex items-baseline justify-center gap-mx-xs">
@@ -477,7 +477,7 @@ function EngagementMetric({ label, value, icon, accent = 'info' }: { label: stri
       <Typography variant="h3" className={cn('mt-mx-xs font-mono-numbers', styles.iconText)}>
         {clamped}%
       </Typography>
-      <div className="mt-mx-xs h-1.5 w-full overflow-hidden rounded-mx-full bg-gray-50">
+      <div className="mt-mx-xs h-1.5 w-full overflow-hidden rounded-mx-full bg-surface-alt">
         <div className={cn('h-full rounded-mx-full transition-all', styles.bar)} style={{ width: `${clamped}%` }} />
       </div>
     </div>
@@ -556,7 +556,7 @@ function SemiCircularGauge({ value, label, suffix = '' }: { value: number; label
 
 function AgendaItem({ time, title, detail }: { time: string; title: string; detail: string }) {
   return (
-    <div className="flex gap-mx-sm rounded-xl bg-gray-50 p-mx-sm">
+    <div className="flex gap-mx-sm rounded-xl bg-surface-alt p-mx-sm">
       <div className="flex h-mx-10 w-mx-12 shrink-0 items-center justify-center rounded-xl bg-white text-mx-tiny font-bold uppercase text-status-success-text shadow-sm">
         {time}
       </div>
@@ -588,7 +588,7 @@ function MetricIcon({ tone, className, children }: { tone: ManagerTone; classNam
 
 function ProgressBar({ value, tone = 'brand', className }: { value: number; tone?: ManagerTone; className?: string }) {
   return (
-    <div className={cn('h-mx-xs w-full overflow-hidden rounded-mx-full bg-gray-50', className)}>
+    <div className={cn('h-mx-xs w-full overflow-hidden rounded-mx-full bg-surface-alt', className)}>
       <div className={cn('h-full rounded-mx-full transition-all', toneFill(tone))} style={{ width: `${Math.min(Math.max(value, 0), 100)}%` }} />
     </div>
   )
@@ -612,7 +612,7 @@ function toneSurface(tone: ManagerTone) {
     warning: 'bg-status-warning-surface text-status-warning-text',
     danger: 'bg-status-error-surface text-status-error-text',
     info: 'bg-status-info-surface text-status-info-text',
-    neutral: 'bg-gray-50 text-muted-foreground',
+    neutral: 'bg-surface-alt text-muted-foreground',
   }[tone]
 }
 

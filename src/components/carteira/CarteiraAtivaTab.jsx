@@ -131,7 +131,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           </div>
         </div>
         <div className="grid grid-cols-2 gap-2">
-          <div className="bg-slate-50 rounded-xl px-2.5 py-2">
+          <div className="bg-surface-alt rounded-xl px-2.5 py-2">
             <p className="text-caption text-muted-foreground font-bold uppercase tracking-wide">Situação</p>
             <p className="text-caption font-semibold text-foreground mt-0.5 leading-snug">{situacao}</p>
           </div>
@@ -150,7 +150,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           </button>
           )}
           <button onClick={() => onFicha(cliente.id)}
-            className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground border border-border hover:bg-slate-50 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
+            className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground border border-border hover:bg-surface-alt px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
             <FileText className="w-3.5 h-3.5" /> Ficha
           </button>
         </div>
@@ -196,7 +196,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           </button>
           )}
           <button onClick={() => onFicha(cliente.id)}
-            className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground border border-border hover:bg-slate-50 px-3 py-1.5 rounded-xl transition-colors justify-center">
+            className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground border border-border hover:bg-surface-alt px-3 py-1.5 rounded-xl transition-colors justify-center">
             <FileText className="w-3.5 h-3.5" /> Abrir ficha
           </button>
         </div>

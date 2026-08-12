@@ -63,7 +63,7 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
       </button>
 
       {resultado && (
-        <div className="mt-5 bg-slate-50 rounded-xl p-4 space-y-3">
+        <div className="mt-5 bg-surface-alt rounded-xl p-4 space-y-3">
           <p className="text-muted-foreground text-sm">
             Com mais <span className="font-bold text-mx-navy">{resultado.va} venda{resultado.va !== 1 ? "s" : ""}</span>, seu salário previsto iria para:
           </p>

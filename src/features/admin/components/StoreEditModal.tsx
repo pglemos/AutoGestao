@@ -117,7 +117,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
       }
     >
       <form id="store-edit-form" onSubmit={handleSubmit} className="space-y-mx-lg">
-        <div className="rounded-2xl border border-border bg-gray-50 p-mx-md">
+        <div className="rounded-2xl border border-border bg-surface-alt p-mx-md">
           <div className="flex items-center justify-between gap-mx-sm mb-mx-sm">
             <div className="min-w-0">
               <Typography variant="caption" className="">Link de pré-cadastro</Typography>
@@ -361,7 +361,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
           </div>
         </div>
 
-        <label htmlFor="edit-store-active" className="flex items-start gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-md cursor-pointer">
+        <label htmlFor="edit-store-active" className="flex items-start gap-mx-sm rounded-2xl border border-border bg-surface-alt p-mx-md cursor-pointer">
           <input
             id="edit-store-active"
             type="checkbox"

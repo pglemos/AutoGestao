@@ -41,14 +41,14 @@ export function FichaClienteSheet({
     <Dialog.Root open={open} onOpenChange={next => { if (!next) onClose() }}>
       <Dialog.Portal>
         <Dialog.Overlay className="fixed inset-0 z-[110] bg-surface-overlay/30" />
-        <Dialog.Content className="fixed inset-y-0 right-0 z-[111] flex w-full max-w-[560px] flex-col bg-gray-50 shadow-2xl focus:outline-none">
+        <Dialog.Content className="fixed inset-y-0 right-0 z-[111] flex w-full max-w-[560px] flex-col bg-surface-alt shadow-2xl focus:outline-none">
           <div className="flex h-16 shrink-0 items-center justify-between border-b border-border bg-white px-5">
             <div className="min-w-0">
               <Dialog.Title className="truncate text-h5 font-bold text-foreground">Ficha do cliente</Dialog.Title>
               <Dialog.Description className="truncate text-[12px] text-muted-foreground">Histórico comercial sem sair da Central</Dialog.Description>
             </div>
             <Dialog.Close asChild>
-              <button type="button" aria-label="Fechar ficha" className="flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-slate-100 hover:text-muted-foreground">
+              <button type="button" aria-label="Fechar ficha" className="flex h-9 w-9 items-center justify-center rounded-xl text-muted-foreground transition-colors hover:bg-muted hover:text-muted-foreground">
                 <X className="h-5 w-5" aria-hidden="true" />
               </button>
             </Dialog.Close>
@@ -73,7 +73,7 @@ export function FichaClienteSheet({
                     </div>
                     <span className="rounded-full bg-status-info-surface px-3 py-1 text-caption font-bold capitalize text-status-info-text">{humanize(client.status)}</span>
                   </div>
-                  {client.observacoes && <p className="mt-4 rounded-xl bg-slate-50 p-3 text-[12px] leading-5 text-muted-foreground">{client.observacoes}</p>}
+                  {client.observacoes && <p className="mt-4 rounded-xl bg-surface-alt p-3 text-[12px] leading-5 text-muted-foreground">{client.observacoes}</p>}
                 </section>
 
                 <section className="grid grid-cols-2 gap-3">

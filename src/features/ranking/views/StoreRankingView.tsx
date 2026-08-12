@@ -35,7 +35,7 @@ export function StoreRankingView() {
             subtitle="Acompanhe sua posição, a corrida do período e as bonificações da loja."
             actions={(
               <div className="flex items-center gap-3 flex-wrap">
-                <div className="flex items-center bg-slate-100 rounded-xl p-1 gap-1 flex-wrap">
+                <div className="flex items-center bg-muted rounded-xl p-1 gap-1 flex-wrap">
                   {RANKING_PERIODOS.map(p => (
                     <button
                       key={p}

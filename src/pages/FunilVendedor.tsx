@@ -192,7 +192,7 @@ export default function FunilVendedor() {
           icon={TrendingUp}
           title="Minha Meta"
           actions={(
-            <div role="group" aria-label="Período" className="flex items-center gap-1 rounded-xl bg-slate-100 p-1">
+            <div role="group" aria-label="Período" className="flex items-center gap-1 rounded-xl bg-muted p-1">
               {Object.entries(periodLabels).map(([value, label]) => (
                 <button
                   key={value}

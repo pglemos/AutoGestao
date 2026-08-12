@@ -861,7 +861,7 @@ export function PendingReminderModal({
       description={`${pendingRows.length} vendedor(es) pendente(s)`}
       footer={
         <div className="grid w-full grid-cols-2 gap-2">
-          <button type="button" onClick={onClose} className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-gray-50">
+          <button type="button" onClick={onClose} className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-surface-alt">
             Cancelar
           </button>
           <button type="button" disabled={reminding} onClick={onConfirm} className="h-11 rounded-xl bg-status-warning px-4 text-sm font-semibold text-status-warning-foreground shadow-sm hover:bg-status-warning disabled:bg-amber-200">
@@ -871,7 +871,7 @@ export function PendingReminderModal({
       }
     >
       <div className="space-y-4">
-        <div className="rounded-xl bg-gray-50 p-4">
+        <div className="rounded-xl bg-surface-alt p-4">
           <p className="mb-3 text-sm text-muted-foreground">Vendedores que serão cobrados:</p>
           <ul className="space-y-2">
             {pendingRows.map(({ seller }) => (
@@ -994,7 +994,7 @@ function ClosingTable({ rows, onOpenAgenda, onOpenDetails, onRemind, onRegulariz
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[1100px] text-sm">
-        <thead className="border-b border-border-subtle bg-gray-50"><tr>{["Vendedor", "Status", "Entrega", "Leads", "Qualif.", "Agend.", "Atendi.", "Venda", "Disc.", "Ações"].map((label) => <th key={label} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead>
+        <thead className="border-b border-border-subtle bg-surface-alt"><tr>{["Vendedor", "Status", "Entrega", "Leads", "Qualif.", "Agend.", "Atendi.", "Venda", "Disc.", "Ações"].map((label) => <th key={label} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead>
         <tbody className="divide-y divide-border-subtle bg-white">
           {rows.map((row) => <ClosingRow key={row.seller.id} row={row} onOpenAgenda={() => onOpenAgenda(row.seller.id)} onOpenDetails={() => onOpenDetails(row)} onRemind={() => onRemind(row)} onRegularize={() => onRegularize(row)} onDecide={(action) => onDecide(row, action)} onCorrectLeads={() => onCorrectLeads(row)} />)}
         </tbody>
@@ -1019,7 +1019,7 @@ function ClosingRow({ row, onOpenAgenda, onOpenDetails, onRemind, onRegularize, 
   const visits = checkin ? sumNumericMetrics(checkin.visit_prev_day) : null;
   const discipline = checkin?.pontuacao_disciplina_final;
   return (
-    <tr className="hover:bg-gray-50/50">
+    <tr className="hover:bg-surface-alt/50">
       <td className="px-4 py-3"><div className="flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-full bg-status-success-surface text-xs font-bold text-status-success-text">{initials(row.seller.name)}</span><span className="font-semibold text-foreground">{row.seller.name}</span></div></td>
       <td className="px-4 py-3"><StatusBadge status={status} /></td>
       <td className="px-4 py-3 text-muted-foreground">{checkin?.submitted_at ? format(parseISO(checkin.submitted_at), "HH:mm") : "—"}</td>
@@ -1035,7 +1035,7 @@ function ClosingRow({ row, onOpenAgenda, onOpenDetails, onRemind, onRegularize, 
 }
 
 function ActionButton({ icon: Icon, label, onClick, tone }: { icon: typeof Eye; label: string; onClick: () => void; tone: "gray" | "orange" | "blue" | "green" | "red" | "purple" }) {
-  const toneClass = { gray: "text-muted-foreground hover:bg-gray-50", orange: "text-status-warning-text hover:bg-status-warning-surface", blue: "text-status-info-text hover:bg-status-info-surface", green: "text-status-success-text hover:bg-status-success-surface", red: "text-status-error-text hover:bg-status-error-surface", purple: "text-status-info-text hover:bg-status-info-surface" }[tone];
+  const toneClass = { gray: "text-muted-foreground hover:bg-surface-alt", orange: "text-status-warning-text hover:bg-status-warning-surface", blue: "text-status-info-text hover:bg-status-info-surface", green: "text-status-success-text hover:bg-status-success-surface", red: "text-status-error-text hover:bg-status-error-surface", purple: "text-status-info-text hover:bg-status-info-surface" }[tone];
   return <button type="button" onClick={onClick} className={`inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-medium ${toneClass}`}><Icon size={13} /> {label}</button>;
 }
 
@@ -1056,17 +1056,17 @@ function MetricCell({ value, muted = false }: { value: number | string | null; m
 
 function DisciplineTrendCard({ trend, range, onRange }: { trend: Array<{ date: string; label: string; value: number | null }>; range: 7 | 15 | 30; onRange: (range: 7 | 15 | 30) => void }) {
   const hasData = trend.some((point) => point.value !== null);
-  return <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h2 className="flex items-center gap-2 text-base font-semibold text-foreground"><TrendingUp size={18} className="text-status-success-text" /> Evolução da Disciplina do Fechamento <HelpTooltip text="Gráfico de evolução percentual da equipe na realização pontual dos fechamentos diários ao longo do período selecionado (7, 15 ou 30 dias)." /></h2><p className="mt-1 text-sm text-muted-foreground">Acompanhe se a equipe está mantendo consistência na prestação de contas diária.</p></div><div className="flex rounded-xl bg-gray-50 p-1">{([7, 15, 30] as const).map((option) => <button key={option} type="button" onClick={() => onRange(option)} className={`rounded-lg px-3 py-2 text-xs font-medium ${range === option ? "bg-brand-primary text-white shadow-sm" : "text-muted-foreground hover:bg-white"}`}>{option} dias</button>)}</div></div><div className="mt-4 h-[236px]">{hasData ? <ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}><CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" /><XAxis dataKey="label" axisLine={{ stroke: "#e5e7eb" }} tickLine={false} tick={{ fontSize: 11, fill: "#9ca3af" }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} width={42} /><Line type="monotone" dataKey="value" connectNulls stroke="#10b981" strokeWidth={2.5} dot={{ r: 3.5, fill: "#10b981", strokeWidth: 0 }} /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-center text-sm text-muted-foreground">Ainda não há histórico de disciplina no período selecionado.</div>}</div><p className="mt-3 text-center text-xs italic text-muted-foreground">O dia atual pode aparecer como parcial enquanto houver fechamentos pendentes ou regularizações em aberto.</p></section>;
+  return <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h2 className="flex items-center gap-2 text-base font-semibold text-foreground"><TrendingUp size={18} className="text-status-success-text" /> Evolução da Disciplina do Fechamento <HelpTooltip text="Gráfico de evolução percentual da equipe na realização pontual dos fechamentos diários ao longo do período selecionado (7, 15 ou 30 dias)." /></h2><p className="mt-1 text-sm text-muted-foreground">Acompanhe se a equipe está mantendo consistência na prestação de contas diária.</p></div><div className="flex rounded-xl bg-surface-alt p-1">{([7, 15, 30] as const).map((option) => <button key={option} type="button" onClick={() => onRange(option)} className={`rounded-lg px-3 py-2 text-xs font-medium ${range === option ? "bg-brand-primary text-white shadow-sm" : "text-muted-foreground hover:bg-white"}`}>{option} dias</button>)}</div></div><div className="mt-4 h-[236px]">{hasData ? <ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}><CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" /><XAxis dataKey="label" axisLine={{ stroke: "#e5e7eb" }} tickLine={false} tick={{ fontSize: 11, fill: "#9ca3af" }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} width={42} /><Line type="monotone" dataKey="value" connectNulls stroke="#10b981" strokeWidth={2.5} dot={{ r: 3.5, fill: "#10b981", strokeWidth: 0 }} /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-center text-sm text-muted-foreground">Ainda não há histórico de disciplina no período selecionado.</div>}</div><p className="mt-3 text-center text-xs italic text-muted-foreground">O dia atual pode aparecer como parcial enquanto houver fechamentos pendentes ou regularizações em aberto.</p></section>;
 }
 
 function ComparisonRow({ label, value, tone }: { label: string; value: number | null; tone: "team" | "network" | "top" }) {
   const color = tone === "team" ? "bg-status-success" : tone === "top" ? "bg-status-success" : "bg-slate-400";
-  return <div className="grid grid-cols-[150px_1fr] items-center gap-3"><span className="flex items-center gap-2 text-sm font-medium text-muted-foreground">{tone === "top" && <Trophy size={14} />}{label}</span><div className="relative h-6 overflow-hidden rounded-full bg-gray-100"><div className={`flex h-full items-center justify-end rounded-full pr-2 text-xs font-semibold text-white ${color}`} style={{ width: `${value || 0}%` }}>{value === null ? "" : `${value}%`}</div>{value === null && <span className="absolute inset-y-0 right-2 grid place-items-center text-xs font-medium text-muted-foreground">—</span>}</div></div>;
+  return <div className="grid grid-cols-[150px_1fr] items-center gap-3"><span className="flex items-center gap-2 text-sm font-medium text-muted-foreground">{tone === "top" && <Trophy size={14} />}{label}</span><div className="relative h-6 overflow-hidden rounded-full bg-muted"><div className={`flex h-full items-center justify-end rounded-full pr-2 text-xs font-semibold text-white ${color}`} style={{ width: `${value || 0}%` }}>{value === null ? "" : `${value}%`}</div>{value === null && <span className="absolute inset-y-0 right-2 grid place-items-center text-xs font-medium text-muted-foreground">—</span>}</div></div>;
 }
 
 function SummaryGroup({ label, icon: Icon, tone, items }: { label: string; icon: typeof Store; tone: "blue" | "emerald" | "purple" | "amber" | "slate"; items: Array<[string, number | string]> }) {
-  const iconTone = { blue: "bg-status-info-surface text-status-info-text", emerald: "bg-status-success-surface text-status-success-text", purple: "bg-status-info-surface text-status-info-text", amber: "bg-status-warning-surface text-status-warning-text", slate: "bg-slate-50 text-muted-foreground" }[tone];
-  return <div className="min-h-[88px] rounded-xl bg-gray-50 p-3"><h3 className="flex items-center gap-2 text-xs font-semibold text-muted-foreground"><span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${iconTone}`}><Icon size={15} /></span>{label}</h3>{items.map(([item, value]) => <div key={item} className="mt-2 flex justify-between gap-2 text-xs"><span className="text-muted-foreground">{item}</span><strong className="text-foreground">{value}</strong></div>)}</div>;
+  const iconTone = { blue: "bg-status-info-surface text-status-info-text", emerald: "bg-status-success-surface text-status-success-text", purple: "bg-status-info-surface text-status-info-text", amber: "bg-status-warning-surface text-status-warning-text", slate: "bg-surface-alt text-muted-foreground" }[tone];
+  return <div className="min-h-[88px] rounded-xl bg-surface-alt p-3"><h3 className="flex items-center gap-2 text-xs font-semibold text-muted-foreground"><span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${iconTone}`}><Icon size={15} /></span>{label}</h3>{items.map(([item, value]) => <div key={item} className="mt-2 flex justify-between gap-2 text-xs"><span className="text-muted-foreground">{item}</span><strong className="text-foreground">{value}</strong></div>)}</div>;
 }
 
 function Empty({ text }: { text: string }) {

@@ -21,6 +21,10 @@ describe("LeadConferenceModal visual contract", () => {
     expect(source).not.toMatch(/rounded(-[a-z]+)?-\[\d+px\]/);
     expect(source).not.toContain("text-text-secondary");
     expect(source).not.toContain("text-text-primary");
-    expect(source).not.toContain("bg-surface-alt");
+    // FASE G 07.019: bg-gray-50/slate-100 do Base44 foram migrados para os
+    // tokens canônicos de superfície (bg-surface-alt/bg-muted) — o que
+    // continua proibido é raio arbitrário e tokens do sistema legado.
+    expect(source).not.toContain("bg-gray-50");
+    expect(source).not.toContain("bg-slate-100");
   });
 });

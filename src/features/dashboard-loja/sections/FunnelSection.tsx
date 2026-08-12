@@ -57,7 +57,7 @@ export function FunnelSection({ funilData, funnelBenchmarks }: FunnelSectionProp
           const healthy = step.value >= step.benchmark
           const StatusIcon = healthy ? CheckCircle2 : CircleAlert
           return (
-            <article key={`${step.from}-${step.to}`} className="rounded-2xl border border-border-subtle bg-gray-50 p-4">
+            <article key={`${step.from}-${step.to}`} className="rounded-2xl border border-border-subtle bg-surface-alt p-4">
               <div className="flex items-center justify-between gap-3">
                 <span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-xs font-bold text-muted-foreground shadow-sm">{index + 1}</span>
                 <StatusIcon size={18} className={healthy ? 'text-status-success-text' : 'text-status-warning-text'} />

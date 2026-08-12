@@ -83,7 +83,7 @@ export function CreateStoreModal({
                     variant="ghost"
                     size="sm"
                     onClick={onClose}
-                    className="rounded-mx-full w-mx-xl h-mx-xl bg-gray-50 hover:bg-white shadow-sm transition-all"
+                    className="rounded-mx-full w-mx-xl h-mx-xl bg-surface-alt hover:bg-white shadow-sm transition-all"
                     aria-label="Fechar modal"
                   >
                     <X size={24} />

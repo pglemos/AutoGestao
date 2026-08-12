@@ -99,7 +99,7 @@ export default function ConsultorNotificacoes() {
                                             <Typography variant="caption" tone="muted" className="mt-1">INTELIGÊNCIA DE REDE</Typography>
                                         </div>
                                     </div>
-                                    <Button variant="ghost" size="icon" onClick={() => setShowForm(false)} aria-label="Fechar" className="rounded-mx-full w-mx-xl h-mx-xl bg-gray-50 hover:bg-white shadow-sm"><X size={24} /></Button>
+                                    <Button variant="ghost" size="icon" onClick={() => setShowForm(false)} aria-label="Fechar" className="rounded-mx-full w-mx-xl h-mx-xl bg-surface-alt hover:bg-white shadow-sm"><X size={24} /></Button>
                                 </header>
 
                                 <div className="grid lg:grid-cols-2 gap-mx-14 relative z-10">
@@ -112,7 +112,7 @@ export default function ConsultorNotificacoes() {
                                             <Typography variant="caption" tone="muted" className="ml-2">Corpo da Mensagem</Typography>
                                             <textarea
                                                 value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-                                                className="w-full bg-gray-50 border border-border rounded-2xl p-mx-lg text-sm font-bold text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary focus:ring-8 focus:ring-brand-primary/5 transition-all resize-none shadow-none h-mx-48"
+                                                className="w-full bg-surface-alt border border-border rounded-2xl p-mx-lg text-sm font-bold text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary focus:ring-8 focus:ring-brand-primary/5 transition-all resize-none shadow-none h-mx-48"
                                                 placeholder="Detalhes técnicos ou operacionais..." required
                                             />
                                         </div>
@@ -123,13 +123,13 @@ export default function ConsultorNotificacoes() {
                                             <Typography variant="caption" tone="muted" className="ml-2">Público Alvo (Segmentação)</Typography>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-sm">
                                                 <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'all' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'all' ? "bg-brand-primary-subtle border-brand-primary shadow-sm" : "bg-white border-border hover:border-brand-primary/20")}>
-                                                    <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'all' ? "bg-brand-primary text-white" : "bg-gray-50 text-muted-foreground group-hover:bg-white")}>
+                                                    <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'all' ? "bg-brand-primary text-white" : "bg-surface-alt text-muted-foreground group-hover:bg-white")}>
                                                         <Globe size={22} />
                                                     </div>
                                                     <Typography variant="caption" className={cn("font-bold", form.target_type === 'all' ? "text-status-success-text" : "text-muted-foreground")}>TODA A REDE</Typography>
                                                 </button>
                                                 <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'store' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'store' ? "bg-status-warning-surface border-status-warning shadow-sm" : "bg-white border-border hover:border-brand-primary/20")}>
-                                                    <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'store' ? "bg-status-warning text-status-warning-foreground" : "bg-gray-50 text-muted-foreground group-hover:bg-white")}>
+                                                    <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'store' ? "bg-status-warning text-status-warning-foreground" : "bg-surface-alt text-muted-foreground group-hover:bg-white")}>
                                                         <Building2 size={22} />
                                                     </div>
                                                     <Typography variant="caption" className={cn("font-bold", form.target_type === 'store' ? "text-status-warning-text" : "text-muted-foreground")}>UNIDADE ALVO</Typography>
@@ -149,7 +149,7 @@ export default function ConsultorNotificacoes() {
                                         {form.target_type === 'store' && (
                                             <div className="space-y-mx-sm">
                                                 <Typography variant="caption" tone="muted" className="ml-2">Selecionar Loja</Typography>
-                                                <select aria-label="Selecionar Loja" value={form.target_store_id} onChange={e => setForm(p => ({ ...p, target_store_id: e.target.value }))} required className="w-full h-mx-14 bg-gray-50 border border-status-warning/20 rounded-2xl px-6 text-sm font-bold text-foreground focus:border-status-warning transition-all appearance-none cursor-pointer shadow-none">
+                                                <select aria-label="Selecionar Loja" value={form.target_store_id} onChange={e => setForm(p => ({ ...p, target_store_id: e.target.value }))} required className="w-full h-mx-14 bg-surface-alt border border-status-warning/20 rounded-2xl px-6 text-sm font-bold text-foreground focus:border-status-warning transition-all appearance-none cursor-pointer shadow-none">
                                                     <option value="">Selecione a unidade...</option>
                                                     {lojas.map(s => <option key={s.id} value={s.id}>{s.name.toUpperCase()}</option>)}
                                                 </select>
@@ -186,7 +186,7 @@ export default function ConsultorNotificacoes() {
                                 <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
 
                                 <header className="flex items-start justify-between mb-8 border-b border-border pb-6 relative z-10">
-                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 flex items-center justify-center text-muted-foreground group-hover:bg-pure-black group-hover:text-white transition-all shadow-none transform group-hover:rotate-6">
+                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-surface-alt flex items-center justify-center text-muted-foreground group-hover:bg-pure-black group-hover:text-white transition-all shadow-none transform group-hover:rotate-6">
                                         <Zap size={20} />
                                     </div>
                                     <div className="flex flex-col items-end gap-mx-xs">

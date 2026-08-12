@@ -279,17 +279,17 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
           </div>
           {!hasUnavailableData && (
             <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
-              <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.leads} leads</span>
-              <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.appointments} agendamentos</span>
-              <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.attendances} atendimentos</span>
-              <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.sales} vendas</span>
+              <span className="rounded-lg bg-surface-alt px-2.5 py-1.5">{summary.leads} leads</span>
+              <span className="rounded-lg bg-surface-alt px-2.5 py-1.5">{summary.appointments} agendamentos</span>
+              <span className="rounded-lg bg-surface-alt px-2.5 py-1.5">{summary.attendances} atendimentos</span>
+              <span className="rounded-lg bg-surface-alt px-2.5 py-1.5">{summary.sales} vendas</span>
             </div>
           )}
         </div>
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1120px] text-sm">
-            <thead className="border-b border-border-subtle bg-gray-50">
+            <thead className="border-b border-border-subtle bg-surface-alt">
               <tr>
                 {['Vendedor', 'Fechamento', 'Leads', 'Agendamentos', 'Atendimentos', 'Vendas', 'Conferência', 'Última atividade'].map(label => (
                   <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -319,7 +319,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
                   && row.closing_status !== 'not_started',
                 )
                 return (
-                  <tr key={row.seller_user_id} className="transition-colors hover:bg-gray-50">
+                  <tr key={row.seller_user_id} className="transition-colors hover:bg-surface-alt">
                     <td className="px-4 py-3">
                       <p className="font-medium text-foreground">{row.seller_name}</p>
                       <p className="mt-0.5 text-caption text-muted-foreground">
@@ -344,7 +344,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
                           {row.has_divergence ? 'Revisar diferenças' : 'Dados conferem'}
                         </span>
                       ) : (
-                        <span className="inline-flex rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-muted-foreground">
+                        <span className="inline-flex rounded-lg bg-muted px-2 py-1 text-xs font-medium text-muted-foreground">
                           Aguardando fechamento
                         </span>
                       )}

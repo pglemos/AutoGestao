@@ -179,7 +179,7 @@ export function AulasAoVivoSection() {
               )}
               {agenda.map((aula) => (
                 <button key={aula.id} type="button" onClick={() => abrirProva(aula)} className="flex w-full items-center gap-mx-md py-mx-sm text-left">
-                  <div className="flex h-mx-16 w-mx-14 shrink-0 flex-col items-center justify-center rounded-xl bg-gray-50">
+                  <div className="flex h-mx-16 w-mx-14 shrink-0 flex-col items-center justify-center rounded-xl bg-surface-alt">
                     <span className="text-xs font-bold uppercase text-status-info-text">{formatDate(aula.inicio).slice(0, 3)}</span>
                     <span className="text-2xl font-bold text-foreground">{new Date(aula.inicio).getDate()}</span>
                     <span className="text-xs font-bold uppercase text-muted-foreground">{new Date(aula.inicio).toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')}</span>
@@ -222,7 +222,7 @@ export function AulasAoVivoSection() {
                   </>
                 )
                 return aula.gravacao_url ? (
-                  <a key={aula.id} href={aula.gravacao_url} target="_blank" rel="noreferrer" className="flex items-center gap-mx-sm rounded-xl transition-colors hover:bg-gray-50">
+                  <a key={aula.id} href={aula.gravacao_url} target="_blank" rel="noreferrer" className="flex items-center gap-mx-sm rounded-xl transition-colors hover:bg-surface-alt">
                     {conteudo}
                   </a>
                 ) : (
@@ -272,7 +272,7 @@ export function AulasAoVivoSection() {
                       'rounded-xl border px-mx-md py-mx-xs text-left text-sm transition-colors',
                       respostas[qIndex] === oIndex
                         ? 'border-status-info bg-status-info-surface font-bold text-status-info-text'
-                        : 'border-border-subtle text-muted-foreground hover:bg-gray-50',
+                        : 'border-border-subtle text-muted-foreground hover:bg-surface-alt',
                     )}
                   >
                     {opcao}

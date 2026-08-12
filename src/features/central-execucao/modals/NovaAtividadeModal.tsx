@@ -227,7 +227,7 @@ export function NovaAtividadeModal({
           {error && <p role="alert" className="rounded-xl border border-status-error/30 bg-status-error-surface px-3 py-2 text-[12px] font-semibold text-status-error-text">{error}</p>}
 
           <div className="flex justify-end gap-3 border-t border-border-subtle pt-4">
-            <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-border px-5 py-2.5 text-body-sm font-semibold text-muted-foreground hover:bg-slate-50 disabled:opacity-50">Cancelar</button>
+            <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-border px-5 py-2.5 text-body-sm font-semibold text-muted-foreground hover:bg-surface-alt disabled:opacity-50">Cancelar</button>
             <button type="button" onClick={() => void handleSave()} disabled={!activityType || !date || !time || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white hover:bg-status-info disabled:opacity-50">{saving ? 'Salvando...' : 'Salvar atividade'}</button>
           </div>
         </div>

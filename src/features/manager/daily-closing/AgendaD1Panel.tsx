@@ -403,7 +403,7 @@ export function AgendaD1Panel({
           </div>
 
           <div
-            className="rounded-2xl bg-gray-50 p-4 space-y-3"
+            className="rounded-2xl bg-surface-alt p-4 space-y-3"
             role="group"
             aria-label="Filtros da Agenda D+1"
           >
@@ -513,7 +513,7 @@ export function AgendaD1Panel({
               </p>
               <button
                 type="button"
-                className="mt-3 rounded-mx-md border border-border bg-white px-3 py-1.5 text-xs font-medium text-foreground hover:bg-gray-50"
+                className="mt-3 rounded-mx-md border border-border bg-white px-3 py-1.5 text-xs font-medium text-foreground hover:bg-surface-alt"
                 onClick={() => void fetchAgenda()}
               >
                 Tentar novamente
@@ -541,7 +541,7 @@ export function AgendaD1Panel({
           ) : (
             <div className="overflow-x-auto rounded-2xl border border-border-subtle">
               <table className="w-full text-sm">
-                <thead className="border-b border-border-subtle bg-gray-50 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <thead className="border-b border-border-subtle bg-surface-alt text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   <tr>
                     {[
                       "Horário",
@@ -573,7 +573,7 @@ export function AgendaD1Panel({
                     );
                     return (
                       <FragmentRow key={row.id}>
-                        <tr className="align-top bg-white transition-colors hover:bg-gray-50">
+                        <tr className="align-top bg-white transition-colors hover:bg-surface-alt">
                           <td className="whitespace-nowrap px-4 py-3 font-medium text-foreground">
                             {format(parseISO(row.data_hora), "HH:mm")}
                           </td>
@@ -594,7 +594,7 @@ export function AgendaD1Panel({
                               "Vendedor da equipe"}
                           </td>
                           <td className="px-4 py-3">
-                            <span className="rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-foreground">
+                            <span className="rounded-lg bg-muted px-2 py-1 text-xs font-medium text-foreground">
                               {AGENDA_TIPO_LABEL[row.tipo] === "Visita"
                                 ? "Visita Presencial"
                                 : AGENDA_TIPO_LABEL[row.tipo]}
@@ -624,7 +624,7 @@ export function AgendaD1Panel({
                               </button>
                               <button
                                 type="button"
-                                className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-gray-100"
+                                className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-muted"
                                 aria-label={`Ligar para ${row.cliente?.nome || "cliente"}`}
                                 onClick={() => void callPhone(row)}
                               >
@@ -770,7 +770,7 @@ export function AgendaD1Panel({
               <button
                 type="button"
                 onClick={() => setConfirming(null)}
-                className="rounded-mx-xl px-3 py-2 text-sm text-foreground hover:bg-gray-100"
+                className="rounded-mx-xl px-3 py-2 text-sm text-foreground hover:bg-muted"
               >
                 Cancelar
               </button>
@@ -802,7 +802,7 @@ function FragmentRow({ children }: { children: ReactNode }) {
 
 function ConfirmationInfo({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-mx-xl bg-gray-50 p-3">
+    <div className="rounded-mx-xl bg-surface-alt p-3">
       <p className="mb-0.5 text-xs text-muted-foreground">{label}</p>
       <p className="font-medium text-foreground">{value}</p>
     </div>
@@ -830,5 +830,5 @@ function confirmationStatusClass(status: string) {
     "Solicitou reagendamento": "bg-status-warning-surface text-status-warning-text",
     Cancelou: "bg-status-error-surface text-status-error-text",
     Outro: "bg-status-info-surface text-status-info-text",
-  }[status] || "bg-gray-100 text-muted-foreground";
+  }[status] || "bg-muted text-muted-foreground";
 }

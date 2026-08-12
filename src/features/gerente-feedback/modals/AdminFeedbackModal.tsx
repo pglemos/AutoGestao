@@ -155,7 +155,7 @@ export function AdminFeedbackModal({
                         setSelectedStoreId(e.target.value)
                         setFormData((f) => ({ ...f, seller_id: '' }))
                       }}
-                      className="w-full h-mx-14 px-6 bg-gray-50 border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
+                      className="w-full h-mx-14 px-6 bg-surface-alt border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
                     >
                       <option value="">Todas as lojas</option>
                       {lojas.map((s) => (
@@ -186,7 +186,7 @@ export function AdminFeedbackModal({
                       name="seller_id"
                       value={formData.seller_id}
                       onChange={(e) => onSellerSelect(e.target.value)}
-                      className="w-full h-mx-14 px-6 bg-gray-50 border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
+                      className="w-full h-mx-14 px-6 bg-surface-alt border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
                     >
                       <option value="">Selecione...</option>
                       {filteredSellers.map((s) => (
@@ -214,7 +214,7 @@ export function AdminFeedbackModal({
                     type="date"
                     value={formData.week_reference}
                     onChange={(e) => onWeekReferenceChange(e.target.value)}
-                    className="!h-mx-14 bg-gray-50 font-bold"
+                    className="!h-mx-14 bg-surface-alt font-bold"
                   />
                 </div>
                 <div className="space-y-mx-xs">
@@ -225,7 +225,7 @@ export function AdminFeedbackModal({
                   >
                     Semana
                   </Typography>
-                  <div className="h-mx-14 px-6 bg-gray-50 border border-border rounded-xl flex items-center text-sm font-bold text-status-success-text shadow-none">
+                  <div className="h-mx-14 px-6 bg-surface-alt border border-border rounded-xl flex items-center text-sm font-bold text-status-success-text shadow-none">
                     <Calendar size={18} className="mr-3 opacity-40" />
                     {previousWeekLabel}
                   </div>
@@ -238,7 +238,7 @@ export function AdminFeedbackModal({
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-mx-xl"
                 >
-                  <div className="p-mx-lg bg-gray-50 rounded-2xl border border-border space-y-mx-lg shadow-none">
+                  <div className="p-mx-lg bg-surface-alt rounded-2xl border border-border space-y-mx-lg shadow-none">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-mx-md">
                       {[
                         { label: 'Leads', val: formData.leads_week, icon: Zap },
@@ -324,7 +324,7 @@ export function AdminFeedbackModal({
                           id="feedback-admin-action-template"
                           value=""
                           onChange={(e) => handleFeedbackActionSelect(e.target.value)}
-                          className="w-full h-mx-14 px-6 bg-gray-50 border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
+                          className="w-full h-mx-14 px-6 bg-surface-alt border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
                         >
                           <option value="">Selecionar ação...</option>
                           {FEEDBACK_ACTIONS_CATALOG.map((action) => (

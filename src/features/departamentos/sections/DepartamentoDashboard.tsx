@@ -245,7 +245,7 @@ function ScoreCard({ tone, value }: { tone: string; value: string }) {
     brand: 'border-brand-primary/30 bg-brand-primary-subtle text-status-success-text',
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error-text',
-    muted: 'border-border bg-gray-50 text-muted-foreground',
+    muted: 'border-border bg-surface-alt text-muted-foreground',
   }
   return (
     <Card className={cn('rounded-2xl border p-mx-md', toneClass[tone])}>
@@ -279,7 +279,7 @@ function KpiCard({ kpi }: { kpi: DepartamentoKpi }) {
     brand: 'border-brand-primary/30 bg-brand-primary-subtle text-status-success-text',
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error-text',
-    muted: 'border-border bg-gray-50 text-muted-foreground',
+    muted: 'border-border bg-surface-alt text-muted-foreground',
   }
   return (
     <Card className={cn('rounded-2xl border p-mx-md', toneClass[tone])}>

@@ -85,7 +85,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
                 className={`rounded-xl border px-mx-xs py-1 text-xs font-semibold transition-colors ${
                   acao === sugestao
                     ? 'border-[#005BFF] bg-[#005BFF] text-white'
-                    : 'border-border-subtle bg-gray-50 text-muted-foreground hover:border-[#005BFF]/40'
+                    : 'border-border-subtle bg-surface-alt text-muted-foreground hover:border-[#005BFF]/40'
                 }`}
               >
                 {sugestao}

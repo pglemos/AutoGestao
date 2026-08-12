@@ -55,7 +55,7 @@ export function RegularizationDecisionModal({
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-surface-alt disabled:cursor-not-allowed disabled:opacity-50"
           >
             Cancelar
           </button>

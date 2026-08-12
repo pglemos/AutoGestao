@@ -624,7 +624,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => switchMode('forgot')}
-                                className="h-mx-11 rounded-xl border border-border bg-white text-muted-foreground hover:text-status-success-text hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-sm transition-colors flex items-center justify-center"
+                                className="h-mx-11 rounded-xl border border-border bg-white text-muted-foreground hover:text-status-success-text hover:border-brand-primary/30 hover:bg-surface-alt font-bold text-sm transition-colors flex items-center justify-center"
                                 style={{ gap: '0.5rem' }}
                             >
                                 <KeyRound size={16} />
@@ -636,7 +636,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => switchMode('login')}
-                                className="h-mx-11 rounded-xl border border-border bg-white text-muted-foreground hover:text-status-success-text hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-label transition-colors flex items-center justify-center"
+                                className="h-mx-11 rounded-xl border border-border bg-white text-muted-foreground hover:text-status-success-text hover:border-brand-primary/30 hover:bg-surface-alt font-bold text-label transition-colors flex items-center justify-center"
                                 style={{ gap: '0.5rem' }}
                             >
                                 <ArrowLeft size={16} />

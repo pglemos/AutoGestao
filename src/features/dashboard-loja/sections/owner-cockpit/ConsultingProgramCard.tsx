@@ -58,7 +58,7 @@ export function ConsultingProgramCard({
         </div>
 
         {program.nextVisitNumber ? (
-          <div className="rounded-xl border border-border-subtle bg-gray-50 p-mx-md md:w-[280px]">
+          <div className="rounded-xl border border-border-subtle bg-surface-alt p-mx-md md:w-[280px]">
             <Typography variant="tiny" tone="muted" className="">Próximo encontro</Typography>
             <Typography variant="p" className="mt-mx-xs">Encontro {program.nextVisitNumber}</Typography>
             {nextVisitDate && (

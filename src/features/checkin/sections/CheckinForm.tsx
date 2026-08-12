@@ -687,7 +687,7 @@ Você informou {totalAgendamentosD1} Agendamentos D+1 e detalhou {creditosValido
               <button
                 type="button"
  onClick={() => setConfirmFinalizeModalOpen(false)}
- className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-body-sm font-semibold text-[#64748B] transition-colors hover:bg-slate-50"
+ className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-body-sm font-semibold text-[#64748B] transition-colors hover:bg-surface-alt"
               >
  Não, voltar
               </button>

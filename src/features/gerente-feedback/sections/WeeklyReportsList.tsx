@@ -91,7 +91,7 @@ function ReportMetrics({
           : 'grid grid-cols-1 sm:grid-cols-2 gap-mx-md py-8 border-y border-border-subtle relative z-10'
       }
     >
-      <div className="bg-gray-50 rounded-xl p-mx-md shadow-mx-inner text-center">
+      <div className="bg-surface-alt rounded-xl p-mx-md shadow-mx-inner text-center">
         <Typography
           variant="tiny"
           tone="muted"
@@ -110,7 +110,7 @@ function ReportMetrics({
           {report.weekly_goal}v
         </Typography>
       </div>
-      <div className="bg-gray-50 rounded-xl p-mx-md shadow-mx-inner text-center">
+      <div className="bg-surface-alt rounded-xl p-mx-md shadow-mx-inner text-center">
         <Typography
           variant="tiny"
           tone="muted"

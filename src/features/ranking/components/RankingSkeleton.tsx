@@ -13,7 +13,7 @@ type Props = {
 export function RankingSkeleton({ ariaLabel, variant = 'global' }: Props) {
   return (
     <main
-      className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
+      className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-surface-alt animate-in fade-in duration-500"
       aria-busy="true"
       aria-live="polite"
       aria-label={ariaLabel}

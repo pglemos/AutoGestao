@@ -88,7 +88,7 @@ function TrainingCard({ training, completed, onOpen, large = false }: { training
             </div>
             <div className="p-4">
                 <div className="mb-2 flex items-center gap-2">
-                    <span className={`rounded-full px-2 py-0.5 text-caption font-semibold ${LEVEL_COLORS[training.level] || 'bg-slate-100 text-muted-foreground'}`}>{training.level}</span>
+                    <span className={`rounded-full px-2 py-0.5 text-caption font-semibold ${LEVEL_COLORS[training.level] || 'bg-muted text-muted-foreground'}`}>{training.level}</span>
                     <span className="text-caption text-muted-foreground">{training.duration_minutes} min</span>
                 </div>
                 <h4 className="line-clamp-2 text-sm font-semibold text-mx-navy">{training.title}</h4>
@@ -290,7 +290,7 @@ export default function VendedorTreinamentosContainer() {
                                 const isActive = level.startsWith(nivelMaturidade)
                                 return (
                                     <div key={level} className={`rounded-xl border-2 p-4 text-center transition-all ${isActive ? 'border-mx-blue bg-mx-blue-light/50' : 'border-border-subtle'}`}>
-                                        <div className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold ${isActive ? 'bg-mx-blue text-white' : 'bg-slate-100 text-muted-foreground'}`}>
+                                        <div className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold ${isActive ? 'bg-mx-blue text-white' : 'bg-muted text-muted-foreground'}`}>
                                             {idx + 1}
                                         </div>
                                         <p className={`text-sm font-semibold ${isActive ? 'text-mx-navy' : 'text-muted-foreground'}`}>{level}</p>
@@ -376,7 +376,7 @@ export default function VendedorTreinamentosContainer() {
                                 <h2 id="training-detail-title" className="text-xl font-bold text-mx-navy">{selectedTraining.title}</h2>
                                 {selectedTraining.description && <p className="mt-1 text-sm text-muted-foreground">{selectedTraining.description}</p>}
                             </div>
-                            <button type="button" onClick={() => setSelectedTraining(null)} aria-label="Fechar aula" className="rounded-lg p-2 hover:bg-slate-100"><X /></button>
+                            <button type="button" onClick={() => setSelectedTraining(null)} aria-label="Fechar aula" className="rounded-lg p-2 hover:bg-muted"><X /></button>
                         </header>
                         <div className="space-y-5 overflow-y-auto p-5">
                             <div className="aspect-video overflow-hidden rounded-xl bg-slate-950">
@@ -416,7 +416,7 @@ export default function VendedorTreinamentosContainer() {
                                 onAprovado={() => void refetch()}
                             />
                             {tarefasDaAula.length > 0 && (
-                                <section className="rounded-xl border border-border bg-slate-50 p-4">
+                                <section className="rounded-xl border border-border bg-surface-alt p-4">
                                     <Typography variant="p" className="flex items-center gap-2 text-sm font-bold tracking-wide text-mx-navy">
                                         <CheckCircle2 size={16} className="text-mx-blue" />
                                         Plano de Ação — Tarefa Prática da Aula

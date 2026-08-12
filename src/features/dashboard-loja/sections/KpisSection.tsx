@@ -188,7 +188,7 @@ function MetricCard({
     red: 'bg-status-error-surface text-status-error-text',
     blue: 'bg-status-info-surface text-status-info-text',
     violet: 'bg-status-info-surface text-status-info-text',
-    slate: 'bg-slate-100 text-muted-foreground',
+    slate: 'bg-muted text-muted-foreground',
   }
 
   return (

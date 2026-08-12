@@ -10,7 +10,7 @@ const InfoBox = ({ color, children }) => {
     green:  "bg-brand-primary-subtle border-brand-primary/30 text-brand-primary-active",
     amber:  "bg-status-warning-surface border-status-warning/30 text-status-warning-text",
     red:    "bg-status-error-surface border-status-error/30 text-status-error-text",
-    slate:  "bg-slate-100 border-border text-foreground",
+    slate:  "bg-muted border-border text-foreground",
   };
   return (
     <div className={`border rounded-xl px-4 py-3 text-[12px] font-semibold leading-snug ${styles[color]}`}>
@@ -46,7 +46,7 @@ const Bullet = ({ children }) => (
 
 const CheckItem = ({ label, value, green }) => (
   <div className="flex items-center gap-2.5">
-    <div className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${green ? "bg-brand-primary-subtle" : "bg-slate-100"}`}>
+    <div className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${green ? "bg-brand-primary-subtle" : "bg-muted"}`}>
       <div className={`w-2 h-2 rounded-sm ${green ? "bg-[#22C55E]" : "bg-slate-400"}`} />
     </div>
     <span className="text-body-sm text-[#475569] leading-relaxed flex-1">{label}</span>
@@ -74,7 +74,7 @@ export default function DisciplinaModal({ open, onClose }) {
             </div>
             <button
               onClick={onClose}
-              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors flex-shrink-0 mt-0.5"
+              className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-muted transition-colors flex-shrink-0 mt-0.5"
             >
               <X className="w-4 h-4 text-muted-foreground" />
             </button>
@@ -102,7 +102,7 @@ export default function DisciplinaModal({ open, onClose }) {
           {/* 2 — +30% */}
           <Section icon={Star} iconColor="bg-[#22C55E]" number="2" title="Cadastro dos agendamentos — até +30%">
             <P>Os outros 30% são conquistados quando você detalha, no campo "Cadastrar Novo Cliente", os agendamentos que informou no card "Agendamento D+1".</P>
-            <div className="bg-slate-50 border border-border rounded-xl p-4 space-y-2">
+            <div className="bg-surface-alt border border-border rounded-xl p-4 space-y-2">
               <p className="text-[12px] font-bold text-[#0F172A]">Exemplo:</p>
               <P>Se você informou no card "Agendamento D+1":</P>
               <ul className="space-y-1 list-none">
@@ -134,7 +134,7 @@ export default function DisciplinaModal({ open, onClose }) {
               <Bullet>O campo "Venda Realizada" deve estar como <strong>Em Negociação</strong>;</Bullet>
               <Bullet>A data do agendamento deve ser para o <strong>dia seguinte ao fechamento</strong> (D+1).</Bullet>
             </ul>
-            <div className="bg-slate-50 border border-border rounded-xl p-4">
+            <div className="bg-surface-alt border border-border rounded-xl p-4">
               <p className="text-[12px] font-bold text-[#0F172A] mb-1">Exemplo:</p>
               <P>Se o fechamento é do dia 22/05, o agendamento deve estar marcado para 23/05.</P>
             </div>
@@ -147,7 +147,7 @@ export default function DisciplinaModal({ open, onClose }) {
           <Section icon={Calendar} iconColor="bg-[#F59E0B]" number="4" title="Atenção à data do agendamento">
             <P>Todo agendamento informado no card "Agendamento D+1" deve ser cadastrado com data para o dia seguinte ao fechamento (D+1).</P>
             <P>Agendamentos com data superior ao D+1 são considerados <strong>agendamentos futuros</strong> e não contam na Disciplina do Fechamento.</P>
-            <div className="bg-slate-50 border border-border rounded-xl p-4 space-y-2">
+            <div className="bg-surface-alt border border-border rounded-xl p-4 space-y-2">
               <p className="text-[12px] font-bold text-[#0F172A]">Exemplo:</p>
               <P>Fechamento em 27/06 → D+1 = 28/06. Você cadastrou:</P>
               <ul className="space-y-1 list-none">
@@ -196,7 +196,7 @@ export default function DisciplinaModal({ open, onClose }) {
               <CheckItem label="Cliente vendido conta como venda, não como agendamento" />
               <CheckItem label="Fechamento do dia anterior fica liberado até 09h30 do dia seguinte" />
             </div>
-            <div className="bg-slate-50 border border-border rounded-xl p-4 mt-2">
+            <div className="bg-surface-alt border border-border rounded-xl p-4 mt-2">
               <p className="text-body-sm text-[#475569] leading-relaxed italic">
                 "Essa regra existe para manter seu funil atualizado e ajudar você, sua liderança e a loja a acompanharem melhor as oportunidades reais de venda."
               </p>

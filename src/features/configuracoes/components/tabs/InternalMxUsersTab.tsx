@@ -506,7 +506,7 @@ export function InternalMxUsersTab() {
             <MxTableSurface className="rounded-none border-x-0 border-b-0">
               <table className="min-w-[1120px] w-full text-sm">
                 <thead>
-                  <tr className="border-b border-border bg-gray-50 text-left text-xs uppercase text-muted-foreground">
+                  <tr className="border-b border-border bg-surface-alt text-left text-xs uppercase text-muted-foreground">
                     <th className="px-4 py-3">Usuário</th>
                     <th className="px-4 py-3">Papel</th>
                     <th className="px-4 py-3">Loja</th>

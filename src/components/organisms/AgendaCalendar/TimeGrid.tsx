@@ -111,7 +111,7 @@ export function TimeGrid({
               type="button"
               onClick={() => onDateSelect(dayInfo.date)}
               className={cn(
-                'min-w-0 border-r border-border px-mx-xs py-mx-sm text-center transition-colors last:border-r-0 hover:bg-gray-50',
+                'min-w-0 border-r border-border px-mx-xs py-mx-sm text-center transition-colors last:border-r-0 hover:bg-surface-alt',
                 isSelected && 'bg-brand-primary-subtle',
               )}
             >
@@ -161,7 +161,7 @@ export function TimeGrid({
                 key={dateKey}
                 className={cn(
                   'relative border-r border-border last:border-r-0',
-                  isWeekend && 'bg-gray-50/40',
+                  isWeekend && 'bg-surface-alt/40',
                 )}
                 onClick={(event) => {
                   if (!onSlotClick) return

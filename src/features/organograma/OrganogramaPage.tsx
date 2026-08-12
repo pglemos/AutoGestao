@@ -34,7 +34,7 @@ export default function OrganogramaPage() {
               value={lojaSelecionada}
               onChange={e => setLojaId(e.target.value)}
               disabled={loading || lojas.length === 0}
-              className="h-mx-12 px-mx-sm bg-gray-50 border border-border-subtle rounded-xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+              className="h-mx-12 px-mx-sm bg-surface-alt border border-border-subtle rounded-xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
             >
               <option value="">Selecione…</option>
               {lojas.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}

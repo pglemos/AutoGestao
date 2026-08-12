@@ -46,7 +46,7 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
           </Button>
         </Card>
 
-        <Card className="p-mx-lg bg-gray-50/30 border shadow-sm flex flex-col items-center justify-center text-center">
+        <Card className="p-mx-lg bg-surface-alt/30 border shadow-sm flex flex-col items-center justify-center text-center">
           {latestPlan ? (
             <div className="space-y-mx-xs">
               <div className="w-mx-12 h-mx-12 bg-white rounded-mx-full flex items-center justify-center mx-auto shadow-sm border border-border">
@@ -77,13 +77,13 @@ export function VisitThreeExecution() {
         <Typography variant="h3" className="text-lg">Ritual de Rotinas (Disciplina)</Typography>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
-        <div className="p-mx-md bg-gray-50/30 rounded-2xl border border-border relative">
+        <div className="p-mx-md bg-surface-alt/30 rounded-2xl border border-border relative">
           <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro text-white border-none px-mx-sm py-0.5 shadow-sm">GERENTE</Badge>
           <ul className="space-y-mx-md text-sm font-medium text-muted-foreground mt-2">
             {[ '09:30 - Cobrar preenchimento SGAP', '10:30 - Reunião Matinal / Ranking', '14:00 - Auditoria de CRM / Funil', '17:00 - Devolutiva Imediata' ].map(li => (<li key={li} className="flex items-center gap-mx-xs"><div className="w-mx-xs h-mx-xs rounded-mx-full bg-gray-900 shrink-0" /> {li}</li>))}
           </ul>
         </div>
-        <div className="p-mx-md bg-gray-50/30 rounded-2xl border border-border relative">
+        <div className="p-mx-md bg-surface-alt/30 rounded-2xl border border-border relative">
           <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro text-white border-none px-mx-sm py-0.5 shadow-sm">VENDEDOR</Badge>
           <ul className="space-y-mx-md text-sm font-medium text-muted-foreground mt-2">
             {[ 'Registro Leads Porta/Online', 'Agendamentos Carteira', 'Atendimento e Prospecção', 'Lançamento Vendas Ontem' ].map(li => (<li key={li} className="flex items-center gap-mx-xs"><div className="w-mx-xs h-mx-xs rounded-mx-full bg-brand-primary shrink-0" /> {li}</li>))}
@@ -476,7 +476,7 @@ export function VisitChecklist({ items, onToggle }: { items: Array<{ task: strin
             "p-mx-md rounded-2xl border cursor-pointer transition-all flex items-start gap-mx-sm text-xs font-bold shadow-sm hover:shadow-sm active:scale-95 min-h-mx-16",
             it.completed
               ? "bg-brand-primary/10 text-status-success-text border-brand-primary/30"
-              : "bg-white border-border text-muted-foreground hover:border-brand-primary/40 hover:bg-gray-50/20"
+              : "bg-white border-border text-muted-foreground hover:border-brand-primary/40 hover:bg-surface-alt/20"
           )}
         >
           <div className={cn(

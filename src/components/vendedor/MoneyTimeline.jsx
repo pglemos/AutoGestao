@@ -35,7 +35,7 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
                   ? "bg-slate-900 text-white shadow-lg"
                   : ponto.novaFaixa
                   ? "bg-status-success-surface border-2 border-status-success/40"
-                  : "bg-slate-50 border border-border-subtle"
+                  : "bg-surface-alt border border-border-subtle"
               }`}
             >
               {ponto.novaFaixa && !isAtual && (

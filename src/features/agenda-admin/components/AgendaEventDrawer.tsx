@@ -52,7 +52,7 @@ export function AgendaEventDrawer({
       aria-label="Painel de detalhes do dia"
     >
       {/* Drawer Header */}
-      <div className="flex items-center justify-between border-b border-border px-5 py-4 bg-gray-50/40">
+      <div className="flex items-center justify-between border-b border-border px-5 py-4 bg-surface-alt/40">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
             Agendamentos do Dia
@@ -64,7 +64,7 @@ export function AgendaEventDrawer({
         <button
           type="button"
           onClick={onClose}
-          className="flex h-8 w-8 items-center justify-center rounded-mx-full text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors"
+          className="flex h-8 w-8 items-center justify-center rounded-mx-full text-muted-foreground hover:bg-surface-alt hover:text-foreground transition-colors"
           aria-label="Fechar painel"
         >
           <X size={18} />
@@ -95,7 +95,7 @@ export function AgendaEventDrawer({
       <div className="flex-1 overflow-y-auto p-5 space-y-4 no-scrollbar">
         {totalItems === 0 ? (
           <div className="flex flex-col items-center justify-center py-12 text-center">
-            <div className="flex h-14 w-14 items-center justify-center rounded-mx-full bg-gray-50 text-muted-foreground mb-3">
+            <div className="flex h-14 w-14 items-center justify-center rounded-mx-full bg-surface-alt text-muted-foreground mb-3">
               <CalendarDays size={28} />
             </div>
             <Typography variant="p" className="font-semibold">Nenhum compromisso agendado</Typography>
@@ -129,7 +129,7 @@ export function AgendaEventDrawer({
                       <button
                         type="button"
                         onClick={() => onEditVisit(visit.id)}
-                        className="p-1 rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-status-success-text transition-colors"
+                        className="p-1 rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-status-success-text transition-colors"
                         title="Editar Visita"
                       >
                         <Edit3 size={15} />
@@ -171,7 +171,7 @@ export function AgendaEventDrawer({
 
                   {/* Objective & Details */}
                   {visit.objective && (
-                    <p className="text-xs text-muted-foreground line-clamp-2 bg-gray-50/50 p-2 rounded-xl mb-2">
+                    <p className="text-xs text-muted-foreground line-clamp-2 bg-surface-alt/50 p-2 rounded-xl mb-2">
                       {visit.objective}
                     </p>
                   )}
@@ -257,7 +257,7 @@ export function AgendaEventDrawer({
                       <button
                         type="button"
                         onClick={() => onEditEvent(event)}
-                        className="p-1 rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-status-success-text transition-colors"
+                        className="p-1 rounded-xl text-muted-foreground hover:bg-surface-alt hover:text-status-success-text transition-colors"
                         title="Editar Evento"
                       >
                         <Edit3 size={15} />
@@ -283,7 +283,7 @@ export function AgendaEventDrawer({
                   )}
 
                   {event.topic && (
-                    <p className="text-xs text-muted-foreground bg-gray-50/50 p-2 rounded-xl mb-2">
+                    <p className="text-xs text-muted-foreground bg-surface-alt/50 p-2 rounded-xl mb-2">
                       {event.topic}
                     </p>
                   )}

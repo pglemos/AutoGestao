@@ -169,7 +169,7 @@ function SellerDetailModal({
           <button
             type="button"
             onClick={onClose}
-            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-border text-muted-foreground hover:bg-gray-100 transition-colors"
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-border text-muted-foreground hover:bg-muted transition-colors"
             aria-label="Fechar"
           >
             <X size={18} />
@@ -200,7 +200,7 @@ function SellerDetailModal({
               {error}
             </div>
           ) : sales.length === 0 ? (
-            <div className="rounded-xl bg-gray-50 p-6 text-center text-sm text-muted-foreground">
+            <div className="rounded-xl bg-surface-alt p-6 text-center text-sm text-muted-foreground">
               Nenhuma venda encontrada neste período.
             </div>
           ) : (
@@ -209,7 +209,7 @@ function SellerDetailModal({
                 const competencia = sale.data_competencia
                   || new Date(sale.data_evento).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
                 return (
-                  <div key={sale.id} className="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors">
+                  <div key={sale.id} className="flex items-start gap-3 px-4 py-3 hover:bg-surface-alt transition-colors">
                     <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-status-success-surface text-xs font-bold text-status-success-text mt-0.5">
                       {i + 1}
                     </span>
@@ -219,7 +219,7 @@ function SellerDetailModal({
                           {sale.oportunidade?.veiculo_interesse || sale.oportunidade?.tipo_veiculo || 'Veículo'}
                         </span>
                         {sale.oportunidade?.placa_veiculo && (
-                          <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
+                          <span className="rounded bg-muted px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
                             {sale.oportunidade.placa_veiculo}
                           </span>
                         )}
@@ -272,7 +272,7 @@ function KpiCard({
     : 'text-foreground'
 
   return (
-    <div className="rounded-xl border border-border-subtle bg-gray-50 p-3">
+    <div className="rounded-xl border border-border-subtle bg-surface-alt p-3">
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
         {icon}
         {label}
@@ -298,7 +298,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics, stor
       header: 'Posição',
       width: 'w-20',
       render: (_, index) => (
-        <span className="grid h-8 w-8 place-items-center rounded-lg bg-gray-100 text-xs font-semibold text-muted-foreground">
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-muted text-xs font-semibold text-muted-foreground">
           {index + 1}
         </span>
       ),
@@ -352,7 +352,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics, stor
       header: 'Situação',
       align: 'right',
       render: row => (
-        <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-semibold ${row.vnd_total > 0 ? 'bg-status-success-surface text-status-success-text' : 'bg-gray-100 text-muted-foreground'}`}>
+        <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-semibold ${row.vnd_total > 0 ? 'bg-status-success-surface text-status-success-text' : 'bg-muted text-muted-foreground'}`}>
           {row.vnd_total > 0 ? 'Com venda' : 'Sem venda'}
         </span>
       ),
@@ -396,7 +396,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics, stor
         </header>
 
         {sellerSearch.trim() && filteredRanking.length > 0 && (
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle bg-gray-50 px-5 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle bg-surface-alt px-5 py-3">
             <p className="text-xs text-muted-foreground">Ações disponíveis para o vendedor localizado.</p>
             <div className="flex flex-wrap gap-2">
               <ActionButton label="Ver Vendas" onClick={() => filteredRanking[0] && setSelectedSeller(filteredRanking[0])} />
@@ -434,7 +434,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics, stor
                   <p className="text-sm font-medium text-muted-foreground">{channel.label}</p>
                   <p className="text-sm font-bold text-foreground tabular-nums">{channel.pct}%</p>
                 </div>
-                <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100">
+                <div className="mt-2 h-2 overflow-hidden rounded-full bg-muted">
                   <motion.div
                     initial={reduceMotion ? false : { width: 0 }}
                     animate={{ width: `${Math.min(Math.max(channel.pct, 0), 100)}%` }}
@@ -457,7 +457,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics, stor
               <p className="mt-1 text-sm text-muted-foreground">Síntese para orientar a próxima ação gerencial.</p>
             </div>
           </header>
-          <div className="mt-5 rounded-xl bg-gray-50 p-4">
+          <div className="mt-5 rounded-xl bg-surface-alt p-4">
             <p className="text-sm leading-6 text-muted-foreground">{diagnostics.diagnostico}</p>
             <p className="mt-3 text-sm font-semibold leading-6 text-foreground">{diagnostics.sugestao}</p>
           </div>
@@ -483,7 +483,7 @@ function ActionButton({ label, onClick }: { label: string; onClick: () => void }
     <button
       type="button"
       onClick={onClick}
-      className="h-8 rounded-lg border border-border bg-white px-3 text-xs font-semibold text-muted-foreground hover:bg-gray-100"
+      className="h-8 rounded-lg border border-border bg-white px-3 text-xs font-semibold text-muted-foreground hover:bg-muted"
     >
       {label}
     </button>

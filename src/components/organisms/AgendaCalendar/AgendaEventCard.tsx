@@ -111,7 +111,7 @@ export function AgendaEventCompactChip({
           onOpen?.(event as unknown as React.MouseEvent<HTMLDivElement>)
         }
       }}
-      className="flex min-w-0 items-center gap-1 rounded-lg px-1 py-0.5 text-left transition-colors hover:bg-gray-50"
+      className="flex min-w-0 items-center gap-1 rounded-lg px-1 py-0.5 text-left transition-colors hover:bg-surface-alt"
     >
       <span className={cn('h-mx-tiny w-mx-tiny shrink-0 rounded-mx-full', dotColor)} aria-hidden="true" />
       <Typography variant="tiny" className="shrink-0 text-caption font-semibold tabular-nums">

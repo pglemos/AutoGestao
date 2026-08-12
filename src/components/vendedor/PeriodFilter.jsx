@@ -24,7 +24,7 @@ export default function PeriodFilter({ value, onChange, customStart, customEnd, 
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(v => !v)}
-        className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors shadow-sm ${dark ? "bg-white/5 border border-white/10 text-text-disabled hover:bg-white/10" : "bg-white border border-border text-foreground hover:bg-slate-50"}`}
+        className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors shadow-sm ${dark ? "bg-white/5 border border-white/10 text-text-disabled hover:bg-white/10" : "bg-white border border-border text-foreground hover:bg-surface-alt"}`}
       >
         <Calendar className="w-4 h-4 text-muted-foreground" />
         {selected?.label}
@@ -37,7 +37,7 @@ export default function PeriodFilter({ value, onChange, customStart, customEnd, 
             <button
               key={opt.value}
               onClick={() => { onChange(opt.value); if (opt.value !== "personalizado") setOpen(false); }}
-              className={`w-full text-left px-4 py-2 text-sm transition-colors ${value === opt.value ? (dark ? "text-emerald-400 font-semibold bg-status-success/10" : "text-mx-blue font-semibold bg-mx-blue/5") : (dark ? "text-text-disabled hover:bg-white/5" : "text-foreground hover:bg-slate-50")}`}
+              className={`w-full text-left px-4 py-2 text-sm transition-colors ${value === opt.value ? (dark ? "text-emerald-400 font-semibold bg-status-success/10" : "text-mx-blue font-semibold bg-mx-blue/5") : (dark ? "text-text-disabled hover:bg-white/5" : "text-foreground hover:bg-surface-alt")}`}
             >
               {opt.label}
             </button>

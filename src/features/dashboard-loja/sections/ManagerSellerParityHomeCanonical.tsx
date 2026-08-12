@@ -281,7 +281,7 @@ export function ManagerSellerParityHomeCanonical({
                   : `${formatSales(salesNeededToday)} ${saleSuffix(salesNeededToday)}`}
               />
             </div>
-            <div className="mt-4 h-2 overflow-hidden rounded-full bg-gray-100">
+            <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
               <div
                 className={`h-full rounded-full ${forecastCoverage !== null && forecastCoverage >= 100 ? 'bg-status-success' : 'bg-status-warning'}`}
                 style={{ width: `${Math.min(Math.max(forecastCoverage ?? 0, 0), 100)}%` }}
@@ -367,7 +367,7 @@ function ManagerHeader({
               value={selectedStoreId}
               onChange={event => onStoreChange?.(event.target.value)}
               disabled={!onStoreChange || stores.length <= 1}
-              className="h-10 rounded-xl border border-border bg-white pl-9 pr-8 text-sm outline-none focus:ring-2 focus:ring-status-success disabled:cursor-not-allowed disabled:bg-gray-50"
+              className="h-10 rounded-xl border border-border bg-white pl-9 pr-8 text-sm outline-none focus:ring-2 focus:ring-status-success disabled:cursor-not-allowed disabled:bg-surface-alt"
             >
               {stores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
             </select>
@@ -397,7 +397,7 @@ function ManagerHeader({
             onClick={onRefresh}
             disabled={refreshing}
             aria-label="Atualizar Dashboard"
-            className="grid h-10 w-10 place-items-center rounded-xl border border-border text-muted-foreground hover:bg-gray-50 disabled:opacity-50"
+            className="grid h-10 w-10 place-items-center rounded-xl border border-border text-muted-foreground hover:bg-surface-alt disabled:opacity-50"
           >
             <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
           </button>
@@ -448,7 +448,7 @@ function MetricValue({ value, suffix }: { value: string; suffix: string }) {
 }
 
 function UnavailableValue({ text }: { text: string }) {
-  return <div className="rounded-xl bg-gray-50 p-3 text-sm font-medium text-muted-foreground">{text}</div>
+  return <div className="rounded-xl bg-surface-alt p-3 text-sm font-medium text-muted-foreground">{text}</div>
 }
 
 function ReadingValue({ label, value }: { label: string; value: string }) {
@@ -490,7 +490,7 @@ function TeamFocus({
 
       <div className="overflow-x-auto" role="region" aria-label="Tabela da equipe em foco" tabIndex={0}>
         <table className="w-full min-w-[848px] text-sm">
-          <thead className="bg-gray-50">
+          <thead className="bg-surface-alt">
             <tr>
               {['Vendedor', 'Agend. hoje', 'Projeção de vendas', 'Realizado no mês', 'Próxima faixa', 'Faltam carros', 'Situação'].map(label => (
                 <th
@@ -513,7 +513,7 @@ function TeamFocus({
               <tr
                 key={item.sellerId}
                 onClick={onSellerClick}
-                className="cursor-pointer hover:bg-gray-50"
+                className="cursor-pointer hover:bg-surface-alt"
               >
                 <td className="px-4 py-3 font-medium text-foreground">{item.sellerName}</td>
                 <td className="px-4 py-3">{item.appointmentsToday}</td>
@@ -552,7 +552,7 @@ function FinancialRadar({ team }: { team: ManagerTeamFocusItem[] }) {
         <RadarItem value="—" label="premiação projetada" />
         <RadarItem value="—" label="podem subir de faixa" />
       </div>
-      <p className="mt-4 rounded-xl bg-gray-50 p-3 text-xs text-muted-foreground">
+      <p className="mt-4 rounded-xl bg-surface-alt p-3 text-xs text-muted-foreground">
         Sem regra financeira configurada. Nenhum valor foi inventado.
       </p>
     </article>
@@ -590,7 +590,7 @@ function AppointmentsChart({
       </div>
 
       {data.length === 0 ? (
-        <div className="grid h-56 place-items-center rounded-xl bg-gray-50 text-sm text-muted-foreground">
+        <div className="grid h-56 place-items-center rounded-xl bg-surface-alt text-sm text-muted-foreground">
           Nenhum agendamento confirmado válido hoje.
         </div>
       ) : (
@@ -649,7 +649,7 @@ function ManagerHomeState({
   action?: ReactNode
 }) {
   return (
-    <div className="grid min-h-[60vh] place-items-center bg-gray-50 p-6">
+    <div className="grid min-h-[60vh] place-items-center bg-surface-alt p-6">
       <div className="max-w-lg rounded-2xl border border-border-subtle bg-white p-8 text-center shadow-sm">
         <CheckCircle2 className="mx-auto mb-4 text-status-success-text" size={36} />
         <h1 className="text-xl font-bold text-foreground">{title}</h1>

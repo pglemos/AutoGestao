@@ -66,7 +66,7 @@ export function RankingPodium({ entries, onSelect }: Props) {
                 'absolute -bottom-3 px-3 py-1 rounded-full text-mx-micro font-bold uppercase tracking-wider shadow-lg border border-white/20 whitespace-nowrap z-20',
                 isFirst
                   ? 'bg-brand-primary text-white'
-                  : 'bg-gray-50 text-foreground',
+                  : 'bg-surface-alt text-foreground',
               )}>
                 {isFirst ? '1º lugar' : `#${seller.position} lugar`}
               </div>

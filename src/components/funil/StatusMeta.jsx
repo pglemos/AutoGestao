@@ -51,7 +51,7 @@ export default function StatusMeta({ indicadores, filtro }) {
                 <span>{pct}% da meta</span>
                 <span>{realizado} / {meta}</span>
               </div>
-              <div className="h-2.5 bg-slate-100 rounded-full overflow-hidden">
+              <div className="h-2.5 bg-muted rounded-full overflow-hidden">
                 <div
                   className="h-full bg-[#005BFF] rounded-full transition-all duration-500"
                   style={{ width: `${pct}%` }}
@@ -61,23 +61,23 @@ export default function StatusMeta({ indicadores, filtro }) {
           </div>
 
           {/* Divider */}
-          <div className="hidden sm:block w-px bg-slate-100 self-stretch" />
+          <div className="hidden sm:block w-px bg-muted self-stretch" />
 
           {/* Grid de indicadores */}
           <div className="flex-1 grid grid-cols-2 gap-3">
-            <div className="bg-slate-50 rounded-xl p-3">
+            <div className="bg-surface-alt rounded-xl p-3">
               <p className="text-caption text-muted-foreground uppercase tracking-wide mb-0.5">Faltam</p>
               <p className="text-h3 font-bold text-status-error-text tabular-nums leading-none">{faltam}</p>
               <p className="text-caption text-muted-foreground">vendas</p>
             </div>
-            <div className="bg-slate-50 rounded-xl p-3">
+            <div className="bg-surface-alt rounded-xl p-3">
               <p className="text-caption text-muted-foreground uppercase tracking-wide mb-0.5">Dias úteis restantes</p>
               <p className="text-h3 font-bold text-[#0F172A] tabular-nums leading-none">
                 {filtro === "mes_atual" ? (diasRestantes ?? "—") : "—"}
               </p>
               <p className="text-caption text-muted-foreground">seg–sab</p>
             </div>
-            <div className="bg-slate-50 rounded-xl p-3">
+            <div className="bg-surface-alt rounded-xl p-3">
               <p className="text-caption text-muted-foreground uppercase tracking-wide mb-0.5">Ritmo necessário</p>
               {filtro !== "mes_atual" || necessarioPorDia === null ? (
                 <>
@@ -114,7 +114,7 @@ export default function StatusMeta({ indicadores, filtro }) {
                 </>
               )}
             </div>
-            <div className="bg-slate-50 rounded-xl p-3">
+            <div className="bg-surface-alt rounded-xl p-3">
               <p className="text-caption text-muted-foreground uppercase tracking-wide mb-0.5">Probabilidade</p>
               <p className={`text-h3 font-bold tabular-nums leading-none ${probCor}`}>
                 {probabilidade !== null ? `${probabilidade}%` : "—"}

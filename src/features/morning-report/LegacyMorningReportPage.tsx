@@ -275,7 +275,7 @@ function AdminMorningReport() {
 
     if (loading) return (
         <div
-            className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
+            className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-surface-alt animate-in fade-in duration-500"
             aria-busy="true"
             aria-live="polite"
             role="status"
@@ -294,7 +294,7 @@ function AdminMorningReport() {
     )
 
     return (
-        <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50">
+        <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-surface-alt">
             <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10 shrink-0">
                 <div className="flex flex-col gap-mx-tiny">
                     <div className="flex items-center gap-mx-sm">
@@ -373,7 +373,7 @@ function AdminMorningReport() {
             </div>
 
             <Card className="w-full border-none bg-white overflow-hidden">
-                <CardHeader className="p-mx-lg bg-gray-50/30 border-b border-border flex flex-row items-center justify-between">
+                <CardHeader className="p-mx-lg bg-surface-alt/30 border-b border-border flex flex-row items-center justify-between">
                     <div className="flex items-center gap-mx-sm">
                         <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-border flex items-center justify-center shadow-sm" aria-hidden="true"><Building2 size={24} className="text-status-success-text" /></div>
                         <div>
@@ -386,7 +386,7 @@ function AdminMorningReport() {
                 <div className="overflow-x-auto no-scrollbar" role="region" tabIndex={0} aria-label="Grade operacional da rede com rolagem horizontal">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-gray-50/50 border-b border-border">
+                            <tr className="bg-surface-alt/50 border-b border-border">
                                 <th scope="col" className="pl-10 py-6"><Typography variant="caption" className="">UNIDADE</Typography></th>
                                 <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">META</Typography></th>
                                 <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">VENDAS</Typography></th>
@@ -403,10 +403,10 @@ function AdminMorningReport() {
                                 const healthPct = store.totalSellers > 0 ? Math.round((store.checkedInCount / store.totalSellers) * 100) : 0
                                 return (
                                     <React.Fragment key={store.store_id}>
-                                        <tr className="hover:bg-gray-50/30 transition-colors group cursor-pointer" onClick={() => setExpandedStoreId(isExpanded ? null : store.store_id)}>
+                                        <tr className="hover:bg-surface-alt/30 transition-colors group cursor-pointer" onClick={() => setExpandedStoreId(isExpanded ? null : store.store_id)}>
                                             <td className="pl-10">
                                                 <div className="flex items-center gap-mx-sm">
-                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-border flex items-center justify-center group-hover:bg-brand-primary transition-all shadow-mx-inner" aria-hidden="true">
+                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-surface-alt border border-border flex items-center justify-center group-hover:bg-brand-primary transition-all shadow-mx-inner" aria-hidden="true">
                                                         <Typography variant="tiny" className="group-hover:text-white">{store.store_name.substring(0, 2)}</Typography>
                                                     </div>
                                                     <Typography variant="h3" className="text-base group-hover:text-status-success-text transition-colors tracking-tight">{store.store_name}</Typography>
@@ -439,7 +439,7 @@ function AdminMorningReport() {
                                                             initial={{ height: 0, opacity: 0 }}
                                                             animate={{ height: 'auto', opacity: 1 }}
                                                             exit={{ height: 0, opacity: 0 }}
-                                                            className="overflow-hidden bg-gray-50/30"
+                                                            className="overflow-hidden bg-surface-alt/30"
                                                         >
                                                             <div className="p-mx-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-sm">
                                                                 {store.sellers.map(seller => (
@@ -563,7 +563,7 @@ function StoreMorningReport() {
 
     if (loadingCheckins || loadingGoals) return (
         <div
-            className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
+            className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-surface-alt animate-in fade-in duration-500"
             aria-busy="true"
             aria-live="polite"
             role="status"
@@ -582,7 +582,7 @@ function StoreMorningReport() {
     )
 
     return (
-        <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50">
+        <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-surface-alt">
             <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10 shrink-0">
                 <div className="flex flex-col gap-mx-tiny">
                     <div className="flex items-center gap-mx-sm">
@@ -667,7 +667,7 @@ function StoreMorningReport() {
 
             <section className="grid grid-cols-1 xl:grid-cols-12 gap-mx-lg pb-32">
                 <Card className="xl:col-span-8 border-none bg-white overflow-hidden">
-                    <CardHeader className="p-mx-10 bg-gray-50/30 border-b border-border flex flex-row items-center justify-between">
+                    <CardHeader className="p-mx-10 bg-surface-alt/30 border-b border-border flex flex-row items-center justify-between">
                         <div className="flex items-center gap-mx-sm">
                             <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-border flex items-center justify-center shadow-sm" aria-hidden="true"><BarChart3 size={24} className="text-status-success-text" /></div>
                             <div>
@@ -679,7 +679,7 @@ function StoreMorningReport() {
                     <div className="overflow-x-auto no-scrollbar" role="region" tabIndex={0} aria-label="Grade operacional do time com rolagem horizontal">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-gray-50/50 border-b border-border">
+                                <tr className="bg-surface-alt/50 border-b border-border">
                                     <th scope="col" className="pl-10 py-6"><Typography variant="caption" className="">ESPECIALISTA</Typography></th>
                                     <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">LEADS</Typography></th>
                                     <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">AGEND.</Typography></th>
@@ -692,10 +692,10 @@ function StoreMorningReport() {
                                 {(ranking || []).map((r) => {
                                     const isDone = sellers.find(s => s.id === r.user_id)?.checkin_today
                                     return (
-                                        <tr key={r.user_id} className="hover:bg-gray-50/30 transition-colors group h-mx-3xl">
+                                        <tr key={r.user_id} className="hover:bg-surface-alt/30 transition-colors group h-mx-3xl">
                                             <td className="pl-10">
                                                 <div className="flex items-center gap-mx-sm">
-                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-border flex items-center justify-center group-hover:bg-brand-primary transition-all shadow-mx-inner" aria-hidden="true">
+                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-surface-alt border border-border flex items-center justify-center group-hover:bg-brand-primary transition-all shadow-mx-inner" aria-hidden="true">
                                                         <Typography variant="tiny" className="group-hover:text-white">{r.user_name.substring(0, 2)}</Typography>
                                                     </div>
                                                     <Typography variant="h3" className="text-base group-hover:text-status-success-text transition-colors tracking-tight">{r.user_name}</Typography>
@@ -751,7 +751,7 @@ function StoreMorningReport() {
                                     </Button>
                                 </Card>
                             )}
-                            <div className="p-mx-lg bg-gray-50 rounded-2xl border border-border shadow-none">
+                            <div className="p-mx-lg bg-surface-alt rounded-2xl border border-border shadow-none">
                                 <Typography variant="caption" tone="muted" className="mb-4 block">Sugestão MX</Typography>
                                 <Typography variant="p" className="text-xs font-bold leading-relaxed italic tracking-tight">"Manter o ritmo de agendamentos D-0 para garantir o escoamento projetado."</Typography>
                             </div>

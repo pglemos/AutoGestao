@@ -57,7 +57,7 @@ export function DepartmentsView({
             </div>
             <ScrollableRegion className="mt-mx-lg" label={`Indicadores de ${selectedDepartment.name}`}>
               <table className="min-w-[760px] w-full text-sm">
-                <thead className="bg-gray-50 text-left text-mx-tiny font-bold uppercase text-muted-foreground">
+                <thead className="bg-surface-alt text-left text-mx-tiny font-bold uppercase text-muted-foreground">
                   <tr>
                     <th className="px-mx-sm py-mx-sm">Indicador</th>
                     <th className="px-mx-sm py-mx-sm">Meta</th>

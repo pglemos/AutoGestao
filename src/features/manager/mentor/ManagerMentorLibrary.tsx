@@ -89,7 +89,7 @@ export function ManagerMentorLibrary() {
           onChange={event => setSearch(event.target.value)}
           aria-label="Buscar orientação"
           placeholder="Buscar orientação..."
-          className="w-full rounded-xl border border-border-subtle bg-gray-50 py-2 pl-9 pr-3 text-sm transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-status-success"
+          className="w-full rounded-xl border border-border-subtle bg-surface-alt py-2 pl-9 pr-3 text-sm transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-status-success"
         />
       </div>
 
@@ -101,7 +101,7 @@ export function ManagerMentorLibrary() {
             aria-pressed={category === item.key}
             onClick={() => setCategory(item.key)}
             className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
-              category === item.key ? 'bg-brand-primary text-white shadow-sm' : 'bg-gray-50 text-muted-foreground hover:bg-gray-100'
+              category === item.key ? 'bg-brand-primary text-white shadow-sm' : 'bg-surface-alt text-muted-foreground hover:bg-muted'
             }`}
           >
             {item.label}
@@ -126,7 +126,7 @@ export function ManagerMentorLibrary() {
                 className={`group rounded-xl border p-4 transition-all ${
                   item.highlight
                     ? 'border-status-success/30 bg-status-success-surface/30'
-                    : 'border-border-subtle bg-gray-50/60 hover:border-status-success/30 hover:bg-status-success-surface/40'
+                    : 'border-border-subtle bg-surface-alt/60 hover:border-status-success/30 hover:bg-status-success-surface/40'
                 }`}
               >
                 <div className="mb-2 flex items-start justify-between gap-2">
@@ -201,7 +201,7 @@ export function ManagerMentorLibrary() {
             <p className="mb-3 mt-1 flex items-center gap-1 text-xs text-muted-foreground">
               <Clock size={12} /> Tempo estimado: {selected.duration}
             </p>
-            <div className="mb-3 h-px bg-gray-100" />
+            <div className="mb-3 h-px bg-muted" />
             <p className="text-sm leading-relaxed text-muted-foreground">{selected.content}</p>
           </section>
         </div>

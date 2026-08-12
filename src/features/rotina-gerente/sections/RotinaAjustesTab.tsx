@@ -64,7 +64,7 @@ export function RotinaAjustesTab({
 
         <div className="space-y-mx-md relative z-10">
           {pendingRequests.length === 0 ? (
-            <div className="py-20 text-center flex flex-col items-center justify-center gap-mx-md bg-gray-50 rounded-xl border border-dashed border-border-subtle">
+            <div className="py-20 text-center flex flex-col items-center justify-center gap-mx-md bg-surface-alt rounded-xl border border-dashed border-border-subtle">
               <ShieldCheck size={48} className="text-muted-foreground/20" />
               <Typography
                 variant="p"
@@ -78,7 +78,7 @@ export function RotinaAjustesTab({
             pendingRequests.map((req) => (
               <Card
                 key={req.id}
-                className="border bg-gray-50/30 hover:bg-white hover:shadow-sm transition-all group p-mx-md"
+                className="border bg-surface-alt/30 hover:bg-white hover:shadow-sm transition-all group p-mx-md"
               >
                 <div className="flex flex-col lg:flex-row gap-mx-lg">
                   <div className="flex-1 space-y-mx-md">

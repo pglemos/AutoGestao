@@ -40,7 +40,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
       </CardHeader>
       <CardContent className="p-mx-0 overflow-x-auto">
         <table className="w-full text-left" style={{ minWidth: 960 }}>
-          <thead className="bg-gray-50/60 border-y border-border-subtle">
+          <thead className="bg-surface-alt/60 border-y border-border-subtle">
             <tr>
               {HEADERS.map((head) => (
                 <th
@@ -54,7 +54,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
           </thead>
           <tbody className="divide-y divide-border-subtle">
             {metrics.byStore.map((store) => (
-              <tr key={store.storeId} className="hover:bg-gray-50/40 transition-colors">
+              <tr key={store.storeId} className="hover:bg-surface-alt/40 transition-colors">
                 <td className="px-mx-md py-mx-sm">
                   <button
                     type="button"

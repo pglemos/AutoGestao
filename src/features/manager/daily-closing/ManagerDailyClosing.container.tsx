@@ -760,7 +760,7 @@ export function PendingReminderModal({
 }) {
   const footer = (
     <div className="flex w-full gap-2">
-      <button type="button" onClick={onClose} className="h-9 flex-1 rounded-mx-xl border border-border bg-white px-4 text-sm font-medium text-foreground hover:bg-gray-50">
+      <button type="button" onClick={onClose} className="h-9 flex-1 rounded-mx-xl border border-border bg-white px-4 text-sm font-medium text-foreground hover:bg-surface-alt">
         Cancelar
       </button>
       <button
@@ -784,7 +784,7 @@ export function PendingReminderModal({
       footer={footer}
     >
       <div className="space-y-4">
-        {pendingRows.length > 1 && <div className="rounded-mx-xl bg-gray-50 p-3">
+        {pendingRows.length > 1 && <div className="rounded-mx-xl bg-surface-alt p-3">
           <p className="mb-2 text-xs text-muted-foreground">
             Vendedores que serão cobrados:
           </p>
@@ -922,7 +922,7 @@ function DisciplineCard({ value }: { value: number | null }) {
   // O Base44 pinta o card inteiro conforme a faixa da disciplina, em vez de
   // deixar tudo azul. As faixas seguem as do MX (classifyDiscipline).
   const palette = value === null
-    ? { surface: "bg-gray-50", badge: "bg-gray-100 text-muted-foreground", glow: "from-gray-300 to-gray-400", ring: "rgb(148 163 184)", track: "rgb(241 245 249)", inner: "bg-gray-50", text: "text-muted-foreground" }
+    ? { surface: "bg-surface-alt", badge: "bg-muted text-muted-foreground", glow: "from-gray-300 to-gray-400", ring: "rgb(148 163 184)", track: "rgb(241 245 249)", inner: "bg-surface-alt", text: "text-muted-foreground" }
     : label === "Excelente"
       ? { surface: "bg-status-success-surface", badge: "bg-brand-primary text-white", glow: "from-emerald-400 to-status-success", ring: "rgb(16 185 129)", track: "rgb(209 250 229)", inner: "bg-status-success-surface", text: "text-status-success-text" }
       : label === "Boa"
@@ -986,7 +986,7 @@ export function ClosingTable({
   return (
     <div className="overflow-x-auto">
       <table className="w-full text-sm">
-        <thead className="bg-gray-50">
+        <thead className="bg-surface-alt">
           <tr>
             {[
               "Vendedor",
@@ -1055,7 +1055,7 @@ function DisciplineTrendCard({
             contas diária.
           </p>
         </div>
-        <div className="self-start rounded-xl bg-gray-100 p-1 sm:self-auto">
+        <div className="self-start rounded-xl bg-muted p-1 sm:self-auto">
           {([7, 15, 30] as const).map((option) => (
             <button
               key={option}
@@ -1158,7 +1158,7 @@ function ComparisonRow({
         {tone === "top" && <Trophy size={14} />}
         {label}
       </span>
-      <div className="relative h-6 flex-1 overflow-hidden rounded-full bg-gray-100">
+      <div className="relative h-6 flex-1 overflow-hidden rounded-full bg-muted">
         <div
           className={`flex h-full items-center justify-end rounded-full pr-2 text-xs font-bold text-white ${color}`}
           style={{ width: `${value || 0}%` }}
@@ -1191,10 +1191,10 @@ function SummaryGroup({
     emerald: "bg-status-success-surface text-status-success-text",
     purple: "bg-status-info-surface text-status-info-text",
     amber: "bg-status-warning-surface text-status-warning-text",
-    gray: "bg-gray-50 text-muted-foreground",
+    gray: "bg-surface-alt text-muted-foreground",
   }[tone];
   return (
-    <div className="rounded-xl bg-gray-50 p-3">
+    <div className="rounded-xl bg-surface-alt p-3">
       <h3 className="mb-2 flex items-center gap-1.5 text-xs font-medium text-muted-foreground">
         <span
           className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${iconTone}`}
@@ -1259,7 +1259,7 @@ function ClosingRow({
         <span className="flex items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-status-success-surface text-xs font-bold text-status-success-text">{initials(name)}</span><span className="font-medium text-foreground">{name}</span></span>
       </td>
       <td className="px-4 py-3">
-        <span className={`inline-flex w-fit whitespace-nowrap rounded-mx-md px-2 py-1 text-xs font-medium ${status === "Finalizado" ? "bg-status-success-surface text-status-success-text" : status === "Em andamento" ? "bg-gray-100 text-foreground" :status === "Pendente" ? "bg-status-warning-surface text-status-warning-text" : status === "Fora do horário" ? "bg-status-error-surface text-status-error-text" : "bg-status-info-surface text-status-info-text"}`}>
+        <span className={`inline-flex w-fit whitespace-nowrap rounded-mx-md px-2 py-1 text-xs font-medium ${status === "Finalizado" ? "bg-status-success-surface text-status-success-text" : status === "Em andamento" ? "bg-muted text-foreground" :status === "Pendente" ? "bg-status-warning-surface text-status-warning-text" : status === "Fora do horário" ? "bg-status-error-surface text-status-error-text" : "bg-status-info-surface text-status-info-text"}`}>
           {status}
         </span>
         {isDraft && (

@@ -43,7 +43,7 @@ export function PlanoCarreira() {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleSubmit} className="rounded-2xl border border-border bg-gray-50 p-mx-md">
+      <form onSubmit={handleSubmit} className="rounded-2xl border border-border bg-surface-alt p-mx-md">
         <Typography variant="caption" tone="muted" className="">Adicionar nível de carreira</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <Field label="Cargo"><Input value={form.cargo} onChange={e => setForm(p => ({ ...p, cargo: e.target.value }))} placeholder="Ex.: Vendedor" /></Field>
@@ -68,7 +68,7 @@ export function PlanoCarreira() {
               <Typography variant="caption" className="">{cargo}</Typography>
               <ol className="mt-mx-sm space-y-mx-sm">
                 {porCargo.get(cargo)!.map(n => (
-                  <li key={n.id} className="rounded-xl bg-gray-50 p-mx-sm">
+                  <li key={n.id} className="rounded-xl bg-surface-alt p-mx-sm">
                     <div className="flex items-center gap-mx-sm">
                       <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-mx-full bg-brand-primary px-2 text-xs font-bold text-white">{n.nivel}</span>
                       <span className="font-bold uppercase text-sm">{n.nome}</span>

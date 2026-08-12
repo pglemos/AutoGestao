@@ -78,11 +78,11 @@ function translatePillarQuality(quality: string): { label: string; badgeClass: s
     lateOver24h: { label: 'Atraso > 24h', badgeClass: 'bg-status-error-surface text-status-error-text' },
     awaitingSellerResponse: { label: 'Cliente aguarda retorno', badgeClass: 'bg-status-error-surface text-status-error-text' },
     respected: { label: 'Cadência respeitada', badgeClass: 'bg-status-info-surface text-status-info-text' },
-    completedWithoutResponse: { label: 'Cadência concluída sem resposta', badgeClass: 'bg-slate-100 text-foreground' },
+    completedWithoutResponse: { label: 'Cadência concluída sem resposta', badgeClass: 'bg-muted text-foreground' },
     broken: { label: 'Cadência interrompida/quebrada', badgeClass: 'bg-status-error-surface text-status-error-text' },
     stale: { label: 'Histórico desatualizado', badgeClass: 'bg-status-warning-surface text-status-warning-text' },
   }
-  return map[quality] ?? { label: quality, badgeClass: 'bg-slate-100 text-foreground' }
+  return map[quality] ?? { label: quality, badgeClass: 'bg-muted text-foreground' }
 }
 
 export function FichaOportunidade({
@@ -105,7 +105,7 @@ export function FichaOportunidade({
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto bg-slate-50 font-sans text-foreground rounded-2xl shadow-xl border border-border overflow-hidden my-4">
+    <div className="w-full max-w-5xl mx-auto bg-surface-alt font-sans text-foreground rounded-2xl shadow-xl border border-border overflow-hidden my-4">
       {/* Structural Top Bar — Identity Sidebar Navy */}
       <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800">
         <div>
@@ -154,7 +154,7 @@ export function FichaOportunidade({
               <span className="px-3 py-1 bg-status-info-surface text-status-info-text font-medium text-xs rounded-full border border-status-info/30">
                 {header.family}
               </span>
-              <span className="px-3 py-1 bg-slate-100 text-foreground font-medium text-xs rounded-full">
+              <span className="px-3 py-1 bg-muted text-foreground font-medium text-xs rounded-full">
                 Resp: {header.responsible}
               </span>
               {header.temperature && (
@@ -269,7 +269,7 @@ export function FichaOportunidade({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div className="bg-slate-50 p-4 rounded-lg border border-border space-y-1">
+            <div className="bg-surface-alt p-4 rounded-lg border border-border space-y-1">
               <span className="text-xs font-bold text-muted-foreground uppercase">Próximo Passo</span>
               <p className="font-bold text-foreground text-base">{nextAction.nextStep}</p>
               <p className="text-xs text-muted-foreground mt-1">
@@ -277,7 +277,7 @@ export function FichaOportunidade({
               </p>
             </div>
 
-            <div className="bg-slate-50 p-4 rounded-lg border border-border space-y-2 text-xs">
+            <div className="bg-surface-alt p-4 rounded-lg border border-border space-y-2 text-xs">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Vencimento da Ação:</span>
                 <span className="font-bold text-foreground">{formatDate(nextAction.nextActionAt)}</span>
@@ -352,7 +352,7 @@ export function FichaOportunidade({
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
             {whatWeKnow.factsSummary.map((item, idx) => (
-              <div key={idx} className="bg-slate-50 p-3 rounded-lg border border-border">
+              <div key={idx} className="bg-surface-alt p-3 rounded-lg border border-border">
                 <span className="text-muted-foreground block">{item.label}</span>
                 <span className="font-semibold text-foreground mt-1 block">{item.value}</span>
               </div>
@@ -367,7 +367,7 @@ export function FichaOportunidade({
               {Object.entries(whatWeKnow.qualityDetails).map(([key, val]) => {
                 const info = translatePillarQuality(val)
                 return (
-                  <div key={key} className="flex justify-between items-center bg-slate-50 p-2.5 rounded border border-border">
+                  <div key={key} className="flex justify-between items-center bg-surface-alt p-2.5 rounded border border-border">
                     <span className="font-medium text-foreground capitalize">{key}:</span>
                     <span className={`px-2 py-0.5 rounded font-semibold ${info.badgeClass}`}>
                       {info.label}
@@ -424,7 +424,7 @@ export function FichaOportunidade({
               {whatIsMissing.missingPillars.length > 0 ? (
                 <div className="space-y-1.5">
                   {whatIsMissing.missingPillars.map((item: MissingPillarInfo) => (
-                    <div key={item.pillar} className="flex justify-between items-center bg-slate-50 p-2 rounded border border-border">
+                    <div key={item.pillar} className="flex justify-between items-center bg-surface-alt p-2 rounded border border-border">
                       <span>{item.label}</span>
                       <span className="font-semibold text-status-error-text">
                         -{item.missing} pt (Atual: {item.current}/{item.max})
@@ -440,7 +440,7 @@ export function FichaOportunidade({
 
           {/* Explicações determinísticas */}
           {whatIsMissing.explanations.length > 0 && (
-            <div className="bg-slate-50 p-3 rounded-lg border border-border text-xs space-y-1">
+            <div className="bg-surface-alt p-3 rounded-lg border border-border text-xs space-y-1">
               <span className="font-bold text-foreground block">Notas Determinísticas do Mentor:</span>
               <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
                 {whatIsMissing.explanations.map((exp, i) => (
@@ -469,7 +469,7 @@ export function FichaOportunidade({
           {history.entries.length > 0 ? (
             <div className="space-y-2">
               {history.entries.map((entry, index) => (
-                <div key={index} className="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-border text-xs">
+                <div key={index} className="flex justify-between items-center bg-surface-alt p-3 rounded-lg border border-border text-xs">
                   <div>
                     <span className="font-bold text-foreground block">{entry.description}</span>
                     {entry.result && (

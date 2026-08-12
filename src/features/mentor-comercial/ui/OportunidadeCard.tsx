@@ -82,7 +82,7 @@ function getPriorityBadgeClass(prioClass?: string | null): string {
       return 'bg-status-info-surface text-status-info-text border-status-info/30'
     case 'Baixa':
     default:
-      return 'bg-slate-100 text-foreground border-border'
+      return 'bg-muted text-foreground border-border'
   }
 }
 
@@ -101,7 +101,7 @@ function getScoreBadgeClass(scoreClass?: string | null): string {
 }
 
 function getTemperatureBadgeClass(temp?: string | null): string {
-  if (!temp) return 'bg-slate-100 text-muted-foreground border-border'
+  if (!temp) return 'bg-muted text-muted-foreground border-border'
   const t = temp.toLowerCase()
   if (t.includes('quente') || t.includes('alta')) {
     return 'bg-status-error-surface text-status-error-text border-status-error/30 font-semibold'
@@ -189,7 +189,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
                   {formatarTelefoneBR(phone)}
                 </span>
               )}
-              <span className="bg-slate-100 text-foreground px-2 py-0.5 rounded text-xs font-medium">
+              <span className="bg-muted text-foreground px-2 py-0.5 rounded text-xs font-medium">
                 Canal: {canalDisplay}
               </span>
               <span className="text-muted-foreground">Origem: {origemDisplay}</span>
@@ -204,7 +204,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
               <Car className="w-4 h-4 text-status-info-text" />
               <span>{veiculo_interesse}</span>
               {placa_veiculo && (
-                <span className="bg-slate-100 text-muted-foreground px-1.5 py-0.5 rounded text-caption font-mono">
+                <span className="bg-muted text-muted-foreground px-1.5 py-0.5 rounded text-caption font-mono">
                   {placa_veiculo}
                 </span>
               )}
@@ -220,7 +220,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
       </div>
 
       {/* Corpo Intermediário: Status, Objetivo, Próximo Passo, Data, Tentativa */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs bg-slate-50/70 p-3.5 rounded-lg border border-border-subtle">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs bg-surface-alt/70 p-3.5 rounded-lg border border-border-subtle">
         <div>
           <span className="text-muted-foreground font-medium uppercase text-caption tracking-wider block mb-1">
             Status Atual
@@ -333,7 +333,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
         <button
           type="button"
           onClick={() => onAtualizarSituacao?.(oportunidade)}
-          className="border border-border-strong bg-white hover:bg-slate-50 active:bg-slate-100 text-foreground font-semibold text-xs px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5"
+          className="border border-border-strong bg-white hover:bg-surface-alt active:bg-muted text-foreground font-semibold text-xs px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5"
         >
           <RefreshCw className="w-3.5 h-3.5 text-muted-foreground" />
           Atualizar situação
@@ -342,7 +342,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
         <button
           type="button"
           onClick={() => onAbrirFicha?.(oportunidade)}
-          className="border border-border bg-slate-50 hover:bg-slate-100 text-muted-foreground font-medium text-xs px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5"
+          className="border border-border bg-surface-alt hover:bg-muted text-muted-foreground font-medium text-xs px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5"
         >
           <FileText className="w-3.5 h-3.5 text-muted-foreground" />
           Abrir ficha

@@ -148,7 +148,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                         {filtered.map(store => {
                             const s = stats[store.id] || { sellers: 0, checkedIn: 0, disciplinePct: 0 }
                             return (
-                                <div key={store.id} className="flex items-center justify-between gap-mx-md p-mx-md hover:bg-gray-50 transition-colors">
+                                <div key={store.id} className="flex items-center justify-between gap-mx-md p-mx-md hover:bg-surface-alt transition-colors">
                                     <div className="flex items-center gap-mx-sm flex-1 min-w-0">
                                         <div className={`w-mx-12 h-mx-12 rounded-2xl flex items-center justify-center text-white shrink-0 ${store.active ? 'bg-brand-primary' : 'bg-text-tertiary'}`}>
                                             <Building2 size={20} />
@@ -238,7 +238,7 @@ function Mini({ icon, label, value, tone }: { icon: React.ReactNode; label: stri
     return (
         <Card className="p-mx-md border-none bg-white">
             <div className="flex items-center gap-mx-sm">
-                <div className={`w-mx-10 h-mx-10 rounded-2xl bg-gray-50 flex items-center justify-center ${toneColor}`}>{icon}</div>
+                <div className={`w-mx-10 h-mx-10 rounded-2xl bg-surface-alt flex items-center justify-center ${toneColor}`}>{icon}</div>
                 <div>
                     <Typography variant="tiny" tone="muted" className="">{label}</Typography>
                     <Typography variant="h3" className="tabular-nums">{value}</Typography>

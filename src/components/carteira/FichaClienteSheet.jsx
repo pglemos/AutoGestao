@@ -46,7 +46,7 @@ function calcularQualidade(cliente) {
     return { label: "Precisa de informação", color: "bg-status-warning-surface text-status-warning-text border-status-warning/30" };
   if (SITUACOES_ENCERRADAS_SEM_VENDA.includes(s))
     return { label: "Recuperação", color: "bg-status-error-surface text-status-error-text border-status-error/30" };
-  return { label: "Nova oportunidade", color: "bg-slate-50 text-muted-foreground border-border" };
+  return { label: "Nova oportunidade", color: "bg-surface-alt text-muted-foreground border-border" };
 }
 
 // ─── URGÊNCIA DA AÇÃO ─────────────────────────────────────────────────────────
@@ -71,7 +71,7 @@ function calcularUrgencia(cliente) {
     return { label: "Visita próxima", color: "bg-status-info-surface text-status-info-text border-status-info/30" };
   if (isAmanha(proxData) || isAmanha(visitaData))
     return { label: "Acompanhar amanhã", color: "bg-status-warning-surface text-status-warning-text border-status-warning/30" };
-  return { label: "Sem urgência imediata", color: "bg-slate-50 text-muted-foreground border-border" };
+  return { label: "Sem urgência imediata", color: "bg-surface-alt text-muted-foreground border-border" };
 }
 
 // ─── O QUE FALTA PARA EVOLUIR ────────────────────────────────────────────────
@@ -132,7 +132,7 @@ function Bloco({ title, icon, children, defaultOpen = true }) {
     <div className="border border-border-subtle rounded-2xl overflow-hidden">
       <button
         onClick={() => setOpen(o => !o)}
-        className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors"
+        className="w-full flex items-center justify-between px-4 py-3 bg-surface-alt hover:bg-muted transition-colors"
       >
         <div className="flex items-center gap-2">
           {icon && <span className="text-base">{icon}</span>}
@@ -165,7 +165,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
   const URGENCIA_OPTS = ["Imediato", "30 dias", "60 dias", "90 dias", "Sem prazo", "Não informado"];
 
   return (
-    <div className="space-y-4 bg-slate-50 rounded-2xl p-4">
+    <div className="space-y-4 bg-surface-alt rounded-2xl p-4">
       <p className="text-xs font-black text-muted-foreground uppercase tracking-wider">Editar informações</p>
 
       {/* Dados Principais */}
@@ -491,7 +491,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
               {/* Situação + Temperatura */}
               <div className="flex flex-wrap gap-1.5">
                 <span className={`text-caption font-bold px-2.5 py-1 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura || "Morno"}</span>
-                <span className="text-caption font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-muted-foreground border border-border">{situacao}</span>
+                <span className="text-caption font-semibold px-2.5 py-1 rounded-full bg-muted text-muted-foreground border border-border">{situacao}</span>
               </div>
 
               {/* Venda cancelada — motivo, data e responsável ficam visíveis
@@ -596,7 +596,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                       <Button
                         variant="outline"
                         onClick={() => abrirAlterarPasso(null)}
-                        className="rounded-xl text-sm border-border text-muted-foreground hover:bg-slate-50 gap-1.5"
+                        className="rounded-xl text-sm border-border text-muted-foreground hover:bg-surface-alt gap-1.5"
                       >
                         <Pencil className="w-3.5 h-3.5" /> Alterar próximo passo
                       </Button>
@@ -651,7 +651,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                         <FieldRow label="Orçamento" value={cliente.valor_negociado} />
                       </div>
                       {cliente.observacoes && (
-                        <div className="mt-2 p-2.5 bg-slate-50 rounded-xl">
+                        <div className="mt-2 p-2.5 bg-surface-alt rounded-xl">
                           <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-0.5">Observações</p>
                           <p className="text-xs text-muted-foreground">{cliente.observacoes}</p>
                         </div>
@@ -720,7 +720,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                         <div key={h.id} className="flex items-start gap-3 pb-4 last:pb-0 relative">
                           {/* Linha vertical */}
                           {idx < historico.length - 1 && (
-                            <div className="absolute left-[7px] top-5 bottom-0 w-px bg-slate-100" />
+                            <div className="absolute left-[7px] top-5 bottom-0 w-px bg-muted" />
                           )}
                           <div className="w-3.5 h-3.5 rounded-full border-2 border-[#005BFF] bg-white shrink-0 mt-0.5 relative z-10" />
                           <div className="flex-1 min-w-0">

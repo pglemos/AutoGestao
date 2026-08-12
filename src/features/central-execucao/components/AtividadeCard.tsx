@@ -59,17 +59,17 @@ const TYPE_BADGE: Record<CentralActivityType, string> = {
   atendimento: 'bg-status-info-surface text-status-info-text',
   visita: 'bg-status-info-surface text-status-info-text',
   retorno: 'bg-status-warning-surface text-status-warning-text',
-  documentacao: 'bg-slate-100 text-muted-foreground',
+  documentacao: 'bg-muted text-muted-foreground',
   entrega: 'bg-status-info-surface text-status-info-text',
   pos_venda: 'bg-brand-primary-subtle text-brand-primary',
   aniversario: 'bg-status-info-surface text-status-info-text',
   garantia: 'bg-status-warning-surface text-status-warning-text',
-  comercial: 'bg-slate-100 text-muted-foreground',
+  comercial: 'bg-muted text-muted-foreground',
   test_drive: 'bg-status-info-surface text-status-info-text',
   negociacao: 'bg-status-info-surface text-status-info-text',
-  pdi: 'bg-slate-100 text-muted-foreground',
-  feedback: 'bg-slate-100 text-muted-foreground',
-  funil: 'bg-slate-100 text-muted-foreground',
+  pdi: 'bg-muted text-muted-foreground',
+  feedback: 'bg-muted text-muted-foreground',
+  funil: 'bg-muted text-muted-foreground',
 }
 
 const TYPE_ICON: Record<CentralActivityType, LucideIcon> = {
@@ -100,7 +100,7 @@ const PRIORITY_BADGE: Record<CentralExecutionAction['priority'], string> = {
   urgent: 'bg-status-error-surface text-status-error-text',
   high: 'bg-status-error-surface text-status-error-text',
   medium: 'bg-status-warning-surface text-status-warning-text',
-  low: 'bg-slate-100 text-muted-foreground',
+  low: 'bg-muted text-muted-foreground',
 }
 
 function formatPhoneDisplay(value: string | null | undefined) {
@@ -176,7 +176,7 @@ export function AtividadeCard({
           </div>
 
           <div className="mb-2 flex items-center gap-2.5">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[12px] font-bold text-muted-foreground">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-muted text-[12px] font-bold text-muted-foreground">
               {initials(clientName)}
             </div>
             <div className="min-w-0">
@@ -200,7 +200,7 @@ export function AtividadeCard({
               </button>
             )}
             {phoneDigits && (
-              <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-caption font-bold text-muted-foreground transition-colors hover:bg-slate-50">
+              <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-caption font-bold text-muted-foreground transition-colors hover:bg-surface-alt">
                 <Phone className="h-3 w-3" aria-hidden="true" /> Ligar
               </a>
             )}
@@ -232,7 +232,7 @@ export function AtividadeCard({
           </div>
 
           <div className="flex min-w-0 flex-1 items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[12px] font-bold text-muted-foreground">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-muted text-[12px] font-bold text-muted-foreground">
               {initials(clientName)}
             </div>
             <div className="min-w-0 flex-1">
@@ -264,7 +264,7 @@ export function AtividadeCard({
               </button>
             )}
             {phoneDigits && (
-              <a href={`tel:${phoneDigits}`} title="Ligar" aria-label={`Ligar para ${clientName}`} className="rounded-xl bg-slate-50 p-2 text-muted-foreground transition-colors hover:bg-slate-100">
+              <a href={`tel:${phoneDigits}`} title="Ligar" aria-label={`Ligar para ${clientName}`} className="rounded-xl bg-surface-alt p-2 text-muted-foreground transition-colors hover:bg-muted">
                 <Phone className="h-4 w-4" aria-hidden="true" />
               </a>
             )}

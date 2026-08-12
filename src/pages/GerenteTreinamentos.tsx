@@ -236,7 +236,7 @@ export default function GerenteTreinamentos() {
             />
 
             <div className="flex items-center gap-mx-sm w-full sm:w-auto sm:self-end">
-                            <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar" className="h-mx-xl w-mx-xl bg-white hover:bg-gray-50">
+                            <Button variant="outline" size="icon" onClick={handleRefresh} aria-label="Atualizar" className="h-mx-xl w-mx-xl bg-white hover:bg-surface-alt">
                                 <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
                             </Button>
                             <div className="relative group flex-1 sm:flex-none">
@@ -294,7 +294,7 @@ export default function GerenteTreinamentos() {
                                     <Card className="border p-mx-md h-full bg-white group hover:shadow-sm transition-all relative overflow-hidden flex flex-col gap-mx-10">
                                         <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-brand-primary/5 rounded-mx-full blur-mx-xl -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                                         <header className="flex justify-between items-start relative z-10">
-                                            <div className={cn("w-mx-14 h-mx-14 rounded-xl flex items-center justify-center border shadow-none transition-all", t.watched ? "bg-status-success-surface text-status-success border-mx-emerald-100" : "bg-gray-50 text-muted-foreground border-border-subtle group-hover:bg-brand-primary group-hover:text-white")}>
+                                            <div className={cn("w-mx-14 h-mx-14 rounded-xl flex items-center justify-center border shadow-none transition-all", t.watched ? "bg-status-success-surface text-status-success border-mx-emerald-100" : "bg-surface-alt text-muted-foreground border-border-subtle group-hover:bg-brand-primary group-hover:text-white")}>
                                                 <GraduationCap size={28} strokeWidth={2} />
                                             </div>
                                             {t.watched && <Badge variant="success" className="px-4 py-1 rounded-mx-full text-mx-micro shadow-sm">CONCLUÍDO</Badge>}
@@ -325,7 +325,7 @@ export default function GerenteTreinamentos() {
                     ) : tab === 'matriz' ? (
                         <motion.div key="matriz" initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} exit={{ opacity: 0, scale: 0.98 }}>
                             <Card className="border bg-white overflow-hidden flex flex-col">
-                                <header className="p-mx-md border-b border-border-subtle bg-gray-50/30 flex items-center justify-between">
+                                <header className="p-mx-md border-b border-border-subtle bg-surface-alt/30 flex items-center justify-between">
                                     <div className="flex items-center gap-mx-sm">
                                         <div className="w-mx-10 h-mx-10 rounded-xl bg-brand-primary text-white flex items-center justify-center shadow-sm"><LayoutDashboard size={20} /></div>
                                         <div>
@@ -341,8 +341,8 @@ export default function GerenteTreinamentos() {
                                 <div className="flex-1 overflow-x-auto no-scrollbar">
                                     <table className="w-full text-left min-w-mx-elite-table">
                                         <thead>
-                                            <tr className="bg-gray-50/50 border-b border-border text-caption font-semibold text-muted-foreground">
-                                                <th scope="col" className="pl-10 py-6 sticky left-mx-0 bg-gray-50/50 z-20">VENDEDOR</th>
+                                            <tr className="bg-surface-alt/50 border-b border-border text-caption font-semibold text-muted-foreground">
+                                                <th scope="col" className="pl-10 py-6 sticky left-mx-0 bg-surface-alt/50 z-20">VENDEDOR</th>
                                                 {treinamentos.map(t => (
                                                     <th key={t.id} scope="col" className="px-4 py-6 text-center group relative min-w-mx-32">
                                                         <span className="truncate block max-w-mx-20 mx-auto">{t.title}</span>
@@ -355,8 +355,8 @@ export default function GerenteTreinamentos() {
                                         </thead>
                                         <tbody className="divide-y divide-border-default bg-white">
                                             {teamProgress.map((p) => (
-                                                <tr key={p.seller_id} className="hover:bg-gray-50/30 transition-colors h-mx-20 group">
-                                                    <td className="pl-10 sticky left-mx-0 bg-white group-hover:bg-gray-50/30 z-10 border-r border-border">
+                                                <tr key={p.seller_id} className="hover:bg-surface-alt/30 transition-colors h-mx-20 group">
+                                                    <td className="pl-10 sticky left-mx-0 bg-white group-hover:bg-surface-alt/30 z-10 border-r border-border">
                                                         <div className="flex items-center gap-mx-sm">
                                                             <Avatar src={p.avatar_url || undefined} alt={`Avatar de ${p.seller_name}`} fallback={p.seller_name} className="w-mx-10 h-mx-10 rounded-2xl shadow-none" />
                                                             <Typography variant="p" className="text-sm  truncate max-w-mx-label-lg">{p.seller_name}</Typography>
@@ -368,7 +368,7 @@ export default function GerenteTreinamentos() {
                                                             <td key={t.id} className="px-4 text-center">
                                                                 <div className="flex flex-col items-center justify-center gap-mx-tiny">
                                                                     <div className={cn("w-mx-9 h-mx-9 rounded-xl flex items-center justify-center border shadow-sm transition-all", 
-                                                                        isWatched ? 'bg-status-success-surface text-status-success-text border-mx-emerald-100' : 'bg-gray-50 text-muted-foreground/30'
+                                                                        isWatched ? 'bg-status-success-surface text-status-success-text border-mx-emerald-100' : 'bg-surface-alt text-muted-foreground/30'
                                                                     )}>
                                                                         {isWatched ? <CheckCircle size={16} /> : <X size={16} />}
                                                                     </div>
@@ -392,7 +392,7 @@ export default function GerenteTreinamentos() {
                                     <Card className="border bg-white p-mx-md group hover:shadow-sm transition-all relative overflow-hidden flex flex-col items-center text-center">
                                         <div className="absolute top-mx-0 right-mx-0 w-mx-32 h-mx-32 bg-brand-primary/5 rounded-mx-full blur-2xl -mr-16 -mt-16" />
                                         
-                                        <div className="w-mx-20 h-mx-20 rounded-mx-full border-4 border-white shadow-sm overflow-hidden bg-gray-50 mb-6 group-hover:scale-105 transition-transform relative z-10">
+                                        <div className="w-mx-20 h-mx-20 rounded-mx-full border-4 border-white shadow-sm overflow-hidden bg-surface-alt mb-6 group-hover:scale-105 transition-transform relative z-10">
                                             <Avatar src={p.avatar_url || undefined} alt={`Avatar de ${p.seller_name}`} fallback={p.seller_name} className="w-full h-full rounded-mx-full" />
                                         </div>
 
@@ -405,7 +405,7 @@ export default function GerenteTreinamentos() {
                                                     <Typography variant="tiny" className="">Conclusão</Typography>
                                                     <Typography variant="mono" tone="brand" className="text-sm">{progressPct}%</Typography>
                                                 </div>
-                                                <div className="h-mx-xs w-full bg-gray-50 rounded-mx-full overflow-hidden border border-border-subtle p-mx-px">
+                                                <div className="h-mx-xs w-full bg-surface-alt rounded-mx-full overflow-hidden border border-border-subtle p-mx-px">
                                                     <motion.div initial={{ width: 0 }} animate={{ width: `${progressPct}%` }} className="h-full bg-brand-primary rounded-mx-full" />
                                                 </div>
                                             </div>

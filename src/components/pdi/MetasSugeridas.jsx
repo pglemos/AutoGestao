@@ -138,7 +138,7 @@ export default function MetasSugeridas() {
     <div className="bg-white rounded-2xl shadow-sm border border-border-subtle overflow-hidden">
       <button
         onClick={() => setExpanded(v => !v)}
-        className="w-full p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors"
+        className="w-full p-5 flex items-center justify-between hover:bg-surface-alt/50 transition-colors"
       >
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5 text-mx-amber" />

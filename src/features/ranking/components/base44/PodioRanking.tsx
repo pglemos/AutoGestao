@@ -22,7 +22,7 @@ export function PodioRanking({ top3 }: { top3: RankedVendedor[] }) {
           if (!v) {
             return (
               <div key={pos} className="flex flex-col items-center gap-2" style={{ order }}>
-                <div className="w-14 h-14 rounded-full bg-slate-100 border-2 border-border flex items-center justify-center">
+                <div className="w-14 h-14 rounded-full bg-muted border-2 border-border flex items-center justify-center">
                   <span className="text-text-disabled text-lg font-bold">{pos}</span>
                 </div>
                 <div className="rounded-t-md w-16 sm:w-20" style={{ height, background: bg, opacity: 0.4 }} />

@@ -267,7 +267,7 @@ function AlertCard({
       Icon: AlertTriangle,
     },
     outline: {
-      surface: 'border-border bg-gray-50',
+      surface: 'border-border bg-surface-alt',
       badge: 'bg-muted text-muted-foreground',
       icon: 'text-muted-foreground',
       label: 'Validar',
@@ -292,7 +292,7 @@ function AlertCard({
       <button
         type="button"
         onClick={onOpen}
-        className="mt-auto inline-flex h-9 items-center justify-between rounded-xl bg-white px-3 text-sm font-semibold text-foreground shadow-sm transition hover:bg-gray-50"
+        className="mt-auto inline-flex h-9 items-center justify-between rounded-xl bg-white px-3 text-sm font-semibold text-foreground shadow-sm transition hover:bg-surface-alt"
       >
         {alert.ctaLabel}
         <ArrowRight size={15} />

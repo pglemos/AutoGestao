@@ -111,7 +111,7 @@ export function ConsultoriaClienteDetalhe() {
   if (error || !client) return <div className="p-mx-20 text-center text-status-error-text">{error || 'Cliente não encontrado'}</div>
 
   return (
-    <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50">
+    <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-surface-alt">
       <ClientHeaderSection client={client} />
 
       <TabNav tabs={TABS} activeTab={activeTab} onTabChange={handleTabChange} />

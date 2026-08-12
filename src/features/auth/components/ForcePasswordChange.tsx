@@ -71,7 +71,7 @@ export function ForcePasswordChange() {
       <motion.div 
         initial={{ opacity: 0 }} 
         animate={{ opacity: 1 }} 
-        className="absolute inset-0 bg-gray-50/80 backdrop-blur-md" 
+        className="absolute inset-0 bg-surface-alt/80 backdrop-blur-md" 
       />
       
       <motion.div 
@@ -118,7 +118,7 @@ export function ForcePasswordChange() {
                     <Typography variant="tiny" tone="muted" className="">Nova Credencial</Typography>
                     {formData.password && (
                       <motion.div initial={{ opacity: 0, x: 10 }} animate={{ opacity: 1, x: 0 }} className="flex items-center gap-mx-xs">
-                        <div className={cn("h-mx-tiny w-12 rounded-mx-full overflow-hidden bg-gray-50")}>
+                        <div className={cn("h-mx-tiny w-12 rounded-mx-full overflow-hidden bg-surface-alt")}>
                           <motion.div 
                             className={cn("h-full transition-all duration-500", strengthColor)} 
                             style={{ width: `${(passwordStrength / 4) * 100}%` }}
@@ -139,7 +139,7 @@ export function ForcePasswordChange() {
                       placeholder="NOVA SENHA" 
                       value={formData.password} 
                       onChange={e => setFormData({...formData, password: e.target.value})}
-                      className="!h-mx-16 !pl-mx-14 !pr-mx-14 bg-gray-50 border-border rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-muted-foreground/30"
+                      className="!h-mx-16 !pl-mx-14 !pr-mx-14 bg-surface-alt border-border rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-muted-foreground/30"
                     />
                     <button 
                       type="button"
@@ -162,14 +162,14 @@ export function ForcePasswordChange() {
                       placeholder="REPETIR SENHA" 
                       value={formData.confirmPassword} 
                       onChange={e => setFormData({...formData, confirmPassword: e.target.value})}
-                      className="!h-mx-16 !pl-mx-14 bg-gray-50 border-border rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-muted-foreground/30"
+                      className="!h-mx-16 !pl-mx-14 bg-surface-alt border-border rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-muted-foreground/30"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Security Hint */}
-              <div className="p-mx-md rounded-2xl bg-gray-50 border border-border flex gap-mx-md items-start">
+              <div className="p-mx-md rounded-2xl bg-surface-alt border border-border flex gap-mx-md items-start">
                 <div className="p-mx-xs rounded-xl bg-brand-primary/10 text-status-success-text">
                   <Sparkles size={16} />
                 </div>

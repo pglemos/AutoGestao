@@ -272,7 +272,7 @@ export default function PDIPage({ hideHeader = false }) {
           <ScrollableRegion label="Ações do plano de desenvolvimento">
             <table className="w-full">
               <thead>
-                <tr className="bg-slate-50">
+                <tr className="bg-surface-alt">
                   {["Ação", "Competência", "Prazo", "Status", "Progresso"].map(h => (
                     <th key={h} className="text-left text-xs font-medium text-muted-foreground uppercase tracking-wider px-5 py-3">{h}</th>
                   ))}
@@ -280,7 +280,7 @@ export default function PDIPage({ hideHeader = false }) {
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {actions.map(a => (
-                  <tr key={a.id} className="hover:bg-slate-50/50">
+                  <tr key={a.id} className="hover:bg-surface-alt/50">
                     <td className="px-5 py-3.5">
                       <p className="text-sm font-medium text-mx-navy">{a.action}</p>
                       <p className="text-xs text-slate-400">{a.description}</p>

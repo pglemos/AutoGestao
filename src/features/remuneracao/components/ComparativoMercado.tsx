@@ -39,7 +39,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
 
   return (
     <div className="space-y-mx-lg">
-      <div className="rounded-2xl border border-border bg-gray-50 p-mx-md">
+      <div className="rounded-2xl border border-border bg-surface-alt p-mx-md">
         <Typography variant="caption" tone="muted" className="font-bold tracking-wide">
           Parâmetros de comparação
         </Typography>
@@ -72,7 +72,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
       ) : (
         <ScrollableRegion className="rounded-2xl border border-border" label="Comparativo de mercado">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-muted-foreground">
+            <thead className="bg-surface-alt text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Cargo</th>
                 <th className="px-mx-md py-mx-sm text-right">Total atual</th>

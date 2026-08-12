@@ -108,7 +108,7 @@ export const CarteiraAtivaList: React.FC<CarteiraAtivaListProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Buscar nome, tel, WhatsApp, veículo, placa..."
-            className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-border rounded-lg text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-status-info focus:bg-white transition-all"
+            className="w-full pl-9 pr-8 py-2 bg-surface-alt border border-border rounded-lg text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-status-info focus:bg-white transition-all"
           />
           {searchTerm && (
             <button

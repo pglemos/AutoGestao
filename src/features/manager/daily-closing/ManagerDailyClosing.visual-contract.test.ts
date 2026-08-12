@@ -13,7 +13,7 @@ describe("ManagerDailyClosing visual contract", () => {
       '"bg-white rounded-mx-2xl border border-border-subtle shadow-sm p-5"',
     );
     expect(source).toContain('"bg-white rounded-mx-2xl border border-border-subtle shadow-sm overflow-hidden"');
-    expect(source).toContain('"bg-gray-50"');
+    expect(source).toContain('"bg-surface-alt"');
     expect(source).toContain('"divide-y divide-border-subtle"');
     expect(source).toContain('"inline-flex h-[36px] items-center gap-1 rounded-mx-xl bg-brand-primary');
     expect(source).toContain('className="px-2.5 py-1 rounded-full text-xs font-semibold opacity-0"');

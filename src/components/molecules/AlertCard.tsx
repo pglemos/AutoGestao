@@ -123,7 +123,7 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
                     onClick={onQuickAction}
                     className={cn(
                       'inline-flex items-center gap-1.5 text-sm font-bold px-3 py-1.5 rounded-[var(--mx-button-radius)] transition-colors',
-                      'bg-white border border-border hover:bg-gray-50',
+                      'bg-white border border-border hover:bg-surface-alt',
                       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1',
                       type === 'critical' && 'focus-visible:ring-status-error',
                       type === 'warning' && 'focus-visible:ring-status-warning',
@@ -138,7 +138,7 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
                     role="button"
                     aria-disabled="true"
                     tabIndex={-1}
-                    className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-[var(--mx-button-radius)] border border-border-subtle bg-gray-50 px-3 py-1.5 text-sm font-bold text-muted-foreground"
+                    className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-[var(--mx-button-radius)] border border-border-subtle bg-surface-alt px-3 py-1.5 text-sm font-bold text-muted-foreground"
                   >
                     {quickActionLabel}
                   </span>

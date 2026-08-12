@@ -54,7 +54,7 @@ export function Checkin() {
 
     if (hookLoading) {
         return (
-            <div className="h-full w-full flex flex-col items-center justify-center bg-gray-50">
+            <div className="h-full w-full flex flex-col items-center justify-center bg-surface-alt">
                 <RefreshCw className="w-mx-xl h-mx-xl animate-spin text-status-success-text mb-6" />
                 <Typography variant="caption" tone="muted" className="animate-pulse">Sincronizando Fechamento Diário...</Typography>
             </div>
@@ -91,7 +91,7 @@ const previousCard = ctx.activeClosingContext.previousCard
     ]
 
   return (
-    <div className="relative min-h-full w-full min-w-0 bg-gray-50 no-scrollbar">
+    <div className="relative min-h-full w-full min-w-0 bg-surface-alt no-scrollbar">
       <PageCanvas width="dashboard" bottomClearance="navigation" className="flex flex-col gap-4">
             {checkinLoadError && (
                 <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error-text">

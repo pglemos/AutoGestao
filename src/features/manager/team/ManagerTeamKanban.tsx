@@ -109,13 +109,13 @@ export function ManagerTeamKanban({ cards, view, storeName, onViewChange, onOpen
   return <div className="space-y-4">
     <section className="rounded-2xl border border-border-subtle bg-white p-4 shadow-sm" data-tour="kanban-equipe" aria-label="Visão do Kanban">
       <div className="mb-1.5 flex items-center gap-1.5"><Eye size={14} className="text-muted-foreground"/><p className="text-xs font-medium text-muted-foreground">Visão do Kanban</p></div>
-      <div className="inline-flex max-w-full gap-1 overflow-x-auto rounded-xl border border-border bg-gray-50 p-1" role="tablist" aria-label="Classificação da equipe">
+      <div className="inline-flex max-w-full gap-1 overflow-x-auto rounded-xl border border-border bg-surface-alt p-1" role="tablist" aria-label="Classificação da equipe">
         {VIEW_OPTIONS.map(option => <button key={option.value} type="button" role="tab" aria-selected={view === option.value} onClick={() => onViewChange(option.value)} className={`whitespace-nowrap rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${view === option.value ? 'bg-brand-primary text-white shadow-sm' : 'text-muted-foreground hover:bg-white hover:text-foreground'}`}>{option.label}</button>)}
       </div>
       <p className="mt-1.5 text-caption text-muted-foreground">A posição no Kanban muda conforme a visão selecionada.</p>
     </section>
 
-    <div className="sticky top-0 z-30 bg-gray-50 py-1">
+    <div className="sticky top-0 z-30 bg-surface-alt py-1">
       <div className="flex items-center justify-center gap-2 py-2">
       <Users size={15} className="text-status-success-text"/>
       <p className="text-sm font-semibold text-foreground"><span className="text-base text-status-success-text">{summary.onTrackPercentage}%</span> da equipe Em dia</p>
@@ -137,7 +137,7 @@ export function ManagerTeamKanban({ cards, view, storeName, onViewChange, onOpen
           const config = COLUMN_CONFIG[status]
           const Icon = config.icon
           const active = activeMobileStatus === status
-          return <button key={status} type="button" disabled={groups[status].length === 0} onClick={() => setMobileStatus(status)} className={`rounded-xl border py-2.5 transition-colors ${active ? config.active : groups[status].length === 0 ? 'border-border-subtle bg-gray-50 text-text-disabled' : `${config.header} bg-opacity-60`}`}>
+          return <button key={status} type="button" disabled={groups[status].length === 0} onClick={() => setMobileStatus(status)} className={`rounded-xl border py-2.5 transition-colors ${active ? config.active : groups[status].length === 0 ? 'border-border-subtle bg-surface-alt text-text-disabled' : `${config.header} bg-opacity-60`}`}>
             <span className="flex items-center justify-center gap-1 text-xs font-semibold"><Icon size={14}/>{config.label}</span>
             <span className="mt-0.5 block text-lg font-bold">{groups[status].length}</span>
           </button>
@@ -189,16 +189,16 @@ function ManagerSellerCard({ card, view, status, storeName, onOpenProfile, onAct
 
 function KanbanMetric({ label, value, status, highlight }: { label: string; value: number | null; status: ManagerTeamStatus; highlight: boolean }) {
   const valueTone = !highlight ? 'text-foreground' : status === 'not_applicable' ? 'text-muted-foreground' : status === 'on_track' ? 'text-status-success-text' : status === 'attention' ? 'text-status-warning-text' : 'text-status-error-text'
-  return <div className="rounded-xl border border-border-subtle bg-gray-50 p-2.5 text-center"><p className={`text-xl font-bold ${valueTone}`}>{value === null ? '—' : `${Math.round(value)}%`}</p><p className="text-xs text-muted-foreground">{label}</p></div>
+  return <div className="rounded-xl border border-border-subtle bg-surface-alt p-2.5 text-center"><p className={`text-xl font-bold ${valueTone}`}>{value === null ? '—' : `${Math.round(value)}%`}</p><p className="text-xs text-muted-foreground">{label}</p></div>
 }
 
 function ActionItem({ icon: Icon, label, onClick }: { icon: typeof CalendarClock; label: string; onClick: () => void }) {
-  return <button type="button" onClick={onClick} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs text-muted-foreground hover:bg-gray-50 hover:text-foreground"><Icon size={14}/>{label}</button>
+  return <button type="button" onClick={onClick} className="flex w-full items-center gap-2 rounded-lg px-3 py-2 text-left text-xs text-muted-foreground hover:bg-surface-alt hover:text-foreground"><Icon size={14}/>{label}</button>
 }
 
 function NotApplicableSellers({ cards, storeName }: { cards: ManagerTeamCard[]; storeName: string }) {
   if (cards.length === 0) return null
-  return <details className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm"><summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 hover:bg-gray-50 [&::-webkit-details-marker]:hidden"><span className="flex items-center gap-2 text-sm font-semibold text-foreground"><UserX size={16} className="text-muted-foreground"/>Não aplicáveis no período — {cards.length}</span><ChevronDown size={16} className="text-muted-foreground"/></summary><div className="space-y-2 px-4 pb-4">{cards.map(card => <div key={card.row.user_id} className="flex items-center justify-between gap-3 rounded-xl bg-gray-50 p-3"><div className="flex min-w-0 items-center gap-2.5"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-gray-100 text-xs font-bold text-muted-foreground">{initials(card.row.user_name)}</span><div className="min-w-0"><p className="truncate text-sm font-medium text-foreground">{card.row.user_name}</p><p className="truncate text-xs text-muted-foreground">{storeName}</p></div></div><p className="max-w-[220px] text-right text-caption text-muted-foreground">{card.reason}</p></div>)}</div></details>
+  return <details className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm"><summary className="flex cursor-pointer list-none items-center justify-between px-4 py-3 hover:bg-surface-alt [&::-webkit-details-marker]:hidden"><span className="flex items-center gap-2 text-sm font-semibold text-foreground"><UserX size={16} className="text-muted-foreground"/>Não aplicáveis no período — {cards.length}</span><ChevronDown size={16} className="text-muted-foreground"/></summary><div className="space-y-2 px-4 pb-4">{cards.map(card => <div key={card.row.user_id} className="flex items-center justify-between gap-3 rounded-xl bg-surface-alt p-3"><div className="flex min-w-0 items-center gap-2.5"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-lg bg-muted text-xs font-bold text-muted-foreground">{initials(card.row.user_name)}</span><div className="min-w-0"><p className="truncate text-sm font-medium text-foreground">{card.row.user_name}</p><p className="truncate text-xs text-muted-foreground">{storeName}</p></div></div><p className="max-w-[220px] text-right text-caption text-muted-foreground">{card.reason}</p></div>)}</div></details>
 }
 
 function initials(name: string) {

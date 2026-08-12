@@ -12,7 +12,7 @@ const formatData = (iso: string | null) => iso ? new Date(iso).toLocaleDateStrin
 function StatusBadge({ venda }: { venda: VendaLoja }) {
   if (venda.etapa === 'cancelada') {
     return (
-      <span title={venda.motivo_cancelamento || undefined} className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-caption font-semibold text-muted-foreground">
+      <span title={venda.motivo_cancelamento || undefined} className="inline-flex items-center rounded-full bg-muted px-2.5 py-1 text-caption font-semibold text-muted-foreground">
         Cancelada
       </span>
     )
@@ -107,7 +107,7 @@ export function VendasFechadasLoja({
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px]">
             <thead>
-              <tr className="border-b border-border-subtle bg-slate-50">
+              <tr className="border-b border-border-subtle bg-surface-alt">
                 {['Cliente', 'Vendedor', 'Veículo', 'Valor', 'Fechamento', 'Status', 'Ações'].map(h => (
                   <th key={h} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wider text-muted-foreground">{h}</th>
                 ))}
@@ -115,7 +115,7 @@ export function VendasFechadasLoja({
             </thead>
             <tbody>
               {filtradas.map(venda => (
-                <tr key={venda.id} className="border-b border-slate-50 hover:bg-slate-50/50">
+                <tr key={venda.id} className="border-b border-slate-50 hover:bg-surface-alt/50">
                   <td className="px-4 py-3 text-body-sm font-semibold text-foreground">{venda.cliente_nome}</td>
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{venda.seller_nome}</td>
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{venda.veiculo_interesse || '—'}</td>

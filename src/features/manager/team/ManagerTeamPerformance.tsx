@@ -84,23 +84,23 @@ function ManagerTeamLoadingState() {
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-2">
             <div className="h-6 w-40 animate-pulse rounded bg-muted" />
-            <div className="h-4 w-96 max-w-full animate-pulse rounded bg-gray-100" />
+            <div className="h-4 w-96 max-w-full animate-pulse rounded bg-muted" />
           </div>
           <div className="flex gap-2">
-            <div className="h-10 w-52 animate-pulse rounded-xl bg-gray-100" />
-            <div className="h-10 w-36 animate-pulse rounded-xl bg-gray-100" />
+            <div className="h-10 w-52 animate-pulse rounded-xl bg-muted" />
+            <div className="h-10 w-36 animate-pulse rounded-xl bg-muted" />
           </div>
         </div>
       </header>
       <div className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
-        <div className="h-4 w-28 animate-pulse rounded bg-gray-100" />
-        <div className="mt-4 h-10 w-80 max-w-full animate-pulse rounded-xl bg-gray-100" />
+        <div className="h-4 w-28 animate-pulse rounded bg-muted" />
+        <div className="mt-4 h-10 w-80 max-w-full animate-pulse rounded-xl bg-muted" />
       </div>
       <div className="grid gap-4 lg:grid-cols-3">
         {['Críticos', 'Atenção', 'Em dia'].map(label => <section key={label} className="min-h-[280px] overflow-hidden rounded-2xl border border-border-subtle bg-white" aria-label={`Carregando coluna ${label}`}>
-          <div className="h-14 animate-pulse bg-gray-100" />
+          <div className="h-14 animate-pulse bg-muted" />
           <div className="space-y-3 p-3">
-            <div className="h-56 animate-pulse rounded-2xl bg-gray-50" />
+            <div className="h-56 animate-pulse rounded-2xl bg-surface-alt" />
           </div>
         </section>)}
     </div>

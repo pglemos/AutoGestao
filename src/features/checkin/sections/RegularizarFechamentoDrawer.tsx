@@ -59,7 +59,7 @@ function NumStepper({ value, onChange, disabled }: { value: number; onChange: (v
         type="button"
         disabled={disabled}
         onClick={() => onChange(Math.max(0, value - 1))}
-        className="flex h-full w-9 shrink-0 items-center justify-center rounded-l-xl border-r border-border text-[18px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground disabled:cursor-not-allowed"
+        className="flex h-full w-9 shrink-0 items-center justify-center rounded-l-xl border-r border-border text-[18px] font-light text-muted-foreground transition-colors hover:bg-surface-alt hover:text-foreground disabled:cursor-not-allowed"
       >
         −
       </button>
@@ -79,7 +79,7 @@ function NumStepper({ value, onChange, disabled }: { value: number; onChange: (v
         type="button"
         disabled={disabled}
         onClick={() => onChange(Math.min(999, value + 1))}
-        className="flex h-full w-9 shrink-0 items-center justify-center rounded-r-xl border-l border-border text-[18px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground disabled:cursor-not-allowed"
+        className="flex h-full w-9 shrink-0 items-center justify-center rounded-r-xl border-l border-border text-[18px] font-light text-muted-foreground transition-colors hover:bg-surface-alt hover:text-foreground disabled:cursor-not-allowed"
       >
         +
       </button>
@@ -196,7 +196,7 @@ export function RegularizarFechamentoDrawer({
                 {dataFormatada} — <span className="capitalize">{weekday}</span>
               </p>
             </div>
-            <button type="button" onClick={onClose} className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-slate-100" aria-label="Fechar">
+            <button type="button" onClick={onClose} className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-muted" aria-label="Fechar">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -320,7 +320,7 @@ export function RegularizarFechamentoDrawer({
 
           {/* Footer */}
           <div className="flex flex-shrink-0 items-center justify-end gap-3 border-t border-border bg-white px-5 py-4">
-            <button type="button" onClick={onVoltar} className="flex items-center gap-1.5 rounded-xl border border-border bg-white px-4 py-2.5 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-slate-50">
+            <button type="button" onClick={onVoltar} className="flex items-center gap-1.5 rounded-xl border border-border bg-white px-4 py-2.5 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-surface-alt">
               <ArrowLeft className="h-3.5 w-3.5" /> Voltar
             </button>
             <button

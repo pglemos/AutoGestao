@@ -96,18 +96,18 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 }
 
 function Field({ label, value }: { label: string; value: ReactNode }) {
-  return <div className="rounded-mx-xl bg-gray-50 p-2.5"><p className="mb-0.5 text-xs text-muted-foreground">{label}</p><div className="text-sm font-medium text-foreground">{value}</div></div>;
+  return <div className="rounded-mx-xl bg-surface-alt p-2.5"><p className="mb-0.5 text-xs text-muted-foreground">{label}</p><div className="text-sm font-medium text-foreground">{value}</div></div>;
 }
 
 function Channel({ name, values }: { name: string; values: Array<[string, number | string]> }) {
-  return <div className="rounded-mx-xl bg-gray-50 p-3"><p className="mb-2 text-xs font-semibold text-muted-foreground">{name}</p><div className="flex flex-wrap gap-4">{values.map(([label, value]) => <div key={label}><span className="text-xs text-muted-foreground">{label}: </span><span className="text-sm font-semibold text-foreground">{value}</span></div>)}</div></div>;
+  return <div className="rounded-mx-xl bg-surface-alt p-3"><p className="mb-2 text-xs font-semibold text-muted-foreground">{name}</p><div className="flex flex-wrap gap-4">{values.map(([label, value]) => <div key={label}><span className="text-xs text-muted-foreground">{label}: </span><span className="text-sm font-semibold text-foreground">{value}</span></div>)}</div></div>;
 }
 
 function Discipline({ value }: { value: string }) {
   const numeric = Number.parseInt(value, 10);
   if (!Number.isFinite(numeric)) return <>{value}</>;
   const color = numeric < 70 ? "rgb(249 115 22)" : numeric < 90 ? "rgb(59 130 246)" : "rgb(16 185 129)";
-  return <span aria-label={`Disciplina ${value}`} className="grid h-14 w-14 place-items-center rounded-full p-1 text-xs font-bold" style={{ background: `conic-gradient(${color} ${numeric * 3.6}deg, rgb(241 245 249) 0deg)`, color }}><span className="grid h-full w-full place-items-center rounded-full bg-gray-50">{value}</span></span>;
+  return <span aria-label={`Disciplina ${value}`} className="grid h-14 w-14 place-items-center rounded-full p-1 text-xs font-bold" style={{ background: `conic-gradient(${color} ${numeric * 3.6}deg, rgb(241 245 249) 0deg)`, color }}><span className="grid h-full w-full place-items-center rounded-full bg-surface-alt">{value}</span></span>;
 }
 
 function metric(value: number | null | undefined): number | string {

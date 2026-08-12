@@ -36,8 +36,8 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                       <div
                         className={
                           variant === 'admin'
-                            ? 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-border-subtle flex items-center justify-center font-bold text-foreground text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-none uppercase'
-                            : 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-border-subtle flex items-center justify-center font-bold text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-none uppercase'
+                            ? 'w-mx-xl h-mx-xl rounded-xl bg-surface-alt border border-border-subtle flex items-center justify-center font-bold text-foreground text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-none uppercase'
+                            : 'w-mx-xl h-mx-xl rounded-xl bg-surface-alt border border-border-subtle flex items-center justify-center font-bold text-sm group-hover:bg-brand-primary group-hover:text-white transition-all shadow-none uppercase'
                         }
                       >
                         {sellerName.substring(0, 2)}
@@ -87,7 +87,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                         </Typography>
                       </div>
                     )}
-                    <div className="p-mx-md bg-gray-50 rounded-xl group-hover:bg-white group-hover:shadow-sm transition-all">
+                    <div className="p-mx-md bg-surface-alt rounded-xl group-hover:bg-white group-hover:shadow-sm transition-all">
                       {showActionHeader ? (
                         <header className="flex items-center justify-between mb-4 border-b border-border/10 pb-3">
                           <Typography

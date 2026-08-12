@@ -41,7 +41,7 @@ export function EstadoVazio({
         <button type="button" onClick={onOpenRoutine} className="flex items-center gap-1.5 rounded-xl border border-status-info px-4 py-2 text-body-sm font-bold text-status-info-text transition-colors hover:bg-status-info-surface">
           <Sparkles className="h-4 w-4" aria-hidden="true" /> Ver Rotina do Dia
         </button>
-        <Link to="/carteira-clientes" className="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-slate-50">
+        <Link to="/carteira-clientes" className="flex items-center gap-1.5 rounded-xl border border-border px-4 py-2 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-surface-alt">
           <Users className="h-4 w-4" aria-hidden="true" /> Abrir Carteira
         </Link>
         <button type="button" onClick={onCreate} className="flex items-center gap-1.5 rounded-xl bg-status-info px-4 py-2 text-body-sm font-bold text-white transition-colors hover:bg-status-info">

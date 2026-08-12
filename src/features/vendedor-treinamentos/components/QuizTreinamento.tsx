@@ -65,7 +65,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
     }
 
     return (
-        <section className="rounded-2xl border border-border-subtle bg-gray-50/40 p-4" aria-label="Prova oficial da aula">
+        <section className="rounded-2xl border border-border-subtle bg-surface-alt/40 p-4" aria-label="Prova oficial da aula">
             <Typography variant="p" className="flex items-center gap-2 text-sm font-bold tracking-wide">
                 <ClipboardCheck size={16} className="text-status-success-text" />
                 Prova Oficial — nota mínima 70%
@@ -82,7 +82,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
                         </legend>
                         <div className="mt-2 space-y-1.5">
                             {questao.opcoes.map((opcao, opcaoIndice) => (
-                                <label key={opcaoIndice} className="flex cursor-pointer select-none items-start gap-2.5 rounded-xl p-1.5 text-sm hover:bg-gray-50">
+                                <label key={opcaoIndice} className="flex cursor-pointer select-none items-start gap-2.5 rounded-xl p-1.5 text-sm hover:bg-surface-alt">
                                     <input
                                         type="radio"
                                         name={`quiz-${questao.id}`}

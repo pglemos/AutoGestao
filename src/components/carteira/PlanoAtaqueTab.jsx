@@ -277,7 +277,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           <div><h2 className="text-lg font-black text-[#031B3D]">Campanhas e condições</h2><p className="mt-1 text-sm text-muted-foreground">Cadastre um feirão, desconto ou bônus de troca e inicie uma missão para os clientes ativos elegíveis.</p></div>
           <span className="rounded-full bg-status-info-surface px-3 py-1 text-xs font-bold text-status-info-text">{campanhas.length} ativa(s)</span>
         </div>
-        <form onSubmit={salvarCampanha} className="mt-4 grid grid-cols-1 gap-3 rounded-xl bg-slate-50 p-4 md:grid-cols-2">
+        <form onSubmit={salvarCampanha} className="mt-4 grid grid-cols-1 gap-3 rounded-xl bg-surface-alt p-4 md:grid-cols-2">
           <select aria-label="Tipo da campanha" value={campanhaForm.tipo} onChange={event => setCampanhaForm(prev => ({ ...prev, tipo: event.target.value }))} className="h-10 rounded-xl border border-border bg-white px-3 text-sm">
             <option value="campanha">Campanha</option><option value="feirao">Feirão</option><option value="desconto">Desconto</option><option value="bonus_troca">Bônus na troca</option>
           </select>
@@ -301,7 +301,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           {campanhas.map(campanha => {
             const { resultado } = candidatosElegiveis(clientes, campanha);
             const elegiveis = resultado.eligible;
-            return <div key={campanha.id} className="rounded-xl border border-border-subtle p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-[#031B3D]">{campanha.titulo}</p><p className="mt-1 text-xs text-muted-foreground">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-slate-100 px-2 py-1 text-caption font-bold text-muted-foreground">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#005BFF] px-3 py-2 text-xs font-bold text-status-info-text disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} cliente(s)</button></div>;
+            return <div key={campanha.id} className="rounded-xl border border-border-subtle p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-[#031B3D]">{campanha.titulo}</p><p className="mt-1 text-xs text-muted-foreground">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-muted px-2 py-1 text-caption font-bold text-muted-foreground">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#005BFF] px-3 py-2 text-xs font-bold text-status-info-text disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} cliente(s)</button></div>;
           })}
         </div>
         {campanhas.length === 0 && <p className="mt-4 rounded-xl border border-dashed border-border p-5 text-center text-sm text-muted-foreground">Nenhuma campanha ativa cadastrada para esta loja.</p>}

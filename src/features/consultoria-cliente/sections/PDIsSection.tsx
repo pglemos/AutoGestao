@@ -65,7 +65,7 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
             <Badge variant="brand">ANEXO</Badge>
           </div>
 
-          <div className="p-mx-md bg-gray-50/30 rounded-2xl flex items-center gap-mx-sm mb-mx-md">
+          <div className="p-mx-md bg-surface-alt/30 rounded-2xl flex items-center gap-mx-sm mb-mx-md">
             <FileText className="w-mx-5 h-mx-5 text-status-success-text shrink-0" />
             <div className="min-w-0">
               <Typography variant="p" className="text-sm font-bold truncate">{attachment.filename}</Typography>
@@ -98,7 +98,7 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
             </div>
 
             <div className="space-y-mx-md mb-mx-md">
-              <div className="p-mx-md bg-gray-50/30 rounded-2xl">
+              <div className="p-mx-md bg-surface-alt/30 rounded-2xl">
                 <Typography variant="tiny" className="font-bold mb-1 block">Objetivo 6 Meses</Typography>
                 <Typography variant="p" className="text-sm font-bold italic">"{pdi.meta_6m}"</Typography>
               </div>

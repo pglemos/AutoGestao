@@ -184,7 +184,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
                   onClick={() => setActiveKind(kind)}
                   className={cn(
                     'min-h-mx-14 rounded-2xl px-4 text-left transition-all',
-                    active ? 'bg-brand-primary text-white shadow-sm' : 'bg-gray-50 text-muted-foreground hover:bg-border-default',
+                    active ? 'bg-brand-primary text-white shadow-sm' : 'bg-surface-alt text-muted-foreground hover:bg-border-default',
                   )}
                 >
                   <span className="block text-xs font-bold uppercase tracking-widest">{KIND_META[kind].label}</span>

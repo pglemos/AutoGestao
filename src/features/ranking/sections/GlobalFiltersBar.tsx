@@ -47,7 +47,7 @@ export function GlobalFiltersBar({
           onClick={() => onFilterStoreChange('all')}
           className={cn(
             "px-3 py-1 rounded-lg text-mx-tiny font-bold uppercase tracking-widest whitespace-nowrap transition-colors",
-            filterStore === 'all' ? 'bg-brand-primary text-white' : 'text-muted-foreground hover:bg-gray-50'
+            filterStore === 'all' ? 'bg-brand-primary text-white' : 'text-muted-foreground hover:bg-surface-alt'
           )}
         >Todas</button>
         {lojas.map(store => (
@@ -57,7 +57,7 @@ export function GlobalFiltersBar({
             onClick={() => onFilterStoreChange(store === filterStore ? 'all' : (store || 'all'))}
             className={cn(
               "px-3 py-1 rounded-lg text-mx-tiny font-bold uppercase tracking-widest whitespace-nowrap transition-colors",
-              filterStore === store ? 'bg-brand-primary text-mx-black' : 'text-muted-foreground hover:bg-gray-50'
+              filterStore === store ? 'bg-brand-primary text-mx-black' : 'text-muted-foreground hover:bg-surface-alt'
             )}
           >{hideStoreNames ? getHiddenStoreName(store) : store}</button>
         ))}

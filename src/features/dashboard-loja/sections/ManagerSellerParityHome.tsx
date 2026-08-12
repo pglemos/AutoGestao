@@ -270,7 +270,7 @@ function ManagerHomeHeader({
             <p className="text-xs text-muted-foreground">{longDate}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <div className="rounded-xl border border-border bg-gray-50 px-3 py-2 text-sm font-medium text-muted-foreground">
+            <div className="rounded-xl border border-border bg-surface-alt px-3 py-2 text-sm font-medium text-muted-foreground">
               {formatNumericDate(referenceDate)}
             </div>
             {stores.length > 1 && onStoreChange ? (
@@ -294,7 +294,7 @@ function ManagerHomeHeader({
               onClick={onRefresh}
               disabled={refreshing}
               aria-label="Atualizar início"
-              className="grid h-[36px] w-10 place-items-center rounded-xl text-muted-foreground hover:bg-gray-50 disabled:opacity-50"
+              className="grid h-[36px] w-10 place-items-center rounded-xl text-muted-foreground hover:bg-surface-alt disabled:opacity-50"
             >
               <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
             </button>
@@ -315,7 +315,7 @@ function HeaderAction({ icon: Icon, label, onClick, tone }: {
     <button
       type="button"
       onClick={onClick}
-      className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${tone === 'emerald' ? 'border-status-success text-status-success-text hover:bg-status-success-surface' : 'border-gray-800 text-foreground hover:bg-gray-100'}`}
+      className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${tone === 'emerald' ? 'border-status-success text-status-success-text hover:bg-status-success-surface' : 'border-gray-800 text-foreground hover:bg-muted'}`}
     >
       <Icon size={14} /> {label}
     </button>
@@ -351,7 +351,7 @@ function SalesNeededCard({ salesNeeded }: { salesNeeded: number | null }) {
     <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Necessidade de Vendas no Dia</p>
-        <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100"><Target size={18} className="text-muted-foreground" /></span>
+        <span className="grid h-9 w-9 place-items-center rounded-xl bg-muted"><Target size={18} className="text-muted-foreground" /></span>
       </div>
       <div>
         {missingGoal ? (
@@ -373,7 +373,7 @@ function AppointmentTargetCard({ appointmentTarget, salesNeeded }: { appointment
     <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Meta de Agendamentos para Hoje</p>
-        <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100"><Calendar size={18} className="text-muted-foreground" /></span>
+        <span className="grid h-9 w-9 place-items-center rounded-xl bg-muted"><Calendar size={18} className="text-muted-foreground" /></span>
       </div>
       <div>
         {missingGoal ? (
@@ -399,7 +399,7 @@ function AppointmentGapCard({ appointmentGap }: { appointmentGap: number | null 
     <article className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm ${negative ? 'border-status-warning/30' : zero || positive ? 'border-status-success/30' : 'border-border-subtle'}`}>
       <div className="flex items-start justify-between">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Gap de Agendamentos</p>
-        <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
+        <span className="grid h-9 w-9 place-items-center rounded-xl bg-muted">
           {missingGoal || negative
             ? <AlertTriangle size={18} className={negative ? 'text-status-warning-text' : 'text-muted-foreground'} />
             : <CheckCircle size={18} className="text-status-success-text" />}
@@ -438,7 +438,7 @@ function TodayReading({ salesForecast, salesNeeded, coverage, message }: {
         <div><p className="text-xs text-muted-foreground">Previsão</p><p className="text-xl font-bold text-foreground">{missingBase ? '—' : `${formatSales(salesForecast)} ${saleSuffix(salesForecast)}`}</p></div>
         <div className="text-right"><p className="text-xs text-muted-foreground">Necessidade</p><p className="text-xl font-bold text-foreground">{missingGoal ? '—' : fulfilled ? '0' : `${salesNeeded} vendas`}</p></div>
       </div>
-      <div className="relative h-3 overflow-hidden rounded-full bg-gray-100">
+      <div className="relative h-3 overflow-hidden rounded-full bg-muted">
         <div className={`h-full rounded-full transition-all ${deficit ? 'bg-orange-400' : 'bg-status-success'}`} style={{ width: `${fill}%` }} />
         <div className="absolute left-full top-0 h-full w-0.5 bg-gray-700" />
       </div>
@@ -486,7 +486,7 @@ function TeamFocus({ team, showAll, onSellerClick, onViewAll }: {
       </ScrollableRegion>
       <div className="space-y-3 md:hidden">
         {team.map(seller => (
-          <button key={seller.sellerId} type="button" onClick={() => onSellerClick(seller)} className="w-full rounded-xl border border-border-subtle p-3 text-left hover:bg-gray-50">
+          <button key={seller.sellerId} type="button" onClick={() => onSellerClick(seller)} className="w-full rounded-xl border border-border-subtle p-3 text-left hover:bg-surface-alt">
             <div className="mb-2 flex items-center justify-between gap-2"><SellerIdentity seller={seller} /><StatusBadge status={seller.financialStatus} /></div>
             <div className="grid grid-cols-2 gap-1 text-xs">
               <MobileMetric label="Agend. hoje" value={seller.appointmentsToday} />
@@ -503,7 +503,7 @@ function TeamFocus({ team, showAll, onSellerClick, onViewAll }: {
 
 function TeamFocusRow({ seller, onClick }: { seller: ManagerTeamFocusItem; onClick: () => void }) {
   return (
-    <tr onClick={onClick} className="cursor-pointer border-b border-gray-50 transition-colors hover:bg-gray-50">
+    <tr onClick={onClick} className="cursor-pointer border-b border-gray-50 transition-colors hover:bg-surface-alt">
       <td className="py-2.5 pr-3"><SellerIdentity seller={seller} /></td>
       <td className="px-2 text-center text-foreground">{seller.appointmentsToday}</td>
       <td className="px-2 text-center text-foreground">{formatSales(seller.salesForecastToday)}</td>
@@ -544,7 +544,7 @@ function FinancialRadar({ team, rulesConfigured }: { team: ManagerTeamFocusItem[
 }
 
 function RadarRow({ icon: Icon, label, value, tone }: { icon: LucideIcon; label: string; value: string; tone: 'emerald' | 'amber' }) {
-  return <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3"><span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${tone === 'amber' ? 'bg-status-warning-surface text-status-warning-text' : 'bg-status-success-surface text-status-success-text'}`}><Icon size={18} /></span><div><p className="text-xs text-muted-foreground">{label}</p><p className="text-lg font-bold text-foreground">{value}</p></div></div>
+  return <div className="flex items-center gap-3 rounded-xl bg-surface-alt p-3"><span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${tone === 'amber' ? 'bg-status-warning-surface text-status-warning-text' : 'bg-status-success-surface text-status-success-text'}`}><Icon size={18} /></span><div><p className="text-xs text-muted-foreground">{label}</p><p className="text-lg font-bold text-foreground">{value}</p></div></div>
 }
 
 function AppointmentsChart({ data, onBarClick }: { data: AppointmentChartItem[]; onBarClick: (item: AppointmentChartItem) => void }) {
@@ -572,7 +572,7 @@ function AppointmentsChart({ data, onBarClick }: { data: AppointmentChartItem[];
 }
 
 function ManagerHomeState({ title, description, action }: { title: string; description: string; action?: ReactNode }) {
-  return <div className="flex min-h-full items-center justify-center bg-gray-50 px-4 py-12"><div className="max-w-md rounded-2xl border border-border-subtle bg-white p-8 text-center shadow-sm"><h2 className="font-semibold text-foreground">{title}</h2><p className="mt-2 text-sm text-muted-foreground">{description}</p>{action ? <div className="mt-5">{action}</div> : null}</div></div>
+  return <div className="flex min-h-full items-center justify-center bg-surface-alt px-4 py-12"><div className="max-w-md rounded-2xl border border-border-subtle bg-white p-8 text-center shadow-sm"><h2 className="font-semibold text-foreground">{title}</h2><p className="mt-2 text-sm text-muted-foreground">{description}</p>{action ? <div className="mt-5">{action}</div> : null}</div></div>
 }
 
 function groupCheckinsBySeller(checkins: DailyCheckin[]) {

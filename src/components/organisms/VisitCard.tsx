@@ -71,7 +71,7 @@ export function VisitCard({
         >
           <div className={cn(
             'w-mx-10 h-mx-10 rounded-xl border flex items-center justify-center shrink-0',
-            isToday(scheduledDate) ? 'bg-brand-primary/10 border-brand-primary/20 text-status-success-text' : 'bg-gray-50 border-border text-muted-foreground'
+            isToday(scheduledDate) ? 'bg-brand-primary/10 border-brand-primary/20 text-status-success-text' : 'bg-surface-alt border-border text-muted-foreground'
           )}>
             <Typography variant="h3" className="text-lg">
               {format(scheduledDate, 'dd')}
@@ -163,7 +163,7 @@ export function VisitCard({
                 href={visit.google_meet_link}
                 target="_blank"
                 rel="noreferrer"
-                className="inline-flex h-mx-9 items-center justify-center gap-mx-xs rounded-lg px-3 text-status-success-text hover:bg-gray-50 transition-all"
+                className="inline-flex h-mx-9 items-center justify-center gap-mx-xs rounded-lg px-3 text-status-success-text hover:bg-surface-alt transition-all"
                 aria-label={`Abrir Google Meet da visita de ${visit.client_name}`}
                 onClick={(event) => event.stopPropagation()}
               >

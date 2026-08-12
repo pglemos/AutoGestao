@@ -11,7 +11,7 @@ const badgeVariants = cva(
       variant: {
         default: 'border-transparent bg-brand-primary text-white shadow-sm',
         brand: 'border-transparent bg-brand-primary text-white shadow-sm',
-        secondary: 'border-border bg-gray-50 text-foreground',
+        secondary: 'border-border bg-surface-alt text-foreground',
         success: 'border-status-success/20 bg-status-success-surface text-status-success-text',
         warning: 'border-status-warning/20 bg-status-warning-surface text-status-warning-text',
         info: 'border-status-info/20 bg-status-info-surface text-status-info-text',
