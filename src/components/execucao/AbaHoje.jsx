@@ -177,7 +177,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
   if (isMobile) {
     return (
       <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${isVencido ? "border-status-error/30" : "border-border"}`}>
-        <div className={`h-1 w-full ${TIPO_COLOR_BAR[op.tipo] || "bg-slate-300"}`} />
+        <div className={`h-1 w-full ${TIPO_COLOR_BAR[op.tipo] || "bg-muted"}`} />
         <div className="p-4">
           <div className="flex items-start justify-between mb-2">
             <div className="flex items-center gap-2 flex-wrap">
@@ -234,7 +234,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
   // Desktop
   return (
     <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden flex group transition-shadow hover:shadow-md ${isVencido ? "border-status-error/30" : "border-border"}`}>
-      <div className={`w-1.5 flex-shrink-0 ${TIPO_COLOR_BAR[op.tipo] || "bg-slate-300"}`} />
+      <div className={`w-1.5 flex-shrink-0 ${TIPO_COLOR_BAR[op.tipo] || "bg-muted"}`} />
       <div className="flex items-center gap-4 px-5 py-4 flex-1 min-w-0">
         {/* Ícone e horário */}
         <div className="flex-shrink-0 text-center w-12">

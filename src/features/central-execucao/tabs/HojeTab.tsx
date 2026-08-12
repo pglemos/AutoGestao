@@ -96,7 +96,7 @@ export function HojeTab({
 
       {loading ? (
         <div className="space-y-3" role="status" aria-label="Carregando atividades">
-          {[0, 1, 2].map(item => <div key={item} className="h-[80px] animate-pulse rounded-2xl bg-slate-200" />)}
+          {[0, 1, 2].map(item => <div key={item} className="h-[80px] animate-pulse rounded-2xl bg-muted" />)}
         </div>
       ) : error ? (
         <p role="alert" className="rounded-2xl border border-status-error/30 bg-status-error-surface p-4 text-body-sm font-semibold text-status-error-text">{error}</p>

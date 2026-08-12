@@ -83,7 +83,7 @@ function ManagerTeamLoadingState() {
       <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="space-y-2">
-            <div className="h-6 w-40 animate-pulse rounded bg-gray-200" />
+            <div className="h-6 w-40 animate-pulse rounded bg-muted" />
             <div className="h-4 w-96 max-w-full animate-pulse rounded bg-gray-100" />
           </div>
           <div className="flex gap-2">

@@ -57,7 +57,7 @@ export function FichaClienteSheet({
           <div className="min-h-0 flex-1 overflow-y-auto p-5">
             {loading ? (
               <div className="space-y-3">
-                {[0, 1, 2].map(item => <div key={item} className="h-24 animate-pulse rounded-2xl bg-slate-200" />)}
+                {[0, 1, 2].map(item => <div key={item} className="h-24 animate-pulse rounded-2xl bg-muted" />)}
               </div>
             ) : error ? (
               <p role="alert" className="rounded-2xl border border-status-error/30 bg-status-error-surface p-4 text-body-sm font-semibold text-status-error-text">{error}</p>
@@ -112,7 +112,7 @@ export function FichaClienteSheet({
                     <ol className="space-y-0">
                       {timeline.map((item, index) => (
                         <li key={item.id} className="relative flex gap-3 pb-5 last:pb-0">
-                          {index < timeline.length - 1 && <span className="absolute left-[4px] top-3 h-full w-px bg-slate-200" />}
+                          {index < timeline.length - 1 && <span className="absolute left-[4px] top-3 h-full w-px bg-muted" />}
                           <span className="relative mt-1.5 h-2.5 w-2.5 shrink-0 rounded-full border-2 border-white bg-status-info ring-1 ring-blue-200" />
                           <div className="min-w-0 flex-1">
                             <div className="flex flex-wrap items-center justify-between gap-2">

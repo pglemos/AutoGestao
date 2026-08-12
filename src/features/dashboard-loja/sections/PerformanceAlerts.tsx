@@ -268,7 +268,7 @@ function AlertCard({
     },
     outline: {
       surface: 'border-border bg-gray-50',
-      badge: 'bg-gray-200 text-muted-foreground',
+      badge: 'bg-muted text-muted-foreground',
       icon: 'text-muted-foreground',
       label: 'Validar',
       Icon: Lightbulb,

@@ -34,7 +34,7 @@ const PROGRESS_TONE = {
   no_ritmo: 'bg-status-info',
   risco: 'bg-status-warning',
   critico: 'bg-status-error',
-  sem_meta: 'bg-gray-300',
+  sem_meta: 'bg-muted',
 } as const
 
 const ATTAINMENT_TONE = {

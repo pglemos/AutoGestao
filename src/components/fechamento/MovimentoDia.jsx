@@ -87,7 +87,7 @@ function ShowroomCard({ dc, updateCounter, setCounter, bloqueado }) {
   return (
     <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-status-warning-surface/60 border-status-warning/20"}`}>
       <div className="flex items-center gap-3">
-        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-status-warning shadow-orange-200"}`}>
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-muted shadow-slate-100" : "bg-status-warning shadow-orange-200"}`}>
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Store className="w-5 h-5 text-white" />}
         </div>
         <div>
@@ -135,7 +135,7 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
   return (
     <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-brand-primary-subtle/60 border-brand-primary/20"}`}>
       <div className="flex items-center gap-3">
-        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-brand-primary shadow-green-200"}`}>
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-muted shadow-slate-100" : "bg-brand-primary shadow-green-200"}`}>
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Users className="w-5 h-5 text-white" />}
         </div>
         <div>
@@ -225,7 +225,7 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
   return (
     <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-status-info-surface/60 border-status-info/20"}`}>
       <div className="flex items-center gap-3">
-        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-status-info shadow-blue-200"}`}>
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-muted shadow-slate-100" : "bg-status-info shadow-blue-200"}`}>
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Globe className="w-5 h-5 text-white" />}
         </div>
         <div>

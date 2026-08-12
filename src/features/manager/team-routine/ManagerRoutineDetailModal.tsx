@@ -33,7 +33,7 @@ export function ManagerRoutineDetailModal({ open, sellerName, date, actions, app
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 p-4" role="dialog" aria-modal="true" aria-labelledby={hasRoutine ? 'manager-routine-detail-title' : undefined}>
       {!hasRoutine ? <div className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-xl">
           <p className="text-sm text-muted-foreground">Nenhuma rotina registrada para este vendedor nesta data.</p>
-          <button type="button" className="mt-4 rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-foreground hover:bg-gray-200" onClick={onClose}>Fechar</button>
+          <button type="button" className="mt-4 rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted" onClick={onClose}>Fechar</button>
         </div> : <div className="flex max-h-[90vh] w-full max-w-3xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl">
           <div className="flex items-center justify-between border-b border-border-subtle px-5 py-4">
             <div><h2 id="manager-routine-detail-title" className="text-lg font-semibold text-foreground">Rotina do Dia — {sellerName}</h2><p className="text-xs text-muted-foreground">Atividades oficiais para {(() => { try { return format(parseISO(date), 'dd/MM/yyyy') } catch { return date } })()}.</p></div>
@@ -73,7 +73,7 @@ export function ManagerRoutineDetailModal({ open, sellerName, date, actions, app
             </ul>
           </div>
           </div>
-          <div className="flex justify-end border-t border-border-subtle px-5 py-3"><button type="button" className="rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-foreground hover:bg-gray-200" onClick={onClose}>Fechar</button></div>
+          <div className="flex justify-end border-t border-border-subtle px-5 py-3"><button type="button" className="rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted" onClick={onClose}>Fechar</button></div>
         </div>}
     </div>
   )

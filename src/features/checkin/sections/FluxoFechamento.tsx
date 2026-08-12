@@ -267,7 +267,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
   }
 
   const totalPct = STEPS.reduce((acc, s) => (completedSteps.has(s.id) ? acc + s.pct : acc), 0)
-  const progressColor = totalPct === 100 ? 'bg-brand-primary' : totalPct >= 70 ? 'bg-status-info' : totalPct >= 40 ? 'bg-orange-400' : 'bg-slate-300'
+  const progressColor = totalPct === 100 ? 'bg-brand-primary' : totalPct >= 70 ? 'bg-status-info' : totalPct >= 40 ? 'bg-orange-400' : 'bg-muted'
 
   const co = COLOR_MAP.orange
   const cg = COLOR_MAP.green

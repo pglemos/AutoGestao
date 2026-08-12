@@ -484,7 +484,7 @@ export default function FluxoFechamento({ dc, updateCounter, setCounter, clients
   const totalPct = STEPS.reduce((acc, s) => completedSteps.has(s.id) ? acc + s.pct : acc, 0);
   const progressColor = totalPct === 100 ? "bg-brand-primary" :
     totalPct >= 70 ? "bg-status-info" :
-    totalPct >= 40 ? "bg-orange-400" : "bg-slate-300";
+    totalPct >= 40 ? "bg-orange-400" : "bg-muted";
 
   return (
     <div className="space-y-3 sm:space-y-4">

@@ -74,7 +74,7 @@ export function FunnelSection({ funilData, funnelBenchmarks }: FunnelSectionProp
                 <p className="pb-1 text-xs text-muted-foreground">Meta {step.benchmark}%</p>
               </div>
 
-              <div className="mt-4 h-2 overflow-hidden rounded-full bg-gray-200">
+              <div className="mt-4 h-2 overflow-hidden rounded-full bg-muted">
                 <motion.div
                   initial={reduceMotion ? false : { width: 0 }}
                   animate={{ width: `${Math.min(Math.max(step.value, 0), 100)}%` }}

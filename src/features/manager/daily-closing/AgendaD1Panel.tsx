@@ -826,7 +826,7 @@ function confirmationStatusClass(status: string) {
     Pendente: "bg-status-warning-surface text-status-warning-text",
     "WhatsApp aberto": "bg-status-info-surface text-status-info-text",
     Confirmado: "bg-status-success-surface text-status-success-text",
-    "Sem resposta": "bg-gray-200 text-muted-foreground",
+    "Sem resposta": "bg-muted text-muted-foreground",
     "Solicitou reagendamento": "bg-status-warning-surface text-status-warning-text",
     Cancelou: "bg-status-error-surface text-status-error-text",
     Outro: "bg-status-info-surface text-status-info-text",

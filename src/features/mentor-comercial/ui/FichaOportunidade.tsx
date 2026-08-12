@@ -296,7 +296,7 @@ export function FichaOportunidade({
               </div>
               <div className="flex justify-between items-center pt-1 border-t border-border">
                 <span className="text-muted-foreground">Entra na Central:</span>
-                <span className={`px-2 py-0.5 rounded font-semibold ${nextAction.centralAction ? 'bg-status-info-surface text-status-info-text' : 'bg-slate-200 text-foreground'}`}>
+                <span className={`px-2 py-0.5 rounded font-semibold ${nextAction.centralAction ? 'bg-status-info-surface text-status-info-text' : 'bg-muted text-foreground'}`}>
                   {nextAction.centralAction ? `Sim (${nextAction.centralRule ?? 'Regra'})` : 'Não'}
                 </span>
               </div>

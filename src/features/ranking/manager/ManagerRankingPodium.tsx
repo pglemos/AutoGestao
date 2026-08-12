@@ -4,7 +4,7 @@ import { initials } from './manager-ranking-comparison'
 
 const PODIUM = [
   { position: 1, icon: Trophy, badge: 'bg-status-warning/50', ring: 'ring-status-warning/40', bar: 'bg-gradient-to-t from-status-warning/40 to-status-warning/50', height: 'h-28', order: 'md:order-2' },
-  { position: 2, icon: Medal, badge: 'bg-gray-300', ring: 'ring-border', bar: 'bg-gradient-to-t from-gray-200 to-gray-300', height: 'h-20', order: 'md:order-1' },
+  { position: 2, icon: Medal, badge: 'bg-muted', ring: 'ring-border', bar: 'bg-gradient-to-t from-gray-200 to-gray-300', height: 'h-20', order: 'md:order-1' },
   { position: 3, icon: Award, badge: 'bg-status-warning', ring: 'ring-amber-300', bar: 'bg-gradient-to-t from-amber-400 to-status-warning', height: 'h-16', order: 'md:order-3' },
 ] as const
 

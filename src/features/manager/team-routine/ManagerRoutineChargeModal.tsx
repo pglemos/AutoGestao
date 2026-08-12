@@ -62,7 +62,7 @@ export function ManagerRoutineChargeModal({ open, sellerName, date, onClose, onS
         {sent && <div className="rounded-xl bg-status-success-surface px-3 py-2 text-sm font-medium text-status-success-text">Cobrança registrada.</div>}
         </div>
         <div className="mt-5 flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-foreground hover:bg-gray-200">Cancelar</button>
+          <button type="button" onClick={onClose} className="rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted">Cancelar</button>
           <button type="button" className="rounded-xl bg-brand-primary px-4 py-2 text-sm font-medium text-white hover:bg-brand-primary-hover disabled:opacity-50" onClick={() => void handleSend()} disabled={sending || sent}>{sending ? 'Enviando...' : 'Enviar cobrança'}</button>
         </div>
       </div>

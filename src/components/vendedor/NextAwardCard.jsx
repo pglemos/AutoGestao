@@ -57,7 +57,7 @@ export default function NextAwardCard({ calcResult }) {
                     <span>{qtdVendas} vendas</span>
                     <span>{proximaPremiacao.quantidade_vendas_necessarias} vendas</span>
                   </div>
-                  <div className="w-full bg-slate-200 rounded-full h-2">
+                  <div className="w-full bg-muted rounded-full h-2">
                     <div
                       className="bg-amber-400 h-2 rounded-full transition-all duration-700"
                       style={{ width: `${Math.min(100, (qtdVendas / (proximaPremiacao.quantidade_vendas_necessarias || 1)) * 100)}%` }}
