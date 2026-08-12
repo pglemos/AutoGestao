@@ -104,7 +104,7 @@ export default function MinhaRemuneracaoPage() {
 
         <div className="text-center pt-4 pb-2">
           <p className="text-muted-foreground text-sm">
-            <span className="text-status-success">⚡</span> Disciplina hoje, liberdade amanhã. Você no controle dos seus resultados.
+            <span className="text-status-success-text">⚡</span> Disciplina hoje, liberdade amanhã. Você no controle dos seus resultados.
           </p>
         </div>
 

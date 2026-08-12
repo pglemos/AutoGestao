@@ -21,9 +21,9 @@ const TIPO_LABEL: Record<CulturaTipo, string> = {
 }
 
 const TIPO_TONE: Record<CulturaTipo, string> = {
-  repescagem: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
+  repescagem: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
   campanha: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
-  reconhecimento: 'border-status-success/30 bg-status-success-surface text-status-success',
+  reconhecimento: 'border-status-success/30 bg-status-success-surface text-status-success-text',
   feed_cultural: 'border-border bg-gray-50 text-muted-foreground',
 }
 
@@ -71,7 +71,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 
       {error && (
         <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="text-status-error">
+          <Typography variant="tiny" className="text-status-error-text">
             {error}
           </Typography>
         </div>
@@ -256,10 +256,10 @@ function MediaCard({ label, value }: { label: string; value: number | null }) {
     value == null
       ? 'border-border bg-gray-50 text-muted-foreground'
       : value >= 8
-        ? 'border-status-success/30 bg-status-success-surface text-status-success'
+        ? 'border-status-success/30 bg-status-success-surface text-status-success-text'
         : value >= 6
-          ? 'border-status-warning/30 bg-status-warning-surface text-status-warning'
-          : 'border-status-error/30 bg-status-error-surface text-status-error'
+          ? 'border-status-warning/30 bg-status-warning-surface text-status-warning-text'
+          : 'border-status-error/30 bg-status-error-surface text-status-error-text'
   return (
     <Card className={cn('rounded-2xl border p-mx-md', tone)}>
       <Typography variant="caption" className="">

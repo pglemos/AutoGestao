@@ -89,7 +89,7 @@ export function AdminNetworkView() {
               </div>
               
               <div className="flex items-center gap-mx-xs sm:gap-mx-lg shrink-0">
-                <div className="flex items-center gap-mx-tiny text-status-success">
+                <div className="flex items-center gap-mx-tiny text-status-success-text">
                   <Zap size={14} className="sm:size-mx-sm" />
                   <Typography variant="mono" className="text-mx-tiny sm:text-sm">{operacionais}/{total}</Typography>
                 </div>
@@ -116,7 +116,7 @@ export function AdminNetworkView() {
                             <Typography className="text-xs sm:text-sm tracking-tight leading-tight whitespace-normal break-words">{member.name}</Typography>
                             <Typography variant="tiny" tone="muted" className="text-mx-tiny font-bold">{member.role}</Typography>
                           </div>
-                          {member.checkin_today ? <Zap size={16} className="text-status-success fill-status-success/20" /> : <Clock size={16} className="text-muted-foreground opacity-20" />}
+                          {member.checkin_today ? <Zap size={16} className="text-status-success-text fill-status-success/20" /> : <Clock size={16} className="text-muted-foreground opacity-20" />}
                         </div>
                         
                         <div className="flex gap-mx-xs border-t border-border pt-mx-xs mt-1 relative z-10">

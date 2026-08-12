@@ -50,7 +50,7 @@ export function GlobalRankingView() {
         />
 
         {data.error && (
-          <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error">
+          <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error-text">
             {data.error}
           </div>
         )}

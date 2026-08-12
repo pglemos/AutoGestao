@@ -287,7 +287,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
               id="mentor-status-especifico-label"
               className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
             >
-              Selecione o status específico: <span className="text-status-error">*</span>
+              Selecione o status específico: <span className="text-status-error-text">*</span>
             </span>
 
             <div

@@ -180,7 +180,7 @@ export function AulasAoVivoSection() {
               {agenda.map((aula) => (
                 <button key={aula.id} type="button" onClick={() => abrirProva(aula)} className="flex w-full items-center gap-mx-md py-mx-sm text-left">
                   <div className="flex h-mx-16 w-mx-14 shrink-0 flex-col items-center justify-center rounded-xl bg-gray-50">
-                    <span className="text-xs font-bold uppercase text-status-info">{formatDate(aula.inicio).slice(0, 3)}</span>
+                    <span className="text-xs font-bold uppercase text-status-info-text">{formatDate(aula.inicio).slice(0, 3)}</span>
                     <span className="text-2xl font-bold text-foreground">{new Date(aula.inicio).getDate()}</span>
                     <span className="text-xs font-bold uppercase text-muted-foreground">{new Date(aula.inicio).toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')}</span>
                   </div>
@@ -271,7 +271,7 @@ export function AulasAoVivoSection() {
                     className={cn(
                       'rounded-xl border px-mx-md py-mx-xs text-left text-sm transition-colors',
                       respostas[qIndex] === oIndex
-                        ? 'border-status-info bg-status-info-surface font-bold text-status-info'
+                        ? 'border-status-info bg-status-info-surface font-bold text-status-info-text'
                         : 'border-border-subtle text-muted-foreground hover:bg-gray-50',
                     )}
                   >
@@ -290,7 +290,7 @@ export function AulasAoVivoSection() {
 function Step({ icon, title, text }: { icon: ReactNode; title: string; text: string }) {
   return (
     <div className="text-center">
-      <span className="mx-auto flex h-mx-16 w-mx-16 items-center justify-center rounded-full bg-status-info-surface text-status-info">{icon}</span>
+      <span className="mx-auto flex h-mx-16 w-mx-16 items-center justify-center rounded-full bg-status-info-surface text-status-info-text">{icon}</span>
       <Typography variant="p" className="mt-mx-sm">{title}</Typography>
       <Typography variant="p" tone="muted" className="text-sm">{text}</Typography>
     </div>
@@ -300,7 +300,7 @@ function Step({ icon, title, text }: { icon: ReactNode; title: string; text: str
 function MiniMetric({ icon, value, label, hint }: { icon: ReactNode; value: string; label: string; hint: string }) {
   return (
     <div className="flex items-center gap-mx-sm">
-      <span className="flex h-mx-12 w-mx-12 items-center justify-center rounded-full bg-white text-status-info">{icon}</span>
+      <span className="flex h-mx-12 w-mx-12 items-center justify-center rounded-full bg-white text-status-info-text">{icon}</span>
       <div>
         <Typography variant="tiny" tone="muted" className="tracking-normal">{label}</Typography>
         <Typography variant="h2" className="text-2xl">{value}</Typography>

@@ -71,19 +71,19 @@ export function FichaClienteSheet({
                       <h2 className="truncate text-[18px] font-bold text-foreground">{client.nome}</h2>
                       <p className="mt-1 flex items-center gap-1.5 text-body-sm text-muted-foreground"><Phone className="h-3.5 w-3.5" aria-hidden="true" />{client.telefone || 'Sem telefone'}</p>
                     </div>
-                    <span className="rounded-full bg-status-info-surface px-3 py-1 text-caption font-bold capitalize text-status-info">{humanize(client.status)}</span>
+                    <span className="rounded-full bg-status-info-surface px-3 py-1 text-caption font-bold capitalize text-status-info-text">{humanize(client.status)}</span>
                   </div>
                   {client.observacoes && <p className="mt-4 rounded-xl bg-slate-50 p-3 text-[12px] leading-5 text-muted-foreground">{client.observacoes}</p>}
                 </section>
 
                 <section className="grid grid-cols-2 gap-3">
                   <div className="rounded-2xl border border-border bg-white p-4 shadow-sm">
-                    <Car className="mb-2 h-4 w-4 text-status-info" aria-hidden="true" />
+                    <Car className="mb-2 h-4 w-4 text-status-info-text" aria-hidden="true" />
                     <p className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Veículo</p>
                     <p className="mt-1 text-body-sm font-bold text-foreground">{opportunity?.veiculo_interesse || '—'}</p>
                   </div>
                   <div className="rounded-2xl border border-border bg-white p-4 shadow-sm">
-                    <CircleDollarSign className="mb-2 h-4 w-4 text-status-info" aria-hidden="true" />
+                    <CircleDollarSign className="mb-2 h-4 w-4 text-status-info-text" aria-hidden="true" />
                     <p className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Valor</p>
                     <p className="mt-1 text-body-sm font-bold text-foreground">{formatCurrency(opportunity?.valor_negociado)}</p>
                   </div>
@@ -93,7 +93,7 @@ export function FichaClienteSheet({
                     <p className="mt-1 text-caption text-muted-foreground">Financiamento: {humanize(opportunity?.financiamento)}</p>
                   </div>
                   <div className="rounded-2xl border border-border bg-white p-4 shadow-sm">
-                    <CalendarClock className="mb-2 h-4 w-4 text-status-info" aria-hidden="true" />
+                    <CalendarClock className="mb-2 h-4 w-4 text-status-info-text" aria-hidden="true" />
                     <p className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Próxima ação</p>
                     <p className="mt-1 text-body-sm font-bold text-foreground">{client.proxima_acao || '—'}</p>
                     <p className="mt-1 text-caption text-muted-foreground">{formatDate(client.proxima_acao_em)}</p>
@@ -102,7 +102,7 @@ export function FichaClienteSheet({
 
                 <section className="rounded-2xl border border-border bg-white p-5 shadow-sm">
                   <div className="mb-4 flex items-center gap-2">
-                    <History className="h-4 w-4 text-status-info" aria-hidden="true" />
+                    <History className="h-4 w-4 text-status-info-text" aria-hidden="true" />
                     <h3 className="text-[14px] font-bold text-foreground">Histórico</h3>
                   </div>
 
@@ -119,7 +119,7 @@ export function FichaClienteSheet({
                               <p className="text-[12px] font-bold capitalize text-foreground">{humanize(item.title)}</p>
                               <time className="text-caption text-muted-foreground">{formatDate(item.date)}</time>
                             </div>
-                            {item.status && <p className="mt-0.5 text-caption font-bold uppercase tracking-wider text-status-info">{humanize(item.status)}</p>}
+                            {item.status && <p className="mt-0.5 text-caption font-bold uppercase tracking-wider text-status-info-text">{humanize(item.status)}</p>}
                             {item.description && <p className="mt-1 text-[12px] leading-5 text-muted-foreground">{item.description}</p>}
                           </div>
                         </li>

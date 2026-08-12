@@ -140,7 +140,7 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
 
           <div className="flex gap-2">
             <Button variant="outline" onClick={copiar} className="flex-1 rounded-xl gap-2 text-xs border-status-info/30 text-status-info-text hover:bg-status-info-surface">
-              {copiado ? <><Check className="w-3.5 h-3.5 text-green-500" /> Copiado!</> : <><Copy className="w-3.5 h-3.5" /> Copiar</>}
+              {copiado ? <><Check className="w-3.5 h-3.5 text-status-success-text" /> Copiado!</> : <><Copy className="w-3.5 h-3.5" /> Copiar</>}
             </Button>
             {waUrl && (
               <a href={waUrl} target="_blank" rel="noopener noreferrer" className="flex-1" onClick={onWhatsAppClick}>

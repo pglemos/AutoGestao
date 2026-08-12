@@ -152,7 +152,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
 
       {benchmark.error && (
         <div className="mt-mx-md rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="text-status-error">
+          <Typography variant="tiny" className="text-status-error-text">
             {benchmark.error}
           </Typography>
         </div>

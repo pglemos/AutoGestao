@@ -73,7 +73,7 @@ export function GlobalRankingHeader({
             Atualizar
           </Button>
           <div className="flex-1 sm:flex-none flex items-center justify-center gap-mx-sm bg-white border border-border px-6 h-mx-xl rounded-mx-full shadow-sm">
-            <Trophy size={18} className="text-status-warning shrink-0" />
+            <Trophy size={18} className="text-status-warning-text shrink-0" />
             <Typography variant="caption" className="whitespace-nowrap text-mx-micro">{filteredCount} no ranking</Typography>
           </div>
         </div>

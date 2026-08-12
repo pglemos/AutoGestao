@@ -165,7 +165,7 @@ export function OwnerRoutineView({
             </div>
           </div>
           {pendingSellers.length > 0 && (
-            <span className="rounded-xl border border-status-error/20 bg-status-error-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-error">
+            <span className="rounded-xl border border-status-error/20 bg-status-error-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-error-text">
               {pendingSellers.length} pendente{pendingSellers.length > 1 ? 's' : ''}
             </span>
           )}
@@ -196,8 +196,8 @@ export function OwnerRoutineView({
                     <span className={cn(
                       'rounded-xl px-mx-sm py-mx-xs text-mx-tiny font-bold uppercase',
                       seller.checkedIn
-                        ? 'bg-status-success-surface text-status-success'
-                        : 'bg-status-error-surface text-status-error'
+                        ? 'bg-status-success-surface text-status-success-text'
+                        : 'bg-status-error-surface text-status-error-text'
                     )}>
                       {seller.checkedIn ? 'Fechamento feito' : 'Fechamento pendente'}
                     </span>
@@ -213,10 +213,10 @@ export function OwnerRoutineView({
 
         {pendingSellers.length > 0 && (
           <div className="mt-mx-md rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md">
-            <Typography variant="tiny" className="block text-status-warning">
+            <Typography variant="tiny" className="block text-status-warning-text">
               Vendedores pendentes
             </Typography>
-            <Typography variant="p" className="mt-mx-xs text-sm font-bold text-status-warning">
+            <Typography variant="p" className="mt-mx-xs text-sm font-bold text-status-warning-text">
               {pendingSellers.map(s => s.name).join(', ')}
             </Typography>
           </div>
@@ -236,7 +236,7 @@ export function OwnerRoutineView({
           </div>
           <div className="mt-mx-md divide-y divide-border-subtle">
             {actionPreview.length === 0 ? (
-              <div className="rounded-2xl bg-status-success-surface p-mx-md text-status-success">
+              <div className="rounded-2xl bg-status-success-surface p-mx-md text-status-success-text">
                 <CheckCircle2 size={20} />
                 <p className="mt-mx-xs text-sm font-bold">Nenhuma ação executiva pendente neste recorte.</p>
               </div>
@@ -271,7 +271,7 @@ export function OwnerRoutineView({
                 className="w-full rounded-2xl border border-border-subtle p-mx-md text-left transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30"
               >
                 <div className="flex items-center gap-mx-sm">
-                  <AlertTriangle size={17} className={alert.variant === 'danger' ? 'text-status-error' : 'text-status-warning'} />
+                  <AlertTriangle size={17} className={alert.variant === 'danger' ? 'text-status-error-text' : 'text-status-warning-text'} />
                   <span className="font-bold text-foreground">{alert.title}</span>
                 </div>
                 <p className="mt-mx-xs text-sm font-bold text-muted-foreground">{alert.description}</p>
@@ -342,7 +342,7 @@ export function OwnerDecisionCenter({
       <div className="space-y-mx-md">
         {itemPreview.length === 0 ? (
           <Card className="border bg-white p-mx-xl text-center">
-            <CheckCircle2 size={32} className="mx-auto text-status-success" />
+            <CheckCircle2 size={32} className="mx-auto text-status-success-text" />
             <Typography variant="h3" className="mt-mx-sm text-xl">Fila executiva tratada</Typography>
             <Typography variant="p" tone="muted" className="mt-mx-xs font-bold">Não há decisões prioritárias neste recorte.</Typography>
           </Card>
@@ -440,7 +440,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
     <div className="space-y-mx-md">
       <div className="flex flex-col gap-mx-xs sm:flex-row sm:items-start sm:justify-between">
         <SectionTitle title="Consultoria" subtitle="Acompanhe o plano contratado, encontros e implicações" />
-        <span className="inline-flex w-fit items-center gap-mx-xs rounded-mx-full bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-success">
+        <span className="inline-flex w-fit items-center gap-mx-xs rounded-mx-full bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-success-text">
           <TrendingUp size={14} /> Estágio atual: {program?.clientStatus || 'Não informado'}
         </span>
       </div>
@@ -457,7 +457,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
           <Card className="border bg-white p-mx-md">
             <div className="grid gap-mx-md xl:grid-cols-[minmax(0,1fr)_280px]">
               <div>
-                <span className="inline-flex rounded-mx-full bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-success">Programa contratado</span>
+                <span className="inline-flex rounded-mx-full bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-success-text">Programa contratado</span>
                 <div className="mt-mx-xs flex flex-wrap items-center gap-mx-xs">
                   <Typography variant="h2" className="text-xl font-bold">{program.programName}</Typography>
                   <span className="inline-flex items-center gap-1 rounded-mx-full bg-status-success-surface px-mx-xs py-0.5 text-mx-tiny font-bold text-status-success"><span className="h-1.5 w-1.5 rounded-full bg-status-success" />Ativo</span>

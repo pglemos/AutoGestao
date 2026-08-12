@@ -83,9 +83,9 @@ export function DRETable({
                       <td key={m} className={cn(
                         'p-mx-md text-sm text-right',
                         row.bold ? 'font-bold' : 'font-bold',
-                        row.color === 'red' && val !== null && val < 0 ? 'text-status-error' : '',
-                        row.color === 'green' && val !== null && val > 0 ? 'text-status-success' : '',
-                        !row.color && isNeg ? 'text-status-error' : '',
+                        row.color === 'red' && val !== null && val < 0 ? 'text-status-error-text' : '',
+                        row.color === 'green' && val !== null && val > 0 ? 'text-status-success-text' : '',
+                        !row.color && isNeg ? 'text-status-error-text' : '',
                       )}>
                         {val !== null ? formatValue(val, row.format) : '—'}
                       </td>

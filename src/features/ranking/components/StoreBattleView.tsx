@@ -69,7 +69,7 @@ function ComparisonRow({ label, v1, v2, format = v => Math.round(v).toString(), 
           initial={{ scale: 0.95, opacity: 0.6 }}
           animate={{ scale: winner === 'p2' ? 1.12 : 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 220, damping: 18 }}
-          className={cn('tabular-nums font-display', winner === 'p2' ? 'text-status-info drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'text-muted-foreground')}
+          className={cn('tabular-nums font-display', winner === 'p2' ? 'text-status-info-text drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'text-muted-foreground')}
         >
           {format(a2)}
         </motion.span>
@@ -157,7 +157,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
               transition={{ duration: 1.2, ease: 'easeOut' }}
               className="w-mx-4xl h-mx-4xl rounded-full bg-gray-900 border-4 border-status-warning/70 flex items-center justify-center shadow-2xl"
             >
-              <Crown size={84} className="text-status-warning fill-status-warning/25" />
+              <Crown size={84} className="text-status-warning-text fill-status-warning/25" />
             </motion.div>
           </motion.div>
         )}
@@ -196,7 +196,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
               animate={{ y: 0, opacity: 1 }}
               className="absolute top-mx-sm left-mx-sm z-10"
             >
-              <Crown size={24} className="text-status-warning fill-status-warning/30" />
+              <Crown size={24} className="text-status-warning-text fill-status-warning/30" />
             </motion.div>
           )}
           <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-brand-primary/10 border-2 border-brand-primary flex items-center justify-center mb-4 relative z-10">
@@ -212,8 +212,8 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
               animate={{ opacity: 1, scale: 1 }}
               className="mt-3 px-3 py-1 rounded-full bg-status-warning/20 border border-status-warning/40 flex items-center gap-mx-xs relative z-10"
             >
-              <Flame size={12} className="text-status-warning" />
-              <span className="text-mx-tiny font-bold uppercase tracking-widest text-status-warning">Líder</span>
+              <Flame size={12} className="text-status-warning-text" />
+              <span className="text-mx-tiny font-bold uppercase tracking-widest text-status-warning-text">Líder</span>
             </motion.div>
           )}
         </motion.div>
@@ -244,14 +244,14 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
               animate={{ y: 0, opacity: 1 }}
               className="absolute top-mx-sm right-mx-sm z-10"
             >
-              <Crown size={24} className="text-status-warning fill-status-warning/30" />
+              <Crown size={24} className="text-status-warning-text fill-status-warning/30" />
             </motion.div>
           )}
           <div className="w-mx-2xl h-mx-2xl rounded-2xl bg-status-info/10 border-2 border-status-info flex items-center justify-center mb-4 relative z-10">
-            <Building2 size={32} className="text-status-info" />
+            <Building2 size={32} className="text-status-info-text" />
           </div>
           <h3 className="font-display font-bold text-2xl text-white text-center relative z-10 truncate max-w-full">{p2.storeName}</h3>
-          <p className="text-mx-tiny font-bold text-status-info uppercase tracking-widest text-center mt-1 relative z-10">
+          <p className="text-mx-tiny font-bold text-status-info-text uppercase tracking-widest text-center mt-1 relative z-10">
             {p2.reaching}% atingido
           </p>
           {winnerSide === 'p2' && (
@@ -260,8 +260,8 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
               animate={{ opacity: 1, scale: 1 }}
               className="mt-3 px-3 py-1 rounded-full bg-status-warning/20 border border-status-warning/40 flex items-center gap-mx-xs relative z-10"
             >
-              <Flame size={12} className="text-status-warning" />
-              <span className="text-mx-tiny font-bold uppercase tracking-widest text-status-warning">Líder</span>
+              <Flame size={12} className="text-status-warning-text" />
+              <span className="text-mx-tiny font-bold uppercase tracking-widest text-status-warning-text">Líder</span>
             </motion.div>
           )}
         </motion.div>
@@ -283,7 +283,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
             <span className="text-muted-foreground">Loja A</span>
             <span className="text-muted-foreground">vs</span>
             <span className="text-muted-foreground">Loja B</span>
-            <span className="text-status-info">●</span>
+            <span className="text-status-info-text">●</span>
           </div>
         </div>
 

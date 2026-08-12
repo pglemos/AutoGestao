@@ -184,11 +184,11 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
       {/* Planejados originais (sempre discreto após finalização) */}
       {showPostFinalizado && (
         <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-border-subtle" : "border-green-100"}`}>
-          <p className={`text-caption font-medium ${bloqueado ? "text-text-disabled" : "text-green-500"}`}>
+          <p className={`text-caption font-medium ${bloqueado ? "text-text-disabled" : "text-status-success-text"}`}>
             Planejados no fechamento: <strong className={bloqueado ? "text-muted-foreground" : "text-green-700"}>{planejados}</strong>
           </p>
           {!bloqueado && (
-            <p className="text-caption font-semibold text-green-500">
+            <p className="text-caption font-semibold text-status-success-text">
               Detalhados: <strong className="text-green-700">{ativos}</strong> de <strong className="text-green-700">{planejados}</strong>
             </p>
           )}
@@ -197,7 +197,7 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
       {/* Antes da finalização: detalhados vs planejados */}
       {!showPostFinalizado && planejados > 0 && (
         <div className="flex items-center gap-1.5 mt-auto pt-3 border-t border-green-100">
-          <span className="text-caption font-semibold text-green-500">
+          <span className="text-caption font-semibold text-status-success-text">
             Detalhados: <strong className="text-green-700">{ativos}</strong> de <strong className="text-green-700">{planejados}</strong>
           </span>
         </div>
@@ -272,11 +272,11 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
       </div>
       {showPostFinalizado && (
         <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-border-subtle" : "border-status-info/20"}`}>
-          <p className={`text-caption font-medium ${bloqueado ? "text-text-disabled" : "text-status-info"}`}>
+          <p className={`text-caption font-medium ${bloqueado ? "text-text-disabled" : "text-status-info-text"}`}>
             Planejados no fechamento: <strong className={bloqueado ? "text-muted-foreground" : "text-status-info-text"}>{planejados}</strong>
           </p>
           {!bloqueado && (
-            <p className="text-caption font-semibold text-status-info">
+            <p className="text-caption font-semibold text-status-info-text">
               Detalhados: <strong className="text-status-info-text">{ativos}</strong> de <strong className="text-status-info-text">{planejados}</strong>
             </p>
           )}
@@ -284,7 +284,7 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
       )}
       {!showPostFinalizado && planejados > 0 && (
         <div className="flex items-center gap-1.5 mt-auto pt-3 border-t border-status-info/20">
-          <span className="text-caption font-semibold text-status-info">
+          <span className="text-caption font-semibold text-status-info-text">
             Detalhados: <strong className="text-status-info-text">{ativos}</strong> de <strong className="text-status-info-text">{planejados}</strong>
           </span>
         </div>

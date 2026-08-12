@@ -36,9 +36,9 @@ import { useExecutiveAgendaGoogleSync } from '../hooks/useExecutiveAgendaGoogleS
  */
 
 const ALERT_TONE: Record<string, string> = {
-  critical: 'bg-status-error-surface text-status-error border-status-error/30',
-  warning: 'bg-status-warning-surface text-status-warning border-status-warning/30',
-  positive: 'bg-status-success-surface text-status-success border-status-success/30',
+  critical: 'bg-status-error-surface text-status-error-text border-status-error/30',
+  warning: 'bg-status-warning-surface text-status-warning-text border-status-warning/30',
+  positive: 'bg-status-success-surface text-status-success-text border-status-success/30',
   consultive: 'bg-mx-indigo-50 text-status-success-text border-brand-primary/30',
 }
 
@@ -50,11 +50,11 @@ const ALERT_STATUS_LABEL: Record<CentralMxAlertStatus, string> = {
 }
 
 const PLANO_TONE: Record<string, string> = {
-  pendente: 'bg-status-warning-surface text-status-warning border-status-warning/30',
+  pendente: 'bg-status-warning-surface text-status-warning-text border-status-warning/30',
   em_andamento: 'bg-mx-indigo-50 text-status-success-text border-brand-primary/30',
-  atrasado: 'bg-status-error-surface text-status-error border-status-error/30',
+  atrasado: 'bg-status-error-surface text-status-error-text border-status-error/30',
   validando_eficacia: 'bg-gray-50 text-muted-foreground border-border',
-  concluido: 'bg-status-success-surface text-status-success border-status-success/30',
+  concluido: 'bg-status-success-surface text-status-success-text border-status-success/30',
 }
 
 type Props = {
@@ -97,7 +97,7 @@ export function CentralMxPersistedAlertsPanel({ storeId }: Props) {
 
       {error && (
         <div className="mt-mx-md rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="text-status-error">
+          <Typography variant="tiny" className="text-status-error-text">
             {error}
           </Typography>
         </div>
@@ -252,7 +252,7 @@ export function CentralMxPersistedPlanosPanel({ storeId }: Props) {
 
       {error && (
         <div className="mt-mx-md rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="text-status-error">
+          <Typography variant="tiny" className="text-status-error-text">
             {error}
           </Typography>
         </div>
@@ -371,7 +371,7 @@ export function CentralMxPersistedAgendaPanel({ storeId }: Props) {
 
       {error && (
         <div className="mt-mx-md rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="text-status-error">
+          <Typography variant="tiny" className="text-status-error-text">
             {error}
           </Typography>
         </div>

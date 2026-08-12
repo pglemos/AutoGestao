@@ -85,7 +85,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{v.unidade || "—"}</td>
                   {/* Vendas / Faturamento */}
                   <td className="px-4 py-3">
-                    <span className={`text-[14px] font-bold ${isMe ? "text-status-info-text" : "text-green-600"}`}>
+                    <span className={`text-[14px] font-bold ${isMe ? "text-status-info-text" : "text-status-success-text"}`}>
                       {isVolume ? val : formatBRL(val)}
                     </span>
                   </td>
@@ -93,7 +93,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{isVolume ? meta : formatBRL(meta)}</td>
                   {/* Atingimento */}
                   <td className="px-4 py-3">
-                    <span className={`text-[14px] font-bold ${pct >= 100 ? "text-green-600" : pct >= 80 ? "text-status-warning-text" : pct >= 50 ? "text-status-info" : "text-status-error"}`}>
+                    <span className={`text-[14px] font-bold ${pct >= 100 ? "text-status-success-text" : pct >= 80 ? "text-status-warning-text" : pct >= 50 ? "text-status-info-text" : "text-status-error-text"}`}>
                       {pct}%
                     </span>
                   </td>

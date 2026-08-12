@@ -205,7 +205,7 @@ export function RegularizarFechamentoDrawer({
  <div className="min-w-0 flex-1 space-y-5 overflow-y-auto overflow-x-hidden p-4 sm:p-6">
             {!finalized && (
               <div className="flex items-start gap-3 rounded-xl border border-status-warning/30 bg-status-warning-surface p-4">
-                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning" />
+                <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning-text" />
                 <p className="text-body-sm font-bold text-status-warning-text">
                   Preencha os dados e solicite a aprovação do gerente. Nenhum lançamento será aplicado antes da aprovação.
                 </p>
@@ -264,7 +264,7 @@ export function RegularizarFechamentoDrawer({
                   { label: 'Leads', value: totalLeads, color: 'text-status-info-text' },
                   { label: 'Atendimentos', value: totalAtendimentos, color: 'text-status-info-text' },
                   { label: 'Agendamentos D+1', value: totalAgendamentosD1, color: 'text-status-warning-text' },
-                  { label: 'Vendas', value: totalVendas, color: 'text-green-600' },
+                  { label: 'Vendas', value: totalVendas, color: 'text-status-success-text' },
                   { label: 'Faturamento', value: totalFaturamento > 0 ? BRL(totalFaturamento) : '—', color: 'text-green-700' },
                 ].map((s) => (
                   <div key={s.label} className="p-4 text-center">
@@ -301,8 +301,8 @@ export function RegularizarFechamentoDrawer({
                     <span className="font-bold text-[#0F172A]">{disciplina.pontuacaoDisciplinaBase}%</span>
                   </div>
                   <div className="flex justify-between text-body-sm">
-                    <span className="font-medium text-status-error">Penalização por atraso</span>
-                    <span className="font-bold text-status-error">-10%</span>
+                    <span className="font-medium text-status-error-text">Penalização por atraso</span>
+                    <span className="font-bold text-status-error-text">-10%</span>
                   </div>
                   <div className="flex justify-between border-t border-border-subtle pt-2 text-body-sm">
                     <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>

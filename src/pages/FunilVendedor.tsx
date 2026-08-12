@@ -209,7 +209,7 @@ export default function FunilVendedor() {
         />
 
         {errors.length > 0 && (
-          <div role="status" className="rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-sm font-semibold text-status-warning">
+          <div role="status" className="rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-sm font-semibold text-status-warning-text">
             Algumas fontes ainda não retornaram dados. A tela continua somente leitura e mostra vazio quando base não existe.
           </div>
         )}

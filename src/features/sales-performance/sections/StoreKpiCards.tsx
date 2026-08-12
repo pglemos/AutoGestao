@@ -57,8 +57,8 @@ export function StoreKpiCards({ metrics }: Props) {
                   stat.tone === 'brand'
                     ? 'bg-mx-indigo-50 border-mx-indigo-100 text-status-success-text'
                     : stat.tone === 'info'
-                      ? 'bg-status-info-surface border-status-info/20 text-status-info'
-                      : 'bg-status-success-surface border-mx-emerald-100 text-status-success',
+                      ? 'bg-status-info-surface border-status-info/20 text-status-info-text'
+                      : 'bg-status-success-surface border-mx-emerald-100 text-status-success-text',
                 )}
               >
                 <stat.icon size={24} strokeWidth={2} />

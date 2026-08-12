@@ -98,9 +98,9 @@ interface TipoDef {
 }
 
 const TIPOS: TipoDef[] = [
-  { id: 'agendamento', icon: CalendarCheck, label: 'Agendamento', desc: 'Compromisso comercial futuro', cor: 'border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text', iconCor: 'text-status-info' },
-  { id: 'venda', icon: ShoppingCart, label: 'Venda', desc: 'Negócio fechado', cor: 'border-green-200 bg-green-50 hover:bg-green-100 text-green-700', iconCor: 'text-green-500' },
-  { id: 'garantia', icon: ShieldCheck, label: 'Garantia', desc: 'Pós-venda ou garantia de veículo', cor: 'border-status-warning/30 bg-status-warning-surface hover:bg-status-warning-surface text-status-warning-text', iconCor: 'text-status-warning' },
+  { id: 'agendamento', icon: CalendarCheck, label: 'Agendamento', desc: 'Compromisso comercial futuro', cor: 'border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text', iconCor: 'text-status-info-text' },
+  { id: 'venda', icon: ShoppingCart, label: 'Venda', desc: 'Negócio fechado', cor: 'border-green-200 bg-green-50 hover:bg-green-100 text-green-700', iconCor: 'text-status-success-text' },
+  { id: 'garantia', icon: ShieldCheck, label: 'Garantia', desc: 'Pós-venda ou garantia de veículo', cor: 'border-status-warning/30 bg-status-warning-surface hover:bg-status-warning-surface text-status-warning-text', iconCor: 'text-status-warning-text' },
   { id: 'qualificado', icon: UserCheck, label: 'Qualificado', desc: 'Nova oportunidade trabalhável', cor: 'border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text', iconCor: 'text-status-info-text' },
 ]
 
@@ -125,7 +125,7 @@ function TipoSelector({ onSelect }: { onSelect: (t: RegistroTipo) => void }) {
 }
 
 function ClienteEncontradoBadge({ jaVendido }: { jaVendido?: boolean }) {
-  return <p className="mt-0.5 text-caption font-semibold text-green-600">✓ Cliente encontrado na Carteira{jaVendido ? ' (já vendido)' : ''}.</p>
+  return <p className="mt-0.5 text-caption font-semibold text-status-success-text">✓ Cliente encontrado na Carteira{jaVendido ? ' (já vendido)' : ''}.</p>
 }
 
 function formatAppointmentDate(value: string): string {

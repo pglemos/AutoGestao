@@ -132,7 +132,7 @@ export default function ConsultorNotificacoes() {
                                                     <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'store' ? "bg-status-warning text-white" : "bg-gray-50 text-muted-foreground group-hover:bg-white")}>
                                                         <Building2 size={22} />
                                                     </div>
-                                                    <Typography variant="caption" className={cn("font-bold", form.target_type === 'store' ? "text-status-warning" : "text-muted-foreground")}>UNIDADE ALVO</Typography>
+                                                    <Typography variant="caption" className={cn("font-bold", form.target_type === 'store' ? "text-status-warning-text" : "text-muted-foreground")}>UNIDADE ALVO</Typography>
                                                 </button>
                                             </div>
                                         </div>

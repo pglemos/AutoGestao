@@ -121,7 +121,7 @@ export function SegurancaTab() {
             {profile?.must_change_password && (
                 <Card className="p-mx-md bg-status-warning-surface border border-status-warning/30">
                     <div className="flex items-start gap-mx-sm">
-                        <AlertTriangle size={20} className="text-status-warning shrink-0 mt-0.5" />
+                        <AlertTriangle size={20} className="text-status-warning-text shrink-0 mt-0.5" />
                         <div>
                             <Typography variant="caption" tone="warning" className="">Troca de Senha Obrigatória</Typography>
                             <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">
@@ -161,7 +161,7 @@ export function SegurancaTab() {
                     <Button
                         variant="outline"
                         onClick={handleForceLogoutAll}
-                        className="w-full h-mx-xl border-status-error/30 text-status-error hover:bg-status-error-surface"
+                        className="w-full h-mx-xl border-status-error/30 text-status-error-text hover:bg-status-error-surface"
                     >
                         <LogOut size={16} className="mr-2" /> Encerrar todas as sessões
                     </Button>

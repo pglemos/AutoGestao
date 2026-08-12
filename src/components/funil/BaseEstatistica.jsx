@@ -7,7 +7,7 @@ const FILTRO_LABEL = {
 };
 
 const COR = {
-  Alta:  "text-green-600 bg-green-50 border-green-200",
+  Alta:  "text-status-success-text bg-green-50 border-green-200",
   Média: "text-status-warning-text bg-status-warning-surface border-status-warning/30",
   Baixa: "text-muted-foreground bg-slate-50 border-border",
 };

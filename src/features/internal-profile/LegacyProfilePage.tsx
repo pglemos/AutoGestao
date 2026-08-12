@@ -100,7 +100,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
           showFilter={false}
           actions={(
             <>
-              <Button variant="outline" size="icon" aria-label="Sair da conta" onClick={() => signOut()} className="h-10 w-10 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface">
+              <Button variant="outline" size="icon" aria-label="Sair da conta" onClick={() => signOut()} className="h-10 w-10 rounded-lg text-status-error-text border-status-error/20 hover:bg-status-error-surface">
                 <LogOut size={18} aria-hidden="true" />
               </Button>
               <Button onClick={handleSave} disabled={saving}>
@@ -123,7 +123,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
           </div>
 
           <div className="flex items-center gap-3 shrink-0">
-            <Button variant="outline" size="icon" aria-label="Sair da conta" onClick={() => signOut()} className="h-14 w-14 rounded-lg text-status-error border-status-error/20 hover:bg-status-error-surface shadow-sm bg-card">
+            <Button variant="outline" size="icon" aria-label="Sair da conta" onClick={() => signOut()} className="h-14 w-14 rounded-lg text-status-error-text border-status-error/20 hover:bg-status-error-surface shadow-sm bg-card">
               <LogOut size={24} aria-hidden="true" />
             </Button>
             <Button onClick={handleSave} disabled={saving} className="h-14 px-10 rounded-full shadow-xl">
@@ -224,7 +224,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
 
                   <div className="rounded-xl border border-border bg-muted/50 p-6 flex items-center justify-between group/sec">
                     <div className="flex items-center gap-3">
-                      <div className="h-xl w-xl rounded-xl bg-card border border-border flex items-center justify-center text-status-success shadow-sm"><ShieldCheck size={20} /></div>
+                      <div className="h-xl w-xl rounded-xl bg-card border border-border flex items-center justify-center text-status-success-text shadow-sm"><ShieldCheck size={20} /></div>
                       <span className="text-xs font-bold uppercase tracking-widest text-foreground">Verificação de acesso</span>
                     </div>
                     <Badge variant="success" className="px-4 py-1 rounded-full border-none">

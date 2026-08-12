@@ -65,11 +65,11 @@ const pct = vendedorMeta > 0 ? Math.round((v.vendas / vendedorMeta) * 100) : 0
                   </td>
                   <td className="px-4 py-3 text-body-sm text-muted-foreground">{v.unidade || '—'}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-[14px] font-bold ${isMe ? 'text-status-info-text' : 'text-green-600'}`}>{v.vendas}</span>
+                    <span className={`text-[14px] font-bold ${isMe ? 'text-status-info-text' : 'text-status-success-text'}`}>{v.vendas}</span>
                   </td>
 <td className="px-4 py-3 text-body-sm text-muted-foreground">{vendedorMeta}</td>
                   <td className="px-4 py-3">
-                    <span className={`text-[14px] font-bold ${pct >= 100 ? 'text-green-600' : pct >= 80 ? 'text-status-warning-text' : pct >= 50 ? 'text-status-info' : 'text-status-error'}`}>
+                    <span className={`text-[14px] font-bold ${pct >= 100 ? 'text-status-success-text' : pct >= 80 ? 'text-status-warning-text' : pct >= 50 ? 'text-status-info-text' : 'text-status-error-text'}`}>
                       {pct}%
                     </span>
                   </td>

@@ -19,7 +19,7 @@ export const statusFilters = [
 export const metricCards = [
   { key: 'total', label: 'Total', valueKey: 'total', className: '' },
   { key: 'agendadas', label: 'Agendadas', valueKey: 'agendadas', className: 'text-brand-primary' },
-  { key: 'andamento', label: 'Em andamento', valueKey: 'emAndamento', className: 'text-status-info' },
-  { key: 'concluidas', label: 'Concluídas', valueKey: 'concluidas', className: 'text-status-success' },
-  { key: 'canceladas', label: 'Canceladas', valueKey: 'canceladas', className: 'text-status-error' },
+  { key: 'andamento', label: 'Em andamento', valueKey: 'emAndamento', className: 'text-status-info-text' },
+  { key: 'concluidas', label: 'Concluídas', valueKey: 'concluidas', className: 'text-status-success-text' },
+  { key: 'canceladas', label: 'Canceladas', valueKey: 'canceladas', className: 'text-status-error-text' },
 ] as const

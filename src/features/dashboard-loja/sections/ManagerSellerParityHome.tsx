@@ -401,15 +401,15 @@ function AppointmentGapCard({ appointmentGap }: { appointmentGap: number | null 
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Gap de Agendamentos</p>
         <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
           {missingGoal || negative
-            ? <AlertTriangle size={18} className={negative ? 'text-status-warning' : 'text-muted-foreground'} />
-            : <CheckCircle size={18} className="text-status-success" />}
+            ? <AlertTriangle size={18} className={negative ? 'text-status-warning-text' : 'text-muted-foreground'} />
+            : <CheckCircle size={18} className="text-status-success-text" />}
         </span>
       </div>
       <div>
         {missingGoal ? (
           <><p className="text-2xl font-bold text-muted-foreground">Não calculado</p><p className="mt-1 text-sm text-muted-foreground">Cadastre a meta da loja.</p></>
         ) : negative ? (
-          <><p className="text-3xl font-bold text-status-warning">{appointmentGap}</p><p className="mt-1 text-sm text-muted-foreground">Faltam {absoluteGap} agendamento{absoluteGap === 1 ? '' : 's'} para sustentar o volume de vendas necessário</p></>
+          <><p className="text-3xl font-bold text-status-warning-text">{appointmentGap}</p><p className="mt-1 text-sm text-muted-foreground">Faltam {absoluteGap} agendamento{absoluteGap === 1 ? '' : 's'} para sustentar o volume de vendas necessário</p></>
         ) : zero ? (
           <><p className="text-3xl font-bold text-status-success-text">0</p><p className="mt-1 text-sm text-muted-foreground">Meta de agendamentos atendida</p></>
         ) : (
@@ -451,7 +451,7 @@ function TodayReading({ salesForecast, salesNeeded, coverage, message }: {
 function SuggestedAction({ message }: { message: string }) {
   return (
     <article className="flex h-full flex-col rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
-      <div className="mb-3 flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-status-warning-surface"><Lightbulb size={16} className="text-status-warning" /></span><h2 className="text-sm font-bold text-foreground">Ação sugerida</h2></div>
+      <div className="mb-3 flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-status-warning-surface"><Lightbulb size={16} className="text-status-warning-text" /></span><h2 className="text-sm font-bold text-foreground">Ação sugerida</h2></div>
       <p className="flex-1 text-sm leading-relaxed text-muted-foreground">{message}</p>
     </article>
   )

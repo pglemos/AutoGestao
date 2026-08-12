@@ -29,8 +29,8 @@ export function RecipientPreview({ value }: RecipientPreviewProps) {
             className={cn(
               'rounded-mx-full border px-mx-xs py-mx-tiny text-mx-micro font-bold',
               valid
-                ? 'border-status-success/20 bg-status-success-surface text-status-success'
-                : 'border-status-error/20 bg-status-error-surface text-status-error'
+                ? 'border-status-success/20 bg-status-success-surface text-status-success-text'
+                : 'border-status-error/20 bg-status-error-surface text-status-error-text'
             )}
           >
             {recipient}

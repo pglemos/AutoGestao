@@ -45,7 +45,7 @@ export default function ConsultingMeetingBlock({ meeting }) {
 
           <div className="flex flex-wrap gap-3">
             <div className="flex items-center gap-1.5 rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground">
-              <CheckSquare className="h-3.5 w-3.5 text-status-warning" />
+              <CheckSquare className="h-3.5 w-3.5 text-status-warning-text" />
               <span className="tabular-nums">{meeting.client_pending_count || 0}</span> pendências
             </div>
             <div className="flex items-center gap-1.5 rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground">
@@ -116,7 +116,7 @@ export default function ConsultingMeetingBlock({ meeting }) {
             <ul className="space-y-1.5 text-sm text-muted-foreground">
               {meeting.preparation?.map((a, i) => (
                 <li key={i} className="flex items-start gap-2">
-                  <CheckSquare className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-warning" />
+                  <CheckSquare className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-warning-text" />
                   {a}
                 </li>
               ))}

@@ -26,10 +26,10 @@ const FLUXO_LABEL: Record<CarteiraFluxoEstado, string> = {
 const FLUXO_TONE: Record<CarteiraFluxoEstado, string> = {
   novo: 'border-border bg-gray-50 text-muted-foreground',
   contato_inicial: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
-  aquecimento: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-  negociacao: 'border-status-warning/40 bg-status-warning-surface text-status-warning',
-  convertido: 'border-status-success/30 bg-status-success-surface text-status-success',
-  perdido: 'border-status-error/30 bg-status-error-surface text-status-error',
+  aquecimento: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
+  negociacao: 'border-status-warning/40 bg-status-warning-surface text-status-warning-text',
+  convertido: 'border-status-success/30 bg-status-success-surface text-status-success-text',
+  perdido: 'border-status-error/30 bg-status-error-surface text-status-error-text',
 }
 
 type Props = {
@@ -71,7 +71,7 @@ export function MarketingModulo({ storeId }: Props) {
 
       {error && (
         <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="text-status-error">
+          <Typography variant="tiny" className="text-status-error-text">
             {error}
           </Typography>
         </div>

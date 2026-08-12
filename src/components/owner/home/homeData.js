@@ -16,7 +16,7 @@ export const STATUS_STYLES = {
     text: "text-status-warning-text",
     bg: "bg-status-warning-surface",
     border: "border-status-warning/30",
-    gauge: "text-status-warning",
+    gauge: "text-status-warning-text",
     cardAccent: "border-status-warning/30",
   },
   critical: {
@@ -25,7 +25,7 @@ export const STATUS_STYLES = {
     text: "text-status-error-text",
     bg: "bg-status-error-surface",
     border: "border-status-error/30",
-    gauge: "text-status-error",
+    gauge: "text-status-error-text",
     cardAccent: "border-status-error/30",
   },
 };
@@ -39,9 +39,9 @@ export const ICON_STYLES = {
 
 export const SPARK_COLORS = {
   green: "text-primary",
-  blue: "text-status-info",
+  blue: "text-status-info-text",
   purple: "text-status-info-text",
-  orange: "text-status-warning",
+  orange: "text-status-warning-text",
 };
 
 export const mainIndicators = [

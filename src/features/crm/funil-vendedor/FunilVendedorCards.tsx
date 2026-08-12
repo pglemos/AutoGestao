@@ -28,7 +28,7 @@ const EFFORT_PRINCIPAL_BG: Record<FunnelChannel, string> = {
 const EFICIENCIA_COR: Record<FunnelChannel, { header: string; badge: string; btn: string }> = {
   Showroom: { header: 'bg-status-warning-surface border-status-warning/30', badge: 'bg-status-warning-surface text-status-warning-text', btn: 'text-status-warning-text hover:text-status-warning-text' },
   Internet: { header: 'bg-status-info-surface border-status-info/30', badge: 'bg-status-info-surface text-status-info-text', btn: 'text-status-info-text hover:text-status-info-text' },
-  Carteira: { header: 'bg-green-50 border-green-200', badge: 'bg-green-100 text-green-700', btn: 'text-green-600 hover:text-green-800' },
+  Carteira: { header: 'bg-green-50 border-green-200', badge: 'bg-green-100 text-green-700', btn: 'text-status-success-text hover:text-green-800' },
 }
 
 const EFICIENCIA_ORDER: FunnelChannel[] = ['Showroom', 'Carteira', 'Internet']
@@ -60,9 +60,9 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
         </div>
       ) : metaBatida ? (
         <div className="flex items-center gap-3">
-          <CheckCircle className="h-6 w-6 shrink-0 text-green-500" />
+          <CheckCircle className="h-6 w-6 shrink-0 text-status-success-text" />
           <div>
-            <p className="text-[20px] font-bold text-green-600">Meta batida!</p>
+            <p className="text-[20px] font-bold text-status-success-text">Meta batida!</p>
             <p className="text-body-sm text-muted-foreground">{realizado} de {meta} vendas realizadas</p>
           </div>
         </div>

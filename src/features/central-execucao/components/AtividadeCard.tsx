@@ -167,7 +167,7 @@ export function AtividadeCard({
             <div className="flex flex-wrap items-center gap-2">
               <span className={cn('rounded-full px-2 py-0.5 text-caption font-bold', TYPE_BADGE[action.activityType])}>{typeLabel}</span>
               <span className={cn('rounded-full px-2 py-0.5 text-caption font-bold', PRIORITY_BADGE[action.priority])}>{PRIORITY_LABEL[action.priority]}</span>
-              {overdue && <span className="rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error">Vencido</span>}
+              {overdue && <span className="rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error-text">Vencido</span>}
               {alreadyEscalated && <span className="rounded-full bg-status-warning-surface px-2 py-0.5 text-caption font-bold text-status-warning-text">Aguardando gerente</span>}
             </div>
             <div className="flex items-center gap-1 text-caption font-bold text-muted-foreground">
@@ -205,7 +205,7 @@ export function AtividadeCard({
               </a>
             )}
             {action.clientId && (
-              <button type="button" onClick={() => onOpenClient(action)} className="flex items-center gap-1 rounded-lg border border-status-info/30 px-3 py-1.5 text-caption font-bold text-status-info transition-colors hover:bg-status-info-surface">
+              <button type="button" onClick={() => onOpenClient(action)} className="flex items-center gap-1 rounded-lg border border-status-info/30 px-3 py-1.5 text-caption font-bold text-status-info-text transition-colors hover:bg-status-info-surface">
                 <UserRound className="h-3 w-3" aria-hidden="true" /> Cliente
               </button>
             )}
@@ -228,7 +228,7 @@ export function AtividadeCard({
             <div className={cn('mx-auto mb-1 flex h-9 w-9 items-center justify-center rounded-xl', TYPE_BADGE[action.activityType])}>
               <Icon className="h-4 w-4" aria-hidden="true" />
             </div>
-            <p className={cn('text-caption font-bold', overdue ? 'text-status-error' : 'text-muted-foreground')}>{hour}</p>
+            <p className={cn('text-caption font-bold', overdue ? 'text-status-error-text' : 'text-muted-foreground')}>{hour}</p>
           </div>
 
           <div className="flex min-w-0 flex-1 items-center gap-3">
@@ -240,7 +240,7 @@ export function AtividadeCard({
                 <p className="truncate text-[14px] font-bold text-foreground">{clientName}</p>
                 <span className={cn('rounded-full px-2 py-0.5 text-caption font-bold', TYPE_BADGE[action.activityType])}>{typeLabel}</span>
                 <span className={cn('rounded-full px-2 py-0.5 text-caption font-bold', PRIORITY_BADGE[action.priority])}>{PRIORITY_LABEL[action.priority]}</span>
-                {overdue && <span className="rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error">Vencido</span>}
+                {overdue && <span className="rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error-text">Vencido</span>}
                 {alreadyEscalated && <span className="rounded-full bg-status-warning-surface px-2 py-0.5 text-caption font-bold text-status-warning-text">Aguardando gerente</span>}
               </div>
               <div className="flex flex-wrap items-center gap-2 text-[12px] text-muted-foreground">
@@ -259,7 +259,7 @@ export function AtividadeCard({
               </button>
             )}
             {phoneDigits && (
-              <button type="button" title="WhatsApp" aria-label={`Abrir WhatsApp de ${clientName}`} onClick={() => onWhatsapp(action)} className="rounded-xl bg-green-50 p-2 text-green-600 transition-colors hover:bg-green-100">
+              <button type="button" title="WhatsApp" aria-label={`Abrir WhatsApp de ${clientName}`} onClick={() => onWhatsapp(action)} className="rounded-xl bg-green-50 p-2 text-status-success-text transition-colors hover:bg-green-100">
                 <MessageCircle className="h-4 w-4" aria-hidden="true" />
               </button>
             )}
@@ -269,7 +269,7 @@ export function AtividadeCard({
               </a>
             )}
             {action.clientId && (
-              <button type="button" title="Abrir cliente" aria-label={`Abrir cliente ${clientName}`} onClick={() => onOpenClient(action)} className="rounded-xl bg-status-info-surface p-2 text-status-info transition-colors hover:bg-status-info-surface">
+              <button type="button" title="Abrir cliente" aria-label={`Abrir cliente ${clientName}`} onClick={() => onOpenClient(action)} className="rounded-xl bg-status-info-surface p-2 text-status-info-text transition-colors hover:bg-status-info-surface">
                 <UserRound className="h-4 w-4" aria-hidden="true" />
               </button>
             )}

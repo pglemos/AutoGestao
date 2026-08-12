@@ -43,7 +43,7 @@ const typeConfig: Record<
 > = {
   critical: {
     Icon: AlertCircle,
-    iconColor: 'text-status-error',
+    iconColor: 'text-status-error-text',
     border: 'border-l-status-error',
     bgSurface: 'bg-status-error-surface',
     title: 'Crítico',
@@ -52,7 +52,7 @@ const typeConfig: Record<
   },
   warning: {
     Icon: AlertTriangle,
-    iconColor: 'text-status-warning',
+    iconColor: 'text-status-warning-text',
     border: 'border-l-status-warning',
     bgSurface: 'bg-status-warning-surface',
     title: 'Atenção',
@@ -61,7 +61,7 @@ const typeConfig: Record<
   },
   positive: {
     Icon: CheckCircle2,
-    iconColor: 'text-status-success',
+    iconColor: 'text-status-success-text',
     border: 'border-l-status-success',
     bgSurface: 'bg-status-success-surface',
     title: 'Positivo',

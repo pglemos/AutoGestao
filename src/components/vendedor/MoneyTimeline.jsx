@@ -40,7 +40,7 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
             >
               {ponto.novaFaixa && !isAtual && (
                 <div className="flex items-center justify-center gap-1 mb-2">
-                  <Star className="w-3 h-3 text-status-success" fill="currentColor" />
+                  <Star className="w-3 h-3 text-status-success-text" fill="currentColor" />
                   <span className="text-caption font-bold text-status-success-text uppercase tracking-wider">Nova faixa</span>
                 </div>
               )}

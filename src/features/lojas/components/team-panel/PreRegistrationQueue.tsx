@@ -173,7 +173,7 @@ export function PreRegistrationQueue({
                         variant="outline"
                         onClick={() => onReview(item, 'reject')}
                         disabled={reviewingPreRegistrationId === item.id || pendingConfirmations.has(getPreRegistrationConfirmationKey(item))}
-                        className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-nano text-status-error hover:bg-status-error-surface"
+                        className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-nano text-status-error-text hover:bg-status-error-surface"
                       >
                         <Ban size={15} className="mr-2" />
                         Rejeitar

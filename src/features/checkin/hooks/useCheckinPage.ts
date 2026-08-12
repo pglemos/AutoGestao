@@ -302,12 +302,67 @@ const activeClosingContext = useMemo(
         visitas: Number(form.visitas_porta) + Number(form.visitas_cart) + Number(form.visitas_net),
     }), [form])
 
+    const crmDailyCounters = useMemo(() => {
+        const dataD1 = addDaysDateOnly(selectedDate, 1)
+        const isD1Negotiation = (cliente: ClienteRow) =>
+            cliente.vendaRealizada === 'Em Negociação'
+            && cliente.tipoRegistroCalculado === 'Agendamento D+1'
+            && parseDateOnly(cliente.dataAgendamento) === dataD1
+
+        return {
+            agd_cart: clientesList.filter(cliente => cliente.canal === 'Carteira' && isD1Negotiation(cliente)).length,
+            agd_net: clientesList.filter(cliente => cliente.canal === 'Internet' && isD1Negotiation(cliente)).length,
+            visitas_porta: clientesList.filter(cliente => cliente.canal === 'Showroom' && cliente.compareceu === 'Sim').length,
+            visitas_cart: clientesList.filter(cliente => cliente.canal === 'Carteira' && cliente.compareceu === 'Sim').length,
+            visitas_net: clientesList.filter(cliente => cliente.canal === 'Internet' && cliente.compareceu === 'Sim').length,
+            vnd_porta: clientesList.filter(cliente => cliente.canal === 'Showroom' && cliente.vendaRealizada === 'Sim').length,
+            vnd_cart: clientesList.filter(cliente => cliente.canal === 'Carteira' && cliente.vendaRealizada === 'Sim').length,
+            vnd_net: clientesList.filter(cliente => cliente.canal === 'Internet' && cliente.vendaRealizada === 'Sim').length,
+        }
+    }, [clientesList, selectedDate])
+
+    const effectiveForm = useMemo<CheckinForm>(() => {
+        const next: CheckinForm = {
+            ...form,
+            agd_cart: Math.max(Number(form.agd_cart ?? 0), crmDailyCounters.agd_cart),
+            agd_net: Math.max(Number(form.agd_net ?? 0), crmDailyCounters.agd_net),
+            visitas_porta: Math.max(Number(form.visitas_porta ?? 0), crmDailyCounters.visitas_porta),
+            visitas_cart: Math.max(Number(form.visitas_cart ?? 0), crmDailyCounters.visitas_cart),
+            visitas_net: Math.max(Number(form.visitas_net ?? 0), crmDailyCounters.visitas_net),
+            vnd_porta: Math.max(Number(form.vnd_porta ?? 0), crmDailyCounters.vnd_porta),
+            vnd_cart: Math.max(Number(form.vnd_cart ?? 0), crmDailyCounters.vnd_cart),
+            vnd_net: Math.max(Number(form.vnd_net ?? 0), crmDailyCounters.vnd_net),
+        }
+        next.leads = Number(next.leads_cart) + Number(next.leads_net)
+        next.visitas = Number(next.visitas_porta) + Number(next.visitas_cart) + Number(next.visitas_net)
+        return next
+    }, [crmDailyCounters, form])
+
+    const effectiveTotals = useMemo(() => ({
+        leads: Number(effectiveForm.leads_cart) + Number(effectiveForm.leads_net),
+        visitas: Number(effectiveForm.visitas_porta) + Number(effectiveForm.visitas_cart) + Number(effectiveForm.visitas_net),
+        agd: Number(effectiveForm.agd_cart) + Number(effectiveForm.agd_net),
+        vendas: Number(effectiveForm.vnd_porta) + Number(effectiveForm.vnd_cart) + Number(effectiveForm.vnd_net),
+    }), [effectiveForm])
+
+    const realSalesCount = useMemo(() => {
+        return clientesList.filter(c => c.vendaRealizada === 'Sim').length
+    }, [clientesList])
+
+    const realFaturamento = useMemo(() => {
+        return clientesList.filter(c => c.vendaRealizada === 'Sim').reduce((acc, c) => acc + (c.valorNegociado || 0), 0)
+    }, [clientesList])
+
     const declaredProgressTotals = useMemo(() => ({
-        leads: Number(declaredForm.leads_cart) + Number(declaredForm.leads_net),
-        visitas: Number(declaredForm.visitas_porta) + Number(declaredForm.visitas_cart) + Number(declaredForm.visitas_net),
-        agd: Number(declaredForm.agd_cart) + Number(declaredForm.agd_net),
-        vendas: Number(declaredForm.vnd_porta) + Number(declaredForm.vnd_cart) + Number(declaredForm.vnd_net),
-    }), [declaredForm])
+        leads: Math.max(Number(declaredForm.leads_cart) + Number(declaredForm.leads_net), effectiveTotals.leads),
+        visitas: Math.max(Number(declaredForm.visitas_porta) + Number(declaredForm.visitas_cart) + Number(declaredForm.visitas_net), effectiveTotals.visitas),
+        agd: Math.max(Number(declaredForm.agd_cart) + Number(declaredForm.agd_net), effectiveTotals.agd),
+        vendas: Math.max(
+            Number(declaredForm.vnd_porta) + Number(declaredForm.vnd_cart) + Number(declaredForm.vnd_net),
+            effectiveTotals.vendas,
+            realSalesCount,
+        ),
+    }), [declaredForm, effectiveTotals, realSalesCount])
 
     const declaredTotals = useMemo(() => calcularTotais(declaredForm), [declaredForm])
     const totals = declaredTotals
@@ -325,7 +380,7 @@ const activeClosingContext = useMemo(
         }
     }, [changedFields, saving])
 
-const spTime = getSPHoursMinutes(currentTime)
+    const spTime = getSPHoursMinutes(currentTime)
 
     // O fechamento diário não possui trava global por horário. A janela
     // 09:30 é exclusiva da consolidação da Agenda D+1 (§11.2); a escolha da
@@ -409,50 +464,6 @@ ${linkSeguro}`
         )
     }
 
-    // Dynamic Discipline and Summary Calculations
-    const crmDailyCounters = useMemo(() => {
-        const dataD1 = addDaysDateOnly(selectedDate, 1)
-        const isD1Negotiation = (cliente: ClienteRow) =>
-            cliente.vendaRealizada === 'Em Negociação'
-            && cliente.tipoRegistroCalculado === 'Agendamento D+1'
-            && parseDateOnly(cliente.dataAgendamento) === dataD1
-
-        return {
-            agd_cart: clientesList.filter(cliente => cliente.canal === 'Carteira' && isD1Negotiation(cliente)).length,
-            agd_net: clientesList.filter(cliente => cliente.canal === 'Internet' && isD1Negotiation(cliente)).length,
-            visitas_porta: clientesList.filter(cliente => cliente.canal === 'Showroom' && cliente.compareceu === 'Sim').length,
-            visitas_cart: clientesList.filter(cliente => cliente.canal === 'Carteira' && cliente.compareceu === 'Sim').length,
-            visitas_net: clientesList.filter(cliente => cliente.canal === 'Internet' && cliente.compareceu === 'Sim').length,
-            vnd_porta: clientesList.filter(cliente => cliente.canal === 'Showroom' && cliente.vendaRealizada === 'Sim').length,
-            vnd_cart: clientesList.filter(cliente => cliente.canal === 'Carteira' && cliente.vendaRealizada === 'Sim').length,
-            vnd_net: clientesList.filter(cliente => cliente.canal === 'Internet' && cliente.vendaRealizada === 'Sim').length,
-        }
-    }, [clientesList, selectedDate])
-
-    const effectiveForm = useMemo<CheckinForm>(() => {
-        const next: CheckinForm = {
-            ...form,
-            agd_cart: Math.max(Number(form.agd_cart ?? 0), crmDailyCounters.agd_cart),
-            agd_net: Math.max(Number(form.agd_net ?? 0), crmDailyCounters.agd_net),
-            visitas_porta: Math.max(Number(form.visitas_porta ?? 0), crmDailyCounters.visitas_porta),
-            visitas_cart: Math.max(Number(form.visitas_cart ?? 0), crmDailyCounters.visitas_cart),
-            visitas_net: Math.max(Number(form.visitas_net ?? 0), crmDailyCounters.visitas_net),
-            vnd_porta: Math.max(Number(form.vnd_porta ?? 0), crmDailyCounters.vnd_porta),
-            vnd_cart: Math.max(Number(form.vnd_cart ?? 0), crmDailyCounters.vnd_cart),
-            vnd_net: Math.max(Number(form.vnd_net ?? 0), crmDailyCounters.vnd_net),
-        }
-        next.leads = Number(next.leads_cart) + Number(next.leads_net)
-        next.visitas = Number(next.visitas_porta) + Number(next.visitas_cart) + Number(next.visitas_net)
-        return next
-    }, [crmDailyCounters, form])
-
-    const effectiveTotals = useMemo(() => ({
-        leads: Number(effectiveForm.leads_cart) + Number(effectiveForm.leads_net),
-        visitas: Number(effectiveForm.visitas_porta) + Number(effectiveForm.visitas_cart) + Number(effectiveForm.visitas_net),
-        agd: Number(effectiveForm.agd_cart) + Number(effectiveForm.agd_net),
-        vendas: Number(effectiveForm.vnd_porta) + Number(effectiveForm.vnd_cart) + Number(effectiveForm.vnd_net),
-    }), [effectiveForm])
-
     const hasCrmActivity = useMemo(
         () => effectiveTotals.leads > declaredProgressTotals.leads
             || effectiveTotals.visitas > declaredProgressTotals.visitas
@@ -529,14 +540,6 @@ ${linkSeguro}`
         )
     }, [clientesList])
 
-    const realSalesCount = useMemo(() => {
-        return clientesList.filter(c => c.vendaRealizada === 'Sim').length
-    }, [clientesList])
-
-    const realFaturamento = useMemo(() => {
-        return clientesList.filter(c => c.vendaRealizada === 'Sim').reduce((acc, c) => acc + (c.valorNegociado || 0), 0)
-    }, [clientesList])
-
     const minutesUntilEditLock = useMemo(() => {
         const currentMinutes = spTime.hours * 60 + spTime.minutes
         return CHECKIN_EDIT_LIMIT_MINUTES - currentMinutes
@@ -544,8 +547,13 @@ ${linkSeguro}`
 
     const isLate = Boolean(historicalCheckin?.submitted_late)
     const declaredAllZero = useMemo(
-        () => declaredProgressTotals.leads === 0 && declaredProgressTotals.agd === 0 && declaredProgressTotals.visitas === 0 && declaredProgressTotals.vendas === 0,
-        [declaredProgressTotals],
+        () => declaredProgressTotals.leads === 0
+            && declaredProgressTotals.agd === 0
+            && declaredProgressTotals.visitas === 0
+            && declaredProgressTotals.vendas === 0
+            && realSalesCount === 0
+            && clientesList.length === 0,
+        [declaredProgressTotals, realSalesCount, clientesList.length],
     )
 const fechamentoConcluido = metricScope === 'daily'
 && selectedDate === activeClosingContext.mainDate
@@ -719,17 +727,15 @@ const fechamentoConcluido = metricScope === 'daily'
             toast.error('Preencha os campos numéricos vazios antes de salvar.')
             return
         }
-        if (declaredAllZero && !form.zero_reason) {
-            setFieldError('zero_reason', 'Selecione o motivo da produção zero.')
-            setInputError('Justificativa obrigatória para produção zero.')
-            toast.error('Justificativa obrigatória para produção zero.')
-            return
-        }
-        if (declaredAllZero && !form.note.trim()) {
-            setFieldError('note', 'Descreva a observação da produção zero.')
-            setInputError('Observação obrigatória para produção zero.')
-            toast.error('Observação obrigatória para produção zero.')
-            return
+        if (declaredAllZero) {
+            if (!form.zero_reason) {
+                updateField('zero_reason', 'Sem movimento')
+                form.zero_reason = 'Sem movimento'
+            }
+            if (!form.note.trim()) {
+                updateField('note', form.zero_reason)
+                form.note = form.zero_reason
+            }
         }
         if (declaredAllZero && form.zero_reason === 'Outro' && form.note.trim().length < 8) {
             setFieldError('note', 'Descreva o motivo “Outro” com pelo menos 8 caracteres.')

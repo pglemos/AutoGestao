@@ -324,12 +324,12 @@ return (
           {mandatoryFeedbackActionsCount > 0 && metricScope === 'daily' && (
             <Card className="border border-status-error/20 bg-status-error-surface p-mx-md">
               <div className="flex items-start gap-mx-sm">
-                <AlertTriangle size={22} className="mt-1 shrink-0 text-status-error" />
+                <AlertTriangle size={22} className="mt-1 shrink-0 text-status-error-text" />
                 <div>
-                  <Typography variant="h3" className="text-status-error">
+                  <Typography variant="h3" className="text-status-error-text">
                     Ação obrigatória do gestor
                   </Typography>
-                  <Typography variant="p" className="mt-mx-xs text-sm font-semibold text-status-error">
+                  <Typography variant="p" className="mt-mx-xs text-sm font-semibold text-status-error-text">
                     Conclua a ação na Central ou registre uma justificativa antes de finalizar o fechamento.
                   </Typography>
                 </div>

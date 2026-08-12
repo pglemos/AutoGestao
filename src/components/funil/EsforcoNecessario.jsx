@@ -83,7 +83,7 @@ export default function EsforcoNecessario({ funis, faltam, funisBase90, usou90 }
     return (
       <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
         <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-2">O que preciso produzir para bater a meta?</p>
-        <p className="text-[14px] font-bold text-green-600">Meta batida. Continue mantendo o ritmo! 🎯</p>
+        <p className="text-[14px] font-bold text-status-success-text">Meta batida. Continue mantendo o ritmo! 🎯</p>
       </div>
     );
   }

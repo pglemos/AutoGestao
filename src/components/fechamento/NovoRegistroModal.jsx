@@ -361,9 +361,9 @@ async function criarEventos({ tipo, form, cliente, currentUser, closingDate, dai
 // ── Tela de seleção de tipo ───────────────────────────────────────────────────
 
 const TIPOS = [
-  { id: "agendamento", icon: CalendarCheck, label: "Agendamento", desc: "Compromisso comercial futuro", cor: "border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text", iconCor: "text-status-info" },
-  { id: "venda", icon: ShoppingCart, label: "Venda", desc: "Negócio fechado", cor: "border-green-200 bg-green-50 hover:bg-green-100 text-green-700", iconCor: "text-green-500" },
-  { id: "garantia", icon: ShieldCheck, label: "Garantia", desc: "Pós-venda ou garantia de veículo", cor: "border-status-warning/30 bg-status-warning-surface hover:bg-status-warning-surface text-status-warning-text", iconCor: "text-status-warning" },
+  { id: "agendamento", icon: CalendarCheck, label: "Agendamento", desc: "Compromisso comercial futuro", cor: "border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text", iconCor: "text-status-info-text" },
+  { id: "venda", icon: ShoppingCart, label: "Venda", desc: "Negócio fechado", cor: "border-green-200 bg-green-50 hover:bg-green-100 text-green-700", iconCor: "text-status-success-text" },
+  { id: "garantia", icon: ShieldCheck, label: "Garantia", desc: "Pós-venda ou garantia de veículo", cor: "border-status-warning/30 bg-status-warning-surface hover:bg-status-warning-surface text-status-warning-text", iconCor: "text-status-warning-text" },
   { id: "qualificado", icon: UserCheck, label: "Qualificado", desc: "Nova oportunidade trabalhável", cor: "border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text", iconCor: "text-status-info-text" },
 ];
 
@@ -391,7 +391,7 @@ function TipoSelector({ onSelect }) {
 function ClienteEncontradoBadge({ cliente }) {
   if (!cliente) return null;
   return (
-    <p className="text-caption text-green-600 mt-0.5 font-semibold">
+    <p className="text-caption text-status-success-text mt-0.5 font-semibold">
       ✓ Cliente encontrado na Carteira{cliente.status_oportunidade === "Vendida" ? " (já vendido)" : ""}.
     </p>
   );

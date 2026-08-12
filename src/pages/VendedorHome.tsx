@@ -257,11 +257,11 @@ export default function VendedorHomePage() {
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Ranking</p>
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
-                <Trophy size={18} className={posicaoRanking === 1 ? 'text-status-warning' : 'text-muted-foreground'} />
+                <Trophy size={18} className={posicaoRanking === 1 ? 'text-status-warning-text' : 'text-muted-foreground'} />
               </span>
             </div>
             <div>
-              <p className={`text-3xl font-bold ${posicaoRanking === 1 ? 'text-status-warning' : 'text-foreground'}`}>
+              <p className={`text-3xl font-bold ${posicaoRanking === 1 ? 'text-status-warning-text' : 'text-foreground'}`}>
                 {posicaoRanking ? `#${posicaoRanking}` : '—'}
               </p>
               <p className="mt-1 text-sm text-muted-foreground">posição na loja</p>
@@ -331,7 +331,7 @@ export default function VendedorHomePage() {
             {ritualItems.map((item, i) => (
               <div key={i} className="flex items-center gap-3">
                 {item.done
-                  ? <CheckCircle size={18} className="text-status-success flex-shrink-0" />
+                  ? <CheckCircle size={18} className="text-status-success-text flex-shrink-0" />
                   : <Circle size={18} className="text-text-disabled flex-shrink-0" />}
                 <p className={`text-sm ${item.done ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>{item.label}</p>
               </div>
@@ -404,17 +404,17 @@ export default function VendedorHomePage() {
                 />
                 <ShortcutCard
                   label="Minha Meta"
-                  icon={<Target size={20} className="text-status-success" />}
+                  icon={<Target size={20} className="text-status-success-text" />}
                   onClick={() => navigate('/meu-funil')}
                 />
                 <ShortcutCard
                   label="Fechamento Diário"
-                  icon={<CheckSquare size={20} className="text-status-info" />}
+                  icon={<CheckSquare size={20} className="text-status-info-text" />}
                   onClick={() => navigate('/fechamento-diario')}
                 />
                 <ShortcutCard
                   label="Desenvolvimento"
-                  icon={<BookOpen size={20} className="text-status-warning" />}
+                  icon={<BookOpen size={20} className="text-status-warning-text" />}
                   onClick={() => navigate('/desenvolvimento')}
                 />
               </div>

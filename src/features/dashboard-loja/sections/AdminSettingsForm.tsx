@@ -186,8 +186,8 @@ export function AdminSettingsForm({
         <div className="rounded-2xl border border-status-error/20 bg-status-error-surface p-mx-md">
           <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center sm:justify-between">
             <div>
-              <Typography variant="caption" className="text-status-error">Zona de risco</Typography>
-              <Typography variant="p" className="mt-mx-tiny text-sm text-status-error">Arquivar preserva histórico, mas remove a loja da operação ativa.</Typography>
+              <Typography variant="caption" className="text-status-error-text">Zona de risco</Typography>
+              <Typography variant="p" className="mt-mx-tiny text-sm text-status-error-text">Arquivar preserva histórico, mas remove a loja da operação ativa.</Typography>
             </div>
             <Button type="button" variant="danger" onClick={onDelete} disabled={deletingStore} className="h-mx-10">
               {deletingStore ? <RefreshCw size={16} className="mr-2 animate-spin" /> : <Archive size={16} className="mr-2" />}

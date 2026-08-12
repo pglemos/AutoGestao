@@ -85,7 +85,7 @@ export function AgendaEventDrawer({
           variant="outline"
           size="sm"
           onClick={() => onBlockDate(selectedDate)}
-          className="rounded-xl font-semibold text-status-error hover:bg-status-error-surface hover:border-status-error/30"
+          className="rounded-xl font-semibold text-status-error-text hover:bg-status-error-surface hover:border-status-error/30"
         >
           <Ban size={15} className="mr-1.5" /> Bloquear
         </Button>
@@ -137,7 +137,7 @@ export function AgendaEventDrawer({
                       <button
                         type="button"
                         onClick={() => onDeleteVisit(visit.id)}
-                        className="p-1 rounded-xl text-muted-foreground hover:bg-status-error-surface hover:text-status-error transition-colors"
+                        className="p-1 rounded-xl text-muted-foreground hover:bg-status-error-surface hover:text-status-error-text transition-colors"
                         title="Excluir Visita"
                       >
                         <Trash2 size={15} />
@@ -223,7 +223,7 @@ export function AgendaEventDrawer({
                         variant="ghost"
                         size="sm"
                         onClick={() => onCancelVisit(visit.id)}
-                        className="text-xs text-status-error hover:bg-status-error-surface"
+                        className="text-xs text-status-error-text hover:bg-status-error-surface"
                       >
                         <XCircle size={13} className="mr-1" /> Cancelar
                       </Button>
@@ -265,7 +265,7 @@ export function AgendaEventDrawer({
                       <button
                         type="button"
                         onClick={() => onDeleteEvent(event.id)}
-                        className="p-1 rounded-xl text-muted-foreground hover:bg-status-error-surface hover:text-status-error transition-colors"
+                        className="p-1 rounded-xl text-muted-foreground hover:bg-status-error-surface hover:text-status-error-text transition-colors"
                         title="Excluir Evento"
                       >
                         <Trash2 size={15} />

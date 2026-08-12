@@ -100,7 +100,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
 
       {error && (
         <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="text-status-error">
+          <Typography variant="tiny" className="text-status-error-text">
             {error}
           </Typography>
         </div>
@@ -181,7 +181,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
                   size={16}
                   className={cn(
                     'mt-mx-tiny',
-                    item.obrigatorio ? 'text-status-warning' : 'text-muted-foreground',
+                    item.obrigatorio ? 'text-status-warning-text' : 'text-muted-foreground',
                   )}
                   aria-hidden="true"
                 />
@@ -241,10 +241,10 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
 
 function ScoreCard({ tone, value }: { tone: string; value: string }) {
   const toneClass: Record<string, string> = {
-    success: 'border-status-success/30 bg-status-success-surface text-status-success',
+    success: 'border-status-success/30 bg-status-success-surface text-status-success-text',
     brand: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
-    warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-    danger: 'border-status-error/30 bg-status-error-surface text-status-error',
+    warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
+    danger: 'border-status-error/30 bg-status-error-surface text-status-error-text',
     muted: 'border-border bg-gray-50 text-muted-foreground',
   }
   return (
@@ -275,10 +275,10 @@ function KpiCard({ kpi }: { kpi: DepartamentoKpi }) {
             ? 'warning'
             : 'danger'
   const toneClass: Record<string, string> = {
-    success: 'border-status-success/30 bg-status-success-surface text-status-success',
+    success: 'border-status-success/30 bg-status-success-surface text-status-success-text',
     brand: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
-    warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-    danger: 'border-status-error/30 bg-status-error-surface text-status-error',
+    warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
+    danger: 'border-status-error/30 bg-status-error-surface text-status-error-text',
     muted: 'border-border bg-gray-50 text-muted-foreground',
   }
   return (

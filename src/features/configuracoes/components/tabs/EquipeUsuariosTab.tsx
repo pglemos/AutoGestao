@@ -257,7 +257,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                                                 size="icon"
                                                 onClick={() => handleDelete(user)}
                                                 aria-label={`Remover ${user.name}`}
-                                                className="h-mx-10 w-mx-10 rounded-2xl text-status-error hover:bg-status-error-surface"
+                                                className="h-mx-10 w-mx-10 rounded-2xl text-status-error-text hover:bg-status-error-surface"
                                             >
                                                 <Trash2 size={16} />
                                             </Button>
@@ -296,7 +296,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
 }
 
 function StatCard({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone?: 'success' | 'brand' | 'muted' }) {
-    const toneColor = tone === 'success' ? 'text-status-success' :
+    const toneColor = tone === 'success' ? 'text-status-success-text' :
         tone === 'brand' ? 'text-status-success-text' : 'text-foreground'
     return (
         <Card className="p-mx-md border-none bg-white">

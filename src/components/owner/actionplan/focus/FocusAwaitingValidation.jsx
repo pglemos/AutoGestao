@@ -45,7 +45,7 @@ export default function FocusAwaitingValidation({ actions, onValidate }) {
                       <span>Resp.: <span className="font-medium text-foreground">{action.responsible}</span></span>
                     </div>
                     <div className="flex items-center gap-1.5">
-                      <FileCheck className="h-3 w-3 text-status-success" />
+                      <FileCheck className="h-3 w-3 text-status-success-text" />
                       <span>Evidência entregue</span>
                       <span>·</span>
                       <span>Enviado: {action.lastUpdate}</span>

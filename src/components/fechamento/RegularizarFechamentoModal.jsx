@@ -157,7 +157,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
           {/* Se já foi enviado e aguardando */}
           {jaEnviado && step !== "success" && (
             <div className="bg-status-warning-surface border border-status-warning/30 rounded-xl p-4 flex items-start gap-3 mb-4">
-              <AlertTriangle className="w-4 h-4 text-status-warning mt-0.5 flex-shrink-0" />
+              <AlertTriangle className="w-4 h-4 text-status-warning-text mt-0.5 flex-shrink-0" />
               <div>
                 <p className="text-body-sm font-bold text-status-warning-text">Aguardando Aprovação</p>
                 <p className="text-[12px] text-status-warning-text mt-0.5">
@@ -169,7 +169,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
 
           {aprovado && step !== "success" && (
             <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3 mb-4">
-              <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+              <CheckCircle2 className="w-4 h-4 text-status-success-text mt-0.5 flex-shrink-0" />
               <p className="text-body-sm font-bold text-green-800">Regularização já aprovada.</p>
             </div>
           )}
@@ -246,7 +246,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
           {step === "success" && (
             <div className="text-center py-4 space-y-3">
               <div className="w-12 h-12 rounded-full bg-status-warning-surface flex items-center justify-center mx-auto">
-                <CheckCircle2 className="w-6 h-6 text-status-warning" />
+                <CheckCircle2 className="w-6 h-6 text-status-warning-text" />
               </div>
               <p className="text-body font-bold text-[#0F172A]">Regularização enviada!</p>
               <p className="text-body-sm text-muted-foreground max-w-xs mx-auto">

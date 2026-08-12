@@ -322,7 +322,7 @@ export default function VendedorTreinamentosContainer() {
                                 {upcomingLive.map(t => (
                                     <Card key={t.id} className="flex items-center gap-4 p-mx-md">
                                         <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-2xl bg-status-error/10">
-                                            <Video className="h-5 w-5 text-status-error" />
+                                            <Video className="h-5 w-5 text-status-error-text" />
                                         </div>
                                         <div className="flex-1">
                                             <Typography variant="p" className="text-sm font-semibold">{t.title}</Typography>

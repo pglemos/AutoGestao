@@ -894,9 +894,9 @@ export default function ConsultoriaVisitaExecucao() {
                            </div>
                         </div>
                         <div className="flex items-center gap-mx-xs opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 transition-opacity">
-                          <Button size="icon" variant="ghost" className="h-mx-8 w-mx-8 text-status-info" onClick={() => handleOpenAttachment(att)} aria-label={`Visualizar ${att.filename}`} icon={<Eye size={14} />} />
+                          <Button size="icon" variant="ghost" className="h-mx-8 w-mx-8 text-status-info-text" onClick={() => handleOpenAttachment(att)} aria-label={`Visualizar ${att.filename}`} icon={<Eye size={14} />} />
                           <Button size="icon" variant="ghost" className="h-mx-8 w-mx-8" onClick={() => handleDownloadAttachment(att)} aria-label={`Baixar ${att.filename}`} icon={<Download size={14} />} />
-                          <Button size="icon" variant="ghost" className="h-mx-8 w-mx-8 text-status-error" onClick={() => handleDeleteAttachment(att)} aria-label={`Remover ${att.filename}`} icon={<Trash2 size={14} />} />
+                          <Button size="icon" variant="ghost" className="h-mx-8 w-mx-8 text-status-error-text" onClick={() => handleDeleteAttachment(att)} aria-label={`Remover ${att.filename}`} icon={<Trash2 size={14} />} />
                         </div>
                      </div>
                   ))}
@@ -905,10 +905,10 @@ export default function ConsultoriaVisitaExecucao() {
 
             {step?.evidence_required && (
                <div className="mt-mx-md p-mx-md bg-status-error/10 border border-status-error/30 rounded-2xl flex gap-mx-sm animate-pulse shadow-sm">
-                  <ShieldAlert className="w-mx-5 h-mx-5 text-status-error shrink-0" />
+                  <ShieldAlert className="w-mx-5 h-mx-5 text-status-error-text shrink-0" />
                   <div>
-                    <Typography variant="tiny" className="text-status-error leading-none tracking-tighter block mb-0.5">Evidência Obrigatória</Typography>
-                    <Typography variant="p" className="text-mx-micro text-status-error font-bold leading-tight">{step.evidence_required}</Typography>
+                    <Typography variant="tiny" className="text-status-error-text leading-none tracking-tighter block mb-0.5">Evidência Obrigatória</Typography>
+                    <Typography variant="p" className="text-mx-micro text-status-error-text font-bold leading-tight">{step.evidence_required}</Typography>
                   </div>
                </div>
             )}

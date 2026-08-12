@@ -135,10 +135,10 @@ export default function ExecutionTab({ action, onReload, onQuickAction, user }) 
                 <Input value={editText} onChange={(e) => setEditText(e.target.value)} onBlur={() => handleSaveEdit(item.id)} onKeyDown={(e) => e.key === "Enter" && handleSaveEdit(item.id)} className="h-7 text-xs" autoFocus />
               ) : (
                 <span className={`flex-1 text-xs ${item.done ? "text-muted-foreground line-through" : "text-foreground"}`} onClick={() => handleStartEdit(item)}>
-                  {item.text} {item.required && <span className="text-status-error">*</span>}
+                  {item.text} {item.required && <span className="text-status-error-text">*</span>}
                 </span>
               )}
-              <button onClick={() => handleRemoveChecklist(item.id)} className="text-muted-foreground hover:text-status-error">
+              <button onClick={() => handleRemoveChecklist(item.id)} className="text-muted-foreground hover:text-status-error-text">
                 <Trash2 className="h-3 w-3" />
               </button>
             </div>

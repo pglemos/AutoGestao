@@ -248,7 +248,7 @@ export default function FalarConsultorDono() {
       </header>
 
       {loadError && (
-        <div role="alert" className="rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-sm font-bold text-status-warning">
+        <div role="alert" className="rounded-2xl border border-status-warning/20 bg-status-warning-surface p-mx-md text-sm font-bold text-status-warning-text">
           {loadError}
         </div>
       )}
@@ -407,7 +407,7 @@ export default function FalarConsultorDono() {
               </div>
               <div className="flex flex-wrap items-center gap-mx-xs">
                 <span className="rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-xs font-bold text-muted-foreground">{request.priority}</span>
-                <span className={request.status === 'respondida' || request.status === 'encerrada' ? 'rounded-xl bg-status-success-surface px-mx-sm py-mx-xs text-xs font-bold text-status-success' : 'rounded-xl bg-status-info-surface px-mx-sm py-mx-xs text-xs font-bold text-status-info'}>
+                <span className={request.status === 'respondida' || request.status === 'encerrada' ? 'rounded-xl bg-status-success-surface px-mx-sm py-mx-xs text-xs font-bold text-status-success-text' : 'rounded-xl bg-status-info-surface px-mx-sm py-mx-xs text-xs font-bold text-status-info-text'}>
                   {request.status === 'respondida' || request.status === 'encerrada' ? <CheckCircle2 size={13} className="mr-1 inline" /> : <Clock3 size={13} className="mr-1 inline" />}
                   {statusLabels[request.status] || request.status}
                 </span>

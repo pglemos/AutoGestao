@@ -123,7 +123,7 @@ export function SistemaMxTab() {
                 <div className="absolute -right-20 -top-20 w-mx-48 h-mx-48 bg-status-success/20 rounded-mx-full blur-3xl pointer-events-none" />
                 <div className="relative z-10 flex items-center justify-between gap-mx-md flex-wrap">
                     <div className="flex items-center gap-mx-md">
-                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-status-success">
+                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center text-status-success-text">
                             <Server size={28} />
                         </div>
                         <div>

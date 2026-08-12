@@ -77,8 +77,8 @@ export function LiberacaoFechamento() {
       // lint-page-roots-ignore: tela de estado centrada em viewport cheio, não
       // página em canvas — o padding serve à centralização.
       <div className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-surface-alt">
-        <ShieldCheck size={64} className="text-status-error/20 mb-6" />
-        <Typography variant="h2" className="mb-2 text-status-error font-extrabold">
+        <ShieldCheck size={64} className="text-status-error-text/20 mb-6" />
+        <Typography variant="h2" className="mb-2 text-status-error-text font-extrabold">
           Acesso Restrito
         </Typography>
         <Typography variant="p" tone="muted" className="max-w-md mx-auto text-xs font-semibold leading-relaxed">
@@ -95,7 +95,7 @@ export function LiberacaoFechamento() {
     return (
       // lint-page-roots-ignore: idem — estado de recurso inexistente.
       <div className="h-screen w-screen flex flex-col items-center justify-center text-center p-6 bg-surface-alt">
-        <AlertTriangle size={64} className="text-status-warning/20 mb-6" />
+        <AlertTriangle size={64} className="text-status-warning-text/20 mb-6" />
         <Typography variant="h2" className="mb-2 font-extrabold">
           Solicitação Não Encontrada
         </Typography>
@@ -161,8 +161,8 @@ export function LiberacaoFechamento() {
               <span className="font-bold text-foreground">Status:</span>
               <span className={`inline-block px-2 py-0.5 rounded-xl text-caption font-extrabold ${
                 solicitacao.status === 'liberado'
-                  ? 'bg-status-success-surface text-status-success border border-status-success/20'
-                  : 'bg-status-warning-surface text-status-warning border border-status-warning/20 animate-pulse'
+                  ? 'bg-status-success-surface text-status-success-text border border-status-success/20'
+                  : 'bg-status-warning-surface text-status-warning-text border border-status-warning/20 animate-pulse'
               }`}>
                 {solicitacao.status.toUpperCase()}
               </span>
@@ -184,10 +184,10 @@ export function LiberacaoFechamento() {
               />
             </div>
           ) : (
-            <div className="bg-status-success-surface text-status-success border border-status-success/20 p-mx-md rounded-xl flex items-start gap-2.5 shadow-sm">
-              <CheckCircle2 size={18} className="shrink-0 text-status-success mt-0.5" />
+            <div className="bg-status-success-surface text-status-success-text border border-status-success/20 p-mx-md rounded-xl flex items-start gap-2.5 shadow-sm">
+              <CheckCircle2 size={18} className="shrink-0 text-status-success-text mt-0.5" />
               <div>
-                <p className="font-bold text-xs uppercase text-status-success">Fechamento Liberado</p>
+                <p className="font-bold text-xs uppercase text-status-success-text">Fechamento Liberado</p>
                 <p className="font-semibold mt-1">
                   Este fechamento já foi liberado e o vendedor já pode preencher e finalizar os dados.
                 </p>

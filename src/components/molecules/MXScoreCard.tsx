@@ -39,9 +39,9 @@ const MXScoreCardInner = React.forwardRef<HTMLDivElement, MXScoreCardProps>(
           <div className={cn(
             'h-mx-xl w-mx-xl rounded-2xl flex items-center justify-center border shadow-none transition-transform group-hover:scale-110',
             tone === 'brand' ? 'bg-mx-green-50 border-mx-green-200 text-mx-green-700' :
-            tone === 'success' ? 'bg-status-success-surface border-mx-emerald-100 text-status-success' :
-            tone === 'warning' ? 'bg-status-warning-surface border-mx-amber-100 text-status-warning' :
-            'bg-status-error-surface border-mx-red-100 text-status-error'
+            tone === 'success' ? 'bg-status-success-surface border-mx-emerald-100 text-status-success-text' :
+            tone === 'warning' ? 'bg-status-warning-surface border-mx-amber-100 text-status-warning-text' :
+            'bg-status-error-surface border-mx-red-100 text-status-error-text'
           )}>
             <Icon size={22} strokeWidth={2} />
           </div>

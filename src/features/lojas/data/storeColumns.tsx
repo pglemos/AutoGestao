@@ -210,7 +210,7 @@ export function buildStoreColumns({
                     variant="ghost"
                     size="icon"
                     onClick={() => handleArchiveStore(store)}
-                    className="text-muted-foreground hover:bg-status-error-surface hover:text-status-error"
+                    className="text-muted-foreground hover:bg-status-error-surface hover:text-status-error-text"
                     aria-label={`Desativar ${store.name}`}
                   >
                     <X size={16} aria-hidden="true" />
@@ -240,7 +240,7 @@ export function buildStoreColumns({
                 variant="ghost"
                 size="icon"
                 onClick={() => { void handleHardDeleteStore(store) }}
-                className="text-status-error hover:bg-status-error-surface"
+                className="text-status-error-text hover:bg-status-error-surface"
                 aria-label={`Excluir definitivamente ${store.name}`}
                 title="Excluir definitivamente"
               >

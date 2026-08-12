@@ -298,7 +298,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
             <h2 className="text-body-sm font-bold uppercase tracking-wide text-[#0F172A] sm:text-[14px]">Progresso do Fechamento</h2>
             <p className="mt-0.5 text-caption leading-tight text-muted-foreground sm:text-caption">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
           </div>
-          <span className={`shrink-0 text-h3 font-bold tabular-nums sm:text-h2 ${totalPct === 100 ? 'text-green-600' : 'text-[#0F172A]'}`}>{totalPct}%</span>
+          <span className={`shrink-0 text-h3 font-bold tabular-nums sm:text-h2 ${totalPct === 100 ? 'text-status-success-text' : 'text-[#0F172A]'}`}>{totalPct}%</span>
         </div>
         <div className="mt-3 h-3 w-full overflow-hidden rounded-full bg-slate-100">
           <div className={`h-full rounded-full transition-all duration-500 ${progressColor}`} style={{ width: `${totalPct}%` }} />

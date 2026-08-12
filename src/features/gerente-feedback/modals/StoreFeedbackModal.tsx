@@ -222,7 +222,7 @@ export function StoreFeedbackModal({
                     <div className="space-y-mx-sm">
                       <label
                         htmlFor="feedback-positives"
-                        className="text-mx-tiny font-bold uppercase tracking-widest text-status-success ml-2 flex items-center gap-mx-xs"
+                        className="text-mx-tiny font-bold uppercase tracking-widest text-status-success-text ml-2 flex items-center gap-mx-xs"
                       >
                         <Award size={14} /> Pontos Fortes
                       </label>
@@ -239,7 +239,7 @@ export function StoreFeedbackModal({
                     <div className="space-y-mx-sm">
                       <label
                         htmlFor="feedback-attention"
-                        className="text-mx-tiny font-bold uppercase tracking-widest text-status-error ml-2 flex items-center gap-mx-xs"
+                        className="text-mx-tiny font-bold uppercase tracking-widest text-status-error-text ml-2 flex items-center gap-mx-xs"
                       >
                         <AlertCircle size={14} /> Pontos de Atenção
                       </label>

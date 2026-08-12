@@ -34,7 +34,7 @@ export function BattleSelector({
             type="button"
             aria-label="Limpar seleção de vendedores"
             onClick={onClear}
-            className="absolute top-mx-0 right-mx-0 z-50 p-mx-xs bg-white/10 text-muted-foreground hover:text-status-error hover:bg-status-error-surface rounded-full transition-colors"
+            className="absolute top-mx-0 right-mx-0 z-50 p-mx-xs bg-white/10 text-muted-foreground hover:text-status-error-text hover:bg-status-error-surface rounded-full transition-colors"
           >
             <X className="w-mx-sm h-mx-sm" />
           </button>

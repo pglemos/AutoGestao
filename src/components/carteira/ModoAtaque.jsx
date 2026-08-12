@@ -99,7 +99,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
 
         {/* Motivo da recomendação */}
         <div className="flex items-start gap-2 bg-status-warning-surface rounded-2xl px-4 py-3">
-          <Target className="w-4 h-4 text-status-warning shrink-0 mt-0.5" />
+          <Target className="w-4 h-4 text-status-warning-text shrink-0 mt-0.5" />
           <p className="text-xs text-status-warning-text leading-snug">{explicacao}</p>
         </div>
 
@@ -116,7 +116,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
               onClick={() => onWhatsApp(cliente)}
               className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-green-200 bg-green-50 hover:bg-green-100 transition-colors"
             >
-              <MessageCircle className="w-4 h-4 text-green-600" />
+              <MessageCircle className="w-4 h-4 text-status-success-text" />
               <span className="text-caption font-semibold text-green-700">WhatsApp</span>
             </button>
           )}
@@ -146,7 +146,7 @@ function TelaConclusao({ stats, onPlanoAtaque, onCarteira, onEncerrar }) {
   return (
     <div className="flex flex-col items-center justify-center gap-8 py-12 text-center">
       <div className="w-20 h-20 rounded-full bg-green-100 flex items-center justify-center">
-        <Trophy className="w-10 h-10 text-green-600" />
+        <Trophy className="w-10 h-10 text-status-success-text" />
       </div>
       <div>
         <p className="text-3xl font-black text-[#031B3D]">🎉 Excelente!</p>
@@ -156,7 +156,7 @@ function TelaConclusao({ stats, onPlanoAtaque, onCarteira, onEncerrar }) {
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-lg">
         {[
           { label: "Executadas", value: stats.executadas, color: "text-status-info-text bg-status-info-surface" },
-          { label: "Visitas geradas", value: stats.visitas, color: "text-green-600 bg-green-50" },
+          { label: "Visitas geradas", value: stats.visitas, color: "text-status-success-text bg-green-50" },
           { label: "Propostas enviadas", value: stats.propostas, color: "text-status-warning-text bg-status-warning-surface" },
           { label: "Recuperações", value: stats.recuperacoes, color: "text-status-info-text bg-status-info-surface" },
         ].map(s => (
@@ -191,7 +191,7 @@ function ModalPausar({ open, onContinuar, onEncerrar }) {
           </div>
           <div className="flex flex-col gap-2 w-full">
             <Button onClick={onContinuar} className="w-full rounded-xl bg-[#005BFF] hover:bg-status-info text-white">Continuar depois</Button>
-            <Button onClick={onEncerrar} variant="outline" className="w-full rounded-xl text-status-error border-status-error/30 hover:bg-status-error-surface">Encerrar</Button>
+            <Button onClick={onEncerrar} variant="outline" className="w-full rounded-xl text-status-error-text border-status-error/30 hover:bg-status-error-surface">Encerrar</Button>
           </div>
         </div>
       </DialogContent>

@@ -12,7 +12,7 @@ export default function BonificacaoPeriodo({ bonificacao }) {
   if (!bonificacao) return (
     <div className="bg-white rounded-2xl border border-border shadow-sm p-5 w-full sm:w-[260px]">
       <div className="flex items-center gap-2 mb-3">
-        <Gift className="w-5 h-5 text-green-600" />
+        <Gift className="w-5 h-5 text-status-success-text" />
         <h2 className="text-body font-bold text-foreground">Bonificação do Período</h2>
       </div>
       <p className="text-body-sm text-muted-foreground text-center py-6">Nenhuma bonificação cadastrada para este período.</p>
@@ -28,7 +28,7 @@ export default function BonificacaoPeriodo({ bonificacao }) {
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm p-5 w-full sm:w-[260px]">
       <div className="flex items-center gap-2 mb-4">
-        <Gift className="w-5 h-5 text-green-600" />
+        <Gift className="w-5 h-5 text-status-success-text" />
         <h2 className="text-body font-bold text-foreground">Bonificação do Período</h2>
       </div>
       <div className="space-y-3">
@@ -47,13 +47,13 @@ export default function BonificacaoPeriodo({ bonificacao }) {
         {bonificacao.bonus_meta_valor > 0 && (
           <div className="flex items-center justify-between gap-2 pt-2 border-t border-green-100 mt-1">
             <div className="flex items-center gap-2">
-              <span className="text-green-600 text-body">📈</span>
+              <span className="text-status-success-text text-body">📈</span>
               <div>
                 <p className="text-[12px] font-semibold text-green-700">Acima de 100% da meta</p>
                 <p className="text-caption text-muted-foreground">{bonificacao.bonus_meta_descricao || "bônus extra"}</p>
               </div>
             </div>
-            <p className="text-[14px] font-bold text-green-600">{formatBRL(bonificacao.bonus_meta_valor)}</p>
+            <p className="text-[14px] font-bold text-status-success-text">{formatBRL(bonificacao.bonus_meta_valor)}</p>
           </div>
         )}
       </div>

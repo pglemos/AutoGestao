@@ -55,16 +55,16 @@ export type ActionRow = {
 
 export const toneClasses: Record<KpiTone, { bg: string; text: string; soft: string; bar: string; border: string }> = {
   success: {
-    bg: 'bg-status-success-surface text-status-success border border-status-success/20',
-    text: 'text-status-success',
-    soft: 'bg-status-success-surface text-status-success border-status-success/20',
+    bg: 'bg-status-success-surface text-status-success-text border border-status-success/20',
+    text: 'text-status-success-text',
+    soft: 'bg-status-success-surface text-status-success-text border-status-success/20',
     bar: 'bg-status-success',
     border: 'border-status-success/20',
   },
   info: {
-    bg: 'bg-status-info-surface text-status-info border border-status-info/20',
-    text: 'text-status-info',
-    soft: 'bg-status-info-surface text-status-info border-status-info/20',
+    bg: 'bg-status-info-surface text-status-info-text border border-status-info/20',
+    text: 'text-status-info-text',
+    soft: 'bg-status-info-surface text-status-info-text border-status-info/20',
     bar: 'bg-status-info',
     border: 'border-status-info/20',
   },

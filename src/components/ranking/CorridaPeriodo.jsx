@@ -37,7 +37,7 @@ export default function CorridaPeriodo({ vendedores, meta, isVolume, meuId }) {
       </div>
       <p className="text-[12px] text-muted-foreground mb-4">
         Meta de {isVolume ? "volume" : "faturamento"}:{" "}
-        <span className="font-bold text-green-600">{formatValue(meta, isVolume)}</span>
+        <span className="font-bold text-status-success-text">{formatValue(meta, isVolume)}</span>
       </p>
 
       {/* Pista */}
@@ -69,7 +69,7 @@ export default function CorridaPeriodo({ vendedores, meta, isVolume, meuId }) {
                 <p className={`text-caption font-bold mb-0.5 text-center whitespace-nowrap ${isMe ? "text-status-info-text" : "text-muted-foreground"}`}>
                   {v.nome?.split(" ")[0]}
                   <br />
-                  <span className={isMe ? "text-status-info" : "text-muted-foreground"}>{formatValue(val, isVolume)}</span>
+                  <span className={isMe ? "text-status-info-text" : "text-muted-foreground"}>{formatValue(val, isVolume)}</span>
                 </p>
                 <Avatar nome={v.nome} foto={v.foto} isMe={isMe} size={36} />
                 {isMe && (

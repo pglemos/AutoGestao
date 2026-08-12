@@ -48,7 +48,7 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
           )}
         </div>
         {error && (
-          <p id={errorId} className="text-status-error text-caption font-medium ml-2 animate-in fade-in slide-in-from-top-1" role="alert">
+          <p id={errorId} className="text-status-error-text text-caption font-medium ml-2 animate-in fade-in slide-in-from-top-1" role="alert">
             {error}
           </p>
         )}

@@ -182,7 +182,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           <div className="flex items-start justify-between mb-2">
             <div className="flex items-center gap-2 flex-wrap">
               <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100 text-muted-foreground"}`}>{op.tipo}</span>
-              {isVencido && <span className="text-caption font-bold text-status-error bg-status-error-surface px-2 py-0.5 rounded-full">Vencido</span>}
+              {isVencido && <span className="text-caption font-bold text-status-error-text bg-status-error-surface px-2 py-0.5 rounded-full">Vencido</span>}
             </div>
             <div className="flex items-center gap-1 text-caption font-bold text-muted-foreground">
               <Clock className="w-3 h-3" />{hora}
@@ -241,7 +241,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           <div className={`w-9 h-9 rounded-xl flex items-center justify-center mx-auto mb-1 ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100"}`}>
             <Icon className="w-4 h-4" />
           </div>
-          <p className={`text-caption font-bold ${isVencido ? "text-status-error" : "text-muted-foreground"}`}>{hora}</p>
+          <p className={`text-caption font-bold ${isVencido ? "text-status-error-text" : "text-muted-foreground"}`}>{hora}</p>
         </div>
 
         {/* Avatar + nome + info */}
@@ -253,7 +253,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
             <div className="flex items-center gap-2 flex-wrap">
               <p className="font-bold text-[14px] text-[#0F172A] truncate">{op.nome_cliente_snapshot || "—"}</p>
               <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${TIPO_COLOR_BADGE[op.tipo] || "bg-slate-100 text-muted-foreground"}`}>{op.tipo}</span>
-              {isVencido && <span className="text-caption font-bold text-status-error bg-status-error-surface px-2 py-0.5 rounded-full">Vencido</span>}
+              {isVencido && <span className="text-caption font-bold text-status-error-text bg-status-error-surface px-2 py-0.5 rounded-full">Vencido</span>}
             </div>
             {op.veiculo_snapshot && <p className="text-[12px] text-muted-foreground truncate">{op.veiculo_snapshot}</p>}
             {op.descricao && <p className="text-[12px] text-muted-foreground truncate">{op.descricao}</p>}
@@ -267,7 +267,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
               target="_blank" rel="noopener noreferrer"
               onClick={handleWaClick}
               title="WhatsApp"
-              className="p-2 rounded-xl bg-green-50 hover:bg-green-100 text-green-600 transition-colors">
+              className="p-2 rounded-xl bg-green-50 hover:bg-green-100 text-status-success-text transition-colors">
               <MessageCircle className="w-4 h-4" />
             </a>
           )}
@@ -510,7 +510,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
       {/* ── Aviso de pendências ── */}
       {pendenciasAnteriores.length > 0 && (
         <div className="flex items-center gap-3 bg-status-warning-surface border border-status-warning/30 rounded-2xl px-4 py-3">
-          <AlertTriangle className="w-4 h-4 text-status-warning flex-shrink-0" />
+          <AlertTriangle className="w-4 h-4 text-status-warning-text flex-shrink-0" />
           <p className="text-body-sm font-semibold text-status-warning-text flex-1">
             Você possui {pendenciasAnteriores.length} pendência{pendenciasAnteriores.length > 1 ? "s" : ""} de dias anteriores.
           </p>

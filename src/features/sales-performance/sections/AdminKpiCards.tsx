@@ -58,10 +58,10 @@ export function AdminKpiCards({ metrics }: Props) {
                   stat.color === 'brand'
                     ? 'bg-mx-indigo-50 border-mx-indigo-100 text-status-success-text'
                     : stat.color === 'info'
-                      ? 'bg-status-info-surface border-status-info/20 text-status-info'
+                      ? 'bg-status-info-surface border-status-info/20 text-status-info-text'
                       : stat.color === 'warning'
-                        ? 'bg-status-warning-surface border-status-warning/20 text-status-warning'
-                        : 'bg-status-success-surface border-mx-emerald-100 text-status-success',
+                        ? 'bg-status-warning-surface border-status-warning/20 text-status-warning-text'
+                        : 'bg-status-success-surface border-mx-emerald-100 text-status-success-text',
                 )}
               >
                 <stat.icon size={24} strokeWidth={2} />

@@ -532,7 +532,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
       <div className="lg:col-span-2 space-y-4">
         {conflito && (
           <div className="flex items-start gap-3 bg-status-warning-surface border border-status-warning/30 rounded-xl px-4 py-3">
-            <AlertTriangle className="w-4 h-4 text-status-warning flex-shrink-0 mt-0.5" />
+            <AlertTriangle className="w-4 h-4 text-status-warning-text flex-shrink-0 mt-0.5" />
             <p className="text-body-sm text-status-warning-text font-medium">
               Você possui um cliente agendado neste horário. Priorize o atendimento e retome sua rotina depois.
             </p>

@@ -156,10 +156,10 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
               </div>
               {clienteEncontrado && (
                 <div className="mt-2 flex items-center gap-2 px-3 py-2 bg-green-50 border border-green-200 rounded-xl">
-                  <UserCheck className="w-4 h-4 text-green-600 flex-shrink-0" />
+                  <UserCheck className="w-4 h-4 text-status-success-text flex-shrink-0" />
                   <div className="min-w-0">
                     <p className="text-[12px] font-bold text-green-800 truncate">{clienteEncontrado.name}</p>
-                    <p className="text-caption text-green-600 truncate">{clienteEncontrado.vehicle_sought || "—"}</p>
+                    <p className="text-caption text-status-success-text truncate">{clienteEncontrado.vehicle_sought || "—"}</p>
                   </div>
                 </div>
               )}

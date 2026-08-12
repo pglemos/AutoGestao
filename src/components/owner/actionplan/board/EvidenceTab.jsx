@@ -124,7 +124,7 @@ export default function EvidenceTab({ action, onReload, user }) {
                 >
                   <Eye className="h-3.5 w-3.5" />
                 </Button>
-                <Button size="sm" variant="ghost" onClick={() => handleRemove(e.id)} className="h-7 w-7 p-0 text-status-error hover:text-status-error-text">
+                <Button size="sm" variant="ghost" onClick={() => handleRemove(e.id)} className="h-7 w-7 p-0 text-status-error-text hover:text-status-error-text">
                   <Trash2 className="h-3.5 w-3.5" />
                 </Button>
               </div>

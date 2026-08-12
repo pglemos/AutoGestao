@@ -599,7 +599,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
 
   // Badge de tipo ao lado do nome
   const TIPO_BADGE_FIXED = {
-    venda: { label: "$", cls: "text-green-600 bg-green-50" },
+    venda: { label: "$", cls: "text-status-success-text bg-green-50" },
     qualificado: { label: "Q", cls: "text-status-info-text bg-status-info-surface" },
     garantia: { label: "!", cls: "text-status-warning-text bg-status-warning-surface" },
     perdido: { label: "✕", cls: "text-muted-foreground bg-slate-100" },
@@ -716,7 +716,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           <div className="px-6 py-2.5 bg-status-info-surface border-b border-status-info/20 flex items-center gap-2">
             <Info className="w-4 h-4 text-[#005BFF] flex-shrink-0" />
             <p className="text-[12px] font-semibold text-[#1e3a5f]">
-              Fechamento concluído. Somente registros <span className="text-status-info">D+1</span> podem ser editados.
+              Fechamento concluído. Somente registros <span className="text-status-info-text">D+1</span> podem ser editados.
             </p>
           </div>
         )}

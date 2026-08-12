@@ -48,7 +48,7 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
         </Typography>
       </div>
 
-      {error && <p className="text-sm font-bold text-status-error">Erro ao carregar: {error}</p>}
+      {error && <p className="text-sm font-bold text-status-error-text">Erro ao carregar: {error}</p>}
 
       {loading ? (
         <p className="text-sm font-bold text-muted-foreground">Carregando vendedores…</p>

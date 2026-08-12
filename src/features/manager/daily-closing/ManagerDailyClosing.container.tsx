@@ -794,7 +794,7 @@ export function PendingReminderModal({
                 key={seller.id}
                 className="flex items-center gap-2 text-sm text-foreground"
               >
-                <Megaphone size={14} className="text-status-warning" />
+                <Megaphone size={14} className="text-status-warning-text" />
                 {seller.name}
               </li>
             ))}
@@ -926,7 +926,7 @@ function DisciplineCard({ value }: { value: number | null }) {
     : label === "Excelente"
       ? { surface: "bg-status-success-surface", badge: "bg-brand-primary text-white", glow: "from-emerald-400 to-emerald-500", ring: "rgb(16 185 129)", track: "rgb(209 250 229)", inner: "bg-status-success-surface", text: "text-status-success-text" }
       : label === "Boa"
-        ? { surface: "bg-status-info-surface", badge: "bg-status-info-surface text-status-info-text", glow: "from-blue-400 to-blue-500", ring: "rgb(59 130 246)", track: "rgb(219 234 254)", inner: "bg-status-info-surface", text: "text-status-info" }
+        ? { surface: "bg-status-info-surface", badge: "bg-status-info-surface text-status-info-text", glow: "from-blue-400 to-blue-500", ring: "rgb(59 130 246)", track: "rgb(219 234 254)", inner: "bg-status-info-surface", text: "text-status-info-text" }
         : label === "Baixa"
           ? { surface: "bg-status-warning-surface", badge: "bg-status-warning-surface text-status-warning-text", glow: "from-amber-400 to-status-warning", ring: "rgb(245 158 11)", track: "rgb(254 243 199)", inner: "bg-status-warning-surface", text: "text-status-warning-text" }
           : { surface: "bg-status-error-surface", badge: "bg-status-error-surface text-status-error-text", glow: "from-red-400 to-red-500", ring: "rgb(239 68 68)", track: "rgb(254 226 226)", inner: "bg-status-error-surface", text: "text-status-error-text" };
@@ -1288,7 +1288,7 @@ function ClosingRow({
       <td className="px-4 py-3 font-semibold">
         <button
           type="button"
-          className={`underline decoration-dotted underline-offset-2 hover:text-status-success-text ${appointments === null ? "text-muted-foreground" : appointments === 0 ? "text-status-error-text" : appointments === 1 ? "text-status-warning" : "text-status-success-text"}`}
+          className={`underline decoration-dotted underline-offset-2 hover:text-status-success-text ${appointments === null ? "text-muted-foreground" : appointments === 0 ? "text-status-error-text" : appointments === 1 ? "text-status-warning-text" : "text-status-success-text"}`}
           aria-label={`Abrir Agenda D+1 de ${name}`}
           onClick={onOpenAgenda}
         >

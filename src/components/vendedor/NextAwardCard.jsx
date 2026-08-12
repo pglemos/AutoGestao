@@ -11,7 +11,7 @@ export default function NextAwardCard({ calcResult }) {
   return (
     <div className="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
       <div className="flex items-center gap-2 mb-4">
-        <Trophy className="w-4 h-4 text-status-warning" />
+        <Trophy className="w-4 h-4 text-status-warning-text" />
         <span className="text-status-warning-text text-xs font-semibold uppercase tracking-widest">Próxima Premiação</span>
       </div>
 
@@ -24,7 +24,7 @@ export default function NextAwardCard({ calcResult }) {
           {premiacoesAtingidas && premiacoesAtingidas.length > 0 && (
             <div className="mb-4 bg-status-warning-surface border border-status-warning/20 rounded-xl px-4 py-3">
               <div className="flex items-center gap-2">
-                <Star className="w-4 h-4 text-status-warning" fill="currentColor" />
+                <Star className="w-4 h-4 text-status-warning-text" fill="currentColor" />
                 <span className="text-status-warning-text text-sm font-semibold">
                   Você já desbloqueou {formatBRL(premiacoesTotal)} em premiações!
                 </span>
@@ -46,7 +46,7 @@ export default function NextAwardCard({ calcResult }) {
                 <span className="text-xl font-semibold text-muted-foreground ml-2">vendas</span>
               </p>
               <p className="text-muted-foreground text-sm mt-2">para desbloquear</p>
-              <p className="text-3xl font-bold text-status-warning mt-1">+ {formatBRL(proximaPremiacao.valor_premio)}</p>
+              <p className="text-3xl font-bold text-status-warning-text mt-1">+ {formatBRL(proximaPremiacao.valor_premio)}</p>
 
               <div className="mt-4 bg-slate-50 rounded-xl p-3">
                 <p className="text-muted-foreground text-xs">

@@ -15,13 +15,13 @@ export function RotinaNoticeBar({ notice }: Props) {
       className={cn(
         'rounded-xl border px-mx-md py-mx-sm text-sm font-bold',
         notice.tone === 'success' &&
-          'border-status-success/20 bg-status-success-surface text-status-success',
+          'border-status-success/20 bg-status-success-surface text-status-success-text',
         notice.tone === 'warning' &&
-          'border-status-warning/20 bg-status-warning-surface text-status-warning',
+          'border-status-warning/20 bg-status-warning-surface text-status-warning-text',
         notice.tone === 'error' &&
-          'border-status-error/20 bg-status-error-surface text-status-error',
+          'border-status-error/20 bg-status-error-surface text-status-error-text',
         notice.tone === 'info' &&
-          'border-status-info/20 bg-status-info-surface text-status-info',
+          'border-status-info/20 bg-status-info-surface text-status-info-text',
       )}
     >
       <div className="flex flex-col gap-mx-tiny sm:flex-row sm:items-center sm:justify-between">

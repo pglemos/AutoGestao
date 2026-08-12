@@ -197,7 +197,7 @@ export function ForcePasswordChange() {
                 <button 
                   type="button"
                   onClick={() => signOut()}
-                  className="w-full flex items-center justify-center gap-mx-xs text-muted-foreground hover:text-status-error font-bold uppercase tracking-mx-widest text-mx-nano py-mx-xs transition-colors"
+                  className="w-full flex items-center justify-center gap-mx-xs text-muted-foreground hover:text-status-error-text font-bold uppercase tracking-mx-widest text-mx-nano py-mx-xs transition-colors"
                 >
                   <LogOut size={14} /> SAIR DA CONTA
                 </button>

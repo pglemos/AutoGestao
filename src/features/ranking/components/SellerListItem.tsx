@@ -97,7 +97,7 @@ export function SellerListItem({
                 "w-mx-2xl h-mx-2xl rounded-2xl flex items-center justify-center border shadow-none shrink-0",
                 isTop1 ? "bg-white/10 border-white/20 text-white" : "bg-gray-50 border-border text-status-success-text"
               )}>
-                <TrendingUp size={28} className={cn(seller.atingimento < 50 && "rotate-180 text-status-error")} />
+                <TrendingUp size={28} className={cn(seller.atingimento < 50 && "rotate-180 text-status-error-text")} />
               </div>
             </div>
           </div>

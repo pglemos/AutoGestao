@@ -94,13 +94,13 @@ const previousCard = ctx.activeClosingContext.previousCard
     <div className="relative min-h-full w-full min-w-0 bg-gray-50 no-scrollbar">
       <PageCanvas width="dashboard" bottomClearance="navigation" className="flex flex-col gap-4">
             {checkinLoadError && (
-                <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error">
+                <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm text-sm font-bold text-status-error-text">
                     {checkinLoadError}
                 </div>
             )}
 
             {!isOnline && (
-                <div role="status" className="flex items-center gap-2 rounded-2xl border border-status-warning/20 bg-status-warning-surface px-mx-md py-mx-sm text-sm font-bold text-status-warning">
+                <div role="status" className="flex items-center gap-2 rounded-2xl border border-status-warning/20 bg-status-warning-surface px-mx-md py-mx-sm text-sm font-bold text-status-warning-text">
                     <WifiOff className="h-mx-md w-mx-md shrink-0" aria-hidden="true" />
                     Sem conexão. O envio pode falhar até a conexão ser restabelecida.
                 </div>

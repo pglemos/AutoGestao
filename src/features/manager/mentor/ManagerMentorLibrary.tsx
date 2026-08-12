@@ -134,7 +134,7 @@ export function ManagerMentorLibrary() {
                     {categoryConfig.label}
                   </span>
                   <div className="flex items-center gap-1">
-                    {item.highlight && <Sparkles size={13} className="text-status-success" />}
+                    {item.highlight && <Sparkles size={13} className="text-status-success-text" />}
                     <button
                       type="button"
                       onClick={() => toggleFavorite(item.title)}

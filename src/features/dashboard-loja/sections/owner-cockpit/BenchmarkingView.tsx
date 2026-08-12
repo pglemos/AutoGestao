@@ -129,7 +129,7 @@ export function BenchmarkingView({
                     <td className="px-mx-sm py-mx-sm font-bold">{formatPlanningValue(row.store)}</td>
                     <td className="px-mx-sm py-mx-sm font-bold">{formatPlanningValue(row.group)}</td>
                     <td className="px-mx-sm py-mx-sm font-bold">{formatPlanningValue(row.best)}</td>
-                    <td className="px-mx-sm py-mx-sm"><span className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-warning">{row.status}</span></td>
+                    <td className="px-mx-sm py-mx-sm"><span className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-mx-sm py-mx-xs text-mx-tiny font-bold text-status-warning-text">{row.status}</span></td>
                   </tr>
                 ))}
               </tbody>

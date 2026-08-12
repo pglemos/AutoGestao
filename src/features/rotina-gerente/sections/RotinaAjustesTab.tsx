@@ -128,17 +128,17 @@ export function RotinaAjustesTab({
                     <div className="rounded-xl border border-status-warning/20 bg-status-warning-surface p-mx-md">
                       <Typography
                         variant="tiny"
-                        className="mb-mx-xs block text-status-warning"
+                        className="mb-mx-xs block text-status-warning-text"
                       >
                         Decisão crítica
                       </Typography>
-                      <Typography variant="p" className="text-sm text-status-warning">
+                      <Typography variant="p" className="text-sm text-status-warning-text">
                         Aprovar aplica estes valores ao histórico do lançamento. Rejeitar
                         mantém o registro atual e remove a solicitação da fila.
                       </Typography>
                       <Typography
                         variant="tiny"
-                        className="mt-mx-xs block text-status-warning"
+                        className="mt-mx-xs block text-status-warning-text"
                       >
                         Referência: {req.requested_values.reference_date || 'não informada'}
                       </Typography>
@@ -205,7 +205,7 @@ export function RotinaAjustesTab({
                         size="sm"
                         onClick={() => onReject(req.id)}
                         disabled={auditorLoading}
-                        className="flex-1 h-mx-11 rounded-xl font-bold text-mx-micro uppercase hover:bg-status-error-surface hover:text-status-error transition-all border-border-subtle"
+                        className="flex-1 h-mx-11 rounded-xl font-bold text-mx-micro uppercase hover:bg-status-error-surface hover:text-status-error-text transition-all border-border-subtle"
                       >
                         REJEITAR
                       </Button>

@@ -137,7 +137,7 @@ export function FunilVendedor() {
   if (oportunidadesError) {
     return (
       <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col items-center justify-center gap-4">
-        <Typography variant="p" className="text-sm font-bold text-status-error">Erro ao carregar dados do funil.</Typography>
+        <Typography variant="p" className="text-sm font-bold text-status-error-text">Erro ao carregar dados do funil.</Typography>
         <Button type="button" variant="secondary" size="sm" onClick={() => refetch()}>Tentar novamente</Button>
       </PageCanvas>
     )
@@ -185,7 +185,7 @@ export function FunilVendedor() {
           <SectionHeader icon={<Target size={22} />} title="Esforço necessário meta" subtitle="Com base na sua conversão atual, esta é a produção necessária para buscar as vendas que faltam." />
           {faltam !== null && faltam <= 0 ? (
             <DashboardCard className="mt-mx-sm border-status-success/20 bg-status-success-surface">
-              <Typography variant="p" className="font-semibold text-status-success">Meta batida. Continue mantendo o ritmo.</Typography>
+              <Typography variant="p" className="font-semibold text-status-success-text">Meta batida. Continue mantendo o ritmo.</Typography>
             </DashboardCard>
           ) : (
             <div className="mt-mx-sm grid gap-mx-sm xl:grid-cols-3">{efforts.map(effort => <EffortCard key={effort.canal} effort={effort} />)}</div>
@@ -314,7 +314,7 @@ function HistoryChart({ rows }: { rows: Array<{ label: string; oportunidades: nu
 }
 
 function MetricCard({ label, value, hint, tone = 'dark' }: { label: string; value: string; hint?: string; tone?: 'dark' | 'green' | 'red' }) {
-  const color = tone === 'green' ? 'text-status-success' : tone === 'red' ? 'text-status-error' : 'text-foreground'
+  const color = tone === 'green' ? 'text-status-success-text' : tone === 'red' ? 'text-status-error-text' : 'text-foreground'
   return (
     <DashboardCard className="min-h-[116px]">
       <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
@@ -325,7 +325,7 @@ function MetricCard({ label, value, hint, tone = 'dark' }: { label: string; valu
 }
 
 function ProjectionStat({ label, value, hint, tone = 'dark' }: { label: string; value: string; hint?: string; tone?: 'dark' | 'green' | 'orange' }) {
-  const color = tone === 'green' ? 'text-status-success' : tone === 'orange' ? 'text-status-warning' : 'text-foreground'
+  const color = tone === 'green' ? 'text-status-success-text' : tone === 'orange' ? 'text-status-warning-text' : 'text-foreground'
   return (
     <div className="rounded-xl border border-border-subtle bg-gray-50 p-mx-sm">
       <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>

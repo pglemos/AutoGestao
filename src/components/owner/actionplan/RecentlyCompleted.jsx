@@ -10,7 +10,7 @@ export default function RecentlyCompleted({ actions, onOpen }) {
   return (
     <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="mb-3 flex items-center gap-2">
-        <CheckCircle2 className="h-4 w-4 text-status-success" />
+        <CheckCircle2 className="h-4 w-4 text-status-success-text" />
         <h2 className="text-sm font-semibold text-foreground">Concluídas recentemente</h2>
       </div>
 

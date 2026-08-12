@@ -558,7 +558,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
 
       {totalOportunidades === 0 && (
         <div className="flex items-start gap-3 bg-status-warning-surface border border-status-warning/30 rounded-2xl px-4 py-3">
-          <AlertTriangle className="w-4 h-4 text-status-warning shrink-0 mt-0.5" />
+          <AlertTriangle className="w-4 h-4 text-status-warning-text shrink-0 mt-0.5" />
           <p className="text-sm text-status-warning-text">Nenhuma missão recomendada no momento. Continue trabalhando a carteira normalmente.</p>
         </div>
       )}

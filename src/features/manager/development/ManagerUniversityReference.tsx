@@ -578,7 +578,7 @@ function UniversityStat({
   const styles = {
     emerald: 'bg-status-success-surface text-status-success-text',
     blue: 'bg-status-info-surface text-status-info-text',
-    green: 'bg-green-50 text-green-600',
+    green: 'bg-green-50 text-status-success-text',
     violet: 'bg-status-info-surface text-status-info-text',
   }
   return (

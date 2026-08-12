@@ -227,7 +227,7 @@ export function ConsultantMxCard({ onOpenConsultant }: { onOpenConsultant: () =>
     <Card className="border bg-white p-mx-md">
       <div className="flex flex-wrap items-center justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <span className="flex h-mx-10 w-mx-10 shrink-0 items-center justify-center rounded-xl bg-status-success-surface text-status-success">
+          <span className="flex h-mx-10 w-mx-10 shrink-0 items-center justify-center rounded-xl bg-status-success-surface text-status-success-text">
             <MessageCircle size={20} />
           </span>
           <div>
@@ -248,7 +248,7 @@ export function OwnerAlertList({ alerts }: { alerts: OwnerPerformanceAlert[] }) 
     <Card className="border bg-white p-mx-md">
       <div className="flex items-center justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
-          <Bell size={24} className="text-status-error" />
+          <Bell size={24} className="text-status-error-text" />
           <Typography variant="h3" className="text-xl">Alertas que exigem sua atenção</Typography>
         </div>
         <span className="min-w-mx-7 h-mx-7 rounded-mx-full bg-status-error px-mx-xs text-white text-xs font-bold flex items-center justify-center">{visibleAlerts.length}</span>

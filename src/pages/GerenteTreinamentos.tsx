@@ -252,16 +252,16 @@ export default function GerenteTreinamentos() {
             <div className="flex-1 min-h-0 pb-32" aria-live="polite">
                 {!isOwner && (
                     <Card className="mb-mx-lg border border-status-info/20 bg-status-info-surface p-mx-md">
-                        <Typography variant="h3" className="text-status-info">Desenvolvimento do gerente</Typography>
-                        <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
+                        <Typography variant="h3" className="text-status-info-text">Desenvolvimento do gerente</Typography>
+                        <Typography variant="p" className="mt-mx-xs text-sm text-status-info-text">
                             Separe a leitura por tarefa: equipe mostra progresso individual, matriz compara cobertura de conteúdos e minha trilha reúne seus próprios módulos. Conteúdo institucional e sugestões ficam como governança, não como competição.
                         </Typography>
                     </Card>
                 )}
                 {isOwner && (
                     <Card className="mb-mx-lg border border-status-info/20 bg-status-info-surface p-mx-md">
-                        <Typography variant="h3" className="text-status-info">Uso executivo dos treinamentos</Typography>
-                        <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
+                        <Typography variant="h3" className="text-status-info-text">Uso executivo dos treinamentos</Typography>
+                        <Typography variant="p" className="mt-mx-xs text-sm text-status-info-text">
                             Dono acompanha absorção, gargalos e consistência da trilha. Cobranças, atribuições e publicação de conteúdo institucional devem ser feitas pelo gerente ou Admin MX.
                         </Typography>
                     </Card>
@@ -306,9 +306,9 @@ export default function GerenteTreinamentos() {
                                         </div>
                                         <footer className="pt-8 border-t border-border-subtle flex items-center justify-between mt-auto relative z-10">
                                             <div className="flex items-center gap-mx-xs text-caption font-bold text-muted-foreground">
-                                                <Award size={14} className="text-status-warning" /> {t.watched ? 'ABSORVIDO' : 'PENDENTE'}
+                                                <Award size={14} className="text-status-warning-text" /> {t.watched ? 'ABSORVIDO' : 'PENDENTE'}
                                             </div>
-                                            <div className="flex items-center gap-mx-tiny text-status-warning">
+                                            <div className="flex items-center gap-mx-tiny text-status-warning-text">
                                                 <Star size={14} className="fill-current" />
                                                 <Typography variant="tiny" as="span" className="">{t.average_rating || 0} ({t.rating_count || 0})</Typography>
                                             </div>
@@ -368,7 +368,7 @@ export default function GerenteTreinamentos() {
                                                             <td key={t.id} className="px-4 text-center">
                                                                 <div className="flex flex-col items-center justify-center gap-mx-tiny">
                                                                     <div className={cn("w-mx-9 h-mx-9 rounded-xl flex items-center justify-center border shadow-sm transition-all", 
-                                                                        isWatched ? 'bg-status-success-surface text-status-success border-mx-emerald-100' : 'bg-gray-50 text-muted-foreground/30'
+                                                                        isWatched ? 'bg-status-success-surface text-status-success-text border-mx-emerald-100' : 'bg-gray-50 text-muted-foreground/30'
                                                                     )}>
                                                                         {isWatched ? <CheckCircle size={16} /> : <X size={16} />}
                                                                     </div>

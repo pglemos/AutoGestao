@@ -10,7 +10,7 @@ export default function RiskActions({ actions, onOpen }) {
   return (
     <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="mb-3 flex items-center gap-2">
-        <AlertTriangle className="h-4 w-4 text-status-error" />
+        <AlertTriangle className="h-4 w-4 text-status-error-text" />
         <h2 className="text-sm font-semibold text-foreground">Ações em risco</h2>
         <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-status-error-surface px-1.5 text-xs font-bold text-status-error-text">
           {riskItems.length}

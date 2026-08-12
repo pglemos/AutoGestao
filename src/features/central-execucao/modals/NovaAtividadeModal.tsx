@@ -181,7 +181,7 @@ export function NovaAtividadeModal({
       ) : (
         <div className="space-y-4">
           <div className="flex items-center justify-between">
-            <span className="rounded-full bg-status-info-surface px-3 py-1 text-[12px] font-bold text-status-info">{selectedType?.label}</span>
+            <span className="rounded-full bg-status-info-surface px-3 py-1 text-[12px] font-bold text-status-info-text">{selectedType?.label}</span>
             <button type="button" onClick={() => setStep('type')} className="text-[12px] text-muted-foreground underline hover:text-muted-foreground">Mudar tipo</button>
           </div>
 
@@ -194,15 +194,15 @@ export function NovaAtividadeModal({
 
             {client && (
               <div className="mt-2 flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-2">
-                <UserCheck className="h-4 w-4 shrink-0 text-green-600" aria-hidden="true" />
-                <div className="min-w-0"><p className="truncate text-[12px] font-bold text-green-800">{client.name}</p><p className="truncate text-caption text-green-600">{client.vehicle || '—'}</p></div>
+                <UserCheck className="h-4 w-4 shrink-0 text-status-success-text" aria-hidden="true" />
+                <div className="min-w-0"><p className="truncate text-[12px] font-bold text-green-800">{client.name}</p><p className="truncate text-caption text-status-success-text">{client.vehicle || '—'}</p></div>
               </div>
             )}
 
             {(notFound || ambiguous) && (
               <div className="mt-2 rounded-xl border border-status-warning/30 bg-status-warning-surface px-3 py-2">
                 <div className="flex items-center gap-2"><UserX className="h-4 w-4 shrink-0 text-status-warning-text" aria-hidden="true" /><p className="text-[12px] font-semibold text-status-warning-text">{ambiguous ? 'Mais de um cliente encontrado. Refine a busca.' : 'Cliente não encontrado.'}</p></div>
-                {!ambiguous && <Link to="/carteira-clientes" onClick={onClose} className="ml-6 text-caption text-status-info underline">Abrir Carteira de Clientes para cadastrar</Link>}
+                {!ambiguous && <Link to="/carteira-clientes" onClick={onClose} className="ml-6 text-caption text-status-info-text underline">Abrir Carteira de Clientes para cadastrar</Link>}
               </div>
             )}
           </div>

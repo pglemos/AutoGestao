@@ -50,7 +50,7 @@ export default function Privacy() {
                                 </Card>
 
                                 <Card className="bg-gray-50 p-mx-10 border-none group hover:bg-white hover:shadow-sm transition-all">
-                                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
+                                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success-text flex items-center justify-center mb-8 shadow-sm group-hover:scale-110 transition-transform">
                                         <Shield size={24} strokeWidth={2} />
                                     </div>
                                     <Typography variant="h2" className="mb-4">Privilégios RLS</Typography>

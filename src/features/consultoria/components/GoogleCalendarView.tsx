@@ -98,14 +98,14 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
             </div>
           )}
 
-          <div className="p-mx-md bg-status-success-surface text-status-success rounded-xl border border-status-success/20 flex items-center gap-mx-xs">
+          <div className="p-mx-md bg-status-success-surface text-status-success-text rounded-xl border border-status-success/20 flex items-center gap-mx-xs">
             <Typography variant="caption" className="font-medium">
               Agenda Conectada! {events.length > 0 ? `${events.length} evento(s) futuro(s).` : ''}
             </Typography>
           </div>
 
           {error && (
-            <div className="p-mx-md bg-status-error-surface text-status-error rounded-xl border border-status-error/20">
+            <div className="p-mx-md bg-status-error-surface text-status-error-text rounded-xl border border-status-error/20">
               <Typography variant="caption">{error}</Typography>
             </div>
           )}

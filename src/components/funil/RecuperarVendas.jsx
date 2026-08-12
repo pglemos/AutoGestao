@@ -104,9 +104,9 @@ const MENSAGENS = {
 };
 
 const CORES = [
-  { bg: "bg-status-error-surface", border: "border-status-error/30", icon: "text-status-error", badge: "bg-status-error-surface text-status-error-text" },
-  { bg: "bg-status-warning-surface", border: "border-status-warning/30", icon: "text-status-warning", badge: "bg-status-warning-surface text-status-warning-text" },
-  { bg: "bg-status-warning-surface", border: "border-status-warning/30", icon: "text-status-warning", badge: "bg-status-warning-surface text-status-warning-text" },
+  { bg: "bg-status-error-surface", border: "border-status-error/30", icon: "text-status-error-text", badge: "bg-status-error-surface text-status-error-text" },
+  { bg: "bg-status-warning-surface", border: "border-status-warning/30", icon: "text-status-warning-text", badge: "bg-status-warning-surface text-status-warning-text" },
+  { bg: "bg-status-warning-surface", border: "border-status-warning/30", icon: "text-status-warning-text", badge: "bg-status-warning-surface text-status-warning-text" },
 ];
 
 export default function RecuperarVendas({ funis }) {

@@ -22,10 +22,10 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
     <div className="space-y-mx-lg">
       <Card className="p-mx-lg border border-status-error/30 bg-status-error/5 shadow-sm rounded-2xl">
         <div className="flex items-center gap-mx-sm mb-mx-xs">
-          <ShieldAlert className="w-mx-6 h-mx-6 text-status-error" />
-          <Typography variant="h3" className="text-status-error">Trava Metodológica</Typography>
+          <ShieldAlert className="w-mx-6 h-mx-6 text-status-error-text" />
+          <Typography variant="h3" className="text-status-error-text">Trava Metodológica</Typography>
         </div>
-        <Typography variant="p" className="text-status-error text-sm">
+        <Typography variant="p" className="text-status-error-text text-sm">
           Sem o formulário de ACOMPANHAMENTO DIÁRIO (SGAP) instalado no celular dos vendedores e a rotina validada, o trabalho não avança.
         </Typography>
       </Card>
@@ -50,7 +50,7 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
           {latestPlan ? (
             <div className="space-y-mx-xs">
               <div className="w-mx-12 h-mx-12 bg-white rounded-mx-full flex items-center justify-center mx-auto shadow-sm border border-border">
-                <CheckCircle2 className="w-mx-6 h-mx-6 text-status-success" />
+                <CheckCircle2 className="w-mx-6 h-mx-6 text-status-success-text" />
               </div>
               <Typography variant="h3" className="">P.E. Validado</Typography>
               <Typography variant="p" className="text-mx-micro">{latestPlan.title}</Typography>
@@ -143,7 +143,7 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
               {sellers.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
             {!storeId && (
-              <Typography variant="tiny" className="block text-status-error font-bold">
+              <Typography variant="tiny" className="block text-status-error-text font-bold">
                 Cliente sem loja vinculada. Vincule a loja para listar apenas os vendedores dela.
               </Typography>
             )}
@@ -244,7 +244,7 @@ export function VisitFiveExecution({ storeId, onGenerateSummary }: { storeId: st
               {sellers.map(seller => <option key={seller.id} value={seller.id}>{seller.name}</option>)}
             </select>
             {!storeId && (
-              <Typography variant="tiny" className="block text-status-error font-bold">
+              <Typography variant="tiny" className="block text-status-error-text font-bold">
                 Cliente sem loja vinculada. Vincule a loja para listar apenas os vendedores dela.
               </Typography>
             )}

@@ -402,7 +402,7 @@ function ResumoDia({ form, clientes }) {
     { label: "Leads", value: totalLeads, color: "text-status-info-text" },
     { label: "Atendimentos", value: totalAtend, color: "text-status-info-text" },
     { label: "Agendamentos D+1", value: totalAgend, color: "text-status-warning-text" },
-    { label: "Vendas", value: totalVendas, color: "text-green-600" },
+    { label: "Vendas", value: totalVendas, color: "text-status-success-text" },
     { label: "Faturamento", value: totalFaturamento > 0 ? "R$ " + totalFaturamento.toLocaleString("pt-BR", { minimumFractionDigits: 2 }) : "—", color: "text-green-700" },
   ];
 
@@ -441,7 +441,7 @@ function DisciplinaBloco({ form, clientes }) {
   const scoreCalc = baseScore + bonusScore;
   const scoreFinal = Math.max(0, scoreCalc - 10); // -10 por atraso
 
-  const scoreColor = scoreFinal >= 80 ? "text-green-600" : scoreFinal >= 50 ? "text-status-warning-text" : "text-status-error-text";
+  const scoreColor = scoreFinal >= 80 ? "text-status-success-text" : scoreFinal >= 50 ? "text-status-warning-text" : "text-status-error-text";
   const ringColor = scoreFinal >= 80 ? "#22C55E" : scoreFinal >= 50 ? "#F59E0B" : "#EF4444";
 
   return (
@@ -468,8 +468,8 @@ function DisciplinaBloco({ form, clientes }) {
             <span className="font-bold text-[#0F172A]">{scoreCalc}%</span>
           </div>
           <div className="flex justify-between text-body-sm">
-            <span className="text-status-error font-medium">Penalização por atraso</span>
-            <span className="font-bold text-status-error">-10%</span>
+            <span className="text-status-error-text font-medium">Penalização por atraso</span>
+            <span className="font-bold text-status-error-text">-10%</span>
           </div>
           <div className="flex justify-between text-body-sm border-t border-border-subtle pt-2">
             <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
@@ -636,7 +636,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
             ) : sucesso ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-8 gap-4">
                 <div className="w-16 h-16 rounded-full bg-status-warning-surface border border-status-warning/30 flex items-center justify-center">
-                  <CheckCircle2 className="w-8 h-8 text-status-warning" />
+                  <CheckCircle2 className="w-8 h-8 text-status-warning-text" />
                 </div>
                 <div>
                   <p className="text-[18px] font-bold text-[#0F172A]">Regularização enviada!</p>
@@ -651,7 +651,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
                 {/* Alerta status existente */}
                 {jaEnviado && (
                   <div className="bg-status-warning-surface border border-status-warning/30 rounded-xl p-4 flex items-start gap-3">
-                    <AlertTriangle className="w-4 h-4 text-status-warning mt-0.5 flex-shrink-0" />
+                    <AlertTriangle className="w-4 h-4 text-status-warning-text mt-0.5 flex-shrink-0" />
                     <div>
                       <p className="text-body-sm font-bold text-status-warning-text">Aguardando Aprovação</p>
                       <p className="text-[12px] text-status-warning-text mt-0.5">Você já enviou a regularização deste dia. Você pode atualizar os dados e reenviar se necessário.</p>
@@ -660,7 +660,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
                 )}
                 {aprovado && (
                   <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
-                    <CheckCircle2 className="w-4 h-4 text-green-500 mt-0.5 flex-shrink-0" />
+                    <CheckCircle2 className="w-4 h-4 text-status-success-text mt-0.5 flex-shrink-0" />
                     <p className="text-body-sm font-bold text-green-800">Esta regularização já foi aprovada.</p>
                   </div>
                 )}

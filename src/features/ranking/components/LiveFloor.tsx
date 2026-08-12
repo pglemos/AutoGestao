@@ -11,7 +11,7 @@ interface LiveFloorProps {
 
 export function LiveFloor({ ranking }: LiveFloorProps) {
     const statuses = {
-        available: { type: 'available', label: 'Check-in realizado', color: 'text-status-success', bg: 'bg-status-success-surface border-status-success/20', icon: Headphones },
+        available: { type: 'available', label: 'Check-in realizado', color: 'text-status-success-text', bg: 'bg-status-success-surface border-status-success/20', icon: Headphones },
         offline: { type: 'offline', label: 'Sem check-in', color: 'text-muted-foreground', bg: 'bg-gray-50 border-border', icon: Activity },
     }
 

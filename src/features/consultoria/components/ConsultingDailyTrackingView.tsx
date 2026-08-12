@@ -33,7 +33,7 @@ export function ConsultingDailyTrackingView({ clientId, storeId }: Props) {
       header: 'LEADS',
       render: (row) => (
         <div className="flex items-center gap-mx-xs">
-          <Phone size={14} className="text-status-info" />
+          <Phone size={14} className="text-status-info-text" />
           <Typography variant="p">{row.leads_prev_day || 0}</Typography>
         </div>
       )
@@ -53,7 +53,7 @@ export function ConsultingDailyTrackingView({ clientId, storeId }: Props) {
       header: 'VISITAS',
       render: (row) => (
         <div className="flex items-center gap-mx-xs">
-          <Users size={14} className="text-status-success" />
+          <Users size={14} className="text-status-success-text" />
           <Typography variant="p">{row.visit_prev_day || 0}</Typography>
         </div>
       )

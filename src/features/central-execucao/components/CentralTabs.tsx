@@ -26,7 +26,7 @@ export function CentralTabs({ value, onChange }: {
             className={cn(
               'border-b-2 px-5 py-3.5 text-body-sm font-bold transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/30',
               value === tab.id
-                ? 'border-status-info bg-white text-status-info'
+                ? 'border-status-info bg-white text-status-info-text'
                 : 'border-transparent text-muted-foreground hover:text-muted-foreground',
             )}
           >

@@ -103,7 +103,7 @@ export function NotificacaoApprovalCard({
           variant="outline"
           onClick={() => void onReview(approval, 'reject', notificationId)}
           disabled={reviewingPreRegistrationId === approval.id}
-          className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-nano text-status-error hover:bg-status-error-surface"
+          className="h-mx-11 rounded-2xl font-bold uppercase tracking-widest text-mx-nano text-status-error-text hover:bg-status-error-surface"
         >
           <X size={15} className="mr-2" />
           Rejeitar

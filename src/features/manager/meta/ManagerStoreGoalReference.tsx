@@ -332,7 +332,7 @@ export function ManagerStoreGoalReference({
           {goal <= 0 ? <p className="rounded-xl border border-border-subtle bg-gray-50 p-4 text-sm text-muted-foreground">Meta ainda não cadastrada.</p> : <>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <SustainabilityBlock icon={Zap} label="Faltam" tone="orange">
-                {sustainabilityPlan.objectiveReached ? <div className="flex items-center gap-1.5"><CheckCircle2 size={20} className="text-status-success" /><p className="text-sm font-semibold text-status-success-text">Objetivo atingido</p></div> : <><p className="text-2xl font-bold text-foreground">{formatStoreGoalMetric(sustainabilityPlan.faltam)} <span className="text-base font-medium text-muted-foreground">{sustainabilityPlan.faltam === 1 ? 'venda' : 'vendas'}</span></p><p className="mt-1 text-xs text-muted-foreground">{horizon === 'hoje' ? 'para hoje' : horizon === 'semana' ? 'nesta semana' : horizon === 'dezena' ? 'nesta dezena' : 'neste mês'}</p></>}
+                {sustainabilityPlan.objectiveReached ? <div className="flex items-center gap-1.5"><CheckCircle2 size={20} className="text-status-success-text" /><p className="text-sm font-semibold text-status-success-text">Objetivo atingido</p></div> : <><p className="text-2xl font-bold text-foreground">{formatStoreGoalMetric(sustainabilityPlan.faltam)} <span className="text-base font-medium text-muted-foreground">{sustainabilityPlan.faltam === 1 ? 'venda' : 'vendas'}</span></p><p className="mt-1 text-xs text-muted-foreground">{horizon === 'hoje' ? 'para hoje' : horizon === 'semana' ? 'nesta semana' : horizon === 'dezena' ? 'nesta dezena' : 'neste mês'}</p></>}
               </SustainabilityBlock>
               <SustainabilityBlock icon={Activity} label="Ritmo necessário" tone="blue">
                 {sustainabilityPlan.objectiveReached ? <p className="text-sm font-semibold text-status-success-text">Ritmo suficiente</p> : <p className="text-base font-semibold leading-snug text-foreground">{sustainabilityPlan.ritmoLabel}</p>}
@@ -433,7 +433,7 @@ function CardFooter({ left, right, tone }: { left: string; right: string; tone: 
 function MetricPill({ value }: { value: number | null }) { if (value === null) return <span className="text-muted-foreground">—</span>; const tone = value >= 100 ? 'bg-status-success-surface text-status-success-text' : value >= 50 ? 'bg-status-warning-surface text-status-warning-text' : 'bg-status-error-surface text-status-error-text'; return <span className={`rounded-lg px-2 py-1 text-xs font-medium ${tone}`}>{value}%</span> }
 function EmptyGoalState() { return <p className="text-sm font-medium text-muted-foreground">Meta ainda não cadastrada.</p> }
 function SustainabilityBlock({ icon: Icon, label, tone, children }: { icon: typeof Activity; label: string; tone: 'orange' | 'blue' | 'purple'; children: ReactNode }) {
-  const tones = { orange: 'text-status-warning', blue: 'text-status-info', purple: 'text-status-info-text' }
+  const tones = { orange: 'text-status-warning-text', blue: 'text-status-info-text', purple: 'text-status-info-text' }
   return <div className="rounded-xl border border-border-subtle bg-gray-50 p-4"><div className="mb-2 flex items-center gap-1.5"><Icon size={16} className={tones[tone]} /><p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p></div>{children}</div>
 }
 

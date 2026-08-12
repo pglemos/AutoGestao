@@ -349,7 +349,7 @@ export function classificacaoScore(score) {
   // Faixas vêm do motor oficial; as cores continuam sendo decisão da tela.
   const label = classificacaoScoreOficial(score);
   const CORES = {
-    "Excelente": "text-green-600 bg-green-50",
+    "Excelente": "text-status-success-text bg-green-50",
     "Boa": "text-status-info-text bg-status-info-surface",
     "Atenção": "text-status-warning-text bg-status-warning-surface",
     "Crítica": "text-status-error-text bg-status-error-surface",
@@ -384,8 +384,8 @@ export function prioridadeColor(p) {
 }
 
 export function statusComercialColor(s) {
-  if (s === "Vendido") return "bg-green-50 text-green-600";
-  if (s === "Perdido") return "bg-status-error-surface text-status-error";
+  if (s === "Vendido") return "bg-green-50 text-status-success-text";
+  if (s === "Perdido") return "bg-status-error-surface text-status-error-text";
   // Cancelada é neutra e âmbar: não é sucesso (verde), não é perda de
   // negociação (vermelho) e não é erro técnico.
   if (s === "Cancelada") return "bg-status-warning-surface text-status-warning-text";

@@ -89,7 +89,7 @@ export function RotinaRitualMatinal({
             className={cn(
               'rounded-xl border p-mx-md cursor-pointer group transition-all',
               step.done
-                ? 'bg-status-success-surface/30 border-status-success/20 text-status-success'
+                ? 'bg-status-success-surface/30 border-status-success/20 text-status-success-text'
                 : 'bg-gray-50 border-border-subtle hover:bg-white hover:border-brand-primary/20 hover:shadow-sm',
             )}
           >
@@ -99,7 +99,7 @@ export function RotinaRitualMatinal({
                   className={cn(
                     'w-mx-xl h-mx-xl rounded-xl flex items-center justify-center border shadow-mx-inner transition-all',
                     step.done
-                      ? 'bg-white text-status-success border-status-success/30'
+                      ? 'bg-white text-status-success-text border-status-success/30'
                       : 'bg-white text-muted-foreground border-border-subtle group-hover:scale-110',
                   )}
                 >
@@ -116,7 +116,7 @@ export function RotinaRitualMatinal({
                     variant="h3"
                     className={cn(
                       'text-base uppercase tracking-tight',
-                      step.done && 'text-status-success',
+                      step.done && 'text-status-success-text',
                     )}
                   >
                     {step.label}
@@ -201,8 +201,8 @@ export function RotinaRitualMatinal({
               className={cn(
                 'w-full rounded-xl border px-mx-md py-mx-sm text-sm font-bold md:basis-full',
                 matinalAudit.tone === 'success'
-                  ? 'border-status-success/20 bg-status-success-surface text-status-success'
-                  : 'border-status-error/20 bg-status-error-surface text-status-error',
+                  ? 'border-status-success/20 bg-status-success-surface text-status-success-text'
+                  : 'border-status-error/20 bg-status-error-surface text-status-error-text',
               )}
             >
               <div className="flex flex-col gap-mx-tiny sm:flex-row sm:items-center sm:justify-between">

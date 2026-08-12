@@ -84,7 +84,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
         </div>
       </form>
 
-      {error && <p className="text-sm font-bold text-status-error">Erro ao carregar: {error}</p>}
+      {error && <p className="text-sm font-bold text-status-error-text">Erro ao carregar: {error}</p>}
 
       {loading ? (
         <p className="text-sm font-bold text-muted-foreground">Carregando planos…</p>

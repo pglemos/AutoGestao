@@ -99,7 +99,7 @@ export default function NovaFaixaModal({ open, onClose, onSaved, politicas, me }
             <Label>{form.tipo === "Percentual sobre valor vendido" ? "Percentual (%) *" : "Valor por veículo (R$) *"}</Label>
             <Input type="number" min={0} step="0.01" value={form.valor} onChange={e => set("valor", e.target.value)} placeholder={form.tipo === "Percentual sobre valor vendido" ? "0,5" : "350"} />
           </div>
-          {erro && <p className="text-status-error text-[12px]">{erro}</p>}
+          {erro && <p className="text-status-error-text text-[12px]">{erro}</p>}
           <div className="flex gap-2 pt-2">
             <Button variant="outline" className="flex-1" onClick={onClose} disabled={saving}>Cancelar</Button>
             <Button className="flex-1 bg-[#00A896] hover:bg-[#008f7e] text-white" onClick={handleSave} disabled={saving}>

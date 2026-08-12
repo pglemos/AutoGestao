@@ -29,12 +29,12 @@ type Props = {
 }
 
 const TONE_MAP: Record<string, string> = {
-  completo: 'border-status-success/30 bg-status-success-surface text-status-success',
-  parcial: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
+  completo: 'border-status-success/30 bg-status-success-surface text-status-success-text',
+  parcial: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
   pendente: 'border-border bg-gray-50 text-muted-foreground',
-  ok: 'border-status-success/30 bg-status-success-surface text-status-success',
-  watch: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-  miss: 'border-status-error/30 bg-status-error-surface text-status-error',
+  ok: 'border-status-success/30 bg-status-success-surface text-status-success-text',
+  watch: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
+  miss: 'border-status-error/30 bg-status-error-surface text-status-error-text',
   pending: 'border-border bg-gray-50 text-muted-foreground',
 }
 

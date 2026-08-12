@@ -42,9 +42,9 @@ const TIPO_LABEL: Record<UniversidadeAulaTipo, string> = {
 const TIPO_TONE: Record<UniversidadeAulaTipo, string> = {
   biblioteca: 'border-border bg-gray-50 text-muted-foreground',
   aula_gravada: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
-  aula_ao_vivo: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-  quiz: 'border-status-success/30 bg-status-success-surface text-status-success',
-  desafio: 'border-status-error/30 bg-status-error-surface text-status-error',
+  aula_ao_vivo: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
+  quiz: 'border-status-success/30 bg-status-success-surface text-status-success-text',
+  desafio: 'border-status-error/30 bg-status-error-surface text-status-error-text',
 }
 
 type Props = {
@@ -99,7 +99,7 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
 
       {error && (
         <div className="rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="font-bold text-status-error">
+          <Typography variant="tiny" className="font-bold text-status-error-text">
             {error}
           </Typography>
         </div>
@@ -146,7 +146,7 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
       {certificacoes.length > 0 && (
         <Card className="p-mx-md">
           <header className="mb-mx-sm flex items-center gap-mx-xs">
-            <div className="rounded-2xl bg-status-success-surface p-mx-xs text-status-success">
+            <div className="rounded-2xl bg-status-success-surface p-mx-xs text-status-success-text">
               <Trophy size={18} aria-hidden="true" />
             </div>
             <Typography variant="h3" className="font-bold">
@@ -160,7 +160,7 @@ export function UniversidadeMx({ userId, embedded = false }: Props) {
                 className="rounded-2xl border border-status-success/30 bg-status-success-surface/40 p-mx-sm"
               >
                 <div className="flex items-center gap-mx-xs">
-                  <Award size={16} className="text-status-success" />
+                  <Award size={16} className="text-status-success-text" />
                   <Typography variant="caption" className="font-bold">
                     {cert.trilha_id}
                   </Typography>

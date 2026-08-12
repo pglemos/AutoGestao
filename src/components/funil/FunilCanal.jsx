@@ -11,7 +11,7 @@ function pct(a, b) {
 
 function PctArrow({ value }) {
   if (value === null) return <div className="flex items-center justify-center gap-1 py-1"><ChevronDown className="w-4 h-4 text-text-disabled" /></div>;
-  const color = value >= 60 ? "text-green-600" : value >= 30 ? "text-status-warning-text" : "text-status-error";
+  const color = value >= 60 ? "text-status-success-text" : value >= 30 ? "text-status-warning-text" : "text-status-error-text";
   return (
     <div className="flex items-center justify-center gap-1 py-1">
       <ChevronDown className="w-4 h-4 text-text-disabled" />
@@ -105,7 +105,7 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
                   <div className="flex items-center justify-center gap-1 py-1.5">
                     <ChevronDown className="w-4 h-4 text-text-disabled" />
                     {conv !== null && (
-                      <span className={`text-[12px] font-bold ${conv >= 60 ? "text-green-600" : conv >= 30 ? "text-status-warning-text" : "text-status-error"}`}>
+                      <span className={`text-[12px] font-bold ${conv >= 60 ? "text-status-success-text" : conv >= 30 ? "text-status-warning-text" : "text-status-error-text"}`}>
                         {conv}%
                       </span>
                     )}

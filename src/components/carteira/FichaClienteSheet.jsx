@@ -612,7 +612,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                     {pendencias.map((p, i) => (
                       <div key={i} className="flex items-center justify-between gap-2">
                         <div className="flex items-start gap-2.5">
-                          <AlertCircle className="w-3.5 h-3.5 text-status-warning mt-0.5 shrink-0" />
+                          <AlertCircle className="w-3.5 h-3.5 text-status-warning-text mt-0.5 shrink-0" />
                           <span className="text-sm text-muted-foreground">{p}</span>
                         </div>
                         <button
@@ -633,7 +633,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                   cancelamento. */}
               {!editando && pendencias.length === 0 && !isVendaCancelada && (
                 <div className="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-100 rounded-2xl">
-                  <CheckCircle2 className="w-4 h-4 text-green-500 shrink-0" />
+                  <CheckCircle2 className="w-4 h-4 text-status-success-text shrink-0" />
                   <p className="text-sm text-green-700 font-medium">Oportunidade bem qualificada. Execute o próximo passo.</p>
                 </div>
               )}

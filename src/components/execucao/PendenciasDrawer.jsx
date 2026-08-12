@@ -29,7 +29,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
         <DialogContent className="sm:max-w-lg max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="text-[#0F172A] font-bold flex items-center gap-2">
-              <AlertTriangle className="w-5 h-5 text-status-warning" />
+              <AlertTriangle className="w-5 h-5 text-status-warning-text" />
               Pendências anteriores ({pendencias.length})
             </DialogTitle>
           </DialogHeader>
@@ -47,7 +47,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                       <div className="flex-1 min-w-0">
                         <div className="flex items-center gap-2 flex-wrap mb-1">
                           <span className="text-caption font-bold text-muted-foreground uppercase tracking-wider">{op.tipo}</span>
-                          <span className="text-caption font-bold text-status-error bg-status-error-surface px-2 py-0.5 rounded-full">
+                          <span className="text-caption font-bold text-status-error-text bg-status-error-surface px-2 py-0.5 rounded-full">
                             {atraso === 0 ? "Hoje" : `${atraso}d atraso`}
                           </span>
                         </div>

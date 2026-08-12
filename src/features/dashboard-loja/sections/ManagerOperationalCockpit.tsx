@@ -344,10 +344,10 @@ function TeamRow({ row }: { row: RankingEntry }) {
           ? 'atencao'
           : 'critico'
   const tierStyles: Record<typeof tier, string> = {
-    excelente: 'bg-[var(--color-status-success-surface)] text-status-success',
-    bom: 'bg-[var(--color-status-info-surface)] text-status-info',
-    atencao: 'bg-[var(--color-status-warning-surface)] text-status-warning',
-    critico: 'bg-[var(--color-status-error-surface)] text-status-error',
+    excelente: 'bg-[var(--color-status-success-surface)] text-status-success-text',
+    bom: 'bg-[var(--color-status-info-surface)] text-status-info-text',
+    atencao: 'bg-[var(--color-status-warning-surface)] text-status-warning-text',
+    critico: 'bg-[var(--color-status-error-surface)] text-status-error-text',
   }
   const tierLabels: Record<typeof tier, string> = {
     excelente: 'Excelente',
@@ -520,10 +520,10 @@ function SemiCircularGauge({ value, label, suffix = '' }: { value: number; label
   const pointerX = cx + (radius - strokeWidth / 2) * Math.cos(pointerRad)
   const pointerY = cy - (radius - strokeWidth / 2) * Math.sin(pointerRad)
   const labelTone = clamped >= 75
-    ? 'text-status-success'
+    ? 'text-status-success-text'
     : clamped >= 60
-      ? 'text-status-warning'
-      : 'text-status-error'
+      ? 'text-status-warning-text'
+      : 'text-status-error-text'
   return (
     <div className="flex flex-col items-center" aria-label={`${label}: ${clamped}%`}>
       <svg viewBox="0 0 160 100" width="160" height="100" role="img" aria-hidden="true">
@@ -597,10 +597,10 @@ function ProgressBar({ value, tone = 'brand', className }: { value: number; tone
 function toneBorder(tone: ManagerTone) {
   return {
     brand: 'border-mx-indigo-100 bg-mx-indigo-50 text-status-success-text',
-    success: 'border-status-success/20 bg-status-success-surface text-status-success',
-    warning: 'border-status-warning/20 bg-status-warning-surface text-status-warning',
-    danger: 'border-status-error/20 bg-status-error-surface text-status-error',
-    info: 'border-status-info/20 bg-status-info-surface text-status-info',
+    success: 'border-status-success/20 bg-status-success-surface text-status-success-text',
+    warning: 'border-status-warning/20 bg-status-warning-surface text-status-warning-text',
+    danger: 'border-status-error/20 bg-status-error-surface text-status-error-text',
+    info: 'border-status-info/20 bg-status-info-surface text-status-info-text',
     neutral: 'border-border bg-white text-muted-foreground',
   }[tone]
 }
@@ -608,10 +608,10 @@ function toneBorder(tone: ManagerTone) {
 function toneSurface(tone: ManagerTone) {
   return {
     brand: 'bg-mx-indigo-50 text-status-success-text',
-    success: 'bg-status-success-surface text-status-success',
-    warning: 'bg-status-warning-surface text-status-warning',
-    danger: 'bg-status-error-surface text-status-error',
-    info: 'bg-status-info-surface text-status-info',
+    success: 'bg-status-success-surface text-status-success-text',
+    warning: 'bg-status-warning-surface text-status-warning-text',
+    danger: 'bg-status-error-surface text-status-error-text',
+    info: 'bg-status-info-surface text-status-info-text',
     neutral: 'bg-gray-50 text-muted-foreground',
   }[tone]
 }
@@ -646,9 +646,9 @@ function gaugeGradient(tone: ManagerTone, value: number) {
 }
 
 function medalTone(index: number) {
-  if (index === 0) return 'border-status-warning/30 text-status-warning'
+  if (index === 0) return 'border-status-warning/30 text-status-warning-text'
   if (index === 1) return 'border-text-tertiary/30 text-muted-foreground'
-  return 'border-status-warning/20 text-status-warning'
+  return 'border-status-warning/20 text-status-warning-text'
 }
 
 function scoreLabel(score: number) {

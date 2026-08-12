@@ -139,7 +139,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
           A aplicação encontrou um erro inesperado. Tente recarregar a página.
         </p>
         {import.meta.env.DEV && this.state.error && (
-          <pre className="text-status-error text-xs bg-white/5 p-mx-md rounded-xl max-w-lg overflow-auto text-left">{this.state.error.message}</pre>
+          <pre className="text-status-error-text text-xs bg-white/5 p-mx-md rounded-xl max-w-lg overflow-auto text-left">{this.state.error.message}</pre>
         )}
         <button
           onClick={() => { this.setState({ hasError: false, error: null }); window.location.reload() }}

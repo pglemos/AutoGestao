@@ -31,7 +31,7 @@ export class CheckinErrorBoundary extends React.Component<Props, State> {
         if (this.state.hasError) {
             return (
                 <div role="alert" className="rounded-2xl border border-status-error/20 bg-status-error-surface px-mx-md py-mx-sm flex items-start gap-mx-sm">
-                    <AlertTriangle size={20} className="text-status-error mt-1 shrink-0" />
+                    <AlertTriangle size={20} className="text-status-error-text mt-1 shrink-0" />
                     <div>
                         <Typography variant="caption" tone="error" className="font-semibold tracking-tight">
                             Falha em {this.props.section}

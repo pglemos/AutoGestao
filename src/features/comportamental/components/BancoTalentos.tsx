@@ -45,7 +45,7 @@ export function BancoTalentos() {
   return (
     <div className="space-y-mx-lg">
       <div className="rounded-2xl border border-status-warning bg-status-warning-surface p-mx-sm">
-        <p className="text-xs font-bold text-status-warning">
+        <p className="text-xs font-bold text-status-warning-text">
           O banco de talentos guarda <strong>padrões agregados</strong> de alta performance — nunca expõe o resultado individual de um colaborador.
         </p>
       </div>
@@ -88,7 +88,7 @@ export function BancoTalentos() {
             return (
               <div key={t.id} className="rounded-2xl border border-border p-mx-md">
                 <div className="flex items-center gap-mx-sm">
-                  <Trophy size={16} className="text-status-warning" />
+                  <Trophy size={16} className="text-status-warning-text" />
                   <span className="font-bold uppercase text-sm">{t.cargo || 'Perfil geral'}</span>
                   <span className="ml-auto text-xs font-bold text-muted-foreground">n={t.amostra_n}</span>
                 </div>

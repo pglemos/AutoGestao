@@ -40,11 +40,11 @@ export const CARD_ICON_STYLES = {
 };
 
 export const SPARK_COLORS = {
-  green: "text-status-success",
+  green: "text-status-success-text",
   purple: "text-status-info-text",
   orange: "text-indigo-500",
-  blue: "text-status-info",
-  teal: "text-status-warning",
+  blue: "text-status-info-text",
+  teal: "text-status-warning-text",
 };
 
 export const STATUS_STYLES = {

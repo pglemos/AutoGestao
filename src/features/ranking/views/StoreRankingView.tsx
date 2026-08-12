@@ -56,10 +56,10 @@ export function StoreRankingView() {
           />
 
           <div className="flex items-center gap-2 bg-green-50 border border-green-100 rounded-xl px-4 py-2">
-            <Info className="w-4 h-4 text-green-600 flex-shrink-0" />
+            <Info className="w-4 h-4 text-status-success-text flex-shrink-0" />
             <p className="text-[12px] text-green-800">
               <strong>Critério configurado pela loja:</strong> Volume de vendas.{' '}
-              <span className="text-green-600">A meta individual é calculada pelas regras da unidade.</span>
+              <span className="text-status-success-text">A meta individual é calculada pelas regras da unidade.</span>
             </p>
           </div>
 

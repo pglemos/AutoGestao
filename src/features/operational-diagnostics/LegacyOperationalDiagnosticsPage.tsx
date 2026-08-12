@@ -142,7 +142,7 @@ export default function AiDiagnostics() {
                 {logs.map((log, index) => (
                   <div key={`${log.msg}-${index}`} className="flex gap-mx-sm group hover:bg-white/5 p-mx-xs rounded-lg transition-colors">
                     <Typography variant="tiny" tone="muted" as="span" className="opacity-10" aria-hidden="true">{(index + 1).toString().padStart(3, '0')}</Typography>
-                    <Typography as="span" variant="caption" className={cn('font-bold tracking-tight uppercase text-xs sm:text-sm', log.type === 'error' ? 'text-status-error' : log.type === 'warning' ? 'text-status-warning' : log.type === 'success' ? 'text-status-success' : 'text-sidebar-foreground')}>{log.msg}</Typography>
+                    <Typography as="span" variant="caption" className={cn('font-bold tracking-tight uppercase text-xs sm:text-sm', log.type === 'error' ? 'text-status-error-text' : log.type === 'warning' ? 'text-status-warning-text' : log.type === 'success' ? 'text-status-success-text' : 'text-sidebar-foreground')}>{log.msg}</Typography>
                   </div>
                 ))}
                 <div ref={terminalEndRef} />
@@ -161,7 +161,7 @@ export default function AiDiagnostics() {
                   {summary ? (
                     <motion.div initial={{ opacity: 0, scale: 0.98 }} animate={{ opacity: 1, scale: 1 }} className="space-y-mx-xl">
                       <Card className="p-mx-md bg-mx-indigo-50 border relative group"><Quote size={64} className="absolute -right-4 -bottom-4 text-status-success-text opacity-5 -rotate-12" aria-hidden="true" /><Typography variant="p" className="text-lg sm:text-xl italic leading-relaxed relative z-10 tracking-tight">“{summary.diagnostic}”</Typography></Card>
-                      <div className="space-y-mx-md"><div className="flex items-center gap-mx-xs"><div className="w-mx-10 h-mx-10 rounded-xl bg-status-success-surface text-status-success flex items-center justify-center border border-status-success/20" aria-hidden="true"><TrendingUp size={20} /></div><Typography variant="tiny" tone="success" className="">Plano de Ação Gerencial</Typography></div><Typography variant="p" className="text-sm sm:text-base font-bold leading-relaxed bg-gray-50 p-mx-md border tracking-tight">{summary.action}</Typography></div>
+                      <div className="space-y-mx-md"><div className="flex items-center gap-mx-xs"><div className="w-mx-10 h-mx-10 rounded-xl bg-status-success-surface text-status-success-text flex items-center justify-center border border-status-success/20" aria-hidden="true"><TrendingUp size={20} /></div><Typography variant="tiny" tone="success" className="">Plano de Ação Gerencial</Typography></div><Typography variant="p" className="text-sm sm:text-base font-bold leading-relaxed bg-gray-50 p-mx-md border tracking-tight">{summary.action}</Typography></div>
                     </motion.div>
                   ) : <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-mx-md"><div className="w-mx-3xl h-mx-3xl rounded-mx-full border-4 border-border-subtle border-t-brand-primary animate-spin" aria-hidden="true" /><Typography variant="caption" tone="muted" className="animate-pulse">ANALISANDO MALHA...</Typography></div>}
                 </AnimatePresence>

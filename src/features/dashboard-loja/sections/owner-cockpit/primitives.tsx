@@ -145,10 +145,10 @@ function SimpleSparkline({
   seed?: number
 }) {
   const colorClass = {
-    success: 'text-status-success',
-    info: 'text-status-info',
-    warning: 'text-status-warning',
-    danger: 'text-status-error',
+    success: 'text-status-success-text',
+    info: 'text-status-info-text',
+    warning: 'text-status-warning-text',
+    danger: 'text-status-error-text',
     muted: 'text-muted-foreground',
     brand: 'text-status-success-text',
     purple: 'text-status-info-text',

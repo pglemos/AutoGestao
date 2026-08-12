@@ -88,7 +88,7 @@ export function ScheduleEventCard({ event, onEdit, onDelete }: ScheduleEventCard
           <Button variant="ghost" size="sm" className="" onClick={() => onEdit(event)} aria-label={`Editar ${event.title}`}>
             <Pencil size={14} />
           </Button>
-          <Button variant="ghost" size="sm" className="text-status-error" onClick={() => onDelete(event.id)} aria-label={`Excluir ${event.title}`}>
+          <Button variant="ghost" size="sm" className="text-status-error-text" onClick={() => onDelete(event.id)} aria-label={`Excluir ${event.title}`}>
             <Trash2 size={14} />
           </Button>
         </div>

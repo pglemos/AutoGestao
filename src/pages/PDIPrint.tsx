@@ -195,7 +195,7 @@ export default function PDIPrint() {
                     </div>
 
                     <div className="mt-auto">
-                        <Typography variant="tiny" className="text-status-error mb-4">Top 5 Maiores Lacunas (Gaps) Identificadas</Typography>
+                        <Typography variant="tiny" className="text-status-error-text mb-4">Top 5 Maiores Lacunas (Gaps) Identificadas</Typography>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-sm">                            {bundle.top_5_gaps.map((gap, i) => (
                                 <div key={i} className="bg-status-error-surface p-mx-sm border-l-4 border-status-error flex justify-between items-center">
                                     <Typography variant="p" className="text-xs font-bold">{gap.competencia}</Typography>

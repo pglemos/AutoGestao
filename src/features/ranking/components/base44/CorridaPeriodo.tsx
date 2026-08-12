@@ -23,7 +23,7 @@ export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
         <h2 className="text-body font-bold text-foreground">Corrida do Período</h2>
       </div>
       <p className="text-[12px] text-muted-foreground mb-4">
-        Meta de volume: <span className="font-bold text-green-600">{formatVendas(meta)}</span>
+        Meta de volume: <span className="font-bold text-status-success-text">{formatVendas(meta)}</span>
       </p>
 
       <div className="relative px-4">
@@ -49,7 +49,7 @@ export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
                 <p className={`text-caption font-bold mb-0.5 text-center whitespace-nowrap ${isMe ? 'text-status-info-text' : 'text-muted-foreground'}`}>
                   {v.nome?.split(' ')[0]}
                   <br />
-                  <span className={isMe ? 'text-status-info' : 'text-muted-foreground'}>{formatVendas(v.vendas)}</span>
+                  <span className={isMe ? 'text-status-info-text' : 'text-muted-foreground'}>{formatVendas(v.vendas)}</span>
                 </p>
                 <RankingAvatar
                   nome={v.nome}

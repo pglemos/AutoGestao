@@ -56,7 +56,7 @@ export default function DecisionCard({ decision, onAction }) {
 
       {decision.recommendation && (
         <div className="mt-2.5 flex gap-2 rounded-md border border-status-info/20 bg-status-info-surface/50 px-2.5 py-2 text-xs text-foreground">
-          <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-info" />
+          <Lightbulb className="mt-0.5 h-3.5 w-3.5 shrink-0 text-status-info-text" />
           <p><span className="font-medium text-foreground">Recomendação:</span> {decision.recommendation}</p>
         </div>
       )}

@@ -28,7 +28,7 @@ export function CheckinValidationBanner({
                 <Card className="p-mx-md border border-status-warning/20 bg-status-warning-surface">
                     <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center sm:justify-between">
                         <div className="flex items-start gap-mx-sm">
-                            <div className="w-mx-xl h-mx-xl rounded-2xl bg-white text-status-warning border border-status-warning/20 flex items-center justify-center shrink-0">
+                            <div className="w-mx-xl h-mx-xl rounded-2xl bg-white text-status-warning-text border border-status-warning/20 flex items-center justify-center shrink-0">
                                 <Clock size={20} />
                             </div>
                             <div>

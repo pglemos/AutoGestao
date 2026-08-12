@@ -40,7 +40,7 @@ export function RotinaProgressCard({ routineProgress }: Props) {
             className={cn(
               'rounded-xl border px-mx-md py-mx-sm text-sm font-bold uppercase',
               step.done
-                ? 'border-status-success/20 bg-status-success-surface text-status-success'
+                ? 'border-status-success/20 bg-status-success-surface text-status-success-text'
                 : 'border-border-subtle bg-gray-50 text-muted-foreground',
             )}
           >

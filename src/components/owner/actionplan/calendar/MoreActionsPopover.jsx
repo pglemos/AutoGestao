@@ -39,8 +39,8 @@ export default function MoreActionsPopover({ actions, onSelectAction, onOpenActi
               >
                 <div className="flex items-center gap-1">
                   <span className="font-medium text-foreground">{action.code}</span>
-                  {action.status === "blocked" && <Lock className="h-3 w-3 text-status-error" />}
-                  {late && <AlertTriangle className="h-3 w-3 text-status-error" />}
+                  {action.status === "blocked" && <Lock className="h-3 w-3 text-status-error-text" />}
+                  {late && <AlertTriangle className="h-3 w-3 text-status-error-text" />}
                 </div>
                 <p className="truncate text-muted-foreground">{action.title}</p>
                 <div className="mt-0.5 flex items-center gap-1">

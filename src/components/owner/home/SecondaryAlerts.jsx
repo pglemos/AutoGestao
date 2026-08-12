@@ -19,7 +19,7 @@ export default function SecondaryAlerts() {
             key={alert.id}
             className="flex cursor-pointer items-center gap-3 rounded-lg border border-border bg-background p-3 transition-colors hover:bg-muted/50"
           >
-            <AlertCircle className="h-4 w-4 shrink-0 text-status-warning" />
+            <AlertCircle className="h-4 w-4 shrink-0 text-status-warning-text" />
             <div className="min-w-0 flex-1">
               <p className="text-sm font-medium text-foreground">{alert.title}</p>
               <p className="text-xs text-muted-foreground">

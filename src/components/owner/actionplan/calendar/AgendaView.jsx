@@ -105,7 +105,7 @@ export default function AgendaView({ actions, selectedDate, onSelectDate, onOpen
                                   Atrasada há {daysLate(action)}d
                                 </span>
                               )}
-                              {action.status === "blocked" && <Lock className="h-3 w-3 text-status-error" />}
+                              {action.status === "blocked" && <Lock className="h-3 w-3 text-status-error-text" />}
                             </div>
                             <p className="mt-1 truncate text-sm text-muted-foreground">{action.title}</p>
                             <div className="mt-1 flex items-center gap-2 text-xs text-muted-foreground">

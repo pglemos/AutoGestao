@@ -29,10 +29,10 @@ import {
  */
 
 const PRIORITY_TONE: Record<ConsultorIaPriority, string> = {
-  critica: 'border-status-error/40 bg-status-error-surface text-status-error',
-  alta: 'border-status-warning/40 bg-status-warning-surface text-status-warning',
+  critica: 'border-status-error/40 bg-status-error-surface text-status-error-text',
+  alta: 'border-status-warning/40 bg-status-warning-surface text-status-warning-text',
   media: 'border-brand-primary/40 bg-mx-indigo-50 text-status-success-text',
-  baixa: 'border-status-success/40 bg-status-success-surface text-status-success',
+  baixa: 'border-status-success/40 bg-status-success-surface text-status-success-text',
 }
 
 const PRIORITY_LABEL: Record<ConsultorIaPriority, string> = {
@@ -116,8 +116,8 @@ export function ConsultorIaChat({ storeId }: Props) {
 
       {consultor.error && (
         <div className="mt-mx-md flex items-start gap-mx-xs rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <AlertTriangle size={16} className="mt-mx-tiny text-status-error" />
-          <Typography variant="tiny" className="text-status-error">
+          <AlertTriangle size={16} className="mt-mx-tiny text-status-error-text" />
+          <Typography variant="tiny" className="text-status-error-text">
             {consultor.error}
           </Typography>
         </div>

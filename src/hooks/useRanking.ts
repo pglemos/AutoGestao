@@ -511,7 +511,7 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
                     gap: Math.max(0, meta - d.vnd),
                     position: 0,
                     efficiency: 0,
-                    status: { label: d.checkedIn ? 'Presente' : 'Ausente', color: d.checkedIn ? 'bg-status-success-surface text-status-success' : 'bg-status-error-surface text-status-error' },
+                    status: { label: d.checkedIn ? 'Presente' : 'Ausente', color: d.checkedIn ? 'bg-status-success-surface text-status-success-text' : 'bg-status-error-surface text-status-error-text' },
                     checked_in: d.checkedIn,
                 }
             })

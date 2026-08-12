@@ -340,7 +340,7 @@ export default function BottomSection({
             {agendamentosFuturos > 0 && (
               <p className="text-caption text-muted-foreground mb-1.5">
                 Agendamentos futuros: <strong className="text-[#0F172A]">{agendamentosFuturos}</strong>{" "}
-                <span className="text-green-600">✓ Já contabilizado na Qualidade da Carteira</span>
+                <span className="text-status-success-text">✓ Já contabilizado na Qualidade da Carteira</span>
               </p>
             )}
 

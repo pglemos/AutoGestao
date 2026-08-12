@@ -71,7 +71,7 @@ export function DREForm({
     <>
       <div>
         {editingId && onDelete && (
-          <Button variant="ghost" size="sm" className="text-status-error" onClick={() => onDelete(editingId)}>
+          <Button variant="ghost" size="sm" className="text-status-error-text" onClick={() => onDelete(editingId)}>
             <Trash2 size={14} className="mr-1" /> Excluir
           </Button>
         )}
@@ -145,11 +145,11 @@ export function DREForm({
           </div>
           <div>
             <Typography variant="tiny" tone="muted" className="">Despesas Totais</Typography>
-            <Typography variant="h3" className="text-status-error">R$ {fmt(computedPreview.total_expenses)}</Typography>
+            <Typography variant="h3" className="text-status-error-text">R$ {fmt(computedPreview.total_expenses)}</Typography>
           </div>
           <div>
             <Typography variant="tiny" tone="muted" className="">Lucro Líquido</Typography>
-            <Typography variant="h3" className={computedPreview.net_profit >= 0 ? 'text-status-success font-bold' : 'text-status-error font-bold'}>
+            <Typography variant="h3" className={computedPreview.net_profit >= 0 ? 'text-status-success-text font-bold' : 'text-status-error-text font-bold'}>
               R$ {fmt(computedPreview.net_profit)}
             </Typography>
           </div>

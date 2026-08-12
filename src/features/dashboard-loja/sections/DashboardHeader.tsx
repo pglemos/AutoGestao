@@ -297,7 +297,7 @@ export function DashboardHeader({
       <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center sm:justify-between">
         <LastUpdated value={lastSyncAt} />
         {syncWarning && (
-          <div role="alert" className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-mx-md py-mx-sm text-mx-tiny font-bold uppercase tracking-tight text-status-warning">
+          <div role="alert" className="rounded-xl border border-status-warning/20 bg-status-warning-surface px-mx-md py-mx-sm text-mx-tiny font-bold uppercase tracking-tight text-status-warning-text">
             {syncWarning}
           </div>
         )}

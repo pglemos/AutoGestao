@@ -67,7 +67,7 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
             <p className="text-body font-bold text-[#0F172A] leading-tight">{nomeCliente}</p>
-            {eD1 && <span className="text-caption font-bold text-status-info bg-status-info-surface px-1.5 py-0.5 rounded-full">D+1</span>}
+            {eD1 && <span className="text-caption font-bold text-status-info-text bg-status-info-surface px-1.5 py-0.5 rounded-full">D+1</span>}
           </div>
           {telefone && (
             <div className="flex items-center gap-1 mt-1">

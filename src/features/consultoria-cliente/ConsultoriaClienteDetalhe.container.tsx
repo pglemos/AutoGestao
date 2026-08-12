@@ -108,7 +108,7 @@ export function ConsultoriaClienteDetalhe() {
   )
 
   if (loading || modulesLoading) return <div className="p-mx-20 text-center opacity-50">Carregando cockpit...</div>
-  if (error || !client) return <div className="p-mx-20 text-center text-status-error">{error || 'Cliente não encontrado'}</div>
+  if (error || !client) return <div className="p-mx-20 text-center text-status-error-text">{error || 'Cliente não encontrado'}</div>
 
   return (
     <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50">

@@ -311,7 +311,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
                         <Button variant="ghost" size="sm" onClick={() => handleArchive(option)} className="text-muted-foreground" disabled={option.status === 'arquivado'}>
                           <Archive size={14} className="mr-2" /> ARQUIVAR
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleDelete(option)} className="text-status-error">
+                        <Button variant="ghost" size="sm" onClick={() => handleDelete(option)} className="text-status-error-text">
                           <Trash2 size={14} className="mr-2" /> EXCLUIR
                         </Button>
                       </div>

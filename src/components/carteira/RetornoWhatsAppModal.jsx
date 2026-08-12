@@ -32,7 +32,7 @@ export default function RetornoWhatsAppModal({ open, cliente, resultado, onResul
         <DialogHeader>
           <div className="flex items-center gap-2 mb-1">
             <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center">
-              <MessageCircle className="w-4 h-4 text-green-600" />
+              <MessageCircle className="w-4 h-4 text-status-success-text" />
             </div>
             <div>
               <DialogTitle className="text-sm font-black text-[#031B3D]">

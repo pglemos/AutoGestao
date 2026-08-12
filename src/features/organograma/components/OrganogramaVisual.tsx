@@ -77,7 +77,7 @@ export function OrganogramaVisual({ lojaId }: { lojaId: string }) {
         </div>
       </form>
 
-      {error && <p className="text-sm font-bold text-status-error">Erro: {error}</p>}
+      {error && <p className="text-sm font-bold text-status-error-text">Erro: {error}</p>}
 
       {loading ? (
         <p className="text-sm font-bold text-muted-foreground">Carregando organograma…</p>

@@ -57,7 +57,7 @@ export default function SubmitValidationModal({ action, open, onOpenChange, onCo
 function CheckRow({ ok, label }) {
   return (
     <div className="flex items-center gap-2 text-sm">
-      {ok ? <CheckCircle className="h-4 w-4 text-status-success" /> : <XCircle className="h-4 w-4 text-status-error" />}
+      {ok ? <CheckCircle className="h-4 w-4 text-status-success-text" /> : <XCircle className="h-4 w-4 text-status-error-text" />}
       <span className={ok ? "text-foreground" : "text-muted-foreground"}>{label}</span>
     </div>
   );

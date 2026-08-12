@@ -703,7 +703,7 @@ function Field({ label, icon: Icon, children, error }: { label: string; icon: Re
 
 function FieldError({ children, className }: { children: React.ReactNode; className?: string }) {
   return (
-    <p className={cn('mt-mx-tiny text-mx-tiny font-bold text-status-error', className)}>
+    <p className={cn('mt-mx-tiny text-mx-tiny font-bold text-status-error-text', className)}>
       {children}
     </p>
   )

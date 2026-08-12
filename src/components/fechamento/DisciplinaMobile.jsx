@@ -101,7 +101,7 @@ export default function DisciplinaMobile({
           {agendamentosFuturos > 0 && (
             <p className="text-[12px] text-muted-foreground">
               Agendamentos futuros: <strong className="text-[#0F172A]">{agendamentosFuturos}</strong>{" "}
-              <span className="text-green-600">✓ Já contabilizado na Qualidade da Carteira</span>
+              <span className="text-status-success-text">✓ Já contabilizado na Qualidade da Carteira</span>
             </p>
           )}
 

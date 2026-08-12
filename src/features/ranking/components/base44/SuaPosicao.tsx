@@ -27,16 +27,16 @@ export function SuaPosicao({ posicao, total, atingimento, faltamValor }: Props) 
       </div>
       <div className="grid grid-cols-2 gap-3 mt-4">
         <div className="bg-green-50 border border-green-100 rounded-xl p-3 flex flex-col items-center gap-1">
-          <Target className="w-5 h-5 text-green-600" />
+          <Target className="w-5 h-5 text-status-success-text" />
           <p className="text-caption text-muted-foreground font-medium">Atingimento</p>
-          <p className="text-h3 font-bold text-green-600 leading-tight">{pct}%</p>
+          <p className="text-h3 font-bold text-status-success-text leading-tight">{pct}%</p>
         </div>
         <div className="bg-status-info-surface border border-status-info/20 rounded-xl p-3 flex flex-col items-center gap-1 text-center">
-          <TrendingUp className="w-5 h-5 text-status-info" />
+          <TrendingUp className="w-5 h-5 text-status-info-text" />
           <p className="text-caption text-muted-foreground font-medium">Faltam</p>
           <p className="text-[16px] font-bold text-status-info-text leading-tight">{formatFaltam(faltamValor)}</p>
           {posicao > 1 && <p className="text-caption text-muted-foreground">{proxLabel}</p>}
-          {posicao === 1 && <p className="text-caption text-green-500 font-semibold">Você lidera!</p>}
+          {posicao === 1 && <p className="text-caption text-status-success-text font-semibold">Você lidera!</p>}
         </div>
       </div>
     </div>

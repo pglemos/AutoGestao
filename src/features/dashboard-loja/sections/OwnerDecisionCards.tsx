@@ -15,14 +15,14 @@ export function OwnerDecisionCards({ alerts, hasDRE }: OwnerDecisionCardsProps) 
   return (
     <section className="grid grid-cols-1 gap-mx-md xl:grid-cols-3">
       <Card className="border border-status-warning/20 bg-status-warning-surface p-mx-lg">
-        <Typography variant="tiny" className="text-status-warning">O que eu decido hoje</Typography>
-        <Typography variant="h3" className="mt-mx-xs text-status-warning">
+        <Typography variant="tiny" className="text-status-warning-text">O que eu decido hoje</Typography>
+        <Typography variant="h3" className="mt-mx-xs text-status-warning-text">
           {alerts[0]?.title || 'Sem decisão crítica'}
         </Typography>
-        <Typography variant="p" className="mt-mx-xs text-sm text-status-warning">
+        <Typography variant="p" className="mt-mx-xs text-sm text-status-warning-text">
           {alerts[0]?.recommendation || 'Manter a cadência e observar oportunidades.'}
         </Typography>
-        <Typography variant="p" className="mt-mx-xs text-sm text-status-warning">
+        <Typography variant="p" className="mt-mx-xs text-sm text-status-warning-text">
           {alerts[0]?.action || 'Acompanhe a execução e mantenha a cadência de gestão.'}
         </Typography>
       </Card>

@@ -189,7 +189,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
 
       {/* Raio-X do Estoque */}
       <Card className="p-mx-lg bg-white border overflow-hidden relative group/card">
-          <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-status-warning">
+          <div className="absolute -top-mx-4 -right-mx-4 p-mx-md opacity-[0.03] group-hover/card:opacity-[0.06] transition-opacity pointer-events-none text-status-warning-text">
             <Layers size={140} />
           </div>
           <div className="relative z-10 mb-mx-md flex items-center gap-mx-sm">

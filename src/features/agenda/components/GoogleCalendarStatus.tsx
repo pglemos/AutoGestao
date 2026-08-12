@@ -38,19 +38,19 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
         <Calendar size={14} className="shrink-0 text-status-success-text" />
         <span className="flex items-center gap-1 font-bold text-muted-foreground">
           {personalConnected
-            ? <CheckCircle2 size={12} className="text-status-success" />
+            ? <CheckCircle2 size={12} className="text-status-success-text" />
             : <AlertCircle size={12} className="text-muted-foreground" />}
           Sua agenda
         </span>
         {canViewCentralAgenda && (
           <span className="flex items-center gap-1 font-bold text-muted-foreground">
             {centralConnected && centralMeetCohostsAuthorized
-              ? <CheckCircle2 size={12} className="text-status-success" />
-              : <AlertCircle size={12} className="text-status-warning" />}
+              ? <CheckCircle2 size={12} className="text-status-success-text" />
+              : <AlertCircle size={12} className="text-status-warning-text" />}
             Central MX
           </span>
         )}
-        {error && <span className="font-bold text-status-error">{error}</span>}
+        {error && <span className="font-bold text-status-error-text">{error}</span>}
       </div>
     )
   }
@@ -83,7 +83,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
           <div className="mb-1 flex min-w-0 items-center justify-between gap-mx-xs">
             <span className="min-w-0 truncate text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Sua agenda</span>
             {personalConnected
-              ? <CheckCircle2 size={16} className="shrink-0 text-status-success" />
+              ? <CheckCircle2 size={16} className="shrink-0 text-status-success-text" />
               : <AlertCircle size={16} className="shrink-0 text-muted-foreground" />}
           </div>
           {personalConnected ? (
@@ -117,8 +117,8 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
                 <span className="truncate">Agenda Central MX</span>
               </span>
               {centralConnected && centralMeetCohostsAuthorized
-                ? <CheckCircle2 size={16} className="shrink-0 text-status-success" />
-                : <AlertCircle size={16} className="shrink-0 text-status-warning" />}
+                ? <CheckCircle2 size={16} className="shrink-0 text-status-success-text" />
+                : <AlertCircle size={16} className="shrink-0 text-status-warning-text" />}
             </div>
             {centralConnected && centralMeetCohostsAuthorized ? (
               <div className="min-w-0">
@@ -138,7 +138,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
       </div>
 
       {error && (
-        <div className="p-mx-sm rounded-xl bg-status-error-surface border border-status-error/20 text-status-error text-mx-tiny font-bold">
+        <div className="p-mx-sm rounded-xl bg-status-error-surface border border-status-error/20 text-status-error-text text-mx-tiny font-bold">
           {error}
         </div>
       )}

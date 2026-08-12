@@ -31,4 +31,15 @@ describe('useCheckinPage — transição D-1→D0 e guards de idempotência (MX-
         expect(pageHookSource).toContain('const handleSaveDraft = async () => {')
         expect(pageHookSource).not.toContain('window.localStorage.setItem')
     })
+
+    test('Produção Zero — declaredAllZero considera vendas/clientes cadastrados no CRM', () => {
+        expect(pageHookSource).toContain('realSalesCount === 0')
+        expect(pageHookSource).toContain('clientesList.length === 0')
+    })
+
+    test('Produção Zero — submitCheckin preenche justificativa padrão se estiver vazio', () => {
+        expect(pageHookSource).toContain("updateField('zero_reason', 'Sem movimento')")
+        expect(pageHookSource).toContain("form.zero_reason = 'Sem movimento'")
+    })
 })
+

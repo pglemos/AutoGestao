@@ -876,7 +876,7 @@ export function PendingReminderModal({
           <ul className="space-y-2">
             {pendingRows.map(({ seller }) => (
               <li key={seller.id} className="flex items-center gap-2 text-sm text-foreground">
-                <Megaphone size={15} className="text-status-warning" /> {seller.name}
+                <Megaphone size={15} className="text-status-warning-text" /> {seller.name}
               </li>
             ))}
           </ul>

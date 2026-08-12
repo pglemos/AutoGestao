@@ -262,12 +262,12 @@ export function AgendaHeader({
                   onSelect={onCreateEvent}
                   className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:bg-gray-50"
                 >
-                  <Users size={15} className="text-status-info" /> Evento / Aula
+                  <Users size={15} className="text-status-info-text" /> Evento / Aula
                 </DropdownMenu.Item>
                 <DropdownMenu.Separator className="my-1 h-px bg-border-default" />
                 <DropdownMenu.Item
                   onSelect={onCreateBlock}
-                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:bg-gray-50 text-status-error"
+                  className="flex cursor-pointer items-center gap-2 rounded-xl px-3 py-2 text-xs font-bold text-foreground outline-none transition-colors hover:bg-gray-50 text-status-error-text"
                 >
                   <Ban size={15} /> Bloquear Agenda
                 </DropdownMenu.Item>

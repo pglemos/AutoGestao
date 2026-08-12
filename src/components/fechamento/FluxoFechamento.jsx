@@ -116,7 +116,7 @@ const COLOR_MAP = {
     stepActive: "bg-green-600 text-white",
     stepDone: "bg-green-600 text-white",
     divider: "border-green-100",
-    note: "text-green-500",
+    note: "text-status-success-text",
   },
   blue: {
     bg: "bg-status-info-surface",
@@ -131,7 +131,7 @@ const COLOR_MAP = {
     stepActive: "bg-status-info text-white",
     stepDone: "bg-status-info text-white",
     divider: "border-status-info/20",
-    note: "text-status-info",
+    note: "text-status-info-text",
   },
   purple: {
     bg: "bg-status-info-surface",
@@ -500,7 +500,7 @@ export default function FluxoFechamento({ dc, updateCounter, setCounter, clients
             <h2 className="text-body-sm sm:text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Progresso do Fechamento</h2>
             <p className="text-caption sm:text-caption text-muted-foreground mt-0.5 leading-tight">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
           </div>
-          <span className={`text-h3 sm:text-h2 font-bold tabular-nums flex-shrink-0 ${totalPct === 100 ? "text-green-600" : "text-[#0F172A]"}`}>
+          <span className={`text-h3 sm:text-h2 font-bold tabular-nums flex-shrink-0 ${totalPct === 100 ? "text-status-success-text" : "text-[#0F172A]"}`}>
             {totalPct}%
           </span>
         </div>

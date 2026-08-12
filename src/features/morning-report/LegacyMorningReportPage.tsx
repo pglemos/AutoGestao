@@ -351,7 +351,7 @@ function AdminMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-status-success-surface rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success flex items-center justify-center shadow-none border border-mx-emerald-100" aria-hidden="true"><Activity size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success-text flex items-center justify-center shadow-none border border-mx-emerald-100" aria-hidden="true"><Activity size={24} /></div>
                             <Badge variant="success" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">SAÚDE REDE</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-5xl tabular-nums leading-none mb-3 tracking-tighter">{networkMetrics.totalCheckedIn}<Typography as="span" variant="h3" tone="muted" className="text-2xl">/{networkMetrics.totalSellers}</Typography></Typography>
@@ -450,7 +450,7 @@ function AdminMorningReport() {
                                                                                 alt={`Avatar de ${seller.name}`}
                                                                                 fallback={seller.name}
                                                                                 size="sm"
-                                                                                className={cn("rounded-xl", seller.checkin_today ? "bg-status-success-surface text-status-success" : "bg-status-error-surface text-status-error")}
+                                                                                className={cn("rounded-xl", seller.checkin_today ? "bg-status-success-surface text-status-success-text" : "bg-status-error-surface text-status-error-text")}
                                                                             />
                                                                             <Typography variant="tiny" className="truncate">{seller.name}</Typography>
                                                                         </div>
@@ -611,9 +611,9 @@ function StoreMorningReport() {
             {reportAudit && (
                 <div role="status" className={cn(
                     "rounded-2xl border px-mx-md py-mx-sm text-sm font-bold",
-                    reportAudit.status === 'success' && "border-status-success/20 bg-status-success-surface text-status-success",
-                    reportAudit.status === 'error' && "border-status-error/20 bg-status-error-surface text-status-error",
-                    reportAudit.status === 'info' && "border-status-info/20 bg-status-info-surface text-status-info"
+                    reportAudit.status === 'success' && "border-status-success/20 bg-status-success-surface text-status-success-text",
+                    reportAudit.status === 'error' && "border-status-error/20 bg-status-error-surface text-status-error-text",
+                    reportAudit.status === 'info' && "border-status-info/20 bg-status-info-surface text-status-info-text"
                 )}>
                     <div className="flex flex-col gap-mx-tiny sm:flex-row sm:items-center sm:justify-between">
                         <span>{reportAudit.action}</span>
@@ -656,7 +656,7 @@ function StoreMorningReport() {
                     <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-status-success-surface rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
                     <div className="relative z-10">
                         <div className="flex items-center justify-between mb-8">
-                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success flex items-center justify-center shadow-none border border-mx-emerald-100" aria-hidden="true"><Activity size={24} /></div>
+                            <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success-surface text-status-success-text flex items-center justify-center shadow-none border border-mx-emerald-100" aria-hidden="true"><Activity size={24} /></div>
                             <Badge variant="success" className="px-4 py-1 shadow-sm"><Typography variant="tiny" as="span">SAÚDE DA MALHA</Typography></Badge>
                         </div>
                         <Typography variant="h1" className="text-6xl tabular-nums leading-none mb-3 tracking-tighter">{metrics.checkedInCount}<Typography as="span" variant="h3" tone="muted" className="text-2xl">/{(sellers || []).length}</Typography></Typography>
@@ -730,7 +730,7 @@ function StoreMorningReport() {
                                 <Card className="p-mx-lg bg-status-error-surface border-none shadow-mx-inner space-y-mx-md">
                                     <header className="flex justify-between items-start">
                                         <div className="space-y-mx-tiny">
-                                            <Typography variant="h3" className="text-base text-status-error leading-none tracking-tight">COBRAR REGISTRO</Typography>
+                                            <Typography variant="h3" className="text-base text-status-error-text leading-none tracking-tight">COBRAR REGISTRO</Typography>
                                             <Typography variant="tiny" tone="error" className="opacity-60">Ação Imediata Necessária</Typography>
                                         </div>
                                         <Badge variant="danger" className="animate-pulse shadow-sm border-none"><Typography variant="tiny" as="span" className="">CRÍTICO</Typography></Badge>

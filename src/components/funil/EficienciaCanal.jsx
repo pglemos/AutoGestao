@@ -37,7 +37,7 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
   const COR = {
     orange: { header: "bg-status-warning-surface border-status-warning/30", badge: "bg-status-warning-surface text-status-warning-text", btn: "text-status-warning-text hover:text-orange-800" },
     blue:   { header: "bg-status-info-surface border-status-info/30",     badge: "bg-status-info-surface text-status-info-text",     btn: "text-status-info-text hover:text-status-info-text" },
-    green:  { header: "bg-green-50 border-green-200",   badge: "bg-green-100 text-green-700",   btn: "text-green-600 hover:text-green-800" },
+    green:  { header: "bg-green-50 border-green-200",   badge: "bg-green-100 text-green-700",   btn: "text-status-success-text hover:text-green-800" },
   };
   const c = COR[cor] || COR.blue;
   const semDados = volume === 0 && vendas === 0;
@@ -66,7 +66,7 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
             </div>
             <div className="text-center">
               <p className="text-caption text-muted-foreground">Vendas</p>
-              <p className="text-[20px] font-bold tabular-nums text-green-600">{vendas}</p>
+              <p className="text-[20px] font-bold tabular-nums text-status-success-text">{vendas}</p>
             </div>
             <div className="text-center">
               <p className="text-caption text-muted-foreground">Conversão</p>

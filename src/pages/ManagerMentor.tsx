@@ -91,7 +91,7 @@ export default function ManagerMentor() {
         <section className="rounded-2xl border border-status-info/20 bg-status-info-surface p-5 text-center">
           <BrainCircuit className="mx-auto text-blue-400" size={32} />
           <p className="mt-2 text-sm font-medium text-status-info-text">Orientações baseadas em regras oficiais</p>
-          <p className="mt-1 text-xs text-status-info">O Mentor não inventa números nem executa ações no lugar do gerente.</p>
+          <p className="mt-1 text-xs text-status-info-text">O Mentor não inventa números nem executa ações no lugar do gerente.</p>
         </section>
     </PageCanvas>
   )

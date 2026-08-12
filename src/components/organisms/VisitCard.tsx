@@ -149,12 +149,12 @@ export function VisitCard({
               </Button>
             )}
             {visit.status === 'agendada' && onStart && (
-              <Button type="button" variant="ghost" size="sm" className="cursor-pointer text-status-info" onClick={() => onStart(visit.id)} aria-label={`Iniciar visita de ${visit.client_name}`}>
+              <Button type="button" variant="ghost" size="sm" className="cursor-pointer text-status-info-text" onClick={() => onStart(visit.id)} aria-label={`Iniciar visita de ${visit.client_name}`}>
                 <Play size={14} />
               </Button>
             )}
             {visit.status === 'agendada' && onCancel && (
-              <Button type="button" variant="ghost" size="sm" className="cursor-pointer text-status-error" onClick={() => onCancel(visit.id)} aria-label={`Cancelar visita de ${visit.client_name}`}>
+              <Button type="button" variant="ghost" size="sm" className="cursor-pointer text-status-error-text" onClick={() => onCancel(visit.id)} aria-label={`Cancelar visita de ${visit.client_name}`}>
                 <X size={14} />
               </Button>
             )}
@@ -172,7 +172,7 @@ export function VisitCard({
               </a>
             )}
             {visit.status === 'cancelada' && onDelete && (
-              <Button type="button" variant="ghost" size="sm" className="cursor-pointer text-status-error" onClick={() => onDelete(visit.id)} aria-label={`Excluir visita de ${visit.client_name}`}>
+              <Button type="button" variant="ghost" size="sm" className="cursor-pointer text-status-error-text" onClick={() => onDelete(visit.id)} aria-label={`Excluir visita de ${visit.client_name}`}>
                 <Trash2 size={14} />
               </Button>
             )}

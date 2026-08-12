@@ -3,9 +3,9 @@ import React from "react";
 // Card compacto de funil — linhas simples com conversão entre etapas
 export default function FunilCompacto({ titulo, subtitulo, cor, etapas, conversaoGeral }) {
   const COR = {
-    orange: { header: "bg-status-warning-surface border-status-warning/30", badge: "bg-status-warning-surface text-status-warning-text", dot: "bg-orange-400", pct: "text-status-warning" },
-    blue:   { header: "bg-status-info-surface border-status-info/30",   badge: "bg-status-info-surface text-status-info-text",   dot: "bg-blue-400",   pct: "text-status-info"   },
-    green:  { header: "bg-green-50 border-green-200", badge: "bg-green-100 text-green-700", dot: "bg-green-400", pct: "text-green-600"  },
+    orange: { header: "bg-status-warning-surface border-status-warning/30", badge: "bg-status-warning-surface text-status-warning-text", dot: "bg-orange-400", pct: "text-status-warning-text" },
+    blue:   { header: "bg-status-info-surface border-status-info/30",   badge: "bg-status-info-surface text-status-info-text",   dot: "bg-blue-400",   pct: "text-status-info-text"   },
+    green:  { header: "bg-green-50 border-green-200", badge: "bg-green-100 text-green-700", dot: "bg-green-400", pct: "text-status-success-text"  },
   };
   const c = COR[cor] || COR.blue;
 

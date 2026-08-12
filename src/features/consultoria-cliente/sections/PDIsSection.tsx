@@ -117,7 +117,7 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
             <div className="pt-mx-md border-t border-border-subtle grid grid-cols-2 gap-mx-md">
               <div className="space-y-mx-xs">
                 {pdi.seller_acknowledged_at ? (
-                  <div className="flex items-center gap-mx-xs text-status-success">
+                  <div className="flex items-center gap-mx-xs text-status-success-text">
                     <ShieldCheck className="w-mx-4 h-mx-4" />
                     <Typography variant="tiny" className="text-mx-micro">Vendedor OK</Typography>
                   </div>
@@ -130,7 +130,7 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
 
               <div className="space-y-mx-xs">
                 {pdi.manager_acknowledged_at ? (
-                  <div className="flex items-center gap-mx-xs text-status-success">
+                  <div className="flex items-center gap-mx-xs text-status-success-text">
                     <ShieldCheck className="w-mx-4 h-mx-4" />
                     <Typography variant="tiny" className="text-mx-micro">Gestor OK</Typography>
                   </div>

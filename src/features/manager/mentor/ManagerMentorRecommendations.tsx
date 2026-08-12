@@ -52,7 +52,7 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
       {filtered.length === 0 ? (
         <div className="py-12 text-center">
           <span className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-full bg-status-success-surface">
-            <ListChecks className="text-status-success" size={28} />
+            <ListChecks className="text-status-success-text" size={28} />
           </span>
           <p className="text-sm font-medium text-muted-foreground">
             {recommendations.length === 0 ? 'Nenhuma recomendação no momento.' : 'Nenhuma recomendação neste filtro.'}

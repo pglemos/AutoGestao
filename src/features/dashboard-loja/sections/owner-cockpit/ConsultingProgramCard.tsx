@@ -47,7 +47,7 @@ export function ConsultingProgramCard({
     <Card className="border bg-white p-mx-lg">
       <div className="flex flex-col gap-mx-md md:flex-row md:items-start md:justify-between">
         <div>
-          <span className="inline-flex rounded-xl border border-status-success/30 bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-bold uppercase text-status-success">
+          <span className="inline-flex rounded-xl border border-status-success/30 bg-status-success-surface px-mx-sm py-mx-xs text-mx-tiny font-bold uppercase text-status-success-text">
             Programa contratado
           </span>
           <Typography variant="h2" className="mt-mx-sm text-2xl">{program.programName}</Typography>

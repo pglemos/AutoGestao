@@ -100,7 +100,7 @@ export function NotificacoesTab() {
                     </Button>
                 </header>
                 {push.error && (
-                    <Typography variant="tiny" className="block text-status-error">
+                    <Typography variant="tiny" className="block text-status-error-text">
                         {push.error}
                     </Typography>
                 )}

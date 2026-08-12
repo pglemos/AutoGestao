@@ -101,7 +101,7 @@ export function VendasFechadasLoja({
         />
       </div>
 
-      {error && <p className="text-sm text-status-error">{error}</p>}
+      {error && <p className="text-sm text-status-error-text">{error}</p>}
 
       <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
         <div className="overflow-x-auto">
@@ -127,7 +127,7 @@ export function VendasFechadasLoja({
                       <button
                         type="button"
                         onClick={() => setCancelarVendaAlvo(venda)}
-                        className="text-[12px] font-semibold text-status-error hover:underline"
+                        className="text-[12px] font-semibold text-status-error-text hover:underline"
                       >
                         Cancelar venda
                       </button>

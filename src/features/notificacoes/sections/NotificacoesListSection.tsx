@@ -58,11 +58,11 @@ function getTypeIcon(type: string) {
     case 'approval':
       return <ShieldCheck size={20} className="text-status-success-text" />
     case 'discipline':
-      return <AlertTriangle size={20} className="text-status-error" />
+      return <AlertTriangle size={20} className="text-status-error-text" />
     case 'performance':
-      return <TrendingUp size={20} className="text-status-success" />
+      return <TrendingUp size={20} className="text-status-success-text" />
     case 'alert':
-      return <Clock size={20} className="text-status-warning" />
+      return <Clock size={20} className="text-status-warning-text" />
     default:
       return <Bell size={20} className="text-status-success-text" />
   }
@@ -218,7 +218,7 @@ export function NotificacoesListSection({
                                 void deleteNotification(n.id)
                                 toast.success('Alerta removido!')
                               }}
-                              className="h-auto p-mx-0 text-xs font-semibold text-muted-foreground hover:bg-transparent hover:text-status-error"
+                              className="h-auto p-mx-0 text-xs font-semibold text-muted-foreground hover:bg-transparent hover:text-status-error-text"
                             >
                               Remover
                             </Button>

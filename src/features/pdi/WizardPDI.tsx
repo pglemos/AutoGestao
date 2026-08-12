@@ -474,7 +474,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                     <Typography variant="p" className="text-xs font-bold">{gap.nome}</Typography>
                                                     <div className="text-right">
                                                         <Typography variant="mono" className="text-mx-tiny">Nota: {gap.nota}/{gap.alvo}</Typography>
-                                                        <Typography variant="tiny" className="text-status-error font-bold">GAP -{gap.gap}</Typography>
+                                                        <Typography variant="tiny" className="text-status-error-text font-bold">GAP -{gap.gap}</Typography>
                                                     </div>
                                                 </div>
                                             ))}

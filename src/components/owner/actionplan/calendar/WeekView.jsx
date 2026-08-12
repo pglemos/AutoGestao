@@ -39,8 +39,8 @@ function WeekEvent({ action, provided, isDragging, onOpenAction }) {
       <div className="mt-1 flex items-center gap-2 text-caption text-muted-foreground">
         <span className={`h-1.5 w-1.5 rounded-full ${deptStyle.dot || "bg-slate-400"}`} />
         <span className="truncate">{action.responsible}</span>
-        {action.status === "blocked" && <Lock className="h-3 w-3 text-status-error" />}
-        {late && <AlertTriangle className="h-3 w-3 text-status-error" />}
+        {action.status === "blocked" && <Lock className="h-3 w-3 text-status-error-text" />}
+        {late && <AlertTriangle className="h-3 w-3 text-status-error-text" />}
       </div>
     </div>
   );

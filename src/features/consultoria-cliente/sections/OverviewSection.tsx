@@ -42,7 +42,7 @@ export function OverviewSection({ client }: Props) {
           </div>
           <div className="flex justify-between border-b border-border-subtle pb-mx-xs">
             <Typography variant="p" className="font-bold">Conversão Geral</Typography>
-            <Typography variant="h3" className="text-status-success">{lastFin?.conversion_rate || 0}%</Typography>
+            <Typography variant="h3" className="text-status-success-text">{lastFin?.conversion_rate || 0}%</Typography>
           </div>
           <div className="flex justify-between">
             <Typography variant="p" className="font-bold">Ciclo de Visitas</Typography>

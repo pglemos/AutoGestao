@@ -41,11 +41,11 @@ const SCOPE_LABEL: Record<CentralMxPlanoScope, { label: string; icon: typeof Bui
 }
 
 const STATUS_TONE: Record<CentralMxPlanoStatus, string> = {
-  pendente: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
+  pendente: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
   em_andamento: 'border-brand-primary/40 bg-mx-indigo-50 text-status-success-text',
-  atrasado: 'border-status-error/30 bg-status-error-surface text-status-error',
+  atrasado: 'border-status-error/30 bg-status-error-surface text-status-error-text',
   validando_eficacia: 'border-border bg-gray-50 text-muted-foreground',
-  concluido: 'border-status-success/30 bg-status-success-surface text-status-success',
+  concluido: 'border-status-success/30 bg-status-success-surface text-status-success-text',
 }
 
 type Props = {
@@ -196,7 +196,7 @@ export function CentralMxPlanoSegmentadoPanel({
 
       {segmentado.error && (
         <div className="mt-mx-md rounded-xl border border-status-error/40 bg-status-error-surface p-mx-sm">
-          <Typography variant="tiny" className="text-status-error">
+          <Typography variant="tiny" className="text-status-error-text">
             {segmentado.error}
           </Typography>
         </div>
@@ -292,9 +292,9 @@ function CountTile({
   tone: 'warning' | 'brand' | 'danger' | 'muted'
 }) {
   const toneClass: Record<typeof tone, string> = {
-    warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
+    warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
     brand: 'border-brand-primary/30 bg-mx-indigo-50 text-status-success-text',
-    danger: 'border-status-error/30 bg-status-error-surface text-status-error',
+    danger: 'border-status-error/30 bg-status-error-surface text-status-error-text',
     muted: 'border-border bg-gray-50 text-muted-foreground',
   }
   return (

@@ -338,5 +338,5 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
 }
 
 function Warning({ message }) {
-  return <div role="alert" className="flex items-start gap-3 rounded-2xl border border-status-warning/30 bg-status-warning-surface px-4 py-3"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning" /><p className="text-sm text-status-warning-text">{message}</p></div>;
+  return <div role="alert" className="flex items-start gap-3 rounded-2xl border border-status-warning/30 bg-status-warning-surface px-4 py-3"><AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-status-warning-text" /><p className="text-sm text-status-warning-text">{message}</p></div>;
 }

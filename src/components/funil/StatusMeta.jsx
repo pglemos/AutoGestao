@@ -9,8 +9,8 @@ export default function StatusMeta({ indicadores, filtro }) {
 
   const probCor =
     probabilidade === null ? "text-muted-foreground" :
-    probabilidade >= 80 ? "text-green-600" :
-    probabilidade >= 50 ? "text-status-warning-text" : "text-status-error";
+    probabilidade >= 80 ? "text-status-success-text" :
+    probabilidade >= 50 ? "text-status-warning-text" : "text-status-error-text";
 
   return (
     <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
@@ -26,9 +26,9 @@ export default function StatusMeta({ indicadores, filtro }) {
         </div>
       ) : metaBatida ? (
         <div className="flex items-center gap-3">
-          <CheckCircle className="w-6 h-6 text-green-500 shrink-0" />
+          <CheckCircle className="w-6 h-6 text-status-success-text shrink-0" />
           <div>
-            <p className="text-[20px] font-bold text-green-600">Meta batida!</p>
+            <p className="text-[20px] font-bold text-status-success-text">Meta batida!</p>
             <p className="text-body-sm text-muted-foreground">{realizado} de {meta} vendas realizadas</p>
           </div>
         </div>
@@ -67,7 +67,7 @@ export default function StatusMeta({ indicadores, filtro }) {
           <div className="flex-1 grid grid-cols-2 gap-3">
             <div className="bg-slate-50 rounded-xl p-3">
               <p className="text-caption text-muted-foreground uppercase tracking-wide mb-0.5">Faltam</p>
-              <p className="text-h3 font-bold text-status-error tabular-nums leading-none">{faltam}</p>
+              <p className="text-h3 font-bold text-status-error-text tabular-nums leading-none">{faltam}</p>
               <p className="text-caption text-muted-foreground">vendas</p>
             </div>
             <div className="bg-slate-50 rounded-xl p-3">
@@ -86,12 +86,12 @@ export default function StatusMeta({ indicadores, filtro }) {
                 </>
               ) : faltam <= 0 ? (
                 <>
-                  <p className="text-[18px] font-bold text-green-600 leading-tight">Meta batida</p>
+                  <p className="text-[18px] font-bold text-status-success-text leading-tight">Meta batida</p>
                   <p className="text-caption text-muted-foreground">Continue o ritmo.</p>
                 </>
               ) : diasRestantes <= 0 ? (
                 <>
-                  <p className="text-[18px] font-bold text-status-error leading-tight">Prazo encerrado</p>
+                  <p className="text-[18px] font-bold text-status-error-text leading-tight">Prazo encerrado</p>
                   <p className="text-caption text-muted-foreground">Revise o fechamento.</p>
                 </>
               ) : Number(necessarioPorDia) >= 1 ? (

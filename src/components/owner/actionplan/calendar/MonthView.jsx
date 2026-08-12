@@ -33,8 +33,8 @@ function EventCard({ action, provided, isDragging }) {
       <div className="flex items-center gap-1">
         <span className={`h-1.5 w-1.5 shrink-0 rounded-full ${deptStyle.dot || "bg-slate-400"}`} />
         <span className="truncate font-medium text-foreground">{action.code}</span>
-        {isBlocked && <Lock className="h-3 w-3 shrink-0 text-status-error" />}
-        {late && <AlertTriangle className="h-3 w-3 shrink-0 text-status-error" />}
+        {isBlocked && <Lock className="h-3 w-3 shrink-0 text-status-error-text" />}
+        {late && <AlertTriangle className="h-3 w-3 shrink-0 text-status-error-text" />}
       </div>
       <p className="truncate text-muted-foreground">{action.title}</p>
     </div>

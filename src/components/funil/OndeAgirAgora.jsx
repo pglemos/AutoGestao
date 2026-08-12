@@ -80,7 +80,7 @@ const COR_BTN = {
   orange: "bg-status-warning hover:bg-status-warning text-white",
   amber:  "bg-status-warning hover:bg-status-warning text-white",
 };
-const PRIORIDADE_COR = ["text-status-error", "text-status-warning", "text-muted-foreground"];
+const PRIORIDADE_COR = ["text-status-error-text", "text-status-warning-text", "text-muted-foreground"];
 
 export default function OndeAgirAgora({ funis }) {
   const acoes = calcAcoes(funis);

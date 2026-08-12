@@ -154,7 +154,7 @@ export function ROISection({ client }: Props) {
                 <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
                   <Typography variant="p" className="font-bold">VENDAS/MÊS</Typography>
                   <div className="flex items-center gap-mx-xs">
-                    <Typography variant="h3" className="text-status-success">{after.sales}</Typography>
+                    <Typography variant="h3" className="text-status-success-text">{after.sales}</Typography>
                     {after.sales > before.sales && <Badge className="bg-status-success/10 text-status-success border-none text-mx-micro">+{((after.sales - before.sales)).toFixed(0)}</Badge>}
                   </div>
                 </div>
@@ -165,7 +165,7 @@ export function ROISection({ client }: Props) {
                 <div className="flex justify-between items-center">
                   <Typography variant="p" className="font-bold">CONVERSÃO GERAL</Typography>
                   <div className="flex items-center gap-mx-xs">
-                    <Typography variant="h3" className={after.conversion > before.conversion ? 'text-status-success' : ''}>{after.conversion.toFixed(1)}%</Typography>
+                    <Typography variant="h3" className={after.conversion > before.conversion ? 'text-status-success-text' : ''}>{after.conversion.toFixed(1)}%</Typography>
                     {after.conversion > before.conversion && <Badge className="bg-status-success/10 text-status-success border-none text-mx-micro">+{((after.conversion - before.conversion)).toFixed(1)}pp</Badge>}
                   </div>
                 </div>
@@ -179,15 +179,15 @@ export function ROISection({ client }: Props) {
               <div className="space-y-mx-md">
                 <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
                   <Typography variant="p" className="font-bold">TEMPO DE RESPOSTA</Typography>
-                  <Typography variant="h3" className="text-status-success">-45%</Typography>
+                  <Typography variant="h3" className="text-status-success-text">-45%</Typography>
                 </div>
                 <div className="flex justify-between items-center border-b border-border-subtle pb-mx-xs">
                   <Typography variant="p" className="font-bold">ADERÊNCIA RITUAIS</Typography>
-                  <Typography variant="h3" className="text-status-success">98%</Typography>
+                  <Typography variant="h3" className="text-status-success-text">98%</Typography>
                 </div>
                 <div className="flex justify-between items-center">
                   <Typography variant="p" className="font-bold">QUALIDADE CRM</Typography>
-                  <Typography variant="h3" className="text-status-success">A+</Typography>
+                  <Typography variant="h3" className="text-status-success-text">A+</Typography>
                 </div>
               </div>
             </Card>

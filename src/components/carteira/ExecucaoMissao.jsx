@@ -309,7 +309,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
 
           <div className="flex gap-2">
             <Button variant="outline" onClick={copiar} className="flex-1 rounded-xl gap-1.5 text-sm">
-              {copiado ? <Check className="w-4 h-4 text-green-500" /> : <Copy className="w-4 h-4" />}
+              {copiado ? <Check className="w-4 h-4 text-status-success-text" /> : <Copy className="w-4 h-4" />}
               {copiado ? "Copiado!" : "Copiar"}
             </Button>
             {waUrl && (

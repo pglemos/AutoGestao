@@ -46,12 +46,12 @@ const labelVariants = cva(
   {
     variants: {
       status: {
-        success: "text-status-success",
-        warning: "text-status-warning",
-        error: "text-status-error",
-        info: "text-status-info",
+        success: "text-status-success-text",
+        warning: "text-status-warning-text",
+        error: "text-status-error-text",
+        info: "text-status-info-text",
         neutral: "text-muted-foreground",
-        pending: "text-status-warning",
+        pending: "text-status-warning-text",
       },
     },
     defaultVariants: {

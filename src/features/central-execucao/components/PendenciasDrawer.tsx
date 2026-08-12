@@ -79,7 +79,7 @@ export function PendenciasDrawer({
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex flex-wrap items-center gap-2">
                       <span className="text-caption font-bold uppercase tracking-wider text-muted-foreground">{action.title}</span>
-                      <span className="rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error">{late === 0 ? 'Hoje' : `${late}d atraso`}</span>
+                      <span className="rounded-full bg-status-error-surface px-2 py-0.5 text-caption font-bold text-status-error-text">{late === 0 ? 'Hoje' : `${late}d atraso`}</span>
                     </div>
                     <p className="truncate text-body-sm font-bold text-foreground">{clientName}</p>
                     {vehicle && <p className="truncate text-[12px] text-muted-foreground">{vehicle}</p>}
@@ -100,7 +100,7 @@ export function PendenciasDrawer({
                     </a>
                   )}
                   {action.clientId && (
-                    <button type="button" onClick={() => onOpenClient(action)} className="flex items-center gap-1 rounded-lg border border-status-info/30 px-2.5 py-1.5 text-caption font-bold text-status-info hover:bg-status-info-surface">
+                    <button type="button" onClick={() => onOpenClient(action)} className="flex items-center gap-1 rounded-lg border border-status-info/30 px-2.5 py-1.5 text-caption font-bold text-status-info-text hover:bg-status-info-surface">
                       <UserRound className="h-3 w-3" aria-hidden="true" /> Abrir cliente
                     </button>
                   )}

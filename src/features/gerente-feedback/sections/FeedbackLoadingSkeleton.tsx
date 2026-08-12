@@ -29,7 +29,7 @@ export function FeedbackLoadingSkeleton({
       {errorMessage && (
         <div
           role="alert"
-          className="rounded-xl border border-status-error/20 bg-status-error-surface px-4 py-3 text-sm font-bold text-status-error"
+          className="rounded-xl border border-status-error/20 bg-status-error-surface px-4 py-3 text-sm font-bold text-status-error-text"
         >
           {errorMessage}
         </div>

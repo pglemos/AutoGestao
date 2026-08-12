@@ -20,7 +20,7 @@ export default function ProximaOportunidadeModal({
         <DialogContent className="max-w-sm rounded-2xl text-center">
           <div className="flex flex-col items-center gap-4 py-4">
             <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center">
-              <Trophy className="w-7 h-7 text-green-600" />
+              <Trophy className="w-7 h-7 text-status-success-text" />
             </div>
             <div>
               <p className="text-lg font-black text-[#031B3D]">🎉 Excelente!</p>
@@ -43,7 +43,7 @@ export default function ProximaOportunidadeModal({
       <Dialog open={open} onOpenChange={v => { if (!v) onVoltarCarteira(); }}>
         <DialogContent className="max-w-sm rounded-2xl">
           <div className="flex flex-col gap-4 py-2">
-            <div className="flex items-center gap-2 text-green-600">
+            <div className="flex items-center gap-2 text-status-success-text">
               <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
               <span className="text-sm font-bold">Resultado registrado</span>
             </div>
@@ -81,7 +81,7 @@ export default function ProximaOportunidadeModal({
     <Dialog open={open} onOpenChange={v => { if (!v) onVoltarCarteira(); }}>
       <DialogContent className="max-w-sm rounded-2xl">
         <div className="flex flex-col gap-4 py-2">
-          <div className="flex items-center gap-2 text-green-600">
+          <div className="flex items-center gap-2 text-status-success-text">
             <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
             <span className="text-sm font-bold">Resultado registrado</span>
           </div>
