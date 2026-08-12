@@ -141,16 +141,16 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
         )}
 
         {!loading && totalFiles === 0 && (
-          <div className="mt-mx-lg rounded-2xl border border-dashed border-gray-200 p-mx-xl text-center">
+          <div className="mt-mx-lg rounded-2xl border border-dashed border-border p-mx-xl text-center">
             <FileUp className="h-mx-10 w-mx-10 mx-auto text-muted-foreground mb-mx-sm" />
             <Typography variant="p" tone="muted" className="font-bold">Nenhum arquivo registrado.</Typography>
           </div>
         )}
 
         {totalFiles > 0 && (
-          <div className="mt-mx-lg overflow-hidden rounded-2xl border border-gray-100">
+          <div className="mt-mx-lg overflow-hidden rounded-2xl border border-border-subtle">
             {visitEvidenceFiles.map((file) => (
-              <div key={`visit-${file.id}`} className="grid grid-cols-1 gap-mx-sm border-b border-gray-100 p-mx-md last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div key={`visit-${file.id}`} className="grid grid-cols-1 gap-mx-sm border-b border-border-subtle p-mx-md last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
                 <div className="min-w-0">
                   <div className="flex items-center gap-mx-xs min-w-0">
                     <Badge variant="brand" className="shrink-0">Visita {file.visitNumber}</Badge>
@@ -172,7 +172,7 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
               </div>
             ))}
             {files.map((file) => (
-              <div key={file.id} className="grid grid-cols-1 gap-mx-sm border-b border-gray-100 p-mx-md last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div key={file.id} className="grid grid-cols-1 gap-mx-sm border-b border-border-subtle p-mx-md last:border-b-0 lg:grid-cols-[1fr_auto] lg:items-center">
                 <div className="min-w-0">
                   <div className="flex items-center gap-mx-xs min-w-0">
                     <Badge variant="outline" className="shrink-0">{getKind(file)}</Badge>

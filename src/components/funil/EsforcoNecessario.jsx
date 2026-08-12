@@ -59,7 +59,7 @@ function calcCarteira(cart, faltam) {
 
 function AlavancaItem({ label, valor }) {
   return (
-    <div className="flex items-center justify-between py-2 border-b border-slate-100 last:border-0">
+    <div className="flex items-center justify-between py-2 border-b border-border-subtle last:border-0">
       <span className="text-body-sm text-muted-foreground">{label}</span>
       <span className="text-[18px] font-bold text-[#0F172A] tabular-nums">{valor}</span>
     </div>
@@ -68,7 +68,7 @@ function AlavancaItem({ label, valor }) {
 
 function CanalSecundario({ titulo, semBase, children }) {
   return (
-    <div className="border border-slate-100 rounded-xl p-3">
+    <div className="border border-border-subtle rounded-xl p-3">
       <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-2">{titulo}</p>
       {semBase
         ? <p className="text-[12px] text-text-disabled italic">Sem base suficiente para projeção.</p>
@@ -81,7 +81,7 @@ function CanalSecundario({ titulo, semBase, children }) {
 export default function EsforcoNecessario({ funis, faltam, funisBase90, usou90 }) {
   if (faltam <= 0) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+      <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
         <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-2">O que preciso produzir para bater a meta?</p>
         <p className="text-[14px] font-bold text-green-600">Meta batida. Continue mantendo o ritmo! 🎯</p>
       </div>
@@ -107,14 +107,14 @@ export default function EsforcoNecessario({ funis, faltam, funisBase90, usou90 }
   const corPrincipal = canalPrincipal ? COR_CANAL[canalPrincipal] : "";
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
       <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-1">O que preciso produzir para bater a meta?</p>
       <p className="text-[12px] text-muted-foreground mb-4">
         Com base na sua conversão registrada, esta é a produção estimada para buscar as {faltam} venda{faltam !== 1 ? "s" : ""} que faltam.
       </p>
 
       {!canalPrincipal ? (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-center">
+        <div className="rounded-xl border border-border bg-slate-50 p-4 text-center">
           <p className="text-body-sm text-muted-foreground">Sem base suficiente para projeção confiável.</p>
           <p className="text-[12px] text-muted-foreground mt-1">Registre atendimentos e vendas para habilitar esta análise.</p>
         </div>

@@ -88,7 +88,7 @@ export function AulasAoVivoSection() {
 
   return (
     <section className="space-y-mx-lg" aria-label="Aulas ao Vivo">
-      <div className="flex flex-col gap-mx-sm border-b border-gray-200 pb-mx-md xl:flex-row xl:items-center xl:justify-between">
+      <div className="flex flex-col gap-mx-sm border-b border-border pb-mx-md xl:flex-row xl:items-center xl:justify-between">
         <div>
           <Typography variant="h2" className="text-3xl tracking-normal">Aulas ao Vivo</Typography>
           <Typography variant="p" tone="muted">Participe das aulas ao vivo, faça a prova e valide sua presença para ganhar pontos no Score.</Typography>
@@ -101,7 +101,7 @@ export function AulasAoVivoSection() {
           <div>
             <Typography variant="h3" className="mb-mx-sm">Próxima Aula ao Vivo</Typography>
             {aulaPrincipal ? (
-            <div className="grid grid-cols-1 overflow-hidden rounded-xl border border-gray-200 bg-white shadow-sm lg:grid-cols-[minmax(0,1fr)_260px]">
+            <div className="grid grid-cols-1 overflow-hidden rounded-xl border border-border bg-white shadow-sm lg:grid-cols-[minmax(0,1fr)_260px]">
               <div className="grid min-h-[220px] grid-cols-[100px_minmax(0,260px)_1fr] bg-sidebar-bg-strong text-white">
                 <div className="flex flex-col items-center justify-center bg-status-info text-white">
                   <Badge variant="info" className="mb-mx-sm">{aulaPrincipal.status === 'ao_vivo' ? 'Ao vivo' : 'Agendada'}</Badge>
@@ -137,7 +137,7 @@ export function AulasAoVivoSection() {
               </div>
             </div>
             ) : (
-            <div className="grid min-h-[220px] place-items-center rounded-xl border border-gray-200 bg-white p-mx-lg text-center shadow-sm">
+            <div className="grid min-h-[220px] place-items-center rounded-xl border border-border bg-white p-mx-lg text-center shadow-sm">
               <div>
                 <Video size={36} className="mx-auto text-muted-foreground" />
                 <Typography variant="p" className="mt-mx-sm">{loading ? 'Carregando aulas...' : 'Nenhuma aula ao vivo agendada'}</Typography>
@@ -272,7 +272,7 @@ export function AulasAoVivoSection() {
                       'rounded-xl border px-mx-md py-mx-xs text-left text-sm transition-colors',
                       respostas[qIndex] === oIndex
                         ? 'border-status-info bg-status-info-surface font-bold text-status-info'
-                        : 'border-gray-100 text-muted-foreground hover:bg-gray-50',
+                        : 'border-border-subtle text-muted-foreground hover:bg-gray-50',
                     )}
                   >
                     {opcao}

@@ -87,7 +87,7 @@ export default function AgendaView({ actions, selectedDate, onSelectDate, onOpen
                     return (
                       <div
                         key={action.id}
-                        className={`rounded-lg border-l-2 bg-white p-3 shadow-sm ${deptStyle.border || "border-slate-200"} ${late ? "border-l-red-500" : ""}`}
+                        className={`rounded-lg border-l-2 bg-white p-3 shadow-sm ${deptStyle.border || "border-border"} ${late ? "border-l-red-500" : ""}`}
                       >
                         <div className="flex items-start justify-between gap-2">
                           <div className="min-w-0 flex-1">

@@ -18,7 +18,7 @@ export function DepartmentsView({
     return (
       <div className="space-y-mx-md">
         <SectionTitle title="Departamentos" subtitle="Marketing, produto, financeiro, RH, operações e comercial com indicators, rotina e playbook." />
-        <div className="rounded-2xl border border-gray-100 bg-white p-mx-lg" role="status">
+        <div className="rounded-2xl border border-border-subtle bg-white p-mx-lg" role="status">
           <strong className="text-base font-bold text-foreground">Nenhum departamento disponível</strong>
           <p className="text-sm text-muted-foreground">Os dados de departamentos para esta unidade não estão configurados.</p>
         </div>
@@ -45,7 +45,7 @@ export function DepartmentsView({
             </div>
             <div className="mt-mx-md grid grid-cols-1 gap-mx-sm md:grid-cols-2 xl:grid-cols-4">
               {selectedDepartment.dashboardCards.map(card => (
-                <div key={card.label} className="rounded-2xl border border-gray-200 bg-white p-mx-md">
+                <div key={card.label} className="rounded-2xl border border-border bg-white p-mx-md">
                   <Typography variant="tiny" tone="muted" className="block">{card.label}</Typography>
                   <Typography variant="h3" className="mt-mx-xs tabular-nums">{formatPlanningValue(card.value, card.unit)}</Typography>
                   <Typography variant="tiny" tone="muted" className="mt-mx-xs block font-bold">

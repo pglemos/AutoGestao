@@ -73,7 +73,7 @@ export function PendenciasDrawer({
             const late = daysLate(action.dueAt)
 
             return (
-              <article key={action.id} className="rounded-2xl border border-slate-200 bg-white p-4 shadow-sm">
+              <article key={action.id} className="rounded-2xl border border-border bg-white p-4 shadow-sm">
                 <div className="flex items-start gap-3">
                   <div className={cn('w-1.5 self-stretch rounded-full', barColor(action.activityType))} />
                   <div className="min-w-0 flex-1">
@@ -95,7 +95,7 @@ export function PendenciasDrawer({
                     </button>
                   )}
                   {phoneDigits && (
-                    <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-slate-50">
+                    <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-slate-50">
                       <Phone className="h-3 w-3" aria-hidden="true" /> Ligar
                     </a>
                   )}
@@ -104,7 +104,7 @@ export function PendenciasDrawer({
                       <UserRound className="h-3 w-3" aria-hidden="true" /> Abrir cliente
                     </button>
                   )}
-                  <button type="button" onClick={() => onReschedule(action)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-slate-50">
+                  <button type="button" onClick={() => onReschedule(action)} className="flex items-center gap-1 rounded-lg border border-border px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-slate-50">
                     <Calendar className="h-3 w-3" aria-hidden="true" /> Reagendar
                   </button>
                   <button type="button" onClick={() => onEscalate(action)} className="flex items-center gap-1 rounded-lg border border-amber-200 px-2.5 py-1.5 text-caption font-bold text-amber-700 hover:bg-amber-50">

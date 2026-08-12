@@ -28,7 +28,7 @@ const FILTERS = [
 export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, setFilterType }: Props) {
   return (
     <Card className="space-y-mx-lg bg-white p-mx-md sm:p-mx-lg">
-      <header className="border-b border-gray-200 pb-mx-md">
+      <header className="border-b border-border pb-mx-md">
         <Typography variant="h3">
           Filtrar notificações
         </Typography>
@@ -63,7 +63,7 @@ export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, 
               'flex w-full items-center justify-between rounded-2xl border p-mx-sm text-left transition-all group/f',
               filterType === f.type
                 ? 'bg-emerald-600 border-brand-primary text-white shadow-sm'
-                : 'bg-gray-50 border-gray-200 hover:bg-white hover:border-brand-primary/20 shadow-none',
+                : 'bg-gray-50 border-border hover:bg-white hover:border-brand-primary/20 shadow-none',
             )}
           >
             <div className="flex items-center gap-mx-sm">
@@ -83,7 +83,7 @@ export function NotificacoesFiltersBar({ searchTerm, setSearchTerm, filterType, 
         ))}
       </nav>
 
-      <footer className="pt-8 border-t border-gray-200 hidden">
+      <footer className="pt-8 border-t border-border hidden">
         <Button
           variant="outline"
           className="w-full h-mx-14 rounded-mx-full shadow-sm text-xs bg-white hover:border-brand-primary"

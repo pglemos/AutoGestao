@@ -65,9 +65,9 @@ export function PerfilTab() {
     return (
         <div className="space-y-mx-lg">
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-center gap-mx-lg pb-mx-md border-b border-gray-200 mb-mx-lg">
+                <header className="flex items-center gap-mx-lg pb-mx-md border-b border-border mb-mx-lg">
                     <div className="relative group">
-                        <div className="w-mx-28 h-mx-28 rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-center shadow-none overflow-hidden">
+                        <div className="w-mx-28 h-mx-28 rounded-2xl bg-gray-50 border border-border flex items-center justify-center shadow-none overflow-hidden">
                             <img
                                 src={getAvatarDisplayUrl(profile?.avatar_url, form.name, { background: '0D3B2E', color: '22C55E', size: 128 })}
                                 alt={form.name ? `Avatar de ${form.name}` : 'Avatar'}
@@ -164,7 +164,7 @@ export function PerfilTab() {
                     </div>
                 </div>
 
-                <div className="mt-mx-lg pt-mx-md border-t border-gray-200 flex items-center justify-between gap-mx-md">
+                <div className="mt-mx-lg pt-mx-md border-t border-border flex items-center justify-between gap-mx-md">
                     <div className="flex items-start gap-mx-sm flex-1">
                         <Info size={16} className="text-emerald-600 shrink-0 mt-1" />
                         <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">

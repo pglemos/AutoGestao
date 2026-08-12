@@ -103,7 +103,7 @@ export function AdminFeedbackModal({
           aria-labelledby="feedback-admin-title"
         >
           <Card className="w-full max-w-mx-4xl max-h-full overflow-y-auto no-scrollbar shadow-mx-2xl border-none flex flex-col bg-white">
-            <header className="p-mx-lg md:p-10 border-b border-gray-200 flex items-center justify-between sticky top-mx-0 bg-white z-10">
+            <header className="p-mx-lg md:p-10 border-b border-border flex items-center justify-between sticky top-mx-0 bg-white z-10">
               <div className="flex items-center gap-mx-sm">
                 <div className="w-mx-xl h-mx-xl rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-sm">
                   <MessageSquare size={24} />
@@ -155,7 +155,7 @@ export function AdminFeedbackModal({
                         setSelectedStoreId(e.target.value)
                         setFormData((f) => ({ ...f, seller_id: '' }))
                       }}
-                      className="w-full h-mx-14 px-6 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
+                      className="w-full h-mx-14 px-6 bg-gray-50 border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
                     >
                       <option value="">Todas as lojas</option>
                       {lojas.map((s) => (
@@ -186,7 +186,7 @@ export function AdminFeedbackModal({
                       name="seller_id"
                       value={formData.seller_id}
                       onChange={(e) => onSellerSelect(e.target.value)}
-                      className="w-full h-mx-14 px-6 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
+                      className="w-full h-mx-14 px-6 bg-gray-50 border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
                     >
                       <option value="">Selecione...</option>
                       {filteredSellers.map((s) => (
@@ -225,7 +225,7 @@ export function AdminFeedbackModal({
                   >
                     Semana
                   </Typography>
-                  <div className="h-mx-14 px-6 bg-gray-50 border border-gray-200 rounded-xl flex items-center text-sm font-bold text-emerald-600 shadow-none">
+                  <div className="h-mx-14 px-6 bg-gray-50 border border-border rounded-xl flex items-center text-sm font-bold text-emerald-600 shadow-none">
                     <Calendar size={18} className="mr-3 opacity-40" />
                     {previousWeekLabel}
                   </div>
@@ -238,7 +238,7 @@ export function AdminFeedbackModal({
                   animate={{ opacity: 1, y: 0 }}
                   className="space-y-mx-xl"
                 >
-                  <div className="p-mx-lg bg-gray-50 rounded-2xl border border-gray-200 space-y-mx-lg shadow-none">
+                  <div className="p-mx-lg bg-gray-50 rounded-2xl border border-border space-y-mx-lg shadow-none">
                     <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-mx-md">
                       {[
                         { label: 'Leads', val: formData.leads_week, icon: Zap },
@@ -248,7 +248,7 @@ export function AdminFeedbackModal({
                       ].map((item) => (
                         <div
                           key={item.label}
-                          className="bg-white p-mx-5 rounded-2xl border border-gray-200 shadow-sm text-center"
+                          className="bg-white p-mx-5 rounded-2xl border border-border shadow-sm text-center"
                         >
                           <Typography
                             variant="tiny"
@@ -283,7 +283,7 @@ export function AdminFeedbackModal({
                           setFormData((f) => ({ ...f, positives: e.target.value }))
                         }
                         placeholder="O que o especialista fez de excelente?"
-                        className="w-full h-mx-4xl p-mx-md bg-white border border-gray-200 rounded-2xl text-sm font-bold focus:border-status-success transition-all shadow-sm outline-none resize-none"
+                        className="w-full h-mx-4xl p-mx-md bg-white border border-border rounded-2xl text-sm font-bold focus:border-status-success transition-all shadow-sm outline-none resize-none"
                       />
                     </div>
                     <div className="space-y-mx-sm">
@@ -301,7 +301,7 @@ export function AdminFeedbackModal({
                           setFormData((f) => ({ ...f, attention_points: e.target.value }))
                         }
                         placeholder="Quais os gargalos identificados?"
-                        className="w-full h-mx-4xl p-mx-md bg-white border border-gray-200 rounded-2xl text-sm font-bold focus:border-status-error transition-all shadow-sm outline-none resize-none"
+                        className="w-full h-mx-4xl p-mx-md bg-white border border-border rounded-2xl text-sm font-bold focus:border-status-error transition-all shadow-sm outline-none resize-none"
                       />
                     </div>
                   </div>
@@ -324,7 +324,7 @@ export function AdminFeedbackModal({
                           id="feedback-admin-action-template"
                           value=""
                           onChange={(e) => handleFeedbackActionSelect(e.target.value)}
-                          className="w-full h-mx-14 px-6 bg-gray-50 border border-gray-200 rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
+                          className="w-full h-mx-14 px-6 bg-gray-50 border border-border rounded-xl text-sm font-bold uppercase shadow-none appearance-none cursor-pointer"
                         >
                           <option value="">Selecionar ação...</option>
                           {FEEDBACK_ACTIONS_CATALOG.map((action) => (
@@ -356,7 +356,7 @@ export function AdminFeedbackModal({
                       type="checkbox"
                       checked={formData.visible_to_seller !== false}
                       onChange={(e) => setFormData((f) => ({ ...f, visible_to_seller: e.target.checked }))}
-                      className="mt-0.5 rounded border-gray-200 text-emerald-600 focus:ring-brand-primary"
+                      className="mt-0.5 rounded border-border text-emerald-600 focus:ring-brand-primary"
                     />
                     <span>
                       <span className="font-semibold text-foreground">Enviar este feedback ao vendedor</span>
@@ -366,7 +366,7 @@ export function AdminFeedbackModal({
                 </motion.div>
               )}
             </div>
-            <footer className="p-mx-lg md:p-10 border-t border-gray-200 sticky bottom-mx-0 bg-white z-10 flex justify-end gap-mx-sm">
+            <footer className="p-mx-lg md:p-10 border-t border-border sticky bottom-mx-0 bg-white z-10 flex justify-end gap-mx-sm">
               <Button
                 variant="ghost"
                 onClick={onClose}

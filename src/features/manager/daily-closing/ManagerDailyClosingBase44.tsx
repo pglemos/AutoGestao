@@ -554,7 +554,7 @@ export default function ManagerDailyClosing() {
     <PageCanvas as="div" width="dashboard" bottomClearance="actions" aria-busy={false} className="flex flex-col gap-5">
         <ManagerHomeReturnLink />
 
-        <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-3xl">
               <h1 className="text-xl font-bold text-foreground">Fechamento Diário</h1>
@@ -573,7 +573,7 @@ export default function ManagerDailyClosing() {
                   type="date"
                   value={date}
                   onChange={(event) => setDate(event.target.value)}
-                  className="h-[36px] rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-[36px] rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </label>
               <label className="block text-xs text-muted-foreground">
@@ -584,7 +584,7 @@ export default function ManagerDailyClosing() {
                   aria-label="Unidade"
                   value={storeId || ""}
                   disabled
-                  className="h-[36px] min-w-[140px] rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground opacity-100"
+                  className="h-[36px] min-w-[140px] rounded-xl border border-border bg-white px-3 text-sm text-foreground opacity-100"
                 >
                   <option value={storeId || ""}>
                     {membership?.store?.name || "Unidade atual"}
@@ -648,9 +648,9 @@ export default function ManagerDailyClosing() {
           <DisciplineCard value={discipline} />
         </section>
 
-        <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+        <section className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
           <div id="manager-closing-movement" />
-          <div className="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 border-b border-border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
             <h2 className="text-base font-semibold text-foreground">
               Movimento da Equipe — {format(parseISO(date), "dd/MM/yyyy")}
             </h2>
@@ -713,7 +713,7 @@ export default function ManagerDailyClosing() {
           onRange={setHistoryRange}
         />
 
-        <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
             <BarChart3 size={18} className="text-emerald-600" />
             Comparativo de Disciplina do Fechamento
@@ -731,7 +731,7 @@ export default function ManagerDailyClosing() {
           </p>
         </section>
 
-        <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <h2 className="text-base font-semibold text-foreground">Resumo do Fechamento</h2>
           <div className="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-6">
             <SummaryGroup label="Showroom" icon={Store} tone="blue" items={[["Atendimentos", formatClosingMetric(summary.showroomVisits, summary.showroomVisits !== null)]]} />
@@ -861,7 +861,7 @@ export function PendingReminderModal({
       description={`${pendingRows.length} vendedor(es) pendente(s)`}
       footer={
         <div className="grid w-full grid-cols-2 gap-2">
-          <button type="button" onClick={onClose} className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-gray-50">
+          <button type="button" onClick={onClose} className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-gray-50">
             Cancelar
           </button>
           <button type="button" disabled={reminding} onClick={onConfirm} className="h-11 rounded-xl bg-amber-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-amber-700 disabled:bg-amber-200">
@@ -941,7 +941,7 @@ function SummaryCard({
     danger: "border-red-200 bg-red-50 text-red-600",
     success: "border-emerald-200 bg-emerald-50 text-emerald-600",
     blue: "border-blue-200 bg-blue-50 text-blue-600",
-    neutral: "border-gray-100 bg-white text-muted-foreground",
+    neutral: "border-border-subtle bg-white text-muted-foreground",
   }[tone];
   const actionTone = tone === "warning" ? "border-amber-200 text-amber-700" : tone === "blue" ? "border-blue-200 text-blue-700" : "border-emerald-200 text-emerald-700";
   return (
@@ -994,8 +994,8 @@ function ClosingTable({ rows, onOpenAgenda, onOpenDetails, onRemind, onRegulariz
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[1100px] text-sm">
-        <thead className="border-b border-gray-100 bg-gray-50"><tr>{["Vendedor", "Status", "Entrega", "Leads", "Qualif.", "Agend.", "Atendi.", "Venda", "Disc.", "Ações"].map((label) => <th key={label} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead>
-        <tbody className="divide-y divide-gray-100 bg-white">
+        <thead className="border-b border-border-subtle bg-gray-50"><tr>{["Vendedor", "Status", "Entrega", "Leads", "Qualif.", "Agend.", "Atendi.", "Venda", "Disc.", "Ações"].map((label) => <th key={label} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead>
+        <tbody className="divide-y divide-border-subtle bg-white">
           {rows.map((row) => <ClosingRow key={row.seller.id} row={row} onOpenAgenda={() => onOpenAgenda(row.seller.id)} onOpenDetails={() => onOpenDetails(row)} onRemind={() => onRemind(row)} onRegularize={() => onRegularize(row)} onDecide={(action) => onDecide(row, action)} onCorrectLeads={() => onCorrectLeads(row)} />)}
         </tbody>
       </table>
@@ -1056,7 +1056,7 @@ function MetricCell({ value, muted = false }: { value: number | string | null; m
 
 function DisciplineTrendCard({ trend, range, onRange }: { trend: Array<{ date: string; label: string; value: number | null }>; range: 7 | 15 | 30; onRange: (range: 7 | 15 | 30) => void }) {
   const hasData = trend.some((point) => point.value !== null);
-  return <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h2 className="flex items-center gap-2 text-base font-semibold text-foreground"><TrendingUp size={18} className="text-emerald-600" /> Evolução da Disciplina do Fechamento <HelpTooltip text="Gráfico de evolução percentual da equipe na realização pontual dos fechamentos diários ao longo do período selecionado (7, 15 ou 30 dias)." /></h2><p className="mt-1 text-sm text-muted-foreground">Acompanhe se a equipe está mantendo consistência na prestação de contas diária.</p></div><div className="flex rounded-xl bg-gray-50 p-1">{([7, 15, 30] as const).map((option) => <button key={option} type="button" onClick={() => onRange(option)} className={`rounded-lg px-3 py-2 text-xs font-medium ${range === option ? "bg-emerald-600 text-white shadow-sm" : "text-muted-foreground hover:bg-white"}`}>{option} dias</button>)}</div></div><div className="mt-4 h-[236px]">{hasData ? <ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}><CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" /><XAxis dataKey="label" axisLine={{ stroke: "#e5e7eb" }} tickLine={false} tick={{ fontSize: 11, fill: "#9ca3af" }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} width={42} /><Line type="monotone" dataKey="value" connectNulls stroke="#10b981" strokeWidth={2.5} dot={{ r: 3.5, fill: "#10b981", strokeWidth: 0 }} /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-center text-sm text-muted-foreground">Ainda não há histórico de disciplina no período selecionado.</div>}</div><p className="mt-3 text-center text-xs italic text-muted-foreground">O dia atual pode aparecer como parcial enquanto houver fechamentos pendentes ou regularizações em aberto.</p></section>;
+  return <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h2 className="flex items-center gap-2 text-base font-semibold text-foreground"><TrendingUp size={18} className="text-emerald-600" /> Evolução da Disciplina do Fechamento <HelpTooltip text="Gráfico de evolução percentual da equipe na realização pontual dos fechamentos diários ao longo do período selecionado (7, 15 ou 30 dias)." /></h2><p className="mt-1 text-sm text-muted-foreground">Acompanhe se a equipe está mantendo consistência na prestação de contas diária.</p></div><div className="flex rounded-xl bg-gray-50 p-1">{([7, 15, 30] as const).map((option) => <button key={option} type="button" onClick={() => onRange(option)} className={`rounded-lg px-3 py-2 text-xs font-medium ${range === option ? "bg-emerald-600 text-white shadow-sm" : "text-muted-foreground hover:bg-white"}`}>{option} dias</button>)}</div></div><div className="mt-4 h-[236px]">{hasData ? <ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}><CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" /><XAxis dataKey="label" axisLine={{ stroke: "#e5e7eb" }} tickLine={false} tick={{ fontSize: 11, fill: "#9ca3af" }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} width={42} /><Line type="monotone" dataKey="value" connectNulls stroke="#10b981" strokeWidth={2.5} dot={{ r: 3.5, fill: "#10b981", strokeWidth: 0 }} /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-center text-sm text-muted-foreground">Ainda não há histórico de disciplina no período selecionado.</div>}</div><p className="mt-3 text-center text-xs italic text-muted-foreground">O dia atual pode aparecer como parcial enquanto houver fechamentos pendentes ou regularizações em aberto.</p></section>;
 }
 
 function ComparisonRow({ label, value, tone }: { label: string; value: number | null; tone: "team" | "network" | "top" }) {

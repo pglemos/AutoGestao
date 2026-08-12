@@ -624,7 +624,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => switchMode('forgot')}
-                                className="h-mx-11 rounded-xl border border-gray-200 bg-white text-muted-foreground hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-sm transition-colors flex items-center justify-center"
+                                className="h-mx-11 rounded-xl border border-border bg-white text-muted-foreground hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-sm transition-colors flex items-center justify-center"
                                 style={{ gap: '0.5rem' }}
                             >
                                 <KeyRound size={16} />
@@ -636,7 +636,7 @@ export default function Login() {
                             <button
                                 type="button"
                                 onClick={() => switchMode('login')}
-                                className="h-mx-11 rounded-xl border border-gray-200 bg-white text-muted-foreground hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-label transition-colors flex items-center justify-center"
+                                className="h-mx-11 rounded-xl border border-border bg-white text-muted-foreground hover:text-emerald-600 hover:border-brand-primary/30 hover:bg-gray-50 font-bold text-label transition-colors flex items-center justify-center"
                                 style={{ gap: '0.5rem' }}
                             >
                                 <ArrowLeft size={16} />
@@ -645,7 +645,7 @@ export default function Login() {
                         )}
                     </form>
 
-                    <div className="mt-8 pt-6 border-t border-gray-200 text-center">
+                    <div className="mt-8 pt-6 border-t border-border text-center">
                         <span className="text-muted-foreground text-xs font-medium">Acesso restrito a usuarios autorizados</span>
                     </div>
                 </motion.div>

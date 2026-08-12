@@ -49,7 +49,7 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
         <Card className="p-mx-lg bg-gray-50/30 border shadow-sm flex flex-col items-center justify-center text-center">
           {latestPlan ? (
             <div className="space-y-mx-xs">
-              <div className="w-mx-12 h-mx-12 bg-white rounded-mx-full flex items-center justify-center mx-auto shadow-sm border border-gray-200">
+              <div className="w-mx-12 h-mx-12 bg-white rounded-mx-full flex items-center justify-center mx-auto shadow-sm border border-border">
                 <CheckCircle2 className="w-mx-6 h-mx-6 text-status-success" />
               </div>
               <Typography variant="h3" className="">P.E. Validado</Typography>
@@ -57,7 +57,7 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
             </div>
           ) : (
             <div className="space-y-mx-xs opacity-50">
-              <div className="w-mx-12 h-mx-12 bg-white rounded-mx-full flex items-center justify-center mx-auto border border-gray-200">
+              <div className="w-mx-12 h-mx-12 bg-white rounded-mx-full flex items-center justify-center mx-auto border border-border">
                 <Rocket className="w-mx-6 h-mx-6 text-muted-foreground" />
               </div>
               <Typography variant="p" className="text-sm font-bold">Aguardando registro do P.E. no sistema</Typography>
@@ -77,13 +77,13 @@ export function VisitThreeExecution() {
         <Typography variant="h3" className="text-lg">Ritual de Rotinas (Disciplina)</Typography>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
-        <div className="p-mx-md bg-gray-50/30 rounded-2xl border border-gray-200 relative">
+        <div className="p-mx-md bg-gray-50/30 rounded-2xl border border-border relative">
           <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro text-white border-none px-mx-sm py-0.5 shadow-sm">GERENTE</Badge>
           <ul className="space-y-mx-md text-sm font-medium text-muted-foreground mt-2">
             {[ '09:30 - Cobrar preenchimento SGAP', '10:30 - Reunião Matinal / Ranking', '14:00 - Auditoria de CRM / Funil', '17:00 - Devolutiva Imediata' ].map(li => (<li key={li} className="flex items-center gap-mx-xs"><div className="w-mx-xs h-mx-xs rounded-mx-full bg-gray-900 shrink-0" /> {li}</li>))}
           </ul>
         </div>
-        <div className="p-mx-md bg-gray-50/30 rounded-2xl border border-gray-200 relative">
+        <div className="p-mx-md bg-gray-50/30 rounded-2xl border border-border relative">
           <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro text-white border-none px-mx-sm py-0.5 shadow-sm">VENDEDOR</Badge>
           <ul className="space-y-mx-md text-sm font-medium text-muted-foreground mt-2">
             {[ 'Registro Leads Porta/Online', 'Agendamentos Carteira', 'Atendimento e Prospecção', 'Lançamento Vendas Ontem' ].map(li => (<li key={li} className="flex items-center gap-mx-xs"><div className="w-mx-xs h-mx-xs rounded-mx-full bg-emerald-600 shrink-0" /> {li}</li>))}
@@ -138,7 +138,7 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
         <div className="grid grid-cols-1 md:grid-cols-2 gap-mx-lg">
           <div className="space-y-mx-md">
             <Typography variant="tiny" className="font-bold">Dados do Vendedor</Typography>
-            <select aria-label="Dados do Vendedor" value={v} onChange={e => setV(e.target.value)} disabled={!storeId || loading} className="w-full h-mx-10 px-mx-md rounded-xl border border-gray-200 bg-white text-sm font-bold disabled:opacity-60">
+            <select aria-label="Dados do Vendedor" value={v} onChange={e => setV(e.target.value)} disabled={!storeId || loading} className="w-full h-mx-10 px-mx-md rounded-xl border border-border bg-white text-sm font-bold disabled:opacity-60">
               <option value="">{loading ? 'Carregando vendedores...' : 'Selecione o vendedor...'}</option>
               {sellers.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
             </select>
@@ -175,7 +175,7 @@ export function VisitFourExecution({ storeId, onGenerateSummary }: { storeId: st
           </div>
         </div>
 
-        <div className="flex gap-mx-md items-end border-t border-gray-100 pt-mx-md">
+        <div className="flex gap-mx-md items-end border-t border-border-subtle pt-mx-md">
           <div className="w-1/3 md:w-1/4">
             <Typography variant="tiny" tone="muted" className="mb-1 block text-mx-tiny">META ACORDADA</Typography>
             <Input aria-label="META ACORDADA" type="number" value={m} onChange={e => setM(parseInt(e.target.value) || 0)} className="h-mx-12 font-bold text-emerald-600 text-center text-xl" />
@@ -239,7 +239,7 @@ export function VisitFiveExecution({ storeId, onGenerateSummary }: { storeId: st
         <div className="space-y-mx-md">
           <div className="space-y-mx-xs">
             <Typography variant="tiny" className="font-bold">Vendedor / Gerente</Typography>
-            <select aria-label="Vendedor / Gerente" value={sellerId} onChange={e => setSellerId(e.target.value)} disabled={!storeId || loading} className="w-full h-mx-10 px-mx-md rounded-xl border border-gray-200 bg-white text-sm font-bold disabled:opacity-60">
+            <select aria-label="Vendedor / Gerente" value={sellerId} onChange={e => setSellerId(e.target.value)} disabled={!storeId || loading} className="w-full h-mx-10 px-mx-md rounded-xl border border-border bg-white text-sm font-bold disabled:opacity-60">
               <option value="">{loading ? 'Carregando vendedores...' : 'Selecione o vendedor...'}</option>
               {sellers.map(seller => <option key={seller.id} value={seller.id}>{seller.name}</option>)}
             </select>
@@ -476,12 +476,12 @@ export function VisitChecklist({ items, onToggle }: { items: Array<{ task: strin
             "p-mx-md rounded-2xl border cursor-pointer transition-all flex items-start gap-mx-sm text-xs font-bold shadow-sm hover:shadow-sm active:scale-95 min-h-mx-16",
             it.completed
               ? "bg-emerald-600/10 text-emerald-600 border-brand-primary/30"
-              : "bg-white border-gray-200 text-muted-foreground hover:border-brand-primary/40 hover:bg-gray-50/20"
+              : "bg-white border-border text-muted-foreground hover:border-brand-primary/40 hover:bg-gray-50/20"
           )}
         >
           <div className={cn(
             "w-mx-6 h-mx-6 rounded-mx-full flex items-center justify-center border transition-all",
-            it.completed ? "bg-emerald-600 border-brand-primary text-white" : "bg-white border-gray-200 text-transparent"
+            it.completed ? "bg-emerald-600 border-brand-primary text-white" : "bg-white border-border text-transparent"
           )}>
             <CheckCircle2 className="w-mx-4 h-mx-4" />
           </div>

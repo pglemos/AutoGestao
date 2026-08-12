@@ -389,7 +389,7 @@ export default function ManagerDailyClosing() {
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="actions" id="page-fechamento-diario" aria-label="Fechamento Diário" className="flex flex-col gap-4">
         <ManagerHomeReturnLink />
-        <section className="bg-white rounded-[16px] border border-gray-100 shadow-sm p-5">
+        <section className="bg-white rounded-[16px] border border-border-subtle shadow-sm p-5">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-xl">
               <h1 className="text-xl font-bold text-foreground">
@@ -408,7 +408,7 @@ export default function ManagerDailyClosing() {
                   type="date"
                   value={date}
                   onChange={(event) => setDate(event.target.value)}
-                  className="h-[36px] border border-gray-200 bg-white rounded-[12px] px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-2xs transition-all"
+                  className="h-[36px] border border-border bg-white rounded-[12px] px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 shadow-2xs transition-all"
                 />
               </Field>
               <Field label="Unidade">
@@ -416,7 +416,7 @@ export default function ManagerDailyClosing() {
                   aria-label="Unidade"
                   value={storeId || ""}
                   onChange={() => undefined}
-                  className="h-[36px] border border-gray-200 bg-white rounded-[12px] px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 min-w-36 shadow-2xs transition-all"
+                  className="h-[36px] border border-border bg-white rounded-[12px] px-3 text-sm text-foreground focus:outline-none focus:ring-2 focus:ring-emerald-500 focus:border-emerald-500 min-w-36 shadow-2xs transition-all"
                 >
                   <option value={storeId || ""}>
                     {membership?.store?.name || "Unidade atual"}
@@ -507,9 +507,9 @@ export default function ManagerDailyClosing() {
           <DisciplineCard value={discipline} />
         </section>
 
-        <section className="bg-white rounded-[16px] border border-gray-100 shadow-sm overflow-hidden">
+        <section className="bg-white rounded-[16px] border border-border-subtle shadow-sm overflow-hidden">
           <div id="manager-closing-movement" />
-          <div className="flex flex-col gap-3 border-b border-gray-100 p-4 sm:flex-row sm:items-center sm:justify-between">
+          <div className="flex flex-col gap-3 border-b border-border-subtle p-4 sm:flex-row sm:items-center sm:justify-between">
               <h2 className="text-base font-semibold text-foreground">
               Movimento da Equipe — {format(parseISO(date), "dd/MM/yyyy")}
             </h2>
@@ -560,7 +560,7 @@ export default function ManagerDailyClosing() {
           onRange={setHistoryRange}
         />
 
-        <section className="rounded-[16px] border border-gray-100 bg-white p-5 shadow-sm">
+        <section className="rounded-[16px] border border-border-subtle bg-white p-5 shadow-sm">
           <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
             <BarChart3 size={18} className="text-emerald-600" />
             Comparativo de Disciplina do Fechamento
@@ -583,7 +583,7 @@ export default function ManagerDailyClosing() {
           </p>
         </section>
 
-        <section className="rounded-[16px] border border-gray-100 bg-white p-5 shadow-sm">
+        <section className="rounded-[16px] border border-border-subtle bg-white p-5 shadow-sm">
           <h2 className="mb-4 flex items-center gap-1.5 text-base font-semibold text-foreground">
             Resumo do Fechamento
             <HelpTooltip text="Consolidação dos fechamentos do dia: atendimentos, leads e vendas por canal (showroom, carteira, internet). Os leads podem ser corrigidos pelo gerente com registro em auditoria." />
@@ -760,7 +760,7 @@ export function PendingReminderModal({
 }) {
   const footer = (
     <div className="flex w-full gap-2">
-      <button type="button" onClick={onClose} className="h-9 flex-1 rounded-[12px] border border-gray-200 bg-white px-4 text-sm font-medium text-foreground hover:bg-gray-50">
+      <button type="button" onClick={onClose} className="h-9 flex-1 rounded-[12px] border border-border bg-white px-4 text-sm font-medium text-foreground hover:bg-gray-50">
         Cancelar
       </button>
       <button
@@ -859,7 +859,7 @@ function SummaryCard({
     danger: "border-red-200 bg-red-50 text-red-600",
     success: "border-emerald-300 bg-emerald-100 text-emerald-700",
     info: "border-blue-200 bg-blue-50 text-blue-600",
-    neutral: "border-gray-100 bg-white text-muted-foreground",
+    neutral: "border-border-subtle bg-white text-muted-foreground",
   }[tone];
   const actionColor =
     tone === "danger" || tone === "success"
@@ -868,7 +868,7 @@ function SummaryCard({
         ? "border-amber-200 text-amber-700"
         : tone === "info"
           ? "border-blue-200 text-blue-600"
-          : "border-gray-200 text-muted-foreground";
+          : "border-border text-muted-foreground";
   const valueColor = {
     warning: "text-amber-700",
     danger: "text-red-700",
@@ -931,7 +931,7 @@ function DisciplineCard({ value }: { value: number | null }) {
           ? { surface: "bg-amber-50", badge: "bg-amber-100 text-amber-700", glow: "from-amber-400 to-amber-500", ring: "rgb(245 158 11)", track: "rgb(254 243 199)", inner: "bg-amber-50", text: "text-amber-600" }
           : { surface: "bg-red-50", badge: "bg-red-100 text-red-700", glow: "from-red-400 to-red-500", ring: "rgb(239 68 68)", track: "rgb(254 226 226)", inner: "bg-red-50", text: "text-red-600" };
   return (
-    <div className={`flex h-full min-h-[164px] flex-col rounded-[16px] border border-gray-100 p-3 shadow-sm ${palette.surface}`}>
+    <div className={`flex h-full min-h-[164px] flex-col rounded-[16px] border border-border-subtle p-3 shadow-sm ${palette.surface}`}>
       <div className="mb-1 flex flex-wrap items-center justify-between gap-x-1 gap-y-0.5">
         <h2 className="flex items-center gap-1 text-xs font-medium text-muted-foreground">
           <span>Disciplina Média</span>
@@ -1009,7 +1009,7 @@ export function ClosingTable({
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-border-subtle">
           {rows.map(({ seller, checkin, status }) => (
             <ClosingRow
               key={seller.id}
@@ -1043,7 +1043,7 @@ function DisciplineTrendCard({
 }) {
   const hasData = trend.some((point) => point.value !== null);
   return (
-    <section className="rounded-[16px] border border-gray-100 bg-white p-5 shadow-sm">
+    <section className="rounded-[16px] border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
               <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">

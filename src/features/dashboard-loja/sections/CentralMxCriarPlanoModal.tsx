@@ -158,7 +158,7 @@ export function CentralMxCriarPlanoModal({
                 id="plano-scope"
                 value={form.scopeIdx}
                 onChange={(event) => update('scopeIdx', Number(event.target.value))}
-                className="w-full h-mx-14 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
+                className="w-full h-mx-14 rounded-xl border border-border bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
               >
                 {scopeOptions.map((option, index) => (
                   <option key={`${option.scope}-${option.scopeId}-${index}`} value={index}>
@@ -178,7 +178,7 @@ export function CentralMxCriarPlanoModal({
                 id="plano-departamento"
                 value={form.departamento}
                 onChange={(event) => update('departamento', event.target.value)}
-                className="w-full h-mx-14 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
+                className="w-full h-mx-14 rounded-xl border border-border bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
               >
                 <option value="comercial">Comercial</option>
                 <option value="marketing">Marketing</option>
@@ -279,7 +279,7 @@ export function CentralMxCriarPlanoModal({
                 id="plano-prioridade"
                 value={form.prioridade}
                 onChange={(event) => update('prioridade', event.target.value as FormState['prioridade'])}
-                className="w-full h-mx-14 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
+                className="w-full h-mx-14 rounded-xl border border-border bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
               >
                 <option value="baixa">Baixa</option>
                 <option value="media">Média</option>
@@ -298,7 +298,7 @@ export function CentralMxCriarPlanoModal({
                 id="plano-origem"
                 value={form.origem}
                 onChange={(event) => update('origem', event.target.value as FormState['origem'])}
-                className="w-full h-mx-14 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
+                className="w-full h-mx-14 rounded-xl border border-border bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5"
               >
                 <option value="manual">Manual</option>
                 <option value="alertas">Alerta</option>
@@ -308,7 +308,7 @@ export function CentralMxCriarPlanoModal({
             </div>
           </div>
 
-          <div className="flex items-center justify-end gap-mx-xs pt-mx-sm border-t border-gray-200">
+          <div className="flex items-center justify-end gap-mx-xs pt-mx-sm border-t border-border">
             <Button type="button" variant="ghost" onClick={onClose} disabled={saving}>
               Cancelar
             </Button>

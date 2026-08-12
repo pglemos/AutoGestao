@@ -82,8 +82,8 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
 
   return (
     <section className="grid grid-cols-1 gap-5 pb-24 xl:grid-cols-12" aria-labelledby="store-ranking-title">
-      <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm xl:col-span-8">
-        <header className="flex flex-col gap-4 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <article className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm xl:col-span-8">
+        <header className="flex flex-col gap-4 border-b border-border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div className="flex items-start gap-3">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
               <UsersRound size={19} />
@@ -105,13 +105,13 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
               placeholder="Buscar vendedor"
               value={sellerSearch}
               onChange={event => setSellerSearch(event.target.value)}
-              className="h-10 rounded-xl border-gray-200 pl-9 text-sm"
+              className="h-10 rounded-xl border-border pl-9 text-sm"
             />
           </div>
         </header>
 
         {sellerSearch.trim() && filteredRanking.length > 0 && (
-          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 bg-gray-50 px-5 py-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle bg-gray-50 px-5 py-3">
             <p className="text-xs text-muted-foreground">Ações disponíveis para o vendedor localizado.</p>
             <div className="flex flex-wrap gap-2">
               <ActionButton label="Devolutiva" onClick={() => navigate('/devolutivas')} />
@@ -130,7 +130,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
       </article>
 
       <aside className="flex flex-col gap-5 xl:col-span-4">
-        <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <header className="flex items-start gap-3">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-600">
               <BarChart3 size={19} />
@@ -161,7 +161,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
           </div>
         </article>
 
-        <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <header className="flex items-start gap-3">
             <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-violet-50 text-violet-600">
               <History size={19} />
@@ -186,7 +186,7 @@ function ActionButton({ label, onClick }: { label: string; onClick: () => void }
     <button
       type="button"
       onClick={onClick}
-      className="h-8 rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-muted-foreground hover:bg-gray-100"
+      className="h-8 rounded-lg border border-border bg-white px-3 text-xs font-semibold text-muted-foreground hover:bg-gray-100"
     >
       {label}
     </button>

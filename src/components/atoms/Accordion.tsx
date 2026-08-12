@@ -7,8 +7,8 @@ const accordionVariants = cva(
   {
     variants: {
       variant: {
-        default: "border border-gray-200 rounded-xl bg-white",
-        bordered: "border border-gray-200 rounded-xl bg-white shadow-sm",
+        default: "border border-border rounded-xl bg-white",
+        bordered: "border border-border rounded-xl bg-white shadow-sm",
         ghost: "bg-transparent",
       },
     },
@@ -46,7 +46,7 @@ const AccordionItem = React.forwardRef<HTMLDetailsElement, AccordionItemProps>(
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
         </summary>
-        <div className="px-mx-md py-mx-sm text-sm text-muted-foreground border-t border-gray-100 animate-accordion-down">
+        <div className="px-mx-md py-mx-sm text-sm text-muted-foreground border-t border-border-subtle animate-accordion-down">
           {children}
         </div>
       </details>

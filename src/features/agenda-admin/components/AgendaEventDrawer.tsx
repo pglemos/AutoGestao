@@ -48,11 +48,11 @@ export function AgendaEventDrawer({
 
   return (
     <aside
-      className="fixed inset-y-0 right-0 z-[100] flex w-full max-w-md flex-col border-l border-gray-200 bg-white shadow-2xl transition-transform duration-300 animate-in slide-in-from-right"
+      className="fixed inset-y-0 right-0 z-[100] flex w-full max-w-md flex-col border-l border-border bg-white shadow-2xl transition-transform duration-300 animate-in slide-in-from-right"
       aria-label="Painel de detalhes do dia"
     >
       {/* Drawer Header */}
-      <div className="flex items-center justify-between border-b border-gray-200 px-5 py-4 bg-gray-50/40">
+      <div className="flex items-center justify-between border-b border-border px-5 py-4 bg-gray-50/40">
         <div>
           <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
             Agendamentos do Dia
@@ -72,7 +72,7 @@ export function AgendaEventDrawer({
       </div>
 
       {/* Drawer Quick Action Bar */}
-      <div className="flex items-center gap-2 border-b border-gray-200 px-5 py-3 bg-white">
+      <div className="flex items-center gap-2 border-b border-border px-5 py-3 bg-white">
         <Button
           variant="secondary"
           size="sm"
@@ -113,7 +113,7 @@ export function AgendaEventDrawer({
               return (
                 <div
                   key={visit.id}
-                  className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-brand-primary/40 hover:shadow-md group"
+                  className="rounded-2xl border border-border bg-white p-4 shadow-sm transition-all hover:border-brand-primary/40 hover:shadow-md group"
                 >
                   {/* Top Bar: Time, Status, Actions */}
                   <div className="flex items-center justify-between mb-2">
@@ -197,7 +197,7 @@ export function AgendaEventDrawer({
                   </div>
 
                   {/* Footer Actions */}
-                  <div className="flex items-center gap-2 pt-2 border-t border-gray-200">
+                  <div className="flex items-center gap-2 pt-2 border-t border-border">
                     {visit.status === 'agendada' && (
                       <Button
                         variant="secondary"
@@ -240,7 +240,7 @@ export function AgendaEventDrawer({
               return (
                 <div
                   key={event.id}
-                  className="rounded-2xl border border-gray-200 bg-white p-4 shadow-sm transition-all hover:border-brand-primary/40 hover:shadow-md group"
+                  className="rounded-2xl border border-border bg-white p-4 shadow-sm transition-all hover:border-brand-primary/40 hover:shadow-md group"
                 >
                   <div className="flex items-center justify-between mb-2">
                     <div className="flex items-center gap-2">

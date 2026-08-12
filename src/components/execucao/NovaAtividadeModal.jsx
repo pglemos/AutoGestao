@@ -124,7 +124,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
             <p className="text-body-sm text-muted-foreground mb-3">Selecione o tipo de atividade comercial:</p>
             {TIPOS.map(t => (
               <button key={t} onClick={() => handleEscolherTipo(t)}
-                className="w-full text-left px-4 py-3 rounded-xl border border-slate-200 hover:border-[#005BFF] hover:bg-blue-50 text-body-sm font-semibold text-[#0F172A] transition-colors">
+                className="w-full text-left px-4 py-3 rounded-xl border border-border hover:border-[#005BFF] hover:bg-blue-50 text-body-sm font-semibold text-[#0F172A] transition-colors">
                 {t}
               </button>
             ))}
@@ -222,9 +222,9 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
               <Input value={form.descricao} onChange={e => setF("descricao", e.target.value)} className="mt-1.5" placeholder="Descreva o objetivo desta atividade..." />
             </div>
 
-            <div className="flex justify-end gap-3 pt-2 border-t border-slate-100">
+            <div className="flex justify-end gap-3 pt-2 border-t border-border-subtle">
               <button onClick={handleClose} disabled={saving}
-                className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">
                 Cancelar
               </button>
               <button onClick={handleSalvar} disabled={!podesSalvar || saving}

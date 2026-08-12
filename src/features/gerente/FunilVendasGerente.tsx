@@ -78,7 +78,7 @@ export default function FunilVendasGerente() {
         title="Funil Comercial"
         subtitle="Desempenho da equipe por canal de origem, com dados registrados em eventos comerciais."
         actions={(
-          <label className="inline-flex h-11 items-center gap-mx-sm rounded-xl border border-gray-100 bg-white px-mx-md text-sm font-semibold text-foreground shadow-sm">
+          <label className="inline-flex h-11 items-center gap-mx-sm rounded-xl border border-border-subtle bg-white px-mx-md text-sm font-semibold text-foreground shadow-sm">
             <Filter size={16} aria-hidden="true" />
             <select
               className="bg-transparent font-semibold outline-none"
@@ -161,7 +161,7 @@ export default function FunilVendasGerente() {
                   })}
                 </div>
 
-                <div className="mt-mx-sm rounded-xl border border-gray-100 bg-gray-50 p-mx-sm">
+                <div className="mt-mx-sm rounded-xl border border-border-subtle bg-gray-50 p-mx-sm">
                   <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">
                     Principal gargalo
                   </Typography>
@@ -198,7 +198,7 @@ export default function FunilVendasGerente() {
                           ))}
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-gray-100">
+                      <tbody className="divide-y divide-border-subtle">
                         {ranking.map((row, index) => <RankingRow key={row.id} row={row} position={index + 1} />)}
                       </tbody>
                     </table>
@@ -249,7 +249,7 @@ function ChannelRow({ channel }: { channel: ChannelFunnel }) {
   const conversion = percent(channel.steps[0]?.value ?? 0, channel.steps[channel.steps.length - 1]?.value ?? 0)
 
   return (
-    <div className="rounded-xl border border-gray-100 p-mx-sm">
+    <div className="rounded-xl border border-border-subtle p-mx-sm">
       <div className="flex items-center justify-between gap-mx-sm">
         <div className="flex items-center gap-mx-sm">
           <span className={cn('grid h-10 w-10 shrink-0 place-items-center rounded-xl', tone.icon)} aria-hidden="true">

@@ -100,9 +100,9 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
       case 'morno':
         return 'bg-amber-100 text-amber-800 border-amber-200'
       case 'frio':
-        return 'bg-slate-100 text-foreground border-slate-200'
+        return 'bg-slate-100 text-foreground border-border'
       default:
-        return 'bg-slate-100 text-foreground border-slate-200'
+        return 'bg-slate-100 text-foreground border-border'
     }
   }
 
@@ -113,9 +113,9 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
         return 'bg-blue-100 text-blue-800 border-blue-200'
       case 'médio':
       case 'medio':
-        return 'bg-slate-100 text-foreground border-slate-200'
+        return 'bg-slate-100 text-foreground border-border'
       default:
-        return 'bg-gray-100 text-foreground border-gray-200'
+        return 'bg-gray-100 text-foreground border-border'
     }
   }
 
@@ -157,7 +157,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
         {/* Conteúdo com Scroll */}
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
           {/* Card 1: Ficha do Cliente & Dados Origem */}
-          <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm space-y-3">
+          <div className="bg-white rounded-lg border border-border p-4 shadow-sm space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Dados do Cliente & Origem
             </h3>
@@ -184,7 +184,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
               </div>
             </div>
 
-            <div className="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs">
+            <div className="flex items-center gap-2 pt-2 border-t border-border-subtle text-xs">
               <span className="text-muted-foreground">Temperatura:</span>
               <Badge variant="outline" className={temperatureColor(opportunity.temperature)}>
                 {opportunity.temperature || 'Não classificada'}
@@ -197,8 +197,8 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
           </div>
 
           {/* Card 2: Diagnóstico & Orientação do Mentor */}
-          <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm space-y-4">
-            <div className="flex items-center justify-between border-b border-slate-100 pb-2">
+          <div className="bg-white rounded-lg border border-border p-4 shadow-sm space-y-4">
+            <div className="flex items-center justify-between border-b border-border-subtle pb-2">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Orientação Comercial do Mentor
               </h3>
@@ -208,7 +208,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
             <div className="space-y-3 text-sm">
               <div>
                 <span className="text-xs font-semibold text-muted-foreground block">Objetivo</span>
-                <p className="text-foreground font-medium bg-slate-50 p-2.5 rounded border border-slate-200">
+                <p className="text-foreground font-medium bg-slate-50 p-2.5 rounded border border-border">
                   {opportunity.objective}
                 </p>
               </div>
@@ -223,7 +223,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
               {(opportunity.mentorGuidance || opportunity.decision?.explanations?.length) && (
                 <div>
                   <span className="text-xs font-semibold text-muted-foreground block">Orientação técnica</span>
-                  <p className="text-foreground text-xs bg-slate-50 p-2.5 rounded border border-slate-200 leading-relaxed">
+                  <p className="text-foreground text-xs bg-slate-50 p-2.5 rounded border border-border leading-relaxed">
                     {opportunity.mentorGuidance ?? opportunity.decision?.explanations?.join(' ')}
                   </p>
                 </div>
@@ -232,7 +232,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
               {(opportunity.centralRule || opportunity.decision?.centralRule) && (
                 <div>
                   <span className="text-xs font-semibold text-muted-foreground block">Por que está aqui (Regra Central)</span>
-                  <p className="text-foreground text-xs italic bg-slate-50 p-2 rounded border border-slate-200">
+                  <p className="text-foreground text-xs italic bg-slate-50 p-2 rounded border border-border">
                     {opportunity.centralRule ?? opportunity.decision?.centralRule}
                   </p>
                 </div>
@@ -241,7 +241,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
           </div>
 
           {/* Card 3: Cadência & Tentativas */}
-          <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm space-y-3">
+          <div className="bg-white rounded-lg border border-border p-4 shadow-sm space-y-3">
             <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Plano de Cadência
             </h3>
@@ -268,7 +268,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
           </div>
 
           {/* Card 4: Script Renderizado & Status de Envio */}
-          <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm space-y-3">
+          <div className="bg-white rounded-lg border border-border p-4 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
               <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Script Comercial
@@ -305,7 +305,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                     variant="outline"
                     size="sm"
                     onClick={handleCopyScript}
-                    className="text-xs border-slate-300 text-foreground hover:bg-slate-100"
+                    className="text-xs border-border-strong text-foreground hover:bg-slate-100"
                   >
                     {copied ? 'Mensagem copiada!' : 'Copiar mensagem'}
                   </Button>
@@ -328,7 +328,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
         </div>
 
         {/* Rodapé Fixo de Ações Operacionais */}
-        <div className="bg-white border-t border-slate-200 p-4 sm:p-5 shrink-0 space-y-3 shadow-lg">
+        <div className="bg-white border-t border-border p-4 sm:p-5 shrink-0 space-y-3 shadow-lg">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
             {!isInternal && (
               <Button
@@ -363,7 +363,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
             )}
           </div>
 
-          <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-slate-100 text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-2 pt-2 border-t border-border-subtle text-xs">
             <div className="flex items-center gap-1.5 flex-wrap">
               <Button
                 type="button"

@@ -14,8 +14,8 @@ function badgeVariant(status?: string | null): 'success' | 'warning' | 'ghost' {
 
 export function DigitalProductCard({ product, canManage, onEdit, onArchive }: { product: ProductRecord; canManage: boolean; onEdit: (product: ProductRecord) => void; onArchive: (product: ProductRecord) => void }) {
   return (
-    <Card className="flex h-full flex-col border border-gray-100 bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
-      <div className="flex items-start justify-between gap-3 border-b border-gray-100 pb-4">
+    <Card className="flex h-full flex-col border border-border-subtle bg-white p-5 shadow-sm transition-shadow hover:shadow-md">
+      <div className="flex items-start justify-between gap-3 border-b border-border-subtle pb-4">
         <div className="flex min-w-0 items-start gap-3">
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600"><Package size={20} aria-hidden="true" /></span>
           <div className="min-w-0">
@@ -34,7 +34,7 @@ export function DigitalProductCard({ product, canManage, onEdit, onArchive }: { 
         </div>
       ) : null}
 
-      <div className="mt-5 border-t border-gray-100 pt-4">
+      <div className="mt-5 border-t border-border-subtle pt-4">
         {canManage ? (
           <div className="grid grid-cols-2 gap-2">
             <Button data-mx-requires-manage="" variant="ghost" size="sm" onClick={() => onEdit(product)}><Edit3 size={14} className="mr-2" />Editar</Button>

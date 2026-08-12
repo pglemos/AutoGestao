@@ -30,7 +30,7 @@ export default function CorridaPeriodo({ vendedores, meta, isVolume, meuId }) {
   const maxVal = Math.max(...vendedores.map(v => isVolume ? v.vendas : v.faturamento), meta, 1);
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex-1">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-5 flex-1">
       <div className="flex items-center gap-2 mb-1">
         <Flag className="w-5 h-5 text-foreground" />
         <h2 className="text-body font-bold text-foreground">Corrida do Período</h2>
@@ -43,7 +43,7 @@ export default function CorridaPeriodo({ vendedores, meta, isVolume, meuId }) {
       {/* Pista */}
       <div className="relative px-4">
         {/* Pista de corrida */}
-        <div className="relative h-16 bg-gradient-to-r from-slate-100 to-slate-50 rounded-xl border border-slate-200 overflow-visible">
+        <div className="relative h-16 bg-gradient-to-r from-slate-100 to-slate-50 rounded-xl border border-border overflow-visible">
           {/* Linha verde de progresso até o líder */}
           <div
             className="absolute left-0 top-0 h-full rounded-l-xl"

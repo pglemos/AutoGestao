@@ -268,7 +268,7 @@ export default function ClientCardMobile({
         </div>
       )}
       {bloqueado && (
-        <div className="flex items-center gap-2 py-3 px-3 bg-slate-50 rounded-xl border border-slate-100">
+        <div className="flex items-center gap-2 py-3 px-3 bg-slate-50 rounded-xl border border-border-subtle">
           <Lock className="w-4 h-4 text-text-disabled flex-shrink-0" />
           <span className="text-[12px] text-muted-foreground font-medium">Fechamento finalizado.</span>
         </div>
@@ -352,7 +352,7 @@ export default function ClientCardMobile({
             </Field>
             <Field label="Venda Realizada">
               {modoD1 ? (
-                <div className="h-10 flex items-center px-3 bg-slate-50 border border-slate-200 rounded-lg text-body-sm text-muted-foreground font-semibold cursor-not-allowed">
+                <div className="h-10 flex items-center px-3 bg-slate-50 border border-border rounded-lg text-body-sm text-muted-foreground font-semibold cursor-not-allowed">
                   Em Negociação
                 </div>
               ) : (
@@ -383,7 +383,7 @@ export default function ClientCardMobile({
 
           {saveError && <p className="text-[12px] text-[#EF4444] font-semibold mt-3">{saveError}</p>}
 
-          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button
               onClick={() => { setDialogOpen(false); setSaveError(null); }}
               disabled={saving}

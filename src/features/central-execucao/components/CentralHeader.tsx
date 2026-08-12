@@ -22,7 +22,7 @@ export function CentralHeader({ date = new Date() }: { date?: Date }) {
   const formatted = formatHeaderDate(date)
 
   return (
-    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-gray-200 bg-white px-5 sm:px-6">
+    <header className="sticky top-0 z-30 flex h-16 items-center justify-between border-b border-border bg-white px-5 sm:px-6">
       <div className="flex min-w-0 items-center gap-3">
         <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-status-info to-blue-400">
           <Target className="h-4 w-4 text-white" aria-hidden="true" />

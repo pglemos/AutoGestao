@@ -55,7 +55,7 @@ export function RotinaRitualMatinal({
         className="absolute top-mx-0 right-mx-0 w-mx-sidebar-expanded h-mx-64 bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-32 -mt-32"
         aria-hidden="true"
       />
-      <header className="flex items-center justify-between border-b border-gray-100 pb-8 relative z-10">
+      <header className="flex items-center justify-between border-b border-border-subtle pb-8 relative z-10">
         <div className="flex items-center gap-mx-md">
           <div className="w-mx-2xl h-mx-2xl rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm transform -rotate-2">
             <Zap size={32} />
@@ -90,7 +90,7 @@ export function RotinaRitualMatinal({
               'rounded-xl border p-mx-md cursor-pointer group transition-all',
               step.done
                 ? 'bg-status-success-surface/30 border-status-success/20 text-status-success'
-                : 'bg-gray-50 border-gray-100 hover:bg-white hover:border-brand-primary/20 hover:shadow-sm',
+                : 'bg-gray-50 border-border-subtle hover:bg-white hover:border-brand-primary/20 hover:shadow-sm',
             )}
           >
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-mx-md">
@@ -100,7 +100,7 @@ export function RotinaRitualMatinal({
                     'w-mx-xl h-mx-xl rounded-xl flex items-center justify-center border shadow-mx-inner transition-all',
                     step.done
                       ? 'bg-white text-status-success border-status-success/30'
-                      : 'bg-white text-muted-foreground border-gray-100 group-hover:scale-110',
+                      : 'bg-white text-muted-foreground border-border-subtle group-hover:scale-110',
                   )}
                 >
                   {step.done ? (
@@ -145,7 +145,7 @@ export function RotinaRitualMatinal({
 
         <Card
           className={cn(
-            'rounded-xl border border-gray-100 p-mx-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-mx-lg',
+            'rounded-xl border border-border-subtle p-mx-md transition-all flex flex-col md:flex-row md:items-center justify-between gap-mx-lg',
             canTriggerMatinal
               ? 'bg-gray-900 text-white shadow-sm border-none'
               : 'bg-gray-50 opacity-40',
@@ -186,7 +186,7 @@ export function RotinaRitualMatinal({
               'h-mx-14 px-10 rounded-xl font-bold uppercase tracking-widest text-tiny',
               canTriggerMatinal
                 ? 'bg-emerald-600 shadow-sm text-white'
-                : 'bg-white border-gray-100 text-muted-foreground',
+                : 'bg-white border-border-subtle text-muted-foreground',
             )}
           >
             {executing ? (

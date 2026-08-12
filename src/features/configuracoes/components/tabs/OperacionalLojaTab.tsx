@@ -102,7 +102,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                             value={selectedStoreId}
                             onChange={e => setSelectedStoreId(e.target.value)}
                             disabled={!isGlobal && lojas.length <= 1}
-                            className="w-full h-mx-12 px-mx-sm pr-mx-10 bg-gray-50 border border-gray-200 rounded-2xl font-bold uppercase text-xs cursor-pointer appearance-none disabled:opacity-50"
+                            className="w-full h-mx-12 px-mx-sm pr-mx-10 bg-gray-50 border border-border rounded-2xl font-bold uppercase text-xs cursor-pointer appearance-none disabled:opacity-50"
                         >
                             <option value="">Selecione a unidade...</option>
                             {lojas.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -128,7 +128,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                 <>
                     {/* Políticas operacionais */}
                     <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                        <header className="border-b border-gray-200 pb-mx-md mb-mx-lg flex items-center justify-between gap-mx-sm">
+                        <header className="border-b border-border pb-mx-md mb-mx-lg flex items-center justify-between gap-mx-sm">
                             <div>
                                 <Typography variant="h3" className="tracking-tight">Políticas Operacionais</Typography>
                                 <Typography variant="caption" tone="muted" className="mt-1">Regras de negócio mandatárias</Typography>
@@ -153,12 +153,12 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                                 />
                             ))}
 
-                            <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-gray-100 gap-mx-md">
+                            <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-border-subtle gap-mx-md">
                                 <div>
                                     <Typography variant="caption" className="tracking-tight">Justiça Matemática</Typography>
                                     <Typography variant="tiny" tone="muted" className="">Base de cálculo da projeção</Typography>
                                 </div>
-                                <div className="flex p-mx-tiny bg-white border border-gray-200 rounded-mx-full shadow-sm">
+                                <div className="flex p-mx-tiny bg-white border border-border rounded-mx-full shadow-sm">
                                     <Button
                                         variant={metaRules?.projection_mode === 'calendar' ? 'secondary' : 'ghost'}
                                         size="sm"
@@ -176,7 +176,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                                 </div>
                             </div>
 
-                            <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-gray-100 gap-mx-md">
+                            <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-border-subtle gap-mx-md">
                                 <div>
                                     <Typography variant="caption" className="tracking-tight">Horário Limite Matinal</Typography>
                                     <Typography variant="tiny" tone="muted" className="">Deadline para disparo automático</Typography>
@@ -190,7 +190,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                                         value={settings.morning_report_time}
                                         onChange={e => setSettings(p => ({ ...p, morning_report_time: e.target.value }))}
                                         disabled
-                                        className="h-mx-xl pl-9 pr-4 bg-white border border-gray-200 rounded-2xl font-mono-numbers font-bold text-sm focus:border-brand-primary outline-none disabled:opacity-50"
+                                        className="h-mx-xl pl-9 pr-4 bg-white border border-border rounded-2xl font-mono-numbers font-bold text-sm focus:border-brand-primary outline-none disabled:opacity-50"
                                     />
                                 </div>
                             </div>
@@ -199,7 +199,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
 
                     {/* Metas e Benchmarks */}
                     <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                        <header className="border-b border-gray-200 pb-mx-md mb-mx-lg flex items-center gap-mx-sm">
+                        <header className="border-b border-border pb-mx-md mb-mx-lg flex items-center gap-mx-sm">
                             <Target size={20} className="text-emerald-600" />
                             <div>
                                 <Typography variant="h3" className="tracking-tight">Metas & Benchmarks</Typography>
@@ -245,7 +245,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
 
                     {/* Privacidade da Remuneração */}
                     <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                        <header className="border-b border-gray-200 pb-mx-md mb-mx-lg flex items-center gap-mx-sm">
+                        <header className="border-b border-border pb-mx-md mb-mx-lg flex items-center gap-mx-sm">
                             <ShieldCheck size={20} className="text-emerald-600" />
                             <div>
                                 <Typography variant="h3" className="tracking-tight">Privacidade da Remuneração</Typography>
@@ -263,7 +263,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
 
                     {/* Destinatários de e-mail */}
                     <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                        <header className="border-b border-gray-200 pb-mx-md mb-mx-lg flex items-center gap-mx-sm">
+                        <header className="border-b border-border pb-mx-md mb-mx-lg flex items-center gap-mx-sm">
                             <Mail size={20} className="text-emerald-600" />
                             <div>
                                 <Typography variant="h3" className="tracking-tight">Destinatários de Relatórios</Typography>
@@ -288,7 +288,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                                         onChange={e => setEmailLists(p => ({ ...p, [list.key]: e.target.value }))}
                                         disabled={isReadOnly}
                                         placeholder="email1@empresa.com, email2@empresa.com..."
-                                        className="w-full min-h-mx-24 p-mx-md bg-gray-50 border border-gray-200 rounded-2xl text-xs font-bold focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 outline-none resize-none"
+                                        className="w-full min-h-mx-24 p-mx-md bg-gray-50 border border-border rounded-2xl text-xs font-bold focus:border-brand-primary focus:ring-2 focus:ring-brand-primary/10 outline-none resize-none"
                                     />
                                 </div>
                             ))}
@@ -308,7 +308,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
 
 function ToggleRow({ label, desc, value, onChange, disabled }: { label: string; desc: string; value: boolean; onChange: () => void; disabled?: boolean }) {
     return (
-        <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-gray-100 gap-mx-md">
+        <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-border-subtle gap-mx-md">
             <div>
                 <Typography variant="caption" className="tracking-tight">{label}</Typography>
                 <Typography variant="tiny" tone="muted" className="opacity-70">{desc}</Typography>
@@ -338,7 +338,7 @@ function NumberField({ label, value, onChange, disabled }: { label: string; valu
                 value={value}
                 onChange={e => onChange(Number(e.target.value))}
                 disabled={disabled}
-                className="w-full h-mx-12 px-mx-sm bg-gray-50 border border-gray-200 rounded-2xl font-bold text-sm focus:border-brand-primary outline-none tabular-nums"
+                className="w-full h-mx-12 px-mx-sm bg-gray-50 border border-border rounded-2xl font-bold text-sm focus:border-brand-primary outline-none tabular-nums"
             />
         </div>
     )
@@ -361,7 +361,7 @@ function SelectField({ label, value, onChange, options, disabled }: {
                 value={value}
                 onChange={e => onChange(e.target.value)}
                 disabled={disabled}
-                className="w-full h-mx-12 px-mx-sm bg-gray-50 border border-gray-200 rounded-2xl font-bold text-xs uppercase cursor-pointer appearance-none focus:border-brand-primary outline-none"
+                className="w-full h-mx-12 px-mx-sm bg-gray-50 border border-border rounded-2xl font-bold text-xs uppercase cursor-pointer appearance-none focus:border-brand-primary outline-none"
             >
                 {options.map(o => <option key={o.value} value={o.value}>{o.label.toUpperCase()}</option>)}
             </select>

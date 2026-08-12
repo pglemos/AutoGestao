@@ -187,9 +187,9 @@ export default function ResolverModal({ oportunidade, open, onClose, onResolvida
           </div>
         </div>
 
-        <div className="flex justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
+        <div className="flex justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
           <button onClick={onClose} disabled={saving}
-            className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+            className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">
             Cancelar
           </button>
           <button onClick={handleConfirmar} disabled={!podeConfirmar || saving}

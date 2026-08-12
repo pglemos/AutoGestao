@@ -7,7 +7,7 @@ import { Gift } from 'lucide-react'
  */
 export function BonificacaoPeriodo() {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 w-full sm:w-[260px]">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-5 w-full sm:w-[260px]">
       <div className="flex items-center gap-2 mb-3">
         <Gift className="w-5 h-5 text-green-600" />
         <h2 className="text-body font-bold text-foreground">Bonificação do Período</h2>

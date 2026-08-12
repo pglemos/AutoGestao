@@ -34,7 +34,7 @@ export function ConsultingProgramCard({
 
   if (error || !program) {
     return (
-      <div className="rounded-2xl border border-gray-100 bg-white p-mx-lg" role="status">
+      <div className="rounded-2xl border border-border-subtle bg-white p-mx-lg" role="status">
         <strong className="text-base font-bold text-foreground">Nenhum programa de consultoria ativo</strong>
         <p className="text-sm text-muted-foreground">{error || 'Esta loja ainda não possui um programa de consultoria vinculado.'}</p>
       </div>
@@ -58,7 +58,7 @@ export function ConsultingProgramCard({
         </div>
 
         {program.nextVisitNumber ? (
-          <div className="rounded-xl border border-gray-100 bg-gray-50 p-mx-md md:w-[280px]">
+          <div className="rounded-xl border border-border-subtle bg-gray-50 p-mx-md md:w-[280px]">
             <Typography variant="tiny" tone="muted" className="">Próximo encontro</Typography>
             <Typography variant="p" className="mt-mx-xs">Encontro {program.nextVisitNumber}</Typography>
             {nextVisitDate && (

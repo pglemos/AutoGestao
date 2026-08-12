@@ -776,7 +776,7 @@ export default function NovoRegistroModal({ open, onClose, closingDate, dailyClo
         {saveError && <p className="text-[12px] text-[#EF4444] font-semibold mt-3">{saveError}</p>}
 
         {tipo && (
-          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button type="button" onClick={handleClose} disabled={saving}
               className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors">
               Cancelar

@@ -117,7 +117,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
       }
     >
       <form id="store-edit-form" onSubmit={handleSubmit} className="space-y-mx-lg">
-        <div className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
+        <div className="rounded-2xl border border-border bg-gray-50 p-mx-md">
           <div className="flex items-center justify-between gap-mx-sm mb-mx-sm">
             <div className="min-w-0">
               <Typography variant="caption" className="">Link de pré-cadastro</Typography>
@@ -244,7 +244,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
           <Typography variant="caption" className="">
             Estrutura da gestão comercial
           </Typography>
-          <div className="rounded-mx-md border border-gray-200 p-mx-md">
+          <div className="rounded-mx-md border border-border p-mx-md">
             {managementLoading ? (
               <Typography variant="tiny" tone="muted" className="font-bold">
                 Verificando vínculos da loja…
@@ -299,7 +299,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
 
           <div className="space-y-mx-sm">
             {(form.partners || []).map((partner, index) => (
-              <div key={index} className="rounded-2xl border border-gray-200 bg-white p-mx-md">
+              <div key={index} className="rounded-2xl border border-border bg-white p-mx-md">
                 <div className="flex items-center justify-between mb-mx-sm">
                   <div className="flex items-center gap-mx-xs">
                     <UserRound size={16} className="text-emerald-600" />
@@ -361,7 +361,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
           </div>
         </div>
 
-        <label htmlFor="edit-store-active" className="flex items-start gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
+        <label htmlFor="edit-store-active" className="flex items-start gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-md cursor-pointer">
           <input
             id="edit-store-active"
             type="checkbox"

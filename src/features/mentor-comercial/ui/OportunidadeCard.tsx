@@ -82,7 +82,7 @@ function getPriorityBadgeClass(prioClass?: string | null): string {
       return 'bg-blue-50 text-blue-800 border-blue-200'
     case 'Baixa':
     default:
-      return 'bg-slate-100 text-foreground border-slate-200'
+      return 'bg-slate-100 text-foreground border-border'
   }
 }
 
@@ -101,7 +101,7 @@ function getScoreBadgeClass(scoreClass?: string | null): string {
 }
 
 function getTemperatureBadgeClass(temp?: string | null): string {
-  if (!temp) return 'bg-slate-100 text-muted-foreground border-slate-200'
+  if (!temp) return 'bg-slate-100 text-muted-foreground border-border'
   const t = temp.toLowerCase()
   if (t.includes('quente') || t.includes('alta')) {
     return 'bg-red-50 text-red-700 border-red-200 font-semibold'
@@ -166,9 +166,9 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
     : []
 
   return (
-    <div className="w-full bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-200 p-5 flex flex-col gap-4">
+    <div className="w-full bg-white rounded-xl border border-border shadow-sm hover:shadow-md transition-all duration-200 p-5 flex flex-col gap-4">
       {/* Cabeçalho do Card: Iniciais, Nome, Contato, Canal, Origem, Veículo */}
-      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-slate-100 pb-4">
+      <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-border-subtle pb-4">
         <div className="flex items-center gap-3.5">
           <div className="w-12 h-12 rounded-full bg-blue-900 text-white font-bold text-base flex items-center justify-center shrink-0 shadow-sm">
             {getInitials(cliente_nome)}
@@ -220,7 +220,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
       </div>
 
       {/* Corpo Intermediário: Status, Objetivo, Próximo Passo, Data, Tentativa */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs bg-slate-50/70 p-3.5 rounded-lg border border-slate-100">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-xs bg-slate-50/70 p-3.5 rounded-lg border border-border-subtle">
         <div>
           <span className="text-muted-foreground font-medium uppercase text-caption tracking-wider block mb-1">
             Status Atual
@@ -320,7 +320,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
       )}
 
       {/* Rodapé: Botões de Ação */}
-      <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-slate-100">
+      <div className="flex flex-wrap items-center justify-end gap-2 pt-2 border-t border-border-subtle">
         <button
           type="button"
           onClick={() => onExecutar?.(oportunidade)}
@@ -333,7 +333,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
         <button
           type="button"
           onClick={() => onAtualizarSituacao?.(oportunidade)}
-          className="border border-slate-300 bg-white hover:bg-slate-50 active:bg-slate-100 text-foreground font-semibold text-xs px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5"
+          className="border border-border-strong bg-white hover:bg-slate-50 active:bg-slate-100 text-foreground font-semibold text-xs px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5"
         >
           <RefreshCw className="w-3.5 h-3.5 text-muted-foreground" />
           Atualizar situação
@@ -342,7 +342,7 @@ export const OportunidadeCard: React.FC<OportunidadeCardProps> = ({
         <button
           type="button"
           onClick={() => onAbrirFicha?.(oportunidade)}
-          className="border border-slate-200 bg-slate-50 hover:bg-slate-100 text-muted-foreground font-medium text-xs px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5"
+          className="border border-border bg-slate-50 hover:bg-slate-100 text-muted-foreground font-medium text-xs px-3.5 py-2 rounded-lg transition-colors flex items-center gap-1.5"
         >
           <FileText className="w-3.5 h-3.5 text-muted-foreground" />
           Abrir ficha

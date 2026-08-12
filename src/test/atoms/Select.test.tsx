@@ -26,7 +26,7 @@ describe("Select", () => {
   test("applies default variant", () => {
     render(<Select>{options}</Select>);
     const select = screen.getByRole("combobox");
-    expect(select.className).toContain("border-gray-200");
+    expect(select.className).toContain("border-border");
   });
 
   test("applies error variant", () => {

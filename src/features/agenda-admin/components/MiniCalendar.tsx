@@ -23,7 +23,7 @@ export function MiniCalendar({ selectedDate, onDateSelect, hasEventsOnDate }: Mi
   const weekDays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-sm select-none">
+    <div className="rounded-2xl border border-border bg-white p-3 shadow-sm select-none">
       {/* Header Navigation */}
       <div className="mb-2 flex items-center justify-between px-1">
         <span className="text-xs font-bold text-foreground capitalize">

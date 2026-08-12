@@ -173,7 +173,7 @@ export default function FunilVendedor() {
   if (loading) {
     return (
       <div className="flex h-64 items-center justify-center">
-        <div className="h-8 w-8 animate-spin rounded-full border-4 border-slate-200 border-t-blue-700" />
+        <div className="h-8 w-8 animate-spin rounded-full border-4 border-border border-t-blue-700" />
       </div>
     )
   }
@@ -217,7 +217,7 @@ export default function FunilVendedor() {
         <StatusMetaCard kpis={officialKpis} periodKey={periodKey} />
 
         {!hasAnyData && (
-          <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
+          <div className="rounded-2xl border border-border bg-white p-10 text-center shadow-sm">
             <TrendingUp className="mx-auto mb-3 h-10 w-10 text-slate-200" />
             <p className="mb-1 text-body font-bold text-foreground">Sem dados suficientes neste período.</p>
             <p className="text-body-sm text-muted-foreground">Registre atendimentos na Carteira ou no Fechamento Diário para alimentar o Funil.</p>

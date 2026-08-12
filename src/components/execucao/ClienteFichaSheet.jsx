@@ -61,7 +61,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
 
         {loading && (
           <div className="flex items-center justify-center h-48">
-            <div className="w-6 h-6 border-4 border-slate-200 border-t-[#005BFF] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-4 border-border border-t-[#005BFF] rounded-full animate-spin" />
           </div>
         )}
 
@@ -104,7 +104,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
               )}
               {tel && (
                 <a href={`tel:${tel}`}
-                  className="flex items-center gap-1.5 text-[12px] font-bold text-muted-foreground border border-slate-200 hover:bg-slate-50 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
+                  className="flex items-center gap-1.5 text-[12px] font-bold text-muted-foreground border border-border hover:bg-slate-50 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
                   <Phone className="w-4 h-4" /> Ligar
                 </a>
               )}

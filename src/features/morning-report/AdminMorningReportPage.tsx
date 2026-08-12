@@ -54,7 +54,7 @@ export default function AdminMorningReportPage() {
           <thead className="bg-gray-50 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
             <tr><th className="px-4 py-3">Unidade</th><th className="px-4 py-3 text-right">Vendas</th><th className="px-4 py-3 text-right">Meta</th><th className="px-4 py-3 text-right">Fechamentos</th><th className="px-4 py-3 text-right">Leads</th><th className="px-4 py-3 text-right">Visitas</th></tr>
           </thead>
-          <tbody className="divide-y divide-gray-100">
+          <tbody className="divide-y divide-border-subtle">
             {state.rows.map(row => <tr key={row.storeId}><td className="px-4 py-3 font-medium text-foreground">{row.storeName}</td><td className="px-4 py-3 text-right tabular-nums">{row.sales}</td><td className="px-4 py-3 text-right tabular-nums">{row.goal}</td><td className="px-4 py-3 text-right tabular-nums">{row.checkedIn}/{row.sellers}</td><td className="px-4 py-3 text-right tabular-nums">{row.leads}</td><td className="px-4 py-3 text-right tabular-nums">{row.visits}</td></tr>)}
           </tbody>
         </table>

@@ -78,7 +78,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
         <motion.div
           initial={{ opacity: 0, y: 6 }}
           animate={{ opacity: 1, y: 0 }}
-          className={`min-w-0 rounded-xl border p-mx-sm ${personalConnected ? 'bg-status-success-surface border-status-success/20' : 'bg-gray-50 border-gray-200'}`}
+          className={`min-w-0 rounded-xl border p-mx-sm ${personalConnected ? 'bg-status-success-surface border-status-success/20' : 'bg-gray-50 border-border'}`}
         >
           <div className="mb-1 flex min-w-0 items-center justify-between gap-mx-xs">
             <span className="min-w-0 truncate text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Sua agenda</span>
@@ -109,7 +109,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
             initial={{ opacity: 0, y: 6 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className={`min-w-0 rounded-xl border p-mx-sm ${centralConnected && centralMeetCohostsAuthorized ? 'bg-mx-green-50 border-mx-green-200' : 'bg-gray-50 border-gray-200'}`}
+            className={`min-w-0 rounded-xl border p-mx-sm ${centralConnected && centralMeetCohostsAuthorized ? 'bg-mx-green-50 border-mx-green-200' : 'bg-gray-50 border-border'}`}
           >
             <div className="mb-1 flex min-w-0 items-center justify-between gap-mx-xs">
               <span className="flex min-w-0 items-center gap-mx-xs text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">

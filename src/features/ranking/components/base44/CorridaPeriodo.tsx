@@ -17,7 +17,7 @@ export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
   const liderVal = Math.max(...vendedores.map(v => v.vendas), 0)
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex-1">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-5 flex-1">
       <div className="flex items-center gap-2 mb-1">
         <Flag className="w-5 h-5 text-foreground" />
         <h2 className="text-body font-bold text-foreground">Corrida do Período</h2>
@@ -27,7 +27,7 @@ export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
       </p>
 
       <div className="relative px-4">
-        <div className="relative h-16 bg-gradient-to-r from-slate-100 to-slate-50 rounded-xl border border-slate-200 overflow-visible">
+        <div className="relative h-16 bg-gradient-to-r from-slate-100 to-slate-50 rounded-xl border border-border overflow-visible">
           <div
             className="absolute left-0 top-0 h-full rounded-l-xl"
             style={{

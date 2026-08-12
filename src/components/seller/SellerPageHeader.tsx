@@ -18,7 +18,7 @@ export function SellerPageHeader({ title, icon: Icon, actions, subtitle, classNa
   return (
     <header
       className={cn(
-        'flex min-h-16 w-full flex-col justify-center gap-3 rounded-2xl border border-slate-200 bg-white px-4 py-4 shadow-sm sm:px-6 lg:flex-row lg:items-center lg:justify-between',
+        'flex min-h-16 w-full flex-col justify-center gap-3 rounded-2xl border border-border bg-white px-4 py-4 shadow-sm sm:px-6 lg:flex-row lg:items-center lg:justify-between',
         className,
       )}
     >

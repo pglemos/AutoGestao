@@ -276,7 +276,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
 
   const getVigenciaStatus = (m: TeamMember) => {
     const today = new Date().toISOString().slice(0, 10)
-    if (!m.is_active) return { label: 'INATIVO', variant: 'outline' as const, color: 'text-muted-foreground border-gray-200 bg-gray-50' }
+    if (!m.is_active) return { label: 'INATIVO', variant: 'outline' as const, color: 'text-muted-foreground border-border bg-gray-50' }
     if (m.ended_at && m.ended_at.slice(0, 10) < today) return { label: 'ENCERRADO', variant: 'danger' as const, color: 'text-red-600 border-red-200 bg-red-50' }
     return { label: 'ATIVO', variant: 'success' as const, color: 'text-emerald-600 border-emerald-200 bg-emerald-50' }
   }
@@ -355,7 +355,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
   }, [canApprovePreRegistrations, executeReviewPreRegistration, requestConfirmation])
 
   if (!storeId) return (
-    <section className="w-full rounded-2xl border border-gray-200 bg-white p-mx-xl text-center shadow-sm">
+    <section className="w-full rounded-2xl border border-border bg-white p-mx-xl text-center shadow-sm">
       <Typography variant="h2" className="tracking-tight">Selecione uma loja</Typography>
       <Typography variant="caption" tone="muted" className="mt-2 block">
         A equipe agora é administrada dentro do dashboard operacional de cada loja.
@@ -365,7 +365,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
 
   if (loading) return (
     <section className="w-full flex flex-col gap-mx-lg animate-in fade-in duration-500 overflow-hidden">
-        <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10">
+        <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10">
             <div className="space-y-mx-xs">
                 <Skeleton className="h-mx-10 w-mx-64" />
                 <div className="flex gap-mx-sm">
@@ -389,7 +389,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
         <div className="flex-1 mt-mx-lg">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-mx-lg">
                 {[1,2,3,4,5,6,7,8].map(i => (
-                    <div key={i} className="h-mx-96 rounded-mx-4xl bg-white/50 border-2 border-dashed border-gray-200 flex flex-col items-center justify-center p-mx-xl">
+                    <div key={i} className="h-mx-96 rounded-mx-4xl bg-white/50 border-2 border-dashed border-border flex flex-col items-center justify-center p-mx-xl">
                         <Skeleton className="w-mx-24 h-mx-24 rounded-mx-4xl mb-6" />
                         <Skeleton className="h-mx-sm w-full mb-2" />
                         <Skeleton className="h-mx-xs w-1/2" />
@@ -409,7 +409,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
             onDismiss={clearPendingConfirmation}
           />
 
-          <div className="flex flex-col gap-mx-sm rounded-2xl border border-slate-200 bg-white p-4 shadow-sm lg:flex-row lg:items-center lg:justify-between">
+          <div className="flex flex-col gap-mx-sm rounded-2xl border border-border bg-white p-4 shadow-sm lg:flex-row lg:items-center lg:justify-between">
             <div><Typography variant="h3">Equipe da Loja</Typography><Typography variant="caption" tone="muted">Integrantes vinculados a {storeName || 'esta unidade'}</Typography></div>
               <div className="flex flex-col sm:flex-row items-center gap-mx-sm w-full lg:w-auto">
                 <div className="relative group w-full sm:w-mx-96">

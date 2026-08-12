@@ -39,7 +39,7 @@ export function DRETable({
 }: DRETableProps) {
   return (
     <Card className={cn('border-none shadow-sm bg-white overflow-hidden', className)}>
-      <div className="p-mx-lg border-b border-gray-100 flex items-center justify-between">
+      <div className="p-mx-lg border-b border-border-subtle flex items-center justify-between">
         <Typography variant="h3">DRE ANUAL</Typography>
         <Button variant="outline" size="sm" className="">
           <FileText size={16} className="mr-2" /> EXPORTAR PDF
@@ -48,7 +48,7 @@ export function DRETable({
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="bg-gray-50/50 border-b border-gray-200">
+            <tr className="bg-gray-50/50 border-b border-border">
               <th className="p-mx-md w-1/4">
                 <Typography variant="tiny" tone="muted">DEMONSTRATIVO</Typography>
               </th>
@@ -95,7 +95,7 @@ export function DRETable({
               )
             })}
             {onEdit && (
-              <tr className="bg-gray-50/50 border-t-2 border-gray-200">
+              <tr className="bg-gray-50/50 border-t-2 border-border">
                 <td className="p-mx-md font-bold text-sm">AÇÕES</td>
                 {months.map((m) => {
                   const entry = data.get(m)

@@ -158,7 +158,7 @@ export default function FinalizarMobile({
   };
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-4">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-4 space-y-4">
       {/* Avisos */}
       {isBlocked && (
         <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
@@ -202,7 +202,7 @@ export default function FinalizarMobile({
       )}
 
       {jaFinalizado && d1Bloqueado && (
-        <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
+        <div className="flex items-center gap-2 bg-slate-50 border border-border rounded-xl px-4 py-3">
           <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
           <p className="text-[12px] font-semibold text-muted-foreground">
             Fechamento de {dataExibicao} encerrado e consolidado.
@@ -255,7 +255,7 @@ export default function FinalizarMobile({
             Até 09h30 de {d1DateExibicao}, você poderá corrigir somente as informações de{" "}
             <strong className="text-[#0F172A]">Agendamentos D+1</strong>.
           </p>
-          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button
               onClick={() => setConfirmModalOpen(false)}
               className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors"

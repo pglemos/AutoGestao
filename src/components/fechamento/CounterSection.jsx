@@ -36,10 +36,10 @@ const CounterItem = ({ label, bgColor, textColor, icon: Icon, value, onDecrement
       {/* Big number */}
       <span className={`${compact ? "text-[30px]" : "text-display"} font-bold leading-none tracking-tight tabular-nums ${textColor}`}>{value}</span>
       {/* Stepper */}
-      <div className={`flex items-center border border-slate-200 rounded-xl shadow-sm w-full focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.15)] transition-all ${compact ? "h-7" : "h-9"}`}>
+      <div className={`flex items-center border border-border rounded-xl shadow-sm w-full focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.15)] transition-all ${compact ? "h-7" : "h-9"}`}>
         <button
           onClick={onDecrement}
-          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-muted-foreground font-light border-r border-slate-200 rounded-l-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}
+          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-muted-foreground font-light border-r border-border rounded-l-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}
         >−</button>
         <input
           type="text"
@@ -56,7 +56,7 @@ const CounterItem = ({ label, bgColor, textColor, icon: Icon, value, onDecrement
         />
         <button
           onClick={onIncrement}
-          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-muted-foreground font-light border-l border-slate-200 rounded-r-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}
+          className={`flex-shrink-0 flex items-center justify-center bg-white hover:bg-slate-50 active:bg-slate-100 transition-colors text-muted-foreground font-light border-l border-border rounded-r-xl h-full ${compact ? "w-7 text-body" : "w-9 text-[18px]"}`}
         >+</button>
       </div>
     </div>
@@ -70,8 +70,8 @@ const Divider = () => (
 );
 
 const SectionCard = ({ number, title, accent, tooltip, children }) => (
-  <div className="bg-white rounded-2xl border border-slate-200 shadow-sm flex flex-col">
-    <div className={`flex items-center gap-2.5 px-5 py-3.5 border-b border-slate-100 bg-gradient-to-r from-slate-50 to-white`}>
+  <div className="bg-white rounded-2xl border border-border shadow-sm flex flex-col">
+    <div className={`flex items-center gap-2.5 px-5 py-3.5 border-b border-border-subtle bg-gradient-to-r from-slate-50 to-white`}>
       <span className={`w-5 h-5 rounded-full ${accent} text-white text-caption font-bold flex items-center justify-center flex-shrink-0`}>{number}</span>
       <span className="text-[12px] font-bold text-muted-foreground uppercase tracking-widest">{title}</span>
       <div className="ml-auto"><InfoTooltip text={tooltip} /></div>

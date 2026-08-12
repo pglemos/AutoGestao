@@ -22,14 +22,14 @@ describe("AccordionItem", () => {
     const { container } = render(<AccordionItem summary="T">C</AccordionItem>);
     const details = container.querySelector("details")!;
     expect(details.className).toContain("border");
-    expect(details.className).toContain("border-gray-200");
+    expect(details.className).toContain("border-border");
     expect(details.className).toContain("rounded-xl");
   });
 
   test("applies bordered variant classes", () => {
     const { container } = render(<AccordionItem variant="bordered" summary="T">C</AccordionItem>);
     const details = container.querySelector("details")!;
-    expect(details.className).toContain("border-gray-200");
+    expect(details.className).toContain("border-border");
     expect(details.className).toContain("shadow-sm");
   });
 

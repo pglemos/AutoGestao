@@ -24,7 +24,7 @@ const FLUXO_LABEL: Record<CarteiraFluxoEstado, string> = {
 }
 
 const FLUXO_TONE: Record<CarteiraFluxoEstado, string> = {
-  novo: 'border-gray-200 bg-gray-50 text-muted-foreground',
+  novo: 'border-border bg-gray-50 text-muted-foreground',
   contato_inicial: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
   aquecimento: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   negociacao: 'border-status-warning/40 bg-status-warning-surface text-status-warning',
@@ -96,7 +96,7 @@ export function MarketingModulo({ storeId }: Props) {
         </header>
 
         {!posicionamento ? (
-          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Loja ainda sem posicionamento cadastrado.
             </Typography>
@@ -115,7 +115,7 @@ export function MarketingModulo({ storeId }: Props) {
             ).map(([label, value]) => (
               <div
                 key={label}
-                className="rounded-2xl border border-gray-200 bg-white p-mx-sm"
+                className="rounded-2xl border border-border bg-white p-mx-sm"
               >
                 <dt>
                   <Typography
@@ -165,7 +165,7 @@ export function MarketingModulo({ storeId }: Props) {
         </header>
 
         {carteira.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhum cliente em carteira para esta loja.
             </Typography>
@@ -184,7 +184,7 @@ export function MarketingModulo({ storeId }: Props) {
               </thead>
               <tbody>
                 {carteira.map((cliente) => (
-                  <tr key={cliente.id} className="border-t border-gray-200/60">
+                  <tr key={cliente.id} className="border-t border-border/60">
                     <td className="px-mx-sm py-mx-xs font-bold">
                       {cliente.nome_cliente}
                       <Typography
@@ -239,7 +239,7 @@ export function MarketingModulo({ storeId }: Props) {
         </header>
 
         {agendaMensal.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Sem agenda estratégica registrada para o trimestre.
             </Typography>
@@ -249,7 +249,7 @@ export function MarketingModulo({ storeId }: Props) {
             {agendaMensal.map((item) => (
               <li
                 key={item.id}
-                className="rounded-2xl border border-gray-200 bg-white p-mx-sm"
+                className="rounded-2xl border border-border bg-white p-mx-sm"
               >
                 <div className="flex flex-wrap items-center gap-mx-xs">
                   <Badge variant="outline" className="">

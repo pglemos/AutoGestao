@@ -151,7 +151,7 @@ export default function AiDiagnostics() {
           </section>
           <aside className="lg:col-span-5 flex flex-col pb-20 lg:pb-0">
             <Card className="p-mx-md bg-white border h-full space-y-mx-md flex flex-col">
-              <header className="flex items-center gap-mx-sm border-b border-gray-100 pb-4">
+              <header className="flex items-center gap-mx-sm border-b border-border-subtle pb-4">
                 <div className="w-mx-2xl h-mx-2xl rounded-xl bg-emerald-600 text-white flex items-center justify-center shadow-sm shrink-0" aria-hidden="true"><ShieldCheck size={32} /></div>
                 <div><Typography variant="h2" className="text-xl sm:text-2xl tracking-tight">Resumo operacional</Typography><Typography variant="caption" tone="muted" className="">Conclusão e ação sugerida</Typography></div>
               </header>
@@ -162,10 +162,10 @@ export default function AiDiagnostics() {
                       <Card className="p-mx-md bg-mx-indigo-50 border relative group"><Quote size={64} className="absolute -right-4 -bottom-4 text-emerald-600 opacity-5 -rotate-12" aria-hidden="true" /><Typography variant="p" className="text-lg sm:text-xl italic leading-relaxed relative z-10 tracking-tight">“{summary.diagnostic}”</Typography></Card>
                       <div className="space-y-mx-md"><div className="flex items-center gap-mx-xs"><div className="w-mx-10 h-mx-10 rounded-xl bg-status-success-surface text-status-success flex items-center justify-center border border-status-success/20" aria-hidden="true"><TrendingUp size={20} /></div><Typography variant="tiny" tone="success" className="">Plano de Ação Gerencial</Typography></div><Typography variant="p" className="text-sm sm:text-base font-bold leading-relaxed bg-gray-50 p-mx-md border tracking-tight">{summary.action}</Typography></div>
                     </motion.div>
-                  ) : <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-mx-md"><div className="w-mx-3xl h-mx-3xl rounded-mx-full border-4 border-gray-100 border-t-brand-primary animate-spin" aria-hidden="true" /><Typography variant="caption" tone="muted" className="animate-pulse">ANALISANDO MALHA...</Typography></div>}
+                  ) : <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-mx-md"><div className="w-mx-3xl h-mx-3xl rounded-mx-full border-4 border-border-subtle border-t-brand-primary animate-spin" aria-hidden="true" /><Typography variant="caption" tone="muted" className="animate-pulse">ANALISANDO MALHA...</Typography></div>}
                 </AnimatePresence>
               </div>
-              <footer className="pt-8 border-t border-gray-100 mt-auto"><Typography variant="tiny" tone="muted" className="text-center block opacity-60">Referência operacional: critério 20/60/33</Typography></footer>
+              <footer className="pt-8 border-t border-border-subtle mt-auto"><Typography variant="tiny" tone="muted" className="text-center block opacity-60">Referência operacional: critério 20/60/33</Typography></footer>
             </Card>
           </aside>
         </div>

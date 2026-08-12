@@ -80,7 +80,7 @@ export function VendasFechadasLoja({
                   aria-label="Unidade das vendas"
                   value={storeId || ''}
                   onChange={event => onStoreChange(event.target.value)}
-                  className="block min-w-[160px] rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-foreground"
+                  className="block min-w-[160px] rounded-xl border border-border bg-white px-3 py-2 text-sm text-foreground"
                 >
                   {selectableStores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
                 </select>
@@ -97,17 +97,17 @@ export function VendasFechadasLoja({
           onChange={event => setSearch(event.target.value)}
           placeholder="Buscar por cliente, vendedor ou veículo..."
           aria-label="Buscar venda"
-          className="h-9 w-full rounded-xl border border-slate-200 bg-white pl-9 pr-3 text-sm focus:outline-none focus:ring-1 focus:ring-mx-action"
+          className="h-9 w-full rounded-xl border border-border bg-white pl-9 pr-3 text-sm focus:outline-none focus:ring-1 focus:ring-mx-action"
         />
       </div>
 
       {error && <p className="text-sm text-status-error">{error}</p>}
 
-      <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
         <div className="overflow-x-auto">
           <table className="w-full min-w-[760px]">
             <thead>
-              <tr className="border-b border-slate-100 bg-slate-50">
+              <tr className="border-b border-border-subtle bg-slate-50">
                 {['Cliente', 'Vendedor', 'Veículo', 'Valor', 'Fechamento', 'Status', 'Ações'].map(h => (
                   <th key={h} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wider text-muted-foreground">{h}</th>
                 ))}

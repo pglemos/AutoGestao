@@ -42,7 +42,7 @@ export function BroadcastsTab() {
             </Card>
 
             <Card className="border-none bg-white overflow-hidden">
-                <header className="flex items-center justify-between p-mx-md border-b border-gray-200">
+                <header className="flex items-center justify-between p-mx-md border-b border-border">
                     <div>
                         <Typography variant="caption" className="">Últimos Broadcasts</Typography>
                         <Typography variant="tiny" tone="muted" className="font-bold">Histórico de comunicados disparados</Typography>

@@ -106,7 +106,7 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
               className={`text-caption font-semibold px-2.5 py-1 rounded-lg border transition-all ${
                 tomSelecionado === t.id
                   ? "bg-violet-600 text-white border-violet-600"
-                  : "bg-white text-muted-foreground border-slate-200 hover:border-violet-300 hover:text-violet-600"
+                  : "bg-white text-muted-foreground border-border hover:border-violet-300 hover:text-violet-600"
               }`}
             >
               {t.label}
@@ -119,7 +119,7 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
       {!script && bloqueio && (
         <p
           role="status"
-          className="text-xs leading-relaxed text-foreground bg-white border border-slate-200 rounded-xl p-3"
+          className="text-xs leading-relaxed text-foreground bg-white border border-border rounded-xl p-3"
         >
           {bloqueio}
         </p>

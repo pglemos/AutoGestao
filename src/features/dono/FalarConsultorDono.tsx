@@ -233,7 +233,7 @@ export default function FalarConsultorDono() {
 
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
-      <header className="flex flex-col gap-mx-sm border-b border-gray-100 pb-mx-lg">
+      <header className="flex flex-col gap-mx-sm border-b border-border-subtle pb-mx-lg">
         <div className="flex flex-wrap items-center justify-between gap-mx-md">
           <div className="min-w-0">
             <Typography variant="h1" className="text-3xl md:text-4xl">Falar com Consultor</Typography>
@@ -282,7 +282,7 @@ export default function FalarConsultorDono() {
                   </a>
                 )}
                 {phoneDigits && (
-                  <a href={`tel:${phoneDigits}`} className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-2xl border border-gray-200 bg-white text-sm font-bold text-foreground transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/20">
+                  <a href={`tel:${phoneDigits}`} className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-2xl border border-border bg-white text-sm font-bold text-foreground transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/20">
                     <Phone size={18} /> Ligar
                   </a>
                 )}
@@ -293,7 +293,7 @@ export default function FalarConsultorDono() {
                 )}
               </div>
 
-              <div className="mt-mx-lg space-y-mx-xs border-t border-gray-100 pt-mx-md">
+              <div className="mt-mx-lg space-y-mx-xs border-t border-border-subtle pt-mx-md">
                 {contact?.consultant_email && (
                   <a href={mailtoUrl || undefined} className="flex items-center gap-mx-xs break-all text-sm font-bold text-muted-foreground hover:text-emerald-600">
                     <Mail size={14} className="shrink-0 text-muted-foreground" /> {contact.consultant_email}
@@ -346,7 +346,7 @@ export default function FalarConsultorDono() {
               </label>
               <label className="space-y-mx-xs text-sm font-bold text-muted-foreground">
                 Tipo da solicitação
-                <select value={requestType} onChange={event => setRequestType(event.target.value)} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-mx-md text-sm font-bold text-foreground focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
+                <select value={requestType} onChange={event => setRequestType(event.target.value)} className="h-12 w-full rounded-xl border border-border bg-white px-mx-md text-sm font-bold text-foreground focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
                   {requestTypes.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
                 </select>
               </label>
@@ -354,13 +354,13 @@ export default function FalarConsultorDono() {
 
             <label className="block space-y-mx-xs text-sm font-bold text-muted-foreground">
               Mensagem
-              <textarea value={message} onChange={event => setMessage(event.target.value)} rows={6} maxLength={5000} required className="w-full resize-y rounded-xl border border-gray-200 bg-white px-mx-md py-mx-sm text-sm font-bold text-foreground shadow-none placeholder:text-mx-subtle focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20" placeholder="Descreva a decisão, dúvida ou análise necessária." />
+              <textarea value={message} onChange={event => setMessage(event.target.value)} rows={6} maxLength={5000} required className="w-full resize-y rounded-xl border border-border bg-white px-mx-md py-mx-sm text-sm font-bold text-foreground shadow-none placeholder:text-mx-subtle focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20" placeholder="Descreva a decisão, dúvida ou análise necessária." />
             </label>
 
             <div className="grid grid-cols-1 gap-mx-md sm:grid-cols-[180px_minmax(0,1fr)]">
               <label className="space-y-mx-xs text-sm font-bold text-muted-foreground">
                 Prioridade
-                <select value={priority} onChange={event => setPriority(event.target.value)} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-mx-md text-sm font-bold text-foreground focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
+                <select value={priority} onChange={event => setPriority(event.target.value)} className="h-12 w-full rounded-xl border border-border bg-white px-mx-md text-sm font-bold text-foreground focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
                   {priorities.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
                 </select>
               </label>
@@ -392,13 +392,13 @@ export default function FalarConsultorDono() {
           {loading ? (
             <div className="h-24 animate-pulse rounded-2xl bg-gray-50" />
           ) : requests.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-gray-200 p-mx-lg text-center">
+            <div className="rounded-2xl border border-dashed border-border p-mx-lg text-center">
               <UserRoundCheck size={26} className="mx-auto text-muted-foreground" />
               <p className="mt-mx-sm text-sm font-bold text-foreground">Nenhuma solicitação registrada</p>
               <p className="mt-mx-xs text-xs font-bold text-muted-foreground">O primeiro envio aparecerá aqui com status e data.</p>
             </div>
           ) : requests.map(request => (
-            <div key={request.id} className="flex flex-col gap-mx-sm rounded-2xl border border-gray-200 p-mx-md md:flex-row md:items-center md:justify-between">
+            <div key={request.id} className="flex flex-col gap-mx-sm rounded-2xl border border-border p-mx-md md:flex-row md:items-center md:justify-between">
               <div className="min-w-0">
                 <p className="truncate font-bold text-foreground">{request.subject}</p>
                 <p className="mt-mx-tiny text-xs font-bold text-muted-foreground">

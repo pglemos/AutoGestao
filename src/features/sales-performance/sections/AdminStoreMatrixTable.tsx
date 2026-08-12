@@ -40,7 +40,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
       </CardHeader>
       <CardContent className="p-mx-0 overflow-x-auto">
         <table className="w-full text-left" style={{ minWidth: 960 }}>
-          <thead className="bg-gray-50/60 border-y border-gray-100">
+          <thead className="bg-gray-50/60 border-y border-border-subtle">
             <tr>
               {HEADERS.map((head) => (
                 <th

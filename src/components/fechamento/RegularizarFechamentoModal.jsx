@@ -18,17 +18,17 @@ const FIELDS = [
 
 function Counter({ label, value, onChange }) {
   return (
-    <div className="flex items-center justify-between py-2.5 border-b border-slate-100 last:border-0">
+    <div className="flex items-center justify-between py-2.5 border-b border-border-subtle last:border-0">
       <span className="text-body-sm font-semibold text-[#0F172A]">{label}</span>
       <div className="flex items-center gap-2">
         <button
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="w-7 h-7 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-muted-foreground font-bold text-base flex items-center justify-center transition-colors"
+          className="w-7 h-7 rounded-lg border border-border bg-slate-50 hover:bg-slate-100 text-muted-foreground font-bold text-base flex items-center justify-center transition-colors"
         >−</button>
         <span className="w-8 text-center font-bold text-[14px] text-[#0F172A]">{value}</span>
         <button
           onClick={() => onChange(Math.min(999, value + 1))}
-          className="w-7 h-7 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-muted-foreground font-bold text-base flex items-center justify-center transition-colors"
+          className="w-7 h-7 rounded-lg border border-border bg-slate-50 hover:bg-slate-100 text-muted-foreground font-bold text-base flex items-center justify-center transition-colors"
         >+</button>
       </div>
     </div>
@@ -200,7 +200,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
               <div className="flex gap-2">
                 <button
                   onClick={onClose}
-                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-body-sm font-bold text-muted-foreground hover:bg-slate-50 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl border border-border text-body-sm font-bold text-muted-foreground hover:bg-slate-50 transition-colors"
                 >
                   Cancelar
                 </button>
@@ -226,7 +226,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
               <div className="flex gap-2">
                 <button
                   onClick={() => setStep("form")}
-                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-body-sm font-bold text-muted-foreground hover:bg-slate-50 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl border border-border text-body-sm font-bold text-muted-foreground hover:bg-slate-50 transition-colors"
                   disabled={salvando}
                 >
                   Não, voltar

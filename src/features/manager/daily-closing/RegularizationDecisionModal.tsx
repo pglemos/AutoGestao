@@ -55,7 +55,7 @@ export function RegularizationDecisionModal({
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -102,7 +102,7 @@ export function RegularizationDecisionModal({
                 ? "Adicione um comentário sobre a aprovação..."
                 : "Descreva por que a regularização foi recusada..."
             }
-            className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-foreground outline-none transition-shadow focus:ring-2 focus:ring-emerald-500"
+            className="w-full resize-none rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none transition-shadow focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
@@ -120,7 +120,7 @@ export function RegularizationDecisionModal({
               className={`mt-0.5 grid h-4 w-4 shrink-0 place-items-center rounded ${
                 confirmed
                   ? "bg-emerald-600 text-white"
-                  : "border border-gray-300 bg-white"
+                  : "border border-border-strong bg-white"
               }`}
             >
               {confirmed && <Check size={12} />}

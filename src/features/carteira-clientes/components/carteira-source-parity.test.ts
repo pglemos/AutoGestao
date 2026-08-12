@@ -83,7 +83,7 @@ describe('Base44 1:1 visual source parity', () => {
     const runtime = readFileSync('src/components/carteira/FichaClienteSheet.jsx', 'utf8')
     const reference = readFileSync('src/base44-reference/components/carteira/FichaClienteSheet.jsx', 'utf8')
 
-    for (const token of ['Mentor Comercial', 'Alterar próximo passo', 'sticky bottom-0 bg-white border-t border-slate-100']) {
+    for (const token of ['Mentor Comercial', 'Alterar próximo passo', 'sticky bottom-0 bg-white border-t border-border-subtle']) {
       expect(reference, `reference token: ${token}`).toContain(token)
       expect(runtime, `runtime token: ${token}`).toContain(token)
     }

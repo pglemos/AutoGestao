@@ -64,7 +64,7 @@ export function ManagerMentorLibrary() {
   const featured = MENTOR_GUIDANCE.find(item => item.highlight) || MENTOR_GUIDANCE[0]
 
   return (
-    <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm" aria-labelledby="mentor-library-title">
+    <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm" aria-labelledby="mentor-library-title">
       <div className="mb-4 flex items-center gap-2">
         <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50">
           <BookOpen className="text-emerald-600" size={20} />
@@ -89,7 +89,7 @@ export function ManagerMentorLibrary() {
           onChange={event => setSearch(event.target.value)}
           aria-label="Buscar orientação"
           placeholder="Buscar orientação..."
-          className="w-full rounded-xl border border-gray-100 bg-gray-50 py-2 pl-9 pr-3 text-sm transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          className="w-full rounded-xl border border-border-subtle bg-gray-50 py-2 pl-9 pr-3 text-sm transition-all focus:bg-white focus:outline-none focus:ring-2 focus:ring-emerald-500"
         />
       </div>
 
@@ -126,7 +126,7 @@ export function ManagerMentorLibrary() {
                 className={`group rounded-xl border p-4 transition-all ${
                   item.highlight
                     ? 'border-emerald-200 bg-emerald-50/30'
-                    : 'border-gray-100 bg-gray-50/60 hover:border-emerald-200 hover:bg-emerald-50/40'
+                    : 'border-border-subtle bg-gray-50/60 hover:border-emerald-200 hover:bg-emerald-50/40'
                 }`}
               >
                 <div className="mb-2 flex items-start justify-between gap-2">

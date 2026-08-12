@@ -14,13 +14,13 @@ import ScriptIA from "./ScriptIA";
 import { toast } from "@/components/ui/use-toast";
 
 const COR_MAP = {
-  green:  { sel: "bg-green-50 border-green-400 text-green-700",    base: "bg-white border-slate-200 hover:bg-green-50 hover:border-green-300" },
-  red:    { sel: "bg-red-50 border-red-400 text-red-700",          base: "bg-white border-slate-200 hover:bg-red-50 hover:border-red-300" },
-  slate:  { sel: "bg-slate-100 border-slate-400 text-foreground",   base: "bg-white border-slate-200 hover:bg-slate-50" },
-  blue:   { sel: "bg-blue-50 border-blue-400 text-blue-700",       base: "bg-white border-slate-200 hover:bg-blue-50 hover:border-blue-300" },
-  orange: { sel: "bg-orange-50 border-orange-400 text-orange-700", base: "bg-white border-slate-200 hover:bg-orange-50 hover:border-orange-300" },
-  teal:   { sel: "bg-teal-50 border-teal-400 text-teal-700",       base: "bg-white border-slate-200 hover:bg-teal-50 hover:border-teal-300" },
-  yellow: { sel: "bg-yellow-50 border-yellow-400 text-yellow-700", base: "bg-white border-slate-200 hover:bg-yellow-50 hover:border-yellow-300" },
+  green:  { sel: "bg-green-50 border-green-400 text-green-700",    base: "bg-white border-border hover:bg-green-50 hover:border-green-300" },
+  red:    { sel: "bg-red-50 border-red-400 text-red-700",          base: "bg-white border-border hover:bg-red-50 hover:border-red-300" },
+  slate:  { sel: "bg-slate-100 border-slate-400 text-foreground",   base: "bg-white border-border hover:bg-slate-50" },
+  blue:   { sel: "bg-blue-50 border-blue-400 text-blue-700",       base: "bg-white border-border hover:bg-blue-50 hover:border-blue-300" },
+  orange: { sel: "bg-orange-50 border-orange-400 text-orange-700", base: "bg-white border-border hover:bg-orange-50 hover:border-orange-300" },
+  teal:   { sel: "bg-teal-50 border-teal-400 text-teal-700",       base: "bg-white border-border hover:bg-teal-50 hover:border-teal-300" },
+  yellow: { sel: "bg-yellow-50 border-yellow-400 text-yellow-700", base: "bg-white border-border hover:bg-yellow-50 hover:border-yellow-300" },
 };
 
 // Chave no sessionStorage para detecção de retorno do WhatsApp
@@ -172,7 +172,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
             className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${
               mostrarRegistro
                 ? "bg-[#005BFF] text-white border-[#005BFF]"
-                : "bg-white text-muted-foreground border-slate-200 hover:bg-blue-50 hover:border-blue-300"
+                : "bg-white text-muted-foreground border-border hover:bg-blue-50 hover:border-blue-300"
             }`}
           >
             <span className="text-sm font-semibold">
@@ -218,7 +218,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                     value={motivoPerda}
                     onChange={e => setMotivoPerda(e.target.value)}
                     placeholder="Descreva o motivo..."
-                    className="w-full h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+                    className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
                   />
                 </div>
               )}
@@ -230,7 +230,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                     type="datetime-local"
                     value={novaDataVisita}
                     onChange={e => setNovaDataVisita(e.target.value)}
-                    className="w-full h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+                    className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
                   />
                 </div>
               )}
@@ -242,7 +242,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                   onChange={e => setObservacao(e.target.value)}
                   placeholder="Detalhes do contato..."
                   rows={3}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+                  className="w-full rounded-xl border border-border bg-slate-50 px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
                 />
               </div>
 

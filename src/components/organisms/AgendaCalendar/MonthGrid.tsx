@@ -30,11 +30,11 @@ export function MonthGrid({
   onEventClick,
 }: MonthGridProps) {
   return (
-    <div className="overflow-hidden rounded-xl border border-gray-200 bg-white shadow-2xs">
+    <div className="overflow-hidden rounded-xl border border-border bg-white shadow-2xs">
       {/* Weekday Labels Header */}
-      <div className="grid grid-cols-7 border-b border-gray-200 bg-gray-50/40 select-none">
+      <div className="grid grid-cols-7 border-b border-border bg-gray-50/40 select-none">
         {WEEKDAY_LABELS.map((label) => (
-          <div key={label} className="border-r border-gray-200 py-1.5 text-center last:border-r-0">
+          <div key={label} className="border-r border-border py-1.5 text-center last:border-r-0">
             <Typography variant="tiny" tone="muted" className="text-caption font-bold tracking-wider">{label}</Typography>
           </div>
         ))}
@@ -67,7 +67,7 @@ export function MonthGrid({
                 if (dayInfo.isCurrentMonth) onDateClick?.(dayInfo.date)
               }}
               className={cn(
-                'relative flex min-h-[88px] md:min-h-[104px] flex-col items-start gap-1 border-b border-r border-gray-100 p-1.5 text-left transition-colors',
+                'relative flex min-h-[88px] md:min-h-[104px] flex-col items-start gap-1 border-b border-r border-border-subtle p-1.5 text-left transition-colors',
                 !dayInfo.isCurrentMonth && 'bg-gray-50/40 text-muted-foreground/40',
                 dayInfo.isCurrentMonth && 'hover:bg-gray-50/50',
                 isSelected && 'bg-emerald-600/10 ring-1 ring-brand-primary ring-inset',

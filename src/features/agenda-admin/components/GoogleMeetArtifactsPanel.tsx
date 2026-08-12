@@ -56,7 +56,7 @@ export function GoogleMeetArtifactsPanel({ artifact, hasMeetLink }: GoogleMeetAr
     : null
 
   return (
-    <div className="mt-mx-sm rounded-xl border border-gray-200 bg-gray-50/60 p-mx-sm">
+    <div className="mt-mx-sm rounded-xl border border-border bg-gray-50/60 p-mx-sm">
       <div className="flex flex-wrap items-center justify-between gap-mx-xs">
         <div className="flex flex-wrap items-center gap-mx-xs">
           <Badge variant={status.variant} className="text-mx-nano">{status.label}</Badge>
@@ -74,7 +74,7 @@ export function GoogleMeetArtifactsPanel({ artifact, hasMeetLink }: GoogleMeetAr
 
       {artifact?.status === 'processed' && (
         <div className="mt-mx-sm space-y-mx-xs">
-          <details className="rounded-xl border border-gray-200 bg-white p-mx-sm">
+          <details className="rounded-xl border border-border bg-white p-mx-sm">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-mx-sm">
               <span className="flex items-center gap-mx-xs">
                 <FileText size={14} className="text-emerald-600" />
@@ -92,7 +92,7 @@ export function GoogleMeetArtifactsPanel({ artifact, hasMeetLink }: GoogleMeetAr
             </pre>
           </details>
 
-          <details className="rounded-xl border border-gray-200 bg-white p-mx-sm">
+          <details className="rounded-xl border border-border bg-white p-mx-sm">
             <summary className="flex cursor-pointer list-none items-center justify-between gap-mx-sm">
               <span className="flex items-center gap-mx-xs">
                 <ScrollText size={14} className="text-emerald-600" />

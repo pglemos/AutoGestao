@@ -53,7 +53,7 @@ const PLANO_TONE: Record<string, string> = {
   pendente: 'bg-status-warning-surface text-status-warning border-status-warning/30',
   em_andamento: 'bg-mx-indigo-50 text-emerald-600 border-brand-primary/30',
   atrasado: 'bg-status-error-surface text-status-error border-status-error/30',
-  validando_eficacia: 'bg-gray-50 text-muted-foreground border-gray-200',
+  validando_eficacia: 'bg-gray-50 text-muted-foreground border-border',
   concluido: 'bg-status-success-surface text-status-success border-status-success/30',
 }
 
@@ -121,7 +121,7 @@ export function CentralMxPersistedAlertsPanel({ storeId }: Props) {
           />
         ))}
         {!alerts.length && !loading && (
-          <li className="rounded-2xl border border-dashed border-gray-200 p-mx-md text-center">
+          <li className="rounded-2xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhum alerta aberto.
             </Typography>
@@ -270,7 +270,7 @@ export function CentralMxPersistedPlanosPanel({ storeId }: Props) {
           <PersistedPlanoRow key={plano.id} plano={plano} onConcluir={marcarConcluido} />
         ))}
         {!planos.length && !loading && (
-          <li className="rounded-2xl border border-dashed border-gray-200 p-mx-md text-center">
+          <li className="rounded-2xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Sem planos de ação ativos para esta loja.
             </Typography>
@@ -387,7 +387,7 @@ export function CentralMxPersistedAgendaPanel({ storeId }: Props) {
           />
         ))}
         {!events.length && !loading && (
-          <li className="rounded-2xl border border-dashed border-gray-200 p-mx-md text-center">
+          <li className="rounded-2xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Sem eventos nos próximos 30 dias.
             </Typography>
@@ -415,7 +415,7 @@ function PersistedAgendaRow({
     minute: '2-digit',
   })
   return (
-    <li className="rounded-2xl border border-gray-200 bg-white p-mx-md">
+    <li className="rounded-2xl border border-border bg-white p-mx-md">
       <div className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-mx-xs">

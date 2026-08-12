@@ -14,8 +14,8 @@ const buttonVariants = cva(
         // `manager`.
         primary: "rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500/20 disabled:bg-gray-100 disabled:text-muted-foreground",
         brand: "rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500/20 disabled:bg-gray-100 disabled:text-muted-foreground",
-        secondary: "rounded-xl border border-gray-200 bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-emerald-500/20 disabled:border-gray-100 disabled:bg-gray-50 disabled:text-muted-foreground",
-        outline: "rounded-xl border border-gray-200 bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-emerald-500/20 disabled:border-gray-100 disabled:bg-gray-50 disabled:text-muted-foreground",
+        secondary: "rounded-xl border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-emerald-500/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
+        outline: "rounded-xl border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-emerald-500/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
         ghost: "rounded-xl bg-transparent text-muted-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-emerald-500/20 disabled:bg-transparent disabled:text-text-disabled",
         success: "rounded-xl bg-emerald-600 text-white shadow-sm hover:bg-emerald-700 focus-visible:ring-emerald-500/20",
         warning: "rounded-xl bg-amber-500 text-white shadow-sm hover:bg-amber-600 focus-visible:ring-amber-500/20",

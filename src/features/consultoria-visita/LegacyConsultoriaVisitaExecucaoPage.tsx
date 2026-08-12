@@ -631,9 +631,9 @@ export default function ConsultoriaVisitaExecucao() {
          </div>
       </div>
 
-      <div className="sticky top-mx-0 z-40 bg-gray-50/80 backdrop-blur-xl px-mx-md py-mx-sm flex flex-col md:flex-row md:items-center justify-between gap-mx-sm mb-mx-md print:hidden border-b border-gray-100 shadow-sm transition-all">
+      <div className="sticky top-mx-0 z-40 bg-gray-50/80 backdrop-blur-xl px-mx-md py-mx-sm flex flex-col md:flex-row md:items-center justify-between gap-mx-sm mb-mx-md print:hidden border-b border-border-subtle shadow-sm transition-all">
         <div className="flex items-center gap-mx-md">
-          <Link to={`/consultoria/clientes/${client?.slug}`} className="p-mx-xs border border-gray-100 rounded-2xl hover:bg-white hover:shadow-sm transition-all text-muted-foreground bg-white/50 backdrop-blur-sm shadow-sm group">
+          <Link to={`/consultoria/clientes/${client?.slug}`} className="p-mx-xs border border-border-subtle rounded-2xl hover:bg-white hover:shadow-sm transition-all text-muted-foreground bg-white/50 backdrop-blur-sm shadow-sm group">
             <ArrowLeft className="w-mx-5 h-mx-5 group-hover:-translate-x-1 transition-transform" />
           </Link>
           <div>
@@ -678,10 +678,10 @@ export default function ConsultoriaVisitaExecucao() {
 
         <div className="lg:col-span-2 space-y-mx-lg">
 
-          <div className="rounded-2xl border border-gray-200 bg-white p-mx-md shadow-sm">
+          <div className="rounded-2xl border border-border bg-white p-mx-md shadow-sm">
             <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-mx-sm">
               {VISIT_FLOW_STEPS.map((item, index) => (
-                <div key={item} className="min-h-mx-14 rounded-2xl border border-gray-100 bg-gray-50/40 px-mx-sm py-mx-xs">
+                <div key={item} className="min-h-mx-14 rounded-2xl border border-border-subtle bg-gray-50/40 px-mx-sm py-mx-xs">
                   <Typography variant="tiny" tone="muted" className="block">{String(index + 1).padStart(2, '0')}</Typography>
                   <Typography variant="p" className="text-xs leading-tight text-foreground">{item}</Typography>
                 </div>
@@ -697,7 +697,7 @@ export default function ConsultoriaVisitaExecucao() {
 
           <Card className="p-mx-lg border bg-white overflow-hidden">
             <div className="flex flex-col gap-mx-md">
-              <div className="flex items-center gap-mx-sm border-b border-gray-100 pb-mx-md">
+              <div className="flex items-center gap-mx-sm border-b border-border-subtle pb-mx-md">
                 <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Calendar size={20} /></div>
                 <div>
                   <Typography variant="h3" className="text-lg">Periodo de Analise</Typography>
@@ -741,7 +741,7 @@ export default function ConsultoriaVisitaExecucao() {
           </Card>
 
           <Card className="p-mx-lg border bg-white overflow-hidden">
-             <div className="flex items-center gap-mx-sm mb-mx-lg border-b border-gray-100 pb-mx-md">
+             <div className="flex items-center gap-mx-sm mb-mx-lg border-b border-border-subtle pb-mx-md">
                 <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><ClipboardCheck size={20} /></div>
                 <Typography variant="h3" className="text-lg">Execução Metodológica</Typography>
              </div>
@@ -755,7 +755,7 @@ export default function ConsultoriaVisitaExecucao() {
              {visitNum === 7 && <VisitSevenExecution onGenerateSummary={(t) => setExecutiveSummary(prev => prev + '\n' + t)} />}
              {visitNum === 8 && <VisitEightExecution onGenerateSummary={(t) => setExecutiveSummary(prev => prev + '\n' + t)} />}
 
-             <div className="mt-mx-lg pt-mx-lg border-t border-gray-100">
+             <div className="mt-mx-lg pt-mx-lg border-t border-border-subtle">
                 <Typography variant="tiny" tone="muted" className="mb-mx-sm block">Checklist de Tarefas</Typography>
                 <VisitChecklist items={checklist} onToggle={handleToggleCheck} />
              </div>
@@ -780,7 +780,7 @@ export default function ConsultoriaVisitaExecucao() {
                 value={executiveSummary}
                 onChange={(e) => setExecutiveSummary(e.target.value)}
                 placeholder="Insira o rascunho da visita. Depois clique em RESUMIR PARA GRUPO para deixar a mensagem pronta para enviar..."
-                className="min-h-mx-64 text-sm bg-gray-50/20 border-gray-200 focus:border-brand-primary focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all mb-mx-md font-medium leading-relaxed relative z-10"
+                className="min-h-mx-64 text-sm bg-gray-50/20 border-border focus:border-brand-primary focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all mb-mx-md font-medium leading-relaxed relative z-10"
               />
               <div className="relative z-10">
                 <VisitActionQuickAdd clientId={clientId!} visitNumber={visitNum} />
@@ -803,7 +803,7 @@ export default function ConsultoriaVisitaExecucao() {
                   value={feedbackClient}
                   onChange={(e) => setFeedbackClient(e.target.value)}
                   placeholder="Pontos de atenção emergenciais..."
-                  className="min-h-mx-32 text-sm bg-gray-50/20 border-gray-200 focus:border-brand-secondary focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all font-medium leading-relaxed relative z-10"
+                  className="min-h-mx-32 text-sm bg-gray-50/20 border-border focus:border-brand-secondary focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all font-medium leading-relaxed relative z-10"
                 />
               </Card>
 
@@ -822,7 +822,7 @@ export default function ConsultoriaVisitaExecucao() {
                   value={nextCycleGoal}
                   onChange={(e) => setNextCycleGoal(e.target.value)}
                   placeholder="O que deve ser o foco da loja até a próxima visita da consultoria?"
-                  className="min-h-mx-32 text-sm bg-gray-50/20 border-gray-200 focus:border-mx-orange-500 focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all font-bold leading-relaxed relative z-10 text-mx-orange-700"
+                  className="min-h-mx-32 text-sm bg-gray-50/20 border-border focus:border-mx-orange-500 focus:bg-white rounded-2xl p-mx-md shadow-mx-inner resize-none transition-all font-bold leading-relaxed relative z-10 text-mx-orange-700"
                 />
               </Card>
             </div>
@@ -834,11 +834,11 @@ export default function ConsultoriaVisitaExecucao() {
             <div className="absolute top-mx-0 right-mx-0 p-mx-md opacity-mx-5"><Info size={80} /></div>
             <Typography variant="tiny" tone="muted" className="mb-mx-md block">Informações da Etapa</Typography>
             <div className="space-y-mx-md">
-              <div className="p-mx-md bg-gray-50 rounded-2xl border border-gray-100">
+              <div className="p-mx-md bg-gray-50 rounded-2xl border border-border-subtle">
                 <Typography variant="tiny" tone="muted" className="text-mx-micro mb-1">Participantes</Typography>
                 <Typography variant="p" className="text-sm font-bold text-foreground">{step?.target || 'Todos'}</Typography>
               </div>
-              <div className="p-mx-md bg-gray-50 rounded-2xl border border-gray-100">
+              <div className="p-mx-md bg-gray-50 rounded-2xl border border-border-subtle">
                 <Typography variant="tiny" tone="muted" className="text-mx-micro mb-1">Duração Estimada</Typography>
                 <div className="flex items-center gap-mx-xs">
                    <Clock className="w-mx-4 h-mx-4 text-muted-foreground" />
@@ -856,16 +856,16 @@ export default function ConsultoriaVisitaExecucao() {
             </div>
 
             {attachments.length === 0 ? (
-               <div className="p-mx-md border border-dashed border-gray-100 rounded-2xl text-center opacity-50">
+               <div className="p-mx-md border border-dashed border-border-subtle rounded-2xl text-center opacity-50">
                   <Paperclip className="w-mx-6 h-mx-6 mx-auto mb-mx-xs text-muted-foreground" />
                   <Typography variant="tiny" className="font-bold text-mx-micro">Nenhuma evidência anexada.</Typography>
                </div>
             ) : (
                <div className="space-y-mx-md">
                   {attachments.map(att => (
-                     <div key={att.id} className="group p-mx-xs bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between hover:bg-white transition-colors shadow-sm">
+                     <div key={att.id} className="group p-mx-xs bg-gray-50 rounded-2xl border border-border flex items-center justify-between hover:bg-white transition-colors shadow-sm">
                         <div className="flex items-center gap-mx-sm min-w-0">
-                           <div className="w-mx-10 h-mx-10 rounded-xl bg-white flex items-center justify-center border border-gray-100 shadow-sm shrink-0">
+                           <div className="w-mx-10 h-mx-10 rounded-xl bg-white flex items-center justify-center border border-border-subtle shadow-sm shrink-0">
                               {att.content_type?.includes('image') ? <Image className="w-mx-5 h-mx-5 text-emerald-600" /> : <FileText className="w-mx-5 h-mx-5 text-muted-foreground" />}
                            </div>
                            <div className="min-w-0">
@@ -924,7 +924,7 @@ export default function ConsultoriaVisitaExecucao() {
 
       <Modal open={showReportModal} onClose={() => setShowReportModal(false)} title="DOCUMENTO DE AUDITORIA">
          <div className="p-mx-md">
-            <div className="p-mx-lg bg-gray-50 rounded-2xl font-mono text-xs whitespace-pre-wrap border border-gray-100 max-h-mx-96 overflow-y-auto mb-mx-md">
+            <div className="p-mx-lg bg-gray-50 rounded-2xl font-mono text-xs whitespace-pre-wrap border border-border-subtle max-h-mx-96 overflow-y-auto mb-mx-md">
                <div className="relative z-10 text-foreground">{generateReportText()}</div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">

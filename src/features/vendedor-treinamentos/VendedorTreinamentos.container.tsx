@@ -69,7 +69,7 @@ function TrainingCard({ training, completed, onOpen, large = false }: { training
         <button
             type="button"
             onClick={onOpen}
-            className="group overflow-hidden rounded-2xl border border-slate-100 bg-white text-left shadow-sm transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-mx-blue"
+            className="group overflow-hidden rounded-2xl border border-border-subtle bg-white text-left shadow-sm transition-all duration-300 hover:shadow-md focus:outline-none focus:ring-2 focus:ring-mx-blue"
         >
             <div className={`relative overflow-hidden bg-slate-900 ${large ? 'h-40' : 'h-28'}`}>
                 {thumbUrl ? (
@@ -208,7 +208,7 @@ export default function VendedorTreinamentosContainer() {
     }
 
     if (loading) {
-        return <div className="flex h-64 items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-gray-100 border-t-brand-primary" /></div>
+        return <div className="flex h-64 items-center justify-center"><div className="h-8 w-8 animate-spin rounded-full border-4 border-border-subtle border-t-brand-primary" /></div>
     }
 
     const progressoPercent = trainings.length > 0 ? Math.round((completedCount / trainings.length) * 100) : 0
@@ -228,7 +228,7 @@ export default function VendedorTreinamentosContainer() {
             </div>
 
             <Tabs value={tab} onValueChange={value => setTab(value as TabKey)} className="w-full">
-                <TabsList className="bg-white border border-slate-100 rounded-xl p-1">
+                <TabsList className="bg-white border border-border-subtle rounded-xl p-1">
                     <TabsTrigger value="biblioteca" className="rounded-lg data-[state=active]:bg-mx-blue data-[state=active]:text-white">Biblioteca</TabsTrigger>
                     <TabsTrigger value="trilha" className="rounded-lg data-[state=active]:bg-mx-blue data-[state=active]:text-white">Trilha</TabsTrigger>
                     <TabsTrigger value="aovivo" className="rounded-lg data-[state=active]:bg-mx-blue data-[state=active]:text-white">Aulas ao Vivo</TabsTrigger>
@@ -268,7 +268,7 @@ export default function VendedorTreinamentosContainer() {
                     </div>
 
                     {filtered.length === 0 ? (
-                        <div className="rounded-2xl border border-slate-100 bg-white p-12 text-center">
+                        <div className="rounded-2xl border border-border-subtle bg-white p-12 text-center">
                             <BookOpen className="mx-auto mb-3 h-10 w-10 text-text-disabled" />
                             <p className="text-sm text-muted-foreground">Nenhum treinamento encontrado.</p>
                         </div>
@@ -280,7 +280,7 @@ export default function VendedorTreinamentosContainer() {
                 </TabsContent>
 
                 <TabsContent value="trilha" className="mt-6 space-y-6">
-                    <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
+                    <div className="rounded-2xl border border-border-subtle bg-white p-6 shadow-sm">
                         <h3 className="mb-2 text-base font-semibold text-mx-navy">Sua Maturidade Profissional</h3>
                         <p className="mb-6 text-xs text-muted-foreground">
                             A trilha reflete tempo de mercado, experiência declarada e cargo — não apenas quantas aulas você assistiu.
@@ -289,7 +289,7 @@ export default function VendedorTreinamentosContainer() {
                             {LEVELS.map((level, idx) => {
                                 const isActive = level.startsWith(nivelMaturidade)
                                 return (
-                                    <div key={level} className={`rounded-xl border-2 p-4 text-center transition-all ${isActive ? 'border-mx-blue bg-mx-blue-light/50' : 'border-slate-100'}`}>
+                                    <div key={level} className={`rounded-xl border-2 p-4 text-center transition-all ${isActive ? 'border-mx-blue bg-mx-blue-light/50' : 'border-border-subtle'}`}>
                                         <div className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold ${isActive ? 'bg-mx-blue text-white' : 'bg-slate-100 text-muted-foreground'}`}>
                                             {idx + 1}
                                         </div>
@@ -360,7 +360,7 @@ export default function VendedorTreinamentosContainer() {
                     )}
 
                     {liveTrainings.length === 0 && (
-                        <div className="rounded-2xl border border-slate-100 bg-white p-12 text-center">
+                        <div className="rounded-2xl border border-border-subtle bg-white p-12 text-center">
                             <Video className="mx-auto mb-3 h-10 w-10 text-text-disabled" />
                             <p className="text-sm text-muted-foreground">Nenhuma aula ao vivo agendada.</p>
                         </div>
@@ -371,7 +371,7 @@ export default function VendedorTreinamentosContainer() {
             {selectedTraining && (
                 <div className="fixed inset-0 z-[160] grid place-items-center bg-black/55 p-4" onPointerDown={(event) => { if (event.target === event.currentTarget) setSelectedTraining(null) }}>
                     <div role="dialog" aria-modal="true" aria-labelledby="training-detail-title" className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
-                        <header className="flex items-start justify-between border-b border-slate-200 p-5">
+                        <header className="flex items-start justify-between border-b border-border p-5">
                             <div>
                                 <h2 id="training-detail-title" className="text-xl font-bold text-mx-navy">{selectedTraining.title}</h2>
                                 {selectedTraining.description && <p className="mt-1 text-sm text-muted-foreground">{selectedTraining.description}</p>}
@@ -390,7 +390,7 @@ export default function VendedorTreinamentosContainer() {
                             </div>
                             <div className="flex flex-wrap gap-3">
                                 {selectedTraining.material_url && (
-                                    <a href={selectedTraining.material_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-4 py-2 text-sm font-semibold text-mx-blue">
+                                    <a href={selectedTraining.material_url} target="_blank" rel="noreferrer" className="inline-flex items-center gap-2 rounded-xl border border-border px-4 py-2 text-sm font-semibold text-mx-blue">
                                         <Download size={16} /> Abrir material complementar
                                     </a>
                                 )}
@@ -416,7 +416,7 @@ export default function VendedorTreinamentosContainer() {
                                 onAprovado={() => void refetch()}
                             />
                             {tarefasDaAula.length > 0 && (
-                                <section className="rounded-xl border border-slate-200 bg-slate-50 p-4">
+                                <section className="rounded-xl border border-border bg-slate-50 p-4">
                                     <Typography variant="p" className="flex items-center gap-2 text-sm font-bold tracking-wide text-mx-navy">
                                         <CheckCircle2 size={16} className="text-mx-blue" />
                                         Plano de Ação — Tarefa Prática da Aula
@@ -426,12 +426,12 @@ export default function VendedorTreinamentosContainer() {
                                     </Typography>
                                     <div className="space-y-2">
                                         {tarefasDaAula.map(tarefa => (
-                                            <label key={tarefa.id} className="flex cursor-pointer select-none items-start gap-2.5 rounded-lg border border-slate-100 bg-white p-2.5 transition-colors hover:border-slate-200">
+                                            <label key={tarefa.id} className="flex cursor-pointer select-none items-start gap-2.5 rounded-lg border border-border-subtle bg-white p-2.5 transition-colors hover:border-border">
                                                 <input
                                                     type="checkbox"
                                                     checked={tarefa.concluida}
                                                     onChange={e => void handleToggleTask(tarefa, e.target.checked)}
-                                                    className="mt-0.5 h-4 w-4 rounded border-slate-300 text-mx-blue focus:ring-mx-blue"
+                                                    className="mt-0.5 h-4 w-4 rounded border-border-strong text-mx-blue focus:ring-mx-blue"
                                                 />
                                                 <span className={`text-xs ${tarefa.concluida ? 'font-medium text-muted-foreground line-through' : 'font-semibold text-foreground'}`}>
                                                     {tarefa.descricao}
@@ -441,14 +441,14 @@ export default function VendedorTreinamentosContainer() {
                                     </div>
                                 </section>
                             )}
-                            <section className="rounded-xl border border-slate-200 p-4">
+                            <section className="rounded-xl border border-border p-4">
                                 <Typography variant="p" className="flex items-center gap-2 font-semibold text-mx-navy"><MessageSquare size={16} /> Comentário ou sugestão</Typography>
                                 <textarea
                                     value={comment}
                                     onChange={event => setComment(event.target.value)}
                                     maxLength={1000}
                                     rows={4}
-                                    className="mt-3 w-full rounded-xl border border-slate-200 p-3 text-sm outline-none focus:ring-2 focus:ring-mx-blue"
+                                    className="mt-3 w-full rounded-xl border border-border p-3 text-sm outline-none focus:ring-2 focus:ring-mx-blue"
                                     placeholder="Compartilhe uma dúvida, comentário ou sugestão de conteúdo."
                                 />
                                 <div className="mt-3 flex justify-end">

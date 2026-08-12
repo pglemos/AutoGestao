@@ -141,7 +141,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleSubmit} className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
+      <form onSubmit={handleSubmit} className="rounded-2xl border border-border bg-gray-50 p-mx-md">
         <Typography variant="caption" tone="muted" className="font-bold tracking-wide">
           Regras de comissão e bônus
         </Typography>
@@ -153,7 +153,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
             <select
               value={form.tipo}
               onChange={e => setForm(p => ({ ...p, tipo: e.target.value as RemuneracaoRegraTipo }))}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-border rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
             >
               <option value="comissao_por_venda">Comissão por venda</option>
               <option value="bonus_meta">Bônus por meta</option>
@@ -189,7 +189,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
               value={form.tipo_veiculo}
               onChange={e => setForm(p => ({ ...p, tipo_veiculo: e.target.value as FormState['tipo_veiculo'] }))}
               disabled={!regraUsaCategoria}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-muted-foreground appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-border rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-muted-foreground appearance-none cursor-pointer"
             >
               <option value="">Não se aplica</option>
               <option value="carro">Carro</option>
@@ -202,7 +202,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
               value={form.nivel_carreira}
               onChange={e => setForm(p => ({ ...p, nivel_carreira: e.target.value as NivelCarreiraForm }))}
               disabled={!regraUsaCarreira}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-muted-foreground appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-border rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-muted-foreground appearance-none cursor-pointer"
             >
               <option value="">Não se aplica</option>
               <option value="junior">Júnior</option>
@@ -241,7 +241,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
       ) : regras.length === 0 ? (
         <EmptyState title="Nenhuma regra cadastrada" description="Adicione comissão por venda e bônus por meta para ativar o salário estimado." />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-gray-200">
+        <div className="overflow-x-auto rounded-2xl border border-border">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
@@ -256,7 +256,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
             </thead>
             <tbody>
               {regras.map(regra => (
-                <tr key={regra.id} className="border-t border-gray-200">
+                <tr key={regra.id} className="border-t border-border">
                   <td className="px-mx-md py-mx-sm font-bold uppercase">{regra.cargo}</td>
                   <td className="px-mx-md py-mx-sm">{TIPO_LABEL[regra.tipo]}</td>
                   <td className="px-mx-md py-mx-sm">

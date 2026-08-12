@@ -257,7 +257,7 @@ function ManagerHomeHeader({
   }).format(date)
 
   return (
-    <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <h1 className="text-xl font-bold text-foreground">Início</h1>
@@ -269,7 +269,7 @@ function ManagerHomeHeader({
             <p className="text-xs text-muted-foreground">{longDate}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <div className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-medium text-muted-foreground">
+            <div className="rounded-xl border border-border bg-gray-50 px-3 py-2 text-sm font-medium text-muted-foreground">
               {formatNumericDate(referenceDate)}
             </div>
             {stores.length > 1 && onStoreChange ? (
@@ -280,7 +280,7 @@ function ManagerHomeHeader({
                   aria-label="Unidade"
                   value={selectedStoreId || ''}
                   onChange={event => onStoreChange(event.target.value)}
-                  className="min-w-[120px] rounded-xl border border-gray-200 py-2 pl-8 pr-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="min-w-[120px] rounded-xl border border-border py-2 pl-8 pr-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   {stores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
                 </select>
@@ -347,7 +347,7 @@ function SalesNeededCard({ salesNeeded }: { salesNeeded: number | null }) {
   const missingGoal = salesNeeded === null
   const fulfilled = salesNeeded === 0
   return (
-    <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Necessidade de Vendas no Dia</p>
         <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100"><Target size={18} className="text-muted-foreground" /></span>
@@ -369,7 +369,7 @@ function AppointmentTargetCard({ appointmentTarget, salesNeeded }: { appointment
   const missingGoal = appointmentTarget === null
   const fulfilled = salesNeeded === 0
   return (
-    <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Meta de Agendamentos para Hoje</p>
         <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100"><Calendar size={18} className="text-muted-foreground" /></span>
@@ -395,7 +395,7 @@ function AppointmentGapCard({ appointmentGap }: { appointmentGap: number | null 
   const positive = appointmentGap !== null && appointmentGap > 0
   const absoluteGap = Math.abs(appointmentGap || 0)
   return (
-    <article className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm ${negative ? 'border-orange-200' : zero || positive ? 'border-emerald-200' : 'border-gray-100'}`}>
+    <article className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm ${negative ? 'border-orange-200' : zero || positive ? 'border-emerald-200' : 'border-border-subtle'}`}>
       <div className="flex items-start justify-between">
         <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Gap de Agendamentos</p>
         <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
@@ -431,7 +431,7 @@ function TodayReading({ salesForecast, salesNeeded, coverage, message }: {
   const deficit = !missingGoal && !fulfilled && !missingBase && salesForecast < salesNeeded
   const fill = missingGoal || fulfilled ? 100 : missingBase ? 0 : Math.min((salesForecast / salesNeeded) * 100, 100)
   return (
-    <article className="h-full rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <article className="h-full rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <h2 className="mb-4 text-sm font-bold text-foreground">Leitura do Dia</h2>
       <div className="mb-3 flex items-center justify-between">
         <div><p className="text-xs text-muted-foreground">Previsão</p><p className="text-xl font-bold text-foreground">{missingBase ? '—' : `${formatSales(salesForecast)} ${saleSuffix(salesForecast)}`}</p></div>
@@ -449,7 +449,7 @@ function TodayReading({ salesForecast, salesNeeded, coverage, message }: {
 
 function SuggestedAction({ message }: { message: string }) {
   return (
-    <article className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <article className="flex h-full flex-col rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="mb-3 flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50"><Lightbulb size={16} className="text-amber-500" /></span><h2 className="text-sm font-bold text-foreground">Ação sugerida</h2></div>
       <p className="flex-1 text-sm leading-relaxed text-muted-foreground">{message}</p>
     </article>
@@ -464,7 +464,7 @@ function TeamFocus({ team, showAll, onSellerClick, onViewAll }: {
 }) {
   if (team.length === 0) {
     return (
-      <section aria-label="Equipe em foco" className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+      <section aria-label="Equipe em foco" className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
         <h2 className="mb-3 text-sm font-bold text-foreground">Equipe em foco</h2>
         <p className="py-6 text-center text-sm text-muted-foreground">Nenhum vendedor vinculado a este gerente.</p>
       </section>
@@ -472,20 +472,20 @@ function TeamFocus({ team, showAll, onSellerClick, onViewAll }: {
   }
 
   return (
-    <section aria-label="Equipe em foco" className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <section aria-label="Equipe em foco" className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
         <h2 className="text-sm font-bold text-foreground">Equipe em foco</h2>
         {showAll ? <button type="button" onClick={onViewAll} className="flex items-center gap-0.5 text-xs font-medium text-emerald-600 hover:text-emerald-700">Ver toda a equipe <span aria-hidden>›</span></button> : null}
       </div>
       <div className="hidden overflow-x-auto md:block">
         <table className="w-full text-sm">
-          <thead><tr className="border-b border-gray-100 text-xs uppercase tracking-wide text-muted-foreground">{['Vendedor', 'Agend. Hoje', 'Projeção', 'Realizado mês', 'Próx. faixa', 'Faltam carros', 'Status'].map((label, index) => <th key={label} className={`${index === 0 ? 'text-left' : 'text-center'} pb-2 font-medium`}>{label}</th>)}</tr></thead>
+          <thead><tr className="border-b border-border-subtle text-xs uppercase tracking-wide text-muted-foreground">{['Vendedor', 'Agend. Hoje', 'Projeção', 'Realizado mês', 'Próx. faixa', 'Faltam carros', 'Status'].map((label, index) => <th key={label} className={`${index === 0 ? 'text-left' : 'text-center'} pb-2 font-medium`}>{label}</th>)}</tr></thead>
           <tbody>{team.map(seller => <TeamFocusRow key={seller.sellerId} seller={seller} onClick={() => onSellerClick(seller)} />)}</tbody>
         </table>
       </div>
       <div className="space-y-3 md:hidden">
         {team.map(seller => (
-          <button key={seller.sellerId} type="button" onClick={() => onSellerClick(seller)} className="w-full rounded-xl border border-gray-100 p-3 text-left hover:bg-gray-50">
+          <button key={seller.sellerId} type="button" onClick={() => onSellerClick(seller)} className="w-full rounded-xl border border-border-subtle p-3 text-left hover:bg-gray-50">
             <div className="mb-2 flex items-center justify-between gap-2"><SellerIdentity seller={seller} /><StatusBadge status={seller.financialStatus} /></div>
             <div className="grid grid-cols-2 gap-1 text-xs">
               <MobileMetric label="Agend. hoje" value={seller.appointmentsToday} />
@@ -531,7 +531,7 @@ function FinancialRadar({ team, rulesConfigured }: { team: ManagerTeamFocusItem[
   const projectedAward = rulesConfigured ? team.reduce((sum, seller) => sum + (seller.projectedAward || 0), 0) : null
   const canMoveUp = rulesConfigured ? team.filter(seller => (seller.missingCarsToNextBand || 0) > 0 && seller.salesForecastToday !== null && seller.salesForecastToday >= (seller.missingCarsToNextBand || 0)).length : 0
   return (
-    <article className="h-full rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <article className="h-full rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <h2 className="mb-4 text-sm font-bold text-foreground">Radar Financeiro da Equipe</h2>
       <div className="space-y-3">
         <RadarRow icon={Users} label="Vendedores próximos da próxima faixa" value={rulesConfigured ? `${closeToBand} vendedor${closeToBand === 1 ? '' : 'es'}` : 'Regras não configuradas'} tone="emerald" />
@@ -553,7 +553,7 @@ function AppointmentsChart({ data, onBarClick }: { data: AppointmentChartItem[];
     if (item) onBarClick(item)
   }
   return (
-    <article className="h-full rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <article className="h-full rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <h2 className="mb-4 text-sm font-bold text-foreground">Agendamentos por Vendedor</h2>
       {data.length === 0 ? <p className="py-6 text-center text-sm text-muted-foreground">Nenhum agendamento confirmado para hoje.</p> : (
         <ResponsiveContainer width="100%" height={Math.max(data.length * 38 + 10, 120)}>
@@ -571,7 +571,7 @@ function AppointmentsChart({ data, onBarClick }: { data: AppointmentChartItem[];
 }
 
 function ManagerHomeState({ title, description, action }: { title: string; description: string; action?: ReactNode }) {
-  return <div className="flex min-h-full items-center justify-center bg-gray-50 px-4 py-12"><div className="max-w-md rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm"><h2 className="font-semibold text-foreground">{title}</h2><p className="mt-2 text-sm text-muted-foreground">{description}</p>{action ? <div className="mt-5">{action}</div> : null}</div></div>
+  return <div className="flex min-h-full items-center justify-center bg-gray-50 px-4 py-12"><div className="max-w-md rounded-2xl border border-border-subtle bg-white p-8 text-center shadow-sm"><h2 className="font-semibold text-foreground">{title}</h2><p className="mt-2 text-sm text-muted-foreground">{description}</p>{action ? <div className="mt-5">{action}</div> : null}</div></div>
 }
 
 function groupCheckinsBySeller(checkins: DailyCheckin[]) {

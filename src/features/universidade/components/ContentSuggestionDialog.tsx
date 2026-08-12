@@ -88,7 +88,7 @@ export function ContentSuggestionDialog() {
                 <select
                   value={form.theme}
                   onChange={event => setForm(current => ({ ...current, theme: event.target.value as DevelopmentTheme }))}
-                  className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-1 h-11 w-full rounded-xl border border-border bg-white px-3 text-sm font-medium text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   {DEVELOPMENT_THEMES.map(theme => <option key={theme.key} value={theme.key}>{theme.label}</option>)}
                 </select>
@@ -112,7 +112,7 @@ export function ContentSuggestionDialog() {
                   placeholder="Descreva a dúvida ou situação prática."
                   maxLength={500}
                   rows={4}
-                  className="mt-1 w-full resize-none rounded-xl border border-slate-200 p-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-1 w-full resize-none rounded-xl border border-border p-3 text-sm outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </label>
             </div>

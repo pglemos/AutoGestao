@@ -48,7 +48,7 @@ export default function NotFound() {
                         <div className="flex flex-col sm:flex-row items-center gap-mx-md w-full sm:w-auto">
                             <Button 
                                 variant="outline" onClick={() => navigate(-1)} 
-                                className="w-full sm:w-auto h-mx-14 px-10 rounded-mx-full font-bold text-sm shadow-sm bg-white border-gray-200 hover:border-brand-primary"
+                                className="w-full sm:w-auto h-mx-14 px-10 rounded-mx-full font-bold text-sm shadow-sm bg-white border-border hover:border-brand-primary"
                             >
                                 <ArrowLeft size={16} className="mr-2" /> RECUAR
                             </Button>
@@ -60,7 +60,7 @@ export default function NotFound() {
                             </Button>
                         </div>
 
-                        <footer className="pt-10 border-t border-gray-200 w-full">
+                        <footer className="pt-10 border-t border-border w-full">
                             <Typography variant="caption" tone="muted" className="text-xs opacity-20">MX PERFORMANCE • PROTOCOLO AIOX SECURITY</Typography>
                         </footer>
                     </CardContent>

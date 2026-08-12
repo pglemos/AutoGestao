@@ -519,7 +519,7 @@ return (
           title="Fechamento"
           actions={
             <>
-              <div className="flex min-w-0 items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-1.5 shadow-sm">
+              <div className="flex min-w-0 items-center gap-2 rounded-xl border border-border bg-white px-3 py-1.5 shadow-sm">
                 <CalendarDays size={18} className="shrink-0 text-[#005BFF]" aria-hidden="true" />
                 <div className="min-w-0">
                   <p className="text-caption font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
@@ -536,7 +536,7 @@ return (
               <button
                 type="button"
                 onClick={handleViewPreviousHistory}
-                className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
+                className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
               >
                 <History size={15} aria-hidden="true" />
                 Histórico de Fechamentos
@@ -571,7 +571,7 @@ previousCard.type === 'previous_done' ? 'text-emerald-700' : 'text-amber-800'
 </div>
 </div>
 <div className="flex shrink-0 gap-2">
-<button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-slate-200 bg-white px-3 text-caption font-bold text-muted-foreground shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]">
+<button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-white px-3 text-caption font-bold text-muted-foreground shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]">
 Ver histórico
 </button>
 <button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-caption font-bold text-white shadow-sm ${
@@ -585,7 +585,7 @@ previousCard.type === 'previous_done' ? 'bg-[#00A89D]' : 'bg-amber-700'
 )}
 
 {/* Desktop: data operacional vive dentro do header (SellerPageHeader actions). Mobile: sem header de topo, mantém aqui. */}
-<section aria-labelledby="checkin-operational-date" className="rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-mx-lg md:hidden">
+<section aria-labelledby="checkin-operational-date" className="rounded-xl border border-border bg-white px-4 py-3 shadow-mx-lg md:hidden">
 <div className="flex flex-wrap items-center justify-between gap-3">
 <div className="flex min-w-0 items-center gap-2">
 <CalendarDays size={18} className="shrink-0 text-[#005BFF]" aria-hidden="true" />

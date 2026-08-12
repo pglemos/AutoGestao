@@ -69,14 +69,14 @@ export function AdminSettingsForm({
           </label>
           <label className="space-y-mx-xs">
             <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Modo de Projeção</span>
-            <select aria-label="Modo de Projeção" value={form.projection_mode} onChange={e => setForm(prev => ({ ...prev, projection_mode: e.target.value as ProjectionMode }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
+            <select aria-label="Modo de Projeção" value={form.projection_mode} onChange={e => setForm(prev => ({ ...prev, projection_mode: e.target.value as ProjectionMode }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-border bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
               <option value="calendar">Calendário</option>
               <option value="business">Dias úteis</option>
             </select>
           </label>
           <label className="space-y-mx-xs">
             <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Meta Individual</span>
-            <select aria-label="Meta Individual" value={form.individual_goal_mode} onChange={e => setForm(prev => ({ ...prev, individual_goal_mode: e.target.value as StoreSettingsPayload['meta']['individual_goal_mode'] }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
+            <select aria-label="Meta Individual" value={form.individual_goal_mode} onChange={e => setForm(prev => ({ ...prev, individual_goal_mode: e.target.value as StoreSettingsPayload['meta']['individual_goal_mode'] }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-border bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
               <option value="even">Igual</option>
               <option value="custom">Customizada</option>
               <option value="proportional">Proporcional</option>
@@ -84,7 +84,7 @@ export function AdminSettingsForm({
           </label>
           <label className="space-y-mx-xs">
             <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Fonte</span>
-            <select aria-label="Fonte" value={form.source_mode} onChange={e => setForm(prev => ({ ...prev, source_mode: e.target.value as StoreSourceMode }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
+            <select aria-label="Fonte" value={form.source_mode} onChange={e => setForm(prev => ({ ...prev, source_mode: e.target.value as StoreSourceMode }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-border bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
               <option value="native_app">App nativo</option>
               <option value="legacy_forms">Forms legado</option>
               <option value="hybrid">Híbrido</option>
@@ -95,18 +95,18 @@ export function AdminSettingsForm({
           </label>
         </div>
         <div className="grid grid-cols-1 gap-mx-sm">
-          <label className="flex items-center gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
+          <label className="flex items-center gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-sm cursor-pointer">
             <input type="checkbox" checked={form.active} onChange={e => setForm(prev => ({ ...prev, active: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
             <span className="text-mx-tiny font-bold uppercase tracking-widest">Loja ativa</span>
           </label>
-          <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
+          <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-sm cursor-pointer">
             <div className="flex items-center gap-mx-sm">
               <input type="checkbox" checked={form.include_venda_loja_in_store_total} onChange={e => setForm(prev => ({ ...prev, include_venda_loja_in_store_total: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
               <span className="text-mx-tiny font-bold uppercase tracking-widest">Vendas da Gestão/Apoio no Total da Loja</span>
             </div>
             <HelpTooltip text="Ative para incluir as vendas efetuadas por Gerentes, Donos e Apoio no faturamento total da loja em tempo real." />
           </label>
-          <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
+          <label className="flex items-center justify-between gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-sm cursor-pointer">
             <div className="flex items-center gap-mx-sm">
               <input type="checkbox" checked={form.include_venda_loja_in_individual_goal} onChange={e => setForm(prev => ({ ...prev, include_venda_loja_in_individual_goal: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
               <span className="text-mx-tiny font-bold uppercase tracking-widest">Vendas da Gestão/Apoio na Meta da Equipe</span>
@@ -175,14 +175,14 @@ export function AdminSettingsForm({
               <Input aria-label="Timezone" value={form.timezone} onChange={e => setForm(prev => ({ ...prev, timezone: e.target.value }))} />
             </label>
           </div>
-          <label className="flex items-center gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm cursor-pointer">
+          <label className="flex items-center gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-sm cursor-pointer">
             <input type="checkbox" checked={form.delivery_active} onChange={e => setForm(prev => ({ ...prev, delivery_active: e.target.checked }))} className="h-mx-sm w-mx-sm accent-brand-primary" />
             <span className="text-mx-tiny font-bold uppercase tracking-widest">Envios ativos</span>
           </label>
         </div>
       </section>
 
-      <footer className="xl:col-span-12 flex flex-col gap-mx-md pt-mx-md border-t border-gray-200">
+      <footer className="xl:col-span-12 flex flex-col gap-mx-md pt-mx-md border-t border-border">
         <div className="rounded-2xl border border-status-error/20 bg-status-error-surface p-mx-md">
           <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center sm:justify-between">
             <div>

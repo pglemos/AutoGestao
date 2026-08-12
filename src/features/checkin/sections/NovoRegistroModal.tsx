@@ -173,7 +173,7 @@ export function QualificadoStatusHelp() {
         <div
           role="dialog"
           aria-label="Ajuda: passos da oportunidade"
-          className="absolute left-0 top-5 z-50 max-h-64 w-72 overflow-y-auto rounded-lg border border-slate-200 bg-white p-3 text-left shadow-lg"
+          className="absolute left-0 top-5 z-50 max-h-64 w-72 overflow-y-auto rounded-lg border border-border bg-white p-3 text-left shadow-lg"
         >
           {SITUACOES_OPORTUNIDADE.map(s => (
             <div key={s} className="mb-2 last:mb-0">
@@ -640,7 +640,7 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4 backdrop-blur-[3px] overflow-y-auto" role="dialog" aria-modal="true" aria-label="Novo registro">
-      <div className="relative my-8 w-full max-w-2xl rounded-2xl border border-slate-100 bg-white p-6 shadow-mx-2xl">
+      <div className="relative my-8 w-full max-w-2xl rounded-2xl border border-border-subtle bg-white p-6 shadow-mx-2xl">
         <div className="mb-1 flex items-center justify-between">
           <div className="flex items-center gap-2">
             {tipo && (
@@ -669,7 +669,7 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
         {buscando && <p className="mt-1 text-caption text-muted-foreground">Buscando cliente…</p>}
 
         {tipo && (
-          <div className="mt-5 flex items-center justify-end gap-3 border-t border-slate-100 pt-4">
+          <div className="mt-5 flex items-center justify-end gap-3 border-t border-border-subtle pt-4">
             <button type="button" onClick={handleClose} disabled={saving} className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-body-sm font-semibold text-[#64748B] transition-colors hover:bg-slate-50">
               Cancelar
             </button>

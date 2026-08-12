@@ -24,7 +24,7 @@ function EtapaRow({ label, value, modalidades, isLast, onClickEtapa }) {
   return (
     <div>
       <div
-        className={`rounded-xl border px-4 py-3 text-center ${onClickEtapa ? "cursor-pointer hover:border-blue-400 hover:bg-blue-50/40 transition-colors" : ""} bg-white border-slate-200`}
+        className={`rounded-xl border px-4 py-3 text-center ${onClickEtapa ? "cursor-pointer hover:border-blue-400 hover:bg-blue-50/40 transition-colors" : ""} bg-white border-border`}
         onClick={onClickEtapa}
       >
         <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-0.5">{label}</p>

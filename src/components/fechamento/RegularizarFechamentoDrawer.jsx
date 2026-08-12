@@ -74,8 +74,8 @@ function NumStepper({ value, onChange }) {
     setInputVal(null);
   };
   return (
- <div className="grid grid-cols-[44px_minmax(44px,1fr)_44px] items-center border border-slate-200 rounded-xl shadow-sm h-11 focus-within:border-blue-400 transition-all bg-white overflow-hidden">
- <button type="button" onClick={() => onChange(Math.max(0, value - 1))} className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 border-r border-slate-200 transition-colors text-[20px] font-light">−</button>
+ <div className="grid grid-cols-[44px_minmax(44px,1fr)_44px] items-center border border-border rounded-xl shadow-sm h-11 focus-within:border-blue-400 transition-all bg-white overflow-hidden">
+ <button type="button" onClick={() => onChange(Math.max(0, value - 1))} className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 border-r border-border transition-colors text-[20px] font-light">−</button>
       <input
         type="text" inputMode="numeric" pattern="[0-9]*"
         value={inputVal !== null ? inputVal : String(value)}
@@ -84,7 +84,7 @@ function NumStepper({ value, onChange }) {
  className="w-full min-w-0 text-center font-bold text-[16px] text-foreground bg-transparent border-none outline-none h-full tabular-nums"
         style={{ boxShadow: "none" }}
       />
- <button type="button" onClick={() => onChange(Math.min(999, value + 1))} className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 border-l border-slate-200 transition-colors text-[20px] font-light">+</button>
+ <button type="button" onClick={() => onChange(Math.min(999, value + 1))} className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 border-l border-border transition-colors text-[20px] font-light">+</button>
     </div>
   );
 }
@@ -105,8 +105,8 @@ function FieldRow({ label, value, onChange }) {
 function MovimentoDia({ form, onChange }) {
   const set = (key, val) => onChange({ ...form, [key]: val });
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-      <div className="px-5 py-4 border-b border-slate-100">
+    <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+      <div className="px-5 py-4 border-b border-border-subtle">
         <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Movimento do Dia</h3>
         <p className="text-[12px] text-muted-foreground mt-0.5">Informe os atendimentos realizados neste dia</p>
       </div>
@@ -240,8 +240,8 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
 
   return (
     <>
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-        <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
+      <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+        <div className="flex items-center justify-between px-5 py-4 border-b border-border-subtle">
           <div>
             <div className="flex items-center gap-2">
               <div className="w-5 h-5 rounded-full bg-purple-600 text-white text-caption font-bold flex items-center justify-center"><ShoppingCart className="w-3 h-3" /></div>
@@ -265,7 +265,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
               {clientes.map(c => {
                 const saleLabel = getSaleLabel(c);
                 return (
-                  <div key={c.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-slate-100 gap-3 flex-wrap">
+                  <div key={c.id} className="flex items-center justify-between p-3 bg-slate-50 rounded-xl border border-border-subtle gap-3 flex-wrap">
                     <div className="flex items-center gap-3 min-w-0 flex-1">
                       <div className="min-w-0">
                         <p className="text-body-sm font-bold text-[#0F172A] truncate">{c.nome}</p>
@@ -359,8 +359,8 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
               <Input value={form.observacoes} onChange={e => setF("observacoes", e.target.value.slice(0, 250))} placeholder="Ex: Cliente ficou de avaliar o usado." />
             </Field>
           </div>
-          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
-            <button onClick={() => setDialogOpen(false)} disabled={saving} className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
+          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
+            <button onClick={() => setDialogOpen(false)} disabled={saving} className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
             <button onClick={handleSave} disabled={!canSave || saving} className="px-6 py-2.5 text-body-sm font-bold text-white bg-purple-600 hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors">
               {saving ? "Salvando..." : "Salvar na Carteira"}
             </button>
@@ -374,7 +374,7 @@ function ClientesBloco({ closingDate, currentUser, clientes, onClientesChange })
           <DialogHeader><DialogTitle className="font-bold">Remover do fechamento?</DialogTitle></DialogHeader>
           <p className="text-body-sm text-muted-foreground mt-1">O registro de <strong>{deleteConfirm?.name}</strong> será removido deste fechamento. O cliente permanece na Carteira.</p>
           <div className="flex items-center justify-end gap-3 mt-4">
-            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-muted-foreground border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
+            <button onClick={() => setDeleteConfirm(null)} className="px-5 py-2 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">Cancelar</button>
             <button onClick={confirmDelete} className="px-5 py-2 text-body-sm font-bold text-white bg-red-500 hover:bg-red-600 rounded-xl transition-colors">Remover</button>
           </div>
         </DialogContent>
@@ -407,11 +407,11 @@ function ResumoDia({ form, clientes }) {
   ];
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-      <div className="px-5 py-4 border-b border-slate-100">
+    <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+      <div className="px-5 py-4 border-b border-border-subtle">
         <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Resumo do Dia</h3>
       </div>
-      <div className="grid grid-cols-2 sm:grid-cols-5 gap-0 divide-x divide-y sm:divide-y-0 divide-slate-100">
+      <div className="grid grid-cols-2 sm:grid-cols-5 gap-0 divide-x divide-y sm:divide-y-0 divide-border-subtle">
         {stats.map(s => (
           <div key={s.label} className="p-4 text-center">
             <p className={`text-h3 font-bold tabular-nums ${s.color}`}>{s.value}</p>
@@ -445,8 +445,8 @@ function DisciplinaBloco({ form, clientes }) {
   const ringColor = scoreFinal >= 80 ? "#22C55E" : scoreFinal >= 50 ? "#F59E0B" : "#EF4444";
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-      <div className="px-5 py-4 border-b border-slate-100">
+    <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+      <div className="px-5 py-4 border-b border-border-subtle">
         <h3 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Disciplina — Fechamento Diário</h3>
         <p className="text-[12px] text-muted-foreground mt-0.5">Estimativa com penalização de -10% por atraso</p>
       </div>
@@ -471,7 +471,7 @@ function DisciplinaBloco({ form, clientes }) {
             <span className="text-red-500 font-medium">Penalização por atraso</span>
             <span className="font-bold text-red-500">-10%</span>
           </div>
-          <div className="flex justify-between text-body-sm border-t border-slate-100 pt-2">
+          <div className="flex justify-between text-body-sm border-t border-border-subtle pt-2">
             <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
             <span className={`font-bold text-body ${scoreColor}`}>{scoreFinal}%</span>
           </div>
@@ -611,7 +611,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
       <div className="fixed inset-0 z-50 flex items-stretch sm:items-start sm:justify-end pointer-events-none">
         <div className="pointer-events-auto w-full sm:w-[720px] h-full bg-[#F8FAFC] flex flex-col shadow-2xl sm:rounded-l-2xl overflow-hidden">
           {/* Header */}
-          <div className="bg-white border-b border-slate-200 px-5 py-4 flex items-center gap-3 flex-shrink-0">
+          <div className="bg-white border-b border-border px-5 py-4 flex items-center gap-3 flex-shrink-0">
             <CalendarDays className="w-5 h-5 text-[#005BFF] flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
@@ -631,7 +631,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
           <div className="flex-1 overflow-y-auto">
             {carregando ? (
               <div className="flex items-center justify-center h-64">
-                <div className="w-8 h-8 border-4 border-slate-200 border-t-blue-500 rounded-full animate-spin" />
+                <div className="w-8 h-8 border-4 border-border border-t-blue-500 rounded-full animate-spin" />
               </div>
             ) : sucesso ? (
               <div className="flex flex-col items-center justify-center h-full text-center p-8 gap-4">
@@ -685,8 +685,8 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
 
           {/* Footer */}
           {!sucesso && !aprovado && !carregando && (
-            <div className="bg-white border-t border-slate-200 px-5 py-4 flex items-center justify-end gap-3 flex-shrink-0">
-              <button onClick={onClose} className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+            <div className="bg-white border-t border-border px-5 py-4 flex items-center justify-end gap-3 flex-shrink-0">
+              <button onClick={onClose} className="px-5 py-2.5 text-body-sm font-semibold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">
                 Cancelar
               </button>
               <button onClick={() => setConfirmOpen(true)} className="flex items-center gap-2 px-6 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors shadow-sm">
@@ -709,7 +709,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
             </p>
           </div>
           <div className="flex gap-3 mt-4">
-            <button onClick={() => setConfirmOpen(false)} disabled={enviando} className="flex-1 py-2.5 rounded-xl border border-slate-200 text-body-sm font-bold text-muted-foreground hover:bg-slate-50 transition-colors">
+            <button onClick={() => setConfirmOpen(false)} disabled={enviando} className="flex-1 py-2.5 rounded-xl border border-border text-body-sm font-bold text-muted-foreground hover:bg-slate-50 transition-colors">
               Não, voltar
             </button>
             <button onClick={handleEnviar} disabled={enviando} className="flex-1 py-2.5 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white text-body-sm font-bold transition-colors">

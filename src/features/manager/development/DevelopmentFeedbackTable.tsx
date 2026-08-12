@@ -12,14 +12,14 @@ export function DevelopmentFeedbackTable({ feedbacks, onOpen, onShareWhatsApp }:
   return (
     <MxTableSurface>
       <table className="w-full min-w-[1048px] text-sm">
-        <thead className="border-b border-gray-100 bg-gray-50">
+        <thead className="border-b border-border-subtle bg-gray-50">
           <tr>
             {['Data', 'Vendedor', 'Tipo', 'Competência', 'Situação', 'Compromisso', 'Semana', 'Status', 'Ações'].map((label) => (
               <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>
             ))}
           </tr>
         </thead>
-        <tbody className="divide-y divide-gray-100">
+        <tbody className="divide-y divide-border-subtle">
           {feedbacks.map((item) => (
             <tr key={item.id} className="hover:bg-gray-50">
               <td className="px-4 py-3 text-muted-foreground">{formatSafeDate(item.created_at)}</td>

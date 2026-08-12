@@ -10,7 +10,7 @@ const InfoBox = ({ color, children }) => {
     green:  "bg-green-50 border-green-200 text-green-800",
     amber:  "bg-amber-50 border-amber-200 text-amber-800",
     red:    "bg-red-50 border-red-200 text-red-800",
-    slate:  "bg-slate-100 border-slate-200 text-foreground",
+    slate:  "bg-slate-100 border-border text-foreground",
   };
   return (
     <div className={`border rounded-xl px-4 py-3 text-[12px] font-semibold leading-snug ${styles[color]}`}>
@@ -30,7 +30,7 @@ const Section = ({ icon: Icon, iconColor, number, title, children }) => (
         <h3 className="text-[14px] font-bold text-[#0F172A] leading-tight">{title}</h3>
       </div>
     </div>
-    <div className="ml-10.5 space-y-2.5 pl-1 border-l-2 border-slate-100">
+    <div className="ml-10.5 space-y-2.5 pl-1 border-l-2 border-border-subtle">
       {children}
     </div>
   </div>
@@ -62,7 +62,7 @@ export default function DisciplinaModal({ open, onClose }) {
         style={{ maxWidth: 720, width: "95vw", maxHeight: "85vh", borderRadius: 16 }}
       >
         {/* Header fixo */}
-        <div className="flex-shrink-0 px-7 pt-6 pb-5 border-b border-slate-100 bg-white">
+        <div className="flex-shrink-0 px-7 pt-6 pb-5 border-b border-border-subtle bg-white">
           <div className="flex items-start justify-between gap-4">
             <div>
               <h2 className="text-[18px] font-bold text-[#0F172A] leading-tight">
@@ -97,12 +97,12 @@ export default function DisciplinaModal({ open, onClose }) {
             <InfoBox color="blue">✓ Preencheu os números do dia = 70%</InfoBox>
           </Section>
 
-          <div className="border-t border-slate-100" />
+          <div className="border-t border-border-subtle" />
 
           {/* 2 — +30% */}
           <Section icon={Star} iconColor="bg-[#22C55E]" number="2" title="Cadastro dos agendamentos — até +30%">
             <P>Os outros 30% são conquistados quando você detalha, no campo "Cadastrar Novo Cliente", os agendamentos que informou no card "Agendamento D+1".</P>
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+            <div className="bg-slate-50 border border-border rounded-xl p-4 space-y-2">
               <p className="text-[12px] font-bold text-[#0F172A]">Exemplo:</p>
               <P>Se você informou no card "Agendamento D+1":</P>
               <ul className="space-y-1 list-none">
@@ -111,11 +111,11 @@ export default function DisciplinaModal({ open, onClose }) {
               </ul>
               <P>Então você precisa cadastrar 2 clientes, sendo 1 do canal Carteira e 1 do canal Internet.</P>
               <div className="grid grid-cols-2 gap-2 pt-1">
-                <div className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-center">
+                <div className="bg-white border border-border rounded-lg px-3 py-2 text-center">
                   <span className="text-[18px] font-bold text-[#22C55E]">100%</span>
                   <p className="text-caption text-muted-foreground mt-0.5">Cadastrou os 2 clientes</p>
                 </div>
-                <div className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-center">
+                <div className="bg-white border border-border rounded-lg px-3 py-2 text-center">
                   <span className="text-[18px] font-bold text-[#F59E0B]">85%</span>
                   <p className="text-caption text-muted-foreground mt-0.5">Cadastrou apenas 1 dos 2</p>
                 </div>
@@ -124,7 +124,7 @@ export default function DisciplinaModal({ open, onClose }) {
             <InfoBox color="green">✓ Detalhou todos os agendamentos D+1 corretamente = 100%</InfoBox>
           </Section>
 
-          <div className="border-t border-slate-100" />
+          <div className="border-t border-border-subtle" />
 
           {/* 3 — Quando conta */}
           <Section icon={Calendar} iconColor="bg-[#6D28D9]" number="3" title="Quando um cadastro conta como agendamento?">
@@ -134,20 +134,20 @@ export default function DisciplinaModal({ open, onClose }) {
               <Bullet>O campo "Venda Realizada" deve estar como <strong>Em Negociação</strong>;</Bullet>
               <Bullet>A data do agendamento deve ser para o <strong>dia seguinte ao fechamento</strong> (D+1).</Bullet>
             </ul>
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4">
+            <div className="bg-slate-50 border border-border rounded-xl p-4">
               <p className="text-[12px] font-bold text-[#0F172A] mb-1">Exemplo:</p>
               <P>Se o fechamento é do dia 22/05, o agendamento deve estar marcado para 23/05.</P>
             </div>
             <InfoBox color="amber">⚠ Para contar como agendamento, a venda deve estar como "Em Negociação".</InfoBox>
           </Section>
 
-          <div className="border-t border-slate-100" />
+          <div className="border-t border-border-subtle" />
 
           {/* 4 — Data */}
           <Section icon={Calendar} iconColor="bg-[#F59E0B]" number="4" title="Atenção à data do agendamento">
             <P>Todo agendamento informado no card "Agendamento D+1" deve ser cadastrado com data para o dia seguinte ao fechamento (D+1).</P>
             <P>Agendamentos com data superior ao D+1 são considerados <strong>agendamentos futuros</strong> e não contam na Disciplina do Fechamento.</P>
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 space-y-2">
+            <div className="bg-slate-50 border border-border rounded-xl p-4 space-y-2">
               <p className="text-[12px] font-bold text-[#0F172A]">Exemplo:</p>
               <P>Fechamento em 27/06 → D+1 = 28/06. Você cadastrou:</P>
               <ul className="space-y-1 list-none">
@@ -159,7 +159,7 @@ export default function DisciplinaModal({ open, onClose }) {
             <InfoBox color="red">⚠ Agendamentos futuros não contam na Disciplina — apenas os D+1 são considerados.</InfoBox>
           </Section>
 
-          <div className="border-t border-slate-100" />
+          <div className="border-t border-border-subtle" />
 
           {/* 5 — Venda */}
           <Section icon={DollarSign} iconColor="bg-[#22C55E]" number="5" title="Venda não é agendamento">
@@ -174,7 +174,7 @@ export default function DisciplinaModal({ open, onClose }) {
             <InfoBox color="blue">ℹ Venda Realizada = Sim conta como venda, não como agendamento.</InfoBox>
           </Section>
 
-          <div className="border-t border-slate-100" />
+          <div className="border-t border-border-subtle" />
 
           {/* 6 — Prazo */}
           <Section icon={Clock} iconColor="bg-[#64748B]" number="6" title="Prazo para fechar o dia anterior">
@@ -183,7 +183,7 @@ export default function DisciplinaModal({ open, onClose }) {
             <InfoBox color="slate">🔒 Após 09h30, somente o superior poderá liberar o fechamento.</InfoBox>
           </Section>
 
-          <div className="border-t border-slate-100" />
+          <div className="border-t border-border-subtle" />
 
           {/* 7 — Checklist final */}
           <Section icon={ListChecks} iconColor="bg-[#005BFF]" number="7" title="Resumo rápido">
@@ -196,7 +196,7 @@ export default function DisciplinaModal({ open, onClose }) {
               <CheckItem label="Cliente vendido conta como venda, não como agendamento" />
               <CheckItem label="Fechamento do dia anterior fica liberado até 09h30 do dia seguinte" />
             </div>
-            <div className="bg-slate-50 border border-slate-200 rounded-xl p-4 mt-2">
+            <div className="bg-slate-50 border border-border rounded-xl p-4 mt-2">
               <p className="text-body-sm text-[#475569] leading-relaxed italic">
                 "Essa regra existe para manter seu funil atualizado e ajudar você, sua liderança e a loja a acompanharem melhor as oportunidades reais de venda."
               </p>
@@ -206,7 +206,7 @@ export default function DisciplinaModal({ open, onClose }) {
         </div>
 
         {/* Footer fixo */}
-        <div className="flex-shrink-0 px-7 py-4 border-t border-slate-100 bg-white flex items-center justify-end">
+        <div className="flex-shrink-0 px-7 py-4 border-t border-border-subtle bg-white flex items-center justify-end">
           <button
             onClick={onClose}
             className="bg-[#005BFF] hover:bg-blue-700 active:scale-[0.98] transition-all text-white font-bold text-body-sm px-8 h-[40px] rounded-xl shadow-sm shadow-blue-200"

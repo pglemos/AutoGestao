@@ -67,7 +67,7 @@ export default function PDIPrint() {
             
             {/* Action Bar (Not Printed) */}
             <div className="w-full max-w-[210mm] flex items-center justify-between mb-8 print:hidden px-4">
-                <button onClick={() => navigate(-1)} className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-gray-200 rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-gray-50">
+                <button onClick={() => navigate(-1)} className="flex items-center gap-mx-xs px-6 py-3 bg-white border border-border rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:bg-gray-50">
                     <ChevronLeft size={16} /> Voltar
                 </button>
                 <button onClick={handlePrint} className="flex items-center gap-mx-xs px-8 py-3 bg-gray-900 text-white rounded-mx-full text-xs font-bold uppercase tracking-widest shadow-sm hover:scale-105 active:scale-95 transition-transform">
@@ -79,7 +79,7 @@ export default function PDIPrint() {
             <div ref={printRef} className="w-[210mm] bg-background shadow-2xl print:shadow-none print:w-full print:max-w-none text-foreground flex flex-col gap-y-[20mm]">
                 
                 {/* --- PÁGINA 1: CAPA --- */}
-                <div className="p-[20mm] h-[297mm] relative break-after-page flex flex-col border border-gray-200 print:border-none">
+                <div className="p-[20mm] h-[297mm] relative break-after-page flex flex-col border border-border print:border-none">
                     <div className="absolute top-mx-0 left-mx-0 w-full h-mx-lg bg-gray-900" />
                     <header className="flex justify-between items-start mt-10 mb-20 border-b-4 border-mx-black pb-8">
                         <div>
@@ -95,7 +95,7 @@ export default function PDIPrint() {
                     </header>
 
                     <div className="mb-14 flex gap-mx-md items-center">
-                        <div className="w-mx-2xl h-mx-2xl rounded-mx-full bg-gray-50 border border-gray-200 flex items-center justify-center">
+                        <div className="w-mx-2xl h-mx-2xl rounded-mx-full bg-gray-50 border border-border flex items-center justify-center">
                             <User size={24} className="text-muted-foreground" />
                         </div>
                         <div>
@@ -150,7 +150,7 @@ export default function PDIPrint() {
                 </div>
 
                 {/* --- PÁGINA 2: VENDEDOR 1 / MAPA DE COMPETÊNCIAS --- */}
-                <div className="p-[20mm] min-h-[297mm] break-after-page flex flex-col border border-gray-200 print:border-none relative">
+                <div className="p-[20mm] min-h-[297mm] break-after-page flex flex-col border border-border print:border-none relative">
                     <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10">
                         <Typography variant="h2" className="text-2xl tracking-tighter">Mapa de Competências</Typography>
                         <Typography variant="caption" tone="muted" className="text-mx-tiny">Página 2 / Vendedor 1</Typography>
@@ -169,7 +169,7 @@ export default function PDIPrint() {
                                 </thead>
                                 <tbody>
                                     {bundle.avaliacoes.map((av, i) => (
-                                        <tr key={i} className="border-b border-gray-200">
+                                        <tr key={i} className="border-b border-border">
                                             <td className="py-2 px-3">{av.competencia}</td>
                                             <td className="py-2 px-3 text-center text-emerald-600">{av.nota}</td>
                                             <td className="py-2 px-3 text-center text-muted-foreground">{av.alvo}</td>
@@ -179,7 +179,7 @@ export default function PDIPrint() {
                             </table>
                         </div>
 
-                        <div className="flex flex-col items-center justify-center border-l-2 border-gray-200 pl-10">
+                        <div className="flex flex-col items-center justify-center border-l-2 border-border pl-10">
                             <Typography variant="tiny" className="mb-4 text-center">Gráfico Radar (Atigimento vs. Alvo)</Typography>
                             <div className="w-full h-mx-80">
                                 <ResponsiveContainer width="100%" height="100%">
@@ -207,7 +207,7 @@ export default function PDIPrint() {
                 </div>
 
                 {/* --- PÁGINA 3: PLANO DE AÇÃO (PDI TABULAR) --- */}
-                <div className="p-[20mm] min-h-[297mm] flex flex-col border border-gray-200 print:border-none">
+                <div className="p-[20mm] min-h-[297mm] flex flex-col border border-border print:border-none">
                     <header className="flex justify-between items-end border-b-2 border-mx-black pb-4 mb-10">
                         <Typography variant="h2" className="text-2xl tracking-tighter">Plano de Desenvolvimento Individual</Typography>
                         <Typography variant="caption" tone="muted" className="text-mx-tiny">Página 3 / Ações Mandatórias</Typography>
@@ -227,7 +227,7 @@ export default function PDIPrint() {
                             </thead>
                             <tbody>
                                 {bundle.plano_acao.map((acao: PDIPlanoAcao360, i: number) => (
-                                    <tr key={i} className="border-b-2 border-gray-200">
+                                    <tr key={i} className="border-b-2 border-border">
                                         <td className="py-4 px-4 font-bold uppercase text-muted-foreground">{acao.competencia}</td>
                                         <td className="py-4 px-4 font-bold text-foreground">{acao.descricao_acao}</td>
                                         <td className="py-4 px-4 font-bold text-center text-emerald-600">{format(parseISO(acao.data_conclusao), 'dd/MM/yyyy')}</td>

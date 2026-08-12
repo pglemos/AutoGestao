@@ -31,7 +31,7 @@ export function StoreFeedbackHeader({
   return (
     <SellerPageHeader icon={MessageSquare} title={isOwner ? 'Devolutivas da Rede' : 'Feedbacks'} subtitle={isOwner ? 'Acompanhe qualidade e cobranças semanais' : 'Rotina semanal obrigatória'} actions={<div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-mx-sm shrink-0 w-full xl:w-auto max-w-full">
         <nav
-          className="flex p-mx-tiny bg-white border border-gray-200 rounded-mx-full shadow-sm xl:mr-2"
+          className="flex p-mx-tiny bg-white border border-border rounded-mx-full shadow-sm xl:mr-2"
           role="tablist"
         >
           <Button

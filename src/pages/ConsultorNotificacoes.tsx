@@ -91,7 +91,7 @@ export default function ConsultorNotificacoes() {
                             <Card className="p-mx-10 md:p-14 border-none bg-white overflow-hidden relative">
                                 <div className="absolute top-mx-0 right-mx-0 w-mx-96 h-mx-96 bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-48 -mt-48" />
 
-                                <header className="flex items-center justify-between border-b border-gray-200 pb-8 mb-10 relative z-10">
+                                <header className="flex items-center justify-between border-b border-border pb-8 mb-10 relative z-10">
                                     <div className="flex items-center gap-mx-md">
                                         <div className="w-mx-14 h-mx-14 rounded-2xl bg-pure-black text-white flex items-center justify-center shadow-sm transform rotate-2"><Mail size={24} className="text-emerald-600" /></div>
                                         <div>
@@ -112,7 +112,7 @@ export default function ConsultorNotificacoes() {
                                             <Typography variant="caption" tone="muted" className="ml-2">Corpo da Mensagem</Typography>
                                             <textarea
                                                 value={form.message} onChange={e => setForm(p => ({ ...p, message: e.target.value }))}
-                                                className="w-full bg-gray-50 border border-gray-200 rounded-2xl p-mx-lg text-sm font-bold text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary focus:ring-8 focus:ring-brand-primary/5 transition-all resize-none shadow-none h-mx-48"
+                                                className="w-full bg-gray-50 border border-border rounded-2xl p-mx-lg text-sm font-bold text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary focus:ring-8 focus:ring-brand-primary/5 transition-all resize-none shadow-none h-mx-48"
                                                 placeholder="Detalhes técnicos ou operacionais..." required
                                             />
                                         </div>
@@ -122,13 +122,13 @@ export default function ConsultorNotificacoes() {
                                         <div className="space-y-mx-sm">
                                             <Typography variant="caption" tone="muted" className="ml-2">Público Alvo (Segmentação)</Typography>
                                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-sm">
-                                                <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'all' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'all' ? "bg-mx-indigo-50 border-brand-primary shadow-sm" : "bg-white border-gray-200 hover:border-brand-primary/20")}>
+                                                <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'all' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'all' ? "bg-mx-indigo-50 border-brand-primary shadow-sm" : "bg-white border-border hover:border-brand-primary/20")}>
                                                     <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'all' ? "bg-emerald-600 text-white" : "bg-gray-50 text-muted-foreground group-hover:bg-white")}>
                                                         <Globe size={22} />
                                                     </div>
                                                     <Typography variant="caption" className={cn("font-bold", form.target_type === 'all' ? "text-emerald-600" : "text-muted-foreground")}>TODA A REDE</Typography>
                                                 </button>
-                                                <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'store' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'store' ? "bg-status-warning-surface border-status-warning shadow-sm" : "bg-white border-gray-200 hover:border-brand-primary/20")}>
+                                                <button type="button" onClick={() => setForm(p => ({ ...p, target_type: 'store' }))} className={cn("p-mx-lg rounded-2xl border-2 transition-all flex flex-col items-center justify-center gap-mx-sm text-center group", form.target_type === 'store' ? "bg-status-warning-surface border-status-warning shadow-sm" : "bg-white border-border hover:border-brand-primary/20")}>
                                                     <div className={cn("w-mx-xl h-mx-xl rounded-2xl flex items-center justify-center shadow-sm transition-all", form.target_type === 'store' ? "bg-status-warning text-white" : "bg-gray-50 text-muted-foreground group-hover:bg-white")}>
                                                         <Building2 size={22} />
                                                     </div>
@@ -158,7 +158,7 @@ export default function ConsultorNotificacoes() {
                                     </div>
                                 </div>
 
-                                <footer className="pt-10 flex justify-end gap-mx-sm border-t border-gray-200 mt-10 relative z-10">
+                                <footer className="pt-10 flex justify-end gap-mx-sm border-t border-border mt-10 relative z-10">
                                     <Button type="submit" disabled={saving} className="h-mx-2xl px-14 rounded-mx-full text-mx-tiny">
                                         {saving ? <RefreshCw className="animate-spin mr-3" /> : <Send size={20} className="mr-3" />} DISPARAR NA REDE
                                     </Button>
@@ -173,7 +173,7 @@ export default function ConsultorNotificacoes() {
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-mx-lg pb-32" aria-live="polite">
                 {broadcasts.length === 0 ? (
                     <Card className="col-span-full py-40 rounded-mx-4xl text-center border-dashed border-2 bg-white/50 flex flex-col items-center justify-center relative overflow-hidden group">
-                        <div className="w-mx-3xl h-mx-3xl rounded-2xl bg-white shadow-sm flex items-center justify-center mb-8 border border-gray-200 group-hover:rotate-12 transition-transform duration-500">
+                        <div className="w-mx-3xl h-mx-3xl rounded-2xl bg-white shadow-sm flex items-center justify-center mb-8 border border-border group-hover:rotate-12 transition-transform duration-500">
                             <Bell size={40} className="text-muted-foreground/20" />
                         </div>
                         <Typography variant="h2" className="mb-4">Mural Vazio</Typography>
@@ -185,7 +185,7 @@ export default function ConsultorNotificacoes() {
                             <Card className="p-mx-lg h-full border-none bg-white group hover:shadow-sm transition-all relative overflow-hidden flex flex-col">
                                 <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
 
-                                <header className="flex items-start justify-between mb-8 border-b border-gray-200 pb-6 relative z-10">
+                                <header className="flex items-start justify-between mb-8 border-b border-border pb-6 relative z-10">
                                     <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 flex items-center justify-center text-muted-foreground group-hover:bg-pure-black group-hover:text-white transition-all shadow-none transform group-hover:rotate-6">
                                         <Zap size={20} />
                                     </div>
@@ -202,7 +202,7 @@ export default function ConsultorNotificacoes() {
                                     <Typography variant="p" tone="muted" className="text-xs font-bold leading-relaxed line-clamp-4">"{n.message}"</Typography>
                                 </div>
 
-                                <footer className="pt-6 border-t border-gray-200 flex items-center justify-between mt-auto relative z-10">
+                                <footer className="pt-6 border-t border-border flex items-center justify-between mt-auto relative z-10">
                                     <div className="flex items-center gap-mx-xs text-caption font-bold text-muted-foreground">
                                         <Calendar size={14} className="text-emerald-600" /> {new Date(n.created_at).toLocaleDateString('pt-BR')}
                                     </div>

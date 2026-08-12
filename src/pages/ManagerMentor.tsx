@@ -56,7 +56,7 @@ export default function ManagerMentor() {
   return (
     <div className="min-h-full bg-surface-alt">
       <div className="mx-auto max-w-4xl space-y-5 px-4 py-6 pb-24">
-        <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600"><BrainCircuit size={20} /></span>
             <div>

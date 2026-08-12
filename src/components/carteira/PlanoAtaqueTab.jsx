@@ -242,7 +242,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
         <button type="button" onClick={() => setMissaoSelecionada(null)} className="flex items-center gap-2 text-sm font-semibold text-[#005BFF]">
           <ArrowLeft className="h-4 w-4" /> Voltar ao Plano de Ataque
         </button>
-        <section className="rounded-2xl border border-slate-100 bg-white p-6">
+        <section className="rounded-2xl border border-border-subtle bg-white p-6">
           <div className="flex items-start gap-4">
             <span className="text-3xl" aria-hidden="true">{missaoSelecionada.icone}</span>
             <div>
@@ -256,7 +256,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
         {error && <Warning message={error} />}
         <div className="space-y-2">
           {missaoSelecionada.clientes.map((client) => (
-            <button key={client.id} type="button" onClick={() => onFicha?.(client.id)} className="flex w-full items-center justify-between rounded-xl border border-slate-100 bg-white px-4 py-3 text-left">
+            <button key={client.id} type="button" onClick={() => onFicha?.(client.id)} className="flex w-full items-center justify-between rounded-xl border border-border-subtle bg-white px-4 py-3 text-left">
               <span><strong className="block text-sm text-[#031B3D]">{client.nome || "Cliente sem nome"}</strong><span className="text-xs text-muted-foreground">{client.situacao_atual || client.momento || "Situação não informada"}</span></span>
               <Users className="h-4 w-4 text-muted-foreground" />
             </button>
@@ -272,25 +272,25 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
   return (
     <div className="space-y-6">
       <div><h1 className="text-2xl font-black text-[#031B3D]">Plano de Ataque</h1><p className="mt-1 text-sm text-muted-foreground">Missões calculadas a partir das situações reais da sua carteira.</p></div>
-      <section className="rounded-2xl border border-slate-100 bg-white p-5">
+      <section className="rounded-2xl border border-border-subtle bg-white p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div><h2 className="text-lg font-black text-[#031B3D]">Campanhas e condições</h2><p className="mt-1 text-sm text-muted-foreground">Cadastre um feirão, desconto ou bônus de troca e inicie uma missão para os clientes ativos elegíveis.</p></div>
           <span className="rounded-full bg-blue-50 px-3 py-1 text-xs font-bold text-[#005BFF]">{campanhas.length} ativa(s)</span>
         </div>
         <form onSubmit={salvarCampanha} className="mt-4 grid grid-cols-1 gap-3 rounded-xl bg-slate-50 p-4 md:grid-cols-2">
-          <select aria-label="Tipo da campanha" value={campanhaForm.tipo} onChange={event => setCampanhaForm(prev => ({ ...prev, tipo: event.target.value }))} className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm">
+          <select aria-label="Tipo da campanha" value={campanhaForm.tipo} onChange={event => setCampanhaForm(prev => ({ ...prev, tipo: event.target.value }))} className="h-10 rounded-xl border border-border bg-white px-3 text-sm">
             <option value="campanha">Campanha</option><option value="feirao">Feirão</option><option value="desconto">Desconto</option><option value="bonus_troca">Bônus na troca</option>
           </select>
-          <input aria-label="Título da campanha" value={campanhaForm.titulo} onChange={event => setCampanhaForm(prev => ({ ...prev, titulo: event.target.value }))} placeholder="Ex.: Feirão de julho" className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm" required />
-          <textarea aria-label="Descrição da campanha" value={campanhaForm.descricao} onChange={event => setCampanhaForm(prev => ({ ...prev, descricao: event.target.value }))} placeholder="Condição que pode ser comunicada ao cliente" rows={2} className="rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm md:col-span-2" />
-          <input aria-label="Valor do desconto" type="number" min="0" value={campanhaForm.valor_desconto} onChange={event => setCampanhaForm(prev => ({ ...prev, valor_desconto: event.target.value }))} placeholder="Desconto em R$ (se aplicável)" className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm" />
-          <input aria-label="Valor do bônus na troca" type="number" min="0" value={campanhaForm.bonus_troca} onChange={event => setCampanhaForm(prev => ({ ...prev, bonus_troca: event.target.value }))} placeholder="Bônus na troca em R$ (se aplicável)" className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm" />
-          <input aria-label="Fim da campanha" type="date" value={campanhaForm.fim_em} onChange={event => setCampanhaForm(prev => ({ ...prev, fim_em: event.target.value }))} className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm" />
-          <select aria-label="Público-alvo da campanha" value={campanhaForm.targeting_kind} onChange={event => setCampanhaForm(prev => ({ ...prev, targeting_kind: event.target.value }))} className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm">
+          <input aria-label="Título da campanha" value={campanhaForm.titulo} onChange={event => setCampanhaForm(prev => ({ ...prev, titulo: event.target.value }))} placeholder="Ex.: Feirão de julho" className="h-10 rounded-xl border border-border bg-white px-3 text-sm" required />
+          <textarea aria-label="Descrição da campanha" value={campanhaForm.descricao} onChange={event => setCampanhaForm(prev => ({ ...prev, descricao: event.target.value }))} placeholder="Condição que pode ser comunicada ao cliente" rows={2} className="rounded-xl border border-border bg-white px-3 py-2 text-sm md:col-span-2" />
+          <input aria-label="Valor do desconto" type="number" min="0" value={campanhaForm.valor_desconto} onChange={event => setCampanhaForm(prev => ({ ...prev, valor_desconto: event.target.value }))} placeholder="Desconto em R$ (se aplicável)" className="h-10 rounded-xl border border-border bg-white px-3 text-sm" />
+          <input aria-label="Valor do bônus na troca" type="number" min="0" value={campanhaForm.bonus_troca} onChange={event => setCampanhaForm(prev => ({ ...prev, bonus_troca: event.target.value }))} placeholder="Bônus na troca em R$ (se aplicável)" className="h-10 rounded-xl border border-border bg-white px-3 text-sm" />
+          <input aria-label="Fim da campanha" type="date" value={campanhaForm.fim_em} onChange={event => setCampanhaForm(prev => ({ ...prev, fim_em: event.target.value }))} className="h-10 rounded-xl border border-border bg-white px-3 text-sm" />
+          <select aria-label="Público-alvo da campanha" value={campanhaForm.targeting_kind} onChange={event => setCampanhaForm(prev => ({ ...prev, targeting_kind: event.target.value }))} className="h-10 rounded-xl border border-border bg-white px-3 text-sm">
             {TARGETING_OPCOES.map(opcao => <option key={opcao.value} value={opcao.value}>{opcao.label}</option>)}
           </select>
           {campanhaForm.targeting_kind === "financing" && (
-            <select aria-label="Etapa de financiamento" value={campanhaForm.targeting_segment} onChange={event => setCampanhaForm(prev => ({ ...prev, targeting_segment: event.target.value }))} className="h-10 rounded-xl border border-slate-200 bg-white px-3 text-sm">
+            <select aria-label="Etapa de financiamento" value={campanhaForm.targeting_segment} onChange={event => setCampanhaForm(prev => ({ ...prev, targeting_segment: event.target.value }))} className="h-10 rounded-xl border border-border bg-white px-3 text-sm">
               {FINANCING_SEGMENTOS.map(segmento => <option key={segmento.value} value={segmento.value}>{segmento.label}</option>)}
             </select>
           )}
@@ -301,12 +301,12 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           {campanhas.map(campanha => {
             const { resultado } = candidatosElegiveis(clientes, campanha);
             const elegiveis = resultado.eligible;
-            return <div key={campanha.id} className="rounded-xl border border-slate-100 p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-[#031B3D]">{campanha.titulo}</p><p className="mt-1 text-xs text-muted-foreground">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-slate-100 px-2 py-1 text-caption font-bold text-muted-foreground">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#005BFF] px-3 py-2 text-xs font-bold text-[#005BFF] disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} cliente(s)</button></div>;
+            return <div key={campanha.id} className="rounded-xl border border-border-subtle p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-[#031B3D]">{campanha.titulo}</p><p className="mt-1 text-xs text-muted-foreground">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-slate-100 px-2 py-1 text-caption font-bold text-muted-foreground">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#005BFF] px-3 py-2 text-xs font-bold text-[#005BFF] disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} cliente(s)</button></div>;
           })}
         </div>
-        {campanhas.length === 0 && <p className="mt-4 rounded-xl border border-dashed border-slate-200 p-5 text-center text-sm text-muted-foreground">Nenhuma campanha ativa cadastrada para esta loja.</p>}
+        {campanhas.length === 0 && <p className="mt-4 rounded-xl border border-dashed border-border p-5 text-center text-sm text-muted-foreground">Nenhuma campanha ativa cadastrada para esta loja.</p>}
       </section>
-      <div className="rounded-2xl border border-slate-100 bg-white p-5"><VeiculosChegaram clientes={clientes} onExecutar={(client, missaoId) => onWhatsApp?.(client, missaoId || null)} onFicha={onFicha} /></div>
+      <div className="rounded-2xl border border-border-subtle bg-white p-5"><VeiculosChegaram clientes={clientes} onExecutar={(client, missaoId) => onWhatsApp?.(client, missaoId || null)} onFicha={onFicha} /></div>
       {activeMission && (
         <section className="rounded-2xl bg-[#005BFF] p-5 text-white">
           <p className="text-xs font-semibold uppercase text-blue-100">Missão em andamento</p>
@@ -322,11 +322,11 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
       {missionBlock && <Warning message={missionBlock} />}
       {error && <Warning message={error} />}
       {missions.every((mission) => mission.clientes.length === 0) ? (
-        <section className="rounded-2xl border border-dashed border-slate-200 bg-white p-8 text-center"><p className="font-bold text-muted-foreground">Nenhuma missão disponível com os dados atuais.</p><p className="mt-1 text-sm text-muted-foreground">Atualize a situação dos clientes para gerar a próxima fila real.</p></section>
+        <section className="rounded-2xl border border-dashed border-border bg-white p-8 text-center"><p className="font-bold text-muted-foreground">Nenhuma missão disponível com os dados atuais.</p><p className="mt-1 text-sm text-muted-foreground">Atualize a situação dos clientes para gerar a próxima fila real.</p></section>
       ) : (
         <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {missions.filter((mission) => mission.clientes.length > 0).map((mission) => (
-            <button key={mission.id} type="button" onClick={() => setMissaoSelecionada(mission)} className="rounded-2xl border border-slate-100 bg-white p-4 text-left transition hover:border-[#005BFF]">
+            <button key={mission.id} type="button" onClick={() => setMissaoSelecionada(mission)} className="rounded-2xl border border-border-subtle bg-white p-4 text-left transition hover:border-[#005BFF]">
               <div className="mb-3 flex items-start justify-between"><span className="text-2xl" aria-hidden="true">{mission.icone}</span><span className={`rounded-full px-2 py-0.5 text-caption font-bold ${prioridadeColor(mission.prioridade)}`}>{mission.prioridade}</span></div>
               <p className="text-sm font-bold text-[#031B3D]">{mission.nome}</p><p className="mt-1 text-xs text-muted-foreground">{mission.objetivo}</p><p className="mt-3 border-t border-slate-50 pt-2 text-xs font-bold text-[#005BFF]">{mission.clientes.length} cliente(s)</p>
             </button>

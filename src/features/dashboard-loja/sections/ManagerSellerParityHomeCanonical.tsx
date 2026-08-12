@@ -264,7 +264,7 @@ export function ManagerSellerParityHomeCanonical({
         </section>
 
         <section className="grid gap-4 lg:grid-cols-[3fr_2fr]">
-          <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
             <div className="mb-4 flex items-center gap-2">
               <BarChart3 size={18} className="text-emerald-600" />
               <h2 className="font-semibold">Leitura do Dia</h2>
@@ -342,7 +342,7 @@ function ManagerHeader({
   refreshing: boolean
 }) {
   return (
-    <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
           <div className="flex flex-wrap items-center gap-2">
@@ -367,13 +367,13 @@ function ManagerHeader({
               value={selectedStoreId}
               onChange={event => onStoreChange?.(event.target.value)}
               disabled={!onStoreChange || stores.length <= 1}
-              className="h-10 rounded-xl border border-gray-200 bg-white pl-9 pr-8 text-sm outline-none focus:ring-2 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:bg-gray-50"
+              className="h-10 rounded-xl border border-border bg-white pl-9 pr-8 text-sm outline-none focus:ring-2 focus:ring-emerald-500 disabled:cursor-not-allowed disabled:bg-gray-50"
             >
               {stores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
             </select>
           </label>
 
-          <span className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-3 text-sm text-muted-foreground">
+          <span className="inline-flex h-10 items-center gap-2 rounded-xl border border-border px-3 text-sm text-muted-foreground">
             <Calendar size={14} />
             {formatReferenceDate(referenceDate)}
           </span>
@@ -397,7 +397,7 @@ function ManagerHeader({
             onClick={onRefresh}
             disabled={refreshing}
             aria-label="Atualizar Dashboard"
-            className="grid h-10 w-10 place-items-center rounded-xl border border-gray-200 text-muted-foreground hover:bg-gray-50 disabled:opacity-50"
+            className="grid h-10 w-10 place-items-center rounded-xl border border-border text-muted-foreground hover:bg-gray-50 disabled:opacity-50"
           >
             <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
           </button>
@@ -426,7 +426,7 @@ function MetricCard({
   }[tone]
 
   return (
-    <article className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+    <article className="rounded-2xl border border-border-subtle bg-white p-4 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
         <span className={`grid h-9 w-9 place-items-center rounded-xl ${toneClass}`}>
           <Icon size={17} />
@@ -470,8 +470,8 @@ function TeamFocus({
   onSellerClick: () => void
 }) {
   return (
-    <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-      <div className="flex items-center justify-between border-b border-gray-100 px-5 py-4">
+    <article className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
+      <div className="flex items-center justify-between border-b border-border-subtle px-5 py-4">
         <div className="flex items-center gap-2">
           <Users size={18} className="text-emerald-600" />
           <div>
@@ -539,7 +539,7 @@ function FinancialRadar({ team }: { team: ManagerTeamFocusItem[] }) {
   const active = team.filter(item => item.appointmentsToday > 0).length
 
   return (
-    <article className="min-w-0 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <article className="min-w-0 rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center gap-2">
         <DollarSign size={18} className="text-emerald-600" />
         <div>
@@ -581,7 +581,7 @@ function AppointmentsChart({
   }
 
   return (
-    <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="mb-4">
         <h2 className="font-semibold">Agendamentos por Vendedor</h2>
         <p className="text-xs text-muted-foreground">
@@ -650,7 +650,7 @@ function ManagerHomeState({
 }) {
   return (
     <div className="grid min-h-[60vh] place-items-center bg-gray-50 p-6">
-      <div className="max-w-lg rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm">
+      <div className="max-w-lg rounded-2xl border border-border-subtle bg-white p-8 text-center shadow-sm">
         <CheckCircle2 className="mx-auto mb-4 text-emerald-600" size={36} />
         <h1 className="text-xl font-bold text-foreground">{title}</h1>
         <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>

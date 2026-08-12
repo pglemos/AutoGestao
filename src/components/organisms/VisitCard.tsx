@@ -71,7 +71,7 @@ export function VisitCard({
         >
           <div className={cn(
             'w-mx-10 h-mx-10 rounded-xl border flex items-center justify-center shrink-0',
-            isToday(scheduledDate) ? 'bg-emerald-600/10 border-brand-primary/20 text-emerald-600' : 'bg-gray-50 border-gray-200 text-muted-foreground'
+            isToday(scheduledDate) ? 'bg-emerald-600/10 border-brand-primary/20 text-emerald-600' : 'bg-gray-50 border-border text-muted-foreground'
           )}>
             <Typography variant="h3" className="text-lg">
               {format(scheduledDate, 'dd')}

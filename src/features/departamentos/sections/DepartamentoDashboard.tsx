@@ -135,7 +135,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
             {data?.fluxograma?.map((step) => (
               <li
                 key={step.passo}
-                className="rounded-2xl border border-gray-200 bg-white p-mx-sm"
+                className="rounded-2xl border border-border bg-white p-mx-sm"
               >
                 <div className="flex items-center gap-mx-xs">
                   <span className="rounded-xl bg-emerald-600 px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest text-pure-white">
@@ -174,7 +174,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
                   'rounded-2xl border p-mx-sm flex items-start gap-mx-xs',
                   item.obrigatorio
                     ? 'border-status-warning/30 bg-status-warning-surface'
-                    : 'border-gray-200 bg-white',
+                    : 'border-border bg-white',
                 )}
               >
                 <CheckSquare
@@ -211,7 +211,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
         >
           <ul className="space-y-mx-xs">
             {data?.biblioteca?.map((entry) => (
-              <li key={entry.id} className="rounded-2xl border border-gray-200 bg-white p-mx-sm">
+              <li key={entry.id} className="rounded-2xl border border-border bg-white p-mx-sm">
                 <div className="flex items-center gap-mx-xs">
                   <Badge variant="outline" className="">
                     {entry.categoria}
@@ -245,7 +245,7 @@ function ScoreCard({ tone, value }: { tone: string; value: string }) {
     brand: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error',
-    muted: 'border-gray-200 bg-gray-50 text-muted-foreground',
+    muted: 'border-border bg-gray-50 text-muted-foreground',
   }
   return (
     <Card className={cn('rounded-2xl border p-mx-md', toneClass[tone])}>
@@ -279,7 +279,7 @@ function KpiCard({ kpi }: { kpi: DepartamentoKpi }) {
     brand: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error',
-    muted: 'border-gray-200 bg-gray-50 text-muted-foreground',
+    muted: 'border-border bg-gray-50 text-muted-foreground',
   }
   return (
     <Card className={cn('rounded-2xl border p-mx-md', toneClass[tone])}>
@@ -321,7 +321,7 @@ function SectionBlock({
         </Typography>
       </header>
       {empty ? (
-        <div className="rounded-xl border border-dashed border-gray-200 p-mx-sm text-center">
+        <div className="rounded-xl border border-dashed border-border p-mx-sm text-center">
           <Typography variant="tiny" tone="muted" className="font-bold">
             {emptyLabel}
           </Typography>

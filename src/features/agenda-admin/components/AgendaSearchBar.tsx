@@ -37,7 +37,7 @@ export function AgendaSearchBar({ searchQuery, onSearchChange, placeholder = 'Bu
         onChange={(e) => onSearchChange(e.target.value)}
         placeholder={placeholder}
         aria-label="Buscar agendamentos"
-        className="w-full h-9 pl-9 pr-14 text-xs bg-gray-50/60 hover:bg-gray-50 border border-gray-200 focus:border-brand-primary focus:bg-white focus:outline-none rounded-xl text-foreground placeholder:text-muted-foreground transition-all"
+        className="w-full h-9 pl-9 pr-14 text-xs bg-gray-50/60 hover:bg-gray-50 border border-border focus:border-brand-primary focus:bg-white focus:outline-none rounded-xl text-foreground placeholder:text-muted-foreground transition-all"
       />
       {searchQuery ? (
         <button
@@ -49,7 +49,7 @@ export function AgendaSearchBar({ searchQuery, onSearchChange, placeholder = 'Bu
           <X size={14} />
         </button>
       ) : (
-        <kbd className="absolute right-2.5 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-caption font-mono font-medium text-muted-foreground bg-white border border-gray-200 rounded shadow-2xs pointer-events-none">
+        <kbd className="absolute right-2.5 hidden sm:inline-flex items-center gap-0.5 px-1.5 py-0.5 text-caption font-mono font-medium text-muted-foreground bg-white border border-border rounded shadow-2xs pointer-events-none">
           /
         </kbd>
       )}

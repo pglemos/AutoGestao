@@ -7,7 +7,7 @@ export default function OAuthHome() {
   return (
     <main className="min-h-screen bg-background text-foreground selection:bg-emerald-600/20">
       <section className="min-h-screen flex flex-col">
-        <header className="w-full px-mx-lg sm:px-mx-2xl py-mx-lg flex items-center justify-between gap-mx-md border-b border-gray-200 bg-white/95">
+        <header className="w-full px-mx-lg sm:px-mx-2xl py-mx-lg flex items-center justify-between gap-mx-md border-b border-border bg-white/95">
           <Link to="/" className="flex items-center gap-mx-sm min-w-0" aria-label="MX PERFORMANCE">
             <img src={MxLogo} alt="MX PERFORMANCE" className="object-contain shrink-0" style={{ width: 44, height: 44 }} />
             <span className="hidden sm:inline text-sm sm:text-base font-bold tracking-tight uppercase">MX PERFORMANCE</span>
@@ -58,7 +58,7 @@ export default function OAuthHome() {
                 </Link>
                 <Link
                   to="/privacy"
-                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl border border-gray-200 text-muted-foreground text-sm font-bold hover:border-brand-primary hover:text-emerald-600 transition-colors"
+                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl border border-border text-muted-foreground text-sm font-bold hover:border-brand-primary hover:text-emerald-600 transition-colors"
                 >
                   <ShieldCheck size={18} />
                   Politica de Privacidade
@@ -100,7 +100,7 @@ export default function OAuthHome() {
           </div>
         </div>
 
-        <footer className="px-mx-lg sm:px-mx-2xl py-mx-md border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-mx-sm text-xs text-muted-foreground">
+        <footer className="px-mx-lg sm:px-mx-2xl py-mx-md border-t border-border flex flex-col sm:flex-row items-center justify-between gap-mx-sm text-xs text-muted-foreground">
           <span className="font-bold">MX Consultoria LTDA © {new Date().getFullYear()}</span>
           <div className="flex items-center gap-mx-md font-bold">
             <Link to="/privacy" className="hover:text-emerald-600">Politica de Privacidade</Link>

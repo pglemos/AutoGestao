@@ -9,7 +9,7 @@ const FILTRO_LABEL = {
 const COR = {
   Alta:  "text-green-600 bg-green-50 border-green-200",
   Média: "text-amber-600 bg-amber-50 border-amber-200",
-  Baixa: "text-muted-foreground bg-slate-50 border-slate-200",
+  Baixa: "text-muted-foreground bg-slate-50 border-border",
 };
 
 const MOTIVO = {
@@ -20,7 +20,7 @@ const MOTIVO = {
 
 export default function BaseEstatistica({ filtro, usou90, confianca, periodoCalculo }) {
   return (
-    <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+    <div className="rounded-xl border border-border-subtle bg-slate-50 p-4">
       <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-3">Base do cálculo</p>
       <div className="flex flex-wrap gap-x-8 gap-y-2 text-[12px]">
         <div>

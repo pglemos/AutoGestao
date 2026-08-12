@@ -23,7 +23,7 @@ export function PageHeading({
   return (
     <header
       data-mx-page-heading="manager"
-      className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"
+      className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm"
     >
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex min-w-0 items-start gap-3">

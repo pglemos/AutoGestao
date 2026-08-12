@@ -18,7 +18,7 @@ const priorityCopy = {
   critical: { label: 'Crítica', badge: 'bg-red-100 text-red-700', border: 'border-red-200' },
   high: { label: 'Alta', badge: 'bg-amber-100 text-amber-700', border: 'border-amber-200' },
   medium: { label: 'Média', badge: 'bg-blue-100 text-blue-700', border: 'border-blue-200' },
-  low: { label: 'Baixa', badge: 'bg-gray-100 text-muted-foreground', border: 'border-gray-200' },
+  low: { label: 'Baixa', badge: 'bg-gray-100 text-muted-foreground', border: 'border-border' },
 } as const
 
 function formatDueDate(value: string | null): string | null {
@@ -79,8 +79,8 @@ export default function DeterministicActionsPanel({
   }
 
   const wrapperClass = compact
-    ? 'flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm'
-    : 'rounded-2xl border border-gray-100 bg-white p-5 shadow-sm'
+    ? 'flex h-full flex-col rounded-2xl border border-border-subtle bg-white p-5 shadow-sm'
+    : 'rounded-2xl border border-border-subtle bg-white p-5 shadow-sm'
 
   return (
     <section className={wrapperClass} aria-labelledby="deterministic-actions-title">
@@ -163,7 +163,7 @@ export default function DeterministicActionsPanel({
                         type="button"
                         onClick={() => void handleResolve(action)}
                         disabled={resolving}
-                        className="inline-flex min-h-9 items-center rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gray-100 disabled:opacity-50"
+                        className="inline-flex min-h-9 items-center rounded-lg border border-border px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-border-subtle disabled:opacity-50"
                       >
                         {resolving ? 'Registrando...' : 'Marcar como tratada'}
                       </button>

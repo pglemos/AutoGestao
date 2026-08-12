@@ -41,7 +41,7 @@ export function GlobalFiltersBar({
           className="!pl-11 !h-mx-14 !text-mx-tiny uppercase tracking-widest font-bold"
         />
       </label>
-      <div className="flex items-center gap-mx-xs bg-white border border-gray-200 px-4 h-mx-14 sm:h-mx-14 rounded-xl shadow-none overflow-x-auto no-scrollbar">
+      <div className="flex items-center gap-mx-xs bg-white border border-border px-4 h-mx-14 sm:h-mx-14 rounded-xl shadow-none overflow-x-auto no-scrollbar">
         <button
           type="button"
           onClick={() => onFilterStoreChange('all')}

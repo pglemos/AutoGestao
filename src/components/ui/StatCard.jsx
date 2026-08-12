@@ -10,7 +10,7 @@ export default function StatCard({ label, value, sublabel, icon: Icon, color = "
   };
 
   return (
-    <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
+    <div className="bg-white rounded-2xl p-5 shadow-sm border border-border-subtle hover:shadow-md transition-shadow duration-300">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
           <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>

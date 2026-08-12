@@ -44,7 +44,7 @@ const STATUS_TONE: Record<CentralMxPlanoStatus, string> = {
   pendente: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   em_andamento: 'border-brand-primary/40 bg-mx-indigo-50 text-emerald-600',
   atrasado: 'border-status-error/30 bg-status-error-surface text-status-error',
-  validando_eficacia: 'border-gray-200 bg-gray-50 text-muted-foreground',
+  validando_eficacia: 'border-border bg-gray-50 text-muted-foreground',
   concluido: 'border-status-success/30 bg-status-success-surface text-status-success',
 }
 
@@ -217,7 +217,7 @@ export function CentralMxPlanoSegmentadoPanel({
                 'inline-flex items-center gap-mx-xs rounded-2xl border px-mx-sm py-mx-xs text-mx-tiny font-bold uppercase tracking-widest transition-colors focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/30',
                 isActive
                   ? 'border-brand-primary bg-emerald-600 text-pure-white shadow-sm'
-                  : 'border-gray-200 bg-white text-muted-foreground',
+                  : 'border-border bg-white text-muted-foreground',
               )}
             >
               <def.icon size={14} aria-hidden="true" />
@@ -263,7 +263,7 @@ export function CentralMxPlanoSegmentadoPanel({
           />
         ))}
         {!activeList.length && !segmentado.loading && (
-          <li className="rounded-2xl border border-dashed border-gray-200 p-mx-md text-center">
+          <li className="rounded-2xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Sem planos de ação ativos no escopo {SCOPE_LABEL[activeScope].label}.
             </Typography>
@@ -295,7 +295,7 @@ function CountTile({
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
     brand: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error',
-    muted: 'border-gray-200 bg-gray-50 text-muted-foreground',
+    muted: 'border-border bg-gray-50 text-muted-foreground',
   }
   return (
     <div className={cn('rounded-2xl border p-mx-sm text-center', toneClass[tone])}>

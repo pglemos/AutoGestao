@@ -122,7 +122,7 @@ export function ManagerTourOverlay({
       )}
 
       <section
-        className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-2xl transition-all"
+        className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-2xl transition-all"
         style={popover
           ? { position: 'fixed', top: popover.top, left: popover.left, width: popover.width, zIndex: 180 }
           : { position: 'fixed', top: '50%', left: '50%', marginLeft: -190, marginTop: -100, width: 380, zIndex: 180 }}
@@ -148,14 +148,14 @@ export function ManagerTourOverlay({
           <p className="text-sm leading-relaxed text-muted-foreground">{step?.description}</p>
         </div>
 
-        <footer className="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-5 py-3">
+        <footer className="flex items-center justify-between border-t border-border-subtle bg-gray-50 px-5 py-3">
           <span className="text-xs tabular-nums text-muted-foreground">Passo {index + 1} de {steps.length}</span>
           <div className="flex items-center gap-2">
             <button type="button" onClick={onSkip} className="h-8 rounded-lg px-2 text-xs text-muted-foreground hover:text-foreground">
               Pular tour
             </button>
             {index > 0 && (
-              <button type="button" onClick={previous} className="flex h-8 items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 text-xs text-muted-foreground hover:bg-gray-50">
+              <button type="button" onClick={previous} className="flex h-8 items-center gap-1 rounded-lg border border-border bg-white px-3 text-xs text-muted-foreground hover:bg-gray-50">
                 <ChevronLeft size={14} /> Voltar
               </button>
             )}

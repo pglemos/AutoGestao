@@ -54,7 +54,7 @@ export function TeamListSection({
         </motion.div>
       ) : filteredTeam.length > 0 ? (
         <Card className="border-none bg-white overflow-hidden">
-          <CardHeader className="border-b border-gray-200 bg-white p-mx-lg">
+          <CardHeader className="border-b border-border bg-white p-mx-lg">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-mx-sm">
               <div>
                 <CardTitle className="text-lg">Integrantes vinculados</CardTitle>
@@ -63,7 +63,7 @@ export function TeamListSection({
               <Badge variant="outline" className="w-fit">{filteredTeam.length} registros</Badge>
             </div>
           </CardHeader>
-          <div className="hidden lg:grid store-team-grid gap-mx-md px-mx-lg py-mx-sm bg-gray-50 border-b border-gray-200 text-mx-nano font-bold uppercase tracking-mx-widest text-muted-foreground">
+          <div className="hidden lg:grid store-team-grid gap-mx-md px-mx-lg py-mx-sm bg-gray-50 border-b border-border text-mx-nano font-bold uppercase tracking-mx-widest text-muted-foreground">
             <span>Integrante</span>
             <span>Papel</span>
             <span>Status</span>
@@ -159,7 +159,7 @@ export function TeamListSection({
         </Card>
       ) : (
         <Card className="border-none bg-white overflow-hidden">
-          <CardHeader className="border-b border-gray-200 bg-white p-mx-lg">
+          <CardHeader className="border-b border-border bg-white p-mx-lg">
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-mx-sm">
               <div>
                 <CardTitle className="text-lg">Integrantes vinculados</CardTitle>
@@ -172,9 +172,9 @@ export function TeamListSection({
             <motion.div
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
-              className="flex flex-col items-center justify-center space-y-mx-md text-center rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-mx-lg"
+              className="flex flex-col items-center justify-center space-y-mx-md text-center rounded-2xl border border-dashed border-border bg-gray-50 p-mx-lg"
             >
-              <div className="w-mx-16 h-mx-16 rounded-2xl bg-white flex items-center justify-center text-emerald-600 shadow-sm border border-gray-200">
+              <div className="w-mx-16 h-mx-16 rounded-2xl bg-white flex items-center justify-center text-emerald-600 shadow-sm border border-border">
                 <Users size={28} strokeWidth={1.8} />
               </div>
               <div className="space-y-mx-xs max-w-sm">

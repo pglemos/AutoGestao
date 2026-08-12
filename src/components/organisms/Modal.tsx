@@ -132,8 +132,8 @@ export function Modal({
           <div className={cn(
             "border-b flex justify-between gap-mx-md bg-white z-10 shrink-0",
             referenceStyle
-              ? "items-center border-gray-100 px-5 py-4"
-              : "items-start border-gray-200 p-mx-md sm:p-mx-lg",
+              ? "items-center border-border-subtle px-5 py-4"
+              : "items-start border-border p-mx-md sm:p-mx-lg",
           )}>
             <div className="min-w-0">
               <Dialog.Title asChild>
@@ -181,8 +181,8 @@ export function Modal({
               className={cn(
                 "border-t flex bg-white shrink-0",
                 referenceStyle
-                  ? "flex-row justify-end gap-3 border-gray-100 px-5 py-4"
-                  : "flex-col-reverse gap-mx-sm border-gray-200 sm:flex-row sm:justify-end p-mx-md sm:p-mx-lg",
+                  ? "flex-row justify-end gap-3 border-border-subtle px-5 py-4"
+                  : "flex-col-reverse gap-mx-sm border-border sm:flex-row sm:justify-end p-mx-md sm:p-mx-lg",
               )}
               style={referenceStyle ? undefined : {
                 paddingBottom: "max(env(safe-area-inset-bottom, 0px), 1rem)",

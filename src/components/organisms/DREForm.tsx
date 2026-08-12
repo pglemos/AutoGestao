@@ -109,7 +109,7 @@ export function DREForm({
       {sections.map((sec) => {
         const isCollapsed = collapsed[sec.key] ?? false
         return (
-          <div key={sec.key} className="border border-gray-200 rounded-xl mb-mx-sm overflow-hidden">
+          <div key={sec.key} className="border border-border rounded-xl mb-mx-sm overflow-hidden">
             <button
               type="button"
               className="w-full flex items-center justify-between px-mx-md py-mx-sm bg-mx-green-900 text-white hover:bg-mx-green-950 transition-colors"

@@ -36,7 +36,7 @@ const EFICIENCIA_ORDER: FunnelChannel[] = ['Showroom', 'Carteira', 'Internet']
 const BASE_CONFIANCA_COR: Record<Confidence, string> = {
   Alta: 'text-status-success-text bg-green-50 border-green-200',
   Média: 'text-status-warning-text bg-amber-50 border-amber-200',
-  Baixa: 'text-muted-foreground bg-slate-50 border-slate-200',
+  Baixa: 'text-muted-foreground bg-slate-50 border-border',
 }
 
 export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: PeriodKey }) {
@@ -47,7 +47,7 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
   const isCurrentMonth = periodKey === 'current_month'
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-border bg-white p-5 shadow-sm">
       <p className="mb-4 text-caption font-bold uppercase tracking-wider text-muted-foreground">Status da Meta</p>
 
       {!meta ? (
@@ -149,7 +149,7 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
 
 function AlavancaItem({ label, valor }: { label: string; valor: number }) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-100 py-2 last:border-0">
+    <div className="flex items-center justify-between border-b border-border-subtle py-2 last:border-0">
       <span className="text-body-sm text-muted-foreground">{label}</span>
       <span className="text-[18px] font-bold tabular-nums text-foreground">{valor}</span>
     </div>
@@ -158,7 +158,7 @@ function AlavancaItem({ label, valor }: { label: string; valor: number }) {
 
 function CanalSecundario({ titulo, semBase, children }: { titulo: string; semBase: boolean; children: ReactNode }) {
   return (
-    <div className="rounded-xl border border-slate-100 p-3">
+    <div className="rounded-xl border border-border-subtle p-3">
       <p className="mb-2 text-caption font-bold uppercase tracking-wide text-muted-foreground">{titulo}</p>
       {semBase ? <p className="text-[12px] italic text-muted-foreground">Sem base suficiente para projeção.</p> : children}
     </div>
@@ -174,7 +174,7 @@ export function hasPositiveEffortLever(values: EsforcoValues | null | undefined)
 export function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelFunnel[]; faltam: number }) {
   if (faltam <= 0) {
     return (
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+      <div className="rounded-2xl border border-border bg-white p-5 shadow-sm">
         <p className="mb-2 text-caption font-bold uppercase tracking-wider text-muted-foreground">O que preciso produzir para bater a meta?</p>
         <p className="text-[14px] font-bold text-status-success-text">Meta batida. Continue mantendo o ritmo! 🎯</p>
       </div>
@@ -197,14 +197,14 @@ export function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelF
   const principalEffort = hasPositiveEffortLever(calcPrincipal) ? calcPrincipal : null
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-border bg-white p-5 shadow-sm">
       <p className="mb-1 text-caption font-bold uppercase tracking-wider text-muted-foreground">O que preciso produzir para bater a meta?</p>
       <p className="mb-4 text-[12px] text-muted-foreground">
         Com base na sua conversão registrada, esta é a produção estimada para buscar as {faltam} venda{faltam !== 1 ? 's' : ''} que faltam.
       </p>
 
       {!canalPrincipal ? (
-        <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-center">
+        <div className="rounded-xl border border-border bg-slate-50 p-4 text-center">
           <p className="text-body-sm text-muted-foreground">Sem base suficiente para projeção confiável.</p>
           <p className="mt-1 text-[12px] text-muted-foreground">Registre atendimentos e vendas para habilitar esta análise.</p>
         </div>
@@ -278,7 +278,7 @@ export function EficienciaCanalCard({ channels }: { channels: ChannelFunnel[] })
   const byName = (name: FunnelChannel) => channels.find(c => c.channel === name)
 
   return (
-    <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+    <div className="rounded-2xl border border-border bg-white p-5 shadow-sm">
       <p className="mb-1 text-caption font-bold uppercase tracking-wider text-muted-foreground">Eficiência por canal</p>
       <p className="mb-4 text-[12px] text-muted-foreground"><span className="font-semibold">Principal limitador:</span> {limitador}</p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -302,7 +302,7 @@ function CanalCard({ channel }: { channel: ChannelFunnel }) {
   const etapas = buildEtapaLinhas(channel)
 
   return (
-    <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
+    <div className="overflow-hidden rounded-xl border border-border bg-white">
       <div className={`flex items-center justify-between border-b px-4 py-2.5 ${cor.header}`}>
         <p className="text-[12px] font-bold uppercase tracking-wide text-foreground">{channel.channel}</p>
         {conv !== null && !semDados ? (
@@ -345,7 +345,7 @@ function CanalCard({ channel }: { channel: ChannelFunnel }) {
       </div>
 
       {expandido && (
-        <div className="border-t border-slate-100 px-4 pb-3 pt-2">
+        <div className="border-t border-border-subtle px-4 pb-3 pt-2">
           {etapas.map((etapa, index) => <EtapaLinha key={index} label={etapa.label} valor={etapa.value} conv={etapa.conv} />)}
         </div>
       )}
@@ -367,7 +367,7 @@ function EtapaLinha({ label, valor, conv }: { label: string; valor: number; conv
 
 export function BaseEstatisticaCard({ displayedPeriod, calculationPeriod, confidence }: { displayedPeriod: string; calculationPeriod: string; confidence: Confidence }) {
   return (
-    <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
+    <div className="rounded-xl border border-border-subtle bg-slate-50 p-4">
       <p className="mb-3 text-caption font-bold uppercase tracking-wider text-muted-foreground">Base do cálculo</p>
       <div className="flex flex-wrap gap-x-8 gap-y-2 text-[12px]">
         <div><span className="text-muted-foreground">Período exibido:</span>{' '}<span className="font-semibold text-muted-foreground">{displayedPeriod}</span></div>
@@ -385,13 +385,13 @@ export function BaseEstatisticaCard({ displayedPeriod, calculationPeriod, confid
 export function EvolucaoCollapsible({ data, chartAberto, onToggle }: { data: MonthlyEvolutionPoint[]; chartAberto: boolean; onToggle: () => void }) {
   const semRegistros = data.every(item => item.oportunidades === 0 && item.atendimentos === 0 && item.vendas === 0)
   return (
-    <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+    <div className="overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
       <button type="button" onClick={onToggle} className="flex w-full items-center justify-between px-5 py-3.5 transition-colors hover:bg-slate-50">
         <p className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Ver evolução dos últimos meses</p>
         {chartAberto ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
       </button>
       {chartAberto && (
-        <div className="border-t border-slate-100 px-5 pb-4">
+        <div className="border-t border-border-subtle px-5 pb-4">
           {semRegistros ? (
             <p className="py-6 text-center text-[12px] text-muted-foreground">Sem registros nos últimos 6 meses.</p>
           ) : (

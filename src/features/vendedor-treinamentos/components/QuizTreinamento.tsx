@@ -65,7 +65,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
     }
 
     return (
-        <section className="rounded-2xl border border-gray-100 bg-gray-50/40 p-4" aria-label="Prova oficial da aula">
+        <section className="rounded-2xl border border-border-subtle bg-gray-50/40 p-4" aria-label="Prova oficial da aula">
             <Typography variant="p" className="flex items-center gap-2 text-sm font-bold tracking-wide">
                 <ClipboardCheck size={16} className="text-emerald-600" />
                 Prova Oficial — nota mínima 70%
@@ -76,7 +76,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
 
             <div className="space-y-4">
                 {questoes.map((questao, indice) => (
-                    <fieldset key={questao.id} className="rounded-xl border border-gray-100 bg-white p-3">
+                    <fieldset key={questao.id} className="rounded-xl border border-border-subtle bg-white p-3">
                         <legend className="px-1 text-sm font-semibold text-foreground">
                             {indice + 1}. {questao.pergunta}
                         </legend>
@@ -89,7 +89,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
                                         checked={respostas[questao.id] === opcaoIndice}
                                         onChange={() => setRespostas(atual => ({ ...atual, [questao.id]: opcaoIndice }))}
                                         disabled={Boolean(resultado?.aprovado)}
-                                        className="mt-0.5 h-4 w-4 border-gray-200 text-emerald-600 focus:ring-brand-primary"
+                                        className="mt-0.5 h-4 w-4 border-border text-emerald-600 focus:ring-brand-primary"
                                     />
                                     <span>{opcao}</span>
                                 </label>

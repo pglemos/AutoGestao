@@ -21,7 +21,7 @@ export function OwnerCockpitHeader({
   periodLabel: string
 }) {
   return (
-    <header className="flex items-start justify-between gap-4 border-b border-gray-200 pb-mx-md sm:pb-mx-lg">
+    <header className="flex items-start justify-between gap-4 border-b border-border pb-mx-md sm:pb-mx-lg">
       <div>
         <h1 className="text-2xl font-bold leading-tight text-foreground sm:text-3xl md:text-[2rem]">
           {greeting()}, <span className="text-status-success-text">{name.split(' ')[0]}</span>!
@@ -29,7 +29,7 @@ export function OwnerCockpitHeader({
         <p className="mt-mx-tiny text-sm font-medium text-muted-foreground">Aqui está o panorama da sua loja hoje.</p>
       </div>
       <div className="flex shrink-0 items-center gap-mx-sm">
-        <div className="inline-flex h-mx-11 items-center gap-mx-xs rounded-mx-full border border-gray-100 bg-white px-mx-md shadow-sm">
+        <div className="inline-flex h-mx-11 items-center gap-mx-xs rounded-mx-full border border-border-subtle bg-white px-mx-md shadow-sm">
           <CalendarDays size={16} className="text-muted-foreground" />
           <Typography variant="tiny" className="">{periodLabel}</Typography>
         </div>
@@ -53,7 +53,7 @@ const cardBorderClasses: Record<KpiTone, string> = {
   info: 'border-status-info/30',
   warning: 'border-amber-200',
   danger: 'border-red-200',
-  muted: 'border-gray-200',
+  muted: 'border-border',
   brand: 'border-emerald-200',
   purple: 'border-[var(--color-accent-purple)]/30',
 }
@@ -250,7 +250,7 @@ export function MXScoreCompact({ score, trend }: { score: number | null; trend?:
 export function MetricPill({ label, value, tone }: { label: string; value: string; tone: KpiTone }) {
   const classes = toneClasses[tone]
   return (
-    <div className={cn('rounded-xl border border-gray-100 p-mx-sm text-center', classes.soft)}>
+    <div className={cn('rounded-xl border border-border-subtle p-mx-sm text-center', classes.soft)}>
       <Typography variant="tiny" className="block leading-tight">{label}</Typography>
       <div className="mt-mx-xs truncate text-base font-bold tabular-nums" title={value}>{value}</div>
     </div>
@@ -304,7 +304,7 @@ export function SectionTitle({ title, subtitle }: { title: string; subtitle: str
 
 export function SideList({ title, items, className }: { title: string; items: string[]; className?: string }) {
   return (
-    <Card className={cn('rounded-xl border border-gray-100 bg-white p-mx-md shadow-sm', className)}>
+    <Card className={cn('rounded-xl border border-border-subtle bg-white p-mx-md shadow-sm', className)}>
       <Typography variant="h3" className="text-lg">{title}</Typography>
       <div className="mt-mx-md space-y-mx-sm">
         {items.map((item, index) => (
@@ -323,7 +323,7 @@ export function ToolbarPlaceholder({ searchPlaceholder }: { searchPlaceholder: s
     <div className="flex flex-col gap-mx-sm lg:flex-row lg:items-center lg:justify-between">
       <div className="grid grid-cols-1 gap-mx-sm sm:grid-cols-4">
         {['Todos os departamentos', 'Todas as origens', 'Todos os status', 'Todas as prioridades'].map(label => (
-          <button key={label} type="button" className="h-mx-10 rounded-xl border border-gray-100 bg-white px-mx-sm text-left text-xs font-bold text-muted-foreground">
+          <button key={label} type="button" className="h-mx-10 rounded-xl border border-border-subtle bg-white px-mx-sm text-left text-xs font-bold text-muted-foreground">
             {label}
           </button>
         ))}
@@ -331,7 +331,7 @@ export function ToolbarPlaceholder({ searchPlaceholder }: { searchPlaceholder: s
       <label className="relative min-w-0 lg:w-[320px]">
         <span className="sr-only">{searchPlaceholder}</span>
         <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
-        <input className="h-mx-10 w-full rounded-xl border border-gray-100 bg-white pl-mx-xl pr-mx-sm text-sm font-bold outline-none focus:border-brand-primary" placeholder={searchPlaceholder} />
+        <input className="h-mx-10 w-full rounded-xl border border-border-subtle bg-white pl-mx-xl pr-mx-sm text-sm font-bold outline-none focus:border-brand-primary" placeholder={searchPlaceholder} />
       </label>
     </div>
   )

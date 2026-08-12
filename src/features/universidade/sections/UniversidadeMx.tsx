@@ -40,7 +40,7 @@ const TIPO_LABEL: Record<UniversidadeAulaTipo, string> = {
 }
 
 const TIPO_TONE: Record<UniversidadeAulaTipo, string> = {
-  biblioteca: 'border-gray-200 bg-gray-50 text-muted-foreground',
+  biblioteca: 'border-border bg-gray-50 text-muted-foreground',
   aula_gravada: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
   aula_ao_vivo: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   quiz: 'border-status-success/30 bg-status-success-surface text-status-success',
@@ -117,7 +117,7 @@ export function UniversidadeMx({ userId }: Props) {
               'rounded-xl border px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest transition-colors',
               filtros.includes(publico)
                 ? 'border-brand-primary bg-emerald-600 text-pure-white'
-                : 'border-gray-200 bg-white text-muted-foreground',
+                : 'border-border bg-white text-muted-foreground',
             )}
             aria-pressed={filtros.includes(publico)}
           >
@@ -137,7 +137,7 @@ export function UniversidadeMx({ userId }: Props) {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
           placeholder="Buscar por tema, nível ou título…"
-          className="w-full rounded-xl border border-gray-200 bg-white py-mx-xs pl-8 pr-mx-sm text-mx-tiny font-bold placeholder-text-secondary focus:border-brand-primary focus:outline-none"
+          className="w-full rounded-xl border border-border bg-white py-mx-xs pl-8 pr-mx-sm text-mx-tiny font-bold placeholder-text-secondary focus:border-brand-primary focus:outline-none"
           aria-label="Buscar trilhas e aulas"
         />
       </div>
@@ -190,7 +190,7 @@ export function UniversidadeMx({ userId }: Props) {
 
       {!trilhas.length ? (
         <Card className="p-mx-md">
-          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               {filtros.length === 0
                 ? 'Selecione ao menos um público para listar trilhas.'
@@ -284,7 +284,7 @@ export function UniversidadeMx({ userId }: Props) {
                   </li>
                 ))}
                 {!(aulas[trilha.id] ?? []).length && (
-                  <li className="rounded-xl border border-dashed border-gray-200 p-mx-sm text-center">
+                  <li className="rounded-xl border border-dashed border-border p-mx-sm text-center">
                     <Typography variant="tiny" tone="muted" className="font-bold">
                       Trilha sem aulas publicadas ainda.
                     </Typography>

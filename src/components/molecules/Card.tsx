@@ -8,7 +8,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
       ref={ref}
       data-mx-card=""
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-colors',
+        'relative overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm transition-colors',
         className,
       )}
       {...props}
@@ -22,7 +22,7 @@ const CardHeader = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
     <div
       ref={ref}
       data-mx-card-header=""
-      className={cn('flex flex-col gap-1 border-b border-gray-100 bg-white p-5', className)}
+      className={cn('flex flex-col gap-1 border-b border-border-subtle bg-white p-5', className)}
       {...props}
     />
   ),
@@ -74,7 +74,7 @@ const CardFooter = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDiv
     <div
       ref={ref}
       data-mx-card-footer=""
-      className={cn('mt-auto flex items-center border-t border-gray-100 bg-white p-5', className)}
+      className={cn('mt-auto flex items-center border-t border-border-subtle bg-white p-5', className)}
       {...props}
     />
   ),

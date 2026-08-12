@@ -70,12 +70,12 @@ export function StoreArenaSelector({ loading, opponents, stores, onToggle, onCle
               aria-pressed={selected}
               className={cn(
                 'p-mx-md rounded-2xl border-2 transition-all flex flex-col items-center gap-mx-sm relative overflow-hidden text-center',
-                selected ? 'bg-gray-900 border-brand-primary shadow-sm scale-105' : 'bg-white/60 border-gray-200 hover:bg-white hover:border-brand-primary/40'
+                selected ? 'bg-gray-900 border-brand-primary shadow-sm scale-105' : 'bg-white/60 border-border hover:bg-white hover:border-brand-primary/40'
               )}
             >
               <div className={cn(
                 'w-mx-14 h-mx-14 rounded-2xl flex items-center justify-center border-2 shrink-0',
-                selected ? 'bg-emerald-600/20 border-brand-primary text-emerald-600' : 'bg-gray-50 border-gray-200 text-muted-foreground'
+                selected ? 'bg-emerald-600/20 border-brand-primary text-emerald-600' : 'bg-gray-50 border-border text-muted-foreground'
               )}>
                 <Building2 size={22} />
               </div>

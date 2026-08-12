@@ -54,12 +54,12 @@ function NumStepper({ value, onChange, disabled }: { value: number; onChange: (v
   }
 
   return (
-    <div className={`flex h-10 items-center rounded-xl border bg-white shadow-sm transition-all ${disabled ? 'border-slate-100 opacity-60' : 'border-slate-200 focus-within:border-blue-400'}`}>
+    <div className={`flex h-10 items-center rounded-xl border bg-white shadow-sm transition-all ${disabled ? 'border-border-subtle opacity-60' : 'border-border focus-within:border-blue-400'}`}>
       <button
         type="button"
         disabled={disabled}
         onClick={() => onChange(Math.max(0, value - 1))}
-        className="flex h-full w-9 shrink-0 items-center justify-center rounded-l-xl border-r border-slate-200 text-[18px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground disabled:cursor-not-allowed"
+        className="flex h-full w-9 shrink-0 items-center justify-center rounded-l-xl border-r border-border text-[18px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground disabled:cursor-not-allowed"
       >
         −
       </button>
@@ -79,7 +79,7 @@ function NumStepper({ value, onChange, disabled }: { value: number; onChange: (v
         type="button"
         disabled={disabled}
         onClick={() => onChange(Math.min(999, value + 1))}
-        className="flex h-full w-9 shrink-0 items-center justify-center rounded-r-xl border-l border-slate-200 text-[18px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground disabled:cursor-not-allowed"
+        className="flex h-full w-9 shrink-0 items-center justify-center rounded-r-xl border-l border-border text-[18px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground disabled:cursor-not-allowed"
       >
         +
       </button>
@@ -185,7 +185,7 @@ export function RegularizarFechamentoDrawer({
       />
       <div className="relative z-10 flex w-full max-w-4xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-[#F8FAFC] shadow-2xl">
           {/* Header */}
-          <div className="flex flex-shrink-0 items-center gap-3 border-b border-slate-200 bg-white px-5 py-4">
+          <div className="flex flex-shrink-0 items-center gap-3 border-b border-border bg-white px-5 py-4">
             <CalendarDays className="h-5 w-5 shrink-0 text-[#005BFF]" />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
@@ -213,8 +213,8 @@ export function RegularizarFechamentoDrawer({
             )}
 
             {/* Movimento do Dia */}
- <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <div className="border-b border-slate-100 px-5 py-4">
+ <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
+              <div className="border-b border-border-subtle px-5 py-4">
                 <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Movimento do Dia</h3>
                 <p className="mt-0.5 text-[12px] text-muted-foreground">Informe os atendimentos realizados neste dia</p>
               </div>
@@ -255,11 +255,11 @@ export function RegularizarFechamentoDrawer({
             <CheckinCrmSection ctx={crmCtx} />
 
             {/* Resumo do Dia */}
- <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <div className="border-b border-slate-100 px-5 py-4">
+ <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
+              <div className="border-b border-border-subtle px-5 py-4">
                 <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Resumo do Dia</h3>
               </div>
-              <div className="grid grid-cols-2 divide-y divide-slate-100 sm:grid-cols-5 sm:divide-x sm:divide-y-0">
+              <div className="grid grid-cols-2 divide-y divide-border-subtle sm:grid-cols-5 sm:divide-x sm:divide-y-0">
                 {[
                   { label: 'Leads', value: totalLeads, color: 'text-blue-600' },
                   { label: 'Atendimentos', value: totalAtendimentos, color: 'text-purple-600' },
@@ -276,8 +276,8 @@ export function RegularizarFechamentoDrawer({
             </div>
 
             {/* Disciplina */}
- <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
-              <div className="border-b border-slate-100 px-5 py-4">
+ <div className="min-w-0 overflow-hidden rounded-2xl border border-border bg-white shadow-sm">
+              <div className="border-b border-border-subtle px-5 py-4">
                 <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Disciplina — Fechamento Diário</h3>
                 <p className="mt-0.5 text-[12px] text-muted-foreground">Estimativa com penalização de -10% por atraso</p>
               </div>
@@ -304,7 +304,7 @@ export function RegularizarFechamentoDrawer({
                     <span className="font-medium text-red-500">Penalização por atraso</span>
                     <span className="font-bold text-red-500">-10%</span>
                   </div>
-                  <div className="flex justify-between border-t border-slate-100 pt-2 text-body-sm">
+                  <div className="flex justify-between border-t border-border-subtle pt-2 text-body-sm">
                     <span className="font-bold text-[#0F172A]">Estimativa após aprovação</span>
                     <span className={`text-body font-bold ${ringColorClass}`}>{disciplina.pontuacaoDisciplinaFinal}%</span>
                   </div>
@@ -319,8 +319,8 @@ export function RegularizarFechamentoDrawer({
           </div>
 
           {/* Footer */}
-          <div className="flex flex-shrink-0 items-center justify-end gap-3 border-t border-slate-200 bg-white px-5 py-4">
-            <button type="button" onClick={onVoltar} className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-slate-50">
+          <div className="flex flex-shrink-0 items-center justify-end gap-3 border-t border-border bg-white px-5 py-4">
+            <button type="button" onClick={onVoltar} className="flex items-center gap-1.5 rounded-xl border border-border bg-white px-4 py-2.5 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-slate-50">
               <ArrowLeft className="h-3.5 w-3.5" /> Voltar
             </button>
             <button

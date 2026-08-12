@@ -83,7 +83,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
         onClick={() => setOpen((value) => !value)}
         aria-haspopup="dialog"
         aria-expanded={open}
-        className="flex h-10 min-w-0 max-w-full items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-foreground outline-none transition-colors hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+        className="flex h-10 min-w-0 max-w-full items-center gap-2 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-foreground outline-none transition-colors hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
       >
         <SlidersHorizontal className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
         <span className="min-w-0 truncate">
@@ -96,7 +96,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
         <div
           role="dialog"
           aria-label="Filtros do módulo Dono"
-          className="absolute left-0 top-12 z-40 w-[min(320px,calc(100vw-2rem))] rounded-2xl border border-gray-100 bg-white p-3 shadow-xl sm:left-auto sm:right-0"
+          className="absolute left-0 top-12 z-40 w-[min(320px,calc(100vw-2rem))] rounded-2xl border border-border-subtle bg-white p-3 shadow-xl sm:left-auto sm:right-0"
         >
           <p className="px-2.5 pb-1 text-caption font-semibold uppercase tracking-[0.08em] text-muted-foreground">
             Loja
@@ -136,7 +136,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
                   value={customStart}
                   max={customEnd}
                   onChange={(event) => setCustomStart(event.target.value)}
-                  className="mt-1 h-9 w-full rounded-lg border border-gray-200 px-2 text-sm font-medium normal-case tracking-normal text-foreground outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+                  className="mt-1 h-9 w-full rounded-lg border border-border px-2 text-sm font-medium normal-case tracking-normal text-foreground outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
                 />
               </label>
               <label className="text-caption font-semibold uppercase tracking-[0.08em] text-muted-foreground">
@@ -146,13 +146,13 @@ export default function OwnerFilterButton({ lastUpdated }) {
                   value={customEnd}
                   min={customStart}
                   onChange={(event) => setCustomEnd(event.target.value)}
-                  className="mt-1 h-9 w-full rounded-lg border border-gray-200 px-2 text-sm font-medium normal-case tracking-normal text-foreground outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+                  className="mt-1 h-9 w-full rounded-lg border border-border px-2 text-sm font-medium normal-case tracking-normal text-foreground outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30"
                 />
               </label>
             </div>
           ) : null}
 
-          <div className="mt-3 flex items-center justify-between gap-2 border-t border-gray-100 pt-3">
+          <div className="mt-3 flex items-center justify-between gap-2 border-t border-border-subtle pt-3">
             <p className="min-w-0 truncate text-caption text-muted-foreground">
               {lastUpdated ? `Atualizado em ${formatDateTime(lastUpdated)}` : "Sem atualização"}
             </p>
@@ -162,7 +162,7 @@ export default function OwnerFilterButton({ lastUpdated }) {
                 reload();
                 setOpen(false);
               }}
-              className="flex h-9 shrink-0 items-center gap-2 rounded-lg border border-gray-200 px-2.5 text-xs font-semibold text-foreground outline-none transition-colors hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+              className="flex h-9 shrink-0 items-center gap-2 rounded-lg border border-border px-2.5 text-xs font-semibold text-foreground outline-none transition-colors hover:bg-gray-50 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
             >
               <RefreshCw className="h-3.5 w-3.5" aria-hidden="true" />
               Atualizar

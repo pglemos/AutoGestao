@@ -119,7 +119,7 @@ export default function VendedorHomePage() {
 
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5 text-foreground">
-        <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h1 className="text-xl font-bold text-foreground">
@@ -185,7 +185,7 @@ export default function VendedorHomePage() {
             </div>
           </article>
 
-          <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
             <div className="flex items-start justify-between">
               <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Faltam para a Meta</p>
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
@@ -213,7 +213,7 @@ export default function VendedorHomePage() {
           </article>
 
           <article
-            className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors"
+            className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-border-subtle bg-white p-5 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors"
             role="link"
             tabIndex={0}
             onClick={() => navigate('/central-execucao')}
@@ -242,7 +242,7 @@ export default function VendedorHomePage() {
 
           <article
             className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm cursor-pointer hover:bg-gray-50 transition-colors ${
-              posicaoRanking === 1 ? 'border-amber-200' : 'border-gray-100'
+              posicaoRanking === 1 ? 'border-amber-200' : 'border-border-subtle'
             }`}
             role="link"
             tabIndex={0}
@@ -271,7 +271,7 @@ export default function VendedorHomePage() {
 
         <section className="flex flex-col gap-4 lg:flex-row">
           <div className="lg:w-[60%]">
-            <article className="h-full rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <article className="h-full rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
               <h2 className="mb-4 text-sm font-bold text-foreground">Disciplina Semanal</h2>
               <div className="mb-3 flex items-center justify-between">
                 <div>
@@ -323,7 +323,7 @@ export default function VendedorHomePage() {
           </div>
         </section>
 
-        <section aria-label="Checklist do dia" className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <section aria-label="Checklist do dia" className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
             <h2 className="text-sm font-bold text-foreground">Checklist do Dia</h2>
           </div>
@@ -341,7 +341,7 @@ export default function VendedorHomePage() {
 
         <section className="flex flex-col gap-4 lg:flex-row">
           <div className="lg:w-[55%]">
-            <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <div className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-sm font-bold text-foreground">Rotina do Dia — Hoje</h2>
                 <button
@@ -394,7 +394,7 @@ export default function VendedorHomePage() {
           </div>
 
           <div className="lg:w-[45%]">
-            <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm h-full">
+            <div className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm h-full">
               <h2 className="mb-4 text-sm font-bold text-foreground">Acesso rápido</h2>
               <div className="grid grid-cols-2 gap-3">
                 <ShortcutCard
@@ -430,7 +430,7 @@ function ShortcutCard({ label, icon, onClick }: { label: string; icon: React.Rea
     <button
       type="button"
       onClick={onClick}
-      className="rounded-xl border border-gray-100 bg-gray-50 px-4 py-4 flex flex-col items-center gap-2 hover:bg-gray-100 transition-colors w-full"
+      className="rounded-xl border border-border-subtle bg-gray-50 px-4 py-4 flex flex-col items-center gap-2 hover:bg-gray-100 transition-colors w-full"
     >
       {icon}
       <span className="text-xs font-medium text-muted-foreground text-center leading-tight">{label}</span>

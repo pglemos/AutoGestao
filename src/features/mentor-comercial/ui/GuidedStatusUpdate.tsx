@@ -241,7 +241,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                   className={`group relative flex items-start space-x-3 rounded-lg border p-3.5 text-left transition-all hover:border-blue-500 hover:bg-blue-50/50 hover:shadow-sm ${
                     opt.isRecommended
                       ? 'border-blue-300 bg-blue-50/30'
-                      : 'border-slate-200 bg-white'
+                      : 'border-border bg-white'
                   }`}
                 >
                   <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-slate-100 text-foreground transition-colors group-hover:bg-blue-600 group-hover:text-white">
@@ -277,7 +277,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
               </span>
               <p className="text-sm font-bold text-foreground">{selectedOption}</p>
             </div>
-            <Badge variant="outline" className="bg-white text-foreground border-slate-300">
+            <Badge variant="outline" className="bg-white text-foreground border-border-strong">
               {compatibleStatuses.length} status disponível{compatibleStatuses.length > 1 ? 'is' : ''}
             </Badge>
           </div>
@@ -316,7 +316,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                     className={`cursor-pointer rounded-lg border p-3 transition-all ${
                       isSelected
                         ? 'border-blue-600 bg-blue-50/60 ring-1 ring-blue-600 shadow-sm'
-                        : 'border-slate-200 bg-white hover:border-slate-300 hover:bg-slate-50'
+                        : 'border-border bg-white hover:border-border-strong hover:bg-slate-50'
                     }`}
                   >
                     <div className="flex items-start justify-between">
@@ -325,7 +325,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                           className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-full border ${
                             isSelected
                               ? 'border-blue-600 bg-blue-600 text-white'
-                              : 'border-slate-300 bg-white'
+                              : 'border-border-strong bg-white'
                           }`}
                         >
                           {isSelected && <Check className="h-3 w-3 stroke-[3]" />}
@@ -445,7 +445,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
               value={notes}
               onChange={(e) => setNotes(e.target.value)}
               placeholder="Ex.: Cliente solicitou retorno no final da tarde..."
-              className="w-full rounded-md border border-slate-300 p-2 text-xs focus:border-blue-500 focus:outline-none bg-white"
+              className="w-full rounded-md border border-border-strong p-2 text-xs focus:border-blue-500 focus:outline-none bg-white"
               rows={2}
             />
           </div>
@@ -503,7 +503,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
         </DialogTrigger>
       )}
 
-      <DialogContent className="max-w-2xl bg-white p-6 rounded-xl shadow-xl border border-slate-200">
+      <DialogContent className="max-w-2xl bg-white p-6 rounded-xl shadow-xl border border-border">
         <DialogHeader className="border-b pb-3 mb-2">
           <DialogTitle className="text-lg font-bold text-foreground flex items-center gap-2">
             <div className="h-3 w-3 rounded-full bg-blue-600" />

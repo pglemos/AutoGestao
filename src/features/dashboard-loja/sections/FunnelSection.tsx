@@ -36,8 +36,8 @@ export function FunnelSection({ funilData, funnelBenchmarks }: FunnelSectionProp
   const healthySteps = steps.filter(step => step.value >= step.benchmark).length
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm" aria-labelledby="conversion-funnel-title">
-      <header className="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <section className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm" aria-labelledby="conversion-funnel-title">
+      <header className="flex flex-col gap-3 border-b border-border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-3">
           <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-600">
             <TrendingUp size={19} />
@@ -57,7 +57,7 @@ export function FunnelSection({ funilData, funnelBenchmarks }: FunnelSectionProp
           const healthy = step.value >= step.benchmark
           const StatusIcon = healthy ? CheckCircle2 : CircleAlert
           return (
-            <article key={`${step.from}-${step.to}`} className="rounded-2xl border border-gray-100 bg-gray-50 p-4">
+            <article key={`${step.from}-${step.to}`} className="rounded-2xl border border-border-subtle bg-gray-50 p-4">
               <div className="flex items-center justify-between gap-3">
                 <span className="grid h-8 w-8 place-items-center rounded-lg bg-white text-xs font-bold text-muted-foreground shadow-sm">{index + 1}</span>
                 <StatusIcon size={18} className={healthy ? 'text-emerald-600' : 'text-amber-600'} />

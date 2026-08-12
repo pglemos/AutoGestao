@@ -23,13 +23,13 @@ export type MxAccessMode = 'manage' | 'read-only'
 
 type ToneStyle = { icon: string; surface: string; value: string; banner: string; progress: string }
 const toneStyles: Record<MxTone, ToneStyle> = {
-  brand: { icon: 'bg-emerald-50 text-emerald-600', surface: 'border-gray-100', value: 'text-emerald-700', banner: 'border-emerald-100 bg-emerald-50 text-emerald-800', progress: 'bg-emerald-600' },
-  success: { icon: 'bg-emerald-50 text-emerald-600', surface: 'border-gray-100', value: 'text-emerald-700', banner: 'border-emerald-100 bg-emerald-50 text-emerald-800', progress: 'bg-emerald-600' },
+  brand: { icon: 'bg-emerald-50 text-emerald-600', surface: 'border-border-subtle', value: 'text-emerald-700', banner: 'border-emerald-100 bg-emerald-50 text-emerald-800', progress: 'bg-emerald-600' },
+  success: { icon: 'bg-emerald-50 text-emerald-600', surface: 'border-border-subtle', value: 'text-emerald-700', banner: 'border-emerald-100 bg-emerald-50 text-emerald-800', progress: 'bg-emerald-600' },
   warning: { icon: 'bg-amber-50 text-amber-600', surface: 'border-amber-200', value: 'text-amber-700', banner: 'border-amber-200 bg-amber-50 text-amber-800', progress: 'bg-amber-500' },
   danger: { icon: 'bg-red-50 text-red-600', surface: 'border-red-200', value: 'text-red-700', banner: 'border-red-200 bg-red-50 text-red-700', progress: 'bg-red-500' },
   info: { icon: 'bg-blue-50 text-blue-600', surface: 'border-blue-200', value: 'text-blue-700', banner: 'border-blue-200 bg-blue-50 text-blue-700', progress: 'bg-blue-500' },
   violet: { icon: 'bg-violet-50 text-violet-600', surface: 'border-violet-200', value: 'text-violet-700', banner: 'border-violet-200 bg-violet-50 text-violet-700', progress: 'bg-violet-500' },
-  neutral: { icon: 'bg-gray-50 text-muted-foreground', surface: 'border-gray-100', value: 'text-foreground', banner: 'border-gray-200 bg-gray-50 text-foreground', progress: 'bg-gray-400' },
+  neutral: { icon: 'bg-gray-50 text-muted-foreground', surface: 'border-border-subtle', value: 'text-foreground', banner: 'border-border bg-gray-50 text-foreground', progress: 'bg-gray-400' },
 }
 
 export interface MxModulePageProps {
@@ -79,7 +79,7 @@ export function MxModulePage({
 
 export function MxModuleHeader({ title, description, eyebrow, actions, className }: { title: ReactNode; description?: ReactNode; eyebrow?: ReactNode; actions?: ReactNode; className?: string }) {
   return (
-    <InternalMxTemplateHeader data-mx-module-header="" className={cn('rounded-2xl border border-gray-100 bg-white p-5 shadow-sm', className)}>
+    <InternalMxTemplateHeader data-mx-module-header="" className={cn('rounded-2xl border border-border-subtle bg-white p-5 shadow-sm', className)}>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0 max-w-3xl">
           {eyebrow ? <Typography variant="caption" className="mb-1 block font-semibold text-emerald-700">{eyebrow}</Typography> : null}
@@ -129,12 +129,12 @@ export function MxStatusGauge({ value, label, ariaLabel, showLabel = true }: { v
 }
 
 export function MxSectionCard({ as: Component = 'section', children, className, ...props }: { as?: ElementType; children: ReactNode; className?: string } & HTMLAttributes<HTMLElement>) {
-  return <InternalMxTemplateSection as={Component} data-mx-section-card="" className={cn('overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm', className)} {...props}>{children}</InternalMxTemplateSection>
+  return <InternalMxTemplateSection as={Component} data-mx-section-card="" className={cn('overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm', className)} {...props}>{children}</InternalMxTemplateSection>
 }
 
 export function MxSectionHeader({ title, description, actions, className }: { title: ReactNode; description?: ReactNode; actions?: ReactNode; className?: string }) {
   return (
-    <header data-mx-section-header="" data-mx-template-slot="section-header" className={cn('flex flex-col gap-3 border-b border-gray-100 p-5 sm:flex-row sm:items-center sm:justify-between', className)}>
+    <header data-mx-section-header="" data-mx-template-slot="section-header" className={cn('flex flex-col gap-3 border-b border-border-subtle p-5 sm:flex-row sm:items-center sm:justify-between', className)}>
       <div className="min-w-0">
         <Typography as="h2" variant="h3" className="text-lg font-semibold text-foreground">{title}</Typography>
         {description ? <Typography variant="p" className="mt-1 text-sm text-muted-foreground">{description}</Typography> : null}
@@ -145,7 +145,7 @@ export function MxSectionHeader({ title, description, actions, className }: { ti
 }
 
 export function MxToolbar({ children, className, ...props }: HTMLAttributes<HTMLElement>) {
-  return <InternalMxTemplateToolbar data-mx-toolbar="" className={cn('flex flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-center', className)} {...props}>{children}</InternalMxTemplateToolbar>
+  return <InternalMxTemplateToolbar data-mx-toolbar="" className={cn('flex flex-col gap-3 rounded-2xl border border-border-subtle bg-white p-4 shadow-sm sm:flex-row sm:flex-wrap sm:items-center', className)} {...props}>{children}</InternalMxTemplateToolbar>
 }
 
 export function MxField({ label, hint, error, children, className, ...props }: { label: ReactNode; hint?: ReactNode; error?: ReactNode; children: ReactNode; className?: string } & LabelHTMLAttributes<HTMLLabelElement>) {
@@ -161,7 +161,7 @@ export function MxField({ label, hint, error, children, className, ...props }: {
 export function MxInput(props: InputProps) { return <Input {...props} /> }
 export function MxSelect(props: SelectProps) { return <Select {...props} /> }
 export function MxTextarea(props: TextareaProps) { return <Textarea {...props} /> }
-export function MxTableSurface({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) { return <InternalMxTemplateTable data-mx-table-surface="" className={cn('w-full overflow-x-auto rounded-2xl border border-gray-100 bg-white', className)} {...props}>{children}</InternalMxTemplateTable> }
+export function MxTableSurface({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) { return <InternalMxTemplateTable data-mx-table-surface="" className={cn('w-full overflow-x-auto rounded-2xl border border-border-subtle bg-white', className)} {...props}>{children}</InternalMxTemplateTable> }
 
 export function MxEmptyState({ title, description, icon: Icon = Inbox, action, className }: { title: string; description?: string; icon?: LucideIcon; action?: ReactNode; className?: string }) {
   return (

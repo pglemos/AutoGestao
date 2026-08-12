@@ -62,7 +62,7 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
   const eD1 = isClienteD1(c, closingDate);
 
   return (
-    <div className={`rounded-2xl border border-slate-200 bg-white p-4 space-y-3 ${eD1 ? "border-blue-200 bg-blue-50/30" : ""}`}>
+    <div className={`rounded-2xl border border-border bg-white p-4 space-y-3 ${eD1 ? "border-blue-200 bg-blue-50/30" : ""}`}>
       <div className="flex items-start justify-between gap-2">
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-1.5 flex-wrap">
@@ -138,7 +138,7 @@ export default function ClientesListaMobile({ clients = [], closingDate, bloquea
 
   if (clients.length === 0) {
     return (
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col items-center gap-2">
+      <div className="bg-white rounded-2xl border border-border shadow-sm p-6 flex flex-col items-center gap-2">
         <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">
           <ShoppingCart className="w-6 h-6 text-purple-300" />
         </div>

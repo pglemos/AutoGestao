@@ -207,7 +207,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
         <button onClick={handleVoltar} className="flex items-center gap-1.5 text-sm text-[#005BFF] hover:underline">
           <ArrowLeft className="w-4 h-4" /> Plano de Ataque
         </button>
-        <div className="bg-white border border-slate-100 rounded-2xl p-8 text-center space-y-4">
+        <div className="bg-white border border-border-subtle rounded-2xl p-8 text-center space-y-4">
           <span className="text-5xl">🎯</span>
           <h2 className="text-xl font-black text-[#031B3D]">Envio concluído!</h2>
           <p className="text-sm text-muted-foreground">A missão <strong>{missao.tipo_missao}</strong> está aguardando respostas.</p>
@@ -252,7 +252,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
         <span className="text-[#031B3D] font-semibold">{missao.tipo_missao}</span>
       </div>
 
-      <div className="bg-white border border-slate-100 rounded-2xl p-5 space-y-3">
+      <div className="bg-white border border-border-subtle rounded-2xl p-5 space-y-3">
         <div className="flex items-start justify-between">
           <div>
             <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Missão</p>
@@ -286,7 +286,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
       </div>
 
       {clienteAtual && etapa === "enviando" && (
-        <div className="bg-white border border-slate-100 rounded-2xl p-5 space-y-4">
+        <div className="bg-white border border-border-subtle rounded-2xl p-5 space-y-4">
           <div className="flex items-center justify-between">
             <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Cliente {indice + 1} de {total}</p>
           </div>
@@ -304,7 +304,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           <div>
             <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Script sugerido</p>
             <textarea value={scriptEditado || scriptPreenchido} onChange={e => setScriptEditado(e.target.value)} rows={6}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]" />
+              className="w-full rounded-xl border border-border bg-slate-50 px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]" />
           </div>
 
           <div className="flex gap-2">
@@ -333,7 +333,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
       )}
 
       {clienteAtual && etapa === "resultado" && (
-        <div className="bg-white border border-slate-100 rounded-2xl p-5 space-y-4">
+        <div className="bg-white border border-border-subtle rounded-2xl p-5 space-y-4">
           <div>
             <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Registrar resultado</p>
             <p className="text-sm font-semibold text-[#031B3D] mt-0.5">{clienteAtual.nome}</p>
@@ -342,7 +342,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           <div className="grid grid-cols-1 gap-1.5">
             {RESULTADOS.map(r => (
               <button key={r} onClick={() => setResultado(r)}
-                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-blue-50 text-[#005BFF] font-semibold" : "border-slate-100 text-muted-foreground hover:bg-slate-50"}`}>
+                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-blue-50 text-[#005BFF] font-semibold" : "border-border-subtle text-muted-foreground hover:bg-slate-50"}`}>
                 {r}
               </button>
             ))}

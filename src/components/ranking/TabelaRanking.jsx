@@ -36,11 +36,11 @@ function formatBRL(v) {
 
 export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full min-w-[640px]">
           <thead>
-            <tr className="bg-slate-50 border-b border-slate-100">
+            <tr className="bg-slate-50 border-b border-border-subtle">
               {["Posição", "Vendedor", "Unidade", isVolume ? "Vendas" : "Faturamento", "Meta", "Atingimento", "Status"].map(h => (
                 <th key={h} className="text-left text-caption font-semibold text-muted-foreground uppercase tracking-wider px-4 py-3">{h}</th>
               ))}

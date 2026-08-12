@@ -269,7 +269,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
                 <AgendaItem time="Agora" title="Cobrar pendências de rotina" detail={pendingNames.length ? pendingNames.slice(0, 3).join(', ') : 'Equipe com rotina sincronizada.'} />
               </>
             ) : (
-              <div className="rounded-xl border border-dashed border-gray-100 bg-gray-50 p-mx-md">
+              <div className="rounded-xl border border-dashed border-border-subtle bg-gray-50 p-mx-md">
                 <Typography variant="p" tone="muted">Agenda operacional pendente de integração ou lançamentos do dia.</Typography>
               </div>
             )}
@@ -413,7 +413,7 @@ function PanelHeader({
 function AlertItem({ alert }: { alert: OwnerPerformanceAlert }) {
   const tone = alert.variant === 'danger' ? 'danger' : alert.variant === 'warning' ? 'warning' : alert.variant === 'success' ? 'success' : 'info'
   return (
-    <div className="flex gap-mx-sm rounded-xl border border-gray-100 bg-gray-50 p-mx-sm">
+    <div className="flex gap-mx-sm rounded-xl border border-border-subtle bg-gray-50 p-mx-sm">
       <MetricIcon tone={tone} className="h-mx-9 w-mx-9"><AlertTriangle size={16} /></MetricIcon>
       <div className="min-w-0">
         <Typography variant="p" className="leading-tight">{alert.title}</Typography>
@@ -435,7 +435,7 @@ function FunnelSegmentRow({
   stages: Array<{ label: string; value: number; pct?: number }>
 }) {
   return (
-    <div className="rounded-xl border border-gray-100 bg-white p-mx-md shadow-sm">
+    <div className="rounded-xl border border-border-subtle bg-white p-mx-md shadow-sm">
       <div className="flex items-center gap-mx-sm">
         <MetricIcon tone={tone} className="h-mx-8 w-mx-8 rounded-xl">
           <Gauge size={14} />
@@ -601,7 +601,7 @@ function toneBorder(tone: ManagerTone) {
     warning: 'border-status-warning/20 bg-status-warning-surface text-status-warning',
     danger: 'border-status-error/20 bg-status-error-surface text-status-error',
     info: 'border-status-info/20 bg-status-info-surface text-status-info',
-    neutral: 'border-gray-200 bg-white text-muted-foreground',
+    neutral: 'border-border bg-white text-muted-foreground',
   }[tone]
 }
 

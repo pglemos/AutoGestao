@@ -23,7 +23,7 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
         onClick={onClose}
       />
       <div className="relative bg-white rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[85vh] overflow-y-auto shadow-2xl">
-        <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
+        <div className="sticky top-0 bg-white border-b border-border-subtle px-6 py-4 flex items-center justify-between">
           <h2 className="text-base font-bold text-mx-navy">Detalhamento do Cálculo</h2>
           <button type="button" onClick={onClose} className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center">
             <X className="w-4 h-4 text-muted-foreground" />
@@ -48,7 +48,7 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
             ))}
           </Section>
 
-          <div className="border-t border-slate-200 pt-4">
+          <div className="border-t border-border pt-4">
             <div className="flex justify-between items-center">
               <span className="font-bold text-mx-navy">Total previsto</span>
               <span className="text-2xl font-bold text-emerald-600">{formatCurrency(calculo.total)}</span>

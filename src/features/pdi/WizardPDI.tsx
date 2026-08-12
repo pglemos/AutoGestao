@@ -264,7 +264,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                     >
                         <Dialog.Content asChild forceMount>
                             <Card className="w-full max-w-mx-6xl max-h-full overflow-y-auto no-scrollbar border-none flex flex-col bg-white">
-                <header className="p-mx-lg md:p-10 border-b border-gray-200 flex flex-col gap-mx-lg sticky top-mx-0 bg-white z-10 shadow-sm">
+                <header className="p-mx-lg md:p-10 border-b border-border flex flex-col gap-mx-lg sticky top-mx-0 bg-white z-10 shadow-sm">
                     <div className="flex items-center justify-between">
                         <div className="flex items-center gap-mx-sm">
                             <div className="w-mx-xl h-mx-xl rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-sm"><Target size={24} /></div>
@@ -353,7 +353,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                         <Card key={prazo} className="p-mx-md bg-gray-50 border-none shadow-sm space-y-mx-md">
                                             <Typography variant="h3" className="font-bold border-b /10 pb-4">Visão {prazo.replace('_', ' ')}</Typography>
                                             {form.metas.map((meta, idx) => meta.prazo === prazo && (
-                                                <div key={idx} className="space-y-mx-xs bg-white p-mx-sm rounded-2xl shadow-sm border border-gray-200">
+                                                <div key={idx} className="space-y-mx-xs bg-white p-mx-sm rounded-2xl shadow-sm border border-border">
                                                     <div className="flex justify-between items-center">
                                                         <select 
                                                             value={meta.tipo}
@@ -399,13 +399,13 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                     const nota = form.avaliacoes[c.id] || template.escala[0]?.nota
                                                     const descritor = template.escala.find(e => e.nota === nota)?.descritor || ''
                                                     return (
-                                                        <div key={c.id} className="bg-gray-50 p-mx-md rounded-2xl border border-gray-200 space-y-mx-sm hover:border-brand-primary/50 transition-colors">
+                                                        <div key={c.id} className="bg-gray-50 p-mx-md rounded-2xl border border-border space-y-mx-sm hover:border-brand-primary/50 transition-colors">
                                                             <div className="flex justify-between items-start gap-mx-sm">
                                                                 <div>
                                                                     <Typography variant="p" className="font-bold">{c.nome}</Typography>
                                                                     <Typography variant="tiny" tone="muted" className="mt-1 leading-snug">{c.descricao_completa}</Typography>
                                                                 </div>
-                                                                <div className="bg-white px-4 py-2 rounded-2xl shadow-sm border border-gray-200 text-center min-w-mx-20">
+                                                                <div className="bg-white px-4 py-2 rounded-2xl shadow-sm border border-border text-center min-w-mx-20">
                                                                     <Typography variant="h2" tone="brand">{nota}</Typography>
                                                                 </div>
                                                             </div>
@@ -418,7 +418,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                                 className="w-full accent-brand-primary"
                                                             />
                                                             
-                                                            <div className="flex justify-between items-center bg-white p-mx-xs rounded-xl text-xs font-bold text-muted-foreground border border-gray-200">
+                                                            <div className="flex justify-between items-center bg-white p-mx-xs rounded-xl text-xs font-bold text-muted-foreground border border-border">
                                                                 <span className="flex items-center gap-mx-xs text-emerald-600/80"><AlertCircle size={14}/> Ind: {c.indicador}</span>
                                                                 <span className="uppercase text-mx-tiny tracking-widest">{descritor}</span>
                                                             </div>
@@ -497,13 +497,13 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                         </div>
 
                                         {form.plano_acao.map((acao, idx) => (
-                                            <div key={idx} className="p-mx-md bg-gray-50 border border-gray-200 rounded-2xl space-y-mx-sm">
+                                            <div key={idx} className="p-mx-md bg-gray-50 border border-border rounded-2xl space-y-mx-sm">
                                                 <div className="flex items-center gap-mx-sm">
                                                     <div className="w-mx-lg h-mx-lg rounded-mx-full bg-emerald-600 text-white flex items-center justify-center font-bold text-xs shrink-0">{idx + 1}</div>
                                                     <select 
                                                         value={acao.competencia_id} onChange={e => handleCompetenciaAcaoChange(idx, e.target.value)}
                                                         aria-label="Competência"
-                                                        className="flex-1 h-mx-xl px-4 bg-white border border-gray-200 rounded-2xl text-sm font-bold outline-none uppercase"
+                                                        className="flex-1 h-mx-xl px-4 bg-white border border-border rounded-2xl text-sm font-bold outline-none uppercase"
                                                     >
                                                         <option value="">-- Vincular Competência (Lacuna) --</option>
                                                         {topGaps.map(g => <option key={g.id} value={g.id}>{g.nome} (Gap: {g.gap})</option>)}
@@ -529,22 +529,22 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                     <textarea 
                                                         value={acao.descricao_acao} placeholder="Descreva a ação de desenvolvimento..."
                                                         onChange={e => { const np = [...form.plano_acao]; np[idx].descricao_acao = e.target.value; setForm({ ...form, plano_acao: np }) }}
-                                                        className="w-full h-mx-header p-mx-sm bg-white border border-gray-200 rounded-2xl text-sm font-bold resize-none outline-none"
+                                                        className="w-full h-mx-header p-mx-sm bg-white border border-border rounded-2xl text-sm font-bold resize-none outline-none"
                                                     />
                                                     <div className="flex gap-mx-sm">
                                                         <div className="flex-1">
                                                             <Typography variant="tiny" className="font-bold mb-1 block">Conclusão</Typography>
-                                                            <input type="date" aria-label="Data de conclusão" value={acao.data_conclusao} onChange={e => { const np = [...form.plano_acao]; np[idx].data_conclusao = e.target.value; setForm({ ...form, plano_acao: np }) }} className="w-full h-mx-xl px-4 bg-white border border-gray-200 rounded-2xl text-sm font-bold outline-none" />
+                                                            <input type="date" aria-label="Data de conclusão" value={acao.data_conclusao} onChange={e => { const np = [...form.plano_acao]; np[idx].data_conclusao = e.target.value; setForm({ ...form, plano_acao: np }) }} className="w-full h-mx-xl px-4 bg-white border border-border rounded-2xl text-sm font-bold outline-none" />
                                                         </div>
                                                         <div className="flex-1">
                                                             <Typography variant="tiny" className="font-bold mb-1 block">Impacto</Typography>
-                                                            <select aria-label="Impacto" value={acao.impacto} onChange={e => { const np = [...form.plano_acao]; np[idx].impacto = e.target.value; setForm({ ...form, plano_acao: np }) }} className="w-full h-mx-xl px-4 bg-white border border-gray-200 rounded-2xl text-sm font-bold outline-none uppercase">
+                                                            <select aria-label="Impacto" value={acao.impacto} onChange={e => { const np = [...form.plano_acao]; np[idx].impacto = e.target.value; setForm({ ...form, plano_acao: np }) }} className="w-full h-mx-xl px-4 bg-white border border-border rounded-2xl text-sm font-bold outline-none uppercase">
                                                                 <option value="alto">Alto</option><option value="medio">Médio</option><option value="baixo">Baixo</option>
                                                             </select>
                                                         </div>
                                                         <div className="flex-1">
                                                             <Typography variant="tiny" className="font-bold mb-1 block">Custo</Typography>
-                                                            <select aria-label="Custo" value={acao.custo} onChange={e => { const np = [...form.plano_acao]; np[idx].custo = e.target.value; setForm({ ...form, plano_acao: np }) }} className="w-full h-mx-xl px-4 bg-white border border-gray-200 rounded-2xl text-sm font-bold outline-none uppercase">
+                                                            <select aria-label="Custo" value={acao.custo} onChange={e => { const np = [...form.plano_acao]; np[idx].custo = e.target.value; setForm({ ...form, plano_acao: np }) }} className="w-full h-mx-xl px-4 bg-white border border-border rounded-2xl text-sm font-bold outline-none uppercase">
                                                                 <option value="alto">Alto</option><option value="medio">Médio</option><option value="baixo">Baixo</option>
                                                             </select>
                                                         </div>
@@ -592,8 +592,8 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                     )}
                 </div>
 
-                <footer className="p-mx-lg md:p-10 border-t border-gray-200 sticky bottom-mx-0 bg-white z-10 flex flex-col sm:flex-row gap-mx-md justify-between">
-                    <Button variant="ghost" onClick={() => currentStep > 0 ? setCurrentStep(s => s - 1) : onClose()} className="h-mx-14 px-8 rounded-mx-full font-bold uppercase text-xs border border-gray-200 w-full sm:w-auto">
+                <footer className="p-mx-lg md:p-10 border-t border-border sticky bottom-mx-0 bg-white z-10 flex flex-col sm:flex-row gap-mx-md justify-between">
+                    <Button variant="ghost" onClick={() => currentStep > 0 ? setCurrentStep(s => s - 1) : onClose()} className="h-mx-14 px-8 rounded-mx-full font-bold uppercase text-xs border border-border w-full sm:w-auto">
                         <ChevronLeft size={18} className="mr-2" /> {currentStep === 0 ? 'CANCELAR' : 'VOLTAR'}
                     </Button>
                     <Button onClick={currentStep < 3 ? handleNext : handleSubmit} disabled={saving} className="h-mx-14 px-12 rounded-mx-full font-bold text-xs w-full sm:w-auto">

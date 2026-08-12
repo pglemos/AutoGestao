@@ -33,19 +33,19 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
 
   if (disabled) {
     return (
-      <div className="flex items-center border border-slate-100 rounded-xl h-9 bg-slate-50 opacity-60 cursor-not-allowed">
-        <div className="w-9 h-full flex items-center justify-center text-text-disabled border-r border-slate-100 text-[18px] font-light">−</div>
+      <div className="flex items-center border border-border-subtle rounded-xl h-9 bg-slate-50 opacity-60 cursor-not-allowed">
+        <div className="w-9 h-full flex items-center justify-center text-text-disabled border-r border-border-subtle text-[18px] font-light">−</div>
         <span className="flex-1 text-center font-bold text-body text-muted-foreground tabular-nums">{value}</span>
-        <div className="w-9 h-full flex items-center justify-center text-text-disabled border-l border-slate-100 text-[18px] font-light">+</div>
+        <div className="w-9 h-full flex items-center justify-center text-text-disabled border-l border-border-subtle text-[18px] font-light">+</div>
       </div>
     );
   }
 
   return (
-    <div className="flex items-center border border-slate-200 rounded-xl shadow-sm h-9 focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] transition-all bg-white">
+    <div className="flex items-center border border-border rounded-xl shadow-sm h-9 focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] transition-all bg-white">
       <button
         onClick={onDecrement}
-        className="w-9 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 active:bg-slate-100 border-r border-slate-200 rounded-l-xl transition-colors text-[18px] font-light flex-shrink-0"
+        className="w-9 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 active:bg-slate-100 border-r border-border rounded-l-xl transition-colors text-[18px] font-light flex-shrink-0"
       >−</button>
       <input
         type="text"
@@ -62,7 +62,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
       />
       <button
         onClick={onIncrement}
-        className="w-9 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 active:bg-slate-100 border-l border-slate-200 rounded-r-xl transition-colors text-[18px] font-light flex-shrink-0"
+        className="w-9 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 active:bg-slate-100 border-l border-border rounded-r-xl transition-colors text-[18px] font-light flex-shrink-0"
       >+</button>
     </div>
   );
@@ -85,7 +85,7 @@ function FieldRow({ label, value, onDecrement, onIncrement, onSet, disabled }) {
 
 function ShowroomCard({ dc, updateCounter, setCounter, bloqueado }) {
   return (
-    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-slate-100 opacity-70" : "bg-orange-50/60 border-orange-100"}`}>
+    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-orange-50/60 border-orange-100"}`}>
       <div className="flex items-center gap-3">
         <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-orange-500 shadow-orange-200"}`}>
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Store className="w-5 h-5 text-white" />}
@@ -105,7 +105,7 @@ function ShowroomCard({ dc, updateCounter, setCounter, bloqueado }) {
           disabled={bloqueado}
         />
       </div>
-      <p className={`text-caption leading-relaxed mt-auto pt-1 border-t ${bloqueado ? "text-text-disabled border-slate-100" : "text-orange-400 border-orange-100"}`}>
+      <p className={`text-caption leading-relaxed mt-auto pt-1 border-t ${bloqueado ? "text-text-disabled border-border-subtle" : "text-orange-400 border-orange-100"}`}>
         Vendas devem ser registradas em Cadastrar Venda/Agendamentos.
       </p>
     </div>
@@ -133,7 +133,7 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
   const showPostFinalizado = d1Editavel || bloqueado;
 
   return (
-    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-slate-100 opacity-70" : "bg-green-50/60 border-green-100"}`}>
+    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-green-50/60 border-green-100"}`}>
       <div className="flex items-center gap-3">
         <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-green-500 shadow-green-200"}`}>
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Users className="w-5 h-5 text-white" />}
@@ -183,7 +183,7 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
       </div>
       {/* Planejados originais (sempre discreto após finalização) */}
       {showPostFinalizado && (
-        <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-slate-100" : "border-green-100"}`}>
+        <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-border-subtle" : "border-green-100"}`}>
           <p className={`text-caption font-medium ${bloqueado ? "text-text-disabled" : "text-green-500"}`}>
             Planejados no fechamento: <strong className={bloqueado ? "text-muted-foreground" : "text-green-700"}>{planejados}</strong>
           </p>
@@ -223,7 +223,7 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
   const showPostFinalizado = d1Editavel || bloqueado;
 
   return (
-    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-slate-100 opacity-70" : "bg-blue-50/60 border-blue-100"}`}>
+    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-blue-50/60 border-blue-100"}`}>
       <div className="flex items-center gap-3">
         <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-blue-600 shadow-blue-200"}`}>
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Globe className="w-5 h-5 text-white" />}
@@ -271,7 +271,7 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
         )}
       </div>
       {showPostFinalizado && (
-        <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-slate-100" : "border-blue-100"}`}>
+        <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-border-subtle" : "border-blue-100"}`}>
           <p className={`text-caption font-medium ${bloqueado ? "text-text-disabled" : "text-blue-500"}`}>
             Planejados no fechamento: <strong className={bloqueado ? "text-muted-foreground" : "text-blue-700"}>{planejados}</strong>
           </p>
@@ -297,8 +297,8 @@ function InternetCard({ dc, updateCounter, setCounter, clients, closingDate, blo
 
 export default function MovimentoDia({ dc, updateCounter, setCounter, clients = [], closingDate, bloqueado = false, d1Editavel = false, onAuditLog }) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
-      <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
+    <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
+      <div className="px-6 py-4 border-b border-border-subtle flex items-center gap-3">
         <div className="flex items-center gap-2.5 flex-1 min-w-0">
           <span className="w-6 h-6 rounded-full bg-[#005BFF] text-white text-caption font-bold flex items-center justify-center flex-shrink-0">1</span>
           <div>

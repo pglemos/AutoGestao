@@ -24,7 +24,7 @@ const Skeleton = React.forwardRef<HTMLDivElement, SkeletonProps>(
       ref={ref}
       aria-hidden="true"
       className={cn(
-        'border border-gray-100 bg-gray-100 motion-safe:animate-pulse',
+        'border border-border-subtle bg-gray-100 motion-safe:animate-pulse',
         variantClasses[variant],
         className,
       )}

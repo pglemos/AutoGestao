@@ -145,12 +145,12 @@ export function FunilVendedor() {
 
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col gap-mx-lg">
-        <header className="relative z-40 shrink-0 border-b border-gray-200/60 bg-gray-50 pb-3 pt-2 shadow-mx-lg md:sticky md:top-0 md:pt-3">
+        <header className="relative z-40 shrink-0 border-b border-border/60 bg-gray-50 pb-3 pt-2 shadow-mx-lg md:sticky md:top-0 md:pt-3">
           <PageHeading
             title="Funil de Vendas"
             subtitle="Com sua conversão atual, veja o que precisa produzir para atingir a meta."
             actions={(
-              <label className="inline-flex h-11 items-center gap-mx-sm rounded-xl border border-gray-100 bg-white px-mx-md text-sm font-semibold shadow-mx-xs">
+              <label className="inline-flex h-11 items-center gap-mx-sm rounded-xl border border-border-subtle bg-white px-mx-md text-sm font-semibold shadow-mx-xs">
                 <Filter size={16} />
                 <select className="bg-transparent font-semibold outline-none" value={period} onChange={(event) => setPeriod(event.target.value as PeriodKey)} aria-label="Período do funil">
                   {PERIOD_OPTIONS.map((option) => <option key={option.key} value={option.key}>{option.label}</option>)}
@@ -161,7 +161,7 @@ export function FunilVendedor() {
         </header>
 
         <section aria-label="Filtro de período">
-          <div className="inline-flex flex-wrap gap-mx-xs rounded-xl border border-gray-100 bg-white p-mx-xs shadow-sm">
+          <div className="inline-flex flex-wrap gap-mx-xs rounded-xl border border-border-subtle bg-white p-mx-xs shadow-sm">
             {PERIOD_OPTIONS.map(option => (
               <button key={option.key} type="button" className={`h-9 rounded-xl px-mx-md text-sm font-semibold transition ${period === option.key ? 'bg-emerald-600 text-white' : 'text-muted-foreground hover:bg-gray-50'}`} onClick={() => setPeriod(option.key)}>
                 {option.label}
@@ -327,7 +327,7 @@ function MetricCard({ label, value, hint, tone = 'dark' }: { label: string; valu
 function ProjectionStat({ label, value, hint, tone = 'dark' }: { label: string; value: string; hint?: string; tone?: 'dark' | 'green' | 'orange' }) {
   const color = tone === 'green' ? 'text-status-success' : tone === 'orange' ? 'text-status-warning' : 'text-foreground'
   return (
-    <div className="rounded-xl border border-gray-100 bg-gray-50 p-mx-sm">
+    <div className="rounded-xl border border-border-subtle bg-gray-50 p-mx-sm">
       <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
       <Typography variant="h3" className={`mt-1 ${color}`}>{value}</Typography>
       {hint && <Typography variant="p" className="mt-1 text-sm font-semibold">{hint}</Typography>}
@@ -336,7 +336,7 @@ function ProjectionStat({ label, value, hint, tone = 'dark' }: { label: string; 
 }
 
 function BaseStat({ label, value }: { label: string; value: string }) {
-  return <div className="rounded-xl border border-gray-100 bg-gray-50 p-mx-sm"><Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography><Typography variant="p" className="mt-1 text-sm font-semibold">{value}</Typography></div>
+  return <div className="rounded-xl border border-border-subtle bg-gray-50 p-mx-sm"><Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography><Typography variant="p" className="mt-1 text-sm font-semibold">{value}</Typography></div>
 }
 
 function CompactRow({ label, value }: { label: string; value: string }) {

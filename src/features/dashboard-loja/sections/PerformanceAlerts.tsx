@@ -208,8 +208,8 @@ export function PerformanceAlerts({ role, isOwner, alerts }: PerformanceAlertsPr
   const SummaryIcon = hasDanger ? AlertTriangle : hasWarning ? CircleAlert : CheckCircle2
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm" aria-labelledby="performance-alerts-title">
-      <header className="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+    <section className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm" aria-labelledby="performance-alerts-title">
+      <header className="flex flex-col gap-3 border-b border-border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
         <div className="flex items-start gap-3">
           <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${hasDanger ? 'bg-red-50 text-red-600' : hasWarning ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}>
             <SummaryIcon size={19} />
@@ -267,7 +267,7 @@ function AlertCard({
       Icon: AlertTriangle,
     },
     outline: {
-      surface: 'border-gray-200 bg-gray-50',
+      surface: 'border-border bg-gray-50',
       badge: 'bg-gray-200 text-muted-foreground',
       icon: 'text-muted-foreground',
       label: 'Validar',

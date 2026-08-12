@@ -11,7 +11,7 @@ export function IntegracoesTab() {
         <div className="space-y-mx-lg">
             {/* Google Calendar pessoal + central */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100">
                         <Calendar size={26} />
                     </div>
@@ -57,9 +57,9 @@ export function IntegracoesTab() {
 
             {/* Webhooks placeholder */}
             <Card className="p-mx-lg border-none bg-white">
-                <header className="flex items-center justify-between pb-mx-md border-b border-gray-200 mb-mx-lg">
+                <header className="flex items-center justify-between pb-mx-md border-b border-border mb-mx-lg">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-gray-200">
+                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-border">
                             <Webhook size={26} />
                         </div>
                         <div>
@@ -77,7 +77,7 @@ export function IntegracoesTab() {
 
             {/* Edge Functions */}
             <Card className="p-mx-lg border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-status-success/10 text-status-success flex items-center justify-center border border-status-success/20">
                         <Globe size={26} />
                     </div>
@@ -99,7 +99,7 @@ export function IntegracoesTab() {
                         'google-calendar-merged',
                         'google-oauth-handler',
                     ].map(fn => (
-                        <div key={fn} className="flex items-center justify-between p-mx-sm bg-gray-50 rounded-2xl border border-gray-100">
+                        <div key={fn} className="flex items-center justify-between p-mx-sm bg-gray-50 rounded-2xl border border-border-subtle">
                             <Typography variant="tiny" className="font-mono-numbers font-bold">{fn}</Typography>
                             <Badge variant="outline" className="text-mx-micro">Registrada</Badge>
                         </div>

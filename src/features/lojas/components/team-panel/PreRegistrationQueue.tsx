@@ -49,7 +49,7 @@ export function PreRegistrationQueue({
   return (
     <aside className="order-2 min-w-0 xl:sticky xl:top-[var(--spacing-mx-layout-offset-top)]">
       <Card className="border bg-white overflow-hidden">
-        <CardHeader className="border-b border-gray-200 bg-gray-50/60 p-mx-md">
+        <CardHeader className="border-b border-border bg-gray-50/60 p-mx-md">
           <div className="flex flex-col gap-mx-md">
             <div className="flex items-start gap-mx-sm min-w-0">
               <div className="w-mx-12 h-mx-12 rounded-2xl bg-emerald-600/10 border border-brand-primary/10 text-emerald-600 flex items-center justify-center shrink-0">
@@ -71,7 +71,7 @@ export function PreRegistrationQueue({
               COPIAR LINK
             </Button>
           </div>
-          <div className="mt-mx-md flex items-center gap-mx-xs rounded-2xl border border-gray-200 bg-white px-mx-md py-mx-sm text-mx-tiny font-bold text-muted-foreground min-w-0">
+          <div className="mt-mx-md flex items-center gap-mx-xs rounded-2xl border border-border bg-white px-mx-md py-mx-sm text-mx-tiny font-bold text-muted-foreground min-w-0">
             <Link2 size={14} className="text-emerald-600 shrink-0" />
             <span className="truncate">{registrationLink || 'Link indisponível até a loja ser identificada'}</span>
           </div>
@@ -79,7 +79,7 @@ export function PreRegistrationQueue({
 
         <CardContent className="p-mx-md mx-pre-registration-scroll">
           {!canApprovePreRegistrations ? (
-            <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-mx-lg text-center">
+            <div className="rounded-2xl border border-dashed border-border bg-gray-50 p-mx-lg text-center">
               <ShieldCheck size={24} className="mx-auto text-emerald-600" />
               <Typography variant="caption" className="mt-mx-sm block">Aprovação restrita ao Admin MX</Typography>
               <Typography variant="tiny" tone="muted" className="mt-2 block font-bold">A loja pode compartilhar o link; a fila de validação fica visível apenas para Admin MX e MX Master.</Typography>
@@ -94,10 +94,10 @@ export function PreRegistrationQueue({
               {preRegistrations.map(item => {
                 const detailsExpanded = expandedPreRegistrations.has(item.id)
                 return (
-                <div key={item.id} className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-sm">
+                <div key={item.id} className="rounded-2xl border border-border bg-gray-50 p-mx-sm">
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-mx-sm">
                     <div className="flex items-start gap-mx-sm min-w-0">
-                      <div className="h-mx-14 w-mx-14 overflow-hidden rounded-2xl border border-gray-200 bg-white shrink-0">
+                      <div className="h-mx-14 w-mx-14 overflow-hidden rounded-2xl border border-border bg-white shrink-0">
                         <PreRegistrationAvatar url={item.avatar_url} name={item.full_name} />
                       </div>
                       <div className="min-w-0 flex-1">
@@ -184,7 +184,7 @@ export function PreRegistrationQueue({
               )})}
             </div>
           ) : (
-            <div className="rounded-2xl border border-dashed border-gray-200 bg-gray-50 p-mx-md text-center">
+            <div className="rounded-2xl border border-dashed border-border bg-gray-50 p-mx-md text-center">
               <Typography variant="h4" className="tracking-tight">Nenhum pré-cadastro recebido</Typography>
               <Typography variant="p" tone="muted" className="mt-2 block text-sm font-bold">Assim que alguém preencher o link da loja, os dados aparecem aqui.</Typography>
             </div>

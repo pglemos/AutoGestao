@@ -78,7 +78,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
 
             {/* Conteúdo do sub-tab */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-start gap-mx-md pb-mx-md border-b border-gray-200 mb-mx-lg">
+                <header className="flex items-start gap-mx-md pb-mx-md border-b border-border mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100">
                         <Icon size={26} />
                     </div>

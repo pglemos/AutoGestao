@@ -79,7 +79,7 @@ export function MxPageTabs<T extends string>({
     <InternalMxTemplateTabs
       data-mx-page-tabs=""
       aria-label={ariaLabel}
-      className={cn('rounded-2xl border border-gray-100 bg-white p-4 shadow-sm', className)}
+      className={cn('rounded-2xl border border-border-subtle bg-white p-4 shadow-sm', className)}
     >
       {searchable ? (
         <label className="relative mb-4 block w-full sm:max-w-sm">
@@ -90,7 +90,7 @@ export function MxPageTabs<T extends string>({
             value={searchTerm}
             onChange={(event: ChangeEvent<HTMLInputElement>) => setSearchTerm(event.target.value)}
             placeholder={searchPlaceholder}
-            className="h-10 w-full rounded-xl border border-gray-200 bg-white pl-9 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
+            className="h-10 w-full rounded-xl border border-border bg-white pl-9 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
           />
         </label>
       ) : null}
@@ -139,7 +139,7 @@ export function MxPageTabs<T extends string>({
           ))}
         </div>
       ) : (
-        <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-8 text-center">
+        <div className="rounded-xl border border-dashed border-border bg-gray-50 px-4 py-8 text-center">
           <Typography variant="p" className="text-sm text-muted-foreground">Nenhuma opção encontrada para a busca.</Typography>
         </div>
       )}

@@ -18,7 +18,7 @@ export function AdminHeader({ metrics, isRefetching, onRefresh, onExport }: Prop
   return (
     <header
       data-mx-module-header=""
-      className="flex shrink-0 flex-col justify-between gap-mx-lg rounded-2xl border border-gray-100 bg-white p-5 shadow-sm xl:flex-row xl:items-end"
+      className="flex shrink-0 flex-col justify-between gap-mx-lg rounded-2xl border border-border-subtle bg-white p-5 shadow-sm xl:flex-row xl:items-end"
     >
       <div className="flex flex-col gap-mx-tiny">
         <div className="flex items-center gap-mx-sm">
@@ -49,7 +49,7 @@ export function AdminHeader({ metrics, isRefetching, onRefresh, onExport }: Prop
         >
           <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
         </Button>
-        <div className="flex items-center gap-mx-xs px-6 h-mx-14 rounded-mx-full border border-gray-200 bg-white shadow-sm">
+        <div className="flex items-center gap-mx-xs px-6 h-mx-14 rounded-mx-full border border-border bg-white shadow-sm">
           <Calendar size={18} className="text-emerald-600" />
           <Typography variant="caption" className="">
             Ciclo {format(new Date(), 'yyyy')}

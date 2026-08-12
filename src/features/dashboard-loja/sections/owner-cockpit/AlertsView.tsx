@@ -45,21 +45,21 @@ export function AlertsView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
         <Card className="p-mx-lg">
           <div className="flex flex-col gap-mx-sm lg:flex-row lg:items-center lg:justify-between">
             <div className="grid grid-cols-1 gap-mx-sm sm:grid-cols-3">
-              <select aria-label="Filtrar status dos alertas" value={statusFilter} onChange={event => setStatusFilter(event.target.value)} className="h-mx-10 rounded-xl border border-gray-100 bg-white px-mx-sm text-xs font-bold text-muted-foreground">
+              <select aria-label="Filtrar status dos alertas" value={statusFilter} onChange={event => setStatusFilter(event.target.value)} className="h-mx-10 rounded-xl border border-border-subtle bg-white px-mx-sm text-xs font-bold text-muted-foreground">
                 <option value="todos">Todos os status</option>
                 <option value="danger">Críticos</option>
                 <option value="warning">Atenção</option>
                 <option value="success">Positivos</option>
                 <option value="outline">Informativos</option>
               </select>
-              <select aria-label="Filtrar departamento dos alertas" value={departmentFilter} onChange={event => setDepartmentFilter(event.target.value)} className="h-mx-10 rounded-xl border border-gray-100 bg-white px-mx-sm text-xs font-bold text-muted-foreground">
+              <select aria-label="Filtrar departamento dos alertas" value={departmentFilter} onChange={event => setDepartmentFilter(event.target.value)} className="h-mx-10 rounded-xl border border-border-subtle bg-white px-mx-sm text-xs font-bold text-muted-foreground">
                 <option value="todos">Todos os departamentos</option>
                 {departments.map(department => <option key={department} value={department}>{department}</option>)}
               </select>
               <label className="relative min-w-0 lg:w-[280px]">
                 <span className="sr-only">Buscar alerta</span>
                 <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
-                <input value={search} onChange={event => setSearch(event.target.value)} className="h-mx-10 w-full rounded-xl border border-gray-100 bg-white pl-mx-xl pr-mx-sm text-sm font-bold outline-none focus:border-brand-primary" placeholder="Buscar alerta..." />
+                <input value={search} onChange={event => setSearch(event.target.value)} className="h-mx-10 w-full rounded-xl border border-border-subtle bg-white pl-mx-xl pr-mx-sm text-sm font-bold outline-none focus:border-brand-primary" placeholder="Buscar alerta..." />
               </label>
             </div>
           </div>
@@ -82,7 +82,7 @@ export function AlertsView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
                 </div>
               )
             })}
-            {filteredAlerts.length === 0 && <div className="rounded-xl border border-dashed border-gray-100 p-mx-lg text-center text-sm font-bold text-muted-foreground">Nenhum alerta corresponde aos filtros.</div>}
+            {filteredAlerts.length === 0 && <div className="rounded-xl border border-dashed border-border-subtle p-mx-lg text-center text-sm font-bold text-muted-foreground">Nenhum alerta corresponde aos filtros.</div>}
           </div>
         </Card>
         <div className="space-y-mx-md">

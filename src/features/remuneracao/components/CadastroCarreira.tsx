@@ -54,7 +54,7 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
       ) : vendedores.length === 0 ? (
         <EmptyState title="Nenhum vendedor nesta loja" description="Cadastre vendedores em Equipe & Usuários primeiro." />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-gray-200">
+        <div className="overflow-x-auto rounded-2xl border border-border">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
@@ -64,14 +64,14 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
             </thead>
             <tbody>
               {vendedores.map(vendedor => (
-                <tr key={vendedor.id} className="border-t border-gray-200">
+                <tr key={vendedor.id} className="border-t border-border">
                   <td className="px-mx-md py-mx-sm font-bold">{vendedor.name}</td>
                   <td className="px-mx-md py-mx-sm">
                     <select
                       value={niveis[vendedor.id] || ''}
                       disabled={savingIds.has(vendedor.id)}
                       onChange={e => handleChange(vendedor.id, e.target.value as NivelCarreira)}
-                      className="h-mx-12 px-mx-sm bg-white border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+                      className="h-mx-12 px-mx-sm bg-white border border-border rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
                     >
                       <option value="" disabled>Não definido</option>
                       {(Object.keys(NIVEL_LABEL) as NivelCarreira[]).map(nivel => (

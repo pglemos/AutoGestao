@@ -41,7 +41,7 @@ export function VisitOneHighFidelity({ clientId, clientSlug, data, onChange }: {
   return (
     <div className="space-y-mx-lg animate-in fade-in slide-in-from-bottom-4 duration-500">
       {/* Navegação de Contexto */}
-      <div className="flex bg-white/50 backdrop-blur-sm p-mx-xs rounded-2xl border border-gray-200 shadow-mx-inner">
+      <div className="flex bg-white/50 backdrop-blur-sm p-mx-xs rounded-2xl border border-border shadow-mx-inner">
         {VISIT_ONE_TABS.map((t) => (
           <button
             key={t.id}
@@ -102,13 +102,13 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
                       type="number"
                       value={s.value}
                       onChange={e => handleSalesChange(i, parseInt(e.target.value) || 0)}
-                      className="h-mx-12 font-bold text-xl text-center border-gray-200 bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all shadow-sm"
+                      className="h-mx-12 font-bold text-xl text-center border-border bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all shadow-sm"
                    />
                 </div>
              ))}
           </div>
 
-          <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-gray-200">
+          <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-border">
              <div>
                 <Typography variant="tiny" className="font-bold">Total Trimestre</Typography>
                 <Typography variant="h2" className="text-3xl">{totalSales} <span className="text-sm font-bold text-muted-foreground">CARROS</span></Typography>
@@ -142,7 +142,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
                   type="number"
                   value={data.marketing?.investment}
                   onChange={e => onChange({ ...data, marketing: { ...data.marketing, investment: parseFloat(e.target.value) || 0 } })}
-                  className="h-mx-12 font-bold text-xl border-gray-200 bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all"
+                  className="h-mx-12 font-bold text-xl border-border bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all"
                   placeholder="Ex: 5000"
                 />
              </div>
@@ -154,7 +154,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
                   type="number"
                   value={data.marketing?.leads}
                   onChange={e => onChange({ ...data, marketing: { ...data.marketing, leads: parseInt(e.target.value) || 0 } })}
-                  className="h-mx-12 font-bold text-xl border-gray-200 bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all"
+                  className="h-mx-12 font-bold text-xl border-border bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all"
                   placeholder="Ex: 250"
                 />
              </div>
@@ -216,7 +216,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
                       type="number"
                       value={data.stock?.[f.k]}
                       onChange={e => onChange({ ...data, stock: { ...data.stock, [f.k]: parseFloat(e.target.value) || 0 } })}
-                      className="h-mx-10 font-bold border-gray-200 bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all shadow-sm"
+                      className="h-mx-10 font-bold border-border bg-gray-50/20 focus:bg-white focus:border-brand-primary transition-all shadow-sm"
                       placeholder={f.p}
                    />
                 </div>
@@ -232,7 +232,7 @@ function VisitOneBenchmark({ data }: { data: VisitOneQuantData }) {
     <Card className="p-mx-20 text-center bg-white border border-dashed relative overflow-hidden group">
        <div className="absolute inset-0 bg-gradient-to-br from-brand-primary/5 via-transparent to-brand-secondary/5 opacity-0 group-hover:opacity-100 transition-opacity" />
        <div className="relative z-10">
-         <div className="w-mx-16 h-mx-16 bg-gray-50 rounded-mx-full flex items-center justify-center mx-auto mb-mx-md border border-gray-100 group-hover:scale-110 transition-transform">
+         <div className="w-mx-16 h-mx-16 bg-gray-50 rounded-mx-full flex items-center justify-center mx-auto mb-mx-md border border-border-subtle group-hover:scale-110 transition-transform">
            <Globe size={48} className="text-emerald-600 opacity-40" />
          </div>
          <Typography variant="h3" className="text-xl mb-mx-xs">Comparativo de Mercado</Typography>
@@ -351,7 +351,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
                 "text-left p-mx-md rounded-2xl border transition-all relative overflow-hidden shadow-sm min-h-mx-28",
                 isActive
                   ? "bg-emerald-600 border-brand-primary text-white shadow-sm"
-                  : "bg-white border-gray-200 hover:border-brand-primary/30 hover:bg-gray-50"
+                  : "bg-white border-border hover:border-brand-primary/30 hover:bg-gray-50"
               )}
             >
               <div className="flex items-start justify-between gap-mx-sm">
@@ -378,7 +378,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
       </div>
 
       <Card className="p-mx-lg bg-white border">
-        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-mx-md mb-mx-lg border-b border-gray-100 pb-mx-md">
+        <div className="flex flex-col xl:flex-row xl:items-center justify-between gap-mx-md mb-mx-lg border-b border-border-subtle pb-mx-md">
           <div className="flex items-start gap-mx-sm">
             <div className="p-mx-xs bg-emerald-600/10 rounded-xl text-emerald-600"><Users size={20} /></div>
             <div>
@@ -413,7 +413,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
             <Typography variant="tiny" className="">
               Escopo
             </Typography>
-            <div className="h-mx-12 rounded-xl border border-gray-200 bg-gray-50/30 px-mx-md flex items-center">
+            <div className="h-mx-12 rounded-xl border border-border bg-gray-50/30 px-mx-md flex items-center">
               <Typography variant="p" className="text-sm font-bold">
                 Diagnóstico consolidado da Visita 1.
               </Typography>
@@ -425,7 +425,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
           {currentTmpl.fields.map(field => {
             const value = answers[field.key]
             return (
-              <div key={field.key} className={cn("space-y-mx-xs p-mx-md bg-gray-50/30 rounded-2xl border border-gray-200", field.type === 'textarea' ? 'md:col-span-2' : '')}>
+              <div key={field.key} className={cn("space-y-mx-xs p-mx-md bg-gray-50/30 rounded-2xl border border-border", field.type === 'textarea' ? 'md:col-span-2' : '')}>
                 <Typography as="label" htmlFor={`interview-${currentTmpl.id}-${field.key}`} variant="p" className="text-xs">
                   {field.label}{field.required ? ' *' : ''}
                 </Typography>
@@ -450,7 +450,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
                           "h-10 w-10 min-w-10 sm:h-12 sm:w-12 sm:min-w-12 rounded-2xl font-bold transition-all border-2 flex items-center justify-center text-lg",
                           value === option
                             ? "bg-emerald-600 border-brand-primary text-white shadow-sm scale-105"
-                            : "bg-white border-gray-200 text-muted-foreground hover:border-brand-primary/40 hover:text-emerald-600"
+                            : "bg-white border-border text-muted-foreground hover:border-brand-primary/40 hover:text-emerald-600"
                         )}
                       >
                         {option}
@@ -458,7 +458,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
                     ))}
                   </div>
                 ) : field.type === 'boolean' ? (
-                  <label className="h-mx-12 rounded-xl bg-white border border-gray-200 px-mx-md flex items-center gap-mx-sm font-bold text-sm">
+                  <label className="h-mx-12 rounded-xl bg-white border border-border px-mx-md flex items-center gap-mx-sm font-bold text-sm">
                     <input
                       type="checkbox"
                       checked={Boolean(value)}

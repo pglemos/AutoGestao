@@ -55,14 +55,14 @@ export function ModalSemCanal({ open, canalSugerido, onConfirmarSugestao, onEsco
                 className={`text-left px-4 py-2.5 rounded-xl border text-body-sm font-semibold transition-colors ${
                   canalEscolhido === c
                     ? "bg-purple-50 border-purple-400 text-[#6D28D9]"
-                    : "border-slate-200 hover:bg-slate-50 text-[#0F172A]"
+                    : "border-border hover:bg-slate-50 text-[#0F172A]"
                 }`}
               >
                 {c}
               </button>
             ))}
           </div>
-          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <Btn onClick={() => setEscolhendo(false)}>Voltar</Btn>
             <Btn variant="primary" onClick={() => { if (canalEscolhido) onEscolherOutro(canalEscolhido); }} disabled={!canalEscolhido}>
               Confirmar canal
@@ -184,7 +184,7 @@ export function ModalMaisVendasQueAtendimentos({ open, divergencias, onRevisar, 
             ))}
           </ul>
         )}
-        <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
+        <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
           <Btn onClick={onRevisar}>Revisar agora</Btn>
           <Btn variant="green" onClick={onConfirmar}>
             <Check className="w-4 h-4 inline mr-1" />

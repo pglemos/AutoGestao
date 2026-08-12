@@ -163,7 +163,7 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                             name="role"
                             value={form.role || ''}
                             onChange={e => setForm(p => ({ ...p, role: e.target.value as UserRole }))}
-                            className="w-full h-mx-14 pl-mx-12 pr-mx-sm bg-gray-50 border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+                            className="w-full h-mx-14 pl-mx-12 pr-mx-sm bg-gray-50 border border-border rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
                         >
                             {ROLE_OPTIONS.filter(r => allowedRoles.includes(r.value)).map(r => (
                                 <option key={r.value} value={r.value}>{r.label.toUpperCase()}</option>
@@ -178,7 +178,7 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                                 name="store_id"
                                 value={form.store_id || ''}
                                 onChange={e => setForm(p => ({ ...p, store_id: e.target.value }))}
-                                className="w-full h-mx-14 pl-mx-12 pr-mx-sm bg-gray-50 border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+                                className="w-full h-mx-14 pl-mx-12 pr-mx-sm bg-gray-50 border border-border rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
                             >
                                 <option value="">Selecione a loja</option>
                                 {lojas.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
@@ -187,7 +187,7 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                     )}
 
                     <div className="md:col-span-2">
-                        <label htmlFor="user-active" className="flex items-start gap-mx-sm rounded-2xl border border-gray-200 bg-gray-50 p-mx-md cursor-pointer">
+                        <label htmlFor="user-active" className="flex items-start gap-mx-sm rounded-2xl border border-border bg-gray-50 p-mx-md cursor-pointer">
                             <input
                                 id="user-active"
                                 name="active"
@@ -206,7 +206,7 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                     </div>
                 </div>
 
-                <div className="pt-mx-md border-t border-gray-200 space-y-mx-sm">
+                <div className="pt-mx-md border-t border-border space-y-mx-sm">
                     <Typography variant="caption" tone="muted" className="">Ações de Segurança</Typography>
                     <div className="flex flex-wrap gap-mx-sm">
                         <Button

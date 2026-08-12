@@ -81,7 +81,7 @@ export function AparenciaTab() {
         <div className="space-y-mx-lg">
             {/* Tema */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100">
                         <Palette size={26} />
                     </div>
@@ -100,8 +100,8 @@ export function AparenciaTab() {
 
             {/* Densidade */}
             <Card className="p-mx-lg border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-gray-200">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-border">
                         <Sparkles size={26} />
                     </div>
                     <div>
@@ -118,7 +118,7 @@ export function AparenciaTab() {
 
             {/* Branding */}
             <Card className="p-mx-lg border-none bg-white">
-                <header className="flex items-center justify-between pb-mx-md border-b border-gray-200 mb-mx-lg">
+                <header className="flex items-center justify-between pb-mx-md border-b border-border mb-mx-lg">
                     <div className="flex items-center gap-mx-sm">
                         <div className="w-mx-14 h-mx-14 rounded-2xl bg-pure-black text-emerald-600 flex items-center justify-center">
                             <Sparkles size={26} />
@@ -154,7 +154,7 @@ function ThemeOption({ icon, label, desc, active, onClick, badge }: {
             className={`text-left p-mx-md rounded-2xl border-2 transition-all ${
                 active
                     ? 'border-brand-primary bg-emerald-600/5 shadow-sm'
-                    : 'border-gray-200 bg-white hover:border-brand-primary/30 hover:bg-gray-50'
+                    : 'border-border bg-white hover:border-brand-primary/30 hover:bg-gray-50'
             }`}
         >
             <div className="flex items-center justify-between mb-mx-sm">
@@ -177,7 +177,7 @@ function DensityOption({ label, desc, active, onClick }: { label: string; desc: 
             className={`text-left p-mx-md rounded-2xl border-2 transition-all ${
                 active
                     ? 'border-brand-primary bg-emerald-600/5'
-                    : 'border-gray-200 bg-white hover:border-brand-primary/30'
+                    : 'border-border bg-white hover:border-brand-primary/30'
             }`}
         >
             <Typography variant="caption" className="tracking-tight !">{label}</Typography>

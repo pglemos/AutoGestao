@@ -27,7 +27,7 @@ export class ConsultoriaErrorBoundary extends Component<Props, State> {
       return (
         <div
           role="alert"
-          className="my-mx-xs rounded-xl border border-gray-200 bg-gray-50 p-mx-md text-mx-tiny font-bold uppercase tracking-widest text-status-warning"
+          className="my-mx-xs rounded-xl border border-border bg-gray-50 p-mx-md text-mx-tiny font-bold uppercase tracking-widest text-status-warning"
         >
           <strong>
             // Bloco indisponível{this.props.sectionName ? `: ${this.props.sectionName}` : ''}

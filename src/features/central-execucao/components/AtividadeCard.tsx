@@ -158,7 +158,7 @@ export function AtividadeCard({
   return (
     <article className={cn(
       'overflow-hidden rounded-2xl border bg-white shadow-sm transition-shadow hover:shadow-md',
-      overdue ? 'border-red-200' : 'border-slate-200',
+      overdue ? 'border-red-200' : 'border-border',
     )}>
       <div className="md:hidden">
         <div className={cn('h-1 w-full', TYPE_BAR[action.activityType])} />
@@ -200,7 +200,7 @@ export function AtividadeCard({
               </button>
             )}
             {phoneDigits && (
-              <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-caption font-bold text-muted-foreground transition-colors hover:bg-slate-50">
+              <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-border px-3 py-1.5 text-caption font-bold text-muted-foreground transition-colors hover:bg-slate-50">
                 <Phone className="h-3 w-3" aria-hidden="true" /> Ligar
               </a>
             )}

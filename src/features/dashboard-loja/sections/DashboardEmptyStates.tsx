@@ -30,7 +30,7 @@ export function PerformanceLoadingSkeleton() {
       aria-live="polite"
       aria-label="Carregando performance"
     >
-      <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10">
+      <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10">
         <div className="space-y-mx-xs">
           <Skeleton className="h-mx-10 w-full max-w-mx-64" />
           <Skeleton className="h-mx-xs w-full max-w-mx-48" />

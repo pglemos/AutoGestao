@@ -76,7 +76,7 @@ function SellerSelect({
         aria-expanded={open}
         aria-label={`Selecionar vendedor do lado ${side}`}
         onClick={() => setOpen(value => !value)}
-        className={`w-full rounded-2xl border p-3 text-left transition-all ${selected ? 'border-transparent shadow-md' : 'border-gray-200 bg-white hover:border-gray-300'}`}
+        className={`w-full rounded-2xl border p-3 text-left transition-all ${selected ? 'border-transparent shadow-md' : 'border-border bg-white hover:border-border-strong'}`}
         style={selected ? { backgroundColor: `${color}10`, boxShadow: `inset 0 0 0 2px ${color}` } : undefined}
       >
         <div className="flex items-center gap-2.5">
@@ -91,7 +91,7 @@ function SellerSelect({
         </div>
       </button>
       {open && (
-        <div className="absolute z-30 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-gray-200 bg-white shadow-lg">
+        <div className="absolute z-30 mt-1 max-h-60 w-full overflow-y-auto rounded-xl border border-border bg-white shadow-lg">
           {sellers.map(seller => (
             <button
               key={seller.id}
@@ -133,7 +133,7 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
 
   return (
     <div className="space-y-4">
-      <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm" data-tour="ranking-comparativo" aria-labelledby="ranking-comparison-title">
+      <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm" data-tour="ranking-comparativo" aria-labelledby="ranking-comparison-title">
         <div className="mb-4 flex items-center gap-2">
           <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50">
             <GitCompareArrows size={18} className="text-emerald-600" />
@@ -154,7 +154,7 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
       </section>
 
       {!canCompare || !sellerA || !sellerB ? (
-        <div className="rounded-2xl border border-gray-100 bg-white p-10 text-center shadow-sm">
+        <div className="rounded-2xl border border-border-subtle bg-white p-10 text-center shadow-sm">
           <GitCompareArrows className="mx-auto mb-3 text-text-disabled" size={40} />
           <p className="text-sm font-medium text-muted-foreground">Selecione dois vendedores diferentes para iniciar a comparação.</p>
         </div>
@@ -178,7 +178,7 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
-            <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
               <h3 className="mb-1 flex items-center gap-1.5 text-sm font-semibold text-foreground">
                 Perfil de desempenho
                 <HelpTooltip text="Gráfico radar com 5 dimensões normalizadas em 0–100. Meta, Conversão e Rotina já são percentuais; Agendamentos e Atendimentos são normalizados pelo maior valor entre os dois." />
@@ -199,8 +199,8 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
               </div>
             </section>
 
-            <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-              <div className="grid grid-cols-[1fr_auto_1fr] gap-2 border-b border-gray-100 pb-3">
+            <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
+              <div className="grid grid-cols-[1fr_auto_1fr] gap-2 border-b border-border-subtle pb-3">
                 <div className="text-right">
                   <p className="text-xs font-semibold uppercase text-muted-foreground">Vendedor A</p>
                   <p className="text-sm font-bold" style={{ color: COMPARISON_SIDE_A }}>{sellerA.nome}</p>
@@ -224,7 +224,7 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
             </section>
           </div>
 
-          <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
             <h3 className="mb-3 flex items-center gap-1.5 text-sm font-semibold text-foreground">
               <MessageSquare size={15} className="text-muted-foreground" /> Volume de oportunidades
             </h3>

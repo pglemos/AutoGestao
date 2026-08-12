@@ -107,7 +107,7 @@ export function ActionPlanView({
         <label className="flex flex-col gap-1 text-mx-tiny font-bold uppercase text-muted-foreground">
           Departamento
           <select
-            className="h-mx-10 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-foreground normal-case"
+            className="h-mx-10 rounded-xl border border-border-subtle bg-white px-mx-sm text-sm font-bold text-foreground normal-case"
             value={departmentFilter}
             onChange={(event) => setDepartmentFilter(event.target.value)}
           >
@@ -120,7 +120,7 @@ export function ActionPlanView({
         <label className="flex flex-col gap-1 text-mx-tiny font-bold uppercase text-muted-foreground">
           Responsável
           <select
-            className="h-mx-10 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-foreground normal-case"
+            className="h-mx-10 rounded-xl border border-border-subtle bg-white px-mx-sm text-sm font-bold text-foreground normal-case"
             value={ownerFilter}
             onChange={(event) => setOwnerFilter(event.target.value)}
           >
@@ -133,7 +133,7 @@ export function ActionPlanView({
       </div>
 
       {filteredActions.length === 0 ? (
-        <div className="rounded-2xl border border-gray-100 bg-white p-mx-lg" role="status">
+        <div className="rounded-2xl border border-border-subtle bg-white p-mx-lg" role="status">
           <strong className="text-base font-bold text-foreground">Nenhuma ação encontrada</strong>
           <p className="text-sm text-muted-foreground">Ajuste os filtros ou cadastre uma nova ação para esta unidade.</p>
         </div>
@@ -173,7 +173,7 @@ export function ActionPlanView({
                     )
                   })}
                   {columnActions.length === 0 && (
-                    <div className="rounded-xl border border-dashed border-gray-100 p-mx-sm text-center text-mx-tiny font-bold text-muted-foreground">
+                    <div className="rounded-xl border border-dashed border-border-subtle p-mx-sm text-center text-mx-tiny font-bold text-muted-foreground">
                       Vazio
                     </div>
                   )}

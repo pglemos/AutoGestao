@@ -60,7 +60,7 @@ export function AdminFunnelChart({ funnelData, metrics }: Props) {
             </Bar>
           </BarChart>
         </ResponsiveContainer>
-        <div className="grid grid-cols-3 gap-mx-xs pt-mx-md border-t border-gray-100">
+        <div className="grid grid-cols-3 gap-mx-xs pt-mx-md border-t border-border-subtle">
           <Badge variant="info" className="justify-center text-mx-nano">
             {formatPercent(metrics.convLeadAgd)} L-A
           </Badge>

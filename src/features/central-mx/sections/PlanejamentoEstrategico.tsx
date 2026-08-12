@@ -31,11 +31,11 @@ type Props = {
 const TONE_MAP: Record<string, string> = {
   completo: 'border-status-success/30 bg-status-success-surface text-status-success',
   parcial: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
-  pendente: 'border-gray-200 bg-gray-50 text-muted-foreground',
+  pendente: 'border-border bg-gray-50 text-muted-foreground',
   ok: 'border-status-success/30 bg-status-success-surface text-status-success',
   watch: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   miss: 'border-status-error/30 bg-status-error-surface text-status-error',
-  pending: 'border-gray-200 bg-gray-50 text-muted-foreground',
+  pending: 'border-border bg-gray-50 text-muted-foreground',
 }
 
 const STATUS_LABEL: Record<string, string> = {
@@ -208,7 +208,7 @@ export function PlanejamentoEstrategico({ planningIndicators, periodLabel }: Pro
             </thead>
             <tbody>
               {indicators.map((indicator) => (
-                <tr key={indicator.code} className="border-t border-gray-200/60">
+                <tr key={indicator.code} className="border-t border-border/60">
                   <td className="px-mx-sm py-mx-xs font-bold">
                     {indicator.label}
                     <Typography variant="tiny" tone="muted" className="block font-normal normal-case">

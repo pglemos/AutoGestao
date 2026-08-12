@@ -122,7 +122,7 @@ export function LiberacaoFechamento() {
     // max-w-lg. Não tem sidebar nem margem de página para padronizar.
     <div className="min-h-screen w-full bg-surface-alt flex flex-col items-center justify-center p-4 sm:p-6 lg:p-8 font-sans">
       <Card className="w-full max-w-lg bg-white border p-mx-md space-y-mx-md">
-        <header className="border-b border-gray-100 pb-4 flex items-center justify-between">
+        <header className="border-b border-border-subtle pb-4 flex items-center justify-between">
           <div>
             <Typography variant="h1" className="!text-lg !">
               Liberação de Fechamento
@@ -136,7 +136,7 @@ export function LiberacaoFechamento() {
 
         <div className="space-y-4 text-xs leading-relaxed text-muted-foreground">
           {/* Details */}
-          <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-3 shadow-none">
+          <div className="bg-gray-50 p-4 rounded-xl border border-border-subtle space-y-3 shadow-none">
             <div className="flex items-center gap-2">
               <User size={15} className="text-emerald-600" />
               <span className="font-bold text-foreground">Vendedor:</span>
@@ -180,7 +180,7 @@ export function LiberacaoFechamento() {
                 value={motivo}
                 onChange={e => setMotivo(e.target.value)}
                 placeholder="Ex: Vendedor teve problemas com a conexão ou ausência justificada..."
-                className="h-20 w-full resize-none rounded-xl border border-gray-100 p-3 text-xs text-foreground outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 transition-all"
+                className="h-20 w-full resize-none rounded-xl border border-border-subtle p-3 text-xs text-foreground outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 transition-all"
               />
             </div>
           ) : (
@@ -196,11 +196,11 @@ export function LiberacaoFechamento() {
           )}
         </div>
 
-        <footer className="flex items-center justify-between pt-4 border-t border-gray-100">
+        <footer className="flex items-center justify-between pt-4 border-t border-border-subtle">
           <Button
             onClick={() => navigate('/home')}
             variant="outline"
-            className="h-9 px-4 text-xs font-bold border-gray-100 text-muted-foreground hover:bg-background flex items-center gap-1.5 rounded-xl"
+            className="h-9 px-4 text-xs font-bold border-border-subtle text-muted-foreground hover:bg-background flex items-center gap-1.5 rounded-xl"
           >
             <ArrowLeft size={13} /> Cockpit
           </Button>

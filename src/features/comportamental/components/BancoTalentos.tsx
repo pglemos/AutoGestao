@@ -50,7 +50,7 @@ export function BancoTalentos() {
         </p>
       </div>
 
-      <form onSubmit={handleSubmit} className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
+      <form onSubmit={handleSubmit} className="rounded-2xl border border-border bg-gray-50 p-mx-md">
         <Typography variant="caption" tone="muted" className="">Registrar perfil vencedor</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <Field label="Cargo (opcional)"><Input value={form.cargo} onChange={e => setForm(p => ({ ...p, cargo: e.target.value }))} placeholder="Ex.: Vendedor" /></Field>
@@ -60,7 +60,7 @@ export function BancoTalentos() {
               aria-label="Loja"
               value={form.loja_id}
               onChange={e => setForm(p => ({ ...p, loja_id: e.target.value }))}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-border rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
             >
               <option value="">Todas</option>
               {lojas.map(l => <option key={l.id} value={l.id}>{l.name}</option>)}
@@ -86,7 +86,7 @@ export function BancoTalentos() {
           {talentos.map(t => {
             const entries = perfilEntries(t.perfil_agregado)
             return (
-              <div key={t.id} className="rounded-2xl border border-gray-200 p-mx-md">
+              <div key={t.id} className="rounded-2xl border border-border p-mx-md">
                 <div className="flex items-center gap-mx-sm">
                   <Trophy size={16} className="text-status-warning" />
                   <span className="font-bold uppercase text-sm">{t.cargo || 'Perfil geral'}</span>

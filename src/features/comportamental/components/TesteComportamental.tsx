@@ -40,7 +40,7 @@ export function TesteComportamental() {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleAddQuestao} className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
+      <form onSubmit={handleAddQuestao} className="rounded-2xl border border-border bg-gray-50 p-mx-md">
         <Typography variant="caption" tone="muted" className="">Adicionar questão ao teste</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-[1fr_200px_auto]">
           <Input aria-label="Enunciado da questão" value={novaQuestao} onChange={e => setNovaQuestao(e.target.value)} placeholder="Enunciado da questão" />
@@ -59,7 +59,7 @@ export function TesteComportamental() {
             Aplicar teste (você responde como exemplo de onboarding) — escala 1 (discordo) a 5 (concordo)
           </Typography>
           {questoes.map((q, i) => (
-            <div key={q.id} className="rounded-2xl border border-gray-200 p-mx-md">
+            <div key={q.id} className="rounded-2xl border border-border p-mx-md">
               <div className="flex items-start gap-mx-sm">
                 <span className="text-xs font-bold text-muted-foreground">{i + 1}.</span>
                 <div className="flex-1">

@@ -82,7 +82,7 @@ export default function GerentePDI() {
             aria-live="polite"
             aria-label="Carregando PDI"
         >
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10">
+            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10">
                 <div className="space-y-mx-xs">
                     <Skeleton className="h-mx-10 w-mx-64" />
                     <Skeleton className="h-mx-xs w-mx-48" />
@@ -176,7 +176,7 @@ export default function GerentePDI() {
                                             <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-mx-lg -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden="true" />
                                             
                                             <div>
-                                                <header className="flex items-start justify-between mb-10 border-b border-gray-200 pb-6 relative z-10">
+                                                <header className="flex items-start justify-between mb-10 border-b border-border pb-6 relative z-10">
                                                     <div className="flex items-center gap-mx-sm min-w-0">
                                                         <Avatar
                                                             src={p.seller_avatar_url || undefined}
@@ -201,7 +201,7 @@ export default function GerentePDI() {
                                                 </div>
                                             </div>
 
-                                            <footer className="pt-8 border-t border-gray-200 flex items-center justify-between mt-10 relative z-10">
+                                            <footer className="pt-8 border-t border-border flex items-center justify-between mt-10 relative z-10">
                                                 <div className="flex items-center gap-mx-md">
                                                     <div className="flex items-center gap-mx-xs">
                                                         <Calendar size={14} className="text-emerald-600" />
@@ -209,7 +209,7 @@ export default function GerentePDI() {
                                                             {formatSafeDate(p.due_date)}
                                                         </Typography>
                                                     </div>
-                                                    <Button type="button" variant="ghost" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-10 h-mx-10 rounded-xl text-muted-foreground hover:text-emerald-600 hover:bg-mx-indigo-50 bg-white shadow-sm border border-gray-100" aria-label={`Imprimir PDI de ${p.seller_name || 'nome não informado'}`}>
+                                                    <Button type="button" variant="ghost" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-10 h-mx-10 rounded-xl text-muted-foreground hover:text-emerald-600 hover:bg-mx-indigo-50 bg-white shadow-sm border border-border-subtle" aria-label={`Imprimir PDI de ${p.seller_name || 'nome não informado'}`}>
                                                         <Printer size={18} />
                                                     </Button>
                                                 </div>
@@ -224,8 +224,8 @@ export default function GerentePDI() {
                         </AnimatePresence>
                     </div>
                 ) : (
-                    <div className="col-span-full py-40 rounded-xl text-center border border-dashed border-gray-100 bg-white shadow-sm flex flex-col items-center justify-center relative overflow-hidden group">
-                        <div className="w-mx-3xl h-mx-3xl rounded-xl bg-gray-50 shadow-sm flex items-center justify-center mb-8 border border-gray-100 group-hover:rotate-12 transition-transform duration-500">
+                    <div className="col-span-full py-40 rounded-xl text-center border border-dashed border-border-subtle bg-white shadow-sm flex flex-col items-center justify-center relative overflow-hidden group">
+                        <div className="w-mx-3xl h-mx-3xl rounded-xl bg-gray-50 shadow-sm flex items-center justify-center mb-8 border border-border-subtle group-hover:rotate-12 transition-transform duration-500">
                             <TrendingUp size={48} className="text-muted-foreground opacity-20" />
                         </div>
                         <Typography variant="h2" className="mb-4er">Matriz de Evolução Limpa</Typography>

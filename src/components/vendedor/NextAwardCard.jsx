@@ -9,7 +9,7 @@ export default function NextAwardCard({ calcResult }) {
   const semPremiacao = !proximaPremiacao && (!premiacoesAtingidas || premiacoesAtingidas.length === 0);
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+    <div className="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
       <div className="flex items-center gap-2 mb-4">
         <Trophy className="w-4 h-4 text-amber-500" />
         <span className="text-amber-600 text-xs font-semibold uppercase tracking-widest">Próxima Premiação</span>

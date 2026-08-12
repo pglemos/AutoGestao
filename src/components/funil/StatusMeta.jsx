@@ -13,7 +13,7 @@ export default function StatusMeta({ indicadores, filtro }) {
     probabilidade >= 50 ? "text-amber-600" : "text-red-500";
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
       <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-4">Status da Meta</p>
 
       {!meta ? (

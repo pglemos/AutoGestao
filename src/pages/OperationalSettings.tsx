@@ -193,7 +193,7 @@ export default function OperationalSettings() {
                 description="Controles sem persistência permanecem visíveis, porém não fingem que foram salvos."
                 actions={<ShieldCheck size={18} className="text-muted-foreground" aria-hidden="true" />}
               />
-              <div className="divide-y divide-gray-100 px-5">
+              <div className="divide-y divide-border-subtle px-5">
                 {FUTURE_POLICIES.map(([title, description]) => (
                   <div key={title} className="flex items-start justify-between gap-4 py-4">
                     <div>

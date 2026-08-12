@@ -65,7 +65,7 @@ export function RelatoriosVendedor() {
       <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-lg">
           <SellerPageHeader icon={BarChart3} title="Relatórios" subtitle="Visão consolidada da sua performance comercial, com dados reais." />
           <div className="flex items-center justify-center h-64">
-            <div className="w-8 h-8 border-4 border-slate-200 border-t-blue-600 rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-border border-t-blue-600 rounded-full animate-spin" />
           </div>
         </PageTemplate>
     )
@@ -103,7 +103,7 @@ export function RelatoriosVendedor() {
               <BarRow label={CRM_CANAL_LABEL.internet} value={porCanal.internet} max={maxCanal} />
               <BarRow label={CRM_CANAL_LABEL.porta} value={porCanal.porta} max={maxCanal} />
             </div>
-            <div className="mt-mx-lg border-t border-gray-100 pt-mx-md">
+            <div className="mt-mx-lg border-t border-border-subtle pt-mx-md">
               <Typography variant="caption" tone="muted" className="tracking-wide">Carteira por status</Typography>
               <div className="mt-mx-sm grid grid-cols-2 gap-mx-sm sm:grid-cols-3">
                 <StatusPill label="Ativos" value={clienteMetrics.ativos} />

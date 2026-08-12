@@ -103,7 +103,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
             const shortcuts = template?.atalhos ?? []
 
             return (
-              <section key={slot.key} className={`rounded-2xl border bg-white shadow-sm transition-all ${slot.isCurrent ? 'border-status-info shadow-blue-100' : 'border-slate-200'}`}>
+              <section key={slot.key} className={`rounded-2xl border bg-white shadow-sm transition-all ${slot.isCurrent ? 'border-status-info shadow-blue-100' : 'border-border'}`}>
                 <button type="button" onClick={() => setExpanded(isExpanded ? null : slot.key)} className="flex w-full items-center gap-4 px-5 py-4 text-left">
                   <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${slot.isCurrent ? 'bg-status-info text-white' : past ? 'bg-green-100 text-green-600' : 'bg-slate-100 text-muted-foreground'}`}>
                     <Icon className="h-5 w-5" aria-hidden="true" />
@@ -120,7 +120,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
                 </button>
 
                 {isExpanded && (
-                  <div className="border-t border-slate-100 px-5 pb-5">
+                  <div className="border-t border-border-subtle px-5 pb-5">
                     <p className="mb-4 mt-3 text-body-sm text-muted-foreground">{template?.objetivo || 'Execute esta etapa com foco e registre os resultados.'}</p>
 
                     {slot.key === 'prospeccao' ? (
@@ -131,7 +131,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
                         ) : (
                           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
                             {playbook.prospeccaoHoje.map(item => (
-                              <div key={item.id} className="flex flex-col rounded-xl border border-slate-200 bg-white p-4">
+                              <div key={item.id} className="flex flex-col rounded-xl border border-border bg-white p-4">
                                 <div className="mb-3 flex items-start justify-between gap-3">
                                   <div><p className="text-body-sm font-bold text-foreground">{TIPO_ACAO_LABEL[item.tipo_acao] || item.tipo_acao}</p><p className="text-caption text-muted-foreground">{item.publico || 'Todos'}</p></div>
                                   <span className="shrink-0 rounded-full bg-blue-50 px-2.5 py-1 text-caption font-bold text-status-info">{item.quantidade ? `${item.quantidade}/${item.periodicidade || 'dia'}` : item.periodicidade || 'Hoje'}</span>
@@ -161,7 +161,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
                         {shortcuts.map(shortcut => shortcut.type === 'route' && shortcut.target ? (
                           <Link key={`${slot.key}-${shortcut.label}`} to={shortcut.target} className="rounded-xl border border-blue-200 px-3 py-2 text-[12px] font-bold text-status-info hover:bg-blue-50">{shortcut.label}</Link>
                         ) : (
-                          <span key={`${slot.key}-${shortcut.label}`} className="rounded-xl border border-slate-200 px-3 py-2 text-[12px] font-bold text-muted-foreground">{shortcut.label}</span>
+                          <span key={`${slot.key}-${shortcut.label}`} className="rounded-xl border border-border px-3 py-2 text-[12px] font-bold text-muted-foreground">{shortcut.label}</span>
                         ))}
                       </div>
                     )}
@@ -172,13 +172,13 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
           })}
         </div>
 
-        <aside className="hidden rounded-2xl border border-slate-200 bg-white p-5 shadow-sm lg:block">
+        <aside className="hidden rounded-2xl border border-border bg-white p-5 shadow-sm lg:block">
           <h3 className="mb-4 text-body-sm font-bold uppercase tracking-wider text-muted-foreground">Linha do dia</h3>
           <ol className="space-y-0">
             {playbook.slots.map((slot, index) => (
               <li key={`timeline-${slot.key}`} className="relative flex gap-3 pb-5 last:pb-0">
                 {index < playbook.slots.length - 1 && <span className="absolute left-[4px] top-3 h-full w-px bg-slate-200" />}
-                <span className={`relative mt-1 h-3 w-3 shrink-0 rounded-full border-2 border-white ring-1 ${slot.isCurrent ? 'bg-status-info ring-blue-300' : isPast(slot.time) ? 'bg-green-500 ring-green-200' : 'bg-slate-200 ring-slate-200'}`} />
+                <span className={`relative mt-1 h-3 w-3 shrink-0 rounded-full border-2 border-white ring-1 ${slot.isCurrent ? 'bg-status-info ring-blue-300' : isPast(slot.time) ? 'bg-green-500 ring-green-200' : 'bg-slate-200 ring-border'}`} />
                 <div><p className="text-caption font-bold text-muted-foreground">{slot.time}</p><p className={`text-[12px] font-bold ${slot.isCurrent ? 'text-status-info' : 'text-muted-foreground'}`}>{slot.template?.nome || STEP_LABELS[slot.key] || slot.key}</p></div>
               </li>
             ))}

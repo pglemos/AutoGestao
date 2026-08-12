@@ -111,7 +111,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
 
   if (!storeId) {
     return (
-      <div className="min-h-mx-section-lg bg-white border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center text-center p-mx-14">
+      <div className="min-h-mx-section-lg bg-white border-2 border-dashed border-border rounded-2xl flex flex-col items-center justify-center text-center p-mx-14">
         <Target size={48} className="text-muted-foreground mb-6" />
         <Typography variant="h2" className="mb-3">Selecione uma loja</Typography>
         <Typography variant="p" tone="muted" className="max-w-sm tracking-tight">A aba de metas precisa de uma unidade ativa para carregar as regras oficiais.</Typography>
@@ -130,8 +130,8 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
 
   return (
     <section className="pb-24 md:pb-32" aria-label="Metas da loja">
-      <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm sm:p-6">
-        <header className="mb-5 flex flex-col gap-mx-sm border-b border-slate-100 pb-4 sm:flex-row sm:items-center sm:justify-between">
+      <div className="rounded-2xl border border-border bg-white p-5 shadow-sm sm:p-6">
+        <header className="mb-5 flex flex-col gap-mx-sm border-b border-border-subtle pb-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <Typography variant="tiny" tone="muted" className="font-bold tracking-wider">Status da meta</Typography>
             <Typography variant="p" tone="muted" className="mt-1 text-sm">Meta mensal e benchmarks oficiais de {storeName || 'Unidade MX'}.</Typography>

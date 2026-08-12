@@ -139,7 +139,7 @@ function CollapsedTooltip({ label }: { label: string }) {
   return (
     <span
       role="tooltip"
-      className="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 z-[var(--mx-z-tooltip)] -translate-y-1/2 whitespace-nowrap rounded-lg border border-gray-100 bg-white px-3 py-2 text-xs font-semibold text-foreground opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+      className="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 z-[var(--mx-z-tooltip)] -translate-y-1/2 whitespace-nowrap rounded-lg border border-border-subtle bg-white px-3 py-2 text-xs font-semibold text-foreground opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
     >
       {label}
     </span>
@@ -499,7 +499,7 @@ export default function MxSidebarShell({
 
   return (
     <div className="h-[100dvh] overflow-hidden bg-gray-50 font-display text-foreground">
-      <header className="fixed left-0 right-0 top-0 z-[90] grid h-[calc(72px+env(safe-area-inset-top))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-gray-100 bg-white px-4 pt-[env(safe-area-inset-top)] shadow-sm xl:hidden">
+      <header className="fixed left-0 right-0 top-0 z-[90] grid h-[calc(72px+env(safe-area-inset-top))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-border-subtle bg-white px-4 pt-[env(safe-area-inset-top)] shadow-sm xl:hidden">
         <button
           type="button"
           aria-label="Abrir menu principal"

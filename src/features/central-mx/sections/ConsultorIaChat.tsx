@@ -154,7 +154,7 @@ export function ConsultorIaChat({ storeId }: Props) {
           />
         ))}
         {!consultor.solucoes.length && !consultor.loading && (
-          <li className="rounded-2xl border border-dashed border-gray-200 p-mx-md text-center">
+          <li className="rounded-2xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhuma sugestão registrada para esta loja.
             </Typography>
@@ -162,7 +162,7 @@ export function ConsultorIaChat({ storeId }: Props) {
         )}
       </ol>
 
-      <div className="mt-mx-md rounded-xl border border-dashed border-gray-200 p-mx-sm">
+      <div className="mt-mx-md rounded-xl border border-dashed border-border p-mx-sm">
         <Typography variant="tiny" tone="muted" className="font-bold normal-case tracking-normal">
           Esta versão do Consultor IA usa regras determinísticas. Cada sugestão é registrada no
           banco de soluções para retroalimentação futura (N10 — ata 2026-05-22 §01:33).

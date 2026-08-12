@@ -67,8 +67,8 @@ export default function MetasSugeridas() {
 
   if (loading) {
     return (
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center gap-3">
-        <div className="w-5 h-5 border-2 border-slate-200 border-t-primary rounded-full animate-spin" />
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-border-subtle flex items-center gap-3">
+        <div className="w-5 h-5 border-2 border-border border-t-primary rounded-full animate-spin" />
         <p className="text-sm text-muted-foreground">Analisando histórico...</p>
       </div>
     );
@@ -76,7 +76,7 @@ export default function MetasSugeridas() {
 
   if (!metrics) {
     return (
-      <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100">
+      <div className="bg-white rounded-2xl p-6 shadow-sm border border-border-subtle">
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="w-5 h-5 text-mx-amber" />
           <h3 className="text-base font-semibold text-mx-navy">Metas Sugeridas</h3>
@@ -135,7 +135,7 @@ export default function MetasSugeridas() {
   ];
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-slate-100 overflow-hidden">
+    <div className="bg-white rounded-2xl shadow-sm border border-border-subtle overflow-hidden">
       <button
         onClick={() => setExpanded(v => !v)}
         className="w-full p-5 flex items-center justify-between hover:bg-slate-50/50 transition-colors"

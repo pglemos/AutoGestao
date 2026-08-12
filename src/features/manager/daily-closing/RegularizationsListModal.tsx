@@ -243,7 +243,7 @@ function RegularizationDecisionModal({
             id="regularization-comment"
             rows={2}
             placeholder={`Adicione um comentário sobre a ${approve ? "aprovação" : "recusa"}...`}
-            className="w-full resize-none rounded-[12px] border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full resize-none rounded-[12px] border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
         <label className="flex cursor-pointer items-start gap-2 text-sm text-muted-foreground">
@@ -251,7 +251,7 @@ function RegularizationDecisionModal({
             type="checkbox"
             checked={confirmed}
             onChange={(event) => onConfirmedChange(event.target.checked)}
-            className="mt-0.5 h-4 w-4 shrink-0 rounded border-gray-300 text-emerald-600 focus:ring-emerald-500"
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-border-strong text-emerald-600 focus:ring-emerald-500"
           />
           {confirmationLabel}
         </label>

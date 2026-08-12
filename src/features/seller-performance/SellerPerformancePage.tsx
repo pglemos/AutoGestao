@@ -155,7 +155,7 @@ export function SellerPerformancePage() {
         </MxField>
       </MxToolbar>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-100 bg-white p-3.5 shadow-2xs text-xs font-medium text-muted-foreground">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-border-subtle bg-white p-3.5 shadow-2xs text-xs font-medium text-muted-foreground">
         <div className="flex items-center gap-2">
           <Filter size={14} className="text-emerald-600" />
           <span>

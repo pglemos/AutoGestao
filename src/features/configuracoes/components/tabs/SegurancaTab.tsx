@@ -51,7 +51,7 @@ export function SegurancaTab() {
         <div className="space-y-mx-lg">
             {/* Alterar senha */}
             <Card className="p-mx-lg md:p-mx-xl border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100 shadow-none">
                         <KeyRound size={26} />
                     </div>
@@ -105,7 +105,7 @@ export function SegurancaTab() {
                     </div>
                 </div>
 
-                <div className="mt-mx-lg pt-mx-md border-t border-gray-200 flex items-center justify-end">
+                <div className="mt-mx-lg pt-mx-md border-t border-border flex items-center justify-end">
                     <Button
                         onClick={handleChangePassword}
                         disabled={saving || !form.next || !form.confirm}
@@ -134,8 +134,8 @@ export function SegurancaTab() {
 
             {/* Sessões ativas */}
             <Card className="p-mx-lg border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-gray-200 shadow-none">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-border shadow-none">
                         <Smartphone size={26} />
                     </div>
                     <div>
@@ -145,7 +145,7 @@ export function SegurancaTab() {
                 </header>
 
                 <div className="space-y-mx-md">
-                    <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-gray-100">
+                    <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-border-subtle">
                         <div className="flex items-center gap-mx-sm">
                             <div className="w-mx-10 h-mx-10 rounded-mx-full bg-status-success/10 text-status-success flex items-center justify-center">
                                 <ShieldCheck size={18} />
@@ -170,7 +170,7 @@ export function SegurancaTab() {
 
             {/* 2FA placeholder */}
             <Card className="p-mx-lg border-none bg-white">
-                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
+                <header className="flex items-center gap-mx-sm pb-mx-md border-b border-border mb-mx-lg">
                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center border border-mx-indigo-100 shadow-none">
                         <ShieldCheck size={26} />
                     </div>

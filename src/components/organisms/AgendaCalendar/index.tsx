@@ -59,9 +59,9 @@ export function AgendaCalendar({
   const isTimeGrid = viewMode === 'day' || viewMode === 'week'
 
   return (
-    <Card className={cn('border border-gray-200 shadow-none bg-white overflow-hidden rounded-xl flex flex-col', className)}>
+    <Card className={cn('border border-border shadow-none bg-white overflow-hidden rounded-xl flex flex-col', className)}>
       {showNavigation && (
-        <div className="flex items-center justify-between gap-mx-xs p-mx-sm sm:p-mx-md border-b border-gray-200 bg-white">
+        <div className="flex items-center justify-between gap-mx-xs p-mx-sm sm:p-mx-md border-b border-border bg-white">
           <button
             type="button"
             onClick={onPrevMonth}
@@ -79,7 +79,7 @@ export function AgendaCalendar({
               <button
                 type="button"
                 onClick={onToday}
-                className="rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-gray-50 hover:text-foreground"
+                className="rounded-xl border border-border bg-white px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-gray-50 hover:text-foreground"
               >
                 Hoje
               </button>

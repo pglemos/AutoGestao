@@ -81,7 +81,7 @@ export function AgendaHeader({
   }
 
   return (
-    <InternalMxTemplateHeader className="flex shrink-0 flex-col gap-3 rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <InternalMxTemplateHeader className="flex shrink-0 flex-col gap-3 rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex flex-wrap items-center gap-3">
           <div className="flex items-center gap-1">
@@ -96,7 +96,7 @@ export function AgendaHeader({
             <button
               type="button"
               onClick={onTodayClick}
-              className="rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-xs font-bold text-foreground hover:bg-gray-50 transition-colors"
+              className="rounded-xl border border-border bg-white px-3 py-1.5 text-xs font-bold text-foreground hover:bg-gray-50 transition-colors"
             >
               Hoje
             </button>
@@ -122,7 +122,7 @@ export function AgendaHeader({
         <div className="flex flex-wrap items-center gap-2">
           <AgendaSearchBar searchQuery={searchQuery} onSearchChange={onSearchChange} />
 
-          <div className="flex rounded-xl border border-gray-200 bg-gray-50/60 p-0.5 shrink-0">
+          <div className="flex rounded-xl border border-border bg-gray-50/60 p-0.5 shrink-0">
             {VIEW_OPTIONS.map((option) => (
               <button
                 key={option.key}
@@ -151,7 +151,7 @@ export function AgendaHeader({
                   'relative flex h-8 items-center gap-1.5 rounded-xl border px-2.5 text-xs font-bold transition-colors',
                   activeFilters > 0
                     ? 'border-brand-primary bg-emerald-600/10 text-emerald-600'
-                    : 'border-gray-200 bg-white text-muted-foreground hover:bg-gray-50 hover:text-foreground',
+                    : 'border-border bg-white text-muted-foreground hover:bg-gray-50 hover:text-foreground',
                 )}
               >
                 <Filter size={14} />
@@ -168,10 +168,10 @@ export function AgendaHeader({
                 side="bottom"
                 align="end"
                 sideOffset={8}
-                className="z-[90] w-72 rounded-2xl border border-gray-200 bg-white p-4 shadow-xl animate-in fade-in-80"
+                className="z-[90] w-72 rounded-2xl border border-border bg-white p-4 shadow-xl animate-in fade-in-80"
               >
                 <div className="flex flex-col gap-3">
-                  <div className="flex items-center justify-between border-b border-gray-100 pb-2">
+                  <div className="flex items-center justify-between border-b border-border-subtle pb-2">
                     <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                       Filtros
                     </span>
@@ -215,7 +215,7 @@ export function AgendaHeader({
                             'rounded-xl px-2.5 py-1 text-xs font-medium transition-colors',
                             statusFilter === filter.key
                               ? 'bg-emerald-600 text-white font-bold'
-                              : 'border border-gray-200 bg-white text-muted-foreground hover:bg-gray-50',
+                              : 'border border-border bg-white text-muted-foreground hover:bg-gray-50',
                           )}
                         >
                           {filter.label}
@@ -250,7 +250,7 @@ export function AgendaHeader({
               <DropdownMenu.Content
                 align="end"
                 sideOffset={6}
-                className="z-[90] w-52 rounded-2xl border border-gray-200 bg-white p-1.5 shadow-xl animate-in fade-in-80"
+                className="z-[90] w-52 rounded-2xl border border-border bg-white p-1.5 shadow-xl animate-in fade-in-80"
               >
                 <DropdownMenu.Item
                   onSelect={onCreateVisit}

@@ -41,7 +41,7 @@ export function NotificacaoApprovalCard({
     >
       <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-mx-sm">
         <div className="flex items-start gap-mx-sm min-w-0">
-          <div className="h-mx-14 w-mx-14 overflow-hidden rounded-2xl border border-gray-200 bg-gray-50 shrink-0">
+          <div className="h-mx-14 w-mx-14 overflow-hidden rounded-2xl border border-border bg-gray-50 shrink-0">
             <ApprovalAvatar url={approval.avatar_url} name={approval.full_name} />
           </div>
           <div className="min-w-0">

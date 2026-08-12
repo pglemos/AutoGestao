@@ -86,7 +86,7 @@ export const CarteiraAtivaList: React.FC<CarteiraAtivaListProps> = ({
   return (
     <div className="w-full max-w-7xl mx-auto flex flex-col gap-5 p-4 md:p-6">
       {/* Topo / Barra de Ferramentas e Busca */}
-      <div className="bg-white rounded-xl border border-slate-200 shadow-sm p-4 md:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
+      <div className="bg-white rounded-xl border border-border shadow-sm p-4 md:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-blue-900" />
@@ -108,7 +108,7 @@ export const CarteiraAtivaList: React.FC<CarteiraAtivaListProps> = ({
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Buscar nome, tel, WhatsApp, veículo, placa..."
-            className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-blue-900 focus:bg-white transition-all"
+            className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-border rounded-lg text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-blue-900 focus:bg-white transition-all"
           />
           {searchTerm && (
             <button
@@ -140,11 +140,11 @@ export const CarteiraAtivaList: React.FC<CarteiraAtivaListProps> = ({
 
       {/* Lista de Cards — UMA COLUNA NO DESKTOP, EMPILHADO NO MOBILE */}
       {loading ? (
-        <div className="w-full bg-white rounded-xl border border-slate-200 p-12 text-center text-muted-foreground text-sm">
+        <div className="w-full bg-white rounded-xl border border-border p-12 text-center text-muted-foreground text-sm">
           Carregando oportunidades da carteira ativa...
         </div>
       ) : filteredAndSortedOportunidades.length === 0 ? (
-        <div className="w-full bg-white rounded-xl border border-slate-200 p-12 text-center flex flex-col items-center gap-3">
+        <div className="w-full bg-white rounded-xl border border-border p-12 text-center flex flex-col items-center gap-3">
           <Filter className="w-10 h-10 text-text-disabled" />
           <h3 className="text-base font-bold text-foreground">Nenhuma oportunidade encontrada</h3>
           <p className="text-xs text-muted-foreground max-w-md">

@@ -58,7 +58,7 @@ export function OwnerExecutiveSection({
         </div>
 
         <div className="mt-mx-md space-y-mx-sm">
-          <div className="rounded-xl border border-gray-100 bg-gray-50 p-mx-md">
+          <div className="rounded-xl border border-border-subtle bg-gray-50 p-mx-md">
             <Typography variant="caption" className="font-semibold">
               Unidades que exigem atenção
             </Typography>
@@ -83,7 +83,7 @@ export function OwnerExecutiveSection({
       </MxSectionCard>
 
       <MxSectionCard className="xl:col-span-8">
-        <div className="border-b border-gray-100 p-mx-md">
+        <div className="border-b border-border-subtle p-mx-md">
           <Typography as="h2" variant="h3" className="text-lg">
             Comparativo entre lojas
           </Typography>
@@ -109,7 +109,7 @@ export function OwnerExecutiveSection({
               <Link
                 key={store.id}
                 to={`/lojas/${slugify(store.name)}?id=${store.id}`}
-                className="group rounded-xl border border-gray-100 bg-white p-mx-md transition-colors hover:border-brand-primary hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/15"
+                className="group rounded-xl border border-border-subtle bg-white p-mx-md transition-colors hover:border-brand-primary hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/15"
               >
                 <div className="flex items-start justify-between gap-mx-sm">
                   <div className="min-w-0">

@@ -16,11 +16,11 @@ export function OverviewSection({ client }: Props) {
       <Card className="p-mx-lg bg-white border">
         <Typography variant="h3" className="mb-mx-md">Dados do Contrato</Typography>
         <div className="space-y-mx-md">
-          <div className="flex justify-between border-b border-gray-100 pb-mx-xs">
+          <div className="flex justify-between border-b border-border-subtle pb-mx-xs">
             <Typography variant="tiny" tone="muted" className="font-bold">Produto</Typography>
             <Typography variant="p" className="">{client.product_name || 'GESTAO PREDITIVA'}</Typography>
           </div>
-          <div className="flex justify-between border-b border-gray-100 pb-mx-xs">
+          <div className="flex justify-between border-b border-border-subtle pb-mx-xs">
             <Typography variant="tiny" tone="muted" className="font-bold">Modalidade</Typography>
             <Badge variant="outline">{client.modality || 'Presencial'}</Badge>
           </div>
@@ -36,11 +36,11 @@ export function OverviewSection({ client }: Props) {
       <Card className="p-mx-lg bg-white border">
         <Typography variant="h3" className="mb-mx-md">Performance Atual</Typography>
         <div className="space-y-mx-md">
-          <div className="flex justify-between border-b border-gray-100 pb-mx-xs">
+          <div className="flex justify-between border-b border-border-subtle pb-mx-xs">
             <Typography variant="p" className="font-bold">Vendas (Mês Ref)</Typography>
             <Typography variant="h3">{lastFin?.volume_vendas || 0} un</Typography>
           </div>
-          <div className="flex justify-between border-b border-gray-100 pb-mx-xs">
+          <div className="flex justify-between border-b border-border-subtle pb-mx-xs">
             <Typography variant="p" className="font-bold">Conversão Geral</Typography>
             <Typography variant="h3" className="text-status-success">{lastFin?.conversion_rate || 0}%</Typography>
           </div>

@@ -54,7 +54,7 @@ export function AgendaConfirmationMenu({
         <div
           role="menu"
           aria-label="Resultado da confirmação"
-          className="absolute right-0 top-full z-[130] mt-1 min-w-[208px] overflow-hidden rounded-xl border border-gray-100 bg-white py-1 shadow-xl"
+          className="absolute right-0 top-full z-[130] mt-1 min-w-[208px] overflow-hidden rounded-xl border border-border-subtle bg-white py-1 shadow-xl"
         >
           {CONFIRMATION_OUTCOMES.map((outcome) => (
             <button

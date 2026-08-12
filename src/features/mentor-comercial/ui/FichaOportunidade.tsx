@@ -105,7 +105,7 @@ export function FichaOportunidade({
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto bg-slate-50 font-sans text-foreground rounded-2xl shadow-xl border border-slate-200 overflow-hidden my-4">
+    <div className="w-full max-w-5xl mx-auto bg-slate-50 font-sans text-foreground rounded-2xl shadow-xl border border-border overflow-hidden my-4">
       {/* Structural Top Bar — Identity Sidebar Navy */}
       <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800">
         <div>
@@ -135,8 +135,8 @@ export function FichaOportunidade({
 
       <div className="p-6 space-y-6">
         {/* BLOCO 1: Cabeçalho da Oportunidade */}
-        <section className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-6">
-          <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-slate-100">
+        <section className="bg-white rounded-xl border border-border p-6 shadow-sm space-y-6">
+          <div className="flex flex-wrap items-start justify-between gap-4 pb-4 border-b border-border-subtle">
             <div>
               <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
                 Bloco 1 — Identificação
@@ -251,7 +251,7 @@ export function FichaOportunidade({
 
         {/* BLOCO 2: Próxima Ação Recomendada */}
         <section className="bg-white rounded-xl border-2 border-blue-600 p-6 shadow-sm space-y-4">
-          <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+          <div className="flex items-center justify-between pb-3 border-b border-border-subtle">
             <div>
               <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
                 Bloco 2 — Ação Requerida
@@ -269,7 +269,7 @@ export function FichaOportunidade({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
-            <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-1">
+            <div className="bg-slate-50 p-4 rounded-lg border border-border space-y-1">
               <span className="text-xs font-bold text-muted-foreground uppercase">Próximo Passo</span>
               <p className="font-bold text-foreground text-base">{nextAction.nextStep}</p>
               <p className="text-xs text-muted-foreground mt-1">
@@ -277,7 +277,7 @@ export function FichaOportunidade({
               </p>
             </div>
 
-            <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2 text-xs">
+            <div className="bg-slate-50 p-4 rounded-lg border border-border space-y-2 text-xs">
               <div className="flex justify-between">
                 <span className="text-muted-foreground">Vencimento da Ação:</span>
                 <span className="font-bold text-foreground">{formatDate(nextAction.nextActionAt)}</span>
@@ -294,7 +294,7 @@ export function FichaOportunidade({
                   {nextAction.scriptId ?? `Não resolvido (${nextAction.scriptReason})`}
                 </span>
               </div>
-              <div className="flex justify-between items-center pt-1 border-t border-slate-200">
+              <div className="flex justify-between items-center pt-1 border-t border-border">
                 <span className="text-muted-foreground">Entra na Central:</span>
                 <span className={`px-2 py-0.5 rounded font-semibold ${nextAction.centralAction ? 'bg-blue-100 text-blue-800' : 'bg-slate-200 text-foreground'}`}>
                   {nextAction.centralAction ? `Sim (${nextAction.centralRule ?? 'Regra'})` : 'Não'}
@@ -342,7 +342,7 @@ export function FichaOportunidade({
         </section>
 
         {/* BLOCO 3: O que Sabemos */}
-        <section className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <section className="bg-white rounded-xl border border-border p-6 shadow-sm space-y-4">
           <div>
             <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
               Bloco 3 — Fatos Confirmados
@@ -352,7 +352,7 @@ export function FichaOportunidade({
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
             {whatWeKnow.factsSummary.map((item, idx) => (
-              <div key={idx} className="bg-slate-50 p-3 rounded-lg border border-slate-200">
+              <div key={idx} className="bg-slate-50 p-3 rounded-lg border border-border">
                 <span className="text-muted-foreground block">{item.label}</span>
                 <span className="font-semibold text-foreground mt-1 block">{item.value}</span>
               </div>
@@ -367,7 +367,7 @@ export function FichaOportunidade({
               {Object.entries(whatWeKnow.qualityDetails).map(([key, val]) => {
                 const info = translatePillarQuality(val)
                 return (
-                  <div key={key} className="flex justify-between items-center bg-slate-50 p-2.5 rounded border border-slate-200">
+                  <div key={key} className="flex justify-between items-center bg-slate-50 p-2.5 rounded border border-border">
                     <span className="font-medium text-foreground capitalize">{key}:</span>
                     <span className={`px-2 py-0.5 rounded font-semibold ${info.badgeClass}`}>
                       {info.label}
@@ -380,7 +380,7 @@ export function FichaOportunidade({
         </section>
 
         {/* BLOCO 4: O que Falta para Evoluir */}
-        <section className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <section className="bg-white rounded-xl border border-border p-6 shadow-sm space-y-4">
           <div>
             <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
               Bloco 4 — Diagnóstico de Lacunas
@@ -424,7 +424,7 @@ export function FichaOportunidade({
               {whatIsMissing.missingPillars.length > 0 ? (
                 <div className="space-y-1.5">
                   {whatIsMissing.missingPillars.map((item: MissingPillarInfo) => (
-                    <div key={item.pillar} className="flex justify-between items-center bg-slate-50 p-2 rounded border border-slate-200">
+                    <div key={item.pillar} className="flex justify-between items-center bg-slate-50 p-2 rounded border border-border">
                       <span>{item.label}</span>
                       <span className="font-semibold text-rose-700">
                         -{item.missing} pt (Atual: {item.current}/{item.max})
@@ -440,7 +440,7 @@ export function FichaOportunidade({
 
           {/* Explicações determinísticas */}
           {whatIsMissing.explanations.length > 0 && (
-            <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs space-y-1">
+            <div className="bg-slate-50 p-3 rounded-lg border border-border text-xs space-y-1">
               <span className="font-bold text-foreground block">Notas Determinísticas do Mentor:</span>
               <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
                 {whatIsMissing.explanations.map((exp, i) => (
@@ -452,7 +452,7 @@ export function FichaOportunidade({
         </section>
 
         {/* BLOCO 5: Histórico */}
-        <section className="bg-white rounded-xl border border-slate-200 p-6 shadow-sm space-y-4">
+        <section className="bg-white rounded-xl border border-border p-6 shadow-sm space-y-4">
           <div>
             <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
               Bloco 5 — Registro de Atividades
@@ -469,7 +469,7 @@ export function FichaOportunidade({
           {history.entries.length > 0 ? (
             <div className="space-y-2">
               {history.entries.map((entry, index) => (
-                <div key={index} className="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
+                <div key={index} className="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-border text-xs">
                   <div>
                     <span className="font-bold text-foreground block">{entry.description}</span>
                     {entry.result && (

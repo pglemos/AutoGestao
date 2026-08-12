@@ -114,7 +114,7 @@ export function PDIsSection({ storeId, visits = [] }: Props) {
               </div>
             </div>
 
-            <div className="pt-mx-md border-t border-gray-100 grid grid-cols-2 gap-mx-md">
+            <div className="pt-mx-md border-t border-border-subtle grid grid-cols-2 gap-mx-md">
               <div className="space-y-mx-xs">
                 {pdi.seller_acknowledged_at ? (
                   <div className="flex items-center gap-mx-xs text-status-success">

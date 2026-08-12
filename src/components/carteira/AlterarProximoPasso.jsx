@@ -190,7 +190,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
                 className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl border transition-all flex items-start gap-2 ${
                   passo === p.label
                     ? "bg-[#005BFF] text-white border-[#005BFF]"
-                    : "bg-white text-muted-foreground border-slate-200 hover:border-blue-300 hover:bg-blue-50/50"
+                    : "bg-white text-muted-foreground border-border hover:border-blue-300 hover:bg-blue-50/50"
                 }`}
               >
                 <span className={`text-caption font-black shrink-0 mt-0.5 ${passo === p.label ? "text-blue-200" : "text-muted-foreground"}`}>{p.codigo}</span>
@@ -210,7 +210,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
               type="date"
               value={dataStr}
               onChange={e => setDataStr(e.target.value)}
-              className="w-full h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+              className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
             />
             <p className="text-caption text-muted-foreground mt-1">Ou digite só o dia: ex. 30</p>
           </div>
@@ -220,7 +220,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
               type="time"
               value={horario}
               onChange={e => setHorario(e.target.value)}
-              className="w-full h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+              className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
             />
           </div>
         </div>
@@ -232,7 +232,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
             value={objetivo}
             onChange={e => setObjetivo(e.target.value)}
             placeholder="Preenchido automaticamente..."
-            className="w-full h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+            className="w-full h-9 rounded-xl border border-border bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
           />
         </div>
 
@@ -246,7 +246,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
             onChange={e => setObservacao(e.target.value)}
             rows={2}
             placeholder={passo === "Pedir sinal de negócio" ? "Ex: sinal de R$ 2.000..." : "Detalhes adicionais..."}
-            className="w-full rounded-xl border border-slate-200 bg-white px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+            className="w-full rounded-xl border border-border bg-white px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
           />
         </div>
 

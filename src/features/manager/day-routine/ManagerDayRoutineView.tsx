@@ -123,7 +123,7 @@ const PRIORITY_STYLE: Record<ManagerRoutinePriority, {
     label: 'Agendada',
     color: 'text-muted-foreground',
     background: 'bg-gray-50',
-    border: 'border-gray-200',
+    border: 'border-border',
     marker: 'bg-gray-400',
   },
 }
@@ -142,7 +142,7 @@ const ICONS = {
   Plus,
 }
 
-const FIELD_CLASS = 'w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-foreground outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+const FIELD_CLASS = 'w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
 
 export function ManagerDayRoutineView({
   returnLink,
@@ -179,7 +179,7 @@ export function ManagerDayRoutineView({
   return (
     <div className="flex flex-col gap-5">
         {returnLink}
-        <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h1 className="text-xl font-bold text-foreground">Rotina do Dia</h1>
@@ -199,7 +199,7 @@ export function ManagerDayRoutineView({
                 type="button"
                 onClick={() => void onRefresh()}
                 disabled={refreshing}
-                className="flex h-[36px] items-center gap-1 rounded-xl border border-gray-200 bg-white px-3 text-sm font-medium text-foreground transition hover:bg-gray-50 disabled:cursor-wait disabled:opacity-60"
+                className="flex h-[36px] items-center gap-1 rounded-xl border border-border bg-white px-3 text-sm font-medium text-foreground transition hover:bg-gray-50 disabled:cursor-wait disabled:opacity-60"
               >
                 <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
                 Atualizar
@@ -208,8 +208,8 @@ export function ManagerDayRoutineView({
           </div>
         </section>
 
-        <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-          <div className="flex border-b border-gray-100" role="tablist" aria-label="Rotina do Dia">
+        <section className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
+          <div className="flex border-b border-border-subtle" role="tablist" aria-label="Rotina do Dia">
             <button
               type="button"
               role="tab"
@@ -377,7 +377,7 @@ function TodayRoutine({
       )}
 
       {!showOverdue && (
-        <div className="rounded-2xl border border-gray-100 bg-white p-3 shadow-sm">
+        <div className="rounded-2xl border border-border-subtle bg-white p-3 shadow-sm">
           <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
             <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0">
               {FILTERS.map(item => (
@@ -388,7 +388,7 @@ function TodayRoutine({
                   className={`whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                     filter === item.key
                       ? 'bg-emerald-600 text-white shadow-sm'
-                      : 'border border-gray-200 bg-white text-muted-foreground hover:bg-gray-50'
+                      : 'border border-border bg-white text-muted-foreground hover:bg-gray-50'
                   }`}
                 >
                   {item.label}
@@ -409,7 +409,7 @@ function TodayRoutine({
                 aria-label="Ordenar"
                 value={sort}
                 onChange={event => setSort(event.target.value as ManagerRoutineSort)}
-                className="rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                className="rounded-lg border border-border px-2.5 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 {SORTS.map(item => <option key={item.key} value={item.key}>{item.label}</option>)}
               </select>
@@ -430,7 +430,7 @@ function TodayRoutine({
       </div>
 
       {tasks.length === 0 ? (
-        <div className="rounded-2xl border border-gray-100 bg-white p-10 text-center shadow-sm">
+        <div className="rounded-2xl border border-border-subtle bg-white p-10 text-center shadow-sm">
           <CheckCircle2 className="mx-auto mb-3 h-10 w-10 text-emerald-300" />
           <p className="text-sm font-semibold text-muted-foreground">Nenhuma ação urgente no momento.</p>
           <p className="mt-1 text-xs text-muted-foreground">
@@ -523,7 +523,7 @@ function RoutineTaskCard({
                 className={`h-9 flex-1 rounded-lg px-3 text-xs font-medium transition lg:h-8 lg:flex-none ${
                   action.kind === 'acao'
                     ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                    : 'border border-gray-200 bg-white text-foreground hover:bg-gray-50'
+                    : 'border border-border bg-white text-foreground hover:bg-gray-50'
                 }`}
               >
                 {action.label}
@@ -562,7 +562,7 @@ function HistoryRoutine({
 
   return (
     <div className="space-y-4">
-      <div className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+      <div className="rounded-2xl border border-border-subtle bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-center gap-2">
           {([7, 15, 30] as const).map(value => (
             <button
@@ -588,7 +588,7 @@ function HistoryRoutine({
               aria-label="Data inicial"
               value={startDate}
               onChange={event => setStartDate(event.target.value)}
-              className="min-w-0 rounded-lg border border-gray-200 px-2 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+              className="min-w-0 rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
             />
             <span className="text-xs text-muted-foreground">até</span>
             <input
@@ -596,7 +596,7 @@ function HistoryRoutine({
               aria-label="Data final"
               value={endDate}
               onChange={event => setEndDate(event.target.value)}
-              className="min-w-0 rounded-lg border border-gray-200 px-2 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+              className="min-w-0 rounded-lg border border-border px-2 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
         </div>
@@ -607,14 +607,14 @@ function HistoryRoutine({
       ) : error ? (
         <RoutineNotice tone="error" title="Não foi possível carregar o histórico." description={error} />
       ) : groups.length === 0 ? (
-        <div className="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm">
+        <div className="rounded-2xl border border-border-subtle bg-white p-8 text-center shadow-sm">
           <p className="text-sm text-muted-foreground">Nenhuma atividade registrada no período.</p>
         </div>
       ) : (
         <div className="space-y-4">
           {groups.map(group => (
-            <section key={group.date} className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-              <header className="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-4 py-3">
+            <section key={group.date} className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
+              <header className="flex items-center justify-between border-b border-border-subtle bg-gray-50 px-4 py-3">
                 <h3 className="text-sm font-semibold text-foreground">
                   {formatShortDate(group.date)}
                   {group.isToday && <span className="ml-2 text-xs font-medium text-emerald-600">Hoje</span>}
@@ -721,7 +721,7 @@ function CreateActivityModal({
       }}
       footer={(
         <>
-          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-gray-200 px-3 text-sm text-foreground hover:bg-gray-50">
+          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-border px-3 text-sm text-foreground hover:bg-gray-50">
             Cancelar
           </button>
           <button
@@ -849,7 +849,7 @@ function CompleteActivityModal({
       referenceStyle
       footer={(
         <>
-          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-gray-200 px-3 text-sm text-foreground hover:bg-gray-50">
+          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-border px-3 text-sm text-foreground hover:bg-gray-50">
             Cancelar
           </button>
           <button
@@ -934,7 +934,7 @@ function RoutineNotice({
   description: string
 }) {
   return (
-    <div className={`rounded-2xl border bg-white p-8 text-center shadow-sm ${tone === 'error' ? 'border-red-200' : 'border-gray-100'}`}>
+    <div className={`rounded-2xl border bg-white p-8 text-center shadow-sm ${tone === 'error' ? 'border-red-200' : 'border-border-subtle'}`}>
       <p className={`text-sm font-semibold ${tone === 'error' ? 'text-red-700' : 'text-muted-foreground'}`}>{title}</p>
       <p className="mt-1 text-xs text-muted-foreground">{description}</p>
     </div>

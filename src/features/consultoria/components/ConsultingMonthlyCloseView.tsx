@@ -137,7 +137,7 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
           <div className="overflow-x-auto">
             <table className="w-full text-left">
               <thead>
-                <tr className="border-b border-gray-200">
+                <tr className="border-b border-border">
                   <th className="py-mx-sm pr-mx-md"><Typography variant="tiny" tone="muted">MÍDIA</Typography></th>
                   <th className="py-mx-sm pr-mx-md"><Typography variant="tiny" tone="muted">LEADS</Typography></th>
                   <th className="py-mx-sm pr-mx-md"><Typography variant="tiny" tone="muted">VENDAS</Typography></th>
@@ -146,7 +146,7 @@ export function ConsultingMonthlyCloseView({ clientId }: Props) {
               </thead>
               <tbody>
                 {summary.marketingRows.map((row) => (
-                  <tr key={`${row.reference_month}-${row.media}`} className="border-b border-gray-100">
+                  <tr key={`${row.reference_month}-${row.media}`} className="border-b border-border-subtle">
                     <td className="py-mx-sm pr-mx-md"><Typography variant="p" className="">{row.media}</Typography></td>
                     <td className="py-mx-sm pr-mx-md"><Typography variant="p">{formatNumber(row.leads_volume)}</Typography></td>
                     <td className="py-mx-sm pr-mx-md"><Typography variant="p">{formatNumber(row.sales_volume)}</Typography></td>

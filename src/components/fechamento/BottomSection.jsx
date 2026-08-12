@@ -300,9 +300,9 @@ export default function BottomSection({
     <div className="space-y-4">
       <div className="grid grid-cols-2 gap-5">
         {/* Resumo do Dia Anterior */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+        <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
           <p className="text-caption font-bold text-muted-foreground uppercase tracking-[0.15em] mb-4">Resumo do Dia Anterior</p>
-          <div className="flex items-start gap-2 divide-x divide-slate-100">
+          <div className="flex items-start gap-2 divide-x divide-border-subtle">
             <StatItem value={totalLeads} label="Leads Recebidos" color="text-[#005BFF]" />
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">
               <span className="text-h2 font-bold leading-none tabular-nums text-[#6D28D9]">{totalAtend}</span>
@@ -317,14 +317,14 @@ export default function BottomSection({
               <span className="text-caption text-[#64748B] text-center leading-tight font-medium">Vendas Realizadas</span>
             </div>
           </div>
-          <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
+          <div className="mt-3 pt-3 border-t border-border-subtle flex items-center justify-between">
             <span className="text-caption font-bold text-muted-foreground uppercase tracking-[0.12em]">Faturamento</span>
             <span className="text-[20px] font-bold tabular-nums text-[#22C55E]">{faturamentoStr}</span>
           </div>
         </div>
 
         {/* Disciplina */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex items-center gap-6">
+        <div className="bg-white rounded-2xl border border-border shadow-sm p-5 flex items-center gap-6">
           <div title="Você cadastrou todos os seus agendamentos. Para a Disciplina do Fechamento, apenas os D+1 são considerados." className="cursor-help">
             <DisciplineRing score={disciplineScore} size="lg" />
           </div>
@@ -381,7 +381,7 @@ export default function BottomSection({
       </div>
 
       {/* Finalizar */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-4">
+      <div className="bg-white rounded-2xl border border-border shadow-sm px-6 py-4">
         {/* Aviso de atraso (bloqueado, 09h31–12h00) */}
         {isBlocked && (
           <div className="flex items-start gap-3 bg-red-50 border border-red-200 rounded-xl px-4 py-3 mb-4">
@@ -428,7 +428,7 @@ export default function BottomSection({
 
         {/* Aviso: tudo bloqueado */}
         {jaFinalizado && d1Bloqueado && (
-          <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 mb-4">
+          <div className="flex items-center gap-2 bg-slate-50 border border-border rounded-xl px-4 py-2.5 mb-4">
             <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
             <p className="text-[12px] font-semibold text-muted-foreground">
               Fechamento de {dataExibicao} encerrado e consolidado.
@@ -491,7 +491,7 @@ export default function BottomSection({
             Até 09h30 de {d1DateExibicao}, você poderá corrigir somente as informações de{" "}
             <strong className="text-[#0F172A]">Agendamentos D+1</strong>.
           </p>
-          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-slate-100">
+          <div className="flex items-center justify-end gap-3 mt-5 pt-4 border-t border-border-subtle">
             <button
               onClick={() => setConfirmModalOpen(false)}
               className="px-5 py-2.5 text-body-sm font-semibold text-[#64748B] border border-[#E5E7EB] rounded-xl hover:bg-slate-50 transition-colors"

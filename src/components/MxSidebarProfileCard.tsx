@@ -89,7 +89,7 @@ export function MxSidebarProfileCard({
           role="menu"
           aria-label="Opções do perfil"
           className={cn(
-            'absolute z-[160] rounded-[16px] border border-gray-100 bg-white p-2 shadow-xl',
+            'absolute z-[160] rounded-[16px] border border-border-subtle bg-white p-2 shadow-xl',
             collapsed
               ? 'bottom-0 left-[calc(100%+10px)] w-64'
               : 'bottom-[calc(100%+10px)] left-0 right-0',
@@ -122,7 +122,7 @@ export function MxSidebarProfileCard({
         aria-label={`Abrir menu de usuário de ${displayName}`}
         onClick={() => setOpen((value) => !value)}
         className={cn(
-          'group flex min-h-14 w-full items-center gap-3 rounded-[16px] border border-gray-100 bg-gray-50/60 py-2 text-left outline-none transition-colors hover:border-emerald-100 hover:bg-emerald-50/60 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+          'group flex min-h-14 w-full items-center gap-3 rounded-[16px] border border-border-subtle bg-gray-50/60 py-2 text-left outline-none transition-colors hover:border-emerald-100 hover:bg-emerald-50/60 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
           collapsed ? 'justify-center px-0' : 'px-3.5',
         )}
       >

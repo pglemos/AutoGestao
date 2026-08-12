@@ -12,7 +12,7 @@ type Props = {
 
 export function StoreHeader({ isRefetching, onRefresh, onExport }: Props) {
   return (
-    <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10 shrink-0">
+    <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10 shrink-0">
       <div className="flex flex-col gap-mx-tiny">
         <div className="flex items-center gap-mx-sm">
           <div
@@ -37,7 +37,7 @@ export function StoreHeader({ isRefetching, onRefresh, onExport }: Props) {
         >
           <RefreshCw size={20} className={cn(isRefetching && 'animate-spin')} />
         </Button>
-        <div className="flex items-center gap-mx-xs px-6 h-mx-14 rounded-mx-full border border-gray-200 bg-white shadow-sm">
+        <div className="flex items-center gap-mx-xs px-6 h-mx-14 rounded-mx-full border border-border bg-white shadow-sm">
           <Calendar size={18} className="text-emerald-600" />
           <Typography variant="caption" className="">
             Ciclo {format(new Date(), 'yyyy')}

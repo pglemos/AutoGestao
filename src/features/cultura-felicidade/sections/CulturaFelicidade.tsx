@@ -24,7 +24,7 @@ const TIPO_TONE: Record<CulturaTipo, string> = {
   repescagem: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   campanha: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
   reconhecimento: 'border-status-success/30 bg-status-success-surface text-status-success',
-  feed_cultural: 'border-gray-200 bg-gray-50 text-muted-foreground',
+  feed_cultural: 'border-border bg-gray-50 text-muted-foreground',
 }
 
 type Props = {
@@ -116,7 +116,7 @@ export function CulturaFelicidade({ storeId }: Props) {
           </div>
         </header>
         {mediasUltimos3.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Sem ciclos registrados ainda.
             </Typography>
@@ -126,7 +126,7 @@ export function CulturaFelicidade({ storeId }: Props) {
             {mediasUltimos3.map((item) => (
               <li
                 key={item.ciclo}
-                className="rounded-2xl border border-gray-200 bg-white p-mx-sm text-center"
+                className="rounded-2xl border border-border bg-white p-mx-sm text-center"
               >
                 <Typography
                   variant="tiny"
@@ -160,7 +160,7 @@ export function CulturaFelicidade({ storeId }: Props) {
         </header>
 
         {registros.length === 0 ? (
-          <div className="rounded-xl border border-dashed border-gray-200 p-mx-md text-center">
+          <div className="rounded-xl border border-dashed border-border p-mx-md text-center">
             <Typography variant="tiny" tone="muted" className="font-bold">
               Nenhum registro de cultura cadastrado.
             </Typography>
@@ -226,7 +226,7 @@ export function CulturaFelicidade({ storeId }: Props) {
               </thead>
               <tbody>
                 {ciclos.map((c) => (
-                  <tr key={c.ciclo} className="border-t border-gray-200/60">
+                  <tr key={c.ciclo} className="border-t border-border/60">
                     <td className="px-mx-sm py-mx-xs font-bold uppercase tracking-widest">
                       {c.ciclo}
                     </td>
@@ -254,7 +254,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 function MediaCard({ label, value }: { label: string; value: number | null }) {
   const tone =
     value == null
-      ? 'border-gray-200 bg-gray-50 text-muted-foreground'
+      ? 'border-border bg-gray-50 text-muted-foreground'
       : value >= 8
         ? 'border-status-success/30 bg-status-success-surface text-status-success'
         : value >= 6

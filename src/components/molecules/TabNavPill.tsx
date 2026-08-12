@@ -30,7 +30,7 @@ export function TabNavPill<T extends string = string>({
   return (
     <nav
       className={cn(
-        'grid w-full max-w-full [grid-template-columns:repeat(auto-fit,minmax(6.75rem,1fr))] bg-white p-mx-tiny rounded-2xl border border-gray-200 shadow-sm gap-mx-tiny sm:flex sm:w-auto sm:flex-nowrap sm:rounded-mx-full',
+        'grid w-full max-w-full [grid-template-columns:repeat(auto-fit,minmax(6.75rem,1fr))] bg-white p-mx-tiny rounded-2xl border border-border shadow-sm gap-mx-tiny sm:flex sm:w-auto sm:flex-nowrap sm:rounded-mx-full',
         className
       )}
       role="tablist"

@@ -178,7 +178,7 @@ export function LeadConferenceModal({
 
   const footer = (
     <div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
-      <button type="button" className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-gray-200 bg-white px-3 text-sm font-medium text-foreground hover:bg-gray-50" onClick={() => void openHistory()}>
+      <button type="button" className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-border bg-white px-3 text-sm font-medium text-foreground hover:bg-gray-50" onClick={() => void openHistory()}>
         <History size={16} />
         Ver Histórico
       </button>
@@ -222,7 +222,7 @@ export function LeadConferenceModal({
                       event.target.value as LeadConferencePeriodType,
                     )
                   }
-                  className="h-10 min-w-[220px] rounded-[12px] border border-gray-200 bg-white px-3 text-sm text-foreground"
+                  className="h-10 min-w-[220px] rounded-[12px] border border-border bg-white px-3 text-sm text-foreground"
                 >
                   {Object.entries(LEAD_CONFERENCE_PERIOD_LABELS).map(
                     ([value, label]) => (
@@ -251,7 +251,7 @@ export function LeadConferenceModal({
                   />
                 </div>
               )}
-              <div className="rounded-[12px] border border-gray-200 bg-white px-3 py-2 text-sm text-muted-foreground">
+              <div className="rounded-[12px] border border-border bg-white px-3 py-2 text-sm text-muted-foreground">
                 Período:{" "}
                 <strong className="text-foreground">
                   {format(parseISO(period.start), "dd/MM/yyyy")} a{" "}
@@ -306,9 +306,9 @@ export function LeadConferenceModal({
               Nenhum vendedor ativo encontrado nesta unidade.
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-[16px] border border-gray-100">
+            <div className="overflow-x-auto rounded-[16px] border border-border-subtle">
               <table className="w-full text-sm min-w-[1120px]">
-                <thead className="bg-gray-50 border-b border-gray-100">
+                <thead className="bg-gray-50 border-b border-border-subtle">
                   <tr>
                     {[
                       "Vendedor",
@@ -373,7 +373,7 @@ export function LeadConferenceModal({
             {history.map((item) => (
               <article
                 key={item.id}
-                className="rounded-[12px] border border-gray-200 p-4"
+                className="rounded-[12px] border border-border p-4"
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div>
@@ -430,7 +430,7 @@ function PeriodInput({
         type="date"
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-10 rounded-[12px] border border-gray-200 bg-white px-3 text-sm"
+        className="h-10 rounded-[12px] border border-border bg-white px-3 text-sm"
       />
     </label>
   );
@@ -452,7 +452,7 @@ function ConferenceMetric({
         ? "border-emerald-200 bg-emerald-50"
       : tone === "orange"
         ? "border-orange-200 bg-orange-50"
-        : "border-gray-100 bg-white text-foreground";
+        : "border-border-subtle bg-white text-foreground";
   return (
     <div className={`rounded-[16px] border p-4 ${colors}`}>
       <p className="text-xs font-medium text-muted-foreground mb-1">{label}</p>
@@ -563,7 +563,7 @@ function OfficialInput({
         placeholder="—"
         value={value ?? ""}
         onChange={(event) => onChange(event.target.value)}
-        className="h-9 w-20 rounded-lg border border-gray-200 px-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="h-9 w-20 rounded-lg border border-border px-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
       />
     </td>
   );

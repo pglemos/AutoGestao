@@ -99,7 +99,7 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     for (const marker of [
       'bg-gray-50',
       'rounded-2xl',
-      'border-gray-100',
+      'border-border-subtle',
       'bg-white',
       'shadow-sm',
       'text-foreground',
@@ -116,7 +116,6 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     expect(managerPrimitives).toContain("from '@/components/module/MxModuleVisualPrimitives'")
     expect(universalPrimitives).not.toContain('bg-surface-alt')
     expect(universalPrimitives).not.toContain('rounded-mx-xl')
-    expect(universalPrimitives).not.toContain('border-border-subtle')
   })
 
   test('a matriz de gestão não tem mais escopo próprio — vale para todo perfil', () => {
@@ -158,7 +157,7 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
     expect(button).not.toContain('bg-mx-action')
     expect(button).toContain('bg-emerald-600')
     expect(button).toContain('hover:bg-emerald-700')
-    expect(button).toContain('border-gray-200')
+    expect(button).toContain('border-border')
     expect(universalPrimitives).not.toContain('ButtonVisualProvider')
   })
 

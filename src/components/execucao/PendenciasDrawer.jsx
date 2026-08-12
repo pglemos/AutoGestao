@@ -41,7 +41,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
               {pendencias.map(op => {
                 const atraso = moment().diff(moment(op.data_hora_execucao), "days");
                 return (
-                  <div key={op.id} className="bg-white border border-slate-200 rounded-2xl p-4 shadow-sm">
+                  <div key={op.id} className="bg-white border border-border rounded-2xl p-4 shadow-sm">
                     <div className="flex items-start gap-3">
                       <div className={`w-1.5 self-stretch rounded-full flex-shrink-0 ${TIPO_COLOR[op.tipo] || "bg-slate-400"}`} />
                       <div className="flex-1 min-w-0">
@@ -70,7 +70,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                           </a>
                           <a
                             href={`tel:${(op.telefone_snapshot || "").replace(/\D/g, "")}`}
-                            className="flex items-center gap-1 text-caption font-bold text-muted-foreground border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors"
+                            className="flex items-center gap-1 text-caption font-bold text-muted-foreground border border-border hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors"
                           >
                             <Phone className="w-3 h-3" /> Ligar
                           </a>
@@ -85,7 +85,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                         </Link>
                       )}
                       <button onClick={() => setReagendarTarget(op)}
-                        className="flex items-center gap-1 text-caption font-bold text-muted-foreground border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
+                        className="flex items-center gap-1 text-caption font-bold text-muted-foreground border border-border hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
                         <Calendar className="w-3 h-3" /> Reagendar
                       </button>
                       <button onClick={() => setResolverTarget(op)}

@@ -1,7 +1,7 @@
 import React from "react";
 
 const Item = ({ value, label, color }) => (
-  <div className="flex flex-col items-center bg-white rounded-2xl border border-slate-200 p-4 gap-1 flex-1 min-w-0">
+  <div className="flex flex-col items-center bg-white rounded-2xl border border-border p-4 gap-1 flex-1 min-w-0">
     <span className={`text-h2 font-bold tabular-nums leading-none ${color}`}>{value}</span>
     <span className="text-caption text-muted-foreground text-center leading-tight font-medium">{label}</span>
   </div>
@@ -15,7 +15,7 @@ export default function ResumoDiaMobile({
     : "R$ 0";
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 space-y-4">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-4 space-y-4">
       <p className="text-caption font-bold text-muted-foreground uppercase tracking-[0.15em]">Resumo do Dia</p>
 
       <div className="grid grid-cols-2 gap-3">

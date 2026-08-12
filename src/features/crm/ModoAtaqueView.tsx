@@ -36,7 +36,7 @@ const RESULTADOS_CARDS: ResultadoCard[] = [
 const COR_MAP: Record<ResultadoCard['cor'], string> = {
   green: 'bg-white border-green-200 hover:bg-green-50',
   red: 'bg-white border-red-200 hover:bg-red-50',
-  slate: 'bg-white border-slate-200 hover:bg-slate-50',
+  slate: 'bg-white border-border hover:bg-slate-50',
   blue: 'bg-white border-blue-200 hover:bg-blue-50',
   orange: 'bg-white border-amber-200 hover:bg-amber-50',
   teal: 'bg-white border-[#005BFF]/20 hover:bg-blue-50',
@@ -128,7 +128,7 @@ function OportunidadeCard({
   const tel = phoneDigits(cliente.telefone)
 
   return (
-    <div className="overflow-hidden rounded-3xl border border-slate-100 bg-white shadow-xl">
+    <div className="overflow-hidden rounded-3xl border border-border-subtle bg-white shadow-xl">
       <div className="bg-gradient-to-br from-[#005BFF] to-blue-700 p-6 text-white">
         <div className="flex items-center gap-4">
           <div className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl bg-white/20 text-xl font-bold">
@@ -160,7 +160,7 @@ function OportunidadeCard({
 
         <div className="grid grid-cols-3 gap-2">
           {tel && (
-            <a href={`tel:+55${tel}`} onClick={onLigar} className="flex flex-col items-center gap-1.5 rounded-2xl border border-slate-200 bg-white py-3 transition-colors hover:bg-slate-50">
+            <a href={`tel:+55${tel}`} onClick={onLigar} className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-white py-3 transition-colors hover:bg-slate-50">
               <Phone className="h-4 w-4 text-muted-foreground" />
               <span className="text-caption font-semibold text-muted-foreground">Ligar</span>
             </a>
@@ -171,7 +171,7 @@ function OportunidadeCard({
               <span className="text-caption font-semibold text-green-700">WhatsApp</span>
             </button>
           )}
-          <button type="button" onClick={onFicha} className="flex flex-col items-center gap-1.5 rounded-2xl border border-slate-200 bg-white py-3 transition-colors hover:bg-slate-50">
+          <button type="button" onClick={onFicha} className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-white py-3 transition-colors hover:bg-slate-50">
             <FileText className="h-4 w-4 text-muted-foreground" />
             <span className="text-caption font-semibold text-muted-foreground">Ficha</span>
           </button>
@@ -387,7 +387,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                       className={`rounded-xl border px-2.5 py-1 text-caption font-semibold transition-all ${
                         tom === t.id
                           ? 'border-[#005BFF] bg-[#005BFF] text-white'
-                          : 'border-slate-200 bg-white text-muted-foreground hover:border-blue-300 hover:text-[#005BFF]'
+                          : 'border-border bg-white text-muted-foreground hover:border-blue-300 hover:text-[#005BFF]'
                       }`}
                     >
                       {t.label}
@@ -399,22 +399,22 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                   value={script}
                   onChange={event => setScriptEditado(event.target.value)}
                   rows={5}
-                  className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 p-mx-sm text-sm text-foreground outline-none focus:border-[#005BFF] focus:ring-4 focus:ring-blue-100"
+                  className="w-full resize-none rounded-xl border border-border bg-slate-50 p-mx-sm text-sm text-foreground outline-none focus:border-[#005BFF] focus:ring-4 focus:ring-blue-100"
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-mx-xs">
                 {tel && (
-                  <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white py-mx-sm hover:bg-gray-50">
+                  <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 rounded-xl border border-border-subtle bg-white py-mx-sm hover:bg-gray-50">
                     <Phone size={16} className="text-muted-foreground" />
                     <Typography variant="caption" className="font-semibold">Ligar</Typography>
                   </a>
                 )}
-                <button type="button" onClick={handleCopiar} className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white py-mx-sm hover:bg-gray-50">
+                <button type="button" onClick={handleCopiar} className="flex flex-col items-center gap-1.5 rounded-xl border border-border-subtle bg-white py-mx-sm hover:bg-gray-50">
                   <Copy size={16} className="text-muted-foreground" />
                   <Typography variant="caption" className="font-semibold">Copiar</Typography>
                 </button>
-                <button type="button" onClick={() => onAbrirFicha(clienteAtual.id)} className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white py-mx-sm hover:bg-gray-50">
+                <button type="button" onClick={() => onAbrirFicha(clienteAtual.id)} className="flex flex-col items-center gap-1.5 rounded-xl border border-border-subtle bg-white py-mx-sm hover:bg-gray-50">
                   <FileText size={16} className="text-muted-foreground" />
                   <Typography variant="caption" className="font-semibold">Ficha</Typography>
                 </button>

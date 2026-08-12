@@ -71,7 +71,7 @@ export default function VendedorConfiguracoes() {
               </div>
             </div>
 
-            <div className="mt-mx-lg rounded-xl border border-gray-200 bg-gray-50 p-mx-md">
+            <div className="mt-mx-lg rounded-xl border border-border bg-gray-50 p-mx-md">
               <Typography variant="caption" className="">
                 Acesso
               </Typography>

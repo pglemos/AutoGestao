@@ -176,7 +176,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
 
   if (isMobile) {
     return (
-      <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${isVencido ? "border-red-200" : "border-slate-200"}`}>
+      <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden ${isVencido ? "border-red-200" : "border-border"}`}>
         <div className={`h-1 w-full ${TIPO_COLOR_BAR[op.tipo] || "bg-slate-300"}`} />
         <div className="p-4">
           <div className="flex items-start justify-between mb-2">
@@ -211,7 +211,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
             )}
             {tel && (
               <a href={`tel:${tel}`}
-                className="flex items-center gap-1 text-caption font-bold text-muted-foreground border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-lg transition-colors">
+                className="flex items-center gap-1 text-caption font-bold text-muted-foreground border border-border hover:bg-slate-50 px-3 py-1.5 rounded-lg transition-colors">
                 <Phone className="w-3 h-3" /> Ligar
               </a>
             )}
@@ -233,7 +233,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
 
   // Desktop
   return (
-    <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden flex group transition-shadow hover:shadow-md ${isVencido ? "border-red-200" : "border-slate-200"}`}>
+    <div className={`bg-white rounded-2xl border shadow-sm overflow-hidden flex group transition-shadow hover:shadow-md ${isVencido ? "border-red-200" : "border-border"}`}>
       <div className={`w-1.5 flex-shrink-0 ${TIPO_COLOR_BAR[op.tipo] || "bg-slate-300"}`} />
       <div className="flex items-center gap-4 px-5 py-4 flex-1 min-w-0">
         {/* Ícone e horário */}
@@ -534,7 +534,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[12px] font-bold transition-colors ${
                   ativo
                     ? "bg-[#005BFF] text-white border-[#005BFF]"
-                    : "bg-white text-muted-foreground border-slate-200 hover:border-[#005BFF] hover:text-[#005BFF]"
+                    : "bg-white text-muted-foreground border-border hover:border-[#005BFF] hover:text-[#005BFF]"
                 }`}>
                 {f.label}
                 <span className={`text-caption px-1.5 py-0.5 rounded-full font-bold ${ativo ? "bg-white/20 text-white" : "bg-slate-100 text-muted-foreground"}`}>
@@ -555,7 +555,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
           </div>
           <div className="flex items-center gap-2">
             <Select value={ordenar} onValueChange={setOrdenar}>
-              <SelectTrigger className="h-8 text-[12px] font-semibold border-slate-200 rounded-xl w-[148px]">
+              <SelectTrigger className="h-8 text-[12px] font-semibold border-border rounded-xl w-[148px]">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -574,14 +574,14 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
 
         {/* Lista */}
         {loadingOps ? (
-          <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-12 text-center">
-            <div className="w-6 h-6 border-4 border-slate-200 border-t-[#005BFF] rounded-full animate-spin mx-auto mb-3" />
+          <div className="bg-white rounded-2xl border border-border shadow-sm p-12 text-center">
+            <div className="w-6 h-6 border-4 border-border border-t-[#005BFF] rounded-full animate-spin mx-auto mb-3" />
             <p className="text-body-sm text-muted-foreground">Carregando oportunidades...</p>
           </div>
         ) : listaFiltrada.length === 0 ? (
           totalHoje === 0 ? (
             // Estado vazio completo
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-14 text-center">
+            <div className="bg-white rounded-2xl border border-border shadow-sm p-14 text-center">
               <div className="w-14 h-14 rounded-2xl bg-blue-50 flex items-center justify-center mx-auto mb-4">
                 <CheckCircle2 className="w-7 h-7 text-[#005BFF]" />
               </div>
@@ -597,7 +597,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                   </button>
                 )}
                 <Link to="/carteira"
-                  className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-muted-foreground border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                  className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">
                   <Users className="w-4 h-4" /> Abrir Carteira
                 </Link>
                 <button onClick={() => setNovaAtividade(true)}
@@ -608,7 +608,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
             </div>
           ) : (
             // Filtro sem resultados
-            <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-10 text-center">
+            <div className="bg-white rounded-2xl border border-border shadow-sm p-10 text-center">
               <Inbox className="w-10 h-10 text-slate-200 mx-auto mb-3" />
               <p className="text-body-sm text-muted-foreground">Nenhuma oportunidade do tipo <strong>{filtroTipo}</strong> para hoje.</p>
               <button onClick={() => setFiltroTipo("todos")} className="text-[12px] text-[#005BFF] font-bold mt-2 hover:underline">Ver todas</button>
@@ -622,7 +622,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
 
             {/* Todas resolvidas (quando tinha e agora zerou) */}
             {listaHoje.length > 0 && listaFiltrada.length === 0 && filtroTipo === "todos" && (
-              <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-10 text-center">
+              <div className="bg-white rounded-2xl border border-border shadow-sm p-10 text-center">
                 <CheckCircle2 className="w-10 h-10 text-[#005BFF] mx-auto mb-3" />
                 <p className="text-body font-bold text-[#0F172A] mb-1">Todas as oportunidades de hoje foram resolvidas.</p>
                 <p className="text-[12px] text-muted-foreground mb-5 max-w-sm mx-auto">
@@ -636,7 +636,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                     </button>
                   )}
                   <Link to="/carteira"
-                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-muted-foreground border border-slate-200 rounded-xl hover:bg-slate-50 transition-colors">
+                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-muted-foreground border border-border rounded-xl hover:bg-slate-50 transition-colors">
                     <Users className="w-4 h-4" /> Abrir Carteira
                   </Link>
                 </div>

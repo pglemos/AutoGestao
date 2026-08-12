@@ -193,7 +193,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
 
   return (
     <section className="space-y-4">
-      <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+      <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
           <div className="flex items-start gap-3">
             <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
@@ -208,7 +208,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-3 text-sm text-muted-foreground">
+            <span className="inline-flex h-10 items-center gap-2 rounded-xl border border-border px-3 text-sm text-muted-foreground">
               <Calendar size={14} />
               {formatReferenceDate(referenceDate)}
             </span>
@@ -269,8 +269,8 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
         ))}
       </section>
 
-      <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-        <div className="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
+      <article className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
+        <div className="flex flex-col gap-3 border-b border-border-subtle px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
             <h3 className="font-semibold text-foreground">Vendedores da unidade</h3>
             <p className="mt-1 text-xs text-muted-foreground">
@@ -289,7 +289,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[1120px] text-sm">
-            <thead className="border-b border-gray-100 bg-gray-50">
+            <thead className="border-b border-border-subtle bg-gray-50">
               <tr>
                 {['Vendedor', 'Fechamento', 'Leads', 'Agendamentos', 'Atendimentos', 'Vendas', 'Conferência', 'Última atividade'].map(label => (
                   <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -383,7 +383,7 @@ function SummaryCard({
     red: 'bg-red-50 text-red-600',
   }
   return (
-    <article className="flex min-h-28 items-start gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm">
+    <article className="flex min-h-28 items-start gap-3 rounded-2xl border border-border-subtle bg-white p-4 shadow-sm">
       <span className={`grid h-10 w-10 shrink-0 place-items-center rounded-xl ${styles[tone]}`}>
         <Icon size={20} />
       </span>
@@ -399,13 +399,13 @@ function SummaryCard({
 function OperationsSkeleton() {
   return (
     <section className="space-y-4" aria-busy="true" aria-label="Carregando acompanhamento da equipe">
-      <div className="h-28 animate-pulse rounded-2xl border border-gray-100 bg-white shadow-sm" />
+      <div className="h-28 animate-pulse rounded-2xl border border-border-subtle bg-white shadow-sm" />
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-4">
         {Array.from({ length: 4 }).map((_, index) => (
-          <div key={index} className="h-28 animate-pulse rounded-2xl border border-gray-100 bg-white shadow-sm" />
+          <div key={index} className="h-28 animate-pulse rounded-2xl border border-border-subtle bg-white shadow-sm" />
         ))}
       </div>
-      <div className="h-80 animate-pulse rounded-2xl border border-gray-100 bg-white shadow-sm" />
+      <div className="h-80 animate-pulse rounded-2xl border border-border-subtle bg-white shadow-sm" />
     </section>
   )
 }

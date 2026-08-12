@@ -46,7 +46,7 @@ function calcularQualidade(cliente) {
     return { label: "Precisa de informação", color: "bg-orange-50 text-orange-700 border-orange-200" };
   if (SITUACOES_ENCERRADAS_SEM_VENDA.includes(s))
     return { label: "Recuperação", color: "bg-red-50 text-red-700 border-red-200" };
-  return { label: "Nova oportunidade", color: "bg-slate-50 text-muted-foreground border-slate-200" };
+  return { label: "Nova oportunidade", color: "bg-slate-50 text-muted-foreground border-border" };
 }
 
 // ─── URGÊNCIA DA AÇÃO ─────────────────────────────────────────────────────────
@@ -71,7 +71,7 @@ function calcularUrgencia(cliente) {
     return { label: "Visita próxima", color: "bg-blue-50 text-blue-700 border-blue-200" };
   if (isAmanha(proxData) || isAmanha(visitaData))
     return { label: "Acompanhar amanhã", color: "bg-amber-50 text-amber-700 border-amber-200" };
-  return { label: "Sem urgência imediata", color: "bg-slate-50 text-muted-foreground border-slate-200" };
+  return { label: "Sem urgência imediata", color: "bg-slate-50 text-muted-foreground border-border" };
 }
 
 // ─── O QUE FALTA PARA EVOLUIR ────────────────────────────────────────────────
@@ -129,7 +129,7 @@ function FieldRow({ label, value, vazio = "Não informado" }) {
 function Bloco({ title, icon, children, defaultOpen = true }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="border border-slate-100 rounded-2xl overflow-hidden">
+    <div className="border border-border-subtle rounded-2xl overflow-hidden">
       <button
         onClick={() => setOpen(o => !o)}
         className="w-full flex items-center justify-between px-4 py-3 bg-slate-50 hover:bg-slate-100 transition-colors"
@@ -243,7 +243,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
       </div>
 
       {/* Dados de Venda & Entrega */}
-      <div className="grid grid-cols-2 gap-3 border-t border-slate-200 pt-3">
+      <div className="grid grid-cols-2 gap-3 border-t border-border pt-3">
         {campo("placa_veiculo", "Placa do Veículo", false, "text", "Ex: ABC-1234")}
         {campo("veiculo_comprado", "Veículo Comprado / Vendido", false, "text", "Ex: HB20 1.0 COMFORT 2024")}
         {campo("data_venda", "Data da Venda", false, "date")}
@@ -453,7 +453,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
       <DialogContent className="w-full sm:max-w-xl max-h-[90vh] overflow-y-auto p-0 flex flex-col">
         {loading ? (
           <div className="flex items-center justify-center h-48">
-            <div className="w-6 h-6 border-4 border-slate-200 border-t-[#005BFF] rounded-full animate-spin" />
+            <div className="w-6 h-6 border-4 border-border border-t-[#005BFF] rounded-full animate-spin" />
           </div>
         ) : !cliente ? (
           <div className="flex items-center justify-center h-48 text-muted-foreground text-sm">Cliente não encontrado.</div>
@@ -461,7 +461,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
           <div className="flex flex-col flex-1 overflow-y-auto">
 
             {/* ── BLOCO 1: CABEÇALHO ────────────────────────────────────── */}
-            <div className="px-5 pt-5 pb-4 border-b border-slate-100 space-y-3">
+            <div className="px-5 pt-5 pb-4 border-b border-border-subtle space-y-3">
               <div className="flex items-start gap-3">
                 <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-base font-black text-[#005BFF] shrink-0">
                   {iniciais}
@@ -483,7 +483,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
               {/* Situação + Temperatura */}
               <div className="flex flex-wrap gap-1.5">
                 <span className={`text-caption font-bold px-2.5 py-1 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura || "Morno"}</span>
-                <span className="text-caption font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-muted-foreground border border-slate-200">{situacao}</span>
+                <span className="text-caption font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-muted-foreground border border-border">{situacao}</span>
               </div>
 
               {/* Venda cancelada — motivo, data e responsável ficam visíveis
@@ -588,7 +588,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                       <Button
                         variant="outline"
                         onClick={() => abrirAlterarPasso(null)}
-                        className="rounded-xl text-sm border-slate-200 text-muted-foreground hover:bg-slate-50 gap-1.5"
+                        className="rounded-xl text-sm border-border text-muted-foreground hover:bg-slate-50 gap-1.5"
                       >
                         <Pencil className="w-3.5 h-3.5" /> Alterar próximo passo
                       </Button>
@@ -739,11 +739,11 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
             </div>
 
             {/* ── BARRA DE AÇÕES FIXA ────────────────────────────────────── */}
-            <div className="sticky bottom-0 bg-white border-t border-slate-100 px-5 py-3 flex gap-2">
+            <div className="sticky bottom-0 bg-white border-t border-border-subtle px-5 py-3 flex gap-2">
               <Button
                 variant="outline"
                 onClick={() => { setEditando(e => !e); if (editando) setForm(cliente); }}
-                className="rounded-xl text-sm gap-1.5 border-slate-200"
+                className="rounded-xl text-sm gap-1.5 border-border"
               >
                 <Edit2 className="w-3.5 h-3.5" /> {editando ? "Cancelar edição" : "Editar"}
               </Button>

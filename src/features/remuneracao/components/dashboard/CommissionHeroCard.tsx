@@ -24,7 +24,7 @@ export function CommissionHeroCard({
   detalhesVisiveis,
 }: Props) {
   return (
-    <div className="relative overflow-hidden rounded-2xl border border-gray-100 bg-white p-6 shadow-sm lg:p-8">
+    <div className="relative overflow-hidden rounded-2xl border border-border-subtle bg-white p-6 shadow-sm lg:p-8">
       <div className="relative flex flex-col justify-between gap-6 lg:flex-row lg:items-center">
         <div className="flex-1">
           <div className="mb-3 flex items-center gap-2">

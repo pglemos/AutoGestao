@@ -14,7 +14,7 @@ export function SkeletonList({ items = 5, className, showAvatar = true }: Skelet
   return (
     <div className={cn('w-full space-y-mx-xs', className)}>
       {Array.from({ length: items }).map((_, i) => (
-        <div key={i} className="flex items-center gap-mx-sm rounded-2xl border border-gray-200/40 p-mx-sm">
+        <div key={i} className="flex items-center gap-mx-sm rounded-2xl border border-border/40 p-mx-sm">
           {showAvatar && <Skeleton variant="avatar" />}
           <div className="flex-1 space-y-mx-xs">
             <Skeleton variant="text" className="h-mx-sm w-3/4" />

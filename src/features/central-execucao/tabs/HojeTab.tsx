@@ -79,7 +79,7 @@ export function HojeTab({
             aria-label="Ordenar atividades"
             value={order}
             onChange={event => setOrder(event.target.value as CentralOrder)}
-            className="h-8 w-[148px] rounded-xl border border-slate-200 bg-white px-3 text-[12px] font-semibold text-muted-foreground outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15"
+            className="h-8 w-[148px] rounded-xl border border-border bg-white px-3 text-[12px] font-semibold text-muted-foreground outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15"
           >
             <option value="prioridade">Prioridade</option>
             <option value="horario">Horário</option>

@@ -24,7 +24,7 @@ export default function PeriodFilter({ value, onChange, customStart, customEnd, 
     <div className="relative" ref={ref}>
       <button
         onClick={() => setOpen(v => !v)}
-        className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors shadow-sm ${dark ? "bg-white/5 border border-white/10 text-text-disabled hover:bg-white/10" : "bg-white border border-slate-200 text-foreground hover:bg-slate-50"}`}
+        className={`flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors shadow-sm ${dark ? "bg-white/5 border border-white/10 text-text-disabled hover:bg-white/10" : "bg-white border border-border text-foreground hover:bg-slate-50"}`}
       >
         <Calendar className="w-4 h-4 text-muted-foreground" />
         {selected?.label}
@@ -32,7 +32,7 @@ export default function PeriodFilter({ value, onChange, customStart, customEnd, 
       </button>
 
       {open && (
-        <div className={`absolute right-0 mt-2 w-56 rounded-xl border shadow-xl z-50 py-2 ${dark ? "bg-[#0B1D2E] border-white/10" : "bg-white border-slate-100"}`}>
+        <div className={`absolute right-0 mt-2 w-56 rounded-xl border shadow-xl z-50 py-2 ${dark ? "bg-[#0B1D2E] border-white/10" : "bg-white border-border-subtle"}`}>
           {OPTIONS.map(opt => (
             <button
               key={opt.value}
@@ -43,16 +43,16 @@ export default function PeriodFilter({ value, onChange, customStart, customEnd, 
             </button>
           ))}
           {value === "personalizado" && (
-            <div className="px-4 py-3 border-t border-slate-100 space-y-2">
+            <div className="px-4 py-3 border-t border-border-subtle space-y-2">
               <div>
                 <label className="text-xs text-muted-foreground">De</label>
                 <input type="date" value={customStart || ""} onChange={e => onCustomStart(e.target.value)}
-                  className="w-full mt-1 border border-slate-200 rounded-lg px-2 py-1.5 text-sm" />
+                  className="w-full mt-1 border border-border rounded-lg px-2 py-1.5 text-sm" />
               </div>
               <div>
                 <label className="text-xs text-muted-foreground">Até</label>
                 <input type="date" value={customEnd || ""} onChange={e => onCustomEnd(e.target.value)}
-                  className="w-full mt-1 border border-slate-200 rounded-lg px-2 py-1.5 text-sm" />
+                  className="w-full mt-1 border border-border rounded-lg px-2 py-1.5 text-sm" />
               </div>
               <button onClick={() => setOpen(false)} className="w-full bg-mx-blue text-white rounded-lg py-1.5 text-sm font-medium mt-1">
                 Aplicar

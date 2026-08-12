@@ -58,7 +58,7 @@ export function AgendaSidebar({
           type="button"
           onClick={onToggleCollapse}
           title="Expandir painel lateral"
-          className="flex h-8 w-8 items-center justify-center rounded-xl border border-gray-200 bg-white text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors shadow-2xs"
+          className="flex h-8 w-8 items-center justify-center rounded-xl border border-border bg-white text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors shadow-2xs"
         >
           <PanelLeftOpen size={16} />
         </button>
@@ -93,7 +93,7 @@ export function AgendaSidebar({
       />
 
       {/* Status Filters - Compact */}
-      <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-2xs">
+      <div className="rounded-2xl border border-border bg-white p-3 shadow-2xs">
         <h4 className="text-caption font-bold uppercase tracking-wider text-muted-foreground mb-2">
           Status
         </h4>
@@ -132,7 +132,7 @@ export function AgendaSidebar({
 
       {/* Consultant Filter - Collapsible */}
       {canViewAllAgendas && consultants.length > 0 && (
-        <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-2xs">
+        <div className="rounded-2xl border border-border bg-white p-3 shadow-2xs">
           <button
             type="button"
             onClick={() => setConsultantsExpanded(!consultantsExpanded)}

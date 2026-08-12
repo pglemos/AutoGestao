@@ -297,7 +297,7 @@ function frasePreview(stepId, ctx, acoesDia) {
 function ProspeccaoCard({ acao, onVerComoFazer }) {
   const Icon = TIPO_ICONS[acao.tipo] || Zap;
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4 flex flex-col gap-3">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-4 flex flex-col gap-3">
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-blue-50 flex items-center justify-center flex-shrink-0">
@@ -549,7 +549,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
           const instrucoesDinamicas = getInstrucoes(step);
 
           return (
-            <div key={step.id} className={`bg-white rounded-2xl border shadow-sm transition-all ${isCurrent ? "border-[#005BFF] shadow-blue-100" : "border-slate-200"}`}>
+            <div key={step.id} className={`bg-white rounded-2xl border shadow-sm transition-all ${isCurrent ? "border-[#005BFF] shadow-blue-100" : "border-border"}`}>
               <button
                 className="w-full flex items-center gap-4 px-5 py-4 text-left"
                 onClick={() => handleToggleStep(step.id)}
@@ -574,7 +574,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
               </button>
 
               {isExpanded && (
-                <div className="px-5 pb-5 border-t border-slate-100">
+                <div className="px-5 pb-5 border-t border-border-subtle">
                   {/* Título contextual para Foco do Dia */}
                   {step.id === "motivacao" && (
                     <p className="text-[12px] font-bold text-[#005BFF] mt-3 mb-1 uppercase tracking-wider">
@@ -615,7 +615,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                       <div className="flex flex-wrap gap-2 mb-4">
                         {OBJECOES.map(o => (
                           <button key={o.label} onClick={() => setObjecaoAberta(objecaoAberta === o.label ? null : o.label)}
-                            className={`px-3 py-1.5 text-[12px] font-bold rounded-xl border transition-colors ${objecaoAberta === o.label ? "bg-[#005BFF] text-white border-[#005BFF]" : "border-slate-200 text-muted-foreground hover:bg-slate-50"}`}>
+                            className={`px-3 py-1.5 text-[12px] font-bold rounded-xl border transition-colors ${objecaoAberta === o.label ? "bg-[#005BFF] text-white border-[#005BFF]" : "border-border text-muted-foreground hover:bg-slate-50"}`}>
                             {o.label}
                           </button>
                         ))}
@@ -669,7 +669,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
       </div>
 
       {/* Timeline sidebar */}
-      <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 sticky top-6">
+      <div className="bg-white rounded-2xl border border-border shadow-sm p-5 sticky top-6">
         <p className="text-caption font-bold text-muted-foreground uppercase tracking-[0.15em] mb-4">Linha do Tempo</p>
         <div className="space-y-0.5">
           {[...routineSteps].sort((a, b) => stepTime(a) - stepTime(b)).map((step, idx, arr) => {

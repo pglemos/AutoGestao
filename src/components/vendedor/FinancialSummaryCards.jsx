@@ -6,7 +6,7 @@ function SummaryCard({ icon: IconComp, iconColor, iconBg, label, value, sub }) {
   const Icon = IconComp;
   const isZero = !value || value === 0;
   return (
-    <div className="bg-white rounded-2xl p-5 border border-slate-100 shadow-sm hover:shadow-md transition-shadow">
+    <div className="bg-white rounded-2xl p-5 border border-border-subtle shadow-sm hover:shadow-md transition-shadow">
       <div className="flex items-start justify-between mb-3">
         <div className={`w-10 h-10 rounded-xl ${iconBg} flex items-center justify-center`}>
           <Icon className={`w-5 h-5 ${iconColor}`} />

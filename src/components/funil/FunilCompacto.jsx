@@ -10,7 +10,7 @@ export default function FunilCompacto({ titulo, subtitulo, cor, etapas, conversa
   const c = COR[cor] || COR.blue;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-2xl border border-border shadow-sm overflow-hidden">
       {/* Header */}
       <div className={`px-4 py-3 border-b flex items-center justify-between ${c.header}`}>
         <div>

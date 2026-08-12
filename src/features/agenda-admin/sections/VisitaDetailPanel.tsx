@@ -27,7 +27,7 @@ export function VisitaDetailPanel({
 }: VisitaDetailPanelProps) {
   return (
     <Card className="border-none bg-white overflow-hidden">
-      <div className="p-mx-md border-b border-gray-200 flex items-center justify-between">
+      <div className="p-mx-md border-b border-border flex items-center justify-between">
         <Typography variant="caption" className="">
           {selectedDate
             ? format(selectedDate, "dd 'de' MMMM", { locale: ptBR })
@@ -81,7 +81,7 @@ export function VisitaDetailPanel({
                   to={`/consultoria/clientes/${visit.client_slug}/visitas/${visit.visit_number}`}
                   className="block"
                 >
-                  <div className="p-mx-sm rounded-xl border border-gray-200 hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-all group overflow-hidden">
+                  <div className="p-mx-sm rounded-xl border border-border hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-all group overflow-hidden">
                     <div className="flex items-center gap-mx-xs mb-1">
                       <div className={cn('w-2 h-2 rounded-mx-full', getVisitDotColor(visit.status))} />
                       <Typography variant="tiny" className="">
@@ -133,7 +133,7 @@ export function VisitaDetailPanel({
                   key={event.id}
                   type="button"
                   onClick={() => onEditEvent(event)}
-                  className="w-full text-left p-mx-sm rounded-xl border border-gray-200 hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-all group overflow-hidden"
+                  className="w-full text-left p-mx-sm rounded-xl border border-border hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-all group overflow-hidden"
                 >
                   <div className="flex items-center gap-mx-xs mb-1">
                     <CalendarDays size={12} className="text-emerald-600 shrink-0" />

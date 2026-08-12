@@ -82,7 +82,7 @@ export default function DisciplinaMobile({
   const d1WindowOpen = dailyClose?.finalizado && dailyClose?.ajustes_d1_permitidos !== false;
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-4">
       <p className="text-caption font-bold text-muted-foreground uppercase tracking-[0.15em] mb-4">Disciplina — Fechamento Diário</p>
 
       <div className="flex items-start gap-4">

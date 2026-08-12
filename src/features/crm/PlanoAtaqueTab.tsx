@@ -244,7 +244,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         </div>
 
         {listaCompativeis.length === 0 ? (
-          <div className="bg-white border border-slate-100 rounded-2xl p-10 text-center">
+          <div className="bg-white border border-border-subtle rounded-2xl p-10 text-center">
             <p className="text-sm font-bold text-muted-foreground">Nenhum cliente compatível encontrado.</p>
             <p className="text-xs text-muted-foreground mt-1">Verifique os veículos de interesse registrados na carteira.</p>
           </div>
@@ -254,7 +254,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
               {listaCompativeis.length} cliente{listaCompativeis.length !== 1 ? 's' : ''} compatível{listaCompativeis.length !== 1 ? 'eis' : ''}
             </p>
             {listaCompativeis.map(cliente => (
-              <div key={cliente.id} className="bg-white border border-slate-100 rounded-xl px-4 py-3 flex items-center gap-3">
+              <div key={cliente.id} className="bg-white border border-border-subtle rounded-xl px-4 py-3 flex items-center gap-3">
                 <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-blue-50 text-xs font-bold text-[#005BFF]">
                   {(cliente.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                 </span>
@@ -267,7 +267,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                 <button
                   type="button"
                   onClick={() => onAbrirFicha(cliente.id)}
-                  className="rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-[#005BFF] hover:bg-blue-50"
+                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-[#005BFF] hover:bg-blue-50"
                 >
                   Ficha
                 </button>
@@ -291,7 +291,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
           <ArrowLeft className="h-4 w-4" /> Voltar ao Plano de Ataque
         </button>
 
-        <div className="bg-white border border-slate-100 rounded-2xl p-6 space-y-4">
+        <div className="bg-white border border-border-subtle rounded-2xl p-6 space-y-4">
           <div className="flex items-start gap-4">
             <span className="text-3xl">{missao.icone}</span>
             <div className="flex-1">
@@ -316,7 +316,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         </div>
 
         {missao.contextos.length === 0 ? (
-          <div className="bg-white border border-slate-100 rounded-2xl p-10 text-center">
+          <div className="bg-white border border-border-subtle rounded-2xl p-10 text-center">
             <p className="text-sm font-bold text-muted-foreground">Nenhum cliente nesta missão no momento.</p>
           </div>
         ) : (
@@ -330,7 +330,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                   ? `https://wa.me/55${tel}?text=${encodeURIComponent(progresso.etapaAtual.script({ cliente: ctx.cliente.nome.split(' ')[0], vendedor: vendedorNome }))}`
                   : null
                 return (
-                  <div key={ctx.cliente.id} className="bg-white border border-slate-100 rounded-xl px-4 py-3 flex items-center gap-3">
+                  <div key={ctx.cliente.id} className="bg-white border border-border-subtle rounded-xl px-4 py-3 flex items-center gap-3">
                     <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-blue-50 text-xs font-bold text-[#005BFF]">
                       {(ctx.cliente.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                     </span>
@@ -354,7 +354,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                     <button
                       type="button"
                       onClick={() => onAbrirFicha(ctx.cliente.id)}
-                      className="shrink-0 rounded-lg border border-slate-200 px-3 py-1.5 text-xs font-bold text-[#005BFF] hover:bg-blue-50"
+                      className="shrink-0 rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-[#005BFF] hover:bg-blue-50"
                     >
                       Ficha
                     </button>
@@ -411,7 +411,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         <p className="text-sm text-muted-foreground mt-1">Missões calculadas a partir das situações reais da sua carteira.</p>
       </div>
 
-      <div className="bg-white border border-slate-100 rounded-2xl p-5 space-y-4">
+      <div className="bg-white border border-border-subtle rounded-2xl p-5 space-y-4">
         <div className="flex items-start justify-between gap-3">
           <div>
             <h2 className="text-lg font-bold text-foreground">Veículos que chegaram</h2>
@@ -420,7 +420,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
           <button
             type="button"
             onClick={() => setModalOpen(true)}
-            className="flex h-10 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-muted-foreground transition-colors hover:bg-slate-50 shrink-0"
+            className="flex h-10 items-center gap-1.5 rounded-xl border border-border bg-white px-4 text-sm font-bold text-muted-foreground transition-colors hover:bg-slate-50 shrink-0"
           >
             <Plus size={16} /> Registrar veículo
           </button>
@@ -441,7 +441,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                   className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all ${
                     ativo
                       ? 'bg-[#005BFF] text-white shadow-sm'
-                      : 'bg-slate-50 text-muted-foreground border border-slate-100 hover:bg-slate-100'
+                      : 'bg-slate-50 text-muted-foreground border border-border-subtle hover:bg-slate-100'
                   }`}
                 >
                   {f.label} ({count})
@@ -454,7 +454,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         {loading ? (
           <p className="text-sm text-muted-foreground">Carregando veículos...</p>
         ) : veiculosFiltrados.length === 0 ? (
-          <div className="bg-slate-50 border border-slate-100 rounded-2xl p-10 text-center">
+          <div className="bg-slate-50 border border-border-subtle rounded-2xl p-10 text-center">
             <Car className="mx-auto text-text-disabled" size={28} />
             <p className="mt-3 text-sm font-bold text-muted-foreground">
               {veiculos.length === 0
@@ -484,7 +484,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
             {veiculosFiltrados.map(veiculo => {
               const compat = clientesCompativeis(clientes, oportunidadePorCliente, veiculo).length
               return (
-                <div key={veiculo.id} className="bg-white border border-slate-100 rounded-2xl p-4 space-y-3">
+                <div key={veiculo.id} className="bg-white border border-border-subtle rounded-2xl p-4 space-y-3">
                   <div className="flex items-start gap-3">
                     <span className="w-10 h-10 shrink-0 grid place-items-center rounded-xl bg-blue-50 text-[#005BFF]">
                       <Car size={20} />
@@ -535,7 +535,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                 key={missao.id}
                 type="button"
                 onClick={() => count > 0 && setMissaoSelecionada(missao)}
-                className={`text-left p-4 rounded-2xl border bg-white transition-all border-slate-100 ${count > 0 ? 'hover:border-[#005BFF] hover:shadow-sm cursor-pointer' : 'opacity-40 cursor-not-allowed'}`}
+                className={`text-left p-4 rounded-2xl border bg-white transition-all border-border-subtle ${count > 0 ? 'hover:border-[#005BFF] hover:shadow-sm cursor-pointer' : 'opacity-40 cursor-not-allowed'}`}
               >
                 <div className="flex items-start justify-between gap-2 mb-3">
                   <span className="text-2xl">{missao.icone}</span>
@@ -603,7 +603,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvar }: { onClose: () => void; onS
 
   return (
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Registrar veículo que chegou">
-      <div className="w-full max-w-[440px] space-y-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-mx-2xl">
+      <div className="w-full max-w-[440px] space-y-4 rounded-2xl border border-border-subtle bg-white p-6 shadow-mx-2xl">
         <div className="flex items-center justify-between">
           <p className="text-lg font-bold text-foreground">Registrar veículo que chegou</p>
           <button type="button" onClick={onClose} aria-label="Fechar"><X size={18} className="text-muted-foreground" /></button>
@@ -620,7 +620,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvar }: { onClose: () => void; onS
         </div>
         <FormField label="Observação (opcional)" value={observacao} onChange={e => setObservacao(e.target.value)} placeholder="Baixo km, único dono..." />
         <div className="flex gap-3 pt-2">
-          <button type="button" onClick={onClose} className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-muted-foreground hover:bg-slate-50">Cancelar</button>
+          <button type="button" onClick={onClose} className="flex-1 rounded-xl border border-border px-4 py-2.5 text-sm font-bold text-muted-foreground hover:bg-slate-50">Cancelar</button>
           <button
             type="button"
             disabled={!marca.trim() || !modelo.trim() || saving}

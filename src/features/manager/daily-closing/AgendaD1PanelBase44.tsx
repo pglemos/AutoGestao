@@ -494,7 +494,7 @@ export function AgendaD1Panel({
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder="Buscar (cliente, veículo, horário)..."
-                  className="h-11 w-full rounded-xl border border-gray-200 bg-white pl-9 pr-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-11 w-full rounded-xl border border-border bg-white pl-9 pr-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </label>
             </div>
@@ -531,9 +531,9 @@ export function AgendaD1Panel({
               </div>
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-2xl border border-gray-100">
+            <div className="overflow-x-auto rounded-2xl border border-border-subtle">
               <table className="w-full min-w-[1120px] text-sm">
-                <thead className="border-b border-gray-100 bg-gray-50">
+                <thead className="border-b border-border-subtle bg-gray-50">
                   <tr>
                     {[
                       "Horário",
@@ -556,7 +556,7 @@ export function AgendaD1Panel({
                     ))}
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-100 bg-white">
+                <tbody className="divide-y divide-border-subtle bg-white">
                   {visible.map((row) => {
                     const lastContact = row.cliente
                       ? lastContactByCliente.get(row.cliente.id) ||
@@ -683,7 +683,7 @@ function FilterSelect({
         aria-label={label}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+        className="h-11 w-full rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
       >
         {children}
       </select>
@@ -747,7 +747,7 @@ function ConfirmationDialog({
                   : current,
               )
             }
-            className="h-11 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+            className="h-11 w-full rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
           >
             {CONFIRMATION_OUTCOMES.map((outcome) => (
               <option key={outcome} value={outcome}>
@@ -770,7 +770,7 @@ function ConfirmationDialog({
             }
             rows={3}
             placeholder="Observações gerenciais (opcional)..."
-            className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full resize-none rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </label>
 

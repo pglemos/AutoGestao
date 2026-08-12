@@ -22,7 +22,7 @@ export function TabNav<T extends string = string>({
   return (
     <nav
       className={cn(
-        'flex flex-wrap gap-mx-xs border-b border-gray-100 mb-mx-md overflow-visible',
+        'flex flex-wrap gap-mx-xs border-b border-border-subtle mb-mx-md overflow-visible',
         className
       )}
       role="tablist"

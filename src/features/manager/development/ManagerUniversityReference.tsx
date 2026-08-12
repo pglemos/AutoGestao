@@ -160,7 +160,7 @@ export function ManagerUniversityReference({
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5">
         <UniversityHeader />
 
-        <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+        <section className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
           <UniversityTabs tab={tab} onTabChange={onTabChange} />
           {loading ? (
             <LoadingState />
@@ -229,7 +229,7 @@ export function buildTeamRows(teamProgress: TeamProgress, trainingCount: number)
 
 function UniversityHeader() {
   return (
-    <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <div className="flex flex-col items-stretch gap-3 md:flex-row md:items-center">
         <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
           <GraduationCap size={20} />
@@ -258,7 +258,7 @@ function UniversityTabs({
   ]
 
   return (
-    <nav className="flex border-b border-gray-100" role="tablist" aria-label="Universidade MX">
+    <nav className="flex border-b border-border-subtle" role="tablist" aria-label="Universidade MX">
       {tabs.map(item => (
         <button
           key={item.key}
@@ -331,7 +331,7 @@ function CatalogTrackGrid({
 }) {
   if (!tracks.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-gray-200 py-14 text-center text-sm text-muted-foreground">
+      <div className="rounded-2xl border border-dashed border-border py-14 text-center text-sm text-muted-foreground">
         Nenhuma trilha corresponde à busca.
       </div>
     )
@@ -342,7 +342,7 @@ function CatalogTrackGrid({
       {tracks.map(track => (
         <article
           key={track.id}
-          className={`flex flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm ${track.comingSoon ? 'opacity-60' : ''}`}
+          className={`flex flex-col rounded-2xl border border-border-subtle bg-white p-5 shadow-sm ${track.comingSoon ? 'opacity-60' : ''}`}
         >
           <div className="flex items-start justify-between">
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
@@ -401,7 +401,7 @@ export function OfficialTrainingGrid({
                 : 'Abra o conteúdo para concluir'
 
           return (
-            <article key={training.id} className="flex flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+            <article key={training.id} className="flex flex-col rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
               <div className="flex items-start justify-between">
                 <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
                   <BookOpen size={18} />
@@ -527,7 +527,7 @@ function InstitutionalContentForm({
   'suggestions' | 'institutionalForm' | 'setInstitutionalForm' | 'onCreateInstitutionalContent' | 'savingInstitutional'
 >) {
   return (
-    <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+    <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
       <h2 className="font-semibold text-foreground">Conteúdo institucional</h2>
       <p className="mt-1 text-xs text-muted-foreground">História, valores, cultura e processos da loja.</p>
       <form onSubmit={onCreateInstitutionalContent} className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-3">
@@ -548,7 +548,7 @@ function InstitutionalContentForm({
           value={institutionalForm.description}
           onChange={event => setInstitutionalForm(previous => ({ ...previous, description: event.target.value }))}
           placeholder="Descrição do conteúdo"
-          className="min-h-20 rounded-xl border border-gray-200 p-3 text-sm lg:col-span-3"
+          className="min-h-20 rounded-xl border border-border p-3 text-sm lg:col-span-3"
         />
       </form>
       {suggestions.length > 0 && (
@@ -640,7 +640,7 @@ function UniversityTeamTable({
 }) {
   if (!teamRows.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-gray-200 py-14 text-center text-sm text-muted-foreground">
+      <div className="rounded-2xl border border-dashed border-border py-14 text-center text-sm text-muted-foreground">
         Nenhum vendedor vinculado para acompanhamento.
       </div>
     )
@@ -648,9 +648,9 @@ function UniversityTeamTable({
 
   const hasOfficialContent = allTrainings.length > 0
   return (
-    <div className="overflow-x-auto rounded-2xl border border-gray-100 bg-white shadow-sm">
+    <div className="overflow-x-auto rounded-2xl border border-border-subtle bg-white shadow-sm">
       <table className="w-full min-w-[820px] text-sm">
-        <thead className="border-b border-gray-100 bg-gray-50">
+        <thead className="border-b border-border-subtle bg-gray-50">
           <tr>
             {['Vendedor', 'Unidade', 'Trilha Atual', 'Progresso', 'Status', 'Ações'].map(label => (
               <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
@@ -771,7 +771,7 @@ export function AssignTrainingDialog({
             type="button"
             disabled={isAssigning}
             onClick={() => void onAssignTraining(training.id)}
-            className="flex w-full items-center justify-between rounded-xl border border-gray-200 p-3 text-left text-sm hover:border-emerald-300 hover:bg-emerald-50"
+            className="flex w-full items-center justify-between rounded-xl border border-border p-3 text-left text-sm hover:border-emerald-300 hover:bg-emerald-50"
           >
             <span>{training.title}</span>
             <Send size={15} className="text-emerald-600" />
@@ -780,7 +780,7 @@ export function AssignTrainingDialog({
         <button
           type="button"
           onClick={onClose}
-          className="mt-4 w-full rounded-xl border border-gray-200 py-2 text-sm font-medium text-foreground"
+          className="mt-4 w-full rounded-xl border border-border py-2 text-sm font-medium text-foreground"
         >
           Cancelar
         </button>
@@ -820,7 +820,7 @@ export function CatalogTrackDialog({
         <button
           type="button"
           onClick={onClose}
-          className="w-full rounded-xl border border-gray-200 py-2 text-sm font-medium text-foreground"
+          className="w-full rounded-xl border border-border py-2 text-sm font-medium text-foreground"
         >
           Fechar
         </button>
@@ -870,7 +870,7 @@ export function TeamTrainingDetailDialog({
       <button
         type="button"
         onClick={onClose}
-        className="mt-5 w-full rounded-xl border border-gray-200 py-2 text-sm font-medium text-foreground"
+        className="mt-5 w-full rounded-xl border border-border py-2 text-sm font-medium text-foreground"
       >
         Fechar
       </button>

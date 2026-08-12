@@ -66,7 +66,7 @@ export const ScoreBandBadge = React.forwardRef<HTMLSpanElement, ScoreBandBadgePr
         role="status"
         aria-label={ariaLabel}
         className={cn(
-          'inline-flex items-center rounded-full font-bold border border-gray-200 bg-white',
+          'inline-flex items-center rounded-full font-bold border border-border bg-white',
           sizeClasses[size],
           className
         )}

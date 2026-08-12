@@ -26,7 +26,7 @@ export function DevelopmentTeamCompetencyMap({ open, pdis, onClose }: { open: bo
         <div className="space-y-4">
           {competencies.map((item) => {
             const intensity = Math.min(100, Math.round(item.averageGap * 20))
-            return <div key={item.name} className="rounded-xl border border-gray-100 p-4"><div className="mb-2 flex items-center justify-between gap-3"><span className="font-medium text-foreground">{item.name}</span><span className="text-xs text-muted-foreground">Gap médio {item.averageGap.toFixed(1)}</span></div><MxProgress value={intensity} tone={intensity > 60 ? 'danger' : intensity > 30 ? 'warning' : 'success'} /></div>
+            return <div key={item.name} className="rounded-xl border border-border-subtle p-4"><div className="mb-2 flex items-center justify-between gap-3"><span className="font-medium text-foreground">{item.name}</span><span className="text-xs text-muted-foreground">Gap médio {item.averageGap.toFixed(1)}</span></div><MxProgress value={intensity} tone={intensity > 60 ? 'danger' : intensity > 30 ? 'warning' : 'success'} /></div>
           })}
         </div>
       ) : <MxEmptyState icon={MapIcon} title="Mapa ainda sem dados" description="As competências aparecem após a equipe possuir avaliações de PDI." />}

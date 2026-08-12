@@ -22,7 +22,7 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
   const filtered = filter === 'todos' ? recommendations : recommendations.filter(item => item.level === filter)
 
   return (
-    <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm" data-tour="mentor-recomendacoes" aria-labelledby="mentor-rules-title">
+    <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm" data-tour="mentor-recomendacoes" aria-labelledby="mentor-rules-title">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <h2 id="mentor-rules-title" className="flex items-center gap-1.5 font-semibold text-foreground">
           <ListChecks size={18} className="text-emerald-600" />
@@ -40,7 +40,7 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
               className={`rounded-lg border px-3 py-1 text-xs font-medium transition-all ${
                 filter === item.key
                   ? 'border-gray-800 bg-gray-800 text-white'
-                  : 'border-gray-100 bg-gray-50 text-muted-foreground hover:bg-gray-100'
+                  : 'border-border-subtle bg-gray-50 text-muted-foreground hover:bg-gray-100'
               }`}
             >
               {item.label}

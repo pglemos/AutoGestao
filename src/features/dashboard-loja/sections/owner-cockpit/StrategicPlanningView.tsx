@@ -62,7 +62,7 @@ export function StrategicPlanningView({
           <Typography variant="p" tone="muted" className="mt-mx-xs">Acompanhe metas, resultados e evolução dos principais indicadores da empresa.</Typography>
         </div>
 
-        <div className="inline-flex rounded-2xl border border-gray-100 bg-white p-0.5 shadow-sm">
+        <div className="inline-flex rounded-2xl border border-border-subtle bg-white p-0.5 shadow-sm">
           <button type="button" onClick={() => setTab('resumo')} className={cn('flex h-mx-10 items-center gap-mx-xs rounded-xl px-mx-md text-sm', tab === 'resumo' ? 'bg-status-success-surface font-bold text-emerald-600' : 'text-muted-foreground')}><BarChart3 size={16} /> Resumo</button>
           <button type="button" onClick={() => setTab('visao-geral')} className={cn('flex h-mx-10 items-center gap-mx-xs rounded-xl px-mx-md text-sm', tab === 'visao-geral' ? 'bg-status-success-surface font-bold text-emerald-600' : 'text-muted-foreground')}><List size={16} /> Visão Geral</button>
         </div>
@@ -71,8 +71,8 @@ export function StrategicPlanningView({
           <>
             <Card className="border bg-white p-mx-sm">
               <div className="flex flex-col gap-mx-sm lg:flex-row lg:items-center">
-                <label className="flex min-w-0 flex-1 items-center gap-mx-xs rounded-xl border border-gray-100 bg-white px-mx-sm text-sm"><Table2 size={15} className="text-muted-foreground" /><select aria-label="Indicador estratégico" value={selected.code} onChange={event => setSelectedCode(event.target.value)} className="h-mx-10 min-w-0 flex-1 bg-transparent outline-none"><option value={selected.code}>{selected.label}</option>{filtered.filter(indicator => indicator.code !== selected.code).map(indicator => <option key={indicator.code} value={indicator.code}>{indicator.label}</option>)}</select></label>
-                <label className="flex items-center gap-mx-xs rounded-xl border border-gray-100 bg-white px-mx-sm text-sm"><Filter size={15} className="text-muted-foreground" /><select aria-label="Área estratégica" value={area} onChange={event => { setArea(event.target.value); setSelectedCode('') }} className="h-mx-10 bg-transparent outline-none"><option value="all">Todas as áreas</option>{areas.map(value => <option key={value} value={value}>{departmentLabel(value)}</option>)}</select></label>
+                <label className="flex min-w-0 flex-1 items-center gap-mx-xs rounded-xl border border-border-subtle bg-white px-mx-sm text-sm"><Table2 size={15} className="text-muted-foreground" /><select aria-label="Indicador estratégico" value={selected.code} onChange={event => setSelectedCode(event.target.value)} className="h-mx-10 min-w-0 flex-1 bg-transparent outline-none"><option value={selected.code}>{selected.label}</option>{filtered.filter(indicator => indicator.code !== selected.code).map(indicator => <option key={indicator.code} value={indicator.code}>{indicator.label}</option>)}</select></label>
+                <label className="flex items-center gap-mx-xs rounded-xl border border-border-subtle bg-white px-mx-sm text-sm"><Filter size={15} className="text-muted-foreground" /><select aria-label="Área estratégica" value={area} onChange={event => { setArea(event.target.value); setSelectedCode('') }} className="h-mx-10 bg-transparent outline-none"><option value="all">Todas as áreas</option>{areas.map(value => <option key={value} value={value}>{departmentLabel(value)}</option>)}</select></label>
                 <div className="flex items-center gap-mx-xs text-mx-tiny text-muted-foreground"><span className="rounded-mx-full bg-gray-50 px-mx-sm py-mx-xs">Dados do período atual</span><button type="button" onClick={exportCsv} className="inline-flex items-center gap-mx-xs px-mx-xs font-bold text-muted-foreground"><Download size={15} /> Exportar</button><Button type="button" size="sm" onClick={() => navigate(`/dono/plano-acao?indicator=${encodeURIComponent(selected.code)}`)}><PlusCircle size={15} /> Criar Plano de Ação</Button></div>
               </div>
             </Card>
@@ -88,7 +88,7 @@ export function StrategicPlanningView({
             </Card>
 
             <Card className="overflow-hidden border bg-white p-0">
-              <div className="border-b border-gray-100 px-mx-md py-mx-sm"><Typography variant="h3" className="text-base font-bold">Comparativo mensal</Typography><Typography variant="tiny" tone="muted">Meta, resultado, score e ano anterior — exibindo somente valores disponíveis na fonte real.</Typography></div>
+              <div className="border-b border-border-subtle px-mx-md py-mx-sm"><Typography variant="h3" className="text-base font-bold">Comparativo mensal</Typography><Typography variant="tiny" tone="muted">Meta, resultado, score e ano anterior — exibindo somente valores disponíveis na fonte real.</Typography></div>
               <div className="overflow-x-auto"><table className="min-w-[1048px] w-full text-sm"><thead><tr className="bg-gray-50 text-left text-mx-tiny font-bold text-muted-foreground"><th className="px-mx-sm py-mx-sm">Comparativo</th>{MONTHS.map((label, index) => <th key={label} className={cn('px-mx-sm py-mx-sm text-center', index === month && 'bg-emerald-600/5 text-emerald-600')}>{label}</th>)}<th className="px-mx-sm py-mx-sm text-center">Período atual</th></tr></thead><tbody><PlanningRow label="Meta" value={selected.meta == null ? null : selected.meta} unit={selected.unit} month={month} /><PlanningRow label="Resultado Atual" value={selected.realizado == null ? null : selected.realizado} unit={selected.unit} month={month} /><PlanningRow label="Score" value={selected.score} unit="score" month={month} /><PlanningRow label="Ano Anterior" value={selected.anoAnterior} unit={selected.unit} month={month} /></tbody></table></div>
             </Card>
 
@@ -107,5 +107,5 @@ function PlanningSummary({ label, value }: { label: string; value: string }) {
 }
 
 function PlanningRow({ label, value, unit, month }: { label: string; value: number | null | undefined; unit: CentralMxIndicatorValue['unit']; month: number }) {
-  return <tr className="border-t border-gray-100"><td className="px-mx-sm py-mx-sm font-bold text-muted-foreground">{label}</td>{MONTHS.map((name, index) => <td key={name} className={cn('px-mx-sm py-mx-sm text-center tabular-nums', index === month && 'bg-emerald-600/5 font-bold text-emerald-600')}>{index === month ? formatPlanningValue(value, unit) : '—'}</td>)}<td className="px-mx-sm py-mx-sm text-center font-bold tabular-nums">{formatPlanningValue(value, unit)}</td></tr>
+  return <tr className="border-t border-border-subtle"><td className="px-mx-sm py-mx-sm font-bold text-muted-foreground">{label}</td>{MONTHS.map((name, index) => <td key={name} className={cn('px-mx-sm py-mx-sm text-center tabular-nums', index === month && 'bg-emerald-600/5 font-bold text-emerald-600')}>{index === month ? formatPlanningValue(value, unit) : '—'}</td>)}<td className="px-mx-sm py-mx-sm text-center font-bold tabular-nums">{formatPlanningValue(value, unit)}</td></tr>
 }

@@ -112,7 +112,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
               <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">{label}</p>
               <input
                 value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder}
-                className="w-full h-9 rounded-xl border border-slate-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+                className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
               />
             </div>
           ))}
@@ -124,7 +124,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
               ? "border-green-200 bg-green-50 text-green-800"
               : ambigua
                 ? "border-amber-200 bg-amber-50 text-amber-800"
-                : "border-slate-200 bg-slate-50 text-muted-foreground"
+                : "border-border bg-slate-50 text-muted-foreground"
           }`}>
           {classificacao ? (
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
@@ -144,14 +144,14 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
             <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Preço (opcional)</p>
             <input
               type="number" value={form.preco} onChange={e => set("preco", e.target.value)} placeholder="Ex: 120000"
-              className="w-full h-9 rounded-xl border border-slate-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+              className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
             />
           </div>
           <div>
             <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Data de entrada</p>
             <input
               type="date" value={form.data_entrada} onChange={e => set("data_entrada", e.target.value)}
-              className="w-full h-9 rounded-xl border border-slate-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+              className="w-full h-9 rounded-xl border border-border px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
             />
           </div>
         </div>
@@ -161,7 +161,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
           <textarea
             value={form.observacao} onChange={e => set("observacao", e.target.value)} rows={2}
             placeholder="Ex: baixo km, único dono..."
-            className="w-full rounded-xl border border-slate-200 px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+            className="w-full rounded-xl border border-border px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
           />
         </div>
 
@@ -183,7 +183,7 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
   const entradaLabel = diasAtras === 0 ? "Entrou hoje" : diasAtras === 1 ? "Entrou ontem" : `Entrou há ${diasAtras} dias`;
 
   return (
-    <div className="bg-white border border-slate-100 rounded-2xl p-4 space-y-3 hover:shadow-sm transition-all">
+    <div className="bg-white border border-border-subtle rounded-2xl p-4 space-y-3 hover:shadow-sm transition-all">
       <div className="flex items-start gap-3">
         <div className="w-10 h-10 rounded-xl bg-blue-50 flex items-center justify-center shrink-0">
           <Car className="w-5 h-5 text-[#005BFF]" />
@@ -253,7 +253,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
       </div>
 
       {lista.length === 0 ? (
-        <div className="bg-white border border-slate-100 rounded-2xl p-10 text-center">
+        <div className="bg-white border border-border-subtle rounded-2xl p-10 text-center">
           <p className="text-3xl mb-2">🔍</p>
           <p className="text-sm font-semibold text-muted-foreground">Nenhum cliente compatível encontrado.</p>
           <p className="text-xs text-muted-foreground mt-1">Verifique os veículos de interesse registrados na carteira.</p>
@@ -267,7 +267,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
             const temUrgente = ["Visita hoje", "Em negociação ativa", "Proposta enviada", "Financiamento aprovado sem compra"].includes(situacao);
 
             return (
-              <div key={c.id} className="bg-white border border-slate-100 rounded-2xl px-4 py-3 flex items-center gap-3">
+              <div key={c.id} className="bg-white border border-border-subtle rounded-2xl px-4 py-3 flex items-center gap-3">
                 <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center text-xs font-black text-[#005BFF] shrink-0">{iniciais}</div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
@@ -289,7 +289,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
                     <Zap className="w-3 h-3" /> Executar
                   </button>
                   <button onClick={() => onFicha(c.id)}
-                    className="text-caption font-bold text-muted-foreground border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
+                    className="text-caption font-bold text-muted-foreground border border-border hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
                     Ficha
                   </button>
                 </div>
@@ -415,7 +415,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
                 className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all ${
                   ativo
                     ? "bg-[#005BFF] text-white shadow-sm"
-                    : "bg-slate-50 text-muted-foreground border border-slate-100 hover:bg-slate-100"
+                    : "bg-slate-50 text-muted-foreground border border-border-subtle hover:bg-slate-100"
                 }`}
               >
                 {f.label} ({count})
@@ -427,10 +427,10 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
 
       {loading ? (
         <div className="flex justify-center py-8">
-          <div className="w-6 h-6 border-2 border-slate-200 border-t-[#005BFF] rounded-full animate-spin" />
+          <div className="w-6 h-6 border-2 border-border border-t-[#005BFF] rounded-full animate-spin" />
         </div>
       ) : veiculosFiltrados.length === 0 ? (
-        <div className="bg-white border border-slate-100 rounded-2xl p-8 text-center">
+        <div className="bg-white border border-border-subtle rounded-2xl p-8 text-center">
           <p className="text-3xl mb-2">🚗</p>
           <p className="text-sm font-semibold text-muted-foreground">
             {veiculos.length === 0

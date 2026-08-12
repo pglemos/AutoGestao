@@ -93,7 +93,7 @@ function DataGridInner<T extends { id: string | number }>({
         </Typography>
         <table className={cn('w-full border-collapse text-left', effectiveMinWidth)}>
           <thead className={cn(stickyHeader && 'sticky top-0 z-20')}>
-            <tr className={'border-b border-gray-100 bg-gray-50'}>
+            <tr className={'border-b border-border-subtle bg-gray-50'}>
               {columns.filter((col) => !col.mobileOnly).map((col) => (
                 <th
                   key={col.key}
@@ -109,7 +109,7 @@ function DataGridInner<T extends { id: string | number }>({
               ))}
             </tr>
           </thead>
-          <MotionList as="tbody" className={'divide-y divide-gray-100 bg-white'}>
+          <MotionList as="tbody" className={'divide-y divide-border-subtle bg-white'}>
             <AnimatePresence mode="popLayout">
               {data.map((item, idx) => (
                 <MotionRow
@@ -154,7 +154,7 @@ function DataGridInner<T extends { id: string | number }>({
               onClick={() => onRowClick?.(item)}
             >
               <Card className={cn(
-                'border border-gray-100 p-4 shadow-sm',
+                'border border-border-subtle p-4 shadow-sm',
                 onRowClick && 'active:scale-[0.98] transition-all',
               )}>
                 <div className={'space-y-3'}>
@@ -163,7 +163,7 @@ function DataGridInner<T extends { id: string | number }>({
                       key={`${item.id}-mob-${col.key}`}
                       className={cn(
                         'flex flex-col gap-1',
-                        cIdx === 0 && ('mb-3 border-b border-gray-100 pb-3'),
+                        cIdx === 0 && ('mb-3 border-b border-border-subtle pb-3'),
                       )}
                     >
                       {cIdx > 0 && (

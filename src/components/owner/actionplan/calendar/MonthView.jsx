@@ -26,7 +26,7 @@ function EventCard({ action, provided, isDragging }) {
       {...provided?.draggableProps}
       {...provided?.dragHandleProps}
       className={`mb-1 rounded border-l-2 bg-white px-1.5 py-1 text-xs shadow-sm transition-shadow ${
-        deptStyle.border || "border-slate-200"
+        deptStyle.border || "border-border"
       } ${late ? "border-l-red-500" : ""} ${isDragging ? "shadow-md opacity-70" : ""} cursor-grab hover:shadow-md`}
       title={`${action.code} — ${action.title}`}
     >

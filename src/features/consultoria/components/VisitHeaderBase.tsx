@@ -27,7 +27,7 @@ export function VisitHeaderBase({ data, onChange, clientName }: Props) {
       </div>
 
       <div className="relative z-10">
-        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-mx-md mb-mx-lg border-b border-gray-100 pb-mx-md">
+        <div className="flex flex-col lg:flex-row lg:items-start justify-between gap-mx-md mb-mx-lg border-b border-border-subtle pb-mx-md">
           <div className="min-w-0">
             <Typography variant="tiny" tone="muted" className="mb-0 block opacity-60">Identificação do Cliente</Typography>
             <Typography variant="h1" className="text-2xl sm:text-3xl lg:text-4xl leading-tight break-words">
@@ -37,19 +37,19 @@ export function VisitHeaderBase({ data, onChange, clientName }: Props) {
           <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-mx-md w-full lg:w-auto">
             <div className="space-y-mx-xs">
               <Typography variant="tiny" tone="muted" className="font-bold">Consultor</Typography>
-              <Input aria-label="Consultor" id="header-consultant" name="header-consultant" value={data.consultant_name} onChange={e => onChange({ consultant_name: e.target.value })} className="h-mx-10 bg-gray-50/50 border border-gray-100 focus:bg-white focus:border-brand-primary font-bold transition-all shadow-sm" />
+              <Input aria-label="Consultor" id="header-consultant" name="header-consultant" value={data.consultant_name} onChange={e => onChange({ consultant_name: e.target.value })} className="h-mx-10 bg-gray-50/50 border border-border-subtle focus:bg-white focus:border-brand-primary font-bold transition-all shadow-sm" />
             </div>
             <div className="space-y-mx-xs">
               <Typography variant="tiny" tone="muted" className="font-bold">Data</Typography>
-              <Input aria-label="Data" id="header-date" name="header-date" type="date" value={data.visit_date} onChange={e => onChange({ visit_date: e.target.value })} className="h-mx-10 bg-gray-50/50 border border-gray-100 focus:bg-white focus:border-brand-primary font-bold transition-all shadow-sm" />
+              <Input aria-label="Data" id="header-date" name="header-date" type="date" value={data.visit_date} onChange={e => onChange({ visit_date: e.target.value })} className="h-mx-10 bg-gray-50/50 border border-border-subtle focus:bg-white focus:border-brand-primary font-bold transition-all shadow-sm" />
             </div>
             <div className="space-y-mx-xs">
               <Typography variant="tiny" tone="muted" className="font-bold">Tempo</Typography>
-              <Input aria-label="Tempo" id="header-time" name="header-time" value={data.tempo} onChange={e => onChange({ tempo: e.target.value })} className="h-mx-10 bg-gray-50/50 border border-gray-100 focus:bg-white focus:border-brand-primary font-bold transition-all shadow-sm" />
+              <Input aria-label="Tempo" id="header-time" name="header-time" value={data.tempo} onChange={e => onChange({ tempo: e.target.value })} className="h-mx-10 bg-gray-50/50 border border-border-subtle focus:bg-white focus:border-brand-primary font-bold transition-all shadow-sm" />
             </div>
             <div className="space-y-mx-xs">
               <Typography variant="tiny" tone="muted" className="font-bold">Alvo</Typography>
-              <Input aria-label="Alvo" id="header-target" name="header-target" value={data.alvo} onChange={e => onChange({ alvo: e.target.value })} className="h-mx-10 bg-gray-50/50 border border-gray-100 focus:bg-white focus:border-brand-primary font-bold transition-all shadow-sm" />
+              <Input aria-label="Alvo" id="header-target" name="header-target" value={data.alvo} onChange={e => onChange({ alvo: e.target.value })} className="h-mx-10 bg-gray-50/50 border border-border-subtle focus:bg-white focus:border-brand-primary font-bold transition-all shadow-sm" />
             </div>
           </div>
         </div>
@@ -63,11 +63,11 @@ export function VisitHeaderBase({ data, onChange, clientName }: Props) {
             <Typography variant="tiny" className="text-brand-secondary text-mx-tiny">Projeção</Typography>
             <Input aria-label="Projeção" id="header-projection" name="header-projection" value={data.projecao} onChange={e => onChange({ projecao: e.target.value })} className="bg-transparent border-none p-mx-0 text-2xl font-bold text-brand-secondary focus-visible:ring-0" />
           </div>
-          <div className="space-y-mx-xs p-mx-md bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
+          <div className="space-y-mx-xs p-mx-md bg-gray-50 rounded-2xl border border-border shadow-sm">
             <Typography variant="tiny" className="text-mx-tiny">Leads (Mês)</Typography>
             <Input aria-label="Leads (Mês)" id="header-leads" name="header-leads" value={data.leads_mes} onChange={e => onChange({ leads_mes: e.target.value })} className="bg-transparent border-none p-mx-0 text-2xl font-bold text-foreground focus-visible:ring-0" />
           </div>
-          <div className="space-y-mx-xs p-mx-md bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
+          <div className="space-y-mx-xs p-mx-md bg-gray-50 rounded-2xl border border-border shadow-sm">
             <Typography variant="tiny" className="text-mx-tiny">Estoque</Typography>
             <Input aria-label="Estoque" id="header-stock" name="header-stock" value={data.estoque_disponivel} onChange={e => onChange({ estoque_disponivel: e.target.value })} className="bg-transparent border-none p-mx-0 text-2xl font-bold text-foreground focus-visible:ring-0" />
           </div>

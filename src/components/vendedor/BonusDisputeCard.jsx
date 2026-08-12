@@ -21,7 +21,7 @@ const STATUS_CONFIG = {
 export default function BonusDisputeCard({ bonificacoes }) {
   if (!bonificacoes || bonificacoes.length === 0) {
     return (
-      <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+      <div className="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
         <div className="flex items-center gap-2 mb-4">
           <Gift className="w-4 h-4 text-purple-500" />
           <span className="text-purple-600 text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>
@@ -34,7 +34,7 @@ export default function BonusDisputeCard({ bonificacoes }) {
   }
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+    <div className="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
       <div className="flex items-center gap-2 mb-4">
         <Gift className="w-4 h-4 text-purple-500" />
         <span className="text-purple-600 text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>

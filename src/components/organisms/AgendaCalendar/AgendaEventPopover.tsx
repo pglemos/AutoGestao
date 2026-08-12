@@ -45,7 +45,7 @@ export function AgendaEventPopover({
           align="start"
           sideOffset={8}
           collisionPadding={12}
-          className="z-[90] w-72 rounded-xl border border-gray-200 bg-white p-mx-md shadow-sm outline-none"
+          className="z-[90] w-72 rounded-xl border border-border bg-white p-mx-md shadow-sm outline-none"
           onOpenAutoFocus={(event) => event.preventDefault()}
         >
           <div className="flex items-start justify-between gap-mx-sm">
@@ -67,7 +67,7 @@ export function AgendaEventPopover({
             <Typography variant="tiny" tone="muted" className="mt-0.5 block">{item.subtitle}</Typography>
           )}
 
-          <div className="mt-mx-sm flex flex-wrap gap-mx-xs border-t border-gray-200 pt-mx-sm">
+          <div className="mt-mx-sm flex flex-wrap gap-mx-xs border-t border-border pt-mx-sm">
             <Button size="xs" variant="outline" onClick={() => runAndClose(quickActions.onEdit)}>
               Editar
             </Button>

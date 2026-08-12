@@ -69,7 +69,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
   const tel = (cliente.whatsapp || cliente.telefone || "").replace(/\D/g, "");
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl border border-slate-100 overflow-hidden">
+    <div className="bg-white rounded-3xl shadow-xl border border-border-subtle overflow-hidden">
       {/* Header do cliente */}
       <div className="bg-gradient-to-br from-[#005BFF] to-blue-700 p-6 text-white">
         <div className="flex items-center gap-4">
@@ -106,7 +106,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
         {/* Ações secundárias */}
         <div className="grid grid-cols-3 gap-2">
           {tel && (
-            <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors">
+            <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-border bg-white hover:bg-slate-50 transition-colors">
               <Phone className="w-4 h-4 text-muted-foreground" />
               <span className="text-caption font-semibold text-muted-foreground">Ligar</span>
             </a>
@@ -122,7 +122,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
           )}
           <button
             onClick={() => onFicha(cliente.id)}
-            className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors"
+            className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-border bg-white hover:bg-slate-50 transition-colors"
           >
             <FileText className="w-4 h-4 text-muted-foreground" />
             <span className="text-caption font-semibold text-muted-foreground">Ficha</span>

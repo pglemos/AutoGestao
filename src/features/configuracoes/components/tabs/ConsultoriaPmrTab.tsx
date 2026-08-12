@@ -45,7 +45,7 @@ export function ConsultoriaPmrTab() {
             </div>
 
             {/* Embed da view existente */}
-            <div className="rounded-2xl overflow-hidden border border-gray-200">
+            <div className="rounded-2xl overflow-hidden border border-border">
                 <ConsultingParametersView />
             </div>
         </div>

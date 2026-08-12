@@ -351,7 +351,7 @@ export default function Reprocessamento() {
                     'flex min-h-28 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-4 text-center transition',
                     file
                       ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                      : 'border-gray-200 bg-gray-50 text-muted-foreground hover:border-emerald-200 hover:bg-emerald-50/50',
+                      : 'border-border bg-gray-50 text-muted-foreground hover:border-emerald-200 hover:bg-emerald-50/50',
                   )}
                 >
                   <Upload size={22} aria-hidden="true" />

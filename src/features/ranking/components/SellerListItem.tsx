@@ -95,7 +95,7 @@ export function SellerListItem({
               <Typography variant="h1" tone={isTop1 ? 'white' : 'brand'} className="text-4xl sm:text-5xl font-mono-numbers tracking-tighter leading-none">{seller.atingimento}%</Typography>
               <div className={cn(
                 "w-mx-2xl h-mx-2xl rounded-2xl flex items-center justify-center border shadow-none shrink-0",
-                isTop1 ? "bg-white/10 border-white/20 text-white" : "bg-gray-50 border-gray-200 text-emerald-600"
+                isTop1 ? "bg-white/10 border-white/20 text-white" : "bg-gray-50 border-border text-emerald-600"
               )}>
                 <TrendingUp size={28} className={cn(seller.atingimento < 50 && "rotate-180 text-status-error")} />
               </div>
@@ -105,7 +105,7 @@ export function SellerListItem({
             type="button"
             onClick={(e) => { e.stopPropagation(); onToggleOpponent(seller.user_id) }}
             aria-label={`Comparar ${seller.user_name}`}
-            className={`ml-0 sm:ml-4 p-mx-sm rounded-xl transition-all border group/btn sm:hover:scale-110 active:scale-95 w-full sm:w-auto flex items-center justify-center ${isBattleSelected ? 'bg-emerald-600 border-brand-primary text-mx-black shadow-mx-glow-brand' : 'bg-gray-50 border-gray-200 text-muted-foreground hover:border-brand-primary hover:text-emerald-600'}`}
+            className={`ml-0 sm:ml-4 p-mx-sm rounded-xl transition-all border group/btn sm:hover:scale-110 active:scale-95 w-full sm:w-auto flex items-center justify-center ${isBattleSelected ? 'bg-emerald-600 border-brand-primary text-mx-black shadow-mx-glow-brand' : 'bg-gray-50 border-border text-muted-foreground hover:border-brand-primary hover:text-emerald-600'}`}
             title="Comparar vendedor"
           >
             <Swords className="w-mx-sm h-mx-sm" />

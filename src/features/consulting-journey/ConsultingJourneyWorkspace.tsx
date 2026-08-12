@@ -30,7 +30,7 @@ export function ConsultingJourneyWorkspace() {
           {nextVisit ? <button type="button" onClick={() => controller.openVisit(nextVisit.id)} className="rounded-lg bg-primary px-4 py-2 text-sm font-medium text-primary-foreground">Comece por aqui</button> : null}
         </div>
       </section>
-      {snapshot.confidentialityLevel === 'restricted' ? <div className="rounded-xl border border-slate-300 bg-slate-50 p-4 text-sm text-foreground"><strong>Confidencialidade PPA:</strong> conteúdo estratégico restrito e auditável.</div> : null}
+      {snapshot.confidentialityLevel === 'restricted' ? <div className="rounded-xl border border-border-strong bg-slate-50 p-4 text-sm text-foreground"><strong>Confidencialidade PPA:</strong> conteúdo estratégico restrito e auditável.</div> : null}
       {!snapshot.canViewStrategicContent ? <div className="rounded-xl border border-amber-200 bg-amber-50 p-4 text-sm text-amber-900">Conteúdo estratégico do PPA restrito ao Dono, sócios autorizados e perfis internos MX.</div> : null}
       <ConsultingJourneyTimeline visits={snapshot.visits} nextVisitNumber={snapshot.nextVisitNumber} onOpen={controller.openVisit} />
       <ConsultingMeetingDialog controller={controller} />

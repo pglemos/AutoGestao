@@ -100,7 +100,7 @@ export function DashboardHeader({
   if (isPerfilInternoMx(role)) {
     return (
       <div className="mx-auto w-full max-w-7xl space-y-4">
-        <header data-mx-module-header="" className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <header data-mx-module-header="" className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
             <div className="flex min-w-0 items-start gap-3">
               <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
@@ -123,7 +123,7 @@ export function DashboardHeader({
                   aria-label="Selecionar unidade"
                   value={selectedStoreId || ''}
                   onChange={event => navigateToStore(event.target.value)}
-                  className="h-10 w-full appearance-none rounded-xl border border-gray-200 bg-white pl-9 pr-8 text-sm font-semibold text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-10 w-full appearance-none rounded-xl border border-border bg-white pl-9 pr-8 text-sm font-semibold text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   {selectableStores.map(store => (
                     <option key={store.id} value={store.id}>{store.name}</option>
@@ -178,7 +178,7 @@ export function DashboardHeader({
         </div>
 
         {activeTab === 'performance' && (
-          <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+          <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
             <div className="grid gap-4 xl:grid-cols-[1fr_auto_auto] xl:items-end">
               <div className="flex items-start gap-3">
                 <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-blue-50 text-blue-600">
@@ -215,7 +215,7 @@ export function DashboardHeader({
                       setStartDate(event.target.value)
                       setViewMode('month')
                     }}
-                    className="mt-1 block h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-muted-foreground"
+                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-muted-foreground"
                   />
                 </label>
 
@@ -230,7 +230,7 @@ export function DashboardHeader({
                       setEndDate(event.target.value)
                       setViewMode('month')
                     }}
-                    className="mt-1 block h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-muted-foreground"
+                    className="mt-1 block h-10 rounded-xl border border-border bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-muted-foreground"
                   />
                 </label>
               </div>
@@ -252,7 +252,7 @@ export function DashboardHeader({
 
   return (
     <>
-      <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-mx-md md:gap-mx-lg border-b border-gray-200 pb-10 shrink-0">
+      <header className="flex flex-col xl:flex-row xl:items-end justify-between gap-mx-md md:gap-mx-lg border-b border-border pb-10 shrink-0">
         <div className="flex flex-col gap-mx-xs text-center xl:text-left min-w-0">
           <Typography variant="tiny" tone="brand" className="opacity-60 text-mx-tiny">
             Status de Unidade
@@ -267,7 +267,7 @@ export function DashboardHeader({
 
         <div className="flex flex-wrap items-center justify-center xl:justify-end gap-mx-sm shrink-0 w-full xl:w-auto max-w-full">
           {isOwner && selectableStores.length > 1 && (
-            <label htmlFor="owner-store-select" className="flex w-full flex-col gap-mx-tiny rounded-xl border border-gray-100 bg-white px-mx-md py-mx-xs shadow-sm sm:w-mx-sidebar-expanded">
+            <label htmlFor="owner-store-select" className="flex w-full flex-col gap-mx-tiny rounded-xl border border-border-subtle bg-white px-mx-md py-mx-xs shadow-sm sm:w-mx-sidebar-expanded">
               <span className="text-mx-micro font-bold uppercase tracking-widest text-muted-foreground">Trocar unidade</span>
               <select
                 aria-label="Trocar unidade"
@@ -313,20 +313,20 @@ export function DashboardHeader({
             <div className="flex flex-col gap-mx-sm sm:flex-row sm:items-center">
               <TabNavPill tabs={PERIODO_TABS} activeTab={viewMode} onTabChange={(mode) => setViewMode(mode as ViewMode)} buttonClassName="h-mx-11 px-5" aria-label="Período do dashboard" />
               <div className={cn(
-                'grid grid-cols-1 gap-mx-sm rounded-xl border border-gray-100 bg-gray-50 p-mx-sm sm:grid-cols-2',
+                'grid grid-cols-1 gap-mx-sm rounded-xl border border-border-subtle bg-gray-50 p-mx-sm sm:grid-cols-2',
                 viewMode === 'day' && 'opacity-50',
               )}>
                 <label className="space-y-mx-tiny">
                   <span className="block text-mx-micro font-bold uppercase tracking-widest text-muted-foreground">Início</span>
-                  <input type="date" aria-label="Data inicial do período" disabled={viewMode === 'day'} value={startDate} onChange={event => { setStartDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-foreground outline-none focus:border-brand-primary" />
+                  <input type="date" aria-label="Data inicial do período" disabled={viewMode === 'day'} value={startDate} onChange={event => { setStartDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-xl border border-border-subtle bg-white px-mx-sm text-sm font-bold text-foreground outline-none focus:border-brand-primary" />
                 </label>
                 <label className="space-y-mx-tiny">
                   <span className="block text-mx-micro font-bold uppercase tracking-widest text-muted-foreground">Fim</span>
-                  <input type="date" aria-label="Data final do período" disabled={viewMode === 'day'} value={endDate} onChange={event => { setEndDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-foreground outline-none focus:border-brand-primary" />
+                  <input type="date" aria-label="Data final do período" disabled={viewMode === 'day'} value={endDate} onChange={event => { setEndDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-xl border border-border-subtle bg-white px-mx-sm text-sm font-bold text-foreground outline-none focus:border-brand-primary" />
                 </label>
               </div>
             </div>
-            <Button type="button" variant="outline" onClick={() => onTabChange('metas')} className="h-mx-11 rounded-2xl bg-white border-gray-100 hover:bg-gray-50">
+            <Button type="button" variant="outline" onClick={() => onTabChange('metas')} className="h-mx-11 rounded-2xl bg-white border-border-subtle hover:bg-gray-50">
               <Target size={16} className="mr-2" />
               Metas que alimentam a leitura
             </Button>

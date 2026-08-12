@@ -16,7 +16,7 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
   if (!timeline || timeline.length === 0) return null;
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+    <div className="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
       <div className="flex items-center gap-2 mb-2">
         <ArrowRight className="w-4 h-4 text-mx-blue" />
         <h3 className="text-base font-bold text-mx-navy">Linha do Dinheiro</h3>
@@ -35,7 +35,7 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
                   ? "bg-slate-900 text-white shadow-lg"
                   : ponto.novaFaixa
                   ? "bg-emerald-50 border-2 border-emerald-300"
-                  : "bg-slate-50 border border-slate-100"
+                  : "bg-slate-50 border border-border-subtle"
               }`}
             >
               {ponto.novaFaixa && !isAtual && (

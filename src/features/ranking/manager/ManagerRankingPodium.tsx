@@ -4,7 +4,7 @@ import { initials } from './manager-ranking-comparison'
 
 const PODIUM = [
   { position: 1, icon: Trophy, badge: 'bg-yellow-400', ring: 'ring-yellow-300', bar: 'bg-gradient-to-t from-yellow-300 to-yellow-400', height: 'h-28', order: 'md:order-2' },
-  { position: 2, icon: Medal, badge: 'bg-gray-300', ring: 'ring-gray-200', bar: 'bg-gradient-to-t from-gray-200 to-gray-300', height: 'h-20', order: 'md:order-1' },
+  { position: 2, icon: Medal, badge: 'bg-gray-300', ring: 'ring-border', bar: 'bg-gradient-to-t from-gray-200 to-gray-300', height: 'h-20', order: 'md:order-1' },
   { position: 3, icon: Award, badge: 'bg-amber-500', ring: 'ring-amber-300', bar: 'bg-gradient-to-t from-amber-400 to-amber-500', height: 'h-16', order: 'md:order-3' },
 ] as const
 
@@ -13,7 +13,7 @@ export function ManagerRankingPodium({ ranking }: { ranking: RankedVendedor[] })
   if (top3.length === 0) return null
 
   return (
-    <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm" aria-label="Pódio do ranking">
+    <section className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm" aria-label="Pódio do ranking">
       <h2 className="mb-4 text-sm font-semibold text-foreground">Pódio — Top 3</h2>
       <div className="grid grid-cols-3 items-end gap-3 md:gap-4">
         {PODIUM.map(step => {

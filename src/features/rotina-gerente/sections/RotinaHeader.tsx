@@ -48,7 +48,7 @@ export function RotinaHeader({
   return (
     <>
       {isAdmin && selectedStoreId && (
-        <div className="flex items-center gap-mx-sm bg-white rounded-xl px-4 py-2 shadow-sm border border-gray-100 self-start">
+        <div className="flex items-center gap-mx-sm bg-white rounded-xl px-4 py-2 shadow-sm border border-border-subtle self-start">
           <Store size={16} className="text-emerald-600" />
           <Typography
             variant="tiny"

@@ -373,7 +373,7 @@ export function calcularPrioridade(cliente) {
 export function tempColor(t) {
   if (t === "Quente") return "bg-red-50 text-red-600 border-red-100";
   if (t === "Morno") return "bg-amber-50 text-amber-600 border-amber-100";
-  return "bg-slate-100 text-muted-foreground border-slate-200";
+  return "bg-slate-100 text-muted-foreground border-border";
 }
 
 export function prioridadeColor(p) {

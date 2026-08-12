@@ -83,7 +83,7 @@ export function ForcePasswordChange() {
           {/* Subtle Border Glow */}
           <div className="absolute -inset-mx-xs bg-gradient-to-r from-brand-primary/20 to-brand-primary/10 rounded-mx-4xl blur-mx-xl opacity-50 transition duration-1000" />
           
-          <div className="relative bg-white/90 backdrop-blur-2xl border border-gray-200 rounded-mx-4xl shadow-sm overflow-hidden">
+          <div className="relative bg-white/90 backdrop-blur-2xl border border-border rounded-mx-4xl shadow-sm overflow-hidden">
             {/* Header Accent */}
             <div className="h-mx-tiny w-full bg-gradient-to-r from-brand-primary via-brand-primary to-brand-primary/50" />
             
@@ -139,7 +139,7 @@ export function ForcePasswordChange() {
                       placeholder="NOVA SENHA" 
                       value={formData.password} 
                       onChange={e => setFormData({...formData, password: e.target.value})}
-                      className="!h-mx-16 !pl-mx-14 !pr-mx-14 bg-gray-50 border-gray-200 rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-muted-foreground/30"
+                      className="!h-mx-16 !pl-mx-14 !pr-mx-14 bg-gray-50 border-border rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-muted-foreground/30"
                     />
                     <button 
                       type="button"
@@ -162,14 +162,14 @@ export function ForcePasswordChange() {
                       placeholder="REPETIR SENHA" 
                       value={formData.confirmPassword} 
                       onChange={e => setFormData({...formData, confirmPassword: e.target.value})}
-                      className="!h-mx-16 !pl-mx-14 bg-gray-50 border-gray-200 rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-muted-foreground/30"
+                      className="!h-mx-16 !pl-mx-14 bg-gray-50 border-border rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-muted-foreground/30"
                     />
                   </div>
                 </div>
               </div>
 
               {/* Security Hint */}
-              <div className="p-mx-md rounded-2xl bg-gray-50 border border-gray-200 flex gap-mx-md items-start">
+              <div className="p-mx-md rounded-2xl bg-gray-50 border border-border flex gap-mx-md items-start">
                 <div className="p-mx-xs rounded-xl bg-emerald-600/10 text-emerald-600">
                   <Sparkles size={16} />
                 </div>

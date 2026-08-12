@@ -43,7 +43,7 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
   const semDados = volume === 0 && vendas === 0;
 
   return (
-    <div className="bg-white rounded-xl border border-slate-200 overflow-hidden">
+    <div className="bg-white rounded-xl border border-border overflow-hidden">
       {/* Header */}
       <div className={`px-4 py-2.5 border-b flex items-center justify-between ${c.header}`}>
         <p className="text-[12px] font-bold text-[#0F172A] uppercase tracking-wide">{titulo}</p>
@@ -89,7 +89,7 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
 
       {/* Etapas expandidas */}
       {expandido && (
-        <div className="px-4 pb-3 border-t border-slate-100 pt-2">
+        <div className="px-4 pb-3 border-t border-border-subtle pt-2">
           {etapas.map((e, i) => (
             <EtapaLinha key={i} label={e.label} valor={e.valor} conv={e.conv} />
           ))}
@@ -148,7 +148,7 @@ export default function EficienciaCanal({ funis }) {
   ];
 
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
+    <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
       <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-1">Eficiência por canal</p>
       {limitador && (
         <p className="text-[12px] text-muted-foreground mb-4">

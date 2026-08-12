@@ -41,7 +41,7 @@ describe("StatusBadge", () => {
   test("applies neutral status variant", () => {
     const { container } = render(<StatusBadge label="Neutral" status="neutral" />);
     const badge = container.firstElementChild!;
-    expect(badge.className).toContain("border-gray-200");
+    expect(badge.className).toContain("border-border");
     expect(badge.className).toContain("bg-gray-50");
   });
 

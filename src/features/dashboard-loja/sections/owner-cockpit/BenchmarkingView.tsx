@@ -92,12 +92,12 @@ export function BenchmarkingView({
       <Card className="p-mx-lg">
         <div className="grid grid-cols-1 gap-mx-sm md:grid-cols-4">
           {Object.entries(filterOptions).map(([label, { current, set, options }]) => (
-            <div key={label} className="rounded-2xl border border-gray-200 bg-white px-mx-md py-mx-sm flex flex-col gap-1">
+            <div key={label} className="rounded-2xl border border-border bg-white px-mx-md py-mx-sm flex flex-col gap-1">
               <Typography variant="tiny" tone="muted" className="block text-xs">{label}</Typography>
               <select
                 value={current}
                 onChange={(e) => set(e.target.value)}
-                className="mt-mx-xs w-full bg-transparent font-bold text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary rounded-xl p-1 border border-gray-100 cursor-pointer"
+                className="mt-mx-xs w-full bg-transparent font-bold text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary rounded-xl p-1 border border-border-subtle cursor-pointer"
               >
                 {options.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>

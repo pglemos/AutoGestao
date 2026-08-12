@@ -53,7 +53,7 @@ export function OrganogramaVisual({ lojaId }: { lojaId: string }) {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleAdd} className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
+      <form onSubmit={handleAdd} className="rounded-2xl border border-border bg-gray-50 p-mx-md">
         <Typography variant="caption" tone="muted" className="">Adicionar cargo ao organograma</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <label className="block space-y-mx-xs md:col-span-1">
@@ -65,7 +65,7 @@ export function OrganogramaVisual({ lojaId }: { lojaId: string }) {
             <select aria-label="Reporta a"
               value={parentId}
               onChange={e => setParentId(e.target.value)}
-              className="w-full h-mx-14 px-mx-sm bg-white border border-gray-200 rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
+              className="w-full h-mx-14 px-mx-sm bg-white border border-border rounded-2xl font-bold uppercase text-xs focus:outline-none focus:border-brand-primary appearance-none cursor-pointer"
             >
               <option value="">— Topo (sem chefia) —</option>
               {nos.map(n => <option key={n.id} value={n.id}>{n.cargo}</option>)}
@@ -84,7 +84,7 @@ export function OrganogramaVisual({ lojaId }: { lojaId: string }) {
       ) : tree.length === 0 ? (
         <EmptyState icon={<Users size={28} />} title="Organograma vazio" description="Adicione o primeiro cargo (topo da estrutura)." />
       ) : (
-        <div className="rounded-2xl border border-gray-200 p-mx-sm">
+        <div className="rounded-2xl border border-border p-mx-sm">
           {tree.map(node => (
             <OrgNodeRow key={node.id} node={node} depth={0} expanded={expanded} onToggle={toggle} onRemove={handleRemove} />
           ))}

@@ -62,7 +62,7 @@ export function StoreConsultorIa() {
 
   return (
   <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-mx-md">
-        <header className="flex flex-col gap-mx-md border-b border-gray-100 pb-mx-lg lg:flex-row lg:items-start lg:justify-between">
+        <header className="flex flex-col gap-mx-md border-b border-border-subtle pb-mx-lg lg:flex-row lg:items-start lg:justify-between">
           <div className="min-w-0">
             <Typography variant="h1" className="text-3xl md:text-4xl">
               Consultor IA

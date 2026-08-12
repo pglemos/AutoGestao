@@ -172,7 +172,7 @@ export function SistemaMxTab() {
 
             {/* Auditoria */}
             <Card className="border-none bg-white overflow-hidden">
-                <header className="flex items-center justify-between p-mx-md border-b border-gray-200">
+                <header className="flex items-center justify-between p-mx-md border-b border-border">
                     <div className="flex items-center gap-mx-sm">
                         <div className="w-mx-12 h-mx-12 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center">
                             <Activity size={20} />

@@ -280,7 +280,7 @@ function AdminMorningReport() {
             aria-live="polite"
             aria-label="Consolidando rede"
         >
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10">
+            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10">
                 <div className="space-y-mx-xs">
                     <Skeleton className="h-mx-10 w-mx-64" />
                     <Skeleton className="h-mx-xs w-mx-48" />
@@ -294,7 +294,7 @@ function AdminMorningReport() {
 
     return (
         <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50">
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10 shrink-0">
+            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10 shrink-0">
                 <div className="flex flex-col gap-mx-tiny">
                     <div className="flex items-center gap-mx-sm">
                         <div className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm" aria-hidden="true" />
@@ -372,9 +372,9 @@ function AdminMorningReport() {
             </div>
 
             <Card className="w-full border-none bg-white overflow-hidden">
-                <CardHeader className="p-mx-lg bg-gray-50/30 border-b border-gray-200 flex flex-row items-center justify-between">
+                <CardHeader className="p-mx-lg bg-gray-50/30 border-b border-border flex flex-row items-center justify-between">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-gray-200 flex items-center justify-center shadow-sm" aria-hidden="true"><Building2 size={24} className="text-emerald-600" /></div>
+                        <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-border flex items-center justify-center shadow-sm" aria-hidden="true"><Building2 size={24} className="text-emerald-600" /></div>
                         <div>
                             <CardTitle className="text-xl uppercase tracking-tighter">Grade Operacional da Rede</CardTitle>
                             <Typography variant="tiny" tone="muted" className="block mt-1">TODAS AS UNIDADES • {range.label}</Typography>
@@ -385,7 +385,7 @@ function AdminMorningReport() {
                 <div className="overflow-x-auto no-scrollbar">
                     <table className="w-full text-left border-collapse">
                         <thead>
-                            <tr className="bg-gray-50/50 border-b border-gray-200">
+                            <tr className="bg-gray-50/50 border-b border-border">
                                 <th scope="col" className="pl-10 py-6"><Typography variant="caption" className="">UNIDADE</Typography></th>
                                 <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">META</Typography></th>
                                 <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">VENDAS</Typography></th>
@@ -405,7 +405,7 @@ function AdminMorningReport() {
                                         <tr className="hover:bg-gray-50/30 transition-colors group cursor-pointer" onClick={() => setExpandedStoreId(isExpanded ? null : store.store_id)}>
                                             <td className="pl-10">
                                                 <div className="flex items-center gap-mx-sm">
-                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-center group-hover:bg-emerald-600 transition-all shadow-mx-inner" aria-hidden="true">
+                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-border flex items-center justify-center group-hover:bg-emerald-600 transition-all shadow-mx-inner" aria-hidden="true">
                                                         <Typography variant="tiny" className="group-hover:text-white">{store.store_name.substring(0, 2)}</Typography>
                                                     </div>
                                                     <Typography variant="h3" className="text-base group-hover:text-emerald-600 transition-colors tracking-tight">{store.store_name}</Typography>
@@ -442,7 +442,7 @@ function AdminMorningReport() {
                                                         >
                                                             <div className="p-mx-md grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-mx-sm">
                                                                 {store.sellers.map(seller => (
-                                                                    <div key={seller.id} className={cn("flex items-center justify-between p-mx-sm rounded-xl border", seller.checkin_today ? "bg-white border-gray-200" : "bg-status-error-surface/50 border-status-error/20")}>
+                                                                    <div key={seller.id} className={cn("flex items-center justify-between p-mx-sm rounded-xl border", seller.checkin_today ? "bg-white border-border" : "bg-status-error-surface/50 border-status-error/20")}>
                                                                         <div className="flex items-center gap-mx-xs min-w-0">
                                                                             <Avatar
                                                                                 src={seller.avatar_url || undefined}
@@ -566,7 +566,7 @@ function StoreMorningReport() {
             aria-live="polite"
             aria-label="Consolidando matinal"
         >
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10">
+            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10">
                 <div className="space-y-mx-xs">
                     <Skeleton className="h-mx-10 w-mx-64" />
                     <Skeleton className="h-mx-xs w-mx-48" />
@@ -580,7 +580,7 @@ function StoreMorningReport() {
 
     return (
         <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50">
-            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-gray-200 pb-10 shrink-0">
+            <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10 shrink-0">
                 <div className="flex flex-col gap-mx-tiny">
                     <div className="flex items-center gap-mx-sm">
                         <div className="w-mx-xs h-mx-10 bg-emerald-600 rounded-mx-full shadow-sm" aria-hidden="true" />
@@ -664,9 +664,9 @@ function StoreMorningReport() {
 
             <section className="grid grid-cols-1 xl:grid-cols-12 gap-mx-lg pb-32">
                 <Card className="xl:col-span-8 border-none bg-white overflow-hidden">
-                    <CardHeader className="p-mx-10 bg-gray-50/30 border-b border-gray-200 flex flex-row items-center justify-between">
+                    <CardHeader className="p-mx-10 bg-gray-50/30 border-b border-border flex flex-row items-center justify-between">
                         <div className="flex items-center gap-mx-sm">
-                            <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-gray-200 flex items-center justify-center shadow-sm" aria-hidden="true"><BarChart3 size={24} className="text-emerald-600" /></div>
+                            <div className="w-mx-xl h-mx-xl rounded-2xl bg-white border border-border flex items-center justify-center shadow-sm" aria-hidden="true"><BarChart3 size={24} className="text-emerald-600" /></div>
                             <div>
                                 <CardTitle className="text-xl uppercase tracking-tighter">Grade Operacional do Time</CardTitle>
                                 <Typography variant="tiny" tone="muted" className="block mt-1">EFICIÊNCIA INDIVIDUAL ACUMULADA</Typography>
@@ -676,7 +676,7 @@ function StoreMorningReport() {
                     <div className="overflow-x-auto no-scrollbar">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="bg-gray-50/50 border-b border-gray-200">
+                                <tr className="bg-gray-50/50 border-b border-border">
                                     <th scope="col" className="pl-10 py-6"><Typography variant="caption" className="">ESPECIALISTA</Typography></th>
                                     <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">LEADS</Typography></th>
                                     <th scope="col" className="py-6 text-center"><Typography variant="caption" className="">AGEND.</Typography></th>
@@ -692,7 +692,7 @@ function StoreMorningReport() {
                                         <tr key={r.user_id} className="hover:bg-gray-50/30 transition-colors group h-mx-3xl">
                                             <td className="pl-10">
                                                 <div className="flex items-center gap-mx-sm">
-                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-gray-200 flex items-center justify-center group-hover:bg-emerald-600 transition-all shadow-mx-inner" aria-hidden="true">
+                                                    <div className="w-mx-xl h-mx-xl rounded-2xl bg-gray-50 border border-border flex items-center justify-center group-hover:bg-emerald-600 transition-all shadow-mx-inner" aria-hidden="true">
                                                         <Typography variant="tiny" className="group-hover:text-white">{r.user_name.substring(0, 2)}</Typography>
                                                     </div>
                                                     <Typography variant="h3" className="text-base group-hover:text-emerald-600 transition-colors tracking-tight">{r.user_name}</Typography>
@@ -718,7 +718,7 @@ function StoreMorningReport() {
                 <aside className="xl:col-span-4 flex flex-col gap-mx-lg">
                     <Card className="p-mx-10 md:p-14 space-y-mx-10 border-none bg-white relative overflow-hidden group">
                         <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-3xl -mr-16 -mt-16 opacity-50" aria-hidden="true" />
-                        <header className="flex items-center gap-mx-sm border-b border-gray-200 pb-8 relative z-10">
+                        <header className="flex items-center gap-mx-sm border-b border-border pb-8 relative z-10">
                             <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 text-emerald-600 flex items-center justify-center shadow-sm" aria-hidden="true"><Zap size={28} /></div>
                             <Typography variant="h3" className="tracking-tight">Foco do Dia</Typography>
                         </header>
@@ -748,7 +748,7 @@ function StoreMorningReport() {
                                     </Button>
                                 </Card>
                             )}
-                            <div className="p-mx-lg bg-gray-50 rounded-2xl border border-gray-200 shadow-none">
+                            <div className="p-mx-lg bg-gray-50 rounded-2xl border border-border shadow-none">
                                 <Typography variant="caption" tone="muted" className="mb-4 block">Sugestão MX</Typography>
                                 <Typography variant="p" className="text-xs font-bold leading-relaxed italic tracking-tight">"Manter o ritmo de agendamentos D-0 para garantir o escoamento projetado."</Typography>
                             </div>

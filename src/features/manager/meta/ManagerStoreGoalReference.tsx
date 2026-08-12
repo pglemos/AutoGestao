@@ -265,7 +265,7 @@ export function ManagerStoreGoalReference({
   return (
     <PageCanvas as="div" width="dashboard" bottomClearance="navigation" aria-labelledby="manager-store-goal-title" className="flex flex-col gap-5">
         <ManagerHomeReturnLink />
-        <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
               <h1 id="manager-store-goal-title" className="text-xl font-bold text-foreground">Meta da Loja</h1>
@@ -273,7 +273,7 @@ export function ManagerStoreGoalReference({
             </div>
             <div className="flex flex-wrap items-end gap-2">
               <label className="text-xs text-muted-foreground">Período
-                <input type="month" value={month} onChange={(event) => changeMonth(event.target.value)} className="mt-1 block rounded-xl border border-gray-200 px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-emerald-500" />
+                <input type="month" value={month} onChange={(event) => changeMonth(event.target.value)} className="mt-1 block rounded-xl border border-border px-3 py-2 text-sm outline-none focus:ring-2 focus:ring-emerald-500" />
               </label>
               {selectableStores.length > 1 && onStoreChange ? (
                 <label className="text-xs text-muted-foreground">
@@ -282,13 +282,13 @@ export function ManagerStoreGoalReference({
                     aria-label="Unidade da meta"
                     value={data.selectedStoreId || ''}
                     onChange={(event) => onStoreChange(event.target.value)}
-                    className="mt-1 block min-w-[140px] rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+                    className="mt-1 block min-w-[140px] rounded-xl border border-border bg-white px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
                   >
                     {selectableStores.map((store) => <option key={store.id} value={store.id}>{store.name}</option>)}
                   </select>
                 </label>
               ) : null}
-              <button type="button" onClick={() => void handleRefresh()} disabled={data.isRefetching || targetPlanRefreshing} className="inline-flex h-[36px] items-center gap-1 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-muted-foreground hover:bg-gray-50 disabled:opacity-60">
+              <button type="button" onClick={() => void handleRefresh()} disabled={data.isRefetching || targetPlanRefreshing} className="inline-flex h-[36px] items-center gap-1 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-muted-foreground hover:bg-gray-50 disabled:opacity-60">
                 <RefreshCw size={15} className={data.isRefetching || targetPlanRefreshing ? 'animate-spin' : ''} /> Atualizar
               </button>
               <button type="button" data-tour="metas-individuais" onClick={() => setGoalsOpen(true)} className="inline-flex h-[36px] items-center gap-1 rounded-xl bg-emerald-600 px-4 text-sm font-semibold text-white hover:bg-emerald-700">
@@ -305,17 +305,17 @@ export function ManagerStoreGoalReference({
           <GoalCard icon={TrendingUp} label="Projeção e ritmo necessário" tone="violet" help="Projeção de fechamento do mês com base na média diária atual. O ritmo necessário indica quantas vendas/dia faltam para bater a meta.">{goal > 0 ? <><strong className="text-2xl text-foreground">{formatStoreGoalMetric(projection)} <span className="text-sm font-medium text-muted-foreground">vendas</span></strong><p className="text-sm font-medium text-violet-600">{projectedPct}% da meta</p><div className="mt-2 border-t border-gray-50 pt-2"><p className="mb-0.5 text-xs text-muted-foreground">Ritmo necessário:</p><p className="text-sm font-semibold text-foreground">{persistedMonth?.pace_label || `${formatStoreGoalMetric(dailyPace)} ${dailyPace === 1 ? 'venda' : 'vendas'} por dia útil`}</p></div></> : <EmptyGoalState />}</GoalCard>
         </div>
 
-        <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <h2 className="font-semibold text-foreground">Evolução da Meta</h2>
           <div className="mt-4 h-72 min-h-[288px] min-w-0">
             {goal <= 0 ? <div className="grid h-full place-items-center rounded-xl bg-gray-50 text-sm text-muted-foreground">Meta ainda não cadastrada.</div> : chartData.length ? <ResponsiveContainer width="100%" height="100%" minWidth={0} minHeight={288} initialDimension={{ width: 320, height: 288 }}><LineChart data={chartData} margin={{ top: 8, right: 20, left: 0, bottom: 0 }}><CartesianGrid strokeDasharray="3 3" stroke={chartTokens.grid()} /><XAxis dataKey="date" tick={{ fontSize: 10, fill: chartTokens.axisTick() }} interval="preserveStartEnd" /><YAxis allowDecimals={false} tick={{ fontSize: 11, fill: chartTokens.axisTick() }} /><Tooltip contentStyle={{ borderRadius: 12, border: `1px solid ${chartTokens.grid()}`, fontSize: 12 }} /><Legend wrapperStyle={{ fontSize: 12 }} /><Line type="monotone" dataKey="meta" name="Meta acumulada" stroke={chartTokens.managerStoreGoal()} strokeDasharray="4 4" dot={false} connectNulls /><Line type="monotone" dataKey="realizado" name="Realizado" stroke={chartTokens.success()} strokeWidth={2.5} dot={false} connectNulls /><Line type="monotone" dataKey="projecao" name="Projeção" stroke={chartTokens.managerStoreProjection()} strokeDasharray="6 4" strokeWidth={2} dot={false} connectNulls /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center rounded-xl bg-gray-50 text-sm text-muted-foreground">A evolução aparecerá quando houver lançamentos oficiais no período.</div>}
           </div>
         </article>
 
-        <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
+        <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="mb-4 flex flex-wrap items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-emerald-100"><Activity size={16} className="text-emerald-600" /></span><h2 className="font-semibold text-foreground">Plano de Sustentação</h2>{selectedPersistedPlan ? <span className="rounded-full bg-emerald-50 px-2 py-1 text-caption font-semibold uppercase tracking-wide text-emerald-700">Oficial v{selectedPersistedPlan.version}</span> : null}</div>
           <div className="mb-5 flex gap-1.5 overflow-x-auto pb-1">{([['hoje', 'Hoje'], ['semana', 'Esta semana'], ['dezena', 'Esta dezena'], ['mes', 'Este mês']] as const).map(([key, label]) => <button key={key} type="button" onClick={() => setHorizon(key)} className={`whitespace-nowrap rounded-xl px-4 py-2 text-sm font-medium transition-all ${horizon === key ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-muted-foreground hover:bg-gray-100'}`}>{label}</button>)}</div>
-          {goal <= 0 ? <p className="rounded-xl border border-gray-100 bg-gray-50 p-4 text-sm text-muted-foreground">Meta ainda não cadastrada.</p> : <>
+          {goal <= 0 ? <p className="rounded-xl border border-border-subtle bg-gray-50 p-4 text-sm text-muted-foreground">Meta ainda não cadastrada.</p> : <>
             <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
               <SustainabilityBlock icon={Zap} label="Faltam" tone="orange">
                 {sustainabilityPlan.objectiveReached ? <div className="flex items-center gap-1.5"><CheckCircle2 size={20} className="text-emerald-500" /><p className="text-sm font-semibold text-emerald-600">Objetivo atingido</p></div> : <><p className="text-2xl font-bold text-foreground">{formatStoreGoalMetric(sustainabilityPlan.faltam)} <span className="text-base font-medium text-muted-foreground">{sustainabilityPlan.faltam === 1 ? 'venda' : 'vendas'}</span></p><p className="mt-1 text-xs text-muted-foreground">{horizon === 'hoje' ? 'para hoje' : horizon === 'semana' ? 'nesta semana' : horizon === 'dezena' ? 'nesta dezena' : 'neste mês'}</p></>}
@@ -332,9 +332,9 @@ export function ManagerStoreGoalReference({
           </>}
         </article>
 
-        <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-          <div className="border-b border-gray-100 px-5 py-4"><h2 className="font-semibold text-foreground">Contribuição da Equipe</h2><p className="mt-0.5 text-xs text-muted-foreground">Ordenado por prioridade de atuação gerencial.</p></div>
-          <div className="overflow-x-auto"><table className="w-full min-w-[900px] text-sm"><thead className="border-b border-gray-100 bg-gray-50"><tr>{[
+        <article className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
+          <div className="border-b border-border-subtle px-5 py-4"><h2 className="font-semibold text-foreground">Contribuição da Equipe</h2><p className="mt-0.5 text-xs text-muted-foreground">Ordenado por prioridade de atuação gerencial.</p></div>
+          <div className="overflow-x-auto"><table className="w-full min-w-[900px] text-sm"><thead className="border-b border-border-subtle bg-gray-50"><tr>{[
             { label: 'Vendedor', tooltip: 'Integrante da equipe com vínculo ativo na loja.' },
             { label: 'Realizado', tooltip: 'Vendas confirmadas e faturadas acumuladas no período.' },
             { label: 'Meta prop.', tooltip: 'Meta proporcional prevista até o dia útil atual.' },
@@ -346,14 +346,14 @@ export function ManagerStoreGoalReference({
           ].map((col) => <th key={col.label} className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"><span className="inline-flex items-center gap-1">{col.label}<HelpTooltip text={col.tooltip} /></span></th>)}</tr></thead><tbody className="divide-y divide-gray-50">{teamRows.length === 0 ? <tr><td colSpan={8} className="px-4 py-8 text-center text-muted-foreground">Nenhum vendedor vinculado.</td></tr> : teamRows.map((seller) => <tr key={seller.sellerId} className="hover:bg-gray-50"><td className="whitespace-nowrap px-4 py-3 font-medium text-foreground">{seller.sellerName}</td><td className="px-4 py-3 font-medium text-emerald-600">{seller.realized}</td><td className="px-4 py-3 text-foreground">{seller.proportionalGoal ?? '—'}</td><td className="px-4 py-3"><MetricPill value={seller.result} /></td><td className="px-4 py-3 text-orange-600">{seller.gap ?? '—'}</td><td className="px-4 py-3 text-foreground">{seller.projection ?? '—'}</td><td className="px-4 py-3"><MetricPill value={seller.consistency} /></td><td className="px-4 py-3"><DropdownMenu><DropdownMenuTrigger asChild><button type="button" aria-label={`Ações para ${seller.sellerName}`} className="rounded-lg p-1.5 text-muted-foreground hover:bg-gray-100" title="Ações"><MoreVertical size={15} /></button></DropdownMenuTrigger><Base44DropdownContent align="end" className="w-48"><Base44DropdownItem role="menuitem" onSelect={() => handleSellerAction('perfil', seller.sellerId, seller.sellerName)} className="gap-2 text-xs"><UserCircle size={14} />Ver perfil</Base44DropdownItem><Base44DropdownItem role="menuitem" onSelect={() => handleSellerAction('rotina', seller.sellerId, seller.sellerName)} className="gap-2 text-xs"><CalendarClock size={14} />Ver rotina</Base44DropdownItem><Base44DropdownItem role="menuitem" onSelect={() => handleSellerAction('orientacao', seller.sellerId, seller.sellerName)} className="gap-2 text-xs"><MessageSquarePlus size={14} />Registrar orientação</Base44DropdownItem></Base44DropdownContent></DropdownMenu></td></tr>)}</tbody></table></div>
         </article>
 
-        <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm"><div className="border-b border-gray-100 px-5 py-4"><h2 className="font-semibold text-foreground">Resultado por Canal</h2><p className="mt-0.5 text-xs text-muted-foreground">Conciliação: {sales} vendas totais da loja.</p></div><div className="overflow-x-auto"><table className="w-full min-w-[780px] text-sm"><thead className="border-b border-gray-100 bg-gray-50"><tr>{['Canal', 'Oportunidades', 'Vendas', 'Conversão', 'Participação', 'Para 1 venda', 'Situação'].map((label) => <th key={label} className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead><tbody className="divide-y divide-gray-50">{channelRows.length === 0 ? <tr><td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">Sem dados de canal no período.</td></tr> : channelRows.map((channel) => <tr key={channel.name} className="hover:bg-gray-50"><td className="px-4 py-3 font-medium text-foreground">{channel.name}</td><td className="px-4 py-3 text-foreground">{channel.opportunities ?? '—'}</td><td className="px-4 py-3 font-medium text-emerald-600">{channel.sales}</td><td className="px-4 py-3 text-foreground">{channel.conversion === null ? '—' : `${channel.conversion}%`}</td><td className="px-4 py-3 text-foreground">{channel.participation}%</td><td className="px-4 py-3 text-foreground">{channel.perSale ?? '—'}</td><td className={`px-4 py-3 font-medium ${channel.situation === 'Bom' ? 'text-emerald-600' : channel.situation === 'Regular' ? 'text-amber-600' : channel.situation === 'Ruim' ? 'text-red-600' : 'text-muted-foreground'}`}>{channel.situation ?? '—'}</td></tr>)}</tbody></table></div></article>
+        <article className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm"><div className="border-b border-border-subtle px-5 py-4"><h2 className="font-semibold text-foreground">Resultado por Canal</h2><p className="mt-0.5 text-xs text-muted-foreground">Conciliação: {sales} vendas totais da loja.</p></div><div className="overflow-x-auto"><table className="w-full min-w-[780px] text-sm"><thead className="border-b border-border-subtle bg-gray-50"><tr>{['Canal', 'Oportunidades', 'Vendas', 'Conversão', 'Participação', 'Para 1 venda', 'Situação'].map((label) => <th key={label} className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead><tbody className="divide-y divide-gray-50">{channelRows.length === 0 ? <tr><td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">Sem dados de canal no período.</td></tr> : channelRows.map((channel) => <tr key={channel.name} className="hover:bg-gray-50"><td className="px-4 py-3 font-medium text-foreground">{channel.name}</td><td className="px-4 py-3 text-foreground">{channel.opportunities ?? '—'}</td><td className="px-4 py-3 font-medium text-emerald-600">{channel.sales}</td><td className="px-4 py-3 text-foreground">{channel.conversion === null ? '—' : `${channel.conversion}%`}</td><td className="px-4 py-3 text-foreground">{channel.participation}%</td><td className="px-4 py-3 text-foreground">{channel.perSale ?? '—'}</td><td className={`px-4 py-3 font-medium ${channel.situation === 'Bom' ? 'text-emerald-600' : channel.situation === 'Regular' ? 'text-amber-600' : channel.situation === 'Ruim' ? 'text-red-600' : 'text-muted-foreground'}`}>{channel.situation ?? '—'}</td></tr>)}</tbody></table></div></article>
         {/*
           Vendas fechadas moraram numa rota própria (`/vendas`) até 2026-08-05.
           O lugar delas é aqui: são a evidência granular do realizado que os
           cards acima resumem, e cancelar uma venda muda a meta na mesma tela.
         */}
-        <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
-          <div className="border-b border-gray-100 px-5 py-4">
+        <article className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
+          <div className="border-b border-border-subtle px-5 py-4">
             <h2 className="font-semibold text-foreground">Vendas Fechadas</h2>
             <p className="mt-0.5 text-xs text-muted-foreground">Vendas registradas pela equipe, com opção de cancelamento.</p>
           </div>
@@ -412,7 +412,7 @@ function nullableNumber(value: number | string | null | undefined): number | nul
 
 function GoalCard({ icon: Icon, label, tone, help, children }: { icon: typeof Target; label: string; tone: 'emerald' | 'blue' | 'orange' | 'violet'; help?: string; children: ReactNode }) {
   const tones = { emerald: 'bg-emerald-100 text-emerald-600', blue: 'bg-blue-100 text-blue-600', orange: 'bg-orange-100 text-orange-600', violet: 'bg-purple-100 text-purple-600' }
-  return <article className="rounded-2xl border border-gray-100 bg-white p-4 shadow-sm"><div className="mb-4 flex items-center gap-2"><span className={`grid h-8 w-8 place-items-center rounded-lg ${tones[tone]}`}><Icon size={16} /></span><p className="flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}<HelpTooltip text={help} /></p></div>{children}</article>
+  return <article className="rounded-2xl border border-border-subtle bg-white p-4 shadow-sm"><div className="mb-4 flex items-center gap-2"><span className={`grid h-8 w-8 place-items-center rounded-lg ${tones[tone]}`}><Icon size={16} /></span><p className="flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}<HelpTooltip text={help} /></p></div>{children}</article>
 }
 function Progress({ value }: { value: number }) { return <div className="mt-3 h-2 overflow-hidden rounded-full bg-gray-100"><div className={`h-full rounded-full ${value >= 80 ? 'bg-emerald-500' : value >= 50 ? 'bg-amber-500' : 'bg-red-500'}`} style={{ width: `${Math.min(100, Math.max(0, value))}%` }} /></div> }
 function CardFooter({ left, right, tone }: { left: string; right: string; tone: 'emerald' | 'amber' | 'red' }) { const colors = { emerald: 'text-emerald-600', amber: 'text-amber-600', red: 'text-red-600' }; return <div className="mt-2 flex justify-between text-xs text-muted-foreground"><span>{right}</span><b className={colors[tone]}>{left}</b></div> }
@@ -420,7 +420,7 @@ function MetricPill({ value }: { value: number | null }) { if (value === null) r
 function EmptyGoalState() { return <p className="text-sm font-medium text-muted-foreground">Meta ainda não cadastrada.</p> }
 function SustainabilityBlock({ icon: Icon, label, tone, children }: { icon: typeof Activity; label: string; tone: 'orange' | 'blue' | 'purple'; children: ReactNode }) {
   const tones = { orange: 'text-orange-500', blue: 'text-blue-500', purple: 'text-purple-500' }
-  return <div className="rounded-xl border border-gray-100 bg-gray-50 p-4"><div className="mb-2 flex items-center gap-1.5"><Icon size={16} className={tones[tone]} /><p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p></div>{children}</div>
+  return <div className="rounded-xl border border-border-subtle bg-gray-50 p-4"><div className="mb-2 flex items-center gap-1.5"><Icon size={16} className={tones[tone]} /><p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p></div>{children}</div>
 }
 
 export default ManagerStoreGoalReference

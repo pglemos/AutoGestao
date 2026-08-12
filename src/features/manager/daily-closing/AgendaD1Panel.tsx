@@ -370,7 +370,7 @@ export function AgendaD1Panel({
     ? rows.find((row) => row.id === confirming.rowId) || null
     : null;
 
-  const filterSelectClass = "w-full rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500";
+  const filterSelectClass = "w-full rounded-xl border border-border bg-white px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500";
 
   return (
     <>
@@ -513,7 +513,7 @@ export function AgendaD1Panel({
               </p>
               <button
                 type="button"
-                className="mt-3 rounded-[8px] border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-foreground hover:bg-gray-50"
+                className="mt-3 rounded-[8px] border border-border bg-white px-3 py-1.5 text-xs font-medium text-foreground hover:bg-gray-50"
                 onClick={() => void fetchAgenda()}
               >
                 Tentar novamente
@@ -539,9 +539,9 @@ export function AgendaD1Panel({
               </div>
             </div>
           ) : (
-            <div className="overflow-x-auto rounded-2xl border border-gray-100">
+            <div className="overflow-x-auto rounded-2xl border border-border-subtle">
               <table className="w-full text-sm">
-                <thead className="border-b border-gray-100 bg-gray-50 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
+                <thead className="border-b border-border-subtle bg-gray-50 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   <tr>
                     {[
                       "Horário",
@@ -650,7 +650,7 @@ export function AgendaD1Panel({
                                       className="fixed inset-0 z-40 cursor-default"
                                       onClick={() => setConfirmMenuRowId(null)}
                                     />
-                                    <div className="absolute right-0 top-full z-50 mt-1 min-w-[208px] rounded-[12px] border border-gray-200 bg-white py-1 shadow-lg">
+                                    <div className="absolute right-0 top-full z-50 mt-1 min-w-[208px] rounded-[12px] border border-border bg-white py-1 shadow-lg">
                                       {CONFIRMATION_OUTCOMES.map((outcome) => (
                                         <button
                                           key={outcome}
@@ -738,7 +738,7 @@ export function AgendaD1Panel({
                 id="agenda-other-status"
                 value="Outro"
                 disabled
-                className="w-full rounded-[12px] border border-gray-200 bg-white px-3 py-2 text-sm text-foreground"
+                className="w-full rounded-[12px] border border-border bg-white px-3 py-2 text-sm text-foreground"
               >
                 <option>Outro</option>
               </select>
@@ -762,7 +762,7 @@ export function AgendaD1Panel({
                   )
                 }
                 placeholder="Descreva a situação observada..."
-                className="w-full resize-none rounded-[12px] border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
+                className="w-full resize-none rounded-[12px] border border-border px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
               />
             </div>
             <div className="flex justify-end gap-2 pt-1">

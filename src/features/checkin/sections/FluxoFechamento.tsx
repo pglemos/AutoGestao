@@ -64,23 +64,23 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
 
   if (disabled) {
     return (
-      <div className="flex h-11 cursor-not-allowed items-center rounded-xl border border-slate-100 bg-slate-50 opacity-60">
-        <div className="flex h-full w-11 items-center justify-center border-r border-slate-100 text-[20px] font-light text-text-disabled">−</div>
+      <div className="flex h-11 cursor-not-allowed items-center rounded-xl border border-border-subtle bg-slate-50 opacity-60">
+        <div className="flex h-full w-11 items-center justify-center border-r border-border-subtle text-[20px] font-light text-text-disabled">−</div>
         <span className="flex-1 text-center text-[16px] font-bold tabular-nums text-muted-foreground">{value}</span>
-        <div className="flex h-full w-11 items-center justify-center border-l border-slate-100 text-[20px] font-light text-text-disabled">+</div>
+        <div className="flex h-full w-11 items-center justify-center border-l border-border-subtle text-[20px] font-light text-text-disabled">+</div>
       </div>
     )
   }
 
   return (
-    <div className="flex h-11 items-center rounded-xl border border-slate-200 bg-white shadow-sm transition-all focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
+    <div className="flex h-11 items-center rounded-xl border border-border bg-white shadow-sm transition-all focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
       <button
         type="button"
         onClick={() => {
           setInputVal(null)
           onDecrement()
         }}
-        className="flex h-full w-11 shrink-0 items-center justify-center rounded-l-xl border-r border-slate-200 text-[20px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground active:bg-slate-100"
+        className="flex h-full w-11 shrink-0 items-center justify-center rounded-l-xl border-r border-border text-[20px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground active:bg-slate-100"
       >
         −
       </button>
@@ -115,7 +115,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
           setInputVal(null)
           onIncrement()
         }}
-        className="flex h-full w-11 shrink-0 items-center justify-center rounded-r-xl border-l border-slate-200 text-[20px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground active:bg-slate-100"
+        className="flex h-full w-11 shrink-0 items-center justify-center rounded-r-xl border-l border-border text-[20px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground active:bg-slate-100"
       >
         +
       </button>
@@ -292,7 +292,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
         <ProgressBarMobile completedSteps={completedSteps} />
       </div>
 
-      <div className="hidden rounded-2xl border border-slate-200 bg-white p-4 shadow-sm sm:block sm:p-5">
+      <div className="hidden rounded-2xl border border-border bg-white p-4 shadow-sm sm:block sm:p-5">
         <div className="mb-1 flex items-center justify-between">
           <div className="min-w-0 flex-1 pr-3">
             <h2 className="text-body-sm font-bold uppercase tracking-wide text-[#0F172A] sm:text-[14px]">Progresso do Fechamento</h2>

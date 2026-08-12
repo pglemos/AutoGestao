@@ -36,7 +36,7 @@ export function RotinaAdminStoreSelector({ lojas, onSelect }: Props) {
             key={store.id}
             variant="outline"
             onClick={() => onSelect(store.id)}
-            className="h-mx-2xl rounded-2xl font-bold uppercase tracking-widest text-xs border-gray-200 hover:border-brand-primary hover:bg-emerald-600/5 transition-all"
+            className="h-mx-2xl rounded-2xl font-bold uppercase tracking-widest text-xs border-border hover:border-brand-primary hover:bg-emerald-600/5 transition-all"
           >
             {store.name}
           </Button>

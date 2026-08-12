@@ -105,7 +105,7 @@ describe('contrato canônico do módulo interno MX', () => {
   test('PageHeading permanece apenas como ponte compacta para páginas ainda não migradas', () => {
     const heading = read('src/components/molecules/PageHeading.tsx')
     expect(heading).toContain('data-mx-page-heading="manager"')
-    expect(heading).toContain('rounded-2xl border border-gray-100 bg-white p-5 shadow-sm')
+    expect(heading).toContain('rounded-2xl border border-border-subtle bg-white p-5 shadow-sm')
   })
 
   for (const file of wave2CanonicalContainers) {

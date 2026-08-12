@@ -61,7 +61,7 @@ export function CreateStoreModal({
           >
             <Card className="p-mx-lg md:p-14 border-none shadow-mx-2xl bg-white overflow-hidden relative">
               <form onSubmit={onSubmit} className="space-y-mx-xl relative z-10">
-                <header className="flex items-center justify-between border-b border-gray-200 pb-8">
+                <header className="flex items-center justify-between border-b border-border pb-8">
                   <div className="flex items-center gap-mx-sm">
                     <div className="w-mx-14 h-mx-14 rounded-2xl bg-mx-indigo-50 flex items-center justify-center text-emerald-600 border border-mx-indigo-100 shadow-none shrink-0">
                       <Building2 size={28} />
@@ -154,7 +154,7 @@ export function CreateStoreModal({
                   </div>
                 </div>
 
-                <footer className="pt-10 flex justify-end border-t border-gray-200">
+                <footer className="pt-10 flex justify-end border-t border-border">
                   <Button
                     type="submit"
                     disabled={creating}

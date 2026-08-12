@@ -43,11 +43,11 @@ export function ManagerRoutineChargeModal({ open, sellerName, date, onClose, onS
         <div className="space-y-3">
         <div>
           <label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-routine-charge-seller">Vendedor</label>
-          <div id="manager-routine-charge-seller" className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-foreground">{sellerName}</div>
+          <div id="manager-routine-charge-seller" className="rounded-xl border border-border bg-gray-50 px-3 py-2 text-sm text-foreground">{sellerName}</div>
         </div>
         <div>
           <label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-routine-charge-date">Data</label>
-          <div id="manager-routine-charge-date" className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-foreground">{date}</div>
+          <div id="manager-routine-charge-date" className="rounded-xl border border-border bg-gray-50 px-3 py-2 text-sm text-foreground">{date}</div>
         </div>
         <div>
           <label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-routine-charge-message">Mensagem</label>
@@ -56,7 +56,7 @@ export function ManagerRoutineChargeModal({ open, sellerName, date, onClose, onS
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             rows={4}
-            className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
         {sent && <div className="rounded-xl bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">Cobrança registrada.</div>}

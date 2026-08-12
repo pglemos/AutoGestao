@@ -44,7 +44,7 @@ export function RegularizeLateModal({
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-gray-50 disabled:opacity-50"
+            className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-gray-50 disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -84,7 +84,7 @@ export function RegularizeLateModal({
             onChange={(event) => setObservation(event.target.value)}
             rows={4}
             placeholder="Justificativa ou contexto da regularização..."
-            className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full resize-none rounded-xl border border-border px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-blue-500"
           />
           <span className="mt-1 block text-caption text-muted-foreground">
             Informe ao menos 8 caracteres para manter a justificativa auditável.

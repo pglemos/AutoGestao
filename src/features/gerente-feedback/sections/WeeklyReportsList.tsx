@@ -23,8 +23,8 @@ export function WeeklyReportsList({ reports, variant = 'admin' }: Props) {
           <Card
             className={
               variant === 'admin'
-                ? 'rounded-xl border border-gray-100 p-mx-md hover:shadow-sm transition-all h-full shadow-sm bg-white relative overflow-hidden flex flex-col'
-                : 'rounded-xl border border-gray-100 p-mx-md hover:shadow-sm transition-all h-full shadow-sm bg-white flex flex-col'
+                ? 'rounded-xl border border-border-subtle p-mx-md hover:shadow-sm transition-all h-full shadow-sm bg-white relative overflow-hidden flex flex-col'
+                : 'rounded-xl border border-border-subtle p-mx-md hover:shadow-sm transition-all h-full shadow-sm bg-white flex flex-col'
             }
           >
             {variant === 'admin' ? (
@@ -87,8 +87,8 @@ function ReportMetrics({
     <div
       className={
         dense
-          ? 'grid grid-cols-2 gap-mx-md py-8 border-y border-gray-100'
-          : 'grid grid-cols-1 sm:grid-cols-2 gap-mx-md py-8 border-y border-gray-100 relative z-10'
+          ? 'grid grid-cols-2 gap-mx-md py-8 border-y border-border-subtle'
+          : 'grid grid-cols-1 sm:grid-cols-2 gap-mx-md py-8 border-y border-border-subtle relative z-10'
       }
     >
       <div className="bg-gray-50 rounded-xl p-mx-md shadow-mx-inner text-center">

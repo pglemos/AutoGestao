@@ -47,7 +47,7 @@ export default function ProximaOportunidadeModal({
               <CheckCircle2 className="w-5 h-5 flex-shrink-0" />
               <span className="text-sm font-bold">Resultado registrado</span>
             </div>
-            <hr className="border-slate-100" />
+            <hr className="border-border-subtle" />
             <div>
               <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-3">Próxima oportunidade</p>
               <div className="bg-blue-50 rounded-xl p-4 space-y-3">
@@ -86,7 +86,7 @@ export default function ProximaOportunidadeModal({
             <span className="text-sm font-bold">Resultado registrado</span>
           </div>
 
-          <hr className="border-slate-100" />
+          <hr className="border-border-subtle" />
 
           {/* Convite Modo Ataque */}
           <div className="bg-gradient-to-br from-[#031B3D] to-[#005BFF] rounded-2xl p-5 text-white space-y-3">

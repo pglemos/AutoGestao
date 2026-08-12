@@ -58,7 +58,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
 
   return (
     <div className="space-y-mx-lg">
-      <form onSubmit={handleSubmit} className="rounded-2xl border border-gray-200 bg-gray-50 p-mx-md">
+      <form onSubmit={handleSubmit} className="rounded-2xl border border-border bg-gray-50 p-mx-md">
         <Typography variant="caption" tone="muted" className="font-bold tracking-wide">
           Adicionar / atualizar plano por cargo
         </Typography>
@@ -90,7 +90,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
       ) : planos.length === 0 ? (
         <EmptyState title="Nenhum plano cadastrado" description="Adicione o plano de remuneração de cada cargo desta loja." />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-gray-200">
+        <div className="overflow-x-auto rounded-2xl border border-border">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
@@ -104,7 +104,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
             </thead>
             <tbody>
               {planos.map(p => (
-                <tr key={p.id} className="border-t border-gray-200">
+                <tr key={p.id} className="border-t border-border">
                   <td className="px-mx-md py-mx-sm font-bold uppercase">{p.cargo}</td>
                   <td className="px-mx-md py-mx-sm text-right">{BRL.format(Number(p.salario_fixo))}</td>
                   <td className="px-mx-md py-mx-sm text-right">{BRL.format(Number(p.salario_variavel))}</td>

@@ -26,7 +26,7 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
   }
 
   return (
-    <div className="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm">
+    <div className="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
       <div className="flex items-center gap-2 mb-4">
         <Calculator className="w-4 h-4 text-mx-blue" />
         <h3 className="text-base font-bold text-mx-navy">Simule seu Ganho</h3>
@@ -38,7 +38,7 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
           <input
             type="number" min={1} max={30} value={vendasAdicionais}
             onChange={e => setVendasAdicionais(e.target.value)}
-            className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-mx-blue/30"
+            className="w-full border border-border rounded-xl px-3 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-mx-blue/30"
           />
         </div>
         <div>
@@ -50,7 +50,7 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
             type="number" min={0} value={valorMedio}
             placeholder={ticketMedio > 0 ? String(Math.round(ticketMedio)) : "0"}
             onChange={e => setValorMedio(e.target.value)}
-            className="w-full border border-slate-200 rounded-xl px-3 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-mx-blue/30"
+            className="w-full border border-border rounded-xl px-3 py-2.5 text-sm font-medium focus:outline-none focus:ring-2 focus:ring-mx-blue/30"
           />
         </div>
       </div>
@@ -68,7 +68,7 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
             Com mais <span className="font-bold text-mx-navy">{resultado.va} venda{resultado.va !== 1 ? "s" : ""}</span>, seu salário previsto iria para:
           </p>
           <p className="text-4xl font-bold text-mx-navy">{formatBRL(resultado.salario)}</p>
-          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200">
+          <div className="grid grid-cols-2 gap-2 pt-2 border-t border-border">
             <SimLine label="Comissão estimada" value={resultado.novaComissao} />
             <SimLine label="Prêmios estimados" value={resultado.premiacoes} />
             <SimLine label="Ganho adicional" value={resultado.ganhoAdicional} highlight />

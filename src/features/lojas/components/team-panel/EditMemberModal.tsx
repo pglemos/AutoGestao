@@ -107,7 +107,7 @@ export function EditMemberModal({
                       required
                       value={editingMember.name || ''}
                       onChange={e => onChange({ ...editingMember, name: e.target.value.toUpperCase() })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold uppercase tracking-tight focus:outline-none focus:border-emerald-600 transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold uppercase tracking-tight focus:outline-none focus:border-emerald-600 transition-all"
                     />
                   </div>
                 </div>
@@ -124,7 +124,7 @@ export function EditMemberModal({
                       type="email"
                       value={editingMember.email || ''}
                       onChange={e => onChange({ ...editingMember, email: e.target.value })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all"
                     />
                   </div>
                 </div>
@@ -139,7 +139,7 @@ export function EditMemberModal({
                       name="phone"
                       value={editingMember.phone || ''}
                       onChange={e => onChange({ ...editingMember, phone: e.target.value })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all"
                     />
                   </div>
                 </div>
@@ -153,7 +153,7 @@ export function EditMemberModal({
                     name="role"
                     value={editingMember.role || 'vendedor'}
                     onChange={e => onChange({ ...editingMember, role: e.target.value as MembershipRole })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
                   >
                     {editableStoreRoles.map(option => (
                       <option key={option} value={option}>{option}</option>
@@ -170,7 +170,7 @@ export function EditMemberModal({
                     name="store_id"
                     value={editingMember.store_id || storeId || ''}
                     onChange={e => onChange({ ...editingMember, store_id: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
                   >
                     <option value="">Selecione a loja</option>
                     {lojas.map(store => (
@@ -193,7 +193,7 @@ export function EditMemberModal({
                     required
                     value={editingMember.started_at || ''}
                     onChange={e => onChange({ ...editingMember, started_at: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
                   />
                 </div>
                 <div className="space-y-mx-tiny">
@@ -207,11 +207,11 @@ export function EditMemberModal({
                     type="date"
                     value={editingMember.ended_at || ''}
                     onChange={e => onChange({ ...editingMember, ended_at: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-border rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
                   />
                 </div>
 
-                <div className="col-span-1 sm:col-span-2 space-y-mx-sm pt-mx-md border-t border-gray-200">
+                <div className="col-span-1 sm:col-span-2 space-y-mx-sm pt-mx-md border-t border-border">
                   <OptionCard
                     title="Usuário ativo"
                     description="Permite acesso ao sistema"
@@ -254,7 +254,7 @@ export function EditMemberModal({
             </CardContent>
 
             <div
-              className="p-3 sm:p-mx-lg bg-gray-50 border-t border-gray-200 flex items-center justify-between gap-2 shrink-0"
+              className="p-3 sm:p-mx-lg bg-gray-50 border-t border-border flex items-center justify-between gap-2 shrink-0"
               style={{ paddingBottom: 'max(env(safe-area-inset-bottom, 0px), 0.75rem)' }}
             >
               <Button

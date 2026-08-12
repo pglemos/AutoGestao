@@ -53,7 +53,7 @@ export function OptionCard({
         }
       }}
       className={cn(
-        'flex items-center justify-between p-mx-md rounded-2xl bg-gray-50 border border-gray-200 select-none',
+        'flex items-center justify-between p-mx-md rounded-2xl bg-gray-50 border border-border select-none',
         'hover:bg-white hover:shadow-sm transition-all cursor-pointer group',
         disabled && 'opacity-50 cursor-not-allowed hover:bg-gray-50 hover:shadow-none',
         className,

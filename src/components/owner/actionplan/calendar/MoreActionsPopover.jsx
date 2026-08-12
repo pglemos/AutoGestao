@@ -35,7 +35,7 @@ export default function MoreActionsPopover({ actions, onSelectAction, onOpenActi
               <button
                 key={action.id}
                 onClick={() => onOpenAction(action)}
-                className={`w-full rounded border-l-2 bg-white px-2 py-1.5 text-left text-xs shadow-sm hover:shadow-md ${deptStyle.border || "border-slate-200"} ${late ? "border-l-red-500" : ""}`}
+                className={`w-full rounded border-l-2 bg-white px-2 py-1.5 text-left text-xs shadow-sm hover:shadow-md ${deptStyle.border || "border-border"} ${late ? "border-l-red-500" : ""}`}
               >
                 <div className="flex items-center gap-1">
                   <span className="font-medium text-foreground">{action.code}</span>

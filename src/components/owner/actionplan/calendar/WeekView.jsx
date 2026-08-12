@@ -26,7 +26,7 @@ function WeekEvent({ action, provided, isDragging, onOpenAction }) {
       {...provided?.dragHandleProps}
       onClick={(e) => { e.stopPropagation(); onOpenAction(action); }}
       className={`mb-1.5 cursor-grab rounded border-l-2 bg-white p-2 text-xs shadow-sm hover:shadow-md ${
-        deptStyle.border || "border-slate-200"
+        deptStyle.border || "border-border"
       } ${late ? "border-l-red-500" : ""} ${isDragging ? "opacity-70" : ""}`}
     >
       <div className="flex items-center justify-between">
@@ -153,7 +153,7 @@ function WeekViewMobile({ refDate, selectedDate, actionsByDate, onSelectDate, on
               <button
                 key={action.id}
                 onClick={() => onOpenAction(action)}
-                className={`w-full rounded border-l-2 bg-white p-3 text-left shadow-sm ${deptStyle.border || "border-slate-200"} ${late ? "border-l-red-500" : ""}`}
+                className={`w-full rounded border-l-2 bg-white p-3 text-left shadow-sm ${deptStyle.border || "border-border"} ${late ? "border-l-red-500" : ""}`}
               >
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium text-foreground">{action.code}</span>

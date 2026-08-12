@@ -165,7 +165,7 @@ export function AdminSettingsCard({
   if (!selectedStore) return null
 
   return (
-    <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
+    <section className="overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm">
       <header className="p-5">
         <div className="flex flex-col gap-4 xl:flex-row xl:items-center xl:justify-between">
           <div className="flex items-start gap-3">
@@ -186,7 +186,7 @@ export function AdminSettingsCard({
             <button
               type="button"
               onClick={onOpenEdit}
-              className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-muted-foreground hover:bg-gray-50"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-muted-foreground hover:bg-gray-50"
             >
               <Building2 size={15} />
               Editar cadastro
@@ -194,7 +194,7 @@ export function AdminSettingsCard({
             <button
               type="button"
               onClick={onManageBranches}
-              className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-muted-foreground hover:bg-gray-50"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-3 text-sm font-semibold text-muted-foreground hover:bg-gray-50"
               title="Abre em nova aba"
             >
               <Building2 size={15} />
@@ -213,7 +213,7 @@ export function AdminSettingsCard({
       </header>
 
       {showAdminSettings && (
-        <div className="border-t border-gray-100 p-5">
+        <div className="border-t border-border-subtle p-5">
           <div className="mb-5 rounded-xl bg-gray-50 p-4 text-sm leading-6 text-muted-foreground">
             Estes parâmetros controlam metas, fonte de dados, benchmarks e entregas de relatório. A leitura da equipe permanece separada para evitar que configuração e resultado sejam confundidos.
           </div>

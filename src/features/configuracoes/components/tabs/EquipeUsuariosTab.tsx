@@ -159,7 +159,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                     name="role-filter"
                     value={roleFilter}
                     onChange={e => setRoleFilter(e.target.value)}
-                    className="h-mx-12 px-mx-sm bg-gray-50 border border-gray-200 rounded-2xl font-bold uppercase text-xs cursor-pointer"
+                    className="h-mx-12 px-mx-sm bg-gray-50 border border-border rounded-2xl font-bold uppercase text-xs cursor-pointer"
                 >
                     <option value="">Todos os papéis</option>
                     {Object.entries(ROLE_LABEL).map(([k, v]) => <option key={k} value={k}>{v.toUpperCase()}</option>)}

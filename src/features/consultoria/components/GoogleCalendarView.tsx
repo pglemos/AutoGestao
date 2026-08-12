@@ -41,7 +41,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
   if (isLoading) return <div className="p-mx-md text-center text-muted-foreground">Verificando contexto da agenda...</div>;
 
   return (
-    <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-mx-lg">
+    <div className="bg-white rounded-2xl shadow-sm border border-border p-mx-lg">
       <div className="flex items-center justify-between mb-mx-lg">
         <div className="flex items-center gap-mx-sm">
           <div className="p-mx-xs bg-mx-indigo-50 text-emerald-600 rounded-xl">
@@ -75,7 +75,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
       </div>
 
       {!isConnected ? (
-        <div className="text-center py-mx-xl border-2 border-dashed border-gray-200 rounded-2xl">
+        <div className="text-center py-mx-xl border-2 border-dashed border-border rounded-2xl">
           <Typography variant="p" className="mb-mx-lg">
             {context.description}
           </Typography>
@@ -93,7 +93,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
       ) : (
         <div className="space-y-mx-sm">
           {!context.linkedToClient && (
-            <div className="p-mx-md bg-gray-50 text-muted-foreground rounded-xl border border-gray-200">
+            <div className="p-mx-md bg-gray-50 text-muted-foreground rounded-xl border border-border">
               <Typography variant="caption">{context.description}</Typography>
             </div>
           )}
@@ -130,7 +130,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
               {events.map((event) => (
                 <div
                   key={event.id}
-                  className="flex items-start gap-mx-sm p-mx-md rounded-xl border border-gray-200 hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-colors"
+                  className="flex items-start gap-mx-sm p-mx-md rounded-xl border border-border hover:border-brand-primary/30 hover:bg-emerald-600/5 transition-colors"
                 >
                   <div className="p-mx-xs bg-emerald-600/10 rounded-xl mt-0.5">
                     <Clock size={14} className="text-emerald-600" />

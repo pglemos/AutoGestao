@@ -60,7 +60,7 @@ export default function Privacy() {
                                 </Card>
                             </div>
 
-                            <div className="space-y-mx-md pt-10 border-t border-gray-200">
+                            <div className="space-y-mx-md pt-10 border-t border-border">
                                 <header className="flex items-center gap-mx-sm">
                                     <div className="w-mx-10 h-mx-10 rounded-xl bg-gray-900 text-emerald-600 flex items-center justify-center shadow-sm"><CalendarDays size={20} /></div>
                                     <Typography variant="h2">Uso de Dados do Google Calendar e Meet</Typography>
@@ -73,7 +73,7 @@ export default function Privacy() {
                                 </Typography>
                             </div>
 
-                            <div className="space-y-mx-md pt-10 border-t border-gray-200">
+                            <div className="space-y-mx-md pt-10 border-t border-border">
                                 <header className="flex items-center gap-mx-sm">
                                     <div className="w-mx-10 h-mx-10 rounded-xl bg-gray-900 text-emerald-600 flex items-center justify-center shadow-sm"><ShieldCheck size={20} /></div>
                                     <Typography variant="h2">Arquitetura de Blindagem</Typography>
@@ -84,7 +84,7 @@ export default function Privacy() {
                             </div>
                         </div>
 
-                        <footer className="pt-10 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-mx-10 w-full flex-wrap">
+                        <footer className="pt-10 border-t border-border flex flex-col sm:flex-row items-center justify-between gap-mx-10 w-full flex-wrap">
                             <Button variant="ghost" onClick={() => navigate(-1)} className="text-caption font-bold text-muted-foreground hover:text-emerald-600 bg-white shadow-sm rounded-mx-full px-6 h-mx-xl w-full sm:w-auto justify-center">
                                 <ArrowLeft size={16} className="mr-2" /> VOLTAR AO SISTEMA
                             </Button>

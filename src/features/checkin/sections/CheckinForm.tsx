@@ -102,7 +102,7 @@ export function InfoTooltip({ text }: { text: string }) {
       </button>
       {visible && (
         <div
-          className="fixed z-[9999] w-64 -translate-x-1/2 -translate-y-full rounded-lg border border-gray-200 bg-white p-3 text-[12px] font-medium leading-relaxed text-muted-foreground shadow-lg pointer-events-none transition-all"
+          className="fixed z-[9999] w-64 -translate-x-1/2 -translate-y-full rounded-lg border border-border bg-white p-3 text-[12px] font-medium leading-relaxed text-muted-foreground shadow-lg pointer-events-none transition-all"
           style={{
             top: `${coords.top}px`,
             left: `${coords.left}px`,
@@ -683,7 +683,7 @@ Você informou {totalAgendamentosD1} Agendamentos D+1 e detalhou {creditosValido
                 <li>Pontuação estimada de disciplina: {disciplinePercent}%</li>
               </ul>
             </div>
- <footer className="flex items-center justify-end gap-3 border-t border-slate-100 px-6 py-4">
+ <footer className="flex items-center justify-end gap-3 border-t border-border-subtle px-6 py-4">
               <button
                 type="button"
  onClick={() => setConfirmFinalizeModalOpen(false)}
@@ -759,7 +759,7 @@ saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoCon
           <button
             type="button"
             onClick={onOpenHistory}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
           >
             <History size={15} aria-hidden="true" />
             Histórico de Fechamentos
