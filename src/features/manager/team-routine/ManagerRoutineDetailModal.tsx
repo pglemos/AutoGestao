@@ -30,7 +30,7 @@ export function ManagerRoutineDetailModal({ open, sellerName, date, actions, app
   if (!open) return null
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 p-4" role="dialog" aria-modal="true" aria-labelledby={hasRoutine ? 'manager-routine-detail-title' : undefined}>
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-surface-overlay/30 p-4" role="dialog" aria-modal="true" aria-labelledby={hasRoutine ? 'manager-routine-detail-title' : undefined}>
       {!hasRoutine ? <div className="w-full max-w-md rounded-2xl bg-white p-6 text-center shadow-xl">
           <p className="text-sm text-muted-foreground">Nenhuma rotina registrada para este vendedor nesta data.</p>
           <button type="button" className="mt-4 rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-foreground hover:bg-muted" onClick={onClose}>Fechar</button>

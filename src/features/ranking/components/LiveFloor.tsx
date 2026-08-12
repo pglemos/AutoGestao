@@ -98,7 +98,7 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
                                             </div>
                                         </div>
                                     </div>
-                                    <div className="font-mono font-bold text-sm px-2 py-1 rounded-lg border bg-black/20 text-white/80 border-white/5">
+                                    <div className="font-mono font-bold text-sm px-2 py-1 rounded-lg border bg-surface-overlay/20 text-white/80 border-white/5">
                                         {agent.duration}
                                     </div>
                                 </div>
@@ -108,7 +108,7 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
                                         <span>Vendas</span>
                                         <span className={agent.vnd_total > 0 ? 'text-status-success-text' : ''}>{agent.vnd_total}/{agent.meta}</span>
                                     </div>
-                                    <div className="h-mx-tiny.5 bg-black/20 rounded-full overflow-hidden">
+                                    <div className="h-mx-tiny.5 bg-surface-overlay/20 rounded-full overflow-hidden">
                                         <div className="h-full bg-brand-primary rounded-full" style={{ width: `${Math.min(agent.atingimento, 100)}%` }} />
                                     </div>
                                 </div>

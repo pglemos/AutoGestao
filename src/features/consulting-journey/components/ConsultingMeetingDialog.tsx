@@ -22,7 +22,7 @@ export function ConsultingMeetingDialog({ controller }: { controller: Consulting
   useEffect(() => { if (visit?.id) setTab('lesson') }, [visit?.id])
   if (!controller.dialogOpen || !visit) return null
   return (
-    <div className="fixed inset-0 z-[140] flex items-center justify-center bg-black/55 p-3" role="presentation" onMouseDown={(event: MouseEvent<HTMLDivElement>) => { if (event.target === event.currentTarget) controller.closeVisit() }}>
+    <div className="fixed inset-0 z-[140] flex items-center justify-center bg-surface-overlay/55 p-3" role="presentation" onMouseDown={(event: MouseEvent<HTMLDivElement>) => { if (event.target === event.currentTarget) controller.closeVisit() }}>
       <section role="dialog" aria-modal="true" aria-labelledby="consulting-meeting-title" className="flex max-h-[94vh] w-full max-w-5xl flex-col overflow-hidden rounded-2xl bg-background shadow-2xl">
         <header className="flex items-start justify-between gap-4 border-b border-border p-4 sm:p-5">
           <div><p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Encontro {visit.visitNumber}</p><h2 id="consulting-meeting-title" className="mt-1 text-xl font-semibold text-foreground">{visit.objective || 'Jornada de Consultoria'}</h2></div>

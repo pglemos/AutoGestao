@@ -96,7 +96,7 @@ export function Modal({
           data-reference-overlay={referenceStyle ? "true" : undefined}
           className={cn(
             "mx-overlay-backdrop fixed inset-0 z-[var(--mx-z-overlay,50)]",
-            referenceStyle ? "bg-black/30" : "bg-gray-900/60 backdrop-blur-md",
+            referenceStyle ? "bg-surface-overlay/30" : "bg-gray-900/60 backdrop-blur-md",
           )}
         />
         <Dialog.Content

@@ -457,7 +457,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
       </div>
 
       {pausarOpen && (
-        <div className="fixed inset-0 z-[210] grid place-items-center bg-black/50 p-4">
+        <div className="fixed inset-0 z-[210] grid place-items-center bg-surface-overlay/50 p-4">
           <Card className="w-full max-w-xs space-y-mx-sm p-mx-lg text-center">
             <span className="mx-auto grid h-12 w-12 place-items-center rounded-full bg-status-warning-surface text-status-warning-text">
               <Pause size={20} />

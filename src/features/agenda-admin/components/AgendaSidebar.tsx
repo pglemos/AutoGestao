@@ -120,7 +120,7 @@ export function AgendaSidebar({
                 <span
                   className={cn(
                     'px-1 py-0.5 rounded-full text-caption font-mono font-semibold',
-                    isActive ? 'bg-black/20 text-white' : 'bg-gray-50 text-muted-foreground',
+                    isActive ? 'bg-surface-overlay/20 text-white' : 'bg-gray-50 text-muted-foreground',
                   )}
                 >
                   {opt.count}

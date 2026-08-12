@@ -35,7 +35,7 @@ export function ManagerRoutineChargeModal({ open, sellerName, date, onClose, onS
   }
 
   return (
-    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 p-4" role="dialog" aria-modal="true" aria-labelledby="manager-routine-charge-title">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-surface-overlay/30 p-4" role="dialog" aria-modal="true" aria-labelledby="manager-routine-charge-title">
       <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
         <button type="button" aria-label="Fechar modal" onClick={onClose} className="absolute right-4 top-4 text-muted-foreground hover:text-muted-foreground"><X size={18}/></button>
         <h2 id="manager-routine-charge-title" className="mb-1 text-lg font-semibold text-foreground">Cobrar rotina do vendedor</h2>

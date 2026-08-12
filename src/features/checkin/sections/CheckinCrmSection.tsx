@@ -900,7 +900,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
 
       {drawerOpen && (
         <div
-          className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4 backdrop-blur-[3px] overflow-y-auto"
+          className="fixed inset-0 z-50 grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px] overflow-y-auto"
           role="dialog"
           aria-modal="true"
           aria-label="Cadastro completo do cliente"
@@ -1315,7 +1315,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
       />
 
       {coerenciaModalOpen && (
-        <div className="fixed inset-0 z-[150] grid place-items-center bg-black/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Confirme a origem da venda">
+        <div className="fixed inset-0 z-[150] grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Confirme a origem da venda">
           <div className="w-full max-w-[440px] rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl">
             <header className="px-6 py-5 border-b border-[#DFE0E1]">
               <h2 className="flex items-center gap-2 text-[16px] font-extrabold text-[#071822]">

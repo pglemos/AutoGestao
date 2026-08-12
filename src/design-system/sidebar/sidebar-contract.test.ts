@@ -54,7 +54,7 @@ describe('design tokens da sidebar', () => {
     expect(SIDEBAR.drawerPanel).toContain('max-w-[var(--mx-sidebar-drawer-max-width)]')
     expect(SIDEBAR.drawerPanel).toContain('sm:w-[var(--mx-sidebar-drawer-width-sm)]')
     expect(SIDEBAR.drawerOverlay).toContain('xl:hidden')
-    expect(SIDEBAR.drawerScrim).toContain('bg-black/40')
+    expect(SIDEBAR.drawerScrim).toContain('bg-surface-overlay/40')
   })
 
   test('usa uma única marca e um ícone neutro também no item ativo', () => {

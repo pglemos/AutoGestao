@@ -438,7 +438,7 @@ return (
       </section>
 
       {disciplineModalOpen && (
-<div className="fixed inset-0 z-[140] grid place-items-center bg-black/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
+<div className="fixed inset-0 z-[140] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
 <div className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(620px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
             {/* Fixed Header */}
             <header className="px-6 py-5 border-b border-[#DFE0E1] flex items-center justify-between bg-[#F7F8F8]">
@@ -651,7 +651,7 @@ return (
       )}
 
 {confirmFinalizeModalOpen && (
-<div className="fixed inset-0 z-[140] grid place-items-center bg-black/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
+<div className="fixed inset-0 z-[140] grid place-items-center bg-surface-overlay/35 px-4 pb-[calc(1rem+env(safe-area-inset-bottom))] pt-[calc(1rem+env(safe-area-inset-top))] backdrop-blur-[3px]">
 <div role="dialog" aria-modal="true" aria-labelledby="checkin-finalize-title" aria-describedby="checkin-finalize-description" className="flex max-h-[calc(100dvh-2rem-env(safe-area-inset-top)-env(safe-area-inset-bottom))] w-full max-w-[min(460px,calc(100vw-2rem))] flex-col overflow-hidden rounded-2xl border border-[#DFE0E1] bg-white shadow-mx-2xl transition-all animate-in fade-in zoom-in-95 duration-200">
 <header className="border-b border-[#DFE0E1] bg-white px-6 py-5">
 <h2 id="checkin-finalize-title" className="text-h5 font-bold leading-snug tracking-tight text-[#0F172A]">

@@ -64,7 +64,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
   }
 
   return (
-    <div className="fixed inset-0 z-[300] grid place-items-center bg-black/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Alterar próximo passo">
+    <div className="fixed inset-0 z-[300] grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Alterar próximo passo">
       <Card className="w-full max-w-md space-y-mx-sm p-mx-lg">
         <div className="flex items-start justify-between">
           <div>

@@ -66,7 +66,7 @@ export function ManagerSellerProfileModal({
   const sellerTarget = seller.meta > 0 ? seller.meta : null
 
   return (
-    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-black/30 p-4">
+    <div className="fixed inset-0 z-[110] flex items-center justify-center bg-surface-overlay/30 p-4">
       <section role="dialog" aria-modal="true" aria-label={`Perfil de ${seller.user_name}`} className="z-[120] flex max-h-[92vh] w-[90vw] max-w-7xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl">
         <header className="flex shrink-0 flex-wrap items-start justify-between gap-2 border-b border-border-subtle px-6 py-4 sm:gap-4">
           <div className="ml-4 flex min-w-0 items-center gap-4 sm:ml-0">

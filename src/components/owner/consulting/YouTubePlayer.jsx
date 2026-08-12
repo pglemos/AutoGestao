@@ -295,9 +295,9 @@ export default function YouTubePlayer({ videoId, lessonId, userId = "demo", init
   return (
     <div className="space-y-3">
       {/* Player */}
-      <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-black">
+      <div className="relative aspect-video w-full overflow-hidden rounded-lg bg-surface-overlay">
         {loading && (
-          <div className="absolute inset-0 flex items-center justify-center bg-black">
+          <div className="absolute inset-0 flex items-center justify-center bg-surface-overlay">
             <Loader2 className="h-8 w-8 animate-spin text-white/60" />
           </div>
         )}
@@ -305,7 +305,7 @@ export default function YouTubePlayer({ videoId, lessonId, userId = "demo", init
 
         {/* Overlay continuar */}
         {showContinue && !loading && (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/80 backdrop-blur-sm">
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-surface-overlay/80 backdrop-blur-sm">
             <p className="text-sm font-medium text-white">Continuar de {formatTime(initialProgress?.currentPositionSeconds)}</p>
             <div className="mt-4 flex gap-2">
               <Button size="sm" onClick={handleContinue}>Continuar</Button>

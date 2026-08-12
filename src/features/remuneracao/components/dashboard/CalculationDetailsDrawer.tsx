@@ -19,7 +19,7 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
       <button
         type="button"
         aria-label="Fechar detalhamento do cálculo"
-        className="absolute inset-0 bg-black/50 backdrop-blur-sm"
+        className="absolute inset-0 bg-surface-overlay/50 backdrop-blur-sm"
         onClick={onClose}
       />
       <div className="relative bg-white rounded-t-2xl sm:rounded-2xl w-full sm:max-w-lg max-h-[85vh] overflow-y-auto shadow-2xl">

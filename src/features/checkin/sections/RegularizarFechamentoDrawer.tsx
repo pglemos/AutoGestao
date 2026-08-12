@@ -180,7 +180,7 @@ export function RegularizarFechamentoDrawer({
       <button
         type="button"
         aria-label="Fechar regularização"
-        className="absolute inset-0 bg-black/40 backdrop-blur-[2px]"
+        className="absolute inset-0 bg-surface-overlay/40 backdrop-blur-[2px]"
         onClick={onClose}
       />
       <div className="relative z-10 flex w-full max-w-4xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-[#F8FAFC] shadow-2xl">

@@ -33,7 +33,7 @@ describe("Modal referenceStyle", () => {
     expect(dialog.className).toContain("rounded-2xl");
     expect(dialog.className).toContain("shadow-xl");
     expect(overlay).toBeTruthy();
-    expect(overlay?.className).toContain("bg-black/30");
+    expect(overlay?.className).toContain("bg-surface-overlay/30");
     expect(overlay?.className).not.toContain("backdrop-blur");
 
     const title = screen.getByRole("heading", { name: "Agenda D+1" });

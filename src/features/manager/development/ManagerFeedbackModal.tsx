@@ -56,7 +56,7 @@ export function ManagerFeedbackModal({ open, saving, sellers, initialDate, prese
     onSubmit({ ...draft, impact: draft.impact === 'Outro' ? impactCustom.trim() : draft.impact })
   }
 
-  return <div className="fixed inset-0 z-[140] flex items-end justify-center bg-black/30 p-0 backdrop-blur-[1px] sm:items-center sm:p-6" role="presentation">
+  return <div className="fixed inset-0 z-[140] flex items-end justify-center bg-surface-overlay/30 p-0 backdrop-blur-[1px] sm:items-center sm:p-6" role="presentation">
     <div ref={dialogRef} role="dialog" aria-modal="true" aria-labelledby="manager-feedback-title" className="flex max-h-[92vh] w-full max-w-2xl flex-col overflow-hidden rounded-t-2xl bg-white shadow-xl sm:rounded-2xl">
       <header className="sticky top-0 z-10 flex items-center justify-between border-b border-border-subtle bg-white px-6 py-4">
         <h2 id="manager-feedback-title" className="text-lg font-semibold text-foreground">Novo Feedback</h2>

@@ -639,7 +639,7 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
   const formProps: FormProps = { form, setF, clienteEncontrado: !!clienteEncontradoId, clienteJaVendido, onPhoneBlur: handleWhatsAppBlur, responsaveis }
 
   return (
-    <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4 backdrop-blur-[3px] overflow-y-auto" role="dialog" aria-modal="true" aria-label="Novo registro">
+    <div className="fixed inset-0 z-50 grid place-items-center bg-surface-overlay/40 p-4 backdrop-blur-[3px] overflow-y-auto" role="dialog" aria-modal="true" aria-label="Novo registro">
       <div className="relative my-8 w-full max-w-2xl rounded-2xl border border-border-subtle bg-white p-6 shadow-mx-2xl">
         <div className="mb-1 flex items-center justify-between">
           <div className="flex items-center gap-2">

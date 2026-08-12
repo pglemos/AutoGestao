@@ -227,7 +227,7 @@ export function ConsultingVideoPlayer({
 
   return (
     <div className="space-y-3">
-      <div className="aspect-video overflow-hidden rounded-xl border border-border bg-black">
+      <div className="aspect-video overflow-hidden rounded-xl border border-border bg-surface-overlay">
         {youtubeId ? <div ref={youtubeContainerRef} className="h-full w-full" aria-label="Aula em vídeo" /> : (
           <video ref={videoRef} src={url} controls preload="metadata" className="h-full w-full" onLoadedMetadata={onLoadedMetadata} onPlay={() => { playingRef.current = true; sample() }} onPause={() => { playingRef.current = false; void flush() }} onEnded={() => { playingRef.current = false; void flush() }} onSeeking={() => sample()} aria-label="Aula em vídeo" />
         )}

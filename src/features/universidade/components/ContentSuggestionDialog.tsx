@@ -57,7 +57,7 @@ export function ContentSuggestionDialog() {
 
       {open && (
         <div
-          className="fixed inset-0 z-[180] grid place-items-center bg-black/45 p-4"
+          className="fixed inset-0 z-[180] grid place-items-center bg-surface-overlay/45 p-4"
           role="presentation"
           onMouseDown={event => { if (event.target === event.currentTarget) close() }}
         >

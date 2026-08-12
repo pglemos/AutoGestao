@@ -77,7 +77,7 @@ function TrainingCard({ training, completed, onOpen, large = false }: { training
                 ) : (
                     <div className="absolute inset-0 bg-gradient-to-br from-mx-navy to-mx-blue" />
                 )}
-                <div className="absolute inset-0 flex items-center justify-center bg-black/25">
+                <div className="absolute inset-0 flex items-center justify-center bg-surface-overlay/25">
                     <Play className="h-10 w-10 text-white/80 transition-all duration-300 group-hover:scale-110 group-hover:text-white" />
                 </div>
                 {completed && (
@@ -369,7 +369,7 @@ export default function VendedorTreinamentosContainer() {
             </Tabs>
 
             {selectedTraining && (
-                <div className="fixed inset-0 z-[160] grid place-items-center bg-black/55 p-4" onPointerDown={(event) => { if (event.target === event.currentTarget) setSelectedTraining(null) }}>
+                <div className="fixed inset-0 z-[160] grid place-items-center bg-surface-overlay/55 p-4" onPointerDown={(event) => { if (event.target === event.currentTarget) setSelectedTraining(null) }}>
                     <div role="dialog" aria-modal="true" aria-labelledby="training-detail-title" className="flex max-h-[92vh] w-full max-w-4xl flex-col overflow-hidden rounded-2xl bg-white shadow-2xl">
                         <header className="flex items-start justify-between border-b border-border p-5">
                             <div>

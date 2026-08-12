@@ -111,7 +111,7 @@ export const SIDEBAR = {
 
   /** Drawer mobile/tablet. */
   drawerOverlay: 'fixed inset-0 z-[var(--mx-z-drawer)] xl:hidden',
-  drawerScrim: 'absolute inset-0 bg-black/40',
+  drawerScrim: 'absolute inset-0 bg-surface-overlay/40',
   drawerPanel:
     'relative z-10 flex h-full w-[var(--mx-sidebar-drawer-width)] max-w-[var(--mx-sidebar-drawer-max-width)] flex-col overflow-hidden bg-mxsb-surface shadow-[var(--mx-shadow-xl)] sm:w-[var(--mx-sidebar-drawer-width-sm)] sm:max-w-sm',
   drawerClose:

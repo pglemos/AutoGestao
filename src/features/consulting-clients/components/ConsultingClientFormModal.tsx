@@ -16,7 +16,7 @@ export function ConsultingClientFormModal(props: {
 }) {
   if (!props.open) return null
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" role="dialog" aria-modal="true" aria-labelledby="consulting-client-modal-title" onMouseDown={event => { if (event.currentTarget === event.target) props.onClose() }}>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay/50 p-4" role="dialog" aria-modal="true" aria-labelledby="consulting-client-modal-title" onMouseDown={event => { if (event.currentTarget === event.target) props.onClose() }}>
       <section className="max-h-[90vh] w-full max-w-3xl overflow-y-auto rounded-2xl bg-white p-5 shadow-xl">
         <h2 id="consulting-client-modal-title" className="text-xl font-bold text-foreground">{props.editing ? 'Editar cliente da consultoria' : 'Novo cliente da consultoria'}</h2>
         <div className="mt-5 grid gap-4 sm:grid-cols-2">

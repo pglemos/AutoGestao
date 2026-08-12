@@ -147,7 +147,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   disabled={uploadingAvatar}
-                  className="absolute inset-0 bg-black/60 rounded-3xl opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center text-white gap-2 disabled:opacity-50"
+                  className="absolute inset-0 bg-surface-overlay/60 rounded-3xl opacity-0 group-hover/avatar:opacity-100 transition-opacity flex flex-col items-center justify-center text-white gap-2 disabled:opacity-50"
                 >
                   {uploadingAvatar ? <RefreshCw size={24} className="animate-spin" /> : <Camera size={24} />}
                   <span className="text-xs font-bold text-white">{uploadingAvatar ? 'Enviando...' : 'ALTERAR'}</span>
@@ -243,7 +243,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
           role="dialog"
           aria-modal="true"
           aria-labelledby="profile-password-modal-title"
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4"
+          className="fixed inset-0 z-50 flex items-center justify-center bg-surface-overlay/50 p-4"
           onClick={() => setShowPasswordModal(false)}
           onKeyDown={(event) => {
             if (event.key === 'Escape') setShowPasswordModal(false)
