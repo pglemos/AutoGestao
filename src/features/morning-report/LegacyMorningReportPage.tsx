@@ -278,6 +278,7 @@ function AdminMorningReport() {
             className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
             aria-busy="true"
             aria-live="polite"
+            role="status"
             aria-label="Consolidando rede"
         >
             <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10">
@@ -382,7 +383,7 @@ function AdminMorningReport() {
                     </div>
                 </CardHeader>
 
-                <div className="overflow-x-auto no-scrollbar">
+                <div className="overflow-x-auto no-scrollbar" role="region" tabIndex={0} aria-label="Grade operacional da rede com rolagem horizontal">
                     <table className="w-full text-left border-collapse">
                         <thead>
                             <tr className="bg-gray-50/50 border-b border-border">
@@ -564,6 +565,7 @@ function StoreMorningReport() {
             className="w-full h-full flex flex-col gap-mx-lg p-mx-md md:p-mx-lg bg-gray-50 animate-in fade-in duration-500"
             aria-busy="true"
             aria-live="polite"
+            role="status"
             aria-label="Consolidando matinal"
         >
             <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10">
@@ -673,7 +675,7 @@ function StoreMorningReport() {
                             </div>
                         </div>
                     </CardHeader>
-                    <div className="overflow-x-auto no-scrollbar">
+                    <div className="overflow-x-auto no-scrollbar" role="region" tabIndex={0} aria-label="Grade operacional do time com rolagem horizontal">
                         <table className="w-full text-left border-collapse">
                             <thead>
                                 <tr className="bg-gray-50/50 border-b border-border">

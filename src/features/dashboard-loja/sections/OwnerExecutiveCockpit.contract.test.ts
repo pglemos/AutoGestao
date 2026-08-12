@@ -24,4 +24,12 @@ describe('OwnerExecutiveCockpit data-backed sections', () => {
     expect(source).not.toContain('p-mx-sm')
     expect(source).not.toContain('md:p-mx-lg')
   })
+
+  test('não aninha canvas ao renderizar Universidade MX dentro do cockpit', () => {
+    expect(source).toContain('<UniversidadeMx userId={profile?.id ?? null} embedded />')
+  })
+
+  test('não aninha canvas ao renderizar a Meta da Loja no DashboardLoja', () => {
+    expect(dashboardSource).toContain('onStoreChange={setActiveStoreId} embedded />')
+  })
 })

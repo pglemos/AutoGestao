@@ -4,7 +4,7 @@ import { VIEW_OPTIONS } from "./strategicUtils";
 export default function ViewSelector({ value, onChange }) {
   return (
     <Select value={value} onValueChange={onChange}>
-      <SelectTrigger className="h-9 w-[148px] bg-card">
+      <SelectTrigger aria-label="Selecionar visualização" className="h-9 w-[148px] bg-card">
         <SelectValue />
       </SelectTrigger>
       <SelectContent>

@@ -110,6 +110,7 @@ describe('arquitetura de tokens do MX Design System', () => {
     const sem = declarations(semantic)
     expect(sem.get('--primary')).toBe('var(--mx-color-primary)')
     expect(sem.get('--mx-color-primary')).toBe('var(--mx-green-600)')
+    expect(sem.get('--mx-color-primary-foreground')).toBe('var(--mx-neutral-0)')
     // Raio base shadcn deriva do primitivo canônico (--mx-radius-lg: 10px),
     // que reproduz o 0.625rem medido no Base44 sem valor cru na camada
     // semântica.

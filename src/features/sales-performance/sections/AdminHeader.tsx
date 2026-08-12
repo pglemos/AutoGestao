@@ -22,17 +22,13 @@ export function AdminHeader({ metrics, isRefetching, onRefresh, onExport }: Prop
     >
       <div className="flex flex-col gap-mx-tiny">
         <div className="flex items-center gap-mx-sm">
-          <div
-            className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-sm"
-            aria-hidden="true"
-          />
           <Typography variant="h1">
             BI Executivo <span className="text-mx-green-700">da Rede</span>
           </Typography>
         </div>
         <Typography
           variant="caption"
-          className="pl-mx-md leading-relaxed"
+          className="leading-relaxed"
         >
           {metrics.storeCount} lojas | {metrics.totalUsers} usuarios | {metrics.consultingClients}{' '}
           clientes consultoria | historico {shortDate(metrics.period.historyStart)} ate{' '}

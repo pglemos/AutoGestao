@@ -30,6 +30,7 @@ import {
   SheetTitle,
 } from "@/components/ui/sheet";
 import ExecutiveFilters from "@/components/owner/actionplan/ExecutiveFilters";
+import { PageCanvas } from "@/design-system/page";
 
 const TAB_MAP = { acoes: "acoes", calendario: "calendario" };
 const DEFAULT_FILTERS = {
@@ -428,7 +429,7 @@ export default function PlanoDeAcao() {
   const filteredActions = filterActions(actions, filters);
 
   return (
-    <div id="page-plano-acao" aria-label="Plano de Ação" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" id="page-plano-acao" aria-label="Plano de Ação" className="flex min-h-0 flex-1 flex-col space-y-6">
       <ActionPlanHeader
         onNewAction={() => handleNewAction()}
         onExport={handleExport}
@@ -585,6 +586,6 @@ export default function PlanoDeAcao() {
         onConfirm={handleModalConfirm}
         responsiblePeople={responsiblePeople}
       />
-    </div>
+    </PageCanvas>
   );
 }

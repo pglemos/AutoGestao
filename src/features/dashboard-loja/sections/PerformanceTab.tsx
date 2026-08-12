@@ -147,6 +147,9 @@ export function PerformanceTab({
           ranking={data.metrics.ranking}
           mixCanais={mixCanais}
           diagnostics={data.diagnostics}
+          storeId={selectedStoreId}
+          periodStartDate={data.periodStartDate}
+          periodEndDate={data.periodEndDate}
         />
       </DashboardErrorBoundary>
     </>

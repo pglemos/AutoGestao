@@ -12,7 +12,7 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
   const allSelected = sorted.length > 0 && sorted.every((a) => selectedIds.includes(a.id));
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-border">
+    <div className="overflow-x-auto rounded-xl border border-border" role="region" tabIndex={0} aria-label="Lista de ações com rolagem horizontal">
       <table className="w-full min-w-[1980px] table-fixed text-sm">
         <colgroup>
           <col className="w-10" /><col className="w-28" /><col className="w-64" /><col className="w-48" />
@@ -23,7 +23,7 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
         <thead className="sticky top-0 bg-muted/50">
           <tr className="border-b border-border">
             <th className="w-10 px-2 py-2 text-left">
-              <Checkbox checked={allSelected} onCheckedChange={() => onToggleSelectAll(sorted.map((a) => a.id))} />
+              <Checkbox aria-label="Selecionar todas as ações" checked={allSelected} onCheckedChange={() => onToggleSelectAll(sorted.map((a) => a.id))} />
             </th>
             <th className="sticky left-10 z-10 whitespace-nowrap bg-muted/50 px-3 py-2 text-left text-xs font-medium text-muted-foreground">
               <SortButton label="Código" onClick={() => onSortChange("updated_recent")} />
@@ -56,7 +56,7 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
             return (
               <tr key={action.id} className={`border-b border-border transition-colors hover:bg-muted/30 ${selected ? "bg-status-success-surface/40" : ""}`}>
                 <td className="px-2 py-2">
-                  <Checkbox checked={selected} onCheckedChange={() => onToggleSelect(action.id)} />
+                  <Checkbox aria-label={`Selecionar ação ${action.title}`} checked={selected} onCheckedChange={() => onToggleSelect(action.id)} />
                 </td>
                 <td className="sticky left-10 z-10 bg-card px-3 py-2 text-xs font-bold text-muted-foreground">{action.code}</td>
                 <td className="sticky left-[88px] z-10 max-w-[256px] bg-card px-3 py-2">
@@ -87,7 +87,7 @@ export default function ListView({ actions, sortBy, onSortChange, onQuickAction,
                 <td className="px-2 py-2 text-center">
                   <DropdownMenu>
                     <DropdownMenuTrigger asChild>
-                      <Button size="sm" variant="ghost" className="h-7 w-7 p-0"><MoreVertical className="h-3.5 w-3.5" /></Button>
+                      <Button size="sm" variant="ghost" aria-label={`Ações para ${action.title}`} className="h-7 w-7 p-0"><MoreVertical className="h-3.5 w-3.5" /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-52">
                       <DropdownMenuItem onClick={() => onQuickAction(action, "open")}><Eye className="h-3.5 w-3.5" /> Abrir</DropdownMenuItem>

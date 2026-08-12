@@ -26,7 +26,7 @@ function formatDate(value: string) {
 function barColor(type: CentralExecutionAction['activityType']) {
   if (['atendimento', 'visita', 'test_drive', 'negociacao'].includes(type)) return 'bg-status-info'
   if (type === 'retorno') return 'bg-status-warning'
-  if (type === 'entrega') return 'bg-purple-500'
+  if (type === 'entrega') return 'bg-status-info'
   if (type === 'pos_venda') return 'bg-teal-500'
   if (type === 'garantia') return 'bg-status-warning'
   if (type === 'aniversario') return 'bg-indigo-500'

@@ -171,7 +171,7 @@ export function OwnerRoutineView({
           )}
         </div>
 
-        <div className="mt-mx-md overflow-x-auto">
+        <div className="mt-mx-md overflow-x-auto" role="region" tabIndex={0} aria-label="Fechamento diário da equipe com rolagem horizontal">
           <table className="w-full min-w-[700px] text-sm">
             <thead className="bg-gray-50">
               <tr>

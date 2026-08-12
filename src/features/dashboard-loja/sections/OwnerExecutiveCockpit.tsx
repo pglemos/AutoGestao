@@ -107,7 +107,7 @@ export function OwnerExecutiveCockpit({ data, alerts }: OwnerExecutiveCockpitPro
 
   const universityContent = (
     <>
-      <UniversidadeMx userId={profile?.id ?? null} />
+      <UniversidadeMx userId={profile?.id ?? null} embedded />
       <OwnerModuleGrid
         title="Universidade MX"
         subtitle="Conteúdos, playbooks e trilhas aplicados à execução estratégica."

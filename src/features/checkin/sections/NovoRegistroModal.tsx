@@ -101,7 +101,7 @@ const TIPOS: TipoDef[] = [
   { id: 'agendamento', icon: CalendarCheck, label: 'Agendamento', desc: 'Compromisso comercial futuro', cor: 'border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text', iconCor: 'text-status-info' },
   { id: 'venda', icon: ShoppingCart, label: 'Venda', desc: 'Negócio fechado', cor: 'border-green-200 bg-green-50 hover:bg-green-100 text-green-700', iconCor: 'text-green-500' },
   { id: 'garantia', icon: ShieldCheck, label: 'Garantia', desc: 'Pós-venda ou garantia de veículo', cor: 'border-status-warning/30 bg-status-warning-surface hover:bg-status-warning-surface text-status-warning-text', iconCor: 'text-status-warning' },
-  { id: 'qualificado', icon: UserCheck, label: 'Qualificado', desc: 'Nova oportunidade trabalhável', cor: 'border-purple-200 bg-purple-50 hover:bg-purple-100 text-purple-700', iconCor: 'text-purple-500' },
+  { id: 'qualificado', icon: UserCheck, label: 'Qualificado', desc: 'Nova oportunidade trabalhável', cor: 'border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text', iconCor: 'text-status-info-text' },
 ]
 
 function TipoSelector({ onSelect }: { onSelect: (t: RegistroTipo) => void }) {
@@ -673,7 +673,7 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
             <button type="button" onClick={handleClose} disabled={saving} className="rounded-xl border border-[#E5E7EB] px-5 py-2.5 text-body-sm font-semibold text-[#64748B] transition-colors hover:bg-slate-50">
               Cancelar
             </button>
-            <Button type="button" onClick={handleSave} disabled={!ok || saving} className="rounded-xl bg-[#6D28D9] px-6 py-2.5 text-body-sm font-bold text-white hover:bg-purple-700 disabled:opacity-50">
+            <Button type="button" onClick={handleSave} disabled={!ok || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white hover:bg-status-info disabled:opacity-50 shadow-[var(--mx-button-shadow)]">
               {saving ? 'Salvando…' : `Salvar ${tipo.charAt(0).toUpperCase() + tipo.slice(1)}`}
             </Button>
           </div>

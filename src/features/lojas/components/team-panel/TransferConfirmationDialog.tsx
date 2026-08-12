@@ -68,7 +68,7 @@ export function TransferConfirmationDialog({
             </div>
           </div>
 
-          <div id="transfer-confirm-description" className="space-y-mx-md bg-status-warning-surface/60 rounded-2xl p-mx-md border border-status-warning/30/60">
+          <div id="transfer-confirm-description" className="space-y-mx-md bg-status-warning-surface/60 rounded-2xl p-mx-md border border-status-warning/60">
             <p className="text-xs text-foreground font-medium leading-relaxed">
               O e-mail <strong className="text-foreground font-bold">{existingUser.email}</strong> já pertence ao integrante{' '}
               <strong className="text-foreground font-bold">{existingUser.name}</strong>, que está ativamente vinculado à loja{' '}
@@ -77,7 +77,7 @@ export function TransferConfirmationDialog({
               </span>.
             </p>
 
-            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground pt-2 border-t border-status-warning/30/40">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground pt-2 border-t border-status-warning/40">
               <UserCheck size={14} className="text-status-success-text shrink-0" />
               <span>
                 Deseja encerrar o vínculo na loja <strong>{existingUser.current_store_name}</strong> e transferi-lo{targetStoreName ? ` para a loja ${targetStoreName}` : ' para a nova unidade'}?

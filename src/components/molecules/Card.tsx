@@ -8,7 +8,7 @@ const Card = React.forwardRef<HTMLDivElement, React.HTMLAttributes<HTMLDivElemen
       ref={ref}
       data-mx-card=""
       className={cn(
-        'relative overflow-hidden rounded-2xl border border-border-subtle bg-white shadow-sm transition-colors',
+        'relative overflow-hidden rounded-[var(--mx-card-radius)] border border-border-subtle bg-white shadow-[var(--mx-card-shadow)] transition-colors',
         className,
       )}
       {...props}

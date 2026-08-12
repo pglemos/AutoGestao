@@ -12,7 +12,7 @@ export default function PageHeader({ title, subtitle, children }) {
   const Icon = ICONS[title] || TrendingUp;
 
   return (
-    <header className="mb-8 flex min-h-16 w-full flex-col justify-center gap-3 rounded-2xl border border-border bg-white px-4 py-4 shadow-sm sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+    <header className="mb-8 flex min-h-16 w-full flex-col justify-center gap-3 rounded-[var(--mx-card-radius)] border border-border bg-white px-4 py-4 shadow-[var(--mx-card-shadow)] sm:px-6 lg:flex-row lg:items-center lg:justify-between">
       <div className="flex min-w-0 items-center gap-3">
         <Icon className="h-5 w-5 shrink-0 text-status-info-text" aria-hidden="true" />
         <div className="min-w-0">
@@ -25,4 +25,3 @@ export default function PageHeader({ title, subtitle, children }) {
     </header>
   );
 }
-

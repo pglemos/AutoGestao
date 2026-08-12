@@ -5,30 +5,30 @@ import { cn } from '@/lib/utils'
 import { Typography } from '@/components/atoms/Typography'
 
 const buttonVariants = cva(
-  "group relative inline-flex items-center justify-center gap-mx-xs whitespace-nowrap rounded-xl font-semibold tracking-normal transition-all duration-fast focus-visible:ring-4 focus-visible:ring-mx-action/20 outline-none disabled:pointer-events-none disabled:bg-gray-50 disabled:text-mx-muted disabled:opacity-100 data-[legacy-disabled=true]:disabled:opacity-50 active:scale-[0.98] active:duration-fast [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
+  "group relative inline-flex items-center justify-center gap-mx-xs whitespace-nowrap rounded-[var(--mx-button-radius)] font-semibold tracking-normal transition-all duration-fast focus-visible:ring-4 focus-visible:ring-mx-action/20 outline-none disabled:pointer-events-none disabled:bg-gray-50 disabled:text-mx-muted disabled:opacity-100 data-[legacy-disabled=true]:disabled:opacity-50 active:scale-[0.98] active:duration-fast [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0",
   {
     variants: {
       variant: {
         // Aparência única — sem variação por perfil (§8.5). Estes são os
         // estilos aprovados do Base44/Dono, antes acessíveis só sob o modo
         // `manager`.
-        primary: "rounded-xl bg-brand-primary text-white shadow-sm hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-gray-100 disabled:text-muted-foreground",
-        brand: "rounded-xl bg-brand-primary text-white shadow-sm hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-gray-100 disabled:text-muted-foreground",
-        secondary: "rounded-xl border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
-        outline: "rounded-xl border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
-        ghost: "rounded-xl bg-transparent text-muted-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:bg-transparent disabled:text-text-disabled",
-        success: "rounded-xl bg-brand-primary text-white shadow-sm hover:bg-brand-primary-hover focus-visible:ring-status-success/20",
-        warning: "rounded-xl bg-status-warning text-white shadow-sm hover:bg-status-warning focus-visible:ring-status-warning/20",
-        info: "rounded-xl bg-status-info text-white shadow-sm hover:bg-status-info focus-visible:ring-status-info/20",
-        danger: "rounded-xl bg-status-error text-white shadow-sm hover:bg-status-error focus-visible:ring-status-error/20",
-        whatsapp: "rounded-xl bg-whatsapp text-white shadow-sm hover:bg-whatsapp/90",
-        "mx-elite": "rounded-xl bg-status-success text-white shadow-sm hover:bg-status-success focus-visible:ring-status-success/20",
+        primary: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-gray-100 disabled:text-muted-foreground",
+        brand: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20 disabled:bg-gray-100 disabled:text-muted-foreground",
+        secondary: "border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
+        outline: "border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
+        ghost: "bg-transparent text-muted-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:bg-transparent disabled:text-text-disabled",
+        success: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20",
+        warning: "bg-status-warning text-white shadow-[var(--mx-button-shadow)] hover:bg-status-warning focus-visible:ring-status-warning/20",
+        info: "bg-status-info text-white shadow-[var(--mx-button-shadow)] hover:bg-status-info focus-visible:ring-status-info/20",
+        danger: "bg-status-error text-white shadow-[var(--mx-button-shadow)] hover:bg-status-error focus-visible:ring-status-error/20",
+        whatsapp: "bg-whatsapp text-white shadow-[var(--mx-button-shadow)] hover:bg-whatsapp/90",
+        "mx-elite": "bg-status-success text-white shadow-[var(--mx-button-shadow)] hover:bg-status-success focus-visible:ring-status-success/20",
       },
       size: {
         default: "h-mx-11 px-6 sm:h-10 sm:px-4",
-        sm: "h-mx-9 rounded-lg px-3",
-        xs: "h-mx-8 rounded-lg px-2 text-caption",
-        lg: "h-mx-14 rounded-xl px-8",
+        sm: "h-mx-9 px-3",
+        xs: "h-mx-8 px-2 text-caption",
+        lg: "h-mx-14 px-8",
         icon: "h-mx-11 w-mx-11 sm:h-10 sm:w-10",
       },
     },
@@ -103,7 +103,7 @@ const Button = React.forwardRef<HTMLButtonElement, ButtonProps>(
               decoratedChildren
             )}
             {iconTooltip && (
-              <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-mx-xs -translate-x-1/2 rounded-xl bg-gray-900 px-mx-xs py-mx-tiny text-mx-micro font-medium text-white opacity-0 shadow-sm transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
+              <span className="pointer-events-none absolute left-1/2 top-full z-50 mt-mx-xs -translate-x-1/2 rounded-[var(--mx-button-radius)] bg-gray-900 px-mx-xs py-mx-tiny text-mx-micro font-medium text-white opacity-0 shadow-[var(--mx-button-shadow)] transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
                 {iconTooltip}
               </span>
             )}

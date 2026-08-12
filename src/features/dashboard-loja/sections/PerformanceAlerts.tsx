@@ -187,7 +187,7 @@ export function usePerformanceAlerts({
     return [
       { label: 'Porta (Showroom)', color: 'bg-status-success', pct: total > 0 ? Math.round((porta / total) * 100) : 0, tone: 'success' as ChannelTone },
       { label: 'Carteira (Ativo)', color: 'bg-status-info', pct: total > 0 ? Math.round((carteira / total) * 100) : 0, tone: 'info' as ChannelTone },
-      { label: 'Digital (Leads)', color: 'bg-violet-500', pct: total > 0 ? Math.round((digital / total) * 100) : 0, tone: 'brand' as ChannelTone },
+      { label: 'Digital (Leads)', color: 'bg-status-info', pct: total > 0 ? Math.round((digital / total) * 100) : 0, tone: 'brand' as ChannelTone },
     ]
   }, [checkins, metrics.totalSales])
 

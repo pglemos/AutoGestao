@@ -90,7 +90,7 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
         role={cfg.ariaRole}
         aria-live={cfg.ariaLive}
         className={cn(
-          'rounded-2xl border border-border border-l-4 bg-white shadow-sm p-mx-lg transition-shadow hover:shadow-sm',
+          'rounded-[var(--mx-card-radius)] border border-border border-l-4 bg-white shadow-[var(--mx-card-shadow)] p-mx-lg transition-shadow hover:shadow-[var(--mx-card-shadow)]',
           cfg.border,
           cfg.bgSurface,
           className
@@ -122,7 +122,7 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
                     type="button"
                     onClick={onQuickAction}
                     className={cn(
-                      'inline-flex items-center gap-1.5 text-sm font-bold px-3 py-1.5 rounded-xl transition-colors',
+                      'inline-flex items-center gap-1.5 text-sm font-bold px-3 py-1.5 rounded-[var(--mx-button-radius)] transition-colors',
                       'bg-white border border-border hover:bg-gray-50',
                       'focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-1',
                       type === 'critical' && 'focus-visible:ring-status-error',
@@ -138,7 +138,7 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
                     role="button"
                     aria-disabled="true"
                     tabIndex={-1}
-                    className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-xl border border-border-subtle bg-gray-50 px-3 py-1.5 text-sm font-bold text-muted-foreground"
+                    className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-[var(--mx-button-radius)] border border-border-subtle bg-gray-50 px-3 py-1.5 text-sm font-bold text-muted-foreground"
                   >
                     {quickActionLabel}
                   </span>

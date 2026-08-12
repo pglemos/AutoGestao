@@ -89,7 +89,7 @@ export function MxSidebarProfileCard({
           role="menu"
           aria-label="Opções do perfil"
           className={cn(
-            'absolute z-[160] rounded-[16px] border border-border-subtle bg-white p-2 shadow-xl',
+            'absolute z-[var(--mx-z-popover)] rounded-[var(--mx-radius-2xl)] border border-border-subtle bg-white p-2 shadow-[var(--mx-shadow-xl)]',
             collapsed
               ? 'bottom-0 left-[calc(100%+10px)] w-64'
               : 'bottom-[calc(100%+10px)] left-0 right-0',
@@ -102,7 +102,7 @@ export function MxSidebarProfileCard({
               role="menuitem"
               onClick={action}
               className={cn(
-                'flex min-h-11 w-full items-center gap-3 rounded-[12px] px-3 text-left text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-status-success/30',
+                'flex min-h-11 w-full items-center gap-3 rounded-[var(--mx-radius-xl)] px-3 text-left text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-status-success/30',
                 destructive
                   ? 'text-status-error-text hover:bg-status-error-surface'
                   : 'text-foreground hover:bg-gray-50 hover:text-foreground',
@@ -122,7 +122,7 @@ export function MxSidebarProfileCard({
         aria-label={`Abrir menu de usuário de ${displayName}`}
         onClick={() => setOpen((value) => !value)}
         className={cn(
-          'group flex min-h-14 w-full items-center gap-3 rounded-[16px] border border-border-subtle bg-gray-50/60 py-2 text-left outline-none transition-colors hover:border-status-success/20 hover:bg-status-success-surface/60 focus-visible:ring-2 focus-visible:ring-status-success/30',
+          'group flex min-h-14 w-full items-center gap-3 rounded-[var(--mx-radius-2xl)] border border-border-subtle bg-gray-50/60 py-2 text-left outline-none transition-colors hover:border-status-success/20 hover:bg-status-success-surface/60 focus-visible:ring-2 focus-visible:ring-status-success/30',
           collapsed ? 'justify-center px-0' : 'px-3.5',
         )}
       >

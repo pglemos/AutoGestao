@@ -85,13 +85,13 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
   const waUrl = tel && script ? `https://wa.me/${tel}?text=${encodeURIComponent(script)}` : null;
 
   return (
-    <div className="border border-dashed border-violet-200 rounded-2xl bg-violet-50/40 p-4 space-y-3">
+    <div className="border border-dashed border-status-info/30 rounded-2xl bg-status-info-surface/40 p-4 space-y-3">
       {/* Header */}
       <div className="flex items-center gap-2">
-        <div className="w-6 h-6 rounded-lg bg-violet-100 flex items-center justify-center flex-shrink-0">
-          <Sparkles className="w-3.5 h-3.5 text-violet-600" />
+        <div className="w-6 h-6 rounded-lg bg-status-info-surface flex items-center justify-center flex-shrink-0">
+          <Sparkles className="w-3.5 h-3.5 text-status-info-text" />
         </div>
-        <p className="text-xs font-bold text-violet-700 uppercase tracking-wide">Script personalizado</p>
+        <p className="text-xs font-bold text-status-info-text uppercase tracking-wide">Script personalizado</p>
       </div>
 
       {/* Seletor de tom */}
@@ -105,8 +105,8 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
               title={t.desc}
               className={`text-caption font-semibold px-2.5 py-1 rounded-lg border transition-all ${
                 tomSelecionado === t.id
-                  ? "bg-violet-600 text-white border-violet-600"
-                  : "bg-white text-muted-foreground border-border hover:border-violet-300 hover:text-violet-600"
+                  ? "bg-status-info text-white border-status-info"
+                  : "bg-white text-muted-foreground border-border hover:border-status-info/40 hover:text-status-info-text"
               }`}
             >
               {t.label}
@@ -133,13 +133,13 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
               value={script}
               onChange={e => setScript(e.target.value)}
               rows={7}
-              className="w-full rounded-xl border border-violet-200 bg-white px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-violet-400 focus:border-violet-400"
+              className="w-full rounded-xl border border-status-info/30 bg-white px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-status-info/40 focus:border-status-info/50"
             />
             <p className="text-caption text-muted-foreground mt-0.5">Edite antes de enviar se necessário.</p>
           </div>
 
           <div className="flex gap-2">
-            <Button variant="outline" onClick={copiar} className="flex-1 rounded-xl gap-2 text-xs border-violet-200 text-violet-700 hover:bg-violet-50">
+            <Button variant="outline" onClick={copiar} className="flex-1 rounded-xl gap-2 text-xs border-status-info/30 text-status-info-text hover:bg-status-info-surface">
               {copiado ? <><Check className="w-3.5 h-3.5 text-green-500" /> Copiado!</> : <><Copy className="w-3.5 h-3.5" /> Copiar</>}
             </Button>
             {waUrl && (
@@ -154,7 +154,7 @@ export default function ScriptIA({ cliente, proximoPasso, onWhatsAppClick }) {
           <Button
             variant="ghost"
             onClick={() => gerarScript()}
-            className="w-full rounded-xl text-violet-600 hover:bg-violet-100 gap-2 text-xs"
+            className="w-full rounded-xl text-status-info-text hover:bg-status-info-surface gap-2 text-xs"
           >
             <RefreshCw className="w-3.5 h-3.5" /> Gerar outra versão
           </Button>

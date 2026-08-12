@@ -579,7 +579,7 @@ function UniversityStat({
     emerald: 'bg-status-success-surface text-status-success-text',
     blue: 'bg-status-info-surface text-status-info-text',
     green: 'bg-green-50 text-green-600',
-    violet: 'bg-violet-50 text-violet-600',
+    violet: 'bg-status-info-surface text-status-info-text',
   }
   return (
     <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-4">
@@ -607,7 +607,7 @@ function TeamStat({
     emerald: 'text-status-success-text',
     blue: 'text-status-info-text',
     amber: 'text-status-warning-text',
-    violet: 'text-violet-600',
+    violet: 'text-status-info-text',
   }
   return (
     <div className="rounded-xl bg-gray-50 p-4">
@@ -722,7 +722,7 @@ function UniversityTeamTable({
                       type="button"
                       disabled={isAssigning || hasActiveOnboarding}
                       onClick={() => void onAssignOnboarding(member.seller_id)}
-                      className="text-xs font-medium text-violet-600 disabled:cursor-not-allowed disabled:opacity-50"
+                      className="text-xs font-medium text-status-info-text disabled:cursor-not-allowed disabled:opacity-50"
                     >
                       Trilha entrada
                     </button>

@@ -28,9 +28,10 @@ export function PageViewport({
     <Element
       {...props}
       data-mx-page-viewport=""
+      data-mx-page-scroll-owner=""
       tabIndex={props.tabIndex ?? 0}
       className={cn(
-        'h-full min-h-0 w-full min-w-0 overflow-y-auto overflow-x-hidden no-scrollbar bg-surface-alt text-foreground',
+        'min-h-0 w-full min-w-0 flex-1 overflow-y-auto overflow-x-hidden no-scrollbar bg-surface-alt text-foreground',
         className,
       )}
     >

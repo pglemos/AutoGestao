@@ -101,6 +101,7 @@ export function ConfiguracoesShell({
         activeKey={activeTab}
         onChange={handleSelect}
         ariaLabel="Configurações"
+        getPanelId={(key) => key === activeTab ? `mx-tab-panel-${key}` : undefined}
         searchable
         searchPlaceholder="Buscar configuração"
         groupLabels={SECTION_LABELS}

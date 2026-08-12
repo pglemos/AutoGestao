@@ -302,8 +302,7 @@ export default function CarteiraClientes() {
   }
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC]">
-      <div className="max-w-[1440px] w-full mx-auto px-4 sm:px-4 xl:px-8 py-6 space-y-6">
+    <div className="w-full min-w-0 space-y-6 bg-surface-alt">
 
         {aba !== "execucao" && (
           <div className="flex gap-1 bg-white border border-slate-100 rounded-2xl p-1 w-fit shadow-sm">
@@ -392,7 +391,6 @@ export default function CarteiraClientes() {
           onClose={handleVoltarCarteira}
           onEntrarModoAtaque={handleEntrarModoAtaque}
         />
-      </div>
     </div>
   );
 }

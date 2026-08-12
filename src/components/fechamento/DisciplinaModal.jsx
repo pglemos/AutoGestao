@@ -127,7 +127,7 @@ export default function DisciplinaModal({ open, onClose }) {
           <div className="border-t border-border-subtle" />
 
           {/* 3 — Quando conta */}
-          <Section icon={Calendar} iconColor="bg-[#6D28D9]" number="3" title="Quando um cadastro conta como agendamento?">
+          <Section icon={Calendar} iconColor="bg-status-info" number="3" title="Quando um cadastro conta como agendamento?">
             <P>Para o cadastro contar na pontuação extra, ele precisa cumprir estas regras:</P>
             <ul className="space-y-1 list-none">
               <Bullet>O canal deve ser <strong>Carteira</strong> ou <strong>Internet</strong>;</Bullet>

@@ -83,7 +83,7 @@ export function useDashboardLojaData({
     saveSettings,
   } = operationalSettings
 
-  const [viewMode, setViewMode] = useState<ViewMode>('day')
+  const [viewMode, setViewMode] = useState<ViewMode>('month')
   const [operationalReferenceDate, setReferenceDate] = useState(() => calculateReferenceDate())
   const managerReferenceDate = getManagerCalendarDate()
   const referenceDate = periodRange?.end || (managerCalendarMode ? managerReferenceDate : operationalReferenceDate)

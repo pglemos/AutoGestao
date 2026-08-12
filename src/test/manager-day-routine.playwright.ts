@@ -78,7 +78,7 @@ test.describe.serial('Rotina do Dia Base44 1:1', () => {
     await page.getByRole('button', { name: 'Voltar para a Rotina do Dia' }).click()
 
     await expect(page).toHaveURL(/\/rotina$/)
-    await expect(page.getByRole('button', { name: 'Equipe', exact: true })).toHaveClass(/bg-emerald-600/)
+    await expect(page.getByRole('button', { name: 'Equipe', exact: true })).toHaveClass(/bg-brand-primary/)
     await expect(page.getByRole('combobox', { name: 'Ordenar' })).toHaveValue('origem')
     await expect.poll(() => page.evaluate(() => sessionStorage.getItem('mx_contexto_navegacao'))).toBeNull()
     expect(consoleErrors).toEqual([])
@@ -121,7 +121,7 @@ test.describe.serial('Rotina do Dia Base44 1:1', () => {
     for (const period of ['15 dias', '30 dias', '7 dias']) {
       const button = page.getByRole('button', { name: period })
       await button.click()
-      await expect(button).toHaveClass(/bg-emerald-600/)
+      await expect(button).toHaveClass(/bg-brand-primary/)
       await expect(page.getByText(createdTitle, { exact: true })).toBeVisible()
     }
   })

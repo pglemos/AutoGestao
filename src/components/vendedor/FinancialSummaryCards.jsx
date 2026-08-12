@@ -53,7 +53,7 @@ export default function FinancialSummaryCards({ calcResult }) {
         sub={`${premiacoesAtingidas?.length || 0} prêmio${premiacoesAtingidas?.length !== 1 ? "s" : ""} desbloqueado${premiacoesAtingidas?.length !== 1 ? "s" : ""}`}
       />
       <SummaryCard
-        icon={Gift} iconColor="text-purple-600" iconBg="bg-purple-50"
+        icon={Gift} iconColor="text-status-info-text" iconBg="bg-status-info-surface"
         label="Bônus confirmados" value={bonificacoesConfirmadas}
         sub="Bonificações já garantidas"
       />

@@ -4,7 +4,7 @@ import { countByStatus, countLate } from "../actionPlanUtils";
 const ITEMS = [
   { key: "total", label: "Ações no ciclo", color: "text-foreground", bg: "bg-muted/40" },
   { key: "in_progress", label: "Em andamento", color: "text-status-info-text", bg: "bg-status-info-surface" },
-  { key: "awaiting_decision", label: "Aguardando decisão", color: "text-violet-700", bg: "bg-violet-50" },
+  { key: "awaiting_decision", label: "Aguardando decisão", color: "text-status-info-text", bg: "bg-status-info-surface" },
   { key: "blocked", label: "Bloqueadas", color: "text-status-error-text", bg: "bg-status-error-surface" },
   { key: "completed", label: "Concluídas", color: "text-status-success-text", bg: "bg-status-success-surface" },
   { key: "late", label: "Atrasadas", color: "text-status-error-text", bg: "bg-status-error-surface" },

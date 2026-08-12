@@ -23,8 +23,8 @@ export default function BonusDisputeCard({ bonificacoes }) {
     return (
       <div className="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
         <div className="flex items-center gap-2 mb-4">
-          <Gift className="w-4 h-4 text-purple-500" />
-          <span className="text-purple-600 text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>
+          <Gift className="w-4 h-4 text-status-info-text" />
+          <span className="text-status-info-text text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>
         </div>
         <div className="text-center py-4">
           <p className="text-muted-foreground text-sm">Nenhuma bonificação em disputa no momento.</p>
@@ -36,8 +36,8 @@ export default function BonusDisputeCard({ bonificacoes }) {
   return (
     <div className="bg-white rounded-2xl p-6 border border-border-subtle shadow-sm">
       <div className="flex items-center gap-2 mb-4">
-        <Gift className="w-4 h-4 text-purple-500" />
-        <span className="text-purple-600 text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>
+        <Gift className="w-4 h-4 text-status-info-text" />
+        <span className="text-status-info-text text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>
       </div>
 
       <div className="space-y-3">

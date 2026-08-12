@@ -11,11 +11,14 @@ describe('contrato do viewport de página', () => {
     const shell = read('src/components/MxSidebarShell.tsx')
 
     expect(viewport).toContain('data-mx-page-viewport=""')
+    expect(viewport).toContain('data-mx-page-scroll-owner=""')
     expect(viewport).toContain('overflow-y-auto')
     expect(viewport).toContain('overflow-x-hidden')
+    expect(viewport).toContain('flex-1')
     expect(viewport).toContain('tabIndex={props.tabIndex ?? 0}')
     expect(shell).toContain('<PageViewport>')
-    expect(shell).not.toContain('overflow-y-auto overflow-x-hidden')
+    expect(shell).toContain('data-mx-shell-main=""')
+    expect(shell).not.toContain('overflow-y-auto')
   })
 
   it('não permite que PageTemplate crie um segundo scroll owner', () => {
@@ -24,6 +27,7 @@ describe('contrato do viewport de página', () => {
     expect(template).not.toContain('overflow-y-auto')
     expect(template).not.toContain('data-mx-page-scroller=""')
     expect(template).toContain("as = 'div'")
+    expect(template).toContain('<PageCanvas as={as}')
   })
 
   it('mantém uma única landmark main no shell autenticado', () => {
@@ -32,6 +36,7 @@ describe('contrato do viewport de página', () => {
 
     expect((shell.match(/<main\b/g) ?? []).length).toBe(1)
     expect(pageTemplate).not.toContain("as = 'main'")
+    expect(pageTemplate).not.toContain("as?: 'main'")
   })
 
   it('não permite scroll vertical concorrente nos wrappers de página delegados', () => {

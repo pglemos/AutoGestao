@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 /** Aparência única — sem variação por perfil (§8.5). */
 const selectVariants = cva(
-  'h-10 w-full appearance-none rounded-xl border bg-white py-2 pl-3 pr-10 text-sm font-normal text-foreground outline-none transition disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-muted-foreground',
+  'h-10 w-full appearance-none rounded-[var(--mx-input-radius)] border bg-white py-2 pl-3 pr-10 text-sm font-normal text-foreground outline-none transition disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-muted-foreground',
   {
     variants: {
       variant: {
@@ -24,7 +24,7 @@ export interface SelectProps
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
-  ({ className, variant, label, id, children, ...props }, ref) => {
+  ({ className, variant, label, id, children, 'aria-label': ariaLabel, ...props }, ref) => {
     const generatedId = React.useId()
     const fieldId = id || generatedId
     const selectElement = (
@@ -34,6 +34,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
           className={cn(selectVariants({ variant }), className)}
           ref={ref}
           {...props}
+          aria-label={ariaLabel ?? label ?? 'Seleção'}
         >
           {children}
         </select>

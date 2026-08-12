@@ -318,12 +318,19 @@ async function collectDomMetrics(page: Page, viewport: ViewportCase): Promise<Do
     const canvas = document.querySelector<HTMLElement>('[data-mx-page-canvas]')
     const pageViewport = document.querySelector<HTMLElement>('[data-mx-page-viewport]')
     const main = document.querySelector<HTMLElement>('#main-content')
-    const pageCandidates = pageViewport
-      ? [pageViewport, ...Array.from(pageViewport.children).filter((child): child is HTMLElement => child instanceof HTMLElement)]
-      : []
+    const pageCandidates = [
+      ...(pageViewport ? [pageViewport, ...Array.from(pageViewport.querySelectorAll<HTMLElement>('*'))] : []),
+      document.documentElement,
+      document.body,
+    ].filter((element, index, all) => element && all.indexOf(element) === index)
     const pageScrollOwnerCount = pageCandidates.filter((element) => {
       const overflowY = getComputedStyle(element).overflowY
-      return overflowY === 'auto' || overflowY === 'scroll'
+      if (overflowY !== 'auto' && overflowY !== 'scroll') return false
+      // The canonical viewport is an explicit owner even when the current
+      // route is shorter than the viewport. Descendants count only when they
+      // actually clip overflowing content, which avoids false positives from
+      // generic `overflow-y-auto` utility classes.
+      return element === pageViewport || element.scrollHeight > element.clientHeight + 1
     }).length
     const style = canvas ? getComputedStyle(canvas) : null
     const rect = canvas?.getBoundingClientRect()
@@ -375,7 +382,7 @@ async function collectA11y(page: Page): Promise<AxeResult> {
     return await page.evaluate(async () => {
       const axe = (window as unknown as { axe: { run: (context: unknown, options: unknown) => Promise<{ violations: unknown[]; incomplete: unknown[]; passes: unknown[] }> } }).axe
       const result = await axe.run(
-        { include: [['#main-content']] },
+        document,
         { resultTypes: ['violations', 'incomplete', 'passes'], runOnly: { type: 'tag', values: ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'] } },
       )
       return result as AxeResult
@@ -524,7 +531,16 @@ async function captureCase(
     } catch {
       notes.push('Nenhum landmark/shell apareceu dentro de 30s após a navegação.')
     }
+    try {
+      // `#main-content` belongs to the shell and mounts before lazy route
+      // modules. STANDARD_CANVAS needs one more explicit synchronization point
+      // so that a Suspense fallback cannot be recorded as a geometry failure.
+      await page.locator('[data-mx-page-canvas]').first().waitFor({ state: 'attached', timeout: 30_000 })
+    } catch {
+      notes.push('PageCanvas canônico não apareceu dentro de 30s após a navegação.')
+    }
     await page.waitForTimeout(1_000)
+    const nativeMetrics = await collectDomMetrics(page, viewport)
     await applyViewportSimulation(page, viewport)
     await page.waitForTimeout(250)
     if (response?.status() && response.status() >= 500) notes.push(`HTTP inicial ${response.status()}`)
@@ -533,19 +549,27 @@ async function captureCase(
     const a11y = await collectA11y(page)
     const counts = a11yCounts(a11y)
     const expectedMargin = expectedPageMargin(viewport.width)
-    const geometryPass = metrics.mainCount === 1 &&
-      metrics.pageCanvasCount === 1 &&
-      metrics.pageViewportCount === 1 &&
-      metrics.pageScrollOwnerCount === 1 &&
-      metrics.canvas.paddingLeft >= expectedMargin &&
-      metrics.canvas.paddingRight >= expectedMargin &&
-      metrics.canvas.paddingTop >= 24 &&
-      !metrics.horizontalOverflow
+    const safeAreaPass = !viewport.safeArea || (
+      metrics.canvas.paddingLeft >= Math.max(expectedMargin, viewport.safeArea.left) &&
+      metrics.canvas.paddingRight >= Math.max(expectedMargin, viewport.safeArea.right) &&
+      metrics.canvas.paddingBottom >= viewport.safeArea.bottom
+    )
+    const geometryPass = nativeMetrics.mainCount === 1 &&
+      nativeMetrics.pageCanvasCount === 1 &&
+      nativeMetrics.pageViewportCount === 1 &&
+      nativeMetrics.pageScrollOwnerCount === 1 &&
+      nativeMetrics.canvas.paddingLeft >= expectedMargin &&
+      nativeMetrics.canvas.paddingRight >= expectedMargin &&
+      nativeMetrics.canvas.paddingTop >= 24 &&
+      !nativeMetrics.horizontalOverflow &&
+      safeAreaPass
+    const roleMatches = nativeMetrics.shell.role === row.role
     const unexpectedNetworkFailures = networkFailures.filter(item => !isExpectedTransportFailure(item))
     const runtimePass = consoleMessages.filter(item => item.type === 'error').length === 0 &&
       pageErrors.length === 0 &&
       unexpectedNetworkFailures.length === 0 &&
-      !page.url().includes('/login')
+      !page.url().includes('/login') &&
+      roleMatches
     const accessibilityPass = counts.critical === 0 && counts.serious === 0 && !('error' in a11y)
     const status: CaseState['status'] = geometryPass && runtimePass && accessibilityPass ? 'PASS' : 'FAIL'
 
@@ -554,13 +578,14 @@ async function captureCase(
     if (viewport.reducedMotion) notes.push('prefers-reduced-motion=reduce aplicado pelo contexto Playwright.')
     if (viewport.safeArea) notes.push('Safe area simulada por override CSS testável, sem alterar o runtime da aplicação.')
     if (!geometryPass) notes.push(`Geometria fora do contrato; margem alvo ${expectedMargin}px.`)
+    if (!roleMatches) notes.push(`Perfil observado não corresponde ao solicitado: ${nativeMetrics.shell.role || 'desconhecido'} ≠ ${row.role}.`)
     if (networkFailures.length) notes.push('Falhas HTTP/rede foram registradas sem assumir que são bugs de produção.')
     if (networkFailures.some(isExpectedTransportFailure)) notes.push('ERR_ABORTED de fetch foi classificado como transporte esperado durante cancelamento de consultas.')
     if (page.url().includes('/login')) notes.push('A rota terminou em /login; autenticação/guard não permitiu a prova desta combinação.')
 
     stateBase.status = status
     stateBase.finalUrl = page.url()
-    stateBase.observedRole = metrics.shell.role
+    stateBase.observedRole = nativeMetrics.shell.role
     stateBase.finishedAt = new Date().toISOString()
     stateBase.checks = {
       authenticated: !page.url().includes('/login'),
@@ -586,6 +611,7 @@ async function captureCase(
     await page.screenshot({ path: join(caseDir, 'screenshot.png'), fullPage: false })
     await page.screenshot({ path: join(caseDir, 'fullpage.png'), fullPage: true })
     await writeJson(join(caseDir, 'dom-metrics.json'), metrics)
+    await writeJson(join(caseDir, 'dom-metrics-native.json'), nativeMetrics)
     await writeJson(join(caseDir, 'console.json'), { errors: consoleMessages.filter(item => item.type === 'error'), warnings: consoleMessages.filter(item => item.type === 'warning'), pageErrors })
     await writeJson(join(caseDir, 'network.json'), { failures: networkFailures })
     await writeJson(join(caseDir, 'a11y.json'), a11y)

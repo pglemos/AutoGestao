@@ -14,7 +14,7 @@ const THEME_CLASSES = {
   primary: { bg: "bg-primary/10", text: "text-primary" },
   blue: { bg: "bg-status-info-surface", text: "text-status-info-text" },
   amber: { bg: "bg-status-warning-surface", text: "text-status-warning-text" },
-  purple: { bg: "bg-purple-50", text: "text-purple-600" },
+  purple: { bg: "bg-status-info-surface", text: "text-status-info-text" },
 };
 
 export default function CycleFocuses() {

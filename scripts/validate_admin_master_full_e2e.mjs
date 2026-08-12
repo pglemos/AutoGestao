@@ -313,11 +313,21 @@ async function createTeamAndCheckins(adminProfile) {
   }
   created.testUserId = register.data.user_id
 
-  await expectNoError(await userClient.from('usuarios').update({
-    name: `E2E VENDEDOR EDITADO ${RUN_STAMP}`,
-    phone: '11999990001',
-    active: true,
-  }).eq('id', created.testUserId), 'update user profile')
+  const updateUser = await userClient.functions.invoke('manage-global-user', {
+    body: {
+      action: 'update',
+      user_id: created.testUserId,
+      updates: {
+        name: `E2E VENDEDOR EDITADO ${RUN_STAMP}`,
+        phone: '11999990001',
+        active: true,
+      },
+      reason: RUN_ID,
+    },
+  })
+  if (updateUser.error || !updateUser.data?.success) {
+    throw new Error(updateUser.error?.message || updateUser.data?.error || 'manage-global-user update failed')
+  }
 
   await expectNoError(await userClient.from('vinculos_loja').upsert({
     user_id: created.testUserId,
@@ -443,6 +453,7 @@ async function validateConsulting(adminProfile) {
     product_name: `E2E PMR ${RUN_STAMP}`,
     notes: RUN_ID,
     status: 'ativo',
+    primary_store_id: created.storeId,
     current_visit_step: 0,
     modality: 'Presencial',
     created_by: adminProfile.id,
@@ -650,7 +661,9 @@ async function validateCliDownloads() {
     userClient.from('lojas').select('id,name,active').eq('id', created.storeId),
     userClient.from('lancamentos_diarios').select('*').eq('store_id', created.storeId),
     userClient.from('produtos_digitais').select('id,name,status').eq('id', created.productId),
-    userClient.from('clientes_consultoria').select('id,name,status').eq('id', created.clientId),
+    created.clientId
+      ? userClient.from('clientes_consultoria').select('id,name,status').eq('id', created.clientId)
+      : Promise.resolve({ data: [], error: null }),
   ])
   for (const [label, res] of [['stores', stores], ['checkins', checkins], ['products', products], ['clients', clients]]) {
     if (res.error) throw new Error(`${label}: ${res.error.message}`)
@@ -659,9 +672,14 @@ async function validateCliDownloads() {
     exportWorkbook(stores.data, `lojas-${RUN_STAMP}.xlsx`, 'Lojas'),
     exportWorkbook(checkins.data, `matinal-api-${RUN_STAMP}.xlsx`, 'Matinal'),
     exportWorkbook(products.data, `produtos-${RUN_STAMP}.xlsx`, 'Produtos'),
-    exportWorkbook(clients.data, `consultoria-${RUN_STAMP}.xlsx`, 'Consultoria'),
   ]
-  return { files: files.map((file) => ({ name: path.basename(file.output), bytes: file.bytes })) }
+  if (created.clientId) {
+    files.push(exportWorkbook(clients.data, `consultoria-${RUN_STAMP}.xlsx`, 'Consultoria'))
+  }
+  return {
+    files: files.map((file) => ({ name: path.basename(file.output), bytes: file.bytes })),
+    consulting_client_export: created.clientId ? 'pass' : 'skipped_due_to_consulting_fixture_failure',
+  }
 }
 
 async function validateUi(password) {

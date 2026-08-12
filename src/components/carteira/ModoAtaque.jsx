@@ -158,7 +158,7 @@ function TelaConclusao({ stats, onPlanoAtaque, onCarteira, onEncerrar }) {
           { label: "Executadas", value: stats.executadas, color: "text-status-info-text bg-status-info-surface" },
           { label: "Visitas geradas", value: stats.visitas, color: "text-green-600 bg-green-50" },
           { label: "Propostas enviadas", value: stats.propostas, color: "text-status-warning-text bg-status-warning-surface" },
-          { label: "Recuperações", value: stats.recuperacoes, color: "text-purple-600 bg-purple-50" },
+          { label: "Recuperações", value: stats.recuperacoes, color: "text-status-info-text bg-status-info-surface" },
         ].map(s => (
           <div key={s.label} className={`rounded-2xl p-4 ${s.color}`}>
             <p className="text-2xl font-black">{s.value}</p>

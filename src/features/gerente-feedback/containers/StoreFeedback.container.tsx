@@ -6,6 +6,7 @@ import { FeedbackLoadingSkeleton } from '../sections/FeedbackLoadingSkeleton'
 import { ManagerScopeBanner, OwnerScopeBanner } from '../sections/ScopeBanners'
 import { StoreFeedbackHeader } from '../sections/StoreFeedbackHeader'
 import { WeeklyReportsList } from '../sections/WeeklyReportsList'
+import { PageCanvas } from '@/design-system/page'
 
 export function StoreFeedbackContainer() {
   const vm = useStoreFeedback()
@@ -13,7 +14,7 @@ export function StoreFeedbackContainer() {
   if (vm.isLoading) return <FeedbackLoadingSkeleton ariaLabel="Carregando devolutivas" />
 
   return (
-    <div id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6 px-4 pb-20 lg:px-8 lg:pb-0" aria-label="Devolutivas">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" id="page-devolutivas" className="flex min-h-0 flex-1 flex-col space-y-6" aria-label="Devolutivas">
       <FeedbackErrorBoundary sectionName="Cabeçalho">
         <StoreFeedbackHeader
           isOwner={vm.isOwner}
@@ -64,7 +65,7 @@ export function StoreFeedbackContainer() {
           </section>
         )}
       </div>
-    </div>
+    </PageCanvas>
   )
 }
 

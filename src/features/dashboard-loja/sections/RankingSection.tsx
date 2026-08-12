@@ -1,6 +1,6 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { BarChart3, History, Search, UsersRound } from 'lucide-react'
+import { BarChart3, History, Search, UsersRound, X, ShoppingCart, Calendar, Target, TrendingUp, AlertCircle } from 'lucide-react'
 import { motion, useReducedMotion } from 'motion/react'
 import { Input } from '@/components/atoms/Input'
 import { Avatar } from '@/components/atoms/Avatar'
@@ -8,20 +8,289 @@ import { DataGrid, type Column } from '@/components/organisms/DataGrid'
 import { duration, easing } from '@/design/motion'
 import type { RankingEntry } from '@/types/database'
 import type { ViewMode } from '../hooks/useDashboardLojaData'
+import { supabase } from '@/lib/supabase'
 
 type StoreRankingEntry = RankingEntry & { id: string }
+
+type SellerSaleEvent = {
+  id: string
+  data_competencia: string | null
+  data_evento: string
+  canal: string | null
+  oportunidade_id: string | null
+  oportunidade?: {
+    etapa: string | null
+    valor_negociado: number | null
+    veiculo_interesse: string | null
+    placa_veiculo: string | null
+    tipo_veiculo: string | null
+    cliente_nome: string | null
+  }
+}
 
 type RankingSectionProps = {
   viewMode: ViewMode
   ranking: RankingEntry[]
   mixCanais: { label: string; color: string; pct: number; tone: 'success' | 'info' | 'brand' }[]
   diagnostics: { diagnostico: string; sugestao: string }
+  storeId?: string | null
+  periodStartDate?: string
+  periodEndDate?: string
 }
 
-export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: RankingSectionProps) {
+function formatDate(iso: string | null | undefined): string {
+  if (!iso) return '—'
+  const d = iso.includes('T') ? new Date(iso) : new Date(`${iso}T12:00:00`)
+  return d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric' })
+}
+
+function formatCurrency(value: number | null | undefined): string {
+  if (!value) return '—'
+  return new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL', minimumFractionDigits: 0 }).format(value)
+}
+
+function canalLabel(canal: string | null): string {
+  const map: Record<string, string> = {
+    porta: 'Porta (Showroom)',
+    ativo: 'Carteira (Ativo)',
+    digital: 'Digital (Leads)',
+    indicacao: 'Indicação',
+  }
+  return canal ? (map[canal] ?? canal) : '—'
+}
+
+/** Modal de detalhes do vendedor — mostra KPIs e lista de vendas individuais */
+function SellerDetailModal({
+  seller,
+  storeId,
+  periodStart,
+  periodEnd,
+  onClose,
+}: {
+  seller: StoreRankingEntry
+  storeId: string | null | undefined
+  periodStart: string
+  periodEnd: string
+  onClose: () => void
+}) {
+  const [sales, setSales] = useState<SellerSaleEvent[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+
+  const fetchSales = useCallback(async () => {
+    if (!storeId) { setLoading(false); return }
+    setLoading(true)
+    setError(null)
+    try {
+      const { data, error: fetchErr } = await supabase
+        .from('eventos_comerciais')
+        .select(`
+          id,
+          data_evento,
+          data_competencia,
+          canal,
+          oportunidade_id,
+          oportunidades (
+            etapa,
+            valor_negociado,
+            veiculo_interesse,
+            placa_veiculo,
+            tipo_veiculo,
+            clientes ( nome )
+          )
+        `)
+        .eq('seller_user_id', seller.user_id)
+        .eq('loja_id', storeId)
+        .eq('tipo_evento', 'venda_realizada')
+        .gte('data_evento', `${periodStart}T00:00:00.000Z`)
+        .lte('data_evento', `${periodEnd}T23:59:59.999Z`)
+        .order('data_evento', { ascending: false })
+
+      if (fetchErr) { setError(fetchErr.message); return }
+
+      const mapped: SellerSaleEvent[] = (data || []).map((row: Record<string, unknown>) => {
+        const op = row.oportunidades as Record<string, unknown> | null
+        const cliente = op ? (op.clientes as Record<string, unknown> | null) : null
+        return {
+          id: row.id as string,
+          data_evento: row.data_evento as string,
+          data_competencia: row.data_competencia as string | null,
+          canal: row.canal as string | null,
+          oportunidade_id: row.oportunidade_id as string | null,
+          oportunidade: op ? {
+            etapa: op.etapa as string | null,
+            valor_negociado: Number(op.valor_negociado) || null,
+            veiculo_interesse: op.veiculo_interesse as string | null,
+            placa_veiculo: op.placa_veiculo as string | null,
+            tipo_veiculo: op.tipo_veiculo as string | null,
+            cliente_nome: cliente ? (cliente.nome as string | null) : null,
+          } : undefined,
+        }
+      })
+      setSales(mapped)
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Erro ao carregar vendas')
+    } finally {
+      setLoading(false)
+    }
+  }, [seller.user_id, storeId, periodStart, periodEnd])
+
+  useEffect(() => { void fetchSales() }, [fetchSales])
+
+  const attainmentPct = seller.meta > 0 ? Math.round((seller.vnd_total / seller.meta) * 100) : 0
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="seller-modal-title"
+      onClick={e => { if (e.target === e.currentTarget) onClose() }}
+      onKeyDown={e => { if (e.key === 'Escape') onClose() }}
+      tabIndex={-1}
+    >
+      <div className="relative w-full max-w-2xl max-h-[90vh] overflow-y-auto rounded-2xl bg-white shadow-2xl">
+        {/* Header */}
+        <div className="sticky top-0 z-10 flex items-center gap-4 border-b border-border-subtle bg-white px-6 py-5">
+          <Avatar
+            src={seller.avatar_url || undefined}
+            fallback={seller.user_name}
+            size="lg"
+            className="h-12 w-12 shrink-0 rounded-xl bg-status-success-surface text-status-success-text"
+          />
+          <div className="min-w-0 flex-1">
+            <h2 id="seller-modal-title" className="text-lg font-bold text-foreground truncate">
+              {seller.user_name}
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Período: {formatDate(periodStart)} — {formatDate(periodEnd)}
+            </p>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="grid h-9 w-9 shrink-0 place-items-center rounded-xl border border-border text-muted-foreground hover:bg-gray-100 transition-colors"
+            aria-label="Fechar"
+          >
+            <X size={18} />
+          </button>
+        </div>
+
+        {/* KPIs */}
+        <div className="grid grid-cols-2 gap-3 px-6 py-5 sm:grid-cols-4">
+          <KpiCard icon={<ShoppingCart size={16} />} label="Vendas" value={String(seller.vnd_total)} highlight />
+          <KpiCard icon={<Target size={16} />} label="Meta" value={String(seller.meta || '—')} />
+          <KpiCard icon={<TrendingUp size={16} />} label="Atingimento" value={seller.meta > 0 ? `${attainmentPct}%` : '—'} color={attainmentPct >= 100 ? 'green' : attainmentPct >= 70 ? 'amber' : 'red'} />
+          <KpiCard icon={<Calendar size={16} />} label="Leads" value={String(seller.leads)} />
+        </div>
+
+        {/* Sales list */}
+        <div className="px-6 pb-6">
+          <h3 className="mb-3 text-sm font-semibold text-foreground">
+            Vendas registradas ({loading ? '...' : sales.length})
+          </h3>
+
+          {loading ? (
+            <div className="flex items-center justify-center py-10 text-muted-foreground">
+              <span className="animate-spin mr-2">⟳</span> Carregando vendas...
+            </div>
+          ) : error ? (
+            <div className="flex items-center gap-2 rounded-xl border border-status-error/20 bg-status-error-surface p-4 text-sm text-status-error-text">
+              <AlertCircle size={16} className="shrink-0" />
+              {error}
+            </div>
+          ) : sales.length === 0 ? (
+            <div className="rounded-xl bg-gray-50 p-6 text-center text-sm text-muted-foreground">
+              Nenhuma venda encontrada neste período.
+            </div>
+          ) : (
+            <div className="divide-y divide-border-subtle overflow-hidden rounded-xl border border-border-subtle">
+              {sales.map((sale, i) => {
+                const competencia = sale.data_competencia
+                  || new Date(sale.data_evento).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
+                return (
+                  <div key={sale.id} className="flex items-start gap-3 px-4 py-3 hover:bg-gray-50 transition-colors">
+                    <span className="grid h-7 w-7 shrink-0 place-items-center rounded-lg bg-status-success-surface text-xs font-bold text-status-success-text mt-0.5">
+                      {i + 1}
+                    </span>
+                    <div className="min-w-0 flex-1">
+                      <div className="flex flex-wrap items-center gap-2">
+                        <span className="text-sm font-semibold text-foreground">
+                          {sale.oportunidade?.veiculo_interesse || sale.oportunidade?.tipo_veiculo || 'Veículo'}
+                        </span>
+                        {sale.oportunidade?.placa_veiculo && (
+                          <span className="rounded bg-gray-100 px-1.5 py-0.5 text-xs font-mono text-muted-foreground">
+                            {sale.oportunidade.placa_veiculo}
+                          </span>
+                        )}
+                        {sale.canal && (
+                          <span className="rounded-md bg-status-info-surface px-1.5 py-0.5 text-xs font-semibold text-status-info-text">
+                            {canalLabel(sale.canal)}
+                          </span>
+                        )}
+                      </div>
+                      <div className="mt-0.5 flex flex-wrap gap-3 text-xs text-muted-foreground">
+                        <span>{formatDate(competencia)}</span>
+                        {sale.oportunidade?.cliente_nome && (
+                          <span>Cliente: {sale.oportunidade.cliente_nome}</span>
+                        )}
+                        {sale.oportunidade?.valor_negociado ? (
+                          <span className="font-semibold text-status-success-text">
+                            {formatCurrency(sale.oportunidade.valor_negociado)}
+                          </span>
+                        ) : null}
+                      </div>
+                    </div>
+                  </div>
+                )
+              })}
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+function KpiCard({
+  icon, label, value, highlight, color,
+}: {
+  icon: React.ReactNode
+  label: string
+  value: string
+  highlight?: boolean
+  color?: 'green' | 'amber' | 'red'
+}) {
+  const colorClass = color === 'green'
+    ? 'text-status-success-text'
+    : color === 'amber'
+    ? 'text-amber-600'
+    : color === 'red'
+    ? 'text-status-error-text'
+    : highlight
+    ? 'text-status-success-text'
+    : 'text-foreground'
+
+  return (
+    <div className="rounded-xl border border-border-subtle bg-gray-50 p-3">
+      <div className="flex items-center gap-1.5 text-xs text-muted-foreground mb-1">
+        {icon}
+        {label}
+      </div>
+      <p className={`text-2xl font-bold tabular-nums ${colorClass}`}>{value}</p>
+    </div>
+  )
+}
+
+export function RankingSection({ viewMode, ranking, mixCanais, diagnostics, storeId, periodStartDate, periodEndDate }: RankingSectionProps) {
   const navigate = useNavigate()
   const reduceMotion = useReducedMotion()
   const [sellerSearch, setSellerSearch] = useState('')
+  const [selectedSeller, setSelectedSeller] = useState<StoreRankingEntry | null>(null)
+
+  // Deriva o período a exibir no modal — usa o que veio via props ou calcula do mês atual
+  const modalPeriodStart = periodStartDate || `${new Date().toISOString().slice(0, 7)}-01`
+  const modalPeriodEnd = periodEndDate || new Date().toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
 
   const columns = useMemo<Column<StoreRankingEntry>[]>(() => [
     {
@@ -38,7 +307,12 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
       key: 'user_name',
       header: 'Vendedor',
       render: row => (
-        <div className="flex items-center gap-3">
+        <button
+          type="button"
+          className="flex items-center gap-3 text-left w-full group"
+          onClick={() => setSelectedSeller(row)}
+          title={`Ver detalhes de ${row.user_name}`}
+        >
           <Avatar
             src={row.avatar_url || undefined}
             alt={`Avatar de ${row.user_name}`}
@@ -47,10 +321,12 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
             className={`h-10 w-10 rounded-xl ${row.is_venda_loja ? 'bg-brand-primary text-white' : 'bg-status-success-surface text-status-success-text'}`}
           />
           <div className="min-w-0">
-            <p className="break-words text-sm font-semibold text-foreground">{row.user_name}</p>
+            <p className="break-words text-sm font-semibold text-foreground group-hover:text-status-success-text transition-colors">
+              {row.user_name}
+            </p>
             {row.is_venda_loja && <span className="mt-1 inline-flex rounded-md bg-status-success-surface px-1.5 py-0.5 text-caption font-semibold text-status-success-text">Vendas da Gestão (Apoio)</span>}
           </div>
-        </div>
+        </button>
       ),
     },
     { key: 'leads', header: 'Leads', align: 'center', desktopOnly: true, render: row => <span className="text-sm text-muted-foreground tabular-nums">{row.leads}</span> },
@@ -60,7 +336,16 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
       key: 'vnd_total',
       header: 'Vendas',
       align: 'center',
-      render: row => <span className="text-lg font-bold text-status-success-text tabular-nums">{row.vnd_total}</span>,
+      render: row => (
+        <button
+          type="button"
+          onClick={() => setSelectedSeller(row)}
+          className="text-lg font-bold text-status-success-text tabular-nums hover:underline"
+          title="Ver lista de vendas"
+        >
+          {row.vnd_total}
+        </button>
+      ),
     },
     {
       key: 'status',
@@ -92,7 +377,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
               <h2 id="store-ranking-title" className="text-lg font-bold text-foreground">
                 {viewMode === 'day' ? 'Resultado diário por vendedor' : 'Resultado por vendedor'}
               </h2>
-              <p className="mt-1 text-sm text-muted-foreground">Localize rapidamente quem precisa de acompanhamento ou reconhecimento.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Clique em um vendedor para ver as vendas individuais.</p>
             </div>
           </div>
 
@@ -114,6 +399,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-border-subtle bg-gray-50 px-5 py-3">
             <p className="text-xs text-muted-foreground">Ações disponíveis para o vendedor localizado.</p>
             <div className="flex flex-wrap gap-2">
+              <ActionButton label="Ver Vendas" onClick={() => filteredRanking[0] && setSelectedSeller(filteredRanking[0])} />
               <ActionButton label="Devolutiva" onClick={() => navigate('/devolutivas')} />
               <ActionButton label="PDI" onClick={() => navigate('/pdi')} />
               <ActionButton label="Rotina" onClick={() => navigate('/rotina')} />
@@ -163,7 +449,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
 
         <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <header className="flex items-start gap-3">
-            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-violet-50 text-violet-600">
+            <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl bg-status-info-surface text-status-info-text">
               <History size={19} />
             </span>
             <div>
@@ -177,6 +463,17 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
           </div>
         </article>
       </aside>
+
+      {/* Modal de detalhes do vendedor */}
+      {selectedSeller && (
+        <SellerDetailModal
+          seller={selectedSeller}
+          storeId={storeId}
+          periodStart={modalPeriodStart}
+          periodEnd={modalPeriodEnd}
+          onClose={() => setSelectedSeller(null)}
+        />
+      )}
     </section>
   )
 }

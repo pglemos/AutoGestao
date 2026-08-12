@@ -316,7 +316,7 @@ export function ActionPlanWorkspace({
       ) : null}
 
       {controller.tab === 'acoes' ? (
-        <>
+        <section id="tab-panel-acoes" role="tabpanel" aria-labelledby="tab-acoes" className="space-y-4">
           <ActionExecutiveCards
             metrics={controller.metrics}
             activeCard={controller.activeCard}
@@ -366,26 +366,28 @@ export function ActionPlanWorkspace({
               responsiblePeople={controller.responsiblePeople as never[]}
             />
           )}
-        </>
+        </section>
       ) : null}
 
       {controller.tab === 'calendario' ? (
-        <CalendarView
-          actions={controller.filteredActions}
-          loading={controller.loading}
-          filters={controller.filters}
-          onClearFilters={controller.clearFilters}
-          onFilterChange={controller.setFilters}
-          onOpenAction={(action: ActionPlanItem) => openDrawer(action)}
-          onNewAction={handleNewAction}
-          onTalkToConsultant={openConsultant}
-          onTalkToConsultantDay={openConsultantDay}
-          onUpdateDeadline={handleUpdateDeadline}
-          user={user}
-          companyName="MX Gestão Preditiva"
-          unitName=""
-          responsiblePeople={controller.responsiblePeople as never[]}
-        />
+        <section id="tab-panel-calendario" role="tabpanel" aria-labelledby="tab-calendario">
+          <CalendarView
+            actions={controller.filteredActions}
+            loading={controller.loading}
+            filters={controller.filters}
+            onClearFilters={controller.clearFilters}
+            onFilterChange={controller.setFilters}
+            onOpenAction={(action: ActionPlanItem) => openDrawer(action)}
+            onNewAction={handleNewAction}
+            onTalkToConsultant={openConsultant}
+            onTalkToConsultantDay={openConsultantDay}
+            onUpdateDeadline={handleUpdateDeadline}
+            user={user}
+            companyName="MX Gestão Preditiva"
+            unitName=""
+            responsiblePeople={controller.responsiblePeople as never[]}
+          />
+        </section>
       ) : null}
 
       <TypedSheet open={mobileFiltersOpen} onOpenChange={setMobileFiltersOpen}>

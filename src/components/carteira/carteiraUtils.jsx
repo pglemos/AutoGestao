@@ -390,7 +390,7 @@ export function statusComercialColor(s) {
   // negociação (vermelho) e não é erro técnico.
   if (s === "Cancelada") return "bg-status-warning-surface text-status-warning-text";
   if (s === "Agendado") return "bg-status-info-surface text-status-info-text";
-  if (s === "Em negociação") return "bg-purple-50 text-purple-600";
+  if (s === "Em negociação") return "bg-status-info-surface text-status-info-text";
   if (s === "Futuro") return "bg-slate-100 text-muted-foreground";
   return "bg-slate-50 text-muted-foreground";
 }

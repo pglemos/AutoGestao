@@ -21,10 +21,11 @@ describe('Checkin sticky header layout contract', () => {
   })
 
   test('prevents the universal MX shell from scrolling the whole document', () => {
-    expect(sidebarShellSource).toContain('h-[100dvh] overflow-hidden')
-    expect(sidebarShellSource).toContain('pt-[calc(72px+env(safe-area-inset-top))] xl:pt-0')
+    expect(sidebarShellSource).toContain('h-[100dvh] min-w-0 overflow-hidden')
+    expect(sidebarShellSource).toContain('pt-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] xl:pt-0')
     expect(sidebarShellSource).toContain('<PageViewport>')
-    expect(sidebarShellSource).toContain("collapsed ? 'xl:pl-16' : 'xl:pl-64'")
+    expect(sidebarShellSource).toContain('xl:pl-[var(--mx-sidebar-width-collapsed)]')
+    expect(sidebarShellSource).toContain('xl:pl-[var(--mx-sidebar-width-expanded)]')
     expect(sidebarShellSource).toContain('role="dialog"')
     expect(sidebarShellSource).toContain('useFocusTrap(drawerRef, mobileOpen)')
   })

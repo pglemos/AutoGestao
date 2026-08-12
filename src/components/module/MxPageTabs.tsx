@@ -21,6 +21,8 @@ export interface MxPageTabsProps<T extends string> {
   searchable?: boolean
   searchPlaceholder?: string
   groupLabels?: Record<string, string>
+  /** Returns the mounted tabpanel id for a tab, when the consumer renders one. */
+  getPanelId?: (key: T) => string | undefined
   className?: string
 }
 
@@ -32,6 +34,7 @@ export function MxPageTabs<T extends string>({
   searchable = false,
   searchPlaceholder = 'Buscar configuração',
   groupLabels,
+  getPanelId,
   className,
 }: MxPageTabsProps<T>): ReactNode {
   const [searchTerm, setSearchTerm] = useState('')
@@ -79,7 +82,8 @@ export function MxPageTabs<T extends string>({
     <InternalMxTemplateTabs
       data-mx-page-tabs=""
       aria-label={ariaLabel}
-      className={cn('rounded-2xl border border-border-subtle bg-white p-4 shadow-sm', className)}
+      style={{ contain: 'paint' }}
+      className={cn('min-w-0 max-w-full overflow-x-hidden rounded-2xl border border-border-subtle bg-white p-4 shadow-sm', className)}
     >
       {searchable ? (
         <label className="relative mb-4 block w-full sm:max-w-sm">
@@ -104,7 +108,7 @@ export function MxPageTabs<T extends string>({
                   {groupLabels[group]}
                 </Typography>
               ) : null}
-              <div role="tablist" aria-label={groupLabels?.[group] || ariaLabel} className="flex min-w-0 gap-1 overflow-x-auto rounded-xl bg-gray-100 p-1 no-scrollbar">
+              <div role="tablist" aria-label={groupLabels?.[group] || ariaLabel} tabIndex={0} className="flex min-w-0 max-w-full gap-1 overflow-x-auto rounded-xl bg-gray-100 p-1 no-scrollbar focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-success/30">
                 {groupItems.map((item: MxPageTabItem<T>) => {
                   flatIndex += 1
                   const index = flatIndex
@@ -116,7 +120,7 @@ export function MxPageTabs<T extends string>({
                       type="button"
                       role="tab"
                       aria-selected={selected}
-                      aria-controls={`mx-tab-panel-${item.key}`}
+                      aria-controls={getPanelId?.(item.key)}
                       tabIndex={selected ? 0 : -1}
                       data-mx-page-tab-key={item.key}
                       data-mx-read-only={item.readOnly ? 'true' : 'false'}
@@ -130,7 +134,7 @@ export function MxPageTabs<T extends string>({
                     >
                       {Icon ? <Icon size={15} className="shrink-0" aria-hidden="true" /> : null}
                       <span>{item.label}</span>
-                      {item.readOnly ? <Eye size={13} className="shrink-0 text-muted-foreground" aria-label="Somente consulta" /> : null}
+                      {item.readOnly ? <><Eye size={13} className="shrink-0 text-muted-foreground" aria-hidden="true" /><span className="sr-only">Somente consulta</span></> : null}
                     </button>
                   )
                 })}

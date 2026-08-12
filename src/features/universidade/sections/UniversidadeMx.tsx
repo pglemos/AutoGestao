@@ -3,7 +3,7 @@ import { Badge } from '@/components/atoms/Badge'
 import { Button } from '@/components/atoms/Button'
 import { Typography } from '@/components/atoms/Typography'
 import { Card } from '@/components/molecules/Card'
-import { PageCanvas } from '@/design-system/page'
+import { ConditionalPageCanvas } from '@/design-system/page'
 import { cn } from '@/lib/utils'
 import { useVendedorPerfil } from '@/features/crm/hooks/useVendedorPerfil'
 import {
@@ -49,9 +49,10 @@ const TIPO_TONE: Record<UniversidadeAulaTipo, string> = {
 
 type Props = {
   userId?: string | null
+  embedded?: boolean
 }
 
-export function UniversidadeMx({ userId }: Props) {
+export function UniversidadeMx({ userId, embedded = false }: Props) {
   const {
     trilhas,
     aulas,
@@ -75,7 +76,7 @@ export function UniversidadeMx({ userId }: Props) {
   const recomendadaId = trilhaRecomendadaId(trilhas, nivelTrilha)
 
   return (
-    <PageCanvas as="section" width="dashboard" className="flex flex-col gap-mx-lg" aria-label="Universidade MX">
+    <ConditionalPageCanvas enabled={!embedded} as="section" width="dashboard" className="flex flex-col gap-mx-lg" aria-label="Universidade MX">
       <header className="flex flex-col gap-mx-xs md:flex-row md:items-center md:justify-between">
         <div className="flex items-center gap-mx-sm">
           <div className="rounded-2xl bg-brand-primary p-mx-sm text-pure-white shadow-sm">
@@ -297,6 +298,6 @@ export function UniversidadeMx({ userId }: Props) {
       )}
 
       <AulasAoVivoSection />
-    </PageCanvas>
+    </ConditionalPageCanvas>
   )
 }

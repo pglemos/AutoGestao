@@ -101,7 +101,7 @@ export default function MetasSugeridas() {
       label: "Atendimentos / dia",
       valor: `${metrics.avgAtendDia}/dia`,
       sugestao: bump(metrics.avgAtendDia),
-      cor: "border-purple-100 bg-purple-50/40",
+      cor: "border-status-info/20 bg-status-info-surface/40",
       detalhe: `+15% sobre sua média dos últimos ${metrics.diasAnalisados} dias`,
     },
     {

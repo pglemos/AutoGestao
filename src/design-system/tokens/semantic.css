@@ -47,7 +47,7 @@
   --mx-color-primary: var(--mx-green-600);
   --mx-color-primary-hover: var(--mx-green-700);
   --mx-color-primary-active: var(--mx-green-800);
-  --mx-color-primary-foreground: var(--mx-neutral-50);
+  --mx-color-primary-foreground: var(--mx-neutral-0);
   --mx-color-primary-subtle: var(--mx-green-50);
 
   /* --------------------------------------------------- estados semânticos */

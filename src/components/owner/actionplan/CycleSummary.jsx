@@ -45,7 +45,7 @@ export default function CycleSummary({ actions }) {
         </div>
       </div>
 
-      <SummaryCard icon={Clock} label="Aguardando você" value={awaiting} colorClass="text-violet-600" bgClass="bg-violet-50" />
+      <SummaryCard icon={Clock} label="Aguardando você" value={awaiting} colorClass="text-status-info-text" bgClass="bg-status-info-surface" />
       <SummaryCard icon={AlertTriangle} label="Atrasadas" value={late} colorClass="text-status-error-text" bgClass="bg-status-error-surface" />
       <SummaryCard icon={Ban} label="Bloqueadas" value={blocked} colorClass="text-status-error-text" bgClass="bg-status-error-surface" />
       <SummaryCard icon={PlayCircle} label="Em andamento" value={inProgress} colorClass="text-status-info-text" bgClass="bg-status-info-surface" />

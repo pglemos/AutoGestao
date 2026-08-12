@@ -168,7 +168,7 @@
 | `etapas_modelo_visita_consultoria` | 1 |
 | `eventos_agenda_consultoria` | 3 |
 | `eventos_agenda_executiva` | 2 |
-| `eventos_comerciais` | 8 |
+| `eventos_comerciais` | 10 |
 | `evidencias_planos_acao` | 1 |
 | `evidencias_visita` | 2 |
 | `evidencias-consultoria` | 2 |
@@ -347,7 +347,7 @@
 | `eventos_agenda_consultoria:update` | 1 |
 | `eventos_agenda_executiva:select` | 2 |
 | `eventos_comerciais:insert` | 2 |
-| `eventos_comerciais:select` | 7 |
+| `eventos_comerciais:select` | 9 |
 | `eventos_comerciais:update` | 1 |
 | `eventos_comerciais:upsert` | 2 |
 | `evidencias_planos_acao:delete` | 1 |

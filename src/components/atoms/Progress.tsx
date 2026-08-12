@@ -48,6 +48,7 @@ const Progress = React.forwardRef<
         className,
       )}
       {...props}
+      aria-label={props['aria-label'] ?? 'Progresso'}
     >
       <ProgressPrimitive.Indicator
         className={cn(

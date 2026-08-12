@@ -45,7 +45,7 @@ const statusDotClasses: Record<KpiTone, string> = {
   danger: 'bg-status-error',
   muted: 'bg-border-default',
   brand: 'bg-brand-primary',
-  purple: 'bg-[var(--color-accent-purple)]',
+  purple: 'bg-status-info',
 }
 
 const cardBorderClasses: Record<KpiTone, string> = {
@@ -55,7 +55,7 @@ const cardBorderClasses: Record<KpiTone, string> = {
   danger: 'border-status-error/30',
   muted: 'border-border',
   brand: 'border-status-success/30',
-  purple: 'border-[var(--color-accent-purple)]/30',
+  purple: 'border-status-info/30',
 }
 
 const iconBgClasses: Record<KpiTone, string> = {
@@ -65,7 +65,7 @@ const iconBgClasses: Record<KpiTone, string> = {
   danger: 'bg-status-error-surface text-status-error-text',
   muted: 'bg-gray-50 text-text-secondary',
   brand: 'bg-status-success-surface text-status-success-text',
-  purple: 'bg-[var(--color-accent-purple-soft)] text-[var(--color-accent-purple)]',
+  purple: 'bg-status-info-surface text-status-info-text',
 }
 
 export function OwnerKpiCard({
@@ -151,7 +151,7 @@ function SimpleSparkline({
     danger: 'text-status-error',
     muted: 'text-muted-foreground',
     brand: 'text-status-success-text',
-    purple: 'text-[var(--color-accent-purple)]',
+    purple: 'text-status-info-text',
   }[tone]
 
   const raw = Array.from({ length: 8 }, (_, i) => {

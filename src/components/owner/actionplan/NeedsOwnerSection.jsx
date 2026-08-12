@@ -8,7 +8,7 @@ export default function NeedsOwnerSection({ actions, onAnalyze, onApprove, onDel
     <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="mb-3 flex items-center gap-2">
         <h2 className="text-sm font-semibold text-foreground">Precisam de você</h2>
-        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-violet-100 px-1.5 text-xs font-bold text-violet-700">
+        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-status-info-surface px-1.5 text-xs font-bold text-status-info-text">
           {needsOwner.length}
         </span>
       </div>

@@ -20,7 +20,7 @@ function Btn({ onClick, variant = "ghost", disabled, children }) {
   const base = "px-4 py-2.5 text-body-sm font-semibold rounded-xl transition-colors disabled:opacity-50";
   const styles = {
     ghost:    "text-[#64748B] border border-[#E5E7EB] hover:bg-slate-50",
-    primary:  "text-white bg-[#6D28D9] hover:bg-purple-700 shadow-sm",
+    primary:  "text-white bg-status-info hover:bg-status-info shadow-[var(--mx-button-shadow)]",
     green:    "text-white bg-[#22C55E] hover:bg-green-600 shadow-sm",
     blue:     "text-white bg-[#005BFF] hover:bg-status-info shadow-sm",
     amber:    "text-white bg-[#F59E0B] hover:bg-status-warning shadow-sm",
@@ -54,7 +54,7 @@ export function ModalSemCanal({ open, canalSugerido, onConfirmarSugestao, onEsco
                 onClick={() => setCanalEscolhido(c)}
                 className={`text-left px-4 py-2.5 rounded-xl border text-body-sm font-semibold transition-colors ${
                   canalEscolhido === c
-                    ? "bg-purple-50 border-purple-400 text-[#6D28D9]"
+                    ? "bg-status-info-surface border-status-info/50 text-status-info-text"
                     : "border-border hover:bg-slate-50 text-[#0F172A]"
                 }`}
               >

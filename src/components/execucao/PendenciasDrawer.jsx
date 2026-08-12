@@ -12,7 +12,7 @@ const TIPO_COLOR = {
   "Atendimento": "bg-status-info",
   "Retorno": "bg-status-warning",
   "Documentação": "bg-slate-400",
-  "Entrega": "bg-purple-500",
+  "Entrega": "bg-status-info",
   "Pós-venda": "bg-teal-500",
   "Aniversário": "bg-indigo-500",
   "Garantia": "bg-status-warning",

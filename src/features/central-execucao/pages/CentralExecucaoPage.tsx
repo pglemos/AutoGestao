@@ -17,6 +17,7 @@ import type { CentralExecutionAction } from '@/features/central-execucao/types/c
 import { useClientes } from '@/features/crm/hooks/useClientes'
 import { useAuth } from '@/hooks/useAuth'
 import { supabase } from '@/lib/supabase'
+import { PageCanvas } from '@/design-system/page'
 
 function dateKeySP(value: Date | string) {
   const date = typeof value === 'string' ? new Date(value) : value
@@ -170,11 +171,11 @@ export function CentralExecucaoPage() {
   }, [createManualAction, refetch, showSuccess])
 
   return (
-    <div className="min-h-full bg-surface-alt text-foreground">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col bg-surface-alt text-foreground">
       <CentralHeader />
       <CentralTabs value={tab} onChange={setTab} />
 
-      <div className="mx-auto w-full max-w-[1440px] p-5 lg:p-6">
+      <div className="flex min-w-0 flex-1 flex-col pt-5 lg:pt-6">
         <section
           id={`central-panel-${tab}`}
           role="tabpanel"
@@ -268,6 +269,6 @@ export function CentralExecucaoPage() {
           {flash.text}
         </div>
       )}
-    </div>
+    </PageCanvas>
   )
 }

@@ -9,6 +9,7 @@ import OwnerPageHeading from '@/components/owner/OwnerPageHeading'
 import { toast } from '@/lib/toast'
 import { isStrongPassword, PASSWORD_POLICY_MESSAGE } from '@/lib/auth/passwordPolicy'
 import { getAvatarDisplayUrl, uploadUserAvatar } from '@/lib/avatar'
+import { PageCanvas } from '@/design-system/page'
 
 function LegacyProfileAvatar({ url, name }: { url: string; name: string }) {
   const [erro, setErro] = useState(false)
@@ -285,13 +286,11 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
 }
 
 export default function Perfil() {
-  const { profile, role, loading } = useAuth()
-  const isOwner = role === 'dono'
-  const pageClass = `flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0${isOwner ? '' : ' px-4 lg:px-8'}`
+  const { profile, loading } = useAuth()
 
   if (loading) {
     return (
-      <div id="page-perfil" className={pageClass} aria-busy="true" aria-label="Meu Perfil">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" id="page-perfil" className="flex min-h-0 flex-1 flex-col space-y-6" aria-busy="true" aria-label="Meu Perfil">
         <div className="space-y-6">
           <div className="h-16 animate-pulse rounded-xl bg-white/60" />
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1fr_2fr]">
@@ -299,25 +298,25 @@ export default function Perfil() {
             <div className="h-[480px] animate-pulse rounded-xl bg-white/60" />
           </div>
         </div>
-      </div>
+      </PageCanvas>
     )
   }
 
   if (!profile) {
     return (
-      <div id="page-perfil" className={pageClass} aria-label="Meu Perfil">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" id="page-perfil" className="flex min-h-0 flex-1 flex-col space-y-6" aria-label="Meu Perfil">
         <div className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
           <h2 className="text-lg font-semibold text-foreground">Não foi possível carregar o perfil</h2>
           <p className="mt-2 text-sm text-muted-foreground">Perfil não encontrado. Tente novamente ou entre em contato com o suporte.</p>
           <Button className="mt-4" onClick={() => window.location.reload()}>Tentar novamente</Button>
         </div>
-      </div>
+      </PageCanvas>
     )
   }
 
   return (
-    <div id="page-perfil" className={pageClass} aria-label="Meu Perfil">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" id="page-perfil" className="flex min-h-0 flex-1 flex-col space-y-6" aria-label="Meu Perfil">
       <ProfileView profile={profile} />
-    </div>
+    </PageCanvas>
   )
 }

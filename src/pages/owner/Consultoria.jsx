@@ -57,7 +57,7 @@ export default function Consultoria() {
 
   if (loading) {
     return (
-      <div id="page-consultoria" aria-label="Consultoria" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0" aria-busy="true">
+      <div id="page-consultoria" aria-label="Consultoria" className="flex min-h-0 flex-1 flex-col space-y-6 pb-20 lg:pb-0" role="status" aria-busy="true">
         <div className="h-8 w-56 animate-pulse rounded bg-muted" />
         <div className="h-64 animate-pulse rounded-xl bg-card" />
       </div>

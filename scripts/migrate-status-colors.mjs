@@ -26,13 +26,10 @@
  * chart-*, base44-reference, whatsapp.
  */
 
-import { readdirSync, readFileSync, statSync, writeFileSync } from 'node:fs'
-import { join, resolve } from 'node:path'
-
-const root = process.cwd()
-
-const EXCLUDE_DIRS = new Set(['node_modules', '.git', '.graphify', 'dist', 'build', '.superpowers', '.wwebjs_auth'])
-const EXCLUDE_FILES = [/base44-reference/, /\.test\./, /\.playwright\./, /\.spec\./, /migrate-.*\.mjs$/]
+import { readFileSync, writeFileSync } from 'node:fs'
+import { execSync } from 'node:child_process'
+import { fileURLToPath } from 'node:url'
+import { resolve } from 'node:path'
 
 const SUCCESS = 'success'
 const WARNING = 'warning'
@@ -40,7 +37,7 @@ const ERROR = 'error'
 const INFO = 'info'
 
 // ordem importa: mais específico primeiro
-const RULES = [
+export const RULES = [
   // ---- text ----
   { re: /text-emerald-900/g, to: 'text-status-success-text', family: SUCCESS },
   { re: /text-emerald-800/g, to: 'text-status-success-text', family: SUCCESS },
@@ -166,42 +163,63 @@ const RULES = [
   { re: /to-blue-700/g, to: 'to-status-info', family: INFO },
 ]
 
-function walk(dir, out = []) {
-  for (const entry of readdirSync(dir)) {
-    if (EXCLUDE_DIRS.has(entry)) continue
-    const full = join(dir, entry)
-    const st = statSync(full)
-    if (st.isDirectory()) walk(full, out)
-    else if (EXCLUDE_FILES.some((r) => r.test(entry))) continue
-    else if (/\.(tsx?|css|jsx?|mjs)$/.test(entry)) out.push(full)
-  }
-  return out
+/**
+ * A border rule may add a semantic opacity (for example, bare blue-400 maps to
+ * status-info/50). When the source already has an explicit opacity, keeping
+ * both values would produce invalid utilities such as status-info/50/30.
+ */
+function normalizeNestedOpacity(value) {
+  return value.replace(
+    /(status-(?:success|warning|info|error)(?:-(?:surface|text|strong))?)\/(?:\d+|\[[^\]]+\])\/(\d+|\[[^\]]+\])/g,
+    '$1/$2',
+  )
 }
 
-const files = walk(root)
-const counts = { files: 0, replacements: 0 }
-const familyCount = {}
-
-for (const file of files) {
-  const original = readFileSync(file, 'utf8')
+export function applyStatusColorRules(original) {
   let next = original
-  let changed = false
+  const byFamily = {}
+  let replacements = 0
+
   for (const rule of RULES) {
-    const before = next
-    next = next.replace(rule.re, (m) => {
-      changed = true
+    next = next.replace(rule.re, (match) => {
+      if (match === rule.to) return match
+      byFamily[rule.family] = (byFamily[rule.family] || 0) + 1
+      replacements += 1
       return rule.to
     })
-    const n = before.split(rule.re).length - 1
-    if (n > 0) {
-      familyCount[rule.family] = (familyCount[rule.family] || 0) + n
-      counts.replacements += n
-    }
   }
-  if (changed && next !== original) {
-    writeFileSync(file, next)
-    counts.files++
-  }
+
+  return { next: normalizeNestedOpacity(next), replacements, byFamily }
 }
 
-console.log(JSON.stringify({ files: counts.files, replacements: counts.replacements, byFamily: familyCount }, null, 2))
+function collectFiles() {
+  const output = execSync(
+    `rg -l "(text|bg|border|ring|from|to|fill|stroke)-(emerald|amber|red|blue|orange)-[0-9]+|bg-status-n" src --glob '*.{tsx,ts,jsx,js,css,mjs}' -g '!**/*.test.*' -g '!**/*.playwright.*' -g '!**/*.spec.*' -g '!**/_stories/**' -g '!**/base44-reference/**' 2>/dev/null || true`,
+  )
+    .toString()
+    .trim()
+
+  return output ? output.split('\n').filter(Boolean) : []
+}
+
+function main() {
+  const counts = { files: 0, replacements: 0 }
+  const byFamily = {}
+
+  for (const file of collectFiles()) {
+    const original = readFileSync(file, 'utf8')
+    const result = applyStatusColorRules(original)
+    if (result.next === original) continue
+
+    writeFileSync(file, result.next)
+    counts.files += 1
+    counts.replacements += result.replacements
+    for (const [family, count] of Object.entries(result.byFamily)) {
+      byFamily[family] = (byFamily[family] || 0) + count
+    }
+  }
+
+  console.log(JSON.stringify({ ...counts, byFamily }, null, 2))
+}
+
+if (process.argv[1] && resolve(process.argv[1]) === fileURLToPath(import.meta.url)) main()

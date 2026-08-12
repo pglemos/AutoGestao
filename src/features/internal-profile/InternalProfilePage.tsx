@@ -3,7 +3,7 @@ import { Camera, Key, LogOut, RefreshCw, Save, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/atoms/Button'
 import { Input } from '@/components/atoms/Input'
 import { getAvatarDisplayUrl } from '@/lib/avatar'
-import { MxField, MxModuleHeader, MxModulePage, MxSectionCard, MxSectionHeader, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
+import { MxField, MxLoadingState, MxModuleHeader, MxModulePage, MxSectionCard, MxSectionHeader, MxStatusBanner } from '@/components/module/MxModuleVisualPrimitives'
 import { useInternalProfileController } from './hooks/useInternalProfileController'
 
 function ProfileAvatar({ url, name }: { url: string; name: string }) {
@@ -15,7 +15,7 @@ function ProfileAvatar({ url, name }: { url: string; name: string }) {
 
 export function InternalProfilePage() {
   const state = useInternalProfileController()
-  if (!state.profile) return null
+  if (!state.profile) return <MxModulePage id="internal-profile-loading"><MxLoadingState label="Carregando perfil" /></MxModulePage>
   return (
     <MxModulePage id="internal-profile">
       <MxModuleHeader eyebrow="Conta" title="Meu Perfil" description="Dados pessoais, foto e segurança da conta MX." actions={<><Button variant="secondary" onClick={() => void state.signOut()}><LogOut size={18} />Sair</Button><Button onClick={() => void state.save()} disabled={!state.canEdit || state.saving}>{state.saving ? <RefreshCw size={18} className="animate-spin motion-reduce:animate-none" /> : <Save size={18} />}Salvar</Button></>} />

@@ -124,6 +124,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                         variant="ghost"
                         size="icon"
                         onClick={() => onShareWhatsApp(f)}
+                        aria-label={`Compartilhar devolutiva de ${sellerName}`}
                         className="w-mx-10 h-mx-10 p-mx-0 text-status-success hover:bg-status-success-surface rounded-xl border border-border-subtle shadow-sm bg-white"
                       >
                         <MessageSquare size={18} />
@@ -134,6 +135,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                       variant="ghost"
                       size="icon"
                       onClick={() => onShareWhatsApp(f)}
+                      aria-label={`Compartilhar devolutiva de ${sellerName}`}
                       className="w-mx-10 h-mx-10 p-mx-0 text-status-success hover:bg-status-success-surface rounded-xl border border-border-subtle shadow-sm bg-white"
                     >
                       <MessageSquare size={18} />

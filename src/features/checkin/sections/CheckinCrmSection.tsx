@@ -611,7 +611,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               id="checkin-new-client-button"
               type="button"
               onClick={() => setNovoRegistroModalOpen(true)}
-              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-[#6D28D9] px-5 text-sm font-bold text-white shadow-[0_10px_20px_rgba(109,40,217,0.22)] transition hover:bg-purple-700 sm:w-auto"
+              className="inline-flex h-10 w-full items-center justify-center gap-2 rounded-xl bg-status-info px-5 text-sm font-bold text-white shadow-[var(--mx-button-shadow)] transition hover:bg-status-info sm:w-auto"
             >
               <UserPlus size={16} /> + Novo Cliente
             </button>

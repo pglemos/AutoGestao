@@ -305,7 +305,7 @@ export default function BottomSection({
           <div className="flex items-start gap-2 divide-x divide-border-subtle">
             <StatItem value={totalLeads} label="Leads Recebidos" color="text-[#005BFF]" />
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">
-              <span className="text-h2 font-bold leading-none tabular-nums text-[#6D28D9]">{totalAtend}</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-status-info-text">{totalAtend}</span>
               <span className="text-caption text-[#64748B] text-center leading-tight font-medium">Atendimentos</span>
             </div>
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">

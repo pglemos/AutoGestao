@@ -23,7 +23,7 @@ const SALE_STYLE = {
   "Venda Realizada": "bg-green-100 text-green-700",
   "Em Negociação": "bg-status-warning-surface text-status-warning-text",
   "Venda perdida": "bg-status-error-surface text-status-error-text",
-  "Qualificado": "bg-purple-100 text-purple-700",
+  "Qualificado": "bg-status-info-surface text-status-info-text",
   "Garantia Registrada": "bg-status-warning-surface text-status-warning-text",
 };
 
@@ -600,7 +600,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
   // Badge de tipo ao lado do nome
   const TIPO_BADGE_FIXED = {
     venda: { label: "$", cls: "text-green-600 bg-green-50" },
-    qualificado: { label: "Q", cls: "text-purple-600 bg-purple-50" },
+    qualificado: { label: "Q", cls: "text-status-info-text bg-status-info-surface" },
     garantia: { label: "!", cls: "text-status-warning-text bg-status-warning-surface" },
     perdido: { label: "✕", cls: "text-muted-foreground bg-slate-100" },
   };
@@ -634,7 +634,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           onClick={() => canEdit && setExpandedId(isExpanded ? null : c.id)}
           className={`border-b border-[#F1F5F9] transition-colors group ${
             rowDim ? "opacity-40 cursor-default"
-            : isExpanded ? "bg-purple-50/30 cursor-pointer"
+            : isExpanded ? "bg-status-info-surface/30 cursor-pointer"
             : "hover:bg-[#F8FAFC] cursor-pointer"
           }`}
         >
@@ -642,7 +642,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             <div className="flex items-center gap-1.5">
               {canEdit
                 ? isExpanded
-                  ? <ChevronUp className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" />
+                  ? <ChevronUp className="w-3.5 h-3.5 text-status-info-text flex-shrink-0" />
                   : <ChevronDown className="w-3.5 h-3.5 text-text-disabled group-hover:text-muted-foreground flex-shrink-0" />
                 : <Lock className="w-3.5 h-3.5 text-slate-200 flex-shrink-0" />
               }
@@ -697,7 +697,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
         <div className="flex items-start justify-between px-6 py-4 border-b border-[#E5E7EB]">
           <div>
             <div className="flex items-center gap-2 flex-wrap">
-              <span className="w-5 h-5 rounded-full bg-[#6D28D9] text-white text-caption font-bold flex items-center justify-center flex-shrink-0">4</span>
+              <span className="w-5 h-5 rounded-full bg-status-info text-white text-caption font-bold flex items-center justify-center flex-shrink-0">4</span>
               <h2 className="text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Cadastrar Venda/Agendamentos</h2>
               <InfoTooltip text="Registros criados aqui são salvos diretamente na Carteira de Clientes — base única do sistema. Nenhum dado é duplicado." />
             </div>
@@ -705,7 +705,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           </div>
           {!bloqueado && (
             <button onClick={openCreate}
-              className="flex items-center gap-1.5 bg-[#6D28D9] hover:bg-purple-700 active:scale-95 transition-all text-white text-body-sm font-bold px-4 py-2 rounded-xl shadow-sm shadow-purple-100 ml-4 flex-shrink-0">
+              className="flex items-center gap-1.5 bg-status-info hover:bg-status-info active:scale-95 transition-all text-white text-body-sm font-bold px-4 py-2 rounded-xl shadow-[var(--mx-button-shadow)] ml-4 flex-shrink-0">
               <Plus className="w-4 h-4" />
               {d1Editavel ? "Novo Agendamento D+1" : "Novo Cliente"}
             </button>
@@ -733,13 +733,13 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             <tbody>
               {loadingClients ? (
                 <tr><td colSpan={10} className="text-center py-14">
-                  <div className="w-6 h-6 border-4 border-border border-t-purple-400 rounded-full animate-spin mx-auto" />
+                  <div className="w-6 h-6 border-4 border-border border-t-status-info rounded-full animate-spin mx-auto" />
                 </td></tr>
               ) : clientes.length === 0 ? (
                 <tr><td colSpan={10} className="text-center py-14">
                   <div className="flex flex-col items-center gap-2">
-                    <div className="w-10 h-10 rounded-full bg-purple-50 flex items-center justify-center">
-                      <Plus className="w-5 h-5 text-purple-300" />
+                    <div className="w-10 h-10 rounded-full bg-status-info-surface flex items-center justify-center">
+                      <Plus className="w-5 h-5 text-status-info-text" />
                     </div>
                     <p className="text-body-sm text-[#64748B] font-medium">Nenhum cliente neste fechamento.</p>
                     <p className="text-[12px] text-text-disabled">Clique em "Novo Cliente" para adicionar.</p>
@@ -750,8 +750,8 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           </table>
         </div>
 
-        <div className="px-6 py-3 bg-purple-50/40 border-t border-purple-100/60">
-          <p className="text-[12px] text-[#6D28D9] flex items-center gap-1.5 font-medium">
+        <div className="px-6 py-3 bg-status-info-surface/40 border-t border-status-info/60">
+          <p className="text-[12px] text-status-info-text flex items-center gap-1.5 font-medium">
             <Star className="w-3.5 h-3.5 text-[#F59E0B] fill-[#F59E0B]" />
             Clientes cadastrados ajudam a aumentar sua pontuação em Disciplina (30% dos pontos).
           </p>
@@ -867,7 +867,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
               Cancelar
             </button>
             <button onClick={handleSave} disabled={!canSave || saving}
-              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#6D28D9] hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-purple-100">
+              className="px-6 py-2.5 text-body-sm font-bold text-white bg-status-info hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors shadow-[var(--mx-button-shadow)]">
               {saving ? "Salvando..." : modoD1 ? "Salvar Agendamento" : "Salvar na Carteira"}
             </button>
           </div>

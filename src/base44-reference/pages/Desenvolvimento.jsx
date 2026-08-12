@@ -23,7 +23,7 @@ export default function Desenvolvimento() {
   }, [searchParams]);
 
   return (
-<div className="min-h-screen bg-[#F8FAFC] p-4 sm:p-6">
+<div className="w-full min-w-0 bg-surface-alt">
 <SellerPageHeader icon={BookOpen} title={tab === "feedback" ? "FEEDBACK" : "PDI"} actions={(
 <div className="flex flex-wrap gap-1 rounded-xl bg-slate-100 p-1">
 {TABS.map(t => (

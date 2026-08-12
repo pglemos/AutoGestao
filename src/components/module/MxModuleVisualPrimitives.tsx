@@ -28,7 +28,7 @@ const toneStyles: Record<MxTone, ToneStyle> = {
   warning: { icon: 'bg-status-warning-surface text-status-warning-text', surface: 'border-status-warning/30', value: 'text-status-warning-text', banner: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text', progress: 'bg-status-warning' },
   danger: { icon: 'bg-status-error-surface text-status-error-text', surface: 'border-status-error/30', value: 'text-status-error-text', banner: 'border-status-error/30 bg-status-error-surface text-status-error-text', progress: 'bg-status-error' },
   info: { icon: 'bg-status-info-surface text-status-info-text', surface: 'border-status-info/30', value: 'text-status-info-text', banner: 'border-status-info/30 bg-status-info-surface text-status-info-text', progress: 'bg-status-info' },
-  violet: { icon: 'bg-violet-50 text-violet-600', surface: 'border-violet-200', value: 'text-violet-700', banner: 'border-violet-200 bg-violet-50 text-violet-700', progress: 'bg-violet-500' },
+  violet: { icon: 'bg-status-info-surface text-status-info-text', surface: 'border-status-info/30', value: 'text-status-info-text', banner: 'border-status-info/30 bg-status-info-surface text-status-info-text', progress: 'bg-status-info' },
   neutral: { icon: 'bg-gray-50 text-muted-foreground', surface: 'border-border-subtle', value: 'text-foreground', banner: 'border-border bg-gray-50 text-foreground', progress: 'bg-gray-400' },
 }
 
@@ -161,7 +161,7 @@ export function MxField({ label, hint, error, children, className, ...props }: {
 export function MxInput(props: InputProps) { return <Input {...props} /> }
 export function MxSelect(props: SelectProps) { return <Select {...props} /> }
 export function MxTextarea(props: TextareaProps) { return <Textarea {...props} /> }
-export function MxTableSurface({ children, className, ...props }: HTMLAttributes<HTMLDivElement>) { return <InternalMxTemplateTable data-mx-table-surface="" className={cn('w-full overflow-x-auto rounded-2xl border border-border-subtle bg-white', className)} {...props}>{children}</InternalMxTemplateTable> }
+export function MxTableSurface({ children, className, role, tabIndex, 'aria-label': ariaLabel, ...props }: HTMLAttributes<HTMLDivElement>) { return <InternalMxTemplateTable data-mx-table-surface="" role={role ?? 'region'} tabIndex={tabIndex ?? 0} aria-label={ariaLabel ?? 'Tabela com rolagem horizontal'} className={cn('w-full overflow-x-auto rounded-2xl border border-border-subtle bg-white', className)} {...props}>{children}</InternalMxTemplateTable> }
 
 export function MxEmptyState({ title, description, icon: Icon = Inbox, action, className }: { title: string; description?: string; icon?: LucideIcon; action?: ReactNode; className?: string }) {
   return (
@@ -175,7 +175,7 @@ export function MxEmptyState({ title, description, icon: Icon = Inbox, action, c
 }
 
 export function MxLoadingState({ label = 'Carregando', className }: { label?: string; className?: string }) {
-  return <div className={cn('flex min-h-48 flex-col items-center justify-center gap-3 text-muted-foreground', className)} aria-busy="true" aria-live="polite" aria-label={label}><LoaderCircle className="animate-spin text-status-success-text motion-reduce:animate-none" size={28} aria-hidden="true" /><Typography variant="caption" className="font-medium text-muted-foreground">{label}</Typography></div>
+  return <div role="status" className={cn('flex min-h-48 flex-col items-center justify-center gap-3 text-muted-foreground', className)} aria-busy="true" aria-live="polite" aria-label={label}><LoaderCircle className="animate-spin text-status-success-text motion-reduce:animate-none" size={28} aria-hidden="true" /><Typography variant="caption" className="font-medium text-muted-foreground">{label}</Typography></div>
 }
 
 export function MxErrorState({ title = 'Não foi possível carregar', description, retry, className }: { title?: string; description: string; retry?: () => void; className?: string }) {

@@ -17,7 +17,7 @@ export default function InternalConsultingPage() {
           <h2 className="text-lg font-semibold text-foreground">Carteira global de Consultoria</h2>
           <p className="text-sm text-muted-foreground">Clientes, atribuições, módulos, visitas, evidências e dados financeiros.</p>
         </div>
-        <div className="-mx-4 lg:-mx-6"><ConsultingClientsPage /></div>
+        <ConsultingClientsPage embedded />
       </section>
     </InternalMxPlanningShell>
   )

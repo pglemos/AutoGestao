@@ -97,11 +97,11 @@ export const toneClasses: Record<KpiTone, { bg: string; text: string; soft: stri
     border: 'border-mx-indigo-100',
   },
   purple: {
-    bg: 'bg-[var(--color-accent-purple-soft)] text-[var(--color-accent-purple)] border border-[var(--color-accent-purple)]/20',
-    text: 'text-[var(--color-accent-purple)]',
-    soft: 'bg-[var(--color-accent-purple-soft)] text-[var(--color-accent-purple)] border-[var(--color-accent-purple)]/20',
-    bar: 'bg-[var(--color-accent-purple)]',
-    border: 'border-[var(--color-accent-purple)]/20',
+    bg: 'bg-status-info-surface text-status-info-text border border-status-info/20',
+    text: 'text-status-info-text',
+    soft: 'bg-status-info-surface text-status-info-text border-status-info/20',
+    bar: 'bg-status-info',
+    border: 'border-status-info/20',
   },
 }
 
@@ -113,7 +113,7 @@ export const vividIconClasses: Record<KpiTone, string> = {
   danger: 'bg-status-error text-white',
   muted: 'bg-surface-alt text-text-tertiary',
   brand: 'bg-brand-primary text-white',
-  purple: 'bg-[var(--color-accent-purple)] text-white',
+  purple: 'bg-status-info text-white',
 }
 
 /** Token per tone for SVG stroke/fill in sparklines. */
@@ -124,5 +124,5 @@ export const toneHex: Record<KpiTone, () => string> = {
   danger: chartTokens.danger,
   muted: chartTokens.axisTickMuted,
   brand: chartTokens.accent,
-  purple: chartTokens.series.s6,
+  purple: chartTokens.info,
 }

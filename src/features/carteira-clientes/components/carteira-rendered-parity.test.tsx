@@ -137,6 +137,18 @@ const COLOR_MIGRATION_MAP: Record<string, string> = {
   'border-slate-300': 'border-border',
   'hover:border-slate-200': 'hover:border-border',
   'hover:border-blue-300': 'hover:border-status-info/40',
+  'bg-violet-50': 'bg-status-info-surface',
+  'bg-violet-100': 'bg-status-info-surface',
+  'bg-violet-600': 'bg-status-info',
+  'border-violet-200': 'border-status-info/30',
+  'border-violet-600': 'border-status-info',
+  'text-violet-600': 'text-status-info-text',
+  'text-violet-700': 'text-status-info-text',
+  'hover:bg-violet-50': 'hover:bg-status-info-surface',
+  'hover:border-violet-300': 'hover:border-status-info/40',
+  'hover:text-violet-600': 'hover:text-status-info-text',
+  'focus:ring-violet-400': 'focus:ring-status-info/40',
+  'focus:border-violet-400': 'focus:border-status-info/50',
 }
 
 function normalizeDom(html: string) {

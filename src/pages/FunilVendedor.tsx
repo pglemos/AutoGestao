@@ -172,9 +172,9 @@ export default function FunilVendedor() {
 
   if (loading) {
     return (
-      <div className="flex h-64 items-center justify-center">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full items-center justify-center">
         <div className="h-8 w-8 animate-spin rounded-full border-4 border-border border-t-blue-700" />
-      </div>
+      </PageCanvas>
     )
   }
 

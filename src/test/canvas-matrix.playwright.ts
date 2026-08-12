@@ -15,7 +15,9 @@ import { createRequire } from 'node:module'
  *   2. a margem lateral corresponde à classe de tela (16 / 24 / 32);
  *   3. o padding de topo é o mesmo em todo perfil e breakpoint (§28.4);
  *   4. não há rolagem horizontal acidental (§28.13);
- *   5. nenhuma violação de acessibilidade grave ou crítica (§21).
+ *   5. há exatamente uma landmark `main` e um scroll owner no caminho da
+ *      página (§09.013–09.015);
+ *   6. nenhuma violação de acessibilidade grave ou crítica (§21).
  *
  * Credenciais vêm do ambiente. Sem elas o teste é ignorado em vez de falhar,
  * porque uma suíte vermelha por configuração ausente ensina a equipe a ignorar
@@ -121,6 +123,7 @@ interface CanvasGeometry {
   paddingRight: number
   paddingTop: number
   hasHorizontalScroll: boolean
+  mainCount: number
   pageScrollOwnerCount: number
   pageViewportFound: boolean
   role: string | null
@@ -138,20 +141,30 @@ async function readCanvas(page: Page): Promise<CanvasGeometry> {
         paddingRight: 0,
         paddingTop: 0,
         hasHorizontalScroll: document.documentElement.scrollWidth > window.innerWidth,
+        mainCount: document.querySelectorAll('main').length,
         pageScrollOwnerCount: 0,
         pageViewportFound: false,
         role: shell?.dataset.mxRole ?? null,
       }
     }
     const style = getComputedStyle(canvas)
+    const main = document.querySelector<HTMLElement>('main#main-content')
     const viewport = document.querySelector<HTMLElement>('#main-content > [data-mx-page-viewport]')
-    const pageLevelCandidates = viewport
-      ? [viewport, ...Array.from(viewport.children).filter((child): child is HTMLElement => child instanceof HTMLElement)]
-      : []
-    const pageScrollOwnerCount = pageLevelCandidates.filter((element) => {
-      const overflowY = getComputedStyle(element).overflowY
-      return overflowY === 'auto' || overflowY === 'scroll'
-    }).length
+    const pagePath: HTMLElement[] = []
+    let current: HTMLElement | null = canvas
+    while (current) {
+      pagePath.push(current)
+      if (current === main) break
+      current = current.parentElement
+    }
+    const pageScrollOwners = pagePath.filter((element) => {
+      const computed = getComputedStyle(element)
+      const overflowY = computed.overflowY
+      return (
+        (overflowY === 'auto' || overflowY === 'scroll') &&
+        element.getBoundingClientRect().height > 0
+      )
+    })
     return {
       found: true,
       width: canvas.dataset.mxPageWidth ?? null,
@@ -159,7 +172,8 @@ async function readCanvas(page: Page): Promise<CanvasGeometry> {
       paddingRight: Math.round(parseFloat(style.paddingRight)),
       paddingTop: Math.round(parseFloat(style.paddingTop)),
       hasHorizontalScroll: document.documentElement.scrollWidth > window.innerWidth,
-      pageScrollOwnerCount,
+      mainCount: document.querySelectorAll('main').length,
+      pageScrollOwnerCount: pageScrollOwners.length,
       pageViewportFound: Boolean(viewport),
       role: shell?.dataset.mxRole ?? null,
     }
@@ -220,6 +234,9 @@ test.describe('matriz canônica de layout', () => {
           }
           if (geometry.hasHorizontalScroll) {
             failures.push(`${route}: rolagem horizontal acidental em ${viewport?.width}px`)
+          }
+          if (geometry.mainCount !== 1) {
+            failures.push(`${route}: ${geometry.mainCount} landmark(s) main, esperado 1`)
           }
           if (!geometry.pageViewportFound || geometry.pageScrollOwnerCount !== 1) {
             failures.push(

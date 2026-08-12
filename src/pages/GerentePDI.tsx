@@ -134,8 +134,8 @@ export default function GerentePDI() {
 
             {isManager && (
                 <Card className="border border-status-info/20 bg-status-info-surface p-mx-md">
-                    <Typography variant="h3" className=" text-status-info">Escopo do gerente</Typography>
-                    <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
+                    <Typography variant="h3" className=" text-status-info-text">Escopo do gerente</Typography>
+                    <Typography variant="p" className="mt-mx-xs text-sm text-status-info-text">
                         Esta tela mostra os PDIs da sua unidade. Use o botão de novo PDI para conduzir desenvolvimento da equipe; Admin MX e Dono usam a mesma rota em escopos diferentes.
                     </Typography>
                 </Card>
@@ -143,8 +143,8 @@ export default function GerentePDI() {
 
             {isOwner && (
                 <Card className="border border-status-info/20 bg-status-info-surface p-mx-md">
-                    <Typography variant="h3" className=" text-status-info">PDI como acompanhamento do Dono</Typography>
-                    <Typography variant="p" className="mt-mx-xs text-sm text-status-info">
+                    <Typography variant="h3" className=" text-status-info-text">PDI como acompanhamento do Dono</Typography>
+                    <Typography variant="p" className="mt-mx-xs text-sm text-status-info-text">
                         Esta visão mostra evolução, prazos e consistência dos planos. Criação e condução de PDI ficam com gerente/Admin MX; aqui o foco é decidir onde cobrar cadência.
                     </Typography>
                 </Card>

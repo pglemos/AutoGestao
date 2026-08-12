@@ -15,15 +15,11 @@ export function StoreHeader({ isRefetching, onRefresh, onExport }: Props) {
     <header className="flex flex-col lg:flex-row lg:items-center justify-between gap-mx-lg border-b border-border pb-10 shrink-0">
       <div className="flex flex-col gap-mx-tiny">
         <div className="flex items-center gap-mx-sm">
-          <div
-            className="w-mx-xs h-mx-10 bg-brand-primary rounded-mx-full shadow-sm"
-            aria-hidden="true"
-          />
           <Typography variant="h1">
             Análise de <span className="text-mx-green-700">Performance</span>
           </Typography>
         </div>
-        <Typography variant="caption" className="pl-mx-md">
+        <Typography variant="caption">
           BUSINESS INTELLIGENCE • LIVE AUDIT MX
         </Typography>
       </div>

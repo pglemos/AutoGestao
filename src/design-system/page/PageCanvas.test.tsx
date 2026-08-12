@@ -3,20 +3,21 @@ import { render, screen } from '@testing-library/react'
 import { PageCanvas } from './PageCanvas'
 
 describe('PageCanvas', () => {
-  it('renders default main landmark with dashboard width and lateral safe area styles', () => {
+  it('renders a content container with dashboard width and lateral safe area styles', () => {
     render(<PageCanvas id="test-canvas"><p>Content</p></PageCanvas>)
 
-    const main = screen.getByRole('main')
-    expect(main.id).toBe('test-canvas')
-    expect(main.getAttribute('data-mx-page-canvas')).toBe('')
-    expect(main.getAttribute('data-mx-page-width')).toBe('dashboard')
-    expect(main.getAttribute('data-mx-page-clearance')).toBe('none')
+    const canvas = document.getElementById('test-canvas')
+    expect(canvas?.tagName.toLowerCase()).toBe('div')
+    expect(screen.queryByRole('main')).toBeNull()
+    expect(canvas?.getAttribute('data-mx-page-canvas')).toBe('')
+    expect(canvas?.getAttribute('data-mx-page-width')).toBe('dashboard')
+    expect(canvas?.getAttribute('data-mx-page-clearance')).toBe('none')
 
-    expect(main.style.maxWidth).toBe('var(--mx-page-width-dashboard)')
-    expect(main.style.paddingInlineStart).toBe(
+    expect(canvas?.style.maxWidth).toBe('var(--mx-page-width-dashboard)')
+    expect(canvas?.style.paddingInlineStart).toBe(
       'max(var(--mx-page-margin), env(safe-area-inset-left, 0px))',
     )
-    expect(main.style.paddingInlineEnd).toBe(
+    expect(canvas?.style.paddingInlineEnd).toBe(
       'max(var(--mx-page-margin), env(safe-area-inset-right, 0px))',
     )
   })
@@ -33,5 +34,11 @@ describe('PageCanvas', () => {
     expect(section?.getAttribute('data-mx-page-width')).toBe('form')
     expect(section?.getAttribute('data-mx-page-clearance')).toBe('actions')
     expect(section?.style.maxWidth).toBe('var(--mx-page-width-form)')
+  })
+
+  it('gives a named canvas a valid region role when the consumer does not provide one', () => {
+    render(<PageCanvas aria-label="Conteúdo do painel"><p>Named content</p></PageCanvas>)
+
+    expect(screen.getByRole('region', { name: 'Conteúdo do painel' })).toBeTruthy()
   })
 })

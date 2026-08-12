@@ -95,7 +95,7 @@ export function HojeTab({
       {actions.length > 0 && <FiltrosAtividade actions={actions} value={filter} onChange={setFilter} />}
 
       {loading ? (
-        <div className="space-y-3" aria-label="Carregando atividades">
+        <div className="space-y-3" role="status" aria-label="Carregando atividades">
           {[0, 1, 2].map(item => <div key={item} className="h-[80px] animate-pulse rounded-2xl bg-slate-200" />)}
         </div>
       ) : error ? (

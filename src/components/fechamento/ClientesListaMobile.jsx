@@ -19,7 +19,7 @@ const SALE_STYLE = {
   "Não": "bg-status-error-surface text-status-error-text",
   "Em Negociação": "bg-status-warning-surface text-status-warning-text",
   "Venda Realizada": "bg-green-100 text-green-700",
-  "Qualificado": "bg-purple-100 text-purple-700",
+  "Qualificado": "bg-status-info-surface text-status-info-text",
   "Garantia Registrada": "bg-status-warning-surface text-status-warning-text",
   "Venda perdida": "bg-status-error-surface text-status-error-text",
 };
@@ -139,8 +139,8 @@ export default function ClientesListaMobile({ clients = [], closingDate, bloquea
   if (clients.length === 0) {
     return (
       <div className="bg-white rounded-2xl border border-border shadow-sm p-6 flex flex-col items-center gap-2">
-        <div className="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center">
-          <ShoppingCart className="w-6 h-6 text-purple-300" />
+        <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center">
+          <ShoppingCart className="w-6 h-6 text-status-info-text" />
         </div>
         <p className="text-body-sm text-[#64748B] font-medium">Nenhum cliente cadastrado hoje.</p>
         <p className="text-[12px] text-text-disabled">Adicione um cliente na etapa 4 acima.</p>

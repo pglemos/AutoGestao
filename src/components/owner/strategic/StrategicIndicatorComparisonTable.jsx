@@ -49,7 +49,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
           <p className="text-xs text-muted-foreground">Meta, resultado, atingimento e ano anterior</p>
         </div>
       </div>
-      <div ref={scrollRef} className="flex-1 overflow-auto">
+      <div ref={scrollRef} className="flex-1 overflow-auto" role="region" tabIndex={0} aria-label="Comparativo de indicadores com rolagem">
         <table className="w-full min-w-[820px] border-collapse text-sm">
           <thead className="sticky top-0 z-20">
             <tr className="border-b border-border bg-slate-50">

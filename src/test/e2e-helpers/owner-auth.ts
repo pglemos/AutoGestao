@@ -1,5 +1,6 @@
 import { createClient, type Session } from '@supabase/supabase-js'
 import type { Page } from '@playwright/test'
+import { skipManagerTour } from './auth'
 
 const SUPABASE_URL = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL
 const SUPABASE_ANON_KEY = process.env.SUPABASE_ANON_KEY || process.env.VITE_SUPABASE_ANON_KEY
@@ -46,6 +47,7 @@ export async function loginAsOwner(
   page: Page,
   options: { email?: string; password?: string } = {},
 ) {
+  await skipManagerTour(page)
   const email = options.email || process.env.E2E_OWNER_EMAIL
   const password = options.password || process.env.E2E_ROLE_PASSWORD || process.env.E2E_AUTH_PASSWORD
 

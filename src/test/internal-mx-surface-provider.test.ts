@@ -41,13 +41,16 @@ describe('superfície unificada do MX', () => {
 
   test('a anatomia canônica é a aprovada', () => {
     expect(read('src/components/molecules/Card.tsx')).toContain(
-      'rounded-2xl border border-border-subtle bg-white shadow-sm',
+      'rounded-[var(--mx-card-radius)] border border-border-subtle bg-white shadow-[var(--mx-card-shadow)]',
     )
     expect(read('src/components/atoms/Input.tsx')).toContain(
-      'h-10 w-full rounded-xl border border-border',
+      'h-10 w-full rounded-[var(--mx-input-radius)] border border-border',
     )
     expect(read('src/components/atoms/Button.tsx')).toContain(
-      'rounded-xl bg-brand-primary text-white shadow-sm',
+      'rounded-[var(--mx-button-radius)]',
+    )
+    expect(read('src/components/atoms/Button.tsx')).toContain(
+      'bg-brand-primary text-white shadow-[var(--mx-button-shadow)]',
     )
   })
 })

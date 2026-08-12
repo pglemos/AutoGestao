@@ -253,7 +253,7 @@ export default function ClientCardMobile({
       {!bloqueado && (
         <button
           onClick={openCreate}
-          className="w-full flex items-center justify-center gap-2 bg-[#6D28D9] hover:bg-purple-700 active:scale-95 transition-all text-white text-[14px] font-bold py-3.5 rounded-2xl shadow-sm shadow-purple-100"
+          className="w-full flex items-center justify-center gap-2 bg-status-info hover:bg-status-info active:scale-95 transition-all text-white text-[14px] font-bold py-3.5 rounded-2xl shadow-[var(--mx-button-shadow)]"
         >
           <Plus className="w-5 h-5" />
           {d1Editavel ? "Novo Agendamento D+1" : "Novo Cliente"}
@@ -394,7 +394,7 @@ export default function ClientCardMobile({
             <button
               onClick={handleSave}
               disabled={!canSave || saving}
-              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#6D28D9] hover:bg-purple-700 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-purple-100"
+              className="px-6 py-2.5 text-body-sm font-bold text-white bg-status-info hover:bg-status-info disabled:opacity-50 rounded-xl transition-colors shadow-[var(--mx-button-shadow)]"
             >
               {saving ? "Salvando..." : modoD1 ? "Salvar Agendamento" : "Salvar Cliente"}
             </button>

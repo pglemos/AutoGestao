@@ -57,13 +57,10 @@ const CANONICAL_TAILWIND = [
   'text-mx-green-light', 'bg-mx-blue', 'text-mx-blue', 'bg-mx-navy', 'text-mx-navy',
   'bg-mx-amber', 'text-mx-amber', 'bg-mx-red', 'text-mx-red', 'bg-accent-blue',
   'bg-accent-blue-strong', 'bg-accent-blue-soft', 'text-accent-blue', 'text-accent-blue-strong',
-  'bg-accent-purple', 'bg-accent-purple-strong', 'bg-accent-purple-soft', 'text-accent-purple',
   'fill-white', 'fill-current', 'text-current', 'border-current', 'stroke-current',
   'bg-transparent', 'border-transparent', 'text-transparent', 'fill-transparent',
   'stroke-transparent', 'from-transparent', 'to-transparent', 'via-transparent',
-  'text-inherit', 'bg-inherit', 'border-inherit', 'border-destructive', 'bg-accent-purple',
-  'bg-accent-purple-strong', 'bg-accent-purple-soft', 'text-accent-purple', 'text-accent-purple-strong',
-  'text-accent-purple-soft', 'border-accent-purple', 'ring-accent-purple',
+  'text-inherit', 'bg-inherit', 'border-inherit', 'border-destructive',
 ]
 
 /** Regras: família Tailwind -> papel -> token alvo. Ordem importa. */

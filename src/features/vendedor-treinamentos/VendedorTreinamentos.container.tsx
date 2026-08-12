@@ -38,7 +38,7 @@ const LEVEL_COLORS: Record<string, string> = {
     'N1 Iniciante': 'bg-mx-green-light text-mx-green',
     'N2 Intermediário': 'bg-mx-blue-light text-mx-blue',
     'N3 Performance': 'bg-mx-amber-light text-mx-amber',
-    'N4 Alta Performance': 'bg-purple-100 text-purple-700',
+    'N4 Alta Performance': 'bg-status-info-surface text-status-info-text',
 }
 
 // Os componentes visuais legados são JavaScript e não expõem props TypeScript.

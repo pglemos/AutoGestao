@@ -53,8 +53,8 @@ export function OptionCard({
         }
       }}
       className={cn(
-        'flex items-center justify-between p-mx-md rounded-2xl bg-gray-50 border border-border select-none',
-        'hover:bg-white hover:shadow-sm transition-all cursor-pointer group',
+        'flex items-center justify-between p-mx-md rounded-[var(--mx-card-radius)] bg-gray-50 border border-border select-none',
+        'hover:bg-white hover:shadow-[var(--mx-card-hover-shadow)] transition-all cursor-pointer group',
         disabled && 'opacity-50 cursor-not-allowed hover:bg-gray-50 hover:shadow-none',
         className,
       )}
@@ -86,7 +86,7 @@ export function OptionCard({
           if (!disabled) onChange(val === true)
         }}
         disabled={disabled}
-        className="w-5 h-5 rounded-lg shrink-0 accent-emerald-600 cursor-pointer"
+        className="w-5 h-5 rounded-[var(--mx-input-radius)] shrink-0 accent-emerald-600 cursor-pointer"
       />
     </div>
   )

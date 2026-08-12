@@ -66,6 +66,7 @@ describe('MxModuleVisualPrimitives', () => {
     expect(html).toContain('<h1')
     expect(html).toContain('<table')
     expect(html).toContain('aria-busy="true"')
+    expect(html).toMatch(/role="status"[^>]*aria-busy="true"[^>]*aria-label="Carregando painel"/)
 
     expect(html).not.toContain('bg-mx-action')
     expect(html).not.toContain('bg-surface-alt')

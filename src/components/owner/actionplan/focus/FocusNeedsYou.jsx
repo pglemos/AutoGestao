@@ -8,13 +8,13 @@ export default function FocusNeedsYou({ actions, onAnalyze, onApprove, onDelegat
   const needsOwner = actions.filter((a) => a.requiresOwner && a.status === "awaiting_decision");
 
   return (
-    <section className="rounded-xl border border-violet-200 bg-violet-50/40 p-4">
+    <section className="rounded-xl border border-status-info/30 bg-status-info-surface/40 p-4">
       <div className="mb-3 flex items-center gap-2">
-        <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-violet-100">
-          <Zap className="h-4 w-4 text-violet-600" />
+        <div className="inline-flex h-7 w-7 items-center justify-center rounded-lg bg-status-info-surface">
+          <Zap className="h-4 w-4 text-status-info-text" />
         </div>
         <h2 className="text-sm font-semibold text-foreground">Precisam de você</h2>
-        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-violet-100 px-1.5 text-xs font-bold text-violet-700">
+        <span className="inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-status-info-surface px-1.5 text-xs font-bold text-status-info-text">
           {needsOwner.length}
         </span>
       </div>
@@ -23,7 +23,7 @@ export default function FocusNeedsYou({ actions, onAnalyze, onApprove, onDelegat
       </p>
 
       {needsOwner.length === 0 ? (
-        <div className="rounded-lg border border-dashed border-violet-200 bg-card py-8 text-center">
+        <div className="rounded-lg border border-dashed border-status-info/30 bg-card py-8 text-center">
           <p className="text-sm text-muted-foreground">Nenhuma ação precisa da sua decisão neste momento.</p>
         </div>
       ) : (
@@ -77,7 +77,7 @@ export default function FocusNeedsYou({ actions, onAnalyze, onApprove, onDelegat
                   </div>
 
                   <div className="mt-2.5">
-                    <Button size="sm" onClick={() => onAnalyze(action)} className="bg-violet-600 hover:bg-violet-700">
+                    <Button size="sm" onClick={() => onAnalyze(action)} className="bg-status-info hover:bg-status-info">
                       Analisar e decidir
                     </Button>
                   </div>

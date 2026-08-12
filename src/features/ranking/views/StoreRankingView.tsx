@@ -7,6 +7,7 @@ import { CorridaPeriodo } from '@/features/ranking/components/base44/CorridaPeri
 import { BonificacaoPeriodo } from '@/features/ranking/components/base44/BonificacaoPeriodo'
 import { TabelaRanking } from '@/features/ranking/components/base44/TabelaRanking'
 import { RANKING_PERIODOS, useStoreRankingPageData } from '@/features/ranking/hooks/useStoreRankingPageData'
+import { PageCanvas } from '@/design-system/page'
 
 /**
  * Ranking por Loja — reproduz 1:1 a estrutura do protótipo Base44
@@ -18,16 +19,16 @@ export function StoreRankingView() {
 
   if (data.loading) {
     return (
-      <div className="flex items-center justify-center h-64">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full items-center justify-center">
         <div className="w-8 h-8 border-4 border-border border-t-green-500 rounded-full animate-spin" />
-      </div>
+      </PageCanvas>
     )
   }
 
   return (
     <RankingErrorBoundary sectionName="Ranking da Loja">
-      <div className="min-h-full w-full min-w-0 bg-gray-50 font-body px-mx-sm py-mx-md sm:px-mx-md lg:px-mx-lg pb-24">
-        <div className="mx-auto flex w-full max-w-[1500px] flex-col gap-4">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="min-h-full w-full min-w-0 bg-surface-alt font-body">
+        <div className="flex w-full min-w-0 flex-col gap-4">
           <SellerPageHeader
             icon={Trophy}
             title="Ranking"
@@ -87,7 +88,7 @@ export function StoreRankingView() {
 
           <TabelaRanking vendedores={data.vendedores} meta={data.metaPeriodo} meuId={data.meuId} />
         </div>
-      </div>
+      </PageCanvas>
     </RankingErrorBoundary>
   )
 }

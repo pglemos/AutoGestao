@@ -24,6 +24,7 @@ export default function StrategicIndicatorSelector({ value, onChange, areaFilter
           <button
             className={`flex items-center justify-between gap-2 rounded-md border border-input bg-card px-3 text-sm shadow-sm hover:bg-muted/40 focus:outline-none focus:ring-2 focus:ring-primary/20 ${compact ? "h-9 min-w-0 flex-1 basis-[200px]" : "h-10 w-full"}`}
             role="combobox"
+            aria-label="Selecionar indicador"
             aria-expanded={open}
             aria-controls="strategic-indicator-listbox"
           >
@@ -80,7 +81,7 @@ export default function StrategicIndicatorSelector({ value, onChange, areaFilter
       </Popover>
 
       <Select value={areaFilter || "all"} onValueChange={onAreaFilterChange}>
-        <SelectTrigger className="h-9 w-[148px] shrink-0 bg-card">
+        <SelectTrigger aria-label="Filtrar por área" className="h-9 w-[148px] shrink-0 bg-card">
           <SelectValue />
         </SelectTrigger>
         <SelectContent>

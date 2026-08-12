@@ -17,7 +17,7 @@ import type { Store } from '@/types/database'
 import { HelpTooltip } from '@/components/ui/HelpTooltip'
 import { SellerGoalsEditor } from '@/features/lojas/components/SellerGoalsEditor'
 import { VendasFechadasLoja } from '@/features/vendas-loja/VendasFechadasLoja'
-import { PageCanvas } from '@/design-system/page'
+import { ConditionalPageCanvas } from '@/design-system/page'
 import { chartTokens } from '@/lib/charts/tokens'
 import { supabase } from '@/lib/supabase'
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu'
@@ -63,10 +63,13 @@ export function ManagerStoreGoalReference({
   data,
   selectableStores = [],
   onStoreChange,
+  embedded = false,
 }: {
   data: DashboardData
   selectableStores?: Store[]
   onStoreChange?: (storeId: string) => void
+  /** Reuse the dashboard's canvas when this view is rendered inside it. */
+  embedded?: boolean
 }) {
   const navigate = useNavigate()
   const { baseRole } = useAuth()
@@ -263,7 +266,7 @@ export function ManagerStoreGoalReference({
   }
 
   return (
-    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" aria-labelledby="manager-store-goal-title" className="flex flex-col gap-5">
+    <ConditionalPageCanvas enabled={!embedded} as="div" width="dashboard" bottomClearance="navigation" aria-labelledby="manager-store-goal-title" className="flex flex-col gap-5">
         <ManagerHomeReturnLink />
         <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
@@ -302,7 +305,7 @@ export function ManagerStoreGoalReference({
           <GoalCard icon={Target} label="Progresso da meta" tone="emerald" help="Vendas realizadas no mês divididas pela meta mensal. Verde ≥ 100%, amarelo ≥ 50%, vermelho abaixo.">{goal > 0 ? <><strong className="text-2xl text-foreground">{sales} <span className="text-base font-medium text-muted-foreground">de {goal}</span></strong><Progress value={attainment} /><CardFooter left={`${attainment}%`} right="atingido" tone={attainment >= 100 ? 'emerald' : attainment >= 50 ? 'amber' : 'red'} /></> : <EmptyGoalState />}</GoalCard>
           <GoalCard icon={Gauge} label="Meta proporcional até hoje" tone="blue" help="Quanto a loja deveria ter vendido até hoje, considerando a meta mensal dividida pelos dias úteis. Comparado ao realizado mostra se o ritmo está acima ou abaixo.">{goal > 0 ? <><p className="text-sm text-muted-foreground">Meta proporcional: <b className="text-foreground">{formatStoreGoalMetric(proportionalGoal)} vendas</b></p><p className="mt-1 text-sm text-muted-foreground">Realizado: <b className="text-foreground">{sales}</b></p><p className={`mt-2 text-lg font-bold ${paceDelta >= 0 ? 'text-status-success-text' : 'text-status-error-text'}`}>{paceDelta >= 0 ? `+${paceDelta} acima do ritmo` : `${paceDelta} abaixo do ritmo`}</p></> : <EmptyGoalState />}</GoalCard>
           <GoalCard icon={ShoppingCart} label="Faltam vender" tone="orange" help="Quantidade de vendas que ainda faltam para alcançar a meta mensal da loja.">{goal > 0 ? <><strong className="text-3xl text-foreground">{formatStoreGoalMetric(gap)}</strong><p className="mt-1 text-sm text-muted-foreground">{gap === 1 ? 'venda' : 'vendas'}</p><p className="mt-2 text-xs text-muted-foreground">Para atingir a meta mensal</p></> : <EmptyGoalState />}</GoalCard>
-          <GoalCard icon={TrendingUp} label="Projeção e ritmo necessário" tone="violet" help="Projeção de fechamento do mês com base na média diária atual. O ritmo necessário indica quantas vendas/dia faltam para bater a meta.">{goal > 0 ? <><strong className="text-2xl text-foreground">{formatStoreGoalMetric(projection)} <span className="text-sm font-medium text-muted-foreground">vendas</span></strong><p className="text-sm font-medium text-violet-600">{projectedPct}% da meta</p><div className="mt-2 border-t border-gray-50 pt-2"><p className="mb-0.5 text-xs text-muted-foreground">Ritmo necessário:</p><p className="text-sm font-semibold text-foreground">{persistedMonth?.pace_label || `${formatStoreGoalMetric(dailyPace)} ${dailyPace === 1 ? 'venda' : 'vendas'} por dia útil`}</p></div></> : <EmptyGoalState />}</GoalCard>
+          <GoalCard icon={TrendingUp} label="Projeção e ritmo necessário" tone="violet" help="Projeção de fechamento do mês com base na média diária atual. O ritmo necessário indica quantas vendas/dia faltam para bater a meta.">{goal > 0 ? <><strong className="text-2xl text-foreground">{formatStoreGoalMetric(projection)} <span className="text-sm font-medium text-muted-foreground">vendas</span></strong><p className="text-sm font-medium text-status-info-text">{projectedPct}% da meta</p><div className="mt-2 border-t border-gray-50 pt-2"><p className="mb-0.5 text-xs text-muted-foreground">Ritmo necessário:</p><p className="text-sm font-semibold text-foreground">{persistedMonth?.pace_label || `${formatStoreGoalMetric(dailyPace)} ${dailyPace === 1 ? 'venda' : 'vendas'} por dia útil`}</p></div></> : <EmptyGoalState />}</GoalCard>
         </div>
 
         <article className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
@@ -394,7 +397,7 @@ export function ManagerStoreGoalReference({
           </div>
         </div>
       )}
-    </PageCanvas>
+    </ConditionalPageCanvas>
   )
 }
 
@@ -411,7 +414,7 @@ function nullableNumber(value: number | string | null | undefined): number | nul
 }
 
 function GoalCard({ icon: Icon, label, tone, help, children }: { icon: typeof Target; label: string; tone: 'emerald' | 'blue' | 'orange' | 'violet'; help?: string; children: ReactNode }) {
-  const tones = { emerald: 'bg-status-success-surface text-status-success-text', blue: 'bg-status-info-surface text-status-info-text', orange: 'bg-status-warning-surface text-status-warning-text', violet: 'bg-purple-100 text-purple-600' }
+  const tones = { emerald: 'bg-status-success-surface text-status-success-text', blue: 'bg-status-info-surface text-status-info-text', orange: 'bg-status-warning-surface text-status-warning-text', violet: 'bg-status-info-surface text-status-info-text' }
   return <article className="rounded-2xl border border-border-subtle bg-white p-4 shadow-sm"><div className="mb-4 flex items-center gap-2"><span className={`grid h-8 w-8 place-items-center rounded-lg ${tones[tone]}`}><Icon size={16} /></span><p className="flex items-center gap-1 text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}<HelpTooltip text={help} /></p></div>{children}</article>
 }
 function Progress({ value }: { value: number }) { return <div className="mt-3 h-2 overflow-hidden rounded-full bg-gray-100"><div className={`h-full rounded-full ${value >= 80 ? 'bg-status-success' : value >= 50 ? 'bg-status-warning' : 'bg-status-error'}`} style={{ width: `${Math.min(100, Math.max(0, value))}%` }} /></div> }
@@ -419,7 +422,7 @@ function CardFooter({ left, right, tone }: { left: string; right: string; tone: 
 function MetricPill({ value }: { value: number | null }) { if (value === null) return <span className="text-muted-foreground">—</span>; const tone = value >= 100 ? 'bg-status-success-surface text-status-success-text' : value >= 50 ? 'bg-status-warning-surface text-status-warning-text' : 'bg-status-error-surface text-status-error-text'; return <span className={`rounded-lg px-2 py-1 text-xs font-medium ${tone}`}>{value}%</span> }
 function EmptyGoalState() { return <p className="text-sm font-medium text-muted-foreground">Meta ainda não cadastrada.</p> }
 function SustainabilityBlock({ icon: Icon, label, tone, children }: { icon: typeof Activity; label: string; tone: 'orange' | 'blue' | 'purple'; children: ReactNode }) {
-  const tones = { orange: 'text-status-warning', blue: 'text-status-info', purple: 'text-purple-500' }
+  const tones = { orange: 'text-status-warning', blue: 'text-status-info', purple: 'text-status-info-text' }
   return <div className="rounded-xl border border-border-subtle bg-gray-50 p-4"><div className="mb-2 flex items-center gap-1.5"><Icon size={16} className={tones[tone]} /><p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{label}</p></div>{children}</div>
 }
 

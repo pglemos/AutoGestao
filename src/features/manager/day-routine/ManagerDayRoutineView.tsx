@@ -78,7 +78,7 @@ const SORTS: Array<{ key: ManagerRoutineSort; label: string }> = [
 ]
 
 const CATEGORY_STYLE: Record<ManagerRoutineCategory, { color: string; background: string }> = {
-  resultado: { color: 'text-purple-600', background: 'bg-purple-50' },
+  resultado: { color: 'text-status-info-text', background: 'bg-status-info-surface' },
   equipe: { color: 'text-cyan-600', background: 'bg-cyan-50' },
   desenvolvimento: { color: 'text-status-success-text', background: 'bg-status-success-surface' },
   operacao: { color: 'text-status-info-text', background: 'bg-status-info-surface' },
@@ -379,7 +379,7 @@ function TodayRoutine({
       {!showOverdue && (
         <div className="rounded-2xl border border-border-subtle bg-white p-3 shadow-sm">
           <div className="flex flex-col justify-between gap-3 lg:flex-row lg:items-center">
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0">
+            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 lg:pb-0" role="region" tabIndex={0} aria-label="Filtros da rotina">
               {FILTERS.map(item => (
                 <button
                   key={item.key}
@@ -918,7 +918,7 @@ function Field({ label, children }: { label: string; children: React.ReactNode }
 
 function LoadingRoutine({ compact = false }: { compact?: boolean }) {
   return (
-    <div className={`flex justify-center ${compact ? 'py-12' : 'py-16'}`} aria-label="Carregando rotina">
+    <div className={`flex justify-center ${compact ? 'py-12' : 'py-16'}`} role="status" aria-label="Carregando rotina">
       <div className="h-8 w-8 animate-spin rounded-full border-4 border-status-success/30 border-t-emerald-600" />
     </div>
   )

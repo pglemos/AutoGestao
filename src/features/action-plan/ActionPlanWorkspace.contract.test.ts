@@ -19,6 +19,13 @@ describe('ActionPlanWorkspace contract', () => {
     expect(workspace).toContain('ActionExecutiveCards')
   })
 
+  test('expõe painéis de abas montados e não aponta controles desmontados', () => {
+    expect(workspace).toContain('id="tab-panel-acoes"')
+    expect(workspace).toContain('id="tab-panel-calendario"')
+    expect(workspace).toContain('role="tabpanel"')
+    expect(readFileSync('src/components/owner/actionplan/ActionPlanTabs.jsx', 'utf8')).toContain('aria-controls={active ? `tab-panel-${t.value}` : undefined}')
+  })
+
   test('exclusão definitiva usa diálogo controlado e confirmação textual', () => {
     expect(workspace).not.toContain('window.confirm')
     expect(deleteDialog).toContain('Digite o código')

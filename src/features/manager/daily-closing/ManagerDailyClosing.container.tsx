@@ -521,7 +521,7 @@ export default function ManagerDailyClosing() {
               <button
                 type="button"
                 onClick={() => setLeadConferenceOpen(true)}
-                className="inline-flex h-[32px] items-center gap-1.5 rounded-[12px] border border-purple-200 bg-white px-3 text-xs font-medium text-purple-700 hover:bg-purple-50"
+                className="inline-flex h-[32px] items-center gap-1.5 rounded-[12px] border border-status-info/30 bg-white px-3 text-xs font-medium text-status-info-text hover:bg-status-info-surface"
               >
                 <Wrench size={16} />
                 Corrigir Leads
@@ -1189,7 +1189,7 @@ function SummaryGroup({
   const iconTone = {
     blue: "bg-status-info-surface text-status-info-text",
     emerald: "bg-status-success-surface text-status-success-text",
-    purple: "bg-purple-50 text-purple-600",
+    purple: "bg-status-info-surface text-status-info-text",
     amber: "bg-status-warning-surface text-status-warning-text",
     gray: "bg-gray-50 text-muted-foreground",
   }[tone];
@@ -1323,7 +1323,7 @@ function ClosingRow({
           ) : status === "Pendente" ? (
             <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-status-warning-text hover:bg-status-warning-surface" aria-label={`Cobrar fechamento de ${name}`} onClick={onRemind}><Megaphone size={13} /> Cobrar</button>
           ) : onCorrectLeads ? (
-            <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-purple-700 hover:bg-purple-50" aria-label={`Corrigir leads de ${name}`} onClick={onCorrectLeads}><Wrench size={13} /> Leads</button>
+            <button type="button" className="inline-flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-status-info-text hover:bg-status-info-surface" aria-label={`Corrigir leads de ${name}`} onClick={onCorrectLeads}><Wrench size={13} /> Leads</button>
           ) : <span className="text-xs text-muted-foreground">Somente consulta</span>}
         </div>
       </td>

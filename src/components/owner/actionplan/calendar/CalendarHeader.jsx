@@ -33,11 +33,11 @@ export default function CalendarHeader({
     <section className="rounded-xl border border-border bg-card p-4 shadow-sm">
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-2">
-          <Button variant="outline" size="icon" onClick={onPrev} className="h-8 w-8">
-            <ChevronLeft className="h-4 w-4" />
+          <Button variant="outline" size="icon" onClick={onPrev} className="h-8 w-8" aria-label="Período anterior">
+            <ChevronLeft className="h-4 w-4" aria-hidden="true" />
           </Button>
-          <Button variant="outline" size="icon" onClick={onNext} className="h-8 w-8">
-            <ChevronRight className="h-4 w-4" />
+          <Button variant="outline" size="icon" onClick={onNext} className="h-8 w-8" aria-label="Próximo período">
+            <ChevronRight className="h-4 w-4" aria-hidden="true" />
           </Button>
           <h2 className="min-w-[140px] text-base font-semibold text-foreground">{periodTitle}</h2>
           <Button variant="outline" size="sm" onClick={onToday} className="h-8">

@@ -139,7 +139,7 @@ function CollapsedTooltip({ label }: { label: string }) {
   return (
     <span
       role="tooltip"
-      className="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 z-[var(--mx-z-tooltip)] -translate-y-1/2 whitespace-nowrap rounded-lg border border-border-subtle bg-white px-3 py-2 text-xs font-semibold text-foreground opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+      className="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 z-[var(--mx-z-tooltip)] -translate-y-1/2 whitespace-nowrap rounded-[var(--mx-radius-lg)] border border-border-subtle bg-white px-3 py-2 text-xs font-semibold text-foreground opacity-0 shadow-[var(--mx-shadow-lg)] transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
     >
       {label}
     </span>
@@ -498,16 +498,19 @@ export default function MxSidebarShell({
   )
 
   return (
-    <div className="h-[100dvh] overflow-hidden bg-gray-50 font-display text-foreground">
-      <header className="fixed left-0 right-0 top-0 z-[90] grid h-[calc(72px+env(safe-area-inset-top))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-border-subtle bg-white px-4 pt-[env(safe-area-inset-top)] shadow-sm xl:hidden">
+    <div className="h-[100dvh] min-w-0 overflow-hidden bg-surface-alt font-display text-foreground">
+      <header
+        data-mx-mobile-header=""
+        className="fixed left-0 right-0 top-0 z-[var(--mx-z-topbar)] grid h-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-[var(--mx-space-2)] border-b border-border-subtle bg-white px-[var(--mx-mobile-header-padding-inline)] pt-[env(safe-area-inset-top,0px)] shadow-[var(--mx-shadow-sm)] xl:hidden"
+      >
         <button
           type="button"
           aria-label="Abrir menu principal"
           onClick={() => setMobileOpen(true)}
-          className="flex min-w-0 items-center gap-2 text-left text-foreground outline-none transition-opacity hover:opacity-80 active:opacity-60 focus-visible:ring-2 focus-visible:ring-status-success/30"
+          className="flex min-h-[var(--mx-mobile-header-touch-target)] min-w-0 items-center gap-[var(--mx-space-2)] text-left text-foreground outline-none transition-opacity hover:opacity-80 active:opacity-60 focus-visible:ring-2 focus-visible:ring-status-success/30"
         >
-          <Menu className="h-5.5 w-5.5 shrink-0 text-foreground" aria-hidden="true" />
-          <img src={SIDEBAR_LOGO} alt="MX" className="h-6 w-6 shrink-0 object-contain" />
+          <Menu className="h-[var(--mx-icon-size-md)] w-[var(--mx-icon-size-md)] shrink-0 text-foreground" aria-hidden="true" />
+          <img src={SIDEBAR_LOGO} alt="MX" className="h-[var(--mx-icon-size-lg)] w-[var(--mx-icon-size-lg)] shrink-0 object-contain" />
           <span className="text-body-sm font-semibold tracking-tight text-foreground">
             Menu
           </span>
@@ -526,7 +529,7 @@ export default function MxSidebarShell({
             type="button"
             aria-label={`Abrir perfil de ${displayName}`}
             onClick={() => goTo(profilePath)}
-            className="grid h-9 w-9 place-items-center rounded-full bg-status-success-surface text-caption font-bold uppercase text-status-success-text ring-1 ring-status-success/20 outline-none focus-visible:ring-2 focus-visible:ring-status-success/30"
+            className="grid h-[var(--mx-mobile-header-touch-target)] w-[var(--mx-mobile-header-touch-target)] place-items-center rounded-full bg-status-success-surface text-caption font-bold uppercase text-status-success-text ring-1 ring-status-success/20 outline-none focus-visible:ring-2 focus-visible:ring-status-success/30"
           >
             {initials}
           </button>
@@ -548,13 +551,14 @@ export default function MxSidebarShell({
 
       {mobileOpen ? (
         <div
-          className="fixed inset-0 z-[100] bg-black/40 xl:hidden"
+          className={SIDEBAR.drawerOverlay}
           role="presentation"
           onClick={() => setMobileOpen(false)}
           onKeyDown={(event) => {
             if (event.key === 'Escape') setMobileOpen(false)
           }}
         >
+          <div className={SIDEBAR.drawerScrim} aria-hidden="true" />
           <div
             ref={drawerRef}
             role="dialog"
@@ -581,17 +585,20 @@ export default function MxSidebarShell({
 
       <main
         id="main-content"
+        data-mx-shell-main=""
         role="main"
         tabIndex={-1}
         className={cn(
-          'h-[100dvh] overflow-hidden bg-gray-50 outline-none transition-[padding] duration-300 xl:h-screen',
-          'pt-[calc(72px+env(safe-area-inset-top))] xl:pt-0',
-          collapsed ? 'xl:pl-16' : 'xl:pl-64',
+          'flex h-[100dvh] min-h-0 min-w-0 flex-col overflow-hidden bg-surface-alt outline-none transition-[padding] duration-[var(--mx-duration-slow)] xl:h-screen',
+          'pt-[calc(var(--mx-mobile-header-height)+env(safe-area-inset-top,0px))] xl:pt-0',
+          collapsed
+            ? 'xl:pl-[var(--mx-sidebar-width-collapsed)]'
+            : 'xl:pl-[var(--mx-sidebar-width-expanded)]',
         )}
       >
         {isSimulating ? (
           <section
-            className="m-3 flex flex-col gap-3 rounded-2xl border border-status-success/20 bg-status-success-surface p-4 text-emerald-950 md:flex-row md:items-center md:justify-between"
+            className="m-3 flex shrink-0 flex-col gap-3 rounded-[var(--mx-radius-2xl)] border border-status-success/20 bg-status-success-surface p-4 text-emerald-950 md:flex-row md:items-center md:justify-between"
             aria-label="Simulação ativa"
           >
             <div className="min-w-0">
@@ -604,7 +611,7 @@ export default function MxSidebarShell({
               <button
                 type="button"
                 onClick={onStopSimulation}
-                className="h-10 rounded-xl bg-brand-primary px-4 text-sm font-semibold text-white outline-none transition-colors hover:bg-brand-primary-hover focus-visible:ring-2 focus-visible:ring-status-success/30"
+                className="h-10 rounded-[var(--mx-radius-xl)] bg-brand-primary px-4 text-sm font-semibold text-white outline-none transition-colors hover:bg-brand-primary-hover focus-visible:ring-2 focus-visible:ring-status-success/30"
               >
                 Voltar Admin MX
               </button>

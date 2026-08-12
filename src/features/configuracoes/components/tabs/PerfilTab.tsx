@@ -95,7 +95,7 @@ export function PerfilTab() {
                             }}
                         />
                     </div>
-                    <div className="flex-1 space-y-mx-xs">
+                    <div className="min-w-0 flex-1 space-y-mx-xs">
                         <Typography variant="h2" className="tracking-tighter">{form.name || 'Sem nome'}</Typography>
                         <div className="flex items-center gap-mx-sm flex-wrap">
                             <Badge variant="brand" className="px-4 py-1">
@@ -164,8 +164,8 @@ export function PerfilTab() {
                     </div>
                 </div>
 
-                <div className="mt-mx-lg pt-mx-md border-t border-border flex items-center justify-between gap-mx-md">
-                    <div className="flex items-start gap-mx-sm flex-1">
+                <div className="mt-mx-lg flex flex-col items-stretch justify-between gap-mx-md border-t border-border pt-mx-md sm:flex-row sm:items-center">
+                    <div className="flex min-w-0 items-start gap-mx-sm">
                         <Info size={16} className="text-status-success-text shrink-0 mt-1" />
                         <Typography variant="tiny" tone="muted" className="font-bold leading-relaxed">
                             E-mail e hierarquia são gerenciados pela administração MX para fins de auditoria imutável.
@@ -174,7 +174,7 @@ export function PerfilTab() {
                     <Button
                         onClick={handleSave}
                         disabled={saving}
-                        className="h-mx-xl px-8 rounded-mx-full shrink-0"
+                        className="h-mx-xl w-full shrink-0 rounded-mx-full px-8 sm:w-auto"
                     >
                         {saving ? <RefreshCw className="animate-spin mr-2" size={16} /> : <Save size={16} className="mr-2" />}
                         Salvar Perfil

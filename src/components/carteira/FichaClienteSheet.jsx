@@ -383,11 +383,19 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
   }
 
   async function confirmarCancelarVenda(motivo) {
-    if (!cliente?.oportunidade_id) return;
+    const oppId = cliente?.oportunidade_id || cliente?.oportunidade_cancelada_id;
+    if (!oppId) {
+      toast({
+        title: "Não foi possível cancelar a venda.",
+        description: "ID da oportunidade de venda não encontrado.",
+        variant: "destructive",
+      });
+      return;
+    }
     setCancelandoVenda(true);
     try {
-      const atualizado = await base44.entities.CarteiraCliente.cancelarVenda(cliente.oportunidade_id, motivo);
-      toast({ title: "Venda cancelada." });
+      const atualizado = await base44.entities.CarteiraCliente.cancelarVenda(oppId, motivo);
+      toast({ title: "Venda cancelada com sucesso." });
       setCancelarVendaOpen(false);
       if (atualizado) {
         setCliente(atualizado);

@@ -63,6 +63,25 @@ describe('carteira normalized mappers', () => {
     expect(result.temperatura).toBe('Quente')
   })
 
+  test('maps a won sale (etapa = ganho) so oportunidade_id points to the closed sale opportunity', () => {
+    const result = mapMxClientToCarteiraVisual({
+      id: 'client-won-1',
+      nome: 'Nathalia',
+      oportunidades: [{
+        id: 'opp-won-1',
+        etapa: 'ganho',
+        veiculo_interesse: 'HB20',
+        valor_negociado: 60000,
+        closed_at: '2026-08-05T12:00:00Z',
+        updated_at: '2026-08-05T12:00:00Z',
+      }],
+      agendamentos: [],
+    }, new Date('2026-08-12T12:00:00Z'))
+
+    expect(result.situacao_atual).toBe('Venda realizada')
+    expect(result.oportunidade_id).toBe('opp-won-1')
+  })
+
   test('advances the funil stage for every "sit" label produced by proximoPassoLib.TRANSICAO', () => {
     // Regressão: essas oito etapas caíam no default 'prospeccao' — a mesma
     // etapa em que a oportunidade já estava — porque nenhum substring do

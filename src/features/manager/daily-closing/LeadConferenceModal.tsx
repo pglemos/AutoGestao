@@ -184,7 +184,7 @@ export function LeadConferenceModal({
       </button>
       <button
         type="button"
-        className="inline-flex h-9 items-center gap-1.5 rounded-[8px] bg-purple-600 px-3 text-sm font-medium text-white hover:bg-purple-700 disabled:opacity-40"
+        className="inline-flex h-9 items-center gap-1.5 rounded-[8px] bg-status-info px-3 text-sm font-medium text-white hover:bg-status-info disabled:opacity-40"
         disabled={!summary.complete || saving || loading}
         onClick={() => void save()}
       >
@@ -563,7 +563,7 @@ function OfficialInput({
         placeholder="—"
         value={value ?? ""}
         onChange={(event) => onChange(event.target.value)}
-        className="h-9 w-20 rounded-lg border border-border px-2 text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+        className="h-9 w-20 rounded-lg border border-border px-2 text-sm focus:outline-none focus:ring-2 focus:ring-status-info"
       />
     </td>
   );

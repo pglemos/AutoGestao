@@ -661,7 +661,7 @@ export default function ManagerDailyClosing() {
               <button
                 type="button"
                 onClick={() => setLeadConferenceOpen(true)}
-                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-purple-200 bg-white px-3 text-xs font-medium text-purple-700 shadow-sm hover:bg-purple-50"
+                className="inline-flex h-9 items-center gap-1.5 rounded-xl border border-status-info/30 bg-white px-3 text-xs font-medium text-status-info-text shadow-sm hover:bg-status-info-surface"
               >
                 <Wrench size={15} /> Corrigir Leads
               </button>
@@ -1035,7 +1035,7 @@ function ClosingRow({ row, onOpenAgenda, onOpenDetails, onRemind, onRegularize, 
 }
 
 function ActionButton({ icon: Icon, label, onClick, tone }: { icon: typeof Eye; label: string; onClick: () => void; tone: "gray" | "orange" | "blue" | "green" | "red" | "purple" }) {
-  const toneClass = { gray: "text-muted-foreground hover:bg-gray-50", orange: "text-status-warning-text hover:bg-status-warning-surface", blue: "text-status-info-text hover:bg-status-info-surface", green: "text-status-success-text hover:bg-status-success-surface", red: "text-status-error-text hover:bg-status-error-surface", purple: "text-purple-700 hover:bg-purple-50" }[tone];
+  const toneClass = { gray: "text-muted-foreground hover:bg-gray-50", orange: "text-status-warning-text hover:bg-status-warning-surface", blue: "text-status-info-text hover:bg-status-info-surface", green: "text-status-success-text hover:bg-status-success-surface", red: "text-status-error-text hover:bg-status-error-surface", purple: "text-status-info-text hover:bg-status-info-surface" }[tone];
   return <button type="button" onClick={onClick} className={`inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-medium ${toneClass}`}><Icon size={13} /> {label}</button>;
 }
 
@@ -1065,7 +1065,7 @@ function ComparisonRow({ label, value, tone }: { label: string; value: number | 
 }
 
 function SummaryGroup({ label, icon: Icon, tone, items }: { label: string; icon: typeof Store; tone: "blue" | "emerald" | "purple" | "amber" | "slate"; items: Array<[string, number | string]> }) {
-  const iconTone = { blue: "bg-status-info-surface text-status-info-text", emerald: "bg-status-success-surface text-status-success-text", purple: "bg-purple-50 text-purple-600", amber: "bg-status-warning-surface text-status-warning-text", slate: "bg-slate-50 text-muted-foreground" }[tone];
+  const iconTone = { blue: "bg-status-info-surface text-status-info-text", emerald: "bg-status-success-surface text-status-success-text", purple: "bg-status-info-surface text-status-info-text", amber: "bg-status-warning-surface text-status-warning-text", slate: "bg-slate-50 text-muted-foreground" }[tone];
   return <div className="min-h-[88px] rounded-xl bg-gray-50 p-3"><h3 className="flex items-center gap-2 text-xs font-semibold text-muted-foreground"><span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${iconTone}`}><Icon size={15} /></span>{label}</h3>{items.map(([item, value]) => <div key={item} className="mt-2 flex justify-between gap-2 text-xs"><span className="text-muted-foreground">{item}</span><strong className="text-foreground">{value}</strong></div>)}</div>;
 }
 

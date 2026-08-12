@@ -5,7 +5,7 @@ import type { MentorRecommendation, MentorType } from './manager-mentor-rules'
 
 const TYPE_CONFIG: Record<MentorType, { icon: typeof Clock; label: string; color: string; surface: string }> = {
   fechamento: { icon: Clock, label: 'Fechamento', color: 'text-status-info-text', surface: 'border-status-info/20 bg-status-info-surface' },
-  rotina: { icon: Activity, label: 'Rotina', color: 'text-purple-600', surface: 'border-purple-100 bg-purple-50' },
+  rotina: { icon: Activity, label: 'Rotina', color: 'text-status-info-text', surface: 'border-status-info/20 bg-status-info-surface' },
   meta: { icon: Target, label: 'Meta', color: 'text-status-success-text', surface: 'border-status-success/20 bg-status-success-surface' },
 }
 

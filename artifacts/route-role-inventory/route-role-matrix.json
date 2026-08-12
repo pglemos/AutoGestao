@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-08-12T05:16:03.817Z",
+  "generatedAt": "2026-08-12T15:36:05.087Z",
   "source": "scripts/audit_route_data_inventory.mjs + src/lib/auth/routeAccess.ts",
   "roles": [
     "administrador_geral",
@@ -14,10 +14,10 @@
     "routesProtected": 101,
     "routesPublic": 8,
     "routeRoleTotal": 232,
-    "standardCanvasTotal": 67,
-    "standardCanvasRenderings": 221,
+    "standardCanvasTotal": 66,
+    "standardCanvasRenderings": 216,
     "redirectTotal": 30,
-    "fullscreenTotal": 3,
+    "fullscreenTotal": 4,
     "printTotal": 1,
     "ungoverned": 0,
     "duplicatePaths": 0
@@ -609,7 +609,7 @@
     {
       "path": "/liberacao-fechamento",
       "kind": "route",
-      "surface": "STANDARD_CANVAS",
+      "surface": "FULLSCREEN",
       "rulePattern": "/liberacao-fechamento",
       "redirect": null,
       "renderRoles": [
@@ -620,11 +620,11 @@
         "gerente"
       ],
       "roleStatus": {
-        "administrador_geral": "RENDER_STANDARD_CANVAS",
-        "administrador_mx": "RENDER_STANDARD_CANVAS",
-        "consultor_mx": "RENDER_STANDARD_CANVAS",
-        "dono": "RENDER_STANDARD_CANVAS",
-        "gerente": "RENDER_STANDARD_CANVAS",
+        "administrador_geral": "RENDER_FULLSCREEN",
+        "administrador_mx": "RENDER_FULLSCREEN",
+        "consultor_mx": "RENDER_FULLSCREEN",
+        "dono": "RENDER_FULLSCREEN",
+        "gerente": "RENDER_FULLSCREEN",
         "vendedor": "FORBIDDEN"
       },
       "applicable": true,
@@ -2486,35 +2486,35 @@
     {
       "path": "/liberacao-fechamento",
       "role": "administrador_geral",
-      "surface": "STANDARD_CANVAS",
+      "surface": "FULLSCREEN",
       "kind": "route",
       "element": "<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
     },
     {
       "path": "/liberacao-fechamento",
       "role": "administrador_mx",
-      "surface": "STANDARD_CANVAS",
+      "surface": "FULLSCREEN",
       "kind": "route",
       "element": "<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
     },
     {
       "path": "/liberacao-fechamento",
       "role": "consultor_mx",
-      "surface": "STANDARD_CANVAS",
+      "surface": "FULLSCREEN",
       "kind": "route",
       "element": "<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
     },
     {
       "path": "/liberacao-fechamento",
       "role": "dono",
-      "surface": "STANDARD_CANVAS",
+      "surface": "FULLSCREEN",
       "kind": "route",
       "element": "<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
     },
     {
       "path": "/liberacao-fechamento",
       "role": "gerente",
-      "surface": "STANDARD_CANVAS",
+      "surface": "FULLSCREEN",
       "kind": "route",
       "element": "<Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense>"
     },

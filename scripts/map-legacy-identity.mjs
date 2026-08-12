@@ -43,7 +43,6 @@ const MAP = {
   'font-black': 'font-bold',
 
   // Superfícies e fundos de marca
-  'bg-brand-primary': 'bg-brand-primary',
   'bg-brand-secondary': 'bg-gray-900',
   'bg-mx-action': 'bg-brand-primary',
   'bg-mx-black': 'bg-gray-900',

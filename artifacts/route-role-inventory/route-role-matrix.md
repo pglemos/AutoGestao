@@ -1,6 +1,6 @@
 # MX Foundation Zero — Matriz atual route × role
 
-Gerado em 2026-08-12T05:16:03.817Z a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.
+Gerado em 2026-08-12T15:36:05.087Z a partir do inventário AST vivo e de ROUTE_ACCESS_RULES.
 
 ## Denominadores
 
@@ -8,10 +8,10 @@ Gerado em 2026-08-12T05:16:03.817Z a partir do inventário AST vivo e de ROUTE_A
 - **routesProtected:** 101
 - **routesPublic:** 8
 - **routeRoleTotal:** 232
-- **standardCanvasTotal:** 67
-- **standardCanvasRenderings:** 221
+- **standardCanvasTotal:** 66
+- **standardCanvasRenderings:** 216
 - **redirectTotal:** 30
-- **fullscreenTotal:** 3
+- **fullscreenTotal:** 4
 - **printTotal:** 1
 - **ungoverned:** 0
 - **duplicatePaths:** 0
@@ -48,11 +48,11 @@ Gerado em 2026-08-12T05:16:03.817Z a partir do inventário AST vivo e de ROUTE_A
 | `/fechamento-diario` | vendedor | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ManagerDailyClosing />} dono={<ManagerDailyClosing />} admin={<ManagerDailyClosing />} /> </Suspense> |
 | `/vendedor/terminal-mx` | vendedor | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense> |
 | `/terminal-mx` | vendedor | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<Checkin />} gerente={<ForbiddenRoute />} dono={<ForbiddenRoute />} admin={<ForbiddenRoute />} /> </Suspense> |
-| `/liberacao-fechamento` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense> |
-| `/liberacao-fechamento` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense> |
-| `/liberacao-fechamento` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense> |
-| `/liberacao-fechamento` | dono | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense> |
-| `/liberacao-fechamento` | gerente | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense> |
+| `/liberacao-fechamento` | administrador_geral | FULLSCREEN | route | <Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense> |
+| `/liberacao-fechamento` | administrador_mx | FULLSCREEN | route | <Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense> |
+| `/liberacao-fechamento` | consultor_mx | FULLSCREEN | route | <Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense> |
+| `/liberacao-fechamento` | dono | FULLSCREEN | route | <Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense> |
+| `/liberacao-fechamento` | gerente | FULLSCREEN | route | <Suspense fallback={<Spinner />}><LiberacaoFechamento /></Suspense> |
 | `/carteira-clientes` | administrador_geral | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense> |
 | `/carteira-clientes` | administrador_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense> |
 | `/carteira-clientes` | consultor_mx | STANDARD_CANVAS | route | <Suspense fallback={<Spinner />}> <RoleSwitch vendedor={<CarteiraClientes />} gerente={<CarteiraClientes />} dono={<CarteiraClientes />} admin={<CarteiraClientes />} /> </Suspense> |
@@ -287,7 +287,7 @@ Gerado em 2026-08-12T05:16:03.817Z a partir do inventário AST vivo e de ROUTE_A
 | `/fechamento-diario` | STANDARD_CANVAS | `/fechamento-diario` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS |
 | `/vendedor/terminal-mx` | STANDARD_CANVAS | `/vendedor/terminal-mx` | FORBIDDEN | FORBIDDEN | FORBIDDEN | FORBIDDEN | FORBIDDEN | RENDER_STANDARD_CANVAS |
 | `/terminal-mx` | STANDARD_CANVAS | `/terminal-mx` | FORBIDDEN | FORBIDDEN | FORBIDDEN | FORBIDDEN | FORBIDDEN | RENDER_STANDARD_CANVAS |
-| `/liberacao-fechamento` | STANDARD_CANVAS | `/liberacao-fechamento` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | FORBIDDEN |
+| `/liberacao-fechamento` | FULLSCREEN | `/liberacao-fechamento` | RENDER_FULLSCREEN | RENDER_FULLSCREEN | RENDER_FULLSCREEN | RENDER_FULLSCREEN | RENDER_FULLSCREEN | FORBIDDEN |
 | `/carteira-clientes` | STANDARD_CANVAS | `/carteira-clientes` | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS | RENDER_STANDARD_CANVAS |
 | `/carteira` | REDIRECT | `/carteira` | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED |
 | `/vendedor/carteira` | REDIRECT | `/vendedor/carteira` | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED | REDIRECT_ALLOWED |
@@ -369,9 +369,9 @@ Gerado em 2026-08-12T05:16:03.817Z a partir do inventário AST vivo e de ROUTE_A
 
 ## Totais de status
 
-- **administrador_geral:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":2,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":42}
-- **administrador_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":2,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":42}
-- **consultor_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":2,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":42}
-- **dono:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":0,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":44}
-- **gerente:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":37,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":0,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":30}
+- **administrador_geral:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":41}
+- **administrador_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":41}
+- **consultor_mx:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":3,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":41}
+- **dono:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":23,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":1,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":43}
+- **gerente:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":37,"PUBLIC":8,"REDIRECT_ALLOWED":12,"REDIRECT_BLOCKED":18,"RENDER_FULLSCREEN":1,"RENDER_PRINT":1,"RENDER_STANDARD_CANVAS":29}
 - **vendedor:** {"CATCHALL":1,"CONTAINER":2,"FORBIDDEN":45,"PUBLIC":8,"REDIRECT_ALLOWED":28,"REDIRECT_BLOCKED":4,"RENDER_FULLSCREEN":0,"RENDER_PRINT":0,"RENDER_STANDARD_CANVAS":21}

@@ -22,11 +22,11 @@ export const ACTION_STATUSES = [
 export const STATUS_STYLES = {
   awaiting_decision: {
     label: "Aguardando decisão",
-    bg: "bg-violet-50",
-    text: "text-violet-700",
-    badge: "bg-violet-100 text-violet-700",
-    dot: "bg-violet-500",
-    border: "border-violet-200",
+    bg: "bg-status-info-surface",
+    text: "text-status-info-text",
+    badge: "bg-status-info-surface text-status-info-text",
+    dot: "bg-status-info",
+    border: "border-status-info/30",
   },
   not_started: {
     label: "Não iniciada",
@@ -91,13 +91,13 @@ export const DEPARTMENTS = [
 export const DEPT_STYLES = {
   commercial: {
     label: "Comercial",
-    bg: "bg-violet-50",
-    text: "text-violet-700",
-    border: "border-violet-200",
-    dot: "bg-violet-500",
-    iconBg: "bg-violet-100 text-violet-600",
-    badge: "bg-violet-100 text-violet-700",
-    sideBar: "bg-violet-500",
+    bg: "bg-status-info-surface",
+    text: "text-status-info-text",
+    border: "border-status-info/30",
+    dot: "bg-status-info",
+    iconBg: "bg-status-info-surface text-status-info-text",
+    badge: "bg-status-info-surface text-status-info-text",
+    sideBar: "bg-status-info",
   },
   marketing: {
     label: "Marketing",

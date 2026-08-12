@@ -95,6 +95,7 @@ export function BenchmarkingView({
             <div key={label} className="rounded-2xl border border-border bg-white px-mx-md py-mx-sm flex flex-col gap-1">
               <Typography variant="tiny" tone="muted" className="block text-xs">{label}</Typography>
               <select
+                aria-label={label}
                 value={current}
                 onChange={(e) => set(e.target.value)}
                 className="mt-mx-xs w-full bg-transparent font-bold text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary rounded-xl p-1 border border-border-subtle cursor-pointer"
@@ -110,7 +111,7 @@ export function BenchmarkingView({
       <div className="grid grid-cols-1 gap-mx-md xl:grid-cols-[minmax(0,1fr)_320px]">
         <Card className="p-mx-lg">
           <Typography variant="h3" className="text-xl">Indicadores Comparados</Typography>
-          <div className="mt-mx-md overflow-x-auto">
+          <div className="mt-mx-md overflow-x-auto" role="region" tabIndex={0} aria-label="Tabela de benchmarking com rolagem horizontal">
             <table className="min-w-[760px] w-full text-sm">
               <thead className="bg-gray-50 text-left text-mx-tiny font-bold uppercase text-muted-foreground">
                 <tr>

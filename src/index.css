@@ -226,12 +226,7 @@ to { height: 0; }
   --color-sidebar-item-active-text: hsl(var(--mx-neutral-0));
   --color-sidebar-border: hsl(var(--mx-tpl-sidebar-active));
 
-  /* Aliases legados de accent: descontinuados; use os tokens mx-action. */
-  --color-accent-purple: hsl(var(--mx-status-info));
-  --color-accent-purple-strong: hsl(var(--mx-tpl-accent-strong));
-  --color-accent-purple-soft: hsl(var(--mx-tpl-accent-soft));
-
-  /* Accent blue (renamed to globally eliminate purple) */
+  /* Accent blue is exposed only as a chart/legacy compatibility alias. */
   --color-accent-blue: hsl(var(--mx-chart-1));
   --color-accent-blue-strong: hsl(var(--mx-chart-1));
   --color-accent-blue-soft: hsl(var(--mx-chart-1) / 0.12);

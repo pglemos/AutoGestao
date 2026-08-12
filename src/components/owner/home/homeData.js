@@ -33,14 +33,14 @@ export const STATUS_STYLES = {
 export const ICON_STYLES = {
   green: "bg-primary/10 text-primary",
   blue: "bg-status-info-surface text-status-info-text",
-  purple: "bg-purple-50 text-purple-600",
+  purple: "bg-status-info-surface text-status-info-text",
   orange: "bg-status-warning-surface text-status-warning-text",
 };
 
 export const SPARK_COLORS = {
   green: "text-primary",
   blue: "text-status-info",
-  purple: "text-purple-500",
+  purple: "text-status-info-text",
   orange: "text-status-warning",
 };
 

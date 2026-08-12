@@ -48,7 +48,7 @@ export default function ActionsToolbar({
           ) : (
             <>
               <Select value={filters.department || "all"} onValueChange={(v) => set("department", v === "all" ? undefined : v)}>
-              <SelectTrigger className={`${selectClass} w-[208px]`}><SelectValue placeholder="Departamento" /></SelectTrigger>
+              <SelectTrigger aria-label="Departamento" className={`${selectClass} w-[208px]`}><SelectValue placeholder="Departamento" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos os departamentos</SelectItem>
                   {DEPARTMENTS.map((d) => <SelectItem key={d.value} value={d.value}>{d.label}</SelectItem>)}
@@ -56,7 +56,7 @@ export default function ActionsToolbar({
               </Select>
 
               <Select value={filters.responsible || "all"} onValueChange={(v) => set("responsible", v === "all" ? undefined : v)}>
-              <SelectTrigger className={`${selectClass} w-[208px]`}><SelectValue placeholder="Responsável" /></SelectTrigger>
+              <SelectTrigger aria-label="Responsável" className={`${selectClass} w-[208px]`}><SelectValue placeholder="Responsável" /></SelectTrigger>
                 <SelectContent>
                   <SelectItem value="all">Todos os responsáveis</SelectItem>
                   {responsiblePeople.map((r) => <SelectItem key={r} value={r}>{r}</SelectItem>)}
@@ -87,7 +87,7 @@ export default function ActionsToolbar({
           </div>
 
           <Select value={sortBy} onValueChange={onSortChange}>
-            <SelectTrigger className="h-9 w-[160px] text-xs"><SelectValue placeholder="Ordenar por" /></SelectTrigger>
+            <SelectTrigger aria-label="Ordenar por" className="h-9 w-[160px] text-xs"><SelectValue placeholder="Ordenar por" /></SelectTrigger>
             <SelectContent>
               {SORT_OPTIONS.map((o) => <SelectItem key={o.value} value={o.value}>{o.label}</SelectItem>)}
             </SelectContent>

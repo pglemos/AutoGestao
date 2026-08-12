@@ -262,7 +262,7 @@ export function RegularizarFechamentoDrawer({
               <div className="grid grid-cols-2 divide-y divide-border-subtle sm:grid-cols-5 sm:divide-x sm:divide-y-0">
                 {[
                   { label: 'Leads', value: totalLeads, color: 'text-status-info-text' },
-                  { label: 'Atendimentos', value: totalAtendimentos, color: 'text-purple-600' },
+                  { label: 'Atendimentos', value: totalAtendimentos, color: 'text-status-info-text' },
                   { label: 'Agendamentos D+1', value: totalAgendamentosD1, color: 'text-status-warning-text' },
                   { label: 'Vendas', value: totalVendas, color: 'text-green-600' },
                   { label: 'Faturamento', value: totalFaturamento > 0 ? BRL(totalFaturamento) : '—', color: 'text-green-700' },

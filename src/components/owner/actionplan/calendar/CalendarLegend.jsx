@@ -3,7 +3,7 @@ import { useState } from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 
 const DEPT_LEGEND = [
-  { value: "commercial", label: "Comercial", color: "bg-violet-500" },
+  { value: "commercial", label: "Comercial", color: "bg-status-info" },
   { value: "marketing", label: "Marketing", color: "bg-indigo-500" },
   { value: "product_stock", label: "Produto e Estoque", color: "bg-status-info" },
   { value: "financial", label: "Financeiro", color: "bg-status-success" },
@@ -13,7 +13,7 @@ const DEPT_LEGEND = [
 ];
 
 const STATUS_LEGEND = [
-  { value: "awaiting_decision", label: "Aguardando decisão", color: "bg-violet-500" },
+  { value: "awaiting_decision", label: "Aguardando decisão", color: "bg-status-info" },
   { value: "in_progress", label: "Em andamento", color: "bg-status-info" },
   { value: "blocked", label: "Bloqueada", color: "bg-status-error" },
   { value: "awaiting_validation", label: "Aguardando validação", color: "bg-status-warning" },

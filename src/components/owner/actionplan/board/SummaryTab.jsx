@@ -121,7 +121,7 @@ function InfoRow({ icon: Icon, label, children }) {
 function Badge({ icon: Icon, active, label }) {
   if (!active) return null;
   return (
-    <span className="inline-flex items-center gap-1 rounded-full bg-violet-50 px-2 py-0.5 text-xs font-medium text-violet-700">
+    <span className="inline-flex items-center gap-1 rounded-full bg-status-info-surface px-2 py-0.5 text-xs font-medium text-status-info-text">
       <Icon className="h-3 w-3" /> {label}
     </span>
   );

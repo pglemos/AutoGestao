@@ -13,6 +13,7 @@ const read = (path: string) => readFileSync(new URL(path, import.meta.url), 'utf
 
 const shell = read('../../components/MxSidebarShell.tsx')
 const profileCard = read('../../components/MxSidebarProfileCard.tsx')
+const components = read('../tokens/components.css')
 const consumers = { shell }
 
 describe('design tokens da sidebar', () => {
@@ -20,6 +21,8 @@ describe('design tokens da sidebar', () => {
     expect(SIDEBAR_METRICS.width).toBe(256)
     expect(SIDEBAR_METRICS.widthCollapsed).toBe(64)
     expect(SIDEBAR_METRICS.headerHeight).toBe(52)
+    expect(SIDEBAR_METRICS.mobileHeaderHeight).toBe(72)
+    expect(SIDEBAR_METRICS.touchTargetMin).toBe(44)
     expect(SIDEBAR_METRICS.itemHeight).toBe(36)
     expect(SIDEBAR_METRICS.nestedItemHeight).toBe(28)
     expect(SIDEBAR_METRICS.iconSize).toBe(16)
@@ -28,13 +31,13 @@ describe('design tokens da sidebar', () => {
   })
 
   test('descreve a superfície, os raios e a tipografia da documentação', () => {
-    expect(SIDEBAR.asideWidth).toBe('w-64')
-    expect(SIDEBAR.asideWidthCollapsed).toBe('w-16')
+    expect(SIDEBAR.asideWidth).toBe('w-[var(--mx-sidebar-width-expanded)]')
+    expect(SIDEBAR.asideWidthCollapsed).toBe('w-[var(--mx-sidebar-width-collapsed)]')
     expect(SIDEBAR.root).toContain('bg-mxsb-surface')
-    expect(SIDEBAR.header).toContain('h-[52px]')
-    expect(SIDEBAR.item).toContain('rounded-[8px]')
+    expect(SIDEBAR.header).toContain('h-[var(--mx-sidebar-header-height)]')
+    expect(SIDEBAR.item).toContain('rounded-[var(--mx-sidebar-item-radius)]')
     expect(SIDEBAR.item).toContain('gap-2.5')
-    expect(SIDEBAR.nestedItem).toContain('rounded-[6px]')
+    expect(SIDEBAR.nestedItem).toContain('rounded-[var(--mx-sidebar-subitem-radius)]')
     expect(SIDEBAR.nestedItem).toContain('text-body-sm')
     expect(SIDEBAR.itemActive).toContain('bg-mxsb-active-surface')
     expect(SIDEBAR.itemActive).toContain('text-mxsb-active')
@@ -47,9 +50,9 @@ describe('design tokens da sidebar', () => {
   })
 
   test('usa o mesmo drawer em mobile e tablet', () => {
-    expect(SIDEBAR.drawerPanel).toContain('w-72')
-    expect(SIDEBAR.drawerPanel).toContain('max-w-[85vw]')
-    expect(SIDEBAR.drawerPanel).toContain('sm:w-80')
+    expect(SIDEBAR.drawerPanel).toContain('w-[var(--mx-sidebar-drawer-width)]')
+    expect(SIDEBAR.drawerPanel).toContain('max-w-[var(--mx-sidebar-drawer-max-width)]')
+    expect(SIDEBAR.drawerPanel).toContain('sm:w-[var(--mx-sidebar-drawer-width-sm)]')
     expect(SIDEBAR.drawerOverlay).toContain('xl:hidden')
     expect(SIDEBAR.drawerScrim).toContain('bg-black/40')
   })
@@ -77,16 +80,25 @@ describe('design tokens da sidebar', () => {
     expect(SIDEBAR.aside).toContain('antialiased')
   })
 
-  test('fixa os raios em pixel, imunes ao --radius de cada escopo', () => {
-    // O vendedor roda fora do escopo manager, onde --radius vale 1rem; sem
-    // valor absoluto os cantos da sidebar dobravam de tamanho.
+  test('deriva os raios do contrato canônico, imunes ao --radius de cada escopo', () => {
+    // O vendedor roda fora do escopo manager, onde --radius pode variar; a
+    // família usa aliases de componentes que resolvem a escala primitiva.
     for (const key of ['item', 'nestedItem', 'toggle', 'ctaButton'] as const) {
       expect(SIDEBAR[key], key).not.toMatch(/rounded-(sm|md|lg|xl|2xl)\b/)
     }
-    expect(SIDEBAR.item).toContain('rounded-[8px]')
-    expect(SIDEBAR.nestedItem).toContain('rounded-[6px]')
-    expect(SIDEBAR.toggle).toContain('rounded-[12px]')
-    expect(profileCard).toContain('rounded-[16px]')
+    expect(SIDEBAR.item).toContain('rounded-[var(--mx-sidebar-item-radius)]')
+    expect(SIDEBAR.nestedItem).toContain('rounded-[var(--mx-sidebar-subitem-radius)]')
+    expect(SIDEBAR.toggle).toContain('rounded-[var(--mx-sidebar-toggle-radius)]')
+    expect(profileCard).toContain('rounded-[var(--mx-radius-2xl)]')
+    for (const token of [
+      '--mx-sidebar-header-height',
+      '--mx-sidebar-width-expanded',
+      '--mx-sidebar-width-collapsed',
+      '--mx-mobile-header-height',
+      '--mx-mobile-header-touch-target',
+    ]) {
+      expect(components).toContain(`${token}:`)
+    }
   })
 
   test('renderiza os ícones com o mesmo peso do Dono', () => {
@@ -119,7 +131,8 @@ describe('consumidores do design system', () => {
   })
 
   test('respeitam o corte xl para a coluna fixa', () => {
-    expect(shell).toContain("collapsed ? 'xl:pl-16' : 'xl:pl-64'")
+    expect(shell).toContain('xl:pl-[var(--mx-sidebar-width-collapsed)]')
+    expect(shell).toContain('xl:pl-[var(--mx-sidebar-width-expanded)]')
     expect(shell).toContain('xl:hidden')
     // O corte `xl:block` vive no token e é composto pelo shell — não é mais
     // reescrito à mão, para que os dois shells não divirjam.

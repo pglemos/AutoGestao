@@ -16,6 +16,7 @@ import { ClientHeaderSection } from './sections/ClientHeaderSection'
 import { TabContentRouter } from './sections/TabContentRouter'
 import { LegacyCompletionModal } from './modals/LegacyCompletionModal'
 import { VisitFormModal } from './modals/VisitFormModal'
+import { MxErrorState, MxLoadingState, MxModulePage } from '@/components/module/MxModuleVisualPrimitives'
 
 export function ScopedConsultoriaClienteDetalhe() {
   const { clientSlug } = useParams<{ clientSlug: string }>()
@@ -107,11 +108,11 @@ export function ScopedConsultoriaClienteDetalhe() {
     [agendaTargetAudienceOptions, visitFormApi.visitForm.target_audience],
   )
 
-  if (loading || modulesLoading) return <div className="p-mx-20 text-center opacity-50">Carregando cockpit...</div>
-  if (error || !client) return <div className="p-mx-20 text-center text-status-error">{error || 'Cliente não encontrado'}</div>
+  if (loading || modulesLoading) return <MxModulePage id="consultoria-cliente-detalhe-loading"><MxLoadingState label="Carregando cockpit de consultoria" /></MxModulePage>
+  if (error || !client) return <MxModulePage id="consultoria-cliente-detalhe-error"><MxErrorState description={error || 'Cliente não encontrado'} /></MxModulePage>
 
   return (
-    <div className="w-full flex flex-col gap-mx-lg p-mx-lg bg-gray-50">
+    <MxModulePage id="consultoria-cliente-detalhe" className="bg-surface-alt">
       <ClientHeaderSection client={client} />
 
       <TabNav tabs={TABS} activeTab={activeTab} onTabChange={handleTabChange} />
@@ -162,7 +163,7 @@ export function ScopedConsultoriaClienteDetalhe() {
         handleVisitNumberChange={visitFormApi.handleVisitNumberChange}
         handleSubmit={visitFormApi.handleSubmitManualVisit}
       />
-    </div>
+    </MxModulePage>
   )
 }
 

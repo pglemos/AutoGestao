@@ -62,7 +62,7 @@ const CARDS = [
 
 export default function ExecutiveCardsStrip({ actions, activeCard, onCardClick }) {
   return (
-    <div role="list" aria-label="Resumo executivo das ações" className="grid grid-cols-2 gap-4 lg:grid-cols-5">
+    <div aria-label="Resumo executivo das ações" className="grid grid-cols-2 gap-4 lg:grid-cols-5">
       {CARDS.map((card) => {
         const Icon = card.icon;
         const value = card.getValue(actions);
@@ -71,7 +71,6 @@ export default function ExecutiveCardsStrip({ actions, activeCard, onCardClick }
         return (
           <button
             key={card.key}
-            role="listitem"
             aria-pressed={selected}
             aria-label={`${card.title}: ${value} ${card.complement}`}
             onClick={() => onCardClick(card.key)}

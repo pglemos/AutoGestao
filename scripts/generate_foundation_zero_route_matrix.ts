@@ -58,6 +58,10 @@ function roleRedirectTarget(route: InventoryRoute, role: UserRole) {
 
 function surfaceFor(route: InventoryRoute) {
   if (route.path === '/dono/*') return 'FULLSCREEN'
+  // Link de aprovação ocupa o viewport inteiro e não participa do shell/canvas
+  // padrão. Mantê-lo explicitamente fora da matriz STANDARD_CANVAS evita
+  // mascarar uma exceção de produto como falha geométrica.
+  if (route.path === '/liberacao-fechamento') return 'FULLSCREEN'
   if (!route.protected) return 'AUTH_LEGAL_PUBLIC'
   if (route.kind === 'fallback') return 'CATCHALL'
   if (route.redirect || isDirectAlias(route)) return 'REDIRECT'

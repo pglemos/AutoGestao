@@ -94,7 +94,7 @@ export const MENTOR_GUIDANCE: MentorGuidance[] = [
 
 export const MENTOR_GUIDANCE_CATEGORY: Record<MentorGuidanceCategory, { label: string; className: string }> = {
   rotina: { label: 'Rotina', className: 'border-status-info/20 bg-status-info-surface text-status-info-text' },
-  pessoas: { label: 'Pessoas', className: 'border-purple-100 bg-purple-50 text-purple-700' },
+  pessoas: { label: 'Pessoas', className: 'border-status-info/20 bg-status-info-surface text-status-info-text' },
   resultado: { label: 'Resultado', className: 'border-status-success/20 bg-status-success-surface text-status-success-text' },
   desenvolvimento: { label: 'Desenvolvimento', className: 'border-status-warning/20 bg-status-warning-surface text-status-warning-text' },
 }

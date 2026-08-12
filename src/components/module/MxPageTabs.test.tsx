@@ -26,4 +26,19 @@ describe('MxPageTabs', () => {
     fireEvent.click(system)
     expect(selected).toBe('sistema')
   })
+
+  test('só referencia o painel que o consumidor realmente renderiza', () => {
+    render(
+      <MxPageTabs
+        items={[...items]}
+        activeKey="perfil"
+        onChange={() => undefined}
+        ariaLabel="Configurações"
+        getPanelId={(key) => (key === 'perfil' ? 'perfil-panel' : undefined)}
+      />,
+    )
+
+    expect(screen.getByRole('tab', { name: /Perfil/ }).getAttribute('aria-controls')).toBe('perfil-panel')
+    expect(screen.getByRole('tab', { name: /Sistema MX/ }).getAttribute('aria-controls')).toBeNull()
+  })
 })

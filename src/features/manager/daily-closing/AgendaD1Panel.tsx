@@ -828,6 +828,6 @@ function confirmationStatusClass(status: string) {
     "Sem resposta": "bg-gray-200 text-muted-foreground",
     "Solicitou reagendamento": "bg-status-warning-surface text-status-warning-text",
     Cancelou: "bg-status-error-surface text-status-error-text",
-    Outro: "bg-violet-100 text-violet-700",
+    Outro: "bg-status-info-surface text-status-info-text",
   }[status] || "bg-gray-100 text-muted-foreground";
 }

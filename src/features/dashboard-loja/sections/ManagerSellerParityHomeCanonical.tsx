@@ -421,7 +421,7 @@ function MetricCard({
   const toneClass = {
     emerald: 'bg-status-success-surface text-status-success-text',
     blue: 'bg-status-info-surface text-status-info-text',
-    violet: 'bg-violet-50 text-violet-600',
+    violet: 'bg-status-info-surface text-status-info-text',
     amber: 'bg-status-warning-surface text-status-warning-text',
   }[tone]
 

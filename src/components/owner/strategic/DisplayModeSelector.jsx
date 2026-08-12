@@ -18,6 +18,7 @@ export default function DisplayModeSelector({ value, onChange, hideBoth = false 
         return (
           <button
             key={mode.value}
+            aria-label={mode.label}
             onClick={() => onChange(mode.value)}
             className={`inline-flex items-center gap-1.5 rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors ${
               active

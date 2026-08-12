@@ -70,16 +70,16 @@ function translatePillarQuality(quality: string): { label: string; badgeClass: s
   const map: Record<string, { label: string; badgeClass: string }> = {
     complete: { label: 'Completo (Pontuação máxima)', badgeClass: 'bg-status-info-surface text-status-info-text' },
     partial: { label: 'Parcial (Atenção aos dados)', badgeClass: 'bg-status-warning-surface text-status-warning-text' },
-    undefined: { label: 'Indefinido (Sem dados)', badgeClass: 'bg-rose-100 text-rose-800' },
-    missing: { label: 'Ausente', badgeClass: 'bg-rose-100 text-rose-800' },
+    undefined: { label: 'Indefinido (Sem dados)', badgeClass: 'bg-status-error-surface text-status-error-text' },
+    missing: { label: 'Ausente', badgeClass: 'bg-status-error-surface text-status-error-text' },
     onTime: { label: 'No prazo', badgeClass: 'bg-status-info-surface text-status-info-text' },
     dueToday: { label: 'Vence hoje', badgeClass: 'bg-status-warning-surface text-status-warning-text' },
     lateUnder24h: { label: 'Atraso < 24h', badgeClass: 'bg-status-warning-surface text-status-warning-text' },
-    lateOver24h: { label: 'Atraso > 24h', badgeClass: 'bg-rose-100 text-rose-800' },
-    awaitingSellerResponse: { label: 'Cliente aguarda retorno', badgeClass: 'bg-rose-100 text-rose-800' },
+    lateOver24h: { label: 'Atraso > 24h', badgeClass: 'bg-status-error-surface text-status-error-text' },
+    awaitingSellerResponse: { label: 'Cliente aguarda retorno', badgeClass: 'bg-status-error-surface text-status-error-text' },
     respected: { label: 'Cadência respeitada', badgeClass: 'bg-status-info-surface text-status-info-text' },
     completedWithoutResponse: { label: 'Cadência concluída sem resposta', badgeClass: 'bg-slate-100 text-foreground' },
-    broken: { label: 'Cadência interrompida/quebrada', badgeClass: 'bg-rose-100 text-rose-800' },
+    broken: { label: 'Cadência interrompida/quebrada', badgeClass: 'bg-status-error-surface text-status-error-text' },
     stale: { label: 'Histórico desatualizado', badgeClass: 'bg-status-warning-surface text-status-warning-text' },
   }
   return map[quality] ?? { label: quality, badgeClass: 'bg-slate-100 text-foreground' }
@@ -188,7 +188,7 @@ export function FichaOportunidade({
               </div>
 
               {/* Breakdown dos 5 pilares do score */}
-              <div className="space-y-2 pt-2 border-t border-status-info/30/60">
+              <div className="space-y-2 pt-2 border-t border-status-info/60">
                 <span className="text-xs font-semibold text-status-info-text">Detalhamento dos Pilares:</span>
                 <div className="grid grid-cols-1 gap-1.5 text-xs">
                   {header.score.pillarsDetail.map((item: ScorePillarDetail) => (
@@ -409,7 +409,7 @@ export function FichaOportunidade({
                   <span className="font-semibold text-foreground block">Alertas de Perda:</span>
                   <div className="space-y-1">
                     {whatIsMissing.scoreAlerts.map((alert) => (
-                      <div key={alert} className="bg-rose-50 text-rose-800 p-2 rounded border border-rose-200">
+                      <div key={alert} className="bg-status-error-surface text-status-error-text p-2 rounded border border-status-error/30">
                         ⚠ Alerta: <span className="font-mono">{alert}</span>
                       </div>
                     ))}
@@ -426,7 +426,7 @@ export function FichaOportunidade({
                   {whatIsMissing.missingPillars.map((item: MissingPillarInfo) => (
                     <div key={item.pillar} className="flex justify-between items-center bg-slate-50 p-2 rounded border border-border">
                       <span>{item.label}</span>
-                      <span className="font-semibold text-rose-700">
+                      <span className="font-semibold text-status-error-text">
                         -{item.missing} pt (Atual: {item.current}/{item.max})
                       </span>
                     </div>

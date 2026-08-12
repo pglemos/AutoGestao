@@ -376,7 +376,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
       {/* PRÉVIA DETERMINÍSTICA DO NOVO ESTADO */}
       {selectedStatus && (
         <div className="rounded-lg border border-status-info/30 bg-status-info-surface/40 p-4 space-y-3">
-          <div className="flex items-center space-x-2 border-b border-status-info/30/60 pb-2">
+          <div className="flex items-center space-x-2 border-b border-status-info/60 pb-2">
             <Sparkles className="h-4 w-4 text-status-info-text" />
             <h4 className="text-xs font-bold uppercase tracking-wider text-status-info-text">
               Prévia da Atualização Determinística

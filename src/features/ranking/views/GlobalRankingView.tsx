@@ -8,6 +8,7 @@ import { BattleSelector } from '@/features/ranking/sections/BattleSelector'
 import { StoreArenaSelector } from '@/features/ranking/sections/StoreArenaSelector'
 import { LeaderboardList } from '@/features/ranking/sections/LeaderboardList'
 import { useGlobalRankingPageData } from '@/features/ranking/hooks/useGlobalRankingPageData'
+import { PageCanvas } from '@/design-system/page'
 
 /**
  * Container slim do Ranking Global (perfis internos MX).
@@ -20,12 +21,12 @@ export function GlobalRankingView() {
   const data = useGlobalRankingPageData()
 
   if (data.loading) {
-    return <RankingSkeleton ariaLabel="Consolidando ranking global" variant="global" />
+    return <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="min-h-full"><RankingSkeleton ariaLabel="Consolidando ranking global" variant="global" /></PageCanvas>
   }
 
   return (
     <RankingErrorBoundary sectionName="Ranking Global">
-      <div className="relative flex min-h-full w-full min-w-0 flex-col gap-mx-lg bg-surface-alt p-mx-lg pb-32">
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="relative flex min-h-full w-full min-w-0 flex-col gap-mx-lg bg-surface-alt pb-32">
         <GlobalRankingHeader
           totalLojas={data.lojas.length}
           totalVendedores={data.totalVendedores}
@@ -107,7 +108,7 @@ export function GlobalRankingView() {
             onClose={() => data.setSelectedSeller(null)}
           />
         )}
-      </div>
+      </PageCanvas>
     </RankingErrorBoundary>
   )
 }

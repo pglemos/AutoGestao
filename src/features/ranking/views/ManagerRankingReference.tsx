@@ -98,7 +98,7 @@ export function ManagerRankingReference() {
 }
 
 function Highlight({ label, name, value, icon: Icon, tone, help }: { label: string; name: string; value: string; icon: typeof Trophy; tone: 'yellow' | 'emerald' | 'blue' | 'violet'; help?: string }) {
-  const tones = { yellow: 'border-yellow-100 bg-yellow-50 text-yellow-600', emerald: 'border-status-success/20 bg-status-success-surface text-status-success-text', blue: 'border-status-info/20 bg-status-info-surface text-status-info-text', violet: 'border-purple-100 bg-purple-50 text-purple-600' }
+  const tones = { yellow: 'border-yellow-100 bg-yellow-50 text-yellow-600', emerald: 'border-status-success/20 bg-status-success-surface text-status-success-text', blue: 'border-status-info/20 bg-status-info-surface text-status-info-text', violet: 'border-status-info/20 bg-status-info-surface text-status-info-text' }
   return <article className={`rounded-2xl border bg-white p-4 shadow-sm ${tones[tone].split(' ')[0]}`}><div className="mb-2 flex items-center gap-2"><span className={`grid h-8 w-8 place-items-center rounded-lg ${tones[tone].split(' ').slice(1).join(' ')}`}><Icon size={16} /></span><p className="flex items-center gap-1 text-xs text-muted-foreground">{label}<HelpTooltip text={help} /></p></div><p className="font-bold text-foreground">{name}</p><p className="text-sm text-muted-foreground">{value}</p></article>
 }
 

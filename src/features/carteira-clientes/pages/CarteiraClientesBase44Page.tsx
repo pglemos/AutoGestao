@@ -2,6 +2,7 @@ import { base44 } from '@/api/base44Client'
 import CarteiraClientesReference from '@/base44-reference/pages/CarteiraClientes.jsx'
 import { installCarteiraBase44Adapter } from '@/features/carteira-clientes/lib/installCarteiraBase44Adapter'
 import { useAuth } from '@/hooks/useAuth'
+import { PageCanvas } from '@/design-system/page'
 
 installCarteiraBase44Adapter(base44)
 
@@ -31,17 +32,13 @@ export function CarteiraClientesBase44Page() {
   // antes do hook de autenticação terminar de resolver vendedor e loja. Não
   // montamos a referência Base44 nesse intervalo, evitando que sua consulta
   // inicial seja feita com o UID real do administrador.
-  if (waitingForSimulationIdentity) {
-    return (
-      <div
-        className="flex h-full min-h-[320px] items-center justify-center text-sm font-semibold text-muted-foreground"
-        role="status"
-        aria-live="polite"
-      >
-        Preparando carteira do vendedor simulado...
-      </div>
-    )
-  }
-
-  return <CarteiraClientesReference />
+  return (
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col">
+      {waitingForSimulationIdentity ? (
+        <div className="flex min-h-[320px] flex-1 items-center justify-center text-sm font-semibold text-muted-foreground" role="status" aria-live="polite">
+          Preparando carteira do vendedor simulado...
+        </div>
+      ) : <CarteiraClientesReference />}
+    </PageCanvas>
+  )
 }

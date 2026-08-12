@@ -34,7 +34,7 @@ export default function KanbanCard({ action, onQuickAction, onDelete, onMoveTo }
         {/* Condições especiais */}
         <div className="mt-2 flex flex-wrap gap-1">
           {action.requiresOwner && action.status === "awaiting_decision" && (
-            <span className="rounded-full bg-violet-100 px-1.5 py-0.5 text-xs font-medium text-violet-700">Sua decisão</span>
+            <span className="rounded-full bg-status-info-surface px-1.5 py-0.5 text-xs font-medium text-status-info-text">Sua decisão</span>
           )}
           {late && (
             <span className="inline-flex items-center gap-0.5 rounded-full bg-status-error-surface px-1.5 py-0.5 text-xs font-medium text-status-error-text">
@@ -74,7 +74,7 @@ export default function KanbanCard({ action, onQuickAction, onDelete, onMoveTo }
         <div className="mt-2 flex items-center justify-end">
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
-              <Button size="sm" variant="ghost" className="h-7 w-7 p-0">
+              <Button size="sm" variant="ghost" aria-label={`Ações para ${action.title}`} className="h-7 w-7 p-0">
                 <MoreVertical className="h-3.5 w-3.5" />
               </Button>
             </DropdownMenuTrigger>

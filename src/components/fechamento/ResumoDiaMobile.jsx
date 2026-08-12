@@ -20,7 +20,7 @@ export default function ResumoDiaMobile({
 
       <div className="grid grid-cols-2 gap-3">
         <Item value={totalLeads} label="Leads Recebidos" color="text-[#005BFF]" />
-        <Item value={totalAtend} label="Atendimentos" color="text-[#6D28D9]" />
+        <Item value={totalAtend} label="Atendimentos" color="text-status-info-text" />
         <Item value={totalAgend} label="Agendamentos D+1" color="text-[#F59E0B]" />
         <Item value={totalVendas} label="Vendas Realizadas" color="text-[#EF4444]" />
       </div>

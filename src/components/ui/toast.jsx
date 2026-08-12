@@ -3,7 +3,7 @@ import { cva } from "class-variance-authority";
 import { X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-const viewportClasses = "pointer-events-none fixed top-0 z-[100] flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]";
+const viewportClasses = "pointer-events-none fixed left-0 top-0 z-[100] box-border flex max-h-screen w-full flex-col-reverse p-4 sm:bottom-0 sm:left-auto sm:right-0 sm:top-auto sm:flex-col md:max-w-[420px]";
 
 const ToastProvider = React.forwardRef(({ className, ...props }, ref) => (
   <div

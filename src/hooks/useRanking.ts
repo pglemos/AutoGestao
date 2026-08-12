@@ -375,7 +375,16 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
                 .eq('metric_scope', 'daily')
                 .eq('reference_date', dias.referencia)
 
-        const [checkinsRes, tenuresRes, rulesRes, todayCheckinsRes] = await Promise.all([
+        // MX-RANK-UNIFY: busca eventos_comerciais como fonte canônica de vendas
+        // (mesma lógica da RPC vendedor_performance_oficial — resolve discrepância ranking vs painel)
+        const salesEventsPromise = supabase
+            .from('eventos_comerciais')
+            .select('seller_user_id, loja_id, data_evento, data_competencia, oportunidade_id')
+            .eq('tipo_evento', 'venda_realizada')
+            .gte('data_evento', `${startOfMonth}T00:00:00.000Z`)
+            .lte('data_evento', `${endOfRange}T23:59:59.999Z`)
+
+        const [checkinsRes, tenuresRes, rulesRes, todayCheckinsRes, salesEventsRes] = await Promise.all([
             checkinsPromise,
             supabase.from('vendedores_loja')
                 .select('seller_user_id, store_id, users:usuarios(name, is_venda_loja, avatar_url), lojas:lojas(name)')
@@ -383,6 +392,7 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
             supabase.from('regras_metas_loja')
                 .select('store_id, monthly_goal, include_venda_loja_in_individual_goal'),
             todayCheckinsPromise,
+            salesEventsPromise,
         ])
         if (checkinsRes.error || tenuresRes.error || rulesRes.error || todayCheckinsRes.error) {
             const message = checkinsRes.error?.message || tenuresRes.error?.message || rulesRes.error?.message || todayCheckinsRes.error?.message || 'Erro desconhecido'
@@ -392,10 +402,21 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
             setLoading(false)
             return
         }
+        if (salesEventsRes.error) {
+            console.error('Audit Error [useGlobalRanking]: sales events fetch fail ->', salesEventsRes.error.message)
+        }
         const checkins = (checkinsRes.data as LancamentoRow[] | null)?.filter(isOfficialLancamento) ?? null
         const tenures = tenuresRes.data
         const rules = rulesRes.data
         const todayCheckins = (todayCheckinsRes.data as LancamentoRow[] | null)?.filter(isOfficialLancamento) ?? null
+        // Eventos de venda do período — fonte canônica (eventos_comerciais, same as RPC)
+        const salesEvents = (salesEventsRes.data || []) as Array<{
+            seller_user_id: string
+            loja_id: string
+            data_evento: string
+            data_competencia: string | null
+            oportunidade_id: string | null
+        }>
 
         if (!checkins || !tenures) { setLoading(false); return }
 
@@ -417,11 +438,31 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
             salesTodayMap.set(c.seller_user_id, v)
         }
 
+        // Mapa seller → store_id para validar loja dos eventos
+        const sellerStoreMap = new Map<string, string>()
+        for (const t of tenures) {
+            sellerStoreMap.set(t.seller_user_id, t.store_id)
+        }
+
+        // Contar vendas por vendedor a partir de eventos_comerciais (fonte canônica)
+        // Filtra por loja_id da vendedora para garantir consistência
+        const salesBySellerFromEvents = new Map<string, number>()
+        for (const ev of salesEvents) {
+            const expectedStore = sellerStoreMap.get(ev.seller_user_id)
+            if (!expectedStore || ev.loja_id !== expectedStore) continue
+            // Calcular data de competência (mesma lógica da RPC)
+            const eventDate = ev.data_competencia
+                || new Date(ev.data_evento).toLocaleDateString('en-CA', { timeZone: 'America/Sao_Paulo' })
+            if (eventDate < startOfMonth || eventDate > endOfRange) continue
+            salesBySellerFromEvents.set(ev.seller_user_id, (salesBySellerFromEvents.get(ev.seller_user_id) || 0) + 1)
+        }
+
         const agg = new Map<string, { vnd: number; vnd_yesterday: number; leads: number; agd: number; vis: number; name: string; avatarUrl: string | null; store: string; storeId: string; isVendaLoja: boolean; checkedIn: boolean }>()
         for (const m of tenures) {
             const mu = m as unknown as { users?: User; lojas?: { name: string } }
             agg.set(m.seller_user_id, {
-                vnd: 0, 
+                // MX-RANK-UNIFY: usa eventos_comerciais como fonte canônica de vendas
+                vnd: salesBySellerFromEvents.get(m.seller_user_id) || 0,
                 vnd_yesterday: salesTodayMap.get(m.seller_user_id) || 0,
                 leads: 0, agd: 0, vis: 0,
                 name: mu.users?.name || '',
@@ -435,7 +476,7 @@ export function useGlobalRanking(filters?: { startDate?: string; endDate?: strin
         for (const c of checkins) {
             const cur = agg.get(c.seller_user_id)
             if (cur) {
-                cur.vnd += (c.vnd_porta_prev_day || 0) + (c.vnd_cart_prev_day || 0) + (c.vnd_net_prev_day || 0)
+                // Leads, agendamentos e visitas continuam vindos de lancamentos_diarios
                 cur.leads += c.leads_prev_day || 0
                 cur.agd += (c.agd_cart_today || 0) + (c.agd_net_today || 0)
                 cur.vis += c.visit_prev_day || 0

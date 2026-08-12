@@ -299,7 +299,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                 { label: 'Executadas', value: stats.executadas, tone: 'bg-status-info-surface text-[#005BFF]' },
                 { label: 'Visitas geradas', value: stats.visitas, tone: 'bg-green-50 text-green-600' },
                 { label: 'Propostas enviadas', value: stats.propostas, tone: 'bg-status-warning-surface text-status-warning-text' },
-                { label: 'Recuperações', value: stats.recuperacoes, tone: 'bg-purple-50 text-purple-600' },
+                { label: 'Recuperações', value: stats.recuperacoes, tone: 'bg-status-info-surface text-status-info-text' },
               ].map(s => (
                 <div key={s.label} className={`rounded-2xl p-mx-md ${s.tone}`}>
                   <p className="text-2xl font-bold">{s.value}</p>

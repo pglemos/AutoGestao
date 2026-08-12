@@ -239,7 +239,7 @@ export function mapMxClientToCarteiraVisual(client: ClientRow, now = new Date())
   return {
     id: client.id,
     cliente_id: client.id,
-    oportunidade_id: opportunity?.id || null,
+    oportunidade_id: opportunity?.id || (latestClosed?.etapa === 'ganho' ? latestClosed.id : null),
     oportunidade_cancelada_id: cancelled?.id || null,
     motivo_cancelamento: cancelled?.motivo_cancelamento || null,
     cancelada_em: cancelled?.cancelada_em || null,

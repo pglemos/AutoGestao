@@ -1,5 +1,6 @@
 // Utilitários do Plano Estratégico: formatação, cálculos, estilos e constantes.
 import { formatBRL, formatNumber, formatPercent } from "@/features/owner/lib/ownerFormatters";
+import { chartTokens } from "@/lib/charts/tokens";
 
 export const MONTHS = ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez"];
 export const MONTHS_FULL = ["Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"];
@@ -19,7 +20,7 @@ export const DISPLAY_MODES = [
 ];
 
 export const AREA_STYLES = {
-  Vendas: { bg: "bg-violet-50", text: "text-violet-700", iconBg: "bg-violet-100 text-violet-600", dot: "bg-violet-500", border: "border-violet-200", hex: "#7C3AED", lightBg: "bg-violet-50/50" },
+  Vendas: { bg: "bg-status-info-surface", text: "text-status-info-text", iconBg: "bg-status-info-surface text-status-info-text", dot: "bg-status-info", border: "border-status-info/30", hex: chartTokens.info(), lightBg: "bg-status-info-surface/50" },
   Marketing: { bg: "bg-indigo-50", text: "text-indigo-700", iconBg: "bg-indigo-100 text-indigo-600", dot: "bg-indigo-500", border: "border-indigo-200", hex: "#4F46E5", lightBg: "bg-indigo-50/50" },
   Estoque: { bg: "bg-status-info-surface", text: "text-status-info-text", iconBg: "bg-status-info-surface text-status-info-text", dot: "bg-status-info", border: "border-status-info/30", hex: "#2563EB", lightBg: "bg-status-info-surface/50" },
   Financeiro: { bg: "bg-status-success-surface", text: "text-status-success-text", iconBg: "bg-status-success-surface text-status-success-text", dot: "bg-status-success", border: "border-status-success/30", hex: "#16A34A", lightBg: "bg-status-success-surface/50" },
@@ -32,7 +33,7 @@ export const AREA_HEX = Object.fromEntries(
 
 export const CARD_ICON_STYLES = {
   green: "bg-status-success-surface text-status-success-text",
-  purple: "bg-violet-100 text-violet-600",
+  purple: "bg-status-info-surface text-status-info-text",
   orange: "bg-indigo-100 text-indigo-600",
   blue: "bg-status-info-surface text-status-info-text",
   teal: "bg-status-warning-surface text-status-warning-text",
@@ -40,7 +41,7 @@ export const CARD_ICON_STYLES = {
 
 export const SPARK_COLORS = {
   green: "text-status-success",
-  purple: "text-violet-500",
+  purple: "text-status-info-text",
   orange: "text-indigo-500",
   blue: "text-status-info",
   teal: "text-status-warning",

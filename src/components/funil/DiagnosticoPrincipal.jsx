@@ -67,12 +67,12 @@ const COR_MAP = {
     labelText: "Converter",
   },
   purple: {
-    bg: "bg-purple-50 border-purple-200",
-    icon: "bg-purple-100 text-purple-600",
-    btn: "bg-purple-600 hover:bg-purple-700 text-white",
-    titulo: "text-purple-900",
-    sub: "text-purple-700",
-    label: "text-purple-600 bg-purple-100",
+    bg: "bg-status-info-surface border-status-info/30",
+    icon: "bg-status-info-surface text-status-info-text",
+    btn: "bg-status-info hover:bg-status-info text-white",
+    titulo: "text-status-info-text",
+    sub: "text-status-info-text",
+    label: "text-status-info-text bg-status-info-surface",
     labelText: "Volume",
   },
 };

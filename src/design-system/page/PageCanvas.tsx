@@ -40,8 +40,8 @@ export interface PageCanvasProps
   density?: PageDensity
   /** Reserva no fim da página. Default `none`. */
   bottomClearance?: PageBottomClearance
-  /** Elemento raiz. `main` por padrão; use `div` quando já houver um `main`. */
-  as?: 'main' | 'div' | 'section'
+  /** Elemento raiz. O shell já fornece a landmark `main`; canvas é conteúdo. */
+  as?: 'div' | 'section'
   /** `id` do conteúdo principal, alvo do skip-link do AppShell. */
   id?: string
   className?: string
@@ -89,7 +89,7 @@ export function PageCanvas({
   width = 'dashboard',
   density,
   bottomClearance = 'none',
-  as: Element = 'main',
+  as: Element = 'div',
   id,
   className,
   // Estados de carregamento e erro precisam de aria-busy/aria-live na mesma
@@ -112,10 +112,12 @@ export function PageCanvas({
     '--mx-page-bottom-clearance': `var(--mx-page-clearance-${bottomClearance})`,
     width: '100%',
   }
+  const namedCanvasRole = rest.role ?? (rest['aria-label'] || rest['aria-labelledby'] ? 'region' : undefined)
 
   return (
     <Element
       {...rest}
+      role={namedCanvasRole}
       id={id}
       className={className}
       style={style}

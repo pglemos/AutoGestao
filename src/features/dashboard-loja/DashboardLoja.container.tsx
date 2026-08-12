@@ -177,7 +177,7 @@ export function DashboardLoja() {
 
       {activeTab === 'metas' ? (
         <>
-          <ManagerStoreGoalReference data={data} selectableStores={selectableStores} onStoreChange={setActiveStoreId} />
+          <ManagerStoreGoalReference data={data} selectableStores={selectableStores} onStoreChange={setActiveStoreId} embedded />
           {isPerfilInternoMx(role) && (
             /**
              * Regras da loja (meta mensal e benchmarks lead→agendamento→visita

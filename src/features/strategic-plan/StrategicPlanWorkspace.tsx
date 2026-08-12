@@ -16,6 +16,7 @@ import TargetHistoryPanel from '@/components/owner/strategic/TargetHistoryPanel'
 import FiltersDrawer from '@/components/owner/strategic/FiltersDrawer'
 import DisplayModeSelector from '@/components/owner/strategic/DisplayModeSelector'
 import { usePlanningWorkspace } from '@/features/planning-workspace'
+import { ConditionalPageCanvas } from '@/design-system/page'
 import { useStrategicPlanController, type StrategicPlanController } from './useStrategicPlanController'
 
 export function StrategicPlanWorkspace({ onUpdated }: { onUpdated?: (at: Date) => void }) {
@@ -31,7 +32,7 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
 
   if (controller.loading) {
     return (
-      <div id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass} aria-busy="true">
+      <ConditionalPageCanvas enabled={shell === 'owner'} as="div" width="dashboard" bottomClearance="navigation" id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass} aria-busy="true">
         <div className="space-y-4">
           {shell === 'owner' ? <div className="h-16 animate-pulse rounded-lg bg-white/60" /> : null}
           <div className="h-10 w-64 animate-pulse rounded-lg bg-white/60" />
@@ -42,34 +43,34 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
             <div className="h-[360px] animate-pulse rounded-xl bg-white/60" />
           </div>
         </div>
-      </div>
+      </ConditionalPageCanvas>
     )
   }
 
   if (controller.error) {
     return (
-      <div id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
+      <ConditionalPageCanvas enabled={shell === 'owner'} as="div" width="dashboard" bottomClearance="navigation" id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
         <div className="rounded-xl border border-destructive/30 bg-card p-6" role="alert">
           <h2 className="text-lg font-semibold text-foreground">Não foi possível carregar o Plano Estratégico</h2>
           <p className="mt-2 text-sm text-muted-foreground">{controller.error}</p>
           <Button className="mt-4" onClick={() => void controller.reload()}>Tentar novamente</Button>
         </div>
-      </div>
+      </ConditionalPageCanvas>
     )
   }
 
   if (!storeId) {
     return (
-      <div id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
+      <ConditionalPageCanvas enabled={shell === 'owner'} as="div" width="dashboard" bottomClearance="navigation" id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
         <div className="rounded-xl border border-border bg-card p-6 text-sm text-muted-foreground">
           Selecione uma loja para carregar o Plano Estratégico.
         </div>
-      </div>
+      </ConditionalPageCanvas>
     )
   }
 
   return (
-    <div id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
+    <ConditionalPageCanvas enabled={shell === 'owner'} as="div" width="dashboard" bottomClearance="navigation" id="page-plano-estrategico" aria-label="Plano Estratégico" className={pageClass}>
       <div className="space-y-4">
         {shell === 'owner' ? <StrategicHeader /> : null}
         <StrategicPlanTabs tab={controller.tab} onTabChange={controller.setTab} />
@@ -179,6 +180,6 @@ export function StrategicPlanView({ controller }: { controller: StrategicPlanCon
         ) : null}
         <FiltersDrawer open={controller.filtersOpen} onOpenChange={controller.setFiltersOpen} />
       </div>
-    </div>
+    </ConditionalPageCanvas>
   )
 }

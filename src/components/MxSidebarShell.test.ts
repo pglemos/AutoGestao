@@ -61,7 +61,8 @@ describe('sidebar universal MX', () => {
     // As classes vivem em src/design-system/sidebar/tokens.ts (contrato próprio).
     expect(shellSource).toContain("from '@/design-system/sidebar/tokens'")
     expect(shellSource).toContain('SIDEBAR.asideWidthCollapsed : SIDEBAR.asideWidth')
-    expect(shellSource).toContain("collapsed ? 'xl:pl-16' : 'xl:pl-64'")
+    expect(shellSource).toContain('xl:pl-[var(--mx-sidebar-width-collapsed)]')
+    expect(shellSource).toContain('xl:pl-[var(--mx-sidebar-width-expanded)]')
     // A borda canônica vem do token, não de classe reescrita no shell.
     expect(shellSource).toContain('SIDEBAR.aside')
     expect(SIDEBAR.aside).toContain('border-mxsb-line')

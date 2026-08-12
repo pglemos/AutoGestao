@@ -354,7 +354,7 @@ return (
               <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Leads Recebidos</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4">
-              <span className="text-h2 font-bold leading-none tabular-nums text-[#6D28D9]">{display.visitas}</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-status-info-text">{display.visitas}</span>
               <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Atendimentos</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4">
@@ -522,7 +522,7 @@ return (
 
               {/* SECTION 3: Quando um cadastro conta como agendamento? */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#6D28D9] flex items-center gap-1.5 uppercase tracking-wider text-caption">
+                <h3 className="font-extrabold text-status-info-text flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <HelpCircle size={14} /> 3. Quando um cadastro conta como agendamento?
                 </h3>
                 <p>

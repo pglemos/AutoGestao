@@ -9,6 +9,7 @@ import { ManagerMentorLibrary } from '@/features/manager/mentor/ManagerMentorLib
 import { ManagerMentorRecommendations } from '@/features/manager/mentor/ManagerMentorRecommendations'
 import { ManagerMentorStatusCard } from '@/features/manager/mentor/ManagerMentorStatusCard'
 import { buildMentorRecommendations, resolveMentorSituation } from '@/features/manager/mentor/manager-mentor-rules'
+import { PageCanvas } from '@/design-system/page'
 
 export default function ManagerMentor() {
   const { storeId, activeStoreId, membership } = useAuth()
@@ -54,8 +55,7 @@ export default function ManagerMentor() {
   const situation = useMemo(() => resolveMentorSituation(recommendations), [recommendations])
 
   return (
-    <div className="min-h-full bg-surface-alt">
-      <div className="mx-auto max-w-4xl space-y-5 px-4 py-6 pb-24">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex min-h-full flex-col gap-5">
         <header className="rounded-2xl border border-border-subtle bg-white p-5 shadow-sm">
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-status-success-surface text-status-success-text"><BrainCircuit size={20} /></span>
@@ -93,7 +93,6 @@ export default function ManagerMentor() {
           <p className="mt-2 text-sm font-medium text-status-info-text">Orientações baseadas em regras oficiais</p>
           <p className="mt-1 text-xs text-status-info">O Mentor não inventa números nem executa ações no lugar do gerente.</p>
         </section>
-      </div>
-    </div>
+    </PageCanvas>
   )
 }

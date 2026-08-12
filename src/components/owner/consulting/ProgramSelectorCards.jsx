@@ -5,7 +5,7 @@ import { Lock } from "lucide-react";
 const PROGRAM_THEME = {
   pmr: { activeBorder: "border-primary", activeBg: "bg-primary/5", badge: "bg-primary text-primary-foreground" },
   pmr_plus: { activeBorder: "border-status-info", activeBg: "bg-status-info-surface", badge: "bg-status-info text-white" },
-  ppa: { activeBorder: "border-purple-500", activeBg: "bg-purple-50", badge: "bg-purple-500 text-white" },
+  ppa: { activeBorder: "border-status-info", activeBg: "bg-status-info-surface", badge: "bg-status-info text-white" },
 };
 
 export default function ProgramSelectorCards({ programs, selectedProgramId, onSelectProgram, activeProgramId }) {
