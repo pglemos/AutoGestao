@@ -49,6 +49,7 @@ import { buildExecutiveVisitReport } from '@/lib/consultoria/executive-visit-rep
 import type { ConsultingVisit, ConsultingVisitAttachment, VisitHeaderBaseData, VisitOneQuantData } from '@/features/consultoria/types'
 
 import { VisitActionQuickAdd } from '@/features/consultoria/components/VisitActionQuickAdd'
+import { PageCanvas } from '@/design-system/page/PageCanvas'
 
 const DEFAULT_VISIT_ONE_QUANT_DATA: VisitOneQuantData = {
   sales: [ { month: 'Jan', value: 0 }, { month: 'Fev', value: 0 }, { month: 'Mar', value: 0 } ],
@@ -588,12 +589,31 @@ export default function ConsultoriaVisitaExecucao() {
     }
   }
 
-  if (clientLoading || methodologyLoading) return <div className="flex w-full items-center justify-center p-mx-20"><Loader2 className="w-mx-8 h-mx-8 animate-spin text-status-success-text" /></div>
+  // Estados de carregamento e de vazio também pertencem ao contrato de página:
+  // renderizá-los fora do PageCanvas fazia a rota medir `pageCanvasCount=0` e
+  // perder margem, largura e safe area (medido no sweep da FASE AB).
+  if (clientLoading || methodologyLoading) {
+    return (
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="w-full">
+        <div className="flex w-full items-center justify-center p-mx-20" role="status" aria-busy="true">
+          <Loader2 className="w-mx-8 h-mx-8 animate-spin text-status-success-text" aria-hidden="true" />
+        </div>
+      </PageCanvas>
+    )
+  }
 
-  if (!client) return <div className="p-mx-20 text-center opacity-50"><Typography variant="h3">Cliente não localizado.</Typography></div>
+  if (!client) {
+    return (
+      <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="w-full">
+        <div className="p-mx-20 text-center" role="status">
+          <Typography variant="h3" tone="muted">Cliente não localizado.</Typography>
+        </div>
+      </PageCanvas>
+    )
+  }
 
   return (
-    <div className="w-full pb-mx-xl relative z-0">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="w-full pb-mx-xl relative z-0">
       <div className="fixed !-left-full top-mx-0 overflow-hidden pointer-events-none" aria-hidden="true">
          <div id="report-template-render">
             <VisitReportTemplate
@@ -934,6 +954,6 @@ export default function ConsultoriaVisitaExecucao() {
             </div>
          </div>
       </Modal>
-    </div>
+    </PageCanvas>
   )
 }
