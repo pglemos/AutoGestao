@@ -119,7 +119,7 @@ export function DashboardLoja() {
   }
   if (!resolving && !storesLoading && role === 'gerente' && activeTab === 'performance' && !selectedStoreId) {
     return (
-      <PageCanvas as="div" width="dashboard" className="flex flex-col gap-5 text-gray-800">
+      <PageCanvas as="div" width="dashboard" className="flex flex-col gap-5 text-foreground">
         <ManagerSellerParityHomeCanonical data={data} alerts={[]} />
       </PageCanvas>
     )
@@ -147,7 +147,7 @@ export function DashboardLoja() {
    * alternativo de gutter/width. `as="div"` evita aninhar outro landmark
    * `main` dentro do shell.
   */
-  <PageCanvas as="div" width="dashboard" className="flex flex-col gap-5 text-gray-800">
+  <PageCanvas as="div" width="dashboard" className="flex flex-col gap-5 text-foreground">
       {!isFocusedRolePerformance && !isManagerSection && (
         <DashboardErrorBoundary sectionName="Header">
           <DashboardHeader

@@ -141,16 +141,16 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
       <DialogContent className="max-w-md rounded-2xl max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-[#031B3D] font-black">Alterar próximo passo</DialogTitle>
-          <p className="text-xs text-slate-400 mt-1">Defina o que precisa acontecer para esta oportunidade evoluir.</p>
+          <p className="text-xs text-muted-foreground mt-1">Defina o que precisa acontecer para esta oportunidade evoluir.</p>
         </DialogHeader>
 
         {/* Info do cliente */}
         <div className="bg-slate-50 rounded-xl px-3 py-2.5 space-y-0.5">
           <p className="text-sm font-bold text-[#031B3D]">{cliente.nome}</p>
-          {cliente.veiculo_interesse && <p className="text-xs text-slate-400">{cliente.veiculo_interesse}</p>}
-          <p className="text-xs text-slate-400">{situacao}</p>
+          {cliente.veiculo_interesse && <p className="text-xs text-muted-foreground">{cliente.veiculo_interesse}</p>}
+          <p className="text-xs text-muted-foreground">{situacao}</p>
           {cliente.proximo_passo && (
-            <p className="text-xs text-slate-500 mt-1">
+            <p className="text-xs text-muted-foreground mt-1">
               <span className="font-semibold">Mentor recomenda:</span>{" "}
               {detectarCodigo(cliente.proximo_passo) ? `${detectarCodigo(cliente.proximo_passo)} · ` : ""}{cliente.proximo_passo}
             </p>
@@ -181,7 +181,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
 
         {/* Seleção de próximo passo — Biblioteca v1 */}
         <div>
-          <label className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2 block">Mentor recomenda — escolha o próximo passo *</label>
+          <label className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-2 block">Mentor recomenda — escolha o próximo passo *</label>
           <div className="grid grid-cols-1 gap-1.5 max-h-64 overflow-y-auto pr-1">
             {TODOS_PASSOS.map(p => (
               <button
@@ -190,10 +190,10 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
                 className={`text-left text-xs font-semibold px-3 py-2.5 rounded-xl border transition-all flex items-start gap-2 ${
                   passo === p.label
                     ? "bg-[#005BFF] text-white border-[#005BFF]"
-                    : "bg-white text-slate-600 border-slate-200 hover:border-blue-300 hover:bg-blue-50/50"
+                    : "bg-white text-muted-foreground border-slate-200 hover:border-blue-300 hover:bg-blue-50/50"
                 }`}
               >
-                <span className={`text-caption font-black shrink-0 mt-0.5 ${passo === p.label ? "text-blue-200" : "text-slate-400"}`}>{p.codigo}</span>
+                <span className={`text-caption font-black shrink-0 mt-0.5 ${passo === p.label ? "text-blue-200" : "text-muted-foreground"}`}>{p.codigo}</span>
                 <span>{p.label}</span>
               </button>
             ))}
@@ -203,7 +203,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
         {/* Data */}
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <label className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1.5 block">
+            <label className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1.5 block">
               Data do próximo passo {precisaData ? "*" : "(opcional)"}
             </label>
             <input
@@ -212,10 +212,10 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
               onChange={e => setDataStr(e.target.value)}
               className="w-full h-9 rounded-xl border border-slate-200 bg-white px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
             />
-            <p className="text-caption text-slate-400 mt-1">Ou digite só o dia: ex. 30</p>
+            <p className="text-caption text-muted-foreground mt-1">Ou digite só o dia: ex. 30</p>
           </div>
           <div>
-            <label className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1.5 block">Horário (opcional)</label>
+            <label className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1.5 block">Horário (opcional)</label>
             <input
               type="time"
               value={horario}
@@ -227,7 +227,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
 
         {/* Objetivo */}
         <div>
-          <label className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1.5 block">Objetivo</label>
+          <label className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1.5 block">Objetivo</label>
           <input
             value={objetivo}
             onChange={e => setObjetivo(e.target.value)}
@@ -238,7 +238,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
 
         {/* Observação */}
         <div>
-          <label className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1.5 block">
+          <label className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1.5 block">
             {passo === "Pedir sinal de negócio" ? "Valor ou condição combinada (opcional)" : "Observação (opcional)"}
           </label>
           <textarea

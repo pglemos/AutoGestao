@@ -78,11 +78,11 @@ function translatePillarQuality(quality: string): { label: string; badgeClass: s
     lateOver24h: { label: 'Atraso > 24h', badgeClass: 'bg-rose-100 text-rose-800' },
     awaitingSellerResponse: { label: 'Cliente aguarda retorno', badgeClass: 'bg-rose-100 text-rose-800' },
     respected: { label: 'Cadência respeitada', badgeClass: 'bg-blue-100 text-blue-800' },
-    completedWithoutResponse: { label: 'Cadência concluída sem resposta', badgeClass: 'bg-slate-100 text-slate-800' },
+    completedWithoutResponse: { label: 'Cadência concluída sem resposta', badgeClass: 'bg-slate-100 text-foreground' },
     broken: { label: 'Cadência interrompida/quebrada', badgeClass: 'bg-rose-100 text-rose-800' },
     stale: { label: 'Histórico desatualizado', badgeClass: 'bg-amber-100 text-amber-800' },
   }
-  return map[quality] ?? { label: quality, badgeClass: 'bg-slate-100 text-slate-700' }
+  return map[quality] ?? { label: quality, badgeClass: 'bg-slate-100 text-foreground' }
 }
 
 export function FichaOportunidade({
@@ -105,7 +105,7 @@ export function FichaOportunidade({
   }
 
   return (
-    <div className="w-full max-w-5xl mx-auto bg-slate-50 font-sans text-slate-800 rounded-2xl shadow-xl border border-slate-200 overflow-hidden my-4">
+    <div className="w-full max-w-5xl mx-auto bg-slate-50 font-sans text-foreground rounded-2xl shadow-xl border border-slate-200 overflow-hidden my-4">
       {/* Structural Top Bar — Identity Sidebar Navy */}
       <div className="bg-slate-900 text-white px-6 py-4 flex items-center justify-between border-b border-slate-800">
         <div>
@@ -113,7 +113,7 @@ export function FichaOportunidade({
             <span className="text-xs uppercase tracking-wider font-semibold text-blue-400">
               MX Performance — Mentor Comercial
             </span>
-            <span className="text-xs bg-slate-800 text-slate-300 px-2.5 py-0.5 rounded-full font-mono">
+            <span className="text-xs bg-slate-800 text-text-disabled px-2.5 py-0.5 rounded-full font-mono">
               Versão {decision.ruleVersion}
             </span>
           </div>
@@ -125,7 +125,7 @@ export function FichaOportunidade({
           <button
             type="button"
             onClick={onClose}
-            className="text-slate-400 hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors"
+            className="text-muted-foreground hover:text-white p-2 rounded-lg hover:bg-slate-800 transition-colors"
             aria-label="Fechar Ficha"
           >
             ✕
@@ -141,10 +141,10 @@ export function FichaOportunidade({
               <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
                 Bloco 1 — Identificação
               </span>
-              <h2 className="text-2xl font-bold text-slate-900">{header.clientName}</h2>
-              <p className="text-sm text-slate-600 mt-0.5">
-                Veículo: <span className="font-medium text-slate-800">{header.vehicleName}</span> | Loja:{' '}
-                <span className="font-medium text-slate-800">{header.storeName}</span>
+              <h2 className="text-2xl font-bold text-foreground">{header.clientName}</h2>
+              <p className="text-sm text-muted-foreground mt-0.5">
+                Veículo: <span className="font-medium text-foreground">{header.vehicleName}</span> | Loja:{' '}
+                <span className="font-medium text-foreground">{header.storeName}</span>
               </p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
@@ -154,7 +154,7 @@ export function FichaOportunidade({
               <span className="px-3 py-1 bg-blue-50 text-blue-700 font-medium text-xs rounded-full border border-blue-200">
                 {header.family}
               </span>
-              <span className="px-3 py-1 bg-slate-100 text-slate-700 font-medium text-xs rounded-full">
+              <span className="px-3 py-1 bg-slate-100 text-foreground font-medium text-xs rounded-full">
                 Resp: {header.responsible}
               </span>
               {header.temperature && (
@@ -193,7 +193,7 @@ export function FichaOportunidade({
                 <div className="grid grid-cols-1 gap-1.5 text-xs">
                   {header.score.pillarsDetail.map((item: ScorePillarDetail) => (
                     <div key={item.pillar} className="flex justify-between items-center bg-white/80 px-2.5 py-1.5 rounded border border-blue-100">
-                      <span className="text-slate-700 font-medium">{item.label}</span>
+                      <span className="text-foreground font-medium">{item.label}</span>
                       <span className="font-bold text-blue-900">
                         {item.score} / {item.maxScore} pt
                       </span>
@@ -207,7 +207,7 @@ export function FichaOportunidade({
             <div className="bg-slate-900 text-white rounded-xl p-5 border border-slate-800 flex flex-col justify-between space-y-4">
               <div>
                 <div className="flex items-center justify-between">
-                  <span className="text-xs font-bold uppercase tracking-wider text-slate-300">
+                  <span className="text-xs font-bold uppercase tracking-wider text-text-disabled">
                     Urgência da Ação (Prioridade)
                   </span>
                   <span className="text-xs bg-blue-600 text-white px-2.5 py-0.5 rounded-full font-bold">
@@ -216,29 +216,29 @@ export function FichaOportunidade({
                 </div>
                 <div className="mt-3 flex items-baseline space-x-2">
                   <span className="text-4xl font-extrabold text-white">{header.priority.index}</span>
-                  <span className="text-sm font-semibold text-slate-400">/ 100 índice</span>
+                  <span className="text-sm font-semibold text-muted-foreground">/ 100 índice</span>
                 </div>
-                <p className="text-xs text-slate-300 mt-1">
+                <p className="text-xs text-text-disabled mt-1">
                   Mede a urgência e o impacto imediato da próxima ação.
                 </p>
               </div>
 
               <div className="space-y-2 pt-2 border-t border-slate-800 text-xs">
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Escala de Urgência:</span>
+                  <span className="text-muted-foreground">Escala de Urgência:</span>
                   <span className="font-semibold text-blue-300">
                     {translateUrgency(header.priority.urgencyLevel)}
                   </span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-slate-400">Potencial Comercial:</span>
+                  <span className="text-muted-foreground">Potencial Comercial:</span>
                   <span className="font-semibold text-slate-200">
                     {header.priority.potential ?? 'Baixo'}
                   </span>
                 </div>
                 {header.priority.appliedOverrides.length > 0 && (
                   <div className="pt-1">
-                    <span className="text-slate-400">Pisos aplicados: </span>
+                    <span className="text-muted-foreground">Pisos aplicados: </span>
                     <span className="font-mono text-blue-400">
                       {header.priority.appliedOverrides.join(', ')}
                     </span>
@@ -256,7 +256,7 @@ export function FichaOportunidade({
               <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
                 Bloco 2 — Ação Requerida
               </span>
-              <h3 className="text-lg font-bold text-slate-900">{nextAction.title}</h3>
+              <h3 className="text-lg font-bold text-foreground">{nextAction.title}</h3>
             </div>
             <button
               type="button"
@@ -270,33 +270,33 @@ export function FichaOportunidade({
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-sm">
             <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-1">
-              <span className="text-xs font-bold text-slate-500 uppercase">Próximo Passo</span>
-              <p className="font-bold text-slate-900 text-base">{nextAction.nextStep}</p>
-              <p className="text-xs text-slate-600 mt-1">
-                Objetivo: <span className="font-medium text-slate-800">{nextAction.objective}</span>
+              <span className="text-xs font-bold text-muted-foreground uppercase">Próximo Passo</span>
+              <p className="font-bold text-foreground text-base">{nextAction.nextStep}</p>
+              <p className="text-xs text-muted-foreground mt-1">
+                Objetivo: <span className="font-medium text-foreground">{nextAction.objective}</span>
               </p>
             </div>
 
             <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 space-y-2 text-xs">
               <div className="flex justify-between">
-                <span className="text-slate-500">Vencimento da Ação:</span>
-                <span className="font-bold text-slate-800">{formatDate(nextAction.nextActionAt)}</span>
+                <span className="text-muted-foreground">Vencimento da Ação:</span>
+                <span className="font-bold text-foreground">{formatDate(nextAction.nextActionAt)}</span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Cadência Ativa:</span>
-                <span className="font-medium text-slate-800">
+                <span className="text-muted-foreground">Cadência Ativa:</span>
+                <span className="font-medium text-foreground">
                   {nextAction.cadenceCode ? `${nextAction.cadenceCode} (Tentativa ${nextAction.cadenceStep} de ${nextAction.totalCadenceAttempts ?? '?'})` : 'Sem cadência (Diretiva)'}
                 </span>
               </div>
               <div className="flex justify-between">
-                <span className="text-slate-500">Script Determinístico:</span>
+                <span className="text-muted-foreground">Script Determinístico:</span>
                 <span className="font-mono text-blue-700 font-semibold">
                   {nextAction.scriptId ?? `Não resolvido (${nextAction.scriptReason})`}
                 </span>
               </div>
               <div className="flex justify-between items-center pt-1 border-t border-slate-200">
-                <span className="text-slate-500">Entra na Central:</span>
-                <span className={`px-2 py-0.5 rounded font-semibold ${nextAction.centralAction ? 'bg-blue-100 text-blue-800' : 'bg-slate-200 text-slate-700'}`}>
+                <span className="text-muted-foreground">Entra na Central:</span>
+                <span className={`px-2 py-0.5 rounded font-semibold ${nextAction.centralAction ? 'bg-blue-100 text-blue-800' : 'bg-slate-200 text-foreground'}`}>
                   {nextAction.centralAction ? `Sim (${nextAction.centralRule ?? 'Regra'})` : 'Não'}
                 </span>
               </div>
@@ -311,7 +311,7 @@ export function FichaOportunidade({
                 <button
                   type="button"
                   onClick={() => setShowExecution(false)}
-                  className="text-xs text-slate-500 hover:text-slate-800 underline"
+                  className="text-xs text-muted-foreground hover:text-foreground underline"
                 >
                   Ocultar painel
                 </button>
@@ -325,10 +325,10 @@ export function FichaOportunidade({
                 />
               ) : (
                 <div className="bg-white p-4 rounded-lg border border-blue-200 text-xs space-y-2">
-                  <p className="font-semibold text-slate-800">
+                  <p className="font-semibold text-foreground">
                     CTA de Execução acionado.
                   </p>
-                  <p className="text-slate-600">
+                  <p className="text-muted-foreground">
                     TODO (TASK 29): O fluxo reutiliza o componente{' '}
                     <code className="font-mono text-blue-700">
                       src/features/mentor-comercial/ui/ExecuteNextStepPanel
@@ -347,20 +347,20 @@ export function FichaOportunidade({
             <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
               Bloco 3 — Fatos Confirmados
             </span>
-            <h3 className="text-lg font-bold text-slate-900">{whatWeKnow.title}</h3>
+            <h3 className="text-lg font-bold text-foreground">{whatWeKnow.title}</h3>
           </div>
 
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs">
             {whatWeKnow.factsSummary.map((item, idx) => (
               <div key={idx} className="bg-slate-50 p-3 rounded-lg border border-slate-200">
-                <span className="text-slate-500 block">{item.label}</span>
-                <span className="font-semibold text-slate-800 mt-1 block">{item.value}</span>
+                <span className="text-muted-foreground block">{item.label}</span>
+                <span className="font-semibold text-foreground mt-1 block">{item.value}</span>
               </div>
             ))}
           </div>
 
           <div className="pt-2">
-            <h4 className="text-xs font-bold text-slate-700 uppercase mb-2">
+            <h4 className="text-xs font-bold text-foreground uppercase mb-2">
               Avaliação dos Pilares de Qualidade:
             </h4>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-2 text-xs">
@@ -368,7 +368,7 @@ export function FichaOportunidade({
                 const info = translatePillarQuality(val)
                 return (
                   <div key={key} className="flex justify-between items-center bg-slate-50 p-2.5 rounded border border-slate-200">
-                    <span className="font-medium text-slate-700 capitalize">{key}:</span>
+                    <span className="font-medium text-foreground capitalize">{key}:</span>
                     <span className={`px-2 py-0.5 rounded font-semibold ${info.badgeClass}`}>
                       {info.label}
                     </span>
@@ -385,13 +385,13 @@ export function FichaOportunidade({
             <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
               Bloco 4 — Diagnóstico de Lacunas
             </span>
-            <h3 className="text-lg font-bold text-slate-900">{whatIsMissing.title}</h3>
+            <h3 className="text-lg font-bold text-foreground">{whatIsMissing.title}</h3>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-xs">
             {/* Alertas & Pendências */}
             <div className="space-y-3">
-              <span className="font-bold text-slate-700 block">Bandeiras e Alertas Pendentes:</span>
+              <span className="font-bold text-foreground block">Bandeiras e Alertas Pendentes:</span>
               {whatIsMissing.pendingFlags.length > 0 ? (
                 <div className="flex flex-wrap gap-1.5">
                   {whatIsMissing.pendingFlags.map((flag) => (
@@ -401,12 +401,12 @@ export function FichaOportunidade({
                   ))}
                 </div>
               ) : (
-                <p className="text-slate-500 italic">Nenhuma bandeira pendente.</p>
+                <p className="text-muted-foreground italic">Nenhuma bandeira pendente.</p>
               )}
 
               {whatIsMissing.scoreAlerts.length > 0 && (
                 <div className="space-y-1 pt-2">
-                  <span className="font-semibold text-slate-700 block">Alertas de Perda:</span>
+                  <span className="font-semibold text-foreground block">Alertas de Perda:</span>
                   <div className="space-y-1">
                     {whatIsMissing.scoreAlerts.map((alert) => (
                       <div key={alert} className="bg-rose-50 text-rose-800 p-2 rounded border border-rose-200">
@@ -420,7 +420,7 @@ export function FichaOportunidade({
 
             {/* Oportunidades de Ganho de Score */}
             <div className="space-y-3">
-              <span className="font-bold text-slate-700 block">Pontos a Recuperar nos Pilares:</span>
+              <span className="font-bold text-foreground block">Pontos a Recuperar nos Pilares:</span>
               {whatIsMissing.missingPillars.length > 0 ? (
                 <div className="space-y-1.5">
                   {whatIsMissing.missingPillars.map((item: MissingPillarInfo) => (
@@ -441,8 +441,8 @@ export function FichaOportunidade({
           {/* Explicações determinísticas */}
           {whatIsMissing.explanations.length > 0 && (
             <div className="bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs space-y-1">
-              <span className="font-bold text-slate-700 block">Notas Determinísticas do Mentor:</span>
-              <ul className="list-disc list-inside text-slate-600 space-y-0.5">
+              <span className="font-bold text-foreground block">Notas Determinísticas do Mentor:</span>
+              <ul className="list-disc list-inside text-muted-foreground space-y-0.5">
                 {whatIsMissing.explanations.map((exp, i) => (
                   <li key={i}>{exp}</li>
                 ))}
@@ -457,7 +457,7 @@ export function FichaOportunidade({
             <span className="text-xs font-bold text-blue-600 uppercase tracking-wide">
               Bloco 5 — Registro de Atividades
             </span>
-            <h3 className="text-lg font-bold text-slate-900">{history.title}</h3>
+            <h3 className="text-lg font-bold text-foreground">{history.title}</h3>
           </div>
 
           {history.transitionSummary && (
@@ -471,17 +471,17 @@ export function FichaOportunidade({
               {history.entries.map((entry, index) => (
                 <div key={index} className="flex justify-between items-center bg-slate-50 p-3 rounded-lg border border-slate-200 text-xs">
                   <div>
-                    <span className="font-bold text-slate-800 block">{entry.description}</span>
+                    <span className="font-bold text-foreground block">{entry.description}</span>
                     {entry.result && (
-                      <span className="text-slate-500">Resultado: {entry.result}</span>
+                      <span className="text-muted-foreground">Resultado: {entry.result}</span>
                     )}
                   </div>
-                  <span className="text-slate-400 font-mono">{formatDate(entry.at)}</span>
+                  <span className="text-muted-foreground font-mono">{formatDate(entry.at)}</span>
                 </div>
               ))}
             </div>
           ) : (
-            <p className="text-xs text-slate-500 italic">Sem eventos históricos adicionais registrados.</p>
+            <p className="text-xs text-muted-foreground italic">Sem eventos históricos adicionais registrados.</p>
           )}
         </section>
       </div>

@@ -57,7 +57,7 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
                 aria-labelledby="seller-profile-title"
             >
                 <button ref={closeButtonRef} type="button" aria-label="Fechar perfil do vendedor" onClick={onClose} className="absolute top-mx-sm right-mx-sm p-mx-xs hover:bg-white/10 rounded-full transition-colors z-20">
-                    <X className="w-mx-md h-mx-md text-gray-500" aria-hidden="true" />
+                    <X className="w-mx-md h-mx-md text-muted-foreground" aria-hidden="true" />
                 </button>
 
                 {/* Left: Avatar & Badges */}
@@ -71,7 +71,7 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
                     </div>
                     
                     <h2 id="seller-profile-title" className="font-display font-bold text-2xl text-white mb-1 text-center">{seller.user_name}</h2>
-                    <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-6">{seller.store_name || 'Loja não informada'}</p>
+                    <p className="text-xs font-bold text-muted-foreground uppercase tracking-widest mb-6">{seller.store_name || 'Loja não informada'}</p>
 
                     <div className="flex gap-mx-xs justify-center w-full flex-wrap mb-8">
                         {badge === 'fire' && <div className="p-mx-xs bg-status-warning-surface text-status-warning rounded-xl border border-status-warning/30" title="On Fire"><Flame className="w-mx-sm h-mx-sm" /></div>}
@@ -94,12 +94,12 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
                                 <h3 className="text-lg font-bold flex items-center gap-mx-xs">
                                     Atributos do Vendedor
                                 </h3>
-                                <div className="px-3 py-1 bg-white/10 rounded-lg text-xs font-bold uppercase text-gray-500">
+                                <div className="px-3 py-1 bg-white/10 rounded-lg text-xs font-bold uppercase text-muted-foreground">
                                     Nível {Math.floor(seller.atingimento / 10) || 1}
                                 </div>
                             </div>
 
-                            <p className="mb-4 text-xs font-bold uppercase tracking-widest text-gray-500">
+                            <p className="mb-4 text-xs font-bold uppercase tracking-widest text-muted-foreground">
                                 Atributos derivados de atingimento, volume operacional, conversão, ritmo e visitas.
                             </p>
                             <div className="flex-1 flex flex-col items-center justify-center mb-6 min-h-mx-64" aria-label="Radar de atributos derivados">
@@ -128,20 +128,20 @@ export function SellerProfileModal({ seller, onClose }: SellerProfileModalProps)
 
                             <div className="grid grid-cols-2 sm:grid-cols-4 gap-mx-sm w-full">
                                 <div className="bg-white/5 p-mx-md rounded-xl border border-white/5">
-                                    <div className="text-mx-tiny text-gray-500 uppercase font-bold mb-1">Vendas</div>
+                                    <div className="text-mx-tiny text-muted-foreground uppercase font-bold mb-1">Vendas</div>
                                     <div className="text-2xl font-display font-bold text-white">{seller.vnd_total}</div>
                                 </div>
                                 <div className="bg-white/5 p-mx-md rounded-xl border border-white/5 relative overflow-hidden">
-                                    <div className="text-mx-tiny text-gray-500 uppercase font-bold mb-1">Leads</div>
+                                    <div className="text-mx-tiny text-muted-foreground uppercase font-bold mb-1">Leads</div>
                                     <div className="text-2xl font-display font-bold text-white">{seller.leads}</div>
                                 </div>
                                 <div className="bg-white/5 p-mx-md rounded-xl border border-white/5 relative overflow-hidden">
-                                    <div className="text-mx-tiny text-gray-500 uppercase font-bold mb-1">Agend.</div>
+                                    <div className="text-mx-tiny text-muted-foreground uppercase font-bold mb-1">Agend.</div>
                                     <div className="text-2xl font-display font-bold text-white">{seller.agd_total}</div>
                                 </div>
                                 <div className="bg-white/5 p-mx-md rounded-xl border border-white/5 relative overflow-hidden">
                                     <div className="absolute right-mx-0 top-mx-0 p-mx-xs opacity-10"><CheckCircle2 className="w-mx-10 h-mx-10" /></div>
-                                    <div className="text-mx-tiny text-gray-500 uppercase font-bold mb-1">Meta</div>
+                                    <div className="text-mx-tiny text-muted-foreground uppercase font-bold mb-1">Meta</div>
                                     <div className="text-2xl font-display font-bold text-emerald-600">{seller.meta}</div>
                                 </div>
                             </div>

@@ -88,11 +88,11 @@ function TrainingCard({ training, completed, onOpen, large = false }: { training
             </div>
             <div className="p-4">
                 <div className="mb-2 flex items-center gap-2">
-                    <span className={`rounded-full px-2 py-0.5 text-caption font-semibold ${LEVEL_COLORS[training.level] || 'bg-slate-100 text-slate-500'}`}>{training.level}</span>
-                    <span className="text-caption text-slate-400">{training.duration_minutes} min</span>
+                    <span className={`rounded-full px-2 py-0.5 text-caption font-semibold ${LEVEL_COLORS[training.level] || 'bg-slate-100 text-muted-foreground'}`}>{training.level}</span>
+                    <span className="text-caption text-muted-foreground">{training.duration_minutes} min</span>
                 </div>
                 <h4 className="line-clamp-2 text-sm font-semibold text-mx-navy">{training.title}</h4>
-                <p className="mt-1 text-xs text-slate-400">{training.category}</p>
+                <p className="mt-1 text-xs text-muted-foreground">{training.category}</p>
             </div>
         </button>
     )
@@ -248,7 +248,7 @@ export default function VendedorTreinamentosContainer() {
 
                     <div className="flex flex-wrap gap-3">
                         <div className="relative min-w-[200px] flex-1">
-                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+                            <Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                             <Input value={search} onChange={event => setSearch(event.target.value)} placeholder="Buscar treinamento..." className="rounded-xl bg-white pl-9" />
                         </div>
                         <Select value={filterCat} onValueChange={setFilterCat}>
@@ -269,8 +269,8 @@ export default function VendedorTreinamentosContainer() {
 
                     {filtered.length === 0 ? (
                         <div className="rounded-2xl border border-slate-100 bg-white p-12 text-center">
-                            <BookOpen className="mx-auto mb-3 h-10 w-10 text-slate-300" />
-                            <p className="text-sm text-slate-400">Nenhum treinamento encontrado.</p>
+                            <BookOpen className="mx-auto mb-3 h-10 w-10 text-text-disabled" />
+                            <p className="text-sm text-muted-foreground">Nenhum treinamento encontrado.</p>
                         </div>
                     ) : (
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -282,7 +282,7 @@ export default function VendedorTreinamentosContainer() {
                 <TabsContent value="trilha" className="mt-6 space-y-6">
                     <div className="rounded-2xl border border-slate-100 bg-white p-6 shadow-sm">
                         <h3 className="mb-2 text-base font-semibold text-mx-navy">Sua Maturidade Profissional</h3>
-                        <p className="mb-6 text-xs text-slate-400">
+                        <p className="mb-6 text-xs text-muted-foreground">
                             A trilha reflete tempo de mercado, experiência declarada e cargo — não apenas quantas aulas você assistiu.
                         </p>
                         <div className="grid grid-cols-1 gap-4 sm:grid-cols-4">
@@ -290,10 +290,10 @@ export default function VendedorTreinamentosContainer() {
                                 const isActive = level.startsWith(nivelMaturidade)
                                 return (
                                     <div key={level} className={`rounded-xl border-2 p-4 text-center transition-all ${isActive ? 'border-mx-blue bg-mx-blue-light/50' : 'border-slate-100'}`}>
-                                        <div className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold ${isActive ? 'bg-mx-blue text-white' : 'bg-slate-100 text-slate-400'}`}>
+                                        <div className={`mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full text-lg font-bold ${isActive ? 'bg-mx-blue text-white' : 'bg-slate-100 text-muted-foreground'}`}>
                                             {idx + 1}
                                         </div>
-                                        <p className={`text-sm font-semibold ${isActive ? 'text-mx-navy' : 'text-slate-400'}`}>{level}</p>
+                                        <p className={`text-sm font-semibold ${isActive ? 'text-mx-navy' : 'text-muted-foreground'}`}>{level}</p>
                                     </div>
                                 )
                             })}
@@ -361,8 +361,8 @@ export default function VendedorTreinamentosContainer() {
 
                     {liveTrainings.length === 0 && (
                         <div className="rounded-2xl border border-slate-100 bg-white p-12 text-center">
-                            <Video className="mx-auto mb-3 h-10 w-10 text-slate-300" />
-                            <p className="text-sm text-slate-400">Nenhuma aula ao vivo agendada.</p>
+                            <Video className="mx-auto mb-3 h-10 w-10 text-text-disabled" />
+                            <p className="text-sm text-muted-foreground">Nenhuma aula ao vivo agendada.</p>
                         </div>
                     )}
                 </TabsContent>
@@ -374,7 +374,7 @@ export default function VendedorTreinamentosContainer() {
                         <header className="flex items-start justify-between border-b border-slate-200 p-5">
                             <div>
                                 <h2 id="training-detail-title" className="text-xl font-bold text-mx-navy">{selectedTraining.title}</h2>
-                                {selectedTraining.description && <p className="mt-1 text-sm text-slate-500">{selectedTraining.description}</p>}
+                                {selectedTraining.description && <p className="mt-1 text-sm text-muted-foreground">{selectedTraining.description}</p>}
                             </div>
                             <button type="button" onClick={() => setSelectedTraining(null)} aria-label="Fechar aula" className="rounded-lg p-2 hover:bg-slate-100"><X /></button>
                         </header>
@@ -433,7 +433,7 @@ export default function VendedorTreinamentosContainer() {
                                                     onChange={e => void handleToggleTask(tarefa, e.target.checked)}
                                                     className="mt-0.5 h-4 w-4 rounded border-slate-300 text-mx-blue focus:ring-mx-blue"
                                                 />
-                                                <span className={`text-xs ${tarefa.concluida ? 'font-medium text-gray-500 line-through' : 'font-semibold text-gray-800'}`}>
+                                                <span className={`text-xs ${tarefa.concluida ? 'font-medium text-muted-foreground line-through' : 'font-semibold text-foreground'}`}>
                                                     {tarefa.descricao}
                                                 </span>
                                             </label>

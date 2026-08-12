@@ -144,12 +144,12 @@ function OportunidadeCard({
       <div className="space-y-5 p-6">
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-slate-50 p-4">
-            <p className="mb-1 text-caption font-bold uppercase tracking-wide text-slate-400">Objetivo</p>
-            <p className="text-sm font-bold text-slate-700">{objetivo}</p>
+            <p className="mb-1 text-caption font-bold uppercase tracking-wide text-muted-foreground">Objetivo</p>
+            <p className="text-sm font-bold text-foreground">{objetivo}</p>
           </div>
           <div className="rounded-2xl bg-blue-50 p-4">
             <p className="mb-1 text-caption font-bold uppercase tracking-wide text-[#005BFF]">Próximo passo</p>
-            <p className="text-sm font-bold text-slate-900">{proximoPasso}</p>
+            <p className="text-sm font-bold text-foreground">{proximoPasso}</p>
           </div>
         </div>
 
@@ -161,8 +161,8 @@ function OportunidadeCard({
         <div className="grid grid-cols-3 gap-2">
           {tel && (
             <a href={`tel:+55${tel}`} onClick={onLigar} className="flex flex-col items-center gap-1.5 rounded-2xl border border-slate-200 bg-white py-3 transition-colors hover:bg-slate-50">
-              <Phone className="h-4 w-4 text-slate-500" />
-              <span className="text-caption font-semibold text-slate-600">Ligar</span>
+              <Phone className="h-4 w-4 text-muted-foreground" />
+              <span className="text-caption font-semibold text-muted-foreground">Ligar</span>
             </a>
           )}
           {tel && (
@@ -172,8 +172,8 @@ function OportunidadeCard({
             </button>
           )}
           <button type="button" onClick={onFicha} className="flex flex-col items-center gap-1.5 rounded-2xl border border-slate-200 bg-white py-3 transition-colors hover:bg-slate-50">
-            <FileText className="h-4 w-4 text-slate-500" />
-            <span className="text-caption font-semibold text-slate-600">Ficha</span>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+            <span className="text-caption font-semibold text-muted-foreground">Ficha</span>
           </button>
         </div>
 
@@ -290,7 +290,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
           ) : (
             <div>
               <p className="text-3xl font-bold text-[#031B3D]">🎉 Excelente!</p>
-              <p className="mt-2 text-sm text-slate-500">Você concluiu todas as oportunidades prioritárias de hoje.</p>
+              <p className="mt-2 text-sm text-muted-foreground">Você concluiu todas as oportunidades prioritárias de hoje.</p>
             </div>
           )}
           {fila.length > 0 && (
@@ -311,7 +311,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
           <div className="flex w-full max-w-sm flex-col gap-mx-xs">
             <Button variant="outline" className="w-full" onClick={onPlanoAtaque}>Ir para Plano de Ataque</Button>
             <Button className="w-full bg-[#005BFF] text-white hover:bg-blue-700" onClick={onSair}>Voltar para Carteira</Button>
-            <button type="button" onClick={onSair} className="mt-1 text-xs text-slate-400 hover:underline">Encerrar sessão</button>
+            <button type="button" onClick={onSair} className="mt-1 text-xs text-muted-foreground hover:underline">Encerrar sessão</button>
           </div>
         </div>
       </div>
@@ -329,9 +329,9 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
             MODO ATAQUE
           </span>
           <div className="order-3 w-full min-w-0 sm:order-none sm:flex-1">
-            <div className="mb-1 flex items-center justify-between text-caption text-slate-300">
+            <div className="mb-1 flex items-center justify-between text-caption text-text-disabled">
               <span>{concluidos} de {fila.length} oportunidades concluídas</span>
-              <span className="font-mono text-slate-400">{tempo}</span>
+              <span className="font-mono text-muted-foreground">{tempo}</span>
             </div>
             <div className="h-1.5 overflow-hidden rounded-full bg-white/20">
               <div className="h-full rounded-full bg-[#005BFF] transition-all duration-500" style={{ width: `${fila.length > 0 ? Math.round((concluidos / fila.length) * 100) : 0}%` }} />
@@ -387,7 +387,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                       className={`rounded-xl border px-2.5 py-1 text-caption font-semibold transition-all ${
                         tom === t.id
                           ? 'border-[#005BFF] bg-[#005BFF] text-white'
-                          : 'border-slate-200 bg-white text-slate-600 hover:border-blue-300 hover:text-[#005BFF]'
+                          : 'border-slate-200 bg-white text-muted-foreground hover:border-blue-300 hover:text-[#005BFF]'
                       }`}
                     >
                       {t.label}
@@ -399,23 +399,23 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                   value={script}
                   onChange={event => setScriptEditado(event.target.value)}
                   rows={5}
-                  className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 p-mx-sm text-sm text-slate-900 outline-none focus:border-[#005BFF] focus:ring-4 focus:ring-blue-100"
+                  className="w-full resize-none rounded-xl border border-slate-200 bg-slate-50 p-mx-sm text-sm text-foreground outline-none focus:border-[#005BFF] focus:ring-4 focus:ring-blue-100"
                 />
               </div>
 
               <div className="grid grid-cols-3 gap-mx-xs">
                 {tel && (
                   <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white py-mx-sm hover:bg-gray-50">
-                    <Phone size={16} className="text-gray-500" />
+                    <Phone size={16} className="text-muted-foreground" />
                     <Typography variant="caption" className="font-semibold">Ligar</Typography>
                   </a>
                 )}
                 <button type="button" onClick={handleCopiar} className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white py-mx-sm hover:bg-gray-50">
-                  <Copy size={16} className="text-gray-500" />
+                  <Copy size={16} className="text-muted-foreground" />
                   <Typography variant="caption" className="font-semibold">Copiar</Typography>
                 </button>
                 <button type="button" onClick={() => onAbrirFicha(clienteAtual.id)} className="flex flex-col items-center gap-1.5 rounded-xl border border-gray-100 bg-white py-mx-sm hover:bg-gray-50">
-                  <FileText size={16} className="text-gray-500" />
+                  <FileText size={16} className="text-muted-foreground" />
                   <Typography variant="caption" className="font-semibold">Ficha</Typography>
                 </button>
               </div>
@@ -448,7 +448,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                 </div>
               </div>
 
-              <button type="button" onClick={avancar} className="w-full text-center text-xs font-semibold text-gray-500 hover:underline">
+              <button type="button" onClick={avancar} className="w-full text-center text-xs font-semibold text-muted-foreground hover:underline">
                 Pular sem registrar resultado
               </button>
             </div>

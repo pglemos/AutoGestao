@@ -181,7 +181,7 @@ export function DepartamentoDashboard({ storeId, code, periodLabel, period }: Pr
                   size={16}
                   className={cn(
                     'mt-mx-tiny',
-                    item.obrigatorio ? 'text-status-warning' : 'text-gray-500',
+                    item.obrigatorio ? 'text-status-warning' : 'text-muted-foreground',
                   )}
                   aria-hidden="true"
                 />
@@ -245,7 +245,7 @@ function ScoreCard({ tone, value }: { tone: string; value: string }) {
     brand: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error',
-    muted: 'border-gray-200 bg-gray-50 text-gray-500',
+    muted: 'border-gray-200 bg-gray-50 text-muted-foreground',
   }
   return (
     <Card className={cn('rounded-2xl border p-mx-md', toneClass[tone])}>
@@ -279,7 +279,7 @@ function KpiCard({ kpi }: { kpi: DepartamentoKpi }) {
     brand: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
     warning: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
     danger: 'border-status-error/30 bg-status-error-surface text-status-error',
-    muted: 'border-gray-200 bg-gray-50 text-gray-500',
+    muted: 'border-gray-200 bg-gray-50 text-muted-foreground',
   }
   return (
     <Card className={cn('rounded-2xl border p-mx-md', toneClass[tone])}>

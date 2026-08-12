@@ -79,7 +79,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
     if (!isPerfilInternoMx(role) && role !== 'dono') {
         return (
             <Card className="p-mx-xl border-none bg-gray-50 text-center">
-                <ShieldAlert size={40} className="text-gray-500 mx-auto opacity-30" />
+                <ShieldAlert size={40} className="text-muted-foreground mx-auto opacity-30" />
                 <Typography variant="caption" tone="muted" className="mt-mx-sm">
                     Apenas administradores e donos podem acessar parâmetros operacionais.
                 </Typography>
@@ -107,7 +107,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                             <option value="">Selecione a unidade...</option>
                             {lojas.map(s => <option key={s.id} value={s.id}>{s.name}</option>)}
                         </select>
-                        <ChevronDown size={16} className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none" />
+                        <ChevronDown size={16} className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none" />
                     </div>
                     <Button
                         onClick={handleSave}
@@ -182,7 +182,7 @@ export function OperacionalLojaTab({ isReadOnly }: TabContext) {
                                     <Typography variant="tiny" tone="muted" className="">Deadline para disparo automático</Typography>
                                 </div>
                                 <div className="relative">
-                                    <History size={14} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
+                                    <History size={14} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
                                     <input
                                         id="morning-report-time"
                                         name="morning_report_time"

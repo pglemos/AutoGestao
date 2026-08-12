@@ -109,8 +109,8 @@ export function NotificacoesListSection({
       <CardContent className="relative z-10 flex-1 p-mx-md sm:p-mx-lg">
         <AnimatePresence mode="popLayout">
           {Object.entries(grouped).length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center text-gray-500">
-              <ShieldCheck size={48} className="mb-mx-md text-gray-500" />
+            <div className="flex flex-col items-center justify-center py-16 text-center text-muted-foreground">
+              <ShieldCheck size={48} className="mb-mx-md text-muted-foreground" />
               <Typography variant="h2">
                 Inbox Limpo
               </Typography>
@@ -150,7 +150,7 @@ export function NotificacoesListSection({
                       <div
                         className={cn(
                           'flex h-mx-11 w-mx-11 shrink-0 items-center justify-center rounded-2xl shadow-none transition-transform group-hover/item:scale-105',
-                          n.read ? 'bg-gray-50 text-gray-500' : 'bg-white border border-gray-200',
+                          n.read ? 'bg-gray-50 text-muted-foreground' : 'bg-white border border-gray-200',
                         )}
                       >
                         {getTypeIcon(n.type)}
@@ -205,7 +205,7 @@ export function NotificacoesListSection({
                                 toast.success('Alerta marcado como lido.')
                               }
                             }}
-                            className="h-auto p-mx-0 text-xs font-semibold text-gray-500 hover:bg-transparent hover:text-emerald-600"
+                            className="h-auto p-mx-0 text-xs font-semibold text-muted-foreground hover:bg-transparent hover:text-emerald-600"
                           >
                             {n.read ? 'Marcar não lida' : 'Marcar lida'}
                           </Button>
@@ -218,7 +218,7 @@ export function NotificacoesListSection({
                                 void deleteNotification(n.id)
                                 toast.success('Alerta removido!')
                               }}
-                              className="h-auto p-mx-0 text-xs font-semibold text-gray-500 hover:bg-transparent hover:text-status-error"
+                              className="h-auto p-mx-0 text-xs font-semibold text-muted-foreground hover:bg-transparent hover:text-status-error"
                             >
                               Remover
                             </Button>

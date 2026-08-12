@@ -104,15 +104,15 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
             <dl className="space-y-1.5 text-sm">
               <div>
                 <dt className="sr-only">Problema</dt>
-                <dd className="font-semibold text-gray-800">{problem}</dd>
+                <dd className="font-semibold text-foreground">{problem}</dd>
               </div>
               <div>
-                <dt className="text-gray-500 text-caption font-bold">Impacto</dt>
-                <dd className="text-gray-500">{impact}</dd>
+                <dt className="text-muted-foreground text-caption font-bold">Impacto</dt>
+                <dd className="text-muted-foreground">{impact}</dd>
               </div>
               <div>
-                <dt className="text-gray-500 text-caption font-bold">Recomendação</dt>
-                <dd className="text-gray-500">{recommendation}</dd>
+                <dt className="text-muted-foreground text-caption font-bold">Recomendação</dt>
+                <dd className="text-muted-foreground">{recommendation}</dd>
               </div>
             </dl>
             {quickActionLabel && (
@@ -138,7 +138,7 @@ export const AlertCard = React.forwardRef<HTMLDivElement, AlertCardProps>(
                     role="button"
                     aria-disabled="true"
                     tabIndex={-1}
-                    className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-xl border border-gray-100 bg-gray-50 px-3 py-1.5 text-sm font-bold text-gray-500"
+                    className="inline-flex cursor-not-allowed items-center gap-1.5 rounded-xl border border-gray-100 bg-gray-50 px-3 py-1.5 text-sm font-bold text-muted-foreground"
                   >
                     {quickActionLabel}
                   </span>

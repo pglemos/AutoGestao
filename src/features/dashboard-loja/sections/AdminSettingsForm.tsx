@@ -64,18 +64,18 @@ export function AdminSettingsForm({
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-1 gap-mx-md">
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Meta Mensal</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Meta Mensal</span>
             <Input aria-label="Meta Mensal" type="number" min="0" value={form.monthly_goal} onChange={e => setForm(prev => ({ ...prev, monthly_goal: e.target.value }))} className="font-mono-numbers font-bold" />
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Modo de Projeção</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Modo de Projeção</span>
             <select aria-label="Modo de Projeção" value={form.projection_mode} onChange={e => setForm(prev => ({ ...prev, projection_mode: e.target.value as ProjectionMode }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
               <option value="calendar">Calendário</option>
               <option value="business">Dias úteis</option>
             </select>
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Meta Individual</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Meta Individual</span>
             <select aria-label="Meta Individual" value={form.individual_goal_mode} onChange={e => setForm(prev => ({ ...prev, individual_goal_mode: e.target.value as StoreSettingsPayload['meta']['individual_goal_mode'] }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
               <option value="even">Igual</option>
               <option value="custom">Customizada</option>
@@ -83,7 +83,7 @@ export function AdminSettingsForm({
             </select>
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Fonte</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Fonte</span>
             <select aria-label="Fonte" value={form.source_mode} onChange={e => setForm(prev => ({ ...prev, source_mode: e.target.value as StoreSourceMode }))} className="w-full h-mx-14 sm:h-12 rounded-xl border border-gray-200 bg-white px-5 text-sm font-bold uppercase shadow-none outline-none focus:border-brand-primary/30 focus:ring-4 focus:ring-brand-primary/5">
               <option value="native_app">App nativo</option>
               <option value="legacy_forms">Forms legado</option>
@@ -123,17 +123,17 @@ export function AdminSettingsForm({
         </div>
         <div className="grid grid-cols-1 sm:grid-cols-3 xl:grid-cols-1 gap-mx-md">
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Lead / Agendamento (%)</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Lead / Agendamento (%)</span>
             <Input aria-label="Lead / Agendamento (%)" type="number" min="0" step="0.01" value={form.bench_lead_agd} onChange={e => setForm(prev => ({ ...prev, bench_lead_agd: e.target.value }))} className="font-mono-numbers font-bold" />
             <Typography variant="tiny" tone="muted" className="block normal-case tracking-normal">Impacta a régua visual Lead → Agendamento.</Typography>
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Agendamento / Visita (%)</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Agendamento / Visita (%)</span>
             <Input aria-label="Agendamento / Visita (%)" type="number" min="0" step="0.01" value={form.bench_agd_visita} onChange={e => setForm(prev => ({ ...prev, bench_agd_visita: e.target.value }))} className="font-mono-numbers font-bold" />
             <Typography variant="tiny" tone="muted" className="block normal-case tracking-normal">Impacta a régua visual Agendamento → Visita.</Typography>
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Visita / Venda (%)</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Visita / Venda (%)</span>
             <Input aria-label="Visita / Venda (%)" type="number" min="0" step="0.01" value={form.bench_visita_vnd} onChange={e => setForm(prev => ({ ...prev, bench_visita_vnd: e.target.value }))} className="font-mono-numbers font-bold" />
             <Typography variant="tiny" tone="muted" className="block normal-case tracking-normal">Impacta a régua visual Visita → Venda.</Typography>
           </label>
@@ -147,31 +147,31 @@ export function AdminSettingsForm({
         </div>
         <div className="grid grid-cols-1 gap-mx-md">
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">E-mail do gestor</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">E-mail do gestor</span>
             <Input type="email" value={form.manager_email} onChange={e => setForm(prev => ({ ...prev, manager_email: e.target.value }))} placeholder="gestor@loja.com.br" />
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Matinal</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Matinal</span>
             <Input value={form.matinal_recipients} onChange={e => setForm(prev => ({ ...prev, matinal_recipients: e.target.value }))} placeholder="email1@loja.com.br, email2@loja.com.br" />
             <RecipientPreview value={form.matinal_recipients} />
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Semanal</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Semanal</span>
             <Input value={form.weekly_recipients} onChange={e => setForm(prev => ({ ...prev, weekly_recipients: e.target.value }))} placeholder="email1@loja.com.br, email2@loja.com.br" />
             <RecipientPreview value={form.weekly_recipients} />
           </label>
           <label className="space-y-mx-xs">
-            <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Mensal</span>
+            <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Mensal</span>
             <Input value={form.monthly_recipients} onChange={e => setForm(prev => ({ ...prev, monthly_recipients: e.target.value }))} placeholder="email1@loja.com.br, email2@loja.com.br" />
             <RecipientPreview value={form.monthly_recipients} />
           </label>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
             <label className="space-y-mx-xs">
-              <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">WhatsApp</span>
+              <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">WhatsApp</span>
               <Input value={form.whatsapp_group_ref} onChange={e => setForm(prev => ({ ...prev, whatsapp_group_ref: e.target.value }))} placeholder="grupo ou link" />
             </label>
             <label className="space-y-mx-xs">
-              <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Timezone</span>
+              <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Timezone</span>
               <Input aria-label="Timezone" value={form.timezone} onChange={e => setForm(prev => ({ ...prev, timezone: e.target.value }))} />
             </label>
           </div>

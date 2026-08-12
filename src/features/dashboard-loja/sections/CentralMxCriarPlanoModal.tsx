@@ -139,7 +139,7 @@ export function CentralMxCriarPlanoModal({
             type="button"
             onClick={onClose}
             aria-label="Fechar"
-            className="rounded-xl p-mx-tiny text-gray-500 hover:bg-gray-50"
+            className="rounded-xl p-mx-tiny text-muted-foreground hover:bg-gray-50"
           >
             <X size={18} />
           </button>
@@ -150,7 +150,7 @@ export function CentralMxCriarPlanoModal({
             <div>
               <label
                 htmlFor="plano-scope"
-                className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+                className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
               >
                 Escopo
               </label>
@@ -170,7 +170,7 @@ export function CentralMxCriarPlanoModal({
             <div>
               <label
                 htmlFor="plano-departamento"
-                className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+                className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
               >
                 Departamento
               </label>
@@ -193,7 +193,7 @@ export function CentralMxCriarPlanoModal({
           <div>
             <label
               htmlFor="plano-indicador"
-              className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+              className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
             >
               Indicador
             </label>
@@ -209,7 +209,7 @@ export function CentralMxCriarPlanoModal({
           <div>
             <label
               htmlFor="plano-problema"
-              className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+              className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
             >
               Problema
             </label>
@@ -225,7 +225,7 @@ export function CentralMxCriarPlanoModal({
           <div>
             <label
               htmlFor="plano-acao"
-              className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+              className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
             >
               Ação
             </label>
@@ -241,7 +241,7 @@ export function CentralMxCriarPlanoModal({
           <div>
             <label
               htmlFor="plano-como"
-              className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+              className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
             >
               Como (opcional)
             </label>
@@ -257,7 +257,7 @@ export function CentralMxCriarPlanoModal({
             <div>
               <label
                 htmlFor="plano-prazo"
-                className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+                className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
               >
                 Prazo
               </label>
@@ -271,7 +271,7 @@ export function CentralMxCriarPlanoModal({
             <div>
               <label
                 htmlFor="plano-prioridade"
-                className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+                className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
               >
                 Prioridade
               </label>
@@ -290,7 +290,7 @@ export function CentralMxCriarPlanoModal({
             <div>
               <label
                 htmlFor="plano-origem"
-                className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+                className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
               >
                 Origem
               </label>

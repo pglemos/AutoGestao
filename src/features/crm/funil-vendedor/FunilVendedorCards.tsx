@@ -36,25 +36,25 @@ const EFICIENCIA_ORDER: FunnelChannel[] = ['Showroom', 'Carteira', 'Internet']
 const BASE_CONFIANCA_COR: Record<Confidence, string> = {
   Alta: 'text-status-success-text bg-green-50 border-green-200',
   Média: 'text-status-warning-text bg-amber-50 border-amber-200',
-  Baixa: 'text-slate-500 bg-slate-50 border-slate-200',
+  Baixa: 'text-muted-foreground bg-slate-50 border-slate-200',
 }
 
 export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKey: PeriodKey }) {
   const { meta, realizado, faltam, diasUteisRestantes, necessarioPorDia, probabilidade, metaBatida } = kpis
   const pct = meta !== null && meta > 0 ? Math.min(100, Math.round((realizado / meta) * 100)) : 0
   const probPct = probabilidade === null ? null : Math.round(probabilidade)
-  const probCor = probPct === null ? 'text-slate-600' : probPct >= 80 ? 'text-status-success-text' : probPct >= 50 ? 'text-status-warning-text' : 'text-status-error-text'
+  const probCor = probPct === null ? 'text-muted-foreground' : probPct >= 80 ? 'text-status-success-text' : probPct >= 50 ? 'text-status-warning-text' : 'text-status-error-text'
   const isCurrentMonth = periodKey === 'current_month'
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="mb-4 text-caption font-bold uppercase tracking-wider text-slate-600">Status da Meta</p>
+      <p className="mb-4 text-caption font-bold uppercase tracking-wider text-muted-foreground">Status da Meta</p>
 
       {!meta ? (
         <div className="flex items-center gap-3">
-          <Target className="h-5 w-5 shrink-0 text-slate-500" />
+          <Target className="h-5 w-5 shrink-0 text-muted-foreground" />
           <div>
-            <p className="text-body-sm text-slate-500">Meta mensal não configurada.</p>
+            <p className="text-body-sm text-muted-foreground">Meta mensal não configurada.</p>
             <Link to="/perfil" className="text-[12px] font-bold text-blue-700 hover:underline">Definir meta no perfil →</Link>
           </div>
         </div>
@@ -63,23 +63,23 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
           <CheckCircle className="h-6 w-6 shrink-0 text-green-500" />
           <div>
             <p className="text-[20px] font-bold text-green-600">Meta batida!</p>
-            <p className="text-body-sm text-slate-500">{realizado} de {meta} vendas realizadas</p>
+            <p className="text-body-sm text-muted-foreground">{realizado} de {meta} vendas realizadas</p>
           </div>
         </div>
       ) : (
         <div className="flex flex-col gap-5 sm:flex-row sm:items-start">
           <div className="flex-1 space-y-3">
             <div>
-              <p className="mb-0.5 text-[12px] text-slate-600">Realizado</p>
-              <p className="text-h2 font-bold leading-none tabular-nums text-slate-900">
+              <p className="mb-0.5 text-[12px] text-muted-foreground">Realizado</p>
+              <p className="text-h2 font-bold leading-none tabular-nums text-foreground">
                 {realizado}
-                <span className="ml-1 text-[16px] font-semibold text-slate-500">/ {meta}</span>
+                <span className="ml-1 text-[16px] font-semibold text-muted-foreground">/ {meta}</span>
               </p>
-              <p className="mt-0.5 text-caption text-slate-600">vendas realizadas</p>
+              <p className="mt-0.5 text-caption text-muted-foreground">vendas realizadas</p>
             </div>
 
             <div>
-              <div className="mb-1 flex justify-between text-caption text-slate-600">
+              <div className="mb-1 flex justify-between text-caption text-muted-foreground">
                 <span>{pct}% da meta</span>
                 <span>{realizado} / {meta}</span>
               </div>
@@ -91,39 +91,39 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
 
           <div className="grid flex-1 grid-cols-2 gap-3">
             <div className="rounded-xl bg-slate-50 p-3">
-              <p className="mb-0.5 text-caption uppercase tracking-wide text-slate-600">Faltam</p>
+              <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Faltam</p>
               <p className="text-h3 font-bold leading-none tabular-nums text-status-error-text">{faltam}</p>
-              <p className="text-caption text-slate-600">vendas</p>
+              <p className="text-caption text-muted-foreground">vendas</p>
             </div>
             <div className="rounded-xl bg-slate-50 p-3">
-              <p className="mb-0.5 text-caption uppercase tracking-wide text-slate-600">Dias úteis restantes</p>
-              <p className="text-h3 font-bold leading-none tabular-nums text-slate-900">{isCurrentMonth ? diasUteisRestantes : '—'}</p>
-              <p className="text-caption text-slate-600">seg–sáb</p>
+              <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Dias úteis restantes</p>
+              <p className="text-h3 font-bold leading-none tabular-nums text-foreground">{isCurrentMonth ? diasUteisRestantes : '—'}</p>
+              <p className="text-caption text-muted-foreground">seg–sáb</p>
             </div>
             <div className="rounded-xl bg-slate-50 p-3">
-              <p className="mb-0.5 text-caption uppercase tracking-wide text-slate-600">Ritmo necessário</p>
+              <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Ritmo necessário</p>
               {!isCurrentMonth || necessarioPorDia === null ? (
                 <>
                   <p className="text-h3 font-bold leading-none tabular-nums text-status-warning-text">—</p>
-                  <p className="text-caption text-slate-600">sem dados</p>
+                  <p className="text-caption text-muted-foreground">sem dados</p>
                 </>
               ) : faltam !== null && faltam <= 0 ? (
                 <>
                   <p className="text-[18px] font-bold leading-tight text-status-success-text">Meta batida</p>
-                  <p className="text-caption text-slate-600">Continue o ritmo.</p>
+                  <p className="text-caption text-muted-foreground">Continue o ritmo.</p>
                 </>
               ) : diasUteisRestantes <= 0 ? (
                 <>
                   <p className="text-[18px] font-bold leading-tight text-status-error-text">Prazo encerrado</p>
-                  <p className="text-caption text-slate-600">Revise o fechamento.</p>
+                  <p className="text-caption text-muted-foreground">Revise o fechamento.</p>
                 </>
               ) : necessarioPorDia >= 1 ? (
                 <>
                   <p className="text-h3 font-bold leading-none tabular-nums text-status-warning-text">
                     {necessarioPorDia % 1 === 0 ? necessarioPorDia : necessarioPorDia.toFixed(2)}
                   </p>
-                  <p className="text-caption text-slate-600">vendas por dia útil</p>
-                  <p className="mt-1 text-caption text-slate-600">≈ {Math.floor(necessarioPorDia * 6)}–{Math.ceil(necessarioPorDia * 6)} por semana</p>
+                  <p className="text-caption text-muted-foreground">vendas por dia útil</p>
+                  <p className="mt-1 text-caption text-muted-foreground">≈ {Math.floor(necessarioPorDia * 6)}–{Math.ceil(necessarioPorDia * 6)} por semana</p>
                 </>
               ) : (
                 <>
@@ -131,14 +131,14 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
                   <p className="text-h3 font-bold leading-none tabular-nums text-status-warning-text">
                     {faltam && faltam > 0 ? (diasUteisRestantes / faltam).toFixed(1) : '—'} dias
                   </p>
-                  <p className="mt-1 text-caption text-slate-600">≈ {Math.floor(necessarioPorDia * 6)}–{Math.ceil(necessarioPorDia * 6)} por semana</p>
+                  <p className="mt-1 text-caption text-muted-foreground">≈ {Math.floor(necessarioPorDia * 6)}–{Math.ceil(necessarioPorDia * 6)} por semana</p>
                 </>
               )}
             </div>
             <div className="rounded-xl bg-slate-50 p-3">
-              <p className="mb-0.5 text-caption uppercase tracking-wide text-slate-600">Probabilidade</p>
+              <p className="mb-0.5 text-caption uppercase tracking-wide text-muted-foreground">Probabilidade</p>
               <p className={`text-h3 font-bold leading-none tabular-nums ${probCor}`}>{probPct !== null ? `${probPct}%` : '—'}</p>
-              <p className="text-caption text-slate-600">com ritmo atual</p>
+              <p className="text-caption text-muted-foreground">com ritmo atual</p>
             </div>
           </div>
         </div>
@@ -150,8 +150,8 @@ export function StatusMetaCard({ kpis, periodKey }: { kpis: FunnelKpis; periodKe
 function AlavancaItem({ label, valor }: { label: string; valor: number }) {
   return (
     <div className="flex items-center justify-between border-b border-slate-100 py-2 last:border-0">
-      <span className="text-body-sm text-slate-600">{label}</span>
-      <span className="text-[18px] font-bold tabular-nums text-slate-900">{valor}</span>
+      <span className="text-body-sm text-muted-foreground">{label}</span>
+      <span className="text-[18px] font-bold tabular-nums text-foreground">{valor}</span>
     </div>
   )
 }
@@ -159,8 +159,8 @@ function AlavancaItem({ label, valor }: { label: string; valor: number }) {
 function CanalSecundario({ titulo, semBase, children }: { titulo: string; semBase: boolean; children: ReactNode }) {
   return (
     <div className="rounded-xl border border-slate-100 p-3">
-      <p className="mb-2 text-caption font-bold uppercase tracking-wide text-slate-600">{titulo}</p>
-      {semBase ? <p className="text-[12px] italic text-slate-500">Sem base suficiente para projeção.</p> : children}
+      <p className="mb-2 text-caption font-bold uppercase tracking-wide text-muted-foreground">{titulo}</p>
+      {semBase ? <p className="text-[12px] italic text-muted-foreground">Sem base suficiente para projeção.</p> : children}
     </div>
   )
 }
@@ -175,7 +175,7 @@ export function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelF
   if (faltam <= 0) {
     return (
       <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-        <p className="mb-2 text-caption font-bold uppercase tracking-wider text-slate-600">O que preciso produzir para bater a meta?</p>
+        <p className="mb-2 text-caption font-bold uppercase tracking-wider text-muted-foreground">O que preciso produzir para bater a meta?</p>
         <p className="text-[14px] font-bold text-status-success-text">Meta batida. Continue mantendo o ritmo! 🎯</p>
       </div>
     )
@@ -198,23 +198,23 @@ export function EsforcoNecessarioCard({ channels, faltam }: { channels: ChannelF
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="mb-1 text-caption font-bold uppercase tracking-wider text-slate-600">O que preciso produzir para bater a meta?</p>
-      <p className="mb-4 text-[12px] text-slate-600">
+      <p className="mb-1 text-caption font-bold uppercase tracking-wider text-muted-foreground">O que preciso produzir para bater a meta?</p>
+      <p className="mb-4 text-[12px] text-muted-foreground">
         Com base na sua conversão registrada, esta é a produção estimada para buscar as {faltam} venda{faltam !== 1 ? 's' : ''} que faltam.
       </p>
 
       {!canalPrincipal ? (
         <div className="rounded-xl border border-slate-200 bg-slate-50 p-4 text-center">
-          <p className="text-body-sm text-slate-500">Sem base suficiente para projeção confiável.</p>
-          <p className="mt-1 text-[12px] text-slate-600">Registre atendimentos e vendas para habilitar esta análise.</p>
+          <p className="text-body-sm text-muted-foreground">Sem base suficiente para projeção confiável.</p>
+          <p className="mt-1 text-[12px] text-muted-foreground">Registre atendimentos e vendas para habilitar esta análise.</p>
         </div>
       ) : (
         <>
           <div className={`mb-4 rounded-xl border p-4 ${EFFORT_PRINCIPAL_BG[canalPrincipal]}`}>
-            <p className="mb-1 text-caption font-bold uppercase tracking-wide text-slate-500">
-              Sua melhor base hoje é <span className="font-bold text-slate-900">{canalPrincipal}</span>
+            <p className="mb-1 text-caption font-bold uppercase tracking-wide text-muted-foreground">
+              Sua melhor base hoje é <span className="font-bold text-foreground">{canalPrincipal}</span>
             </p>
-            <p className="mb-3 text-[12px] text-slate-500">
+            <p className="mb-3 text-[12px] text-muted-foreground">
               Esses números mostram o esforço estimado em cada ponto do funil. Você pode acompanhar sua evolução por qualquer uma dessas alavancas.
             </p>
             {canalPrincipal === 'Showroom' && principalEffort?.atendimentos != null && principalEffort.atendimentos > 0 && (
@@ -279,8 +279,8 @@ export function EficienciaCanalCard({ channels }: { channels: ChannelFunnel[] })
 
   return (
     <div className="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
-      <p className="mb-1 text-caption font-bold uppercase tracking-wider text-slate-600">Eficiência por canal</p>
-      <p className="mb-4 text-[12px] text-slate-500"><span className="font-semibold">Principal limitador:</span> {limitador}</p>
+      <p className="mb-1 text-caption font-bold uppercase tracking-wider text-muted-foreground">Eficiência por canal</p>
+      <p className="mb-4 text-[12px] text-muted-foreground"><span className="font-semibold">Principal limitador:</span> {limitador}</p>
       <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
         {EFICIENCIA_ORDER.map(name => {
           const channel = byName(name)
@@ -304,30 +304,30 @@ function CanalCard({ channel }: { channel: ChannelFunnel }) {
   return (
     <div className="overflow-hidden rounded-xl border border-slate-200 bg-white">
       <div className={`flex items-center justify-between border-b px-4 py-2.5 ${cor.header}`}>
-        <p className="text-[12px] font-bold uppercase tracking-wide text-slate-900">{channel.channel}</p>
+        <p className="text-[12px] font-bold uppercase tracking-wide text-foreground">{channel.channel}</p>
         {conv !== null && !semDados ? (
           <span className={`rounded-full px-2 py-0.5 text-caption font-bold ${cor.badge}`}>{conv}% conv.</span>
         ) : (
-          <span className="text-caption text-slate-500">Sem dados</span>
+          <span className="text-caption text-muted-foreground">Sem dados</span>
         )}
       </div>
 
       <div className="px-4 py-3">
         {semDados ? (
-          <p className="text-[12px] italic text-slate-500">Sem base suficiente para projeção.</p>
+          <p className="text-[12px] italic text-muted-foreground">Sem base suficiente para projeção.</p>
         ) : (
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-caption text-slate-600">{VOLUME_LABEL[channel.channel]}</p>
-              <p className="text-[20px] font-bold tabular-nums text-slate-900">{volume}</p>
+              <p className="text-caption text-muted-foreground">{VOLUME_LABEL[channel.channel]}</p>
+              <p className="text-[20px] font-bold tabular-nums text-foreground">{volume}</p>
             </div>
             <div className="text-center">
-              <p className="text-caption text-slate-600">Vendas</p>
+              <p className="text-caption text-muted-foreground">Vendas</p>
               <p className="text-[20px] font-bold tabular-nums text-status-success-text">{vendas}</p>
             </div>
             <div className="text-center">
-              <p className="text-caption text-slate-600">Conversão</p>
-              <p className="text-[20px] font-bold tabular-nums text-slate-900">{conv !== null ? `${conv}%` : '—'}</p>
+              <p className="text-caption text-muted-foreground">Conversão</p>
+              <p className="text-[20px] font-bold tabular-nums text-foreground">{conv !== null ? `${conv}%` : '—'}</p>
             </div>
           </div>
         )}
@@ -357,10 +357,10 @@ function EtapaLinha({ label, valor, conv }: { label: string; valor: number; conv
   return (
     <div className="flex items-center justify-between border-b border-slate-50 py-1.5 last:border-0">
       <div className="flex flex-col">
-        <span className="text-[12px] text-slate-600">{label}</span>
-        {conv && <span className="text-caption text-slate-600">→ {conv}</span>}
+        <span className="text-[12px] text-muted-foreground">{label}</span>
+        {conv && <span className="text-caption text-muted-foreground">→ {conv}</span>}
       </div>
-      <span className="text-[14px] font-bold tabular-nums text-slate-900">{valor}</span>
+      <span className="text-[14px] font-bold tabular-nums text-foreground">{valor}</span>
     </div>
   )
 }
@@ -368,15 +368,15 @@ function EtapaLinha({ label, valor, conv }: { label: string; valor: number; conv
 export function BaseEstatisticaCard({ displayedPeriod, calculationPeriod, confidence }: { displayedPeriod: string; calculationPeriod: string; confidence: Confidence }) {
   return (
     <div className="rounded-xl border border-slate-100 bg-slate-50 p-4">
-      <p className="mb-3 text-caption font-bold uppercase tracking-wider text-slate-600">Base do cálculo</p>
+      <p className="mb-3 text-caption font-bold uppercase tracking-wider text-muted-foreground">Base do cálculo</p>
       <div className="flex flex-wrap gap-x-8 gap-y-2 text-[12px]">
-        <div><span className="text-slate-600">Período exibido:</span>{' '}<span className="font-semibold text-slate-600">{displayedPeriod}</span></div>
-        <div><span className="text-slate-600">Período de cálculo:</span>{' '}<span className="font-semibold text-slate-600">{calculationPeriod}</span></div>
+        <div><span className="text-muted-foreground">Período exibido:</span>{' '}<span className="font-semibold text-muted-foreground">{displayedPeriod}</span></div>
+        <div><span className="text-muted-foreground">Período de cálculo:</span>{' '}<span className="font-semibold text-muted-foreground">{calculationPeriod}</span></div>
         <div className="flex items-center gap-2">
-          <span className="text-slate-600">Confiança:</span>
+          <span className="text-muted-foreground">Confiança:</span>
           <span className={`rounded-full border px-2 py-0.5 text-caption font-bold ${BASE_CONFIANCA_COR[confidence]}`}>{confidence}</span>
         </div>
-        <div className="w-full text-caption text-slate-600">{confidenceReason(confidence)}</div>
+        <div className="w-full text-caption text-muted-foreground">{confidenceReason(confidence)}</div>
       </div>
     </div>
   )
@@ -387,13 +387,13 @@ export function EvolucaoCollapsible({ data, chartAberto, onToggle }: { data: Mon
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
       <button type="button" onClick={onToggle} className="flex w-full items-center justify-between px-5 py-3.5 transition-colors hover:bg-slate-50">
-        <p className="text-caption font-bold uppercase tracking-wider text-slate-600">Ver evolução dos últimos meses</p>
-        {chartAberto ? <ChevronUp className="h-4 w-4 text-slate-600" /> : <ChevronDown className="h-4 w-4 text-slate-600" />}
+        <p className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Ver evolução dos últimos meses</p>
+        {chartAberto ? <ChevronUp className="h-4 w-4 text-muted-foreground" /> : <ChevronDown className="h-4 w-4 text-muted-foreground" />}
       </button>
       {chartAberto && (
         <div className="border-t border-slate-100 px-5 pb-4">
           {semRegistros ? (
-            <p className="py-6 text-center text-[12px] text-slate-500">Sem registros nos últimos 6 meses.</p>
+            <p className="py-6 text-center text-[12px] text-muted-foreground">Sem registros nos últimos 6 meses.</p>
           ) : (
             <ResponsiveContainer width="100%" height={150}>
               <LineChart data={data} margin={{ top: 12, right: 8, left: -18, bottom: 0 }}>

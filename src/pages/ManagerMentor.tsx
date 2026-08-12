@@ -60,8 +60,8 @@ export default function ManagerMentor() {
           <div className="flex items-center gap-3">
             <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600"><BrainCircuit size={20} /></span>
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Mentor Gerencial</h1>
-              <p className="mt-0.5 text-sm text-gray-500">Área de apoio à gestão. Recomendações baseadas em regras e indicadores da operação.</p>
+              <h1 className="text-xl font-bold text-foreground">Mentor Gerencial</h1>
+              <p className="mt-0.5 text-sm text-muted-foreground">Área de apoio à gestão. Recomendações baseadas em regras e indicadores da operação.</p>
             </div>
           </div>
         </header>

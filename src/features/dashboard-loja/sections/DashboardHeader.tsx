@@ -107,8 +107,8 @@ export function DashboardHeader({
                 <Building2 size={20} />
               </span>
               <div className="min-w-0">
-                <h1 className="text-xl font-bold text-gray-800">Visão da unidade</h1>
-                <p className="mt-1 text-sm text-gray-500">
+                <h1 className="text-xl font-bold text-foreground">Visão da unidade</h1>
+                <p className="mt-1 text-sm text-muted-foreground">
                   Acompanhe resultado, execução da equipe e qualidade dos fechamentos.
                 </p>
               </div>
@@ -116,20 +116,20 @@ export function DashboardHeader({
 
             <div className="flex flex-wrap items-center gap-2">
               <label className="relative min-w-48">
-                <Building2 size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <Building2 size={14} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                 <select
                   id="store-dashboard-select"
                   name="store-dashboard-select"
                   aria-label="Selecionar unidade"
                   value={selectedStoreId || ''}
                   onChange={event => navigateToStore(event.target.value)}
-                  className="h-10 w-full appearance-none rounded-xl border border-gray-200 bg-white pl-9 pr-8 text-sm font-semibold text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-10 w-full appearance-none rounded-xl border border-gray-200 bg-white pl-9 pr-8 text-sm font-semibold text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   {selectableStores.map(store => (
                     <option key={store.id} value={store.id}>{store.name}</option>
                   ))}
                 </select>
-                <ChevronDown size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                <ChevronDown size={15} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
               </label>
 
               <nav className="flex rounded-xl bg-gray-100 p-1" aria-label="Abas da loja">
@@ -141,7 +141,7 @@ export function DashboardHeader({
                       key={tab.key}
                       type="button"
                       onClick={() => onTabChange(tab.key)}
-                      className={`inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition ${active ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:text-gray-700'}`}
+                      className={`inline-flex h-8 items-center gap-1.5 rounded-lg px-3 text-xs font-semibold transition ${active ? 'bg-white text-emerald-700 shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
                     >
                       <Icon size={14} />
                       <span className="hidden sm:inline">{tab.label}</span>
@@ -185,8 +185,8 @@ export function DashboardHeader({
                   <CalendarDays size={18} />
                 </span>
                 <div>
-                  <h2 className="font-semibold text-gray-800">{periodContext.title}</h2>
-                  <p className="mt-1 text-sm text-gray-500">{periodContext.description}</p>
+                  <h2 className="font-semibold text-foreground">{periodContext.title}</h2>
+                  <p className="mt-1 text-sm text-muted-foreground">{periodContext.description}</p>
                 </div>
               </div>
 
@@ -197,14 +197,14 @@ export function DashboardHeader({
                       key={tab.key}
                       type="button"
                       onClick={() => setViewMode(tab.key)}
-                      className={`rounded-lg px-4 text-xs font-semibold transition ${viewMode === tab.key ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500'}`}
+                      className={`rounded-lg px-4 text-xs font-semibold transition ${viewMode === tab.key ? 'bg-white text-emerald-700 shadow-sm' : 'text-muted-foreground'}`}
                     >
                       {tab.label}
                     </button>
                   ))}
                 </div>
 
-                <label className="text-xs text-gray-500">
+                <label className="text-xs text-muted-foreground">
                   Início
                   <input
                     type="date"
@@ -215,11 +215,11 @@ export function DashboardHeader({
                       setStartDate(event.target.value)
                       setViewMode('month')
                     }}
-                    className="mt-1 block h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-gray-400"
+                    className="mt-1 block h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-muted-foreground"
                   />
                 </label>
 
-                <label className="text-xs text-gray-500">
+                <label className="text-xs text-muted-foreground">
                   Fim
                   <input
                     type="date"
@@ -230,7 +230,7 @@ export function DashboardHeader({
                       setEndDate(event.target.value)
                       setViewMode('month')
                     }}
-                    className="mt-1 block h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-gray-400"
+                    className="mt-1 block h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500 disabled:bg-gray-50 disabled:text-muted-foreground"
                   />
                 </label>
               </div>
@@ -268,14 +268,14 @@ export function DashboardHeader({
         <div className="flex flex-wrap items-center justify-center xl:justify-end gap-mx-sm shrink-0 w-full xl:w-auto max-w-full">
           {isOwner && selectableStores.length > 1 && (
             <label htmlFor="owner-store-select" className="flex w-full flex-col gap-mx-tiny rounded-xl border border-gray-100 bg-white px-mx-md py-mx-xs shadow-sm sm:w-mx-sidebar-expanded">
-              <span className="text-mx-micro font-bold uppercase tracking-widest text-gray-500">Trocar unidade</span>
+              <span className="text-mx-micro font-bold uppercase tracking-widest text-muted-foreground">Trocar unidade</span>
               <select
                 aria-label="Trocar unidade"
                 id="owner-store-select"
                 name="owner-store-select"
                 value={selectedStoreId || ''}
                 onChange={event => navigateToStore(event.target.value)}
-                className="min-w-0 bg-transparent text-sm font-bold uppercase text-gray-800 outline-none"
+                className="min-w-0 bg-transparent text-sm font-bold uppercase text-foreground outline-none"
               >
                 {selectableStores.map(store => (
                   <option key={store.id} value={store.id}>{store.name}</option>
@@ -317,12 +317,12 @@ export function DashboardHeader({
                 viewMode === 'day' && 'opacity-50',
               )}>
                 <label className="space-y-mx-tiny">
-                  <span className="block text-mx-micro font-bold uppercase tracking-widest text-gray-500">Início</span>
-                  <input type="date" aria-label="Data inicial do período" disabled={viewMode === 'day'} value={startDate} onChange={event => { setStartDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-gray-800 outline-none focus:border-brand-primary" />
+                  <span className="block text-mx-micro font-bold uppercase tracking-widest text-muted-foreground">Início</span>
+                  <input type="date" aria-label="Data inicial do período" disabled={viewMode === 'day'} value={startDate} onChange={event => { setStartDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-foreground outline-none focus:border-brand-primary" />
                 </label>
                 <label className="space-y-mx-tiny">
-                  <span className="block text-mx-micro font-bold uppercase tracking-widest text-gray-500">Fim</span>
-                  <input type="date" aria-label="Data final do período" disabled={viewMode === 'day'} value={endDate} onChange={event => { setEndDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-gray-800 outline-none focus:border-brand-primary" />
+                  <span className="block text-mx-micro font-bold uppercase tracking-widest text-muted-foreground">Fim</span>
+                  <input type="date" aria-label="Data final do período" disabled={viewMode === 'day'} value={endDate} onChange={event => { setEndDate(event.target.value); setViewMode('month') }} className="h-mx-12 w-full min-w-mx-40 rounded-xl border border-gray-100 bg-white px-mx-sm text-sm font-bold text-foreground outline-none focus:border-brand-primary" />
                 </label>
               </div>
             </div>

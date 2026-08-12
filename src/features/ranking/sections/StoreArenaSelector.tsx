@@ -34,7 +34,7 @@ export function StoreArenaSelector({ loading, opponents, stores, onToggle, onCle
     <div className="animate-slide-up">
       {opponents.length < 2 && (
         <div className="mb-8 text-center animate-pulse">
-          <p className="text-sm font-bold text-gray-500 bg-white/50 inline-block px-4 py-2 rounded-full border border-white/60 shadow-sm">
+          <p className="text-sm font-bold text-muted-foreground bg-white/50 inline-block px-4 py-2 rounded-full border border-white/60 shadow-sm">
             Selecione {2 - opponents.length} {2 - opponents.length === 1 ? 'loja' : 'lojas'} abaixo para iniciar o comparativo de lojas
           </p>
         </div>
@@ -46,7 +46,7 @@ export function StoreArenaSelector({ loading, opponents, stores, onToggle, onCle
             type="button"
             onClick={onClear}
             aria-label="Limpar seleção de lojas"
-            className="absolute top-mx-0 right-mx-0 z-50 p-mx-xs bg-white/10 text-gray-500 hover:text-status-error hover:bg-status-error-surface rounded-full transition-colors"
+            className="absolute top-mx-0 right-mx-0 z-50 p-mx-xs bg-white/10 text-muted-foreground hover:text-status-error hover:bg-status-error-surface rounded-full transition-colors"
           >
             <X className="w-mx-sm h-mx-sm" />
           </button>
@@ -75,7 +75,7 @@ export function StoreArenaSelector({ loading, opponents, stores, onToggle, onCle
             >
               <div className={cn(
                 'w-mx-14 h-mx-14 rounded-2xl flex items-center justify-center border-2 shrink-0',
-                selected ? 'bg-emerald-600/20 border-brand-primary text-emerald-600' : 'bg-gray-50 border-gray-200 text-gray-500'
+                selected ? 'bg-emerald-600/20 border-brand-primary text-emerald-600' : 'bg-gray-50 border-gray-200 text-muted-foreground'
               )}>
                 <Building2 size={22} />
               </div>

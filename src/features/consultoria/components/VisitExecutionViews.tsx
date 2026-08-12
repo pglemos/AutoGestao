@@ -37,8 +37,8 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
             <Typography variant="h3">Ferramentas de Gestão</Typography>
           </div>
           <Button className="w-full justify-between h-mx-12 shadow-sm font-bold bg-white" variant="outline" onClick={() => window.open(`/consultoria/clientes/${clientSlug}?tab=strategic`, '_blank')}>
-            <div className="flex items-center gap-mx-sm"><Target className="w-mx-4 h-mx-4 text-gray-500" />Planejamento Estratégico</div>
-            <ExternalLink className="w-mx-4 h-mx-4 text-gray-500" />
+            <div className="flex items-center gap-mx-sm"><Target className="w-mx-4 h-mx-4 text-muted-foreground" />Planejamento Estratégico</div>
+            <ExternalLink className="w-mx-4 h-mx-4 text-muted-foreground" />
           </Button>
           <Button className="w-full justify-between h-mx-12 shadow-sm font-bold border-brand-primary bg-white" variant="outline" onClick={() => window.open(`/consultoria/clientes/${clientSlug}?tab=daily`, '_blank')}>
             <div className="flex items-center gap-mx-sm"><BarChart3 className="w-mx-4 h-mx-4" />Validar SGAP Diário</div>
@@ -58,7 +58,7 @@ export function VisitTwoExecution({ clientId, clientSlug }: { clientId: string, 
           ) : (
             <div className="space-y-mx-xs opacity-50">
               <div className="w-mx-12 h-mx-12 bg-white rounded-mx-full flex items-center justify-center mx-auto border border-gray-200">
-                <Rocket className="w-mx-6 h-mx-6 text-gray-500" />
+                <Rocket className="w-mx-6 h-mx-6 text-muted-foreground" />
               </div>
               <Typography variant="p" className="text-sm font-bold">Aguardando registro do P.E. no sistema</Typography>
             </div>
@@ -79,13 +79,13 @@ export function VisitThreeExecution() {
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
         <div className="p-mx-md bg-gray-50/30 rounded-2xl border border-gray-200 relative">
           <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro text-white border-none px-mx-sm py-0.5 shadow-sm">GERENTE</Badge>
-          <ul className="space-y-mx-md text-sm font-medium text-gray-500 mt-2">
+          <ul className="space-y-mx-md text-sm font-medium text-muted-foreground mt-2">
             {[ '09:30 - Cobrar preenchimento SGAP', '10:30 - Reunião Matinal / Ranking', '14:00 - Auditoria de CRM / Funil', '17:00 - Devolutiva Imediata' ].map(li => (<li key={li} className="flex items-center gap-mx-xs"><div className="w-mx-xs h-mx-xs rounded-mx-full bg-gray-900 shrink-0" /> {li}</li>))}
           </ul>
         </div>
         <div className="p-mx-md bg-gray-50/30 rounded-2xl border border-gray-200 relative">
           <Badge className="absolute -top-mx-tiny left-mx-md font-bold text-mx-micro text-white border-none px-mx-sm py-0.5 shadow-sm">VENDEDOR</Badge>
-          <ul className="space-y-mx-md text-sm font-medium text-gray-500 mt-2">
+          <ul className="space-y-mx-md text-sm font-medium text-muted-foreground mt-2">
             {[ 'Registro Leads Porta/Online', 'Agendamentos Carteira', 'Atendimento e Prospecção', 'Lançamento Vendas Ontem' ].map(li => (<li key={li} className="flex items-center gap-mx-xs"><div className="w-mx-xs h-mx-xs rounded-mx-full bg-emerald-600 shrink-0" /> {li}</li>))}
           </ul>
         </div>
@@ -476,7 +476,7 @@ export function VisitChecklist({ items, onToggle }: { items: Array<{ task: strin
             "p-mx-md rounded-2xl border cursor-pointer transition-all flex items-start gap-mx-sm text-xs font-bold shadow-sm hover:shadow-sm active:scale-95 min-h-mx-16",
             it.completed
               ? "bg-emerald-600/10 text-emerald-600 border-brand-primary/30"
-              : "bg-white border-gray-200 text-gray-500 hover:border-brand-primary/40 hover:bg-gray-50/20"
+              : "bg-white border-gray-200 text-muted-foreground hover:border-brand-primary/40 hover:bg-gray-50/20"
           )}
         >
           <div className={cn(

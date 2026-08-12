@@ -58,7 +58,7 @@ export function AgendaSidebar({
           type="button"
           onClick={onToggleCollapse}
           title="Expandir painel lateral"
-          className="flex h-8 w-8 items-center justify-center rounded-xl border border-gray-200 bg-white text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-colors shadow-2xs"
+          className="flex h-8 w-8 items-center justify-center rounded-xl border border-gray-200 bg-white text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors shadow-2xs"
         >
           <PanelLeftOpen size={16} />
         </button>
@@ -70,7 +70,7 @@ export function AgendaSidebar({
     <div className="flex flex-col gap-3 w-full lg:w-56 shrink-0 transition-all">
       {/* Toggle Collapse Bar */}
       <div className="hidden lg:flex items-center justify-between px-1">
-        <span className="text-caption font-extrabold uppercase tracking-wider text-gray-500">
+        <span className="text-caption font-extrabold uppercase tracking-wider text-muted-foreground">
           Painel Lateral
         </span>
         {onToggleCollapse && (
@@ -78,7 +78,7 @@ export function AgendaSidebar({
             type="button"
             onClick={onToggleCollapse}
             title="Recolher painel lateral"
-            className="flex h-6 w-6 items-center justify-center rounded-xl text-gray-500 hover:bg-gray-50 hover:text-gray-800 transition-colors"
+            className="flex h-6 w-6 items-center justify-center rounded-xl text-muted-foreground hover:bg-gray-50 hover:text-foreground transition-colors"
           >
             <PanelLeftClose size={15} />
           </button>
@@ -94,7 +94,7 @@ export function AgendaSidebar({
 
       {/* Status Filters - Compact */}
       <div className="rounded-2xl border border-gray-200 bg-white p-3 shadow-2xs">
-        <h4 className="text-caption font-bold uppercase tracking-wider text-gray-500 mb-2">
+        <h4 className="text-caption font-bold uppercase tracking-wider text-muted-foreground mb-2">
           Status
         </h4>
         <div className="flex flex-wrap gap-1">
@@ -111,15 +111,15 @@ export function AgendaSidebar({
                   'flex items-center gap-1.5 rounded-xl px-2 py-1 text-caption font-medium transition-colors',
                   isActive
                     ? 'bg-emerald-600 text-white font-bold shadow-2xs'
-                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800',
+                    : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
                 )}
               >
-                <Icon size={12} className={isActive ? 'text-white' : 'text-gray-500'} />
+                <Icon size={12} className={isActive ? 'text-white' : 'text-muted-foreground'} />
                 <span>{opt.label}</span>
                 <span
                   className={cn(
                     'px-1 py-0.5 rounded-full text-caption font-mono font-semibold',
-                    isActive ? 'bg-white/20 text-white' : 'bg-gray-50 text-gray-500',
+                    isActive ? 'bg-white/20 text-white' : 'bg-gray-50 text-muted-foreground',
                   )}
                 >
                   {opt.count}
@@ -138,10 +138,10 @@ export function AgendaSidebar({
             onClick={() => setConsultantsExpanded(!consultantsExpanded)}
             className="flex w-full items-center justify-between mb-2"
           >
-            <h4 className="text-caption font-bold uppercase tracking-wider text-gray-500 flex items-center gap-1.5">
+            <h4 className="text-caption font-bold uppercase tracking-wider text-muted-foreground flex items-center gap-1.5">
               <Users size={12} /> Consultores
             </h4>
-            {consultantsExpanded ? <ChevronUp size={14} className="text-gray-500" /> : <ChevronDown size={14} className="text-gray-500" />}
+            {consultantsExpanded ? <ChevronUp size={14} className="text-muted-foreground" /> : <ChevronDown size={14} className="text-muted-foreground" />}
           </button>
 
           {consultantsExpanded && (
@@ -153,7 +153,7 @@ export function AgendaSidebar({
                   'flex w-full items-center px-2 py-1.5 rounded-xl text-caption font-medium transition-colors',
                   consultantFilter === 'todos'
                     ? 'bg-emerald-600/10 text-emerald-600 font-bold border border-brand-primary/20'
-                    : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800',
+                    : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
                 )}
               >
                 Todos
@@ -171,7 +171,7 @@ export function AgendaSidebar({
                       'flex w-full items-center gap-1.5 px-2 py-1.5 rounded-xl text-caption font-medium transition-colors text-left truncate',
                       isSelected
                         ? 'bg-emerald-600 text-white font-bold shadow-2xs'
-                        : 'text-gray-500 hover:bg-gray-50 hover:text-gray-800',
+                        : 'text-muted-foreground hover:bg-gray-50 hover:text-foreground',
                     )}
                   >
                     <span

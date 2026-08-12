@@ -184,18 +184,18 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
           >
             1
           </div>
-          <span className={`text-sm font-medium ${selectedOption ? 'text-slate-500' : 'text-slate-900'}`}>
+          <span className={`text-sm font-medium ${selectedOption ? 'text-muted-foreground' : 'text-foreground'}`}>
             Intenção Comercial
           </span>
-          <ChevronRight className="h-4 w-4 text-slate-400" />
+          <ChevronRight className="h-4 w-4 text-muted-foreground" />
           <div
             className={`flex h-7 w-7 items-center justify-center rounded-full text-xs font-bold ${
-              selectedOption ? 'bg-slate-900 text-white' : 'bg-slate-100 text-slate-400'
+              selectedOption ? 'bg-slate-900 text-white' : 'bg-slate-100 text-muted-foreground'
             }`}
           >
             2
           </div>
-          <span className={`text-sm font-medium ${selectedOption ? 'text-slate-900' : 'text-slate-400'}`}>
+          <span className={`text-sm font-medium ${selectedOption ? 'text-foreground' : 'text-muted-foreground'}`}>
             Status Específico
           </span>
         </div>
@@ -219,7 +219,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
       {/* Passo 1: Seleção de primeiro nível (8 opções guiadas) */}
       {!selectedOption ? (
         <div className="space-y-3">
-          <p className="text-sm font-medium text-slate-700">
+          <p className="text-sm font-medium text-foreground">
             Selecione qual é a situação atual do atendimento:
           </p>
           <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
@@ -244,12 +244,12 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                       : 'border-slate-200 bg-white'
                   }`}
                 >
-                  <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-slate-100 text-slate-700 transition-colors group-hover:bg-blue-600 group-hover:text-white">
+                  <div className="mt-0.5 flex h-8 w-8 shrink-0 items-center justify-center rounded-md bg-slate-100 text-foreground transition-colors group-hover:bg-blue-600 group-hover:text-white">
                     <IconComp className="h-4 w-4" />
                   </div>
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center justify-between">
-                      <span className="text-sm font-semibold text-slate-900 group-hover:text-blue-900">
+                      <span className="text-sm font-semibold text-foreground group-hover:text-blue-900">
                         {opt.optionText}
                       </span>
                       {opt.isRecommended && (
@@ -258,7 +258,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                         </Badge>
                       )}
                     </div>
-                    <p className="mt-0.5 text-xs text-slate-500">
+                    <p className="mt-0.5 text-xs text-muted-foreground">
                       {opt.compatibleCount} status compatíve{opt.compatibleCount > 1 ? 'is' : 'l'}
                     </p>
                   </div>
@@ -272,12 +272,12 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
         <div className="space-y-4">
           <div className="rounded-md bg-slate-100 p-3 flex items-center justify-between">
             <div>
-              <span className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                 Opção selecionada
               </span>
-              <p className="text-sm font-bold text-slate-900">{selectedOption}</p>
+              <p className="text-sm font-bold text-foreground">{selectedOption}</p>
             </div>
-            <Badge variant="outline" className="bg-white text-slate-700 border-slate-300">
+            <Badge variant="outline" className="bg-white text-foreground border-slate-300">
               {compatibleStatuses.length} status disponível{compatibleStatuses.length > 1 ? 'is' : ''}
             </Badge>
           </div>
@@ -285,7 +285,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
           <div className="space-y-2">
             <span
               id="mentor-status-especifico-label"
-              className="block text-xs font-semibold uppercase tracking-wider text-slate-600"
+              className="block text-xs font-semibold uppercase tracking-wider text-muted-foreground"
             >
               Selecione o status específico: <span className="text-red-500">*</span>
             </span>
@@ -333,13 +333,13 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                         <Badge className="bg-slate-900 text-white font-mono text-caption">
                           {st.statusId}
                         </Badge>
-                        <span className="text-sm font-semibold text-slate-900">
+                        <span className="text-sm font-semibold text-foreground">
                           {st.label}
                         </span>
                       </div>
                       <div className="flex items-center space-x-1.5">
                         {isCurrent && (
-                          <Badge variant="outline" className="bg-slate-100 text-slate-600 text-caption">
+                          <Badge variant="outline" className="bg-slate-100 text-muted-foreground text-caption">
                             Atual
                           </Badge>
                         )}
@@ -351,7 +351,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                                 ? 'bg-red-100 text-red-800'
                                 : st.temperature.toLowerCase().includes('morno')
                                 ? 'bg-amber-100 text-amber-800'
-                                : 'bg-slate-100 text-slate-700'
+                                : 'bg-slate-100 text-foreground'
                             }`}
                           >
                             {st.temperature}
@@ -361,7 +361,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
                     </div>
 
                     {st.definition && (
-                      <p className="mt-1.5 ml-6 text-xs text-slate-600 leading-relaxed">
+                      <p className="mt-1.5 ml-6 text-xs text-muted-foreground leading-relaxed">
                         {st.definition}
                       </p>
                     )}
@@ -385,49 +385,49 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
             <div className="bg-white p-2.5 rounded border border-blue-100">
-              <span className="text-slate-500 font-medium flex items-center gap-1">
+              <span className="text-muted-foreground font-medium flex items-center gap-1">
                 <FileText className="h-3.5 w-3.5 text-blue-600" /> Status Resultante
               </span>
-              <p className="font-bold text-slate-900 mt-1">
+              <p className="font-bold text-foreground mt-1">
                 {selectedStatus.statusId} — {selectedStatus.label}
               </p>
             </div>
 
             <div className="bg-white p-2.5 rounded border border-blue-100">
-              <span className="text-slate-500 font-medium flex items-center gap-1">
+              <span className="text-muted-foreground font-medium flex items-center gap-1">
                 <Target className="h-3.5 w-3.5 text-blue-600" /> Objetivo Comercial
               </span>
-              <p className="font-semibold text-slate-800 mt-1">{selectedStatus.objective}</p>
+              <p className="font-semibold text-foreground mt-1">{selectedStatus.objective}</p>
             </div>
 
             <div className="bg-white p-2.5 rounded border border-blue-100">
-              <span className="text-slate-500 font-medium flex items-center gap-1">
+              <span className="text-muted-foreground font-medium flex items-center gap-1">
                 <Sparkles className="h-3.5 w-3.5 text-blue-600" /> Próximo Passo
               </span>
-              <p className="font-semibold text-slate-800 mt-1">{selectedStatus.nextStep}</p>
+              <p className="font-semibold text-foreground mt-1">{selectedStatus.nextStep}</p>
             </div>
 
             <div className="bg-white p-2.5 rounded border border-blue-100">
-              <span className="text-slate-500 font-medium flex items-center gap-1">
+              <span className="text-muted-foreground font-medium flex items-center gap-1">
                 <User className="h-3.5 w-3.5 text-blue-600" /> Responsável
               </span>
-              <p className="font-semibold text-slate-800 mt-1">{selectedStatus.responsible}</p>
+              <p className="font-semibold text-foreground mt-1">{selectedStatus.responsible}</p>
             </div>
 
             <div className="bg-white p-2.5 rounded border border-blue-100">
-              <span className="text-slate-500 font-medium flex items-center gap-1">
+              <span className="text-muted-foreground font-medium flex items-center gap-1">
                 <Clock className="h-3.5 w-3.5 text-blue-600" /> Cadência
               </span>
-              <p className="font-semibold text-slate-800 mt-1">
+              <p className="font-semibold text-foreground mt-1">
                 {selectedStatus.cadenceId ?? 'Sem cadência'}
               </p>
             </div>
 
             <div className="bg-white p-2.5 rounded border border-blue-100">
-              <span className="text-slate-500 font-medium flex items-center gap-1">
+              <span className="text-muted-foreground font-medium flex items-center gap-1">
                 <MessageSquare className="h-3.5 w-3.5 text-blue-600" /> Script
               </span>
-              <p className="font-semibold text-slate-800 mt-1">
+              <p className="font-semibold text-foreground mt-1">
                 {selectedStatus.scriptId ?? 'Sem script'}
               </p>
             </div>
@@ -436,7 +436,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
           <div className="pt-2">
             <label
               htmlFor="mentor-observacoes-adicionais"
-              className="text-xs font-semibold text-slate-700 mb-1 block"
+              className="text-xs font-semibold text-foreground mb-1 block"
             >
               Observações adicionais (opcional):
             </label>
@@ -472,7 +472,7 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
             variant="outline"
             onClick={handleClose}
             disabled={isSubmitting || isSubmittingLocal}
-            className="text-slate-700"
+            className="text-foreground"
           >
             Cancelar
           </Button>
@@ -505,11 +505,11 @@ export const GuidedStatusUpdate: React.FC<GuidedStatusUpdateProps> = ({
 
       <DialogContent className="max-w-2xl bg-white p-6 rounded-xl shadow-xl border border-slate-200">
         <DialogHeader className="border-b pb-3 mb-2">
-          <DialogTitle className="text-lg font-bold text-slate-900 flex items-center gap-2">
+          <DialogTitle className="text-lg font-bold text-foreground flex items-center gap-2">
             <div className="h-3 w-3 rounded-full bg-blue-600" />
             {triggerButtonText}
           </DialogTitle>
-          <DialogDescription className="text-xs text-slate-500">
+          <DialogDescription className="text-xs text-muted-foreground">
             Atualização guiada determinística de situação comercial. Selecione o objetivo e o status correspondente.
           </DialogDescription>
         </DialogHeader>

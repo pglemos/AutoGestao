@@ -191,7 +191,7 @@ export function SistemaMxTab() {
                     <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-emerald-600" /></div>
                 ) : audit.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
-                        <Activity size={40} className="mx-auto text-gray-500 opacity-30" />
+                        <Activity size={40} className="mx-auto text-muted-foreground opacity-30" />
                         <Typography variant="caption" tone="muted" className="">Nenhum registro de auditoria</Typography>
                     </div>
                 ) : (

@@ -81,8 +81,8 @@ function MetricCell({
   const differs = declaredAvailable && real !== declared
   return (
     <td className={`px-4 py-3 ${differs ? 'bg-amber-50/60' : ''}`}>
-      <p className="text-base font-bold text-gray-800">{real}</p>
-      <p className={`mt-0.5 text-caption ${differs ? 'font-semibold text-amber-700' : 'text-gray-400'}`}>
+      <p className="text-base font-bold text-foreground">{real}</p>
+      <p className={`mt-0.5 text-caption ${differs ? 'font-semibold text-amber-700' : 'text-muted-foreground'}`}>
         {declaredAvailable ? `Declarado: ${declared}` : `${label}: aguardando fechamento`}
       </p>
     </td>
@@ -200,19 +200,19 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
               <UsersRound size={20} />
             </span>
             <div>
-              <h2 className="text-xl font-bold text-gray-800">Acompanhamento diário da equipe</h2>
-              <p className="mt-1 text-sm text-gray-500">
+              <h2 className="text-xl font-bold text-foreground">Acompanhamento diário da equipe</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
                 Fechamento, atividade comercial e comparação entre o registrado no sistema e o informado pelo vendedor.
               </p>
             </div>
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-3 text-sm text-gray-600">
+            <span className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-3 text-sm text-muted-foreground">
               <Calendar size={14} />
               {formatReferenceDate(referenceDate)}
             </span>
-            <span className="hidden text-xs text-gray-400 sm:inline">
+            <span className="hidden text-xs text-muted-foreground sm:inline">
               {lastSyncAt
                 ? `Atualizado às ${lastSyncAt.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}`
                 : 'Aguardando atualização'}
@@ -272,13 +272,13 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
       <article className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
         <div className="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h3 className="font-semibold text-gray-800">Vendedores da unidade</h3>
-            <p className="mt-1 text-xs text-gray-400">
+            <h3 className="font-semibold text-foreground">Vendedores da unidade</h3>
+            <p className="mt-1 text-xs text-muted-foreground">
               Valores principais são os registros do sistema. O declarado aparece abaixo para conferência.
             </p>
           </div>
           {!hasUnavailableData && (
-            <div className="flex flex-wrap gap-2 text-xs text-gray-500">
+            <div className="flex flex-wrap gap-2 text-xs text-muted-foreground">
               <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.leads} leads</span>
               <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.appointments} agendamentos</span>
               <span className="rounded-lg bg-gray-50 px-2.5 py-1.5">{summary.attendances} atendimentos</span>
@@ -292,7 +292,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
             <thead className="border-b border-gray-100 bg-gray-50">
               <tr>
                 {['Vendedor', 'Fechamento', 'Leads', 'Agendamentos', 'Atendimentos', 'Vendas', 'Conferência', 'Última atividade'].map(label => (
-                  <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+                  <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                     {label}
                   </th>
                 ))}
@@ -301,13 +301,13 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
             <tbody className="divide-y divide-gray-50">
               {hasUnavailableData ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-12 text-center text-sm text-gray-500">
+                  <td colSpan={8} className="px-4 py-12 text-center text-sm text-muted-foreground">
                     Atualize novamente para carregar os vendedores e os números da unidade.
                   </td>
                 </tr>
               ) : rows.length === 0 ? (
                 <tr>
-                  <td colSpan={8} className="px-4 py-12 text-center text-sm text-gray-500">
+                  <td colSpan={8} className="px-4 py-12 text-center text-sm text-muted-foreground">
                     Nenhum vendedor ativo está vinculado a esta unidade.
                   </td>
                 </tr>
@@ -321,8 +321,8 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
                 return (
                   <tr key={row.seller_user_id} className="transition-colors hover:bg-gray-50">
                     <td className="px-4 py-3">
-                      <p className="font-medium text-gray-800">{row.seller_name}</p>
-                      <p className="mt-0.5 text-caption text-gray-400">
+                      <p className="font-medium text-foreground">{row.seller_name}</p>
+                      <p className="mt-0.5 text-caption text-muted-foreground">
                         Disciplina: {row.discipline_score ?? 'sem pontuação'}
                       </p>
                     </td>
@@ -330,7 +330,7 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
                       <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-medium ${statusClass(row.closing_status)}`}>
                         {presentation.label}
                       </span>
-                      <p className="mt-1.5 text-caption text-gray-400">
+                      <p className="mt-1.5 text-caption text-muted-foreground">
                         {formatDateTime(row.submitted_at, 'Ainda não enviado')}
                       </p>
                     </td>
@@ -344,12 +344,12 @@ export function AdminLiveOperationsPanel({ storeId, referenceDate }: Props) {
                           {row.has_divergence ? 'Revisar diferenças' : 'Dados conferem'}
                         </span>
                       ) : (
-                        <span className="inline-flex rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-500">
+                        <span className="inline-flex rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-muted-foreground">
                           Aguardando fechamento
                         </span>
                       )}
                     </td>
-                    <td className="px-4 py-3 text-sm text-gray-600">
+                    <td className="px-4 py-3 text-sm text-muted-foreground">
                       {formatDateTime(row.last_activity_at, 'Sem atividade registrada')}
                     </td>
                   </tr>
@@ -388,9 +388,9 @@ function SummaryCard({
         <Icon size={20} />
       </span>
       <div className="min-w-0">
-        <p className="text-2xl font-bold text-gray-800">{value}</p>
-        <p className="text-xs font-medium text-gray-600">{label}</p>
-        <p className="mt-1 text-caption leading-4 text-gray-400">{helper}</p>
+        <p className="text-2xl font-bold text-foreground">{value}</p>
+        <p className="text-xs font-medium text-muted-foreground">{label}</p>
+        <p className="mt-1 text-caption leading-4 text-muted-foreground">{helper}</p>
       </div>
     </article>
   )

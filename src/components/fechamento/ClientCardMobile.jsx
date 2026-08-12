@@ -269,8 +269,8 @@ export default function ClientCardMobile({
       )}
       {bloqueado && (
         <div className="flex items-center gap-2 py-3 px-3 bg-slate-50 rounded-xl border border-slate-100">
-          <Lock className="w-4 h-4 text-slate-300 flex-shrink-0" />
-          <span className="text-[12px] text-slate-400 font-medium">Fechamento finalizado.</span>
+          <Lock className="w-4 h-4 text-text-disabled flex-shrink-0" />
+          <span className="text-[12px] text-muted-foreground font-medium">Fechamento finalizado.</span>
         </div>
       )}
 
@@ -352,7 +352,7 @@ export default function ClientCardMobile({
             </Field>
             <Field label="Venda Realizada">
               {modoD1 ? (
-                <div className="h-10 flex items-center px-3 bg-slate-50 border border-slate-200 rounded-lg text-body-sm text-slate-500 font-semibold cursor-not-allowed">
+                <div className="h-10 flex items-center px-3 bg-slate-50 border border-slate-200 rounded-lg text-body-sm text-muted-foreground font-semibold cursor-not-allowed">
                   Em Negociação
                 </div>
               ) : (

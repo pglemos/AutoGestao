@@ -191,14 +191,14 @@ export default function OperationalSettings() {
               <MxSectionHeader
                 title="Políticas em preparação"
                 description="Controles sem persistência permanecem visíveis, porém não fingem que foram salvos."
-                actions={<ShieldCheck size={18} className="text-gray-500" aria-hidden="true" />}
+                actions={<ShieldCheck size={18} className="text-muted-foreground" aria-hidden="true" />}
               />
               <div className="divide-y divide-gray-100 px-5">
                 {FUTURE_POLICIES.map(([title, description]) => (
                   <div key={title} className="flex items-start justify-between gap-4 py-4">
                     <div>
-                      <Typography variant="h3" className="text-sm font-semibold text-gray-800">{title}</Typography>
-                      <Typography variant="p" className="mt-1 text-sm text-gray-500">{description}</Typography>
+                      <Typography variant="h3" className="text-sm font-semibold text-foreground">{title}</Typography>
+                      <Typography variant="p" className="mt-1 text-sm text-muted-foreground">{description}</Typography>
                     </div>
                     <Badge variant="outline" className="shrink-0">Em preparação</Badge>
                   </div>

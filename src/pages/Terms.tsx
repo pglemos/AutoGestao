@@ -75,7 +75,7 @@ export default function Terms() {
                         </div>
 
                         <footer className="pt-10 border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-mx-10 w-full flex-wrap">
-                            <Button variant="ghost" onClick={() => navigate(-1)} className="text-caption font-bold text-gray-500 hover:text-emerald-600 bg-white shadow-sm rounded-mx-full px-6 h-mx-xl w-full sm:w-auto justify-center">
+                            <Button variant="ghost" onClick={() => navigate(-1)} className="text-caption font-bold text-muted-foreground hover:text-emerald-600 bg-white shadow-sm rounded-mx-full px-6 h-mx-xl w-full sm:w-auto justify-center">
                                 <ArrowLeft size={16} className="mr-2" /> VOLTAR AO SISTEMA
                             </Button>
                             <div className="text-center sm:text-right space-y-mx-tiny">

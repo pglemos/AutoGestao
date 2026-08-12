@@ -29,7 +29,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
       header: 'Posição',
       width: 'w-20',
       render: (_, index) => (
-        <span className="grid h-8 w-8 place-items-center rounded-lg bg-gray-100 text-xs font-semibold text-gray-500">
+        <span className="grid h-8 w-8 place-items-center rounded-lg bg-gray-100 text-xs font-semibold text-muted-foreground">
           {index + 1}
         </span>
       ),
@@ -47,15 +47,15 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
             className={`h-10 w-10 rounded-xl ${row.is_venda_loja ? 'bg-emerald-600 text-white' : 'bg-emerald-50 text-emerald-700'}`}
           />
           <div className="min-w-0">
-            <p className="break-words text-sm font-semibold text-gray-800">{row.user_name}</p>
+            <p className="break-words text-sm font-semibold text-foreground">{row.user_name}</p>
             {row.is_venda_loja && <span className="mt-1 inline-flex rounded-md bg-emerald-100 px-1.5 py-0.5 text-caption font-semibold text-emerald-700">Vendas da Gestão (Apoio)</span>}
           </div>
         </div>
       ),
     },
-    { key: 'leads', header: 'Leads', align: 'center', desktopOnly: true, render: row => <span className="text-sm text-gray-600 tabular-nums">{row.leads}</span> },
-    { key: 'agd_total', header: 'Agendamentos', align: 'center', desktopOnly: true, render: row => <span className="text-sm text-gray-600 tabular-nums">{row.agd_total}</span> },
-    { key: 'visitas', header: 'Visitas', align: 'center', desktopOnly: true, render: row => <span className="text-sm text-gray-600 tabular-nums">{row.visitas}</span> },
+    { key: 'leads', header: 'Leads', align: 'center', desktopOnly: true, render: row => <span className="text-sm text-muted-foreground tabular-nums">{row.leads}</span> },
+    { key: 'agd_total', header: 'Agendamentos', align: 'center', desktopOnly: true, render: row => <span className="text-sm text-muted-foreground tabular-nums">{row.agd_total}</span> },
+    { key: 'visitas', header: 'Visitas', align: 'center', desktopOnly: true, render: row => <span className="text-sm text-muted-foreground tabular-nums">{row.visitas}</span> },
     {
       key: 'vnd_total',
       header: 'Vendas',
@@ -67,7 +67,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
       header: 'Situação',
       align: 'right',
       render: row => (
-        <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-semibold ${row.vnd_total > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'}`}>
+        <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-semibold ${row.vnd_total > 0 ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-muted-foreground'}`}>
           {row.vnd_total > 0 ? 'Com venda' : 'Sem venda'}
         </span>
       ),
@@ -89,15 +89,15 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
               <UsersRound size={19} />
             </span>
             <div>
-              <h2 id="store-ranking-title" className="text-lg font-bold text-gray-800">
+              <h2 id="store-ranking-title" className="text-lg font-bold text-foreground">
                 {viewMode === 'day' ? 'Resultado diário por vendedor' : 'Resultado por vendedor'}
               </h2>
-              <p className="mt-1 text-sm text-gray-500">Localize rapidamente quem precisa de acompanhamento ou reconhecimento.</p>
+              <p className="mt-1 text-sm text-muted-foreground">Localize rapidamente quem precisa de acompanhamento ou reconhecimento.</p>
             </div>
           </div>
 
           <div className="relative w-full sm:w-64">
-            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <label htmlFor="dashboard-seller-search" className="sr-only">Buscar vendedor</label>
             <Input
               id="dashboard-seller-search"
@@ -112,7 +112,7 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
 
         {sellerSearch.trim() && filteredRanking.length > 0 && (
           <div className="flex flex-wrap items-center justify-between gap-3 border-b border-gray-100 bg-gray-50 px-5 py-3">
-            <p className="text-xs text-gray-500">Ações disponíveis para o vendedor localizado.</p>
+            <p className="text-xs text-muted-foreground">Ações disponíveis para o vendedor localizado.</p>
             <div className="flex flex-wrap gap-2">
               <ActionButton label="Devolutiva" onClick={() => navigate('/devolutivas')} />
               <ActionButton label="PDI" onClick={() => navigate('/pdi')} />
@@ -136,8 +136,8 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
               <BarChart3 size={19} />
             </span>
             <div>
-              <h2 className="text-lg font-bold text-gray-800">Origem das vendas</h2>
-              <p className="mt-1 text-sm text-gray-500">Participação de cada canal no resultado.</p>
+              <h2 className="text-lg font-bold text-foreground">Origem das vendas</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Participação de cada canal no resultado.</p>
             </div>
           </header>
 
@@ -145,8 +145,8 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
             {mixCanais.map(channel => (
               <div key={channel.label}>
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-sm font-medium text-gray-600">{channel.label}</p>
-                  <p className="text-sm font-bold text-gray-800 tabular-nums">{channel.pct}%</p>
+                  <p className="text-sm font-medium text-muted-foreground">{channel.label}</p>
+                  <p className="text-sm font-bold text-foreground tabular-nums">{channel.pct}%</p>
                 </div>
                 <div className="mt-2 h-2 overflow-hidden rounded-full bg-gray-100">
                   <motion.div
@@ -167,13 +167,13 @@ export function RankingSection({ viewMode, ranking, mixCanais, diagnostics }: Ra
               <History size={19} />
             </span>
             <div>
-              <h2 className="text-lg font-bold text-gray-800">Diagnóstico da unidade</h2>
-              <p className="mt-1 text-sm text-gray-500">Síntese para orientar a próxima ação gerencial.</p>
+              <h2 className="text-lg font-bold text-foreground">Diagnóstico da unidade</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Síntese para orientar a próxima ação gerencial.</p>
             </div>
           </header>
           <div className="mt-5 rounded-xl bg-gray-50 p-4">
-            <p className="text-sm leading-6 text-gray-600">{diagnostics.diagnostico}</p>
-            <p className="mt-3 text-sm font-semibold leading-6 text-gray-800">{diagnostics.sugestao}</p>
+            <p className="text-sm leading-6 text-muted-foreground">{diagnostics.diagnostico}</p>
+            <p className="mt-3 text-sm font-semibold leading-6 text-foreground">{diagnostics.sugestao}</p>
           </div>
         </article>
       </aside>
@@ -186,7 +186,7 @@ function ActionButton({ label, onClick }: { label: string; onClick: () => void }
     <button
       type="button"
       onClick={onClick}
-      className="h-8 rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-gray-600 hover:bg-gray-100"
+      className="h-8 rounded-lg border border-gray-200 bg-white px-3 text-xs font-semibold text-muted-foreground hover:bg-gray-100"
     >
       {label}
     </button>

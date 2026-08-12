@@ -37,17 +37,17 @@ function MetricRow({
   return (
     <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-2 border-b border-gray-50 py-2.5 last:border-0">
       <div className="pr-1 text-right">
-        <span className={`text-base font-bold ${aWins ? 'text-emerald-600' : 'text-gray-700'}`}>{a === null ? '—' : format(a)}</span>
+        <span className={`text-base font-bold ${aWins ? 'text-emerald-600' : 'text-foreground'}`}>{a === null ? '—' : format(a)}</span>
         {aWins && <Check size={12} className="ml-1 inline text-emerald-500" />}
       </div>
-      <div className="flex min-w-[108px] items-center justify-center gap-1 text-center text-gray-500">
-        <Icon size={13} className="text-gray-400" />
+      <div className="flex min-w-[108px] items-center justify-center gap-1 text-center text-muted-foreground">
+        <Icon size={13} className="text-muted-foreground" />
         <span className="text-xs font-medium">{label}</span>
         <HelpTooltip text={help} />
       </div>
       <div className="pl-1 text-left">
         {bWins && <Check size={12} className="mr-1 inline text-indigo-500" />}
-        <span className={`text-base font-bold ${bWins ? 'text-indigo-600' : 'text-gray-700'}`}>{b === null ? '—' : format(b)}</span>
+        <span className={`text-base font-bold ${bWins ? 'text-indigo-600' : 'text-foreground'}`}>{b === null ? '—' : format(b)}</span>
       </div>
     </div>
   )
@@ -84,10 +84,10 @@ function SellerSelect({
             {initials(selected?.nome || '')}
           </span>
           <div className="min-w-0 flex-1">
-            <p className="truncate text-sm font-semibold text-gray-800">{selected?.nome || `Selecionar lado ${side}`}</p>
+            <p className="truncate text-sm font-semibold text-foreground">{selected?.nome || `Selecionar lado ${side}`}</p>
             {selected && <p className="text-caption font-medium" style={{ color }}>Selecionado</p>}
           </div>
-          <ChevronDown size={16} className="shrink-0 text-gray-300" />
+          <ChevronDown size={16} className="shrink-0 text-text-disabled" />
         </div>
       </button>
       {open && (
@@ -99,8 +99,8 @@ function SellerSelect({
               onClick={() => { onSelect(seller.id); setOpen(false) }}
               className={`flex w-full items-center gap-2 px-3 py-2 text-left text-sm hover:bg-gray-50 ${seller.id === selectedId ? 'bg-gray-50' : ''}`}
             >
-              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gray-100 text-caption font-bold text-gray-600">{initials(seller.nome)}</span>
-              <span className="truncate text-gray-700">{seller.nome}</span>
+              <span className="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-gray-100 text-caption font-bold text-muted-foreground">{initials(seller.nome)}</span>
+              <span className="truncate text-foreground">{seller.nome}</span>
             </button>
           ))}
         </div>
@@ -139,8 +139,8 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
             <GitCompareArrows size={18} className="text-emerald-600" />
           </span>
           <div>
-            <h2 id="ranking-comparison-title" className="font-semibold text-gray-800">Comparativo de Vendedores — {periodLabel}</h2>
-            <p className="text-xs text-gray-500">Selecione dois vendedores para cruzar resultados, volume e rotina, e gerar insights de feedback.</p>
+            <h2 id="ranking-comparison-title" className="font-semibold text-foreground">Comparativo de Vendedores — {periodLabel}</h2>
+            <p className="text-xs text-muted-foreground">Selecione dois vendedores para cruzar resultados, volume e rotina, e gerar insights de feedback.</p>
           </div>
         </div>
 
@@ -155,8 +155,8 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
 
       {!canCompare || !sellerA || !sellerB ? (
         <div className="rounded-2xl border border-gray-100 bg-white p-10 text-center shadow-sm">
-          <GitCompareArrows className="mx-auto mb-3 text-gray-300" size={40} />
-          <p className="text-sm font-medium text-gray-500">Selecione dois vendedores diferentes para iniciar a comparação.</p>
+          <GitCompareArrows className="mx-auto mb-3 text-text-disabled" size={40} />
+          <p className="text-sm font-medium text-muted-foreground">Selecione dois vendedores diferentes para iniciar a comparação.</p>
         </div>
       ) : (
         <>
@@ -168,22 +168,22 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
             }}
           >
             <Award size={22} style={{ color: winnerColor || chartTokens.axisTickMuted() }} />
-            <p className="text-sm text-gray-700">
+            <p className="text-sm text-foreground">
               {winner
-                ? <>Em pontuação geral, <strong className="text-gray-900">{winner.nome}</strong> está à frente neste período.</>
+                ? <>Em pontuação geral, <strong className="text-foreground">{winner.nome}</strong> está à frente neste período.</>
                 : sellerA.pontuacao === null || sellerB.pontuacao === null
-                  ? <>Sem execução verificável dos dois lados, a <strong className="text-gray-900">pontuação geral não é comparável</strong> neste período.</>
-                  : <><strong className="text-gray-900">Empate</strong> — ambos têm a mesma pontuação geral no período.</>}
+                  ? <>Sem execução verificável dos dois lados, a <strong className="text-foreground">pontuação geral não é comparável</strong> neste período.</>
+                  : <><strong className="text-foreground">Empate</strong> — ambos têm a mesma pontuação geral no período.</>}
             </p>
           </div>
 
           <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
             <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-              <h3 className="mb-1 flex items-center gap-1.5 text-sm font-semibold text-gray-800">
+              <h3 className="mb-1 flex items-center gap-1.5 text-sm font-semibold text-foreground">
                 Perfil de desempenho
                 <HelpTooltip text="Gráfico radar com 5 dimensões normalizadas em 0–100. Meta, Conversão e Rotina já são percentuais; Agendamentos e Atendimentos são normalizados pelo maior valor entre os dois." />
               </h3>
-              <p className="mb-2 text-xs text-gray-400">Quanto maior a área, mais completo o desempenho.</p>
+              <p className="mb-2 text-xs text-muted-foreground">Quanto maior a área, mais completo o desempenho.</p>
               <ResponsiveContainer width="100%" height={280}>
                 <RadarChart data={radar} outerRadius="75%">
                   <PolarGrid stroke="#f0f0f0" />
@@ -202,12 +202,12 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
             <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
               <div className="grid grid-cols-[1fr_auto_1fr] gap-2 border-b border-gray-100 pb-3">
                 <div className="text-right">
-                  <p className="text-xs font-semibold uppercase text-gray-400">Vendedor A</p>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">Vendedor A</p>
                   <p className="text-sm font-bold" style={{ color: COMPARISON_SIDE_A }}>{sellerA.nome}</p>
                 </div>
-                <p className="text-center text-xs font-semibold uppercase text-gray-400">Métrica</p>
+                <p className="text-center text-xs font-semibold uppercase text-muted-foreground">Métrica</p>
                 <div className="text-left">
-                  <p className="text-xs font-semibold uppercase text-gray-400">Vendedor B</p>
+                  <p className="text-xs font-semibold uppercase text-muted-foreground">Vendedor B</p>
                   <p className="text-sm font-bold" style={{ color: COMPARISON_SIDE_B }}>{sellerB.nome}</p>
                 </div>
               </div>
@@ -225,8 +225,8 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
           </div>
 
           <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-            <h3 className="mb-3 flex items-center gap-1.5 text-sm font-semibold text-gray-800">
-              <MessageSquare size={15} className="text-gray-400" /> Volume de oportunidades
+            <h3 className="mb-3 flex items-center gap-1.5 text-sm font-semibold text-foreground">
+              <MessageSquare size={15} className="text-muted-foreground" /> Volume de oportunidades
             </h3>
             <div className="grid grid-cols-2 gap-4">
               {[sellerA, sellerB].map(seller => (
@@ -235,9 +235,9 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
                     {seller.nome.split(' ')[0]}
                   </p>
                   <dl className="space-y-1.5 text-xs">
-                    <div className="flex justify-between"><dt className="text-gray-500">Atendimentos</dt><dd className="font-semibold text-gray-700">{seller.visitas}</dd></div>
-                    <div className="flex justify-between"><dt className="text-gray-500">Leads</dt><dd className="font-semibold text-gray-700">{seller.leads}</dd></div>
-                    <div className="flex justify-between"><dt className="text-gray-500">Agendamentos</dt><dd className="font-semibold text-gray-700">{seller.agendamentos}</dd></div>
+                    <div className="flex justify-between"><dt className="text-muted-foreground">Atendimentos</dt><dd className="font-semibold text-foreground">{seller.visitas}</dd></div>
+                    <div className="flex justify-between"><dt className="text-muted-foreground">Leads</dt><dd className="font-semibold text-foreground">{seller.leads}</dd></div>
+                    <div className="flex justify-between"><dt className="text-muted-foreground">Agendamentos</dt><dd className="font-semibold text-foreground">{seller.agendamentos}</dd></div>
                   </dl>
                 </div>
               ))}
@@ -245,10 +245,10 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
           </section>
 
           <section className="rounded-2xl border border-emerald-100 bg-gradient-to-br from-emerald-50 to-indigo-50 p-5">
-            <h3 className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-gray-800">
+            <h3 className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-foreground">
               <Sparkles size={16} className="text-emerald-600" /> Pontos para o feedback
             </h3>
-            <ul className="space-y-1.5 text-sm text-gray-700">
+            <ul className="space-y-1.5 text-sm text-foreground">
               {insights.map(insight => (
                 <li key={insight} className="flex gap-2"><span className="mt-0.5 text-emerald-500">•</span><span>{insight}</span></li>
               ))}

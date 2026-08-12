@@ -29,10 +29,10 @@ export function PotentialCommissionCard({ comissaoProjetada, ganhoPotencial }: P
     <div className="rounded-2xl p-6 flex flex-col justify-between" style={{ background: '#FFFFFF', border: '1px solid rgba(255,255,255,0.06)', minHeight: '180px' }}>
       <div>
         <div className="flex items-start justify-between">
-          <p className="text-gray-500 text-xs font-bold uppercase tracking-wide max-w-[60%]">Se fechar todos os clientes quentes</p>
+          <p className="text-muted-foreground text-xs font-bold uppercase tracking-wide max-w-[60%]">Se fechar todos os clientes quentes</p>
           <Sparkline />
         </div>
-        <p className="text-gray-500 text-sm mt-3">Sua comissão sobe para</p>
+        <p className="text-muted-foreground text-sm mt-3">Sua comissão sobe para</p>
         <p className="font-bold mt-1 tabular-nums" style={{ fontSize: '2.25rem', color: 'var(--color-chart-manager-positive)' }}>
           {formatBRLWhole(comissaoProjetada)}
         </p>

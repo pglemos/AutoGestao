@@ -324,7 +324,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                     <Card className="p-mx-md bg-gray-50 border space-y-mx-sm">
                                         <Typography variant="tiny" tone="brand" className="font-bold">Protocolo de Aplicação</Typography>
                                         <div className="grid gap-mx-xs">
-                                            <label className="flex items-start gap-mx-sm text-sm font-bold text-gray-500">
+                                            <label className="flex items-start gap-mx-sm text-sm font-bold text-muted-foreground">
                                                 <input
                                                     type="checkbox"
                                                     checked={preChecklist.conversaIndividual}
@@ -333,7 +333,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                 />
                                                 Aplicação individual prevista em 45 minutos, seguindo a pauta de metas, competências e ações.
                                             </label>
-                                            <label className="flex items-start gap-mx-sm text-sm font-bold text-gray-500">
+                                            <label className="flex items-start gap-mx-sm text-sm font-bold text-muted-foreground">
                                                 <input
                                                     type="checkbox"
                                                     checked={preChecklist.localReservado}
@@ -418,7 +418,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                                 className="w-full accent-brand-primary"
                                                             />
                                                             
-                                                            <div className="flex justify-between items-center bg-white p-mx-xs rounded-xl text-xs font-bold text-gray-500 border border-gray-200">
+                                                            <div className="flex justify-between items-center bg-white p-mx-xs rounded-xl text-xs font-bold text-muted-foreground border border-gray-200">
                                                                 <span className="flex items-center gap-mx-xs text-emerald-600/80"><AlertCircle size={14}/> Ind: {c.indicador}</span>
                                                                 <span className="uppercase text-mx-tiny tracking-widest">{descritor}</span>
                                                             </div>
@@ -556,7 +556,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                         <Card className="p-mx-md bg-white border border-brand-primary/20 shadow-sm space-y-mx-sm">
                                             <Typography variant="tiny" tone="brand" className="font-bold">Encerramento da Sessão</Typography>
                                             <div className="grid gap-mx-xs">
-                                                <label className="flex items-start gap-mx-sm text-sm font-bold text-gray-500">
+                                                <label className="flex items-start gap-mx-sm text-sm font-bold text-muted-foreground">
                                                     <input
                                                         type="checkbox"
                                                         checked={closingChecklist.revisaoExplicada}
@@ -565,7 +565,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                     />
                                                     Próximo passo explicado: no próximo mês haverá nova conversa para analisar evolução e apoio necessário.
                                                 </label>
-                                                <label className="flex items-start gap-mx-sm text-sm font-bold text-gray-500">
+                                                <label className="flex items-start gap-mx-sm text-sm font-bold text-muted-foreground">
                                                     <input
                                                         type="checkbox"
                                                         checked={closingChecklist.impressaoCombinada}
@@ -574,7 +574,7 @@ export function WizardPDI({ onClose, onSuccess }: { onClose: () => void, onSucce
                                                     />
                                                     Impressão e entrega do PDF combinadas; ao concluir, o sistema abre Capa, Vendedor 1 e PDI para impressão.
                                                 </label>
-                                                <label className="flex items-start gap-mx-sm text-sm font-bold text-gray-500">
+                                                <label className="flex items-start gap-mx-sm text-sm font-bold text-muted-foreground">
                                                     <input
                                                         type="checkbox"
                                                         checked={closingChecklist.compromissoSimbolico}

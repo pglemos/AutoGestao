@@ -187,11 +187,11 @@ export default function AiDiagnostics() {
       />
       <div className="grid gap-5 lg:grid-cols-[minmax(0,3fr)_minmax(320px,2fr)]">
         <MxSectionCard className="min-w-0">
-          <MxSectionHeader title="Eventos da análise" description="Etapas, totais e conversões calculadas durante o diagnóstico." actions={<TerminalIcon size={18} className="text-gray-500" aria-hidden="true" />} />
-          <div className="max-h-[560px] min-h-[360px] overflow-y-auto bg-gray-900 p-5 font-mono text-xs leading-6 text-gray-300" role="log" aria-live="polite">
+          <MxSectionHeader title="Eventos da análise" description="Etapas, totais e conversões calculadas durante o diagnóstico." actions={<TerminalIcon size={18} className="text-muted-foreground" aria-hidden="true" />} />
+          <div className="max-h-[560px] min-h-[360px] overflow-y-auto bg-gray-900 p-5 font-mono text-xs leading-6 text-text-disabled" role="log" aria-live="polite">
             {logs.map((log, index) => (
               <div key={`${log.msg}-${index}`} className="flex gap-3 border-b border-white/5 py-1.5 last:border-0">
-                <span className="w-8 shrink-0 text-gray-600">{(index + 1).toString().padStart(3, '0')}</span>
+                <span className="w-8 shrink-0 text-muted-foreground">{(index + 1).toString().padStart(3, '0')}</span>
                 <span className={cn(log.type === 'error' && 'text-red-300', log.type === 'warning' && 'text-amber-300', log.type === 'success' && 'text-emerald-300')}>{log.msg}</span>
               </div>
             ))}

@@ -83,7 +83,7 @@ export default function DisciplinaMobile({
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-4">
-      <p className="text-caption font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">Disciplina — Fechamento Diário</p>
+      <p className="text-caption font-bold text-muted-foreground uppercase tracking-[0.15em] mb-4">Disciplina — Fechamento Diário</p>
 
       <div className="flex items-start gap-4">
         <div title="Você cadastrou todos os seus agendamentos. Para a Disciplina do Fechamento, apenas os D+1 são considerados." className="cursor-help">
@@ -91,7 +91,7 @@ export default function DisciplinaMobile({
         </div>
         <div className="flex-1 min-w-0 space-y-2">
           {totalD1 > 0 && (
-            <p className="text-[12px] text-slate-400">
+            <p className="text-[12px] text-muted-foreground">
               Agendamentos D+1 detalhados:{" "}
               <strong className="text-[#0F172A]">{creditos}</strong> de{" "}
               <strong className="text-[#0F172A]">{totalD1}</strong>
@@ -99,7 +99,7 @@ export default function DisciplinaMobile({
             </p>
           )}
           {agendamentosFuturos > 0 && (
-            <p className="text-[12px] text-slate-400">
+            <p className="text-[12px] text-muted-foreground">
               Agendamentos futuros: <strong className="text-[#0F172A]">{agendamentosFuturos}</strong>{" "}
               <span className="text-green-600">✓ Já contabilizado na Qualidade da Carteira</span>
             </p>
@@ -121,7 +121,7 @@ export default function DisciplinaMobile({
           )}
 
           {!penalizado && (
-            <p className="text-caption text-slate-400">
+            <p className="text-caption text-muted-foreground">
               70% base + {Math.max(0, score - 70)}% detalhamento
               {totalD1 > 0 && ` (${score >= 100 ? 30 : Math.max(0, score - 70)}/30 pontos extras)`}
             </p>

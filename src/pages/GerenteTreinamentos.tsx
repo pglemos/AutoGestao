@@ -240,7 +240,7 @@ export default function GerenteTreinamentos() {
                                 <RefreshCw size={20} className={cn(isRefetching && "animate-spin")} />
                             </Button>
                             <div className="relative group flex-1 sm:flex-none">
-                                <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" />
+                                <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors" />
                                 <Input 
                                     placeholder="BUSCAR CONTEÚDO..." value={searchTerm}
                                     onChange={(e) => setSearchTerm(e.target.value)}
@@ -294,7 +294,7 @@ export default function GerenteTreinamentos() {
                                     <Card className="border p-mx-md h-full bg-white group hover:shadow-sm transition-all relative overflow-hidden flex flex-col gap-mx-10">
                                         <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-mx-xl -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                                         <header className="flex justify-between items-start relative z-10">
-                                            <div className={cn("w-mx-14 h-mx-14 rounded-xl flex items-center justify-center border shadow-none transition-all", t.watched ? "bg-status-success-surface text-status-success border-mx-emerald-100" : "bg-gray-50 text-gray-500 border-gray-100 group-hover:bg-emerald-600 group-hover:text-white")}>
+                                            <div className={cn("w-mx-14 h-mx-14 rounded-xl flex items-center justify-center border shadow-none transition-all", t.watched ? "bg-status-success-surface text-status-success border-mx-emerald-100" : "bg-gray-50 text-muted-foreground border-gray-100 group-hover:bg-emerald-600 group-hover:text-white")}>
                                                 <GraduationCap size={28} strokeWidth={2} />
                                             </div>
                                             {t.watched && <Badge variant="success" className="px-4 py-1 rounded-mx-full text-mx-micro shadow-sm">CONCLUÍDO</Badge>}
@@ -305,7 +305,7 @@ export default function GerenteTreinamentos() {
                                             <Typography variant="p" tone="muted" className="text-xs font-bold leading-relaxed opacity-60">"{t.description}"</Typography>
                                         </div>
                                         <footer className="pt-8 border-t border-gray-100 flex items-center justify-between mt-auto relative z-10">
-                                            <div className="flex items-center gap-mx-xs text-caption font-bold text-gray-500">
+                                            <div className="flex items-center gap-mx-xs text-caption font-bold text-muted-foreground">
                                                 <Award size={14} className="text-status-warning" /> {t.watched ? 'ABSORVIDO' : 'PENDENTE'}
                                             </div>
                                             <div className="flex items-center gap-mx-tiny text-status-warning">
@@ -341,7 +341,7 @@ export default function GerenteTreinamentos() {
                                 <div className="flex-1 overflow-x-auto no-scrollbar">
                                     <table className="w-full text-left min-w-mx-elite-table">
                                         <thead>
-                                            <tr className="bg-gray-50/50 border-b border-gray-200 text-caption font-semibold text-gray-500">
+                                            <tr className="bg-gray-50/50 border-b border-gray-200 text-caption font-semibold text-muted-foreground">
                                                 <th scope="col" className="pl-10 py-6 sticky left-mx-0 bg-gray-50/50 z-20">VENDEDOR</th>
                                                 {treinamentos.map(t => (
                                                     <th key={t.id} scope="col" className="px-4 py-6 text-center group relative min-w-mx-32">
@@ -368,7 +368,7 @@ export default function GerenteTreinamentos() {
                                                             <td key={t.id} className="px-4 text-center">
                                                                 <div className="flex flex-col items-center justify-center gap-mx-tiny">
                                                                     <div className={cn("w-mx-9 h-mx-9 rounded-xl flex items-center justify-center border shadow-sm transition-all", 
-                                                                        isWatched ? 'bg-status-success-surface text-status-success border-mx-emerald-100' : 'bg-gray-50 text-gray-500/30'
+                                                                        isWatched ? 'bg-status-success-surface text-status-success border-mx-emerald-100' : 'bg-gray-50 text-muted-foreground/30'
                                                                     )}>
                                                                         {isWatched ? <CheckCircle size={16} /> : <X size={16} />}
                                                                     </div>

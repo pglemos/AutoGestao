@@ -65,7 +65,7 @@ export function AgendaConfirmationMenu({
                 onSelect(outcome);
                 setOpen(false);
               }}
-              className="block w-full px-3 py-2.5 text-left text-sm text-gray-700 transition-colors hover:bg-gray-50 focus-visible:bg-gray-50 focus-visible:outline-none"
+              className="block w-full px-3 py-2.5 text-left text-sm text-foreground transition-colors hover:bg-gray-50 focus-visible:bg-gray-50 focus-visible:outline-none"
             >
               {outcome}
             </button>

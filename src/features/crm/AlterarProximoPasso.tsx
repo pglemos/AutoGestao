@@ -71,7 +71,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
             <Typography variant="h3">Alterar próximo passo</Typography>
             <Typography variant="caption" tone="muted">Defina o que precisa acontecer para {cliente.nome.split(' ')[0]} evoluir.</Typography>
           </div>
-          <button type="button" onClick={onClose} aria-label="Fechar"><X size={18} className="text-gray-500" /></button>
+          <button type="button" onClick={onClose} aria-label="Fechar"><X size={18} className="text-muted-foreground" /></button>
         </div>
 
         <div>
@@ -85,7 +85,7 @@ export function AlterarProximoPasso({ open, cliente, onClose, onSalvar }: Altera
                 className={`rounded-xl border px-mx-xs py-1 text-xs font-semibold transition-colors ${
                   acao === sugestao
                     ? 'border-[#005BFF] bg-[#005BFF] text-white'
-                    : 'border-gray-100 bg-gray-50 text-gray-500 hover:border-[#005BFF]/40'
+                    : 'border-gray-100 bg-gray-50 text-muted-foreground hover:border-[#005BFF]/40'
                 }`}
               >
                 {sugestao}

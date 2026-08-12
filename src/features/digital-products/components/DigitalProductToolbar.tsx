@@ -39,7 +39,7 @@ export function DigitalProductToolbar({ controller }: { controller: DigitalProdu
 
       <MxField label="Buscar" className="min-w-60 flex-[2]">
         <div className="relative">
-          <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" aria-hidden="true" />
+          <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
           <MxInput value={controller.searchTerm} onChange={(event: ChangeEvent<HTMLInputElement>) => controller.setSearchTerm(event.target.value)} placeholder="Buscar produto" className="pl-9" />
         </div>
       </MxField>

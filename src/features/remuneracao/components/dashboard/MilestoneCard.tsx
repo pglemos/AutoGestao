@@ -24,25 +24,25 @@ export function MilestoneCard({ veiculosFaltam, valorProjetado, percentual, semD
       <div className="relative z-10">
         {semDados ? (
           <div>
-            <p className="text-gray-600 text-sm font-semibold">Sem vendas no período</p>
-            <p className="text-gray-500 text-xs mt-1">Registre vendas para ver seu próximo marco financeiro.</p>
+            <p className="text-muted-foreground text-sm font-semibold">Sem vendas no período</p>
+            <p className="text-muted-foreground text-xs mt-1">Registre vendas para ver seu próximo marco financeiro.</p>
           </div>
         ) : (
           <>
-            <p className="text-gray-500 text-xs font-bold uppercase tracking-wide mb-2">Faltam</p>
+            <p className="text-muted-foreground text-xs font-bold uppercase tracking-wide mb-2">Faltam</p>
             <div className="flex items-baseline gap-2">
-              <span className="font-bold text-gray-800" style={{ fontSize: '4rem', lineHeight: 1 }}>{veiculosFaltam}</span>
+              <span className="font-bold text-foreground" style={{ fontSize: '4rem', lineHeight: 1 }}>{veiculosFaltam}</span>
               <span className="text-amber-400 text-2xl font-bold">veículo{veiculosFaltam !== 1 ? 's' : ''}</span>
             </div>
-            <p className="text-gray-500 text-sm mt-1">para você ganhar</p>
+            <p className="text-muted-foreground text-sm mt-1">para você ganhar</p>
             <p className="font-bold mt-1" style={{ fontSize: '2rem', color: 'var(--color-status-warning)', }}>
               {formatBRLWhole(valorProjetado)}
             </p>
 
             <div className="mt-5">
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-gray-500 text-xs">Sua meta de comissão</span>
-                <span className="text-gray-600 text-xs font-semibold">{formatBRLWhole(valorProjetado)}</span>
+                <span className="text-muted-foreground text-xs">Sua meta de comissão</span>
+                <span className="text-muted-foreground text-xs font-semibold">{formatBRLWhole(valorProjetado)}</span>
               </div>
               <div className="w-full rounded-full h-2.5" style={{ background: 'rgba(255,255,255,0.08)' }}>
                 <div

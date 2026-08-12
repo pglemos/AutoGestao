@@ -173,13 +173,13 @@ function prioridadeBadgeClass(p: MissaoDef['prioridade']): string {
   if (p === 'Máxima') return 'bg-red-100 text-red-700'
   if (p === 'Alta') return 'bg-red-50 text-red-600'
   if (p === 'Média') return 'bg-amber-50 text-amber-600'
-  return 'bg-slate-100 text-slate-500'
+  return 'bg-slate-100 text-muted-foreground'
 }
 
 function temperaturaBadgeClass(t: Temperatura): string {
   if (t === 'quente') return 'bg-red-50 text-red-600'
   if (t === 'morno') return 'bg-amber-50 text-amber-600'
-  return 'bg-slate-100 text-slate-500'
+  return 'bg-slate-100 text-muted-foreground'
 }
 
 const TEMPERATURA_LABEL: Record<Temperatura, string> = { quente: 'Quente', morno: 'Morno', frio: 'Frio' }
@@ -245,12 +245,12 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
 
         {listaCompativeis.length === 0 ? (
           <div className="bg-white border border-slate-100 rounded-2xl p-10 text-center">
-            <p className="text-sm font-bold text-slate-600">Nenhum cliente compatível encontrado.</p>
-            <p className="text-xs text-slate-400 mt-1">Verifique os veículos de interesse registrados na carteira.</p>
+            <p className="text-sm font-bold text-muted-foreground">Nenhum cliente compatível encontrado.</p>
+            <p className="text-xs text-muted-foreground mt-1">Verifique os veículos de interesse registrados na carteira.</p>
           </div>
         ) : (
           <div className="space-y-2">
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider">
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider">
               {listaCompativeis.length} cliente{listaCompativeis.length !== 1 ? 's' : ''} compatível{listaCompativeis.length !== 1 ? 'eis' : ''}
             </p>
             {listaCompativeis.map(cliente => (
@@ -259,8 +259,8 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                   {(cliente.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                 </span>
                 <div className="min-w-0 flex-1">
-                  <p className="text-sm font-semibold text-slate-900 truncate">{cliente.nome}</p>
-                  <p className="text-xs text-slate-400 truncate">
+                  <p className="text-sm font-semibold text-foreground truncate">{cliente.nome}</p>
+                  <p className="text-xs text-muted-foreground truncate">
                     {oportunidadePorCliente.get(cliente.id)?.veiculo_interesse || '—'}
                   </p>
                 </div>
@@ -296,32 +296,32 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
             <span className="text-3xl">{missao.icone}</span>
             <div className="flex-1">
               <div className="flex items-center gap-2 flex-wrap">
-                <h2 className="text-xl font-bold text-slate-900">{missao.nome}</h2>
+                <h2 className="text-xl font-bold text-foreground">{missao.nome}</h2>
                 <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${prioridadeBadgeClass(missao.prioridade)}`}>{missao.prioridade}</span>
               </div>
-              <p className="text-sm text-slate-500 mt-1">{missao.objetivo}</p>
-              <p className="text-xs text-slate-400 mt-1 italic">{missao.porqueAgora}</p>
+              <p className="text-sm text-muted-foreground mt-1">{missao.objetivo}</p>
+              <p className="text-xs text-muted-foreground mt-1 italic">{missao.porqueAgora}</p>
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4 pt-2 border-t border-slate-50">
             <div className="text-center">
-              <p className="text-2xl font-bold text-slate-900">{missao.contextos.length}</p>
-              <p className="text-xs text-slate-400">Clientes</p>
+              <p className="text-2xl font-bold text-foreground">{missao.contextos.length}</p>
+              <p className="text-xs text-muted-foreground">Clientes</p>
             </div>
             <div className="text-center">
-              <p className="text-sm font-bold text-slate-600">{missao.prioridade}</p>
-              <p className="text-xs text-slate-400">Prioridade</p>
+              <p className="text-sm font-bold text-muted-foreground">{missao.prioridade}</p>
+              <p className="text-xs text-muted-foreground">Prioridade</p>
             </div>
           </div>
         </div>
 
         {missao.contextos.length === 0 ? (
           <div className="bg-white border border-slate-100 rounded-2xl p-10 text-center">
-            <p className="text-sm font-bold text-slate-600">Nenhum cliente nesta missão no momento.</p>
+            <p className="text-sm font-bold text-muted-foreground">Nenhum cliente nesta missão no momento.</p>
           </div>
         ) : (
           <div>
-            <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Clientes da missão</p>
+            <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Clientes da missão</p>
             <div className="space-y-2">
               {missao.contextos.map(ctx => {
                 const progresso = progressoPorCliente.get(ctx.cliente.id)
@@ -335,8 +335,8 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                       {(ctx.cliente.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-semibold text-slate-900 truncate">{ctx.cliente.nome}</p>
-                      <p className="text-xs text-slate-400 truncate">{ctx.situacao}</p>
+                      <p className="text-sm font-semibold text-foreground truncate">{ctx.cliente.nome}</p>
+                      <p className="text-xs text-muted-foreground truncate">{ctx.situacao}</p>
                     </div>
                     <span className={`text-caption font-bold px-2 py-0.5 rounded-full shrink-0 ${temperaturaBadgeClass(ctx.temperatura)}`}>
                       {TEMPERATURA_LABEL[ctx.temperatura]}
@@ -407,20 +407,20 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
   return (
     <div className="space-y-6">
       <div>
-        <h1 className="text-2xl font-bold text-slate-900">Plano de Ataque</h1>
-        <p className="text-sm text-slate-400 mt-1">Missões calculadas a partir das situações reais da sua carteira.</p>
+        <h1 className="text-2xl font-bold text-foreground">Plano de Ataque</h1>
+        <p className="text-sm text-muted-foreground mt-1">Missões calculadas a partir das situações reais da sua carteira.</p>
       </div>
 
       <div className="bg-white border border-slate-100 rounded-2xl p-5 space-y-4">
         <div className="flex items-start justify-between gap-3">
           <div>
-            <h2 className="text-lg font-bold text-slate-900">Veículos que chegaram</h2>
-            <p className="text-sm text-slate-400 mt-1">Encontre clientes da carteira interessados nos veículos recém-entrados.</p>
+            <h2 className="text-lg font-bold text-foreground">Veículos que chegaram</h2>
+            <p className="text-sm text-muted-foreground mt-1">Encontre clientes da carteira interessados nos veículos recém-entrados.</p>
           </div>
           <button
             type="button"
             onClick={() => setModalOpen(true)}
-            className="flex h-10 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-slate-600 transition-colors hover:bg-slate-50 shrink-0"
+            className="flex h-10 items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 text-sm font-bold text-muted-foreground transition-colors hover:bg-slate-50 shrink-0"
           >
             <Plus size={16} /> Registrar veículo
           </button>
@@ -429,7 +429,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         {/* Categorização por Faixa de Preço */}
         {veiculos.length > 0 && (
           <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-            <span className="text-caption font-bold text-slate-400 uppercase tracking-wide mr-1 shrink-0">Faixa de preço:</span>
+            <span className="text-caption font-bold text-muted-foreground uppercase tracking-wide mr-1 shrink-0">Faixa de preço:</span>
             {FAIXAS_PRECO.map(f => {
               const count = countsFaixa[f.id] ?? 0
               const ativo = faixaPrecoAtiva === f.id
@@ -441,7 +441,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                   className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all ${
                     ativo
                       ? 'bg-[#005BFF] text-white shadow-sm'
-                      : 'bg-slate-50 text-slate-600 border border-slate-100 hover:bg-slate-100'
+                      : 'bg-slate-50 text-muted-foreground border border-slate-100 hover:bg-slate-100'
                   }`}
                 >
                   {f.label} ({count})
@@ -452,11 +452,11 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         )}
 
         {loading ? (
-          <p className="text-sm text-slate-400">Carregando veículos...</p>
+          <p className="text-sm text-muted-foreground">Carregando veículos...</p>
         ) : veiculosFiltrados.length === 0 ? (
           <div className="bg-slate-50 border border-slate-100 rounded-2xl p-10 text-center">
-            <Car className="mx-auto text-slate-300" size={28} />
-            <p className="mt-3 text-sm font-bold text-slate-600">
+            <Car className="mx-auto text-text-disabled" size={28} />
+            <p className="mt-3 text-sm font-bold text-muted-foreground">
               {veiculos.length === 0
                 ? 'Nenhum veículo recém-chegado registrado no momento.'
                 : 'Nenhum veículo encontrado nesta faixa de preço.'}
@@ -490,16 +490,16 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                       <Car size={20} />
                     </span>
                     <div className="min-w-0 flex-1">
-                      <p className="text-sm font-bold text-slate-900 truncate">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
-                      <p className="text-xs text-slate-400">
+                      <p className="text-sm font-bold text-foreground truncate">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
+                      <p className="text-xs text-muted-foreground">
                         {veiculo.ano}{veiculo.preco ? ` · ${veiculo.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}` : ''}
                       </p>
                       <p className="text-xs font-semibold text-[#005BFF]">{entradaLabel(veiculo.data_entrada)}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 pt-2 border-t border-slate-50">
-                    <Users size={14} className="text-slate-400" />
-                    <span className={`text-xs ${compat > 0 ? 'font-bold text-slate-600' : 'text-slate-400'}`}>
+                    <Users size={14} className="text-muted-foreground" />
+                    <span className={`text-xs ${compat > 0 ? 'font-bold text-muted-foreground' : 'text-muted-foreground'}`}>
                       {compat} cliente{compat !== 1 ? 's' : ''} compatível{compat !== 1 ? 'eis' : ''}
                     </span>
                   </div>
@@ -526,7 +526,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
       </div>
 
       <div>
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-wider mb-3">Missões recomendadas</p>
+        <p className="text-xs font-bold text-muted-foreground uppercase tracking-wider mb-3">Missões recomendadas</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3">
           {missoesOrdenadas.map(missao => {
             const count = missao.contextos.length
@@ -541,13 +541,13 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                   <span className="text-2xl">{missao.icone}</span>
                   <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${prioridadeBadgeClass(missao.prioridade)}`}>{missao.prioridade}</span>
                 </div>
-                <p className="text-sm font-bold text-slate-900 leading-tight">{missao.nome}</p>
-                <p className="text-xs text-slate-400 mt-1 leading-snug">{missao.objetivo}</p>
-                <p className="text-caption text-slate-300 mt-1 leading-snug italic">{missao.porqueAgora}</p>
+                <p className="text-sm font-bold text-foreground leading-tight">{missao.nome}</p>
+                <p className="text-xs text-muted-foreground mt-1 leading-snug">{missao.objetivo}</p>
+                <p className="text-caption text-text-disabled mt-1 leading-snug italic">{missao.porqueAgora}</p>
                 <div className="flex items-center mt-3 pt-2 border-t border-slate-50">
                   <div className="flex items-center gap-1.5">
-                    <Users className="w-3.5 h-3.5 text-slate-400" />
-                    <span className="text-xs font-bold text-slate-600">{count} cliente{count !== 1 ? 's' : ''}</span>
+                    <Users className="w-3.5 h-3.5 text-muted-foreground" />
+                    <span className="text-xs font-bold text-muted-foreground">{count} cliente{count !== 1 ? 's' : ''}</span>
                   </div>
                 </div>
               </button>
@@ -605,8 +605,8 @@ function ModalRegistrarVeiculo({ onClose, onSalvar }: { onClose: () => void; onS
     <div className="fixed inset-0 z-50 grid place-items-center bg-black/40 p-4 backdrop-blur-[3px]" role="dialog" aria-modal="true" aria-label="Registrar veículo que chegou">
       <div className="w-full max-w-[440px] space-y-4 rounded-2xl border border-slate-100 bg-white p-6 shadow-mx-2xl">
         <div className="flex items-center justify-between">
-          <p className="text-lg font-bold text-slate-900">Registrar veículo que chegou</p>
-          <button type="button" onClick={onClose} aria-label="Fechar"><X size={18} className="text-slate-400" /></button>
+          <p className="text-lg font-bold text-foreground">Registrar veículo que chegou</p>
+          <button type="button" onClick={onClose} aria-label="Fechar"><X size={18} className="text-muted-foreground" /></button>
         </div>
         <div className="grid grid-cols-2 gap-3">
           <FormField label="Marca *" value={marca} onChange={e => setMarca(e.target.value)} placeholder="Honda" />
@@ -620,7 +620,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvar }: { onClose: () => void; onS
         </div>
         <FormField label="Observação (opcional)" value={observacao} onChange={e => setObservacao(e.target.value)} placeholder="Baixo km, único dono..." />
         <div className="flex gap-3 pt-2">
-          <button type="button" onClick={onClose} className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-slate-600 hover:bg-slate-50">Cancelar</button>
+          <button type="button" onClick={onClose} className="flex-1 rounded-xl border border-slate-200 px-4 py-2.5 text-sm font-bold text-muted-foreground hover:bg-slate-50">Cancelar</button>
           <button
             type="button"
             disabled={!marca.trim() || !modelo.trim() || saving}

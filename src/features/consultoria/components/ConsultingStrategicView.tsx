@@ -375,7 +375,7 @@ export function ConsultingStrategicView({ clientId, clientName = 'Cliente PMR' }
                     MD
                   </Badge>
                 </div>
-                <pre className="max-h-mx-64 overflow-auto whitespace-pre-wrap text-xs leading-relaxed text-gray-500 font-mono">
+                <pre className="max-h-mx-64 overflow-auto whitespace-pre-wrap text-xs leading-relaxed text-muted-foreground font-mono">
                   {selectedArtifact.content_md}
                 </pre>
               </div>

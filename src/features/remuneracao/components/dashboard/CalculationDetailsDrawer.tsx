@@ -26,7 +26,7 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
         <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
           <h2 className="text-base font-bold text-mx-navy">Detalhamento do Cálculo</h2>
           <button type="button" onClick={onClose} className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center">
-            <X className="w-4 h-4 text-gray-500" />
+            <X className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
 
@@ -42,7 +42,7 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
           <Section title="Composição">
             {calculo.formulaItens.map(item => (
               <div key={item.chave} className="flex justify-between text-sm mt-1">
-                <span className="text-slate-600">{item.label}</span>
+                <span className="text-muted-foreground">{item.label}</span>
                 <span className="font-semibold text-emerald-600">{formatCurrency(item.valor)}</span>
               </div>
             ))}
@@ -63,8 +63,8 @@ export function CalculationDetailsDrawer({ open, onClose, calculo }: Props) {
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <div>
-      <p className="text-xs font-semibold text-gray-500 uppercase tracking-wider mb-1">{title}</p>
-      <div className="text-sm text-slate-700 font-medium">{children}</div>
+      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">{title}</p>
+      <div className="text-sm text-foreground font-medium">{children}</div>
     </div>
   )
 }

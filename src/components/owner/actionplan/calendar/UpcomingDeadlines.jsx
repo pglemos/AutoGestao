@@ -34,7 +34,7 @@ export default function UpcomingDeadlines({ actions, onSelectDate, onViewAll }) 
                 className="flex w-full items-center gap-2 rounded-lg border border-border p-2 text-left hover:bg-muted/30"
               >
                 <div className={`flex h-8 w-8 shrink-0 flex-col items-center justify-center rounded ${deptStyle.bg || "bg-slate-50"}`}>
-                  <span className={`text-xs font-bold ${deptStyle.text || "text-slate-600"}`}>
+                  <span className={`text-xs font-bold ${deptStyle.text || "text-muted-foreground"}`}>
                     {date ? date.getDate() : "—"}
                   </span>
                 </div>

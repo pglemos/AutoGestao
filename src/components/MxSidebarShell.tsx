@@ -139,7 +139,7 @@ function CollapsedTooltip({ label }: { label: string }) {
   return (
     <span
       role="tooltip"
-      className="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 z-[var(--mx-z-tooltip)] -translate-y-1/2 whitespace-nowrap rounded-lg border border-gray-100 bg-white px-3 py-2 text-xs font-semibold text-gray-700 opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
+      className="pointer-events-none absolute left-[calc(100%+10px)] top-1/2 z-[var(--mx-z-tooltip)] -translate-y-1/2 whitespace-nowrap rounded-lg border border-gray-100 bg-white px-3 py-2 text-xs font-semibold text-foreground opacity-0 shadow-lg transition-opacity duration-150 group-hover:opacity-100 group-focus-visible:opacity-100"
     >
       {label}
     </span>
@@ -498,17 +498,17 @@ export default function MxSidebarShell({
   )
 
   return (
-    <div className="h-[100dvh] overflow-hidden bg-gray-50 font-display text-gray-800">
+    <div className="h-[100dvh] overflow-hidden bg-gray-50 font-display text-foreground">
       <header className="fixed left-0 right-0 top-0 z-[90] grid h-[calc(72px+env(safe-area-inset-top))] grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] items-center gap-2 border-b border-gray-100 bg-white px-4 pt-[env(safe-area-inset-top)] shadow-sm xl:hidden">
         <button
           type="button"
           aria-label="Abrir menu principal"
           onClick={() => setMobileOpen(true)}
-          className="flex min-w-0 items-center gap-2 text-left text-gray-700 outline-none transition-opacity hover:opacity-80 active:opacity-60 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
+          className="flex min-w-0 items-center gap-2 text-left text-foreground outline-none transition-opacity hover:opacity-80 active:opacity-60 focus-visible:ring-2 focus-visible:ring-emerald-500/30"
         >
-          <Menu className="h-5.5 w-5.5 shrink-0 text-gray-700" aria-hidden="true" />
+          <Menu className="h-5.5 w-5.5 shrink-0 text-foreground" aria-hidden="true" />
           <img src={SIDEBAR_LOGO} alt="MX" className="h-6 w-6 shrink-0 object-contain" />
-          <span className="text-body-sm font-semibold tracking-tight text-gray-800">
+          <span className="text-body-sm font-semibold tracking-tight text-foreground">
             Menu
           </span>
           <span className="hidden min-w-0 leading-tight min-[500px]:block">
@@ -517,7 +517,7 @@ export default function MxSidebarShell({
             </span>
           </span>
         </button>
-        <div className="pointer-events-none min-w-0 max-w-[42vw] truncate px-1 text-center text-sm font-bold text-gray-800">
+        <div className="pointer-events-none min-w-0 max-w-[42vw] truncate px-1 text-center text-sm font-bold text-foreground">
           {mobileTitle}
         </div>
         <div className="flex items-center justify-self-end gap-2">

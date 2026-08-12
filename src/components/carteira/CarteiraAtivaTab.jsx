@@ -122,7 +122,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
             <div className="w-9 h-9 rounded-full bg-blue-50 flex items-center justify-center text-xs font-black text-[#005BFF] shrink-0">{iniciais}</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-[#031B3D] truncate">{cliente.nome}</p>
-              <p className="text-caption text-slate-400 truncate">{canal} · {cliente.veiculo_interesse || "Sem veículo"}</p>
+              <p className="text-caption text-muted-foreground truncate">{canal} · {cliente.veiculo_interesse || "Sem veículo"}</p>
             </div>
           </div>
           <div className="flex items-center gap-1 flex-shrink-0 flex-wrap justify-end">
@@ -132,15 +132,15 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
         </div>
         <div className="grid grid-cols-2 gap-2">
           <div className="bg-slate-50 rounded-xl px-2.5 py-2">
-            <p className="text-caption text-slate-400 font-bold uppercase tracking-wide">Situação</p>
-            <p className="text-caption font-semibold text-slate-700 mt-0.5 leading-snug">{situacao}</p>
+            <p className="text-caption text-muted-foreground font-bold uppercase tracking-wide">Situação</p>
+            <p className="text-caption font-semibold text-foreground mt-0.5 leading-snug">{situacao}</p>
           </div>
           <div className="bg-blue-50 rounded-xl px-2.5 py-2">
             <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
             <p className="text-caption font-semibold text-[#031B3D] mt-0.5 leading-snug">{proximoPasso}</p>
           </div>
         </div>
-        <p className="text-caption text-slate-400 leading-snug italic">{explicacao}</p>
+        <p className="text-caption text-muted-foreground leading-snug italic">{explicacao}</p>
         <ScoreBadge score={score} motivos={motivos} />
         <div className="flex gap-2">
           {!encerradoSemVenda && (
@@ -150,7 +150,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           </button>
           )}
           <button onClick={() => onFicha(cliente.id)}
-            className="flex items-center gap-1.5 text-xs font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
+            className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground border border-slate-200 hover:bg-slate-50 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
             <FileText className="w-3.5 h-3.5" /> Ficha
           </button>
         </div>
@@ -162,8 +162,8 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-sm font-black text-[#005BFF] shrink-0">{iniciais}</div>
           <div className="min-w-0">
             <p className="text-sm font-bold text-[#031B3D] truncate">{cliente.nome}</p>
-            <p className="text-caption text-slate-400 truncate">{canal}</p>
-            <p className="text-caption text-slate-400 truncate">{cliente.veiculo_interesse || "Sem veículo"}</p>
+            <p className="text-caption text-muted-foreground truncate">{canal}</p>
+            <p className="text-caption text-muted-foreground truncate">{cliente.veiculo_interesse || "Sem veículo"}</p>
           </div>
         </div>
         <div className="px-4 py-3.5 w-52 shrink-0 space-y-1.5">
@@ -172,21 +172,21 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
             <span className={`text-caption font-bold px-1.5 py-0.5 rounded-full ${prioridadeColor(prioridade)}`}>{prioridade}</span>
           </div>
           <div>
-            <p className="text-caption text-slate-400 font-bold uppercase tracking-wide">Situação</p>
-            <p className="text-caption font-semibold text-slate-700 leading-snug mt-0.5">{situacao}</p>
+            <p className="text-caption text-muted-foreground font-bold uppercase tracking-wide">Situação</p>
+            <p className="text-caption font-semibold text-foreground leading-snug mt-0.5">{situacao}</p>
           </div>
           <ScoreBadge score={score} motivos={motivos} />
         </div>
         <div className="min-w-0 flex-1 px-4 py-3.5 bg-blue-50/30 space-y-1.5">
           <div>
-            <p className="text-caption text-slate-400 font-bold uppercase tracking-wide">Objetivo</p>
-            <p className="text-caption font-semibold text-slate-600 leading-snug mt-0.5">{objetivo}</p>
+            <p className="text-caption text-muted-foreground font-bold uppercase tracking-wide">Objetivo</p>
+            <p className="text-caption font-semibold text-muted-foreground leading-snug mt-0.5">{objetivo}</p>
           </div>
           <div>
             <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
             <p className="text-caption font-bold text-[#031B3D] leading-snug mt-0.5">{proximoPasso}</p>
           </div>
-          <p className="text-caption text-slate-400 italic leading-snug">{explicacao}</p>
+          <p className="text-caption text-muted-foreground italic leading-snug">{explicacao}</p>
         </div>
         <div className="flex flex-col gap-1.5 px-4 py-3.5 shrink-0 w-40 justify-center">
           {!encerradoSemVenda && (
@@ -196,7 +196,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
           </button>
           )}
           <button onClick={() => onFicha(cliente.id)}
-            className="flex items-center gap-1.5 text-xs font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-xl transition-colors justify-center">
+            className="flex items-center gap-1.5 text-xs font-bold text-muted-foreground border border-slate-200 hover:bg-slate-50 px-3 py-1.5 rounded-xl transition-colors justify-center">
             <FileText className="w-3.5 h-3.5" /> Abrir ficha
           </button>
         </div>
@@ -230,7 +230,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
 
   function chipClass(ativo) {
     return `text-caption font-semibold px-2.5 py-1 rounded-lg border transition-all cursor-pointer ${
-      ativo ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white text-slate-600 border-slate-200 hover:border-blue-300"
+      ativo ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white text-muted-foreground border-slate-200 hover:border-blue-300"
     }`;
   }
 
@@ -240,12 +240,12 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
       <div className="w-80 bg-white shadow-2xl overflow-y-auto flex flex-col">
         <div className="flex items-center justify-between px-5 py-4 border-b border-slate-100">
           <p className="font-black text-[#031B3D]">Filtros</p>
-          <button onClick={onFechar}><X className="w-5 h-5 text-slate-400" /></button>
+          <button onClick={onFechar}><X className="w-5 h-5 text-muted-foreground" /></button>
         </div>
 
         <div className="flex-1 px-5 py-4 space-y-5">
           <div>
-            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">Veículo de interesse</p>
+            <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-2">Veículo de interesse</p>
             <input
               value={local.veiculo || ""}
               onChange={e => set("veiculo", e.target.value)}
@@ -255,7 +255,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
           </div>
 
           <div>
-            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">Origem</p>
+            <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-2">Origem</p>
             <div className="flex flex-wrap gap-1.5">
               {ORIGENS_FILTRO.map(o => (
                 <button key={o} onClick={() => toggle("origens", o)} className={chipClass((local.origens || []).includes(o))}>{o}</button>
@@ -264,7 +264,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
           </div>
 
           <div>
-            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">Situação</p>
+            <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-2">Situação</p>
             <div className="flex flex-wrap gap-1.5">
               {SITUACOES_FILTRO.map(s => (
                 <button key={s} onClick={() => toggle("situacoes", s)} className={chipClass((local.situacoes || []).includes(s))}>{s}</button>
@@ -273,7 +273,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
           </div>
 
           <div>
-            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">Período</p>
+            <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-2">Período</p>
             <div className="flex flex-wrap gap-1.5">
               {PERIODOS_FILTRO.map(p => (
                 <button key={p} onClick={() => toggle("periodos", p)} className={chipClass((local.periodos || []).includes(p))}>{p}</button>
@@ -282,7 +282,7 @@ function PainelFiltros({ onAplicar, onFechar, filtrosAtivos }) {
           </div>
 
           <div>
-            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">Prioridade</p>
+            <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-2">Prioridade</p>
             <div className="flex flex-wrap gap-1.5">
               {PRIORIDADES_FILTRO.map(p => (
                 <button key={p} onClick={() => toggle("prioridades", p)} className={chipClass((local.prioridades || []).includes(p))}>{p}</button>
@@ -447,18 +447,18 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
       <div className="flex items-start justify-between gap-4 flex-wrap">
         <div>
           <h1 className="text-2xl font-black text-[#031B3D]">Mentor Comercial</h1>
-          <p className="text-sm text-slate-400 mt-1">Sua agenda comercial de hoje. Execute e registre resultados.</p>
+          <p className="text-sm text-muted-foreground mt-1">Sua agenda comercial de hoje. Execute e registre resultados.</p>
         </div>
         <div className="flex gap-2 flex-wrap">
           <div className="relative">
-            <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+            <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
             <input value={busca} onChange={e => setBusca(e.target.value)} placeholder="Buscar cliente..."
               className="pl-9 pr-3 h-9 rounded-xl border border-slate-200 bg-white text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF] w-44" />
           </div>
           <button
             onClick={() => setFiltrosPanelOpen(true)}
             className={`flex items-center gap-1.5 h-9 px-3.5 rounded-xl border text-sm font-semibold transition-all ${
-              temFiltrosAtivos ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white border-slate-200 text-slate-600 hover:border-blue-300"
+              temFiltrosAtivos ? "bg-[#005BFF] text-white border-[#005BFF]" : "bg-white border-slate-200 text-muted-foreground hover:border-blue-300"
             }`}
           >
             <SlidersHorizontal className="w-4 h-4" /> Filtros
@@ -475,8 +475,8 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
             <button key={card.id} onClick={() => setCardAtivo(card.id)}
               className={`text-left p-3.5 rounded-2xl border transition-all ${ativo ? "border-[#005BFF] bg-blue-50 shadow-sm" : "border-slate-100 bg-white hover:border-blue-100 hover:bg-blue-50/30"}`}>
               <p className={`text-2xl font-black mb-0.5 ${ativo ? "text-[#005BFF]" : "text-[#031B3D]"}`}>{count}</p>
-              <p className={`text-xs font-bold leading-snug ${ativo ? "text-[#005BFF]" : "text-slate-600"}`}>{card.label}</p>
-              <p className="text-caption text-slate-400 mt-0.5">{card.sublabel}</p>
+              <p className={`text-xs font-bold leading-snug ${ativo ? "text-[#005BFF]" : "text-muted-foreground"}`}>{card.label}</p>
+              <p className="text-caption text-muted-foreground mt-0.5">{card.sublabel}</p>
             </button>
           );
         })}
@@ -488,7 +488,7 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
       {/* Lista */}
       <div>
         <div className="flex items-center justify-between mb-3">
-          <p className="text-sm font-semibold text-slate-600">
+          <p className="text-sm font-semibold text-muted-foreground">
             {clientesFiltrados.length} cliente{clientesFiltrados.length !== 1 ? "s" : ""} · {cardConfig.label}
           </p>
           {cardAtivo !== "hoje" && (
@@ -499,7 +499,7 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
         {clientesFiltrados.length === 0 ? (
           <div className="bg-white border border-slate-100 rounded-2xl p-12 text-center">
             <p className="text-4xl mb-3">{cardAtivo === "hoje" ? "✅" : "📋"}</p>
-            <p className="text-sm font-semibold text-slate-500">{cardConfig.vazio}</p>
+            <p className="text-sm font-semibold text-muted-foreground">{cardConfig.vazio}</p>
             {cardAtivo === "hoje" && (
               <button onClick={() => setCardAtivo("todos")} className="text-xs text-[#005BFF] hover:underline mt-2 block mx-auto">Ver todos os clientes</button>
             )}

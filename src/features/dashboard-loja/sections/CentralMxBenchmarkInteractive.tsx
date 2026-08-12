@@ -92,7 +92,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
         <div>
           <label
             htmlFor="benchmark-metric-code"
-            className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+            className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
           >
             Indicador (code)
           </label>
@@ -107,7 +107,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
         <div>
           <label
             htmlFor="benchmark-peer-group"
-            className="block text-mx-tiny font-bold uppercase tracking-widest text-gray-500"
+            className="block text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground"
           >
             Grupo de comparação
           </label>
@@ -200,7 +200,7 @@ export function CentralMxBenchmarkInteractive({ storeId, period }: Props) {
             key={code}
             type="button"
             onClick={() => setMetricCode(code)}
-            className="rounded-xl border border-gray-200 bg-white px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest text-gray-500 hover:border-brand-primary/40 hover:text-emerald-600"
+            className="rounded-xl border border-gray-200 bg-white px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground hover:border-brand-primary/40 hover:text-emerald-600"
           >
             {code}
             <ArrowRight size={10} className="ml-1 inline" />

@@ -57,13 +57,13 @@ export function FiltrosAtividade({
               'flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-[12px] font-bold transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-status-info/30',
               active
                 ? 'border-status-info bg-status-info text-white'
-                : 'border-slate-200 bg-white text-slate-600 hover:border-status-info hover:text-status-info',
+                : 'border-slate-200 bg-white text-muted-foreground hover:border-status-info hover:text-status-info',
             )}
           >
             {filter.label}
             <span className={cn(
               'rounded-full px-1.5 py-0.5 text-caption font-bold',
-              active ? 'bg-white/20 text-white' : 'bg-slate-100 text-slate-500',
+              active ? 'bg-white/20 text-white' : 'bg-slate-100 text-muted-foreground',
             )}>
               {count}
             </span>

@@ -32,7 +32,7 @@ export function ScheduleEventCard({ event, onEdit, onDelete }: ScheduleEventCard
               <Badge variant="outline" className="text-mx-micro">{getEventTypeLabel(event.event_type)}</Badge>
               <Typography variant="h3" className="text-sm truncate">{event.title}</Typography>
             </div>
-            <div className="flex flex-wrap items-center gap-mx-sm text-gray-500">
+            <div className="flex flex-wrap items-center gap-mx-sm text-muted-foreground">
               <div className="flex items-center gap-mx-xs">
                 <Clock size={12} />
                 <Typography variant="tiny">{format(date, 'HH:mm')} - {event.duration_hours}h</Typography>

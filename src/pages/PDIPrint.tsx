@@ -34,7 +34,7 @@ export default function PDIPrint() {
     if (error || !bundle) return (
         // lint-page-roots-ignore: estado centrado de documento não encontrado.
         <div className="min-h-screen p-mx-20 text-center flex flex-col items-center justify-center bg-surface-alt">
-            <History size={48} className="text-gray-500 mb-6 opacity-20" />
+            <History size={48} className="text-muted-foreground mb-6 opacity-20" />
             <Typography variant="h3" tone="muted" className="tracking-tighter">Plano ou permissão não localizados.</Typography>
             <button onClick={() => navigate(-1)} className="mt-8 px-8 py-4 bg-emerald-600 text-white rounded-mx-full font-bold text-xs uppercase tracking-widest">VOLTAR</button>
         </div>
@@ -76,7 +76,7 @@ export default function PDIPrint() {
             </div>
 
             {/* A4 Document Container */}
-            <div ref={printRef} className="w-[210mm] bg-background shadow-2xl print:shadow-none print:w-full print:max-w-none text-gray-800 flex flex-col gap-y-[20mm]">
+            <div ref={printRef} className="w-[210mm] bg-background shadow-2xl print:shadow-none print:w-full print:max-w-none text-foreground flex flex-col gap-y-[20mm]">
                 
                 {/* --- PÁGINA 1: CAPA --- */}
                 <div className="p-[20mm] h-[297mm] relative break-after-page flex flex-col border border-gray-200 print:border-none">
@@ -96,7 +96,7 @@ export default function PDIPrint() {
 
                     <div className="mb-14 flex gap-mx-md items-center">
                         <div className="w-mx-2xl h-mx-2xl rounded-mx-full bg-gray-50 border border-gray-200 flex items-center justify-center">
-                            <User size={24} className="text-gray-500" />
+                            <User size={24} className="text-muted-foreground" />
                         </div>
                         <div>
                             <Typography variant="tiny" tone="muted" className="">Colaborador (Especialista)</Typography>
@@ -172,7 +172,7 @@ export default function PDIPrint() {
                                         <tr key={i} className="border-b border-gray-200">
                                             <td className="py-2 px-3">{av.competencia}</td>
                                             <td className="py-2 px-3 text-center text-emerald-600">{av.nota}</td>
-                                            <td className="py-2 px-3 text-center text-gray-500">{av.alvo}</td>
+                                            <td className="py-2 px-3 text-center text-muted-foreground">{av.alvo}</td>
                                         </tr>
                                     ))}
                                 </tbody>
@@ -228,8 +228,8 @@ export default function PDIPrint() {
                             <tbody>
                                 {bundle.plano_acao.map((acao: PDIPlanoAcao360, i: number) => (
                                     <tr key={i} className="border-b-2 border-gray-200">
-                                        <td className="py-4 px-4 font-bold uppercase text-gray-500">{acao.competencia}</td>
-                                        <td className="py-4 px-4 font-bold text-gray-800">{acao.descricao_acao}</td>
+                                        <td className="py-4 px-4 font-bold uppercase text-muted-foreground">{acao.competencia}</td>
+                                        <td className="py-4 px-4 font-bold text-foreground">{acao.descricao_acao}</td>
                                         <td className="py-4 px-4 font-bold text-center text-emerald-600">{format(parseISO(acao.data_conclusao), 'dd/MM/yyyy')}</td>
                                         <td className="py-4 px-4 font-bold text-center uppercase">{acao.impacto}</td>
                                         <td className="py-4 px-4 font-bold text-center uppercase">{acao.custo}</td>

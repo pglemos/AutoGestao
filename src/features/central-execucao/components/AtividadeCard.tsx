@@ -59,17 +59,17 @@ const TYPE_BADGE: Record<CentralActivityType, string> = {
   atendimento: 'bg-blue-50 text-blue-700',
   visita: 'bg-blue-50 text-blue-700',
   retorno: 'bg-amber-50 text-amber-700',
-  documentacao: 'bg-slate-100 text-slate-600',
+  documentacao: 'bg-slate-100 text-muted-foreground',
   entrega: 'bg-purple-50 text-purple-700',
   pos_venda: 'bg-teal-50 text-teal-700',
   aniversario: 'bg-indigo-50 text-indigo-700',
   garantia: 'bg-orange-50 text-orange-700',
-  comercial: 'bg-slate-100 text-slate-600',
+  comercial: 'bg-slate-100 text-muted-foreground',
   test_drive: 'bg-blue-50 text-blue-700',
   negociacao: 'bg-blue-50 text-blue-700',
-  pdi: 'bg-slate-100 text-slate-600',
-  feedback: 'bg-slate-100 text-slate-600',
-  funil: 'bg-slate-100 text-slate-600',
+  pdi: 'bg-slate-100 text-muted-foreground',
+  feedback: 'bg-slate-100 text-muted-foreground',
+  funil: 'bg-slate-100 text-muted-foreground',
 }
 
 const TYPE_ICON: Record<CentralActivityType, LucideIcon> = {
@@ -100,7 +100,7 @@ const PRIORITY_BADGE: Record<CentralExecutionAction['priority'], string> = {
   urgent: 'bg-red-50 text-red-600',
   high: 'bg-red-50 text-red-600',
   medium: 'bg-amber-50 text-amber-600',
-  low: 'bg-slate-100 text-slate-500',
+  low: 'bg-slate-100 text-muted-foreground',
 }
 
 function formatPhoneDisplay(value: string | null | undefined) {
@@ -170,24 +170,24 @@ export function AtividadeCard({
               {overdue && <span className="rounded-full bg-red-50 px-2 py-0.5 text-caption font-bold text-red-500">Vencido</span>}
               {alreadyEscalated && <span className="rounded-full bg-amber-50 px-2 py-0.5 text-caption font-bold text-amber-700">Aguardando gerente</span>}
             </div>
-            <div className="flex items-center gap-1 text-caption font-bold text-slate-400">
+            <div className="flex items-center gap-1 text-caption font-bold text-muted-foreground">
               <Clock className="h-3 w-3" aria-hidden="true" />{hour}
             </div>
           </div>
 
           <div className="mb-2 flex items-center gap-2.5">
-            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[12px] font-bold text-slate-500">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[12px] font-bold text-muted-foreground">
               {initials(clientName)}
             </div>
             <div className="min-w-0">
-              <p className="truncate text-[14px] font-bold text-gray-800">{clientName}</p>
-              {vehicle && <p className="truncate text-[12px] text-slate-400">{vehicle}</p>}
-              {phoneDisplay && <p className="truncate text-caption text-slate-400">{phoneDisplay}</p>}
+              <p className="truncate text-[14px] font-bold text-foreground">{clientName}</p>
+              {vehicle && <p className="truncate text-[12px] text-muted-foreground">{vehicle}</p>}
+              {phoneDisplay && <p className="truncate text-caption text-muted-foreground">{phoneDisplay}</p>}
             </div>
           </div>
 
-          {action.objective && <p className="mb-1 text-[12px] font-semibold text-slate-600">{action.objective}</p>}
-          {action.description && <p className="mb-3 text-[12px] text-slate-500">{action.description}</p>}
+          {action.objective && <p className="mb-1 text-[12px] font-semibold text-muted-foreground">{action.objective}</p>}
+          {action.description && <p className="mb-3 text-[12px] text-muted-foreground">{action.description}</p>}
 
           <div className="flex flex-wrap items-center gap-2">
             {phoneDigits && (
@@ -200,7 +200,7 @@ export function AtividadeCard({
               </button>
             )}
             {phoneDigits && (
-              <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-caption font-bold text-slate-600 transition-colors hover:bg-slate-50">
+              <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-slate-200 px-3 py-1.5 text-caption font-bold text-muted-foreground transition-colors hover:bg-slate-50">
                 <Phone className="h-3 w-3" aria-hidden="true" /> Ligar
               </a>
             )}
@@ -228,27 +228,27 @@ export function AtividadeCard({
             <div className={cn('mx-auto mb-1 flex h-9 w-9 items-center justify-center rounded-xl', TYPE_BADGE[action.activityType])}>
               <Icon className="h-4 w-4" aria-hidden="true" />
             </div>
-            <p className={cn('text-caption font-bold', overdue ? 'text-red-500' : 'text-slate-400')}>{hour}</p>
+            <p className={cn('text-caption font-bold', overdue ? 'text-red-500' : 'text-muted-foreground')}>{hour}</p>
           </div>
 
           <div className="flex min-w-0 flex-1 items-center gap-3">
-            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[12px] font-bold text-slate-500">
+            <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-slate-100 text-[12px] font-bold text-muted-foreground">
               {initials(clientName)}
             </div>
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
-                <p className="truncate text-[14px] font-bold text-gray-800">{clientName}</p>
+                <p className="truncate text-[14px] font-bold text-foreground">{clientName}</p>
                 <span className={cn('rounded-full px-2 py-0.5 text-caption font-bold', TYPE_BADGE[action.activityType])}>{typeLabel}</span>
                 <span className={cn('rounded-full px-2 py-0.5 text-caption font-bold', PRIORITY_BADGE[action.priority])}>{PRIORITY_LABEL[action.priority]}</span>
                 {overdue && <span className="rounded-full bg-red-50 px-2 py-0.5 text-caption font-bold text-red-500">Vencido</span>}
                 {alreadyEscalated && <span className="rounded-full bg-amber-50 px-2 py-0.5 text-caption font-bold text-amber-700">Aguardando gerente</span>}
               </div>
-              <div className="flex flex-wrap items-center gap-2 text-[12px] text-slate-400">
+              <div className="flex flex-wrap items-center gap-2 text-[12px] text-muted-foreground">
                 {vehicle && <span className="truncate">{vehicle}</span>}
                 {phoneDisplay && <span className="truncate">{phoneDisplay}</span>}
               </div>
-              {action.objective && <p className="truncate text-[12px] font-semibold text-slate-600">{action.objective}</p>}
-              {action.description && <p className="truncate text-[12px] text-slate-500">{action.description}</p>}
+              {action.objective && <p className="truncate text-[12px] font-semibold text-muted-foreground">{action.objective}</p>}
+              {action.description && <p className="truncate text-[12px] text-muted-foreground">{action.description}</p>}
             </div>
           </div>
 
@@ -264,7 +264,7 @@ export function AtividadeCard({
               </button>
             )}
             {phoneDigits && (
-              <a href={`tel:${phoneDigits}`} title="Ligar" aria-label={`Ligar para ${clientName}`} className="rounded-xl bg-slate-50 p-2 text-slate-500 transition-colors hover:bg-slate-100">
+              <a href={`tel:${phoneDigits}`} title="Ligar" aria-label={`Ligar para ${clientName}`} className="rounded-xl bg-slate-50 p-2 text-muted-foreground transition-colors hover:bg-slate-100">
                 <Phone className="h-4 w-4" aria-hidden="true" />
               </a>
             )}

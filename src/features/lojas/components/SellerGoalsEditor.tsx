@@ -42,7 +42,7 @@ const ATTAINMENT_TONE = {
   no_ritmo: 'text-sky-600',
   risco: 'text-amber-600',
   critico: 'text-red-600',
-  sem_meta: 'text-gray-400',
+  sem_meta: 'text-muted-foreground',
 } as const
 
 interface SellerGoalsEditorProps {
@@ -175,9 +175,9 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
   if (!storeId) {
     return (
       <div className="flex min-h-[300px] flex-col items-center justify-center rounded-2xl border-2 border-dashed border-slate-200 bg-white p-8 text-center">
-        <Target size={48} className="mb-4 text-slate-300" />
-        <p className="text-sm font-medium text-slate-500">Selecione uma loja</p>
-        <p className="mt-1 text-xs text-slate-400">A edição de metas individuais precisa de uma loja ativa.</p>
+        <Target size={48} className="mb-4 text-text-disabled" />
+        <p className="text-sm font-medium text-muted-foreground">Selecione uma loja</p>
+        <p className="mt-1 text-xs text-muted-foreground">A edição de metas individuais precisa de uma loja ativa.</p>
       </div>
     )
   }
@@ -186,7 +186,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
     return (
       <div className="flex min-h-[300px] flex-col items-center justify-center">
         <RefreshCw className="mb-4 h-6 w-6 animate-spin text-emerald-600" />
-        <p className="text-sm text-slate-500 animate-pulse">Carregando...</p>
+        <p className="text-sm text-muted-foreground animate-pulse">Carregando...</p>
       </div>
     )
   }
@@ -198,21 +198,21 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
         <div className={embedded ? '' : 'rounded-2xl border border-slate-200 bg-white p-5 shadow-sm'}>
           <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
             {embedded ? (
-              <p className="text-sm text-slate-500">
+              <p className="text-sm text-muted-foreground">
                 {storeName || 'Unidade MX'} · Meta da loja: <strong>{storeGoal} vendas</strong>
                 {sellerCount > 0 && ` · ${sellerCount} vendedor${sellerCount !== 1 ? 'es' : ''} ativos`}
               </p>
             ) : (
               <div>
-                <h1 className="text-lg font-bold text-slate-800">Metas Individuais</h1>
-                <p className="mt-0.5 text-sm text-slate-500">
+                <h1 className="text-lg font-bold text-foreground">Metas Individuais</h1>
+                <p className="mt-0.5 text-sm text-muted-foreground">
                   {storeName || 'Unidade MX'} · Meta da loja: <strong>{storeGoal} vendas</strong>
                   {sellerCount > 0 && ` · ${sellerCount} vendedor${sellerCount !== 1 ? 'es' : ''} ativos`}
                 </p>
               </div>
             )}
             <div className="flex flex-wrap items-center gap-2">
-              <label className="text-xs text-slate-500">
+              <label className="text-xs text-muted-foreground">
                 Mês
                 <input
                   type="month"
@@ -238,7 +238,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
                     type="button"
                     onClick={handleResetToEven}
                     disabled={saving}
-                    className="inline-flex h-[36px] items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-600 hover:bg-slate-50 disabled:opacity-60"
+                    className="inline-flex h-[36px] items-center gap-1.5 rounded-xl border border-slate-300 bg-white px-4 text-sm font-semibold text-muted-foreground hover:bg-slate-50 disabled:opacity-60"
                   >
                     <Trash2 size={15} />
                     Ratear igual
@@ -248,7 +248,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
               <button
                 type="button"
                 onClick={() => { fetchGoals(); refetchPerformance(); resetEdits() }}
-                className="inline-flex h-[36px] w-10 items-center justify-center rounded-xl text-slate-500 hover:bg-slate-50"
+                className="inline-flex h-[36px] w-10 items-center justify-center rounded-xl text-muted-foreground hover:bg-slate-50"
                 aria-label="Atualizar"
               >
                 <RefreshCw size={15} />
@@ -311,19 +311,19 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
             <table className="w-full min-w-[700px] text-sm">
               <thead className="border-b border-slate-100 bg-slate-50">
                 <tr>
-                  <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">Vendedor</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Realizado</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Meta Atual</th>
-                  <th className="whitespace-nowrap px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">% Ating.</th>
+                  <th className="whitespace-nowrap px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">Vendedor</th>
+                  <th className="whitespace-nowrap px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">Realizado</th>
+                  <th className="whitespace-nowrap px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">Meta Atual</th>
+                  <th className="whitespace-nowrap px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">% Ating.</th>
                   {canEdit && (
-                    <th className="whitespace-nowrap px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-slate-500">Nova Meta</th>
+                    <th className="whitespace-nowrap px-4 py-3 text-right text-xs font-semibold uppercase tracking-wide text-muted-foreground">Nova Meta</th>
                   )}
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-50">
                 {sellers.length === 0 ? (
                   <tr>
-                    <td colSpan={canEdit ? 5 : 4} className="px-4 py-8 text-center text-sm text-slate-400">
+                    <td colSpan={canEdit ? 5 : 4} className="px-4 py-8 text-center text-sm text-muted-foreground">
                       Nenhum vendedor ativo nesta loja.
                     </td>
                   </tr>
@@ -339,18 +339,18 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
 
                     return (
                       <tr key={seller.id} className="hover:bg-slate-50">
-                        <td className="whitespace-nowrap px-4 py-3 font-medium text-slate-800">
+                        <td className="whitespace-nowrap px-4 py-3 font-medium text-foreground">
                           {seller.name || 'Vendedor'}
                         </td>
                         <td className="whitespace-nowrap px-4 py-3 text-right font-medium text-emerald-600">
                           {realized}
                         </td>
-                        <td className="whitespace-nowrap px-4 py-3 text-right text-slate-700">
+                        <td className="whitespace-nowrap px-4 py-3 text-right text-foreground">
                           {currentGoal}
                         </td>
                         <td className="whitespace-nowrap px-4 py-3 text-right">
                           {attainment === null ? (
-                            <span className="text-xs text-slate-400">—</span>
+                            <span className="text-xs text-muted-foreground">—</span>
                           ) : (
                             <div className="flex flex-col items-end gap-1">
                               <span className={`text-xs font-semibold ${ATTAINMENT_TONE[status]}`}>{attainment}%</span>
@@ -379,13 +379,13 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
               </tbody>
               {sellers.length > 0 && (
                 <tfoot>
-                  <tr className="border-t-2 border-slate-100 bg-slate-50 font-semibold text-slate-700">
+                  <tr className="border-t-2 border-slate-100 bg-slate-50 font-semibold text-foreground">
                     <td className="px-4 py-3">Total da equipe</td>
                     <td className="px-4 py-3 text-right">{totals.realized}</td>
                     <td className="px-4 py-3 text-right">{totals.goal}</td>
                     <td className="px-4 py-3 text-right">
                       <span className={
-                        totals.attainment === null ? 'text-slate-400'
+                        totals.attainment === null ? 'text-muted-foreground'
                           : totals.attainment >= 100 ? 'text-emerald-600'
                             : totals.attainment >= 80 ? 'text-amber-600'
                               : 'text-red-600'
@@ -403,7 +403,7 @@ export function SellerGoalsEditor({ storeId, storeName, embedded = false }: Sell
 
         {/* Info: modo da meta */}
         {metaRules?.individual_goal_mode && (
-          <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 text-xs text-slate-500">
+          <div className="rounded-xl border border-slate-100 bg-slate-50 p-4 text-xs text-muted-foreground">
             Modo de meta individual: <strong>{metaRules.individual_goal_mode === 'custom' ? 'Customizada' : metaRules.individual_goal_mode === 'even' ? 'Rateio igual' : 'Proporcional'}</strong>
             {metaRules.individual_goal_mode !== 'custom' && (
               <span className="ml-1"> — as metas salvas aqui só surtirão efeito quando o modo for alterado para "Customizada".</span>

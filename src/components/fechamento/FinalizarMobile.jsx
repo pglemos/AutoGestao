@@ -203,8 +203,8 @@ export default function FinalizarMobile({
 
       {jaFinalizado && d1Bloqueado && (
         <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-3">
-          <Lock className="w-4 h-4 text-slate-400 flex-shrink-0" />
-          <p className="text-[12px] font-semibold text-slate-500">
+          <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+          <p className="text-[12px] font-semibold text-muted-foreground">
             Fechamento de {dataExibicao} encerrado e consolidado.
           </p>
         </div>
@@ -226,9 +226,9 @@ export default function FinalizarMobile({
             Finalizar Fechamento do Dia
           </button>
           {!isBlocked && (
-            <p className="text-[12px] text-slate-400 text-center leading-relaxed">
+            <p className="text-[12px] text-muted-foreground text-center leading-relaxed">
               Após finalizar, as informações serão enviadas para sua liderança e{" "}
-              <strong className="text-slate-500">não poderão mais ser editadas</strong>.
+              <strong className="text-muted-foreground">não poderão mais ser editadas</strong>.
             </p>
           )}
         </div>

@@ -5,7 +5,7 @@ import MxLogo from '@/assets/mx-logo.png'
 
 export default function OAuthHome() {
   return (
-    <main className="min-h-screen bg-background text-gray-800 selection:bg-emerald-600/20">
+    <main className="min-h-screen bg-background text-foreground selection:bg-emerald-600/20">
       <section className="min-h-screen flex flex-col">
         <header className="w-full px-mx-lg sm:px-mx-2xl py-mx-lg flex items-center justify-between gap-mx-md border-b border-gray-200 bg-white/95">
           <Link to="/" className="flex items-center gap-mx-sm min-w-0" aria-label="MX PERFORMANCE">
@@ -14,7 +14,7 @@ export default function OAuthHome() {
           </Link>
 
           <nav className="flex items-center gap-mx-sm text-label font-bold">
-            <Link to="/privacy" className="text-gray-500 hover:text-emerald-600 transition-colors">
+            <Link to="/privacy" className="text-muted-foreground hover:text-emerald-600 transition-colors">
               Privacidade
             </Link>
             <Link
@@ -40,11 +40,11 @@ export default function OAuthHome() {
                 Google Calendar Integration
               </div>
 
-              <h1 className="text-display font-bold text-gray-800">
+              <h1 className="text-display font-bold text-foreground">
                 MX PERFORMANCE
               </h1>
 
-              <p className="mt-mx-lg text-lg sm:text-xl leading-relaxed text-gray-500 max-w-2xl">
+              <p className="mt-mx-lg text-lg sm:text-xl leading-relaxed text-muted-foreground max-w-2xl">
                 Plataforma operacional da MX Consultoria para organizar visitas, agendas comerciais e rotinas de acompanhamento com sincronizacao autorizada ao Google Calendar.
               </p>
 
@@ -58,7 +58,7 @@ export default function OAuthHome() {
                 </Link>
                 <Link
                   to="/privacy"
-                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl border border-gray-200 text-gray-500 text-sm font-bold hover:border-brand-primary hover:text-emerald-600 transition-colors"
+                  className="inline-flex items-center justify-center gap-mx-xs h-mx-12 px-mx-lg rounded-xl border border-gray-200 text-muted-foreground text-sm font-bold hover:border-brand-primary hover:text-emerald-600 transition-colors"
                 >
                   <ShieldCheck size={18} />
                   Politica de Privacidade
@@ -100,7 +100,7 @@ export default function OAuthHome() {
           </div>
         </div>
 
-        <footer className="px-mx-lg sm:px-mx-2xl py-mx-md border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-mx-sm text-xs text-gray-500">
+        <footer className="px-mx-lg sm:px-mx-2xl py-mx-md border-t border-gray-200 flex flex-col sm:flex-row items-center justify-between gap-mx-sm text-xs text-muted-foreground">
           <span className="font-bold">MX Consultoria LTDA © {new Date().getFullYear()}</span>
           <div className="flex items-center gap-mx-md font-bold">
             <Link to="/privacy" className="hover:text-emerald-600">Politica de Privacidade</Link>

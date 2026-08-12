@@ -25,7 +25,7 @@ const FormField = React.forwardRef<HTMLInputElement, FormFieldProps>(
         </label>
         <div className="relative group">
           {icon && (
-            <div className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" aria-hidden="true">
+            <div className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors" aria-hidden="true">
               {icon}
             </div>
           )}

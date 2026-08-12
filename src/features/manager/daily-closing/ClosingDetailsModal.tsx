@@ -92,15 +92,15 @@ export function ClosingDetailsModal({
 }
 
 function Section({ title, children }: { title: string; children: ReactNode }) {
-  return <section><h3 className="mb-2 text-sm font-semibold text-gray-700">{title}</h3>{children}</section>;
+  return <section><h3 className="mb-2 text-sm font-semibold text-foreground">{title}</h3>{children}</section>;
 }
 
 function Field({ label, value }: { label: string; value: ReactNode }) {
-  return <div className="rounded-[12px] bg-gray-50 p-2.5"><p className="mb-0.5 text-xs text-gray-500">{label}</p><div className="text-sm font-medium text-gray-800">{value}</div></div>;
+  return <div className="rounded-[12px] bg-gray-50 p-2.5"><p className="mb-0.5 text-xs text-muted-foreground">{label}</p><div className="text-sm font-medium text-foreground">{value}</div></div>;
 }
 
 function Channel({ name, values }: { name: string; values: Array<[string, number | string]> }) {
-  return <div className="rounded-[12px] bg-gray-50 p-3"><p className="mb-2 text-xs font-semibold text-gray-600">{name}</p><div className="flex flex-wrap gap-4">{values.map(([label, value]) => <div key={label}><span className="text-xs text-gray-500">{label}: </span><span className="text-sm font-semibold text-gray-800">{value}</span></div>)}</div></div>;
+  return <div className="rounded-[12px] bg-gray-50 p-3"><p className="mb-2 text-xs font-semibold text-muted-foreground">{name}</p><div className="flex flex-wrap gap-4">{values.map(([label, value]) => <div key={label}><span className="text-xs text-muted-foreground">{label}: </span><span className="text-sm font-semibold text-foreground">{value}</span></div>)}</div></div>;
 }
 
 function Discipline({ value }: { value: string }) {

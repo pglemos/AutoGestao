@@ -37,32 +37,32 @@ export function ManagerRoutineChargeModal({ open, sellerName, date, onClose, onS
   return (
     <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/30 p-4" role="dialog" aria-modal="true" aria-labelledby="manager-routine-charge-title">
       <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl">
-        <button type="button" aria-label="Fechar modal" onClick={onClose} className="absolute right-4 top-4 text-gray-400 hover:text-gray-600"><X size={18}/></button>
-        <h2 id="manager-routine-charge-title" className="mb-1 text-lg font-semibold text-gray-800">Cobrar rotina do vendedor</h2>
-        <p className="mb-4 text-xs text-gray-500">Uma notificação interna será registrada para o vendedor.</p>
+        <button type="button" aria-label="Fechar modal" onClick={onClose} className="absolute right-4 top-4 text-muted-foreground hover:text-muted-foreground"><X size={18}/></button>
+        <h2 id="manager-routine-charge-title" className="mb-1 text-lg font-semibold text-foreground">Cobrar rotina do vendedor</h2>
+        <p className="mb-4 text-xs text-muted-foreground">Uma notificação interna será registrada para o vendedor.</p>
         <div className="space-y-3">
         <div>
-          <label className="mb-1 block text-xs text-gray-500" htmlFor="manager-routine-charge-seller">Vendedor</label>
-          <div id="manager-routine-charge-seller" className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">{sellerName}</div>
+          <label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-routine-charge-seller">Vendedor</label>
+          <div id="manager-routine-charge-seller" className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-foreground">{sellerName}</div>
         </div>
         <div>
-          <label className="mb-1 block text-xs text-gray-500" htmlFor="manager-routine-charge-date">Data</label>
-          <div id="manager-routine-charge-date" className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-gray-700">{date}</div>
+          <label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-routine-charge-date">Data</label>
+          <div id="manager-routine-charge-date" className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm text-foreground">{date}</div>
         </div>
         <div>
-          <label className="mb-1 block text-xs text-gray-500" htmlFor="manager-routine-charge-message">Mensagem</label>
+          <label className="mb-1 block text-xs text-muted-foreground" htmlFor="manager-routine-charge-message">Mensagem</label>
           <textarea
             id="manager-routine-charge-message"
             value={message}
             onChange={(event) => setMessage(event.target.value)}
             rows={4}
-            className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
         {sent && <div className="rounded-xl bg-emerald-50 px-3 py-2 text-sm font-medium text-emerald-700">Cobrança registrada.</div>}
         </div>
         <div className="mt-5 flex justify-end gap-2">
-          <button type="button" onClick={onClose} className="rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-200">Cancelar</button>
+          <button type="button" onClick={onClose} className="rounded-xl bg-gray-100 px-4 py-2 text-sm font-medium text-foreground hover:bg-gray-200">Cancelar</button>
           <button type="button" className="rounded-xl bg-emerald-600 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-700 disabled:opacity-50" onClick={() => void handleSend()} disabled={sending || sent}>{sending ? 'Enviando...' : 'Enviar cobrança'}</button>
         </div>
       </div>

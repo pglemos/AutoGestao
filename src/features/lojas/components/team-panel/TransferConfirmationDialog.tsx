@@ -59,7 +59,7 @@ export function TransferConfirmationDialog({
               <ArrowRightLeft size={24} />
             </div>
             <div>
-              <Typography id="transfer-confirm-title" variant="h3" className="text-gray-900 font-bold text-lg tracking-tight">
+              <Typography id="transfer-confirm-title" variant="h3" className="text-foreground font-bold text-lg tracking-tight">
                 Transferir integrante de loja?
               </Typography>
               <Typography variant="caption" tone="muted" className="text-mx-nano block font-medium">
@@ -69,15 +69,15 @@ export function TransferConfirmationDialog({
           </div>
 
           <div id="transfer-confirm-description" className="space-y-mx-md bg-amber-50/60 rounded-2xl p-mx-md border border-amber-200/60">
-            <p className="text-xs text-gray-700 font-medium leading-relaxed">
-              O e-mail <strong className="text-gray-900 font-bold">{existingUser.email}</strong> já pertence ao integrante{' '}
-              <strong className="text-gray-900 font-bold">{existingUser.name}</strong>, que está ativamente vinculado à loja{' '}
+            <p className="text-xs text-foreground font-medium leading-relaxed">
+              O e-mail <strong className="text-foreground font-bold">{existingUser.email}</strong> já pertence ao integrante{' '}
+              <strong className="text-foreground font-bold">{existingUser.name}</strong>, que está ativamente vinculado à loja{' '}
               <span className="inline-flex items-center gap-1 font-bold text-amber-900 bg-amber-200/60 px-2 py-0.5 rounded-md">
                 <Building2 size={12} /> {existingUser.current_store_name}
               </span>.
             </p>
 
-            <div className="flex items-center gap-2 text-xs font-semibold text-gray-600 pt-2 border-t border-amber-200/40">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground pt-2 border-t border-amber-200/40">
               <UserCheck size={14} className="text-emerald-600 shrink-0" />
               <span>
                 Deseja encerrar o vínculo na loja <strong>{existingUser.current_store_name}</strong> e transferi-lo{targetStoreName ? ` para a loja ${targetStoreName}` : ' para a nova unidade'}?

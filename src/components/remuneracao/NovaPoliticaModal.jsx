@@ -129,7 +129,7 @@ export default function NovaPoliticaModal({ open, onClose, onSaved, me }) {
               <div className="flex items-center justify-between mb-2">
                 <div>
                   <p className="text-body-sm font-bold text-[#0F172A]">Aplicar faixa sobre todos os veículos</p>
-                  <p className="text-[12px] text-slate-500 mt-0.5">Ao atingir nova faixa, todos os veículos do período são recalculados</p>
+                  <p className="text-[12px] text-muted-foreground mt-0.5">Ao atingir nova faixa, todos os veículos do período são recalculados</p>
                 </div>
                 <Switch checked={form.aplicar_faixa_sobre_todos_veiculos} onCheckedChange={v => set("aplicar_faixa_sobre_todos_veiculos", v)} />
               </div>

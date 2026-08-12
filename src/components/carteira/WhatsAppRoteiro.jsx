@@ -16,7 +16,7 @@ import { toast } from "@/components/ui/use-toast";
 const COR_MAP = {
   green:  { sel: "bg-green-50 border-green-400 text-green-700",    base: "bg-white border-slate-200 hover:bg-green-50 hover:border-green-300" },
   red:    { sel: "bg-red-50 border-red-400 text-red-700",          base: "bg-white border-slate-200 hover:bg-red-50 hover:border-red-300" },
-  slate:  { sel: "bg-slate-100 border-slate-400 text-slate-700",   base: "bg-white border-slate-200 hover:bg-slate-50" },
+  slate:  { sel: "bg-slate-100 border-slate-400 text-foreground",   base: "bg-white border-slate-200 hover:bg-slate-50" },
   blue:   { sel: "bg-blue-50 border-blue-400 text-blue-700",       base: "bg-white border-slate-200 hover:bg-blue-50 hover:border-blue-300" },
   orange: { sel: "bg-orange-50 border-orange-400 text-orange-700", base: "bg-white border-slate-200 hover:bg-orange-50 hover:border-orange-300" },
   teal:   { sel: "bg-teal-50 border-teal-400 text-teal-700",       base: "bg-white border-slate-200 hover:bg-teal-50 hover:border-teal-300" },
@@ -133,14 +133,14 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
           </DialogTitle>
           {cliente && (
             <div className="space-y-1 pt-1">
-              <p className="text-sm font-bold text-slate-700">{cliente.nome}</p>
+              <p className="text-sm font-bold text-foreground">{cliente.nome}</p>
               {cliente.veiculo_interesse && (
-                <p className="text-xs text-slate-400">{cliente.veiculo_interesse}</p>
+                <p className="text-xs text-muted-foreground">{cliente.veiculo_interesse}</p>
               )}
               <div className="flex gap-4 pt-1">
                 <div>
-                  <p className="text-caption text-slate-400 font-bold uppercase tracking-wide">Objetivo</p>
-                  <p className="text-xs font-semibold text-slate-700">{objetivoAtual}</p>
+                  <p className="text-caption text-muted-foreground font-bold uppercase tracking-wide">Objetivo</p>
+                  <p className="text-xs font-semibold text-foreground">{objetivoAtual}</p>
                 </div>
                 <div>
                   <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
@@ -172,7 +172,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
             className={`w-full flex items-center justify-between px-4 py-3 rounded-xl border transition-all ${
               mostrarRegistro
                 ? "bg-[#005BFF] text-white border-[#005BFF]"
-                : "bg-white text-slate-600 border-slate-200 hover:bg-blue-50 hover:border-blue-300"
+                : "bg-white text-muted-foreground border-slate-200 hover:bg-blue-50 hover:border-blue-300"
             }`}
           >
             <span className="text-sm font-semibold">
@@ -188,7 +188,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
           {mostrarRegistro && (
             <div className="space-y-4 animate-in slide-in-from-top-2 duration-200">
               <div>
-                <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-2">
+                <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-2">
                   Registrar resultado — {codigoPasso ? `${codigoPasso}: ${passoAtual}` : passoAtual}
                 </p>
                 <div className="grid grid-cols-3 gap-2">
@@ -213,7 +213,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
 
               {precisaMotivo && (
                 <div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Motivo da perda</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Motivo da perda</p>
                   <input
                     value={motivoPerda}
                     onChange={e => setMotivoPerda(e.target.value)}
@@ -225,7 +225,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
 
               {precisaDataVisita && (
                 <div>
-                  <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Data e hora da visita / videochamada</p>
+                  <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Data e hora da visita / videochamada</p>
                   <input
                     type="datetime-local"
                     value={novaDataVisita}
@@ -236,13 +236,13 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
               )}
 
               <div>
-                <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1">Observação (opcional)</p>
+                <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Observação (opcional)</p>
                 <textarea
                   value={observacao}
                   onChange={e => setObservacao(e.target.value)}
                   placeholder="Detalhes do contato..."
                   rows={3}
-                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
+                  className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
                 />
               </div>
 

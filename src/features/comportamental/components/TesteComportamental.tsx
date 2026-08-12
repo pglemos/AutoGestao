@@ -50,7 +50,7 @@ export function TesteComportamental() {
       </form>
 
       {loading ? (
-        <p className="text-sm font-bold text-gray-500">Carregando questões…</p>
+        <p className="text-sm font-bold text-muted-foreground">Carregando questões…</p>
       ) : questoes.length === 0 ? (
         <EmptyState icon={<ClipboardCheck size={28} />} title="Nenhuma questão" description="Cadastre as questões do teste comportamental." />
       ) : (
@@ -61,17 +61,17 @@ export function TesteComportamental() {
           {questoes.map((q, i) => (
             <div key={q.id} className="rounded-2xl border border-gray-200 p-mx-md">
               <div className="flex items-start gap-mx-sm">
-                <span className="text-xs font-bold text-gray-500">{i + 1}.</span>
+                <span className="text-xs font-bold text-muted-foreground">{i + 1}.</span>
                 <div className="flex-1">
-                  <p className="font-bold text-gray-800">{q.texto}</p>
-                  <span className="text-xs font-bold uppercase tracking-widest text-gray-500">{q.dimensao}</span>
+                  <p className="font-bold text-foreground">{q.texto}</p>
+                  <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">{q.dimensao}</span>
                   <div className="mt-mx-sm flex gap-mx-xs">
                     {ESCALA.map(v => (
                       <button
                         key={v}
                         type="button"
                         onClick={() => setRespostas(p => ({ ...p, [q.id]: v }))}
-                        className={`h-9 w-9 rounded-mx-full text-sm font-bold transition-colors ${respostas[q.id] === v ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-gray-500 hover:bg-border-default'}`}
+                        className={`h-9 w-9 rounded-mx-full text-sm font-bold transition-colors ${respostas[q.id] === v ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-muted-foreground hover:bg-border-default'}`}
                       >
                         {v}
                       </button>

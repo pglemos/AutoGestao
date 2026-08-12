@@ -18,7 +18,7 @@ const priorityCopy = {
   critical: { label: 'Crítica', badge: 'bg-red-100 text-red-700', border: 'border-red-200' },
   high: { label: 'Alta', badge: 'bg-amber-100 text-amber-700', border: 'border-amber-200' },
   medium: { label: 'Média', badge: 'bg-blue-100 text-blue-700', border: 'border-blue-200' },
-  low: { label: 'Baixa', badge: 'bg-gray-100 text-gray-600', border: 'border-gray-200' },
+  low: { label: 'Baixa', badge: 'bg-gray-100 text-muted-foreground', border: 'border-gray-200' },
 } as const
 
 function formatDueDate(value: string | null): string | null {
@@ -90,8 +90,8 @@ export default function DeterministicActionsPanel({
             <AlertTriangle size={16} aria-hidden="true" />
           </span>
           <div>
-            <h2 id="deterministic-actions-title" className="text-sm font-bold text-gray-800">{title}</h2>
-            {!compact && <p className="mt-0.5 text-xs text-gray-400">Regras oficiais aplicadas aos dados atuais da operação.</p>}
+            <h2 id="deterministic-actions-title" className="text-sm font-bold text-foreground">{title}</h2>
+            {!compact && <p className="mt-0.5 text-xs text-muted-foreground">Regras oficiais aplicadas aos dados atuais da operação.</p>}
           </div>
         </div>
         {refresh && (
@@ -100,7 +100,7 @@ export default function DeterministicActionsPanel({
             onClick={() => void refresh()}
             disabled={loading}
             aria-label="Atualizar ações recomendadas"
-            className="grid h-9 w-9 place-items-center rounded-lg text-gray-400 transition-colors hover:bg-gray-50 hover:text-gray-600 disabled:opacity-50"
+            className="grid h-9 w-9 place-items-center rounded-lg text-muted-foreground transition-colors hover:bg-gray-50 hover:text-muted-foreground disabled:opacity-50"
           >
             <RefreshCw size={15} className={loading ? 'animate-spin' : ''} />
           </button>
@@ -109,7 +109,7 @@ export default function DeterministicActionsPanel({
 
       <div aria-live="polite" className={compact ? 'flex flex-1 flex-col' : ''}>
         {loading ? (
-          <div className="flex flex-1 items-center justify-center py-6 text-sm text-gray-400">
+          <div className="flex flex-1 items-center justify-center py-6 text-sm text-muted-foreground">
             <RefreshCw size={16} className="mr-2 animate-spin" /> Avaliando dados oficiais...
           </div>
         ) : error || localError ? (
@@ -132,14 +132,14 @@ export default function DeterministicActionsPanel({
               return (
                 <article key={action.id} className={`rounded-xl border p-4 ${priority.border} bg-white`}>
                   <div className="flex flex-wrap items-start justify-between gap-2">
-                    <h3 className="min-w-0 flex-1 text-sm font-semibold text-gray-800">{action.title}</h3>
+                    <h3 className="min-w-0 flex-1 text-sm font-semibold text-foreground">{action.title}</h3>
                     <span className={`rounded-full px-2 py-1 text-caption font-bold uppercase tracking-wide ${priority.badge}`}>
                       {priority.label}
                     </span>
                   </div>
-                  <p className="mt-2 text-sm leading-relaxed text-gray-600">{action.explanation}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{action.explanation}</p>
                   {(dueDate || evidence) && (
-                    <div className="mt-2 space-y-1 text-xs text-gray-600">
+                    <div className="mt-2 space-y-1 text-xs text-muted-foreground">
                       {dueDate && <p>Prazo de atenção: {dueDate}</p>}
                       {evidence && <p className="truncate" title={evidence}>Evidências: {evidence}</p>}
                     </div>
@@ -163,7 +163,7 @@ export default function DeterministicActionsPanel({
                         type="button"
                         onClick={() => void handleResolve(action)}
                         disabled={resolving}
-                        className="inline-flex min-h-9 items-center rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-gray-600 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gray-100 disabled:opacity-50"
+                        className="inline-flex min-h-9 items-center rounded-lg border border-gray-200 px-3 py-2 text-xs font-semibold text-muted-foreground transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-gray-100 disabled:opacity-50"
                       >
                         {resolving ? 'Registrando...' : 'Marcar como tratada'}
                       </button>
@@ -177,7 +177,7 @@ export default function DeterministicActionsPanel({
       </div>
 
       {maxItems && actions.length > maxItems && (
-        <p className="mt-3 text-xs text-gray-600">Mais {actions.length - maxItems} ação(ões) disponível(is) nas áreas operacionais.</p>
+        <p className="mt-3 text-xs text-muted-foreground">Mais {actions.length - maxItems} ação(ões) disponível(is) nas áreas operacionais.</p>
       )}
     </section>
   )

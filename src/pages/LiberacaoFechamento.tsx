@@ -134,31 +134,31 @@ export function LiberacaoFechamento() {
           <ShieldCheck size={32} className="text-emerald-600 shrink-0" />
         </header>
 
-        <div className="space-y-4 text-xs leading-relaxed text-gray-500">
+        <div className="space-y-4 text-xs leading-relaxed text-muted-foreground">
           {/* Details */}
           <div className="bg-gray-50 p-4 rounded-xl border border-gray-100 space-y-3 shadow-none">
             <div className="flex items-center gap-2">
               <User size={15} className="text-emerald-600" />
-              <span className="font-bold text-gray-800">Vendedor:</span>
+              <span className="font-bold text-foreground">Vendedor:</span>
               <span className="font-semibold">{solicitacao.vendedorNome}</span>
             </div>
             <div className="flex items-center gap-2">
               <Calendar size={15} className="text-emerald-600" />
-              <span className="font-bold text-gray-800">Data do Fechamento:</span>
+              <span className="font-bold text-foreground">Data do Fechamento:</span>
               <span className="font-extrabold text-emerald-600">
                 {solicitacao.dataFechamento.split('-').reverse().join('/')}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <Clock size={15} className="text-emerald-600" />
-              <span className="font-bold text-gray-800">Data/Hora Solicitação:</span>
+              <span className="font-bold text-foreground">Data/Hora Solicitação:</span>
               <span className="font-semibold">
                 {new Date(solicitacao.dataHoraSolicitacao).toLocaleString('pt-BR')}
               </span>
             </div>
             <div className="flex items-center gap-2">
               <CheckCircle2 size={15} className="text-emerald-600" />
-              <span className="font-bold text-gray-800">Status:</span>
+              <span className="font-bold text-foreground">Status:</span>
               <span className={`inline-block px-2 py-0.5 rounded-xl text-caption font-extrabold ${
                 solicitacao.status === 'liberado'
                   ? 'bg-status-success-surface text-status-success border border-status-success/20'
@@ -172,7 +172,7 @@ export function LiberacaoFechamento() {
           {/* Action Input */}
           {solicitacao.status === 'pendente' ? (
             <div className="flex flex-col gap-2">
-              <label htmlFor="motivo-liberacao" className="font-bold text-gray-800">
+              <label htmlFor="motivo-liberacao" className="font-bold text-foreground">
                 Motivo da Liberação (Opcional)
               </label>
               <textarea
@@ -180,7 +180,7 @@ export function LiberacaoFechamento() {
                 value={motivo}
                 onChange={e => setMotivo(e.target.value)}
                 placeholder="Ex: Vendedor teve problemas com a conexão ou ausência justificada..."
-                className="h-20 w-full resize-none rounded-xl border border-gray-100 p-3 text-xs text-gray-800 outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 transition-all"
+                className="h-20 w-full resize-none rounded-xl border border-gray-100 p-3 text-xs text-foreground outline-none focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/5 transition-all"
               />
             </div>
           ) : (
@@ -200,7 +200,7 @@ export function LiberacaoFechamento() {
           <Button
             onClick={() => navigate('/home')}
             variant="outline"
-            className="h-9 px-4 text-xs font-bold border-gray-100 text-gray-500 hover:bg-background flex items-center gap-1.5 rounded-xl"
+            className="h-9 px-4 text-xs font-bold border-gray-100 text-muted-foreground hover:bg-background flex items-center gap-1.5 rounded-xl"
           >
             <ArrowLeft size={13} /> Cockpit
           </Button>

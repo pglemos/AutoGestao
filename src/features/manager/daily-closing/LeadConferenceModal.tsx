@@ -178,7 +178,7 @@ export function LeadConferenceModal({
 
   const footer = (
     <div className="flex w-full flex-col-reverse gap-2 sm:flex-row sm:items-center sm:justify-between">
-      <button type="button" className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-gray-200 bg-white px-3 text-sm font-medium text-gray-700 hover:bg-gray-50" onClick={() => void openHistory()}>
+      <button type="button" className="inline-flex h-9 items-center gap-1.5 rounded-[8px] border border-gray-200 bg-white px-3 text-sm font-medium text-foreground hover:bg-gray-50" onClick={() => void openHistory()}>
         <History size={16} />
         Ver Histórico
       </button>
@@ -208,12 +208,12 @@ export function LeadConferenceModal({
       >
         <div className="space-y-4">
           <section className="rounded-[16px] bg-gray-50 p-4">
-            <div className="flex items-center gap-2 text-xs font-semibold text-gray-600">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
               <CalendarDays size={17} />
               Período da Conferência
             </div>
             <div className="mt-3 flex flex-col gap-3 lg:flex-row lg:items-end lg:justify-between">
-              <label className="text-xs text-gray-500">
+              <label className="text-xs text-muted-foreground">
                 <span className="mb-1 block">Tipo de período</span>
                 <select
                   value={periodType}
@@ -222,7 +222,7 @@ export function LeadConferenceModal({
                       event.target.value as LeadConferencePeriodType,
                     )
                   }
-                  className="h-10 min-w-[220px] rounded-[12px] border border-gray-200 bg-white px-3 text-sm text-gray-700"
+                  className="h-10 min-w-[220px] rounded-[12px] border border-gray-200 bg-white px-3 text-sm text-foreground"
                 >
                   {Object.entries(LEAD_CONFERENCE_PERIOD_LABELS).map(
                     ([value, label]) => (
@@ -251,9 +251,9 @@ export function LeadConferenceModal({
                   />
                 </div>
               )}
-              <div className="rounded-[12px] border border-gray-200 bg-white px-3 py-2 text-sm text-gray-500">
+              <div className="rounded-[12px] border border-gray-200 bg-white px-3 py-2 text-sm text-muted-foreground">
                 Período:{" "}
-                <strong className="text-gray-800">
+                <strong className="text-foreground">
                   {format(parseISO(period.start), "dd/MM/yyyy")} a{" "}
                   {format(parseISO(period.end), "dd/MM/yyyy")}
                 </strong>
@@ -302,7 +302,7 @@ export function LeadConferenceModal({
               <Skeleton className="h-12" />
             </div>
           ) : rows.length === 0 ? (
-            <div className="py-12 text-center text-sm text-gray-500">
+            <div className="py-12 text-center text-sm text-muted-foreground">
               Nenhum vendedor ativo encontrado nesta unidade.
             </div>
           ) : (
@@ -325,7 +325,7 @@ export function LeadConferenceModal({
                     ].map((label) => (
                       <th
                         key={label}
-                        className="text-left px-3 py-3 whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-gray-500"
+                        className="text-left px-3 py-3 whitespace-nowrap text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                       >
                         {label}
                       </th>
@@ -362,8 +362,8 @@ export function LeadConferenceModal({
         ) : history.length === 0 ? (
           <div className="grid min-h-52 place-items-center text-center">
             <div>
-              <History size={42} className="mx-auto text-gray-300" />
-              <p className="mt-3 text-sm text-gray-500">
+              <History size={42} className="mx-auto text-text-disabled" />
+              <p className="mt-3 text-sm text-muted-foreground">
                 Nenhuma conferência de leads foi realizada.
               </p>
             </div>
@@ -381,7 +381,7 @@ export function LeadConferenceModal({
                       {format(parseISO(item.period_start), "dd/MM/yyyy")} a{" "}
                       {format(parseISO(item.period_end), "dd/MM/yyyy")}
                     </strong>
-                    <p className="mt-1 text-xs text-gray-400">
+                    <p className="mt-1 text-xs text-muted-foreground">
                       {item.manager?.name || "Gestor"} ·{" "}
                       {format(parseISO(item.created_at), "dd/MM/yyyy HH:mm")}
                     </p>
@@ -424,7 +424,7 @@ function PeriodInput({
   onChange: (value: string) => void;
 }) {
   return (
-    <label className="text-xs text-gray-500">
+    <label className="text-xs text-muted-foreground">
       <span className="mb-1 block">{label}</span>
       <input
         type="date"
@@ -452,10 +452,10 @@ function ConferenceMetric({
         ? "border-emerald-200 bg-emerald-50"
       : tone === "orange"
         ? "border-orange-200 bg-orange-50"
-        : "border-gray-100 bg-white text-gray-800";
+        : "border-gray-100 bg-white text-foreground";
   return (
     <div className={`rounded-[16px] border p-4 ${colors}`}>
-      <p className="text-xs font-medium text-gray-500 mb-1">{label}</p>
+      <p className="text-xs font-medium text-muted-foreground mb-1">{label}</p>
       <strong className="block text-2xl font-bold">
         {value === null ? "—" : value}
       </strong>
@@ -495,10 +495,10 @@ function ConferenceRow({
           <span className="grid h-7 w-7 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">
             {getInitials(row.sellerName)}
           </span>
-          <strong className="text-sm font-medium text-gray-800 whitespace-nowrap">{row.sellerName}</strong>
+          <strong className="text-sm font-medium text-foreground whitespace-nowrap">{row.sellerName}</strong>
         </div>
       </td>
-      <td className="px-3 py-3 text-sm text-gray-600 whitespace-nowrap">
+      <td className="px-3 py-3 text-sm text-muted-foreground whitespace-nowrap">
         {storeName}
       </td>
       <NumberValue value={row.internetMx} />
@@ -518,7 +518,7 @@ function ConferenceRow({
       <DifferenceValue value={totalDiff} />
       <td className="px-3 py-3">
         {!complete ? (
-          <span className="inline-flex rounded-lg bg-gray-100 px-2 py-1 text-xs font-semibold text-gray-500">
+          <span className="inline-flex rounded-lg bg-gray-100 px-2 py-1 text-xs font-semibold text-muted-foreground">
             Não conferido
           </span>
         ) : (
@@ -531,7 +531,7 @@ function ConferenceRow({
         <button
           type="button"
           onClick={() => onClear(row.sellerId)}
-          className="inline-flex items-center gap-1 text-xs font-medium text-gray-500 hover:text-gray-700 hover:bg-gray-100 px-2 py-1 rounded-lg"
+          className="inline-flex items-center gap-1 text-xs font-medium text-muted-foreground hover:text-foreground hover:bg-gray-100 px-2 py-1 rounded-lg"
         >
           <RotateCcw size={13} />
           Limpar
@@ -542,7 +542,7 @@ function ConferenceRow({
 }
 
 function NumberValue({ value }: { value: number }) {
-  return <td className="px-3 py-3 text-sm text-gray-700">{value}</td>;
+  return <td className="px-3 py-3 text-sm text-foreground">{value}</td>;
 }
 function OfficialInput({
   value,
@@ -571,7 +571,7 @@ function OfficialInput({
 function DifferenceValue({ value }: { value: number | null }) {
   return (
     <td
-      className={`px-3 py-3 text-sm font-semibold ${value === null ? "text-gray-400" : value === 0 ? "text-emerald-600" : "text-orange-600"}`}
+      className={`px-3 py-3 text-sm font-semibold ${value === null ? "text-muted-foreground" : value === 0 ? "text-emerald-600" : "text-orange-600"}`}
     >
       {formatDifference(value)}
     </td>

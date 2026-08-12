@@ -56,7 +56,7 @@ export function BroadcastsTab() {
                     <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-emerald-600" /></div>
                 ) : broadcasts.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
-                        <Megaphone size={40} className="mx-auto text-gray-500 opacity-30" />
+                        <Megaphone size={40} className="mx-auto text-muted-foreground opacity-30" />
                         <Typography variant="caption" tone="muted" className="">Nenhum broadcast disparado ainda</Typography>
                     </div>
                 ) : (

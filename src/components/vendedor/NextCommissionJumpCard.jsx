@@ -28,10 +28,10 @@ export default function NextCommissionJumpCard({ calcResult }) {
           <div>
             <CheckCircle2 className="w-8 h-8 text-emerald-400 mb-3" />
             <p className="text-lg font-bold text-white">Você já está na maior faixa de comissão.</p>
-            <p className="text-slate-400 text-sm mt-2">Continue vendendo para aumentar sua comissão total e disputar novas premiações.</p>
+            <p className="text-muted-foreground text-sm mt-2">Continue vendendo para aumentar sua comissão total e disputar novas premiações.</p>
             {faixaAtual && (
               <div className="mt-4 bg-white/5 rounded-xl p-3">
-                <p className="text-slate-400 text-xs">Faixa atual</p>
+                <p className="text-muted-foreground text-xs">Faixa atual</p>
                 <p className="text-white font-bold">
                   {faixaAtual.quantidade_inicial}{faixaAtual.quantidade_final ? `–${faixaAtual.quantidade_final}` : "+"} veículos
                 </p>
@@ -40,11 +40,11 @@ export default function NextCommissionJumpCard({ calcResult }) {
           </div>
         ) : (
           <div>
-            <p className="text-slate-400 text-sm">Venda mais</p>
+            <p className="text-muted-foreground text-sm">Venda mais</p>
             <p className="text-5xl font-bold text-white mt-1">
-              {proxSaltoVendas} <span className="text-2xl font-semibold text-slate-300">veículo{proxSaltoVendas !== 1 ? "s" : ""}</span>
+              {proxSaltoVendas} <span className="text-2xl font-semibold text-text-disabled">veículo{proxSaltoVendas !== 1 ? "s" : ""}</span>
             </p>
-            <p className="text-slate-400 text-sm mt-2">e sua comissão salta para</p>
+            <p className="text-muted-foreground text-sm mt-2">e sua comissão salta para</p>
             <p className="text-3xl font-bold text-emerald-400 mt-1">{formatBRL(comissaoProxSalto)}</p>
 
             <div className="mt-4 bg-emerald-500/15 border border-emerald-500/20 rounded-xl px-4 py-3">
@@ -52,13 +52,13 @@ export default function NextCommissionJumpCard({ calcResult }) {
               <p className="text-emerald-400 text-2xl font-bold">+ {formatBRL(ganhoAdicionalSalto)}</p>
             </div>
 
-            <p className="text-slate-500 text-xs mt-3">
+            <p className="text-muted-foreground text-xs mt-3">
               Ao atingir a próxima faixa, todos os veículos vendidos no período são recalculados pela nova faixa.
             </p>
 
             <div className="mt-3 flex gap-3 text-xs">
               <div className="bg-white/5 rounded-lg px-3 py-2 flex-1">
-                <p className="text-slate-400">Agora</p>
+                <p className="text-muted-foreground">Agora</p>
                 <p className="text-white font-bold">{qtdVendas} vend. · {formatBRL(comissao)}</p>
               </div>
               <div className="bg-emerald-500/10 border border-emerald-500/20 rounded-lg px-3 py-2 flex-1">

@@ -121,7 +121,7 @@ const PRIORITY_STYLE: Record<ManagerRoutinePriority, {
   },
   futura: {
     label: 'Agendada',
-    color: 'text-gray-500',
+    color: 'text-muted-foreground',
     background: 'bg-gray-50',
     border: 'border-gray-200',
     marker: 'bg-gray-400',
@@ -142,7 +142,7 @@ const ICONS = {
   Plus,
 }
 
-const FIELD_CLASS = 'w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
+const FIELD_CLASS = 'w-full rounded-xl border border-gray-200 px-3 py-2 text-sm text-foreground outline-none transition focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/20'
 
 export function ManagerDayRoutineView({
   returnLink,
@@ -182,15 +182,15 @@ export function ManagerDayRoutineView({
         <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Rotina do Dia</h1>
-              <p className="mt-0.5 text-sm text-gray-500">
+              <h1 className="text-xl font-bold text-foreground">Rotina do Dia</h1>
+              <p className="mt-0.5 text-sm text-muted-foreground">
                 Alertas e ações essenciais para conduzir o dia com foco em resultado.
               </p>
             </div>
             <div className="flex items-center gap-3 self-end lg:self-auto">
               <div className="text-right">
-                <p className="text-sm font-semibold text-gray-700">{dateLabel.weekday}</p>
-                <p className="text-xs text-gray-500">{dateLabel.longDate}</p>
+                <p className="text-sm font-semibold text-foreground">{dateLabel.weekday}</p>
+                <p className="text-xs text-muted-foreground">{dateLabel.longDate}</p>
                 {storeName && (
                   <p className="mt-0.5 text-xs font-medium text-emerald-600">{storeName}</p>
                 )}
@@ -199,7 +199,7 @@ export function ManagerDayRoutineView({
                 type="button"
                 onClick={() => void onRefresh()}
                 disabled={refreshing}
-                className="flex h-[36px] items-center gap-1 rounded-xl border border-gray-200 bg-white px-3 text-sm font-medium text-gray-700 transition hover:bg-gray-50 disabled:cursor-wait disabled:opacity-60"
+                className="flex h-[36px] items-center gap-1 rounded-xl border border-gray-200 bg-white px-3 text-sm font-medium text-foreground transition hover:bg-gray-50 disabled:cursor-wait disabled:opacity-60"
               >
                 <RefreshCw size={14} className={refreshing ? 'animate-spin' : ''} />
                 Atualizar
@@ -218,13 +218,13 @@ export function ManagerDayRoutineView({
               className={`flex items-center gap-2 px-6 py-3.5 text-sm font-medium transition-colors ${
                 activeTab === 'today'
                   ? 'border-b-2 border-emerald-600 text-emerald-700'
-                  : 'text-gray-500 hover:text-gray-700'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               <CalendarClock size={16} />
               Hoje
               {pendingToday > 0 && activeTab !== 'today' && (
-                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-caption text-gray-500">
+                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-caption text-muted-foreground">
                   {pendingToday}
                 </span>
               )}
@@ -237,7 +237,7 @@ export function ManagerDayRoutineView({
               className={`px-6 py-3.5 text-sm font-medium transition-colors ${
                 activeTab === 'history'
                   ? 'border-b-2 border-emerald-600 text-emerald-700'
-                  : 'text-gray-500 hover:text-gray-700'
+                  : 'text-muted-foreground hover:text-foreground'
               }`}
             >
               Minha Rotina
@@ -388,7 +388,7 @@ function TodayRoutine({
                   className={`whitespace-nowrap rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                     filter === item.key
                       ? 'bg-emerald-600 text-white shadow-sm'
-                      : 'border border-gray-200 bg-white text-gray-500 hover:bg-gray-50'
+                      : 'border border-gray-200 bg-white text-muted-foreground hover:bg-gray-50'
                   }`}
                 >
                   {item.label}
@@ -403,13 +403,13 @@ function TodayRoutine({
                 </button>
               ))}
             </div>
-            <label className="flex shrink-0 items-center gap-2 text-xs text-gray-400">
+            <label className="flex shrink-0 items-center gap-2 text-xs text-muted-foreground">
               <span className="hidden lg:block">Ordenar:</span>
               <select
                 aria-label="Ordenar"
                 value={sort}
                 onChange={event => setSort(event.target.value as ManagerRoutineSort)}
-                className="rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-gray-600 outline-none focus:ring-2 focus:ring-emerald-500"
+                className="rounded-lg border border-gray-200 px-2.5 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
               >
                 {SORTS.map(item => <option key={item.key} value={item.key}>{item.label}</option>)}
               </select>
@@ -419,10 +419,10 @@ function TodayRoutine({
       )}
 
       <div>
-        <h2 className="text-base font-bold text-gray-800">
+        <h2 className="text-base font-bold text-foreground">
           {showOverdue ? 'Pendências de dias anteriores' : 'O que você não pode deixar de fazer hoje'}
         </h2>
-        <p className="mt-0.5 text-xs text-gray-500">
+        <p className="mt-0.5 text-xs text-muted-foreground">
           {showOverdue
             ? 'Tarefas vencidas que ainda exigem atuação.'
             : 'Somente ações urgentes e pendentes do dia.'}
@@ -432,8 +432,8 @@ function TodayRoutine({
       {tasks.length === 0 ? (
         <div className="rounded-2xl border border-gray-100 bg-white p-10 text-center shadow-sm">
           <CheckCircle2 className="mx-auto mb-3 h-10 w-10 text-emerald-300" />
-          <p className="text-sm font-semibold text-gray-600">Nenhuma ação urgente no momento.</p>
-          <p className="mt-1 text-xs text-gray-400">
+          <p className="text-sm font-semibold text-muted-foreground">Nenhuma ação urgente no momento.</p>
+          <p className="mt-1 text-xs text-muted-foreground">
             O sistema continuará acompanhando a operação e avisará quando sua atuação for necessária.
           </p>
         </div>
@@ -474,7 +474,7 @@ function RoutineTaskCard({
     <article className={`overflow-hidden rounded-xl border bg-white shadow-sm transition-all hover:shadow-md ${priority.border}`}>
       <div className="flex flex-wrap items-center gap-2 p-3 lg:flex-nowrap lg:gap-4 lg:px-4 lg:py-3">
         <div className="order-1 flex items-center gap-2 lg:order-none lg:w-16 lg:shrink-0 lg:flex-col lg:gap-0 lg:text-center">
-          <Clock size={12} className="text-gray-400 lg:hidden" />
+          <Clock size={12} className="text-muted-foreground lg:hidden" />
           <span className={`text-sm font-bold ${priority.color}`}>{task.dueTime || '—'}</span>
           {task.daysLate > 0 && (
             <span className="text-caption font-medium text-red-600">{task.daysLate}d atraso</span>
@@ -487,24 +487,24 @@ function RoutineTaskCard({
           </div>
           <div className="min-w-0 flex-1">
             <div className="flex items-center gap-2">
-              <h3 className="truncate text-sm font-semibold text-gray-800">{task.title}</h3>
+              <h3 className="truncate text-sm font-semibold text-foreground">{task.title}</h3>
               {!task.automatic && (
-                <span className="hidden rounded bg-gray-100 px-1.5 py-0.5 text-caption font-medium text-gray-500 lg:inline">
+                <span className="hidden rounded bg-gray-100 px-1.5 py-0.5 text-caption font-medium text-muted-foreground lg:inline">
                   Manual
                 </span>
               )}
             </div>
-            <p className="mt-0.5 text-xs text-gray-500 lg:line-clamp-1">{task.description}</p>
+            <p className="mt-0.5 text-xs text-muted-foreground lg:line-clamp-1">{task.description}</p>
             <div className="mt-1.5 flex flex-wrap items-center gap-2 lg:mt-1">
               <span className={`rounded px-1.5 py-0.5 text-caption font-medium ${category.background} ${category.color}`}>
                 {MANAGER_ROUTINE_CATEGORY_LABELS[task.category]}
               </span>
               {!task.automatic && (
-                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-caption font-medium text-gray-500 lg:hidden">
+                <span className="rounded bg-gray-100 px-1.5 py-0.5 text-caption font-medium text-muted-foreground lg:hidden">
                   Manual
                 </span>
               )}
-              <span className="hidden text-caption text-gray-400 lg:inline">
+              <span className="hidden text-caption text-muted-foreground lg:inline">
                 {MANAGER_ROUTINE_ORIGIN_LABELS[task.origin]}
               </span>
             </div>
@@ -523,7 +523,7 @@ function RoutineTaskCard({
                 className={`h-9 flex-1 rounded-lg px-3 text-xs font-medium transition lg:h-8 lg:flex-none ${
                   action.kind === 'acao'
                     ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                    : 'border border-gray-200 bg-white text-gray-700 hover:bg-gray-50'
+                    : 'border border-gray-200 bg-white text-foreground hover:bg-gray-50'
                 }`}
               >
                 {action.label}
@@ -576,7 +576,7 @@ function HistoryRoutine({
               className={`rounded-lg px-3 py-1.5 text-xs font-medium transition-all ${
                 period === value && !startDate
                   ? 'bg-emerald-600 text-white'
-                  : 'bg-gray-50 text-gray-500 hover:bg-gray-100'
+                  : 'bg-gray-50 text-muted-foreground hover:bg-gray-100'
               }`}
             >
               {value} dias
@@ -588,15 +588,15 @@ function HistoryRoutine({
               aria-label="Data inicial"
               value={startDate}
               onChange={event => setStartDate(event.target.value)}
-              className="min-w-0 rounded-lg border border-gray-200 px-2 py-1.5 text-xs text-gray-600 outline-none focus:ring-2 focus:ring-emerald-500"
+              className="min-w-0 rounded-lg border border-gray-200 px-2 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
             />
-            <span className="text-xs text-gray-400">até</span>
+            <span className="text-xs text-muted-foreground">até</span>
             <input
               type="date"
               aria-label="Data final"
               value={endDate}
               onChange={event => setEndDate(event.target.value)}
-              className="min-w-0 rounded-lg border border-gray-200 px-2 py-1.5 text-xs text-gray-600 outline-none focus:ring-2 focus:ring-emerald-500"
+              className="min-w-0 rounded-lg border border-gray-200 px-2 py-1.5 text-xs text-muted-foreground outline-none focus:ring-2 focus:ring-emerald-500"
             />
           </div>
         </div>
@@ -608,14 +608,14 @@ function HistoryRoutine({
         <RoutineNotice tone="error" title="Não foi possível carregar o histórico." description={error} />
       ) : groups.length === 0 ? (
         <div className="rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm">
-          <p className="text-sm text-gray-400">Nenhuma atividade registrada no período.</p>
+          <p className="text-sm text-muted-foreground">Nenhuma atividade registrada no período.</p>
         </div>
       ) : (
         <div className="space-y-4">
           {groups.map(group => (
             <section key={group.date} className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
               <header className="flex items-center justify-between border-b border-gray-100 bg-gray-50 px-4 py-3">
-                <h3 className="text-sm font-semibold text-gray-700">
+                <h3 className="text-sm font-semibold text-foreground">
                   {formatShortDate(group.date)}
                   {group.isToday && <span className="ml-2 text-xs font-medium text-emerald-600">Hoje</span>}
                 </h3>
@@ -655,8 +655,8 @@ function HistoryTaskRow({ task }: { task: ManagerRoutineTask }) {
   return (
     <div className="flex items-start gap-3 px-4 py-3">
       <div className="min-w-0 flex-1">
-        <p className="text-sm font-medium text-gray-800">{task.title}</p>
-        {task.description && <p className="mt-0.5 text-xs text-gray-500">{task.description}</p>}
+        <p className="text-sm font-medium text-foreground">{task.title}</p>
+        {task.description && <p className="mt-0.5 text-xs text-muted-foreground">{task.description}</p>}
         <div className="mt-1.5 flex flex-wrap items-center gap-2">
           <span className={`rounded px-1.5 py-0.5 text-caption font-medium ${category.background} ${category.color}`}>
             {MANAGER_ROUTINE_CATEGORY_LABELS[task.category]}
@@ -664,9 +664,9 @@ function HistoryTaskRow({ task }: { task: ManagerRoutineTask }) {
           <span className={`rounded px-1.5 py-0.5 text-caption font-medium ${status.background} ${status.color}`}>
             {label}
           </span>
-          {task.dueTime && <span className="text-caption text-gray-400">{task.dueTime}</span>}
+          {task.dueTime && <span className="text-caption text-muted-foreground">{task.dueTime}</span>}
           {task.observation && (
-            <span className="truncate text-caption italic text-gray-400">&quot;{task.observation}&quot;</span>
+            <span className="truncate text-caption italic text-muted-foreground">&quot;{task.observation}&quot;</span>
           )}
         </div>
       </div>
@@ -721,7 +721,7 @@ function CreateActivityModal({
       }}
       footer={(
         <>
-          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-gray-200 px-3 text-sm text-gray-700 hover:bg-gray-50">
+          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-gray-200 px-3 text-sm text-foreground hover:bg-gray-50">
             Cancelar
           </button>
           <button
@@ -849,7 +849,7 @@ function CompleteActivityModal({
       referenceStyle
       footer={(
         <>
-          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-gray-200 px-3 text-sm text-gray-700 hover:bg-gray-50">
+          <button type="button" onClick={onClose} className="h-8 rounded-xl border border-gray-200 px-3 text-sm text-foreground hover:bg-gray-50">
             Cancelar
           </button>
           <button
@@ -865,11 +865,11 @@ function CompleteActivityModal({
     >
       <div className="space-y-4">
         <div className="rounded-xl bg-gray-50 p-3">
-          <p className="text-sm font-medium text-gray-800">{task.title}</p>
-          {task.description && <p className="mt-0.5 text-xs text-gray-500">{task.description}</p>}
+          <p className="text-sm font-medium text-foreground">{task.title}</p>
+          {task.description && <p className="mt-0.5 text-xs text-muted-foreground">{task.description}</p>}
         </div>
         <div>
-          <span className="mb-2 block text-xs font-medium text-gray-500">Resultado</span>
+          <span className="mb-2 block text-xs font-medium text-muted-foreground">Resultado</span>
           <div className="grid grid-cols-2 gap-2">
             {([
               ['concluida', 'Concluída', 'bg-emerald-600 hover:bg-emerald-700'],
@@ -885,7 +885,7 @@ function CompleteActivityModal({
                 className={`rounded-xl px-3 py-2.5 text-sm font-medium transition-all ${
                   result === value
                     ? `${activeClass} text-white shadow-sm`
-                    : 'bg-gray-50 text-gray-600 hover:bg-gray-100'
+                    : 'bg-gray-50 text-muted-foreground hover:bg-gray-100'
                 }`}
               >
                 {label}
@@ -909,7 +909,7 @@ function CompleteActivityModal({
 
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
-    <label className="block text-xs font-medium text-gray-500">
+    <label className="block text-xs font-medium text-muted-foreground">
       <span className="mb-1 block">{label}</span>
       {children}
     </label>
@@ -935,8 +935,8 @@ function RoutineNotice({
 }) {
   return (
     <div className={`rounded-2xl border bg-white p-8 text-center shadow-sm ${tone === 'error' ? 'border-red-200' : 'border-gray-100'}`}>
-      <p className={`text-sm font-semibold ${tone === 'error' ? 'text-red-700' : 'text-gray-600'}`}>{title}</p>
-      <p className="mt-1 text-xs text-gray-400">{description}</p>
+      <p className={`text-sm font-semibold ${tone === 'error' ? 'text-red-700' : 'text-muted-foreground'}`}>{title}</p>
+      <p className="mt-1 text-xs text-muted-foreground">{description}</p>
     </div>
   )
 }
@@ -973,8 +973,8 @@ function historyStatusStyle(status: string): { color: string; background: string
   if (status === 'concluida') return { color: 'text-emerald-600', background: 'bg-emerald-50' }
   if (status === 'concluida_parcial') return { color: 'text-amber-600', background: 'bg-amber-50' }
   if (status === 'reagendada') return { color: 'text-blue-600', background: 'bg-blue-50' }
-  if (status === 'nao_realizada') return { color: 'text-gray-500', background: 'bg-gray-50' }
-  return { color: 'text-gray-600', background: 'bg-gray-50' }
+  if (status === 'nao_realizada') return { color: 'text-muted-foreground', background: 'bg-gray-50' }
+  return { color: 'text-muted-foreground', background: 'bg-gray-50' }
 }
 
 export default ManagerDayRoutineView

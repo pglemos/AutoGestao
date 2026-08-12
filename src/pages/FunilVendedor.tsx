@@ -199,7 +199,7 @@ export default function FunilVendedor() {
                   type="button"
                   aria-pressed={periodKey === value}
                   onClick={() => setPeriodKey(value as PeriodKey)}
-                  className={`rounded-lg px-3 py-1.5 text-caption font-semibold transition-all ${periodKey === value ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-600 hover:text-slate-800'}`}
+                  className={`rounded-lg px-3 py-1.5 text-caption font-semibold transition-all ${periodKey === value ? 'bg-white text-foreground shadow-sm' : 'text-muted-foreground hover:text-foreground'}`}
                 >
                   {label}
                 </button>
@@ -219,8 +219,8 @@ export default function FunilVendedor() {
         {!hasAnyData && (
           <div className="rounded-2xl border border-slate-200 bg-white p-10 text-center shadow-sm">
             <TrendingUp className="mx-auto mb-3 h-10 w-10 text-slate-200" />
-            <p className="mb-1 text-body font-bold text-slate-900">Sem dados suficientes neste período.</p>
-            <p className="text-body-sm text-slate-600">Registre atendimentos na Carteira ou no Fechamento Diário para alimentar o Funil.</p>
+            <p className="mb-1 text-body font-bold text-foreground">Sem dados suficientes neste período.</p>
+            <p className="text-body-sm text-muted-foreground">Registre atendimentos na Carteira ou no Fechamento Diário para alimentar o Funil.</p>
           </div>
         )}
 

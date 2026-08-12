@@ -142,7 +142,7 @@ export function ConsultingDriveFilesView({ clientId, visits = [] }: { clientId: 
 
         {!loading && totalFiles === 0 && (
           <div className="mt-mx-lg rounded-2xl border border-dashed border-gray-200 p-mx-xl text-center">
-            <FileUp className="h-mx-10 w-mx-10 mx-auto text-gray-500 mb-mx-sm" />
+            <FileUp className="h-mx-10 w-mx-10 mx-auto text-muted-foreground mb-mx-sm" />
             <Typography variant="p" tone="muted" className="font-bold">Nenhum arquivo registrado.</Typography>
           </div>
         )}

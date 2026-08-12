@@ -33,7 +33,7 @@ export default function MinhaRemuneracaoPage() {
     return (
       <div className="h-full w-full flex flex-col items-center justify-center gap-4" style={{ background: '#FFFFFF' }}>
         <div className="w-10 h-10 border-4 border-emerald-900 border-t-emerald-400 rounded-full animate-spin" />
-        <p className="text-gray-500 font-medium">Calculando sua comissão do mês...</p>
+        <p className="text-muted-foreground font-medium">Calculando sua comissão do mês...</p>
       </div>
     )
   }
@@ -41,8 +41,8 @@ export default function MinhaRemuneracaoPage() {
   if (data.error) {
     return (
       <div className="h-full w-full flex flex-col items-center justify-center gap-4" style={{ background: '#FFFFFF' }}>
-        <p className="text-gray-500 font-medium">{data.error}</p>
-        <button type="button" className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-gray-800 rounded-xl text-sm font-semibold">
+        <p className="text-muted-foreground font-medium">{data.error}</p>
+        <button type="button" className="flex items-center gap-2 px-4 py-2 bg-emerald-600 text-foreground rounded-xl text-sm font-semibold">
           <RefreshCw className="w-4 h-4" /> Tentar novamente
         </button>
       </div>
@@ -52,18 +52,18 @@ export default function MinhaRemuneracaoPage() {
   const userName = data.profile?.name?.split(' ')[0] || 'Nome não informado'
 
   return (
-    <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex min-w-0 flex-col gap-4" surface="plain" scrollerClassName="!bg-[#030B14] text-gray-800">
+    <PageTemplate as="div" width="dashboard" bottomClearance="navigation" className="flex min-w-0 flex-col gap-4" surface="plain" scrollerClassName="!bg-[#030B14] text-foreground">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 py-4">
           <div>
-            <h1 className="text-2xl lg:text-3xl font-bold text-gray-800">{saudacaoPorHora()}, {userName}! 🚀</h1>
-            <p className="text-gray-500 text-sm mt-0.5">Foque no que importa. Venda mais e ganhe mais.</p>
+            <h1 className="text-2xl lg:text-3xl font-bold text-foreground">{saudacaoPorHora()}, {userName}! 🚀</h1>
+            <p className="text-muted-foreground text-sm mt-0.5">Foque no que importa. Venda mais e ganhe mais.</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="relative">
-              <button className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors shadow-sm bg-white/5 border border-white/10 text-gray-600 hover:bg-white/10">
-                <Calendar className="w-4 h-4 text-gray-500" />
+              <button className="flex items-center gap-2 rounded-xl px-4 py-2 text-sm font-medium transition-colors shadow-sm bg-white/5 border border-white/10 text-muted-foreground hover:bg-white/10">
+                <Calendar className="w-4 h-4 text-muted-foreground" />
                 Este mês
-                <ChevronDown className="w-3.5 h-3.5 text-gray-500 transition-transform" />
+                <ChevronDown className="w-3.5 h-3.5 text-muted-foreground transition-transform" />
               </button>
             </div>
           </div>
@@ -103,7 +103,7 @@ export default function MinhaRemuneracaoPage() {
         </div>
 
         <div className="text-center pt-4 pb-2">
-          <p className="text-gray-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             <span className="text-emerald-500">⚡</span> Disciplina hoje, liberdade amanhã. Você no controle dos seus resultados.
           </p>
         </div>

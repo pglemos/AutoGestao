@@ -77,7 +77,7 @@ export function QuizTreinamento({ trainingId, onCarregado, onAprovado }: {
             <div className="space-y-4">
                 {questoes.map((questao, indice) => (
                     <fieldset key={questao.id} className="rounded-xl border border-gray-100 bg-white p-3">
-                        <legend className="px-1 text-sm font-semibold text-gray-800">
+                        <legend className="px-1 text-sm font-semibold text-foreground">
                             {indice + 1}. {questao.pergunta}
                         </legend>
                         <div className="mt-2 space-y-1.5">

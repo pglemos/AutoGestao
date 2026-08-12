@@ -16,7 +16,7 @@ export function NetworkFiltersSection(props: {
   return (
     <MxToolbar>
       <MxField label="Buscar loja" className="min-w-[220px] flex-1">
-        <div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={17} /><Input value={props.search} onChange={event => props.onSearch(event.target.value)} className="pl-9" placeholder="Nome da loja" /></div>
+        <div className="relative"><Search className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" size={17} /><Input value={props.search} onChange={event => props.onSearch(event.target.value)} className="pl-9" placeholder="Nome da loja" /></div>
       </MxField>
       <MxField label="Situação" className="min-w-[168px]">
         <select className="h-10 rounded-xl border border-gray-200 bg-white px-3 text-sm" value={props.status} onChange={event => props.onStatus(event.target.value as NetworkStatusFilter)}>

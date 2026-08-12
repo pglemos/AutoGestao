@@ -10,7 +10,7 @@ const InfoBox = ({ color, children }) => {
     green:  "bg-green-50 border-green-200 text-green-800",
     amber:  "bg-amber-50 border-amber-200 text-amber-800",
     red:    "bg-red-50 border-red-200 text-red-800",
-    slate:  "bg-slate-100 border-slate-200 text-slate-700",
+    slate:  "bg-slate-100 border-slate-200 text-foreground",
   };
   return (
     <div className={`border rounded-xl px-4 py-3 text-[12px] font-semibold leading-snug ${styles[color]}`}>
@@ -26,7 +26,7 @@ const Section = ({ icon: Icon, iconColor, number, title, children }) => (
         <Icon className="w-4 h-4 text-white" />
       </div>
       <div>
-        <span className="text-caption font-bold text-slate-400 uppercase tracking-widest">Item {number}</span>
+        <span className="text-caption font-bold text-muted-foreground uppercase tracking-widest">Item {number}</span>
         <h3 className="text-[14px] font-bold text-[#0F172A] leading-tight">{title}</h3>
       </div>
     </div>
@@ -76,7 +76,7 @@ export default function DisciplinaModal({ open, onClose }) {
               onClick={onClose}
               className="w-8 h-8 flex items-center justify-center rounded-lg hover:bg-slate-100 transition-colors flex-shrink-0 mt-0.5"
             >
-              <X className="w-4 h-4 text-slate-500" />
+              <X className="w-4 h-4 text-muted-foreground" />
             </button>
           </div>
         </div>
@@ -113,11 +113,11 @@ export default function DisciplinaModal({ open, onClose }) {
               <div className="grid grid-cols-2 gap-2 pt-1">
                 <div className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-center">
                   <span className="text-[18px] font-bold text-[#22C55E]">100%</span>
-                  <p className="text-caption text-slate-500 mt-0.5">Cadastrou os 2 clientes</p>
+                  <p className="text-caption text-muted-foreground mt-0.5">Cadastrou os 2 clientes</p>
                 </div>
                 <div className="bg-white border border-slate-200 rounded-lg px-3 py-2 text-center">
                   <span className="text-[18px] font-bold text-[#F59E0B]">85%</span>
-                  <p className="text-caption text-slate-500 mt-0.5">Cadastrou apenas 1 dos 2</p>
+                  <p className="text-caption text-muted-foreground mt-0.5">Cadastrou apenas 1 dos 2</p>
                 </div>
               </div>
             </div>

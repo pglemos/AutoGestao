@@ -19,8 +19,8 @@ export function DepartmentsView({
       <div className="space-y-mx-md">
         <SectionTitle title="Departamentos" subtitle="Marketing, produto, financeiro, RH, operações e comercial com indicators, rotina e playbook." />
         <div className="rounded-2xl border border-gray-100 bg-white p-mx-lg" role="status">
-          <strong className="text-base font-bold text-gray-800">Nenhum departamento disponível</strong>
-          <p className="text-sm text-gray-500">Os dados de departamentos para esta unidade não estão configurados.</p>
+          <strong className="text-base font-bold text-foreground">Nenhum departamento disponível</strong>
+          <p className="text-sm text-muted-foreground">Os dados de departamentos para esta unidade não estão configurados.</p>
         </div>
       </div>
     )
@@ -56,7 +56,7 @@ export function DepartmentsView({
             </div>
             <div className="mt-mx-lg overflow-x-auto">
               <table className="min-w-[760px] w-full text-sm">
-                <thead className="bg-gray-50 text-left text-mx-tiny font-bold uppercase text-gray-500">
+                <thead className="bg-gray-50 text-left text-mx-tiny font-bold uppercase text-muted-foreground">
                   <tr>
                     <th className="px-mx-sm py-mx-sm">Indicador</th>
                     <th className="px-mx-sm py-mx-sm">Meta</th>

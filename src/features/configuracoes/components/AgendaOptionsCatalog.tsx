@@ -184,7 +184,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
                   onClick={() => setActiveKind(kind)}
                   className={cn(
                     'min-h-mx-14 rounded-2xl px-4 text-left transition-all',
-                    active ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-gray-500 hover:bg-border-default',
+                    active ? 'bg-emerald-600 text-white shadow-sm' : 'bg-gray-50 text-muted-foreground hover:bg-border-default',
                   )}
                 >
                   <span className="block text-xs font-bold uppercase tracking-widest">{KIND_META[kind].label}</span>
@@ -245,7 +245,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
             <option value="todos">Todos</option>
           </Select>
           <div className="relative min-w-0 sm:col-span-2">
-            <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+            <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input
               placeholder="BUSCAR OPÇÃO..."
               value={searchTerm}
@@ -308,7 +308,7 @@ export function AgendaOptionsCatalog({ isReadOnly = false }: { isReadOnly?: bool
                         <Button variant="ghost" size="sm" onClick={() => openEditForm(option)} className="text-emerald-600">
                           <Edit3 size={14} className="mr-2" /> EDITAR
                         </Button>
-                        <Button variant="ghost" size="sm" onClick={() => handleArchive(option)} className="text-gray-500" disabled={option.status === 'arquivado'}>
+                        <Button variant="ghost" size="sm" onClick={() => handleArchive(option)} className="text-muted-foreground" disabled={option.status === 'arquivado'}>
                           <Archive size={14} className="mr-2" /> ARQUIVAR
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => handleDelete(option)} className="text-status-error">

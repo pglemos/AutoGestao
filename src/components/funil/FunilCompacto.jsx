@@ -15,14 +15,14 @@ export default function FunilCompacto({ titulo, subtitulo, cor, etapas, conversa
       <div className={`px-4 py-3 border-b flex items-center justify-between ${c.header}`}>
         <div>
           <p className="text-body-sm font-bold text-[#0F172A] uppercase tracking-wide">{titulo}</p>
-          <p className="text-caption text-slate-500">{subtitulo}</p>
+          <p className="text-caption text-muted-foreground">{subtitulo}</p>
         </div>
         {conversaoGeral !== null && conversaoGeral !== undefined ? (
           <span className={`text-caption font-bold px-2.5 py-1 rounded-full ${c.badge}`}>
             {conversaoGeral}% conv.
           </span>
         ) : (
-          <span className="text-caption text-slate-300 font-medium">—</span>
+          <span className="text-caption text-text-disabled font-medium">—</span>
         )}
       </div>
 

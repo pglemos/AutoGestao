@@ -173,8 +173,8 @@ export function AdminSettingsCard({
               <Settings2 size={20} />
             </span>
             <div>
-              <h2 className="text-xl font-bold text-gray-800">Administração da loja</h2>
-              <p className="mt-1 text-sm text-gray-500">
+              <h2 className="text-xl font-bold text-foreground">Administração da loja</h2>
+              <p className="mt-1 text-sm text-muted-foreground">
                 {operationalLoading
                   ? 'Carregando cadastro e parâmetros da unidade.'
                   : `${selectedStore.name} · cadastro, metas, benchmarks e entregas.`}
@@ -186,7 +186,7 @@ export function AdminSettingsCard({
             <button
               type="button"
               onClick={onOpenEdit}
-              className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-muted-foreground hover:bg-gray-50"
             >
               <Building2 size={15} />
               Editar cadastro
@@ -194,7 +194,7 @@ export function AdminSettingsCard({
             <button
               type="button"
               onClick={onManageBranches}
-              className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-gray-600 hover:bg-gray-50"
+              className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 bg-white px-3 text-sm font-semibold text-muted-foreground hover:bg-gray-50"
               title="Abre em nova aba"
             >
               <Building2 size={15} />
@@ -203,7 +203,7 @@ export function AdminSettingsCard({
             <button
               type="button"
               onClick={onToggleAdminSettings}
-              className={`inline-flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition ${showAdminSettings ? 'bg-gray-100 text-gray-700' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}
+              className={`inline-flex h-10 items-center gap-2 rounded-xl px-3 text-sm font-semibold transition ${showAdminSettings ? 'bg-gray-100 text-foreground' : 'bg-emerald-600 text-white hover:bg-emerald-700'}`}
             >
               <SlidersHorizontal size={15} />
               {showAdminSettings ? 'Ocultar parâmetros' : 'Configurar parâmetros'}
@@ -214,7 +214,7 @@ export function AdminSettingsCard({
 
       {showAdminSettings && (
         <div className="border-t border-gray-100 p-5">
-          <div className="mb-5 rounded-xl bg-gray-50 p-4 text-sm leading-6 text-gray-600">
+          <div className="mb-5 rounded-xl bg-gray-50 p-4 text-sm leading-6 text-muted-foreground">
             Estes parâmetros controlam metas, fonte de dados, benchmarks e entregas de relatório. A leitura da equipe permanece separada para evitar que configuração e resultado sejam confundidos.
           </div>
           <AdminSettingsForm

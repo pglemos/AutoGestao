@@ -235,8 +235,8 @@ function UniversityHeader() {
           <GraduationCap size={20} />
         </span>
         <div>
-          <h1 className="text-xl font-bold text-gray-800">Universidade MX</h1>
-          <p className="text-sm text-gray-500">
+          <h1 className="text-xl font-bold text-foreground">Universidade MX</h1>
+          <p className="text-sm text-muted-foreground">
             Desenvolva suas habilidades de liderança e acompanhe a evolução da sua equipe.
           </p>
         </div>
@@ -269,7 +269,7 @@ function UniversityTabs({
           className={`px-5 py-3.5 text-sm font-medium transition-colors ${
             tab === item.key
               ? 'border-b-2 border-emerald-600 text-emerald-700'
-              : 'text-gray-500 hover:text-gray-700'
+              : 'text-muted-foreground hover:text-foreground'
           }`}
         >
           {item.label}
@@ -315,7 +315,7 @@ export function ManagerDevelopmentPanel({
         <UniversityStat label="Certificados não rastreados" value="—" icon={Award} tone="violet" />
       </div>
 
-      <h2 className="font-semibold text-gray-800">Trilhas Gerenciais</h2>
+      <h2 className="font-semibold text-foreground">Trilhas Gerenciais</h2>
       <CatalogTrackGrid tracks={catalogTracks} onSelect={onSelectCatalogTrack} />
       <OfficialTrainingGrid trainings={trainings} onMarkWatched={onMarkWatched} />
     </div>
@@ -331,7 +331,7 @@ function CatalogTrackGrid({
 }) {
   if (!tracks.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-gray-200 py-14 text-center text-sm text-gray-500">
+      <div className="rounded-2xl border border-dashed border-gray-200 py-14 text-center text-sm text-muted-foreground">
         Nenhuma trilha corresponde à busca.
       </div>
     )
@@ -348,15 +348,15 @@ function CatalogTrackGrid({
             <span className="grid h-9 w-9 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
               <BookOpen size={18} />
             </span>
-            <span className="rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-500">
+            <span className="rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-muted-foreground">
               {track.comingSoon ? 'Em breve' : 'Iniciar'}
             </span>
           </div>
-          <h3 className="mt-3 text-sm font-semibold text-gray-800">{track.title}</h3>
-          <p className="mt-1 flex-1 text-xs leading-5 text-gray-500">{track.description}</p>
+          <h3 className="mt-3 text-sm font-semibold text-foreground">{track.title}</h3>
+          <p className="mt-1 flex-1 text-xs leading-5 text-muted-foreground">{track.description}</p>
           {!track.comingSoon && (
             <>
-              <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
+              <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
                 <span>{track.lessons} aulas</span>
                 <span>0%</span>
               </div>
@@ -386,7 +386,7 @@ export function OfficialTrainingGrid({
 
   return (
     <>
-      <h2 className="font-semibold text-gray-800">Conteúdos Oficiais</h2>
+      <h2 className="font-semibold text-foreground">Conteúdos Oficiais</h2>
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-3">
         {trainings.map(training => {
           const materialUrl = getSafeTrainingMaterialUrl(training.video_url)
@@ -407,14 +407,14 @@ export function OfficialTrainingGrid({
                   <BookOpen size={18} />
                 </span>
                 <span className={`rounded-lg px-2 py-1 text-xs font-medium ${
-                  training.watched ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-gray-500'
+                  training.watched ? 'bg-emerald-100 text-emerald-700' : 'bg-gray-100 text-muted-foreground'
                 }`}>
                   {training.watched ? 'Concluído' : 'Iniciar'}
                 </span>
               </div>
-              <h3 className="mt-3 text-sm font-semibold text-gray-800">{training.title}</h3>
-              <p className="mt-1 flex-1 text-xs leading-5 text-gray-500">{training.description}</p>
-              <div className="mt-4 flex items-center justify-between text-xs text-gray-500">
+              <h3 className="mt-3 text-sm font-semibold text-foreground">{training.title}</h3>
+              <p className="mt-1 flex-1 text-xs leading-5 text-muted-foreground">{training.description}</p>
+              <div className="mt-4 flex items-center justify-between text-xs text-muted-foreground">
                 <span>{training.duration_minutes || 0} min</span>
                 <span>{training.watched ? '100%' : '0%'}</span>
               </div>
@@ -437,7 +437,7 @@ export function OfficialTrainingGrid({
                   Abrir conteúdo
                 </a>
               ) : (
-                <span className="mt-3 rounded-xl bg-gray-50 py-2 text-center text-xs font-medium text-gray-500">
+                <span className="mt-3 rounded-xl bg-gray-50 py-2 text-center text-xs font-medium text-muted-foreground">
                   Material indisponível
                 </span>
               )}
@@ -452,7 +452,7 @@ export function OfficialTrainingGrid({
                     ? 'cursor-default bg-emerald-50 text-emerald-600'
                     : canComplete
                       ? 'bg-emerald-600 text-white hover:bg-emerald-700'
-                      : 'cursor-not-allowed bg-gray-100 text-gray-500'
+                      : 'cursor-not-allowed bg-gray-100 text-muted-foreground'
                 }`}
               >
                 {completionLabel}
@@ -528,8 +528,8 @@ function InstitutionalContentForm({
 >) {
   return (
     <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-      <h2 className="font-semibold text-gray-800">Conteúdo institucional</h2>
-      <p className="mt-1 text-xs text-gray-500">História, valores, cultura e processos da loja.</p>
+      <h2 className="font-semibold text-foreground">Conteúdo institucional</h2>
+      <p className="mt-1 text-xs text-muted-foreground">História, valores, cultura e processos da loja.</p>
       <form onSubmit={onCreateInstitutionalContent} className="mt-4 grid grid-cols-1 gap-3 lg:grid-cols-3">
         <Input
           value={institutionalForm.title}
@@ -587,8 +587,8 @@ function UniversityStat({
         <Icon size={20} />
       </span>
       <div>
-        <p className="text-xl font-bold text-gray-800">{value}</p>
-        <p className="text-xs text-gray-500">{label}</p>
+        <p className="text-xl font-bold text-foreground">{value}</p>
+        <p className="text-xs text-muted-foreground">{label}</p>
       </div>
     </div>
   )
@@ -612,7 +612,7 @@ function TeamStat({
   return (
     <div className="rounded-xl bg-gray-50 p-4">
       <p className={`text-2xl font-bold ${styles[tone]}`}>{value}</p>
-      <p className="mt-0.5 text-xs text-gray-500">{label}</p>
+      <p className="mt-0.5 text-xs text-muted-foreground">{label}</p>
     </div>
   )
 }
@@ -640,7 +640,7 @@ function UniversityTeamTable({
 }) {
   if (!teamRows.length) {
     return (
-      <div className="rounded-2xl border border-dashed border-gray-200 py-14 text-center text-sm text-gray-500">
+      <div className="rounded-2xl border border-dashed border-gray-200 py-14 text-center text-sm text-muted-foreground">
         Nenhum vendedor vinculado para acompanhamento.
       </div>
     )
@@ -653,7 +653,7 @@ function UniversityTeamTable({
         <thead className="border-b border-gray-100 bg-gray-50">
           <tr>
             {['Vendedor', 'Unidade', 'Trilha Atual', 'Progresso', 'Status', 'Ações'].map(label => (
-              <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">
+              <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                 {label}
               </th>
             ))}
@@ -664,7 +664,7 @@ function UniversityTeamTable({
             const pendingTraining = allTrainings.find(training => !member.watched.includes(training.id))
             const statusLabel = !hasOfficialContent ? 'Sem conteúdo' : member.progress >= 75 ? 'Em dia' : 'Atenção'
             const statusStyle = !hasOfficialContent
-              ? 'bg-gray-100 text-gray-600'
+              ? 'bg-gray-100 text-muted-foreground'
               : member.progress >= 75
                 ? 'bg-emerald-100 text-emerald-700'
                 : 'bg-amber-100 text-amber-700'
@@ -674,9 +674,9 @@ function UniversityTeamTable({
 
             return (
               <tr key={member.seller_id}>
-                <td className="px-4 py-3 font-medium text-gray-800">{member.seller_name}</td>
-                <td className="px-4 py-3 text-gray-500">{storeName}</td>
-                <td className="px-4 py-3 text-gray-600">
+                <td className="px-4 py-3 font-medium text-foreground">{member.seller_name}</td>
+                <td className="px-4 py-3 text-muted-foreground">{storeName}</td>
+                <td className="px-4 py-3 text-muted-foreground">
                   {pendingTraining?.title || (hasOfficialContent ? 'Trilha concluída' : 'Nenhum conteúdo oficial')}
                 </td>
                 <td className="px-4 py-3">
@@ -684,7 +684,7 @@ function UniversityTeamTable({
                     <div className="h-1.5 w-20 overflow-hidden rounded-full bg-gray-100">
                       <div className="h-full rounded-full bg-emerald-500" style={{ width: `${member.progress}%` }} />
                     </div>
-                    <span className="text-xs text-gray-500">{member.progress}%</span>
+                    <span className="text-xs text-muted-foreground">{member.progress}%</span>
                   </div>
                 </td>
                 <td className="px-4 py-3">
@@ -695,7 +695,7 @@ function UniversityTeamTable({
                     <button
                       type="button"
                       onClick={() => onOpenDetails(member)}
-                      className="text-xs font-medium text-gray-600"
+                      className="text-xs font-medium text-muted-foreground"
                     >
                       Ver detalhes
                     </button>
@@ -780,7 +780,7 @@ export function AssignTrainingDialog({
         <button
           type="button"
           onClick={onClose}
-          className="mt-4 w-full rounded-xl border border-gray-200 py-2 text-sm font-medium text-gray-700"
+          className="mt-4 w-full rounded-xl border border-gray-200 py-2 text-sm font-medium text-foreground"
         >
           Cancelar
         </button>
@@ -814,13 +814,13 @@ export function CatalogTrackDialog({
         <span className="grid h-10 w-10 place-items-center rounded-xl bg-emerald-50 text-emerald-600">
           <BookOpen size={20} />
         </span>
-        <p className="rounded-xl bg-gray-50 p-3 text-xs leading-5 text-gray-500">
+        <p className="rounded-xl bg-gray-50 p-3 text-xs leading-5 text-muted-foreground">
           Catálogo gerencial com {track.lessons} aulas. O progresso só será registrado quando houver conteúdo oficial vinculado à trilha.
         </p>
         <button
           type="button"
           onClick={onClose}
-          className="w-full rounded-xl border border-gray-200 py-2 text-sm font-medium text-gray-700"
+          className="w-full rounded-xl border border-gray-200 py-2 text-sm font-medium text-foreground"
         >
           Fechar
         </button>
@@ -870,7 +870,7 @@ export function TeamTrainingDetailDialog({
       <button
         type="button"
         onClick={onClose}
-        className="mt-5 w-full rounded-xl border border-gray-200 py-2 text-sm font-medium text-gray-700"
+        className="mt-5 w-full rounded-xl border border-gray-200 py-2 text-sm font-medium text-foreground"
       >
         Fechar
       </button>
@@ -881,8 +881,8 @@ export function TeamTrainingDetailDialog({
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <dt className="text-xs font-medium text-gray-500">{label}</dt>
-      <dd className="mt-1 text-gray-700">{value}</dd>
+      <dt className="text-xs font-medium text-muted-foreground">{label}</dt>
+      <dd className="mt-1 text-foreground">{value}</dd>
     </div>
   )
 }

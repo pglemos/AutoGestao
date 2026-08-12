@@ -154,7 +154,7 @@ export function PerformanceTab({
 
   if (isPerfilInternoMx(role)) {
     return (
-      <div className="flex flex-col gap-5 text-gray-800">
+      <div className="flex flex-col gap-5 text-foreground">
         {performanceContent}
       </div>
     )

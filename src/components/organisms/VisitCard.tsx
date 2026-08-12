@@ -71,7 +71,7 @@ export function VisitCard({
         >
           <div className={cn(
             'w-mx-10 h-mx-10 rounded-xl border flex items-center justify-center shrink-0',
-            isToday(scheduledDate) ? 'bg-emerald-600/10 border-brand-primary/20 text-emerald-600' : 'bg-gray-50 border-gray-200 text-gray-500'
+            isToday(scheduledDate) ? 'bg-emerald-600/10 border-brand-primary/20 text-emerald-600' : 'bg-gray-50 border-gray-200 text-muted-foreground'
           )}>
             <Typography variant="h3" className="text-lg">
               {format(scheduledDate, 'dd')}
@@ -83,7 +83,7 @@ export function VisitCard({
               <Building2 size={14} className="text-emerald-600 shrink-0" />
               <Typography variant="h3" className="text-sm leading-tight break-words sm:truncate">{visit.client_name}</Typography>
             </div>
-            <div className="flex flex-wrap items-center gap-x-mx-sm gap-y-mx-xs text-gray-500">
+            <div className="flex flex-wrap items-center gap-x-mx-sm gap-y-mx-xs text-muted-foreground">
               <div className="flex items-center gap-mx-xs min-w-0">
                 <Clock size={12} className="shrink-0" />
                 <Typography variant="tiny">
@@ -137,7 +137,7 @@ export function VisitCard({
 
           {visit.consultant && (
             <div className="hidden md:flex items-center gap-mx-xs">
-              <User size={14} className="text-gray-500" />
+              <User size={14} className="text-muted-foreground" />
               <Typography variant="tiny" tone="muted">{visit.consultant.name}</Typography>
             </div>
           )}
@@ -177,7 +177,7 @@ export function VisitCard({
               </Button>
             )}
             <Link to={linkTo} aria-label={`Abrir visita de ${visit.client_name}`} className="inline-flex items-center justify-center min-h-11 min-w-11 rounded-mx-full">
-              <ChevronRight size={18} className="text-gray-500 group-hover:text-emerald-600 transition-colors shrink-0" />
+              <ChevronRight size={18} className="text-muted-foreground group-hover:text-emerald-600 transition-colors shrink-0" />
             </Link>
           </div>
         </div>

@@ -29,7 +29,7 @@ const toneStyles: Record<MxTone, ToneStyle> = {
   danger: { icon: 'bg-red-50 text-red-600', surface: 'border-red-200', value: 'text-red-700', banner: 'border-red-200 bg-red-50 text-red-700', progress: 'bg-red-500' },
   info: { icon: 'bg-blue-50 text-blue-600', surface: 'border-blue-200', value: 'text-blue-700', banner: 'border-blue-200 bg-blue-50 text-blue-700', progress: 'bg-blue-500' },
   violet: { icon: 'bg-violet-50 text-violet-600', surface: 'border-violet-200', value: 'text-violet-700', banner: 'border-violet-200 bg-violet-50 text-violet-700', progress: 'bg-violet-500' },
-  neutral: { icon: 'bg-gray-50 text-gray-500', surface: 'border-gray-100', value: 'text-gray-800', banner: 'border-gray-200 bg-gray-50 text-gray-700', progress: 'bg-gray-400' },
+  neutral: { icon: 'bg-gray-50 text-muted-foreground', surface: 'border-gray-100', value: 'text-foreground', banner: 'border-gray-200 bg-gray-50 text-foreground', progress: 'bg-gray-400' },
 }
 
 export interface MxModulePageProps {
@@ -59,7 +59,7 @@ export function MxModulePage({
   return (
     <InternalMxTemplatePage
       data-mx-visual-system="manager"
-      className={cn('min-h-full w-full text-gray-800', className)}
+      className={cn('min-h-full w-full text-foreground', className)}
     >
       <PageCanvas
         as="div"
@@ -83,8 +83,8 @@ export function MxModuleHeader({ title, description, eyebrow, actions, className
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="min-w-0 max-w-3xl">
           {eyebrow ? <Typography variant="caption" className="mb-1 block font-semibold text-emerald-700">{eyebrow}</Typography> : null}
-          <Typography as="h1" variant="h2" className="text-xl font-bold text-gray-800 md:text-2xl">{title}</Typography>
-          {description ? <Typography variant="p" className="mt-1 max-w-3xl text-sm leading-6 text-gray-500">{description}</Typography> : null}
+          <Typography as="h1" variant="h2" className="text-xl font-bold text-foreground md:text-2xl">{title}</Typography>
+          {description ? <Typography variant="p" className="mt-1 max-w-3xl text-sm leading-6 text-muted-foreground">{description}</Typography> : null}
         </div>
         {actions ? <div className="flex min-w-0 flex-wrap items-center gap-2">{actions}</div> : null}
       </div>
@@ -102,8 +102,8 @@ export function MxMetricCard({ title, value, detail, icon: Icon, tone = 'brand',
     <Card className={cn('group flex min-h-40 flex-col border bg-white p-4', styles.surface, className)}>
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
-          <Typography variant="h3" className="text-sm font-semibold text-gray-700">{title}</Typography>
-          <Typography variant="p" className="mt-1 text-sm leading-5 text-gray-500">{detail}</Typography>
+          <Typography variant="h3" className="text-sm font-semibold text-foreground">{title}</Typography>
+          <Typography variant="p" className="mt-1 text-sm leading-5 text-muted-foreground">{detail}</Typography>
         </div>
         <span className={cn('grid h-10 w-10 shrink-0 place-items-center rounded-xl', styles.icon)}><Icon size={18} strokeWidth={1.8} aria-hidden="true" /></span>
       </div>
@@ -121,8 +121,8 @@ export function MxStatusGauge({ value, label, ariaLabel, showLabel = true }: { v
   return (
     <div role="progressbar" aria-label={ariaLabel} aria-valuemin={0} aria-valuemax={100} aria-valuenow={normalized} className="grid h-20 w-20 shrink-0 place-items-center rounded-full bg-gray-100" style={{ background: `conic-gradient(var(--color-brand-primary) ${normalized * 3.6}deg, var(--color-surface-alt) 0deg)` }}>
       <div className="grid h-14 w-14 place-items-center rounded-full bg-white text-center">
-        <strong className="text-base leading-none text-gray-800">{normalized}%</strong>
-        {showLabel ? <span className="max-w-12 text-caption font-medium leading-tight text-gray-500">{label}</span> : null}
+        <strong className="text-base leading-none text-foreground">{normalized}%</strong>
+        {showLabel ? <span className="max-w-12 text-caption font-medium leading-tight text-muted-foreground">{label}</span> : null}
       </div>
     </div>
   )
@@ -136,8 +136,8 @@ export function MxSectionHeader({ title, description, actions, className }: { ti
   return (
     <header data-mx-section-header="" data-mx-template-slot="section-header" className={cn('flex flex-col gap-3 border-b border-gray-100 p-5 sm:flex-row sm:items-center sm:justify-between', className)}>
       <div className="min-w-0">
-        <Typography as="h2" variant="h3" className="text-lg font-semibold text-gray-800">{title}</Typography>
-        {description ? <Typography variant="p" className="mt-1 text-sm text-gray-500">{description}</Typography> : null}
+        <Typography as="h2" variant="h3" className="text-lg font-semibold text-foreground">{title}</Typography>
+        {description ? <Typography variant="p" className="mt-1 text-sm text-muted-foreground">{description}</Typography> : null}
       </div>
       {actions ? <div className="flex flex-wrap items-center gap-2">{actions}</div> : null}
     </header>
@@ -151,9 +151,9 @@ export function MxToolbar({ children, className, ...props }: HTMLAttributes<HTML
 export function MxField({ label, hint, error, children, className, ...props }: { label: ReactNode; hint?: ReactNode; error?: ReactNode; children: ReactNode; className?: string } & LabelHTMLAttributes<HTMLLabelElement>) {
   return (
     <label className={cn('flex min-w-0 flex-col gap-2', className)} {...props}>
-      <Typography as="span" variant="caption" className="font-medium text-gray-600">{label}</Typography>
+      <Typography as="span" variant="caption" className="font-medium text-muted-foreground">{label}</Typography>
       {children}
-      {error ? <Typography variant="tiny" className="text-red-600">{error}</Typography> : hint ? <Typography variant="tiny" className="text-gray-500">{hint}</Typography> : null}
+      {error ? <Typography variant="tiny" className="text-red-600">{error}</Typography> : hint ? <Typography variant="tiny" className="text-muted-foreground">{hint}</Typography> : null}
     </label>
   )
 }
@@ -166,24 +166,24 @@ export function MxTableSurface({ children, className, ...props }: HTMLAttributes
 export function MxEmptyState({ title, description, icon: Icon = Inbox, action, className }: { title: string; description?: string; icon?: LucideIcon; action?: ReactNode; className?: string }) {
   return (
     <div className={cn('flex min-h-48 flex-col items-center justify-center px-5 py-10 text-center', className)}>
-      <span className="grid h-14 w-14 place-items-center rounded-2xl bg-gray-50 text-gray-400"><Icon size={24} strokeWidth={1.8} aria-hidden="true" /></span>
-      <Typography variant="h3" className="mt-4 text-base text-gray-800">{title}</Typography>
-      {description ? <Typography variant="p" className="mt-2 max-w-md text-sm leading-6 text-gray-500">{description}</Typography> : null}
+      <span className="grid h-14 w-14 place-items-center rounded-2xl bg-gray-50 text-muted-foreground"><Icon size={24} strokeWidth={1.8} aria-hidden="true" /></span>
+      <Typography variant="h3" className="mt-4 text-base text-foreground">{title}</Typography>
+      {description ? <Typography variant="p" className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">{description}</Typography> : null}
       {action ? <div className="mt-4">{action}</div> : null}
     </div>
   )
 }
 
 export function MxLoadingState({ label = 'Carregando', className }: { label?: string; className?: string }) {
-  return <div className={cn('flex min-h-48 flex-col items-center justify-center gap-3 text-gray-500', className)} aria-busy="true" aria-live="polite" aria-label={label}><LoaderCircle className="animate-spin text-emerald-600 motion-reduce:animate-none" size={28} aria-hidden="true" /><Typography variant="caption" className="font-medium text-gray-500">{label}</Typography></div>
+  return <div className={cn('flex min-h-48 flex-col items-center justify-center gap-3 text-muted-foreground', className)} aria-busy="true" aria-live="polite" aria-label={label}><LoaderCircle className="animate-spin text-emerald-600 motion-reduce:animate-none" size={28} aria-hidden="true" /><Typography variant="caption" className="font-medium text-muted-foreground">{label}</Typography></div>
 }
 
 export function MxErrorState({ title = 'Não foi possível carregar', description, retry, className }: { title?: string; description: string; retry?: () => void; className?: string }) {
   return (
     <div className={cn('flex min-h-48 flex-col items-center justify-center px-5 py-10 text-center', className)} role="alert">
       <span className="grid h-14 w-14 place-items-center rounded-2xl bg-red-50 text-red-600"><AlertTriangle size={24} aria-hidden="true" /></span>
-      <Typography variant="h3" className="mt-4 text-base text-gray-800">{title}</Typography>
-      <Typography variant="p" className="mt-2 max-w-md text-sm leading-6 text-gray-500">{description}</Typography>
+      <Typography variant="h3" className="mt-4 text-base text-foreground">{title}</Typography>
+      <Typography variant="p" className="mt-2 max-w-md text-sm leading-6 text-muted-foreground">{description}</Typography>
       {retry ? <Button variant="outline" className="mt-4" onClick={retry}>Tentar novamente</Button> : null}
     </div>
   )
@@ -200,6 +200,6 @@ export function MxChartCard({ title, description, actions, children, className }
 export function MxSkeleton(props: SkeletonProps) { return <Skeleton {...props} /> }
 export function MxProgress({ value, tone = 'brand', label }: { value: number; tone?: MxTone; label?: string }) {
   const normalized = Math.max(0, Math.min(100, Math.round(value)))
-  return <div className="space-y-2">{label ? <div className="flex items-center justify-between text-xs text-gray-500"><span>{label}</span><span>{normalized}%</span></div> : null}<div className="h-2 overflow-hidden rounded-full bg-gray-100" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={normalized}><div className={cn('h-full rounded-full transition-[width] motion-reduce:transition-none', toneStyles[tone].progress)} style={{ width: `${normalized}%` }} /></div></div>
+  return <div className="space-y-2">{label ? <div className="flex items-center justify-between text-xs text-muted-foreground"><span>{label}</span><span>{normalized}%</span></div> : null}<div className="h-2 overflow-hidden rounded-full bg-gray-100" role="progressbar" aria-valuemin={0} aria-valuemax={100} aria-valuenow={normalized}><div className={cn('h-full rounded-full transition-[width] motion-reduce:transition-none', toneStyles[tone].progress)} style={{ width: `${normalized}%` }} /></div></div>
 }
 export function MxActionGroup({ children, className }: { children: ReactNode; className?: string }) { return <div className={cn('flex flex-wrap items-center gap-2', className)}>{children}</div> }

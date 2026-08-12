@@ -19,14 +19,14 @@ export function DigitalProductCard({ product, canManage, onEdit, onArchive }: { 
         <div className="flex min-w-0 items-start gap-3">
           <span className="grid h-11 w-11 shrink-0 place-items-center rounded-xl bg-emerald-50 text-emerald-600"><Package size={20} aria-hidden="true" /></span>
           <div className="min-w-0">
-            <Typography as="h3" variant="h3" className="line-clamp-2 text-base font-semibold text-gray-800">{product.name}</Typography>
-            <Typography variant="caption" className="mt-1 block text-xs text-gray-500">{product.category || 'Operacional'}</Typography>
+            <Typography as="h3" variant="h3" className="line-clamp-2 text-base font-semibold text-foreground">{product.name}</Typography>
+            <Typography variant="caption" className="mt-1 block text-xs text-muted-foreground">{product.category || 'Operacional'}</Typography>
           </div>
         </div>
         <Badge variant={badgeVariant(product.status)}>{product.status || 'ativo'}</Badge>
       </div>
 
-      <Typography variant="p" className="mt-4 line-clamp-4 flex-1 text-sm leading-6 text-gray-600">{product.description}</Typography>
+      <Typography variant="p" className="mt-4 line-clamp-4 flex-1 text-sm leading-6 text-muted-foreground">{product.description}</Typography>
 
       {canManage ? (
         <div className="mt-4 flex flex-wrap gap-1.5">

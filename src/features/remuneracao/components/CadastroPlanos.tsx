@@ -86,13 +86,13 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
       {error && <p className="text-sm font-bold text-status-error">Erro ao carregar: {error}</p>}
 
       {loading ? (
-        <p className="text-sm font-bold text-gray-500">Carregando planos…</p>
+        <p className="text-sm font-bold text-muted-foreground">Carregando planos…</p>
       ) : planos.length === 0 ? (
         <EmptyState title="Nenhum plano cadastrado" description="Adicione o plano de remuneração de cada cargo desta loja." />
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-gray-200">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-500">
+            <thead className="bg-gray-50 text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Cargo</th>
                 <th className="px-mx-md py-mx-sm text-right">Fixo</th>
@@ -128,7 +128,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-mx-xs">
-      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-gray-500">{label}</span>
+      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-muted-foreground">{label}</span>
       {children}
     </label>
   )

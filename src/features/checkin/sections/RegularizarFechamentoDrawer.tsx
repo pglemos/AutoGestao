@@ -59,7 +59,7 @@ function NumStepper({ value, onChange, disabled }: { value: number; onChange: (v
         type="button"
         disabled={disabled}
         onClick={() => onChange(Math.max(0, value - 1))}
-        className="flex h-full w-9 shrink-0 items-center justify-center rounded-l-xl border-r border-slate-200 text-[18px] font-light text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700 disabled:cursor-not-allowed"
+        className="flex h-full w-9 shrink-0 items-center justify-center rounded-l-xl border-r border-slate-200 text-[18px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground disabled:cursor-not-allowed"
       >
         −
       </button>
@@ -73,13 +73,13 @@ function NumStepper({ value, onChange, disabled }: { value: number; onChange: (v
         onChange={(e) => setInputVal(e.target.value.replace(/\D/g, ''))}
         onBlur={commit}
         onKeyDown={(e) => { if (e.key === 'Enter' || e.key === 'Tab') commit() }}
-        className="h-full min-w-0 flex-1 border-none bg-transparent text-center text-[14px] font-bold tabular-nums text-slate-700 outline-none disabled:text-slate-600"
+        className="h-full min-w-0 flex-1 border-none bg-transparent text-center text-[14px] font-bold tabular-nums text-foreground outline-none disabled:text-muted-foreground"
       />
       <button
         type="button"
         disabled={disabled}
         onClick={() => onChange(Math.min(999, value + 1))}
-        className="flex h-full w-9 shrink-0 items-center justify-center rounded-r-xl border-l border-slate-200 text-[18px] font-light text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700 disabled:cursor-not-allowed"
+        className="flex h-full w-9 shrink-0 items-center justify-center rounded-r-xl border-l border-slate-200 text-[18px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground disabled:cursor-not-allowed"
       >
         +
       </button>
@@ -90,7 +90,7 @@ function NumStepper({ value, onChange, disabled }: { value: number; onChange: (v
 function FieldRow({ label, value, onChange, disabled }: { label: string; value: number; onChange: (v: number) => void; disabled?: boolean }) {
   return (
     <div className="flex items-center justify-between gap-2">
-      <span className={`min-w-0 flex-1 text-[12px] font-semibold leading-tight ${disabled ? 'text-slate-300' : 'text-slate-600'}`}>{label}</span>
+      <span className={`min-w-0 flex-1 text-[12px] font-semibold leading-tight ${disabled ? 'text-text-disabled' : 'text-muted-foreground'}`}>{label}</span>
       <div className="w-[108px] shrink-0">
         <NumStepper value={value} onChange={onChange} disabled={disabled} />
       </div>
@@ -192,11 +192,11 @@ export function RegularizarFechamentoDrawer({
                 <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>
                 <span className="rounded-full border border-red-200 bg-red-50 px-2 py-0.5 text-caption font-bold text-red-600">Fechamento atrasado</span>
               </div>
-              <p className="mt-0.5 text-body-sm text-slate-500">
+              <p className="mt-0.5 text-body-sm text-muted-foreground">
                 {dataFormatada} — <span className="capitalize">{weekday}</span>
               </p>
             </div>
-            <button type="button" onClick={onClose} className="rounded-xl p-2 text-slate-600 transition-colors hover:bg-slate-100" aria-label="Fechar">
+            <button type="button" onClick={onClose} className="rounded-xl p-2 text-muted-foreground transition-colors hover:bg-slate-100" aria-label="Fechar">
               <X className="h-5 w-5" />
             </button>
           </div>
@@ -216,7 +216,7 @@ export function RegularizarFechamentoDrawer({
  <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
               <div className="border-b border-slate-100 px-5 py-4">
                 <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Movimento do Dia</h3>
-                <p className="mt-0.5 text-[12px] text-slate-600">Informe os atendimentos realizados neste dia</p>
+                <p className="mt-0.5 text-[12px] text-muted-foreground">Informe os atendimentos realizados neste dia</p>
               </div>
               <div className="space-y-4 p-5">
                 <div className="space-y-3 rounded-xl border border-orange-200 bg-orange-50 p-4">
@@ -269,7 +269,7 @@ export function RegularizarFechamentoDrawer({
                 ].map((s) => (
                   <div key={s.label} className="p-4 text-center">
                     <p className={`text-[20px] font-bold tabular-nums ${s.color}`}>{s.value}</p>
-                    <p className="mt-0.5 text-caption font-medium text-slate-600">{s.label}</p>
+                    <p className="mt-0.5 text-caption font-medium text-muted-foreground">{s.label}</p>
                   </div>
                 ))}
               </div>
@@ -279,7 +279,7 @@ export function RegularizarFechamentoDrawer({
  <div className="min-w-0 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
               <div className="border-b border-slate-100 px-5 py-4">
                 <h3 className="text-[14px] font-bold uppercase tracking-wide text-[#0F172A]">Disciplina — Fechamento Diário</h3>
-                <p className="mt-0.5 text-[12px] text-slate-600">Estimativa com penalização de -10% por atraso</p>
+                <p className="mt-0.5 text-[12px] text-muted-foreground">Estimativa com penalização de -10% por atraso</p>
               </div>
               <div className="flex items-center gap-6 p-5">
                 <div className="relative h-20 w-20 shrink-0">
@@ -297,7 +297,7 @@ export function RegularizarFechamentoDrawer({
                 </div>
                 <div className="flex-1 space-y-2">
                   <div className="flex justify-between text-body-sm">
-                    <span className="text-slate-500">Pontuação base</span>
+                    <span className="text-muted-foreground">Pontuação base</span>
                     <span className="font-bold text-[#0F172A]">{disciplina.pontuacaoDisciplinaBase}%</span>
                   </div>
                   <div className="flex justify-between text-body-sm">
@@ -309,8 +309,8 @@ export function RegularizarFechamentoDrawer({
                     <span className={`text-body font-bold ${ringColorClass}`}>{disciplina.pontuacaoDisciplinaFinal}%</span>
                   </div>
                   <div className="flex justify-between text-[12px]">
-                    <span className="text-slate-600">Agendamentos D+1</span>
-                    <span className="font-semibold text-slate-600">{creditosValidos} de {totalAgendamentosD1} detalhados</span>
+                    <span className="text-muted-foreground">Agendamentos D+1</span>
+                    <span className="font-semibold text-muted-foreground">{creditosValidos} de {totalAgendamentosD1} detalhados</span>
                   </div>
                 </div>
               </div>
@@ -320,7 +320,7 @@ export function RegularizarFechamentoDrawer({
 
           {/* Footer */}
           <div className="flex flex-shrink-0 items-center justify-end gap-3 border-t border-slate-200 bg-white px-5 py-4">
-            <button type="button" onClick={onVoltar} className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-body-sm font-bold text-slate-600 transition-colors hover:bg-slate-50">
+            <button type="button" onClick={onVoltar} className="flex items-center gap-1.5 rounded-xl border border-slate-200 bg-white px-4 py-2.5 text-body-sm font-bold text-muted-foreground transition-colors hover:bg-slate-50">
               <ArrowLeft className="h-3.5 w-3.5" /> Voltar
             </button>
             <button

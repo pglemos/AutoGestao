@@ -51,11 +51,11 @@ export function DigitalProductFormModal({ open, editingProduct, form, saving, ca
         </div>
 
         <div className="space-y-3">
-          <div className="flex items-center gap-2"><Users size={16} className="text-emerald-600" /><Typography variant="caption" className="font-medium text-gray-600">Públicos onde aparece</Typography></div>
+          <div className="flex items-center gap-2"><Users size={16} className="text-emerald-600" /><Typography variant="caption" className="font-medium text-muted-foreground">Públicos onde aparece</Typography></div>
           <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
             {PRODUCT_AUDIENCES.map((audience) => {
               const selected = form.target_roles.includes(audience.key)
-              return <button key={audience.key} type="button" disabled={!canManage} onClick={() => onToggleAudience(audience.key)} className={cn('min-h-20 rounded-xl border p-3 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-60', selected ? 'border-emerald-300 bg-emerald-50 text-gray-800' : 'border-gray-200 bg-gray-50 text-gray-600 hover:border-emerald-200')}><span className="block text-sm font-semibold">{audience.label}</span><span className="mt-1 block text-xs text-gray-500">{audience.description}</span></button>
+              return <button key={audience.key} type="button" disabled={!canManage} onClick={() => onToggleAudience(audience.key)} className={cn('min-h-20 rounded-xl border p-3 text-left transition-colors disabled:cursor-not-allowed disabled:opacity-60', selected ? 'border-emerald-300 bg-emerald-50 text-foreground' : 'border-gray-200 bg-gray-50 text-muted-foreground hover:border-emerald-200')}><span className="block text-sm font-semibold">{audience.label}</span><span className="mt-1 block text-xs text-muted-foreground">{audience.description}</span></button>
             })}
           </div>
         </div>

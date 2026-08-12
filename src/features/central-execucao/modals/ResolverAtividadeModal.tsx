@@ -134,7 +134,7 @@ export function ResolverAtividadeModal({
       closeOnEscape={!saving}
       footer={(
         <>
-          <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-slate-200 px-5 py-2.5 text-body-sm font-semibold text-slate-500 transition-colors hover:bg-slate-50 disabled:opacity-50">
+          <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-slate-200 px-5 py-2.5 text-body-sm font-semibold text-muted-foreground transition-colors hover:bg-slate-50 disabled:opacity-50">
             Cancelar
           </button>
           <button type="button" onClick={() => void handleConfirm()} disabled={!canConfirm || saving} className="rounded-xl bg-status-info px-6 py-2.5 text-body-sm font-bold text-white transition-colors hover:bg-blue-700 disabled:opacity-50">
@@ -145,19 +145,19 @@ export function ResolverAtividadeModal({
     >
       <div className="space-y-5">
         <div className="space-y-1">
-          <p className="text-body-sm font-semibold text-gray-800">{clientName}</p>
-          <p className="text-[12px] text-slate-400">{currentAction.title}{currentAction.description ? ` · ${currentAction.description}` : ''}</p>
-          {vehicle && <p className="text-[12px] text-slate-500">{vehicle}</p>}
-          <p className="text-caption text-slate-400">{formatDateTime(currentAction.dueAt)}</p>
+          <p className="text-body-sm font-semibold text-foreground">{clientName}</p>
+          <p className="text-[12px] text-muted-foreground">{currentAction.title}{currentAction.description ? ` · ${currentAction.description}` : ''}</p>
+          {vehicle && <p className="text-[12px] text-muted-foreground">{vehicle}</p>}
+          <p className="text-caption text-muted-foreground">{formatDateTime(currentAction.dueAt)}</p>
         </div>
 
         <div>
-          <label htmlFor="central-result" className="text-caption font-bold uppercase tracking-wider text-slate-500">Como foi resolvido?</label>
+          <label htmlFor="central-result" className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Como foi resolvido?</label>
           <select
             id="central-result"
             value={resultCode}
             onChange={event => setResultCode(event.target.value as CentralResultCode)}
-            className="mt-1.5 h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-body-sm text-slate-700 outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15"
+            className="mt-1.5 h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-body-sm text-foreground outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15"
           >
             <option value="">Selecionar resultado</option>
             {options.map(option => <option key={option.code} value={option.code}>{option.label}</option>)}
@@ -166,14 +166,14 @@ export function ResolverAtividadeModal({
 
         {resultCode === 'sale_completed' && (
           <div>
-            <label htmlFor="central-sale-value" className="text-caption font-bold uppercase tracking-wider text-slate-500">Valor negociado</label>
+            <label htmlFor="central-sale-value" className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Valor negociado</label>
             <input id="central-sale-value" type="number" min="0" step="0.01" value={value} onChange={event => setValue(event.target.value)} placeholder="R$ 0,00" className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
           </div>
         )}
 
         {resultCode === 'sale_lost' && (
           <div>
-            <label htmlFor="central-loss-reason" className="text-caption font-bold uppercase tracking-wider text-slate-500">Motivo da perda</label>
+            <label htmlFor="central-loss-reason" className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Motivo da perda</label>
             <select id="central-loss-reason" value={lossReason} onChange={event => setLossReason(event.target.value)} className="mt-1.5 h-10 w-full rounded-md border border-slate-200 bg-white px-3 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15">
               <option value="">Selecionar motivo</option>
               {LOSS_REASONS.map(reason => <option key={reason} value={reason}>{reason}</option>)}
@@ -183,13 +183,13 @@ export function ResolverAtividadeModal({
 
         {selected?.requiresSchedule && (
           <div>
-            <label htmlFor="central-reschedule" className="text-caption font-bold uppercase tracking-wider text-slate-500">Nova data e horário</label>
+            <label htmlFor="central-reschedule" className="text-caption font-bold uppercase tracking-wider text-muted-foreground">Nova data e horário</label>
             <input id="central-reschedule" type="datetime-local" value={dueAt} onChange={event => setDueAt(event.target.value)} className="mt-1.5 h-10 w-full rounded-md border border-slate-200 px-3 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />
           </div>
         )}
 
         <div>
-          <label htmlFor="central-result-note" className="text-caption font-bold uppercase tracking-wider text-slate-500">
+          <label htmlFor="central-result-note" className="text-caption font-bold uppercase tracking-wider text-muted-foreground">
             Observação {selected?.requiresNote ? '' : '(opcional)'}
           </label>
           <textarea id="central-result-note" rows={3} value={note} onChange={event => setNote(event.target.value)} placeholder="Ex: cliente vai pensar até amanhã..." className="mt-1.5 w-full resize-none rounded-md border border-slate-200 px-3 py-2 text-body-sm outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15" />

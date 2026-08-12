@@ -22,9 +22,9 @@ function EtapaLinha({ label, valor, conv }) {
   return (
     <div className="flex items-center justify-between py-1.5 border-b border-slate-50 last:border-0">
       <div className="flex flex-col">
-        <span className="text-[12px] text-slate-600">{label}</span>
+        <span className="text-[12px] text-muted-foreground">{label}</span>
         {conv !== null && conv !== undefined && (
-          <span className="text-caption text-slate-400">→ {conv}</span>
+          <span className="text-caption text-muted-foreground">→ {conv}</span>
         )}
       </div>
       <span className="text-[14px] font-bold tabular-nums text-[#0F172A]">{valor}</span>
@@ -50,26 +50,26 @@ function CanalCard({ titulo, cor, volumeLabel, volume, vendas, conversaoGeral, e
         {conversaoGeral !== null && !semDados ? (
           <span className={`text-caption font-bold px-2 py-0.5 rounded-full ${c.badge}`}>{conversaoGeral}% conv.</span>
         ) : (
-          <span className="text-caption text-slate-300">Sem dados</span>
+          <span className="text-caption text-text-disabled">Sem dados</span>
         )}
       </div>
 
       {/* Resumo compacto */}
       <div className="px-4 py-3">
         {semDados ? (
-          <p className="text-[12px] text-slate-300 italic">Sem base suficiente para projeção.</p>
+          <p className="text-[12px] text-text-disabled italic">Sem base suficiente para projeção.</p>
         ) : (
           <div className="flex items-center justify-between gap-4">
             <div>
-              <p className="text-caption text-slate-400">{volumeLabel}</p>
+              <p className="text-caption text-muted-foreground">{volumeLabel}</p>
               <p className="text-[20px] font-bold tabular-nums text-[#0F172A]">{volume}</p>
             </div>
             <div className="text-center">
-              <p className="text-caption text-slate-400">Vendas</p>
+              <p className="text-caption text-muted-foreground">Vendas</p>
               <p className="text-[20px] font-bold tabular-nums text-green-600">{vendas}</p>
             </div>
             <div className="text-center">
-              <p className="text-caption text-slate-400">Conversão</p>
+              <p className="text-caption text-muted-foreground">Conversão</p>
               <p className="text-[20px] font-bold tabular-nums text-[#0F172A]">{conversaoGeral !== null ? `${conversaoGeral}%` : "—"}</p>
             </div>
           </div>
@@ -149,9 +149,9 @@ export default function EficienciaCanal({ funis }) {
 
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-      <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-1">Eficiência por canal</p>
+      <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-1">Eficiência por canal</p>
       {limitador && (
-        <p className="text-[12px] text-slate-500 mb-4">
+        <p className="text-[12px] text-muted-foreground mb-4">
           <span className="font-semibold">Principal limitador:</span> {limitador}
         </p>
       )}

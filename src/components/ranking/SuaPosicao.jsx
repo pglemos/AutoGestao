@@ -17,21 +17,21 @@ export default function SuaPosicao({ posicao, total, atingimento, faltamValor, i
       {/* bg trophy watermark */}
       <Trophy className="absolute right-2 top-2 opacity-[0.06]" style={{ width: 120, height: 120, color: "#00A896" }} />
       <div>
-        <p className="text-body-sm font-semibold text-slate-500 mb-1">Sua posição</p>
-        <p className="text-h2 font-bold text-slate-800 leading-tight">{posLabel}</p>
-        <p className="text-[12px] text-slate-400 mt-0.5">de {total || "—"} vendedores</p>
+        <p className="text-body-sm font-semibold text-muted-foreground mb-1">Sua posição</p>
+        <p className="text-h2 font-bold text-foreground leading-tight">{posLabel}</p>
+        <p className="text-[12px] text-muted-foreground mt-0.5">de {total || "—"} vendedores</p>
       </div>
       <div className="grid grid-cols-2 gap-3 mt-4">
         <div className="bg-green-50 border border-green-100 rounded-xl p-3 flex flex-col items-center gap-1">
           <Target className="w-5 h-5 text-green-600" />
-          <p className="text-caption text-slate-500 font-medium">Atingimento</p>
+          <p className="text-caption text-muted-foreground font-medium">Atingimento</p>
           <p className="text-h3 font-bold text-green-600 leading-tight">{pct}%</p>
         </div>
         <div className="bg-blue-50 border border-blue-100 rounded-xl p-3 flex flex-col items-center gap-1 text-center">
           <TrendingUp className="w-5 h-5 text-blue-500" />
-          <p className="text-caption text-slate-500 font-medium">Faltam</p>
+          <p className="text-caption text-muted-foreground font-medium">Faltam</p>
           <p className="text-[16px] font-bold text-blue-600 leading-tight">{formatFaltam(faltamValor, isVolume)}</p>
-          {posicao > 1 && <p className="text-caption text-slate-400">{proxLabel}</p>}
+          {posicao > 1 && <p className="text-caption text-muted-foreground">{proxLabel}</p>}
           {posicao === 1 && <p className="text-caption text-green-500 font-semibold">Você lidera!</p>}
         </div>
       </div>

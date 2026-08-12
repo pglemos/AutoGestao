@@ -557,15 +557,15 @@ export default function ManagerDailyClosing() {
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div className="max-w-3xl">
-              <h1 className="text-xl font-bold text-gray-800">Fechamento Diário</h1>
-              <p className="mt-0.5 text-sm leading-5 text-gray-500">
+              <h1 className="text-xl font-bold text-foreground">Fechamento Diário</h1>
+              <p className="mt-0.5 text-sm leading-5 text-muted-foreground">
                 Acompanhe o movimento comercial informado pelos vendedores,
                 regularize fechamentos fora do horário e corrija volumes oficiais
                 de leads.
               </p>
             </div>
             <div className="flex flex-wrap items-end gap-2">
-              <label className="block text-xs text-gray-500">
+              <label className="block text-xs text-muted-foreground">
                 <span className="mb-1 flex items-center gap-1">
                   <Calendar size={12} /> Data
                 </span>
@@ -573,10 +573,10 @@ export default function ManagerDailyClosing() {
                   type="date"
                   value={date}
                   onChange={(event) => setDate(event.target.value)}
-                  className="h-[36px] rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-800 outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-[36px] rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </label>
-              <label className="block text-xs text-gray-500">
+              <label className="block text-xs text-muted-foreground">
                 <span className="mb-1 flex items-center gap-1">
                   <Building2 size={12} /> Unidade
                 </span>
@@ -584,7 +584,7 @@ export default function ManagerDailyClosing() {
                   aria-label="Unidade"
                   value={storeId || ""}
                   disabled
-                  className="h-[36px] min-w-[140px] rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-800 opacity-100"
+                  className="h-[36px] min-w-[140px] rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground opacity-100"
                 >
                   <option value={storeId || ""}>
                     {membership?.store?.name || "Unidade atual"}
@@ -651,11 +651,11 @@ export default function ManagerDailyClosing() {
         <section className="overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm">
           <div id="manager-closing-movement" />
           <div className="flex flex-col gap-3 border-b border-gray-100 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-            <h2 className="text-base font-semibold text-gray-800">
+            <h2 className="text-base font-semibold text-foreground">
               Movimento da Equipe — {format(parseISO(date), "dd/MM/yyyy")}
             </h2>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-1 text-xs text-gray-400">
+              <span className="inline-flex items-center gap-1 text-xs text-muted-foreground">
                 <RefreshCw size={13} /> Ordenado por entrega (mais recente)
               </span>
               <button
@@ -714,11 +714,11 @@ export default function ManagerDailyClosing() {
         />
 
         <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-          <h2 className="flex items-center gap-2 text-base font-semibold text-gray-800">
+          <h2 className="flex items-center gap-2 text-base font-semibold text-foreground">
             <BarChart3 size={18} className="text-emerald-600" />
             Comparativo de Disciplina do Fechamento
           </h2>
-          <p className="mt-1 text-sm text-gray-500">
+          <p className="mt-1 text-sm text-muted-foreground">
             Comparação com equipes da rede da consultoria
           </p>
           <div className="mt-5 space-y-3">
@@ -726,13 +726,13 @@ export default function ManagerDailyClosing() {
             <ComparisonRow label="Média da Rede" value={null} tone="network" />
             <ComparisonRow label="Top 25% da Rede" value={null} tone="top" />
           </div>
-          <p className="mt-4 text-center text-xs italic text-gray-400">
+          <p className="mt-4 text-center text-xs italic text-muted-foreground">
             Comparativos de rede aparecem quando houver snapshots oficiais disponíveis.
           </p>
         </section>
 
         <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-          <h2 className="text-base font-semibold text-gray-800">Resumo do Fechamento</h2>
+          <h2 className="text-base font-semibold text-foreground">Resumo do Fechamento</h2>
           <div className="mt-5 grid grid-cols-2 gap-3 xl:grid-cols-6">
             <SummaryGroup label="Showroom" icon={Store} tone="blue" items={[["Atendimentos", formatClosingMetric(summary.showroomVisits, summary.showroomVisits !== null)]]} />
             <SummaryGroup label="Carteira" icon={WalletCards} tone="emerald" items={[["Leads", formatClosingMetric(summary.carteiraLeads, summary.carteiraLeads !== null)], ["Atendimentos", formatClosingMetric(summary.carteiraVisits, summary.carteiraVisits !== null)]]} />
@@ -741,7 +741,7 @@ export default function ManagerDailyClosing() {
             <SummaryGroup label="Qualificados" icon={UserRoundCheck} tone="amber" items={[["Total", "—"]]} />
             <SummaryGroup label="Garantia" icon={ShieldCheck} tone="slate" items={[["Total", "—"]]} />
           </div>
-          <p className="mt-4 text-center text-xs text-gray-400">
+          <p className="mt-4 text-center text-xs text-muted-foreground">
             Os leads podem ser corrigidos pelo gerente com registro em auditoria. Demais dados permanecem sob responsabilidade do vendedor.
           </p>
         </section>
@@ -861,7 +861,7 @@ export function PendingReminderModal({
       description={`${pendingRows.length} vendedor(es) pendente(s)`}
       footer={
         <div className="grid w-full grid-cols-2 gap-2">
-          <button type="button" onClick={onClose} className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50">
+          <button type="button" onClick={onClose} className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-gray-50">
             Cancelar
           </button>
           <button type="button" disabled={reminding} onClick={onConfirm} className="h-11 rounded-xl bg-amber-600 px-4 text-sm font-semibold text-white shadow-sm hover:bg-amber-700 disabled:bg-amber-200">
@@ -872,10 +872,10 @@ export function PendingReminderModal({
     >
       <div className="space-y-4">
         <div className="rounded-xl bg-gray-50 p-4">
-          <p className="mb-3 text-sm text-gray-500">Vendedores que serão cobrados:</p>
+          <p className="mb-3 text-sm text-muted-foreground">Vendedores que serão cobrados:</p>
           <ul className="space-y-2">
             {pendingRows.map(({ seller }) => (
-              <li key={seller.id} className="flex items-center gap-2 text-sm text-gray-700">
+              <li key={seller.id} className="flex items-center gap-2 text-sm text-foreground">
                 <Megaphone size={15} className="text-amber-500" /> {seller.name}
               </li>
             ))}
@@ -883,7 +883,7 @@ export function PendingReminderModal({
         </div>
         <div className="rounded-xl border border-amber-200 bg-amber-50 p-4">
           <p className="text-sm font-semibold text-amber-700">Mensagem padrão enviada:</p>
-          <p className="mt-2 text-sm italic leading-6 text-gray-700">“{PENDING_CLOSING_MESSAGE}”</p>
+          <p className="mt-2 text-sm italic leading-6 text-foreground">“{PENDING_CLOSING_MESSAGE}”</p>
         </div>
       </div>
     </Modal>
@@ -941,17 +941,17 @@ function SummaryCard({
     danger: "border-red-200 bg-red-50 text-red-600",
     success: "border-emerald-200 bg-emerald-50 text-emerald-600",
     blue: "border-blue-200 bg-blue-50 text-blue-600",
-    neutral: "border-gray-100 bg-white text-gray-500",
+    neutral: "border-gray-100 bg-white text-muted-foreground",
   }[tone];
   const actionTone = tone === "warning" ? "border-amber-200 text-amber-700" : tone === "blue" ? "border-blue-200 text-blue-700" : "border-emerald-200 text-emerald-700";
   return (
     <article className={`flex h-[164px] flex-col rounded-2xl border p-3 shadow-sm ${tones}`}>
       <div className="flex items-center justify-between gap-2">
-        <h2 className="flex items-center gap-2 text-xs font-semibold text-gray-600"><Icon size={16} /> {title}</h2>
+        <h2 className="flex items-center gap-2 text-xs font-semibold text-muted-foreground"><Icon size={16} /> {title}</h2>
         {status && status !== "—" && <span className={`rounded-full px-3 py-1 text-xs font-semibold ${status === "Excelente" || status === "Bom" ? "bg-emerald-100 text-emerald-700" : status === "Regular" ? "bg-amber-100 text-amber-700" : "bg-red-100 text-red-700"}`}>{status}</span>}
       </div>
-      <strong className="mt-2 text-3xl text-gray-800">{value}</strong>
-      <p className="mt-1 text-xs text-gray-500">{detail}</p>
+      <strong className="mt-2 text-3xl text-foreground">{value}</strong>
+      <p className="mt-1 text-xs text-muted-foreground">{detail}</p>
       <button type="button" disabled={actionDisabled} onClick={onAction} className={`mt-auto inline-flex h-[28px] items-center justify-center gap-1.5 rounded-lg border bg-white px-2 text-xs font-medium disabled:cursor-not-allowed disabled:opacity-40 ${actionTone}`}>
         {action === "Ver Agenda D+1" && <CalendarClock size={14} />}
         {action === "Cobrar Pendentes" && <Megaphone size={14} />}
@@ -970,8 +970,8 @@ function DisciplineCard({ value }: { value: number | null }) {
   return (
     <article className={`flex h-[164px] flex-col rounded-2xl border p-3 shadow-sm ${background}`}>
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-xs font-semibold text-gray-600">Disciplina Média</h2>
-        <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-gray-700">{label}</span>
+        <h2 className="text-xs font-semibold text-muted-foreground">Disciplina Média</h2>
+        <span className="rounded-full bg-white/70 px-3 py-1 text-xs font-semibold text-foreground">{label}</span>
       </div>
       <div className="mx-auto mt-1">
         <div role="progressbar" aria-label="Disciplina média da equipe" aria-valuemin={0} aria-valuemax={100} aria-valuenow={normalized} className="grid h-24 w-24 place-items-center rounded-full p-2" style={{ background: `conic-gradient(${color} ${normalized * 3.6}deg, rgba(255,255,255,.8) 0deg)` }}>
@@ -994,7 +994,7 @@ function ClosingTable({ rows, onOpenAgenda, onOpenDetails, onRemind, onRegulariz
   return (
     <div className="overflow-x-auto">
       <table className="w-full min-w-[1100px] text-sm">
-        <thead className="border-b border-gray-100 bg-gray-50"><tr>{["Vendedor", "Status", "Entrega", "Leads", "Qualif.", "Agend.", "Atendi.", "Venda", "Disc.", "Ações"].map((label) => <th key={label} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-500">{label}</th>)}</tr></thead>
+        <thead className="border-b border-gray-100 bg-gray-50"><tr>{["Vendedor", "Status", "Entrega", "Leads", "Qualif.", "Agend.", "Atendi.", "Venda", "Disc.", "Ações"].map((label) => <th key={label} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead>
         <tbody className="divide-y divide-gray-100 bg-white">
           {rows.map((row) => <ClosingRow key={row.seller.id} row={row} onOpenAgenda={() => onOpenAgenda(row.seller.id)} onOpenDetails={() => onOpenDetails(row)} onRemind={() => onRemind(row)} onRegularize={() => onRegularize(row)} onDecide={(action) => onDecide(row, action)} onCorrectLeads={() => onCorrectLeads(row)} />)}
         </tbody>
@@ -1020,12 +1020,12 @@ function ClosingRow({ row, onOpenAgenda, onOpenDetails, onRemind, onRegularize, 
   const discipline = checkin?.pontuacao_disciplina_final;
   return (
     <tr className="hover:bg-gray-50/50">
-      <td className="px-4 py-3"><div className="flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">{initials(row.seller.name)}</span><span className="font-semibold text-gray-800">{row.seller.name}</span></div></td>
+      <td className="px-4 py-3"><div className="flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">{initials(row.seller.name)}</span><span className="font-semibold text-foreground">{row.seller.name}</span></div></td>
       <td className="px-4 py-3"><StatusBadge status={status} /></td>
-      <td className="px-4 py-3 text-gray-600">{checkin?.submitted_at ? format(parseISO(checkin.submitted_at), "HH:mm") : "—"}</td>
+      <td className="px-4 py-3 text-muted-foreground">{checkin?.submitted_at ? format(parseISO(checkin.submitted_at), "HH:mm") : "—"}</td>
       <MetricCell value={leads} />
       <MetricCell value="—" muted />
-      <td className="px-4 py-3"><button type="button" onClick={onOpenAgenda} className={`font-semibold underline decoration-dotted underline-offset-4 ${appointments === null ? "text-gray-400" : appointments === 0 ? "text-red-600" : appointments === 1 ? "text-orange-600" : "text-emerald-600"}`}>{appointments ?? "—"}</button></td>
+      <td className="px-4 py-3"><button type="button" onClick={onOpenAgenda} className={`font-semibold underline decoration-dotted underline-offset-4 ${appointments === null ? "text-muted-foreground" : appointments === 0 ? "text-red-600" : appointments === 1 ? "text-orange-600" : "text-emerald-600"}`}>{appointments ?? "—"}</button></td>
       <MetricCell value={visits} />
       <MetricCell value={sales} />
       <td className="px-4 py-3"><MiniDiscipline value={typeof discipline === "number" ? discipline : null} /></td>
@@ -1035,7 +1035,7 @@ function ClosingRow({ row, onOpenAgenda, onOpenDetails, onRemind, onRegularize, 
 }
 
 function ActionButton({ icon: Icon, label, onClick, tone }: { icon: typeof Eye; label: string; onClick: () => void; tone: "gray" | "orange" | "blue" | "green" | "red" | "purple" }) {
-  const toneClass = { gray: "text-gray-600 hover:bg-gray-50", orange: "text-orange-700 hover:bg-orange-50", blue: "text-blue-700 hover:bg-blue-50", green: "text-emerald-700 hover:bg-emerald-50", red: "text-red-700 hover:bg-red-50", purple: "text-purple-700 hover:bg-purple-50" }[tone];
+  const toneClass = { gray: "text-muted-foreground hover:bg-gray-50", orange: "text-orange-700 hover:bg-orange-50", blue: "text-blue-700 hover:bg-blue-50", green: "text-emerald-700 hover:bg-emerald-50", red: "text-red-700 hover:bg-red-50", purple: "text-purple-700 hover:bg-purple-50" }[tone];
   return <button type="button" onClick={onClick} className={`inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-medium ${toneClass}`}><Icon size={13} /> {label}</button>;
 }
 
@@ -1051,26 +1051,26 @@ function MiniDiscipline({ value }: { value: number | null }) {
 }
 
 function MetricCell({ value, muted = false }: { value: number | string | null; muted?: boolean }) {
-  return <td className={`px-4 py-3 font-semibold ${muted ? "text-gray-400" : "text-gray-800"}`}>{value ?? "—"}</td>;
+  return <td className={`px-4 py-3 font-semibold ${muted ? "text-muted-foreground" : "text-foreground"}`}>{value ?? "—"}</td>;
 }
 
 function DisciplineTrendCard({ trend, range, onRange }: { trend: Array<{ date: string; label: string; value: number | null }>; range: 7 | 15 | 30; onRange: (range: 7 | 15 | 30) => void }) {
   const hasData = trend.some((point) => point.value !== null);
-  return <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h2 className="flex items-center gap-2 text-base font-semibold text-gray-800"><TrendingUp size={18} className="text-emerald-600" /> Evolução da Disciplina do Fechamento <HelpTooltip text="Gráfico de evolução percentual da equipe na realização pontual dos fechamentos diários ao longo do período selecionado (7, 15 ou 30 dias)." /></h2><p className="mt-1 text-sm text-gray-500">Acompanhe se a equipe está mantendo consistência na prestação de contas diária.</p></div><div className="flex rounded-xl bg-gray-50 p-1">{([7, 15, 30] as const).map((option) => <button key={option} type="button" onClick={() => onRange(option)} className={`rounded-lg px-3 py-2 text-xs font-medium ${range === option ? "bg-emerald-600 text-white shadow-sm" : "text-gray-500 hover:bg-white"}`}>{option} dias</button>)}</div></div><div className="mt-4 h-[236px]">{hasData ? <ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}><CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" /><XAxis dataKey="label" axisLine={{ stroke: "#e5e7eb" }} tickLine={false} tick={{ fontSize: 11, fill: "#9ca3af" }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} width={42} /><Line type="monotone" dataKey="value" connectNulls stroke="#10b981" strokeWidth={2.5} dot={{ r: 3.5, fill: "#10b981", strokeWidth: 0 }} /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-center text-sm text-gray-500">Ainda não há histórico de disciplina no período selecionado.</div>}</div><p className="mt-3 text-center text-xs italic text-gray-400">O dia atual pode aparecer como parcial enquanto houver fechamentos pendentes ou regularizações em aberto.</p></section>;
+  return <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm"><div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between"><div><h2 className="flex items-center gap-2 text-base font-semibold text-foreground"><TrendingUp size={18} className="text-emerald-600" /> Evolução da Disciplina do Fechamento <HelpTooltip text="Gráfico de evolução percentual da equipe na realização pontual dos fechamentos diários ao longo do período selecionado (7, 15 ou 30 dias)." /></h2><p className="mt-1 text-sm text-muted-foreground">Acompanhe se a equipe está mantendo consistência na prestação de contas diária.</p></div><div className="flex rounded-xl bg-gray-50 p-1">{([7, 15, 30] as const).map((option) => <button key={option} type="button" onClick={() => onRange(option)} className={`rounded-lg px-3 py-2 text-xs font-medium ${range === option ? "bg-emerald-600 text-white shadow-sm" : "text-muted-foreground hover:bg-white"}`}>{option} dias</button>)}</div></div><div className="mt-4 h-[236px]">{hasData ? <ResponsiveContainer width="100%" height="100%"><LineChart data={trend} margin={{ top: 18, right: 12, bottom: 0, left: 0 }}><CartesianGrid vertical={false} strokeDasharray="3 3" stroke="#e5e7eb" /><XAxis dataKey="label" axisLine={{ stroke: "#e5e7eb" }} tickLine={false} tick={{ fontSize: 11, fill: "#9ca3af" }} /><YAxis domain={[0, 100]} ticks={[0, 25, 50, 75, 100]} axisLine={false} tickLine={false} tickFormatter={(value) => `${value}%`} tick={{ fontSize: 11, fill: "#9ca3af" }} width={42} /><Line type="monotone" dataKey="value" connectNulls stroke="#10b981" strokeWidth={2.5} dot={{ r: 3.5, fill: "#10b981", strokeWidth: 0 }} /></LineChart></ResponsiveContainer> : <div className="grid h-full place-items-center text-center text-sm text-muted-foreground">Ainda não há histórico de disciplina no período selecionado.</div>}</div><p className="mt-3 text-center text-xs italic text-muted-foreground">O dia atual pode aparecer como parcial enquanto houver fechamentos pendentes ou regularizações em aberto.</p></section>;
 }
 
 function ComparisonRow({ label, value, tone }: { label: string; value: number | null; tone: "team" | "network" | "top" }) {
   const color = tone === "team" ? "bg-emerald-500" : tone === "top" ? "bg-emerald-700" : "bg-slate-400";
-  return <div className="grid grid-cols-[150px_1fr] items-center gap-3"><span className="flex items-center gap-2 text-sm font-medium text-gray-600">{tone === "top" && <Trophy size={14} />}{label}</span><div className="relative h-6 overflow-hidden rounded-full bg-gray-100"><div className={`flex h-full items-center justify-end rounded-full pr-2 text-xs font-semibold text-white ${color}`} style={{ width: `${value || 0}%` }}>{value === null ? "" : `${value}%`}</div>{value === null && <span className="absolute inset-y-0 right-2 grid place-items-center text-xs font-medium text-gray-400">—</span>}</div></div>;
+  return <div className="grid grid-cols-[150px_1fr] items-center gap-3"><span className="flex items-center gap-2 text-sm font-medium text-muted-foreground">{tone === "top" && <Trophy size={14} />}{label}</span><div className="relative h-6 overflow-hidden rounded-full bg-gray-100"><div className={`flex h-full items-center justify-end rounded-full pr-2 text-xs font-semibold text-white ${color}`} style={{ width: `${value || 0}%` }}>{value === null ? "" : `${value}%`}</div>{value === null && <span className="absolute inset-y-0 right-2 grid place-items-center text-xs font-medium text-muted-foreground">—</span>}</div></div>;
 }
 
 function SummaryGroup({ label, icon: Icon, tone, items }: { label: string; icon: typeof Store; tone: "blue" | "emerald" | "purple" | "amber" | "slate"; items: Array<[string, number | string]> }) {
-  const iconTone = { blue: "bg-blue-50 text-blue-600", emerald: "bg-emerald-50 text-emerald-600", purple: "bg-purple-50 text-purple-600", amber: "bg-amber-50 text-amber-600", slate: "bg-slate-50 text-slate-600" }[tone];
-  return <div className="min-h-[88px] rounded-xl bg-gray-50 p-3"><h3 className="flex items-center gap-2 text-xs font-semibold text-gray-600"><span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${iconTone}`}><Icon size={15} /></span>{label}</h3>{items.map(([item, value]) => <div key={item} className="mt-2 flex justify-between gap-2 text-xs"><span className="text-gray-500">{item}</span><strong className="text-gray-800">{value}</strong></div>)}</div>;
+  const iconTone = { blue: "bg-blue-50 text-blue-600", emerald: "bg-emerald-50 text-emerald-600", purple: "bg-purple-50 text-purple-600", amber: "bg-amber-50 text-amber-600", slate: "bg-slate-50 text-muted-foreground" }[tone];
+  return <div className="min-h-[88px] rounded-xl bg-gray-50 p-3"><h3 className="flex items-center gap-2 text-xs font-semibold text-muted-foreground"><span className={`grid h-7 w-7 shrink-0 place-items-center rounded-lg ${iconTone}`}><Icon size={15} /></span>{label}</h3>{items.map(([item, value]) => <div key={item} className="mt-2 flex justify-between gap-2 text-xs"><span className="text-muted-foreground">{item}</span><strong className="text-foreground">{value}</strong></div>)}</div>;
 }
 
 function Empty({ text }: { text: string }) {
-  return <div className="grid min-h-[148px] place-items-center p-8 text-center"><p className="text-sm font-medium text-gray-500">{text}</p></div>;
+  return <div className="grid min-h-[148px] place-items-center p-8 text-center"><p className="text-sm font-medium text-muted-foreground">{text}</p></div>;
 }
 
 function ManagerClosingSkeleton() {

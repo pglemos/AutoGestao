@@ -7,8 +7,8 @@ export function LastSixMonthsCard({ historico }: { historico: Mes[] }) {
   if (!historico || historico.length === 0) {
     return (
       <div className="rounded-2xl p-6" style={{ background: '#FFFFFF', border: '1px solid rgba(255,255,255,0.06)' }}>
-        <p className="text-gray-500 text-xs font-bold uppercase tracking-wide mb-4">Últimos 6 Meses</p>
-        <p className="text-gray-500 text-sm">Sem histórico disponível ainda.</p>
+        <p className="text-muted-foreground text-xs font-bold uppercase tracking-wide mb-4">Últimos 6 Meses</p>
+        <p className="text-muted-foreground text-sm">Sem histórico disponível ainda.</p>
       </div>
     )
   }
@@ -18,7 +18,7 @@ export function LastSixMonthsCard({ historico }: { historico: Mes[] }) {
 
   return (
     <div className="rounded-2xl p-6" style={{ background: '#FFFFFF', border: '1px solid rgba(255,255,255,0.06)' }}>
-      <p className="text-gray-600 text-xs font-bold uppercase tracking-wide mb-5">Últimos 6 Meses</p>
+      <p className="text-muted-foreground text-xs font-bold uppercase tracking-wide mb-5">Últimos 6 Meses</p>
       <div className="space-y-3">
         {historico.map((mes, i) => {
           const isMelhor = mes.comissao === melhorComissao && melhorComissao > 0
@@ -26,7 +26,7 @@ export function LastSixMonthsCard({ historico }: { historico: Mes[] }) {
           const label = mes.label.charAt(0).toUpperCase() + mes.label.slice(1)
           return (
             <div key={mes.mes || i} className="flex items-center gap-3">
-              <span className="text-gray-500 text-sm w-24 flex-shrink-0">{label}</span>
+              <span className="text-muted-foreground text-sm w-24 flex-shrink-0">{label}</span>
               <div className="flex-1 flex items-center gap-2">
                 <div className="flex-1 rounded-full h-2.5" style={{ background: 'rgba(255,255,255,0.06)' }}>
                   <div

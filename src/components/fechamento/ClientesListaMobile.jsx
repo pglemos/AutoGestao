@@ -12,7 +12,7 @@ const CHANNEL_STYLE = {
 const FINANCING_STYLE = {
   "Aprovado": "bg-green-100 text-green-700",
   "Recusado": "bg-red-100 text-red-600",
-  "Não se aplica": "bg-slate-100 text-slate-500",
+  "Não se aplica": "bg-slate-100 text-muted-foreground",
 };
 const SALE_STYLE = {
   "Sim": "bg-green-100 text-green-700",
@@ -71,8 +71,8 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
           </div>
           {telefone && (
             <div className="flex items-center gap-1 mt-1">
-              <Phone className="w-3 h-3 text-slate-400" />
-              <span className="text-body-sm text-slate-500">{telefone}</span>
+              <Phone className="w-3 h-3 text-muted-foreground" />
+              <span className="text-body-sm text-muted-foreground">{telefone}</span>
             </div>
           )}
         </div>
@@ -97,14 +97,14 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
       <div className="space-y-1.5">
         {veiculo && (
           <div className="flex items-center gap-2">
-            <Car className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-            <span className="text-body-sm text-slate-600">{veiculo}</span>
+            <Car className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+            <span className="text-body-sm text-muted-foreground">{veiculo}</span>
           </div>
         )}
         {dataDisplay && (
           <div className="flex items-center gap-2">
-            <CalendarDays className="w-3.5 h-3.5 text-slate-400 flex-shrink-0" />
-            <span className="text-body-sm text-slate-600">{moment(dataDisplay).format("DD/MM/YYYY")}</span>
+            <CalendarDays className="w-3.5 h-3.5 text-muted-foreground flex-shrink-0" />
+            <span className="text-body-sm text-muted-foreground">{moment(dataDisplay).format("DD/MM/YYYY")}</span>
           </div>
         )}
         {valorDisplay && (
@@ -115,10 +115,10 @@ function ClientMobileCard({ c, closingDate, canEdit, canDelete, onEdit, onDelete
       </div>
 
       <div className="flex flex-wrap gap-1.5 pt-1">
-        {(c.canal_comercial || c.channel) && <Badge label={c.canal_comercial || c.channel} className={CHANNEL_STYLE[c.canal_comercial || c.channel] || "bg-slate-100 text-slate-600"} />}
+        {(c.canal_comercial || c.channel) && <Badge label={c.canal_comercial || c.channel} className={CHANNEL_STYLE[c.canal_comercial || c.channel] || "bg-slate-100 text-muted-foreground"} />}
         {c.attended && <Badge label={`Compareceu: ${c.attended}`} className={BOOL_STYLE(c.attended)} />}
-        {(c.financiamento || c.financing) && <Badge label={c.financiamento || c.financing} className={FINANCING_STYLE[c.financiamento || c.financing] || "bg-slate-100 text-slate-500"} />}
-        <Badge label={saleStatus} className={SALE_STYLE[saleStatus] || "bg-slate-100 text-slate-500"} />
+        {(c.financiamento || c.financing) && <Badge label={c.financiamento || c.financing} className={FINANCING_STYLE[c.financiamento || c.financing] || "bg-slate-100 text-muted-foreground"} />}
+        <Badge label={saleStatus} className={SALE_STYLE[saleStatus] || "bg-slate-100 text-muted-foreground"} />
       </div>
     </div>
   );
@@ -143,14 +143,14 @@ export default function ClientesListaMobile({ clients = [], closingDate, bloquea
           <ShoppingCart className="w-6 h-6 text-purple-300" />
         </div>
         <p className="text-body-sm text-[#64748B] font-medium">Nenhum cliente cadastrado hoje.</p>
-        <p className="text-[12px] text-slate-300">Adicione um cliente na etapa 4 acima.</p>
+        <p className="text-[12px] text-text-disabled">Adicione um cliente na etapa 4 acima.</p>
       </div>
     );
   }
 
   return (
     <div className="space-y-3">
-      <p className="text-[12px] font-bold text-slate-400 uppercase tracking-wider px-1">Clientes cadastrados hoje</p>
+      <p className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider px-1">Clientes cadastrados hoje</p>
       {clients.map(c => (
         <ClientMobileCard
           key={c.id}

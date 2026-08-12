@@ -58,7 +58,7 @@ export function PlanoCarreira() {
       </form>
 
       {loading ? (
-        <p className="text-sm font-bold text-gray-500">Carregando trilhas…</p>
+        <p className="text-sm font-bold text-muted-foreground">Carregando trilhas…</p>
       ) : cargos.length === 0 ? (
         <EmptyState icon={<TrendingUp size={28} />} title="Sem trilhas de carreira" description="Defina os níveis e requisitos de cada cargo." />
       ) : (
@@ -72,9 +72,9 @@ export function PlanoCarreira() {
                     <div className="flex items-center gap-mx-sm">
                       <span className="inline-flex h-6 min-w-6 items-center justify-center rounded-mx-full bg-emerald-600 px-2 text-xs font-bold text-white">{n.nivel}</span>
                       <span className="font-bold uppercase text-sm">{n.nome}</span>
-                      {n.proximo_cargo && <span className="ml-auto text-xs font-bold text-gray-500">→ {n.proximo_cargo}</span>}
+                      {n.proximo_cargo && <span className="ml-auto text-xs font-bold text-muted-foreground">→ {n.proximo_cargo}</span>}
                     </div>
-                    {n.requisitos && <p className="mt-mx-xs text-xs font-medium text-gray-500">{n.requisitos}</p>}
+                    {n.requisitos && <p className="mt-mx-xs text-xs font-medium text-muted-foreground">{n.requisitos}</p>}
                   </li>
                 ))}
               </ol>
@@ -89,7 +89,7 @@ export function PlanoCarreira() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-mx-xs">
-      <span className="block px-1 text-xs font-bold uppercase tracking-widest text-gray-500">{label}</span>
+      <span className="block px-1 text-xs font-bold uppercase tracking-widest text-muted-foreground">{label}</span>
       {children}
     </label>
   )

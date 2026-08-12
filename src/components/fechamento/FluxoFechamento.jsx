@@ -33,9 +33,9 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
   if (disabled) {
     return (
       <div className="flex items-center border border-slate-100 rounded-xl h-11 bg-slate-50 opacity-60 cursor-not-allowed">
-        <div className="w-11 h-full flex items-center justify-center text-slate-300 border-r border-slate-100 text-[20px] font-light">−</div>
-        <span className="flex-1 text-center font-bold text-[16px] text-slate-400 tabular-nums">{value}</span>
-        <div className="w-11 h-full flex items-center justify-center text-slate-300 border-l border-slate-100 text-[20px] font-light">+</div>
+        <div className="w-11 h-full flex items-center justify-center text-text-disabled border-r border-slate-100 text-[20px] font-light">−</div>
+        <span className="flex-1 text-center font-bold text-[16px] text-muted-foreground tabular-nums">{value}</span>
+        <div className="w-11 h-full flex items-center justify-center text-text-disabled border-l border-slate-100 text-[20px] font-light">+</div>
       </div>
     );
   }
@@ -44,7 +44,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
     <div className="flex items-center border border-slate-200 rounded-xl shadow-sm h-11 focus-within:border-blue-400 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)] transition-all bg-white">
       <button
         onClick={onDecrement}
-        className="w-11 h-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 active:bg-slate-100 border-r border-slate-200 rounded-l-xl transition-colors text-[20px] font-light flex-shrink-0"
+        className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 active:bg-slate-100 border-r border-slate-200 rounded-l-xl transition-colors text-[20px] font-light flex-shrink-0"
       >−</button>
       <input
         type="text"
@@ -56,12 +56,12 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
         onBlur={commit}
         onKeyDown={handleKeyDown}
         onWheel={e => e.target.blur()}
-        className="flex-1 min-w-0 text-center font-bold text-[16px] text-slate-700 bg-transparent border-none outline-none h-full tabular-nums"
+        className="flex-1 min-w-0 text-center font-bold text-[16px] text-foreground bg-transparent border-none outline-none h-full tabular-nums"
         style={{ boxShadow: "none" }}
       />
       <button
         onClick={onIncrement}
-        className="w-11 h-full flex items-center justify-center text-slate-400 hover:text-slate-700 hover:bg-slate-50 active:bg-slate-100 border-l border-slate-200 rounded-r-xl transition-colors text-[20px] font-light flex-shrink-0"
+        className="w-11 h-full flex items-center justify-center text-muted-foreground hover:text-foreground hover:bg-slate-50 active:bg-slate-100 border-l border-slate-200 rounded-r-xl transition-colors text-[20px] font-light flex-shrink-0"
       >+</button>
     </div>
   );
@@ -70,7 +70,7 @@ function StepperInput({ value, onDecrement, onIncrement, onSet, disabled }) {
 function FieldRow({ label, value, onDecrement, onIncrement, onSet, disabled }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className={`text-body-sm font-semibold leading-tight flex-1 min-w-0 ${disabled ? "text-slate-300" : "text-slate-600"}`}>{label}</span>
+      <span className={`text-body-sm font-semibold leading-tight flex-1 min-w-0 ${disabled ? "text-text-disabled" : "text-muted-foreground"}`}>{label}</span>
       <div className="w-[140px] flex-shrink-0">
         <StepperInput value={value} onDecrement={onDecrement} onIncrement={onIncrement} onSet={onSet} disabled={disabled} />
       </div>
@@ -168,15 +168,15 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }) {
               className="flex flex-col items-center gap-1 flex-1 min-w-0 cursor-pointer transition-all"
             >
               <div className={`w-9 h-9 rounded-full flex items-center justify-center transition-all shadow-sm
-                ${done ? c.stepDone : active ? c.stepActive : "bg-slate-100 text-slate-400"}
+                ${done ? c.stepDone : active ? c.stepActive : "bg-slate-100 text-muted-foreground"}
               `}>
                 {done ? <CheckCircle2 className="w-4 h-4 text-white" /> : <Icon className="w-4 h-4" />}
               </div>
               <span className={`text-caption font-bold text-center leading-tight
-                ${done ? c.title : active ? c.title : "text-slate-400"}
+                ${done ? c.title : active ? c.title : "text-muted-foreground"}
               `}>{step.label}</span>
               <span className={`text-caption font-semibold
-                ${done || active ? c.note : "text-slate-300"}
+                ${done || active ? c.note : "text-text-disabled"}
               `}>{step.pct}%</span>
             </button>
             {idx < STEPS.length - 1 && (
@@ -258,7 +258,7 @@ function BackButton({ onGoBack }) {
   return (
     <button
       onClick={onGoBack}
-      className="sm:hidden flex items-center gap-1 text-[12px] font-semibold text-slate-500 hover:text-slate-700 mb-1 -mt-1"
+      className="sm:hidden flex items-center gap-1 text-[12px] font-semibold text-muted-foreground hover:text-foreground mb-1 -mt-1"
     >
       <ChevronRight className="w-3.5 h-3.5 rotate-180" />
       Voltar
@@ -280,7 +280,7 @@ function ShowroomStep({ dc, updateCounter, setCounter, bloqueado, onConfirm, onG
           <p className={`text-caption mt-0.5 font-medium ${c.sub}`}>Atendimento presencial</p>
         </div>
       </div>
-      <p className="text-[12px] text-slate-500">Informe os atendimentos presenciais realizados no dia.</p>
+      <p className="text-[12px] text-muted-foreground">Informe os atendimentos presenciais realizados no dia.</p>
       <div className={`border-t ${c.divider} pt-4 space-y-4`}>
         <FieldRow
           label="Atendimentos realizados"
@@ -323,7 +323,7 @@ function CarteiraStep({ dc, updateCounter, setCounter, clients, closingDate, blo
           <p className={`text-caption mt-0.5 font-medium ${c.sub}`}>Relacionamento e prospecção</p>
         </div>
       </div>
-      <p className="text-[12px] text-slate-500">Informe os contatos, atendimentos e agendamentos gerados pela sua carteira.</p>
+      <p className="text-[12px] text-muted-foreground">Informe os contatos, atendimentos e agendamentos gerados pela sua carteira.</p>
       <div className={`border-t ${c.divider} pt-4 space-y-4`}>
         <FieldRow label="Leads recebidos" value={dc.leads_carteira || 0}
           onDecrement={() => updateCounter("leads_carteira", -1)} onIncrement={() => updateCounter("leads_carteira", 1)}
@@ -337,7 +337,7 @@ function CarteiraStep({ dc, updateCounter, setCounter, clients, closingDate, blo
             onSet={v => setCounter("agendamentos_carteira", v)} disabled={false} />
         ) : (
           <div className="flex items-center justify-between gap-3">
-            <span className="text-body-sm font-semibold text-slate-500 flex-1">Agendamentos D+1 ativos</span>
+            <span className="text-body-sm font-semibold text-muted-foreground flex-1">Agendamentos D+1 ativos</span>
             <span className={`text-h3 font-bold tabular-nums ${c.title}`}>{ativos}</span>
           </div>
         )}
@@ -376,7 +376,7 @@ function InternetStep({ dc, updateCounter, setCounter, clients, closingDate, blo
           <p className={`text-caption mt-0.5 font-medium ${c.sub}`}>Leads digitais</p>
         </div>
       </div>
-      <p className="text-[12px] text-slate-500">Informe os leads digitais recebidos e o andamento dos atendimentos.</p>
+      <p className="text-[12px] text-muted-foreground">Informe os leads digitais recebidos e o andamento dos atendimentos.</p>
       <div className={`border-t ${c.divider} pt-4 space-y-4`}>
         <FieldRow label="Leads recebidos" value={dc.leads_internet || 0}
           onDecrement={() => updateCounter("leads_internet", -1)} onIncrement={() => updateCounter("leads_internet", 1)}
@@ -390,7 +390,7 @@ function InternetStep({ dc, updateCounter, setCounter, clients, closingDate, blo
             onSet={v => setCounter("agendamentos_internet", v)} disabled={false} />
         ) : (
           <div className="flex items-center justify-between gap-3">
-            <span className="text-body-sm font-semibold text-slate-500 flex-1">Agendamentos D+1 ativos</span>
+            <span className="text-body-sm font-semibold text-muted-foreground flex-1">Agendamentos D+1 ativos</span>
             <span className={`text-h3 font-bold tabular-nums ${c.title}`}>{ativos}</span>
           </div>
         )}
@@ -431,7 +431,7 @@ function VendasStep({ onGoBack, agendCarteira, agendInternet, children }) {
           <p className={`text-caption mt-0.5 font-medium ${c.sub}`}>Registros de vendas e agendamentos D+1</p>
         </div>
       </div>
-      <p className="text-[12px] text-slate-500">{msg}</p>
+      <p className="text-[12px] text-muted-foreground">{msg}</p>
       {children && <div className="space-y-3">{children}</div>}
     </div>
   );
@@ -498,7 +498,7 @@ export default function FluxoFechamento({ dc, updateCounter, setCounter, clients
         <div className="flex items-center justify-between mb-1">
           <div className="flex-1 min-w-0 pr-3">
             <h2 className="text-body-sm sm:text-[14px] font-bold text-[#0F172A] uppercase tracking-wide">Progresso do Fechamento</h2>
-            <p className="text-caption sm:text-caption text-slate-400 mt-0.5 leading-tight">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
+            <p className="text-caption sm:text-caption text-muted-foreground mt-0.5 leading-tight">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
           </div>
           <span className={`text-h3 sm:text-h2 font-bold tabular-nums flex-shrink-0 ${totalPct === 100 ? "text-green-600" : "text-[#0F172A]"}`}>
             {totalPct}%

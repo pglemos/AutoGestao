@@ -37,7 +37,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
     { label: "Meta", values: targetValues, cons: consTarget, fmt: (v) => formatCellValue(v, displayFormat, decimalPlaces), rowClass: "text-blue-700" },
     { label: "Resultado Atual", values: currentValues, cons: consCurrent, fmt: (v) => formatCellValue(v, displayFormat, decimalPlaces), rowClass: areaStyle.text || "text-foreground", rowFont: "font-semibold" },
     { label: "% da Meta", values: pctValues, cons: consPct, fmt: (v) => (v !== null ? formatCellValue(v, "percentage", 1) : "—"), status: true },
-    { label: "Ano Anterior", values: previousYearValues, cons: consPrevious, fmt: (v) => formatCellValue(v, displayFormat, decimalPlaces), rowClass: "text-slate-500" },
+    { label: "Ano Anterior", values: previousYearValues, cons: consPrevious, fmt: (v) => formatCellValue(v, displayFormat, decimalPlaces), rowClass: "text-muted-foreground" },
     { label: "Variação vs. Ano Anterior", values: varValues, cons: consVar, fmt: (v) => (v !== null ? formatVariation(v) : "—"), status: true },
   ];
 
@@ -53,23 +53,23 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
         <table className="w-full min-w-[820px] border-collapse text-sm">
           <thead className="sticky top-0 z-20">
             <tr className="border-b border-border bg-slate-50">
-              <th className="sticky left-0 z-30 min-w-[168px] border-r border-border bg-slate-50 px-3 py-2 text-left text-xs font-semibold text-slate-700">Comparativo</th>
+              <th className="sticky left-0 z-30 min-w-[168px] border-r border-border bg-slate-50 px-3 py-2 text-left text-xs font-semibold text-foreground">Comparativo</th>
               {MONTHS.map((m, i) => (
                 <th
                   key={m}
                   data-month-idx={i}
-                  className={`px-2 py-2 text-center text-xs font-semibold ${i === idx ? "border-b-2 border-blue-400 bg-blue-50 text-blue-700" : "text-slate-600"}`}
+                  className={`px-2 py-2 text-center text-xs font-semibold ${i === idx ? "border-b-2 border-blue-400 bg-blue-50 text-blue-700" : "text-muted-foreground"}`}
                 >
                   {m}
                 </th>
               ))}
-              <th className="bg-slate-100 px-3 py-2 text-center text-xs font-semibold text-slate-700">{consLabel}</th>
+              <th className="bg-slate-100 px-3 py-2 text-center text-xs font-semibold text-foreground">{consLabel}</th>
             </tr>
           </thead>
           <tbody>
             {rows.map((row, ri) => (
               <tr key={ri} className="border-b border-border/40 bg-card hover:bg-slate-50/50">
-                <td className="sticky left-0 z-10 min-w-[168px] border-r border-border bg-card px-3 py-1.5 text-left text-xs font-medium text-slate-700">
+                <td className="sticky left-0 z-10 min-w-[168px] border-r border-border bg-card px-3 py-1.5 text-left text-xs font-medium text-foreground">
                   {row.label === "Meta" && <span className="mr-1.5 inline-block h-2 w-2 rounded-full bg-blue-500 align-middle" />}
                   {row.label === "Resultado Atual" && <span className={`mr-1.5 inline-block h-2 w-2 rounded-full ${areaStyle.dot} align-middle`} />}
                   {row.label}
@@ -86,7 +86,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
                     <td
                       key={ci}
                       data-month-idx={ci}
-                      className={`px-2 py-1.5 text-center text-xs ${ci === idx ? "bg-blue-50/60 font-medium text-blue-700" : ""} ${row.rowClass || "text-slate-600"} ${row.rowFont || ""}`}
+                      className={`px-2 py-1.5 text-center text-xs ${ci === idx ? "bg-blue-50/60 font-medium text-blue-700" : ""} ${row.rowClass || "text-muted-foreground"} ${row.rowFont || ""}`}
                     >
                       {statusStyle ? (
                         <span className={`inline-flex items-center rounded px-1.5 py-0.5 text-xs font-medium ${statusStyle.bg} ${statusStyle.text}`}>{row.fmt(v)}</span>
@@ -96,7 +96,7 @@ export default function StrategicIndicatorComparisonTable({ series, height = 360
                     </td>
                   );
                 })}
-                <td className="bg-slate-50/80 px-3 py-1.5 text-center text-xs font-semibold text-slate-700">
+                <td className="bg-slate-50/80 px-3 py-1.5 text-center text-xs font-semibold text-foreground">
                   {row.cons !== null && row.cons !== undefined ? row.fmt(row.cons) : "—"}
                 </td>
               </tr>

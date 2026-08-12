@@ -38,7 +38,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
     return '';
   };
 
-  if (isLoading) return <div className="p-mx-md text-center text-gray-500">Verificando contexto da agenda...</div>;
+  if (isLoading) return <div className="p-mx-md text-center text-muted-foreground">Verificando contexto da agenda...</div>;
 
   return (
     <div className="bg-white rounded-2xl shadow-sm border border-gray-200 p-mx-lg">
@@ -93,7 +93,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
       ) : (
         <div className="space-y-mx-sm">
           {!context.linkedToClient && (
-            <div className="p-mx-md bg-gray-50 text-gray-500 rounded-xl border border-gray-200">
+            <div className="p-mx-md bg-gray-50 text-muted-foreground rounded-xl border border-gray-200">
               <Typography variant="caption">{context.description}</Typography>
             </div>
           )}
@@ -111,14 +111,14 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
           )}
 
           {isRefreshing && events.length === 0 && (
-            <div className="p-mx-lg text-center text-gray-500">
+            <div className="p-mx-lg text-center text-muted-foreground">
               <RefreshCcw size={20} className="animate-spin mx-auto mb-mx-xs" />
               <Typography variant="caption">Buscando eventos...</Typography>
             </div>
           )}
 
           {!isRefreshing && events.length === 0 && !error && (
-            <div className="p-mx-lg text-center text-gray-500 opacity-60">
+            <div className="p-mx-lg text-center text-muted-foreground opacity-60">
               <Typography variant="caption">
                 Nenhum evento futuro encontrado para este cliente nos proximos 30 dias.
               </Typography>
@@ -144,7 +144,7 @@ export const GoogleCalendarView: React.FC<GoogleCalendarViewProps> = ({ clientId
                     </Typography>
                     {event.location && (
                       <div className="flex items-center gap-mx-xs mt-mx-xs">
-                        <MapPin size={12} className="text-gray-500 shrink-0" />
+                        <MapPin size={12} className="text-muted-foreground shrink-0" />
                         <Typography variant="caption" className="truncate">
                           {event.location}
                         </Typography>

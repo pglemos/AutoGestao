@@ -97,7 +97,7 @@ export function BenchmarkingView({
               <select
                 value={current}
                 onChange={(e) => set(e.target.value)}
-                className="mt-mx-xs w-full bg-transparent font-bold text-gray-800 text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary rounded-xl p-1 border border-gray-100 cursor-pointer"
+                className="mt-mx-xs w-full bg-transparent font-bold text-foreground text-sm focus:outline-none focus:ring-2 focus:ring-brand-primary rounded-xl p-1 border border-gray-100 cursor-pointer"
               >
                 {options.map((opt) => (
                   <option key={opt} value={opt}>{opt}</option>
@@ -112,7 +112,7 @@ export function BenchmarkingView({
           <Typography variant="h3" className="text-xl">Indicadores Comparados</Typography>
           <div className="mt-mx-md overflow-x-auto">
             <table className="min-w-[760px] w-full text-sm">
-              <thead className="bg-gray-50 text-left text-mx-tiny font-bold uppercase text-gray-500">
+              <thead className="bg-gray-50 text-left text-mx-tiny font-bold uppercase text-muted-foreground">
                 <tr>
                   <th className="px-mx-sm py-mx-sm">Indicador</th>
                   <th className="px-mx-sm py-mx-sm">Sua Loja</th>

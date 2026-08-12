@@ -24,7 +24,7 @@ const TIPO_TONE: Record<CulturaTipo, string> = {
   repescagem: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   campanha: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
   reconhecimento: 'border-status-success/30 bg-status-success-surface text-status-success',
-  feed_cultural: 'border-gray-200 bg-gray-50 text-gray-500',
+  feed_cultural: 'border-gray-200 bg-gray-50 text-muted-foreground',
 }
 
 type Props = {
@@ -254,7 +254,7 @@ export function CulturaFelicidade({ storeId }: Props) {
 function MediaCard({ label, value }: { label: string; value: number | null }) {
   const tone =
     value == null
-      ? 'border-gray-200 bg-gray-50 text-gray-500'
+      ? 'border-gray-200 bg-gray-50 text-muted-foreground'
       : value >= 8
         ? 'border-status-success/30 bg-status-success-surface text-status-success'
         : value >= 6

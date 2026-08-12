@@ -107,7 +107,7 @@ const TIPOS: TipoDef[] = [
 function TipoSelector({ onSelect }: { onSelect: (t: RegistroTipo) => void }) {
   return (
     <div>
-      <p className="mb-4 text-body-sm text-slate-500">Qual tipo de registro você quer adicionar?</p>
+      <p className="mb-4 text-body-sm text-muted-foreground">Qual tipo de registro você quer adicionar?</p>
       <div className="grid grid-cols-2 gap-3">
         {TIPOS.map(t => {
           const Icon = t.icon
@@ -138,13 +138,13 @@ function ClienteFichaResumo({ form, ultimoAgendamento }: { form: FormState; ulti
   return (
     <section aria-label="Ficha do cliente carregada" className="mt-4 rounded-xl border border-emerald-100 bg-emerald-50/60 p-3">
       <p className="text-caption font-bold uppercase tracking-wide text-emerald-800">Ficha carregada da Carteira</p>
-      <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 text-caption text-slate-600">
-        <p><strong className="text-slate-700">Veículo:</strong> {form.veiculo_texto || 'Não informado'}</p>
-        <p><strong className="text-slate-700">Negociação:</strong> {CRM_ETAPA_LABEL[form.negociacao as CrmEtapaFunil] || 'Não informada'}</p>
-        <p><strong className="text-slate-700">Financiamento:</strong> {form.financiamento || 'Não informado'}</p>
-        <p><strong className="text-slate-700">Troca:</strong> {form.possui_troca || 'Não informado'}</p>
-        <p className="col-span-2"><strong className="text-slate-700">Observações:</strong> {form.observacao || 'Sem observações'}</p>
-        <p className="col-span-2"><strong className="text-slate-700">Último agendamento:</strong> {ultimoAgendamento ? formatAppointmentDate(ultimoAgendamento.data_hora) : 'Sem agendamento registrado'}</p>
+      <div className="mt-2 grid grid-cols-2 gap-x-4 gap-y-1.5 text-caption text-muted-foreground">
+        <p><strong className="text-foreground">Veículo:</strong> {form.veiculo_texto || 'Não informado'}</p>
+        <p><strong className="text-foreground">Negociação:</strong> {CRM_ETAPA_LABEL[form.negociacao as CrmEtapaFunil] || 'Não informada'}</p>
+        <p><strong className="text-foreground">Financiamento:</strong> {form.financiamento || 'Não informado'}</p>
+        <p><strong className="text-foreground">Troca:</strong> {form.possui_troca || 'Não informado'}</p>
+        <p className="col-span-2"><strong className="text-foreground">Observações:</strong> {form.observacao || 'Sem observações'}</p>
+        <p className="col-span-2"><strong className="text-foreground">Último agendamento:</strong> {ultimoAgendamento ? formatAppointmentDate(ultimoAgendamento.data_hora) : 'Sem agendamento registrado'}</p>
       </div>
     </section>
   )
@@ -165,7 +165,7 @@ export function QualificadoStatusHelp() {
         onClick={() => setOpen(o => !o)}
         aria-expanded={open}
         aria-label="Ajuda sobre os passos da oportunidade"
-        className="grid h-4 w-4 place-items-center rounded-full text-slate-600 transition-colors hover:text-slate-600"
+        className="grid h-4 w-4 place-items-center rounded-full text-muted-foreground transition-colors hover:text-muted-foreground"
       >
         <HelpCircle size={13} />
       </button>
@@ -177,8 +177,8 @@ export function QualificadoStatusHelp() {
         >
           {SITUACOES_OPORTUNIDADE.map(s => (
             <div key={s} className="mb-2 last:mb-0">
-              <p className="text-caption font-bold text-slate-700">{s}</p>
-              <p className="text-caption text-slate-500">{SITUACOES_OPORTUNIDADE_AJUDA[s]}</p>
+              <p className="text-caption font-bold text-foreground">{s}</p>
+              <p className="text-caption text-muted-foreground">{SITUACOES_OPORTUNIDADE_AJUDA[s]}</p>
             </div>
           ))}
         </div>
@@ -356,7 +356,7 @@ function FormQualificado({ form, setF, clienteEncontrado, clienteJaVendido, onPh
       </Select>
       <div className="space-y-1">
         <div className="ml-2 flex items-center gap-1">
-          <span className="text-caption font-bold uppercase tracking-widest text-slate-600">Passo Atual da Oportunidade *</span>
+          <span className="text-caption font-bold uppercase tracking-widest text-muted-foreground">Passo Atual da Oportunidade *</span>
           <QualificadoStatusHelp />
         </div>
         <Select value={form.passo_atual || ''} onChange={e => setF('passo_atual', e.target.value)}>
@@ -645,16 +645,16 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
           <div className="flex items-center gap-2">
             {tipo && (
               <button type="button" onClick={handleVoltar} className="rounded-lg p-1 transition-colors hover:bg-slate-100" aria-label="Voltar">
-                <ArrowLeft className="h-4 w-4 text-slate-600" />
+                <ArrowLeft className="h-4 w-4 text-muted-foreground" />
               </button>
             )}
             <Typography variant="h3" className="text-h5 text-[#0F172A]">{tipo ? TITULO[tipo] : 'Novo Registro'}</Typography>
           </div>
           <button type="button" onClick={handleClose} aria-label="Fechar" className="rounded-lg p-1 hover:bg-slate-100">
-            <X className="h-4 w-4 text-slate-600" />
+            <X className="h-4 w-4 text-muted-foreground" />
           </button>
         </div>
-        <p className="mb-4 text-[12px] text-slate-600">
+        <p className="mb-4 text-[12px] text-muted-foreground">
           {tipo ? 'Dados salvos na base única de clientes/oportunidades.' : 'Escolha o tipo de registro para o fechamento de hoje.'}
         </p>
 
@@ -666,7 +666,7 @@ export function NovoRegistroModal({ open, onClose, onSaved, defaultDate }: NovoR
 
         {clienteFicha && <ClienteFichaResumo form={form} ultimoAgendamento={ultimoAgendamento} />}
 
-        {buscando && <p className="mt-1 text-caption text-slate-600">Buscando cliente…</p>}
+        {buscando && <p className="mt-1 text-caption text-muted-foreground">Buscando cliente…</p>}
 
         {tipo && (
           <div className="mt-5 flex items-center justify-end gap-3 border-t border-slate-100 pt-4">

@@ -90,31 +90,31 @@ export const CarteiraAtivaList: React.FC<CarteiraAtivaListProps> = ({
         <div>
           <div className="flex items-center gap-2">
             <Briefcase className="w-5 h-5 text-blue-900" />
-            <h2 className="text-xl font-bold text-slate-900">Carteira Ativa</h2>
+            <h2 className="text-xl font-bold text-foreground">Carteira Ativa</h2>
             <span className="bg-blue-50 text-blue-900 text-xs font-bold px-2.5 py-0.5 rounded-full border border-blue-200">
               {totalAtivasCount} ativas
             </span>
           </div>
-          <p className="text-xs text-slate-500 mt-1">
+          <p className="text-xs text-muted-foreground mt-1">
             Oportunidades organizadas por prioridade, data de ação, potencial e score de condução.
           </p>
         </div>
 
         {/* Input de busca */}
         <div className="relative w-full md:w-80">
-          <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+          <Search className="w-4 h-4 text-muted-foreground absolute left-3 top-1/2 -translate-y-1/2" />
           <input
             type="text"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
             placeholder="Buscar nome, tel, WhatsApp, veículo, placa..."
-            className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-900 focus:bg-white transition-all"
+            className="w-full pl-9 pr-8 py-2 bg-slate-50 border border-slate-200 rounded-lg text-xs text-foreground focus:outline-none focus:ring-2 focus:ring-blue-900 focus:bg-white transition-all"
           />
           {searchTerm && (
             <button
               type="button"
               onClick={() => setSearchTerm('')}
-              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600"
+              className="absolute right-2.5 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-muted-foreground"
             >
               <X className="w-3.5 h-3.5" />
             </button>
@@ -140,14 +140,14 @@ export const CarteiraAtivaList: React.FC<CarteiraAtivaListProps> = ({
 
       {/* Lista de Cards — UMA COLUNA NO DESKTOP, EMPILHADO NO MOBILE */}
       {loading ? (
-        <div className="w-full bg-white rounded-xl border border-slate-200 p-12 text-center text-slate-500 text-sm">
+        <div className="w-full bg-white rounded-xl border border-slate-200 p-12 text-center text-muted-foreground text-sm">
           Carregando oportunidades da carteira ativa...
         </div>
       ) : filteredAndSortedOportunidades.length === 0 ? (
         <div className="w-full bg-white rounded-xl border border-slate-200 p-12 text-center flex flex-col items-center gap-3">
-          <Filter className="w-10 h-10 text-slate-300" />
-          <h3 className="text-base font-bold text-slate-800">Nenhuma oportunidade encontrada</h3>
-          <p className="text-xs text-slate-500 max-w-md">
+          <Filter className="w-10 h-10 text-text-disabled" />
+          <h3 className="text-base font-bold text-foreground">Nenhuma oportunidade encontrada</h3>
+          <p className="text-xs text-muted-foreground max-w-md">
             {searchTerm
               ? `Nenhuma oportunidade (ativa ou encerrada) encontrada para "${searchTerm}".`
               : 'Não há oportunidades ativas pendentes de desenvolvimento no momento.'}

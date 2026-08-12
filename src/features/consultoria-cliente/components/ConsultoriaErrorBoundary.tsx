@@ -32,7 +32,7 @@ export class ConsultoriaErrorBoundary extends Component<Props, State> {
           <strong>
             // Bloco indisponível{this.props.sectionName ? `: ${this.props.sectionName}` : ''}
           </strong>
-          <span className="mt-mx-xs block normal-case tracking-normal text-gray-500">
+          <span className="mt-mx-xs block normal-case tracking-normal text-muted-foreground">
             O restante do cockpit continua disponível. Recarregue para tentar novamente.
           </span>
         </div>

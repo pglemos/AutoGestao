@@ -170,7 +170,7 @@ export function ManagerSellerParityHome({
   }
 
   return (
-    <div className="flex flex-col gap-5 text-gray-800">
+    <div className="flex flex-col gap-5 text-foreground">
         <ManagerHomeHeader
           referenceDate={data.referenceDate}
           stores={selectableStores}
@@ -260,22 +260,22 @@ function ManagerHomeHeader({
     <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div>
-          <h1 className="text-xl font-bold text-gray-800">Início</h1>
-          <p className="mt-0.5 text-sm text-gray-500">Previsibilidade comercial para conduzir o resultado do dia.</p>
+          <h1 className="text-xl font-bold text-foreground">Início</h1>
+          <p className="mt-0.5 text-sm text-muted-foreground">Previsibilidade comercial para conduzir o resultado do dia.</p>
         </div>
         <div className="flex flex-wrap items-center gap-2">
           <div className="hidden text-right sm:block">
-            <p className="text-sm font-semibold text-gray-700">{weekday}</p>
-            <p className="text-xs text-gray-500">{longDate}</p>
+            <p className="text-sm font-semibold text-foreground">{weekday}</p>
+            <p className="text-xs text-muted-foreground">{longDate}</p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
-            <div className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-medium text-gray-600">
+            <div className="rounded-xl border border-gray-200 bg-gray-50 px-3 py-2 text-sm font-medium text-muted-foreground">
               {formatNumericDate(referenceDate)}
             </div>
             {stores.length > 1 && onStoreChange ? (
               <label className="relative">
                 <span className="sr-only">Unidade</span>
-                <Building2 size={14} className="pointer-events-none absolute left-2.5 top-2.5 text-gray-400" />
+                <Building2 size={14} className="pointer-events-none absolute left-2.5 top-2.5 text-muted-foreground" />
                 <select
                   aria-label="Unidade"
                   value={selectedStoreId || ''}
@@ -293,7 +293,7 @@ function ManagerHomeHeader({
               onClick={onRefresh}
               disabled={refreshing}
               aria-label="Atualizar início"
-              className="grid h-[36px] w-10 place-items-center rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+              className="grid h-[36px] w-10 place-items-center rounded-xl text-muted-foreground hover:bg-gray-50 disabled:opacity-50"
             >
               <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
             </button>
@@ -314,7 +314,7 @@ function HeaderAction({ icon: Icon, label, onClick, tone }: {
     <button
       type="button"
       onClick={onClick}
-      className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${tone === 'emerald' ? 'border-emerald-600 text-emerald-700 hover:bg-emerald-50' : 'border-gray-800 text-gray-800 hover:bg-gray-100'}`}
+      className={`flex h-[36px] items-center gap-1 rounded-xl border px-3 text-sm font-semibold shadow-sm transition-colors ${tone === 'emerald' ? 'border-emerald-600 text-emerald-700 hover:bg-emerald-50' : 'border-gray-800 text-foreground hover:bg-gray-100'}`}
     >
       <Icon size={14} /> {label}
     </button>
@@ -349,16 +349,16 @@ function SalesNeededCard({ salesNeeded }: { salesNeeded: number | null }) {
   return (
     <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between">
-        <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Necessidade de Vendas no Dia</p>
-        <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100"><Target size={18} className="text-gray-500" /></span>
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Necessidade de Vendas no Dia</p>
+        <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100"><Target size={18} className="text-muted-foreground" /></span>
       </div>
       <div>
         {missingGoal ? (
-          <><p className="text-2xl font-bold text-gray-400">Meta não cadastrada</p><p className="mt-1 text-sm text-gray-400">Cadastre a meta da loja para ativar a previsibilidade.</p></>
+          <><p className="text-2xl font-bold text-muted-foreground">Meta não cadastrada</p><p className="mt-1 text-sm text-muted-foreground">Cadastre a meta da loja para ativar a previsibilidade.</p></>
         ) : fulfilled ? (
-          <><p className="text-3xl font-bold text-emerald-600">0 vendas adicionais</p><p className="mt-1 text-sm text-gray-500">Necessidade do dia atendida</p></>
+          <><p className="text-3xl font-bold text-emerald-600">0 vendas adicionais</p><p className="mt-1 text-sm text-muted-foreground">Necessidade do dia atendida</p></>
         ) : (
-          <><p className="text-3xl font-bold text-gray-800">{salesNeeded} {salesNeeded === 1 ? 'venda' : 'vendas'}</p><p className="mt-1 text-sm text-gray-500">Para sustentar a meta da loja hoje</p></>
+          <><p className="text-3xl font-bold text-foreground">{salesNeeded} {salesNeeded === 1 ? 'venda' : 'vendas'}</p><p className="mt-1 text-sm text-muted-foreground">Para sustentar a meta da loja hoje</p></>
         )}
       </div>
     </article>
@@ -371,16 +371,16 @@ function AppointmentTargetCard({ appointmentTarget, salesNeeded }: { appointment
   return (
     <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="flex items-start justify-between">
-        <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Meta de Agendamentos para Hoje</p>
-        <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100"><Calendar size={18} className="text-gray-500" /></span>
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Meta de Agendamentos para Hoje</p>
+        <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100"><Calendar size={18} className="text-muted-foreground" /></span>
       </div>
       <div>
         {missingGoal ? (
-          <><p className="text-2xl font-bold text-gray-400">Não calculada</p><p className="mt-1 text-sm text-gray-400">Cadastre a meta da loja.</p></>
+          <><p className="text-2xl font-bold text-muted-foreground">Não calculada</p><p className="mt-1 text-sm text-muted-foreground">Cadastre a meta da loja.</p></>
         ) : (
           <>
-            <p className="text-3xl font-bold text-gray-800">{fulfilled ? '0 obrigatórios' : `${appointmentTarget} agendamentos`}</p>
-            <p className="mt-1 text-sm text-gray-500">{fulfilled ? 'Para a necessidade atual do dia' : `Baseado na necessidade de ${salesNeeded} vendas`}</p>
+            <p className="text-3xl font-bold text-foreground">{fulfilled ? '0 obrigatórios' : `${appointmentTarget} agendamentos`}</p>
+            <p className="mt-1 text-sm text-muted-foreground">{fulfilled ? 'Para a necessidade atual do dia' : `Baseado na necessidade de ${salesNeeded} vendas`}</p>
           </>
         )}
       </div>
@@ -397,22 +397,22 @@ function AppointmentGapCard({ appointmentGap }: { appointmentGap: number | null 
   return (
     <article className={`flex min-h-[140px] flex-col justify-between rounded-2xl border bg-white p-5 shadow-sm ${negative ? 'border-orange-200' : zero || positive ? 'border-emerald-200' : 'border-gray-100'}`}>
       <div className="flex items-start justify-between">
-        <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Gap de Agendamentos</p>
+        <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Gap de Agendamentos</p>
         <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
           {missingGoal || negative
-            ? <AlertTriangle size={18} className={negative ? 'text-orange-500' : 'text-gray-400'} />
+            ? <AlertTriangle size={18} className={negative ? 'text-orange-500' : 'text-muted-foreground'} />
             : <CheckCircle size={18} className="text-emerald-500" />}
         </span>
       </div>
       <div>
         {missingGoal ? (
-          <><p className="text-2xl font-bold text-gray-400">Não calculado</p><p className="mt-1 text-sm text-gray-400">Cadastre a meta da loja.</p></>
+          <><p className="text-2xl font-bold text-muted-foreground">Não calculado</p><p className="mt-1 text-sm text-muted-foreground">Cadastre a meta da loja.</p></>
         ) : negative ? (
-          <><p className="text-3xl font-bold text-orange-500">{appointmentGap}</p><p className="mt-1 text-sm text-gray-500">Faltam {absoluteGap} agendamento{absoluteGap === 1 ? '' : 's'} para sustentar o volume de vendas necessário</p></>
+          <><p className="text-3xl font-bold text-orange-500">{appointmentGap}</p><p className="mt-1 text-sm text-muted-foreground">Faltam {absoluteGap} agendamento{absoluteGap === 1 ? '' : 's'} para sustentar o volume de vendas necessário</p></>
         ) : zero ? (
-          <><p className="text-3xl font-bold text-emerald-600">0</p><p className="mt-1 text-sm text-gray-500">Meta de agendamentos atendida</p></>
+          <><p className="text-3xl font-bold text-emerald-600">0</p><p className="mt-1 text-sm text-muted-foreground">Meta de agendamentos atendida</p></>
         ) : (
-          <><p className="text-3xl font-bold text-emerald-600">+{appointmentGap}</p><p className="mt-1 text-sm text-gray-500">{appointmentGap} agendamento{appointmentGap === 1 ? '' : 's'} acima da necessidade</p></>
+          <><p className="text-3xl font-bold text-emerald-600">+{appointmentGap}</p><p className="mt-1 text-sm text-muted-foreground">{appointmentGap} agendamento{appointmentGap === 1 ? '' : 's'} acima da necessidade</p></>
         )}
       </div>
     </article>
@@ -432,17 +432,17 @@ function TodayReading({ salesForecast, salesNeeded, coverage, message }: {
   const fill = missingGoal || fulfilled ? 100 : missingBase ? 0 : Math.min((salesForecast / salesNeeded) * 100, 100)
   return (
     <article className="h-full rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-      <h2 className="mb-4 text-sm font-bold text-gray-800">Leitura do Dia</h2>
+      <h2 className="mb-4 text-sm font-bold text-foreground">Leitura do Dia</h2>
       <div className="mb-3 flex items-center justify-between">
-        <div><p className="text-xs text-gray-500">Previsão</p><p className="text-xl font-bold text-gray-800">{missingBase ? '—' : `${formatSales(salesForecast)} ${saleSuffix(salesForecast)}`}</p></div>
-        <div className="text-right"><p className="text-xs text-gray-500">Necessidade</p><p className="text-xl font-bold text-gray-800">{missingGoal ? '—' : fulfilled ? '0' : `${salesNeeded} vendas`}</p></div>
+        <div><p className="text-xs text-muted-foreground">Previsão</p><p className="text-xl font-bold text-foreground">{missingBase ? '—' : `${formatSales(salesForecast)} ${saleSuffix(salesForecast)}`}</p></div>
+        <div className="text-right"><p className="text-xs text-muted-foreground">Necessidade</p><p className="text-xl font-bold text-foreground">{missingGoal ? '—' : fulfilled ? '0' : `${salesNeeded} vendas`}</p></div>
       </div>
       <div className="relative h-3 overflow-hidden rounded-full bg-gray-100">
         <div className={`h-full rounded-full transition-all ${deficit ? 'bg-orange-400' : 'bg-emerald-500'}`} style={{ width: `${fill}%` }} />
         <div className="absolute left-full top-0 h-full w-0.5 bg-gray-700" />
       </div>
-      {coverage !== null ? <p className="mt-1.5 text-xs text-gray-400">Cobertura: {Math.round(coverage)}%</p> : null}
-      <p className={`mt-3 text-sm font-medium ${deficit ? 'text-orange-600' : 'text-gray-600'}`}>{message}</p>
+      {coverage !== null ? <p className="mt-1.5 text-xs text-muted-foreground">Cobertura: {Math.round(coverage)}%</p> : null}
+      <p className={`mt-3 text-sm font-medium ${deficit ? 'text-orange-600' : 'text-muted-foreground'}`}>{message}</p>
     </article>
   )
 }
@@ -450,8 +450,8 @@ function TodayReading({ salesForecast, salesNeeded, coverage, message }: {
 function SuggestedAction({ message }: { message: string }) {
   return (
     <article className="flex h-full flex-col rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-      <div className="mb-3 flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50"><Lightbulb size={16} className="text-amber-500" /></span><h2 className="text-sm font-bold text-gray-800">Ação sugerida</h2></div>
-      <p className="flex-1 text-sm leading-relaxed text-gray-600">{message}</p>
+      <div className="mb-3 flex items-center gap-2"><span className="grid h-8 w-8 place-items-center rounded-lg bg-amber-50"><Lightbulb size={16} className="text-amber-500" /></span><h2 className="text-sm font-bold text-foreground">Ação sugerida</h2></div>
+      <p className="flex-1 text-sm leading-relaxed text-muted-foreground">{message}</p>
     </article>
   )
 }
@@ -465,8 +465,8 @@ function TeamFocus({ team, showAll, onSellerClick, onViewAll }: {
   if (team.length === 0) {
     return (
       <section aria-label="Equipe em foco" className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-        <h2 className="mb-3 text-sm font-bold text-gray-800">Equipe em foco</h2>
-        <p className="py-6 text-center text-sm text-gray-400">Nenhum vendedor vinculado a este gerente.</p>
+        <h2 className="mb-3 text-sm font-bold text-foreground">Equipe em foco</h2>
+        <p className="py-6 text-center text-sm text-muted-foreground">Nenhum vendedor vinculado a este gerente.</p>
       </section>
     )
   }
@@ -474,12 +474,12 @@ function TeamFocus({ team, showAll, onSellerClick, onViewAll }: {
   return (
     <section aria-label="Equipe em foco" className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-sm font-bold text-gray-800">Equipe em foco</h2>
+        <h2 className="text-sm font-bold text-foreground">Equipe em foco</h2>
         {showAll ? <button type="button" onClick={onViewAll} className="flex items-center gap-0.5 text-xs font-medium text-emerald-600 hover:text-emerald-700">Ver toda a equipe <span aria-hidden>›</span></button> : null}
       </div>
       <div className="hidden overflow-x-auto md:block">
         <table className="w-full text-sm">
-          <thead><tr className="border-b border-gray-100 text-xs uppercase tracking-wide text-gray-500">{['Vendedor', 'Agend. Hoje', 'Projeção', 'Realizado mês', 'Próx. faixa', 'Faltam carros', 'Status'].map((label, index) => <th key={label} className={`${index === 0 ? 'text-left' : 'text-center'} pb-2 font-medium`}>{label}</th>)}</tr></thead>
+          <thead><tr className="border-b border-gray-100 text-xs uppercase tracking-wide text-muted-foreground">{['Vendedor', 'Agend. Hoje', 'Projeção', 'Realizado mês', 'Próx. faixa', 'Faltam carros', 'Status'].map((label, index) => <th key={label} className={`${index === 0 ? 'text-left' : 'text-center'} pb-2 font-medium`}>{label}</th>)}</tr></thead>
           <tbody>{team.map(seller => <TeamFocusRow key={seller.sellerId} seller={seller} onClick={() => onSellerClick(seller)} />)}</tbody>
         </table>
       </div>
@@ -504,18 +504,18 @@ function TeamFocusRow({ seller, onClick }: { seller: ManagerTeamFocusItem; onCli
   return (
     <tr onClick={onClick} className="cursor-pointer border-b border-gray-50 transition-colors hover:bg-gray-50">
       <td className="py-2.5 pr-3"><SellerIdentity seller={seller} /></td>
-      <td className="px-2 text-center text-gray-700">{seller.appointmentsToday}</td>
-      <td className="px-2 text-center text-gray-700">{formatSales(seller.salesForecastToday)}</td>
-      <td className="px-2 text-center text-gray-700">{seller.salesThisMonth}</td>
-      <td className="px-2 text-center text-xs text-gray-500">{seller.nextCommissionBand ?? 'Sem regra configurada'}</td>
-      <td className="px-2 text-center text-xs text-gray-500">{seller.missingCarsToNextBand ?? '—'}</td>
+      <td className="px-2 text-center text-foreground">{seller.appointmentsToday}</td>
+      <td className="px-2 text-center text-foreground">{formatSales(seller.salesForecastToday)}</td>
+      <td className="px-2 text-center text-foreground">{seller.salesThisMonth}</td>
+      <td className="px-2 text-center text-xs text-muted-foreground">{seller.nextCommissionBand ?? 'Sem regra configurada'}</td>
+      <td className="px-2 text-center text-xs text-muted-foreground">{seller.missingCarsToNextBand ?? '—'}</td>
       <td className="pl-2 text-center"><StatusBadge status={seller.financialStatus} /></td>
     </tr>
   )
 }
 
 function SellerIdentity({ seller }: { seller: ManagerTeamFocusItem }) {
-  return <div className="flex min-w-0 items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">{initials(seller.sellerName)}</span><span className="truncate text-sm font-medium text-gray-700">{seller.sellerName}</span></div>
+  return <div className="flex min-w-0 items-center gap-2"><span className="grid h-8 w-8 shrink-0 place-items-center rounded-full bg-emerald-100 text-xs font-bold text-emerald-700">{initials(seller.sellerName)}</span><span className="truncate text-sm font-medium text-foreground">{seller.sellerName}</span></div>
 }
 
 function StatusBadge({ status }: { status: ManagerTeamFocusItem['financialStatus'] }) {
@@ -523,7 +523,7 @@ function StatusBadge({ status }: { status: ManagerTeamFocusItem['financialStatus
 }
 
 function MobileMetric({ label, value }: { label: string; value: ReactNode }) {
-  return <div><span className="text-gray-400">{label}:</span> <span className="font-medium text-gray-700">{value}</span></div>
+  return <div><span className="text-muted-foreground">{label}:</span> <span className="font-medium text-foreground">{value}</span></div>
 }
 
 function FinancialRadar({ team, rulesConfigured }: { team: ManagerTeamFocusItem[]; rulesConfigured: boolean }) {
@@ -532,7 +532,7 @@ function FinancialRadar({ team, rulesConfigured }: { team: ManagerTeamFocusItem[
   const canMoveUp = rulesConfigured ? team.filter(seller => (seller.missingCarsToNextBand || 0) > 0 && seller.salesForecastToday !== null && seller.salesForecastToday >= (seller.missingCarsToNextBand || 0)).length : 0
   return (
     <article className="h-full rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-      <h2 className="mb-4 text-sm font-bold text-gray-800">Radar Financeiro da Equipe</h2>
+      <h2 className="mb-4 text-sm font-bold text-foreground">Radar Financeiro da Equipe</h2>
       <div className="space-y-3">
         <RadarRow icon={Users} label="Vendedores próximos da próxima faixa" value={rulesConfigured ? `${closeToBand} vendedor${closeToBand === 1 ? '' : 'es'}` : 'Regras não configuradas'} tone="emerald" />
         <RadarRow icon={DollarSign} label="Premiação projetada da equipe" value={rulesConfigured ? formatCurrency(projectedAward) : 'Regras não configuradas'} tone="amber" />
@@ -543,7 +543,7 @@ function FinancialRadar({ team, rulesConfigured }: { team: ManagerTeamFocusItem[
 }
 
 function RadarRow({ icon: Icon, label, value, tone }: { icon: LucideIcon; label: string; value: string; tone: 'emerald' | 'amber' }) {
-  return <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3"><span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${tone === 'amber' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}><Icon size={18} /></span><div><p className="text-xs text-gray-500">{label}</p><p className="text-lg font-bold text-gray-800">{value}</p></div></div>
+  return <div className="flex items-center gap-3 rounded-xl bg-gray-50 p-3"><span className={`grid h-9 w-9 shrink-0 place-items-center rounded-lg ${tone === 'amber' ? 'bg-amber-50 text-amber-600' : 'bg-emerald-50 text-emerald-600'}`}><Icon size={18} /></span><div><p className="text-xs text-muted-foreground">{label}</p><p className="text-lg font-bold text-foreground">{value}</p></div></div>
 }
 
 function AppointmentsChart({ data, onBarClick }: { data: AppointmentChartItem[]; onBarClick: (item: AppointmentChartItem) => void }) {
@@ -554,8 +554,8 @@ function AppointmentsChart({ data, onBarClick }: { data: AppointmentChartItem[];
   }
   return (
     <article className="h-full rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-      <h2 className="mb-4 text-sm font-bold text-gray-800">Agendamentos por Vendedor</h2>
-      {data.length === 0 ? <p className="py-6 text-center text-sm text-gray-400">Nenhum agendamento confirmado para hoje.</p> : (
+      <h2 className="mb-4 text-sm font-bold text-foreground">Agendamentos por Vendedor</h2>
+      {data.length === 0 ? <p className="py-6 text-center text-sm text-muted-foreground">Nenhum agendamento confirmado para hoje.</p> : (
         <ResponsiveContainer width="100%" height={Math.max(data.length * 38 + 10, 120)}>
           <BarChart data={data} layout="vertical" margin={{ left: 10, right: 20, top: 0, bottom: 0 }}>
             <XAxis type="number" domain={[0, maxValue]} hide />
@@ -571,7 +571,7 @@ function AppointmentsChart({ data, onBarClick }: { data: AppointmentChartItem[];
 }
 
 function ManagerHomeState({ title, description, action }: { title: string; description: string; action?: ReactNode }) {
-  return <div className="flex min-h-full items-center justify-center bg-gray-50 px-4 py-12"><div className="max-w-md rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm"><h2 className="font-semibold text-gray-700">{title}</h2><p className="mt-2 text-sm text-gray-500">{description}</p>{action ? <div className="mt-5">{action}</div> : null}</div></div>
+  return <div className="flex min-h-full items-center justify-center bg-gray-50 px-4 py-12"><div className="max-w-md rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm"><h2 className="font-semibold text-foreground">{title}</h2><p className="mt-2 text-sm text-muted-foreground">{description}</p>{action ? <div className="mt-5">{action}</div> : null}</div></div>
 }
 
 function groupCheckinsBySeller(checkins: DailyCheckin[]) {

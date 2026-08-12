@@ -40,7 +40,7 @@ const TIPO_LABEL: Record<UniversidadeAulaTipo, string> = {
 }
 
 const TIPO_TONE: Record<UniversidadeAulaTipo, string> = {
-  biblioteca: 'border-gray-200 bg-gray-50 text-gray-500',
+  biblioteca: 'border-gray-200 bg-gray-50 text-muted-foreground',
   aula_gravada: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
   aula_ao_vivo: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   quiz: 'border-status-success/30 bg-status-success-surface text-status-success',
@@ -117,7 +117,7 @@ export function UniversidadeMx({ userId }: Props) {
               'rounded-xl border px-mx-xs py-mx-tiny text-mx-tiny font-bold uppercase tracking-widest transition-colors',
               filtros.includes(publico)
                 ? 'border-brand-primary bg-emerald-600 text-pure-white'
-                : 'border-gray-200 bg-white text-gray-500',
+                : 'border-gray-200 bg-white text-muted-foreground',
             )}
             aria-pressed={filtros.includes(publico)}
           >
@@ -129,7 +129,7 @@ export function UniversidadeMx({ userId }: Props) {
       <div className="relative">
         <Search
           size={14}
-          className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500"
+          className="pointer-events-none absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground"
           aria-hidden="true"
         />
         <input

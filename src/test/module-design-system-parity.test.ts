@@ -102,15 +102,15 @@ describe('paridade visual dos módulos MX com o Gerente', () => {
       'border-gray-100',
       'bg-white',
       'shadow-sm',
-      'text-gray-800',
-      'text-gray-500',
+      'text-foreground',
+      'text-muted-foreground',
     ]) {
       expect(managerCanonical).toContain(marker)
       expect(universalPrimitives).toContain(marker)
     }
     // O conteúdo da rota não decide mais largura, margem ou padding: o
     // PageCanvas do shell é a única autoridade dessas dimensões.
-    expect(managerCanonical).toMatch(/return \(\s*<div className="flex flex-col gap-5 text-gray-800">/)
+    expect(managerCanonical).toMatch(/return \(\s*<div className="flex flex-col gap-5 text-foreground">/)
     expect(managerCanonical).not.toMatch(/return\s*\(\s*<div[^>]*\b(?:mx-auto|max-w-7xl|px-4|py-6)/)
 
     expect(managerPrimitives).toContain("from '@/components/module/MxModuleVisualPrimitives'")

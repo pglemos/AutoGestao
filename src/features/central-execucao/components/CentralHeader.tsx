@@ -28,14 +28,14 @@ export function CentralHeader({ date = new Date() }: { date?: Date }) {
           <Target className="h-4 w-4 text-white" aria-hidden="true" />
         </div>
         <div className="min-w-0">
-          <h1 className="truncate text-[20px] font-bold leading-none tracking-tight text-gray-800">Rotina do Dia</h1>
-          <p className="mt-0.5 truncate text-caption font-medium text-slate-400">Organize e execute seu dia com foco</p>
+          <h1 className="truncate text-[20px] font-bold leading-none tracking-tight text-foreground">Rotina do Dia</h1>
+          <p className="mt-0.5 truncate text-caption font-medium text-muted-foreground">Organize e execute seu dia com foco</p>
         </div>
       </div>
 
       <div className="hidden text-right sm:block">
-        <p className="text-body-sm font-bold text-gray-800">{formatted.weekday}</p>
-        <p className="text-[12px] text-slate-400">{formatted.fullDate}</p>
+        <p className="text-body-sm font-bold text-foreground">{formatted.weekday}</p>
+        <p className="text-[12px] text-muted-foreground">{formatted.fullDate}</p>
       </div>
     </header>
   )

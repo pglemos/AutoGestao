@@ -136,7 +136,7 @@ export function buildStoreColumns({
               size={14}
               className={cn(
                 'shrink-0',
-                canManageNetwork ? 'text-emerald-600' : 'text-gray-500',
+                canManageNetwork ? 'text-emerald-600' : 'text-muted-foreground',
               )}
               aria-hidden="true"
             />
@@ -210,7 +210,7 @@ export function buildStoreColumns({
                     variant="ghost"
                     size="icon"
                     onClick={() => handleArchiveStore(store)}
-                    className="text-gray-500 hover:bg-status-error-surface hover:text-status-error"
+                    className="text-muted-foreground hover:bg-status-error-surface hover:text-status-error"
                     aria-label={`Desativar ${store.name}`}
                   >
                     <X size={16} aria-hidden="true" />

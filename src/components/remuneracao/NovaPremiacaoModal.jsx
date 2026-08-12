@@ -81,7 +81,7 @@ export default function NovaPremiacaoModal({ open, onClose, onSaved, politicas, 
                 <SelectItem value="Substitutiva">Substitutiva</SelectItem>
               </SelectContent>
             </Select>
-            <p className="text-caption text-slate-400 mt-1">
+            <p className="text-caption text-muted-foreground mt-1">
               {form.tipo_premiacao === "Acumulativa"
                 ? "Mantém prêmios anteriores e soma o novo."
                 : "O novo prêmio substitui o anterior."}

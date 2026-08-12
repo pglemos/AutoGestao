@@ -57,11 +57,11 @@ export function OrganogramaVisual({ lojaId }: { lojaId: string }) {
         <Typography variant="caption" tone="muted" className="">Adicionar cargo ao organograma</Typography>
         <div className="mt-mx-sm grid gap-mx-sm md:grid-cols-3">
           <label className="block space-y-mx-xs md:col-span-1">
-            <span className="block px-1 text-xs font-bold uppercase tracking-widest text-gray-500">Cargo</span>
+            <span className="block px-1 text-xs font-bold uppercase tracking-widest text-muted-foreground">Cargo</span>
             <Input value={cargo} onChange={e => setCargo(e.target.value)} placeholder="Ex.: Gerente" />
           </label>
           <label className="block space-y-mx-xs md:col-span-1">
-            <span className="block px-1 text-xs font-bold uppercase tracking-widest text-gray-500">Reporta a</span>
+            <span className="block px-1 text-xs font-bold uppercase tracking-widest text-muted-foreground">Reporta a</span>
             <select aria-label="Reporta a"
               value={parentId}
               onChange={e => setParentId(e.target.value)}
@@ -80,7 +80,7 @@ export function OrganogramaVisual({ lojaId }: { lojaId: string }) {
       {error && <p className="text-sm font-bold text-status-error">Erro: {error}</p>}
 
       {loading ? (
-        <p className="text-sm font-bold text-gray-500">Carregando organograma…</p>
+        <p className="text-sm font-bold text-muted-foreground">Carregando organograma…</p>
       ) : tree.length === 0 ? (
         <EmptyState icon={<Users size={28} />} title="Organograma vazio" description="Adicione o primeiro cargo (topo da estrutura)." />
       ) : (
@@ -112,12 +112,12 @@ function OrgNodeRow({
         style={{ paddingLeft: `${depth * 20 + 8}px` }}
       >
         {hasChildren ? (
-          <button type="button" onClick={() => onToggle(node.id)} aria-label={isOpen ? 'Recolher' : 'Expandir'} className="text-gray-500">
+          <button type="button" onClick={() => onToggle(node.id)} aria-label={isOpen ? 'Recolher' : 'Expandir'} className="text-muted-foreground">
             {isOpen ? <ChevronDown size={16} /> : <ChevronRight size={16} />}
           </button>
         ) : <span className="w-4" />}
-        <span className="font-bold uppercase text-sm text-gray-800">{node.cargo}</span>
-        {hasChildren && <span className="text-xs font-bold text-gray-500">({node.children.length})</span>}
+        <span className="font-bold uppercase text-sm text-foreground">{node.cargo}</span>
+        {hasChildren && <span className="text-xs font-bold text-muted-foreground">({node.children.length})</span>}
         <Button type="button" variant="ghost" size="icon" aria-label="Remover" className="ml-auto" onClick={() => onRemove(node)}>
           <Trash2 size={14} />
         </Button>

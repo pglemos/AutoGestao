@@ -116,7 +116,7 @@ export default function RecuperarVendas({ funis }) {
     return (
       <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
         <h2 className="text-[16px] font-bold text-[#0F172A] mb-1">Onde recuperar vendas?</h2>
-        <p className="text-body-sm text-slate-400">
+        <p className="text-body-sm text-muted-foreground">
           {Object.values(funis).every(f => !f || Object.values(f).every(v => v === 0))
             ? "Registre atendimentos no Fechamento Diário para ver onde há oportunidades de melhoria."
             : "Funil equilibrado. Sem grandes vazamentos identificados no período."}
@@ -128,7 +128,7 @@ export default function RecuperarVendas({ funis }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6">
       <h2 className="text-[16px] font-bold text-[#0F172A] mb-1">Onde recuperar vendas?</h2>
-      <p className="text-[12px] text-slate-400 mb-5">Os maiores pontos de perda no seu funil.</p>
+      <p className="text-[12px] text-muted-foreground mb-5">Os maiores pontos de perda no seu funil.</p>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {recomendacoes.map((rec, idx) => {
           const msg = MENSAGENS[rec.key] || { titulo: `${rec.de} → ${rec.para}`, texto: `Perda de ${rec.perda} no canal ${rec.canal}.`, botao: "Abrir Carteira", link: "/carteira" };
@@ -143,9 +143,9 @@ export default function RecuperarVendas({ funis }) {
                   <span className={`inline-block text-caption font-bold px-2 py-0.5 rounded-full mt-1 ${c.badge}`}>{rec.canal}</span>
                 </div>
               </div>
-              <p className="text-[12px] text-slate-600 leading-relaxed">{msg.texto}</p>
+              <p className="text-[12px] text-muted-foreground leading-relaxed">{msg.texto}</p>
               <div className="flex items-center justify-between gap-2 pt-1 border-t border-slate-200/60">
-                <div className="text-caption text-slate-400">
+                <div className="text-caption text-muted-foreground">
                   <span className="font-bold text-[#0F172A]">{rec.de}</span> → <span className="font-bold text-[#0F172A]">{rec.para}</span>
                   <span className="ml-1">({conv}% conversão)</span>
                 </div>

@@ -21,7 +21,7 @@ export function ConsultingDailyTrackingView({ clientId, storeId }: Props) {
       header: 'DATA',
       render: (row) => (
         <div className="flex items-center gap-mx-xs">
-          <Calendar size={14} className="text-gray-500" />
+          <Calendar size={14} className="text-muted-foreground" />
           <Typography variant="p" className="font-bold">
             {new Date(row.reference_date + 'T12:00:00').toLocaleDateString('pt-BR')}
           </Typography>

@@ -36,7 +36,7 @@ export function ManagerTourLauncher() {
               </button>
             </div>
             <div className="space-y-2 p-3">
-              <p className="text-xs leading-relaxed text-gray-500">
+              <p className="text-xs leading-relaxed text-muted-foreground">
                 Quer rever o Tour do Gerente desta página? Você pode repetir o tour quantas vezes quiser.
               </p>
               <button

@@ -32,12 +32,12 @@ export default function PotentialCommissionCard({ comissaoProjetada, ganhoPotenc
     >
       <div>
         <div className="flex items-start justify-between">
-          <p className="text-slate-400 text-xs font-bold uppercase tracking-widest max-w-[60%]">
+          <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest max-w-[60%]">
             Se fechar todos os clientes quentes
           </p>
           <Sparkline />
         </div>
-        <p className="text-slate-400 text-sm mt-3">Sua comissão sobe para</p>
+        <p className="text-muted-foreground text-sm mt-3">Sua comissão sobe para</p>
         <p
           className="font-bold mt-1 tabular-nums"
           style={{ fontSize: "2.25rem", color: "#39FF5A", textShadow: "0 0 20px rgba(57,255,90,0.3)" }}

@@ -12,7 +12,7 @@ interface LiveFloorProps {
 export function LiveFloor({ ranking }: LiveFloorProps) {
     const statuses = {
         available: { type: 'available', label: 'Check-in realizado', color: 'text-status-success', bg: 'bg-status-success-surface border-status-success/20', icon: Headphones },
-        offline: { type: 'offline', label: 'Sem check-in', color: 'text-gray-500', bg: 'bg-gray-50 border-gray-200', icon: Activity },
+        offline: { type: 'offline', label: 'Sem check-in', color: 'text-muted-foreground', bg: 'bg-gray-50 border-gray-200', icon: Activity },
     }
 
     const liveAgents = ranking.map((seller) => {
@@ -37,13 +37,13 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
                 <div className="absolute top-mx-0 left-mx-0 h-full bg-emerald-600/10 transition-all duration-1000" style={{ width: `${Math.min(teamProgress, 100)}%` }} aria-hidden="true" />
 
                 <div className="flex items-center gap-mx-md px-6 py-3 relative z-10">
-                    <div className="w-mx-10 h-mx-10 rounded-xl bg-emerald-600 text-black flex items-center justify-center font-bold shadow-mx-glow-brand">
+                    <div className="w-mx-10 h-mx-10 rounded-xl bg-emerald-600 text-foreground flex items-center justify-center font-bold shadow-mx-glow-brand">
                         <Trophy className="w-mx-sm h-mx-sm" aria-hidden="true" />
                     </div>
                     <div>
-                        <div className="text-mx-tiny font-bold text-gray-500 uppercase tracking-widest">Ritmo do Time Hoje</div>
+                        <div className="text-mx-tiny font-bold text-muted-foreground uppercase tracking-widest">Ritmo do Time Hoje</div>
                         <div className="text-xl font-bold text-white flex items-baseline gap-mx-tiny">
-                            {totalSalesToday} <span className="text-sm text-gray-500 font-bold">/ ~{Math.round(teamGoal)} Vendas</span>
+                            {totalSalesToday} <span className="text-sm text-muted-foreground font-bold">/ ~{Math.round(teamGoal)} Vendas</span>
                         </div>
                     </div>
                 </div>
@@ -77,7 +77,7 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
                     <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-mx-md pb-20" role="list" aria-label="Status de check-in dos vendedores">
                         {liveAgents.length === 0 && (
                             <div className="col-span-full rounded-2xl border border-white/10 bg-white/5 p-mx-lg text-center">
-                                <p className="text-xs font-bold uppercase tracking-widest text-gray-500 leading-relaxed">
+                                <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground leading-relaxed">
                                     Nenhum vendedor ativo encontrado para monitoramento.
                                 </p>
                             </div>
@@ -104,7 +104,7 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
                                 </div>
 
                                 <div className="space-y-mx-xs mb-4 relative z-10">
-                                    <div className="flex justify-between text-mx-micro font-bold text-gray-500 uppercase mb-1">
+                                    <div className="flex justify-between text-mx-micro font-bold text-muted-foreground uppercase mb-1">
                                         <span>Vendas</span>
                                         <span className={agent.vnd_total > 0 ? 'text-emerald-600' : ''}>{agent.vnd_total}/{agent.meta}</span>
                                     </div>
@@ -125,7 +125,7 @@ export function LiveFloor({ ranking }: LiveFloorProps) {
 
                     <div className="flex-1 overflow-y-auto custom-scrollbar space-y-mx-md pr-2">
                         <div className="rounded-2xl border border-white/10 bg-white/5 p-mx-lg text-center">
-                            <p className="text-xs font-bold uppercase tracking-widest text-gray-500 leading-relaxed">
+                            <p className="text-xs font-bold uppercase tracking-widest text-muted-foreground leading-relaxed">
                                 Feed em tempo real indisponível até integração de eventos operacionais.
                             </p>
                         </div>

@@ -270,7 +270,7 @@ export default function Reprocessamento() {
         header: 'Unidade',
         render: (item) => (
           <div className="flex min-w-0 items-center gap-3">
-            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gray-50 text-sm font-semibold text-gray-600">
+            <span className="grid h-9 w-9 shrink-0 place-items-center rounded-xl bg-gray-50 text-sm font-semibold text-muted-foreground">
               {item.store_name?.charAt(0) || '—'}
             </span>
             <Typography variant="h4" className="truncate text-sm">
@@ -351,7 +351,7 @@ export default function Reprocessamento() {
                     'flex min-h-28 cursor-pointer flex-col items-center justify-center gap-2 rounded-2xl border-2 border-dashed px-4 text-center transition',
                     file
                       ? 'border-emerald-200 bg-emerald-50 text-emerald-700'
-                      : 'border-gray-200 bg-gray-50 text-gray-500 hover:border-emerald-200 hover:bg-emerald-50/50',
+                      : 'border-gray-200 bg-gray-50 text-muted-foreground hover:border-emerald-200 hover:bg-emerald-50/50',
                   )}
                 >
                   <Upload size={22} aria-hidden="true" />
@@ -388,10 +388,10 @@ export default function Reprocessamento() {
             <MxSectionHeader
               title="Eventos do processamento"
               description="Acompanhamento técnico do lote atual."
-              actions={<TerminalIcon size={18} className="text-gray-500" aria-hidden="true" />}
+              actions={<TerminalIcon size={18} className="text-muted-foreground" aria-hidden="true" />}
             />
-            <div className="max-h-72 min-h-48 overflow-y-auto bg-gray-900 p-4 font-mono text-xs leading-5 text-gray-300" role="log" aria-live="polite">
-              {logs.length === 0 ? <p className="text-gray-500">Nenhum processamento iniciado nesta sessão.</p> : null}
+            <div className="max-h-72 min-h-48 overflow-y-auto bg-gray-900 p-4 font-mono text-xs leading-5 text-text-disabled" role="log" aria-live="polite">
+              {logs.length === 0 ? <p className="text-muted-foreground">Nenhum processamento iniciado nesta sessão.</p> : null}
               {logs.map((log, index) => (
                 <p
                   key={`${log.msg}-${index}`}

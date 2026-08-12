@@ -13,9 +13,9 @@ export default function BonificacaoPeriodo({ bonificacao }) {
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 w-full sm:w-[260px]">
       <div className="flex items-center gap-2 mb-3">
         <Gift className="w-5 h-5 text-green-600" />
-        <h2 className="text-body font-bold text-slate-800">Bonificação do Período</h2>
+        <h2 className="text-body font-bold text-foreground">Bonificação do Período</h2>
       </div>
-      <p className="text-body-sm text-slate-400 text-center py-6">Nenhuma bonificação cadastrada para este período.</p>
+      <p className="text-body-sm text-muted-foreground text-center py-6">Nenhuma bonificação cadastrada para este período.</p>
     </div>
   );
 
@@ -29,18 +29,18 @@ export default function BonificacaoPeriodo({ bonificacao }) {
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 w-full sm:w-[260px]">
       <div className="flex items-center gap-2 mb-4">
         <Gift className="w-5 h-5 text-green-600" />
-        <h2 className="text-body font-bold text-slate-800">Bonificação do Período</h2>
+        <h2 className="text-body font-bold text-foreground">Bonificação do Período</h2>
       </div>
       <div className="space-y-3">
         {rows.map((r) => (
           <div key={r.label} className="flex items-center justify-between gap-2">
             <div className="flex items-center gap-2">
               <Trophy className="w-4 h-4 flex-shrink-0" style={{ color: r.color }} fill="currentColor" />
-              <span className="text-body-sm font-medium text-slate-700">{r.label}</span>
+              <span className="text-body-sm font-medium text-foreground">{r.label}</span>
             </div>
             <div className="text-right">
-              <p className="text-[14px] font-bold text-slate-800">{formatBRL(r.valor)}</p>
-              {r.desc && <p className="text-caption text-slate-400">{r.desc}</p>}
+              <p className="text-[14px] font-bold text-foreground">{formatBRL(r.valor)}</p>
+              {r.desc && <p className="text-caption text-muted-foreground">{r.desc}</p>}
             </div>
           </div>
         ))}
@@ -50,7 +50,7 @@ export default function BonificacaoPeriodo({ bonificacao }) {
               <span className="text-green-600 text-body">📈</span>
               <div>
                 <p className="text-[12px] font-semibold text-green-700">Acima de 100% da meta</p>
-                <p className="text-caption text-slate-400">{bonificacao.bonus_meta_descricao || "bônus extra"}</p>
+                <p className="text-caption text-muted-foreground">{bonificacao.bonus_meta_descricao || "bônus extra"}</p>
               </div>
             </div>
             <p className="text-[14px] font-bold text-green-600">{formatBRL(bonificacao.bonus_meta_valor)}</p>

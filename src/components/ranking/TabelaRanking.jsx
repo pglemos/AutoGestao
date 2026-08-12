@@ -42,7 +42,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
               {["Posição", "Vendedor", "Unidade", isVolume ? "Vendas" : "Faturamento", "Meta", "Atingimento", "Status"].map(h => (
-                <th key={h} className="text-left text-caption font-semibold text-slate-500 uppercase tracking-wider px-4 py-3">{h}</th>
+                <th key={h} className="text-left text-caption font-semibold text-muted-foreground uppercase tracking-wider px-4 py-3">{h}</th>
               ))}
             </tr>
           </thead>
@@ -65,7 +65,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                         <Trophy className="w-4 h-4" style={{ color: medal.color }} fill="currentColor" />
                       </div>
                     ) : (
-                      <span className="text-[14px] font-bold text-slate-400">{i + 1}</span>
+                      <span className="text-[14px] font-bold text-muted-foreground">{i + 1}</span>
                     )}
                   </td>
                   {/* Vendedor */}
@@ -74,14 +74,14 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                       <Avatar nome={v.nome} foto={v.foto} />
                       <div>
                         <div className="flex items-center gap-1.5">
-                          <span className="text-body-sm font-semibold text-slate-800">{v.nome}</span>
+                          <span className="text-body-sm font-semibold text-foreground">{v.nome}</span>
                           {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-caption font-bold rounded-full">Você</span>}
                         </div>
                       </div>
                     </div>
                   </td>
                   {/* Unidade */}
-                  <td className="px-4 py-3 text-body-sm text-slate-500">{v.unidade || "—"}</td>
+                  <td className="px-4 py-3 text-body-sm text-muted-foreground">{v.unidade || "—"}</td>
                   {/* Vendas / Faturamento */}
                   <td className="px-4 py-3">
                     <span className={`text-[14px] font-bold ${isMe ? "text-blue-600" : "text-green-600"}`}>
@@ -89,7 +89,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
                     </span>
                   </td>
                   {/* Meta */}
-                  <td className="px-4 py-3 text-body-sm text-slate-500">{isVolume ? meta : formatBRL(meta)}</td>
+                  <td className="px-4 py-3 text-body-sm text-muted-foreground">{isVolume ? meta : formatBRL(meta)}</td>
                   {/* Atingimento */}
                   <td className="px-4 py-3">
                     <span className={`text-[14px] font-bold ${pct >= 100 ? "text-green-600" : pct >= 80 ? "text-amber-600" : pct >= 50 ? "text-blue-500" : "text-red-500"}`}>
@@ -104,7 +104,7 @@ export default function TabelaRanking({ vendedores, meta, isVolume, meuId }) {
           </tbody>
         </table>
         {vendedores.length === 0 && (
-          <div className="text-center py-12 text-slate-400 text-body-sm">
+          <div className="text-center py-12 text-muted-foreground text-body-sm">
             Nenhum dado encontrado para os filtros selecionados.
           </div>
         )}

@@ -15,7 +15,7 @@ function formatVendas(v: number) {
 export function PodioRanking({ top3 }: { top3: RankedVendedor[] }) {
   return (
     <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5 flex-1">
-      <h2 className="text-body font-bold text-slate-800 mb-4">Pódio do Período</h2>
+      <h2 className="text-body font-bold text-foreground mb-4">Pódio do Período</h2>
       <div className="flex items-end justify-center gap-3 sm:gap-6 mt-2 pb-2">
         {PEDESTAL.map(({ pos, label, bg, height, order }) => {
           const v = top3[pos - 1]
@@ -23,7 +23,7 @@ export function PodioRanking({ top3 }: { top3: RankedVendedor[] }) {
             return (
               <div key={pos} className="flex flex-col items-center gap-2" style={{ order }}>
                 <div className="w-14 h-14 rounded-full bg-slate-100 border-2 border-slate-200 flex items-center justify-center">
-                  <span className="text-slate-300 text-lg font-bold">{pos}</span>
+                  <span className="text-text-disabled text-lg font-bold">{pos}</span>
                 </div>
                 <div className="rounded-t-md w-16 sm:w-20" style={{ height, background: bg, opacity: 0.4 }} />
               </div>
@@ -45,7 +45,7 @@ export function PodioRanking({ top3 }: { top3: RankedVendedor[] }) {
                 border={pos === 1 ? '4px solid var(--color-status-warning)' : '3px solid var(--color-border-default)'}
               />
               <div className="text-center mt-1">
-                <p className="text-body-sm font-bold text-slate-800 leading-tight">{v.nome?.split(' ')[0]}</p>
+                <p className="text-body-sm font-bold text-foreground leading-tight">{v.nome?.split(' ')[0]}</p>
                 <p className="text-caption font-semibold" style={{ color: 'var(--color-brand-primary)' }}>{formatVendas(v.vendas)}</p>
               </div>
               <div className="relative rounded-t-md flex items-center justify-center w-16 sm:w-20" style={{ height, background: bg }}>

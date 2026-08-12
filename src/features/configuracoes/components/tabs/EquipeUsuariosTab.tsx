@@ -144,7 +144,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
             {/* Toolbar */}
             <Card className="p-mx-md border-none bg-white flex flex-col md:flex-row items-stretch md:items-center gap-mx-md">
                 <div className="relative flex-1">
-                    <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
+                    <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         id="team-search"
                         name="team-search"
@@ -201,7 +201,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                     </div>
                 ) : filtered.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
-                        <Users size={40} className="mx-auto text-gray-500 opacity-30" />
+                        <Users size={40} className="mx-auto text-muted-foreground opacity-30" />
                         <Typography variant="caption" tone="muted" className="">Nenhum usuário encontrado</Typography>
                     </div>
                 ) : (
@@ -227,11 +227,11 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
                                                 {user.must_change_password && <Badge variant="warning" className="text-mx-micro">Trocar Senha</Badge>}
                                             </div>
                                             <div className="flex items-center gap-mx-md flex-wrap mt-1">
-                                                <span className="flex items-center gap-mx-tiny text-mx-micro font-bold text-gray-500">
+                                                <span className="flex items-center gap-mx-tiny text-mx-micro font-bold text-muted-foreground">
                                                     <Mail size={11} />{user.email}
                                                 </span>
                                                 {user.store_name && (
-                                                    <span className="flex items-center gap-mx-tiny text-mx-micro font-bold text-gray-500">
+                                                    <span className="flex items-center gap-mx-tiny text-mx-micro font-bold text-muted-foreground">
                                                         <Building2 size={11} />{user.store_name}
                                                     </span>
                                                 )}
@@ -297,7 +297,7 @@ export function EquipeUsuariosTab({ isReadOnly }: TabContext) {
 
 function StatCard({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone?: 'success' | 'brand' | 'muted' }) {
     const toneColor = tone === 'success' ? 'text-status-success' :
-        tone === 'brand' ? 'text-emerald-600' : 'text-gray-800'
+        tone === 'brand' ? 'text-emerald-600' : 'text-foreground'
     return (
         <Card className="p-mx-md border-none bg-white">
             <div className="flex items-center gap-mx-sm">

@@ -16,7 +16,7 @@ export function BattleView({ opponents, ranking }: BattleViewProps) {
     const p1 = ranking.find(s => s.user_id === p1Id)
     const p2 = ranking.find(s => s.user_id === p2Id)
 
-    if (!p1 || !p2) return <div className="text-center p-mx-xl text-gray-500 font-bold uppercase tracking-widest">Selecione dois vendedores</div>
+    if (!p1 || !p2) return <div className="text-center p-mx-xl text-muted-foreground font-bold uppercase tracking-widest">Selecione dois vendedores</div>
 
     const ComparisonRow = ({ label, v1, v2, format = (v: number) => v }: { label: string, v1: number, v2: number, format?: (v: number) => ReactNode }) => {
         const total = v1 + v2
@@ -26,9 +26,9 @@ export function BattleView({ opponents, ranking }: BattleViewProps) {
         return (
             <div className="mb-6 group">
                 <div className="flex justify-between items-end mb-2 text-sm font-bold text-white">
-                    <span className={winner === 'p1' ? 'text-emerald-600 scale-110 transition-transform' : 'text-gray-500'}>{format(v1)}</span>
-                    <span className="text-mx-tiny uppercase text-gray-500 tracking-widest">{label}</span>
-                    <span className={winner === 'p2' ? 'text-status-info scale-110 transition-transform' : 'text-gray-500'}>{format(v2)}</span>
+                    <span className={winner === 'p1' ? 'text-emerald-600 scale-110 transition-transform' : 'text-muted-foreground'}>{format(v1)}</span>
+                    <span className="text-mx-tiny uppercase text-muted-foreground tracking-widest">{label}</span>
+                    <span className={winner === 'p2' ? 'text-status-info scale-110 transition-transform' : 'text-muted-foreground'}>{format(v2)}</span>
                 </div>
                 <div className="h-mx-sm bg-gray-900 rounded-full overflow-hidden flex relative shadow-none">
                     <div className={`h-full transition-all duration-1000 ${winner === 'p1' ? 'bg-emerald-600 shadow-mx-glow-brand' : 'bg-emerald-600/50'}`} style={{ width: `${p1Pct}%` }}></div>

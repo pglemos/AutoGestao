@@ -65,11 +65,11 @@ export function VisitHeaderBase({ data, onChange, clientName }: Props) {
           </div>
           <div className="space-y-mx-xs p-mx-md bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
             <Typography variant="tiny" className="text-mx-tiny">Leads (Mês)</Typography>
-            <Input aria-label="Leads (Mês)" id="header-leads" name="header-leads" value={data.leads_mes} onChange={e => onChange({ leads_mes: e.target.value })} className="bg-transparent border-none p-mx-0 text-2xl font-bold text-gray-800 focus-visible:ring-0" />
+            <Input aria-label="Leads (Mês)" id="header-leads" name="header-leads" value={data.leads_mes} onChange={e => onChange({ leads_mes: e.target.value })} className="bg-transparent border-none p-mx-0 text-2xl font-bold text-foreground focus-visible:ring-0" />
           </div>
           <div className="space-y-mx-xs p-mx-md bg-gray-50 rounded-2xl border border-gray-200 shadow-sm">
             <Typography variant="tiny" className="text-mx-tiny">Estoque</Typography>
-            <Input aria-label="Estoque" id="header-stock" name="header-stock" value={data.estoque_disponivel} onChange={e => onChange({ estoque_disponivel: e.target.value })} className="bg-transparent border-none p-mx-0 text-2xl font-bold text-gray-800 focus-visible:ring-0" />
+            <Input aria-label="Estoque" id="header-stock" name="header-stock" value={data.estoque_disponivel} onChange={e => onChange({ estoque_disponivel: e.target.value })} className="bg-transparent border-none p-mx-0 text-2xl font-bold text-foreground focus-visible:ring-0" />
           </div>
         </div>
       </div>

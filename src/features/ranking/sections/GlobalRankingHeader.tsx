@@ -45,13 +45,13 @@ export function GlobalRankingHeader({
 
       <div className="flex min-w-0 flex-col items-center gap-mx-sm shrink-0 w-full sm:flex-row sm:flex-wrap sm:justify-center 2xl:w-auto 2xl:justify-end">
         <div className="grid grid-cols-1 sm:flex w-full sm:w-auto bg-white p-1.5 rounded-2xl border border-gray-200 shadow-sm mr-0 sm:mr-4 gap-mx-xs" role="tablist" aria-label="Modo da classificação">
-          <button type="button" role="tab" aria-selected={viewMode === 'leaderboard'} onClick={() => onChangeViewMode('leaderboard')} className={cn('px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs', viewMode === 'leaderboard' ? activeTabClass : 'text-gray-500 hover:bg-white/60')}>
+          <button type="button" role="tab" aria-selected={viewMode === 'leaderboard'} onClick={() => onChangeViewMode('leaderboard')} className={cn('px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs', viewMode === 'leaderboard' ? activeTabClass : 'text-muted-foreground hover:bg-white/60')}>
             <Trophy size={14} /> Ranking
           </button>
-          <button type="button" role="tab" aria-selected={viewMode === 'battle'} onClick={() => onChangeViewMode('battle')} className={cn('px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs', viewMode === 'battle' ? activeTabClass : 'text-gray-500 hover:bg-white/60')}>
+          <button type="button" role="tab" aria-selected={viewMode === 'battle'} onClick={() => onChangeViewMode('battle')} className={cn('px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs', viewMode === 'battle' ? activeTabClass : 'text-muted-foreground hover:bg-white/60')}>
             <Swords size={14} /> Comparativo
           </button>
-          <button type="button" role="tab" aria-selected={viewMode === 'store-arena'} onClick={() => onChangeViewMode('store-arena')} className={cn('px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs', viewMode === 'store-arena' ? activeTabClass : 'text-gray-500 hover:bg-white/60')}>
+          <button type="button" role="tab" aria-selected={viewMode === 'store-arena'} onClick={() => onChangeViewMode('store-arena')} className={cn('px-4 py-2 rounded-xl text-mx-tiny font-bold uppercase tracking-wider transition-all flex items-center justify-center whitespace-nowrap gap-mx-xs', viewMode === 'store-arena' ? activeTabClass : 'text-muted-foreground hover:bg-white/60')}>
             <Building2 size={14} /> Comparativo Lojas
           </button>
         </div>

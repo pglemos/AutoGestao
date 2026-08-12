@@ -62,7 +62,7 @@ export function PendenciasDrawer({
       referenceStyle
     >
       {actions.length === 0 ? (
-        <p className="py-8 text-center text-body-sm text-slate-400">Nenhuma pendência anterior.</p>
+        <p className="py-8 text-center text-body-sm text-muted-foreground">Nenhuma pendência anterior.</p>
       ) : (
         <div className="space-y-3">
           {actions.map(action => {
@@ -78,13 +78,13 @@ export function PendenciasDrawer({
                   <div className={cn('w-1.5 self-stretch rounded-full', barColor(action.activityType))} />
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex flex-wrap items-center gap-2">
-                      <span className="text-caption font-bold uppercase tracking-wider text-slate-400">{action.title}</span>
+                      <span className="text-caption font-bold uppercase tracking-wider text-muted-foreground">{action.title}</span>
                       <span className="rounded-full bg-red-50 px-2 py-0.5 text-caption font-bold text-red-500">{late === 0 ? 'Hoje' : `${late}d atraso`}</span>
                     </div>
-                    <p className="truncate text-body-sm font-bold text-gray-800">{clientName}</p>
-                    {vehicle && <p className="truncate text-[12px] text-slate-500">{vehicle}</p>}
-                    {action.description && <p className="mt-0.5 text-[12px] text-slate-400">{action.description}</p>}
-                    <p className="mt-0.5 text-caption text-slate-300">{formatDate(action.dueAt)}</p>
+                    <p className="truncate text-body-sm font-bold text-foreground">{clientName}</p>
+                    {vehicle && <p className="truncate text-[12px] text-muted-foreground">{vehicle}</p>}
+                    {action.description && <p className="mt-0.5 text-[12px] text-muted-foreground">{action.description}</p>}
+                    <p className="mt-0.5 text-caption text-text-disabled">{formatDate(action.dueAt)}</p>
                   </div>
                 </div>
 
@@ -95,7 +95,7 @@ export function PendenciasDrawer({
                     </button>
                   )}
                   {phoneDigits && (
-                    <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-caption font-bold text-slate-600 hover:bg-slate-50">
+                    <a href={`tel:${phoneDigits}`} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-slate-50">
                       <Phone className="h-3 w-3" aria-hidden="true" /> Ligar
                     </a>
                   )}
@@ -104,7 +104,7 @@ export function PendenciasDrawer({
                       <UserRound className="h-3 w-3" aria-hidden="true" /> Abrir cliente
                     </button>
                   )}
-                  <button type="button" onClick={() => onReschedule(action)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-caption font-bold text-slate-500 hover:bg-slate-50">
+                  <button type="button" onClick={() => onReschedule(action)} className="flex items-center gap-1 rounded-lg border border-slate-200 px-2.5 py-1.5 text-caption font-bold text-muted-foreground hover:bg-slate-50">
                     <Calendar className="h-3 w-3" aria-hidden="true" /> Reagendar
                   </button>
                   <button type="button" onClick={() => onEscalate(action)} className="flex items-center gap-1 rounded-lg border border-amber-200 px-2.5 py-1.5 text-caption font-bold text-amber-700 hover:bg-amber-50">

@@ -48,7 +48,7 @@ export function VisitOneHighFidelity({ clientId, clientSlug, data, onChange }: {
             onClick={() => setTab(t.id)}
             className={cn(
               "flex-1 flex items-center justify-center gap-mx-xs py-mx-sm px-mx-md rounded-xl text-xs font-bold uppercase tracking-mx-wider transition-all",
-              tab === t.id ? "bg-emerald-600 text-white shadow-sm" : "text-gray-500 hover:text-gray-800 hover:bg-white"
+              tab === t.id ? "bg-emerald-600 text-white shadow-sm" : "text-muted-foreground hover:text-foreground hover:bg-white"
             )}
           >
             <t.icon size={14} />
@@ -111,7 +111,7 @@ function VisitOneDashboards({ data, onChange }: { data: VisitOneQuantData, onCha
           <div className="flex items-center justify-between p-mx-md bg-gray-50 rounded-2xl border border-gray-200">
              <div>
                 <Typography variant="tiny" className="font-bold">Total Trimestre</Typography>
-                <Typography variant="h2" className="text-3xl">{totalSales} <span className="text-sm font-bold text-gray-500">CARROS</span></Typography>
+                <Typography variant="h2" className="text-3xl">{totalSales} <span className="text-sm font-bold text-muted-foreground">CARROS</span></Typography>
              </div>
              <div className="text-right">
                 <Typography variant="tiny" className="font-bold">Média Mensal</Typography>
@@ -356,20 +356,20 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
             >
               <div className="flex items-start justify-between gap-mx-sm">
                 <div>
-                  <Typography variant="tiny" className={cn("uppercase font-bold tracking-mx-widest text-mx-tiny", isActive ? "text-white/70" : "text-gray-500")}>
+                  <Typography variant="tiny" className={cn("uppercase font-bold tracking-mx-widest text-mx-tiny", isActive ? "text-white/70" : "text-muted-foreground")}>
                     Entrevista
                   </Typography>
-                  <Typography variant="h3" className={cn("text-base font-bold leading-tight", isActive ? "text-white" : "text-gray-800")}>
+                  <Typography variant="h3" className={cn("text-base font-bold leading-tight", isActive ? "text-white" : "text-foreground")}>
                     {getInterviewLabel(t.form_key, t.title)}
                   </Typography>
                 </div>
                 {responses.length ? (
                   <CheckCircle2 className={cn("w-mx-5 h-mx-5 shrink-0", isActive ? "text-white/70" : "text-status-success")} />
                 ) : (
-                  <Circle className={cn("w-mx-5 h-mx-5 shrink-0", isActive ? "text-white/40" : "text-gray-500/50")} />
+                  <Circle className={cn("w-mx-5 h-mx-5 shrink-0", isActive ? "text-white/40" : "text-muted-foreground/50")} />
                 )}
               </div>
-              <Typography variant="tiny" className={cn("mt-mx-md block font-bold", isActive ? "text-white/70" : "text-gray-500")}>
+              <Typography variant="tiny" className={cn("mt-mx-md block font-bold", isActive ? "text-white/70" : "text-muted-foreground")}>
                 {responses.length ? `${responses.length} resposta(s) agrupada(s)` : 'Pendente'}
               </Typography>
             </button>
@@ -450,7 +450,7 @@ function VisitOneInterviews({ clientId }: { clientId: string }) {
                           "h-10 w-10 min-w-10 sm:h-12 sm:w-12 sm:min-w-12 rounded-2xl font-bold transition-all border-2 flex items-center justify-center text-lg",
                           value === option
                             ? "bg-emerald-600 border-brand-primary text-white shadow-sm scale-105"
-                            : "bg-white border-gray-200 text-gray-500 hover:border-brand-primary/40 hover:text-emerald-600"
+                            : "bg-white border-gray-200 text-muted-foreground hover:border-brand-primary/40 hover:text-emerald-600"
                         )}
                       >
                         {option}

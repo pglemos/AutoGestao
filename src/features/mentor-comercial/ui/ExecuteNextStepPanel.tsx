@@ -100,9 +100,9 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
       case 'morno':
         return 'bg-amber-100 text-amber-800 border-amber-200'
       case 'frio':
-        return 'bg-slate-100 text-slate-700 border-slate-200'
+        return 'bg-slate-100 text-foreground border-slate-200'
       default:
-        return 'bg-slate-100 text-slate-700 border-slate-200'
+        return 'bg-slate-100 text-foreground border-slate-200'
     }
   }
 
@@ -113,9 +113,9 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
         return 'bg-blue-100 text-blue-800 border-blue-200'
       case 'médio':
       case 'medio':
-        return 'bg-slate-100 text-slate-800 border-slate-200'
+        return 'bg-slate-100 text-foreground border-slate-200'
       default:
-        return 'bg-gray-100 text-gray-700 border-gray-200'
+        return 'bg-gray-100 text-foreground border-gray-200'
     }
   }
 
@@ -135,7 +135,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                 <Badge variant="outline" className="border-blue-400 text-blue-300 bg-blue-950/60 text-xs font-semibold">
                   {opportunity.statusCode}
                 </Badge>
-                <Badge variant="outline" className="border-slate-600 text-slate-300 bg-slate-800 text-xs">
+                <Badge variant="outline" className="border-slate-600 text-text-disabled bg-slate-800 text-xs">
                   {priorityClass ? `Prioridade ${priorityClass}` : 'Prioridade não calculada'}
                 </Badge>
                 {isInternal && (
@@ -147,7 +147,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
               <SheetTitle className="text-xl font-bold text-white tracking-tight">
                 {opportunity.clientName}
               </SheetTitle>
-              <SheetDescription className="text-sm text-slate-400 mt-1">
+              <SheetDescription className="text-sm text-muted-foreground mt-1">
                 {opportunity.statusLabel}
               </SheetDescription>
             </div>
@@ -158,38 +158,38 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
         <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-5">
           {/* Card 1: Ficha do Cliente & Dados Origem */}
           <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Dados do Cliente & Origem
             </h3>
             <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 text-sm">
               <div>
-                <span className="text-xs text-slate-500 block">Canal</span>
-                <span className="font-medium text-slate-900">{opportunity.channel}</span>
+                <span className="text-xs text-muted-foreground block">Canal</span>
+                <span className="font-medium text-foreground">{opportunity.channel}</span>
               </div>
               <div>
-                <span className="text-xs text-slate-500 block">Origem detalhada</span>
-                <span className="font-medium text-slate-900">
+                <span className="text-xs text-muted-foreground block">Origem detalhada</span>
+                <span className="font-medium text-foreground">
                   {opportunity.detailedOrigin || 'Não informada'}
                 </span>
               </div>
               <div>
-                <span className="text-xs text-slate-500 block">Responsável</span>
-                <span className="font-medium text-slate-900">{opportunity.responsible}</span>
+                <span className="text-xs text-muted-foreground block">Responsável</span>
+                <span className="font-medium text-foreground">{opportunity.responsible}</span>
               </div>
               <div>
-                <span className="text-xs text-slate-500 block">Telefone</span>
-                <span className="font-medium text-slate-900">
+                <span className="text-xs text-muted-foreground block">Telefone</span>
+                <span className="font-medium text-foreground">
                   {opportunity.clientPhone || 'Não informado'}
                 </span>
               </div>
             </div>
 
             <div className="flex items-center gap-2 pt-2 border-t border-slate-100 text-xs">
-              <span className="text-slate-500">Temperatura:</span>
+              <span className="text-muted-foreground">Temperatura:</span>
               <Badge variant="outline" className={temperatureColor(opportunity.temperature)}>
                 {opportunity.temperature || 'Não classificada'}
               </Badge>
-              <span className="text-slate-500 ml-2">Potencial:</span>
+              <span className="text-muted-foreground ml-2">Potencial:</span>
               <Badge variant="outline" className={potentialColor(opportunity.potential)}>
                 {opportunity.potential || 'Não classificado'}
               </Badge>
@@ -199,22 +199,22 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
           {/* Card 2: Diagnóstico & Orientação do Mentor */}
           <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm space-y-4">
             <div className="flex items-center justify-between border-b border-slate-100 pb-2">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Orientação Comercial do Mentor
               </h3>
-              <span className="text-xs text-slate-400 font-medium">100% Determinístico</span>
+              <span className="text-xs text-muted-foreground font-medium">100% Determinístico</span>
             </div>
 
             <div className="space-y-3 text-sm">
               <div>
-                <span className="text-xs font-semibold text-slate-600 block">Objetivo</span>
-                <p className="text-slate-900 font-medium bg-slate-50 p-2.5 rounded border border-slate-200">
+                <span className="text-xs font-semibold text-muted-foreground block">Objetivo</span>
+                <p className="text-foreground font-medium bg-slate-50 p-2.5 rounded border border-slate-200">
                   {opportunity.objective}
                 </p>
               </div>
 
               <div>
-                <span className="text-xs font-semibold text-slate-600 block">Próximo Passo</span>
+                <span className="text-xs font-semibold text-muted-foreground block">Próximo Passo</span>
                 <p className="text-blue-900 font-semibold bg-blue-50/70 p-2.5 rounded border border-blue-200">
                   {opportunity.nextStep}
                 </p>
@@ -222,8 +222,8 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
 
               {(opportunity.mentorGuidance || opportunity.decision?.explanations?.length) && (
                 <div>
-                  <span className="text-xs font-semibold text-slate-600 block">Orientação técnica</span>
-                  <p className="text-slate-700 text-xs bg-slate-50 p-2.5 rounded border border-slate-200 leading-relaxed">
+                  <span className="text-xs font-semibold text-muted-foreground block">Orientação técnica</span>
+                  <p className="text-foreground text-xs bg-slate-50 p-2.5 rounded border border-slate-200 leading-relaxed">
                     {opportunity.mentorGuidance ?? opportunity.decision?.explanations?.join(' ')}
                   </p>
                 </div>
@@ -231,8 +231,8 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
 
               {(opportunity.centralRule || opportunity.decision?.centralRule) && (
                 <div>
-                  <span className="text-xs font-semibold text-slate-600 block">Por que está aqui (Regra Central)</span>
-                  <p className="text-slate-700 text-xs italic bg-slate-50 p-2 rounded border border-slate-200">
+                  <span className="text-xs font-semibold text-muted-foreground block">Por que está aqui (Regra Central)</span>
+                  <p className="text-foreground text-xs italic bg-slate-50 p-2 rounded border border-slate-200">
                     {opportunity.centralRule ?? opportunity.decision?.centralRule}
                   </p>
                 </div>
@@ -242,25 +242,25 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
 
           {/* Card 3: Cadência & Tentativas */}
           <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm space-y-3">
-            <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+            <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
               Plano de Cadência
             </h3>
             <div className="grid grid-cols-3 gap-3 text-sm">
               <div>
-                <span className="text-xs text-slate-500 block">Cadência</span>
-                <span className="font-semibold text-slate-900">
+                <span className="text-xs text-muted-foreground block">Cadência</span>
+                <span className="font-semibold text-foreground">
                   {opportunity.cadenceCode || 'Sem cadência'}
                 </span>
               </div>
               <div>
-                <span className="text-xs text-slate-500 block">Tentativa</span>
-                <span className="font-semibold text-slate-900">
+                <span className="text-xs text-muted-foreground block">Tentativa</span>
+                <span className="font-semibold text-foreground">
                   {opportunity.cadenceStep ?? 1} / {opportunity.totalCadenceAttempts ?? 1}
                 </span>
               </div>
               <div>
-                <span className="text-xs text-slate-500 block">Próxima Ação</span>
-                <span className="font-semibold text-slate-900">
+                <span className="text-xs text-muted-foreground block">Próxima Ação</span>
+                <span className="font-semibold text-foreground">
                   {formattedNextActionAt || 'Sem agendamento'}
                 </span>
               </div>
@@ -270,11 +270,11 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
           {/* Card 4: Script Renderizado & Status de Envio */}
           <div className="bg-white rounded-lg border border-slate-200 p-4 shadow-sm space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-muted-foreground">
                 Script Comercial
               </h3>
               {opportunity.scriptRef && (
-                <span className="text-xs font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded">
+                <span className="text-xs font-mono text-muted-foreground bg-slate-100 px-2 py-0.5 rounded">
                   {opportunity.scriptRef}
                 </span>
               )}
@@ -305,7 +305,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                     variant="outline"
                     size="sm"
                     onClick={handleCopyScript}
-                    className="text-xs border-slate-300 text-slate-700 hover:bg-slate-100"
+                    className="text-xs border-slate-300 text-foreground hover:bg-slate-100"
                   >
                     {copied ? 'Mensagem copiada!' : 'Copiar mensagem'}
                   </Button>
@@ -370,7 +370,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={() => onReschedule?.(new Date())}
-                className="text-slate-600 hover:text-slate-900 text-xs h-7 px-2"
+                className="text-muted-foreground hover:text-foreground text-xs h-7 px-2"
               >
                 Reagendar
               </Button>
@@ -379,7 +379,7 @@ export const ExecuteNextStepPanel: React.FC<ExecuteNextStepPanelProps> = ({
                 variant="ghost"
                 size="sm"
                 onClick={handleUpdateStatus}
-                className="text-slate-600 hover:text-slate-900 text-xs h-7 px-2"
+                className="text-muted-foreground hover:text-foreground text-xs h-7 px-2"
               >
                 Atualizar situação
               </Button>

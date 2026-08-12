@@ -24,7 +24,7 @@ const FLUXO_LABEL: Record<CarteiraFluxoEstado, string> = {
 }
 
 const FLUXO_TONE: Record<CarteiraFluxoEstado, string> = {
-  novo: 'border-gray-200 bg-gray-50 text-gray-500',
+  novo: 'border-gray-200 bg-gray-50 text-muted-foreground',
   contato_inicial: 'border-brand-primary/30 bg-mx-indigo-50 text-emerald-600',
   aquecimento: 'border-status-warning/30 bg-status-warning-surface text-status-warning',
   negociacao: 'border-status-warning/40 bg-status-warning-surface text-status-warning',

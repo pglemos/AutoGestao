@@ -17,7 +17,7 @@ export default function NextAwardCard({ calcResult }) {
 
       {semPremiacao ? (
         <div className="text-center py-4">
-          <p className="text-slate-400 text-sm">Nenhuma premiação ativa cadastrada para este período.</p>
+          <p className="text-muted-foreground text-sm">Nenhuma premiação ativa cadastrada para este período.</p>
         </div>
       ) : (
         <div>
@@ -38,22 +38,22 @@ export default function NextAwardCard({ calcResult }) {
           {proximaPremiacao && (
             <div>
               {premiacoesAtingidas?.length > 0 && (
-                <p className="text-slate-500 text-xs mb-2">Próxima premiação:</p>
+                <p className="text-muted-foreground text-xs mb-2">Próxima premiação:</p>
               )}
-              <p className="text-slate-500 text-sm">Faltam</p>
+              <p className="text-muted-foreground text-sm">Faltam</p>
               <p className="text-5xl font-bold text-mx-navy mt-1">
                 {(proximaPremiacao.quantidade_vendas_necessarias || 0) - qtdVendas}
-                <span className="text-xl font-semibold text-slate-400 ml-2">vendas</span>
+                <span className="text-xl font-semibold text-muted-foreground ml-2">vendas</span>
               </p>
-              <p className="text-slate-500 text-sm mt-2">para desbloquear</p>
+              <p className="text-muted-foreground text-sm mt-2">para desbloquear</p>
               <p className="text-3xl font-bold text-amber-500 mt-1">+ {formatBRL(proximaPremiacao.valor_premio)}</p>
 
               <div className="mt-4 bg-slate-50 rounded-xl p-3">
-                <p className="text-slate-500 text-xs">
+                <p className="text-muted-foreground text-xs">
                   Prêmio ao atingir {proximaPremiacao.quantidade_vendas_necessarias} vendas no mês.
                 </p>
                 <div className="mt-2">
-                  <div className="flex justify-between text-xs text-slate-400 mb-1">
+                  <div className="flex justify-between text-xs text-muted-foreground mb-1">
                     <span>{qtdVendas} vendas</span>
                     <span>{proximaPremiacao.quantidade_vendas_necessarias} vendas</span>
                   </div>

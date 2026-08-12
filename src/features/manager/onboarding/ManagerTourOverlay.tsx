@@ -145,17 +145,17 @@ export function ManagerTourOverlay({
           {step?.subtitle && (
             <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-emerald-600">{step.subtitle}</p>
           )}
-          <p className="text-sm leading-relaxed text-gray-600">{step?.description}</p>
+          <p className="text-sm leading-relaxed text-muted-foreground">{step?.description}</p>
         </div>
 
         <footer className="flex items-center justify-between border-t border-gray-100 bg-gray-50 px-5 py-3">
-          <span className="text-xs tabular-nums text-gray-400">Passo {index + 1} de {steps.length}</span>
+          <span className="text-xs tabular-nums text-muted-foreground">Passo {index + 1} de {steps.length}</span>
           <div className="flex items-center gap-2">
-            <button type="button" onClick={onSkip} className="h-8 rounded-lg px-2 text-xs text-gray-500 hover:text-gray-700">
+            <button type="button" onClick={onSkip} className="h-8 rounded-lg px-2 text-xs text-muted-foreground hover:text-foreground">
               Pular tour
             </button>
             {index > 0 && (
-              <button type="button" onClick={previous} className="flex h-8 items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 text-xs text-gray-600 hover:bg-gray-50">
+              <button type="button" onClick={previous} className="flex h-8 items-center gap-1 rounded-lg border border-gray-200 bg-white px-3 text-xs text-muted-foreground hover:bg-gray-50">
                 <ChevronLeft size={14} /> Voltar
               </button>
             )}

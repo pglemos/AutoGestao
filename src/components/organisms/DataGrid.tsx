@@ -65,14 +65,14 @@ function DataGridInner<T extends { id: string | number }>({
     return (
       <div className={cn(
         'flex flex-col items-center justify-center text-center',
-        'gap-3 px-5 py-16 text-gray-500',
+        'gap-3 px-5 py-16 text-muted-foreground',
       )}>
-        <span className={'grid h-14 w-14 place-items-center rounded-2xl bg-gray-50 text-gray-400'}>
+        <span className={'grid h-14 w-14 place-items-center rounded-2xl bg-gray-50 text-muted-foreground'}>
           <SearchX size={24} className={''} aria-hidden="true" />
         </span>
         <Typography
           variant={'h3'}
-          className={'text-gray-800'}
+          className={'text-foreground'}
         >
           {emptyMessage}
         </Typography>
@@ -99,7 +99,7 @@ function DataGridInner<T extends { id: string | number }>({
                   key={col.key}
                   scope="col"
                   className={cn(
-                    'px-4 py-3 text-caption font-semibold text-gray-500',
+                    'px-4 py-3 text-caption font-semibold text-muted-foreground',
                     col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left',
                     col.width,
                   )}
@@ -129,7 +129,7 @@ function DataGridInner<T extends { id: string | number }>({
                     <td
                       key={`${item.id}-${col.key}`}
                       className={cn(
-                        'px-4 py-3 text-body-sm font-medium text-gray-700',
+                        'px-4 py-3 text-body-sm font-medium text-foreground',
                         col.align === 'center' ? 'text-center' : col.align === 'right' ? 'text-right' : 'text-left',
                       )}
                     >
@@ -170,14 +170,14 @@ function DataGridInner<T extends { id: string | number }>({
                         <Typography
                           variant="tiny"
                           tone="muted"
-                          className={'text-xs font-medium text-gray-500'}
+                          className={'text-xs font-medium text-muted-foreground'}
                         >
                           {col.header}
                         </Typography>
                       )}
                       <div className={cn(
-                        'text-sm font-medium text-gray-700',
-                        cIdx === 0 && ('text-base font-semibold text-gray-800'),
+                        'text-sm font-medium text-foreground',
+                        cIdx === 0 && ('text-base font-semibold text-foreground'),
                       )}>
                         {col.render ? col.render(item, idx) : getCellValue(item, col.key)}
                       </div>

@@ -21,14 +21,14 @@ export default function RecordRoutineCard({ melhorMes }) {
           <Star className="w-7 h-7" style={{ color: "#22c55e", filter: "drop-shadow(0 0 6px rgba(34,197,94,0.5))" }} fill="currentColor" />
         </div>
 
-        <p className="text-slate-400 text-sm mb-1">Seu recorde foi</p>
+        <p className="text-muted-foreground text-sm mb-1">Seu recorde foi</p>
         <p
           className="font-bold tabular-nums"
           style={{ fontSize: "2.25rem", color: "#39FF5A", textShadow: "0 0 20px rgba(57,255,90,0.3)" }}
         >
           {melhorMes > 0 ? formatBRL(melhorMes).replace(",00", "") : "—"}
         </p>
-        <p className="text-slate-400 text-sm mt-2">
+        <p className="text-muted-foreground text-sm mt-2">
           Vamos buscar{" "}
           <span style={{ color: "#22c55e" }}>isso novamente?</span>
         </p>
@@ -47,7 +47,7 @@ export default function RecordRoutineCard({ melhorMes }) {
           EXECUTAR MINHA ROTINA
         </button>
       </Link>
-      <p className="text-slate-500 text-xs text-center mt-2">Acesse sua Rotina do Dia e venda mais hoje!</p>
+      <p className="text-muted-foreground text-xs text-center mt-2">Acesse sua Rotina do Dia e venda mais hoje!</p>
     </div>
   );
 }

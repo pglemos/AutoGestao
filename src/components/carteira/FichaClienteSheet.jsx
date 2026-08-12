@@ -46,7 +46,7 @@ function calcularQualidade(cliente) {
     return { label: "Precisa de informação", color: "bg-orange-50 text-orange-700 border-orange-200" };
   if (SITUACOES_ENCERRADAS_SEM_VENDA.includes(s))
     return { label: "Recuperação", color: "bg-red-50 text-red-700 border-red-200" };
-  return { label: "Nova oportunidade", color: "bg-slate-50 text-slate-600 border-slate-200" };
+  return { label: "Nova oportunidade", color: "bg-slate-50 text-muted-foreground border-slate-200" };
 }
 
 // ─── URGÊNCIA DA AÇÃO ─────────────────────────────────────────────────────────
@@ -71,7 +71,7 @@ function calcularUrgencia(cliente) {
     return { label: "Visita próxima", color: "bg-blue-50 text-blue-700 border-blue-200" };
   if (isAmanha(proxData) || isAmanha(visitaData))
     return { label: "Acompanhar amanhã", color: "bg-amber-50 text-amber-700 border-amber-200" };
-  return { label: "Sem urgência imediata", color: "bg-slate-50 text-slate-500 border-slate-200" };
+  return { label: "Sem urgência imediata", color: "bg-slate-50 text-muted-foreground border-slate-200" };
 }
 
 // ─── O QUE FALTA PARA EVOLUIR ────────────────────────────────────────────────
@@ -116,10 +116,10 @@ function motivoRecomendacao(cliente) {
 function FieldRow({ label, value, vazio = "Não informado" }) {
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-caption font-bold text-slate-400 uppercase tracking-wide">{label}</span>
+      <span className="text-caption font-bold text-muted-foreground uppercase tracking-wide">{label}</span>
       {value
-        ? <span className="text-body-sm text-slate-700 font-medium">{value}</span>
-        : <span className="text-[12px] text-slate-300 italic">{vazio}</span>
+        ? <span className="text-body-sm text-foreground font-medium">{value}</span>
+        : <span className="text-[12px] text-text-disabled italic">{vazio}</span>
       }
     </div>
   );
@@ -136,9 +136,9 @@ function Bloco({ title, icon, children, defaultOpen = true }) {
       >
         <div className="flex items-center gap-2">
           {icon && <span className="text-base">{icon}</span>}
-          <span className="text-xs font-black text-slate-600 uppercase tracking-wide">{title}</span>
+          <span className="text-xs font-black text-muted-foreground uppercase tracking-wide">{title}</span>
         </div>
-        {open ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+        {open ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
       </button>
       {open && <div className="px-4 py-4">{children}</div>}
     </div>
@@ -149,7 +149,7 @@ function Bloco({ title, icon, children, defaultOpen = true }) {
 function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
   const campo = (k, l, span2 = false, type = "text", placeholder = "") => (
     <div key={k} className={span2 ? "col-span-2" : ""}>
-      <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">{l}</label>
+      <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">{l}</label>
       <Input
         type={type}
         value={form[k] != null ? (type === "datetime-local" ? String(form[k]).slice(0, 16) : form[k]) : ""}
@@ -166,7 +166,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
 
   return (
     <div className="space-y-4 bg-slate-50 rounded-2xl p-4">
-      <p className="text-xs font-black text-slate-500 uppercase tracking-wider">Editar informações</p>
+      <p className="text-xs font-black text-muted-foreground uppercase tracking-wider">Editar informações</p>
 
       {/* Dados Principais */}
       <div className="grid grid-cols-2 gap-3">
@@ -179,7 +179,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
       {/* Origem e Atendimento */}
       <div className="grid grid-cols-2 gap-3">
         <div>
-          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Origem (canal)</label>
+          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Origem (canal)</label>
           <select
             value={form.canal_comercial || "Internet"}
             onChange={e => setForm(p => ({ ...p, canal_comercial: e.target.value }))}
@@ -190,7 +190,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         </div>
         {campo("origem_detalhada", "Origem Detalhada", false, "text", "Ex: Indicação, Tráfego Pago...")}
         <div>
-          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Temperatura</label>
+          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Temperatura</label>
           <select
             value={form.temperatura || "Morno"}
             onChange={e => setForm(p => ({ ...p, temperatura: e.target.value }))}
@@ -200,7 +200,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
           </select>
         </div>
         <div>
-          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Urgência da Compra</label>
+          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Urgência da Compra</label>
           <select
             value={form.urgencia_compra || form.urgencia || "Não informado"}
             onChange={e => setForm(p => ({ ...p, urgencia_compra: e.target.value, urgencia: e.target.value }))}
@@ -216,7 +216,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         {campo("veiculo_interesse", "Veículo de interesse", true, "text", "Ex: HB20 1.0 COMFORT")}
         {campo("valor_negociado", "Orçamento / Valor Negociado", false, "text", "R$ 68.900,00")}
         <div>
-          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Financiamento</label>
+          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Financiamento</label>
           <select
             value={form.financiamento || "Não se aplica"}
             onChange={e => setForm(p => ({ ...p, financiamento: e.target.value, interesse_financiamento: e.target.value !== "Não se aplica" }))}
@@ -231,7 +231,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
         {campo("veiculo_troca", "Veículo na troca", false, "text", "Ex: GOL 1.0 2018")}
         {campo("valor_troca", "Valor da troca", false, "text", "R$ 35.000,00")}
         <div>
-          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Modalidade Preferida</label>
+          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Modalidade Preferida</label>
           <select
             value={form.preferencia_modalidade || form.modalidade || "Não informado"}
             onChange={e => setForm(p => ({ ...p, preferencia_modalidade: e.target.value, modalidade: e.target.value }))}
@@ -253,7 +253,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
 
       {/* Situação e Agenda */}
       <div>
-        <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Situação atual</label>
+        <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Situação atual</label>
         <select value={form.situacao_atual || ""} onChange={e => setForm(p => ({ ...p, situacao_atual: e.target.value }))} className="w-full h-9 rounded-xl border border-input bg-white px-3 text-sm">
           {SITUACOES_ATUAIS.map(s => <option key={s} value={s}>{s}</option>)}
         </select>
@@ -261,21 +261,21 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
 
       <div className="grid grid-cols-2 gap-3">
         <div className="col-span-2">
-          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Próximo passo</label>
+          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Próximo passo</label>
           <Input value={form.proximo_passo || ""} onChange={e => setForm(p => ({ ...p, proximo_passo: e.target.value }))} className="rounded-xl h-8 text-sm" />
         </div>
         <div className="col-span-2">
-          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Data do próximo passo</label>
+          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data do próximo passo</label>
           <Input type="datetime-local" value={form.proxima_acao_data ? form.proxima_acao_data.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, proxima_acao_data: e.target.value }))} className="rounded-xl h-8 text-sm" />
         </div>
         <div className="col-span-2">
-          <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Data e Hora da Visita / Agendamento</label>
+          <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data e Hora da Visita / Agendamento</label>
           <Input type="datetime-local" value={form.visita_agendada_em ? form.visita_agendada_em.slice(0, 16) : ""} onChange={e => setForm(p => ({ ...p, visita_agendada_em: e.target.value }))} className="rounded-xl h-8 text-sm" />
         </div>
       </div>
 
       <div className="space-y-2">
-        <p className="text-caption font-semibold text-slate-400 uppercase tracking-wide">Interesses</p>
+        <p className="text-caption font-semibold text-muted-foreground uppercase tracking-wide">Interesses</p>
         <label className="flex items-center gap-2 cursor-pointer">
           <input
             type="checkbox"
@@ -283,7 +283,7 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
             onChange={e => setForm(p => ({ ...p, interesse_troca: e.target.checked, possui_troca: e.target.checked }))}
             className="rounded"
           />
-          <span className="text-sm text-slate-600">Possui troca</span>
+          <span className="text-sm text-muted-foreground">Possui troca</span>
         </label>
         <label className="flex items-center gap-2 cursor-pointer">
           <input
@@ -292,17 +292,17 @@ function FormularioEdicao({ form, setForm, onSalvar, onCancelar, salvando }) {
             onChange={e => setForm(p => ({ ...p, interesse_financiamento: e.target.checked }))}
             className="rounded"
           />
-          <span className="text-sm text-slate-600">Interesse em financiamento</span>
+          <span className="text-sm text-muted-foreground">Interesse em financiamento</span>
         </label>
       </div>
 
       <div>
-        <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Objeções / Motivo de perda</label>
+        <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Objeções / Motivo de perda</label>
         <Input value={form.motivo_perda || ""} onChange={e => setForm(p => ({ ...p, motivo_perda: e.target.value }))} className="rounded-xl h-8 text-sm" placeholder="Ex: preço, parcela, avaliação..." />
       </div>
 
       <div>
-        <label className="text-caption font-semibold text-slate-400 uppercase tracking-wide mb-1 block">Observações</label>
+        <label className="text-caption font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Observações</label>
         <textarea value={form.observacoes || ""} onChange={e => setForm(p => ({ ...p, observacoes: e.target.value }))} rows={2} className="w-full rounded-xl border border-input bg-white px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-ring" />
       </div>
 
@@ -456,7 +456,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
             <div className="w-6 h-6 border-4 border-slate-200 border-t-[#005BFF] rounded-full animate-spin" />
           </div>
         ) : !cliente ? (
-          <div className="flex items-center justify-center h-48 text-slate-400 text-sm">Cliente não encontrado.</div>
+          <div className="flex items-center justify-center h-48 text-muted-foreground text-sm">Cliente não encontrado.</div>
         ) : (
           <div className="flex flex-col flex-1 overflow-y-auto">
 
@@ -468,11 +468,11 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                 </div>
                 <div className="flex-1 min-w-0">
                   <h3 className="text-h5 font-black text-[#0F172A] leading-tight">{cliente.nome}</h3>
-                  <p className="text-xs text-slate-400 mt-0.5">
+                  <p className="text-xs text-muted-foreground mt-0.5">
                     {canal}{cliente.origem_detalhada ? ` · ${cliente.origem_detalhada}` : ""} · Cadastrado {moment(cliente.created_date).format("DD/MM/YYYY")}
                   </p>
                   {cliente.whatsapp && (
-                    <p className="text-xs text-slate-500 mt-0.5">📱 {cliente.whatsapp}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">📱 {cliente.whatsapp}</p>
                   )}
                   {cliente.veiculo_interesse && (
                     <p className="text-xs font-semibold text-[#031B3D] mt-1">🚗 {cliente.veiculo_interesse}</p>
@@ -483,7 +483,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
               {/* Situação + Temperatura */}
               <div className="flex flex-wrap gap-1.5">
                 <span className={`text-caption font-bold px-2.5 py-1 rounded-full border ${tempColor(cliente.temperatura)}`}>{cliente.temperatura || "Morno"}</span>
-                <span className="text-caption font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-slate-600 border border-slate-200">{situacao}</span>
+                <span className="text-caption font-semibold px-2.5 py-1 rounded-full bg-slate-100 text-muted-foreground border border-slate-200">{situacao}</span>
               </div>
 
               {/* Venda cancelada — motivo, data e responsável ficam visíveis
@@ -546,21 +546,21 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
                   <div className="space-y-2">
                     <div>
-                      <p className="text-caption font-bold text-slate-400 uppercase tracking-wide">Mentor recomenda</p>
+                      <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide">Mentor recomenda</p>
                       <p className="text-sm font-bold text-[#031B3D] mt-0.5">{cliente.proximo_passo || proximoPasso}</p>
                     </div>
                     <div>
-                      <p className="text-caption font-bold text-slate-400 uppercase tracking-wide">Objetivo</p>
-                      <p className="text-sm font-semibold text-slate-600 mt-0.5">{cliente.objetivo_atual || objetivo}</p>
+                      <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide">Objetivo</p>
+                      <p className="text-sm font-semibold text-muted-foreground mt-0.5">{cliente.objetivo_atual || objetivo}</p>
                     </div>
                     {motivo && (
                       <div>
-                        <p className="text-caption font-bold text-slate-400 uppercase tracking-wide">Motivo</p>
-                        <p className="text-xs text-slate-500 mt-0.5 italic">{motivo}</p>
+                        <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide">Motivo</p>
+                        <p className="text-xs text-muted-foreground mt-0.5 italic">{motivo}</p>
                       </div>
                     )}
                     {cliente.proxima_acao_data && (
-                      <div className="flex items-center gap-1.5 text-xs text-slate-500">
+                      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
                         <Clock className="w-3.5 h-3.5" />
                         Programado para {moment(cliente.proxima_acao_data).format("DD/MM/YYYY [às] HH:mm")}
                       </div>
@@ -588,7 +588,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                       <Button
                         variant="outline"
                         onClick={() => abrirAlterarPasso(null)}
-                        className="rounded-xl text-sm border-slate-200 text-slate-600 hover:bg-slate-50 gap-1.5"
+                        className="rounded-xl text-sm border-slate-200 text-muted-foreground hover:bg-slate-50 gap-1.5"
                       >
                         <Pencil className="w-3.5 h-3.5" /> Alterar próximo passo
                       </Button>
@@ -605,7 +605,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                       <div key={i} className="flex items-center justify-between gap-2">
                         <div className="flex items-start gap-2.5">
                           <AlertCircle className="w-3.5 h-3.5 text-amber-500 mt-0.5 shrink-0" />
-                          <span className="text-sm text-slate-600">{p}</span>
+                          <span className="text-sm text-muted-foreground">{p}</span>
                         </div>
                         <button
                           onClick={() => abrirAlterarPasso(p)}
@@ -637,36 +637,36 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
                     {/* Interesse */}
                     <div>
-                      <p className="text-caption font-black text-slate-400 uppercase tracking-wide mb-2">Interesse</p>
+                      <p className="text-caption font-black text-muted-foreground uppercase tracking-wide mb-2">Interesse</p>
                       <div className="grid grid-cols-2 gap-3">
                         <FieldRow label="Veículo" value={cliente.veiculo_interesse} />
                         <FieldRow label="Orçamento" value={cliente.valor_negociado} />
                       </div>
                       {cliente.observacoes && (
                         <div className="mt-2 p-2.5 bg-slate-50 rounded-xl">
-                          <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-0.5">Observações</p>
-                          <p className="text-xs text-slate-600">{cliente.observacoes}</p>
+                          <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-0.5">Observações</p>
+                          <p className="text-xs text-muted-foreground">{cliente.observacoes}</p>
                         </div>
                       )}
                     </div>
 
                     {/* Compra */}
                     <div>
-                      <p className="text-caption font-black text-slate-400 uppercase tracking-wide mb-2">Compra</p>
+                      <p className="text-caption font-black text-muted-foreground uppercase tracking-wide mb-2">Compra</p>
                       <div className="grid grid-cols-2 gap-3">
                         <FieldRow label="Orçamento" value={cliente.valor_negociado} />
                         <div className="flex flex-col gap-0.5">
-                          <span className="text-caption font-bold text-slate-400 uppercase tracking-wide">Possui troca</span>
+                          <span className="text-caption font-bold text-muted-foreground uppercase tracking-wide">Possui troca</span>
                           {cliente.interesse_troca != null
-                            ? <span className="text-body-sm text-slate-700 font-medium">{cliente.interesse_troca ? "Sim" : "Não"}</span>
-                            : <span className="text-[12px] text-slate-300 italic">Não informado</span>
+                            ? <span className="text-body-sm text-foreground font-medium">{cliente.interesse_troca ? "Sim" : "Não"}</span>
+                            : <span className="text-[12px] text-text-disabled italic">Não informado</span>
                           }
                         </div>
                         <div className="flex flex-col gap-0.5">
-                          <span className="text-caption font-bold text-slate-400 uppercase tracking-wide">Financiamento</span>
+                          <span className="text-caption font-bold text-muted-foreground uppercase tracking-wide">Financiamento</span>
                           {cliente.interesse_financiamento != null
-                            ? <span className="text-body-sm text-slate-700 font-medium">{cliente.interesse_financiamento ? "Sim" : "Não"}</span>
-                            : <span className="text-[12px] text-slate-300 italic">Não informado</span>
+                            ? <span className="text-body-sm text-foreground font-medium">{cliente.interesse_financiamento ? "Sim" : "Não"}</span>
+                            : <span className="text-[12px] text-text-disabled italic">Não informado</span>
                           }
                         </div>
                         {cliente.proposta_enviada && (
@@ -679,7 +679,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
 
                     {/* Dados de contato */}
                     <div>
-                      <p className="text-caption font-black text-slate-400 uppercase tracking-wide mb-2">Contato</p>
+                      <p className="text-caption font-black text-muted-foreground uppercase tracking-wide mb-2">Contato</p>
                       <div className="grid grid-cols-2 gap-3">
                         <FieldRow label="WhatsApp" value={cliente.whatsapp} />
                         <FieldRow label="Telefone" value={cliente.telefone} />
@@ -691,7 +691,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                     {/* Objeções */}
                     {cliente.motivo_perda && (
                       <div>
-                        <p className="text-caption font-black text-slate-400 uppercase tracking-wide mb-2">Objeções</p>
+                        <p className="text-caption font-black text-muted-foreground uppercase tracking-wide mb-2">Objeções</p>
                         <div className="bg-red-50 border border-red-100 rounded-xl px-3 py-2">
                           <p className="text-sm text-red-700">{cliente.motivo_perda}</p>
                         </div>
@@ -705,7 +705,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
               {!editando && (
                 <Bloco title="Histórico da oportunidade" icon="🕐" defaultOpen={false}>
                   {historico.length === 0 ? (
-                    <p className="text-sm text-slate-400 text-center py-4">Nenhuma ação registrada ainda.</p>
+                    <p className="text-sm text-muted-foreground text-center py-4">Nenhuma ação registrada ainda.</p>
                   ) : (
                     <div className="space-y-0">
                       {historico.map((h, idx) => (
@@ -717,17 +717,17 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                           <div className="w-3.5 h-3.5 rounded-full border-2 border-[#005BFF] bg-white shrink-0 mt-0.5 relative z-10" />
                           <div className="flex-1 min-w-0">
                             <div className="flex items-start justify-between gap-2">
-                              <p className="text-xs font-bold text-slate-700">{h.tipo}</p>
-                              <span className="text-caption text-slate-300 shrink-0">{moment(h.created_date).format("DD/MM HH:mm")}</span>
+                              <p className="text-xs font-bold text-foreground">{h.tipo}</p>
+                              <span className="text-caption text-text-disabled shrink-0">{moment(h.created_date).format("DD/MM HH:mm")}</span>
                             </div>
-                            {h.descricao && <p className="text-xs text-slate-500 mt-0.5">{h.descricao}</p>}
+                            {h.descricao && <p className="text-xs text-muted-foreground mt-0.5">{h.descricao}</p>}
                             {h.resultado && (
                               <span className="inline-block mt-1 text-caption font-semibold text-[#005BFF] bg-blue-50 px-2 py-0.5 rounded-full">
                                 → {h.resultado}
                               </span>
                             )}
                             {h.momento_novo && h.momento_novo !== h.momento_anterior && (
-                              <p className="text-caption text-slate-400 mt-0.5 italic">{h.momento_anterior} → {h.momento_novo}</p>
+                              <p className="text-caption text-muted-foreground mt-0.5 italic">{h.momento_anterior} → {h.momento_novo}</p>
                             )}
                           </div>
                         </div>
@@ -764,7 +764,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                   <Zap className="w-3.5 h-3.5" /> Executar próximo passo
                 </Button>
               )}
-              <Button variant="ghost" onClick={onClose} className="rounded-xl text-sm text-slate-400 hover:text-slate-600 px-3">
+              <Button variant="ghost" onClick={onClose} className="rounded-xl text-sm text-muted-foreground hover:text-muted-foreground px-3">
                 <X className="w-4 h-4" />
               </Button>
             </div>

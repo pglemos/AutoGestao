@@ -36,7 +36,7 @@ export function FeedbackList({ feedbacks, onShareWhatsApp, variant = 'admin' }: 
                       <div
                         className={
                           variant === 'admin'
-                            ? 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center font-bold text-gray-800 text-sm group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-none uppercase'
+                            ? 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center font-bold text-foreground text-sm group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-none uppercase'
                             : 'w-mx-xl h-mx-xl rounded-xl bg-gray-50 border border-gray-100 flex items-center justify-center font-bold text-sm group-hover:bg-emerald-600 group-hover:text-white transition-all shadow-none uppercase'
                         }
                       >

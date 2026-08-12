@@ -45,7 +45,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
               {HEADERS.map((head) => (
                 <th
                   key={head}
-                  className="px-mx-md py-mx-sm text-mx-nano font-bold uppercase tracking-widest text-gray-500"
+                  className="px-mx-md py-mx-sm text-mx-nano font-bold uppercase tracking-widest text-muted-foreground"
                 >
                   {head}
                 </th>
@@ -59,7 +59,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
                   <button
                     type="button"
                     onClick={() => onStoreClick(store.storeId, store.storeName)}
-                    className="font-bold uppercase text-gray-800 hover:text-emerald-600 text-xs"
+                    className="font-bold uppercase text-foreground hover:text-emerald-600 text-xs"
                   >
                     {store.storeName}
                   </button>
@@ -77,7 +77,7 @@ export function AdminStoreMatrixTable({ metrics, onStoreClick }: Props) {
                 <td className="px-mx-md py-mx-sm text-mx-nano font-bold uppercase">
                   {store.sellers}V / {store.managers}G / {store.owners}D
                 </td>
-                <td className="px-mx-md py-mx-sm text-mx-nano font-bold uppercase text-gray-500">
+                <td className="px-mx-md py-mx-sm text-mx-nano font-bold uppercase text-muted-foreground">
                   {shortDate(store.lastActivity)}
                 </td>
                 <td className="px-mx-md py-mx-sm">

@@ -89,7 +89,7 @@ const Spinner = () => (
       <div className="absolute inset-0 border-4 border-brand-primary/10 rounded-mx-full"></div>
       <div className="absolute inset-0 border-4 border-t-brand-primary rounded-mx-full animate-spin"></div>
     </div>
-    <p className="text-mx-tiny font-bold text-gray-500 uppercase tracking-mx-widest animate-pulse">MX PERFORMANCE</p>
+    <p className="text-mx-tiny font-bold text-muted-foreground uppercase tracking-mx-widest animate-pulse">MX PERFORMANCE</p>
   </div>
 )
 

@@ -191,7 +191,7 @@ export function ManagerSellerParityHomeCanonical({
   }
 
   return (
-    <div className="flex flex-col gap-5 text-gray-800">
+    <div className="flex flex-col gap-5 text-foreground">
         <ManagerHeader
           referenceDate={data.referenceDate}
           stores={selectableStores}
@@ -225,7 +225,7 @@ export function ManagerSellerParityHomeCanonical({
             ) : (
               <>
                 <MetricValue value={formatSales(salesNeededToday)} suffix={saleSuffix(salesNeededToday)} />
-                <p className="mt-2 text-xs text-gray-500">Plano de Sustentação oficial de hoje</p>
+                <p className="mt-2 text-xs text-muted-foreground">Plano de Sustentação oficial de hoje</p>
               </>
             )}
           </MetricCard>
@@ -236,7 +236,7 @@ export function ManagerSellerParityHomeCanonical({
             ) : (
               <>
                 <MetricValue value={formatSales(appointmentTarget)} suffix="agendamentos" />
-                <p className="mt-2 text-xs text-gray-500">Necessidade × razão operacional</p>
+                <p className="mt-2 text-xs text-muted-foreground">Necessidade × razão operacional</p>
               </>
             )}
           </MetricCard>
@@ -251,7 +251,7 @@ export function ManagerSellerParityHomeCanonical({
             ) : (
               <>
                 <MetricValue value={formatSigned(appointmentGap)} suffix="agendamentos" />
-                <p className="mt-2 text-xs text-gray-500">
+                <p className="mt-2 text-xs text-muted-foreground">
                   {appointmentGap < 0
                     ? `Faltam ${formatSales(Math.abs(appointmentGap))}`
                     : appointmentGap > 0
@@ -287,7 +287,7 @@ export function ManagerSellerParityHomeCanonical({
                 style={{ width: `${Math.min(Math.max(forecastCoverage ?? 0, 0), 100)}%` }}
               />
             </div>
-            <p className="mt-3 text-sm text-gray-600">{todayReading}</p>
+            <p className="mt-3 text-sm text-muted-foreground">{todayReading}</p>
           </article>
 
           <article className="rounded-2xl border border-emerald-100 bg-emerald-50 p-5">
@@ -313,7 +313,7 @@ export function ManagerSellerParityHomeCanonical({
           />
         </section>
 
-        <p className="text-center text-caption text-gray-600">
+        <p className="text-center text-caption text-muted-foreground">
           Fontes oficiais: Plano de Sustentação v{plan?.version ?? '—'} e agenda confirmada da unidade.
         </p>
     </div>
@@ -353,14 +353,14 @@ function ManagerHeader({
               </span>
             ) : null}
           </div>
-          <p className="mt-1 text-sm text-gray-500">Previsibilidade comercial para conduzir o resultado do dia.</p>
+          <p className="mt-1 text-sm text-muted-foreground">Previsibilidade comercial para conduzir o resultado do dia.</p>
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
           <label className="relative">
             <Building2
               size={14}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             />
             <select
               aria-label="Unidade"
@@ -373,7 +373,7 @@ function ManagerHeader({
             </select>
           </label>
 
-          <span className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-3 text-sm text-gray-600">
+          <span className="inline-flex h-10 items-center gap-2 rounded-xl border border-gray-200 px-3 text-sm text-muted-foreground">
             <Calendar size={14} />
             {formatReferenceDate(referenceDate)}
           </span>
@@ -397,7 +397,7 @@ function ManagerHeader({
             onClick={onRefresh}
             disabled={refreshing}
             aria-label="Atualizar Dashboard"
-            className="grid h-10 w-10 place-items-center rounded-xl border border-gray-200 text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+            className="grid h-10 w-10 place-items-center rounded-xl border border-gray-200 text-muted-foreground hover:bg-gray-50 disabled:opacity-50"
           >
             <RefreshCw size={16} className={refreshing ? 'animate-spin' : ''} />
           </button>
@@ -431,7 +431,7 @@ function MetricCard({
         <span className={`grid h-9 w-9 place-items-center rounded-xl ${toneClass}`}>
           <Icon size={17} />
         </span>
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</p>
       </div>
       {children}
     </article>
@@ -441,21 +441,21 @@ function MetricCard({
 function MetricValue({ value, suffix }: { value: string; suffix: string }) {
   return (
     <p>
-      <strong className="text-3xl text-gray-800">{value}</strong>{' '}
-      <span className="text-sm font-medium text-gray-600">{suffix}</span>
+      <strong className="text-3xl text-foreground">{value}</strong>{' '}
+      <span className="text-sm font-medium text-muted-foreground">{suffix}</span>
     </p>
   )
 }
 
 function UnavailableValue({ text }: { text: string }) {
-  return <div className="rounded-xl bg-gray-50 p-3 text-sm font-medium text-gray-500">{text}</div>
+  return <div className="rounded-xl bg-gray-50 p-3 text-sm font-medium text-muted-foreground">{text}</div>
 }
 
 function ReadingValue({ label, value }: { label: string; value: string }) {
   return (
     <div>
-      <p className="text-xs uppercase tracking-wide text-gray-600">{label}</p>
-      <p className="mt-1 text-lg font-bold text-gray-800">{value}</p>
+      <p className="text-xs uppercase tracking-wide text-muted-foreground">{label}</p>
+      <p className="mt-1 text-lg font-bold text-foreground">{value}</p>
     </div>
   )
 }
@@ -476,7 +476,7 @@ function TeamFocus({
           <Users size={18} className="text-emerald-600" />
           <div>
             <h2 className="font-semibold">Equipe em foco</h2>
-            <p className="text-xs text-gray-600">Agenda confirmada, projeção e ritmo por vendedor.</p>
+            <p className="text-xs text-muted-foreground">Agenda confirmada, projeção e ritmo por vendedor.</p>
           </div>
         </div>
         <button
@@ -495,7 +495,7 @@ function TeamFocus({
               {['Vendedor', 'Agend. hoje', 'Projeção de vendas', 'Realizado no mês', 'Próxima faixa', 'Faltam carros', 'Situação'].map(label => (
                 <th
                   key={label}
-                  className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500"
+                  className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                 >
                   {label}
                 </th>
@@ -505,7 +505,7 @@ function TeamFocus({
           <tbody className="divide-y divide-gray-50">
             {team.length === 0 ? (
               <tr>
-                <td colSpan={7} className="px-4 py-8 text-center text-gray-600">
+                <td colSpan={7} className="px-4 py-8 text-center text-muted-foreground">
                   Nenhum vendedor vinculado a este gerente.
                 </td>
               </tr>
@@ -515,12 +515,12 @@ function TeamFocus({
                 onClick={onSellerClick}
                 className="cursor-pointer hover:bg-gray-50"
               >
-                <td className="px-4 py-3 font-medium text-gray-800">{item.sellerName}</td>
+                <td className="px-4 py-3 font-medium text-foreground">{item.sellerName}</td>
                 <td className="px-4 py-3">{item.appointmentsToday}</td>
                 <td className="px-4 py-3">{formatSales(item.salesForecastToday)}</td>
                 <td className="px-4 py-3">{item.salesThisMonth}</td>
-                <td className="px-4 py-3 text-gray-600">Sem regra configurada</td>
-                <td className="px-4 py-3 text-gray-600">—</td>
+                <td className="px-4 py-3 text-muted-foreground">Sem regra configurada</td>
+                <td className="px-4 py-3 text-muted-foreground">—</td>
                 <td className="px-4 py-3">
                   <span className={`rounded-lg px-2 py-1 text-xs font-medium ${item.financialStatus.className}`}>
                     {item.financialStatus.label}
@@ -544,7 +544,7 @@ function FinancialRadar({ team }: { team: ManagerTeamFocusItem[] }) {
         <DollarSign size={18} className="text-emerald-600" />
         <div>
           <h2 className="font-semibold">Radar Financeiro da Equipe</h2>
-          <p className="text-xs text-gray-600">Motor financeiro compartilhado com o Vendedor.</p>
+          <p className="text-xs text-muted-foreground">Motor financeiro compartilhado com o Vendedor.</p>
         </div>
       </div>
       <div className="grid grid-cols-3 gap-3">
@@ -552,7 +552,7 @@ function FinancialRadar({ team }: { team: ManagerTeamFocusItem[] }) {
         <RadarItem value="—" label="premiação projetada" />
         <RadarItem value="—" label="podem subir de faixa" />
       </div>
-      <p className="mt-4 rounded-xl bg-gray-50 p-3 text-xs text-gray-500">
+      <p className="mt-4 rounded-xl bg-gray-50 p-3 text-xs text-muted-foreground">
         Sem regra financeira configurada. Nenhum valor foi inventado.
       </p>
     </article>
@@ -563,7 +563,7 @@ function RadarItem({ value, label }: { value: string | number; label: string }) 
   return (
     <div className="text-center">
       <p className="text-xl font-bold text-emerald-700">{value}</p>
-      <p className="mt-1 text-caption leading-4 text-gray-600">{label}</p>
+      <p className="mt-1 text-caption leading-4 text-muted-foreground">{label}</p>
     </div>
   )
 }
@@ -584,13 +584,13 @@ function AppointmentsChart({
     <article className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
       <div className="mb-4">
         <h2 className="font-semibold">Agendamentos por Vendedor</h2>
-        <p className="text-xs text-gray-600">
+        <p className="text-xs text-muted-foreground">
           Somatório conciliado: {data.reduce((sum, item) => sum + item.appointments, 0)} confirmados.
         </p>
       </div>
 
       {data.length === 0 ? (
-        <div className="grid h-56 place-items-center rounded-xl bg-gray-50 text-sm text-gray-500">
+        <div className="grid h-56 place-items-center rounded-xl bg-gray-50 text-sm text-muted-foreground">
           Nenhum agendamento confirmado válido hoje.
         </div>
       ) : (
@@ -652,8 +652,8 @@ function ManagerHomeState({
     <div className="grid min-h-[60vh] place-items-center bg-gray-50 p-6">
       <div className="max-w-lg rounded-2xl border border-gray-100 bg-white p-8 text-center shadow-sm">
         <CheckCircle2 className="mx-auto mb-4 text-emerald-600" size={36} />
-        <h1 className="text-xl font-bold text-gray-800">{title}</h1>
-        <p className="mt-2 text-sm leading-6 text-gray-500">{description}</p>
+        <h1 className="text-xl font-bold text-foreground">{title}</h1>
+        <p className="mt-2 text-sm leading-6 text-muted-foreground">{description}</p>
         {action ? <div className="mt-5">{action}</div> : null}
       </div>
     </div>

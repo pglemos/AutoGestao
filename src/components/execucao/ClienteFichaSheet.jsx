@@ -9,7 +9,7 @@ const statusColors = {
   "Aguardando Cliente": "bg-amber-50 text-amber-700",
   "Sem Resposta": "bg-red-50 text-red-700",
   "Vendido": "bg-green-50 text-green-700",
-  "Perdido": "bg-slate-100 text-slate-500",
+  "Perdido": "bg-slate-100 text-muted-foreground",
 };
 
 const saleStatusColors = {
@@ -22,7 +22,7 @@ function InfoRow({ label, value }) {
   if (!value) return null;
   return (
     <div className="flex flex-col gap-0.5">
-      <span className="text-caption text-slate-400 font-semibold uppercase tracking-wide">{label}</span>
+      <span className="text-caption text-muted-foreground font-semibold uppercase tracking-wide">{label}</span>
       <span className="text-body-sm text-[#0F172A] font-medium">{value}</span>
     </div>
   );
@@ -67,8 +67,8 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
 
         {notFound && (
           <div className="mt-10 text-center space-y-3">
-            <User className="w-10 h-10 text-slate-300 mx-auto" />
-            <p className="text-[14px] font-bold text-slate-500">Cliente não encontrado na Carteira de Clientes.</p>
+            <User className="w-10 h-10 text-text-disabled mx-auto" />
+            <p className="text-[14px] font-bold text-muted-foreground">Cliente não encontrado na Carteira de Clientes.</p>
             <button onClick={onClose}
               className="text-[12px] font-bold text-[#005BFF] hover:underline">
               Voltar
@@ -85,10 +85,10 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
               </div>
               <div>
                 <h3 className="text-h5 font-bold text-[#0F172A]">{cliente.name}</h3>
-                <p className="text-[12px] text-slate-400">{cliente.channel} · {cliente.status}</p>
+                <p className="text-[12px] text-muted-foreground">{cliente.channel} · {cliente.status}</p>
               </div>
               {cliente.status && (
-                <span className={`ml-auto text-caption font-bold px-2.5 py-1 rounded-full ${statusColors[cliente.status] || "bg-slate-100 text-slate-500"}`}>
+                <span className={`ml-auto text-caption font-bold px-2.5 py-1 rounded-full ${statusColors[cliente.status] || "bg-slate-100 text-muted-foreground"}`}>
                   {cliente.status}
                 </span>
               )}
@@ -104,7 +104,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
               )}
               {tel && (
                 <a href={`tel:${tel}`}
-                  className="flex items-center gap-1.5 text-[12px] font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
+                  className="flex items-center gap-1.5 text-[12px] font-bold text-muted-foreground border border-slate-200 hover:bg-slate-50 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
                   <Phone className="w-4 h-4" /> Ligar
                 </a>
               )}
@@ -112,7 +112,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
 
             {/* Dados do cliente */}
             <div className="bg-slate-50 rounded-2xl p-4 space-y-4">
-              <p className="text-caption font-bold text-slate-400 uppercase tracking-wider">Informações</p>
+              <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider">Informações</p>
               <div className="grid grid-cols-2 gap-4">
                 <InfoRow label="Telefone" value={cliente.phone} />
                 <InfoRow label="Canal" value={cliente.channel} />
@@ -131,7 +131,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
               )}
               {cliente.notes && (
                 <div className="flex flex-col gap-0.5">
-                  <span className="text-caption text-slate-400 font-semibold uppercase tracking-wide">Observações</span>
+                  <span className="text-caption text-muted-foreground font-semibold uppercase tracking-wide">Observações</span>
                   <p className="text-body-sm text-[#0F172A]">{cliente.notes}</p>
                 </div>
               )}
@@ -141,7 +141,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
             </div>
 
             {/* Datas */}
-            <div className="text-caption text-slate-400 space-y-1">
+            <div className="text-caption text-muted-foreground space-y-1">
               {cliente.created_date && (
                 <p>Cadastrado em {moment(cliente.created_date).format("DD/MM/YYYY")}</p>
               )}

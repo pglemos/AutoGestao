@@ -68,7 +68,7 @@ const EXPECTED_PADDING_TOP = 24
  * por par de cor em vez de tela a tela:
  *   - `label` e `button-name`, as duas únicas violações `critical`. Não resta
  *     nenhuma crítica.
- *   - `text-slate-400`/`300` em texto pequeno, que davam 4.47:1 sobre branco.
+ *   - `text-muted-foreground`/`300` em texto pequeno, que davam 4.47:1 sobre branco.
  *   - `--mx-neutral-500`, corrigido de 45% para 42% no primitives: era a origem
  *     de todo `text-secondary`/`muted-foreground` reprovado sobre cinza-claro.
  *   Efeito medido: /meu-funil 21 → 2, /funil-vendas 15 → 7, /terminal-mx 11 → 8.

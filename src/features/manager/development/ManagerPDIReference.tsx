@@ -31,7 +31,7 @@ function isActionDone(status?: string | null) {
 }
 
 function pdiStatus(pdi: PDISessionSummary | null, today: string): DevelopmentPdiRow['status'] {
-  if (!pdi) return { key: 'none', label: 'Sem PDI', rank: 4, className: 'bg-gray-100 text-gray-600' }
+  if (!pdi) return { key: 'none', label: 'Sem PDI', rank: 4, className: 'bg-gray-100 text-muted-foreground' }
   if (isCompleted(pdi.status)) return { key: 'completed', label: 'Concluído', rank: 3, className: 'bg-emerald-100 text-emerald-700' }
   if (pdi.due_date && pdi.due_date < today) return { key: 'overdue', label: 'Em atraso', rank: 1, className: 'bg-red-100 text-red-700' }
   return { key: 'active', label: 'PDI ativo', rank: 2, className: 'bg-blue-100 text-blue-700' }
@@ -80,7 +80,7 @@ export default function ManagerPDIReference() {
         <MxSectionCard>
           <div className="p-5">
             {myPdi ? (
-              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"><div><Typography variant="h3" className="text-lg font-semibold text-gray-800">Seu plano de desenvolvimento</Typography><Typography variant="p" className="mt-1 text-sm text-gray-500">Acompanhe metas, competências e ações do seu PDI atual.</Typography></div><Button onClick={() => navigate(`/pdi/${myPdi.id}/print`)}>Abrir meu PDI</Button></div>
+              <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between"><div><Typography variant="h3" className="text-lg font-semibold text-foreground">Seu plano de desenvolvimento</Typography><Typography variant="p" className="mt-1 text-sm text-muted-foreground">Acompanhe metas, competências e ações do seu PDI atual.</Typography></div><Button onClick={() => navigate(`/pdi/${myPdi.id}/print`)}>Abrir meu PDI</Button></div>
             ) : <MxStatusBanner tone="info">Nenhum PDI foi vinculado ao seu perfil.</MxStatusBanner>}
           </div>
         </MxSectionCard>

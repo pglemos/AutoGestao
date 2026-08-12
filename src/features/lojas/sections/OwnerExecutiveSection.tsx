@@ -140,7 +140,7 @@ export function OwnerExecutiveSection({
                   </div>
                   <ArrowRight
                     size={18}
-                    className="text-gray-500 transition-transform group-hover:translate-x-1 group-hover:text-emerald-600"
+                    className="text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-emerald-600"
                     aria-hidden="true"
                   />
                 </div>

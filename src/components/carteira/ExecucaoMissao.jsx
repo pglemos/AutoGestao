@@ -210,19 +210,19 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
         <div className="bg-white border border-slate-100 rounded-2xl p-8 text-center space-y-4">
           <span className="text-5xl">🎯</span>
           <h2 className="text-xl font-black text-[#031B3D]">Envio concluído!</h2>
-          <p className="text-sm text-slate-400">A missão <strong>{missao.tipo_missao}</strong> está aguardando respostas.</p>
+          <p className="text-sm text-muted-foreground">A missão <strong>{missao.tipo_missao}</strong> está aguardando respostas.</p>
           <div className="grid grid-cols-3 gap-4 mt-4">
             <div className="bg-slate-50 rounded-xl p-3">
               <p className="text-2xl font-black text-[#031B3D]">{total}</p>
-              <p className="text-xs text-slate-400">Total</p>
+              <p className="text-xs text-muted-foreground">Total</p>
             </div>
             <div className="bg-blue-50 rounded-xl p-3">
               <p className="text-2xl font-black text-[#005BFF]">{enviados}</p>
-              <p className="text-xs text-slate-400">Enviadas</p>
+              <p className="text-xs text-muted-foreground">Enviadas</p>
             </div>
             <div className="bg-slate-50 rounded-xl p-3">
-              <p className="text-2xl font-black text-slate-500">{pulados}</p>
-              <p className="text-xs text-slate-400">Pulados</p>
+              <p className="text-2xl font-black text-muted-foreground">{pulados}</p>
+              <p className="text-xs text-muted-foreground">Pulados</p>
             </div>
           </div>
           <div className="bg-amber-50 border border-amber-100 rounded-xl p-3 mt-2">
@@ -244,7 +244,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           {erro}
         </div>
       )}
-      <div className="flex items-center gap-1.5 text-xs text-slate-400">
+      <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
         <button onClick={handleVoltar} className="hover:text-[#005BFF] transition-colors">Carteira de Clientes</button>
         <ChevronRight className="w-3 h-3" />
         <span>Plano de Ataque</span>
@@ -255,7 +255,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
       <div className="bg-white border border-slate-100 rounded-2xl p-5 space-y-3">
         <div className="flex items-start justify-between">
           <div>
-            <p className="text-xs font-black text-slate-400 uppercase tracking-wide">Missão</p>
+            <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Missão</p>
             <p className="text-base font-black text-[#031B3D]">{missao.tipo_missao}</p>
           </div>
           <span className="text-xs bg-amber-50 text-amber-600 font-bold px-2.5 py-1 rounded-full border border-amber-100">Em execução</span>
@@ -263,19 +263,19 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
         <div className="grid grid-cols-3 gap-3">
           <div className="text-center">
             <p className="text-xl font-black text-[#031B3D]">{total}</p>
-            <p className="text-xs text-slate-400">Total</p>
+            <p className="text-xs text-muted-foreground">Total</p>
           </div>
           <div className="text-center">
             <p className="text-xl font-black text-[#005BFF]">{enviados}</p>
-            <p className="text-xs text-slate-400">Enviadas</p>
+            <p className="text-xs text-muted-foreground">Enviadas</p>
           </div>
           <div className="text-center">
-            <p className="text-xl font-black text-slate-400">{Math.max(total - enviados - pulados, 0)}</p>
-            <p className="text-xs text-slate-400">Pendentes</p>
+            <p className="text-xl font-black text-muted-foreground">{Math.max(total - enviados - pulados, 0)}</p>
+            <p className="text-xs text-muted-foreground">Pendentes</p>
           </div>
         </div>
         <div>
-          <div className="flex justify-between text-xs text-slate-400 mb-1">
+          <div className="flex justify-between text-xs text-muted-foreground mb-1">
             <span>Progresso</span>
             <span>{progresso}%</span>
           </div>
@@ -288,7 +288,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
       {clienteAtual && etapa === "enviando" && (
         <div className="bg-white border border-slate-100 rounded-2xl p-5 space-y-4">
           <div className="flex items-center justify-between">
-            <p className="text-xs font-black text-slate-400 uppercase tracking-wide">Cliente {indice + 1} de {total}</p>
+            <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Cliente {indice + 1} de {total}</p>
           </div>
           <div className="flex items-center gap-3">
             <div className="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center text-base font-black text-[#005BFF]">
@@ -296,15 +296,15 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             </div>
             <div>
               <p className="text-base font-black text-[#031B3D]">{clienteAtual.nome}</p>
-              <p className="text-sm text-slate-400">{clienteAtual.whatsapp} · {clienteAtual.veiculo_interesse || "Sem veículo"}</p>
-              <p className="text-xs text-slate-400 mt-0.5">{clienteAtual.momento}</p>
+              <p className="text-sm text-muted-foreground">{clienteAtual.whatsapp} · {clienteAtual.veiculo_interesse || "Sem veículo"}</p>
+              <p className="text-xs text-muted-foreground mt-0.5">{clienteAtual.momento}</p>
             </div>
           </div>
 
           <div>
-            <p className="text-xs font-semibold text-slate-400 uppercase tracking-wide mb-1">Script sugerido</p>
+            <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1">Script sugerido</p>
             <textarea value={scriptEditado || scriptPreenchido} onChange={e => setScriptEditado(e.target.value)} rows={6}
-              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-slate-700 resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]" />
+              className="w-full rounded-xl border border-slate-200 bg-slate-50 px-3 py-2.5 text-sm text-foreground resize-none focus:outline-none focus:ring-1 focus:ring-[#005BFF]" />
           </div>
 
           <div className="flex gap-2">
@@ -322,7 +322,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           </div>
 
           <div className="flex gap-2">
-            <Button variant="outline" onClick={pularCliente} disabled={persistindo} className="rounded-xl gap-1.5 text-sm text-slate-500">
+            <Button variant="outline" onClick={pularCliente} disabled={persistindo} className="rounded-xl gap-1.5 text-sm text-muted-foreground">
               <SkipForward className="w-4 h-4" /> Pular
             </Button>
             <Button onClick={marcarEnviado} disabled={persistindo} className="flex-1 rounded-xl bg-blue-50 text-[#005BFF] hover:bg-blue-100 font-bold gap-1.5 text-sm border border-blue-100">
@@ -335,14 +335,14 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
       {clienteAtual && etapa === "resultado" && (
         <div className="bg-white border border-slate-100 rounded-2xl p-5 space-y-4">
           <div>
-            <p className="text-xs font-black text-slate-400 uppercase tracking-wide">Registrar resultado</p>
+            <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Registrar resultado</p>
             <p className="text-sm font-semibold text-[#031B3D] mt-0.5">{clienteAtual.nome}</p>
           </div>
-          <p className="text-sm text-slate-500">O que aconteceu nesse contato?</p>
+          <p className="text-sm text-muted-foreground">O que aconteceu nesse contato?</p>
           <div className="grid grid-cols-1 gap-1.5">
             {RESULTADOS.map(r => (
               <button key={r} onClick={() => setResultado(r)}
-                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-blue-50 text-[#005BFF] font-semibold" : "border-slate-100 text-slate-600 hover:bg-slate-50"}`}>
+                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-blue-50 text-[#005BFF] font-semibold" : "border-slate-100 text-muted-foreground hover:bg-slate-50"}`}>
                 {r}
               </button>
             ))}

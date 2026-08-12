@@ -22,17 +22,17 @@ export function DevelopmentPdiTable({ rows, onOpenOrStart }: { rows: Development
   return (
     <MxTableSurface>
       <table className="w-full min-w-[1080px] text-sm">
-        <thead className="border-b border-gray-100 bg-gray-50"><tr>{['Vendedor', 'Status', 'Última avaliação', 'Próxima revisão', 'Competências', 'Progresso', 'Ações vencidas', ''].map((label) => <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-gray-500">{label}</th>)}</tr></thead>
+        <thead className="border-b border-gray-100 bg-gray-50"><tr>{['Vendedor', 'Status', 'Última avaliação', 'Próxima revisão', 'Competências', 'Progresso', 'Ações vencidas', ''].map((label) => <th key={label} className="px-4 py-3 text-left text-xs font-semibold uppercase tracking-wide text-muted-foreground">{label}</th>)}</tr></thead>
         <tbody className="divide-y divide-gray-100">
           {rows.map((row) => (
             <tr key={row.seller.id} className="hover:bg-gray-50">
-              <td className="px-4 py-3 font-medium text-gray-800">{row.seller.name}</td>
+              <td className="px-4 py-3 font-medium text-foreground">{row.seller.name}</td>
               <td className="px-4 py-3"><span className={`rounded-lg px-2 py-1 text-xs font-medium ${row.status.className}`}>{row.status.label}</span></td>
-              <td className="px-4 py-3 text-gray-600">{formatDate(row.pdi?.data_realizacao || row.pdi?.created_at)}</td>
-              <td className="px-4 py-3 text-gray-600">{formatDate(row.pdi?.due_date)}</td>
-              <td className="max-w-60 px-4 py-3 text-xs text-gray-600">{(row.pdi?.top_5_gaps ?? []).map((gap: PDIAvaliacao360) => gap.competencia).slice(0, 3).join(', ') || '—'}</td>
+              <td className="px-4 py-3 text-muted-foreground">{formatDate(row.pdi?.data_realizacao || row.pdi?.created_at)}</td>
+              <td className="px-4 py-3 text-muted-foreground">{formatDate(row.pdi?.due_date)}</td>
+              <td className="max-w-60 px-4 py-3 text-xs text-muted-foreground">{(row.pdi?.top_5_gaps ?? []).map((gap: PDIAvaliacao360) => gap.competencia).slice(0, 3).join(', ') || '—'}</td>
               <td className="min-w-40 px-4 py-3">{row.pdi ? <MxProgress value={row.progress} /> : '—'}</td>
-              <td className="px-4 py-3"><span className={row.overdueActions > 0 ? 'font-medium text-red-600' : 'text-gray-400'}>{row.overdueActions}</span></td>
+              <td className="px-4 py-3"><span className={row.overdueActions > 0 ? 'font-medium text-red-600' : 'text-muted-foreground'}>{row.overdueActions}</span></td>
               <td className="px-4 py-3"><Button variant="ghost" size="sm" onClick={() => onOpenOrStart(row)}>{row.pdi ? 'Abrir' : 'Iniciar'}<ChevronRight size={14} className="ml-1" /></Button></td>
             </tr>
           ))}

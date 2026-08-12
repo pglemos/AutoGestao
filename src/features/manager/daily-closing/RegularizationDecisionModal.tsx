@@ -55,7 +55,7 @@ export function RegularizationDecisionModal({
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
+            className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-gray-50 disabled:cursor-not-allowed disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -79,7 +79,7 @@ export function RegularizationDecisionModal({
       }
     >
       <div className="space-y-4">
-        <p className="text-sm leading-6 text-gray-600">
+        <p className="text-sm leading-6 text-muted-foreground">
           {isApproval
             ? "Confirme a aprovação da regularização deste fechamento. Após aprovada, ela passará a contar nos indicadores oficiais conforme as regras da loja."
             : "Informe o motivo da recusa. A solicitação continuará registrada na auditoria e não contará nos indicadores oficiais."}
@@ -88,7 +88,7 @@ export function RegularizationDecisionModal({
         <div>
           <label
             htmlFor="regularization-decision-comment"
-            className="mb-1 block text-xs font-medium text-gray-600"
+            className="mb-1 block text-xs font-medium text-muted-foreground"
           >
             {isApproval ? "Comentário (opcional)" : "Motivo da recusa"}
           </label>
@@ -102,7 +102,7 @@ export function RegularizationDecisionModal({
                 ? "Adicione um comentário sobre a aprovação..."
                 : "Descreva por que a regularização foi recusada..."
             }
-            className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none transition-shadow focus:ring-2 focus:ring-emerald-500"
+            className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-foreground outline-none transition-shadow focus:ring-2 focus:ring-emerald-500"
           />
         </div>
 
@@ -125,7 +125,7 @@ export function RegularizationDecisionModal({
             >
               {confirmed && <Check size={12} />}
             </span>
-            <span className="text-sm text-gray-600">
+            <span className="text-sm text-muted-foreground">
               Confirmo a aprovação da regularização.
             </span>
           </label>

@@ -29,7 +29,7 @@ export default function OrganogramaPage() {
         subtitle="ESTRUTURA HIERÁRQUICA DA EMPRESA E A TRILHA DE EVOLUÇÃO POR CARGO"
         actions={
           <label className="flex items-center gap-mx-sm">
-            <span className="text-xs font-bold uppercase tracking-widest text-gray-500">Loja</span>
+            <span className="text-xs font-bold uppercase tracking-widest text-muted-foreground">Loja</span>
             <select
               value={lojaSelecionada}
               onChange={e => setLojaId(e.target.value)}

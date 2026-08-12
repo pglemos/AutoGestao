@@ -83,7 +83,7 @@ export function SellerPerformancePage() {
           <div className="relative">
             <Search
               size={17}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             />
             <Input
               className="pl-9"
@@ -98,7 +98,7 @@ export function SellerPerformancePage() {
           <div className="relative">
             <Calendar
               size={16}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             />
             <Select
               className="pl-9"
@@ -137,7 +137,7 @@ export function SellerPerformancePage() {
           <div className="relative">
             <SlidersHorizontal
               size={16}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             />
             <Select
               className="pl-9"
@@ -155,16 +155,16 @@ export function SellerPerformancePage() {
         </MxField>
       </MxToolbar>
 
-      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-100 bg-white p-3.5 shadow-2xs text-xs font-medium text-gray-600">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-xl border border-gray-100 bg-white p-3.5 shadow-2xs text-xs font-medium text-muted-foreground">
         <div className="flex items-center gap-2">
           <Filter size={14} className="text-emerald-600" />
           <span>
-            Período selecionado: <strong className="text-gray-900">{state.dateRange.label}</strong> (
+            Período selecionado: <strong className="text-foreground">{state.dateRange.label}</strong> (
             {formatDateBR(state.dateRange.startDate)} até {formatDateBR(state.dateRange.endDate)})
           </span>
         </div>
-        <div className="flex items-center gap-4 text-gray-500">
-          <span>Vendedores na lista: <strong className="text-gray-900">{state.rows.length}</strong></span>
+        <div className="flex items-center gap-4 text-muted-foreground">
+          <span>Vendedores na lista: <strong className="text-foreground">{state.rows.length}</strong></span>
           <span>Vendas no período: <strong className="text-emerald-700">{totalSalesInPeriod}</strong></span>
         </div>
       </div>

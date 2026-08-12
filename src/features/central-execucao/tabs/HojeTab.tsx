@@ -71,15 +71,15 @@ export function HojeTab({
 
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div>
-          <h2 className="text-[14px] font-bold text-gray-800">O que você não pode deixar de fazer hoje</h2>
-          <p className="text-[12px] text-slate-400">Atividades previstas para hoje. Execute e registre o resultado.</p>
+          <h2 className="text-[14px] font-bold text-foreground">O que você não pode deixar de fazer hoje</h2>
+          <p className="text-[12px] text-muted-foreground">Atividades previstas para hoje. Execute e registre o resultado.</p>
         </div>
         <div className="flex items-center gap-2">
           <select
             aria-label="Ordenar atividades"
             value={order}
             onChange={event => setOrder(event.target.value as CentralOrder)}
-            className="h-8 w-[148px] rounded-xl border border-slate-200 bg-white px-3 text-[12px] font-semibold text-slate-600 outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15"
+            className="h-8 w-[148px] rounded-xl border border-slate-200 bg-white px-3 text-[12px] font-semibold text-muted-foreground outline-none focus:border-status-info focus:ring-2 focus:ring-status-info/15"
           >
             <option value="prioridade">Prioridade</option>
             <option value="horario">Horário</option>

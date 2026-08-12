@@ -104,7 +104,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
 
             <Card className="p-mx-md border-none bg-white flex flex-col md:flex-row items-stretch md:items-center gap-mx-md">
                 <div className="relative flex-1">
-                    <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
+                    <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <Input
                         id="store-search"
                         name="store-search"
@@ -140,7 +140,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                     <div className="p-mx-xl text-center"><RefreshCw size={24} className="animate-spin mx-auto text-emerald-600" /></div>
                 ) : filtered.length === 0 ? (
                     <div className="p-mx-xl text-center space-y-mx-sm">
-                        <Building2 size={40} className="mx-auto text-gray-500 opacity-30" />
+                        <Building2 size={40} className="mx-auto text-muted-foreground opacity-30" />
                         <Typography variant="caption" tone="muted" className="">Nenhuma loja encontrada</Typography>
                     </div>
                 ) : (
@@ -157,9 +157,9 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
                                             <Typography variant="caption" className="tracking-tight truncate">{store.name}</Typography>
                                             <div className="flex items-center gap-mx-md flex-wrap mt-1">
                                                 {store.manager_email && (
-                                                    <span className="text-mx-micro font-bold text-gray-500">{store.manager_email}</span>
+                                                    <span className="text-mx-micro font-bold text-muted-foreground">{store.manager_email}</span>
                                                 )}
-                                                <span className="text-mx-micro font-bold text-gray-500">
+                                                <span className="text-mx-micro font-bold text-muted-foreground">
                                                     {s.sellers} vendedor{s.sellers !== 1 ? 'es' : ''} · {s.disciplinePct}% disciplina
                                                 </span>
                                             </div>
@@ -234,7 +234,7 @@ export function LojasRedeTab({ isReadOnly }: TabContext) {
 function Mini({ icon, label, value, tone }: { icon: React.ReactNode; label: string; value: number; tone?: 'success' | 'brand' | 'error' }) {
     const toneColor = tone === 'success' ? 'text-status-success' :
         tone === 'brand' ? 'text-emerald-600' :
-        tone === 'error' ? 'text-status-error' : 'text-gray-800'
+        tone === 'error' ? 'text-status-error' : 'text-foreground'
     return (
         <Card className="p-mx-md border-none bg-white">
             <div className="flex items-center gap-mx-sm">

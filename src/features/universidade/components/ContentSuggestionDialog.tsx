@@ -70,30 +70,30 @@ export function ContentSuggestionDialog() {
           >
             <header className="flex items-start justify-between gap-4">
               <div>
-                <Typography id="content-suggestion-title" variant="h3" className="text-lg text-slate-900">
+                <Typography id="content-suggestion-title" variant="h3" className="text-lg text-foreground">
                   Sugerir tema de aula
                 </Typography>
                 <Typography variant="caption" tone="muted">
                   A sugestão será enviada para a curadoria do Admin MX.
                 </Typography>
               </div>
-              <button type="button" onClick={close} aria-label="Fechar sugestão" className="rounded-lg p-2 text-slate-400 hover:bg-slate-100 hover:text-slate-700">
+              <button type="button" onClick={close} aria-label="Fechar sugestão" className="rounded-lg p-2 text-muted-foreground hover:bg-slate-100 hover:text-foreground">
                 <X size={18} />
               </button>
             </header>
 
             <div className="mt-5 space-y-4">
-              <label className="block text-xs font-bold uppercase tracking-wide text-slate-600">
+              <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
                 Tema
                 <select
                   value={form.theme}
                   onChange={event => setForm(current => ({ ...current, theme: event.target.value as DevelopmentTheme }))}
-                  className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-slate-800 outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="mt-1 h-11 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm font-medium text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
                 >
                   {DEVELOPMENT_THEMES.map(theme => <option key={theme.key} value={theme.key}>{theme.label}</option>)}
                 </select>
               </label>
-              <label className="block text-xs font-bold uppercase tracking-wide text-slate-600">
+              <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
                 Título da aula
                 <Input
                   value={form.title}
@@ -104,8 +104,8 @@ export function ContentSuggestionDialog() {
                   className="mt-1 h-11 rounded-xl"
                 />
               </label>
-              <label className="block text-xs font-bold uppercase tracking-wide text-slate-600">
-                O que você gostaria de aprender? <span className="font-normal normal-case text-slate-400">(opcional)</span>
+              <label className="block text-xs font-bold uppercase tracking-wide text-muted-foreground">
+                O que você gostaria de aprender? <span className="font-normal normal-case text-muted-foreground">(opcional)</span>
                 <textarea
                   value={form.description}
                   onChange={event => setForm(current => ({ ...current, description: event.target.value }))}

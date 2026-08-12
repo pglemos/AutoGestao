@@ -115,7 +115,7 @@ export default function ConsultorTreinamentos() {
                                             <Typography variant="caption" tone="muted" className="ml-2">Ementa / Descrição</Typography>
                                             <textarea 
                                                 value={form.description} onChange={e => setForm(p => ({ ...p, description: e.target.value }))}
-                                                className="w-full bg-gray-50 border border-gray-100 rounded-xl p-mx-md text-sm font-bold text-gray-800 placeholder:text-gray-500 focus:outline-none focus:border-brand-primary focus:ring-8 focus:ring-brand-primary/5 transition-all resize-none shadow-none h-mx-xl"
+                                                className="w-full bg-gray-50 border border-gray-100 rounded-xl p-mx-md text-sm font-bold text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-brand-primary focus:ring-8 focus:ring-brand-primary/5 transition-all resize-none shadow-none h-mx-xl"
                                                 placeholder="Descreva detalhadamente os objetivos desta aula..."
                                             />
                                         </div>
@@ -129,26 +129,26 @@ export default function ConsultorTreinamentos() {
                                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
                                             <div className="space-y-mx-sm">
                                                 <Typography variant="caption" tone="muted" className="ml-2">Pilar de Vendas</Typography>
-                                                <select aria-label="Pilar de Vendas" value={form.type} onChange={e => setForm(p => ({ ...p, type: e.target.value }))} className="w-full h-mx-14 bg-gray-50 border border-gray-100 rounded-xl px-6 text-sm font-bold text-gray-800 focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
+                                                <select aria-label="Pilar de Vendas" value={form.type} onChange={e => setForm(p => ({ ...p, type: e.target.value }))} className="w-full h-mx-14 bg-gray-50 border border-gray-100 rounded-xl px-6 text-sm font-bold text-foreground focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
                                                     {types.map(t => <option key={t} value={t}>{t.toUpperCase()}</option>)}
                                                 </select>
                                             </div>
                                             <div className="space-y-mx-sm">
                                                 <Typography variant="caption" tone="muted" className="ml-2">Público Alvo</Typography>
-                                                <select aria-label="Público Alvo" value={form.target_audience} onChange={e => setForm(p => ({ ...p, target_audience: e.target.value }))} className="w-full h-mx-14 bg-gray-50 border border-gray-100 rounded-xl px-6 text-sm font-bold text-gray-800 focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
+                                                <select aria-label="Público Alvo" value={form.target_audience} onChange={e => setForm(p => ({ ...p, target_audience: e.target.value }))} className="w-full h-mx-14 bg-gray-50 border border-gray-100 rounded-xl px-6 text-sm font-bold text-foreground focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
                                                     {audiences.map(a => <option key={a} value={a}>{a.toUpperCase()}</option>)}
                                                 </select>
                                             </div>
                                             <div className="space-y-mx-sm">
                                                 <Typography variant="caption" tone="muted" className="ml-2">Origem / Curadoria</Typography>
-                                                <select aria-label="Origem / Curadoria" value={form.source_kind} onChange={e => setForm(p => ({ ...p, source_kind: e.target.value }))} className="w-full h-mx-14 bg-gray-50 border border-gray-100 rounded-xl px-6 text-sm font-bold text-gray-800 focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
+                                                <select aria-label="Origem / Curadoria" value={form.source_kind} onChange={e => setForm(p => ({ ...p, source_kind: e.target.value }))} className="w-full h-mx-14 bg-gray-50 border border-gray-100 rounded-xl px-6 text-sm font-bold text-foreground focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
                                                     {sources.map(source => <option key={source} value={source}>{source.toUpperCase()}</option>)}
                                                 </select>
                                             </div>
                                             {form.source_kind === 'loja_institucional' && (
                                                 <div className="space-y-mx-sm">
                                                     <Typography variant="caption" tone="muted" className="ml-2">Loja vinculada</Typography>
-                                                    <select aria-label="Loja vinculada" value={form.store_id} onChange={e => setForm(p => ({ ...p, store_id: e.target.value, type: 'institucional' }))} className="w-full h-mx-14 bg-gray-50 border border-gray-100 rounded-xl px-6 text-sm font-bold text-gray-800 focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
+                                                    <select aria-label="Loja vinculada" value={form.store_id} onChange={e => setForm(p => ({ ...p, store_id: e.target.value, type: 'institucional' }))} className="w-full h-mx-14 bg-gray-50 border border-gray-100 rounded-xl px-6 text-sm font-bold text-foreground focus:border-brand-primary transition-all appearance-none cursor-pointer shadow-none">
                                                         <option value="">SELECIONE A LOJA</option>
                                                         {lojas.map(loja => <option key={loja.id} value={loja.id}>{loja.name.toUpperCase()}</option>)}
                                                     </select>
@@ -208,7 +208,7 @@ export default function ConsultorTreinamentos() {
                             <div className="absolute top-mx-0 right-mx-0 w-mx-4xl h-mx-4xl bg-emerald-600/5 rounded-mx-full blur-mx-huge -mr-16 -mt-16 opacity-0 group-hover:opacity-100 transition-opacity" />
                             
                             <div className="flex items-start justify-between mb-8 border-b border-gray-100 pb-6 relative z-10">
-                                <div className={cn("w-mx-xl h-mx-xl rounded-xl flex items-center justify-center transition-all shadow-none transform group-hover:rotate-6", t.watched ? "bg-status-success-surface text-status-success" : "bg-gray-50 text-gray-500 group-hover:bg-emerald-600 group-hover:text-white")}>
+                                <div className={cn("w-mx-xl h-mx-xl rounded-xl flex items-center justify-center transition-all shadow-none transform group-hover:rotate-6", t.watched ? "bg-status-success-surface text-status-success" : "bg-gray-50 text-muted-foreground group-hover:bg-emerald-600 group-hover:text-white")}>
                                     {t.watched ? <CheckCircle size={20} /> : <Play size={20} className="ml-1" />}
                                 </div>
                                 <div className="flex flex-col items-end gap-mx-xs">
@@ -232,7 +232,7 @@ export default function ConsultorTreinamentos() {
                             <footer className="pt-6 border-t border-gray-100 flex items-center justify-between mt-auto relative z-10">
                                 <div className="flex -space-x-2">
                                     {[1, 2, 3].map(j => (
-                                        <div key={j} className="w-mx-lg h-mx-lg rounded-xl border-2 border-white bg-gray-50 flex items-center justify-center text-gray-500">
+                                        <div key={j} className="w-mx-lg h-mx-lg rounded-xl border-2 border-white bg-gray-50 flex items-center justify-center text-muted-foreground">
                                             <Typography variant="caption" as="span">{String.fromCharCode(64 + j)}</Typography>
                                         </div>
                                     ))}

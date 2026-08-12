@@ -36,14 +36,14 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
     return (
       <div className="flex min-w-0 items-center gap-mx-sm text-mx-tiny">
         <Calendar size={14} className="shrink-0 text-emerald-600" />
-        <span className="flex items-center gap-1 font-bold text-gray-500">
+        <span className="flex items-center gap-1 font-bold text-muted-foreground">
           {personalConnected
             ? <CheckCircle2 size={12} className="text-status-success" />
-            : <AlertCircle size={12} className="text-gray-500" />}
+            : <AlertCircle size={12} className="text-muted-foreground" />}
           Sua agenda
         </span>
         {canViewCentralAgenda && (
-          <span className="flex items-center gap-1 font-bold text-gray-500">
+          <span className="flex items-center gap-1 font-bold text-muted-foreground">
             {centralConnected && centralMeetCohostsAuthorized
               ? <CheckCircle2 size={12} className="text-status-success" />
               : <AlertCircle size={12} className="text-status-warning" />}
@@ -81,10 +81,10 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
           className={`min-w-0 rounded-xl border p-mx-sm ${personalConnected ? 'bg-status-success-surface border-status-success/20' : 'bg-gray-50 border-gray-200'}`}
         >
           <div className="mb-1 flex min-w-0 items-center justify-between gap-mx-xs">
-            <span className="min-w-0 truncate text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Sua agenda</span>
+            <span className="min-w-0 truncate text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Sua agenda</span>
             {personalConnected
               ? <CheckCircle2 size={16} className="shrink-0 text-status-success" />
-              : <AlertCircle size={16} className="shrink-0 text-gray-500" />}
+              : <AlertCircle size={16} className="shrink-0 text-muted-foreground" />}
           </div>
           {personalConnected ? (
             <div className="flex min-w-0 flex-col gap-mx-tiny">
@@ -112,7 +112,7 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
             className={`min-w-0 rounded-xl border p-mx-sm ${centralConnected && centralMeetCohostsAuthorized ? 'bg-mx-green-50 border-mx-green-200' : 'bg-gray-50 border-gray-200'}`}
           >
             <div className="mb-1 flex min-w-0 items-center justify-between gap-mx-xs">
-              <span className="flex min-w-0 items-center gap-mx-xs text-mx-tiny font-bold uppercase tracking-widest text-gray-500">
+              <span className="flex min-w-0 items-center gap-mx-xs text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">
                 <Building2 size={12} className="shrink-0" />
                 <span className="truncate">Agenda Central MX</span>
               </span>
@@ -144,13 +144,13 @@ export function GoogleCalendarStatus({ clientId, compact = false }: Props) {
       )}
 
       {!compact && canViewCentralAgenda && centralConnected && !personalConnected && (
-        <div className="p-mx-sm rounded-xl bg-mx-indigo-50 border border-mx-indigo-100 text-gray-500 text-mx-tiny font-bold leading-relaxed">
+        <div className="p-mx-sm rounded-xl bg-mx-indigo-50 border border-mx-indigo-100 text-muted-foreground text-mx-tiny font-bold leading-relaxed">
           A Agenda Central MX está conectada. Para receber os compromissos na própria conta Google, cada admin MX precisa entrar no sistema com seu usuário e conectar a agenda pessoal.
         </div>
       )}
 
       {!compact && canViewCentralAgenda && centralConnected && !centralMeetCohostsAuthorized && (
-        <div className="p-mx-sm rounded-xl bg-status-warning-surface border border-status-warning/20 text-gray-500 text-mx-tiny font-bold leading-relaxed">
+        <div className="p-mx-sm rounded-xl bg-status-warning-surface border border-status-warning/20 text-muted-foreground text-mx-tiny font-bold leading-relaxed">
           Reconecte a Agenda Central MX para autorizar Daniel, Jose, Mariane e Joao como co-hosts das reunioes Google Meet.
         </div>
       )}

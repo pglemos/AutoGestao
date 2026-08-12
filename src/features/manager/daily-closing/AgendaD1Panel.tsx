@@ -389,14 +389,14 @@ export function AgendaD1Panel({
               <span className="inline-block rounded-[8px] bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700">
                 Agenda D+1 parcial
               </span>
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Atualizada em tempo real até o encerramento da janela de ajuste.
               </p>
             </div>
-            <p className="inline-flex items-center gap-1 text-xs text-gray-500">
+            <p className="inline-flex items-center gap-1 text-xs text-muted-foreground">
               <CalendarClock size={13} />
               Data D+1:{" "}
-              <strong className="text-gray-700">
+              <strong className="text-foreground">
                 {format(parseISO(d1Date), "dd/MM/yyyy")}
               </strong>
             </p>
@@ -407,7 +407,7 @@ export function AgendaD1Panel({
             role="group"
             aria-label="Filtros da Agenda D+1"
           >
-            <div className="flex items-center gap-2 text-xs font-semibold text-gray-600">
+            <div className="flex items-center gap-2 text-xs font-semibold text-muted-foreground">
               <Filter size={14} /> Filtros
             </div>
             <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-5">
@@ -492,7 +492,7 @@ export function AgendaD1Panel({
 
               <div className="relative">
                 <Search
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                   size={14}
                 />
                 <input
@@ -513,7 +513,7 @@ export function AgendaD1Panel({
               </p>
               <button
                 type="button"
-                className="mt-3 rounded-[8px] border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-gray-700 hover:bg-gray-50"
+                className="mt-3 rounded-[8px] border border-gray-200 bg-white px-3 py-1.5 text-xs font-medium text-foreground hover:bg-gray-50"
                 onClick={() => void fetchAgenda()}
               >
                 Tentar novamente
@@ -531,7 +531,7 @@ export function AgendaD1Panel({
             <div className="grid min-h-[220px] place-items-center p-mx-xl text-center">
               <div>
                 <CalendarDays size={42} className="mx-auto text-border-default" />
-                <p className="mt-3 text-sm text-gray-500">
+                <p className="mt-3 text-sm text-muted-foreground">
                   {rows.length === 0
                     ? "Nenhum cliente agendado para D+1."
                     : "Nenhum agendamento corresponde aos filtros."}
@@ -541,7 +541,7 @@ export function AgendaD1Panel({
           ) : (
             <div className="overflow-x-auto rounded-2xl border border-gray-100">
               <table className="w-full text-sm">
-                <thead className="border-b border-gray-100 bg-gray-50 text-xs font-semibold uppercase tracking-wide text-gray-500">
+                <thead className="border-b border-gray-100 bg-gray-50 text-xs font-semibold uppercase tracking-wide text-muted-foreground">
                   <tr>
                     {[
                       "Horário",
@@ -557,7 +557,7 @@ export function AgendaD1Panel({
                     ].map((label) => (
                       <th
                         key={label}
-                        className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide text-gray-500"
+                        className="text-left px-4 py-3 text-xs font-semibold uppercase tracking-wide text-muted-foreground"
                       >
                         {label}
                       </th>
@@ -574,27 +574,27 @@ export function AgendaD1Panel({
                     return (
                       <FragmentRow key={row.id}>
                         <tr className="align-top bg-white transition-colors hover:bg-gray-50">
-                          <td className="whitespace-nowrap px-4 py-3 font-medium text-gray-800">
+                          <td className="whitespace-nowrap px-4 py-3 font-medium text-foreground">
                             {format(parseISO(row.data_hora), "HH:mm")}
                           </td>
-                          <td className="px-4 py-3 text-gray-800">
+                          <td className="px-4 py-3 text-foreground">
                             {row.cliente?.nome || "—"}
                           </td>
-                          <td className="whitespace-nowrap px-4 py-3 text-gray-600">
+                          <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
                             {row.cliente?.telefone || "—"}
                           </td>
-                          <td className="px-4 py-3 text-gray-600">
+                          <td className="px-4 py-3 text-muted-foreground">
                             {row.oportunidade?.veiculo_interesse || "—"}
                           </td>
-                          <td className="px-4 py-3 text-gray-600">
+                          <td className="px-4 py-3 text-muted-foreground">
                             {row.canal ? AGENDA_CANAL_LABEL[row.canal] : "—"}
                           </td>
-                          <td className="px-4 py-3 text-gray-600">
+                          <td className="px-4 py-3 text-muted-foreground">
                             {sellerNameById.get(row.seller_user_id) ||
                               "Vendedor da equipe"}
                           </td>
                           <td className="px-4 py-3">
-                            <span className="rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                            <span className="rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-foreground">
                               {AGENDA_TIPO_LABEL[row.tipo] === "Visita"
                                 ? "Visita Presencial"
                                 : AGENDA_TIPO_LABEL[row.tipo]}
@@ -607,7 +607,7 @@ export function AgendaD1Panel({
                               {managerConfirmationStatus}
                             </span>
                           </td>
-                          <td className="whitespace-nowrap px-4 py-3 text-gray-500">
+                          <td className="whitespace-nowrap px-4 py-3 text-muted-foreground">
                             {lastContact
                               ? format(parseISO(lastContact), "dd/MM HH:mm")
                               : "—"}
@@ -624,7 +624,7 @@ export function AgendaD1Panel({
                               </button>
                               <button
                                 type="button"
-                                className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-gray-600 hover:bg-gray-100"
+                                className="flex items-center gap-1 rounded-lg px-2 py-1 text-xs font-medium text-muted-foreground hover:bg-gray-100"
                                 aria-label={`Ligar para ${row.cliente?.nome || "cliente"}`}
                                 onClick={() => void callPhone(row)}
                               >
@@ -655,7 +655,7 @@ export function AgendaD1Panel({
                                         <button
                                           key={outcome}
                                           type="button"
-                                          className="block w-full px-3 py-2 text-left text-sm text-gray-700 hover:bg-emerald-50 hover:text-emerald-700"
+                                          className="block w-full px-3 py-2 text-left text-sm text-foreground hover:bg-emerald-50 hover:text-emerald-700"
                                           onClick={() => {
                                             setConfirmMenuRowId(null);
                                             if (outcome === "Outro") {
@@ -687,7 +687,7 @@ export function AgendaD1Panel({
             </div>
           )}
 
-          <p className="block text-xs text-gray-500">
+          <p className="block text-xs text-muted-foreground">
             A Carteira de Clientes permanece a base oficial. O gerente não altera
             o agendamento original: apenas confirma com o cliente e registra o
             status gerencial de confirmação.
@@ -729,7 +729,7 @@ export function AgendaD1Panel({
             </div>
             <div>
               <label
-                className="mb-1.5 block text-xs font-medium text-gray-600"
+                className="mb-1.5 block text-xs font-medium text-muted-foreground"
                 htmlFor="agenda-other-status"
               >
                 Status da confirmação
@@ -738,14 +738,14 @@ export function AgendaD1Panel({
                 id="agenda-other-status"
                 value="Outro"
                 disabled
-                className="w-full rounded-[12px] border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700"
+                className="w-full rounded-[12px] border border-gray-200 bg-white px-3 py-2 text-sm text-foreground"
               >
                 <option>Outro</option>
               </select>
             </div>
             <div>
               <label
-                className="mb-1.5 block text-xs font-medium text-gray-600"
+                className="mb-1.5 block text-xs font-medium text-muted-foreground"
                 htmlFor="agenda-other-note"
               >
                 Descreva a situação *
@@ -769,7 +769,7 @@ export function AgendaD1Panel({
               <button
                 type="button"
                 onClick={() => setConfirming(null)}
-                className="rounded-[12px] px-3 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                className="rounded-[12px] px-3 py-2 text-sm text-foreground hover:bg-gray-100"
               >
                 Cancelar
               </button>
@@ -802,8 +802,8 @@ function FragmentRow({ children }: { children: ReactNode }) {
 function ConfirmationInfo({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-[12px] bg-gray-50 p-3">
-      <p className="mb-0.5 text-xs text-gray-500">{label}</p>
-      <p className="font-medium text-gray-800">{value}</p>
+      <p className="mb-0.5 text-xs text-muted-foreground">{label}</p>
+      <p className="font-medium text-foreground">{value}</p>
     </div>
   );
 }
@@ -825,9 +825,9 @@ function confirmationStatusClass(status: string) {
     Pendente: "bg-amber-100 text-amber-700",
     "WhatsApp aberto": "bg-blue-100 text-blue-700",
     Confirmado: "bg-emerald-100 text-emerald-700",
-    "Sem resposta": "bg-gray-200 text-gray-600",
+    "Sem resposta": "bg-gray-200 text-muted-foreground",
     "Solicitou reagendamento": "bg-orange-100 text-orange-700",
     Cancelou: "bg-red-100 text-red-700",
     Outro: "bg-violet-100 text-violet-700",
-  }[status] || "bg-gray-100 text-gray-600";
+  }[status] || "bg-gray-100 text-muted-foreground";
 }

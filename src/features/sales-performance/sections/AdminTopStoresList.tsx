@@ -37,7 +37,7 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
                       ? 'bg-emerald-600 text-white'
                       : i === 2
                         ? 'bg-status-info text-white'
-                        : 'bg-gray-50 text-gray-500',
+                        : 'bg-gray-50 text-muted-foreground',
                 )}
               >
                 {i + 1}

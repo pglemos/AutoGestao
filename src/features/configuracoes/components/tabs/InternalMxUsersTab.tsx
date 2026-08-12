@@ -458,7 +458,7 @@ export function InternalMxUsersTab() {
           <div className="relative">
             <Search
               size={16}
-              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-500"
+              className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
             />
             <Input
               aria-label="Buscar usuários"
@@ -506,7 +506,7 @@ export function InternalMxUsersTab() {
             <MxTableSurface className="rounded-none border-x-0 border-b-0">
               <table className="min-w-[1120px] w-full text-sm">
                 <thead>
-                  <tr className="border-b border-gray-200 bg-gray-50 text-left text-xs uppercase text-gray-500">
+                  <tr className="border-b border-gray-200 bg-gray-50 text-left text-xs uppercase text-muted-foreground">
                     <th className="px-4 py-3">Usuário</th>
                     <th className="px-4 py-3">Papel</th>
                     <th className="px-4 py-3">Loja</th>
@@ -532,7 +532,7 @@ export function InternalMxUsersTab() {
             </MxTableSurface>
 
             <div className="flex flex-col gap-3 border-t border-gray-200 px-5 py-4 sm:flex-row sm:items-center sm:justify-between">
-              <p className="text-sm text-gray-500">
+              <p className="text-sm text-muted-foreground">
                 {totalFiltered} resultado{totalFiltered === 1 ? '' : 's'} · página {page + 1} de {totalPages}
               </p>
               <div className="flex gap-2">
@@ -652,8 +652,8 @@ function UserRow({
   return (
     <tr className="border-b border-gray-100 last:border-0">
       <td className="px-4 py-4">
-        <div className="font-semibold text-gray-800">{user.name}</div>
-        <div className="text-xs text-gray-500">
+        <div className="font-semibold text-foreground">{user.name}</div>
+        <div className="text-xs text-muted-foreground">
           {user.email}{user.phone ? ` · ${user.phone}` : ''}
         </div>
       </td>

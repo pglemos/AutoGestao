@@ -66,17 +66,17 @@ export function RankingPodium({ entries, onSelect }: Props) {
                 'absolute -bottom-3 px-3 py-1 rounded-full text-mx-micro font-bold uppercase tracking-wider shadow-lg border border-white/20 whitespace-nowrap z-20',
                 isFirst
                   ? 'bg-emerald-600 text-white'
-                  : 'bg-gray-50 text-gray-800',
+                  : 'bg-gray-50 text-foreground',
               )}>
                 {isFirst ? '1º lugar' : `#${seller.position} lugar`}
               </div>
             </div>
             <div className={`w-mx-20 sm:w-mx-32 rounded-t-2xl backdrop-blur-md border-x border-t border-white/30 flex flex-col items-center justify-end pb-4 shadow-2xl relative overflow-hidden transition-all duration-700
               ${isFirst ? 'h-mx-64 bg-gradient-to-b from-brand-primary/80 to-brand-primary/5' : isSecond ? 'h-mx-48 bg-gradient-to-b from-border-strong/80 to-surface-alt/10' : 'h-mx-32 bg-gradient-to-b from-status-warning/60 to-status-warning/10'}`}>
-              <div className={`font-display font-bold text-2xl sm:text-3xl mb-1 drop-shadow-sm ${isFirst ? 'text-mx-black' : 'text-gray-800'}`}>{seller.atingimento}%</div>
+              <div className={`font-display font-bold text-2xl sm:text-3xl mb-1 drop-shadow-sm ${isFirst ? 'text-mx-black' : 'text-foreground'}`}>{seller.atingimento}%</div>
               <div className={cn(
                 'text-mx-nano sm:text-mx-micro uppercase font-bold tracking-wide sm:tracking-widest max-w-full text-center',
-                isFirst ? 'text-brand-secondary' : 'text-gray-500',
+                isFirst ? 'text-brand-secondary' : 'text-muted-foreground',
               )}>
                 <span className="sm:hidden">ATG</span>
                 <span className="hidden sm:inline">ATINGIMENTO</span>

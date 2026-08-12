@@ -112,43 +112,43 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
       <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto rounded-2xl">
         <DialogHeader>
           <DialogTitle className="text-[#031B3D] text-lg font-black">Novo Cliente</DialogTitle>
-          <p className="text-sm text-slate-400">Adicione um cliente à sua carteira de desenvolvimento.</p>
+          <p className="text-sm text-muted-foreground">Adicione um cliente à sua carteira de desenvolvimento.</p>
         </DialogHeader>
 
         <div className="space-y-4 mt-2">
           <div className="grid grid-cols-2 gap-3">
             <div className="col-span-2">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Nome *</label>
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Nome *</label>
               <Input value={form.nome} onChange={e => set("nome", e.target.value)} placeholder="Nome completo" className="rounded-xl" />
             </div>
             <div>
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">WhatsApp *</label>
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">WhatsApp *</label>
               <Input value={form.whatsapp} onChange={e => set("whatsapp", formatarWhatsapp(e.target.value))} placeholder="(11) 99999-9999" className="rounded-xl" />
             </div>
             <div>
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Canal</label>
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Canal</label>
               <select value={form.canal_comercial} onChange={e => setForm(p => ({ ...p, canal_comercial: e.target.value, canal_origem: e.target.value }))} className="w-full h-9 rounded-xl border border-input bg-transparent px-3 text-sm">
                 {["Internet", "Carteira", "Porta"].map(c => <option key={c} value={c}>{c}</option>)}
               </select>
             </div>
             <div className="col-span-2">
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Veículo de Interesse</label>
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Veículo de Interesse</label>
               <Input value={form.veiculo_interesse} onChange={e => set("veiculo_interesse", e.target.value)} placeholder="Ex: Corolla XEI 2023" className="rounded-xl" />
             </div>
             {["Proposta enviada", "Em negociação", "Venda realizada"].includes(form.momento) && (
               <div className="col-span-2">
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Orçamento</label>
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Orçamento</label>
                 <Input type="number" min="0" value={form.valor_negociado} onChange={e => set("valor_negociado", e.target.value)} placeholder="Ex: 60000" className="rounded-xl" />
               </div>
             )}
           </div>
 
           <div>
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-2 block">Em que momento esse cliente está?</label>
+            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-2 block">Em que momento esse cliente está?</label>
             <div className="grid grid-cols-1 gap-1.5">
               {MOMENTOS_CADASTRO.map(m => (
                 <button key={m.value} onClick={() => setForm(p => ({ ...p, momento: m.value, situacao_atual: situacaoDoMomento(m.value), proposta_enviada: m.value === "Proposta enviada" || p.proposta_enviada }))}
-                  className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${form.momento === m.value ? "border-[#005BFF] bg-blue-50 text-[#005BFF] font-semibold" : "border-slate-100 text-slate-600 hover:border-slate-200 hover:bg-slate-50"}`}>
+                  className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${form.momento === m.value ? "border-[#005BFF] bg-blue-50 text-[#005BFF] font-semibold" : "border-slate-100 text-muted-foreground hover:border-slate-200 hover:bg-slate-50"}`}>
                   {m.label}
                 </button>
               ))}
@@ -157,14 +157,14 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
 
           {form.momento === "Visita agendada" && (
             <div>
-              <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Data e hora da visita</label>
+              <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Data e hora da visita</label>
               <Input type="datetime-local" value={form.visita_agendada_em} onChange={e => set("visita_agendada_em", e.target.value)} className="rounded-xl" />
             </div>
           )}
 
           <div className="flex gap-4">
             {[{ k: "interesse_troca", l: "Interesse em troca?" }, { k: "proposta_enviada", l: "Proposta enviada?" }, { k: "interesse_financiamento", l: "Interesse em financiamento?" }].map(({ k, l }) => (
-              <label key={k} className="flex items-center gap-2 cursor-pointer text-sm text-slate-600">
+              <label key={k} className="flex items-center gap-2 cursor-pointer text-sm text-muted-foreground">
                 <input type="checkbox" checked={form[k]} onChange={e => set(k, e.target.checked)} className="rounded" />
                 {l}
               </label>
@@ -175,7 +175,7 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
             <div className="grid grid-cols-2 gap-3">
               {form.interesse_financiamento && (
                 <div>
-                  <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Financiamento</label>
+                  <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Financiamento</label>
                   <select value={form.financiamento} onChange={e => setForm(p => ({ ...p, financiamento: e.target.value, interesse_financiamento: e.target.value !== "nao_aplica" }))} className="w-full h-9 rounded-xl border border-input bg-transparent px-3 text-sm">
                     <option value="nao_aplica">Não se aplica</option>
                     <option value="pendente">Em análise</option>
@@ -186,11 +186,11 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
               )}
               {form.interesse_troca && <>
               <div>
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Veículo na troca</label>
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Veículo na troca</label>
                 <Input value={form.veiculo_troca} onChange={e => set("veiculo_troca", e.target.value)} placeholder="Ex: Polo 2018" className="rounded-xl" />
               </div>
               <div>
-                <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Valor da troca</label>
+                <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Valor da troca</label>
                 <Input type="number" min="0" value={form.valor_troca} onChange={e => set("valor_troca", e.target.value)} placeholder="Ex: 30000" className="rounded-xl" />
               </div>
               </>}
@@ -198,7 +198,7 @@ export default function NovoClienteModal({ open, onClose, onCriado, vendedorId }
           )}
 
           <div>
-            <label className="text-xs font-semibold text-slate-500 uppercase tracking-wide mb-1 block">Observação inicial</label>
+            <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide mb-1 block">Observação inicial</label>
             <textarea value={form.observacoes} onChange={e => set("observacoes", e.target.value)} placeholder="Contexto do primeiro contato..." rows={2} className="w-full rounded-xl border border-input bg-transparent px-3 py-2 text-sm resize-none focus:outline-none focus:ring-1 focus:ring-ring" />
           </div>
 

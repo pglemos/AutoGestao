@@ -10,11 +10,11 @@ function pct(a, b) {
 }
 
 function PctArrow({ value }) {
-  if (value === null) return <div className="flex items-center justify-center gap-1 py-1"><ChevronDown className="w-4 h-4 text-slate-300" /></div>;
+  if (value === null) return <div className="flex items-center justify-center gap-1 py-1"><ChevronDown className="w-4 h-4 text-text-disabled" /></div>;
   const color = value >= 60 ? "text-green-600" : value >= 30 ? "text-amber-600" : "text-red-500";
   return (
     <div className="flex items-center justify-center gap-1 py-1">
-      <ChevronDown className="w-4 h-4 text-slate-300" />
+      <ChevronDown className="w-4 h-4 text-text-disabled" />
       <span className={`text-[12px] font-bold ${color}`}>{value}%</span>
     </div>
   );
@@ -27,16 +27,16 @@ function EtapaRow({ label, value, modalidades, isLast, onClickEtapa }) {
         className={`rounded-xl border px-4 py-3 text-center ${onClickEtapa ? "cursor-pointer hover:border-blue-400 hover:bg-blue-50/40 transition-colors" : ""} bg-white border-slate-200`}
         onClick={onClickEtapa}
       >
-        <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-0.5">{label}</p>
+        <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-0.5">{label}</p>
         <p className="text-h2 font-bold text-[#0F172A] tabular-nums leading-none">{value}</p>
-        {value === 0 && <p className="text-caption text-slate-300 mt-0.5">Sem registros</p>}
+        {value === 0 && <p className="text-caption text-text-disabled mt-0.5">Sem registros</p>}
       </div>
       {modalidades && modalidades.length > 0 && (
         <div className="mt-1.5 px-1 space-y-0.5">
           {modalidades.map(m => (
             <div key={m.label} className="flex justify-between text-caption">
-              <span className="text-slate-400">{m.label}</span>
-              <span className="font-semibold text-slate-600">{m.value}</span>
+              <span className="text-muted-foreground">{m.label}</span>
+              <span className="font-semibold text-muted-foreground">{m.value}</span>
             </div>
           ))}
         </div>
@@ -71,7 +71,7 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
         </div>
         <div className="flex-1 min-w-0">
           <p className={`text-[14px] font-bold uppercase tracking-wider ${c.title}`}>{titulo}</p>
-          {descricao && <p className="text-caption text-slate-400 mt-0.5">{descricao}</p>}
+          {descricao && <p className="text-caption text-muted-foreground mt-0.5">{descricao}</p>}
         </div>
         {conversaoGeral !== null && !semDados && (
           <span className={`text-caption font-bold px-2.5 py-1 rounded-full flex-shrink-0 ${c.badge}`}>
@@ -83,8 +83,8 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
       {/* Funil */}
       {semDados ? (
         <div className="flex-1 flex flex-col items-center justify-center text-center py-8 gap-2">
-          <p className="text-body-sm text-slate-400 font-medium">Sem dados no período</p>
-          <p className="text-caption text-slate-300">Registre atendimentos no Fechamento Diário</p>
+          <p className="text-body-sm text-muted-foreground font-medium">Sem dados no período</p>
+          <p className="text-caption text-text-disabled">Registre atendimentos no Fechamento Diário</p>
           <Link to="/fechamento" className="mt-2 text-[12px] font-bold text-[#005BFF] hover:underline">Abrir Fechamento Diário</Link>
         </div>
       ) : (
@@ -103,7 +103,7 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
                 />
                 {proxima && (
                   <div className="flex items-center justify-center gap-1 py-1.5">
-                    <ChevronDown className="w-4 h-4 text-slate-300" />
+                    <ChevronDown className="w-4 h-4 text-text-disabled" />
                     {conv !== null && (
                       <span className={`text-[12px] font-bold ${conv >= 60 ? "text-green-600" : conv >= 30 ? "text-amber-600" : "text-red-500"}`}>
                         {conv}%

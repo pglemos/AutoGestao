@@ -139,7 +139,7 @@ export function AulasAoVivoSection() {
             ) : (
             <div className="grid min-h-[220px] place-items-center rounded-xl border border-gray-200 bg-white p-mx-lg text-center shadow-sm">
               <div>
-                <Video size={36} className="mx-auto text-gray-500" />
+                <Video size={36} className="mx-auto text-muted-foreground" />
                 <Typography variant="p" className="mt-mx-sm">{loading ? 'Carregando aulas...' : 'Nenhuma aula ao vivo agendada'}</Typography>
                 {!loading && <Typography variant="caption" tone="muted" className="normal-case tracking-normal">Quando sua loja ou a MX agendar uma aula, ela aparece aqui com link, prova e presença.</Typography>}
               </div>
@@ -181,8 +181,8 @@ export function AulasAoVivoSection() {
                 <button key={aula.id} type="button" onClick={() => abrirProva(aula)} className="flex w-full items-center gap-mx-md py-mx-sm text-left">
                   <div className="flex h-mx-16 w-mx-14 shrink-0 flex-col items-center justify-center rounded-xl bg-gray-50">
                     <span className="text-xs font-bold uppercase text-status-info">{formatDate(aula.inicio).slice(0, 3)}</span>
-                    <span className="text-2xl font-bold text-gray-800">{new Date(aula.inicio).getDate()}</span>
-                    <span className="text-xs font-bold uppercase text-gray-500">{new Date(aula.inicio).toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')}</span>
+                    <span className="text-2xl font-bold text-foreground">{new Date(aula.inicio).getDate()}</span>
+                    <span className="text-xs font-bold uppercase text-muted-foreground">{new Date(aula.inicio).toLocaleDateString('pt-BR', { month: 'short' }).replace('.', '')}</span>
                   </div>
                   <div className="min-w-0 flex-1">
                     <Typography variant="p" className="">{aula.titulo}</Typography>
@@ -272,7 +272,7 @@ export function AulasAoVivoSection() {
                       'rounded-xl border px-mx-md py-mx-xs text-left text-sm transition-colors',
                       respostas[qIndex] === oIndex
                         ? 'border-status-info bg-status-info-surface font-bold text-status-info'
-                        : 'border-gray-100 text-gray-500 hover:bg-gray-50',
+                        : 'border-gray-100 text-muted-foreground hover:bg-gray-50',
                     )}
                   >
                     {opcao}

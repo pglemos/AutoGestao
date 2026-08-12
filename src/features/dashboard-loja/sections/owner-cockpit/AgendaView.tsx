@@ -29,8 +29,8 @@ export function AgendaView({ alerts }: { alerts: OwnerPerformanceAlert[] }) {
         <div className="space-y-mx-sm">
           {priorities.length === 0 ? (
             <div className="rounded-2xl border border-gray-100 bg-white p-mx-lg" role="status">
-              <strong className="text-base font-bold text-gray-800">Nenhuma prioridade calculada</strong>
-              <p className="text-sm text-gray-500">Não há alertas derivados dos dados atuais da loja.</p>
+              <strong className="text-base font-bold text-foreground">Nenhuma prioridade calculada</strong>
+              <p className="text-sm text-muted-foreground">Não há alertas derivados dos dados atuais da loja.</p>
             </div>
           ) : (
             priorities.map((item, index) => {

@@ -22,7 +22,7 @@ export function BattleSelector({
     <div className="animate-slide-up">
       {opponents.length < 2 && (
         <div className="mb-8 text-center animate-pulse">
-          <p className="text-sm font-bold text-gray-500 bg-white/50 inline-block px-4 py-2 rounded-full border border-white/60 shadow-sm">
+          <p className="text-sm font-bold text-muted-foreground bg-white/50 inline-block px-4 py-2 rounded-full border border-white/60 shadow-sm">
             Selecione {2 - opponents.length} {2 - opponents.length === 1 ? 'vendedor' : 'vendedores'} abaixo para iniciar o comparativo
           </p>
         </div>
@@ -34,7 +34,7 @@ export function BattleSelector({
             type="button"
             aria-label="Limpar seleção de vendedores"
             onClick={onClear}
-            className="absolute top-mx-0 right-mx-0 z-50 p-mx-xs bg-white/10 text-gray-500 hover:text-status-error hover:bg-status-error-surface rounded-full transition-colors"
+            className="absolute top-mx-0 right-mx-0 z-50 p-mx-xs bg-white/10 text-muted-foreground hover:text-status-error hover:bg-status-error-surface rounded-full transition-colors"
           >
             <X className="w-mx-sm h-mx-sm" />
           </button>
@@ -63,7 +63,7 @@ export function BattleSelector({
               />
               <span className={`font-bold text-xs ${selected ? 'text-white' : 'text-mx-black'} truncate w-full`}>{seller.user_name}</span>
               {showStoreName && (
-                <span className="text-mx-micro text-gray-500 truncate w-full">{seller.store_name}</span>
+                <span className="text-mx-micro text-muted-foreground truncate w-full">{seller.store_name}</span>
               )}
             </button>
           )

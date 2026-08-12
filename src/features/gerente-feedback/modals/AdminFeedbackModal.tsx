@@ -166,7 +166,7 @@ export function AdminFeedbackModal({
                     </select>
                     <ChevronDown
                       size={18}
-                      className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                      className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
                     />
                   </div>
                 </div>
@@ -197,14 +197,14 @@ export function AdminFeedbackModal({
                     </select>
                     <ChevronDown
                       size={18}
-                      className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                      className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
                     />
                   </div>
                 </div>
                 <div className="space-y-mx-xs">
                   <label
                     htmlFor="feedback-admin-week-reference"
-                    className="ml-2 text-mx-tiny uppercase font-bold tracking-widest text-gray-500"
+                    className="ml-2 text-mx-tiny uppercase font-bold tracking-widest text-muted-foreground"
                   >
                     Semana
                   </label>
@@ -315,7 +315,7 @@ export function AdminFeedbackModal({
                     <div className="space-y-mx-xs">
                       <label
                         htmlFor="feedback-admin-action-template"
-                        className="ml-2 text-mx-tiny uppercase font-bold tracking-widest text-gray-500"
+                        className="ml-2 text-mx-tiny uppercase font-bold tracking-widest text-muted-foreground"
                       >
                         Ação padronizada
                       </label>
@@ -335,7 +335,7 @@ export function AdminFeedbackModal({
                         </select>
                         <ChevronDown
                           size={18}
-                          className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-gray-500 pointer-events-none"
+                          className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground pointer-events-none"
                         />
                       </div>
                     </div>
@@ -350,7 +350,7 @@ export function AdminFeedbackModal({
                       className="w-full h-mx-3xl p-mx-md bg-white border-2 border-brand-primary/20 rounded-2xl text-base font-bold focus:border-brand-primary transition-all shadow-sm outline-none resize-none"
                     />
                   </div>
-                  <label className="flex items-start gap-mx-xs text-xs text-gray-500">
+                  <label className="flex items-start gap-mx-xs text-xs text-muted-foreground">
                     <input
                       aria-label="Enviar este feedback ao vendedor"
                       type="checkbox"
@@ -359,8 +359,8 @@ export function AdminFeedbackModal({
                       className="mt-0.5 rounded border-gray-200 text-emerald-600 focus:ring-brand-primary"
                     />
                     <span>
-                      <span className="font-semibold text-gray-800">Enviar este feedback ao vendedor</span>
-                      <span className="block text-caption text-gray-500">Desmarque para manter a observação somente com a liderança.</span>
+                      <span className="font-semibold text-foreground">Enviar este feedback ao vendedor</span>
+                      <span className="block text-caption text-muted-foreground">Desmarque para manter a observação somente com a liderança.</span>
                     </span>
                   </label>
                 </motion.div>

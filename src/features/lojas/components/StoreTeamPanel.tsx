@@ -276,7 +276,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
 
   const getVigenciaStatus = (m: TeamMember) => {
     const today = new Date().toISOString().slice(0, 10)
-    if (!m.is_active) return { label: 'INATIVO', variant: 'outline' as const, color: 'text-gray-500 border-gray-200 bg-gray-50' }
+    if (!m.is_active) return { label: 'INATIVO', variant: 'outline' as const, color: 'text-muted-foreground border-gray-200 bg-gray-50' }
     if (m.ended_at && m.ended_at.slice(0, 10) < today) return { label: 'ENCERRADO', variant: 'danger' as const, color: 'text-red-600 border-red-200 bg-red-50' }
     return { label: 'ATIVO', variant: 'success' as const, color: 'text-emerald-600 border-emerald-200 bg-emerald-50' }
   }
@@ -414,7 +414,7 @@ export function StoreTeamPanel({ storeId, storeName }: StoreTeamPanelProps) {
               <div className="flex flex-col sm:flex-row items-center gap-mx-sm w-full lg:w-auto">
                 <div className="relative group w-full sm:w-mx-96">
                   <label htmlFor="search-specialist" className="sr-only">Buscar integrante da equipe</label>
-                  <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" />
+                  <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors" />
                   <Input
                     id="search-specialist"
                     name="search-specialist"

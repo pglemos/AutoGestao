@@ -60,7 +60,7 @@ export function SellerPerformanceTable({
               onClick={() => onSelect(row.user_id, String((row as RankingEntry & { store_id?: string }).store_id || ''))}
             >
               <Avatar src={row.avatar_url || undefined} fallback={row.user_name} size="sm" />
-              <span className="font-semibold text-gray-800">{row.user_name}</span>
+              <span className="font-semibold text-foreground">{row.user_name}</span>
             </button>
           ),
         },
@@ -68,7 +68,7 @@ export function SellerPerformanceTable({
           key: 'sales',
           label: `Vendas${getSortIndicator('sales')}`,
           align: 'center',
-          render: row => <span className="font-bold text-gray-900">{row.vnd_total}</span>,
+          render: row => <span className="font-bold text-foreground">{row.vnd_total}</span>,
         },
         {
           key: 'leads',

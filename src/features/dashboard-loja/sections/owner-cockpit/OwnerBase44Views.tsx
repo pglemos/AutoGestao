@@ -175,23 +175,23 @@ export function OwnerRoutineView({
           <table className="w-full min-w-[700px] text-sm">
             <thead className="bg-gray-50">
               <tr>
-                <th className="px-mx-md py-mx-sm text-left text-mx-tiny font-bold uppercase tracking-mx-wide text-gray-500">Vendedor</th>
-                <th className="px-mx-md py-mx-sm text-left text-mx-tiny font-bold uppercase tracking-mx-wide text-gray-500">Status</th>
-                <th className="px-mx-md py-mx-sm text-center text-mx-tiny font-bold uppercase tracking-mx-wide text-gray-500">Vendas</th>
-                <th className="px-mx-md py-mx-sm text-center text-mx-tiny font-bold uppercase tracking-mx-wide text-gray-500">Leads</th>
-                <th className="px-mx-md py-mx-sm text-center text-mx-tiny font-bold uppercase tracking-mx-wide text-gray-500">Agendamentos</th>
+                <th className="px-mx-md py-mx-sm text-left text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">Vendedor</th>
+                <th className="px-mx-md py-mx-sm text-left text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">Status</th>
+                <th className="px-mx-md py-mx-sm text-center text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">Vendas</th>
+                <th className="px-mx-md py-mx-sm text-center text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">Leads</th>
+                <th className="px-mx-md py-mx-sm text-center text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">Agendamentos</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-border-subtle">
               {sellerStatus.length === 0 ? (
                 <tr>
-                  <td colSpan={5} className="px-mx-md py-mx-lg text-center text-sm font-bold text-gray-500">
+                  <td colSpan={5} className="px-mx-md py-mx-lg text-center text-sm font-bold text-muted-foreground">
                     Nenhum vendedor vinculado a esta loja.
                   </td>
                 </tr>
               ) : sellerStatus.map(seller => (
                 <tr key={seller.id} className="transition-colors hover:bg-gray-50">
-                  <td className="px-mx-md py-mx-sm font-bold text-gray-800">{seller.name}</td>
+                  <td className="px-mx-md py-mx-sm font-bold text-foreground">{seller.name}</td>
                   <td className="px-mx-md py-mx-sm">
                     <span className={cn(
                       'rounded-xl px-mx-sm py-mx-xs text-mx-tiny font-bold uppercase',
@@ -247,12 +247,12 @@ export function OwnerRoutineView({
                 onClick={() => navigate(ownerPath('plano-acao'))}
                 className="flex w-full items-start gap-mx-md py-mx-md text-left transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-primary/30"
               >
-                <span className="mt-0.5 flex h-mx-8 w-mx-8 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-xs font-bold text-gray-500">{index + 1}</span>
+                <span className="mt-0.5 flex h-mx-8 w-mx-8 shrink-0 items-center justify-center rounded-xl bg-gray-50 text-xs font-bold text-muted-foreground">{index + 1}</span>
                 <span className="min-w-0 flex-1">
-                  <span className="block font-bold text-gray-800">{action.action}</span>
-                  <span className="mt-1 block text-sm font-bold text-gray-500">{action.owner} · {action.due} · {action.department}</span>
+                  <span className="block font-bold text-foreground">{action.action}</span>
+                  <span className="mt-1 block text-sm font-bold text-muted-foreground">{action.owner} · {action.due} · {action.department}</span>
                 </span>
-                <ArrowRight size={17} className="mt-1 shrink-0 text-gray-500" />
+                <ArrowRight size={17} className="mt-1 shrink-0 text-muted-foreground" />
               </button>
             ))}
           </div>
@@ -262,7 +262,7 @@ export function OwnerRoutineView({
           <Typography variant="h3" className="text-xl">Riscos e intervenções</Typography>
           <div className="mt-mx-md space-y-mx-sm">
             {alertPreview.length === 0 ? (
-              <p className="rounded-2xl bg-gray-50 p-mx-md text-sm font-bold text-gray-500">Nenhum alerta prioritário no período.</p>
+              <p className="rounded-2xl bg-gray-50 p-mx-md text-sm font-bold text-muted-foreground">Nenhum alerta prioritário no período.</p>
             ) : alertPreview.map((alert, index) => (
               <button
                 type="button"
@@ -272,9 +272,9 @@ export function OwnerRoutineView({
               >
                 <div className="flex items-center gap-mx-sm">
                   <AlertTriangle size={17} className={alert.variant === 'danger' ? 'text-status-error' : 'text-status-warning'} />
-                  <span className="font-bold text-gray-800">{alert.title}</span>
+                  <span className="font-bold text-foreground">{alert.title}</span>
                 </div>
-                <p className="mt-mx-xs text-sm font-bold text-gray-500">{alert.description}</p>
+                <p className="mt-mx-xs text-sm font-bold text-muted-foreground">{alert.description}</p>
               </button>
             ))}
           </div>
@@ -355,19 +355,19 @@ export function OwnerDecisionCenter({
                 <div className="min-w-0 flex-1">
                   <div className="flex flex-wrap items-center gap-mx-sm">
                     <span className={cn('rounded-xl border px-mx-sm py-mx-xs text-mx-tiny font-bold', classes.soft)}>{item.status}</span>
-                    <span className="rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-mx-tiny font-bold text-gray-500">{item.department}</span>
-                    <span className="text-mx-tiny font-bold uppercase tracking-mx-wide text-gray-500">{item.origin}</span>
+                    <span className="rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-mx-tiny font-bold text-muted-foreground">{item.department}</span>
+                    <span className="text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">{item.origin}</span>
                   </div>
                   <Typography variant="h3" className="mt-mx-sm text-xl">{item.title}</Typography>
                   <Typography variant="p" tone="muted" className="mt-mx-xs font-bold leading-relaxed">{item.context}</Typography>
-                  <div className="mt-mx-sm flex flex-wrap gap-x-mx-lg gap-y-mx-xs text-sm font-bold text-gray-500">
+                  <div className="mt-mx-sm flex flex-wrap gap-x-mx-lg gap-y-mx-xs text-sm font-bold text-muted-foreground">
                     <span>Prazo: <strong className={classes.text}>{item.due}</strong></span>
                     <span>Responsável: <strong>{item.owner}</strong></span>
                   </div>
                   {expanded && (
                     <div className="mt-mx-md rounded-2xl bg-gray-50 p-mx-md">
-                      <p className="text-mx-tiny font-bold uppercase tracking-mx-wide text-gray-500">Direcionamento MX</p>
-                      <p className="mt-mx-xs text-sm font-bold leading-relaxed text-gray-800">{item.recommendation}</p>
+                      <p className="text-mx-tiny font-bold uppercase tracking-mx-wide text-muted-foreground">Direcionamento MX</p>
+                      <p className="mt-mx-xs text-sm font-bold leading-relaxed text-foreground">{item.recommendation}</p>
                     </div>
                   )}
                 </div>
@@ -463,10 +463,10 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
                   <span className="inline-flex items-center gap-1 rounded-mx-full bg-status-success-surface px-mx-xs py-0.5 text-mx-tiny font-bold text-status-success"><span className="h-1.5 w-1.5 rounded-full bg-status-success" />Ativo</span>
                 </div>
                 <Typography variant="p" tone="muted" className="mt-mx-xs text-sm">Acompanhamento do programa no recorte de {monthLabel}.</Typography>
-                <div className="mt-mx-sm flex flex-wrap gap-x-mx-md gap-y-mx-xs text-mx-tiny text-gray-500">
-                  <span>Modalidade: <strong className="text-gray-800">{program.clientModality || 'Não informado'}</strong></span>
-                  <span>Encontros: <strong className="text-gray-800">{completedVisits} de {totalVisits || '—'}</strong></span>
-                  <span>Status: <strong className="text-gray-800">{program.clientStatus || 'Não informado'}</strong></span>
+                <div className="mt-mx-sm flex flex-wrap gap-x-mx-md gap-y-mx-xs text-mx-tiny text-muted-foreground">
+                  <span>Modalidade: <strong className="text-foreground">{program.clientModality || 'Não informado'}</strong></span>
+                  <span>Encontros: <strong className="text-foreground">{completedVisits} de {totalVisits || '—'}</strong></span>
+                  <span>Status: <strong className="text-foreground">{program.clientStatus || 'Não informado'}</strong></span>
                 </div>
                 <div className="mt-mx-md grid gap-mx-sm sm:grid-cols-3">
                   <ConsultingMetric label="Encontros realizados" completed={completedVisits} total={totalVisits} percent={completion} />
@@ -481,7 +481,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
                 <Typography variant="tiny" tone="muted" className="mt-mx-xs block">{program.nextVisitScheduledAt ? new Date(program.nextVisitScheduledAt).toLocaleString('pt-BR') : 'Sem data registrada'}</Typography>
                 <div className="mt-mx-sm space-y-mx-xs">
                   {program.nextVisitMeetLink && <a href={program.nextVisitMeetLink} target="_blank" rel="noreferrer" className="flex h-mx-10 items-center justify-center rounded-xl bg-emerald-600 px-mx-sm text-mx-tiny font-bold text-white">Entrar na Reunião</a>}
-                  <button type="button" onClick={() => navigate(`/falar-consultor?${contextQuery}`)} className="flex h-mx-10 w-full items-center justify-center gap-mx-xs rounded-xl border border-gray-100 bg-white text-mx-tiny font-bold text-gray-800">Falar com Consultor <ArrowRight size={14} /></button>
+                  <button type="button" onClick={() => navigate(`/falar-consultor?${contextQuery}`)} className="flex h-mx-10 w-full items-center justify-center gap-mx-xs rounded-xl border border-gray-100 bg-white text-mx-tiny font-bold text-foreground">Falar com Consultor <ArrowRight size={14} /></button>
                 </div>
               </div>
             </div>
@@ -492,7 +492,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
               const isActive = card.key === activeProgram
               return (
                 <div key={card.key} className={cn('rounded-2xl border bg-white p-mx-md', isActive ? 'border-brand-primary bg-emerald-600/5' : 'border-gray-100 opacity-60')}>
-                  <div className="flex items-center justify-between"><span className={cn('rounded-mx-full px-mx-xs py-0.5 text-mx-tiny font-bold', isActive ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-gray-500')}>{isActive ? 'Ativo' : 'Bloqueado'}</span>{!isActive && <Lock size={15} className="text-gray-500" />}</div>
+                  <div className="flex items-center justify-between"><span className={cn('rounded-mx-full px-mx-xs py-0.5 text-mx-tiny font-bold', isActive ? 'bg-emerald-600 text-white' : 'bg-gray-50 text-muted-foreground')}>{isActive ? 'Ativo' : 'Bloqueado'}</span>{!isActive && <Lock size={15} className="text-muted-foreground" />}</div>
                   <Typography variant="p" className="mt-mx-sm font-bold">{card.name}</Typography>
                   <Typography variant="tiny" tone="muted" className="mt-mx-xs block line-clamp-2">{card.detail}</Typography>
                   <Typography variant="tiny" tone="muted" className="mt-mx-sm block">{card.total ? `${card.total} encontros` : 'Detalhes não disponíveis'}</Typography>
@@ -509,7 +509,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
                 const number = index + 1
                 const completed = number <= completedVisits
                 const current = number === nextVisit
-                return <div key={number} className="flex min-w-[76px] flex-1 flex-col items-center text-center"><div className={cn('flex h-8 w-8 items-center justify-center rounded-full border-2 text-mx-tiny font-bold', completed ? 'border-brand-primary bg-emerald-600 text-white' : current ? 'border-brand-primary bg-emerald-600/10 text-emerald-600' : 'border-gray-200 bg-gray-50 text-gray-500')}>{completed ? '✓' : number}</div><span className={cn('mt-mx-xs text-mx-tiny', current ? 'font-bold text-gray-800' : 'text-gray-500')}>{current ? program.nextVisitObjective || 'Próximo encontro' : `Encontro ${number}`}</span><span className="mt-0.5 text-caption text-gray-500">{completed ? 'Concluído' : current ? 'Agendado' : 'Pendente'}</span></div>
+                return <div key={number} className="flex min-w-[76px] flex-1 flex-col items-center text-center"><div className={cn('flex h-8 w-8 items-center justify-center rounded-full border-2 text-mx-tiny font-bold', completed ? 'border-brand-primary bg-emerald-600 text-white' : current ? 'border-brand-primary bg-emerald-600/10 text-emerald-600' : 'border-gray-200 bg-gray-50 text-muted-foreground')}>{completed ? '✓' : number}</div><span className={cn('mt-mx-xs text-mx-tiny', current ? 'font-bold text-foreground' : 'text-muted-foreground')}>{current ? program.nextVisitObjective || 'Próximo encontro' : `Encontro ${number}`}</span><span className="mt-0.5 text-caption text-muted-foreground">{completed ? 'Concluído' : current ? 'Agendado' : 'Pendente'}</span></div>
               })}
             </div>
           </Card>
@@ -521,7 +521,7 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
             </div>
           </Card>
 
-          <Card className="border bg-white p-mx-md"><Typography variant="h3" className="text-base font-bold">Detalhes</Typography><div className="mt-mx-sm grid gap-x-mx-md gap-y-mx-xs text-mx-tiny text-gray-500 sm:grid-cols-3"><span>Consultor: <strong className="text-gray-800">Não informado</strong></span><span>Cliente: <strong className="text-gray-800">{program.clientId}</strong></span><span>Início: <strong className="text-gray-800">Não informado</strong></span></div></Card>
+          <Card className="border bg-white p-mx-md"><Typography variant="h3" className="text-base font-bold">Detalhes</Typography><div className="mt-mx-sm grid gap-x-mx-md gap-y-mx-xs text-mx-tiny text-muted-foreground sm:grid-cols-3"><span>Consultor: <strong className="text-foreground">Não informado</strong></span><span>Cliente: <strong className="text-foreground">{program.clientId}</strong></span><span>Início: <strong className="text-foreground">Não informado</strong></span></div></Card>
         </>
       )}
     </div>
@@ -529,5 +529,5 @@ export function OwnerConsultingView({ data }: { data: DashboardData }) {
 }
 
 function ConsultingMetric({ label, completed, total, percent }: { label: string; completed: string | number; total: string | number; percent: number | null }) {
-  return <div className="rounded-lg border border-gray-100 bg-gray-50/60 p-mx-sm"><Typography variant="tiny" className="font-bold">{label}</Typography><div className="mt-mx-xs flex items-baseline gap-1"><span className="text-base font-bold text-gray-800">{completed}</span>{total !== '' && <span className="text-mx-tiny text-gray-500">de {total}</span>}{percent != null && <span className="ml-auto text-mx-tiny text-gray-500">{percent}%</span>}</div>{percent != null && <div className="mt-mx-xs h-1.5 overflow-hidden rounded-full bg-border-subtle"><div className="h-full rounded-full bg-emerald-600" style={{ width: `${percent}%` }} /></div>}</div>
+  return <div className="rounded-lg border border-gray-100 bg-gray-50/60 p-mx-sm"><Typography variant="tiny" className="font-bold">{label}</Typography><div className="mt-mx-xs flex items-baseline gap-1"><span className="text-base font-bold text-foreground">{completed}</span>{total !== '' && <span className="text-mx-tiny text-muted-foreground">de {total}</span>}{percent != null && <span className="ml-auto text-mx-tiny text-muted-foreground">{percent}%</span>}</div>{percent != null && <div className="mt-mx-xs h-1.5 overflow-hidden rounded-full bg-border-subtle"><div className="h-full rounded-full bg-emerald-600" style={{ width: `${percent}%` }} /></div>}</div>
 }

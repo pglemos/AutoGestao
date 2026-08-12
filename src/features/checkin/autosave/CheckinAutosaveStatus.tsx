@@ -70,7 +70,7 @@ export function CheckinAutosaveStatus({
       ? 'border-red-200 bg-red-50 text-red-900'
       : isOffline
         ? 'border-amber-200 bg-amber-50 text-amber-900'
-        : 'border-slate-200 bg-white text-slate-700'
+        : 'border-slate-200 bg-white text-foreground'
 
   const Icon = finalizado
     ? Check
@@ -112,7 +112,7 @@ export function CheckinAutosaveStatus({
             type="button"
             onClick={onSaveNow}
             disabled={disabled || saving}
-            className="inline-flex h-11 min-w-[44px] items-center rounded-lg border border-slate-300 bg-white px-3 text-body-sm font-bold text-slate-700 transition-colors hover:border-[#005BFF] hover:text-[#005BFF] disabled:cursor-not-allowed disabled:opacity-50"
+            className="inline-flex h-11 min-w-[44px] items-center rounded-lg border border-slate-300 bg-white px-3 text-body-sm font-bold text-foreground transition-colors hover:border-[#005BFF] hover:text-[#005BFF] disabled:cursor-not-allowed disabled:opacity-50"
           >
             Salvar rascunho
           </button>

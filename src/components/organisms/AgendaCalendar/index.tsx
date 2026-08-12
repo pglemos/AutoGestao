@@ -66,7 +66,7 @@ export function AgendaCalendar({
             type="button"
             onClick={onPrevMonth}
             aria-label={viewMode === 'day' ? 'Dia anterior' : viewMode === 'week' ? 'Semana anterior' : 'Mês anterior'}
-            className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-white text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800"
+            className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-white text-muted-foreground transition-colors hover:bg-gray-50 hover:text-foreground"
           >
             <ChevronLeft size={18} />
           </button>
@@ -79,7 +79,7 @@ export function AgendaCalendar({
               <button
                 type="button"
                 onClick={onToday}
-                className="rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800"
+                className="rounded-xl border border-gray-200 bg-white px-3 py-1.5 text-xs font-semibold text-muted-foreground transition-colors hover:bg-gray-50 hover:text-foreground"
               >
                 Hoje
               </button>
@@ -90,7 +90,7 @@ export function AgendaCalendar({
             type="button"
             onClick={onNextMonth}
             aria-label={viewMode === 'day' ? 'Próximo dia' : viewMode === 'week' ? 'Próxima semana' : 'Próximo mês'}
-            className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-white text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800"
+            className="flex h-mx-10 w-mx-10 items-center justify-center rounded-mx-full bg-white text-muted-foreground transition-colors hover:bg-gray-50 hover:text-foreground"
           >
             <ChevronRightIcon size={18} />
           </button>

@@ -21,7 +21,7 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
         <ArrowRight className="w-4 h-4 text-mx-blue" />
         <h3 className="text-base font-bold text-mx-navy">Linha do Dinheiro</h3>
       </div>
-      <p className="text-slate-400 text-xs mb-5">Evolução da sua comissão conforme você vende mais veículos.</p>
+      <p className="text-muted-foreground text-xs mb-5">Evolução da sua comissão conforme você vende mais veículos.</p>
 
       <div className="flex gap-3 overflow-x-auto pb-2 scrollbar-thin">
         {timeline.map((ponto, i) => {
@@ -44,7 +44,7 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
                   <span className="text-caption font-bold text-emerald-600 uppercase tracking-wider">Nova faixa</span>
                 </div>
               )}
-              <p className={`text-xs font-medium mb-1 ${isAtual ? "text-slate-300" : "text-slate-400"}`}>
+              <p className={`text-xs font-medium mb-1 ${isAtual ? "text-text-disabled" : "text-muted-foreground"}`}>
                 {isAtual ? "Atual" : `+${i} venda${i !== 1 ? "s" : ""}`}
               </p>
               <p className={`text-lg font-bold tabular-nums ${isAtual ? "text-white" : ponto.novaFaixa ? "text-emerald-700" : "text-mx-navy"}`}>
@@ -57,7 +57,7 @@ export default function MoneyTimeline({ calcResult, faixas = [] }) {
                 <p className="text-caption font-bold text-emerald-600 mt-1">+ {formatBRL(ganho)}</p>
               )}
               {ponto.faixa && (
-                <p className={`text-caption mt-1.5 ${isAtual ? "text-slate-400" : "text-slate-400"}`}>
+                <p className={`text-caption mt-1.5 ${isAtual ? "text-muted-foreground" : "text-muted-foreground"}`}>
                   {ponto.faixa.tipo === "Valor fixo por veículo"
                     ? `${formatBRL(ponto.faixa.valor)}/vend.`
                     : `${ponto.faixa.valor}% s/ valor`}

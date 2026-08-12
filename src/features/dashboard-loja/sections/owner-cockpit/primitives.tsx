@@ -23,14 +23,14 @@ export function OwnerCockpitHeader({
   return (
     <header className="flex items-start justify-between gap-4 border-b border-gray-200 pb-mx-md sm:pb-mx-lg">
       <div>
-        <h1 className="text-2xl font-bold leading-tight text-gray-800 sm:text-3xl md:text-[2rem]">
+        <h1 className="text-2xl font-bold leading-tight text-foreground sm:text-3xl md:text-[2rem]">
           {greeting()}, <span className="text-status-success-text">{name.split(' ')[0]}</span>!
         </h1>
-        <p className="mt-mx-tiny text-sm font-medium text-gray-500">Aqui está o panorama da sua loja hoje.</p>
+        <p className="mt-mx-tiny text-sm font-medium text-muted-foreground">Aqui está o panorama da sua loja hoje.</p>
       </div>
       <div className="flex shrink-0 items-center gap-mx-sm">
         <div className="inline-flex h-mx-11 items-center gap-mx-xs rounded-mx-full border border-gray-100 bg-white px-mx-md shadow-sm">
-          <CalendarDays size={16} className="text-gray-500" />
+          <CalendarDays size={16} className="text-muted-foreground" />
           <Typography variant="tiny" className="">{periodLabel}</Typography>
         </div>
       </div>
@@ -111,11 +111,11 @@ export function OwnerKpiCard({
           />
         )}
       </div>
-      <p className="mt-2.5 text-sm font-medium text-gray-500">{title}</p>
-      <p className="mt-0.5 text-2xl font-bold tracking-tight text-gray-800" aria-label={`${title}: ${value}`}>
+      <p className="mt-2.5 text-sm font-medium text-muted-foreground">{title}</p>
+      <p className="mt-0.5 text-2xl font-bold tracking-tight text-foreground" aria-label={`${title}: ${value}`}>
         {value}
       </p>
-      {detail && <p className="mt-0.5 text-xs text-gray-500">{detail}</p>}
+      {detail && <p className="mt-0.5 text-xs text-muted-foreground">{detail}</p>}
       <div className="mt-2 flex items-end justify-between gap-2">
         {trend ? (
           <p
@@ -149,7 +149,7 @@ function SimpleSparkline({
     info: 'text-status-info',
     warning: 'text-amber-500',
     danger: 'text-red-500',
-    muted: 'text-gray-400',
+    muted: 'text-muted-foreground',
     brand: 'text-status-success-text',
     purple: 'text-[var(--color-accent-purple)]',
   }[tone]
@@ -218,8 +218,8 @@ export function MXScoreCompact({ score, trend }: { score: number | null; trend?:
   return (
     <div className={cn('rounded-xl border bg-white p-4 shadow-sm', cardBorderClasses[tone])}>
       <div className="flex items-center justify-between">
-        <p className="text-sm font-medium text-gray-500">MX Score da Loja</p>
-        <CircleHelp size={16} className="text-gray-500" aria-hidden="true" />
+        <p className="text-sm font-medium text-muted-foreground">MX Score da Loja</p>
+        <CircleHelp size={16} className="text-muted-foreground" aria-hidden="true" />
       </div>
       <div className="relative mx-auto mt-2 h-[100px] w-[100px]">
         <svg viewBox="0 0 120 120" className="h-full w-full" role="img" aria-label={`MX Score ${safeScore}: ${status}`}>
@@ -238,7 +238,7 @@ export function MXScoreCompact({ score, trend }: { score: number | null; trend?:
           />
         </svg>
         <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-2xl font-bold tracking-tight text-gray-800">{score ?? '--'}</span>
+          <span className="text-2xl font-bold tracking-tight text-foreground">{score ?? '--'}</span>
           <span className={cn('text-xs font-medium', statusColor)}>{status}</span>
         </div>
       </div>
@@ -323,14 +323,14 @@ export function ToolbarPlaceholder({ searchPlaceholder }: { searchPlaceholder: s
     <div className="flex flex-col gap-mx-sm lg:flex-row lg:items-center lg:justify-between">
       <div className="grid grid-cols-1 gap-mx-sm sm:grid-cols-4">
         {['Todos os departamentos', 'Todas as origens', 'Todos os status', 'Todas as prioridades'].map(label => (
-          <button key={label} type="button" className="h-mx-10 rounded-xl border border-gray-100 bg-white px-mx-sm text-left text-xs font-bold text-gray-500">
+          <button key={label} type="button" className="h-mx-10 rounded-xl border border-gray-100 bg-white px-mx-sm text-left text-xs font-bold text-muted-foreground">
             {label}
           </button>
         ))}
       </div>
       <label className="relative min-w-0 lg:w-[320px]">
         <span className="sr-only">{searchPlaceholder}</span>
-        <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
+        <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
         <input className="h-mx-10 w-full rounded-xl border border-gray-100 bg-white pl-mx-xl pr-mx-sm text-sm font-bold outline-none focus:border-brand-primary" placeholder={searchPlaceholder} />
       </label>
     </div>

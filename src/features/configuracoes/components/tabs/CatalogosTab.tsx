@@ -36,7 +36,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
                                         "flex-1 min-w-[140px] flex items-center justify-center gap-mx-sm h-mx-xl px-4 rounded-2xl font-bold uppercase text-xs tracking-widest transition-all",
                                         isActive
                                             ? "bg-emerald-600 text-white shadow-sm"
-                                            : "bg-transparent text-gray-500 hover:bg-gray-50"
+                                            : "bg-transparent text-muted-foreground hover:bg-gray-50"
                                     )}
                                 >
                                     <TabIcon size={14} /> {tab.label}
@@ -66,7 +66,7 @@ export function CatalogosTab({ isReadOnly }: TabContext) {
                                     "flex-1 min-w-[140px] flex items-center justify-center gap-mx-sm h-mx-xl px-4 rounded-2xl font-bold uppercase text-xs tracking-widest transition-all",
                                     isActive
                                         ? "bg-emerald-600 text-white shadow-sm"
-                                        : "bg-transparent text-gray-500 hover:bg-gray-50"
+                                        : "bg-transparent text-muted-foreground hover:bg-gray-50"
                                 )}
                             >
                                 <TabIcon size={14} /> {tab.label}

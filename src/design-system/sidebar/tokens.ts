@@ -57,10 +57,10 @@ export const SIDEBAR = {
   headerExpanded: 'justify-between px-4',
   headerCollapsed: 'justify-center px-2',
   brandLogo: 'h-7 w-7 shrink-0 object-contain',
-  brandTitle: 'truncate text-body-sm font-black tracking-tight text-slate-900',
+  brandTitle: 'truncate text-body-sm font-black tracking-tight text-foreground',
   brandModule: 'mt-0.5 truncate text-caption font-bold uppercase tracking-[0.14em] text-emerald-700',
   toggle:
-    'flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] border border-mxsb-line bg-white text-slate-500 outline-none transition-colors hover:bg-slate-50 hover:text-slate-800 focus-visible:ring-2 focus-visible:ring-emerald-500/30',
+    'flex h-9 w-9 shrink-0 items-center justify-center rounded-[12px] border border-mxsb-line bg-white text-muted-foreground outline-none transition-colors hover:bg-slate-50 hover:text-foreground focus-visible:ring-2 focus-visible:ring-emerald-500/30',
 
   /** Área de navegação. */
   nav: 'flex-1 min-h-0 overflow-y-auto py-4',

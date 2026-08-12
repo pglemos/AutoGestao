@@ -54,7 +54,7 @@ export function AgendaEventPopover({
               <Typography variant="caption" className="min-w-0 truncate font-bold">{item.title}</Typography>
             </div>
             <Popover.Close asChild>
-              <button type="button" aria-label="Fechar" className="shrink-0 rounded-xl p-1 text-gray-500 transition-colors hover:bg-gray-50 hover:text-gray-800">
+              <button type="button" aria-label="Fechar" className="shrink-0 rounded-xl p-1 text-muted-foreground transition-colors hover:bg-gray-50 hover:text-foreground">
                 <X size={14} />
               </button>
             </Popover.Close>

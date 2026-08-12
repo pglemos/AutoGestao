@@ -44,7 +44,7 @@ export function RegularizeLateModal({
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-gray-700 shadow-sm hover:bg-gray-50 disabled:opacity-50"
+            className="h-11 rounded-xl border border-gray-200 bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-gray-50 disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -75,7 +75,7 @@ export function RegularizeLateModal({
         </div>
 
         <label className="block">
-          <span className="mb-1 block text-xs font-medium text-gray-600">
+          <span className="mb-1 block text-xs font-medium text-muted-foreground">
             Observação
           </span>
           <textarea
@@ -84,9 +84,9 @@ export function RegularizeLateModal({
             onChange={(event) => setObservation(event.target.value)}
             rows={4}
             placeholder="Justificativa ou contexto da regularização..."
-            className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-blue-500"
           />
-          <span className="mt-1 block text-caption text-gray-400">
+          <span className="mt-1 block text-caption text-muted-foreground">
             Informe ao menos 8 caracteres para manter a justificativa auditável.
           </span>
         </label>
@@ -98,8 +98,8 @@ export function RegularizeLateModal({
 function DataRow({ label, value }: { label: string; value: string }) {
   return (
     <div className="flex items-center justify-between gap-4">
-      <span className="text-gray-500">{label}</span>
-      <strong className="text-gray-800">{value}</strong>
+      <span className="text-muted-foreground">{label}</span>
+      <strong className="text-foreground">{value}</strong>
     </div>
   );
 }

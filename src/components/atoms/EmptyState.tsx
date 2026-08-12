@@ -20,7 +20,7 @@ const emptyStateVariants = cva(
 )
 
 const iconSizeVariants = cva(
-  "text-gray-500",
+  "text-muted-foreground",
   {
     variants: {
       size: {

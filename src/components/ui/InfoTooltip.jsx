@@ -21,7 +21,7 @@ export default function InfoTooltip({ text }) {
         onMouseEnter={() => setVisible(true)}
         onMouseLeave={() => setVisible(false)}
         onClick={() => setVisible(v => !v)}
-        className="text-slate-300 hover:text-[#005BFF] transition-colors focus:outline-none"
+        className="text-text-disabled hover:text-[#005BFF] transition-colors focus:outline-none"
         aria-label="Mais informações"
       >
         <Info className="w-3.5 h-3.5" />
@@ -36,7 +36,7 @@ export default function InfoTooltip({ text }) {
             left: ref.current ? Math.min(ref.current.getBoundingClientRect().left, window.innerWidth - 296) : 0,
           }}
         >
-          <p className="text-[12px] text-slate-600 leading-relaxed">{text}</p>
+          <p className="text-[12px] text-muted-foreground leading-relaxed">{text}</p>
         </div>
       )}
     </div>

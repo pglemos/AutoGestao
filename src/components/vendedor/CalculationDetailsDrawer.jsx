@@ -16,7 +16,7 @@ export default function CalculationDetailsDrawer({ open, onClose, calcResult, pe
         <div className="sticky top-0 bg-white border-b border-slate-100 px-6 py-4 flex items-center justify-between">
           <h2 className="text-base font-bold text-mx-navy">Detalhamento do Cálculo</h2>
           <button onClick={onClose} className="w-8 h-8 rounded-full hover:bg-slate-100 flex items-center justify-center">
-            <X className="w-4 h-4 text-slate-500" />
+            <X className="w-4 h-4 text-muted-foreground" />
           </button>
         </div>
 
@@ -63,7 +63,7 @@ export default function CalculationDetailsDrawer({ open, onClose, calcResult, pe
             <Section title="Premiações atingidas">
               {premiacoesAtingidas.map((p, i) => (
                 <div key={i} className="flex justify-between text-sm mt-1">
-                  <span className="text-slate-600">{p.quantidade_vendas_necessarias} vendas</span>
+                  <span className="text-muted-foreground">{p.quantidade_vendas_necessarias} vendas</span>
                   <span className="font-semibold text-emerald-600">{formatBRL(p.valor_premio)}</span>
                 </div>
               ))}
@@ -73,7 +73,7 @@ export default function CalculationDetailsDrawer({ open, onClose, calcResult, pe
           {proximaPremiacao && (
             <Section title="Próxima premiação">
               <div className="flex justify-between text-sm">
-                <span className="text-slate-600">{proximaPremiacao.quantidade_vendas_necessarias} vendas</span>
+                <span className="text-muted-foreground">{proximaPremiacao.quantidade_vendas_necessarias} vendas</span>
                 <span className="font-semibold text-amber-600">{formatBRL(proximaPremiacao.valor_premio)} — Não atingida</span>
               </div>
             </Section>
@@ -94,8 +94,8 @@ export default function CalculationDetailsDrawer({ open, onClose, calcResult, pe
 function Section({ title, children }) {
   return (
     <div>
-      <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider mb-1">{title}</p>
-      <div className="text-sm text-slate-700 font-medium">{children}</div>
+      <p className="text-xs font-semibold text-muted-foreground uppercase tracking-wider mb-1">{title}</p>
+      <div className="text-sm text-foreground font-medium">{children}</div>
     </div>
   );
 }

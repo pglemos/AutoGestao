@@ -20,7 +20,7 @@ const CARDS = [
     complement: "aguardando início",
     icon: Circle,
     strip: "bg-slate-400",
-    iconBg: "bg-slate-100 text-slate-600",
+    iconBg: "bg-slate-100 text-muted-foreground",
     selectedBg: "bg-slate-50/80",
     selectedBorder: "border-slate-400",
     getValue: (actions) => countByStatus(actions, "not_started"),

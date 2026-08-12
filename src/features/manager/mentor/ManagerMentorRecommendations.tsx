@@ -24,13 +24,13 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
   return (
     <section className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm" data-tour="mentor-recomendacoes" aria-labelledby="mentor-rules-title">
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
-        <h2 id="mentor-rules-title" className="flex items-center gap-1.5 font-semibold text-gray-800">
+        <h2 id="mentor-rules-title" className="flex items-center gap-1.5 font-semibold text-foreground">
           <ListChecks size={18} className="text-emerald-600" />
           Recomendações por Regras
           <HelpTooltip text="Sinais gerados automaticamente por regras objetivas (sem IA) sobre fechamentos pendentes, rotina crítica e atraso na meta proporcional da loja." />
         </h2>
         <div className="flex items-center gap-2">
-          <Filter size={14} className="text-gray-400" />
+          <Filter size={14} className="text-muted-foreground" />
           {FILTERS.map(item => (
             <button
               key={item.key}
@@ -40,7 +40,7 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
               className={`rounded-lg border px-3 py-1 text-xs font-medium transition-all ${
                 filter === item.key
                   ? 'border-gray-800 bg-gray-800 text-white'
-                  : 'border-gray-100 bg-gray-50 text-gray-500 hover:bg-gray-100'
+                  : 'border-gray-100 bg-gray-50 text-muted-foreground hover:bg-gray-100'
               }`}
             >
               {item.label}
@@ -54,10 +54,10 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
           <span className="mx-auto mb-3 grid h-14 w-14 place-items-center rounded-full bg-emerald-50">
             <ListChecks className="text-emerald-500" size={28} />
           </span>
-          <p className="text-sm font-medium text-gray-600">
+          <p className="text-sm font-medium text-muted-foreground">
             {recommendations.length === 0 ? 'Nenhuma recomendação no momento.' : 'Nenhuma recomendação neste filtro.'}
           </p>
-          <p className="mt-1 text-xs text-gray-400">Operação normalizada — continue monitorando.</p>
+          <p className="mt-1 text-xs text-muted-foreground">Operação normalizada — continue monitorando.</p>
         </div>
       ) : (
         <div className="space-y-2.5">
@@ -76,12 +76,12 @@ export function ManagerMentorRecommendations({ recommendations }: { recommendati
                   </span>
                   <div className="min-w-0 flex-1">
                     <div className="mb-1 flex flex-wrap items-center gap-2">
-                      <span className="text-caption font-semibold uppercase tracking-wide text-gray-500">{config.label}</span>
+                      <span className="text-caption font-semibold uppercase tracking-wide text-muted-foreground">{config.label}</span>
                       <span className={`rounded-md px-1.5 py-0.5 text-caption font-semibold ${isCritical ? 'bg-red-100 text-red-700' : 'bg-amber-100 text-amber-700'}`}>
                         {isCritical ? 'CRÍTICO' : 'ATENÇÃO'}
                       </span>
                     </div>
-                    <p className="text-sm leading-relaxed text-gray-700">{item.message}</p>
+                    <p className="text-sm leading-relaxed text-foreground">{item.message}</p>
                     <p className={`mt-2 flex items-start gap-1.5 text-xs ${isCritical ? 'text-red-700' : 'text-amber-700'}`}>
                       <ArrowRight size={13} className="mt-0.5 shrink-0" />
                       <span><span className="font-semibold">Ação sugerida: </span>{item.action}</span>

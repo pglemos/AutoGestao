@@ -84,13 +84,13 @@ export function MxPageTabs<T extends string>({
       {searchable ? (
         <label className="relative mb-4 block w-full sm:max-w-sm">
           <span className="sr-only">{searchPlaceholder}</span>
-          <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" aria-hidden="true" />
+          <Search size={16} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
           <input
             type="search"
             value={searchTerm}
             onChange={(event: ChangeEvent<HTMLInputElement>) => setSearchTerm(event.target.value)}
             placeholder={searchPlaceholder}
-            className="h-10 w-full rounded-xl border border-gray-200 bg-white pl-9 pr-3 text-sm text-gray-700 outline-none placeholder:text-gray-400 focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
+            className="h-10 w-full rounded-xl border border-gray-200 bg-white pl-9 pr-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-emerald-500 focus:ring-2 focus:ring-emerald-500/15"
           />
         </label>
       ) : null}
@@ -100,7 +100,7 @@ export function MxPageTabs<T extends string>({
           {groupedItems.map(([group, groupItems]: [string, MxPageTabItem<T>[]]) => (
             <section key={group} aria-label={groupLabels?.[group] || undefined} className="space-y-2">
               {group !== 'default' && groupLabels?.[group] ? (
-                <Typography variant="caption" className="block px-1 text-xs font-semibold text-gray-500">
+                <Typography variant="caption" className="block px-1 text-xs font-semibold text-muted-foreground">
                   {groupLabels[group]}
                 </Typography>
               ) : null}
@@ -125,12 +125,12 @@ export function MxPageTabs<T extends string>({
                       title={item.description}
                       className={cn(
                         'inline-flex min-h-10 shrink-0 items-center gap-2 rounded-lg px-3 text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-emerald-500/30',
-                        selected ? 'bg-white text-emerald-700 shadow-sm' : 'text-gray-500 hover:bg-white/70 hover:text-gray-700',
+                        selected ? 'bg-white text-emerald-700 shadow-sm' : 'text-muted-foreground hover:bg-white/70 hover:text-foreground',
                       )}
                     >
                       {Icon ? <Icon size={15} className="shrink-0" aria-hidden="true" /> : null}
                       <span>{item.label}</span>
-                      {item.readOnly ? <Eye size={13} className="shrink-0 text-gray-400" aria-label="Somente consulta" /> : null}
+                      {item.readOnly ? <Eye size={13} className="shrink-0 text-muted-foreground" aria-label="Somente consulta" /> : null}
                     </button>
                   )
                 })}
@@ -140,7 +140,7 @@ export function MxPageTabs<T extends string>({
         </div>
       ) : (
         <div className="rounded-xl border border-dashed border-gray-200 bg-gray-50 px-4 py-8 text-center">
-          <Typography variant="p" className="text-sm text-gray-500">Nenhuma opção encontrada para a busca.</Typography>
+          <Typography variant="p" className="text-sm text-muted-foreground">Nenhuma opção encontrada para a busca.</Typography>
         </div>
       )}
     </InternalMxTemplateTabs>

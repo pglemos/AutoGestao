@@ -27,7 +27,7 @@ export default function BonusDisputeCard({ bonificacoes }) {
           <span className="text-purple-600 text-xs font-semibold uppercase tracking-widest">Bônus em Disputa</span>
         </div>
         <div className="text-center py-4">
-          <p className="text-slate-400 text-sm">Nenhuma bonificação em disputa no momento.</p>
+          <p className="text-muted-foreground text-sm">Nenhuma bonificação em disputa no momento.</p>
         </div>
       </div>
     );
@@ -48,22 +48,22 @@ export default function BonusDisputeCard({ bonificacoes }) {
           return (
             <div key={i} className={`flex items-start justify-between p-3 rounded-xl ${cfg.bg} border ${cfg.border}`}>
               <div className="flex-1">
-                <p className="text-sm font-semibold text-slate-700">{bon.nome}</p>
-                {bon.criterio && <p className="text-xs text-slate-400 mt-0.5">{bon.criterio}</p>}
+                <p className="text-sm font-semibold text-foreground">{bon.nome}</p>
+                {bon.criterio && <p className="text-xs text-muted-foreground mt-0.5">{bon.criterio}</p>}
                 <div className={`flex items-center gap-1 mt-1.5 ${cfg.color}`}>
                   <Icon className="w-3 h-3" />
                   <span className="text-xs font-medium">{cfg.label}</span>
                 </div>
               </div>
               <div className="text-right ml-3">
-                <p className="text-sm font-bold text-slate-700">{formatBRL(bon.valor)}</p>
+                <p className="text-sm font-bold text-foreground">{formatBRL(bon.valor)}</p>
               </div>
             </div>
           );
         })}
       </div>
 
-      <p className="text-slate-400 text-xs mt-4">
+      <p className="text-muted-foreground text-xs mt-4">
         Bônus em disputa não são somados ao salário previsto até confirmação.
       </p>
     </div>

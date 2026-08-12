@@ -409,7 +409,7 @@ function AdminMorningReport() {
                                                         <Typography variant="tiny" className="group-hover:text-white">{store.store_name.substring(0, 2)}</Typography>
                                                     </div>
                                                     <Typography variant="h3" className="text-base group-hover:text-emerald-600 transition-colors tracking-tight">{store.store_name}</Typography>
-                                                    <ChevronDown size={16} className={cn("transition-transform text-gray-500", isExpanded && "rotate-180")} />
+                                                    <ChevronDown size={16} className={cn("transition-transform text-muted-foreground", isExpanded && "rotate-180")} />
                                                 </div>
                                             </td>
                                             <td className="text-center"><Typography variant="mono" className="text-sm tabular-nums opacity-60">{store.goal}</Typography></td>

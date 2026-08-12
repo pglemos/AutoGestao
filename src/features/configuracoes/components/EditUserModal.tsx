@@ -197,8 +197,8 @@ export function EditUserModal({ open, user, lojas, onClose, onSubmit, allowedRol
                                 className="mt-1 h-mx-sm w-mx-sm accent-brand-primary"
                             />
                             <span className="flex-1">
-                                <span className="block text-sm font-bold uppercase tracking-widest text-gray-800">Usuário ativo</span>
-                                <span className="block text-xs font-bold text-gray-500 mt-1">
+                                <span className="block text-sm font-bold uppercase tracking-widest text-foreground">Usuário ativo</span>
+                                <span className="block text-xs font-bold text-muted-foreground mt-1">
                                     Desativar bloqueia o login mas preserva o histórico operacional.
                                 </span>
                             </span>
@@ -240,7 +240,7 @@ function FormGroup({ icon, label, children }: { icon: React.ReactNode; label: st
         <div className="space-y-mx-xs">
             <Typography variant="tiny" tone="muted" className="px-1">{label}</Typography>
             <div className="relative">
-                <span className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 z-10 pointer-events-none">{icon}</span>
+                <span className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground z-10 pointer-events-none">{icon}</span>
                 {children}
             </div>
         </div>

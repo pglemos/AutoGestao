@@ -35,13 +35,13 @@ function calcMetrics(dailyCloses, clients) {
 function MetaCard({ label, valor, sugestao, cor, detalhe }) {
   return (
     <div className={`rounded-xl border p-4 ${cor}`}>
-      <p className="text-caption font-bold text-slate-400 uppercase tracking-wider mb-1">{label}</p>
+      <p className="text-caption font-bold text-muted-foreground uppercase tracking-wider mb-1">{label}</p>
       <div className="flex items-end gap-2">
-        <span className="text-h2 font-bold tabular-nums text-slate-800 leading-none">{sugestao}</span>
-        <span className="text-caption text-slate-400 mb-1">sugerido</span>
+        <span className="text-h2 font-bold tabular-nums text-foreground leading-none">{sugestao}</span>
+        <span className="text-caption text-muted-foreground mb-1">sugerido</span>
       </div>
-      {detalhe && <p className="text-caption text-slate-400 mt-1">{detalhe}</p>}
-      <p className="text-caption text-slate-300 mt-0.5">Média atual: {valor}</p>
+      {detalhe && <p className="text-caption text-muted-foreground mt-1">{detalhe}</p>}
+      <p className="text-caption text-text-disabled mt-0.5">Média atual: {valor}</p>
     </div>
   );
 }
@@ -69,7 +69,7 @@ export default function MetasSugeridas() {
     return (
       <div className="bg-white rounded-2xl p-6 shadow-sm border border-slate-100 flex items-center gap-3">
         <div className="w-5 h-5 border-2 border-slate-200 border-t-primary rounded-full animate-spin" />
-        <p className="text-sm text-slate-400">Analisando histórico...</p>
+        <p className="text-sm text-muted-foreground">Analisando histórico...</p>
       </div>
     );
   }
@@ -81,7 +81,7 @@ export default function MetasSugeridas() {
           <Sparkles className="w-5 h-5 text-mx-amber" />
           <h3 className="text-base font-semibold text-mx-navy">Metas Sugeridas</h3>
         </div>
-        <p className="text-sm text-slate-400">Nenhum dado histórico disponível. Preencha o Fechamento Diário para começar a receber sugestões personalizadas.</p>
+        <p className="text-sm text-muted-foreground">Nenhum dado histórico disponível. Preencha o Fechamento Diário para começar a receber sugestões personalizadas.</p>
       </div>
     );
   }
@@ -144,10 +144,10 @@ export default function MetasSugeridas() {
           <Sparkles className="w-5 h-5 text-mx-amber" />
           <div className="text-left">
             <h3 className="text-base font-semibold text-mx-navy">Metas Sugeridas pelo Histórico</h3>
-            <p className="text-xs text-slate-400 mt-0.5">Baseado nos últimos {metrics.diasAnalisados} fechamentos — use como referência para o Funil de Vendas</p>
+            <p className="text-xs text-muted-foreground mt-0.5">Baseado nos últimos {metrics.diasAnalisados} fechamentos — use como referência para o Funil de Vendas</p>
           </div>
         </div>
-        {expanded ? <ChevronUp className="w-4 h-4 text-slate-400" /> : <ChevronDown className="w-4 h-4 text-slate-400" />}
+        {expanded ? <ChevronUp className="w-4 h-4 text-muted-foreground" /> : <ChevronDown className="w-4 h-4 text-muted-foreground" />}
       </button>
 
       {expanded && (

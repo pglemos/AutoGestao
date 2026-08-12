@@ -14,8 +14,8 @@ export function ConfiguracoesTabSummary({ definition, isReadOnly }: { definition
             <Icon size={22} aria-hidden="true" />
           </span>
           <div className="min-w-0">
-            <Typography as="h2" variant="h3" className="text-lg font-semibold text-gray-800">{definition.label}</Typography>
-            <Typography variant="p" className="mt-1 text-sm text-gray-500">{definition.description}</Typography>
+            <Typography as="h2" variant="h3" className="text-lg font-semibold text-foreground">{definition.label}</Typography>
+            <Typography variant="p" className="mt-1 text-sm text-muted-foreground">{definition.description}</Typography>
           </div>
         </div>
         <div className="flex flex-wrap items-center gap-2">

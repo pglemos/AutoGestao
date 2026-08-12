@@ -16,18 +16,18 @@ export default function PerformanceCard({ melhorMes, comissaoAtual }) {
       }}
     >
       <div className="flex items-center gap-2 mb-5">
-        <span className="text-slate-300 text-xs font-bold uppercase tracking-widest">Seu Desempenho</span>
-        <Info className="w-3.5 h-3.5 text-slate-600" />
+        <span className="text-text-disabled text-xs font-bold uppercase tracking-widest">Seu Desempenho</span>
+        <Info className="w-3.5 h-3.5 text-muted-foreground" />
       </div>
 
       {melhorMes === 0 ? (
-        <p className="text-slate-500 text-sm">Seu desempenho começará a aparecer conforme suas vendas forem registradas.</p>
+        <p className="text-muted-foreground text-sm">Seu desempenho começará a aparecer conforme suas vendas forem registradas.</p>
       ) : (
         <>
           <div className="space-y-4">
             <div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-slate-400 text-sm">Seu melhor mês</span>
+                <span className="text-muted-foreground text-sm">Seu melhor mês</span>
                 <span className="text-emerald-400 font-bold text-sm tabular-nums">{formatBRL(melhorMes).replace(",00","")}</span>
               </div>
               <div className="w-full rounded-full h-3" style={{ background: "rgba(255,255,255,0.06)" }}>
@@ -37,7 +37,7 @@ export default function PerformanceCard({ melhorMes, comissaoAtual }) {
 
             <div>
               <div className="flex justify-between items-center mb-2">
-                <span className="text-slate-400 text-sm">Mês atual</span>
+                <span className="text-muted-foreground text-sm">Mês atual</span>
                 <span className="text-blue-400 font-bold text-sm tabular-nums">{formatBRL(comissaoAtual).replace(",00","")}</span>
               </div>
               <div className="w-full rounded-full h-3" style={{ background: "rgba(255,255,255,0.06)" }}>
@@ -48,7 +48,7 @@ export default function PerformanceCard({ melhorMes, comissaoAtual }) {
 
           <div className="flex items-center gap-2 mt-5">
             <TrendingUp className="w-4 h-4 text-emerald-400" />
-            <p className="text-slate-300 text-sm">
+            <p className="text-text-disabled text-sm">
               Você está <span className="text-emerald-400 font-bold">{pct}%</span> do seu melhor resultado!
             </p>
           </div>

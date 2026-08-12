@@ -373,14 +373,14 @@ export function calcularPrioridade(cliente) {
 export function tempColor(t) {
   if (t === "Quente") return "bg-red-50 text-red-600 border-red-100";
   if (t === "Morno") return "bg-amber-50 text-amber-600 border-amber-100";
-  return "bg-slate-100 text-slate-500 border-slate-200";
+  return "bg-slate-100 text-muted-foreground border-slate-200";
 }
 
 export function prioridadeColor(p) {
   if (p === "Máxima") return "bg-red-100 text-red-700";
   if (p === "Alta") return "bg-red-50 text-red-600";
   if (p === "Média") return "bg-amber-50 text-amber-600";
-  return "bg-slate-100 text-slate-500";
+  return "bg-slate-100 text-muted-foreground";
 }
 
 export function statusComercialColor(s) {
@@ -391,8 +391,8 @@ export function statusComercialColor(s) {
   if (s === "Cancelada") return "bg-amber-50 text-amber-700";
   if (s === "Agendado") return "bg-blue-50 text-blue-600";
   if (s === "Em negociação") return "bg-purple-50 text-purple-600";
-  if (s === "Futuro") return "bg-slate-100 text-slate-500";
-  return "bg-slate-50 text-slate-500";
+  if (s === "Futuro") return "bg-slate-100 text-muted-foreground";
+  return "bg-slate-50 text-muted-foreground";
 }
 
 // ─── SCRIPTS BIBLIOTECA ───────────────────────────────────────────────────────

@@ -602,7 +602,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
     venda: { label: "$", cls: "text-green-600 bg-green-50" },
     qualificado: { label: "Q", cls: "text-purple-600 bg-purple-50" },
     garantia: { label: "!", cls: "text-amber-600 bg-amber-50" },
-    perdido: { label: "✕", cls: "text-slate-400 bg-slate-100" },
+    perdido: { label: "✕", cls: "text-muted-foreground bg-slate-100" },
   };
 
   const getTipoBadge = (c) => {
@@ -643,7 +643,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
               {canEdit
                 ? isExpanded
                   ? <ChevronUp className="w-3.5 h-3.5 text-purple-400 flex-shrink-0" />
-                  : <ChevronDown className="w-3.5 h-3.5 text-slate-300 group-hover:text-slate-400 flex-shrink-0" />
+                  : <ChevronDown className="w-3.5 h-3.5 text-text-disabled group-hover:text-muted-foreground flex-shrink-0" />
                 : <Lock className="w-3.5 h-3.5 text-slate-200 flex-shrink-0" />
               }
               {c.nome}
@@ -661,15 +661,15 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             {c._dataDisplay ? moment(c._dataDisplay).format("DD/MM/YYYY") : "—"}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-slate-100 text-slate-600"} />}
+            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-slate-100 text-muted-foreground"} />}
           </td>
           <td className="px-4 py-3">
             {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_troca ? "Sim" : "Não"} className={c.interesse_troca ? "bg-green-100 text-green-700" : "bg-red-100 text-red-600"} />}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-green-100 text-green-700" : "bg-slate-100 text-slate-500"} />}
+            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-green-100 text-green-700" : "bg-slate-100 text-muted-foreground"} />}
           </td>
-          <td className="px-4 py-3"><Badge label={saleDisplay} className={SALE_STYLE[saleDisplay] || "bg-slate-100 text-slate-500"} /></td>
+          <td className="px-4 py-3"><Badge label={saleDisplay} className={SALE_STYLE[saleDisplay] || "bg-slate-100 text-muted-foreground"} /></td>
           <td className="px-4 py-3">
             <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
               <button onClick={(e) => canEdit && openEdit(c, e)} disabled={!canEdit}
@@ -742,7 +742,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
                       <Plus className="w-5 h-5 text-purple-300" />
                     </div>
                     <p className="text-body-sm text-[#64748B] font-medium">Nenhum cliente neste fechamento.</p>
-                    <p className="text-[12px] text-slate-300">Clique em "Novo Cliente" para adicionar.</p>
+                    <p className="text-[12px] text-text-disabled">Clique em "Novo Cliente" para adicionar.</p>
                   </div>
                 </td></tr>
               ) : ordenarClientes(clientes).map(renderRow)}
@@ -827,7 +827,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             </Field>
             <Field label="Situação Comercial">
               {modoD1 ? (
-                <div className="h-10 flex items-center px-3 bg-slate-50 border border-slate-200 rounded-lg text-body-sm text-slate-500 font-semibold cursor-not-allowed">
+                <div className="h-10 flex items-center px-3 bg-slate-50 border border-slate-200 rounded-lg text-body-sm text-muted-foreground font-semibold cursor-not-allowed">
                   Em negociação ativa
                 </div>
               ) : (

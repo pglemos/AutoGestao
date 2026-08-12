@@ -106,7 +106,7 @@ export function DRETable({
                           <Pencil size={14} />
                         </Button>
                       ) : (
-                        <span className="text-gray-500 text-xs">—</span>
+                        <span className="text-muted-foreground text-xs">—</span>
                       )}
                     </td>
                   )

@@ -18,7 +18,7 @@ export function ClientHeaderSection({ client }: Props) {
         </Link>
         <div>
           <div className="flex items-center gap-mx-xs">
-            <Typography variant="h1" className="text-2xl text-black">{client.name}</Typography>
+            <Typography variant="h1" className="text-2xl text-foreground">{client.name}</Typography>
             <Badge
               variant={client.status === 'ativo' ? 'success' : 'outline'}
               className="h-mx-5 text-mx-micro"

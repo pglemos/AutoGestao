@@ -225,13 +225,13 @@ export function MentorCarteiraSection({
       ) : null}
 
       {ficha.phase === 'loading' ? (
-        <p role="status" className="p-4 text-sm text-slate-600">
+        <p role="status" className="p-4 text-sm text-muted-foreground">
           Carregando ficha da oportunidade…
         </p>
       ) : null}
 
       {ficha.phase === 'unavailable' ? (
-        <p role="alert" className="p-4 text-sm text-slate-700">
+        <p role="alert" className="p-4 text-sm text-foreground">
           {ficha.reason}
         </p>
       ) : null}

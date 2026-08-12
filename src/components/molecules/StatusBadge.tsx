@@ -50,7 +50,7 @@ const labelVariants = cva(
         warning: "text-status-warning",
         error: "text-status-error",
         info: "text-status-info",
-        neutral: "text-gray-500",
+        neutral: "text-muted-foreground",
         pending: "text-status-warning",
       },
     },
@@ -79,7 +79,7 @@ const StatusBadge = React.forwardRef<HTMLDivElement, StatusBadgeProps>(
         </span>
         {description && (
           <>
-            <span className="text-gray-500" aria-hidden="true">&middot;</span>
+            <span className="text-muted-foreground" aria-hidden="true">&middot;</span>
             <Typography variant="tiny" tone="muted">{description}</Typography>
           </>
         )}

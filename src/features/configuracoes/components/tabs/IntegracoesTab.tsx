@@ -59,7 +59,7 @@ export function IntegracoesTab() {
             <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center justify-between pb-mx-md border-b border-gray-200 mb-mx-lg">
                     <div className="flex items-center gap-mx-sm">
-                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-gray-500 flex items-center justify-center border border-gray-200">
+                        <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-gray-200">
                             <Webhook size={26} />
                         </div>
                         <div>

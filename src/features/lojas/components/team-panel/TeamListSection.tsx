@@ -63,7 +63,7 @@ export function TeamListSection({
               <Badge variant="outline" className="w-fit">{filteredTeam.length} registros</Badge>
             </div>
           </CardHeader>
-          <div className="hidden lg:grid store-team-grid gap-mx-md px-mx-lg py-mx-sm bg-gray-50 border-b border-gray-200 text-mx-nano font-bold uppercase tracking-mx-widest text-gray-500">
+          <div className="hidden lg:grid store-team-grid gap-mx-md px-mx-lg py-mx-sm bg-gray-50 border-b border-gray-200 text-mx-nano font-bold uppercase tracking-mx-widest text-muted-foreground">
             <span>Integrante</span>
             <span>Papel</span>
             <span>Status</span>
@@ -92,7 +92,7 @@ export function TeamListSection({
                       />
                       <div className="min-w-0 flex-1">
                         <Typography variant="caption" className="block max-w-full tracking-tight truncate">{member.name}</Typography>
-                        <div className="mt-1 flex flex-wrap gap-x-mx-md gap-y-mx-tiny text-mx-micro font-bold text-gray-500">
+                        <div className="mt-1 flex flex-wrap gap-x-mx-md gap-y-mx-tiny text-mx-micro font-bold text-muted-foreground">
                           <span className="inline-flex items-center gap-mx-tiny min-w-0"><Mail size={11} />{member.email || 'sem e-mail'}</span>
                           <span className="inline-flex items-center gap-mx-tiny"><Phone size={11} />{member.phone || 'sem telefone'}</span>
                         </div>
@@ -116,11 +116,11 @@ export function TeamListSection({
 
                   <div className="grid grid-cols-2 gap-mx-sm text-mx-tiny font-bold uppercase">
                     <div>
-                      <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Início</span>
+                      <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Início</span>
                       {member.started_at ? format(parseISO(member.started_at), 'dd/MM/yyyy') : '--'}
                     </div>
                     <div>
-                      <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Fim</span>
+                      <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Fim</span>
                       {member.ended_at ? format(parseISO(member.ended_at), 'dd/MM/yyyy') : '--'}
                     </div>
                   </div>

@@ -111,32 +111,32 @@ export default function VendedorHomePage() {
       >
         <div className="text-center">
           <div className="h-8 w-8 animate-spin rounded-full border-4 border-emerald-600 border-t-transparent mx-auto mb-4" />
-          <p className="text-sm text-gray-500">Carregando cockpit...</p>
+          <p className="text-sm text-muted-foreground">Carregando cockpit...</p>
         </div>
       </PageCanvas>
     )
   }
 
   return (
-    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5 text-gray-800">
+    <PageCanvas as="div" width="dashboard" bottomClearance="navigation" className="flex flex-col gap-5 text-foreground">
         <header className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-800">
+              <h1 className="text-xl font-bold text-foreground">
                 {saudacao()}, {firstName}! 👋
               </h1>
-              <p className="mt-0.5 text-sm text-gray-500">Acompanhe sua rotina e resultados do dia.</p>
+              <p className="mt-0.5 text-sm text-muted-foreground">Acompanhe sua rotina e resultados do dia.</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <div className="hidden text-right sm:block">
-                <p className="text-sm font-semibold text-gray-700">{weekday}</p>
-                <p className="text-xs text-gray-500">{longDate}</p>
+                <p className="text-sm font-semibold text-foreground">{weekday}</p>
+                <p className="text-xs text-muted-foreground">{longDate}</p>
               </div>
               <div className="flex flex-wrap items-center gap-2">
                 <button
                   type="button"
                   onClick={() => navigate('/central-execucao')}
-                  className="flex h-[36px] items-center gap-1 rounded-xl border border-gray-800 px-3 text-sm font-semibold text-gray-800 shadow-sm transition-colors hover:bg-gray-100"
+                  className="flex h-[36px] items-center gap-1 rounded-xl border border-gray-800 px-3 text-sm font-semibold text-foreground shadow-sm transition-colors hover:bg-gray-100"
                 >
                   <CalendarClock size={14} /> Rotina do Dia
                 </button>
@@ -160,7 +160,7 @@ export default function VendedorHomePage() {
                   }}
                   disabled={home.isRefetching || deterministic.loading}
                   aria-label="Atualizar"
-                  className="grid h-[36px] w-10 place-items-center rounded-xl text-gray-500 hover:bg-gray-50 disabled:opacity-50"
+                  className="grid h-[36px] w-10 place-items-center rounded-xl text-muted-foreground hover:bg-gray-50 disabled:opacity-50"
                 >
                   <RefreshCw size={16} className={home.isRefetching || deterministic.loading ? 'animate-spin' : ''} />
                 </button>
@@ -187,26 +187,26 @@ export default function VendedorHomePage() {
 
           <article className="flex min-h-[140px] flex-col justify-between rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
             <div className="flex items-start justify-between">
-              <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Faltam para a Meta</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Faltam para a Meta</p>
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
-                <Target size={18} className="text-gray-500" />
+                <Target size={18} className="text-muted-foreground" />
               </span>
             </div>
             <div>
               {meta === 0 ? (
                 <>
-                  <p className="text-2xl font-bold text-gray-600">Meta não cadastrada</p>
-                  <p className="mt-1 text-sm text-gray-600">Fale com seu gerente.</p>
+                  <p className="text-2xl font-bold text-muted-foreground">Meta não cadastrada</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Fale com seu gerente.</p>
                 </>
               ) : faltam === 0 ? (
                 <>
                   <p className="text-3xl font-bold text-emerald-600">0 vendas</p>
-                  <p className="mt-1 text-sm text-gray-500">Meta do mês atingida! 🎉</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Meta do mês atingida! 🎉</p>
                 </>
               ) : (
                 <>
-                  <p className="text-3xl font-bold text-gray-800">{faltam} {faltam === 1 ? 'venda' : 'vendas'}</p>
-                  <p className="mt-1 text-sm text-gray-500">Para atingir a meta mensal</p>
+                  <p className="text-3xl font-bold text-foreground">{faltam} {faltam === 1 ? 'venda' : 'vendas'}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Para atingir a meta mensal</p>
                 </>
               )}
             </div>
@@ -225,14 +225,14 @@ export default function VendedorHomePage() {
             }}
           >
             <div className="flex items-start justify-between">
-              <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Agenda Hoje</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Agenda Hoje</p>
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
-                <CalendarClock size={18} className="text-gray-500" />
+                <CalendarClock size={18} className="text-muted-foreground" />
               </span>
             </div>
             <div>
-              <p className="text-3xl font-bold text-gray-800">{agendaMetrics.agendamentosHoje}</p>
-              <p className="mt-1 text-sm text-gray-500">
+              <p className="text-3xl font-bold text-foreground">{agendaMetrics.agendamentosHoje}</p>
+              <p className="mt-1 text-sm text-muted-foreground">
                 {agendaMetrics.agendamentosHoje === 0
                   ? 'Nenhum compromisso hoje'
                   : `compromisso${agendaMetrics.agendamentosHoje !== 1 ? 's' : ''} confirmado${agendaMetrics.agendamentosHoje !== 1 ? 's' : ''}`}
@@ -255,16 +255,16 @@ export default function VendedorHomePage() {
             }}
           >
             <div className="flex items-start justify-between">
-              <p className="text-xs font-medium uppercase tracking-wide text-gray-500">Ranking</p>
+              <p className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Ranking</p>
               <span className="grid h-9 w-9 place-items-center rounded-xl bg-gray-100">
-                <Trophy size={18} className={posicaoRanking === 1 ? 'text-amber-500' : 'text-gray-500'} />
+                <Trophy size={18} className={posicaoRanking === 1 ? 'text-amber-500' : 'text-muted-foreground'} />
               </span>
             </div>
             <div>
-              <p className={`text-3xl font-bold ${posicaoRanking === 1 ? 'text-amber-500' : 'text-gray-800'}`}>
+              <p className={`text-3xl font-bold ${posicaoRanking === 1 ? 'text-amber-500' : 'text-foreground'}`}>
                 {posicaoRanking ? `#${posicaoRanking}` : '—'}
               </p>
-              <p className="mt-1 text-sm text-gray-500">posição na loja</p>
+              <p className="mt-1 text-sm text-muted-foreground">posição na loja</p>
             </div>
           </article>
         </section>
@@ -272,15 +272,15 @@ export default function VendedorHomePage() {
         <section className="flex flex-col gap-4 lg:flex-row">
           <div className="lg:w-[60%]">
             <article className="h-full rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
-              <h2 className="mb-4 text-sm font-bold text-gray-800">Disciplina Semanal</h2>
+              <h2 className="mb-4 text-sm font-bold text-foreground">Disciplina Semanal</h2>
               <div className="mb-3 flex items-center justify-between">
                 <div>
-                  <p className="text-xs text-gray-500">Consistência nos fechamentos</p>
-                  <p className="text-xl font-bold text-gray-800">{Math.round(disciplina)}%</p>
+                  <p className="text-xs text-muted-foreground">Consistência nos fechamentos</p>
+                  <p className="text-xl font-bold text-foreground">{Math.round(disciplina)}%</p>
                 </div>
                 <div className="text-right">
-                  <p className="text-xs text-gray-500">Oportunidades ativas</p>
-                  <p className="text-xl font-bold text-gray-800">{oportunidadesAtivas.length}</p>
+                  <p className="text-xs text-muted-foreground">Oportunidades ativas</p>
+                  <p className="text-xl font-bold text-foreground">{oportunidadesAtivas.length}</p>
                 </div>
               </div>
               <div className="relative h-3 overflow-hidden rounded-full bg-gray-100">
@@ -297,10 +297,10 @@ export default function VendedorHomePage() {
                   }}
                 />
               </div>
-              <p className="mt-1.5 text-xs text-gray-600">
+              <p className="mt-1.5 text-xs text-muted-foreground">
                 {disciplina >= 80 ? 'Excelente ritmo na semana' : disciplina >= 50 ? 'Bom progresso, mantenha a frequência' : 'Atenção à disciplina diária'}
               </p>
-              <p className="mt-3 text-sm font-medium text-gray-600">
+              <p className="mt-3 text-sm font-medium text-muted-foreground">
                 {disciplina >= 80
                   ? '🔥 Você está no caminho certo. Continue com o mesmo ritmo!'
                   : disciplina >= 50
@@ -325,15 +325,15 @@ export default function VendedorHomePage() {
 
         <section aria-label="Checklist do dia" className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
           <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-sm font-bold text-gray-800">Checklist do Dia</h2>
+            <h2 className="text-sm font-bold text-foreground">Checklist do Dia</h2>
           </div>
           <div className="space-y-3">
             {ritualItems.map((item, i) => (
               <div key={i} className="flex items-center gap-3">
                 {item.done
                   ? <CheckCircle size={18} className="text-emerald-500 flex-shrink-0" />
-                  : <Circle size={18} className="text-gray-300 flex-shrink-0" />}
-                <p className={`text-sm ${item.done ? 'text-gray-700 font-medium' : 'text-gray-600'}`}>{item.label}</p>
+                  : <Circle size={18} className="text-text-disabled flex-shrink-0" />}
+                <p className={`text-sm ${item.done ? 'text-foreground font-medium' : 'text-muted-foreground'}`}>{item.label}</p>
               </div>
             ))}
           </div>
@@ -343,7 +343,7 @@ export default function VendedorHomePage() {
           <div className="lg:w-[55%]">
             <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm">
               <div className="mb-4 flex items-center justify-between">
-                <h2 className="text-sm font-bold text-gray-800">Rotina do Dia — Hoje</h2>
+                <h2 className="text-sm font-bold text-foreground">Rotina do Dia — Hoje</h2>
                 <button
                   type="button"
                   onClick={() => navigate('/central-execucao')}
@@ -354,7 +354,7 @@ export default function VendedorHomePage() {
               </div>
               {agendaHoje.length === 0 ? (
                 <div className="py-6 text-center">
-                  <p className="text-sm text-gray-600">Nenhum compromisso agendado para hoje.</p>
+                  <p className="text-sm text-muted-foreground">Nenhum compromisso agendado para hoje.</p>
                   <button
                     type="button"
                     onClick={() => navigate('/central-execucao')}
@@ -370,13 +370,13 @@ export default function VendedorHomePage() {
                       <div className="flex items-center gap-3 min-w-0">
                         <span className="flex-shrink-0 w-2 h-2 rounded-full bg-emerald-400" />
                         <div className="min-w-0">
-                          <p className="text-sm font-medium text-gray-800 truncate">{item.cliente?.nome || 'Cliente'}</p>
-                          <p className="text-xs text-gray-600">
+                          <p className="text-sm font-medium text-foreground truncate">{item.cliente?.nome || 'Cliente'}</p>
+                          <p className="text-xs text-muted-foreground">
                             {item.tipo} · {new Date(item.data_hora).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                           </p>
                         </div>
                       </div>
-                      <ChevronRight size={15} className="text-gray-300 flex-shrink-0" />
+                      <ChevronRight size={15} className="text-text-disabled flex-shrink-0" />
                     </div>
                   ))}
                 </div>
@@ -395,7 +395,7 @@ export default function VendedorHomePage() {
 
           <div className="lg:w-[45%]">
             <div className="rounded-2xl border border-gray-100 bg-white p-5 shadow-sm h-full">
-              <h2 className="mb-4 text-sm font-bold text-gray-800">Acesso rápido</h2>
+              <h2 className="mb-4 text-sm font-bold text-foreground">Acesso rápido</h2>
               <div className="grid grid-cols-2 gap-3">
                 <ShortcutCard
                   label="Mentor Comercial"
@@ -433,7 +433,7 @@ function ShortcutCard({ label, icon, onClick }: { label: string; icon: React.Rea
       className="rounded-xl border border-gray-100 bg-gray-50 px-4 py-4 flex flex-col items-center gap-2 hover:bg-gray-100 transition-colors w-full"
     >
       {icon}
-      <span className="text-xs font-medium text-gray-600 text-center leading-tight">{label}</span>
+      <span className="text-xs font-medium text-muted-foreground text-center leading-tight">{label}</span>
     </button>
   )
 }

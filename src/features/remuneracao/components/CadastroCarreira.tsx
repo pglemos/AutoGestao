@@ -50,13 +50,13 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
       {error && <p className="text-sm font-bold text-status-error">Erro ao carregar: {error}</p>}
 
       {loading ? (
-        <p className="text-sm font-bold text-gray-500">Carregando vendedores…</p>
+        <p className="text-sm font-bold text-muted-foreground">Carregando vendedores…</p>
       ) : vendedores.length === 0 ? (
         <EmptyState title="Nenhum vendedor nesta loja" description="Cadastre vendedores em Equipe & Usuários primeiro." />
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-gray-200">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-500">
+            <thead className="bg-gray-50 text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Vendedor</th>
                 <th className="px-mx-md py-mx-sm">Nível</th>

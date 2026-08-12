@@ -33,7 +33,7 @@ function Field({ label, required, children, hint }) {
       <Label className="text-caption font-bold text-[#64748B] uppercase tracking-wider">
         {label}{required && <span className="text-red-400 ml-0.5">*</span>}
       </Label>
-      {hint && <p className="text-caption text-slate-400 mb-0.5">{hint}</p>}
+      {hint && <p className="text-caption text-muted-foreground mb-0.5">{hint}</p>}
       <div className="mt-1">{children}</div>
     </div>
   );
@@ -370,7 +370,7 @@ const TIPOS = [
 function TipoSelector({ onSelect }) {
   return (
     <div>
-      <p className="text-body-sm text-slate-500 mb-4">Qual tipo de registro você quer adicionar?</p>
+      <p className="text-body-sm text-muted-foreground mb-4">Qual tipo de registro você quer adicionar?</p>
       <div className="grid grid-cols-2 gap-3">
         {TIPOS.map(t => {
           const Icon = t.icon;
@@ -742,12 +742,12 @@ export default function NovoRegistroModal({ open, onClose, closingDate, dailyClo
           <DialogTitle className="text-[#0F172A] font-bold text-h5 flex items-center gap-2">
             {tipo && (
               <button type="button" onClick={handleVoltar} className="p-1 rounded-lg hover:bg-slate-100 transition-colors mr-1">
-                <ArrowLeft className="w-4 h-4 text-slate-400" />
+                <ArrowLeft className="w-4 h-4 text-muted-foreground" />
               </button>
             )}
             {tipo ? TITULO[tipo] : "Novo Registro"}
           </DialogTitle>
-          <p className="text-[12px] text-slate-400">
+          <p className="text-[12px] text-muted-foreground">
             {tipo ? "Dados salvos na base única de clientes/oportunidades." : "Escolha o tipo de registro para o fechamento de hoje."}
           </p>
         </DialogHeader>
@@ -772,7 +772,7 @@ export default function NovoRegistroModal({ open, onClose, closingDate, dailyClo
           )}
         </div>
 
-        {buscando && <p className="text-caption text-slate-400 mt-1">Buscando cliente…</p>}
+        {buscando && <p className="text-caption text-muted-foreground mt-1">Buscando cliente…</p>}
         {saveError && <p className="text-[12px] text-[#EF4444] font-semibold mt-3">{saveError}</p>}
 
         {tipo && (

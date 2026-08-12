@@ -34,10 +34,10 @@ function BarraModoAtaque({ total, concluidos, tempoInicio, onPausar }) {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center justify-between mb-1">
-            <span className="text-caption text-slate-300">
+            <span className="text-caption text-text-disabled">
               {concluidos} de {total} oportunidades concluídas
             </span>
-            <span className="text-caption text-slate-400 font-mono">{tempoStr}</span>
+            <span className="text-caption text-muted-foreground font-mono">{tempoStr}</span>
           </div>
           <div className="h-1.5 bg-white/20 rounded-full overflow-hidden">
             <div
@@ -88,8 +88,8 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
         {/* Objetivo + Próximo passo */}
         <div className="grid grid-cols-2 gap-3">
           <div className="bg-slate-50 rounded-2xl p-4">
-            <p className="text-caption text-slate-400 font-bold uppercase tracking-wide mb-1">Objetivo</p>
-            <p className="text-sm font-bold text-slate-700">{objetivo}</p>
+            <p className="text-caption text-muted-foreground font-bold uppercase tracking-wide mb-1">Objetivo</p>
+            <p className="text-sm font-bold text-foreground">{objetivo}</p>
           </div>
           <div className="bg-blue-50 rounded-2xl p-4">
             <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide mb-1">Próximo passo</p>
@@ -107,8 +107,8 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
         <div className="grid grid-cols-3 gap-2">
           {tel && (
             <a href={`tel:+55${tel}`} className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors">
-              <Phone className="w-4 h-4 text-slate-500" />
-              <span className="text-caption font-semibold text-slate-600">Ligar</span>
+              <Phone className="w-4 h-4 text-muted-foreground" />
+              <span className="text-caption font-semibold text-muted-foreground">Ligar</span>
             </a>
           )}
           {tel && (
@@ -124,8 +124,8 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
             onClick={() => onFicha(cliente.id)}
             className="flex flex-col items-center gap-1.5 py-3 rounded-2xl border border-slate-200 bg-white hover:bg-slate-50 transition-colors"
           >
-            <FileText className="w-4 h-4 text-slate-500" />
-            <span className="text-caption font-semibold text-slate-600">Ficha</span>
+            <FileText className="w-4 h-4 text-muted-foreground" />
+            <span className="text-caption font-semibold text-muted-foreground">Ficha</span>
           </button>
         </div>
 
@@ -150,7 +150,7 @@ function TelaConclusao({ stats, onPlanoAtaque, onCarteira, onEncerrar }) {
       </div>
       <div>
         <p className="text-3xl font-black text-[#031B3D]">🎉 Excelente!</p>
-        <p className="text-slate-500 mt-2 text-sm">Você concluiu todas as oportunidades prioritárias de hoje.</p>
+        <p className="text-muted-foreground mt-2 text-sm">Você concluiu todas as oportunidades prioritárias de hoje.</p>
       </div>
 
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 w-full max-w-lg">
@@ -170,7 +170,7 @@ function TelaConclusao({ stats, onPlanoAtaque, onCarteira, onEncerrar }) {
       <div className="flex flex-col gap-2 w-full max-w-sm">
         <Button onClick={onPlanoAtaque} variant="outline" className="w-full rounded-xl">Ir para Plano de Ataque</Button>
         <Button onClick={onCarteira} className="w-full rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white">Voltar para Carteira</Button>
-        <button onClick={onEncerrar} className="text-xs text-slate-400 hover:underline mt-1">Encerrar sessão</button>
+        <button onClick={onEncerrar} className="text-xs text-muted-foreground hover:underline mt-1">Encerrar sessão</button>
       </div>
     </div>
   );
@@ -187,7 +187,7 @@ function ModalPausar({ open, onContinuar, onEncerrar }) {
           </div>
           <div>
             <p className="text-base font-black text-[#031B3D]">Pausar o Modo Ataque?</p>
-            <p className="text-sm text-slate-400 mt-1">Sua posição na fila será salva. Você continua de onde parou.</p>
+            <p className="text-sm text-muted-foreground mt-1">Sua posição na fila será salva. Você continua de onde parou.</p>
           </div>
           <div className="flex flex-col gap-2 w-full">
             <Button onClick={onContinuar} className="w-full rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white">Continuar depois</Button>
@@ -310,7 +310,7 @@ export default function ModoAtaque({ clientes, onSair, onWhatsApp, onFicha, onPl
               onExecutar={handleExecutar}
             />
           ) : (
-            <div className="text-center py-20 text-slate-400">Sem oportunidades na fila.</div>
+            <div className="text-center py-20 text-muted-foreground">Sem oportunidades na fila.</div>
           )}
         </div>
       </div>

@@ -67,7 +67,7 @@ export function OptionCard({
         )}
         <div className="space-y-0.5">
           <div className="flex items-center gap-1.5">
-            <Typography variant="h3" className="text-sm text-gray-800">
+            <Typography variant="h3" className="text-sm text-foreground">
               {title}
             </Typography>
             {tooltip && <HelpTooltip text={tooltip} side="right" />}

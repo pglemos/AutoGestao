@@ -78,7 +78,7 @@ export default function FunilVendasGerente() {
         title="Funil Comercial"
         subtitle="Desempenho da equipe por canal de origem, com dados registrados em eventos comerciais."
         actions={(
-          <label className="inline-flex h-11 items-center gap-mx-sm rounded-xl border border-gray-100 bg-white px-mx-md text-sm font-semibold text-gray-800 shadow-sm">
+          <label className="inline-flex h-11 items-center gap-mx-sm rounded-xl border border-gray-100 bg-white px-mx-md text-sm font-semibold text-foreground shadow-sm">
             <Filter size={16} aria-hidden="true" />
             <select
               className="bg-transparent font-semibold outline-none"
@@ -104,7 +104,7 @@ export default function FunilVendasGerente() {
 
       {loading ? (
         <Card className="border bg-white p-mx-lg">
-          <Typography variant="p" className="text-sm font-semibold text-gray-500">Carregando dados do funil…</Typography>
+          <Typography variant="p" className="text-sm font-semibold text-muted-foreground">Carregando dados do funil…</Typography>
         </Card>
       ) : (
         <>
@@ -138,8 +138,8 @@ export default function FunilVendasGerente() {
 
           {!hasEvents ? (
             <Card className="border bg-white p-mx-lg text-center">
-              <Typography variant="h3" className="text-gray-800">Sem eventos comerciais no período</Typography>
-              <Typography variant="p" className="mt-1 text-sm font-semibold text-gray-500">
+              <Typography variant="h3" className="text-foreground">Sem eventos comerciais no período</Typography>
+              <Typography variant="p" className="mt-1 text-sm font-semibold text-muted-foreground">
                 O funil é alimentado pelo Fechamento Diário e pela Carteira. Assim que a equipe registrar atendimentos,
                 agendamentos e vendas, os números aparecem aqui.
               </Typography>
@@ -149,8 +149,8 @@ export default function FunilVendasGerente() {
             // cortado quando dividia a largura com o funil por canal.
             <section className="flex flex-col gap-mx-sm" aria-label="Funil e ranking">
               <Card className="border bg-white p-mx-md">
-                <Typography variant="h2" className="text-xl text-gray-800">Funil por canal</Typography>
-                <Typography variant="p" className="mt-1 text-sm font-semibold text-gray-500">
+                <Typography variant="h2" className="text-xl text-foreground">Funil por canal</Typography>
+                <Typography variant="p" className="mt-1 text-sm font-semibold text-muted-foreground">
                   Cada linha mostra o ciclo até a venda na origem correspondente.
                 </Typography>
 
@@ -165,7 +165,7 @@ export default function FunilVendasGerente() {
                   <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">
                     Principal gargalo
                   </Typography>
-                  <Typography variant="p" className="mt-1 text-sm font-semibold text-gray-800">
+                  <Typography variant="p" className="mt-1 text-sm font-semibold text-foreground">
                     {bottleneck
                       ? `${bottleneck.channel}: ${bottleneck.label} converte ${bottleneck.conversion}%.`
                       : 'Ainda não há volume suficiente para apontar um gargalo estatístico.'}
@@ -174,8 +174,8 @@ export default function FunilVendasGerente() {
               </Card>
 
               <Card className="border bg-white p-mx-md">
-                <Typography variant="h2" className="text-xl text-gray-800">Ranking por origem</Typography>
-                <Typography variant="p" className="mt-1 text-sm font-semibold text-gray-500">
+                <Typography variant="h2" className="text-xl text-foreground">Ranking por origem</Typography>
+                <Typography variant="p" className="mt-1 text-sm font-semibold text-muted-foreground">
                   Vendas da equipe por canal no período selecionado.
                 </Typography>
 
@@ -184,7 +184,7 @@ export default function FunilVendasGerente() {
                     ficam inacessíveis sem mouse. */}
                 <div className="mt-mx-md overflow-x-auto" tabIndex={0} role="region" aria-label="Vendas da equipe por canal">
                   {ranking.length === 0 ? (
-                    <Typography variant="p" className="text-sm font-semibold text-gray-500">
+                    <Typography variant="p" className="text-sm font-semibold text-muted-foreground">
                       Nenhuma venda registrada no período.
                     </Typography>
                   ) : (
@@ -192,7 +192,7 @@ export default function FunilVendasGerente() {
                       <thead className="bg-gray-50">
                         <tr>
                           {['Vendedor', 'Showroom', 'Internet', 'Carteira', 'Sem canal', 'Total'].map(header => (
-                            <th key={header} className="px-3 py-3 text-left text-xs font-bold uppercase tracking-widest text-gray-500">
+                            <th key={header} className="px-3 py-3 text-left text-xs font-bold uppercase tracking-widest text-muted-foreground">
                               {header}
                             </th>
                           ))}
@@ -234,10 +234,10 @@ function MetricCard({
         </span>
         <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
       </div>
-      <Typography variant="h2" className={cn('mt-mx-sm text-2xl tabular-nums', tone === 'emerald' ? 'text-emerald-700' : 'text-gray-800')}>
+      <Typography variant="h2" className={cn('mt-mx-sm text-2xl tabular-nums', tone === 'emerald' ? 'text-emerald-700' : 'text-foreground')}>
         {value}
       </Typography>
-      <Typography variant="p" className="mt-1 text-xs font-semibold text-gray-500">{hint}</Typography>
+      <Typography variant="p" className="mt-1 text-xs font-semibold text-muted-foreground">{hint}</Typography>
     </Card>
   )
 }
@@ -256,8 +256,8 @@ function ChannelRow({ channel }: { channel: ChannelFunnel }) {
             <Icon size={18} strokeWidth={1.8} />
           </span>
           <div className="min-w-0">
-            <Typography variant="h3" className="text-base text-gray-800">{channel.channel}</Typography>
-            <Typography variant="p" className="text-xs font-semibold text-gray-500">{ui.description}</Typography>
+            <Typography variant="h3" className="text-base text-foreground">{channel.channel}</Typography>
+            <Typography variant="p" className="text-xs font-semibold text-muted-foreground">{ui.description}</Typography>
           </div>
         </div>
         <span className={cn('rounded-xl px-mx-sm py-1 text-xs font-bold tabular-nums', tone.pill)}>
@@ -272,14 +272,14 @@ function ChannelRow({ channel }: { channel: ChannelFunnel }) {
           return (
             <div key={step.key} className="relative">
               {index > 0 && (
-                <span className="absolute -left-0.5 top-1/2 hidden -translate-y-1/2 text-gray-500 md:block" aria-hidden="true">
+                <span className="absolute -left-0.5 top-1/2 hidden -translate-y-1/2 text-muted-foreground md:block" aria-hidden="true">
                   <ChevronRight size={14} />
                 </span>
               )}
               <div className="rounded-xl bg-gray-50 px-3 py-3">
-                <span className="block truncate text-xs font-bold uppercase tracking-tight text-gray-500">{step.label}</span>
+                <span className="block truncate text-xs font-bold uppercase tracking-tight text-muted-foreground">{step.label}</span>
                 <div className="mt-0.5 flex items-baseline gap-2">
-                  <span className="text-lg font-bold tabular-nums text-gray-800">{step.value}</span>
+                  <span className="text-lg font-bold tabular-nums text-foreground">{step.value}</span>
                   {rate !== null && (
                     <span className={cn('inline-flex rounded-md px-1.5 py-0.5 text-xs font-bold tabular-nums', tone.pill)}>
                       {rate}%
@@ -303,19 +303,19 @@ function RankingRow({ row, position }: { row: TeamRankingRow; position: number }
           <span
             className={cn(
               'grid h-7 w-7 shrink-0 place-items-center rounded-full text-xs font-bold tabular-nums',
-              position === 1 ? 'bg-amber-50 text-amber-700' : 'bg-gray-50 text-gray-500',
+              position === 1 ? 'bg-amber-50 text-amber-700' : 'bg-gray-50 text-muted-foreground',
             )}
           >
             {position}
           </span>
-          <p className="truncate font-bold text-gray-800">{row.name}</p>
+          <p className="truncate font-bold text-foreground">{row.name}</p>
         </div>
       </td>
       <td className={cn('px-3 py-3 text-center font-bold tabular-nums', TONE.emerald.column)}>{row.showroom}</td>
       <td className={cn('px-3 py-3 text-center font-bold tabular-nums', TONE.sky.column)}>{row.internet}</td>
       <td className={cn('px-3 py-3 text-center font-bold tabular-nums', TONE.amber.column)}>{row.carteira}</td>
-      <td className="px-3 py-3 text-center font-bold tabular-nums text-gray-500">{row.semCanal}</td>
-      <td className="px-3 py-3 text-center font-bold tabular-nums text-gray-800">{row.total}</td>
+      <td className="px-3 py-3 text-center font-bold tabular-nums text-muted-foreground">{row.semCanal}</td>
+      <td className="px-3 py-3 text-center font-bold tabular-nums text-foreground">{row.total}</td>
     </tr>
   )
 }

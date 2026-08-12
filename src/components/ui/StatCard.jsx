@@ -13,9 +13,9 @@ export default function StatCard({ label, value, sublabel, icon: Icon, color = "
     <div className="bg-white rounded-2xl p-5 shadow-sm border border-slate-100 hover:shadow-md transition-shadow duration-300">
       <div className="flex items-start justify-between">
         <div className="space-y-1">
-          <p className="text-xs font-medium text-slate-500 uppercase tracking-wider">{label}</p>
+          <p className="text-xs font-medium text-muted-foreground uppercase tracking-wider">{label}</p>
           <p className="text-3xl font-bold text-mx-navy">{value}</p>
-          {sublabel && <p className="text-xs text-slate-400">{sublabel}</p>}
+          {sublabel && <p className="text-xs text-muted-foreground">{sublabel}</p>}
         </div>
         {Icon && (
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center ${colorMap[color] || colorMap.blue}`}>

@@ -18,7 +18,7 @@ export function ManagerHomeReturnLink() {
         }
         navigate(context.path)
       }}
-      className="flex items-center gap-1.5 text-sm text-gray-500 transition-colors hover:text-gray-700"
+      className="flex items-center gap-1.5 text-sm text-muted-foreground transition-colors hover:text-foreground"
     >
       <ArrowLeft size={16} /> {context.label}
     </button>

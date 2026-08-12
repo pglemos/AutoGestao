@@ -65,7 +65,7 @@ export function RotinaAjustesTab({
         <div className="space-y-mx-md relative z-10">
           {pendingRequests.length === 0 ? (
             <div className="py-20 text-center flex flex-col items-center justify-center gap-mx-md bg-gray-50 rounded-xl border border-dashed border-gray-100">
-              <ShieldCheck size={48} className="text-gray-500/20" />
+              <ShieldCheck size={48} className="text-muted-foreground/20" />
               <Typography
                 variant="p"
                 tone="muted"

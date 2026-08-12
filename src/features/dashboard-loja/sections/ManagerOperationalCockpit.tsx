@@ -149,7 +149,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
         <Card className="min-h-[188px] border bg-white p-mx-md">
           <div className="flex items-center justify-between gap-mx-sm">
             <Typography variant="tiny" tone="muted" className="">MX Score Loja</Typography>
-            <Gauge size={18} className="text-gray-500" />
+            <Gauge size={18} className="text-muted-foreground" />
           </div>
           <div className="mt-mx-md flex items-center justify-center">
             <SemiCircularGauge value={mxScore} label={scoreLabel(mxScore)} />
@@ -168,7 +168,7 @@ export function ManagerOperationalCockpit({ data, alerts }: ManagerOperationalCo
               <thead className="bg-gray-50/60">
                 <tr>
                   {['Vendedor', 'Vendas', 'Meta', 'Agenda', 'Disciplina', 'Status'].map(header => (
-                    <th key={header} className="px-mx-md py-mx-sm text-left text-mx-tiny font-bold uppercase tracking-widest text-gray-500">{header}</th>
+                    <th key={header} className="px-mx-md py-mx-sm text-left text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">{header}</th>
                   ))}
                 </tr>
               </thead>
@@ -370,7 +370,7 @@ function TeamRow({ row }: { row: RankingEntry }) {
       <td className="px-mx-md py-mx-sm">
         <div className="flex items-center gap-mx-xs">
           <ProgressBar value={attainment} tone={disciplineTone} className="flex-1" />
-          <span className="text-mx-tiny font-bold text-gray-500 tabular-nums w-mx-9 text-right">{attainment}%</span>
+          <span className="text-mx-tiny font-bold text-muted-foreground tabular-nums w-mx-9 text-right">{attainment}%</span>
         </div>
       </td>
       <td className="px-mx-md py-mx-sm">
@@ -445,7 +445,7 @@ function FunnelSegmentRow({
       <div className={cn('mt-mx-md grid gap-mx-sm', stages.length === 2 ? 'grid-cols-2' : 'grid-cols-2 md:grid-cols-4')}>
         {stages.map((stage, index) => (
           <div key={stage.label} className="relative min-w-0 rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-center">
-            {index > 0 && <span className="absolute -left-mx-sm top-1/2 hidden -translate-y-1/2 text-gray-500 md:block">&gt;</span>}
+            {index > 0 && <span className="absolute -left-mx-sm top-1/2 hidden -translate-y-1/2 text-muted-foreground md:block">&gt;</span>}
             <Typography variant="tiny" tone="muted" className="block truncate tracking-tight">{stage.label}</Typography>
             <div className="mt-mx-xs flex items-baseline justify-center gap-mx-xs">
               <Typography variant="h3" className="font-mono-numbers">{formatInteger(stage.value)}</Typography>
@@ -547,7 +547,7 @@ function SemiCircularGauge({ value, label, suffix = '' }: { value: number; label
         <circle cx={pointerX} cy={pointerY} r={3} fill="var(--color-pure-white)" />
       </svg>
       <div className="-mt-mx-md flex flex-col items-center">
-        <span className="text-4xl font-bold font-mono-numbers leading-none text-gray-800">{clamped}{suffix}</span>
+        <span className="text-4xl font-bold font-mono-numbers leading-none text-foreground">{clamped}{suffix}</span>
         <span className={cn('mt-mx-tiny text-mx-tiny font-bold uppercase tracking-widest', labelTone)}>{label}</span>
       </div>
     </div>
@@ -601,7 +601,7 @@ function toneBorder(tone: ManagerTone) {
     warning: 'border-status-warning/20 bg-status-warning-surface text-status-warning',
     danger: 'border-status-error/20 bg-status-error-surface text-status-error',
     info: 'border-status-info/20 bg-status-info-surface text-status-info',
-    neutral: 'border-gray-200 bg-white text-gray-500',
+    neutral: 'border-gray-200 bg-white text-muted-foreground',
   }[tone]
 }
 
@@ -612,7 +612,7 @@ function toneSurface(tone: ManagerTone) {
     warning: 'bg-status-warning-surface text-status-warning',
     danger: 'bg-status-error-surface text-status-error',
     info: 'bg-status-info-surface text-status-info',
-    neutral: 'bg-gray-50 text-gray-500',
+    neutral: 'bg-gray-50 text-muted-foreground',
   }[tone]
 }
 
@@ -647,7 +647,7 @@ function gaugeGradient(tone: ManagerTone, value: number) {
 
 function medalTone(index: number) {
   if (index === 0) return 'border-status-warning/30 text-status-warning'
-  if (index === 1) return 'border-text-tertiary/30 text-gray-500'
+  if (index === 1) return 'border-text-tertiary/30 text-muted-foreground'
   return 'border-status-warning/20 text-status-warning'
 }
 

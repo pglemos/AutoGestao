@@ -163,7 +163,7 @@ export function FunilVendedor() {
         <section aria-label="Filtro de período">
           <div className="inline-flex flex-wrap gap-mx-xs rounded-xl border border-gray-100 bg-white p-mx-xs shadow-sm">
             {PERIOD_OPTIONS.map(option => (
-              <button key={option.key} type="button" className={`h-9 rounded-xl px-mx-md text-sm font-semibold transition ${period === option.key ? 'bg-emerald-600 text-white' : 'text-gray-500 hover:bg-gray-50'}`} onClick={() => setPeriod(option.key)}>
+              <button key={option.key} type="button" className={`h-9 rounded-xl px-mx-md text-sm font-semibold transition ${period === option.key ? 'bg-emerald-600 text-white' : 'text-muted-foreground hover:bg-gray-50'}`} onClick={() => setPeriod(option.key)}>
                 {option.label}
               </button>
             ))}
@@ -314,7 +314,7 @@ function HistoryChart({ rows }: { rows: Array<{ label: string; oportunidades: nu
 }
 
 function MetricCard({ label, value, hint, tone = 'dark' }: { label: string; value: string; hint?: string; tone?: 'dark' | 'green' | 'red' }) {
-  const color = tone === 'green' ? 'text-status-success' : tone === 'red' ? 'text-status-error' : 'text-gray-800'
+  const color = tone === 'green' ? 'text-status-success' : tone === 'red' ? 'text-status-error' : 'text-foreground'
   return (
     <DashboardCard className="min-h-[116px]">
       <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>
@@ -325,7 +325,7 @@ function MetricCard({ label, value, hint, tone = 'dark' }: { label: string; valu
 }
 
 function ProjectionStat({ label, value, hint, tone = 'dark' }: { label: string; value: string; hint?: string; tone?: 'dark' | 'green' | 'orange' }) {
-  const color = tone === 'green' ? 'text-status-success' : tone === 'orange' ? 'text-status-warning' : 'text-gray-800'
+  const color = tone === 'green' ? 'text-status-success' : tone === 'orange' ? 'text-status-warning' : 'text-foreground'
   return (
     <div className="rounded-xl border border-gray-100 bg-gray-50 p-mx-sm">
       <Typography variant="caption" tone="muted" className="block font-semibold normal-case tracking-normal">{label}</Typography>

@@ -56,11 +56,11 @@ function ComparisonRow({ label, v1, v2, format = v => Math.round(v).toString(), 
           initial={{ scale: 0.95, opacity: 0.6 }}
           animate={{ scale: winner === 'p1' ? 1.12 : 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 220, damping: 18 }}
-          className={cn('tabular-nums font-display', winner === 'p1' ? 'text-emerald-600 drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'text-gray-500')}
+          className={cn('tabular-nums font-display', winner === 'p1' ? 'text-emerald-600 drop-shadow-[0_0_8px_rgba(34,197,94,0.5)]' : 'text-muted-foreground')}
         >
           {format(a1)}
         </motion.span>
-        <span className="flex items-center gap-mx-xs text-mx-tiny uppercase text-gray-500 tracking-widest">
+        <span className="flex items-center gap-mx-xs text-mx-tiny uppercase text-muted-foreground tracking-widest">
           <Icon size={12} className="opacity-60" />
           {label}
         </span>
@@ -69,7 +69,7 @@ function ComparisonRow({ label, v1, v2, format = v => Math.round(v).toString(), 
           initial={{ scale: 0.95, opacity: 0.6 }}
           animate={{ scale: winner === 'p2' ? 1.12 : 1, opacity: 1 }}
           transition={{ type: 'spring', stiffness: 220, damping: 18 }}
-          className={cn('tabular-nums font-display', winner === 'p2' ? 'text-status-info drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'text-gray-500')}
+          className={cn('tabular-nums font-display', winner === 'p2' ? 'text-status-info drop-shadow-[0_0_8px_rgba(59,130,246,0.5)]' : 'text-muted-foreground')}
         >
           {format(a2)}
         </motion.span>
@@ -131,7 +131,7 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
           <div className="w-mx-3xl h-mx-3xl rounded-2xl bg-gray-900 flex items-center justify-center shadow-sm">
             <Building2 size={36} className="text-emerald-600" />
           </div>
-          <p className="font-bold uppercase tracking-widest text-gray-500">
+          <p className="font-bold uppercase tracking-widest text-muted-foreground">
             Selecione 2 lojas para iniciar o comparativo
           </p>
         </motion.div>
@@ -280,9 +280,9 @@ export function StoreBattleView({ opponents, lojas }: StoreBattleViewProps) {
           </h4>
           <div className="hidden sm:flex items-center gap-mx-sm text-mx-tiny font-bold uppercase tracking-widest">
             <span className="text-emerald-600">●</span>
-            <span className="text-gray-500">Loja A</span>
-            <span className="text-gray-500">vs</span>
-            <span className="text-gray-500">Loja B</span>
+            <span className="text-muted-foreground">Loja A</span>
+            <span className="text-muted-foreground">vs</span>
+            <span className="text-muted-foreground">Loja B</span>
             <span className="text-status-info">●</span>
           </div>
         </div>

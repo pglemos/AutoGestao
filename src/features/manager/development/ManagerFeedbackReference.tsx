@@ -74,9 +74,9 @@ export default function ManagerFeedbackReference() {
       <Modal open={Boolean(detail)} onClose={() => setDetail(null)} title="Detalhes do feedback" description={detail ? getFeedbackSellerName(detail) : undefined} size="lg" referenceStyle>
         {detail ? (
           <div className="space-y-4">
-            <div><Typography variant="caption" className="font-medium text-gray-500">Reconhecimento</Typography><Typography variant="p" className="mt-1 text-sm text-gray-700">{detail.positives || 'Não informado.'}</Typography></div>
-            <div><Typography variant="caption" className="font-medium text-gray-500">Ponto de desenvolvimento</Typography><Typography variant="p" className="mt-1 text-sm text-gray-700">{detail.attention_points || 'Não informado.'}</Typography></div>
-            <div><Typography variant="caption" className="font-medium text-gray-500">Compromisso</Typography><Typography variant="p" className="mt-1 text-sm text-gray-700">{detail.action || 'Não informado.'}</Typography></div>
+            <div><Typography variant="caption" className="font-medium text-muted-foreground">Reconhecimento</Typography><Typography variant="p" className="mt-1 text-sm text-foreground">{detail.positives || 'Não informado.'}</Typography></div>
+            <div><Typography variant="caption" className="font-medium text-muted-foreground">Ponto de desenvolvimento</Typography><Typography variant="p" className="mt-1 text-sm text-foreground">{detail.attention_points || 'Não informado.'}</Typography></div>
+            <div><Typography variant="caption" className="font-medium text-muted-foreground">Compromisso</Typography><Typography variant="p" className="mt-1 text-sm text-foreground">{detail.action || 'Não informado.'}</Typography></div>
           </div>
         ) : null}
       </Modal>

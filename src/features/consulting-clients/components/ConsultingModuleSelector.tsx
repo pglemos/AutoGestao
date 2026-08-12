@@ -5,7 +5,7 @@ export function ConsultingModuleSelector({ modules, value, onChange }: {
 }) {
   return (
     <fieldset className="grid grid-cols-1 gap-2 sm:grid-cols-2">
-      <legend className="mb-2 text-sm font-semibold text-gray-700">Módulos habilitados</legend>
+      <legend className="mb-2 text-sm font-semibold text-foreground">Módulos habilitados</legend>
       {modules.map(module => {
         const checked = value.includes(module.module_key)
         return (

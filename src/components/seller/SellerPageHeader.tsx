@@ -25,11 +25,11 @@ export function SellerPageHeader({ title, icon: Icon, actions, subtitle, classNa
       <div className="flex min-w-0 items-center gap-3">
         <Icon className="h-5 w-5 shrink-0 text-blue-700" aria-hidden="true" />
         <div className="min-w-0">
-          <h1 className="truncate text-h3 font-bold text-slate-900">
+          <h1 className="truncate text-h3 font-bold text-foreground">
             {title}
           </h1>
           {subtitle && (
-            <p className="mt-0.5 text-sm text-slate-500">{subtitle}</p>
+            <p className="mt-0.5 text-sm text-muted-foreground">{subtitle}</p>
           )}
         </div>
       </div>

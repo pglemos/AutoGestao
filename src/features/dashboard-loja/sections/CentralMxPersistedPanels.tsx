@@ -53,7 +53,7 @@ const PLANO_TONE: Record<string, string> = {
   pendente: 'bg-status-warning-surface text-status-warning border-status-warning/30',
   em_andamento: 'bg-mx-indigo-50 text-emerald-600 border-brand-primary/30',
   atrasado: 'bg-status-error-surface text-status-error border-status-error/30',
-  validando_eficacia: 'bg-gray-50 text-gray-500 border-gray-200',
+  validando_eficacia: 'bg-gray-50 text-muted-foreground border-gray-200',
   concluido: 'bg-status-success-surface text-status-success border-status-success/30',
 }
 

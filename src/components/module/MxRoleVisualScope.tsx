@@ -32,7 +32,7 @@ export function MxRoleVisualScope({
         <div
           data-mx-visual-system="manager"
           className={cn(
-            'h-full min-h-0 w-full bg-gray-50 text-gray-800',
+            'h-full min-h-0 w-full bg-gray-50 text-foreground',
             className,
           )}
         >

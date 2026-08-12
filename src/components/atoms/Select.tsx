@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 
 /** Aparência única — sem variação por perfil (§8.5). */
 const selectVariants = cva(
-  'h-10 w-full appearance-none rounded-xl border bg-white py-2 pl-3 pr-10 text-sm font-normal text-gray-800 outline-none transition disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-gray-400',
+  'h-10 w-full appearance-none rounded-xl border bg-white py-2 pl-3 pr-10 text-sm font-normal text-foreground outline-none transition disabled:cursor-not-allowed disabled:bg-gray-50 disabled:text-muted-foreground',
   {
     variants: {
       variant: {
@@ -37,7 +37,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
         >
           {children}
         </select>
-        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-gray-400">
+        <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center pr-3 text-muted-foreground">
           <svg className="h-3 w-3" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
           </svg>
@@ -49,7 +49,7 @@ const Select = React.forwardRef<HTMLSelectElement, SelectProps>(
       return (
         <div className="w-full space-y-2">
           <label htmlFor={fieldId} className="block">
-            <span className="text-sm font-medium text-gray-600">{label}</span>
+            <span className="text-sm font-medium text-muted-foreground">{label}</span>
           </label>
           {selectElement}
         </div>

@@ -10,11 +10,11 @@ export function RecordRoutineCard({ melhorMes }: { melhorMes: number }) {
           <Star className="w-7 h-7" style={{ color: 'var(--color-chart-manager-positive)' }} fill="currentColor" />
         </div>
 
-        <p className="text-gray-500 text-sm mb-1">Seu recorde foi</p>
+        <p className="text-muted-foreground text-sm mb-1">Seu recorde foi</p>
         <p className="font-bold tabular-nums" style={{ fontSize: '2.25rem', color: 'var(--color-chart-manager-positive)' }}>
           {melhorMes > 0 ? formatBRLWhole(melhorMes) : '—'}
         </p>
-        <p className="text-gray-500 text-sm mt-2">
+        <p className="text-muted-foreground text-sm mt-2">
           Vamos buscar <span style={{ color: 'var(--color-chart-manager-positive)' }}>isso novamente?</span>
         </p>
       </div>
@@ -29,7 +29,7 @@ export function RecordRoutineCard({ melhorMes }: { melhorMes: number }) {
           EXECUTAR MINHA ROTINA
         </button>
       </Link>
-      <p className="text-gray-500 text-xs text-center mt-2">Acesse sua Rotina do Dia e venda mais hoje!</p>
+      <p className="text-muted-foreground text-xs text-center mt-2">Acesse sua Rotina do Dia e venda mais hoje!</p>
     </div>
   )
 }

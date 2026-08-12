@@ -39,7 +39,7 @@ export function ReportDataTable<Row extends { id?: string }>(props: {
           <MxTableSurface>
             <table className="w-full min-w-[760px] text-sm">
               <thead>
-                <tr className="border-b border-gray-100 bg-gray-50 text-gray-500">
+                <tr className="border-b border-gray-100 bg-gray-50 text-muted-foreground">
                   {props.columns.map(column => (
                     <th key={column.key} className={cn('px-4 py-3 font-semibold', alignmentClasses[column.align || 'left'])}>
                       {column.label}

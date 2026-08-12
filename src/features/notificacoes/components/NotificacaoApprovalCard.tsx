@@ -59,19 +59,19 @@ export function NotificacaoApprovalCard({
       </div>
       <div className="mt-mx-md grid grid-cols-1 sm:grid-cols-4 gap-mx-sm text-mx-tiny font-bold uppercase">
         <div>
-          <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Loja</span>
+          <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Loja</span>
           {approval.store_name_snapshot}
         </div>
         <div>
-          <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Função</span>
+          <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Função</span>
           {approval.role}
         </div>
         <div>
-          <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Na loja</span>
+          <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Na loja</span>
           {approval.store_tenure}
         </div>
         <div>
-          <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Mercado</span>
+          <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Mercado</span>
           {approval.market_experience}
         </div>
       </div>
@@ -80,7 +80,7 @@ export function NotificacaoApprovalCard({
           <Typography variant="tiny" tone="brand" className="mb-mx-xs block">
             Dados administrativos
           </Typography>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-xs text-mx-micro font-bold text-gray-500">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-xs text-mx-micro font-bold text-muted-foreground">
             <span><b>Razão:</b> {approval.company_legal_name || 'não informado'}</span>
             <span><b>CNPJ:</b> {approval.company_cnpj || 'não informado'}</span>
             <span><b>Telefone:</b> {approval.company_administrative_phone || 'não informado'}</span>

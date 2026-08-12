@@ -65,7 +65,7 @@ export function SegurancaTab() {
                     <div className="space-y-mx-sm md:col-span-2">
                         <Typography variant="caption" tone="muted" className="ml-2">Nova Senha</Typography>
                         <div className="relative">
-                            <Lock size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
+                            <Lock size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
                             <Input
                                 id="settings-new-password"
                                 name="new-password"
@@ -80,7 +80,7 @@ export function SegurancaTab() {
                             <button
                                 type="button"
                                 onClick={() => setShowPasswords(s => !s)}
-                                className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-gray-500 hover:text-emerald-600"
+                                className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground hover:text-emerald-600"
                                 aria-label={showPasswords ? 'Ocultar senha' : 'Mostrar senha'}
                             >
                                 {showPasswords ? <EyeOff size={18} /> : <Eye size={18} />}
@@ -90,7 +90,7 @@ export function SegurancaTab() {
                     <div className="space-y-mx-sm md:col-span-2">
                         <Typography variant="caption" tone="muted" className="ml-2">Confirmar Nova Senha</Typography>
                         <div className="relative">
-                            <Lock size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
+                            <Lock size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
                             <Input
                                 id="settings-confirm-password"
                                 name="confirm-password"
@@ -135,7 +135,7 @@ export function SegurancaTab() {
             {/* Sessões ativas */}
             <Card className="p-mx-lg border-none bg-white">
                 <header className="flex items-center gap-mx-sm pb-mx-md border-b border-gray-200 mb-mx-lg">
-                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-gray-500 flex items-center justify-center border border-gray-200 shadow-none">
+                    <div className="w-mx-14 h-mx-14 rounded-2xl bg-gray-50 text-muted-foreground flex items-center justify-center border border-gray-200 shadow-none">
                         <Smartphone size={26} />
                     </div>
                     <div>

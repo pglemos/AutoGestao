@@ -137,14 +137,14 @@ export function Modal({
           )}>
             <div className="min-w-0">
               <Dialog.Title asChild>
-                <h2 className={referenceStyle ? (resolvedSize === "sm" ? "text-base leading-6 font-semibold text-gray-800" : "text-lg leading-6 font-semibold text-gray-800") : "text-lg font-semibold text-gray-800"}>{title}</h2>
+                <h2 className={referenceStyle ? (resolvedSize === "sm" ? "text-base leading-6 font-semibold text-foreground" : "text-lg leading-6 font-semibold text-foreground") : "text-lg font-semibold text-foreground"}>{title}</h2>
               </Dialog.Title>
               {description && (
                 <Dialog.Description asChild>
                   {referenceStyle ? (
-                    <p className="mt-0.5 text-sm text-gray-500">{description}</p>
+                    <p className="mt-0.5 text-sm text-muted-foreground">{description}</p>
                   ) : (
-                    <p className="mt-1 text-sm text-gray-500">{description}</p>
+                    <p className="mt-1 text-sm text-muted-foreground">{description}</p>
                   )}
                 </Dialog.Description>
               )}
@@ -157,7 +157,7 @@ export function Modal({
                   className={cn(
                     "mx-overlay-close flex items-center justify-center transition-colors shrink-0",
                     referenceStyle
-                      ? "rounded-none bg-transparent p-0 text-gray-400 hover:text-gray-600"
+                      ? "rounded-none bg-transparent p-0 text-muted-foreground hover:text-muted-foreground"
                       : "rounded-2xl bg-gray-50",
                   )}
                 >

@@ -71,7 +71,7 @@ export function PreRegistrationQueue({
               COPIAR LINK
             </Button>
           </div>
-          <div className="mt-mx-md flex items-center gap-mx-xs rounded-2xl border border-gray-200 bg-white px-mx-md py-mx-sm text-mx-tiny font-bold text-gray-500 min-w-0">
+          <div className="mt-mx-md flex items-center gap-mx-xs rounded-2xl border border-gray-200 bg-white px-mx-md py-mx-sm text-mx-tiny font-bold text-muted-foreground min-w-0">
             <Link2 size={14} className="text-emerald-600 shrink-0" />
             <span className="truncate">{registrationLink || 'Link indisponível até a loja ser identificada'}</span>
           </div>
@@ -102,7 +102,7 @@ export function PreRegistrationQueue({
                       </div>
                       <div className="min-w-0 flex-1">
                         <Typography variant="caption" className="block max-w-full tracking-tight truncate">{item.full_name}</Typography>
-                        <div className="mt-1 flex flex-wrap gap-x-mx-md gap-y-mx-tiny text-mx-micro font-bold text-gray-500">
+                        <div className="mt-1 flex flex-wrap gap-x-mx-md gap-y-mx-tiny text-mx-micro font-bold text-muted-foreground">
                           <span className="inline-flex items-center gap-mx-tiny"><Mail size={11} aria-hidden="true" />{detailsExpanded ? item.email : redactEmail(item.email)}</span>
                           <span className="inline-flex items-center gap-mx-tiny"><Phone size={11} aria-hidden="true" />{detailsExpanded ? item.phone : redactPhone(item.phone)}</span>
                         </div>
@@ -114,19 +114,19 @@ export function PreRegistrationQueue({
                   </div>
                   <div className="mt-mx-md grid grid-cols-1 sm:grid-cols-3 gap-mx-sm text-mx-tiny font-bold uppercase">
                     <div>
-                      <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Papel</span>
+                      <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Papel</span>
                       {item.role}
                     </div>
                     <div>
-                      <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Na loja</span>
+                      <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Na loja</span>
                       {item.store_tenure}
                     </div>
                     <div>
-                      <span className="block text-mx-nano text-gray-500 tracking-mx-widest">Mercado</span>
+                      <span className="block text-mx-nano text-muted-foreground tracking-mx-widest">Mercado</span>
                       {item.market_experience}
                     </div>
                   </div>
-                  <div className="mt-mx-sm flex items-center gap-mx-xs text-mx-tiny font-bold text-gray-500">
+                  <div className="mt-mx-sm flex items-center gap-mx-xs text-mx-tiny font-bold text-muted-foreground">
                     <BriefcaseBusiness size={13} className="text-emerald-600" />
                     <span>{item.segment}</span>
                   </div>
@@ -144,7 +144,7 @@ export function PreRegistrationQueue({
                       <Typography variant="tiny" tone="brand" className="mb-mx-xs block">
                         Dados administrativos
                       </Typography>
-                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-xs text-mx-micro font-bold text-gray-500">
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-xs text-mx-micro font-bold text-muted-foreground">
                         <span><b>Razão:</b> {item.company_legal_name || 'não informado'}</span>
                         <span><b>CNPJ:</b> {item.company_cnpj || 'não informado'}</span>
                         <span><b>Telefone:</b> {item.company_administrative_phone || 'não informado'}</span>

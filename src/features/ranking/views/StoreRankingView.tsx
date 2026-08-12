@@ -43,7 +43,7 @@ export function StoreRankingView() {
                       className={`text-[12px] font-semibold px-3 py-1.5 rounded-lg transition-all ${
                         data.periodo === p
                           ? 'bg-white text-green-700 shadow-sm border border-green-200'
-                          : 'text-slate-500 hover:text-slate-700'
+                          : 'text-muted-foreground hover:text-foreground'
                       }`}
                     >
                       {p}

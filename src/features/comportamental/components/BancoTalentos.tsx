@@ -68,7 +68,7 @@ export function BancoTalentos() {
           </Field>
           <div className="md:col-span-3"><Field label="Descrição do perfil"><Textarea value={form.descricao} onChange={e => setForm(p => ({ ...p, descricao: e.target.value }))} placeholder="Traços comportamentais associados aos colaboradores de alta performance" /></Field></div>
         </div>
-        <label className="mt-mx-sm flex items-center gap-mx-sm text-xs font-bold text-gray-500">
+        <label className="mt-mx-sm flex items-center gap-mx-sm text-xs font-bold text-muted-foreground">
           <input type="checkbox" checked={form.baseado_em_score} onChange={e => setForm(p => ({ ...p, baseado_em_score: e.target.checked }))} className="h-4 w-4 accent-brand-primary" />
           Baseado no cruzamento com o score de performance
         </label>
@@ -78,7 +78,7 @@ export function BancoTalentos() {
       </form>
 
       {loading ? (
-        <p className="text-sm font-bold text-gray-500">Carregando banco de talentos…</p>
+        <p className="text-sm font-bold text-muted-foreground">Carregando banco de talentos…</p>
       ) : talentos.length === 0 ? (
         <EmptyState icon={<Trophy size={28} />} title="Banco de talentos vazio" description="Registre perfis vencedores para orientar futuras contratações." />
       ) : (
@@ -90,13 +90,13 @@ export function BancoTalentos() {
                 <div className="flex items-center gap-mx-sm">
                   <Trophy size={16} className="text-status-warning" />
                   <span className="font-bold uppercase text-sm">{t.cargo || 'Perfil geral'}</span>
-                  <span className="ml-auto text-xs font-bold text-gray-500">n={t.amostra_n}</span>
+                  <span className="ml-auto text-xs font-bold text-muted-foreground">n={t.amostra_n}</span>
                 </div>
-                {t.descricao && <p className="mt-mx-sm text-sm font-medium text-gray-500">{t.descricao}</p>}
+                {t.descricao && <p className="mt-mx-sm text-sm font-medium text-muted-foreground">{t.descricao}</p>}
                 {entries.length > 0 && (
                   <div className="mt-mx-sm flex flex-wrap gap-mx-xs">
                     {entries.map(([dim, val]) => (
-                      <span key={dim} className="rounded-mx-full bg-gray-50 px-mx-sm py-1 text-xs font-bold uppercase tracking-widest text-gray-500">{dim}: {val}</span>
+                      <span key={dim} className="rounded-mx-full bg-gray-50 px-mx-sm py-1 text-xs font-bold uppercase tracking-widest text-muted-foreground">{dim}: {val}</span>
                     ))}
                   </div>
                 )}
@@ -112,7 +112,7 @@ export function BancoTalentos() {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-mx-xs">
-      <span className="block px-1 text-xs font-bold uppercase tracking-widest text-gray-500">{label}</span>
+      <span className="block px-1 text-xs font-bold uppercase tracking-widest text-muted-foreground">{label}</span>
       {children}
     </label>
   )

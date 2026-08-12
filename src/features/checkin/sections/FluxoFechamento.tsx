@@ -65,9 +65,9 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
   if (disabled) {
     return (
       <div className="flex h-11 cursor-not-allowed items-center rounded-xl border border-slate-100 bg-slate-50 opacity-60">
-        <div className="flex h-full w-11 items-center justify-center border-r border-slate-100 text-[20px] font-light text-slate-300">−</div>
-        <span className="flex-1 text-center text-[16px] font-bold tabular-nums text-slate-600">{value}</span>
-        <div className="flex h-full w-11 items-center justify-center border-l border-slate-100 text-[20px] font-light text-slate-300">+</div>
+        <div className="flex h-full w-11 items-center justify-center border-r border-slate-100 text-[20px] font-light text-text-disabled">−</div>
+        <span className="flex-1 text-center text-[16px] font-bold tabular-nums text-muted-foreground">{value}</span>
+        <div className="flex h-full w-11 items-center justify-center border-l border-slate-100 text-[20px] font-light text-text-disabled">+</div>
       </div>
     )
   }
@@ -80,7 +80,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
           setInputVal(null)
           onDecrement()
         }}
-        className="flex h-full w-11 shrink-0 items-center justify-center rounded-l-xl border-r border-slate-200 text-[20px] font-light text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700 active:bg-slate-100"
+        className="flex h-full w-11 shrink-0 items-center justify-center rounded-l-xl border-r border-slate-200 text-[20px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground active:bg-slate-100"
       >
         −
       </button>
@@ -107,7 +107,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
         // O rótulo existe visualmente no <span> do FieldRow, mas nada o
         // associava a este campo: um leitor de tela anunciava só "editar texto".
         aria-label={label}
-        className="h-full min-w-0 flex-1 border-none bg-transparent text-center text-[16px] font-bold tabular-nums text-slate-700 outline-none"
+        className="h-full min-w-0 flex-1 border-none bg-transparent text-center text-[16px] font-bold tabular-nums text-foreground outline-none"
       />
       <button
         type="button"
@@ -115,7 +115,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
           setInputVal(null)
           onIncrement()
         }}
-        className="flex h-full w-11 shrink-0 items-center justify-center rounded-r-xl border-l border-slate-200 text-[20px] font-light text-slate-600 transition-colors hover:bg-slate-50 hover:text-slate-700 active:bg-slate-100"
+        className="flex h-full w-11 shrink-0 items-center justify-center rounded-r-xl border-l border-slate-200 text-[20px] font-light text-muted-foreground transition-colors hover:bg-slate-50 hover:text-foreground active:bg-slate-100"
       >
         +
       </button>
@@ -126,7 +126,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
 function FieldRow({ label, value, onDecrement, onIncrement, onSet, disabled }: { label: string; value: number; onDecrement: () => void; onIncrement: () => void; onSet: (v: number) => void; disabled?: boolean }) {
   return (
     <div className="flex items-center justify-between gap-3">
-      <span className={`min-w-0 flex-1 text-body-sm font-semibold leading-tight ${disabled ? 'text-slate-300' : 'text-slate-600'}`}>{label}</span>
+      <span className={`min-w-0 flex-1 text-body-sm font-semibold leading-tight ${disabled ? 'text-text-disabled' : 'text-muted-foreground'}`}>{label}</span>
       <div className="w-[140px] shrink-0">
         <StepperInput label={label} value={value} onDecrement={onDecrement} onIncrement={onIncrement} onSet={onSet} disabled={disabled} />
       </div>
@@ -137,7 +137,7 @@ function FieldRow({ label, value, onDecrement, onIncrement, onSet, disabled }: {
 function BackButton({ onGoBack }: { onGoBack?: () => void }) {
   if (!onGoBack) return null
   return (
-    <button type="button" onClick={onGoBack} className="-mt-1 mb-1 flex items-center gap-1 text-[12px] font-semibold text-slate-500 hover:text-slate-700 sm:hidden">
+    <button type="button" onClick={onGoBack} className="-mt-1 mb-1 flex items-center gap-1 text-[12px] font-semibold text-muted-foreground hover:text-foreground sm:hidden">
       <ChevronRight className="h-3.5 w-3.5 rotate-180" />
       Voltar
     </button>
@@ -155,14 +155,14 @@ function StepperHeader({ currentStep, completedSteps, onStepClick }: { currentSt
         return (
           <Fragment key={step.id}>
             <button type="button" onClick={() => onStepClick(step.id)} className="flex min-w-0 flex-1 flex-col items-center gap-1 transition-all">
-              <div className={`flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-all ${done ? c.stepDone : active ? c.stepActive : 'bg-slate-100 text-slate-600'}`}>
+              <div className={`flex h-9 w-9 items-center justify-center rounded-full shadow-sm transition-all ${done ? c.stepDone : active ? c.stepActive : 'bg-slate-100 text-muted-foreground'}`}>
                 {done ? <CheckCircle2 className="h-4 w-4 text-white" /> : <Icon className="h-4 w-4" />}
               </div>
-              <span className={`text-center text-caption font-bold leading-tight ${done || active ? c.title : 'text-slate-600'}`}>{step.label}</span>
+              <span className={`text-center text-caption font-bold leading-tight ${done || active ? c.title : 'text-muted-foreground'}`}>{step.label}</span>
               {/* 10px e slate-500: em 8px com slate-300 o percentual ficava
                   abaixo do contraste AA e perto do limite legível (§12 pede
                   evitar texto excessivamente pequeno). */}
-              <span className={`text-caption font-semibold ${done || active ? c.note : 'text-slate-500'}`}>{step.pct}%</span>
+              <span className={`text-caption font-semibold ${done || active ? c.note : 'text-muted-foreground'}`}>{step.pct}%</span>
             </button>
             {idx < STEPS.length - 1 && (
               <div className={`h-0.5 max-w-[24px] flex-1 rounded-full transition-all ${completedSteps.has(step.id) ? COLOR_MAP[STEPS[idx + 1].color].progress : 'bg-slate-100'}`} />
@@ -296,7 +296,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
         <div className="mb-1 flex items-center justify-between">
           <div className="min-w-0 flex-1 pr-3">
             <h2 className="text-body-sm font-bold uppercase tracking-wide text-[#0F172A] sm:text-[14px]">Progresso do Fechamento</h2>
-            <p className="mt-0.5 text-caption leading-tight text-slate-600 sm:text-caption">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
+            <p className="mt-0.5 text-caption leading-tight text-muted-foreground sm:text-caption">Acompanhe o preenchimento. Não é sua pontuação de disciplina.</p>
           </div>
           <span className={`shrink-0 text-h3 font-bold tabular-nums sm:text-h2 ${totalPct === 100 ? 'text-green-600' : 'text-[#0F172A]'}`}>{totalPct}%</span>
         </div>
@@ -320,7 +320,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <p className={`mt-0.5 text-caption font-medium ${co.sub}`}>Atendimento presencial</p>
             </div>
           </div>
-          <p className="text-[12px] text-slate-600">Informe os atendimentos presenciais realizados no dia.</p>
+          <p className="text-[12px] text-muted-foreground">Informe os atendimentos presenciais realizados no dia.</p>
           <div className={`space-y-4 border-t ${co.divider} pt-4`}>
             <FieldRow
               label="Atendimentos realizados"
@@ -352,7 +352,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <p className={`mt-0.5 text-caption font-medium ${cg.sub}`}>Relacionamento e prospecção</p>
             </div>
           </div>
-          <p className="text-[12px] text-slate-600">Informe os contatos, atendimentos e agendamentos gerados pela sua carteira.</p>
+          <p className="text-[12px] text-muted-foreground">Informe os contatos, atendimentos e agendamentos gerados pela sua carteira.</p>
           <div className={`space-y-4 border-t ${cg.divider} pt-4`}>
             <FieldRow label="Leads recebidos" value={leadsCart} onDecrement={() => updateField('leads_cart', clampCounter(leadsCart - 1))} onIncrement={() => updateField('leads_cart', clampCounter(leadsCart + 1))} onSet={v => updateField('leads_cart', clampCounter(v))} disabled={disabled} />
             <FieldRow label="Atendimentos realizados" value={visitasCart} onDecrement={() => updateField('visitas_cart', clampCounter(visitasCart - 1))} onIncrement={() => updateField('visitas_cart', clampCounter(visitasCart + 1))} onSet={v => updateField('visitas_cart', clampCounter(v))} disabled={disabled} />
@@ -360,7 +360,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <FieldRow label="Agendamentos D+1" value={agdCart} onDecrement={() => updateField('agd_cart', clampCounter(agdCart - 1))} onIncrement={() => updateField('agd_cart', clampCounter(agdCart + 1))} onSet={v => updateField('agd_cart', clampCounter(v))} disabled={false} />
             ) : (
               <div className="flex items-center justify-between gap-3">
-                <span className="flex-1 text-body-sm font-semibold text-slate-500">Agendamentos D+1 ativos</span>
+                <span className="flex-1 text-body-sm font-semibold text-muted-foreground">Agendamentos D+1 ativos</span>
                 <span className={`text-h3 font-bold tabular-nums ${cg.title}`}>{agdCartAtivos}</span>
               </div>
             )}
@@ -388,7 +388,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <p className={`mt-0.5 text-caption font-medium ${cb.sub}`}>Leads digitais</p>
             </div>
           </div>
-          <p className="text-[12px] text-slate-600">Informe os leads digitais recebidos e o andamento dos atendimentos.</p>
+          <p className="text-[12px] text-muted-foreground">Informe os leads digitais recebidos e o andamento dos atendimentos.</p>
           <div className={`space-y-4 border-t ${cb.divider} pt-4`}>
             <FieldRow label="Leads recebidos" value={leadsNet} onDecrement={() => updateField('leads_net', clampCounter(leadsNet - 1))} onIncrement={() => updateField('leads_net', clampCounter(leadsNet + 1))} onSet={v => updateField('leads_net', clampCounter(v))} disabled={disabled} />
             <FieldRow label="Atendimentos realizados" value={visitasNet} onDecrement={() => updateField('visitas_net', clampCounter(visitasNet - 1))} onIncrement={() => updateField('visitas_net', clampCounter(visitasNet + 1))} onSet={v => updateField('visitas_net', clampCounter(v))} disabled={disabled} />
@@ -396,7 +396,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <FieldRow label="Agendamentos D+1" value={agdNet} onDecrement={() => updateField('agd_net', clampCounter(agdNet - 1))} onIncrement={() => updateField('agd_net', clampCounter(agdNet + 1))} onSet={v => updateField('agd_net', clampCounter(v))} disabled={false} />
             ) : (
               <div className="flex items-center justify-between gap-3">
-                <span className="flex-1 text-body-sm font-semibold text-slate-500">Agendamentos D+1 ativos</span>
+                <span className="flex-1 text-body-sm font-semibold text-muted-foreground">Agendamentos D+1 ativos</span>
                 <span className={`text-h3 font-bold tabular-nums ${cb.title}`}>{agdNetAtivos}</span>
               </div>
             )}
@@ -424,7 +424,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
               <p className={`mt-0.5 text-caption font-medium ${cp.sub}`}>Registros de vendas e agendamentos D+1</p>
             </div>
           </div>
-          <p className="text-[12px] text-slate-600">{vendasMsg}</p>
+          <p className="text-[12px] text-muted-foreground">{vendasMsg}</p>
         </div>
       )}
     </div>

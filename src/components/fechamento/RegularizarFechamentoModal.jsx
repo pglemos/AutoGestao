@@ -23,12 +23,12 @@ function Counter({ label, value, onChange }) {
       <div className="flex items-center gap-2">
         <button
           onClick={() => onChange(Math.max(0, value - 1))}
-          className="w-7 h-7 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold text-base flex items-center justify-center transition-colors"
+          className="w-7 h-7 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-muted-foreground font-bold text-base flex items-center justify-center transition-colors"
         >−</button>
         <span className="w-8 text-center font-bold text-[14px] text-[#0F172A]">{value}</span>
         <button
           onClick={() => onChange(Math.min(999, value + 1))}
-          className="w-7 h-7 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-600 font-bold text-base flex items-center justify-center transition-colors"
+          className="w-7 h-7 rounded-lg border border-slate-200 bg-slate-50 hover:bg-slate-100 text-muted-foreground font-bold text-base flex items-center justify-center transition-colors"
         >+</button>
       </div>
     </div>
@@ -148,7 +148,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
             <span className="text-body-sm font-semibold text-[#0F172A]">
               {moment(date).format("DD/MM/YYYY")}
             </span>
-            <span className="text-[12px] text-slate-400 capitalize">{moment(date).format("dddd")}</span>
+            <span className="text-[12px] text-muted-foreground capitalize">{moment(date).format("dddd")}</span>
             <span className="ml-auto text-caption font-bold text-red-600 bg-red-50 px-2.5 py-0.5 rounded-full">
               Fechamento atrasado
             </span>
@@ -200,7 +200,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
               <div className="flex gap-2">
                 <button
                   onClick={onClose}
-                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-body-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-body-sm font-bold text-muted-foreground hover:bg-slate-50 transition-colors"
                 >
                   Cancelar
                 </button>
@@ -226,7 +226,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
               <div className="flex gap-2">
                 <button
                   onClick={() => setStep("form")}
-                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-body-sm font-bold text-slate-600 hover:bg-slate-50 transition-colors"
+                  className="flex-1 py-2.5 rounded-xl border border-slate-200 text-body-sm font-bold text-muted-foreground hover:bg-slate-50 transition-colors"
                   disabled={salvando}
                 >
                   Não, voltar
@@ -249,7 +249,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
                 <CheckCircle2 className="w-6 h-6 text-amber-500" />
               </div>
               <p className="text-body font-bold text-[#0F172A]">Regularização enviada!</p>
-              <p className="text-body-sm text-slate-500 max-w-xs mx-auto">
+              <p className="text-body-sm text-muted-foreground max-w-xs mx-auto">
                 O fechamento foi salvo e está aguardando aprovação do responsável. Ele só contará nos indicadores após a aprovação.
               </p>
               <button

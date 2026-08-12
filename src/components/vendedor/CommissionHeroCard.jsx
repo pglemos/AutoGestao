@@ -33,8 +33,8 @@ export default function CommissionHeroCard({ comissaoEstimada, qtdVendas, onVerC
 
           {semPolitica ? (
             <div>
-              <p className="text-slate-300 text-lg font-semibold mt-2">Nenhuma política de remuneração ativa encontrada.</p>
-              <p className="text-slate-500 text-sm mt-2">Peça ao gestor ou RH para configurar sua remuneração em Departamento / RH / Remuneração.</p>
+              <p className="text-text-disabled text-lg font-semibold mt-2">Nenhuma política de remuneração ativa encontrada.</p>
+              <p className="text-muted-foreground text-sm mt-2">Peça ao gestor ou RH para configurar sua remuneração em Departamento / RH / Remuneração.</p>
             </div>
           ) : (
             <>
@@ -50,11 +50,11 @@ export default function CommissionHeroCard({ comissaoEstimada, qtdVendas, onVerC
               </p>
 
               {qtdVendas === 0 ? (
-                <p className="text-slate-400 text-sm mt-4">
+                <p className="text-muted-foreground text-sm mt-4">
                   Ainda não há vendas confirmadas neste período. Assim que suas vendas forem registradas, sua comissão aparecerá aqui.
                 </p>
               ) : (
-                <p className="text-slate-300 text-sm mt-4">
+                <p className="text-text-disabled text-sm mt-4">
                   💰 Você já vendeu{" "}
                   <span className="text-emerald-400 font-bold">{qtdVendas} veículo{qtdVendas !== 1 ? "s" : ""}</span>{" "}
                   neste mês.

@@ -65,13 +65,13 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
       {!paramsOk ? (
         <EmptyState title="Defina os parâmetros" description="Informe região e tamanho da loja para comparar contra o mercado." />
       ) : loadingPlanos || loadingBench ? (
-        <p className="text-sm font-bold text-gray-500">Calculando comparativo…</p>
+        <p className="text-sm font-bold text-muted-foreground">Calculando comparativo…</p>
       ) : linhas.length === 0 ? (
         <EmptyState title="Sem planos para comparar" description="Cadastre planos de remuneração na aba anterior." />
       ) : (
         <div className="overflow-x-auto rounded-2xl border border-gray-200">
           <table className="w-full text-sm">
-            <thead className="bg-gray-50 text-gray-500">
+            <thead className="bg-gray-50 text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
                 <th className="px-mx-md py-mx-sm">Cargo</th>
                 <th className="px-mx-md py-mx-sm text-right">Total atual</th>
@@ -84,7 +84,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
                 <tr key={l.cargo} className="border-t border-gray-200">
                   <td className="px-mx-md py-mx-sm font-bold uppercase">{l.cargo}</td>
                   <td className="px-mx-md py-mx-sm text-right font-bold">{BRL.format(l.total)}</td>
-                  <td className="px-mx-md py-mx-sm text-right text-gray-500">
+                  <td className="px-mx-md py-mx-sm text-right text-muted-foreground">
                     {l.faixa ? `${BRL.format(l.faixa.min)} – ${BRL.format(l.faixa.max)}` : '—'}
                   </td>
                   <td className="px-mx-md py-mx-sm">
@@ -105,7 +105,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
 function Field({ label, children }: { label: string; children: React.ReactNode }) {
   return (
     <label className="block space-y-mx-xs">
-      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-gray-500">{label}</span>
+      <span className="block px-1 text-xs font-bold uppercase tracking-wide text-muted-foreground">{label}</span>
       {children}
     </label>
   )

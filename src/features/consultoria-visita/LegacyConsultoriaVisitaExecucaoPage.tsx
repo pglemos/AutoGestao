@@ -633,12 +633,12 @@ export default function ConsultoriaVisitaExecucao() {
 
       <div className="sticky top-mx-0 z-40 bg-gray-50/80 backdrop-blur-xl px-mx-md py-mx-sm flex flex-col md:flex-row md:items-center justify-between gap-mx-sm mb-mx-md print:hidden border-b border-gray-100 shadow-sm transition-all">
         <div className="flex items-center gap-mx-md">
-          <Link to={`/consultoria/clientes/${client?.slug}`} className="p-mx-xs border border-gray-100 rounded-2xl hover:bg-white hover:shadow-sm transition-all text-gray-500 bg-white/50 backdrop-blur-sm shadow-sm group">
+          <Link to={`/consultoria/clientes/${client?.slug}`} className="p-mx-xs border border-gray-100 rounded-2xl hover:bg-white hover:shadow-sm transition-all text-muted-foreground bg-white/50 backdrop-blur-sm shadow-sm group">
             <ArrowLeft className="w-mx-5 h-mx-5 group-hover:-translate-x-1 transition-transform" />
           </Link>
           <div>
             <div className="flex items-center gap-mx-sm">
-               <Typography variant="h1" className="text-2xl text-black tracking-tighter">{getPmrVisitDisplayLabel(visitNum)}</Typography>
+               <Typography variant="h1" className="text-2xl text-foreground tracking-tighter">{getPmrVisitDisplayLabel(visitNum)}</Typography>
                <div className={cn(
                  "px-mx-sm py-0.5 rounded-mx-full text-mx-nano font-bold tracking-mx-widest uppercase shadow-sm border",
                  visit?.status === 'concluida' ? "bg-status-success/10 text-status-success border-status-success/20" : "bg-mx-orange-500/10 text-mx-orange-600 border-mx-orange-200 animate-pulse"
@@ -683,7 +683,7 @@ export default function ConsultoriaVisitaExecucao() {
               {VISIT_FLOW_STEPS.map((item, index) => (
                 <div key={item} className="min-h-mx-14 rounded-2xl border border-gray-100 bg-gray-50/40 px-mx-sm py-mx-xs">
                   <Typography variant="tiny" tone="muted" className="block">{String(index + 1).padStart(2, '0')}</Typography>
-                  <Typography variant="p" className="text-xs leading-tight text-black">{item}</Typography>
+                  <Typography variant="p" className="text-xs leading-tight text-foreground">{item}</Typography>
                 </div>
               ))}
             </div>
@@ -836,13 +836,13 @@ export default function ConsultoriaVisitaExecucao() {
             <div className="space-y-mx-md">
               <div className="p-mx-md bg-gray-50 rounded-2xl border border-gray-100">
                 <Typography variant="tiny" tone="muted" className="text-mx-micro mb-1">Participantes</Typography>
-                <Typography variant="p" className="text-sm font-bold text-black">{step?.target || 'Todos'}</Typography>
+                <Typography variant="p" className="text-sm font-bold text-foreground">{step?.target || 'Todos'}</Typography>
               </div>
               <div className="p-mx-md bg-gray-50 rounded-2xl border border-gray-100">
                 <Typography variant="tiny" tone="muted" className="text-mx-micro mb-1">Duração Estimada</Typography>
                 <div className="flex items-center gap-mx-xs">
-                   <Clock className="w-mx-4 h-mx-4 text-gray-500" />
-                   <Typography variant="p" className="text-sm font-bold text-black">{step?.duration || '4 horas'}</Typography>
+                   <Clock className="w-mx-4 h-mx-4 text-muted-foreground" />
+                   <Typography variant="p" className="text-sm font-bold text-foreground">{step?.duration || '4 horas'}</Typography>
                 </div>
               </div>
             </div>
@@ -857,7 +857,7 @@ export default function ConsultoriaVisitaExecucao() {
 
             {attachments.length === 0 ? (
                <div className="p-mx-md border border-dashed border-gray-100 rounded-2xl text-center opacity-50">
-                  <Paperclip className="w-mx-6 h-mx-6 mx-auto mb-mx-xs text-gray-500" />
+                  <Paperclip className="w-mx-6 h-mx-6 mx-auto mb-mx-xs text-muted-foreground" />
                   <Typography variant="tiny" className="font-bold text-mx-micro">Nenhuma evidência anexada.</Typography>
                </div>
             ) : (
@@ -866,10 +866,10 @@ export default function ConsultoriaVisitaExecucao() {
                      <div key={att.id} className="group p-mx-xs bg-gray-50 rounded-2xl border border-gray-200 flex items-center justify-between hover:bg-white transition-colors shadow-sm">
                         <div className="flex items-center gap-mx-sm min-w-0">
                            <div className="w-mx-10 h-mx-10 rounded-xl bg-white flex items-center justify-center border border-gray-100 shadow-sm shrink-0">
-                              {att.content_type?.includes('image') ? <Image className="w-mx-5 h-mx-5 text-emerald-600" /> : <FileText className="w-mx-5 h-mx-5 text-gray-500" />}
+                              {att.content_type?.includes('image') ? <Image className="w-mx-5 h-mx-5 text-emerald-600" /> : <FileText className="w-mx-5 h-mx-5 text-muted-foreground" />}
                            </div>
                            <div className="min-w-0">
-                              <Typography variant="p" className="text-xs font-bold truncate max-w-mx-40 text-black">{att.filename}</Typography>
+                              <Typography variant="p" className="text-xs font-bold truncate max-w-mx-40 text-foreground">{att.filename}</Typography>
                               <Typography variant="tiny" className="opacity-50 text-mx-micro">{formatFileSize(att.size_bytes)}</Typography>
                            </div>
                         </div>
@@ -925,7 +925,7 @@ export default function ConsultoriaVisitaExecucao() {
       <Modal open={showReportModal} onClose={() => setShowReportModal(false)} title="DOCUMENTO DE AUDITORIA">
          <div className="p-mx-md">
             <div className="p-mx-lg bg-gray-50 rounded-2xl font-mono text-xs whitespace-pre-wrap border border-gray-100 max-h-mx-96 overflow-y-auto mb-mx-md">
-               <div className="relative z-10 text-gray-800">{generateReportText()}</div>
+               <div className="relative z-10 text-foreground">{generateReportText()}</div>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
                <Button className="h-mx-11 text-sm bg-white" variant="outline" onClick={() => window.print()} icon={<Printer className="w-mx-4 h-mx-4" />}>IMPRIMIR PDF</Button>

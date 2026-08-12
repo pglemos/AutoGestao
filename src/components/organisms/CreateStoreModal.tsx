@@ -129,7 +129,7 @@ export function CreateStoreModal({
                     <div className="relative group">
                       <Mail
                         size={18}
-                        className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors"
+                        className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors"
                         aria-hidden="true"
                       />
                       <Input
@@ -144,7 +144,7 @@ export function CreateStoreModal({
                         className="!h-14 !pl-14 !px-6 font-bold"
                       />
                     </div>
-                    <p className="mt-mx-sm text-mx-micro text-gray-500">
+                    <p className="mt-mx-sm text-mx-micro text-muted-foreground">
                       Este e-mail recebe os relatórios da unidade. Ele não define a
                       gestão comercial: enquanto não houver um gerente com vínculo
                       ativo nesta loja, o dono acumula a gestão e recebe as funções

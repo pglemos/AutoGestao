@@ -35,7 +35,7 @@ const CardTitle = React.forwardRef<HTMLHeadingElement, React.HTMLAttributes<HTML
       ref={ref}
       data-mx-card-title=""
       className={cn(
-        'text-h4 text-gray-800',
+        'text-h4 text-foreground',
         className,
       )}
       {...props}
@@ -54,7 +54,7 @@ const CardDescription = React.forwardRef<
     ref={ref}
     data-mx-card-description=""
     className={cn(
-      'mt-1 text-body-sm text-gray-500',
+      'mt-1 text-body-sm text-muted-foreground',
       className,
     )}
     {...props}

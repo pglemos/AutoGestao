@@ -34,7 +34,7 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-4">
         <div>
-          <label className="text-xs font-medium text-slate-500 mb-1.5 block">Vendas adicionais</label>
+          <label className="text-xs font-medium text-muted-foreground mb-1.5 block">Vendas adicionais</label>
           <input
             type="number" min={1} max={30} value={vendasAdicionais}
             onChange={e => setVendasAdicionais(e.target.value)}
@@ -42,9 +42,9 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
           />
         </div>
         <div>
-          <label className="text-xs font-medium text-slate-500 mb-1.5 block">
+          <label className="text-xs font-medium text-muted-foreground mb-1.5 block">
             Valor médio por veículo
-            {ticketMedio > 0 && <span className="text-slate-400 ml-1">(padrão: {formatBRL(ticketMedio)})</span>}
+            {ticketMedio > 0 && <span className="text-muted-foreground ml-1">(padrão: {formatBRL(ticketMedio)})</span>}
           </label>
           <input
             type="number" min={0} value={valorMedio}
@@ -64,7 +64,7 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
 
       {resultado && (
         <div className="mt-5 bg-slate-50 rounded-xl p-4 space-y-3">
-          <p className="text-slate-500 text-sm">
+          <p className="text-muted-foreground text-sm">
             Com mais <span className="font-bold text-mx-navy">{resultado.va} venda{resultado.va !== 1 ? "s" : ""}</span>, seu salário previsto iria para:
           </p>
           <p className="text-4xl font-bold text-mx-navy">{formatBRL(resultado.salario)}</p>
@@ -82,7 +82,7 @@ export default function QuickSimulationCard({ calcResult, faixas = [], premiacoe
 function SimLine({ label, value, highlight }) {
   return (
     <div>
-      <p className="text-xs text-slate-400">{label}</p>
+      <p className="text-xs text-muted-foreground">{label}</p>
       <p className={`text-sm font-bold ${highlight ? "text-emerald-600" : "text-mx-navy"}`}>
         {highlight && value > 0 ? "+" : ""}{formatBRL(value)}
       </p>

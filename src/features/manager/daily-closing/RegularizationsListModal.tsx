@@ -86,7 +86,7 @@ export function RegularizationsListModal({
         description={`${requests.length} regularização(ões) pendente(s)`}
       >
       {requests.length === 0 ? (
-        <p className="py-8 text-center text-sm text-gray-500">
+        <p className="py-8 text-center text-sm text-muted-foreground">
           Nenhuma regularização aguardando aprovação.
         </p>
       ) : (
@@ -102,8 +102,8 @@ export function RegularizationsListModal({
                       {initials(name)}
                     </div>
                     <div className="min-w-0">
-                      <p className="truncate text-sm font-medium text-gray-800">{name}</p>
-                      <p className="text-xs text-gray-500">
+                      <p className="truncate text-sm font-medium text-foreground">{name}</p>
+                      <p className="text-xs text-muted-foreground">
                         Entrega: {formatRequestDate(request.created_at)}
                       </p>
                     </div>
@@ -233,10 +233,10 @@ function RegularizationDecisionModal({
         </div>
       }
     >
-      <div className="space-y-4 text-gray-600">
+      <div className="space-y-4 text-muted-foreground">
         <p className="text-sm">{description}</p>
         <div>
-          <label className="mb-1 block text-xs font-medium text-gray-600" htmlFor="regularization-comment">
+          <label className="mb-1 block text-xs font-medium text-muted-foreground" htmlFor="regularization-comment">
             Comentário (opcional)
           </label>
           <textarea
@@ -246,7 +246,7 @@ function RegularizationDecisionModal({
             className="w-full resize-none rounded-[12px] border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </div>
-        <label className="flex cursor-pointer items-start gap-2 text-sm text-gray-600">
+        <label className="flex cursor-pointer items-start gap-2 text-sm text-muted-foreground">
           <input
             type="checkbox"
             checked={confirmed}
@@ -261,7 +261,7 @@ function RegularizationDecisionModal({
 }
 
 function Metric({ label, value }: { label: string; value: number }) {
-  return <div><span className="text-gray-500">{label}: </span><span className="font-semibold text-gray-800">{value}</span></div>;
+  return <div><span className="text-muted-foreground">{label}: </span><span className="font-semibold text-foreground">{value}</span></div>;
 }
 
 function initials(name: string) {

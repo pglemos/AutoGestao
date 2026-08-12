@@ -131,7 +131,7 @@ export function ForcePasswordChange() {
                     )}
                   </div>
                   <div className="relative group/input">
-                    <KeyRound size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-emerald-600 transition-colors z-10" />
+                    <KeyRound size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-emerald-600 transition-colors z-10" />
                     <Input 
                       required 
                       minLength={6}
@@ -139,12 +139,12 @@ export function ForcePasswordChange() {
                       placeholder="NOVA SENHA" 
                       value={formData.password} 
                       onChange={e => setFormData({...formData, password: e.target.value})}
-                      className="!h-mx-16 !pl-mx-14 !pr-mx-14 bg-gray-50 border-gray-200 rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-gray-500/30"
+                      className="!h-mx-16 !pl-mx-14 !pr-mx-14 bg-gray-50 border-gray-200 rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-muted-foreground/30"
                     />
                     <button 
                       type="button"
                       onClick={() => setShowPassword(!showPassword)}
-                      className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-gray-500 hover:text-mx-black transition-colors z-10"
+                      className="absolute right-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground hover:text-mx-black transition-colors z-10"
                     >
                       {showPassword ? <EyeOff size={20} /> : <Eye size={20} />}
                     </button>
@@ -155,14 +155,14 @@ export function ForcePasswordChange() {
                 <div className="space-y-mx-xs">
                   <Typography variant="tiny" tone="muted" className="px-mx-xs">Confirmação</Typography>
                   <div className="relative group/input">
-                    <Lock size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within/input:text-emerald-600 transition-colors z-10" />
+                    <Lock size={20} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within/input:text-emerald-600 transition-colors z-10" />
                     <Input 
                       required 
                       type={showPassword ? 'text' : 'password'} 
                       placeholder="REPETIR SENHA" 
                       value={formData.confirmPassword} 
                       onChange={e => setFormData({...formData, confirmPassword: e.target.value})}
-                      className="!h-mx-16 !pl-mx-14 bg-gray-50 border-gray-200 rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-gray-500/30"
+                      className="!h-mx-16 !pl-mx-14 bg-gray-50 border-gray-200 rounded-2xl font-bold tracking-mx-wide focus:border-brand-primary transition-all placeholder:text-muted-foreground/30"
                     />
                   </div>
                 </div>
@@ -197,7 +197,7 @@ export function ForcePasswordChange() {
                 <button 
                   type="button"
                   onClick={() => signOut()}
-                  className="w-full flex items-center justify-center gap-mx-xs text-gray-500 hover:text-status-error font-bold uppercase tracking-mx-widest text-mx-nano py-mx-xs transition-colors"
+                  className="w-full flex items-center justify-center gap-mx-xs text-muted-foreground hover:text-status-error font-bold uppercase tracking-mx-widest text-mx-nano py-mx-xs transition-colors"
                 >
                   <LogOut size={14} /> SAIR DA CONTA
                 </button>

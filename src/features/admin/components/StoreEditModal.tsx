@@ -149,7 +149,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
             Nome da Loja
           </Typography>
           <div className="relative">
-            <Building2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+            <Building2 size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input
               id="edit-store-name"
               required
@@ -192,7 +192,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               Endereço
             </Typography>
             <div className="relative">
-              <MapPin size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+              <MapPin size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
               <Input
                 id="edit-store-address"
                 value={form.address || ''}
@@ -208,7 +208,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
               Telefone administrativo
             </Typography>
             <div className="relative">
-              <Phone size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+              <Phone size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
               <Input
                 id="edit-store-administrative-phone"
                 value={form.administrative_phone || ''}
@@ -228,7 +228,7 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
             <Badge variant="outline" className="text-mx-micro">Opcional</Badge>
           </div>
           <div className="relative">
-            <Mail size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" aria-hidden="true" />
+            <Mail size={18} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" aria-hidden="true" />
             <Input
               id="edit-store-manager-email"
               type="email"
@@ -370,8 +370,8 @@ export function StoreEditModal({ open, store, saving = false, onClose, onSubmit 
             className="mt-1 h-mx-sm w-mx-sm accent-brand-primary"
           />
           <span className="flex-1">
-            <span className="block text-sm font-bold uppercase tracking-widest text-gray-800">Loja ativa</span>
-            <span className="block text-xs font-bold text-gray-500 mt-1">
+            <span className="block text-sm font-bold uppercase tracking-widest text-foreground">Loja ativa</span>
+            <span className="block text-xs font-bold text-muted-foreground mt-1">
               Desmarcar arquiva a unidade sem excluir dados historicos.
             </span>
           </span>

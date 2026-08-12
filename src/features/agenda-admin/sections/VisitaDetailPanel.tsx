@@ -37,7 +37,7 @@ export function VisitaDetailPanel({
           <button
             type="button"
             onClick={onClearSelection}
-            className="w-mx-lg h-mx-lg rounded-xl hover:bg-gray-50 flex items-center justify-center text-gray-500 transition-all"
+            className="w-mx-lg h-mx-lg rounded-xl hover:bg-gray-50 flex items-center justify-center text-muted-foreground transition-all"
           >
             <X size={14} />
           </button>
@@ -47,12 +47,12 @@ export function VisitaDetailPanel({
       <div className="p-mx-md max-h-mx-6xl overflow-y-auto no-scrollbar">
         {!selectedDate ? (
           <div className="flex flex-col items-center justify-center py-mx-2xl text-center gap-mx-sm">
-            <CalendarDays size={32} className="text-gray-500" />
+            <CalendarDays size={32} className="text-muted-foreground" />
             <Typography variant="tiny" tone="muted">Clique em um dia no calendário para ver os detalhes</Typography>
           </div>
         ) : selectedDayVisits.length === 0 && selectedDayEvents.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-mx-2xl text-center gap-mx-sm">
-            <CalendarDays size={32} className="text-gray-500" />
+            <CalendarDays size={32} className="text-muted-foreground" />
             <Typography variant="tiny" tone="muted">Nenhum item neste dia</Typography>
             <div className="mt-mx-sm flex flex-wrap justify-center gap-mx-xs">
               <Button variant="secondary" size="sm" onClick={() => onScheduleVisit(selectedDate)}>
@@ -95,7 +95,7 @@ export function VisitaDetailPanel({
                     </div>
                     {visit.consultant && (
                       <div className="flex items-center gap-mx-xs min-w-0">
-                        <User size={10} className="text-gray-500 shrink-0" />
+                        <User size={10} className="text-muted-foreground shrink-0" />
                         <Typography variant="tiny" tone="muted" className="truncate">{visit.consultant.name}</Typography>
                       </div>
                     )}
@@ -120,7 +120,7 @@ export function VisitaDetailPanel({
                     )}
                     <div className="flex items-center justify-between mt-1">
                       <Typography variant="tiny" tone="muted">{getPmrVisitDisplayLabel(visit.visit_number)}</Typography>
-                      <ChevronRight size={14} className="text-gray-500 group-hover:text-emerald-600 transition-colors" />
+                      <ChevronRight size={14} className="text-muted-foreground group-hover:text-emerald-600 transition-colors" />
                     </div>
                   </div>
                 </Link>

@@ -12,7 +12,7 @@ const formatData = (iso: string | null) => iso ? new Date(iso).toLocaleDateStrin
 function StatusBadge({ venda }: { venda: VendaLoja }) {
   if (venda.etapa === 'cancelada') {
     return (
-      <span title={venda.motivo_cancelamento || undefined} className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-caption font-semibold text-slate-500">
+      <span title={venda.motivo_cancelamento || undefined} className="inline-flex items-center rounded-full bg-slate-100 px-2.5 py-1 text-caption font-semibold text-muted-foreground">
         Cancelada
       </span>
     )
@@ -69,18 +69,18 @@ export function VendasFechadasLoja({
           <ManagerHomeReturnLink />
           <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
             <div>
-              <h1 className="text-xl font-bold text-gray-800">Vendas da loja</h1>
-              <p className="mt-0.5 text-sm text-gray-500">Vendas fechadas por toda a equipe, com opção de cancelamento.</p>
+              <h1 className="text-xl font-bold text-foreground">Vendas da loja</h1>
+              <p className="mt-0.5 text-sm text-muted-foreground">Vendas fechadas por toda a equipe, com opção de cancelamento.</p>
             </div>
             {selectableStores.length > 1 && onStoreChange && (
               <div>
-                <label className="mb-1 block text-xs text-gray-500" htmlFor="vendas-loja-store">Unidade</label>
+                <label className="mb-1 block text-xs text-muted-foreground" htmlFor="vendas-loja-store">Unidade</label>
                 <select
                   id="vendas-loja-store"
                   aria-label="Unidade das vendas"
                   value={storeId || ''}
                   onChange={event => onStoreChange(event.target.value)}
-                  className="block min-w-[160px] rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-gray-700"
+                  className="block min-w-[160px] rounded-xl border border-gray-200 bg-white px-3 py-2 text-sm text-foreground"
                 >
                   {selectableStores.map(store => <option key={store.id} value={store.id}>{store.name}</option>)}
                 </select>
@@ -91,7 +91,7 @@ export function VendasFechadasLoja({
       )}
 
       <div className="relative w-full max-w-xs">
-        <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-400" />
+        <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
         <input
           value={search}
           onChange={event => setSearch(event.target.value)}
@@ -109,18 +109,18 @@ export function VendasFechadasLoja({
             <thead>
               <tr className="border-b border-slate-100 bg-slate-50">
                 {['Cliente', 'Vendedor', 'Veículo', 'Valor', 'Fechamento', 'Status', 'Ações'].map(h => (
-                  <th key={h} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wider text-slate-500">{h}</th>
+                  <th key={h} className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wider text-muted-foreground">{h}</th>
                 ))}
               </tr>
             </thead>
             <tbody>
               {filtradas.map(venda => (
                 <tr key={venda.id} className="border-b border-slate-50 hover:bg-slate-50/50">
-                  <td className="px-4 py-3 text-body-sm font-semibold text-slate-800">{venda.cliente_nome}</td>
-                  <td className="px-4 py-3 text-body-sm text-slate-600">{venda.seller_nome}</td>
-                  <td className="px-4 py-3 text-body-sm text-slate-500">{venda.veiculo_interesse || '—'}</td>
-                  <td className="px-4 py-3 text-body-sm font-bold text-slate-800">{BRL(venda.valor_negociado)}</td>
-                  <td className="px-4 py-3 text-body-sm text-slate-500">{formatData(venda.closed_at)}</td>
+                  <td className="px-4 py-3 text-body-sm font-semibold text-foreground">{venda.cliente_nome}</td>
+                  <td className="px-4 py-3 text-body-sm text-muted-foreground">{venda.seller_nome}</td>
+                  <td className="px-4 py-3 text-body-sm text-muted-foreground">{venda.veiculo_interesse || '—'}</td>
+                  <td className="px-4 py-3 text-body-sm font-bold text-foreground">{BRL(venda.valor_negociado)}</td>
+                  <td className="px-4 py-3 text-body-sm text-muted-foreground">{formatData(venda.closed_at)}</td>
                   <td className="px-4 py-3"><StatusBadge venda={venda} /></td>
                   <td className="px-4 py-3">
                     {venda.etapa === 'ganho' && (
@@ -138,11 +138,11 @@ export function VendasFechadasLoja({
             </tbody>
           </table>
           {!loading && filtradas.length === 0 && (
-            <div className="py-12 text-center text-body-sm text-slate-400">
+            <div className="py-12 text-center text-body-sm text-muted-foreground">
               {vendas.length === 0 ? 'Nenhuma venda fechada encontrada para esta unidade.' : 'Nenhuma venda encontrada para esta busca.'}
             </div>
           )}
-          {loading && <div className="py-12 text-center text-body-sm text-slate-400">Carregando vendas...</div>}
+          {loading && <div className="py-12 text-center text-body-sm text-muted-foreground">Carregando vendas...</div>}
         </div>
       </div>
 

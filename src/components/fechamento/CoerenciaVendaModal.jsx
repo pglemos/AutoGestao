@@ -123,7 +123,7 @@ export function ModalSemAtendimento({ open, canal, onAtendimentoAnterior, onVinc
         <p className="text-body-sm text-[#64748B] mt-1 leading-relaxed">
           Não encontramos atendimento hoje para o canal <strong className="text-[#0F172A]">{canal}</strong>. Esta venda veio de um atendimento anterior?
         </p>
-        <p className="text-[12px] text-slate-400 mt-1">
+        <p className="text-[12px] text-muted-foreground mt-1">
           No mercado automotivo, é comum o cliente atender em um dia e confirmar a compra em outro — isso é totalmente válido.
         </p>
         <div className="flex flex-col gap-2 mt-4">

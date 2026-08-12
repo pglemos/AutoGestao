@@ -98,7 +98,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
       <div className="bg-white rounded-2xl shadow-2xl w-full max-w-md p-6 space-y-4">
         <div className="flex items-center justify-between">
           <p className="font-black text-[#031B3D]">Registrar veículo que chegou</p>
-          <button onClick={onClose}><X className="w-5 h-5 text-slate-400" /></button>
+          <button onClick={onClose}><X className="w-5 h-5 text-muted-foreground" /></button>
         </div>
 
         <div className="grid grid-cols-2 gap-3">
@@ -109,7 +109,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
             { k: "ano", label: "Ano", placeholder: "2024" },
           ].map(({ k, label, placeholder }) => (
             <div key={k}>
-              <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1">{label}</p>
+              <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">{label}</p>
               <input
                 value={form[k]} onChange={e => set(k, e.target.value)} placeholder={placeholder}
                 className="w-full h-9 rounded-xl border border-slate-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
@@ -124,7 +124,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
               ? "border-green-200 bg-green-50 text-green-800"
               : ambigua
                 ? "border-amber-200 bg-amber-50 text-amber-800"
-                : "border-slate-200 bg-slate-50 text-slate-500"
+                : "border-slate-200 bg-slate-50 text-muted-foreground"
           }`}>
           {classificacao ? (
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0" />
@@ -141,14 +141,14 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
 
         <div className="grid grid-cols-2 gap-3">
           <div>
-            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1">Preço (opcional)</p>
+            <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Preço (opcional)</p>
             <input
               type="number" value={form.preco} onChange={e => set("preco", e.target.value)} placeholder="Ex: 120000"
               className="w-full h-9 rounded-xl border border-slate-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
             />
           </div>
           <div>
-            <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1">Data de entrada</p>
+            <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Data de entrada</p>
             <input
               type="date" value={form.data_entrada} onChange={e => set("data_entrada", e.target.value)}
               className="w-full h-9 rounded-xl border border-slate-200 px-3 text-sm focus:outline-none focus:ring-1 focus:ring-[#005BFF]"
@@ -157,7 +157,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
         </div>
 
         <div>
-          <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-1">Observação (opcional)</p>
+          <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-1">Observação (opcional)</p>
           <textarea
             value={form.observacao} onChange={e => set("observacao", e.target.value)} rows={2}
             placeholder="Ex: baixo km, único dono..."
@@ -190,15 +190,15 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-black text-[#031B3D] truncate">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
-          <p className="text-xs text-slate-400">{veiculo.ano}{veiculo.preco ? ` · R$ ${veiculo.preco.toLocaleString("pt-BR")}` : ""}</p>
+          <p className="text-xs text-muted-foreground">{veiculo.ano}{veiculo.preco ? ` · R$ ${veiculo.preco.toLocaleString("pt-BR")}` : ""}</p>
           <p className="text-caption text-[#005BFF] font-semibold mt-0.5">{entradaLabel}</p>
         </div>
       </div>
 
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-1.5">
-          <Users className="w-3.5 h-3.5 text-slate-400" />
-          <span className={`text-xs font-bold ${compatíveis > 0 ? "text-[#031B3D]" : "text-slate-400"}`}>
+          <Users className="w-3.5 h-3.5 text-muted-foreground" />
+          <span className={`text-xs font-bold ${compatíveis > 0 ? "text-[#031B3D]" : "text-muted-foreground"}`}>
             {compatíveis} cliente{compatíveis !== 1 ? "s" : ""} compatível{compatíveis !== 1 ? "s" : ""}
           </span>
         </div>
@@ -255,12 +255,12 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
       {lista.length === 0 ? (
         <div className="bg-white border border-slate-100 rounded-2xl p-10 text-center">
           <p className="text-3xl mb-2">🔍</p>
-          <p className="text-sm font-semibold text-slate-500">Nenhum cliente compatível encontrado.</p>
-          <p className="text-xs text-slate-400 mt-1">Verifique os veículos de interesse registrados na carteira.</p>
+          <p className="text-sm font-semibold text-muted-foreground">Nenhum cliente compatível encontrado.</p>
+          <p className="text-xs text-muted-foreground mt-1">Verifique os veículos de interesse registrados na carteira.</p>
         </div>
       ) : (
         <div className="space-y-3">
-          <p className="text-xs font-black text-slate-400 uppercase tracking-wider">{lista.length} cliente{lista.length !== 1 ? "s" : ""} compatível{lista.length !== 1 ? "s" : ""}</p>
+          <p className="text-xs font-black text-muted-foreground uppercase tracking-wider">{lista.length} cliente{lista.length !== 1 ? "s" : ""} compatível{lista.length !== 1 ? "s" : ""}</p>
           {lista.map(c => {
             const situacao = c.situacao_atual || c.momento || "—";
             const iniciais = (c.nome || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase();
@@ -281,7 +281,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
                       Veículo compatível chegou
                     </span>
                   </div>
-                  <p className="text-xs text-slate-400 truncate">{c.veiculo_interesse} · {situacao}</p>
+                  <p className="text-xs text-muted-foreground truncate">{c.veiculo_interesse} · {situacao}</p>
                 </div>
                 <div className="flex gap-1.5 shrink-0">
                   <button onClick={() => onExecutar(c, veiculo)}
@@ -289,7 +289,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
                     <Zap className="w-3 h-3" /> Executar
                   </button>
                   <button onClick={() => onFicha(c.id)}
-                    className="text-caption font-bold text-slate-600 border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
+                    className="text-caption font-bold text-muted-foreground border border-slate-200 hover:bg-slate-50 px-2.5 py-1.5 rounded-lg transition-colors">
                     Ficha
                   </button>
                 </div>
@@ -393,7 +393,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
       <div className="flex items-start justify-between gap-4">
         <div>
           <h2 className="text-lg font-black text-[#031B3D]">Veículos que chegaram</h2>
-          <p className="text-sm text-slate-400 mt-0.5">Encontre clientes da carteira interessados nos veículos recém-entrados.</p>
+          <p className="text-sm text-muted-foreground mt-0.5">Encontre clientes da carteira interessados nos veículos recém-entrados.</p>
         </div>
         <Button onClick={() => setModalOpen(true)} variant="outline" className="rounded-xl text-sm gap-1.5 border-[#005BFF] text-[#005BFF] hover:bg-blue-50 whitespace-nowrap">
           <Plus className="w-4 h-4" /> Registrar veículo
@@ -403,7 +403,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
       {/* Categorização por Faixa de Preço */}
       {veiculos.length > 0 && (
         <div className="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
-          <span className="text-caption font-bold text-slate-400 uppercase tracking-wide mr-1 shrink-0">Faixa de preço:</span>
+          <span className="text-caption font-bold text-muted-foreground uppercase tracking-wide mr-1 shrink-0">Faixa de preço:</span>
           {FAIXAS_PRECO.map(f => {
             const count = countsFaixa[f.id] ?? 0;
             const ativo = faixaPrecoAtiva === f.id;
@@ -415,7 +415,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
                 className={`px-3 py-1.5 rounded-xl font-bold whitespace-nowrap transition-all ${
                   ativo
                     ? "bg-[#005BFF] text-white shadow-sm"
-                    : "bg-slate-50 text-slate-600 border border-slate-100 hover:bg-slate-100"
+                    : "bg-slate-50 text-muted-foreground border border-slate-100 hover:bg-slate-100"
                 }`}
               >
                 {f.label} ({count})
@@ -432,7 +432,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
       ) : veiculosFiltrados.length === 0 ? (
         <div className="bg-white border border-slate-100 rounded-2xl p-8 text-center">
           <p className="text-3xl mb-2">🚗</p>
-          <p className="text-sm font-semibold text-slate-500">
+          <p className="text-sm font-semibold text-muted-foreground">
             {veiculos.length === 0
               ? "Nenhum veículo recém-chegado registrado no momento."
               : "Nenhum veículo encontrado nesta faixa de preço."}

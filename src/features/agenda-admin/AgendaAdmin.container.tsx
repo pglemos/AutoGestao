@@ -423,7 +423,7 @@ export function AgendaAdmin() {
           {/* Sync Footer Badge */}
           <div className="mt-4 flex items-center justify-between border-t border-gray-200 pt-3 shrink-0">
             <GoogleCalendarStatus compact />
-            <span className="text-caption text-gray-500 font-mono hidden md:inline">
+            <span className="text-caption text-muted-foreground font-mono hidden md:inline">
               Atalhos: [T] Hoje • [D] Dia • [W] Semana • [M] Mês • [L] Lista • [/] Buscar
             </span>
           </div>

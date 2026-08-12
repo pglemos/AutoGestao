@@ -96,27 +96,27 @@ export function EditMemberModal({
             <CardContent className="p-mx-md sm:p-mx-xl space-y-mx-lg overflow-y-auto flex-1 overscroll-contain">
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
                 <div className="space-y-mx-tiny">
-                  <label htmlFor="edit-member-name" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">
+                  <label htmlFor="edit-member-name" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-muted-foreground">
                     Nome
                   </label>
                   <div className="relative">
-                    <User size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
+                    <User size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <input
                       id="edit-member-name"
                       name="name"
                       required
                       value={editingMember.name || ''}
                       onChange={e => onChange({ ...editingMember, name: e.target.value.toUpperCase() })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase tracking-tight focus:outline-none focus:border-emerald-600 transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold uppercase tracking-tight focus:outline-none focus:border-emerald-600 transition-all"
                     />
                   </div>
                 </div>
                 <div className="space-y-mx-tiny">
-                  <label htmlFor="edit-member-email" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">
+                  <label htmlFor="edit-member-email" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-muted-foreground">
                     E-mail
                   </label>
                   <div className="relative">
-                    <Mail size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
+                    <Mail size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <input
                       id="edit-member-email"
                       name="email"
@@ -124,27 +124,27 @@ export function EditMemberModal({
                       type="email"
                       value={editingMember.email || ''}
                       onChange={e => onChange({ ...editingMember, email: e.target.value })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600 transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all"
                     />
                   </div>
                 </div>
                 <div className="space-y-mx-tiny">
-                  <label htmlFor="edit-member-phone" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">
+                  <label htmlFor="edit-member-phone" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-muted-foreground">
                     Telefone
                   </label>
                   <div className="relative">
-                    <Phone size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500" />
+                    <Phone size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <input
                       id="edit-member-phone"
                       name="phone"
                       value={editingMember.phone || ''}
                       onChange={e => onChange({ ...editingMember, phone: e.target.value })}
-                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600 transition-all"
+                      className="w-full h-mx-14 pl-12 pr-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all"
                     />
                   </div>
                 </div>
                 <div className="space-y-mx-tiny">
-                  <label htmlFor="edit-member-role" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">
+                  <label htmlFor="edit-member-role" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-muted-foreground">
                     Papel na loja
                   </label>
                   <select
@@ -153,7 +153,7 @@ export function EditMemberModal({
                     name="role"
                     value={editingMember.role || 'vendedor'}
                     onChange={e => onChange({ ...editingMember, role: e.target.value as MembershipRole })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
                   >
                     {editableStoreRoles.map(option => (
                       <option key={option} value={option}>{option}</option>
@@ -161,7 +161,7 @@ export function EditMemberModal({
                   </select>
                 </div>
                 <div className="sm:col-span-2 space-y-mx-tiny">
-                  <label htmlFor="edit-member-store" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">
+                  <label htmlFor="edit-member-store" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-muted-foreground">
                     Loja vinculada
                   </label>
                   <select
@@ -170,7 +170,7 @@ export function EditMemberModal({
                     name="store_id"
                     value={editingMember.store_id || storeId || ''}
                     onChange={e => onChange({ ...editingMember, store_id: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold uppercase focus:outline-none focus:border-emerald-600 transition-all"
                   >
                     <option value="">Selecione a loja</option>
                     {lojas.map(store => (
@@ -182,7 +182,7 @@ export function EditMemberModal({
 
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-mx-md">
                 <div className="space-y-mx-tiny">
-                  <label htmlFor="started-at" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">
+                  <label htmlFor="started-at" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-muted-foreground">
                     Início da vigência
                   </label>
                   <input
@@ -193,11 +193,11 @@ export function EditMemberModal({
                     required
                     value={editingMember.started_at || ''}
                     onChange={e => onChange({ ...editingMember, started_at: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
                   />
                 </div>
                 <div className="space-y-mx-tiny">
-                  <label htmlFor="ended-at" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-gray-500">
+                  <label htmlFor="ended-at" className="px-2 text-mx-tiny font-bold uppercase tracking-mx-widest text-muted-foreground">
                     Término (Opcional)
                   </label>
                   <input
@@ -207,7 +207,7 @@ export function EditMemberModal({
                     type="date"
                     value={editingMember.ended_at || ''}
                     onChange={e => onChange({ ...editingMember, ended_at: e.target.value })}
-                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-gray-800 font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
+                    className="w-full h-mx-14 px-4 bg-gray-50 border border-gray-200 rounded-2xl text-foreground font-bold focus:outline-none focus:border-emerald-600 transition-all uppercase"
                   />
                 </div>
 

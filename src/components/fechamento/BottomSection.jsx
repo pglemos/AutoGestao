@@ -301,7 +301,7 @@ export default function BottomSection({
       <div className="grid grid-cols-2 gap-5">
         {/* Resumo do Dia Anterior */}
         <div className="bg-white rounded-2xl border border-slate-200 shadow-sm p-5">
-          <p className="text-caption font-bold text-slate-400 uppercase tracking-[0.15em] mb-4">Resumo do Dia Anterior</p>
+          <p className="text-caption font-bold text-muted-foreground uppercase tracking-[0.15em] mb-4">Resumo do Dia Anterior</p>
           <div className="flex items-start gap-2 divide-x divide-slate-100">
             <StatItem value={totalLeads} label="Leads Recebidos" color="text-[#005BFF]" />
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">
@@ -318,7 +318,7 @@ export default function BottomSection({
             </div>
           </div>
           <div className="mt-3 pt-3 border-t border-slate-100 flex items-center justify-between">
-            <span className="text-caption font-bold text-slate-400 uppercase tracking-[0.12em]">Faturamento</span>
+            <span className="text-caption font-bold text-muted-foreground uppercase tracking-[0.12em]">Faturamento</span>
             <span className="text-[20px] font-bold tabular-nums text-[#22C55E]">{faturamentoStr}</span>
           </div>
         </div>
@@ -329,16 +329,16 @@ export default function BottomSection({
             <DisciplineRing score={disciplineScore} size="lg" />
           </div>
           <div className="flex-1 min-w-0">
-            <p className="text-caption font-bold text-slate-400 uppercase tracking-[0.15em] mb-2">Disciplina – Fechamento Diário</p>
+            <p className="text-caption font-bold text-muted-foreground uppercase tracking-[0.15em] mb-2">Disciplina – Fechamento Diário</p>
 
             {totalD1 > 0 && (
-              <p className="text-caption text-slate-400 mb-1.5">
+              <p className="text-caption text-muted-foreground mb-1.5">
                 Agendamentos D+1 detalhados: <strong className="text-[#0F172A]">{creditos}</strong> de <strong className="text-[#0F172A]">{totalD1}</strong>
                 {d1WindowOpen && <span className="text-[#F59E0B] ml-1">(provisório)</span>}
               </p>
             )}
             {agendamentosFuturos > 0 && (
-              <p className="text-caption text-slate-400 mb-1.5">
+              <p className="text-caption text-muted-foreground mb-1.5">
                 Agendamentos futuros: <strong className="text-[#0F172A]">{agendamentosFuturos}</strong>{" "}
                 <span className="text-green-600">✓ Já contabilizado na Qualidade da Carteira</span>
               </p>
@@ -362,7 +362,7 @@ export default function BottomSection({
             )}
 
             {!penalizado && (
-              <div className="text-caption text-slate-400 mb-2">
+              <div className="text-caption text-muted-foreground mb-2">
                 70% base + {disciplineScore - 70 < 0 ? 0 : disciplineScore - 70}% detalhamento
                 {totalD1 > 0 && ` (${disciplineScore >= 100 ? 30 : disciplineScore - 70}/30 pontos extras)`}
               </div>
@@ -429,8 +429,8 @@ export default function BottomSection({
         {/* Aviso: tudo bloqueado */}
         {jaFinalizado && d1Bloqueado && (
           <div className="flex items-center gap-2 bg-slate-50 border border-slate-200 rounded-xl px-4 py-2.5 mb-4">
-            <Lock className="w-4 h-4 text-slate-400 flex-shrink-0" />
-            <p className="text-[12px] font-semibold text-slate-500">
+            <Lock className="w-4 h-4 text-muted-foreground flex-shrink-0" />
+            <p className="text-[12px] font-semibold text-muted-foreground">
               Fechamento de {dataExibicao} encerrado e consolidado.
             </p>
           </div>
@@ -454,7 +454,7 @@ export default function BottomSection({
               {!isBlocked && (
                 <p className="text-[12px] text-[#64748B] leading-relaxed">
                   Após finalizar, as informações serão enviadas para sua liderança e{" "}
-                  <strong className="text-slate-500">não poderão mais ser editadas</strong>.
+                  <strong className="text-muted-foreground">não poderão mais ser editadas</strong>.
                 </p>
               )}
             </>

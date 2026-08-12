@@ -110,7 +110,7 @@ export default function GerentePDI() {
                 actions={(
                     <div className="flex flex-col sm:flex-row items-center gap-mx-sm shrink-0 w-full sm:w-auto">
                         <div className="relative group w-full sm:w-mx-sidebar-expanded">
-                            <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-gray-500 group-focus-within:text-emerald-600 transition-colors" />
+                            <Search size={16} className="absolute left-mx-sm top-1/2 -translate-y-1/2 text-muted-foreground group-focus-within:text-emerald-600 transition-colors" />
                             <label htmlFor="pdi-search" className="sr-only">Buscar plano de PDI</label>
                             <Input
                                 id="pdi-search"
@@ -209,7 +209,7 @@ export default function GerentePDI() {
                                                             {formatSafeDate(p.due_date)}
                                                         </Typography>
                                                     </div>
-                                                    <Button type="button" variant="ghost" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-10 h-mx-10 rounded-xl text-gray-500 hover:text-emerald-600 hover:bg-mx-indigo-50 bg-white shadow-sm border border-gray-100" aria-label={`Imprimir PDI de ${p.seller_name || 'nome não informado'}`}>
+                                                    <Button type="button" variant="ghost" size="icon" onClick={() => navigate(`/pdi/${p.id}/print`)} className="w-mx-10 h-mx-10 rounded-xl text-muted-foreground hover:text-emerald-600 hover:bg-mx-indigo-50 bg-white shadow-sm border border-gray-100" aria-label={`Imprimir PDI de ${p.seller_name || 'nome não informado'}`}>
                                                         <Printer size={18} />
                                                     </Button>
                                                 </div>
@@ -226,7 +226,7 @@ export default function GerentePDI() {
                 ) : (
                     <div className="col-span-full py-40 rounded-xl text-center border border-dashed border-gray-100 bg-white shadow-sm flex flex-col items-center justify-center relative overflow-hidden group">
                         <div className="w-mx-3xl h-mx-3xl rounded-xl bg-gray-50 shadow-sm flex items-center justify-center mb-8 border border-gray-100 group-hover:rotate-12 transition-transform duration-500">
-                            <TrendingUp size={48} className="text-gray-500 opacity-20" />
+                            <TrendingUp size={48} className="text-muted-foreground opacity-20" />
                         </div>
                         <Typography variant="h2" className="mb-4er">Matriz de Evolução Limpa</Typography>
                         <Typography variant="caption" tone="muted" className="max-w-sm mx-auto mb-10">Não localizamos planos de desenvolvimento para os filtros atuais.</Typography>

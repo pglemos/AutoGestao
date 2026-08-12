@@ -23,7 +23,7 @@ const typographyVariants = cva('transition-colors normal-case', {
       warning: 'text-amber-700',
       info: 'text-blue-700',
       error: 'text-red-700',
-      muted: 'text-gray-500',
+      muted: 'text-muted-foreground',
       white: 'text-white',
     },
   },

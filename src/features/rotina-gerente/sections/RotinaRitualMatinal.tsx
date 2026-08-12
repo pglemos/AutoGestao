@@ -100,7 +100,7 @@ export function RotinaRitualMatinal({
                     'w-mx-xl h-mx-xl rounded-xl flex items-center justify-center border shadow-mx-inner transition-all',
                     step.done
                       ? 'bg-white text-status-success border-status-success/30'
-                      : 'bg-white text-gray-500 border-gray-100 group-hover:scale-110',
+                      : 'bg-white text-muted-foreground border-gray-100 group-hover:scale-110',
                   )}
                 >
                   {step.done ? (
@@ -157,7 +157,7 @@ export function RotinaRitualMatinal({
                 'w-mx-14 h-mx-14 rounded-xl flex items-center justify-center border transition-all',
                 canTriggerMatinal
                   ? 'bg-white/10 text-white border-white/10 shadow-mx-inner'
-                  : 'bg-white text-gray-500',
+                  : 'bg-white text-muted-foreground',
               )}
             >
               <Mail size={28} strokeWidth={2} />
@@ -186,7 +186,7 @@ export function RotinaRitualMatinal({
               'h-mx-14 px-10 rounded-xl font-bold uppercase tracking-widest text-tiny',
               canTriggerMatinal
                 ? 'bg-emerald-600 shadow-sm text-white'
-                : 'bg-white border-gray-100 text-gray-500',
+                : 'bg-white border-gray-100 text-muted-foreground',
             )}
           >
             {executing ? (

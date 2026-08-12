@@ -95,14 +95,14 @@ export function InfoTooltip({ text }: { text: string }) {
         onMouseLeave={() => setVisible(false)}
         onClick={() => setVisible(!visible)}
         onBlur={() => setVisible(false)}
-        className="text-gray-500/50 hover:text-emerald-600 transition-colors focus:outline-none"
+        className="text-muted-foreground/50 hover:text-emerald-600 transition-colors focus:outline-none"
         aria-label="Informação adicional"
       >
         <HelpCircle size={14} className="stroke-[2.5]" />
       </button>
       {visible && (
         <div
-          className="fixed z-[9999] w-64 -translate-x-1/2 -translate-y-full rounded-lg border border-gray-200 bg-white p-3 text-[12px] font-medium leading-relaxed text-gray-500 shadow-lg pointer-events-none transition-all"
+          className="fixed z-[9999] w-64 -translate-x-1/2 -translate-y-full rounded-lg border border-gray-200 bg-white p-3 text-[12px] font-medium leading-relaxed text-muted-foreground shadow-lg pointer-events-none transition-all"
           style={{
             top: `${coords.top}px`,
             left: `${coords.left}px`,
@@ -759,7 +759,7 @@ saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoCon
           <button
             type="button"
             onClick={onOpenHistory}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-body-sm font-semibold text-slate-600 shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-slate-200 bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
           >
             <History size={15} aria-hidden="true" />
             Histórico de Fechamentos

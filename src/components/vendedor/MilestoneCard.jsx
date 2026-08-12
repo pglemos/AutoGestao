@@ -19,12 +19,12 @@ export default function MilestoneCard({ veiculosFaltam, valorProjetado, percentu
       <div className="relative z-10">
         {semDados ? (
           <div>
-            <p className="text-slate-300 text-sm font-semibold">Sem vendas no período</p>
-            <p className="text-slate-500 text-xs mt-1">Registre vendas para ver seu próximo marco financeiro.</p>
+            <p className="text-text-disabled text-sm font-semibold">Sem vendas no período</p>
+            <p className="text-muted-foreground text-xs mt-1">Registre vendas para ver seu próximo marco financeiro.</p>
           </div>
         ) : (
           <>
-            <p className="text-slate-400 text-xs font-bold uppercase tracking-widest mb-2">Faltam</p>
+            <p className="text-muted-foreground text-xs font-bold uppercase tracking-widest mb-2">Faltam</p>
             <div className="flex items-baseline gap-2">
               <span className="font-bold text-white" style={{ fontSize: "4rem", lineHeight: 1 }}>
                 {veiculosFaltam}
@@ -33,15 +33,15 @@ export default function MilestoneCard({ veiculosFaltam, valorProjetado, percentu
                 veículo{veiculosFaltam !== 1 ? "s" : ""}
               </span>
             </div>
-            <p className="text-slate-400 text-sm mt-1">para você ganhar</p>
+            <p className="text-muted-foreground text-sm mt-1">para você ganhar</p>
             <p className="font-bold mt-1" style={{ fontSize: "2rem", color: "#F59E0B", textShadow: "0 0 15px rgba(245,158,11,0.3)" }}>
               {formatBRL(valorProjetado).replace(",00", "")}
             </p>
 
             <div className="mt-5">
               <div className="flex justify-between items-center mb-1.5">
-                <span className="text-slate-400 text-xs">Sua meta de comissão</span>
-                <span className="text-slate-300 text-xs font-semibold">{formatBRL(valorProjetado).replace(",00", "")}</span>
+                <span className="text-muted-foreground text-xs">Sua meta de comissão</span>
+                <span className="text-text-disabled text-xs font-semibold">{formatBRL(valorProjetado).replace(",00", "")}</span>
               </div>
               <div className="w-full rounded-full h-2.5" style={{ background: "rgba(255,255,255,0.08)" }}>
                 <div

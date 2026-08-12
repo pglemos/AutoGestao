@@ -268,7 +268,7 @@ export default function FalarConsultorDono() {
                 <div className="min-w-0">
                   <Typography variant="h3" className="truncate text-xl">{contactName}</Typography>
                   <Typography variant="p" tone="muted" className="text-sm font-bold">{contactRole}</Typography>
-                  <div className="mt-mx-tiny flex items-center gap-mx-xs text-mx-tiny text-gray-500">
+                  <div className="mt-mx-tiny flex items-center gap-mx-xs text-mx-tiny text-muted-foreground">
                     <MapPin size={12} aria-hidden="true" />
                     <span>{storeName}</span>
                   </div>
@@ -282,7 +282,7 @@ export default function FalarConsultorDono() {
                   </a>
                 )}
                 {phoneDigits && (
-                  <a href={`tel:${phoneDigits}`} className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-2xl border border-gray-200 bg-white text-sm font-bold text-gray-800 transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/20">
+                  <a href={`tel:${phoneDigits}`} className="flex h-mx-12 w-full items-center justify-center gap-mx-sm rounded-2xl border border-gray-200 bg-white text-sm font-bold text-foreground transition-colors hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-brand-primary/20">
                     <Phone size={18} /> Ligar
                   </a>
                 )}
@@ -295,17 +295,17 @@ export default function FalarConsultorDono() {
 
               <div className="mt-mx-lg space-y-mx-xs border-t border-gray-100 pt-mx-md">
                 {contact?.consultant_email && (
-                  <a href={mailtoUrl || undefined} className="flex items-center gap-mx-xs break-all text-sm font-bold text-gray-500 hover:text-emerald-600">
-                    <Mail size={14} className="shrink-0 text-gray-500" /> {contact.consultant_email}
+                  <a href={mailtoUrl || undefined} className="flex items-center gap-mx-xs break-all text-sm font-bold text-muted-foreground hover:text-emerald-600">
+                    <Mail size={14} className="shrink-0 text-muted-foreground" /> {contact.consultant_email}
                   </a>
                 )}
                 {contact?.consultant_phone && (
-                  <div className="flex items-center gap-mx-xs text-sm font-bold text-gray-500">
-                    <Phone size={14} className="text-gray-500" /> {contact.consultant_phone}
+                  <div className="flex items-center gap-mx-xs text-sm font-bold text-muted-foreground">
+                    <Phone size={14} className="text-muted-foreground" /> {contact.consultant_phone}
                   </div>
                 )}
                 {!contact?.consultant_user_id && (
-                  <p className="rounded-xl bg-gray-50 p-mx-sm text-xs font-bold text-gray-500">
+                  <p className="rounded-xl bg-gray-50 p-mx-sm text-xs font-bold text-muted-foreground">
                     Nenhum consultor individual está vinculado. A solicitação será registrada na fila da equipe MX.
                   </p>
                 )}
@@ -332,7 +332,7 @@ export default function FalarConsultorDono() {
               </div>
               <div className="mt-mx-sm flex flex-wrap gap-mx-xs">
                 {contextSummary.map(item => (
-                  <span key={item} className="rounded-xl bg-white px-mx-sm py-mx-xs text-xs font-bold text-gray-500 shadow-mx-xs">{item}</span>
+                  <span key={item} className="rounded-xl bg-white px-mx-sm py-mx-xs text-xs font-bold text-muted-foreground shadow-mx-xs">{item}</span>
                 ))}
               </div>
             </div>
@@ -340,33 +340,33 @@ export default function FalarConsultorDono() {
 
           <form onSubmit={submitRequest} className="mt-mx-md space-y-mx-md">
             <div className="grid grid-cols-1 gap-mx-md md:grid-cols-2">
-              <label className="space-y-mx-xs text-sm font-bold text-gray-500">
+              <label className="space-y-mx-xs text-sm font-bold text-muted-foreground">
                 Assunto
                 <Input value={subject} onChange={event => setSubject(event.target.value)} maxLength={180} required />
               </label>
-              <label className="space-y-mx-xs text-sm font-bold text-gray-500">
+              <label className="space-y-mx-xs text-sm font-bold text-muted-foreground">
                 Tipo da solicitação
-                <select value={requestType} onChange={event => setRequestType(event.target.value)} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-mx-md text-sm font-bold text-gray-800 focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
+                <select value={requestType} onChange={event => setRequestType(event.target.value)} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-mx-md text-sm font-bold text-foreground focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
                   {requestTypes.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
                 </select>
               </label>
             </div>
 
-            <label className="block space-y-mx-xs text-sm font-bold text-gray-500">
+            <label className="block space-y-mx-xs text-sm font-bold text-muted-foreground">
               Mensagem
-              <textarea value={message} onChange={event => setMessage(event.target.value)} rows={6} maxLength={5000} required className="w-full resize-y rounded-xl border border-gray-200 bg-white px-mx-md py-mx-sm text-sm font-bold text-gray-800 shadow-none placeholder:text-mx-subtle focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20" placeholder="Descreva a decisão, dúvida ou análise necessária." />
+              <textarea value={message} onChange={event => setMessage(event.target.value)} rows={6} maxLength={5000} required className="w-full resize-y rounded-xl border border-gray-200 bg-white px-mx-md py-mx-sm text-sm font-bold text-foreground shadow-none placeholder:text-mx-subtle focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20" placeholder="Descreva a decisão, dúvida ou análise necessária." />
             </label>
 
             <div className="grid grid-cols-1 gap-mx-md sm:grid-cols-[180px_minmax(0,1fr)]">
-              <label className="space-y-mx-xs text-sm font-bold text-gray-500">
+              <label className="space-y-mx-xs text-sm font-bold text-muted-foreground">
                 Prioridade
-                <select value={priority} onChange={event => setPriority(event.target.value)} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-mx-md text-sm font-bold text-gray-800 focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
+                <select value={priority} onChange={event => setPriority(event.target.value)} className="h-12 w-full rounded-xl border border-gray-200 bg-white px-mx-md text-sm font-bold text-foreground focus-visible:border-mx-action focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-mx-action/20">
                   {priorities.map(item => <option key={item.value} value={item.value}>{item.label}</option>)}
                 </select>
               </label>
-              <div className="rounded-2xl bg-gray-50 p-mx-md text-sm font-bold text-gray-500">
-                <strong className="text-gray-800">Empresa:</strong> {contact?.client_name || storeName}<br />
-                <strong className="text-gray-800">Consultor:</strong> {contactName}
+              <div className="rounded-2xl bg-gray-50 p-mx-md text-sm font-bold text-muted-foreground">
+                <strong className="text-foreground">Empresa:</strong> {contact?.client_name || storeName}<br />
+                <strong className="text-foreground">Consultor:</strong> {contactName}
               </div>
             </div>
 
@@ -393,20 +393,20 @@ export default function FalarConsultorDono() {
             <div className="h-24 animate-pulse rounded-2xl bg-gray-50" />
           ) : requests.length === 0 ? (
             <div className="rounded-2xl border border-dashed border-gray-200 p-mx-lg text-center">
-              <UserRoundCheck size={26} className="mx-auto text-gray-500" />
-              <p className="mt-mx-sm text-sm font-bold text-gray-800">Nenhuma solicitação registrada</p>
-              <p className="mt-mx-xs text-xs font-bold text-gray-500">O primeiro envio aparecerá aqui com status e data.</p>
+              <UserRoundCheck size={26} className="mx-auto text-muted-foreground" />
+              <p className="mt-mx-sm text-sm font-bold text-foreground">Nenhuma solicitação registrada</p>
+              <p className="mt-mx-xs text-xs font-bold text-muted-foreground">O primeiro envio aparecerá aqui com status e data.</p>
             </div>
           ) : requests.map(request => (
             <div key={request.id} className="flex flex-col gap-mx-sm rounded-2xl border border-gray-200 p-mx-md md:flex-row md:items-center md:justify-between">
               <div className="min-w-0">
-                <p className="truncate font-bold text-gray-800">{request.subject}</p>
-                <p className="mt-mx-tiny text-xs font-bold text-gray-500">
+                <p className="truncate font-bold text-foreground">{request.subject}</p>
+                <p className="mt-mx-tiny text-xs font-bold text-muted-foreground">
                   {requestTypeLabels[request.request_type] || request.request_type} · {new Date(request.created_at).toLocaleString('pt-BR')}
                 </p>
               </div>
               <div className="flex flex-wrap items-center gap-mx-xs">
-                <span className="rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-xs font-bold text-gray-500">{request.priority}</span>
+                <span className="rounded-xl bg-gray-50 px-mx-sm py-mx-xs text-xs font-bold text-muted-foreground">{request.priority}</span>
                 <span className={request.status === 'respondida' || request.status === 'encerrada' ? 'rounded-xl bg-status-success-surface px-mx-sm py-mx-xs text-xs font-bold text-status-success' : 'rounded-xl bg-status-info-surface px-mx-sm py-mx-xs text-xs font-bold text-status-info'}>
                   {request.status === 'respondida' || request.status === 'encerrada' ? <CheckCircle2 size={13} className="mr-1 inline" /> : <Clock3 size={13} className="mr-1 inline" />}
                   {statusLabels[request.status] || request.status}

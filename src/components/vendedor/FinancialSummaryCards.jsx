@@ -12,11 +12,11 @@ function SummaryCard({ icon: IconComp, iconColor, iconBg, label, value, sub }) {
           <Icon className={`w-5 h-5 ${iconColor}`} />
         </div>
       </div>
-      <p className="text-xs font-medium text-slate-500 mb-1">{label}</p>
-      <p className={`text-2xl font-bold tabular-nums ${isZero ? "text-slate-300" : "text-mx-navy"}`}>
+      <p className="text-xs font-medium text-muted-foreground mb-1">{label}</p>
+      <p className={`text-2xl font-bold tabular-nums ${isZero ? "text-text-disabled" : "text-mx-navy"}`}>
         {formatBRL(value)}
       </p>
-      <p className={`text-xs mt-1.5 ${isZero ? "text-slate-300" : "text-slate-500"}`}>
+      <p className={`text-xs mt-1.5 ${isZero ? "text-text-disabled" : "text-muted-foreground"}`}>
         {isZero ? "Ainda não conquistado neste período" : sub}
       </p>
     </div>

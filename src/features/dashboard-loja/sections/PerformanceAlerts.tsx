@@ -215,10 +215,10 @@ export function PerformanceAlerts({ role, isOwner, alerts }: PerformanceAlertsPr
             <SummaryIcon size={19} />
           </span>
           <div>
-            <h2 id="performance-alerts-title" className="text-lg font-bold text-gray-800">
+            <h2 id="performance-alerts-title" className="text-lg font-bold text-foreground">
               {role === 'gerente' ? 'Prioridades gerenciais' : isOwner ? 'Decisões prioritárias' : 'Pontos de atenção'}
             </h2>
-            <p className="mt-1 text-sm text-gray-500">Alertas de performance, rotina e funil organizados por impacto.</p>
+            <p className="mt-1 text-sm text-muted-foreground">Alertas de performance, rotina e funil organizados por impacto.</p>
           </div>
         </div>
         <span className={`inline-flex w-fit rounded-lg px-2.5 py-1 text-xs font-semibold ${hasDanger ? 'bg-red-100 text-red-700' : hasWarning ? 'bg-amber-100 text-amber-700' : 'bg-emerald-100 text-emerald-700'}`}>
@@ -268,8 +268,8 @@ function AlertCard({
     },
     outline: {
       surface: 'border-gray-200 bg-gray-50',
-      badge: 'bg-gray-200 text-gray-600',
-      icon: 'text-gray-500',
+      badge: 'bg-gray-200 text-muted-foreground',
+      icon: 'text-muted-foreground',
       label: 'Validar',
       Icon: Lightbulb,
     },
@@ -282,17 +282,17 @@ function AlertCard({
         <Icon size={19} className={styles.icon} />
         <span className={`rounded-lg px-2 py-1 text-caption font-semibold ${styles.badge}`}>{styles.label}</span>
       </div>
-      <h3 className="mt-4 text-base font-bold text-gray-800">{alert.title}</h3>
-      <p className="mt-2 text-sm leading-5 text-gray-600">{alert.description}</p>
+      <h3 className="mt-4 text-base font-bold text-foreground">{alert.title}</h3>
+      <p className="mt-2 text-sm leading-5 text-muted-foreground">{alert.description}</p>
       <div className="mt-4 rounded-xl bg-white/80 p-3">
-        <p className="text-xs font-semibold text-gray-700">Recomendação</p>
-        <p className="mt-1 text-xs leading-5 text-gray-500">{alert.recommendation}</p>
+        <p className="text-xs font-semibold text-foreground">Recomendação</p>
+        <p className="mt-1 text-xs leading-5 text-muted-foreground">{alert.recommendation}</p>
       </div>
-      {isOwner && <p className="mt-3 text-xs text-gray-500">Impacto {alert.impact}</p>}
+      {isOwner && <p className="mt-3 text-xs text-muted-foreground">Impacto {alert.impact}</p>}
       <button
         type="button"
         onClick={onOpen}
-        className="mt-auto inline-flex h-9 items-center justify-between rounded-xl bg-white px-3 text-sm font-semibold text-gray-700 shadow-sm transition hover:bg-gray-50"
+        className="mt-auto inline-flex h-9 items-center justify-between rounded-xl bg-white px-3 text-sm font-semibold text-foreground shadow-sm transition hover:bg-gray-50"
       >
         {alert.ctaLabel}
         <ArrowRight size={15} />

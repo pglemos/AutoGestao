@@ -112,7 +112,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
   if (!storeId) {
     return (
       <div className="min-h-mx-section-lg bg-white border-2 border-dashed border-gray-200 rounded-2xl flex flex-col items-center justify-center text-center p-mx-14">
-        <Target size={48} className="text-gray-500 mb-6" />
+        <Target size={48} className="text-muted-foreground mb-6" />
         <Typography variant="h2" className="mb-3">Selecione uma loja</Typography>
         <Typography variant="p" tone="muted" className="max-w-sm tracking-tight">A aba de metas precisa de uma unidade ativa para carregar as regras oficiais.</Typography>
       </div>
@@ -179,7 +179,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
                   }}
                   disabled={!canManageGoals}
                   aria-label="Meta mensal de vendas"
-                  className="mt-1 w-full bg-transparent text-left font-mono-numbers text-3xl font-bold leading-none text-slate-900 focus:outline-none disabled:opacity-100 sm:text-4xl"
+                  className="mt-1 w-full bg-transparent text-left font-mono-numbers text-3xl font-bold leading-none text-foreground focus:outline-none disabled:opacity-100 sm:text-4xl"
                 />
               <Typography variant="caption" tone="muted">unidades comerciais</Typography>
             </div>
@@ -211,7 +211,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
                         onChange={(event) => updateBenchmark(benchmark.field, event.target.value)}
                         disabled={!canManageGoals}
                         aria-label={`Benchmark ${benchmark.label}`}
-                        className="w-mx-20 bg-transparent font-mono-numbers text-2xl font-bold text-slate-900 outline-none disabled:opacity-100"
+                        className="w-mx-20 bg-transparent font-mono-numbers text-2xl font-bold text-foreground outline-none disabled:opacity-100"
                       />
                       <Typography variant="h1" tone="muted" className="text-2xl">%</Typography>
                     </div>

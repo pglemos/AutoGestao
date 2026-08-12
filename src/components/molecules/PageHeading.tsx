@@ -31,12 +31,12 @@ export function PageHeading({
               <Icon size={20} strokeWidth={1.8} aria-hidden="true" />
             </span>
             <div className="min-w-0">
-              {breadcrumb ? <div className="mb-1 text-xs text-gray-500">{breadcrumb}</div> : null}
-              <Typography as="h1" variant="h2" className="font-bold text-gray-800">
+              {breadcrumb ? <div className="mb-1 text-xs text-muted-foreground">{breadcrumb}</div> : null}
+              <Typography as="h1" variant="h2" className="font-bold text-foreground">
                 {title}
               </Typography>
               {subtitle ? (
-                <Typography as="div" variant="p" className="mt-1 max-w-3xl text-sm font-normal leading-6 text-gray-500">
+                <Typography as="div" variant="p" className="mt-1 max-w-3xl text-sm font-normal leading-6 text-muted-foreground">
                   {subtitle}
                 </Typography>
               ) : null}

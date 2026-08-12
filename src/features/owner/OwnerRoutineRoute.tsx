@@ -13,7 +13,7 @@ export default function OwnerRoutineRoute() {
   if (management.loading) {
     return (
       <div className="flex min-h-[320px] items-center justify-center" aria-busy="true">
-        <p className="text-sm font-semibold text-gray-500">Verificando a estrutura gerencial da loja...</p>
+        <p className="text-sm font-semibold text-muted-foreground">Verificando a estrutura gerencial da loja...</p>
       </div>
     )
   }

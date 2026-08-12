@@ -29,7 +29,7 @@ export function TabelaRanking({ vendedores, meta, meuId }: Props) {
           <thead>
             <tr className="bg-slate-50 border-b border-slate-100">
               {['Posição', 'Vendedor', 'Unidade', 'Vendas', 'Meta', 'Atingimento', 'Status'].map(h => (
-                <th key={h} className="text-left text-caption font-semibold text-slate-500 uppercase tracking-wider px-4 py-3">{h}</th>
+                <th key={h} className="text-left text-caption font-semibold text-muted-foreground uppercase tracking-wider px-4 py-3">{h}</th>
               ))}
             </tr>
           </thead>
@@ -51,23 +51,23 @@ const pct = vendedorMeta > 0 ? Math.round((v.vendas / vendedorMeta) * 100) : 0
                         <Trophy className="w-4 h-4" style={{ color: medal.color }} fill="currentColor" />
                       </div>
                     ) : (
-                      <span className="text-[14px] font-bold text-slate-400">{i + 1}</span>
+                      <span className="text-[14px] font-bold text-muted-foreground">{i + 1}</span>
                     )}
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center gap-2">
                       <RankingAvatar nome={v.nome} foto={v.foto} size={32} />
                       <div className="flex items-center gap-1.5">
-                        <span className="text-body-sm font-semibold text-slate-800">{v.nome}</span>
+                        <span className="text-body-sm font-semibold text-foreground">{v.nome}</span>
                         {isMe && <span className="px-1.5 py-0.5 bg-blue-100 text-blue-600 text-caption font-bold rounded-full">Você</span>}
                       </div>
                     </div>
                   </td>
-                  <td className="px-4 py-3 text-body-sm text-slate-500">{v.unidade || '—'}</td>
+                  <td className="px-4 py-3 text-body-sm text-muted-foreground">{v.unidade || '—'}</td>
                   <td className="px-4 py-3">
                     <span className={`text-[14px] font-bold ${isMe ? 'text-blue-600' : 'text-green-600'}`}>{v.vendas}</span>
                   </td>
-<td className="px-4 py-3 text-body-sm text-slate-500">{vendedorMeta}</td>
+<td className="px-4 py-3 text-body-sm text-muted-foreground">{vendedorMeta}</td>
                   <td className="px-4 py-3">
                     <span className={`text-[14px] font-bold ${pct >= 100 ? 'text-green-600' : pct >= 80 ? 'text-amber-600' : pct >= 50 ? 'text-blue-500' : 'text-red-500'}`}>
                       {pct}%
@@ -80,7 +80,7 @@ const pct = vendedorMeta > 0 ? Math.round((v.vendas / vendedorMeta) * 100) : 0
           </tbody>
         </table>
         {vendedores.length === 0 && (
-          <div className="text-center py-12 text-slate-400 text-body-sm">
+          <div className="text-center py-12 text-muted-foreground text-body-sm">
             Nenhum dado encontrado para os filtros selecionados.
           </div>
         )}

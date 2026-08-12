@@ -47,13 +47,13 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
       <div className="flex items-center gap-2">
         <Target className="h-5 w-5 text-status-success-text" />
-        <h2 className="text-base font-semibold text-gray-800">Meta de Venda do Mês</h2>
+        <h2 className="text-base font-semibold text-foreground">Meta de Venda do Mês</h2>
       </div>
       <div className="mt-4 space-y-4">
         <div>
           <div className="flex items-baseline justify-between">
-            <span className="text-sm text-gray-500">Atingimento</span>
-            <span className="text-sm font-semibold text-gray-800">{goal > 0 ? `${progress}%` : '--'}</span>
+            <span className="text-sm text-muted-foreground">Atingimento</span>
+            <span className="text-sm font-semibold text-foreground">{goal > 0 ? `${progress}%` : '--'}</span>
           </div>
           <div className="mt-1.5 h-2.5 w-full overflow-hidden rounded-full bg-gray-100">
             <div className="h-full rounded-full bg-emerald-600" style={{ width: `${progress}%` }} />
@@ -61,7 +61,7 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
         </div>
         <div className="grid grid-cols-3 gap-2">
           <div className="rounded-lg bg-emerald-600/5 p-2.5 text-center">
-            <p className="text-xs text-gray-500">Vendidos</p>
+            <p className="text-xs text-muted-foreground">Vendidos</p>
             <p className="mt-0.5 text-xl font-bold text-status-success-text">{formatInteger(sold)}</p>
           </div>
           <div className="rounded-lg bg-red-50 p-2.5 text-center">
@@ -69,16 +69,16 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
             <p className="mt-0.5 text-xl font-bold text-status-error-text">{goal > 0 ? formatInteger(missing) : '--'}</p>
           </div>
           <div className="rounded-lg bg-gray-100/60 p-2.5 text-center">
-            <p className="text-xs text-gray-500">Ritmo ideal</p>
-            <p className="mt-0.5 text-sm font-bold text-gray-800">
+            <p className="text-xs text-muted-foreground">Ritmo ideal</p>
+            <p className="mt-0.5 text-sm font-bold text-foreground">
               {idealPace > 0 ? `${idealPace.toLocaleString('pt-BR', { maximumFractionDigits: 1 })}/dia` : '--'}
             </p>
           </div>
         </div>
         <div className="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-3">
           <div>
-            <p className="text-xs text-gray-500">Projeção atual</p>
-            <p className="text-sm font-semibold text-gray-800">
+            <p className="text-xs text-muted-foreground">Projeção atual</p>
+            <p className="text-sm font-semibold text-foreground">
               {goal > 0 ? `${formatInteger(projected)} veículos` : 'Pendente'}
             </p>
           </div>
@@ -118,7 +118,7 @@ export function SalesGoalCard({ data }: { data: DashboardData }) {
         <button
           type="button"
           onClick={() => navigate(ownerPath('departamentos-comercial'))}
-          className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50"
+          className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-foreground hover:bg-gray-50"
         >
           Ver diagnóstico comercial
           <ArrowUpRight className="h-3.5 w-3.5" />
@@ -156,7 +156,7 @@ export function PriorityIntervention({
         <div className={cn('flex h-8 w-8 items-center justify-center rounded-lg', style.bg)}>
           <Zap className={cn('h-4 w-4', style.text)} />
         </div>
-        <h2 className="text-base font-semibold text-gray-800">Intervenção prioritária</h2>
+        <h2 className="text-base font-semibold text-foreground">Intervenção prioritária</h2>
       </div>
 
       <div className={cn('mt-4 rounded-xl border p-4', style.border, style.bg)}>
@@ -164,7 +164,7 @@ export function PriorityIntervention({
           <div className="flex items-start gap-2">
             <AlertTriangle className={cn('mt-0.5 h-5 w-5 shrink-0', style.text)} />
             <div>
-              <p className="font-semibold text-gray-800">{alert.title}</p>
+              <p className="font-semibold text-foreground">{alert.title}</p>
               <p className="mt-0.5 text-sm text-text-secondary">{alert.description}</p>
             </div>
           </div>
@@ -184,20 +184,20 @@ export function PriorityIntervention({
 
       {why && (
         <div className="mt-4">
-          <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Por que isso importa</p>
-          <p className="mt-1 text-sm text-gray-800">{why}</p>
+          <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Por que isso importa</p>
+          <p className="mt-1 text-sm text-foreground">{why}</p>
         </div>
       )}
 
       <div className="mt-3 rounded-lg border border-emerald-600/20 bg-emerald-600/5 p-3">
         <p className="text-xs font-semibold uppercase tracking-wide text-status-success-text">Direcionamento MX</p>
-        <p className="mt-1 text-sm text-gray-800">{alert.recommendation}</p>
+        <p className="mt-1 text-sm text-foreground">{alert.recommendation}</p>
       </div>
 
       <div className="mt-4">
-        <p className="text-xs font-semibold uppercase tracking-wide text-gray-500">Impacto estimado</p>
+        <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Impacto estimado</p>
         <ul className="mt-1.5 space-y-1">
-          <li className="flex items-start gap-2 text-sm text-gray-800">
+          <li className="flex items-start gap-2 text-sm text-foreground">
             <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-status-success-text" />
             Impacto {alert.impact.toLowerCase()} sobre o resultado do período.
           </li>
@@ -287,7 +287,7 @@ export function NextActionsCard({ actions }: { actions: ActionRow[] }) {
   return (
     // Espelha components/owner/home/OwnerActionsBlock.
     <section className="rounded-2xl border border-gray-200 bg-white p-5 shadow-sm">
-      <h2 className="text-base font-semibold text-gray-800">Próximas ações do Dono</h2>
+      <h2 className="text-base font-semibold text-foreground">Próximas ações do Dono</h2>
       <div className="mt-4 space-y-2">
         {actions.slice(0, 5).map((action, index) => (
           <div
@@ -295,20 +295,20 @@ export function NextActionsCard({ actions }: { actions: ActionRow[] }) {
             className="flex items-center gap-3 rounded-lg border border-gray-200 bg-white p-3"
           >
             <div className="flex w-12 shrink-0 flex-col items-center">
-              <Clock3 className="h-3.5 w-3.5 text-gray-500" aria-hidden="true" />
-              <span className="mt-0.5 text-center text-caption font-semibold leading-tight text-gray-800">
+              <Clock3 className="h-3.5 w-3.5 text-muted-foreground" aria-hidden="true" />
+              <span className="mt-0.5 text-center text-caption font-semibold leading-tight text-foreground">
                 {action.due || 'Pendente'}
               </span>
             </div>
             <div className="min-w-0 flex-1">
-              <p className="text-sm text-gray-800">{action.action}</p>
-              <span className="text-xs font-medium text-gray-500">{action.department}</span>
+              <p className="text-sm text-foreground">{action.action}</p>
+              <span className="text-xs font-medium text-muted-foreground">{action.department}</span>
             </div>
-            <ChevronRight className="h-4 w-4 shrink-0 text-gray-500" aria-hidden="true" />
+            <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
           </div>
         ))}
         {actions.length === 0 && (
-          <p className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-gray-500">
+          <p className="rounded-lg border border-gray-200 bg-gray-50 p-3 text-sm text-muted-foreground">
             Nenhuma ação registrada para esta unidade.
           </p>
         )}
@@ -316,7 +316,7 @@ export function NextActionsCard({ actions }: { actions: ActionRow[] }) {
       <button
         type="button"
         onClick={() => navigate(ownerPath('agenda'))}
-        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-gray-800 hover:bg-gray-50"
+        className="mt-3 flex w-full items-center justify-center gap-1.5 rounded-lg border border-gray-200 bg-white px-3 py-2 text-sm font-medium text-foreground hover:bg-gray-50"
       >
         <CalendarDays className="h-3.5 w-3.5" />
         Ver agenda completa
@@ -379,7 +379,7 @@ export function OwnerPanoramaChart({
         </div>
       ) : (
         <div className="mt-mx-md min-h-[248px] rounded-xl border border-dashed border-gray-100 bg-gray-50 flex flex-col items-center justify-center text-center p-mx-lg">
-          <LineChartIcon size={40} className="text-gray-500" />
+          <LineChartIcon size={40} className="text-muted-foreground" />
           <Typography variant="h3" className="mt-mx-md text-lg">Dados pendentes</Typography>
           <Typography variant="p" tone="muted" className="mt-mx-xs max-w-sm">A evolução aparece quando a rotina diária tiver histórico no período.</Typography>
         </div>
@@ -459,8 +459,8 @@ function EficaciaDonut({ eficazes, parciais, ineficazes }: { eficazes: number; p
         {arcs}
       </svg>
       <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-2xl font-bold tabular-nums text-gray-800 leading-none">{headlinePct}%</span>
-        <span className="text-mx-tiny font-bold uppercase tracking-widest text-gray-500">Média geral</span>
+        <span className="text-2xl font-bold tabular-nums text-foreground leading-none">{headlinePct}%</span>
+        <span className="text-mx-tiny font-bold uppercase tracking-widest text-muted-foreground">Média geral</span>
       </div>
     </div>
   )
@@ -470,8 +470,8 @@ function EficaciaLegendRow({ color, label, value }: { color: string; label: stri
   return (
     <div className="flex items-center gap-mx-xs text-sm">
       <span className="h-mx-2 w-mx-2 rounded-full shrink-0" style={{ backgroundColor: color }} aria-hidden="true" />
-      <span className="flex-1 truncate font-bold text-gray-500">{label}</span>
-      <span className="font-bold tabular-nums text-gray-800">{value}</span>
+      <span className="flex-1 truncate font-bold text-muted-foreground">{label}</span>
+      <span className="font-bold tabular-nums text-foreground">{value}</span>
     </div>
   )
 }
@@ -485,8 +485,8 @@ export function OwnerDepartmentScoreGrid({ departments }: { departments: Departm
     <section>
       <div className="mb-3 flex items-end justify-between gap-4">
         <div>
-          <h2 className="text-lg font-semibold text-gray-800">Desempenho por Departamento</h2>
-          <p className="mt-0.5 text-sm text-gray-500">Scores consolidados por área da loja.</p>
+          <h2 className="text-lg font-semibold text-foreground">Desempenho por Departamento</h2>
+          <p className="mt-0.5 text-sm text-muted-foreground">Scores consolidados por área da loja.</p>
         </div>
         <Button type="button" variant="ghost" size="sm" onClick={() => navigate(ownerPath('departamentos'))}>Ver todas</Button>
       </div>
@@ -504,19 +504,19 @@ export function OwnerDepartmentScoreGrid({ departments }: { departments: Departm
                 <div className="relative h-14 w-14 shrink-0">
                   <DepartmentScoreRing score={department.score} tone={department.tone} />
                   <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-base font-bold tracking-tight text-gray-800">{department.score ?? '--'}</span>
+                    <span className="text-base font-bold tracking-tight text-foreground">{department.score ?? '--'}</span>
                   </div>
                 </div>
                 <div className="min-w-0 flex-1">
                   <div className="flex items-center justify-between gap-2">
-                    <p className="truncate text-sm font-semibold text-gray-800">{department.name}</p>
-                    <ChevronRight className="h-4 w-4 shrink-0 text-gray-500" aria-hidden="true" />
+                    <p className="truncate text-sm font-semibold text-foreground">{department.name}</p>
+                    <ChevronRight className="h-4 w-4 shrink-0 text-muted-foreground" aria-hidden="true" />
                   </div>
                   <span className={cn('mt-1 inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-xs font-medium', classes.soft)}>
                     <span className={cn('h-1.5 w-1.5 rounded-full', classes.bar)} />
                     {department.status}
                   </span>
-                  <p className="mt-1.5 line-clamp-2 text-xs text-gray-500">{department.detail}</p>
+                  <p className="mt-1.5 line-clamp-2 text-xs text-muted-foreground">{department.detail}</p>
                 </div>
               </div>
             </button>

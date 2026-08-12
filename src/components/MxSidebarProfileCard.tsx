@@ -105,7 +105,7 @@ export function MxSidebarProfileCard({
                 'flex min-h-11 w-full items-center gap-3 rounded-[12px] px-3 text-left text-sm font-semibold outline-none transition-colors focus-visible:ring-2 focus-visible:ring-emerald-500/30',
                 destructive
                   ? 'text-red-600 hover:bg-red-50'
-                  : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900',
+                  : 'text-foreground hover:bg-gray-50 hover:text-foreground',
               )}
             >
               <Icon size={18} strokeWidth={1.8} aria-hidden="true" />
@@ -137,13 +137,13 @@ export function MxSidebarProfileCard({
           <>
             <span className="min-w-0 flex-1 overflow-hidden">
               <span
-                className="block truncate text-body-sm font-bold leading-tight text-gray-800"
+                className="block truncate text-body-sm font-bold leading-tight text-foreground"
                 title={displayName}
               >
                 {displayName}
               </span>
               <span
-                className="mt-1 block truncate text-caption font-medium leading-tight text-gray-500"
+                className="mt-1 block truncate text-caption font-medium leading-tight text-muted-foreground"
                 title={roleLabel}
               >
                 {roleLabel}
@@ -153,7 +153,7 @@ export function MxSidebarProfileCard({
               size={16}
               strokeWidth={2}
               className={cn(
-                'shrink-0 text-gray-400 transition-transform duration-200',
+                'shrink-0 text-muted-foreground transition-transform duration-200',
                 open && 'rotate-180',
               )}
               aria-hidden="true"

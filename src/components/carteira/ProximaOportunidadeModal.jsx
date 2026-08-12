@@ -24,7 +24,7 @@ export default function ProximaOportunidadeModal({
             </div>
             <div>
               <p className="text-lg font-black text-[#031B3D]">🎉 Excelente!</p>
-              <p className="text-sm text-slate-500 mt-1">Você concluiu todas as oportunidades prioritárias de hoje.</p>
+              <p className="text-sm text-muted-foreground mt-1">Você concluiu todas as oportunidades prioritárias de hoje.</p>
             </div>
             <Button onClick={onVoltarCarteira} className="w-full rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white">
               Voltar para Carteira
@@ -49,23 +49,23 @@ export default function ProximaOportunidadeModal({
             </div>
             <hr className="border-slate-100" />
             <div>
-              <p className="text-caption font-bold text-slate-400 uppercase tracking-wide mb-3">Próxima oportunidade</p>
+              <p className="text-caption font-bold text-muted-foreground uppercase tracking-wide mb-3">Próxima oportunidade</p>
               <div className="bg-blue-50 rounded-xl p-4 space-y-3">
                 <div>
                   <p className="text-base font-black text-[#031B3D]">{proximaOportunidade.nome}</p>
                   {proximaOportunidade.veiculo_interesse && (
-                    <p className="text-xs text-slate-500 mt-0.5">{proximaOportunidade.veiculo_interesse}</p>
+                    <p className="text-xs text-muted-foreground mt-0.5">{proximaOportunidade.veiculo_interesse}</p>
                   )}
                 </div>
                 <div>
                   <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Próximo passo</p>
                   <p className="text-sm font-bold text-[#031B3D]">{proximoPasso}</p>
-                  {objetivo && <p className="text-caption text-slate-400 mt-0.5">{objetivo}</p>}
+                  {objetivo && <p className="text-caption text-muted-foreground mt-0.5">{objetivo}</p>}
                 </div>
               </div>
             </div>
             <div className="flex gap-2 mt-1">
-              <Button variant="outline" onClick={onVoltarCarteira} className="flex-1 rounded-xl text-slate-600">Voltar</Button>
+              <Button variant="outline" onClick={onVoltarCarteira} className="flex-1 rounded-xl text-muted-foreground">Voltar</Button>
               <Button onClick={() => onExecutar(proximaOportunidade)} className="flex-1 rounded-xl bg-[#005BFF] hover:bg-blue-700 text-white gap-2">
                 <Zap className="w-4 h-4" /> Executar
               </Button>
@@ -117,7 +117,7 @@ export default function ProximaOportunidadeModal({
             <Button
               variant="outline"
               onClick={onVoltarCarteira}
-              className="w-full rounded-xl text-slate-600"
+              className="w-full rounded-xl text-muted-foreground"
             >
               Voltar para Carteira
             </Button>

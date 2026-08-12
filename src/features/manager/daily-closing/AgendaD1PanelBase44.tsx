@@ -393,14 +393,14 @@ export function AgendaD1Panel({
               <span className="inline-flex rounded-lg bg-amber-100 px-2.5 py-1 text-xs font-medium text-amber-700">
                 Agenda D+1 parcial
               </span>
-              <p className="mt-1 text-xs text-gray-400">
+              <p className="mt-1 text-xs text-muted-foreground">
                 Atualizada em tempo real até o encerramento da janela de ajuste.
               </p>
             </div>
-            <p className="inline-flex items-center gap-1.5 text-sm text-gray-500">
+            <p className="inline-flex items-center gap-1.5 text-sm text-muted-foreground">
               <CalendarClock size={16} />
               Data D+1:
-              <strong className="text-gray-800">
+              <strong className="text-foreground">
                 {format(parseISO(d1Date), "dd/MM/yyyy")}
               </strong>
             </p>
@@ -411,7 +411,7 @@ export function AgendaD1Panel({
             role="group"
             aria-label="Filtros da Agenda D+1"
           >
-            <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-gray-600">
+            <div className="mb-3 flex items-center gap-2 text-sm font-semibold text-muted-foreground">
               <Filter size={16} /> Filtros
             </div>
             <div className="grid grid-cols-1 gap-3 md:grid-cols-2 xl:grid-cols-5">
@@ -486,7 +486,7 @@ export function AgendaD1Panel({
               <label className="relative block">
                 <span className="sr-only">Buscar agenda D+1</span>
                 <Search
-                  className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+                  className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground"
                   size={16}
                 />
                 <input
@@ -494,7 +494,7 @@ export function AgendaD1Panel({
                   value={search}
                   onChange={(event) => setSearch(event.target.value)}
                   placeholder="Buscar (cliente, veículo, horário)..."
-                  className="h-11 w-full rounded-xl border border-gray-200 bg-white pl-9 pr-3 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500"
+                  className="h-11 w-full rounded-xl border border-gray-200 bg-white pl-9 pr-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
                 />
               </label>
             </div>
@@ -522,8 +522,8 @@ export function AgendaD1Panel({
           ) : visible.length === 0 ? (
             <div className="grid min-h-[220px] place-items-center p-8 text-center">
               <div>
-                <CalendarDays size={42} className="mx-auto text-gray-300" />
-                <p className="mt-3 text-sm text-gray-500">
+                <CalendarDays size={42} className="mx-auto text-text-disabled" />
+                <p className="mt-3 text-sm text-muted-foreground">
                   {rows.length === 0
                     ? "Nenhum cliente agendado para D+1."
                     : "Nenhum agendamento corresponde aos filtros."}
@@ -549,7 +549,7 @@ export function AgendaD1Panel({
                     ].map((label) => (
                       <th
                         key={label}
-                        className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-gray-500"
+                        className="px-4 py-3 text-left text-caption font-semibold uppercase tracking-wide text-muted-foreground"
                       >
                         {label}
                       </th>
@@ -568,27 +568,27 @@ export function AgendaD1Panel({
                     );
                     return (
                       <tr key={row.id} className="hover:bg-gray-50/60">
-                        <td className="px-4 py-3 font-semibold text-gray-800">
+                        <td className="px-4 py-3 font-semibold text-foreground">
                           {format(parseISO(row.data_hora), "HH:mm")}
                         </td>
-                        <td className="px-4 py-3 font-medium text-gray-800">
+                        <td className="px-4 py-3 font-medium text-foreground">
                           {row.cliente?.nome || "—"}
                         </td>
-                        <td className="px-4 py-3 text-gray-600">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {row.cliente?.telefone || "—"}
                         </td>
-                        <td className="px-4 py-3 text-gray-600">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {row.oportunidade?.veiculo_interesse || "—"}
                         </td>
-                        <td className="px-4 py-3 text-gray-600">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {row.canal ? AGENDA_CANAL_LABEL[row.canal] : "—"}
                         </td>
-                        <td className="px-4 py-3 text-gray-600">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {sellerNameById.get(row.seller_user_id) ||
                             "Vendedor da equipe"}
                         </td>
                         <td className="px-4 py-3">
-                          <span className="inline-flex rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-gray-700">
+                          <span className="inline-flex rounded-lg bg-gray-100 px-2 py-1 text-xs font-medium text-foreground">
                             {formatAppointmentType(AGENDA_TIPO_LABEL[row.tipo])}
                           </span>
                         </td>
@@ -599,7 +599,7 @@ export function AgendaD1Panel({
                             {managerStatus}
                           </span>
                         </td>
-                        <td className="px-4 py-3 text-gray-500">
+                        <td className="px-4 py-3 text-muted-foreground">
                           {lastContact
                             ? format(parseISO(lastContact), "dd/MM HH:mm")
                             : "—"}
@@ -618,7 +618,7 @@ export function AgendaD1Panel({
                               type="button"
                               aria-label={`Ligar para ${row.cliente?.nome || "cliente"}`}
                               onClick={() => void callPhone(row)}
-                              className="inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-medium text-gray-600 hover:bg-gray-50"
+                              className="inline-flex h-8 items-center gap-1 rounded-lg px-2 text-xs font-medium text-muted-foreground hover:bg-gray-50"
                             >
                               <Phone size={14} /> Telefone
                             </button>
@@ -638,7 +638,7 @@ export function AgendaD1Panel({
             </div>
           )}
 
-          <p className="text-xs text-gray-400">
+          <p className="text-xs text-muted-foreground">
             A Carteira de Clientes permanece a base oficial. O gerente não altera
             o agendamento original: apenas confirma com o cliente e registra o
             status gerencial de confirmação.
@@ -683,7 +683,7 @@ function FilterSelect({
         aria-label={label}
         value={value}
         onChange={(event) => onChange(event.target.value)}
-        className="h-11 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500"
+        className="h-11 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
       >
         {children}
       </select>
@@ -732,7 +732,7 @@ function ConfirmationDialog({
         </div>
 
         <label className="block">
-          <span className="mb-1.5 block text-xs font-medium text-gray-600">
+          <span className="mb-1.5 block text-xs font-medium text-muted-foreground">
             Status da confirmação
           </span>
           <select
@@ -747,7 +747,7 @@ function ConfirmationDialog({
                   : current,
               )
             }
-            className="h-11 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500"
+            className="h-11 w-full rounded-xl border border-gray-200 bg-white px-3 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
           >
             {CONFIRMATION_OUTCOMES.map((outcome) => (
               <option key={outcome} value={outcome}>
@@ -758,7 +758,7 @@ function ConfirmationDialog({
         </label>
 
         <label className="block">
-          <span className="mb-1.5 block text-xs font-medium text-gray-600">
+          <span className="mb-1.5 block text-xs font-medium text-muted-foreground">
             {noteRequired ? "Observação (obrigatória)" : "Observação"}
           </span>
           <textarea
@@ -770,7 +770,7 @@ function ConfirmationDialog({
             }
             rows={3}
             placeholder="Observações gerenciais (opcional)..."
-            className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-gray-700 outline-none focus:ring-2 focus:ring-emerald-500"
+            className="w-full resize-none rounded-xl border border-gray-200 px-3 py-2 text-sm text-foreground outline-none focus:ring-2 focus:ring-emerald-500"
           />
         </label>
 
@@ -787,7 +787,7 @@ function ConfirmationDialog({
             type="button"
             onClick={onClose}
             disabled={saving}
-            className="h-10 rounded-xl px-4 text-sm font-medium text-gray-600 hover:bg-gray-50 disabled:opacity-50"
+            className="h-10 rounded-xl px-4 text-sm font-medium text-muted-foreground hover:bg-gray-50 disabled:opacity-50"
           >
             Cancelar
           </button>
@@ -808,8 +808,8 @@ function ConfirmationDialog({
 function Detail({ label, value }: { label: string; value: string }) {
   return (
     <div className="rounded-xl bg-gray-50 p-3">
-      <p className="mb-0.5 text-xs text-gray-500">{label}</p>
-      <p className="font-medium text-gray-800">{value}</p>
+      <p className="mb-0.5 text-xs text-muted-foreground">{label}</p>
+      <p className="font-medium text-foreground">{value}</p>
     </div>
   );
 }
@@ -845,7 +845,7 @@ function statusBadgeClass(status: string) {
   if (status === "Sem resposta" || status === "Pendente") {
     return "bg-amber-100 text-amber-700";
   }
-  return "bg-gray-100 text-gray-600";
+  return "bg-gray-100 text-muted-foreground";
 }
 
 function formatAppointmentType(label: string) {

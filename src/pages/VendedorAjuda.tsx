@@ -37,8 +37,8 @@ export default function VendedorAjuda() {
                 <Link to={item.to}>
                   <item.icon size={18} className="mr-mx-sm shrink-0 text-emerald-600" />
                   <span className="min-w-0">
-                    <span className="block text-body text-lg font-bold text-gray-800">{item.title}</span>
-                    <span className="block text-xs font-bold normal-case tracking-normal text-gray-500">{item.desc}</span>
+                    <span className="block text-body text-lg font-bold text-foreground">{item.title}</span>
+                    <span className="block text-xs font-bold normal-case tracking-normal text-muted-foreground">{item.desc}</span>
                   </span>
                 </Link>
               </Button>
