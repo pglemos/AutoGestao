@@ -99,7 +99,7 @@ export function TransferConfirmationDialog({
               type="button"
               onClick={() => void onConfirm()}
               disabled={loading}
-              className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano bg-status-warning hover:bg-status-warning text-white shadow-sm flex items-center justify-center gap-2"
+              className="h-mx-12 rounded-2xl font-bold uppercase tracking-widest text-mx-nano bg-status-warning hover:bg-status-warning text-status-warning-foreground shadow-sm flex items-center justify-center gap-2"
             >
               {loading ? <RefreshCw className="animate-spin size-4" /> : <ArrowRightLeft size={16} />}
               Confirmar Transferência

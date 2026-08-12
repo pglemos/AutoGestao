@@ -23,7 +23,7 @@ export function AdminHeader({ metrics, isRefetching, onRefresh, onExport }: Prop
       <div className="flex flex-col gap-mx-tiny">
         <div className="flex items-center gap-mx-sm">
           <Typography variant="h1">
-            BI Executivo <span className="text-mx-green-700">da Rede</span>
+            BI Executivo <span className="text-status-success-text">da Rede</span>
           </Typography>
         </div>
         <Typography

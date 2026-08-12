@@ -103,9 +103,12 @@ describe('arquitetura de tokens do MX Design System', () => {
     expect(prim.get('--mx-neutral-0')).toBe('0 0% 100%')
     expect(prim.get('--mx-neutral-950')).toBe('0 0% 4%')
     expect(prim.get('--mx-neutral-200')).toBe('0 0% 90%')
-    // 42% e não os 45% do export: em 45% o texto secundário reprovava contraste
-    // AA sobre superfície cinza-clara. Ver a justificativa em primitives.css.
-    expect(prim.get('--mx-neutral-500')).toBe('0 0% 42%')
+    // 40% e não os 45% do export. INTENTIONAL_ACCESSIBILITY_DELTA: em 45% o
+    // texto secundário reprovava AA sobre a superfície cinza-clara, e em 42%
+    // ainda reprovava sobre a superfície info (#e1e9f6, 4.36:1). 40% entrega
+    // 4.70:1 ali e melhora todos os outros fundos claros junto. Ver a
+    // justificativa completa em primitives.css.
+    expect(prim.get('--mx-neutral-500')).toBe('0 0% 40%')
 
     const sem = declarations(semantic)
     expect(sem.get('--primary')).toBe('var(--mx-color-primary)')

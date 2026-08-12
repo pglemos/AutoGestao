@@ -105,7 +105,7 @@ export default function PreparationTab({ meeting, onChanged }) {
         </div>
         <Progress value={prep.progressPercent} className="mt-1.5 h-2" />
         {prep.readyForAnticipation && (
-          <div className="mt-2 flex items-center gap-1.5 rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-primary">
+          <div className="mt-2 flex items-center gap-1.5 rounded-md bg-primary/10 px-2 py-1 text-xs font-medium text-status-success-text">
             <CheckCircle2 className="h-3.5 w-3.5" />
             Entrega concluída — pronto para antecipar
           </div>

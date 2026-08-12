@@ -24,7 +24,7 @@ const COLOR_MAP = {
   orange: {
     bg: 'bg-status-warning-surface', border: 'border-status-warning/30', iconBg: 'bg-status-warning', iconShadow: 'shadow-orange-200',
     title: 'text-status-warning-text', sub: 'text-status-warning-text', btn: 'bg-status-warning hover:bg-status-warning',
-    stepActive: 'bg-status-warning text-white', stepDone: 'bg-status-warning text-white', divider: 'border-status-warning/20', note: 'text-status-warning-text', progress: 'bg-status-warning',
+    stepActive: 'bg-status-warning text-status-warning-foreground', stepDone: 'bg-status-warning text-status-warning-foreground', divider: 'border-status-warning/20', note: 'text-status-warning-text', progress: 'bg-status-warning',
   },
   green: {
     bg: 'bg-green-50', border: 'border-green-200', iconBg: 'bg-green-500', iconShadow: 'shadow-green-200',

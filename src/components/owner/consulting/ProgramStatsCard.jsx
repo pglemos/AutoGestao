@@ -52,12 +52,12 @@ export default function ProgramStatsCard({ program, progressBars, currentMeeting
         <div className="flex-1 space-y-4">
           {/* Badge + Nome */}
           <div>
-            <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">
+            <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-status-success-text">
               Programa contratado
             </span>
             <div className="mt-2 flex items-center gap-2">
               <h2 className="text-2xl font-bold text-foreground">{program.shortName}</h2>
-              <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+              <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-status-success-text">
                 <span className="mr-1 h-1.5 w-1.5 rounded-full bg-primary" />
                 Ativo
               </span>

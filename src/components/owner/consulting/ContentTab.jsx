@@ -110,7 +110,7 @@ export default function ContentTab({ meeting, program, userRole, userId = "demo"
                 onClick={() => setActiveLessonId(lesson.id)}
                 className={`shrink-0 rounded-lg border px-3 py-1.5 text-xs font-medium transition-all ${
                   isActive
-                    ? "border-primary bg-primary/10 text-primary"
+                    ? "border-primary bg-primary/10 text-status-success-text"
                     : isCompleted
                     ? "border-primary/30 bg-primary/5 text-primary"
                     : "border-border bg-card text-muted-foreground hover:border-primary/30"

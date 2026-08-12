@@ -79,7 +79,7 @@ export default function MeetingJourney({ meetings, onSelectMeeting, selectedMeet
                     isCompleted
                       ? "border-primary bg-primary text-primary-foreground"
                       : isCurrent
-                      ? "border-primary bg-primary/10 text-primary"
+                      ? "border-primary bg-primary/10 text-status-success-text"
                       : isLocked
                       ? "border-border bg-muted text-muted-foreground"
                       : "border-border bg-card text-foreground hover:border-primary/40"

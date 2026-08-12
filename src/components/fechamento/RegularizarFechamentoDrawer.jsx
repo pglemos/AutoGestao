@@ -114,7 +114,7 @@ function MovimentoDia({ form, onChange }) {
         {/* Showroom */}
         <div className="bg-status-warning-surface rounded-xl border border-status-warning/30 p-4 space-y-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-status-warning flex items-center justify-center flex-shrink-0"><Store className="w-4 h-4 text-white" /></div>
+            <div className="w-8 h-8 rounded-full bg-status-warning flex items-center justify-center flex-shrink-0"><Store className="w-4 h-4 text-status-warning-foreground" /></div>
             <span className="text-body-sm font-bold text-status-warning-text uppercase tracking-wide">Showroom</span>
           </div>
           <FieldRow label="Atendimentos" value={form.atendimentos_showroom} onChange={v => set("atendimentos_showroom", v)} />

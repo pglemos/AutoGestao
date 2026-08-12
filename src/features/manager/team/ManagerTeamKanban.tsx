@@ -56,7 +56,7 @@ const COLUMN_CONFIG = {
     header: 'border-status-warning/30 bg-status-warning-surface text-status-warning-text',
     body: 'border-status-warning/30 bg-status-warning-surface/50',
     footer: 'border-status-warning/20 bg-status-warning-surface text-status-warning-text',
-    active: 'border-status-warning bg-status-warning text-white',
+    active: 'border-status-warning bg-status-warning text-status-warning-foreground',
   },
   on_track: {
     label: 'Em dia',

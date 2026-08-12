@@ -86,7 +86,7 @@ export default function VendedorConfiguracoes() {
               <Card key={item.title} className="border bg-white p-mx-md sm:p-mx-lg">
                 <div className="flex h-full flex-col gap-mx-md">
                   <div className="flex items-start gap-mx-md">
-                    <span className="grid h-mx-12 w-mx-12 shrink-0 place-items-center rounded-2xl bg-status-success-surface text-mx-green-700">
+                    <span className="grid h-mx-12 w-mx-12 shrink-0 place-items-center rounded-2xl bg-status-success-surface text-status-success-text">
                       <item.icon size={22} />
                     </span>
                     <div className="min-w-0">

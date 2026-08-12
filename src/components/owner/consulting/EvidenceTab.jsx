@@ -12,7 +12,7 @@ const EVIDENCE_STATUS = {
   pending: { label: "Pendente", tone: "text-muted-foreground bg-muted" },
   sent: { label: "Enviada", tone: "text-status-info-text bg-status-info-surface" },
   in_analysis: { label: "Em análise", tone: "text-status-warning-text bg-status-warning-surface" },
-  approved: { label: "Aprovada", tone: "text-primary bg-primary/10" },
+  approved: { label: "Aprovada", tone: "text-status-success-text bg-primary/10" },
   returned: { label: "Devolvida", tone: "text-status-error-text bg-status-error-surface" },
 };
 

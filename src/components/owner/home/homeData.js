@@ -31,7 +31,7 @@ export const STATUS_STYLES = {
 };
 
 export const ICON_STYLES = {
-  green: "bg-primary/10 text-primary",
+  green: "bg-primary/10 text-status-success-text",
   blue: "bg-status-info-surface text-status-info-text",
   purple: "bg-status-info-surface text-status-info-text",
   orange: "bg-status-warning-surface text-status-warning-text",

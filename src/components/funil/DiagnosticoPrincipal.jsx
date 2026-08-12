@@ -51,7 +51,7 @@ const COR_MAP = {
   amber: {
     bg: "bg-status-warning-surface border-status-warning/30",
     icon: "bg-status-warning-surface text-status-warning-text",
-    btn: "bg-status-warning hover:bg-status-warning text-white",
+    btn: "bg-status-warning hover:bg-status-warning text-status-warning-foreground",
     titulo: "text-status-warning-text",
     sub: "text-status-warning-text",
     label: "text-status-warning-text bg-status-warning-surface",

@@ -765,7 +765,7 @@ export function PendingReminderModal({
       </button>
       <button
         type="button"
-        className="h-9 flex-1 rounded-mx-xl bg-status-warning px-4 text-sm font-medium text-white hover:bg-status-warning disabled:opacity-40"
+        className="h-9 flex-1 rounded-mx-xl bg-status-warning px-4 text-sm font-medium text-status-warning-foreground hover:bg-status-warning disabled:opacity-40"
         disabled={reminding}
         onClick={onConfirm}
       >

@@ -221,7 +221,7 @@ export function RegularizarFechamentoDrawer({
               <div className="space-y-4 p-5">
                 <div className="space-y-3 rounded-xl border border-status-warning/30 bg-status-warning-surface p-4">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-status-warning"><Store className="h-4 w-4 text-white" /></div>
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-status-warning"><Store className="h-4 w-4 text-status-warning-foreground" /></div>
                     <span className="text-body-sm font-bold uppercase tracking-wide text-status-warning-text">Showroom</span>
                   </div>
                   <FieldRow label="Atendimentos" value={formValues.visitas_porta} onChange={(v) => onFieldChange('visitas_porta', v)} disabled={false} />

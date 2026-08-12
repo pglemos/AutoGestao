@@ -60,7 +60,7 @@ export function EscalarAtividadeModal({
       footer={(
         <>
           <button type="button" onClick={onClose} disabled={saving} className="rounded-xl border border-border px-5 py-2.5 text-body-sm font-semibold text-muted-foreground hover:bg-slate-50 disabled:opacity-50">Cancelar</button>
-          <button type="button" onClick={() => void handleSubmit()} disabled={!reason.trim() || saving} className="rounded-xl bg-status-warning px-6 py-2.5 text-body-sm font-bold text-white hover:bg-status-warning disabled:opacity-50">{saving ? 'Enviando...' : 'Pedir apoio'}</button>
+          <button type="button" onClick={() => void handleSubmit()} disabled={!reason.trim() || saving} className="rounded-xl bg-status-warning px-6 py-2.5 text-body-sm font-bold text-status-warning-foreground hover:bg-status-warning disabled:opacity-50">{saving ? 'Enviando...' : 'Pedir apoio'}</button>
         </>
       )}
     >

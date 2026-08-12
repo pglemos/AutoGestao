@@ -25,13 +25,13 @@ export function ConsultingJourneyTimeline({ visits, nextVisitNumber, onOpen }: {
               onClick={() => onOpen(visit.id)}
               className="flex w-full items-center gap-3 rounded-xl border border-border p-3 text-left transition hover:border-primary/40 hover:bg-muted/30"
             >
-              <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${visit.status === 'concluida' ? 'bg-status-success-surface text-status-success-text' : isNext ? 'bg-primary/10 text-primary' : 'bg-muted text-muted-foreground'}`}>
+              <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sm font-bold ${visit.status === 'concluida' ? 'bg-status-success-surface text-status-success-text' : isNext ? 'bg-primary/10 text-status-success-text' : 'bg-muted text-muted-foreground'}`}>
                 {visit.visitNumber}
               </span>
               <span className="min-w-0 flex-1">
                 <span className="flex flex-wrap items-center gap-2">
                   <strong className="text-sm text-foreground">Encontro {visit.visitNumber}</strong>
-                  {isNext ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-caption font-medium text-primary">Próximo passo</span> : null}
+                  {isNext ? <span className="rounded-full bg-primary/10 px-2 py-0.5 text-caption font-medium text-status-success-text">Próximo passo</span> : null}
                 </span>
                 <span className="mt-0.5 block truncate text-sm text-muted-foreground">{visit.objective || 'Objetivo disponível ao abrir o encontro'}</span>
               </span>

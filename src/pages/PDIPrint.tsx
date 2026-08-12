@@ -85,9 +85,9 @@ export default function PDIPrint() {
                         <div>
                             <div className="flex items-center gap-mx-sm mb-4">
                                 <div className="w-mx-xl h-mx-xl bg-gray-900 text-white flex items-center justify-center rounded-2xl shadow-md"><Target size={24} /></div>
-                                <Typography variant="h2" className="text-xl tracking-tighter">MX <span className="text-mx-green-700">PERFORMANCE</span></Typography>
+                                <Typography variant="h2" className="text-xl tracking-tighter">MX <span className="text-status-success-text">PERFORMANCE</span></Typography>
                             </div>
-                            <Typography variant="h1" className="text-4xl tracking-tighter leading-none">Plano de Desenvolvimento<br/>Individual <span className="text-mx-green-700">(PDI)</span></Typography>
+                            <Typography variant="h1" className="text-4xl tracking-tighter leading-none">Plano de Desenvolvimento<br/>Individual <span className="text-status-success-text">(PDI)</span></Typography>
                         </div>
                         <div className="text-right">
                             <Typography variant="mono" className="text-xs bg-gray-50 px-4 py-2 rounded">Protocolo: {bundle.sessao.id.split('-')[0]}</Typography>

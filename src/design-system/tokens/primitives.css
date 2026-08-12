@@ -42,7 +42,12 @@
      4.5:1 — medido com axe em /funil-vendas. Escurecer 3 pontos é imperceptível
      e leva todo consumidor de `text-secondary`/`muted-foreground` para o lado
      certo do limite de uma vez (§21). */
-  --mx-neutral-500: 0 0% 42%;
+  /* 42% -> 40%: sobre a superfície info (#e1e9f6) o texto secundário ficava em
+     4.36:1 e reprovava AA, medido no sweep da FASE V. 40% leva o par para
+     4.70:1 e melhora todos os outros fundos claros junto (slate-100 5.24,
+     branco 5.74). Mesmo movimento de 3 pontos já feito antes por causa do
+     funil — imperceptível e conserta a família inteira de uma vez. */
+  --mx-neutral-500: 0 0% 40%;
   --mx-neutral-600: 0 0% 32%;
   --mx-neutral-700: 0 0% 26%;
   --mx-neutral-800: 0 0% 15%;

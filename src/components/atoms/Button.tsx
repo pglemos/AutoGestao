@@ -18,7 +18,7 @@ const buttonVariants = cva(
         outline: "border border-border bg-white text-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:border-border-subtle disabled:bg-gray-50 disabled:text-muted-foreground",
         ghost: "bg-transparent text-muted-foreground shadow-none hover:bg-gray-50 hover:text-foreground focus-visible:ring-status-success/20 disabled:bg-transparent disabled:text-text-disabled",
         success: "bg-brand-primary text-white shadow-[var(--mx-button-shadow)] hover:bg-brand-primary-hover focus-visible:ring-status-success/20",
-        warning: "bg-status-warning text-white shadow-[var(--mx-button-shadow)] hover:bg-status-warning focus-visible:ring-status-warning/20",
+        warning: "bg-status-warning text-status-warning-foreground shadow-[var(--mx-button-shadow)] hover:bg-status-warning focus-visible:ring-status-warning/20",
         info: "bg-status-info text-white shadow-[var(--mx-button-shadow)] hover:bg-status-info focus-visible:ring-status-info/20",
         danger: "bg-status-error text-white shadow-[var(--mx-button-shadow)] hover:bg-status-error focus-visible:ring-status-error/20",
         whatsapp: "bg-whatsapp text-white shadow-[var(--mx-button-shadow)] hover:bg-whatsapp/90",

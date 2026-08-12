@@ -36,7 +36,7 @@ export function GlobalRankingHeader({
     <header data-mx-module-header="" className="flex min-w-0 shrink-0 flex-col justify-between gap-mx-lg rounded-2xl border border-border-subtle bg-white p-5 shadow-sm 2xl:flex-row 2xl:items-center">
       <div className="flex flex-col gap-mx-tiny text-center lg:text-left">
         <div className="flex items-center justify-center lg:justify-start gap-mx-sm">
-          <Typography variant="h1">Ranking <span className="text-mx-green-700">Global</span></Typography>
+          <Typography variant="h1">Ranking <span className="text-status-success-text">Global</span></Typography>
         </div>
         <Typography variant="caption" className="pl-mx-md">
           {totalLojas} UNIDADES • {totalVendedores} VENDEDORES • PERFORMANCE EM TEMPO REAL

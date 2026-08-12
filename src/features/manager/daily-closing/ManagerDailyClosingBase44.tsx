@@ -864,7 +864,7 @@ export function PendingReminderModal({
           <button type="button" onClick={onClose} className="h-11 rounded-xl border border-border bg-white px-4 text-sm font-semibold text-foreground shadow-sm hover:bg-gray-50">
             Cancelar
           </button>
-          <button type="button" disabled={reminding} onClick={onConfirm} className="h-11 rounded-xl bg-status-warning px-4 text-sm font-semibold text-white shadow-sm hover:bg-status-warning disabled:bg-amber-200">
+          <button type="button" disabled={reminding} onClick={onConfirm} className="h-11 rounded-xl bg-status-warning px-4 text-sm font-semibold text-status-warning-foreground shadow-sm hover:bg-status-warning disabled:bg-amber-200">
             {reminding ? "Enviando..." : "Confirmar Cobrança"}
           </button>
         </div>

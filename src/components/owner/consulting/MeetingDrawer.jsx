@@ -60,7 +60,7 @@ export default function MeetingDrawer({ meetingId, onClose, user, onDataChange, 
         {/* Header fixo */}
         <div className="border-b border-border bg-card px-5 py-3 pr-10">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary">
+            <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-status-success-text">
               Encontro {meeting.number}
             </span>
             {meeting.pillar && (
@@ -92,7 +92,7 @@ export default function MeetingDrawer({ meetingId, onClose, user, onDataChange, 
                   onClick={() => setActiveTab(tab.id)}
                   className={`flex shrink-0 items-center gap-1.5 rounded-md px-3 py-1.5 text-xs font-medium transition-colors ${
                     activeTab === tab.id
-                      ? "bg-primary/10 text-primary"
+                      ? "bg-primary/10 text-status-success-text"
                       : "text-muted-foreground hover:bg-muted hover:text-foreground"
                   }`}
                 >

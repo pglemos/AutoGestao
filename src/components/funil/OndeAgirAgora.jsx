@@ -77,8 +77,8 @@ const COR_BADGE = {
 const COR_BTN = {
   blue:   "bg-[#005BFF] hover:bg-status-info text-white",
   green:  "bg-green-600 hover:bg-green-700 text-white",
-  orange: "bg-status-warning hover:bg-status-warning text-white",
-  amber:  "bg-status-warning hover:bg-status-warning text-white",
+  orange: "bg-status-warning hover:bg-status-warning text-status-warning-foreground",
+  amber:  "bg-status-warning hover:bg-status-warning text-status-warning-foreground",
 };
 const PRIORIDADE_COR = ["text-status-error-text", "text-status-warning-text", "text-muted-foreground"];
 

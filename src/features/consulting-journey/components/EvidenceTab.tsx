@@ -74,7 +74,7 @@ export function EvidenceTab({ visit, controller }: { visit: ConsultingJourneyVis
                 <div className="mt-3 flex flex-wrap gap-2">
                   <button type="button" onClick={() => void controller.reviewEvidence(evidence.id, 'under_review')} className="rounded-md border border-border px-2.5 py-1.5 text-xs">Em análise</button>
                   <button type="button" onClick={() => void controller.reviewEvidence(evidence.id, 'approved')} className="rounded-md bg-brand-primary px-2.5 py-1.5 text-xs text-white">Aprovar</button>
-                  <button type="button" onClick={() => { setReturningEvidenceId(evidence.id); setReturnFeedback(evidence.feedback || '') }} className="rounded-md bg-status-warning px-2.5 py-1.5 text-xs text-white">Devolver</button>
+                  <button type="button" onClick={() => { setReturningEvidenceId(evidence.id); setReturnFeedback(evidence.feedback || '') }} className="rounded-md bg-status-warning px-2.5 py-1.5 text-xs text-status-warning-foreground">Devolver</button>
                 </div>
               ) : null}
               {returningEvidenceId === evidence.id ? (
@@ -83,7 +83,7 @@ export function EvidenceTab({ visit, controller }: { visit: ConsultingJourneyVis
                   <textarea id={`feedback-${evidence.id}`} value={returnFeedback} onChange={(event) => setReturnFeedback(event.target.value)} rows={3} className="mt-2 w-full rounded-md border border-status-warning/40 bg-white px-3 py-2 text-sm" placeholder="Explique o que deve ser corrigido ou reenviado." />
                   <div className="mt-2 flex justify-end gap-2">
                     <button type="button" onClick={() => { setReturningEvidenceId(null); setReturnFeedback('') }} className="rounded-md border border-border bg-background px-3 py-1.5 text-xs">Cancelar</button>
-                    <button type="button" disabled={!returnFeedback.trim() || controller.mutating} onClick={() => void controller.reviewEvidence(evidence.id, 'returned', returnFeedback.trim()).then(() => { setReturningEvidenceId(null); setReturnFeedback('') })} className="rounded-md bg-status-warning px-3 py-1.5 text-xs text-white disabled:opacity-50">Enviar devolutiva</button>
+                    <button type="button" disabled={!returnFeedback.trim() || controller.mutating} onClick={() => void controller.reviewEvidence(evidence.id, 'returned', returnFeedback.trim()).then(() => { setReturningEvidenceId(null); setReturnFeedback('') })} className="rounded-md bg-status-warning px-3 py-1.5 text-xs text-status-warning-foreground disabled:opacity-50">Enviar devolutiva</button>
                   </div>
                 </div>
               ) : null}

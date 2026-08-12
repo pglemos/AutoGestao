@@ -16,7 +16,7 @@ export function StoreHeader({ isRefetching, onRefresh, onExport }: Props) {
       <div className="flex flex-col gap-mx-tiny">
         <div className="flex items-center gap-mx-sm">
           <Typography variant="h1">
-            Análise de <span className="text-mx-green-700">Performance</span>
+            Análise de <span className="text-status-success-text">Performance</span>
           </Typography>
         </div>
         <Typography variant="caption">

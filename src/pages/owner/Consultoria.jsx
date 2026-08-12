@@ -107,10 +107,10 @@ export default function Consultoria() {
             <div className="flex flex-col gap-4 lg:flex-row">
               <div className="flex-1 space-y-4">
                 <div>
-                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-primary">Programa contratado</span>
+                  <span className="inline-flex items-center rounded-full bg-primary/10 px-2.5 py-1 text-xs font-medium text-status-success-text">Programa contratado</span>
                   <div className="mt-2 flex items-center gap-2">
                     <h2 className="text-2xl font-bold text-foreground">{program.programName}</h2>
-                    <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-primary"><span className="mr-1 h-1.5 w-1.5 rounded-full bg-primary" />{program.clientStatus}</span>
+                    <span className="inline-flex items-center rounded-full bg-primary/10 px-2 py-0.5 text-xs font-medium text-status-success-text"><span className="mr-1 h-1.5 w-1.5 rounded-full bg-primary" />{program.clientStatus}</span>
                   </div>
                   <p className="mt-1 text-sm text-muted-foreground">Dados agregados pelo contrato seguro de Consultoria do Dono.</p>
                 </div>

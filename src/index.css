@@ -157,6 +157,9 @@ to { height: 0; }
   --color-status-warning: hsl(var(--mx-status-warning));
   --color-status-warning-text: hsl(var(--mx-status-warning-text));
   --color-status-warning-surface: hsl(var(--mx-status-warning) / 0.05);
+  /* Texto sobre o PREENCHIMENTO warning. O amber é claro: branco sobre ele dá
+     2.15:1 e reprova AA com folga; o degrau quase preto entrega 9.27:1. */
+  --color-status-warning-foreground: hsl(var(--mx-color-warning-foreground));
   --color-status-error: hsl(var(--mx-status-error));
   --color-status-error-strong: hsl(var(--mx-status-error-strong));
   --color-status-error-text: hsl(var(--mx-status-error-text));

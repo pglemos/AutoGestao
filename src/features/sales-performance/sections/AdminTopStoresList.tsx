@@ -32,7 +32,7 @@ export function AdminTopStoresList({ topStores, onStoreClick }: Props) {
                 className={cn(
                   'w-mx-8 h-mx-8 rounded-xl flex items-center justify-center text-mx-nano font-bold',
                   i === 0
-                    ? 'bg-status-warning text-white'
+                    ? 'bg-status-warning text-status-warning-foreground'
                     : i === 1
                       ? 'bg-brand-primary text-white'
                       : i === 2
