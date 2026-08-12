@@ -8,6 +8,7 @@ import {
   montarComparativo,
   type Classificacao,
 } from '../hooks/useRemuneracao'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
 
@@ -69,7 +70,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
       ) : linhas.length === 0 ? (
         <EmptyState title="Sem planos para comparar" description="Cadastre planos de remuneração na aba anterior." />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-border">
+        <ScrollableRegion className="rounded-2xl border border-border" label="Comparativo de mercado">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
@@ -96,7 +97,7 @@ export function ComparativoMercado({ lojaId }: { lojaId: string }) {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollableRegion>
       )}
     </div>
   )

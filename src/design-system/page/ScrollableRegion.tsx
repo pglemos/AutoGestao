@@ -11,9 +11,17 @@ export interface ScrollableRegionProps extends React.HTMLAttributes<HTMLDivEleme
   label: string
 }
 
+/**
+ * `overflow-y-hidden` no eixo horizontal não é decoração: pela regra do CSS, um
+ * eixo `visible` vira `auto` quando o outro não é `visible`. Um simples
+ * `overflow-x-auto` portanto cria um scroll VERTICAL de página fantasma, com a
+ * altura exata da barra horizontal (14px no macOS) — foi o que o sweep da FASE
+ * AE flagrou como segundo scroll owner em /configuracoes/remuneracao. Fixar o
+ * eixo Y em `hidden` remove o fantasma sem cortar conteúdo real.
+ */
 const AXIS_CLASS: Record<NonNullable<ScrollableRegionProps['axis']>, string> = {
-  horizontal: 'overflow-x-auto',
-  vertical: 'overflow-y-auto',
+  horizontal: 'overflow-x-auto overflow-y-hidden',
+  vertical: 'overflow-y-auto overflow-x-hidden',
   both: 'overflow-auto',
 }
 

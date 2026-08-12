@@ -12,6 +12,7 @@ import {
   type RemuneracaoRegraTipo,
   type RemuneracaoTipoVeiculo,
 } from '../hooks/useRemuneracao'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
 
@@ -241,7 +242,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
       ) : regras.length === 0 ? (
         <EmptyState title="Nenhuma regra cadastrada" description="Adicione comissão por venda e bônus por meta para ativar o salário estimado." />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-border">
+        <ScrollableRegion className="rounded-2xl border border-border" label="Regras de remuneração">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
@@ -290,7 +291,7 @@ export function CadastroRegras({ lojaId }: { lojaId: string }) {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollableRegion>
       )}
     </div>
   )

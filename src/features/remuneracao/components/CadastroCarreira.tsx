@@ -5,6 +5,7 @@ import { Typography } from '@/components/atoms/Typography'
 import { Button } from '@/components/atoms/Button'
 import { EmptyState } from '@/components/atoms/EmptyState'
 import { useVendedoresNivelCarreira, type NivelCarreira } from '../hooks/useRemuneracao'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 const NIVEL_LABEL: Record<NivelCarreira, string> = {
   junior: 'Júnior',
@@ -54,7 +55,7 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
       ) : vendedores.length === 0 ? (
         <EmptyState title="Nenhum vendedor nesta loja" description="Cadastre vendedores em Equipe & Usuários primeiro." />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-border">
+        <ScrollableRegion className="rounded-2xl border border-border" label="Carreira dos vendedores">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
@@ -83,7 +84,7 @@ export function CadastroCarreira({ lojaId }: { lojaId: string }) {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollableRegion>
       )}
     </div>
   )

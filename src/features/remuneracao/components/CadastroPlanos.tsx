@@ -7,6 +7,7 @@ import { Typography } from '@/components/atoms/Typography'
 import { EmptyState } from '@/components/atoms/EmptyState'
 import { requestToastConfirmation } from '@/lib/ui/confirmAction'
 import { usePlanosRemuneracao, totalPlano, type RemuneracaoPlano } from '../hooks/useRemuneracao'
+import { ScrollableRegion } from '@/design-system/page/ScrollableRegion'
 
 const BRL = new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' })
 
@@ -90,7 +91,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
       ) : planos.length === 0 ? (
         <EmptyState title="Nenhum plano cadastrado" description="Adicione o plano de remuneração de cada cargo desta loja." />
       ) : (
-        <div className="overflow-x-auto rounded-2xl border border-border">
+        <ScrollableRegion className="rounded-2xl border border-border" label="Planos de remuneração">
           <table className="w-full text-sm">
             <thead className="bg-gray-50 text-muted-foreground">
               <tr className="text-left uppercase tracking-wide text-xs font-bold">
@@ -119,7 +120,7 @@ export function CadastroPlanos({ lojaId }: { lojaId: string }) {
               ))}
             </tbody>
           </table>
-        </div>
+        </ScrollableRegion>
       )}
     </div>
   )
