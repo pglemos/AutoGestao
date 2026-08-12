@@ -128,7 +128,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
       <DialogContent className="max-w-md rounded-2xl max-h-[92vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="text-[#031B3D] font-black flex items-center gap-2">
-            <Zap className="w-4 h-4 text-[#005BFF]" />
+            <Zap className="w-4 h-4 text-status-info-text" />
             Executar próximo passo
           </DialogTitle>
           {cliente && (
@@ -143,7 +143,7 @@ export default function WhatsAppRoteiro({ open, onClose, cliente, missaoId, onRe
                   <p className="text-xs font-semibold text-foreground">{objetivoAtual}</p>
                 </div>
                 <div>
-                  <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
+                  <p className="text-caption text-status-info-text font-bold uppercase tracking-wide">Mentor recomenda</p>
                   <p className="text-xs font-bold text-[#031B3D]">
                     {codigoPasso ? `${codigoPasso} · ` : ""}{passoAtual}
                   </p>

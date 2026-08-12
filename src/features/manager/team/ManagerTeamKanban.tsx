@@ -166,14 +166,14 @@ function KanbanColumn({ status, cards, view, storeName, onOpenProfile, onAction 
   return <section className={`flex h-full min-w-0 flex-col overflow-hidden rounded-2xl border ${config.body}`} aria-label={`${config.label}: ${cards.length}`}>
     <header className={`flex min-h-[52px] items-center justify-between border-b px-4 py-3 ${config.header}`}><div className="flex items-center gap-2"><Icon size={18}/><h2 className="text-sm font-bold">{config.label}</h2></div><span className="rounded-full bg-white/80 px-2.5 py-0.5 text-xs font-bold">{cards.length}</span></header>
     <div className="flex min-h-[100px] flex-1 flex-col gap-3 p-3">{cards.length ? cards.map(card => <ManagerSellerCard key={card.row.user_id} card={card} view={view} status={status} storeName={storeName} onOpenProfile={onOpenProfile} onAction={onAction}/>) : <div className="flex h-20 items-center justify-center text-xs text-muted-foreground">Nenhum vendedor nesta coluna</div>}</div>
-    <footer className={`border-t px-3 py-2.5 ${config.footer}`}><p className="text-xs font-semibold">{guidance.title}</p><p className="mt-0.5 text-caption leading-snug opacity-75">{guidance.detail}</p></footer>
+    <footer className={`border-t px-3 py-2.5 ${config.footer}`}><p className="text-xs font-semibold">{guidance.title}</p><p className="mt-0.5 text-caption leading-snug">{guidance.detail}</p></footer>
   </section>
 }
 
 function KanbanMobileList(props: ColumnProps) {
   const guidance = MANAGER_TEAM_COLUMN_GUIDANCE[props.view][props.status]
   const config = COLUMN_CONFIG[props.status]
-  return <>{props.cards.length ? <div className="space-y-3">{props.cards.map(card => <ManagerSellerCard key={card.row.user_id} card={card} view={props.view} status={props.status} storeName={props.storeName} onOpenProfile={props.onOpenProfile} onAction={props.onAction}/>)}</div> : <div className="rounded-2xl border border-border-subtle bg-white py-12 text-center text-sm text-muted-foreground">Nenhum vendedor nesta coluna</div>}<div className={`mt-3 rounded-2xl border p-3 ${config.footer}`}><p className="text-xs font-semibold">{guidance.title}</p><p className="mt-0.5 text-caption leading-snug opacity-75">{guidance.detail}</p></div></>
+  return <>{props.cards.length ? <div className="space-y-3">{props.cards.map(card => <ManagerSellerCard key={card.row.user_id} card={card} view={props.view} status={props.status} storeName={props.storeName} onOpenProfile={props.onOpenProfile} onAction={props.onAction}/>)}</div> : <div className="rounded-2xl border border-border-subtle bg-white py-12 text-center text-sm text-muted-foreground">Nenhum vendedor nesta coluna</div>}<div className={`mt-3 rounded-2xl border p-3 ${config.footer}`}><p className="text-xs font-semibold">{guidance.title}</p><p className="mt-0.5 text-caption leading-snug">{guidance.detail}</p></div></>
 }
 
 function ManagerSellerCard({ card, view, status, storeName, onOpenProfile, onAction }: Omit<ColumnProps, 'cards'> & { card: ManagerTeamCard }) {

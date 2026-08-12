@@ -194,7 +194,7 @@ export default function FinalizarMobile({
 
       {jaFinalizado && d1WindowOpen && (
         <div className="flex items-center gap-2 bg-status-info-surface border border-status-info/30 rounded-xl px-4 py-3">
-          <Clock className="w-4 h-4 text-[#005BFF] flex-shrink-0" />
+          <Clock className="w-4 h-4 text-status-info-text flex-shrink-0" />
           <p className="text-[12px] font-semibold text-[#1e3a5f]">
             Fechamento concluído. Os Agendamentos D+1 podem ser ajustados até 09h30 de {d1DateExibicao}.
           </p>

@@ -78,7 +78,7 @@ export function ModalSemCanal({ open, canalSugerido, onConfirmarSugestao, onEsco
       <DialogContent className="sm:max-w-sm">
         <DialogHeader>
           <DialogTitle className="text-[#0F172A] font-bold flex items-center gap-2">
-            <Info className="w-5 h-5 text-[#005BFF]" />
+            <Info className="w-5 h-5 text-status-info-text" />
             Informe o canal da venda
           </DialogTitle>
         </DialogHeader>
@@ -151,7 +151,7 @@ export function AvisoClienteExistente({ nome }) {
   if (!nome) return null;
   return (
     <div className="flex items-start gap-2 px-3 py-2.5 bg-status-info-surface border border-status-info/30 rounded-xl text-[12px] text-[#1e3a5f] mt-2">
-      <Info className="w-4 h-4 text-[#005BFF] flex-shrink-0 mt-0.5" />
+      <Info className="w-4 h-4 text-status-info-text flex-shrink-0 mt-0.5" />
       <span>
         <strong>{nome}</strong> já existe na Carteira. A venda será vinculada ao histórico anterior.
       </span>
@@ -167,7 +167,7 @@ export function ModalMaisVendasQueAtendimentos({ open, divergencias, onRevisar, 
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-[#0F172A] font-bold flex items-center gap-2">
-            <Info className="w-5 h-5 text-[#005BFF]" />
+            <Info className="w-5 h-5 text-status-info-text" />
             Atenção antes de finalizar
           </DialogTitle>
         </DialogHeader>

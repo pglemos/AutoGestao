@@ -85,7 +85,7 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
         <div className="flex-1 flex flex-col items-center justify-center text-center py-8 gap-2">
           <p className="text-body-sm text-muted-foreground font-medium">Sem dados no período</p>
           <p className="text-caption text-text-disabled">Registre atendimentos no Fechamento Diário</p>
-          <Link to="/fechamento" className="mt-2 text-[12px] font-bold text-[#005BFF] hover:underline">Abrir Fechamento Diário</Link>
+          <Link to="/fechamento" className="mt-2 text-[12px] font-bold text-status-info-text hover:underline">Abrir Fechamento Diário</Link>
         </div>
       ) : (
         <div className="space-y-0">

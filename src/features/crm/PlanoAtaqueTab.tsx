@@ -230,7 +230,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         <button
           type="button"
           onClick={() => setVeiculoAtaque(null)}
-          className="flex items-center gap-1.5 text-sm text-[#005BFF] hover:underline"
+          className="flex items-center gap-1.5 text-sm text-status-info-text hover:underline"
         >
           <ArrowLeft className="h-4 w-4" /> Voltar aos veículos
         </button>
@@ -255,7 +255,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
             </p>
             {listaCompativeis.map(cliente => (
               <div key={cliente.id} className="bg-white border border-border-subtle rounded-xl px-4 py-3 flex items-center gap-3">
-                <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-status-info-surface text-xs font-bold text-[#005BFF]">
+                <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-status-info-surface text-xs font-bold text-status-info-text">
                   {(cliente.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                 </span>
                 <div className="min-w-0 flex-1">
@@ -267,7 +267,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                 <button
                   type="button"
                   onClick={() => onAbrirFicha(cliente.id)}
-                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-[#005BFF] hover:bg-status-info-surface"
+                  className="rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-status-info-text hover:bg-status-info-surface"
                 >
                   Ficha
                 </button>
@@ -286,7 +286,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
         <button
           type="button"
           onClick={() => setMissaoSelecionada(null)}
-          className="flex items-center gap-1.5 text-sm text-[#005BFF] hover:underline"
+          className="flex items-center gap-1.5 text-sm text-status-info-text hover:underline"
         >
           <ArrowLeft className="h-4 w-4" /> Voltar ao Plano de Ataque
         </button>
@@ -331,7 +331,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                   : null
                 return (
                   <div key={ctx.cliente.id} className="bg-white border border-border-subtle rounded-xl px-4 py-3 flex items-center gap-3">
-                    <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-status-info-surface text-xs font-bold text-[#005BFF]">
+                    <span className="w-9 h-9 shrink-0 grid place-items-center rounded-full bg-status-info-surface text-xs font-bold text-status-info-text">
                       {(ctx.cliente.nome || '?').split(' ').slice(0, 2).map(p => p[0]).join('').toUpperCase()}
                     </span>
                     <div className="min-w-0 flex-1">
@@ -354,7 +354,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                     <button
                       type="button"
                       onClick={() => onAbrirFicha(ctx.cliente.id)}
-                      className="shrink-0 rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-[#005BFF] hover:bg-status-info-surface"
+                      className="shrink-0 rounded-lg border border-border px-3 py-1.5 text-xs font-bold text-status-info-text hover:bg-status-info-surface"
                     >
                       Ficha
                     </button>
@@ -465,7 +465,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
               <button
                 type="button"
                 onClick={() => setFaixaPrecoAtiva('todas')}
-                className="mt-3 text-xs text-[#005BFF] font-bold hover:underline"
+                className="mt-3 text-xs text-status-info-text font-bold hover:underline"
               >
                 Ver todas as faixas de preço
               </button>
@@ -486,7 +486,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
               return (
                 <div key={veiculo.id} className="bg-white border border-border-subtle rounded-2xl p-4 space-y-3">
                   <div className="flex items-start gap-3">
-                    <span className="w-10 h-10 shrink-0 grid place-items-center rounded-xl bg-status-info-surface text-[#005BFF]">
+                    <span className="w-10 h-10 shrink-0 grid place-items-center rounded-xl bg-status-info-surface text-status-info-text">
                       <Car size={20} />
                     </span>
                     <div className="min-w-0 flex-1">
@@ -494,7 +494,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                       <p className="text-xs text-muted-foreground">
                         {veiculo.ano}{veiculo.preco ? ` · ${veiculo.preco.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' })}` : ''}
                       </p>
-                      <p className="text-xs font-semibold text-[#005BFF]">{entradaLabel(veiculo.data_entrada)}</p>
+                      <p className="text-xs font-semibold text-status-info-text">{entradaLabel(veiculo.data_entrada)}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-1.5 pt-2 border-t border-slate-50">

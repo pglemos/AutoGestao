@@ -78,7 +78,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                       )}
                       {op.cliente_id && (
                         <Link to="/carteira"
-                          className="flex items-center gap-1 text-caption font-bold text-[#005BFF] border border-status-info/30 hover:bg-status-info-surface px-2.5 py-1.5 rounded-lg transition-colors"
+                          className="flex items-center gap-1 text-caption font-bold text-status-info-text border border-status-info/30 hover:bg-status-info-surface px-2.5 py-1.5 rounded-lg transition-colors"
                           onClick={onClose}
                         >
                           <ExternalLink className="w-3 h-3" /> Abrir cliente

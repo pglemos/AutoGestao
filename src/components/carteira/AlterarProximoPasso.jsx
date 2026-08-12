@@ -160,7 +160,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
         {/* Sugestões do MX */}
         {sugestoes.length > 0 && (
           <div>
-            <p className="text-caption font-black text-[#005BFF] uppercase tracking-wide mb-2">Sugestões do MX</p>
+            <p className="text-caption font-black text-status-info-text uppercase tracking-wide mb-2">Sugestões do MX</p>
             <div className="flex flex-wrap gap-1.5">
               {sugestoes.map(s => (
                 <button
@@ -169,7 +169,7 @@ export default function AlterarProximoPasso({ open, onClose, cliente, pendencias
                   className={`text-xs font-semibold px-3 py-1.5 rounded-xl border transition-all ${
                     passo === s
                       ? "bg-[#005BFF] text-white border-[#005BFF]"
-                      : "bg-status-info-surface text-[#005BFF] border-status-info/30 hover:bg-status-info-surface"
+                      : "bg-status-info-surface text-status-info-text border-status-info/30 hover:bg-status-info-surface"
                   }`}
                 >
                   ✦ {s}

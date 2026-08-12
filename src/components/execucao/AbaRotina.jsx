@@ -301,19 +301,19 @@ function ProspeccaoCard({ acao, onVerComoFazer }) {
       <div className="flex items-start justify-between gap-2">
         <div className="flex items-center gap-2.5">
           <div className="w-9 h-9 rounded-xl bg-status-info-surface flex items-center justify-center flex-shrink-0">
-            <Icon className="w-4 h-4 text-[#005BFF]" />
+            <Icon className="w-4 h-4 text-status-info-text" />
           </div>
           <div>
             <p className="font-bold text-body-sm text-[#0F172A]">{acao.tipo}</p>
             <p className="text-caption text-muted-foreground">{acao.publico}</p>
           </div>
         </div>
-        <span className="text-caption font-bold text-[#005BFF] bg-status-info-surface px-2.5 py-1 rounded-full flex-shrink-0">{acao.meta}</span>
+        <span className="text-caption font-bold text-status-info-text bg-status-info-surface px-2.5 py-1 rounded-full flex-shrink-0">{acao.meta}</span>
       </div>
       {acao.exemplo && <p className="text-[12px] text-muted-foreground italic">"{acao.exemplo}"</p>}
       <button
         onClick={() => { onVerComoFazer(acao); base44.analytics.track({ eventName: "rotina_ver_como_fazer", properties: { tipo: acao.tipo } }); }}
-        className="flex items-center gap-1.5 text-[12px] font-bold text-[#005BFF] hover:underline mt-auto"
+        className="flex items-center gap-1.5 text-[12px] font-bold text-status-info-text hover:underline mt-auto"
       >
         <BookOpen className="w-3.5 h-3.5" /> Ver como fazer
       </button>
@@ -329,12 +329,12 @@ function ComoFazerDrawer({ acao, onClose }) {
       <DialogContent className="sm:max-w-md max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2 text-[#0F172A]">
-            <Icon className="w-5 h-5 text-[#005BFF]" /> {acao.tipo}
+            <Icon className="w-5 h-5 text-status-info-text" /> {acao.tipo}
           </DialogTitle>
         </DialogHeader>
         <div className="space-y-4 mt-2">
           <div className="flex items-center gap-3 bg-status-info-surface rounded-xl p-3">
-            <span className="text-[12px] font-semibold text-[#005BFF]">Meta: {acao.meta}</span>
+            <span className="text-[12px] font-semibold text-status-info-text">Meta: {acao.meta}</span>
             <span className="text-[12px] text-muted-foreground">• Público: {acao.publico}</span>
           </div>
           {acao.objetivo && <p className="text-body-sm text-muted-foreground">{acao.objetivo}</p>}
@@ -561,11 +561,11 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                   <div className="flex items-center gap-2 flex-wrap">
                     <span className={`text-caption font-bold px-2 py-0.5 rounded-lg ${isCurrent ? "bg-[#005BFF] text-white" : "bg-slate-100 text-muted-foreground"}`}>{time}</span>
                     <span className={`text-[14px] font-bold ${isCurrent ? "text-[#0F172A]" : "text-muted-foreground"}`}>{step.label}</span>
-                    {isCurrent && <span className="text-caption font-bold text-[#005BFF] bg-status-info-surface px-2 py-0.5 rounded-full uppercase tracking-wider">Agora</span>}
+                    {isCurrent && <span className="text-caption font-bold text-status-info-text bg-status-info-surface px-2 py-0.5 rounded-full uppercase tracking-wider">Agora</span>}
                   </div>
                   {/* Frase contextual no card recolhido */}
                   {!isExpanded && (
-                    <p className={`text-[12px] mt-0.5 truncate ${isCurrent ? "text-[#005BFF] font-semibold" : "text-muted-foreground"}`}>
+                    <p className={`text-[12px] mt-0.5 truncate ${isCurrent ? "text-status-info-text font-semibold" : "text-muted-foreground"}`}>
                       {isCurrent && preview ? preview : step.objetivo}
                     </p>
                   )}
@@ -577,7 +577,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                 <div className="px-5 pb-5 border-t border-border-subtle">
                   {/* Título contextual para Foco do Dia */}
                   {step.id === "motivacao" && (
-                    <p className="text-[12px] font-bold text-[#005BFF] mt-3 mb-1 uppercase tracking-wider">
+                    <p className="text-[12px] font-bold text-status-info-text mt-3 mb-1 uppercase tracking-wider">
                       {motivacaoConteudo(ctx).titulo}
                     </p>
                   )}
@@ -622,11 +622,11 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                       </div>
                       {objecaoAberta && (
                         <div className="bg-status-info-surface rounded-xl p-4">
-                          <p className="text-[12px] font-bold text-[#005BFF] mb-2">{objecaoAberta}</p>
+                          <p className="text-[12px] font-bold text-status-info-text mb-2">{objecaoAberta}</p>
                           <ul className="space-y-1.5">
                             {OBJECOES.find(o => o.label === objecaoAberta)?.dicas.map((d, i) => (
                               <li key={i} className="flex items-start gap-2 text-body-sm text-foreground">
-                                <span className="text-[#005BFF] font-bold mt-0.5">→</span>{d}
+                                <span className="text-status-info-text font-bold mt-0.5">→</span>{d}
                               </li>
                             ))}
                           </ul>
@@ -685,7 +685,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                   {idx < arr.length - 1 && <div className={`w-px h-5 ${isPast ? "bg-green-200" : "bg-slate-100"}`} />}
                 </div>
                 <div className="pb-3 pt-0.5">
-                  <p className={`text-caption font-bold ${isCurrent ? "text-[#005BFF]" : "text-muted-foreground"}`}>{formatMin(stepTime(step))}</p>
+                  <p className={`text-caption font-bold ${isCurrent ? "text-status-info-text" : "text-muted-foreground"}`}>{formatMin(stepTime(step))}</p>
                   <p className={`text-[12px] font-semibold leading-tight ${isCurrent ? "text-[#0F172A]" : "text-muted-foreground"}`}>{step.label}</p>
                 </div>
               </div>

@@ -217,7 +217,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
             )}
             {op.cliente_id && (
               <button onClick={() => onAbrirCliente(op)}
-                className="flex items-center gap-1 text-caption font-bold text-[#005BFF] border border-status-info/30 hover:bg-status-info-surface px-3 py-1.5 rounded-lg transition-colors">
+                className="flex items-center gap-1 text-caption font-bold text-status-info-text border border-status-info/30 hover:bg-status-info-surface px-3 py-1.5 rounded-lg transition-colors">
                 <UserRound className="w-3 h-3" /> Cliente
               </button>
             )}
@@ -279,7 +279,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
           )}
           {op.cliente_id && (
             <button onClick={() => onAbrirCliente(op)} title="Abrir cliente"
-              className="p-2 rounded-xl bg-status-info-surface hover:bg-status-info-surface text-[#005BFF] transition-colors">
+              className="p-2 rounded-xl bg-status-info-surface hover:bg-status-info-surface text-status-info-text transition-colors">
               <UserRound className="w-4 h-4" />
             </button>
           )}
@@ -515,7 +515,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
             Você possui {pendenciasAnteriores.length} pendência{pendenciasAnteriores.length > 1 ? "s" : ""} de dias anteriores.
           </p>
           <button onClick={() => setPendenciasOpen(true)}
-            className="text-[12px] font-bold text-[#005BFF] hover:underline flex-shrink-0">
+            className="text-[12px] font-bold text-status-info-text hover:underline flex-shrink-0">
             Ver pendências
           </button>
         </div>
@@ -534,7 +534,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-xl border text-[12px] font-bold transition-colors ${
                   ativo
                     ? "bg-[#005BFF] text-white border-[#005BFF]"
-                    : "bg-white text-muted-foreground border-border hover:border-[#005BFF] hover:text-[#005BFF]"
+                    : "bg-white text-muted-foreground border-border hover:border-[#005BFF] hover:text-status-info-text"
                 }`}>
                 {f.label}
                 <span className={`text-caption px-1.5 py-0.5 rounded-full font-bold ${ativo ? "bg-white/20 text-white" : "bg-slate-100 text-muted-foreground"}`}>
@@ -583,7 +583,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
             // Estado vazio completo
             <div className="bg-white rounded-2xl border border-border shadow-sm p-14 text-center">
               <div className="w-14 h-14 rounded-2xl bg-status-info-surface flex items-center justify-center mx-auto mb-4">
-                <CheckCircle2 className="w-7 h-7 text-[#005BFF]" />
+                <CheckCircle2 className="w-7 h-7 text-status-info-text" />
               </div>
               <p className="text-[16px] font-bold text-[#0F172A] mb-1">Tela limpa por hoje.</p>
               <p className="text-body-sm text-muted-foreground mb-5 max-w-sm mx-auto">
@@ -592,7 +592,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
               <div className="flex items-center justify-center gap-3 flex-wrap">
                 {onGoToRotina && (
                   <button onClick={onGoToRotina}
-                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-[#005BFF] border border-[#005BFF] rounded-xl hover:bg-status-info-surface transition-colors">
+                    className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-status-info-text border border-[#005BFF] rounded-xl hover:bg-status-info-surface transition-colors">
                     <Sparkles className="w-4 h-4" /> Ver Rotina do Dia
                   </button>
                 )}
@@ -611,7 +611,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
             <div className="bg-white rounded-2xl border border-border shadow-sm p-10 text-center">
               <Inbox className="w-10 h-10 text-slate-200 mx-auto mb-3" />
               <p className="text-body-sm text-muted-foreground">Nenhuma oportunidade do tipo <strong>{filtroTipo}</strong> para hoje.</p>
-              <button onClick={() => setFiltroTipo("todos")} className="text-[12px] text-[#005BFF] font-bold mt-2 hover:underline">Ver todas</button>
+              <button onClick={() => setFiltroTipo("todos")} className="text-[12px] text-status-info-text font-bold mt-2 hover:underline">Ver todas</button>
             </div>
           )
         ) : (
@@ -623,7 +623,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
             {/* Todas resolvidas (quando tinha e agora zerou) */}
             {listaHoje.length > 0 && listaFiltrada.length === 0 && filtroTipo === "todos" && (
               <div className="bg-white rounded-2xl border border-border shadow-sm p-10 text-center">
-                <CheckCircle2 className="w-10 h-10 text-[#005BFF] mx-auto mb-3" />
+                <CheckCircle2 className="w-10 h-10 text-status-info-text mx-auto mb-3" />
                 <p className="text-body font-bold text-[#0F172A] mb-1">Todas as oportunidades de hoje foram resolvidas.</p>
                 <p className="text-[12px] text-muted-foreground mb-5 max-w-sm mx-auto">
                   Novas oportunidades aparecerão aqui conforme sua agenda, carteira e processos comerciais forem atualizados.
@@ -631,7 +631,7 @@ export default function AbaHoje({ clients, dailyClose, onClientsChange, isMobile
                 <div className="flex items-center justify-center gap-3 flex-wrap">
                   {onGoToRotina && (
                     <button onClick={onGoToRotina}
-                      className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-[#005BFF] border border-[#005BFF] rounded-xl hover:bg-status-info-surface transition-colors">
+                      className="flex items-center gap-1.5 px-4 py-2 text-body-sm font-bold text-status-info-text border border-[#005BFF] rounded-xl hover:bg-status-info-surface transition-colors">
                       <Sparkles className="w-4 h-4" /> Ver Rotina do Dia
                     </button>
                   )}

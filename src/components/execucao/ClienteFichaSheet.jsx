@@ -70,7 +70,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
             <User className="w-10 h-10 text-text-disabled mx-auto" />
             <p className="text-[14px] font-bold text-muted-foreground">Cliente não encontrado na Carteira de Clientes.</p>
             <button onClick={onClose}
-              className="text-[12px] font-bold text-[#005BFF] hover:underline">
+              className="text-[12px] font-bold text-status-info-text hover:underline">
               Voltar
             </button>
           </div>
@@ -80,7 +80,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
           <div className="mt-6 space-y-6">
             {/* Cabeçalho do cliente */}
             <div className="flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center text-[16px] font-bold text-[#005BFF]">
+              <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center text-[16px] font-bold text-status-info-text">
                 {(cliente.name || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase()}
               </div>
               <div>

@@ -92,7 +92,7 @@ function OportunidadeCard({ cliente, onWhatsApp, onLigar, onFicha, onExecutar })
             <p className="text-sm font-bold text-foreground">{objetivo}</p>
           </div>
           <div className="bg-status-info-surface rounded-2xl p-4">
-            <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide mb-1">Próximo passo</p>
+            <p className="text-caption text-status-info-text font-bold uppercase tracking-wide mb-1">Próximo passo</p>
             <p className="text-sm font-bold text-[#031B3D]">{proximoPasso}</p>
           </div>
         </div>

@@ -138,7 +138,7 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
       <DialogContent className="sm:max-w-md">
         <DialogHeader>
           <DialogTitle className="text-[#0F172A] font-bold flex items-center gap-2">
-            <CalendarDays className="w-5 h-5 text-[#005BFF]" />
+            <CalendarDays className="w-5 h-5 text-status-info-text" />
             Regularizar Fechamento
           </DialogTitle>
         </DialogHeader>

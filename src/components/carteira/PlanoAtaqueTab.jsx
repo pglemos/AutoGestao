@@ -239,7 +239,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
   if (missaoSelecionada) {
     return (
       <div className="space-y-6">
-        <button type="button" onClick={() => setMissaoSelecionada(null)} className="flex items-center gap-2 text-sm font-semibold text-[#005BFF]">
+        <button type="button" onClick={() => setMissaoSelecionada(null)} className="flex items-center gap-2 text-sm font-semibold text-status-info-text">
           <ArrowLeft className="h-4 w-4" /> Voltar ao Plano de Ataque
         </button>
         <section className="rounded-2xl border border-border-subtle bg-white p-6">
@@ -248,7 +248,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
             <div>
               <h2 className="text-xl font-black text-[#031B3D]">{missaoSelecionada.nome}</h2>
               <p className="mt-1 text-sm text-muted-foreground">{missaoSelecionada.objetivo}</p>
-              <p className="mt-2 text-sm font-semibold text-[#005BFF]">{missaoSelecionada.clientes.length} cliente(s) identificado(s) pelos dados atuais.</p>
+              <p className="mt-2 text-sm font-semibold text-status-info-text">{missaoSelecionada.clientes.length} cliente(s) identificado(s) pelos dados atuais.</p>
             </div>
           </div>
         </section>
@@ -275,7 +275,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
       <section className="rounded-2xl border border-border-subtle bg-white p-5">
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div><h2 className="text-lg font-black text-[#031B3D]">Campanhas e condições</h2><p className="mt-1 text-sm text-muted-foreground">Cadastre um feirão, desconto ou bônus de troca e inicie uma missão para os clientes ativos elegíveis.</p></div>
-          <span className="rounded-full bg-status-info-surface px-3 py-1 text-xs font-bold text-[#005BFF]">{campanhas.length} ativa(s)</span>
+          <span className="rounded-full bg-status-info-surface px-3 py-1 text-xs font-bold text-status-info-text">{campanhas.length} ativa(s)</span>
         </div>
         <form onSubmit={salvarCampanha} className="mt-4 grid grid-cols-1 gap-3 rounded-xl bg-slate-50 p-4 md:grid-cols-2">
           <select aria-label="Tipo da campanha" value={campanhaForm.tipo} onChange={event => setCampanhaForm(prev => ({ ...prev, tipo: event.target.value }))} className="h-10 rounded-xl border border-border bg-white px-3 text-sm">
@@ -301,7 +301,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           {campanhas.map(campanha => {
             const { resultado } = candidatosElegiveis(clientes, campanha);
             const elegiveis = resultado.eligible;
-            return <div key={campanha.id} className="rounded-xl border border-border-subtle p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-[#031B3D]">{campanha.titulo}</p><p className="mt-1 text-xs text-muted-foreground">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-slate-100 px-2 py-1 text-caption font-bold text-muted-foreground">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#005BFF] px-3 py-2 text-xs font-bold text-[#005BFF] disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} cliente(s)</button></div>;
+            return <div key={campanha.id} className="rounded-xl border border-border-subtle p-4"><div className="flex items-start justify-between gap-3"><div><p className="text-sm font-black text-[#031B3D]">{campanha.titulo}</p><p className="mt-1 text-xs text-muted-foreground">{campanha.descricao || "Condição comercial cadastrada para a carteira."}</p></div><span className="rounded-full bg-slate-100 px-2 py-1 text-caption font-bold text-muted-foreground">{campanha.tipo}</span></div><button type="button" disabled={!elegiveis || Boolean(missionBlock) || iniciando} onClick={() => iniciarCampanha(campanha)} className="mt-3 flex w-full items-center justify-center gap-2 rounded-xl border border-[#005BFF] px-3 py-2 text-xs font-bold text-status-info-text disabled:cursor-not-allowed disabled:opacity-40"><Zap className="h-3.5 w-3.5" /> Iniciar para {elegiveis} cliente(s)</button></div>;
           })}
         </div>
         {campanhas.length === 0 && <p className="mt-4 rounded-xl border border-dashed border-border p-5 text-center text-sm text-muted-foreground">Nenhuma campanha ativa cadastrada para esta loja.</p>}
@@ -313,7 +313,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           <p className="font-bold">{activeMission.tipo_missao}</p>
           <p className="mt-1 text-sm text-blue-100">{activeMission.mensagens_enviadas || 0}/{activeMission.total_clientes || 0} contatos registrados</p>
           {RESUMABLE_STATUSES.includes(activeMission.status) && missaoRecuperada && (
-            <button type="button" onClick={retomarMissaoRecuperada} className="mt-3 rounded-xl bg-white px-4 py-2 text-xs font-bold text-[#005BFF] hover:bg-status-info-surface">
+            <button type="button" onClick={retomarMissaoRecuperada} className="mt-3 rounded-xl bg-white px-4 py-2 text-xs font-bold text-status-info-text hover:bg-status-info-surface">
               Continuar missão
             </button>
           )}
@@ -328,7 +328,7 @@ export default function PlanoAtaqueTab({ clientes = [], missaoAtiva, onIniciarMi
           {missions.filter((mission) => mission.clientes.length > 0).map((mission) => (
             <button key={mission.id} type="button" onClick={() => setMissaoSelecionada(mission)} className="rounded-2xl border border-border-subtle bg-white p-4 text-left transition hover:border-[#005BFF]">
               <div className="mb-3 flex items-start justify-between"><span className="text-2xl" aria-hidden="true">{mission.icone}</span><span className={`rounded-full px-2 py-0.5 text-caption font-bold ${prioridadeColor(mission.prioridade)}`}>{mission.prioridade}</span></div>
-              <p className="text-sm font-bold text-[#031B3D]">{mission.nome}</p><p className="mt-1 text-xs text-muted-foreground">{mission.objetivo}</p><p className="mt-3 border-t border-slate-50 pt-2 text-xs font-bold text-[#005BFF]">{mission.clientes.length} cliente(s)</p>
+              <p className="text-sm font-bold text-[#031B3D]">{mission.nome}</p><p className="mt-1 text-xs text-muted-foreground">{mission.objetivo}</p><p className="mt-3 border-t border-slate-50 pt-2 text-xs font-bold text-status-info-text">{mission.clientes.length} cliente(s)</p>
             </button>
           ))}
         </div>

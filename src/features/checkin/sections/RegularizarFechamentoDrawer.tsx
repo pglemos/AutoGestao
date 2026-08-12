@@ -186,7 +186,7 @@ export function RegularizarFechamentoDrawer({
       <div className="relative z-10 flex w-full max-w-4xl max-h-[90vh] flex-col overflow-hidden rounded-2xl bg-[#F8FAFC] shadow-2xl">
           {/* Header */}
           <div className="flex flex-shrink-0 items-center gap-3 border-b border-border bg-white px-5 py-4">
-            <CalendarDays className="h-5 w-5 shrink-0 text-[#005BFF]" />
+            <CalendarDays className="h-5 w-5 shrink-0 text-status-info-text" />
             <div className="min-w-0 flex-1">
               <div className="flex flex-wrap items-center gap-2">
                 <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>

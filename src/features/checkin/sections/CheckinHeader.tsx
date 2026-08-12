@@ -520,7 +520,7 @@ return (
           actions={
             <>
               <div className="flex min-w-0 items-center gap-2 rounded-xl border border-border bg-white px-3 py-1.5 shadow-sm">
-                <CalendarDays size={18} className="shrink-0 text-[#005BFF]" aria-hidden="true" />
+                <CalendarDays size={18} className="shrink-0 text-status-info-text" aria-hidden="true" />
                 <div className="min-w-0">
                   <p className="text-caption font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
                   <p className="truncate text-body-sm font-bold text-[#071822]">{dateStr}</p>
@@ -528,7 +528,7 @@ return (
                 <button
                   type="button"
                   onClick={() => setCustomReferenceDate('')}
-                  className="ml-1 inline-flex h-8 shrink-0 items-center gap-2 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[12px] font-bold text-[#071822] shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]"
+                  className="ml-1 inline-flex h-8 shrink-0 items-center gap-2 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[12px] font-bold text-[#071822] shadow-sm hover:border-[#005BFF] hover:text-status-info-text"
                 >
                   Ver data atual
                 </button>
@@ -536,7 +536,7 @@ return (
               <button
                 type="button"
                 onClick={handleViewPreviousHistory}
-                className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
+                className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-status-info-text"
               >
                 <History size={15} aria-hidden="true" />
                 Histórico de Fechamentos
@@ -571,7 +571,7 @@ previousCard.type === 'previous_done' ? 'text-status-success-text' : 'text-statu
 </div>
 </div>
 <div className="flex shrink-0 gap-2">
-<button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-white px-3 text-caption font-bold text-muted-foreground shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]">
+<button type="button" onClick={handleViewPreviousHistory} className="inline-flex h-8 items-center justify-center rounded-lg border border-border bg-white px-3 text-caption font-bold text-muted-foreground shadow-sm hover:border-[#005BFF] hover:text-status-info-text">
 Ver histórico
 </button>
 <button type="button" onClick={handleAdjustPrevious} className={`inline-flex h-8 items-center justify-center rounded-lg px-3 text-caption font-bold shadow-sm ${
@@ -588,7 +588,7 @@ previousCard.type === 'previous_done' ? 'bg-brand-primary text-white hover:bg-br
 <section aria-labelledby="checkin-operational-date" className="rounded-xl border border-border bg-white px-4 py-3 shadow-mx-lg md:hidden">
 <div className="flex flex-wrap items-center justify-between gap-3">
 <div className="flex min-w-0 items-center gap-2">
-<CalendarDays size={18} className="shrink-0 text-[#005BFF]" aria-hidden="true" />
+<CalendarDays size={18} className="shrink-0 text-status-info-text" aria-hidden="true" />
 <div className="min-w-0">
 <p className="text-caption font-bold uppercase tracking-[0.08em] text-[#526B7A]">Data operacional principal</p>
 <h2 id="checkin-operational-date" className="truncate text-body font-bold text-[#071822] sm:text-h5">{dateStr}</h2>
@@ -597,7 +597,7 @@ previousCard.type === 'previous_done' ? 'bg-brand-primary text-white hover:bg-br
 <button
 type="button"
 onClick={() => setCustomReferenceDate('')}
-className="inline-flex h-9 items-center gap-2 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[12px] font-bold text-[#071822] shadow-sm hover:border-[#005BFF] hover:text-[#005BFF]"
+className="inline-flex h-9 items-center gap-2 rounded-lg border border-[#DFE0E1] bg-white px-3 text-[12px] font-bold text-[#071822] shadow-sm hover:border-[#005BFF] hover:text-status-info-text"
 >
 Ver data atual
 </button>

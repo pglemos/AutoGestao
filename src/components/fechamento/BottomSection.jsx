@@ -303,7 +303,7 @@ export default function BottomSection({
         <div className="bg-white rounded-2xl border border-border shadow-sm p-5">
           <p className="text-caption font-bold text-muted-foreground uppercase tracking-[0.15em] mb-4">Resumo do Dia Anterior</p>
           <div className="flex items-start gap-2 divide-x divide-border-subtle">
-            <StatItem value={totalLeads} label="Leads Recebidos" color="text-[#005BFF]" />
+            <StatItem value={totalLeads} label="Leads Recebidos" color="text-status-info-text" />
             <div className="flex-1 flex flex-col items-center gap-1.5 pl-2">
               <span className="text-h2 font-bold leading-none tabular-nums text-status-info-text">{totalAtend}</span>
               <span className="text-caption text-[#64748B] text-center leading-tight font-medium">Atendimentos</span>
@@ -370,7 +370,7 @@ export default function BottomSection({
 
             <button
               onClick={() => setDisciplinaModalOpen(true)}
-              className="text-[12px] text-[#005BFF] font-semibold hover:underline flex items-center gap-1 transition-colors"
+              className="text-[12px] text-status-info-text font-semibold hover:underline flex items-center gap-1 transition-colors"
             >
               Saiba mais <Info className="w-3 h-3" />
             </button>
@@ -419,7 +419,7 @@ export default function BottomSection({
         {/* Aviso: fechamento concluído, janela D+1 aberta */}
         {jaFinalizado && d1WindowOpen && (
           <div className="flex items-center gap-2 bg-status-info-surface border border-status-info/30 rounded-xl px-4 py-2.5 mb-4">
-            <Clock className="w-4 h-4 text-[#005BFF] flex-shrink-0" />
+            <Clock className="w-4 h-4 text-status-info-text flex-shrink-0" />
             <p className="text-[12px] font-semibold text-[#1e3a5f]">
               Fechamento concluído. Os Agendamentos D+1 podem ser ajustados até 09h30 de {d1DateExibicao}.
             </p>

@@ -135,7 +135,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
           <div className="mt-3 space-y-4">
             {/* Tipo selecionado */}
             <div className="flex items-center justify-between">
-              <span className="text-[12px] font-bold text-[#005BFF] bg-status-info-surface px-3 py-1 rounded-full">{tipo}</span>
+              <span className="text-[12px] font-bold text-status-info-text bg-status-info-surface px-3 py-1 rounded-full">{tipo}</span>
               <button onClick={() => setStep("tipo")} className="text-[12px] text-muted-foreground hover:text-muted-foreground underline">Mudar tipo</button>
             </div>
 
@@ -169,7 +169,7 @@ export default function NovaAtividadeModal({ open, onClose, clients, onCriada, v
                     <UserX className="w-4 h-4 text-status-warning-text flex-shrink-0" />
                     <div className="min-w-0 flex-1">
                       <p className="text-[12px] font-semibold text-status-warning-text">Cliente não encontrado.</p>
-                      <Link to="/carteira" onClick={handleClose} className="text-caption text-[#005BFF] underline">
+                      <Link to="/carteira" onClick={handleClose} className="text-caption text-status-info-text underline">
                         Abrir Carteira de Clientes para cadastrar depois
                       </Link>
                     </div>

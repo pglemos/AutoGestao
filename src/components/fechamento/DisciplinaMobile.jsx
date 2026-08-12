@@ -129,7 +129,7 @@ export default function DisciplinaMobile({
 
           <button
             onClick={() => setModalOpen(true)}
-            className="text-[12px] text-[#005BFF] font-semibold hover:underline flex items-center gap-1 transition-colors"
+            className="text-[12px] text-status-info-text font-semibold hover:underline flex items-center gap-1 transition-colors"
           >
             Saiba mais <Info className="w-3 h-3" />
           </button>

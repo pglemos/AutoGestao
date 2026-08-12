@@ -150,7 +150,7 @@ export default function RecuperarVendas({ funis }) {
                   <span className="ml-1">({conv}% conversão)</span>
                 </div>
               </div>
-              <Link to={msg.link} className="flex items-center gap-1 text-[12px] font-bold text-[#005BFF] hover:underline mt-auto">
+              <Link to={msg.link} className="flex items-center gap-1 text-[12px] font-bold text-status-info-text hover:underline mt-auto">
                 {msg.botao} <ArrowRight className="w-3.5 h-3.5" />
               </Link>
             </div>

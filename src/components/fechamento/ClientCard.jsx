@@ -673,7 +673,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
           <td className="px-4 py-3">
             <div className="flex items-center gap-1.5" onClick={e => e.stopPropagation()}>
               <button onClick={(e) => canEdit && openEdit(c, e)} disabled={!canEdit}
-                className={`p-1.5 rounded-lg transition-colors ${canEdit ? "hover:bg-status-info-surface text-[#005BFF]" : "text-slate-200 cursor-not-allowed"}`}>
+                className={`p-1.5 rounded-lg transition-colors ${canEdit ? "hover:bg-status-info-surface text-status-info-text" : "text-slate-200 cursor-not-allowed"}`}>
                 <Pencil className="w-3.5 h-3.5" />
               </button>
               <button onClick={(e) => { e.stopPropagation(); canDelete && setDeleteConfirm({ id: c.id, name: c.nome }); }} disabled={!canDelete}
@@ -714,7 +714,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
 
         {d1Editavel && (
           <div className="px-6 py-2.5 bg-status-info-surface border-b border-status-info/20 flex items-center gap-2">
-            <Info className="w-4 h-4 text-[#005BFF] flex-shrink-0" />
+            <Info className="w-4 h-4 text-status-info-text flex-shrink-0" />
             <p className="text-[12px] font-semibold text-[#1e3a5f]">
               Fechamento concluído. Somente registros <span className="text-status-info-text">D+1</span> podem ser editados.
             </p>
@@ -769,7 +769,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             </DialogTitle>
             {modoD1 ? (
               <div className="mt-1.5 px-3 py-2 bg-status-info-surface border border-status-info/30 rounded-lg flex items-start gap-2">
-                <CalendarClock className="w-4 h-4 text-[#005BFF] mt-0.5 flex-shrink-0" />
+                <CalendarClock className="w-4 h-4 text-status-info-text mt-0.5 flex-shrink-0" />
                 <p className="text-[12px] font-semibold text-[#1e3a5f]">
                   Este cadastro será considerado um Agendamento D+1 e salvo na Carteira de Clientes.
                 </p>

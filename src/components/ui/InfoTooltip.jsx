@@ -21,7 +21,7 @@ export default function InfoTooltip({ text }) {
         onMouseEnter={() => setVisible(true)}
         onMouseLeave={() => setVisible(false)}
         onClick={() => setVisible(v => !v)}
-        className="text-text-disabled hover:text-[#005BFF] transition-colors focus:outline-none"
+        className="text-text-disabled hover:text-status-info-text transition-colors focus:outline-none"
         aria-label="Mais informações"
       >
         <Info className="w-3.5 h-3.5" />

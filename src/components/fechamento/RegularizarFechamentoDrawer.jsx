@@ -612,7 +612,7 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
         <div className="pointer-events-auto w-full sm:w-[720px] h-full bg-[#F8FAFC] flex flex-col shadow-2xl sm:rounded-l-2xl overflow-hidden">
           {/* Header */}
           <div className="bg-white border-b border-border px-5 py-4 flex items-center gap-3 flex-shrink-0">
-            <CalendarDays className="w-5 h-5 text-[#005BFF] flex-shrink-0" />
+            <CalendarDays className="w-5 h-5 text-status-info-text flex-shrink-0" />
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 flex-wrap">
                 <h2 className="text-[16px] font-bold text-[#0F172A]">Regularizar Fechamento</h2>

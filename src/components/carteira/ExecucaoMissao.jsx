@@ -204,7 +204,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             {erro}
           </div>
         )}
-        <button onClick={handleVoltar} className="flex items-center gap-1.5 text-sm text-[#005BFF] hover:underline">
+        <button onClick={handleVoltar} className="flex items-center gap-1.5 text-sm text-status-info-text hover:underline">
           <ArrowLeft className="w-4 h-4" /> Plano de Ataque
         </button>
         <div className="bg-white border border-border-subtle rounded-2xl p-8 text-center space-y-4">
@@ -217,7 +217,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
               <p className="text-xs text-muted-foreground">Total</p>
             </div>
             <div className="bg-status-info-surface rounded-xl p-3">
-              <p className="text-2xl font-black text-[#005BFF]">{enviados}</p>
+              <p className="text-2xl font-black text-status-info-text">{enviados}</p>
               <p className="text-xs text-muted-foreground">Enviadas</p>
             </div>
             <div className="bg-slate-50 rounded-xl p-3">
@@ -245,7 +245,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
         </div>
       )}
       <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
-        <button onClick={handleVoltar} className="hover:text-[#005BFF] transition-colors">Carteira de Clientes</button>
+        <button onClick={handleVoltar} className="hover:text-status-info-text transition-colors">Carteira de Clientes</button>
         <ChevronRight className="w-3 h-3" />
         <span>Plano de Ataque</span>
         <ChevronRight className="w-3 h-3" />
@@ -266,7 +266,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             <p className="text-xs text-muted-foreground">Total</p>
           </div>
           <div className="text-center">
-            <p className="text-xl font-black text-[#005BFF]">{enviados}</p>
+            <p className="text-xl font-black text-status-info-text">{enviados}</p>
             <p className="text-xs text-muted-foreground">Enviadas</p>
           </div>
           <div className="text-center">
@@ -291,7 +291,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             <p className="text-xs font-black text-muted-foreground uppercase tracking-wide">Cliente {indice + 1} de {total}</p>
           </div>
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center text-base font-black text-[#005BFF]">
+            <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center text-base font-black text-status-info-text">
               {(clienteAtual.nome || "?").split(" ").slice(0, 2).map(p => p[0]).join("").toUpperCase()}
             </div>
             <div>
@@ -325,7 +325,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
             <Button variant="outline" onClick={pularCliente} disabled={persistindo} className="rounded-xl gap-1.5 text-sm text-muted-foreground">
               <SkipForward className="w-4 h-4" /> Pular
             </Button>
-            <Button onClick={marcarEnviado} disabled={persistindo} className="flex-1 rounded-xl bg-status-info-surface text-[#005BFF] hover:bg-status-info-surface font-bold gap-1.5 text-sm border border-status-info/20">
+            <Button onClick={marcarEnviado} disabled={persistindo} className="flex-1 rounded-xl bg-status-info-surface text-status-info-text hover:bg-status-info-surface font-bold gap-1.5 text-sm border border-status-info/20">
               Mensagem enviada →
             </Button>
           </div>
@@ -342,7 +342,7 @@ export default function ExecucaoMissao({ missao, clientes, onVoltar, onConcluida
           <div className="grid grid-cols-1 gap-1.5">
             {RESULTADOS.map(r => (
               <button key={r} onClick={() => setResultado(r)}
-                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-status-info-surface text-[#005BFF] font-semibold" : "border-border-subtle text-muted-foreground hover:bg-slate-50"}`}>
+                className={`text-left px-3 py-2.5 rounded-xl border text-sm transition-all ${resultado === r ? "border-[#005BFF] bg-status-info-surface text-status-info-text font-semibold" : "border-border-subtle text-muted-foreground hover:bg-slate-50"}`}>
                 {r}
               </button>
             ))}

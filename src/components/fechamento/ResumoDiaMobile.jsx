@@ -19,7 +19,7 @@ export default function ResumoDiaMobile({
       <p className="text-caption font-bold text-muted-foreground uppercase tracking-[0.15em]">Resumo do Dia</p>
 
       <div className="grid grid-cols-2 gap-3">
-        <Item value={totalLeads} label="Leads Recebidos" color="text-[#005BFF]" />
+        <Item value={totalLeads} label="Leads Recebidos" color="text-status-info-text" />
         <Item value={totalAtend} label="Atendimentos" color="text-status-info-text" />
         <Item value={totalAgend} label="Agendamentos D+1" color="text-[#F59E0B]" />
         <Item value={totalVendas} label="Vendas Realizadas" color="text-[#EF4444]" />

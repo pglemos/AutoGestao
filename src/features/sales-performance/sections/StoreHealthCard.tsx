@@ -25,7 +25,7 @@ export function StoreHealthCard({ reaching }: Props) {
           <Typography
             variant="p"
             tone="white"
-            className="opacity-60 text-xs font-bold italic leading-relaxed"
+            className=" text-xs font-bold italic leading-relaxed"
           >
             "Ritmo operacional sincronizado com a meta projetada."
           </Typography>

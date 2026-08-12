@@ -166,7 +166,7 @@ export default function AiDiagnostics() {
                   ) : <div className="h-full flex flex-col items-center justify-center py-20 text-center space-y-mx-md"><div className="w-mx-3xl h-mx-3xl rounded-mx-full border-4 border-border-subtle border-t-brand-primary animate-spin" aria-hidden="true" /><Typography variant="caption" tone="muted" className="animate-pulse">ANALISANDO MALHA...</Typography></div>}
                 </AnimatePresence>
               </div>
-              <footer className="pt-8 border-t border-border-subtle mt-auto"><Typography variant="tiny" tone="muted" className="text-center block opacity-60">Referência operacional: critério 20/60/33</Typography></footer>
+              <footer className="pt-8 border-t border-border-subtle mt-auto"><Typography variant="tiny" tone="muted" className="text-center block">Referência operacional: critério 20/60/33</Typography></footer>
             </Card>
           </aside>
         </div>

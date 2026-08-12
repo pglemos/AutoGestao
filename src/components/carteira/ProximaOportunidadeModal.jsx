@@ -58,7 +58,7 @@ export default function ProximaOportunidadeModal({
                   )}
                 </div>
                 <div>
-                  <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Próximo passo</p>
+                  <p className="text-caption text-status-info-text font-bold uppercase tracking-wide">Próximo passo</p>
                   <p className="text-sm font-bold text-[#031B3D]">{proximoPasso}</p>
                   {objetivo && <p className="text-caption text-muted-foreground mt-0.5">{objetivo}</p>}
                 </div>

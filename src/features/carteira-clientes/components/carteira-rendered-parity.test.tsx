@@ -121,6 +121,12 @@ const OFF_CANONIC: Record<string, string> = {
 // congelada mantém os literais originais; normaliza ambos para os mesmos
 // lexemas antes de comparar o DOM.
 const COLOR_MIGRATION_MAP: Record<string, string> = {
+  // INTENTIONAL_ACCESSIBILITY_DELTA — o azul literal do protótipo rende
+  // #005BFF, que sobre a superfície info (#e1e9f6) dá 4.36:1 e reprova o
+  // mínimo AA de 4.5:1 para texto normal. O token `-text` entrega 6.18:1 ali e
+  // 7.54:1 sobre branco. Geometria, tipografia e estrutura seguem idênticas —
+  // o delta é só o degrau de cor exigido pelo WCAG 2.2.
+  'text-[#005BFF]': 'text-status-info-text',
   'bg-blue-50': 'bg-status-info-surface',
   'bg-blue-100': 'bg-status-info-surface',
   'bg-blue-700': 'bg-status-info',

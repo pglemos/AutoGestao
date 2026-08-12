@@ -119,7 +119,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
       <div className="flex flex-col gap-3 p-4 sm:hidden">
         <div className="flex items-start justify-between gap-2">
           <div className="flex items-center gap-2.5 flex-1 min-w-0">
-            <div className="w-9 h-9 rounded-full bg-status-info-surface flex items-center justify-center text-xs font-black text-[#005BFF] shrink-0">{iniciais}</div>
+            <div className="w-9 h-9 rounded-full bg-status-info-surface flex items-center justify-center text-xs font-black text-status-info-text shrink-0">{iniciais}</div>
             <div className="flex-1 min-w-0">
               <p className="text-sm font-bold text-[#031B3D] truncate">{cliente.nome}</p>
               <p className="text-caption text-muted-foreground truncate">{canal} · {cliente.veiculo_interesse || "Sem veículo"}</p>
@@ -136,7 +136,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
             <p className="text-caption font-semibold text-foreground mt-0.5 leading-snug">{situacao}</p>
           </div>
           <div className="bg-status-info-surface rounded-xl px-2.5 py-2">
-            <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
+            <p className="text-caption text-status-info-text font-bold uppercase tracking-wide">Mentor recomenda</p>
             <p className="text-caption font-semibold text-[#031B3D] mt-0.5 leading-snug">{proximoPasso}</p>
           </div>
         </div>
@@ -159,7 +159,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
       {/* DESKTOP */}
       <div className="hidden sm:flex items-stretch divide-x divide-border-subtle">
         <div className="flex items-center gap-3 px-4 py-3.5 w-52 shrink-0">
-          <div className="w-10 h-10 rounded-full bg-status-info-surface flex items-center justify-center text-sm font-black text-[#005BFF] shrink-0">{iniciais}</div>
+          <div className="w-10 h-10 rounded-full bg-status-info-surface flex items-center justify-center text-sm font-black text-status-info-text shrink-0">{iniciais}</div>
           <div className="min-w-0">
             <p className="text-sm font-bold text-[#031B3D] truncate">{cliente.nome}</p>
             <p className="text-caption text-muted-foreground truncate">{canal}</p>
@@ -183,7 +183,7 @@ function ClienteCard({ cliente, onExecutar, onFicha }) {
             <p className="text-caption font-semibold text-muted-foreground leading-snug mt-0.5">{objetivo}</p>
           </div>
           <div>
-            <p className="text-caption text-[#005BFF] font-bold uppercase tracking-wide">Mentor recomenda</p>
+            <p className="text-caption text-status-info-text font-bold uppercase tracking-wide">Mentor recomenda</p>
             <p className="text-caption font-bold text-[#031B3D] leading-snug mt-0.5">{proximoPasso}</p>
           </div>
           <p className="text-caption text-muted-foreground italic leading-snug">{explicacao}</p>
@@ -351,7 +351,7 @@ function ChipsFiltrosAtivos({ filtros, onRemover }) {
   return (
     <div className="flex flex-wrap gap-1.5">
       {chips.map(chip => (
-        <span key={chip.key} className="flex items-center gap-1 text-caption font-semibold px-2.5 py-1 rounded-lg bg-status-info-surface text-[#005BFF] border border-status-info/30">
+        <span key={chip.key} className="flex items-center gap-1 text-caption font-semibold px-2.5 py-1 rounded-lg bg-status-info-surface text-status-info-text border border-status-info/30">
           {chip.label}
           <button onClick={() => onRemover(chip.key)}><X className="w-3 h-3" /></button>
         </span>
@@ -474,8 +474,8 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
           return (
             <button key={card.id} onClick={() => setCardAtivo(card.id)}
               className={`text-left p-3.5 rounded-2xl border transition-all ${ativo ? "border-[#005BFF] bg-status-info-surface shadow-sm" : "border-border-subtle bg-white hover:border-status-info/20 hover:bg-status-info-surface/30"}`}>
-              <p className={`text-2xl font-black mb-0.5 ${ativo ? "text-[#005BFF]" : "text-[#031B3D]"}`}>{count}</p>
-              <p className={`text-xs font-bold leading-snug ${ativo ? "text-[#005BFF]" : "text-muted-foreground"}`}>{card.label}</p>
+              <p className={`text-2xl font-black mb-0.5 ${ativo ? "text-status-info-text" : "text-[#031B3D]"}`}>{count}</p>
+              <p className={`text-xs font-bold leading-snug ${ativo ? "text-status-info-text" : "text-muted-foreground"}`}>{card.label}</p>
               <p className="text-caption text-muted-foreground mt-0.5">{card.sublabel}</p>
             </button>
           );
@@ -492,7 +492,7 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
             {clientesFiltrados.length} cliente{clientesFiltrados.length !== 1 ? "s" : ""} · {cardConfig.label}
           </p>
           {cardAtivo !== "hoje" && (
-            <button onClick={() => setCardAtivo("hoje")} className="text-xs text-[#005BFF] hover:underline">Prioridade hoje</button>
+            <button onClick={() => setCardAtivo("hoje")} className="text-xs text-status-info-text hover:underline">Prioridade hoje</button>
           )}
         </div>
 
@@ -501,7 +501,7 @@ export default function CarteiraAtivaTab({ clientes = [], onNovoCliente: _onNovo
             <p className="text-4xl mb-3">{cardAtivo === "hoje" ? "✅" : "📋"}</p>
             <p className="text-sm font-semibold text-muted-foreground">{cardConfig.vazio}</p>
             {cardAtivo === "hoje" && (
-              <button onClick={() => setCardAtivo("todos")} className="text-xs text-[#005BFF] hover:underline mt-2 block mx-auto">Ver todos os clientes</button>
+              <button onClick={() => setCardAtivo("todos")} className="text-xs text-status-info-text hover:underline mt-2 block mx-auto">Ver todos os clientes</button>
             )}
           </div>
         ) : (

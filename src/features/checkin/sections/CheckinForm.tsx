@@ -350,7 +350,7 @@ return (
           {/* 4 metrics: 2x2 grid on mobile, single row with dividers from sm+ */}
           <div className="grid grid-cols-2 gap-y-4 sm:flex sm:items-stretch sm:gap-y-0 sm:divide-x sm:divide-[#DFE0E1]">
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4 sm:first:pl-0">
-              <span className="text-h2 font-bold leading-none tabular-nums text-[#005BFF]">{display.leads}</span>
+              <span className="text-h2 font-bold leading-none tabular-nums text-status-info-text">{display.leads}</span>
               <span className="mt-1 text-caption font-semibold text-[#526B7A] text-center leading-tight">Leads Recebidos</span>
             </div>
             <div className="flex flex-col items-center gap-1 px-2 sm:flex-1 sm:px-4">
@@ -425,7 +425,7 @@ return (
 
                 <button
                   type="button"
-                  className="flex w-fit cursor-pointer items-center gap-1 border-none bg-transparent p-0 text-[12px] font-semibold text-[#005BFF] transition-colors hover:underline"
+                  className="flex w-fit cursor-pointer items-center gap-1 border-none bg-transparent p-0 text-[12px] font-semibold text-status-info-text transition-colors hover:underline"
                   onClick={() => setDisciplineModalOpen(true)}
                 >
                   Saiba mais
@@ -465,7 +465,7 @@ return (
               
               {/* SECTION 1: Fechamento básico — 70% */}
               <div className="space-y-2">
-                <h3 className="font-extrabold text-[#005BFF] flex items-center gap-1.5 uppercase tracking-wider text-caption">
+                <h3 className="font-extrabold text-status-info-text flex items-center gap-1.5 uppercase tracking-wider text-caption">
                   <Check size={14} className="stroke-[3]" /> 1. Fechamento básico — 70%
                 </h3>
                 <p>
@@ -619,7 +619,7 @@ return (
 
               {/* SECTION 7: Resumo rápido */}
               <div className="space-y-2 bg-[#F7F8F8] p-4 rounded-xl border border-[#DFE0E1]">
-                <h3 className="font-extrabold text-[#005BFF] uppercase tracking-wider text-caption">
+                <h3 className="font-extrabold text-status-info-text uppercase tracking-wider text-caption">
                   7. Resumo rápido
                 </h3>
                 <ul className="space-y-1.5 font-semibold text-[#071822]">
@@ -759,7 +759,7 @@ saving || submitBlockedByDeadline || editLockedWithoutLiberacao || fechamentoCon
           <button
             type="button"
             onClick={onOpenHistory}
-            className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-[#005BFF]"
+            className="inline-flex h-10 items-center gap-2 rounded-xl border border-border bg-white px-4 text-body-sm font-semibold text-muted-foreground shadow-sm transition-colors hover:border-[#005BFF] hover:text-status-info-text"
           >
             <History size={15} aria-hidden="true" />
             Histórico de Fechamentos

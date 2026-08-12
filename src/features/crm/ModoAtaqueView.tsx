@@ -148,7 +148,7 @@ function OportunidadeCard({
             <p className="text-sm font-bold text-foreground">{objetivo}</p>
           </div>
           <div className="rounded-2xl bg-status-info-surface p-4">
-            <p className="mb-1 text-caption font-bold uppercase tracking-wide text-[#005BFF]">Próximo passo</p>
+            <p className="mb-1 text-caption font-bold uppercase tracking-wide text-status-info-text">Próximo passo</p>
             <p className="text-sm font-bold text-foreground">{proximoPasso}</p>
           </div>
         </div>
@@ -296,7 +296,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
           {fila.length > 0 && (
             <div className="grid w-full max-w-lg grid-cols-2 gap-mx-sm sm:grid-cols-4">
               {[
-                { label: 'Executadas', value: stats.executadas, tone: 'bg-status-info-surface text-[#005BFF]' },
+                { label: 'Executadas', value: stats.executadas, tone: 'bg-status-info-surface text-status-info-text' },
                 { label: 'Visitas geradas', value: stats.visitas, tone: 'bg-green-50 text-status-success-text' },
                 { label: 'Propostas enviadas', value: stats.propostas, tone: 'bg-status-warning-surface text-status-warning-text' },
                 { label: 'Recuperações', value: stats.recuperacoes, tone: 'bg-status-info-surface text-status-info-text' },
@@ -387,7 +387,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
                       className={`rounded-xl border px-2.5 py-1 text-caption font-semibold transition-all ${
                         tom === t.id
                           ? 'border-[#005BFF] bg-[#005BFF] text-white'
-                          : 'border-border bg-white text-muted-foreground hover:border-status-info/40 hover:text-[#005BFF]'
+                          : 'border-border bg-white text-muted-foreground hover:border-status-info/40 hover:text-status-info-text'
                       }`}
                     >
                       {t.label}

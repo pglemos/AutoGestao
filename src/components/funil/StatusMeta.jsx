@@ -21,7 +21,7 @@ export default function StatusMeta({ indicadores, filtro }) {
           <Target className="w-5 h-5 text-text-disabled shrink-0" />
           <div>
             <p className="text-body-sm text-muted-foreground">Meta mensal não configurada.</p>
-            <Link to="/perfil" className="text-[12px] font-bold text-[#005BFF] hover:underline">Definir meta no perfil →</Link>
+            <Link to="/perfil" className="text-[12px] font-bold text-status-info-text hover:underline">Definir meta no perfil →</Link>
           </div>
         </div>
       ) : metaBatida ? (

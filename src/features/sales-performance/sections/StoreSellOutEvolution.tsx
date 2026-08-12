@@ -20,7 +20,7 @@ export function StoreSellOutEvolution({ chartData }: Props) {
       <CardHeader className="bg-gray-50/30 border-b border-border p-mx-10 flex flex-row items-center justify-between">
         <div>
           <CardTitle className="text-2xl uppercase">Evolução de Sell-out</CardTitle>
-          <CardDescription className="uppercase tracking-widest font-bold text-mx-micro mt-1 opacity-60">
+          <CardDescription className="uppercase tracking-widest font-bold text-mx-micro mt-1">
             VOLUME CONSOLIDADO MENSAL
           </CardDescription>
         </div>

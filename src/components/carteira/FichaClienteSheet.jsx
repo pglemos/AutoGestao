@@ -471,7 +471,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
             {/* ── BLOCO 1: CABEÇALHO ────────────────────────────────────── */}
             <div className="px-5 pt-5 pb-4 border-b border-border-subtle space-y-3">
               <div className="flex items-start gap-3">
-                <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center text-base font-black text-[#005BFF] shrink-0">
+                <div className="w-12 h-12 rounded-full bg-status-info-surface flex items-center justify-center text-base font-black text-status-info-text shrink-0">
                   {iniciais}
                 </div>
                 <div className="flex-1 min-w-0">
@@ -548,8 +548,8 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
               {!editando && (
                 <div className="bg-status-info-surface border border-status-info/30 rounded-2xl p-4 space-y-3">
                   <div className="flex items-center gap-2">
-                    <Zap className="w-4 h-4 text-[#005BFF]" />
-                    <p className="text-xs font-black text-[#005BFF] uppercase tracking-wide">Mentor Comercial</p>
+                    <Zap className="w-4 h-4 text-status-info-text" />
+                    <p className="text-xs font-black text-status-info-text uppercase tracking-wide">Mentor Comercial</p>
                   </div>
 
                   <div className="space-y-2">
@@ -617,7 +617,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                         </div>
                         <button
                           onClick={() => abrirAlterarPasso(p)}
-                          className="text-caption font-semibold text-[#005BFF] hover:underline whitespace-nowrap shrink-0"
+                          className="text-caption font-semibold text-status-info-text hover:underline whitespace-nowrap shrink-0"
                         >
                           Definir →
                         </button>
@@ -730,7 +730,7 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                             </div>
                             {h.descricao && <p className="text-xs text-muted-foreground mt-0.5">{h.descricao}</p>}
                             {h.resultado && (
-                              <span className="inline-block mt-1 text-caption font-semibold text-[#005BFF] bg-status-info-surface px-2 py-0.5 rounded-full">
+                              <span className="inline-block mt-1 text-caption font-semibold text-status-info-text bg-status-info-surface px-2 py-0.5 rounded-full">
                                 → {h.resultado}
                               </span>
                             )}

@@ -186,12 +186,12 @@ function CardVeiculo({ veiculo, compatíveis, onClick }) {
     <div className="bg-white border border-border-subtle rounded-2xl p-4 space-y-3 hover:shadow-sm transition-all">
       <div className="flex items-start gap-3">
         <div className="w-10 h-10 rounded-xl bg-status-info-surface flex items-center justify-center shrink-0">
-          <Car className="w-5 h-5 text-[#005BFF]" />
+          <Car className="w-5 h-5 text-status-info-text" />
         </div>
         <div className="flex-1 min-w-0">
           <p className="text-sm font-black text-[#031B3D] truncate">{veiculo.marca} {veiculo.modelo} {veiculo.versao}</p>
           <p className="text-xs text-muted-foreground">{veiculo.ano}{veiculo.preco ? ` · R$ ${veiculo.preco.toLocaleString("pt-BR")}` : ""}</p>
-          <p className="text-caption text-[#005BFF] font-semibold mt-0.5">{entradaLabel}</p>
+          <p className="text-caption text-status-info-text font-semibold mt-0.5">{entradaLabel}</p>
         </div>
       </div>
 
@@ -241,7 +241,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
 
   return (
     <div className="space-y-5">
-      <button onClick={onVoltar} className="flex items-center gap-1.5 text-sm text-[#005BFF] hover:underline">
+      <button onClick={onVoltar} className="flex items-center gap-1.5 text-sm text-status-info-text hover:underline">
         <ArrowLeft className="w-4 h-4" /> Voltar aos veículos
       </button>
 
@@ -268,7 +268,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
 
             return (
               <div key={c.id} className="bg-white border border-border-subtle rounded-2xl px-4 py-3 flex items-center gap-3">
-                <div className="w-9 h-9 rounded-full bg-status-info-surface flex items-center justify-center text-xs font-black text-[#005BFF] shrink-0">{iniciais}</div>
+                <div className="w-9 h-9 rounded-full bg-status-info-surface flex items-center justify-center text-xs font-black text-status-info-text shrink-0">{iniciais}</div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 flex-wrap">
                     <p className="text-sm font-semibold text-[#031B3D] truncate">{c.nome}</p>
@@ -395,7 +395,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
           <h2 className="text-lg font-black text-[#031B3D]">Veículos que chegaram</h2>
           <p className="text-sm text-muted-foreground mt-0.5">Encontre clientes da carteira interessados nos veículos recém-entrados.</p>
         </div>
-        <Button onClick={() => setModalOpen(true)} variant="outline" className="rounded-xl text-sm gap-1.5 border-[#005BFF] text-[#005BFF] hover:bg-status-info-surface whitespace-nowrap">
+        <Button onClick={() => setModalOpen(true)} variant="outline" className="rounded-xl text-sm gap-1.5 border-[#005BFF] text-status-info-text hover:bg-status-info-surface whitespace-nowrap">
           <Plus className="w-4 h-4" /> Registrar veículo
         </Button>
       </div>
@@ -440,7 +440,7 @@ export default function VeiculosChegaram({ clientes, onExecutar, onFicha }) {
           {veiculos.length > 0 ? (
             <button
               onClick={() => setFaixaPrecoAtiva("todas")}
-              className="mt-3 text-xs text-[#005BFF] font-bold hover:underline"
+              className="mt-3 text-xs text-status-info-text font-bold hover:underline"
             >
               Ver todas as faixas de preço
             </button>
