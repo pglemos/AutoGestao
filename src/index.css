@@ -21,6 +21,11 @@
  */
 --color-mx-black: hsl(var(--mx-brand-ink));
 --color-pure-black: hsl(var(--mx-black));
+/* O par branco existia só no nome: `text-pure-white` e
+   `fill: var(--color-pure-white)` não resolviam nada e caíam para a cor
+   herdada — preto. Renderizava texto preto sobre o verde da marca (4.31:1) e
+   pontos pretos em gráficos que deviam ser brancos. */
+--color-pure-white: hsl(var(--mx-neutral-0));
 --color-brand-primary: hsl(var(--mx-color-primary));
 --color-brand-primary-hover: hsl(var(--mx-color-primary-hover));
 --color-brand-secondary: hsl(var(--mx-brand-ink));
