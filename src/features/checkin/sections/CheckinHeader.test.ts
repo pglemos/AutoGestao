@@ -120,6 +120,11 @@ describe('CheckinHeader — regularização (P0-02/P0-06)', () => {
         expect(formSource.indexOf('FINALIZAR FECHAMENTO DO DIA')).toBeLessThan(formSource.lastIndexOf('Histórico de Fechamentos'))
     })
 
+    test('usa o token de texto de sucesso sobre superfícies claras', () => {
+        expect(headerSource).toContain('text-status-success-text')
+        expect(headerSource).not.toContain('text-[#00A89D]')
+    })
+
     test('não reutiliza observação operacional como motivo de regularização', () => {
         expect(headerSource).not.toContain('formValues.note')
         expect(headerSource).not.toContain('onNoteChange')
@@ -208,4 +213,3 @@ describe('CheckinHeader — Produção Zero com seletor de data', () => {
         expect(headerSource).toContain('c => c.reference_date === productionZeroDate && isSubmittedClosing(c)')
     })
 })
-

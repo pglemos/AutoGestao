@@ -251,7 +251,7 @@ function RegularizationDecisionModal({
             type="checkbox"
             checked={confirmed}
             onChange={(event) => onConfirmedChange(event.target.checked)}
-            className="mt-0.5 h-4 w-4 shrink-0 rounded border-border-strong text-status-success-text focus:ring-status-success"
+            className="mt-0.5 h-4 w-4 shrink-0 rounded border-border-control text-status-success-text focus:ring-status-success"
           />
           {confirmationLabel}
         </label>

@@ -614,11 +614,11 @@ Ver data atual
 <span className="grid h-5 w-5 place-items-center rounded-full border border-[#526B7A] text-[12px] font-bold text-[#526B7A]">i</span>
 </div>
 <p className="mt-3 text-body-sm font-bold text-[#334155]">
-Etapa {activeStep} de 4 <span className="text-[#526B7A]">•</span> <span className="text-[#00A89D]">{activeStepLabel}</span>
+Etapa {activeStep} de 4 <span className="text-[#526B7A]">•</span> <span className="text-status-success-text">{activeStepLabel}</span>
 </p>
 </div>
 <div className="text-right">
-<p className="text-h2 font-bold leading-none text-[#00A89D]">{progressPercent}%</p>
+<p className="text-h2 font-bold leading-none text-status-success-text">{progressPercent}%</p>
 <p className="mt-1 text-[12px] font-semibold text-[#526B7A]">preenchido</p>
 </div>
 </div>
@@ -635,10 +635,10 @@ return (
 <span className={item.done ? 'grid h-8 w-8 place-items-center rounded-full bg-[#34c759] text-body font-bold text-white' : active ? 'grid h-8 w-8 place-items-center rounded-full bg-[#00A89D] text-[14px] font-bold text-white' : 'grid h-8 w-8 place-items-center rounded-full border border-[#526B7A] text-[14px] font-bold text-[#526B7A]'}>
 {item.done ? '✓' : item.step}
 </span>
-<span className={active ? 'max-w-full text-caption font-bold leading-tight text-[#00A89D]' : 'max-w-full text-caption font-bold leading-tight text-[#071822]'}>
+<span className={active ? 'max-w-full text-caption font-bold leading-tight text-status-success-text' : 'max-w-full text-caption font-bold leading-tight text-[#071822]'}>
 {item.step}. {item.label}
 </span>
-<span className={active ? 'text-caption font-bold text-[#00A89D]' : 'text-caption font-semibold text-[#526B7A]'}>
+<span className={active ? 'text-caption font-bold text-status-success-text' : 'text-caption font-semibold text-[#526B7A]'}>
 {item.percent}%
 </span>
 </div>
@@ -695,7 +695,7 @@ return (
                         {/* Left Side: Date & Icon */}
                         <div className="flex items-center gap-3">
                           <div className={`grid h-9 w-9 place-items-center rounded-xl ${
-                            row.finalized ? 'bg-[#E8F3F2] text-[#00A89D]' : 'bg-[#fef2f2] text-[#EF4343]'
+                            row.finalized ? 'bg-[#E8F3F2] text-status-success-text' : 'bg-[#fef2f2] text-[#EF4343]'
                           }`}>
                             <CalendarClock size={18} />
                           </div>
@@ -717,7 +717,7 @@ return (
                           {row.finalized && (
                             <div className="flex items-center gap-3 text-xs flex-wrap">
                               <div>
-                                <span className="text-[#00A89D] font-bold">{row.leads}</span>{' '}
+                                <span className="text-status-success-text font-bold">{row.leads}</span>{' '}
                                 <span className="text-[#526B7A] font-semibold">leads</span>
                               </div>
                               <div className="h-3 w-px bg-[#DFE0E1]" />
@@ -732,7 +732,7 @@ return (
                               </div>
                               <div className="h-3 w-px bg-[#DFE0E1]" />
                               <div>
-                                <span className="text-[#00A89D] font-bold">{row.vendas}</span>{' '}
+                                <span className="text-status-success-text font-bold">{row.vendas}</span>{' '}
                                 <span className="text-[#526B7A] font-semibold">vendas</span>
                               </div>
                             </div>
@@ -752,7 +752,7 @@ return (
                             </span>
                           )}
                           {row.state === 'aprovado' && (
-                            <span className="inline-flex items-center rounded-full border border-[#00A89D] bg-[#E8F3F2] px-2.5 py-0.5 text-caption font-extrabold text-[#00A89D]">
+                            <span className="inline-flex items-center rounded-full border border-[#00A89D] bg-[#E8F3F2] px-2.5 py-0.5 text-caption font-extrabold text-status-success-text">
                               Regularizado Aprovado
                             </span>
                           )}
@@ -780,7 +780,7 @@ return (
                                   setDetailRequest(row.latestRequest)
                                   setActiveView('detail')
                                 }}
-                                className="inline-flex h-7 items-center justify-center rounded-lg border border-[#DFE0E1] bg-white px-3 text-caption font-bold text-[#00A89D] hover:bg-[#E8F3F2] transition-colors shadow-sm cursor-pointer"
+                                className="inline-flex h-7 items-center justify-center rounded-lg border border-[#DFE0E1] bg-white px-3 text-caption font-bold text-status-success-text hover:bg-[#E8F3F2] transition-colors shadow-sm cursor-pointer"
                               >
                                 {label[action]}
                               </button>

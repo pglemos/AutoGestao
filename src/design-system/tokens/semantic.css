@@ -42,6 +42,8 @@
 
   --mx-color-border: var(--mx-neutral-200);
   --mx-color-border-strong: var(--mx-neutral-300);
+  /* Contorno de controle interativo — ver --mx-neutral-450. */
+  --mx-color-border-control: var(--mx-neutral-450);
 
   /* ------------------------------------------------------------- primária */
   --mx-color-primary: var(--mx-green-600);

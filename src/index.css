@@ -193,6 +193,7 @@ to { height: 0; }
   --color-border-default: hsl(var(--mx-color-border));
   --color-border-subtle: hsl(var(--mx-neutral-100));
   --color-border-strong: hsl(var(--mx-color-border-strong));
+  --color-border-control: hsl(var(--mx-color-border-control));
 
   /* Typography Colors */
   --color-text-primary: hsl(var(--mx-color-text-primary));
@@ -325,6 +326,10 @@ to { height: 0; }
   --shadow-lg: var(--mx-shadow-lg);
   --shadow-xl: var(--mx-shadow-xl);
   --shadow-2xl: var(--mx-shadow-2xl);
+
+  --shadow-mx-focus-info: var(--mx-shadow-focus-info);
+  --shadow-mx-sticky-start: var(--mx-shadow-sticky-start);
+  --shadow-mx-sticky-end: var(--mx-shadow-sticky-end);
 
   --shadow-mx-sm: var(--mx-shadow-sm);
   --shadow-mx-md: var(--mx-shadow-md);

@@ -711,9 +711,9 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                     key={column}
                     className={`px-4 py-3.5 font-extrabold whitespace-nowrap truncate ${
                       column === 'Nome do Cliente'
-                        ? 'sticky left-0 aggression-z z-10 bg-[#F7F8F8] shadow-[6px_0_10px_-10px_rgba(15,23,42,0.15)]'
+                        ? 'sticky left-0 aggression-z z-10 bg-[#F7F8F8] shadow-mx-sticky-start'
                         : column === 'Ações'
-                          ? 'sticky right-0 z-10 bg-[#F7F8F8] shadow-[-6px_0_10px_-10px_rgba(15,23,42,0.15)]'
+                          ? 'sticky right-0 z-10 bg-[#F7F8F8] shadow-mx-sticky-end'
                           : ''
                     }`}
                     title={column}
@@ -747,7 +747,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                           isExpanded ? 'bg-[#F7F8F8]/50' : 'bg-white'
                         }`}
                       >
-                        <td className="sticky left-0 z-10 whitespace-nowrap bg-inherit px-4 py-3 font-bold text-[#00A89D] shadow-[6px_0_10px_-10px_rgba(15,23,42,0.15)]">
+                        <td className="sticky left-0 z-10 whitespace-nowrap bg-inherit px-4 py-3 font-bold text-[#00A89D] shadow-mx-sticky-start">
                           <div className="flex items-center gap-1.5">
                             {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
                             <span className="truncate" title={row.nomeCliente}>{row.nomeCliente}</span>
@@ -775,7 +775,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
                         <td className="px-4 py-3">
                           <VendaBadge value={row.vendaRealizada} />
                         </td>
-                        <td className="sticky right-0 z-10 bg-inherit px-4 py-3 shadow-[-6px_0_10px_-10px_rgba(15,23,42,0.15)]" onClick={e => e.stopPropagation()}>
+                        <td className="sticky right-0 z-10 bg-inherit px-4 py-3 shadow-mx-sticky-end" onClick={e => e.stopPropagation()}>
                           <div className="flex items-center gap-2">
                             <button
                               type="button"

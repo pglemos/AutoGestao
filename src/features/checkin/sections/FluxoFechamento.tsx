@@ -73,7 +73,7 @@ function StepperInput({ label, value, onDecrement, onIncrement, onSet, disabled 
   }
 
   return (
-    <div className="flex h-11 items-center rounded-xl border border-border bg-white shadow-sm transition-all focus-within:border-status-info/50 focus-within:shadow-[0_0_0_3px_rgba(59,130,246,0.12)]">
+    <div className="flex h-11 items-center rounded-xl border border-border bg-white shadow-sm transition-all focus-within:border-status-info/50 focus-within:shadow-mx-focus-info">
       <button
         type="button"
         onClick={() => {

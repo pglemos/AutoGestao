@@ -23,7 +23,7 @@ function grepArbitraryPixelRadius(): string[] {
   try {
     const output = execFileSync(
       'git',
-      ['grep', '-n', '-E', String.raw`rounded(-[a-z]+)?-\[[0-9]+px\]`, '--', 'src', ...EXCLUDED],
+      ['grep', '--untracked', '-n', '-E', String.raw`rounded(-[a-z]+)?-\[[0-9]+px\]`, '--', 'src', ...EXCLUDED],
       { encoding: 'utf8' },
     )
     return output.trim().split('\n').filter(Boolean)

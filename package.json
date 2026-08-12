@@ -27,6 +27,7 @@
     "lint:colors": "node scripts/lint-colors.mjs",
     "audit:color-arbitrary": "node scripts/audit-color-arbitrary.mjs",
     "audit:shadow-runtime": "node scripts/audit-shadow-runtime.mjs",
+    "lint:visual-raw": "node scripts/lint-visual-raw.mjs",
     "lint:tokens:legacy": "node scripts/lint-tokens.legacy.js",
     "audit:management-design-system": "node --test scripts/management-route-manifest.test.mjs scripts/audit-management-design-system.test.mjs && node scripts/audit-management-design-system.mjs",
     "audit:layout-contract": "node scripts/audit-page-layout-contract.mjs",
