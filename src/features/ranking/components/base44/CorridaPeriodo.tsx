@@ -35,7 +35,7 @@ export function CorridaPeriodo({ vendedores, meta, meuId }: Props) {
               background: 'linear-gradient(90deg, rgba(0,168,150,0.15), rgba(0,168,150,0.05))',
             }}
           />
-          <div className="absolute right-0 top-0 h-full w-1 bg-green-400 rounded-r-xl opacity-60" />
+          <div className="absolute right-0 top-0 h-full w-1 bg-brand-primary/50 rounded-r-xl opacity-60" />
 
           {vendedores.map(v => {
             const pct = Math.min(100, (v.vendas / maxVal) * 100)

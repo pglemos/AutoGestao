@@ -133,14 +133,14 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
   const showPostFinalizado = d1Editavel || bloqueado;
 
   return (
-    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-green-50/60 border-green-100"}`}>
+    <div className={`flex-1 rounded-2xl p-5 flex flex-col gap-4 min-w-0 border ${bloqueado ? "bg-slate-50 border-border-subtle opacity-70" : "bg-brand-primary-subtle/60 border-brand-primary/20"}`}>
       <div className="flex items-center gap-3">
-        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-green-500 shadow-green-200"}`}>
+        <div className={`w-10 h-10 rounded-full flex items-center justify-center flex-shrink-0 shadow-md ${bloqueado ? "bg-slate-300 shadow-slate-100" : "bg-brand-primary shadow-green-200"}`}>
           {bloqueado ? <Lock className="w-5 h-5 text-white" /> : <Users className="w-5 h-5 text-white" />}
         </div>
         <div>
-          <p className={`text-body-sm font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-muted-foreground" : "text-green-700"}`}>Carteira</p>
-          <p className={`text-caption mt-0.5 font-medium ${bloqueado ? "text-text-disabled" : "text-green-400"}`}>Relacionamento e prospecção</p>
+          <p className={`text-body-sm font-bold uppercase tracking-wider leading-none ${bloqueado ? "text-muted-foreground" : "text-brand-primary-hover"}`}>Carteira</p>
+          <p className={`text-caption mt-0.5 font-medium ${bloqueado ? "text-text-disabled" : "text-brand-primary/60"}`}>Relacionamento e prospecção</p>
         </div>
       </div>
       <div className="space-y-3">
@@ -176,29 +176,29 @@ function CarteiraCard({ dc, updateCounter, setCounter, clients, closingDate, blo
               Agendamentos D+1 ativos
             </span>
             <div className="w-[120px] flex-shrink-0 flex items-center justify-center">
-              <span className={`text-h3 font-bold tabular-nums ${bloqueado ? "text-muted-foreground" : "text-green-700"}`}>{ativos}</span>
+              <span className={`text-h3 font-bold tabular-nums ${bloqueado ? "text-muted-foreground" : "text-brand-primary-hover"}`}>{ativos}</span>
             </div>
           </div>
         )}
       </div>
       {/* Planejados originais (sempre discreto após finalização) */}
       {showPostFinalizado && (
-        <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-border-subtle" : "border-green-100"}`}>
+        <div className={`mt-auto pt-3 border-t space-y-1 ${bloqueado ? "border-border-subtle" : "border-brand-primary/20"}`}>
           <p className={`text-caption font-medium ${bloqueado ? "text-text-disabled" : "text-status-success-text"}`}>
-            Planejados no fechamento: <strong className={bloqueado ? "text-muted-foreground" : "text-green-700"}>{planejados}</strong>
+            Planejados no fechamento: <strong className={bloqueado ? "text-muted-foreground" : "text-brand-primary-hover"}>{planejados}</strong>
           </p>
           {!bloqueado && (
             <p className="text-caption font-semibold text-status-success-text">
-              Detalhados: <strong className="text-green-700">{ativos}</strong> de <strong className="text-green-700">{planejados}</strong>
+              Detalhados: <strong className="text-brand-primary-hover">{ativos}</strong> de <strong className="text-brand-primary-hover">{planejados}</strong>
             </p>
           )}
         </div>
       )}
       {/* Antes da finalização: detalhados vs planejados */}
       {!showPostFinalizado && planejados > 0 && (
-        <div className="flex items-center gap-1.5 mt-auto pt-3 border-t border-green-100">
+        <div className="flex items-center gap-1.5 mt-auto pt-3 border-t border-brand-primary/20">
           <span className="text-caption font-semibold text-status-success-text">
-            Detalhados: <strong className="text-green-700">{ativos}</strong> de <strong className="text-green-700">{planejados}</strong>
+            Detalhados: <strong className="text-brand-primary-hover">{ativos}</strong> de <strong className="text-brand-primary-hover">{planejados}</strong>
           </span>
         </div>
       )}

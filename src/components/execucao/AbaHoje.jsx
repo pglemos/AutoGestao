@@ -25,8 +25,8 @@ const TIPO_COLOR_BAR = {
   "Retorno": "bg-status-warning",
   "Documentação": "bg-slate-400",
   "Entrega": "bg-status-info",
-  "Pós-venda": "bg-teal-500",
-  "Aniversário": "bg-indigo-500",
+  "Pós-venda": "bg-brand-primary",
+  "Aniversário": "bg-status-info",
   "Garantia": "bg-status-warning",
   "Outra atividade comercial": "bg-slate-400",
 };
@@ -36,8 +36,8 @@ const TIPO_COLOR_BADGE = {
   "Retorno": "bg-status-warning-surface text-status-warning-text",
   "Documentação": "bg-slate-100 text-muted-foreground",
   "Entrega": "bg-status-info-surface text-status-info-text",
-  "Pós-venda": "bg-teal-50 text-teal-700",
-  "Aniversário": "bg-indigo-50 text-indigo-700",
+  "Pós-venda": "bg-brand-primary-subtle text-brand-primary",
+  "Aniversário": "bg-status-info-surface text-status-info-text",
   "Garantia": "bg-status-warning-surface text-status-warning-text",
   "Outra atividade comercial": "bg-slate-100 text-muted-foreground",
 };
@@ -205,7 +205,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
               <a href={msgAniversario ? `${waUrl}?text=${encodeURIComponent(msgAniversario)}` : waUrl}
                 target="_blank" rel="noopener noreferrer"
                 onClick={handleWaClick}
-                className="flex items-center gap-1 text-caption font-bold text-white bg-green-500 hover:bg-green-600 px-3 py-1.5 rounded-lg transition-colors">
+                className="flex items-center gap-1 text-caption font-bold text-white bg-brand-primary hover:bg-brand-primary px-3 py-1.5 rounded-lg transition-colors">
                 <MessageCircle className="w-3 h-3" /> WhatsApp
               </a>
             )}
@@ -267,7 +267,7 @@ function OportunidadeCard({ op, onResolver, onAbrirCliente, onWhatsApp, isMobile
               target="_blank" rel="noopener noreferrer"
               onClick={handleWaClick}
               title="WhatsApp"
-              className="p-2 rounded-xl bg-green-50 hover:bg-green-100 text-status-success-text transition-colors">
+              className="p-2 rounded-xl bg-brand-primary-subtle hover:bg-brand-primary-subtle text-status-success-text transition-colors">
               <MessageCircle className="w-4 h-4" />
             </a>
           )}

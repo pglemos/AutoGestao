@@ -227,10 +227,10 @@ export function RegularizarFechamentoDrawer({
                   <FieldRow label="Atendimentos" value={formValues.visitas_porta} onChange={(v) => onFieldChange('visitas_porta', v)} disabled={false} />
                 </div>
 
-                <div className="space-y-3 rounded-xl border border-green-200 bg-green-50 p-4">
+                <div className="space-y-3 rounded-xl border border-brand-primary/30 bg-brand-primary-subtle p-4">
                   <div className="flex items-center gap-2">
-                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-green-500"><Users className="h-4 w-4 text-white" /></div>
-                    <span className="text-body-sm font-bold uppercase tracking-wide text-green-700">Carteira</span>
+                    <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-brand-primary"><Users className="h-4 w-4 text-white" /></div>
+                    <span className="text-body-sm font-bold uppercase tracking-wide text-brand-primary-hover">Carteira</span>
                   </div>
                   <FieldRow label="Leads recebidos" value={formValues.leads_cart} onChange={(v) => onFieldChange('leads_cart', v)} disabled={false} />
                   <FieldRow label="Atendimentos" value={formValues.visitas_cart} onChange={(v) => onFieldChange('visitas_cart', v)} disabled={false} />
@@ -265,7 +265,7 @@ export function RegularizarFechamentoDrawer({
                   { label: 'Atendimentos', value: totalAtendimentos, color: 'text-status-info-text' },
                   { label: 'Agendamentos D+1', value: totalAgendamentosD1, color: 'text-status-warning-text' },
                   { label: 'Vendas', value: totalVendas, color: 'text-status-success-text' },
-                  { label: 'Faturamento', value: totalFaturamento > 0 ? BRL(totalFaturamento) : '—', color: 'text-green-700' },
+                  { label: 'Faturamento', value: totalFaturamento > 0 ? BRL(totalFaturamento) : '—', color: 'text-brand-primary-hover' },
                 ].map((s) => (
                   <div key={s.label} className="p-4 text-center">
                     <p className={`text-[20px] font-bold tabular-nums ${s.color}`}>{s.value}</p>

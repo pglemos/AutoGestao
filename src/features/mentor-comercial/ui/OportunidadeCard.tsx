@@ -91,7 +91,7 @@ function getScoreBadgeClass(scoreClass?: string | null): string {
     case 'Excelente':
       return 'bg-status-info-surface text-status-info-text border-status-info/30'
     case 'Boa':
-      return 'bg-indigo-50 text-indigo-800 border-indigo-200'
+      return 'bg-status-info-surface text-status-info-text border-status-info/30'
     case 'Atenção':
       return 'bg-status-warning-surface text-status-warning-text border-status-warning/30'
     case 'Crítica':

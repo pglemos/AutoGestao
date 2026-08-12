@@ -17,7 +17,7 @@ function StatusBadge({ venda }: { venda: VendaLoja }) {
       </span>
     )
   }
-  return <span className="inline-flex items-center rounded-full bg-green-100 px-2.5 py-1 text-caption font-semibold text-green-700">Vendida</span>
+  return <span className="inline-flex items-center rounded-full bg-brand-primary-subtle px-2.5 py-1 text-caption font-semibold text-brand-primary-hover">Vendida</span>
 }
 
 export function VendasFechadasLoja({

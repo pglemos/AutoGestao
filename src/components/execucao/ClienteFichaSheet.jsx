@@ -8,12 +8,12 @@ const statusColors = {
   "Em Andamento": "bg-status-info-surface text-status-info-text",
   "Aguardando Cliente": "bg-status-warning-surface text-status-warning-text",
   "Sem Resposta": "bg-status-error-surface text-status-error-text",
-  "Vendido": "bg-green-50 text-green-700",
+  "Vendido": "bg-brand-primary-subtle text-brand-primary-hover",
   "Perdido": "bg-slate-100 text-muted-foreground",
 };
 
 const saleStatusColors = {
-  "Sim": "bg-green-50 text-green-700",
+  "Sim": "bg-brand-primary-subtle text-brand-primary-hover",
   "Não": "bg-status-error-surface text-status-error-text",
   "Em Negociação": "bg-status-info-surface text-status-info-text",
 };
@@ -98,7 +98,7 @@ export default function ClienteFichaSheet({ clienteId, clienteObj, open, onClose
             <div className="flex gap-2">
               {waUrl && (
                 <a href={waUrl} target="_blank" rel="noopener noreferrer"
-                  className="flex items-center gap-1.5 text-[12px] font-bold text-white bg-green-500 hover:bg-green-600 px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
+                  className="flex items-center gap-1.5 text-[12px] font-bold text-white bg-brand-primary hover:bg-brand-primary px-3 py-2 rounded-xl transition-colors flex-1 justify-center">
                   <MessageCircle className="w-4 h-4" /> WhatsApp
                 </a>
               )}

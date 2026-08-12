@@ -27,9 +27,9 @@ const COLOR_MAP = {
     stepActive: 'bg-status-warning text-status-warning-foreground', stepDone: 'bg-status-warning text-status-warning-foreground', divider: 'border-status-warning/20', note: 'text-status-warning-text', progress: 'bg-status-warning',
   },
   green: {
-    bg: 'bg-green-50', border: 'border-green-200', iconBg: 'bg-green-500', iconShadow: 'shadow-green-200',
-    title: 'text-green-700', sub: 'text-green-400', btn: 'bg-green-600 hover:bg-green-700', btnText: 'text-white',
-    stepActive: 'bg-green-600 text-white', stepDone: 'bg-green-600 text-white', divider: 'border-green-100', note: 'text-green-500', progress: 'bg-green-500',
+    bg: 'bg-brand-primary-subtle', border: 'border-brand-primary/30', iconBg: 'bg-brand-primary', iconShadow: 'shadow-green-200',
+    title: 'text-brand-primary-hover', sub: 'text-brand-primary/60', btn: 'bg-brand-primary hover:bg-brand-primary-hover', btnText: 'text-white',
+    stepActive: 'bg-brand-primary text-white', stepDone: 'bg-brand-primary text-white', divider: 'border-brand-primary/20', note: 'text-brand-primary', progress: 'bg-brand-primary',
   },
   blue: {
     bg: 'bg-status-info-surface', border: 'border-status-info/30', iconBg: 'bg-status-info', iconShadow: 'shadow-blue-200',
@@ -267,7 +267,7 @@ export function FluxoFechamento({ readValue, updateField, disabled, finalized = 
   }
 
   const totalPct = STEPS.reduce((acc, s) => (completedSteps.has(s.id) ? acc + s.pct : acc), 0)
-  const progressColor = totalPct === 100 ? 'bg-green-500' : totalPct >= 70 ? 'bg-status-info' : totalPct >= 40 ? 'bg-orange-400' : 'bg-slate-300'
+  const progressColor = totalPct === 100 ? 'bg-brand-primary' : totalPct >= 70 ? 'bg-status-info' : totalPct >= 40 ? 'bg-orange-400' : 'bg-slate-300'
 
   const co = COLOR_MAP.orange
   const cg = COLOR_MAP.green

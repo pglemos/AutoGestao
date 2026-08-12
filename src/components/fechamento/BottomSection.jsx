@@ -396,7 +396,7 @@ export default function BottomSection({
                 <button
                   onClick={handleAvisarGerente}
                   disabled={enviando}
-                  className="mt-2 flex items-center gap-1.5 text-[12px] font-bold text-white bg-[#25D366] hover:bg-green-600 disabled:opacity-60 px-4 py-1.5 rounded-lg transition-colors"
+                  className="mt-2 flex items-center gap-1.5 text-[12px] font-bold text-white bg-[#25D366] hover:bg-brand-primary disabled:opacity-60 px-4 py-1.5 rounded-lg transition-colors"
                 >
                   <MessageCircle className="w-3.5 h-3.5" />
                   {enviando ? "Enviando..." : "Avisar gerente no WhatsApp"}
@@ -445,7 +445,7 @@ export default function BottomSection({
                 className={`flex items-center gap-3 transition-all text-white font-bold tracking-widest text-body-sm px-10 h-[52px] rounded-xl shadow-md flex-shrink-0 uppercase active:scale-[0.98] disabled:cursor-not-allowed
                   ${isBlocked
                     ? "bg-[#EF4444] shadow-red-200 opacity-70 cursor-not-allowed"
-                    : "bg-[#22C55E] hover:bg-green-600 shadow-green-200"
+                    : "bg-[#22C55E] hover:bg-brand-primary shadow-green-200"
                   }`}
               >
                 <Lock className="w-4 h-4" />
@@ -501,7 +501,7 @@ export default function BottomSection({
             <button
               onClick={handleConfirmarFechamento}
               disabled={finalizando}
-              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#22C55E] hover:bg-green-600 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-green-100"
+              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#22C55E] hover:bg-brand-primary disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-green-100"
             >
               {finalizando ? "Finalizando..." : "Sim, concluir"}
             </button>

@@ -173,7 +173,7 @@ export default function FinalizarMobile({
               <button
                 onClick={handleAvisarGerente}
                 disabled={enviando}
-                className="mt-2 flex items-center gap-1.5 text-body-sm font-bold text-white bg-[#25D366] hover:bg-green-600 disabled:opacity-60 px-4 py-2 rounded-xl transition-colors"
+                className="mt-2 flex items-center gap-1.5 text-body-sm font-bold text-white bg-[#25D366] hover:bg-brand-primary disabled:opacity-60 px-4 py-2 rounded-xl transition-colors"
               >
                 <MessageCircle className="w-4 h-4" />
                 {enviando ? "Enviando..." : "Avisar gerente no WhatsApp"}
@@ -219,7 +219,7 @@ export default function FinalizarMobile({
             className={`w-full flex items-center justify-center gap-3 py-4 rounded-2xl text-white font-bold text-body tracking-widest uppercase transition-all active:scale-[0.98] disabled:cursor-not-allowed shadow-md
               ${isBlocked
                 ? "bg-[#EF4444] shadow-red-200 opacity-70"
-                : "bg-[#22C55E] hover:bg-green-600 shadow-green-200"
+                : "bg-[#22C55E] hover:bg-brand-primary shadow-green-200"
               }`}
           >
             <Lock className="w-5 h-5" />
@@ -265,7 +265,7 @@ export default function FinalizarMobile({
             <button
               onClick={handleConfirmarFechamento}
               disabled={finalizando}
-              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#22C55E] hover:bg-green-600 disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-green-100"
+              className="px-6 py-2.5 text-body-sm font-bold text-white bg-[#22C55E] hover:bg-brand-primary disabled:opacity-50 rounded-xl transition-colors shadow-sm shadow-green-100"
             >
               {finalizando ? "Finalizando..." : "Sim, concluir"}
             </button>

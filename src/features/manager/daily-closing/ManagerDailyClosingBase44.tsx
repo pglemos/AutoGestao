@@ -1040,7 +1040,7 @@ function ActionButton({ icon: Icon, label, onClick, tone }: { icon: typeof Eye; 
 }
 
 function StatusBadge({ status }: { status: ClosingStatus }) {
-  const classes: Record<ClosingStatus, string> = { Finalizado: "bg-status-success-surface text-status-success-text", Pendente: "bg-status-warning-surface text-status-warning-text", "Fora do horário": "bg-status-error-surface text-status-error-text", "Aguardando aprovação": "bg-status-info-surface text-status-info-text", "Regularizado aprovado": "bg-teal-100 text-teal-700", "Regularização recusada": "bg-status-error-surface text-status-error-text" };
+  const classes: Record<ClosingStatus, string> = { Finalizado: "bg-status-success-surface text-status-success-text", Pendente: "bg-status-warning-surface text-status-warning-text", "Fora do horário": "bg-status-error-surface text-status-error-text", "Aguardando aprovação": "bg-status-info-surface text-status-info-text", "Regularizado aprovado": "bg-brand-primary-subtle text-brand-primary", "Regularização recusada": "bg-status-error-surface text-status-error-text" };
   return <span className={`inline-flex rounded-lg px-2 py-1 text-xs font-medium ${classes[status]}`}>{status}</span>;
 }
 

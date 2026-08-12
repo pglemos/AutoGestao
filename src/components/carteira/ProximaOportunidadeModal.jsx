@@ -19,7 +19,7 @@ export default function ProximaOportunidadeModal({
       <Dialog open={open} onOpenChange={v => { if (!v) onVoltarCarteira(); }}>
         <DialogContent className="max-w-sm rounded-2xl text-center">
           <div className="flex flex-col items-center gap-4 py-4">
-            <div className="w-14 h-14 rounded-full bg-green-100 flex items-center justify-center">
+            <div className="w-14 h-14 rounded-full bg-brand-primary-subtle flex items-center justify-center">
               <Trophy className="w-7 h-7 text-status-success-text" />
             </div>
             <div>

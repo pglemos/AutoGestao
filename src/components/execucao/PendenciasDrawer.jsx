@@ -13,8 +13,8 @@ const TIPO_COLOR = {
   "Retorno": "bg-status-warning",
   "Documentação": "bg-slate-400",
   "Entrega": "bg-status-info",
-  "Pós-venda": "bg-teal-500",
-  "Aniversário": "bg-indigo-500",
+  "Pós-venda": "bg-brand-primary",
+  "Aniversário": "bg-status-info",
   "Garantia": "bg-status-warning",
   "Outra atividade comercial": "bg-slate-500",
 };
@@ -64,7 +64,7 @@ export default function PendenciasDrawer({ open, onClose, pendencias, onResolvid
                           <a
                             href={`https://wa.me/55${(op.telefone_snapshot || "").replace(/\D/g, "")}`}
                             target="_blank" rel="noopener noreferrer"
-                            className="flex items-center gap-1 text-caption font-bold text-white bg-green-500 hover:bg-green-600 px-2.5 py-1.5 rounded-lg transition-colors"
+                            className="flex items-center gap-1 text-caption font-bold text-white bg-brand-primary hover:bg-brand-primary px-2.5 py-1.5 rounded-lg transition-colors"
                           >
                             <MessageCircle className="w-3 h-3" /> WhatsApp
                           </a>

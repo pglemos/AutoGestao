@@ -193,9 +193,9 @@ export function NovaAtividadeModal({
             </div>
 
             {client && (
-              <div className="mt-2 flex items-center gap-2 rounded-xl border border-green-200 bg-green-50 px-3 py-2">
+              <div className="mt-2 flex items-center gap-2 rounded-xl border border-brand-primary/30 bg-brand-primary-subtle px-3 py-2">
                 <UserCheck className="h-4 w-4 shrink-0 text-status-success-text" aria-hidden="true" />
-                <div className="min-w-0"><p className="truncate text-[12px] font-bold text-green-800">{client.name}</p><p className="truncate text-caption text-status-success-text">{client.vehicle || '—'}</p></div>
+                <div className="min-w-0"><p className="truncate text-[12px] font-bold text-brand-primary-active">{client.name}</p><p className="truncate text-caption text-status-success-text">{client.vehicle || '—'}</p></div>
               </div>
             )}
 

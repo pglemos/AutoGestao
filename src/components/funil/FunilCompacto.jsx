@@ -5,7 +5,7 @@ export default function FunilCompacto({ titulo, subtitulo, cor, etapas, conversa
   const COR = {
     orange: { header: "bg-status-warning-surface border-status-warning/30", badge: "bg-status-warning-surface text-status-warning-text", dot: "bg-orange-400", pct: "text-status-warning-text" },
     blue:   { header: "bg-status-info-surface border-status-info/30",   badge: "bg-status-info-surface text-status-info-text",   dot: "bg-blue-400",   pct: "text-status-info-text"   },
-    green:  { header: "bg-green-50 border-green-200", badge: "bg-green-100 text-green-700", dot: "bg-green-400", pct: "text-status-success-text"  },
+    green:  { header: "bg-brand-primary-subtle border-brand-primary/30", badge: "bg-brand-primary-subtle text-brand-primary-hover", dot: "bg-brand-primary/50", pct: "text-status-success-text"  },
   };
   const c = COR[cor] || COR.blue;
 

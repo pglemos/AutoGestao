@@ -21,7 +21,7 @@ function Btn({ onClick, variant = "ghost", disabled, children }) {
   const styles = {
     ghost:    "text-[#64748B] border border-[#E5E7EB] hover:bg-slate-50",
     primary:  "text-white bg-status-info hover:bg-status-info shadow-[var(--mx-button-shadow)]",
-    green:    "text-white bg-[#22C55E] hover:bg-green-600 shadow-sm",
+    green:    "text-white bg-[#22C55E] hover:bg-brand-primary shadow-sm",
     blue:     "text-white bg-[#005BFF] hover:bg-status-info shadow-sm",
     amber:    "text-status-warning-foreground bg-[#F59E0B] hover:bg-status-warning shadow-sm",
   };

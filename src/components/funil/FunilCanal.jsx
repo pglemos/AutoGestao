@@ -58,7 +58,7 @@ export default function FunilCanal({ titulo, cor, icone: Icone, etapas, conversa
   const corMap = {
     orange: { border: "border-status-warning/30", bg: "bg-status-warning-surface", title: "text-status-warning-text", iconBg: "bg-status-warning", badge: "bg-status-warning-surface text-status-warning-text" },
     blue:   { border: "border-status-info/30",   bg: "bg-status-info-surface",   title: "text-status-info-text",   iconBg: "bg-status-info",   badge: "bg-status-info-surface text-status-info-text"   },
-    green:  { border: "border-green-200",  bg: "bg-green-50",  title: "text-green-700",  iconBg: "bg-green-500",  badge: "bg-green-100 text-green-700"  },
+    green:  { border: "border-brand-primary/30",  bg: "bg-brand-primary-subtle",  title: "text-brand-primary-hover",  iconBg: "bg-brand-primary",  badge: "bg-brand-primary-subtle text-brand-primary-hover"  },
   };
   const c = corMap[cor] || corMap.blue;
 

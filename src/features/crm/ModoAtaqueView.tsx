@@ -34,7 +34,7 @@ const RESULTADOS_CARDS: ResultadoCard[] = [
 ]
 
 const COR_MAP: Record<ResultadoCard['cor'], string> = {
-  green: 'bg-white border-green-200 hover:bg-green-50',
+  green: 'bg-white border-brand-primary/30 hover:bg-brand-primary-subtle',
   red: 'bg-white border-status-error/30 hover:bg-status-error-surface',
   slate: 'bg-white border-border hover:bg-slate-50',
   blue: 'bg-white border-status-info/30 hover:bg-status-info-surface',
@@ -166,9 +166,9 @@ function OportunidadeCard({
             </a>
           )}
           {tel && (
-            <button type="button" onClick={onWhatsApp} className="flex flex-col items-center gap-1.5 rounded-2xl border border-green-200 bg-green-50 py-3 transition-colors hover:bg-green-100">
+            <button type="button" onClick={onWhatsApp} className="flex flex-col items-center gap-1.5 rounded-2xl border border-brand-primary/30 bg-brand-primary-subtle py-3 transition-colors hover:bg-brand-primary-subtle">
               <MessageCircle className="h-4 w-4 text-status-success-text" />
-              <span className="text-caption font-semibold text-green-700">WhatsApp</span>
+              <span className="text-caption font-semibold text-brand-primary-hover">WhatsApp</span>
             </button>
           )}
           <button type="button" onClick={onFicha} className="flex flex-col items-center gap-1.5 rounded-2xl border border-border bg-white py-3 transition-colors hover:bg-slate-50">
@@ -282,7 +282,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
     return (
       <div className="fixed inset-0 z-[200] overflow-y-auto bg-[#F8FAFC]">
         <div className="mx-auto flex max-w-xl flex-col items-center gap-mx-md px-mx-md py-mx-xl text-center">
-          <span className="grid h-16 w-16 place-items-center rounded-full bg-green-100 text-status-success-text">
+          <span className="grid h-16 w-16 place-items-center rounded-full bg-brand-primary-subtle text-status-success-text">
             <Trophy size={32} />
           </span>
           {fila.length === 0 ? (
@@ -297,7 +297,7 @@ export function ModoAtaqueView({ clientes, oportunidadePorCliente, registrarStat
             <div className="grid w-full max-w-lg grid-cols-2 gap-mx-sm sm:grid-cols-4">
               {[
                 { label: 'Executadas', value: stats.executadas, tone: 'bg-status-info-surface text-status-info-text' },
-                { label: 'Visitas geradas', value: stats.visitas, tone: 'bg-green-50 text-status-success-text' },
+                { label: 'Visitas geradas', value: stats.visitas, tone: 'bg-brand-primary-subtle text-status-success-text' },
                 { label: 'Propostas enviadas', value: stats.propostas, tone: 'bg-status-warning-surface text-status-warning-text' },
                 { label: 'Recuperações', value: stats.recuperacoes, tone: 'bg-status-info-surface text-status-info-text' },
               ].map(s => (

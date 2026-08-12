@@ -105,7 +105,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
             return (
               <section key={slot.key} className={`rounded-2xl border bg-white shadow-sm transition-all ${slot.isCurrent ? 'border-status-info shadow-blue-100' : 'border-border'}`}>
                 <button type="button" onClick={() => setExpanded(isExpanded ? null : slot.key)} className="flex w-full items-center gap-4 px-5 py-4 text-left">
-                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${slot.isCurrent ? 'bg-status-info text-white' : past ? 'bg-green-100 text-green-600' : 'bg-slate-100 text-muted-foreground'}`}>
+                  <div className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl ${slot.isCurrent ? 'bg-status-info text-white' : past ? 'bg-brand-primary-subtle text-brand-primary' : 'bg-slate-100 text-muted-foreground'}`}>
                     <Icon className="h-5 w-5" aria-hidden="true" />
                   </div>
                   <div className="min-w-0 flex-1">
@@ -178,7 +178,7 @@ export function RotinaDiaTab({ actions }: { actions: CentralExecutionAction[] })
             {playbook.slots.map((slot, index) => (
               <li key={`timeline-${slot.key}`} className="relative flex gap-3 pb-5 last:pb-0">
                 {index < playbook.slots.length - 1 && <span className="absolute left-[4px] top-3 h-full w-px bg-slate-200" />}
-                <span className={`relative mt-1 h-3 w-3 shrink-0 rounded-full border-2 border-white ring-1 ${slot.isCurrent ? 'bg-status-info ring-blue-300' : isPast(slot.time) ? 'bg-green-500 ring-green-200' : 'bg-slate-200 ring-border'}`} />
+                <span className={`relative mt-1 h-3 w-3 shrink-0 rounded-full border-2 border-white ring-1 ${slot.isCurrent ? 'bg-status-info ring-blue-300' : isPast(slot.time) ? 'bg-brand-primary ring-brand-primary/30' : 'bg-slate-200 ring-border'}`} />
                 <div><p className="text-caption font-bold text-muted-foreground">{slot.time}</p><p className={`text-[12px] font-bold ${slot.isCurrent ? 'text-status-info-text' : 'text-muted-foreground'}`}>{slot.template?.nome || STEP_LABELS[slot.key] || slot.key}</p></div>
               </li>
             ))}

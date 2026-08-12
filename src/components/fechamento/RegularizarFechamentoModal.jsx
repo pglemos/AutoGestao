@@ -168,9 +168,9 @@ export default function RegularizarFechamentoModal({ open, onClose, date, curren
           )}
 
           {aprovado && step !== "success" && (
-            <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3 mb-4">
+            <div className="bg-brand-primary-subtle border border-brand-primary/30 rounded-xl p-4 flex items-start gap-3 mb-4">
               <CheckCircle2 className="w-4 h-4 text-status-success-text mt-0.5 flex-shrink-0" />
-              <p className="text-body-sm font-bold text-green-800">Regularização já aprovada.</p>
+              <p className="text-body-sm font-bold text-brand-primary-active">Regularização já aprovada.</p>
             </div>
           )}
 

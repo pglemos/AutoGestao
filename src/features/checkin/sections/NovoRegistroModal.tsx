@@ -99,7 +99,7 @@ interface TipoDef {
 
 const TIPOS: TipoDef[] = [
   { id: 'agendamento', icon: CalendarCheck, label: 'Agendamento', desc: 'Compromisso comercial futuro', cor: 'border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text', iconCor: 'text-status-info-text' },
-  { id: 'venda', icon: ShoppingCart, label: 'Venda', desc: 'Negócio fechado', cor: 'border-green-200 bg-green-50 hover:bg-green-100 text-green-700', iconCor: 'text-status-success-text' },
+  { id: 'venda', icon: ShoppingCart, label: 'Venda', desc: 'Negócio fechado', cor: 'border-brand-primary/30 bg-brand-primary-subtle hover:bg-brand-primary-subtle text-brand-primary-hover', iconCor: 'text-status-success-text' },
   { id: 'garantia', icon: ShieldCheck, label: 'Garantia', desc: 'Pós-venda ou garantia de veículo', cor: 'border-status-warning/30 bg-status-warning-surface hover:bg-status-warning-surface text-status-warning-text', iconCor: 'text-status-warning-text' },
   { id: 'qualificado', icon: UserCheck, label: 'Qualificado', desc: 'Nova oportunidade trabalhável', cor: 'border-status-info/30 bg-status-info-surface hover:bg-status-info-surface text-status-info-text', iconCor: 'text-status-info-text' },
 ]

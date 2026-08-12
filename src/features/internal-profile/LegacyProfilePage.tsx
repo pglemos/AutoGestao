@@ -205,7 +205,7 @@ function ProfileView({ profile }: { profile: NonNullable<ReturnType<typeof useAu
 
               <div className="pt-14 border-t border-border space-y-10">
                 <div className="flex items-center gap-3">
-                  <div className="h-10 w-10 rounded-lg bg-indigo-50 text-status-success-text flex items-center justify-center shadow-none border border-indigo-100"><ShieldCheck size={20} /></div>
+                  <div className="h-10 w-10 rounded-lg bg-status-info-surface text-status-success-text flex items-center justify-center shadow-none border border-status-info/20"><ShieldCheck size={20} /></div>
                   <p className="text-xs font-bold uppercase tracking-widest text-status-success-text">Segurança & Criptografia MX</p>
                 </div>
 

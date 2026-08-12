@@ -7,7 +7,7 @@ import {
 const InfoBox = ({ color, children }) => {
   const styles = {
     blue:   "bg-status-info-surface border-status-info/30 text-status-info-text",
-    green:  "bg-green-50 border-green-200 text-green-800",
+    green:  "bg-brand-primary-subtle border-brand-primary/30 text-brand-primary-active",
     amber:  "bg-status-warning-surface border-status-warning/30 text-status-warning-text",
     red:    "bg-status-error-surface border-status-error/30 text-status-error-text",
     slate:  "bg-slate-100 border-border text-foreground",
@@ -46,7 +46,7 @@ const Bullet = ({ children }) => (
 
 const CheckItem = ({ label, value, green }) => (
   <div className="flex items-center gap-2.5">
-    <div className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${green ? "bg-green-100" : "bg-slate-100"}`}>
+    <div className={`w-4 h-4 rounded flex items-center justify-center flex-shrink-0 ${green ? "bg-brand-primary-subtle" : "bg-slate-100"}`}>
       <div className={`w-2 h-2 rounded-sm ${green ? "bg-[#22C55E]" : "bg-slate-400"}`} />
     </div>
     <span className="text-body-sm text-[#475569] leading-relaxed flex-1">{label}</span>

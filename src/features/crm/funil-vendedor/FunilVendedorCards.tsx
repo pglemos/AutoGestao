@@ -20,7 +20,7 @@ const VOLUME_LABEL: Record<FunnelChannel, string> = {
 }
 
 const EFFORT_PRINCIPAL_BG: Record<FunnelChannel, string> = {
-  Carteira: 'bg-green-50 border-green-200',
+  Carteira: 'bg-brand-primary-subtle border-brand-primary/30',
   Internet: 'bg-status-info-surface border-status-info/30',
   Showroom: 'bg-status-warning-surface border-status-warning/30',
 }
@@ -28,13 +28,13 @@ const EFFORT_PRINCIPAL_BG: Record<FunnelChannel, string> = {
 const EFICIENCIA_COR: Record<FunnelChannel, { header: string; badge: string; btn: string }> = {
   Showroom: { header: 'bg-status-warning-surface border-status-warning/30', badge: 'bg-status-warning-surface text-status-warning-text', btn: 'text-status-warning-text hover:text-status-warning-text' },
   Internet: { header: 'bg-status-info-surface border-status-info/30', badge: 'bg-status-info-surface text-status-info-text', btn: 'text-status-info-text hover:text-status-info-text' },
-  Carteira: { header: 'bg-green-50 border-green-200', badge: 'bg-green-100 text-green-700', btn: 'text-status-success-text hover:text-green-800' },
+  Carteira: { header: 'bg-brand-primary-subtle border-brand-primary/30', badge: 'bg-brand-primary-subtle text-brand-primary-hover', btn: 'text-status-success-text hover:text-brand-primary-active' },
 }
 
 const EFICIENCIA_ORDER: FunnelChannel[] = ['Showroom', 'Carteira', 'Internet']
 
 const BASE_CONFIANCA_COR: Record<Confidence, string> = {
-  Alta: 'text-status-success-text bg-green-50 border-green-200',
+  Alta: 'text-status-success-text bg-brand-primary-subtle border-brand-primary/30',
   Média: 'text-status-warning-text bg-status-warning-surface border-status-warning/30',
   Baixa: 'text-muted-foreground bg-slate-50 border-border',
 }

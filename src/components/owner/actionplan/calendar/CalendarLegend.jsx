@@ -4,12 +4,12 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 
 const DEPT_LEGEND = [
   { value: "commercial", label: "Comercial", color: "bg-status-info" },
-  { value: "marketing", label: "Marketing", color: "bg-indigo-500" },
+  { value: "marketing", label: "Marketing", color: "bg-status-info" },
   { value: "product_stock", label: "Produto e Estoque", color: "bg-status-info" },
   { value: "financial", label: "Financeiro", color: "bg-status-success" },
   { value: "operations", label: "Operações", color: "bg-status-warning" },
-  { value: "people_hr", label: "Pessoas — RH", color: "bg-teal-500" },
-  { value: "general", label: "Geral e Estratégia", color: "bg-indigo-500" },
+  { value: "people_hr", label: "Pessoas — RH", color: "bg-brand-primary" },
+  { value: "general", label: "Geral e Estratégia", color: "bg-status-info" },
 ];
 
 const STATUS_LEGEND = [

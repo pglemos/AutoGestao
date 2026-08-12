@@ -53,7 +53,7 @@ export default function CorridaPeriodo({ vendedores, meta, isVolume, meuId }) {
             }}
           />
           {/* Linha da meta */}
-          <div className="absolute right-0 top-0 h-full w-1 bg-green-400 rounded-r-xl opacity-60" />
+          <div className="absolute right-0 top-0 h-full w-1 bg-brand-primary/50 rounded-r-xl opacity-60" />
 
           {/* Avatares dos vendedores */}
           {vendedores.map((v) => {

@@ -18,7 +18,7 @@ import {
 
 const STATUS_CARDS = [
   { key: 'acima', label: 'Acima da meta', icon: TrendingUp, surface: 'border-status-success/20 bg-status-success-surface', text: 'text-status-success-text', value: 'text-status-success-text' },
-  { key: 'no_ritmo', label: 'No ritmo', icon: Minus, surface: 'border-sky-100 bg-sky-50', text: 'text-sky-600', value: 'text-sky-700' },
+  { key: 'no_ritmo', label: 'No ritmo', icon: Minus, surface: 'border-status-info/20 bg-status-info-surface', text: 'text-status-info-text', value: 'text-status-info-text' },
   { key: 'risco', label: 'Risco', icon: AlertTriangle, surface: 'border-status-warning/20 bg-status-warning-surface', text: 'text-status-warning-text', value: 'text-status-warning-text' },
   { key: 'critico', label: 'Crítico', icon: ArrowDown, surface: 'border-status-error/20 bg-status-error-surface', text: 'text-status-error-text', value: 'text-status-error-text' },
 ] as const
@@ -31,7 +31,7 @@ const RECOMMENDATION_TONE = {
 
 const PROGRESS_TONE = {
   acima: 'bg-status-success',
-  no_ritmo: 'bg-sky-500',
+  no_ritmo: 'bg-status-info',
   risco: 'bg-status-warning',
   critico: 'bg-status-error',
   sem_meta: 'bg-gray-300',
@@ -39,7 +39,7 @@ const PROGRESS_TONE = {
 
 const ATTAINMENT_TONE = {
   acima: 'text-status-success-text',
-  no_ritmo: 'text-sky-600',
+  no_ritmo: 'text-status-info-text',
   risco: 'text-status-warning-text',
   critico: 'text-status-error-text',
   sem_meta: 'text-muted-foreground',

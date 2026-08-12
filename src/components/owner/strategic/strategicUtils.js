@@ -21,7 +21,7 @@ export const DISPLAY_MODES = [
 
 export const AREA_STYLES = {
   Vendas: { bg: "bg-status-info-surface", text: "text-status-info-text", iconBg: "bg-status-info-surface text-status-info-text", dot: "bg-status-info", border: "border-status-info/30", hex: chartTokens.info(), lightBg: "bg-status-info-surface/50" },
-  Marketing: { bg: "bg-indigo-50", text: "text-indigo-700", iconBg: "bg-indigo-100 text-indigo-600", dot: "bg-indigo-500", border: "border-indigo-200", hex: "#4F46E5", lightBg: "bg-indigo-50/50" },
+  Marketing: { bg: "bg-status-info-surface", text: "text-status-info-text", iconBg: "bg-status-info-surface text-status-info-text", dot: "bg-status-info", border: "border-status-info/30", hex: "#4F46E5", lightBg: "bg-status-info-surface/50" },
   Estoque: { bg: "bg-status-info-surface", text: "text-status-info-text", iconBg: "bg-status-info-surface text-status-info-text", dot: "bg-status-info", border: "border-status-info/30", hex: "#2563EB", lightBg: "bg-status-info-surface/50" },
   Financeiro: { bg: "bg-status-success-surface", text: "text-status-success-text", iconBg: "bg-status-success-surface text-status-success-text", dot: "bg-status-success", border: "border-status-success/30", hex: "#16A34A", lightBg: "bg-status-success-surface/50" },
   Operacional: { bg: "bg-status-warning-surface", text: "text-status-warning-text", iconBg: "bg-status-warning-surface text-status-warning-text", dot: "bg-status-warning", border: "border-status-warning/30", hex: "#F97316", lightBg: "bg-status-warning-surface/50" },
@@ -34,7 +34,7 @@ export const AREA_HEX = Object.fromEntries(
 export const CARD_ICON_STYLES = {
   green: "bg-status-success-surface text-status-success-text",
   purple: "bg-status-info-surface text-status-info-text",
-  orange: "bg-indigo-100 text-indigo-600",
+  orange: "bg-status-info-surface text-status-info-text",
   blue: "bg-status-info-surface text-status-info-text",
   teal: "bg-status-warning-surface text-status-warning-text",
 };
@@ -42,7 +42,7 @@ export const CARD_ICON_STYLES = {
 export const SPARK_COLORS = {
   green: "text-status-success-text",
   purple: "text-status-info-text",
-  orange: "text-indigo-500",
+  orange: "text-status-info",
   blue: "text-status-info-text",
   teal: "text-status-warning-text",
 };

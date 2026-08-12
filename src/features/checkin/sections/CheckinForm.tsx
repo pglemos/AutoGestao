@@ -275,9 +275,9 @@ return (
       )}
 
       {hasCrmActivity && (
-        <div className="flex items-start gap-3 rounded-xl border border-sky-200 bg-sky-50 px-4 py-3" role="status">
-          <Info size={16} className="mt-0.5 shrink-0 text-sky-600" aria-hidden="true" />
-          <p className="text-body-sm font-semibold text-sky-900">
+        <div className="flex items-start gap-3 rounded-xl border border-status-info/30 bg-status-info-surface px-4 py-3" role="status">
+          <Info size={16} className="mt-0.5 shrink-0 text-status-info-text" aria-hidden="true" />
+          <p className="text-body-sm font-semibold text-status-info-text">
             O CRM registra atividade acima do declarado. O fechamento salvará exatamente os números informados por você; a divergência ficará disponível para conferência da liderança.
           </p>
         </div>
@@ -514,7 +514,7 @@ return (
                 <p>
                   Se cadastrar corretamente os 2 clientes, sua pontuação será 100%. Se cadastrar apenas 1 dos 2 clientes, sua pontuação será 85%.
                 </p>
-                <div className="bg-green-50 text-green-800 font-bold p-2.5 rounded-lg border border-green-200 flex items-center gap-2">
+                <div className="bg-brand-primary-subtle text-brand-primary-active font-bold p-2.5 rounded-lg border border-brand-primary/30 flex items-center gap-2">
                   <CheckCircle2 size={14} className="text-[#22C55E]" />
                   <span>Detalhou todos os agendamentos para amanhã corretamente = 100%</span>
                 </div>
@@ -695,7 +695,7 @@ Você informou {totalAgendamentosD1} Agendamentos D+1 e detalhou {creditosValido
                 type="button"
  onClick={handleFinalizarMesmoAssim}
 disabled={saving}
-className="rounded-xl bg-[#22C55E] px-6 py-2.5 text-body-sm font-bold text-white shadow-sm shadow-green-100 transition-colors hover:bg-green-600 disabled:opacity-50"
+className="rounded-xl bg-[#22C55E] px-6 py-2.5 text-body-sm font-bold text-white shadow-sm shadow-green-100 transition-colors hover:bg-brand-primary disabled:opacity-50"
               >
  Sim, concluir
               </button>

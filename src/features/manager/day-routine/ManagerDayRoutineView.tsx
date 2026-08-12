@@ -79,7 +79,7 @@ const SORTS: Array<{ key: ManagerRoutineSort; label: string }> = [
 
 const CATEGORY_STYLE: Record<ManagerRoutineCategory, { color: string; background: string }> = {
   resultado: { color: 'text-status-info-text', background: 'bg-status-info-surface' },
-  equipe: { color: 'text-cyan-600', background: 'bg-cyan-50' },
+  equipe: { color: 'text-status-info-text', background: 'bg-status-info-surface' },
   desenvolvimento: { color: 'text-status-success-text', background: 'bg-status-success-surface' },
   operacao: { color: 'text-status-info-text', background: 'bg-status-info-surface' },
 }

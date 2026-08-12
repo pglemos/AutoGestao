@@ -104,18 +104,18 @@ const COLOR_MAP = {
     note: "text-orange-400",
   },
   green: {
-    bg: "bg-green-50",
-    border: "border-green-200",
-    iconBg: "bg-green-500",
+    bg: "bg-brand-primary-subtle",
+    border: "border-brand-primary/30",
+    iconBg: "bg-brand-primary",
     iconShadow: "shadow-green-200",
-    title: "text-green-700",
-    sub: "text-green-400",
-    badge: "bg-green-100 text-green-700",
-    btn: "bg-green-600 hover:bg-green-700",
-    progress: "bg-green-500",
-    stepActive: "bg-green-600 text-white",
-    stepDone: "bg-green-600 text-white",
-    divider: "border-green-100",
+    title: "text-brand-primary-hover",
+    sub: "text-brand-primary/60",
+    badge: "bg-brand-primary-subtle text-brand-primary-hover",
+    btn: "bg-brand-primary hover:bg-brand-primary-hover",
+    progress: "bg-brand-primary",
+    stepActive: "bg-brand-primary text-white",
+    stepDone: "bg-brand-primary text-white",
+    divider: "border-brand-primary/20",
     note: "text-status-success-text",
   },
   blue: {
@@ -482,7 +482,7 @@ export default function FluxoFechamento({ dc, updateCounter, setCounter, clients
   const handleStepClick = (stepId) => setCurrentStep(stepId);
 
   const totalPct = STEPS.reduce((acc, s) => completedSteps.has(s.id) ? acc + s.pct : acc, 0);
-  const progressColor = totalPct === 100 ? "bg-green-500" :
+  const progressColor = totalPct === 100 ? "bg-brand-primary" :
     totalPct >= 70 ? "bg-status-info" :
     totalPct >= 40 ? "bg-orange-400" : "bg-slate-300";
 

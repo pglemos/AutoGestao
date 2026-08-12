@@ -14,13 +14,13 @@ import NovoRegistroModal from "@/components/fechamento/NovoRegistroModal";
 // ── Helpers ──────────────────────────────────────────────────────────────────
 
 const CHANNEL_STYLE = {
-  Carteira: "bg-green-100 text-green-700",
+  Carteira: "bg-brand-primary-subtle text-brand-primary-hover",
   Internet: "bg-status-info-surface text-status-info-text",
   Porta: "bg-status-warning-surface text-status-warning-text",
 };
 
 const SALE_STYLE = {
-  "Venda Realizada": "bg-green-100 text-green-700",
+  "Venda Realizada": "bg-brand-primary-subtle text-brand-primary-hover",
   "Em Negociação": "bg-status-warning-surface text-status-warning-text",
   "Venda perdida": "bg-status-error-surface text-status-error-text",
   "Qualificado": "bg-status-info-surface text-status-info-text",
@@ -599,7 +599,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
 
   // Badge de tipo ao lado do nome
   const TIPO_BADGE_FIXED = {
-    venda: { label: "$", cls: "text-status-success-text bg-green-50" },
+    venda: { label: "$", cls: "text-status-success-text bg-brand-primary-subtle" },
     qualificado: { label: "Q", cls: "text-status-info-text bg-status-info-surface" },
     garantia: { label: "!", cls: "text-status-warning-text bg-status-warning-surface" },
     perdido: { label: "✕", cls: "text-muted-foreground bg-slate-100" },
@@ -610,7 +610,7 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
     if (tipo === "agendamento" && c.visita_agendada_em) {
       const diffDias = moment(c.visita_agendada_em).startOf("day").diff(moment(closingDate).startOf("day"), "days");
       if (diffDias >= 1) {
-        return { label: `D+${diffDias}`, cls: diffDias === 1 ? "text-status-info-text bg-status-info-surface" : "text-sky-600 bg-sky-50" };
+        return { label: `D+${diffDias}`, cls: diffDias === 1 ? "text-status-info-text bg-status-info-surface" : "text-status-info-text bg-status-info-surface" };
       }
       return null;
     }
@@ -664,10 +664,10 @@ export default function ClientCard({ onClientsChange, closingDate, bloqueado = f
             {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.canal_comercial || "—"} className={CHANNEL_STYLE[c.canal_comercial] || "bg-slate-100 text-muted-foreground"} />}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_troca ? "Sim" : "Não"} className={c.interesse_troca ? "bg-green-100 text-green-700" : "bg-status-error-surface text-status-error-text"} />}
+            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_troca ? "Sim" : "Não"} className={c.interesse_troca ? "bg-brand-primary-subtle text-brand-primary-hover" : "bg-status-error-surface text-status-error-text"} />}
           </td>
           <td className="px-4 py-3">
-            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-green-100 text-green-700" : "bg-slate-100 text-muted-foreground"} />}
+            {isGarantia ? <span className="text-[#64748B] text-body-sm">—</span> : <Badge label={c.interesse_financiamento ? "Sim" : "Não"} className={c.interesse_financiamento ? "bg-brand-primary-subtle text-brand-primary-hover" : "bg-slate-100 text-muted-foreground"} />}
           </td>
           <td className="px-4 py-3"><Badge label={saleDisplay} className={SALE_STYLE[saleDisplay] || "bg-slate-100 text-muted-foreground"} /></td>
           <td className="px-4 py-3">

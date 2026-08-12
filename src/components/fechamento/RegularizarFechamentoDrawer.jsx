@@ -35,14 +35,14 @@ const LOSS_REASONS = [
 ];
 
 const SALE_STYLE = {
-  "Venda realizada": "bg-green-100 text-green-700",
+  "Venda realizada": "bg-brand-primary-subtle text-brand-primary-hover",
   "Em negociação": "bg-status-warning-surface text-status-warning-text",
   "Em negociação ativa": "bg-status-warning-surface text-status-warning-text",
   "Venda perdida": "bg-status-error-surface text-status-error-text",
 };
 
 const CHANNEL_STYLE = {
-  Carteira: "bg-green-100 text-green-700",
+  Carteira: "bg-brand-primary-subtle text-brand-primary-hover",
   Internet: "bg-status-info-surface text-status-info-text",
   Porta: "bg-status-warning-surface text-status-warning-text",
 };
@@ -120,10 +120,10 @@ function MovimentoDia({ form, onChange }) {
           <FieldRow label="Atendimentos" value={form.atendimentos_showroom} onChange={v => set("atendimentos_showroom", v)} />
         </div>
         {/* Carteira */}
-        <div className="bg-green-50 rounded-xl border border-green-200 p-4 space-y-3">
+        <div className="bg-brand-primary-subtle rounded-xl border border-brand-primary/30 p-4 space-y-3">
           <div className="flex items-center gap-2">
-            <div className="w-8 h-8 rounded-full bg-green-500 flex items-center justify-center flex-shrink-0"><Users className="w-4 h-4 text-white" /></div>
-            <span className="text-body-sm font-bold text-green-700 uppercase tracking-wide">Carteira</span>
+            <div className="w-8 h-8 rounded-full bg-brand-primary flex items-center justify-center flex-shrink-0"><Users className="w-4 h-4 text-white" /></div>
+            <span className="text-body-sm font-bold text-brand-primary-hover uppercase tracking-wide">Carteira</span>
           </div>
           <FieldRow label="Leads recebidos" value={form.leads_carteira} onChange={v => set("leads_carteira", v)} />
           <FieldRow label="Atendimentos" value={form.atendimentos_carteira} onChange={v => set("atendimentos_carteira", v)} />
@@ -403,7 +403,7 @@ function ResumoDia({ form, clientes }) {
     { label: "Atendimentos", value: totalAtend, color: "text-status-info-text" },
     { label: "Agendamentos D+1", value: totalAgend, color: "text-status-warning-text" },
     { label: "Vendas", value: totalVendas, color: "text-status-success-text" },
-    { label: "Faturamento", value: totalFaturamento > 0 ? "R$ " + totalFaturamento.toLocaleString("pt-BR", { minimumFractionDigits: 2 }) : "—", color: "text-green-700" },
+    { label: "Faturamento", value: totalFaturamento > 0 ? "R$ " + totalFaturamento.toLocaleString("pt-BR", { minimumFractionDigits: 2 }) : "—", color: "text-brand-primary-hover" },
   ];
 
   return (
@@ -659,9 +659,9 @@ export default function RegularizarFechamentoDrawer({ open, onClose, date, curre
                   </div>
                 )}
                 {aprovado && (
-                  <div className="bg-green-50 border border-green-200 rounded-xl p-4 flex items-start gap-3">
+                  <div className="bg-brand-primary-subtle border border-brand-primary/30 rounded-xl p-4 flex items-start gap-3">
                     <CheckCircle2 className="w-4 h-4 text-status-success-text mt-0.5 flex-shrink-0" />
-                    <p className="text-body-sm font-bold text-green-800">Esta regularização já foi aprovada.</p>
+                    <p className="text-body-sm font-bold text-brand-primary-active">Esta regularização já foi aprovada.</p>
                   </div>
                 )}
                 {recusado && (

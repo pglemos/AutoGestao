@@ -44,8 +44,8 @@ const TYPE_BAR: Record<CentralActivityType, string> = {
   retorno: 'bg-status-warning',
   documentacao: 'bg-slate-400',
   entrega: 'bg-status-info',
-  pos_venda: 'bg-teal-500',
-  aniversario: 'bg-indigo-500',
+  pos_venda: 'bg-brand-primary',
+  aniversario: 'bg-status-info',
   garantia: 'bg-status-warning',
   comercial: 'bg-slate-400',
   test_drive: 'bg-status-info',
@@ -61,8 +61,8 @@ const TYPE_BADGE: Record<CentralActivityType, string> = {
   retorno: 'bg-status-warning-surface text-status-warning-text',
   documentacao: 'bg-slate-100 text-muted-foreground',
   entrega: 'bg-status-info-surface text-status-info-text',
-  pos_venda: 'bg-teal-50 text-teal-700',
-  aniversario: 'bg-indigo-50 text-indigo-700',
+  pos_venda: 'bg-brand-primary-subtle text-brand-primary',
+  aniversario: 'bg-status-info-surface text-status-info-text',
   garantia: 'bg-status-warning-surface text-status-warning-text',
   comercial: 'bg-slate-100 text-muted-foreground',
   test_drive: 'bg-status-info-surface text-status-info-text',
@@ -194,7 +194,7 @@ export function AtividadeCard({
               <button
                 type="button"
                 onClick={() => onWhatsapp(action)}
-                className="flex items-center gap-1 rounded-lg bg-green-500 px-3 py-1.5 text-caption font-bold text-white transition-colors hover:bg-green-600"
+                className="flex items-center gap-1 rounded-lg bg-brand-primary px-3 py-1.5 text-caption font-bold text-white transition-colors hover:bg-brand-primary"
               >
                 <MessageCircle className="h-3 w-3" aria-hidden="true" /> WhatsApp
               </button>
@@ -259,7 +259,7 @@ export function AtividadeCard({
               </button>
             )}
             {phoneDigits && (
-              <button type="button" title="WhatsApp" aria-label={`Abrir WhatsApp de ${clientName}`} onClick={() => onWhatsapp(action)} className="rounded-xl bg-green-50 p-2 text-status-success-text transition-colors hover:bg-green-100">
+              <button type="button" title="WhatsApp" aria-label={`Abrir WhatsApp de ${clientName}`} onClick={() => onWhatsapp(action)} className="rounded-xl bg-brand-primary-subtle p-2 text-status-success-text transition-colors hover:bg-brand-primary-subtle">
                 <MessageCircle className="h-4 w-4" aria-hidden="true" />
               </button>
             )}

@@ -45,11 +45,11 @@ export default function BonificacaoPeriodo({ bonificacao }) {
           </div>
         ))}
         {bonificacao.bonus_meta_valor > 0 && (
-          <div className="flex items-center justify-between gap-2 pt-2 border-t border-green-100 mt-1">
+          <div className="flex items-center justify-between gap-2 pt-2 border-t border-brand-primary/20 mt-1">
             <div className="flex items-center gap-2">
               <span className="text-status-success-text text-body">📈</span>
               <div>
-                <p className="text-[12px] font-semibold text-green-700">Acima de 100% da meta</p>
+                <p className="text-[12px] font-semibold text-brand-primary-hover">Acima de 100% da meta</p>
                 <p className="text-caption text-muted-foreground">{bonificacao.bonus_meta_descricao || "bônus extra"}</p>
               </div>
             </div>

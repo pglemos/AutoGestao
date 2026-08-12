@@ -121,7 +121,7 @@ function ModalRegistrarVeiculo({ onClose, onSalvo, catalog }) {
         {resolucao && (
           <div className={`flex items-start gap-2 rounded-xl border px-3 py-2 text-xs ${
             classificacao
-              ? "border-green-200 bg-green-50 text-green-800"
+              ? "border-brand-primary/30 bg-brand-primary-subtle text-brand-primary-active"
               : ambigua
                 ? "border-status-warning/30 bg-status-warning-surface text-status-warning-text"
                 : "border-border bg-slate-50 text-muted-foreground"
@@ -277,7 +277,7 @@ function AtaqueVeiculo({ veiculo, clientes, catalog, onVoltar, onExecutar, onFic
                         Próximo passo urgente
                       </span>
                     )}
-                    <span className="text-caption font-bold px-2 py-0.5 rounded-full bg-green-50 text-green-700 border border-green-200 shrink-0">
+                    <span className="text-caption font-bold px-2 py-0.5 rounded-full bg-brand-primary-subtle text-brand-primary-hover border border-brand-primary/30 shrink-0">
                       Veículo compatível chegou
                     </span>
                   </div>

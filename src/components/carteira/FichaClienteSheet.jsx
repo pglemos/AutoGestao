@@ -37,7 +37,7 @@ function calcularQualidade(cliente) {
   const temVisita = !!cliente.visita_agendada_em;
 
   if (["Financiamento aprovado sem compra", "Em negociação ativa", "Vai pensar"].includes(s))
-    return { label: "Excelente oportunidade", color: "bg-green-50 text-green-700 border-green-200" };
+    return { label: "Excelente oportunidade", color: "bg-brand-primary-subtle text-brand-primary-hover border-brand-primary/30" };
   if (["Visita agendada", "Visita hoje", "Visita a confirmar", "Visita realizada", "Proposta enviada"].includes(s))
     return { label: "Boa oportunidade", color: "bg-status-info-surface text-status-info-text border-status-info/30" };
   if (temVeiculo && (temValor || temVisita))
@@ -632,9 +632,9 @@ export default function FichaClienteSheet({ clienteId, open, onClose, onAtualiza
                   leria como "venda bem qualificada" logo abaixo do aviso de
                   cancelamento. */}
               {!editando && pendencias.length === 0 && !isVendaCancelada && (
-                <div className="flex items-center gap-2 px-4 py-3 bg-green-50 border border-green-100 rounded-2xl">
+                <div className="flex items-center gap-2 px-4 py-3 bg-brand-primary-subtle border border-brand-primary/20 rounded-2xl">
                   <CheckCircle2 className="w-4 h-4 text-status-success-text shrink-0" />
-                  <p className="text-sm text-green-700 font-medium">Oportunidade bem qualificada. Execute o próximo passo.</p>
+                  <p className="text-sm text-brand-primary-hover font-medium">Oportunidade bem qualificada. Execute o próximo passo.</p>
                 </div>
               )}
 

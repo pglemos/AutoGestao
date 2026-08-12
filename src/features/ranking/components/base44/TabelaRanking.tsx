@@ -9,7 +9,7 @@ const MEDAL = [
 ]
 
 function StatusBadge({ pct }: { pct: number }) {
-  if (pct >= 100) return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-green-100 text-green-700">Acima da meta</span>
+  if (pct >= 100) return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-brand-primary-subtle text-brand-primary-hover">Acima da meta</span>
   if (pct >= 80) return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-status-warning-surface text-status-warning-text">Próximo da meta</span>
   if (pct >= 50) return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-status-info-surface text-status-info-text">Em evolução</span>
   return <span className="px-2.5 py-1 rounded-full text-caption font-semibold bg-status-error-surface text-status-error-text">Abaixo do esperado</span>

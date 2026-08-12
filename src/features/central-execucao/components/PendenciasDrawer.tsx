@@ -27,9 +27,9 @@ function barColor(type: CentralExecutionAction['activityType']) {
   if (['atendimento', 'visita', 'test_drive', 'negociacao'].includes(type)) return 'bg-status-info'
   if (type === 'retorno') return 'bg-status-warning'
   if (type === 'entrega') return 'bg-status-info'
-  if (type === 'pos_venda') return 'bg-teal-500'
+  if (type === 'pos_venda') return 'bg-brand-primary'
   if (type === 'garantia') return 'bg-status-warning'
-  if (type === 'aniversario') return 'bg-indigo-500'
+  if (type === 'aniversario') return 'bg-status-info'
   return 'bg-slate-400'
 }
 
@@ -90,7 +90,7 @@ export function PendenciasDrawer({
 
                 <div className="mt-3 flex flex-wrap items-center gap-1.5">
                   {phoneDigits && (
-                    <button type="button" onClick={() => onWhatsapp(action)} className="flex items-center gap-1 rounded-lg bg-green-500 px-2.5 py-1.5 text-caption font-bold text-white hover:bg-green-600">
+                    <button type="button" onClick={() => onWhatsapp(action)} className="flex items-center gap-1 rounded-lg bg-brand-primary px-2.5 py-1.5 text-caption font-bold text-white hover:bg-brand-primary">
                       <MessageCircle className="h-3 w-3" aria-hidden="true" /> WhatsApp
                     </button>
                   )}

@@ -554,7 +554,7 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
                 className="w-full flex items-center gap-4 px-5 py-4 text-left"
                 onClick={() => handleToggleStep(step.id)}
               >
-                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${isCurrent ? "bg-[#005BFF] text-white" : isPast ? "bg-green-100 text-green-600" : "bg-slate-100 text-muted-foreground"}`}>
+                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${isCurrent ? "bg-[#005BFF] text-white" : isPast ? "bg-brand-primary-subtle text-brand-primary" : "bg-slate-100 text-muted-foreground"}`}>
                   <Icon className="w-5 h-5" />
                 </div>
                 <div className="flex-1 min-w-0">
@@ -679,10 +679,10 @@ export default function AbaRotina({ profile, clients = [], clientesHoje = [], pd
             return (
               <div key={step.id} className="flex items-start gap-3">
                 <div className="flex flex-col items-center">
-                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${isCurrent ? "bg-[#005BFF] text-white" : isPast ? "bg-green-100 text-green-600" : "bg-slate-100 text-muted-foreground"}`}>
+                  <div className={`w-7 h-7 rounded-lg flex items-center justify-center flex-shrink-0 ${isCurrent ? "bg-[#005BFF] text-white" : isPast ? "bg-brand-primary-subtle text-brand-primary" : "bg-slate-100 text-muted-foreground"}`}>
                     <Icon className="w-3.5 h-3.5" />
                   </div>
-                  {idx < arr.length - 1 && <div className={`w-px h-5 ${isPast ? "bg-green-200" : "bg-slate-100"}`} />}
+                  {idx < arr.length - 1 && <div className={`w-px h-5 ${isPast ? "bg-brand-primary/30" : "bg-slate-100"}`} />}
                 </div>
                 <div className="pb-3 pt-0.5">
                   <p className={`text-caption font-bold ${isCurrent ? "text-status-info-text" : "text-muted-foreground"}`}>{formatMin(stepTime(step))}</p>

@@ -399,7 +399,7 @@ export default function VendedorHomePage() {
               <div className="grid grid-cols-2 gap-3">
                 <ShortcutCard
                   label="Mentor Comercial"
-                  icon={<Users size={20} className="text-indigo-500" />}
+                  icon={<Users size={20} className="text-status-info" />}
                   onClick={() => navigate('/carteira-clientes')}
                 />
                 <ShortcutCard

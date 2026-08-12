@@ -346,7 +346,7 @@ export function PlanoAtaqueTab({ clientes, oportunidadePorCliente, progressoPorC
                         href={waUrl}
                         target="_blank"
                         rel="noreferrer"
-                        className="shrink-0 flex items-center gap-1 rounded-lg border border-green-200 bg-green-50 px-3 py-1.5 text-xs font-bold text-green-700 hover:bg-green-100"
+                        className="shrink-0 flex items-center gap-1 rounded-lg border border-brand-primary/30 bg-brand-primary-subtle px-3 py-1.5 text-xs font-bold text-brand-primary-hover hover:bg-brand-primary-subtle"
                       >
                         <MessageCircle size={13} /> WhatsApp
                       </a>

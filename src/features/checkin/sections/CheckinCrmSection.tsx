@@ -1333,7 +1333,7 @@ export function CheckinCrmSection({ ctx, allowInlineQuickEdit = true }: CheckinC
               <button
                 type="button"
                 onClick={() => handleCadastrar({ coerenciaObservacao: 'Venda de atendimento anterior (confirmado pelo vendedor).' })}
-                className="h-11 rounded-xl bg-[#22C55E] px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-green-600"
+                className="h-11 rounded-xl bg-[#22C55E] px-4 text-sm font-bold text-white shadow-sm transition-colors hover:bg-brand-primary"
               >
                 Sim, atendimento anterior
               </button>

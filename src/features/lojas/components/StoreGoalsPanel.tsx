@@ -163,7 +163,7 @@ export function StoreGoalsPanel({ storeId, storeName }: StoreGoalsPanelProps) {
 
         <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)]">
           <div className="flex min-w-0 items-center gap-4 rounded-xl bg-slate-50 p-4 sm:p-5">
-            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-teal-400">
+            <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-slate-900 text-brand-primary/60">
               <Target size={24} />
             </div>
             <div className="min-w-0 flex-1">

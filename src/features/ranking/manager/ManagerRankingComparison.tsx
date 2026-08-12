@@ -46,8 +46,8 @@ function MetricRow({
         <HelpTooltip text={help} />
       </div>
       <div className="pl-1 text-left">
-        {bWins && <Check size={12} className="mr-1 inline text-indigo-500" />}
-        <span className={`text-base font-bold ${bWins ? 'text-indigo-600' : 'text-foreground'}`}>{b === null ? '—' : format(b)}</span>
+        {bWins && <Check size={12} className="mr-1 inline text-status-info" />}
+        <span className={`text-base font-bold ${bWins ? 'text-status-info-text' : 'text-foreground'}`}>{b === null ? '—' : format(b)}</span>
       </div>
     </div>
   )
@@ -244,7 +244,7 @@ export function ManagerRankingComparison({ sellers, periodLabel }: { sellers: Ra
             </div>
           </section>
 
-          <section className="rounded-2xl border border-status-success/20 bg-gradient-to-br from-status-success-surface to-indigo-50 p-5">
+          <section className="rounded-2xl border border-status-success/20 bg-gradient-to-br from-status-success-surface to-status-info-surface p-5">
             <h3 className="mb-2 flex items-center gap-1.5 text-sm font-semibold text-foreground">
               <Sparkles size={16} className="text-status-success-text" /> Pontos para o feedback
             </h3>

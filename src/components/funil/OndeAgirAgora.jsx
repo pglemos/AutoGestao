@@ -70,13 +70,13 @@ function calcAcoes(funis) {
 
 const COR_BADGE = {
   blue:   "bg-status-info-surface text-status-info-text",
-  green:  "bg-green-100 text-green-700",
+  green:  "bg-brand-primary-subtle text-brand-primary-hover",
   orange: "bg-status-warning-surface text-status-warning-text",
   amber:  "bg-status-warning-surface text-status-warning-text",
 };
 const COR_BTN = {
   blue:   "bg-[#005BFF] hover:bg-status-info text-white",
-  green:  "bg-green-600 hover:bg-green-700 text-white",
+  green:  "bg-brand-primary hover:bg-brand-primary-hover text-white",
   orange: "bg-status-warning hover:bg-status-warning text-status-warning-foreground",
   amber:  "bg-status-warning hover:bg-status-warning text-status-warning-foreground",
 };

@@ -25,7 +25,7 @@ export default function ResumoDiaMobile({
         <Item value={totalVendas} label="Vendas Realizadas" color="text-[#EF4444]" />
       </div>
 
-      <div className="flex items-center justify-between px-4 py-3 bg-green-50 rounded-xl border border-green-100">
+      <div className="flex items-center justify-between px-4 py-3 bg-brand-primary-subtle rounded-xl border border-brand-primary/20">
         <span className="text-[12px] font-bold text-muted-foreground uppercase tracking-wider">Faturamento</span>
         <span className="text-h3 font-bold tabular-nums text-[#22C55E]">{faturamentoStr}</span>
       </div>

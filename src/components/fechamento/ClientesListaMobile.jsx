@@ -4,26 +4,26 @@ import { isClienteD1 } from "@/components/fechamento/ClientCard";
 import moment from "moment";
 
 const CHANNEL_STYLE = {
-  Carteira: "bg-green-100 text-green-700",
+  Carteira: "bg-brand-primary-subtle text-brand-primary-hover",
   Internet: "bg-status-info-surface text-status-info-text",
   Showroom: "bg-status-warning-surface text-status-warning-text",
   Porta: "bg-status-warning-surface text-status-warning-text",
 };
 const FINANCING_STYLE = {
-  "Aprovado": "bg-green-100 text-green-700",
+  "Aprovado": "bg-brand-primary-subtle text-brand-primary-hover",
   "Recusado": "bg-status-error-surface text-status-error-text",
   "Não se aplica": "bg-slate-100 text-muted-foreground",
 };
 const SALE_STYLE = {
-  "Sim": "bg-green-100 text-green-700",
+  "Sim": "bg-brand-primary-subtle text-brand-primary-hover",
   "Não": "bg-status-error-surface text-status-error-text",
   "Em Negociação": "bg-status-warning-surface text-status-warning-text",
-  "Venda Realizada": "bg-green-100 text-green-700",
+  "Venda Realizada": "bg-brand-primary-subtle text-brand-primary-hover",
   "Qualificado": "bg-status-info-surface text-status-info-text",
   "Garantia Registrada": "bg-status-warning-surface text-status-warning-text",
   "Venda perdida": "bg-status-error-surface text-status-error-text",
 };
-const BOOL_STYLE = (v) => v === "Sim" ? "bg-green-100 text-green-700" : "bg-status-error-surface text-status-error-text";
+const BOOL_STYLE = (v) => v === "Sim" ? "bg-brand-primary-subtle text-brand-primary-hover" : "bg-status-error-surface text-status-error-text";
 
 function Badge({ label, className }) {
   return <span className={`inline-block text-caption font-semibold px-2.5 py-0.5 rounded-full whitespace-nowrap ${className}`}>{label}</span>;

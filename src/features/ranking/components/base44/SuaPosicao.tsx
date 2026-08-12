@@ -26,7 +26,7 @@ export function SuaPosicao({ posicao, total, atingimento, faltamValor }: Props) 
         <p className="text-[12px] text-muted-foreground mt-0.5">de {total || '—'} vendedores</p>
       </div>
       <div className="grid grid-cols-2 gap-3 mt-4">
-        <div className="bg-green-50 border border-green-100 rounded-xl p-3 flex flex-col items-center gap-1">
+        <div className="bg-brand-primary-subtle border border-brand-primary/20 rounded-xl p-3 flex flex-col items-center gap-1">
           <Target className="w-5 h-5 text-status-success-text" />
           <p className="text-caption text-muted-foreground font-medium">Atingimento</p>
           <p className="text-h3 font-bold text-status-success-text leading-tight">{pct}%</p>
