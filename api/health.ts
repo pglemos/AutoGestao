@@ -12,6 +12,8 @@
  * normalizadas para um código curto.
  */
 
+import { getServerRelease } from '../src/lib/observability/server-release'
+
 const TIMEOUT_MS = 8_000
 
 /** Idade máxima tolerada para o cron crítico mais recente. */
@@ -38,14 +40,6 @@ function getSupabaseConfig(): { url: string; anonKey: string; serverKey: string 
         ''
     const serverKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
     return { url: url.replace(/\/$/, ''), anonKey, serverKey }
-}
-
-function getRelease(): string {
-    return (
-        process.env.VITE_RELEASE ||
-        process.env.VERCEL_GIT_COMMIT_SHA ||
-        'unknown'
-    )
 }
 
 function getEnvironment(): string {
@@ -203,7 +197,7 @@ async function health(request: Request): Promise<Response> {
         {
             status,
             checks,
-            release: getRelease(),
+            release: getServerRelease(),
             environment: getEnvironment(),
             duration_ms: Date.now() - startedAt,
             correlation_id: request.headers.get('x-correlation-id') ?? undefined,
